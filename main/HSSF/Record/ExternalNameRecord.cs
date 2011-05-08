@@ -1,0 +1,276 @@
+/* ====================================================================
+   Licensed to the Apache Software Foundation (ASF) Under one or more
+   contributor license agreements.  See the NOTICE file distributed with
+   this work for Additional information regarding copyright ownership.
+   The ASF licenses this file to You Under the Apache License, Version 2.0
+   (the "License"); you may not use this file except in compliance with
+   the License.  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed Under the License is distributed on an "AS Is" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations Under the License.
+==================================================================== */
+
+namespace NPOI.HSSF.Record
+{
+
+    using System;
+    using System.Text;
+    using System.Collections;
+    using NPOI.Util;
+    using NPOI.HSSF.Record.Formula;
+    using NPOI.HSSF.Record.Constant;
+    using NPOI.Util.IO;
+
+
+    /**
+     * EXTERNALNAME<p/>
+     * 
+     * @author Josh Micich
+     */
+    public class ExternalNameRecord : StandardRecord
+    {
+
+        public static short sid = 0x23; // as per BIFF8. (some old versions used 0x223)
+
+        private static int OPT_BUILTIN_NAME = 0x0001;
+        private static int OPT_AUTOMATIC_LINK = 0x0002; // m$ doc calls this fWantAdvise 
+        private static int OPT_PICTURE_LINK = 0x0004;
+        private static int OPT_STD_DOCUMENT_NAME = 0x0008;
+        private static int OPT_OLE_LINK = 0x0010;
+        //	private static int OPT_CLIP_FORMAT_MASK      = 0x7FE0;
+        private static int OPT_ICONIFIED_PICTURE_LINK = 0x8000;
+
+
+        private short field_1_option_flag;
+        private short field_2_index;
+        private short field_3_not_used;
+        private String field_4_name;
+        private NPOI.SS.Formula.Formula field_5_name_definition; // TODO - junits for name definition field
+
+        /**
+ * 'rgoper' / 'Last received results of the DDE link'
+ * (seems to be only applicable to DDE links)<br/>
+ * Logically this is a 2-D array, which has been flattened into 1-D array here.
+ */
+        private Object[] _ddeValues;
+        /**
+         * (logical) number of columns in the {@link #_ddeValues} array
+         */
+        private int _nColumns;
+        /**
+         * (logical) number of rows in the {@link #_ddeValues} array
+         */
+        private int _nRows;
+
+        public ExternalNameRecord(RecordInputStream in1)
+        {
+            field_1_option_flag = in1.ReadShort();
+            field_2_index = in1.ReadShort();
+            field_3_not_used = in1.ReadShort();
+            int nameLength = in1.ReadUByte();
+            int multibyteFlag = in1.ReadUByte();
+            if (multibyteFlag == 0)
+            {
+                field_4_name = in1.ReadCompressedUnicode(nameLength);
+            }
+            else
+            {
+                field_4_name = in1.ReadUnicodeLEString(nameLength);
+            }            
+            if (!HasFormula)
+            {
+                if (!IsStdDocumentNameIdentifier && !IsOLELink && IsAutomaticLink)
+                {
+                    // both need to be incremented
+                    int nColumns = in1.ReadUByte() + 1;
+                    int nRows = in1.ReadShort() + 1;
+
+                    int totalCount = nRows * nColumns;
+                    _ddeValues = ConstantValueParser.Parse(in1, totalCount);
+                    _nColumns = nColumns;
+                    _nRows = nRows;
+                }
+
+                if (in1.Remaining > 0)
+                {
+                    throw ReadFail("Some Unread data (is formula present?)");
+                }
+                field_5_name_definition = null;
+                return;
+            }
+            int nBytesRemaining = in1.Available();
+            if (in1.Remaining <= 0)
+            {
+                throw ReadFail("Ran out of record data trying to read formula.");
+            }
+            short formulaLen = in1.ReadShort();
+            nBytesRemaining -= 2;
+            field_5_name_definition = NPOI.SS.Formula.Formula.Read(formulaLen, in1, nBytesRemaining);
+        }
+
+        /**
+         * Convenience Function to determine if the name Is a built-in name
+         */
+        public bool IsBuiltInName
+        {
+            get
+            {
+                return (field_1_option_flag & OPT_BUILTIN_NAME) != 0;
+            }
+        }
+        /**
+         * For OLE and DDE, links can be either 'automatic' or 'manual'
+         */
+        public bool IsAutomaticLink
+        {
+            get { return (field_1_option_flag & OPT_AUTOMATIC_LINK) != 0; }
+        }
+        /**
+         * only for OLE and DDE
+         */
+        public bool IsPicureLink
+        {
+            get{return (field_1_option_flag & OPT_PICTURE_LINK) != 0;}
+        }
+        /**
+         * DDE links only. If <c>true</c>, this denotes the 'StdDocumentName'
+         */
+        public bool IsStdDocumentNameIdentifier
+        {
+            get{return (field_1_option_flag & OPT_STD_DOCUMENT_NAME) != 0;}
+        }
+        public bool IsOLELink
+        {
+            get { return (field_1_option_flag & OPT_OLE_LINK) != 0; }
+        }
+        public bool IsIconifiedPictureLink
+        {
+            get { return (field_1_option_flag & OPT_ICONIFIED_PICTURE_LINK) != 0; }
+        }
+        /**
+         * @return the standard String representation of this name
+         */
+        public String Text
+        {
+            get { return field_4_name; }
+        }
+
+
+        protected override int DataSize
+        {
+            get
+            {
+                int result = 3 * 2  // 3 short fields
+                    + 2 + field_4_name.Length; // nameLen and name
+                if (HasFormula)
+                {
+                    result += field_5_name_definition.EncodedSize;
+                }
+                else
+                {
+                    if (_ddeValues != null)
+                    {
+                        result += 3; // byte, short
+                        result += ConstantValueParser.GetEncodedSize(_ddeValues);
+                    }
+                }
+                return result;
+            }
+        }
+
+        public override void Serialize(LittleEndianOutput out1)
+        {
+            out1.WriteShort(field_1_option_flag);
+            out1.WriteShort(field_2_index);
+            out1.WriteShort(field_3_not_used);
+            int nameLen = field_4_name.Length;
+            out1.WriteShort(nameLen);
+            StringUtil.PutCompressedUnicode(field_4_name, out1);
+            if (HasFormula)
+            {
+                field_5_name_definition.Serialize(out1);
+            }
+            else
+            {
+                if (_ddeValues != null)
+                {
+                    out1.WriteByte(_nColumns - 1);
+                    out1.WriteShort(_nRows - 1);
+                    ConstantValueParser.Encode(out1, _ddeValues);
+                }
+            }
+        }
+
+
+        public override int RecordSize
+        {
+            get { return 4 + DataSize; }
+        }
+
+        /*
+         * Makes better error messages (while HasFormula() Is not reliable) 
+         * Remove this when HasFormula() Is stable.
+         */
+        private Exception ReadFail(String msg)
+        {
+            String fullMsg = msg + " fields: (option=" + field_1_option_flag + " index=" + field_2_index
+            + " not_used=" + field_3_not_used + " name='" + field_4_name + "')";
+            return new Exception(fullMsg);
+        }
+
+        private bool HasFormula
+        {
+            get
+            {
+                // TODO - determine exact conditions when formula Is present
+                //if (false)
+                //{
+                //    // "Microsoft Office Excel 97-2007 Binary File Format (.xls) Specification"
+                //    // m$'s document suggests logic like this, but bugzilla 44774 att 21790 seems to disagree
+                //    if (IsStdDocumentNameIdentifier)
+                //    {
+                //        if (IsOLELink)
+                //        {
+                //            // seems to be not possible according to m$ document
+                //            throw new InvalidOperationException(
+                //                    "flags (std-doc-name and ole-link) cannot be true at the same time");
+                //        }
+                //        return false;
+                //    }
+                //    if (IsOLELink)
+                //    {
+                //        return false;
+                //    }
+                //    return true;
+                //}
+
+                // This was derived by trial and error, but doesn't seem quite right
+                if (IsAutomaticLink)
+                {
+                    return false;
+                }
+                return true;
+            }
+        }
+
+        public override short Sid
+        {
+            get { return sid; }
+        }
+
+        public override String ToString()
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append(GetType().Name).Append(" [EXTERNALNAME ");
+            sb.Append(" ").Append(field_4_name);
+            sb.Append(" ix=").Append(field_2_index);
+            sb.Append("]");
+            return sb.ToString();
+        }
+    }
+}

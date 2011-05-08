@@ -1,0 +1,219 @@
+/* ====================================================================
+   Licensed to the Apache Software Foundation (ASF) under one or more
+   contributor license agreements.  See the NOTICE file distributed with
+   this work for Additional information regarding copyright ownership.
+   The ASF licenses this file to You under the Apache License, Version 2.0
+   (the "License"); you may not use this file except in compliance with
+   the License.  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+==================================================================== */
+
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NPOI.SS.UserModel;
+using System;
+using NPOI.HSSF.Record.CF;
+namespace TestCases.SS.UserModel
+{
+
+    /**
+     * @author Yegor Kozlov
+     */
+    public abstract class BaseTestFont
+    {
+        protected ITestDataProvider _testDataProvider;
+
+        /**
+         * @param testDataProvider an object that provides test data in HSSF / XSSF specific way
+         */
+        protected BaseTestFont(ITestDataProvider testDataProvider)
+        {
+            _testDataProvider = testDataProvider;
+        }
+        public void BaseTestDefaultFont(String defaultName, short defaultSize, short defaultColor)
+        {
+            //get default font and check against default value
+            Workbook workbook = _testDataProvider.CreateWorkbook();
+            Font fontFind = workbook.FindFont((short)FontBoldWeight.NORMAL, defaultColor, defaultSize, defaultName, false, false, (short)FontFormatting.SS_NONE, (byte)FontUnderlineType.NONE);
+            Assert.IsNotNull(fontFind);
+
+            //get default font, then change 2 values and check against different values (height Changes)
+            Font font = workbook.CreateFont();
+            font.Boldweight = (short)(FontBoldWeight.BOLD);
+            Assert.AreEqual((short)FontBoldWeight.BOLD, font.Boldweight);
+            font.Underline = (byte)(FontUnderlineType.DOUBLE);
+            Assert.AreEqual((byte)FontUnderlineType.DOUBLE, font.Underline);
+            font.FontHeightInPoints = ((short)15);
+            Assert.AreEqual(15 * 20, font.FontHeight);
+            Assert.AreEqual(15, font.FontHeightInPoints);
+            fontFind = workbook.FindFont((short)FontBoldWeight.BOLD, defaultColor, (short)(15 * 20), defaultName, false, false, (short)FontFormatting.SS_NONE, (byte)FontUnderlineType.DOUBLE);
+            Assert.IsNotNull(fontFind);
+        }
+        [TestMethod]
+        public void TestNumberOfFonts()
+        {
+            Workbook wb = _testDataProvider.CreateWorkbook();
+            int num0 = wb.NumberOfFonts;
+
+            Font f1 = wb.CreateFont();
+            f1.Boldweight = (short)(FontBoldWeight.BOLD);
+            short idx1 = f1.Index;
+            wb.CreateCellStyle().SetFont(f1);
+
+            Font f2 = wb.CreateFont();
+            f2.Underline = (byte)(FontUnderlineType.DOUBLE);
+            short idx2 = f2.Index;
+            wb.CreateCellStyle().SetFont(f2);
+
+            Font f3 = wb.CreateFont();
+            f3.FontHeightInPoints = ((short)23);
+            short idx3 = f3.Index;
+            wb.CreateCellStyle().SetFont(f3);
+
+            Assert.AreEqual(num0 + 3, wb.NumberOfFonts);
+            Assert.AreEqual((short)FontBoldWeight.BOLD, wb.GetFontAt(idx1).Boldweight);
+            Assert.AreEqual((byte)FontUnderlineType.DOUBLE, wb.GetFontAt(idx2).Underline);
+            Assert.AreEqual(23, wb.GetFontAt(idx3).FontHeightInPoints);
+        }
+
+        /**
+         * Tests that we can define fonts to a new
+         *  file, save, load, and still see them
+         */
+        [TestMethod]
+        public void TestCreateSave()
+        {
+            Workbook wb = _testDataProvider.CreateWorkbook();
+            Sheet s1 = wb.CreateSheet();
+            Row r1 = s1.CreateRow(0);
+            Cell r1c1 = r1.CreateCell(0);
+            r1c1.SetCellValue(2.2);
+
+            int num0 = wb.NumberOfFonts;
+
+            Font font = wb.CreateFont();
+            font.Boldweight = (short)(FontBoldWeight.BOLD);
+            font.IsStrikeout = (true);
+            font.Color = (IndexedColors.YELLOW.Index);
+            font.FontName = ("Courier");
+            short font1Idx = font.Index;
+            wb.CreateCellStyle().SetFont(font);
+            Assert.AreEqual(num0 + 1, wb.NumberOfFonts);
+
+            CellStyle cellStyleTitle = wb.CreateCellStyle();
+            cellStyleTitle.SetFont(font);
+            r1c1.CellStyle = (cellStyleTitle);
+
+            // Save and re-load
+            wb = _testDataProvider.WriteOutAndReadBack(wb);
+            s1 = wb.GetSheetAt(0);
+
+            Assert.AreEqual(num0 + 1, wb.NumberOfFonts);
+            short idx = s1.GetRow(0).GetCell(0).CellStyle.FontIndex;
+            Font fnt = wb.GetFontAt(idx);
+            Assert.IsNotNull(fnt);
+            Assert.AreEqual(IndexedColors.YELLOW.Index, fnt.Color);
+            Assert.AreEqual("Courier", fnt.FontName);
+
+            // Now add an orphaned one
+            Font font2 = wb.CreateFont();
+            font2.IsItalic = (true);
+            font2.FontHeightInPoints = (short)15;
+            short font2Idx = font2.Index;
+            wb.CreateCellStyle().SetFont(font2);
+            Assert.AreEqual(num0 + 2, wb.NumberOfFonts);
+
+            // Save and re-load
+            wb = _testDataProvider.WriteOutAndReadBack(wb);
+            s1 = wb.GetSheetAt(0);
+
+            Assert.AreEqual(num0 + 2, wb.NumberOfFonts);
+            Assert.IsNotNull(wb.GetFontAt(font1Idx));
+            Assert.IsNotNull(wb.GetFontAt(font2Idx));
+
+            Assert.AreEqual(15, wb.GetFontAt(font2Idx).FontHeightInPoints);
+            Assert.IsTrue(wb.GetFontAt(font2Idx).IsItalic);
+        }
+
+        /**
+         * Test that fonts get Added properly
+         *
+         * @see NPOI.HSSF.usermodel.TestBugs#test45338()
+         */
+        [TestMethod]
+        public void Test45338()
+        {
+            Workbook wb = _testDataProvider.CreateWorkbook();
+            int num0 = wb.NumberOfFonts;
+
+            Sheet s = wb.CreateSheet();
+            s.CreateRow(0);
+            s.CreateRow(1);
+            s.GetRow(0).CreateCell(0);
+            s.GetRow(1).CreateCell(0);
+
+            //default font
+            Font f1 = wb.GetFontAt((short)0);
+            Assert.AreEqual((short)FontBoldWeight.NORMAL, f1.Boldweight);
+
+            // Check that asking for the same font
+            //  multiple times gives you the same thing.
+            // Otherwise, our Tests wouldn't work!
+            Assert.AreEqual(wb.GetFontAt((short)0), wb.GetFontAt((short)0));
+
+            // Look for a new font we have
+            //  yet to add
+            Assert.IsNull(
+                wb.FindFont(
+                    (short)FontBoldWeight.BOLD, (short)123, (short)(22 * 20),
+                    "Thingy", false, true, (short)2, (byte)2
+                )
+            );
+
+            Font nf = wb.CreateFont();
+            short nfIdx = nf.Index;
+            Assert.AreEqual(num0 + 1, wb.NumberOfFonts);
+
+            Assert.AreEqual(nf, wb.GetFontAt(nfIdx));
+
+            nf.Boldweight = (short)(FontBoldWeight.BOLD);
+            nf.Color = (short)123;
+            nf.FontHeightInPoints = (short)22;
+            nf.FontName = ("Thingy");
+            nf.IsItalic = (false);
+            nf.IsStrikeout = (true);
+            nf.TypeOffset = (short)2;
+            nf.Underline = (byte)2;
+
+            Assert.AreEqual(num0 + 1, wb.NumberOfFonts);
+            Assert.AreEqual(nf, wb.GetFontAt(nfIdx));
+
+            Assert.AreEqual(wb.GetFontAt(nfIdx), wb.GetFontAt(nfIdx));
+            Assert.IsTrue(wb.GetFontAt((short)0) != wb.GetFontAt(nfIdx));
+
+            // Find it now
+            Assert.IsNotNull(
+                wb.FindFont(
+                    (short)FontBoldWeight.BOLD, (short)123, (short)(22 * 20),
+                    "Thingy", false, true, (short)2, (byte)2
+                )
+            );
+            Assert.AreEqual(nf,
+                   wb.FindFont(
+                       (short)FontBoldWeight.BOLD, (short)123, (short)(22 * 20),
+                       "Thingy", false, true, (short)2, (byte)2
+                   )
+            );
+        }
+    }
+
+}
+
+
+

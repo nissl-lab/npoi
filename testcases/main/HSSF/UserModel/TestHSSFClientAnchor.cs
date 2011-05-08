@@ -1,0 +1,115 @@
+/* ====================================================================
+   Licensed to the Apache Software Foundation (ASF) under one or more
+   contributor license agreements.  See the NOTICE file distributed with
+   this work for Additional information regarding copyright ownership.
+   The ASF licenses this file to You under the Apache License, Version 2.0
+   (the "License"); you may not use this file except in compliance with
+   the License.  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+==================================================================== */
+
+namespace TestCases.HSSF.UserModel
+{
+    using System;
+    using NPOI.DDF;
+    using NPOI.HSSF.Model;
+    using NPOI.HSSF.UserModel;
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    /**
+     * Various Tests for HSSFClientAnchor.
+     *
+     * @author Glen Stampoultzis (glens at apache.org)
+     * @author Yegor Kozlov (yegor at apache.org)
+     */
+    [TestClass]
+    public class TestHSSFClientAnchor
+    {
+        [TestMethod]
+        public void TestGetAnchorHeightInPoints()
+        {
+            HSSFWorkbook wb = new HSSFWorkbook();
+            HSSFSheet sheet = (HSSFSheet)wb.CreateSheet("Test");
+            HSSFClientAnchor a = new HSSFClientAnchor(0, 0, 1023, 255, (short)0, 0, (short)0, 0);
+            float p = a.GetAnchorHeightInPoints(sheet);
+            Assert.AreEqual(11.953, p, 0.001);
+
+            sheet.CreateRow(0).HeightInPoints = (14);
+            a = new HSSFClientAnchor(0, 0, 1023, 255, (short)0, 0, (short)0, 0);
+            p = a.GetAnchorHeightInPoints(sheet);
+            Assert.AreEqual(13.945, p, 0.001);
+
+            a = new HSSFClientAnchor(0, 0, 1023, 127, (short)0, 0, (short)0, 0);
+            p = a.GetAnchorHeightInPoints(sheet);
+            Assert.AreEqual(6.945, p, 0.001);
+
+            a = new HSSFClientAnchor(0, 126, 1023, 127, (short)0, 0, (short)0, 0);
+            p = a.GetAnchorHeightInPoints(sheet);
+            Assert.AreEqual(0.054, p, 0.001);
+
+            a = new HSSFClientAnchor(0, 0, 1023, 0, (short)0, 0, (short)0, 1);
+            p = a.GetAnchorHeightInPoints(sheet);
+            Assert.AreEqual(14.0, p, 0.001);
+
+            sheet.CreateRow(0).HeightInPoints = (12);
+            a = new HSSFClientAnchor(0, 127, 1023, 127, (short)0, 0, (short)0, 1);
+            p = a.GetAnchorHeightInPoints(sheet);
+            Assert.AreEqual(12.0, p, 0.001);
+
+        }
+
+        /**
+         * When HSSFClientAnchor is converted into EscherClientAnchorRecord
+         * Check that dx1, dx2, dy1 and dy2 are writtem "as is".
+         * (Bug 42999 reported that dx1 ans dx2 are swapped if dx1>dx2. It doesn't make sense for client anchors.)
+         */
+        [TestMethod]
+        public void TestConvertAnchor()
+        {
+            HSSFClientAnchor[] anchor = {
+            new HSSFClientAnchor( 0 , 0 , 0 , 0 ,(short)0, 1,(short)1,3),
+            new HSSFClientAnchor( 100 , 0 , 900 , 255 ,(short)0, 1,(short)1,3),
+            new HSSFClientAnchor( 900 , 0 , 100 , 255 ,(short)0, 1,(short)1,3)
+        };
+            for (int i = 0; i < anchor.Length; i++)
+            {
+                EscherClientAnchorRecord record = (EscherClientAnchorRecord)ConvertAnchor.CreateAnchor(anchor[i]);
+                Assert.AreEqual(anchor[i].Dx1, record.Dx1);
+                Assert.AreEqual(anchor[i].Dx2, record.Dx2);
+                Assert.AreEqual(anchor[i].Dy1, record.Dy1);
+                Assert.AreEqual(anchor[i].Dy2, record.Dy2);
+                Assert.AreEqual(anchor[i].Col1, record.Col1);
+                Assert.AreEqual(anchor[i].Col2, record.Col2);
+                Assert.AreEqual(anchor[i].Row1, record.Row1);
+                Assert.AreEqual(anchor[i].Row2, record.Row2);
+            }
+        }
+        [TestMethod]
+        public void TestAnchorHeightInPoints()
+        {
+            HSSFWorkbook wb = new HSSFWorkbook();
+            NPOI.SS.UserModel.Sheet sheet = wb.CreateSheet();
+
+            HSSFClientAnchor[] anchor = {
+            new HSSFClientAnchor( 0 , 0,    0 , 0 ,(short)0, 1,(short)1, 3),
+            new HSSFClientAnchor( 0 , 254 , 0 , 126 ,(short)0, 1,(short)1, 3),
+            new HSSFClientAnchor( 0 , 128 , 0 , 128 ,(short)0, 1,(short)1, 3),
+            new HSSFClientAnchor( 0 , 0 , 0 , 128 ,(short)0, 1,(short)1, 3),
+        };
+            float[] ref1 = { 25.5f, 19.125f, 25.5f, 31.875f };
+            for (int i = 0; i < anchor.Length; i++)
+            {
+                float height = anchor[i].GetAnchorHeightInPoints(sheet);
+                Assert.AreEqual(ref1[i], height, 0);
+            }
+
+        }
+
+    }
+}

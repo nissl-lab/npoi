@@ -1,0 +1,282 @@
+﻿namespace NPOI.SS.Formula
+{
+    using System;
+    using NPOI.HSSF.Record.Formula.Eval;
+    using NPOI.HSSF.Record.Formula.Functions;
+    using NPOI.SS.Util;
+    /**
+     * Contains all the contextual information required to Evaluate an operation
+     * within a formula
+     *
+     * For POI internal use only
+     *
+     * @author Josh Micich
+     */
+    public class OperationEvaluationContext
+    {
+        public static FreeRefFunction UDF = UserDefinedFunction.instance;
+        private EvaluationWorkbook _workbook;
+        private int _sheetIndex;
+        private int _rowIndex;
+        private int _columnIndex;
+        private EvaluationTracker _tracker;
+        private WorkbookEvaluator _bookEvaluator;
+
+        public OperationEvaluationContext(WorkbookEvaluator bookEvaluator, EvaluationWorkbook workbook, int sheetIndex, int srcRowNum,
+                int srcColNum, EvaluationTracker tracker)
+        {
+            _bookEvaluator = bookEvaluator;
+            _workbook = workbook;
+            _sheetIndex = sheetIndex;
+            _rowIndex = srcRowNum;
+            _columnIndex = srcColNum;
+            _tracker = tracker;
+        }
+
+        public EvaluationWorkbook GetWorkbook()
+        {
+            return _workbook;
+        }
+
+        public int RowIndex
+        {
+            get
+            {
+                return _rowIndex;
+            }
+        }
+
+        public int ColumnIndex
+        {
+            get
+            {
+                return _columnIndex;
+            }
+        }
+
+        SheetRefEvaluator CreateExternSheetRefEvaluator(ExternSheetReferenceToken ptg)
+        {
+            return CreateExternSheetRefEvaluator(ptg.ExternSheetIndex);
+        }
+        SheetRefEvaluator CreateExternSheetRefEvaluator(int externSheetIndex)
+        {
+            ExternalSheet externalSheet = _workbook.GetExternalSheet(externSheetIndex);
+            WorkbookEvaluator targetEvaluator;
+            int otherSheetIndex;
+            if (externalSheet == null)
+            {
+                // sheet is in same workbook
+                otherSheetIndex = _workbook.ConvertFromExternSheetIndex(externSheetIndex);
+                targetEvaluator = _bookEvaluator;
+            }
+            else
+            {
+                // look up sheet by name from external workbook
+                String workbookName = externalSheet.GetWorkbookName();
+                try
+                {
+                    targetEvaluator = _bookEvaluator.GetOtherWorkbookEvaluator(workbookName);
+                }
+                catch (WorkbookNotFoundException e)
+                {
+                    throw;
+                }
+                otherSheetIndex = targetEvaluator.GetSheetIndex(externalSheet.GetSheetName());
+                if (otherSheetIndex < 0)
+                {
+                    throw new Exception("Invalid sheet name '" + externalSheet.GetSheetName()
+                            + "' in bool '" + workbookName + "'.");
+                }
+            }
+            return new SheetRefEvaluator(targetEvaluator, _tracker, otherSheetIndex);
+        }
+
+        /**
+         * @return <code>null</code> if either workbook or sheet is not found
+         */
+        private SheetRefEvaluator CreateExternSheetRefEvaluator(String workbookName, String sheetName)
+        {
+            WorkbookEvaluator targetEvaluator;
+            if (workbookName == null)
+            {
+                targetEvaluator = _bookEvaluator;
+            }
+            else
+            {
+                if (sheetName == null)
+                {
+                    throw new ArgumentException("sheetName must not be null if workbookName is provided");
+                }
+                try
+                {
+                    targetEvaluator = _bookEvaluator.GetOtherWorkbookEvaluator(workbookName);
+                }
+                catch (WorkbookNotFoundException)
+                {
+                    return null;
+                }
+            }
+            int otherSheetIndex = sheetName == null ? _sheetIndex : targetEvaluator.GetSheetIndex(sheetName);
+            if (otherSheetIndex < 0)
+            {
+                return null;
+            }
+            return new SheetRefEvaluator(targetEvaluator, _tracker, otherSheetIndex);
+        }
+
+        public SheetRefEvaluator GetRefEvaluatorForCurrentSheet()
+        {
+            return new SheetRefEvaluator(_bookEvaluator, _tracker, _sheetIndex);
+        }
+
+
+
+        /**
+         * Resolves a cell or area reference dynamically.
+         * @param workbookName the name of the workbook Containing the reference.  If <code>null</code>
+         * the current workbook is assumed.  Note - to Evaluate formulas which use multiple workbooks,
+         * a {@link CollaboratingWorkbooksEnvironment} must be set up.
+         * @param sheetName the name of the sheet Containing the reference.  May be <code>null</code>
+         * (when <tt>workbookName</tt> is also null) in which case the current workbook and sheet is
+         * assumed.
+         * @param refStrPart1 the single cell reference or first part of the area reference.  Must not
+         * be <code>null</code>.
+         * @param refStrPart2 the second part of the area reference. For single cell references this
+         * parameter must be <code>null</code>
+         * @param isA1Style specifies the format for <tt>refStrPart1</tt> and <tt>refStrPart2</tt>.
+         * Pass <code>true</code> for 'A1' style and <code>false</code> for 'R1C1' style.
+         * TODO - currently POI only supports 'A1' reference style
+         * @return a {@link RefEval} or {@link AreaEval}
+         */
+        public ValueEval GetDynamicReference(String workbookName, String sheetName, String refStrPart1,
+                String refStrPart2, bool isA1Style)
+        {
+            if (!isA1Style)
+            {
+                throw new Exception("R1C1 style not supported yet");
+            }
+            SheetRefEvaluator sre = CreateExternSheetRefEvaluator(workbookName, sheetName);
+            if (sre == null)
+            {
+                return ErrorEval.REF_INVALID;
+            }
+            // ugly typecast - TODO - make spReadsheet version more easily accessible
+            SpreadsheetVersion ssVersion = ((FormulaParsingWorkbook)_workbook).GetSpreadsheetVersion();
+
+            NameType part1refType = ClassifyCellReference(refStrPart1, ssVersion);
+            switch (part1refType)
+            {
+                case NameType.BAD_CELL_OR_NAMED_RANGE:
+                    return ErrorEval.REF_INVALID;
+                case NameType.NAMED_RANGE:
+                    throw new Exception("Cannot Evaluate '" + refStrPart1
+                            + "'. Indirect Evaluation of defined names not supported yet");
+            }
+            if (refStrPart2 == null)
+            {
+                // no ':'
+                switch (part1refType)
+                {
+                    case NameType.COLUMN:
+                    case NameType.ROW:
+                        return ErrorEval.REF_INVALID;
+                    case NameType.CELL:
+                        CellReference cr = new CellReference(refStrPart1);
+                        return new LazyRefEval(cr.Row, cr.Col, sre);
+                }
+                throw new InvalidOperationException("Unexpected reference classification of '" + refStrPart1 + "'.");
+            }
+            NameType part2refType = ClassifyCellReference(refStrPart1, ssVersion);
+            switch (part2refType)
+            {
+                case NameType.BAD_CELL_OR_NAMED_RANGE:
+                    return ErrorEval.REF_INVALID;
+                case NameType.NAMED_RANGE:
+                    throw new Exception("Cannot Evaluate '" + refStrPart1
+                            + "'. Indirect Evaluation of defined names not supported yet");
+            }
+
+            if (part2refType != part1refType)
+            {
+                // LHS and RHS of ':' must be compatible
+                return ErrorEval.REF_INVALID;
+            }
+            int firstRow, firstCol, lastRow, lastCol;
+            switch (part1refType)
+            {
+                case NameType.COLUMN:
+                    firstRow = 0;
+                    lastRow = ssVersion.LastRowIndex;
+                    firstCol = ParseColRef(refStrPart1);
+                    lastCol = ParseColRef(refStrPart2);
+                    break;
+                case NameType.ROW:
+                    firstCol = 0;
+                    lastCol = ssVersion.LastColumnIndex;
+                    firstRow = ParseRowRef(refStrPart1);
+                    lastRow = ParseRowRef(refStrPart2);
+                    break;
+                case NameType.CELL:
+                    CellReference cr;
+                    cr = new CellReference(refStrPart1);
+                    firstRow = cr.Row;
+                    firstCol = cr.Col;
+                    cr = new CellReference(refStrPart2);
+                    lastRow = cr.Row;
+                    lastCol = cr.Col;
+                    break;
+                default:
+                    throw new InvalidOperationException("Unexpected reference classification of '" + refStrPart1 + "'.");
+            }
+            return new LazyAreaEval(firstRow, firstCol, lastRow, lastCol, sre);
+        }
+
+        private static int ParseRowRef(String refStrPart)
+        {
+            return CellReference.ConvertColStringToIndex(refStrPart);
+        }
+
+        private static int ParseColRef(String refStrPart)
+        {
+            return Int32.Parse(refStrPart) - 1;
+        }
+
+        private static NameType ClassifyCellReference(String str, SpreadsheetVersion ssVersion)
+        {
+            int len = str.Length;
+            if (len < 1)
+            {
+                return NameType.BAD_CELL_OR_NAMED_RANGE;
+            }
+            return CellReference.ClassifyCellReference(str, ssVersion);
+        }
+
+        public FreeRefFunction FindUserDefinedFunction(String functionName)
+        {
+            return _bookEvaluator.FindUserDefinedFunction(functionName);
+        }
+
+        public ValueEval GetRefEval(int rowIndex, int columnIndex)
+        {
+            SheetRefEvaluator sre = GetRefEvaluatorForCurrentSheet();
+            return new LazyRefEval(rowIndex, columnIndex, sre);
+        }
+        public ValueEval GetRef3DEval(int rowIndex, int columnIndex, int extSheetIndex)
+        {
+            SheetRefEvaluator sre = CreateExternSheetRefEvaluator(extSheetIndex);
+            return new LazyRefEval(rowIndex, columnIndex, sre);
+        }
+        public ValueEval GetAreaEval(int firstRowIndex, int firstColumnIndex,
+                int lastRowIndex, int lastColumnIndex)
+        {
+            SheetRefEvaluator sre = GetRefEvaluatorForCurrentSheet();
+            return new LazyAreaEval(firstRowIndex, firstColumnIndex, lastRowIndex, lastColumnIndex, sre);
+        }
+        public ValueEval GetArea3DEval(int firstRowIndex, int firstColumnIndex,
+                int lastRowIndex, int lastColumnIndex, int extSheetIndex)
+        {
+            SheetRefEvaluator sre = CreateExternSheetRefEvaluator(extSheetIndex);
+            return new LazyAreaEval(firstRowIndex, firstColumnIndex, lastRowIndex, lastColumnIndex, sre);
+        }
+    }
+}

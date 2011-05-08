@@ -1,0 +1,338 @@
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CreatePOIFSFile", "..\..\examples\poifs\CreatePOIFSFile\CreatePOIFSFile.csproj", "{646A589F-90D3-4AB2-9346-0FC4C097D76A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CreatePOIFSFileWithProperties", "..\..\examples\poifs\CreatePOIFSFileWithProperties\CreatePOIFSFileWithProperties.csproj", "{2EFA16D1-5B04-43E4-B4FC-8CBAF2E30B93}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CreateEmptyExcelFile", "..\..\examples\hssf\CreateEmptyExcelFile\CreateEmptyExcelFile.csproj", "{A5555027-4EAF-47E7-B5C2-C2595AB22A6A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExtractStringsFromXls", "..\..\examples\hssf\ExtractStringsFromXls\ExtractStringsFromXls.csproj", "{3C323255-CF44-43FC-BD7B-F170FEB93E6A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MultplicationTableInXls", "..\..\examples\hssf\MultplicationTableInXls\MultplicationTableInXls.csproj", "{0183662A-B1B4-4E65-916E-C2FB397B8A3E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ColorfulMatrixTable", "..\..\examples\hssf\ColorfulMatrixTable\ColorfulMatrixTable.csproj", "{727632C0-1983-4943-AD09-6347F74BBE85}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SetAlignmentInXls", "..\..\examples\hssf\SetAlignmentInXls\SetAlignmentInXls.csproj", "{A6787661-E365-4457-9D6E-F5BEE50191A6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SetWidthAndHeightInXls", "..\..\examples\hssf\SetWidthAndHeightInXls\SetWidthAndHeightInXls.csproj", "{F4C3D91C-93AA-4678-ADAA-8E81B162B54B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RotateTextInXls", "..\..\examples\hssf\RotateTextInXls\RotateTextInXls.csproj", "{68BA3B7C-629D-4FA2-A301-0F9F2A5FC5F2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SetPrintSettingsInXls", "..\..\examples\hssf\SetPrintSettingsInXls\SetPrintSettingsInXls.csproj", "{911B580E-30EC-4D43-93DB-C8E6091F6053}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExportXlsToDownload", "..\..\examples\hssf\ExportXlsToDownload\ExportXlsToDownload.csproj", "{3BC1A9C3-7963-4A0A-A072-F36BA72917AC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SetBorderStyleInXls", "..\..\examples\hssf\SetBorderStyleInXls\SetBorderStyleInXls.csproj", "{08AE95F1-1234-4F95-ACCC-DFE0F85AE4B9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SetDateCellInXls", "..\..\examples\hssf\SetDateCellInXls\SetDateCellInXls.csproj", "{A2F98C75-FA26-49B5-9F59-E11F80455AE2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SetCellCommentInXls", "..\..\examples\hssf\SetCellCommentInXls\SetCellCommentInXls.csproj", "{8817BC32-9672-4DAF-901D-62FC9C89932B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DrawingInXls", "..\..\examples\hssf\DrawingInXls\DrawingInXls.csproj", "{064D83E9-B303-4924-888C-37115DB6F94F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NumberFormatInXls", "..\..\examples\hssf\NumberFormatInXls\NumberFormatInXls.csproj", "{BB29D536-3C65-496D-9FC0-E54BB31C4AEB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZoomSheet", "..\..\examples\hssf\ZoomSheet\ZoomSheet.csproj", "{A2E1D5DA-1E70-48E2-BBDC-5E01882ADC95}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MergeCellsInXls", "..\..\examples\hssf\MergeCellsInXls\MergeCellsInXls.csproj", "{D668018C-D806-4875-9A49-3E17005B4719}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApplyFontInXls", "..\..\examples\hssf\ApplyFontInXls\ApplyFontInXls.csproj", "{7F775F9F-4BA0-47BF-B2EE-FEA2A3CC5D00}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InsertPicturesInXls", "..\..\examples\hssf\InsertPicturesInXls\InsertPicturesInXls.csproj", "{743F3B02-A12E-4D01-8733-129AD48A02CC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GroupRowAndColumnInXls", "..\..\examples\hssf\GroupRowAndColumnInXls\GroupRowAndColumnInXls.csproj", "{E09B35CA-9580-4CCB-9F01-1E2452101834}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UseBasicFormulaInXls", "..\..\examples\hssf\UseBasicFormulaInXls\UseBasicFormulaInXls.csproj", "{874E25C5-3ECE-4772-90C1-C857AF4C7568}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FillBackgroundInXls", "..\..\examples\hssf\FillBackgroundInXls\FillBackgroundInXls.csproj", "{0242FC8A-E605-40D0-A55E-A2A8A80CA564}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DisplayGridlinesInXls", "..\..\examples\hssf\DisplayGridlinesInXls\DisplayGridlinesInXls.csproj", "{FE443BA3-E3DF-4875-82EB-F21B4E000D51}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConditionalFormattingInXls", "..\..\examples\hssf\ConditionalFormattingInXls\ConditionalFormattingInXls.csproj", "{A77B2631-7EFD-45AF-BF36-999ABE7D7D36}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AddHyperlinkInXls", "..\..\examples\hssf\AddHyperlinkInXls\AddHyperlinkInXls.csproj", "{ED368B57-3AFC-46F2-94C7-B77A5584FCA8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SplitAndFreezePanes", "..\..\examples\hssf\SplitAndFreezePanes\SplitAndFreezePanes.csproj", "{D9527798-10E9-466B-96A8-6AE42DBE0428}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GenerateXlsFromXlsTemplate", "..\..\examples\hssf\GenerateXlsFromXlsTemplate\GenerateXlsFromXlsTemplate.csproj", "{1AEB7B6E-FCDA-4AC2-9ED5-363D4B22A594}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SetCellValuesInXls", "..\..\examples\hssf\SetCellValuesInXls\SetCellValuesInXls.csproj", "{39ACE35B-EE6E-4A08-944F-9961E25667EE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CreateHeaderFooterInXls", "..\..\examples\hssf\CreateHeaderFooterInXls\CreateHeaderFooterInXls.csproj", "{FAF396EC-1702-4091-A8DC-6C8FD73C5A93}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoSizeColumnInXls", "..\..\examples\hssf\AutoSizeColumnInXls\AutoSizeColumnInXls.csproj", "{84C3F015-13D1-47DF-A71B-9D535F9E32BA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CreateDropDownListCellInXls", "..\..\examples\hssf\CreateDropDownListCellInXls\CreateDropDownListCellInXls.csproj", "{60421AA4-2180-4E6A-BED6-44B8974604F5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShrinkToFitColumnInXls", "..\..\examples\hssf\ShrinkToFitColumnInXls\ShrinkToFitColumnInXls.csproj", "{0915C349-771A-4292-9CDB-C90DB9699B1D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SetActiveCellRangeInXls", "..\..\examples\hssf\SetActiveCellRangeInXls\SetActiveCellRangeInXls.csproj", "{21640A19-3428-42E1-A442-D8A6E36DF625}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChangeSheetTabColorInXls", "..\..\examples\hssf\ChangeSheetTabColorInXls\ChangeSheetTabColorInXls.csproj", "{0FC26430-9B64-4F42-BA37-9BB9DBBFD9D3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RepeatingRowsAndColumns", "..\..\examples\hssf\RepeatingRowsAndColumns\RepeatingRowsAndColumns.csproj", "{A0A6ACE2-9988-4304-AEC0-1DCE1336C6EB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HideColumnAndRowInXls", "..\..\examples\hssf\HideColumnAndRowInXls\HideColumnAndRowInXls.csproj", "{2B3D1915-6538-4E2A-8739-5423F5BB8718}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImportXlsToDataTable", "..\..\examples\hssf\ImportXlsToDataTable\ImportXlsToDataTable.csproj", "{3249C8B8-2C5A-42B6-BDA8-F8B0C2619F71}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SetPrintAreaInXls", "..\..\examples\hssf\SetPrintAreaInXls\SetPrintAreaInXls.csproj", "{65A0B059-B6FF-47C9-AC7F-275B858AC355}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EnableAutoFilterInXls", "..\..\examples\hssf\EnableAutoFilterInXls\EnableAutoFilterInXls.csproj", "{EBFEB35E-2E99-4AB1-90A9-876D84B42B39}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UseNewlinesInCellsInXls", "..\..\examples\hssf\UseNewlinesInCellsInXls\UseNewlinesInCellsInXls.csproj", "{E59F8B89-6E0E-4870-A68B-A7CB11977ABA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProtectSheetInXls", "..\..\examples\hssf\ProtectSheetInXls\ProtectSheetInXls.csproj", "{3BDA1D83-7189-4B17-AE70-56E1E264EB41}"
+EndProject
+Global
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 37
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = https://tfs08.codeplex.com/
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = ColorfulMatrixTable\\ColorfulMatrixTable.csproj
+		SccProjectName1 = ColorfulMatrixTable
+		SccLocalPath1 = ColorfulMatrixTable
+		SccProjectUniqueName2 = CreateEmptyExcelFile\\CreateEmptyExcelFile.csproj
+		SccProjectName2 = CreateEmptyExcelFile
+		SccLocalPath2 = CreateEmptyExcelFile
+		SccProjectUniqueName3 = CreatePOIFSFile\\CreatePOIFSFile.csproj
+		SccProjectName3 = CreatePOIFSFile
+		SccLocalPath3 = CreatePOIFSFile
+		SccProjectUniqueName4 = CreatePOIFSFileWithProperties\\CreatePOIFSFileWithProperties.csproj
+		SccProjectName4 = CreatePOIFSFileWithProperties
+		SccLocalPath4 = CreatePOIFSFileWithProperties
+		SccProjectUniqueName5 = ExtractStringsFromXls\\ExtractStringsFromXls.csproj
+		SccProjectName5 = ExtractStringsFromXls
+		SccLocalPath5 = ExtractStringsFromXls
+		SccProjectUniqueName6 = MultplicationTableInXls\\MultplicationTableInXls.csproj
+		SccProjectName6 = MultplicationTableInXls
+		SccLocalPath6 = MultplicationTableInXls
+		SccProjectUniqueName7 = ExportXlsToDownload\\ExportXlsToDownload.csproj
+		SccProjectName7 = ExportXlsToDownload
+		SccLocalPath7 = ExportXlsToDownload
+		SccProjectUniqueName8 = RotateTextInXls\\RotateTextInXls.csproj
+		SccProjectName8 = RotateTextInXls
+		SccLocalPath8 = RotateTextInXls
+		SccProjectUniqueName9 = SetAlignmentInXls\\SetAlignmentInXls.csproj
+		SccProjectName9 = SetAlignmentInXls
+		SccLocalPath9 = SetAlignmentInXls
+		SccProjectUniqueName10 = SetPrintSettingsInXls\\SetPrintSettingsInXls.csproj
+		SccProjectName10 = SetPrintSettingsInXls
+		SccLocalPath10 = SetPrintSettingsInXls
+		SccProjectUniqueName11 = SetWidthAndHeightInXls\\SetWidthAndHeightInXls.csproj
+		SccProjectName11 = SetWidthAndHeightInXls
+		SccLocalPath11 = SetWidthAndHeightInXls
+		SccProjectUniqueName12 = SetBorderStyleInXls\\SetBorderStyleInXls.csproj
+		SccProjectName12 = SetBorderStyleInXls
+		SccLocalPath12 = SetBorderStyleInXls
+		SccProjectUniqueName13 = SetDateCellInXls\\SetDateCellInXls.csproj
+		SccProjectName13 = SetDateCellInXls
+		SccLocalPath13 = SetDateCellInXls
+		SccProjectUniqueName14 = SetCellCommentInXls\\SetCellCommentInXls.csproj
+		SccProjectName14 = SetCellCommentInXls
+		SccLocalPath14 = SetCellCommentInXls
+		SccProjectUniqueName15 = DrawingInXls\\DrawingInXls.csproj
+		SccProjectName15 = DrawingInXls
+		SccLocalPath15 = DrawingInXls
+		SccProjectUniqueName16 = NumberFormatInXls\\NumberFormatInXls.csproj
+		SccProjectName16 = NumberFormatInXls
+		SccLocalPath16 = NumberFormatInXls
+		SccProjectUniqueName17 = ZoomSheet\\ZoomSheet.csproj
+		SccProjectName17 = ZoomSheet
+		SccLocalPath17 = ZoomSheet
+		SccProjectUniqueName18 = MergeCellsInXls\\MergeCellsInXls.csproj
+		SccProjectName18 = MergeCellsInXls
+		SccLocalPath18 = MergeCellsInXls
+		SccProjectUniqueName19 = ApplyFontInXls\\ApplyFontInXls.csproj
+		SccProjectName19 = ApplyFontInXls
+		SccLocalPath19 = ApplyFontInXls
+		SccProjectUniqueName20 = InsertPicturesInXls\\InsertPicturesInXls.csproj
+		SccProjectName20 = InsertPicturesInXls
+		SccLocalPath20 = InsertPicturesInXls
+		SccProjectUniqueName21 = GroupRowAndColumnInXls\\GroupRowAndColumnInXls.csproj
+		SccProjectName21 = GroupRowAndColumnInXls
+		SccLocalPath21 = GroupRowAndColumnInXls
+		SccProjectUniqueName22 = UseBasicFormulaInXls\\UseBasicFormulaInXls.csproj
+		SccProjectName22 = UseBasicFormulaInXls
+		SccLocalPath22 = UseBasicFormulaInXls
+		SccProjectUniqueName23 = FillBackgroundInXls\\FillBackgroundInXls.csproj
+		SccProjectName23 = FillBackgroundInXls
+		SccLocalPath23 = FillBackgroundInXls
+		SccProjectUniqueName24 = DisplayGridlinesInXls\\DisplayGridlinesInXls.csproj
+		SccProjectName24 = DisplayGridlinesInXls
+		SccLocalPath24 = DisplayGridlinesInXls
+		SccProjectUniqueName25 = ConditionalFormattingInXls\\ConditionalFormattingInXls.csproj
+		SccProjectName25 = ConditionalFormattingInXls
+		SccLocalPath25 = ConditionalFormattingInXls
+		SccProjectUniqueName26 = AddHyperlinkInXls\\AddHyperlinkInXls.csproj
+		SccProjectName26 = AddHyperlinkInXls
+		SccLocalPath26 = AddHyperlinkInXls
+		SccProjectUniqueName27 = SplitAndFreezePanes\\SplitAndFreezePanes.csproj
+		SccProjectName27 = SplitAndFreezePanes
+		SccLocalPath27 = SplitAndFreezePanes
+		SccProjectUniqueName28 = GenerateXlsFromXlsTemplate\\GenerateXlsFromXlsTemplate.csproj
+		SccProjectName28 = GenerateXlsFromXlsTemplate
+		SccLocalPath28 = GenerateXlsFromXlsTemplate
+		SccProjectUniqueName29 = SetCellValuesInXls\\SetCellValuesInXls.csproj
+		SccProjectName29 = SetCellValuesInXls
+		SccLocalPath29 = SetCellValuesInXls
+		SccProjectUniqueName30 = CreateHeaderFooterInXls\\CreateHeaderFooterInXls.csproj
+		SccProjectName30 = CreateHeaderFooterInXls
+		SccLocalPath30 = CreateHeaderFooterInXls
+		SccProjectUniqueName31 = CreateDropDownListCellInXls\\CreateDropDownListCellInXls.csproj
+		SccProjectName31 = CreateDropDownListCellInXls
+		SccLocalPath31 = CreateDropDownListCellInXls
+		SccProjectUniqueName32 = AutoSizeColumnInXls\\AutoSizeColumnInXls.csproj
+		SccProjectName32 = AutoSizeColumnInXls
+		SccLocalPath32 = AutoSizeColumnInXls
+		SccProjectUniqueName33 = ShrinkToFitColumnInXls\\ShrinkToFitColumnInXls.csproj
+		SccProjectName33 = ShrinkToFitColumnInXls
+		SccLocalPath33 = ShrinkToFitColumnInXls
+		SccProjectUniqueName34 = SetActiveCellRangeInXls\\SetActiveCellRangeInXls.csproj
+		SccProjectName34 = SetActiveCellRangeInXls
+		SccLocalPath34 = SetActiveCellRangeInXls
+		SccProjectUniqueName35 = ChangeSheetTabColorInXls\\ChangeSheetTabColorInXls.csproj
+		SccProjectName35 = ChangeSheetTabColorInXls
+		SccLocalPath35 = ChangeSheetTabColorInXls
+		SccProjectUniqueName36 = RepeatingRowsAndColumns\\RepeatingRowsAndColumns.csproj
+		SccProjectName36 = RepeatingRowsAndColumns
+		SccLocalPath36 = RepeatingRowsAndColumns
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		NPOI.Tools|Any CPU = NPOI.Tools|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{646A589F-90D3-4AB2-9346-0FC4C097D76A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{646A589F-90D3-4AB2-9346-0FC4C097D76A}.NPOI.Tools|Any CPU.ActiveCfg = Release|Any CPU
+		{646A589F-90D3-4AB2-9346-0FC4C097D76A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2EFA16D1-5B04-43E4-B4FC-8CBAF2E30B93}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2EFA16D1-5B04-43E4-B4FC-8CBAF2E30B93}.NPOI.Tools|Any CPU.ActiveCfg = Release|Any CPU
+		{2EFA16D1-5B04-43E4-B4FC-8CBAF2E30B93}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A5555027-4EAF-47E7-B5C2-C2595AB22A6A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A5555027-4EAF-47E7-B5C2-C2595AB22A6A}.NPOI.Tools|Any CPU.ActiveCfg = Release|Any CPU
+		{A5555027-4EAF-47E7-B5C2-C2595AB22A6A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3C323255-CF44-43FC-BD7B-F170FEB93E6A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3C323255-CF44-43FC-BD7B-F170FEB93E6A}.NPOI.Tools|Any CPU.ActiveCfg = Release|Any CPU
+		{3C323255-CF44-43FC-BD7B-F170FEB93E6A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0183662A-B1B4-4E65-916E-C2FB397B8A3E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0183662A-B1B4-4E65-916E-C2FB397B8A3E}.NPOI.Tools|Any CPU.ActiveCfg = Release|Any CPU
+		{0183662A-B1B4-4E65-916E-C2FB397B8A3E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{727632C0-1983-4943-AD09-6347F74BBE85}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{727632C0-1983-4943-AD09-6347F74BBE85}.NPOI.Tools|Any CPU.ActiveCfg = Release|Any CPU
+		{727632C0-1983-4943-AD09-6347F74BBE85}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A6787661-E365-4457-9D6E-F5BEE50191A6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A6787661-E365-4457-9D6E-F5BEE50191A6}.NPOI.Tools|Any CPU.ActiveCfg = Release|Any CPU
+		{A6787661-E365-4457-9D6E-F5BEE50191A6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F4C3D91C-93AA-4678-ADAA-8E81B162B54B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F4C3D91C-93AA-4678-ADAA-8E81B162B54B}.NPOI.Tools|Any CPU.ActiveCfg = Release|Any CPU
+		{F4C3D91C-93AA-4678-ADAA-8E81B162B54B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{68BA3B7C-629D-4FA2-A301-0F9F2A5FC5F2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{68BA3B7C-629D-4FA2-A301-0F9F2A5FC5F2}.NPOI.Tools|Any CPU.ActiveCfg = Release|Any CPU
+		{68BA3B7C-629D-4FA2-A301-0F9F2A5FC5F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{911B580E-30EC-4D43-93DB-C8E6091F6053}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{911B580E-30EC-4D43-93DB-C8E6091F6053}.NPOI.Tools|Any CPU.ActiveCfg = Release|Any CPU
+		{911B580E-30EC-4D43-93DB-C8E6091F6053}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3BC1A9C3-7963-4A0A-A072-F36BA72917AC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3BC1A9C3-7963-4A0A-A072-F36BA72917AC}.NPOI.Tools|Any CPU.ActiveCfg = Release|Any CPU
+		{3BC1A9C3-7963-4A0A-A072-F36BA72917AC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{08AE95F1-1234-4F95-ACCC-DFE0F85AE4B9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{08AE95F1-1234-4F95-ACCC-DFE0F85AE4B9}.NPOI.Tools|Any CPU.ActiveCfg = Release|Any CPU
+		{08AE95F1-1234-4F95-ACCC-DFE0F85AE4B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A2F98C75-FA26-49B5-9F59-E11F80455AE2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A2F98C75-FA26-49B5-9F59-E11F80455AE2}.NPOI.Tools|Any CPU.ActiveCfg = Release|Any CPU
+		{A2F98C75-FA26-49B5-9F59-E11F80455AE2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8817BC32-9672-4DAF-901D-62FC9C89932B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8817BC32-9672-4DAF-901D-62FC9C89932B}.NPOI.Tools|Any CPU.ActiveCfg = Release|Any CPU
+		{8817BC32-9672-4DAF-901D-62FC9C89932B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{064D83E9-B303-4924-888C-37115DB6F94F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{064D83E9-B303-4924-888C-37115DB6F94F}.NPOI.Tools|Any CPU.ActiveCfg = Release|Any CPU
+		{064D83E9-B303-4924-888C-37115DB6F94F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BB29D536-3C65-496D-9FC0-E54BB31C4AEB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BB29D536-3C65-496D-9FC0-E54BB31C4AEB}.NPOI.Tools|Any CPU.ActiveCfg = Release|Any CPU
+		{BB29D536-3C65-496D-9FC0-E54BB31C4AEB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A2E1D5DA-1E70-48E2-BBDC-5E01882ADC95}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A2E1D5DA-1E70-48E2-BBDC-5E01882ADC95}.NPOI.Tools|Any CPU.ActiveCfg = Release|Any CPU
+		{A2E1D5DA-1E70-48E2-BBDC-5E01882ADC95}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D668018C-D806-4875-9A49-3E17005B4719}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D668018C-D806-4875-9A49-3E17005B4719}.NPOI.Tools|Any CPU.ActiveCfg = Release|Any CPU
+		{D668018C-D806-4875-9A49-3E17005B4719}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7F775F9F-4BA0-47BF-B2EE-FEA2A3CC5D00}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7F775F9F-4BA0-47BF-B2EE-FEA2A3CC5D00}.NPOI.Tools|Any CPU.ActiveCfg = Release|Any CPU
+		{7F775F9F-4BA0-47BF-B2EE-FEA2A3CC5D00}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{743F3B02-A12E-4D01-8733-129AD48A02CC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{743F3B02-A12E-4D01-8733-129AD48A02CC}.NPOI.Tools|Any CPU.ActiveCfg = Release|Any CPU
+		{743F3B02-A12E-4D01-8733-129AD48A02CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E09B35CA-9580-4CCB-9F01-1E2452101834}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E09B35CA-9580-4CCB-9F01-1E2452101834}.NPOI.Tools|Any CPU.ActiveCfg = Release|Any CPU
+		{E09B35CA-9580-4CCB-9F01-1E2452101834}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{874E25C5-3ECE-4772-90C1-C857AF4C7568}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{874E25C5-3ECE-4772-90C1-C857AF4C7568}.NPOI.Tools|Any CPU.ActiveCfg = Release|Any CPU
+		{874E25C5-3ECE-4772-90C1-C857AF4C7568}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0242FC8A-E605-40D0-A55E-A2A8A80CA564}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0242FC8A-E605-40D0-A55E-A2A8A80CA564}.NPOI.Tools|Any CPU.ActiveCfg = Release|Any CPU
+		{0242FC8A-E605-40D0-A55E-A2A8A80CA564}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FE443BA3-E3DF-4875-82EB-F21B4E000D51}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FE443BA3-E3DF-4875-82EB-F21B4E000D51}.NPOI.Tools|Any CPU.ActiveCfg = Release|Any CPU
+		{FE443BA3-E3DF-4875-82EB-F21B4E000D51}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A77B2631-7EFD-45AF-BF36-999ABE7D7D36}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A77B2631-7EFD-45AF-BF36-999ABE7D7D36}.NPOI.Tools|Any CPU.ActiveCfg = Release|Any CPU
+		{A77B2631-7EFD-45AF-BF36-999ABE7D7D36}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ED368B57-3AFC-46F2-94C7-B77A5584FCA8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ED368B57-3AFC-46F2-94C7-B77A5584FCA8}.NPOI.Tools|Any CPU.ActiveCfg = Release|Any CPU
+		{ED368B57-3AFC-46F2-94C7-B77A5584FCA8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D9527798-10E9-466B-96A8-6AE42DBE0428}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D9527798-10E9-466B-96A8-6AE42DBE0428}.NPOI.Tools|Any CPU.ActiveCfg = Release|Any CPU
+		{D9527798-10E9-466B-96A8-6AE42DBE0428}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1AEB7B6E-FCDA-4AC2-9ED5-363D4B22A594}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1AEB7B6E-FCDA-4AC2-9ED5-363D4B22A594}.NPOI.Tools|Any CPU.ActiveCfg = Release|Any CPU
+		{1AEB7B6E-FCDA-4AC2-9ED5-363D4B22A594}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{39ACE35B-EE6E-4A08-944F-9961E25667EE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{39ACE35B-EE6E-4A08-944F-9961E25667EE}.NPOI.Tools|Any CPU.ActiveCfg = Release|Any CPU
+		{39ACE35B-EE6E-4A08-944F-9961E25667EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FAF396EC-1702-4091-A8DC-6C8FD73C5A93}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FAF396EC-1702-4091-A8DC-6C8FD73C5A93}.NPOI.Tools|Any CPU.ActiveCfg = Release|Any CPU
+		{FAF396EC-1702-4091-A8DC-6C8FD73C5A93}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{84C3F015-13D1-47DF-A71B-9D535F9E32BA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{84C3F015-13D1-47DF-A71B-9D535F9E32BA}.NPOI.Tools|Any CPU.ActiveCfg = Release|Any CPU
+		{84C3F015-13D1-47DF-A71B-9D535F9E32BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{60421AA4-2180-4E6A-BED6-44B8974604F5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{60421AA4-2180-4E6A-BED6-44B8974604F5}.NPOI.Tools|Any CPU.ActiveCfg = Release|Any CPU
+		{60421AA4-2180-4E6A-BED6-44B8974604F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0915C349-771A-4292-9CDB-C90DB9699B1D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0915C349-771A-4292-9CDB-C90DB9699B1D}.NPOI.Tools|Any CPU.ActiveCfg = Release|Any CPU
+		{0915C349-771A-4292-9CDB-C90DB9699B1D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{21640A19-3428-42E1-A442-D8A6E36DF625}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{21640A19-3428-42E1-A442-D8A6E36DF625}.NPOI.Tools|Any CPU.ActiveCfg = Release|Any CPU
+		{21640A19-3428-42E1-A442-D8A6E36DF625}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0FC26430-9B64-4F42-BA37-9BB9DBBFD9D3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0FC26430-9B64-4F42-BA37-9BB9DBBFD9D3}.NPOI.Tools|Any CPU.ActiveCfg = Release|Any CPU
+		{0FC26430-9B64-4F42-BA37-9BB9DBBFD9D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A0A6ACE2-9988-4304-AEC0-1DCE1336C6EB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A0A6ACE2-9988-4304-AEC0-1DCE1336C6EB}.NPOI.Tools|Any CPU.ActiveCfg = Release|Any CPU
+		{A0A6ACE2-9988-4304-AEC0-1DCE1336C6EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2B3D1915-6538-4E2A-8739-5423F5BB8718}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2B3D1915-6538-4E2A-8739-5423F5BB8718}.NPOI.Tools|Any CPU.ActiveCfg = Release|Any CPU
+		{2B3D1915-6538-4E2A-8739-5423F5BB8718}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3249C8B8-2C5A-42B6-BDA8-F8B0C2619F71}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3249C8B8-2C5A-42B6-BDA8-F8B0C2619F71}.NPOI.Tools|Any CPU.ActiveCfg = Release|Any CPU
+		{3249C8B8-2C5A-42B6-BDA8-F8B0C2619F71}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{65A0B059-B6FF-47C9-AC7F-275B858AC355}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{65A0B059-B6FF-47C9-AC7F-275B858AC355}.NPOI.Tools|Any CPU.ActiveCfg = Release|Any CPU
+		{65A0B059-B6FF-47C9-AC7F-275B858AC355}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EBFEB35E-2E99-4AB1-90A9-876D84B42B39}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EBFEB35E-2E99-4AB1-90A9-876D84B42B39}.NPOI.Tools|Any CPU.ActiveCfg = Release|Any CPU
+		{EBFEB35E-2E99-4AB1-90A9-876D84B42B39}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E59F8B89-6E0E-4870-A68B-A7CB11977ABA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E59F8B89-6E0E-4870-A68B-A7CB11977ABA}.NPOI.Tools|Any CPU.ActiveCfg = Release|Any CPU
+		{E59F8B89-6E0E-4870-A68B-A7CB11977ABA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3BDA1D83-7189-4B17-AE70-56E1E264EB41}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3BDA1D83-7189-4B17-AE70-56E1E264EB41}.NPOI.Tools|Any CPU.ActiveCfg = Release|Any CPU
+		{3BDA1D83-7189-4B17-AE70-56E1E264EB41}.Release|Any CPU.ActiveCfg = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

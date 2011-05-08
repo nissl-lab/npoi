@@ -1,0 +1,68 @@
+/* ====================================================================
+   Licensed to the Apache Software Foundation (ASF) Under one or more
+   contributor license agreements.  See the NOTICE file distributed with
+   this work for Additional information regarding copyright ownership.
+   The ASF licenses this file to You Under the Apache License, Version 2.0
+   (the "License"); you may not use this file except in compliance with
+   the License.  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed Under the License is distributed on an "AS Is" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations Under the License.
+==================================================================== */
+
+namespace NPOI.HSSF.Record
+{
+    using System;
+    using System.IO;
+
+    /**
+     * This Is purely for the biff viewer.  During normal operations we don't want
+     * to be seeing this.
+     */
+    public class DrawingRecordForBiffViewer
+           : AbstractEscherHolderRecord
+    {
+        public static short sid = 0xEC;
+
+        public DrawingRecordForBiffViewer()
+        {
+        }
+
+        public DrawingRecordForBiffViewer(RecordInputStream in1)
+            : base(in1)
+        {
+
+        }
+
+        public DrawingRecordForBiffViewer(DrawingRecord r)
+            : base(ConvertToInputStream(r))
+        {
+
+            ConvertRawBytesToEscherRecords();
+        }
+        private static RecordInputStream ConvertToInputStream(DrawingRecord r)
+        {
+            byte[] data = r.Serialize();
+            RecordInputStream rinp = new RecordInputStream(
+                    new MemoryStream(data)
+            );
+            rinp.NextRecord();
+            return rinp;
+        }
+
+        protected override String RecordName
+        {
+            get { return "MSODRAWING"; }
+        }
+
+        public override short Sid
+        {
+            get { return sid; }
+        }
+    }
+}

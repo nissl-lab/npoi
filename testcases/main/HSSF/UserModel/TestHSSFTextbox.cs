@@ -1,0 +1,77 @@
+/*
+* Licensed to the Apache Software Foundation (ASF) under one or more
+* contributor license agreements.  See the NOTICE file distributed with
+* this work for Additional information regarding copyright ownership.
+* The ASF licenses this file to You under the Apache License, Version 2.0
+* (the "License"); you may not use this file except in compliance with
+* the License.  You may obtain a copy of the License at
+*
+*     http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+*/
+namespace TestCases.HSSF.UserModel
+{
+    using System;
+    using NPOI.HSSF.UserModel;
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using System.IO;
+    using TestCases.HSSF;
+    using NPOI.SS.UserModel;
+
+    /**
+     * Test <c>HSSFTextbox</c>.
+     *
+     * @author Yegor Kozlov (yegor at apache.org)
+     */
+    [TestClass]
+    public class TestHSSFTextbox
+    {
+
+        /**
+         * Test that accessors to horizontal and vertical alignment work properly
+         */
+        [TestMethod]
+        public void TestAlignment()
+        {
+            HSSFWorkbook wb = new HSSFWorkbook();
+            NPOI.SS.UserModel.Sheet sh1 = wb.CreateSheet();
+            Drawing patriarch = sh1.CreateDrawingPatriarch();
+
+            Textbox textbox = patriarch.CreateTextbox(new HSSFClientAnchor(0, 0, 0, 0, 1, 1, 6, 4));
+            HSSFRichTextString str = new HSSFRichTextString("Hello, World");
+            textbox.String = (str);
+            textbox.HorizontalAlignment = (HSSFTextbox.HORIZONTAL_ALIGNMENT_CENTERED);
+            textbox.VerticalAlignment = (HSSFTextbox.VERTICAL_ALIGNMENT_CENTER);
+
+            Assert.AreEqual(HSSFTextbox.HORIZONTAL_ALIGNMENT_CENTERED, textbox.HorizontalAlignment);
+            Assert.AreEqual(HSSFTextbox.VERTICAL_ALIGNMENT_CENTER, textbox.VerticalAlignment);
+        }
+
+        /**
+         * Excel requires at least one format run in HSSFTextbox.
+         * When inserting text make sure that if font is not set we must set the default one.
+         */
+        [TestMethod]
+        public void TestSetDeafultTextFormat()
+        {
+            HSSFWorkbook wb = new HSSFWorkbook();
+            NPOI.SS.UserModel.Sheet sheet = wb.CreateSheet();
+            Drawing patriarch = sheet.CreateDrawingPatriarch();
+
+            Textbox textbox1 = patriarch.CreateTextbox(new HSSFClientAnchor(0, 0, 0, 0, 1, 1, 3, 3));
+            HSSFRichTextString rt1 = new HSSFRichTextString("Hello, World!");
+            Assert.AreEqual(0, rt1.NumFormattingRuns);
+            textbox1.String=(rt1);
+
+            HSSFRichTextString rt2 = (HSSFRichTextString)textbox1.String;
+            Assert.AreEqual(1, rt2.NumFormattingRuns);
+            Assert.AreEqual(HSSFRichTextString.NO_FONT, rt2.GetFontOfFormattingRun(0));
+        }
+
+    }
+}

@@ -1,0 +1,498 @@
+/* ====================================================================
+   Licensed to the Apache Software Foundation (ASF) Under one or more
+   contributor license agreements.  See the NOTICE file distributed with
+   this work for Additional information regarding copyright ownership.
+   The ASF licenses this file to You Under the Apache License, Version 2.0
+   (the "License"); you may not use this file except in compliance with
+   the License.  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed Under the License Is distributed on an "AS Is" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations Under the License.
+==================================================================== */
+
+namespace NPOI.HSSF.Record
+{
+    using System;
+    using System.IO;
+    using System.Text;
+    using NPOI.HSSF.Record;
+    using NPOI.Util;
+    using NPOI.HSSF.UserModel;
+    using NPOI.Util.IO;
+
+    using NPOI.HSSF.Record.Formula;
+    using NPOI.SS.UserModel;
+
+    public class TextObjectRecord : Record
+    {
+        NPOI.SS.UserModel.RichTextString _text;
+
+        public const short sid = 0x1B6;
+
+        private static int FORMAT_RUN_ENCODED_SIZE = 8; // 2 shorts and 4 bytes reserved
+
+
+        private BitField _HorizontalTextAlignment = BitFieldFactory.GetInstance(0x000E);
+        private BitField _VerticalTextAlignment = BitFieldFactory.GetInstance(0x0070);
+        private BitField textLocked = BitFieldFactory.GetInstance(0x200);
+
+        public const short TEXT_ORIENTATION_NONE = 0;
+        public const short TEXT_ORIENTATION_TOP_TO_BOTTOM = 1;
+        public const short TEXT_ORIENTATION_ROT_RIGHT = 2;
+        public const short TEXT_ORIENTATION_ROT_LEFT = 3;
+
+
+        	public const short HORIZONTAL_TEXT_ALIGNMENT_LEFT_ALIGNED = 1;
+	public const short HORIZONTAL_TEXT_ALIGNMENT_CENTERED = 2;
+	public const short HORIZONTAL_TEXT_ALIGNMENT_RIGHT_ALIGNED = 3;
+	public const short HORIZONTAL_TEXT_ALIGNMENT_JUSTIFIED = 4;
+	public const short VERTICAL_TEXT_ALIGNMENT_TOP = 1;
+	public const short VERTICAL_TEXT_ALIGNMENT_CENTER = 2;
+	public const short VERTICAL_TEXT_ALIGNMENT_BOTTOM = 3;
+	public const short VERTICAL_TEXT_ALIGNMENT_JUSTIFY = 4;
+
+        private int field_1_options;
+        private int field_2_textOrientation;
+        private int field_3_reserved4;
+        private int field_4_reserved5;
+        private int field_5_reserved6;
+        private int field_8_reserved7;
+
+        /*
+         * Note - the next three fields are very similar to those on
+         * EmbededObjectRefSubRecord(ftPictFmla 0x0009)
+         * 
+         * some observed values for the 4 bytes preceding the formula: C0 5E 86 03
+         * C0 11 AC 02 80 F1 8A 03 D4 F0 8A 03
+         */
+        private int _unknownPreFormulaInt;
+        /** expect tRef, tRef3D, tArea, tArea3D or tName */
+        private Ptg _linkRefPtg;
+        /**
+         * Not clear if needed .  Excel seems to be OK if this byte is not present. 
+         * Value is often the same as the earlier firstColumn byte. */
+        private Byte? _unknownPostFormulaByte;
+
+        public TextObjectRecord()
+        {
+
+        }
+
+        public TextObjectRecord(RecordInputStream in1)
+        {
+
+            field_1_options = in1.ReadUShort();
+            field_2_textOrientation = in1.ReadUShort();
+            field_3_reserved4 = in1.ReadUShort();
+            field_4_reserved5 = in1.ReadUShort();
+            field_5_reserved6 = in1.ReadUShort();
+            int field_6_textLength = in1.ReadUShort();
+            int field_7_formattingDataLength = in1.ReadUShort();
+            field_8_reserved7 = in1.ReadInt();
+
+            if (in1.Remaining > 0)
+            {
+                // Text Objects can have simple reference formulas
+                // (This bit not mentioned in the MS document)
+                if (in1.Remaining < 11)
+                {
+                    throw new RecordFormatException("Not enough remaining data for a link formula");
+                }
+                int formulaSize = in1.ReadUShort();
+                _unknownPreFormulaInt = in1.ReadInt();
+                Ptg[] ptgs = Ptg.ReadTokens(formulaSize, in1);
+                if (ptgs.Length != 1)
+                {
+                    throw new RecordFormatException("Read " + ptgs.Length
+                            + " tokens but expected exactly 1");
+                }
+                _linkRefPtg = ptgs[0];
+                if (in1.Remaining > 0)
+                {
+                    _unknownPostFormulaByte = (byte)in1.ReadByte();
+                }
+                else
+                {
+                    _unknownPostFormulaByte = null;
+                }
+            }
+            else
+            {
+                _linkRefPtg = null;
+            }
+            if (in1.Remaining > 0)
+            {
+                throw new RecordFormatException("Unused " + in1.Remaining + " bytes at end of record");
+            }
+
+            String text;
+            if (field_6_textLength > 0)
+            {
+                text = ReadRawString(in1, field_6_textLength);
+            }
+            else
+            {
+                text = "";
+            }
+            _text = new HSSFRichTextString(text);
+
+            if (field_7_formattingDataLength > 0)
+            {
+                if (in1.IsContinueNext && in1.Remaining == 0)
+                {
+                    in1.NextRecord();
+                    ProcessFontRuns(in1, _text, field_7_formattingDataLength);
+                }
+                else
+                {
+                    throw new RecordFormatException(
+                            "Expected Continue Record to hold font runs for TextObjectRecord");
+                }
+            }
+        }
+        private static void ProcessFontRuns(RecordInputStream in1, RichTextString str,
+            int formattingRunDataLength)
+        {
+            if (formattingRunDataLength % FORMAT_RUN_ENCODED_SIZE != 0)
+            {
+                throw new RecordFormatException("Bad format run data length " + formattingRunDataLength
+                        + ")");
+            }
+            if (in1.Remaining != formattingRunDataLength)
+            {
+                throw new RecordFormatException("Expected " + formattingRunDataLength
+                        + " bytes but got " + in1.Remaining);
+            }
+            int nRuns = formattingRunDataLength / FORMAT_RUN_ENCODED_SIZE;
+            for (int i = 0; i < nRuns; i++)
+            {
+                short index = in1.ReadShort();
+                short iFont = in1.ReadShort();
+                in1.ReadInt(); // skip reserved.
+                str.ApplyFont(index, str.Length, iFont);
+            }
+        }
+
+        private int TrailingRecordsSize
+        {
+            get
+            {
+                if (_text.Length < 1)
+                {
+                    return 0;
+                }
+                int encodedTextSize = 0;
+                int textBytesLength = _text.Length * LittleEndianConstants.SHORT_SIZE;
+                while (textBytesLength > 0)
+                {
+                    int chunkSize = Math.Min(RecordInputStream.MAX_RECORD_DATA_SIZE - 2, textBytesLength);
+                    textBytesLength -= chunkSize;
+
+                    encodedTextSize += 4;           // +4 for ContinueRecord sid+size
+                    encodedTextSize += 1 + chunkSize; // +1 for compressed unicode flag, 
+                }
+
+                int encodedFormatSize = (_text.NumFormattingRuns + 1) * FORMAT_RUN_ENCODED_SIZE
+                    + 4;  // +4 for ContinueRecord sid+size
+                return encodedTextSize + encodedFormatSize;
+            }
+        }
+        private static byte[] CreateFormatData(RichTextString str)
+        {
+            int nRuns = str.NumFormattingRuns;
+            byte[] result = new byte[(nRuns + 1) * FORMAT_RUN_ENCODED_SIZE];
+            int pos = 0;
+            for (int i = 0; i < nRuns; i++)
+            {
+                LittleEndian.PutUShort(result, pos, str.GetIndexOfFormattingRun(i));
+                pos += 2;
+                int fontIndex = ((HSSFRichTextString)str).GetFontOfFormattingRun(i);
+                LittleEndian.PutUShort(result, pos, fontIndex == HSSFRichTextString.NO_FONT ? 0 : fontIndex);
+                pos += 2;
+                pos += 4; // skip reserved
+            }
+            LittleEndian.PutUShort(result, pos, str.Length);
+            pos += 2;
+            LittleEndian.PutUShort(result, pos, 0);
+            pos += 2;
+            pos += 4; // skip reserved
+
+            return result;
+        }
+
+        private int SerializeTrailingRecords(int offset, byte[] data)
+        {
+            byte[] textBytes;
+            try
+            {
+                textBytes = Encoding.GetEncoding("UTF-16LE").GetBytes(_text.String);
+            }
+            catch (EncoderFallbackException)
+            {
+                throw;
+            }
+            int remainingLength = textBytes.Length;
+
+            int countTextBytesWritten = 0;
+            int pos = offset;
+            // (regardless what was read, we always serialize double-byte
+            // unicode characters (UTF-16LE).
+            Byte unicodeFlag = (byte)1;
+            while (remainingLength > 0)
+            {
+                int chunkSize = Math.Min(RecordInputStream.MAX_RECORD_DATA_SIZE - 2, remainingLength);
+                remainingLength -= chunkSize;
+                pos += ContinueRecord.Write(data, pos, unicodeFlag, textBytes, countTextBytesWritten, chunkSize);
+                countTextBytesWritten += chunkSize;
+            }
+
+            byte[] formatData = CreateFormatData(_text);
+            pos += ContinueRecord.Write(data, pos, null, formatData);
+            return pos - offset;
+        }
+
+        private int FormattingDataLength
+        {
+            get
+            {
+                if (_text.Length < 1)
+                {
+                    // important - no formatting data if text is empty 
+                    return 0;
+                }
+                return (_text.NumFormattingRuns + 1) * FORMAT_RUN_ENCODED_SIZE;
+            }
+        }
+
+        /**
+         * Only for the current record. does not include any subsequent Continue
+         * records
+         */
+        protected int DataSize
+        {
+            get
+            {
+                int result = 2 + 2 + 2 + 2 + 2 + 2 + 2 + 4;
+                if (_linkRefPtg != null)
+                {
+                    result += 2 // formula size
+                        + 4  // unknownInt
+                        + _linkRefPtg.Size;
+                    if (_unknownPostFormulaByte != null)
+                    {
+                        result += 1;
+                    }
+                }
+                return result;
+            }
+        }
+
+        public override int RecordSize
+        {
+            get
+            {
+                int baseSize = 4 + DataSize;
+                return baseSize + TrailingRecordsSize;
+            }
+        }
+
+        private int SerializeTXORecord(int offset, byte[] data)
+        {
+            int dataSize = this.DataSize;
+
+            LittleEndian.PutUShort(data, 0 + offset, TextObjectRecord.sid);
+            LittleEndian.PutUShort(data, 2 + offset, dataSize);
+
+            LittleEndian.PutUShort(data, 4 + offset, field_1_options);
+            LittleEndian.PutUShort(data, 6 + offset, field_2_textOrientation);
+            LittleEndian.PutUShort(data, 8 + offset, field_3_reserved4);
+            LittleEndian.PutUShort(data, 10 + offset, field_4_reserved5);
+            LittleEndian.PutUShort(data, 12 + offset, field_5_reserved6);
+            LittleEndian.PutUShort(data, 14 + offset, _text.Length);
+            LittleEndian.PutUShort(data, 16 + offset, FormattingDataLength);
+            LittleEndian.PutInt(data, 18 + offset, field_8_reserved7);
+
+            if (_linkRefPtg != null)
+            {
+                int pos = offset + 22;
+                int formulaSize = _linkRefPtg.Size;
+                LittleEndian.PutUShort(data, pos, formulaSize);
+                pos += LittleEndianConstants.SHORT_SIZE;
+                LittleEndian.PutInt(data, pos, _unknownPreFormulaInt);
+                pos += LittleEndianConstants.INT_SIZE;
+                _linkRefPtg.WriteBytes(data, pos);
+                pos += formulaSize;
+
+
+                if (_unknownPostFormulaByte != null)
+                {
+                    LittleEndian.PutByte(data, pos, Convert.ToByte(_unknownPostFormulaByte));
+                    pos += LittleEndianConstants.BYTE_SIZE;
+
+                }
+            }
+
+            return 4 + dataSize;
+        }
+
+
+        public override int Serialize(int offset, byte[] data)
+        {
+            int expectedTotalSize = this.RecordSize;
+            int totalSize = SerializeTXORecord(offset, data);
+
+            if (_text.String.Length > 0)
+            {
+                totalSize += SerializeTrailingRecords(offset + totalSize, data);
+            }
+
+            if (totalSize != expectedTotalSize)
+                throw new RecordFormatException(totalSize
+                        + " bytes written but getRecordSize() reports " + expectedTotalSize);
+            return totalSize;
+        }
+
+        private void ProcessFontRuns(RecordInputStream in1)
+        {
+            while (in1.Remaining > 0)
+            {
+                short index = in1.ReadShort();
+                short iFont = in1.ReadShort();
+                in1.ReadInt();  // skip reserved.
+
+                _text.ApplyFont(index, _text.Length, iFont);
+            }
+        }
+
+
+        private static String ReadRawString(RecordInputStream in1, int textLength)
+        {
+            byte compressByte = (byte)in1.ReadByte();
+            bool isCompressed = (compressByte & 0x01) == 0;
+            if (isCompressed)
+            {
+                return in1.ReadCompressedUnicode(textLength);
+            }
+            return in1.ReadUnicodeLEString(textLength);
+        }
+
+        public NPOI.SS.UserModel.RichTextString Str
+        {
+            get { return _text; }
+            set { this._text = value; }
+        }
+        public override short Sid
+        {
+            get
+            {
+                return sid;
+            }
+        }
+
+        /**
+         * Get the text orientation field for the TextObjectBase record.
+         *
+         * @return  One of 
+         *        TEXT_ORIENTATION_NONE
+         *        TEXT_ORIENTATION_TOP_TO_BOTTOM
+         *        TEXT_ORIENTATION_ROT_RIGHT
+         *        TEXT_ORIENTATION_ROT_LEFT
+         */
+        public int TextOrientation
+        {
+            get { return field_2_textOrientation; }
+            set { this.field_2_textOrientation = value; }
+        }
+
+
+        /**
+ * @return the Horizontal text alignment field value.
+ */
+        public int HorizontalTextAlignment
+        {
+            get
+            {
+                return _HorizontalTextAlignment.GetValue(field_1_options);
+            }
+            set { field_1_options = _HorizontalTextAlignment.SetValue(field_1_options, value); }
+        }
+        /**
+ * @return the Vertical text alignment field value.
+ */
+        public int VerticalTextAlignment
+        {
+            get
+            {
+                return _VerticalTextAlignment.GetValue(field_1_options);
+            }
+            set { field_1_options = _VerticalTextAlignment.SetValue(field_1_options, value); }
+        }
+
+        /**
+         * Text has been locked
+         * @return  the text locked field value.
+         */
+        public bool IsTextLocked
+        {
+            get { return textLocked.IsSet(field_1_options); }
+            set { field_1_options = textLocked.SetBoolean(field_1_options, value); }
+        }
+
+        public override String ToString()
+        {
+            StringBuilder sb = new StringBuilder();
+
+            sb.Append("[TXO]\n");
+            sb.Append("    .options        = ").Append(HexDump.ShortToHex(field_1_options)).Append("\n");
+            sb.Append("         .IsHorizontal = ").Append(HorizontalTextAlignment).Append('\n');
+            sb.Append("         .IsVertical   = ").Append(VerticalTextAlignment).Append('\n');
+            sb.Append("         .textLocked   = ").Append(IsTextLocked).Append('\n');
+            sb.Append("    .textOrientation= ").Append(HexDump.ShortToHex(TextOrientation)).Append("\n");
+            sb.Append("    .reserved4      = ").Append(HexDump.ShortToHex(field_3_reserved4)).Append("\n");
+            sb.Append("    .reserved5      = ").Append(HexDump.ShortToHex(field_4_reserved5)).Append("\n");
+            sb.Append("    .reserved6      = ").Append(HexDump.ShortToHex(field_5_reserved6)).Append("\n");
+            sb.Append("    .textLength     = ").Append(HexDump.ShortToHex(_text.Length)).Append("\n");
+            sb.Append("    .reserved7      = ").Append(HexDump.IntToHex(field_8_reserved7)).Append("\n");
+
+            sb.Append("    .string = ").Append(_text).Append('\n');
+
+            for (int i = 0; i < _text.NumFormattingRuns; i++)
+            {
+                sb.Append("    .textrun = ").Append(((HSSFRichTextString)_text).GetFontOfFormattingRun(i)).Append('\n');
+
+            }
+            sb.Append("[/TXO]\n");
+            return sb.ToString();
+        }
+
+        public override Object Clone()
+        {
+
+            TextObjectRecord rec = new TextObjectRecord();
+            rec._text = _text;
+
+            rec.field_1_options = field_1_options;
+            rec.field_2_textOrientation = field_2_textOrientation;
+            rec.field_3_reserved4 = field_3_reserved4;
+            rec.field_4_reserved5 = field_4_reserved5;
+            rec.field_5_reserved6 = field_5_reserved6;
+            rec.field_8_reserved7 = field_8_reserved7;
+
+            rec._text = _text; // clone needed?
+
+            if (_linkRefPtg != null)
+            {
+                rec._unknownPreFormulaInt = _unknownPreFormulaInt;
+                rec._linkRefPtg = _linkRefPtg.Copy();
+                rec._unknownPostFormulaByte = _unknownPostFormulaByte;
+            }
+            return rec;
+        }
+
+    }
+}
