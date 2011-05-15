@@ -639,7 +639,7 @@ namespace TestCases.HPSF.Basic
                     || files[i].EndsWith("TestHPSFWritingFunctionality.doc"))
                     continue;
 
-                TestRecreate(_samples.GetFile(files[i]));
+                TestRecreate(_samples.GetFile(new FileInfo(files[i]).Name));
             }
         }
 

@@ -189,7 +189,7 @@ namespace TestCases
  */
         public FileStream GetFile(String sampleFileName)
         {
-            string path = sampleFileName;
+            string path = _resolvedDataDir+ sampleFileName;
             if (!File.Exists(path))
             {
                 throw new Exception("Sample file '" + sampleFileName
