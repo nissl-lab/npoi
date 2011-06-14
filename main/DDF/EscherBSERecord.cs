@@ -164,7 +164,21 @@ namespace NPOI.DDF
         /// <value>Number of bytes</value>
         public override int RecordSize
         {
-            get { return 8 + 1 + 1 + 16 + 2 + 4 + 4 + 4 + 1 + 1 + 1 + 1 + field_12_blipRecord.RecordSize + (remainingData == null ? 0 : remainingData.Length); }
+            get 
+            {
+                int field_12_size = 0;
+                if (field_12_blipRecord != null)
+                {
+                    field_12_size = field_12_blipRecord.RecordSize;
+                }
+                int remaining_size = 0;
+                if (remainingData != null)
+                {
+                    remaining_size = remainingData.Length;
+                }
+                return 8 + 1 + 1 + 16 + 2 + 4 + 4 + 4 + 1 + 1 +
+                    1 + 1 + field_12_size + remaining_size;            
+            }
         }
 
         /// <summary>
