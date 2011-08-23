@@ -21,6 +21,8 @@ namespace NPOI.HSSF.EventUserModel
     using System.Collections;
     using NPOI.HSSF.Record;
     using NPOI.HSSF.UserModel;
+    using System.Collections.Generic;
+    using NPOI.SS.UserModel;
 
     /**
      * A proxy HSSFListener that keeps track of the document
@@ -30,9 +32,9 @@ namespace NPOI.HSSF.EventUserModel
     public class FormatTrackingHSSFListener : HSSFListener
     {
         private HSSFListener childListener;
-        private Hashtable customFormatRecords = new Hashtable();
-        private NPOI.SS.UserModel.DataFormatter formatter = new NPOI.SS.UserModel.DataFormatter();
-        private IList xfRecords = new ArrayList();
+        private Dictionary<int, FormatRecord> customFormatRecords = new Dictionary<int, FormatRecord>();
+        private DataFormatter formatter = new DataFormatter();
+        private List<ExtendedFormatRecord> xfRecords = new List<ExtendedFormatRecord>();
 
         public FormatTrackingHSSFListener(HSSFListener childListener)
         {

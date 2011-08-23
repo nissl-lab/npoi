@@ -288,6 +288,61 @@ namespace TestCases.HSSF.UserModel
                 Assert.IsTrue(result.EndsWith(" USD"));
             }
         }
+        [TestMethod]
+        public void TestFromFile()
+        {
+            HSSFWorkbook workbook = HSSFTestDataSamples.OpenSampleWorkbook("Formatting.xls");
+            Sheet sheet = workbook.GetSheetAt(0);
+
+            DataFormatter f = new DataFormatter();
+
+            // This one is one of the nasty auto-locale changing ones...
+            Assert.AreEqual("dd/mm/yyyy", sheet.GetRow(1).GetCell(0).StringCellValue);
+            Assert.AreEqual("m/d/yy", sheet.GetRow(1).GetCell(1).CellStyle.GetDataFormatString());
+            Assert.AreEqual("11/24/06", f.FormatCellValue(sheet.GetRow(1).GetCell(1)));
+
+            Assert.AreEqual("yyyy/mm/dd", sheet.GetRow(2).GetCell(0).StringCellValue);
+            Assert.AreEqual("yyyy/mm/dd", sheet.GetRow(2).GetCell(1).CellStyle.GetDataFormatString());
+            Assert.AreEqual("2006/11/24", f.FormatCellValue(sheet.GetRow(2).GetCell(1)));
+
+            Assert.AreEqual("yyyy-mm-dd", sheet.GetRow(3).GetCell(0).StringCellValue);
+            Assert.AreEqual("yyyy\\-mm\\-dd", sheet.GetRow(3).GetCell(1).CellStyle.GetDataFormatString());
+            Assert.AreEqual("2006-11-24", f.FormatCellValue(sheet.GetRow(3).GetCell(1)));
+
+            Assert.AreEqual("yy/mm/dd", sheet.GetRow(4).GetCell(0).StringCellValue);
+            Assert.AreEqual("yy/mm/dd", sheet.GetRow(4).GetCell(1).CellStyle.GetDataFormatString());
+            Assert.AreEqual("06/11/24", f.FormatCellValue(sheet.GetRow(4).GetCell(1)));
+
+            // Another builtin fun one
+            Assert.AreEqual("dd/mm/yy", sheet.GetRow(5).GetCell(0).StringCellValue);
+            Assert.AreEqual("d/m/yy;@", sheet.GetRow(5).GetCell(1).CellStyle.GetDataFormatString());
+            Assert.AreEqual("24/11/06", f.FormatCellValue(sheet.GetRow(5).GetCell(1)));
+
+            Assert.AreEqual("dd-mm-yy", sheet.GetRow(6).GetCell(0).StringCellValue);
+            Assert.AreEqual("dd\\-mm\\-yy", sheet.GetRow(6).GetCell(1).CellStyle.GetDataFormatString());
+            Assert.AreEqual("24-11-06", f.FormatCellValue(sheet.GetRow(6).GetCell(1)));
+
+
+            // Another builtin fun one
+            Assert.AreEqual("nn.nn", sheet.GetRow(9).GetCell(0).StringCellValue);
+            Assert.AreEqual("General", sheet.GetRow(9).GetCell(1).CellStyle.GetDataFormatString());
+            Assert.AreEqual("10.52", f.FormatCellValue(sheet.GetRow(9).GetCell(1)));
+
+            // text isn't quite the format rule...
+            Assert.AreEqual("nn.nnn", sheet.GetRow(10).GetCell(0).StringCellValue);
+            Assert.AreEqual("0.000", sheet.GetRow(10).GetCell(1).CellStyle.GetDataFormatString());
+            Assert.AreEqual("10.520", f.FormatCellValue(sheet.GetRow(10).GetCell(1)));
+
+            // text isn't quite the format rule...
+            Assert.AreEqual("nn.n", sheet.GetRow(11).GetCell(0).StringCellValue);
+            Assert.AreEqual("0.0", sheet.GetRow(11).GetCell(1).CellStyle.GetDataFormatString());
+            Assert.AreEqual("10.5", f.FormatCellValue(sheet.GetRow(11).GetCell(1)));
+
+            // text isn't quite the format rule...
+            Assert.AreEqual("\u00a3nn.nn", sheet.GetRow(12).GetCell(0).StringCellValue);
+            Assert.AreEqual("\"\u00a3\"#,##0.00", sheet.GetRow(12).GetCell(1).CellStyle.GetDataFormatString());
+            Assert.AreEqual("\u00a310.52", f.FormatCellValue(sheet.GetRow(12).GetCell(1)));
+        }
 
         private static void log(String msg)
         {

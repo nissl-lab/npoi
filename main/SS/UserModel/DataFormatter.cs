@@ -238,16 +238,16 @@ namespace NPOI.SS.UserModel
         private FormatBase CreateDateFormat(String pformatStr, double cellValue)
         {
             String formatStr = pformatStr;
-            formatStr = formatStr.Replace("\\\\-", "-");
-            formatStr = formatStr.Replace("\\\\,", ",");
-            formatStr = formatStr.Replace("\\\\ ", " ");
+            formatStr = formatStr.Replace("\\-", "-");
+            formatStr = formatStr.Replace("\\,", ",");
+            formatStr = formatStr.Replace("\\ ", " ");
             formatStr = formatStr.Replace(";@", "");
             bool hasAmPm = Regex.IsMatch(formatStr, amPmPattern);
             if (hasAmPm)
             {
                 formatStr = Regex.Replace(formatStr, amPmPattern, "@");
             }
-            formatStr = formatStr.Replace("@", "a");
+            formatStr = formatStr.Replace("@", "tt");
 
 
             MatchCollection match = Regex.Matches(formatStr, daysAsText);

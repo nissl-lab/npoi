@@ -70,6 +70,8 @@ namespace TestCases.SS.UserModel
             //read and verify the string representation
             Assert.AreEqual(customFmt, df.GetFormat((short)customIdx));
         }
+
+
     }
 }
 

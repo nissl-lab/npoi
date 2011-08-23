@@ -20,6 +20,8 @@ namespace TestCases.HSSF.UserModel
 
     using TestCases.HSSF;
     using TestCases.SS.UserModel;
+using NPOI.SS.UserModel;
+    using NPOI.HSSF.UserModel;
 
     /**
      * Test <c>HSSFPicture</c>.
@@ -34,7 +36,33 @@ namespace TestCases.HSSF.UserModel
         {
             
         }
+                    /**
+     * [Bug 49928] formatCellValue returns incorrect value for \u00a3 formatted cells
+     */
+    [TestMethod]
+    public void Test49928()
+    {
+        HSSFWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("49928.xls");
+        string poundFmt = "\"\u00a3\"#,##0;[Red]\\-\"\u00a3\"#,##0";
+        DataFormatter df = new DataFormatter();
 
+        Sheet sheet = wb.GetSheetAt(0);
+        Cell cell = sheet.GetRow(0).GetCell(0);
+        CellStyle style = cell.CellStyle;
+
+        // not expected normally, id of a custom format should be greater 
+        // than BuiltinFormats.FIRST_USER_DEFINED_FORMAT_INDEX
+        short  poundFmtIdx = 6;
+
+        Assert.AreEqual(poundFmt, style.GetDataFormatString());
+        Assert.AreEqual(poundFmtIdx, style.DataFormat);
+        Assert.AreEqual("\u00a31", df.FormatCellValue(cell));
+
+
+        DataFormat dataFormat = wb.CreateDataFormat();
+        Assert.AreEqual(poundFmtIdx, dataFormat.GetFormat(poundFmt));
+        Assert.AreEqual(poundFmt, dataFormat.GetFormat(poundFmtIdx));
+    }
  
     }
 }
