@@ -1105,7 +1105,7 @@ namespace NPOI.HSSF.Model
             WSBoolRecord retval = new WSBoolRecord();
 
             retval.WSBool1 = ((byte)0x4);
-            retval.WSBool2 = (unchecked((byte)0xffffffc1));
+            retval.WSBool2 = ((byte)0x1);
             return retval;
         }
 
