@@ -22,6 +22,7 @@ namespace NPOI.HSSF.Record
     using System;
     using System.Text;
     using NPOI.Util;
+    using NPOI.Util.IO;
 
     /**
      * Title: Interface End Record
@@ -33,7 +34,7 @@ namespace NPOI.HSSF.Record
      */
 
     public class InterfaceEndRecord
-       : Record
+       : StandardRecord
     {
         public const short sid = 0xe2;
 
@@ -45,9 +46,14 @@ namespace NPOI.HSSF.Record
          * Constructs an InterfaceEnd record and Sets its fields appropriately.
          * @param in the RecordInputstream to Read the record from
          */
+        private byte[] _unknownData;
+
 
         public InterfaceEndRecord(RecordInputStream in1)
         {
+            if(in1.Available() > 0){
+                _unknownData = in1.ReadRemainder();
+            }
 
         }
 
@@ -57,21 +63,25 @@ namespace NPOI.HSSF.Record
             StringBuilder buffer = new StringBuilder();
 
             buffer.Append("[INTERFACEEND]\n");
+            buffer.Append("  unknownData=").Append(HexDump.ToHex(_unknownData)).Append("\n");
             buffer.Append("[/INTERFACEEND]\n");
             return buffer.ToString();
         }
 
-        public override int Serialize(int offset, byte [] data)
+        public override void Serialize(LittleEndianOutput out1)
         {
-            LittleEndian.PutShort(data, 0 + offset, sid);
-            LittleEndian.PutShort(data, 2 + offset,
-                                  ((short)0x00));   // 0 bytes (4 total)
-            return RecordSize;
+            if(_unknownData != null) out1.Write(_unknownData);
         }
 
-        public override int RecordSize
+        protected override int DataSize
         {
-            get { return 4; }
+            get 
+            {
+                int size = 0;
+                if (_unknownData != null) size += _unknownData.Length;
+
+                return size;
+            }
         }
 
         public override short Sid

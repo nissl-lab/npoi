@@ -143,6 +143,22 @@ namespace NPOI.HSSF.UserModel
             get { return this._data_type; }
         }
 
+        public DVConstraint Constraint
+        {
+            get
+            {
+                return _constraint;
+            }
+        }
+
+        public CellRangeAddressList Regions
+        {
+            get
+            {
+                return _regions;
+            }
+        }
+
         /**
          * Sets the error style for error box
          * @param error_style Error style constant
