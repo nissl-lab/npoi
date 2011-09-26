@@ -24,7 +24,7 @@ namespace NPOI.SS.UserModel
     /// placed into a footer, such as page number,
     /// bold, underline etc, see
     /// </summary>
-    public interface Footer : HeaderFooter
+    public interface IFooter : IHeaderFooter
     {
         /// <summary>
         /// Get the left side of the footer.

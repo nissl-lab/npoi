@@ -68,7 +68,7 @@ namespace TestCases.HSSF.UserModel
          * @return the {@link Record}s (in order) which will be output when the
          *         specified sheet is serialized
          */
-        public static Record[] GetRecords(NPOI.SS.UserModel.Sheet hSheet, int streamOffset)
+        public static Record[] GetRecords(NPOI.SS.UserModel.ISheet hSheet, int streamOffset)
         {
             RecordCollector rc = new RecordCollector();
             ((HSSFSheet)hSheet).Sheet.VisitContainedRecords(rc, streamOffset);

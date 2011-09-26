@@ -140,9 +140,9 @@ namespace TestCases.HSSF.EventModel
         private MemoryStream SetupRunFile(HSSFWorkbook book)
         {
             MemoryStream stream = new MemoryStream();
-            NPOI.SS.UserModel.Sheet sheet = book.CreateSheet("Test");
-            Row row = sheet.CreateRow(0);
-            Cell cell = row.CreateCell(0);
+            NPOI.SS.UserModel.ISheet sheet = book.CreateSheet("Test");
+            IRow row = sheet.CreateRow(0);
+            ICell cell = row.CreateCell(0);
             cell.SetCellValue(10.5);
             book.Write(stream);
             return stream;

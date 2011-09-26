@@ -41,8 +41,8 @@ namespace NPOI.HSSF.Record.Aggregates
             // PageSettingBlock in this file Contains PLS (sid=x004D) record
             // followed by ContinueRecord (sid=x003C)
             HSSFWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("ex46548-23133.xls");
-            Sheet sheet = wb.GetSheetAt(0);
-            PrintSetup ps = sheet.PrintSetup;
+            ISheet sheet = wb.GetSheetAt(0);
+            IPrintSetup ps = sheet.PrintSetup;
 
             try
             {

@@ -41,7 +41,7 @@ namespace NPOI.SS.UserModel
     /**
      * High level representation of a row of a spreadsheet.
      */
-    public interface Row
+    public interface IRow
     {
 
         /**
@@ -55,7 +55,7 @@ namespace NPOI.SS.UserModel
          * @throws ArgumentException if columnIndex < 0 or greater than the maximum number of supported columns
          * (255 for *.xls, 1048576 for *.xlsx)
          */
-        Cell CreateCell(int column);
+        ICell CreateCell(int column);
 
         /**
          * Use this to create new cells within the row and return it.
@@ -68,14 +68,14 @@ namespace NPOI.SS.UserModel
          * @throws ArgumentException if columnIndex < 0 or greate than a maximum number of supported columns
          * (255 for *.xls, 1048576 for *.xlsx)
          */
-        Cell CreateCell(int column, NPOI.SS.UserModel.CellType type);
+        ICell CreateCell(int column, NPOI.SS.UserModel.CellType type);
 
         /**
          * Remove the Cell from this row.
          *
          * @param cell the cell to remove
          */
-        void RemoveCell(Cell cell);
+        void RemoveCell(ICell cell);
 
         /**
          * Get row number this row represents
@@ -92,7 +92,7 @@ namespace NPOI.SS.UserModel
          * @return Cell representing that column or null if undefined.
          * @see #GetCell(int, NPOI.SS.usermodel.Row.MissingCellPolicy)
          */
-        Cell GetCell(int cellnum);
+        ICell GetCell(int cellnum);
 
         /**
          * Returns the cell at the given (0 based) index, with the specified {@link NPOI.SS.usermodel.Row.MissingCellPolicy}
@@ -103,7 +103,7 @@ namespace NPOI.SS.UserModel
          * @see Row#RETURN_BLANK_AS_NULL
          * @see Row#CREATE_NULL_AS_BLANK
          */
-        Cell GetCell(int cellnum, MissingCellPolicy policy);
+        ICell GetCell(int cellnum, MissingCellPolicy policy);
 
         /**
          * Get the number of the first cell Contained in this row.
@@ -177,11 +177,11 @@ namespace NPOI.SS.UserModel
          *
          * @return the Sheet that owns this row
          */
-        Sheet Sheet { get; }
+        ISheet Sheet { get; }
 
-        CellStyle RowStyle { get; set; }
+        ICellStyle RowStyle { get; set; }
 
-        void MoveCell(Cell cell, int idx);
+        void MoveCell(ICell cell, int idx);
     }
 }
 

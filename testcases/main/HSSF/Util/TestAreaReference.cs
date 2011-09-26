@@ -222,7 +222,7 @@ namespace TestCases.HSSF.Util
             // Check the high level definition
             int idx = wb.GetNameIndex("test");
             Assert.AreEqual(0, idx);
-            NPOI.SS.UserModel.Name aNamedCell = wb.GetNameAt(idx);
+            NPOI.SS.UserModel.IName aNamedCell = wb.GetNameAt(idx);
 
             // Should have 2 references
             Assert.AreEqual(ref1, aNamedCell.RefersToFormula);
@@ -244,9 +244,9 @@ namespace TestCases.HSSF.Util
 
         private static void ConfirmResolveCellRef(HSSFWorkbook wb, CellReference cref)
         {
-            NPOI.SS.UserModel.Sheet s = wb.GetSheet(cref.SheetName);
-            Row r = s.GetRow(cref.Row);
-            Cell c = r.GetCell((int)cref.Col);
+            NPOI.SS.UserModel.ISheet s = wb.GetSheet(cref.SheetName);
+            IRow r = s.GetRow(cref.Row);
+            ICell c = r.GetCell((int)cref.Col);
             Assert.IsNotNull(c);
         }
         [TestMethod]

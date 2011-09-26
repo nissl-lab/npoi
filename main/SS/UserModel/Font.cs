@@ -88,7 +88,7 @@ namespace NPOI.SS.UserModel
          */
         SYMBOL= 2,
     }
-    public interface Font
+    public interface IFont
     {
 
         /**

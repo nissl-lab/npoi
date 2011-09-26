@@ -49,12 +49,12 @@ namespace TestCases.HSSF.UserModel
         public void Test45829()
         {
             HSSFWorkbook wb = new HSSFWorkbook();
-            NPOI.SS.UserModel.Sheet sh1 = wb.CreateSheet();
-            Drawing p1 = sh1.CreateDrawingPatriarch();
+            NPOI.SS.UserModel.ISheet sh1 = wb.CreateSheet();
+            IDrawing p1 = sh1.CreateDrawingPatriarch();
 
             byte[] pictureData = HSSFTestDataSamples.GetTestDataFileContent("45829.png");
             int idx1 = wb.AddPicture(pictureData, PictureType.PNG);
-            Picture pic = p1.CreatePicture(new HSSFClientAnchor(), idx1);
+            IPicture pic = p1.CreatePicture(new HSSFClientAnchor(), idx1);
             pic.Resize();
         }
     }

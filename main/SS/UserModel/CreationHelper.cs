@@ -35,17 +35,17 @@ namespace NPOI.SS.UserModel
          * Creates a new RichTextString instance
          * @param text The text to Initialise the RichTextString with
          */
-        RichTextString CreateRichTextString(String text);
+        IRichTextString CreateRichTextString(String text);
 
         /**
          * Creates a new DataFormat instance
          */
-        DataFormat CreateDataFormat();
+        IDataFormat CreateDataFormat();
 
         /**
          * Creates a new Hyperlink, of the given type
          */
-        Hyperlink CreateHyperlink(HyperlinkType type);
+        IHyperlink CreateHyperlink(HyperlinkType type);
 
         /**
          * Creates FormulaEvaluator - an object that Evaluates formula cells.
@@ -54,6 +54,6 @@ namespace NPOI.SS.UserModel
          */
         FormulaEvaluator CreateFormulaEvaluator();
 
-        ClientAnchor CreateClientAnchor();
+        IClientAnchor CreateClientAnchor();
     }
 }

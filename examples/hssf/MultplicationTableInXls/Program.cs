@@ -48,7 +48,7 @@ namespace MultplicationTableInXls
 
             //here, we must insert at least one sheet to the workbook. otherwise, Excel will say 'data lost in file'
             //So we insert three sheet just like what Excel does
-            Sheet sheet1 = hssfworkbook.CreateSheet("Multiple Table");
+            ISheet sheet1 = hssfworkbook.CreateSheet("Multiple Table");
 
             //create horizontal 1-9
             for (int i = 1; i <= 9; i++)
@@ -63,7 +63,7 @@ namespace MultplicationTableInXls
             //create the cell formula
             for (int iRow = 1; iRow <= 9; iRow++)
             {
-                Row row = sheet1.GetRow(iRow);
+                IRow row = sheet1.GetRow(iRow);
                 for (int iCol = 1; iCol <= 9; iCol++)
                 {
                     //the first cell of each row * the first cell of each column

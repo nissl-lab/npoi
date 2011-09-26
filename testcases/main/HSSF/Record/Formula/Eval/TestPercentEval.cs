@@ -59,9 +59,9 @@ namespace TestCases.HSSF.Record.Formula.Eval
         public void TestInSpreadSheet()
         {
             HSSFWorkbook wb = new HSSFWorkbook();
-            NPOI.SS.UserModel.Sheet sheet = wb.CreateSheet("Sheet1");
-            Row row = sheet.CreateRow(0);
-            Cell cell = row.CreateCell((short)0);
+            NPOI.SS.UserModel.ISheet sheet = wb.CreateSheet("Sheet1");
+            IRow row = sheet.CreateRow(0);
+            ICell cell = row.CreateCell((short)0);
             cell.CellFormula = ("B1%");
             row.CreateCell(1).SetCellValue(50.0);
 

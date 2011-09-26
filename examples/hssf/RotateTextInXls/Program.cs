@@ -40,19 +40,19 @@ namespace RotateTextInXls
         {
             InitializeWorkbook();
 
-            Sheet sheet1 = hssfworkbook.CreateSheet("Sheet1");
+            ISheet sheet1 = hssfworkbook.CreateSheet("Sheet1");
 
             //a valid rotate value is from -90 - 90
             int x = -90;
             for (int i = 1; i <= 13; i++)
             {
-                Row row = sheet1.CreateRow(i);
+                IRow row = sheet1.CreateRow(i);
                 for (int j = 0; j < 13; j++)
                 {
                     //set the value
                     row.CreateCell(j).SetCellValue(x);
                     //set the style
-                    CellStyle style=hssfworkbook.CreateCellStyle();
+                   .CellStyle style=hssfworkbook.CreateCellStyle();
                     style.Rotation=(short)x;
                     row.GetCell(j).CellStyle = style;
                     //increase x

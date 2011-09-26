@@ -40,15 +40,15 @@ namespace TestCases.HSSF.UserModel
         public void TestBOFandEOFRecords()
         {
             HSSFWorkbook workbook = HSSFTestDataSamples.OpenSampleWorkbook("SimpleChart.xls");
-            NPOI.SS.UserModel.Sheet sheet = workbook.GetSheetAt(0);
-            Row firstRow = sheet.GetRow(0);
-            Cell firstCell = firstRow.GetCell(0);
+            NPOI.SS.UserModel.ISheet sheet = workbook.GetSheetAt(0);
+            IRow firstRow = sheet.GetRow(0);
+            ICell firstCell = firstRow.GetCell(0);
 
             //System.out.println("first assertion for date");
             Assert.AreEqual(new DateTime(2000, 1, 1, 10, 51, 2),
                          DateUtil.GetJavaDate(firstCell.NumericCellValue, false));
-            Row row = sheet.CreateRow(15);
-            Cell cell = row.CreateCell(1);
+            IRow row = sheet.CreateRow(15);
+            ICell cell = row.CreateCell(1);
 
             cell.SetCellValue(22);
             InternalSheet newSheet = ((HSSFSheet)workbook.GetSheetAt(0)).Sheet;

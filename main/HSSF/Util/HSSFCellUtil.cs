@@ -101,9 +101,9 @@ namespace NPOI.HSSF.Util
         /// <param name="rowCounter">The 0 based row number</param>
         /// <param name="sheet">The sheet that the row is part of.</param>
         /// <returns>The row indicated by the rowCounter</returns>
-        public static NPOI.SS.UserModel.Row GetRow(int rowCounter, HSSFSheet sheet)
+        public static NPOI.SS.UserModel.IRow GetRow(int rowCounter, HSSFSheet sheet)
         {
-            NPOI.SS.UserModel.Row row = sheet.GetRow(rowCounter);
+            NPOI.SS.UserModel.IRow row = sheet.GetRow(rowCounter);
             if (row == null)
             {
                 row = sheet.CreateRow(rowCounter);
@@ -119,9 +119,9 @@ namespace NPOI.HSSF.Util
         /// <param name="row">The row that the cell is part of</param>
         /// <param name="column">The column index that the cell is in.</param>
         /// <returns>The cell indicated by the column.</returns>
-        public static NPOI.SS.UserModel.Cell GetCell(NPOI.SS.UserModel.Row row, int column)
+        public static NPOI.SS.UserModel.ICell GetCell(NPOI.SS.UserModel.IRow row, int column)
         {
-            NPOI.SS.UserModel.Cell cell = row.GetCell(column);
+            NPOI.SS.UserModel.ICell cell = row.GetCell(column);
 
             if (cell == null)
             {
@@ -139,9 +139,9 @@ namespace NPOI.HSSF.Util
         /// <param name="value">The value of the cell</param>
         /// <param name="style">If the style is not null, then Set</param>
         /// <returns>A new HSSFCell</returns>
-        public static NPOI.SS.UserModel.Cell CreateCell(NPOI.SS.UserModel.Row row, int column, String value, HSSFCellStyle style)
+        public static NPOI.SS.UserModel.ICell CreateCell(NPOI.SS.UserModel.IRow row, int column, String value, HSSFCellStyle style)
         {
-            NPOI.SS.UserModel.Cell cell = GetCell(row, column);
+            NPOI.SS.UserModel.ICell cell = GetCell(row, column);
 
             cell.SetCellValue(new HSSFRichTextString(value));
             if (style != null)
@@ -160,7 +160,7 @@ namespace NPOI.HSSF.Util
         /// <param name="column">the column index to Create the cell in</param>
         /// <param name="value">The value of the cell</param>
         /// <returns>A new HSSFCell.</returns>
-        public static NPOI.SS.UserModel.Cell CreateCell(NPOI.SS.UserModel.Row row, int column, String value)
+        public static NPOI.SS.UserModel.ICell CreateCell(NPOI.SS.UserModel.IRow row, int column, String value)
         {
             return CreateCell(row, column, value, null);
         }
@@ -172,7 +172,7 @@ namespace NPOI.HSSF.Util
         /// <param name="cell">the cell to Set the alignment for</param>
         /// <param name="workbook">The workbook that is being worked with.</param>
         /// <param name="align">the column alignment to use.</param>
-        public static void SetAlignment(Cell cell, HSSFWorkbook workbook, short align)
+        public static void SetAlignment(ICell cell, HSSFWorkbook workbook, short align)
         {
             SetCellStyleProperty(cell, workbook, ALIGNMENT, align);
         }
@@ -183,7 +183,7 @@ namespace NPOI.HSSF.Util
         /// <param name="cell">the cell to Set the alignment for</param>
         /// <param name="workbook">The workbook that is being worked with.</param>
         /// <param name="font">The HSSFFont that you want to Set...</param>
-        public static void SetFont(Cell cell, HSSFWorkbook workbook, HSSFFont font)
+        public static void SetFont(ICell cell, HSSFWorkbook workbook, HSSFFont font)
         {
             SetCellStyleProperty(cell, workbook, FONT, font);
         }
@@ -203,10 +203,10 @@ namespace NPOI.HSSF.Util
          *@param  cell                   The cell that needs it's style changes
          *@exception  NestableException  Thrown if an error happens.
          */
-        public static void SetCellStyleProperty(NPOI.SS.UserModel.Cell cell, HSSFWorkbook workbook, String propertyName, Object propertyValue)
+        public static void SetCellStyleProperty(NPOI.SS.UserModel.ICell cell, HSSFWorkbook workbook, String propertyName, Object propertyValue)
         {
-            NPOI.SS.UserModel.CellStyle originalStyle = cell.CellStyle;
-            NPOI.SS.UserModel.CellStyle newStyle = null;
+            NPOI.SS.UserModel.ICellStyle originalStyle = cell.CellStyle;
+            NPOI.SS.UserModel.ICellStyle newStyle = null;
             Hashtable values = GetFormatProperties(originalStyle);
             values[propertyName] = propertyValue;
 
@@ -216,7 +216,7 @@ namespace NPOI.HSSF.Util
 
             for (short i = 0; i < numberCellStyles; i++)
             {
-                NPOI.SS.UserModel.CellStyle wbStyle = workbook.GetCellStyleAt(i);
+                NPOI.SS.UserModel.ICellStyle wbStyle = workbook.GetCellStyleAt(i);
                 Hashtable wbStyleMap = GetFormatProperties(wbStyle);
 
                 if (wbStyleMap.Equals(values))
@@ -240,7 +240,7 @@ namespace NPOI.HSSF.Util
         /// </summary>
         /// <param name="style">cell style</param>
         /// <returns>map of format properties (String -&gt; Object)</returns>
-        private static Hashtable GetFormatProperties(NPOI.SS.UserModel.CellStyle style)
+        private static Hashtable GetFormatProperties(NPOI.SS.UserModel.ICellStyle style)
         {
             Hashtable properties = new Hashtable();
             PutShort(properties, ALIGNMENT, (short)style.Alignment);
@@ -273,7 +273,7 @@ namespace NPOI.HSSF.Util
         /// <param name="workbook">The parent workbook.</param>
         /// <param name="properties">The map of format properties (String -&gt; Object).</param>
         private static void SetFormatProperties(
-                NPOI.SS.UserModel.CellStyle style, HSSFWorkbook workbook, Hashtable properties)
+                NPOI.SS.UserModel.ICellStyle style, HSSFWorkbook workbook, Hashtable properties)
         {
             style.Alignment = (NPOI.SS.UserModel.HorizontalAlignment)GetShort(properties, ALIGNMENT);
             style.BorderBottom = (NPOI.SS.UserModel.CellBorderType)GetShort(properties, BORDER_BOTTOM);
@@ -365,7 +365,7 @@ namespace NPOI.HSSF.Util
         /// </summary>
         /// <param name="cell">The cell to check for unicode values</param>
         /// <returns>transalted to unicode</returns>
-        public static Cell TranslateUnicodeValues(Cell cell)
+        public static ICell TranslateUnicodeValues(ICell cell)
         {
 
             String s = cell.RichStringCellValue.String;

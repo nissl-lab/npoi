@@ -41,16 +41,16 @@ namespace TestCases.SS.UserModel
         [TestMethod]
         public void TestCreateRow()
         {
-            Workbook workbook = _testDataProvider.CreateWorkbook();
-            Sheet sheet = workbook.CreateSheet();
+            IWorkbook workbook = _testDataProvider.CreateWorkbook();
+            ISheet sheet = workbook.CreateSheet();
             Assert.AreEqual(0, sheet.PhysicalNumberOfRows);
 
             //Test that we get null for undefined rownumber
             Assert.IsNull(sheet.GetRow(1));
 
             // Test row creation with consecutive indexes
-            Row row1 = sheet.CreateRow(0);
-            Row row2 = sheet.CreateRow(1);
+            IRow row1 = sheet.CreateRow(0);
+            IRow row2 = sheet.CreateRow(1);
             Assert.AreEqual(0, row1.RowNum);
             Assert.AreEqual(1, row2.RowNum);
             IEnumerator it = sheet.GetRowEnumerator();
@@ -61,20 +61,20 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual(1, sheet.LastRowNum);
 
             // Test row creation with non consecutive index
-            Row row101 = sheet.CreateRow(100);
+            IRow row101 = sheet.CreateRow(100);
             Assert.IsNotNull(row101);
             Assert.AreEqual(100, sheet.LastRowNum);
             Assert.AreEqual(3, sheet.PhysicalNumberOfRows);
 
             // Test overwriting an existing row
-            Row row2_ovrewritten = sheet.CreateRow(1);
-            Cell cell = row2_ovrewritten.CreateCell(0);
+            IRow row2_ovrewritten = sheet.CreateRow(1);
+            ICell cell = row2_ovrewritten.CreateCell(0);
             cell.SetCellValue(100);
             IEnumerator it2 = sheet.GetRowEnumerator();
             Assert.IsTrue(it2.MoveNext());
             Assert.AreSame(row1, it2.Current);
             Assert.IsTrue(it2.MoveNext());
-            Row row2_ovrewritten_ref = (Row)it2.Current;
+            IRow row2_ovrewritten_ref = (IRow)it2.Current;
             Assert.AreSame(row2_ovrewritten, row2_ovrewritten_ref);
             Assert.AreEqual(100.0, row2_ovrewritten_ref.GetCell(0).NumericCellValue, 0.0);
         }
@@ -82,13 +82,13 @@ namespace TestCases.SS.UserModel
         [TestMethod]
         public void TestRemoveRow()
         {
-            Workbook workbook = _testDataProvider.CreateWorkbook();
-            Sheet sheet1 = workbook.CreateSheet();
+            IWorkbook workbook = _testDataProvider.CreateWorkbook();
+            ISheet sheet1 = workbook.CreateSheet();
             Assert.AreEqual(0, sheet1.PhysicalNumberOfRows);
             Assert.AreEqual(0, sheet1.FirstRowNum);
             Assert.AreEqual(0, sheet1.LastRowNum);
 
-            Row row0 = sheet1.CreateRow(0);
+            IRow row0 = sheet1.CreateRow(0);
             Assert.AreEqual(1, sheet1.PhysicalNumberOfRows);
             Assert.AreEqual(0, sheet1.FirstRowNum);
             Assert.AreEqual(0, sheet1.LastRowNum);
@@ -97,8 +97,8 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual(0, sheet1.FirstRowNum);
             Assert.AreEqual(0, sheet1.LastRowNum);
 
-            Row row1 = sheet1.CreateRow(1);
-            Row row2 = sheet1.CreateRow(2);
+            IRow row1 = sheet1.CreateRow(1);
+            IRow row2 = sheet1.CreateRow(2);
             Assert.AreEqual(2, sheet1.PhysicalNumberOfRows);
             Assert.AreEqual(1, sheet1.FirstRowNum);
             Assert.AreEqual(2, sheet1.LastRowNum);
@@ -112,8 +112,8 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual(1, sheet1.FirstRowNum);
             Assert.AreEqual(1, sheet1.LastRowNum);
 
-            Row row3 = sheet1.CreateRow(3);
-            Sheet sheet2 = workbook.CreateSheet();
+            IRow row3 = sheet1.CreateRow(3);
+            ISheet sheet2 = workbook.CreateSheet();
             try
             {
                 sheet2.RemoveRow(row3);
@@ -127,17 +127,17 @@ namespace TestCases.SS.UserModel
         [TestMethod]
         public void TestCloneSheet()
         {
-            Workbook workbook = _testDataProvider.CreateWorkbook();
+            IWorkbook workbook = _testDataProvider.CreateWorkbook();
             CreationHelper factory = workbook.GetCreationHelper();
-            Sheet sheet = workbook.CreateSheet("Test Clone");
-            Row row = sheet.CreateRow(0);
-            Cell cell = row.CreateCell(0);
-            Cell cell2 = row.CreateCell(1);
+            ISheet sheet = workbook.CreateSheet("Test Clone");
+            IRow row = sheet.CreateRow(0);
+            ICell cell = row.CreateCell(0);
+            ICell cell2 = row.CreateCell(1);
             cell.SetCellValue(factory.CreateRichTextString("Clone_test"));
             cell2.CellFormula = "SIN(1)";
 
-            Sheet ClonedSheet = workbook.CloneSheet(0);
-            Row ClonedRow = ClonedSheet.GetRow(0);
+            ISheet ClonedSheet = workbook.CloneSheet(0);
+            IRow ClonedRow = ClonedSheet.GetRow(0);
 
             //Check for a good clone
             Assert.AreEqual(ClonedRow.GetCell(0).RichStringCellValue.String, "Clone_test");
@@ -163,11 +163,11 @@ namespace TestCases.SS.UserModel
         [TestMethod]
         public void TestCloneSheetMultipleTimes()
         {
-            Workbook workbook = _testDataProvider.CreateWorkbook();
+            IWorkbook workbook = _testDataProvider.CreateWorkbook();
             CreationHelper factory = workbook.GetCreationHelper();
-            Sheet sheet = workbook.CreateSheet("Test Clone");
-            Row row = sheet.CreateRow(0);
-            Cell cell = row.CreateCell(0);
+            ISheet sheet = workbook.CreateSheet("Test Clone");
+            IRow row = sheet.CreateRow(0);
+            ICell cell = row.CreateCell(0);
             cell.SetCellValue(factory.CreateRichTextString("Clone_test"));
             //Clone the sheet multiple times
             workbook.CloneSheet(0);
@@ -192,9 +192,9 @@ namespace TestCases.SS.UserModel
         [TestMethod]
         public void TestPrintSetupLandscapeNew()
         {
-            Workbook workbook = _testDataProvider.CreateWorkbook();
-            Sheet sheetL = workbook.CreateSheet("LandscapeS");
-            Sheet sheetP = workbook.CreateSheet("LandscapeP");
+            IWorkbook workbook = _testDataProvider.CreateWorkbook();
+            ISheet sheetL = workbook.CreateSheet("LandscapeS");
+            ISheet sheetP = workbook.CreateSheet("LandscapeP");
 
             // Check two aspects of the print Setup
             Assert.IsFalse(sheetL.PrintSetup.Landscape);
@@ -231,8 +231,8 @@ namespace TestCases.SS.UserModel
         [TestMethod]
         public void TestAddMerged()
         {
-            Workbook wb = _testDataProvider.CreateWorkbook();
-            Sheet sheet = wb.CreateSheet();
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            ISheet sheet = wb.CreateSheet();
             Assert.AreEqual(0, sheet.NumMergedRegions);
             SpreadsheetVersion ssVersion = _testDataProvider.GetSpreadsheetVersion();
 
@@ -281,8 +281,8 @@ namespace TestCases.SS.UserModel
         [TestMethod]
         public void TestRemoveMerged()
         {
-            Workbook wb = _testDataProvider.CreateWorkbook();
-            Sheet sheet = wb.CreateSheet();
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            ISheet sheet = wb.CreateSheet();
             CellRangeAddress region = new CellRangeAddress(0, 1, 0, 1);
             sheet.AddMergedRegion(region);
             region = new CellRangeAddress(1, 2, 0, 1);
@@ -316,11 +316,11 @@ namespace TestCases.SS.UserModel
         [TestMethod]
         public void TestShiftMerged()
         {
-            Workbook wb = _testDataProvider.CreateWorkbook();
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
             CreationHelper factory = wb.GetCreationHelper();
-            Sheet sheet = wb.CreateSheet();
-            Row row = sheet.CreateRow(0);
-            Cell cell = row.CreateCell(0);
+            ISheet sheet = wb.CreateSheet();
+            IRow row = sheet.CreateRow(0);
+            ICell cell = row.CreateCell(0);
             cell.SetCellValue(factory.CreateRichTextString("first row, first cell"));
 
             row = sheet.CreateRow(1);
@@ -338,11 +338,11 @@ namespace TestCases.SS.UserModel
         [TestMethod]
         public void TestIsMergedRegion()
         {
-            Workbook wb = _testDataProvider.CreateWorkbook();
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
             CreationHelper factory = wb.GetCreationHelper();
-            Sheet sheet = wb.CreateSheet();
-            Row row = sheet.CreateRow(0);
-            Cell cell = row.CreateCell(0);
+            ISheet sheet = wb.CreateSheet();
+            IRow row = sheet.CreateRow(0);
+            ICell cell = row.CreateCell(0);
             cell.SetCellValue(factory.CreateRichTextString("first row, first cell"));
 
             CellRangeAddress region = new CellRangeAddress(1, 3, 0, 2);
@@ -363,8 +363,8 @@ namespace TestCases.SS.UserModel
         [TestMethod]
         public void TestDisplayOptions()
         {
-            Workbook wb = _testDataProvider.CreateWorkbook();
-            Sheet sheet = wb.CreateSheet();
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            ISheet sheet = wb.CreateSheet();
 
             Assert.AreEqual(sheet.DisplayGridlines, true);
             Assert.AreEqual(sheet.DisplayRowColHeadings, true);
@@ -387,8 +387,8 @@ namespace TestCases.SS.UserModel
         [TestMethod]
         public void TestColumnWidth()
         {
-            Workbook wb = _testDataProvider.CreateWorkbook();
-            Sheet sheet = wb.CreateSheet();
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            ISheet sheet = wb.CreateSheet();
 
             //default column width measured in characters
             sheet.DefaultColumnWidth=(10);
@@ -453,8 +453,8 @@ namespace TestCases.SS.UserModel
         [TestMethod]
         public void TestDefaultRowHeight()
         {
-            Workbook workbook = _testDataProvider.CreateWorkbook();
-            Sheet sheet = workbook.CreateSheet();
+            IWorkbook workbook = _testDataProvider.CreateWorkbook();
+            ISheet sheet = workbook.CreateSheet();
             sheet.DefaultRowHeightInPoints = (15);
             Assert.AreEqual((short)300, sheet.DefaultRowHeight);
             Assert.AreEqual(15.0F, sheet.DefaultRowHeightInPoints, 0F);
@@ -479,12 +479,12 @@ namespace TestCases.SS.UserModel
         [TestMethod]
         public void Test35084()
         {
-            Workbook wb = _testDataProvider.CreateWorkbook();
-            Sheet s = wb.CreateSheet("Sheet1");
-            Row r = s.CreateRow(0);
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            ISheet s = wb.CreateSheet("Sheet1");
+            IRow r = s.CreateRow(0);
             r.CreateCell(0).SetCellValue(1);
             r.CreateCell(1).CellFormula = ("A1*2");
-            Sheet s1 = wb.CloneSheet(0);
+            ISheet s1 = wb.CloneSheet(0);
             r = s1.GetRow(0);
             Assert.AreEqual(r.GetCell(0).NumericCellValue, 1, 0, "double"); // sanity check
             Assert.IsNotNull(r.GetCell(1));
@@ -495,25 +495,25 @@ namespace TestCases.SS.UserModel
         [TestMethod]
         public void TestDefaultColumnStyle()
         {
-            Workbook wb = _testDataProvider.CreateWorkbook();
-            CellStyle style = wb.CreateCellStyle();
-            Sheet sheet = wb.CreateSheet();
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            ICellStyle style = wb.CreateCellStyle();
+            ISheet sheet = wb.CreateSheet();
             sheet.SetDefaultColumnStyle(0, style);
             Assert.IsNotNull(sheet.GetColumnStyle(0));
             Assert.AreEqual(style.Index, sheet.GetColumnStyle(0).Index);
 
-            Row row = sheet.CreateRow(0);
-            Cell cell = row.CreateCell(0);
-            CellStyle style2 = cell.CellStyle;
+            IRow row = sheet.CreateRow(0);
+            ICell cell = row.CreateCell(0);
+            ICellStyle style2 = cell.CellStyle;
             Assert.IsNotNull(style2);
             Assert.AreEqual(style.Index, style2.Index, "style should match");
         }
         [TestMethod]
         public void TestOutlineProperties()
         {
-            Workbook wb = _testDataProvider.CreateWorkbook();
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
 
-            Sheet sheet = wb.CreateSheet();
+            ISheet sheet = wb.CreateSheet();
 
             //TODO defaults are different in HSSF and XSSF
             //Assert.IsTrue(sheet.RowSumsBelow);
@@ -543,8 +543,8 @@ namespace TestCases.SS.UserModel
         [TestMethod]
         public void TestSheetProperties()
         {
-            Workbook wb = _testDataProvider.CreateWorkbook();
-            Sheet sheet = wb.CreateSheet();
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            ISheet sheet = wb.CreateSheet();
 
             Assert.IsFalse(sheet.HorizontallyCenter);
             sheet.HorizontallyCenter = true;
@@ -602,8 +602,8 @@ namespace TestCases.SS.UserModel
             double marginHeader = defaultMargins[4];
             double marginFooter = defaultMargins[5];
 
-            Workbook workbook = _testDataProvider.CreateWorkbook();
-            Sheet sheet = workbook.CreateSheet("Sheet 1");
+            IWorkbook workbook = _testDataProvider.CreateWorkbook();
+            ISheet sheet = workbook.CreateSheet("Sheet 1");
             Assert.AreEqual(marginLeft, sheet.GetMargin(MarginType.LeftMargin), 0.0);
             sheet.SetMargin(MarginType.LeftMargin, 10.0);
             //left margin is custom, all others are default
@@ -629,8 +629,8 @@ namespace TestCases.SS.UserModel
         [TestMethod]
         public void TestRowBreaks()
         {
-            Workbook workbook = _testDataProvider.CreateWorkbook();
-            Sheet sheet = workbook.CreateSheet();
+            IWorkbook workbook = _testDataProvider.CreateWorkbook();
+            ISheet sheet = workbook.CreateSheet();
             //Sheet#RowBreaks returns an empty array if no row breaks are defined
             Assert.IsNotNull(sheet.RowBreaks);
             Assert.AreEqual(0, sheet.RowBreaks.Length);
@@ -658,8 +658,8 @@ namespace TestCases.SS.UserModel
         [TestMethod]
         public void TestColumnBreaks()
         {
-            Workbook workbook = _testDataProvider.CreateWorkbook();
-            Sheet sheet = workbook.CreateSheet();
+            IWorkbook workbook = _testDataProvider.CreateWorkbook();
+            ISheet sheet = workbook.CreateSheet();
             Assert.IsNotNull(sheet.ColumnBreaks);
             Assert.AreEqual(0, sheet.ColumnBreaks.Length);
 
@@ -686,8 +686,8 @@ namespace TestCases.SS.UserModel
         [TestMethod]
         public void TestGetFirstLastRowNum()
         {
-            Workbook workbook = _testDataProvider.CreateWorkbook();
-            Sheet sheet = workbook.CreateSheet("Sheet 1");
+            IWorkbook workbook = _testDataProvider.CreateWorkbook();
+            ISheet sheet = workbook.CreateSheet("Sheet 1");
             sheet.CreateRow(9);
             sheet.CreateRow(0);
             sheet.CreateRow(1);
@@ -697,8 +697,8 @@ namespace TestCases.SS.UserModel
         [TestMethod]
         public void TestFooter()
         {
-            Workbook workbook = _testDataProvider.CreateWorkbook();
-            Sheet sheet = workbook.CreateSheet("Sheet 1");
+            IWorkbook workbook = _testDataProvider.CreateWorkbook();
+            ISheet sheet = workbook.CreateSheet("Sheet 1");
             Assert.IsNotNull(sheet.Footer);
             sheet.Footer.Center = ("test center footer");
             Assert.AreEqual("test center footer", sheet.Footer.Center);
@@ -706,8 +706,8 @@ namespace TestCases.SS.UserModel
         [TestMethod]
         public void TestGetSetColumnHidden()
         {
-            Workbook workbook = _testDataProvider.CreateWorkbook();
-            Sheet sheet = workbook.CreateSheet("Sheet 1");
+            IWorkbook workbook = _testDataProvider.CreateWorkbook();
+            ISheet sheet = workbook.CreateSheet("Sheet 1");
             sheet.SetColumnHidden(2, true);
             Assert.IsTrue(sheet.IsColumnHidden(2));
         }

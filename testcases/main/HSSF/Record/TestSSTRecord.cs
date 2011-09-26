@@ -371,7 +371,7 @@ namespace TestCases.HSSF.Record
         public void TestReadWriteDuplicatedRichText1()
         {
             HSSFWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("duprich1.xls");
-            NPOI.SS.UserModel.Sheet sheet = wb.GetSheetAt(1);
+            NPOI.SS.UserModel.ISheet sheet = wb.GetSheetAt(1);
             Assert.AreEqual("01/05 (Wed)", sheet.GetRow(0).GetCell((short)8).StringCellValue);
             Assert.AreEqual("01/05 (Wed)", sheet.GetRow(1).GetCell((short)8).StringCellValue);
 

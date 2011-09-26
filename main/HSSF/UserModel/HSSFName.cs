@@ -33,7 +33,7 @@ namespace NPOI.HSSF.UserModel
     /// High Level Represantion of Named Range
     /// </summary>
     /// <remarks>@author Libin Roman (Vista Portal LDT. Developer)</remarks>
-    public class HSSFName:NPOI.SS.UserModel.Name
+    public class HSSFName:NPOI.SS.UserModel.IName
     {
         private HSSFWorkbook book;
         private NameRecord _definedNameRec;

@@ -65,18 +65,18 @@ namespace NPOI.HSSF.UserModel
         }
 
 
-        protected NPOI.SS.UserModel.Row row;
-        protected NPOI.SS.UserModel.Sheet sheet;
-        protected NPOI.SS.UserModel.Workbook workbook;
+        protected NPOI.SS.UserModel.IRow row;
+        protected NPOI.SS.UserModel.ISheet sheet;
+        protected NPOI.SS.UserModel.IWorkbook workbook;
 
-        public HSSFFormulaEvaluator(NPOI.SS.UserModel.Sheet sheet, NPOI.SS.UserModel.Workbook workbook)
+        public HSSFFormulaEvaluator(NPOI.SS.UserModel.ISheet sheet, NPOI.SS.UserModel.IWorkbook workbook)
             : this(workbook)
         {
             this.sheet = sheet;
             this.workbook = workbook;
         }
 
-        public HSSFFormulaEvaluator(NPOI.SS.UserModel.Workbook workbook)
+        public HSSFFormulaEvaluator(NPOI.SS.UserModel.IWorkbook workbook)
             : this(workbook, null)
         {
             
@@ -86,7 +86,7 @@ namespace NPOI.HSSF.UserModel
  * for the (conservative) assumption that any cell may have its definition changed after
  * evaluation begins.
  */
-        public HSSFFormulaEvaluator(NPOI.SS.UserModel.Workbook workbook, IStabilityClassifier stabilityClassifier)
+        public HSSFFormulaEvaluator(NPOI.SS.UserModel.IWorkbook workbook, IStabilityClassifier stabilityClassifier)
             : this(workbook, stabilityClassifier, null)
         {
             
@@ -95,11 +95,11 @@ namespace NPOI.HSSF.UserModel
         /**
          * @param udfFinder pass <code>null</code> for default (AnalysisToolPak only)
          */
-        private HSSFFormulaEvaluator(NPOI.SS.UserModel.Workbook workbook, IStabilityClassifier stabilityClassifier, UDFFinder udfFinder)
+        private HSSFFormulaEvaluator(NPOI.SS.UserModel.IWorkbook workbook, IStabilityClassifier stabilityClassifier, UDFFinder udfFinder)
         {
             _bookEvaluator = new WorkbookEvaluator(HSSFEvaluationWorkbook.Create(workbook), stabilityClassifier, udfFinder);
         }
-        private static void SetCellType(NPOI.SS.UserModel.Cell cell, NPOI.SS.UserModel.CellValue cv)
+        private static void SetCellType(NPOI.SS.UserModel.ICell cell, NPOI.SS.UserModel.CellValue cv)
         {
             NPOI.SS.UserModel.CellType cellType = cv.CellType;
             switch (cellType)
@@ -119,7 +119,7 @@ namespace NPOI.HSSF.UserModel
             }
             throw new InvalidOperationException("Unexpected cell value type (" + cellType + ")");
         }
-        private static void SetCellValue(NPOI.SS.UserModel.Cell cell, NPOI.SS.UserModel.CellValue cv)
+        private static void SetCellValue(NPOI.SS.UserModel.ICell cell, NPOI.SS.UserModel.CellValue cv)
         {
             NPOI.SS.UserModel.CellType cellType = cv.CellType;
             switch (cellType)
@@ -179,7 +179,7 @@ namespace NPOI.HSSF.UserModel
          * @param cell may be <c>null</c> signifying that the cell is not present (or blank)
          * @return <c>null</c> if the supplied cell is <c>null</c> or blank
          */
-        public NPOI.SS.UserModel.CellValue Evaluate(NPOI.SS.UserModel.Cell cell)
+        public NPOI.SS.UserModel.CellValue Evaluate(NPOI.SS.UserModel.ICell cell)
         {
             if (cell == null)
             {
@@ -223,7 +223,7 @@ namespace NPOI.HSSF.UserModel
          * Failure to call this method after changing cell values will cause incorrect behaviour
          * of the evaluate~ methods of this class
          */
-        public void NotifyUpdateCell(Cell cell)
+        public void NotifyUpdateCell(ICell cell)
         {
             _bookEvaluator.NotifyUpdateCell(new HSSFEvaluationCell(cell));
         }
@@ -233,7 +233,7 @@ namespace NPOI.HSSF.UserModel
          * Failure to call this method after changing cell values will cause incorrect behaviour
          * of the evaluate~ methods of this class
          */
-        public void NotifyDeleteCell(Cell cell)
+        public void NotifyDeleteCell(ICell cell)
         {
             _bookEvaluator.NotifyDeleteCell(new HSSFEvaluationCell(cell));
         }
@@ -244,7 +244,7 @@ namespace NPOI.HSSF.UserModel
          * Failure to call this method after changing cell values will cause incorrect behaviour
          * of the evaluate~ methods of this class
          */
-        public void NotifySetFormula(Cell cell)
+        public void NotifySetFormula(ICell cell)
         {
             _bookEvaluator.NotifyUpdateCell(new HSSFEvaluationCell(cell));
         }
@@ -267,7 +267,7 @@ namespace NPOI.HSSF.UserModel
          * @param cell The cell to Evaluate
          * @return The type of the formula result (the cell's type remains as NPOI.SS.UserModel.CellType.FORMULA however)
          */
-        public NPOI.SS.UserModel.CellType EvaluateFormulaCell(NPOI.SS.UserModel.Cell cell)
+        public NPOI.SS.UserModel.CellType EvaluateFormulaCell(NPOI.SS.UserModel.ICell cell)
         {
             if (cell == null || cell.CellType != NPOI.SS.UserModel.CellType.FORMULA)
             {
@@ -282,7 +282,7 @@ namespace NPOI.HSSF.UserModel
          * Returns a CellValue wrapper around the supplied ValueEval instance.
          * @param eval
          */
-        private NPOI.SS.UserModel.CellValue EvaluateFormulaCellValue(NPOI.SS.UserModel.Cell cell)
+        private NPOI.SS.UserModel.CellValue EvaluateFormulaCellValue(NPOI.SS.UserModel.ICell cell)
         {
             ValueEval eval = _bookEvaluator.Evaluate(new HSSFEvaluationCell((HSSFCell)cell));
             if (eval is NumberEval)
@@ -322,7 +322,7 @@ namespace NPOI.HSSF.UserModel
          *  value computed for you, use {@link #EvaluateFormulaCell(HSSFCell)}
          * @param cell
          */
-        public NPOI.SS.UserModel.Cell EvaluateInCell(NPOI.SS.UserModel.Cell cell)
+        public NPOI.SS.UserModel.ICell EvaluateInCell(NPOI.SS.UserModel.ICell cell)
         {
             if (cell == null)
             {
@@ -352,7 +352,7 @@ namespace NPOI.HSSF.UserModel
         {
             for (int i = 0; i < wb.NumberOfSheets; i++)
             {
-                NPOI.SS.UserModel.Sheet sheet = wb.GetSheetAt(i);
+                NPOI.SS.UserModel.ISheet sheet = wb.GetSheetAt(i);
                 HSSFFormulaEvaluator evaluator = new HSSFFormulaEvaluator(sheet, wb);
 
                 for (IEnumerator rit = sheet.GetRowEnumerator(); rit.MoveNext(); )
@@ -362,7 +362,7 @@ namespace NPOI.HSSF.UserModel
 
                     for (IEnumerator cit = r.GetCellEnumerator(); cit.MoveNext(); )
                     {
-                        NPOI.SS.UserModel.Cell c = (HSSFCell)cit.Current;
+                        NPOI.SS.UserModel.ICell c = (HSSFCell)cit.Current;
                         if (c.CellType == NPOI.SS.UserModel.CellType.FORMULA)
                             evaluator.EvaluateFormulaCell(c);
                     }

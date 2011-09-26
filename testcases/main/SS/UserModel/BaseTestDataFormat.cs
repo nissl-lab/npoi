@@ -42,9 +42,9 @@ namespace TestCases.SS.UserModel
         [TestMethod]
         public void BaseBuiltinFormats()
         {
-            Workbook wb = _testDataProvider.CreateWorkbook();
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
 
-            DataFormat df = wb.CreateDataFormat();
+            IDataFormat df = wb.CreateDataFormat();
 
             List<String> formats = HSSFDataFormat.GetBuiltinFormats();
             int idx = 0;
@@ -55,8 +55,8 @@ namespace TestCases.SS.UserModel
             }
 
             //default format for new cells is General
-            Sheet sheet = wb.CreateSheet();
-            Cell cell = sheet.CreateRow(0).CreateCell(0);
+            ISheet sheet = wb.CreateSheet();
+            ICell cell = sheet.CreateRow(0).CreateCell(0);
             Assert.AreEqual(0, cell.CellStyle.DataFormat);
             Assert.AreEqual("General", cell.CellStyle.GetDataFormatString());
 

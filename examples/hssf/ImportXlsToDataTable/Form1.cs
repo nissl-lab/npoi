@@ -33,7 +33,7 @@ namespace ImportXlsToDataTable
 
         void ConvertToDataTable()
         {
-            Sheet sheet = hssfworkbook.GetSheetAt(0);
+            ISheet sheet = hssfworkbook.GetSheetAt(0);
             System.Collections.IEnumerator rows = sheet.GetRowEnumerator();
 
             DataTable dt = new DataTable();
@@ -44,12 +44,12 @@ namespace ImportXlsToDataTable
 
             while (rows.MoveNext())
             {
-                Row row = (HSSFRow)rows.Current;
+                IRow row = (HSSFRow)rows.Current;
                 DataRow dr = dt.NewRow();
 
                 for (int i = 0; i < row.LastCellNum; i++)
                 {
-                    Cell cell = row.GetCell(i);
+                    ICell cell = row.GetCell(i);
 
 
                     if (cell == null)

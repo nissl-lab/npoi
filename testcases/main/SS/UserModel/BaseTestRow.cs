@@ -42,9 +42,9 @@ namespace TestCases.SS.UserModel
         [TestMethod]
         public void TestLastAndFirstColumns()
         {
-            Workbook workbook = _testDataProvider.CreateWorkbook();
-            Sheet sheet = workbook.CreateSheet();
-            Row row = sheet.CreateRow(0);
+            IWorkbook workbook = _testDataProvider.CreateWorkbook();
+            ISheet sheet = workbook.CreateSheet();
+            IRow row = sheet.CreateRow(0);
             Assert.AreEqual(-1, row.FirstCellNum);
             Assert.AreEqual(-1, row.LastCellNum);
 
@@ -72,16 +72,16 @@ namespace TestCases.SS.UserModel
         [TestMethod]
         public void TestBoundsInMultipleRows()
         {
-            Workbook workbook = _testDataProvider.CreateWorkbook();
-            Sheet sheet = workbook.CreateSheet();
-            Row rowA = sheet.CreateRow(0);
+            IWorkbook workbook = _testDataProvider.CreateWorkbook();
+            ISheet sheet = workbook.CreateSheet();
+            IRow rowA = sheet.CreateRow(0);
 
             rowA.CreateCell(10);
             rowA.CreateCell(5);
             Assert.AreEqual(5, rowA.FirstCellNum);
             Assert.AreEqual(11, rowA.LastCellNum);
 
-            Row rowB = sheet.CreateRow(1);
+            IRow rowB = sheet.CreateRow(1);
             rowB.CreateCell(15);
             rowB.CreateCell(30);
             Assert.AreEqual(15, rowB.FirstCellNum);
@@ -97,9 +97,9 @@ namespace TestCases.SS.UserModel
         [TestMethod]
         public void TestRemoveCell()
         {
-            Workbook workbook = _testDataProvider.CreateWorkbook();
-            Sheet sheet = workbook.CreateSheet();
-            Row row = sheet.CreateRow(0);
+            IWorkbook workbook = _testDataProvider.CreateWorkbook();
+            ISheet sheet = workbook.CreateSheet();
+            IRow row = sheet.CreateRow(0);
 
             Assert.AreEqual(0, row.PhysicalNumberOfCells);
             Assert.AreEqual(-1, row.LastCellNum);
@@ -132,8 +132,8 @@ namespace TestCases.SS.UserModel
 
         public void BaseTestRowBounds(int maxRowNum)
         {
-            Workbook workbook = _testDataProvider.CreateWorkbook();
-            Sheet sheet = workbook.CreateSheet();
+            IWorkbook workbook = _testDataProvider.CreateWorkbook();
+            ISheet sheet = workbook.CreateSheet();
             //Test low row bound
             sheet.CreateRow(0);
             //Test low row bound exception
@@ -165,14 +165,14 @@ namespace TestCases.SS.UserModel
 
         public void BaseTestCellBounds(int maxCellNum)
         {
-            Workbook workbook = _testDataProvider.CreateWorkbook();
-            Sheet sheet = workbook.CreateSheet();
+            IWorkbook workbook = _testDataProvider.CreateWorkbook();
+            ISheet sheet = workbook.CreateSheet();
 
-            Row row = sheet.CreateRow(0);
+            IRow row = sheet.CreateRow(0);
             //Test low cell bound
             try
             {
-                Cell cell = row.CreateCell(-1);
+                ICell cell = row.CreateCell(-1);
                 Assert.Fail("expected exception");
             }
             catch (ArgumentException e)
@@ -184,7 +184,7 @@ namespace TestCases.SS.UserModel
             //Test high cell bound
             try
             {
-                Cell cell = row.CreateCell(maxCellNum + 1);
+                ICell cell = row.CreateCell(maxCellNum + 1);
                 Assert.Fail("expected exception");
             }
             catch (ArgumentException e)
@@ -194,7 +194,7 @@ namespace TestCases.SS.UserModel
             }
             for (int i = 0; i < maxCellNum; i++)
             {
-                Cell cell = row.CreateCell(i);
+                ICell cell = row.CreateCell(i);
             }
             Assert.AreEqual(maxCellNum, row.PhysicalNumberOfCells);
             workbook = _testDataProvider.WriteOutAndReadBack(workbook);
@@ -203,7 +203,7 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual(maxCellNum, row.PhysicalNumberOfCells);
             for (int i = 0; i < maxCellNum; i++)
             {
-                Cell cell = row.GetCell(i);
+                ICell cell = row.GetCell(i);
                 Assert.AreEqual(i, cell.ColumnIndex);
             }
 
@@ -216,9 +216,9 @@ namespace TestCases.SS.UserModel
         [TestMethod]
         public void TestLastCellNumIsCorrectAfterAddCell_bug43901()
         {
-            Workbook workbook = _testDataProvider.CreateWorkbook();
-            Sheet sheet = workbook.CreateSheet("test");
-            Row row = sheet.CreateRow(0);
+            IWorkbook workbook = _testDataProvider.CreateWorkbook();
+            ISheet sheet = workbook.CreateSheet("test");
+            IRow row = sheet.CreateRow(0);
 
             // New row has last col -1
             Assert.AreEqual(-1, row.LastCellNum);
@@ -241,9 +241,9 @@ namespace TestCases.SS.UserModel
         [TestMethod]
         public void TestGetCellPolicy()
         {
-            Workbook workbook = _testDataProvider.CreateWorkbook();
-            Sheet sheet = workbook.CreateSheet("test");
-            Row row = sheet.CreateRow(0);
+            IWorkbook workbook = _testDataProvider.CreateWorkbook();
+            ISheet sheet = workbook.CreateSheet("test");
+            IRow row = sheet.CreateRow(0);
 
             // 0 -> string
             // 1 -> num
@@ -311,9 +311,9 @@ namespace TestCases.SS.UserModel
         [TestMethod]
         public void TestRowHeight()
         {
-            Workbook workbook = _testDataProvider.CreateWorkbook();
-            Sheet sheet = workbook.CreateSheet();
-            Row row1 = sheet.CreateRow(0);
+            IWorkbook workbook = _testDataProvider.CreateWorkbook();
+            ISheet sheet = workbook.CreateSheet();
+            IRow row1 = sheet.CreateRow(0);
 
             Assert.AreEqual(sheet.DefaultRowHeight, row1.Height);
 
@@ -322,17 +322,17 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual(20.0f, row1.HeightInPoints, 0F);
             Assert.AreEqual(20 * 20, row1.Height);
 
-            Row row2 = sheet.CreateRow(1);
+            IRow row2 = sheet.CreateRow(1);
             row2.Height = ((short)310);
             Assert.AreEqual(310, row2.Height);
             Assert.AreEqual(310F / 20, row2.HeightInPoints, 0F);
 
-            Row row3 = sheet.CreateRow(2);
+            IRow row3 = sheet.CreateRow(2);
             row3.HeightInPoints = (25.5f);
             Assert.AreEqual((short)(25.5f * 20), row3.Height);
             Assert.AreEqual(25.5f, row3.HeightInPoints, 0F);
 
-            Row row4 = sheet.CreateRow(3);
+            IRow row4 = sheet.CreateRow(3);
             Assert.IsFalse(row4.ZeroHeight);
             row4.ZeroHeight = (true);
             Assert.IsTrue(row4.ZeroHeight);
@@ -365,19 +365,19 @@ namespace TestCases.SS.UserModel
         [TestMethod]
         public void TestGetCellEnumerator()
         {
-            Workbook wb = _testDataProvider.CreateWorkbook();
-            Sheet sheet = wb.CreateSheet();
-            Row row = sheet.CreateRow(0);
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            ISheet sheet = wb.CreateSheet();
+            IRow row = sheet.CreateRow(0);
 
             // One cell at the beginning
-            Cell cell1 = row.CreateCell(1);
+            ICell cell1 = row.CreateCell(1);
             IEnumerator it = row.GetCellEnumerator();
             Assert.IsTrue(it.MoveNext());
             Assert.IsTrue(cell1 == it.Current);
             Assert.IsFalse(it.MoveNext());
 
             // Add another cell at the end
-            Cell cell2 = row.CreateCell(99);
+            ICell cell2 = row.CreateCell(99);
             it = row.GetCellEnumerator();
             Assert.IsTrue(it.MoveNext());
             Assert.IsTrue(cell1 == it.Current);
@@ -385,7 +385,7 @@ namespace TestCases.SS.UserModel
             Assert.IsTrue(cell2 == it.Current);
 
             // Add another cell at the beginning
-            Cell cell3 = row.CreateCell(0);
+            ICell cell3 = row.CreateCell(0);
             it = row.GetCellEnumerator();
             Assert.IsTrue(it.MoveNext());
             Assert.IsTrue(cell3 == it.Current);
@@ -395,7 +395,7 @@ namespace TestCases.SS.UserModel
             Assert.IsTrue(cell2 == it.Current);
 
             // Replace cell1
-            Cell cell4 = row.CreateCell(1);
+            ICell cell4 = row.CreateCell(1);
             it = row.GetCellEnumerator();
             Assert.IsTrue(it.MoveNext());
             Assert.IsTrue(cell3 == it.Current);
@@ -406,7 +406,7 @@ namespace TestCases.SS.UserModel
             Assert.IsFalse(it.MoveNext());
 
             // Add another cell, specifying the cellType
-            Cell cell5 = row.CreateCell(2, CellType.STRING);
+            ICell cell5 = row.CreateCell(2, CellType.STRING);
             it = row.GetCellEnumerator();
             Assert.IsNotNull(cell5);
             Assert.IsTrue(it.MoveNext());

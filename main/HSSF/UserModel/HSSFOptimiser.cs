@@ -150,7 +150,7 @@ namespace NPOI.HSSF.UserModel
             ArrayList doneUnicodeStrings = new ArrayList();
             for (int sheetNum = 0; sheetNum < workbook.NumberOfSheets; sheetNum++)
             {
-                NPOI.SS.UserModel.Sheet s = workbook.GetSheetAt(sheetNum);
+                NPOI.SS.UserModel.ISheet s = workbook.GetSheetAt(sheetNum);
                 IEnumerator rIt = s.GetRowEnumerator();
                 while (rIt.MoveNext())
                 {
@@ -158,7 +158,7 @@ namespace NPOI.HSSF.UserModel
                     IEnumerator cIt = row.GetCellEnumerator();
                     while (cIt.MoveNext())
                     {
-                        Cell cell = (HSSFCell)cIt.Current;
+                        ICell cell = (HSSFCell)cIt.Current;
                         if (cell.CellType == NPOI.SS.UserModel.CellType.STRING)
                         {
                             HSSFRichTextString rtr = (HSSFRichTextString)cell.RichStringCellValue;
@@ -282,9 +282,9 @@ namespace NPOI.HSSF.UserModel
                     IEnumerator cIt = row.GetCellEnumerator();
                     while (cIt.MoveNext())
                     {
-                        Cell cell = (HSSFCell)cIt.Current;
+                        ICell cell = (HSSFCell)cIt.Current;
                         short oldXf = ((HSSFCell)cell).CellValueRecord.XFIndex;
-                        NPOI.SS.UserModel.CellStyle newStyle = workbook.GetCellStyleAt(
+                        NPOI.SS.UserModel.ICellStyle newStyle = workbook.GetCellStyleAt(
                                 newPos[oldXf]
                         );
                         cell.CellStyle = (newStyle);

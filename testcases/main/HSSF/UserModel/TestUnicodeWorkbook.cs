@@ -125,10 +125,10 @@ namespace TestCases.HSSF.UserModel
             HSSFWorkbook wb = new HSSFWorkbook();
 
             //Create a unicode sheet name (euro symbol)
-            NPOI.SS.UserModel.Sheet s = wb.CreateSheet("Test");
+            NPOI.SS.UserModel.ISheet s = wb.CreateSheet("Test");
 
-            Row r = s.CreateRow(0);
-            Cell c = r.CreateCell(1);
+            IRow r = s.CreateRow(0);
+            ICell c = r.CreateCell(1);
             c.SetCellValue(new HSSFRichTextString("\u00e4"));
 
             //Confirm that the sring will be compressed

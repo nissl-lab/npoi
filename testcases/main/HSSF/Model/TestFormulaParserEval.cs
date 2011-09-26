@@ -40,12 +40,12 @@ namespace TestCases.HSSF.Model
             FormulaParser fp;
             Ptg[] ptgs;
 
-            NPOI.SS.UserModel.Sheet s = workbook.CreateSheet("Foo");
+            NPOI.SS.UserModel.ISheet s = workbook.CreateSheet("Foo");
             s.CreateRow(0).CreateCell((short)0).SetCellValue(1.1);
             s.CreateRow(1).CreateCell((short)0).SetCellValue(2.3);
             s.CreateRow(2).CreateCell((short)2).SetCellValue(3.1);
 
-            NPOI.SS.UserModel.Name name = workbook.CreateName();
+            NPOI.SS.UserModel.IName name = workbook.CreateName();
             name.NameName = ("testName");
             name.RefersToFormula = ("A1:A2");
 
@@ -74,11 +74,11 @@ namespace TestCases.HSSF.Model
         {
 
             HSSFWorkbook wb = new HSSFWorkbook();
-            NPOI.SS.UserModel.Sheet sheet = wb.CreateSheet();
+            NPOI.SS.UserModel.ISheet sheet = wb.CreateSheet();
             wb.SetSheetName(0, "Sheet1");
 
-            Row row = sheet.CreateRow(0);
-            Cell cell = row.CreateCell((short)0);
+            IRow row = sheet.CreateRow(0);
+            ICell cell = row.CreateCell((short)0);
             cell.CellFormula = ("SUM(A32769:A32770)");
 
             // put some values in the cells to make the evaluation more interesting

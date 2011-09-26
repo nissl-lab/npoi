@@ -31,7 +31,7 @@ namespace NPOI.HSSF.UserModel
     /// @author  Andrew C. Oliver (acoliver at apache dot org)
     /// @author Jason Height (jheight at chariot dot net dot au)
     /// </summary>
-    public class HSSFCellStyle : NPOI.SS.UserModel.CellStyle
+    public class HSSFCellStyle : NPOI.SS.UserModel.ICellStyle
     {
         private ExtendedFormatRecord format = null;
         private short index = 0;
@@ -131,7 +131,7 @@ namespace NPOI.HSSF.UserModel
         /// Set the font for this style
         /// </summary>
         /// <param name="font">a font object Created or retreived from the HSSFWorkbook object</param>
-        public void SetFont(NPOI.SS.UserModel.Font font)
+        public void SetFont(NPOI.SS.UserModel.IFont font)
         {
             format.IsIndentNotParentFont=(true);
             short fontindex = font.Index;
@@ -152,7 +152,7 @@ namespace NPOI.HSSF.UserModel
         /// </summary>
         /// <param name="parentWorkbook">The parent workbook that this style belongs to.</param>
         /// <returns></returns>
-        public NPOI.SS.UserModel.Font GetFont(NPOI.SS.UserModel.Workbook parentWorkbook)
+        public NPOI.SS.UserModel.IFont GetFont(NPOI.SS.UserModel.IWorkbook parentWorkbook)
         {
             return ((HSSFWorkbook)parentWorkbook).GetFontAt(FontIndex);
         }
@@ -460,7 +460,7 @@ namespace NPOI.HSSF.UserModel
  *  HSSFWorkbook if you like. This allows you to
  *  copy styles from one HSSFWorkbook to another.
  */
-        public void CloneStyleFrom(CellStyle source)
+        public void CloneStyleFrom(ICellStyle source)
         {
             if (source is HSSFCellStyle)
             {

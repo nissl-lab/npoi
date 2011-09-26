@@ -32,10 +32,10 @@ namespace SplitAndFreezePanes
         {
             InitializeWorkbook();
 
-            Sheet sheet1 = hssfworkbook.CreateSheet("new sheet");
-            Sheet sheet2 = hssfworkbook.CreateSheet("second sheet");
-            Sheet sheet3 = hssfworkbook.CreateSheet("third sheet");
-            Sheet sheet4 = hssfworkbook.CreateSheet("fourth sheet");
+            ISheet sheet1 = hssfworkbook.CreateSheet("new sheet");
+            ISheet sheet2 = hssfworkbook.CreateSheet("second sheet");
+            ISheet sheet3 = hssfworkbook.CreateSheet("third sheet");
+            ISheet sheet4 = hssfworkbook.CreateSheet("fourth sheet");
 
             // Freeze just one row
             sheet1.CreateFreezePane(0, 1, 0, 1);

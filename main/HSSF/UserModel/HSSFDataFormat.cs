@@ -78,7 +78,7 @@ namespace NPOI.HSSF.UserModel
     ///       0x31  "text" - Alias for "@"
     ///  </example>
     [Serializable]
-    public class HSSFDataFormat: DataFormat
+    public class HSSFDataFormat: IDataFormat
     {
         	/**
 	 * The first user-defined format starts at 164.

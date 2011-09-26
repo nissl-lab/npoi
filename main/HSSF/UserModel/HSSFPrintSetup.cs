@@ -26,7 +26,7 @@ namespace NPOI.HSSF.UserModel
     /// Used to modify the print Setup.
     /// @author Shawn Laubach (slaubach at apache dot org)
     /// </summary>
-    public class HSSFPrintSetup :NPOI.SS.UserModel.PrintSetup
+    public class HSSFPrintSetup :NPOI.SS.UserModel.IPrintSetup
     {
         PrintSetupRecord printSetupRecord;
 

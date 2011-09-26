@@ -38,7 +38,7 @@ namespace TestCases.HSSF.Record.Formula
         public void TestReading()
         {
             HSSFWorkbook workbook = LoadWorkbook("ErrPtg.xls");
-            NPOI.SS.UserModel.Cell cell = workbook.GetSheetAt(0).GetRow(3).GetCell(0);
+            NPOI.SS.UserModel.ICell cell = workbook.GetSheetAt(0).GetRow(3).GetCell(0);
             Assert.AreEqual(4.0, cell.NumericCellValue, 0.0, "Wrong cell value");
             Assert.AreEqual("ERROR.TYPE(#REF!)", cell.CellFormula, "Wrong cell formula");
         }

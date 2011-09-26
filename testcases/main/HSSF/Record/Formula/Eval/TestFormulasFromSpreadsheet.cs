@@ -89,7 +89,7 @@ namespace TestCases.HSSF.Record.Formula.Eval
         }
 
         private HSSFWorkbook workbook;
-        private NPOI.SS.UserModel.Sheet sheet;
+        private NPOI.SS.UserModel.ISheet sheet;
         // Note - multiple failures are aggregated before ending.  
         // If one or more functions fail, a single AssertFailedException is1 thrown at the end
         private int _functionFailureCount;
@@ -97,7 +97,7 @@ namespace TestCases.HSSF.Record.Formula.Eval
         private int _evaluationFailureCount;
         private int _evaluationSuccessCount;
 
-        private static Cell GetExpectedValueCell(NPOI.SS.UserModel.Row row, short columnIndex)
+        private static ICell GetExpectedValueCell(NPOI.SS.UserModel.IRow row, short columnIndex)
         {
             if (row == null)
             {
@@ -107,7 +107,7 @@ namespace TestCases.HSSF.Record.Formula.Eval
         }
 
 
-        private static void ConfirmExpectedResult(String msg, Cell expected, NPOI.SS.UserModel.CellValue actual)
+        private static void ConfirmExpectedResult(String msg, ICell expected, NPOI.SS.UserModel.CellValue actual)
         {
             if (expected == null)
             {
@@ -194,7 +194,7 @@ namespace TestCases.HSSF.Record.Formula.Eval
             int rowIndex = startRowIndex;
             while (true)
             {
-                NPOI.SS.UserModel.Row r = sheet.GetRow(rowIndex);
+                NPOI.SS.UserModel.IRow r = sheet.GetRow(rowIndex);
                 String targetFunctionName = GetTargetFunctionName(r);
                 if (targetFunctionName == null)
                 {
@@ -211,7 +211,7 @@ namespace TestCases.HSSF.Record.Formula.Eval
                 {
 
                     // expected results are on the row below
-                    NPOI.SS.UserModel.Row expectedValuesRow = sheet.GetRow(rowIndex + 1);
+                    NPOI.SS.UserModel.IRow expectedValuesRow = sheet.GetRow(rowIndex + 1);
                     if (expectedValuesRow == null)
                     {
                         int missingRowNum = rowIndex + 2; //+1 for 1-based, +1 for next row
@@ -238,7 +238,7 @@ namespace TestCases.HSSF.Record.Formula.Eval
          * cases, and whether they all succeeded.
          */
         private int ProcessFunctionRow(HSSFFormulaEvaluator evaluator, String targetFunctionName,
-                NPOI.SS.UserModel.Row formulasRow, NPOI.SS.UserModel.Row expectedValuesRow)
+                NPOI.SS.UserModel.IRow formulasRow, NPOI.SS.UserModel.IRow expectedValuesRow)
         {
 
             int result = Result.NO_EVALUATIONS_FOUND; // so far
@@ -248,7 +248,7 @@ namespace TestCases.HSSF.Record.Formula.Eval
             // iterate across the row for all the evaluation cases
             for (short colnum = SS.COLUMN_INDEX_FIRST_TEST_VALUE; colnum < endcolnum; colnum++)
             {
-                Cell c = formulasRow.GetCell(colnum);
+                ICell c = formulasRow.GetCell(colnum);
                 if (c == null || c.CellType != NPOI.SS.UserModel.CellType.FORMULA)
                 {
                     continue;
@@ -256,7 +256,7 @@ namespace TestCases.HSSF.Record.Formula.Eval
 
                 NPOI.SS.UserModel.CellValue actualValue = evaluator.Evaluate(c);
 
-                Cell expectedValueCell = GetExpectedValueCell(expectedValuesRow, colnum);
+                ICell expectedValueCell = GetExpectedValueCell(expectedValuesRow, colnum);
                 try
                 {
                     ConfirmExpectedResult("Function '" + targetFunctionName + "': Formula: " + c.CellFormula + " @ " + formulasRow.RowNum + ":" + colnum,
@@ -280,14 +280,14 @@ namespace TestCases.HSSF.Record.Formula.Eval
         /**
          * @return <c>null</c> if cell is1 missing, empty or blank
          */
-        private static String GetTargetFunctionName(NPOI.SS.UserModel.Row r)
+        private static String GetTargetFunctionName(NPOI.SS.UserModel.IRow r)
         {
             if (r == null)
             {
                 Console.Error.WriteLine("Warning - given null row, can't figure out function name");
                 return null;
             }
-            Cell cell = r.GetCell(SS.COLUMN_INDEX_FUNCTION_NAME);
+            ICell cell = r.GetCell(SS.COLUMN_INDEX_FUNCTION_NAME);
             if (cell == null)
             {
                 Console.Error.WriteLine("Warning - NPOI.SS.UserModel.Row " + r.RowNum + " has no cell " + SS.COLUMN_INDEX_FUNCTION_NAME + ", can't figure out function name");

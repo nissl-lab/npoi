@@ -40,7 +40,7 @@ namespace SetPrintSettingsInXls
         {
             InitializeWorkbook();
 
-            Sheet sheet1 = hssfworkbook.CreateSheet("Sheet1");
+            ISheet sheet1 = hssfworkbook.CreateSheet("Sheet1");
             sheet1.SetMargin(MarginType.RightMargin, (double)0.5);
             sheet1.SetMargin(MarginType.TopMargin, (double)0.6);
             sheet1.SetMargin(MarginType.LeftMargin, (double)0.4);
@@ -61,14 +61,14 @@ namespace SetPrintSettingsInXls
             int x = 1;
             for (int i = 1; i <= 15; i++)
             {
-                Row row = sheet1.CreateRow(i);
+                IRow row = sheet1.CreateRow(i);
                 for (int j = 0; j < 15; j++)
                 {
                     row.CreateCell(j).SetCellValue(x++);
                 }
             }
 
-            Sheet sheet2 = hssfworkbook.CreateSheet("Sheet2");
+            ISheet sheet2 = hssfworkbook.CreateSheet("Sheet2");
             sheet2.PrintSetup.Copies = 1;
             sheet2.PrintSetup.Landscape = false;
             sheet2.PrintSetup.Notes = true;
@@ -79,7 +79,7 @@ namespace SetPrintSettingsInXls
             x = 100;
             for (int i = 1; i <= 15; i++)
             {
-                Row row = sheet2.CreateRow(i);
+                IRow row = sheet2.CreateRow(i);
                 for (int j = 0; j < 15; j++)
                 {
                     row.CreateCell(j).SetCellValue(x++);

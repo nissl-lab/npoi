@@ -20,7 +20,7 @@ namespace NPOI.SS.UserModel
     /// <summary>
     /// Common interface for NPOI.SS.UserModel.Header and NPOI.SS.UserModel.Footer
     /// </summary>
-    public interface HeaderFooter
+    public interface IHeaderFooter
     {
         /// <summary>
         /// Gets or sets the left side of the header or footer.

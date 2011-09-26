@@ -42,26 +42,26 @@ namespace SetActiveCellRangeInXls
         {
             InitializeWorkbook();
             //use HSSFCell.SetAsActiveCell() to select B6 as the active column
-            Sheet sheet1 = hssfworkbook.CreateSheet("Sheet A");
+            ISheet sheet1 = hssfworkbook.CreateSheet("ISheet A");
             CreateCellArray(sheet1);
             sheet1.GetRow(5).GetCell(1).SetAsActiveCell();
             //set TopRow and LeftCol to make B6 the first cell in the visible area
             sheet1.TopRow = 5;
             sheet1.LeftCol = 1;
 
-            //use Sheet.SetActiveCell(), the sheet can be empty
-            Sheet sheet2 = hssfworkbook.CreateSheet("Sheet B");
+            //use ISheet.SetActiveCell(), the sheet can be empty
+            ISheet sheet2 = hssfworkbook.CreateSheet("ISheet B");
             sheet2.SetActiveCell(1, 5);
 
-            //use Sheet.SetActiveCellRange to select a cell range
-            Sheet sheet3 = hssfworkbook.CreateSheet("Sheet C");
+            //use ISheet.SetActiveCellRange to select a cell range
+            ISheet sheet3 = hssfworkbook.CreateSheet("ISheet C");
             CreateCellArray(sheet3);
             sheet3.SetActiveCellRange(2, 20, 1, 50);
-            //set the Sheet C as the active sheet
+            //set the ISheet C as the active sheet
             hssfworkbook.ActiveSheetIndex = 2;
 
-            //use Sheet.SetActiveCellRange to select multiple cell ranges
-            Sheet sheet4 = hssfworkbook.CreateSheet("Sheet D");
+            //use ISheet.SetActiveCellRange to select multiple cell ranges
+            ISheet sheet4 = hssfworkbook.CreateSheet("ISheet D");
             CreateCellArray(sheet4);
             List<CellRangeAddress8Bit> cellranges = new List<CellRangeAddress8Bit>();
             cellranges.Add(new CellRangeAddress8Bit(1,5,10,100));
@@ -71,14 +71,14 @@ namespace SetActiveCellRangeInXls
             WriteToFile();
         }
 
-        static void CreateCellArray(Sheet sheet)
+        static void CreateCellArray(ISheet sheet)
         {
             for (int i = 0; i < 300; i++)
             {
-                Row row=sheet.CreateRow(i);
+                IRow row=sheet.CreateRow(i);
                 for (int j = 0; j < 150; j++)
                 {
-                    Cell cell = row.CreateCell(j);
+                    ICell cell = row.CreateCell(j);
                     cell.SetCellValue(i*j);
                 }
             }

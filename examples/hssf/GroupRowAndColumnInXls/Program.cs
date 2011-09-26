@@ -15,12 +15,12 @@ namespace GroupRowAndColumnInXls
         {
             InitializeWorkbook();
 
-            Sheet s = hssfworkbook.CreateSheet("Sheet1");
-            Row r1 = s.CreateRow(0);
-            Row r2 = s.CreateRow(1);
-            Row r3 = s.CreateRow(2);
-            Row r4 = s.CreateRow(3);
-            Row r5 = s.CreateRow(4);
+            ISheet s = hssfworkbook.CreateSheet("Sheet1");
+            IRow r1 = s.CreateRow(0);
+            IRow r2 = s.CreateRow(1);
+            IRow r3 = s.CreateRow(2);
+            IRow r4 = s.CreateRow(3);
+            IRow r5 = s.CreateRow(4);
 
             //group row 2 to row 4
             s.GroupRow(1, 3);

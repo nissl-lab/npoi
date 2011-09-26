@@ -19,7 +19,7 @@ namespace NPOI.SS.UserModel
 {
     using System;
 
-    public interface PictureData
+    public interface IPictureData
     {
 
         /**

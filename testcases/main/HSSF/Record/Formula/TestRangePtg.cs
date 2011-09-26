@@ -39,7 +39,7 @@ namespace TestCases.HSSF.Record.Formula
         public void TestReading()
         {
             HSSFWorkbook workbook = LoadWorkbook("RangePtg.xls");
-            NPOI.SS.UserModel.Cell cell = workbook.GetSheetAt(0).GetRow(3).GetCell(1);
+            NPOI.SS.UserModel.ICell cell = workbook.GetSheetAt(0).GetRow(3).GetCell(1);
             Assert.AreEqual(10.0, cell.NumericCellValue, 0.0, "Wrong cell value");
             Assert.AreEqual("SUM(pineapple:B2)", cell.CellFormula, "Wrong cell formula");
         }

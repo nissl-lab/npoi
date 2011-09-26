@@ -28,7 +28,7 @@ namespace NPOI.SS.Util
      *
      * @author Josh Micich
      */
-    public class SSCellRange<K> : CellRange<K> where K:Cell
+    public class SSCellRange<K> : ICellRange<K> where K:ICell
     {
 
         private int _height;

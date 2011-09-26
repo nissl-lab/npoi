@@ -146,9 +146,9 @@ namespace TestCases.HSSF.Model
             wb.CreateSheet("NoQuotesNeeded");
             wb.CreateSheet("Quotes Needed Here &#$@");
 
-            NPOI.SS.UserModel.Sheet sheet = wb.CreateSheet("Test");
-            Row row = sheet.CreateRow(0);
-            Cell cell;
+            NPOI.SS.UserModel.ISheet sheet = wb.CreateSheet("Test");
+            IRow row = sheet.CreateRow(0);
+            ICell cell;
 
             cell = row.CreateCell((short)0);
             cell.CellFormula = ("NoQuotesNeeded!A1");
@@ -226,9 +226,9 @@ namespace TestCases.HSSF.Model
 
             wb.CreateSheet("Cash_Flow");
 
-            NPOI.SS.UserModel.Sheet sheet = wb.CreateSheet("Test");
-            Row row = sheet.CreateRow(0);
-            Cell cell;
+            NPOI.SS.UserModel.ISheet sheet = wb.CreateSheet("Test");
+            IRow row = sheet.CreateRow(0);
+            ICell cell;
 
             cell = row.CreateCell((short)0);
             cell.CellFormula = ("Cash_Flow!A1");
@@ -264,9 +264,9 @@ namespace TestCases.HSSF.Model
 
             wb.CreateSheet("Cash_Flow");
 
-            NPOI.SS.UserModel.Sheet sheet = wb.CreateSheet("Test");
-            Row row = sheet.CreateRow(0);
-            Cell cell = row.CreateCell((short)0);
+            NPOI.SS.UserModel.ISheet sheet = wb.CreateSheet("Test");
+            IRow row = sheet.CreateRow(0);
+            ICell cell = row.CreateCell((short)0);
             String formula = null;
 
             cell.CellFormula = ("1.3E21/3");
@@ -336,9 +336,9 @@ namespace TestCases.HSSF.Model
 
             wb.CreateSheet("Cash_Flow");
 
-            NPOI.SS.UserModel.Sheet sheet = wb.CreateSheet("Test");
-            Row row = sheet.CreateRow(0);
-            Cell cell = row.CreateCell((short)0);
+            NPOI.SS.UserModel.ISheet sheet = wb.CreateSheet("Test");
+            IRow row = sheet.CreateRow(0);
+            ICell cell = row.CreateCell((short)0);
             String formula = null;
 
             // starts from decimal point
@@ -376,9 +376,9 @@ namespace TestCases.HSSF.Model
 
             wb.CreateSheet("Cash_Flow");
 
-            NPOI.SS.UserModel.Sheet sheet = wb.CreateSheet("Test");
-            Row row = sheet.CreateRow(0);
-            Cell cell = row.CreateCell((short)0);
+            NPOI.SS.UserModel.ISheet sheet = wb.CreateSheet("Test");
+            IRow row = sheet.CreateRow(0);
+            ICell cell = row.CreateCell((short)0);
             String formula = null;
 
             cell.CellFormula = ("A1.A2");
@@ -630,11 +630,11 @@ namespace TestCases.HSSF.Model
             Assert.AreEqual("test\"ing", sp.Value);
 
             HSSFWorkbook wb = new HSSFWorkbook();
-            NPOI.SS.UserModel.Sheet sheet = wb.CreateSheet();
+            NPOI.SS.UserModel.ISheet sheet = wb.CreateSheet();
             wb.SetSheetName(0, "Sheet1");
 
-            Row row = sheet.CreateRow(0);
-            Cell cell = row.CreateCell((short)0);
+            IRow row = sheet.CreateRow(0);
+            ICell cell = row.CreateCell((short)0);
             cell.CellFormula = ("right(\"test\"\"ing\", 3)");
             String actualCellFormula = cell.CellFormula;
             if ("RIGHT(\"test\"ing\",3)".Equals(actualCellFormula))
@@ -703,11 +703,11 @@ namespace TestCases.HSSF.Model
         {
 
             HSSFWorkbook wb = new HSSFWorkbook();
-            NPOI.SS.UserModel.Sheet sheet = wb.CreateSheet();
+            NPOI.SS.UserModel.ISheet sheet = wb.CreateSheet();
             wb.SetSheetName(0, "Sheet1");
 
-            Row row = sheet.CreateRow(0);
-            Cell cell = row.CreateCell((short)0);
+            IRow row = sheet.CreateRow(0);
+            ICell cell = row.CreateCell((short)0);
             cell.CellFormula = ("SUM(A32769:A32770)");
             if ("SUM(A-32767:A-32766)".Equals(cell.CellFormula))
             {

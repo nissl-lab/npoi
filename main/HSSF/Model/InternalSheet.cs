@@ -1970,13 +1970,19 @@ namespace NPOI.HSSF.Model
                 int startloc = loc;
                 while (loc + 1 < records.Count
                         && records[loc] is DrawingRecord
-                        && records[loc + 1] is ObjRecord)
+                        && records[loc + 1] is ObjRecord
+                        && (records[loc + 1] is ObjRecord ||
+                            records[loc + 1] is TextObjectRecord)
+                        )
                 {
                     loc += 2;
+                    if (records[loc] is NoteRecord) loc ++;
                 }
                 int endloc = loc - 1;
                 for (int i = 0; i < (endloc - startloc + 1); i++)
+                {
                     records.RemoveAt(startloc);
+                }
                 records.Insert(startloc, r);
 
                 return startloc;

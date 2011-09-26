@@ -27,7 +27,7 @@ namespace NPOI.SS.UserModel
      * will construct whether they are Reading or writing a workbook.  It is also the
      * top level object for creating new sheets/etc.
      */
-    public interface Workbook : IDisposable
+    public interface IWorkbook : IDisposable
     {
 
 
@@ -102,7 +102,7 @@ namespace NPOI.SS.UserModel
          * @param sheet the sheet to look up
          * @return index of the sheet (0 based)
          */
-        int GetSheetIndex(Sheet sheet);
+        int GetSheetIndex(ISheet sheet);
 
         /**
          * Sreate an Sheet for this Workbook, Adds it to the sheets and returns
@@ -110,7 +110,7 @@ namespace NPOI.SS.UserModel
          *
          * @return Sheet representing the new sheet.
          */
-        Sheet CreateSheet();
+        ISheet CreateSheet();
 
         /**
          * Create an Sheet for this Workbook, Adds it to the sheets and returns
@@ -120,14 +120,14 @@ namespace NPOI.SS.UserModel
          * @return Sheet representing the new sheet.
          * @throws ArgumentException if the name is greater than 31 chars or Contains <code>/\?*[]</code>
          */
-        Sheet CreateSheet(String sheetname);
+        ISheet CreateSheet(String sheetname);
 
         /**
          * Create an Sheet from an existing sheet in the Workbook.
          *
          * @return Sheet representing the Cloned sheet.
          */
-        Sheet CloneSheet(int sheetNum);
+        ISheet CloneSheet(int sheetNum);
 
 
         /**
@@ -143,7 +143,7 @@ namespace NPOI.SS.UserModel
          * @param index of the sheet number (0-based physical & logical)
          * @return Sheet at the provided index
          */
-        Sheet GetSheetAt(int index);
+        ISheet GetSheetAt(int index);
 
         /**
          * Get sheet with the given name
@@ -151,7 +151,7 @@ namespace NPOI.SS.UserModel
          * @param name of the sheet
          * @return Sheet with the name provided or <code>null</code> if it does not exist
          */
-        Sheet GetSheet(String name);
+        ISheet GetSheet(String name);
 
         /**
          * Removes sheet at the given index
@@ -192,14 +192,14 @@ namespace NPOI.SS.UserModel
          *
          * @return new font object
          */
-        Font CreateFont();
+        IFont CreateFont();
 
         /**
          * Finds a font that matches the one with the supplied attributes
          *
          * @return the font with the matched attributes or <code>null</code>
          */
-        Font FindFont(short boldWeight, short color, short fontHeight, String name, bool italic, bool strikeout, short typeOffset, byte underline);
+        IFont FindFont(short boldWeight, short color, short fontHeight, String name, bool italic, bool strikeout, short typeOffset, byte underline);
 
         /**
          * Get the number of fonts in the font table
@@ -214,14 +214,14 @@ namespace NPOI.SS.UserModel
          * @param idx  index number (0-based)
          * @return font at the index
          */
-        Font GetFontAt(short idx);
+        IFont GetFontAt(short idx);
 
         /**
          * Create a new Cell style and add it to the workbook's style table
          *
          * @return the new Cell Style object
          */
-        CellStyle CreateCellStyle();
+        ICellStyle CreateCellStyle();
 
         /**
          * Get the number of styles the workbook Contains
@@ -236,7 +236,7 @@ namespace NPOI.SS.UserModel
          * @param idx  index within the set of styles (0-based)
          * @return CellStyle object at the index
          */
-        CellStyle GetCellStyleAt(short idx);
+        ICellStyle GetCellStyleAt(short idx);
 
         /**
          * Write out this workbook to an OutPutstream.
@@ -255,20 +255,20 @@ namespace NPOI.SS.UserModel
          * @param name the name of the defined name
          * @return the defined name with the specified name. <code>null</code> if not found.
          */
-        Name GetName(String name);
+        IName GetName(String name);
         /**
          * @param nameIndex position of the named range (0-based)
          * @return the defined name at the specified index
          * @throws ArgumentException if the supplied index is invalid
          */
-        Name GetNameAt(int nameIndex);
+        IName GetNameAt(int nameIndex);
 
         /**
          * Creates a new (unInitialised) defined name in this workbook
          *
          * @return new defined name object
          */
-        Name CreateName();
+        IName CreateName();
 
         /**
          * Gets the defined name index by name<br/>
@@ -346,7 +346,7 @@ namespace NPOI.SS.UserModel
          *
          * @return the DataFormat object
          */
-        DataFormat CreateDataFormat();
+        IDataFormat CreateDataFormat();
 
         /**
          * Adds a picture to the workbook.

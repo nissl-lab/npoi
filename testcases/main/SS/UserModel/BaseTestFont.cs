@@ -39,12 +39,12 @@ namespace TestCases.SS.UserModel
         public void BaseTestDefaultFont(String defaultName, short defaultSize, short defaultColor)
         {
             //get default font and check against default value
-            Workbook workbook = _testDataProvider.CreateWorkbook();
-            Font fontFind = workbook.FindFont((short)FontBoldWeight.NORMAL, defaultColor, defaultSize, defaultName, false, false, (short)FontFormatting.SS_NONE, (byte)FontUnderlineType.NONE);
+            IWorkbook workbook = _testDataProvider.CreateWorkbook();
+            IFont fontFind = workbook.FindFont((short)FontBoldWeight.NORMAL, defaultColor, defaultSize, defaultName, false, false, (short)FontFormatting.SS_NONE, (byte)FontUnderlineType.NONE);
             Assert.IsNotNull(fontFind);
 
             //get default font, then change 2 values and check against different values (height Changes)
-            Font font = workbook.CreateFont();
+            IFont font = workbook.CreateFont();
             font.Boldweight = (short)(FontBoldWeight.BOLD);
             Assert.AreEqual((short)FontBoldWeight.BOLD, font.Boldweight);
             font.Underline = (byte)(FontUnderlineType.DOUBLE);
@@ -58,20 +58,20 @@ namespace TestCases.SS.UserModel
         [TestMethod]
         public void TestNumberOfFonts()
         {
-            Workbook wb = _testDataProvider.CreateWorkbook();
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
             int num0 = wb.NumberOfFonts;
 
-            Font f1 = wb.CreateFont();
+            IFont f1 = wb.CreateFont();
             f1.Boldweight = (short)(FontBoldWeight.BOLD);
             short idx1 = f1.Index;
             wb.CreateCellStyle().SetFont(f1);
 
-            Font f2 = wb.CreateFont();
+            IFont f2 = wb.CreateFont();
             f2.Underline = (byte)(FontUnderlineType.DOUBLE);
             short idx2 = f2.Index;
             wb.CreateCellStyle().SetFont(f2);
 
-            Font f3 = wb.CreateFont();
+            IFont f3 = wb.CreateFont();
             f3.FontHeightInPoints = ((short)23);
             short idx3 = f3.Index;
             wb.CreateCellStyle().SetFont(f3);
@@ -89,15 +89,15 @@ namespace TestCases.SS.UserModel
         [TestMethod]
         public void TestCreateSave()
         {
-            Workbook wb = _testDataProvider.CreateWorkbook();
-            Sheet s1 = wb.CreateSheet();
-            Row r1 = s1.CreateRow(0);
-            Cell r1c1 = r1.CreateCell(0);
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            ISheet s1 = wb.CreateSheet();
+            IRow r1 = s1.CreateRow(0);
+            ICell r1c1 = r1.CreateCell(0);
             r1c1.SetCellValue(2.2);
 
             int num0 = wb.NumberOfFonts;
 
-            Font font = wb.CreateFont();
+            IFont font = wb.CreateFont();
             font.Boldweight = (short)(FontBoldWeight.BOLD);
             font.IsStrikeout = (true);
             font.Color = (IndexedColors.YELLOW.Index);
@@ -106,7 +106,7 @@ namespace TestCases.SS.UserModel
             wb.CreateCellStyle().SetFont(font);
             Assert.AreEqual(num0 + 1, wb.NumberOfFonts);
 
-            CellStyle cellStyleTitle = wb.CreateCellStyle();
+            ICellStyle cellStyleTitle = wb.CreateCellStyle();
             cellStyleTitle.SetFont(font);
             r1c1.CellStyle = (cellStyleTitle);
 
@@ -116,13 +116,13 @@ namespace TestCases.SS.UserModel
 
             Assert.AreEqual(num0 + 1, wb.NumberOfFonts);
             short idx = s1.GetRow(0).GetCell(0).CellStyle.FontIndex;
-            Font fnt = wb.GetFontAt(idx);
+            IFont fnt = wb.GetFontAt(idx);
             Assert.IsNotNull(fnt);
             Assert.AreEqual(IndexedColors.YELLOW.Index, fnt.Color);
             Assert.AreEqual("Courier", fnt.FontName);
 
             // Now add an orphaned one
-            Font font2 = wb.CreateFont();
+            IFont font2 = wb.CreateFont();
             font2.IsItalic = (true);
             font2.FontHeightInPoints = (short)15;
             short font2Idx = font2.Index;
@@ -149,17 +149,17 @@ namespace TestCases.SS.UserModel
         [TestMethod]
         public void Test45338()
         {
-            Workbook wb = _testDataProvider.CreateWorkbook();
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
             int num0 = wb.NumberOfFonts;
 
-            Sheet s = wb.CreateSheet();
+            ISheet s = wb.CreateSheet();
             s.CreateRow(0);
             s.CreateRow(1);
             s.GetRow(0).CreateCell(0);
             s.GetRow(1).CreateCell(0);
 
             //default font
-            Font f1 = wb.GetFontAt((short)0);
+            IFont f1 = wb.GetFontAt((short)0);
             Assert.AreEqual((short)FontBoldWeight.NORMAL, f1.Boldweight);
 
             // Check that asking for the same font
@@ -176,7 +176,7 @@ namespace TestCases.SS.UserModel
                 )
             );
 
-            Font nf = wb.CreateFont();
+            IFont nf = wb.CreateFont();
             short nfIdx = nf.Index;
             Assert.AreEqual(num0 + 1, wb.NumberOfFonts);
 

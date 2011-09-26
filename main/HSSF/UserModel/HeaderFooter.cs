@@ -25,7 +25,7 @@ namespace NPOI.HSSF.UserModel
     /// <summary>
     /// Common class for HSSFHeader and HSSFFooter
     /// </summary>
-    public abstract class HeaderFooter:NPOI.SS.UserModel.HeaderFooter
+    public abstract class HeaderFooter:NPOI.SS.UserModel.IHeaderFooter
     {
         protected bool stripFields = false;
 

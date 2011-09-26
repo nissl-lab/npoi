@@ -30,7 +30,7 @@ namespace NPOI.HSSF.UserModel
     /// @author Yegor Kozlov
     /// </summary>
     [Serializable]
-    public class HSSFComment : HSSFTextbox,Comment
+    public class HSSFComment : HSSFTextbox,IComment
     {
 
         private bool visible;
@@ -139,7 +139,7 @@ namespace NPOI.HSSF.UserModel
         /// <summary>
         /// Gets or sets the rich text string used by this comment.
         /// </summary>   
-        public override NPOI.SS.UserModel.RichTextString String
+        public override NPOI.SS.UserModel.IRichTextString String
         {
             get { return base.String; }
             set

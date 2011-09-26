@@ -39,7 +39,7 @@ namespace TestCases.HSSF.Record.Formula
         public void TestReading()
         {
             HSSFWorkbook workbook = LoadWorkbook("PercentPtg.xls");
-            NPOI.SS.UserModel.Sheet sheet = workbook.GetSheetAt(0);
+            NPOI.SS.UserModel.ISheet sheet = workbook.GetSheetAt(0);
 
             Assert.AreEqual(53000.0,
                          sheet.GetRow(0).GetCell((short)0).NumericCellValue, 0.0, "Wrong numeric value for original number");

@@ -43,12 +43,12 @@ namespace NPOI.SS.UserModel
          * Failure to call this method after changing cell values will cause incorrect behaviour
          * of the Evaluate~ methods of this class
          */
-        void NotifySetFormula(Cell cell);
+        void NotifySetFormula(ICell cell);
         /**
          * Should be called to tell the cell value cache that the specified cell has just become a
          * formula cell, or the formula text has Changed 
          */
-        void NotifyDeleteCell(Cell cell);
+        void NotifyDeleteCell(ICell cell);
         /**
          * If cell Contains a formula, the formula is Evaluated and returned,
          * else the CellValue simply copies the appropriate cell value from
@@ -57,7 +57,7 @@ namespace NPOI.SS.UserModel
          * original cell.
          * @param cell
          */
-        CellValue Evaluate(Cell cell);
+        CellValue Evaluate(ICell cell);
 
 
         /**
@@ -78,7 +78,7 @@ namespace NPOI.SS.UserModel
          * @param cell The cell to Evaluate
          * @return The type of the formula result (the cell's type remains as Cell.CELL_TYPE_FORMULA however)
          */
-        CellType EvaluateFormulaCell(Cell cell);
+        CellType EvaluateFormulaCell(ICell cell);
 
         /**
          * If cell Contains formula, it Evaluates the formula, and
@@ -96,7 +96,7 @@ namespace NPOI.SS.UserModel
          *  value comPuted for you, use {@link #EvaluateFormulaCell(Cell)}
          * @param cell
          */
-        Cell EvaluateInCell(Cell cell);
+        ICell EvaluateInCell(ICell cell);
     }
 
 }

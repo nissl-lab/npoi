@@ -40,16 +40,16 @@ namespace MergeCellsInXls
         {
             InitializeWorkbook();
 
-            Sheet sheet = hssfworkbook.CreateSheet("new sheet");
+            ISheet sheet = hssfworkbook.CreateSheet("new sheet");
 
-            Row row = sheet.CreateRow(0);
+            IRow row = sheet.CreateRow(0);
             row.HeightInPoints = 30;
 
-            Cell cell = row.CreateCell(0);
+            ICell cell = row.CreateCell(0);
             //set the title of the sheet
             cell.SetCellValue("Sales Report");
 
-            CellStyle style = hssfworkbook.CreateCellStyle();
+           .CellStyle style = hssfworkbook.CreateCellStyle();
             style.Alignment = HorizontalAlignment.CENTER;
             //create a font style
             Font font = hssfworkbook.CreateFont();

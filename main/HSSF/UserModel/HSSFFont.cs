@@ -29,7 +29,7 @@ namespace NPOI.HSSF.UserModel
     /// @version 1.0-pre
     /// @author  Andrew C. Oliver
     /// </summary>
-    public class HSSFFont:NPOI.SS.UserModel.Font
+    public class HSSFFont:NPOI.SS.UserModel.IFont
     {
         public const String FONT_ARIAL = "Arial";
 

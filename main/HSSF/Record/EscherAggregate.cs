@@ -153,7 +153,7 @@ namespace NPOI.HSSF.Record
         public static short ST_IRREGULARSEAL2 = (short)72;
         public static short ST_LIGHTNINGBOLT = (short)73;
         public static short ST_HEART = (short)74;
-        public static short ST_PICTUREFRAME = (short)75;
+        public const short ST_PICTUREFRAME = (short)75;
         public static short ST_QUADARROW = (short)76;
         public static short ST_LEFTARROWCALLOUT = (short)77;
         public static short ST_RIGHTARROWCALLOUT = (short)78;
@@ -280,8 +280,8 @@ namespace NPOI.HSSF.Record
         public static short ST_ACTIONBUTTONSOUND = (short)199;
         public static short ST_ACTIONBUTTONMOVIE = (short)200;
         public static short ST_HOSTCONTROL = (short)201;
-        public static short ST_TEXTBOX = (short)202;
-        public static short ST_NIL = (short)0x0FFF;
+        public const short ST_TEXTBOX = (short)202;
+        public const short ST_NIL = (short)0x0FFF;
 
         protected HSSFPatriarch patriarch;
 
@@ -610,30 +610,62 @@ namespace NPOI.HSSF.Record
                 //Console.Error.WriteLine(shapeContainer);
 
                 // Could be a Group, or a base object
-                if (shapeContainer.ChildRecords.Count == 1 &&
-                        shapeContainer.ChildContainers.Count == 1)
+                if (shapeContainer.RecordId == EscherContainerRecord.SPGR_CONTAINER)
                 {
-                    // Group
-                    HSSFShapeGroup group =
-                        new HSSFShapeGroup(null, new HSSFClientAnchor());
-                    patriarch.Children.Add(group);
+                    if(shapeContainer.ChildRecords.Count>0)
+                    {
+                        // Group
+                        HSSFShapeGroup group =
+                            new HSSFShapeGroup(null, new HSSFClientAnchor());
+                        patriarch.Children.Add(group);
 
-                    EscherContainerRecord groupContainer =
-                        (EscherContainerRecord)shapeContainer.GetChild(0);
-                    ConvertRecordsToUserModel(groupContainer, group);
+                        EscherContainerRecord groupContainer =
+                            (EscherContainerRecord)shapeContainer.GetChild(0);
+                        ConvertRecordsToUserModel(groupContainer, group);
+                    }
                 }
-                else if (shapeContainer.HasChildOfType(unchecked((short)0xF00D)))
+                else if (shapeContainer.RecordId == EscherContainerRecord.SP_CONTAINER)
                 {
-                    // TextBox
-                    HSSFTextbox box =
-                        new HSSFTextbox(null, new HSSFClientAnchor());
-                    patriarch.Children.Add(box);
+                    EscherSpRecord spRecord = shapeContainer.GetChildById(EscherSpRecord.RECORD_ID);
+                    int type = spRecord.Options >> 4;
 
-                    ConvertRecordsToUserModel(shapeContainer, box);
-                }
-                else if (shapeContainer.HasChildOfType(unchecked((short)0xF011)))
-                {
-                    // Not yet supporting EscherClientDataRecord stuff
+                    switch (type)
+                    {
+                        case ST_TEXTBOX:
+                            // TextBox
+                            HSSFTextbox box =
+                                new HSSFTextbox(null, new HSSFClientAnchor());
+                            patriarch.Children.Add(box);
+
+                            ConvertRecordsToUserModel(shapeContainer, box);
+                            break;
+                        case ST_PICTUREFRAME:
+                            // Duplicated from
+                            // org.apache.poi.hslf.model.Picture.getPictureIndex()
+                            EscherOptRecord opt = (EscherOptRecord)GetEscherChild(shapeContainer, EscherOptRecord.RECORD_ID);
+                            EscherSimpleProperty prop = (EscherSimpleProperty)opt.Lookup(EscherProperties.BLIP__BLIPTODISPLAY);
+                            if (prop != null)
+                            {
+                                int pictureIndex = prop.PropertyValue;
+                                EscherClientAnchorRecord anchorRecord = (EscherClientAnchorRecord)GetEscherChild(shapeContainer, EscherClientAnchorRecord.RECORD_ID);
+                                HSSFClientAnchor anchor = new HSSFClientAnchor();
+                                anchor.Col1 = anchorRecord.Col1;
+                                anchor.Col2 = anchorRecord.Col2;
+                                anchor.Dx1 = anchorRecord.Dx1;
+                                anchor.Dx2 = anchorRecord.Dx2;
+                                anchor.Dy1 = anchorRecord.Dy1;
+                                anchor.Dy2 = anchorRecord.Dy2;
+                                anchor.Row1 = anchorRecord.Row1;
+                                anchor.Row2 = anchorRecord.Row2;
+                                HSSFPicture picture = new HSSFPicture(null, anchor);
+                                picture.PictureIndex = pictureIndex;
+                                patriarch.Children.Add(picture);
+
+                            }
+                            break;
+                    }
+
+
                 }
                 else
                 {
@@ -653,6 +685,18 @@ namespace NPOI.HSSF.Record
             //  back into shapes
             log.Log(POILogger.WARN, "Not Processing objects into Patriarch!");
         }
+
+        private EscherRecord GetEscherChild(EscherContainerRecord owner, int recordId)
+        {
+            for (IEnumerator iterator = owner.ChildRecords.GetEnumerator(); iterator.MoveNext(); )
+            {
+                EscherRecord escherRecord = (EscherRecord)iterator.Current;
+                if (escherRecord.RecordId == recordId)
+                    return escherRecord;
+            }
+            return null;
+        }
+
 
         private void ConvertRecordsToUserModel(EscherContainerRecord shapeContainer, Object model)
         {

@@ -50,9 +50,9 @@ namespace TestCases.HSSF.UserModel
         public void Test47924()
         {
             HSSFWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("47924.xls");
-            Sheet sheet = wb.GetSheetAt(0);
-            Cell cell;
-            Comment comment;
+            ISheet sheet = wb.GetSheetAt(0);
+            ICell cell;
+            IComment comment;
 
             cell = sheet.GetRow(0).GetCell(0);
             comment = cell.CellComment;

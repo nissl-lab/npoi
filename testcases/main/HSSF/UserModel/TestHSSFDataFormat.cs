@@ -46,9 +46,9 @@ using NPOI.SS.UserModel;
         string poundFmt = "\"\u00a3\"#,##0;[Red]\\-\"\u00a3\"#,##0";
         DataFormatter df = new DataFormatter();
 
-        Sheet sheet = wb.GetSheetAt(0);
-        Cell cell = sheet.GetRow(0).GetCell(0);
-        CellStyle style = cell.CellStyle;
+        ISheet sheet = wb.GetSheetAt(0);
+        ICell cell = sheet.GetRow(0).GetCell(0);
+        ICellStyle style = cell.CellStyle;
 
         // not expected normally, id of a custom format should be greater 
         // than BuiltinFormats.FIRST_USER_DEFINED_FORMAT_INDEX
@@ -59,7 +59,7 @@ using NPOI.SS.UserModel;
         Assert.AreEqual("\u00a31", df.FormatCellValue(cell));
 
 
-        DataFormat dataFormat = wb.CreateDataFormat();
+        IDataFormat dataFormat = wb.CreateDataFormat();
         Assert.AreEqual(poundFmtIdx, dataFormat.GetFormat(poundFmt));
         Assert.AreEqual(poundFmt, dataFormat.GetFormat(poundFmtIdx));
     }

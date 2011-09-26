@@ -218,7 +218,7 @@ namespace TestCases.HSSF.Record.Aggregates
             }
             HSSFWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook(ABNORMAL_SHARED_FORMULA_FLAG_TEST_FILE);
 
-            NPOI.SS.UserModel.Sheet s = wb.GetSheetAt(0); // Sheet1
+            NPOI.SS.UserModel.ISheet s = wb.GetSheetAt(0); // Sheet1
 
             String cellFormula;
             cellFormula = GetFormulaFromFirstCell(s, 0); // row "1"
@@ -239,7 +239,7 @@ namespace TestCases.HSSF.Record.Aggregates
                 throw new Exception("Something else wrong with this Test case");
             }
         }
-        private static String GetFormulaFromFirstCell(NPOI.SS.UserModel.Sheet s, int rowIx)
+        private static String GetFormulaFromFirstCell(NPOI.SS.UserModel.ISheet s, int rowIx)
         {
             return s.GetRow(rowIx).GetCell((short)0).CellFormula;
         }

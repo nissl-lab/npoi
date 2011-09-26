@@ -31,18 +31,18 @@ namespace TestCases.SS.UserModel
             _testDataProvider = testDataProvider;
         }
 
-        public void BaseTestResize(ClientAnchor referenceAnchor)
+        public void BaseTestResize(IClientAnchor referenceAnchor)
         {
-            Workbook wb = _testDataProvider.CreateWorkbook();
-            Sheet sh1 = wb.CreateSheet();
-            Drawing p1 = sh1.CreateDrawingPatriarch();
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            ISheet sh1 = wb.CreateSheet();
+            IDrawing p1 = sh1.CreateDrawingPatriarch();
             CreationHelper factory = wb.GetCreationHelper();
 
             byte[] pictureData = _testDataProvider.GetTestDataFileContent("logoKarmokar4.png");
             int idx1 = wb.AddPicture(pictureData,PictureType.PNG);
-            Picture picture = p1.CreatePicture(factory.CreateClientAnchor(), idx1);
+            IPicture picture = p1.CreatePicture(factory.CreateClientAnchor(), idx1);
             picture.Resize();
-            ClientAnchor anchor1 = picture.GetPreferredSize();
+            IClientAnchor anchor1 = picture.GetPreferredSize();
 
             //assert against what would BiffViewer print if we insert the image in xls and dump the file
             Assert.AreEqual(referenceAnchor.Col1, anchor1.Col1);

@@ -109,7 +109,7 @@ namespace TestCases.HSSF.UserModel
 
             // first Check a file with 1900 Date Windowing
             HSSFWorkbook workbook = OpenSample("1900DateWindowing.xls");
-            NPOI.SS.UserModel.Sheet sheet = workbook.GetSheetAt(0);
+            NPOI.SS.UserModel.ISheet sheet = workbook.GetSheetAt(0);
 
             Assert.AreEqual(date, sheet.GetRow(0).GetCell(0).DateCellValue,
                                "Date from file using 1900 Date Windowing");
@@ -241,9 +241,9 @@ namespace TestCases.HSSF.UserModel
 
         private static void SetCell(HSSFWorkbook workbook, int rowIdx, int colIdx, DateTime date)
         {
-            NPOI.SS.UserModel.Sheet sheet = workbook.GetSheetAt(0);
-            Row row = sheet.GetRow(rowIdx);
-            Cell cell = row.GetCell(colIdx);
+            NPOI.SS.UserModel.ISheet sheet = workbook.GetSheetAt(0);
+            IRow row = sheet.GetRow(rowIdx);
+            ICell cell = row.GetCell(colIdx);
 
             if (cell == null)
             {
@@ -254,9 +254,9 @@ namespace TestCases.HSSF.UserModel
 
         private static DateTime ReadCell(HSSFWorkbook workbook, int rowIdx, int colIdx)
         {
-            NPOI.SS.UserModel.Sheet sheet = workbook.GetSheetAt(0);
-            Row row = sheet.GetRow(rowIdx);
-            Cell cell = row.GetCell(colIdx);
+            NPOI.SS.UserModel.ISheet sheet = workbook.GetSheetAt(0);
+            IRow row = sheet.GetRow(rowIdx);
+            ICell cell = row.GetCell(colIdx);
             return cell.DateCellValue;
         }
 
@@ -276,7 +276,7 @@ namespace TestCases.HSSF.UserModel
             Assert.AreEqual(1, s.ActiveCellRow, "Initial active cell should be on row 1");
 
             //modify position through Cell
-            Cell cell = umSheet.CreateRow(3).CreateCell(2);
+            ICell cell = umSheet.CreateRow(3).CreateCell(2);
             cell.SetAsActiveCell();
             Assert.AreEqual(2, s.ActiveCellCol, "After modify, active cell should be in col 2");
             Assert.AreEqual(3, s.ActiveCellRow, "After modify, active cell should be on row 3");
@@ -301,9 +301,9 @@ namespace TestCases.HSSF.UserModel
 
             HSSFWorkbook wb = OpenSample("WithHyperlink.xls");
 
-            NPOI.SS.UserModel.Sheet sheet = wb.GetSheetAt(0);
-            Cell cell = sheet.GetRow(4).GetCell(0);
-            Hyperlink link = cell.Hyperlink;
+            NPOI.SS.UserModel.ISheet sheet = wb.GetSheetAt(0);
+            ICell cell = sheet.GetRow(4).GetCell(0);
+            IHyperlink link = cell.Hyperlink;
             Assert.IsNotNull(link);
 
             Assert.AreEqual("Foo", link.Label);
@@ -321,18 +321,18 @@ namespace TestCases.HSSF.UserModel
 
             HSSFWorkbook wb = OpenSample("WithTwoHyperLinks.xls");
 
-            NPOI.SS.UserModel.Sheet sheet = wb.GetSheetAt(0);
+            NPOI.SS.UserModel.ISheet sheet = wb.GetSheetAt(0);
 
-            Cell cell1 = sheet.GetRow(4).GetCell(0);
-            Hyperlink link1 = cell1.Hyperlink;
+            ICell cell1 = sheet.GetRow(4).GetCell(0);
+            IHyperlink link1 = cell1.Hyperlink;
             Assert.IsNotNull(link1);
             Assert.AreEqual("Foo", link1.Label);
             Assert.AreEqual("http://poi.apache.org/", link1.Address);
             Assert.AreEqual(4, link1.FirstRow);
             Assert.AreEqual(0, link1.FirstColumn);
 
-            Cell cell2 = sheet.GetRow(8).GetCell(1);
-            Hyperlink link2 = cell2.Hyperlink;
+            ICell cell2 = sheet.GetRow(8).GetCell(1);
+            IHyperlink link2 = cell2.Hyperlink;
             Assert.IsNotNull(link2);
             Assert.AreEqual("Bar", link2.Label);
             Assert.AreEqual("http://poi.apache.org/hssf/", link2.Address);
@@ -345,15 +345,15 @@ namespace TestCases.HSSF.UserModel
         public void TestHSSFCellToStringWithDataFormat()
         {
             HSSFWorkbook wb = new HSSFWorkbook();
-            Cell cell = wb.CreateSheet("Sheet1").CreateRow(0).CreateCell(0);
+            ICell cell = wb.CreateSheet("Sheet1").CreateRow(0).CreateCell(0);
             cell.SetCellValue(new DateTime(2009, 8, 20));
-            NPOI.SS.UserModel.CellStyle cellStyle = wb.CreateCellStyle();
+            NPOI.SS.UserModel.ICellStyle cellStyle = wb.CreateCellStyle();
             cellStyle.DataFormat = HSSFDataFormat.GetBuiltinFormat("m/d/yy");
             cell.CellStyle = cellStyle;
             Assert.AreEqual("8/20/09", cell.ToString());
 
-            NPOI.SS.UserModel.CellStyle cellStyle2 = wb.CreateCellStyle();
-            DataFormat format = wb.CreateDataFormat();
+            NPOI.SS.UserModel.ICellStyle cellStyle2 = wb.CreateCellStyle();
+            IDataFormat format = wb.CreateDataFormat();
             cellStyle2.DataFormat = format.GetFormat("YYYY-mm/dd");
             cell.CellStyle = cellStyle2;
             Assert.AreEqual("2009-08/20", cell.ToString());
@@ -363,7 +363,7 @@ namespace TestCases.HSSF.UserModel
         {
             HSSFWorkbook wb = new HSSFWorkbook();
 
-            DataFormat format = wb.CreateDataFormat();
+            IDataFormat format = wb.CreateDataFormat();
             short formatidx1 = format.GetFormat("YYYY-mm/dd");
             short formatidx2 = format.GetFormat("YYYY-mm/dd");
             Assert.AreEqual(formatidx1, formatidx2);
@@ -398,8 +398,8 @@ namespace TestCases.HSSF.UserModel
             }
             catch (ArgumentException e) { }
 
-            Cell cellA = wbA.CreateSheet().CreateRow(0).CreateCell(0);
-            Cell cellB = wbB.CreateSheet().CreateRow(0).CreateCell(0);
+            ICell cellA = wbA.CreateSheet().CreateRow(0).CreateCell(0);
+            ICell cellB = wbB.CreateSheet().CreateRow(0).CreateCell(0);
 
             cellA.CellStyle = (styA);
             cellB.CellStyle = (styB);

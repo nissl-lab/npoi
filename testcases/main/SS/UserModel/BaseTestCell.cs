@@ -43,12 +43,12 @@ namespace TestCases.SS.UserModel
         [TestMethod]
         public void TestSetValues()
         {
-            Workbook book = _testDataProvider.CreateWorkbook();
-            Sheet sheet = book.CreateSheet("test");
-            Row row = sheet.CreateRow(0);
+            IWorkbook book = _testDataProvider.CreateWorkbook();
+            ISheet sheet = book.CreateSheet("test");
+            IRow row = sheet.CreateRow(0);
 
             CreationHelper factory = book.GetCreationHelper();
-            Cell cell = row.CreateCell(0);
+            ICell cell = row.CreateCell(0);
 
             cell.SetCellValue(1.2);
             Assert.AreEqual(1.2, cell.NumericCellValue, 0.0001);
@@ -98,7 +98,7 @@ namespace TestCases.SS.UserModel
                     CellType.FORMULA, CellType.STRING);
         }
 
-        private static void AssertProhibitedValueAccess(Cell cell, params CellType[] types)
+        private static void AssertProhibitedValueAccess(ICell cell, params CellType[] types)
         {
             object a;
             foreach (CellType type in types)
@@ -140,10 +140,10 @@ namespace TestCases.SS.UserModel
         public void TestBoolErr()
         {
 
-            Workbook wb = _testDataProvider.CreateWorkbook();
-            Sheet s = wb.CreateSheet("testSheet1");
-            Row r;
-            Cell c;
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            ISheet s = wb.CreateSheet("testSheet1");
+            IRow r;
+            ICell c;
             r = s.CreateRow(0);
             c = r.CreateCell(1);
             //c.SetCellType(HSSFCellType.BOOLEAN);
@@ -183,12 +183,12 @@ namespace TestCases.SS.UserModel
         public void TestFormulaStyle()
         {
 
-            Workbook wb = _testDataProvider.CreateWorkbook();
-            Sheet s = wb.CreateSheet("testSheet1");
-            Row r = null;
-            Cell c = null;
-            CellStyle cs = wb.CreateCellStyle();
-            Font f = wb.CreateFont();
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            ISheet s = wb.CreateSheet("testSheet1");
+            IRow r = null;
+            ICell c = null;
+            ICellStyle cs = wb.CreateCellStyle();
+            IFont f = wb.CreateFont();
             f.FontHeightInPoints = 20;
             f.Color=(IndexedColors.RED.Index);
             f.Boldweight= (int)FontBoldWeight.BOLD;
@@ -225,8 +225,8 @@ namespace TestCases.SS.UserModel
         [TestMethod]
         public void TestToString()
         {
-            Workbook wb = _testDataProvider.CreateWorkbook();
-            Row r = wb.CreateSheet("Sheet1").CreateRow(0);
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            IRow r = wb.CreateSheet("Sheet1").CreateRow(0);
             CreationHelper factory = wb.GetCreationHelper();
 
             r.CreateCell(0).SetCellValue(true);
@@ -258,11 +258,11 @@ namespace TestCases.SS.UserModel
         [TestMethod]
         public void TestSetFormulaValue()
         {
-            Workbook wb = _testDataProvider.CreateWorkbook();
-            Sheet s = wb.CreateSheet();
-            Row r = s.CreateRow(0);
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            ISheet s = wb.CreateSheet();
+            IRow r = s.CreateRow(0);
 
-            Cell c1 = r.CreateCell(0);
+            ICell c1 = r.CreateCell(0);
             c1.CellFormula = ("NA()");
             Assert.AreEqual(0.0, c1.NumericCellValue, 0.0);
             Assert.AreEqual(CellType.NUMERIC, c1.CachedFormulaResultType);
@@ -271,7 +271,7 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual(CellType.FORMULA, c1.CellType);
             Assert.AreEqual(CellType.NUMERIC, c1.CachedFormulaResultType);
 
-            Cell c2 = r.CreateCell(1);
+            ICell c2 = r.CreateCell(1);
             c2.CellFormula = ("NA()");
             Assert.AreEqual(0.0, c2.NumericCellValue, 0.0);
             Assert.AreEqual(CellType.NUMERIC, c2.CachedFormulaResultType);
@@ -281,12 +281,12 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual(CellType.STRING, c2.CachedFormulaResultType);
 
             //calglin Cell.CellFormula = (null) for a non-formula cell
-            Cell c3 = r.CreateCell(2);
+            ICell c3 = r.CreateCell(2);
             c3.CellFormula = (null);
             Assert.AreEqual(CellType.BLANK, c3.CellType);
 
         }
-        private Cell CreateACell()
+        private ICell CreateACell()
         {
             return _testDataProvider.CreateWorkbook().CreateSheet("Sheet1").CreateRow(0).CreateCell(0);
         }
@@ -294,7 +294,7 @@ namespace TestCases.SS.UserModel
         [TestMethod]
         public void TestChangeTypeStringToBool()
         {
-            Cell cell = CreateACell();
+            ICell cell = CreateACell();
 
             cell.SetCellValue("TRUE");
             Assert.AreEqual(CellType.STRING, cell.CellType);
@@ -324,7 +324,7 @@ namespace TestCases.SS.UserModel
         [TestMethod]
         public void TestChangeTypeBoolToString()
         {
-            Cell cell = CreateACell();
+            ICell cell = CreateACell();
 
             cell.SetCellValue(true);
             try
@@ -345,7 +345,7 @@ namespace TestCases.SS.UserModel
         [TestMethod]
         public void TestChangeTypeErrorToNumber()
         {
-            Cell cell = CreateACell();
+            ICell cell = CreateACell();
             cell.SetCellErrorValue((byte)ErrorConstants.ERROR_NAME);
             try
             {
@@ -360,7 +360,7 @@ namespace TestCases.SS.UserModel
         [TestMethod]
         public void TestChangeTypeErrorToBoolean()
         {
-            Cell cell = CreateACell();
+            ICell cell = CreateACell();
             cell.SetCellErrorValue((byte)ErrorConstants.ERROR_NAME);
             cell.SetCellValue(true);
             try
@@ -387,7 +387,7 @@ namespace TestCases.SS.UserModel
         [TestMethod]
         public void TestConvertStringFormulaCell()
         {
-            Cell cellA1 = CreateACell();
+            ICell cellA1 = CreateACell();
             cellA1.CellFormula = ("\"abc\"");
 
             // default cached formula result is numeric zero
@@ -412,7 +412,7 @@ namespace TestCases.SS.UserModel
         [TestMethod]
         public void TestSetTypeStringOnFormulaCell()
         {
-            Cell cellA1 = CreateACell();
+            ICell cellA1 = CreateACell();
             FormulaEvaluator fe = cellA1.Sheet.Workbook.GetCreationHelper().CreateFormulaEvaluator();
 
             cellA1.CellFormula = ("\"DEF\"");
@@ -447,7 +447,7 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual("#NAME?", cellA1.StringCellValue);
         }
 
-        private static void ConfirmCannotReadString(Cell cell)
+        private static void ConfirmCannotReadString(ICell cell)
         {
             AssertProhibitedValueAccess(cell, CellType.STRING);
         }
@@ -458,7 +458,7 @@ namespace TestCases.SS.UserModel
         [TestMethod]
         public void TestChangeTypeFormulaToBoolean()
         {
-            Cell cell = CreateACell();
+            ICell cell = CreateACell();
             cell.CellFormula = ("1=1");
             cell.SetCellValue(true);
             cell.SetCellType(CellType.BOOLEAN);
@@ -476,10 +476,10 @@ namespace TestCases.SS.UserModel
         [TestMethod]
         public void Test40296()
         {
-            Workbook wb = _testDataProvider.CreateWorkbook();
-            Sheet workSheet = wb.CreateSheet("Sheet1");
-            Cell cell;
-            Row row = workSheet.CreateRow(0);
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            ISheet workSheet = wb.CreateSheet("Sheet1");
+            ICell cell;
+            IRow row = workSheet.CreateRow(0);
 
             cell = row.CreateCell(0, CellType.NUMERIC);
             cell.SetCellValue(1.0);
@@ -514,8 +514,8 @@ namespace TestCases.SS.UserModel
         [TestMethod]
         public void TestSetStringInFormulaCell_bug44606()
         {
-            Workbook wb = _testDataProvider.CreateWorkbook();
-            Cell cell = wb.CreateSheet("Sheet1").CreateRow(0).CreateCell(0);
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            ICell cell = wb.CreateSheet("Sheet1").CreateRow(0).CreateCell(0);
             cell.CellFormula = ("B1&C1");
             try
             {
@@ -533,9 +533,9 @@ namespace TestCases.SS.UserModel
         [TestMethod]
         public void TestSetBlank_bug47028()
         {
-            Workbook wb = _testDataProvider.CreateWorkbook();
-            CellStyle style = wb.CreateCellStyle();
-            Cell cell = wb.CreateSheet("Sheet1").CreateRow(0).CreateCell(0);
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            ICellStyle style = wb.CreateCellStyle();
+            ICell cell = wb.CreateSheet("Sheet1").CreateRow(0).CreateCell(0);
             cell.CellStyle = (style);
             int i1 = cell.CellStyle.Index;
             cell.SetCellType(CellType.BLANK);
@@ -546,16 +546,16 @@ namespace TestCases.SS.UserModel
         [TestMethod]
         public void TestIsMergedCell()
         {
-            Workbook wb = _testDataProvider.CreateWorkbook();
-            Sheet sheet = wb.CreateSheet();
-            Row row = sheet.CreateRow(0);
-            Cell cell1 = row.CreateCell(0);
-            Cell cell2 = row.CreateCell(1);
-            Cell cell3 = row.CreateCell(3);
-            Row row2 = sheet.CreateRow(1);
-            Cell cell4 = row2.CreateCell(0);
-            Cell cell5 = row2.CreateCell(2);
-            Cell cell6 = row2.CreateCell(5);
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            ISheet sheet = wb.CreateSheet();
+            IRow row = sheet.CreateRow(0);
+            ICell cell1 = row.CreateCell(0);
+            ICell cell2 = row.CreateCell(1);
+            ICell cell3 = row.CreateCell(3);
+            IRow row2 = sheet.CreateRow(1);
+            ICell cell4 = row2.CreateCell(0);
+            ICell cell5 = row2.CreateCell(2);
+            ICell cell6 = row2.CreateCell(5);
 
             
             CellRangeAddress region = new CellRangeAddress(1, 3, 0, 2);

@@ -84,6 +84,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UseNewlinesInCellsInXls", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProtectSheetInXls", "..\..\examples\hssf\ProtectSheetInXls\ProtectSheetInXls.csproj", "{3BDA1D83-7189-4B17-AE70-56E1E264EB41}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExtractPicturesFromXls", "..\..\examples\hssf\ExtractPicturesFromXls\ExtractPicturesFromXls.csproj", "{ACEDDD5E-EEFF-4A59-ABB4-F70C58B8E644}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
 		SccNumberOfProjects = 37
@@ -331,6 +333,12 @@ Global
 		{3BDA1D83-7189-4B17-AE70-56E1E264EB41}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{3BDA1D83-7189-4B17-AE70-56E1E264EB41}.NPOI.Tools|Any CPU.ActiveCfg = Release|Any CPU
 		{3BDA1D83-7189-4B17-AE70-56E1E264EB41}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ACEDDD5E-EEFF-4A59-ABB4-F70C58B8E644}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ACEDDD5E-EEFF-4A59-ABB4-F70C58B8E644}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ACEDDD5E-EEFF-4A59-ABB4-F70C58B8E644}.NPOI.Tools|Any CPU.ActiveCfg = Release|Any CPU
+		{ACEDDD5E-EEFF-4A59-ABB4-F70C58B8E644}.NPOI.Tools|Any CPU.Build.0 = Release|Any CPU
+		{ACEDDD5E-EEFF-4A59-ABB4-F70C58B8E644}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ACEDDD5E-EEFF-4A59-ABB4-F70C58B8E644}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

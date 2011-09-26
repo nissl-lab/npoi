@@ -30,7 +30,7 @@ namespace NPOI.HSSF.Record
 
     public class TextObjectRecord : Record
     {
-        NPOI.SS.UserModel.RichTextString _text;
+        NPOI.SS.UserModel.IRichTextString _text;
 
         public const short sid = 0x1B6;
 
@@ -155,7 +155,7 @@ namespace NPOI.HSSF.Record
                 }
             }
         }
-        private static void ProcessFontRuns(RecordInputStream in1, RichTextString str,
+        private static void ProcessFontRuns(RecordInputStream in1, IRichTextString str,
             int formattingRunDataLength)
         {
             if (formattingRunDataLength % FORMAT_RUN_ENCODED_SIZE != 0)
@@ -202,7 +202,7 @@ namespace NPOI.HSSF.Record
                 return encodedTextSize + encodedFormatSize;
             }
         }
-        private static byte[] CreateFormatData(RichTextString str)
+        private static byte[] CreateFormatData(IRichTextString str)
         {
             int nRuns = str.NumFormattingRuns;
             byte[] result = new byte[(nRuns + 1) * FORMAT_RUN_ENCODED_SIZE];
@@ -381,7 +381,7 @@ namespace NPOI.HSSF.Record
             return in1.ReadUnicodeLEString(textLength);
         }
 
-        public NPOI.SS.UserModel.RichTextString Str
+        public NPOI.SS.UserModel.IRichTextString Str
         {
             get { return _text; }
             set { this._text = value; }

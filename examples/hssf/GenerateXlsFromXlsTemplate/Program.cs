@@ -40,7 +40,7 @@ namespace GenerateXlsFromXlsTemplate
         {
             InitializeWorkbook();
 
-            Sheet sheet1 = hssfworkbook.GetSheet("Sheet1");
+            ISheet sheet1 = hssfworkbook.GetSheet("Sheet1");
             //create cell on rows, since rows do already exist,it's not necessary to create rows again.
             sheet1.GetRow(1).GetCell(1).SetCellValue(200200);
             sheet1.GetRow(2).GetCell(1).SetCellValue(300);

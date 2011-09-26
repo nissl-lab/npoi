@@ -20,15 +20,15 @@ namespace NPOI.SS.UserModel
     /**
      * @author Yegor Kozlov
      */
-    public interface Drawing
+    public interface IDrawing
     {
-        Picture CreatePicture(ClientAnchor anchor, int pictureIndex);
+        IPicture CreatePicture(IClientAnchor anchor, int pictureIndex);
 
-        Comment CreateCellComment(ClientAnchor anchor);
+        IComment CreateCellComment(IClientAnchor anchor);
 
         bool ContainsChart();
 
-        Textbox CreateTextbox(ClientAnchor anchor);
+        Textbox CreateTextbox(IClientAnchor anchor);
     }
 
 }

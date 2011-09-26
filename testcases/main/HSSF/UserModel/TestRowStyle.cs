@@ -62,11 +62,11 @@ namespace TestCases.HSSF.UserModel
         public void TestWriteSheetFont()
         {
             HSSFWorkbook wb = new HSSFWorkbook();
-            NPOI.SS.UserModel.Sheet s = wb.CreateSheet();
-            Row r = null;
-            Cell c = null;
-            Font fnt = wb.CreateFont();
-            NPOI.SS.UserModel.CellStyle cs = wb.CreateCellStyle();
+            NPOI.SS.UserModel.ISheet s = wb.CreateSheet();
+            IRow r = null;
+            ICell c = null;
+            IFont fnt = wb.CreateFont();
+            NPOI.SS.UserModel.ICellStyle cs = wb.CreateCellStyle();
 
             fnt.Color=(NPOI.HSSF.Util.HSSFColor.RED.index);
             fnt.Boldweight=(short)FontBoldWeight.BOLD;
@@ -92,9 +92,9 @@ namespace TestCases.HSSF.UserModel
         public void TestDataStyle()
         {
             HSSFWorkbook wb = new HSSFWorkbook();
-            NPOI.SS.UserModel.Sheet s = wb.CreateSheet();
-            NPOI.SS.UserModel.CellStyle cs = wb.CreateCellStyle();
-            Row row = s.CreateRow((short)0);
+            NPOI.SS.UserModel.ISheet s = wb.CreateSheet();
+            NPOI.SS.UserModel.ICellStyle cs = wb.CreateCellStyle();
+            IRow row = s.CreateRow((short)0);
 
             // with Date:
             cs.DataFormat=(HSSFDataFormat.GetBuiltinFormat("m/d/yy"));
@@ -132,11 +132,11 @@ namespace TestCases.HSSF.UserModel
         public void TestWriteSheetStyle()
         {
             HSSFWorkbook wb = new HSSFWorkbook();
-            NPOI.SS.UserModel.Sheet s = wb.CreateSheet();
-            Row r = null;
-            Font fnt = wb.CreateFont();
-            NPOI.SS.UserModel.CellStyle cs = wb.CreateCellStyle();
-            NPOI.SS.UserModel.CellStyle cs2 = wb.CreateCellStyle();
+            NPOI.SS.UserModel.ISheet s = wb.CreateSheet();
+            IRow r = null;
+            IFont fnt = wb.CreateFont();
+            NPOI.SS.UserModel.ICellStyle cs = wb.CreateCellStyle();
+            NPOI.SS.UserModel.ICellStyle cs2 = wb.CreateCellStyle();
 
             cs.BorderBottom=(CellBorderType.THIN);
             cs.BorderLeft=(CellBorderType.THIN);

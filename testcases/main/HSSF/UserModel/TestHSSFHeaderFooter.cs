@@ -44,8 +44,8 @@ namespace TestCases.HSSF.UserModel
         {
             // Read initial file in
             HSSFWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("EmbeddedChartHeaderTest.xls");
-            NPOI.SS.UserModel.Sheet s = wb.GetSheetAt(0);
-            Header head = s.Header;
+            NPOI.SS.UserModel.ISheet s = wb.GetSheetAt(0);
+            IHeader head = s.Header;
 
             Assert.AreEqual("Top Left", head.Left);
             Assert.AreEqual("Top Center", head.Center);
@@ -80,8 +80,8 @@ namespace TestCases.HSSF.UserModel
 
             // Now Test the default Strip flag
             HSSFWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("EmbeddedChartHeaderTest.xls");
-            NPOI.SS.UserModel.Sheet s = wb.GetSheetAt(0);
-            Header head = s.Header;
+            NPOI.SS.UserModel.ISheet s = wb.GetSheetAt(0);
+            IHeader head = s.Header;
 
             Assert.AreEqual("Top Left", head.Left);
             Assert.AreEqual("Top Center", head.Center);
@@ -106,8 +106,8 @@ namespace TestCases.HSSF.UserModel
         {
             // Read initial file in
             HSSFWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("EmbeddedChartHeaderTest.xls");
-            NPOI.SS.UserModel.Sheet s = wb.GetSheetAt(0);
-            Footer foot = s.Footer;
+            NPOI.SS.UserModel.ISheet s = wb.GetSheetAt(0);
+            IFooter foot = s.Footer;
 
             Assert.AreEqual("Bottom Left", foot.Left);
             Assert.AreEqual("Bottom Center", foot.Center);
@@ -121,14 +121,14 @@ namespace TestCases.HSSF.UserModel
         public void TestHeaderHas16bitCharacter()
         {
             HSSFWorkbook b = new HSSFWorkbook();
-            NPOI.SS.UserModel.Sheet s = b.CreateSheet("Test");
-            Header h = s.Header;
+            NPOI.SS.UserModel.ISheet s = b.CreateSheet("Test");
+            IHeader h = s.Header;
             h.Left = ("\u0391");
             h.Center = ("\u0392");
             h.Right = ("\u0393");
 
             HSSFWorkbook b2 = HSSFTestDataSamples.WriteOutAndReadBack(b);
-            Header h2 = b2.GetSheet("Test").Header;
+            IHeader h2 = b2.GetSheet("Test").Header;
 
             Assert.AreEqual(h2.Left, "\u0391");
             Assert.AreEqual(h2.Center, "\u0392");
@@ -142,14 +142,14 @@ namespace TestCases.HSSF.UserModel
         public void TestFooterHas16bitCharacter()
         {
             HSSFWorkbook b = new HSSFWorkbook();
-            NPOI.SS.UserModel.Sheet s = b.CreateSheet("Test");
-            Footer f = s.Footer;
+            NPOI.SS.UserModel.ISheet s = b.CreateSheet("Test");
+            IFooter f = s.Footer;
             f.Left = ("\u0391");
             f.Center = ("\u0392");
             f.Right = ("\u0393");
 
             HSSFWorkbook b2 = HSSFTestDataSamples.WriteOutAndReadBack(b);
-            Footer f2 = b2.GetSheet("Test").Footer;
+            IFooter f2 = b2.GetSheet("Test").Footer;
 
             Assert.AreEqual(f2.Left, "\u0391");
             Assert.AreEqual(f2.Center, "\u0392");
@@ -159,13 +159,13 @@ namespace TestCases.HSSF.UserModel
         public void TestReadDBCSHeaderFooter()
         {
             HSSFWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("DBCSHeader.xls");
-            NPOI.SS.UserModel.Sheet s = wb.GetSheetAt(0);
-            Header h = s.Header;
+            NPOI.SS.UserModel.ISheet s = wb.GetSheetAt(0);
+            IHeader h = s.Header;
             Assert.AreEqual(h.Left, "\u090f\u0915","Header Left ");
             Assert.AreEqual(h.Center, "\u0939\u094b\u0917\u093e", "Header Center ");
             Assert.AreEqual(h.Right, "\u091c\u093e", "Header Right ");
 
-            Footer f = s.Footer;
+            IFooter f = s.Footer;
             Assert.AreEqual(f.Left, "\u091c\u093e", "Footer Left ");
             Assert.AreEqual(f.Center, "\u091c\u093e", "Footer Center ");
             Assert.AreEqual(f.Right, "\u091c\u093e", "Footer Right ");

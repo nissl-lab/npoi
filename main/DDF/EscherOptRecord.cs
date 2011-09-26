@@ -36,7 +36,7 @@ namespace NPOI.DDF
         public const short RECORD_ID = unchecked((short)0xF00B);
         public const String RECORD_DESCRIPTION = "msofbtOPT";
 
-        private ArrayList properties = new ArrayList();
+        private List<EscherProperty> properties = new List<EscherProperty>();
 
         /// <summary>
         /// This method deSerializes the record from a byte array.
@@ -51,7 +51,7 @@ namespace NPOI.DDF
             int pos = offset + 8;
 
             EscherPropertyFactory f = new EscherPropertyFactory();
-            properties = (ArrayList)f.CreateProperties(data, pos, GetInstance());
+            properties = f.CreateProperties(data, pos, GetInstance());
             return bytesRemaining + 8;
         }
 
@@ -160,7 +160,7 @@ namespace NPOI.DDF
         /// The list of properties stored by this record.
         /// </summary>
         /// <returns></returns>
-        public ArrayList EscherProperties
+        public List<EscherProperty> EscherProperties
         {
             get{return properties;}
         }
@@ -184,26 +184,30 @@ namespace NPOI.DDF
             properties.Add(prop);
         }
 
-        class EscherPropertyComparator : IComparer
+        public EscherProperty Lookup(int propId)
         {
-
-            #region IComparer Members
-
-            public int Compare(object o1, object o2)
+            foreach (EscherProperty prop in properties)
             {
-                EscherProperty p1 = (EscherProperty)o1;
-                EscherProperty p2 = (EscherProperty)o2;
-                return p1.PropertyNumber.CompareTo(p2.PropertyNumber);
+                if (prop.PropertyNumber == propId)
+                    return prop;
             }
-
-            #endregion
+            return null;
         }
+
+
+        int CompareEscherProperty(EscherProperty o1, EscherProperty o2)
+        {
+            EscherProperty p1 = o1;
+            EscherProperty p2 = o2;
+            return p1.PropertyNumber.CompareTo(p2.PropertyNumber);
+        }
+
         /// <summary>
         /// Records should be sorted by property number before being stored.
         /// </summary>
         public void SortProperties()
         {
-            properties.Sort(new EscherPropertyComparator());
+            properties.Sort(CompareEscherProperty);
         }
     }
 }

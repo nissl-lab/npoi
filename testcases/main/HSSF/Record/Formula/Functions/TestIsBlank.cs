@@ -34,12 +34,12 @@ namespace TestCases.HSSF.Record.Formula.Functions
         public void Test3DArea()
         {
             HSSFWorkbook wb = new HSSFWorkbook();
-            NPOI.SS.UserModel.Sheet sheet1 = wb.CreateSheet();
+            NPOI.SS.UserModel.ISheet sheet1 = wb.CreateSheet();
             wb.SetSheetName(0, "Sheet1");
             wb.CreateSheet();
             wb.SetSheetName(1, "Sheet2");
-            Row row = sheet1.CreateRow(0);
-            Cell cell = row.CreateCell((short)0);
+            IRow row = sheet1.CreateRow(0);
+            ICell cell = row.CreateCell((short)0);
 
 
             cell.CellFormula = ("isblank(Sheet2!A1:A1)");

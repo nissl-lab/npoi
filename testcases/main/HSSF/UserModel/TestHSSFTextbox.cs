@@ -39,8 +39,8 @@ namespace TestCases.HSSF.UserModel
         public void TestAlignment()
         {
             HSSFWorkbook wb = new HSSFWorkbook();
-            NPOI.SS.UserModel.Sheet sh1 = wb.CreateSheet();
-            Drawing patriarch = sh1.CreateDrawingPatriarch();
+            NPOI.SS.UserModel.ISheet sh1 = wb.CreateSheet();
+            IDrawing patriarch = sh1.CreateDrawingPatriarch();
 
             Textbox textbox = patriarch.CreateTextbox(new HSSFClientAnchor(0, 0, 0, 0, 1, 1, 6, 4));
             HSSFRichTextString str = new HSSFRichTextString("Hello, World");
@@ -60,8 +60,8 @@ namespace TestCases.HSSF.UserModel
         public void TestSetDeafultTextFormat()
         {
             HSSFWorkbook wb = new HSSFWorkbook();
-            NPOI.SS.UserModel.Sheet sheet = wb.CreateSheet();
-            Drawing patriarch = sheet.CreateDrawingPatriarch();
+            NPOI.SS.UserModel.ISheet sheet = wb.CreateSheet();
+            IDrawing patriarch = sheet.CreateDrawingPatriarch();
 
             Textbox textbox1 = patriarch.CreateTextbox(new HSSFClientAnchor(0, 0, 0, 0, 1, 1, 3, 3));
             HSSFRichTextString rt1 = new HSSFRichTextString("Hello, World!");

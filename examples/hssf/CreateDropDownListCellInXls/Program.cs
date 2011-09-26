@@ -41,11 +41,11 @@ namespace CreateDropDownListCellInXls
         {
             InitializeWorkbook();
 
-            Sheet sheet1 = hssfworkbook.CreateSheet("Sheet1");
-            Sheet sheet2 = hssfworkbook.CreateSheet("Sheet2");
+            ISheet sheet1 = hssfworkbook.CreateSheet("Sheet1");
+            ISheet sheet2 = hssfworkbook.CreateSheet("Sheet2");
             //create three items in Sheet2
-            Row row0 = sheet2.CreateRow(0);
-            Cell cell0 = row0.CreateCell(4);
+            IRow row0 = sheet2.CreateRow(0);
+            ICell cell0 = row0.CreateCell(4);
             cell0.SetCellValue("Product1");
 
             row0 = sheet2.CreateRow(1);

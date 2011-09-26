@@ -136,7 +136,7 @@ namespace NPOI.SS.UserModel
          * @param cell The cell to retrieve a FormatBase for
          * @return A FormatBase for the FormatBase String
          */
-        private FormatBase GetFormat(Cell cell)
+        private FormatBase GetFormat(ICell cell)
         {
             if (cell.CellStyle == null)
             {
@@ -179,7 +179,7 @@ namespace NPOI.SS.UserModel
          * @param cell The Excel cell
          * @return A FormatBase representing the excel FormatBase. May return null.
          */
-        public FormatBase CreateFormat(Cell cell)
+        public FormatBase CreateFormat(ICell cell)
         {
 
             int formatIndex = cell.CellStyle.DataFormat;
@@ -420,7 +420,7 @@ namespace NPOI.SS.UserModel
          * @param cell The cell
          * @return a default FormatBase
          */
-        public FormatBase GetDefaultFormat(Cell cell)
+        public FormatBase GetDefaultFormat(ICell cell)
         {
             return GetDefaultFormat(cell.NumericCellValue);
         }
@@ -448,7 +448,7 @@ namespace NPOI.SS.UserModel
          * @param cell The cell
          * @return a Formatted date string
          */
-        private String GetFormattedDateString(Cell cell)
+        private String GetFormattedDateString(ICell cell)
         {
             FormatBase dateFormat = GetFormat(cell);
             DateTime d = cell.DateCellValue;
@@ -468,7 +468,7 @@ namespace NPOI.SS.UserModel
          * @param cell The cell
          * @return a Formatted number string
          */
-        private String GetFormattedNumberString(Cell cell)
+        private String GetFormattedNumberString(ICell cell)
         {
 
             FormatBase numberFormat = GetFormat(cell);
@@ -522,7 +522,7 @@ namespace NPOI.SS.UserModel
          * @param cell The cell
          * @return the Formatted cell value as a String
          */
-        public String FormatCellValue(Cell cell)
+        public String FormatCellValue(ICell cell)
         {
             return FormatCellValue(cell, null);
         }
@@ -544,7 +544,7 @@ namespace NPOI.SS.UserModel
          * @param evaluator The HSSFFormulaEvaluator (can be null)
          * @return a string value of the cell
          */
-        public String FormatCellValue(Cell cell, FormulaEvaluator evaluator)
+        public String FormatCellValue(ICell cell, FormulaEvaluator evaluator)
         {
 
             if (cell == null)

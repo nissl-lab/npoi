@@ -28,7 +28,7 @@ namespace NPOI.HSSF.UserModel
     /// Represents an Excel hyperlink.
     /// </summary>
     /// <remarks>@author Yegor Kozlov (yegor at apache dot org)</remarks>
-    public class HSSFHyperlink:Hyperlink
+    public class HSSFHyperlink:IHyperlink
     {
         /**
          * Low-level record object that stores the actual hyperlink data

@@ -41,14 +41,14 @@ namespace UseNewlinesInCellsInXls
         {
             InitializeWorkbook();
 
-            Sheet sheet1 = hssfworkbook.CreateSheet("Sheet1");
+            ISheet sheet1 = hssfworkbook.CreateSheet("Sheet1");
 
             //use newlines in cell
-            Row row1 = sheet1.CreateRow(0);
-            Cell cell1 = row1.CreateCell(0);
+            IRow row1 = sheet1.CreateRow(0);
+            ICell cell1 = row1.CreateCell(0);
 
             //to enable newlines you need set a cell styles with wrap=true
-            CellStyle cs = hssfworkbook.CreateCellStyle();
+            ICellStyle cs = hssfworkbook.CreateCellStyle();
             cs.WrapText = true;
             cell1.CellStyle = cs;
 

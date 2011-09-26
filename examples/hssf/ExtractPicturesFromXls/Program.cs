@@ -33,24 +33,27 @@ using NPOI.HPSF;
 using NPOI.POIFS.FileSystem;
 using NPOI.SS.UserModel;
 
-namespace ProtectSheetInXls
+namespace ExtractPicturesFromXls
 {
     class Program
     {
         static void Main(string[] args)
         {
-            Console.Read();
             InitializeWorkbook();
 
-            HSSFSheet sheet1 = (HSSFSheet)hssfworkbook.CreateSheet("Sheet1");
+            Sheet sheet1 = hssfworkbook.CreateSheet("Sheet1");
 
-            ICell cell1=sheet1.CreateRow(0).CreateCell(0);
-            cell1.SetCellValue("This is a Sample");
-           .CellStyle cs1=hssfworkbook.CreateCellStyle();
-            cs1.IsLocked = true;
-            cell1.CellStyle = cs1;
-
-            sheet1.ProtectSheet("test");
+            sheet1.CreateRow(0).CreateCell(0).SetCellValue("This is a Sample");
+            int x = 1;
+            int i = 1;
+            for (i = 1; i <= 15; i++)
+            {
+                Row row = sheet1.CreateRow(i);
+                for (int j = 0; j < 15; j++)
+                {
+                    row.CreateCell(j).SetCellValue(x++);
+                }
+            }
 
             WriteToFile();
         }

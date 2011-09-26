@@ -18,96 +18,79 @@
 namespace NPOI.SS.UserModel
 {
 
-    /**
-     * The enumeration value indicating the line style of a border in a cell,
-     * i.e., whether it is borded dash dot, dash dot dot, dashed, dotted, double, hair, medium, 
-     * medium dash dot, medium dash dot dot, medium dashed, none, slant dash dot, thick or thin.
-     */
+    /// <summary>
+    /// The enumeration value indicating the line style of a border in a cell
+    /// </summary>
     public enum BorderStyle
     {
-
-        /**
-         * No border
-         */
-
+        /// <summary>
+        /// No border
+        /// </summary>
         NONE,
 
-        /**
-         * Thin border
-         */
-
+        /// <summary>
+        /// Thin border
+        /// </summary>
         THIN,
 
-        /**
-         * Medium border
-         */
-
+        /// <summary>
+        /// Medium border
+        /// </summary>
         MEDIUM,
 
-        /**
-         * dash border
-         */
-
+        /// <summary>
+        /// dash border
+        /// </summary>
         DASHED,
 
-        /**
-         * dot border
-         */
-
+        /// <summary>
+        /// dot border
+        /// </summary>
         HAIR,
 
-        /**
-         * Thick border
-         */
-
+        /// <summary>
+        /// Thick border
+        /// </summary>
         THICK,
 
-        /**
-         * double-line border
-         */
-
+        /// <summary>
+        /// double-line border
+        /// </summary>
         DOUBLE,
 
-        /**
-         * hair-line border
-         */
-
+        /// <summary>
+        /// hair-line border
+        /// </summary>
         DOTTED,
 
-        /**
-         * Medium dashed border
-         */
-
+        /// <summary>
+        /// Medium dashed border
+        /// </summary>
         MEDIUM_DASHED,
 
-        /**
-         * dash-dot border
-         */
-
+        /// <summary>
+        /// dash-dot border
+        /// </summary>
         DASH_DOT,
 
-        /**
-         * medium dash-dot border
-         */
-
+        /// <summary>
+        /// medium dash-dot border
+        /// </summary>
         MEDIUM_DASH_DOT,
 
-        /**
-         * dash-dot-dot border
-         */
-
+        /// <summary>
+        /// dash-dot-dot border
+        /// </summary>
         DASH_DOT_DOT,
 
-        /**
-         * medium dash-dot-dot border
-         */
-
+        /// <summary>
+        /// medium dash-dot-dot border
+        /// </summary>
         MEDIUM_DASH_DOT_DOTC,
 
-        /**
-         * slanted dash-dot border
-         */
-
+        /// <summary>
+        /// slanted dash-dot border
+        /// </summary>
         SLANTED_DASH_DOT
 
     }

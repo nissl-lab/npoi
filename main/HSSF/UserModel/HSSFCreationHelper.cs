@@ -33,17 +33,17 @@ namespace NPOI.HSSF.UserModel
             dataFormat = new HSSFDataFormat(workbook.Workbook);
         }
 
-        public NPOI.SS.UserModel.RichTextString CreateRichTextString(String text)
+        public NPOI.SS.UserModel.IRichTextString CreateRichTextString(String text)
         {
             return new HSSFRichTextString(text);
         }
 
-        public NPOI.SS.UserModel.DataFormat CreateDataFormat()
+        public NPOI.SS.UserModel.IDataFormat CreateDataFormat()
         {
             return dataFormat;
         }
 
-        public NPOI.SS.UserModel.Hyperlink CreateHyperlink(HyperlinkType type)
+        public NPOI.SS.UserModel.IHyperlink CreateHyperlink(HyperlinkType type)
         {
             return new HSSFHyperlink(type);
         }
@@ -64,7 +64,7 @@ namespace NPOI.HSSF.UserModel
          * @return a HSSFClientAnchor instance
          * @see NPOI.SS.usermodel.Drawing
          */
-        public NPOI.SS.UserModel.ClientAnchor CreateClientAnchor()
+        public NPOI.SS.UserModel.IClientAnchor CreateClientAnchor()
         {
             return new HSSFClientAnchor();
         }

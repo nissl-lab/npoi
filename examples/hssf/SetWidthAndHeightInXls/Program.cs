@@ -40,7 +40,7 @@ namespace SetWidthAndHeightInXls
         {
             InitializeWorkbook();
 
-            Sheet sheet1 = hssfworkbook.CreateSheet("Sheet1");
+            ISheet sheet1 = hssfworkbook.CreateSheet("Sheet1");
             //set the width of columns
             sheet1.SetColumnWidth(0,50 * 256);
             sheet1.SetColumnWidth(1, 100 * 256);

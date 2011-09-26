@@ -30,7 +30,7 @@ namespace NPOI.SS.UserModel
 
 
 
-    public interface PrintSetup
+    public interface IPrintSetup
     {
 
         /**    

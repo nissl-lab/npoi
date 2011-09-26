@@ -115,7 +115,7 @@ using NPOI.SS.UserModel;
             }
             _rowIndex = int.Parse(rowRef) - 1; // -1 to convert 1-based to zero-based
         }
-        public CellReference(Cell cell):this(cell.RowIndex, cell.ColumnIndex, false, false)
+        public CellReference(ICell cell):this(cell.RowIndex, cell.ColumnIndex, false, false)
         {
             
         }

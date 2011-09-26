@@ -93,7 +93,7 @@ namespace NPOI.SS.UserModel
         /// </summary>
         SLANTED_DASH_DOT = 0xD,
     }
-    public interface CellStyle
+    public interface ICellStyle
     {
 
         bool ShrinkToFit { get; set; }
@@ -123,7 +123,7 @@ namespace NPOI.SS.UserModel
          * @see Workbook#GetFontAt(short)
          */
 
-        void SetFont(Font font);
+        void SetFont(IFont font);
 
         /**
          * Gets the index of the font for this style
@@ -344,9 +344,9 @@ namespace NPOI.SS.UserModel
          *  to be of the same type (HSSFCellStyle or
          *  XSSFCellStyle)
          */
-        void CloneStyleFrom(CellStyle source);
+        void CloneStyleFrom(ICellStyle source);
 
 
-        Font GetFont(Workbook parentWorkbook);
+        IFont GetFont(IWorkbook parentWorkbook);
     }
 }

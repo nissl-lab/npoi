@@ -153,9 +153,9 @@ namespace TestCases.HSSF.UserModel
         public void TestReadBooleans()
         {
             HSSFWorkbook workbook = new HSSFWorkbook();
-            NPOI.SS.UserModel.Sheet sheet = workbook.CreateSheet("Test boolean");
-            Row row = sheet.CreateRow(2);
-            Cell cell = row.CreateCell(9);
+            NPOI.SS.UserModel.ISheet sheet = workbook.CreateSheet("Test boolean");
+            IRow row = sheet.CreateRow(2);
+            ICell cell = row.CreateCell(9);
             cell.SetCellValue(true);
             cell = row.CreateCell(11);
             cell.SetCellValue(true);
@@ -171,8 +171,8 @@ namespace TestCases.HSSF.UserModel
         public void TestRemoveZeroRow()
         {
             HSSFWorkbook workbook = new HSSFWorkbook();
-            NPOI.SS.UserModel.Sheet sheet = workbook.CreateSheet("Sheet1");
-            Row row = sheet.CreateRow(0);
+            NPOI.SS.UserModel.ISheet sheet = workbook.CreateSheet("Sheet1");
+            IRow row = sheet.CreateRow(0);
             try
             {
                 sheet.RemoveRow(row);
@@ -198,9 +198,9 @@ namespace TestCases.HSSF.UserModel
 
             Assert.AreEqual(3, workbook.NumberOfSheets);
 
-            NPOI.SS.UserModel.Sheet sheetL = workbook.GetSheetAt(0);
-            NPOI.SS.UserModel.Sheet sheetPM = workbook.GetSheetAt(1);
-            NPOI.SS.UserModel.Sheet sheetLS = workbook.GetSheetAt(2);
+            NPOI.SS.UserModel.ISheet sheetL = workbook.GetSheetAt(0);
+            NPOI.SS.UserModel.ISheet sheetPM = workbook.GetSheetAt(1);
+            NPOI.SS.UserModel.ISheet sheetLS = workbook.GetSheetAt(2);
 
             // Check two aspects of the print setup
             Assert.IsFalse(sheetL.PrintSetup.Landscape);
@@ -237,7 +237,7 @@ namespace TestCases.HSSF.UserModel
         public void TestGroupRows()
         {
             HSSFWorkbook workbook = new HSSFWorkbook();
-            NPOI.SS.UserModel.Sheet s = workbook.CreateSheet();
+            NPOI.SS.UserModel.ISheet s = workbook.CreateSheet();
             HSSFRow r1 = (HSSFRow)s.CreateRow(0);
             HSSFRow r2 = (HSSFRow)s.CreateRow(1);
             HSSFRow r3 = (HSSFRow)s.CreateRow(2);
@@ -279,7 +279,7 @@ namespace TestCases.HSSF.UserModel
         {
             HSSFWorkbook workbook = HSSFTestDataSamples.OpenSampleWorkbook("NoGutsRecords.xls");
 
-            NPOI.SS.UserModel.Sheet s = workbook.GetSheetAt(0);
+            NPOI.SS.UserModel.ISheet s = workbook.GetSheetAt(0);
             HSSFRow r1 = (HSSFRow)s.GetRow(0);
             HSSFRow r2 = (HSSFRow)s.GetRow(1);
             HSSFRow r3 = (HSSFRow)s.GetRow(2);
@@ -452,7 +452,7 @@ namespace TestCases.HSSF.UserModel
         {
             HSSFWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("SimpleWithPageBreaks.xls");
 
-            NPOI.SS.UserModel.Sheet sheet = wb.GetSheetAt(0);
+            NPOI.SS.UserModel.ISheet sheet = wb.GetSheetAt(0);
             Assert.IsNotNull(sheet);
 
             Assert.AreEqual(1, sheet.RowBreaks.Length, "1 row page break");
@@ -495,7 +495,7 @@ namespace TestCases.HSSF.UserModel
         {
             HSSFWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("SimpleWithPageBreaks.xls");
 
-            NPOI.SS.UserModel.Sheet sheet = wb.GetSheetAt(0);
+            NPOI.SS.UserModel.ISheet sheet = wb.GetSheetAt(0);
             Assert.IsNotNull(sheet);
 
             short toprow = (short)100;
@@ -511,11 +511,11 @@ namespace TestCases.HSSF.UserModel
         {
 
             HSSFWorkbook wb = new HSSFWorkbook();
-            NPOI.SS.UserModel.Sheet s = wb.CreateSheet("Sheet1");
-            Row r = s.CreateRow(0);
+            NPOI.SS.UserModel.ISheet s = wb.CreateSheet("Sheet1");
+            IRow r = s.CreateRow(0);
             r.CreateCell(0).SetCellValue(1);
             r.CreateCell(1).CellFormula = ("A1*2");
-            NPOI.SS.UserModel.Sheet s1 = wb.CloneSheet(0);
+            NPOI.SS.UserModel.ISheet s1 = wb.CloneSheet(0);
             r = s1.GetRow(0);
             Assert.AreEqual(r.GetCell(0).NumericCellValue, 1, 1); // sanity Check
             Assert.IsNotNull(r.GetCell(1));
@@ -527,11 +527,11 @@ namespace TestCases.HSSF.UserModel
         public void TestDefaultColumnStyle()
         {
             HSSFWorkbook wb = new HSSFWorkbook();
-            NPOI.SS.UserModel.CellStyle style = wb.CreateCellStyle();
-            NPOI.SS.UserModel.Sheet s = wb.CreateSheet();
+            NPOI.SS.UserModel.ICellStyle style = wb.CreateCellStyle();
+            NPOI.SS.UserModel.ISheet s = wb.CreateSheet();
             s.SetDefaultColumnStyle((short)0, style);
-            Row r = s.CreateRow(0);
-            Cell c = r.CreateCell(0);
+            IRow r = s.CreateRow(0);
+            ICell c = r.CreateCell(0);
             Assert.AreEqual(style.Index, c.CellStyle.Index, "style should Match");
         }
 
@@ -544,7 +544,7 @@ namespace TestCases.HSSF.UserModel
         {
             //try to Add 5 empty rows to a new sheet
             HSSFWorkbook workbook = new HSSFWorkbook();
-            NPOI.SS.UserModel.Sheet sheet = workbook.CreateSheet();
+            NPOI.SS.UserModel.ISheet sheet = workbook.CreateSheet();
             for (int i = 0; i < 5; i++)
             {
                 sheet.CreateRow(i);
@@ -590,7 +590,7 @@ namespace TestCases.HSSF.UserModel
 
             // Check that the autoSized column width has ignored the 2nd row
             // because it is included in a merged region (Excel like behavior)
-            NPOI.SS.UserModel.Sheet sheet2 = wb2.GetSheet(sheetName);
+            NPOI.SS.UserModel.ISheet sheet2 = wb2.GetSheet(sheetName);
             Assert.IsTrue(sheet2.GetColumnWidth(0) >= minWithRow1Only);
             Assert.IsTrue(sheet2.GetColumnWidth(0) <= maxWithRow1Only);
 
@@ -598,7 +598,7 @@ namespace TestCases.HSSF.UserModel
             sheet2.RemoveMergedRegion(1);
             sheet2.AutoSizeColumn(0);
             HSSFWorkbook wb3 = HSSFTestDataSamples.WriteOutAndReadBack(wb2);
-            NPOI.SS.UserModel.Sheet sheet3 = wb3.GetSheet(sheetName);
+            NPOI.SS.UserModel.ISheet sheet3 = wb3.GetSheet(sheetName);
             Assert.IsTrue(sheet3.GetColumnWidth(0) >= minWithRow1And2);
             Assert.IsTrue(sheet3.GetColumnWidth(0) <= maxWithRow1And2);
         }
@@ -690,8 +690,8 @@ namespace TestCases.HSSF.UserModel
         {
             HSSFWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("ex41187-19267.xls");
 
-            NPOI.SS.UserModel.Sheet sheet = wb.GetSheetAt(0);
-            Row row = sheet.GetRow(0);
+            NPOI.SS.UserModel.ISheet sheet = wb.GetSheetAt(0);
+            IRow row = sheet.GetRow(0);
             if (row == null)
             {
                 throw new AssertFailedException("Identified bug 41187 a");

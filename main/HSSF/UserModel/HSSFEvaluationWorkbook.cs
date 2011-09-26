@@ -41,7 +41,7 @@ namespace NPOI.HSSF.UserModel
         private HSSFWorkbook _uBook;
         private NPOI.HSSF.Model.InternalWorkbook _iBook;
 
-        public static HSSFEvaluationWorkbook Create(NPOI.SS.UserModel.Workbook book)
+        public static HSSFEvaluationWorkbook Create(NPOI.SS.UserModel.IWorkbook book)
         {
             if (book == null)
             {
@@ -133,7 +133,7 @@ namespace NPOI.HSSF.UserModel
         }
         public Ptg[] GetFormulaTokens(EvaluationCell evalCell)
         {
-            Cell cell = ((HSSFEvaluationCell)evalCell).HSSFCell;
+            ICell cell = ((HSSFEvaluationCell)evalCell).HSSFCell;
             //if (false)
             //{
             //    // re-parsing the formula text also works, but is a waste of time

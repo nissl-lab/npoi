@@ -51,7 +51,7 @@ namespace NPOI.HSSF.UserModel
             {
                 return null;
             }
-            Cell cell = (HSSFCell)row.GetCell(columnIndex);
+            ICell cell = (HSSFCell)row.GetCell(columnIndex);
             if (cell == null)
             {
                 return null;

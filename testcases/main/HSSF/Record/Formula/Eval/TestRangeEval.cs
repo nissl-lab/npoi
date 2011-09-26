@@ -122,10 +122,10 @@ namespace TestCases.HSSF.Record.Formula.Eval
         [TestMethod]
         public void TestRangeUsingOffSetFunc_bug46948()
         {
-            Workbook wb = new HSSFWorkbook();
-            Row row = wb.CreateSheet("Sheet1").CreateRow(0);
-            Cell cellA1 = row.CreateCell(0);
-            Cell cellB1 = row.CreateCell(1);
+            IWorkbook wb = new HSSFWorkbook();
+            IRow row = wb.CreateSheet("Sheet1").CreateRow(0);
+            ICell cellA1 = row.CreateCell(0);
+            ICell cellB1 = row.CreateCell(1);
             row.CreateCell(2).SetCellValue(5.0); // C1
             row.CreateCell(3).SetCellValue(7.0); // D1
             row.CreateCell(4).SetCellValue(9.0); // E1

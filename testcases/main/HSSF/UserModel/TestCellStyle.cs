@@ -71,11 +71,11 @@ namespace TestCases.HSSF.UserModel
                                                     ".xls");
         FileStream out1  = new FileStream(filepath,FileMode.OpenOrCreate);
         HSSFWorkbook     wb   = new HSSFWorkbook();
-        NPOI.SS.UserModel.Sheet        s    = wb.CreateSheet();
-        Row          r    = null;
-        Cell         c    = null;
-        Font         fnt  = wb.CreateFont();
-        NPOI.SS.UserModel.CellStyle    cs   = wb.CreateCellStyle();
+        NPOI.SS.UserModel.ISheet        s    = wb.CreateSheet();
+        IRow          r    = null;
+        ICell         c    = null;
+        IFont         fnt  = wb.CreateFont();
+        NPOI.SS.UserModel.ICellStyle    cs   = wb.CreateCellStyle();
 
         fnt.Color=(NPOI.HSSF.Util.HSSFColor.RED.index);
         fnt.Boldweight= (short)FontBoldWeight.BOLD;
@@ -117,12 +117,12 @@ namespace TestCases.HSSF.UserModel
                                                     ".xls");
         FileStream out1  = new FileStream(filepath,FileMode.OpenOrCreate);
         HSSFWorkbook     wb   = new HSSFWorkbook();
-        NPOI.SS.UserModel.Sheet        s    = wb.CreateSheet();
-        NPOI.SS.UserModel.CellStyle    cs   = wb.CreateCellStyle();
-        Row row = s.CreateRow(0);
+        NPOI.SS.UserModel.ISheet        s    = wb.CreateSheet();
+        NPOI.SS.UserModel.ICellStyle    cs   = wb.CreateCellStyle();
+        IRow row = s.CreateRow(0);
 
         // with Date:
-        Cell cell = row.CreateCell(1);
+        ICell cell = row.CreateCell(1);
         cs.DataFormat=(HSSFDataFormat.GetBuiltinFormat("m/d/yy"));
         cell.CellStyle = (cs);
         cell.SetCellValue(DateTime.Now);
@@ -146,12 +146,12 @@ namespace TestCases.HSSF.UserModel
         public void TestHashEquals()
         {
             HSSFWorkbook wb = new HSSFWorkbook();
-            NPOI.SS.UserModel.Sheet s = wb.CreateSheet();
-            NPOI.SS.UserModel.CellStyle cs1 = wb.CreateCellStyle();
-            NPOI.SS.UserModel.CellStyle cs2 = wb.CreateCellStyle();
-            Row row = s.CreateRow(0);
-            Cell cell1 = row.CreateCell(1);
-            Cell cell2 = row.CreateCell(2);
+            NPOI.SS.UserModel.ISheet s = wb.CreateSheet();
+            NPOI.SS.UserModel.ICellStyle cs1 = wb.CreateCellStyle();
+            NPOI.SS.UserModel.ICellStyle cs2 = wb.CreateCellStyle();
+            IRow row = s.CreateRow(0);
+            ICell cell1 = row.CreateCell(1);
+            ICell cell2 = row.CreateCell(2);
 
             cs1.DataFormat = (HSSFDataFormat.GetBuiltinFormat("m/d/yy"));
             cs2.DataFormat = (HSSFDataFormat.GetBuiltinFormat("m/dd/yy"));
@@ -190,12 +190,12 @@ namespace TestCases.HSSF.UserModel
                                                     ".xls");
         FileStream out1  = new FileStream(filepath,FileMode.OpenOrCreate);
         HSSFWorkbook     wb   = new HSSFWorkbook();
-        NPOI.SS.UserModel.Sheet        s    = wb.CreateSheet();
-        Row          r    = null;
-        Cell         c    = null;
-        Font         fnt  = wb.CreateFont();
-        NPOI.SS.UserModel.CellStyle cs = wb.CreateCellStyle();
-        NPOI.SS.UserModel.CellStyle cs2 = wb.CreateCellStyle();
+        NPOI.SS.UserModel.ISheet        s    = wb.CreateSheet();
+        IRow          r    = null;
+        ICell         c    = null;
+        IFont         fnt  = wb.CreateFont();
+        NPOI.SS.UserModel.ICellStyle cs = wb.CreateCellStyle();
+        NPOI.SS.UserModel.ICellStyle cs2 = wb.CreateCellStyle();
 
         cs.BorderBottom= (CellBorderType.THIN);
         cs.BorderLeft= (CellBorderType.THIN);
@@ -243,11 +243,11 @@ namespace TestCases.HSSF.UserModel
         public void TestCloneStyleSameWB()
         {
             HSSFWorkbook wb = new HSSFWorkbook();
-            Font fnt = wb.CreateFont();
+            IFont fnt = wb.CreateFont();
             fnt.FontName=("TestingFont");
             Assert.AreEqual(5, wb.NumberOfFonts);
 
-            NPOI.SS.UserModel.CellStyle orig = wb.CreateCellStyle();
+            NPOI.SS.UserModel.ICellStyle orig = wb.CreateCellStyle();
             orig.Alignment=(HorizontalAlignment.RIGHT);
             orig.SetFont(fnt);
             orig.DataFormat=((short)18);
@@ -256,7 +256,7 @@ namespace TestCases.HSSF.UserModel
             Assert.AreEqual(fnt,orig.GetFont(wb));
             Assert.AreEqual(18,orig.DataFormat);
 
-            NPOI.SS.UserModel.CellStyle clone = wb.CreateCellStyle();
+            NPOI.SS.UserModel.ICellStyle clone = wb.CreateCellStyle();
             Assert.AreNotEqual(HorizontalAlignment.RIGHT , clone.Alignment);
             Assert.AreNotEqual(fnt, clone.GetFont(wb));
             Assert.AreNotEqual(18, clone.DataFormat);
@@ -277,15 +277,15 @@ namespace TestCases.HSSF.UserModel
         {
             HSSFWorkbook wbOrig = new HSSFWorkbook();
 
-            Font fnt = wbOrig.CreateFont();
+            IFont fnt = wbOrig.CreateFont();
             fnt.FontName=("TestingFont");
             Assert.AreEqual(5, wbOrig.NumberOfFonts);
 
-            DataFormat fmt = wbOrig.CreateDataFormat();
+            IDataFormat fmt = wbOrig.CreateDataFormat();
             fmt.GetFormat("MadeUpOne");
             fmt.GetFormat("MadeUpTwo");
 
-            NPOI.SS.UserModel.CellStyle orig = wbOrig.CreateCellStyle();
+            NPOI.SS.UserModel.ICellStyle orig = wbOrig.CreateCellStyle();
             orig.Alignment = (HorizontalAlignment.RIGHT);
             orig.SetFont(fnt);
             orig.DataFormat=(fmt.GetFormat("Test##"));
@@ -297,9 +297,9 @@ namespace TestCases.HSSF.UserModel
             // Now a style on another workbook
             HSSFWorkbook wbClone = new HSSFWorkbook();
             Assert.AreEqual(4, wbClone.NumberOfFonts);
-            DataFormat fmtClone = wbClone.CreateDataFormat();
+            IDataFormat fmtClone = wbClone.CreateDataFormat();
 
-            NPOI.SS.UserModel.CellStyle clone = wbClone.CreateCellStyle();
+            NPOI.SS.UserModel.ICellStyle clone = wbClone.CreateCellStyle();
             Assert.AreEqual(4, wbClone.NumberOfFonts);
 
             Assert.AreNotEqual(HorizontalAlignment.RIGHT,clone.Alignment);
@@ -316,10 +316,10 @@ namespace TestCases.HSSF.UserModel
         public void TestStyleNames()
         {
             HSSFWorkbook wb = OpenSample("WithExtendedStyles.xls");
-            NPOI.SS.UserModel.Sheet s = wb.GetSheetAt(0);
-            Cell c1 = s.GetRow(0).GetCell(0);
-            Cell c2 = s.GetRow(1).GetCell(0);
-            Cell c3 = s.GetRow(2).GetCell(0);
+            NPOI.SS.UserModel.ISheet s = wb.GetSheetAt(0);
+            ICell c1 = s.GetRow(0).GetCell(0);
+            ICell c2 = s.GetRow(1).GetCell(0);
+            ICell c3 = s.GetRow(2).GetCell(0);
 
             HSSFCellStyle cs1 = (HSSFCellStyle)c1.CellStyle;
             HSSFCellStyle cs2 = (HSSFCellStyle)c2.CellStyle;

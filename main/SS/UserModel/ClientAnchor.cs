@@ -67,7 +67,7 @@ namespace NPOI.SS.UserModel
      *
      * @author Yegor Kozlov
      */
-    public interface ClientAnchor
+    public interface IClientAnchor
     {
 
         /**

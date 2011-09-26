@@ -57,6 +57,9 @@ namespace CreateEmptyExcelFile
             hssfworkbook.CreateSheet("Sheet3");
             hssfworkbook.CreateSheet("Sheet4");
 
+            ((HSSFSheet)hssfworkbook.GetSheetAt(0)).AlternativeFormula = false;
+            ((HSSFSheet)hssfworkbook.GetSheetAt(0)).AlternativeExpression = false;
+
             //Write the stream data of workbook to the root directory
             FileStream file = new FileStream(@"test.xls", FileMode.Create);
             hssfworkbook.Write(file);

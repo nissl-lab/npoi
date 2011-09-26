@@ -532,7 +532,7 @@ namespace NPOI.SS.UserModel
         /// we infer it Is a date if it Is formatted as such.
         /// </summary>
         /// <param name="cell">The cell.</param>
-        public static bool IsCellDateFormatted(Cell cell)
+        public static bool IsCellDateFormatted(ICell cell)
         {
             if (cell == null) return false;
             bool bDate = false;
@@ -540,7 +540,7 @@ namespace NPOI.SS.UserModel
             double d = cell.NumericCellValue;
             if (DateUtil.IsValidExcelDate(d))
             {
-                CellStyle style = cell.CellStyle;
+                ICellStyle style = cell.CellStyle;
                 if (style == null)
                     return false;
                 int i = style.DataFormat;
@@ -554,7 +554,7 @@ namespace NPOI.SS.UserModel
         /// As Excel stores a great many of its dates in "non-internal" date formats, you will not normally want to use this method.
         /// </summary>
         /// <param name="cell">The cell.</param>
-        public static bool IsCellInternalDateFormatted(Cell cell)
+        public static bool IsCellInternalDateFormatted(ICell cell)
         {
             if (cell == null) return false;
             bool bDate = false;
@@ -562,7 +562,7 @@ namespace NPOI.SS.UserModel
             double d = cell.NumericCellValue;
             if (DateUtil.IsValidExcelDate(d))
             {
-                CellStyle style = cell.CellStyle;
+                ICellStyle style = cell.CellStyle;
                 int i = style.DataFormat;
                 bDate = IsInternalDateFormat(i);
             }

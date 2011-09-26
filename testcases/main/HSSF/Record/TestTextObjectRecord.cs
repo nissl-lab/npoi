@@ -120,7 +120,7 @@ namespace TestCases.HSSF.Record
                 {
                     buff.Append("x");
                 }
-                NPOI.SS.UserModel.RichTextString str = new HSSFRichTextString(buff.ToString());
+                NPOI.SS.UserModel.IRichTextString str = new HSSFRichTextString(buff.ToString());
 
                 TextObjectRecord obj = new TextObjectRecord();
                 obj.Str = (str);

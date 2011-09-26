@@ -40,7 +40,7 @@ namespace UseBasicFormulaInXls
         {
             InitializeWorkbook();
 
-            Sheet s1=hssfworkbook.CreateSheet("Sheet1");
+            ISheet s1=hssfworkbook.CreateSheet("Sheet1");
             //set A2
             s1.CreateRow(1).CreateCell(0).SetCellValue(-5);
             //set B2
@@ -59,7 +59,7 @@ namespace UseBasicFormulaInXls
 
 
             //create another sheet
-            Sheet s2 = hssfworkbook.CreateSheet("Sheet2");
+            ISheet s2 = hssfworkbook.CreateSheet("Sheet2");
             //set cross-sheet reference
             s2.CreateRow(0).CreateCell(0).CellFormula = "Sheet1!A2+Sheet1!A3";
 

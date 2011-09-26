@@ -99,11 +99,11 @@ namespace TestCases.HSSF.UserModel
 
             HSSFPalette p = book.GetCustomPalette();
 
-            Cell cellA = book.GetSheetAt(0).GetRow(0).GetCell(0);
-            Cell cellB = book.GetSheetAt(0).GetRow(1).GetCell(0);
-            Cell cellC = book.GetSheetAt(0).GetRow(2).GetCell(0);
-            Cell cellD = book.GetSheetAt(0).GetRow(3).GetCell(0);
-            Cell cellE = book.GetSheetAt(0).GetRow(4).GetCell(0);
+            ICell cellA = book.GetSheetAt(0).GetRow(0).GetCell(0);
+            ICell cellB = book.GetSheetAt(0).GetRow(1).GetCell(0);
+            ICell cellC = book.GetSheetAt(0).GetRow(2).GetCell(0);
+            ICell cellD = book.GetSheetAt(0).GetRow(3).GetCell(0);
+            ICell cellE = book.GetSheetAt(0).GetRow(4).GetCell(0);
 
             // Plain
             Assert.AreEqual("I'm plain", cellA.StringCellValue);

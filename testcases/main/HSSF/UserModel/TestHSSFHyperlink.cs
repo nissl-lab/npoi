@@ -45,9 +45,9 @@ namespace TestCases.HSSF.UserModel
 
             HSSFWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("HyperlinksOnManySheets.xls");
 
-            NPOI.SS.UserModel.Sheet sheet;
-            Cell cell;
-            Hyperlink link;
+            NPOI.SS.UserModel.ISheet sheet;
+            ICell cell;
+            IHyperlink link;
 
             sheet = wb.GetSheet("WebLinks");
             cell = sheet.GetRow(4).GetCell(0);
@@ -86,9 +86,9 @@ namespace TestCases.HSSF.UserModel
         {
             HSSFWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("HyperlinksOnManySheets.xls");
 
-            NPOI.SS.UserModel.Sheet sheet;
-            Cell cell;
-            Hyperlink link;
+            NPOI.SS.UserModel.ISheet sheet;
+            ICell cell;
+            IHyperlink link;
 
             sheet = wb.GetSheet("WebLinks");
             cell = sheet.GetRow(4).GetCell(0);
@@ -121,12 +121,12 @@ namespace TestCases.HSSF.UserModel
             HSSFWorkbook wb = new HSSFWorkbook();
 
             //link to a place in this workbook
-            Hyperlink link;
-            Cell cell;
-            NPOI.SS.UserModel.Sheet sheet = wb.CreateSheet("Hyperlinks");
+            IHyperlink link;
+            ICell cell;
+            NPOI.SS.UserModel.ISheet sheet = wb.CreateSheet("Hyperlinks");
 
             //create a target sheet and cell
-            NPOI.SS.UserModel.Sheet sheet2 = wb.CreateSheet("Target Sheet");
+            NPOI.SS.UserModel.ISheet sheet2 = wb.CreateSheet("Target Sheet");
             sheet2.CreateRow(0).CreateCell(0).SetCellValue("Target Cell");
 
             //cell A1 has a link to 'Target Sheet-1'!A1
@@ -168,11 +168,11 @@ namespace TestCases.HSSF.UserModel
             HSSFWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("46445.xls");
 
 
-            NPOI.SS.UserModel.Sheet sheet = wb.GetSheetAt(0);
+            NPOI.SS.UserModel.ISheet sheet = wb.GetSheetAt(0);
 
             //verify existing hyperlink in A3
-            Cell cell1 = sheet.GetRow(2).GetCell(0);
-            Hyperlink link1 = cell1.Hyperlink;
+            ICell cell1 = sheet.GetRow(2).GetCell(0);
+            IHyperlink link1 = cell1.Hyperlink;
             Assert.IsNotNull(link1);
             Assert.AreEqual(2, link1.FirstRow);
             Assert.AreEqual(2, link1.LastRow);
@@ -180,7 +180,7 @@ namespace TestCases.HSSF.UserModel
             //assign a hyperlink to A4
             HSSFHyperlink link2 = new HSSFHyperlink(HyperlinkType.DOCUMENT);
             link2.Address=("Sheet2!A2");
-            Cell cell2 = sheet.GetRow(3).GetCell(0);
+            ICell cell2 = sheet.GetRow(3).GetCell(0);
             cell2.Hyperlink=(link2);
             Assert.AreEqual(3, link2.FirstRow);
             Assert.AreEqual(3, link2.LastRow);
@@ -193,13 +193,13 @@ namespace TestCases.HSSF.UserModel
             Assert.IsNull(sheet.GetRow(3).GetCell(0).Hyperlink);
 
             //the first hypelink now belongs to A5
-            Hyperlink link1_shifted = sheet.GetRow(2 + 2).GetCell(0).Hyperlink;
+            IHyperlink link1_shifted = sheet.GetRow(2 + 2).GetCell(0).Hyperlink;
             Assert.IsNotNull(link1_shifted);
             Assert.AreEqual(4, link1_shifted.FirstRow);
             Assert.AreEqual(4, link1_shifted.LastRow);
 
             //the second hypelink now belongs to A6
-            Hyperlink link2_shifted = sheet.GetRow(3 + 2).GetCell(0).Hyperlink;
+            IHyperlink link2_shifted = sheet.GetRow(3 + 2).GetCell(0).Hyperlink;
             Assert.IsNotNull(link2_shifted);
             Assert.AreEqual(5, link2_shifted.FirstRow);
             Assert.AreEqual(5, link2_shifted.LastRow);
@@ -209,13 +209,13 @@ namespace TestCases.HSSF.UserModel
         {
             HSSFWorkbook wb = new HSSFWorkbook();
 
-            Cell cell;
-            NPOI.SS.UserModel.Sheet sheet = wb.CreateSheet("Hyperlinks");
+            ICell cell;
+            NPOI.SS.UserModel.ISheet sheet = wb.CreateSheet("Hyperlinks");
 
             //URL
             cell = sheet.CreateRow(0).CreateCell(0);
             cell.SetCellValue("URL Link");
-            Hyperlink link = new HSSFHyperlink(HyperlinkType.URL);
+            IHyperlink link = new HSSFHyperlink(HyperlinkType.URL);
             link.Address = ("http://poi.apache.org/");
             cell.Hyperlink = link;
 
@@ -237,7 +237,7 @@ namespace TestCases.HSSF.UserModel
             //link to a place in this workbook
 
             //Create a target sheet and cell
-            NPOI.SS.UserModel.Sheet sheet2 = wb.CreateSheet("Target Sheet");
+            NPOI.SS.UserModel.ISheet sheet2 = wb.CreateSheet("Target Sheet");
             sheet2.CreateRow(0).CreateCell(0).SetCellValue("Target Cell");
 
             cell = sheet.CreateRow(3).CreateCell(0);
@@ -277,10 +277,10 @@ namespace TestCases.HSSF.UserModel
         {
             HSSFWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("HyperlinksOnManySheets.xls");
 
-            Cell cell;
-            Hyperlink link;
+            ICell cell;
+            IHyperlink link;
 
-            NPOI.SS.UserModel.Sheet sheet = wb.CloneSheet(0);
+            NPOI.SS.UserModel.ISheet sheet = wb.CloneSheet(0);
 
             cell = sheet.GetRow(4).GetCell(0);
             link = cell.Hyperlink;

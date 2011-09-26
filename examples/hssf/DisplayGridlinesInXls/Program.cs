@@ -41,11 +41,11 @@ namespace DisplayGridlinesInXls
             InitializeWorkbook();
 
             //sheet1 disables gridline
-            Sheet s1 = hssfworkbook.CreateSheet("Sheet1");
+            ISheet s1 = hssfworkbook.CreateSheet("Sheet1");
             s1.DisplayGridlines = false;
 
             //sheet2 enables gridline
-            Sheet s2 = hssfworkbook.CreateSheet("Sheet2");
+            ISheet s2 = hssfworkbook.CreateSheet("Sheet2");
             s2.DisplayGridlines = true;
             
             WriteToFile();

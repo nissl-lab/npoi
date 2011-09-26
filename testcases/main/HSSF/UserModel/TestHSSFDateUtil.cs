@@ -337,12 +337,12 @@ namespace TestCases.HSSF.UserModel
         {
 
             HSSFWorkbook workbook = HSSFTestDataSamples.OpenSampleWorkbook("DateFormats.xls");
-            NPOI.SS.UserModel.Sheet sheet = workbook.GetSheetAt(0);
+            NPOI.SS.UserModel.ISheet sheet = workbook.GetSheetAt(0);
             InternalWorkbook wb = workbook.Workbook;
 
-            Row row;
-            Cell cell;
-            NPOI.SS.UserModel.CellStyle style;
+            IRow row;
+            ICell cell;
+            NPOI.SS.UserModel.ICellStyle style;
 
             double aug_10_2007 = 39304.0;
 

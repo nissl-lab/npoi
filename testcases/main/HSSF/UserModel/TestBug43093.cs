@@ -31,15 +31,15 @@ namespace TestCases.HSSF.UserModel
         private static void AddNewSheetWithCellsA1toD4(HSSFWorkbook book, int sheet)
         {
 
-            NPOI.SS.UserModel.Sheet sht = book.CreateSheet("s" + sheet);
+            NPOI.SS.UserModel.ISheet sht = book.CreateSheet("s" + sheet);
             for (int r = 0; r < 4; r++)
             {
 
-                Row row = sht.CreateRow(r);
+                IRow row = sht.CreateRow(r);
                 for (int c = 0; c < 4; c++)
                 {
 
-                    Cell cel = row.CreateCell(c);
+                    ICell cel = row.CreateCell(c);
                     cel.SetCellValue(sheet * 100 + r * 10 + c);
                 }
             }
@@ -54,9 +54,9 @@ namespace TestCases.HSSF.UserModel
             AddNewSheetWithCellsA1toD4(xlw, 3);
             AddNewSheetWithCellsA1toD4(xlw, 4);
 
-            NPOI.SS.UserModel.Sheet s2 = xlw.GetSheet("s2");
-            Row s2r3 = s2.GetRow(3);
-            Cell s2E4 = s2r3.CreateCell(4);
+            NPOI.SS.UserModel.ISheet s2 = xlw.GetSheet("s2");
+            IRow s2r3 = s2.GetRow(3);
+            ICell s2E4 = s2r3.CreateCell(4);
             s2E4.CellFormula = ("SUM(s3!B2:C3)");
 
             HSSFFormulaEvaluator eva = new HSSFFormulaEvaluator(xlw);

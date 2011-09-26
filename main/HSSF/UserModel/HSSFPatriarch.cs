@@ -29,7 +29,7 @@ namespace NPOI.HSSF.UserModel
     /// little other than act as a container for other shapes and Groups.
     /// @author Glen Stampoultzis (glens at apache.org)
     /// </summary>
-    public class HSSFPatriarch : HSSFShapeContainer,NPOI.SS.UserModel.Drawing
+    public class HSSFPatriarch : HSSFShapeContainer,NPOI.SS.UserModel.IDrawing
     {
         IList shapes = new ArrayList();
         public HSSFSheet sheet;
@@ -92,7 +92,7 @@ namespace NPOI.HSSF.UserModel
         /// to the sheet.</param>
         /// <param name="pictureIndex">Index of the picture.</param>
         /// <returns>the newly created shape.</returns>
-        public NPOI.SS.UserModel.Picture CreatePicture(ClientAnchor anchor, int pictureIndex)
+        public NPOI.SS.UserModel.IPicture CreatePicture(IClientAnchor anchor, int pictureIndex)
         {
             HSSFPicture shape = new HSSFPicture(null, (HSSFClientAnchor)anchor);
             shape.PictureIndex=pictureIndex;
@@ -109,7 +109,7 @@ namespace NPOI.HSSF.UserModel
         /// <param name="anchor">the client anchor describes how this Group is attached
         /// to the sheet.</param>
         /// <returns>the newly Created shape.</returns>
-        public HSSFPolygon CreatePolygon(ClientAnchor anchor)
+        public HSSFPolygon CreatePolygon(IClientAnchor anchor)
         {
             HSSFPolygon shape = new HSSFPolygon(null, (HSSFAnchor)anchor);
             shape.Anchor = (HSSFAnchor)anchor;
@@ -123,7 +123,7 @@ namespace NPOI.HSSF.UserModel
         /// <param name="anchor">the client anchor describes how this Group is attached
         /// to the sheet.</param>
         /// <returns>the newly Created textbox.</returns>
-        public Textbox CreateTextbox(ClientAnchor anchor)
+        public Textbox CreateTextbox(IClientAnchor anchor)
         {
             HSSFTextbox shape = new HSSFTextbox(null, (HSSFAnchor)anchor);
             shape.Anchor = (HSSFAnchor)anchor;
@@ -151,7 +151,7 @@ namespace NPOI.HSSF.UserModel
         /// <param name="anchor">the client anchor describes how this comment is attached
         /// to the sheet.</param>
         /// <returns>the newly created comment.</returns>
-        public Comment CreateCellComment(NPOI.SS.UserModel.ClientAnchor anchor)
+        public IComment CreateCellComment(NPOI.SS.UserModel.IClientAnchor anchor)
         {
             HSSFComment shape = new HSSFComment(null, (HSSFAnchor)anchor);
             shape.Anchor = (HSSFAnchor)anchor;

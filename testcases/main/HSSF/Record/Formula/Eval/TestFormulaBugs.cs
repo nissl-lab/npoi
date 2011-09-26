@@ -57,9 +57,9 @@ namespace TestCases.HSSF.Record.Formula.Eval
                 throw;
             }
 
-            NPOI.SS.UserModel.Sheet sheet = wb.GetSheetAt(0);
-            Row row = sheet.GetRow(1);
-            Cell cell = row.GetCell(0);
+            NPOI.SS.UserModel.ISheet sheet = wb.GetSheetAt(0);
+            IRow row = sheet.GetRow(1);
+            ICell cell = row.GetCell(0);
 
             // this definitely would have failed due to 27349
             Assert.AreEqual("VLOOKUP(1,'DATA TABLE'!$A$8:'DATA TABLE'!$B$10,2)", cell.CellFormula);
@@ -83,10 +83,10 @@ namespace TestCases.HSSF.Record.Formula.Eval
         {
 
             HSSFWorkbook wb = new HSSFWorkbook();
-            NPOI.SS.UserModel.Sheet sheet = wb.CreateSheet("input");
+            NPOI.SS.UserModel.ISheet sheet = wb.CreateSheet("input");
             // input row 0
-            Row row = sheet.CreateRow((short)0);
-            Cell cell = row.CreateCell((short)0);
+            IRow row = sheet.CreateRow((short)0);
+            ICell cell = row.CreateCell((short)0);
             cell = row.CreateCell((short)1);
             cell.SetCellValue(1); // B1
             // input row 1
@@ -137,13 +137,13 @@ namespace TestCases.HSSF.Record.Formula.Eval
         public void Test21334()
         {
             HSSFWorkbook wb = new HSSFWorkbook();
-            NPOI.SS.UserModel.Sheet sh = wb.CreateSheet();
-            Cell cell = sh.CreateRow(0).CreateCell(0);
+            NPOI.SS.UserModel.ISheet sh = wb.CreateSheet();
+            ICell cell = sh.CreateRow(0).CreateCell(0);
             String formula = "SUM(IF(FREQUENCY(IF(LEN(V4:V220)>0,MATCH(V4:V220,V4:V220,0),\"\"),IF(LEN(V4:V220)>0,MATCH(V4:V220,V4:V220,0),\"\"))>0,1))";
             cell.CellFormula = (formula);
 
             HSSFWorkbook wb_sv = HSSFTestDataSamples.WriteOutAndReadBack(wb);
-            Cell cell_sv = wb_sv.GetSheetAt(0).GetRow(0).GetCell(0);
+            ICell cell_sv = wb_sv.GetSheetAt(0).GetRow(0).GetCell(0);
             Assert.AreEqual(formula, cell_sv.CellFormula);
         }
         /**
@@ -153,13 +153,13 @@ namespace TestCases.HSSF.Record.Formula.Eval
         public void Test42448()
         {
             HSSFWorkbook wb = new HSSFWorkbook();
-            NPOI.SS.UserModel.Sheet sheet1 = wb.CreateSheet("Sheet1");
+            NPOI.SS.UserModel.ISheet sheet1 = wb.CreateSheet("Sheet1");
 
-            Row row = sheet1.CreateRow(0);
-            Cell cell = row.CreateCell((short)0);
+            IRow row = sheet1.CreateRow(0);
+            ICell cell = row.CreateCell((short)0);
 
             // it's important to create the referenced sheet first
-            NPOI.SS.UserModel.Sheet sheet2 = wb.CreateSheet("A"); // note name 'A'
+            NPOI.SS.UserModel.ISheet sheet2 = wb.CreateSheet("A"); // note name 'A'
             // TODO - POI crashes if the formula is added before this sheet
             // Exception("Zero length string is an invalid sheet name")
             // Excel doesn't crash but the formula doesn't work until it is
@@ -199,7 +199,7 @@ namespace TestCases.HSSF.Record.Formula.Eval
             Assert.AreEqual(expectedResult, cv.NumberValue, 0.0);
         }
 
-        private static void AddCell(NPOI.SS.UserModel.Sheet sheet, int rowIx, int colIx,
+        private static void AddCell(NPOI.SS.UserModel.ISheet sheet, int rowIx, int colIx,
                 double value)
         {
             sheet.CreateRow(rowIx).CreateCell((short)colIx).SetCellValue(value);

@@ -54,7 +54,7 @@ namespace TestCases.HSSF.UserModel
          * This method achieves the aims at low cost without augmenting the POI usermodel api.
          * @return a reference to the wrapped {@link NameRecord} 
          */
-        public static NameRecord GetNameRecord(Name definedName)
+        public static NameRecord GetNameRecord(IName definedName)
         {
 
             FieldInfo f;
@@ -78,7 +78,7 @@ namespace TestCases.HSSF.UserModel
                 sheet.CreateFreezePane(0, 3);
             }
             Assert.AreEqual(1, wb.NumberOfNames);
-            Name nr1 = wb.GetNameAt(0);
+            IName nr1 = wb.GetNameAt(0);
 
             Assert.AreEqual("Print_Titles", nr1.NameName);
             if (false)
@@ -106,7 +106,7 @@ namespace TestCases.HSSF.UserModel
             nwb.SetRepeatingRowsAndColumns(1, 1, 2, 0, 0);
 
             Assert.AreEqual(2, nwb.NumberOfNames);
-            Name nr2 = nwb.GetNameAt(1);
+            IName nr2 = nwb.GetNameAt(1);
 
             Assert.AreEqual("Print_Titles", nr2.NameName);
             Assert.AreEqual("SecondSheet!B:C,SecondSheet!$A$1:$IV$1", nr2.RefersToFormula);
@@ -127,7 +127,7 @@ namespace TestCases.HSSF.UserModel
             HSSFWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("Simple.xls");
 
             //Creating new Named Range
-            Name newNamedRange = wb.CreateName();
+            IName newNamedRange = wb.CreateName();
 
             //Getting Sheet Name for the reference
             String sheetName = wb.GetSheetName(0);
@@ -138,7 +138,7 @@ namespace TestCases.HSSF.UserModel
             newNamedRange.RefersToFormula = sheetName + "!$D$4:$E$8";
 
             //Getting NAmed Range
-            Name namedRange1 = wb.GetNameAt(0);
+            IName namedRange1 = wb.GetNameAt(0);
             //Getting it sheet name
             sheetName = namedRange1.SheetName;
 
@@ -147,7 +147,7 @@ namespace TestCases.HSSF.UserModel
             c.CheckHSSFWorkbook(wb);
 
             wb = HSSFTestDataSamples.WriteOutAndReadBack(wb);
-            Name nm = wb.GetNameAt(wb.GetNameIndex("RangeTest"));
+            IName nm = wb.GetNameAt(wb.GetNameIndex("RangeTest"));
             Assert.IsTrue("RangeTest".Equals(nm.NameName), "Name is " + nm.NameName);
             Assert.AreEqual(wb.GetSheetName(0) + "!$D$4:$E$8", nm.RefersToFormula);
         }
@@ -166,7 +166,7 @@ namespace TestCases.HSSF.UserModel
             int NamedRangeIndex = wb.GetNameIndex("NamedRangeName");
 
             //Getting NAmed Range
-            Name namedRange1 = wb.GetNameAt(NamedRangeIndex);
+            IName namedRange1 = wb.GetNameAt(NamedRangeIndex);
             String sheetName = wb.GetSheetName(0);
 
             //Getting its reference
@@ -174,7 +174,7 @@ namespace TestCases.HSSF.UserModel
 
             Assert.AreEqual(sheetName + "!$A$1:$D$10", reference);
 
-            Name namedRange2 = wb.GetNameAt(1);
+            IName namedRange2 = wb.GetNameAt(1);
 
             Assert.AreEqual(sheetName + "!$D$17:$G$27", namedRange2.RefersToFormula);
             Assert.AreEqual("SecondNamedRange", namedRange2.NameName);
@@ -190,7 +190,7 @@ namespace TestCases.HSSF.UserModel
         {
             HSSFWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("namedinput.xls");
 
-            Name name = wb.GetNameAt(0);
+            IName name = wb.GetNameAt(0);
             String sheetName = wb.GetSheetName(0);
 
             Assert.AreEqual(sheetName + "!$A$1:$D$10", name.RefersToFormula);
@@ -222,13 +222,13 @@ namespace TestCases.HSSF.UserModel
             HSSFWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("24207.xls");
             Assert.AreEqual(2, wb.NumberOfNames);
 
-            Name name1 = wb.GetNameAt(0);
+            IName name1 = wb.GetNameAt(0);
             Assert.AreEqual("a", name1.NameName);
             Assert.AreEqual("Sheet1!$A$1", name1.RefersToFormula);
             new AreaReference(name1.RefersToFormula);
             Assert.IsTrue(true, "Successfully constructed first reference");
 
-            Name name2 = wb.GetNameAt(1);
+            IName name2 = wb.GetNameAt(1);
             Assert.AreEqual("b", name2.NameName);
             Assert.AreEqual("Sheet1!#REF!", name2.RefersToFormula);
             Assert.IsTrue(name2.IsDeleted);

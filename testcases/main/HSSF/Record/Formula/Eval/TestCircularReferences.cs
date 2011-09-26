@@ -34,7 +34,7 @@ namespace TestCases.HSSF.Record.Formula.Eval
         /**
          * Translates StackOverflowError into AssertFailedException
          */
-        private static NPOI.SS.UserModel.CellValue EvaluateWithCycles(HSSFWorkbook wb,  Cell testCell)
+        private static NPOI.SS.UserModel.CellValue EvaluateWithCycles(HSSFWorkbook wb,  ICell testCell)
         {
             HSSFFormulaEvaluator evaluator = new HSSFFormulaEvaluator(wb);
             try
@@ -65,14 +65,14 @@ namespace TestCases.HSSF.Record.Formula.Eval
         {
 
             HSSFWorkbook wb = new HSSFWorkbook();
-            NPOI.SS.UserModel.Sheet sheet = wb.CreateSheet("Sheet1");
+            NPOI.SS.UserModel.ISheet sheet = wb.CreateSheet("Sheet1");
 
             short colB = 1;
             sheet.CreateRow(0).CreateCell(colB).SetCellValue(1);
             sheet.CreateRow(1).CreateCell(colB).SetCellValue(2);
             sheet.CreateRow(2).CreateCell(colB).SetCellValue(3);
-            Row row4 = sheet.CreateRow(3);
-            Cell testCell = row4.CreateCell((short)0);
+            IRow row4 = sheet.CreateRow(3);
+            ICell testCell = row4.CreateCell((short)0);
             // This formula should evaluate to the contents of B2,
             testCell.CellFormula = ("INDEX(A1:B4,2,2)");
             // However the range A1:B4 also includes the current cell A4.  If the other parameters
@@ -94,10 +94,10 @@ namespace TestCases.HSSF.Record.Formula.Eval
         {
 
             HSSFWorkbook wb = new HSSFWorkbook();
-            NPOI.SS.UserModel.Sheet sheet = wb.CreateSheet("Sheet1");
+            NPOI.SS.UserModel.ISheet sheet = wb.CreateSheet("Sheet1");
 
-            Row row = sheet.CreateRow(0);
-            Cell testCell = row.CreateCell(0);
+            IRow row = sheet.CreateRow(0);
+            ICell testCell = row.CreateCell(0);
             testCell.CellFormula = ("A1");
 
             NPOI.SS.UserModel.CellValue cellValue = EvaluateWithCycles(wb,testCell);
@@ -113,13 +113,13 @@ namespace TestCases.HSSF.Record.Formula.Eval
         {
 
             HSSFWorkbook wb = new HSSFWorkbook();
-            NPOI.SS.UserModel.Sheet sheet = wb.CreateSheet("Sheet1");
+            NPOI.SS.UserModel.ISheet sheet = wb.CreateSheet("Sheet1");
 
-            Row row = sheet.CreateRow(0);
+            IRow row = sheet.CreateRow(0);
             row.CreateCell(0).CellFormula = ("B1");
             row.CreateCell(1).CellFormula = ("C1");
             row.CreateCell(2).CellFormula = ("D1");
-            Cell testCell = row.CreateCell(3);
+            ICell testCell = row.CreateCell(3);
             testCell.CellFormula = ("A1");
 
             NPOI.SS.UserModel.CellValue cellValue = EvaluateWithCycles(wb,  testCell);

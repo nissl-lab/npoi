@@ -94,7 +94,7 @@ namespace TestCases.HSSF.UserModel
         public void TestAnchorHeightInPoints()
         {
             HSSFWorkbook wb = new HSSFWorkbook();
-            NPOI.SS.UserModel.Sheet sheet = wb.CreateSheet();
+            NPOI.SS.UserModel.ISheet sheet = wb.CreateSheet();
 
             HSSFClientAnchor[] anchor = {
             new HSSFClientAnchor( 0 , 0,    0 , 0 ,(short)0, 1,(short)1, 3),

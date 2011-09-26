@@ -44,13 +44,13 @@ namespace SetCellCommentInXls
         {
             InitializeWorkbook();
 
-            Sheet sheet = hssfworkbook.CreateSheet("Cell comments in POI HSSF");
+            ISheet sheet = hssfworkbook.CreateSheet("ICell comments in POI HSSF");
 
             // Create the drawing patriarch. This is the top level container for all shapes including cell comments.
             HSSFPatriarch patr = (HSSFPatriarch)sheet.CreateDrawingPatriarch();
 
             //Create a cell in row 3
-            Cell cell1 = sheet.CreateRow(3).CreateCell(1);
+            ICell cell1 = sheet.CreateRow(3).CreateCell(1);
             cell1.SetCellValue(new HSSFRichTextString("Hello, World"));
 
             //anchor defines size and position of the comment in worksheet
@@ -67,7 +67,7 @@ namespace SetCellCommentInXls
             cell1.CellComment = (comment1);
 
             //Create another cell in row 6
-            Cell cell2 = sheet.CreateRow(6).CreateCell(1);
+            ICell cell2 = sheet.CreateRow(6).CreateCell(1);
             cell2.SetCellValue(36.6);
 
 
@@ -95,7 +95,7 @@ namespace SetCellCommentInXls
              * Note, it is possible to set row and column of a non-existing cell.
              * It works, the commnet is visible.
              */
-            comment2.Row = 6;
+            comment2.IRow = 6;
             comment2.Column = 1;
 
             WriteToFile();

@@ -101,7 +101,7 @@ namespace TestCases.HSSF.UserModel
             // Now get the index by the sheet, not the name
             for (int i = 0; i < 10; i++)
             {
-                NPOI.SS.UserModel.Sheet s = wbr.GetSheetAt(i);
+                NPOI.SS.UserModel.ISheet s = wbr.GetSheetAt(i);
                 Assert.AreEqual(i, wbr.GetSheetIndex(s));
             }
         }

@@ -54,8 +54,8 @@ namespace TestCases.SS.UserModel
         {
             // Read Initial file in
             String sampleName = "SimpleMultiCell." + _testDataProvider.StandardFileNameExtension;
-            Workbook wb = _testDataProvider.OpenSampleWorkbook(sampleName);
-            Sheet s = wb.GetSheetAt(0);
+            IWorkbook wb = _testDataProvider.OpenSampleWorkbook(sampleName);
+            ISheet s = wb.GetSheetAt(0);
 
             // Shift the second row down 1 and write to temp file
             s.ShiftRows(1, 1, 1);
@@ -100,9 +100,9 @@ namespace TestCases.SS.UserModel
             ConfirmEmptyRow(s, 3);
             Assert.AreEqual(s.GetRow(4).PhysicalNumberOfCells, 5);
         }
-        private static void ConfirmEmptyRow(Sheet s, int rowIx)
+        private static void ConfirmEmptyRow(ISheet s, int rowIx)
         {
-            Row row = s.GetRow(rowIx);
+            IRow row = s.GetRow(rowIx);
             Assert.IsTrue(row == null || row.PhysicalNumberOfCells == 0);
         }
 
@@ -112,8 +112,8 @@ namespace TestCases.SS.UserModel
         [TestMethod]
         public void BaseTestShiftRow()
         {
-            Workbook b = _testDataProvider.CreateWorkbook();
-            Sheet s = b.CreateSheet();
+            IWorkbook b = _testDataProvider.CreateWorkbook();
+            ISheet s = b.CreateSheet();
             s.CreateRow(0).CreateCell(0).SetCellValue("TEST1");
             s.CreateRow(3).CreateCell(0).SetCellValue("TEST2");
             s.ShiftRows(0, 4, 1);
@@ -125,8 +125,8 @@ namespace TestCases.SS.UserModel
         [TestMethod]
         public void BaseTestActiveCell()
         {
-            Workbook b = _testDataProvider.CreateWorkbook();
-            Sheet s = b.CreateSheet();
+            IWorkbook b = _testDataProvider.CreateWorkbook();
+            ISheet s = b.CreateSheet();
 
             s.CreateRow(0).CreateCell(0).SetCellValue("TEST1");
             s.CreateRow(3).CreateCell(0).SetCellValue("TEST2");
@@ -140,9 +140,9 @@ namespace TestCases.SS.UserModel
         [TestMethod]
         public void BaseTestShiftRowBreaks()
         {
-            Workbook b = _testDataProvider.CreateWorkbook();
-            Sheet s = b.CreateSheet();
-            Row row = s.CreateRow(4);
+            IWorkbook b = _testDataProvider.CreateWorkbook();
+            ISheet s = b.CreateSheet();
+            IRow row = s.CreateRow(4);
             row.CreateCell(0).SetCellValue("test");
             s.SetRowBreak(4);
 
@@ -153,9 +153,9 @@ namespace TestCases.SS.UserModel
         [TestMethod]
         public void BaseTestShiftWithComments()
         {
-            Workbook wb = _testDataProvider.OpenSampleWorkbook("comments." + _testDataProvider.StandardFileNameExtension);
+            IWorkbook wb = _testDataProvider.OpenSampleWorkbook("comments." + _testDataProvider.StandardFileNameExtension);
 
-            Sheet sheet = wb.GetSheet("Sheet1");
+            ISheet sheet = wb.GetSheet("Sheet1");
             Assert.AreEqual(3, sheet.LastRowNum);
 
             // Verify comments are in the position expected
@@ -212,28 +212,28 @@ namespace TestCases.SS.UserModel
         [TestMethod]
         public void BaseTestShiftWithNames()
         {
-            Workbook wb = _testDataProvider.CreateWorkbook();
-            Sheet sheet1 = wb.CreateSheet("Sheet1");
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            ISheet sheet1 = wb.CreateSheet("Sheet1");
             wb.CreateSheet("Sheet2");
-            Row row = sheet1.CreateRow(0);
+            IRow row = sheet1.CreateRow(0);
             row.CreateCell(0).SetCellValue(1.1);
             row.CreateCell(1).SetCellValue(2.2);
 
-            Name name1 = wb.CreateName();
+            IName name1 = wb.CreateName();
             name1.NameName = ("name1");
             name1.RefersToFormula = ("Sheet1!$A$1+Sheet1!$B$1");
 
-            Name name2 = wb.CreateName();
+            IName name2 = wb.CreateName();
             name2.NameName = ("name2");
             name2.RefersToFormula = ("Sheet1!$A$1");
 
             //refers to A1 but on Sheet2. Should stay unaffected.
-            Name name3 = wb.CreateName();
+            IName name3 = wb.CreateName();
             name3.NameName = ("name3");
             name3.RefersToFormula = ("Sheet2!$A$1");
 
             //The scope of this one is Sheet2. Should stay unaffected.
-            Name name4 = wb.CreateName();
+            IName name4 = wb.CreateName();
             name4.NameName = ("name4");
             name4.RefersToFormula = ("A1");
             name4.SheetIndex = (1);
@@ -255,9 +255,9 @@ namespace TestCases.SS.UserModel
         [TestMethod]
         public void BaseTestShiftWithMergedRegions()
         {
-            Workbook wb = _testDataProvider.CreateWorkbook();
-            Sheet sheet = wb.CreateSheet();
-            Row row = sheet.CreateRow(0);
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            ISheet sheet = wb.CreateSheet();
+            IRow row = sheet.CreateRow(0);
             row.CreateCell(0).SetCellValue(1.1);
             row.CreateCell(1).SetCellValue(2.2);
             CellRangeAddress region = new CellRangeAddress(0, 0, 0, 2);
@@ -278,9 +278,9 @@ namespace TestCases.SS.UserModel
         [TestMethod]
         public void BaseTestShiftWithFormulas()
         {
-            Workbook wb = _testDataProvider.OpenSampleWorkbook("ForShifting." + _testDataProvider.StandardFileNameExtension);
+            IWorkbook wb = _testDataProvider.OpenSampleWorkbook("ForShifting." + _testDataProvider.StandardFileNameExtension);
 
-            Sheet sheet = wb.GetSheet("Sheet1");
+            ISheet sheet = wb.GetSheet("Sheet1");
             Assert.AreEqual(20, sheet.LastRowNum);
 
             ConfirmRow(sheet, 0, 1, 171, 1, "ROW(D1)", "100+B1", "COUNT(D1:E1)");
@@ -322,7 +322,7 @@ namespace TestCases.SS.UserModel
             ConfirmCell(sheet, 8, 1, 273, "200+B3");
 
             // check formulas on other sheets
-            Sheet sheet2 = wb.GetSheet("Sheet2");
+            ISheet sheet2 = wb.GetSheet("Sheet2");
             ConfirmCell(sheet2, 0, 0, 371, "300+Sheet1!B1");
             ConfirmCell(sheet2, 1, 0, 372, "300+Sheet1!B12");
             ConfirmCell(sheet2, 2, 0, 373, "300+Sheet1!B3");
@@ -333,7 +333,7 @@ namespace TestCases.SS.UserModel
             // Note - named ranges formulas have not been updated
         }
 
-        private static void ConfirmRow(Sheet sheet, int rowIx, double valA, double valB, double valC,
+        private static void ConfirmRow(ISheet sheet, int rowIx, double valA, double valB, double valC,
                     String formulaA, String formulaB, String formulaC)
         {
             ConfirmCell(sheet, rowIx, 4, valA, formulaA);
@@ -341,10 +341,10 @@ namespace TestCases.SS.UserModel
             ConfirmCell(sheet, rowIx, 6, valC, formulaC);
         }
 
-        private static void ConfirmCell(Sheet sheet, int rowIx, int colIx,
+        private static void ConfirmCell(ISheet sheet, int rowIx, int colIx,
                 double expectedValue, String expectedFormula)
         {
-            Cell cell = sheet.GetRow(rowIx).GetCell(colIx);
+            ICell cell = sheet.GetRow(rowIx).GetCell(colIx);
             Assert.AreEqual(expectedValue, cell.NumericCellValue, 0.0);
             Assert.AreEqual(expectedFormula, cell.CellFormula);
         }

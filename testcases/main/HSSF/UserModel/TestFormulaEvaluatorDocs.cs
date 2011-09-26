@@ -39,30 +39,30 @@ namespace TestCases.HSSF.UserModel
         public void TestEvaluateAll()
         {
             HSSFWorkbook wb = new HSSFWorkbook();
-            NPOI.SS.UserModel.Sheet s1 = wb.CreateSheet();
-            NPOI.SS.UserModel.Sheet s2 = wb.CreateSheet();
+            NPOI.SS.UserModel.ISheet s1 = wb.CreateSheet();
+            NPOI.SS.UserModel.ISheet s2 = wb.CreateSheet();
             wb.SetSheetName(0, "S1");
             wb.SetSheetName(1, "S2");
 
-            Row s1r1 = s1.CreateRow(0);
-            Row s1r2 = s1.CreateRow(1);
-            Row s2r1 = s2.CreateRow(0);
+            IRow s1r1 = s1.CreateRow(0);
+            IRow s1r2 = s1.CreateRow(1);
+            IRow s2r1 = s2.CreateRow(0);
 
-            Cell s1r1c1 = s1r1.CreateCell(0);
-            Cell s1r1c2 = s1r1.CreateCell(1);
-            Cell s1r1c3 = s1r1.CreateCell(2);
+            ICell s1r1c1 = s1r1.CreateCell(0);
+            ICell s1r1c2 = s1r1.CreateCell(1);
+            ICell s1r1c3 = s1r1.CreateCell(2);
             s1r1c1.SetCellValue(22.3);
             s1r1c2.SetCellValue(33.4);
             s1r1c3.CellFormula = ("SUM(A1:B1)");
 
-            Cell s1r2c1 = s1r2.CreateCell(0);
-            Cell s1r2c2 = s1r2.CreateCell(1);
-            Cell s1r2c3 = s1r2.CreateCell(2);
+            ICell s1r2c1 = s1r2.CreateCell(0);
+            ICell s1r2c2 = s1r2.CreateCell(1);
+            ICell s1r2c3 = s1r2.CreateCell(2);
             s1r2c1.SetCellValue(-1.2);
             s1r2c2.SetCellValue(-3.4);
             s1r2c3.CellFormula = ("SUM(A2:B2)");
 
-            Cell s2r1c1 = s2r1.CreateCell(0);
+            ICell s2r1c1 = s2r1.CreateCell(0);
             s2r1c1.CellFormula = ("S1!A1");
 
             // Not Evaluated yet
@@ -74,16 +74,16 @@ namespace TestCases.HSSF.UserModel
             // uses EvaluateFormulaCell()
             for (int sheetNum = 0; sheetNum < wb.NumberOfSheets; sheetNum++)
             {
-                NPOI.SS.UserModel.Sheet sheet = wb.GetSheetAt(sheetNum);
+                NPOI.SS.UserModel.ISheet sheet = wb.GetSheetAt(sheetNum);
                 HSSFFormulaEvaluator evaluator = new HSSFFormulaEvaluator(wb);
 
                 for (IEnumerator rit = sheet.GetRowEnumerator(); rit.MoveNext(); )
                 {
-                    Row r = (Row)rit.Current;
+                    IRow r = (IRow)rit.Current;
 
                     for (IEnumerator cit = r.GetCellEnumerator(); cit.MoveNext(); )
                     {
-                        Cell c = (Cell)cit.Current;
+                        ICell c = (ICell)cit.Current;
                         if (c.CellType == NPOI.SS.UserModel.CellType.FORMULA)
                         {
                             evaluator.EvaluateFormulaCell(c);
@@ -113,16 +113,16 @@ namespace TestCases.HSSF.UserModel
             // uses EvaluateInCell()
             for (int sheetNum = 0; sheetNum < wb.NumberOfSheets; sheetNum++)
             {
-                NPOI.SS.UserModel.Sheet sheet = wb.GetSheetAt(sheetNum);
+                NPOI.SS.UserModel.ISheet sheet = wb.GetSheetAt(sheetNum);
                 HSSFFormulaEvaluator evaluator = new HSSFFormulaEvaluator(wb);
 
                 for (IEnumerator rit = sheet.GetRowEnumerator(); rit.MoveNext(); )
                 {
-                    Row r = (Row)rit.Current;
+                    IRow r = (IRow)rit.Current;
 
                     for (IEnumerator cit = r.GetCellEnumerator(); cit.MoveNext(); )
                     {
-                        Cell c = (Cell)cit.Current;
+                        ICell c = (ICell)cit.Current;
                         if (c.CellType == NPOI.SS.UserModel.CellType.FORMULA)
                         {
                             evaluator.EvaluateInCell(c);

@@ -39,7 +39,7 @@ namespace TestCases.HSSF.Record.Formula
         public void TestReading()
         {
             HSSFWorkbook workbook = HSSFTestDataSamples.OpenSampleWorkbook("ReferencePtg.xls");
-            NPOI.SS.UserModel.Sheet sheet = workbook.GetSheetAt(0);
+            NPOI.SS.UserModel.ISheet sheet = workbook.GetSheetAt(0);
 
             // First row
             Assert.AreEqual(55.0,

@@ -36,7 +36,7 @@ namespace NPOI.SS.UserModel
      *
      * @author Yegor Kozlov
      */
-    public interface Picture : Shape
+    public interface IPicture : IShape
     {
 
         /**
@@ -53,7 +53,7 @@ namespace NPOI.SS.UserModel
          */
         void Resize(double scale);
 
-        ClientAnchor GetPreferredSize();
+        IClientAnchor GetPreferredSize();
 
     }
 }

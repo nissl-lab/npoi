@@ -112,7 +112,7 @@ namespace TestCases.SS.Formula
             {
                 _formulaCellsByCacheEntry.Remove(entry);
                 _formulaCellsByCacheEntry.Add(entry, cell);
-                Cell hc = _book.GetSheetAt(0).GetRow(cell.RowIndex).GetCell(cell.ColumnIndex);
+                ICell hc = _book.GetSheetAt(0).GetRow(cell.RowIndex).GetCell(cell.ColumnIndex);
                 log("start", cell.RowIndex, cell.ColumnIndex, FormulaExtractor.GetPtgs(hc));
             }
             public override void OnEndEvaluate(ICacheEntry entry, ValueEval result)
@@ -215,7 +215,7 @@ namespace TestCases.SS.Formula
         private class MySheet
         {
 
-            private NPOI.SS.UserModel.Sheet _sheet;
+            private NPOI.SS.UserModel.ISheet _sheet;
             private WorkbookEvaluator _evaluator;
             private HSSFWorkbook _wb;
             private EvalListener _evalListener;
@@ -228,14 +228,14 @@ namespace TestCases.SS.Formula
                 _sheet = _wb.CreateSheet("Sheet1");
             }
 
-            private static EvaluationCell WrapCell(Cell cell)
+            private static EvaluationCell WrapCell(ICell cell)
             {
                 return HSSFEvaluationTestHelper.WrapCell(cell);
             }
 
             public void SetCellValue(String cellRefText, double value)
             {
-                Cell cell = GetOrCreateCell(cellRefText);
+                ICell cell = GetOrCreateCell(cellRefText);
                 // be sure to blank cell, in case it is currently a formula
                 cell.SetCellType(NPOI.SS.UserModel.CellType.BLANK);
                 // otherwise this line will Only set the formula cached result;
@@ -245,23 +245,23 @@ namespace TestCases.SS.Formula
 
             public void SetCellFormula(String cellRefText, String formulaText)
             {
-                Cell cell = GetOrCreateCell(cellRefText);
+                ICell cell = GetOrCreateCell(cellRefText);
                 //_evaluator.NotifyDeleteCell(WrapCell(cell));
                 cell.CellFormula=(formulaText);
                 _evaluator.NotifyUpdateCell(WrapCell(cell));
             }
 
-            private Cell GetOrCreateCell(String cellRefText)
+            private ICell GetOrCreateCell(String cellRefText)
             {
                 CellReference cr = new CellReference(cellRefText);
                 int rowIndex = cr.Row;
-                Row row = _sheet.GetRow(rowIndex);
+                IRow row = _sheet.GetRow(rowIndex);
                 if (row == null)
                 {
                     row = _sheet.CreateRow(rowIndex);
                 }
                 int cellIndex = cr.Col;
-                Cell cell = row.GetCell(cellIndex);
+                ICell cell = row.GetCell(cellIndex);
                 if (cell == null)
                 {
                     cell = row.CreateCell(cellIndex);

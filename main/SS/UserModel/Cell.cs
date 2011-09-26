@@ -45,7 +45,7 @@ namespace NPOI.SS.UserModel
      * Cells should have their number (0 based) before being Added to a row.
      * </p>
      */
-    public interface Cell
+    public interface ICell
     {
 
         /**
@@ -71,14 +71,14 @@ namespace NPOI.SS.UserModel
          *
          * @return the sheet this cell belongs to
          */
-        Sheet Sheet { get; }
+        ISheet Sheet { get; }
 
         /**
          * Returns the Row this cell belongs to
          *
          * @return the Row that owns this cell
          */
-        Row Row { get; }
+        IRow Row { get; }
 
         /**
          * Set the cells type (numeric, formula or string)
@@ -171,7 +171,7 @@ namespace NPOI.SS.UserModel
          * change the cell to a string cell and set its value.
          * If value is null then we will change the cell to a Blank cell.
          */
-        void SetCellValue(RichTextString value);
+        void SetCellValue(IRichTextString value);
 
         /**
          * Set a string value for the cell.
@@ -224,7 +224,7 @@ namespace NPOI.SS.UserModel
          * </p>
          * @return the value of the cell as a XSSFRichTextString
          */
-        RichTextString RichStringCellValue { get; }
+        IRichTextString RichStringCellValue { get; }
         /**
  * Get the value of the cell as an error code.
  * <p>
@@ -286,7 +286,7 @@ namespace NPOI.SS.UserModel
          * <code>workbook.GetCellStyleAt(0)</code>
          * @see Workbook#GetCellStyleAt(short)
          */
-        CellStyle CellStyle { get; set; }
+        ICellStyle CellStyle { get; set; }
 
         /**
          * Sets this cell as the active cell for the worksheet
@@ -298,7 +298,7 @@ namespace NPOI.SS.UserModel
          *
          * @return comment associated with this cell or <code>null</code> if not found
          */
-        Comment CellComment { get; set; }
+        IComment CellComment { get; set; }
 
         /**
          * Removes the comment for this cell, if there is one.
@@ -310,7 +310,7 @@ namespace NPOI.SS.UserModel
          *
          * @return hyperlink associated with this cell or <code>null</code> if not found
          */
-        Hyperlink Hyperlink { get; set; }
+        IHyperlink Hyperlink { get; set; }
 
         /**
          * Only valid for array formula cells

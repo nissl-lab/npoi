@@ -41,7 +41,7 @@ namespace SetPrintAreaInXls
         {
             InitializeWorkbook();
 
-            Sheet sheet1 = hssfworkbook.CreateSheet("Sheet1");
+            ISheet sheet1 = hssfworkbook.CreateSheet("Sheet1");
 
             //fill some data
             sheet1.CreateRow(0).CreateCell(0).SetCellValue("This is a Sample");
@@ -49,7 +49,7 @@ namespace SetPrintAreaInXls
             int i = 1;
             for (i = 1; i <= 15; i++)
             {
-                Row row = sheet1.CreateRow(i);
+                IRow row = sheet1.CreateRow(i);
                 for (int j = 0; j < 15; j++)
                 {
                     row.CreateCell(j).SetCellValue(x++);

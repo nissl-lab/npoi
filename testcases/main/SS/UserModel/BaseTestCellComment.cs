@@ -37,12 +37,12 @@ namespace TestCases.SS.UserModel
         [TestMethod]
         public void TestFind()
         {
-            Workbook book = _testDataProvider.CreateWorkbook();
-            Sheet sheet = book.CreateSheet();
+            IWorkbook book = _testDataProvider.CreateWorkbook();
+            ISheet sheet = book.CreateSheet();
             Assert.IsNull(sheet.GetCellComment(0, 0));
 
-            Row row = sheet.CreateRow(0);
-            Cell cell = row.CreateCell(0);
+            IRow row = sheet.CreateRow(0);
+            ICell cell = row.CreateCell(0);
             Assert.IsNull(sheet.GetCellComment(0, 0));
             Assert.IsNull(cell.CellComment);
         }
@@ -55,28 +55,28 @@ namespace TestCases.SS.UserModel
             int cellRow = 3;
             int cellColumn = 1;
 
-            Workbook wb = _testDataProvider.CreateWorkbook();
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
             CreationHelper factory = wb.GetCreationHelper();
 
-            Sheet sheet = wb.CreateSheet();
+            ISheet sheet = wb.CreateSheet();
             Assert.IsNull(sheet.GetCellComment(cellRow, cellColumn));
 
-            Cell cell = sheet.CreateRow(cellRow).CreateCell(cellColumn);
+            ICell cell = sheet.CreateRow(cellRow).CreateCell(cellColumn);
             cell.SetCellValue(factory.CreateRichTextString(cellText));
             Assert.IsNull(cell.CellComment);
             Assert.IsNull(sheet.GetCellComment(cellRow, cellColumn));
 
-            Drawing patr = sheet.CreateDrawingPatriarch();
-            ClientAnchor anchor = factory.CreateClientAnchor();
+            IDrawing patr = sheet.CreateDrawingPatriarch();
+            IClientAnchor anchor = factory.CreateClientAnchor();
             anchor.Col1=(2);
             anchor.Col2=(5);
             anchor.Row1=(1);
             anchor.Row2=(2);
-            Comment comment = patr.CreateCellComment(anchor);
+            IComment comment = patr.CreateCellComment(anchor);
             Assert.IsFalse(comment.Visible);
             comment.Visible = (true);
             Assert.IsTrue(comment.Visible);
-            RichTextString string1 = factory.CreateRichTextString(commentText);
+            IRichTextString string1 = factory.CreateRichTextString(commentText);
             comment.String=(string1);
             comment.Author=(commentAuthor);
             cell.CellComment=(comment);
@@ -125,13 +125,13 @@ namespace TestCases.SS.UserModel
         [TestMethod]
         public void TestReadComments()
         {
-            Workbook wb = _testDataProvider.OpenSampleWorkbook("SimpleWithComments." + _testDataProvider.StandardFileNameExtension);
+            IWorkbook wb = _testDataProvider.OpenSampleWorkbook("SimpleWithComments." + _testDataProvider.StandardFileNameExtension);
 
-            Sheet sheet = wb.GetSheetAt(0);
+            ISheet sheet = wb.GetSheetAt(0);
 
-            Cell cell;
-            Row row;
-            Comment comment;
+            ICell cell;
+            IRow row;
+            IComment comment;
 
             for (int rownum = 0; rownum < 3; rownum++)
             {
@@ -164,14 +164,14 @@ namespace TestCases.SS.UserModel
         public void TestModifyComments()
         {
 
-            Workbook wb = _testDataProvider.OpenSampleWorkbook("SimpleWithComments." + _testDataProvider.StandardFileNameExtension);
+            IWorkbook wb = _testDataProvider.OpenSampleWorkbook("SimpleWithComments." + _testDataProvider.StandardFileNameExtension);
             CreationHelper factory = wb.GetCreationHelper();
 
-            Sheet sheet = wb.GetSheetAt(0);
+            ISheet sheet = wb.GetSheetAt(0);
 
-            Cell cell;
-            Row row;
-            Comment comment;
+            ICell cell;
+            IRow row;
+            IComment comment;
 
             for (int rownum = 0; rownum < 3; rownum++)
             {
@@ -199,8 +199,8 @@ namespace TestCases.SS.UserModel
         [TestMethod]
         public void TestDeleteComments()
         {
-            Workbook wb = _testDataProvider.OpenSampleWorkbook("SimpleWithComments." + _testDataProvider.StandardFileNameExtension);
-            Sheet sheet = wb.GetSheetAt(0);
+            IWorkbook wb = _testDataProvider.OpenSampleWorkbook("SimpleWithComments." + _testDataProvider.StandardFileNameExtension);
+            ISheet sheet = wb.GetSheetAt(0);
 
             // Zap from rows 1 and 3
             Assert.IsNotNull(sheet.GetRow(0).GetCell(1).CellComment);
@@ -231,20 +231,20 @@ namespace TestCases.SS.UserModel
         [TestMethod]
         public void TestQuickGuide()
         {
-            Workbook wb = _testDataProvider.CreateWorkbook();
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
 
             CreationHelper factory = wb.GetCreationHelper();
 
-            Sheet sheet = wb.CreateSheet();
+            ISheet sheet = wb.CreateSheet();
 
-            Cell cell = sheet.CreateRow(3).CreateCell(5);
+            ICell cell = sheet.CreateRow(3).CreateCell(5);
             cell.SetCellValue("F4");
 
-            Drawing drawing = sheet.CreateDrawingPatriarch();
+            IDrawing drawing = sheet.CreateDrawingPatriarch();
 
-            ClientAnchor anchor = factory.CreateClientAnchor();
-            Comment comment = drawing.CreateCellComment(anchor);
-            RichTextString str = factory.CreateRichTextString("Hello, World!");
+            IClientAnchor anchor = factory.CreateClientAnchor();
+            IComment comment = drawing.CreateCellComment(anchor);
+            IRichTextString str = factory.CreateRichTextString("Hello, World!");
             comment.String = (str);
             comment.Author = ("Apache POI");
             //assign the comment to the cell

@@ -43,7 +43,7 @@ namespace TestCases.HSSF.Model
         public void TestFormulas()
         {
             HSSFWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("testRVA.xls");
-            NPOI.SS.UserModel.Sheet sheet = wb.GetSheetAt(0);
+            NPOI.SS.UserModel.ISheet sheet = wb.GetSheetAt(0);
 
             int countFailures = 0;
             int countErrors = 0;
@@ -51,12 +51,12 @@ namespace TestCases.HSSF.Model
             int rowIx = 0;
             while (rowIx < 65535)
             {
-                Row row = sheet.GetRow(rowIx);
+                IRow row = sheet.GetRow(rowIx);
                 if (row == null)
                 {
                     break;
                 }
-                Cell cell = row.GetCell(0);
+                ICell cell = row.GetCell(0);
                 if (cell == null || cell.CellType == NPOI.SS.UserModel.CellType.BLANK)
                 {
                     break;
@@ -87,7 +87,7 @@ namespace TestCases.HSSF.Model
             }
         }
 
-        private void ConfirmCell(Cell formulaCell, String formula, HSSFWorkbook wb)
+        private void ConfirmCell(ICell formulaCell, String formula, HSSFWorkbook wb)
         {
             Ptg[] excelPtgs = FormulaExtractor.GetPtgs(formulaCell);
             Ptg[] poiPtgs = HSSFFormulaParser.Parse(formula, wb);

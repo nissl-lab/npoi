@@ -43,33 +43,33 @@ namespace SetDateCellInXls
         {
             InitializeWorkbook();
 
-            Sheet sheet = hssfworkbook.CreateSheet("new sheet");
+            ISheet sheet = hssfworkbook.CreateSheet("new sheet");
             // Create a row and put some cells in it. Rows are 0 based.
-            Row row = sheet.CreateRow(0);
+            IRow row = sheet.CreateRow(0);
 
             // Create a cell and put a date value in it.  The first cell is not styled as a date.
-            Cell cell = row.CreateCell(0);
+            ICell cell = row.CreateCell(0);
             cell.SetCellValue(DateTime.Now);
 
             // we style the second cell as a date (and time).  It is important to Create a new cell style from the workbook
             // otherwise you can end up modifying the built in style and effecting not only this cell but other cells.
-            CellStyle cellStyle = hssfworkbook.CreateCellStyle();
+           .CellStyle cellStyle = hssfworkbook.CreateCellStyle();
             
             // Perhaps this may only works for Chinese date, I don't have english office on hand
             cellStyle.DataFormat = hssfworkbook.CreateDataFormat().GetFormat("[$-409]h:mm:ss AM/PM;@");
             cell.CellStyle=cellStyle;
 
             //set chinese date format
-            Cell cell2 = row.CreateCell(1);
+            ICell cell2 = row.CreateCell(1);
             cell2.SetCellValue(new DateTime(2008, 5, 5));
-            CellStyle cellStyle2 = hssfworkbook.CreateCellStyle();
+           .CellStyle cellStyle2 = hssfworkbook.CreateCellStyle();
             DataFormat format = hssfworkbook.CreateDataFormat();
             cellStyle2.DataFormat = format.GetFormat("yyyy年m月d日");
             cell2.CellStyle = cellStyle2;
 
-            Cell cell3 = row.CreateCell(2);
+            ICell cell3 = row.CreateCell(2);
             cell3.CellFormula = "DateValue(\"2005-11-11 11:11:11\")";
-            CellStyle cellStyle3 = hssfworkbook.CreateCellStyle(); 
+           .CellStyle cellStyle3 = hssfworkbook.CreateCellStyle(); 
             cellStyle3.DataFormat = HSSFDataFormat.GetBuiltinFormat("m/d/yy h:mm");
             cell3.CellStyle = cellStyle3;
 

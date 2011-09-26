@@ -44,19 +44,19 @@ namespace TestCases.HSSF.UserModel
         public void TestMoveCell()
         {
             HSSFWorkbook workbook = new HSSFWorkbook();
-            NPOI.SS.UserModel.Sheet sheet = workbook.CreateSheet();
-            Row row = sheet.CreateRow(0);
-            Row rowB = sheet.CreateRow(1);
+            NPOI.SS.UserModel.ISheet sheet = workbook.CreateSheet();
+            IRow row = sheet.CreateRow(0);
+            IRow rowB = sheet.CreateRow(1);
 
-            Cell cellA2 = rowB.CreateCell(0);
+            ICell cellA2 = rowB.CreateCell(0);
             Assert.AreEqual(0, rowB.FirstCellNum);
             Assert.AreEqual(0, rowB.FirstCellNum);
 
             Assert.AreEqual(-1, row.LastCellNum);
             Assert.AreEqual(-1, row.FirstCellNum);
-            Cell cellB2 = row.CreateCell(1);
-            Cell cellB3 = row.CreateCell(2);
-            Cell cellB4 = row.CreateCell(3);
+            ICell cellB2 = row.CreateCell(1);
+            ICell cellB3 = row.CreateCell(2);
+            ICell cellB4 = row.CreateCell(3);
 
             Assert.AreEqual(1, row.FirstCellNum);
             Assert.AreEqual(4, row.LastCellNum);
@@ -111,8 +111,8 @@ namespace TestCases.HSSF.UserModel
         public void TestLastCellNumIsCorrectAfterAddCell_bug43901()
         {
             HSSFWorkbook book = new HSSFWorkbook();
-            NPOI.SS.UserModel.Sheet sheet = book.CreateSheet("Test");
-            Row row = sheet.CreateRow(0);
+            NPOI.SS.UserModel.ISheet sheet = book.CreateSheet("Test");
+            IRow row = sheet.CreateRow(0);
 
             // New row has last col -1
             Assert.AreEqual(-1, row.LastCellNum);
@@ -145,7 +145,7 @@ namespace TestCases.HSSF.UserModel
 
             sheet.Sheet.AddValueRecord(ROW_IX, br);
             HSSFRow row = new HSSFRow(workbook,sheet, rowRec);
-            Cell cell = row.CreateCellFromRecord(br);
+            ICell cell = row.CreateCellFromRecord(br);
 
             if (row.FirstCellNum == 2 && row.LastCellNum == 5)
             {

@@ -29,7 +29,7 @@ namespace TestCases.HSSF.UserModel
     public class HSSFEvaluationTestHelper
     {
 
-        public static EvaluationCell WrapCell(NPOI.SS.UserModel.Cell cell)
+        public static EvaluationCell WrapCell(NPOI.SS.UserModel.ICell cell)
         {
             return new HSSFEvaluationCell(cell);
         }

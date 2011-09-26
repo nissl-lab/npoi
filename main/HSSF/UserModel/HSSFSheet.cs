@@ -53,7 +53,7 @@ namespace NPOI.HSSF.UserModel
     /// @author  Yegor Kozlov (yegor at apache.org) (Autosizing columns)
     /// </remarks>
     [Serializable]
-    public class HSSFSheet : IDisposable, NPOI.SS.UserModel.Sheet
+    public class HSSFSheet : IDisposable, NPOI.SS.UserModel.ISheet
     {
 
         /**
@@ -69,7 +69,7 @@ namespace NPOI.HSSF.UserModel
          */
 
         private InternalSheet _sheet;
-        private Dictionary<int, NPOI.SS.UserModel.Row> rows;
+        private Dictionary<int, NPOI.SS.UserModel.IRow> rows;
         public InternalWorkbook book;
         protected HSSFWorkbook _workbook;
         private int firstrow;
@@ -85,7 +85,7 @@ namespace NPOI.HSSF.UserModel
         public HSSFSheet(HSSFWorkbook _workbook)
         {
             _sheet = InternalSheet.CreateSheet();
-            rows = new Dictionary<int, NPOI.SS.UserModel.Row>();
+            rows = new Dictionary<int, NPOI.SS.UserModel.IRow>();
             this._workbook = _workbook;
             this.book = _workbook.Workbook;
         }
@@ -107,7 +107,7 @@ namespace NPOI.HSSF.UserModel
         public HSSFSheet(HSSFWorkbook workbook, InternalSheet sheet)
         {
             this._sheet = sheet;
-            rows = new Dictionary<int, NPOI.SS.UserModel.Row>();
+            rows = new Dictionary<int, NPOI.SS.UserModel.IRow>();
             this._workbook = workbook;
             this.book = _workbook.Workbook;
             SetPropertiesFromSheet(_sheet);
@@ -220,7 +220,7 @@ namespace NPOI.HSSF.UserModel
         /// <returns></returns>
         /// @see org.apache.poi.hssf.usermodel.HSSFRow
         /// @see #RemoveRow(HSSFRow)
-        public NPOI.SS.UserModel.Row CreateRow(int rownum)
+        public NPOI.SS.UserModel.IRow CreateRow(int rownum)
         {
             HSSFRow row = new HSSFRow(_workbook, this, rownum);
             AddRow(row, true);
@@ -245,7 +245,7 @@ namespace NPOI.HSSF.UserModel
         /// Remove a row from this _sheet.  All cells contained in the row are Removed as well
         /// </summary>
         /// <param name="row">the row to Remove.</param>
-        public void RemoveRow(NPOI.SS.UserModel.Row row)
+        public void RemoveRow(NPOI.SS.UserModel.IRow row)
         {
 
             if (rows.Count > 0)
@@ -297,7 +297,7 @@ namespace NPOI.HSSF.UserModel
             }
 
             int rownum = lastrow - 1;
-            NPOI.SS.UserModel.Row r = GetRow(rownum);
+            NPOI.SS.UserModel.IRow r = GetRow(rownum);
 
             while (r == null && rownum > 0)
             {
@@ -316,7 +316,7 @@ namespace NPOI.HSSF.UserModel
         private int FindFirstRow(int firstrow)
         {
             int rownum = firstrow + 1;
-            NPOI.SS.UserModel.Row r = GetRow(rownum);
+            NPOI.SS.UserModel.IRow r = GetRow(rownum);
 
             while (r == null && rownum <= LastRowNum)
             {
@@ -361,7 +361,7 @@ namespace NPOI.HSSF.UserModel
         /// </summary>
         /// <param name="column">The column.</param>
         /// <returns></returns>
-        public NPOI.SS.UserModel.CellStyle GetColumnStyle(int column)
+        public NPOI.SS.UserModel.ICellStyle GetColumnStyle(int column)
         {
             short styleIndex = _sheet.GetXFIndexForColAt((short)column);
 
@@ -381,7 +381,7 @@ namespace NPOI.HSSF.UserModel
         /// </summary>
         /// <param name="rowIndex">Index of the row to get.</param>
         /// <returns>the row number or null if its not defined on the _sheet</returns>
-        public NPOI.SS.UserModel.Row GetRow(int rowIndex)
+        public NPOI.SS.UserModel.IRow GetRow(int rowIndex)
         {
             if (!rows.ContainsKey(rowIndex))
                 return null;
@@ -496,10 +496,10 @@ namespace NPOI.HSSF.UserModel
         /// twips (1/20 of  a point)
         /// </summary>
         /// <value>The default height of the row.</value>
-        public short DefaultRowHeight
+        public int DefaultRowHeight
         {
             get { return _sheet.DefaultRowHeight; }
-            set { _sheet.DefaultRowHeight = value; }
+            set { _sheet.DefaultRowHeight = (short)value; }
         }
 
         /// <summary>
@@ -879,7 +879,7 @@ namespace NPOI.HSSF.UserModel
         /// Gets the print setup object.
         /// </summary>
         /// <value>The user model for the print setup object.</value>
-        public NPOI.SS.UserModel.PrintSetup PrintSetup
+        public NPOI.SS.UserModel.IPrintSetup PrintSetup
         {
             get { return new HSSFPrintSetup(this._sheet.PageSettings.PrintSetup); }
         }
@@ -888,7 +888,7 @@ namespace NPOI.HSSF.UserModel
         /// Gets the user model for the document header.
         /// </summary>
         /// <value>The Document header.</value>
-        public NPOI.SS.UserModel.Header Header
+        public NPOI.SS.UserModel.IHeader Header
         {
             get { return new HSSFHeader(this._sheet.PageSettings); }
         }
@@ -897,7 +897,7 @@ namespace NPOI.HSSF.UserModel
         /// Gets the user model for the document footer.
         /// </summary>
         /// <value>The Document footer.</value>
-        public NPOI.SS.UserModel.Footer Footer
+        public NPOI.SS.UserModel.IFooter Footer
         {
             get { return new HSSFFooter(this._sheet.PageSettings); }
         }
@@ -1305,8 +1305,8 @@ namespace NPOI.HSSF.UserModel
 
                 // Copy each cell from the source row to
                 //  the destination row
-                List<Cell> cells = row.Cells;
-                foreach (Cell cell in cells)
+                List<ICell> cells = row.Cells;
+                foreach (ICell cell in cells)
                 {
                     row.RemoveCell(cell);
                     CellValueRecordInterface cellRecord = ((HSSFCell)cell).CellValueRecord;
@@ -1314,7 +1314,7 @@ namespace NPOI.HSSF.UserModel
                     row2Replace.CreateCellFromRecord(cellRecord);
                     _sheet.AddValueRecord(rowNum + n, cellRecord);
 
-                    NPOI.SS.UserModel.Hyperlink link = cell.Hyperlink;
+                    NPOI.SS.UserModel.IHyperlink link = cell.Hyperlink;
                     if (link != null)
                     {
                         link.FirstRow = (link.FirstRow + n);
@@ -1337,7 +1337,7 @@ namespace NPOI.HSSF.UserModel
                         {
                             continue;
                         }
-                        Comment comment = GetCellComment(rowNum, nr.Column);
+                        IComment comment = GetCellComment(rowNum, nr.Column);
                         if (comment != null)
                         {
                             comment.Row = (rowNum + n);
@@ -1387,7 +1387,7 @@ namespace NPOI.HSSF.UserModel
         {
             String msg = "Row[rownum=" + row.RowNum + "] contains cell(s) included in a multi-cell array formula. " +
                     "You cannot change part of an array.";
-            foreach (Cell cell in row.Cells)
+            foreach (ICell cell in row.Cells)
             {
                 HSSFCell hcell = (HSSFCell)cell;
                 if (hcell.IsPartOfArrayFormulaGroup)
@@ -1638,7 +1638,7 @@ namespace NPOI.HSSF.UserModel
         /// This may then be used to Add graphics or charts
         /// </summary>
         /// <returns>The new patriarch.</returns>
-        public NPOI.SS.UserModel.Drawing CreateDrawingPatriarch()
+        public NPOI.SS.UserModel.IDrawing CreateDrawingPatriarch()
         {
             // Create the drawing Group if it doesn't already exist.
             book.CreateDrawingGroup();
@@ -1702,7 +1702,7 @@ namespace NPOI.HSSF.UserModel
         /// start from scratch!
         /// </summary>
         /// <value>The drawing patriarch.</value>
-        public NPOI.SS.UserModel.Drawing DrawingPatriarch
+        public NPOI.SS.UserModel.IDrawing DrawingPatriarch
         {
             get
             {
@@ -1782,7 +1782,7 @@ namespace NPOI.HSSF.UserModel
         {
             _sheet.GroupRowRange(fromRow, toRow, true);
         }
-        public CellRange<Cell> RemoveArrayFormula(Cell cell)
+        public ICellRange<ICell> RemoveArrayFormula(ICell cell)
         {
             if (cell.Sheet != this)
             {
@@ -1797,9 +1797,9 @@ namespace NPOI.HSSF.UserModel
             FormulaRecordAggregate fra = (FormulaRecordAggregate)rec;
             CellRangeAddress range = fra.RemoveArrayFormula(cell.RowIndex, cell.ColumnIndex);
 
-            CellRange<Cell> result = GetCellRange(range);
+            ICellRange<ICell> result = GetCellRange(range);
             // clear all cells in the range
-            foreach (Cell c in result)
+            foreach (ICell c in result)
             {
                 c.SetCellType(CellType.BLANK);
             }
@@ -1808,7 +1808,7 @@ namespace NPOI.HSSF.UserModel
         /**
  * Also creates cells if they don't exist
  */
-        private CellRange<Cell> GetCellRange(CellRangeAddress range)
+        private ICellRange<ICell> GetCellRange(CellRangeAddress range)
         {
             int firstRow = range.FirstRow;
             int firstColumn = range.FirstColumn;
@@ -1816,17 +1816,17 @@ namespace NPOI.HSSF.UserModel
             int lastColumn = range.LastColumn;
             int height = lastRow - firstRow + 1;
             int width = lastColumn - firstColumn + 1;
-            List<Cell> temp = new List<Cell>(height * width);
+            List<ICell> temp = new List<ICell>(height * width);
             for (int rowIn = firstRow; rowIn <= lastRow; rowIn++)
             {
                 for (int colIn = firstColumn; colIn <= lastColumn; colIn++)
                 {
-                    Row row = GetRow(rowIn);
+                    IRow row = GetRow(rowIn);
                     if (row == null)
                     {
                         row = CreateRow(rowIn);
                     }
-                    Cell cell = row.GetCell(colIn);
+                    ICell cell = row.GetCell(colIn);
                     if (cell == null)
                     {
                         cell = row.CreateCell(colIn);
@@ -1834,14 +1834,14 @@ namespace NPOI.HSSF.UserModel
                     temp.Add(cell);
                 }
             }
-            return SSCellRange<Cell>.Create(firstRow, firstColumn, height, width, temp, typeof(HSSFCell));
+            return SSCellRange<ICell>.Create(firstRow, firstColumn, height, width, temp, typeof(HSSFCell));
         }
-        public CellRange<Cell> SetArrayFormula(String formula, CellRangeAddress range)
+        public ICellRange<ICell> SetArrayFormula(String formula, CellRangeAddress range)
         {
             // make sure the formula parses OK first
             int sheetIndex = _workbook.GetSheetIndex(this);
             Ptg[] ptgs = HSSFFormulaParser.Parse(formula, _workbook, FormulaType.ARRAY, sheetIndex);
-            CellRange<Cell> cells = GetCellRange(range);
+            ICellRange<ICell> cells = GetCellRange(range);
 
             foreach (HSSFCell c in cells)
             {
@@ -1886,7 +1886,7 @@ namespace NPOI.HSSF.UserModel
         /// </summary>
         /// <param name="column">the column index</param>
         /// <param name="style">the style to set</param>
-        public void SetDefaultColumnStyle(int column, NPOI.SS.UserModel.CellStyle style)
+        public void SetDefaultColumnStyle(int column, NPOI.SS.UserModel.ICellStyle style)
         {
             _sheet.SetDefaultColumnStyle(column, style.Index);
         }
@@ -1933,7 +1933,7 @@ namespace NPOI.HSSF.UserModel
             //FontRenderContext frc = new FontRenderContext(null, true, true);
 
             HSSFWorkbook wb = new HSSFWorkbook(book);
-            NPOI.SS.UserModel.Font defaultFont = wb.GetFontAt((short)0);
+            NPOI.SS.UserModel.IFont defaultFont = wb.GetFontAt((short)0);
 
             //str = new AttributedString("" + defaultChar);
             //CopyAttributes(defaultFont, str, 0, 1);
@@ -1947,7 +1947,7 @@ namespace NPOI.HSSF.UserModel
             for (IEnumerator it = rows.Values.GetEnumerator(); it.MoveNext(); )
             {
                 HSSFRow row = (HSSFRow)it.Current;
-                NPOI.SS.UserModel.Cell cell = (HSSFCell)row.GetCell(column);
+                NPOI.SS.UserModel.ICell cell = (HSSFCell)row.GetCell(column);
 
                 if (cell == null) continue;
 
@@ -1971,8 +1971,8 @@ namespace NPOI.HSSF.UserModel
                     continue;
                 }
 
-                NPOI.SS.UserModel.CellStyle style = cell.CellStyle;
-                NPOI.SS.UserModel.Font font1 = wb.GetFontAt(style.FontIndex);
+                NPOI.SS.UserModel.ICellStyle style = cell.CellStyle;
+                NPOI.SS.UserModel.IFont font1 = wb.GetFontAt(style.FontIndex);
 
                 if (cell.CellType == NPOI.SS.UserModel.CellType.STRING)
                 {
@@ -1991,7 +1991,7 @@ namespace NPOI.HSSF.UserModel
                                 int idx = rt.GetFontAtIndex(j);
                                 if (idx != 0)
                                 {
-                                    NPOI.SS.UserModel.Font fnt = wb.GetFontAt((short)idx);
+                                    NPOI.SS.UserModel.IFont fnt = wb.GetFontAt((short)idx);
                                     //copyAttributes(fnt, str, j, j + 1);
                                 }
                             }
@@ -2030,7 +2030,7 @@ namespace NPOI.HSSF.UserModel
                     String sval = null;
                     if (cell.CellType == NPOI.SS.UserModel.CellType.NUMERIC)
                     {
-                        NPOI.SS.UserModel.DataFormat dataformat = wb.CreateDataFormat();
+                        NPOI.SS.UserModel.IDataFormat dataformat = wb.CreateDataFormat();
                         short idx = style.DataFormat;
                         String format = "General";
                         if (idx >= 0)
@@ -2138,7 +2138,7 @@ namespace NPOI.HSSF.UserModel
         /// <param name="row">The row.</param>
         /// <param name="column">The column.</param>
         /// <returns>cell comment or null if not found</returns>
-        public Comment GetCellComment(int row, int column)
+        public IComment GetCellComment(int row, int column)
         {
             // Don't call FindCellComment directly, otherwise
             //  two calls to this method will result in two
@@ -2146,7 +2146,7 @@ namespace NPOI.HSSF.UserModel
             HSSFRow r = (HSSFRow)GetRow(row);
             if (r != null)
             {
-                NPOI.SS.UserModel.Cell c = r.GetCell(column);
+                NPOI.SS.UserModel.ICell c = r.GetCell(column);
                 if (c != null)
                 {
                     return c.CellComment;
@@ -2193,7 +2193,7 @@ namespace NPOI.HSSF.UserModel
                 return dvRecords;
             }
         }
-        public NPOI.SS.UserModel.Workbook Workbook
+        public NPOI.SS.UserModel.IWorkbook Workbook
         {
             get
             {
@@ -2210,7 +2210,7 @@ namespace NPOI.HSSF.UserModel
         {
             get
             {
-                NPOI.SS.UserModel.Workbook wb = Workbook;
+                NPOI.SS.UserModel.IWorkbook wb = Workbook;
                 int idx = wb.GetSheetIndex(this);
                 return wb.GetSheetName(idx);
             }

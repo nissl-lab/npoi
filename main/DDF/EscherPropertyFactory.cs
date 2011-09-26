@@ -21,6 +21,7 @@ namespace NPOI.DDF
     using System;
     using System.Collections;
     using NPOI.Util;
+    using System.Collections.Generic;
 
     /// <summary>
     /// Generates a property given a reference into the byte array storing that property.
@@ -35,9 +36,9 @@ namespace NPOI.DDF
         /// <param name="offset">The starting offset into the byte array</param>
         /// <param name="numProperties">The new properties</param>
         /// <returns></returns>        
-        public IList CreateProperties(byte[] data, int offset, short numProperties)
+        public List<EscherProperty> CreateProperties(byte[] data, int offset, short numProperties)
         {
-            IList results = new ArrayList();
+            List<EscherProperty> results = new List<EscherProperty>();
 
             int pos = offset;
 

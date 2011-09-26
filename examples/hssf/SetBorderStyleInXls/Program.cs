@@ -43,17 +43,17 @@ namespace SetBorderStyleInXls
         {
             InitializeWorkbook();
 
-            Sheet sheet = hssfworkbook.CreateSheet("new sheet");
+            ISheet sheet = hssfworkbook.CreateSheet("new sheet");
 
             // Create a row and put some cells in it. Rows are 0 based.
-            Row row = sheet.CreateRow(1);
+            IRow row = sheet.CreateRow(1);
 
             // Create a cell and put a value in it.
-            Cell cell = row.CreateCell(1);
+            ICell cell = row.CreateCell(1);
             cell.SetCellValue(4);
 
             // Style the cell with borders all around.
-            CellStyle style = hssfworkbook.CreateCellStyle();
+           .CellStyle style = hssfworkbook.CreateCellStyle();
             style.BorderBottom= CellBorderType.THIN;
             style.BottomBorderColor= HSSFColor.BLACK.index;
             style.BorderLeft = CellBorderType.DASH_DOT_DOT;

@@ -41,7 +41,7 @@ namespace InsertPicturesInXls
         {
             InitializeWorkbook();
 
-            Sheet sheet1 = hssfworkbook.CreateSheet("PictureSheet");
+            ISheet sheet1 = hssfworkbook.CreateSheet("PictureSheet");
             
             
             HSSFPatriarch patriarch = (HSSFPatriarch)sheet1.CreateDrawingPatriarch();

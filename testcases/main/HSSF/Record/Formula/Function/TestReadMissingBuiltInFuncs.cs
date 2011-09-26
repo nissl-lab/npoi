@@ -40,9 +40,9 @@ namespace TestCases.HSSF.Record.Formula.Function
          * This spReadsheet has examples of calls to the interesting built-in functions in cells A1:A7
          */
         private static String SAMPLE_SPREADSHEET_FILE_NAME = "missingFuncs44675.xls";
-        private static NPOI.SS.UserModel.Sheet _sheet;
+        private static NPOI.SS.UserModel.ISheet _sheet;
 
-        private static NPOI.SS.UserModel.Sheet GetSheet()
+        private static NPOI.SS.UserModel.ISheet GetSheet()
         {
             if (_sheet == null)
             {
@@ -170,7 +170,7 @@ namespace TestCases.HSSF.Record.Formula.Function
 
         private String GetCellFormula(int rowIx)
         {
-            NPOI.SS.UserModel.Sheet sheet;
+            NPOI.SS.UserModel.ISheet sheet;
             try
             {
                 sheet = GetSheet();

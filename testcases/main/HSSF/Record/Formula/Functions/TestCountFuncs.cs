@@ -279,15 +279,15 @@ namespace TestCases.HSSF.Record.Formula.Functions
 
 		    int failureCount = 0;
 		    HSSFWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook(FILE_NAME);
-		    NPOI.SS.UserModel.Sheet sheet = wb.GetSheetAt(0);
+		    NPOI.SS.UserModel.ISheet sheet = wb.GetSheetAt(0);
 		    HSSFFormulaEvaluator fe = new HSSFFormulaEvaluator(wb);
 		    int maxRow = sheet.LastRowNum;
 		    for (int rowIx=START_ROW_IX; rowIx<maxRow; rowIx++) {
-			    NPOI.SS.UserModel.Row row = sheet.GetRow(rowIx);
+			    NPOI.SS.UserModel.IRow row = sheet.GetRow(rowIx);
 			    if(row == null) {
 				    continue;
 			    }
-			    Cell cell = row.GetCell(COL_IX_ACTUAL);
+			    ICell cell = row.GetCell(COL_IX_ACTUAL);
                 NPOI.SS.UserModel.CellValue cv = fe.Evaluate(cell);
 			    double actualValue = cv.NumberValue;
 			    double expectedValue = row.GetCell(COL_IX_EXPECTED).NumericCellValue;

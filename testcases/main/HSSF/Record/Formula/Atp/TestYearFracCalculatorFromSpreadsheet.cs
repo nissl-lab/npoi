@@ -49,7 +49,7 @@ namespace TestCases.HSSF.Record.Formula.ATP
         {
 
             HSSFWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("yearfracExamples.xls");
-            NPOI.SS.UserModel.Sheet sheet = wb.GetSheetAt(0);
+            NPOI.SS.UserModel.ISheet sheet = wb.GetSheetAt(0);
             HSSFFormulaEvaluator formulaEvaluator = new HSSFFormulaEvaluator(wb);
             int nSuccess = 0;
             int nFailures = 0;
@@ -57,9 +57,9 @@ namespace TestCases.HSSF.Record.Formula.ATP
             IEnumerator rowIterator = sheet.GetRowEnumerator();
             while (rowIterator.MoveNext())
             {
-                Row row = (Row)rowIterator.Current;
+                IRow row = (IRow)rowIterator.Current;
 
-                Cell cell = row.GetCell(SS.YEARFRAC_FORMULA_COLUMN);
+                ICell cell = row.GetCell(SS.YEARFRAC_FORMULA_COLUMN);
                 if (cell == null || cell.CellType != NPOI.SS.UserModel.CellType.FORMULA)
                 {
                     continue;
@@ -90,7 +90,7 @@ namespace TestCases.HSSF.Record.Formula.ATP
             }
         }
 
-        private static void ProcessRow(Row row, Cell cell, HSSFFormulaEvaluator formulaEvaluator)
+        private static void ProcessRow(IRow row, ICell cell, HSSFFormulaEvaluator formulaEvaluator)
         {
 
             double startDate = MakeDate(row, SS.START_YEAR_COLUMN);
@@ -122,7 +122,7 @@ namespace TestCases.HSSF.Record.Formula.ATP
             }
         }
 
-        private static double MakeDate(Row row, int yearColumn)
+        private static double MakeDate(IRow row, int yearColumn)
         {
             int year = GetIntCell(row, yearColumn + 0);
             int month = GetIntCell(row, yearColumn + 1);
@@ -132,7 +132,7 @@ namespace TestCases.HSSF.Record.Formula.ATP
             return NPOI.SS.UserModel.DateUtil.GetExcelDate(dt);
         }
 
-        private static int GetIntCell(Row row, int colIx)
+        private static int GetIntCell(IRow row, int colIx)
         {
             double dVal = GetDoubleCell(row, colIx);
             if (Math.Floor(dVal) != dVal)
@@ -143,9 +143,9 @@ namespace TestCases.HSSF.Record.Formula.ATP
             return (int)dVal;
         }
 
-        private static double GetDoubleCell(Row row, int colIx)
+        private static double GetDoubleCell(IRow row, int colIx)
         {
-            Cell cell = row.GetCell(colIx);
+            ICell cell = row.GetCell(colIx);
             if (cell == null)
             {
                 throw new Exception("No cell found at column " + colIx);

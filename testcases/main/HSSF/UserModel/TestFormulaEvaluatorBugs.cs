@@ -64,8 +64,8 @@ namespace TestCases.HSSF.UserModel
             // re-calculate
 
             HSSFWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("44636.xls");
-            NPOI.SS.UserModel.Sheet sheet = wb.GetSheetAt(0);
-            Row row = sheet.GetRow(0);
+            NPOI.SS.UserModel.ISheet sheet = wb.GetSheetAt(0);
+            IRow row = sheet.GetRow(0);
 
             row.GetCell(0).SetCellValue(4.2);
             row.GetCell(2).SetCellValue(25);
@@ -121,10 +121,10 @@ namespace TestCases.HSSF.UserModel
 
             HSSFWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("44297.xls");
 
-            Row row;
-            Cell cell;
+            IRow row;
+            ICell cell;
 
-            NPOI.SS.UserModel.Sheet sheet = wb.GetSheetAt(0);
+            NPOI.SS.UserModel.ISheet sheet = wb.GetSheetAt(0);
 
             HSSFFormulaEvaluator eva = new HSSFFormulaEvaluator(wb);
 
@@ -186,19 +186,19 @@ namespace TestCases.HSSF.UserModel
 
             HSSFWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("SingleLetterRanges.xls");
 
-            NPOI.SS.UserModel.Sheet sheet = wb.GetSheetAt(0);
+            NPOI.SS.UserModel.ISheet sheet = wb.GetSheetAt(0);
 
             HSSFFormulaEvaluator eva = new HSSFFormulaEvaluator(wb);
 
             // =index(C:C,2,1) -> 2
-            Row rowIDX = sheet.GetRow(3);
+            IRow rowIDX = sheet.GetRow(3);
             // =sum(C:C) -> 6
-            Row rowSUM = sheet.GetRow(4);
+            IRow rowSUM = sheet.GetRow(4);
             // =sum(C:D) -> 66
-            Row rowSUM2D = sheet.GetRow(5);
+            IRow rowSUM2D = sheet.GetRow(5);
 
             // Test the sum
-            Cell cellSUM = rowSUM.GetCell(0);
+            ICell cellSUM = rowSUM.GetCell(0);
 
             FormulaRecordAggregate frec = (FormulaRecordAggregate)((HSSFCell)cellSUM).CellValueRecord;
             Ptg[] ops = frec.FormulaRecord.ParsedExpression;
@@ -227,12 +227,12 @@ namespace TestCases.HSSF.UserModel
             // Test the index
             // Again, the formula string will be right but
             // lacking row count, Evaluated will be right
-            Cell cellIDX = rowIDX.GetCell(0);
+            ICell cellIDX = rowIDX.GetCell(0);
             Assert.AreEqual("INDEX(C:C,2,1)", cellIDX.CellFormula);
             Assert.AreEqual(2, eva.Evaluate(cellIDX).NumberValue, 0);
 
             // Across two colums
-            Cell cellSUM2D = rowSUM2D.GetCell(0);
+            ICell cellSUM2D = rowSUM2D.GetCell(0);
             Assert.AreEqual("SUM(C:D)", cellSUM2D.CellFormula);
             Assert.AreEqual(66, eva.Evaluate(cellSUM2D).NumberValue, 0);
         }
@@ -244,10 +244,10 @@ namespace TestCases.HSSF.UserModel
         public void TestEvaluateBooleanInCell_bug44508()
         {
             HSSFWorkbook wb = new HSSFWorkbook();
-            NPOI.SS.UserModel.Sheet sheet = wb.CreateSheet();
+            NPOI.SS.UserModel.ISheet sheet = wb.CreateSheet();
             wb.SetSheetName(0, "Sheet1");
-            Row row = sheet.CreateRow(0);
-            Cell cell = row.CreateCell(0);
+            IRow row = sheet.CreateRow(0);
+            ICell cell = row.CreateCell(0);
 
             cell.CellFormula = ("1=1");
 
@@ -274,16 +274,16 @@ namespace TestCases.HSSF.UserModel
             int numSheets = wb.NumberOfSheets;
             for (int i = 0; i < numSheets; i++)
             {
-                NPOI.SS.UserModel.Sheet s = wb.GetSheetAt(i);
+                NPOI.SS.UserModel.ISheet s = wb.GetSheetAt(i);
                 HSSFFormulaEvaluator eval = new HSSFFormulaEvaluator(wb);
 
                 for (IEnumerator rows = s.GetRowEnumerator(); rows.MoveNext(); )
                 {
-                    Row r = (Row)rows.Current;
+                    IRow r = (IRow)rows.Current;
 
                     for (IEnumerator cells = r.GetCellEnumerator(); cells.MoveNext(); )
                     {
-                        Cell c = (Cell)cells.Current;
+                        ICell c = (ICell)cells.Current;
                         eval.EvaluateFormulaCell(c);
                     }
                 }
@@ -293,9 +293,9 @@ namespace TestCases.HSSF.UserModel
         public void TestEvaluateInCellWithErrorCode_bug44950()
         {
             HSSFWorkbook wb = new HSSFWorkbook();
-            NPOI.SS.UserModel.Sheet sheet = wb.CreateSheet("Sheet1");
-            Row row = sheet.CreateRow(1);
-            Cell cell = row.CreateCell(0);
+            NPOI.SS.UserModel.ISheet sheet = wb.CreateSheet("Sheet1");
+            IRow row = sheet.CreateRow(1);
+            ICell cell = row.CreateCell(0);
             cell.CellFormula = ("na()"); // this formula Evaluates to an Excel error code '#N/A'
             HSSFFormulaEvaluator fe = new HSSFFormulaEvaluator(wb);
             try
@@ -355,11 +355,11 @@ namespace TestCases.HSSF.UserModel
             // Firstly set up a sequence of formula cells where each depends on the  previous multiple
             // times.  Without caching, each subsequent cell take about 4 times longer to Evaluate.
             HSSFWorkbook wb = new HSSFWorkbook();
-            NPOI.SS.UserModel.Sheet sheet = wb.CreateSheet("Sheet1");
-            Row row = sheet.CreateRow(0);
+            NPOI.SS.UserModel.ISheet sheet = wb.CreateSheet("Sheet1");
+            IRow row = sheet.CreateRow(0);
             for (int i = 1; i < 10; i++)
             {
-                Cell cell = row.CreateCell(i);
+                ICell cell = row.CreateCell(i);
                 char prevCol = (char)('A' + i - 1);
                 String prevCell = prevCol + "1";
                 // this formula is inspired by the offending formula of the attachment for bug 45376
@@ -371,7 +371,7 @@ namespace TestCases.HSSF.UserModel
             row.CreateCell(0).SetCellValue(new DateTime(2000,1,1,0,0,0));
 
             // Choose cell A9, so that the Assert.Failing Test case doesn't take too long to execute.
-            Cell cell1 = row.GetCell(8);
+            ICell cell1 = row.GetCell(8);
             EvalListener evalListener = new EvalListener();
             WorkbookEvaluator evaluator = WorkbookEvaluatorTestHelper.CreateEvaluator(wb, evalListener);
             ValueEval ve = evaluator.Evaluate(HSSFEvaluationTestHelper.WrapCell(cell1));

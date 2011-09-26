@@ -168,7 +168,7 @@ namespace NPOI.HSSF.Extractor
                     int lastRow = sheet.LastRowNum;
                     for (int j = firstRow; j <= lastRow; j++)
                     {
-                        Row row = sheet.GetRow(j);
+                        IRow row = sheet.GetRow(j);
                         if (row == null) { continue; }
 
                         // Check each cell in turn
@@ -181,7 +181,7 @@ namespace NPOI.HSSF.Extractor
 
                         for (int k = firstCell; k < lastCell; k++)
                         {
-                            Cell cell = row.GetCell(k);
+                            ICell cell = row.GetCell(k);
                             bool outputContents = true;
 
                             if (cell == null)
@@ -216,7 +216,7 @@ namespace NPOI.HSSF.Extractor
                                             switch (cell.CachedFormulaResultType)
                                             {
                                                 case CellType.STRING:
-                                                    RichTextString str = cell.RichStringCellValue;
+                                                    IRichTextString str = cell.RichStringCellValue;
                                                     if (str != null && str.Length > 0)
                                                     {
                                                         text.Append(str.ToString());
@@ -240,7 +240,7 @@ namespace NPOI.HSSF.Extractor
                                 }
 
                                 // Output the comment, if requested and exists
-                                NPOI.SS.UserModel.Comment comment = cell.CellComment;
+                                NPOI.SS.UserModel.IComment comment = cell.CellComment;
                                 if (includeCellComments && comment != null)
                                 {
                                     // Replace any newlines with spaces, otherwise it
@@ -279,7 +279,7 @@ namespace NPOI.HSSF.Extractor
         /// </summary>
         /// <param name="hf">The header or footer</param>
         /// <returns></returns>
-        private String ExtractHeaderFooter(NPOI.SS.UserModel.HeaderFooter hf)
+        private String ExtractHeaderFooter(NPOI.SS.UserModel.IHeaderFooter hf)
         {
             StringBuilder text = new StringBuilder();
 

@@ -19,7 +19,7 @@ namespace NPOI.SS.UserModel
 {
     using System;
 
-    public interface DataFormat
+    public interface IDataFormat
     {
         /**
          * get the format index that matches the given format string.

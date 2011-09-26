@@ -39,7 +39,7 @@ namespace SetAlignmentInXls
         {
             InitializeWorkbook();
 
-            Sheet sheet1 = hssfworkbook.CreateSheet("Sheet1");
+            ISheet sheet1 = hssfworkbook.CreateSheet("Sheet1");
 
             //set the column width respectively
             sheet1.SetColumnWidth(0, 3000);
@@ -49,13 +49,13 @@ namespace SetAlignmentInXls
             for (int i = 1; i <= 10; i++)
             {
                 //create the row
-                Row row = sheet1.CreateRow(i);
+                IRow row = sheet1.CreateRow(i);
                 //set height of the row
                 row.HeightInPoints = 100;
 
                 //create the first cell
                 row.CreateCell(0).SetCellValue("Left");
-                CellStyle styleLeft=hssfworkbook.CreateCellStyle();
+               .CellStyle styleLeft=hssfworkbook.CreateCellStyle();
                 styleLeft.Alignment = HorizontalAlignment.LEFT;
                 styleLeft.VerticalAlignment = VerticalAlignment.TOP;
                 row.GetCell(0).CellStyle = styleLeft;
@@ -64,7 +64,7 @@ namespace SetAlignmentInXls
 
                 //create the second cell
                 row.CreateCell(1).SetCellValue("Center Hello World Hello WorldHello WorldHello WorldHello WorldHello World");
-                CellStyle styleMiddle = hssfworkbook.CreateCellStyle();
+               .CellStyle styleMiddle = hssfworkbook.CreateCellStyle();
                 styleMiddle.Alignment = HorizontalAlignment.CENTER;
                 styleMiddle.VerticalAlignment = VerticalAlignment.CENTER;
                 row.GetCell(1).CellStyle = styleMiddle;
@@ -74,7 +74,7 @@ namespace SetAlignmentInXls
 
                 //create the third cell
                 row.CreateCell(2).SetCellValue("Right");
-                CellStyle styleRight = hssfworkbook.CreateCellStyle();
+               .CellStyle styleRight = hssfworkbook.CreateCellStyle();
                 styleRight.Alignment = HorizontalAlignment.JUSTIFY;
                 styleRight.VerticalAlignment = VerticalAlignment.BOTTOM;
                 row.GetCell(2).CellStyle = styleRight;

@@ -43,8 +43,8 @@ namespace TestCases.HSSF.UserModel
         public void TestEvaluateSimple()
         {
             HSSFWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("TestNames.xls");
-            NPOI.SS.UserModel.Sheet sheet = wb.GetSheetAt(0);
-            Cell cell = sheet.GetRow(8).GetCell(0);
+            NPOI.SS.UserModel.ISheet sheet = wb.GetSheetAt(0);
+            ICell cell = sheet.GetRow(8).GetCell(0);
             HSSFFormulaEvaluator fe = new HSSFFormulaEvaluator(wb);
             NPOI.SS.UserModel.CellValue cv = fe.Evaluate(cell);
             Assert.AreEqual(NPOI.SS.UserModel.CellType.NUMERIC, cv.CellType);
@@ -54,11 +54,11 @@ namespace TestCases.HSSF.UserModel
         public void TestFullColumnRefs()
         {
             HSSFWorkbook wb = new HSSFWorkbook();
-            NPOI.SS.UserModel.Sheet sheet = wb.CreateSheet("Sheet1");
-            Row row = sheet.CreateRow(0);
-            Cell cell0 = row.CreateCell(0);
+            NPOI.SS.UserModel.ISheet sheet = wb.CreateSheet("Sheet1");
+            IRow row = sheet.CreateRow(0);
+            ICell cell0 = row.CreateCell(0);
             cell0.CellFormula = ("sum(D:D)");
-            Cell cell1 = row.CreateCell(1);
+            ICell cell1 = row.CreateCell(1);
             cell1.CellFormula = ("sum(D:E)");
 
             // some values in column D
@@ -83,9 +83,9 @@ namespace TestCases.HSSF.UserModel
             Assert.AreEqual(56.0, fe.Evaluate(cell1).NumberValue, 0.0);
         }
 
-        private static void setValue(NPOI.SS.UserModel.Sheet sheet, int rowIndex, int colIndex, double value)
+        private static void setValue(NPOI.SS.UserModel.ISheet sheet, int rowIndex, int colIndex, double value)
         {
-            Row row = sheet.GetRow(rowIndex);
+            IRow row = sheet.GetRow(rowIndex);
             if (row == null)
             {
                 row = sheet.CreateRow(rowIndex);
@@ -103,8 +103,8 @@ namespace TestCases.HSSF.UserModel
             HSSFWorkbook wb = new HSSFWorkbook();
             HSSFFormulaEvaluator fe = new HSSFFormulaEvaluator(wb);
             Assert.IsNull(fe.Evaluate(null));
-            NPOI.SS.UserModel.Sheet sheet = wb.CreateSheet("Sheet1");
-            Cell cell = sheet.CreateRow(0).CreateCell(0);
+            NPOI.SS.UserModel.ISheet sheet = wb.CreateSheet("Sheet1");
+            ICell cell = sheet.CreateRow(0).CreateCell(0);
             Assert.IsNull(fe.Evaluate(cell));
         }
         /**
@@ -115,10 +115,10 @@ namespace TestCases.HSSF.UserModel
         {
 
             HSSFWorkbook wb = new HSSFWorkbook();
-            Sheet sheet = wb.CreateSheet("Sheet1");
-            Row row = sheet.CreateRow(0);
-            Cell cellA1 = row.CreateCell(0);
-            Cell cellB1 = row.CreateCell(1);
+            ISheet sheet = wb.CreateSheet("Sheet1");
+            IRow row = sheet.CreateRow(0);
+            ICell cellA1 = row.CreateCell(0);
+            ICell cellB1 = row.CreateCell(1);
             cellB1.CellFormula = "A1+1";
             HSSFFormulaEvaluator fe = new HSSFFormulaEvaluator(wb);
 
@@ -153,19 +153,19 @@ namespace TestCases.HSSF.UserModel
         {
             // Mock up a spreadsheet to match the critical details of the sample
             HSSFWorkbook wb = new HSSFWorkbook();
-            Sheet sheet = wb.CreateSheet("Input");
-            Name definedName = wb.CreateName();
+            ISheet sheet = wb.CreateSheet("Input");
+            IName definedName = wb.CreateName();
             definedName.NameName = ("Is_Multicar_Vehicle");
             definedName.RefersToFormula = ("Input!$B$17:$G$17");
 
             // Set up some data and the formula
-            Row row17 = sheet.CreateRow(16);
+            IRow row17 = sheet.CreateRow(16);
             row17.CreateCell(0).SetCellValue(25.0);
             row17.CreateCell(1).SetCellValue(1.33);
             row17.CreateCell(2).SetCellValue(4.0);
 
-            Row row = sheet.CreateRow(0);
-            Cell cellA1 = row.CreateCell(0);
+            IRow row = sheet.CreateRow(0);
+            ICell cellA1 = row.CreateCell(0);
             cellA1.CellFormula = ("SUM(Is_Multicar_Vehicle)");
 
             // Set the complex flag - POI doesn't usually manipulate this flag
@@ -219,9 +219,9 @@ namespace TestCases.HSSF.UserModel
 
             // Set up a simple IF() formula that has measurable evaluation cost for its operands.
             HSSFWorkbook wb = new HSSFWorkbook();
-            Sheet sheet = wb.CreateSheet("Sheet1");
-            Row row = sheet.CreateRow(0);
-            Cell cellA1 = row.CreateCell(0);
+            ISheet sheet = wb.CreateSheet("Sheet1");
+            IRow row = sheet.CreateRow(0);
+            ICell cellA1 = row.CreateCell(0);
             cellA1.CellFormula = "if(B1,C1,D1+E1+F1)";
             // populate cells B1..F1 with simple formulas instead of plain values so we can use
             // EvaluationListener to check which parts of the first formula get evaluated

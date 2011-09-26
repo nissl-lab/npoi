@@ -54,8 +54,8 @@ namespace TestCases.HSSF.UserModel
         public void TestCaseInsensitiveNames()
         {
             HSSFWorkbook b = new HSSFWorkbook();
-            NPOI.SS.UserModel.Sheet originalSheet = b.CreateSheet("Sheet1");
-            NPOI.SS.UserModel.Sheet fetchedSheet = b.GetSheet("sheet1");
+            NPOI.SS.UserModel.ISheet originalSheet = b.CreateSheet("Sheet1");
+            NPOI.SS.UserModel.ISheet fetchedSheet = b.GetSheet("sheet1");
             if (fetchedSheet == null)
             {
                 throw new AssertFailedException("Identified bug 44892");
@@ -166,7 +166,7 @@ namespace TestCases.HSSF.UserModel
         public void TestReadWriteWithCharts()
         {
             HSSFWorkbook b;
-            NPOI.SS.UserModel.Sheet s;
+            NPOI.SS.UserModel.ISheet s;
 
             // Single chart, two sheets
             b = OpenSample("44010-SingleChart.xls");
@@ -237,10 +237,10 @@ namespace TestCases.HSSF.UserModel
         public void TestSelectedSheet_bug44523()
         {
             HSSFWorkbook wb = new HSSFWorkbook();
-            NPOI.SS.UserModel.Sheet sheet1 = wb.CreateSheet("Sheet1");
-            NPOI.SS.UserModel.Sheet sheet2 = wb.CreateSheet("Sheet2");
-            NPOI.SS.UserModel.Sheet sheet3 = wb.CreateSheet("Sheet3");
-            NPOI.SS.UserModel.Sheet sheet4 = wb.CreateSheet("Sheet4");
+            NPOI.SS.UserModel.ISheet sheet1 = wb.CreateSheet("Sheet1");
+            NPOI.SS.UserModel.ISheet sheet2 = wb.CreateSheet("Sheet2");
+            NPOI.SS.UserModel.ISheet sheet3 = wb.CreateSheet("Sheet3");
+            NPOI.SS.UserModel.ISheet sheet4 = wb.CreateSheet("Sheet4");
 
             ConfirmActiveSelected(sheet1, true);
             ConfirmActiveSelected(sheet2, false);
@@ -330,11 +330,11 @@ namespace TestCases.HSSF.UserModel
         public void TestActiveSheetAfterDelete_bug40414()
         {
             HSSFWorkbook wb = new HSSFWorkbook();
-            NPOI.SS.UserModel.Sheet sheet0 = wb.CreateSheet("Sheet0");
-            NPOI.SS.UserModel.Sheet sheet1 = wb.CreateSheet("Sheet1");
-            NPOI.SS.UserModel.Sheet sheet2 = wb.CreateSheet("Sheet2");
-            NPOI.SS.UserModel.Sheet sheet3 = wb.CreateSheet("Sheet3");
-            NPOI.SS.UserModel.Sheet sheet4 = wb.CreateSheet("Sheet4");
+            NPOI.SS.UserModel.ISheet sheet0 = wb.CreateSheet("Sheet0");
+            NPOI.SS.UserModel.ISheet sheet1 = wb.CreateSheet("Sheet1");
+            NPOI.SS.UserModel.ISheet sheet2 = wb.CreateSheet("Sheet2");
+            NPOI.SS.UserModel.ISheet sheet3 = wb.CreateSheet("Sheet3");
+            NPOI.SS.UserModel.ISheet sheet4 = wb.CreateSheet("Sheet4");
 
             // Confirm default activation/selection
             ConfirmActiveSelected(sheet0, true);
@@ -396,13 +396,13 @@ namespace TestCases.HSSF.UserModel
             ConfirmActiveSelected(sheet0, true, true);
         }
 
-        private static void ConfirmActiveSelected(NPOI.SS.UserModel.Sheet sheet, bool expected)
+        private static void ConfirmActiveSelected(NPOI.SS.UserModel.ISheet sheet, bool expected)
         {
             ConfirmActiveSelected(sheet, expected, expected);
         }
 
 
-        private static void ConfirmActiveSelected(NPOI.SS.UserModel.Sheet sheet,
+        private static void ConfirmActiveSelected(NPOI.SS.UserModel.ISheet sheet,
                 bool expectedActive, bool expectedSelected)
         {
             Assert.AreEqual(expectedActive, sheet.IsActive, "active");
@@ -452,7 +452,7 @@ namespace TestCases.HSSF.UserModel
 
             Area3DPtg ptg;
             NameRecord nr;
-            NPOI.SS.UserModel.Name n;
+            NPOI.SS.UserModel.IName n;
 
             /* ======= Name pointing to deleted sheet ====== */
 

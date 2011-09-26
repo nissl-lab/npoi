@@ -24,7 +24,7 @@ namespace NPOI.HSSF.UserModel
     /// @author Glen Stampoultzis (glens at apache.org)
     /// </summary>
     [Serializable]
-    public abstract class HSSFShape:Shape
+    public abstract class HSSFShape:IShape
     {
         public static int LINEWIDTH_ONE_PT = 12700;
         public static int LINEWIDTH_DEFAULT = 9525;
@@ -42,7 +42,7 @@ namespace NPOI.HSSF.UserModel
         public static int LINESTYLE_LONGDASHDOTDOTGEL = 10; // long dash short dash short dash
         public static int LINESTYLE_NONE = -1;
 
-        Shape parent;
+        IShape parent;
         HSSFAnchor anchor;
         int lineStyleColor = 0x08000040;
         int fillColor = 0x08000009;
@@ -55,7 +55,7 @@ namespace NPOI.HSSF.UserModel
         /// </summary>
         /// <param name="parent">The parent.</param>
         /// <param name="anchor">The anchor.</param>
-        protected HSSFShape(Shape parent, HSSFAnchor anchor)
+        protected HSSFShape(IShape parent, HSSFAnchor anchor)
         {
             this.parent = parent;
             this.Anchor = anchor;
@@ -65,7 +65,7 @@ namespace NPOI.HSSF.UserModel
         /// Gets the parent shape.
         /// </summary>
         /// <value>The parent.</value>
-        public Shape Parent
+        public IShape Parent
         {
             get { return parent; }
         }

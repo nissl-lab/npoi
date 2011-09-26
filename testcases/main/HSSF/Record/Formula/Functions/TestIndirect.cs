@@ -31,7 +31,7 @@ namespace NPOI.HSSF.Record.Formula.Functions
     [TestClass]
     public class TestIndirect
     {
-        private void CreateDataRow(Sheet sheet, int rowIndex, params double[] vals)
+        private void CreateDataRow(ISheet sheet, int rowIndex, params double[] vals)
         {
             HSSFRow row = (NPOI.HSSF.UserModel.HSSFRow)sheet.CreateRow(rowIndex);
             for (int i = 0; i < vals.Length; i++)
@@ -43,9 +43,9 @@ namespace NPOI.HSSF.Record.Formula.Functions
         private HSSFWorkbook CreateWBA()
         {
             HSSFWorkbook wb = new HSSFWorkbook();
-            Sheet sheet1 = wb.CreateSheet("Sheet1");
-            Sheet sheet2 = wb.CreateSheet("Sheet2");
-            Sheet sheet3 = wb.CreateSheet("John's sales");
+            ISheet sheet1 = wb.CreateSheet("Sheet1");
+            ISheet sheet2 = wb.CreateSheet("Sheet2");
+            ISheet sheet3 = wb.CreateSheet("John's sales");
 
             CreateDataRow(sheet1, 0, 11, 12, 13, 14);
             CreateDataRow(sheet1, 1, 21, 22, 23, 24);
@@ -63,9 +63,9 @@ namespace NPOI.HSSF.Record.Formula.Functions
         private HSSFWorkbook CreateWBB()
         {
             HSSFWorkbook wb = new HSSFWorkbook();
-            Sheet sheet1 = wb.CreateSheet("Sheet1");
-            Sheet sheet2 = wb.CreateSheet("Sheet2");
-            Sheet sheet3 = wb.CreateSheet("## Look here!");
+            ISheet sheet1 = wb.CreateSheet("Sheet1");
+            ISheet sheet2 = wb.CreateSheet("Sheet2");
+            ISheet sheet3 = wb.CreateSheet("## Look here!");
 
             CreateDataRow(sheet1, 0, 400, 440, 480, 520);
             CreateDataRow(sheet1, 1, 420, 460, 500, 540);
@@ -83,7 +83,7 @@ namespace NPOI.HSSF.Record.Formula.Functions
         {
 
             HSSFWorkbook wbA = CreateWBA();
-            Cell c = wbA.GetSheetAt(0).CreateRow(5).CreateCell(2);
+            ICell c = wbA.GetSheetAt(0).CreateRow(5).CreateCell(2);
             HSSFFormulaEvaluator feA = new HSSFFormulaEvaluator(wbA);
 
             // non-error cases
@@ -136,11 +136,11 @@ namespace NPOI.HSSF.Record.Formula.Functions
         public void TestMultipleWorkbooks()
         {
             HSSFWorkbook wbA = CreateWBA();
-            Cell cellA = wbA.GetSheetAt(0).CreateRow(10).CreateCell(0);
+            ICell cellA = wbA.GetSheetAt(0).CreateRow(10).CreateCell(0);
             HSSFFormulaEvaluator feA = new HSSFFormulaEvaluator(wbA);
 
             HSSFWorkbook wbB = CreateWBB();
-            Cell cellB = wbB.GetSheetAt(0).CreateRow(10).CreateCell(0);
+            ICell cellB = wbB.GetSheetAt(0).CreateRow(10).CreateCell(0);
             HSSFFormulaEvaluator feB = new HSSFFormulaEvaluator(wbB);
 
             String[] workbookNames = { "MyBook", "Figures for January", };
@@ -155,7 +155,7 @@ namespace NPOI.HSSF.Record.Formula.Functions
             Confirm(feA, cellA, "INDIRECT(\"'[Figures for January]Sheet1'!A11\")", 50); // points to cellB
         }
 
-        private void Confirm(FormulaEvaluator fe, Cell cell, String formula,
+        private void Confirm(FormulaEvaluator fe, ICell cell, String formula,
                 double expectedResult)
         {
             fe.ClearAllCachedResultValues();
@@ -167,7 +167,7 @@ namespace NPOI.HSSF.Record.Formula.Functions
             }
             Assert.AreEqual(expectedResult, cv.NumberValue, 0.0);
         }
-        private void Confirm(FormulaEvaluator fe, Cell cell, String formula,
+        private void Confirm(FormulaEvaluator fe, ICell cell, String formula,
                 ErrorEval expectedResult)
         {
             fe.ClearAllCachedResultValues();

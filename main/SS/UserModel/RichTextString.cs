@@ -25,7 +25,7 @@ namespace NPOI.SS.UserModel
      * @author Glen Stampoultzis (glens at apache.org)
      * @author Jason Height (jheight at apache.org)
      */
-    public interface RichTextString
+    public interface IRichTextString
     {
 
         /**
@@ -44,13 +44,13 @@ namespace NPOI.SS.UserModel
          * @param endIndex      The end index to apply to font to (exclusive)
          * @param font          The index of the font to use.
          */
-        void ApplyFont(int startIndex, int endIndex, Font font);
+        void ApplyFont(int startIndex, int endIndex, IFont font);
 
         /**
          * Sets the font of the entire string.
          * @param font          The font to use.
          */
-        void ApplyFont(Font font);
+        void ApplyFont(IFont font);
 
         short GetFontAtIndex(int i);
         /**

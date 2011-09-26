@@ -29,14 +29,14 @@ namespace NPOI.HSSF.UserModel
     {
 
         private EvaluationSheet _evalSheet;
-        private NPOI.SS.UserModel.Cell _cell;
+        private NPOI.SS.UserModel.ICell _cell;
 
-        public HSSFEvaluationCell(NPOI.SS.UserModel.Cell cell, EvaluationSheet evalSheet)
+        public HSSFEvaluationCell(NPOI.SS.UserModel.ICell cell, EvaluationSheet evalSheet)
         {
             _cell = cell;
             _evalSheet = evalSheet;
         }
-        public HSSFEvaluationCell(NPOI.SS.UserModel.Cell cell)
+        public HSSFEvaluationCell(NPOI.SS.UserModel.ICell cell)
         {
             _cell = cell;
             _evalSheet = new HSSFEvaluationSheet((HSSFSheet)cell.Sheet);
@@ -48,14 +48,14 @@ namespace NPOI.HSSF.UserModel
         }
         public override bool Equals(Object obj)
         {
-            NPOI.SS.UserModel.Cell cellb = ((HSSFEvaluationCell)obj)._cell;
+            NPOI.SS.UserModel.ICell cellb = ((HSSFEvaluationCell)obj)._cell;
             return _cell.RowIndex == cellb.RowIndex
                 && _cell.ColumnIndex == cellb.ColumnIndex
                 && _cell.CellFormula == cellb.CellFormula
                 && _cell.Sheet == cellb.Sheet;
         }
 
-        public NPOI.SS.UserModel.Cell HSSFCell
+        public NPOI.SS.UserModel.ICell HSSFCell
         {
             get
             {

@@ -42,19 +42,19 @@ namespace ColorfulMatrixTable
         {
             InitializeWorkbook();
 
-            Sheet sheet1 = hssfworkbook.CreateSheet("Sheet1");
+            ISheet sheet1 = hssfworkbook.CreateSheet("Sheet1");
 
             int x = 1;
             for (int i = 0; i <15; i++)
             {
-                Row row = sheet1.CreateRow(i);
+                IRow row = sheet1.CreateRow(i);
                 for (int j = 0; j < 15; j++)
                 {
-                    Cell cell = row.CreateCell(j);
+                    ICell cell = row.CreateCell(j);
                     if (x % 2 == 0)
                     {
                         //fill background with blue
-                        CellStyle style1 = hssfworkbook.CreateCellStyle();
+                       .CellStyle style1 = hssfworkbook.CreateCellStyle();
                         style1.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.BLUE.index2;
                         style1.FillPattern = FillPatternType.SOLID_FOREGROUND;
                         cell.CellStyle = style1;
@@ -62,7 +62,7 @@ namespace ColorfulMatrixTable
                     else
                     {
                         //fill background with yellow
-                        CellStyle style1 = hssfworkbook.CreateCellStyle();
+                       .CellStyle style1 = hssfworkbook.CreateCellStyle();
                         style1.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.YELLOW.index2;
                         style1.FillPattern = FillPatternType.SOLID_FOREGROUND;
                         cell.CellStyle = style1;

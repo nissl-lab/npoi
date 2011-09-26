@@ -40,12 +40,12 @@ namespace NPOI.SS.UserModel
         [TestMethod]
         public void TestBasicTypes()
         {
-            Workbook wb = _testDataProvider.CreateWorkbook();
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
             CreationHelper CreateHelper = wb.GetCreationHelper();
 
-            Cell cell;
-            Hyperlink link;
-            Sheet sheet = wb.CreateSheet("Hyperlinks");
+            ICell cell;
+            IHyperlink link;
+            ISheet sheet = wb.CreateSheet("Hyperlinks");
 
             //URL
             cell = sheet.CreateRow(0).CreateCell((short)0);
@@ -72,7 +72,7 @@ namespace NPOI.SS.UserModel
             //link to a place in this workbook
 
             //create a target sheet and cell
-            Sheet sheet2 = wb.CreateSheet("Target Sheet");
+            ISheet sheet2 = wb.CreateSheet("Target Sheet");
             sheet2.CreateRow(0).CreateCell((short)0).SetCellValue("Target Cell");
 
             cell = sheet.CreateRow(3).CreateCell((short)0);

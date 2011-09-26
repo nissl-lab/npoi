@@ -38,8 +38,8 @@ namespace TestCases.HSSF.Record.Formula.Eval
         {
             HSSFWorkbook wb = new HSSFWorkbook();
             HSSFFormulaEvaluator fe = new HSSFFormulaEvaluator(wb);
-            Sheet sheet = wb.CreateSheet("Sheet1");
-            Cell cell = sheet.CreateRow(0).CreateCell(0);
+            ISheet sheet = wb.CreateSheet("Sheet1");
+            ICell cell = sheet.CreateRow(0).CreateCell(0);
 
             cell.CellFormula = "if(true,)";
             fe.ClearAllCachedResultValues();
@@ -65,8 +65,8 @@ namespace TestCases.HSSF.Record.Formula.Eval
         {
             HSSFWorkbook wb = new HSSFWorkbook();
             HSSFFormulaEvaluator fe = new HSSFFormulaEvaluator(wb);
-            Sheet sheet = wb.CreateSheet("Sheet1");
-            Cell cell = sheet.CreateRow(0).CreateCell(0);
+            ISheet sheet = wb.CreateSheet("Sheet1");
+            ICell cell = sheet.CreateRow(0).CreateCell(0);
 
             cell.CellFormula = "COUNT(C5,,,,)"; // 4 missing args, C5 is blank 
             Assert.AreEqual(4.0, fe.Evaluate(cell).NumberValue, 0.0);

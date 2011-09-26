@@ -32,7 +32,7 @@ namespace NPOI.HSSF.UserModel
     /// @author Glen Stampoultzis
     /// @author Yegor Kozlov (yegor at apache.org)
     /// </summary>
-    public class HSSFPicture : HSSFSimpleShape,Picture
+    public class HSSFPicture : HSSFSimpleShape,IPicture
     {
         /**
          * width of 1px in columns with default width in Units of 1/256 of a Char width
@@ -92,7 +92,7 @@ namespace NPOI.HSSF.UserModel
             HSSFClientAnchor anchor = (HSSFClientAnchor)Anchor;
             anchor.AnchorType = 2;
 
-            ClientAnchor pref = GetPreferredSize(scale);
+            IClientAnchor pref = GetPreferredSize(scale);
 
             int row2 = anchor.Row1 + (pref.Row2 - pref.Row1);
             int col2 = anchor.Col1 + (pref.Col2 - pref.Col1);
@@ -174,7 +174,7 @@ namespace NPOI.HSSF.UserModel
         /// Calculate the preferred size for this picture.
         /// </summary>
         /// <returns>HSSFClientAnchor with the preferred size for this image</returns>
-        public NPOI.SS.UserModel.ClientAnchor GetPreferredSize()
+        public NPOI.SS.UserModel.IClientAnchor GetPreferredSize()
         {
             return GetPreferredSize(1.0);
         }
@@ -201,7 +201,7 @@ namespace NPOI.HSSF.UserModel
         private float GetRowHeightInPixels(int i)
         {
 
-            Row row = patriarch.sheet.GetRow(i);
+            IRow row = patriarch.sheet.GetRow(i);
             float height;
             if (row != null) height = row.Height;
             else height = patriarch.sheet.DefaultRowHeight;

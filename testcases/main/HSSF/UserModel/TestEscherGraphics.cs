@@ -51,7 +51,7 @@ namespace TestCases.HSSF.UserModel
         {
             workbook = new HSSFWorkbook();
 
-            NPOI.SS.UserModel.Sheet sheet = workbook.CreateSheet("Test");
+            NPOI.SS.UserModel.ISheet sheet = workbook.CreateSheet("Test");
             patriarch = (HSSFPatriarch)sheet.CreateDrawingPatriarch();
             escherGroupA = patriarch.CreateGroup(new HSSFClientAnchor(0, 0, 1022, 255, (short)0, 0, (short)0, 0));
             escherGroupB = patriarch.CreateGroup(new HSSFClientAnchor(20, 30, 500, 200, (short)0, 0, (short)0, 0));

@@ -15,13 +15,13 @@ namespace ShrinkToFitColumnInXls
         {
             InitializeWorkbook();
 
-            Sheet sheet = hssfworkbook.CreateSheet("Sheet1");
-            Row row = sheet.CreateRow(0);
+            ISheet sheet = hssfworkbook.CreateSheet("Sheet1");
+            IRow row = sheet.CreateRow(0);
             //create cell value
-            Cell cell1 = row.CreateCell(0);
+            ICell cell1 = row.CreateCell(0);
             cell1.SetCellValue("This is a test");
             //apply ShrinkToFit to cellstyle
-            CellStyle cellstyle1 = hssfworkbook.CreateCellStyle();
+           .CellStyle cellstyle1 = hssfworkbook.CreateCellStyle();
             cellstyle1.ShrinkToFit = true;
             cell1.CellStyle = cellstyle1;
             //create cell value

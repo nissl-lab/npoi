@@ -55,23 +55,23 @@ namespace TestCases.HSSF.UserModel
             HSSFFormulaEvaluator eval = new HSSFFormulaEvaluator(wb);
             for (int i = 0; i < wb.NumberOfSheets; i++)
             {
-                NPOI.SS.UserModel.Sheet s = wb.GetSheetAt(i);
+                NPOI.SS.UserModel.ISheet s = wb.GetSheetAt(i);
 
                 IEnumerator it = s.GetRowEnumerator();
                 while (it.MoveNext())
                 {
-                    Row r = (Row)it.Current;
+                    IRow r = (IRow)it.Current;
                     Process(r, eval);
                 }
             }
         }
 
-        private static void Process(Row row, HSSFFormulaEvaluator eval)
+        private static void Process(IRow row, HSSFFormulaEvaluator eval)
         {
             IEnumerator it = row.GetCellEnumerator();
             while (it.MoveNext())
             {
-                Cell cell = (Cell)it.Current;
+                ICell cell = (ICell)it.Current;
                 if (cell.CellType != NPOI.SS.UserModel.CellType.FORMULA)
                 {
                     continue;

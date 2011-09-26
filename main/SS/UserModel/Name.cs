@@ -23,7 +23,7 @@ namespace NPOI.SS.UserModel
      * A name is a meaningful shorthand that makes it easier to understand the purpose of a
      * cell reference, constant or a formula.
      */
-    public interface Name
+    public interface IName
     {
 
         /**

@@ -38,7 +38,7 @@ namespace TestCases.HSSF.UserModel
             // no instances of this class
         }
         
-        public static Ptg[] GetPtgs(Cell cell)
+        public static Ptg[] GetPtgs(ICell cell)
         {
             CellValueRecordInterface vr = ((HSSFCell)cell).CellValueRecord;
             if (!(vr is FormulaRecordAggregate))

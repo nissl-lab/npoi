@@ -35,7 +35,7 @@ namespace NPOI.HSSF.UserModel
     /// @author Glen Stampoultzis (glens at apache.org)
     /// </summary>
     [Serializable]
-    public class HSSFRow : IComparable,Row
+    public class HSSFRow : IComparable,IRow
     {
 
 
@@ -43,7 +43,7 @@ namespace NPOI.HSSF.UserModel
         public const int INITIAL_CAPACITY = 5;
 
         private int rowNum;
-        private SortedDictionary<int, Cell> cells = new SortedDictionary<int, Cell>();
+        private SortedDictionary<int, ICell> cells = new SortedDictionary<int, ICell>();
          
         /**
          * reference to low level representation
@@ -108,7 +108,7 @@ namespace NPOI.HSSF.UserModel
         /// </summary>
         /// <param name="column">the column number this cell represents</param>
         /// <returns>a high level representation of the Created cell.</returns>
-        public NPOI.SS.UserModel.Cell CreateCell(int column)
+        public NPOI.SS.UserModel.ICell CreateCell(int column)
         {
             return this.CreateCell(column, NPOI.SS.UserModel.CellType.BLANK);
         }
@@ -121,9 +121,9 @@ namespace NPOI.HSSF.UserModel
         /// <param name="columnIndex">the column number this cell represents</param>
         /// <param name="type">a high level representation of the created cell.</param>
         /// <returns></returns>
-        public NPOI.SS.UserModel.Cell CreateCell(int columnIndex, NPOI.SS.UserModel.CellType type)
+        public NPOI.SS.UserModel.ICell CreateCell(int columnIndex, NPOI.SS.UserModel.CellType type)
         {
-            Cell cell = new HSSFCell(book, sheet, RowNum, (short)columnIndex, type);
+            ICell cell = new HSSFCell(book, sheet, RowNum, (short)columnIndex, type);
 
             AddCell(cell);
             sheet.Sheet.AddValueRecord(RowNum, ((HSSFCell)cell).CellValueRecord);
@@ -133,7 +133,7 @@ namespace NPOI.HSSF.UserModel
         /// Remove the Cell from this row.
         /// </summary>
         /// <param name="cell">The cell to Remove.</param>
-        public void RemoveCell(NPOI.SS.UserModel.Cell cell)
+        public void RemoveCell(NPOI.SS.UserModel.ICell cell)
         {
             if (cell == null)
             {
@@ -146,7 +146,7 @@ namespace NPOI.HSSF.UserModel
         /// </summary>
         /// <param name="cell">The cell.</param>
         /// <param name="alsoRemoveRecords">if set to <c>true</c> [also remove records].</param>
-        private void RemoveCell(Cell cell, bool alsoRemoveRecords)
+        private void RemoveCell(ICell cell, bool alsoRemoveRecords)
         {
 
             int column = cell.ColumnIndex;
@@ -188,7 +188,7 @@ namespace NPOI.HSSF.UserModel
         private int CalculateNewLastCellPlusOne(int lastcell)
         {
             int cellIx = lastcell - 1;
-            Cell r = RetrieveCell(cellIx);
+            ICell r = RetrieveCell(cellIx);
 
             while (r == null)
             {
@@ -208,7 +208,7 @@ namespace NPOI.HSSF.UserModel
         private int CalculateNewFirstCell(int firstcell)
         {
             int cellIx = firstcell + 1;
-            Cell r = RetrieveCell(cellIx);
+            ICell r = RetrieveCell(cellIx);
 
             if (cells.Count == 0)
                 return -1;
@@ -229,9 +229,9 @@ namespace NPOI.HSSF.UserModel
         /// </summary>
         /// <param name="cell">The low level cell to Create the high level representation from</param>
         /// <returns> the low level record passed in</returns>
-        public Cell CreateCellFromRecord(CellValueRecordInterface cell)
+        public ICell CreateCellFromRecord(CellValueRecordInterface cell)
         {
-            Cell hcell = new HSSFCell(book, sheet, cell);
+            ICell hcell = new HSSFCell(book, sheet, cell);
 
             AddCell(hcell);
             int colIx = cell.Column;
@@ -321,7 +321,7 @@ namespace NPOI.HSSF.UserModel
         /// </summary>
         /// <param name="cell">The cell to move</param>
         /// <param name="newColumn">The new column number (0 based)</param>
-        public void MoveCell(Cell cell, int newColumn)
+        public void MoveCell(ICell cell, int newColumn)
         {
             // Ensure the destination is free
             //if (cells.Count > newColumn && cells[newColumn] != null)
@@ -332,7 +332,7 @@ namespace NPOI.HSSF.UserModel
 
             // Check it's one of ours
             bool existflag = false;
-            foreach (Cell cellinrow in cells.Values)
+            foreach (ICell cellinrow in cells.Values)
             {
                 if (cellinrow.Equals(cell))
                 {
@@ -360,7 +360,7 @@ namespace NPOI.HSSF.UserModel
  *
  * @return the HSSFSheet that owns this row
  */
-        public NPOI.SS.UserModel.Sheet Sheet
+        public NPOI.SS.UserModel.ISheet Sheet
         {
             get
             {
@@ -371,7 +371,7 @@ namespace NPOI.HSSF.UserModel
         /// used internally to Add a cell.
         /// </summary>
         /// <param name="cell">The cell.</param>
-        private void AddCell(Cell cell)
+        private void AddCell(ICell cell)
         {
 
             int column = cell.ColumnIndex;
@@ -413,7 +413,7 @@ namespace NPOI.HSSF.UserModel
         /// </summary>
         /// <param name="cellnum">0 based column number</param>
         /// <returns>Cell representing that column or null if Undefined.</returns>
-        private Cell RetrieveCell(int cellnum)
+        private ICell RetrieveCell(int cellnum)
         {
             if (!cells.ContainsKey(cellnum))
                 return null;
@@ -431,7 +431,7 @@ namespace NPOI.HSSF.UserModel
         /// </summary>
         /// <param name="cellnum">0 based column number</param>
         /// <returns>Cell representing that column or null if Undefined.</returns>
-        public NPOI.SS.UserModel.Cell GetCell(short cellnum)
+        public NPOI.SS.UserModel.ICell GetCell(short cellnum)
         {
             int ushortCellNum = cellnum & 0x0000FFFF; // avoid sign extension
             return GetCell(ushortCellNum);
@@ -445,7 +445,7 @@ namespace NPOI.HSSF.UserModel
         /// </summary>
         /// <param name="cellnum">0 based column number</param>
         /// <returns>Cell representing that column or null if Undefined.</returns>
-        public Cell GetCell(int cellnum)
+        public ICell GetCell(int cellnum)
         {
             return GetCell(cellnum, book.MissingCellPolicy);
         }
@@ -458,9 +458,9 @@ namespace NPOI.HSSF.UserModel
         /// <param name="cellnum">0 based column number</param>
         /// <param name="policy">Policy on blank / missing cells</param>
         /// <returns>that column or null if Undefined + policy allows.</returns>
-        public Cell GetCell(int cellnum, MissingCellPolicy policy)
+        public ICell GetCell(int cellnum, MissingCellPolicy policy)
         {
-            NPOI.SS.UserModel.Cell cell = RetrieveCell(cellnum);
+            NPOI.SS.UserModel.ICell cell = RetrieveCell(cellnum);
             if (policy == MissingCellPolicy.RETURN_NULL_AND_BLANK)
             {
                 return cell;
@@ -609,7 +609,7 @@ namespace NPOI.HSSF.UserModel
         /// have one of these, so will return null. Call IsFormmated to check first
         /// </summary>
         /// <value>The row style.</value>
-        public CellStyle RowStyle
+        public ICellStyle RowStyle
         {
             get
             {
@@ -672,7 +672,7 @@ namespace NPOI.HSSF.UserModel
         private short FindFirstCell(int firstcell)
         {
             short cellnum = (short)(firstcell + 1);
-            NPOI.SS.UserModel.Cell r = GetCell(cellnum);
+            NPOI.SS.UserModel.ICell r = GetCell(cellnum);
 
             while (r == null && cellnum <= LastCellNum)
             {
@@ -686,10 +686,10 @@ namespace NPOI.HSSF.UserModel
         /// <summary>
         /// Get cells in the row
         /// </summary>
-        public List<NPOI.SS.UserModel.Cell> Cells
+        public List<NPOI.SS.UserModel.ICell> Cells
         {
             get {
-                return new List<NPOI.SS.UserModel.Cell>(this.cells.Values);
+                return new List<NPOI.SS.UserModel.ICell>(this.cells.Values);
             }
         }
 

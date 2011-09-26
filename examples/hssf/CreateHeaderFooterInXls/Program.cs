@@ -40,7 +40,7 @@ namespace CreateHeaderFooterInXls
         {
             InitializeWorkbook();
 
-            Sheet s1 = hssfworkbook.CreateSheet("Sheet1");
+            ISheet s1 = hssfworkbook.CreateSheet("Sheet1");
             s1.CreateRow(0).CreateCell(1).SetCellValue(123);
 
             //set header text

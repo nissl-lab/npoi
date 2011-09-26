@@ -18,7 +18,7 @@
 namespace NPOI.SS.UserModel
 {
 
-    public interface Textbox : Shape
+    public interface Textbox : IShape
     {
 
         //public const short OBJECT_TYPE_TEXT = 6;
@@ -26,7 +26,7 @@ namespace NPOI.SS.UserModel
         /**
          * @return  the rich text string for this textbox.
          */
-        RichTextString String { get; set; }
+        IRichTextString String { get; set; }
 
 
         /**

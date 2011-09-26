@@ -10,12 +10,12 @@ namespace TestCases.HSSF
 {
     public class HSSFITestDataProvider : ITestDataProvider
     {
-        public Workbook OpenSampleWorkbook(String sampleFileName)
+        public IWorkbook OpenSampleWorkbook(String sampleFileName)
         {
             return HSSFTestDataSamples.OpenSampleWorkbook(sampleFileName);
         }
 
-        public Workbook WriteOutAndReadBack(Workbook original)
+        public IWorkbook WriteOutAndReadBack(IWorkbook original)
         {
             if (!(original is HSSFWorkbook))
             {
@@ -25,7 +25,7 @@ namespace TestCases.HSSF
             return HSSFTestDataSamples.WriteOutAndReadBack((HSSFWorkbook)original);
         }
 
-        public Workbook CreateWorkbook()
+        public IWorkbook CreateWorkbook()
         {
             return new HSSFWorkbook();
         }

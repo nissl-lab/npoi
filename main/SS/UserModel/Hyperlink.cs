@@ -38,56 +38,43 @@ namespace NPOI.SS.UserModel
         /// </summary>
         FILE = 4
     }
-    /**
-     * Represents an Excel hyperlink.
-     */
-    public interface Hyperlink  //NPOI.COMMON.UserModel.Hyperlink
+    /// <summary>
+    /// Represents an Excel hyperlink.
+    /// </summary>
+    public interface IHyperlink  //NPOI.COMMON.UserModel.Hyperlink
     {
-        /**
- * Hypelink address. Depending on the hyperlink type it can be URL, e-mail, patrh to a file, etc.
- *
- * @return  the address of this hyperlink
- */
+        /// <summary>
+        /// Hypelink address. Depending on the hyperlink type it can be URL, e-mail, patrh to a file, etc.
+        /// </summary>
         String Address { get; set; }
 
-        /**
-         * Return text label for this hyperlink
-         *
-         * @return  text to display
-         */
+        /// <summary>
+        /// text label for this hyperlink
+        /// </summary>
         String Label { get; set; }
 
-        /**
-         * Return the type of this hyperlink
-         *
-         * @return the type of this hyperlink
-         */
+        /// <summary>
+        /// the type of this hyperlink
+        /// </summary>
         HyperlinkType Type { get; }
-        /**
-         * Return the row of the first cell that Contains the hyperlink
-         *
-         * @return the 0-based row of the cell that Contains the hyperlink
-         */
+
+        /// <summary>
+        /// the row of the first cell that Contains the hyperlink
+        /// </summary>
         int FirstRow { get; set; }
-        /**
-         * Return the row of the last cell that Contains the hyperlink
-         *
-         * @return the 0-based row of the last cell that Contains the hyperlink
-         */
+        /// <summary>
+        /// the row of the last cell that Contains the hyperlink
+        /// </summary>
         int LastRow { get; set; }
 
-        /**
-         * Return the column of the first cell that Contains the hyperlink
-         *
-         * @return the 0-based column of the first cell that Contains the hyperlink
-         */
+        /// <summary>
+        /// the column of the first cell that Contains the hyperlink
+        /// </summary>
         int FirstColumn { get; set; }
 
-        /**
-         * Return the column of the last cell that Contains the hyperlink
-         *
-         * @return the 0-based column of the last cell that Contains the hyperlink
-         */
+        /// <summary>
+        /// the column of the last cell that Contains the hyperlink
+        /// </summary>
         int LastColumn { get; set; }
 
         string TextMark { get; set; }

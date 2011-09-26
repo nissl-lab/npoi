@@ -123,7 +123,7 @@ namespace NPOI.HSSF.Model
             display such a formula as "''!$A2", but then complains of broken link errors.
             */
 
-            Cell cell = wb.GetSheetAt(0).GetRow(1).GetCell(1);
+            ICell cell = wb.GetSheetAt(0).GetRow(1).GetCell(1);
             String cellFormula;
             try
             {

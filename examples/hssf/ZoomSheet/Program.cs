@@ -37,7 +37,7 @@ namespace ZoomSheet
         {
             InitializeWorkbook();
 
-            Sheet sheet1 = hssfworkbook.CreateSheet("new sheet");
+            ISheet sheet1 = hssfworkbook.CreateSheet("new sheet");
             sheet1.SetZoom(3, 4);   // 75 percent magnification
 
             WriteToFile();

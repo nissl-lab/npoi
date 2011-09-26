@@ -43,7 +43,7 @@ namespace TestCases.HSSF.Record.Formula
             HSSFWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("externalFunctionExample.xls");
 
             String expectedFormula = "YEARFRAC(B1,C1)";
-            NPOI.SS.UserModel.Sheet sht = wb.GetSheetAt(0);
+            NPOI.SS.UserModel.ISheet sht = wb.GetSheetAt(0);
             String cellFormula = sht.GetRow(0).GetCell(0).CellFormula;
             Assert.AreEqual(expectedFormula, cellFormula);
         }

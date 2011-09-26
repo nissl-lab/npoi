@@ -52,7 +52,7 @@ namespace NPOI.HSSF.UserModel
         short halign;
         short valign;
 
-        NPOI.SS.UserModel.RichTextString str = new HSSFRichTextString("");
+        NPOI.SS.UserModel.IRichTextString str = new HSSFRichTextString("");
 
         /// <summary>
         /// Construct a new textbox with the given parent and anchor.
@@ -72,7 +72,7 @@ namespace NPOI.HSSF.UserModel
         /// Gets or sets the rich text string for this textbox.
         /// </summary>
         /// <value>The string.</value>
-        public virtual NPOI.SS.UserModel.RichTextString String
+        public virtual NPOI.SS.UserModel.IRichTextString String
         {
             get { return str; }
             set

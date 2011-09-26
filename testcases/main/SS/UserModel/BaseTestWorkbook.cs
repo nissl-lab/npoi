@@ -40,7 +40,7 @@ namespace TestCases.SS.UserModel
         [TestMethod]
         public void TestCreateSheet()
         {
-            Workbook wb = _testDataProvider.CreateWorkbook();
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
             Assert.AreEqual(0, wb.NumberOfSheets);
 
             //Getting a sheet by invalid index or non-existing name
@@ -55,15 +55,15 @@ namespace TestCases.SS.UserModel
                 // expected during successful test
             }
 
-            Sheet sheet0 = wb.CreateSheet();
-            Sheet sheet1 = wb.CreateSheet();
+            ISheet sheet0 = wb.CreateSheet();
+            ISheet sheet1 = wb.CreateSheet();
             Assert.AreEqual("Sheet0", sheet0.SheetName);
             Assert.AreEqual("Sheet1", sheet1.SheetName);
             Assert.AreEqual(2, wb.NumberOfSheets);
 
             //fetching sheets by name is case-insensitive
-            Sheet originalSheet = wb.CreateSheet("Sheet3");
-            Sheet fetchedSheet = wb.GetSheet("sheet3");
+            ISheet originalSheet = wb.CreateSheet("Sheet3");
+            ISheet fetchedSheet = wb.GetSheet("sheet3");
             if (fetchedSheet == null)
             {
                 throw new AssertFailedException("Identified bug 44892");
@@ -134,7 +134,7 @@ namespace TestCases.SS.UserModel
         [TestMethod]
         public void TestRemoveSheetAt()
         {
-            Workbook workbook = _testDataProvider.CreateWorkbook();
+            IWorkbook workbook = _testDataProvider.CreateWorkbook();
             workbook.CreateSheet("sheet1");
             workbook.CreateSheet("sheet2");
             workbook.CreateSheet("sheet3");
@@ -157,7 +157,7 @@ namespace TestCases.SS.UserModel
         [TestMethod]
         public void TestDefaultValues()
         {
-            Workbook b = _testDataProvider.CreateWorkbook();
+            IWorkbook b = _testDataProvider.CreateWorkbook();
             Assert.AreEqual(0, b.ActiveSheetIndex);
             Assert.AreEqual(0, b.FirstVisibleTab);
             Assert.AreEqual(0, b.NumberOfNames);
@@ -166,7 +166,7 @@ namespace TestCases.SS.UserModel
         [TestMethod]
         public void TestSheetSelection()
         {
-            Workbook b = _testDataProvider.CreateWorkbook();
+            IWorkbook b = _testDataProvider.CreateWorkbook();
             b.CreateSheet("Sheet One");
             b.CreateSheet("Sheet Two");
             b.SetActiveSheet(1);
@@ -178,8 +178,8 @@ namespace TestCases.SS.UserModel
         [TestMethod]
         public void TestPrintArea()
         {
-            Workbook workbook = _testDataProvider.CreateWorkbook();
-            Sheet sheet1 = workbook.CreateSheet("Test Print Area");
+            IWorkbook workbook = _testDataProvider.CreateWorkbook();
+            ISheet sheet1 = workbook.CreateSheet("Test Print Area");
             String sheetName1 = sheet1.SheetName;
 
             // workbook.SetPrintArea(0, reference);
@@ -198,7 +198,7 @@ namespace TestCases.SS.UserModel
         [TestMethod]
         public void TestGetSetActiveSheet()
         {
-            Workbook workbook = _testDataProvider.CreateWorkbook();
+            IWorkbook workbook = _testDataProvider.CreateWorkbook();
             Assert.AreEqual(0, workbook.ActiveSheetIndex);
 
             workbook.CreateSheet("sheet1");
@@ -216,7 +216,7 @@ namespace TestCases.SS.UserModel
         [TestMethod]
         public void TestSetSheetOrder()
         {
-            Workbook wb = _testDataProvider.CreateWorkbook();
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
 
             for (int i = 0; i < 10; i++)
             {
@@ -252,7 +252,7 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual(8, wb.GetSheetIndex("Sheet 9"));
             Assert.AreEqual(9, wb.GetSheetIndex("Sheet 1"));
 
-            Workbook wbr = _testDataProvider.WriteOutAndReadBack(wb);
+            IWorkbook wbr = _testDataProvider.WriteOutAndReadBack(wb);
 
             Assert.AreEqual(0, wbr.GetSheetIndex("Sheet 6"));
             Assert.AreEqual(1, wbr.GetSheetIndex("Sheet 0"));
@@ -268,22 +268,22 @@ namespace TestCases.SS.UserModel
             // Now get the index by the sheet, not the name
             for (int i = 0; i < 10; i++)
             {
-                Sheet s = wbr.GetSheetAt(i);
+                ISheet s = wbr.GetSheetAt(i);
                 Assert.AreEqual(i, wbr.GetSheetIndex(s));
             }
         }
         [TestMethod]
         public void TestCloneSheet()
         {
-            Workbook book = _testDataProvider.CreateWorkbook();
-            Sheet sheet = book.CreateSheet("TEST");
+            IWorkbook book = _testDataProvider.CreateWorkbook();
+            ISheet sheet = book.CreateSheet("TEST");
             sheet.CreateRow(0).CreateCell(0).SetCellValue("Test");
             sheet.CreateRow(1).CreateCell(0).SetCellValue(36.6);
             sheet.AddMergedRegion(new CellRangeAddress(0, 1, 0, 2));
             sheet.AddMergedRegion(new CellRangeAddress(1, 2, 0, 2));
             Assert.IsTrue(sheet.IsSelected);
 
-            Sheet ClonedSheet = book.CloneSheet(0);
+            ISheet ClonedSheet = book.CloneSheet(0);
             Assert.AreEqual("TEST (2)", ClonedSheet.SheetName);
             Assert.AreEqual(2, ClonedSheet.PhysicalNumberOfRows);
             Assert.AreEqual(2, ClonedSheet.NumMergedRegions);
@@ -304,14 +304,14 @@ namespace TestCases.SS.UserModel
         [TestMethod]
         public void TestParentReferences()
         {
-            Workbook workbook = _testDataProvider.CreateWorkbook();
-            Sheet sheet = workbook.CreateSheet();
+            IWorkbook workbook = _testDataProvider.CreateWorkbook();
+            ISheet sheet = workbook.CreateSheet();
             Assert.AreSame(workbook, sheet.Workbook);
 
-            Row row = sheet.CreateRow(0);
+            IRow row = sheet.CreateRow(0);
             Assert.AreSame(sheet, row.Sheet);
 
-            Cell cell = row.CreateCell(1);
+            ICell cell = row.CreateCell(1);
             Assert.AreSame(sheet, cell.Sheet);
             Assert.AreSame(row, cell.Row);
 
@@ -329,12 +329,12 @@ namespace TestCases.SS.UserModel
         [TestMethod]
         public void TestSetRepeatingRowsAnsColumns()
         {
-            Workbook wb = _testDataProvider.CreateWorkbook();
-            Sheet sheet1 = wb.CreateSheet();
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            ISheet sheet1 = wb.CreateSheet();
             wb.SetRepeatingRowsAndColumns(wb.GetSheetIndex(sheet1), 0, 0, 0, 3);
 
             //must handle sheets with quotas, see Bugzilla #47294
-            Sheet sheet2 = wb.CreateSheet("My' Sheet");
+            ISheet sheet2 = wb.CreateSheet("My' Sheet");
             wb.SetRepeatingRowsAndColumns(wb.GetSheetIndex(sheet2), 0, 0, 0, 3);
         }
 
@@ -344,37 +344,37 @@ namespace TestCases.SS.UserModel
         [TestMethod]
         public void TestUnicodeInAll()
         {
-            Workbook wb = _testDataProvider.CreateWorkbook();
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
             CreationHelper factory = wb.GetCreationHelper();
             //Create a unicode dataformat (Contains euro symbol)
-            DataFormat df = wb.CreateDataFormat();
+            IDataFormat df = wb.CreateDataFormat();
             String formatStr = "_([$\u20ac-2]\\\\\\ * #,##0.00_);_([$\u20ac-2]\\\\\\ * \\\\\\(#,##0.00\\\\\\);_([$\u20ac-2]\\\\\\ *\\\"\\-\\\\\"??_);_(@_)";
             short fmt = df.GetFormat(formatStr);
 
             //Create a unicode sheet name (euro symbol)
-            Sheet s = wb.CreateSheet("\u20ac");
+            ISheet s = wb.CreateSheet("\u20ac");
 
             //Set a unicode header (you guessed it the euro symbol)
-            Header h = s.Header;
+            IHeader h = s.Header;
             h.Center=("\u20ac");
             h.Left=("\u20ac");
             h.Right=("\u20ac");
 
             //Set a unicode footer
-            Footer f = s.Footer;
+            IFooter f = s.Footer;
             f.Center=("\u20ac");
             f.Left=("\u20ac");
             f.Right=("\u20ac");
 
-            Row r = s.CreateRow(0);
-            Cell c = r.CreateCell(1);
+            IRow r = s.CreateRow(0);
+            ICell c = r.CreateCell(1);
             c.SetCellValue(12.34);
             c.CellStyle.DataFormat=(fmt);
 
-            Cell c2 = r.CreateCell(2); // TODO - c2 unused but changing next line ('c'->'c2') causes test to Assert.Fail
+            ICell c2 = r.CreateCell(2); // TODO - c2 unused but changing next line ('c'->'c2') causes test to Assert.Fail
             c.SetCellValue(factory.CreateRichTextString("\u20ac"));
 
-            Cell c3 = r.CreateCell(3);
+            ICell c3 = r.CreateCell(3);
             String formulaString = "TEXT(12.34,\"\u20ac###,##\")";
             c3.CellFormula = (formulaString);
 

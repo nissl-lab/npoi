@@ -59,15 +59,15 @@ namespace TestCases.HSSF.UserModel
         private class ValidationAdder
         {
 
-            private NPOI.SS.UserModel.CellStyle _style_1;
-            private NPOI.SS.UserModel.CellStyle _style_2;
+            private NPOI.SS.UserModel.ICellStyle _style_1;
+            private NPOI.SS.UserModel.ICellStyle _style_2;
             private int _validationType;
             private HSSFSheet _sheet;
             private int _currentRowIndex;
-            private NPOI.SS.UserModel.CellStyle _cellStyle;
+            private NPOI.SS.UserModel.ICellStyle _cellStyle;
 
-            public ValidationAdder(NPOI.SS.UserModel.Sheet fSheet, NPOI.SS.UserModel.CellStyle style_1, NPOI.SS.UserModel.CellStyle style_2,
-                    NPOI.SS.UserModel.CellStyle cellStyle, int validationType)
+            public ValidationAdder(NPOI.SS.UserModel.ISheet fSheet, NPOI.SS.UserModel.ICellStyle style_1, NPOI.SS.UserModel.ICellStyle style_2,
+                    NPOI.SS.UserModel.ICellStyle cellStyle, int validationType)
             {
                 _sheet = (HSSFSheet)fSheet;
                 _style_1 = style_1;
@@ -113,8 +113,8 @@ namespace TestCases.HSSF.UserModel
                         inputBox, errorBox);
                 if (_cellStyle != null)
                 {
-                    Row row = _sheet.GetRow(_sheet.PhysicalNumberOfRows - 1);
-                    Cell cell = row.CreateCell(0);
+                    IRow row = _sheet.GetRow(_sheet.PhysicalNumberOfRows - 1);
+                    ICell cell = row.CreateCell(0);
                     cell.CellStyle = (_cellStyle);
                 }
                 WriteOtherSettings(_sheet, _style_1, promptDescr);
@@ -148,13 +148,13 @@ namespace TestCases.HSSF.UserModel
              * Writes plain text values into cells in a tabular format to form comments readable from within 
              * the spreadsheet.
              */
-            private static void WriteDataValidationSettings(NPOI.SS.UserModel.Sheet sheet, NPOI.SS.UserModel.CellStyle style_1,
-                    NPOI.SS.UserModel.CellStyle style_2, String strCondition, bool allowEmpty, bool inputBox,
+            private static void WriteDataValidationSettings(NPOI.SS.UserModel.ISheet sheet, NPOI.SS.UserModel.ICellStyle style_1,
+                    NPOI.SS.UserModel.ICellStyle style_2, String strCondition, bool allowEmpty, bool inputBox,
                     bool errorBox)
             {
-                Row row = sheet.CreateRow(sheet.PhysicalNumberOfRows);
+                IRow row = sheet.CreateRow(sheet.PhysicalNumberOfRows);
                 // condition's string
-                Cell cell = row.CreateCell(1);
+                ICell cell = row.CreateCell(1);
                 cell.CellStyle = (style_1);
                 SetCellValue(cell, strCondition);
                 // allow empty cells
@@ -170,11 +170,11 @@ namespace TestCases.HSSF.UserModel
                 cell.CellStyle = (style_2);
                 SetCellValue(cell, ((errorBox) ? "yes" : "no"));
             }
-            private static void WriteOtherSettings(NPOI.SS.UserModel.Sheet sheet, NPOI.SS.UserModel.CellStyle style,
+            private static void WriteOtherSettings(NPOI.SS.UserModel.ISheet sheet, NPOI.SS.UserModel.ICellStyle style,
                     String strStettings)
             {
-                Row row = sheet.GetRow(sheet.PhysicalNumberOfRows - 1);
-                Cell cell = row.CreateCell(5);
+                IRow row = sheet.GetRow(sheet.PhysicalNumberOfRows - 1);
+                ICell cell = row.CreateCell(5);
                 cell.CellStyle = (style);
                 SetCellValue(cell, strStettings);
             }
@@ -195,11 +195,11 @@ namespace TestCases.HSSF.UserModel
         {
 
             private HSSFWorkbook _wb;
-            private NPOI.SS.UserModel.CellStyle _style_1;
-            private NPOI.SS.UserModel.CellStyle _style_2;
-            private NPOI.SS.UserModel.CellStyle _style_3;
-            private NPOI.SS.UserModel.CellStyle _style_4;
-            private NPOI.SS.UserModel.Sheet _currentSheet;
+            private NPOI.SS.UserModel.ICellStyle _style_1;
+            private NPOI.SS.UserModel.ICellStyle _style_2;
+            private NPOI.SS.UserModel.ICellStyle _style_3;
+            private NPOI.SS.UserModel.ICellStyle _style_4;
+            private NPOI.SS.UserModel.ISheet _currentSheet;
 
             public WorkbookFormatter(HSSFWorkbook wb)
             {
@@ -210,16 +210,16 @@ namespace TestCases.HSSF.UserModel
                 _style_4 = CreateHeaderStyle(wb);
             }
 
-            private static NPOI.SS.UserModel.CellStyle CreateStyle(HSSFWorkbook wb, HorizontalAlignment h_align, short color,
+            private static NPOI.SS.UserModel.ICellStyle CreateStyle(HSSFWorkbook wb, HorizontalAlignment h_align, short color,
                     bool bold)
             {
-                Font font = wb.CreateFont();
+                IFont font = wb.CreateFont();
                 if (bold)
                 {
                     font.Boldweight= (short)FontBoldWeight.BOLD;
                 }
 
-                NPOI.SS.UserModel.CellStyle cellStyle = wb.CreateCellStyle();
+                NPOI.SS.UserModel.ICellStyle cellStyle = wb.CreateCellStyle();
                 cellStyle.SetFont(font);
                 cellStyle.FillForegroundColor = (color);
                 cellStyle.FillPattern = FillPatternType.SOLID_FOREGROUND;
@@ -237,17 +237,17 @@ namespace TestCases.HSSF.UserModel
                 return cellStyle;
             }
 
-            private static NPOI.SS.UserModel.CellStyle CreateStyle(HSSFWorkbook wb, HorizontalAlignment h_align)
+            private static NPOI.SS.UserModel.ICellStyle CreateStyle(HSSFWorkbook wb, HorizontalAlignment h_align)
             {
                 return CreateStyle(wb, h_align, HSSFColor.WHITE.index, false);
             }
-            private static NPOI.SS.UserModel.CellStyle CreateHeaderStyle(HSSFWorkbook wb)
+            private static NPOI.SS.UserModel.ICellStyle CreateHeaderStyle(HSSFWorkbook wb)
             {
-                Font font = wb.CreateFont();
+                IFont font = wb.CreateFont();
                 font.Color = (HSSFColor.WHITE.index);
                 font.Boldweight = (short)FontBoldWeight.BOLD;
 
-                NPOI.SS.UserModel.CellStyle cellStyle = wb.CreateCellStyle();
+                NPOI.SS.UserModel.ICellStyle cellStyle = wb.CreateCellStyle();
                 cellStyle.FillForegroundColor = (HSSFColor.BLUE_GREY.index);
                 cellStyle.FillPattern = (FillPatternType.SOLID_FOREGROUND);
                 cellStyle.Alignment = (HorizontalAlignment.CENTER);
@@ -265,18 +265,18 @@ namespace TestCases.HSSF.UserModel
             }
 
 
-            public NPOI.SS.UserModel.Sheet CreateSheet(String sheetName)
+            public NPOI.SS.UserModel.ISheet CreateSheet(String sheetName)
             {
                 _currentSheet = _wb.CreateSheet(sheetName);
                 return _currentSheet;
             }
             public void CreateDVTypeRow(String strTypeDescription)
             {
-                NPOI.SS.UserModel.Sheet sheet = _currentSheet;
-                Row row = sheet.CreateRow(sheet.PhysicalNumberOfRows);
+                NPOI.SS.UserModel.ISheet sheet = _currentSheet;
+                IRow row = sheet.CreateRow(sheet.PhysicalNumberOfRows);
                 row = sheet.CreateRow(sheet.PhysicalNumberOfRows);
                 sheet.AddMergedRegion(new CellRangeAddress(sheet.PhysicalNumberOfRows - 1, sheet.PhysicalNumberOfRows - 1, 0, 5));
-                Cell cell = row.CreateCell(0);
+                ICell cell = row.CreateCell(0);
                 SetCellValue(cell, strTypeDescription);
                 cell.CellStyle = (_style_3);
                 row = sheet.CreateRow(sheet.PhysicalNumberOfRows);
@@ -284,8 +284,8 @@ namespace TestCases.HSSF.UserModel
 
             public void CreateHeaderRow()
             {
-                NPOI.SS.UserModel.Sheet sheet = _currentSheet;
-                Row row = sheet.CreateRow(sheet.PhysicalNumberOfRows);
+                NPOI.SS.UserModel.ISheet sheet = _currentSheet;
+                IRow row = sheet.CreateRow(sheet.PhysicalNumberOfRows);
                 row.Height = ((short)400);
                 for (int i = 0; i < 6; i++)
                 {
@@ -303,7 +303,7 @@ namespace TestCases.HSSF.UserModel
                         sheet.SetColumnWidth(i, 8000);
                     }
                 }
-                Cell cell = row.GetCell(0);
+                ICell cell = row.GetCell(0);
                 SetCellValue(cell, "Data validation cells");
                 cell = row.GetCell(1);
                 SetCellValue(cell, "Condition");
@@ -317,17 +317,17 @@ namespace TestCases.HSSF.UserModel
                 SetCellValue(cell, "Other settings");
             }
 
-            public ValidationAdder CreateValidationAdder(NPOI.SS.UserModel.CellStyle cellStyle, int dataValidationType)
+            public ValidationAdder CreateValidationAdder(NPOI.SS.UserModel.ICellStyle cellStyle, int dataValidationType)
             {
                 return new ValidationAdder(_currentSheet, _style_1, _style_2, cellStyle, dataValidationType);
             }
 
             public void CreateDVDescriptionRow(String strTypeDescription)
             {
-                NPOI.SS.UserModel.Sheet sheet = _currentSheet;
-                Row row = sheet.GetRow(sheet.PhysicalNumberOfRows - 1);
+                NPOI.SS.UserModel.ISheet sheet = _currentSheet;
+                IRow row = sheet.GetRow(sheet.PhysicalNumberOfRows - 1);
                 sheet.AddMergedRegion(new CellRangeAddress(sheet.PhysicalNumberOfRows - 1, sheet.PhysicalNumberOfRows - 1, 0, 5));
-                Cell cell = row.CreateCell(0);
+                ICell cell = row.CreateCell(0);
                 SetCellValue(cell, strTypeDescription);
                 cell.CellStyle = (_style_3);
                 row = sheet.CreateRow(sheet.PhysicalNumberOfRows);
@@ -388,8 +388,8 @@ namespace TestCases.HSSF.UserModel
             + "a b c d e f g h i j k l m n o p r s t u v x y z w 0 1 2 3 4 ";
             String dataSheetName = "list_data";
             // "List" Data Validation type
-            NPOI.SS.UserModel.Sheet fSheet = wf.CreateSheet("Lists");
-            NPOI.SS.UserModel.Sheet dataSheet = wb.CreateSheet(dataSheetName);
+            NPOI.SS.UserModel.ISheet fSheet = wf.CreateSheet("Lists");
+            NPOI.SS.UserModel.ISheet dataSheet = wb.CreateSheet(dataSheetName);
 
 
             wf.CreateDVTypeRow("Explicit lists - list items are explicitly provided");
@@ -415,7 +415,7 @@ namespace TestCases.HSSF.UserModel
 
             strFormula = dataSheetName + "!$A$1:$A$10";
             va.AddListValidation(null, strFormula, strFormula, false, false);
-            NPOI.SS.UserModel.Name namedRange = wb.CreateName();
+            NPOI.SS.UserModel.IName namedRange = wb.CreateName();
             namedRange.NameName=("myName");
             namedRange.RefersToFormula=(dataSheetName + "!$A$2:$A$7");
             strFormula = "myName";
@@ -427,13 +427,13 @@ namespace TestCases.HSSF.UserModel
             // Add list data on same sheet
             for (int i = 0; i < 10; i++)
             {
-                Row currRow = fSheet.CreateRow(i + 29);
+                IRow currRow = fSheet.CreateRow(i + 29);
                 SetCellValue(currRow.CreateCell(0), cellStrValue);
             }
             // Add list data on another sheet
             for (int i = 0; i < 10; i++)
             {
-                Row currRow = dataSheet.CreateRow(i + 0);
+                IRow currRow = dataSheet.CreateRow(i + 0);
                 SetCellValue(currRow.CreateCell(0), "Data a" + i);
                 SetCellValue(currRow.CreateCell(1), "Data b" + i);
                 SetCellValue(currRow.CreateCell(2), "Data c" + i);
@@ -444,12 +444,12 @@ namespace TestCases.HSSF.UserModel
         {
             wf.CreateSheet("Dates and Times");
 
-            DataFormat dataFormat = wb.CreateDataFormat();
+            IDataFormat dataFormat = wb.CreateDataFormat();
             short fmtDate = dataFormat.GetFormat("m/d/yyyy");
             short fmtTime = dataFormat.GetFormat("h:mm");
-            NPOI.SS.UserModel.CellStyle cellStyle_date = wb.CreateCellStyle();
+            NPOI.SS.UserModel.ICellStyle cellStyle_date = wb.CreateCellStyle();
             cellStyle_date.DataFormat=(fmtDate);
-            NPOI.SS.UserModel.CellStyle cellStyle_time = wb.CreateCellStyle();
+            NPOI.SS.UserModel.ICellStyle cellStyle_time = wb.CreateCellStyle();
             cellStyle_time.DataFormat=(fmtTime);
 
             wf.CreateDVTypeRow("Date ( cells are already formated as date - m/d/yyyy)");
@@ -599,7 +599,7 @@ namespace TestCases.HSSF.UserModel
 
 
         /* package */
-        static void SetCellValue(Cell cell, String text)
+        static void SetCellValue(ICell cell, String text)
         {
             cell.SetCellValue(new HSSFRichTextString(text));
 

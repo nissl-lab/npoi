@@ -38,15 +38,15 @@ namespace TestCases.HSSF.Record.Formula.Eval
         public void TestInvoke()
         {
             HSSFWorkbook wb;
-            NPOI.SS.UserModel.Sheet sheet ;
-            Cell cell;
+            NPOI.SS.UserModel.ISheet sheet ;
+            ICell cell;
             if (false)
             {
                 // TODO - this code won't work until we can create user-defined functions directly with POI
                 wb = new HSSFWorkbook();
                 sheet = wb.CreateSheet();
                 wb.SetSheetName(0, "Sheet1");
-                NPOI.SS.UserModel.Name hssfName = wb.CreateName();
+                NPOI.SS.UserModel.IName hssfName = wb.CreateName();
                 hssfName.NameName = ("myFunc");
 
             }
@@ -55,7 +55,7 @@ namespace TestCases.HSSF.Record.Formula.Eval
                 // This sample spreadsheet already has a VB function called 'myFunc'
                 wb = HSSFTestDataSamples.OpenSampleWorkbook("testNames.xls");
                 sheet = wb.GetSheetAt(0);
-                Row row = sheet.CreateRow(0);
+                IRow row = sheet.CreateRow(0);
                 cell = row.CreateCell(1);
             }
 

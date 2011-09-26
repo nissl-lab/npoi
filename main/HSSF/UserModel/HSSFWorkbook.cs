@@ -49,7 +49,7 @@ namespace NPOI.HSSF.UserModel
     /// @author  Glen Stampoultzis (glens at apache.org)
     /// @author  Shawn Laubach (slaubach at apache dot org)
     [Serializable]
-    public class HSSFWorkbook : POIDocument,IDisposable,NPOI.SS.UserModel.Workbook
+    public class HSSFWorkbook : POIDocument,IDisposable,NPOI.SS.UserModel.IWorkbook
     {
         //private static int DEBUG = POILogger.DEBUG;
         private const int MAX_ROW = 0xFFFF;
@@ -672,7 +672,7 @@ namespace NPOI.HSSF.UserModel
         /// <param name="sheet">the sheet to look up</param>
         /// <returns>index of the sheet (0 based).-1
         ///  if not found </returns>
-        public int GetSheetIndex(Sheet sheet)
+        public int GetSheetIndex(ISheet sheet)
         {
             for (int i = 0; i < _sheets.Count; i++)
             {
@@ -703,7 +703,7 @@ namespace NPOI.HSSF.UserModel
         /// the high level representation.  Use this to Create new sheets.
         /// </summary>
         /// <returns>HSSFSheet representing the new sheet.</returns>
-        public Sheet CreateSheet()
+        public ISheet CreateSheet()
         {
             HSSFSheet sheet = new HSSFSheet(this);
 
@@ -720,7 +720,7 @@ namespace NPOI.HSSF.UserModel
         /// </summary>
         /// <param name="sheetIndex">the sheet index</param>
         /// <returns>HSSFSheet representing the Cloned sheet.</returns>
-        public Sheet CloneSheet(int sheetIndex)
+        public ISheet CloneSheet(int sheetIndex)
         {
             ValidateSheetIndex(sheetIndex);
             HSSFSheet srcSheet = (HSSFSheet)_sheets[sheetIndex];
@@ -820,7 +820,7 @@ namespace NPOI.HSSF.UserModel
         /// </summary>
         /// <param name="sheetname">sheetname to set for the sheet.</param>
         /// <returns>HSSFSheet representing the new sheet.</returns>
-        public NPOI.SS.UserModel.Sheet CreateSheet(String sheetname)
+        public NPOI.SS.UserModel.ISheet CreateSheet(String sheetname)
         {
             if (workbook.ContainsSheetName(sheetname, _sheets.Count))
                 throw new ArgumentException("The workbook already contains a sheet of this name");
@@ -857,7 +857,7 @@ namespace NPOI.HSSF.UserModel
         ///</summary>
         /// <param name="index">index of the sheet number (0-based)</param>
         /// <returns>HSSFSheet at the provided index</returns>
-        public NPOI.SS.UserModel.Sheet GetSheetAt(int index)
+        public NPOI.SS.UserModel.ISheet GetSheetAt(int index)
         {
             return (HSSFSheet)_sheets[index];
         }
@@ -867,7 +867,7 @@ namespace NPOI.HSSF.UserModel
         /// </summary>
         /// <param name="name">name of the sheet</param>
         /// <returns>HSSFSheet with the name provided or null if it does not exist</returns>
-        public NPOI.SS.UserModel.Sheet GetSheet(String name)
+        public NPOI.SS.UserModel.ISheet GetSheet(String name)
         {
             HSSFSheet retval = null;
 
@@ -1061,7 +1061,7 @@ namespace NPOI.HSSF.UserModel
                 names.Add(newName);
             }
 
-            NPOI.SS.UserModel.PrintSetup printSetup = sheet.PrintSetup;
+            NPOI.SS.UserModel.IPrintSetup printSetup = sheet.PrintSetup;
             printSetup.ValidSettings = (false);
 
             sheet.IsActive = (true);
@@ -1096,7 +1096,7 @@ namespace NPOI.HSSF.UserModel
         /// Create a new Font and Add it to the workbook's font table
         /// </summary>
         /// <returns>new font object</returns>
-        public NPOI.SS.UserModel.Font CreateFont()
+        public NPOI.SS.UserModel.IFont CreateFont()
         {
             FontRecord font = workbook.CreateNewFont();
             short fontindex = (short)(NumberOfFonts - 1);
@@ -1133,7 +1133,7 @@ namespace NPOI.HSSF.UserModel
         /// <param name="typeOffset">The type offset.</param>
         /// <param name="Underline">The underline.</param>
         /// <returns></returns>
-        public NPOI.SS.UserModel.Font FindFont(short boldWeight, short color, short fontHeight,
+        public NPOI.SS.UserModel.IFont FindFont(short boldWeight, short color, short fontHeight,
                          String name, bool italic, bool strikeout,
                          short typeOffset, byte Underline)
         {
@@ -1144,7 +1144,7 @@ namespace NPOI.HSSF.UserModel
                 if (i == 4)
                     continue;
 
-                NPOI.SS.UserModel.Font hssfFont = GetFontAt(i);
+                NPOI.SS.UserModel.IFont hssfFont = GetFontAt(i);
                 //            Console.WriteLine( hssfFont.GetBoldweight() + ", " + hssfFont.GetColor() + ", " + hssfFont.FontHeight + ", " + hssfFont.FontName + ", " + hssfFont.GetItalic() + ", " + hssfFont.GetStrikeout() + ", " + hssfFont.GetTypeOffset() + ", " + hssfFont.Underline );
                 if (hssfFont.Boldweight == boldWeight
                         && hssfFont.Color == color
@@ -1193,7 +1193,7 @@ namespace NPOI.HSSF.UserModel
         /// </summary>
         /// <param name="idx">The index number</param>
         /// <returns>HSSFFont at the index</returns>
-        public NPOI.SS.UserModel.Font GetFontAt(short idx)
+        public NPOI.SS.UserModel.IFont GetFontAt(short idx)
         {
             if (fonts == null) fonts = new Hashtable();
 
@@ -1227,7 +1227,7 @@ namespace NPOI.HSSF.UserModel
         /// Create a new Cell style and Add it to the workbook's style table
         /// </summary>
         /// <returns>the new Cell Style object</returns>
-        public NPOI.SS.UserModel.CellStyle CreateCellStyle()
+        public NPOI.SS.UserModel.ICellStyle CreateCellStyle()
         {
             if (workbook.NumExFormats == MAX_STYLES)
             {
@@ -1259,7 +1259,7 @@ namespace NPOI.HSSF.UserModel
         /// </summary>
         /// <param name="idx">index within the Set of styles</param>
         /// <returns>HSSFCellStyle object at the index</returns>
-        public NPOI.SS.UserModel.CellStyle GetCellStyleAt(short idx)
+        public NPOI.SS.UserModel.ICellStyle GetCellStyleAt(short idx)
         {
             ExtendedFormatRecord xfr = workbook.GetExFormatAt(idx);
             HSSFCellStyle style = new HSSFCellStyle(idx, xfr, this);
@@ -1401,7 +1401,7 @@ namespace NPOI.HSSF.UserModel
                 return result;
             }
         }
-        public NPOI.SS.UserModel.Name GetName(String name)
+        public NPOI.SS.UserModel.IName GetName(String name)
         {
             int nameIndex = GetNameIndex(name);
             if (nameIndex < 0)
@@ -1416,7 +1416,7 @@ namespace NPOI.HSSF.UserModel
         /// </summary>
         /// <param name="index">position of the named range</param>
         /// <returns>named range high level</returns>
-        public NPOI.SS.UserModel.Name GetNameAt(int index)
+        public NPOI.SS.UserModel.IName GetNameAt(int index)
         {
             HSSFName result = names[index];
 
@@ -1526,7 +1526,7 @@ namespace NPOI.HSSF.UserModel
         /// Creates a new named range and Add it to the model
         /// </summary>
         /// <returns>named range high level</returns>
-        public NPOI.SS.UserModel.Name CreateName()
+        public NPOI.SS.UserModel.IName CreateName()
         {
             NameRecord nameRecord = workbook.CreateName();
 
@@ -1577,7 +1577,7 @@ namespace NPOI.HSSF.UserModel
         /// Creates the instance of HSSFDataFormat for this workbook.
         /// </summary>
         /// <returns>the HSSFDataFormat object</returns>
-        public NPOI.SS.UserModel.DataFormat CreateDataFormat()
+        public NPOI.SS.UserModel.IDataFormat CreateDataFormat()
         {
             if (formatter == null)
                 formatter = new HSSFDataFormat(workbook);

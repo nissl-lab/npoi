@@ -43,7 +43,7 @@ namespace RepeatingRowsAndColumns
         {
             InitializeWorkbook();
 
-            Sheet sheet1 = hssfworkbook.CreateSheet("first sheet");
+            ISheet sheet1 = hssfworkbook.CreateSheet("first sheet");
             hssfworkbook.CreateSheet("second sheet");
             hssfworkbook.CreateSheet("third sheet");
 
@@ -51,11 +51,11 @@ namespace RepeatingRowsAndColumns
             boldFont.FontHeightInPoints = 22;
             boldFont.Boldweight = (short)FontBoldWeight.BOLD;
 
-            CellStyle boldStyle = hssfworkbook.CreateCellStyle();
+           .CellStyle boldStyle = hssfworkbook.CreateCellStyle();
             boldStyle.SetFont(boldFont);
 
-            Row row = sheet1.CreateRow(1);
-            Cell cell = row.CreateCell(0);
+            IRow row = sheet1.CreateRow(1);
+            ICell cell = row.CreateCell(0);
             cell.SetCellValue("This quick brown fox");
             cell.CellStyle = (boldStyle);
 

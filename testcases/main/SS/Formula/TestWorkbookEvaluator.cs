@@ -112,10 +112,10 @@ namespace TestCases.SS.Formula
             HSSFFormulaEvaluator[] evaluators = { evaluatorA, evaluatorB, };
             HSSFFormulaEvaluator.SetupEnvironment(bookNames, evaluators);
 
-            Cell cell;
+            ICell cell;
 
-            NPOI.SS.UserModel.Sheet aSheet1 = wbA.GetSheetAt(0);
-            NPOI.SS.UserModel.Sheet bSheet1 = wbB.GetSheetAt(0);
+            NPOI.SS.UserModel.ISheet aSheet1 = wbA.GetSheetAt(0);
+            NPOI.SS.UserModel.ISheet bSheet1 = wbB.GetSheetAt(0);
 
             // Simple case - single link from wbA to wbB
             ConfirmFormula(wbA, 0, 0, 0, "[multibookFormulaB.xls]BSheet1!B1");
@@ -133,25 +133,25 @@ namespace TestCases.SS.Formula
             ConfirmEvaluation(264, evaluatorA, cell);
 
             // change [wbB]BSheet1!B3 (from 50 to 60)
-            Cell cellB3 = bSheet1.GetRow(2).GetCell(1);
+            ICell cellB3 = bSheet1.GetRow(2).GetCell(1);
             cellB3.SetCellValue(60);
             evaluatorB.NotifyUpdateCell(cellB3);
             ConfirmEvaluation(274, evaluatorA, cell);
 
             // change [wbA]ASheet1!A3 (from 100 to 80)
-            Cell cellA3 = aSheet1.GetRow(2).GetCell(0);
+            ICell cellA3 = aSheet1.GetRow(2).GetCell(0);
             cellA3.SetCellValue(80);
             evaluatorA.NotifyUpdateCell(cellA3);
             ConfirmEvaluation(234, evaluatorA, cell);
 
             // change [wbA]AnotherSheet!A1 (from 2 to 3)
-            Cell cellA1 = wbA.GetSheetAt(1).GetRow(0).GetCell(0);
+            ICell cellA1 = wbA.GetSheetAt(1).GetRow(0).GetCell(0);
             cellA1.SetCellValue(3);
             evaluatorA.NotifyUpdateCell(cellA1);
             ConfirmEvaluation(235, evaluatorA, cell);
         }
 
-        private static void ConfirmEvaluation(double expectedValue, HSSFFormulaEvaluator fe, Cell cell)
+        private static void ConfirmEvaluation(double expectedValue, HSSFFormulaEvaluator fe, ICell cell)
         {
             Assert.AreEqual(expectedValue, fe.Evaluate(cell).NumberValue, 0.0);
         }
@@ -159,7 +159,7 @@ namespace TestCases.SS.Formula
         private static void ConfirmFormula(HSSFWorkbook wb, int sheetIndex, int rowIndex, int columnIndex,
                 String expectedFormula)
         {
-            Cell cell = wb.GetSheetAt(sheetIndex).GetRow(rowIndex).GetCell(columnIndex);
+            ICell cell = wb.GetSheetAt(sheetIndex).GetRow(rowIndex).GetCell(columnIndex);
             Assert.AreEqual(expectedFormula, cell.CellFormula);
         }
     }

@@ -43,15 +43,15 @@ namespace TestCases.SS.UserModel
         public void TestCreate()
         {
             // Create a new workbook
-            Workbook wb = _testDataProvider.CreateWorkbook();
-            Sheet sheet1 = wb.CreateSheet("Test1");
-            Sheet sheet2 = wb.CreateSheet("Testing Named Ranges");
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            ISheet sheet1 = wb.CreateSheet("Test1");
+            ISheet sheet2 = wb.CreateSheet("Testing Named Ranges");
 
-            Name name1 = wb.CreateName();
+            IName name1 = wb.CreateName();
             name1.NameName = ("testOne");
 
             //Setting a duplicate name should throw ArgumentException
-            Name name2 = wb.CreateName();
+            IName name2 = wb.CreateName();
             try
             {
                 name2.NameName = ("testOne");
@@ -123,15 +123,15 @@ namespace TestCases.SS.UserModel
         [TestMethod]
         public void TestUnicodeNamedRange()
         {
-            Workbook workBook = _testDataProvider.CreateWorkbook();
+            IWorkbook workBook = _testDataProvider.CreateWorkbook();
             workBook.CreateSheet("Test");
-            Name name = workBook.CreateName();
+            IName name = workBook.CreateName();
             name.NameName = ("\u03B1");
             name.RefersToFormula = ("Test!$D$3:$E$8");
 
 
-            Workbook workBook2 = _testDataProvider.WriteOutAndReadBack(workBook);
-            Name name2 = workBook2.GetNameAt(0);
+            IWorkbook workBook2 = _testDataProvider.WriteOutAndReadBack(workBook);
+            IName name2 = workBook2.GetNameAt(0);
 
             Assert.AreEqual("\u03B1", name2.NameName);
             Assert.AreEqual("Test!$D$3:$E$8", name2.RefersToFormula);
@@ -139,17 +139,17 @@ namespace TestCases.SS.UserModel
         [TestMethod]
         public void TestAddRemove()
         {
-            Workbook wb = _testDataProvider.CreateWorkbook();
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
             Assert.AreEqual(0, wb.NumberOfNames);
-            Name name1 = wb.CreateName();
+            IName name1 = wb.CreateName();
             name1.NameName = ("name1");
             Assert.AreEqual(1, wb.NumberOfNames);
 
-            Name name2 = wb.CreateName();
+            IName name2 = wb.CreateName();
             name2.NameName = ("name2");
             Assert.AreEqual(2, wb.NumberOfNames);
 
-            Name name3 = wb.CreateName();
+            IName name3 = wb.CreateName();
             name3.NameName = ("name3");
             Assert.AreEqual(3, wb.NumberOfNames);
 
@@ -162,11 +162,11 @@ namespace TestCases.SS.UserModel
         [TestMethod]
         public void TestScope()
         {
-            Workbook wb = _testDataProvider.CreateWorkbook();
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
             wb.CreateSheet();
             wb.CreateSheet();
 
-            Name name;
+            IName name;
 
             name = wb.CreateName();
             name.NameName = ("aaa");
@@ -229,7 +229,7 @@ namespace TestCases.SS.UserModel
         {
 
             // Create a new workbook
-            Workbook wb = _testDataProvider.CreateWorkbook();
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
 
             // Create a worksheet 'sheet1' in the new workbook
             wb.CreateSheet();
@@ -240,7 +240,7 @@ namespace TestCases.SS.UserModel
             wb.SetSheetName(1, "sheet2");
 
             // Create a new named range for worksheet 'sheet1'
-            Name namedRange1 = wb.CreateName();
+            IName namedRange1 = wb.CreateName();
 
             // Set the name for the named range for worksheet 'sheet1'
             namedRange1.NameName = ("RangeTest1");
@@ -249,7 +249,7 @@ namespace TestCases.SS.UserModel
             namedRange1.RefersToFormula = ("sheet1" + "!$A$1:$L$41");
 
             // Create a new named range for worksheet 'sheet2'
-            Name namedRange2 = wb.CreateName();
+            IName namedRange2 = wb.CreateName();
 
             // Set the name for the named range for worksheet 'sheet2'
             namedRange2.NameName = ("RangeTest2");
@@ -260,11 +260,11 @@ namespace TestCases.SS.UserModel
             // Write the workbook to a file
             // Read the Excel file and verify its content
             wb = _testDataProvider.WriteOutAndReadBack(wb);
-            Name nm1 = wb.GetNameAt(wb.GetNameIndex("RangeTest1"));
+            IName nm1 = wb.GetNameAt(wb.GetNameIndex("RangeTest1"));
             Assert.IsTrue("RangeTest1".Equals(nm1.NameName), "Name is " + nm1.NameName);
             Assert.IsTrue((wb.GetSheetName(0) + "!$A$1:$L$41").Equals(nm1.RefersToFormula), "Reference is " + nm1.RefersToFormula);
 
-            Name nm2 = wb.GetNameAt(wb.GetNameIndex("RangeTest2"));
+            IName nm2 = wb.GetNameAt(wb.GetNameIndex("RangeTest2"));
             Assert.IsTrue("RangeTest2".Equals(nm2.NameName), "Name is " + nm2.NameName);
             Assert.IsTrue((wb.GetSheetName(1) + "!$A$1:$O$21").Equals(nm2.RefersToFormula), "Reference is " + nm2.RefersToFormula);
         }
@@ -275,7 +275,7 @@ namespace TestCases.SS.UserModel
         [TestMethod]
         public void TestSinglePrintArea()
         {
-            Workbook workbook = _testDataProvider.CreateWorkbook();
+            IWorkbook workbook = _testDataProvider.CreateWorkbook();
             workbook.CreateSheet("Test Print Area");
             String sheetName = workbook.GetSheetName(0);
 
@@ -294,7 +294,7 @@ namespace TestCases.SS.UserModel
         [TestMethod]
         public void TestSinglePrintAreaWOSheet()
         {
-            Workbook workbook = _testDataProvider.CreateWorkbook();
+            IWorkbook workbook = _testDataProvider.CreateWorkbook();
             workbook.CreateSheet("Test Print Area");
             String sheetName = workbook.GetSheetName(0);
 
@@ -313,7 +313,7 @@ namespace TestCases.SS.UserModel
         [TestMethod]
         public void TestPrintAreaFile()
         {
-            Workbook workbook = _testDataProvider.CreateWorkbook();
+            IWorkbook workbook = _testDataProvider.CreateWorkbook();
             workbook.CreateSheet("Test Print Area");
             String sheetName = workbook.GetSheetName(0);
 
@@ -334,7 +334,7 @@ namespace TestCases.SS.UserModel
         [TestMethod]
         public void TestMultiplePrintAreaFile()
         {
-            Workbook workbook = _testDataProvider.CreateWorkbook();
+            IWorkbook workbook = _testDataProvider.CreateWorkbook();
 
             workbook.CreateSheet("Sheet1");
             workbook.CreateSheet("Sheet2");
@@ -385,7 +385,7 @@ namespace TestCases.SS.UserModel
         [TestMethod]
         public void TestPrintAreaCoords()
         {
-            Workbook workbook = _testDataProvider.CreateWorkbook();
+            IWorkbook workbook = _testDataProvider.CreateWorkbook();
             workbook.CreateSheet("Test Print Area");
             String sheetName = workbook.GetSheetName(0);
 
@@ -405,7 +405,7 @@ namespace TestCases.SS.UserModel
         [TestMethod]
         public void TestPrintAreaUnion()
         {
-            Workbook workbook = _testDataProvider.CreateWorkbook();
+            IWorkbook workbook = _testDataProvider.CreateWorkbook();
             workbook.CreateSheet("Test Print Area");
 
             String reference = "$A$1:$B$1,$D$1:$F$2";
@@ -422,7 +422,7 @@ namespace TestCases.SS.UserModel
         [TestMethod]
         public void TestPrintAreaRemove()
         {
-            Workbook workbook = _testDataProvider.CreateWorkbook();
+            IWorkbook workbook = _testDataProvider.CreateWorkbook();
             workbook.CreateSheet("Test Print Area");
             workbook.GetSheetName(0);
 
@@ -442,7 +442,7 @@ namespace TestCases.SS.UserModel
         [TestMethod]
         public void TestMultipleNamedWrite()
         {
-            Workbook wb = _testDataProvider.CreateWorkbook();
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
 
 
             wb.CreateSheet("testSheet1");
@@ -451,13 +451,13 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual("testSheet1", sheetName);
 
             //Creating new Named Range
-            Name newNamedRange = wb.CreateName();
+            IName newNamedRange = wb.CreateName();
 
             newNamedRange.NameName = ("RangeTest");
             newNamedRange.RefersToFormula = (sheetName + "!$D$4:$E$8");
 
             //Creating another new Named Range
-            Name newNamedRange2 = wb.CreateName();
+            IName newNamedRange2 = wb.CreateName();
 
             newNamedRange2.NameName = ("AnotherTest");
             newNamedRange2.RefersToFormula = (sheetName + "!$F$1:$G$6");
@@ -465,7 +465,7 @@ namespace TestCases.SS.UserModel
             wb.GetNameAt(0);
 
             wb = _testDataProvider.WriteOutAndReadBack(wb);
-            Name nm = wb.GetNameAt(wb.GetNameIndex("RangeTest"));
+            IName nm = wb.GetNameAt(wb.GetNameIndex("RangeTest"));
             Assert.IsTrue("RangeTest".Equals(nm.NameName), "Name is " + nm.NameName);
             Assert.IsTrue((wb.GetSheetName(0) + "!$D$4:$E$8").Equals(nm.RefersToFormula), "Reference is " + nm.RefersToFormula);
 
@@ -484,20 +484,20 @@ namespace TestCases.SS.UserModel
             String sheetName = "Test Named Cell";
             String cellName = "named_cell";
             String cellValue = "TEST Value";
-            Workbook wb = _testDataProvider.CreateWorkbook();
-            Sheet sheet = wb.CreateSheet(sheetName);
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            ISheet sheet = wb.CreateSheet(sheetName);
             CreationHelper factory = wb.GetCreationHelper();
             sheet.CreateRow(0).CreateCell(0).SetCellValue(factory.CreateRichTextString(cellValue));
 
             // create named range for a single cell using areareference
-            Name namedCell = wb.CreateName();
+            IName namedCell = wb.CreateName();
             namedCell.NameName = (cellName);
             String reference = "'" + sheetName + "'" + "!A1:A1";
             namedCell.RefersToFormula = (reference);
 
             // retrieve the newly Created named range
             int namedCellIdx = wb.GetNameIndex(cellName);
-            Name aNamedCell = wb.GetNameAt(namedCellIdx);
+            IName aNamedCell = wb.GetNameAt(namedCellIdx);
             Assert.IsNotNull(aNamedCell);
 
             // retrieve the cell at the named range and test its contents
@@ -506,10 +506,10 @@ namespace TestCases.SS.UserModel
 
             CellReference cref = aref.FirstCell;
             Assert.IsNotNull(cref);
-            Sheet s = wb.GetSheet(cref.SheetName);
+            ISheet s = wb.GetSheet(cref.SheetName);
             Assert.IsNotNull(s);
-            Row r = sheet.GetRow(cref.Row);
-            Cell c = r.GetCell(cref.Col);
+            IRow r = sheet.GetRow(cref.Row);
+            ICell c = r.GetCell(cref.Col);
             String contents = c.RichStringCellValue.String;
             Assert.AreEqual(contents, cellValue, "Contents of cell retrieved by its named reference");
         }
@@ -523,28 +523,28 @@ namespace TestCases.SS.UserModel
 
             // Setup for this testcase
             String sname = "TestSheet", cname = "TestName", cvalue = "TestVal";
-            Workbook wb = _testDataProvider.CreateWorkbook();
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
             CreationHelper factory = wb.GetCreationHelper();
-            Sheet sheet = wb.CreateSheet(sname);
+            ISheet sheet = wb.CreateSheet(sname);
             sheet.CreateRow(0).CreateCell(0).SetCellValue(factory.CreateRichTextString(cvalue));
 
             // create named range for a single cell using cellreference
-            Name namedCell = wb.CreateName();
+            IName namedCell = wb.CreateName();
             namedCell.NameName = (cname);
             String reference = sname + "!A1";
             namedCell.RefersToFormula = (reference);
 
             // retrieve the newly Created named range
             int namedCellIdx = wb.GetNameIndex(cname);
-            Name aNamedCell = wb.GetNameAt(namedCellIdx);
+            IName aNamedCell = wb.GetNameAt(namedCellIdx);
             Assert.IsNotNull(aNamedCell);
 
             // retrieve the cell at the named range and test its contents
             CellReference cref = new CellReference(aNamedCell.RefersToFormula);
             Assert.IsNotNull(cref);
-            Sheet s = wb.GetSheet(cref.SheetName);
-            Row r = sheet.GetRow(cref.Row);
-            Cell c = r.GetCell(cref.Col);
+            ISheet s = wb.GetSheet(cref.SheetName);
+            IRow r = sheet.GetRow(cref.Row);
+            ICell c = r.GetCell(cref.Col);
             String contents = c.RichStringCellValue.String;
             Assert.AreEqual(contents, cvalue, "Contents of cell retrieved by its named reference");
         }
@@ -569,8 +569,8 @@ namespace TestCases.SS.UserModel
         [TestMethod]
         public void TestUnInitialisedNameRefersToFormula_bug46973()
         {
-            Workbook wb = _testDataProvider.CreateWorkbook();
-            Name n = wb.CreateName();
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            IName n = wb.CreateName();
             n.NameName = ("UPSState");
             String formula;
             try
@@ -591,8 +591,8 @@ namespace TestCases.SS.UserModel
         [TestMethod]
         public void TestDeletedCell()
         {
-            Workbook wb = _testDataProvider.CreateWorkbook();
-            Name n = wb.CreateName();
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            IName n = wb.CreateName();
             n.NameName = ("MyName");
             // contrived example to expose bug:
             n.RefersToFormula = ("if(A1,\"#REF!\", \"\")");
@@ -606,8 +606,8 @@ namespace TestCases.SS.UserModel
         [TestMethod]
         public void TestFunctionNames()
         {
-            Workbook wb = _testDataProvider.CreateWorkbook();
-            Name n = wb.CreateName();
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            IName n = wb.CreateName();
             Assert.IsFalse(n.IsFunctionName);
 
             n.IsFunctionName =false;

@@ -45,11 +45,11 @@ namespace TestCases.HSSF.UserModel
 
             // Create a workbook to Test with
             wb = new HSSFWorkbook();
-            NPOI.SS.UserModel.Sheet sheet = wb.CreateSheet();
-            DataFormat format = wb.CreateDataFormat();
+            NPOI.SS.UserModel.ISheet sheet = wb.CreateSheet();
+            IDataFormat format = wb.CreateDataFormat();
 
             // Create a row and put some cells in it
-            Row row = sheet.CreateRow(0);
+            IRow row = sheet.CreateRow(0);
 
             // date value for July 8 1901 1:19 PM
             double dateNum = 555.555;
@@ -101,9 +101,9 @@ namespace TestCases.HSSF.UserModel
             // Create cells with good date patterns
             for (int i = 0; i < goodDatePatterns.Length; i++)
             {
-                Cell cell = row.CreateCell(i);
+                ICell cell = row.CreateCell(i);
                 cell.SetCellValue(dateNum);
-                NPOI.SS.UserModel.CellStyle cellStyle = wb.CreateCellStyle();
+                NPOI.SS.UserModel.ICellStyle cellStyle = wb.CreateCellStyle();
                 cellStyle.DataFormat = (format.GetFormat(goodDatePatterns[i]));
                 cell.CellStyle = (cellStyle);
             }
@@ -112,9 +112,9 @@ namespace TestCases.HSSF.UserModel
             // Create cells with num patterns
             for (int i = 0; i < goodNumPatterns.Length; i++)
             {
-                Cell cell = row.CreateCell(i);
+                ICell cell = row.CreateCell(i);
                 cell.SetCellValue(-1234567890.12345);
-                NPOI.SS.UserModel.CellStyle cellStyle = wb.CreateCellStyle();
+                NPOI.SS.UserModel.ICellStyle cellStyle = wb.CreateCellStyle();
                 cellStyle.DataFormat = (format.GetFormat(goodNumPatterns[i]));
                 cell.CellStyle = (cellStyle);
             }
@@ -123,9 +123,9 @@ namespace TestCases.HSSF.UserModel
             // Create cells with bad num patterns
             for (int i = 0; i < badNumPatterns.Length; i++)
             {
-                Cell cell = row.CreateCell(i);
+                ICell cell = row.CreateCell(i);
                 cell.SetCellValue(1234567890.12345);
-                NPOI.SS.UserModel.CellStyle cellStyle = wb.CreateCellStyle();
+                NPOI.SS.UserModel.ICellStyle cellStyle = wb.CreateCellStyle();
                 cellStyle.DataFormat = (format.GetFormat(badNumPatterns[i]));
                 cell.CellStyle = (cellStyle);
             }
@@ -134,37 +134,37 @@ namespace TestCases.HSSF.UserModel
 
             { // Zip + 4 format
                 row = sheet.CreateRow(3);
-                Cell cell = row.CreateCell(0);
+                ICell cell = row.CreateCell(0);
                 cell.SetCellValue(123456789);
-                NPOI.SS.UserModel.CellStyle cellStyle = wb.CreateCellStyle();
+                NPOI.SS.UserModel.ICellStyle cellStyle = wb.CreateCellStyle();
                 cellStyle.DataFormat = (format.GetFormat("00000-0000"));
                 cell.CellStyle = (cellStyle);
             }
 
             { // Phone number format
                 row = sheet.CreateRow(4);
-                Cell cell = row.CreateCell(0);
+                ICell cell = row.CreateCell(0);
                 cell.SetCellValue(5551234567D);
-                NPOI.SS.UserModel.CellStyle cellStyle = wb.CreateCellStyle();
+                NPOI.SS.UserModel.ICellStyle cellStyle = wb.CreateCellStyle();
                 cellStyle.DataFormat = (format.GetFormat("[<=9999999]###-####;(###) ###-####"));
                 cell.CellStyle = (cellStyle);
             }
 
             { // SSN format
                 row = sheet.CreateRow(5);
-                Cell cell = row.CreateCell(0);
+                ICell cell = row.CreateCell(0);
                 cell.SetCellValue(444551234);
-                NPOI.SS.UserModel.CellStyle cellStyle = wb.CreateCellStyle();
+                NPOI.SS.UserModel.ICellStyle cellStyle = wb.CreateCellStyle();
                 cellStyle.DataFormat = (format.GetFormat("000-00-0000"));
                 cell.CellStyle = (cellStyle);
             }
 
             { // formula cell
                 row = sheet.CreateRow(6);
-                Cell cell = row.CreateCell(0);
+                ICell cell = row.CreateCell(0);
                 cell.SetCellType(NPOI.SS.UserModel.CellType.FORMULA);
                 cell.CellFormula = ("SUM(12.25,12.25)/100");
-                NPOI.SS.UserModel.CellStyle cellStyle = wb.CreateCellStyle();
+                NPOI.SS.UserModel.ICellStyle cellStyle = wb.CreateCellStyle();
                 cellStyle.DataFormat = (format.GetFormat("##.00%;"));
                 cell.CellStyle = (cellStyle);
             }
@@ -177,12 +177,12 @@ namespace TestCases.HSSF.UserModel
         public void TestGetFormattedCellValueHSSFCell()
         {
             // Valid date formats -- cell values should be date formatted & not "555.555"
-            Row row = wb.GetSheetAt(0).GetRow(0);
+            IRow row = wb.GetSheetAt(0).GetRow(0);
             IEnumerator it = row.GetCellEnumerator();
             log("==== VALID DATE FORMATS ====");
             while (it.MoveNext())
             {
-                Cell cell = (Cell)it.Current;
+                ICell cell = (ICell)it.Current;
                 log(formatter.FormatCellValue(cell));
 
                 // should not be equal to "555.555"
@@ -199,7 +199,7 @@ namespace TestCases.HSSF.UserModel
             log("\n==== VALID NUMBER FORMATS ====");
             while (it.MoveNext())
             {
-                Cell cell = (Cell)it.Current;
+                ICell cell = (ICell)it.Current;
                 log(formatter.FormatCellValue(cell));
 
                 // should not be equal to "1234567890.12345"
@@ -212,7 +212,7 @@ namespace TestCases.HSSF.UserModel
             log("\n==== INVALID NUMBER FORMATS ====");
             while (it.MoveNext())
             {
-                Cell cell = (Cell)it.Current;
+                ICell cell = (ICell)it.Current;
                 log(formatter.FormatCellValue(cell));
                 // should be equal to "1234567890.12345"
                 Assert.AreEqual("1234567890.12345", formatter.FormatCellValue(cell));
@@ -220,7 +220,7 @@ namespace TestCases.HSSF.UserModel
 
             // Test Zip+4 format
             row = wb.GetSheetAt(0).GetRow(3);
-            Cell cell2 = row.GetCell(0);
+            ICell cell2 = row.GetCell(0);
             log("\n==== ZIP FORMAT ====");
             log(formatter.FormatCellValue(cell2));
             Assert.AreEqual("12345-6789", formatter.FormatCellValue(cell2));
@@ -249,8 +249,8 @@ namespace TestCases.HSSF.UserModel
         public void TestGetFormattedCellValueHSSFCellHSSFFormulaEvaluator()
         {
             // Test formula format
-            Row row = wb.GetSheetAt(0).GetRow(6);
-            Cell cell = row.GetCell(0);
+            IRow row = wb.GetSheetAt(0).GetRow(6);
+            ICell cell = row.GetCell(0);
             log("\n==== FORMULA CELL ====");
 
             // first without a formula evaluator
@@ -270,7 +270,7 @@ namespace TestCases.HSSF.UserModel
         [TestMethod]
         public void TestSetDefaultNumberFormat()
         {
-            Row row = wb.GetSheetAt(0).GetRow(2);
+            IRow row = wb.GetSheetAt(0).GetRow(2);
             IEnumerator it = row.GetCellEnumerator();
             FormatBase defaultFormat = new DecimalFormat("Balance $#,#00.00 USD;Balance -$#,#00.00 USD");
             formatter.SetDefaultNumberFormat(defaultFormat);
@@ -280,7 +280,7 @@ namespace TestCases.HSSF.UserModel
             Random rand = new Random((int)DateTime.Now.ToFileTime());
             while (it.MoveNext())
             {
-                Cell cell = (Cell)it.Current;
+                ICell cell = (ICell)it.Current;
                 cell.SetCellValue(cell.NumericCellValue * rand.Next() / 1000000 - 1000);
                 string result = formatter.FormatCellValue(cell);
                 log(result);
@@ -292,7 +292,7 @@ namespace TestCases.HSSF.UserModel
         public void TestFromFile()
         {
             HSSFWorkbook workbook = HSSFTestDataSamples.OpenSampleWorkbook("Formatting.xls");
-            Sheet sheet = workbook.GetSheetAt(0);
+            ISheet sheet = workbook.GetSheetAt(0);
 
             DataFormatter f = new DataFormatter();
 

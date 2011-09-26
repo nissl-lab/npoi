@@ -75,9 +75,9 @@ namespace TestCases.HSSF.UserModel
                                                     ".xls");
         FileStream out1  = new FileStream(filepath,FileMode.OpenOrCreate);
         HSSFWorkbook     wb   = new HSSFWorkbook();
-        NPOI.SS.UserModel.Sheet        s    = wb.CreateSheet();
-        Row          r    = null;
-        Cell         c    = null;
+        NPOI.SS.UserModel.ISheet        s    = wb.CreateSheet();
+        IRow          r    = null;
+        ICell         c    = null;
 
         for (int rownum = 0; rownum < 100; rownum++) {
             r = s.CreateRow(rownum);
@@ -115,9 +115,9 @@ namespace TestCases.HSSF.UserModel
                                                         ".xls");
             FileStream out1 = new FileStream(filepath, FileMode.OpenOrCreate);
             HSSFWorkbook wb = new HSSFWorkbook();
-            NPOI.SS.UserModel.Sheet s = wb.CreateSheet();
-            Row r = null;
-            Cell c = null;
+            NPOI.SS.UserModel.ISheet s = wb.CreateSheet();
+            IRow r = null;
+            ICell c = null;
 
             for (int rownum = 0; rownum < 100; rownum++)
             {
@@ -163,9 +163,9 @@ namespace TestCases.HSSF.UserModel
         public void TestReadSimple()
         {
             HSSFWorkbook workbook = OpenSample("Simple.xls");
-            NPOI.SS.UserModel.Sheet sheet = workbook.GetSheetAt(0);
+            NPOI.SS.UserModel.ISheet sheet = workbook.GetSheetAt(0);
 
-            Cell cell = sheet.GetRow(0).GetCell(0);
+            ICell cell = sheet.GetRow(0).GetCell(0);
             Assert.AreEqual(REPLACE_ME, cell.RichStringCellValue.String);
         }
 
@@ -181,9 +181,9 @@ namespace TestCases.HSSF.UserModel
         public void TestReadSimpleWithDataFormat()
         {
             HSSFWorkbook workbook = OpenSample("SimpleWithDataFormat.xls");
-            NPOI.SS.UserModel.Sheet sheet = workbook.GetSheetAt(0);
-            DataFormat format = workbook.CreateDataFormat();
-            Cell cell = sheet.GetRow(0).GetCell(0);
+            NPOI.SS.UserModel.ISheet sheet = workbook.GetSheetAt(0);
+            IDataFormat format = workbook.CreateDataFormat();
+            ICell cell = sheet.GetRow(0).GetCell(0);
 
             Assert.AreEqual(1.25, cell.NumericCellValue, 1e-10);
 
@@ -204,11 +204,11 @@ namespace TestCases.HSSF.UserModel
             string filepath = TempFile.GetTempFilePath("TestWriteSheetSimple", ".xls");
             FileStream out1 = new FileStream(filepath, FileMode.OpenOrCreate);
             HSSFWorkbook wb = new HSSFWorkbook();
-            NPOI.SS.UserModel.Sheet s = wb.CreateSheet();
-            Row r = null;
-            Cell c = null;
-            DataFormat format = wb.CreateDataFormat();
-            NPOI.SS.UserModel.CellStyle cs = wb.CreateCellStyle();
+            NPOI.SS.UserModel.ISheet s = wb.CreateSheet();
+            IRow r = null;
+            ICell c = null;
+            IDataFormat format = wb.CreateDataFormat();
+            NPOI.SS.UserModel.ICellStyle cs = wb.CreateCellStyle();
 
             short df = format.GetFormat("0.0");
             cs.DataFormat=(df);
@@ -224,8 +224,8 @@ namespace TestCases.HSSF.UserModel
             FileStream stream = new FileStream(filepath,FileMode.OpenOrCreate);
             POIFSFileSystem fs = new POIFSFileSystem(stream);
             HSSFWorkbook workbook = new HSSFWorkbook(fs);
-            NPOI.SS.UserModel.Sheet sheet = workbook.GetSheetAt(0);
-            Cell cell =
+            NPOI.SS.UserModel.ISheet sheet = workbook.GetSheetAt(0);
+            ICell cell =
                              sheet.GetRow(0).GetCell(0);
             format = workbook.CreateDataFormat();
 
@@ -250,7 +250,7 @@ namespace TestCases.HSSF.UserModel
         public void TestReadEmployeeSimple()
         {
             HSSFWorkbook workbook = OpenSample("Employee.xls");
-            NPOI.SS.UserModel.Sheet sheet = workbook.GetSheetAt(0);
+            NPOI.SS.UserModel.ISheet sheet = workbook.GetSheetAt(0);
 
             Assert.AreEqual(EMPLOYEE_INFORMATION, sheet.GetRow(1).GetCell(1).RichStringCellValue.String);
             Assert.AreEqual(LAST_NAME_KEY, sheet.GetRow(3).GetCell(2).RichStringCellValue.String);
@@ -274,8 +274,8 @@ namespace TestCases.HSSF.UserModel
         public void TestModifySimple()
         {
             HSSFWorkbook workbook = OpenSample("Simple.xls");
-            NPOI.SS.UserModel.Sheet sheet = workbook.GetSheetAt(0);
-            Cell cell = sheet.GetRow(0).GetCell(0);
+            NPOI.SS.UserModel.ISheet sheet = workbook.GetSheetAt(0);
+            ICell cell = sheet.GetRow(0).GetCell(0);
 
             cell.SetCellValue(new HSSFRichTextString(REPLACED));
 
@@ -302,8 +302,8 @@ namespace TestCases.HSSF.UserModel
         public void TestModifySimpleWithSkip()
         {
             HSSFWorkbook workbook = OpenSample("SimpleWithSkip.xls");
-            NPOI.SS.UserModel.Sheet sheet = workbook.GetSheetAt(0);
-            Cell cell = sheet.GetRow(0).GetCell(1);
+            NPOI.SS.UserModel.ISheet sheet = workbook.GetSheetAt(0);
+            ICell cell = sheet.GetRow(0).GetCell(1);
 
             cell.SetCellValue(new HSSFRichTextString(REPLACED));
             cell = sheet.GetRow(1).GetCell(0);
@@ -339,11 +339,11 @@ namespace TestCases.HSSF.UserModel
         public void TestModifySimpleWithStyling()
         {
             HSSFWorkbook workbook = OpenSample("SimpleWithStyling.xls");
-            NPOI.SS.UserModel.Sheet sheet = workbook.GetSheetAt(0);
+            NPOI.SS.UserModel.ISheet sheet = workbook.GetSheetAt(0);
 
             for (int k = 0; k < 4; k++)
             {
-                Cell cell = sheet.GetRow(k).GetCell(0);
+                ICell cell = sheet.GetRow(k).GetCell(0);
 
                 cell.SetCellValue(new HSSFRichTextString(REPLACED));
             }
@@ -353,7 +353,7 @@ namespace TestCases.HSSF.UserModel
             sheet = workbook.GetSheetAt(0);
             for (int k = 0; k < 4; k++)
             {
-                Cell cell = sheet.GetRow(k).GetCell(0);
+                ICell cell = sheet.GetRow(k).GetCell(0);
 
                 Assert.AreEqual(REPLACED, cell.RichStringCellValue.String);
             }
@@ -376,8 +376,8 @@ namespace TestCases.HSSF.UserModel
         public void TestModifyEmployee()
         {
             HSSFWorkbook workbook = OpenSample("Employee.xls");
-            NPOI.SS.UserModel.Sheet sheet = workbook.GetSheetAt(0);
-            Cell cell = sheet.GetRow(3).GetCell(2);
+            NPOI.SS.UserModel.ISheet sheet = workbook.GetSheetAt(0);
+            ICell cell = sheet.GetRow(3).GetCell(2);
 
             cell.SetCellValue(new HSSFRichTextString(LAST_NAME_VALUE));
             cell = sheet.GetRow(4).GetCell(2);
@@ -405,8 +405,8 @@ namespace TestCases.HSSF.UserModel
         public void TestReadSheetWithRK()
         {
             HSSFWorkbook h = OpenSample("rk.xls");
-            NPOI.SS.UserModel.Sheet s = h.GetSheetAt(0);
-            Cell c = s.GetRow(0).GetCell(0);
+            NPOI.SS.UserModel.ISheet s = h.GetSheetAt(0);
+            ICell c = s.GetRow(0).GetCell(0);
             NPOI.SS.UserModel.CellType a = c.CellType;
 
             Assert.AreEqual(a, NPOI.SS.UserModel.CellType.NUMERIC);
@@ -426,15 +426,15 @@ namespace TestCases.HSSF.UserModel
         public void TestWriteModifySheetMerged()
         {
             HSSFWorkbook wb = new HSSFWorkbook();
-            NPOI.SS.UserModel.Sheet s = wb.CreateSheet();
+            NPOI.SS.UserModel.ISheet s = wb.CreateSheet();
 
             for (int rownum = 0; rownum < 100; rownum++)
             {
-                Row r = s.CreateRow(rownum);
+                IRow r = s.CreateRow(rownum);
 
                 for (int cellnum = 0; cellnum < 50; cellnum += 2)
                 {
-                    Cell c = r.CreateCell(cellnum);
+                    ICell c = r.CreateCell(cellnum);
                     c.SetCellValue(rownum * 10000 + cellnum
                                    + (((double)rownum / 1000)
                                       + ((double)cellnum / 10000)));
@@ -510,8 +510,8 @@ namespace TestCases.HSSF.UserModel
         {
             HSSFWorkbook workbook = new HSSFWorkbook();
             HSSFSheet sheet = (HSSFSheet)workbook.CreateSheet("Design Variants");
-            Row row = sheet.CreateRow(2);
-            Cell cell = row.CreateCell(1);
+            IRow row = sheet.CreateRow(2);
+            ICell cell = row.CreateCell(1);
 
             cell.SetCellValue(new HSSFRichTextString("Class"));
             cell = row.CreateCell(2);
@@ -525,9 +525,9 @@ namespace TestCases.HSSF.UserModel
         public void TestManyRows()
         {
             HSSFWorkbook workbook = new HSSFWorkbook();
-            NPOI.SS.UserModel.Sheet sheet = workbook.CreateSheet();
-            Row row;
-            Cell cell;
+            NPOI.SS.UserModel.ISheet sheet = workbook.CreateSheet();
+            IRow row;
+            ICell cell;
             int i, j;
             for (i = 0, j = 32771; j > 0; i++, j--)
             {
@@ -541,7 +541,7 @@ namespace TestCases.HSSF.UserModel
             double lastVal = cell.NumericCellValue;
 
             HSSFWorkbook wb = HSSFTestDataSamples.WriteOutAndReadBack(workbook);
-            NPOI.SS.UserModel.Sheet s = wb.GetSheetAt(0);
+            NPOI.SS.UserModel.ISheet s = wb.GetSheetAt(0);
             row = s.GetRow(32770);
             cell = row.GetCell(0);
             Assert.AreEqual(lastVal, cell.NumericCellValue, 0, "Value from last row == 32770");
@@ -555,11 +555,11 @@ namespace TestCases.HSSF.UserModel
         public void TestRepeatingColsRows()
         {
             HSSFWorkbook workbook = new HSSFWorkbook();
-            NPOI.SS.UserModel.Sheet sheet = workbook.CreateSheet("Test Print Titles");
+            NPOI.SS.UserModel.ISheet sheet = workbook.CreateSheet("Test Print Titles");
 
-            Row row = sheet.CreateRow(0);
+            IRow row = sheet.CreateRow(0);
 
-            Cell cell = row.CreateCell(1);
+            ICell cell = row.CreateCell(1);
             cell.SetCellValue(new HSSFRichTextString("hi"));
 
 
@@ -587,7 +587,7 @@ namespace TestCases.HSSF.UserModel
             }
             HSSFWorkbook workbook2 = OpenSample("blankworkbook.xls");
             workbook2.Dispose();
-            NPOI.SS.UserModel.Sheet sheet=workbook2.GetSheetAt(1);
+            NPOI.SS.UserModel.ISheet sheet=workbook2.GetSheetAt(1);
         }
     }
 }

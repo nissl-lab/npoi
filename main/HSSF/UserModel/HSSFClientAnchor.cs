@@ -26,7 +26,7 @@ namespace NPOI.HSSF.UserModel
     /// top-left and buttom-right cell.
     /// @author Glen Stampoultzis (glens at apache.org)
     /// </summary>
-    public class HSSFClientAnchor : HSSFAnchor, NPOI.SS.UserModel.ClientAnchor
+    public class HSSFClientAnchor : HSSFAnchor, NPOI.SS.UserModel.IClientAnchor
     {
         int col1;
         int row1;
@@ -78,7 +78,7 @@ namespace NPOI.HSSF.UserModel
         /// </summary>
         /// <param name="sheet">the sheet the anchor will be attached to</param>
         /// <returns>the shape height.</returns>     
-        public float GetAnchorHeightInPoints(NPOI.SS.UserModel.Sheet sheet)
+        public float GetAnchorHeightInPoints(NPOI.SS.UserModel.ISheet sheet)
         {
             int y1 = Dy1;
             int y2 = Dy2;
@@ -109,9 +109,9 @@ namespace NPOI.HSSF.UserModel
         /// <param name="sheet">The sheet.</param>
         /// <param name="rowNum">The row num.</param>
         /// <returns></returns>
-        private float GetRowHeightInPoints(NPOI.SS.UserModel.Sheet sheet, int rowNum)
+        private float GetRowHeightInPoints(NPOI.SS.UserModel.ISheet sheet, int rowNum)
         {
-            NPOI.SS.UserModel.Row row = sheet.GetRow(rowNum);
+            NPOI.SS.UserModel.IRow row = sheet.GetRow(rowNum);
             if (row == null)
                 return sheet.DefaultRowHeightInPoints;
             else

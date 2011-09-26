@@ -4,9 +4,9 @@ using System.Text;
 
 namespace NPOI.SS.UserModel
 {
-    public interface Shape
+    public interface IShape
     {
-        Shape Parent { get; }
+        IShape Parent { get; }
 
         void SetLineStyleColor(int lineStyleColor);
         void SetLineStyleColor(int red, int green, int blue);

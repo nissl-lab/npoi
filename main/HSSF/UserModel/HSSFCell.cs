@@ -53,7 +53,7 @@ namespace NPOI.HSSF.UserModel
     /// @author  Yegor Kozlov cell comments support
     /// </remarks>
     [Serializable]
-    public class HSSFCell : NPOI.SS.UserModel.Cell
+    public class HSSFCell : NPOI.SS.UserModel.ICell
     {
 
         public const short ENCODING_UNCHANGED = -1;
@@ -66,7 +66,7 @@ namespace NPOI.HSSF.UserModel
         private HSSFWorkbook book;
         private HSSFSheet sheet;
         private CellValueRecordInterface record;
-        private Comment comment;
+        private IComment comment;
 
 
         private static String FILE_FORMAT_NAME = "BIFF8";
@@ -266,7 +266,7 @@ namespace NPOI.HSSF.UserModel
             }
         }
 
-        public NPOI.SS.UserModel.Sheet Sheet
+        public NPOI.SS.UserModel.ISheet Sheet
         {
             get
             {
@@ -278,7 +278,7 @@ namespace NPOI.HSSF.UserModel
  *
  * @return the HSSFRow that owns this cell
  */
-        public NPOI.SS.UserModel.Row Row
+        public NPOI.SS.UserModel.IRow Row
         {
             get
             {
@@ -603,7 +603,7 @@ namespace NPOI.HSSF.UserModel
         /// string, for String cells we'll Set its value.  For other types we will
         /// Change the cell to a string cell and Set its value.
         /// If value is null then we will Change the cell to a Blank cell.</param>
-        public void SetCellValue(NPOI.SS.UserModel.RichTextString value)
+        public void SetCellValue(NPOI.SS.UserModel.IRichTextString value)
         {
             HSSFRichTextString hvalue = (HSSFRichTextString)value;
 
@@ -830,7 +830,7 @@ namespace NPOI.HSSF.UserModel
         {
             get
             {
-                NPOI.SS.UserModel.RichTextString str = RichStringCellValue;
+                NPOI.SS.UserModel.IRichTextString str = RichStringCellValue;
                 return str.String;
             }
         }
@@ -841,7 +841,7 @@ namespace NPOI.HSSF.UserModel
         /// For formulaCells that are not string Formulas, we return empty String
         /// </summary>
         /// <value>The rich string cell value.</value>
-        public NPOI.SS.UserModel.RichTextString RichStringCellValue
+        public NPOI.SS.UserModel.IRichTextString RichStringCellValue
         {
             get
             {
@@ -984,7 +984,7 @@ namespace NPOI.HSSF.UserModel
         /// object.
         /// </summary>
         /// <value>The cell style.</value>
-        public NPOI.SS.UserModel.CellStyle CellStyle
+        public NPOI.SS.UserModel.ICellStyle CellStyle
         {
             get
             {
@@ -1093,7 +1093,7 @@ namespace NPOI.HSSF.UserModel
         /// Returns comment associated with this cell
         /// </summary>
         /// <value>The cell comment associated with this cell.</value>
-        public NPOI.SS.UserModel.Comment CellComment
+        public NPOI.SS.UserModel.IComment CellComment
         {
             get
             {
@@ -1256,7 +1256,7 @@ namespace NPOI.HSSF.UserModel
         /// Returns hyperlink associated with this cell
         /// </summary>
         /// <value>The hyperlink associated with this cell or null if not found</value>
-        public Hyperlink Hyperlink
+        public IHyperlink Hyperlink
         {
             get
             {

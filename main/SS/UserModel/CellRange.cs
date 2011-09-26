@@ -4,7 +4,7 @@ using System.Text;
 
 namespace NPOI.SS.UserModel
 {
-    public interface CellRange<T> : IEnumerable<T> where T : Cell
+    public interface ICellRange<T> : IEnumerable<T> where T : ICell
     {
         int Width { get; }
         int Height { get; }

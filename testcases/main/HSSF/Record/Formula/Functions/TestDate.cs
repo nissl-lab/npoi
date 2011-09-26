@@ -20,15 +20,15 @@ namespace TestCases.HSSF.Record.Formula.Functions
     [TestClass]
     public class TestDate
     {
-        private NPOI.SS.UserModel.Cell cell11, cell12, cell13, cell14, cell15,cell16;
+        private NPOI.SS.UserModel.ICell cell11, cell12, cell13, cell14, cell15,cell16;
         private HSSFFormulaEvaluator evaluator;
 
         [TestInitialize]
         public void SetUp()
         {
             HSSFWorkbook wb = new HSSFWorkbook();
-            NPOI.SS.UserModel.Sheet sheet = wb.CreateSheet("new sheet");
-            NPOI.SS.UserModel.Row row1 = sheet.CreateRow(0);
+            NPOI.SS.UserModel.ISheet sheet = wb.CreateSheet("new sheet");
+            NPOI.SS.UserModel.IRow row1 = sheet.CreateRow(0);
 
             this.cell11 = row1.CreateCell(0);
             this.cell12 = row1.CreateCell(1);

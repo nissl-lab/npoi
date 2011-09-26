@@ -43,10 +43,10 @@ namespace DrawingInXls
         {
             InitializeWorkbook();
 
-            Sheet sheet1 = hssfworkbook.CreateSheet("new sheet");
-            Sheet sheet2 = hssfworkbook.CreateSheet("second sheet");
-            Sheet sheet3 = hssfworkbook.CreateSheet("third sheet");
-            Sheet sheet4 = hssfworkbook.CreateSheet("fourth sheet");
+            ISheet sheet1 = hssfworkbook.CreateSheet("new sheet");
+            ISheet sheet2 = hssfworkbook.CreateSheet("second sheet");
+            ISheet sheet3 = hssfworkbook.CreateSheet("third sheet");
+            ISheet sheet4 = hssfworkbook.CreateSheet("fourth sheet");
 
             // Draw stuff in them
             DrawSheet1(sheet1);
@@ -58,10 +58,10 @@ namespace DrawingInXls
         }
 
 
-        private static void DrawSheet1(Sheet sheet1)
+        private static void DrawSheet1(ISheet sheet1)
         {
             // Create a row and size one of the cells reasonably large.
-            Row row = sheet1.CreateRow(2);
+            IRow row = sheet1.CreateRow(2);
             row.Height = ((short)2800);
             row.CreateCell(1);
             sheet1.SetColumnWidth(2, 9000);
@@ -81,10 +81,10 @@ namespace DrawingInXls
             rect.ShapeType = (HSSFSimpleShape.OBJECT_TYPE_RECTANGLE);
         }
 
-        private static void DrawSheet2(Sheet sheet2)
+        private static void DrawSheet2(ISheet sheet2)
         {
             // Create a row and size one of the cells reasonably large.
-            Row row = sheet2.CreateRow(2);
+            IRow row = sheet2.CreateRow(2);
             row.CreateCell(1);
             row.HeightInPoints = 240;
             sheet2.SetColumnWidth(2, 9000);
@@ -97,10 +97,10 @@ namespace DrawingInXls
             DrawGrid(patriarch);
         }
 
-        private static void DrawSheet3(Sheet sheet3)
+        private static void DrawSheet3(ISheet sheet3)
         {
             // Create a row and size one of the cells reasonably large
-            Row row = sheet3.CreateRow(2);
+            IRow row = sheet3.CreateRow(2);
             row.HeightInPoints = 140;
             row.CreateCell(1);
             sheet3.SetColumnWidth(2, 9000);
@@ -122,7 +122,7 @@ namespace DrawingInXls
 
         }
 
-        private static void DrawSheet4(Sheet sheet4, HSSFWorkbook wb)
+        private static void DrawSheet4(ISheet sheet4, HSSFWorkbook wb)
         {
             // Create the Drawing patriarch.  This is the top level container for
             // all shapes. This will clear out any existing shapes for that sheet.

@@ -37,14 +37,14 @@ namespace AddHyperlinkInXls
 
             ////cell style for hyperlinks
             ////by default hyperlinks are blue and underlined
-            CellStyle hlink_style = hssfworkbook.CreateCellStyle();
+           .CellStyle hlink_style = hssfworkbook.CreateCellStyle();
             Font hlink_font = hssfworkbook.CreateFont();
             hlink_font.Underline = (byte)FontUnderlineType.SINGLE;
             hlink_font.Color = HSSFColor.BLUE.index;
             hlink_style.SetFont(hlink_font);
 
-            Cell cell;
-            Sheet sheet = hssfworkbook.CreateSheet("Hyperlinks");
+            ICell cell;
+            ISheet sheet = hssfworkbook.CreateSheet("Hyperlinks");
 
             //URL
             cell = sheet.CreateRow(0).CreateCell(0);
@@ -74,13 +74,13 @@ namespace AddHyperlinkInXls
             //link to a place in this workbook
 
             //Create a target sheet and cell
-            Sheet sheet2 = hssfworkbook.CreateSheet("Target Sheet");
-            sheet2.CreateRow(0).CreateCell(0).SetCellValue("Target Cell");
+            ISheet sheet2 = hssfworkbook.CreateSheet("Target ISheet");
+            sheet2.CreateRow(0).CreateCell(0).SetCellValue("Target ICell");
 
             cell = sheet.CreateRow(3).CreateCell(0);
             cell.SetCellValue("Worksheet Link");
             link = new HSSFHyperlink(HyperlinkType.DOCUMENT);
-            link.Address = ("'Target Sheet'!A1");
+            link.Address = ("'Target ISheet'!A1");
             cell.Hyperlink = (link);
             cell.CellStyle = (hlink_style);
 

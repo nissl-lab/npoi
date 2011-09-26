@@ -20,7 +20,7 @@ namespace EnableAutoFilterInXls
             //create horizontal 1-9
             for (int i = 1; i <= 9; i++)
             {
-                Row row = sheet1.CreateRow(i);
+                IRow row = sheet1.CreateRow(i);
                 //create vertical 1-9
                 for (int j = 1; j <= 9; j++)
                 {

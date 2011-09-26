@@ -32,7 +32,7 @@ namespace NPOI.HSSF.UserModel
     /// fonts by using similar methods.
     /// @author Shawn Laubach (slaubach at apache dot org)
     /// </summary>
-    public class HSSFHeader : HeaderFooter,Header
+    public class HSSFHeader : HeaderFooter,IHeader
     {
         private PageSettingsBlock _psb;
 

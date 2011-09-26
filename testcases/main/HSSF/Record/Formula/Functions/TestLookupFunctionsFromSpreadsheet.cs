@@ -90,7 +90,7 @@ namespace TestCases.HSSF.Record.Formula.Functions
 
 
 
-        private static void ConfirmExpectedResult(String msg, Cell expected, NPOI.SS.UserModel.CellValue actual)
+        private static void ConfirmExpectedResult(String msg, ICell expected, NPOI.SS.UserModel.CellValue actual)
         {
             if (expected == null)
             {
@@ -132,7 +132,7 @@ namespace TestCases.HSSF.Record.Formula.Functions
         }
 
 
-        private static AssertFailedException WrongTypeError(String msgPrefix, Cell expectedCell, NPOI.SS.UserModel.CellValue actualValue)
+        private static AssertFailedException WrongTypeError(String msgPrefix, ICell expectedCell, NPOI.SS.UserModel.CellValue actualValue)
         {
             return new AssertFailedException(msgPrefix + " Result type mismatch. Evaluated result was "
                     + FormatValue(actualValue)
@@ -140,7 +140,7 @@ namespace TestCases.HSSF.Record.Formula.Functions
                     + FormatValue(expectedCell)
                     );
         }
-        private static AssertFailedException UnexpectedError(String msgPrefix, Cell expected, int actualErrorCode)
+        private static AssertFailedException UnexpectedError(String msgPrefix, ICell expected, int actualErrorCode)
         {
             return new AssertFailedException(msgPrefix + " Error code ("
                     + ErrorEval.GetText(actualErrorCode)
@@ -169,7 +169,7 @@ namespace TestCases.HSSF.Record.Formula.Functions
         }
 
 
-        private static String FormatValue(Cell expecedCell)
+        private static String FormatValue(ICell expecedCell)
         {
             switch (expecedCell.CellType)
             {
@@ -234,7 +234,7 @@ namespace TestCases.HSSF.Record.Formula.Functions
 
         private int ProcessTestSheet(HSSFWorkbook workbook, int sheetIndex, String sheetName)
         {
-            NPOI.SS.UserModel.Sheet sheet = workbook.GetSheetAt(sheetIndex);
+            NPOI.SS.UserModel.ISheet sheet = workbook.GetSheetAt(sheetIndex);
             HSSFFormulaEvaluator evaluator = new HSSFFormulaEvaluator(sheet, workbook);
             int maxRows = sheet.LastRowNum + 1;
             int result = Result.NO_EVALUATIONS_FOUND; // so far
@@ -242,7 +242,7 @@ namespace TestCases.HSSF.Record.Formula.Functions
             String currentGroupComment = null;
             for (int rowIndex = SS.START_TEST_CASES_ROW_INDEX; rowIndex < maxRows; rowIndex++)
             {
-                Row r = sheet.GetRow(rowIndex);
+                IRow r = sheet.GetRow(rowIndex);
                 String newMarkerValue = GetMarkerColumnValue(r);
                 if (r == null)
                 {
@@ -262,14 +262,14 @@ namespace TestCases.HSSF.Record.Formula.Functions
                 {
                     currentGroupComment = newMarkerValue;
                 }
-                Cell c = r.GetCell(SS.COLUMN_INDEX_EVALUATION);
+                ICell c = r.GetCell(SS.COLUMN_INDEX_EVALUATION);
                 if (c == null || c.CellType != NPOI.SS.UserModel.CellType.FORMULA)
                 {
                     continue;
                 }
                 //evaluator.SetCurrentRow(r);
                 NPOI.SS.UserModel.CellValue actualValue = evaluator.Evaluate(c);
-                Cell expectedValueCell = r.GetCell(SS.COLUMN_INDEX_EXPECTED_RESULT);
+                ICell expectedValueCell = r.GetCell(SS.COLUMN_INDEX_EXPECTED_RESULT);
                 String rowComment = GetRowCommentColumnValue(r);
 
                 String msgPrefix = FormatTestCaseDetails(sheetName, r.RowNum, c, currentGroupComment, rowComment);
@@ -301,7 +301,7 @@ namespace TestCases.HSSF.Record.Formula.Functions
         }
 
 
-        private static String FormatTestCaseDetails(String sheetName, int rowNum, Cell c, String currentGroupComment,
+        private static String FormatTestCaseDetails(String sheetName, int rowNum, ICell c, String currentGroupComment,
                 String rowComment)
         {
 
@@ -346,18 +346,18 @@ namespace TestCases.HSSF.Record.Formula.Functions
             {
                 throw new Exception("First sheet's name was '" + firstSheetName + "' but expected '" + SS.README_SHEET_NAME + "'");
             }
-            NPOI.SS.UserModel.Sheet sheet = workbook.GetSheetAt(0);
+            NPOI.SS.UserModel.ISheet sheet = workbook.GetSheetAt(0);
             String specifiedClassName = sheet.GetRow(2).GetCell((short)0).RichStringCellValue.String;
             Assert.AreEqual(GetType().Name, specifiedClassName, "Test class name in spReadsheet comment");
 
         }
 
-        private static String GetRowCommentColumnValue(Row r)
+        private static String GetRowCommentColumnValue(IRow r)
         {
             return GetCellTextValue(r, SS.COLUMN_ROW_COMMENT, "row comment");
         }
 
-        private static String GetMarkerColumnValue(Row r)
+        private static String GetMarkerColumnValue(IRow r)
         {
             return GetCellTextValue(r, SS.COLUMN_INDEX_MARKER, "marker");
         }
@@ -365,13 +365,13 @@ namespace TestCases.HSSF.Record.Formula.Functions
         /**
          * @return <c>null</c> if cell is1 missing, empty or blank
          */
-        private static String GetCellTextValue(Row r, int colIndex, String columnName)
+        private static String GetCellTextValue(IRow r, int colIndex, String columnName)
         {
             if (r == null)
             {
                 return null;
             }
-            Cell cell = r.GetCell((short)colIndex);
+            ICell cell = r.GetCell((short)colIndex);
             if (cell == null)
             {
                 return null;

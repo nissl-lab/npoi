@@ -18,7 +18,7 @@
 namespace NPOI.SS.UserModel
 {
     using System;
-    public interface Comment
+    public interface IComment
     {
         /**
          * Sets whether this comment is visible.
@@ -53,7 +53,7 @@ namespace NPOI.SS.UserModel
         /**
          * Fetches the rich text string of the comment
          */
-        RichTextString String { get; set; }
+        IRichTextString String { get; set; }
 
     }
 }

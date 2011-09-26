@@ -46,7 +46,7 @@ namespace NPOI.SS.UserModel
     /// The most common type of sheet is the worksheet, which is represented as a grid of cells. Worksheet cells can
     /// contain text, numbers, dates, and formulas. Cells can also be formatted.
     /// </remarks>
-    public interface Sheet : IDisposable
+    public interface ISheet : IDisposable
     {
 
         /// <summary>
@@ -55,13 +55,13 @@ namespace NPOI.SS.UserModel
         /// <param name="rownum">The row number.</param>
         /// <returns>high level Row object representing a row in the sheet</returns>
         /// <see>RemoveRow(Row)</see>
-        Row CreateRow(int rownum);
+        IRow CreateRow(int rownum);
 
         /// <summary>
         /// Remove a row from this sheet.  All cells Contained in the row are Removed as well
         /// </summary>
         /// <param name="row">a row to Remove.</param>
-        void RemoveRow(Row row);
+        void RemoveRow(IRow row);
 
         /// <summary>
         /// Returns the logical row (not physical) 0-based.  If you ask for a row that is not
@@ -69,7 +69,7 @@ namespace NPOI.SS.UserModel
         /// </summary>
         /// <param name="rownum">row to get (0-based).</param>
         /// <returns>the rownumber or null if its not defined on the sheet</returns>
-        Row GetRow(int rownum);
+        IRow GetRow(int rownum);
 
         /// <summary>
         /// Returns the number of physically defined rows (NOT the number of rows in the sheet)
@@ -142,7 +142,7 @@ namespace NPOI.SS.UserModel
         /// twips (1/20 of  a point)
         /// </summary>
         /// <value>default row height measured in twips (1/20 of  a point)</value>
-        short DefaultRowHeight { get; set; }
+        int DefaultRowHeight { get; set; }
 
         /// <summary>
         /// Get the default row height for the sheet (if the rows do not define their own height) in
@@ -158,7 +158,7 @@ namespace NPOI.SS.UserModel
         /// </summary>
         /// <param name="column">The column.</param>
         /// <returns></returns>
-        CellStyle GetColumnStyle(int column);
+        ICellStyle GetColumnStyle(int column);
 
         /// <summary>
         /// Adds a merged region of cells (hence those cells form one)
@@ -272,7 +272,7 @@ namespace NPOI.SS.UserModel
          *
          * @return The user model for the print Setup object.
          */
-        PrintSetup PrintSetup { get; }
+        IPrintSetup PrintSetup { get; }
 
         /**
          * Gets the user model for the default document header.
@@ -281,7 +281,7 @@ namespace NPOI.SS.UserModel
          * </p>
          * @return the document header. Never <code>null</code>
          */
-        Header Header { get; }
+        IHeader Header { get; }
 
         /**
          * Gets the user model for the default document footer.
@@ -290,7 +290,7 @@ namespace NPOI.SS.UserModel
          *
          * @return the document footer. Never <code>null</code>
          */
-        Footer Footer { get; }
+        IFooter Footer { get; }
         /**
          * Gets the size of the margin in inches.
          *
@@ -321,7 +321,7 @@ namespace NPOI.SS.UserModel
          */
         bool ScenarioProtect { get; }
         short TabColorIndex { get; set; }
-        Drawing DrawingPatriarch { get; }
+        IDrawing DrawingPatriarch { get; }
         /**
          * Sets the zoom magnication for the sheet.  The zoom is expressed as a
          * fraction.  For example to express a zoom of 75% use 3 for the numerator
@@ -541,7 +541,7 @@ namespace NPOI.SS.UserModel
         /// </summary>
         /// <param name="column">the column index</param>
         /// <param name="style">the style to set</param>
-        void SetDefaultColumnStyle(int column, CellStyle style);
+        void SetDefaultColumnStyle(int column, ICellStyle style);
 
         /// <summary>
         /// Adjusts the column width to fit the contents.
@@ -571,19 +571,19 @@ namespace NPOI.SS.UserModel
         /// </summary>
         /// <param name="row">The row.</param>
         /// <param name="column">The column.</param>
-        Comment GetCellComment(int row, int column);
+        IComment GetCellComment(int row, int column);
 
         /// <summary>
         /// Creates the top-level drawing patriarch.
         /// </summary>
         /// <returns></returns>
-        Drawing CreateDrawingPatriarch();
+        IDrawing CreateDrawingPatriarch();
 
 
         /// <summary>
         /// Gets the parent workbook.
         /// </summary>
-        Workbook Workbook { get; }
+        IWorkbook Workbook { get; }
 
         /// <summary>
         /// Gets the name of the sheet.
@@ -604,7 +604,7 @@ namespace NPOI.SS.UserModel
          * @param range Region of array formula for result.
          * @return the {@link CellRange} of cells affected by this change
          */
-        CellRange<Cell> SetArrayFormula(String formula, CellRangeAddress range);
+        ICellRange<ICell> SetArrayFormula(String formula, CellRangeAddress range);
 
         /**
          * Remove a Array Formula from this sheet.  All cells contained in the Array Formula range are removed as well
@@ -612,7 +612,7 @@ namespace NPOI.SS.UserModel
          * @param cell   any cell within Array Formula range
          * @return the {@link CellRange} of cells affected by this change
          */
-        CellRange<Cell> RemoveArrayFormula(Cell cell);
+        ICellRange<ICell> RemoveArrayFormula(ICell cell);
 
         bool IsMergedRegion(CellRangeAddress mergedRegion);
     }
