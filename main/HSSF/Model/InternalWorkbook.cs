@@ -2819,6 +2819,35 @@ namespace NPOI.HSSF.Model
             return linkTable.ResolveNameXText(reFindex, definedNameIndex);
         }
 
+        public NameRecord CloneFilter(int filterDbNameIndex, int newSheetIndex)
+        {
+            NameRecord origNameRecord = GetNameRecord(filterDbNameIndex);
+            // copy original formula but adjust 3D refs to the new external sheet index
+            int newExtSheetIx = CheckExternSheet(newSheetIndex);
+            Ptg[] ptgs = origNameRecord.NameDefinition;
+            for (int i = 0; i < ptgs.Length; i++)
+            {
+                Ptg ptg = ptgs[i];
+                if (ptg is Area3DPtg)
+                {
+                    Area3DPtg a3p = (Area3DPtg)((OperandPtg)ptg).Copy();
+                    a3p.ExternSheetIndex = (newExtSheetIx);
+                    ptgs[i] = a3p;
+                }
+                else if (ptg is Ref3DPtg)
+                {
+                    Ref3DPtg r3p = (Ref3DPtg)((OperandPtg)ptg).Copy();
+                    r3p.ExternSheetIndex = (newExtSheetIx);
+                    ptgs[i] = r3p;
+                }
+            }
+            NameRecord newNameRecord = CreateBuiltInName(NameRecord.BUILTIN_FILTER_DB, newSheetIndex + 1);
+            newNameRecord.NameDefinition = ptgs;
+            newNameRecord.IsHiddenName = true;
+            return newNameRecord;
+
+        }
+
         /**
  * Updates named ranges due to moving of cells
  */

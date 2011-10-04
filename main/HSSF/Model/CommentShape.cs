@@ -97,9 +97,9 @@ namespace NPOI.HSSF.Model
             base.AddStandardOptions(shape, opt);
 
             //Remove Unnecessary properties inherited from TextboxShape
-            for (IEnumerator iterator = opt.EscherProperties.GetEnumerator(); iterator.MoveNext(); )
+            for (int i = 0; i < opt.EscherProperties.Count; i++ )
             {
-                EscherProperty prop = (EscherProperty)iterator.Current;
+                EscherProperty prop = opt.EscherProperties[i];
                 switch (prop.Id)
                 {
                     case EscherProperties.TEXT__TEXTLEFT:

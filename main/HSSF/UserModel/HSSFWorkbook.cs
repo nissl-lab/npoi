@@ -736,37 +736,14 @@ namespace NPOI.HSSF.UserModel
 
             // Check this sheet has an autofilter, (which has a built-in NameRecord at workbook level)
             int filterDbNameIndex = FindExistingBuiltinNameRecordIdx(sheetIndex, NameRecord.BUILTIN_FILTER_DB);
-            if (filterDbNameIndex >= 0)
+            if (filterDbNameIndex != -1)
             {
-                NameRecord origNameRecord = workbook.GetNameRecord(filterDbNameIndex);
-                // copy original formula but adjust 3D refs to the new external sheet index
-                int newExtSheetIx = workbook.CheckExternSheet(newSheetIndex);
-                Ptg[] ptgs = origNameRecord.NameDefinition;
-                for (int i = 0; i < ptgs.Length; i++)
-                {
-                    Ptg ptg = ptgs[i];
-                    //ptg = ptg.Copy();
-
-                    if (ptg is Area3DPtg)
-                    {
-                        Area3DPtg a3p = (Area3DPtg)ptg;
-                        a3p.ExternSheetIndex = newExtSheetIx;
-                    }
-                    else if (ptg is Ref3DPtg)
-                    {
-                        Ref3DPtg r3p = (Ref3DPtg)ptg;
-                        r3p.ExternSheetIndex = (newExtSheetIx);
-                    }
-                    ptgs[i] = ptg;
-                }
-                NameRecord newNameRecord = workbook.CreateBuiltInName(NameRecord.BUILTIN_FILTER_DB, newSheetIndex + 1);
-                newNameRecord.NameDefinition = ptgs;
-                newNameRecord.IsHiddenName = true;
+                NameRecord newNameRecord = workbook.CloneFilter(filterDbNameIndex, newSheetIndex);
                 HSSFName newName = new HSSFName(this, newNameRecord);
                 names.Add(newName);
-
-                workbook.CloneDrawings(clonedSheet.Sheet);
             }
+            // TODO - maybe same logic required for other/all built-in name records
+            workbook.CloneDrawings(clonedSheet.Sheet);
             return clonedSheet;
         }
         /// <summary>
