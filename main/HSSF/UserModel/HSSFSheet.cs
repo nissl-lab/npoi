@@ -245,9 +245,21 @@ namespace NPOI.HSSF.UserModel
         /// Remove a row from this _sheet.  All cells contained in the row are Removed as well
         /// </summary>
         /// <param name="row">the row to Remove.</param>
-        public void RemoveRow(NPOI.SS.UserModel.IRow row)
+        public void RemoveRow(IRow row)
         {
-
+            if (row.Sheet != this)
+            {
+                throw new ArgumentException("Specified row does not belong to this sheet");
+            }
+            foreach (ICell cell in row)
+            {
+                HSSFCell xcell = (HSSFCell)cell;
+                if (xcell.IsPartOfArrayFormulaGroup)
+                {
+                    String msg = "Row[rownum=" + row.RowNum + "] contains cell(s) included in a multi-cell array formula. You cannot change part of an array.";
+                    xcell.NotifyArrayFormulaChanging(msg);
+                }
+            }
             if (rows.Count > 0)
             {
                 int key = row.RowNum;
@@ -2092,11 +2104,14 @@ namespace NPOI.HSSF.UserModel
             }
             if (width != -1)
             {
-                if (width > short.MaxValue)
-                { //width can be bigger that Short.MAX_VALUE!
-                    width = short.MaxValue;
+                width *= 256;
+                int maxColumnWidth = 255 * 256; // The maximum column width for an individual cell is 255 characters
+
+                if (width > maxColumnWidth)
+                { 
+                    width = maxColumnWidth;
                 }
-                _sheet.SetColumnWidth(column, (short)(width * 256));
+                SetColumnWidth(column, (int)width);
             }
         }
         public bool IsMergedRegion(CellRangeAddress mergedRegion)

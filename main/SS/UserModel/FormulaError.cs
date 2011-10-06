@@ -58,7 +58,7 @@ namespace NPOI.SS.UserModel
          * OFFSET(A1,0,20000) will result in a #REF! error.
          * </p>
          */
-        public static FormulaError REF = new FormulaError(0x1D, "#REF!");
+        public static FormulaError REF = new FormulaError(0x17, "#REF!");
 
         /**
          * Intended to indicate when what looks like a name is used, but no such name has been defined.
@@ -103,7 +103,11 @@ namespace NPOI.SS.UserModel
         {
             this.type = (byte)type;
             this.repr = repr;
+            if(imap==null)
+                imap = new Dictionary<Byte, FormulaError>();
             imap.Add(this.Code, this);
+            if (smap == null)
+                smap = new Dictionary<string, FormulaError>();
             smap.Add(this.String, this);
         }
 
@@ -129,8 +133,8 @@ namespace NPOI.SS.UserModel
             }
         }
 
-        private static Dictionary<String, FormulaError> smap = new Dictionary<String, FormulaError>();
-        private static Dictionary<Byte, FormulaError> imap = new Dictionary<Byte, FormulaError>();
+        private static Dictionary<String, FormulaError> smap = null;
+        private static Dictionary<Byte, FormulaError> imap = null;
 
         public static FormulaError ForInt(byte type)
         {

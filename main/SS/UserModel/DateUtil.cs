@@ -266,7 +266,7 @@ namespace NPOI.SS.UserModel
             }
             DateTime startdate = new DateTime(startYear, 1, 1);
             startdate = startdate.AddDays(wholeDays + dayAdjust - 1);
-            int millisecondsInDay = (int)((date - wholeDays) *
+            double millisecondsInDay = (int)((date - wholeDays) *
                                           DAY_MILLISECONDS + 0.5);
             return startdate.AddMilliseconds(millisecondsInDay);
         }

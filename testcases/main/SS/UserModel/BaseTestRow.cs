@@ -371,14 +371,14 @@ namespace TestCases.SS.UserModel
 
             // One cell at the beginning
             ICell cell1 = row.CreateCell(1);
-            IEnumerator it = row.GetCellEnumerator();
+            IEnumerator it = row.GetEnumerator();
             Assert.IsTrue(it.MoveNext());
             Assert.IsTrue(cell1 == it.Current);
             Assert.IsFalse(it.MoveNext());
 
             // Add another cell at the end
             ICell cell2 = row.CreateCell(99);
-            it = row.GetCellEnumerator();
+            it = row.GetEnumerator();
             Assert.IsTrue(it.MoveNext());
             Assert.IsTrue(cell1 == it.Current);
             Assert.IsTrue(it.MoveNext());
@@ -386,7 +386,7 @@ namespace TestCases.SS.UserModel
 
             // Add another cell at the beginning
             ICell cell3 = row.CreateCell(0);
-            it = row.GetCellEnumerator();
+            it = row.GetEnumerator();
             Assert.IsTrue(it.MoveNext());
             Assert.IsTrue(cell3 == it.Current);
             Assert.IsTrue(it.MoveNext());
@@ -396,7 +396,7 @@ namespace TestCases.SS.UserModel
 
             // Replace cell1
             ICell cell4 = row.CreateCell(1);
-            it = row.GetCellEnumerator();
+            it = row.GetEnumerator();
             Assert.IsTrue(it.MoveNext());
             Assert.IsTrue(cell3 == it.Current);
             Assert.IsTrue(it.MoveNext());
@@ -407,7 +407,7 @@ namespace TestCases.SS.UserModel
 
             // Add another cell, specifying the cellType
             ICell cell5 = row.CreateCell(2, CellType.STRING);
-            it = row.GetCellEnumerator();
+            it = row.GetEnumerator();
             Assert.IsNotNull(cell5);
             Assert.IsTrue(it.MoveNext());
             Assert.IsTrue(cell3 == it.Current);

@@ -78,15 +78,15 @@ namespace TestCases.SS.UserModel
             AssertProhibitedValueAccess(cell, CellType.NUMERIC, CellType.BOOLEAN,
                     CellType.FORMULA, CellType.ERROR);
 
-            DateTime dt = new DateTime(123456789);
+            DateTime dt = DateTime.Now.AddMilliseconds(123456789);
             cell.SetCellValue(dt);
-            Assert.AreEqual(dt.Ticks, cell.DateCellValue.Ticks);
+            Assert.IsTrue((dt.Ticks - cell.DateCellValue.Ticks)>=-20000);
             Assert.AreEqual(CellType.NUMERIC, cell.CellType);
             AssertProhibitedValueAccess(cell, CellType.BOOLEAN, CellType.STRING,
                     CellType.FORMULA, CellType.ERROR);
 
             cell.SetCellValue(dt);
-            Assert.AreEqual(dt.Ticks, cell.DateCellValue.Ticks);
+            Assert.IsTrue((dt.Ticks - cell.DateCellValue.Ticks) >= -20000);
             Assert.AreEqual(CellType.NUMERIC, cell.CellType);
             AssertProhibitedValueAccess(cell, CellType.BOOLEAN, CellType.STRING,
                     CellType.FORMULA, CellType.ERROR);

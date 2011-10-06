@@ -81,13 +81,15 @@ namespace NPOI.HSSF.UserModel
         {
             get
             {
-                if (format.ParentIndex == 0)
+                short parentIndex = format.ParentIndex;
+                // parentIndex equal 0xFFF indicates no inheritance from a cell style XF (See 2.4.353 XF)
+                if ( parentIndex == 0|| parentIndex == 0xFFF)
                 {
                     return null;
                 }
                 return new HSSFCellStyle(
-                        format.ParentIndex,
-                        workbook.GetExFormatAt(format.ParentIndex),
+                        parentIndex,
+                        workbook.GetExFormatAt(parentIndex),
                         workbook
                 );
             }
@@ -516,28 +518,6 @@ namespace NPOI.HSSF.UserModel
             }
         }
         /// <summary>
-        /// Gets the name of the user defined style.
-        /// Returns null for built in styles, and
-        /// styles where no name has been defined
-        /// </summary>
-        /// <value>The name of the user style.</value>
-        public String UserStyleName
-        {
-            get
-            {
-                StyleRecord sr = workbook.GetStyleRecord(index);
-                if (sr == null)
-                {
-                    return null;
-                }
-                if (sr.IsBuiltin)
-                {
-                    return null;
-                }
-                return sr.Name;
-            }
-        }
-        /// <summary>
         /// Gets or sets the color of the fill background.
         /// </summary>
         /// <value>The color of the fill background.</value>
@@ -588,6 +568,44 @@ namespace NPOI.HSSF.UserModel
                 CheckDefaultBackgroundFills();
             }
         }
+
+        /**
+ * Gets the name of the user defined style.
+ * Returns null for built in styles, and
+ *  styles where no name has been defined
+ */
+        public String UserStyleName
+        {
+            get
+            {
+                StyleRecord sr = workbook.GetStyleRecord(index);
+                if (sr == null)
+                {
+                    return null;
+                }
+                if (sr.IsBuiltin)
+                {
+                    return null;
+                }
+                return sr.Name;
+            }
+            set 
+            {
+                StyleRecord sr = workbook.GetStyleRecord(index);
+                if (sr == null)
+                {
+                    sr = workbook.CreateStyleRecord(index);
+                }
+                // All Style records start as "builtin", but generally
+                //  only 20 and below really need to be
+                if (sr.IsBuiltin && index <= 20)
+                {
+                    throw new ArgumentException("Unable to set user specified style names for built in styles!");
+                }
+                sr.Name = value;
+            }
+        }
+
 
         /// <summary>
         /// Serves as a hash function for a particular type.

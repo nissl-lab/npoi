@@ -68,7 +68,7 @@ namespace TestCases.HSSF.UserModel
 
         private static void Process(IRow row, HSSFFormulaEvaluator eval)
         {
-            IEnumerator it = row.GetCellEnumerator();
+            IEnumerator it = row.GetEnumerator();
             while (it.MoveNext())
             {
                 ICell cell = (ICell)it.Current;

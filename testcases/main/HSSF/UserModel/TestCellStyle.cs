@@ -360,6 +360,11 @@ namespace TestCases.HSSF.UserModel
             Assert.AreEqual(null, cs3.UserStyleName);
             Assert.AreEqual("style1", cs2.ParentStyle.UserStyleName);
             Assert.AreEqual("style2", cs3.ParentStyle.UserStyleName);
+
+            // now apply a named style to a new cell
+            ICell c4 = s.GetRow(0).CreateCell(1);
+            c4.CellStyle = (cs2);
+            Assert.AreEqual("style1", ((HSSFCellStyle)c4.CellStyle).ParentStyle.UserStyleName);
         }
     }
 }

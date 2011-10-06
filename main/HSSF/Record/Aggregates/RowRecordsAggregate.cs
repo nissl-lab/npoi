@@ -464,7 +464,6 @@ namespace NPOI.HSSF.Record.Aggregates
             IndexRecord result = new IndexRecord();
             result.FirstRow= firstrow;
             result.LastRowAdd1= lastrow+1;
-            result.PosOfDefColWidthRecord = offsetDefaultColWidth;
             // Calculate the size of the records from the end of the BOF
             // and up to the RowRecordsAggregate...
 

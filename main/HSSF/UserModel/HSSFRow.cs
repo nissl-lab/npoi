@@ -686,10 +686,10 @@ namespace NPOI.HSSF.UserModel
         /// <summary>
         /// Get cells in the row
         /// </summary>
-        public List<NPOI.SS.UserModel.ICell> Cells
+        public List<ICell> Cells
         {
             get {
-                return new List<NPOI.SS.UserModel.ICell>(this.cells.Values);
+                return new List<ICell>(this.cells.Values);
             }
         }
 
@@ -701,7 +701,7 @@ namespace NPOI.HSSF.UserModel
         /// will not return Un-defined (null) cells.
         /// Call CellNum on the returned cells to know which cell they are.
         /// </remarks>
-        public IEnumerator GetCellEnumerator()
+        public IEnumerator GetEnumerator()
         {
             //return //new CellEnumerator(this.cells);
             return this.cells.Values.GetEnumerator();

@@ -23,6 +23,7 @@ namespace NPOI.HSSF.Record
     using System.Text;
     using System.Collections.Generic;
     using NPOI.Util;
+    using NPOI.Util.IO;
 
     /**
      * Title:        Index Record
@@ -36,14 +37,14 @@ namespace NPOI.HSSF.Record
      */
 
     public class IndexRecord
-       : Record
+       : StandardRecord
     {
         public const short sid = 0x20B;
         public static int DBCELL_CAPACITY = 30;
         public int field_1_zero;            // reserved must be 0
         public int field_2_first_row;       // first row on the sheet
         public int field_3_last_row_add1;   // last row
-        public int field_4_ibXF;            // DefColWidth 
+        public int field_4_zero;            // DefColWidth 
         public List<int> field_5_dbcells;         // array of offsets to DBCELL records
 
         public IndexRecord()
@@ -57,18 +58,19 @@ namespace NPOI.HSSF.Record
 
         public IndexRecord(RecordInputStream in1)
         {
-            field_5_dbcells =
-                new List<int>(DBCELL_CAPACITY);   // initial capacity of 30
             field_1_zero = in1.ReadInt();
             field_2_first_row = in1.ReadInt();
             field_3_last_row_add1 = in1.ReadInt();
-            field_4_ibXF = in1.ReadInt();
-            while (in1.Remaining > 0)
-            {
+            field_4_zero = in1.ReadInt();
 
-                // Console.WriteLine("Getting " + k);
+            int nCells = in1.Remaining / 4;
+            field_5_dbcells =
+                new List<int>(nCells);   // initial capacity of 30
+            for (int i = 0; i < nCells; i++)
+            {
                 field_5_dbcells.Add(in1.ReadInt());
             }
+
         }
 
 
@@ -104,17 +106,6 @@ namespace NPOI.HSSF.Record
             set { field_3_last_row_add1 = value; }
         }
 
-        public int PosOfDefColWidthRecord
-        {
-            get
-            {
-                return field_4_ibXF;
-            }
-            set
-            {
-                field_4_ibXF = value;
-            }
-        }
 
         public int NumDbcells
         {
@@ -151,25 +142,21 @@ namespace NPOI.HSSF.Record
             return buffer.ToString();
         }
 
-        public override int Serialize(int offset, byte [] data)
+        public override void Serialize(LittleEndianOutput out1)
         {
-            LittleEndian.PutShort(data, 0 + offset, sid);
-            LittleEndian.PutShort(data, 2 + offset,
-                                  (short)(16 + (NumDbcells * 4)));
-            LittleEndian.PutInt(data, 4 + offset, 0);
-            LittleEndian.PutInt(data, 8 + offset, field_2_first_row);
-            LittleEndian.PutInt(data, 12 + offset, field_3_last_row_add1);
-            LittleEndian.PutInt(data, 16 + offset, field_4_ibXF);
+            out1.WriteInt(0);
+            out1.WriteInt(FirstRow);
+            out1.WriteInt(LastRowAdd1);
+            out1.WriteInt(field_4_zero);
             for (int k = 0; k < NumDbcells; k++)
             {
-                LittleEndian.PutInt(data, (k * 4) + 20 + offset, GetDbcellAt(k));
+                out1.WriteInt(GetDbcellAt(k));
             }
-            return RecordSize;
         }
 
-        public override int RecordSize
+        protected override int DataSize
         {
-            get { return 20 + (NumDbcells * 4); }
+            get { return 16 + (NumDbcells * 4); }
         }
 
         /** Returns the size of an INdexRecord when it needs to index the specified number of blocks
@@ -191,7 +178,7 @@ namespace NPOI.HSSF.Record
             rec.field_1_zero = field_1_zero;
             rec.field_2_first_row = field_2_first_row;
             rec.field_3_last_row_add1 = field_3_last_row_add1;
-            rec.field_4_ibXF = field_4_ibXF;
+            rec.field_4_zero = field_4_zero;
             rec.field_5_dbcells = new List<int>();
             rec.field_5_dbcells.AddRange(field_5_dbcells);
             return rec;

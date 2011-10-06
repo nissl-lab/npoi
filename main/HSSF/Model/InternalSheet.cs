@@ -1970,7 +1970,6 @@ namespace NPOI.HSSF.Model
                 int startloc = loc;
                 while (loc + 1 < records.Count
                         && records[loc] is DrawingRecord
-                        && records[loc + 1] is ObjRecord
                         && (records[loc + 1] is ObjRecord ||
                             records[loc + 1] is TextObjectRecord)
                         )
@@ -2268,5 +2267,6 @@ namespace NPOI.HSSF.Model
             result = temp.ToArray();
             return result;
         }
+
     }
 }

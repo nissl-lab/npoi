@@ -214,13 +214,19 @@ namespace NPOI.HSSF.UserModel
         /// </summary>
         /// <param name="format">The format string matching a built in format.</param>
         /// <returns>index of format.</returns>
-        public short GetFormat(String format)
+        public short GetFormat(String pFormat)
         {
             IEnumerator i;
             int ind;
-
-            if (format.ToUpper().Equals("TEXT"))
+            String format;
+            if (pFormat.ToUpper().Equals("TEXT"))
+            {
                 format = "@";
+            }
+            else
+            {
+                format = pFormat;
+            }
 
             if (!movedBuiltins)
             {
@@ -228,13 +234,12 @@ namespace NPOI.HSSF.UserModel
                 ind = 0;
                 while (i.MoveNext())
                 {
-                    ind ++;
-
                     for (int j = formats.Count; formats.Count < ind + 1; j++)
                     {
                         formats.Add(null);
                     }
                     formats[ind] = i.Current as string;
+                    ind++;
                 }
                 movedBuiltins = true;
             }
@@ -267,10 +272,28 @@ namespace NPOI.HSSF.UserModel
         {
             if (movedBuiltins)
                 return (String)formats[index];
-            else
-                return (String)(builtinFormats.Count > index
-                        && builtinFormats[index] != null
-                        ? builtinFormats[index] : formats[index]);
+
+            if (index == -1)
+                return null;
+
+            String fmt = formats.Count > index ? formats[index] : null;
+
+            if (builtinFormats.Count > index
+                        && builtinFormats[index] != null)
+            {
+                // It's in the built in range
+                if (fmt != null)
+                {
+                    // It's been overriden, use that value
+                    return fmt;
+                }
+                else
+                {
+                    // Standard built in format
+                    return builtinFormats[index];
+                }
+            }
+            return fmt;
         }
 
         /// <summary>
@@ -294,5 +317,6 @@ namespace NPOI.HSSF.UserModel
                 return builtinFormats.Count;
             }
         }
+
     }
 }

@@ -717,7 +717,7 @@ namespace TestCases.HSSF.UserModel
                 IRow row = (IRow)it.Current;
                 Assert.AreEqual(rownum, row.RowNum);
                 int cellNum = 0;
-                for (IEnumerator it2 = row.GetCellEnumerator(); it2.MoveNext(); cellNum++)
+                for (IEnumerator it2 = row.GetEnumerator(); it2.MoveNext(); cellNum++)
                 {
                     ICell cell = (ICell)it2.Current;
                     Assert.AreEqual(cellNum, cell.ColumnIndex);
@@ -1720,13 +1720,13 @@ namespace TestCases.HSSF.UserModel
             Assert.AreEqual(7, wb.NumberOfSheets);
             wb = HSSFTestDataSamples.WriteOutAndReadBack(wb);
         }
-    /**
-     * Newly created sheets need to get a 
-     *  proper TabID, otherwise print setup
-     *  gets confused on them.
-     * Also ensure that print setup refs are
-     *  by reference not value 
-     */
+        /**
+         * Newly created sheets need to get a 
+         *  proper TabID, otherwise print setup
+         *  gets confused on them.
+         * Also ensure that print setup refs are
+         *  by reference not value 
+         */
         [TestMethod]
         public void Test46664()
         {
@@ -1779,7 +1779,7 @@ namespace TestCases.HSSF.UserModel
                   ((Area3DPtg)nr.NameDefinition[0]).ToFormulaString(HSSFEvaluationWorkbook.Create(wb))
             );
             // TODO - fix me to be Reference not Value!
-                //Assert.AreEqual('R', nr.NameDefinition[0].RVAType);
+            //Assert.AreEqual('R', nr.NameDefinition[0].RVAType);
         }
         /**
          * Odd POIFS blocks issue:
@@ -2072,74 +2072,75 @@ namespace TestCases.HSSF.UserModel
         /**
          * Setting the user style name on custom styles
          */
-/*        public void Test49689()
-        {
-            HSSFWorkbook wb = new HSSFWorkbook();
-            Sheet s = wb.CreateSheet("Test");
-            Row r = s.CreateRow(0);
-            Cell c = r.CreateCell(0);
-
-            CellStyle cs1 = wb.CreateCellStyle();
-            CellStyle cs2 = wb.CreateCellStyle();
-            CellStyle cs3 = wb.CreateCellStyle();
-
-            Assert.AreEqual(21, cs1.Index);
-            cs1.setUserStyleName("Testing");
-
-            Assert.AreEqual(22, cs2.Index);
-            cs2.setUserStyleName("Testing 2");
-
-            Assert.AreEqual(23, cs3.Index);
-            cs3.setUserStyleName("Testing 3");
-
-            // Set one
-            c.setCellStyle(cs1);
-
-            // Write out and read back
-            wb = WriteOutAndReadBack(wb);
-
-            // Re-check
-            Assert.AreEqual("Testing", wb.GetCellStyleAt((short)21).GetUserStyleName());
-            Assert.AreEqual("Testing 2", wb.GetCellStyleAt((short)22).GetUserStyleName());
-            Assert.AreEqual("Testing 3", wb.GetCellStyleAt((short)23).GetUserStyleName());
-        }
-
-        public void Test49751()
-        {
-            HSSFWorkbook wb = OpenSample("49751.xls");
-            short numCellStyles = wb.NumCellStyles;
-            List<String> namedStyles = new List<string>(new string[]{
-                "20% - Accent1", "20% - Accent2", "20% - Accent3", "20% - Accent4", "20% - Accent5",
-                "20% - Accent6", "40% - Accent1", "40% - Accent2", "40% - Accent3", "40% - Accent4", 
-                "40% - Accent5", "40% - Accent6", "60% - Accent1", "60% - Accent2", "60% - Accent3",
-                "60% - Accent4", "60% - Accent5", "60% - Accent6", "Accent1", "Accent2", "Accent3",
-                "Accent4", "Accent5", "Accent6", "Bad", "Calculation", "Check Cell", "Explanatory Text",
-                "Good", "Heading 1", "Heading 2", "Heading 3", "Heading 4", "Input", "Linked Cell",
-                "Neutral", "Note", "Output", "Title", "Total", "Warning Text"});
-
-            List<String> collecteddStyles = new List<String>();
-            for (short i = 0; i < numCellStyles; i++)
-            {
-                HSSFCellStyle cellStyle = wb.GetCellStyleAt(i);
-                String styleName = cellStyle.GetUserStyleName();
-                if (styleName != null)
+        /*        public void Test49689()
                 {
-                    collecteddStyles.Add(styleName);
+                    HSSFWorkbook wb = new HSSFWorkbook();
+                    Sheet s = wb.CreateSheet("Test");
+                    Row r = s.CreateRow(0);
+                    Cell c = r.CreateCell(0);
+
+                    CellStyle cs1 = wb.CreateCellStyle();
+                    CellStyle cs2 = wb.CreateCellStyle();
+                    CellStyle cs3 = wb.CreateCellStyle();
+
+                    Assert.AreEqual(21, cs1.Index);
+                    cs1.setUserStyleName("Testing");
+
+                    Assert.AreEqual(22, cs2.Index);
+                    cs2.setUserStyleName("Testing 2");
+
+                    Assert.AreEqual(23, cs3.Index);
+                    cs3.setUserStyleName("Testing 3");
+
+                    // Set one
+                    c.setCellStyle(cs1);
+
+                    // Write out and read back
+                    wb = WriteOutAndReadBack(wb);
+
+                    // Re-check
+                    Assert.AreEqual("Testing", wb.GetCellStyleAt((short)21).GetUserStyleName());
+                    Assert.AreEqual("Testing 2", wb.GetCellStyleAt((short)22).GetUserStyleName());
+                    Assert.AreEqual("Testing 3", wb.GetCellStyleAt((short)23).GetUserStyleName());
                 }
-            }
-            Assert.IsTrue(namedStyles.ContainsAll(collecteddStyles));
-        }
-*/
+
+                public void Test49751()
+                {
+                    HSSFWorkbook wb = OpenSample("49751.xls");
+                    short numCellStyles = wb.NumCellStyles;
+                    List<String> namedStyles = new List<string>(new string[]{
+                        "20% - Accent1", "20% - Accent2", "20% - Accent3", "20% - Accent4", "20% - Accent5",
+                        "20% - Accent6", "40% - Accent1", "40% - Accent2", "40% - Accent3", "40% - Accent4", 
+                        "40% - Accent5", "40% - Accent6", "60% - Accent1", "60% - Accent2", "60% - Accent3",
+                        "60% - Accent4", "60% - Accent5", "60% - Accent6", "Accent1", "Accent2", "Accent3",
+                        "Accent4", "Accent5", "Accent6", "Bad", "Calculation", "Check Cell", "Explanatory Text",
+                        "Good", "Heading 1", "Heading 2", "Heading 3", "Heading 4", "Input", "Linked Cell",
+                        "Neutral", "Note", "Output", "Title", "Total", "Warning Text"});
+
+                    List<String> collecteddStyles = new List<String>();
+                    for (short i = 0; i < numCellStyles; i++)
+                    {
+                        HSSFCellStyle cellStyle = wb.GetCellStyleAt(i);
+                        String styleName = cellStyle.GetUserStyleName();
+                        if (styleName != null)
+                        {
+                            collecteddStyles.Add(styleName);
+                        }
+                    }
+                    Assert.IsTrue(namedStyles.ContainsAll(collecteddStyles));
+                }
+        */
         /**
          * Regression with the PageSettingsBlock
          */
         [TestMethod]
-        public void Test49931() {
-       HSSFWorkbook wb = OpenSample("49931.xls");
-       
-       Assert.AreEqual(1, wb.NumberOfSheets);
-       Assert.AreEqual("Foo", wb.GetSheetAt(0).GetRow(0).GetCell(0).RichStringCellValue.String);
-    }
+        public void Test49931()
+        {
+            HSSFWorkbook wb = OpenSample("49931.xls");
+
+            Assert.AreEqual(1, wb.NumberOfSheets);
+            Assert.AreEqual("Foo", wb.GetSheetAt(0).GetRow(0).GetCell(0).RichStringCellValue.String);
+        }
 
         /**
          * Missing left/right/centre options on a footer
@@ -2169,5 +2170,39 @@ namespace TestCases.HSSF.UserModel
             HSSFWorkbook wb = OpenSample("50020.xls");
             WriteOutAndReadBack(wb);
         }
+        [TestMethod]
+        public void TestAutoSize_bug50681()
+        {
+            IWorkbook wb = new HSSFWorkbook();
+            ISheet sheet = wb.CreateSheet("Sheet1");
+            IRow row = sheet.CreateRow(0);
+            ICell cell0 = row.CreateCell(0);
+
+            String longValue = "www.hostname.com, www.hostname.com, " +
+                    "www.hostname.com, www.hostname.com, www.hostname.com, " +
+                    "www.hostname.com, www.hostname.com, www.hostname.com, " +
+                    "www.hostname.com, www.hostname.com, www.hostname.com, " +
+                    "www.hostname.com, www.hostname.com, www.hostname.com, " +
+                    "www.hostname.com, www.hostname.com, www.hostname.com, www.hostname.com";
+
+            cell0.SetCellValue(longValue);
+
+            sheet.AutoSizeColumn(0);
+            Assert.AreEqual(255 * 256, sheet.GetColumnWidth(0)); // maximum column width is 255 characters
+            sheet.SetColumnWidth(0, sheet.GetColumnWidth(0)); // Bug 506819 reports exception at this point
+        }
+        /**
+ * Mixture of Ascii and Unicode strings in a 
+ *  NameComment record
+ */
+        [TestMethod]
+        public void Test51143()
+        {
+            HSSFWorkbook wb = OpenSample("51143.xls");
+            Assert.AreEqual(1, wb.NumberOfSheets);
+            wb = WriteOutAndReadBack(wb);
+            Assert.AreEqual(1, wb.NumberOfSheets);
+        }
+
     }
 }

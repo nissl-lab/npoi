@@ -360,10 +360,10 @@ namespace NPOI.HSSF.Record
             //Excel represents NAN in several ways, at this point in time we do not often
             //know the sequence of bytes, so as a hack we store the NAN byte sequence
             //so that it is not corrupted.
-            if (double.IsNaN(result))
-            {
-                throw new Exception("Did not expect to read NaN"); // (Because Excel typically doesn't write NaN
-            }
+            //if (double.IsNaN(result))
+            //{
+                //throw new Exception("Did not expect to read NaN"); // (Because Excel typically doesn't write NaN
+            //}
             pos += LittleEndianConstants.DOUBLE_SIZE;
             return result;
         }

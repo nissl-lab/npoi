@@ -40,18 +40,17 @@ namespace TestCases.SS.UserModel
             _testDataProvider = testDataProvider;
         }
         [TestMethod]
-        public void BaseBuiltinFormats()
+        public void TestBuiltinFormats()
         {
             IWorkbook wb = _testDataProvider.CreateWorkbook();
 
             IDataFormat df = wb.CreateDataFormat();
 
             List<String> formats = HSSFDataFormat.GetBuiltinFormats();
-            int idx = 0;
-            foreach (string fmt in formats)
+            for (int idx = 0; idx < formats.Count; idx++)
             {
+                String fmt = formats[idx];
                 Assert.AreEqual(idx, df.GetFormat(fmt));
-                idx++;
             }
 
             //default format for new cells is General

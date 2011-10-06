@@ -19,6 +19,7 @@ namespace NPOI.SS.UserModel
 {
     using System;
     using System.Collections.Generic;
+    using System.Collections;
     /**
      * Used to specify the different possible policies
      *  if for the case of null and blank cells
@@ -170,7 +171,7 @@ namespace NPOI.SS.UserModel
          * @return Cell iterator of the physically defined cells.  Note element 4 may
          * actually be row cell depending on how many are defined!
          */
-        System.Collections.IEnumerator GetCellEnumerator();
+        IEnumerator GetEnumerator();
 
         /**
          * Returns the Sheet this row belongs to
@@ -182,6 +183,8 @@ namespace NPOI.SS.UserModel
         ICellStyle RowStyle { get; set; }
 
         void MoveCell(ICell cell, int idx);
+
+        List<ICell> Cells { get; }
     }
 }
 

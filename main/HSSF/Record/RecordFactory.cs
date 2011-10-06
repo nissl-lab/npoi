@@ -115,6 +115,7 @@ namespace NPOI.HSSF.Record
 		        typeof(MulBlankRecord),
 		        typeof(MulRKRecord),
 		        typeof(NameRecord),
+                typeof(NameCommentRecord),
 		        typeof(NoteRecord),
 		        typeof(NumberRecord),
 		        typeof(ObjectProtectRecord),

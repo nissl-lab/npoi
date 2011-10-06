@@ -30,6 +30,8 @@ namespace TestCases.HSSF.Model
     using System.Collections.Generic;
     using NPOI.HSSF.UserModel;
     using NPOI.HSSF.Record.Formula;
+    using NPOI.Util;
+    using NPOI.DDF;
 
     /**
      * Unit Test for the Sheet class.
@@ -750,6 +752,95 @@ namespace TestCases.HSSF.Model
             sheet2.VisitContainedRecords(rc, 0);
             Record[] clonedRecs = rc.Records;
             Assert.AreEqual(recs.Length + 2, clonedRecs.Length); // +2 for INDEX and DBCELL
+        }
+        [TestMethod]
+        public void TestCreateAggregate()
+        {
+            String msoDrawingRecord1 =
+                    "0F 00 02 F0 20 01 00 00 10 00 08 F0 08 00 00 00 \n" +
+                    "03 00 00 00 02 04 00 00 0F 00 03 F0 08 01 00 00 \n" +
+                    "0F 00 04 F0 28 00 00 00 01 00 09 F0 10 00 00 00 \n" +
+                    "00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 \n" +
+                    "02 00 0A F0 08 00 00 00 00 04 00 00 05 00 00 00 \n" +
+                    "0F 00 04 F0 64 00 00 00 42 01 0A F0 08 00 00 00 \n" +
+                    "01 04 00 00 00 0A 00 00 73 00 0B F0 2A 00 00 00 \n" +
+                    "BF 00 08 00 08 00 44 01 04 00 00 00 7F 01 00 00 \n" +
+                    "01 00 BF 01 00 00 11 00 C0 01 40 00 00 08 FF 01 \n" +
+                    "10 00 10 00 BF 03 00 00 08 00 00 00 10 F0 12 00 \n" +
+                    "00 00 00 00 01 00 54 00 05 00 45 00 01 00 88 03 \n" +
+                    "05 00 94 00 00 00 11 F0 00 00 00 00";
+
+            String msoDrawingRecord2 =
+                    "0F 00 04 F0 64 00 00 00 42 01 0A F0 08 00 00 00 " +
+                    "02 04 00 00 80 0A 00 00 73 00 0B F0 2A 00 00 00 " +
+                    "BF 00 08 00 08 00 44 01 04 00 00 00 7F 01 00 00 " +
+                    "01 00 BF 01 00 00 11 00 C0 01 40 00 00 08 FF 01 " +
+                    "10 00 10 00 BF 03 00 00 08 00 00 00 10 F0 12 00 " +
+                    "00 00 00 00 01 00 8D 03 05 00 E4 00 03 00 4D 03 " +
+                    "0B 00 0C 00 00 00 11 F0 00 00 00 00";
+
+            DrawingRecord d1 = new DrawingRecord();
+            d1.Data = HexRead.ReadFromString(msoDrawingRecord1);
+
+            ObjRecord r1 = new ObjRecord();
+
+            DrawingRecord d2 = new DrawingRecord();
+            d2.Data = (HexRead.ReadFromString(msoDrawingRecord2));
+
+            TextObjectRecord r2 = new TextObjectRecord();
+            r2.Str = (new HSSFRichTextString("Aggregated"));
+            NoteRecord n2 = new NoteRecord();
+
+            List<RecordBase> recordStream = new List<RecordBase>();
+            recordStream.Add(InternalSheet.CreateBOF());
+            recordStream.Add(d1);
+            recordStream.Add(r1);
+            recordStream.Add(CreateWindow2Record());
+            recordStream.Add(EOFRecord.instance);
+
+            ConfirmAggregatedRecords(recordStream);
+
+
+            recordStream = new List<RecordBase>();
+            recordStream.Add(InternalSheet.CreateBOF());
+            recordStream.Add(d1);
+            recordStream.Add(r1);
+            recordStream.Add(d2);
+            recordStream.Add(r2);
+            recordStream.Add(CreateWindow2Record());
+            recordStream.Add(EOFRecord.instance);
+
+            ConfirmAggregatedRecords(recordStream);
+
+            recordStream = new List<RecordBase>();
+            recordStream.Add(InternalSheet.CreateBOF());
+            recordStream.Add(d1);
+            recordStream.Add(r1);
+            recordStream.Add(d2);
+            recordStream.Add(r2);
+            recordStream.Add(n2);
+            recordStream.Add(CreateWindow2Record());
+            recordStream.Add(EOFRecord.instance);
+
+            ConfirmAggregatedRecords(recordStream);
+        }
+
+        private void ConfirmAggregatedRecords(List<RecordBase> recordStream)
+        {
+            InternalSheet sheet = InternalSheet.CreateSheet();
+            sheet.Records.Clear();
+            ((List<RecordBase>)sheet.Records).AddRange(recordStream);
+
+            IList sheetRecords = sheet.Records;
+
+            DrawingManager2 drawingManager = new DrawingManager2(new EscherDggRecord());
+            sheet.AggregateDrawingRecords(drawingManager, false);
+
+            Assert.AreEqual(4, sheetRecords.Count);
+            Assert.AreEqual(BOFRecord.sid, ((Record)sheetRecords[0]).Sid);
+            Assert.AreEqual(EscherAggregate.sid, ((Record)sheetRecords[1]).Sid);
+            Assert.AreEqual(WindowTwoRecord.sid, ((Record)sheetRecords[2]).Sid);
+            Assert.AreEqual(EOFRecord.sid, ((Record)sheetRecords[3]).Sid);
         }
     }
 }

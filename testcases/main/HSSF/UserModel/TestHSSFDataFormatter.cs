@@ -178,7 +178,7 @@ namespace TestCases.HSSF.UserModel
         {
             // Valid date formats -- cell values should be date formatted & not "555.555"
             IRow row = wb.GetSheetAt(0).GetRow(0);
-            IEnumerator it = row.GetCellEnumerator();
+            IEnumerator it = row.GetEnumerator();
             log("==== VALID DATE FORMATS ====");
             while (it.MoveNext())
             {
@@ -195,7 +195,7 @@ namespace TestCases.HSSF.UserModel
 
             // Test number formats
             row = wb.GetSheetAt(0).GetRow(1);
-            it = row.GetCellEnumerator();
+            it = row.GetEnumerator();
             log("\n==== VALID NUMBER FORMATS ====");
             while (it.MoveNext())
             {
@@ -208,7 +208,7 @@ namespace TestCases.HSSF.UserModel
 
             // Test bad number formats
             row = wb.GetSheetAt(0).GetRow(2);
-            it = row.GetCellEnumerator();
+            it = row.GetEnumerator();
             log("\n==== INVALID NUMBER FORMATS ====");
             while (it.MoveNext())
             {
@@ -271,7 +271,7 @@ namespace TestCases.HSSF.UserModel
         public void TestSetDefaultNumberFormat()
         {
             IRow row = wb.GetSheetAt(0).GetRow(2);
-            IEnumerator it = row.GetCellEnumerator();
+            IEnumerator it = row.GetEnumerator();
             FormatBase defaultFormat = new DecimalFormat("Balance $#,#00.00 USD;Balance -$#,#00.00 USD");
             formatter.SetDefaultNumberFormat(defaultFormat);
 

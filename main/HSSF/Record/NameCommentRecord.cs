@@ -63,9 +63,9 @@ namespace NPOI.HSSF.Record
             out1.WriteShort(field_5_comment_length);
 
             out1.WriteByte(0);
-            out1.Write(Encoding.UTF8.GetBytes(field_6_name_text));
+            StringUtil.PutCompressedUnicode(field_6_name_text,out1);
             out1.WriteByte(0);
-            out1.Write(Encoding.UTF8.GetBytes(field_7_comment_text));
+            StringUtil.PutCompressedUnicode(field_7_comment_text, out1);
         }
 
         protected override int DataSize

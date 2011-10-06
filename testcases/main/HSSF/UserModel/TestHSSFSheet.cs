@@ -112,8 +112,8 @@ namespace TestCases.HSSF.UserModel
                     (WSBoolRecord)sheet.FindFirstRecordBySid(WSBoolRecord.sid);
 
             // Check defaults
-            Assert.AreEqual(true, record.AlternateExpression);
-            Assert.AreEqual(true, record.AlternateFormula);
+            Assert.AreEqual(false, record.AlternateExpression);
+            Assert.AreEqual(false, record.AlternateFormula);
             Assert.AreEqual(false, record.Autobreaks);
             Assert.AreEqual(false, record.Dialog);
             Assert.AreEqual(false, record.DisplayGuts);

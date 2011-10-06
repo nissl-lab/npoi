@@ -281,7 +281,7 @@ namespace TestCases.HSSF.UserModel
                 {
                     IRow r = (IRow)rows.Current;
 
-                    for (IEnumerator cells = r.GetCellEnumerator(); cells.MoveNext(); )
+                    for (IEnumerator cells = r.GetEnumerator(); cells.MoveNext(); )
                     {
                         ICell c = (ICell)cells.Current;
                         eval.EvaluateFormulaCell(c);

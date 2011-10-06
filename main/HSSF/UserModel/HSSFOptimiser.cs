@@ -155,7 +155,7 @@ namespace NPOI.HSSF.UserModel
                 while (rIt.MoveNext())
                 {
                     HSSFRow row = (HSSFRow)rIt.Current;
-                    IEnumerator cIt = row.GetCellEnumerator();
+                    IEnumerator cIt = row.GetEnumerator();
                     while (cIt.MoveNext())
                     {
                         ICell cell = (HSSFCell)cIt.Current;
@@ -279,7 +279,7 @@ namespace NPOI.HSSF.UserModel
                 while (rIt.MoveNext())
                 {
                     HSSFRow row = (HSSFRow)rIt.Current;
-                    IEnumerator cIt = row.GetCellEnumerator();
+                    IEnumerator cIt = row.GetEnumerator();
                     while (cIt.MoveNext())
                     {
                         ICell cell = (HSSFCell)cIt.Current;

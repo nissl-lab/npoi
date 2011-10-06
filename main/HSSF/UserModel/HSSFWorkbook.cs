@@ -145,7 +145,6 @@ namespace NPOI.HSSF.UserModel
 
             private ArrayList _list;
             private int _totalSize;
-            private int _idxIndexRecord=-1;
 
             public SheetRecordCollector()
             {
@@ -161,16 +160,6 @@ namespace NPOI.HSSF.UserModel
             }
             public void VisitRecord(Record r)
             {
-                if(r is IndexRecord)
-                {
-                    _idxIndexRecord=_list.Count;
-                }
-                if (r is DefaultColWidthRecord)
-                {
-
-                    IndexRecord indexRec = _list[_idxIndexRecord] as IndexRecord;
-                    indexRec.PosOfDefColWidthRecord=((DefaultColWidthRecord)r).offsetForFilePointer;
-                }
                 _list.Add(r);
                 _totalSize += r.RecordSize;
             }

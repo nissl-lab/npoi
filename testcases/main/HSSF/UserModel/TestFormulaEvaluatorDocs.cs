@@ -81,7 +81,7 @@ namespace TestCases.HSSF.UserModel
                 {
                     IRow r = (IRow)rit.Current;
 
-                    for (IEnumerator cit = r.GetCellEnumerator(); cit.MoveNext(); )
+                    for (IEnumerator cit = r.GetEnumerator(); cit.MoveNext(); )
                     {
                         ICell c = (ICell)cit.Current;
                         if (c.CellType == NPOI.SS.UserModel.CellType.FORMULA)
@@ -120,7 +120,7 @@ namespace TestCases.HSSF.UserModel
                 {
                     IRow r = (IRow)rit.Current;
 
-                    for (IEnumerator cit = r.GetCellEnumerator(); cit.MoveNext(); )
+                    for (IEnumerator cit = r.GetEnumerator(); cit.MoveNext(); )
                     {
                         ICell c = (ICell)cit.Current;
                         if (c.CellType == NPOI.SS.UserModel.CellType.FORMULA)

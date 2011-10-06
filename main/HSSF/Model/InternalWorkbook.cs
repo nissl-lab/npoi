@@ -542,14 +542,37 @@ namespace NPOI.HSSF.Model
                         //recursively find shape records and re-generate shapeId
                         ArrayList spRecords = new ArrayList();
                         EscherContainerRecord cp = (EscherContainerRecord)er;
-                        cp.GetRecordsById(EscherSpRecord.RECORD_ID, ref spRecords);
-                        for (IEnumerator spIt = spRecords.GetEnumerator(); spIt.MoveNext(); )
+                        for (IEnumerator spIt = cp.ChildRecords.GetEnumerator(); spIt.MoveNext(); )
                         {
-                            EscherSpRecord sp = (EscherSpRecord)spIt.Current;
-                            int shapeId = drawingManager.AllocateShapeId((short)dgId, dg);
-                            //allocateShapeId increments the number of shapes. roll back to the previous value
-                            dg.NumShapes = (dg.NumShapes - 1);
-                            sp.ShapeId = (shapeId);
+                            EscherContainerRecord shapeContainer = (EscherContainerRecord)spIt.Current;
+
+                            foreach (EscherRecord shapeChildRecord in shapeContainer.ChildRecords)
+                            {
+                                int recordId = shapeChildRecord.RecordId;
+                                if (recordId == EscherSpRecord.RECORD_ID)
+                                {
+                                    EscherSpRecord sp = (EscherSpRecord)shapeChildRecord;
+                                    int shapeId = drawingManager.AllocateShapeId((short)dgId, dg);
+                                    //allocateShapeId increments the number of shapes. roll back to the previous value
+                                    dg.NumShapes = (dg.NumShapes - 1);
+                                    sp.ShapeId = (shapeId);
+                                }
+                                else if (recordId == EscherOptRecord.RECORD_ID)
+                                {
+                                    EscherOptRecord opt = (EscherOptRecord)shapeChildRecord;
+                                    EscherSimpleProperty prop = (EscherSimpleProperty)opt.Lookup(
+                                            EscherProperties.BLIP__BLIPTODISPLAY);
+                                    if (prop != null)
+                                    {
+                                        int pictureIndex = prop.PropertyValue;
+                                        // increment reference count for pictures
+                                        EscherBSERecord bse = GetBSERecord(pictureIndex);
+                                        bse.Ref = bse.Ref + 1;
+                                    }
+
+                                }
+
+                            }
                         }
                     }
                 }
@@ -2501,7 +2524,7 @@ namespace NPOI.HSSF.Model
         /**
          * Finds the primary drawing Group, if one already exists
          */
-        public void FindDrawingGroup()
+        public DrawingManager2 FindDrawingGroup()
         {
             // Need to Find a DrawingGroupRecord that
             //  Contains a EscherDggRecord
@@ -2522,19 +2545,32 @@ namespace NPOI.HSSF.Model
                     }
 
                     EscherDggRecord dgg = null;
+                    EscherContainerRecord bStore = null;
                     for (IEnumerator it = cr.ChildRecords.GetEnumerator(); it.MoveNext(); )
                     {
-                        Object er = it.Current;
+                        EscherRecord er = (EscherRecord)it.Current;
                         if (er is EscherDggRecord)
                         {
                             dgg = (EscherDggRecord)er;
+                        }
+                        else if (er.RecordId == EscherContainerRecord.BSTORE_CONTAINER)
+                        {
+                            bStore = (EscherContainerRecord)er;
                         }
                     }
 
                     if (dgg != null)
                     {
                         drawingManager = new DrawingManager2(dgg);
-                        return;
+                        if (bStore != null)
+                        {
+                            foreach (EscherRecord bs in bStore.ChildRecords)
+                            {
+                                if (bs is EscherBSERecord)
+                                    escherBSERecords.Add((EscherBSERecord)bs);
+                            }
+                        }
+                        return drawingManager;
                     }
                 }
             }
@@ -2548,20 +2584,35 @@ namespace NPOI.HSSF.Model
                 DrawingGroupRecord dg =
                     (DrawingGroupRecord)records[dgLoc];
                 EscherDggRecord dgg = null;
+                EscherContainerRecord bStore = null;
+
                 for (IEnumerator it = dg.EscherRecords.GetEnumerator(); it.MoveNext(); )
                 {
-                    Object er = it.Current;
+                    EscherRecord er = (EscherRecord)it.Current;
                     if (er is EscherDggRecord)
                     {
                         dgg = (EscherDggRecord)er;
+                    }
+                    else if (er.RecordId == EscherContainerRecord.BSTORE_CONTAINER)
+                    {
+                        bStore = (EscherContainerRecord)er;
                     }
                 }
 
                 if (dgg != null)
                 {
                     drawingManager = new DrawingManager2(dgg);
+                    if (bStore != null)
+                    {
+                        foreach (EscherRecord bs in bStore.ChildRecords)
+                        {
+                            if (bs is EscherBSERecord)
+                                escherBSERecords.Add((EscherBSERecord)bs);
+                        }
+                    }
                 }
             }
+            return drawingManager;
         }
 
         /**
@@ -2845,7 +2896,6 @@ namespace NPOI.HSSF.Model
             newNameRecord.NameDefinition = ptgs;
             newNameRecord.IsHiddenName = true;
             return newNameRecord;
-
         }
 
         /**

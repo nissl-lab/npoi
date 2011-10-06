@@ -997,11 +997,72 @@ namespace NPOI.HSSF.UserModel
                 // Verify it really does belong to our workbook
                 ((HSSFCellStyle)value).VerifyBelongsToWorkbook(book);
 
+                short styleIndex;
+                if (((HSSFCellStyle)value).UserStyleName != null)
+                {
+                    styleIndex = ApplyUserCellStyle((HSSFCellStyle)value);
+                }
+                else
+                {
+                    styleIndex = value.Index;
+                }
+
                 // Change our cell record to use this style
                 record.XFIndex = value.Index;
             }
         }
+        /**
+ * Applying a user-defined style (UDS) is special. Excel does not directly reference user-defined styles, but
+ * instead create a 'proxy' ExtendedFormatRecord referencing the UDS as parent.
+ *
+ * The proceudre to apply a UDS is as follows:
+ *
+ * 1. search for a ExtendedFormatRecord with parentIndex == style.getIndex()
+ *    and xfType ==  ExtendedFormatRecord.XF_CELL.
+ * 2. if not found then create a new ExtendedFormatRecord and copy all attributes from the user-defined style
+ *    and set the parentIndex to be style.getIndex()
+ * 3. return the index of the ExtendedFormatRecord, this will be assigned to the parent cell record
+ *
+ * @param style  the user style to apply
+ *
+ * @return  the index of a ExtendedFormatRecord record that will be referenced by the cell
+ */
+        private short ApplyUserCellStyle(HSSFCellStyle style)
+        {
+            if (style.UserStyleName == null)
+            {
+                throw new ArgumentException("Expected user-defined style");
+            }
 
+            InternalWorkbook iwb = book.Workbook;
+            short userXf = -1;
+            int numfmt = iwb.NumExFormats;
+            for (short i = 0; i < numfmt; i++)
+            {
+                ExtendedFormatRecord xf = iwb.GetExFormatAt(i);
+                if (xf.XFType == ExtendedFormatRecord.XF_CELL && xf.ParentIndex == style.Index)
+                {
+                    userXf = i;
+                    break;
+                }
+            }
+            short styleIndex;
+            if (userXf == -1)
+            {
+                ExtendedFormatRecord xfr = iwb.CreateCellXF();
+                xfr.CloneStyleFrom(iwb.GetExFormatAt(style.Index));
+                xfr.IndentionOptions = (short)0;
+                xfr.XFType = (ExtendedFormatRecord.XF_CELL);
+                xfr.ParentIndex = (style.Index);
+                styleIndex = (short)numfmt;
+            }
+            else
+            {
+                styleIndex = userXf;
+            }
+
+            return styleIndex;
+        }
         /// <summary>
         /// used for internationalization, currently -1 for UnChanged, 0 for compressed Unicode or 1 for 16-bit
         /// </summary>

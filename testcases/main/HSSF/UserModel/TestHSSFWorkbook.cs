@@ -28,12 +28,18 @@ namespace TestCases.HSSF.UserModel
     using NPOI.Util;
     using NPOI.HSSF.UserModel;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NPOI.DDF;
+    using TestCases.SS.UserModel;
     /**
      *
      */
     [TestClass]
-    public class TestHSSFWorkbook
+    public class TestHSSFWorkbook:BaseTestWorkbook
     {
+        public TestHSSFWorkbook()
+            : base(HSSFITestDataProvider.Instance)
+        { }
+
         private static HSSFWorkbook OpenSample(String sampleFileName)
         {
             return HSSFTestDataSamples.OpenSampleWorkbook(sampleFileName);
@@ -604,6 +610,33 @@ namespace TestCases.HSSF.UserModel
             Assert.AreEqual(3, wb.Workbook.NumNames);
             nr = wb.Workbook.GetNameRecord(2);
             Assert.AreEqual("Sheet2!E:F,Sheet2!$A$9:$IV$12", HSSFFormulaParser.ToFormulaString(wb,nr.NameDefinition)); // E:F,9:12
+        }
+        [TestMethod]
+        public void TestClonePictures()
+        {
+            HSSFWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("SimpleWithImages.xls");
+            InternalWorkbook iwb = wb.Workbook;
+            iwb.FindDrawingGroup();
+
+            for (int pictureIndex = 1; pictureIndex <= 4; pictureIndex++)
+            {
+                EscherBSERecord bse = iwb.GetBSERecord(pictureIndex);
+                Assert.AreEqual(1, bse.Ref);
+            }
+
+            wb.CloneSheet(0);
+            for (int pictureIndex = 1; pictureIndex <= 4; pictureIndex++)
+            {
+                EscherBSERecord bse = iwb.GetBSERecord(pictureIndex);
+                Assert.AreEqual(2, bse.Ref);
+            }
+
+            wb.CloneSheet(0);
+            for (int pictureIndex = 1; pictureIndex <= 4; pictureIndex++)
+            {
+                EscherBSERecord bse = iwb.GetBSERecord(pictureIndex);
+                Assert.AreEqual(3, bse.Ref);
+            }
         }
     }
 }

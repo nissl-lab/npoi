@@ -48,7 +48,7 @@ namespace TestCases.HSSF.UserModel
         public static int CALENDAR_OCTOBER = 10;
 
         /**
-         * Checks the date conversion functions in the NPOI.SS.UserModel.DateUtil class.
+         * Checks the date conversion functions in the DateUtil class.
          */
         [TestMethod]
         public void TestDateConversion()
@@ -60,9 +60,9 @@ namespace TestCases.HSSF.UserModel
                 DateTime date = new DateTime(2002, 1, 1,
                         hour, 1, 1);
                 double excelDate =
-                        NPOI.SS.UserModel.DateUtil.GetExcelDate(date, false);
+                        DateUtil.GetExcelDate(date, false);
 
-                Assert.AreEqual(date,NPOI.SS.UserModel.DateUtil.GetJavaDate(excelDate, false), "Checking hour = " + hour);
+                Assert.AreEqual(date,DateUtil.GetJavaDate(excelDate, false), "Checking hour = " + hour);
             }
 
             // Check 1900 and 1904 date windowing conversions
@@ -77,10 +77,10 @@ namespace TestCases.HSSF.UserModel
             
             // 1900 windowing
             Assert.AreEqual(dateIf1900,
-                    NPOI.SS.UserModel.DateUtil.GetJavaDate(excelDate2, false), "Checking 1900 Date Windowing");
+                    DateUtil.GetJavaDate(excelDate2, false), "Checking 1900 Date Windowing");
             // 1904 windowing
             Assert.AreEqual(
-                    dateIf1904,NPOI.SS.UserModel.DateUtil.GetJavaDate(excelDate2, true),"Checking 1904 Date Windowing");
+                    dateIf1904,DateUtil.GetJavaDate(excelDate2, true),"Checking 1904 Date Windowing");
         }
 
         /**
@@ -104,7 +104,7 @@ namespace TestCases.HSSF.UserModel
 
                 cal.AddHours(hour);
                 DateTime javaDate = cal;
-                double excelDate = NPOI.SS.UserModel.DateUtil.GetExcelDate(javaDate, false);
+                double excelDate = DateUtil.GetExcelDate(javaDate, false);
                 double difference = excelDate - Math.Floor(excelDate);
                 int differenceInHours = (int)(difference * 24 * 60 + 0.5) / 60;
                 Assert.AreEqual(
@@ -112,7 +112,7 @@ namespace TestCases.HSSF.UserModel
                         differenceInHours, "Checking " + hour + " hour on Daylight Saving Time start date");
                 Assert.AreEqual(
                         javaDate,
-                        NPOI.SS.UserModel.DateUtil.GetJavaDate(excelDate, false),
+                        DateUtil.GetJavaDate(excelDate, false),
                         "Checking " + hour + " hour on Daylight Saving Time start date");
             }
         }
@@ -126,7 +126,7 @@ namespace TestCases.HSSF.UserModel
         {
             //TODO:: change time zone
             DateTime cal = new DateTime(2004, CALENDAR_MARCH, 28);
-            double excelDate = NPOI.SS.UserModel.DateUtil.GetExcelDate(cal, false);
+            double excelDate = DateUtil.GetExcelDate(cal, false);
             double oneHour = 1.0 / 24;
             double oneMinute = oneHour / 60;
             for (int hour = 0; hour < 24; hour++, excelDate += oneHour)
@@ -140,10 +140,10 @@ namespace TestCases.HSSF.UserModel
                 }
 
                 cal.AddHours(hour);
-                DateTime javaDate = NPOI.SS.UserModel.DateUtil.GetJavaDate(excelDate, false);
+                DateTime javaDate = DateUtil.GetJavaDate(excelDate, false);
                 Assert.AreEqual(
                         excelDate,
-                        NPOI.SS.UserModel.DateUtil.GetExcelDate(javaDate, false),0.001);
+                        DateUtil.GetExcelDate(javaDate, false),0.001);
             }
         }
 
@@ -160,7 +160,7 @@ namespace TestCases.HSSF.UserModel
             {
                 cal.AddDays(hour);
                 DateTime javaDate = cal;
-                double excelDate = NPOI.SS.UserModel.DateUtil.GetExcelDate(javaDate, false);
+                double excelDate = DateUtil.GetExcelDate(javaDate, false);
                 double difference = excelDate - Math.Floor(excelDate);
                 int differenceInHours = (int)(difference * 24 * 60 + 0.5) / 60;
                 Assert.AreEqual(
@@ -168,7 +168,7 @@ namespace TestCases.HSSF.UserModel
                         differenceInHours, "Checking " + hour + " hour on Daylight Saving Time end date");
                 Assert.AreEqual(
                         javaDate,
-                        NPOI.SS.UserModel.DateUtil.GetJavaDate(excelDate, false),
+                        DateUtil.GetJavaDate(excelDate, false),
                         "Checking " + hour + " hour on Daylight Saving Time start date");
             }
         }
@@ -182,16 +182,16 @@ namespace TestCases.HSSF.UserModel
         {
             //TODO:: change time zone
             DateTime cal = new DateTime(2004, CALENDAR_OCTOBER, 31);
-            double excelDate = NPOI.SS.UserModel.DateUtil.GetExcelDate(cal, false);
+            double excelDate = DateUtil.GetExcelDate(cal, false);
             double oneHour = 1.0 / 24;
             double oneMinute = oneHour / 60;
             for (int hour = 0; hour < 24; hour++, excelDate += oneHour)
             {
                 cal.AddHours( hour);
-                DateTime javaDate = NPOI.SS.UserModel.DateUtil.GetJavaDate(excelDate, false);
+                DateTime javaDate = DateUtil.GetJavaDate(excelDate, false);
                 Assert.AreEqual(
                         excelDate,
-                        NPOI.SS.UserModel.DateUtil.GetExcelDate(javaDate, false),0.1);
+                        DateUtil.GetExcelDate(javaDate, false),0.1);
             }
         }
 
@@ -213,8 +213,8 @@ namespace TestCases.HSSF.UserModel
                 //date.SetTimeZone(TimeZone.GetTimeZone(id));
                 //date.AddDays(12);
                 
-                double excelDate = NPOI.SS.UserModel.DateUtil.GetExcelDate(date, false);
-                DateTime javaDate = NPOI.SS.UserModel.DateUtil.GetJavaDate(excelDate);
+                double excelDate = DateUtil.GetExcelDate(date, false);
+                DateTime javaDate = DateUtil.GetJavaDate(excelDate);
 
                 // Should Match despite time-zone
                 Assert.AreEqual(expected, javaDate, "Checking timezone " + id);
@@ -232,8 +232,8 @@ namespace TestCases.HSSF.UserModel
             for (int i = 0; i < builtins.Length; i++)
             {
                 String formatStr = HSSFDataFormat.GetBuiltinFormat(builtins[i]);
-                Assert.IsTrue(NPOI.SS.UserModel.DateUtil.IsInternalDateFormat(builtins[i]));
-                Assert.IsTrue(NPOI.SS.UserModel.DateUtil.IsADateFormat(builtins[i], formatStr));
+                Assert.IsTrue(DateUtil.IsInternalDateFormat(builtins[i]));
+                Assert.IsTrue(DateUtil.IsADateFormat(builtins[i], formatStr));
             }
 
             // Now try a few built-in non date formats
@@ -241,8 +241,8 @@ namespace TestCases.HSSF.UserModel
             for (int i = 0; i < builtins.Length; i++)
             {
                 String formatStr = HSSFDataFormat.GetBuiltinFormat(builtins[i]);
-                Assert.IsFalse(NPOI.SS.UserModel.DateUtil.IsInternalDateFormat(builtins[i]));
-                Assert.IsFalse(NPOI.SS.UserModel.DateUtil.IsADateFormat(builtins[i], formatStr));
+                Assert.IsFalse(DateUtil.IsInternalDateFormat(builtins[i]));
+                Assert.IsFalse(DateUtil.IsADateFormat(builtins[i], formatStr));
             }
 
             // Now for some non-internal ones
@@ -250,7 +250,7 @@ namespace TestCases.HSSF.UserModel
             int numBuiltins = HSSFDataFormat.NumberOfBuiltinBuiltinFormats;
             Assert.IsTrue(numBuiltins < 60);
             short formatId = 60;
-            Assert.IsFalse(NPOI.SS.UserModel.DateUtil.IsInternalDateFormat(formatId));
+            Assert.IsFalse(DateUtil.IsInternalDateFormat(formatId));
 
             // Valid ones first
             String[] formats = new String[] {
@@ -279,7 +279,7 @@ namespace TestCases.HSSF.UserModel
             for (int i = 0; i < formats.Length; i++)
             {
                 Assert.IsTrue(
-                        NPOI.SS.UserModel.DateUtil.IsADateFormat(formatId, formats[i])
+                        DateUtil.IsADateFormat(formatId, formats[i])
                         ,formats[i] + " is a date format"
                 );
             }
@@ -295,7 +295,7 @@ namespace TestCases.HSSF.UserModel
             for (int i = 0; i < formats.Length; i++)
             {
                 Assert.IsTrue(
-                        NPOI.SS.UserModel.DateUtil.IsADateFormat(formatId, formats[i]),
+                        DateUtil.IsADateFormat(formatId, formats[i]),
                         formats[i] + " is a datetime format"
                 );
             }
@@ -312,7 +312,7 @@ namespace TestCases.HSSF.UserModel
             {
                 Assert.IsFalse(
 
-                        NPOI.SS.UserModel.DateUtil.IsADateFormat(formatId, formats[i]), 
+                        DateUtil.IsADateFormat(formatId, formats[i]), 
                         formats[i] + " is not a date or datetime format"
                 );
             }
@@ -324,7 +324,7 @@ namespace TestCases.HSSF.UserModel
         };
             for (int i = 0; i < formats.Length; i++)
             {
-                //    Assert.IsFalse( NPOI.SS.UserModel.DateUtil.IsADateFormat(formatId, formats[i]) );
+                //    Assert.IsFalse( DateUtil.IsADateFormat(formatId, formats[i]) );
             }
         }
 
@@ -354,107 +354,107 @@ namespace TestCases.HSSF.UserModel
             style = cell.CellStyle;
             Assert.AreEqual(aug_10_2007, cell.NumericCellValue, 0.0001);
             Assert.AreEqual("d-mmm-yy", style.GetDataFormatString());
-            Assert.IsTrue(NPOI.SS.UserModel.DateUtil.IsInternalDateFormat(style.DataFormat));
-            Assert.IsTrue(NPOI.SS.UserModel.DateUtil.IsADateFormat(style.DataFormat, style.GetDataFormatString()));
-            Assert.IsTrue(NPOI.SS.UserModel.DateUtil.IsCellDateFormatted(cell));
+            Assert.IsTrue(DateUtil.IsInternalDateFormat(style.DataFormat));
+            Assert.IsTrue(DateUtil.IsADateFormat(style.DataFormat, style.GetDataFormatString()));
+            Assert.IsTrue(DateUtil.IsCellDateFormatted(cell));
 
             row = sheet.GetRow(1);
             cell = row.GetCell(1);
             style = cell.CellStyle;
             Assert.AreEqual(aug_10_2007, cell.NumericCellValue, 0.0001);
-            Assert.IsFalse(NPOI.SS.UserModel.DateUtil.IsInternalDateFormat(cell.CellStyle.DataFormat));
-            Assert.IsTrue(NPOI.SS.UserModel.DateUtil.IsADateFormat(style.DataFormat, style.GetDataFormatString()));
-            Assert.IsTrue(NPOI.SS.UserModel.DateUtil.IsCellDateFormatted(cell));
+            Assert.IsFalse(DateUtil.IsInternalDateFormat(cell.CellStyle.DataFormat));
+            Assert.IsTrue(DateUtil.IsADateFormat(style.DataFormat, style.GetDataFormatString()));
+            Assert.IsTrue(DateUtil.IsCellDateFormatted(cell));
 
             row = sheet.GetRow(2);
             cell = row.GetCell(1);
             style = cell.CellStyle;
             Assert.AreEqual(aug_10_2007, cell.NumericCellValue, 0.0001);
-            Assert.IsTrue(NPOI.SS.UserModel.DateUtil.IsInternalDateFormat(cell.CellStyle.DataFormat));
-            Assert.IsTrue(NPOI.SS.UserModel.DateUtil.IsADateFormat(style.DataFormat, style.GetDataFormatString()));
-            Assert.IsTrue(NPOI.SS.UserModel.DateUtil.IsCellDateFormatted(cell));
+            Assert.IsTrue(DateUtil.IsInternalDateFormat(cell.CellStyle.DataFormat));
+            Assert.IsTrue(DateUtil.IsADateFormat(style.DataFormat, style.GetDataFormatString()));
+            Assert.IsTrue(DateUtil.IsCellDateFormatted(cell));
 
             row = sheet.GetRow(3);
             cell = row.GetCell(1);
             style = cell.CellStyle;
             Assert.AreEqual(aug_10_2007, cell.NumericCellValue, 0.0001);
-            Assert.IsFalse(NPOI.SS.UserModel.DateUtil.IsInternalDateFormat(cell.CellStyle.DataFormat));
-            Assert.IsTrue(NPOI.SS.UserModel.DateUtil.IsADateFormat(style.DataFormat, style.GetDataFormatString()));
-            Assert.IsTrue(NPOI.SS.UserModel.DateUtil.IsCellDateFormatted(cell));
+            Assert.IsFalse(DateUtil.IsInternalDateFormat(cell.CellStyle.DataFormat));
+            Assert.IsTrue(DateUtil.IsADateFormat(style.DataFormat, style.GetDataFormatString()));
+            Assert.IsTrue(DateUtil.IsCellDateFormatted(cell));
 
             row = sheet.GetRow(4);
             cell = row.GetCell(1);
             style = cell.CellStyle;
             Assert.AreEqual(aug_10_2007, cell.NumericCellValue, 0.0001);
-            Assert.IsFalse(NPOI.SS.UserModel.DateUtil.IsInternalDateFormat(cell.CellStyle.DataFormat));
-            Assert.IsTrue(NPOI.SS.UserModel.DateUtil.IsADateFormat(style.DataFormat, style.GetDataFormatString()));
-            Assert.IsTrue(NPOI.SS.UserModel.DateUtil.IsCellDateFormatted(cell));
+            Assert.IsFalse(DateUtil.IsInternalDateFormat(cell.CellStyle.DataFormat));
+            Assert.IsTrue(DateUtil.IsADateFormat(style.DataFormat, style.GetDataFormatString()));
+            Assert.IsTrue(DateUtil.IsCellDateFormatted(cell));
         }
         [TestMethod]
         public void TestDateBug_2Excel()
         {
-            Assert.AreEqual(59.0, NPOI.SS.UserModel.DateUtil.GetExcelDate(new DateTime(1900, CALENDAR_FEBRUARY, 28), false), 1);
-            Assert.AreEqual(61.0, NPOI.SS.UserModel.DateUtil.GetExcelDate(new DateTime(1900, CALENDAR_MARCH, 1), false), 1);
+            Assert.AreEqual(59.0, DateUtil.GetExcelDate(new DateTime(1900, CALENDAR_FEBRUARY, 28), false), 1);
+            Assert.AreEqual(61.0, DateUtil.GetExcelDate(new DateTime(1900, CALENDAR_MARCH, 1), false), 1);
 
-            Assert.AreEqual(37315.00, NPOI.SS.UserModel.DateUtil.GetExcelDate(new DateTime(2002, CALENDAR_FEBRUARY, 28), false), 1);
-            Assert.AreEqual(37316.00, NPOI.SS.UserModel.DateUtil.GetExcelDate(new DateTime(2002, CALENDAR_MARCH, 1), false), 1);
-            Assert.AreEqual(37257.00, NPOI.SS.UserModel.DateUtil.GetExcelDate(new DateTime(2002, CALENDAR_JANUARY, 1), false), 1);
-            Assert.AreEqual(38074.00, NPOI.SS.UserModel.DateUtil.GetExcelDate(new DateTime(2004, CALENDAR_MARCH, 28), false), 1);
+            Assert.AreEqual(37315.00, DateUtil.GetExcelDate(new DateTime(2002, CALENDAR_FEBRUARY, 28), false), 1);
+            Assert.AreEqual(37316.00, DateUtil.GetExcelDate(new DateTime(2002, CALENDAR_MARCH, 1), false), 1);
+            Assert.AreEqual(37257.00, DateUtil.GetExcelDate(new DateTime(2002, CALENDAR_JANUARY, 1), false), 1);
+            Assert.AreEqual(38074.00, DateUtil.GetExcelDate(new DateTime(2004, CALENDAR_MARCH, 28), false), 1);
         }
         [TestMethod]
         public void TestDateBug_2Java()
         {
-            Assert.AreEqual(new DateTime(1900, CALENDAR_FEBRUARY, 28), NPOI.SS.UserModel.DateUtil.GetJavaDate(59.0, false));
-            Assert.AreEqual(new DateTime(1900, CALENDAR_MARCH, 1), NPOI.SS.UserModel.DateUtil.GetJavaDate(61.0, false));
+            Assert.AreEqual(new DateTime(1900, CALENDAR_FEBRUARY, 28), DateUtil.GetJavaDate(59.0, false));
+            Assert.AreEqual(new DateTime(1900, CALENDAR_MARCH, 1), DateUtil.GetJavaDate(61.0, false));
 
-            Assert.AreEqual(new DateTime(2002, CALENDAR_FEBRUARY, 28), NPOI.SS.UserModel.DateUtil.GetJavaDate(37315.00, false));
-            Assert.AreEqual(new DateTime(2002, CALENDAR_MARCH, 1), NPOI.SS.UserModel.DateUtil.GetJavaDate(37316.00, false));
-            Assert.AreEqual(new DateTime(2002, CALENDAR_JANUARY, 1), NPOI.SS.UserModel.DateUtil.GetJavaDate(37257.00, false));
-            Assert.AreEqual(new DateTime(2004, CALENDAR_MARCH, 28), NPOI.SS.UserModel.DateUtil.GetJavaDate(38074.00, false));
+            Assert.AreEqual(new DateTime(2002, CALENDAR_FEBRUARY, 28), DateUtil.GetJavaDate(37315.00, false));
+            Assert.AreEqual(new DateTime(2002, CALENDAR_MARCH, 1), DateUtil.GetJavaDate(37316.00, false));
+            Assert.AreEqual(new DateTime(2002, CALENDAR_JANUARY, 1), DateUtil.GetJavaDate(37257.00, false));
+            Assert.AreEqual(new DateTime(2004, CALENDAR_MARCH, 28), DateUtil.GetJavaDate(38074.00, false));
         }
         [TestMethod]
         public void TestDate1904()
         {
-            Assert.AreEqual(new DateTime(1904, CALENDAR_JANUARY, 2), NPOI.SS.UserModel.DateUtil.GetJavaDate(1.0, true));
-            Assert.AreEqual(new DateTime(1904, CALENDAR_JANUARY, 1), NPOI.SS.UserModel.DateUtil.GetJavaDate(0.0, true));
-            Assert.AreEqual(0.0, NPOI.SS.UserModel.DateUtil.GetExcelDate(new DateTime(1904, CALENDAR_JANUARY, 1), true), 0.00001);
-            Assert.AreEqual(1.0, NPOI.SS.UserModel.DateUtil.GetExcelDate(new DateTime(1904, CALENDAR_JANUARY, 2), true), 0.00001);
+            Assert.AreEqual(new DateTime(1904, CALENDAR_JANUARY, 2), DateUtil.GetJavaDate(1.0, true));
+            Assert.AreEqual(new DateTime(1904, CALENDAR_JANUARY, 1), DateUtil.GetJavaDate(0.0, true));
+            Assert.AreEqual(0.0, DateUtil.GetExcelDate(new DateTime(1904, CALENDAR_JANUARY, 1), true), 0.00001);
+            Assert.AreEqual(1.0, DateUtil.GetExcelDate(new DateTime(1904, CALENDAR_JANUARY, 2), true), 0.00001);
 
-            Assert.AreEqual(new DateTime(1998, CALENDAR_JULY, 5), NPOI.SS.UserModel.DateUtil.GetJavaDate(35981, false));
-            Assert.AreEqual(new DateTime(1998, CALENDAR_JULY, 5), NPOI.SS.UserModel.DateUtil.GetJavaDate(34519, true));
+            Assert.AreEqual(new DateTime(1998, CALENDAR_JULY, 5), DateUtil.GetJavaDate(35981, false));
+            Assert.AreEqual(new DateTime(1998, CALENDAR_JULY, 5), DateUtil.GetJavaDate(34519, true));
 
-            Assert.AreEqual(35981.0, NPOI.SS.UserModel.DateUtil.GetExcelDate(new DateTime(1998, CALENDAR_JULY, 5), false), 0.00001);
-            Assert.AreEqual(34519.0, NPOI.SS.UserModel.DateUtil.GetExcelDate(new DateTime(1998, CALENDAR_JULY, 5), true), 0.00001);
+            Assert.AreEqual(35981.0, DateUtil.GetExcelDate(new DateTime(1998, CALENDAR_JULY, 5), false), 0.00001);
+            Assert.AreEqual(34519.0, DateUtil.GetExcelDate(new DateTime(1998, CALENDAR_JULY, 5), true), 0.00001);
         }
 
         /**
-         * Check if NPOI.SS.UserModel.DateUtil.GetAbsoluteDay works as advertised.
+         * Check if DateUtil.GetAbsoluteDay works as advertised.
          */
         [TestMethod]
         public void TestAbsoluteDay()
         {
             // 1 Jan 1900 is 1 day after 31 Dec 1899
             DateTime calendar = new DateTime(1900, 1, 1);
-            Assert.AreEqual(1, NPOI.SS.UserModel.DateUtil.AbsoluteDay(calendar, false), "Checking absolute day (1 Jan 1900)");
+            Assert.AreEqual(1, DateUtil.AbsoluteDay(calendar, false), "Checking absolute day (1 Jan 1900)");
             // 1 Jan 1901 is 366 days after 31 Dec 1899
             calendar = new DateTime(1901, 1, 1);
-            Assert.AreEqual(366, NPOI.SS.UserModel.DateUtil.AbsoluteDay(calendar, false), "Checking absolute day (1 Jan 1901)");
+            Assert.AreEqual(366, DateUtil.AbsoluteDay(calendar, false), "Checking absolute day (1 Jan 1901)");
         }
         [TestMethod]
         public void TestConvertTime()
         {
 
             double delta = 1E-7; // a couple of digits more accuracy than strictly required
-            Assert.AreEqual(0.5, NPOI.SS.UserModel.DateUtil.ConvertTime("12:00"), delta);
-            Assert.AreEqual(2.0 / 3, NPOI.SS.UserModel.DateUtil.ConvertTime("16:00"), delta);
-            Assert.AreEqual(0.0000116, NPOI.SS.UserModel.DateUtil.ConvertTime("0:00:01"), delta);
-            Assert.AreEqual(0.7330440, NPOI.SS.UserModel.DateUtil.ConvertTime("17:35:35"), delta);
+            Assert.AreEqual(0.5, DateUtil.ConvertTime("12:00"), delta);
+            Assert.AreEqual(2.0 / 3, DateUtil.ConvertTime("16:00"), delta);
+            Assert.AreEqual(0.0000116, DateUtil.ConvertTime("0:00:01"), delta);
+            Assert.AreEqual(0.7330440, DateUtil.ConvertTime("17:35:35"), delta);
         }
         [TestMethod]
         public void TestParseDate()
         {
-            Assert.AreEqual(new DateTime(2008, 8, 3), NPOI.SS.UserModel.DateUtil.ParseYYYYMMDDDate("2008/08/03"));
-            Assert.AreEqual(new DateTime(1994, 5, 1), NPOI.SS.UserModel.DateUtil.ParseYYYYMMDDDate("1994/05/01"));
+            Assert.AreEqual(new DateTime(2008, 8, 3), DateUtil.ParseYYYYMMDDDate("2008/08/03"));
+            Assert.AreEqual(new DateTime(1994, 5, 1), DateUtil.ParseYYYYMMDDDate("1994/05/01"));
         }
 
         /**
@@ -465,7 +465,7 @@ namespace TestCases.HSSF.UserModel
         {
             // Excel day 30000 is date 18-Feb-1982 
             // 0.7 corresponds to time 16:48:00
-            DateTime actual = NPOI.SS.UserModel.DateUtil.GetJavaDate(30000.7);
+            DateTime actual = DateUtil.GetJavaDate(30000.7);
             DateTime expected = new DateTime(1982, 2, 18, 16, 48, 0);
             Assert.AreEqual(expected, actual);
         }

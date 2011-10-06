@@ -42,7 +42,7 @@ namespace TestCases.HSSF.UserModel
         public TestHSSFCell()
             : base(HSSFITestDataProvider.Instance)
         {
-            
+
         }
 
         private static HSSFWorkbook OpenSample(String sampleFileName)
@@ -53,7 +53,7 @@ namespace TestCases.HSSF.UserModel
         {
             return HSSFTestDataSamples.WriteOutAndReadBack(original);
         }
- 
+
         /**
          * Test that Boolean and Error types (BoolErrRecord) are supported properly.
          */
@@ -291,7 +291,7 @@ namespace TestCases.HSSF.UserModel
             Assert.AreEqual(3, s.ActiveCellRow, "After serialize, active cell should be on row 3");
         }
 
- 
+
         /**
          * Test reading hyperlinks
          */
@@ -415,6 +415,14 @@ namespace TestCases.HSSF.UserModel
                 Assert.Fail();
             }
             catch (ArgumentException) { }
+        }
+        /**
+  * HSSF prior to version 3.7 had a bug: it could write a NaN but could not read such a file back.
+  */
+        [TestMethod]
+        public void TestReadNaN()
+        {
+            HSSFWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("49761.xls");
         }
 
     }

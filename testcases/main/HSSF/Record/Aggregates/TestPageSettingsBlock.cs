@@ -360,7 +360,7 @@ namespace NPOI.HSSF.Record.Aggregates
                 new HeaderFooterRecord(HexRead.ReadFromString("9C 08 00 00 00 00 00 00 00 00 00 00 53 CE BD CC DE 38 44 45 97 C1 5C 89 F9 37 32 1B 34 33 00 00 00 00 00 00 00 00")),
 
                 EOFRecord.instance,
-        };
+            };
             RecordStream rs = new RecordStream(Arrays.AsList(recs), 0);
             InternalSheet sheet;
             try
@@ -400,10 +400,10 @@ namespace NPOI.HSSF.Record.Aggregates
                 recs[8],  // UserSViewEnd
 
                 recs[11],  //EOFRecord
-        };
+            };
             for (int i = 0; i < expectedRecs.Length; i++)
             {
-                Assert.AreEqual(expectedRecs[i], outRecs[i], "Record mismatch at index " + i);
+                Assert.AreEqual(expectedRecs[i].GetType(), outRecs[i].GetType(), "Record mismatch at index " + i);
             }
             HeaderFooterRecord hd1 = (HeaderFooterRecord)expectedRecs[4];
             //GUID is zero

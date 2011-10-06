@@ -360,7 +360,7 @@ namespace NPOI.HSSF.UserModel
                     HSSFRow r = (HSSFRow)rit.Current;
                     //evaluator.SetCurrentRow(r);
 
-                    for (IEnumerator cit = r.GetCellEnumerator(); cit.MoveNext(); )
+                    for (IEnumerator cit = r.GetEnumerator(); cit.MoveNext(); )
                     {
                         NPOI.SS.UserModel.ICell c = (HSSFCell)cit.Current;
                         if (c.CellType == NPOI.SS.UserModel.CellType.FORMULA)
