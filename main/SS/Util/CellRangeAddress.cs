@@ -70,5 +70,27 @@ namespace NPOI.SS.Util
         {
             return numberOfItems * ENCODED_SIZE;
         }
+
+            /**
+     * @param ref usually a standard area ref (e.g. "B1:D8").  May be a single cell
+     *            ref (e.g. "B5") in which case the result is a 1 x 1 cell range.
+     */
+        public static CellRangeAddress ValueOf(String reference)
+        {
+            int sep = reference.IndexOf(":");
+            CellReference a;
+            CellReference b;
+            if (sep == -1)
+            {
+                a = new CellReference(reference);
+                b = a;
+            }
+            else
+            {
+                a = new CellReference(reference.Substring(0, sep));
+                b = new CellReference(reference.Substring(sep + 1));
+            }
+            return new CellRangeAddress(a.Row, b.Row, a.Col, b.Col);
+        }
     }
 }
