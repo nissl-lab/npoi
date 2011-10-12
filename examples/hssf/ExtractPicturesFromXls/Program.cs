@@ -32,6 +32,8 @@ using NPOI.HSSF.UserModel;
 using NPOI.HPSF;
 using NPOI.POIFS.FileSystem;
 using NPOI.SS.UserModel;
+using System.Collections;
+using System.Drawing;
 
 namespace ExtractPicturesFromXls
 {
@@ -41,46 +43,33 @@ namespace ExtractPicturesFromXls
         {
             InitializeWorkbook();
 
-            Sheet sheet1 = hssfworkbook.CreateSheet("Sheet1");
-
-            sheet1.CreateRow(0).CreateCell(0).SetCellValue("This is a Sample");
-            int x = 1;
-            int i = 1;
-            for (i = 1; i <= 15; i++)
+            IList pictures = hssfworkbook.GetAllPictures();
+            int i = 0;
+            foreach (HSSFPictureData pic in pictures)
             {
-                Row row = sheet1.CreateRow(i);
-                for (int j = 0; j < 15; j++)
+                string ext = pic.SuggestFileExtension();
+                if (ext.Equals("jpeg"))
                 {
-                    row.CreateCell(j).SetCellValue(x++);
+                    Image jpg = Image.FromStream(new MemoryStream(pic.Data));
+                    jpg.Save(string.Format("pic{0}.jpg",i++));
                 }
+                else if (ext.Equals("png"))
+                {
+                    Image png = Image.FromStream(new MemoryStream(pic.Data));
+                    png.Save(string.Format("pic{0}.png", i++));
+                }
+
             }
 
-            WriteToFile();
         }
 
         static HSSFWorkbook hssfworkbook;
 
-        static void WriteToFile()
-        {
-            //Write the stream data of workbook to the root directory
-            FileStream file = new FileStream(@"test.xls", FileMode.Create);
-            hssfworkbook.Write(file);
-            file.Close();
-        }
 
         static void InitializeWorkbook()
         {
-            hssfworkbook = new HSSFWorkbook();
-
-            ////create a entry of DocumentSummaryInformation
-            DocumentSummaryInformation dsi = PropertySetFactory.CreateDocumentSummaryInformation();
-            dsi.Company = "NPOI Team";
-            hssfworkbook.DocumentSummaryInformation = dsi;
-
-            ////create a entry of SummaryInformation
-            SummaryInformation si = PropertySetFactory.CreateSummaryInformation();
-            si.Subject = "NPOI SDK Example";
-            hssfworkbook.SummaryInformation = si;
+            FileStream file = new FileStream(@"clothes.xls", FileMode.Open, FileAccess.Read);
+            hssfworkbook = new HSSFWorkbook(file);
         }
     }
 }
