@@ -56,5 +56,6 @@ namespace NPOI.SS.Formula
          */
         void SortDependentCachedValues(ICacheEntry[] formulaCells);
         void OnClearDependentCachedValue(ICacheEntry formulaCell, int depth);
+        void OnChangeFromBlankValue(int sheetIndex, int rowIndex, int columnIndex,EvaluationCell cell, ICacheEntry entry);
     }
 }

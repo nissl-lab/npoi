@@ -51,6 +51,8 @@ namespace NPOI.SS.Formula
         {
             FormulaCellCacheEntry fcce = _formulaCellCache.Get(cell);
 
+            int rowIndex = cell.RowIndex;
+            int columnIndex = cell.ColumnIndex;
             Loc loc = new Loc(bookIndex, sheetIndex, cell.RowIndex, cell.ColumnIndex);
             PlainValueCellCacheEntry pcce = _plainCellCache.Get(loc);
 
@@ -58,11 +60,17 @@ namespace NPOI.SS.Formula
             {
                 if (fcce == null)
                 {
+                    fcce = new FormulaCellCacheEntry();
+
                     if (pcce == null)
                     {
-                        UpdateAnyBlankReferencingFormulas(bookIndex, sheetIndex, cell.RowIndex, cell.ColumnIndex);
+                        if (_evaluationListener != null)
+                        {
+                            _evaluationListener.OnChangeFromBlankValue(sheetIndex, rowIndex,
+                                    columnIndex, cell, fcce);
+                        }
+                        UpdateAnyBlankReferencingFormulas(bookIndex, sheetIndex, rowIndex, columnIndex);
                     }
-                    fcce = new FormulaCellCacheEntry();
                     _formulaCellCache.Put(cell, fcce);
                 }
                 else
@@ -86,15 +94,19 @@ namespace NPOI.SS.Formula
                 ValueEval value = WorkbookEvaluator.GetValueFromNonFormulaCell(cell);
                 if (pcce == null)
                 {
-                    if (fcce == null)
+                    if (value != BlankEval.instance)
                     {
-                        UpdateAnyBlankReferencingFormulas(bookIndex, sheetIndex, cell.RowIndex, cell.ColumnIndex);
-                    }
-                    pcce = new PlainValueCellCacheEntry(value);
-                    _plainCellCache.Put(loc, pcce);
-                    if (_evaluationListener != null)
-                    {
-                        _evaluationListener.OnReadPlainValue(sheetIndex, cell.RowIndex, cell.ColumnIndex, pcce);
+                        pcce = new PlainValueCellCacheEntry(value);
+                        if (fcce == null)
+                        {
+                            if (_evaluationListener != null)
+                            {
+                                _evaluationListener.OnChangeFromBlankValue(sheetIndex, rowIndex,
+                                        columnIndex, cell, pcce);
+                            }
+                            UpdateAnyBlankReferencingFormulas(bookIndex, sheetIndex, rowIndex, columnIndex);
+                        }
+                        _plainCellCache.Put(loc, pcce);
                     }
                 }
                 else
@@ -102,6 +114,10 @@ namespace NPOI.SS.Formula
                     if (pcce.UpdateValue(value))
                     {
                         pcce.RecurseClearCachedFormulaResults(_evaluationListener);
+                    }
+                    if (value == BlankEval.instance)
+                    {
+                        _plainCellCache.Remove(loc);
                     }
                 }
                 if (fcce == null)

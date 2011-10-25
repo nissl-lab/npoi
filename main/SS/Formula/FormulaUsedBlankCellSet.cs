@@ -126,6 +126,7 @@ namespace NPOI.SS.Formula
                 }
                 return false;
             }
+
         }
 
         private class BlankCellRectangleGroup
@@ -227,6 +228,13 @@ namespace NPOI.SS.Formula
                 return false;
             }
             return bcsg.ContainsCell(rowIndex, columnIndex);
+        }
+        public bool IsEmpty
+        {
+            get
+            {
+                return _sheetGroupsByBookSheet.Count == 0;
+            }
         }
     }
 }

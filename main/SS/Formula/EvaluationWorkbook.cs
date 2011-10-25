@@ -47,7 +47,7 @@ namespace NPOI.SS.Formula
      * 
      * @author Josh Micich
      */
-    public interface EvaluationWorkbook
+    public interface IEvaluationWorkbook
     {
         String GetSheetName(int sheetIndex);
         /**
@@ -63,8 +63,45 @@ namespace NPOI.SS.Formula
          */
         ExternalSheet GetExternalSheet(int externSheetIndex);
         int ConvertFromExternSheetIndex(int externSheetIndex);
-        EvaluationName GetName(NamePtg namePtg);
+        ExternalName GetExternalName(int externSheetIndex, int externNameIndex);
+        IEvaluationName GetName(NamePtg namePtg);
+        IEvaluationName GetName(String name, int sheetIndex);
         String ResolveNameXText(NameXPtg ptg);
         Ptg[] GetFormulaTokens(EvaluationCell cell);
+    }
+
+    public class ExternalName
+    {
+        private String _nameName;
+        private int _nameNumber;
+        private int _ix;
+
+        public ExternalName(String nameName, int nameNumber, int ix)
+        {
+            _nameName = nameName;
+            _nameNumber = nameNumber;
+            _ix = ix;
+        }
+        public String Name
+        {
+            get
+            {
+                return _nameName;
+            }
+        }
+        public int Number
+        {
+            get
+            {
+                return _nameNumber;
+            }
+        }
+        public int Ix
+        {
+            get
+            {
+                return _ix;
+            }
+        }
     }
 }

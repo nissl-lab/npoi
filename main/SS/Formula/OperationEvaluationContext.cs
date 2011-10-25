@@ -4,6 +4,7 @@
     using NPOI.HSSF.Record.Formula.Eval;
     using NPOI.HSSF.Record.Formula.Functions;
     using NPOI.SS.Util;
+    using NPOI.HSSF.Record.Formula;
     /**
      * Contains all the contextual information required to Evaluate an operation
      * within a formula
@@ -15,14 +16,14 @@
     public class OperationEvaluationContext
     {
         public static FreeRefFunction UDF = UserDefinedFunction.instance;
-        private EvaluationWorkbook _workbook;
+        private IEvaluationWorkbook _workbook;
         private int _sheetIndex;
         private int _rowIndex;
         private int _columnIndex;
         private EvaluationTracker _tracker;
         private WorkbookEvaluator _bookEvaluator;
 
-        public OperationEvaluationContext(WorkbookEvaluator bookEvaluator, EvaluationWorkbook workbook, int sheetIndex, int srcRowNum,
+        public OperationEvaluationContext(WorkbookEvaluator bookEvaluator, IEvaluationWorkbook workbook, int sheetIndex, int srcRowNum,
                 int srcColNum, EvaluationTracker tracker)
         {
             _bookEvaluator = bookEvaluator;
@@ -33,7 +34,7 @@
             _tracker = tracker;
         }
 
-        public EvaluationWorkbook GetWorkbook()
+        public IEvaluationWorkbook GetWorkbook()
         {
             return _workbook;
         }
@@ -277,6 +278,51 @@
         {
             SheetRefEvaluator sre = CreateExternSheetRefEvaluator(extSheetIndex);
             return new LazyAreaEval(firstRowIndex, firstColumnIndex, lastRowIndex, lastColumnIndex, sre);
+        }
+        public ValueEval GetNameXEval(NameXPtg nameXPtg)
+        {
+            ExternalSheet externSheet = _workbook.GetExternalSheet(nameXPtg.SheetRefIndex);
+            if (externSheet == null)
+                return new NameXEval(nameXPtg);
+            String workbookName = externSheet.GetWorkbookName();
+            ExternalName externName = _workbook.GetExternalName(
+                  nameXPtg.SheetRefIndex,
+                  nameXPtg.NameIndex
+            );
+            try
+            {
+                WorkbookEvaluator refWorkbookEvaluator = _bookEvaluator.GetOtherWorkbookEvaluator(workbookName);
+                IEvaluationName evaluationName = refWorkbookEvaluator.GetName(externName.Name, externName.Ix - 1);
+                if (evaluationName != null && evaluationName.HasFormula)
+                {
+                    if (evaluationName.NameDefinition.Length > 1)
+                    {
+                        throw new Exception("Complex name formulas not supported yet");
+                    }
+                    Ptg ptg = evaluationName.NameDefinition[0];
+                    if (ptg is Ref3DPtg)
+                    {
+                        Ref3DPtg ref3D = (Ref3DPtg)ptg;
+                        int sheetIndex = refWorkbookEvaluator.GetSheetIndexByExternIndex(ref3D.ExternSheetIndex);
+                        String sheetName = refWorkbookEvaluator.GetSheetName(sheetIndex);
+                        SheetRefEvaluator sre = CreateExternSheetRefEvaluator(workbookName, sheetName);
+                        return new LazyRefEval(ref3D.Row, ref3D.Column, sre);
+                    }
+                    else if (ptg is Area3DPtg)
+                    {
+                        Area3DPtg area3D = (Area3DPtg)ptg;
+                        int sheetIndex = refWorkbookEvaluator.GetSheetIndexByExternIndex(area3D.ExternSheetIndex);
+                        String sheetName = refWorkbookEvaluator.GetSheetName(sheetIndex);
+                        SheetRefEvaluator sre = CreateExternSheetRefEvaluator(workbookName, sheetName);
+                        return new LazyAreaEval(area3D.FirstRow, area3D.FirstColumn, area3D.LastRow, area3D.LastColumn, sre);
+                    }
+                }
+                return ErrorEval.REF_INVALID;
+            }
+            catch (WorkbookNotFoundException wnfe)
+            {
+                return ErrorEval.REF_INVALID;
+            }
         }
     }
 }

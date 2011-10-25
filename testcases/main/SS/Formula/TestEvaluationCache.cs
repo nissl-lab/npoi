@@ -151,6 +151,21 @@ namespace TestCases.SS.Formula
                 EvaluationCell cell = (EvaluationCell)_formulaCellsByCacheEntry[entry];
                 log("Clear" + depth, cell.RowIndex, cell.ColumnIndex, entry.GetValue());
             }
+            public override void OnChangeFromBlankValue(int sheetIndex, int rowIndex, int columnIndex,
+                    EvaluationCell cell, ICacheEntry entry)
+            {
+                log("changeFromBlank", rowIndex, columnIndex, entry.GetValue());
+                if (entry.GetValue() == null)
+                { // hack to tell the difference between formula and plain value
+                    // perhaps the API could be improved: onChangeFromBlankToValue, onChangeFromBlankToFormula
+                    _formulaCellsByCacheEntry.Add(entry,cell);
+                }
+                else
+                {
+                    Loc loc = new Loc(0, sheetIndex, rowIndex, columnIndex);
+                    _plainCellLocsByCacheEntry.Add(entry, loc);
+                }
+            }
             private void log(String tag, int rowIndex, int columnIndex, Object value)
             {
                 StringBuilder sb = new StringBuilder(64);

@@ -41,7 +41,7 @@ namespace NPOI.HSSF.Extractor
         private bool formulasNotResults = false;
         private bool includeCellComments = false;
         private bool includeBlankCells = false;
-
+        private bool includeHeaderFooter = true;
         /// <summary>
         /// Initializes a new instance of the <see cref="ExcelExtractor"/> class.
         /// </summary>
@@ -49,7 +49,6 @@ namespace NPOI.HSSF.Extractor
         public ExcelExtractor(HSSFWorkbook wb)
             : base(wb)
         {
-
             this.wb = wb;
         }
         /// <summary>
@@ -61,8 +60,18 @@ namespace NPOI.HSSF.Extractor
         {
 
         }
-
-
+        /// <summary>
+        ///  Should header and footer be included? Default is true
+        /// </summary>
+        public bool IncludeHeaderFooter
+        {
+            get {
+                return this.includeHeaderFooter;
+            }
+            set {
+                this.includeHeaderFooter = value;
+            }
+        }
         /// <summary>
         /// Should sheet names be included? Default is true
         /// </summary>
@@ -157,7 +166,7 @@ namespace NPOI.HSSF.Extractor
                     }
 
                     // Header text, if there is any
-                    if (sheet.Header != null)
+                    if (sheet.Header != null && includeHeaderFooter)
                     {
                         text.Append(
                                 ExtractHeaderFooter(sheet.Header)
@@ -262,7 +271,7 @@ namespace NPOI.HSSF.Extractor
                     }
 
                     // Finally Feader text, if there is any
-                    if (sheet.Footer != null)
+                    if (sheet.Footer != null && includeHeaderFooter)
                     {
                         text.Append(
                                 ExtractHeaderFooter(sheet.Footer)

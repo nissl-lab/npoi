@@ -36,7 +36,7 @@ namespace NPOI.SS.Formula
         /// <param name="name">The name.</param>
         /// <param name="sheetIndex">Index of the sheet.</param>
         /// <returns></returns>        
-        EvaluationName GetName(String name, int sheetIndex);
+        IEvaluationName GetName(String name, int sheetIndex);
 
         /// <summary>
         /// Gets the name XPTG.

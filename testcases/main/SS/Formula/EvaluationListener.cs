@@ -69,5 +69,9 @@ namespace TestCases.SS.Formula
         {
             // do nothing 
         }
+        public virtual void OnChangeFromBlankValue(int sheetIndex, int rowIndex, int columnIndex, EvaluationCell cell, ICacheEntry entry)
+        {
+            // do nothing 
+        }
     }
 }

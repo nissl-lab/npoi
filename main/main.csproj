@@ -848,7 +848,6 @@
     <Compile Include="SS\Util\CellReference.cs" />
     <Compile Include="SS\Util\Format.cs" />
     <Compile Include="SS\Util\IEEEDouble.cs" />
-    <Compile Include="SS\Util\NumberComparer.cs" />
     <Compile Include="SS\Util\PaneInformation.cs" />
     <Compile Include="SS\Util\Region.cs" />
     <Compile Include="SS\Util\SheetReferences.cs" />

@@ -27,7 +27,7 @@ namespace NPOI.SS.Formula
      * 
      * @author Josh Micich
      */
-    public interface EvaluationName
+    public interface IEvaluationName
     {
 
         String NameText{ get; }

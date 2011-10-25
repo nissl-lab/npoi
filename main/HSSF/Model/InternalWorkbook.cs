@@ -425,7 +425,16 @@ namespace NPOI.HSSF.Model
             }
             return new ExternalSheet(extNames[0], extNames[1]);
         }
-
+        public ExternalName GetExternalName(int externSheetIndex, int externNameIndex)
+        {
+            String nameName = linkTable.ResolveNameXText(externSheetIndex, externNameIndex);
+            if (nameName == null)
+            {
+                return null;
+            }
+            int ix = linkTable.ResolveNameXIx(externSheetIndex, externNameIndex);
+            return new ExternalName(nameName, externNameIndex, ix);
+        }
         /**
          * Removes the specified Builtin NameRecord that matches the name and index
          * @param name byte representation of the builtin to match

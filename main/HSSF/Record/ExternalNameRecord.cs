@@ -47,7 +47,7 @@ namespace NPOI.HSSF.Record
 
 
         private short field_1_option_flag;
-        private short field_2_index;
+        private short field_2_ixals;
         private short field_3_not_used;
         private String field_4_name;
         private NPOI.SS.Formula.Formula field_5_name_definition; // TODO - junits for name definition field
@@ -70,7 +70,7 @@ namespace NPOI.HSSF.Record
         public ExternalNameRecord(RecordInputStream in1)
         {
             field_1_option_flag = in1.ReadShort();
-            field_2_index = in1.ReadShort();
+            field_2_ixals = in1.ReadShort();
             field_3_not_used = in1.ReadShort();
             int nameLength = in1.ReadUByte();
             int multibyteFlag = in1.ReadUByte();
@@ -152,6 +152,18 @@ namespace NPOI.HSSF.Record
         {
             get { return (field_1_option_flag & OPT_ICONIFIED_PICTURE_LINK) != 0; }
         }
+        public short Ix
+        {
+            get
+            {
+                return field_2_ixals;
+            }
+            set 
+            {
+                field_2_ixals = value;
+            }
+        }
+
         /**
          * @return the standard String representation of this name
          */
@@ -186,7 +198,7 @@ namespace NPOI.HSSF.Record
         public override void Serialize(LittleEndianOutput out1)
         {
             out1.WriteShort(field_1_option_flag);
-            out1.WriteShort(field_2_index);
+            out1.WriteShort(field_2_ixals);
             out1.WriteShort(field_3_not_used);
             int nameLen = field_4_name.Length;
             out1.WriteShort(nameLen);
@@ -218,7 +230,7 @@ namespace NPOI.HSSF.Record
          */
         private Exception ReadFail(String msg)
         {
-            String fullMsg = msg + " fields: (option=" + field_1_option_flag + " index=" + field_2_index
+            String fullMsg = msg + " fields: (option=" + field_1_option_flag + " index=" + field_2_ixals
             + " not_used=" + field_3_not_used + " name='" + field_4_name + "')";
             return new Exception(fullMsg);
         }
@@ -268,7 +280,7 @@ namespace NPOI.HSSF.Record
             StringBuilder sb = new StringBuilder();
             sb.Append(GetType().Name).Append(" [EXTERNALNAME ");
             sb.Append(" ").Append(field_4_name);
-            sb.Append(" ix=").Append(field_2_index);
+            sb.Append(" ix=").Append(field_2_ixals);
             sb.Append("]");
             return sb.ToString();
         }

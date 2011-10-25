@@ -171,6 +171,12 @@ namespace NPOI.HSSF.Model
                 }
                 return -1;
             }
+
+            public int GetNameIx(int definedNameIndex)
+            {
+                return _externalNameRecords[definedNameIndex].Ix;
+            }
+
         }
 
         private ExternalBookBlock[] _externalBookBlocks;
@@ -485,6 +491,11 @@ namespace NPOI.HSSF.Model
         {
             int extBookIndex = _externSheetRecord.GetExtbookIndexFromRefIndex(refIndex);
             return _externalBookBlocks[extBookIndex].GetNameText(definedNameIndex);
+        }
+        public int ResolveNameXIx(int refIndex, int definedNameIndex)
+        {
+            int extBookIndex = _externSheetRecord.GetExtbookIndexFromRefIndex(refIndex);
+            return _externalBookBlocks[extBookIndex].GetNameIx(definedNameIndex);
         }
     }
 }

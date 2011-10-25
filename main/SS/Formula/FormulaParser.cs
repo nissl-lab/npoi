@@ -660,7 +660,7 @@ namespace NPOI.SS.Formula
                 // Only test cases omit the book (expecting it not to be needed)
                 throw new InvalidOperationException("Need book to evaluate name '" + name + "'");
             }
-            EvaluationName evalName = book.GetName(name, _sheetIndex);
+            IEvaluationName evalName = book.GetName(name, _sheetIndex);
             if (evalName == null)
             {
                 throw new FormulaParseException("Specified named range '"
@@ -1243,7 +1243,7 @@ namespace NPOI.SS.Formula
                 // user defined Function
                 // in the Token tree, the name is more or less the first argument
 
-                EvaluationName hName = book.GetName(name, _sheetIndex);
+                IEvaluationName hName = book.GetName(name, _sheetIndex);
                 if (hName == null)
                 {
 

@@ -41,7 +41,7 @@ namespace NPOI.SS.Formula
     public class WorkbookEvaluator
     {
 
-        private EvaluationWorkbook _workbook;
+        private IEvaluationWorkbook _workbook;
         private EvaluationCache _cache;
         private int _workbookIx;
 
@@ -52,13 +52,13 @@ namespace NPOI.SS.Formula
         private IStabilityClassifier _stabilityClassifier;
 	    private UDFFinder _udfFinder;
 
-        public WorkbookEvaluator(EvaluationWorkbook workbook, IStabilityClassifier stabilityClassifier, UDFFinder udfFinder)
+        public WorkbookEvaluator(IEvaluationWorkbook workbook, IStabilityClassifier stabilityClassifier, UDFFinder udfFinder)
             : this (workbook, null, stabilityClassifier, udfFinder)
         {
 
         }
 
-        public WorkbookEvaluator(EvaluationWorkbook workbook, IEvaluationListener evaluationListener, IStabilityClassifier stabilityClassifier, UDFFinder udfFinder)
+        public WorkbookEvaluator(IEvaluationWorkbook workbook, IEvaluationListener evaluationListener, IStabilityClassifier stabilityClassifier, UDFFinder udfFinder)
         {
             _workbook = workbook;
             _evaluationListener = evaluationListener;
@@ -90,7 +90,20 @@ namespace NPOI.SS.Formula
         {
             return _workbook.GetSheet(sheetIndex);
         }
+        /* package */
+        internal IEvaluationName GetName(String name, int sheetIndex)
+        {
+            NamePtg namePtg = _workbook.GetName(name, sheetIndex).CreatePtg();
 
+            if (namePtg == null)
+            {
+                return null;
+            }
+            else
+            {
+                return _workbook.GetName(namePtg);
+            }
+        }
         private static bool IsDebugLogEnabled()
         {
             return false;
@@ -173,7 +186,11 @@ namespace NPOI.SS.Formula
             }
             return (int)result;
         }
-
+        /* package */
+        internal int GetSheetIndexByExternIndex(int externSheetIndex)
+        {
+            return _workbook.ConvertFromExternSheetIndex(externSheetIndex);
+        }
         /**
  * Case-insensitive.
  * @return -1 if sheet with specified name does not exist
@@ -221,7 +238,10 @@ namespace NPOI.SS.Formula
             }
 
             FormulaCellCacheEntry cce = _cache.GetOrCreateFormulaCellEntry(srcCell);
-            tracker.AcceptFormulaDependency(cce);
+            //if (cce.IsInputSensitive)
+            //{
+                tracker.AcceptFormulaDependency(cce);
+            //}
             IEvaluationListener evalListener = _evaluationListener;
             if (cce.GetValue() == null)
             {
@@ -249,6 +269,10 @@ namespace NPOI.SS.Formula
 
                     tracker.UpdateCacheResult(result);
                 }
+                catch (NotImplementedException e)
+                {
+                    throw AddExceptionInfo(e, sheetIndex, rowIndex, columnIndex);
+                }
                 finally
                 {
                     tracker.EndEvaluate(cce);
@@ -269,6 +293,27 @@ namespace NPOI.SS.Formula
                 LogDebug("Evaluated " + sheetName + "!" + cr.FormatAsString() + " To " + cce.GetValue().ToString());
             }
             return cce.GetValue();
+        }
+        /**
+ * Adds the current cell reference to the exception for easier debugging.
+ * Would be nice to get the formula text as well, but that seems to require
+ * too much digging around and casting to get the FormulaRenderingWorkbook.
+ */
+        private NotImplementedException AddExceptionInfo(NotImplementedException inner, int sheetIndex, int rowIndex, int columnIndex)
+        {
+            try
+            {
+                String sheetName = _workbook.GetSheetName(sheetIndex);
+                CellReference cr = new CellReference(sheetName, rowIndex, columnIndex, false, false);
+                String msg = "Error evaluating cell " + cr.FormatAsString();
+                return new NotImplementedException(msg, inner);
+            }
+            catch (Exception)
+            {
+                // avoid bombing out during exception handling
+                //e.printStackTrace();
+                return inner; // preserve original exception
+            }
         }
         /**
          * Gets the value from a non-formula cell.
@@ -319,7 +364,7 @@ namespace NPOI.SS.Formula
                         byte nArgs = 1;  // tAttrSum always Has 1 parameter
                         ptg = new FuncVarPtg("SUM", nArgs);
                     }
-                    				if (attrPtg.IsOptimizedChoose) {
+                    if (attrPtg.IsOptimizedChoose) {
 					ValueEval arg0 = stack.Pop();
 					int[] jumpTable = attrPtg.JumpTable;
 					int dist;
@@ -428,15 +473,8 @@ namespace NPOI.SS.Formula
             {
                 throw new InvalidOperationException("evaluation stack not empty");
             }
-            value = DereferenceValue(value, ec.RowIndex, ec.ColumnIndex);
-            if (value == BlankEval.instance)
-            {
-                // Note Excel behaviour here. A blank value is converted To zero.
-                return NumberEval.ZERO;
-                // Formulas _never_ evaluate To blank.  If a formula appears To have evaluated To
-                // blank, the actual value is empty string. This can be verified with ISBLANK().
-            }
-            return value;
+            return DereferenceResult(value, ec.RowIndex, ec.ColumnIndex);
+
         }
         /**
  * Calculates the number of tokens that the evaluator should skip upon reaching a tAttrSkip.
@@ -469,31 +507,25 @@ namespace NPOI.SS.Formula
          * @return a <tt>NumberEval</tt>, <tt>StringEval</tt>, <tt>BoolEval</tt>,
          *  <tt>BlankEval</tt> or <tt>ErrorEval</tt>. Never <c>null</c>.
          */
-        private static ValueEval DereferenceValue(ValueEval evaluationResult, int srcRowNum, int srcColNum)
+        private static ValueEval DereferenceResult(ValueEval evaluationResult, int srcRowNum, int srcColNum)
         {
-            if (evaluationResult is RefEval)
+            ValueEval value;
+            try
             {
-                RefEval rv = (RefEval)evaluationResult;
-                return rv.InnerValueEval;
+                value = OperandResolver.GetSingleValue(evaluationResult, srcRowNum, srcColNum);
             }
-            if (evaluationResult is AreaEval)
+            catch (EvaluationException e)
             {
-                AreaEval ae = (AreaEval)evaluationResult;
-                if (ae.IsRow)
-                {
-                    if (ae.IsColumn)
-                    {
-                        return ae.GetRelativeValue(0, 0);
-                    }
-                    return ae.GetValueAt(ae.FirstRow, srcColNum);
-                }
-                if (ae.IsColumn)
-                {
-                    return ae.GetValueAt(srcRowNum, ae.FirstColumn);
-                }
-                return ErrorEval.VALUE_INVALID;
+                return e.GetErrorEval();
             }
-            return evaluationResult;
+            if (value == BlankEval.instance)
+            {
+                // Note Excel behaviour here. A blank value is converted To zero.
+                return NumberEval.ZERO;
+                // Formulas _never_ evaluate To blank.  If a formula appears To have evaluated To
+                // blank, the actual value is empty string. This can be verified with ISBLANK().
+            }
+            return value;
         }
         /**
          * returns an appropriate Eval impl instance for the Ptg. The Ptg must be
@@ -509,7 +541,7 @@ namespace NPOI.SS.Formula
             {
                 // named ranges, macro functions
                 NamePtg namePtg = (NamePtg)ptg;
-                EvaluationName nameRecord = _workbook.GetName(namePtg);
+                IEvaluationName nameRecord = _workbook.GetName(namePtg);
                 if (nameRecord.IsFunctionName)
                 {
                     return new NameEval(nameRecord.NameText);
@@ -523,7 +555,7 @@ namespace NPOI.SS.Formula
             }
             if (ptg is NameXPtg)
             {
-                return new NameXEval(((NameXPtg)ptg));
+                return ec.GetNameXEval(((NameXPtg)ptg));
             }
 
             if (ptg is IntPtg)

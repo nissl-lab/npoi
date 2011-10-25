@@ -46,6 +46,21 @@ namespace NPOI.SS.Formula
 
         }
 
+        public bool IsInputSensitive
+        {
+            get
+            {
+                if (_sensitiveInputCells != null)
+                {
+                    if (_sensitiveInputCells.Length > 0)
+                    {
+                        return true;
+                    }
+                }
+                return _usedBlankCellGroup == null ? false : !_usedBlankCellGroup.IsEmpty;
+            }
+        }
+
         public void SetSensitiveInputCells(CellCacheEntry[] sensitiveInputCells)
         {
             // need To tell all cells that were previously used, but no longer are, 

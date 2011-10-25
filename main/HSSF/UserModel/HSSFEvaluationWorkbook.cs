@@ -35,7 +35,7 @@ namespace NPOI.HSSF.UserModel
      * 
      * @author Josh Micich
      */
-    public class HSSFEvaluationWorkbook : FormulaRenderingWorkbook, EvaluationWorkbook, FormulaParsingWorkbook
+    public class HSSFEvaluationWorkbook : FormulaRenderingWorkbook, IEvaluationWorkbook, FormulaParsingWorkbook
     {
 
         private HSSFWorkbook _uBook;
@@ -65,13 +65,17 @@ namespace NPOI.HSSF.UserModel
         {
             return _iBook.GetExternalSheetIndex(workbookName, sheetName);
         }
+        public ExternalName GetExternalName(int externSheetIndex, int externNameIndex)
+        {
+            return _iBook.GetExternalName(externSheetIndex, externNameIndex);
+        }
 
         public NameXPtg GetNameXPtg(String name)
         {
             return _iBook.GetNameXPtg(name);
         }
 
-        public EvaluationName GetName(String name,int sheetIndex)
+        public IEvaluationName GetName(String name,int sheetIndex)
         {
             for (int i = 0; i < _iBook.NumNames; i++)
             {
@@ -126,7 +130,7 @@ namespace NPOI.HSSF.UserModel
         {
             return _iBook.GetNameRecord(namePtg.Index).NameText;
         }
-        public EvaluationName GetName(NamePtg namePtg)
+        public IEvaluationName GetName(NamePtg namePtg)
         {
             int ix = namePtg.Index;
             return new Name(_iBook.GetNameRecord(ix), ix);
@@ -145,7 +149,7 @@ namespace NPOI.HSSF.UserModel
             return fr.FormulaTokens;
         }
 
-        private class Name : EvaluationName
+        private class Name : IEvaluationName
         {
 
             private NameRecord _nameRecord;

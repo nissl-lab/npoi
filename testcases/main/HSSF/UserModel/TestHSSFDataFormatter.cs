@@ -344,6 +344,26 @@ namespace TestCases.HSSF.UserModel
             Assert.AreEqual("\u00a310.52", f.FormatCellValue(sheet.GetRow(12).GetCell(1)));
         }
 
+        /**
+ * A format of "@" means use the general format
+ */
+        [TestMethod]
+        public void TestGeneralAtFormat()
+        {
+            HSSFWorkbook workbook = HSSFTestDataSamples.OpenSampleWorkbook("47154.xls");
+            ISheet sheet = workbook.GetSheetAt(0);
+            IRow row = sheet.GetRow(0);
+            ICell cellA1 = row.GetCell(0);
+
+            Assert.AreEqual(CellType.NUMERIC, cellA1.CellType);
+            Assert.AreEqual(2345.0, cellA1.NumericCellValue, 0.0001);
+            Assert.AreEqual("@", cellA1.CellStyle.GetDataFormatString());
+
+            DataFormatter f = new DataFormatter();
+
+            Assert.AreEqual("2345", f.FormatCellValue(cellA1));
+        }
+
         private static void log(String msg)
         {
             //if (false)
