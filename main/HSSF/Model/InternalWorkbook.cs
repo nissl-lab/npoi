@@ -634,6 +634,11 @@ namespace NPOI.HSSF.Model
         public void SetSheetName(int sheetnum, String sheetname)
         {
             CheckSheets(sheetnum);
+
+            // YK: Mimic Excel and silently truncate sheet names longer than 31 characters
+            if (sheetname.Length > 31) 
+                sheetname = sheetname.Substring(0, 31);
+
             BoundSheetRecord sheet =boundsheets[sheetnum];
             sheet.Sheetname=sheetname;
         }
@@ -1548,7 +1553,6 @@ namespace NPOI.HSSF.Model
             retval.Attributes=(short)0x0;
             retval.ColorPaletteIndex=(short)0x7fff;
             retval.BoldWeight=(short)0x190;
-            retval.FontNameLength=(byte)5;
             retval.FontName="Arial";
             return retval;
         }

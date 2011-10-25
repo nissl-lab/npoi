@@ -467,6 +467,15 @@ namespace NPOI.Util
           public static string ToHexString(int chr)
           {
               return ToHexString((char)chr);
+          }
+          /// <summary> 
+          /// Encodes a non-US-ASCII character. 
+          /// </summary> 
+          /// <param name="chr"></param> 
+          /// <returns></returns> 
+          public static string ToHexString(long chr)
+          {
+              return ToHexString((char)chr);
           } 
           /// <summary> 
           /// Determines if the character needs to be encoded. 

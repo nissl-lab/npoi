@@ -75,7 +75,7 @@ namespace NPOI.HSSF.Record
 
             //Check if this can be continued, if so then the
             //following wont work properly
-            int subSize = 0;
+            //int subSize = 0;
             byte[] subRecordData = in1.ReadRemainder();
 
             if (LittleEndian.GetUShort(subRecordData, 0) != CommonObjectDataSubRecord.sid)

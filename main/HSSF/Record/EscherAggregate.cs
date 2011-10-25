@@ -850,26 +850,26 @@ namespace NPOI.HSSF.Record
             EscherRecord anchor;
             EscherClientDataRecord clientData = new EscherClientDataRecord();
 
-            spgrContainer.RecordId=EscherContainerRecord.SPGR_CONTAINER;
-            spgrContainer.Options=(short)0x000F;
-            spContainer.RecordId=EscherContainerRecord.SP_CONTAINER;
-            spContainer.Options=(short)0x000F;
-            spgr.RecordId=EscherSpgrRecord.RECORD_ID;
-            spgr.Options=(short)0x0001;
-            spgr.RectX1=shape.X1;
-            spgr.RectY1=shape.Y1;
-            spgr.RectX2=shape.X2;
-            spgr.RectY2=shape.Y2;
-            sp.RecordId=EscherSpRecord.RECORD_ID;
-            sp.Options=(short)0x0002;
+            spgrContainer.RecordId = EscherContainerRecord.SPGR_CONTAINER;
+            spgrContainer.Options = (short)0x000F;
+            spContainer.RecordId = EscherContainerRecord.SP_CONTAINER;
+            spContainer.Options = (short)0x000F;
+            spgr.RecordId = EscherSpgrRecord.RECORD_ID;
+            spgr.Options = (short)0x0001;
+            spgr.RectX1 = shape.X1;
+            spgr.RectY1 = shape.Y1;
+            spgr.RectX2 = shape.X2;
+            spgr.RectY2 = shape.Y2;
+            sp.RecordId = EscherSpRecord.RECORD_ID;
+            sp.Options = (short)0x0002;
             int shapeId = drawingManager.AllocateShapeId(drawingGroupId);
-            sp.ShapeId=shapeId;
+            sp.ShapeId = shapeId;
             if (shape.Anchor is HSSFClientAnchor)
-                sp.Flags=EscherSpRecord.FLAG_GROUP | EscherSpRecord.FLAG_HAVEANCHOR;
+                sp.Flags = EscherSpRecord.FLAG_GROUP | EscherSpRecord.FLAG_HAVEANCHOR;
             else
-                sp.Flags=EscherSpRecord.FLAG_GROUP | EscherSpRecord.FLAG_HAVEANCHOR | EscherSpRecord.FLAG_CHILD;
-            opt.RecordId=EscherOptRecord.RECORD_ID;
-            opt.Options=(short)0x0023;
+                sp.Flags = EscherSpRecord.FLAG_GROUP | EscherSpRecord.FLAG_HAVEANCHOR | EscherSpRecord.FLAG_CHILD;
+            opt.RecordId = EscherOptRecord.RECORD_ID;
+            opt.Options = (short)0x0023;
             opt.AddEscherProperty(new EscherBoolProperty(EscherProperties.PROTECTION__LOCKAGAINSTGROUPING, 0x00040004));
             opt.AddEscherProperty(new EscherBoolProperty(EscherProperties.GROUPSHAPE__PRINT, 0x00080000));
 
@@ -882,8 +882,8 @@ namespace NPOI.HSSF.Record
             //        clientAnchor.Row2( (short) ( (HSSFClientAnchor) shape.Anchor ).Row2 );
             //        clientAnchor.Dx2( (short) shape.Anchor.Dx2 );
             //        clientAnchor.Dy2( (short) shape.Anchor.Dy2 );
-            clientData.RecordId=(EscherClientDataRecord.RECORD_ID);
-            clientData.Options=((short)0x0000);
+            clientData.RecordId = (EscherClientDataRecord.RECORD_ID);
+            clientData.Options = ((short)0x0000);
 
             spgrContainer.AddChildRecord(spContainer);
             spContainer.AddChildRecord(spgr);
@@ -894,18 +894,18 @@ namespace NPOI.HSSF.Record
 
             ObjRecord obj = new ObjRecord();
             CommonObjectDataSubRecord cmo = new CommonObjectDataSubRecord();
-            cmo.ObjectType= CommonObjectType.GROUP;
-            cmo.ObjectId=((short)(shapeId));
-            cmo.IsLocked= true;
-            cmo.IsPrintable= true;
-            cmo.IsAutoFill=true;
-            cmo.IsAutoline=true;
+            cmo.ObjectType = CommonObjectType.GROUP;
+            cmo.ObjectId = shapeId;
+            cmo.IsLocked = true;
+            cmo.IsPrintable = true;
+            cmo.IsAutoFill = true;
+            cmo.IsAutoline = true;
             GroupMarkerSubRecord gmo = new GroupMarkerSubRecord();
             EndSubRecord end = new EndSubRecord();
             obj.AddSubRecord(cmo);
             obj.AddSubRecord(gmo);
             obj.AddSubRecord(end);
-            shapeToObj[clientData]=obj;
+            shapeToObj[clientData] = obj;
 
             escherParent.AddChildRecord(spgrContainer);
 

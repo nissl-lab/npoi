@@ -25,6 +25,7 @@ namespace NPOI.HSSF.Record
     using System.IO;
     using System.Text;
     using NPOI.Util;
+    using NPOI.SS.Util;
 
     /**
      * Title:        Bound Sheet Record (aka BundleSheet) 
@@ -80,41 +81,6 @@ namespace NPOI.HSSF.Record
                 field_5_sheetname = in1.ReadCompressedUnicode(field_3_sheetname_length);
             }
         }
-        private static void ValidateSheetName(String sheetName)
-        {
-            if (sheetName == null)
-            {
-                throw new ArgumentException("sheetName must not be null");
-            }
-            int len = sheetName.Length;
-            if (len < 1)
-            {
-                throw new ArgumentException("sheetName must not be empty string");
-            }
-            //if (len > 31)
-            //{
-            //    throw new ArgumentException("The length of sheetName must not be longer than 31");
-            //}
-            for (int i = 0; i < len; i++)
-            {
-                char ch = sheetName[i];
-                switch (ch)
-                {
-                    case '/':
-                    case '\\':
-                    case '?':
-                    case '*':
-                    case ']':
-                    case '[':
-                        break;
-                    default:
-                        // all other chars OK
-                        continue;
-                }
-                throw new ArgumentException("Invalid char (" + ch
-                        + ") found at index (" + i + ") in sheet name '" + sheetName + "'");
-            }
-        }
 
         /**
          * Get the offset in bytes of the Beginning of File Marker within the HSSF Stream part of the POIFS file
@@ -153,7 +119,7 @@ namespace NPOI.HSSF.Record
             get { return field_5_sheetname; }
             set
             {
-                ValidateSheetName(value);
+                WorkbookUtil.ValidateSheetName(value);
                 field_5_sheetname = value;
                 field_4_isMultibyteUnicode = (StringUtil.HasMultibyte(value) ? (byte)1 : (byte)0);
 

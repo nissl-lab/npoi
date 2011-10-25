@@ -22,6 +22,7 @@ namespace NPOI.HSSF.Record.Formula.Eval
 {
     using System;
     using NPOI.HSSF.Record.Formula.Functions;
+    using NPOI.SS.Util;
 
     //public class RelationalValues
     //{
@@ -86,7 +87,12 @@ namespace NPOI.HSSF.Record.Formula.Eval
                 {
                     NumberEval nA = (NumberEval)va;
                     NumberEval nB = (NumberEval)vb;
-                    return nA.NumberValue.CompareTo(nB.NumberValue);
+                    if (nA.NumberValue == nB.NumberValue)
+                    {
+                        // Excel considers -0.0 == 0.0 which is different to Double.compare()
+                        return 0;
+                    }
+                    return NumberComparer.Compare(nA.NumberValue,nB.NumberValue);
                 }
             }
             throw new ArgumentException("Bad operand types (" + va.GetType().Name + "), ("
@@ -102,7 +108,7 @@ namespace NPOI.HSSF.Record.Formula.Eval
 		    }
 		    if (v is NumberEval) {
 			    NumberEval ne = (NumberEval) v;
-			    return ne.NumberValue.CompareTo(0);
+                return NumberComparer.Compare(0.0, ne.NumberValue);
 		    }
 		    if (v is StringEval) {
 			    StringEval se = (StringEval) v;

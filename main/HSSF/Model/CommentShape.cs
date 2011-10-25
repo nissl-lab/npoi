@@ -76,11 +76,11 @@ namespace NPOI.HSSF.Model
         private NoteRecord CreateNoteRecord(HSSFComment shape, int shapeId)
         {
             NoteRecord note = new NoteRecord();
-            note.Column=shape.Column;
-            note.Row=(short)shape.Row;
+            note.Column = shape.Column;
+            note.Row = shape.Row;
             note.Flags = (shape.Visible ? NoteRecord.NOTE_VISIBLE : NoteRecord.NOTE_HIDDEN);
-            note.ShapeId=((short)shapeId);
-            note.Author=(shape.Author == null ? "" : shape.Author);
+            note.ShapeId = shapeId;
+            note.Author = (shape.Author == null ? "" : shape.Author);
             return note;
         }
 

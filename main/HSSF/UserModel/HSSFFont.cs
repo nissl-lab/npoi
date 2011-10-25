@@ -58,7 +58,6 @@ namespace NPOI.HSSF.UserModel
             set
             {
                 font.FontName = value;
-                font.FontNameLength = (byte)value.Length;
             }
         }
 
@@ -166,8 +165,8 @@ namespace NPOI.HSSF.UserModel
         /// <value>The char set.</value>
         public short Charset
         {
-            get { return font.CharSet; }
-            set { font.CharSet = (byte)value; }
+            get { return font.Charset; }
+            set { font.Charset = (byte)value; }
         }
 
         /// <summary>

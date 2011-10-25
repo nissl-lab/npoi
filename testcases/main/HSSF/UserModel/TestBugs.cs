@@ -509,7 +509,7 @@ namespace TestCases.HSSF.UserModel
             {
                 OpenSample("34775.xls");
             }
-            catch (NullReferenceException e)
+            catch (NullReferenceException)
             {
                 throw new AssertFailedException("identified bug 34775");
             }
@@ -916,7 +916,7 @@ namespace TestCases.HSSF.UserModel
             {
                 wb = OpenSample("43251.xls");
             }
-            catch (ArgumentException e)
+            catch (ArgumentException)
             {
                 throw new AssertFailedException("identified bug 43251");
             }
@@ -939,7 +939,7 @@ namespace TestCases.HSSF.UserModel
             {
                 wb = OpenSample("OddStyleRecord.xls");
             }
-            catch (IndexOutOfRangeException e)
+            catch (IndexOutOfRangeException)
             {
                 throw new AssertFailedException("Identified bug 44471");
             }
@@ -985,7 +985,7 @@ namespace TestCases.HSSF.UserModel
             {
                 wb = OpenSample("44593.xls");
             }
-            catch (ArgumentException e)
+            catch (ArgumentException)
             {
                 throw new AssertFailedException("Identified bug 44593");
             }
@@ -1007,7 +1007,7 @@ namespace TestCases.HSSF.UserModel
             {
                 wb = OpenSample("44643.xls");
             }
-            catch (ArgumentException e)
+            catch (ArgumentException)
             {
                 throw new AssertFailedException("identified bug 44643");
             }
@@ -2203,6 +2203,7 @@ namespace TestCases.HSSF.UserModel
             wb = WriteOutAndReadBack(wb);
             Assert.AreEqual(1, wb.NumberOfSheets);
         }
+
 
     }
 }

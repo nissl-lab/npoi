@@ -75,7 +75,7 @@ namespace NPOI.HSSF.Record
         public const short sid = 0x15;
         private short field_1_objectType;
 
-        private short field_2_objectId;
+        private int field_2_objectId;
         private short field_3_option;
         private BitField locked = BitFieldFactory.GetInstance(0x1);
         private BitField printable = BitFieldFactory.GetInstance(0x10);
@@ -104,7 +104,7 @@ namespace NPOI.HSSF.Record
                 throw new RecordFormatException("Expected size 18 but got (" + size + ")");
             }
             field_1_objectType = in1.ReadShort();
-            field_2_objectId = in1.ReadShort();
+            field_2_objectId = in1.ReadUShort();
             field_3_option = in1.ReadShort();
             field_4_reserved1 = in1.ReadInt();
             field_5_reserved2 = in1.ReadInt();
@@ -204,7 +204,7 @@ namespace NPOI.HSSF.Record
         /**
          * Get the object id field for the CommonObjectData record.
          */
-        public short ObjectId
+        public int ObjectId
         {
             get
             {

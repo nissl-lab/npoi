@@ -20,13 +20,14 @@ namespace NPOI.HSSF.Record
     using System.Text;
     using System;
     using NPOI.Util;
+using NPOI.Util.IO;
 
     /**
      * NOTE: Comment Associated with a Cell (1Ch)
      *
      * @author Yegor Kozlov
      */
-    public class NoteRecord : Record
+    public class NoteRecord : StandardRecord
     {
         public static NoteRecord[] EMPTY_ARRAY = { };
         public const short sid = 0x1C;
@@ -44,17 +45,27 @@ namespace NPOI.HSSF.Record
         private int field_1_row;
         private int field_2_col;
         private short field_3_flags;
-        private short field_4_shapeid;
-        private String field_5_author;
+        private int field_4_shapeid;
+        private bool field_5_hasMultibyte;
+        private String field_6_author;
+        private const Byte DEFAULT_PADDING = (byte)0;
 
+        /**
+ * Saves padding byte value to reduce delta during round-trip serialization.<br/>
+ *
+ * The documentation is not clear about how padding should work.  In any case
+ * Excel(2007) does something different.
+ */
+        private Byte field_7_padding;
         /**
          * Construct a new <c>NoteRecord</c> and
          * Fill its data with the default values
          */
         public NoteRecord()
         {
-            field_5_author = "";
+            field_6_author = "";
             field_3_flags = 0;
+            field_7_padding = DEFAULT_PADDING; // seems to be always present regardless of author text  
         }
 
         /**
@@ -66,14 +77,19 @@ namespace NPOI.HSSF.Record
         public NoteRecord(RecordInputStream in1)
         {
             field_1_row = in1.ReadShort();
-            field_2_col = in1.ReadShort();
+            field_2_col = in1.ReadUShort();
             field_3_flags = in1.ReadShort();
-            field_4_shapeid = in1.ReadShort();
-            int Length = in1.ReadShort();
-            byte[] bytes = in1.ReadRemainder();
-            field_5_author = Encoding.UTF8.GetString(bytes, 1, Length);
-
-
+            field_4_shapeid = in1.ReadUShort();
+            int length = in1.ReadShort();
+		    field_5_hasMultibyte = in1.ReadByte() != 0x00;
+		    if (field_5_hasMultibyte) {
+			    field_6_author = StringUtil.ReadUnicodeLE(in1, length);
+		    } else {
+			    field_6_author = StringUtil.ReadCompressedUnicode(in1, length);
+		    }
+ 		    if (in1.Available() == 1) {
+			    field_7_padding = (byte)in1.ReadByte();
+		    }
         }
 
         /**
@@ -92,34 +108,35 @@ namespace NPOI.HSSF.Record
          *
          * @return size of the record
          */
-        public override int Serialize(int offset, byte [] data)
+        public override void Serialize(LittleEndianOutput out1)
         {
-            LittleEndian.PutShort(data, 0 + offset, sid);
-            LittleEndian.PutShort(data, 2 + offset, (short)(RecordSize - 4));
+            out1.WriteShort(field_1_row);
+		    out1.WriteShort(field_2_col);
+		    out1.WriteShort(field_3_flags);
+		    out1.WriteShort(field_4_shapeid);
+		    out1.WriteShort(field_6_author.Length);
+		    out1.WriteByte(field_5_hasMultibyte ? 0x01 : 0x00);
+		    if (field_5_hasMultibyte) {
+			    StringUtil.PutUnicodeLE(field_6_author, out1);
+		    } else {
+			    StringUtil.PutCompressedUnicode(field_6_author, out1);
+		    }
+		    if (field_7_padding != null) {
+			    out1.WriteByte(field_7_padding);
+		    }
 
-            LittleEndian.PutUShort(data, 4 + offset, field_1_row);
-            LittleEndian.PutUShort(data, 6 + offset, field_2_col);
-            LittleEndian.PutShort(data, 8 + offset, field_3_flags);
-            LittleEndian.PutShort(data, 10 + offset, field_4_shapeid);
-            LittleEndian.PutShort(data, 12 + offset, (short)field_5_author.Length);
-
-            byte[] str = Encoding.UTF8.GetBytes(field_5_author);
-            Array.Copy(str, 0, data, 15 + offset, str.Length);
-
-            return RecordSize;
         }
 
         /**
          * Size of record
          */
-        public override int RecordSize
+        protected override int DataSize
         {
             get
             {
-                int retval = 4 + 2 + 2 + 2 + 2 + 2 + 1 + field_5_author.Length + 1;
-
-                return retval;
-
+                return 11 // 5 shorts + 1 byte
+                    + field_6_author.Length * (field_5_hasMultibyte ? 2 : 1)
+                    + (field_7_padding == null ? 0 : 1);
             }
         }
 
@@ -137,7 +154,7 @@ namespace NPOI.HSSF.Record
             buffer.Append("    .col =     " + field_2_col + "\n");
             buffer.Append("    .flags =   " + field_3_flags + "\n");
             buffer.Append("    .shapeid = " + field_4_shapeid + "\n");
-            buffer.Append("    .author =  " + field_5_author + "\n");
+            buffer.Append("    .author =  " + field_6_author + "\n");
             buffer.Append("[/NOTE]\n");
             return buffer.ToString();
         }
@@ -180,7 +197,7 @@ namespace NPOI.HSSF.Record
         /**
          * Object id for OBJ record that Contains the comment
          */
-        public short ShapeId
+        public int ShapeId
         {
             get { return field_4_shapeid; }
             set { field_4_shapeid = value; }
@@ -194,10 +211,20 @@ namespace NPOI.HSSF.Record
          */
         public String Author
         {
-            get { return field_5_author; }
-            set { field_5_author = value; }
+            get { return field_6_author; }
+            set { field_6_author = value; }
         }
 
+        /**
+ * For unit testing only!
+ */
+        internal bool AuthorIsMultibyte
+        {
+            get
+            {
+                return field_5_hasMultibyte;
+            }
+        }
 
         public override Object Clone()
         {
@@ -206,7 +233,7 @@ namespace NPOI.HSSF.Record
             rec.field_2_col = field_2_col;
             rec.field_3_flags = field_3_flags;
             rec.field_4_shapeid = field_4_shapeid;
-            rec.field_5_author = field_5_author;
+            rec.field_6_author = field_6_author;
             return rec;
         }
 

@@ -21,6 +21,32 @@ namespace NPOI.SS.UserModel
     using System.Collections;
     using System.IO;
 
+    public enum SheetState : int
+    {
+        /** Indicates the sheet is visible.
+         * 
+         * @see #setSheetHidden(int, int)
+         */
+        VISIBLE = 0,
+        /**
+         * Indicates the book window is hidden, but can be shown by the user via the user interface.
+         *
+         * @see #setSheetHidden(int, int)
+         */
+        HIDDEN = 1,
+
+        /**
+         * Indicates the sheet is hidden and cannot be shown in the user interface (UI).
+         *
+         * <p>
+         * In Excel this state is only available programmatically in VBA:
+         * <code>ThisWorkbook.Sheets("MySheetName").Visible = xlSheetVeryHidden </code>
+         * </p>
+         *
+         * @see #setSheetHidden(int, int)
+         */
+        VERY_HIDDEN = 2
+    }
 
     /**
      * High level representation of a Excel workbook.  This is the first object most users
@@ -409,7 +435,7 @@ namespace NPOI.SS.UserModel
          * @param sheetIx the sheet index (0-based)
          * @param hidden True to mark the sheet as hidden, false otherwise
          */
-        void SetSheetHidden(int sheetIx, bool hidden);
+        void SetSheetHidden(int sheetIx, SheetState hidden);
 
         /**
          * Hide or unhide a sheet.

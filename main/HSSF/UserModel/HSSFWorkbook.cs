@@ -629,10 +629,11 @@ namespace NPOI.HSSF.UserModel
         /// </summary>
         /// <param name="sheetIx">The sheet index</param>
         /// <param name="hidden">True to mark the sheet as hidden, false otherwise</param>
-        public void SetSheetHidden(int sheetIx, bool hidden)
+        public void SetSheetHidden(int sheetIx, SheetState hidden)
         {
             ValidateSheetIndex(sheetIx);
-            workbook.SetSheetHidden(sheetIx, hidden);
+            WorkbookUtil.ValidateSheetState(hidden);
+            workbook.SetSheetHidden(sheetIx, (int)hidden);
         }
         /// <summary>
         /// Hide or unhide a sheet.
@@ -786,18 +787,24 @@ namespace NPOI.HSSF.UserModel
         /// </summary>
         /// <param name="sheetname">sheetname to set for the sheet.</param>
         /// <returns>HSSFSheet representing the new sheet.</returns>
-        public NPOI.SS.UserModel.ISheet CreateSheet(String sheetname)
+        public ISheet CreateSheet(String sheetname)
         {
+            if (sheetname == null)
+            {
+                throw new ArgumentException("sheetName must not be null");
+            }
+
             if (workbook.ContainsSheetName(sheetname, _sheets.Count))
                 throw new ArgumentException("The workbook already contains a sheet of this name");
 
             HSSFSheet sheet = new HSSFSheet(this);
 
+            workbook.SetSheetName(_sheets.Count, sheetname);
             _sheets.Add(sheet);
-            workbook.SetSheetName(_sheets.Count - 1, sheetname);
+
             bool isOnlySheet = _sheets.Count == 1;
-            sheet.IsSelected = (isOnlySheet);
-            sheet.IsActive = (isOnlySheet);
+            sheet.IsSelected = isOnlySheet;
+            sheet.IsActive = isOnlySheet;
             return sheet;
         }
 

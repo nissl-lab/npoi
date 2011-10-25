@@ -107,7 +107,7 @@ namespace NPOI.HSSF.Model
             CommonObjectDataSubRecord c = new CommonObjectDataSubRecord();
             c.ObjectType=(CommonObjectType)((HSSFSimpleShape)shape).ShapeType;
             //        c.ObjectId((short) ( 1 ));
-            c.ObjectId=((short)(shapeId));
+            c.ObjectId=shapeId;
             c.IsLocked=true;
             c.IsPrintable=true;
             c.IsAutoFill=true;

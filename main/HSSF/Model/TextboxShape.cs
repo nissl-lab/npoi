@@ -60,12 +60,12 @@ namespace NPOI.HSSF.Model
 
             ObjRecord obj = new ObjRecord();
             CommonObjectDataSubRecord c = new CommonObjectDataSubRecord();
-            c.ObjectType=(CommonObjectType)((HSSFSimpleShape)shape).ShapeType;
-            c.ObjectId=((short)(shapeId));
-            c.IsLocked=(true);
-            c.IsPrintable=(true);
-            c.IsAutoFill=(true);
-            c.IsAutoline=(true);
+            c.ObjectType = (CommonObjectType)((HSSFSimpleShape)shape).ShapeType;
+            c.ObjectId = shapeId;
+            c.IsLocked = true;
+            c.IsPrintable = true;
+            c.IsAutoFill = true;
+            c.IsAutoline = true;
             EndSubRecord e = new EndSubRecord();
 
             obj.AddSubRecord(c);

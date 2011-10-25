@@ -1241,7 +1241,7 @@ namespace NPOI.HSSF.UserModel
         public static HSSFComment FindCellComment(InternalSheet sheet, int row, int column)
         {
             HSSFComment comment = null;
-            Dictionary<short, TextObjectRecord> noteTxo = new Dictionary<short, TextObjectRecord>(); //map shapeId and TextObjectRecord
+            Dictionary<int, TextObjectRecord> noteTxo = new Dictionary<int, TextObjectRecord>(); //map shapeId and TextObjectRecord
             int i = 0;
             for (IEnumerator it = sheet.Records.GetEnumerator(); it.MoveNext(); )
             {

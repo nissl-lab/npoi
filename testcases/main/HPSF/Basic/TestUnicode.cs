@@ -36,14 +36,14 @@ namespace TestCases.HPSF.Basic
     [TestClass]
     public class TestUnicode
     {
-        static string dataDir = @"..\..\..\TestCases\HPSF\data\";
+        //static string dataDir = @"..\..\..\TestCases\HPSF\data\";
         static String POI_FS = "TestUnicode.xls";
         static String[] POI_FILES = new String[]
         {
             "\x0005DocumentSummaryInformation",
         };
         FileStream data;
-        POIFile[] poiFiles;
+        //POIFile[] poiFiles;
 
 
 

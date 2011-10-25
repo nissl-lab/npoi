@@ -24,6 +24,7 @@ namespace NPOI.HSSF.Record
     using System.Text;
     using System.Collections;
     using NPOI.Util;
+    using NPOI.Util.IO;
 
 
     /**
@@ -35,7 +36,7 @@ namespace NPOI.HSSF.Record
      */
 
     public class FontRecord
-       : Record
+       : StandardRecord
     {
         public const short sid =
             0x31;                                                 // docs are wrong (0x231 Microsoft Support site article Q184647)
@@ -71,7 +72,6 @@ namespace NPOI.HSSF.Record
         private byte field_7_family;             // ?? defined by windows api logfont structure?
         private byte field_8_charset;            // ?? defined by windows api logfont structure?
         private byte field_9_zero = 0;           // must be 0
-        private byte field_10_font_name_len;     // Length of the font name
         private String field_11_font_name;         // whoa...the font name
 
         public FontRecord()
@@ -95,17 +95,23 @@ namespace NPOI.HSSF.Record
             field_7_family = (byte)in1.ReadByte();
             field_8_charset = (byte)in1.ReadByte();
             field_9_zero = (byte)in1.ReadByte();
-            field_10_font_name_len = (byte)in1.ReadByte();
+            int field_10_font_name_len = (byte)in1.ReadByte();
+            int unicodeFlags  = in1.ReadUByte(); // options byte present always (even if no character data)
+
             if (field_10_font_name_len > 0)
             {
-                if (in1.ReadByte() == 0)
+                if (unicodeFlags == 0)
                 {   // Is compressed Unicode
-                    field_11_font_name = in1.ReadCompressedUnicode(LittleEndian.UByteToInt(field_10_font_name_len));
+                    field_11_font_name = in1.ReadCompressedUnicode(field_10_font_name_len);
                 }
                 else
                 {   // Is not compressed Unicode
                     field_11_font_name = in1.ReadUnicodeLEString(field_10_font_name_len);
                 }
+            }
+            else
+            {
+                field_11_font_name = "";
             }
         }
 
@@ -125,7 +131,6 @@ namespace NPOI.HSSF.Record
             field_7_family = source.field_7_family;
             field_8_charset = source.field_8_charset;
             field_9_zero = source.field_9_zero;
-            field_10_font_name_len = source.field_10_font_name_len;
             field_11_font_name = source.field_11_font_name;
         }
         // attributes bitfields
@@ -225,23 +230,10 @@ namespace NPOI.HSSF.Record
          * @param charSet - CharSet
          */
 
-        public byte CharSet
+        public byte Charset
         {
             set { field_8_charset = value; }
             get { return field_8_charset; }
-        }
-
-        /**
-         * Set the Length of the fontname string
-         *
-         * @param len  Length of the font name
-         * @see #SetFontName(String)
-         */
-
-        public byte FontNameLength
-        {
-            set { field_10_font_name_len = value; }
-            get { return field_10_font_name_len; }
         }
 
         /**
@@ -340,9 +332,7 @@ namespace NPOI.HSSF.Record
             field_7_family == other.field_7_family &&
             field_8_charset == other.field_8_charset &&
             field_9_zero == other.field_9_zero &&
-            field_10_font_name_len == other.field_10_font_name_len &&
-            field_11_font_name.Equals(other.field_11_font_name)
-            ;
+            field_11_font_name.Equals(other.field_11_font_name);
         }
         public override String ToString()
         {
@@ -371,48 +361,52 @@ namespace NPOI.HSSF.Record
                 .Append(StringUtil.ToHexString(Underline)).Append("\n");
             buffer.Append("    .family          = ")
                 .Append(StringUtil.ToHexString(Family)).Append("\n");
-            buffer.Append("    .charSet         = ")
-                .Append(StringUtil.ToHexString(CharSet)).Append("\n");
-            buffer.Append("    .nameLength      = ")
-                .Append(StringUtil.ToHexString(FontNameLength)).Append("\n");
+            buffer.Append("    .charset         = ")
+                .Append(StringUtil.ToHexString(Charset)).Append("\n");
             buffer.Append("    .fontname        = ").Append(FontName)
                 .Append("\n");
             buffer.Append("[/FONT]\n");
             return buffer.ToString();
         }
 
-        public override int Serialize(int offset, byte [] data)
+        public override void Serialize(LittleEndianOutput out1)
         {
-            int realflen = FontNameLength * 2;
+            out1.WriteShort(FontHeight);
+		    out1.WriteShort(Attributes);
+		    out1.WriteShort(ColorPaletteIndex);
+		    out1.WriteShort(BoldWeight);
+		    out1.WriteShort(SuperSubScript);
+		    out1.WriteByte(Underline);
+		    out1.WriteByte(Family);
+		    out1.WriteByte(Charset);
+		    out1.WriteByte(field_9_zero);
+		    int fontNameLen = field_11_font_name.Length;
+		    out1.WriteByte(fontNameLen);
+		    bool hasMultibyte = StringUtil.HasMultibyte(field_11_font_name);
+		    out1.WriteByte(hasMultibyte ? 0x01 : 0x00);
+		    if (fontNameLen > 0) {
+			    if (hasMultibyte) {
+			       StringUtil.PutUnicodeLE(field_11_font_name, out1);
+			    } else {
+				    StringUtil.PutCompressedUnicode(field_11_font_name, out1);
+			    }
+		    }
 
-            LittleEndian.PutShort(data, 0 + offset, sid);
-            LittleEndian.PutShort(
-                data, 2 + offset,
-                (short)(15 + realflen
-                           + 1));   // 19 - 4 (sid/len) + font name Length = datasize
-
-            // Undocumented single byte (1)
-            LittleEndian.PutShort(data, 4 + offset, FontHeight);
-            LittleEndian.PutShort(data, 6 + offset, Attributes);
-            LittleEndian.PutShort(data, 8 + offset, ColorPaletteIndex);
-            LittleEndian.PutShort(data, 10 + offset, BoldWeight);
-            LittleEndian.PutShort(data, 12 + offset, SuperSubScript);
-            data[14 + offset] = Underline;
-            data[15 + offset] = Family;
-            data[16 + offset] = CharSet;
-            data[17 + offset] = field_9_zero;
-            data[18 + offset] = FontNameLength;
-            data[19 + offset] = (byte)1;
-            if (FontName != null)
-            {
-                StringUtil.PutUnicodeLE(FontName, data, 20 + offset);
-            }
-            return RecordSize;
         }
 
-        public override int RecordSize
+        protected override int DataSize
         {
-            get { return (FontNameLength * 2) + 20; }
+            get {
+                int size = 16; // 5 shorts + 6 bytes
+                int fontNameLen = field_11_font_name.Length;
+                if (fontNameLen < 1)
+                {
+                    return size;
+                }
+
+                bool hasMultibyte = StringUtil.HasMultibyte(field_11_font_name);
+                return size + fontNameLen * (hasMultibyte ? 2 : 1);
+            }
         }
 
         public override short Sid
@@ -437,7 +431,6 @@ namespace NPOI.HSSF.Record
             result = prime * result + field_7_family;
             result = prime * result + field_8_charset;
             result = prime * result + field_9_zero;
-            result = prime * result + field_10_font_name_len;
             return result;
         }
 

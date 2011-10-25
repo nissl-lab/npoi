@@ -848,10 +848,12 @@
     <Compile Include="SS\Util\CellReference.cs" />
     <Compile Include="SS\Util\Format.cs" />
     <Compile Include="SS\Util\IEEEDouble.cs" />
+    <Compile Include="SS\Util\NumberComparer.cs" />
     <Compile Include="SS\Util\PaneInformation.cs" />
     <Compile Include="SS\Util\Region.cs" />
     <Compile Include="SS\Util\SheetReferences.cs" />
     <Compile Include="SS\Util\SSCellRange.cs" />
+    <Compile Include="SS\Util\WorkbookUtil.cs" />
     <Compile Include="Util\Arrays.cs" />
     <Compile Include="Util\BitField.cs" />
     <Compile Include="Util\BitFieldFactory.cs" />

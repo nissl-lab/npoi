@@ -79,7 +79,7 @@ namespace TestCases.SS.UserModel
             catch (ArgumentException e)
             {
                 // expected during successful test
-                Assert.AreEqual("The workbook already Contains a sheet of this name", e.Message);
+                Assert.AreEqual("The workbook already contains a sheet of this name", e.Message);
             }
 
             //names cannot be blank or contain any of /\*?[]

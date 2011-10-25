@@ -41,16 +41,16 @@ namespace TestCases.HSSF.Record
          *     [ftEnd]
          */
         private static byte[] recdata = {
-        0x15, 0x00, 0x12, 0x00, 0x06, 0x00, 0x01, 0x00, 0x11, 0x60,
-        (byte)0xF4, 0x02, 0x41, 0x01, 0x14, 0x10, 0x1F, 0x02, 0x00, 0x00,
-        0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-        // TODO - this data seems to require two extra bytes padding. not sure where original file is.
-        // it's not bug 38607 attachment 17639
-    };
+            0x15, 0x00, 0x12, 0x00, 0x06, 0x00, 0x01, 0x00, 0x11, 0x60,
+            (byte)0xF4, 0x02, 0x41, 0x01, 0x14, 0x10, 0x1F, 0x02, 0x00, 0x00,
+            0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+            // TODO - this data seems to require two extra bytes padding. not sure where original file is.
+            // it's not bug 38607 attachment 17639
+        };
 
         private static byte[] recdataNeedingPadding = {
-    	21, 0, 18, 0, 0, 0, 1, 0, 17, 96, 0, 0, 0, 0, 56, 111, unchecked((byte)-52), 3, 0, 0, 0, 0, 6, 0, 2, 0, 0, 0, 0, 0, 0, 0
-    };
+    	    21, 0, 18, 0, 0, 0, 1, 0, 17, 96, 0, 0, 0, 0, 56, 111, unchecked((byte)-52), 3, 0, 0, 0, 0, 6, 0, 2, 0, 0, 0, 0, 0, 0, 0
+        };
         [TestInitialize]
         public void TestLoad()
         {

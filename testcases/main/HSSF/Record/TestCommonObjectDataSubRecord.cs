@@ -72,15 +72,15 @@ namespace TestCases.HSSF.Record
             CommonObjectDataSubRecord record = new CommonObjectDataSubRecord();
 
             record.ObjectType = (CommonObjectType.LIST_BOX);
-            record.ObjectId=((short)1);
-            record.Option=((short)1);
-            record.IsLocked=(true);
-            record.IsPrintable=(false);
-            record.IsAutoFill=(false);
-            record.IsAutoline=(false);
-            record.Reserved1=((int)24593);
-            record.Reserved2=((int)218103808);
-            record.Reserved3=((int)294);
+            record.ObjectId = 1;
+            record.Option = ((short)1);
+            record.IsLocked = (true);
+            record.IsPrintable = false;
+            record.IsAutoFill = false;
+            record.IsAutoline = false;
+            record.Reserved1 = ((int)24593);
+            record.Reserved2 = ((int)218103808);
+            record.Reserved3 = ((int)294);
 
             byte[] recordBytes = record.Serialize();
             Assert.AreEqual(recordBytes.Length - 4, data.Length);
