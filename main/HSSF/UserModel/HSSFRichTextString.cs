@@ -135,7 +135,7 @@ namespace NPOI.HSSF.UserModel
             short currentFont = NO_FONT;
             if (endIndex != Length)
             {
-                currentFont = this.GetFontAtIndex(startIndex);
+                currentFont = this.GetFontAtIndex(endIndex);
             }
 
             //Need to clear the current formatting between the startIndex and endIndex

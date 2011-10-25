@@ -24,6 +24,7 @@ namespace TestCases.HSSF.Model
     using NPOI.HSSF.UserModel;
     using TestCases.SS.Formula;
     using NPOI.SS.UserModel;
+    using NPOI.SS.Formula;
 
     /**
      * Test the low level formula Parser functionality. High level tests are to
@@ -829,5 +830,43 @@ namespace TestCases.HSSF.Model
                 Assert.AreEqual("Parse error near char 10 ';' in specified formula 'round(3.14;2)'. Expected ',' or ')'", e.Message);
             }
         }
+        [TestMethod]
+        public void TestRange_bug46643()
+        {
+            String formula = "Sheet1!A1:Sheet1!B3";
+            HSSFWorkbook wb = new HSSFWorkbook();
+            wb.CreateSheet("Sheet1");
+            Ptg[] ptgs = FormulaParser.Parse(formula, HSSFEvaluationWorkbook.Create(wb), FormulaType.CELL, -1);
+
+            if (ptgs.Length == 3)
+            {
+                ConfirmTokenClasses(ptgs, typeof(Ref3DPtg), typeof(Ref3DPtg), typeof(RangePtg));
+                throw new AssertFailedException("Identified bug 46643");
+            }
+
+            ConfirmTokenClasses(ptgs,
+                    typeof(MemFuncPtg),
+                    typeof(Ref3DPtg),
+                    typeof(Ref3DPtg),
+                    typeof(RangePtg)
+            );
+            MemFuncPtg mf = (MemFuncPtg)ptgs[0];
+            Assert.AreEqual(15, mf.LenRefSubexpression);
+        }
+        /* package */
+        internal void ConfirmTokenClasses(Ptg[] ptgs, params Type[] expectedClasses)
+        {
+            Assert.AreEqual(expectedClasses.Length, ptgs.Length);
+            for (int i = 0; i < expectedClasses.Length; i++)
+            {
+                if (expectedClasses[i] != ptgs[i].GetType())
+                {
+                    Assert.Fail("difference at token[" + i + "]: expected ("
+                        + expectedClasses[i].Name + ") but got ("
+                        + ptgs[i].GetType().Name + ")");
+                }
+            }
+        }
+
     }
 }

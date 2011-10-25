@@ -82,5 +82,64 @@ namespace TestCases.HSSF.UserModel
             r.ClearFormatting();
             Assert.AreEqual(0, r.NumFormattingRuns);
         }
+        /**
+  * Test case proposed in Bug 40520:  formated twice => will format whole String
+  */
+        [TestMethod]
+        public void Test40520_1()
+        {
+
+            short font = 3;
+
+            HSSFRichTextString r = new HSSFRichTextString("f0_123456789012345678901234567890123456789012345678901234567890");
+
+            r.ApplyFont(0, 7, font);
+            r.ApplyFont(5, 9, font);
+
+            for (int i = 0; i < 7; i++) Assert.AreEqual(font, r.GetFontAtIndex(i));
+            for (int i = 5; i < 9; i++) Assert.AreEqual(font, r.GetFontAtIndex(i));
+            for (int i = 9; i < r.Length; i++) Assert.AreEqual(HSSFRichTextString.NO_FONT, r.GetFontAtIndex(i));
+        }
+
+        /**
+         * Test case proposed in Bug 40520:  overlapped range => will format whole String
+         */
+        [TestMethod]
+        public void Test40520_2()
+        {
+
+            short font = 3;
+            HSSFRichTextString r = new HSSFRichTextString("f0_123456789012345678901234567890123456789012345678901234567890");
+
+            r.ApplyFont(0, 2, font);
+            for (int i = 0; i < 2; i++) Assert.AreEqual(font, r.GetFontAtIndex(i));
+            for (int i = 2; i < r.Length; i++) Assert.AreEqual(HSSFRichTextString.NO_FONT, r.GetFontAtIndex(i));
+
+            r.ApplyFont(0, 2, font);
+            for (int i = 0; i < 2; i++) Assert.AreEqual(font, r.GetFontAtIndex(i));
+            for (int i = 2; i < r.Length; i++) Assert.AreEqual(HSSFRichTextString.NO_FONT, r.GetFontAtIndex(i));
+        }
+
+        /**
+         * Test case proposed in Bug 40520:  formated twice => will format whole String
+         */
+        [TestMethod]
+        public void Test40520_3()
+        {
+
+            short font = 3;
+            HSSFRichTextString r = new HSSFRichTextString("f0_123456789012345678901234567890123456789012345678901234567890");
+
+            // wrong order => will format 0-6
+            r.ApplyFont(0, 2, font);
+            r.ApplyFont(5, 7, font);
+            r.ApplyFont(0, 2, font);
+
+            r.ApplyFont(0, 2, font);
+            for (int i = 0; i < 2; i++) Assert.AreEqual(font, r.GetFontAtIndex(i));
+            for (int i = 2; i < 5; i++) Assert.AreEqual(HSSFRichTextString.NO_FONT, r.GetFontAtIndex(i));
+            for (int i = 5; i < 7; i++) Assert.AreEqual(font, r.GetFontAtIndex(i));
+            for (int i = 7; i < r.Length; i++) Assert.AreEqual(HSSFRichTextString.NO_FONT, r.GetFontAtIndex(i));
+        }
     }
 }
