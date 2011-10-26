@@ -26,14 +26,9 @@ namespace NPOI.HSSF.UserModel
 
 
     using NPOI.DDF;
-    using NPOI.Util;
     using NPOI.HSSF.Record;
     using NPOI.HSSF.Record.Formula;
-    using NPOI.HSSF.Record.AutoFilter;
     using NPOI.HSSF.Model;
-    using NPOI.HSSF.UserModel;
-    using NPOI.HSSF.EventModel;
-    using NPOI.HSSF.Util;
     using NPOI.POIFS.FileSystem;
     using NPOI.SS.Formula;
     using NPOI.SS.Util;

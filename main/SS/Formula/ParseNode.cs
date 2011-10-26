@@ -101,16 +101,23 @@ namespace NPOI.SS.Formula
         }
         private void CollectPtgs(TokenCollector temp)
         {
-            if (IsIf(GetToken()))
+            if (IsIf(_token))
             {
                 CollectIfPtgs(temp);
                 return;
             }
+            bool isPreFixOperator = _token is MemFuncPtg || _token is MemAreaPtg;
+		    if (isPreFixOperator) {
+			    temp.Add(_token);
+		    }
             for (int i = 0; i < GetChildren().Length; i++)
             {
                 GetChildren()[i].CollectPtgs(temp);
             }
-            temp.Add(GetToken());
+            if(!isPreFixOperator)
+            {
+                temp.Add(_token);
+            }
         }
         /**
          * The IF() function Gets marked up with two or three tAttr Tokens.

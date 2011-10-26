@@ -50,11 +50,10 @@ namespace NPOI.HSSF.Record
                     return new NoteStructureSubRecord(in1, secondUShort);
                 case LbsDataSubRecord.sid:
                     return new LbsDataSubRecord(in1, secondUShort, (int)cmoOt);
-                case ScrollableObjectSubRecord.sid:
-                    return new ScrollableObjectSubRecord(in1, secondUShort);
-                default:
-                    return new UnknownSubRecord(in1, sid, secondUShort);
+                case FtCblsSubRecord.sid:
+                    return new FtCblsSubRecord(in1, secondUShort);
             }
+            return new UnknownSubRecord(in1, sid, secondUShort);
         }
         public abstract short Sid { get; }
         public abstract int DataSize { get; }

@@ -723,7 +723,7 @@ namespace TestCases.HSSF.UserModel
         {
             HSSFWorkbook wb1 = HSSFTestDataSamples.OpenSampleWorkbook("45720.xls");
 
-            HSSFSheet sheet1 = (HSSFSheet)wb1.CreateSheet();
+            HSSFSheet sheet1 = (HSSFSheet)wb1.GetSheetAt(0);
 
             wb1.Workbook.FindDrawingGroup();
             DrawingManager2 dm1 = wb1.Workbook.DrawingManager;
@@ -737,7 +737,6 @@ namespace TestCases.HSSF.UserModel
             //Check EscherDggRecord - a workbook-level registry of drawing objects
             Assert.AreEqual(dm1.GetDgg().MaxDrawingGroupId + 1, dm2.GetDgg().MaxDrawingGroupId);
 
-            sheet1 = (HSSFSheet)wb2.GetSheetAt(0);
             HSSFSheet sheet2 = (HSSFSheet)wb2.GetSheetAt(1);
 
             //Check that id of the drawing Group was updated

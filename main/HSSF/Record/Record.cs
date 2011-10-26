@@ -107,7 +107,18 @@ namespace NPOI.HSSF.Record
 
         public virtual Record CloneViaReserialise() 
         {
-            throw new NotImplementedException("Please implement it in subclass");
+            // Do it via a re-serialization
+            // It's a cheat, but it works...
+            byte[] b = Serialize();
+            RecordInputStream rinp = new RecordInputStream(new MemoryStream(b));
+            rinp.NextRecord();
+
+            Record[] r = RecordFactory.CreateRecord(rinp);
+            if (r.Length != 1)
+            {
+                throw new InvalidOperationException("Re-serialised a record to clone it, but got " + r.Length + " records back!");
+            }
+            return r[0];
         }
     }
 }
