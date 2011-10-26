@@ -33,6 +33,10 @@ namespace TestCases.HSSF.UserModel
     using TestCases.SS.UserModel;
     using NPOI.SS.UserModel;
     using NPOI.Util;
+    using NPOI.HSSF.Record.AutoFilter;
+    using System.Collections.Generic;
+    using System.Collections;
+    using NPOI.HSSF.Record.Formula;
 
     /**
      * Tests NPOI.SS.UserModel.Sheet.  This Test case is very incomplete at the moment.
@@ -44,9 +48,10 @@ namespace TestCases.HSSF.UserModel
     [TestClass]
     public class TestHSSFSheet : BaseTestSheet
     {
-        public TestHSSFSheet():base(HSSFITestDataProvider.Instance)
+        public TestHSSFSheet()
+            : base(HSSFITestDataProvider.Instance)
         {
-            
+
         }
 
         /**
@@ -391,8 +396,8 @@ namespace TestCases.HSSF.UserModel
             Assert.IsTrue(s.Protect, "Protection should be on");
             Assert.IsTrue(s.ObjectProtect, "object Protection should be on");
             Assert.IsTrue(s.ScenarioProtect, "scenario Protection should be on");
-            Assert.AreEqual(expected,s.Password, "well known value for top secret hash should be " + StringUtil.ToHexString(expected).Substring(4));
-            
+            Assert.AreEqual(expected, s.Password, "well known value for top secret hash should be " + StringUtil.ToHexString(expected).Substring(4));
+
         }
         [TestMethod]
         public void TestProtectSheetRecordOrder_bug47363a()
@@ -678,7 +683,7 @@ namespace TestCases.HSSF.UserModel
         //    Assert.IsFalse(wb3.GetSheetAt(2).ForceFormulaRecalculation);
         //    Assert.IsTrue(wb3.GetSheetAt(3).ForceFormulaRecalculation);
         //}
- 
+
 
         /**
          * Some utilities Write Excel files without the ROW records.
@@ -778,6 +783,55 @@ namespace TestCases.HSSF.UserModel
             s.IsArabic = true;
             Assert.AreEqual(true, s.IsArabic);
         }
+        [TestMethod]
+        public void TestAutoFilter()
+        {
+            HSSFWorkbook wb = new HSSFWorkbook();
+            HSSFSheet sh = (HSSFSheet)wb.CreateSheet();
+            InternalWorkbook iwb = wb.Workbook;
+            InternalSheet ish = sh.Sheet;
 
+            Assert.IsNull(iwb.GetSpecificBuiltinRecord(NameRecord.BUILTIN_FILTER_DB, 1));
+            Assert.IsNull(ish.FindFirstRecordBySid(AutoFilterInfoRecord.sid));
+
+            CellRangeAddress range = CellRangeAddress.ValueOf("A1:B10");
+            sh.SetAutoFilter(range);
+
+            NameRecord name = iwb.GetSpecificBuiltinRecord(NameRecord.BUILTIN_FILTER_DB, 1);
+            Assert.IsNotNull(name);
+
+            // The built-in name for auto-filter must consist of a single Area3d Ptg.
+            Ptg[] ptg = name.NameDefinition;
+            Assert.AreEqual(1, ptg.Length, "The built-in name for auto-filter must consist of a single Area3d Ptg");
+            Assert.IsTrue(ptg[0] is Area3DPtg, "The built-in name for auto-filter must consist of a single Area3d Ptg");
+
+            Area3DPtg aref = (Area3DPtg)ptg[0];
+            Assert.AreEqual(range.FirstColumn, aref.FirstColumn);
+            Assert.AreEqual(range.FirstRow, aref.FirstRow);
+            Assert.AreEqual(range.LastColumn, aref.LastColumn);
+            Assert.AreEqual(range.LastRow, aref.LastRow);
+
+            // verify  AutoFilterInfoRecord
+            AutoFilterInfoRecord afilter = (AutoFilterInfoRecord)ish.FindFirstRecordBySid(AutoFilterInfoRecord.sid);
+            Assert.IsNotNull(afilter);
+            Assert.AreEqual(2, afilter.NumEntries); //filter covers two columns
+
+            HSSFPatriarch dr = (HSSFPatriarch)sh.DrawingPatriarch;
+            Assert.IsNotNull(dr);
+            HSSFSimpleShape comboBoxShape = (HSSFSimpleShape)dr.Children[0];
+            Assert.AreEqual(comboBoxShape.ShapeType, HSSFSimpleShape.OBJECT_TYPE_COMBO_BOX);
+
+            Assert.IsNull(ish.FindFirstRecordBySid(ObjRecord.sid)); // ObjRecord will appear after serializetion
+
+            wb = HSSFTestDataSamples.WriteOutAndReadBack(wb);
+            sh = (HSSFSheet)wb.GetSheetAt(0);
+            ish = sh.Sheet;
+            ObjRecord objRecord = (ObjRecord)ish.FindFirstRecordBySid(ObjRecord.sid);
+            IList subRecords = objRecord.GetSubRecords();
+            Assert.AreEqual(3, subRecords.Count);
+            Assert.IsTrue(subRecords[0] is CommonObjectDataSubRecord);
+            Assert.IsTrue(subRecords[1] is FtCblsSubRecord); // must be present, see Bug 51481
+            Assert.IsTrue(subRecords[2] is LbsDataSubRecord);
+        }
     }
 }

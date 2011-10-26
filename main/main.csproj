@@ -48,6 +48,7 @@
   <ItemGroup>
     <Compile Include="HSSF\Record\Aggregates\ChartSubstreamRecordAggregate.cs" />
     <Compile Include="HSSF\Record\Aggregates\WorksheetProtectionBlock.cs" />
+    <Compile Include="HSSF\Record\FtCblsSubRecord.cs" />
     <Compile Include="OldFileFormatException.cs" />
     <Compile Include="DDF\DefaultEscherRecordFactory.cs" />
     <Compile Include="DDF\EscherArrayProperty.cs" />

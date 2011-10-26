@@ -31,18 +31,21 @@
         {
             ObjRecord obj = new ObjRecord();
             CommonObjectDataSubRecord c = new CommonObjectDataSubRecord();
-            c.ObjectType= CommonObjectType.COMBO_BOX;
-            c.ObjectId= (short)shapeId;
-            c.IsLocked=(true);
-            c.IsPrintable=false;
-            c.IsAutoFill=true;
-            c.IsAutoline=false;
+            c.ObjectType = CommonObjectType.COMBO_BOX;
+            c.ObjectId = shapeId;
+            c.IsLocked = true;
+            c.IsPrintable = false;
+            c.IsAutoFill = true;
+            c.IsAutoline = false;
+
+            FtCblsSubRecord f = new FtCblsSubRecord();
 
             LbsDataSubRecord l = LbsDataSubRecord.CreateAutoFilterInstance();
 
             EndSubRecord e = new EndSubRecord();
 
             obj.AddSubRecord(c);
+            obj.AddSubRecord(f);
             obj.AddSubRecord(l);
             obj.AddSubRecord(e);
 
