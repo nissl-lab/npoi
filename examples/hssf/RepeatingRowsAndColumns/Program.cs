@@ -47,11 +47,11 @@ namespace RepeatingRowsAndColumns
             hssfworkbook.CreateSheet("second sheet");
             hssfworkbook.CreateSheet("third sheet");
 
-            Font boldFont = hssfworkbook.CreateFont();
+            IFont boldFont = hssfworkbook.CreateFont();
             boldFont.FontHeightInPoints = 22;
             boldFont.Boldweight = (short)FontBoldWeight.BOLD;
 
-           .CellStyle boldStyle = hssfworkbook.CreateCellStyle();
+           ICellStyle boldStyle = hssfworkbook.CreateCellStyle();
             boldStyle.SetFont(boldFont);
 
             IRow row = sheet1.CreateRow(1);

@@ -55,7 +55,7 @@ namespace SetAlignmentInXls
 
                 //create the first cell
                 row.CreateCell(0).SetCellValue("Left");
-               .CellStyle styleLeft=hssfworkbook.CreateCellStyle();
+               ICellStyle styleLeft=hssfworkbook.CreateCellStyle();
                 styleLeft.Alignment = HorizontalAlignment.LEFT;
                 styleLeft.VerticalAlignment = VerticalAlignment.TOP;
                 row.GetCell(0).CellStyle = styleLeft;
@@ -64,7 +64,7 @@ namespace SetAlignmentInXls
 
                 //create the second cell
                 row.CreateCell(1).SetCellValue("Center Hello World Hello WorldHello WorldHello WorldHello WorldHello World");
-               .CellStyle styleMiddle = hssfworkbook.CreateCellStyle();
+               ICellStyle styleMiddle = hssfworkbook.CreateCellStyle();
                 styleMiddle.Alignment = HorizontalAlignment.CENTER;
                 styleMiddle.VerticalAlignment = VerticalAlignment.CENTER;
                 row.GetCell(1).CellStyle = styleMiddle;
@@ -74,7 +74,7 @@ namespace SetAlignmentInXls
 
                 //create the third cell
                 row.CreateCell(2).SetCellValue("Right");
-               .CellStyle styleRight = hssfworkbook.CreateCellStyle();
+               ICellStyle styleRight = hssfworkbook.CreateCellStyle();
                 styleRight.Alignment = HorizontalAlignment.JUSTIFY;
                 styleRight.VerticalAlignment = VerticalAlignment.BOTTOM;
                 row.GetCell(2).CellStyle = styleRight;

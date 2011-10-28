@@ -46,7 +46,7 @@ namespace ProtectSheetInXls
 
             ICell cell1=sheet1.CreateRow(0).CreateCell(0);
             cell1.SetCellValue("This is a Sample");
-           .CellStyle cs1=hssfworkbook.CreateCellStyle();
+           ICellStyle cs1=hssfworkbook.CreateCellStyle();
             cs1.IsLocked = true;
             cell1.CellStyle = cs1;
 

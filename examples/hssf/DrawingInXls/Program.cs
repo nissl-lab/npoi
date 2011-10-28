@@ -141,7 +141,7 @@ namespace DrawingInXls
             // Create third one with some fancy font styling.
             Textbox textbox3 = patriarch.CreateTextbox(
                     new HSSFClientAnchor(0, 0, 900, 100, (short)4, 4, (short)5, 4 + 1));
-            Font font = wb.CreateFont();
+            IFont font = wb.CreateFont();
             font.IsItalic = true;
             font.Underline = (byte)FontUnderlineType.DOUBLE;
             HSSFRichTextString str = new HSSFRichTextString("Woo!!!");

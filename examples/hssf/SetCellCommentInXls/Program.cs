@@ -47,14 +47,14 @@ namespace SetCellCommentInXls
             ISheet sheet = hssfworkbook.CreateSheet("ICell comments in POI HSSF");
 
             // Create the drawing patriarch. This is the top level container for all shapes including cell comments.
-            HSSFPatriarch patr = (HSSFPatriarch)sheet.CreateDrawingPatriarch();
+            IDrawing patr = (HSSFPatriarch)sheet.CreateDrawingPatriarch();
 
             //Create a cell in row 3
             ICell cell1 = sheet.CreateRow(3).CreateCell(1);
             cell1.SetCellValue(new HSSFRichTextString("Hello, World"));
 
             //anchor defines size and position of the comment in worksheet
-            Comment comment1 = patr.CreateCellComment(new HSSFClientAnchor(0, 0, 0, 0, 4, 2, 6, 5));
+            IComment comment1 = patr.CreateCellComment(new HSSFClientAnchor(0, 0, 0, 0, 4, 2, 6, 5));
 
              // set text in the comment
             comment1.String = (new HSSFRichTextString("We can set comments in POI"));
@@ -78,7 +78,7 @@ namespace SetCellCommentInXls
             HSSFRichTextString str = new HSSFRichTextString("Normal body temperature");
 
             //apply custom font to the text in the comment
-            Font font = hssfworkbook.CreateFont();
+            IFont font = hssfworkbook.CreateFont();
             font.FontName = ("Arial");
             font.FontHeightInPoints =10;
             font.Boldweight = (short)FontBoldWeight.BOLD;
@@ -95,7 +95,7 @@ namespace SetCellCommentInXls
              * Note, it is possible to set row and column of a non-existing cell.
              * It works, the commnet is visible.
              */
-            comment2.IRow = 6;
+            comment2.Row = 6;
             comment2.Column = 1;
 
             WriteToFile();

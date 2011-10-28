@@ -52,7 +52,7 @@ namespace RotateTextInXls
                     //set the value
                     row.CreateCell(j).SetCellValue(x);
                     //set the style
-                   .CellStyle style=hssfworkbook.CreateCellStyle();
+                    ICellStyle style=hssfworkbook.CreateCellStyle();
                     style.Rotation=(short)x;
                     row.GetCell(j).CellStyle = style;
                     //increase x

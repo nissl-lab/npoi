@@ -54,7 +54,7 @@ namespace ColorfulMatrixTable
                     if (x % 2 == 0)
                     {
                         //fill background with blue
-                       .CellStyle style1 = hssfworkbook.CreateCellStyle();
+                       ICellStyle style1 = hssfworkbook.CreateCellStyle();
                         style1.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.BLUE.index2;
                         style1.FillPattern = FillPatternType.SOLID_FOREGROUND;
                         cell.CellStyle = style1;
@@ -62,7 +62,7 @@ namespace ColorfulMatrixTable
                     else
                     {
                         //fill background with yellow
-                       .CellStyle style1 = hssfworkbook.CreateCellStyle();
+                       ICellStyle style1 = hssfworkbook.CreateCellStyle();
                         style1.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.YELLOW.index2;
                         style1.FillPattern = FillPatternType.SOLID_FOREGROUND;
                         cell.CellStyle = style1;

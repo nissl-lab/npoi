@@ -49,10 +49,10 @@ namespace MergeCellsInXls
             //set the title of the sheet
             cell.SetCellValue("Sales Report");
 
-           .CellStyle style = hssfworkbook.CreateCellStyle();
+           ICellStyle style = hssfworkbook.CreateCellStyle();
             style.Alignment = HorizontalAlignment.CENTER;
             //create a font style
-            Font font = hssfworkbook.CreateFont();
+            IFont font = hssfworkbook.CreateFont();
             font.FontHeight = 20*20;
             style.SetFont(font);
             cell.CellStyle = style;

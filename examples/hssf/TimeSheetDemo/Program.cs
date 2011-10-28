@@ -123,9 +123,9 @@ namespace TimeSheetDemo
                 ICell cell = sumRow.CreateCell(j);
                 String reference = (char)('A' + j) + "3:" + (char)('A' + j) + "12";
                 cell.CellFormula = ("SUM(" + reference + ")");
-                if(j >= 9) 
+                if(j >= 9)
                     cell.CellStyle = (styles["formula_2"]);
-                else 
+                else
                     cell.CellStyle = (styles["formula"]);
             }
 

@@ -44,25 +44,25 @@ namespace ApplyFontInXls
             ISheet sheet1=hssfworkbook.CreateSheet("Sheet1");
 
             //font style1: underlined, italic, red color, fontsize=20
-            Font font1 = hssfworkbook.CreateFont();
+            IFont font1 = hssfworkbook.CreateFont();
             font1.Color = HSSFColor.RED.index;
             font1.IsItalic = true;
             font1.Underline = (byte)FontUnderlineType.DOUBLE;
             font1.FontHeightInPoints = 20;
 
             //bind font with style 1
-           .CellStyle style1 = hssfworkbook.CreateCellStyle();
+           ICellStyle style1 = hssfworkbook.CreateCellStyle();
             style1.SetFont(font1);
 
             //font style2: strikeout line, green color, fontsize=15, fontname='宋体'
-            Font font2 = hssfworkbook.CreateFont();
+            IFont font2 = hssfworkbook.CreateFont();
             font2.Color = HSSFColor.OLIVE_GREEN.index;
             font2.IsStrikeout=true;
             font2.FontHeightInPoints = 15;
             font2.FontName = "宋体";
 
             //bind font with style 2
-           .CellStyle style2 = hssfworkbook.CreateCellStyle();
+           ICellStyle style2 = hssfworkbook.CreateCellStyle();
             style2.SetFont(font2);
             
             //apply font styles
@@ -76,11 +76,11 @@ namespace ApplyFontInXls
             HSSFRichTextString richtext = new HSSFRichTextString("Microsoft OfficeTM");
 
             //apply font to "Microsoft Office"
-            Font font4 = hssfworkbook.CreateFont();
+            IFont font4 = hssfworkbook.CreateFont();
             font4.FontHeightInPoints = 12;
             richtext.ApplyFont(0, 16, font4);
             //apply font to "TM"
-            Font font3=hssfworkbook.CreateFont();
+            IFont font3=hssfworkbook.CreateFont();
             font3.TypeOffset = (short)FontSuperScript.SUPER;
             font3.IsItalic = true;
             font3.Color = HSSFColor.BLUE.index;

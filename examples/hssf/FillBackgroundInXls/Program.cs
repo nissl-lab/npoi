@@ -43,124 +43,124 @@ namespace FillBackgroundInXls
             ISheet sheet1 = hssfworkbook.CreateSheet("Sheet1");
             
             //fill background
-           .CellStyle style1 = hssfworkbook.CreateCellStyle();
+           ICellStyle style1 = hssfworkbook.CreateCellStyle();
             style1.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.BLUE.index;
             style1.FillPattern = FillPatternType.BIG_SPOTS;
             style1.FillBackgroundColor = NPOI.HSSF.Util.HSSFColor.PINK.index;
-            sheet1.CreateRow(0).CreateCell(0).CellStyle = style1;
+            sheet1.CreateRow(0).CreateCell(0)ICellStyle = style1;
 
             //fill background
-           .CellStyle style2 = hssfworkbook.CreateCellStyle();
+           ICellStyle style2 = hssfworkbook.CreateCellStyle();
             style2.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.YELLOW.index;
             style2.FillPattern = FillPatternType.ALT_BARS;
             style2.FillBackgroundColor = NPOI.HSSF.Util.HSSFColor.ROSE.index;
-            sheet1.CreateRow(1).CreateCell(0).CellStyle = style2;
+            sheet1.CreateRow(1).CreateCell(0)ICellStyle = style2;
 
             //fill background
-           .CellStyle style3 = hssfworkbook.CreateCellStyle();
+           ICellStyle style3 = hssfworkbook.CreateCellStyle();
             style3.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.LIME.index;
             style3.FillPattern = FillPatternType.LESS_DOTS;
             style3.FillBackgroundColor = NPOI.HSSF.Util.HSSFColor.LIGHT_GREEN.index;
-            sheet1.CreateRow(2).CreateCell(0).CellStyle = style3;
+            sheet1.CreateRow(2).CreateCell(0)ICellStyle = style3;
 
             //fill background
-           .CellStyle style4 = hssfworkbook.CreateCellStyle();
+           ICellStyle style4 = hssfworkbook.CreateCellStyle();
             style4.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.YELLOW.index;
             style4.FillPattern = FillPatternType.LEAST_DOTS;
             style4.FillBackgroundColor = NPOI.HSSF.Util.HSSFColor.ROSE.index;
-            sheet1.CreateRow(3).CreateCell(0).CellStyle = style4;
+            sheet1.CreateRow(3).CreateCell(0)ICellStyle = style4;
 
             //fill background
-           .CellStyle style5 = hssfworkbook.CreateCellStyle();
+           ICellStyle style5 = hssfworkbook.CreateCellStyle();
             style5.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.LIGHT_BLUE.index;
             style5.FillPattern = FillPatternType.BRICKS;
             style5.FillBackgroundColor = NPOI.HSSF.Util.HSSFColor.PLUM.index;
-            sheet1.CreateRow(4).CreateCell(0).CellStyle = style5;
+            sheet1.CreateRow(4).CreateCell(0)ICellStyle = style5;
 
             //fill background
-           .CellStyle style6 = hssfworkbook.CreateCellStyle();
+           ICellStyle style6 = hssfworkbook.CreateCellStyle();
             style6.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.SEA_GREEN.index;
             style6.FillPattern = FillPatternType.FINE_DOTS;
             style6.FillBackgroundColor = NPOI.HSSF.Util.HSSFColor.WHITE.index;
-            sheet1.CreateRow(5).CreateCell(0).CellStyle = style6;
+            sheet1.CreateRow(5).CreateCell(0)ICellStyle = style6;
 
             //fill background
-           .CellStyle style7 = hssfworkbook.CreateCellStyle();
+           ICellStyle style7 = hssfworkbook.CreateCellStyle();
             style7.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.ORANGE.index;
             style7.FillPattern = FillPatternType.DIAMONDS;
             style7.FillBackgroundColor = NPOI.HSSF.Util.HSSFColor.ORCHID.index;
-            sheet1.CreateRow(6).CreateCell(0).CellStyle = style7;
+            sheet1.CreateRow(6).CreateCell(0)ICellStyle = style7;
 
             //fill background
-           .CellStyle style8 = hssfworkbook.CreateCellStyle();
+           ICellStyle style8 = hssfworkbook.CreateCellStyle();
             style8.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.WHITE.index;
             style8.FillPattern = FillPatternType.SQUARES;
             style8.FillBackgroundColor = NPOI.HSSF.Util.HSSFColor.RED.index;
-            sheet1.CreateRow(7).CreateCell(0).CellStyle = style8;
+            sheet1.CreateRow(7).CreateCell(0)ICellStyle = style8;
 
             //fill background
-           .CellStyle style9 = hssfworkbook.CreateCellStyle();
+           ICellStyle style9 = hssfworkbook.CreateCellStyle();
             style9.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.ROYAL_BLUE.index;
             style9.FillPattern = FillPatternType.SPARSE_DOTS;
             style9.FillBackgroundColor = NPOI.HSSF.Util.HSSFColor.YELLOW.index;
-            sheet1.CreateRow(8).CreateCell(0).CellStyle = style9;
+            sheet1.CreateRow(8).CreateCell(0)ICellStyle = style9;
 
             //fill background
-           .CellStyle style10 = hssfworkbook.CreateCellStyle();
+           ICellStyle style10 = hssfworkbook.CreateCellStyle();
             style10.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.ROYAL_BLUE.index;
             style10.FillPattern = FillPatternType.THICK_BACKWARD_DIAG;
             style10.FillBackgroundColor = NPOI.HSSF.Util.HSSFColor.YELLOW.index;
-            sheet1.CreateRow(9).CreateCell(0).CellStyle = style10;
+            sheet1.CreateRow(9).CreateCell(0)ICellStyle = style10;
 
             //fill background
-           .CellStyle style11 = hssfworkbook.CreateCellStyle();
+           ICellStyle style11 = hssfworkbook.CreateCellStyle();
             style11.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.ROYAL_BLUE.index;
             style11.FillPattern = FillPatternType.THICK_FORWARD_DIAG;
             style11.FillBackgroundColor = NPOI.HSSF.Util.HSSFColor.YELLOW.index;
-            sheet1.CreateRow(10).CreateCell(0).CellStyle = style11;
+            sheet1.CreateRow(10).CreateCell(0)ICellStyle = style11;
 
             //fill background
-           .CellStyle style12 = hssfworkbook.CreateCellStyle();
+           ICellStyle style12 = hssfworkbook.CreateCellStyle();
             style12.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.ROYAL_BLUE.index;
             style12.FillPattern = FillPatternType.THICK_HORZ_BANDS;
             style12.FillBackgroundColor = NPOI.HSSF.Util.HSSFColor.YELLOW.index;
-            sheet1.CreateRow(11).CreateCell(0).CellStyle = style12;
+            sheet1.CreateRow(11).CreateCell(0)ICellStyle = style12;
 
 
             //fill background
-           .CellStyle style13 = hssfworkbook.CreateCellStyle();
+           ICellStyle style13 = hssfworkbook.CreateCellStyle();
             style13.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.ROYAL_BLUE.index;
             style13.FillPattern = FillPatternType.THICK_VERT_BANDS;
             style13.FillBackgroundColor = NPOI.HSSF.Util.HSSFColor.YELLOW.index;
-            sheet1.CreateRow(12).CreateCell(0).CellStyle = style13;
+            sheet1.CreateRow(12).CreateCell(0)ICellStyle = style13;
 
             //fill background
-           .CellStyle style14 = hssfworkbook.CreateCellStyle();
+           ICellStyle style14 = hssfworkbook.CreateCellStyle();
             style14.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.ROYAL_BLUE.index;
             style14.FillPattern = FillPatternType.THIN_BACKWARD_DIAG;
             style14.FillBackgroundColor = NPOI.HSSF.Util.HSSFColor.YELLOW.index;
-            sheet1.CreateRow(13).CreateCell(0).CellStyle = style14;
+            sheet1.CreateRow(13).CreateCell(0)ICellStyle = style14;
 
             //fill background
-           .CellStyle style15 = hssfworkbook.CreateCellStyle();
+           ICellStyle style15 = hssfworkbook.CreateCellStyle();
             style15.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.ROYAL_BLUE.index;
             style15.FillPattern = FillPatternType.THIN_FORWARD_DIAG;
             style15.FillBackgroundColor = NPOI.HSSF.Util.HSSFColor.YELLOW.index;
-            sheet1.CreateRow(14).CreateCell(0).CellStyle = style15;
+            sheet1.CreateRow(14).CreateCell(0)ICellStyle = style15;
 
             //fill background
-           .CellStyle style16 = hssfworkbook.CreateCellStyle();
+           ICellStyle style16 = hssfworkbook.CreateCellStyle();
             style16.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.ROYAL_BLUE.index;
             style16.FillPattern = FillPatternType.THIN_HORZ_BANDS;
             style16.FillBackgroundColor = NPOI.HSSF.Util.HSSFColor.YELLOW.index;
-            sheet1.CreateRow(15).CreateCell(0).CellStyle = style16;
+            sheet1.CreateRow(15).CreateCell(0)ICellStyle = style16;
 
             //fill background
-           .CellStyle style17 = hssfworkbook.CreateCellStyle();
+           ICellStyle style17 = hssfworkbook.CreateCellStyle();
             style17.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.ROYAL_BLUE.index;
             style17.FillPattern = FillPatternType.THIN_VERT_BANDS;
             style17.FillBackgroundColor = NPOI.HSSF.Util.HSSFColor.YELLOW.index;
-            sheet1.CreateRow(16).CreateCell(0).CellStyle = style17;
+            sheet1.CreateRow(16).CreateCell(0)ICellStyle = style17;
 
 
             WriteToFile();

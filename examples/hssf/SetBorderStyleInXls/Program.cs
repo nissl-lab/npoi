@@ -53,7 +53,7 @@ namespace SetBorderStyleInXls
             cell.SetCellValue(4);
 
             // Style the cell with borders all around.
-           .CellStyle style = hssfworkbook.CreateCellStyle();
+            ICellStyle style = hssfworkbook.CreateCellStyle();
             style.BorderBottom= CellBorderType.THIN;
             style.BottomBorderColor= HSSFColor.BLACK.index;
             style.BorderLeft = CellBorderType.DASH_DOT_DOT;

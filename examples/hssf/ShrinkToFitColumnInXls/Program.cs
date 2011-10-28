@@ -21,7 +21,7 @@ namespace ShrinkToFitColumnInXls
             ICell cell1 = row.CreateCell(0);
             cell1.SetCellValue("This is a test");
             //apply ShrinkToFit to cellstyle
-           .CellStyle cellstyle1 = hssfworkbook.CreateCellStyle();
+           ICellStyle cellstyle1 = hssfworkbook.CreateCellStyle();
             cellstyle1.ShrinkToFit = true;
             cell1.CellStyle = cellstyle1;
             //create cell value

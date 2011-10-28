@@ -37,8 +37,8 @@ namespace AddHyperlinkInXls
 
             ////cell style for hyperlinks
             ////by default hyperlinks are blue and underlined
-           .CellStyle hlink_style = hssfworkbook.CreateCellStyle();
-            Font hlink_font = hssfworkbook.CreateFont();
+           ICellStyle hlink_style = hssfworkbook.CreateCellStyle();
+            IFont hlink_font = hssfworkbook.CreateFont();
             hlink_font.Underline = (byte)FontUnderlineType.SINGLE;
             hlink_font.Color = HSSFColor.BLUE.index;
             hlink_style.SetFont(hlink_font);
