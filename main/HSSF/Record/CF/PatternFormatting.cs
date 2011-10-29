@@ -28,6 +28,7 @@ namespace NPOI.HSSF.Record.CF
     using System.Text;
     using NPOI.HSSF.Record;
     using NPOI.Util;
+    using NPOI.Util.IO;
 
     /**
      * Pattern Formatting Block of the Conditional Formatting Rule Record.
@@ -177,6 +178,12 @@ namespace NPOI.HSSF.Record.CF
             LittleEndian.PutShort(data, offset, field_16_pattern_color_indexes);
             offset += 2;
             return 4;
+        }
+
+        public void Serialize(LittleEndianOutput out1)
+        {
+            out1.WriteShort(field_15_pattern_style);
+            out1.WriteShort(field_16_pattern_color_indexes);
         }
     }
 }

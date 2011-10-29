@@ -25,7 +25,8 @@ namespace NPOI.HSSF.Record
     using NPOI.HSSF.UserModel;
     using NPOI.HSSF.Record.Formula;
     using NPOI.HSSF.Record.CF;
-    using NPOI.SS.Formula;
+    using FR=NPOI.SS.Formula;
+    using NPOI.Util.IO;
 
     public enum ComparisonOperator : byte
     {
@@ -43,7 +44,7 @@ namespace NPOI.HSSF.Record
      * Conditional Formatting Rule Record.
      * @author Dmitriy Kumshayev
      */
-    public class CFRuleRecord : Record,ICloneable
+    public class CFRuleRecord : StandardRecord
     {
 
         public const short sid = 0x01B1;
@@ -107,8 +108,8 @@ namespace NPOI.HSSF.Record
 
         private PatternFormatting patternFormatting;
 
-        private Ptg[] field_17_formula1;
-        private Ptg[] field_18_formula2;
+        private FR.Formula field_17_formula1;
+        private FR.Formula field_18_formula2;
 
         /** Creates new CFRuleRecord */
         private CFRuleRecord(byte conditionType, ComparisonOperator comparisonOperation)
@@ -132,8 +133,8 @@ namespace NPOI.HSSF.Record
             field_12_not_used = 0;
             borderFormatting = null;
             patternFormatting = null;
-            field_17_formula1 = null;
-            field_18_formula2 = null;
+            field_17_formula1 = FR.Formula.Create(Ptg.EMPTY_PTG_ARRAY);
+            field_18_formula2 = FR.Formula.Create(Ptg.EMPTY_PTG_ARRAY);
         }
 
         private CFRuleRecord(byte conditionType, ComparisonOperator comparisonOperation, Ptg[] formula1, Ptg[] formula2)
@@ -142,8 +143,8 @@ namespace NPOI.HSSF.Record
             
             field_1_condition_type = CONDITION_TYPE_CELL_VALUE_IS;
             field_2_comparison_operator = (byte)comparisonOperation;
-            field_17_formula1 = formula1;
-            field_18_formula2 = formula2;
+            field_17_formula1 = FR.Formula.Create(formula1);
+            field_18_formula2 = FR.Formula.Create(formula2);
         }
         /**
          * get the stack of the 1st expression as a list
@@ -158,17 +159,9 @@ namespace NPOI.HSSF.Record
         {
             get
             {
-                return field_17_formula1;
+                return field_17_formula1.Tokens;
             }
-            set { field_17_formula1 = SafeClone(value); }
-        }
-        private static Ptg[] SafeClone(Ptg[] ptgs)
-        {
-            if (ptgs == null)
-            {
-                return null;
-            }
-            return (Ptg[])ptgs.Clone();
+            set { field_17_formula1 = FR.Formula.Create(value); }
         }
         /**
  * get the stack of the 2nd expression as a list
@@ -183,9 +176,9 @@ namespace NPOI.HSSF.Record
         {
             get
             {
-                return field_18_formula2;
+                return field_18_formula2.Tokens;
             }
-            set { field_18_formula2 = SafeClone(value); }
+            set { field_18_formula2 = FR.Formula.Create(value); }
         }
 
         /**
@@ -231,15 +224,8 @@ namespace NPOI.HSSF.Record
             {
                 patternFormatting = new PatternFormatting(in1);
             }
-
-            if (field_3_formula1_len > 0)
-            {
-                field_17_formula1 = Ptg.ReadTokens(field_3_formula1_len, in1);
-            }
-            if (field_4_formula2_len > 0)
-            {
-                field_18_formula2 = Ptg.ReadTokens(field_4_formula2_len, in1);
-            }
+            field_17_formula1 = FR.Formula.Read(field_3_formula1_len, in1);
+            field_18_formula2 = FR.Formula.Read(field_4_formula2_len, in1);
 	}
 
         public byte ConditionType
@@ -430,19 +416,6 @@ namespace NPOI.HSSF.Record
             field_5_options = field.SetBoolean(field_5_options, flag);
         }
 
-        /**
-         * Get the stack of the 1st expression as a list
-         *
-         * @return list of tokens (casts stack to a list and returns it!)
-         * this method can return null Is we are Unable to Create Ptgs from 
-         *	 existing excel file
-         * callers should Check for null!
-         */
-
-        public Ptg[] GetParsedExpression1()
-        {
-            return field_17_formula1;
-        }
 
 
         public override short Sid
@@ -454,13 +427,9 @@ namespace NPOI.HSSF.Record
          * @param ptgs may be <c>null</c>
          * @return encoded size of the formula
          */
-        private static int GetFormulaSize(Ptg[] ptgs)
+        private int GetFormulaSize(FR.Formula formula)
         {
-            if (ptgs == null)
-            {
-                return 0;
-            }
-            return Ptg.GetEncodedSize(ptgs);
+            return formula.EncodedTokenSize;
         }
 
         /**
@@ -472,64 +441,41 @@ namespace NPOI.HSSF.Record
          * @param data byte array containing instance data
          * @return number of bytes written
          */
-        public override int Serialize(int pOffset, byte[] data)
+        public override void Serialize(LittleEndianOutput out1)
         {
+		    int formula1Len=GetFormulaSize(field_17_formula1);
+		    int formula2Len=GetFormulaSize(field_18_formula2);
 
-            int formula1Len = GetFormulaSize(field_17_formula1);
-            int formula2Len = GetFormulaSize(field_18_formula2);
+		    out1.WriteByte(field_1_condition_type);
+		    out1.WriteByte(field_2_comparison_operator);
+		    out1.WriteShort(formula1Len);
+		    out1.WriteShort(formula2Len);
+		    out1.WriteInt(field_5_options);
+		    out1.WriteShort(field_6_not_used);
 
-            int offset = pOffset;
-            int recordsize = RecordSize;
-            LittleEndian.PutShort(data, 0 + offset, sid);
-            LittleEndian.PutShort(data, 2 + offset, (short)(recordsize - 4));
-            LittleEndian.PutByte(data, 4 + offset, field_1_condition_type);
-            LittleEndian.PutByte(data, 5 + offset, field_2_comparison_operator);
-            LittleEndian.PutUShort(data, 6 + offset, formula1Len);
-            LittleEndian.PutUShort(data, 8 + offset, formula2Len);
-            LittleEndian.PutInt(data, 10 + offset, field_5_options);
-            LittleEndian.PutShort(data, 14 + offset, field_6_not_used);
+		    if (ContainsFontFormattingBlock) {
+			    byte[] fontFormattingRawRecord  = fontFormatting.GetRawRecord();
+			    out1.Write(fontFormattingRawRecord);
+		    }
 
-            offset += 16;
+		    if (ContainsBorderFormattingBlock) {
+			    borderFormatting.Serialize(out1);
+		    }
 
-            if (ContainsFontFormattingBlock)
-            {
-                byte[] fontFormattingRawRecord = fontFormatting.GetRawRecord();
-                Array.Copy(fontFormattingRawRecord, 0, data, offset, fontFormattingRawRecord.Length);
-                offset += fontFormattingRawRecord.Length;
-            }
+		    if (ContainsPatternFormattingBlock) {
+			    patternFormatting.Serialize(out1);
+		    }
 
-            if (ContainsBorderFormattingBlock)
-            {
-                offset += borderFormatting.Serialize(offset, data);
-            }
-
-            if (ContainsPatternFormattingBlock)
-            {
-                offset += patternFormatting.Serialize(offset, data);
-            }
-
-            if (field_17_formula1 != null)
-            {
-                offset += Ptg.SerializePtgs(field_17_formula1, data, offset);
-            }
-
-            if (field_18_formula2 != null)
-            {
-                offset += Ptg.SerializePtgs(field_18_formula2, data, offset);
-            }
-            if (offset - pOffset != recordsize)
-            {
-                throw new InvalidOperationException("Write mismatch (" + (offset - pOffset) + "!=" + recordsize + ")");
-            }
-            return recordsize;
+		    field_17_formula1.SerializeTokens(out1);
+		    field_18_formula2.SerializeTokens(out1);
         }
 
 
-        public override int RecordSize
+        protected override int DataSize
         {
             get
             {
-                int retval = 16 +
+                int retval = 12 +
                             (ContainsFontFormattingBlock ? fontFormatting.GetRawRecord().Length : 0) +
                             (ContainsBorderFormattingBlock ? 8 : 0) +
                             (ContainsPatternFormattingBlock? 4 : 0) +
@@ -583,11 +529,11 @@ namespace NPOI.HSSF.Record
             }
             if (field_17_formula1 != null)
             {
-                rec.field_17_formula1 = (Ptg[])field_17_formula1.Clone();
+                rec.field_17_formula1 = field_17_formula1.Copy();
             }
             if (field_18_formula2 != null)
             {
-                rec.field_18_formula2 = (Ptg[])field_18_formula2.Clone();
+                rec.field_18_formula2 = field_18_formula2.Copy();
             }
 
             return rec;

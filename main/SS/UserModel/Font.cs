@@ -19,6 +19,29 @@ namespace NPOI.SS.UserModel
 {
     using System;
 
+    public enum FontUnderlineType : byte
+    {
+        /**
+         * not underlined
+         */
+        NONE = 0,
+        /**
+         * single (normal) underline
+         */
+        SINGLE = 1,
+        /**
+         * double underlined
+         */
+        DOUBLE = 2,
+        /**
+         * accounting style single underline
+         */
+        SINGLE_ACCOUNTING = 0x21,
+        /**
+         * accounting style double underline
+         */
+        DOUBLE_ACCOUNTING = 0x22
+    }
 
     public enum FontSuperScript:short
     { 
@@ -71,23 +94,6 @@ namespace NPOI.SS.UserModel
     }
 
 
-    public enum FontCharsetType:byte
-    {
-        /**
-         * ANSI character set
-         */
-        ANSI= 0,
-
-        /**
-         * Default character Set.
-         */
-        DEFAULT= 1,
-
-        /**
-         * Symbol character set
-         */
-        SYMBOL= 2,
-    }
     public interface IFont
     {
 

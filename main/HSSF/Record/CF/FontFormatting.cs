@@ -22,6 +22,7 @@ namespace NPOI.HSSF.Record.CF
     using System.Text;
     using NPOI.HSSF.Record;
     using NPOI.Util;
+    using NPOI.SS.UserModel;
 
     /**
      * Font Formatting Block of the Conditional Formatting Rule Record.
@@ -32,21 +33,21 @@ namespace NPOI.HSSF.Record.CF
     {
         private byte[] _rawData;
 
-        private static int OFFSet_FONT_NAME = 0;
-        private static int OFFSet_FONT_HEIGHT = 64;
-        private static int OFFSet_FONT_OPTIONS = 68;
-        private static int OFFSet_FONT_WEIGHT = 72;
-        private static int OFFSet_ESCAPEMENT_TYPE = 74;
-        private static int OFFSet_UNDERLINE_TYPE = 76;
-        private static int OFFSet_FONT_COLOR_INDEX = 80;
-        private static int OFFSet_OPTION_FLAGS = 88;
-        private static int OFFSet_ESCAPEMENT_TYPE_MODIFIED = 92;
-        private static int OFFSet_UNDERLINE_TYPE_MODIFIED = 96;
-        private static int OFFSet_FONT_WEIGHT_MODIFIED = 100;
-        private static int OFFSet_NOT_USED1 = 104;
-        private static int OFFSet_NOT_USED2 = 108;
-        private static int OFFSet_NOT_USED3 = 112; // for some reason Excel always Writes  0x7FFFFFFF at this offset   
-        private static int OFFSet_FONT_FORMATING_END = 116;
+        private static int OFFSET_FONT_NAME = 0;
+        private static int OFFSET_FONT_HEIGHT = 64;
+        private static int OFFSET_FONT_OPTIONS = 68;
+        private static int OFFSET_FONT_WEIGHT = 72;
+        private static int OFFSET_ESCAPEMENT_TYPE = 74;
+        private static int OFFSET_UNDERLINE_TYPE = 76;
+        private static int OFFSET_FONT_COLOR_INDEX = 80;
+        private static int OFFSET_OPTION_FLAGS = 88;
+        private static int OFFSET_ESCAPEMENT_TYPE_MODIFIED = 92;
+        private static int OFFSET_UNDERLINE_TYPE_MODIFIED = 96;
+        private static int OFFSET_FONT_WEIGHT_MODIFIED = 100;
+        private static int OFFSET_NOT_USED1 = 104;
+        private static int OFFSET_NOT_USED2 = 108;
+        private static int OFFSET_NOT_USED3 = 112; // for some reason Excel always Writes  0x7FFFFFFF at this offset   
+        private static int OFFSET_FONT_FORMATING_END = 116;
         private static int RAW_DATA_SIZE = 118;
 
 
@@ -116,11 +117,11 @@ namespace NPOI.HSSF.Record.CF
             IsEscapementTypeModified=false;
             IsUnderlineTypeModified=false;
 
-            SetShort(OFFSet_FONT_NAME, 0);
-            SetInt(OFFSet_NOT_USED1, 0x00000001);
-            SetInt(OFFSet_NOT_USED2, 0x00000000);
-            SetInt(OFFSet_NOT_USED3, 0x7FFFFFFF);// for some reason Excel always Writes  0x7FFFFFFF at this offset
-            SetShort(OFFSet_FONT_FORMATING_END, 0x0001);
+            SetShort(OFFSET_FONT_NAME, 0);
+            SetInt(OFFSET_NOT_USED1, 0x00000001);
+            SetInt(OFFSET_NOT_USED2, 0x00000000);
+            SetInt(OFFSET_NOT_USED3, 0x7FFFFFFF);// for some reason Excel always Writes  0x7FFFFFFF at this offset
+            SetShort(OFFSET_FONT_FORMATING_END, 0x0001);
         }
 
         /** Creates new FontFormatting */
@@ -162,20 +163,20 @@ namespace NPOI.HSSF.Record.CF
          */
         public int FontHeight
         {
-            get{return GetInt(OFFSet_FONT_HEIGHT);}
-            set { SetInt(OFFSet_FONT_HEIGHT, value); }
+            get{return GetInt(OFFSET_FONT_HEIGHT);}
+            set { SetInt(OFFSET_FONT_HEIGHT, value); }
         }
 
         private void SetFontOption(bool option, BitField field)
         {
-            int options = GetInt(OFFSet_FONT_OPTIONS);
+            int options = GetInt(OFFSET_FONT_OPTIONS);
             options = field.SetBoolean(options, option);
-            SetInt(OFFSet_FONT_OPTIONS, options);
+            SetInt(OFFSET_FONT_OPTIONS, options);
         }
 
         private bool GetFontOption(BitField field)
         {
-            int options = GetInt(OFFSet_FONT_OPTIONS);
+            int options = GetInt(OFFSET_FONT_OPTIONS);
             return field.IsSet(options);
         }
 
@@ -234,46 +235,34 @@ namespace NPOI.HSSF.Record.CF
             set { SetFontOption(value, cancellation); }
         }
 
-        /**
-         * Set the font weight (100-1000dec or 0x64-0x3e8).  Default Is
-         * 0x190 for normal and 0x2bc for bold
-         *
-         * @param bw - a number between 100-1000 for the fonts "boldness"
-         */
 
-        private void SetFontWeight(short pbw)
-        {
-            short bw = pbw;
-            if (bw < 100) { bw = 100; }
-            if (bw > 1000) { bw = 1000; }
-            SetShort(OFFSet_FONT_WEIGHT, bw);
-        }
-
-        /**
-         * Get the font weight for this font (100-1000dec or 0x64-0x3e8).  Default Is
-         * 0x190 for normal and 0x2bc for bold
-         *
-         * @return bw - a number between 100-1000 for the fonts "boldness"
-         */
-
+        /// <summary>
+        /// Get or set the font weight for this font (100-1000dec or 0x64-0x3e8).  
+        /// Default Is 0x190 for normal and 0x2bc for bold
+        /// </summary>
         public short FontWeight
         {
-            get { return GetShort(OFFSet_FONT_WEIGHT); }
+            get { return GetShort(OFFSET_FONT_WEIGHT); }
+            set
+            {
+                short bw = value;
+                if (bw < 100) { bw = 100; }
+                if (bw > 1000) { bw = 1000; }
+                SetShort(OFFSET_FONT_WEIGHT, bw);
+            }
         }
 
-        /**
-         * Get whether the font weight Is Set to bold or not
-         *
-         * @return bold - whether the font Is bold or not
-         */
 
+        /// <summary>
+        ///Get or set whether the font weight is set to bold or not 
+        /// </summary>
         public bool IsBold
         {
             get
             {
                 return FontWeight == FONT_WEIGHT_BOLD;
             }
-            set { SetFontWeight(value ? FONT_WEIGHT_BOLD : FONT_WEIGHT_NORMAL); }
+            set { this.FontWeight = (value ? FONT_WEIGHT_BOLD : FONT_WEIGHT_NORMAL); }
         }
 
         /**
@@ -284,13 +273,13 @@ namespace NPOI.HSSF.Record.CF
          * @see org.apache.poi.hssf.usermodel.HSSFFontFormatting#SS_SUPER
          * @see org.apache.poi.hssf.usermodel.HSSFFontFormatting#SS_SUB
          */
-        public short EscapementType
+        public FontSuperScript EscapementType
         {
             get
             {
-                return GetShort(OFFSet_ESCAPEMENT_TYPE);
+                return (FontSuperScript)GetShort(OFFSET_ESCAPEMENT_TYPE);
             }
-            set { SetShort(OFFSet_ESCAPEMENT_TYPE, value); }
+            set { SetShort(OFFSET_ESCAPEMENT_TYPE, (short)value); }
         }
 
         /**
@@ -305,13 +294,13 @@ namespace NPOI.HSSF.Record.CF
          * @see org.apache.poi.hssf.usermodel.HSSFFontFormatting#U_DOUBLE_ACCOUNTING
          */
 
-        public short UnderlineType
+        public FontUnderlineType UnderlineType
         {
             get
             {
-                return GetShort(OFFSet_UNDERLINE_TYPE);
+                return (FontUnderlineType)GetShort(OFFSET_UNDERLINE_TYPE);
             }
-            set { SetShort(OFFSet_UNDERLINE_TYPE, value); }
+            set { SetShort(OFFSET_UNDERLINE_TYPE, (short)value); }
         }
 
 
@@ -320,15 +309,15 @@ namespace NPOI.HSSF.Record.CF
         {
             get
             {
-                return (short)GetInt(OFFSet_FONT_COLOR_INDEX);
+                return (short)GetInt(OFFSET_FONT_COLOR_INDEX);
             }
-            set { SetInt(OFFSet_FONT_COLOR_INDEX, value); }
+            set { SetInt(OFFSET_FONT_COLOR_INDEX, value); }
         }
 
 
         private bool GetOptionFlag(BitField field)
         {
-            int optionFlags = GetInt(OFFSet_OPTION_FLAGS);
+            int optionFlags = GetInt(OFFSET_OPTION_FLAGS);
             int value = field.GetValue(optionFlags);
             return value == 0 ? true : false;
         }
@@ -336,9 +325,9 @@ namespace NPOI.HSSF.Record.CF
         private void SetOptionFlag(bool modified, BitField field)
         {
             int value = modified ? 0 : 1;
-            int optionFlags = GetInt(OFFSet_OPTION_FLAGS);
+            int optionFlags = GetInt(OFFSET_OPTION_FLAGS);
             optionFlags = field.SetValue(optionFlags, value);
-            SetInt(OFFSet_OPTION_FLAGS, optionFlags);
+            SetInt(OFFSET_OPTION_FLAGS, optionFlags);
         }
 
 
@@ -370,13 +359,13 @@ namespace NPOI.HSSF.Record.CF
         {
             get
             {
-                int escapementModified = GetInt(OFFSet_ESCAPEMENT_TYPE_MODIFIED);
+                int escapementModified = GetInt(OFFSET_ESCAPEMENT_TYPE_MODIFIED);
                 return escapementModified == 0;
             }
             set
             {
                 int value1 = value ? 0 : 1;
-                SetInt(OFFSet_ESCAPEMENT_TYPE_MODIFIED, value1);
+                SetInt(OFFSET_ESCAPEMENT_TYPE_MODIFIED, value1);
             }
         }
 
@@ -384,13 +373,13 @@ namespace NPOI.HSSF.Record.CF
         {
             get
             {
-                int underlineModified = GetInt(OFFSet_UNDERLINE_TYPE_MODIFIED);
+                int underlineModified = GetInt(OFFSET_UNDERLINE_TYPE_MODIFIED);
                 return underlineModified == 0;
             }
             set {
 
                 int value1 = value ? 0 : 1;
-                SetInt(OFFSet_UNDERLINE_TYPE_MODIFIED, value1);
+                SetInt(OFFSET_UNDERLINE_TYPE_MODIFIED, value1);
             }
         }
 
@@ -398,13 +387,13 @@ namespace NPOI.HSSF.Record.CF
         {
             get
             {
-                int fontStyleModified = GetInt(OFFSet_FONT_WEIGHT_MODIFIED);
+                int fontStyleModified = GetInt(OFFSET_FONT_WEIGHT_MODIFIED);
                 return fontStyleModified == 0;
             }
             set
             {
                 int value1 = value ? 0 : 1;
-                SetInt(OFFSet_FONT_WEIGHT_MODIFIED, value1);
+                SetInt(OFFSET_FONT_WEIGHT_MODIFIED, value1);
             }
         }
 

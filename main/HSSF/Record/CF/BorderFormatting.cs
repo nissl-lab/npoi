@@ -29,6 +29,8 @@ namespace NPOI.HSSF.Record.CF
     using System.Collections;
     using NPOI.HSSF.Record;
     using NPOI.Util;
+    using NPOI.Util.IO;
+    using NPOI.SS.UserModel;
 
 
 
@@ -181,7 +183,7 @@ namespace NPOI.HSSF.Record.CF
             {
                 return (short)bordLeftLineStyle.GetValue(field_13_border_styles1);
             }
-            set 
+            set
             {
                 field_13_border_styles1 = bordLeftLineStyle.SetValue(field_13_border_styles1, value);
             }
@@ -212,9 +214,9 @@ namespace NPOI.HSSF.Record.CF
             {
                 return (short)bordRightLineStyle.GetValue(field_13_border_styles1);
             }
-            set 
+            set
             {
-                field_13_border_styles1 = 
+                field_13_border_styles1 =
                     bordRightLineStyle.SetValue(field_13_border_styles1, value);
             }
         }
@@ -244,7 +246,7 @@ namespace NPOI.HSSF.Record.CF
             {
                 return (short)bordTopLineStyle.GetValue(field_13_border_styles1);
             }
-            set 
+            set
             {
                 field_13_border_styles1 = bordTopLineStyle.SetValue(field_13_border_styles1, value);
             }
@@ -274,7 +276,7 @@ namespace NPOI.HSSF.Record.CF
             {
                 return (short)bordBottomLineStyle.GetValue(field_13_border_styles1);
             }
-            set 
+            set
             {
                 field_13_border_styles1 = bordBottomLineStyle.SetValue(field_13_border_styles1, value);
             }
@@ -304,7 +306,7 @@ namespace NPOI.HSSF.Record.CF
             {
                 return (short)bordDiagLineStyle.GetValue(field_14_border_styles2);
             }
-            set 
+            set
             {
                 field_14_border_styles2 = bordDiagLineStyle.SetValue(field_14_border_styles2, value);
             }
@@ -321,9 +323,9 @@ namespace NPOI.HSSF.Record.CF
             {
                 return (short)bordLeftLineColor.GetValue(field_13_border_styles1);
             }
-            set 
-            { 
-                field_13_border_styles1 = bordLeftLineColor.SetValue(field_13_border_styles1, value); 
+            set
+            {
+                field_13_border_styles1 = bordLeftLineColor.SetValue(field_13_border_styles1, value);
             }
         }
 
@@ -338,9 +340,9 @@ namespace NPOI.HSSF.Record.CF
             {
                 return (short)bordRightLineColor.GetValue(field_13_border_styles1);
             }
-            set 
-            { 
-                field_13_border_styles1 = bordRightLineColor.SetValue(field_13_border_styles1, value); 
+            set
+            {
+                field_13_border_styles1 = bordRightLineColor.SetValue(field_13_border_styles1, value);
             }
         }
 
@@ -355,7 +357,7 @@ namespace NPOI.HSSF.Record.CF
             {
                 return (short)bordTopLineColor.GetValue(field_14_border_styles2);
             }
-            set 
+            set
             {
                 field_14_border_styles2 = bordTopLineColor.SetValue(field_14_border_styles2, value);
             }
@@ -372,7 +374,7 @@ namespace NPOI.HSSF.Record.CF
             {
                 return (short)bordBottomLineColor.GetValue(field_14_border_styles2);
             }
-            set 
+            set
             {
                 field_14_border_styles2 = bordBottomLineColor.SetValue(field_14_border_styles2, value);
             }
@@ -389,7 +391,7 @@ namespace NPOI.HSSF.Record.CF
             {
                 return (short)bordDiagLineColor.GetValue(field_14_border_styles2);
             }
-            set 
+            set
             {
                 field_14_border_styles2 = bordDiagLineColor.SetValue(field_14_border_styles2, value);
             }
@@ -404,9 +406,9 @@ namespace NPOI.HSSF.Record.CF
             {
                 return bordBlTrtLineOnOff.IsSet(field_13_border_styles1);
             }
-            set 
-            { 
-                field_13_border_styles1 = bordBlTrtLineOnOff.SetBoolean(field_13_border_styles1, value); 
+            set
+            {
+                field_13_border_styles1 = bordBlTrtLineOnOff.SetBoolean(field_13_border_styles1, value);
             }
         }
 
@@ -419,7 +421,7 @@ namespace NPOI.HSSF.Record.CF
             {
                 return bordTlBrLineOnOff.IsSet(field_13_border_styles1);
             }
-            set 
+            set
             {
                 field_13_border_styles1 = bordTlBrLineOnOff.SetBoolean(field_13_border_styles1, value);
             }
@@ -459,6 +461,11 @@ namespace NPOI.HSSF.Record.CF
             LittleEndian.PutInt(data, offset, field_14_border_styles2);
             offset += 4;
             return 8;
+        }
+        public void Serialize(LittleEndianOutput out1)
+        {
+            out1.WriteInt(field_13_border_styles1);
+            out1.WriteInt(field_14_border_styles2);
         }
     }
 }

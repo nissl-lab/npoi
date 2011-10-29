@@ -48,6 +48,7 @@ namespace NPOI.HSSF.Record
         public static byte U_DOUBLE = 2;
         public static byte U_SINGLE_ACCOUNTING = 0x21;
         public static byte U_DOUBLE_ACCOUNTING = 0x22;
+
         private short field_1_font_height;        // in Units of .05 of a point
         private short field_2_attributes;
 

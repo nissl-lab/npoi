@@ -1207,7 +1207,7 @@ namespace TestCases.HSSF.UserModel
         }
 
         /**
-         * Test that fonts get Added properly
+         * Test that fonts get added properly
          */
         [TestMethod]
         public void Test45338()

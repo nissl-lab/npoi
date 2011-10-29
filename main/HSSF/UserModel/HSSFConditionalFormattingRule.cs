@@ -168,7 +168,7 @@ namespace NPOI.HSSF.UserModel
         {
             get
             {
-                return ToFormulaString(cfRuleRecord.GetParsedExpression1());
+                return ToFormulaString(cfRuleRecord.ParsedExpression1);
             }
         }
 

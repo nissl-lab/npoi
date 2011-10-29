@@ -24,6 +24,8 @@ namespace TestCases.HSSF.UserModel
     using NPOI.HSSF.Record;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using NPOI.SS.Util;
+    using NPOI.SS.UserModel;
+    using NPOI.HSSF.Record.CF;
     /**
      * 
      * @author Dmitriy Kumshayev
@@ -45,10 +47,10 @@ namespace TestCases.HSSF.UserModel
             fontFmt.SetFontStyle(true, false);
 
             HSSFBorderFormatting bordFmt = rule1.CreateBorderFormatting();
-            bordFmt.BorderBottom= (HSSFBorderFormatting.BORDER_THIN);
-            bordFmt.BorderTop= (HSSFBorderFormatting.BORDER_THICK);
-            bordFmt.BorderLeft= (HSSFBorderFormatting.BORDER_DASHED);
-            bordFmt.BorderRight= (HSSFBorderFormatting.BORDER_DOTTED);
+            bordFmt.BorderBottom= (short)BorderStyle.THIN;
+            bordFmt.BorderTop= (short)BorderStyle.THICK;
+            bordFmt.BorderLeft= (short)BorderStyle.DASHED;
+            bordFmt.BorderRight= (short)BorderStyle.DOTTED;
 
             HSSFPatternFormatting patternFmt = rule1.CreatePatternFormatting();
             patternFmt.FillBackgroundColor= (HSSFColor.YELLOW.index);
@@ -98,10 +100,10 @@ namespace TestCases.HSSF.UserModel
 
             HSSFBorderFormatting r1bf = rule1.GetBorderFormatting();
             Assert.IsNotNull(r1bf);
-            Assert.AreEqual(HSSFBorderFormatting.BORDER_THIN, r1bf.BorderBottom);
-            Assert.AreEqual(HSSFBorderFormatting.BORDER_THICK, r1bf.BorderTop);
-            Assert.AreEqual(HSSFBorderFormatting.BORDER_DASHED, r1bf.BorderLeft);
-            Assert.AreEqual(HSSFBorderFormatting.BORDER_DOTTED, r1bf.BorderRight);
+            Assert.AreEqual(BorderFormatting.BORDER_THIN, r1bf.BorderBottom);
+            Assert.AreEqual(BorderFormatting.BORDER_THICK, r1bf.BorderTop);
+            Assert.AreEqual(BorderFormatting.BORDER_DASHED, r1bf.BorderLeft);
+            Assert.AreEqual(BorderFormatting.BORDER_DOTTED, r1bf.BorderRight);
 
             HSSFPatternFormatting r1pf = rule1.GetPatternFormatting();
             Assert.IsNotNull(r1pf);

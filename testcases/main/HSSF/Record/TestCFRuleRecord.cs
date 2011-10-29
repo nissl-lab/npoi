@@ -27,6 +27,7 @@ namespace TestCases.HSSF.Record
     using NPOI.HSSF.Model;
     using NPOI.HSSF.Util;
     using NPOI.Util;
+    using NPOI.SS.UserModel;
 
     /**
      * Tests the serialization and deserialization of the TestCFRuleRecord
@@ -207,9 +208,9 @@ namespace TestCases.HSSF.Record
             fontFormatting.IsBold = (false);
             Assert.IsFalse(fontFormatting.IsBold);
 
-            fontFormatting.EscapementType = (FontFormatting.SS_SUB);
+            fontFormatting.EscapementType = FontSuperScript.SUB;
             Assert.AreEqual(FontFormatting.SS_SUB, fontFormatting.EscapementType);
-            fontFormatting.EscapementType = (FontFormatting.SS_SUPER);
+            fontFormatting.EscapementType = FontSuperScript.SUPER;
             Assert.AreEqual(FontFormatting.SS_SUPER, fontFormatting.EscapementType);
             fontFormatting.EscapementType = (FontFormatting.SS_NONE);
             Assert.AreEqual(FontFormatting.SS_NONE, fontFormatting.EscapementType);
@@ -270,7 +271,7 @@ namespace TestCases.HSSF.Record
             fontFormatting.IsStruckout = (true);
             Assert.IsTrue(fontFormatting.IsStruckout);
 
-            fontFormatting.UnderlineType = (FontFormatting.U_DOUBLE_ACCOUNTING);
+            fontFormatting.UnderlineType = FontUnderlineType.DOUBLE_ACCOUNTING;
             Assert.AreEqual(FontFormatting.U_DOUBLE_ACCOUNTING, fontFormatting.UnderlineType);
 
             fontFormatting.IsUnderlineTypeModified = (false);

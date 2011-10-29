@@ -40,7 +40,7 @@ namespace TestCases.SS.UserModel
         {
             //get default font and check against default value
             IWorkbook workbook = _testDataProvider.CreateWorkbook();
-            IFont fontFind = workbook.FindFont((short)FontBoldWeight.NORMAL, defaultColor, defaultSize, defaultName, false, false, (short)FontFormatting.SS_NONE, (byte)FontUnderlineType.NONE);
+            IFont fontFind = workbook.FindFont((short)FontBoldWeight.NORMAL, defaultColor, defaultSize, defaultName, false, false, FontFormatting.SS_NONE, (byte)FontUnderlineType.NONE);
             Assert.IsNotNull(fontFind);
 
             //get default font, then change 2 values and check against different values (height Changes)
@@ -52,7 +52,7 @@ namespace TestCases.SS.UserModel
             font.FontHeightInPoints = ((short)15);
             Assert.AreEqual(15 * 20, font.FontHeight);
             Assert.AreEqual(15, font.FontHeightInPoints);
-            fontFind = workbook.FindFont((short)FontBoldWeight.BOLD, defaultColor, (short)(15 * 20), defaultName, false, false, (short)FontFormatting.SS_NONE, (byte)FontUnderlineType.DOUBLE);
+            fontFind = workbook.FindFont((short)FontBoldWeight.BOLD, defaultColor, (short)(15 * 20), defaultName, false, false, FontFormatting.SS_NONE, (byte)FontUnderlineType.DOUBLE);
             Assert.IsNotNull(fontFind);
         }
         [TestMethod]

@@ -21,77 +21,77 @@ namespace NPOI.SS.UserModel
     /// <summary>
     /// The enumeration value indicating the line style of a border in a cell
     /// </summary>
-    public enum BorderStyle
+    public enum BorderStyle : short
     {
         /// <summary>
         /// No border
         /// </summary>
-        NONE,
+        NONE = 0x0,
 
         /// <summary>
         /// Thin border
         /// </summary>
-        THIN,
+        THIN = 0x1,
 
         /// <summary>
         /// Medium border
         /// </summary>
-        MEDIUM,
+        MEDIUM = 0x2,
 
         /// <summary>
         /// dash border
         /// </summary>
-        DASHED,
+        DASHED = 0x3,
 
         /// <summary>
         /// dot border
         /// </summary>
-        HAIR,
+        HAIR = 0x4,
 
         /// <summary>
         /// Thick border
         /// </summary>
-        THICK,
+        THICK = 0x5,
 
         /// <summary>
         /// double-line border
         /// </summary>
-        DOUBLE,
+        DOUBLE = 0x6,
 
         /// <summary>
         /// hair-line border
         /// </summary>
-        DOTTED,
+        DOTTED = 0x7,
 
         /// <summary>
         /// Medium dashed border
         /// </summary>
-        MEDIUM_DASHED,
+        MEDIUM_DASHED = 0x8,
 
         /// <summary>
         /// dash-dot border
         /// </summary>
-        DASH_DOT,
+        DASH_DOT = 0x9,
 
         /// <summary>
         /// medium dash-dot border
         /// </summary>
-        MEDIUM_DASH_DOT,
+        MEDIUM_DASH_DOT = 0xA,
 
         /// <summary>
         /// dash-dot-dot border
         /// </summary>
-        DASH_DOT_DOT,
+        DASH_DOT_DOT = 0xB,
 
         /// <summary>
         /// medium dash-dot-dot border
         /// </summary>
-        MEDIUM_DASH_DOT_DOTC,
+        MEDIUM_DASH_DOT_DOT = 0xC,
 
         /// <summary>
         /// slanted dash-dot border
         /// </summary>
-        SLANTED_DASH_DOT
+        SLANTED_DASH_DOT = 0xD
 
     }
 

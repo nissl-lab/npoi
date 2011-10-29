@@ -30,36 +30,6 @@ namespace NPOI.HSSF.UserModel
      */
     public class HSSFBorderFormatting
     {
-        /** No border */
-        public static short BORDER_NONE = BorderFormatting.BORDER_NONE;
-        /** Thin border */
-        public static short BORDER_THIN = BorderFormatting.BORDER_THIN;
-        /** Medium border */
-        public static short BORDER_MEDIUM = BorderFormatting.BORDER_MEDIUM;
-        /** dash border */
-        public static short BORDER_DASHED = BorderFormatting.BORDER_DASHED;
-        /** dot border */
-        public static short BORDER_HAIR = BorderFormatting.BORDER_HAIR;
-        /** Thick border */
-        public static short BORDER_THICK = BorderFormatting.BORDER_THICK;
-        /** double-line border */
-        public static short BORDER_DOUBLE = BorderFormatting.BORDER_DOUBLE;
-        /** hair-line border */
-        public static short BORDER_DOTTED = BorderFormatting.BORDER_DOTTED;
-        /** Medium dashed border */
-        public static short BORDER_MEDIUM_DASHED = BorderFormatting.BORDER_MEDIUM_DASHED;
-        /** dash-dot border */
-        public static short BORDER_DASH_DOT = BorderFormatting.BORDER_DASH_DOT;
-        /** medium dash-dot border */
-        public static short BORDER_MEDIUM_DASH_DOT = BorderFormatting.BORDER_MEDIUM_DASH_DOT;
-        /** dash-dot-dot border */
-        public static short BORDER_DASH_DOT_DOT = BorderFormatting.BORDER_DASH_DOT_DOT;
-        /** medium dash-dot-dot border */
-        public static short BORDER_MEDIUM_DASH_DOT_DOT = BorderFormatting.BORDER_MEDIUM_DASH_DOT_DOT;
-        /** slanted dash-dot border */
-        public static short BORDER_SLANTED_DASH_DOT = BorderFormatting.BORDER_SLANTED_DASH_DOT;
-
-
         private CFRuleRecord cfRuleRecord;
         private BorderFormatting borderFormatting;
 

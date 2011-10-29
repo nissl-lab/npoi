@@ -20,6 +20,7 @@ namespace NPOI.HSSF.UserModel
     using System;
     using NPOI.HSSF.Record;
     using NPOI.HSSF.Record.CF;
+    using NPOI.SS.UserModel;
 
     /**
      * High level representation for Font Formatting component
@@ -30,23 +31,6 @@ namespace NPOI.HSSF.UserModel
      */
     public class HSSFFontFormatting
     {
-        /** Escapement type - None */
-        public const short SS_NONE = FontFormatting.SS_NONE;
-        /** Escapement type - Superscript */
-        public const short SS_SUPER = FontFormatting.SS_SUPER;
-        /** Escapement type - Subscript */
-        public const short SS_SUB = FontFormatting.SS_SUB;
-
-        /** Underline type - None */
-        public const byte U_NONE = FontFormatting.U_NONE;
-        /** Underline type - Single */
-        public const byte U_SINGLE = FontFormatting.U_SINGLE;
-        /** Underline type - Double */
-        public const byte U_DOUBLE = FontFormatting.U_DOUBLE;
-        /**  Underline type - Single Accounting */
-        public const byte U_SINGLE_ACCOUNTING = FontFormatting.U_SINGLE_ACCOUNTING;
-        /** Underline type - Double Accounting */
-        public const byte U_DOUBLE_ACCOUNTING = FontFormatting.U_DOUBLE_ACCOUNTING;
 
         private FontFormatting fontFormatting;
 
@@ -68,24 +52,24 @@ namespace NPOI.HSSF.UserModel
          * @see #SS_SUPER
          * @see #SS_SUB
          */
-        public short EscapementType
+        public FontSuperScript EscapementType
         {
             get
             {
-                return fontFormatting.EscapementType;
+                return (FontSuperScript)fontFormatting.EscapementType;
             }
             set
             {
                 switch (value)
                 {
-                    case HSSFFontFormatting.SS_SUB:
-                    case HSSFFontFormatting.SS_SUPER:
-                        fontFormatting.EscapementType=(value);
-                        fontFormatting.IsEscapementTypeModified=(true);
+                    case FontSuperScript.SUB:
+                    case FontSuperScript.SUPER:
+                        fontFormatting.EscapementType = value;
+                        fontFormatting.IsEscapementTypeModified = true;
                         break;
-                    case HSSFFontFormatting.SS_NONE:
-                        fontFormatting.EscapementType=(value);
-                        fontFormatting.IsEscapementTypeModified=(false);
+                    case FontSuperScript.NONE:
+                        fontFormatting.EscapementType = value;
+                        fontFormatting.IsEscapementTypeModified = false;
                         break;
                 }
             }
@@ -146,25 +130,25 @@ namespace NPOI.HSSF.UserModel
          * @see #U_SINGLE_ACCOUNTING
          * @see #U_DOUBLE_ACCOUNTING
          */
-        public short UnderlineType
+        public FontUnderlineType UnderlineType
         {
             get
             {
-                return fontFormatting.UnderlineType;
+                return (FontUnderlineType)fontFormatting.UnderlineType;
             }
             set
             {
                 switch (value)
                 {
-                    case HSSFFontFormatting.U_SINGLE:
-                    case HSSFFontFormatting.U_DOUBLE:
-                    case HSSFFontFormatting.U_SINGLE_ACCOUNTING:
-                    case HSSFFontFormatting.U_DOUBLE_ACCOUNTING:
+                    case FontUnderlineType.SINGLE:
+                    case FontUnderlineType.DOUBLE:
+                    case FontUnderlineType.SINGLE_ACCOUNTING:
+                    case FontUnderlineType.DOUBLE_ACCOUNTING:
                         fontFormatting.UnderlineType = value;
                         IsUnderlineTypeModified = true;
                         break;
 
-                    case HSSFFontFormatting.U_NONE:
+                    case FontUnderlineType.NONE:
                         fontFormatting.UnderlineType = value;
                         IsUnderlineTypeModified = false;
                         break;

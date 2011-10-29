@@ -27,7 +27,7 @@ namespace NPOI.SS.UserModel
  */
 public class FontCharset {
 
-     public static FontCharset ANSI = new FontCharset(0);
+    public static FontCharset ANSI = new FontCharset(0);
     public static FontCharset DEFAULT = new FontCharset(1);
     public static FontCharset SYMBOL = new FontCharset(2);
     public static FontCharset MAC = new FontCharset(77);
