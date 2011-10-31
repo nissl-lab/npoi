@@ -22,65 +22,65 @@ namespace NPOI.SS.UserModel
      * The enumeration value indicating the style of fill pattern being used for a cell format.
      * 
      */
-    public enum FillPatternType
+    public enum FillPatternType : short
     {
 
         /**  No background */
-        NO_FILL,
+        NO_FILL = 0,
 
         /**  Solidly Filled */
-        SOLID_FOREGROUND,
+        SOLID_FOREGROUND = 1,
 
         /**  Small fine dots */
-        FINE_DOTS,
+        FINE_DOTS = 2,
 
         /**  Wide dots */
-        ALT_BARS,
+        ALT_BARS = 3,
 
         /**  Sparse dots */
-        SPARSE_DOTS,
+        SPARSE_DOTS = 4,
 
         /**  Thick horizontal bands */
-        THICK_HORZ_BANDS,
+        THICK_HORZ_BANDS = 5,
 
         /**  Thick vertical bands */
-        THICK_VERT_BANDS,
+        THICK_VERT_BANDS = 6,
 
         /**  Thick backward facing diagonals */
-        THICK_BACKWARD_DIAG,
+        THICK_BACKWARD_DIAG = 7,
 
         /**  Thick forward facing diagonals */
-        THICK_FORWARD_DIAG,
+        THICK_FORWARD_DIAG = 8,
 
         /**  Large spots */
-        BIG_SPOTS,
+        BIG_SPOTS = 9,
 
         /**  Brick-like layout */
-        BRICKS,
+        BRICKS = 10,
 
         /**  Thin horizontal bands */
-        THIN_HORZ_BANDS,
+        THIN_HORZ_BANDS = 11,
 
         /**  Thin vertical bands */
-        THIN_VERT_BANDS,
+        THIN_VERT_BANDS = 12,
 
         /**  Thin backward diagonal */
-        THIN_BACKWARD_DIAG,
+        THIN_BACKWARD_DIAG = 13,
 
         /**  Thin forward diagonal */
-        THIN_FORWARD_DIAG,
+        THIN_FORWARD_DIAG = 14,
 
         /**  Squares */
-        SQUARES,
+        SQUARES = 15,
 
         /**  Diamonds */
-        DIAMONDS,
+        DIAMONDS = 16,
 
         /**  Less Dots */
-        LESS_DOTS,
+        LESS_DOTS = 17,
 
         /**  Least Dots */
-        LEAST_DOTS
+        LEAST_DOTS = 18
 
     }
 }
