@@ -65,6 +65,8 @@ namespace NPOI.SS.UserModel
         private FontUnderline(int val)
         {
             value = val;
+            if (_table == null)
+                _table = new FontUnderline[6];
             _table[val] = this;
         }
 

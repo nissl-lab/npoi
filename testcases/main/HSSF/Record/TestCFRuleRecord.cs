@@ -197,11 +197,11 @@ namespace TestCases.HSSF.Record
             Assert.IsFalse(fontFormatting.IsShadowOn);
             Assert.IsFalse(fontFormatting.IsStruckout);
 
-            Assert.AreEqual(0, fontFormatting.EscapementType);
+            Assert.AreEqual(FontSuperScript.NONE, fontFormatting.EscapementType);
             Assert.AreEqual(-1, fontFormatting.FontColorIndex);
             Assert.AreEqual(-1, fontFormatting.FontHeight);
             Assert.AreEqual(0, fontFormatting.FontWeight);
-            Assert.AreEqual(0, fontFormatting.UnderlineType);
+            Assert.AreEqual(FontUnderlineType.NONE, fontFormatting.UnderlineType);
 
             fontFormatting.IsBold = (true);
             Assert.IsTrue(fontFormatting.IsBold);
@@ -209,11 +209,11 @@ namespace TestCases.HSSF.Record
             Assert.IsFalse(fontFormatting.IsBold);
 
             fontFormatting.EscapementType = FontSuperScript.SUB;
-            Assert.AreEqual(FontFormatting.SS_SUB, fontFormatting.EscapementType);
+            Assert.AreEqual(FontSuperScript.SUB, fontFormatting.EscapementType);
             fontFormatting.EscapementType = FontSuperScript.SUPER;
-            Assert.AreEqual(FontFormatting.SS_SUPER, fontFormatting.EscapementType);
-            fontFormatting.EscapementType = (FontFormatting.SS_NONE);
-            Assert.AreEqual(FontFormatting.SS_NONE, fontFormatting.EscapementType);
+            Assert.AreEqual(FontSuperScript.SUPER, fontFormatting.EscapementType);
+            fontFormatting.EscapementType = FontSuperScript.NONE;
+            Assert.AreEqual(FontSuperScript.NONE, fontFormatting.EscapementType);
 
             fontFormatting.IsEscapementTypeModified = (false);
             Assert.IsFalse(fontFormatting.IsEscapementTypeModified);
@@ -272,7 +272,7 @@ namespace TestCases.HSSF.Record
             Assert.IsTrue(fontFormatting.IsStruckout);
 
             fontFormatting.UnderlineType = FontUnderlineType.DOUBLE_ACCOUNTING;
-            Assert.AreEqual(FontFormatting.U_DOUBLE_ACCOUNTING, fontFormatting.UnderlineType);
+            Assert.AreEqual(FontUnderlineType.DOUBLE_ACCOUNTING, fontFormatting.UnderlineType);
 
             fontFormatting.IsUnderlineTypeModified = (false);
             Assert.IsFalse(fontFormatting.IsUnderlineTypeModified);
