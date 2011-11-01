@@ -31,6 +31,7 @@ using System.Collections.Generic;
 using System.Collections;
 using System.Text;
 using System.Reflection;
+using System.Configuration;
 
 namespace NPOI.Util
 {
@@ -86,7 +87,7 @@ namespace NPOI.Util
             //  between class loading and first use
             if(_loggerClassName == null) {
         	    try {
-        		    _loggerClassName = System.Configuration.ConfigurationSettings.AppSettings["loggername"];
+        		    _loggerClassName = ConfigurationManager.AppSettings["loggername"];
         	    } catch(Exception) {}
             	
         	    // Use the default logger if none specified,

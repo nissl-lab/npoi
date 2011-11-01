@@ -43,7 +43,7 @@ namespace NPOI.SS.Formula
             return _cce;
         }
 
-        public String ToString()
+        public override String ToString()
         {
             StringBuilder sb = new StringBuilder(64);
             sb.Append(GetType().Name).Append(" [");

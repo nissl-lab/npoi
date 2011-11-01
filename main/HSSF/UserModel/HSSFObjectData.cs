@@ -78,8 +78,8 @@ namespace NPOI.HSSF.UserModel
         {
             EmbeddedObjectRefSubRecord subRecord = FindObjectRecord();
 
-            int streamId = ((EmbeddedObjectRefSubRecord)subRecord).StreamId;
-            String streamName = "MBD" + HexDump.ToHex(streamId);
+            int? streamId = ((EmbeddedObjectRefSubRecord)subRecord).StreamId;
+            String streamName = "MBD" + HexDump.ToHex((int)streamId);
 
             Entry entry = poifs.Root.GetEntry(streamName);
             if (entry is DirectoryEntry)
@@ -112,7 +112,7 @@ namespace NPOI.HSSF.UserModel
             EmbeddedObjectRefSubRecord subRecord = FindObjectRecord();
 
             // 'stream id' field tells you
-            int streamId = subRecord.StreamId;
+            int? streamId = subRecord.StreamId;
             return streamId != null && streamId != 0;
         }
 

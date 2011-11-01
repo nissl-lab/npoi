@@ -133,7 +133,7 @@ namespace NPOI.HSSF.Extractor
                         text = text + "\n";
                     }
                 }
-                catch (IOException e)
+                catch (IOException)
                 {
                     throw;
                 }

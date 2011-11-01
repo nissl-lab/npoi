@@ -26,23 +26,6 @@ namespace NPOI.SS.UserModel
     /// </summary>
     public interface IFooter : IHeaderFooter
     {
-        /// <summary>
-        /// Get the left side of the footer.
-        /// </summary>
-        /// <value>The string representing the left side.</value>
-        String Left { get; set; }
-
-        /// <summary>
-        /// Get the center of the footer.
-        /// </summary>
-        /// <value>The string representing the center.</value>
-        String Center { get; set; }
-
-        /// <summary>
-        /// Get the right side of the footer.
-        /// </summary>
-        /// <value>The string representing the right side.</value>
-        String Right { get; set; }
     }
 
 }

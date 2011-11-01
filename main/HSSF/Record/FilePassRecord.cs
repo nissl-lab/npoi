@@ -166,7 +166,7 @@ namespace NPOI.HSSF.Record
             get { return sid; }
         }
 
-        public Object Clone()
+        public override Object Clone()
         {
             // currently immutable
             return this;

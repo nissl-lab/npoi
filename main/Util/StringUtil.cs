@@ -177,7 +177,7 @@ namespace NPOI.Util
             {
                 bytes = Encoding.GetEncoding(ENCODING).GetBytes(input);
             }
-            catch (EncoderFallbackException e)
+            catch (EncoderFallbackException)
             {
                 throw;
             }
@@ -205,7 +205,7 @@ namespace NPOI.Util
             {
                 bytes = Encoding.GetEncoding("UTF-16LE").GetBytes(input);
             }
-            catch (EncoderFallbackException e)
+            catch (EncoderFallbackException)
             {
                 throw;
             }

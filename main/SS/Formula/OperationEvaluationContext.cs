@@ -78,7 +78,7 @@
                 {
                     targetEvaluator = _bookEvaluator.GetOtherWorkbookEvaluator(workbookName);
                 }
-                catch (WorkbookNotFoundException e)
+                catch (WorkbookNotFoundException)
                 {
                     throw;
                 }
@@ -319,7 +319,7 @@
                 }
                 return ErrorEval.REF_INVALID;
             }
-            catch (WorkbookNotFoundException wnfe)
+            catch (WorkbookNotFoundException)
             {
                 return ErrorEval.REF_INVALID;
             }

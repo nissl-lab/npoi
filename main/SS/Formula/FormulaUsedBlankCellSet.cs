@@ -183,7 +183,7 @@ namespace NPOI.SS.Formula
                 _lastRowIndex = rowIndex;
                 return true;
             }
-            public String ToString()
+            public override String ToString()
             {
                 StringBuilder sb = new StringBuilder(64);
                 CellReference crA = new CellReference(_firstRowIndex, _firstColumnIndex, false, false);

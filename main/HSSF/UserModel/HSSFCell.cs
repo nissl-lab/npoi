@@ -496,7 +496,6 @@ namespace NPOI.HSSF.UserModel
                     break;
                 default:
                     throw new InvalidDataException("Unexpected cell type (" + cellType + ")");
-                    break;
             }
             FormulaRecordAggregate fra = ((FormulaRecordAggregate)record);
             FormulaRecord fr = fra.FormulaRecord;
@@ -722,7 +721,6 @@ namespace NPOI.HSSF.UserModel
                         break;
                     default:
                         throw TypeMismatch(NPOI.SS.UserModel.CellType.NUMERIC, cellType, false);
-                        break;
                 }
                 FormulaRecord fr = ((FormulaRecordAggregate)record).FormulaRecord;
                 CheckFormulaCachedValueType(NPOI.SS.UserModel.CellType.NUMERIC, fr);

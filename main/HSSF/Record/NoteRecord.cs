@@ -56,7 +56,7 @@ using NPOI.Util.IO;
  * The documentation is not clear about how padding should work.  In any case
  * Excel(2007) does something different.
  */
-        private Byte field_7_padding;
+        private Byte? field_7_padding;
         /**
          * Construct a new <c>NoteRecord</c> and
          * Fill its data with the default values
@@ -122,7 +122,7 @@ using NPOI.Util.IO;
 			    StringUtil.PutCompressedUnicode(field_6_author, out1);
 		    }
 		    if (field_7_padding != null) {
-			    out1.WriteByte(field_7_padding);
+			    out1.WriteByte(Convert.ToInt32(field_7_padding));
 		    }
 
         }

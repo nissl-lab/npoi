@@ -564,12 +564,13 @@ namespace NPOI.HSSF.Model
             }
         }
 
+
         /// <summary>
         /// Gets the merged region at.
         /// </summary>
         /// <param name="index">The index.</param>
         /// <returns></returns>
-        public NPOI.SS.Util.CellRangeAddress GetMergedRegionAt(int index)
+        public CellRangeAddress GetMergedRegionAt(int index)
         {
             //safety checks
             MergedCellsTable mrt = MergedRecords;

@@ -7,7 +7,6 @@ namespace NPOI.Util
 
     public class TempFile
     {
-        static DirectoryInfo dir;
         static Random rnd = new Random();
 
         /**

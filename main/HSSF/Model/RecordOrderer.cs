@@ -205,6 +205,10 @@ namespace NPOI.HSSF.Model
                 {
                     return i + 1;
                 }
+                if (rb is DataValidityTable)
+                {
+                    continue;
+                }
                 Record rec = (Record)rb;
                 switch (rec.Sid)
                 {
@@ -216,7 +220,10 @@ namespace NPOI.HSSF.Model
                     // MergedCellsTable usually here 
                     case UnknownRecord.LABELRANGES_015F:
                     case UnknownRecord.PHONETICPR_00EF:
+                        // ConditionalFormattingTable goes here
                         return i + 1;
+                    // HyperlinkTable (not aggregated by POI yet)
+                    // DataValidityTable
                 }
             }
             throw new InvalidOperationException("Did not Find Window2 record");

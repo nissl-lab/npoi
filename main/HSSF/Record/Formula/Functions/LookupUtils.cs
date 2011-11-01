@@ -203,7 +203,7 @@ namespace NPOI.HSSF.Record.Formula.Functions
 		    ValueEval veRowColIndexArg;
 		    try {
 			    veRowColIndexArg = OperandResolver.GetSingleValue(rowColIndexArg, srcCellRow, (short)srcCellCol);
-		    } catch (EvaluationException e) {
+		    } catch (EvaluationException) {
 			    // All errors get translated to #REF!
 			    throw EvaluationException.InvalidRef();
 		    }

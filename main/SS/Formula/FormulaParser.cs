@@ -1499,7 +1499,7 @@ namespace NPOI.SS.Formula
                 {
                     i = Int32.Parse(rep.Replace("$", ""));
                 }
-                catch (FormatException e)
+                catch (FormatException)
                 {
                     return null;
                 }
@@ -2026,10 +2026,10 @@ namespace NPOI.SS.Formula
                         result = new ParseNode(UnionPtg.instance, result, other);
                         continue;
                 }
-                //if (hasUnions)
-                //{
-                //    return AugmentWithMemPtg(result);
-                //}
+                if (hasUnions)
+                {
+                    return AugmentWithMemPtg(result);
+                }
                 return result;
             }
         }

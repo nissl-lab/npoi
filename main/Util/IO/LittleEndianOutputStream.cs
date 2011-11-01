@@ -44,7 +44,7 @@ namespace NPOI.Util.IO
             {
                 out1.WriteByte((byte)v);
             }
-            catch (IOException e)
+            catch (IOException)
             {
                 throw;
             }
@@ -68,7 +68,7 @@ namespace NPOI.Util.IO
                 out1.WriteByte((byte)b2);
                 out1.WriteByte((byte)b3);
             }
-            catch (IOException e)
+            catch (IOException)
             {
                 throw;
             }

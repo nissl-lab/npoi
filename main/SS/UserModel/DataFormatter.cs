@@ -343,7 +343,7 @@ namespace NPOI.SS.UserModel
             {
                 return new SimpleDateFormat(formatStr);
             }
-            catch (ArgumentException iae)
+            catch (ArgumentException)
             {
 
                 // the pattern could not be Parsed correctly,
@@ -396,7 +396,7 @@ namespace NPOI.SS.UserModel
             {
                 return new DecimalFormat(sb.ToString());
             }
-            catch (ArgumentException iae)
+            catch (ArgumentException)
             {
 
                 // the pattern could not be Parsed correctly,

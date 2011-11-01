@@ -94,7 +94,7 @@ namespace NPOI.HSSF.Record.Chart
             buffer.Append("[/STARTBLOCK]\n");
             return buffer.ToString();
         }
-        public ChartStartBlockRecord Clone()
+        public override object Clone()
         {
             ChartStartBlockRecord record = new ChartStartBlockRecord();
             record.rt = rt;

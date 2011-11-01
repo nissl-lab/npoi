@@ -353,11 +353,11 @@ namespace NPOI.HSSF.Record
          *
          * @return the data stream ID. Possibly <c>null</c>
          */
-        public int StreamId
+        public int? StreamId
         {
             get
             {
-                return Convert.ToInt32(field_5_stream_id);
+                return field_5_stream_id;
             }
         }
 

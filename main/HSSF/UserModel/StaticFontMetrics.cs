@@ -61,9 +61,9 @@ namespace NPOI.HSSF.UserModel
                     String propFileName = null;
                     try
                     {
-                        propFileName = ConfigurationSettings.AppSettings["font.metrics.filename"];
+                        propFileName = ConfigurationManager.AppSettings["font.metrics.filename"];
                     }
-                    catch(Exception e) { }
+                    catch(Exception) { }
 
                     if (propFileName != null)
                     {

@@ -160,7 +160,7 @@ namespace NPOI
                 // Find the entry, and Get an input stream for it
                 dis = directory.CreatePOIFSDocumentReader(SetName);
             }
-            catch (IOException ie)
+            catch (IOException)
             {
                 // Oh well, doesn't exist
                 //logger.Log(POILogger.WARN, "Error Getting property Set with name " + SetName + "\n" + ie);
@@ -173,12 +173,12 @@ namespace NPOI
                 PropertySet Set = PropertySetFactory.Create(dis);
                 return Set;
             }
-            catch (IOException ie)
+            catch (IOException)
             {
                 // Must be corrupt or something like that
                 //logger.Log(POILogger.WARN, "Error creating property Set with name " + SetName + "\n" + ie);
             }
-            catch (HPSFException he)
+            catch (HPSFException)
             {
                 // Oh well, doesn't exist
                 //logger.Log(POILogger.WARN, "Error creating property Set with name " + SetName + "\n" + he);

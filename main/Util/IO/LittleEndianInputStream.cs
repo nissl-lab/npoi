@@ -52,7 +52,7 @@ namespace NPOI.Util.IO
             {
                 ch = in1.ReadByte();
             }
-            catch (IOException e)
+            catch (IOException)
             {
                 throw;
             }
@@ -76,7 +76,7 @@ namespace NPOI.Util.IO
                 ch3 = in1.ReadByte();
                 ch4 = in1.ReadByte();
             }
-            catch (IOException e)
+            catch (IOException)
             {
                 throw;
             }
@@ -101,7 +101,7 @@ namespace NPOI.Util.IO
 			b5 = in1.ReadByte();
 			b6 = in1.ReadByte();
 			b7 = in1.ReadByte();
-		} catch (IOException e) {
+		} catch (IOException) {
 			throw;
 		}
 		CheckEOF(b0 | b1 | b2 | b3 | b4 | b5 | b6 | b7);
@@ -124,7 +124,7 @@ namespace NPOI.Util.IO
 		try {
 			ch1 = in1.ReadByte();
 			ch2 = in1.ReadByte();
-		} catch (IOException e) {
+		} catch (IOException) {
 			throw;
 		}
 		CheckEOF(ch1 | ch2);
@@ -153,7 +153,7 @@ namespace NPOI.Util.IO
                 {
                     ch = (byte)in1.ReadByte();
                 }
-                catch (IOException e)
+                catch (IOException)
                 {
                     throw;
                 }

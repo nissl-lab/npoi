@@ -26,7 +26,7 @@ namespace NPOI.HSSF.Record.Formula
      */
     public class AreaNPtg : Area2DPtgBase
     {
-        public new const short sid = 0x2D;
+        public const short sid = 0x2D;
 
         public AreaNPtg(LittleEndianInput in1)
             : base(in1)
