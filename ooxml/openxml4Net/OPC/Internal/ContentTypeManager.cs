@@ -418,9 +418,9 @@ namespace NPOI.OpenXml4Net.OPC.Internal
         {
             XmlDocument xmlOutDoc = new XmlDocument();
             XmlNamespaceManager xmlnm = new XmlNamespaceManager(xmlOutDoc.NameTable);
-            xmlnm.AddNamespace("", TYPES_NAMESPACE_URI);
+            xmlnm.AddNamespace("x", TYPES_NAMESPACE_URI);
             XmlElement typesElem = xmlOutDoc.CreateElement(TYPES_TAG_NAME, TYPES_NAMESPACE_URI);
-            xmlOutDoc.DocumentElement.PrependChild(typesElem);
+            xmlOutDoc.AppendChild(typesElem);
 
             // Adding default types
             IEnumerator<KeyValuePair<string, string>> contentTypes = defaultContentType.GetEnumerator();
@@ -459,7 +459,7 @@ namespace NPOI.OpenXml4Net.OPC.Internal
         private void AppendSpecificTypes(XmlDocument xmldoc, XmlElement root,
                 KeyValuePair<PackagePartName, String> entry)
         {
-            XmlElement elem = xmldoc.CreateElement(OVERRIDE_TAG_NAME);
+            XmlElement elem = xmldoc.CreateElement(OVERRIDE_TAG_NAME, PackageNamespaces.CONTENT_TYPES);
             root.AppendChild(elem);
             elem.SetAttribute(
                     PART_NAME_ATTRIBUTE_NAME,
@@ -479,7 +479,7 @@ namespace NPOI.OpenXml4Net.OPC.Internal
          */
         private void AppendDefaultType(XmlDocument xmldoc, XmlElement root, KeyValuePair<String, String> entry)
         {
-            XmlElement elem = xmldoc.CreateElement(DEFAULT_TAG_NAME);
+            XmlElement elem = xmldoc.CreateElement(DEFAULT_TAG_NAME,PackageNamespaces.CONTENT_TYPES);
             root.AppendChild(elem);
             elem.SetAttribute(EXTENSION_ATTRIBUTE_NAME, entry.Key);
             elem.SetAttribute(CONTENT_TYPE_ATTRIBUTE_NAME, entry.Value);

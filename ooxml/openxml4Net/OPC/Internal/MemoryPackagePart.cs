@@ -13,7 +13,7 @@ namespace NPOI.OpenXml4Net.OPC.Internal
         /**
  * Storage for the part data.
  */
-        protected byte[] data;
+        internal byte[] data;
 
         /**
          * Size of data.
@@ -60,7 +60,7 @@ namespace NPOI.OpenXml4Net.OPC.Internal
 
         }
 
-        protected override Stream GetStreamImpl()
+        protected override Stream GetInputStreamImpl()
         {
             // If this part has been created from scratch and/or the data buffer is
             // not
@@ -71,6 +71,12 @@ namespace NPOI.OpenXml4Net.OPC.Internal
             }
             return new MemoryStream(data);
         }
+
+        protected override Stream GetOutputStreamImpl()
+        {
+            return new MemoryPackagePartOutputStream(this);
+        }
+
 
         public void Clear()
         {

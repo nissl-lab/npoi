@@ -33,11 +33,13 @@
   <ItemGroup>
     <Reference Include="ICSharpCode.SharpZipLib, Version=0.86.0.518, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\solution\Lib\ICSharpCode.SharpZipLib.dll</HintPath>
+      <HintPath>..\..\solution\Lib\ICSharpCode.SharpZipLib.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="NPOI, Version=1.2.4.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\solution\Lib\NPOI.dll</HintPath>
+      <HintPath>..\..\solution\Lib\NPOI.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -72,6 +74,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="OPC\Internal\MemoryPackagePart.cs" />
+    <Compile Include="OPC\Internal\MemoryPackagePartOutputStream.cs" />
     <Compile Include="OPC\Internal\PackagePropertiesPart.cs">
       <SubType>Code</SubType>
     </Compile>

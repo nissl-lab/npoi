@@ -79,12 +79,18 @@ public class ZipPackagePart : PackagePart {
 	 * @return Input stream of this part zip entry.
 	 */
 	
-	protected override Stream GetStreamImpl(){
+	protected override Stream GetInputStreamImpl()
+    {
 		// We use the getInputStream() method from java.util.zip.ZipFile
 		// class which return an InputStream to this part zip entry.
 		return ((ZipPackage) container).ZipArchive
                 .GetInputStream(zipEntry);
 	}
+
+    protected override Stream GetOutputStreamImpl()
+    {
+        return null;
+    }
 
 	
 	public override bool Save(Stream os){

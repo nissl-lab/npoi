@@ -34,7 +34,7 @@ public class ZipPackagePropertiesMarshaller:PackagePropertiesMarshaller
             // Document
             StreamHelper.SaveXmlInStream(xmlDoc, out1);
 
-            zos.Close();
+            zos.CloseEntry();
         }
         catch (IOException e)
         {

@@ -566,9 +566,14 @@ public class PackagePropertiesPart:PackagePart,PackageProperties
 	}
 
 	
-	protected override Stream GetStreamImpl() {
+	protected override Stream GetInputStreamImpl() {
 		throw new InvalidOperationException("Operation not authorized");
 	}
+
+    protected override Stream GetOutputStreamImpl()
+    {
+        throw new InvalidOperationException("Operation not authorized");
+    }
 
 	
 	public override bool Save(Stream zos) {

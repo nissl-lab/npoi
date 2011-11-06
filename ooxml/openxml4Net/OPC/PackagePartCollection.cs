@@ -33,7 +33,7 @@ namespace NPOI.OpenXml4Net.OPC
          */
         public PackagePart Put(PackagePartName partName, PackagePart part)
         {
-            String[] segments = partName.URI.AbsolutePath.Split(
+            String[] segments = partName.URI.OriginalString.Split(
                     PackagingURIHelper.FORWARD_SLASH_CHAR);
             StringBuilder concatSeg = new StringBuilder();
             foreach (String seg in segments)

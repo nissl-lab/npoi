@@ -152,7 +152,7 @@ namespace NPOI.OpenXml4Net.OPC
             if (partUri == null)
                 throw new ArgumentException("partUri");
 
-            return Regex.IsMatch(partUri.AbsolutePath,
+            return Regex.IsMatch(partUri.OriginalString,
                     ".*" + RELATIONSHIP_PART_SEGMENT_NAME + ".*"
                             + RELATIONSHIP_PART_EXTENSION_NAME + "$");
         }
@@ -196,7 +196,7 @@ namespace NPOI.OpenXml4Net.OPC
         {
             if (uri != null)
             {
-                String path = uri.AbsolutePath;
+                String path = uri.OriginalString;
                 int len = path.Length;
                 int num2 = len;
                 while (--num2 >= 0)
@@ -231,7 +231,7 @@ namespace NPOI.OpenXml4Net.OPC
             Uri retUri = null;
             try
             {
-                retUri = new Uri(Combine(prefix.AbsolutePath, suffix.AbsolutePath));
+                retUri = new Uri(Combine(prefix.OriginalString, suffix.OriginalString));
             }
             catch (UriFormatException e)
             {
@@ -272,8 +272,8 @@ namespace NPOI.OpenXml4Net.OPC
         public static Uri RelativizeURI(Uri sourceURI, Uri targetURI)
         {
             StringBuilder retVal = new StringBuilder();
-            String[] segmentsSource = sourceURI.AbsolutePath.Split(new char[]{'/'});
-            String[] segmentsTarget = targetURI.AbsolutePath.Split(new char[] { '/' });
+            String[] segmentsSource = sourceURI.OriginalString.Split(new char[] { '/' });
+            String[] segmentsTarget = targetURI.OriginalString.Split(new char[] { '/' });
 
             // If the source Uri is empty
             if (segmentsSource.Length == 0)
@@ -413,7 +413,7 @@ namespace NPOI.OpenXml4Net.OPC
                         + targetUri);
             }
 
-            return new Uri(sourcePartUri,targetUri.ToString());
+            return new Uri(sourcePartUri.ToString()+targetUri.ToString(),UriKind.RelativeOrAbsolute);
         }
 
         /**
@@ -424,7 +424,7 @@ namespace NPOI.OpenXml4Net.OPC
             Uri retUri = null;
             try
             {
-                retUri = new Uri(path);
+                retUri = new Uri(path,UriKind.RelativeOrAbsolute);
             }
             catch (UriFormatException e)
             {
@@ -454,7 +454,7 @@ namespace NPOI.OpenXml4Net.OPC
             if (Uri.Compare(relationshipPartUri, PACKAGE_RELATIONSHIPS_ROOT_URI, UriComponents.AbsoluteUri, UriFormat.SafeUnescaped, StringComparison.InvariantCultureIgnoreCase) == 0)
                 return PACKAGE_ROOT_URI;
 
-            String filename = relationshipPartUri.AbsolutePath;
+            String filename = relationshipPartUri.OriginalString;
             String filenameWithoutExtension = GetFilenameWithoutExtension(relationshipPartUri);
             filename = filename
                     .Substring(0, ((filename.Length - filenameWithoutExtension

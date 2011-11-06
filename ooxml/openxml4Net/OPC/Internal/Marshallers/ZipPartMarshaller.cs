@@ -5,6 +5,7 @@ using System.IO;
 using NPOI.OpenXml4Net.OPC;
 using System.Xml;
 using ICSharpCode.SharpZipLib.Zip;
+using NPOI.Util;
 
 namespace NPOI.OpenXml4Net.OPC.Internal.Marshallers
 {
@@ -15,7 +16,7 @@ namespace NPOI.OpenXml4Net.OPC.Internal.Marshallers
      */
     public class ZipPartMarshaller : PartMarshaller
     {
-        //private static POILogger logger = POILogFactory.getLogger(ZipPartMarshaller);
+        private static POILogger logger = POILogFactory.GetLogger(typeof(ZipPartMarshaller));
 
         /**
          * Save the specified part.
@@ -24,53 +25,60 @@ namespace NPOI.OpenXml4Net.OPC.Internal.Marshallers
          *             Throws if an internal exception is thrown.
          */
         public bool Marshall(PackagePart part, Stream os)
-	{
-		if (!(os is ZipOutputStream)) {
-			//logger.log(POILogger.ERROR,"Unexpected class " + os.getClass().getName());
-			throw new OpenXml4NetException("ZipOutputStream expected !");
-			// Normally should happen only in developement phase, so just throw
-			// exception
-		}
+        {
+            if (!(os is ZipOutputStream))
+            {
+                logger.Log(POILogger.ERROR,"Unexpected class " + os.GetType().Name);
+                throw new OpenXml4NetException("ZipOutputStream expected !");
+                // Normally should happen only in developement phase, so just throw
+                // exception
+            }
 
-		ZipOutputStream zos = (ZipOutputStream) os;
-		string name=ZipHelper
-				.GetZipItemNameFromOPCName(part.PartName.URI
-						.AbsolutePath);
-        ZipEntry partEntry = new ZipEntry(name);
-		try {
-			// Create next zip entry
-            zos.PutNextEntry(partEntry);
+            ZipOutputStream zos = (ZipOutputStream)os;
+            string name = ZipHelper
+                    .GetZipItemNameFromOPCName(part.PartName.URI
+                            .OriginalString);
+            ZipEntry partEntry = new ZipEntry(name);
+            try
+            {
+                // Create next zip entry
+                zos.PutNextEntry(partEntry);
 
-			// Saving data in the ZIP file
-			Stream ins = part.GetStream();
-			byte[] buff = new byte[ZipHelper.READ_WRITE_FILE_BUFFER_SIZE];
-            int totalRead=0;
-			while (ins.Length - ins.Position > 0) {
-				int resultRead = ins.Read(buff,totalRead,buff.Length);
-				if (resultRead == -1) {
-					// End of file reached
-					break;
-				}
-				zos.Write(buff, 0, resultRead);
-                totalRead += resultRead;
-			}
-			zos.Close();
-		} catch (IOException ioe) {
-			//logger.log(POILogger.ERROR,"Cannot write: " + part.getPartName() + ": in ZIP",ioe);
-			return false;
-		}
+                // Saving data in the ZIP file
+                Stream ins = part.GetInputStream();
+                byte[] buff = new byte[ZipHelper.READ_WRITE_FILE_BUFFER_SIZE];
+                int totalRead = 0;
+                while (ins.Length - ins.Position > 0)
+                {
+                    int resultRead = ins.Read(buff, 0, buff.Length);
+                    if (resultRead == -1)
+                    {
+                        // End of file reached
+                        break;
+                    }
+                    zos.Write(buff, 0, resultRead);
+                    totalRead += resultRead;
+                }
+                zos.CloseEntry();
+            }
+            catch (IOException ioe)
+            {
+                logger.Log(POILogger.ERROR, "Cannot write: " + part.PartName + ": in ZIP", ioe);
+                return false;
+            }
 
-		// Saving relationship part
-		if (part.HasRelationships) {
-			PackagePartName relationshipPartName = PackagingURIHelper
-                    .GetRelationshipPartName(part.PartName);
+            // Saving relationship part
+            if (part.HasRelationships)
+            {
+                PackagePartName relationshipPartName = PackagingURIHelper
+                        .GetRelationshipPartName(part.PartName);
 
-			MarshallRelationshipPart(part.Relationships,
-					relationshipPartName, zos);
+                MarshallRelationshipPart(part.Relationships,
+                        relationshipPartName, zos);
 
-		}
-		return true;
-	}
+            }
+            return true;
+        }
 
         /**
          * Save relationships into the part.
@@ -92,9 +100,9 @@ namespace NPOI.OpenXml4Net.OPC.Internal.Marshallers
             // make something like <Relationships
             // xmlns="http://schemas.openxmlformats.org/package/2006/relationships">
             System.Xml.XmlNamespaceManager xmlnsManager = new System.Xml.XmlNamespaceManager(xmlOutDoc.NameTable);
-            xmlnsManager.AddNamespace("",PackageNamespaces.RELATIONSHIPS);
-            
-            XmlNode root = xmlOutDoc.AppendChild(xmlOutDoc.CreateElement(PackageRelationship.RELATIONSHIPS_TAG_NAME,PackageNamespaces.RELATIONSHIPS));
+            xmlnsManager.AddNamespace("x", PackageNamespaces.RELATIONSHIPS);
+
+            XmlNode root = xmlOutDoc.AppendChild(xmlOutDoc.CreateElement(PackageRelationship.RELATIONSHIPS_TAG_NAME, PackageNamespaces.RELATIONSHIPS));
 
             // <Relationship
             // TargetMode="External"
@@ -108,10 +116,10 @@ namespace NPOI.OpenXml4Net.OPC.Internal.Marshallers
             foreach (PackageRelationship rel in rels)
             {
                 // the relationship element
-                XmlElement relElem = xmlOutDoc.CreateElement(PackageRelationship.RELATIONSHIP_TAG_NAME);
+                XmlElement relElem = xmlOutDoc.CreateElement(PackageRelationship.RELATIONSHIP_TAG_NAME,PackageNamespaces.RELATIONSHIPS);
 
                 // the relationship ID
-                relElem.SetAttribute(PackageRelationship.ID_ATTRIBUTE_NAME,rel.Id);
+                relElem.SetAttribute(PackageRelationship.ID_ATTRIBUTE_NAME, rel.Id);
 
                 // the relationship Type
                 relElem.SetAttribute(PackageRelationship.TYPE_ATTRIBUTE_NAME, rel
@@ -134,10 +142,11 @@ namespace NPOI.OpenXml4Net.OPC.Internal.Marshallers
                 else
                 {
                     targetValue = PackagingURIHelper.RelativizeURI(
-                            sourcePartURI, rel.TargetUri).AbsolutePath;
+                            sourcePartURI, rel.TargetUri).OriginalString;
                 }
                 relElem.SetAttribute(PackageRelationship.TARGET_ATTRIBUTE_NAME,
                         targetValue);
+                xmlOutDoc.DocumentElement.AppendChild(relElem);
             }
 
             xmlOutDoc.Normalize();
@@ -153,11 +162,11 @@ namespace NPOI.OpenXml4Net.OPC.Internal.Marshallers
                 zos.PutNextEntry(ctEntry);
 
                 StreamHelper.SaveXmlInStream(xmlOutDoc, zos);
-                zos.Close();
+                zos.CloseEntry();
             }
             catch (IOException e)
             {
-                //logger.log(POILogger.ERROR,"Cannot create zip entry " + relPartName, e);
+                logger.Log(POILogger.ERROR,"Cannot create zip entry " + relPartName, e);
                 return false;
             }
             return true; // success

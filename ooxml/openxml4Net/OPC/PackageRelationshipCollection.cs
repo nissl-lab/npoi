@@ -5,6 +5,7 @@ using System.Xml;
 using System.Xml.XPath;
 
 using NPOI.OpenXml4Net.Exceptions;
+using NPOI.Util;
 
 namespace NPOI.OpenXml4Net.OPC
 {
@@ -18,7 +19,7 @@ namespace NPOI.OpenXml4Net.OPC
     public class PackageRelationshipCollection : IEnumerator<PackageRelationship>
     {
 
-    //private static POILogger logger = POILogFactory.getLogger(PackageRelationshipCollection.class);
+    private static POILogger logger = POILogFactory.GetLogger(typeof(PackageRelationshipCollection));
 
 	/**
 	 * Package relationships ordered by ID.
@@ -54,10 +55,25 @@ namespace NPOI.OpenXml4Net.OPC
 	 * Constructor.
 	 */
 	public PackageRelationshipCollection() {
-		relationshipsByID = new SortedList<String, PackageRelationship>();
-		relationshipsByType = new SortedList<String, PackageRelationship>();
+		relationshipsByID = new SortedList<String, PackageRelationship>(new DuplicateComparer());
+        relationshipsByType = new SortedList<String, PackageRelationship>(new DuplicateComparer());
 	}
+    class DuplicateComparer : IComparer<string>
+    { 
 
+        #region IComparer<string> Members
+
+        public int Compare(string x, string y)
+        {
+            if (x.CompareTo(y) < 0)
+            {
+                return -1;
+            }
+            return 1;
+        }
+
+        #endregion
+}
 	/**
 	 * Copy constructor.
 	 * 
@@ -198,7 +214,7 @@ namespace NPOI.OpenXml4Net.OPC
 
 		PackageRelationship rel = new PackageRelationship(container,
 				sourcePart, targetUri, targetMode, relationshipType, id);
-		relationshipsByID.Add(rel.Id, rel);
+	    relationshipsByID.Add(rel.Id, rel);
 		relationshipsByType.Add(rel.RelationshipType, rel);
 		return rel;
 	}
@@ -283,23 +299,21 @@ namespace NPOI.OpenXml4Net.OPC
 	 */
 	private void ParseRelationshipsPart(PackagePart relPart)
 	{
-        //try {
-			//SAXReader reader = new SAXReader();
-			//logger.log(POILogger.DEBUG, "Parsing relationship: " + relPart.pathName);
-			XPathDocument xmlRelationshipsDoc = new XPathDocument(relPart.GetStream());
-
-			// Browse default types
-			//Element root = xmlRelationshipsDoc.getRootElement();
+        try {
+			logger.Log(POILogger.DEBUG, "Parsing relationship: " + relPart.PartName);
+            XPathDocument xmlRelationshipsDoc = new XPathDocument(relPart.GetInputStream());
 
 			// Check OPC compliance M4.1 rule
 			bool fCorePropertiesRelationship = false;
-            XPathNavigator xpathnav=xmlRelationshipsDoc.CreateNavigator();
-            XPathNodeIterator iterator = xpathnav.Select(PackageRelationship.RELATIONSHIP_TAG_NAME);
+            ///xmlRelationshipsDoc.ChildNodes.GetEnumerator();
+            XPathNavigator xpathnav = xmlRelationshipsDoc.CreateNavigator();
+            XmlNamespaceManager nsMgr = new XmlNamespaceManager(xpathnav.NameTable);
+                nsMgr.AddNamespace("x", PackageNamespaces.RELATIONSHIPS);
+
+            XPathNodeIterator iterator = xpathnav.Select("//x:"+PackageRelationship.RELATIONSHIP_TAG_NAME,nsMgr);
 
             while(iterator.MoveNext())
             {
-                iterator.Current.MoveToNext();
-				
 				// Relationship ID
                 String id = iterator.Current.GetAttribute(PackageRelationship.ID_ATTRIBUTE_NAME, xpathnav.NamespaceURI);
 				// Relationship type
@@ -334,26 +348,25 @@ namespace NPOI.OpenXml4Net.OPC
 							PackageRelationship.TARGET_ATTRIBUTE_NAME,xpathnav.NamespaceURI);
 
 					if (value.IndexOf("\\") != -1) {
-                        //logger
-                        //        .log(POILogger.INFO, "target contains \\ therefore not a valid URI"
-                        //                + value + " replaced by /");
+                        logger.Log(POILogger.INFO, "target contains \\ therefore not a valid URI"
+                                        + value + " replaced by /");
 						value = value.Replace("\\\\", "/");
 						// word can save external relationship with a \ instead
 						// of /
 					}
 
-					target = new Uri(value);
+					target = new Uri(value,UriKind.RelativeOrAbsolute);
 				} catch (UriFormatException e) {
-                    //logger.log(POILogger.ERROR, "Cannot convert " + value
-                    //        + " in a valid relationship URI-> ignored", e);
+                    logger.Log(POILogger.ERROR, "Cannot convert " + value
+                            + " in a valid relationship URI-> ignored", e);
 					continue;
 				}
 				AddRelationship(target, targetMode, type, id);
 			}
-        //} catch (Exception e) {
-        //    logger.log(POILogger.ERROR, e);
-        //    throw new InvalidFormatException(e.getMessage());
-        //}
+        } catch (Exception e) {
+            logger.Log(POILogger.ERROR, e);
+            throw new InvalidFormatException(e.Message);
+        }
 	}
 
 	/**
@@ -445,8 +458,8 @@ namespace NPOI.OpenXml4Net.OPC
 
     void IDisposable.Dispose()
     {
-        relationshipsByID=null;
-        relationshipsByType = null;
+        //relationshipsByID=null;
+        //relationshipsByType = null;
     }
 
     #endregion

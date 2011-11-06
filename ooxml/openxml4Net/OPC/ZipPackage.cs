@@ -9,6 +9,7 @@ using NPOI.OpenXml4Net.Exceptions;
 using Util=NPOI.OpenXml4Net.Util;
 using NPOI.OpenXml4Net.Util;
 using ICSharpCode.SharpZipLib.Zip;
+using NPOI.Util;
 
 namespace NPOI.OpenXml4Net.OPC
 {
@@ -20,7 +21,7 @@ namespace NPOI.OpenXml4Net.OPC
     public class ZipPackage : Package
     {
 
-        //private static POILogger logger = POILogFactory.getLogger(ZipPackage.class);
+        private static POILogger logger = POILogFactory.GetLogger(typeof(ZipPackage));
 
         /**
          * Zip archive, as either a file on disk,
@@ -296,10 +297,10 @@ namespace NPOI.OpenXml4Net.OPC
                         // temporary file
                         File.Delete(tempfilePath);
                         
-                            //logger
-                            //        .log(POILogger.WARN, "The temporary file: '"
-                            //                + targetFile.getAbsolutePath()
-                            //                + "' cannot be deleted ! Make sure that no other application use it.");
+                            logger
+                                    .Log(POILogger.WARN, "The temporary file: '"
+                                            + tempfilePath
+                                            + "' cannot be deleted ! Make sure that no other application use it.");
                         
                     }
                 }
@@ -381,8 +382,8 @@ namespace NPOI.OpenXml4Net.OPC
             ThrowExceptionIfReadOnly();
             ZipOutputStream zos = null;
 
-            try
-            {
+            //try
+            //{
                 if (!(outputStream is ZipOutputStream))
                     zos = new ZipOutputStream(outputStream);
                 else
@@ -393,7 +394,7 @@ namespace NPOI.OpenXml4Net.OPC
                 if (this.GetPartsByRelationshipType(
                         PackageRelationshipTypes.CORE_PROPERTIES).Count == 0)
                 {
-                    //logger.log(POILogger.DEBUG,"Save core properties part");
+                    logger.Log(POILogger.DEBUG,"Save core properties part");
 
                     // We have to save the core properties part ...
                     new ZipPackagePropertiesMarshaller().Marshall(
@@ -413,13 +414,13 @@ namespace NPOI.OpenXml4Net.OPC
                 }
 
                 // Save package relationships part.
-                //logger.log(POILogger.DEBUG,"Save package relationships");
+                logger.Log(POILogger.DEBUG,"Save package relationships");
                 ZipPartMarshaller.MarshallRelationshipPart(this.Relationships,
                         PackagingURIHelper.PACKAGE_RELATIONSHIPS_ROOT_PART_NAME,
                         zos);
 
                 // Save content type part.
-                //logger.log(POILogger.DEBUG,"Save content types part");
+                logger.Log(POILogger.DEBUG,"Save content types part");
                 this.contentTypeManager.Save(zos);
 
                 // Save parts.
@@ -430,12 +431,13 @@ namespace NPOI.OpenXml4Net.OPC
                     if (part.IsRelationshipPart)
                         continue;
 
-                    //logger.log(POILogger.DEBUG,"Save part '"
-                    //        + ZipHelper.getZipItemNameFromOPCName(part
-                    //                .getPartName().getName()) + "'");
-                    PartMarshaller marshaller = partMarshallers[part.contentType];
-                    if (marshaller != null)
+                    logger.Log(POILogger.DEBUG,"Save part '"
+                            + ZipHelper.GetZipItemNameFromOPCName(part
+                                    .PartName.Name) + "'");
+                    if (partMarshallers.ContainsKey(part.contentType))
                     {
+                        PartMarshaller marshaller = partMarshallers[part.contentType];
+
                         if (!marshaller.Marshall(part, zos))
                         {
                             throw new OpenXml4NetException(
@@ -456,13 +458,13 @@ namespace NPOI.OpenXml4Net.OPC
                     }
                 }
                 zos.Close();
-            }
-            catch (Exception e)
-            {
-                //logger
-                //        .log(POILogger.ERROR,"Fail to save: an error occurs while saving the package : "
-                //                + e.Message);
-            }
+            //}
+            //catch (Exception e)
+            //{
+            //    logger
+            //            .Log(POILogger.ERROR,"Fail to save: an error occurs while saving the package : "
+            //                    + e.Message);
+            //}
         }
 
         /**

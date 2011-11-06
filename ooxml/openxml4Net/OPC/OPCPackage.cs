@@ -6,6 +6,7 @@ using NPOI.OpenXml4Net.Exceptions;
 using NPOI.OpenXml4Net.OPC.Internal.Marshallers;
 using NPOI.OpenXml4Net.OPC.Internal;
 using NPOI.OpenXml4Net.OPC.Internal.Unmarshallers;
+using NPOI.Util;
 
 namespace NPOI.OpenXml4Net.OPC
 {
@@ -20,7 +21,7 @@ public abstract class OPCPackage:RelationshipSource {
 	/**
 	 * Logger.
 	 */
-    //private static POILogger logger = POILogFactory.GetLogger(OPCPackage.class);
+    private static POILogger logger = POILogFactory.GetLogger(typeof(OPCPackage));
 
 	/**
 	 * Default package access.
@@ -105,16 +106,16 @@ public abstract class OPCPackage:RelationshipSource {
 
 		try {
 			// Add 'default' unmarshaller
-			this.partUnmarshallers[new ContentType(
-					ContentTypes.CORE_PROPERTIES_PART)]=
-					new PackagePropertiesUnmarshaller();
+            this.partUnmarshallers.Add(new ContentType(
+                    ContentTypes.CORE_PROPERTIES_PART),
+                    new PackagePropertiesUnmarshaller());
 
 			// Add default marshaller
 			this.defaultPartMarshaller = new DefaultMarshaller();
 			// TODO Delocalize specialized marshallers
-			this.partMarshallers[new ContentType(
-					ContentTypes.CORE_PROPERTIES_PART)]=
-					new ZipPackagePropertiesMarshaller();
+			this.partMarshallers.Add(new ContentType(
+					ContentTypes.CORE_PROPERTIES_PART),
+					new ZipPackagePropertiesMarshaller());
 		} catch (InvalidFormatException e) {
 			// Should never happen
 			throw new OpenXml4NetException(
@@ -293,8 +294,8 @@ public abstract class OPCPackage:RelationshipSource {
 	 */
 	public void Close() {
 		if (this.packageAccess == PackageAccess.READ) {
-			//logger
-			//		.log(POILogger.WARN, "The close() method is intended to SAVE a package. This package is open in READ ONLY mode, use the revert() method instead !");
+			logger
+					.Log(POILogger.WARN, "The close() method is intended to SAVE a package. This package is open in READ ONLY mode, use the revert() method instead !");
 			return;
 		}
 
@@ -386,7 +387,7 @@ public abstract class OPCPackage:RelationshipSource {
 
 		// Copy file data to the newly Created part
 		StreamHelper.CopyStream(new FileStream(path,FileMode.Open), thumbnailPart
-				.GetStream());
+				.GetOutputStream());
 	}
 
 	/**
@@ -574,15 +575,15 @@ public abstract class OPCPackage:RelationshipSource {
                             part.PartName);
 					try {
 						PackagePart unmarshallPart = partUnmarshaller
-								.Unmarshall(context, part.GetStream());
+								.Unmarshall(context, part.GetInputStream());
                         partList[unmarshallPart.PartName] = unmarshallPart;
 
 						// Core properties case
 						if (unmarshallPart is PackagePropertiesPart)
 							this.packageProperties = (PackagePropertiesPart) unmarshallPart;
 					} catch (IOException ioe) {
-                        //logger.log(POILogger.WARN, "Unmarshall operation : IOException for "
-                        //        + part.PathName);
+                        logger.Log(POILogger.WARN, "Unmarshall operation : IOException for "
+                                + part.PartName);
 						continue;
 					} catch (InvalidOperationException invoe) {
 						throw new InvalidFormatException(invoe.Message);
@@ -637,7 +638,7 @@ public abstract class OPCPackage:RelationshipSource {
 	 *             Create nor recognize packages with equivalent part names.
 	 * @see {@link#CreatePartImpl(URI, String)}
 	 */
-	PackagePart CreatePart(PackagePartName PartName, String contentType,
+	public PackagePart CreatePart(PackagePartName PartName, String contentType,
 			bool loadRelationships) {
 		ThrowExceptionIfReadOnly();
 		if (PartName == null) {
@@ -719,7 +720,7 @@ public abstract class OPCPackage:RelationshipSource {
 		// Extract the zip entry content to put it in the part content
 		if (content != null) {
 			try {
-				Stream partOutput = AddedPart.GetStream();
+				Stream partOutput = AddedPart.GetOutputStream();
 				if (partOutput == null) {
 					return null;
 				}
@@ -727,7 +728,7 @@ public abstract class OPCPackage:RelationshipSource {
 				partOutput.Write(content.ToArray(), 0, (int)content.Length);
 				partOutput.Close();
 
-			} catch (IOException ioe) {
+			} catch (IOException) {
 				return null;
 			}
 		} else {
@@ -822,10 +823,10 @@ public abstract class OPCPackage:RelationshipSource {
 			try {
 				sourcePartName = PackagingURIHelper.CreatePartName(sourceURI);
 			} catch (InvalidFormatException e) {
-                //logger
-                //        .log(POILogger.ERROR, "Part name URI '"
-                //                + sourceURI
-                //                + "' is not valid ! This message is not intended to be displayed !");
+                logger
+                        .Log(POILogger.ERROR, "Part name URI '"
+                                + sourceURI
+                                + "' is not valid ! This message is not intended to be displayed !");
 				return;
 			}
 			if (sourcePartName.URI.Equals(
@@ -924,10 +925,10 @@ public abstract class OPCPackage:RelationshipSource {
 				this.DeletePartRecursive(targetPartName);
 			}
 		} catch (InvalidFormatException e) {
-            //logger.log(POILogger.WARN, "An exception occurs while deleting part '"
-            //        + PartName.GetName()
-            //        + "'. Some parts may remain in the package. - "
-            //        + e.Message);
+            logger.Log(POILogger.WARN, "An exception occurs while deleting part '"
+                    + PartName.Name
+                    + "'. Some parts may remain in the package. - "
+                    + e.Message);
 			return;
 		}
 		// Remove the relationships part
@@ -1159,7 +1160,7 @@ public abstract class OPCPackage:RelationshipSource {
 		if (this.relationships == null) {
 			try {
 				this.relationships = new PackageRelationshipCollection(this);
-			} catch (InvalidFormatException e) {
+			} catch (InvalidFormatException) {
 				this.relationships = new PackageRelationshipCollection();
 			}
 		}
@@ -1205,8 +1206,8 @@ get{
 		try {
 			partMarshallers[new ContentType(contentType)]= marshaller;
 		} catch (InvalidFormatException e) {
-            //logger.log(POILogger.WARN, "The specified content type is not valid: '"
-            //        + e.Message + "'. The marshaller will not be Added !");
+            logger.Log(POILogger.WARN, "The specified content type is not valid: '"
+                    + e.Message + "'. The marshaller will not be Added !");
 		}
 	}
 
@@ -1223,9 +1224,9 @@ get{
 		try {
 			partUnmarshallers[new ContentType(contentType)]= unmarshaller;
 		} catch (InvalidFormatException e) {
-            //logger.log(POILogger.WARN, "The specified content type is not valid: '"
-            //        + e.Message
-            //        + "'. The unmarshaller will not be Added !");
+            logger.Log(POILogger.WARN, "The specified content type is not valid: '"
+                    + e.Message
+                    + "'. The unmarshaller will not be Added !");
 		}
 	}
 

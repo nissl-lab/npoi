@@ -27,8 +27,15 @@ namespace NPOI.OpenXml4Net.OPC
         public static void SaveXmlInStream(XmlDocument xmlContent,
                 Stream outStream)
         {
-            XmlTextWriter writer = new XmlTextWriter(outStream, Encoding.UTF8);
+            //XmlNamespaceManager nsmgr = new XmlNamespaceManager(xmlContent.NameTable);
+            //nsmgr.AddNamespace("", "");
+            XmlWriterSettings settings = new XmlWriterSettings();
+            settings.Encoding = Encoding.UTF8;
+            settings.OmitXmlDeclaration = false;
+            XmlWriter writer = XmlTextWriter.Create(outStream,settings);
+            //XmlWriter writer = new XmlTextWriter(outStream,Encoding.UTF8);
             xmlContent.WriteContentTo(writer);
+            writer.Flush();
         }
 
         /**

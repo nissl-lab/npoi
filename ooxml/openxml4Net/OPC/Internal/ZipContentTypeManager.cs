@@ -4,6 +4,8 @@ using System.Text;
 using System.IO;
 using System.Xml;
 using ICSharpCode.SharpZipLib.Zip;
+using NPOI.Util;
+using NPOI.Util.IO;
 namespace NPOI.OpenXml4Net.OPC.Internal
 {
 /**
@@ -15,7 +17,7 @@ namespace NPOI.OpenXml4Net.OPC.Internal
  */
 public class ZipContentTypeManager:ContentTypeManager {
     
-
+    private static POILogger logger = POILogFactory.GetLogger(typeof(ZipContentTypeManager));
 	/**
 	 * Delegate constructor to the super constructor.
 	 * 
@@ -45,7 +47,8 @@ public class ZipContentTypeManager:ContentTypeManager {
 			// Saving data in the ZIP file
 			
 			StreamHelper.SaveXmlInStream(content, out1);
-            Stream ins = new MemoryStream();
+            Stream ins =  new MemoryStream();
+            
             byte[] buff = new byte[ZipHelper.READ_WRITE_FILE_BUFFER_SIZE];
             while (true) {
                 int resultRead = ins.Read(buff, 0, ZipHelper.READ_WRITE_FILE_BUFFER_SIZE);
@@ -56,10 +59,10 @@ public class ZipContentTypeManager:ContentTypeManager {
                     zos.Write(buff, 0, resultRead);
                 }
             }
-			zos.Close();
+			zos.CloseEntry();
 		} catch (IOException ioe) {
-			//logger.log(POILogger.ERROR, "Cannot write: " + CONTENT_TYPES_PART_NAME
-		//		+ " in Zip !", ioe);
+			logger.Log(POILogger.ERROR, "Cannot write: " + CONTENT_TYPES_PART_NAME
+				+ " in Zip !", ioe);
 			return false;
 		}
 		return true;

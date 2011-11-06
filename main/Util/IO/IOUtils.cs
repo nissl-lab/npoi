@@ -41,18 +41,20 @@ namespace NPOI.Util.IO
         /// <remarks>Tony Qu changed the code</remarks>
         public static byte[] ToByteArray(Stream stream)
         {
-    	    MemoryStream baos = new MemoryStream();
-        	
-    	    byte[] buffer = new byte[4096];
-    	    int read = -2;
-    	    while(read != -1&& read != 0) {
-    		    read = stream.Read(buffer,0,buffer.Length);
-    		    if(read > 0) {
-    			    baos.Write(buffer, 0, read);
-    		    }
-    	    }
-        	
-    	    return baos.ToArray();
+            MemoryStream baos = new MemoryStream();
+
+            byte[] buffer = new byte[4096];
+            int read = -2;
+            while (read != -1 && read != 0)
+            {
+                read = stream.Read(buffer, 0, buffer.Length);
+                if (read > 0)
+                {
+                    baos.Write(buffer, 0, read);
+                }
+            }
+
+            return baos.ToArray();
         }
 
         /// <summary>
@@ -103,7 +105,25 @@ namespace NPOI.Util.IO
                     return total;
                 }
             }
-            
+
+        }
+
+        /**
+ * Copies all the data from the given InputStream to the OutputStream. It
+ * leaves both streams open, so you will still need to close them once done.
+ */
+        public static void Copy(Stream inp, Stream out1)
+        {
+            byte[] buff = new byte[4096];
+            inp.Position = 0;
+            int count;
+            while ((count = inp.Read(buff, 0, buff.Length)) != 0)
+            {
+                if (count > 0)
+                {
+                    out1.Write(buff, 0, count);
+                }
+            }
         }
     }
 }

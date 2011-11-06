@@ -207,7 +207,7 @@ namespace NPOI.OpenXml4Net.OPC
             {
                 // If it's an external target, we don't
                 //  need to apply our normal validation rules
-                if (targetMode == TargetMode.EXTERNAL)
+                if (targetMode == TargetMode.EXTERNAL && targetUri.IsAbsoluteUri)
                 {
                     return targetUri;
                 }

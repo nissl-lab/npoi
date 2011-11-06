@@ -4,6 +4,7 @@ using System.Text;
 using System.IO;
 using NPOI.OpenXml4Net.Exceptions;
 using NPOI.OpenXml4Net.OPC.Internal;
+using NPOI.Util;
 
 namespace NPOI.OpenXml4Net.OPC
 {
@@ -19,7 +20,7 @@ namespace NPOI.OpenXml4Net.OPC
         /**
          * Logger.
          */
-        //private static POILogger logger = POILogFactory.getLogger(Package.class);
+        private static POILogger logger = POILogFactory.GetLogger(typeof(Package));
 
 
         /**
@@ -44,18 +45,19 @@ namespace NPOI.OpenXml4Net.OPC
          * @deprecated use {@link OPCPackage#open(String,PackageAccess)} 
          */
         public static Package Open(String path, PackageAccess access)
-	{
-		if (path == null || "".Equals(path.Trim())
-				|| new DirectoryInfo(path).Exists)
-			throw new ArgumentException("path");
+        {
+            if (path == null || "".Equals(path.Trim())
+                    || new DirectoryInfo(path).Exists)
+                throw new ArgumentException("path");
 
-		Package pack = new ZipPackage(path, access);
-		if (pack.partList == null && access != PackageAccess.WRITE) {
-			pack.GetParts();
-		}
-        pack.originalPackagePath = Path.GetFullPath(path);
-		return pack;
-	}
+            Package pack = new ZipPackage(path, access);
+            if (pack.partList == null && access != PackageAccess.WRITE)
+            {
+                pack.GetParts();
+            }
+            pack.originalPackagePath = Path.GetFullPath(path);
+            return pack;
+        }
 
         /**
          * @deprecated use {@link OPCPackage#open(InputStream)} 

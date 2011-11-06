@@ -10,57 +10,62 @@ namespace NPOI.OpenXml4Net.OPC
      * @author Julien Chable
      * @version 0.2
      */
-    public class PackageRelationshipTypes
+    public static class PackageRelationshipTypes
     {
         /**
          * Core properties relationship type.
          */
-        public static String CORE_PROPERTIES = "http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties";
+        public const String CORE_PROPERTIES = "http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties";
 
         /**
          * Digital signature relationship type.
          */
-        public static String DIGITAL_SIGNATURE = "http://schemas.openxmlformats.org/package/2006/relationships/digital-signature/signature";
+        public const String DIGITAL_SIGNATURE = "http://schemas.openxmlformats.org/package/2006/relationships/digital-signature/signature";
 
         /**
          * Digital signature certificate relationship type.
          */
-        public static String DIGITAL_SIGNATURE_CERTIFICATE = "http://schemas.openxmlformats.org/package/2006/relationships/digital-signature/certificate";
+        public const String DIGITAL_SIGNATURE_CERTIFICATE = "http://schemas.openxmlformats.org/package/2006/relationships/digital-signature/certificate";
 
         /**
          * Digital signature origin relationship type.
          */
-        public static String DIGITAL_SIGNATURE_ORIGIN = "http://schemas.openxmlformats.org/package/2006/relationships/digital-signature/origin";
+        public const String DIGITAL_SIGNATURE_ORIGIN = "http://schemas.openxmlformats.org/package/2006/relationships/digital-signature/origin";
 
         /**
          * Thumbnail relationship type.
          */
-        public static String THUMBNAIL = "http://schemas.openxmlformats.org/package/2006/relationships/metadata/thumbnail";
+        public const String THUMBNAIL = "http://schemas.openxmlformats.org/package/2006/relationships/metadata/thumbnail";
 
         /**
          * Extended properties relationship type.
          */
-        public static String EXTENDED_PROPERTIES = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/extended-properties";
+        public const String EXTENDED_PROPERTIES = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/extended-properties";
 
+        /**
+         * Custom properties relationship type.
+         */
+        public const String CUSTOM_PROPERTIES = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/custom-properties";
+	
         /**
          * Core properties relationship type.
          */
-        public static String CORE_DOCUMENT = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument";
+        public const String CORE_DOCUMENT = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument";
 
         /**
          * Custom XML relationship type.
          */
-        public static String CUSTOM_XML = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/customXml";
+        public const String CUSTOM_XML = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/customXml";
 
         /**
          * Image type.
          */
-        public static String IMAGE_PART = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/image";
+        public const String IMAGE_PART = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/image";
 
         /**
          * Style type.
          */
-        public static String STYLE_PART = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles";
+        public const String STYLE_PART = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles";
     }
 
 }

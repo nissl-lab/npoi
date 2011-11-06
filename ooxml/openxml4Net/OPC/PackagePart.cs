@@ -485,9 +485,9 @@ namespace NPOI.OpenXml4Net.OPC
          * @return The input stream of the content of this part, else
          *         <code>null</code>.
          */
-        public Stream GetStream()
+        public Stream GetInputStream()
         {
-            Stream inStream = this.GetStreamImpl();
+            Stream inStream = this.GetInputStreamImpl();
             if (inStream == null)
             {
                 throw new IOException("Can't obtain the input stream from "
@@ -496,6 +496,43 @@ namespace NPOI.OpenXml4Net.OPC
             else
                 return inStream;
         }
+
+        /**
+ * Get the output stream of this part. If the part is originally embedded in
+ * Zip package, it'll be transform intot a <i>MemoryPackagePart</i> in
+ * order to write inside (the standard Java API doesn't allow to write in
+ * the file)
+ *
+ * @see org.apache.poi.openxml4j.opc.internal.MemoryPackagePart
+ */
+        public Stream GetOutputStream()
+        {
+            Stream outStream;
+            // If this part is a zip package part (read only by design) we convert
+            // this part into a MemoryPackagePart instance for write purpose.
+            if (this is ZipPackagePart)
+            {
+                // Delete logically this part
+                container.RemovePart(this.partName);
+
+                // Create a memory part
+                PackagePart part = container.CreatePart(this.partName,
+                        this.contentType.ToString(), false);
+                part.relationships = this.relationships;
+                if (part == null)
+                {
+                    throw new InvalidOperationException(
+                            "Can't create a temporary part !");
+                }
+                outStream = part.GetOutputStreamImpl();
+            }
+            else
+            {
+                outStream = this.GetOutputStreamImpl();
+            }
+            return outStream;
+        }
+
 
         /**
          * Throws an exception if this package part is a relationship part.
@@ -605,7 +642,11 @@ namespace NPOI.OpenXml4Net.OPC
          *                Throws if an IO Exception occur in the implementation
          *                method.
          */
-        protected abstract Stream GetStreamImpl();
+        protected abstract Stream GetInputStreamImpl();
+        /**
+         * Abstract method that get the output stream of this part.
+         */
+        protected abstract Stream GetOutputStreamImpl();
 
         /**
          * Save the content of this part and the associated relationships part (if
