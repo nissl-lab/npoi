@@ -39,7 +39,7 @@ namespace NPOI.HWPF
     public class HWPFDocument : HWPFDocumentCore
     {
         /** And for making sense of CP lengths in the FIB */
-        protected CPSplitCalculator _cpSplit;
+        internal CPSplitCalculator _cpSplit;
 
         /** table stream buffer*/
         protected byte[] _tableStream;
