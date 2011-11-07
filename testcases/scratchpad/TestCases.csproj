@@ -67,6 +67,9 @@
     <Compile Include="HWPF\Model\TestSectionTable.cs" />
     <Compile Include="HWPF\Model\TestStyleSheet.cs" />
     <Compile Include="HWPF\Model\TestTextPieceTable.cs" />
+    <Compile Include="HWPF\TestFieldsTables.cs" />
+    <Compile Include="HWPF\TestHWPFPictures.cs" />
+    <Compile Include="HWPF\TestHWPFRangeParts.cs" />
     <Compile Include="HWPF\UserModel\TestBorderCode.cs" />
     <Compile Include="HWPF\UserModel\TestBug46610.cs" />
     <Compile Include="HWPF\UserModel\TestBugs.cs" />
