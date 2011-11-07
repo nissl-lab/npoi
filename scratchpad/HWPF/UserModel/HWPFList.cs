@@ -85,7 +85,7 @@ namespace NPOI.HWPF.UserModel
             int styleIndex = _listData.GetLevelStyle(level);
             ParagraphProperties base1 = _styleSheet.GetParagraphStyle(styleIndex);
 
-            byte[] grpprl = ParagraphSprmCompressor.compressParagraphProperty(pap, base1);
+            byte[] grpprl = ParagraphSprmCompressor.CompressParagraphProperty(pap, base1);
             listLevel.SetLevelProperties(grpprl);
         }
 

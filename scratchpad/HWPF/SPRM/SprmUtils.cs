@@ -51,6 +51,13 @@ namespace NPOI.HWPF.SPRM
             return sprm.Length;
         }
 
+
+        public static int AddSprm(short instruction, bool param,
+            IList list)
+        {
+            return AddSprm(instruction, param ? 1 : 0, null, list);
+        }
+
         public static int AddSprm(short instruction, int param, byte[] varParam, IList list)
         {
             int type = (instruction & 0xe000) >> 13;

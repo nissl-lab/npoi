@@ -557,7 +557,7 @@ namespace NPOI.HWPF.UserModel
             ParagraphProperties baseStyle = ss.GetParagraphStyle(styleIndex);
             CharacterProperties baseChp = ss.GetCharacterStyle(styleIndex);
 
-            byte[] grpprl = ParagraphSprmCompressor.compressParagraphProperty(props, baseStyle);
+            byte[] grpprl = ParagraphSprmCompressor.CompressParagraphProperty(props, baseStyle);
             byte[] withIndex = new byte[grpprl.Length + LittleEndianConstants.SHORT_SIZE];
             LittleEndian.PutShort(withIndex, (short)styleIndex);
             Array.Copy(grpprl, 0, withIndex, LittleEndianConstants.SHORT_SIZE, grpprl.Length);
@@ -607,7 +607,7 @@ namespace NPOI.HWPF.UserModel
             ParagraphProperties baseStyle = ss.GetParagraphStyle(styleIndex);
             CharacterProperties baseChp = ss.GetCharacterStyle(styleIndex);
 
-            byte[] grpprl = ParagraphSprmCompressor.compressParagraphProperty(props, baseStyle);
+            byte[] grpprl = ParagraphSprmCompressor.CompressParagraphProperty(props, baseStyle);
             byte[] withIndex = new byte[grpprl.Length + LittleEndianConstants.SHORT_SIZE];
             LittleEndian.PutShort(withIndex, (short)styleIndex);
             Array.Copy(grpprl, 0, withIndex, LittleEndianConstants.SHORT_SIZE, grpprl.Length);
