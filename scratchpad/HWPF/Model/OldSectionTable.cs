@@ -31,11 +31,11 @@ namespace NPOI.HWPF.Model
      */
     public class OldSectionTable : SectionTable
     {
-        public OldSectionTable(byte[] documentStream, int OffSet,
+        public OldSectionTable(byte[] documentStream, int Offset,
                             int size, int fcMin,
                             TextPieceTable tpt)
         {
-            PlexOfCps sedPlex = new PlexOfCps(documentStream, OffSet, size, 12);
+            PlexOfCps sedPlex = new PlexOfCps(documentStream, Offset, size, 12);
             CharIsBytes charConv = new CharIsBytes(tpt);
 
             int length = sedPlex.Length;
@@ -62,7 +62,7 @@ namespace NPOI.HWPF.Model
                     //  section properties, and we're trying to decode them as if they
                     //  were the new ones, we sometimes "need" more data than we have.
                     // As a workaround, have a few extra 0 bytes on the end!
-                    byte[] buf = new byte[sepxSize + 2];
+                    byte[] buf = new byte[sepxSize];
                     fileOffset += LittleEndianConstants.SHORT_SIZE;
                     Array.Copy(documentStream, fileOffset, buf, 0, buf.Length);
                     _sections.Add(new SEPX(sed, startAt, endAt, charConv, buf));

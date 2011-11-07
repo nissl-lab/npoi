@@ -263,7 +263,7 @@ namespace NPOI.HWPF
          *  file, including main text, footnotes, headers
          *  and comments
          */
-        public Range GetOverallRange()
+        public override Range GetOverallRange()
         {
             // hack to get the ending cp of the document, Have to revisit this.
             PropertyNode p = _tpt.TextPieces[_tpt.TextPieces.Count - 1];

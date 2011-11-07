@@ -43,7 +43,8 @@ namespace NPOI.HWPF.SPRM
 
         public bool HasNext()
         {
-            return _offset < _grpprl.Length;
+            // A Sprm is at least 2 bytes long
+            return _offset < _grpprl.Length-1;
         }
 
         public SprmOperation Next()

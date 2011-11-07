@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="3.5" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -73,6 +73,8 @@
     <Compile Include="Model\FIBLongHandler.cs" />
     <Compile Include="Model\FIBShortHandler.cs" />
     <Compile Include="Model\FieldDescriptor.cs" />
+    <Compile Include="Model\FieldsDocumentPart.cs" />
+    <Compile Include="Model\FieldsTables.cs" />
     <Compile Include="Model\FileInformationBlock.cs" />
     <Compile Include="Model\FontTable.cs" />
     <Compile Include="Model\FormattedDiskPage.cs" />
@@ -106,6 +108,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Model\PlexOfCps.cs" />
+    <Compile Include="Model\PlexOfField.cs" />
     <Compile Include="Model\PropertyNode.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -135,6 +138,7 @@
     <Compile Include="Model\Types\FIBAbstractType.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Model\Types\FLDAbstractType.cs" />
     <Compile Include="Model\Types\PAPAbstractType.cs">
       <SubType>Code</SubType>
     </Compile>

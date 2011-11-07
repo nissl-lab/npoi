@@ -473,6 +473,27 @@ namespace NPOI.HWPF.Model
             _fieldHandler.ClearFields();
         }
 
+        public int GetFieldsPlcfOffSet(FieldsDocumentPart part)
+        {
+            return _fieldHandler.GetFieldOffset((int)part);
+        }
+
+        public int GetFieldsPlcfLength(FieldsDocumentPart part)
+        {
+            return _fieldHandler.GetFieldSize((int)part);
+        }
+
+        public void SetFieldsPlcfOffSet(FieldsDocumentPart part, int offSet)
+        {
+            _fieldHandler.SetFieldOffset((int)part, offSet);
+        }
+
+        public void SetFieldsPlcfLength(FieldsDocumentPart part, int length)
+        {
+            _fieldHandler.SetFieldSize((int)part, length);
+        }
+
+
         public int GetFcPlcffldMom()
         {
             return _fieldHandler.GetFieldOffset(FIBFieldHandler.PLCFFLDMOM);

@@ -24,166 +24,161 @@ namespace NPOI.HWPF
     using NPOI.HWPF.Model;
     using NPOI.HWPF.UserModel;
 
+    /// <summary>
+    /// This class holds much of the core of a Word document, but without some of the table structure information. You generally want to work with one of HWPFDocument or HWPFOldDocument
+    /// </summary>
+    public abstract class HWPFDocumentCore : POIDocument
+    {
+        /** The FIB */
+        protected FileInformationBlock _fib;
 
-/**
- * This class holds much of the core of a Word document, but
- *  without some of the table structure information.
- * You generally want to work with one of
- *  {@link HWPFDocument} or {@link HWPFOldDocument} 
- */
-public abstract class HWPFDocumentCore : POIDocument
-{
-  /** The FIB */
-  protected FileInformationBlock _fib;
+        /** Holds styles for this document.*/
+        protected StyleSheet _ss;
 
-  /** Holds styles for this document.*/
-  protected StyleSheet _ss;
+        /** Contains formatting properties for text*/
+        protected CHPBinTable _cbt;
 
-  /** Contains formatting properties for text*/
-  protected CHPBinTable _cbt;
+        /** Contains formatting properties for paragraphs*/
+        protected PAPBinTable _pbt;
 
-  /** Contains formatting properties for paragraphs*/
-  protected PAPBinTable _pbt;
+        /** Contains formatting properties for sections.*/
+        protected SectionTable _st;
 
-  /** Contains formatting properties for sections.*/
-  protected SectionTable _st;
+        /** Holds fonts for this document.*/
+        protected FontTable _ft;
 
-  /** Holds fonts for this document.*/
-  protected FontTable _ft;
+        /** Hold list tables */
+        protected ListTables _lt;
 
-  /** Hold list tables */
-  protected ListTables _lt;
+        /** main document stream buffer*/
+        protected byte[] _mainStream;
 
-  /** main document stream buffer*/
-  protected byte[] _mainStream;
+        protected HWPFDocumentCore()
+            : base(null, null)
+        {
 
-  protected HWPFDocumentCore():base(null, null)
-  {
-     
-  }
+        }
 
-  /**
-   * Takens an InputStream, verifies that it's not RTF, builds a
-   *  POIFSFileSystem from it, and returns that.
-   */
-  public static POIFSFileSystem VerifyAndBuildPOIFS(Stream istream)  {
-	// Open a PushbackInputStream, so we can peek at the first few bytes
-	PushbackStream pis = new PushbackStream(istream);
-	byte[] first6 = new byte[6];
-	pis.Read(first6,0,6);
+        /**
+         * Takens an InputStream, verifies that it's not RTF, builds a
+         *  POIFSFileSystem from it, and returns that.
+         */
+        public static POIFSFileSystem VerifyAndBuildPOIFS(Stream istream)
+        {
+            // Open a PushbackInputStream, so we can peek at the first few bytes
+            PushbackStream pis = new PushbackStream(istream);
+            byte[] first6 = new byte[6];
+            pis.Read(first6, 0, 6);
 
-	// Does it start with {\rtf ? If so, it's really RTF
-	if(first6[0] == '{' && first6[1] == '\\' && first6[2] == 'r'
-		&& first6[3] == 't' && first6[4] == 'f') {
-		throw new ArgumentException("The document is really a RTF file");
-	}
+            // Does it start with {\rtf ? If so, it's really RTF
+            if (first6[0] == '{' && first6[1] == '\\' && first6[2] == 'r'
+                && first6[3] == 't' && first6[4] == 'f')
+            {
+                throw new ArgumentException("The document is really a RTF file");
+            }
 
-	// OK, so it's not RTF
-	// Open a POIFSFileSystem on the (pushed back) stream
-	pis.Unread(6);
-	return new POIFSFileSystem(istream);
-  }
+            // OK, so it's not RTF
+            // Open a POIFSFileSystem on the (pushed back) stream
+            pis.Unread(6);
+            return new POIFSFileSystem(istream);
+        }
 
-  /**
-   * This constructor loads a Word document from an InputStream.
-   *
-   * @param istream The InputStream that Contains the Word document.
-   * @throws IOException If there is an unexpected IOException from the passed
-   *         in InputStream.
-   */
-  public HWPFDocumentCore(Stream istream) :this( VerifyAndBuildPOIFS(istream) )
-  {
-    //do Ole stuff
-    
-  }
+        /// <summary>
+        /// This constructor loads a Word document from an stream.
+        /// </summary>
+        /// <param name="istream">The InputStream that Contains the Word document.</param>
+        public HWPFDocumentCore(Stream istream)
+            : this(VerifyAndBuildPOIFS(istream))
+        {
+            //do Ole stuff
 
-  /**
-   * This constructor loads a Word document from a POIFSFileSystem
-   *
-   * @param pfilesystem The POIFSFileSystem that Contains the Word document.
-   * @throws IOException If there is an unexpected IOException from the passed
-   *         in POIFSFileSystem.
-   */
-  public HWPFDocumentCore(POIFSFileSystem pfilesystem):this(pfilesystem.Root, pfilesystem)
-  {
-	
-  }
+        }
+        /// <summary>
+        /// This constructor loads a Word document from a POIFSFileSystem
+        /// </summary>
+        /// <param name="pfilesystem">The POIFSFileSystem that Contains the Word document.</param>
+        public HWPFDocumentCore(POIFSFileSystem pfilesystem)
+            : this(pfilesystem.Root, pfilesystem)
+        {
 
-  /**
-   * This constructor loads a Word document from a specific point
-   *  in a POIFSFileSystem, probably not the default.
-   * Used typically to open embeded documents.
-   *
-   * @param pfilesystem The POIFSFileSystem that Contains the Word document.
-   * @throws IOException If there is an unexpected IOException from the passed
-   *         in POIFSFileSystem.
-   */
-  public HWPFDocumentCore(DirectoryNode directory, POIFSFileSystem pfilesystem):base(directory, pfilesystem)
-  {
-    // Sort out the hpsf properties
-	
+        }
+        /// <summary>
+        /// This constructor loads a Word document from a specific point in a POIFSFileSystem, probably not the default.Used typically to open embeded documents.
+        /// </summary>
+        /// <param name="directory">The POIFSFileSystem that Contains the Word document.</param>
+        /// <param name="pfilesystem">If there is an unexpected IOException from the passed in POIFSFileSystem.</param>
+        public HWPFDocumentCore(DirectoryNode directory, POIFSFileSystem pfilesystem)
+            : base(directory, pfilesystem)
+        {
+            // Sort out the hpsf properties
 
-    // read in the main stream.
-    DocumentEntry documentProps = (DocumentEntry)
-       directory.GetEntry("WordDocument");
-    _mainStream = new byte[documentProps.Size];
 
-    directory.CreatePOIFSDocumentReader("WordDocument").Read(_mainStream);
+            // read in the main stream.
+            DocumentEntry documentProps = (DocumentEntry)
+               directory.GetEntry("WordDocument");
+            _mainStream = new byte[documentProps.Size];
 
-    // Create our FIB, and check for the doc being encrypted
-    _fib = new FileInformationBlock(_mainStream);
-    if(_fib.IsFEncrypted()) {
-    	throw new EncryptedDocumentException("Cannot process encrypted word files!");
+            directory.CreatePOIFSDocumentReader("WordDocument").Read(_mainStream);
+
+            // Create our FIB, and check for the doc being encrypted
+            _fib = new FileInformationBlock(_mainStream);
+            if (_fib.IsFEncrypted())
+            {
+                throw new EncryptedDocumentException("Cannot process encrypted word files!");
+            }
+        }
+
+        /// <summary>
+        /// the range which covers the whole of the document, but excludes any headers and footers.
+        /// </summary>
+        public abstract Range GetRange();
+
+        /// <summary>
+        /// the range that covers all text in the file, including main text,footnotes, headers and comments
+        /// </summary>
+        public abstract Range GetOverallRange();
+
+        public abstract TextPieceTable TextTable { get; }
+
+        public CHPBinTable CharacterTable
+        {
+            get
+            {
+                return _cbt;
+            }
+        }
+
+        public PAPBinTable ParagraphTable
+        {
+            get
+            {
+                return _pbt;
+            }
+        }
+
+        public SectionTable GetSectionTable()
+        {
+            return _st;
+        }
+
+        public StyleSheet GetStyleSheet()
+        {
+            return _ss;
+        }
+
+        public ListTables GetListTables()
+        {
+            return _lt;
+        }
+
+        public FontTable GetFontTable()
+        {
+            return _ft;
+        }
+
+        public FileInformationBlock GetFileInformationBlock()
+        {
+            return _fib;
+        }
     }
-  }
-
-  /**
-   * Returns the range which covers the whole of the
-   *  document, but excludes any headers and footers.
-   */
-  public abstract Range GetRange();
-
-  public abstract TextPieceTable TextTable { get; }
-  
-  public CHPBinTable CharacterTable
-  {
-      get
-      {
-          return _cbt;
-      }
-  }
-
-  public PAPBinTable ParagraphTable
-  {
-      get
-      {
-          return _pbt;
-      }
-  }
-
-  public SectionTable GetSectionTable()
-  {
-    return _st;
-  }
-
-  public StyleSheet GetStyleSheet()
-  {
-    return _ss;
-  }
-
-  public ListTables GetListTables()
-  {
-    return _lt;
-  }
-
-  public FontTable GetFontTable()
-  {
-    return _ft;
-  }
-
-  public FileInformationBlock GetFileInformationBlock()
-  {
-    return _fib;
-  }
-}
 }

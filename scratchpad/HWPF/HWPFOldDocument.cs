@@ -114,6 +114,12 @@ namespace NPOI.HWPF
                     0, _fib.GetFcMac() - _fib.GetFcMin(), this
             );
         }
+        public override Range GetOverallRange()
+        {
+            // Life is easy when we have no footers, headers or unicode!
+            return new Range(0, _fib.GetFcMac() - _fib.GetFcMin(), this);
+        }
+
 
         public override TextPieceTable TextTable
         {
