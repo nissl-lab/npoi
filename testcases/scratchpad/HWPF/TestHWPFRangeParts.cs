@@ -98,6 +98,7 @@ namespace TestCases.HWPF
          */
         private HWPFDocument docUnicode;
 
+        [TestInitialize]
         public void SetUp()
         {
             docUnicode = HWPFTestDataSamples.OpenSampleFile("HeaderFooterUnicode.doc");

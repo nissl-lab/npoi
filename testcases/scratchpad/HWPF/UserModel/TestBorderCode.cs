@@ -91,7 +91,7 @@ namespace TestCases.HWPF.Usermodel
             Assert.AreEqual(1, row.GetTopBorder().BorderType);
             Assert.AreEqual(1, row.GetBottomBorder().BorderType);
 
-            Assert.AreEqual(2, row.numCells());
+            Assert.AreEqual(2, row.NumCells());
             TableCell cell = row.GetCell(1);
             Assert.AreEqual(3, cell.GetBrcTop().BorderType);
 
