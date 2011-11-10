@@ -44,6 +44,8 @@
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="HWPF\Extractor\TestDifferentRoutes.cs" />
@@ -87,6 +89,7 @@
     <Compile Include="HWPF\UserModel\TestRangeReplacement.cs" />
     <Compile Include="HWPF\UserModel\TestRangeSymbols.cs" />
     <Compile Include="HWPF\UserModel\TestShapes.cs" />
+    <Compile Include="HWPF\UserModel\TestTableRow.cs" />
     <Compile Include="POIDataSamples.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
