@@ -14,10 +14,14 @@
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkSubset>
     </TargetFrameworkSubset>
-    <SccProjectName>SAK</SccProjectName>
-    <SccLocalPath>SAK</SccLocalPath>
-    <SccAuxPath>SAK</SccAuxPath>
-    <SccProvider>SAK</SccProvider>
+    <SccProjectName>
+    </SccProjectName>
+    <SccLocalPath>
+    </SccLocalPath>
+    <SccAuxPath>
+    </SccAuxPath>
+    <SccProvider>
+    </SccProvider>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -191,6 +195,8 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="SPRM\TableSprmUncompressor.cs" />
+    <Compile Include="UserModel\Bookmark.cs" />
+    <Compile Include="UserModel\Bookmarks.cs" />
     <Compile Include="UserModel\BorderCode.cs" />
     <Compile Include="UserModel\CharacterProperties.cs" />
     <Compile Include="UserModel\CharacterRun.cs">
@@ -203,6 +209,10 @@
     <Compile Include="UserModel\HWPFList.cs" />
     <Compile Include="UserModel\LineSpacingDescriptor.cs" />
     <Compile Include="UserModel\ListEntry.cs" />
+    <Compile Include="UserModel\Notes.cs" />
+    <Compile Include="UserModel\ObjectsPool.cs" />
+    <Compile Include="UserModel\OfficeDrawing.cs" />
+    <Compile Include="UserModel\OfficeDrawings.cs" />
     <Compile Include="UserModel\Paragraph.cs" />
     <Compile Include="UserModel\ParagraphProperties.cs" />
     <Compile Include="UserModel\Picture.cs" />
