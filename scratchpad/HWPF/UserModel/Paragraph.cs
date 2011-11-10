@@ -86,7 +86,7 @@ namespace NPOI.HWPF.UserModel
         internal SprmBuffer _papx;
 
         internal Paragraph(int startIdx, int endIdx, Table parent)
-            : base(startIdx, endIdx, Range.TYPE_PARAGRAPH, parent)
+            : base(startIdx, endIdx, parent)
         {
 
             PAPX papx = (PAPX)_paragraphs[_parEnd - 1];

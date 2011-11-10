@@ -21,6 +21,7 @@ using NPOI.HWPF.Model;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using NPOI;
+using NPOI.HWPF.Extractor;
 namespace TestCases.HWPF.UserModel
 {
 
@@ -100,11 +101,6 @@ namespace TestCases.HWPF.UserModel
             Assert.AreEqual("One paragraph is ok\u0007", r.GetParagraph(3).Text);
             Assert.AreEqual("\u0007", r.GetParagraph(4).Text);
             Assert.AreEqual("\r", r.GetParagraph(5).Text);
-            for (int i = 0; i <= 5; i++)
-            {
-                Assert.IsFalse(r.GetParagraph(i).UsesUnicode);
-            }
-
 
             // Get the table
             Table t = r.GetTable(p);
@@ -267,24 +263,25 @@ namespace TestCases.HWPF.UserModel
          * Bug #49936 - Problems with Reading the header out of
          *  the Header Stories
          */
-        /*
-    [TestMethod]
-   public void TestProblemHeaderStories49936() {
-      HWPFDocument doc = HWPFTestDataSamples.OpenSampleFile("HeaderFooterProblematic.doc");
-      HeaderStories hs = new HeaderStories(doc);
-      
-      Assert.AreEqual("", hs.GetFirstHeader());
-      Assert.AreEqual("\r", hs.GetEvenHeader());
-      Assert.AreEqual("", hs.GetOddHeader());
-      
-      Assert.AreEqual("", hs.GetFirstFooter());
-      Assert.AreEqual("", hs.GetEvenFooter());
-      Assert.AreEqual("", hs.GetOddFooter());
-      
-      WordExtractor ext = new WordExtractor(doc);
-      Assert.AreEqual("\n", ext.GetHeaderText);
-      Assert.AreEqual("", ext.GetFooterText);
-   }*/
+
+        [TestMethod]
+        public void TestProblemHeaderStories49936()
+        {
+            HWPFDocument doc = HWPFTestDataSamples.OpenSampleFile("HeaderFooterProblematic.doc");
+            HeaderStories hs = new HeaderStories(doc);
+
+            Assert.AreEqual("", hs.FirstHeader);
+            Assert.AreEqual("\r", hs.EvenHeader);
+            Assert.AreEqual("", hs.OddHeader);
+
+            Assert.AreEqual("", hs.FirstFooter);
+            Assert.AreEqual("", hs.EvenFooter);
+            Assert.AreEqual("", hs.OddFooter);
+
+            WordExtractor ext = new WordExtractor(doc);
+            Assert.AreEqual("\n", ext.HeaderText);
+            Assert.AreEqual("", ext.FooterText);
+        }
 
         /**
          * Bug #45877 - problematic PAPX with no parent set
@@ -324,10 +321,6 @@ namespace TestCases.HWPF.UserModel
             Assert.AreEqual("Row 3/Cell 3\u0007", r.GetParagraph(10).Text);
             Assert.AreEqual("\u0007", r.GetParagraph(11).Text);
             Assert.AreEqual("\r", r.GetParagraph(12).Text);
-            for (int i = 0; i <= 12; i++)
-            {
-                Assert.IsFalse(r.GetParagraph(i).UsesUnicode);
-            }
 
             Paragraph p;
 

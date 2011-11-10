@@ -165,62 +165,6 @@ namespace NPOI.HWPF.UserModel
             SanityCheckStartEnd();
         }
 
-        /**
-         * Constructor used to build a Range from indexes in one of its internal
-         * lists.
-         *
-         * @param startIdx
-         *            The starting index in the list.
-         * @param endIdx
-         *            The ending index in the list.
-         * @param idxType
-         *            The list type.
-         * @param parent
-         *            The parent Range this range belongs to.
-         */
-        internal Range(int startIdx, int endIdx, int idxType, Range parent)
-        {
-            _doc = parent._doc;
-            _sections = parent._sections;
-            _paragraphs = parent._paragraphs;
-            _characters = parent._characters;
-            _text = parent._text;
-            _parent = parent;
-
-            switch (idxType)
-            {
-                case TYPE_PARAGRAPH:
-                    _parStart = parent._parStart + startIdx;
-                    _parEnd = parent._parStart + endIdx;
-                    _start = _paragraphs[(_parStart)].Start;
-                    _end = _paragraphs[(_parEnd)].End;
-                    _parRangeFound = true;
-                    break;
-                case TYPE_CHARACTER:
-                    _charStart = parent._charStart + startIdx;
-                    _charEnd = parent._charStart + endIdx;
-                    _start = _characters[(_charStart)].Start;
-                    _end = _characters[(_charEnd)].End;
-                    _charRangeFound = true;
-                    break;
-                case TYPE_SECTION:
-                    _sectionStart = parent._sectionStart + startIdx;
-                    _sectionEnd = parent._sectionStart + endIdx;
-                    _start = _sections[(_sectionStart)].Start;
-                    _end = _sections[(_sectionEnd)].End;
-                    _sectionRangeFound = true;
-                    break;
-                case TYPE_TEXT:
-                    _textStart = parent._textStart + startIdx;
-                    _textEnd = parent._textStart + endIdx;
-                    _start = _textStart;
-                    _end = _textEnd;
-                    _textRangeFound = true;
-                    break;
-            }
-
-            SanityCheckStartEnd();
-        }
 
         /**
          * Ensures that the start and end were were given are actually valid, to

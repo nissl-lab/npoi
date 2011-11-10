@@ -65,7 +65,7 @@ namespace TestCases.HWPF
 
         private static String u_page_1 =
             "This is a fairly simple word document, over two pages, with headers and footers.\r" +
-            "The trick with this one is that it Contains some Unicode based strings in it.\r" +
+            "The trick with this one is that it contains some Unicode based strings in it.\r" +
             "Firstly, some currency symbols:\r" +
             "\tGBP - \u00a3\r" +
             "\tEUR - \u20ac\r" +

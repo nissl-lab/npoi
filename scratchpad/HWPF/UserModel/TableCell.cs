@@ -27,7 +27,7 @@ namespace NPOI.HWPF.UserModel
         private int _width;
 
         public TableCell(int startIdx, int endIdx, TableRow parent, int levelNum, TableCellDescriptor tcd, int leftEdge, int width)
-            : base(startIdx, endIdx, Range.TYPE_PARAGRAPH, parent)
+            : base(startIdx, endIdx,parent)
         {
             _tcd = tcd;
             _leftEdge = leftEdge;

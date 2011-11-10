@@ -24,7 +24,7 @@ namespace NPOI.HWPF.UserModel
         ArrayList _rows;
 
         internal Table(int startIdx, int endIdx, Range parent, int levelNum)
-            : base(startIdx, endIdx, Range.TYPE_PARAGRAPH, parent)
+            : base(startIdx, endIdx,  parent)
         {
 
             _rows = new ArrayList();

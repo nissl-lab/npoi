@@ -23,6 +23,7 @@ using System.Text;
 using TestCases;
 using NPOI.POIFS.FileSystem;
 using NPOI.HWPF;
+using System.Text.RegularExpressions;
 namespace TestCases.HWPF.Extractor
 {
     /**
@@ -114,12 +115,14 @@ namespace TestCases.HWPF.Extractor
         public void TestText()
         {
             Assert.AreEqual(p_text1_block, extractor.Text);
-
+            Regex regex = new Regex("[\\r\\n]");
+            
+            
             // For the 2nd, should give similar answers for
             //  the two methods, differing only in line endings
             Assert.AreEqual(
-                  extractor2.TextFromPieces.Replace("[\\r\\n]", ""),
-                  extractor2.Text.Replace("[\\r\\n]", ""));
+                  regex.Replace(extractor2.TextFromPieces, ""),
+                  regex.Replace(extractor2.Text, ""));
         }
 
         /**
