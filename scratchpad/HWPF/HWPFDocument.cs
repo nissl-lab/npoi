@@ -27,6 +27,7 @@ namespace NPOI.HWPF
     using NPOI.POIFS.FileSystem;
     using NPOI.POIFS.Common;
     using System.Collections.Generic;
+    using System.Text;
 
 
     /**
@@ -47,14 +48,15 @@ namespace NPOI.HWPF
         /** data stream buffer*/
         protected byte[] _dataStream;
 
+        /** Contains text buffer linked directly to single-piece document text piece */
+        protected string _text;
+
         /** Document wide Properties*/
         protected DocumentProperties _dop;
 
         /** Contains text of the document wrapped in a obfuscated Word data
         * structure*/
         protected ComplexFileTable _cft;
-
-        protected TextPieceTable _tpt;
 
         /** Holds the save history for this document. */
         protected SavedByTable _sbt;
@@ -177,7 +179,7 @@ namespace NPOI.HWPF
             // Start to load up our standard structures.
             _dop = new DocumentProperties(_tableStream, _fib.GetFcDop());
             _cft = new ComplexFileTable(_mainStream, _tableStream, _fib.GetFcClx(), fcMin);
-            _tpt = _cft.GetTextPieceTable();
+            TextPieceTable _tpt = _cft.GetTextPieceTable();
 
             // Word XP and later all put in a zero Filled buffer in
             //  front of the text. This screws up the system for offSets,
@@ -188,6 +190,8 @@ namespace NPOI.HWPF
             //  for where text really begin
             _cbt = new CHPBinTable(_mainStream, _tableStream, _fib.GetFcPlcfbteChpx(), _fib.GetLcbPlcfbteChpx(), cpMin, _tpt);
             _pbt = new PAPBinTable(_mainStream, _tableStream, _dataStream, _fib.GetFcPlcfbtePapx(), _fib.GetLcbPlcfbtePapx(), cpMin, _tpt);
+
+            _text = _tpt.Text;
 
             // Read FSPA and Escher information
             _fspa = new FSPATable(_tableStream, _fib.GetFcPlcspaMom(), _fib.GetLcbPlcspaMom(), TextTable.TextPieces);
@@ -258,6 +262,14 @@ namespace NPOI.HWPF
             return _dop;
         }
 
+        public override string Text
+        {
+            get
+            {
+                return _text;
+            }
+        }
+
         /**
          * Returns the range that covers all text in the
          *  file, including main text, footnotes, headers
@@ -265,29 +277,52 @@ namespace NPOI.HWPF
          */
         public override Range GetOverallRange()
         {
-            // hack to get the ending cp of the document, Have to revisit this.
-            PropertyNode p = _tpt.TextPieces[_tpt.TextPieces.Count - 1];
-
-            return new Range(0, p.End, this);
+            return new Range(0, _text.Length, this);
         }
-
+            /**
+     * Array of {@link SubdocumentType}s ordered by document position and FIB
+     * field order
+     */
+    public static SubdocumentType[] ORDERED = new SubdocumentType[] {
+            SubdocumentType.MAIN, SubdocumentType.FOOTNOTE, 
+            SubdocumentType.HEADER, SubdocumentType.MACRO, 
+            SubdocumentType.ANNOTATION, SubdocumentType.ENDNOTE, SubdocumentType.TEXTBOX,
+            SubdocumentType.HEADER_TEXTBOX };
         /**
          * Returns the range which covers the whole of the
          *  document, but excludes any headers and footers.
          */
         public override Range GetRange()
         {
+
             // First up, trigger a full-recalculate
             // Needed in case of deletes etc
-            GetOverallRange();
+            //GetOverallRange();
 
-            // Now, return the real one
-            return new Range(
-                    _cpSplit.GetMainDocumentStart(),
-                    _cpSplit.GetMainDocumentEnd(),
-                    this
-            );
+            //// Now, return the real one
+            //return new Range(
+            //        _cpSplit.GetMainDocumentStart(),
+            //        _cpSplit.GetMainDocumentEnd(),
+            //        this
+            //);
+            return GetRange(SubdocumentType.MAIN);
         }
+
+        private Range GetRange(SubdocumentType subdocument)
+        {
+            int startCp = 0;
+            foreach (SubdocumentType previos in ORDERED)
+            {
+                int length = GetFileInformationBlock()
+                        .GetSubdocumentTextStreamLength(previos);
+                if (subdocument == previos)
+                    return new Range(startCp, startCp + length, this);
+                startCp += length;
+            }
+            throw new NotSupportedException(
+                    "Subdocument type not supported: " + subdocument);
+        }
+
 
         /**
          * Returns the range which covers all the Footnotes.
@@ -347,16 +382,7 @@ namespace NPOI.HWPF
         {
             get
             {
-                List<TextPiece> textPieces = _tpt.TextPieces;
-                IEnumerator<TextPiece> textIt = textPieces.GetEnumerator();
-
-                int length = 0;
-                while (textIt.MoveNext())
-                {
-                    TextPiece tp = textIt.Current;
-                    length += tp.CharacterLength;
-                }
-                return length;
+                return _text.Length;
             }
         }
 

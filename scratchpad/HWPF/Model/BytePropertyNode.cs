@@ -15,6 +15,7 @@
    limitations under the License.
 ==================================================================== */
 
+using System;
 namespace NPOI.HWPF.Model
 {
     /**
@@ -41,6 +42,18 @@ namespace NPOI.HWPF.Model
             this.startBytes = fcStart;
             this.endBytes = fcEnd;           
         }
+        public BytePropertyNode(int charStart, int charEnd, object buf)
+            :base(charStart, charEnd, buf)
+        {            
+
+            if (charStart > charEnd)
+                throw new ArgumentException("charStart (" + charStart
+                        + ") > charEnd (" + charEnd + ")");
+
+            this.startBytes = -1;
+            this.endBytes = -1;
+        }
+
         private static int GenerateCp(int val, bool IsUnicode)
         {
             if (IsUnicode)

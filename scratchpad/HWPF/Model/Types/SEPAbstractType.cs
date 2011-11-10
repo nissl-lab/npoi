@@ -41,6 +41,18 @@ namespace NPOI.HWPF.Model.Types
         protected bool field_2_fTitlePage;
         protected bool field_3_fAutoPgn;
         protected byte field_4_nfcPgn;
+
+        /** Arabic */
+        /**/public const byte NFCPGN_ARABIC = 0;
+        /** Roman (upper case) */
+        /**/public const byte NFCPGN_ROMAN_UPPER_CASE = 1;
+        /** Roman (lower case) */
+        /**/public const byte NFCPGN_ROMAN_LOWER_CASE = 2;
+        /** Letter (upper case) */
+        /**/public const byte NFCPGN_LETTER_UPPER_CASE = 3;
+        /** Letter (lower case) */
+        /**/public const byte NFCPGN_LETTER_LOWER_CASE = 4;
+
         protected bool field_5_fUnlocked;
         protected byte field_6_cnsPgn;
         protected bool field_7_fPgnRestart;
@@ -67,7 +79,10 @@ namespace NPOI.HWPF.Model.Types
         protected int field_28_dyaLinePitch;
         protected int field_29_clm;
         protected int field_30_unused2;
-        protected byte field_31_dmOrientPage;
+        protected bool field_31_dmOrientPage;
+        public const bool DMORIENTPAGE_LANDSCAPE = false;
+        public const bool DMORIENTPAGE_PORTRAIT = true;
+
         protected byte field_32_iHeadingPgn;
         protected int field_33_pgnStart;
         protected int field_34_lnnMin;
@@ -100,17 +115,25 @@ namespace NPOI.HWPF.Model.Types
 
         public SEPAbstractType()
         {
-
+            this.field_1_bkc = 2;
+            this.field_8_fEndNote = true;
+            this.field_13_dxaPgn = 720;
+            this.field_14_dyaPgn = 720;
+            this.field_31_dmOrientPage = true;
+            this.field_33_pgnStart = 1;
+            this.field_39_xaPage = 12240;
+            this.field_40_yaPage = 15840;
+            this.field_41_xaPageNUp = 12240;
+            this.field_42_yaPageNUp = 15840;
+            this.field_43_dxaLeft = 1800;
+            this.field_44_dxaRight = 1800;
+            this.field_45_dyaTop = 1440;
+            this.field_46_dyaBottom = 1440;
+            this.field_48_dyaHdrTop = 720;
+            this.field_49_dyaHdrBottom = 720;
+            this.field_51_fEvenlySpaced = true;
+            this.field_53_dxaColumns = 720;
         }
-
-        /**
-         * Size of record (exluding 4 byte header)
-         */
-        public int GetSize()
-        {
-            return 4 + +1 + 0 + 0 + 1 + 0 + 1 + 0 + 0 + 1 + 1 + 2 + 4 + 2 + 2 + 0 + 1 + 2 + 2 + 2 + 4 + 4 + 4 + 4 + 0 + 2 + 4 + 4 + 4 + 2 + 2 + 1 + 1 + 2 + 2 + 2 + 2 + 2 + 2 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 2 + 0 + 1 + 4 + 356 + 4 + 1 + 1 + 2 + 212;
-        }
-
 
 
         /**
@@ -596,7 +619,7 @@ namespace NPOI.HWPF.Model.Types
         /**
          * Get the dmOrientPage field for the SEP record.
          */
-        public byte GetDmOrientPage()
+        public bool GetDmOrientPage()
         {
             return field_31_dmOrientPage;
         }
@@ -604,7 +627,7 @@ namespace NPOI.HWPF.Model.Types
         /**
          * Set the dmOrientPage field for the SEP record.
          */
-        public void SetDmOrientPage(byte field_31_dmOrientPage)
+        public void SetDmOrientPage(bool field_31_dmOrientPage)
         {
             this.field_31_dmOrientPage = field_31_dmOrientPage;
         }

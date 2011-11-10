@@ -50,7 +50,7 @@ namespace NPOI.HWPF.UserModel
         public const int TYPE_UNDEFINED = 6;
 
         /** Needed so inserts and deletes will ripple up through Containing Ranges */
-        internal object _parent;
+        internal Range _parent;
 
         /** The starting character offset of this range. */
         internal int _start;
@@ -101,7 +101,7 @@ namespace NPOI.HWPF.UserModel
         protected bool _textRangeFound;
 
         /** All text pieces that belong to the document this Range belongs to. */
-        protected List<TextPiece> _text;
+        protected string _text;
 
         /** The start index in the text list for this Range. */
         protected int _textStart;
@@ -134,11 +134,12 @@ namespace NPOI.HWPF.UserModel
             _sections = _doc.GetSectionTable().GetSections();
             _paragraphs = _doc.ParagraphTable.GetParagraphs();
             _characters = _doc.CharacterTable.GetTextRuns();
-            _text = _doc.TextTable.TextPieces;
+            _text = _doc.Text;
             _parent = null;
 
             SanityCheckStartEnd();
         }
+
 
         /**
          * Used to create Ranges that are children of other Ranges.
@@ -212,8 +213,8 @@ namespace NPOI.HWPF.UserModel
                 case TYPE_TEXT:
                     _textStart = parent._textStart + startIdx;
                     _textEnd = parent._textStart + endIdx;
-                    _start = _text[(_textStart)].Start;
-                    _end = _text[(_textEnd)].End;
+                    _start = _textStart;
+                    _end = _textEnd;
                     _textRangeFound = true;
                     break;
             }
@@ -248,54 +249,7 @@ namespace NPOI.HWPF.UserModel
 
             get
             {
-                InitText();
-
-                for (int i = _textStart; i < _textEnd; i++)
-                {
-                    TextPiece piece = _text[i];
-                    if (piece.IsUnicode)
-                        return true;
-                }
-
-                return false;
-            }
-        }
-
-        /**
-         * Gets the text that this Range Contains.
-         *
-         * @return The text for this range.
-         */
-        public String Text
-        {
-            get
-            {
-                InitText();
-
-                StringBuilder sb = new StringBuilder();
-
-                for (int x = _textStart; x < _textEnd; x++)
-                {
-                    TextPiece piece = _text[x];
-
-                    // Figure out where in this piece the text
-                    // we're after lives
-                    int rStart = 0;
-                    int rEnd = piece.CharacterLength;
-                    if (_start > piece.Start)
-                    {
-                        rStart = _start - piece.Start;
-                    }
-                    if (_end < piece.End)
-                    {
-                        rEnd -= (piece.End - _end);
-                    }
-
-                    // Luckily TextPieces work in characters, so we don't
-                    // need to worry about unicode here
-                    sb.Append(piece.Substring(rStart, rEnd));
-                }
-                return sb.ToString();
+                return true;
             }
         }
 
@@ -413,19 +367,12 @@ namespace NPOI.HWPF.UserModel
         {
             InitAll();
 
-            TextPiece tp = _text[_textStart];
-            StringBuilder sb = tp.GetStringBuilder();
+            _text.Insert(_start, text);
 
-            // Since this is the first item in our list, it is safe to assume that
-            // _start >= tp.Start
-            int insertIndex = _start - tp.Start;
-            sb.Insert(insertIndex, text);
-
-            int adjustedLength = _doc.TextTable.AdjustForInsert(_textStart, text.Length);
-            _doc.CharacterTable.AdjustForInsert(_charStart, adjustedLength);
-            _doc.ParagraphTable.AdjustForInsert(_parStart, adjustedLength);
-            _doc.GetSectionTable().AdjustForInsert(_sectionStart, adjustedLength);
-            AdjustForInsert(adjustedLength);
+            _doc.CharacterTable.AdjustForInsert(_charStart, text.Length);
+            _doc.ParagraphTable.AdjustForInsert(_parStart, text.Length);
+            _doc.GetSectionTable().AdjustForInsert(_sectionStart, text.Length);
+            AdjustForInsert(text.Length);
 
             // update the FIB.CCPText + friends fields
             AdjustFIB(text.Length);
@@ -444,21 +391,10 @@ namespace NPOI.HWPF.UserModel
         {
             InitAll();
 
-            int listIndex = _textEnd - 1;
-            TextPiece tp = _text[listIndex];
-            StringBuilder sb = tp.GetStringBuilder();
-
-            int insertIndex = _end - tp.Start;
-
-            if (tp.GetStringBuilder()[_end - 1] == '\r' && text[0] != '\u0007')
-            {
-                insertIndex--;
-            }
-            sb.Insert(insertIndex, text);
-            int adjustedLength = _doc.TextTable.AdjustForInsert(listIndex, text.Length);
-            _doc.CharacterTable.AdjustForInsert(_charEnd - 1, adjustedLength);
-            _doc.ParagraphTable.AdjustForInsert(_parEnd - 1, adjustedLength);
-            _doc.GetSectionTable().AdjustForInsert(_sectionEnd - 1, adjustedLength);
+            _text.Insert(_end, text);
+            _doc.CharacterTable.AdjustForInsert(_charEnd - 1, text.Length);
+            _doc.ParagraphTable.AdjustForInsert(_parEnd - 1, text.Length);
+            _doc.GetSectionTable().AdjustForInsert(_sectionEnd - 1, text.Length);
             AdjustForInsert(text.Length);
 
             return GetCharacterRun(NumCharacterRuns - 1);
@@ -627,7 +563,6 @@ namespace NPOI.HWPF.UserModel
             int numSections = _sections.Count;
             int numRuns = _characters.Count;
             int numParagraphs = _paragraphs.Count;
-            int numTextPieces = _text.Count;
 
             for (int x = _charStart; x < numRuns; x++)
             {
@@ -654,13 +589,12 @@ namespace NPOI.HWPF.UserModel
                 // System.err.println("Section " + x + " is now " + sepx.Start
                 // + " -> " + sepx.End);
             }
-
-            for (int x = _textStart; x < numTextPieces; x++)
+            _text.Remove(_start, _end - _start);
+            Range parent = _parent;
+            if (parent != null)
             {
-                TextPiece piece = _text[x];
-                piece.AdjustForDelete(_start, _end - _start);
+                parent.AdjustForInsert(-(_end- _start));
             }
-
             // update the FIB.CCPText + friends field
             AdjustFIB(-(_end - _start));
         }
@@ -678,8 +612,8 @@ namespace NPOI.HWPF.UserModel
         public Table InsertBefore(TableProperties props, int rows)
         {
             ParagraphProperties parProps = new ParagraphProperties();
-            parProps.SetFInTable((byte)1);
-            parProps.SetTableLevel((byte)1);
+            parProps.SetFInTable(true);
+            parProps.SetItap(1);
 
             int columns = props.GetItcMac();
             for (int x = 0; x < rows; x++)
@@ -962,7 +896,6 @@ namespace NPOI.HWPF.UserModel
          */
         protected void InitAll()
         {
-            InitText();
             InitCharacterRuns();
             InitParagraphs();
             InitSections();
@@ -997,16 +930,15 @@ namespace NPOI.HWPF.UserModel
         }
 
         /**
-         * Inits the text piece list indexes.
+         * Gets the text that this Range contains.
+         *
+         * @return The text for this range.
          */
-        private void InitText()
+        public String Text
         {
-            if (!_textRangeFound)
+            get
             {
-                int[] point = FindRange(_text, _textStart, _start, _end);
-                _textStart = point[0];
-                _textEnd = point[1];
-                _textRangeFound = true;
+                return _text.Substring(_start, _end-_start);
             }
         }
 
@@ -1100,38 +1032,54 @@ namespace NPOI.HWPF.UserModel
             // without this, OpenOffice.org (v. 2.2.x) does not see all the text in
             // the document
 
-            CPSplitCalculator cpS = ((HWPFDocument)_doc).GetCPSplitCalculator();
+            //CPSplitCalculator cpS = ((HWPFDocument)_doc).GetCPSplitCalculator();
             FileInformationBlock fib = _doc.GetFileInformationBlock();
 
             // Do for each affected part
-            if (_start < cpS.GetMainDocumentEnd())
-            {
-                fib.SetCcpText(fib.GetCcpText() + adjustment);
-            }
+            //if (_start < cpS.GetMainDocumentEnd())
+            //{
+            //    fib.SetCcpText(fib.GetCcpText() + adjustment);
+            //}
 
-            if (_start < cpS.GetCommentsEnd())
+            //if (_start < cpS.GetCommentsEnd())
+            //{
+            //    fib.SetCcpAtn(fib.GetCcpAtn() + adjustment);
+            //}
+            //if (_start < cpS.GetEndNoteEnd())
+            //{
+            //    fib.SetCcpEdn(fib.GetCcpEdn() + adjustment);
+            //}
+            //if (_start < cpS.GetFootnoteEnd())
+            //{
+            //    fib.SetCcpFtn(fib.GetCcpFtn() + adjustment);
+            //}
+            //if (_start < cpS.GetHeaderStoryEnd())
+            //{
+            //    fib.SetCcpHdd(fib.GetCcpHdd() + adjustment);
+            //}
+            //if (_start < cpS.GetHeaderTextboxEnd())
+            //{
+            //    fib.SetCcpHdrTxtBx(fib.GetCcpHdrTxtBx() + adjustment);
+            //}
+            //if (_start < cpS.GetMainTextboxEnd())
+            //{
+            //    fib.SetCcpTxtBx(fib.GetCcpTxtBx() + adjustment);
+            //}
+
+            int currentEnd = 0;
+            foreach (SubdocumentType type in HWPFDocument.ORDERED)
             {
-                fib.SetCcpAtn(fib.GetCcpAtn() + adjustment);
-            }
-            if (_start < cpS.GetEndNoteEnd())
-            {
-                fib.SetCcpEdn(fib.GetCcpEdn() + adjustment);
-            }
-            if (_start < cpS.GetFootnoteEnd())
-            {
-                fib.SetCcpFtn(fib.GetCcpFtn() + adjustment);
-            }
-            if (_start < cpS.GetHeaderStoryEnd())
-            {
-                fib.SetCcpHdd(fib.GetCcpHdd() + adjustment);
-            }
-            if (_start < cpS.GetHeaderTextboxEnd())
-            {
-                fib.SetCcpHdrTxtBx(fib.GetCcpHdrTxtBx() + adjustment);
-            }
-            if (_start < cpS.GetMainTextboxEnd())
-            {
-                fib.SetCcpTxtBx(fib.GetCcpTxtBx() + adjustment);
+                int currentLength = fib.GetSubdocumentTextStreamLength(type);
+                currentEnd += currentLength;
+
+                // do we need to shift this part?
+                if (_start > currentEnd)
+                    continue;
+
+                fib.SetSubdocumentTextStreamLength(type, currentLength
+                        + adjustment);
+
+                break;
             }
         }
 
@@ -1173,6 +1121,12 @@ namespace NPOI.HWPF.UserModel
         internal HWPFDocumentCore GetDocument()
         {
             return _doc;
+        }
+
+        public override String ToString()
+        {
+            return "Range from " + StartOffset + " to " + EndOffset
+                    + " (chars)";
         }
     }
 }

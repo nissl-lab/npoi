@@ -26,10 +26,11 @@ namespace NPOI.HWPF.Model
     public class SEPX : BytePropertyNode
     {
 
+        SectionProperties sectionProperties;
         SectionDescriptor _sed;
 
-        public SEPX(SectionDescriptor sed, int start, int end, CharIndexTranslator translator, byte[] grpprl)
-            : base(start, end, translator, SectionSprmUncompressor.UncompressSEP(grpprl, 0))
+        public SEPX(SectionDescriptor sed, int start, int end, byte[] grpprl)
+            : base(start, end, new SprmBuffer(grpprl, 0))
         {
 
             _sed = sed;
@@ -37,7 +38,13 @@ namespace NPOI.HWPF.Model
 
         public byte[] GetGrpprl()
         {
-            return SectionSprmCompressor.CompressSectionProperty((SectionProperties)_buf);
+            if (sectionProperties != null)
+            {
+                byte[] grpprl = SectionSprmCompressor
+                        .CompressSectionProperty(sectionProperties);
+                _buf = new SprmBuffer(grpprl, 0);
+            }
+            return ((SprmBuffer)_buf).ToByteArray();
         }
 
         public SectionDescriptor GetSectionDescriptor()
@@ -47,7 +54,12 @@ namespace NPOI.HWPF.Model
 
         public SectionProperties GetSectionProperties()
         {
-            return (SectionProperties)_buf;
+            if (sectionProperties == null)
+            {
+                sectionProperties = SectionSprmUncompressor.UncompressSEP(
+                        ((SprmBuffer)_buf).ToByteArray(), 0);
+            }
+            return sectionProperties;
         }
 
         public override bool Equals(Object o)
@@ -58,6 +70,11 @@ namespace NPOI.HWPF.Model
                 return sepx._sed.Equals(_sed);
             }
             return false;
+        }
+
+        public override String ToString()
+        {
+            return "SEPX from " + Start + " to " + End;
         }
     }
 }

@@ -127,6 +127,7 @@
     </Compile>
     <Compile Include="Model\StyleDescription.cs" />
     <Compile Include="Model\StyleSheet.cs" />
+    <Compile Include="Model\SubdocumentType.cs" />
     <Compile Include="Model\TextPiece.cs" />
     <Compile Include="Model\TextPieceTable.cs" />
     <Compile Include="Model\Types\CHPAbstractType.cs">

@@ -148,7 +148,7 @@ namespace NPOI.HWPF.SPRM
             }
             if (newSEP.GetDmOrientPage() != DEFAULT_SEP.GetDmOrientPage())
             {
-                size += SprmUtils.AddSprm((short)0x301D, newSEP.GetDmOrientPage(), null, sprmList);
+                size += SprmUtils.AddSprm((short)0x301D, newSEP.GetDmOrientPage()?1:0, null, sprmList);
             }
             if (newSEP.GetXaPage() != DEFAULT_SEP.GetXaPage())
             {

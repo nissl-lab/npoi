@@ -83,7 +83,7 @@ namespace NPOI.HWPF.UserModel
 
         protected short _istd;
         protected ParagraphProperties _props;
-        protected SprmBuffer _papx;
+        internal SprmBuffer _papx;
 
         internal Paragraph(int startIdx, int endIdx, Table parent)
             : base(startIdx, endIdx, Range.TYPE_PARAGRAPH, parent)
@@ -128,22 +128,22 @@ namespace NPOI.HWPF.UserModel
 
         public bool IsInTable()
         {
-            return _props.GetFInTable() != 0;
+            return _props.GetFInTable();
         }
 
         public bool IsTableRowEnd()
         {
-            return _props.GetFTtp() != 0 || _props.GetFTtpEmbedded() != 0;
+            return _props.GetFTtp() || _props.GetFTtpEmbedded();
         }
 
         public int GetTableLevel()
         {
-            return _props.GetTableLevel();
+            return _props.GetItap();
         }
 
         public bool IsEmbeddedCellMark()
         {
-            return _props.GetEmbeddedCellMark() != 0;
+            return _props.GetFInnerTableCell();
         }
 
         public int GetJustification()
@@ -159,61 +159,57 @@ namespace NPOI.HWPF.UserModel
 
         public bool KeepOnPage()
         {
-            return _props.GetFKeep() != 0;
+            return _props.GetFKeep();
         }
 
         public void SetKeepOnPage(bool fKeep)
         {
-            byte keep = (byte)(fKeep ? 1 : 0);
-            _props.SetFKeep(keep);
-            _papx.UpdateSprm(SPRM_FKEEP, keep);
+            _props.SetFKeep(fKeep);
+            _papx.UpdateSprm(SPRM_FKEEP, Convert.ToByte(fKeep));
         }
 
         public bool KeepWithNext()
         {
-            return _props.GetFKeepFollow() != 0;
+            return _props.GetFKeepFollow();
         }
 
         public void SetKeepWithNext(bool fKeepFollow)
         {
-            byte keepFollow = (byte)(fKeepFollow ? 1 : 0);
-            _props.SetFKeepFollow(keepFollow);
-            _papx.UpdateSprm(SPRM_FKEEPFOLLOW, keepFollow);
+            _props.SetFKeepFollow(fKeepFollow);
+            _papx.UpdateSprm(SPRM_FKEEPFOLLOW, Convert.ToByte(fKeepFollow));
         }
 
         public bool PageBreakBefore()
         {
-            return _props.GetFPageBreakBefore() != 0;
+            return _props.GetFPageBreakBefore();
         }
 
         public void SetPageBreakBefore(bool fPageBreak)
         {
-            byte pageBreak = (byte)(fPageBreak ? 1 : 0);
-            _props.SetFPageBreakBefore(pageBreak);
-            _papx.UpdateSprm(SPRM_FPAGEBREAKBEFORE, pageBreak);
+            _props.SetFPageBreakBefore(fPageBreak);
+            _papx.UpdateSprm(SPRM_FPAGEBREAKBEFORE, Convert.ToByte(fPageBreak));
         }
 
         public bool IsLineNotNumbered()
         {
-            return _props.GetFNoLnn() != 0;
+            return _props.GetFNoLnn();
         }
 
         public void SetLineNotNumbered(bool fNoLnn)
         {
-            byte noLnn = (byte)(fNoLnn ? 1 : 0);
-            _props.SetFNoLnn(noLnn);
-            _papx.UpdateSprm(SPRM_FNOLINENUMB, noLnn);
+            _props.SetFNoLnn(fNoLnn);
+            _papx.UpdateSprm(SPRM_FNOLINENUMB, Convert.ToByte(fNoLnn));
         }
 
         public bool IsSideBySide()
         {
-            return _props.GetFSideBySide() != 0;
+            return _props.GetFSideBySide();
         }
 
         public void SetSideBySide(bool fSideBySide)
         {
             byte sideBySide = (byte)(fSideBySide ? 1 : 0);
-            _props.SetFSideBySide(sideBySide);
+            _props.SetFSideBySide(fSideBySide);
             _papx.UpdateSprm(SPRM_FSIDEBYSIDE, sideBySide);
         }
 
@@ -221,27 +217,25 @@ namespace NPOI.HWPF.UserModel
         {
             get
             {
-                return _props.GetFNoAutoHyph() == 0;
+                return !_props.GetFNoAutoHyph();
             }
             set 
             {
-                byte auto = (byte)(!value ? 1 : 0);
-                _props.SetFNoAutoHyph(auto);
-                _papx.UpdateSprm(SPRM_FNOAUTOHYPH, auto);
+                _props.SetFNoAutoHyph(!value);
+                _papx.UpdateSprm(SPRM_FNOAUTOHYPH, Convert.ToByte(!value));
            
             }
         }
 
         public bool IsWidowControlled()
         {
-            return _props.GetFWidowControl() != 0;
+            return _props.GetFWidowControl();
         }
 
         public void SetWidowControl(bool widowControl)
         {
-            byte widow = (byte)(widowControl ? 1 : 0);
-            _props.SetFWidowControl(widow);
-            _papx.UpdateSprm(SPRM_FWIDOWCONTROL, widow);
+            _props.SetFWidowControl(widowControl);
+            _papx.UpdateSprm(SPRM_FWIDOWCONTROL, Convert.ToByte(widowControl));
         }
 
         public int GetIndentFromRight()
@@ -312,25 +306,25 @@ namespace NPOI.HWPF.UserModel
 
         public bool IsKinsoku()
         {
-            return _props.GetFKinsoku() != 0;
+            return _props.GetFKinsoku();
         }
 
         public void SetKinsoku(bool kinsoku)
         {
             byte kin = (byte)(kinsoku ? 1 : 0);
-            _props.SetFKinsoku(kin);
+            _props.SetFKinsoku(kinsoku);
             _papx.UpdateSprm(SPRM_FKINSOKU, kin);
         }
 
         public bool IsWordWrapped()
         {
-            return _props.GetFWordWrap() != 0;
+            return _props.GetFWordWrap();
         }
 
         public void SetWordWrapped(bool wrap)
         {
             byte wordWrap = (byte)(wrap ? 1 : 0);
-            _props.SetFWordWrap(wordWrap);
+            _props.SetFWordWrap(wrap);
             _papx.UpdateSprm(SPRM_FWORDWRAP, wordWrap);
         }
 
@@ -475,15 +469,15 @@ namespace NPOI.HWPF.UserModel
 
         internal void SetTableRowEnd(TableProperties props)
         {
-            SetTableRowEnd((byte)1);
+            SetTableRowEnd(true);
             byte[] grpprl = TableSprmCompressor.compressTableProperty(props);
             _papx.Append(grpprl);
         }
 
-        private void SetTableRowEnd(byte val)
+        private void SetTableRowEnd(bool val)
         {
             _props.SetFTtp(val);
-            _papx.UpdateSprm(SPRM_FTTP, val);
+            _papx.UpdateSprm(SPRM_FTTP, Convert.ToByte(val));
         }
 
         /**

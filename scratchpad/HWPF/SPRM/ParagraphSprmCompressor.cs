@@ -48,15 +48,15 @@ namespace NPOI.HWPF.SPRM
             }
             if (newPAP.GetFKeep() != oldPAP.GetFKeep())
             {
-                size += SprmUtils.AddSprm((short)0x2405, newPAP.GetFKeep(), null, sprmList);
+                size += SprmUtils.AddSprm((short)0x2405, newPAP.GetFKeep(), sprmList);
             }
             if (newPAP.GetFKeepFollow() != oldPAP.GetFKeepFollow())
             {
-                size += SprmUtils.AddSprm((short)0x2406, newPAP.GetFKeepFollow(), null, sprmList);
+                size += SprmUtils.AddSprm((short)0x2406, newPAP.GetFKeepFollow(), sprmList);
             }
             if (newPAP.GetFPageBreakBefore() != oldPAP.GetFPageBreakBefore())
             {
-                size += SprmUtils.AddSprm((short)0x2407, newPAP.GetFPageBreakBefore(), null, sprmList);
+                size += SprmUtils.AddSprm((short)0x2407, newPAP.GetFPageBreakBefore(), sprmList);
             }
             if (newPAP.GetBrcl() != oldPAP.GetBrcl())
             {
@@ -76,18 +76,18 @@ namespace NPOI.HWPF.SPRM
             }
             if (newPAP.GetFNoLnn() != oldPAP.GetFNoLnn())
             {
-                size += SprmUtils.AddSprm((short)0x240C, newPAP.GetFNoLnn(), null, sprmList);
+                size += SprmUtils.AddSprm((short)0x240C, newPAP.GetFNoLnn(), sprmList);
             }
             if (newPAP.GetFNoAutoHyph() != oldPAP.GetFNoAutoHyph())
             {
-                size += SprmUtils.AddSprm((short)0x242A, newPAP.GetFNoAutoHyph(), null, sprmList);
+                size += SprmUtils.AddSprm((short)0x242A, newPAP.GetFNoAutoHyph(), sprmList);
             }
             if (newPAP.GetDyaHeight() != oldPAP.GetDyaHeight() ||
                  newPAP.GetFMinHeight() != oldPAP.GetFMinHeight())
             {
                 // sprmPWHeightAbs
                 short val = (short)newPAP.GetDyaHeight();
-                if (newPAP.GetFMinHeight()==(byte)1)
+                if (newPAP.GetFMinHeight())
                 {
                     val |= unchecked((short)0x8000);
                 }
@@ -121,7 +121,7 @@ namespace NPOI.HWPF.SPRM
             if (newPAP.GetFWidowControl() != oldPAP.GetFWidowControl())
             {
                 // sprmPFWidowControl
-                size += SprmUtils.AddSprm((short)0x2431, newPAP.GetFWidowControl(), null, sprmList);
+                size += SprmUtils.AddSprm((short)0x2431, newPAP.GetFWidowControl(),sprmList);
             }
             if (newPAP.GetItbdMac() != oldPAP.GetItbdMac() ||
                 !Arrays.Equals(newPAP.GetRgdxaTab(), oldPAP.GetRgdxaTab()) ||
@@ -195,23 +195,23 @@ namespace NPOI.HWPF.SPRM
             }
             if (newPAP.GetFWordWrap() != oldPAP.GetFWordWrap())
             {
-                size += SprmUtils.AddSprm((short)0x2434, newPAP.GetFWordWrap(), null, sprmList);
+                size += SprmUtils.AddSprm((short)0x2434, newPAP.GetFWordWrap(), sprmList);
             }
             if (newPAP.GetFOverflowPunct() != oldPAP.GetFOverflowPunct())
             {
-                size += SprmUtils.AddSprm((short)0x2435, newPAP.GetFOverflowPunct(), null, sprmList);
+                size += SprmUtils.AddSprm((short)0x2435, newPAP.GetFOverflowPunct(), sprmList);
             }
             if (newPAP.GetFTopLinePunct() != oldPAP.GetFTopLinePunct())
             {
-                size += SprmUtils.AddSprm((short)0x2436, newPAP.GetFTopLinePunct(), null, sprmList);
+                size += SprmUtils.AddSprm((short)0x2436, newPAP.GetFTopLinePunct(), sprmList);
             }
             if (newPAP.GetFAutoSpaceDE() != oldPAP.GetFAutoSpaceDE())
             {
-                size += SprmUtils.AddSprm((short)0x2437, newPAP.GetFAutoSpaceDE(), null, sprmList);
+                size += SprmUtils.AddSprm((short)0x2437, newPAP.GetFAutoSpaceDE(), sprmList);
             }
             if (newPAP.GetFAutoSpaceDN() != oldPAP.GetFAutoSpaceDN())
             {
-                size += SprmUtils.AddSprm((short)0x2438, newPAP.GetFAutoSpaceDN(), null, sprmList);
+                size += SprmUtils.AddSprm((short)0x2438, newPAP.GetFAutoSpaceDN(), sprmList);
             }
             if (newPAP.GetWAlignFont() != oldPAP.GetWAlignFont())
             {
@@ -244,12 +244,12 @@ namespace NPOI.HWPF.SPRM
             if (newPAP.GetFInTable() != oldPAP.GetFInTable())
             {
                 // sprmPFInTable
-                size += SprmUtils.AddSprm((short)0x2416, newPAP.GetFInTable(), null, sprmList);
+                size += SprmUtils.AddSprm((short)0x2416, newPAP.GetFInTable(), sprmList);
             }
             if (newPAP.GetFTtp() != oldPAP.GetFTtp())
             {
                 // sprmPFTtp
-                size += SprmUtils.AddSprm((short)0x2417, newPAP.GetFTtp(), null, sprmList);
+                size += SprmUtils.AddSprm((short)0x2417, newPAP.GetFTtp(), sprmList);
             }
             if (newPAP.GetWr() != oldPAP.GetWr())
             {
@@ -259,7 +259,7 @@ namespace NPOI.HWPF.SPRM
             if (newPAP.GetFLocked() != oldPAP.GetFLocked())
             {
                 // sprmPFLocked
-                size += SprmUtils.AddSprm((short)0x2430, newPAP.GetFLocked(), null, sprmList);
+                size += SprmUtils.AddSprm((short)0x2430, newPAP.GetFLocked(), sprmList);
             }
             if (newPAP.GetDxaAbs() != oldPAP.GetDxaAbs())
             {
@@ -323,7 +323,7 @@ namespace NPOI.HWPF.SPRM
             if (newPAP.GetFNumRMIns() != oldPAP.GetFNumRMIns())
             {
                 // sprmPFNumRMIns 
-                size += SprmUtils.AddSprm((short)0x2443, newPAP.GetFNumRMIns(), null, sprmList);
+                size += SprmUtils.AddSprm((short)0x2443, newPAP.GetFNumRMIns(), sprmList);
             }
             if (newPAP.GetFPropRMark() != oldPAP.GetFPropRMark() ||
                 newPAP.GetIbstPropRMark() != oldPAP.GetIbstPropRMark() ||
@@ -331,7 +331,7 @@ namespace NPOI.HWPF.SPRM
             {
                 // sprmPPropRMark
                 byte[] buf = new byte[7];
-                buf[0] = (byte)newPAP.GetFPropRMark();
+                buf[0] = (byte)(newPAP.GetFPropRMark()?1:0);
                 LittleEndian.PutShort(buf, 1, (short)newPAP.GetIbstPropRMark());
                 newPAP.GetDttmPropRMark().Serialize(buf, 3);
                 size += SprmUtils.AddSprm(unchecked((short)0xC63F), 0, buf, sprmList);
@@ -342,22 +342,22 @@ namespace NPOI.HWPF.SPRM
                 size += SprmUtils.AddSprm(unchecked((short)0xC645), 0, newPAP.GetNumrm(), sprmList);
             }
 
-            if (newPAP.GetEmbeddedCellMark() != oldPAP.GetEmbeddedCellMark())
+            if (newPAP.GetFInnerTableCell() != oldPAP.GetFInnerTableCell())
             {
                 // sprmPFInnerTableCell
-                size += SprmUtils.AddSprm((short)0x244b, newPAP.GetEmbeddedCellMark(), null, sprmList);
+                size += SprmUtils.AddSprm((short)0x244b, newPAP.GetFInnerTableCell(), sprmList);
             }
 
             if (newPAP.GetFTtpEmbedded() != oldPAP.GetFTtpEmbedded())
             {
                 // sprmPFInnerTtp 
-                size += SprmUtils.AddSprm((short)0x244c, newPAP.GetFTtpEmbedded(), null, sprmList);
+                size += SprmUtils.AddSprm((short)0x244c, newPAP.GetFTtpEmbedded(), sprmList);
             }
             // Page 55 of public specification begins
-            if (newPAP.GetTableLevel() != oldPAP.GetTableLevel())
+            if (newPAP.GetItap() != oldPAP.GetItap())
             {
                 // sprmPItap
-                size += SprmUtils.AddSprm((short)0x6649, newPAP.GetTableLevel(), null, sprmList);
+                size += SprmUtils.AddSprm((short)0x6649, newPAP.GetItap(), null, sprmList);
             }
 
             return SprmUtils.GetGrpprl(sprmList, size);

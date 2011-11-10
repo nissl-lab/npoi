@@ -29,6 +29,7 @@ namespace NPOI.HWPF.SPRM
         byte[] _buf;
         int _offset;
         bool _istd;
+        private int _sprmsStartOffset;
 
         public SprmBuffer(byte[] buf, bool Istd)
         {
@@ -41,13 +42,33 @@ namespace NPOI.HWPF.SPRM
         {
 
         }
+        public SprmBuffer(byte[] buf, bool istd, int sprmsStartOffset)
+        {
+            _offset = buf.Length;
+            _buf = buf;
+            _istd = istd;
+            _sprmsStartOffset = sprmsStartOffset;
+        }
+        public SprmBuffer(byte[] buf, int _sprmsStartOffset)
+            :this(buf, false, _sprmsStartOffset)
+        {
+            
+        }
+
+        public SprmBuffer(int sprmsStartOffset)
+        {
+            _buf = new byte[sprmsStartOffset + 4];
+            _offset = sprmsStartOffset;
+            _sprmsStartOffset = sprmsStartOffset;
+        }
+
         public SprmBuffer()
         {
             _buf = new byte[4];
             _offset = 0;
         }
 
-        private int FindSprm(short opcode)
+        internal SprmOperation FindSprm(short opcode)
         {
             int operation = SprmOperation.GetOperationFromOpcode(opcode);
             int type = SprmOperation.GetTypeFromOpcode(opcode);
@@ -57,14 +78,28 @@ namespace NPOI.HWPF.SPRM
             {
                 SprmOperation i = si.Next();
                 if (i.Operation == operation && i.Type == type)
-                    return i.GrpprlOffset;
+                    return i;
             }
-            return -1;
+            return null;
         }
 
+
+        public SprmIterator Iterator()
+        {
+            return new SprmIterator(_buf, _sprmsStartOffset);
+        }
+
+        internal int FindSprmOffset(short opcode)
+        {
+            SprmOperation sprmOperation = FindSprm(opcode);
+            if (sprmOperation == null)
+                return -1;
+
+            return sprmOperation.GrpprlOffset;
+        }
         public void UpdateSprm(short opcode, byte operand)
         {
-            int grpprlOffset = FindSprm(opcode);
+            int grpprlOffset = FindSprmOffset(opcode);
             if (grpprlOffset != -1)
             {
                 _buf[grpprlOffset] = operand;
@@ -75,7 +110,7 @@ namespace NPOI.HWPF.SPRM
 
         public void UpdateSprm(short opcode, short operand)
         {
-            int grpprlOffset = FindSprm(opcode);
+            int grpprlOffset = FindSprmOffset(opcode);
             if (grpprlOffset != -1)
             {
                 LittleEndian.PutShort(_buf, grpprlOffset, operand);
@@ -86,7 +121,7 @@ namespace NPOI.HWPF.SPRM
 
         public void UpdateSprm(short opcode, int operand)
         {
-            int grpprlOffset = FindSprm(opcode);
+            int grpprlOffset = FindSprmOffset(opcode);
             if (grpprlOffset != -1)
             {
                 LittleEndian.PutInt(_buf, grpprlOffset, operand);

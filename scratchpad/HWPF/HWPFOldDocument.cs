@@ -85,12 +85,14 @@ namespace NPOI.HWPF
                 byte[] textData = new byte[_fib.GetFcMac() - _fib.GetFcMin()];
                 Array.Copy(_mainStream, _fib.GetFcMin(), textData, 0, textData.Length);
                 TextPiece tp = new TextPiece(
-                        0, textData.Length, textData, pd, 0
+                        0, textData.Length, textData, pd
                 );
                 tpt.Add(tp);
 
                 text.Append(tp.GetStringBuilder());
             }
+
+            _text = tpt.Text;
 
             // Now we can fetch the character and paragraph properties
             _cbt = new OldCHPBinTable(
@@ -106,21 +108,15 @@ namespace NPOI.HWPF
                     _fib.GetFcMin(), tpt
             );
         }
-
-        public override Range GetRange()
-        {
-            // Life is easy when we have no footers, headers or unicode!
-            return new Range(
-                    0, _fib.GetFcMac() - _fib.GetFcMin(), this
-            );
-        }
         public override Range GetOverallRange()
         {
             // Life is easy when we have no footers, headers or unicode!
             return new Range(0, _fib.GetFcMac() - _fib.GetFcMin(), this);
         }
-
-
+        public override Range GetRange()
+        {
+            return GetOverallRange();
+        }
         public override TextPieceTable TextTable
         {
             get
@@ -128,6 +124,15 @@ namespace NPOI.HWPF
                 return tpt;
             }
         }
+        private string _text;
+        public override string Text
+        {
+            get
+            {
+                return _text.ToString();
+            }
+        }
+
 
         public override void Write(Stream out1)
         {

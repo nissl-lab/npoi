@@ -145,7 +145,7 @@ namespace NPOI.HWPF.SPRM
                     newSEP.SetPgnStart((short)sprm.Operand);
                     break;
                 case 0x1d:
-                    newSEP.SetDmOrientPage((byte)sprm.Operand);
+                    newSEP.SetDmOrientPage(sprm.Operand!=0);
                     break;
                 case 0x1e:
 

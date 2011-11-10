@@ -71,7 +71,21 @@ namespace NPOI.HWPF.SPRM
         {
             return TYPE_BITFIELD.GetValue(opcode);
         }
+        byte[] _buf;
+        public SprmOperation FindSprm(short opcode)
+        {
+            int operation = SprmOperation.GetOperationFromOpcode(opcode);
+            int type = SprmOperation.GetTypeFromOpcode(opcode);
 
+            SprmIterator si = new SprmIterator(_buf, 2);
+            while (si.HasNext())
+            {
+                SprmOperation i = si.Next();
+                if (i.Operation == operation && i.Type == type)
+                    return i;
+            }
+            return null;
+        }
         public int Type
         {
             get

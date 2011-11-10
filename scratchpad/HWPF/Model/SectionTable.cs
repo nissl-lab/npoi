@@ -64,7 +64,7 @@ namespace NPOI.HWPF.Model
                 // check for the optimization
                 if (fileOffset == unchecked((int)0xffffffff))
                 {
-                    _sections.Add(new SEPX(sed, startAt, endAt, tpt, new byte[0]));
+                    _sections.Add(new SEPX(sed, startAt, endAt, new byte[0]));
                 }
                 else
                 {
@@ -73,7 +73,7 @@ namespace NPOI.HWPF.Model
                     byte[] buf = new byte[sepxSize];
                     fileOffset += LittleEndianConstants.SHORT_SIZE;
                     Array.Copy(documentStream, fileOffset, buf, 0, buf.Length);
-                    _sections.Add(new SEPX(sed, startAt, endAt, tpt, buf));
+                    _sections.Add(new SEPX(sed, startAt, endAt, buf));
                 }
             }
 
@@ -103,8 +103,10 @@ namespace NPOI.HWPF.Model
                     SEPX s = _sections[i];
                     GenericPropertyNode node = sedPlex.GetProperty(i);
 
-                    s.Start = (CPtoFC(node.Start));
-                    s.End = (CPtoFC(node.End));
+                    int startAt = node.Start;
+                    int endAt = node.End;
+                    s.Start = (startAt);
+                    s.End = (endAt);
                 }
             }
         }

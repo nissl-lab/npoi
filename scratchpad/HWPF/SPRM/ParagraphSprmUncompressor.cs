@@ -107,16 +107,16 @@ namespace NPOI.HWPF.SPRM
                     newPAP.SetJc((byte)sprm.Operand);
                     break;
                 case 0x4:
-                    newPAP.SetFSideBySide((byte)sprm.Operand);
+                    newPAP.SetFSideBySide(sprm.Operand!=0);
                     break;
                 case 0x5:
-                    newPAP.SetFKeep((byte)sprm.Operand);
+                    newPAP.SetFKeep(sprm.Operand!=0);
                     break;
                 case 0x6:
-                    newPAP.SetFKeepFollow((byte)sprm.Operand);
+                    newPAP.SetFKeepFollow(sprm.Operand!=0);
                     break;
                 case 0x7:
-                    newPAP.SetFPageBreakBefore((byte)sprm.Operand);
+                    newPAP.SetFPageBreakBefore(sprm.Operand!=0);
                     break;
                 case 0x8:
                     newPAP.SetBrcl((byte)sprm.Operand);
@@ -131,7 +131,7 @@ namespace NPOI.HWPF.SPRM
                     newPAP.SetIlfo(sprm.Operand);
                     break;
                 case 0xc:
-                    newPAP.SetFNoLnn((byte)sprm.Operand);
+                    newPAP.SetFNoLnn(sprm.Operand!=0);
                     break;
                 case 0xd:
                     /**handle tabs . variable parameter. seperate Processing needed*/
@@ -166,10 +166,10 @@ namespace NPOI.HWPF.SPRM
                     //ApplySprmPChgTabs (newPAP, varParam, opSize);
                     break;
                 case 0x16:
-                    newPAP.SetFInTable((byte)sprm.Operand);
+                    newPAP.SetFInTable(sprm.Operand!=0);
                     break;
                 case 0x17:
-                    newPAP.SetFTtp((byte)sprm.Operand);
+                    newPAP.SetFTtp(sprm.Operand!=0);
                     break;
                 case 0x18:
                     newPAP.SetDxaAbs(sprm.Operand);
@@ -245,7 +245,7 @@ namespace NPOI.HWPF.SPRM
                     newPAP.SetBrcBar(new BorderCode(sprm.Grpprl, sprm.GrpprlOffset));
                     break;
                 case 0x2a:
-                    newPAP.SetFNoAutoHyph((byte)sprm.Operand);
+                    newPAP.SetFNoAutoHyph(sprm.Operand!=0);
                     break;
                 case 0x2b:
                     newPAP.SetDyaHeight(sprm.Operand);
@@ -263,32 +263,32 @@ namespace NPOI.HWPF.SPRM
                     newPAP.SetDxaFromText(sprm.Operand);
                     break;
                 case 0x30:
-                    newPAP.SetFLocked((byte)sprm.Operand);
+                    newPAP.SetFLocked(sprm.Operand!=0);
                     break;
                 case 0x31:
-                    newPAP.SetFWidowControl((byte)sprm.Operand);
+                    newPAP.SetFWidowControl(sprm.Operand!=0);
                     break;
                 case 0x32:
 
                     //undocumented
                     break;
                 case 0x33:
-                    newPAP.SetFKinsoku((byte)sprm.Operand);
+                    newPAP.SetFKinsoku(sprm.Operand!=0);
                     break;
                 case 0x34:
-                    newPAP.SetFWordWrap((byte)sprm.Operand);
+                    newPAP.SetFWordWrap(sprm.Operand!=0);
                     break;
                 case 0x35:
-                    newPAP.SetFOverflowPunct((byte)sprm.Operand);
+                    newPAP.SetFOverflowPunct(sprm.Operand!=0);
                     break;
                 case 0x36:
-                    newPAP.SetFTopLinePunct((byte)sprm.Operand);
+                    newPAP.SetFTopLinePunct(sprm.Operand!=0);
                     break;
                 case 0x37:
-                    newPAP.SetFAutoSpaceDE((byte)sprm.Operand);
+                    newPAP.SetFAutoSpaceDE(sprm.Operand!=0);
                     break;
                 case 0x38:
-                    newPAP.SetFAutoSpaceDN((byte)sprm.Operand);
+                    newPAP.SetFAutoSpaceDN(sprm.Operand!=0);
                     break;
                 case 0x39:
                     newPAP.SetWAlignFont(sprm.Operand);
@@ -301,21 +301,19 @@ namespace NPOI.HWPF.SPRM
                     //obsolete
                     break;
                 case 0x3e:
-                    {
-                        byte[] buf = new byte[sprm.Size - 3];
-                        Array.Copy(buf, 0, sprm.Grpprl, sprm.GrpprlOffset,
-                                         buf.Length);
-                        newPAP.SetAnld(buf);
-                        break;
-                    }
+                    byte[] buf = new byte[sprm.Size - 3];
+                    Array.Copy(buf, 0, sprm.Grpprl, sprm.GrpprlOffset,
+                                     buf.Length);
+                    newPAP.SetAnld(buf);
+                    break;
                 case 0x3f:
                     //don't really need this. spec is confusing regarding this
                     //sprm
-                    byte[] varParam = sprm.Grpprl;
-                    int offset = sprm.GrpprlOffset;
-                    newPAP.SetFPropRMark(varParam[offset]);
-                    newPAP.SetIbstPropRMark(LittleEndian.GetShort(varParam, offset + 1));
-                    newPAP.SetDttmPropRMark(new DateAndTime(varParam, offset + 3));
+                        byte[] varParam = sprm.Grpprl;
+                        int offset = sprm.GrpprlOffset;
+                        newPAP.SetFPropRMark(varParam[offset]!=0);
+                        newPAP.SetIbstPropRMark(LittleEndian.GetShort(varParam, offset + 1));
+                        newPAP.SetDttmPropRMark(new DateAndTime(varParam, offset + 3));
 
                     break;
                 case 0x40:
@@ -334,7 +332,7 @@ namespace NPOI.HWPF.SPRM
                 case 0x43:
 
                     //pap.fNumRMIns
-                    newPAP.SetFNumRMIns((byte)sprm.Operand);
+                    newPAP.SetFNumRMIns(sprm.Operand!=0);
                     break;
                 case 0x44:
 
@@ -343,9 +341,9 @@ namespace NPOI.HWPF.SPRM
                 case 0x45:
                     if (sprm.SizeCode == 6)
                     {
-                        byte[] buf = new byte[sprm.Size - 3];
-                        Array.Copy(buf, 0, sprm.Grpprl, sprm.GrpprlOffset, buf.Length);
-                        newPAP.SetNumrm(buf);
+                        byte[] buf1 = new byte[sprm.Size - 3];
+                        Array.Copy(buf1, 0, sprm.Grpprl, sprm.GrpprlOffset, buf1.Length);
+                        newPAP.SetNumrm(buf1);
                     }
                     else
                     {
@@ -354,19 +352,23 @@ namespace NPOI.HWPF.SPRM
                     break;
 
                 case 0x47:
-                    newPAP.SetFUsePgsuSettings((byte)sprm.Operand);
+                    newPAP.SetFUsePgsuSettings(sprm.Operand!=0);
                     break;
                 case 0x48:
-                    newPAP.SetFAdjustRight((byte)sprm.Operand);
+                    newPAP.SetFAdjustRight(sprm.Operand!=0);
                     break;
                 case 0x49:
-                    newPAP.SetTableLevel((byte)sprm.Operand);
+                    newPAP.SetItap(sprm.Operand);
+                    break;
+                case 0x4a:
+                    // sprmPDtap -- 0x664a
+                    newPAP.SetItap((byte)(newPAP.GetItap() + sprm.Operand));
                     break;
                 case 0x4b:
-                    newPAP.SetEmbeddedCellMark((byte)sprm.Operand);
+                    newPAP.SetFInnerTableCell(sprm.Operand!=0);
                     break;
                 case 0x4c:
-                    newPAP.SetFTtpEmbedded((byte)sprm.Operand);
+                    newPAP.SetFTtpEmbedded(sprm.Operand!=0);
                     break;
                 case 0x61:
                     // Logicial justification of the paragraph, eg left, centre, right

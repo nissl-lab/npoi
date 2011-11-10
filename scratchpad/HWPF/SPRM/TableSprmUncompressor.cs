@@ -29,7 +29,7 @@ namespace NPOI.HWPF.SPRM
         {
         }
 
-        public static TableProperties uncompressTAP(byte[] grpprl,
+        public static TableProperties UncompressTAP(byte[] grpprl,
                                                         int Offset)
         {
             TableProperties newProperties = new TableProperties();
@@ -44,13 +44,54 @@ namespace NPOI.HWPF.SPRM
                 //uncompress the right type of sprm.
                 if (sprm.Type == SprmOperation.TAP_TYPE)
                 {
-                    unCompressTAPOperation(newProperties, sprm);
+                    UncompressTAPOperation(newProperties, sprm);
                 }
             }
 
             return newProperties;
         }
+        public static TableProperties UncompressTAP(SprmBuffer sprmBuffer)
+        {
+            TableProperties tableProperties;
 
+            SprmOperation sprmOperation = sprmBuffer.FindSprm(unchecked((short)0xd608));
+            if (sprmOperation != null)
+            {
+                byte[] grpprl = sprmOperation.Grpprl;
+                int offset = sprmOperation.GrpprlOffset;
+                short itcMac = grpprl[offset];
+                tableProperties = new TableProperties(itcMac);
+            }
+            else
+            {
+                //logger.log(POILogger.WARN,
+                //        "Some table rows didn't specify number of columns in SPRMs");
+                tableProperties = new TableProperties((short)1);
+            }
+
+            for (SprmIterator iterator = sprmBuffer.Iterator(); iterator.HasNext(); )
+            {
+                SprmOperation sprm = iterator.Next();
+
+                /*
+                 * TAPXs are actually PAPXs so we have to make sure we are only
+                 * trying to uncompress the right type of sprm.
+                 */
+                if (sprm.Type == SprmOperation.TAP_TYPE)
+                {
+                    try
+                    {
+                        UncompressTAPOperation(tableProperties, sprm);
+                    }
+                    catch ( IndexOutOfRangeException ex)
+                    {
+                        //logger.log(POILogger.ERROR, "Unable to apply ", sprm,
+                        //        ": ", ex, ex);
+                    }
+                }
+            }
+            return tableProperties;
+        }
         /**
          * Used to uncompress a table property. Performs an operation defined
          * by a sprm stored in a tapx.
@@ -60,7 +101,7 @@ namespace NPOI.HWPF.SPRM
          * @param param The parameter for this operation.
          * @param varParam Variable length parameter for this operation.
          */
-        static void unCompressTAPOperation(TableProperties newTAP, SprmOperation sprm)
+        static void UncompressTAPOperation(TableProperties newTAP, SprmOperation sprm)
         {
             switch (sprm.Operation)
             {

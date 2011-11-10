@@ -41,9 +41,13 @@ namespace NPOI.HWPF.Model
          * @param text The raw bytes of our text
          */
         public TextPiece(int start, int end, byte[] text, PieceDescriptor pd, int cpStart)
-            : base(start, end, buildInitSB(text, pd))
+            : this(start, end, text, pd)
         {
-
+            
+        }
+        public TextPiece(int start, int end, byte[] text, PieceDescriptor pd)
+            : base(start, end, buildInitSB(text, pd))
+         {
             _usesUnicode = pd.IsUnicode;
             _pd = pd;
 
@@ -213,6 +217,12 @@ namespace NPOI.HWPF.Model
         public int GetCP()
         {
             return Start;
+        }
+
+        public override String ToString()
+        {
+            return "TextPiece from " + Start + " to " + End + " ("
+                    + PieceDescriptor + ")";
         }
     }
 

@@ -17,6 +17,7 @@
 
 using System;
 using NPOI.HWPF.SPRM;
+using System.Collections.Generic;
 namespace NPOI.HWPF.UserModel
 {
 
@@ -39,44 +40,94 @@ namespace NPOI.HWPF.UserModel
             : base(startIdx, endIdx, parent)
         {
 
-
-            _tprops = TableSprmUncompressor.uncompressTAP(_papx.ToByteArray(), 2);
+            Paragraph last = GetParagraph(NumParagraphs - 1);
+            _papx = last._papx;
+            _tprops = TableSprmUncompressor.UncompressTAP(_papx);
             _levelNum = levelNum;
-            _cells = new TableCell[_tprops.GetItcMac()];
+            initCells();
 
-            int start = 0;
-            int end = 0;
+        }
 
-            for (int cellIndex = 0; cellIndex < _cells.Length; cellIndex++)
+            private void initCells()
+    {
+        if ( _cellsFound )
+            return;
+
+        short expectedCellsCount = _tprops.GetItcMac();
+
+        int lastCellStart = 0;
+        List<TableCell> cells = new List<TableCell>(
+                expectedCellsCount + 1 );
+        for ( int p = 0; p < NumParagraphs; p++ )
+        {
+            Paragraph paragraph = GetParagraph( p );
+            String s = paragraph.Text;
+
+            if ( ( ( s.Length > 0 && s[s.Length - 1]== TABLE_CELL_MARK ) || paragraph
+                    .IsEmbeddedCellMark() )
+                    && paragraph.GetTableLevel() == _levelNum )
             {
-                Paragraph p = GetParagraph(start);
-                String s = p.Text;
+                TableCellDescriptor tableCellDescriptor = _tprops.GetRgtc() != null
+                        && _tprops.GetRgtc().Length > cells.Count ? _tprops
+                        .GetRgtc()[cells.Count] : new TableCellDescriptor();
+                short leftEdge = (_tprops.GetRgdxaCenter() != null
+                        && _tprops.GetRgdxaCenter().Length > cells.Count) ? (short)_tprops
+                        .GetRgdxaCenter()[cells.Count] : (short)0;
+                short rightEdge = (_tprops.GetRgdxaCenter() != null
+                        && _tprops.GetRgdxaCenter().Length > cells.Count + 1) ? (short)_tprops
+                        .GetRgdxaCenter()[cells.Count + 1] : (short)0;
 
-                while (!((s[s.Length - 1] == TABLE_CELL_MARK) ||
-                          p.IsEmbeddedCellMark() && p.GetTableLevel() == levelNum))
-                {
-                    end++;
-                    p = GetParagraph(end);
-                    s = p.Text;
-                }
-
-                // Create it for the correct paragraph range
-                _cells[cellIndex] = new TableCell(start, end, this, levelNum,
-                                                  _tprops.GetRgtc()[cellIndex],
-                                                  _tprops.GetRgdxaCenter()[cellIndex],
-                                                  _tprops.GetRgdxaCenter()[cellIndex + 1] - _tprops.GetRgdxaCenter()[cellIndex]);
-                // Now we've decided where everything is, tweak the
-                //  record of the paragraph end so that the
-                //  paragraph level counts work
-                // This is a bit hacky, we really need a better fix...
-                _cells[cellIndex]._parEnd++;
-
-                // Next!
-                end++;
-                start = end;
+                TableCell tableCell = new TableCell( GetParagraph(
+                        lastCellStart ).StartOffset, GetParagraph( p )
+                        .EndOffset, this, _levelNum, tableCellDescriptor,
+                        leftEdge, rightEdge - leftEdge );
+                cells.Add( tableCell );
+                lastCellStart = p + 1;
             }
         }
 
+        if ( lastCellStart < ( NumParagraphs - 1 ) )
+        {
+            TableCellDescriptor tableCellDescriptor = _tprops.GetRgtc() != null
+                    && _tprops.GetRgtc().Length > cells.Count ? _tprops
+                    .GetRgtc()[cells.Count] : new TableCellDescriptor();
+            short leftEdge = _tprops.GetRgdxaCenter() != null
+                    && _tprops.GetRgdxaCenter().Length > cells.Count ? (short)_tprops
+                    .GetRgdxaCenter()[cells.Count] : (short)0;
+            short rightEdge = _tprops.GetRgdxaCenter() != null
+                    && _tprops.GetRgdxaCenter().Length > cells.Count + 1 ? (short)_tprops
+                    .GetRgdxaCenter()[cells.Count + 1] : (short)0;
+
+            TableCell tableCell = new TableCell( lastCellStart,
+                    ( NumParagraphs - 1 ), this, _levelNum,
+                    tableCellDescriptor, leftEdge, rightEdge - leftEdge );
+            cells.Add( tableCell );
+        }
+
+        if ( cells.Count>0 )
+        {
+            TableCell lastCell = cells[cells.Count - 1];
+            if ( lastCell.NumParagraphs == 1
+                    && ( lastCell.GetParagraph( 0 ).IsTableRowEnd() ) )
+            {
+                // remove "fake" cell
+                cells.RemoveAt( cells.Count - 1 );
+            }
+        }
+
+        if ( cells.Count != expectedCellsCount )
+        {
+            _tprops.SetItcMac( (short) cells.Count);
+        }
+
+        _cells = cells.ToArray();
+        _cellsFound = true;
+    }
+            private bool _cellsFound = false;
+            protected void Reset()
+            {
+                _cellsFound = false;
+            }
         public int GetRowJustification()
         {
             return _tprops.GetJc();
@@ -132,13 +183,15 @@ namespace NPOI.HWPF.UserModel
             _papx.UpdateSprm(SPRM_FTABLEHEADER, (byte)(tableHeader ? 1 : 0));
         }
 
-        public int numCells()
+        public int NumCells()
         {
+            initCells();
             return _cells.Length;
         }
 
         public TableCell GetCell(int index)
         {
+            initCells();
             return _cells[index];
         }
 

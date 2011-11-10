@@ -34,6 +34,11 @@ namespace NPOI.HWPF.UserModel
         private static BitField _type = BitFieldFactory.GetInstance(0x07);
         private static BitField _lines = BitFieldFactory.GetInstance(0xf8);
 
+        public DropCapSpecifier()
+        {
+            this._info = 0;
+        }
+
         public DropCapSpecifier(byte[] buf, int offset)
             : this(LittleEndian.GetShort(buf, offset))
         {

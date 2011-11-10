@@ -22,6 +22,7 @@ namespace NPOI.HWPF.Model
     using System.Collections.Generic;
     using NPOI.POIFS.Common;
     using NPOI.HWPF.Model.IO;
+    using System.Text;
 
     /**
      * The piece table for matching up character positions to bits of text. This
@@ -337,6 +338,29 @@ namespace NPOI.HWPF.Model
             }
 
             return false;
+        }
+
+        public string Text
+        {
+            get
+            {
+                long start = DateTime.Now.Ticks;
+
+                // rebuild document paragraphs structure
+                StringBuilder docText = new StringBuilder();
+                foreach (TextPiece textPiece in _textPieces)
+                {
+                    String toAppend = textPiece.GetStringBuilder().ToString();
+                    int toAppendLength = toAppend.Length;
+
+                    //if ( toAppendLength != textPiece.getEnd() - textPiece.getStart() )
+                    //{
+                    //}
+                    docText.Append(toAppend);
+                }
+
+                return docText.ToString();
+            }
         }
 
         private class FCComparator : IComparer<TextPiece>

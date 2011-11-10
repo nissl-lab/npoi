@@ -22,10 +22,24 @@ namespace NPOI.HWPF.Model
 
     public class SectionDescriptor
     {
-
+        /// <summary>
+        /// Used internally by Word
+        /// </summary>
         private short fn;
-        private int fc;
+        /// <summary>
+        /// File offset in main stream to beginning of SEPX stored for section. 
+        /// If sed.fcSepx==0xFFFFFFFF, the section properties for the section are equal
+        /// to the standard SEP (see SEP definition).
+        /// </summary>
+        private int fcSepx;
+        /// <summary>
+        /// Used internally by Word
+        /// </summary>
         private short fnMpr;
+        /// <summary>
+        /// Points to offset in FC space of main stream where the Macintosh Print
+        /// Record for a document created on a Macintosh will be stored
+        /// </summary>
         private int fcMpr;
 
         public SectionDescriptor()
@@ -36,7 +50,7 @@ namespace NPOI.HWPF.Model
         {
             fn = LittleEndian.GetShort(buf, offset);
             offset += LittleEndianConstants.SHORT_SIZE;
-            fc = LittleEndian.GetInt(buf, offset);
+            fcSepx = LittleEndian.GetInt(buf, offset);
             offset += LittleEndianConstants.INT_SIZE;
             fnMpr = LittleEndian.GetShort(buf, offset);
             offset += LittleEndianConstants.SHORT_SIZE;
@@ -45,12 +59,12 @@ namespace NPOI.HWPF.Model
 
         public int GetFc()
         {
-            return fc;
+            return fcSepx;
         }
 
         public void SetFc(int fc)
         {
-            this.fc = fc;
+            this.fcSepx = fc;
         }
 
         public override bool Equals(Object o)
@@ -66,13 +80,19 @@ namespace NPOI.HWPF.Model
 
             LittleEndian.PutShort(buf, offset, fn);
             offset += LittleEndianConstants.SHORT_SIZE;
-            LittleEndian.PutInt(buf, offset, fc);
+            LittleEndian.PutInt(buf, offset, fcSepx);
             offset += LittleEndianConstants.INT_SIZE;
             LittleEndian.PutShort(buf, offset, fnMpr);
             offset += LittleEndianConstants.SHORT_SIZE;
             LittleEndian.PutInt(buf, offset, fcMpr);
 
             return buf;
+        }
+        public override string ToString()
+        {
+
+            return "[SED] (fn: " + fn + "; fcSepx: " + fcSepx + "; fnMpr: " + fnMpr
+                + "; fcMpr: " + fcMpr + ")";
         }
     }
 }

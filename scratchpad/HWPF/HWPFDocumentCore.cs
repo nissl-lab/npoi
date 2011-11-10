@@ -23,6 +23,7 @@ namespace NPOI.HWPF
     using NPOI.Util.IO;
     using NPOI.HWPF.Model;
     using NPOI.HWPF.UserModel;
+    using System.Text;
 
     /// <summary>
     /// This class holds much of the core of a Word document, but without some of the table structure information. You generally want to work with one of HWPFDocument or HWPFOldDocument
@@ -138,7 +139,22 @@ namespace NPOI.HWPF
         /// </summary>
         public abstract Range GetOverallRange();
 
+            /**
+     * Returns document text, i.e. text information from all text pieces,
+     * including OLE descriptions and field codes
+     */
+    public String GetDocumentText() {
+        return Text.ToString();
+    }
+
+    /**
+     * Internal method to access document text
+     */
+    
+        public abstract string Text{get;}
+
         public abstract TextPieceTable TextTable { get; }
+
 
         public CHPBinTable CharacterTable
         {

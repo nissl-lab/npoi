@@ -36,7 +36,6 @@ namespace NPOI.HWPF.Model
                             TextPieceTable tpt)
         {
             PlexOfCps sedPlex = new PlexOfCps(documentStream, Offset, size, 12);
-            CharIsBytes charConv = new CharIsBytes(tpt);
 
             int length = sedPlex.Length;
 
@@ -49,10 +48,11 @@ namespace NPOI.HWPF.Model
                 int startAt = node.Start;
                 int endAt = node.End;
 
+                SEPX sepx;
                 // check for the optimization
                 if (fileOffset == unchecked((int)0xffffffff))
                 {
-                    _sections.Add(new SEPX(sed, startAt, endAt, charConv, new byte[0]));
+                    sepx = new SEPX(sed, startAt, endAt, new byte[0]);
                 }
                 else
                 {
@@ -62,44 +62,16 @@ namespace NPOI.HWPF.Model
                     //  section properties, and we're trying to decode them as if they
                     //  were the new ones, we sometimes "need" more data than we have.
                     // As a workaround, have a few extra 0 bytes on the end!
-                    byte[] buf = new byte[sepxSize];
+                    byte[] buf = new byte[sepxSize+2];
                     fileOffset += LittleEndianConstants.SHORT_SIZE;
                     Array.Copy(documentStream, fileOffset, buf, 0, buf.Length);
-                    _sections.Add(new SEPX(sed, startAt, endAt, charConv, buf));
+                    sepx = new SEPX(sed, startAt, endAt,buf);
                 }
+                _sections.Add(sepx);
             }
+            //_sections.Sort(PropertyNode.Start
         }
 
-        private class CharIsBytes : CharIndexTranslator
-        {
-            private TextPieceTable tpt;
-            internal CharIsBytes(TextPieceTable tpt)
-            {
-                this.tpt = tpt;
-            }
-
-            public int GetCharIndex(int bytePos, int startCP)
-            {
-                return bytePos;
-            }
-            public int GetCharIndex(int bytePos)
-            {
-                return bytePos;
-            }
-
-            public bool IsIndexInTable(int bytePos)
-            {
-                return tpt.IsIndexInTable(bytePos);
-            }
-            public int LookIndexBackward(int bytePos)
-            {
-                return tpt.LookIndexBackward(bytePos);
-            }
-            public int LookIndexForward(int bytePos)
-            {
-                return tpt.LookIndexForward(bytePos);
-            }
-        }
     }
 }
 

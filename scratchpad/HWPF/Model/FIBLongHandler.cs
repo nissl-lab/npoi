@@ -25,28 +25,28 @@ namespace NPOI.HWPF.Model
      */
     public class FIBLongHandler
     {
-        public static int CBMAC = 0;
-        public static int PRODUCTCREATED = 1;
-        public static int PRODUCTREVISED = 2;
-        public static int CCPTEXT = 3;
-        public static int CCPFTN = 4;
-        public static int CCPHDD = 5;
-        public static int CCPMCR = 6;
-        public static int CCPATN = 7;
-        public static int CCPEDN = 8;
-        public static int CCPTXBX = 9;
-        public static int CCPHDRTXBX = 10;
-        public static int PNFBPCHPFIRST = 11;
-        public static int PNCHPFIRST = 12;
-        public static int CPNBTECHP = 13;
-        public static int PNFBPPAPFIRST = 14;
-        public static int PNPAPFIRST = 15;
-        public static int CPNBTEPAP = 16;
-        public static int PNFBPLVCFIRST = 17;
-        public static int PNLVCFIRST = 18;
-        public static int CPNBTELVC = 19;
-        public static int FCISLANDFIRST = 20;
-        public static int FCISLANDLIM = 21;
+        public const int CBMAC = 0;
+        public const int PRODUCTCREATED = 1;
+        public const int PRODUCTREVISED = 2;
+        public const int CCPTEXT = 3;
+        public const int CCPFTN = 4;
+        public const int CCPHDD = 5;
+        public const int CCPMCR = 6;
+        public const int CCPATN = 7;
+        public const int CCPEDN = 8;
+        public const int CCPTXBX = 9;
+        public const int CCPHDRTXBX = 10;
+        public const int PNFBPCHPFIRST = 11;
+        public const int PNCHPFIRST = 12;
+        public const int CPNBTECHP = 13;
+        public const int PNFBPPAPFIRST = 14;
+        public const int PNPAPFIRST = 15;
+        public const int CPNBTEPAP = 16;
+        public const int PNFBPLVCFIRST = 17;
+        public const int PNLVCFIRST = 18;
+        public const int CPNBTELVC = 19;
+        public const int FCISLANDFIRST = 20;
+        public const int FCISLANDLIM = 21;
 
         int[] _longs;
 

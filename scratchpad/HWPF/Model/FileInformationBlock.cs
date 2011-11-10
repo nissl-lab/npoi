@@ -18,6 +18,7 @@
 using NPOI.HWPF.Model.Types;
 using System.Collections;
 using NPOI.HWPF.Model.IO;
+using System;
 namespace NPOI.HWPF.Model
 {
 
@@ -357,7 +358,23 @@ namespace NPOI.HWPF.Model
         {
             _longHandler.SetLong(FIBLongHandler.CBMAC, cbMac);
         }
+        /**
+ * @return length of specified subdocument text stream in characters
+ */
+        public int GetSubdocumentTextStreamLength(SubdocumentType type)
+        {
+            return _longHandler.GetLong((int)type);
+        }
+        public void SetSubdocumentTextStreamLength(SubdocumentType type, int length)
+        {
+            if (length < 0)
+                throw new ArgumentException(
+                        "Subdocument length can't be less than 0 (passed value is "
+                                + length + "). " + "If there is no subdocument "
+                                + "length must be set to zero.");
 
+            _longHandler.SetLong((int)type, length);
+        }
         /**
          * The count of CPs in the main document
          */
