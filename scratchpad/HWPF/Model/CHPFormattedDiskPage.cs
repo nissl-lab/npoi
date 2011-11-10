@@ -151,7 +151,7 @@ namespace NPOI.HWPF.Model
             if (index != size)
             {
                 _overFlow = new List<CHPX>();
-                _overFlow.AddRange(_chpxList.GetRange(index, size));
+                _overFlow.AddRange(_chpxList.GetRange(index, size-index));
             }
 
             // index should equal number of CHPXs that will be in this fkp now.

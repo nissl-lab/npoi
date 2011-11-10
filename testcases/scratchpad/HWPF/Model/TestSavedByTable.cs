@@ -15,28 +15,25 @@
    limitations under the License.
 ==================================================================== */
 
-namespace NPOI.HWPF.model;
-
-using java.io.*;
-using java.util.Arrays;
-using java.util.List;
-
-using junit.framework.TestCase;
-
-using NPOI.HWPF.HWPFDocument;
-using NPOI.HWPF.HWPFTestDataSamples;
-
-/**
- * Unit test for {@link SavedByTable} and {@link SavedByEntry}.
- *
- * @author Daniel Noll
- */
-public class TestSavedByTable
-  : TestCase
+namespace NPOI.HWPF.Model
 {
+    using NPOI.Util;
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using TestCases.HWPF;
+    using System.IO;
+    using System.Collections;
 
-  /** The expected entries in the test document. */
-  private List expected = Arrays.asList(new Object[] {
+    /**
+     * Unit test for {@link SavedByTable} and {@link SavedByEntry}.
+     *
+     * @author Daniel Noll
+     */
+    [TestClass]
+    public class TestSavedByTable
+    {
+
+        /** The expected entries in the test document. */
+        private IList expected = Arrays.AsList(new object[] {
     new SavedByEntry("cic22", "C:\\DOCUME~1\\phamill\\LOCALS~1\\Temp\\AutoRecovery save of Iraq - security.asd"),
     new SavedByEntry("cic22", "C:\\DOCUME~1\\phamill\\LOCALS~1\\Temp\\AutoRecovery save of Iraq - security.asd"),
     new SavedByEntry("cic22", "C:\\DOCUME~1\\phamill\\LOCALS~1\\Temp\\AutoRecovery save of Iraq - security.asd"),
@@ -49,33 +46,33 @@ public class TestSavedByTable
     new SavedByEntry("MKhan", "C:\\WINNT\\Profiles\\mkhan\\Desktop\\Iraq.doc")
   });
 
-  /**
-   * Tests Reading in the entries, comparing them against the expected entries.
-   * Then tests writing the document out and Reading the entries yet again.
-   *
-   * @throws Exception if an unexpected error occurs.
-   */
-  public void testReadWrite()
-    throws Exception
-  {
-    // This document is widely available on the internet as "blair.doc".
-    // I tried stripping the content and saving the document but my version
-    // of Word (from Office XP) strips this table out.
-    HWPFDocument doc = HWPFTestDataSamples.openSampleFile("saved-by-table.doc");
+        /**
+         * Tests Reading in the entries, comparing them against the expected entries.
+         * Then tests writing the document out and Reading the entries yet again.
+         *
+         * @throws Exception if an unexpected error occurs.
+         */
+        [TestMethod]
+        public void TestReadWrite()
+        {
+            // This document is widely available on the internet as "blair.doc".
+            // I tried stripping the content and saving the document but my version
+            // of Word (from Office XP) strips this table out.
+            HWPFDocument doc = HWPFTestDataSamples.OpenSampleFile("saved-by-table.doc");
 
-    // Check what we just Read.
-    Assert.AreEqual("List of saved-by entries was not as expected",
-                 expected, doc.GetSavedByTable().getEntries());
+            // Check what we just Read.
+            Assert.AreEqual(
+                         expected, doc.GetSavedByTable().GetEntries(), "List of saved-by entries was not as expected");
 
-    // Now write the entire document out, and read it back in...
-    MemoryStream byteStream = new MemoryStream();
-    doc.Write(byteStream);
-    InputStream copyStream = new MemoryStream(byteStream.ToArray());
-    HWPFDocument copy = new HWPFDocument(copyStream);
+            // Now write the entire document out, and read it back in...
+            MemoryStream byteStream = new MemoryStream();
+            doc.Write(byteStream);
+            Stream copyStream = new MemoryStream(byteStream.ToArray());
+            HWPFDocument copy = new HWPFDocument(copyStream);
 
-    // And check again.
-    Assert.AreEqual("List of saved-by entries was incorrect after writing",
-                 expected, copy.GetSavedByTable().getEntries());
-  }
+            // And check again.
+            Assert.AreEqual(
+                         expected, copy.GetSavedByTable().GetEntries(), "List of saved-by entries was incorrect after writing");
+        }
+    }
 }
-

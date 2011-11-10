@@ -97,7 +97,6 @@ namespace TestCases.HWPF
          * A document with some unicode in it too
          */
         private HWPFDocument docUnicode;
-
         [TestInitialize]
         public void SetUp()
         {

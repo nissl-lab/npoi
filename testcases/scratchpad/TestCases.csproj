@@ -64,9 +64,11 @@
     <Compile Include="HWPF\Model\TestRevisionMarkAuthorTable.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="HWPF\Model\TestSavedByTable.cs" />
     <Compile Include="HWPF\Model\TestSectionTable.cs" />
     <Compile Include="HWPF\Model\TestStyleSheet.cs" />
     <Compile Include="HWPF\Model\TestTextPieceTable.cs" />
+    <Compile Include="HWPF\SPRM\TestSprms.cs" />
     <Compile Include="HWPF\TestFieldsTables.cs" />
     <Compile Include="HWPF\TestHWPFPictures.cs" />
     <Compile Include="HWPF\TestHWPFRangeParts.cs" />
