@@ -210,6 +210,7 @@
     <Compile Include="UserModel\LineSpacingDescriptor.cs" />
     <Compile Include="UserModel\ListEntry.cs" />
     <Compile Include="UserModel\Notes.cs" />
+    <Compile Include="UserModel\ObjectPoolImpl.cs" />
     <Compile Include="UserModel\ObjectsPool.cs" />
     <Compile Include="UserModel\OfficeDrawing.cs" />
     <Compile Include="UserModel\OfficeDrawings.cs" />

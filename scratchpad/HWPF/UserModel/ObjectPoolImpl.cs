@@ -16,6 +16,7 @@
 ==================================================================== */
 using NPOI.POIFS.FileSystem;
 using System.IO;
+using NPOI.Util;
 namespace NPOI.HWPF.UserModel
 {
 
@@ -52,4 +53,3 @@ namespace NPOI.HWPF.UserModel
         }
     }
 }
-
