@@ -96,17 +96,18 @@ namespace NPOI.HSSF.Record
         private long _initialposition;
         private long pos = 0;
 
-        	/** Header {@link LittleEndianInput} facet of the wrapped {@link InputStream} */
-	private BiffHeaderInput _bhi;
-	/** Data {@link LittleEndianInput} facet of the wrapped {@link InputStream} */
-	private LittleEndianInput _dataInput;
-	/** the record identifier of the BIFF record currently being read */
+        /** Header {@link LittleEndianInput} facet of the wrapped {@link InputStream} */
+        private BiffHeaderInput _bhi;
+        /** Data {@link LittleEndianInput} facet of the wrapped {@link InputStream} */
+        private LittleEndianInput _dataInput;
+        /** the record identifier of the BIFF record currently being read */
 
         protected byte[] data = new byte[MAX_RECORD_DATA_SIZE];
 
-        public RecordInputStream(Stream in1):this (in1, null, 0)
+        public RecordInputStream(Stream in1)
+            : this(in1, null, 0)
         {
-            
+
         }
 
         public RecordInputStream(Stream in1, Biff8EncryptionKey key, int initialOffset)
@@ -162,7 +163,7 @@ namespace NPOI.HSSF.Record
                 throw new RecordFormatException("Found invalid sid (" + result + ")");
             }
             _currentDataLength = DATA_LEN_NEEDS_TO_BE_READ;
-            
+
             return result;
         }
 
@@ -234,7 +235,7 @@ namespace NPOI.HSSF.Record
             {
                 if (_currentDataLength != -1 && _currentDataLength != _currentDataOffset)
                 {
-                    throw new  LeftoverDataException(_currentSid, Remaining);
+                    throw new LeftoverDataException(_currentSid, Remaining);
                 }
                 if (_currentDataLength != DATA_LEN_NEEDS_TO_BE_READ)
                 {
@@ -362,7 +363,7 @@ namespace NPOI.HSSF.Record
             //so that it is not corrupted.
             //if (double.IsNaN(result))
             //{
-                //throw new Exception("Did not expect to read NaN"); // (Because Excel typically doesn't write NaN
+            //throw new Exception("Did not expect to read NaN"); // (Because Excel typically doesn't write NaN
             //}
             pos += LittleEndianConstants.DOUBLE_SIZE;
             return result;
@@ -430,7 +431,7 @@ namespace NPOI.HSSF.Record
                         buf[curLen] = ch;
                         curLen++;
                     }
-                    return  new String(buf);// Encoding.UTF8.GetChars(buf,0,buf.Length);
+                    return new String(buf);// Encoding.UTF8.GetChars(buf,0,buf.Length);
                 }
                 // else string has been spilled into next continue record
                 // so read what's left of the current record
@@ -498,14 +499,16 @@ namespace NPOI.HSSF.Record
             //Using a ByteArrayOutputStream is just an easy way to Get a
             //growable array of the data.
             MemoryStream out1 = new MemoryStream(2 * MAX_RECORD_DATA_SIZE);
-     
-            while (true) {
-              byte[] b = ReadRemainder();
-              out1.Write(b, 0, b.Length);
-              if (!IsContinueNext) {
-                  break;
-              }
-              NextRecord();
+
+            while (true)
+            {
+                byte[] b = ReadRemainder();
+                out1.Write(b, 0, b.Length);
+                if (!IsContinueNext)
+                {
+                    break;
+                }
+                NextRecord();
             }
 
             return out1.ToArray();
@@ -517,7 +520,8 @@ namespace NPOI.HSSF.Record
          */
         public int Remaining
         {
-            get {
+            get
+            {
                 if (_currentDataLength == DATA_LEN_NEEDS_TO_BE_READ)
                 {
                     // already read sid of next record. so current one is finished
@@ -533,7 +537,8 @@ namespace NPOI.HSSF.Record
          */
         public bool IsContinueNext
         {
-            get {
+            get
+            {
                 if (_currentDataLength != DATA_LEN_NEEDS_TO_BE_READ && _currentDataOffset != _currentDataLength)
                 {
                     throw new InvalidOperationException("Should never be called before end of current record");
@@ -548,7 +553,7 @@ namespace NPOI.HSSF.Record
                 //  - During TextObjectRecord construction (just before the text, perhaps within the text, 
                 //    and before the formatting run data)
                 return _nextSid == ContinueRecord.sid;
-            
+
             }
         }
 
@@ -599,10 +604,19 @@ namespace NPOI.HSSF.Record
 
         public override int Read(byte[] b, int off, int len)
         {
-            
+
             Array.Copy(data, _currentDataOffset, b, off, len);
             _currentDataOffset += len;
-            return Math.Min(data.Length,b.Length);
+            return Math.Min(data.Length, b.Length);
+        }
+
+
+        /**
+ @return sid of next record. Can be called after hasNextRecord()
+ */
+        public int GetNextSid()
+        {
+            return _nextSid;
         }
     }
 }

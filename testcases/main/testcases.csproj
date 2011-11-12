@@ -491,6 +491,7 @@
     <Compile Include="HSSF\Record\TestBoolErrRecord.cs" />
     <Compile Include="HSSF\Record\TestFontRecord.cs" />
     <Compile Include="HSSF\Record\TestNameCommentRecord.cs" />
+    <Compile Include="HSSF\Record\TestTextObjectBaseRecord.cs" />
     <Compile Include="HSSF\Record\TestWriteAccessRecord.cs" />
     <Compile Include="HSSF\UserModel\TestHSSFFont.cs" />
     <Compile Include="HSSF\UserModel\TestHSSFDataFormat.cs" />

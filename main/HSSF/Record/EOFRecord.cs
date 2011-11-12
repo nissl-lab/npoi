@@ -22,6 +22,7 @@ namespace NPOI.HSSF.Record
     using System.Text;
     using NPOI.Util;
     using System;
+    using NPOI.Util.IO;
 
 /**
  * End Of File record.
@@ -34,8 +35,7 @@ namespace NPOI.HSSF.Record
  * @version 2.0-pre
  */
 
-public class EOFRecord
-   : Record
+public class EOFRecord: StandardRecord
 {
     public const short sid = 0x0A;
     public static int ENCODED_SIZE = 4;
@@ -64,17 +64,13 @@ public class EOFRecord
         return buffer.ToString();
     }
 
-    public override int Serialize(int offset, byte [] data)
+    public override void Serialize(LittleEndianOutput out1)
     {
-        LittleEndian.PutShort(data, 0 + offset, sid);
-        LittleEndian.PutShort(data, 2 + offset,
-                              (( short ) 0));   // no record info
-        return RecordSize;
     }
 
-    public override int RecordSize
+    protected override int DataSize
     {
-        get{return 4;}
+        get { return ENCODED_SIZE-4; }
     }
 
     public override short Sid

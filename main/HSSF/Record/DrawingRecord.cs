@@ -20,8 +20,9 @@ namespace NPOI.HSSF.Record
     using System;
     using System.Text;
     using NPOI.Util;
+    using NPOI.Util.IO;
 
-    public class DrawingRecord : Record
+    public class DrawingRecord : StandardRecord
     {
         public const short sid = 0xEC;
 
@@ -43,32 +44,16 @@ namespace NPOI.HSSF.Record
             contd = record;
         }
 
-        public override int Serialize(int offset, byte [] data)
+        public override void Serialize(LittleEndianOutput out1)
         {
-            if (recordData == null)
-            {
-                recordData = new byte[0];
-            }
-            LittleEndian.PutShort(data, 0 + offset, sid);
-            LittleEndian.PutShort(data, 2 + offset, (short)(recordData.Length));
-            if (recordData.Length > 0)
-            {
-                Array.Copy(recordData, 0, data, 4 + offset, recordData.Length);
-            }
-            return RecordSize;
+            out1.Write(recordData);
         }
 
-        public override int RecordSize
+        protected override int DataSize
         {
             get
             {
-                int retval = 4;
-
-                if (recordData != null)
-                {
-                    retval += recordData.Length;
-                }
-                return retval;
+                return recordData.Length;
             }
         }
 

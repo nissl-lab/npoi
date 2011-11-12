@@ -15,89 +15,80 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 ==================================================================== */
-        
+
 
 
 namespace TestCases.HSSF.Record
 {
 
-        using System;
+    using System;
     using NPOI.HSSF.Record;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NPOI.HSSF.UserModel;
+    using NPOI.Util;
 
-/**
- * Tests the serialization and deserialization of the TextObjectBaseRecord
- * class works correctly.  Test data taken directly from a real
- * Excel file.
- *
+    /**
+     * Tests the serialization and deserialization of the TextObjectBaseRecord
+     * class works correctly.  Test data taken directly from a real
+     * Excel file.
+     *
 
- * @author Glen Stampoultzis (glens at apache.org)
- */
-public class TestTextObjectBaseRecord
-        
-{
-    byte[] data = new byte[] {
-	    0x44, 0x02, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00,
-	    0x00, 0x00, 0x02, 0x00, 0x02, 0x00, 0x00, 0x00,
-        0x00, 0x00,
-    };
-
-    public TestTextObjectBaseRecord(String name)
+     * @author Glen Stampoultzis (glens at apache.org)
+     */
+    [TestClass]
+    public class TestTextObjectBaseRecord
     {
-        
-    }
+	    /** data for one TXO rec and two continue recs */
+        private static byte[] data = HexRead.ReadFromString(
+            "B6 01 " + // TextObjectRecord.sid
+            "12 00 " + // size 18
+            "44 02 02 00 00 00 00 00" +
+            "00 00 " +
+            "02 00 " + // strLen 2
+            "10 00 " + // 16 bytes for 2 format runs
+            "00 00" +
+            "00 00 " +
+            "3C 00 " + // ContinueRecord.sid
+            "03 00 " + // size 3
+            "00 " + // unicode compressed
+            "41 42 " + // 'AB'
+            "3C 00 " + // ContinueRecord.sid
+            "10 00 " + // size 16
+            "00 00 18 00 00 00 00 00 " +
+            "02 00 00 00 00 00 00 00 "
+        );
 
-    public void TestLoad()
-            
-    {
-        TextObjectBaseRecord record = new TextObjectBaseRecord(new TestcaseRecordStream((short)0x1B6, (short)data.Length, data));
-
-
-//        Assert.AreEqual( (short), record.GetOptions());
-        Assert.AreEqual( false, record.IsReserved1() );
-        Assert.AreEqual( TextObjectBaseRecord.HORIZONTAL_TEXT_ALIGNMENT_CENTERED, record.GetHorizontalTextAlignment() );
-        Assert.AreEqual( TextObjectBaseRecord.VERTICAL_TEXT_ALIGNMENT_JUSTIFY, record.GetVerticalTextAlignment() );
-        Assert.AreEqual( 0, record.GetReserved2() );
-        Assert.AreEqual( true, record.IsTextLocked() );
-        Assert.AreEqual( 0, record.GetReserved3() );
-        Assert.AreEqual( TextObjectBaseRecord.TEXT_ORIENTATION_ROT_RIGHT, record.GetTextOrientation());
-        Assert.AreEqual( 0, record.GetReserved4());
-        Assert.AreEqual( 0, record.GetReserved5());
-        Assert.AreEqual( 0, record.GetReserved6());
-        Assert.AreEqual( 2, record.GetTextLength());
-        Assert.AreEqual( 2, record.GetFormattingRunLength());
-        Assert.AreEqual( 0, record.GetReserved7());
-
-
-        Assert.AreEqual( 22, record.GetRecordSize() );
-
-        record.ValidateSid((short)0x1B6);
-    }
-
-    public void TestStore()
-    {
-        TextObjectBaseRecord record = new TextObjectBaseRecord();
+        [TestMethod]
+        public void TestLoad()
+        {
+            TextObjectRecord record = new TextObjectRecord(TestcaseRecordInputStream.Create(data));
+            Assert.AreEqual(TextObjectRecord.HORIZONTAL_TEXT_ALIGNMENT_CENTERED, record.HorizontalTextAlignment);
+            Assert.AreEqual(TextObjectRecord.VERTICAL_TEXT_ALIGNMENT_JUSTIFY, record.VerticalTextAlignment);
+            Assert.AreEqual(true, record.IsTextLocked);
+            Assert.AreEqual(TextObjectRecord.TEXT_ORIENTATION_ROT_RIGHT, record.TextOrientation);
 
 
+            Assert.AreEqual(49, record.RecordSize);
+        }
 
-//        record.SetOptions( (short) 0x0000);
-        record.SetReserved1( false );
-        record.SetHorizontalTextAlignment( TextObjectBaseRecord.HORIZONTAL_TEXT_ALIGNMENT_CENTERED );
-        record.SetVerticalTextAlignment( TextObjectBaseRecord.VERTICAL_TEXT_ALIGNMENT_JUSTIFY );
-        record.SetReserved2( (short)0 );
-        record.SetTextLocked( true );
-        record.SetReserved3( (short)0 );
-        record.SetTextOrientation( TextObjectBaseRecord.TEXT_ORIENTATION_ROT_RIGHT );
-        record.SetReserved4( (short)0 );
-        record.SetReserved5( (short)0 );
-        record.SetReserved6( (short)0 );
-        record.SetTextLength( (short)2 );
-        record.SetFormattingRunLength( (short)2 );
-        record.SetReserved7( 0 );
+        [TestMethod]
+        public void TestStore()
+        {
+            TextObjectRecord record = new TextObjectRecord();
+            HSSFRichTextString str = new HSSFRichTextString("AB");
+            str.ApplyFont(0, 2, (short)0x0018);
+            str.ApplyFont(2, 2, (short)0x0320);
 
-        byte [] recordBytes = record.Serialize();
-        Assert.AreEqual(recordBytes.Length - 4, data.Length);
-        for (int i = 0; i < data.Length; i++)
-            Assert.AreEqual("At offSet " + i, data[i], recordBytes[i+4]);
+            record.HorizontalTextAlignment = (TextObjectRecord.HORIZONTAL_TEXT_ALIGNMENT_CENTERED);
+            record.VerticalTextAlignment = (TextObjectRecord.VERTICAL_TEXT_ALIGNMENT_JUSTIFY);
+            record.IsTextLocked = (true);
+            record.TextOrientation = (TextObjectRecord.TEXT_ORIENTATION_ROT_RIGHT);
+            record.Str = (str);
+
+            byte[] recordBytes = record.Serialize();
+            Assert.AreEqual(recordBytes.Length, data.Length);
+            for (int i = 0; i < data.Length; i++)
+                Assert.AreEqual(data[i], recordBytes[i], "At offset " + i);
+        }
     }
 }

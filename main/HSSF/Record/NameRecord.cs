@@ -29,6 +29,7 @@ namespace NPOI.HSSF.Record
     using NPOI.HSSF.UserModel;
     using NPOI.HSSF.Record.Formula;
     using SSFormula=NPOI.SS.Formula;
+    using NPOI.HSSF.Record.Cont;
 
     /**
      * Title:        Name Record (aka Named Range) 
@@ -39,7 +40,7 @@ namespace NPOI.HSSF.Record
      * @author Glen Stampoultzis (glens at apache.org)
      * @version 1.0-pre
      */
-    public class NameRecord : StandardRecord
+    public class NameRecord : ContinuableRecord
     {
         private enum Option:short {
 		    OPT_HIDDEN_NAME =   0x0001,
@@ -153,7 +154,7 @@ namespace NPOI.HSSF.Record
             field_16_help_topic_text = "";
             field_17_status_bar_text = "";
         }
-        protected override int DataSize
+        protected int DataSize
         {
             get {
                 return 13   // 3 shorts + 7 bytes
@@ -452,7 +453,7 @@ namespace NPOI.HSSF.Record
          * @param data byte array containing instance data
          * @return number of bytes written
          */
-        public override void Serialize(NPOI.Util.IO.LittleEndianOutput out1)
+        protected override void Serialize(ContinuableRecordOutput out1)
         {
             int field_7_length_custom_menu = field_14_custom_menu_text.Length;
             int field_8_length_description_text = field_15_description_text.Length;

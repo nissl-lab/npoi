@@ -33,7 +33,7 @@ namespace NPOI.HSSF.Record
     public class StringRecord : ContinuableRecord
     {
         public const short sid = 0x207;
-        private bool field_2_unicode_flag;
+        private bool _is16bitUnicode;
         private String field_3_string;
 
 
@@ -49,16 +49,15 @@ namespace NPOI.HSSF.Record
         public StringRecord(RecordInputStream in1)
         {
             int field_1_string_Length = in1.ReadShort();
-            field_2_unicode_flag = in1.ReadByte() != 0x00;
-            byte[] data = in1.ReadRemainder();
-            //Why Isnt this using the in1.ReadString methods???
-            if (field_2_unicode_flag)
+            _is16bitUnicode = in1.ReadByte() != 0x00;
+
+            if (_is16bitUnicode)
             {
-                field_3_string = StringUtil.GetFromUnicodeLE(data, 0, field_1_string_Length);
+                field_3_string = in1.ReadUnicodeLEString(field_1_string_Length);
             }
             else
             {
-                field_3_string = StringUtil.GetFromCompressedUnicode(data, 0, field_1_string_Length);
+                field_3_string = in1.ReadCompressedUnicode(field_1_string_Length);
             }
         }
 
@@ -94,7 +93,7 @@ namespace NPOI.HSSF.Record
             set
             {
                 this.field_3_string = value;
-                this.field_2_unicode_flag = StringUtil.HasMultibyte(value);
+                this._is16bitUnicode = StringUtil.HasMultibyte(value);
             }
         }
 
@@ -113,7 +112,7 @@ namespace NPOI.HSSF.Record
         public override Object Clone()
         {
             StringRecord rec = new StringRecord();
-            rec.field_2_unicode_flag = this.field_2_unicode_flag;
+            rec._is16bitUnicode = this._is16bitUnicode;
             rec.field_3_string = this.field_3_string;
             return rec;
         }

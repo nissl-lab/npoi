@@ -20,6 +20,7 @@ namespace NPOI.HSSF.Record
     using System;
     using System.Text;
     using NPOI.Util;
+    using NPOI.Util.IO;
 
     /**
      * Title:        DATAVALIDATIONS Record
@@ -27,7 +28,7 @@ namespace NPOI.HSSF.Record
      *               This record Is the list header of all data validation records (0x01BE) in the current sheet.
      * @author Dragos Buleandra (dragos.buleandra@trade2b.ro)
      */
-    public class DVALRecord : Record
+    public class DVALRecord : StandardRecord
     {
         public const short sid = 0x01B2;
 
@@ -69,87 +70,72 @@ namespace NPOI.HSSF.Record
 
 
         /**
-         * @param field_1_options the options of the dialog
-         */
-        public void SetOptions(short field_1_options)
-        {
-            this.field_1_options = field_1_options;
-        }
-
-        /**
-         * @param field_2_horiz_pos the Horizontal position of the dialog
-         */
-        public void SetHorizontalPos(int field_2_horiz_pos)
-        {
-            this.field_2_horiz_pos = field_2_horiz_pos;
-        }
-
-        /**
-         * @param field_3_vert_pos the Vertical position of the dialog
-         */
-        public void SetVerticalPos(int field_3_vert_pos)
-        {
-            this.field_3_vert_pos = field_3_vert_pos;
-        }
-
-        /**
-         * Set the object ID of the drop down arrow object for list boxes
-         * @param cboID - Object ID
-         */
-        public void SetObjectID(int cboID)
-        {
-            this.field_cbo_id = cboID;
-        }
-
-        /**
-         * Set the number of following DV records
-         * @param dvNo - the DV records number
-         */
-        public void SetDVRecNo(int dvNo)
-        {
-            this.field_5_dv_no = dvNo;
-        }
-
-
-
-        /**
          * @return the field_1_options
          */
         public short Options
         {
             get { return field_1_options; }
+            set { this.field_1_options = value; }
         }
 
         /**
          * @return the Horizontal position of the dialog
          */
-        public int GetHorizontalPos()
+        public int HorizontalPos
         {
-            return field_2_horiz_pos;
+            get
+            {
+                return field_2_horiz_pos;
+            }
+            set 
+            {
+                this.field_2_horiz_pos = value;
+            }
         }
 
         /**
          * @return the the Vertical position of the dialog
          */
-        public int GetVerticalPos()
+        public int VerticalPos
         {
-            return field_3_vert_pos;
+            get
+            {
+                return field_3_vert_pos;
+            }
+            set 
+            {
+                this.field_3_vert_pos = value;
+            }
         }
 
         /**
          * Get Object ID of the drop down arrow object for list boxes
          */
-        public int GetObjectID()
+        public int ObjectID
         {
-            return this.field_cbo_id;
+            get
+            {
+                return this.field_cbo_id;
+            }
+            set 
+            {
+                this.field_cbo_id = value;
+            }
         }
 
         /**
          * Get number of following DV records
          */
-        public int GetDVRecNo()
+        public int DVRecNo
         {
-            return this.field_5_dv_no;
+            get
+            {
+                return this.field_5_dv_no;
+            }
+            set 
+            {
+                this.field_5_dv_no = value;
+            }
         }
 
 
@@ -159,31 +145,26 @@ namespace NPOI.HSSF.Record
 
             buffer.Append("[DVAL]\n");
             buffer.Append("    .options      = ").Append(this.Options).Append('\n');
-            buffer.Append("    .horizPos     = ").Append(this.GetHorizontalPos()).Append('\n');
-            buffer.Append("    .vertPos      = ").Append(this.GetVerticalPos()).Append('\n');
-            buffer.Append("    .comboObjectID   = ").Append(StringUtil.ToHexString(this.GetObjectID())).Append("\n");
-            buffer.Append("    .DVRecordsNumber = ").Append(StringUtil.ToHexString(this.GetDVRecNo())).Append("\n");
+            buffer.Append("    .horizPos     = ").Append(this.HorizontalPos).Append('\n');
+            buffer.Append("    .vertPos      = ").Append(this.VerticalPos).Append('\n');
+            buffer.Append("    .comboObjectID   = ").Append(StringUtil.ToHexString(this.ObjectID)).Append("\n");
+            buffer.Append("    .DVRecordsNumber = ").Append(StringUtil.ToHexString(this.DVRecNo)).Append("\n");
             buffer.Append("[/DVAL]\n");
             return buffer.ToString();
         }
 
-        public override int Serialize(int offset, byte [] data)
+        public override void Serialize(LittleEndianOutput out1)
         {
-            LittleEndian.PutShort(data, 0 + offset, this.Sid);
-            LittleEndian.PutShort(data, 2 + offset, (short)(this.RecordSize - 4));
-
-            LittleEndian.PutShort(data, 4 + offset, this.Options);
-            LittleEndian.PutInt(data, 6 + offset, this.GetHorizontalPos());
-            LittleEndian.PutInt(data, 10 + offset, this.GetVerticalPos());
-            LittleEndian.PutInt(data, 14 + offset, this.GetObjectID());
-            LittleEndian.PutInt(data, 18 + offset, this.GetDVRecNo());
-            return RecordSize;
+		    out1.WriteShort(Options);
+		    out1.WriteInt(HorizontalPos);
+		    out1.WriteInt(VerticalPos);
+		    out1.WriteInt(ObjectID);
+		    out1.WriteInt(DVRecNo);
         }
 
-        //with 4 bytes header
-        public override int RecordSize
+        protected override int DataSize
         {
-            get { return 22; }
+            get { return 18; }
         }
 
         public override short Sid

@@ -23,6 +23,7 @@ namespace NPOI.HSSF.Record
     using System;
     using System.Text;
     using NPOI.Util;
+    using NPOI.Util.IO;
 
     /**
      * Title: double Stream Flag Record
@@ -33,38 +34,37 @@ namespace NPOI.HSSF.Record
      * @version 2.0-pre
      */
 
-    public class DSFRecord
-       : Record
+    public class DSFRecord: StandardRecord
     {
         public const short sid = 0x161;
-        private short field_1_dsf;
+        private int _options;
+        private static BitField biff5BookStreamFlag = BitFieldFactory.GetInstance(0x0001);
 
-        public DSFRecord()
+        private DSFRecord(int options)
         {
+            _options = options;
         }
-
+        public DSFRecord(bool isBiff5BookStreamPresent):this(0)
+        {
+            
+            _options = biff5BookStreamFlag.SetBoolean(0, isBiff5BookStreamPresent);
+        }
         /**
          * Constructs a DBCellRecord and Sets its fields appropriately.
          * @param in the RecordInputstream to Read the record from
          */
 
-        public DSFRecord(RecordInputStream in1)
+        public DSFRecord(RecordInputStream in1):this(in1.ReadShort())
         {
-            field_1_dsf = in1.ReadShort();
+            
         }
 
-        /**
-         * Get the DSF flag
-         * @return dsfflag (0-off,1-on)
-         */
-
-        public short Dsf
+        public bool IsBiff5BookStreamPresent
         {
-            get
+          get
             {
-                return field_1_dsf;
+            return biff5BookStreamFlag.IsSet(_options);
             }
-            set { field_1_dsf = value; }
         }
 
         public override String ToString()
@@ -73,23 +73,19 @@ namespace NPOI.HSSF.Record
 
             buffer.Append("[DSF]\n");
             buffer.Append("    .IsDSF           = ")
-                .Append(StringUtil.ToHexString(Dsf)).Append("\n");
+                .Append(StringUtil.ToHexString(_options)).Append("\n");
             buffer.Append("[/DSF]\n");
             return buffer.ToString();
         }
 
-        public override int Serialize(int offset, byte [] data)
+        public override void Serialize(LittleEndianOutput out1)
         {
-            LittleEndian.PutShort(data, 0 + offset, sid);
-            LittleEndian.PutShort(data, 2 + offset,
-                                  ((short)0x02));   // 2 bytes (6 total)
-            LittleEndian.PutShort(data, 4 + offset, Dsf);
-            return RecordSize;
+            out1.WriteShort(_options);
         }
 
-        public override int RecordSize
+        protected override int DataSize
         {
-            get { return 6; }
+            get { return 2; }
         }
 
         public override short Sid

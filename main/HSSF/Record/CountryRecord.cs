@@ -24,6 +24,7 @@ namespace NPOI.HSSF.Record
     using System.IO;
     using System.Text;
     using NPOI.Util;
+using NPOI.Util.IO;
 
     /**
      * Title:        Country Record (aka WIN.INI country)
@@ -35,8 +36,7 @@ namespace NPOI.HSSF.Record
      * @version 2.0-pre
      */
 
-    public class CountryRecord
-       : Record
+    public class CountryRecord : StandardRecord
     {
         public const short sid = 0x8c;
 
@@ -102,19 +102,15 @@ namespace NPOI.HSSF.Record
             return buffer.ToString();
         }
 
-        public override int Serialize(int offset, byte [] data)
+        public override void Serialize(LittleEndianOutput out1)
         {
-            LittleEndian.PutShort(data, 0 + offset, sid);
-            LittleEndian.PutShort(data, 2 + offset,
-                                  ((short)0x04));   // 4 bytes (8 total)
-            LittleEndian.PutShort(data, 4 + offset, DefaultCountry);
-            LittleEndian.PutShort(data, 6 + offset, CurrentCountry);
-            return RecordSize;
+            out1.WriteShort(DefaultCountry);
+            out1.WriteShort(CurrentCountry);
         }
 
-        public override int RecordSize
+        protected override int DataSize
         {
-            get { return 8; }
+            get { return 4; }
         }
 
         public override short Sid

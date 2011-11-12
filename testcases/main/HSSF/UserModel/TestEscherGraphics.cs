@@ -56,7 +56,7 @@ namespace TestCases.HSSF.UserModel
             escherGroupA = patriarch.CreateGroup(new HSSFClientAnchor(0, 0, 1022, 255, (short)0, 0, (short)0, 0));
             escherGroupB = patriarch.CreateGroup(new HSSFClientAnchor(20, 30, 500, 200, (short)0, 0, (short)0, 0));
             //        escherGroup = new HSSFShapeGroup(null, new HSSFChildAnchor());
-            graphics = new EscherGraphics(this.escherGroupA, workbook, Color.Black, 1.0f);
+            graphics = new EscherGraphics(this.escherGroupA, workbook, System.Drawing.Color.Black, 1.0f);
 
         }
 
@@ -91,8 +91,8 @@ namespace TestCases.HSSF.UserModel
         [TestMethod]
         public void TestSetColor()
         {
-            graphics.SetColor(Color.Red);
-            Assert.AreEqual(Color.Red, graphics.Color);
+            graphics.SetColor(System.Drawing.Color.Red);
+            Assert.AreEqual(System.Drawing.Color.Red, graphics.Color);
         }
 
         [TestMethod]

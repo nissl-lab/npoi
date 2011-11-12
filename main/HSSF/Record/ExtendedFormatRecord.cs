@@ -22,6 +22,7 @@ namespace NPOI.HSSF.Record
     using System;
     using System.Text;
     using NPOI.Util;
+    using NPOI.Util.IO;
     /**
      * Title:        Extended Format Record
      * Description:  Probably one of the more complex records.  There are two breeds:
@@ -38,7 +39,7 @@ namespace NPOI.HSSF.Record
      * @version 2.0-pre
      */
 
-    public class ExtendedFormatRecord: Record
+    public class ExtendedFormatRecord : StandardRecord
     {
         public const short sid = 0xE0;
 
@@ -1305,26 +1306,22 @@ namespace NPOI.HSSF.Record
             return buffer.ToString();
         }
 
-        public override int Serialize(int offset, byte [] data)
+        public override void Serialize(LittleEndianOutput out1)
         {
-            LittleEndian.PutShort(data, 0 + offset, sid);
-            LittleEndian.PutShort(data, 2 + offset,
-                                  (short)(20));   // 24 - 4(sid/len)
-            LittleEndian.PutShort(data, 4 + offset, FontIndex);
-            LittleEndian.PutShort(data, 6 + offset, FormatIndex);
-            LittleEndian.PutShort(data, 8 + offset, CellOptions);
-            LittleEndian.PutShort(data, 10 + offset, AlignmentOptions);
-            LittleEndian.PutShort(data, 12 + offset, IndentionOptions);
-            LittleEndian.PutShort(data, 14 + offset, BorderOptions);
-            LittleEndian.PutShort(data, 16 + offset, PaletteOptions);
-            LittleEndian.PutInt(data, 18 + offset, AdtlPaletteOptions);
-            LittleEndian.PutShort(data, 22 + offset, FillPaletteOptions);
-            return RecordSize;
+            out1.WriteShort(FontIndex);
+            out1.WriteShort(FormatIndex);
+            out1.WriteShort(CellOptions);
+            out1.WriteShort(AlignmentOptions);
+            out1.WriteShort(IndentionOptions);
+            out1.WriteShort(BorderOptions);
+            out1.WriteShort(PaletteOptions);
+            out1.WriteInt(AdtlPaletteOptions);
+            out1.WriteShort(FillPaletteOptions);
         }
 
-        public override int RecordSize
+        protected override int DataSize
         {
-            get { return 24; }
+            get { return 20; }
         }
 
         public override short Sid

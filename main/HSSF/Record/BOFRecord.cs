@@ -25,6 +25,7 @@ namespace NPOI.HSSF.Record
     using System.Text;
     using System.Collections;
     using NPOI.Util;
+    using NPOI.Util.IO;
 
 
     /**
@@ -38,7 +39,7 @@ namespace NPOI.HSSF.Record
      * @version 2.0-pre
      */
 
-    public class BOFRecord : Record
+    public class BOFRecord : StandardRecord
     {
 
         /**
@@ -250,23 +251,19 @@ namespace NPOI.HSSF.Record
             return buffer.ToString();
         }
 
-        public override int Serialize(int offset, byte [] data)
+        public override void Serialize(LittleEndianOutput out1)
         {
-            LittleEndian.PutShort(data, 0 + offset, sid);
-            LittleEndian.PutShort(data, 2 + offset,
-                                  ((short)0x10));   // 16 byte Length
-            LittleEndian.PutShort(data, 4 + offset, (short)Version);
-            LittleEndian.PutShort(data, 6 + offset, (short)Type);
-            LittleEndian.PutShort(data, 8 + offset, (short)Build);
-            LittleEndian.PutShort(data, 10 + offset, (short)BuildYear);
-            LittleEndian.PutInt(data, 12 + offset, HistoryBitMask);
-            LittleEndian.PutInt(data, 16 + offset, RequiredVersion);
-            return RecordSize;
+            out1.WriteShort(Version);
+            out1.WriteShort(Type);
+            out1.WriteShort(Build);
+            out1.WriteShort(BuildYear);
+            out1.WriteInt(HistoryBitMask);
+            out1.WriteInt(RequiredVersion);
         }
 
-        public override int RecordSize
+        protected override int DataSize
         {
-            get { return 20; }
+            get { return 16; }
         }
 
         public override short Sid

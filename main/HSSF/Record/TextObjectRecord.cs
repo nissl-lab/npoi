@@ -27,8 +27,9 @@ namespace NPOI.HSSF.Record
 
     using NPOI.HSSF.Record.Formula;
     using NPOI.SS.UserModel;
+    using NPOI.HSSF.Record.Cont;
 
-    public class TextObjectRecord : Record
+    public class TextObjectRecord : ContinuableRecord
     {
         NPOI.SS.UserModel.IRichTextString _text;
 
@@ -47,14 +48,14 @@ namespace NPOI.HSSF.Record
         public const short TEXT_ORIENTATION_ROT_LEFT = 3;
 
 
-        	public const short HORIZONTAL_TEXT_ALIGNMENT_LEFT_ALIGNED = 1;
-	public const short HORIZONTAL_TEXT_ALIGNMENT_CENTERED = 2;
-	public const short HORIZONTAL_TEXT_ALIGNMENT_RIGHT_ALIGNED = 3;
-	public const short HORIZONTAL_TEXT_ALIGNMENT_JUSTIFIED = 4;
-	public const short VERTICAL_TEXT_ALIGNMENT_TOP = 1;
-	public const short VERTICAL_TEXT_ALIGNMENT_CENTER = 2;
-	public const short VERTICAL_TEXT_ALIGNMENT_BOTTOM = 3;
-	public const short VERTICAL_TEXT_ALIGNMENT_JUSTIFY = 4;
+        public const short HORIZONTAL_TEXT_ALIGNMENT_LEFT_ALIGNED = 1;
+        public const short HORIZONTAL_TEXT_ALIGNMENT_CENTERED = 2;
+        public const short HORIZONTAL_TEXT_ALIGNMENT_RIGHT_ALIGNED = 3;
+        public const short HORIZONTAL_TEXT_ALIGNMENT_JUSTIFIED = 4;
+        public const short VERTICAL_TEXT_ALIGNMENT_TOP = 1;
+        public const short VERTICAL_TEXT_ALIGNMENT_CENTER = 2;
+        public const short VERTICAL_TEXT_ALIGNMENT_BOTTOM = 3;
+        public const short VERTICAL_TEXT_ALIGNMENT_JUSTIFY = 4;
 
         private int field_1_options;
         private int field_2_textOrientation;
@@ -143,16 +144,7 @@ namespace NPOI.HSSF.Record
 
             if (field_7_formattingDataLength > 0)
             {
-                if (in1.IsContinueNext && in1.Remaining == 0)
-                {
-                    in1.NextRecord();
-                    ProcessFontRuns(in1, _text, field_7_formattingDataLength);
-                }
-                else
-                {
-                    throw new RecordFormatException(
-                            "Expected Continue Record to hold font runs for TextObjectRecord");
-                }
+                ProcessFontRuns(in1, _text, field_7_formattingDataLength);
             }
         }
         private static void ProcessFontRuns(RecordInputStream in1, IRichTextString str,
@@ -162,11 +154,6 @@ namespace NPOI.HSSF.Record
             {
                 throw new RecordFormatException("Bad format run data length " + formattingRunDataLength
                         + ")");
-            }
-            if (in1.Remaining != formattingRunDataLength)
-            {
-                throw new RecordFormatException("Expected " + formattingRunDataLength
-                        + " bytes but got " + in1.Remaining);
             }
             int nRuns = formattingRunDataLength / FORMAT_RUN_ENCODED_SIZE;
             for (int i = 0; i < nRuns; i++)
@@ -225,36 +212,29 @@ namespace NPOI.HSSF.Record
             return result;
         }
 
-        private int SerializeTrailingRecords(int offset, byte[] data)
+        private void SerializeTrailingRecords(ContinuableRecordOutput out1)
         {
-            byte[] textBytes;
-            try
-            {
-                textBytes = Encoding.GetEncoding("UTF-16LE").GetBytes(_text.String);
-            }
-            catch (EncoderFallbackException)
-            {
-                throw;
-            }
-            int remainingLength = textBytes.Length;
-
-            int countTextBytesWritten = 0;
-            int pos = offset;
-            // (regardless what was read, we always serialize double-byte
-            // unicode characters (UTF-16LE).
-            Byte unicodeFlag = (byte)1;
-            while (remainingLength > 0)
-            {
-                int chunkSize = Math.Min(RecordInputStream.MAX_RECORD_DATA_SIZE - 2, remainingLength);
-                remainingLength -= chunkSize;
-                pos += ContinueRecord.Write(data, pos, unicodeFlag, textBytes, countTextBytesWritten, chunkSize);
-                countTextBytesWritten += chunkSize;
-            }
-
-            byte[] formatData = CreateFormatData(_text);
-            pos += ContinueRecord.Write(data, pos, null, formatData);
-            return pos - offset;
+            out1.WriteContinue();
+            out1.WriteStringData(_text.String);
+            out1.WriteContinue();
+            WriteFormatData(out1,_text);
         }
+
+        private void WriteFormatData(ContinuableRecordOutput out1, IRichTextString str)
+        {
+            int nRuns = str.NumFormattingRuns;
+            for (int i = 0; i < nRuns; i++)
+            {
+                out1.WriteShort(str.GetIndexOfFormattingRun(i));
+                int fontIndex = ((HSSFRichTextString)str).GetFontOfFormattingRun(i);
+                out1.WriteShort(fontIndex == HSSFRichTextString.NO_FONT ? 0 : fontIndex);
+                out1.WriteInt(0); // skip reserved
+            }
+            out1.WriteShort(str.Length);
+            out1.WriteShort(0);
+            out1.WriteInt(0); // skip reserved
+        }
+
 
         private int FormattingDataLength
         {
@@ -269,92 +249,40 @@ namespace NPOI.HSSF.Record
             }
         }
 
-        /**
-         * Only for the current record. does not include any subsequent Continue
-         * records
-         */
-        protected int DataSize
+        private void SerializeTXORecord(ContinuableRecordOutput out1)
         {
-            get
-            {
-                int result = 2 + 2 + 2 + 2 + 2 + 2 + 2 + 4;
-                if (_linkRefPtg != null)
-                {
-                    result += 2 // formula size
-                        + 4  // unknownInt
-                        + _linkRefPtg.Size;
-                    if (_unknownPostFormulaByte != null)
-                    {
-                        result += 1;
-                    }
-                }
-                return result;
-            }
-        }
-
-        public override int RecordSize
-        {
-            get
-            {
-                int baseSize = 4 + DataSize;
-                return baseSize + TrailingRecordsSize;
-            }
-        }
-
-        private int SerializeTXORecord(int offset, byte[] data)
-        {
-            int dataSize = this.DataSize;
-
-            LittleEndian.PutUShort(data, 0 + offset, TextObjectRecord.sid);
-            LittleEndian.PutUShort(data, 2 + offset, dataSize);
-
-            LittleEndian.PutUShort(data, 4 + offset, field_1_options);
-            LittleEndian.PutUShort(data, 6 + offset, field_2_textOrientation);
-            LittleEndian.PutUShort(data, 8 + offset, field_3_reserved4);
-            LittleEndian.PutUShort(data, 10 + offset, field_4_reserved5);
-            LittleEndian.PutUShort(data, 12 + offset, field_5_reserved6);
-            LittleEndian.PutUShort(data, 14 + offset, _text.Length);
-            LittleEndian.PutUShort(data, 16 + offset, FormattingDataLength);
-            LittleEndian.PutInt(data, 18 + offset, field_8_reserved7);
+            out1.WriteShort(field_1_options);
+            out1.WriteShort(field_2_textOrientation);
+            out1.WriteShort(field_3_reserved4);
+            out1.WriteShort(field_4_reserved5);
+            out1.WriteShort(field_5_reserved6);
+            out1.WriteShort(_text.Length);
+            out1.WriteShort(FormattingDataLength);
+            out1.WriteInt(field_8_reserved7);
 
             if (_linkRefPtg != null)
             {
-                int pos = offset + 22;
                 int formulaSize = _linkRefPtg.Size;
-                LittleEndian.PutUShort(data, pos, formulaSize);
-                pos += LittleEndianConstants.SHORT_SIZE;
-                LittleEndian.PutInt(data, pos, _unknownPreFormulaInt);
-                pos += LittleEndianConstants.INT_SIZE;
-                _linkRefPtg.WriteBytes(data, pos);
-                pos += formulaSize;
-
+                out1.WriteShort(formulaSize);
+                out1.WriteInt(_unknownPreFormulaInt);
+                _linkRefPtg.Write(out1);
 
                 if (_unknownPostFormulaByte != null)
                 {
-                    LittleEndian.PutByte(data, pos, Convert.ToByte(_unknownPostFormulaByte));
-                    pos += LittleEndianConstants.BYTE_SIZE;
-
+                    out1.WriteByte(Convert.ToByte(_unknownPostFormulaByte));
                 }
             }
-
-            return 4 + dataSize;
         }
 
 
-        public override int Serialize(int offset, byte[] data)
+        protected override void Serialize(ContinuableRecordOutput out1)
         {
-            int expectedTotalSize = this.RecordSize;
-            int totalSize = SerializeTXORecord(offset, data);
+            SerializeTXORecord(out1);
 
             if (_text.String.Length > 0)
             {
-                totalSize += SerializeTrailingRecords(offset + totalSize, data);
+                SerializeTrailingRecords(out1);
             }
-
-            if (totalSize != expectedTotalSize)
-                throw new RecordFormatException(totalSize
-                        + " bytes written but getRecordSize() reports " + expectedTotalSize);
-            return totalSize;
         }
 
         private void ProcessFontRuns(RecordInputStream in1)
@@ -381,7 +309,7 @@ namespace NPOI.HSSF.Record
             return in1.ReadUnicodeLEString(textLength);
         }
 
-        public NPOI.SS.UserModel.IRichTextString Str
+        public IRichTextString Str
         {
             get { return _text; }
             set { this._text = value; }

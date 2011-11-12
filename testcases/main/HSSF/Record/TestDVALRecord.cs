@@ -47,14 +47,14 @@ namespace TestCases.HSSF.Record
             DVALRecord dv = new DVALRecord(in1);
 
             Assert.AreEqual(55, dv.Options);
-            Assert.AreEqual(56, dv.GetHorizontalPos());
-            Assert.AreEqual(57, dv.GetVerticalPos());
-            Assert.AreEqual(58, dv.GetObjectID());
-            if (dv.GetDVRecNo() == 0)
+            Assert.AreEqual(56, dv.HorizontalPos);
+            Assert.AreEqual(57, dv.VerticalPos);
+            Assert.AreEqual(58, dv.ObjectID);
+            if (dv.DVRecNo == 0)
             {
                 Assert.Fail("Identified bug 44510");
             }
-            Assert.AreEqual(59, dv.GetDVRecNo());
+            Assert.AreEqual(59, dv.DVRecNo);
         }
     }
 }

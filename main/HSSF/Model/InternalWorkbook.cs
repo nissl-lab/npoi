@@ -1315,10 +1315,7 @@ namespace NPOI.HSSF.Model
 
         protected Record CreateDSF()
         {
-            DSFRecord retval = new DSFRecord();
-
-            retval.Dsf=(short)0;   // we don't even support double stream files
-            return retval;
+            return new DSFRecord(false); // we don't even support double stream files
         }
 
         /**

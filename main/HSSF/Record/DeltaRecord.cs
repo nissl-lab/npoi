@@ -23,6 +23,7 @@ namespace NPOI.HSSF.Record
     using System.Collections;
     using NPOI.Util;
     using System;
+    using NPOI.Util.IO;
 
     /**
      * Title:        Delta Record
@@ -33,18 +34,18 @@ namespace NPOI.HSSF.Record
      * @version 2.0-pre
      */
 
-    public class DeltaRecord
-       : Record
+    public class DeltaRecord : StandardRecord
     {
         public const short sid = 0x10;
         public static double DEFAULT_VALUE = 0.0010;   // should be .001
 
         // a double Is an IEEE 8-byte float...damn IEEE and their goofy standards an
         // ambiguous numeric identifiers
-        private double field_1_max_Change;
+        private double field_1_max_change;
 
-        public DeltaRecord()
+        public DeltaRecord(double maxChange)
         {
+            field_1_max_change = maxChange;
         }
 
         /**
@@ -54,7 +55,7 @@ namespace NPOI.HSSF.Record
 
         public DeltaRecord(RecordInputStream in1)
         {
-            field_1_max_Change = in1.ReadDouble();
+            field_1_max_change = in1.ReadDouble();
         }
 
 
@@ -67,10 +68,10 @@ namespace NPOI.HSSF.Record
         {
             get
             {
-                return field_1_max_Change;
+                return field_1_max_change;
             }
             set {
-                field_1_max_Change = value;
+                field_1_max_change = value;
             }
         }
 
@@ -85,17 +86,14 @@ namespace NPOI.HSSF.Record
             return buffer.ToString();
         }
 
-        public override int Serialize(int offset, byte [] data)
+        public override void Serialize(LittleEndianOutput out1)
         {
-            LittleEndian.PutShort(data, 0 + offset, sid);
-            LittleEndian.PutShort(data, 2 + offset, (short)0x8);
-            LittleEndian.PutDouble(data, 4 + offset, MaxChange);
-            return RecordSize;
+            out1.WriteDouble(MaxChange);
         }
 
-        public override int RecordSize
+        protected override int DataSize
         {
-            get { return 12; }
+            get { return 8; }
         }
 
         public override short Sid
@@ -105,9 +103,7 @@ namespace NPOI.HSSF.Record
 
         public override Object Clone()
         {
-            DeltaRecord rec = new DeltaRecord();
-            rec.field_1_max_Change = field_1_max_Change;
-            return rec;
+            return this;
         }
     }
 }

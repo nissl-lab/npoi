@@ -1010,10 +1010,7 @@ namespace NPOI.HSSF.Model
         /// <returns>record containing a DeltaRecord</returns>
         protected Record CreateDelta()
         {
-            DeltaRecord retval = new DeltaRecord();
-
-            retval.MaxChange=(0.0010);
-            return retval;
+            return new DeltaRecord(DeltaRecord.DEFAULT_VALUE);            
         }
 
         /// <summary>

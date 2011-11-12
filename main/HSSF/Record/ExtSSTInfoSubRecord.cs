@@ -25,87 +25,81 @@
 namespace NPOI.HSSF.Record
 {
 
-using System;
-using System.Text;
-using NPOI.Util;
+    using System;
+    using System.Text;
+    using NPOI.Util;
+    using NPOI.Util.IO;
 
-/**
- * Extended SST table info subrecord
- * Contains the elements of "info" in the SST's array field
- * @author Andrew C. Oliver (acoliver at apache dot org)
- * @version 2.0-pre
- * @see org.apache.poi.hssf.record.ExtSSTRecord
- */
+    /**
+     * Extended SST table info subrecord
+     * Contains the elements of "info" in the SST's array field
+     * @author Andrew C. Oliver (acoliver at apache dot org)
+     * @version 2.0-pre
+     * @see org.apache.poi.hssf.record.ExtSSTRecord
+     */
 
-public class ExtSSTInfoSubRecord: Record
-{
-   public static int INFO_SIZE = 8;
-    public const short sid =
-        0xFFF;                                             // only here for conformance, doesn't really have an sid
-    private int               field_1_stream_pos;          // stream pointer to the SST record
-    private short             field_2_bucket_sst_offset;   // don't really Understand this yet.
-    private short             field_3_zero;                // must be 0;
-
-    /** Creates new ExtSSTInfoSubRecord */
-
-    public ExtSSTInfoSubRecord()
+    public class InfoSubRecord
     {
-    }
+        public const int ENCODED_SIZE = 8;
+        public const short sid =
+            0xFFF;                                             // only here for conformance, doesn't really have an sid
+        private int field_1_stream_pos;          // stream pointer to the SST record
+        private int field_2_bucket_sst_offset;   // don't really Understand this yet.
+        private short field_3_zero;                // must be 0;
 
-    public ExtSSTInfoSubRecord(RecordInputStream in1)
-    {
-        field_1_stream_pos = in1.ReadInt();
-        field_2_bucket_sst_offset = in1.ReadShort();
-        field_3_zero = in1.ReadShort();  
-    }
+        /** Creates new ExtSSTInfoSubRecord */
 
-    public int StreamPos
-    {
-        set{field_1_stream_pos = value;}
-        get{return field_1_stream_pos;}
-    }
 
-    public short BucketRecordOffset
-    {
-        set{field_2_bucket_sst_offset = value;}
-    }
+        public InfoSubRecord(int streamPos, int bucketSstOffset)
+        {
+            field_1_stream_pos = streamPos;
+            field_2_bucket_sst_offset = bucketSstOffset;
+        }
 
-    public short BucketSSTOffset
-    {
-        get{return field_2_bucket_sst_offset;}
-    }
+        public InfoSubRecord(RecordInputStream in1)
+        {
+            field_1_stream_pos = in1.ReadInt();
+            field_2_bucket_sst_offset = in1.ReadShort();
+            field_3_zero = in1.ReadShort();
+        }
 
-    public override String ToString()
-    {
-        StringBuilder buffer = new StringBuilder();
+        public int StreamPos
+        {
+            set { field_1_stream_pos = value; }
+            get { return field_1_stream_pos; }
+        }
 
-        buffer.Append("[EXTSST]\n");
-        buffer.Append("    .streampos      = ")
-            .Append(StringUtil.ToHexString(StreamPos)).Append("\n");
-        buffer.Append("    .bucketsstoffset= ")
-            .Append(StringUtil.ToHexString( BucketSSTOffset)).Append("\n");
-        buffer.Append("    .zero           = ")
-            .Append(StringUtil.ToHexString( field_3_zero)).Append("\n");
-        buffer.Append("[/EXTSST]\n");
-        return buffer.ToString();
-    }
+        public short BucketRecordOffset
+        {
+            set { field_2_bucket_sst_offset = value; }
+        }
 
-    public override int Serialize(int offset, byte [] data)
-    {
-        LittleEndian.PutInt(data, 0 + offset, StreamPos);
-        LittleEndian.PutShort(data, 4 + offset, BucketSSTOffset);
-        LittleEndian.PutShort(data, 6 + offset, ( short ) 0);
-        return RecordSize;
-    }
+        public int BucketSSTOffset
+        {
+            get { return field_2_bucket_sst_offset; }
+        }
 
-    public override int RecordSize
-    {
-        get{return 8;}
-    }
+        public override String ToString()
+        {
+            StringBuilder buffer = new StringBuilder();
 
-    public override short Sid
-    {
-        get { return sid; }
+            buffer.Append("[EXTSST]\n");
+            buffer.Append("    .streampos      = ")
+                .Append(StringUtil.ToHexString(StreamPos)).Append("\n");
+            buffer.Append("    .bucketsstoffset= ")
+                .Append(StringUtil.ToHexString(BucketSSTOffset)).Append("\n");
+            buffer.Append("    .zero           = ")
+                .Append(StringUtil.ToHexString(field_3_zero)).Append("\n");
+            buffer.Append("[/EXTSST]\n");
+            return buffer.ToString();
+        }
+
+        public void Serialize(LittleEndianOutput out1)
+        {
+            out1.WriteInt(field_1_stream_pos);
+            out1.WriteShort(field_2_bucket_sst_offset);
+            out1.WriteShort(field_3_zero);
+        }
+
     }
-}
 }

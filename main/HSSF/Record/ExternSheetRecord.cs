@@ -24,6 +24,7 @@ namespace NPOI.HSSF.Record
     using System.Text;
     using System.Collections;
     using NPOI.Util;
+    using NPOI.Util.IO;
 
     public class RefSubRecord
     {
@@ -89,11 +90,11 @@ namespace NPOI.HSSF.Record
          * @param data byte array containing instance data
          * @return number of bytes written
          */
-        public void Serialize(int offset, byte[] data)
+        public void Serialize(LittleEndianOutput out1)
         {
-            LittleEndian.PutUShort(data, 0 + offset, _extBookIndex);
-            LittleEndian.PutUShort(data, 2 + offset, _firstSheetIndex);
-            LittleEndian.PutUShort(data, 4 + offset, _lastSheetIndex);
+            out1.WriteShort(_extBookIndex);
+            out1.WriteShort(_firstSheetIndex);
+            out1.WriteShort(_lastSheetIndex);
         }
     }
 
@@ -105,7 +106,7 @@ namespace NPOI.HSSF.Record
      * @version 1.0-pre
      */
 
-    public class ExternSheetRecord : Record
+    public class ExternSheetRecord : StandardRecord
     {
         public const short sid = 0x17;
         private IList _list;
@@ -232,14 +233,6 @@ namespace NPOI.HSSF.Record
         {
             return GetRef(extRefIndex).FirstSheetIndex;
         }
-
-        private int DataSize
-        {
-            get
-            {
-                return 2 + _list.Count * RefSubRecord.ENCODED_SIZE;
-            }
-        }
 	
         public override String ToString()
         {
@@ -268,29 +261,23 @@ namespace NPOI.HSSF.Record
          * @param data byte array containing instance data
          * @return number of bytes written
          */
-        public override int Serialize(int offset, byte[] data)
+        public override void Serialize(LittleEndianOutput out1)
         {
-            int dataSize = DataSize;
-
             int nItems = _list.Count;
 
-            LittleEndian.PutShort(data, 0 + offset, sid);
-            LittleEndian.PutUShort(data, 2 + offset, dataSize);
-            LittleEndian.PutUShort(data, 4 + offset, nItems);
-
-            int pos = 6;
+            out1.WriteShort(nItems);
 
             for (int i = 0; i < nItems; i++)
             {
-                GetRef(i).Serialize(offset + pos, data);
-                pos += 6;
+                GetRef(i).Serialize(out1);
             }
-            return dataSize + 4;
         }
 
-        public override int RecordSize
+        protected override int DataSize
         {
-            get { return 4 + DataSize; }
+            get { 
+                return 2 + _list.Count * RefSubRecord.ENCODED_SIZE; 
+            }
         }
 
         /**
