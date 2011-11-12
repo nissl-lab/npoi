@@ -12,7 +12,46 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestCases", "..\TestCases\s
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HSLF", "HSLF\HSLF.csproj", "{EB09BCCA-0B45-4984-B4E6-BAD8C0A9F8A9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HSSF", "HSSF\HSSF.csproj", "{236BB091-2BEE-4594-A8AB-4E35ED17371D}"
+EndProject
 Global
+	GlobalSection(TestCaseManagementSettings) = postSolution
+		CategoryFile = NPOI.ScratchPad.vsmdi
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		NPOI.Tools|Any CPU = NPOI.Tools|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F040162E-F6F3-4B09-809B-3095A07A6687}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F040162E-F6F3-4B09-809B-3095A07A6687}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F040162E-F6F3-4B09-809B-3095A07A6687}.NPOI.Tools|Any CPU.ActiveCfg = Release|Any CPU
+		{F040162E-F6F3-4B09-809B-3095A07A6687}.NPOI.Tools|Any CPU.Build.0 = Release|Any CPU
+		{F040162E-F6F3-4B09-809B-3095A07A6687}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F040162E-F6F3-4B09-809B-3095A07A6687}.Release|Any CPU.Build.0 = Release|Any CPU
+		{81F02870-E6BA-42D9-8E8C-DD16699DCABE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{81F02870-E6BA-42D9-8E8C-DD16699DCABE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{81F02870-E6BA-42D9-8E8C-DD16699DCABE}.NPOI.Tools|Any CPU.ActiveCfg = Release|Any CPU
+		{81F02870-E6BA-42D9-8E8C-DD16699DCABE}.NPOI.Tools|Any CPU.Build.0 = Release|Any CPU
+		{81F02870-E6BA-42D9-8E8C-DD16699DCABE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{81F02870-E6BA-42D9-8E8C-DD16699DCABE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EB09BCCA-0B45-4984-B4E6-BAD8C0A9F8A9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EB09BCCA-0B45-4984-B4E6-BAD8C0A9F8A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EB09BCCA-0B45-4984-B4E6-BAD8C0A9F8A9}.NPOI.Tools|Any CPU.ActiveCfg = Release|Any CPU
+		{EB09BCCA-0B45-4984-B4E6-BAD8C0A9F8A9}.NPOI.Tools|Any CPU.Build.0 = Release|Any CPU
+		{EB09BCCA-0B45-4984-B4E6-BAD8C0A9F8A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EB09BCCA-0B45-4984-B4E6-BAD8C0A9F8A9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{236BB091-2BEE-4594-A8AB-4E35ED17371D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{236BB091-2BEE-4594-A8AB-4E35ED17371D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{236BB091-2BEE-4594-A8AB-4E35ED17371D}.NPOI.Tools|Any CPU.ActiveCfg = Release|Any CPU
+		{236BB091-2BEE-4594-A8AB-4E35ED17371D}.NPOI.Tools|Any CPU.Build.0 = Release|Any CPU
+		{236BB091-2BEE-4594-A8AB-4E35ED17371D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{236BB091-2BEE-4594-A8AB-4E35ED17371D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
 	GlobalSection(TeamFoundationVersionControl) = preSolution
 		SccNumberOfProjects = 10
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
@@ -45,36 +84,5 @@ Global
 		SccProjectUniqueName9 = DDF\\DDF.csproj
 		SccProjectName9 = DDF
 		SccLocalPath9 = DDF
-	EndGlobalSection
-	GlobalSection(TestCaseManagementSettings) = postSolution
-		CategoryFile = NPOI.ScratchPad.vsmdi
-	EndGlobalSection
-	GlobalSection(SolutionConfigurationPlatforms) = preSolution
-		Debug|Any CPU = Debug|Any CPU
-		NPOI.Tools|Any CPU = NPOI.Tools|Any CPU
-		Release|Any CPU = Release|Any CPU
-	EndGlobalSection
-	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{F040162E-F6F3-4B09-809B-3095A07A6687}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F040162E-F6F3-4B09-809B-3095A07A6687}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F040162E-F6F3-4B09-809B-3095A07A6687}.NPOI.Tools|Any CPU.ActiveCfg = Release|Any CPU
-		{F040162E-F6F3-4B09-809B-3095A07A6687}.NPOI.Tools|Any CPU.Build.0 = Release|Any CPU
-		{F040162E-F6F3-4B09-809B-3095A07A6687}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F040162E-F6F3-4B09-809B-3095A07A6687}.Release|Any CPU.Build.0 = Release|Any CPU
-		{81F02870-E6BA-42D9-8E8C-DD16699DCABE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{81F02870-E6BA-42D9-8E8C-DD16699DCABE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{81F02870-E6BA-42D9-8E8C-DD16699DCABE}.NPOI.Tools|Any CPU.ActiveCfg = Release|Any CPU
-		{81F02870-E6BA-42D9-8E8C-DD16699DCABE}.NPOI.Tools|Any CPU.Build.0 = Release|Any CPU
-		{81F02870-E6BA-42D9-8E8C-DD16699DCABE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{81F02870-E6BA-42D9-8E8C-DD16699DCABE}.Release|Any CPU.Build.0 = Release|Any CPU
-		{EB09BCCA-0B45-4984-B4E6-BAD8C0A9F8A9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{EB09BCCA-0B45-4984-B4E6-BAD8C0A9F8A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{EB09BCCA-0B45-4984-B4E6-BAD8C0A9F8A9}.NPOI.Tools|Any CPU.ActiveCfg = Release|Any CPU
-		{EB09BCCA-0B45-4984-B4E6-BAD8C0A9F8A9}.NPOI.Tools|Any CPU.Build.0 = Release|Any CPU
-		{EB09BCCA-0B45-4984-B4E6-BAD8C0A9F8A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{EB09BCCA-0B45-4984-B4E6-BAD8C0A9F8A9}.Release|Any CPU.Build.0 = Release|Any CPU
-	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
 	EndGlobalSection
 EndGlobal

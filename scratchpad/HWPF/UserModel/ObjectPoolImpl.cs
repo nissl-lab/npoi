@@ -17,6 +17,7 @@
 using NPOI.POIFS.FileSystem;
 using System.IO;
 using NPOI.Util;
+using System;
 namespace NPOI.HWPF.UserModel
 {
 
