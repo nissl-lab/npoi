@@ -49,6 +49,9 @@ namespace NPOI.HSSF.Record.Formula.Udf
 
         public override FreeRefFunction FindFunction(String name)
         {
+            if (!_functionsByName.ContainsKey(name))
+                return null;
+            
             return _functionsByName[name];
         }
     }

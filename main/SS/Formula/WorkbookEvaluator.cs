@@ -68,7 +68,13 @@ namespace NPOI.SS.Formula
             _collaboratingWorkbookEnvironment = CollaboratingWorkbooksEnvironment.EMPTY;
             _workbookIx = 0;
             _stabilityClassifier = stabilityClassifier;
-            _udfFinder = udfFinder == null ? UDFFinder.DEFAULT : udfFinder;
+
+           AggregatingUDFFinder defaultToolkit = // workbook can be null in unit tests
+            workbook == null ? null : (AggregatingUDFFinder)workbook.GetUDFFinder();
+            if(defaultToolkit != null && udfFinder != null) {
+                defaultToolkit.Add(udfFinder);
+            }
+            _udfFinder = defaultToolkit;
         }
 
         /**

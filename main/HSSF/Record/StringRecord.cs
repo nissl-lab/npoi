@@ -34,6 +34,7 @@ namespace NPOI.HSSF.Record
     {
         public const short sid = 0x207;
         private bool _is16bitUnicode;
+        int field_1_string_length;
         private String field_3_string;
 
 
@@ -48,16 +49,16 @@ namespace NPOI.HSSF.Record
          */
         public StringRecord(RecordInputStream in1)
         {
-            int field_1_string_Length = in1.ReadShort();
+            field_1_string_length = in1.ReadShort();
             _is16bitUnicode = in1.ReadByte() != 0x00;
 
             if (_is16bitUnicode)
             {
-                field_3_string = in1.ReadUnicodeLEString(field_1_string_Length);
+                field_3_string = in1.ReadUnicodeLEString(field_1_string_length);
             }
             else
             {
-                field_3_string = in1.ReadCompressedUnicode(field_1_string_Length);
+                field_3_string = in1.ReadCompressedUnicode(field_1_string_length);
             }
         }
 
@@ -75,7 +76,18 @@ namespace NPOI.HSSF.Record
             out1.WriteShort(this.field_3_string.Length);
             out1.WriteStringData(this.field_3_string);
         }
+        public void ProcessContinueRecord(byte[] data)
+        {
 
+            if (!_is16bitUnicode)
+            {
+                field_3_string += StringUtil.GetFromUnicodeLE(data, 0, field_1_string_length - field_3_string.Length);
+            }
+            else
+            {
+                field_3_string += StringUtil.GetFromCompressedUnicode(data, 0, field_1_string_length - field_3_string.Length);
+            }
+        } 
         /**
          * return the non static version of the id for this record.
          */

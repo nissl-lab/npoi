@@ -22,6 +22,9 @@ namespace TestCases.HSSF.Record.Formula.Eval
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using NPOI.HSSF.Record.Formula.Eval;
     using NPOI.SS.UserModel;
+    using NPOI.HSSF.Record.Formula.Udf;
+    using NPOI.HSSF.Record.Formula.Functions;
+    using NPOI.SS.Formula;
 
     /**
      * 
@@ -30,46 +33,67 @@ namespace TestCases.HSSF.Record.Formula.Eval
     [TestClass]
     public class TestExternalFunction
     {
+        private class MyFunc : FreeRefFunction
+        {
+            public MyFunc()
+            {
+                //
+            }
 
+            public ValueEval Evaluate(ValueEval[] args, OperationEvaluationContext ec)
+            {
+                if (args.Length != 1 || !(args[0] is StringEval))
+                {
+                    return ErrorEval.VALUE_INVALID;
+                }
+                StringEval input = (StringEval)args[0];
+                return new StringEval(input.StringValue + "abc");
+            }
+        }
+
+        private class MyFunc2 : FreeRefFunction
+        {
+            public MyFunc2()
+            {
+                //
+            }
+
+            public ValueEval Evaluate(ValueEval[] args, OperationEvaluationContext ec)
+            {
+                if (args.Length != 1 || !(args[0] is StringEval))
+                {
+                    return ErrorEval.VALUE_INVALID;
+                }
+                StringEval input = (StringEval)args[0];
+                return new StringEval(input.StringValue + "abc2");
+            }
+        }
         /**
          * Checks that an external function can Get Invoked from the formula evaluator. 
          */
         [TestMethod]
         public void TestInvoke()
         {
-            HSSFWorkbook wb;
-            NPOI.SS.UserModel.ISheet sheet ;
-            ICell cell;
-            if (false)
-            {
-                // TODO - this code won't work until we can create user-defined functions directly with POI
-                wb = new HSSFWorkbook();
-                sheet = wb.CreateSheet();
-                wb.SetSheetName(0, "Sheet1");
-                NPOI.SS.UserModel.IName hssfName = wb.CreateName();
-                hssfName.NameName = ("myFunc");
+            // This sample spreadsheet already has a VB function called 'myFunc'
+            HSSFWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("testNames.xls");
+            ISheet sheet = wb.GetSheetAt(0);
 
-            }
-            else
-            {
-                // This sample spreadsheet already has a VB function called 'myFunc'
-                wb = HSSFTestDataSamples.OpenSampleWorkbook("testNames.xls");
-                sheet = wb.GetSheetAt(0);
-                IRow row = sheet.CreateRow(0);
-                cell = row.CreateCell(1);
-            }
+            /**
+ * register the two test UDFs in a UDF finder, to be passed to the evaluator
+ */
+            UDFFinder udff1 = new DefaultUDFFinder(new String[] { "myFunc", },
+                    new FreeRefFunction[] { new MyFunc(), });
+            UDFFinder udff2 = new DefaultUDFFinder(new String[] { "myFunc2", },
+                    new FreeRefFunction[] { new MyFunc2(), });
+            UDFFinder udff = new AggregatingUDFFinder(udff1, udff2);
 
-            cell.CellFormula = ("myFunc()");
-            String actualFormula = cell.CellFormula;
-            Assert.AreEqual("myFunc()", actualFormula);
+            IRow row = sheet.GetRow(0);
+            ICell myFuncCell = row.GetCell(1);
+            ICell myFunc2Cell = row.GetCell(2); 
 
-            HSSFFormulaEvaluator fe = new HSSFFormulaEvaluator(sheet, wb);
-            NPOI.SS.UserModel.CellValue evalResult = fe.Evaluate(cell);
-
-            // Check the return value from ExternalFunction.evaluate()
-            // TODO - make this test assert something more interesting as soon as ExternalFunction works a bit better
-            Assert.AreEqual(NPOI.SS.UserModel.CellType.ERROR, evalResult.CellType);
-            Assert.AreEqual(ErrorEval.FUNCTION_NOT_IMPLEMENTED.ErrorCode, evalResult.ErrorValue);
+            HSSFFormulaEvaluator fe = new HSSFFormulaEvaluator(wb,null,udff);
+            Assert.AreEqual("_abc", fe.Evaluate(myFuncCell).StringValue);
+            Assert.AreEqual("_abc2", fe.Evaluate(myFunc2Cell).StringValue);
         }
     }
 }

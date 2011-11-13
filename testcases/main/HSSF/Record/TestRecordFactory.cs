@@ -165,30 +165,30 @@ namespace TestCases.HSSF.Record
              */
             String dump =
                 //OBJ
-                    "5D, 00, 48, 00, 15, 00, 12, 00, 0C, 00, 3C, 00, 11, 00, A0, 2E, 03, 01, CC, 42, " +
-                    "CF, 00, 00, 00, 00, 00, 0A, 00, 0C, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, " +
-                    "03, 00, 0B, 00, 06, 00, 28, 01, 03, 01, 00, 00, 12, 00, 08, 00, 00, 00, 00, 00, " +
-                    "00, 00, 03, 00, 11, 00, 04, 00, 3D, 00, 00, 00, 00, 00, 00, 00, " +
+                    "5D 00 48 00 15 00 12 00 0C 00 3C 00 11 00 A0 2E 03 01 CC 42 " +
+                    "CF 00 00 00 00 00 0A 00 0C 00 00 00 00 00 00 00 00 00 00 00 " +
+                    "03 00 0B 00 06 00 28 01 03 01 00 00 12 00 08 00 00 00 00 00 " +
+                    "00 00 03 00 11 00 04 00 3D 00 00 00 00 00 00 00 " +
                 //MSODRAWING
-                    "EC, 00, 08, 00, 00, 00, 0D, F0, 00, 00, 00, 00, " +
+                    "EC 00 08 00 00 00 0D F0 00 00 00 00 " +
                 //TXO
-                    "B6, 01, 12, 00, 22, 02, 00, 00, 00, 00, 00, 00, 00, 00, 10, 00, 10, 00, 00, 00, " +
-                    "00, 00, 3C, 00, 21, 00, 01, 4F, 00, 70, 00, 74, 00, 69, 00, 6F, 00, 6E, 00, 20, " +
-                    "00, 42, 00, 75, 00, 74, 00, 74, 00, 6F, 00, 6E, 00, 20, 00, 33, 00, 39, 00, 3C, " +
-                    "00, 10, 00, 00, 00, 05, 00, 00, 00, 00, 00, 10, 00, 00, 00, 00, 00, 00, 00, " +
+                    "B6 01 12 00 22 02 00 00 00 00 00 00 00 00 10 00 10 00 00 00 " +
+                    "00 00 3C 00 21 00 01 4F 00 70 00 74 00 69 00 6F 00 6E 00 20 " +
+                    "00 42 00 75 00 74 00 74 00 6F 00 6E 00 20 00 33 00 39 00 3C " +
+                    "00 10 00 00 00 05 00 00 00 00 00 10 00 00 00 00 00 00 00 " +
                 //CONTINUE
-                    "3C, 00, 7E, 00, 0F, 00, 04, F0, 7E, 00, 00, 00, 92, 0C, 0A, F0, 08, 00, 00, 00, " +
-                    "3D, 04, 00, 00, 00, 0A, 00, 00, A3, 00, 0B, F0, 3C, 00, 00, 00, 7F, 00, 00, 01, " +
-                    "00, 01, 80, 00, 8C, 01, 03, 01, 85, 00, 01, 00, 00, 00, 8B, 00, 02, 00, 00, 00, " +
-                    "BF, 00, 08, 00, 1A, 00, 7F, 01, 29, 00, 29, 00, 81, 01, 41, 00, 00, 08, BF, 01, " +
-                    "00, 00, 10, 00, C0, 01, 40, 00, 00, 08, FF, 01, 00, 00, 08, 00, 00, 00, 10, F0, " +
-                    "12, 00, 00, 00, 02, 00, 02, 00, A0, 03, 18, 00, B5, 00, 04, 00, 30, 02, 1A, 00, " +
-                    "00, 00, 00, 00, 11, F0, 00, 00, 00, 00, " +
+                    "3C 00 7E 00 0F 00 04 F0 7E 00 00 00 92 0C 0A F0 08 00 00 00 " +
+                    "3D 04 00 00 00 0A 00 00 A3 00 0B F0 3C 00 00 00 7F 00 00 01 " +
+                    "00 01 80 00 8C 01 03 01 85 00 01 00 00 00 8B 00 02 00 00 00 " +
+                    "BF 00 08 00 1A 00 7F 01 29 00 29 00 81 01 41 00 00 08 BF 01 " +
+                    "00 00 10 00 C0 01 40 00 00 08 FF 01 00 00 08 00 00 00 10 F0 " +
+                    "12 00 00 00 02 00 02 00 A0 03 18 00 B5 00 04 00 30 02 1A 00 " +
+                    "00 00 00 00 11 F0 00 00 00 00 " +
                 //OBJ
-                    "5D, 00, 48, 00, 15, 00, 12, 00, 0C, 00, 3D, 00, 11, 00, 8C, 01, 03, 01, C8, 59, CF, 00, 00, " +
-                    "00, 00, 00, 0A, 00, 0C, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 03, 00, 0B, 00, 06, 00, " +
-                    "7C, 16, 03, 01, 00, 00, 12, 00, 08, 00, 00, 00, 00, 00, 00, 00, 03, 00, 11, 00, 04, 00, 01, " +
-                    "00, 00, 00, 00, 00, 00, 00";
+                    "5D 00 48 00 15 00 12 00 0C 00 3D 00 11 00 8C 01 03 01 C8 59 CF 00 00 " +
+                    "00 00 00 0A 00 0C 00 00 00 00 00 00 00 00 00 00 00 03 00 0B 00 06 00 " +
+                    "7C 16 03 01 00 00 12 00 08 00 00 00 00 00 00 00 03 00 11 00 04 00 01 " +
+                    "00 00 00 00 00 00 00";
             byte[] data = HexRead.ReadFromString(dump);
 
             IList records = RecordFactory.CreateRecords(new MemoryStream(data));
@@ -212,7 +212,54 @@ namespace TestCases.HSSF.Record
             Assert.AreEqual(data.Length, ser.Length);
             Assert.IsTrue(Arrays.Equals(data, ser));
         }
+        [TestMethod]
+        public void TestNonZeroPadding_bug46987()
+        {
+            Record[] recs = {
+			    new BOFRecord(),
+			    new WriteAccessRecord(), // need *something* between BOF and EOF
+			    EOFRecord.instance,
+			    BOFRecord.CreateSheetBOF(),
+			    EOFRecord.instance,
+		    };
+            MemoryStream baos = new MemoryStream();
+            for (int i = 0; i < recs.Length; i++)
+            {
+                byte[] data = recs[i].Serialize();
+                baos.Write(data,0,data.Length);
+            }
+            //simulate the bad padding at the end of the workbook stream in attachment 23483 of bug 46987
+            baos.WriteByte(0x00);
+            baos.WriteByte(0x11);
+            baos.WriteByte(0x00);
+            baos.WriteByte(0x02);
+            for (int i = 0; i < 192; i++)
+            {
+                baos.WriteByte(0x00);
+            }
 
+
+            POIFSFileSystem fs = new POIFSFileSystem();
+            Stream is1;
+            fs.CreateDocument(new MemoryStream(baos.ToArray()), "dummy");
+            is1 = fs.Root.CreatePOIFSDocumentReader("dummy");
+
+
+            List<Record> outRecs;
+            try
+            {
+                outRecs = RecordFactory.CreateRecords(is1);
+            }
+            catch (Exception e)
+            {
+                if (e.Message.Equals("Buffer underrun - requested 512 bytes but 192 was available"))
+                {
+                    throw new AssertFailedException("Identified bug 46987");
+                }
+                throw e;
+            }
+            Assert.AreEqual(5, outRecs.Count);
+        }
         [TestMethod]
         //public void TestNonZeroPadding_bug46987()
         public void TestNPOIBug6177()

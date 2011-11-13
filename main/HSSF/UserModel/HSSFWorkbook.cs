@@ -33,6 +33,7 @@ namespace NPOI.HSSF.UserModel
     using NPOI.SS.Formula;
     using NPOI.SS.Util;
     using NPOI.SS.UserModel;
+    using NPOI.HSSF.Record.Formula.Udf;
 
 
     /// <summary>
@@ -1346,6 +1347,27 @@ namespace NPOI.HSSF.UserModel
         public String GetSSTString(int index)
         {
             return workbook.GetSSTString(index).String;
+        }
+        /**
+ * The locator of user-defined functions.
+ * By default includes functions from the Excel Analysis Toolpack
+ */
+        private UDFFinder _udfFinder = UDFFinder.DEFAULT;
+
+        /**
+ * Register a new toolpack in this workbook.
+ *
+ * @param toopack the toolpack to register
+ */
+        public void AddToolPack(UDFFinder toopack)
+        {
+            AggregatingUDFFinder udfs = (AggregatingUDFFinder)_udfFinder;
+            udfs.Add(toopack);
+        }
+        /*package*/
+        internal UDFFinder GetUDFFinder()
+        {
+            return _udfFinder;
         }
 
         /// <summary>

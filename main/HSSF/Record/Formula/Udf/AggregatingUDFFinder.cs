@@ -19,6 +19,7 @@ namespace NPOI.HSSF.Record.Formula.Udf
 {
     using System;
     using NPOI.HSSF.Record.Formula.Functions;
+    using System.Collections.Generic;
 
     /**
      * Collects Add-in libraries and VB macro functions toGether into one UDF Finder
@@ -28,20 +29,19 @@ namespace NPOI.HSSF.Record.Formula.Udf
     public class AggregatingUDFFinder : UDFFinder
     {
 
-        private UDFFinder[] _usedToolPacks=new UDFFinder[20];
+        private List<UDFFinder> _usedToolPacks = new List<UDFFinder>();
 
         public AggregatingUDFFinder(params UDFFinder[] usedToolPacks)
         {
-            Array.Copy(usedToolPacks, _usedToolPacks, usedToolPacks.Length);
+            _usedToolPacks = new List<UDFFinder>(usedToolPacks.Length);
+            _usedToolPacks.AddRange(usedToolPacks);
         }
 
-        /**
-         * Returns executor by specified name. Returns <code>null</code> if
-         * function isn't Contained by any registered tool pack.
-         *
-         * @param name Name of function.
-         * @return Function executor. <code>null</code> if not found
-         */
+        /// <summary>
+        /// Returns executor by specified name. 
+        /// </summary>
+        /// <param name="name">Name of function.</param>
+        /// <returns>Function executor. null if not found</returns>
         public override FreeRefFunction FindFunction(String name)
         {
             FreeRefFunction evaluatorForFunction;
@@ -54,6 +54,15 @@ namespace NPOI.HSSF.Record.Formula.Udf
                 }
             }
             return null;
+        }
+
+        /// <summary>
+        /// Add a new toolpack
+        /// </summary>
+        /// <param name="toolPack"></param>
+        public void Add(UDFFinder toolPack)
+        {
+            _usedToolPacks.Add(toolPack);
         }
     }
 }

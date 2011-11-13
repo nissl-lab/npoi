@@ -65,18 +65,18 @@ namespace NPOI.HSSF.UserModel
         }
 
 
-        protected NPOI.SS.UserModel.IRow row;
-        protected NPOI.SS.UserModel.ISheet sheet;
-        protected NPOI.SS.UserModel.IWorkbook workbook;
+        protected IRow row;
+        protected ISheet sheet;
+        protected IWorkbook workbook;
 
-        public HSSFFormulaEvaluator(NPOI.SS.UserModel.ISheet sheet, NPOI.SS.UserModel.IWorkbook workbook)
+        public HSSFFormulaEvaluator(ISheet sheet, IWorkbook workbook)
             : this(workbook)
         {
             this.sheet = sheet;
             this.workbook = workbook;
         }
 
-        public HSSFFormulaEvaluator(NPOI.SS.UserModel.IWorkbook workbook)
+        public HSSFFormulaEvaluator(IWorkbook workbook)
             : this(workbook, null)
         {
             
@@ -86,59 +86,61 @@ namespace NPOI.HSSF.UserModel
  * for the (conservative) assumption that any cell may have its definition changed after
  * evaluation begins.
  */
-        public HSSFFormulaEvaluator(NPOI.SS.UserModel.IWorkbook workbook, IStabilityClassifier stabilityClassifier)
+        public HSSFFormulaEvaluator(IWorkbook workbook, IStabilityClassifier stabilityClassifier)
             : this(workbook, stabilityClassifier, null)
         {
             
         }
 
+
+
         /**
          * @param udfFinder pass <code>null</code> for default (AnalysisToolPak only)
          */
-        private HSSFFormulaEvaluator(NPOI.SS.UserModel.IWorkbook workbook, IStabilityClassifier stabilityClassifier, UDFFinder udfFinder)
+        public HSSFFormulaEvaluator(IWorkbook workbook, IStabilityClassifier stabilityClassifier, UDFFinder udfFinder)
         {
             _bookEvaluator = new WorkbookEvaluator(HSSFEvaluationWorkbook.Create(workbook), stabilityClassifier, udfFinder);
         }
-        private static void SetCellType(NPOI.SS.UserModel.ICell cell, NPOI.SS.UserModel.CellValue cv)
+        private static void SetCellType(ICell cell, CellValue cv)
         {
-            NPOI.SS.UserModel.CellType cellType = cv.CellType;
+            CellType cellType = cv.CellType;
             switch (cellType)
             {
-                case NPOI.SS.UserModel.CellType.BOOLEAN:
-                case NPOI.SS.UserModel.CellType.ERROR:
-                case NPOI.SS.UserModel.CellType.NUMERIC:
-                case NPOI.SS.UserModel.CellType.STRING:
+                case CellType.BOOLEAN:
+                case CellType.ERROR:
+                case CellType.NUMERIC:
+                case CellType.STRING:
                     cell.SetCellType(cellType);
                     return;
-                case NPOI.SS.UserModel.CellType.BLANK:
+                case CellType.BLANK:
                 // never happens - blanks eventually get translated to zero
                     break;
-                case NPOI.SS.UserModel.CellType.FORMULA:
+                case CellType.FORMULA:
                 // this will never happen, we have already evaluated the formula
                     break;
             }
             throw new InvalidOperationException("Unexpected cell value type (" + cellType + ")");
         }
-        private static void SetCellValue(NPOI.SS.UserModel.ICell cell, NPOI.SS.UserModel.CellValue cv)
+        private static void SetCellValue(ICell cell, CellValue cv)
         {
-            NPOI.SS.UserModel.CellType cellType = cv.CellType;
+            CellType cellType = cv.CellType;
             switch (cellType)
             {
-                case NPOI.SS.UserModel.CellType.BOOLEAN:
+                case CellType.BOOLEAN:
                     cell.SetCellValue(cv.BooleanValue);
                     break;
-                case NPOI.SS.UserModel.CellType.ERROR:
-                    cell.CellErrorValue=cv.ErrorValue;
+                case CellType.ERROR:
+                    cell.CellErrorValue = (byte)cv.ErrorValue;
                     break;
-                case NPOI.SS.UserModel.CellType.NUMERIC:
+                case CellType.NUMERIC:
                     cell.SetCellValue(cv.NumberValue);
                     break;
-                case NPOI.SS.UserModel.CellType.STRING:
+                case CellType.STRING:
                     cell.SetCellValue(new HSSFRichTextString(cv.StringValue));
                     break;
-                //case NPOI.SS.UserModel.CellType.BLANK:
+                //case CellType.BLANK:
                 //// never happens - blanks eventually get translated to zero
-                //case NPOI.SS.UserModel.CellType.FORMULA:
+                //case CellType.FORMULA:
                 //// this will never happen, we have already evaluated the formula
                 default:
                     throw new InvalidOperationException("Unexpected cell value type (" + cellType + ")");
@@ -179,7 +181,7 @@ namespace NPOI.HSSF.UserModel
          * @param cell may be <c>null</c> signifying that the cell is not present (or blank)
          * @return <c>null</c> if the supplied cell is <c>null</c> or blank
          */
-        public NPOI.SS.UserModel.CellValue Evaluate(NPOI.SS.UserModel.ICell cell)
+        public CellValue Evaluate(ICell cell)
         {
             if (cell == null)
             {
@@ -188,17 +190,17 @@ namespace NPOI.HSSF.UserModel
 
             switch (cell.CellType)
             {
-                case NPOI.SS.UserModel.CellType.BOOLEAN:
-                    return NPOI.SS.UserModel.CellValue.ValueOf(cell.BooleanCellValue);
-                case NPOI.SS.UserModel.CellType.ERROR:
-                    return NPOI.SS.UserModel.CellValue.GetError(cell.ErrorCellValue);
-                case NPOI.SS.UserModel.CellType.FORMULA:
+                case CellType.BOOLEAN:
+                    return CellValue.ValueOf(cell.BooleanCellValue);
+                case CellType.ERROR:
+                    return CellValue.GetError(cell.ErrorCellValue);
+                case CellType.FORMULA:
                     return EvaluateFormulaCellValue(cell);
-                case NPOI.SS.UserModel.CellType.NUMERIC:
-                    return new NPOI.SS.UserModel.CellValue(cell.NumericCellValue);
-                case NPOI.SS.UserModel.CellType.STRING:
-                    return new NPOI.SS.UserModel.CellValue(cell.RichStringCellValue.String);
-                case NPOI.SS.UserModel.CellType.BLANK:
+                case CellType.NUMERIC:
+                    return new CellValue(cell.NumericCellValue);
+                case CellType.STRING:
+                    return new CellValue(cell.RichStringCellValue.String);
+                case CellType.BLANK:
                     return null;
             }
             throw new InvalidOperationException("Bad cell type (" + cell.CellType + ")");
@@ -265,15 +267,15 @@ namespace NPOI.HSSF.UserModel
          *  and the result. If you want the cell Replaced with
          *  the result of the formula, use {@link #EvaluateInCell(HSSFCell)}
          * @param cell The cell to Evaluate
-         * @return The type of the formula result (the cell's type remains as NPOI.SS.UserModel.CellType.FORMULA however)
+         * @return The type of the formula result (the cell's type remains as CellType.FORMULA however)
          */
-        public NPOI.SS.UserModel.CellType EvaluateFormulaCell(NPOI.SS.UserModel.ICell cell)
+        public CellType EvaluateFormulaCell(ICell cell)
         {
-            if (cell == null || cell.CellType != NPOI.SS.UserModel.CellType.FORMULA)
+            if (cell == null || cell.CellType != CellType.FORMULA)
             {
-                return NPOI.SS.UserModel.CellType.Unknown;
+                return CellType.Unknown;
             }
-            NPOI.SS.UserModel.CellValue cv = EvaluateFormulaCellValue(cell);
+            CellValue cv = EvaluateFormulaCellValue(cell);
             // cell remains a formula cell, but the cached value is changed
             SetCellValue(cell, cv);
             return cv.CellType;
@@ -282,27 +284,27 @@ namespace NPOI.HSSF.UserModel
          * Returns a CellValue wrapper around the supplied ValueEval instance.
          * @param eval
          */
-        private NPOI.SS.UserModel.CellValue EvaluateFormulaCellValue(NPOI.SS.UserModel.ICell cell)
+        private CellValue EvaluateFormulaCellValue(ICell cell)
         {
             ValueEval eval = _bookEvaluator.Evaluate(new HSSFEvaluationCell((HSSFCell)cell));
             if (eval is NumberEval)
             {
                 NumberEval ne = (NumberEval)eval;
-                return new NPOI.SS.UserModel.CellValue(ne.NumberValue);
+                return new CellValue(ne.NumberValue);
             }
             if (eval is BoolEval)
             {
                 BoolEval be = (BoolEval)eval;
-                return NPOI.SS.UserModel.CellValue.ValueOf(be.BooleanValue);
+                return CellValue.ValueOf(be.BooleanValue);
             }
             if (eval is StringEval)
             {
                 StringEval ne = (StringEval)eval;
-                return new NPOI.SS.UserModel.CellValue(ne.StringValue);
+                return new CellValue(ne.StringValue);
             }
             if (eval is ErrorEval)
             {
-                return NPOI.SS.UserModel.CellValue.GetError(((ErrorEval)eval).ErrorCode);
+                return CellValue.GetError(((ErrorEval)eval).ErrorCode);
             }
             throw new InvalidOperationException("Unexpected eval class (" + eval.GetType().Name + ")");
         }
@@ -322,15 +324,15 @@ namespace NPOI.HSSF.UserModel
          *  value computed for you, use {@link #EvaluateFormulaCell(HSSFCell)}
          * @param cell
          */
-        public NPOI.SS.UserModel.ICell EvaluateInCell(NPOI.SS.UserModel.ICell cell)
+        public ICell EvaluateInCell(ICell cell)
         {
             if (cell == null)
             {
                 return null;
             }
-            if (cell.CellType == NPOI.SS.UserModel.CellType.FORMULA)
+            if (cell.CellType == CellType.FORMULA)
             {
-                NPOI.SS.UserModel.CellValue cv = EvaluateFormulaCellValue(cell);
+                CellValue cv = EvaluateFormulaCellValue(cell);
                 SetCellValue(cell, cv);
                 SetCellType(cell, cv); // cell will no longer be a formula cell
             }
@@ -352,7 +354,7 @@ namespace NPOI.HSSF.UserModel
         {
             for (int i = 0; i < wb.NumberOfSheets; i++)
             {
-                NPOI.SS.UserModel.ISheet sheet = wb.GetSheetAt(i);
+                ISheet sheet = wb.GetSheetAt(i);
                 HSSFFormulaEvaluator evaluator = new HSSFFormulaEvaluator(sheet, wb);
 
                 for (IEnumerator rit = sheet.GetRowEnumerator(); rit.MoveNext(); )
@@ -362,8 +364,8 @@ namespace NPOI.HSSF.UserModel
 
                     for (IEnumerator cit = r.GetEnumerator(); cit.MoveNext(); )
                     {
-                        NPOI.SS.UserModel.ICell c = (HSSFCell)cit.Current;
-                        if (c.CellType == NPOI.SS.UserModel.CellType.FORMULA)
+                        ICell c = (HSSFCell)cit.Current;
+                        if (c.CellType == CellType.FORMULA)
                             evaluator.EvaluateFormulaCell(c);
                     }
                 }
@@ -371,117 +373,6 @@ namespace NPOI.HSSF.UserModel
         }
 
 
-        /**
-         * Mimics the 'data view' of a cell. This allows formula evaluator 
-         * to return a CellValue instead of precasting the value to String
-         * or Number or bool type.
-         * @author Amol S. Deshmukh &lt; amolweb at ya hoo dot com &gt;
-         */
-        public class CellValue
-        {
-            public static CellValue TRUE = new CellValue(NPOI.SS.UserModel.CellType.BOOLEAN, 0.0, true, null, 0);
-            public static CellValue FALSE = new CellValue(NPOI.SS.UserModel.CellType.BOOLEAN, 0.0, false, null, 0);
 
-
-            private NPOI.SS.UserModel.CellType _cellType;
-            private double _numberValue;
-            private bool _booleanValue;
-            private String _textValue;
-            private int _errorCode;
-
-            private CellValue(NPOI.SS.UserModel.CellType cellType, double numberValue, bool booleanValue,
-        String textValue, int errorCode)
-            {
-                _cellType = cellType;
-                _numberValue = numberValue;
-                _booleanValue = booleanValue;
-                _textValue = textValue;
-                _errorCode = errorCode;
-            }
-
-            /* package*/
-            internal CellValue(double numberValue) :
-                this(NPOI.SS.UserModel.CellType.NUMERIC, numberValue, false, null, 0)
-            {
-
-            }
-            /* package*/
-            internal CellValue(String stringValue)
-                : this(NPOI.SS.UserModel.CellType.STRING, 0.0, false, stringValue, 0)
-            {
-
-            }
-            /* package*/
-            internal static CellValue ValueOf(bool booleanValue)
-            {
-                return booleanValue ? TRUE : FALSE;
-            }
-            /* package*/
-            internal static CellValue GetError(int errorCode)
-            {
-                return new CellValue(NPOI.SS.UserModel.CellType.ERROR, 0.0, false, null, errorCode);
-            }
-            /**
-             * @return Returns the boolValue.
-             */
-            public bool BooleanValue
-            {
-                get { return _booleanValue; }
-                set { this._booleanValue = value; }
-            }
-            /**
-             * @return Returns the numberValue.
-             */
-            public double NumberValue
-            {
-                get { return _numberValue; }
-                set { this._numberValue = value; }
-            }
-            /**
-             * @return Returns the stringValue. This method is deprecated, use
-             * GetRichTextStringValue instead
-             * @deprecated
-             */
-            public String StringValue
-            {
-                get { return _textValue; }
-            }
-            /**
-             * @return Returns the cellType.
-             */
-            public NPOI.SS.UserModel.CellType CellType
-            {
-                get { return _cellType; }
-            }
-            /**
-             * @return Returns the errorValue.
-             */
-            public int ErrorValue
-            {
-                get { return _errorCode; }
-            }
-            /**
-             * @return Returns the richTextStringValue.
-             */
-            public HSSFRichTextString RichTextStringValue
-            {
-                get { return new HSSFRichTextString(_textValue); }
-            }
-            public String FormatAsString()
-            {
-                switch (_cellType)
-                {
-                    case NPOI.SS.UserModel.CellType.NUMERIC:
-                        return _numberValue.ToString();
-                    case NPOI.SS.UserModel.CellType.STRING:
-                        return '"' + _textValue + '"';
-                    case NPOI.SS.UserModel.CellType.BOOLEAN:
-                        return _booleanValue ? "TRUE" : "FALSE";
-                    case NPOI.SS.UserModel.CellType.ERROR:
-                        return ErrorEval.GetText(_errorCode);
-                }
-                return "<error unexpected cell type " + _cellType + ">";
-            }
-        }
     }
 }

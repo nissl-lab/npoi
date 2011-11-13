@@ -29,6 +29,7 @@ namespace NPOI.HSSF.UserModel
     using NPOI.SS.Formula;
     using NPOI.SS;
     using NPOI.SS.UserModel;
+    using NPOI.HSSF.Record.Formula.Udf;
    
     /**
      * Internal POI use only
@@ -148,6 +149,12 @@ namespace NPOI.HSSF.UserModel
             FormulaRecordAggregate fr = (FormulaRecordAggregate)((HSSFCell)cell).CellValueRecord;
             return fr.FormulaTokens;
         }
+
+        public UDFFinder GetUDFFinder()
+        {
+            return _uBook.GetUDFFinder();
+        }
+
 
         private class Name : IEvaluationName
         {

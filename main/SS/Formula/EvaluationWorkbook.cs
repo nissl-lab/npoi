@@ -20,6 +20,7 @@ namespace NPOI.SS.Formula
 
     using System;
     using NPOI.HSSF.Record.Formula;
+    using NPOI.HSSF.Record.Formula.Udf;
 
     public class ExternalSheet
     {
@@ -68,6 +69,7 @@ namespace NPOI.SS.Formula
         IEvaluationName GetName(String name, int sheetIndex);
         String ResolveNameXText(NameXPtg ptg);
         Ptg[] GetFormulaTokens(EvaluationCell cell);
+        UDFFinder GetUDFFinder();
     }
 
     public class ExternalName

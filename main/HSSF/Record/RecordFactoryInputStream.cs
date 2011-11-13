@@ -394,6 +394,11 @@ namespace NPOI.HSSF.Record
                     //  outPuts a file like this all the same
                     return record;
                 }
+                //if (_lastRecord is StringRecord)
+                //{
+                //    ((StringRecord)_lastRecord).ProcessContinueRecord(contRec.Data);
+                //    return null;
+                //}
                 throw new RecordFormatException("Unhandled Continue Record");
             }
             _lastRecord = record;
