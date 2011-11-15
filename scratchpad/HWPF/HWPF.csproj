@@ -41,6 +41,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Iesi.Collections, Version=1.0.1.0, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\solution\Lib\Iesi.Collections.dll</HintPath>
+    </Reference>
     <Reference Include="Ionic.Zip, Version=1.9.1.5, Culture=neutral, PublicKeyToken=edbe51ad942a3f5c, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\solution\Lib\Ionic.Zip.dll</HintPath>
@@ -54,7 +58,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Converter\AbstractWordConverter.cs" />
+    <Compile Include="Converter\AbstractWordUtils.cs" />
+    <Compile Include="Converter\DefaultFontReplacer.cs" />
     <Compile Include="Converter\HtmlDocumentFacade.cs" />
+    <Compile Include="Converter\FontReplacer.cs" />
+    <Compile Include="Converter\NumberFormatter.cs" />
     <Compile Include="Extractor\Word6Extractor.cs" />
     <Compile Include="Extractor\WordExtractor.cs" />
     <Compile Include="HWPFDocument.cs" />
@@ -206,6 +215,7 @@
     <Compile Include="UserModel\DateAndTime.cs" />
     <Compile Include="UserModel\DocumentPosition.cs" />
     <Compile Include="UserModel\DropCapSpecifier.cs" />
+    <Compile Include="UserModel\Field.cs" />
     <Compile Include="UserModel\HeaderStories.cs" />
     <Compile Include="UserModel\HWPFList.cs" />
     <Compile Include="UserModel\LineSpacingDescriptor.cs" />

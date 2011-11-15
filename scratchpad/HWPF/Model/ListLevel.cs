@@ -144,7 +144,13 @@ namespace NPOI.HWPF.Model
             else
                 return null;
         }
-
+        /**
+     * "The type of character following the number text for the paragraph: 0 == tab, 1 == space, 2 == nothing."
+     */
+        public byte GetTypeOfCharFollowingTheNumber()
+        {
+            return this._ixchFollow;
+        }
         public void SetStartAt(int startAt)
         {
             _iStartAt = startAt;
