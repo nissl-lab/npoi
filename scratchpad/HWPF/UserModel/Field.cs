@@ -37,14 +37,14 @@ namespace NPOI.HWPF.UserModel
          */
         int GetFieldStartOffset();
 
-        CharacterRun getMarkEndCharacterRun(Range parent);
+        CharacterRun GetMarkEndCharacterRun(Range parent);
 
         /**
          * @return character position of end field mark
          */
         int GetMarkEndOffset();
 
-        CharacterRun getMarkSeparatorCharacterRun(Range parent);
+        CharacterRun GetMarkSeparatorCharacterRun(Range parent);
 
         /**
          * @return character position of separator field mark (if present,
@@ -52,7 +52,7 @@ namespace NPOI.HWPF.UserModel
          */
         int GetMarkSeparatorOffset();
 
-        CharacterRun getMarkStartCharacterRun(Range parent);
+        CharacterRun GetMarkStartCharacterRun(Range parent);
 
         /**
          * @return character position of start field mark

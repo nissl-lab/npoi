@@ -24,6 +24,7 @@ using Iesi.Collections.Generic;
 using System.Xml;
 using NPOI.HWPF.Model;
 using System.Diagnostics;
+using System.Text.RegularExpressions;
 
 
 namespace NPOI.HWPF.Converter
@@ -117,10 +118,10 @@ namespace NPOI.HWPF.Converter
         private PicturesManager picturesManager;
 
         /**
-     * Special actions that need to be called after processing complete, like
-     * updating stylesheets or building document notes list. Usually they are
-     * called once, but it's okay to call them several times.
-     */
+         * Special actions that need to be called after processing complete, like
+         * updating stylesheets or building document notes list. Usually they are
+         * called once, but it's okay to call them several times.
+         */
         protected void AfterProcess()
         {
             // by default no such actions needed
@@ -273,7 +274,10 @@ namespace NPOI.HWPF.Converter
             //structures = new ArrayList<Structure>( structures );
             //Collections.sort( structures );
             SortedList<Structure, Structure> sl = new SortedList<Structure, Structure>();
-            structures = sl.Values;
+            foreach (Structure s in structures)
+                sl.Add(s, s);
+            structures.Clear();
+            ((List<Structure>)structures).AddRange(sl.Values);
 
             int previous = range.StartOffset;
             foreach (Structure structure in structures)
@@ -512,26 +516,25 @@ namespace NPOI.HWPF.Converter
                 XmlElement currentBlock, Range range, int currentTableLevel,
                 int beginMark, int separatorMark, int endMark)
         {
-            throw new NotImplementedException();
-            //    StringBuilder debug = new StringBuilder( "Unsupported field type: \n" );
-            //    for ( int i = beginMark; i <= endMark; i++ )
-            //    {
-            //        debug.Append( "\t" );
-            //        debug.Append( range.getCharacterRun( i ) );
-            //        debug.Append( "\n" );
-            //    }
-            //    logger.log( POILogger.WARN, debug );
+            StringBuilder debug = new StringBuilder("Unsupported field type: \n");
+            for (int i = beginMark; i <= endMark; i++)
+            {
+                debug.Append("\t");
+                debug.Append(range.GetCharacterRun(i));
+                debug.Append("\n");
+            }
+            logger.Log(POILogger.WARN, debug);
 
-            //    Range deadFieldValueSubrage = new Range( range.getCharacterRun(
-            //            separatorMark ).StartOffset + 1, range.getCharacterRun(
-            //            endMark ).StartOffset, range )
+            //Range deadFieldValueSubrage = new Range( range.getCharacterRun(
+            //        separatorMark ).StartOffset + 1, range.getCharacterRun(
+            //        endMark ).StartOffset, range )
+            //{
+            //    @Override
+            //    public String toString()
             //    {
-            //        @Override
-            //        public String toString()
-            //        {
-            //            return "DeadFieldValueSubrange (" + super.ToString() + ")";
-            //        }
-            //    };
+            //        return "DeadFieldValueSubrange (" + super.ToString() + ")";
+            //    }
+            //};
 
             //    // just output field value
             //    if ( separatorMark + 1 < endMark )
@@ -539,58 +542,54 @@ namespace NPOI.HWPF.Converter
             //                deadFieldValueSubrage, currentBlock );
 
             //    return;
+            throw new NotImplementedException();
         }
 
         protected Field processDeadField(HWPFDocumentCore wordDocument,
                 Range charactersRange, int currentTableLevel, int startOffset,
                 XmlElement currentBlock)
         {
-            throw new NotImplementedException();
-            //    if ( !( wordDocument is HWPFDocument ) )
-            //        return null;
+            if (!(wordDocument is HWPFDocument))
+                return null;
 
-            //    HWPFDocument hwpfDocument = (HWPFDocument) wordDocument;
-            //    Field field = hwpfDocument.getFields().getFieldByStartOffset(
-            //            FieldsDocumentPart.MAIN, startOffset );
-            //    if ( field == null )
-            //        return null;
+            HWPFDocument hwpfDocument = (HWPFDocument)wordDocument;
+            Field field = hwpfDocument.GetFields().GetFieldByStartOffset(
+                    FieldsDocumentPart.MAIN, startOffset);
+            if (field == null)
+                return null;
 
-            //    processField( hwpfDocument, charactersRange, currentTableLevel, field,
-            //            currentBlock );
+            processField(hwpfDocument, charactersRange, currentTableLevel, field,
+                    currentBlock);
 
-            //return field;
+            return field;
         }
 
         public void processDocument(HWPFDocumentCore wordDocument)
         {
-            throw new NotImplementedException();
-            //    try
-            //    {
-            //         SummaryInformation summaryInformation = wordDocument
-            //                .getSummaryInformation();
-            //        if ( summaryInformation != null )
-            //        {
-            //            processDocumentInformation( summaryInformation );
-            //        }
-            //    }
-            //    catch ( Exception exc )
-            //    {
-            //        logger.log( POILogger.WARN,
-            //                "Unable to process document summary information: ", exc,
-            //                exc );
-            //    }
+            try
+            {
+                NPOI.HPSF.SummaryInformation summaryInformation = wordDocument.SummaryInformation;
+                if (summaryInformation != null)
+                {
+                    processDocumentInformation(summaryInformation);
+                }
+            }
+            catch (Exception exc)
+            {
+                logger.Log(POILogger.WARN, "Unable to process document summary information: ", exc, exc);
+            }
 
-            //     Range docRange = wordDocument.getRange();
+            Range docRange = wordDocument.GetRange();
 
-            //    if ( docRange.numSections() == 1 )
-            //    {
-            //        processSingleSection( wordDocument, docRange.getSection( 0 ) );
-            //        afterProcess();
-            //        return;
-            //    }
+            if (docRange.NumSections == 1)
+            {
+                processSingleSection(wordDocument, docRange.GetSection(0));
+                AfterProcess();
+                return;
+            }
 
-            //    processDocumentPart( wordDocument, docRange );
-            //    afterProcess();
+            processDocumentPart(wordDocument, docRange);
+            AfterProcess();
         }
 
         protected abstract void processDocumentInformation(NPOI.HPSF.SummaryInformation summaryInformation);
@@ -607,30 +606,28 @@ namespace NPOI.HWPF.Converter
         protected void processDrawnObject(HWPFDocument doc,
                 CharacterRun characterRun, XmlElement block)
         {
+            if (GetPicturesManager() == null)
+                return;
+            //// TODO: support headers
+            //OfficeDrawing officeDrawing = doc.GetOfficeDrawingsMain().GetOfficeDrawingAt(characterRun.StartOffset);
+            //if (officeDrawing == null)
+            //{
+            //    logger.Log(POILogger.WARN, "Characters #" + characterRun
+            //            + " references missing drawn object");
+            //    return;
+            //}
+
+            //byte[] pictureData = officeDrawing.GetPictureData();
+            //if (pictureData == null)
+            //    // usual shape?
+            //    return;
+
+            //PictureType type = PictureType.FindMatchingType(pictureData);
+            //String path = GetPicturesManager().SavePicture(pictureData, type,
+            //        "s" + characterRun.StartOffset + "." + type);
+
+            //processDrawnObject(doc, characterRun, officeDrawing, path, block);
             throw new NotImplementedException();
-            //    if ( getPicturesManager() == null )
-            //        return;
-
-            //    // TODO: support headers
-            //    OfficeDrawing officeDrawing = doc.getOfficeDrawingsMain()
-            //            .getOfficeDrawingAt( characterRun.StartOffset );
-            //    if ( officeDrawing == null )
-            //    {
-            //        logger.log( POILogger.WARN, "Characters #" + characterRun
-            //                + " references missing drawn object" );
-            //        return;
-            //    }
-
-            //    byte[] pictureData = officeDrawing.getPictureData();
-            //    if ( pictureData == null )
-            //        // usual shape?
-            //        return;
-
-            //     PictureType type = PictureType.findMatchingType( pictureData );
-            //    String path = getPicturesManager().savePicture( pictureData, type,
-            //            "s" + characterRun.StartOffset + "." + type );
-
-            //    processDrawnObject( doc, characterRun, officeDrawing, path, block );
         }
 
         protected abstract void processDrawnObject(HWPFDocument doc,
@@ -644,85 +641,103 @@ namespace NPOI.HWPF.Converter
         protected void processField(HWPFDocument wordDocument, Range parentRange,
                 int currentTableLevel, Field field, XmlElement currentBlock)
         {
-            throw new NotImplementedException();
-            //    switch ( field.getType() )
-            //    {
-            //    case 37: // page reference
-            //    {
-            //         Range firstSubrange = field.firstSubrange( parentRange );
-            //        if ( firstSubrange != null )
-            //        {
-            //            String formula = firstSubrange.text();
-            //            Pattern pagerefPattern = Pattern
-            //                    .compile( "[ \\t\\r\\n]*PAGEREF ([^ ]*)[ \\t\\r\\n]*\\\\h[ \\t\\r\\n]*" );
-            //            Matcher matcher = pagerefPattern.matcher( formula );
-            //            if ( matcher.find() )
-            //            {
-            //                String pageref = matcher.group( 1 );
-            //                processPageref( wordDocument, currentBlock,
-            //                        field.secondSubrange( parentRange ),
-            //                        currentTableLevel, pageref );
-            //                return;
-            //            }
-            //        }
-            //        break;
-            //    }
-            //    case 58: // Embedded Object
-            //    {
-            //        if ( !field.hasSeparator() )
-            //        {
-            //            logger.log( POILogger.WARN, parentRange + " contains " + field
-            //                    + " with 'Embedded Object' but without separator mark" );
-            //            return;
-            //        }
+            switch (field.getType())
+            {
+                case 37: // page reference
+                    {
+                        Range firstSubrange = field.FirstSubrange(parentRange);
+                        if (firstSubrange != null)
+                        {
+                            String formula = firstSubrange.Text;
+                            Regex pagerefPattern = new Regex("[ \\t\\r\\n]*PAGEREF ([^ ]*)[ \\t\\r\\n]*\\\\h[ \\t\\r\\n]*");
+                            Match match = pagerefPattern.Match(formula);
+                            if (match.Success)
+                            {
+                                String pageref = match.Groups[1].Value;
+                                processPageref(wordDocument, currentBlock,
+                                        field.SecondSubrange(parentRange),
+                                        currentTableLevel, pageref);
+                                return;
+                            }
+                            //Pattern pagerefPattern = Pattern
+                            //        .compile("[ \\t\\r\\n]*PAGEREF ([^ ]*)[ \\t\\r\\n]*\\\\h[ \\t\\r\\n]*");
+                            //Matcher matcher = pagerefPattern.matcher(formula);
+                            //if (matcher.find())
+                            //{
+                            //    String pageref = matcher.group(1);
+                            //    processPageref(wordDocument, currentBlock,
+                            //            field.secondSubrange(parentRange),
+                            //            currentTableLevel, pageref);
+                            //    return;
+                            //}
+                        }
+                        break;
+                    }
+                case 58: // Embedded Object
+                    {
+                        if (!field.HasSeparator())
+                        {
+                            logger.Log(POILogger.WARN, parentRange + " contains " + field
+                                    + " with 'Embedded Object' but without separator mark");
+                            return;
+                        }
 
-            //        CharacterRun separator = field
-            //                .getMarkSeparatorCharacterRun( parentRange );
+                        CharacterRun separator = field.GetMarkSeparatorCharacterRun(parentRange);
 
-            //        if ( separator.isOle2() )
-            //        {
-            //            // the only supported so far
-            //            bool processed = processOle2( wordDocument, separator,
-            //                    currentBlock );
+                        if (separator.IsOle2())
+                        {
+                            // the only supported so far
+                            bool processed = processOle2(wordDocument, separator,
+                                    currentBlock);
 
-            //            // if we didn't output OLE - output field value
-            //            if ( !processed )
-            //            {
-            //                processCharacters( wordDocument, currentTableLevel,
-            //                        field.secondSubrange( parentRange ), currentBlock );
-            //            }
+                            // if we didn't output OLE - output field value
+                            if (!processed)
+                            {
+                                processCharacters(wordDocument, currentTableLevel,
+                                        field.SecondSubrange(parentRange), currentBlock);
+                            }
 
-            //            return;
-            //        }
+                            return;
+                        }
 
-            //        break;
-            //    }
-            //    case 88: // hyperlink
-            //    {
-            //         Range firstSubrange = field.firstSubrange( parentRange );
-            //        if ( firstSubrange != null )
-            //        {
-            //            String formula = firstSubrange.text();
-            //            Pattern hyperlinkPattern = Pattern
-            //                    .compile( "[ \\t\\r\\n]*HYPERLINK \"(.*)\"[ \\t\\r\\n]*" );
-            //            Matcher matcher = hyperlinkPattern.matcher( formula );
-            //            if ( matcher.find() )
-            //            {
-            //                String hyperlink = matcher.group( 1 );
-            //                processHyperlink( wordDocument, currentBlock,
-            //                        field.secondSubrange( parentRange ),
-            //                        currentTableLevel, hyperlink );
-            //                return;
-            //            }
-            //        }
-            //        break;
-            //    }
-            //    }
+                        break;
+                    }
+                case 88: // hyperlink
+                    {
+                        Range firstSubrange = field.FirstSubrange(parentRange);
+                        if (firstSubrange != null)
+                        {
+                            String formula = firstSubrange.Text;
+                            Regex hyperlinkPattern = new Regex("[ \\t\\r\\n]*HYPERLINK \"(.*)\"[ \\t\\r\\n]*");
+                            Match match = hyperlinkPattern.Match(formula);
+                            if (match.Success)
+                            {
+                                String hyperlink = match.Groups[1].Value;
+                                processHyperlink(wordDocument, currentBlock,
+                                        field.SecondSubrange(parentRange),
+                                        currentTableLevel, hyperlink);
+                                return;
+                            }
+                            //Pattern hyperlinkPattern = Pattern
+                            //        .compile("[ \\t\\r\\n]*HYPERLINK \"(.*)\"[ \\t\\r\\n]*");
+                            //Matcher matcher = hyperlinkPattern.matcher(formula);
+                            //if (matcher.find())
+                            //{
+                            //    String hyperlink = matcher.group(1);
+                            //    processHyperlink(wordDocument, currentBlock,
+                            //            field.secondSubrange(parentRange),
+                            //            currentTableLevel, hyperlink);
+                            //    return;
+                            //}
+                        }
+                        break;
+                    }
+            }
 
-            //    logger.log( POILogger.WARN, parentRange + " contains " + field
-            //            + " with unsupported type or format" );
-            //    processCharacters( wordDocument, currentTableLevel,
-            //            field.secondSubrange( parentRange ), currentBlock );
+            logger.Log(POILogger.WARN, parentRange + " contains " + field
+                    + " with unsupported type or format");
+            processCharacters(wordDocument, currentTableLevel,
+                    field.SecondSubrange(parentRange), currentBlock);
         }
 
         protected abstract void processFootnoteAutonumbered(
@@ -742,52 +757,52 @@ namespace NPOI.HWPF.Converter
         protected void processNoteAnchor(HWPFDocument doc,
                 CharacterRun characterRun, XmlElement block)
         {
+            //{
+            //    Notes footnotes = doc.getFootnotes();
+            //    int noteIndex = footnotes
+            //            .getNoteIndexByAnchorPosition(characterRun
+            //                    .StartOffset);
+            //    if (noteIndex != -1)
+            //    {
+            //        Range footnoteRange = doc.getFootnoteRange();
+            //        int rangeStartOffset = footnoteRange.StartOffset;
+            //        int noteTextStartOffset = footnotes
+            //                .getNoteTextStartOffset(noteIndex);
+            //        int noteTextEndOffset = footnotes
+            //                .getNoteTextEndOffset(noteIndex);
+
+            //        Range noteTextRange = new Range(rangeStartOffset
+            //                + noteTextStartOffset, rangeStartOffset
+            //                + noteTextEndOffset, doc);
+
+            //        processFootnoteAutonumbered(doc, noteIndex, block,
+            //                noteTextRange);
+            //        return;
+            //    }
+            //}
+            //{
+            //    Notes endnotes = doc.getEndnotes();
+            //    int noteIndex = endnotes.getNoteIndexByAnchorPosition(characterRun
+            //            .StartOffset);
+            //    if (noteIndex != -1)
+            //    {
+            //        Range endnoteRange = doc.getEndnoteRange();
+            //        int rangeStartOffset = endnoteRange.StartOffset;
+            //        int noteTextStartOffset = endnotes
+            //                .getNoteTextStartOffset(noteIndex);
+            //        int noteTextEndOffset = endnotes
+            //                .getNoteTextEndOffset(noteIndex);
+
+            //        Range noteTextRange = new Range(rangeStartOffset
+            //                + noteTextStartOffset, rangeStartOffset
+            //                + noteTextEndOffset, doc);
+
+            //        processEndnoteAutonumbered(doc, noteIndex, block,
+            //                noteTextRange);
+            //        return;
+            //    }
+            //}
             throw new NotImplementedException();
-            //    {
-            //        Notes footnotes = doc.getFootnotes();
-            //        int noteIndex = footnotes
-            //                .getNoteIndexByAnchorPosition( characterRun
-            //                        .StartOffset );
-            //        if ( noteIndex != -1 )
-            //        {
-            //            Range footnoteRange = doc.getFootnoteRange();
-            //            int rangeStartOffset = footnoteRange.StartOffset;
-            //            int noteTextStartOffset = footnotes
-            //                    .getNoteTextStartOffset( noteIndex );
-            //            int noteTextEndOffset = footnotes
-            //                    .getNoteTextEndOffset( noteIndex );
-
-            //            Range noteTextRange = new Range( rangeStartOffset
-            //                    + noteTextStartOffset, rangeStartOffset
-            //                    + noteTextEndOffset, doc );
-
-            //            processFootnoteAutonumbered( doc, noteIndex, block,
-            //                    noteTextRange );
-            //            return;
-            //        }
-            //    }
-            //    {
-            //        Notes endnotes = doc.getEndnotes();
-            //        int noteIndex = endnotes.getNoteIndexByAnchorPosition( characterRun
-            //                .StartOffset );
-            //        if ( noteIndex != -1 )
-            //        {
-            //            Range endnoteRange = doc.getEndnoteRange();
-            //            int rangeStartOffset = endnoteRange.StartOffset;
-            //            int noteTextStartOffset = endnotes
-            //                    .getNoteTextStartOffset( noteIndex );
-            //            int noteTextEndOffset = endnotes
-            //                    .getNoteTextEndOffset( noteIndex );
-
-            //            Range noteTextRange = new Range( rangeStartOffset
-            //                    + noteTextStartOffset, rangeStartOffset
-            //                    + noteTextEndOffset, doc );
-
-            //            processEndnoteAutonumbered( doc, noteIndex, block,
-            //                    noteTextRange );
-            //            return;
-            //        }
-            //    }
         }
 
         private bool processOle2(HWPFDocument doc, CharacterRun characterRun,
@@ -839,77 +854,75 @@ namespace NPOI.HWPF.Converter
         protected void processParagraphes(HWPFDocumentCore wordDocument,
                 XmlElement flow, Range range, int currentTableLevel)
         {
+
+            ListTables listTables = wordDocument.GetListTables();
+            int currentListInfo = 0;
+
+            int paragraphs = range.NumParagraphs;
+            for (int p = 0; p < paragraphs; p++)
+            {
+                Paragraph paragraph = range.GetParagraph(p);
+
+                if (paragraph.IsInTable() && paragraph.GetTableLevel() != currentTableLevel)
+                {
+                    if (paragraph.GetTableLevel() < currentTableLevel)
+                        throw new InvalidOperationException(
+                                "Trying to process table cell with higher level ("
+                                        + paragraph.GetTableLevel()
+                                        + ") than current table level ("
+                                        + currentTableLevel
+                                        + ") as inner table part");
+
+                    Table table = range.GetTable(paragraph);
+                    processTable(wordDocument, flow, table);
+
+                    p += table.NumParagraphs;
+                    p--;
+                    continue;
+                }
+
+                if (paragraph.Text.Equals("\u000c"))
+                {
+                    processPageBreak(wordDocument, flow);
+                }
+
+                if (paragraph.GetIlfo() != currentListInfo)
+                {
+                    currentListInfo = paragraph.GetIlfo();
+                }
+
+                if (currentListInfo != 0)
+                {
+                    if (listTables != null)
+                    {
+                        ListFormatOverride listFormatOverride = listTables.GetOverride(paragraph.GetIlfo());
+
+                        String label = AbstractWordUtils.GetBulletText(listTables,
+                                paragraph, listFormatOverride.GetLsid());
+
+                        processParagraph(wordDocument, flow, currentTableLevel,
+                                paragraph, label);
+                    }
+                    else
+                    {
+                        logger.Log(POILogger.WARN,
+                                "Paragraph #" + paragraph.StartOffset + "-"
+                                        + paragraph.EndOffset
+                                        + " has reference to list structure #"
+                                        + currentListInfo
+                                        + ", but listTables not defined in file");
+
+                        processParagraph(wordDocument, flow, currentTableLevel,
+                                paragraph, string.Empty);
+                    }
+                }
+                else
+                {
+                    processParagraph(wordDocument, flow, currentTableLevel,
+                            paragraph, string.Empty);
+                }
+            }
             throw new NotImplementedException();
-            //     ListTables listTables = wordDocument.getListTables();
-            //    int currentListInfo = 0;
-
-            //     int paragraphs = range.numParagraphs();
-            //    for ( int p = 0; p < paragraphs; p++ )
-            //    {
-            //        Paragraph paragraph = range.getParagraph( p );
-
-            //        if ( paragraph.isInTable()
-            //                && paragraph.getTableLevel() != currentTableLevel )
-            //        {
-            //            if ( paragraph.getTableLevel() < currentTableLevel )
-            //                throw new IllegalStateException(
-            //                        "Trying to process table cell with higher level ("
-            //                                + paragraph.getTableLevel()
-            //                                + ") than current table level ("
-            //                                + currentTableLevel
-            //                                + ") as inner table part" );
-
-            //            Table table = range.getTable( paragraph );
-            //            processTable( wordDocument, flow, table );
-
-            //            p += table.numParagraphs();
-            //            p--;
-            //            continue;
-            //        }
-
-            //        if ( paragraph.text().equals( "\u000c" ) )
-            //        {
-            //            processPageBreak( wordDocument, flow );
-            //        }
-
-            //        if ( paragraph.getIlfo() != currentListInfo )
-            //        {
-            //            currentListInfo = paragraph.getIlfo();
-            //        }
-
-            //        if ( currentListInfo != 0 )
-            //        {
-            //            if ( listTables != null )
-            //            {
-            //                 ListFormatOverride listFormatOverride = listTables
-            //                        .getOverride( paragraph.getIlfo() );
-
-            //                String label = AbstractWordUtils.getBulletText( listTables,
-            //                        paragraph, listFormatOverride.getLsid() );
-
-            //                processParagraph( wordDocument, flow, currentTableLevel,
-            //                        paragraph, label );
-            //            }
-            //            else
-            //            {
-            //                logger.log( POILogger.WARN,
-            //                        "Paragraph #" + paragraph.StartOffset + "-"
-            //                                + paragraph.getEndOffset()
-            //                                + " has reference to list structure #"
-            //                                + currentListInfo
-            //                                + ", but listTables not defined in file" );
-
-            //                processParagraph( wordDocument, flow, currentTableLevel,
-            //                        paragraph, AbstractWordUtils.EMPTY );
-            //            }
-            //        }
-            //        else
-            //        {
-            //            processParagraph( wordDocument, flow, currentTableLevel,
-            //                    paragraph, AbstractWordUtils.EMPTY );
-            //        }
-            //    }
-
         }
 
         protected abstract void processSection(HWPFDocumentCore wordDocument,
@@ -937,66 +950,66 @@ namespace NPOI.HWPF.Converter
         protected int tryDeadField(HWPFDocumentCore wordDocument, Range range,
                 int currentTableLevel, int beginMark, XmlElement currentBlock)
         {
-            throw new NotImplementedException();
-            //    int separatorMark = -1;
-            //    int endMark = -1;
-            //    for ( int c = beginMark + 1; c < range.numCharacterRuns(); c++ )
-            //    {
-            //        CharacterRun characterRun = range.getCharacterRun( c );
+            int separatorMark = -1;
+            int endMark = -1;
+            for (int c = beginMark + 1; c < range.NumCharacterRuns; c++)
+            {
+                CharacterRun characterRun = range.GetCharacterRun(c);
 
-            //        String text = characterRun.text();
-            //        if ( text.getBytes().length == 0 )
-            //            continue;
+                String text = characterRun.Text;
+                if (text.Length == 0)
+                    //if (text.getBytes().length == 0)
+                    continue;
 
-            //        if ( text.getBytes()[0] == FIELD_BEGIN_MARK )
-            //        {
-            //            // nested?
-            //            Field possibleField = processDeadField( wordDocument, range,
-            //                    currentTableLevel, characterRun.StartOffset,
-            //                    currentBlock );
-            //            if ( possibleField != null )
-            //            {
-            //                c = possibleField.getFieldEndOffset();
-            //            }
-            //            else
-            //            {
-            //                continue;
-            //            }
-            //        }
+                if (text[0] == FIELD_BEGIN_MARK)
+                {
+                    // nested?
+                    Field possibleField = processDeadField(wordDocument, range,
+                            currentTableLevel, characterRun.StartOffset,
+                            currentBlock);
+                    if (possibleField != null)
+                    {
+                        c = possibleField.GetFieldEndOffset();
+                    }
+                    else
+                    {
+                        continue;
+                    }
+                }
 
-            //        if ( text.getBytes()[0] == FIELD_SEPARATOR_MARK )
-            //        {
-            //            if ( separatorMark != -1 )
-            //            {
-            //                // double;
-            //                return beginMark;
-            //            }
+                if (text[0] == FIELD_SEPARATOR_MARK)
+                {
+                    if (separatorMark != -1)
+                    {
+                        // double;
+                        return beginMark;
+                    }
 
-            //            separatorMark = c;
-            //            continue;
-            //        }
+                    separatorMark = c;
+                    continue;
+                }
 
-            //        if ( text.getBytes()[0] == FIELD_END_MARK )
-            //        {
-            //            if ( endMark != -1 )
-            //            {
-            //                // double;
-            //                return beginMark;
-            //            }
+                if (text[0] == FIELD_END_MARK)
+                {
+                    if (endMark != -1)
+                    {
+                        // double;
+                        return beginMark;
+                    }
 
-            //            endMark = c;
-            //            break;
-            //        }
+                    endMark = c;
+                    break;
+                }
 
-            //    }
+            }
 
-            //    if ( separatorMark == -1 || endMark == -1 )
-            //        return beginMark;
+            if (separatorMark == -1 || endMark == -1)
+                return beginMark;
 
-            //    processDeadField( wordDocument, currentBlock, range, currentTableLevel,
-            //            beginMark, separatorMark, endMark );
+            processDeadField(wordDocument, currentBlock, range, currentTableLevel,
+                    beginMark, separatorMark, endMark);
 
-            //    return endMark;
+            return endMark;
         }
     }
 

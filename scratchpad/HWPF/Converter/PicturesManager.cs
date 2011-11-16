@@ -18,7 +18,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using NPOI.SS.UserModel;
+using NPOI.HWPF.UserModel;
 
 namespace NPOI.HWPF.Converter
 {
