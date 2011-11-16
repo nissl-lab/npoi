@@ -76,6 +76,16 @@ namespace NPOI.HWPF
         /** Holds Office Art objects */
         protected ShapesTable _officeArts;
 
+
+        /** Holds the bookmarks tables */
+        protected BookmarksTables _bookmarksTables;
+
+        /** Holds the bookmarks */
+        protected Bookmarks _bookmarks;
+
+        /** Holds the fields */
+        protected Fields _fields;
+
         protected HWPFDocument()
             : base()
         {
@@ -422,6 +432,23 @@ namespace NPOI.HWPF
             return _officeArts;
         }
 
+
+        /**
+         * @return user-friendly interface to access document bookmarks
+         */
+        public Bookmarks GetBookmarks()
+        {
+            return _bookmarks;
+        }
+        /**
+         * Returns user-friendly interface to access document {@link Field}s
+         * 
+         * @return user-friendly interface to access document {@link Field}s
+         */
+        public Fields GetFields()
+        {
+            return _fields;
+        }
         /**
          * Writes out the word file that is represented by an instance of this class.
          *

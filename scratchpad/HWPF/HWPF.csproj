@@ -64,6 +64,7 @@
     <Compile Include="Converter\HtmlDocumentFacade.cs" />
     <Compile Include="Converter\FontReplacer.cs" />
     <Compile Include="Converter\NumberFormatter.cs" />
+    <Compile Include="Converter\PicturesManager.cs" />
     <Compile Include="Extractor\Word6Extractor.cs" />
     <Compile Include="Extractor\WordExtractor.cs" />
     <Compile Include="HWPFDocument.cs" />
@@ -225,6 +226,7 @@
     <Compile Include="UserModel\DocumentPosition.cs" />
     <Compile Include="UserModel\DropCapSpecifier.cs" />
     <Compile Include="UserModel\Field.cs" />
+    <Compile Include="UserModel\Fields.cs" />
     <Compile Include="UserModel\HeaderStories.cs" />
     <Compile Include="UserModel\HWPFList.cs" />
     <Compile Include="UserModel\LineSpacingDescriptor.cs" />
