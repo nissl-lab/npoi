@@ -376,7 +376,7 @@ public class PackagePropertiesPart:PackagePart,PackageProperties
 	 * @see org.apache.poi.OpenXml4Net.opc.PackageProperties#setCreatedProperty(org.apache.poi.OpenXml4Net.util.Nullable)
 	 */
 	public void SetCreatedProperty(Nullable<DateTime> created) {
-		if (created.Value!=null)
+		if (created!=null)
 			this.created = created;
 	}
 

@@ -23,19 +23,7 @@ namespace NPOI.OpenXml4Net.OPC.Internal
          */
         public static string GetDirectory(string filepath)
         {
-
-            String path = filepath;
-            int len = path.Length;
-            int num2 = len;
-            while (--num2 >= 0)
-            {
-                char ch1 = path[num2];
-                if (ch1 == '\\')
-                {
-                    path.Substring(0, num2);
-                }
-            }
-            return "";
+            return Path.GetDirectoryName(filepath).Replace("\\","/");
         }
 
         /**

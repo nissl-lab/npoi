@@ -209,7 +209,7 @@ namespace NPOI.OpenXml4Net.OPC
 			int i = 0;
 			do {
 				id = "rId" + ++i;
-			} while (relationshipsByID[id] != null);
+			} while (relationshipsByID.ContainsKey(id));
 		}
 
 		PackageRelationship rel = new PackageRelationship(container,

@@ -66,7 +66,7 @@ namespace NPOI.OpenXml4Net.OPC.Internal
              *
              * CHAR = <any US-ASCII character (octets 0 - 127)>
              */
-            String token = "[^\\(\\)<>@,;:\\\\/\"\\[\\]\\?={}]";
+            String token = "[^\\(\\)<>@,;:\\\\/\"\\[\\]\\?={}\\s]";
 
             /*
              * parameter = attribute "=" value

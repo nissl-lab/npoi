@@ -141,7 +141,7 @@ namespace NPOI.OpenXml4Net.OPC.Internal.Marshallers
                 }
                 else
                 {
-                    targetValue = PackagingURIHelper.RelativizeURI(
+                    targetValue = PackagingURIHelper.RelativizeUri(
                             sourcePartURI, rel.TargetUri).OriginalString;
                 }
                 relElem.SetAttribute(PackageRelationship.TARGET_ATTRIBUTE_NAME,

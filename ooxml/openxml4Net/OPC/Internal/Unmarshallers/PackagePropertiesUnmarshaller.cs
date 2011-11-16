@@ -142,167 +142,165 @@ public class PackagePropertiesUnmarshaller : PartUnmarshaller {
 	}
 
 	private String LoadCategory(XmlDocument xmlDoc) {
-        XmlNode el = xmlDoc.DocumentElement.GetElementsByTagName(KEYWORD_CATEGORY)[0];
+        XmlNode el = xmlDoc.DocumentElement.SelectNodes("cp:" + KEYWORD_CATEGORY, nsmgr)[0];
 
 		if (el == null) {
 			return null;
 		}
-		return el.Value;
+        return el.InnerText;
 	}
 
     private String LoadContentStatus(XmlDocument xmlDoc)
     {
-        //Element el = xmlDoc.getRootElement().element(
-        //        new QName(KEYWORD_CONTENT_STATUS, namespaceCP));
-        XmlNode el = xmlDoc.DocumentElement.GetElementsByTagName(KEYWORD_CONTENT_STATUS)[0];
+        XmlNode el = xmlDoc.DocumentElement.SelectNodes("cp:" + KEYWORD_CONTENT_STATUS, nsmgr)[0];
 		if (el == null) {
 			return null;
 		}
-        return el.Value;
+        return el.InnerText;
 	}
 
     private String LoadContentType(XmlDocument xmlDoc)
     {
         //Element el = xmlDoc.getRootElement().element(
         //        new QName(KEYWORD_CONTENT_TYPE, namespaceCP));
-        XmlNode el = xmlDoc.DocumentElement.GetElementsByTagName(KEYWORD_CONTENT_TYPE)[0];
+        XmlNode el = xmlDoc.DocumentElement.SelectNodes("cp:" + KEYWORD_CONTENT_TYPE, nsmgr)[0];
 		if (el == null) {
 			return null;
 		}
-        return el.Value;
+        return el.InnerText;
 	}
 
     private String LoadCreated(XmlDocument xmlDoc)
     {
         //Element el = xmlDoc.getRootElement().element(
         //        new QName(KEYWORD_CREATED, namespaceDcTerms));
-        XmlNode el = xmlDoc.DocumentElement.GetElementsByTagName(KEYWORD_CREATED)[0];
+        XmlNode el = xmlDoc.DocumentElement.SelectNodes("dcterms:"+KEYWORD_CREATED, nsmgr)[0];
 		if (el == null) {
 			return null;
 		}
-        return el.Value;
+        return el.InnerText;
 	}
 
     private String LoadCreator(XmlDocument xmlDoc)
     {
         //Element el = xmlDoc.getRootElement().element(
         //        new QName(KEYWORD_CREATOR, namespaceDC));
-        XmlNode el = xmlDoc.DocumentElement.GetElementsByTagName(KEYWORD_CREATOR)[0];
+        XmlNode el = xmlDoc.DocumentElement.SelectNodes("dc:" + KEYWORD_CREATOR, nsmgr)[0];
 		if (el == null) {
 			return null;
 		}
-		return el.Value;
+        return el.InnerText;
 	}
 
 	private String LoadDescription(XmlDocument xmlDoc) {
         //Element el = xmlDoc.getRootElement().element(
         //        new QName(KEYWORD_DESCRIPTION, namespaceDC));
-        XmlNode el = xmlDoc.DocumentElement.GetElementsByTagName(KEYWORD_DESCRIPTION)[0];
+        XmlNode el = xmlDoc.DocumentElement.SelectNodes("dc:" + KEYWORD_DESCRIPTION, nsmgr)[0];
 		if (el == null) {
 			return null;
 		}
-		return el.Value;
+        return el.InnerText;
 	}
 
 	private String LoadIdentifier(XmlDocument xmlDoc) {
         //Element el = xmlDoc.getRootElement().element(
         //        new QName(KEYWORD_IDENTIFIER, namespaceDC));
-        XmlNode el = xmlDoc.DocumentElement.GetElementsByTagName(KEYWORD_IDENTIFIER)[0];
+        XmlNode el = xmlDoc.DocumentElement.SelectNodes("dc:" + KEYWORD_IDENTIFIER, nsmgr)[0];
 		if (el == null) {
 			return null;
 		}
-		return el.Value;
+        return el.InnerText;
 	}
 
 	private String LoadKeywords(XmlDocument xmlDoc) {
         //Element el = xmlDoc.getRootElement().element(
         //        new QName(KEYWORD_KEYWORDS, namespaceCP));
-        XmlNode el = xmlDoc.DocumentElement.GetElementsByTagName(KEYWORD_KEYWORDS)[0];
+        XmlNode el = xmlDoc.DocumentElement.SelectNodes("cp:" + KEYWORD_KEYWORDS, nsmgr)[0];
 
 		if (el == null) {
 			return null;
 		}
-		return el.Value;
+        return el.InnerText;
 	}
 
 	private String LoadLanguage(XmlDocument xmlDoc) {
         //Element el = xmlDoc.getRootElement().element(
         //        new QName(KEYWORD_LANGUAGE, namespaceDC));
-        XmlNode el = xmlDoc.DocumentElement.GetElementsByTagName(KEYWORD_LANGUAGE)[0];
+        XmlNode el = xmlDoc.DocumentElement.SelectNodes("dc:" + KEYWORD_LANGUAGE, nsmgr)[0];
 		if (el == null) {
 			return null;
 		}
-		return el.Value;
+        return el.InnerText;
 	}
 
 	private String LoadLastModifiedBy(XmlDocument xmlDoc) {
         //Element el = xmlDoc.getRootElement().element(
         //        new QName(KEYWORD_LAST_MODIFIED_BY, namespaceCP));
-        XmlNode el = xmlDoc.DocumentElement.GetElementsByTagName(KEYWORD_LAST_MODIFIED_BY)[0];
+        XmlNode el = xmlDoc.DocumentElement.SelectNodes("cp:" + KEYWORD_LAST_MODIFIED_BY, nsmgr)[0];
 		if (el == null) {
 			return null;
 		}
-		return el.Value;
+        return el.InnerText;
 	}
 
 	private String LoadLastPrinted(XmlDocument xmlDoc) {
         //Element el = xmlDoc.getRootElement().element(
         //        new QName(KEYWORD_LAST_PRINTED, namespaceCP));
-        XmlNode el = xmlDoc.DocumentElement.GetElementsByTagName(KEYWORD_LAST_PRINTED)[0];
+        XmlNode el = xmlDoc.DocumentElement.SelectNodes("cp:" + KEYWORD_LAST_PRINTED, nsmgr)[0];
 		if (el == null) {
 			return null;
 		}
-		return el.Value;
+        return el.InnerText;
 	}
 
 	private String LoadModified(XmlDocument xmlDoc) {
         //Element el = xmlDoc.getRootElement().element(
         //        new QName(KEYWORD_MODIFIED, namespaceDcTerms));
-        XmlNode el = xmlDoc.DocumentElement.GetElementsByTagName(KEYWORD_MODIFIED)[0];
+        XmlNode el = xmlDoc.DocumentElement.SelectNodes("dcterms:" + KEYWORD_MODIFIED, nsmgr)[0];
 		if (el == null) {
 			return null;
 		}
-		return el.Value;
+        return el.InnerText;
 	}
 
 	private String LoadRevision(XmlDocument xmlDoc) {
         //Element el = xmlDoc.getRootElement().element(
         //        new QName(KEYWORD_REVISION, namespaceCP));
-        XmlNode el = xmlDoc.DocumentElement.GetElementsByTagName(KEYWORD_REVISION)[0];
+        XmlNode el = xmlDoc.DocumentElement.SelectNodes("cp:"+KEYWORD_REVISION, nsmgr)[0];
 		if (el == null) {
 			return null;
 		}
-		return el.Value;
+        return el.InnerText;
 	}
 
 	private String LoadSubject(XmlDocument xmlDoc) {
         //Element el = xmlDoc.getRootElement().element(
         //        new QName(KEYWORD_SUBJECT, namespaceDC));
-        XmlNode el = xmlDoc.DocumentElement.GetElementsByTagName(KEYWORD_SUBJECT)[0];
+        XmlNode el = xmlDoc.DocumentElement.SelectNodes("dc:" + KEYWORD_SUBJECT, nsmgr)[0];
 		if (el == null) {
 			return null;
 		}
-		return el.Value;
+        return el.InnerText;
 	}
 
 	private String LoadTitle(XmlDocument xmlDoc) {
         //Element el = xmlDoc.getRootElement().element(
         //        new QName(KEYWORD_TITLE, namespaceDC));
-        XmlNode el = xmlDoc.DocumentElement.GetElementsByTagName(KEYWORD_TITLE)[0];
+        XmlNode el = xmlDoc.DocumentElement.SelectNodes("dc:"+KEYWORD_TITLE, nsmgr)[0];
 		if (el == null) {
 			return null;
 		}
-		return el.Value;
+        return el.InnerText;
 	}
 
 	private String LoadVersion(XmlDocument xmlDoc) {
         //Element el = xmlDoc.getRootElement().element(
         //        new QName(KEYWORD_VERSION, namespaceCP));
-        XmlNode el = xmlDoc.DocumentElement.GetElementsByTagName(KEYWORD_VERSION)[0];
+        XmlNode el = xmlDoc.DocumentElement.SelectNodes("cp:" + KEYWORD_VERSION, nsmgr)[0];
 		if (el == null) {
 			return null;
 		}
-		return el.Value;
+        return el.InnerText;
 	}
 
 	/* OPC Compliance methods */

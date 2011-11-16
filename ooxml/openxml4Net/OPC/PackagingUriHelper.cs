@@ -2,6 +2,7 @@
 using System.Text;
 using System.Text.RegularExpressions;
 using NPOI.OpenXml4Net.Exceptions;
+using System.IO;
 
 namespace NPOI.OpenXml4Net.OPC
 {
@@ -269,7 +270,7 @@ namespace NPOI.OpenXml4Net.OPC
          *         '/word/document.xml' => 'media/image1.gif') else
          *         <code>null</code>.
          */
-        public static Uri RelativizeURI(Uri sourceURI, Uri targetURI)
+        public static Uri RelativizeUri(Uri sourceURI, Uri targetURI, bool msCompatible)
         {
             StringBuilder retVal = new StringBuilder();
             String[] segmentsSource = sourceURI.OriginalString.Split(new char[] { '/' });
@@ -293,9 +294,21 @@ namespace NPOI.OpenXml4Net.OPC
             //  form must actually be an absolute Uri
             if (sourceURI.ToString().Equals("/"))
             {
+                String path = targetURI.OriginalString;
+                if (msCompatible && path.Length > 0 && path[0] == '/')
+                {
+                    try
+                    {
+                        targetURI = new Uri(path.Substring(1), UriKind.RelativeOrAbsolute);
+                    }
+                    catch (Exception e)
+                    {
+                        //_logger.log(POILogger.WARN, e);
+                        return null;
+                    }
+                }
                 return targetURI;
             }
-
 
             // Relativize the source Uri against the target Uri.
             // First up, figure out how many steps along we can go
@@ -333,7 +346,7 @@ namespace NPOI.OpenXml4Net.OPC
 
                 try
                 {
-                    return new Uri(retVal.ToString());
+                    return new Uri(retVal.ToString(),UriKind.RelativeOrAbsolute);
                 }
                 catch (Exception e)
                 {
@@ -346,7 +359,18 @@ namespace NPOI.OpenXml4Net.OPC
             if (segmentsTheSame == segmentsSource.Length
                     && segmentsTheSame == segmentsTarget.Length)
             {
-                retVal.Append("");
+                if (sourceURI.Equals(targetURI))
+                {
+                    // if source and target are the same they should be resolved to the last segment,
+                    // Example: if a slide references itself, e.g. the source URI is
+                    // "/ppt/slides/slide1.xml" and the targetURI is "slide1.xml" then
+                    // this it should be relativized as "slide1.xml", i.e. the last segment.
+                    retVal.Append(segmentsSource[segmentsSource.Length - 1]);
+                }
+                else
+                {
+                    retVal.Append("");
+                }
             }
             else
             {
@@ -381,13 +405,30 @@ namespace NPOI.OpenXml4Net.OPC
 
             try
             {
-                return new Uri(retVal.ToString());
+                return new Uri(retVal.ToString(), UriKind.RelativeOrAbsolute);
             }
             catch (Exception e)
             {
                 //System.err.println(e);
                 return null;
             }
+        }
+
+
+        /**
+         * Fully relativize the source part URI against the target part URI.
+         *
+         * @param sourceURI
+         *            The source part URI.
+         * @param targetURI
+         *            The target part URI.
+         * @return A fully relativize part name URI ('word/media/image1.gif',
+         *         '/word/document.xml' => 'media/image1.gif') else
+         *         <code>null</code>.
+         */
+        public static Uri RelativizeUri(Uri sourceURI, Uri targetURI)
+        {
+            return RelativizeUri(sourceURI, targetURI, false);
         }
 
         /**
@@ -413,7 +454,12 @@ namespace NPOI.OpenXml4Net.OPC
                         + targetUri);
             }
 
-            return new Uri(sourcePartUri.ToString()+targetUri.ToString(),UriKind.RelativeOrAbsolute);
+            string path;
+            if(sourcePartUri.OriginalString=="/")
+                path="/";
+            else
+                path = Path.GetDirectoryName(sourcePartUri.ToString()).Replace("\\", "/") + "/";
+            return new Uri(path+targetUri.ToString(),UriKind.RelativeOrAbsolute);
         }
 
         /**
@@ -526,7 +572,7 @@ namespace NPOI.OpenXml4Net.OPC
             try
             {
                 newPartNameURI = ResolvePartUri(
-                        relativePart.PartName.URI, new Uri(partName));
+                        relativePart.PartName.URI, new Uri(partName,UriKind.RelativeOrAbsolute));
             }
             catch (UriFormatException e)
             {
@@ -633,7 +679,90 @@ namespace NPOI.OpenXml4Net.OPC
             }
             return retVal.ToString();
         }
+           /**
+     * Convert a string to {@link java.net.URI}
+     *
+     * If  part name is not a valid URI, it is resolved as follows:
+     * <p>
+     * 1. Percent-encode each open bracket ([) and close bracket (]).</li>
+     * 2. Percent-encode each percent (%) character that is not followed by a hexadecimal notation of an octet value.</li>
+     * 3. Un-percent-encode each percent-encoded unreserved character.
+     * 4. Un-percent-encode each forward slash (/) and back slash (\).
+     * 5. Convert all back slashes to forward slashes.
+     * 6. If present in a segment containing non-dot (?.?) characters, remove trailing dot (?.?) characters from each segment.
+     * 7. Replace each occurrence of multiple consecutive forward slashes (/) with a single forward slash.
+     * 8. If a single trailing forward slash (/) is present, remove that trailing forward slash.
+     * 9. Remove complete segments that consist of three or more dots.
+     * 10. Resolve the relative reference against the base URI of the part holding the Unicode string, as it is defined
+     * in ?5.2 of RFC 3986. The path component of the resulting absolute URI is the part name.
+     *</p>
+     *
+     * @param   value   the string to be parsed into a URI
+     * @return  the resolved part name that should be OK to construct a URI
+     *
+     * TODO YK: for now this method does only (5). Finish the rest.
+     */
+        public static Uri ToUri(String value)
+        {
+            //5. Convert all back slashes to forward slashes
+            if (value.IndexOf("\\") != -1)
+            {
+                value = value.Replace('\\', '/');
+            }
 
+            // URI fragemnts (those starting with '#') are not encoded
+            // and may contain white spaces and raw unicode characters
+            int fragmentIdx = value.IndexOf('#');
+            if (fragmentIdx != -1)
+            {
+                String path = value.Substring(0, fragmentIdx);
+                String fragment = value.Substring(fragmentIdx + 1);
+
+                value = path + "#" + Encode(fragment);
+            }
+
+            return new Uri(value,UriKind.RelativeOrAbsolute);
+        }
+
+           /**
+     * percent-encode white spaces and characters above 0x80.
+     * <p>
+     *   Examples:
+     *   'Apache POI' --> 'Apache%20POI'
+     *   'Apache\u0410POI' --> 'Apache%04%10POI'
+     *
+     * @param s the string to encode
+     * @return  the encoded string
+     */
+    public static String Encode(String s) {
+        int n = s.Length;
+        if (n == 0) return s;
+
+        byte[] bb = Encoding.UTF8.GetBytes(s);
+        StringBuilder sb = new StringBuilder();
+        foreach (byte b in bb)
+        { 
+            int b1 = (int)b & 0xff;
+            if (IsUnsafe(b1)) {
+                sb.Append('%');
+                sb.Append(hexDigits[(b1 >> 4) & 0x0F]);
+                sb.Append(hexDigits[(b1 >> 0) & 0x0F]);
+            } else {
+                sb.Append((char)b1);
+            }           
+        }
+        return sb.ToString();
+    }
+
+    private static char[] hexDigits = {
+        '0', '1', '2', '3', '4', '5', '6', '7',
+        '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'
+    };
+
+    private static bool IsUnsafe(int ch)
+    {
+        return ch > 0x80 || ch == ' ';
+    }
         /**
          * Build a part name where the relationship should be stored ((ex
          * /word/document.xml -> /word/_rels/document.xml.rels)
