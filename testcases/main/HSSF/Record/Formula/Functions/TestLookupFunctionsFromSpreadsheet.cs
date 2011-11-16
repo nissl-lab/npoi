@@ -348,7 +348,7 @@ namespace TestCases.HSSF.Record.Formula.Functions
             }
             NPOI.SS.UserModel.ISheet sheet = workbook.GetSheetAt(0);
             String specifiedClassName = sheet.GetRow(2).GetCell((short)0).RichStringCellValue.String;
-            Assert.AreEqual(GetType().Name, specifiedClassName, "Test class name in spReadsheet comment");
+            Assert.AreEqual(GetType().Name, specifiedClassName.Substring(specifiedClassName.LastIndexOf(".") + 1), "Test class name in spreadsheet comment");
 
         }
 

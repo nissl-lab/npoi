@@ -41,7 +41,7 @@ namespace TestCases.SS.Formula
         }
         private static void CheckType(Exception e)
         {
-            if (!(e is FormulaParser.FormulaParseException))
+            if (!(e is FormulaParseException))
             {
                 String failMsg = "Expected FormulaParseException, but got ("
                     + e.GetType().Name + "):";

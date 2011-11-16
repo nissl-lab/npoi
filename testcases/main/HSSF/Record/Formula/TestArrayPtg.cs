@@ -63,15 +63,15 @@ namespace TestCases.HSSF.Record.Formula
             ptg.ReadTokenValues(TestcaseRecordInputStream.CreateWithFakeSid(ENCODED_CONSTANT_DATA));
             Assert.AreEqual(3, ptg.ColumnCount);
             Assert.AreEqual(2, ptg.RowCount);
-            object[] values = ptg.GetTokenArrayValues();
+            object[][] values = ptg.GetTokenArrayValues();
             Assert.AreEqual(6, values.Length);
 
 
-            Assert.AreEqual(true, values[0]);
-            Assert.AreEqual("ABCD", values[1]);
-            Assert.AreEqual(0, Convert.ToInt32( values[3]));
-            Assert.AreEqual(false, values[4]);
-            Assert.AreEqual("FG", values[5]);
+            Assert.AreEqual(true, values[0][0]);
+            Assert.AreEqual("ABCD", values[0][1]);
+            Assert.AreEqual(0, Convert.ToInt32( values[1][0]));
+            Assert.AreEqual(false, values[1][1]);
+            Assert.AreEqual("FG", values[1][2]);
 
             byte[] outBuf = new byte[ENCODED_CONSTANT_DATA.Length];
             ptg.WriteTokenValueBytes(new LittleEndianByteArrayOutputStream(outBuf, 0));

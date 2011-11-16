@@ -25,9 +25,14 @@ namespace TestCases.HSSF.Model
     using TestCases.SS.Formula;
     using NPOI.SS.UserModel;
     using NPOI.SS.Formula;
+    using NPOI.HSSF.Record;
+    using NPOI.Util;
+    using NPOI.Util.IO;
+    using TestCases.HSSF.UserModel;
+    using NPOI.HSSF.Record.Constant;
 
     /**
-     * Test the low level formula Parser functionality. High level tests are to
+     * Test the low level formula Parser functionality. High level Tests are to
      * be done via usermodel/Cell.SetFormulaValue().
      */
     [TestClass]
@@ -112,7 +117,7 @@ namespace TestCases.HSSF.Model
         [TestMethod]
         public void TestMacroFunction()
         {
-            // testNames.xls contains a VB function called 'myFunc'
+            // TestNames.xls contains a VB function called 'myFunc'
             HSSFWorkbook w = HSSFTestDataSamples.OpenSampleWorkbook("testNames.xls");
             HSSFEvaluationWorkbook book = HSSFEvaluationWorkbook.Create(w);
 
@@ -208,7 +213,7 @@ namespace TestCases.HSSF.Model
             Assert.IsTrue(ptgs[0] is IntPtg, "ptg should be  IntPtg, is1 " + ptgs[0].GetType());
         }
 
-        /** bug 33160, testcase by Amol Deshmukh*/
+        /** bug 33160, Testcase by Amol Deshmukh*/
         [TestMethod]
         public void TestSimpleLongFormula()
         {
@@ -766,7 +771,7 @@ namespace TestCases.HSSF.Model
             }
             catch (InvalidOperationException e)
             {
-                // expected during successful test
+                // expected during successful Test
                 Assert.IsTrue(e.Message.StartsWith("Too few arguments supplied to operation"));
             }
         }
@@ -867,6 +872,578 @@ namespace TestCases.HSSF.Model
                 }
             }
         }
+        [TestMethod]
+        public void TestParseErrorExpectedMsg()
+        {
 
+            try
+            {
+                ParseFormula("round(3.14;2)");
+                throw new AssertFailedException("Didn't get parse exception as expected");
+            }
+            catch (FormulaParseException e)
+            {
+                ConfirmParseException(e,
+                        "Parse error near char 10 ';' in specified formula 'round(3.14;2)'. Expected ',' or ')'");
+            }
+
+            try
+            {
+                ParseFormula(" =2+2");
+                throw new AssertFailedException("Didn't get parse exception as expected");
+            }
+            catch (FormulaParseException e)
+            {
+                ConfirmParseException(e,
+                        "The specified formula ' =2+2' starts with an equals sign which is not allowed.");
+            }
+        }
+
+        /**
+         * this function name has a dot in it.
+         */
+        [TestMethod]
+        public void TestParseErrorTypeFunction()
+        {
+
+            Ptg[] ptgs;
+            try
+            {
+                ptgs = ParseFormula("error.type(A1)");
+            }
+            catch (ArgumentException e)
+            {
+                if (e.Message.Equals("Invalid Formula cell reference: 'error'"))
+                {
+                    throw new AssertFailedException("Identified bug 45334");
+                }
+                throw e;
+            }
+            ConfirmTokenClasses(ptgs, typeof(RefPtg), typeof(FuncPtg));
+            Assert.AreEqual("ERROR.TYPE", ((FuncPtg)ptgs[1]).Name);
+        }
+        [TestMethod]
+        public void TestNamedRangeThatLooksLikeCell()
+        {
+            HSSFWorkbook wb = new HSSFWorkbook();
+            ISheet sheet = wb.CreateSheet("Sheet1");
+            IName name = wb.CreateName();
+            name.RefersToFormula = ("Sheet1!B1");
+            name.NameName = ("pfy1");
+
+            Ptg[] ptgs;
+            try
+            {
+                ptgs = HSSFFormulaParser.Parse("count(pfy1)", wb);
+            }
+            catch (ArgumentException e)
+            {
+                if (e.Message.Equals("Specified colIx (1012) is out of range"))
+                {
+                    throw new AssertFailedException("Identified bug 45354");
+                }
+                throw e;
+            }
+            ConfirmTokenClasses(ptgs, typeof(NamePtg), typeof(FuncVarPtg));
+
+            ICell cell = sheet.CreateRow(0).CreateCell(0);
+            cell.CellFormula = ("count(pfy1)");
+            Assert.AreEqual("COUNT(pfy1)", cell.CellFormula);
+            try
+            {
+                cell.CellFormula = ("count(pf1)");
+                throw new AssertFailedException("Expected formula parse execption");
+            }
+            catch (FormulaParseException e)
+            {
+                ConfirmParseException(e,
+                        "Specified named range 'pf1' does not exist in the current workbook.");
+            }
+            cell.CellFormula = ("count(fp1)"); // plain cell ref, col is in range
+        }
+        [TestMethod]
+        public void TestParseAreaRefHighRow_bug45358()
+        {
+            Ptg[] ptgs;
+            AreaI aptg;
+
+            HSSFWorkbook book = new HSSFWorkbook();
+            book.CreateSheet("Sheet1");
+
+            ptgs = HSSFFormulaParser.Parse("Sheet1!A10:A40000", book);
+            aptg = (AreaI)ptgs[0];
+            if (aptg.LastRow == -25537)
+            {
+                throw new AssertFailedException("Identified bug 45358");
+            }
+            Assert.AreEqual(39999, aptg.LastRow);
+
+            ptgs = HSSFFormulaParser.Parse("Sheet1!A10:A65536", book);
+            aptg = (AreaI)ptgs[0];
+            Assert.AreEqual(65535, aptg.LastRow);
+
+            // plain area refs should be ok too
+            ptgs = ParseFormula("A10:A65536");
+            aptg = (AreaI)ptgs[0];
+            Assert.AreEqual(65535, aptg.LastRow);
+
+        }
+        [TestMethod]
+        public void TestParseArray()
+        {
+            Ptg[] ptgs;
+            ptgs = ParseFormula("mode({1,2,2,#REF!;FALSE,3,3,2})");
+            ConfirmTokenClasses(ptgs, typeof(ArrayPtg), typeof(FuncVarPtg));
+            Assert.AreEqual("{1,2,2,#REF!;FALSE,3,3,2}", ptgs[0].ToFormulaString());
+
+            ArrayPtg aptg = (ArrayPtg)ptgs[0];
+            Object[][] values = aptg.GetTokenArrayValues();
+            Assert.AreEqual(ErrorConstant.ValueOf(HSSFErrorConstants.ERROR_REF), values[0][3]);
+            Assert.AreEqual(false, values[1][0]);
+        }
+        [TestMethod]
+        public void TestParseStringElementInArray()
+        {
+            Ptg[] ptgs;
+            ptgs = ParseFormula("MAX({\"5\"},3)");
+            ConfirmTokenClasses(ptgs, typeof(ArrayPtg), typeof(IntPtg), typeof(FuncVarPtg));
+            object element = ((ArrayPtg)ptgs[0]).GetTokenArrayValues()[0][0];
+            if (element is UnicodeString)
+            {
+                // this would cause ClassCastException below
+                throw new AssertFailedException("Wrong encoding of array element value");
+            }
+            Assert.AreEqual(typeof(String), element.GetType());
+
+            // make sure the formula encodes OK
+            int encSize = Ptg.GetEncodedSize(ptgs);
+            byte[] data = new byte[encSize];
+            Ptg.SerializePtgs(ptgs, data, 0);
+            byte[] expData = HexRead.ReadFromString(
+                    "20 00 00 00 00 00 00 00 " // tArray
+                    + "1E 03 00 "      // tInt(3)
+                    + "42 02 07 00 "   // tFuncVar(MAX) 2-arg
+                    + "00 00 00 "      // Array data: 1 col, 1 row
+                    + "02 01 00 00 35" // elem (type=string, len=1, "5")
+            );
+            Assert.IsTrue(Arrays.Equals(expData, data));
+            int initSize = Ptg.GetEncodedSizeWithoutArrayData(ptgs);
+            Ptg[] ptgs2 = Ptg.ReadTokens(initSize, new LittleEndianByteArrayInputStream(data));
+            ConfirmTokenClasses(ptgs2, typeof(ArrayPtg), typeof(IntPtg), typeof(FuncVarPtg));
+        }
+        [TestMethod]
+        public void TestParseArrayNegativeElement()
+        {
+            Ptg[] ptgs;
+            try
+            {
+                ptgs = ParseFormula("{-42}");
+            }
+            catch (FormulaParseException e)
+            {
+                if (e.Message.Equals("Parse error near char 1 '-' in specified formula '{-42}'. Expected Integer"))
+                {
+                    throw new AssertFailedException("Identified bug - failed to parse negative array element.");
+                }
+                throw e;
+            }
+            ConfirmTokenClasses(ptgs, typeof(ArrayPtg));
+            Object element = ((ArrayPtg)ptgs[0]).GetTokenArrayValues()[0][0];
+
+            Assert.AreEqual(-42.0, (Double)element, 0.0);
+
+            // Should be able to handle whitespace between unary minus and digits (Excel
+            // accepts this formula after presenting the user with a Confirmation dialog).
+            ptgs = ParseFormula("{- 5}");
+            element = ((ArrayPtg)ptgs[0]).GetTokenArrayValues()[0][0];
+            Assert.AreEqual(-5.0, (Double)element, 0.0);
+        }
+        [TestMethod]
+        public void TestRangeOperator()
+        {
+
+            HSSFWorkbook wb = new HSSFWorkbook();
+            ISheet sheet = wb.CreateSheet();
+            ICell cell = sheet.CreateRow(0).CreateCell(0);
+
+            wb.SetSheetName(0, "Sheet1");
+            cell.CellFormula = ("Sheet1!B$4:Sheet1!$C1"); // explicit range ':' operator
+            Assert.AreEqual("Sheet1!B$4:Sheet1!$C1", cell.CellFormula);
+
+            cell.CellFormula = ("Sheet1!B$4:$C1"); // plain area ref
+            Assert.AreEqual("Sheet1!B1:$C$4", cell.CellFormula); // note - area ref is normalised
+
+            cell.CellFormula = ("Sheet1!$C1...B$4"); // different syntax for plain area ref
+            Assert.AreEqual("Sheet1!B1:$C$4", cell.CellFormula);
+
+            // with funny sheet name
+            wb.SetSheetName(0, "A1...A2");
+            cell.CellFormula = ("A1...A2!B1");
+            Assert.AreEqual("A1...A2!B1", cell.CellFormula);
+        }
+        [TestMethod]
+        public void TestBooleanNamedSheet()
+        {
+
+            HSSFWorkbook wb = new HSSFWorkbook();
+            ISheet sheet = wb.CreateSheet("true");
+            ICell cell = sheet.CreateRow(0).CreateCell(0);
+            cell.CellFormula = ("'true'!B2");
+
+            Assert.AreEqual("'true'!B2", cell.CellFormula);
+        }
+        [TestMethod]
+        public void TestParseExternalWorkbookReference()
+        {
+            HSSFWorkbook wbA = HSSFTestDataSamples.OpenSampleWorkbook("multibookFormulaA.xls");
+            ICell cell = wbA.GetSheetAt(0).GetRow(0).GetCell(0);
+
+            // make sure formula in sample is as expected
+            Assert.AreEqual("[multibookFormulaB.xls]BSheet1!B1", cell.CellFormula);
+            Ptg[] expectedPtgs = FormulaExtractor.GetPtgs(cell);
+            ConfirmSingle3DRef(expectedPtgs, 1);
+
+            // now try (re-)parsing the formula
+            Ptg[] actualPtgs = HSSFFormulaParser.Parse("[multibookFormulaB.xls]BSheet1!B1", wbA);
+            ConfirmSingle3DRef(actualPtgs, 1); // externalSheetIndex 1 -> BSheet1
+
+            // try parsing a formula pointing to a different external sheet
+            Ptg[] otherPtgs = HSSFFormulaParser.Parse("[multibookFormulaB.xls]AnotherSheet!B1", wbA);
+            ConfirmSingle3DRef(otherPtgs, 0); // externalSheetIndex 0 -> AnotherSheet
+
+            // try setting the same formula in a cell
+            cell.CellFormula = ("[multibookFormulaB.xls]AnotherSheet!B1");
+            Assert.AreEqual("[multibookFormulaB.xls]AnotherSheet!B1", cell.CellFormula);
+        }
+        private static void ConfirmSingle3DRef(Ptg[] ptgs, int expectedExternSheetIndex)
+        {
+            Assert.AreEqual(1, ptgs.Length);
+            Ptg ptg0 = ptgs[0];
+            Assert.IsTrue(ptg0 is Ref3DPtg);
+            Assert.AreEqual(expectedExternSheetIndex, ((Ref3DPtg)ptg0).ExternSheetIndex);
+        }
+        [TestMethod]
+        public void TestUnion()
+        {
+            String formula = "Sheet1!$B$2:$C$3,OFFSET(Sheet1!$E$2:$E$4,1,Sheet1!$A$1),Sheet1!$D$6";
+            HSSFWorkbook wb = new HSSFWorkbook();
+            wb.CreateSheet("Sheet1");
+            Ptg[] ptgs = FormulaParser.Parse(formula, HSSFEvaluationWorkbook.Create(wb), FormulaType.CELL, -1);
+
+            ConfirmTokenClasses(ptgs,
+                // TODO - AttrPtg), // Excel prepends this
+                    typeof(MemFuncPtg),
+                    typeof(Area3DPtg),
+                    typeof(Area3DPtg),
+                    typeof(IntPtg),
+                    typeof(Ref3DPtg),
+                    typeof(FuncVarPtg),
+                    typeof(UnionPtg),
+                    typeof(Ref3DPtg),
+                    typeof(UnionPtg)
+            );
+            MemFuncPtg mf = (MemFuncPtg)ptgs[0];
+            Assert.AreEqual(45, mf.LenRefSubexpression);
+        }
+        /** Named ranges with backslashes, e.g. 'POI\\2009' */
+        [TestMethod]
+        public void TestBackSlashInNames()
+        {
+            HSSFWorkbook wb = new HSSFWorkbook();
+
+            IName name = wb.CreateName();
+            name.NameName = ("POI\\2009");
+            name.RefersToFormula = ("Sheet1!$A$1");
+
+            ISheet sheet = wb.CreateSheet();
+            IRow row = sheet.CreateRow(0);
+
+            ICell cell_C1 = row.CreateCell(2);
+            cell_C1.CellFormula = ("POI\\2009");
+            Assert.AreEqual("POI\\2009", cell_C1.CellFormula);
+
+            ICell cell_D1 = row.CreateCell(2);
+            cell_D1.CellFormula = ("NOT(POI\\2009=\"3.5-final\")");
+            Assert.AreEqual("NOT(POI\\2009=\"3.5-final\")", cell_D1.CellFormula);
+        }
+
+        /**
+         * TODO - delete equiv Test:
+         * {@link BaseTestBugzillaIssues#test42448()}
+         */
+        [TestMethod]
+        public void TestParseAbnormalSheetNamesAndRanges_bug42448()
+        {
+            HSSFWorkbook wb = new HSSFWorkbook();
+            wb.CreateSheet("A");
+            try
+            {
+                HSSFFormulaParser.Parse("SUM(A!C7:A!C67)", wb);
+            }
+            catch (IndexOutOfRangeException e)
+            {
+                throw new AssertFailedException("Identified bug 42448");
+            }
+            // the exact example from the bugzilla description:
+            HSSFFormulaParser.Parse("SUMPRODUCT(A!C7:A!C67, B8:B68) / B69", wb);
+        }
+        [TestMethod]
+        public void TestRangeFuncOperand_bug46951()
+        {
+            HSSFWorkbook wb = new HSSFWorkbook();
+            Ptg[] ptgs;
+            try
+            {
+                ptgs = HSSFFormulaParser.Parse("SUM(C1:OFFSET(C1,0,B1))", wb);
+            }
+            catch (Exception e)
+            {
+                if (e.Message.Equals("Specified named range 'OFFSET' does not exist in the current workbook."))
+                {
+                    throw new AssertFailedException("Identified bug 46951");
+                }
+                throw e;
+            }
+            ConfirmTokenClasses(ptgs,
+                typeof(MemFuncPtg), // [len=23]
+                typeof(RefPtg), // [C1]
+                typeof(RefPtg), // [C1]
+                typeof(IntPtg), // [0]
+                typeof(RefPtg), // [B1]
+                typeof(FuncVarPtg), // [OFFSET nArgs=3]
+                typeof(RangePtg), //
+                typeof(AttrPtg) // [sum ]
+            );
+
+        }
+        [TestMethod]
+        public void TestUnionOfFullCollFullRowRef()
+        {
+            Ptg[] ptgs;
+            ptgs = ParseFormula("3:4");
+            ptgs = ParseFormula("$Z:$AC");
+            ConfirmTokenClasses(ptgs, typeof(AreaPtg));
+            ptgs = ParseFormula("B:B");
+
+            ptgs = ParseFormula("$11:$13");
+            ConfirmTokenClasses(ptgs, typeof(AreaPtg));
+
+            ptgs = ParseFormula("$A:$A,$1:$4");
+            ConfirmTokenClasses(ptgs, typeof(MemAreaPtg),
+                    typeof(AreaPtg),
+                    typeof(AreaPtg),
+                    typeof(UnionPtg)
+            );
+
+            HSSFWorkbook wb = new HSSFWorkbook();
+            wb.CreateSheet("Sheet1");
+            ptgs = HSSFFormulaParser.Parse("Sheet1!$A:$A,Sheet1!$1:$4", wb);
+            ConfirmTokenClasses(ptgs, typeof(MemFuncPtg),
+                    typeof(Area3DPtg),
+                    typeof(Area3DPtg),
+                    typeof(UnionPtg)
+            );
+
+            ptgs = HSSFFormulaParser.Parse("'Sheet1'!$A:$A,'Sheet1'!$1:$4", wb);
+            ConfirmTokenClasses(ptgs,
+                    typeof(MemFuncPtg),
+                    typeof(Area3DPtg),
+                    typeof(Area3DPtg),
+                    typeof(UnionPtg)
+            );
+        }
+
+        [TestMethod]
+        public void TestExplicitRangeWithTwoSheetNames()
+        {
+            HSSFWorkbook wb = new HSSFWorkbook();
+            wb.CreateSheet("Sheet1");
+            Ptg[] ptgs = HSSFFormulaParser.Parse("Sheet1!F1:Sheet1!G2", wb);
+            ConfirmTokenClasses(ptgs,
+                    typeof(MemFuncPtg),
+                    typeof(Ref3DPtg),
+                    typeof(Ref3DPtg),
+                    typeof(RangePtg)
+            );
+            MemFuncPtg mf;
+            mf = (MemFuncPtg)ptgs[0];
+            Assert.AreEqual(15, mf.LenRefSubexpression);
+        }
+
+        /**
+         * Checks that the area-ref and explicit range operators get the right associativity
+         * and that the {@link MemFuncPtg} / {@link MemAreaPtg} is added correctly
+         */
+        [TestMethod]
+        public void TestComplexExplicitRangeEncodings()
+        {
+
+            Ptg[] ptgs;
+            ptgs = ParseFormula("SUM(OFFSET(A1,0,0):B2:C3:D4:E5:OFFSET(F6,1,1):G7)");
+            ConfirmTokenClasses(ptgs,
+                // AttrPtg), // [volatile ] // POI doesn't do this yet (Apr 2009)
+                typeof(MemFuncPtg), // len 57
+                typeof(RefPtg), // [A1]
+                typeof(IntPtg), // [0]
+                typeof(IntPtg), // [0]
+                typeof(FuncVarPtg), // [OFFSET nArgs=3]
+                typeof(AreaPtg), // [B2:C3]
+                typeof(RangePtg),
+                typeof(AreaPtg), // [D4:E5]
+                typeof(RangePtg),
+                typeof(RefPtg), // [F6]
+                typeof(IntPtg), // [1]
+                typeof(IntPtg), // [1]
+                typeof(FuncVarPtg), // [OFFSET nArgs=3]
+                typeof(RangePtg),
+                typeof(RefPtg), // [G7]
+                typeof(RangePtg),
+                typeof(AttrPtg) // [sum ]
+            );
+
+            MemFuncPtg mf = (MemFuncPtg)ptgs[0];
+            Assert.AreEqual(57, mf.LenRefSubexpression);
+            Assert.AreEqual("D4:E5", ((AreaPtgBase)ptgs[7]).ToFormulaString());
+            Assert.IsTrue(((AttrPtg)ptgs[16]).IsSum);
+
+            ptgs = ParseFormula("SUM(A1:B2:C3:D4)");
+            ConfirmTokenClasses(ptgs,
+                // AttrPtg), // [volatile ] // POI doesn't do this yet (Apr 2009)
+                    typeof(MemAreaPtg), // len 19
+                    typeof(AreaPtg), // [A1:B2]
+                    typeof(AreaPtg), // [C3:D4]
+                    typeof(RangePtg),
+                    typeof(AttrPtg) // [sum ]
+            );
+            MemAreaPtg ma = (MemAreaPtg)ptgs[0];
+            Assert.AreEqual(19, ma.LenRefSubexpression);
+        }
+
+
+        /**
+         * Mostly Confirming that erroneous conditions are detected.  Actual error message wording is not critical.
+         *
+         */
+        [TestMethod]
+        public void TestEdgeCaseParserErrors()
+        {
+            HSSFWorkbook wb = new HSSFWorkbook();
+            wb.CreateSheet("Sheet1");
+
+            ConfirmParseError(wb, "A1:ROUND(B1,1)", "The RHS of the range operator ':' at position 3 is not a proper reference.");
+
+            ConfirmParseError(wb, "Sheet1!Sheet1", "Cell reference expected after sheet name at index 8.");
+            ConfirmParseError(wb, "Sheet1!F:Sheet1!G", "'Sheet1!F' is not a proper reference.");
+            ConfirmParseError(wb, "Sheet1!F..foobar", "Complete area reference expected after sheet name at index 11.");
+            ConfirmParseError(wb, "Sheet1!A .. B", "Dotted range (full row or column) expression 'A .. B' must not contain whitespace.");
+            ConfirmParseError(wb, "Sheet1!A...B", "Dotted range (full row or column) expression 'A...B' must have exactly 2 dots.");
+            ConfirmParseError(wb, "Sheet1!A foobar", "Second part of cell reference expected after sheet name at index 10.");
+
+            ConfirmParseError(wb, "foobar", "Specified named range 'foobar' does not exist in the current workbook.");
+            ConfirmParseError(wb, "A1:1", "The RHS of the range operator ':' at position 3 is not a proper reference.");
+        }
+        private static void ConfirmParseError(HSSFWorkbook wb, String formula, String expectedMessage)
+        {
+
+            try
+            {
+                HSSFFormulaParser.Parse(formula, wb);
+                throw new AssertFailedException("Expected formula parse execption");
+            }
+            catch (FormulaParseException e)
+            {
+                ConfirmParseException(e, expectedMessage);
+            }
+        }
+
+        /**
+         * In bug 47078, POI had trouble evaluating a defined name flagged as 'complex'.
+         * POI should also be able to parse such defined names.
+         */
+        [TestMethod]
+        public void TestParseComplexName()
+        {
+
+            // Mock up a spreadsheet to match the critical details of the sample
+            HSSFWorkbook wb = new HSSFWorkbook();
+            wb.CreateSheet("Sheet1");
+            IName definedName = wb.CreateName();
+            definedName.NameName = ("foo");
+            definedName.RefersToFormula = ("Sheet1!B2");
+
+            // Set the complex flag - POI doesn't usually manipulate this flag
+            NameRecord nameRec = TestHSSFName.GetNameRecord(definedName);
+            nameRec.OptionFlag = ((short)0x10); // 0x10 -> complex
+
+            Ptg[] result;
+            try
+            {
+                result = HSSFFormulaParser.Parse("1+foo", wb);
+            }
+            catch (FormulaParseException e)
+            {
+                if (e.Message.Equals("Specified name 'foo' is not a range as expected."))
+                {
+                    throw new AssertFailedException("Identified bug 47078c");
+                }
+                throw e;
+            }
+            ConfirmTokenClasses(result, typeof(IntPtg), typeof(NamePtg), typeof(AddPtg));
+        }
+
+        /**
+         * Zero is not a valid row number so cell references like 'A0' are not valid.
+         * Actually, they should be treated like defined names.
+         * <br/>
+         * In addition, leading zeros (on the row component) should be removed from cell
+         * references during parsing.
+         */
+        [TestMethod]
+        public void TestZeroRowRefs()
+        {
+            String badCellRef = "B0"; // bad because zero is not a valid row number
+            String leadingZeroCellRef = "B000001"; // this should get parsed as "B1"
+            HSSFWorkbook wb = new HSSFWorkbook();
+
+            try
+            {
+                HSSFFormulaParser.Parse(badCellRef, wb);
+                throw new AssertFailedException("Identified bug 47312b - Shouldn't be able to parse cell ref '"
+                        + badCellRef + "'.");
+            }
+            catch (FormulaParseException e)
+            {
+                // expected during successful Test
+                ConfirmParseException(e, "Specified named range '"
+                        + badCellRef + "' does not exist in the current workbook.");
+            }
+
+            Ptg[] ptgs;
+            try
+            {
+                ptgs = HSSFFormulaParser.Parse(leadingZeroCellRef, wb);
+                Assert.AreEqual("B1", ((RefPtg)ptgs[0]).ToFormulaString());
+            }
+            catch (FormulaParseException e)
+            {
+                ConfirmParseException(e, "Specified named range '"
+                        + leadingZeroCellRef + "' does not exist in the current workbook.");
+                // close but no cigar
+                throw new AssertFailedException("Identified bug 47312c - '"
+                        + leadingZeroCellRef + "' should parse as 'B1'.");
+            }
+
+            // create a defined name called 'B0' and try again
+            IName n = wb.CreateName();
+            n.NameName = ("B0");
+            n.RefersToFormula = ("1+1");
+            ptgs = HSSFFormulaParser.Parse("B0", wb);
+            ConfirmTokenClasses(ptgs, typeof(NamePtg));
+        }
+
+        private static void ConfirmParseException(FormulaParseException e, String expMsg)
+        {
+            Assert.AreEqual(expMsg, e.Message);
+        }
     }
 }

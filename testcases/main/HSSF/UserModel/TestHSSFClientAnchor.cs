@@ -38,7 +38,7 @@ namespace TestCases.HSSF.UserModel
             HSSFSheet sheet = (HSSFSheet)wb.CreateSheet("Test");
             HSSFClientAnchor a = new HSSFClientAnchor(0, 0, 1023, 255, (short)0, 0, (short)0, 0);
             float p = a.GetAnchorHeightInPoints(sheet);
-            Assert.AreEqual(11.953, p, 0.001);
+            Assert.AreEqual(12.7, p, 0.001);
 
             sheet.CreateRow(0).HeightInPoints = (14);
             a = new HSSFClientAnchor(0, 0, 1023, 255, (short)0, 0, (short)0, 0);
@@ -60,7 +60,7 @@ namespace TestCases.HSSF.UserModel
             sheet.CreateRow(0).HeightInPoints = (12);
             a = new HSSFClientAnchor(0, 127, 1023, 127, (short)0, 0, (short)0, 1);
             p = a.GetAnchorHeightInPoints(sheet);
-            Assert.AreEqual(12.0, p, 0.001);
+            Assert.AreEqual(12.372, p, 0.001);
 
         }
 
