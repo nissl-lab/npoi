@@ -26,32 +26,41 @@ namespace NPOI.HWPF.UserModel
     public class PictureType
     {
 
-        /*BMP( "image/bmp", "bmp", new byte[][] { { 'B', 'M' } } ),
+        public static PictureType BMP = new PictureType("image/bmp", "bmp", new byte[][] { new byte[] { (byte)'B', (byte)'M' } });
 
-    EMF( "image/x-emf", "emf", new byte[][] { { 0x01, 0x00, 0x00, 0x00 } } ),
+        public static PictureType EMF = new PictureType("image/x-emf", "emf", new byte[][] { new byte[] { 0x01, 0x00, 0x00, 0x00 } });
 
-    GIF( "image/gif", "gif", new byte[][] { { 'G', 'I', 'F' } } ),
+        public static PictureType GIF = new PictureType("image/gif", "gif", new byte[][] { new byte[] { (byte)'G', (byte)'I', (byte)'F' } });
 
-    JPEG( "image/jpeg", "jpg", new byte[][] { { (byte) 0xFF, (byte) 0xD8 } } ),
+        public static PictureType JPEG = new PictureType("image/jpeg", "jpg", new byte[][] { new byte[] { (byte)0xFF, (byte)0xD8 } });
 
-    PNG( "image/png", "png", new byte[][] { { (byte) 0x89, 0x50, 0x4E, 0x47,
-            0x0D, 0x0A, 0x1A, 0x0A } } ),
+        public static PictureType PNG = new PictureType("image/png", "png", new byte[][] { new byte[]{ (byte) 0x89, 0x50, 0x4E, 0x47,
+            0x0D, 0x0A, 0x1A, 0x0A } });
 
-    TIFF( "image/tiff", "tiff", new byte[][] { { 0x49, 0x49, 0x2A, 0x00 },
-            { 0x4D, 0x4D, 0x00, 0x2A } } ),
+        public static PictureType TIFF = new PictureType("image/tiff", "tiff", new byte[][] { new byte[]{ 0x49, 0x49, 0x2A, 0x00 },
+            new byte[]{ 0x4D, 0x4D, 0x00, 0x2A } });
 
-    UNKNOWN( "image/unknown", "", new byte[][] {} ),
+        public static PictureType UNKNOWN = new PictureType("image/unknown", "", new byte[][] { new byte[] { } });
 
-    WMF( "image/x-wmf", "wmf", new byte[][] {
-            { (byte) 0xD7, (byte) 0xCD, (byte) 0xC6, (byte) 0x9A, 0x00, 0x00 },
-            { 0x01, 0x00, 0x09, 0x00, 0x00, 0x03 } } );
-         * */
+        public static PictureType WMF = new PictureType("image/x-wmf", "wmf", new byte[][] {
+            new byte[]{ (byte) 0xD7, (byte) 0xCD, (byte) 0xC6, (byte) 0x9A, 0x00, 0x00 },
+            new byte[]{ 0x01, 0x00, 0x09, 0x00, 0x00, 0x03 } });
+
+        public static PictureType[] Values = new PictureType[] 
+            { 
+                PictureType.BMP,PictureType.EMF,PictureType.GIF,
+                PictureType.JPEG,PictureType.PNG,PictureType.TIFF,
+                PictureType.WMF,PictureType.UNKNOWN
+            };
+
         public static PictureType FindMatchingType(byte[] pictureContent)
         {
-            foreach (PictureType pictureType in PictureType.values())
-                foreach (byte[] signature in pictureType.Signatures)
-                    if (MatchSignature(pictureContent, signature))
+            foreach (PictureType pictureType in PictureType.Values)
+                for (int i = 0; i < pictureType.Signatures.Length; i++)
+                {
+                    if (MatchSignature(pictureContent, pictureType.Signatures[i]))
                         return pictureType;
+                }
 
             // TODO: DIB, PICT
             return PictureType.UNKNOWN;
@@ -114,6 +123,7 @@ namespace NPOI.HWPF.UserModel
             return false;
         }
     }
+
 }
 
 

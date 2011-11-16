@@ -32,7 +32,7 @@ namespace NPOI.HWPF.Model
      */
     public class PlexOfCps
     {
-        private int _count;
+        private int _iMac;
         private int _offset;
         private int _sizeOfStruct;
         private ArrayList _props;
@@ -54,12 +54,12 @@ namespace NPOI.HWPF.Model
         public PlexOfCps(byte[] buf, int start, int size, int sizeOfStruct)
         {
             // Figure out the number we hold
-            _count = (size - 4) / (4 + sizeOfStruct);
+            _iMac = (size - 4) / (4 + sizeOfStruct);
 
             _sizeOfStruct = sizeOfStruct;
-            _props = new ArrayList(_count);
+            _props = new ArrayList(_iMac);
 
-            for (int x = 0; x < _count; x++)
+            for (int x = 0; x < _iMac; x++)
             {
                 _props.Add(GetProperty(x, buf, start));
             }
@@ -128,8 +128,17 @@ namespace NPOI.HWPF.Model
         {
             get
             {
-                return _count;
+                return _iMac;
             }
+        }
+
+
+        internal GenericPropertyNode[] ToPropertiesArray()
+        {
+            if (_props == null || _props.Count==0)
+                return new GenericPropertyNode[0];
+
+            return (GenericPropertyNode[])_props.ToArray(typeof(GenericPropertyNode));
         }
 
         /**
@@ -143,7 +152,7 @@ namespace NPOI.HWPF.Model
          */
         private int GetStructOffset(int index)
         {
-            return (4 * (_count + 1)) + (_sizeOfStruct * index);
+            return (4 * (_iMac + 1)) + (_sizeOfStruct * index);
         }
     }
 }

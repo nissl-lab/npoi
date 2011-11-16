@@ -15,6 +15,7 @@
    limitations under the License.
 ==================================================================== */
 using System.Collections.Generic;
+using NPOI.HWPF.Model;
 namespace NPOI.HWPF.UserModel
 {
 
@@ -81,5 +82,4 @@ namespace NPOI.HWPF.UserModel
         }
     }
 }
-
 

@@ -21,6 +21,7 @@ namespace NPOI.HWPF.Model
     using System;
     using System.Collections;
     using NPOI.Util;
+using System.Collections.Generic;
 
     /**
      * Represents a lightweight node in the Trees used to store content
@@ -33,6 +34,32 @@ namespace NPOI.HWPF.Model
      */
     public abstract class PropertyNode : IComparable
     {
+            public class EndComparator:IComparer<PropertyNode>
+            {
+                public static EndComparator instance = new EndComparator();
+
+                public int Compare( PropertyNode o1, PropertyNode o2 )
+                {
+                    int thisVal = o1.End;
+                    int anotherVal = o2.End;
+                    return ( thisVal < anotherVal ? -1 : ( thisVal == anotherVal ? 0
+                            : 1 ) );
+                }
+            }
+
+            public class StartComparator:IComparer<PropertyNode>
+            {
+                public static StartComparator instance = new StartComparator();
+
+                public int Compare(PropertyNode o1, PropertyNode o2)
+                {
+                    int thisVal = o1.Start;
+                    int anotherVal = o2.Start;
+                    return ( thisVal < anotherVal ? -1 : ( thisVal == anotherVal ? 0
+                            : 1 ) );
+                }
+            }
+
         protected Object _buf;
         /** The start, in characters */
         private int _cpStart;

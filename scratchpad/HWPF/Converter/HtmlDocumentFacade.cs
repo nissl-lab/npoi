@@ -208,21 +208,6 @@ namespace NPOI.HWPF.Converter
         {
             get { return head; }
         }
-        /*
-        public XmlElement getBody()
-        {
-            return body;
-        }
-
-        public XmlDocument getDocument()
-        {
-            return document;
-        }
-
-        public XmlElement getHead()
-        {
-            return head;
-        }*/
 
         public string GetOrCreateCssClass(string tagName, string classNamePrefix,
             string style)

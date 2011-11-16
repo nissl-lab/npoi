@@ -227,6 +227,89 @@ namespace NPOI.HWPF.Model
             return _fieldHandler.GetFieldSize(FIBFieldHandler.PLFLFO);
         }
 
+        /**
+ * @return Offset in table stream of the STTBF that records bookmark names
+ *         in the main document
+ */
+        public int GetFcSttbfbkmk()
+        {
+            return _fieldHandler.GetFieldOffset(FIBFieldHandler.STTBFBKMK);
+        }
+
+        public void SetFcSttbfbkmk(int offset)
+        {
+            _fieldHandler.SetFieldOffset(FIBFieldHandler.STTBFBKMK, offset);
+        }
+
+        /**
+         * @return Count of bytes in Sttbfbkmk
+         */
+        public int GetLcbSttbfbkmk()
+        {
+            return _fieldHandler.GetFieldSize(FIBFieldHandler.STTBFBKMK);
+        }
+
+        public void SetLcbSttbfbkmk(int length)
+        {
+            _fieldHandler.SetFieldSize(FIBFieldHandler.STTBFBKMK, length);
+        }
+
+        /**
+         * @return Offset in table stream of the PLCF that records the beginning CP
+         *         offsets of bookmarks in the main document. See BKF structure
+         *         definition.
+         */
+        public int GetFcPlcfbkf()
+        {
+            return _fieldHandler.GetFieldOffset(FIBFieldHandler.PLCFBKF);
+        }
+
+        public void SetFcPlcfbkf(int offset)
+        {
+            _fieldHandler.SetFieldOffset(FIBFieldHandler.PLCFBKF, offset);
+        }
+
+        /**
+         * @return Count of bytes in Plcfbkf
+         */
+        public int GetLcbPlcfbkf()
+        {
+            return _fieldHandler.GetFieldSize(FIBFieldHandler.PLCFBKF);
+        }
+
+        public void SetLcbPlcfbkf(int length)
+        {
+            _fieldHandler.SetFieldSize(FIBFieldHandler.PLCFBKF, length);
+        }
+
+        /**
+         * @return Offset in table stream of the PLCF that records the ending CP
+         *         offsets of bookmarks recorded in the main document. No structure
+         *         is stored in this PLCF.
+         */
+        public int GetFcPlcfbkl()
+        {
+            return _fieldHandler.GetFieldOffset(FIBFieldHandler.PLCFBKL);
+        }
+
+        public void SetFcPlcfbkl(int offset)
+        {
+            _fieldHandler.SetFieldOffset(FIBFieldHandler.PLCFBKL, offset);
+        }
+
+        /**
+         * @return Count of bytes in Plcfbkl
+         */
+        public int GetLcbPlcfbkl()
+        {
+            return _fieldHandler.GetFieldSize(FIBFieldHandler.PLCFBKL);
+        }
+
+        public void SetLcbPlcfbkl(int length)
+        {
+            _fieldHandler.SetFieldSize(FIBFieldHandler.PLCFBKL, length);
+        }
+
         public void SetFcPlfLfo(int fcPlfLfo)
         {
             _fieldHandler.SetFieldOffset(FIBFieldHandler.PLFLFO, fcPlfLfo);
@@ -371,7 +454,7 @@ namespace NPOI.HWPF.Model
                 throw new ArgumentException(
                         "Subdocument length can't be less than 0 (passed value is "
                                 + length + "). " + "If there is no subdocument "
-                                + "length must be set to zero.");
+                                + "length must be Set to zero.");
 
             _longHandler.SetLong((int)type, length);
         }
@@ -539,6 +622,54 @@ namespace NPOI.HWPF.Model
         public int GetLcbDggInfo()
         {
             return _fieldHandler.GetFieldSize(FIBFieldHandler.DGGINFO);
+        }
+
+        public int GetNotesDescriptorsOffset(NoteType noteType)
+        {
+            return _fieldHandler.GetFieldOffset(noteType
+                    .GetFibDescriptorsFieldIndex());
+        }
+
+        public void SetNotesDescriptorsOffset(NoteType noteType, int offset)
+        {
+            _fieldHandler.SetFieldOffset(noteType.GetFibDescriptorsFieldIndex(),
+                    offset);
+        }
+
+        public int GetNotesDescriptorsSize(NoteType noteType)
+        {
+            return _fieldHandler.GetFieldSize(noteType
+                    .GetFibDescriptorsFieldIndex());
+        }
+
+        public void SetNotesDescriptorsSize(NoteType noteType, int offset)
+        {
+            _fieldHandler.SetFieldSize(noteType.GetFibDescriptorsFieldIndex(),
+                    offset);
+        }
+
+        public int GetNotesTextPositionsOffset(NoteType noteType)
+        {
+            return _fieldHandler.GetFieldOffset(noteType
+                    .GetFibTextPositionsFieldIndex());
+        }
+
+        public void SetNotesTextPositionsOffset(NoteType noteType, int offset)
+        {
+            _fieldHandler.SetFieldOffset(noteType.GetFibTextPositionsFieldIndex(),
+                    offset);
+        }
+
+        public int GetNotesTextPositionsSize(NoteType noteType)
+        {
+            return _fieldHandler.GetFieldSize(noteType
+                    .GetFibTextPositionsFieldIndex());
+        }
+
+        public void SetNotesTextPositionsSize(NoteType noteType, int offset)
+        {
+            _fieldHandler.SetFieldSize(noteType.GetFibTextPositionsFieldIndex(),
+                    offset);
         }
 
         public void WriteTo(byte[] mainStream, HWPFStream tableStream)

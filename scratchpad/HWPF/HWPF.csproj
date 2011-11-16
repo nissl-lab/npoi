@@ -70,6 +70,8 @@
     <Compile Include="HWPFDocumentCore.cs" />
     <Compile Include="HWPFOldDocument.cs" />
     <Compile Include="Model\BaseObject.cs" />
+    <Compile Include="Model\BookmarkFirstDescriptor.cs" />
+    <Compile Include="Model\BookmarksTables.cs" />
     <Compile Include="Model\BytePropertyNode.cs" />
     <Compile Include="Model\CachedPropertyNode.cs" />
     <Compile Include="Model\CharIndexTranslator.cs" />
@@ -91,6 +93,7 @@
     <Compile Include="Model\FieldsTables.cs" />
     <Compile Include="Model\FileInformationBlock.cs" />
     <Compile Include="Model\FontTable.cs" />
+    <Compile Include="Model\FootnoteReferenceDescriptor.cs" />
     <Compile Include="Model\FormattedDiskPage.cs" />
     <Compile Include="Model\FSPA.cs" />
     <Compile Include="Model\FSPATable.cs" />
@@ -108,6 +111,8 @@
     <Compile Include="Model\ListFormatOverrideLevel.cs" />
     <Compile Include="Model\ListLevel.cs" />
     <Compile Include="Model\ListTables.cs" />
+    <Compile Include="Model\NotesTables.cs" />
+    <Compile Include="Model\NoteType.cs" />
     <Compile Include="Model\OldCHPBinTable.cs" />
     <Compile Include="Model\OldPAPBinTable.cs" />
     <Compile Include="Model\OldSectionTable.cs" />
@@ -139,11 +144,13 @@
     <Compile Include="Model\ShapesTable.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Model\SttbfUtils.cs" />
     <Compile Include="Model\StyleDescription.cs" />
     <Compile Include="Model\StyleSheet.cs" />
     <Compile Include="Model\SubdocumentType.cs" />
     <Compile Include="Model\TextPiece.cs" />
     <Compile Include="Model\TextPieceTable.cs" />
+    <Compile Include="Model\Types\BKFAbstractType.cs" />
     <Compile Include="Model\Types\CHPAbstractType.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -154,6 +161,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Model\Types\FLDAbstractType.cs" />
+    <Compile Include="Model\Types\FRDAbstractType.cs" />
     <Compile Include="Model\Types\PAPAbstractType.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -207,6 +215,7 @@
     <Compile Include="SPRM\TableSprmUncompressor.cs" />
     <Compile Include="UserModel\Bookmark.cs" />
     <Compile Include="UserModel\Bookmarks.cs" />
+    <Compile Include="UserModel\BookmarksImpl.cs" />
     <Compile Include="UserModel\BorderCode.cs" />
     <Compile Include="UserModel\CharacterProperties.cs" />
     <Compile Include="UserModel\CharacterRun.cs">
@@ -221,6 +230,7 @@
     <Compile Include="UserModel\LineSpacingDescriptor.cs" />
     <Compile Include="UserModel\ListEntry.cs" />
     <Compile Include="UserModel\Notes.cs" />
+    <Compile Include="UserModel\NotesImpl.cs" />
     <Compile Include="UserModel\ObjectPoolImpl.cs" />
     <Compile Include="UserModel\ObjectsPool.cs" />
     <Compile Include="UserModel\OfficeDrawing.cs" />
@@ -228,6 +238,7 @@
     <Compile Include="UserModel\Paragraph.cs" />
     <Compile Include="UserModel\ParagraphProperties.cs" />
     <Compile Include="UserModel\Picture.cs" />
+    <Compile Include="UserModel\PictureType.cs" />
     <Compile Include="UserModel\Range.cs" />
     <Compile Include="UserModel\Section.cs">
       <SubType>Code</SubType>

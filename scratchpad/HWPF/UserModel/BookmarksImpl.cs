@@ -14,224 +14,214 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 ==================================================================== */
-namespace NPOI.HWPF.usermodel;
-
-using java.util.ArrayList;
-using java.util.Arrays;
-using java.util.Collections;
-using java.util.HashMap;
-using java.util.LinkedHashMap;
-using java.util.LinkedList;
-using java.util.List;
-using java.util.Map;
-
-using NPOI.HWPF.model.BookmarksTables;
-using NPOI.HWPF.model.GenericPropertyNode;
-using NPOI.HWPF.model.PropertyNode;
-
-/**
- * Implementation of user-friendly interface for document bookmarks
- * 
- * @author Sergey Vladimirov (vlsergey {at} gmail {doc} com)
- */
-public class BookmarksImpl : Bookmarks
+using System;
+using NPOI.HWPF.Model;
+using System.Collections.Generic;
+using NPOI.HWPF.UserModel;
+using NPOI.Util;
+namespace NPOI.HWPF.Usermodel
 {
 
-    private BookmarksTables bookmarksTables;
-
-    private Dictionary<Integer, List<GenericPropertyNode>> sortedDescriptors = null;
-
-    private int[] sortedStartPositions = null;
-
-    public BookmarksImpl( BookmarksTables bookmarksTables )
+    /**
+     * Implementation of user-friendly interface for document bookmarks
+     * 
+     * @author Sergey Vladimirov (vlsergey {at} gmail {doc} com)
+     */
+    public class BookmarksImpl : Bookmarks
     {
-        this.bookmarksTables = bookmarksTables;
-    }
 
-    private Bookmark GetBookmark( GenericPropertyNode first )
-    {
-        return new BookmarkImpl( first );
-    }
+        private BookmarksTables bookmarksTables;
 
-    public Bookmark GetBookmark( int index )
-    {
-        GenericPropertyNode first = bookmarksTables
-                .GetDescriptorFirst( index );
-        return GetBookmark( first );
-    }
+        private Dictionary<int, List<GenericPropertyNode>> sortedDescriptors = null;
 
-    public List<Bookmark> GetBookmarksAt( int startCp )
-    {
-        updateSortedDescriptors();
+        private int[] sortedStartPositions = null;
 
-        List<GenericPropertyNode> nodes = sortedDescriptors.Get( Integer
-                .ValueOf( startCp ) );
-        if ( nodes == null || nodes.isEmpty() )
-            return Collections.emptyList();
-
-        List<Bookmark> result = new ArrayList<Bookmark>( nodes.Count );
-        for ( GenericPropertyNode node : nodes )
+        public BookmarksImpl(BookmarksTables bookmarksTables)
         {
-            result.Add( GetBookmark( node ) );
-        }
-        return Collections.unmodifiableList( result );
-    }
-
-    public int GetBookmarksCount()
-    {
-        return bookmarksTables.GetDescriptorsFirstCount();
-    }
-
-    public Dictionary<Integer, List<Bookmark>> GetBookmarksStartedBetween(
-            int startInclusive, int endExclusive )
-    {
-        updateSortedDescriptors();
-
-        int startLookupIndex = Arrays.binarySearch( this.sortedStartPositions,
-                startInclusive );
-        if ( startLookupIndex < 0 )
-            startLookupIndex = -( startLookupIndex + 1 );
-        int endLookupIndex = Arrays.binarySearch( this.sortedStartPositions,
-                endExclusive );
-        if ( endLookupIndex < 0 )
-            endLookupIndex = -( endLookupIndex + 1 );
-
-        Dictionary<Integer, List<Bookmark>> result = new LinkedDictionary<Integer, List<Bookmark>>();
-        for ( int LookupIndex = startLookupIndex; LookupIndex < endLookupIndex; LookupIndex++ )
-        {
-            int s = sortedStartPositions[LookupIndex];
-            if ( s < startInclusive )
-                continue;
-            if ( s >= endExclusive )
-                break;
-
-            List<Bookmark> startedAt = GetBookmarksAt( s );
-            if ( startedAt != null )
-                result.Put( Int32.ValueOf( s ), startedAt );
+            this.bookmarksTables = bookmarksTables;
         }
 
-        return Collections.unmodifiableMap( result );
-    }
-
-    private void updateSortedDescriptors()
-    {
-        if ( sortedDescriptors != null )
-            return;
-
-        Dictionary<Integer, List<GenericPropertyNode>> result = new Dictionary<Integer, List<GenericPropertyNode>>();
-        for ( int b = 0; b < bookmarksTables.GetDescriptorsFirstCount(); b++ )
+        private Bookmark GetBookmark(GenericPropertyNode first)
         {
-            GenericPropertyNode property = bookmarksTables
-                    .GetDescriptorFirst( b );
-            Integer positionKey = Int32.ValueOf( property.Start );
-            List<GenericPropertyNode> atPositionList = result.Get( positionKey );
-            if ( atPositionList == null )
+            return new BookmarkImpl(this.bookmarksTables, first);
+        }
+
+        public Bookmark GetBookmark(int index)
+        {
+            GenericPropertyNode first = bookmarksTables
+                    .GetDescriptorFirst(index);
+            return GetBookmark(first);
+        }
+
+        public List<Bookmark> GetBookmarksAt(int startCp)
+        {
+            updateSortedDescriptors();
+
+            List<GenericPropertyNode> nodes = sortedDescriptors[startCp];
+            if (nodes == null || nodes.Count == 0)
+                return new List<Bookmark>();
+
+            List<Bookmark> result = new List<Bookmark>(nodes.Count);
+            foreach (GenericPropertyNode node in nodes)
             {
-                atPositionList = new LinkedList<GenericPropertyNode>();
-                result.Put( positionKey, atPositionList );
+                result.Add(GetBookmark(node));
             }
-            atPositionList.Add( property );
+            return result;
         }
 
-        int counter = 0;
-        int[] indices = new int[result.Count];
-        for ( Map.Entry<Integer, List<GenericPropertyNode>> entry : result
-                .entrySet() )
+        public int GetBookmarksCount()
         {
-            indices[counter++] = entry.GetKey().intValue();
-            List<GenericPropertyNode> updated = new ArrayList<GenericPropertyNode>(
-                    entry.GetValue() );
-            Collections.sort( updated, PropertyNode.EndComparator.instance );
-            entry.SetValue( updated );
-        }
-        Arrays.sort( indices );
-
-        this.sortedDescriptors = result;
-        this.sortedStartPositions = indices;
-    }
-
-    private class BookmarkImpl : Bookmark
-    {
-        private GenericPropertyNode first;
-
-        private BookmarkImpl( GenericPropertyNode first )
-        {
-            this.first = first;
+            return bookmarksTables.GetDescriptorsFirstCount();
         }
 
-        @Override
-        public bool Equals( Object obj )
+        public Dictionary<int, List<Bookmark>> GetBookmarksStartedBetween(
+                int startInclusive, int endExclusive)
         {
-            if ( this == obj )
-                return true;
-            if ( obj == null )
-                return false;
-            if ( GetClass() != obj.GetClass() )
-                return false;
-            BookmarkImpl other = (BookmarkImpl) obj;
-            if ( first == null )
+            updateSortedDescriptors();
+
+            int startLookupIndex = Array.BinarySearch(this.sortedStartPositions,
+                    startInclusive);
+            if (startLookupIndex < 0)
+                startLookupIndex = -(startLookupIndex + 1);
+            int endLookupIndex = Array.BinarySearch(this.sortedStartPositions,
+                    endExclusive);
+            if (endLookupIndex < 0)
+                endLookupIndex = -(endLookupIndex + 1);
+
+            Dictionary<int, List<Bookmark>> result = new Dictionary<int, List<Bookmark>>();
+            for (int LookupIndex = startLookupIndex; LookupIndex < endLookupIndex; LookupIndex++)
             {
-                if ( other.first != null )
+                int s = sortedStartPositions[LookupIndex];
+                if (s < startInclusive)
+                    continue;
+                if (s >= endExclusive)
+                    break;
+
+                List<Bookmark> startedAt = GetBookmarksAt(s);
+                if (startedAt != null)
+                    result[s] = startedAt;
+            }
+
+            return result;
+        }
+
+        private void updateSortedDescriptors()
+        {
+            if (sortedDescriptors != null)
+                return;
+
+            Dictionary<int, List<GenericPropertyNode>> result = new Dictionary<int, List<GenericPropertyNode>>();
+            for (int b = 0; b < bookmarksTables.GetDescriptorsFirstCount(); b++)
+            {
+                GenericPropertyNode property = bookmarksTables
+                        .GetDescriptorFirst(b);
+                int positionKey = property.Start;
+                List<GenericPropertyNode> atPositionList = result[positionKey];
+                if (atPositionList == null)
+                {
+                    atPositionList = new List<GenericPropertyNode>();
+                    result[positionKey] = atPositionList;
+                }
+                atPositionList.Add(property);
+            }
+
+            int counter = 0;
+            int[] indices = new int[result.Count];
+            foreach (KeyValuePair<int, List<GenericPropertyNode>> entry in result)
+            {
+                indices[counter++] = entry.Key;
+                List<GenericPropertyNode> updated = new List<GenericPropertyNode>(
+                        entry.Value);
+                updated.Sort((IComparer<GenericPropertyNode>)PropertyNode.EndComparator.instance);
+                result[entry.Key] = updated;
+            }
+            Array.Sort(indices);
+
+            this.sortedDescriptors = result;
+            this.sortedStartPositions = indices;
+        }
+
+        private class BookmarkImpl : Bookmark
+        {
+            private GenericPropertyNode first;
+            private BookmarksTables bookmarksTables;
+
+            internal BookmarkImpl(BookmarksTables bookmarksTables, GenericPropertyNode first)
+            {
+                this.bookmarksTables = bookmarksTables;
+                this.first = first;
+            }
+
+            public override bool Equals(Object obj)
+            {
+                if (this == obj)
+                    return true;
+                if (obj == null)
                     return false;
+                if (this.GetType() != obj.GetType())
+                    return false;
+                BookmarkImpl other = (BookmarkImpl)obj;
+                if (first == null)
+                {
+                    if (other.first != null)
+                        return false;
+                }
+                else if (!first.Equals(other.first))
+                    return false;
+                return true;
             }
-            else if ( !first.Equals( other.first ) )
-                return false;
-            return true;
-        }
 
-        public int GetEnd()
-        {
-            int currentIndex = bookmarksTables.GetDescriptorFirstIndex( first );
-            try
+            public int GetEnd()
             {
-                GenericPropertyNode descriptorLim = bookmarksTables
-                        .GetDescriptorLim( currentIndex );
-                return descriptorLim.Start;
+                int currentIndex = bookmarksTables.GetDescriptorFirstIndex(first);
+                try
+                {
+                    GenericPropertyNode descriptorLim = bookmarksTables
+                            .GetDescriptorLim(currentIndex);
+                    return descriptorLim.Start;
+                }
+                catch (IndexOutOfRangeException)
+                {
+                    return first.End;
+                }
             }
-            catch ( IndexOutOfBoundsException exc )
+
+            public String GetName()
             {
-                return first.End;
+                int currentIndex = bookmarksTables.GetDescriptorFirstIndex(first);
+                try
+                {
+                    return bookmarksTables.GetName(currentIndex);
+                }
+                catch (IndexOutOfRangeException)
+                {
+                    return "";
+                }
             }
-        }
 
-        public String GetName()
-        {
-            int currentIndex = bookmarksTables.GetDescriptorFirstIndex( first );
-            try
+            public int GetStart()
             {
-                return bookmarksTables.GetName( currentIndex );
+                return first.Start;
             }
-            catch ( ArrayIndexOutOfBoundsException exc )
+
+            public override int GetHashCode()
             {
-                return "";
+                return 31 + (first == null ? 0 : first.GetHashCode());
             }
-        }
 
-        public int GetStart()
-        {
-            return first.Start;
-        }
+            public void SetName(String name)
+            {
+                int currentIndex = bookmarksTables.GetDescriptorFirstIndex(first);
+                bookmarksTables.SetName(currentIndex, name);
+            }
 
-        @Override
-        public int hashCode()
-        {
-            return 31 + ( first == null ? 0 : first.HashCode() );
-        }
+            public override String ToString()
+            {
+                return "Bookmark [" + GetStart() + "; " + GetEnd() + "): name: "
+                        + GetName();
+            }
 
-        public void SetName( String name )
-        {
-            int currentIndex = bookmarksTables.GetDescriptorFirstIndex( first );
-            bookmarksTables.SetName( currentIndex, name );
         }
-
-        @Override
-        public String ToString()
-        {
-            return "Bookmark [" + GetStart() + "; " + GetEnd() + "): name: "
-                    + GetName();
-        }
-
     }
 }
-
 
