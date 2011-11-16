@@ -608,6 +608,19 @@ namespace NPOI.HWPF.UserModel
             return _props.GetBrc();
         }
 
-
+        public bool isHighlighted()
+        {
+            return _props.IsFHighlight();
+        }
+        public byte GetHighlightedColor()
+        {
+            return _props.GetIcoHighlight();
+        }
+        public void setHighlighted(byte color)
+        {
+            _props.SetFHighlight(true);
+            _props.SetIcoHighlight(color);
+            _chpx.UpdateSprm(SPRM_HIGHLIGHT, color);
+        }
     }
 }

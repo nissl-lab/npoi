@@ -46,7 +46,7 @@ namespace NPOI.HWPF.Converter
      *            table to build cell edges array from
      * @return array of cell edges (including leftest one) in twips
      */
-        static int[] BuildTableCellEdgesArray(Table table)
+        public static int[] BuildTableCellEdgesArray(Table table)
         {
             SortedSet<int> edges = new SortedSet<int>();
 
@@ -75,8 +75,8 @@ namespace NPOI.HWPF.Converter
             XmlElement element1 = (XmlElement)node1;
             XmlElement element2 = (XmlElement)node2;
 
-            if (!equals(requiredTagName, element1.Name)
-                    || !equals(requiredTagName, element2.Name))
+            if (!StringEquals(requiredTagName, element1.Name)
+                    || !StringEquals(requiredTagName, element2.Name))
                 return false;
 
             if (element1.Attributes.Count != element2.Attributes.Count)
@@ -91,7 +91,7 @@ namespace NPOI.HWPF.Converter
                 else
                     attr2 = (XmlAttribute)element2.Attributes.GetNamedItem(attr1.Name);
 
-                if (attr2 == null || !equals(attr1.InnerText, attr2.InnerText))
+                if (attr2 == null || !StringEquals(attr1.InnerText, attr2.InnerText))
                     //if (attr2 == null || !equals(attr1.getTextContent(), attr2.getTextContent()))
                     return false;
             }
@@ -99,7 +99,7 @@ namespace NPOI.HWPF.Converter
             return true;
         }
 
-        static void CompactChildNodesR(XmlElement parentElement, String childTagName)
+        protected static void CompactChildNodesR(XmlElement parentElement, String childTagName)
         {
             XmlNodeList childNodes = parentElement.ChildNodes;
             for (int i = 0; i < childNodes.Count - 1; i++)
@@ -126,7 +126,7 @@ namespace NPOI.HWPF.Converter
                 }
             }
         }
-        static bool equals(String str1, String str2)
+        static bool StringEquals(String str1, String str2)
         {
             return str1 == null ? str2 == null : str1.Equals(str2);
         }

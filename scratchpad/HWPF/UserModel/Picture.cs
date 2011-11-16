@@ -211,7 +211,7 @@ namespace NPOI.HWPF.UserModel
                 return aspectRatioY;
             }
         }
-
+        
         /**
          * tries to suggest extension for picture's file by matching signatures of popular image formats to first bytes
          * of picture's contents
@@ -228,6 +228,7 @@ namespace NPOI.HWPF.UserModel
             return extension;
         }
 
+        
         /**
          * Returns the mime type for the image
          */
@@ -267,7 +268,10 @@ namespace NPOI.HWPF.UserModel
                 return "image/unknown";
             }
         }
-
+        public PictureType SuggestPictureType()
+        {
+            return PictureType.FindMatchingType(GetContent());
+        }
 
         private String SuggestFileExtension(byte[] _dataStream, int pictureBytesStartOffSet)
         {

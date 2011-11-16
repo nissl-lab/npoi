@@ -29,7 +29,7 @@ using System.Text.RegularExpressions;
 
 namespace NPOI.HWPF.Converter
 {
-    public abstract class AbstractWordConverter : AbstractWordUtils
+    public abstract class AbstractWordConverter
     {
         private class Structure : IComparable<Structure>
         {
@@ -122,7 +122,7 @@ namespace NPOI.HWPF.Converter
          * updating stylesheets or building document notes list. Usually they are
          * called once, but it's okay to call them several times.
          */
-        protected void AfterProcess()
+        protected virtual void AfterProcess()
         {
             // by default no such actions needed
         }
@@ -208,7 +208,7 @@ namespace NPOI.HWPF.Converter
             return GetNumberColumnsSpanned(tableCellEdges, currentEdgeIndex,
                     tableCell);
         }
-        protected abstract void outputCharacters(XmlElement block,
+        protected abstract void OutputCharacters(XmlElement block,
             CharacterRun characterRun, String text);
 
         /**
@@ -216,11 +216,11 @@ namespace NPOI.HWPF.Converter
          * equal to range start and ends equal to range end. Usually it's only one
          * bookmark.
          */
-        protected abstract void processBookmarks(HWPFDocumentCore wordDocument,
+        protected abstract void ProcessBookmarks(HWPFDocumentCore wordDocument,
                 XmlElement currentBlock, Range range, int currentTableLevel,
                 IList<Bookmark> rangeBookmarks);
 
-        protected bool processCharacters(HWPFDocumentCore wordDocument,
+        protected bool ProcessCharacters(HWPFDocumentCore wordDocument,
              int currentTableLevel, Range range, XmlElement block)
         {
             if (range == null)
@@ -291,7 +291,7 @@ namespace NPOI.HWPF.Converter
                     //        return "BetweenStructuresSubrange " + super.ToString();
                     //    }
                     //};
-                    processCharacters(wordDocument, currentTableLevel, subrange, block);
+                    ProcessCharacters(wordDocument, currentTableLevel, subrange, block);
                 }
 
                 if (structure.StructureObject is Bookmark)
@@ -321,7 +321,7 @@ namespace NPOI.HWPF.Converter
                             }
                         };*/
 
-                        processBookmarks(wordDocument, block, subrange,
+                        ProcessBookmarks(wordDocument, block, subrange,
                                 currentTableLevel, bookmarks);
                     }
                     finally
@@ -332,7 +332,7 @@ namespace NPOI.HWPF.Converter
                 else if (structure.StructureObject is Field)
                 {
                     Field field = (Field)structure.StructureObject;
-                    processField((HWPFDocument)wordDocument, range, currentTableLevel, field, block);
+                    ProcessField((HWPFDocument)wordDocument, range, currentTableLevel, field, block);
                 }
                 else
                 {
@@ -363,7 +363,7 @@ namespace NPOI.HWPF.Converter
                             return "AfterStructureSubrange " + super.ToString();
                         }
                     };*/
-                    processCharacters(wordDocument, currentTableLevel, subrange,
+                    ProcessCharacters(wordDocument, currentTableLevel, subrange,
                             block);
                 }
                 return true;
@@ -381,7 +381,7 @@ namespace NPOI.HWPF.Converter
                     HWPFDocument newFormat = (HWPFDocument)wordDocument;
                     Picture picture = newFormat.GetPicturesTable().ExtractPicture(characterRun, true);
 
-                    processImage(block, characterRun.Text[0] == 0x01, picture);
+                    ProcessImage(block, characterRun.Text[0] == 0x01, picture);
                     continue;
                 }
 
@@ -395,20 +395,20 @@ namespace NPOI.HWPF.Converter
                     if (text[0] == SPECCHAR_AUTONUMBERED_FOOTNOTE_REFERENCE && (wordDocument is HWPFDocument))
                     {
                         HWPFDocument doc = (HWPFDocument)wordDocument;
-                        processNoteAnchor(doc, characterRun, block);
+                        ProcessNoteAnchor(doc, characterRun, block);
                         continue;
                     }
                     if (text[0] == SPECCHAR_DRAWN_OBJECT
                             && (wordDocument is HWPFDocument))
                     {
                         HWPFDocument doc = (HWPFDocument)wordDocument;
-                        processDrawnObject(doc, characterRun, block);
+                        ProcessDrawnObject(doc, characterRun, block);
                         continue;
                     }
                     if (characterRun.IsOle2() && (wordDocument is HWPFDocument))
                     {
                         HWPFDocument doc = (HWPFDocument)wordDocument;
-                        processOle2(doc, characterRun, block);
+                        ProcessOle2(doc, characterRun, block);
                         continue;
                     }
                 }
@@ -421,7 +421,7 @@ namespace NPOI.HWPF.Converter
                                         FieldsDocumentPart.MAIN, characterRun.StartOffset);
                         if (aliveField != null)
                         {
-                            processField(((HWPFDocument)wordDocument), range,
+                            ProcessField(((HWPFDocument)wordDocument), range,
                                     currentTableLevel, aliveField, block);
 
                             int continueAfter = aliveField.GetFieldEndOffset();
@@ -477,11 +477,11 @@ namespace NPOI.HWPF.Converter
                         {
                             if (stringBuilder.Length > 0)
                             {
-                                outputCharacters(block, characterRun,
+                                OutputCharacters(block, characterRun,
                                         stringBuilder.ToString());
                                 stringBuilder.Length = 0;
                             }
-                            processLineBreak(block, characterRun);
+                            ProcessLineBreak(block, characterRun);
                         }
                         else if (charChar == 30)
                         {
@@ -501,7 +501,7 @@ namespace NPOI.HWPF.Converter
                     }
                     if (stringBuilder.Length > 0)
                     {
-                        outputCharacters(block, characterRun,
+                        OutputCharacters(block, characterRun,
                                 stringBuilder.ToString());
                         stringBuilder.Length = 0;
                     }
@@ -512,7 +512,7 @@ namespace NPOI.HWPF.Converter
 
             return haveAnyText;
         }
-        protected void processDeadField(HWPFDocumentCore wordDocument,
+        protected void ProcessDeadField(HWPFDocumentCore wordDocument,
                 XmlElement currentBlock, Range range, int currentTableLevel,
                 int beginMark, int separatorMark, int endMark)
         {
@@ -545,7 +545,7 @@ namespace NPOI.HWPF.Converter
             throw new NotImplementedException();
         }
 
-        protected Field processDeadField(HWPFDocumentCore wordDocument,
+        protected Field ProcessDeadField(HWPFDocumentCore wordDocument,
                 Range charactersRange, int currentTableLevel, int startOffset,
                 XmlElement currentBlock)
         {
@@ -558,20 +558,20 @@ namespace NPOI.HWPF.Converter
             if (field == null)
                 return null;
 
-            processField(hwpfDocument, charactersRange, currentTableLevel, field,
+            ProcessField(hwpfDocument, charactersRange, currentTableLevel, field,
                     currentBlock);
 
             return field;
         }
 
-        public void processDocument(HWPFDocumentCore wordDocument)
+        public void ProcessDocument(HWPFDocumentCore wordDocument)
         {
             try
             {
                 NPOI.HPSF.SummaryInformation summaryInformation = wordDocument.SummaryInformation;
                 if (summaryInformation != null)
                 {
-                    processDocumentInformation(summaryInformation);
+                    ProcessDocumentInformation(summaryInformation);
                 }
             }
             catch (Exception exc)
@@ -583,27 +583,27 @@ namespace NPOI.HWPF.Converter
 
             if (docRange.NumSections == 1)
             {
-                processSingleSection(wordDocument, docRange.GetSection(0));
+                ProcessSingleSection(wordDocument, docRange.GetSection(0));
                 AfterProcess();
                 return;
             }
 
-            processDocumentPart(wordDocument, docRange);
+            ProcessDocumentPart(wordDocument, docRange);
             AfterProcess();
         }
 
-        protected abstract void processDocumentInformation(NPOI.HPSF.SummaryInformation summaryInformation);
+        protected abstract void ProcessDocumentInformation(NPOI.HPSF.SummaryInformation summaryInformation);
 
-        protected void processDocumentPart(HWPFDocumentCore wordDocument,
+        protected virtual void ProcessDocumentPart(HWPFDocumentCore wordDocument,
                  Range range)
         {
             for (int s = 0; s < range.NumSections; s++)
             {
-                processSection(wordDocument, range.GetSection(s), s);
+                ProcessSection(wordDocument, range.GetSection(s), s);
             }
         }
 
-        protected void processDrawnObject(HWPFDocument doc,
+        protected void ProcessDrawnObject(HWPFDocument doc,
                 CharacterRun characterRun, XmlElement block)
         {
             if (GetPicturesManager() == null)
@@ -630,15 +630,15 @@ namespace NPOI.HWPF.Converter
             throw new NotImplementedException();
         }
 
-        protected abstract void processDrawnObject(HWPFDocument doc,
+        protected abstract void ProcessDrawnObject(HWPFDocument doc,
                 CharacterRun characterRun, OfficeDrawing officeDrawing,
                 String path, XmlElement block);
 
-        protected abstract void processEndnoteAutonumbered(
+        protected abstract void ProcessEndnoteAutonumbered(
                 HWPFDocument wordDocument, int noteIndex, XmlElement block,
                 Range endnoteTextRange);
 
-        protected void processField(HWPFDocument wordDocument, Range parentRange,
+        protected void ProcessField(HWPFDocument wordDocument, Range parentRange,
                 int currentTableLevel, Field field, XmlElement currentBlock)
         {
             switch (field.getType())
@@ -654,7 +654,7 @@ namespace NPOI.HWPF.Converter
                             if (match.Success)
                             {
                                 String pageref = match.Groups[1].Value;
-                                processPageref(wordDocument, currentBlock,
+                                ProcessPageref(wordDocument, currentBlock,
                                         field.SecondSubrange(parentRange),
                                         currentTableLevel, pageref);
                                 return;
@@ -687,13 +687,13 @@ namespace NPOI.HWPF.Converter
                         if (separator.IsOle2())
                         {
                             // the only supported so far
-                            bool processed = processOle2(wordDocument, separator,
+                            bool processed = ProcessOle2(wordDocument, separator,
                                     currentBlock);
 
                             // if we didn't output OLE - output field value
                             if (!processed)
                             {
-                                processCharacters(wordDocument, currentTableLevel,
+                                ProcessCharacters(wordDocument, currentTableLevel,
                                         field.SecondSubrange(parentRange), currentBlock);
                             }
 
@@ -713,7 +713,7 @@ namespace NPOI.HWPF.Converter
                             if (match.Success)
                             {
                                 String hyperlink = match.Groups[1].Value;
-                                processHyperlink(wordDocument, currentBlock,
+                                ProcessHyperlink(wordDocument, currentBlock,
                                         field.SecondSubrange(parentRange),
                                         currentTableLevel, hyperlink);
                                 return;
@@ -736,25 +736,25 @@ namespace NPOI.HWPF.Converter
 
             logger.Log(POILogger.WARN, parentRange + " contains " + field
                     + " with unsupported type or format");
-            processCharacters(wordDocument, currentTableLevel,
+            ProcessCharacters(wordDocument, currentTableLevel,
                     field.SecondSubrange(parentRange), currentBlock);
         }
 
-        protected abstract void processFootnoteAutonumbered(
+        protected abstract void ProcessFootnoteAutonumbered(
                 HWPFDocument wordDocument, int noteIndex, XmlElement block,
                 Range footnoteTextRange);
 
-        protected abstract void processHyperlink(HWPFDocumentCore wordDocument,
+        protected abstract void ProcessHyperlink(HWPFDocumentCore wordDocument,
                 XmlElement currentBlock, Range textRange, int currentTableLevel,
                 String hyperlink);
 
-        protected abstract void processImage(XmlElement currentBlock,
+        protected abstract void ProcessImage(XmlElement currentBlock,
                 bool inlined, Picture picture);
 
-        protected abstract void processLineBreak(XmlElement block,
+        protected abstract void ProcessLineBreak(XmlElement block,
                 CharacterRun characterRun);
 
-        protected void processNoteAnchor(HWPFDocument doc,
+        protected void ProcessNoteAnchor(HWPFDocument doc,
                 CharacterRun characterRun, XmlElement block)
         {
             //{
@@ -805,7 +805,7 @@ namespace NPOI.HWPF.Converter
             throw new NotImplementedException();
         }
 
-        private bool processOle2(HWPFDocument doc, CharacterRun characterRun,
+        private bool ProcessOle2(HWPFDocument doc, CharacterRun characterRun,
                 XmlElement block)
         {
             throw new NotImplementedException();
@@ -834,24 +834,24 @@ namespace NPOI.HWPF.Converter
         }
 
         ////@SuppressWarnings( "unused" )
-        protected bool processOle2(HWPFDocument wordDocument, XmlElement block,
+        protected bool ProcessOle2(HWPFDocument wordDocument, XmlElement block,
                 NPOI.POIFS.FileSystem.Entry entry)
         {
             return false;
         }
 
-        protected abstract void processPageBreak(HWPFDocumentCore wordDocument,
+        protected abstract void ProcessPageBreak(HWPFDocumentCore wordDocument,
                 XmlElement flow);
 
-        protected abstract void processPageref(HWPFDocumentCore wordDocument,
+        protected abstract void ProcessPageref(HWPFDocumentCore wordDocument,
                 XmlElement currentBlock, Range textRange, int currentTableLevel,
                 String pageref);
 
-        protected abstract void processParagraph(HWPFDocumentCore wordDocument,
+        protected abstract void ProcessParagraph(HWPFDocumentCore wordDocument,
                 XmlElement parentElement, int currentTableLevel, Paragraph paragraph,
                 String bulletText);
 
-        protected void processParagraphes(HWPFDocumentCore wordDocument,
+        protected void ProcessParagraphes(HWPFDocumentCore wordDocument,
                 XmlElement flow, Range range, int currentTableLevel)
         {
 
@@ -874,7 +874,7 @@ namespace NPOI.HWPF.Converter
                                         + ") as inner table part");
 
                     Table table = range.GetTable(paragraph);
-                    processTable(wordDocument, flow, table);
+                    ProcessTable(wordDocument, flow, table);
 
                     p += table.NumParagraphs;
                     p--;
@@ -883,7 +883,7 @@ namespace NPOI.HWPF.Converter
 
                 if (paragraph.Text.Equals("\u000c"))
                 {
-                    processPageBreak(wordDocument, flow);
+                    ProcessPageBreak(wordDocument, flow);
                 }
 
                 if (paragraph.GetIlfo() != currentListInfo)
@@ -900,7 +900,7 @@ namespace NPOI.HWPF.Converter
                         String label = AbstractWordUtils.GetBulletText(listTables,
                                 paragraph, listFormatOverride.GetLsid());
 
-                        processParagraph(wordDocument, flow, currentTableLevel,
+                        ProcessParagraph(wordDocument, flow, currentTableLevel,
                                 paragraph, label);
                     }
                     else
@@ -912,37 +912,37 @@ namespace NPOI.HWPF.Converter
                                         + currentListInfo
                                         + ", but listTables not defined in file");
 
-                        processParagraph(wordDocument, flow, currentTableLevel,
+                        ProcessParagraph(wordDocument, flow, currentTableLevel,
                                 paragraph, string.Empty);
                     }
                 }
                 else
                 {
-                    processParagraph(wordDocument, flow, currentTableLevel,
+                    ProcessParagraph(wordDocument, flow, currentTableLevel,
                             paragraph, string.Empty);
                 }
             }
             throw new NotImplementedException();
         }
 
-        protected abstract void processSection(HWPFDocumentCore wordDocument,
+        protected abstract void ProcessSection(HWPFDocumentCore wordDocument,
                 Section section, int s);
 
-        protected void processSingleSection(HWPFDocumentCore wordDocument,
+        protected virtual void ProcessSingleSection(HWPFDocumentCore wordDocument,
                 Section section)
         {
-            processSection(wordDocument, section, 0);
+            ProcessSection(wordDocument, section, 0);
         }
 
-        protected abstract void processTable(HWPFDocumentCore wordDocument,
+        protected abstract void ProcessTable(HWPFDocumentCore wordDocument,
                 XmlElement flow, Table table);
 
-        public void setFontReplacer(FontReplacer fontReplacer)
+        public void SetFontReplacer(FontReplacer fontReplacer)
         {
             this.fontReplacer = fontReplacer;
         }
 
-        public void setPicturesManager(PicturesManager fileManager)
+        public void SetPicturesManager(PicturesManager fileManager)
         {
             this.picturesManager = fileManager;
         }
@@ -964,7 +964,7 @@ namespace NPOI.HWPF.Converter
                 if (text[0] == FIELD_BEGIN_MARK)
                 {
                     // nested?
-                    Field possibleField = processDeadField(wordDocument, range,
+                    Field possibleField = ProcessDeadField(wordDocument, range,
                             currentTableLevel, characterRun.StartOffset,
                             currentBlock);
                     if (possibleField != null)
@@ -1006,7 +1006,7 @@ namespace NPOI.HWPF.Converter
             if (separatorMark == -1 || endMark == -1)
                 return beginMark;
 
-            processDeadField(wordDocument, currentBlock, range, currentTableLevel,
+            ProcessDeadField(wordDocument, currentBlock, range, currentTableLevel,
                     beginMark, separatorMark, endMark);
 
             return endMark;

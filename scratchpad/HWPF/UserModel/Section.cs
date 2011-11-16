@@ -21,7 +21,7 @@ namespace NPOI.HWPF.UserModel
 
     using System;
     using NPOI.HWPF.Model;
-    public class Section: Range
+    public class Section : Range
     {
 
         private SectionProperties _props;
@@ -56,7 +56,86 @@ namespace NPOI.HWPF.UserModel
             return s;
         }
 
+        /**
+         * @return distance to be maintained between columns, in twips. Used when
+         *         {@link #isColumnsEvenlySpaced()} == true
+         */
+        public int DistanceBetweenColumns
+        {
+            get
+            {
+                return _props.GetDxaColumns();
+            }
+        }
 
+        public int MarginBottom
+        {
+            get
+            {
+                return _props.GetDyaBottom();
+            }
+        }
+
+        public int MarginLeft
+        {
+            get
+            {
+                return _props.GetDxaLeft();
+            }
+        }
+
+        public int MarginRight
+        {
+            get
+            { 
+                return _props.GetDxaRight();
+            }
+        }
+
+        public int MarginTop
+        {
+            get
+            {
+                return _props.GetDyaTop();
+            }
+        }
+
+        /**
+         * @return page height (in twips) in current section. Default value is 15840
+         *         twips
+         */
+        public int PageHeight
+        {
+            get 
+            {
+                return _props.GetYaPage();
+            }
+        }
+
+        /**
+         * @return page width (in twips) in current section. Default value is 12240
+         *         twips
+         */
+        public int GetPageWidth
+        {
+            get
+            { 
+                return _props.GetXaPage();
+            }
+        }
+
+        public bool IsColumnsEvenlySpaced
+        {
+            get 
+            {
+                return _props.GetFEvenlySpaced();
+            }
+        }
+
+        public override String ToString()
+        {
+            return "Section [" + StartOffset + "; " + EndOffset + ")";
+        }
     }
 }
 

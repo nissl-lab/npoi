@@ -65,6 +65,8 @@
     <Compile Include="Converter\FontReplacer.cs" />
     <Compile Include="Converter\NumberFormatter.cs" />
     <Compile Include="Converter\PicturesManager.cs" />
+    <Compile Include="Converter\WordToHtmlConverter.cs" />
+    <Compile Include="Converter\WordToHtmlUtils.cs" />
     <Compile Include="Extractor\Word6Extractor.cs" />
     <Compile Include="Extractor\WordExtractor.cs" />
     <Compile Include="HWPFDocument.cs" />
