@@ -254,7 +254,7 @@ namespace NPOI.HWPF.Converter
                     this.head.AppendChild(title);
                 }
 
-                this.titleText.InnerXml = value;
+                this.titleText.InnerText = value;
             }
         }
 

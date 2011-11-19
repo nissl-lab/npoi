@@ -40,7 +40,6 @@ namespace NPOI.HSSF.Converter
             htmlDocumentFacade = new HtmlDocumentFacade(doc);
             cssClassTable = htmlDocumentFacade.GetOrCreateCssClass("table", "t",
                     "border-collapse:collapse;border-spacing:0;");
-            //XmlText
         }
         protected static int GetColumnWidth(HSSFSheet sheet, int columnIndex)
         {
