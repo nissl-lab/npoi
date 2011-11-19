@@ -108,9 +108,9 @@ namespace NPOI.HSSF.UserModel
         /// </summary>
         /// <param name="column">the column number this cell represents</param>
         /// <returns>a high level representation of the Created cell.</returns>
-        public NPOI.SS.UserModel.ICell CreateCell(int column)
+        public ICell CreateCell(int column)
         {
-            return this.CreateCell(column, NPOI.SS.UserModel.CellType.BLANK);
+            return this.CreateCell(column, CellType.BLANK);
         }
 
         /// <summary>
@@ -121,10 +121,15 @@ namespace NPOI.HSSF.UserModel
         /// <param name="columnIndex">the column number this cell represents</param>
         /// <param name="type">a high level representation of the created cell.</param>
         /// <returns></returns>
-        public NPOI.SS.UserModel.ICell CreateCell(int columnIndex, NPOI.SS.UserModel.CellType type)
+        public ICell CreateCell(int columnIndex, CellType type)
         {
-            ICell cell = new HSSFCell(book, sheet, RowNum, (short)columnIndex, type);
+            short shortCellNum = (short)columnIndex;
+            if (columnIndex > 0x7FFF)
+            {
+                shortCellNum = (short)(0xffff - columnIndex);
+            }
 
+            ICell cell = new HSSFCell(book, sheet, RowNum, (short)columnIndex, type);
             AddCell(cell);
             sheet.Sheet.AddValueRecord(RowNum, ((HSSFCell)cell).CellValueRecord);
             return cell;
@@ -133,7 +138,7 @@ namespace NPOI.HSSF.UserModel
         /// Remove the Cell from this row.
         /// </summary>
         /// <param name="cell">The cell to Remove.</param>
-        public void RemoveCell(NPOI.SS.UserModel.ICell cell)
+        public void RemoveCell(ICell cell)
         {
             if (cell == null)
             {
@@ -360,7 +365,7 @@ namespace NPOI.HSSF.UserModel
  *
  * @return the HSSFSheet that owns this row
  */
-        public NPOI.SS.UserModel.ISheet Sheet
+        public ISheet Sheet
         {
             get
             {
@@ -431,7 +436,7 @@ namespace NPOI.HSSF.UserModel
         /// </summary>
         /// <param name="cellnum">0 based column number</param>
         /// <returns>Cell representing that column or null if Undefined.</returns>
-        public NPOI.SS.UserModel.ICell GetCell(short cellnum)
+        public ICell GetCell(short cellnum)
         {
             int ushortCellNum = cellnum & 0x0000FFFF; // avoid sign extension
             return GetCell(ushortCellNum);
@@ -460,7 +465,7 @@ namespace NPOI.HSSF.UserModel
         /// <returns>that column or null if Undefined + policy allows.</returns>
         public ICell GetCell(int cellnum, MissingCellPolicy policy)
         {
-            NPOI.SS.UserModel.ICell cell = RetrieveCell(cellnum);
+            ICell cell = RetrieveCell(cellnum);
             if (policy == MissingCellPolicy.RETURN_NULL_AND_BLANK)
             {
                 return cell;
@@ -468,7 +473,7 @@ namespace NPOI.HSSF.UserModel
             if (policy == MissingCellPolicy.RETURN_BLANK_AS_NULL)
             {
                 if (cell == null) return cell;
-                if (cell.CellType == NPOI.SS.UserModel.CellType.BLANK)
+                if (cell.CellType == CellType.BLANK)
                 {
                     return null;
                 }
@@ -478,7 +483,7 @@ namespace NPOI.HSSF.UserModel
             {
                 if (cell == null)
                 {
-                    return CreateCell((short)cellnum, NPOI.SS.UserModel.CellType.BLANK);
+                    return CreateCell(cellnum, CellType.BLANK);
                 }
                 return cell;
             }
@@ -542,12 +547,6 @@ namespace NPOI.HSSF.UserModel
         {
             get
             {
-                //int count = 0;
-                //for (int i = 0; i < cells.Count; i++)
-                //{
-                //    if (cells[i] != null) count++;
-                //}
-                //return count;
                 return cells.Count;
             }
         }
@@ -672,7 +671,7 @@ namespace NPOI.HSSF.UserModel
         private short FindFirstCell(int firstcell)
         {
             short cellnum = (short)(firstcell + 1);
-            NPOI.SS.UserModel.ICell r = GetCell(cellnum);
+            ICell r = GetCell(cellnum);
 
             while (r == null && cellnum <= LastCellNum)
             {

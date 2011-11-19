@@ -30,7 +30,24 @@ namespace NPOI.SS.Formula
     using NPOI.SS.Util;
     using NPOI.HSSF.Record.Constant;
     using NPOI.HSSF.UserModel;
+    using System.Collections.Generic;
 
+    /// <summary>
+    /// Specific exception thrown when a supplied formula does not Parse properly.
+    ///  Primarily used by test cases when testing for specific parsing exceptions.
+    /// </summary>
+    public class FormulaParseException : Exception
+    {
+        /// <summary>
+        ///This class was given package scope until it would become Clear that it is useful to general client code.
+        /// </summary>
+        /// <param name="msg"></param>
+        public FormulaParseException(String msg)
+            : base(msg)
+        {
+
+        }
+    }
     /**
      * This class Parses a formula string into a List of Tokens in RPN order.
      * Inspired by
@@ -93,22 +110,7 @@ namespace NPOI.SS.Formula
             }
         }
 
-        /// <summary>
-        /// Specific exception thrown when a supplied formula does not Parse properly.
-        ///  Primarily used by test cases when testing for specific parsing exceptions.
-        /// </summary>
-        public class FormulaParseException : Exception
-        {
-            /// <summary>
-            ///This class was given package scope until it would become Clear that it is useful to general client code.
-            /// </summary>
-            /// <param name="msg"></param>
-            public FormulaParseException(String msg)
-                : base(msg)
-            {
 
-            }
-        }
 
 
         private String formulaString;
@@ -214,7 +216,7 @@ namespace NPOI.SS.Formula
             if (look == '=' && formulaString.Substring(0, pointer - 1).Trim().Length < 1)
             {
                 msg = "The specified formula '" + formulaString
-                    + "' starts with an Equals sign which is not allowed.";
+                    + "' starts with an equals sign which is not allowed.";
             }
             else
             {
@@ -1565,7 +1567,7 @@ namespace NPOI.SS.Formula
 
         private ParseNode ParseArray()
         {
-            ArrayList rowsData = new ArrayList();
+            List<Object[]> rowsData = new List<Object[]>();
             while (true)
             {
                 Object[] singleRowData = ParseArrayRow();

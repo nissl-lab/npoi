@@ -56,7 +56,7 @@ namespace NPOI.HSSF.Record.Formula
         // data from these fields comes after the Ptg data of all tokens in current formula
         private short token_1_columns;
         private short token_2_rows;
-        private Array token_3_arrayValues;
+        private Object[] token_3_arrayValues;
 
         public ArrayPtg(LittleEndianInput in1)
         {
@@ -91,9 +91,23 @@ namespace NPOI.HSSF.Record.Formula
             token_3_arrayValues = vv;
             field_1_reserved = DEFAULT_RESERVED_DATA;
         }
-        public Object[] GetTokenArrayValues()
+        public Object[][] GetTokenArrayValues()
         {
-            return (Object[])token_3_arrayValues.Clone();
+            if (token_3_arrayValues == null)
+            {
+                throw new InvalidOperationException("array values not read yet");
+            }
+            Object[][] result = new Object[token_2_rows][];
+            for (int r = 0; r < token_2_rows; r++)
+            {
+                result[r]= new object[token_1_columns];
+                for (int c = 0; c < token_1_columns; c++)
+                {
+                    result[r][c] = token_3_arrayValues[GetValueIndex(c, r)];
+                }
+            }
+            return result;
+
         }
 
         public override bool IsBaseToken
@@ -247,9 +261,9 @@ namespace NPOI.HSSF.Record.Formula
             {
                 return ((Double)o).ToString();
             }
-            if (o is bool)
+            if (o is bool || o is Boolean)
             {
-                ((bool)o).ToString();
+                return ((bool)o).ToString();
             }
             if (o is ErrorConstant)
             {

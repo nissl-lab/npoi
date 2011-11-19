@@ -33,8 +33,11 @@ namespace NPOI.DDF
     public class DefaultEscherRecordFactory : EscherRecordFactory
     {
         private static Type[] escherRecordClasses = {
-            typeof(EscherBSERecord), typeof(EscherOptRecord), typeof(EscherClientAnchorRecord), typeof(EscherDgRecord),
-            typeof(EscherSpgrRecord), typeof(EscherSpRecord), typeof(EscherClientDataRecord), typeof(EscherDggRecord),
+            
+            typeof(EscherBSERecord), typeof(EscherOptRecord), typeof(EscherTertiaryOptRecord),
+            typeof(EscherClientAnchorRecord), 
+            typeof(EscherDgRecord), typeof(EscherSpgrRecord), typeof(EscherSpRecord), 
+            typeof(EscherClientDataRecord), typeof(EscherDggRecord),
             typeof(EscherSplitMenuColorsRecord), typeof(EscherChildAnchorRecord), typeof(EscherTextboxRecord)
         };
         private static Hashtable recordsMap = RecordsToMap(escherRecordClasses);
