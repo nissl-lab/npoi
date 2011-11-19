@@ -176,7 +176,10 @@ namespace NPOI.HSSF.UserModel
             }
 
         }
-
+        public static HSSFWorkbook Create(InternalWorkbook book)
+        {
+            return new HSSFWorkbook(book);
+        }
 
         /// <summary>
         /// Creates new HSSFWorkbook from scratch (start here!)
@@ -188,7 +191,7 @@ namespace NPOI.HSSF.UserModel
         }
 
         public HSSFWorkbook(InternalWorkbook book)
-            : base(null, null)
+            : base((DirectoryNode)null)
         {
 
             workbook = book;

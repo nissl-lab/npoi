@@ -36,13 +36,13 @@ namespace NPOI.HSSF.Record
         public const short sid = 0x208;
         public static int ENCODED_SIZE = 20;
 
-        private static int OPTION_BITS_ALWAYS_SET = 0x0100;
-        private static int DEFAULT_HEIGHT_BIT = 0x8000;
+        private const int OPTION_BITS_ALWAYS_SET = 0x0100;
+        private const int DEFAULT_HEIGHT_BIT = 0x8000;
 
         /** The maximum row number that excel can handle (zero based) ie 65536 rows Is
          *  max number of rows.
          */
-        public static int MAX_ROW_NUMBER = 65535;
+        public const int MAX_ROW_NUMBER = 65535;
 
         private int field_1_row_number;
         private int field_2_first_col;

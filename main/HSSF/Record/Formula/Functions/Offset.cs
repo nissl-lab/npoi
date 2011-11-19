@@ -152,7 +152,7 @@ namespace NPOI.HSSF.Record.Formula.Functions
          */
         private class BaseRef
         {
-            private static int INVALID_SHEET_INDEX = -1;
+            private const int INVALID_SHEET_INDEX = -1;
             private int _firstRowIndex;
             private int _firstColumnIndex;
             private int _width;

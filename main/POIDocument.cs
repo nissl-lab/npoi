@@ -49,15 +49,18 @@ namespace NPOI
         /* Have the property streams been Read yet? (Only done on-demand) */
         protected bool initialized = false;
 
-
+        protected POIDocument(DirectoryNode dir)
+        {
+            this.directory = dir;
+        }
         /// <summary>
         /// Initializes a new instance of the <see cref="POIDocument"/> class.
         /// </summary>
         /// <param name="dir">The dir.</param>
         /// <param name="fs">The fs.</param>
+        [Obsolete]
         public POIDocument(DirectoryNode dir, POIFSFileSystem fs)
         {
-            this.filesystem = fs;
             this.directory = dir;
             //POILogFactory.GetLogger(this.GetType());
         }
@@ -66,15 +69,13 @@ namespace NPOI
         /// </summary>
         /// <param name="fs">The fs.</param>
         public POIDocument(POIFSFileSystem fs)
-            : this(fs.Root, fs) 
+            : this(fs.Root) 
         {
             
         }
         public virtual void Dispose()
         {
-            this.directory = null;
-            this.dsInf = null;
-            this.filesystem = null;
+
         }
         /// <summary>
         /// Fetch the Document Summary Information of the document
