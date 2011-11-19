@@ -99,6 +99,7 @@
     <Compile Include="Model\FootnoteReferenceDescriptor.cs" />
     <Compile Include="Model\FormattedDiskPage.cs" />
     <Compile Include="Model\FSPA.cs" />
+    <Compile Include="Model\FSPADocumentPart.cs" />
     <Compile Include="Model\FSPATable.cs" />
     <Compile Include="Model\GenericPropertyNode.cs">
       <SubType>Code</SubType>
@@ -123,6 +124,7 @@
     <Compile Include="Model\PAPFormattedDiskPage.cs" />
     <Compile Include="Model\PAPX.cs" />
     <Compile Include="Model\ParagraphHeight.cs" />
+    <Compile Include="Model\PictureDescriptor.cs" />
     <Compile Include="Model\PicturesTable.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -239,6 +241,9 @@
     <Compile Include="UserModel\ObjectsPool.cs" />
     <Compile Include="UserModel\OfficeDrawing.cs" />
     <Compile Include="UserModel\OfficeDrawings.cs" />
+    <Compile Include="UserModel\OfficeDrawingsImpl.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="UserModel\Paragraph.cs" />
     <Compile Include="UserModel\ParagraphProperties.cs" />
     <Compile Include="UserModel\Picture.cs" />

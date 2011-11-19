@@ -20,6 +20,7 @@ using System;
 using System.IO;
 using Ionic.Zip;
 using Ionic.Zlib;
+using NPOI.HWPF.Model;
 namespace NPOI.HWPF.UserModel
 {
 
@@ -27,7 +28,7 @@ namespace NPOI.HWPF.UserModel
      * Represents embedded picture extracted from Word Document
      * @author Dmitry Romanov
      */
-    public class Picture
+    public class Picture : PictureDescriptor
     {
         //private static POILogger log = POILogFactory.GetLogger(Picture.class);
 
@@ -72,6 +73,7 @@ namespace NPOI.HWPF.UserModel
 
 
         public Picture(int dataBlockStartOfsset, byte[] _dataStream, bool FillBytes)
+            : base(_dataStream, dataBlockStartOfsset)
         {
             this._dataStream = _dataStream;
             this.dataBlockStartOfsset = dataBlockStartOfsset;
@@ -94,6 +96,7 @@ namespace NPOI.HWPF.UserModel
         }
 
         public Picture(byte[] _dataStream)
+            : base()
         {
             this._dataStream = _dataStream;
             this.dataBlockStartOfsset = 0;
@@ -106,11 +109,11 @@ namespace NPOI.HWPF.UserModel
         {
             String ext = SuggestFileExtension();
             // trying to extract width and height from pictures content:
-            if ("jpg".Equals(ext,StringComparison.InvariantCultureIgnoreCase))
+            if ("jpg".Equals(ext, StringComparison.InvariantCultureIgnoreCase))
             {
                 FillJPGWidthHeight();
             }
-            else if ("png".Equals(ext,StringComparison.InvariantCultureIgnoreCase))
+            else if ("png".Equals(ext, StringComparison.InvariantCultureIgnoreCase))
             {
                 FillPNGWidthHeight();
             }
@@ -211,7 +214,77 @@ namespace NPOI.HWPF.UserModel
                 return aspectRatioY;
             }
         }
-        
+        /**
+         * @return Horizontal scaling factor supplied by user expressed in .001%
+         *         units
+         */
+        public int GetHorizontalScalingFactor()
+        {
+            return mx;
+        }
+
+
+        /**
+         * @return Vertical scaling factor supplied by user expressed in .001% units
+         */
+        public int GetVerticalScalingFactor()
+        {
+            return my;
+        }
+
+        /**
+         * Gets the initial width of the picture, in twips, prior to cropping or
+         * scaling.
+         * 
+         * @return the initial width of the picture in twips
+         */
+        public int GetDxaGoal()
+        {
+            return dxaGoal;
+        }
+
+        /**
+         * Gets the initial height of the picture, in twips, prior to cropping or
+         * scaling.
+         * 
+         * @return the initial width of the picture in twips
+         */
+        public int GetDyaGoal()
+        {
+            return dyaGoal;
+        }
+
+        /**
+         * @return The amount the picture has been cropped on the left in twips
+         */
+        public int GetDxaCropLeft()
+        {
+            return dxaCropLeft;
+        }
+
+        /**
+         * @return The amount the picture has been cropped on the top in twips
+         */
+        public int GetDyaCropTop()
+        {
+            return dyaCropTop;
+        }
+
+        /**
+         * @return The amount the picture has been cropped on the right in twips
+         */
+        public int GetDxaCropRight()
+        {
+            return dxaCropRight;
+        }
+
+        /**
+         * @return The amount the picture has been cropped on the bottom in twips
+         */
+        public int GetDyaCropBottom()
+        {
+            return dyaCropBottom;
+        }
         /**
          * tries to suggest extension for picture's file by matching signatures of popular image formats to first bytes
          * of picture's contents
@@ -228,7 +301,7 @@ namespace NPOI.HWPF.UserModel
             return extension;
         }
 
-        
+
         /**
          * Returns the mime type for the image
          */
@@ -358,7 +431,7 @@ namespace NPOI.HWPF.UserModel
         }
 
         private void FillImageContent()
-          {
+        {
             byte[] rawContent = GetRawContent();
 
             // HACK: Detect compressed images.  In reality there should be some way to determine
@@ -366,30 +439,32 @@ namespace NPOI.HWPF.UserModel
             //       samples I have obtained, nor any similarity in the data block contents.
             if (MatchSignature(rawContent, COMPRESSED1, 32) || MatchSignature(rawContent, COMPRESSED2, 32))
             {
-              try
-              {
-
-                  ZlibStream gzip = new ZlibStream(new MemoryStream(rawContent, 33, rawContent.Length - 33), CompressionMode.Decompress);
-                MemoryStream out1 = new MemoryStream();
-                byte[] buf = new byte[4096];
-                int readBytes;
-                while ((readBytes = gzip.Read(buf,0,4096)) > 0)
+                try
                 {
-                    out1.Write(buf, 0, readBytes);
+
+                    ZlibStream gzip = new ZlibStream(new MemoryStream(rawContent, 33, rawContent.Length - 33), CompressionMode.Decompress);
+                    MemoryStream out1 = new MemoryStream();
+                    byte[] buf = new byte[4096];
+                    int readBytes;
+                    while ((readBytes = gzip.Read(buf, 0, 4096)) > 0)
+                    {
+                        out1.Write(buf, 0, readBytes);
+                    }
+                    content = out1.ToArray();
                 }
-                content = out1.ToArray();
-              }
-              catch (IOException)
-              {
-                // Problems Reading from the actual MemoryStream should never happen
-                // so this will only ever be a ZipException.
-                //log.log(POILogger.INFO, "Possibly corrupt compression or non-compressed data", e);
-              }
-            } else {
-              // Raw data is not compressed.
-              content = rawContent;
+                catch (IOException)
+                {
+                    // Problems Reading from the actual MemoryStream should never happen
+                    // so this will only ever be a ZipException.
+                    //log.log(POILogger.INFO, "Possibly corrupt compression or non-compressed data", e);
+                }
             }
-          }
+            else
+            {
+                // Raw data is not compressed.
+                content = rawContent;
+            }
+        }
 
         private static int GetPictureBytesStartOffset(int dataBlockStartOffset, byte[] _dataStream, int dataBlockSize)
         {

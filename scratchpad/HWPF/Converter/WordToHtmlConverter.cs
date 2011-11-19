@@ -301,8 +301,8 @@ namespace NPOI.HWPF.Converter
         protected void ProcessImage(XmlElement currentBlock, bool inlined,
             Picture picture, String imageSourcePath)
         {
-            /*int aspectRatioX = picture.HorizontalScalingFactor;
-            int aspectRatioY = picture.VerticalScalingFactor;
+            int aspectRatioX = picture.GetHorizontalScalingFactor();
+            int aspectRatioY = picture.GetVerticalScalingFactor();
 
             StringBuilder style = new StringBuilder();
 
@@ -318,32 +318,32 @@ namespace NPOI.HWPF.Converter
             {
                 imageWidth = picture.GetDxaGoal() * aspectRatioX / 1000
                         / AbstractWordUtils.TWIPS_PER_INCH;
-                cropRight = picture.getDxaCropRight() * aspectRatioX / 1000
+                cropRight = picture.GetDxaCropRight() * aspectRatioX / 1000
                         / AbstractWordUtils.TWIPS_PER_INCH;
-                cropLeft = picture.getDxaCropLeft() * aspectRatioX / 1000
+                cropLeft = picture.GetDxaCropLeft() * aspectRatioX / 1000
                         / AbstractWordUtils.TWIPS_PER_INCH;
             }
             else
             {
-                imageWidth = picture.getDxaGoal() / TWIPS_PER_INCH;
-                cropRight = picture.getDxaCropRight() / TWIPS_PER_INCH;
-                cropLeft = picture.getDxaCropLeft() / TWIPS_PER_INCH;
+                imageWidth = picture.GetDxaGoal() / AbstractWordUtils.TWIPS_PER_INCH;
+                cropRight = picture.GetDxaCropRight() / AbstractWordUtils.TWIPS_PER_INCH;
+                cropLeft = picture.GetDxaCropLeft() / AbstractWordUtils.TWIPS_PER_INCH;
             }
 
             if (aspectRatioY > 0)
             {
-                imageHeight = picture.getDyaGoal() * aspectRatioY / 1000
+                imageHeight = picture.GetDyaGoal() * aspectRatioY / 1000
                         / AbstractWordUtils.TWIPS_PER_INCH;
-                cropTop = picture.getDyaCropTop() * aspectRatioY / 1000
+                cropTop = picture.GetDyaCropTop() * aspectRatioY / 1000
                         / AbstractWordUtils.TWIPS_PER_INCH;
-                cropBottom = picture.getDyaCropBottom() * aspectRatioY / 1000
+                cropBottom = picture.GetDyaCropBottom() * aspectRatioY / 1000
                         / AbstractWordUtils.TWIPS_PER_INCH;
             }
             else
             {
-                imageHeight = picture.getDyaGoal() / AbstractWordUtils.TWIPS_PER_INCH;
-                cropTop = picture.getDyaCropTop() / AbstractWordUtils.TWIPS_PER_INCH;
-                cropBottom = picture.getDyaCropBottom() / AbstractWordUtils.TWIPS_PER_INCH;
+                imageHeight = picture.GetDyaGoal() / AbstractWordUtils.TWIPS_PER_INCH;
+                cropTop = picture.GetDyaCropTop() / AbstractWordUtils.TWIPS_PER_INCH;
+                cropBottom = picture.GetDyaCropBottom() / AbstractWordUtils.TWIPS_PER_INCH;
             }
 
             XmlElement root;
@@ -372,7 +372,7 @@ namespace NPOI.HWPF.Converter
                 root.SetAttribute("style", "width:" + imageWidth + "in;height:" + imageHeight + "in;vertical-align:text-bottom;");
             }
 
-            currentBlock.AppendChild(root);*/
+            currentBlock.AppendChild(root);
         }
         protected override void ProcessLineBreak(XmlElement block, CharacterRun characterRun)
         {

@@ -70,12 +70,26 @@ namespace NPOI.HWPF
         /** Holds FSBA (shape) information */
         protected FSPATable _fspa;
 
+        /** Holds FSBA (shape) information */
+        private FSPATable _fspaHeaders;
+
+        /** Holds FSBA (shape) information */
+        private FSPATable _fspaMain;
+
+        /** Escher Drawing Group information */
+        protected EscherRecordHolder _escherRecordHolder;
+
         /** Escher Drawing Group information */
         protected EscherRecordHolder _dgg;
 
         /** Holds Office Art objects */
         protected ShapesTable _officeArts;
 
+        /** Holds Office Art objects */
+        protected OfficeDrawingsImpl _officeDrawingsHeaders;
+
+        /** Holds Office Art objects */
+        protected OfficeDrawingsImpl _officeDrawingsMain;
 
         /** Holds the bookmarks tables */
         protected BookmarksTables _bookmarksTables;
@@ -206,6 +220,12 @@ namespace NPOI.HWPF
             // Read FSPA and Escher information
             _fspa = new FSPATable(_tableStream, _fib.GetFcPlcspaMom(), _fib.GetLcbPlcspaMom(), TextTable.TextPieces);
 
+            // Read FSPA and Escher information
+            // _fspa = new FSPATable(_tableStream, _fib.getFcPlcspaMom(),
+            // _fib.getLcbPlcspaMom(), getTextTable().getTextPieces());
+            //_fspaHeaders = new FSPATable(_tableStream, _fib, FSPADocumentPart.HEADER);
+            //_fspaMain = new FSPATable(_tableStream, _fib, FSPADocumentPart.MAIN);
+
             if (_fib.GetFcDggInfo() != 0)
             {
                 _dgg = new EscherRecordHolder(_tableStream, _fib.GetFcDggInfo(), _fib.GetLcbDggInfo());
@@ -219,6 +239,10 @@ namespace NPOI.HWPF
             _pictures = new PicturesTable(this, _dataStream, _mainStream, _fspa, _dgg);
             // And the art shapes stream
             _officeArts = new ShapesTable(_tableStream, _fib);
+
+            // And escher pictures
+            _officeDrawingsHeaders = new OfficeDrawingsImpl(_fspaHeaders, _escherRecordHolder, _mainStream);
+            _officeDrawingsMain = new OfficeDrawingsImpl(_fspaMain, _escherRecordHolder, _mainStream);
 
             _st = new SectionTable(_mainStream, _tableStream, _fib.GetFcPlcfsed(), _fib.GetLcbPlcfsed(), fcMin, _tpt, _cpSplit);
             _ss = new StyleSheet(_tableStream, _fib.GetFcStshf());
@@ -432,7 +456,17 @@ namespace NPOI.HWPF
             return _officeArts;
         }
 
+        public OfficeDrawings GetOfficeDrawingsHeaders()
+        {
+            throw new NotImplementedException();
+            //return _officeDrawingsHeaders;
+        }
 
+        public OfficeDrawings GetOfficeDrawingsMain()
+        {
+            throw new NotImplementedException();
+            //return _officeDrawingsMain;
+        }
         /**
          * @return user-friendly interface to access document bookmarks
          */

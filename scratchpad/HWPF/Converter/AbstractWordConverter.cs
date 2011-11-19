@@ -525,9 +525,9 @@ namespace NPOI.HWPF.Converter
             }
             logger.Log(POILogger.WARN, debug);
 
-            //Range deadFieldValueSubrage = new Range( range.getCharacterRun(
-            //        separatorMark ).StartOffset + 1, range.getCharacterRun(
-            //        endMark ).StartOffset, range )
+            Range deadFieldValueSubrage = new Range(range.GetCharacterRun(
+                    separatorMark).StartOffset + 1, range.GetCharacterRun(
+                    endMark).StartOffset, range);
             //{
             //    @Override
             //    public String toString()
@@ -536,13 +536,12 @@ namespace NPOI.HWPF.Converter
             //    }
             //};
 
-            //    // just output field value
-            //    if ( separatorMark + 1 < endMark )
-            //        processCharacters( wordDocument, currentTableLevel,
-            //                deadFieldValueSubrage, currentBlock );
+            // just output field value
+            if (separatorMark + 1 < endMark)
+                ProcessCharacters(wordDocument, currentTableLevel,
+                        deadFieldValueSubrage, currentBlock);
 
-            //    return;
-            throw new NotImplementedException();
+            return;
         }
 
         protected Field ProcessDeadField(HWPFDocumentCore wordDocument,
@@ -608,26 +607,25 @@ namespace NPOI.HWPF.Converter
         {
             if (GetPicturesManager() == null)
                 return;
-            //// TODO: support headers
-            //OfficeDrawing officeDrawing = doc.GetOfficeDrawingsMain().GetOfficeDrawingAt(characterRun.StartOffset);
-            //if (officeDrawing == null)
-            //{
-            //    logger.Log(POILogger.WARN, "Characters #" + characterRun
-            //            + " references missing drawn object");
-            //    return;
-            //}
+            // TODO: support headers
+            OfficeDrawing officeDrawing = doc.GetOfficeDrawingsMain().GetOfficeDrawingAt(characterRun.StartOffset);
+            if (officeDrawing == null)
+            {
+                logger.Log(POILogger.WARN, "Characters #" + characterRun
+                        + " references missing drawn object");
+                return;
+            }
 
-            //byte[] pictureData = officeDrawing.GetPictureData();
-            //if (pictureData == null)
-            //    // usual shape?
-            //    return;
+            byte[] pictureData = officeDrawing.GetPictureData();
+            if (pictureData == null)
+                // usual shape?
+                return;
 
-            //PictureType type = PictureType.FindMatchingType(pictureData);
-            //String path = GetPicturesManager().SavePicture(pictureData, type,
-            //        "s" + characterRun.StartOffset + "." + type);
+            PictureType type = PictureType.FindMatchingType(pictureData);
+            String path = GetPicturesManager().SavePicture(pictureData, type,
+                    "s" + characterRun.StartOffset + "." + type);
 
-            //processDrawnObject(doc, characterRun, officeDrawing, path, block);
-            throw new NotImplementedException();
+            ProcessDrawnObject(doc, characterRun, officeDrawing, path, block);
         }
 
         protected abstract void ProcessDrawnObject(HWPFDocument doc,
@@ -757,7 +755,8 @@ namespace NPOI.HWPF.Converter
         protected void ProcessNoteAnchor(HWPFDocument doc,
                 CharacterRun characterRun, XmlElement block)
         {
-            //{
+            {
+                
             //    Notes footnotes = doc.getFootnotes();
             //    int noteIndex = footnotes
             //            .getNoteIndexByAnchorPosition(characterRun
@@ -779,8 +778,8 @@ namespace NPOI.HWPF.Converter
             //                noteTextRange);
             //        return;
             //    }
-            //}
-            //{
+            }
+            {
             //    Notes endnotes = doc.getEndnotes();
             //    int noteIndex = endnotes.getNoteIndexByAnchorPosition(characterRun
             //            .StartOffset);
@@ -801,7 +800,7 @@ namespace NPOI.HWPF.Converter
             //                noteTextRange);
             //        return;
             //    }
-            //}
+            }
             throw new NotImplementedException();
         }
 

@@ -8,6 +8,7 @@ namespace NPOI.HWPF.Model
     using System.Text;
     using System.Collections;
     using NPOI.DDF;
+    using System.Collections.Generic;
 
     /**
      * Based on AbstractEscherRecordHolder fomr HSSF.
@@ -124,6 +125,95 @@ namespace NPOI.HWPF.Model
 
             // Not found in this lot
             return null;
+        }
+
+        public List<EscherContainerRecord> GetDgContainers()
+        {
+            List<EscherContainerRecord> dgContainers = new List<EscherContainerRecord>(1);
+            foreach (EscherRecord escherRecord in EscherRecords)
+            {
+                unchecked
+                {
+                    if (escherRecord.RecordId == (short)0xF002)
+                    {
+                        dgContainers.Add((EscherContainerRecord)escherRecord);
+                    }
+                }
+            }
+            return dgContainers;
+        }
+
+        public List<EscherContainerRecord> GetDggContainers()
+        {
+            List<EscherContainerRecord> dggContainers = new List<EscherContainerRecord>(1);
+            foreach (EscherRecord escherRecord in EscherRecords)
+            {
+                unchecked
+                {
+                    if (escherRecord.RecordId == (short)0xF000)
+                    {
+                        dggContainers.Add((EscherContainerRecord)escherRecord);
+                    }
+                }
+            }
+            return dggContainers;
+        }
+
+        public List<EscherContainerRecord> GetBStoreContainers()
+        {
+            List<EscherContainerRecord> bStoreContainers = new List<EscherContainerRecord>(1);
+            foreach (EscherContainerRecord dggContainer in GetDggContainers())
+            {
+                foreach (EscherRecord escherRecord in dggContainer.ChildRecords)
+                {
+                    unchecked
+                    {
+                        if (escherRecord.RecordId == (short)0xF001)
+                        {
+                            bStoreContainers.Add((EscherContainerRecord)escherRecord);
+                        }
+                    }
+                }
+            }
+            return bStoreContainers;
+        }
+
+        public List<EscherContainerRecord> GetSpgrContainers()
+        {
+            List<EscherContainerRecord> spgrContainers = new List<EscherContainerRecord>(1);
+            foreach (EscherContainerRecord dgContainer in GetDgContainers())
+            {
+                foreach (EscherRecord escherRecord in dgContainer.ChildRecords)
+                {
+                    unchecked
+                    {
+                        if (escherRecord.RecordId == (short)0xF003)
+                        {
+                            spgrContainers.Add((EscherContainerRecord)escherRecord);
+                        }
+                    }
+                }
+            }
+            return spgrContainers;
+        }
+
+        public List<EscherContainerRecord> GetSpContainers()
+        {
+            List<EscherContainerRecord> spContainers = new List<EscherContainerRecord>(1);
+            foreach (EscherContainerRecord spgrContainer in GetSpgrContainers())
+            {
+                foreach (EscherRecord escherRecord in spgrContainer.ChildRecords)
+                {
+                    unchecked
+                    {
+                        if (escherRecord.RecordId == (short)0xF004)
+                        {
+                            spContainers.Add((EscherContainerRecord)escherRecord);
+                        }
+                    }
+                }
+            }
+            return spContainers;
         }
     }
 }

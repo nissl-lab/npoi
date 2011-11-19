@@ -14,7 +14,8 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 ==================================================================== */
-using System.Collections.ObjectModel;
+
+using System.Collections.Generic;
 namespace NPOI.HWPF.UserModel
 {
 
@@ -27,6 +28,6 @@ namespace NPOI.HWPF.UserModel
     {
         OfficeDrawing GetOfficeDrawingAt(int characterPosition);
 
-        Collection<OfficeDrawing> GetOfficeDrawings();
+        IList<OfficeDrawing> GetOfficeDrawings();
     }
 }
