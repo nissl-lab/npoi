@@ -20,6 +20,7 @@ using System;
 using System.IO;
 using Ionic.Zip;
 using Ionic.Zlib;
+using NPOI.HWPF.Model;
 namespace NPOI.HWPF.UserModel
 {
 
@@ -27,7 +28,7 @@ namespace NPOI.HWPF.UserModel
      * Represents embedded picture extracted from Word Document
      * @author Dmitry Romanov
      */
-    public class Picture //: PictureDescriptor
+    public class Picture: PictureDescriptor
     {
         //private static POILogger log = POILogFactory.GetLogger(Picture.class);
 

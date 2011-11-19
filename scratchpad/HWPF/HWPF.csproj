@@ -79,7 +79,8 @@
     <Compile Include="Model\CHPBinTable.cs" />
     <Compile Include="Model\CHPFormattedDiskPage.cs" />
     <Compile Include="Model\CHPX.cs" />
-    <Compile Include="Model\Class1.cs" />
+    <Compile Include="Model\PictureDescriptor.cs" />
+    <Compile Include="Model\SinglentonTextPiece.cs" />
     <Compile Include="Model\FSPADocumentPart.cs" />
     <Compile Include="Model\ComplexFileTable.cs" />
     <Compile Include="Model\CPSplitCalculator.cs" />
@@ -233,6 +234,7 @@
     <Compile Include="UserModel\DocumentPosition.cs" />
     <Compile Include="UserModel\DropCapSpecifier.cs" />
     <Compile Include="UserModel\Field.cs" />
+    <Compile Include="UserModel\Fields.cs" />
     <Compile Include="UserModel\HeaderStories.cs" />
     <Compile Include="UserModel\HWPFList.cs" />
     <Compile Include="UserModel\LineSpacingDescriptor.cs" />

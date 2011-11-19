@@ -112,6 +112,11 @@ namespace NPOI.HWPF
         /** Holds the footnotes */
         protected Notes _footnotes;
 
+        /** Holds the fields PLCFs */
+        protected FieldsTables _fieldsTables;
+
+        /** Holds the fields */
+        protected Fields _fields;
 
         protected HWPFDocument()
             : base()
@@ -132,7 +137,7 @@ namespace NPOI.HWPF
             : this(VerifyAndBuildPOIFS(istream))
         {
             //do Ole stuff
-            
+
         }
 
         /**
@@ -158,9 +163,10 @@ namespace NPOI.HWPF
          *         in POIFSFileSystem.
          */
         [Obsolete]
-        public HWPFDocument(DirectoryNode directory, POIFSFileSystem pfilesystem):this(directory)
+        public HWPFDocument(DirectoryNode directory, POIFSFileSystem pfilesystem)
+            : this(directory)
         {
-            
+
         }
         /// <summary>
         /// Initializes a new instance of the <see cref="HWPFDocument"/> class.
@@ -240,56 +246,56 @@ namespace NPOI.HWPF
 
             _text = _tpt.Text;
 
-                    /*
-         * in this mode we preserving PAPX/CHPX structure from file, so text may
-         * miss from output, and text order may be corrupted
-         */
-        bool preserveBinTables = false;
-        try
-        {
-            preserveBinTables = Boolean.Parse( 
-                ConfigurationManager.AppSettings[PROPERTY_PRESERVE_BIN_TABLES] );
-        }
-        catch ( Exception)
-        {
-            // ignore;
-        }
+            /*
+ * in this mode we preserving PAPX/CHPX structure from file, so text may
+ * miss from output, and text order may be corrupted
+ */
+            bool preserveBinTables = false;
+            try
+            {
+                preserveBinTables = Boolean.Parse(
+                    ConfigurationManager.AppSettings[PROPERTY_PRESERVE_BIN_TABLES]);
+            }
+            catch (Exception)
+            {
+                // ignore;
+            }
 
-        if ( !preserveBinTables )
-        {
-            _cbt.Rebuild( _cft );
-            _pbt.Rebuild( _text, _cft );
-        }
+            if (!preserveBinTables)
+            {
+                _cbt.Rebuild(_cft);
+                _pbt.Rebuild(_text, _cft);
+            }
 
-        /*
-         * Property to disable text rebuilding. In this mode changing the text
-         * will lead to unpredictable behavior
-         */
-        bool preserveTextTable = false;
-        try
-        {
-            preserveTextTable = Boolean.Parse(
-                    ConfigurationManager.AppSettings[PROPERTY_PRESERVE_TEXT_TABLE] );
-        }
-        catch ( Exception)
-        {
-            // ignore;
-        }
-        if ( !preserveTextTable )
-        {
-            _cft = new ComplexFileTable();
-            _tpt = _cft.GetTextPieceTable();
-            TextPiece textPiece = new SinglentonTextPiece( _text );
-            _tpt.Add( textPiece );
-            _text = textPiece.GetStringBuilder();
-        }
+            /*
+             * Property to disable text rebuilding. In this mode changing the text
+             * will lead to unpredictable behavior
+             */
+            bool preserveTextTable = false;
+            try
+            {
+                preserveTextTable = Boolean.Parse(
+                        ConfigurationManager.AppSettings[PROPERTY_PRESERVE_TEXT_TABLE]);
+            }
+            catch (Exception)
+            {
+                // ignore;
+            }
+            if (!preserveTextTable)
+            {
+                _cft = new ComplexFileTable();
+                _tpt = _cft.GetTextPieceTable();
+                TextPiece textPiece = new SinglentonTextPiece(_text);
+                _tpt.Add(textPiece);
+                _text = textPiece.GetStringBuilder();
+            }
 
-        // Read FSPA and Escher information
-        // _fspa = new FSPATable(_tableStream, _fib.getFcPlcspaMom(),
-        // _fib.getLcbPlcspaMom(), getTextTable().getTextPieces());
-        _fspaHeaders = new FSPATable( _tableStream, _fib,
-                FSPADocumentPart.HEADER );
-        _fspaMain = new FSPATable( _tableStream, _fib, FSPADocumentPart.MAIN );
+            // Read FSPA and Escher information
+            // _fspa = new FSPATable(_tableStream, _fib.getFcPlcspaMom(),
+            // _fib.getLcbPlcspaMom(), getTextTable().getTextPieces());
+            _fspaHeaders = new FSPATable(_tableStream, _fib,
+                    FSPADocumentPart.HEADER);
+            _fspaMain = new FSPATable(_tableStream, _fib, FSPADocumentPart.MAIN);
 
             if (_fib.GetFcDggInfo() != 0)
             {
@@ -342,6 +348,9 @@ namespace NPOI.HWPF
             _endnotes = new NotesImpl(_endnotesTables);
             _footnotesTables = new NotesTables(NoteType.FOOTNOTE, _tableStream, _fib);
             _footnotes = new NotesImpl(_footnotesTables);
+
+            _fieldsTables = new FieldsTables(_tableStream, _fib);
+            //_fields = new FieldsImpl(_fieldsTables);
         }
 
         public override TextPieceTable TextTable
@@ -781,7 +790,25 @@ namespace NPOI.HWPF
         {
             return _footnotes;
         }
+        /**
+ * @return FieldsTables object, that is able to extract fields descriptors from this document
+ * @deprecated
+ */
+        [Obsolete]
+        public FieldsTables GetFieldsTables()
+        {
+            return _fieldsTables;
+        }
 
+        /**
+ * Returns user-friendly interface to access document {@link Field}s
+ * 
+ * @return user-friendly interface to access document {@link Field}s
+ */
+        public Fields GetFields()
+        {
+            return _fields;
+        }
     }
 
 }

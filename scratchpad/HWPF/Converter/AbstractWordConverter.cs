@@ -20,7 +20,6 @@ using System.Collections.Generic;
 using System.Text;
 using NPOI.HWPF.UserModel;
 using NPOI.Util;
-using Iesi.Collections.Generic;
 using System.Xml;
 using NPOI.HWPF.Model;
 using System.Diagnostics;
@@ -39,8 +38,8 @@ namespace NPOI.HWPF.Converter
 
             public Structure(Bookmark bookmark)
             {
-                this.Start = bookmark.GetStart();
-                this.End = bookmark.GetEnd();
+                this.Start = bookmark.Start;
+                this.End = bookmark.End;
                 this.StructureObject = bookmark;
             }
 
@@ -111,7 +110,7 @@ namespace NPOI.HWPF.Converter
                 structures.Remove(s);
             structures.Add(structure);
         }
-        private Set<Bookmark> bookmarkStack = new OrderedSet<Bookmark>();
+        private List<Bookmark> bookmarkStack = new List<Bookmark>();
 
         private FontReplacer fontReplacer = new DefaultFontReplacer();
 
