@@ -29,13 +29,28 @@ namespace NPOI.HWPF.Model
      */
     public class FSPATable
     {
-        private ArrayList _shapes = new ArrayList();
-        private Hashtable _shapeIndexesByPropertyStart = new Hashtable();
-        private List<TextPiece> _text;
+        private Dictionary<int, GenericPropertyNode> _byStart
+            = new Dictionary<int, GenericPropertyNode>();
 
+        public FSPATable(byte[] tableStream, FileInformationBlock fib,
+        FSPADocumentPart part)
+        {
+            int offset = fib.GetFSPAPlcfOffset(part);
+            int length = fib.GetFSPAPlcfLength(part);
+
+            PlexOfCps plex = new PlexOfCps(tableStream, offset, length,
+                    FSPA.FSPA_SIZE);
+            for (int i = 0; i < plex.Length; i++)
+            {
+                GenericPropertyNode property = plex.GetProperty(i);
+                _byStart.Add(property.Start, property);
+            }
+        }
+
+
+        [Obsolete]
         public FSPATable(byte[] tableStream, int fcPlcspa, int lcbPlcspa, List<TextPiece> tpt)
         {
-            _text = tpt;
             // Will be 0 if no drawing objects in document
             if (fcPlcspa == 0)
                 return;
@@ -44,39 +59,49 @@ namespace NPOI.HWPF.Model
             for (int i = 0; i < plex.Length; i++)
             {
                 GenericPropertyNode property = plex.GetProperty(i);
-                FSPA fspa = new FSPA(property.Bytes, 0);
-
-                _shapes.Add(fspa);
-                _shapeIndexesByPropertyStart.Add(property.Start, i);
+                _byStart.Add(property.Start, property);
             }
         }
 
         public FSPA GetFspaFromCp(int cp)
         {
-            if (!_shapeIndexesByPropertyStart.Contains(cp))
+            if (!_byStart.ContainsKey(cp))
             {
                 return null;
             }
-            return (FSPA)_shapes[(int)_shapeIndexesByPropertyStart[cp]];
+
+            return new FSPA(_byStart[cp].Bytes, 0);
         }
 
         public FSPA[] GetShapes()
         {
-            FSPA[] result = new FSPA[_shapes.Count];
-            result = (FSPA[])_shapes.ToArray();
-            return result;
+            List<FSPA> result = new List<FSPA>(_byStart.Count);
+            foreach (GenericPropertyNode propertyNode in _byStart.Values)
+            {
+                result.Add(new FSPA(propertyNode.Bytes, 0));
+            }
+            return result.ToArray();
         }
 
         public override String ToString()
         {
             StringBuilder buf = new StringBuilder();
-            buf.Append("[FPSA PLC size=").Append(_shapes.Count).Append("]\n");
-            for (IEnumerator it = _shapeIndexesByPropertyStart.Keys.GetEnumerator(); it.MoveNext(); )
+            buf.Append("[FPSA PLC size=").Append(_byStart.Count).Append("]\n");
+            foreach (KeyValuePair<int, GenericPropertyNode> entry in _byStart
+                     )
             {
-                int i = (int)it.Current;
-                FSPA fspa = (FSPA)_shapes[(int)_shapeIndexesByPropertyStart[i]];
-                buf.Append("  [FC: ").Append(i.ToString()).Append("] ");
-                buf.Append(fspa.ToString());
+                int i = entry.Key;
+                buf.Append("  ").Append(i.ToString()).Append(" => \t");
+
+                try
+                {
+                    FSPA fspa = GetFspaFromCp(i);
+                    buf.Append(fspa.ToString());
+                }
+                catch (Exception exc)
+                {
+                    buf.Append(exc.Message);
+                }
                 buf.Append("\n");
             }
             buf.Append("[/FSPA PLC]");

@@ -38,7 +38,7 @@ namespace NPOI.HWPF.Usermodel
                 HWPFTestDataSamples.OpenSampleFile("Word6.doc");
                 Assert.Fail("Shouldn't be openable");
             }
-            catch (OldFileFormatException e) { }
+            catch (OldFileFormatException) { }
 
             // Open
             HWPFOldDocument doc = HWPFTestDataSamples.OpenOldSampleFile("Word6.doc");
@@ -66,7 +66,7 @@ namespace NPOI.HWPF.Usermodel
                 HWPFTestDataSamples.OpenSampleFile("Word95.doc");
                 Assert.Fail("Shouldn't be openable");
             }
-            catch (OldFileFormatException e) { }
+            catch (OldFileFormatException) { }
 
             // Open
             HWPFOldDocument doc = HWPFTestDataSamples.OpenOldSampleFile("Word95.doc");

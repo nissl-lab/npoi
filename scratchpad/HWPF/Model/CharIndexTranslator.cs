@@ -21,6 +21,14 @@ namespace NPOI.HWPF.Model
     public interface CharIndexTranslator
     {
         /**
+ * Calculates the byte index of the given char index.
+ * 
+ * @param charPos
+ *            The char position
+ * @return The byte index
+ */
+        int GetByteIndex(int charPos);
+        /**
          * Calculates the char index of the given byte index.
          * Look forward if index is not in table
          *

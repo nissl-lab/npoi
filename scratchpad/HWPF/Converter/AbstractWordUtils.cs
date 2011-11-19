@@ -21,7 +21,6 @@ using System.Text;
 using NPOI.Util;
 using NPOI.HWPF.UserModel;
 using System.Collections;
-using Iesi.Collections.Generic;
 using System.Xml;
 using NPOI.HWPF.Model;
 using NPOI.POIFS.FileSystem;
@@ -48,7 +47,7 @@ namespace NPOI.HWPF.Converter
      */
         public static int[] BuildTableCellEdgesArray(Table table)
         {
-            SortedSet<int> edges = new SortedSet<int>();
+            SortedList<int, int> edges = new SortedList<int, int>();
 
             for (int r = 0; r < table.NumRows; r++)
             {
@@ -57,14 +56,14 @@ namespace NPOI.HWPF.Converter
                 {
                     TableCell tableCell = tableRow.GetCell(c);
 
-                    edges.Add(tableCell.GetLeftEdge());
-                    edges.Add(tableCell.GetLeftEdge() + tableCell.GetWidth());
+                    edges.Add(tableCell.GetLeftEdge(),0);
+                    edges.Add(tableCell.GetLeftEdge() + tableCell.GetWidth(), 0);
                 }
             }
 
             int[] result = new int[edges.Count];
 
-            edges.CopyTo(result, 0);
+            edges.Keys.CopyTo(result, 0);
             return result;
         }
         static bool CanBeMerged(XmlNode node1, XmlNode node2, String requiredTagName)

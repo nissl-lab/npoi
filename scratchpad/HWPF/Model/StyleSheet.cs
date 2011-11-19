@@ -35,11 +35,11 @@ namespace NPOI.HWPF.Model
     public class StyleSheet
     {
 
-        public static int NIL_STYLE = 4095;
-        private static int PAP_TYPE = 1;
-        private static int CHP_TYPE = 2;
-        private static int SEP_TYPE = 4;
-        private static int TAP_TYPE = 5;
+        public const int NIL_STYLE = 4095;
+        private const int PAP_TYPE = 1;
+        private const int CHP_TYPE = 2;
+        private const int SEP_TYPE = 4;
+        private const int TAP_TYPE = 5;
 
 
         private static ParagraphProperties NIL_PAP = new ParagraphProperties();
@@ -172,6 +172,8 @@ namespace NPOI.HWPF.Model
                 }
             }
         }
+
+   
         public override bool Equals(Object o)
         {
             StyleSheet ss = (StyleSheet)o;
@@ -314,7 +316,11 @@ namespace NPOI.HWPF.Model
             {
                 return NIL_CHP;
             }
-            return (_styleDescriptions[x] != null ? _styleDescriptions[x].GetCHP() : null);
+            if (x >= _styleDescriptions.Length)
+            {
+                return NIL_CHP;
+            }
+            return (_styleDescriptions[x] != null ? _styleDescriptions[x].GetCHP() : NIL_CHP);
         }
 
         public ParagraphProperties GetParagraphStyle(int x)
@@ -323,7 +329,23 @@ namespace NPOI.HWPF.Model
             {
                 return NIL_PAP;
             }
-            return (_styleDescriptions[x] != null ? _styleDescriptions[x].GetPAP() : null);
+
+            if (x >= _styleDescriptions.Length)
+            {
+                return NIL_PAP;
+            }
+
+            if (_styleDescriptions[x] == null)
+            {
+                return NIL_PAP;
+            }
+
+            if (_styleDescriptions[x].GetPAP() == null)
+            {
+                return NIL_PAP;
+            }
+
+            return _styleDescriptions[x].GetPAP();
         }
 
     }

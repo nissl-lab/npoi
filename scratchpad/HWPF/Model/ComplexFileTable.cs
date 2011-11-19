@@ -21,13 +21,16 @@ namespace NPOI.HWPF.Model
     using NPOI.Util;
     using System.IO;
     using NPOI.HWPF.Model.IO;
+    using NPOI.HWPF.SPRM;
+    using System.Collections.Generic;
+    using System;
 
     public class ComplexFileTable
     {
 
         private static byte GRPPRL_TYPE = 1;
         private static byte TEXT_PIECE_TABLE_TYPE = 2;
-
+        private SprmBuffer[] _grpprls;
         protected TextPieceTable _tpt;
 
         public ComplexFileTable()
@@ -39,12 +42,22 @@ namespace NPOI.HWPF.Model
         {
             //skips through the prms before we reach the piece table. These contain data
             //for actual fast saved files
+            List<SprmBuffer> sprmBuffers = new List<SprmBuffer>();
+            //skips through the prms before we reach the piece table. These contain data
+            //for actual fast saved files
             while (tableStream[offset] == GRPPRL_TYPE)
             {
                 offset++;
-                int skip = LittleEndian.GetShort(tableStream, offset);
-                offset += LittleEndianConstants.SHORT_SIZE + skip;
+                int size = LittleEndian.GetShort(tableStream, offset);
+                offset += LittleEndianConstants.SHORT_SIZE;
+                byte[] bs = LittleEndian.GetByteArray(tableStream, offset, size);
+                offset += size;
+
+                SprmBuffer sprmBuffer = new SprmBuffer(bs, false, 0);
+                sprmBuffers.Add(sprmBuffer);
             }
+            this._grpprls = sprmBuffers.ToArray();
+
             if (tableStream[offset] != TEXT_PIECE_TABLE_TYPE)
             {
                 throw new IOException("The text piece table is corrupted");
@@ -59,21 +72,30 @@ namespace NPOI.HWPF.Model
             return _tpt;
         }
 
+        public SprmBuffer[] GetGrpprls()
+        {
+            return _grpprls;
+        }
+
+        [Obsolete]
         public void WriteTo(HWPFFileSystem sys)
         {
             HWPFStream docStream = sys.GetStream("WordDocument");
             HWPFStream tableStream = sys.GetStream("1Table");
+            WriteTo(docStream, tableStream);
+        }
 
+        public void WriteTo(HWPFStream wordDocumentStream,HWPFStream tableStream)
+        {
             tableStream.Write(TEXT_PIECE_TABLE_TYPE);
 
-            byte[] table = _tpt.WriteTo(docStream);
+            byte[] table = _tpt.WriteTo(wordDocumentStream);
 
             byte[] numHolder = new byte[LittleEndianConstants.INT_SIZE];
             LittleEndian.PutInt(numHolder, table.Length);
             tableStream.Write(numHolder);
             tableStream.Write(table);
         }
-
     }
 }
 

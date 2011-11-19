@@ -20,6 +20,7 @@ namespace TestCases.HWPF.UserModel
     using NPOI.HWPF.UserModel;
     using NPOI.HWPF.Model;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using System;
 
     [TestClass]
     public class TestBugs
@@ -61,12 +62,12 @@ namespace TestCases.HWPF.UserModel
             assertLevels(documentRange, styleSheet, 11, 9, 4);
 
             // output to console
-            /*for (int i=0; i<documentRange.NumParagraphs; i++) {
+            for (int i=0; i<documentRange.NumParagraphs; i++) {
               Paragraph par = documentRange.GetParagraph(i);
-              int styleLvl = styleSheet.GetParagraphStyle(par.getStyleIndex()).getLvl();
+              int styleLvl = styleSheet.GetParagraphStyle(par.GetStyleIndex()).GetLvl();
               int parLvl = par.GetLvl();
-              Console.WriteLine("Style level: " + styleLvl + ", paragraph level: " + parLvl + ", text: " + par.text());
-            }*/
+              Console.WriteLine("Style level: " + styleLvl + ", paragraph level: " + parLvl + ", text: " + par.Text);
+            }
         }
 
         private void assertLevels(Range documentRange, StyleSheet styleSheet, int parIndex, int expectedStyleLvl, int expectedParLvl)

@@ -16,6 +16,7 @@
 ==================================================================== */
 using TestCases.HWPF;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NPOI.HWPF.UserModel;
 namespace NPOI.HWPF.Model
 {
 
@@ -26,17 +27,19 @@ namespace NPOI.HWPF.Model
      * 
      * @author Sergey Vladimirov (vlsergey {at} gmail {dot} com)
      */
-    public class TestBookmarksTables : TestCase
+    [TestClass]
+    public class TestBookmarksTables 
     {
-        public void test()
+        [TestMethod]
+        public void TestBookmarks()
         {
             HWPFDocument doc = HWPFTestDataSamples.OpenSampleFile("pageref.doc");
             Bookmarks bookmarks = doc.GetBookmarks();
 
-            Assert.AreEqual(1, bookmarks.GetBookmarksCount());
+            Assert.AreEqual(1, bookmarks.Count);
 
             Bookmark bookmark = bookmarks.GetBookmark(0);
-            Assert.AreEqual("userref", bookmark.GetName());
+            Assert.AreEqual("userref", bookmark.Name);
             Assert.AreEqual(27, bookmark.Start);
             Assert.AreEqual(38, bookmark.End);
         }

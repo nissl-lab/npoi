@@ -17,6 +17,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NPOI.HWPF;
 using TestCases.HWPF;
+using NPOI.HWPF.UserModel;
 namespace TestCase.HWPF.Model
 {
     /**
@@ -25,10 +26,11 @@ namespace TestCase.HWPF.Model
      * 
      * @author Sergey Vladimirov (vlsergey {at} gmail {dot} com)
      */
+    [TestClass]
     public class TestNotesTables
     {
         [TestMethod]
-        public void Test()
+        public void TestNotes()
         {
             HWPFDocument doc = HWPFTestDataSamples
                     .OpenSampleFile("endingnote.doc");

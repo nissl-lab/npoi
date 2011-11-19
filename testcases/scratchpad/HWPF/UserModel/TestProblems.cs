@@ -114,7 +114,7 @@ namespace TestCases.HWPF.UserModel
             Assert.AreEqual(0, row._parStart);
             Assert.AreEqual(5, row._parEnd);
             Assert.AreEqual(0, row.StartOffset);
-            Assert.AreEqual(87, row.EndOffset);
+            Assert.AreEqual(86, row.EndOffset);
 
 
             // get the first cell
@@ -169,7 +169,7 @@ namespace TestCases.HWPF.UserModel
                 if (text.IndexOf("{delete me}") > -1)
                 {
                     para.Delete();
-                    deletedLength = text.Length;
+                    deletedLength += text.Length;
                 }
             }
 
@@ -200,7 +200,7 @@ namespace TestCases.HWPF.UserModel
                 HWPFTestDataSamples.OpenSampleFile("PasswordProtected.doc");
                 Assert.Fail();
             }
-            catch (EncryptedDocumentException e)
+            catch (EncryptedDocumentException )
             {
                 // Good
             }

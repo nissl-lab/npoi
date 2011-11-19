@@ -60,6 +60,45 @@ using System.Collections.Generic;
                 }
             }
 
+            public class CHPXComparator : IComparer<CHPX>
+            {
+                public static CHPXComparator instance = new CHPXComparator();
+
+                public int Compare(CHPX o1, CHPX o2)
+                {
+                    int thisVal = o1.Start;
+                    int anotherVal = o2.Start;
+                    return (thisVal < anotherVal ? -1 : (thisVal == anotherVal ? 0
+                            : 1));
+                } 
+            }
+
+            public class PAPXComparator : IComparer<PAPX>
+            {
+                public static PAPXComparator instance = new PAPXComparator();
+
+                public int Compare(PAPX o1, PAPX o2)
+                {
+                    int thisVal = o1.Start;
+                    int anotherVal = o2.Start;
+                    return (thisVal < anotherVal ? -1 : (thisVal == anotherVal ? 0
+                            : 1));
+                }
+            }
+
+            public class SEPXComparator : IComparer<SEPX>
+            {
+                public static SEPXComparator instance = new SEPXComparator();
+
+                public int Compare(SEPX o1, SEPX o2)
+                {
+                    int thisVal = o1.Start;
+                    int anotherVal = o2.Start;
+                    return (thisVal < anotherVal ? -1 : (thisVal == anotherVal ? 0
+                            : 1));
+                }
+            }
+
         protected Object _buf;
         /** The start, in characters */
         private int _cpStart;

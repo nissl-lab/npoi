@@ -53,7 +53,7 @@ namespace NPOI.HWPF.Model
             TextPieceTable oldTextPieceTable = cft.GetTextPieceTable();
             TextPieceTable newTextPieceTable = newCft.GetTextPieceTable();
 
-            Assert.AreEqual(oldTextPieceTable, newTextPieceTable);
+            Assert.AreEqual(oldTextPieceTable.Text.ToString(), newTextPieceTable.Text.ToString());
         }
 
         /**

@@ -277,7 +277,7 @@ namespace TestCases.HWPF.Extractor
                 );
                 Assert.Fail();
             }
-            catch (OldWordFileFormatException e) { }
+            catch (OldWordFileFormatException ) { }
 
             // Can work with the special one
             Word6Extractor w6e = new Word6Extractor(
@@ -311,7 +311,7 @@ namespace TestCases.HWPF.Extractor
                 );
                 Assert.Fail();
             }
-            catch (OldWordFileFormatException e) { }
+            catch (OldWordFileFormatException) { }
 
             Word6Extractor w6e = new Word6Extractor(
                     POIDataSamples.GetDocumentInstance().OpenResourceAsStream("Word6.doc")

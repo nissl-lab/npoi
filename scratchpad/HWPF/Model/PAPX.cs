@@ -40,16 +40,32 @@ namespace NPOI.HWPF.Model
         private ParagraphHeight _phe;
         private int _hugeGrpprlOffset = -1;
 
+        public PAPX(int charStart, int charEnd, SprmBuffer buf):
+            base(charStart, charEnd, buf)
+        {
+            
+            _phe = new ParagraphHeight();
+        }
+
         public PAPX(int fcStart, int fcEnd, CharIndexTranslator translator, byte[] papx, ParagraphHeight phe, byte[] dataStream)
-            : base(fcStart, fcEnd, translator, new SprmBuffer(papx))
+            : base(fcStart, fcEnd, translator, new SprmBuffer(papx,2))
         {
 
             _phe = phe;
-            SprmBuffer buf = FindHuge(new SprmBuffer(papx), dataStream);
+            SprmBuffer buf = FindHuge(new SprmBuffer(papx,2), dataStream);
             if (buf != null)
                 _buf = buf;
         }
-
+        public PAPX(int charStart, int charEnd, byte[] papx, ParagraphHeight phe,
+                    byte[] dataStream):
+            base(charStart, charEnd, new SprmBuffer(papx, 2))
+        {
+            _phe = phe;
+            SprmBuffer buf = FindHuge(new SprmBuffer(papx, 2), dataStream);
+            if (buf != null)
+                _buf = buf;
+        }
+        [Obsolete]
         public PAPX(int fcStart, int fcEnd, CharIndexTranslator translator, SprmBuffer buf, byte[] dataStream)
             : base(fcStart, fcEnd, translator, buf)
         {

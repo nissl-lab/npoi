@@ -88,7 +88,7 @@ namespace NPOI.HWPF.UserModel
         internal Paragraph(int startIdx, int endIdx, Table parent)
             : base(startIdx, endIdx, parent)
         {
-
+            InitAll();
             PAPX papx = (PAPX)_paragraphs[_parEnd - 1];
             _props = papx.GetParagraphProperties(_doc.GetStyleSheet());
             _papx = papx.GetSprmBuf();
@@ -490,7 +490,7 @@ namespace NPOI.HWPF.UserModel
             return (ParagraphProperties)_props.Clone();
         }
 
-        public Object Clone()
+        public override Object Clone()
         {
             Paragraph p = (Paragraph)base.Clone();
             p._props = (ParagraphProperties)_props.Clone();

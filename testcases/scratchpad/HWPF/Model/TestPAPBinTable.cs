@@ -28,28 +28,27 @@ namespace NPOI.HWPF.Model
         private PAPBinTable _pAPBinTable = null;
         private HWPFDocFixture _hWPFDocFixture;
 
-        private TextPieceTable fakeTPT = new TextPieceTable();
-
         [TestMethod]
         public void TestReadWrite()
         {
+            TextPieceTable fakeTPT = new TextPieceTable();
+
             FileInformationBlock fib = _hWPFDocFixture._fib;
             byte[] mainStream = _hWPFDocFixture._mainStream;
             byte[] tableStream = _hWPFDocFixture._tableStream;
-            int fcMin = fib.GetFcMin();
 
-            _pAPBinTable = new PAPBinTable(mainStream, tableStream, null, fib.GetFcPlcfbtePapx(), fib.GetLcbPlcfbtePapx(), fcMin, fakeTPT);
+            _pAPBinTable = new PAPBinTable(mainStream, tableStream, null, fib.GetFcPlcfbtePapx(), fib.GetLcbPlcfbtePapx(), fakeTPT);
 
             HWPFFileSystem fileSys = new HWPFFileSystem();
 
-            _pAPBinTable.WriteTo(fileSys, 0);
+            _pAPBinTable.WriteTo(fileSys, fakeTPT);
             MemoryStream tableOut = fileSys.GetStream("1Table");
             MemoryStream mainOut = fileSys.GetStream("WordDocument");
 
             byte[] newTableStream = tableOut.ToArray();
             byte[] newMainStream = mainOut.ToArray();
 
-            PAPBinTable newBinTable = new PAPBinTable(newMainStream, newTableStream, null, 0, newTableStream.Length, 0, fakeTPT);
+            PAPBinTable newBinTable = new PAPBinTable(newMainStream, newTableStream, null, 0, newTableStream.Length, fakeTPT);
 
             List<PAPX> oldTextRuns = _pAPBinTable.GetParagraphs();
             List<PAPX> newTextRuns = newBinTable.GetParagraphs();

@@ -31,11 +31,16 @@ namespace NPOI.HWPF.Model
      */
     public class OldSectionTable : SectionTable
     {
-        public OldSectionTable(byte[] documentStream, int Offset,
+        public OldSectionTable(byte[] documentStream, int offset,
                             int size, int fcMin,
-                            TextPieceTable tpt)
+                            TextPieceTable tpt):this(documentStream, offset, size)
         {
-            PlexOfCps sedPlex = new PlexOfCps(documentStream, Offset, size, 12);
+
+        }
+
+        public OldSectionTable(byte[] documentStream, int offset, int size)
+        {
+            PlexOfCps sedPlex = new PlexOfCps(documentStream, offset, size, 12);
 
             int length = sedPlex.Length;
 
@@ -69,7 +74,7 @@ namespace NPOI.HWPF.Model
                 }
                 _sections.Add(sepx);
             }
-            //_sections.Sort(PropertyNode.Start
+            _sections.Sort(PropertyNode.SEPXComparator.instance);
         }
 
     }

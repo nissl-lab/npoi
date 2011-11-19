@@ -533,11 +533,11 @@ namespace NPOI.HWPF.UserModel
                 // System.err.println("Section " + x + " is now " + sepx.Start
                 // + " -> " + sepx.End);
             }
-            _text.Remove(_start, _end - _start);
+            _text = _text.Remove(_start, _end - _start);
             Range parent = _parent;
             if (parent != null)
             {
-                parent.AdjustForInsert(-(_end- _start));
+                parent.AdjustForInsert(-(_end - _start));
             }
             // update the FIB.CCPText + friends field
             AdjustFIB(-(_end - _start));
@@ -647,19 +647,9 @@ namespace NPOI.HWPF.UserModel
         {
             int absPlaceHolderIndex = StartOffset + pOffSet;
             Range subRange = new Range(absPlaceHolderIndex, (absPlaceHolderIndex + pPlaceHolder
-                    .Length), GetDocument());
-
-            // this Range isn't a proper parent of the subRange() so we'll have to
-            // keep
-            // track of an updated endOffset on our own
-            int previousEndOffset = subRange.EndOffset;
+                    .Length), this);
 
             subRange.InsertBefore(pValue);
-
-            if (subRange.EndOffset != previousEndOffset)
-            {
-                AdjustForInsert(subRange.EndOffset - previousEndOffset);
-            }
 
             // re-create the sub-range so we can delete it
             subRange = new Range((absPlaceHolderIndex + pValue.Length), (absPlaceHolderIndex
@@ -702,15 +692,26 @@ namespace NPOI.HWPF.UserModel
         public CharacterRun GetCharacterRun(int index)
         {
             InitCharacterRuns();
+
+            if (index + _charStart >= _charEnd)
+                throw new IndexOutOfRangeException("CHPX #" + index + " ("
+                        + (index + _charStart) + ") not in range [" + _charStart
+                        + "; " + _charEnd + ")");
+
             CHPX chpx = _characters[index + _charStart];
 
             if (chpx == null)
             {
                 return null;
             }
-
-            int[] point = FindRange(_paragraphs, _parStart, Math.Max(chpx.Start, _start), chpx
-                    .End);
+            //        short istd;
+            //if ( this is Paragraph )
+            //{
+            //    istd = ((Paragraph) this)._istd;
+            //}
+            //else
+            //{
+            int[] point = FindRange(_paragraphs, Math.Max(chpx.Start, _start), Math.Min(chpx.End, _end));
             PAPX papx = _paragraphs[point[0]];
             short istd = papx.GetIstd();
 
@@ -804,35 +805,43 @@ namespace NPOI.HWPF.UserModel
             }
 
             r.InitAll();
-            int tableEnd = r._parEnd;
+            int tableLevel = paragraph.GetTableLevel();
+            int tableEndInclusive = r._parStart;
 
-            if (r._parStart != 0 && GetParagraph(r._parStart - 1).IsInTable()
-                    && GetParagraph(r._parStart - 1)._sectionEnd >= r._sectionStart)
+            if (r._parStart != 0)
             {
-                throw new ArgumentException("This paragraph is not the first one in the table");
+                 Paragraph previous = new Paragraph(
+                    _paragraphs[r._parStart - 1], this );
+                if( previous.IsInTable()
+                    && previous.GetTableLevel()==tableLevel
+                    && previous._sectionEnd >= r._sectionStart)
+                        throw new ArgumentException("This paragraph is not the first one in the table");
             }
 
+            Range overallRange = _doc.GetOverallRange();
             int limit = _paragraphs.Count;
-            for (; tableEnd < limit; tableEnd++)
+            for (; tableEndInclusive < limit; tableEndInclusive++)
             {
-                if (!GetParagraph(tableEnd).IsInTable())
-                {
+                Paragraph next = new Paragraph(
+                    _paragraphs[tableEndInclusive + 1], overallRange);
+                if (!next.IsInTable() || next.GetTableLevel() < tableLevel)
                     break;
-                }
             }
 
             InitAll();
-            if (tableEnd > _parEnd)
+            if (tableEndInclusive > _parEnd)
             {
                 throw new IndexOutOfRangeException(
                         "The table's bounds fall outside of this Range");
             }
-            if (tableEnd < 0)
+            if (tableEndInclusive < 0)
             {
                 throw new IndexOutOfRangeException(
                         "The table's end is negative, which isn't allowed!");
             }
-            return new Table(r._parStart, tableEnd, r._doc.GetRange(), paragraph.GetTableLevel());
+            int endOffsetExclusive = _paragraphs[tableEndInclusive].End;
+
+            return new Table(paragraph.StartOffset, endOffsetExclusive, this, paragraph.GetTableLevel());
         }
 
         /**
@@ -852,7 +861,7 @@ namespace NPOI.HWPF.UserModel
         {
             if (!_parRangeFound)
             {
-                int[] point = FindRange(_paragraphs, _parStart, _start, _end);
+                int[] point = FindRange<PAPX>(_paragraphs, _start, _end);
                 _parStart = point[0];
                 _parEnd = point[1];
                 _parRangeFound = true;
@@ -866,7 +875,7 @@ namespace NPOI.HWPF.UserModel
         {
             if (!_charRangeFound)
             {
-                int[] point = FindRange(_characters, _charStart, _start, _end);
+                int[] point = FindRange<CHPX>(_characters, _start, _end);
                 _charStart = point[0];
                 _charEnd = point[1];
                 _charRangeFound = true;
@@ -882,7 +891,7 @@ namespace NPOI.HWPF.UserModel
         {
             get
             {
-                return _text.Substring(_start, _end-_start);
+                return _text.Substring(_start, _end - _start);
             }
         }
 
@@ -893,7 +902,7 @@ namespace NPOI.HWPF.UserModel
         {
             if (!_sectionRangeFound)
             {
-                int[] point = FindRange(_sections, _sectionStart, _start, _end);
+                int[] point = FindRange<SEPX>(_sections, _start, _end);
                 _sectionStart = point[0];
                 _sectionEnd = point[1];
                 _sectionRangeFound = true;
@@ -914,35 +923,23 @@ namespace NPOI.HWPF.UserModel
          * @return An int array of length 2. The first int is the start index and
          *         the second int is the end index.
          */
-        private int[] FindRange<T>(List<T> rpl, int min, int start, int end) where T : PropertyNode
+        private int[] FindRange<T>(List<T> rpl, int start, int end) where T : PropertyNode
         {
-            int x = min;
-            PropertyNode node = (PropertyNode)rpl[x];
+            int startIndex = BinarySearchStart(rpl, start);
+            while (startIndex > 0 && rpl[startIndex - 1].Start >= start)
+                startIndex--;
 
-            while (node == null || (node.End <= start && x < rpl.Count - 1))
-            {
-                x++;
-                node = rpl[x];
-            }
+            int endIndex = BinarySearchEnd(rpl, startIndex, end);
+            while (endIndex < rpl.Count - 1
+                    && rpl[endIndex + 1].End <= end)
+                endIndex--;
 
-            if (node.Start > end)
-            {
-                return new int[] { 0, 0 };
-            }
+            if (startIndex < 0 || startIndex >= rpl.Count
+                    || startIndex > endIndex || endIndex < 0
+                    || endIndex >= rpl.Count)
+                throw new Exception();
 
-            if (node.End <= start)
-            {
-                return new int[] { rpl.Count, rpl.Count };
-            }
-
-            int y = x;
-            node = rpl[y];
-            while (node == null || (node.End < end && y < rpl.Count - 1))
-            {
-                y++;
-                node = rpl[y];
-            }
-            return new int[] { x, y + 1 };
+            return new int[] { startIndex, endIndex + 1 };
         }
 
         /**
@@ -1046,6 +1043,67 @@ namespace NPOI.HWPF.UserModel
             }
         }
 
+        private static int BinarySearchStart<T>(List<T> rpl,
+            int start) where T : PropertyNode
+        {
+            if (rpl[0].Start >= start)
+                return 0;
+
+            int low = 0;
+            int high = rpl.Count - 1;
+
+            while (low <= high)
+            {
+                int mid = (low + high) >> 1;
+                PropertyNode node = rpl[mid];
+
+                if (node.Start < start)
+                {
+                    low = mid + 1;
+                }
+                else if (node.Start > start)
+                {
+                    high = mid - 1;
+                }
+                else
+                {
+                    return mid;
+                }
+            }
+            return low - 1;
+        }
+
+        private static int BinarySearchEnd<T>(List<T> rpl,
+                int foundStart, int end) where T : PropertyNode
+        {
+            if (rpl[rpl.Count - 1].End <= end)
+                return rpl.Count - 1;
+
+            int low = foundStart;
+            int high = rpl.Count - 1;
+
+            while (low <= high)
+            {
+                int mid = (low + high) >> 1;
+                PropertyNode node = rpl[mid];
+
+                if (node.End < end)
+                {
+                    low = mid + 1;
+                }
+                else if (node.End > end)
+                {
+                    high = mid - 1;
+                }
+                else
+                {
+                    return mid;
+                }
+            }
+            return low;
+        }
+
+
         public int StartOffset
         {
             get
@@ -1061,7 +1119,6 @@ namespace NPOI.HWPF.UserModel
                 return _end;
             }
         }
-
         internal HWPFDocumentCore GetDocument()
         {
             return _doc;
@@ -1074,5 +1131,3 @@ namespace NPOI.HWPF.UserModel
         }
     }
 }
-
-

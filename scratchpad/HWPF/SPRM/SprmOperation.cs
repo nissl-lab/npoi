@@ -38,8 +38,11 @@ namespace NPOI.HWPF.SPRM
         static private short LONG_SPRM_TABLE = unchecked((short)0xd608);
         static private short LONG_SPRM_PARAGRAPH = unchecked((short)0xc615);
 
-        static public int PAP_TYPE = 1;
-        static public int TAP_TYPE = 5;
+        public const int TYPE_PAP = 1;
+        public const int TYPE_CHP = 2;
+        public const int TYPE_PIC = 3;
+        public const int TYPE_SEP = 4;
+        public const int TYPE_TAP = 5;
 
         private int _type;
         private int _operation;

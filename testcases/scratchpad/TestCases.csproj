@@ -57,11 +57,13 @@
     <Compile Include="HWPF\HWPFTestDataSamples.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="HWPF\Model\TestBookmarksTables.cs" />
     <Compile Include="HWPF\Model\TestCHPBinTable.cs" />
     <Compile Include="HWPF\Model\TestDocumentProperties.cs" />
     <Compile Include="HWPF\Model\TestFileInformationBlock.cs" />
     <Compile Include="HWPF\Model\TestFontTable.cs" />
     <Compile Include="HWPF\Model\TestListTables.cs" />
+    <Compile Include="HWPF\Model\TestNotesTables.cs" />
     <Compile Include="HWPF\Model\TestPAPBinTable.cs" />
     <Compile Include="HWPF\Model\TestPlexOfCps.cs" />
     <Compile Include="HWPF\Model\TestRevisionMarkAuthorTable.cs">
@@ -106,6 +108,9 @@
       <Project>{F040162E-F6F3-4B09-809B-3095A07A6687}</Project>
       <Name>HWPF</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="HWPF\Converter\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

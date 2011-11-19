@@ -36,7 +36,7 @@ namespace NPOI.HWPF.UserModel
         /**
          * @return count of {@link Bookmark}s in document
          */
-        int GetBookmarksCount();
+        int Count { get; }
 
         /**
          * @return {@link Map} of bookmarks started in specified range, where key is

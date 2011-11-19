@@ -604,6 +604,28 @@ namespace NPOI.HWPF.Model
             return _fieldHandler.GetFieldSize(FIBFieldHandler.PLCFFLDMOM);
         }
 
+
+        public int GetFSPAPlcfOffset(FSPADocumentPart part)
+        {
+            return _fieldHandler.GetFieldOffset(part.GetFibFieldsField());
+        }
+
+        public int GetFSPAPlcfLength(FSPADocumentPart part)
+        {
+            return _fieldHandler.GetFieldSize(part.GetFibFieldsField());
+        }
+
+        public void SetFSPAPlcfOffset(FSPADocumentPart part, int offset)
+        {
+            _fieldHandler.SetFieldOffset(part.GetFibFieldsField(), offset);
+        }
+
+        public void SetFSPAPlcfLength(FSPADocumentPart part, int length)
+        {
+            _fieldHandler.SetFieldSize(part.GetFibFieldsField(), length);
+        }
+
+        [Obsolete]
         public int GetFcPlcspaMom()
         {
             return _fieldHandler.GetFieldOffset(FIBFieldHandler.PLCSPAMOM);

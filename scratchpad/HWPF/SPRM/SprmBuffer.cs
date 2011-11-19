@@ -182,6 +182,12 @@ namespace NPOI.HWPF.SPRM
             EnsureCapacity(grpprl.Length);
             System.Array.Copy(grpprl, 0, _buf, _offset, grpprl.Length);
         }
+        public void Append(byte[] grpprl, int offset)
+        {
+            EnsureCapacity(grpprl.Length - offset);
+            System.Array.Copy(grpprl, offset, _buf, _offset, grpprl.Length - offset);
+            _offset += grpprl.Length - offset;
+        }
 
         public Object Clone()
         {

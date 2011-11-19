@@ -21,6 +21,7 @@ namespace NPOI.HWPF.Model
     using System.Collections.Generic;
     using NPOI.Util;
     using System;
+    using NPOI.HWPF.SPRM;
 /**
  * Represents a CHP fkp. The style properties for paragraph and character Runs
  * are stored in fkps. There are PAP fkps for paragraph properties and CHP fkps
@@ -54,23 +55,30 @@ namespace NPOI.HWPF.Model
          * read from a Word file).
          */
         public CHPFormattedDiskPage(byte[] documentStream, int offset, int fcMin, TextPieceTable tpt)
+            : this( documentStream, offset, tpt )
+        {
+        }
+
+
+                /**
+     * This constructs a CHPFormattedDiskPage from a raw fkp (512 byte array
+     * read from a Word file).
+     */
+        public CHPFormattedDiskPage(byte[] documentStream, int offset,
+                CharIndexTranslator translator)
             : base(documentStream, offset)
         {
-
-
             for (int x = 0; x < _crun; x++)
             {
-                int startAt = GetStart(x);
-                int endAt = GetEnd(x);
+                int bytesStartAt = GetStart(x);
+                int bytesEndAt = GetEnd(x);
 
-                if (!tpt.IsIndexInTable(startAt) && !tpt.IsIndexInTable(endAt))
-                {
-                    _chpxList.Add(null);
-                }
-                else
-                {
-                    _chpxList.Add(new CHPX(startAt, endAt, tpt, GetGrpprl(x)));
-                }
+                int charStartAt = translator.GetCharIndex(bytesStartAt);
+                int charEndAt = translator.GetCharIndex(bytesEndAt, charStartAt);
+
+                CHPX chpx = new CHPX(charStartAt, charEndAt, new SprmBuffer(
+                    GetGrpprl(x), 0));
+                _chpxList.Add(chpx);
             }
         }
 

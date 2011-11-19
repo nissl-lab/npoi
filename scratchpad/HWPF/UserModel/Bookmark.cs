@@ -25,13 +25,11 @@ namespace NPOI.HWPF.UserModel
      */
     public interface Bookmark
     {
-        int GetEnd();
+        int End { get; }
 
-        String GetName();
+        String Name{ get; set; }
 
-        int GetStart();
-
-        void SetName(String name);
+        int Start { get;  }
     }
 
 

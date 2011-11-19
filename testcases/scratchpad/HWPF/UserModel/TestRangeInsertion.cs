@@ -96,16 +96,16 @@ namespace TestCases.HWPF.UserModel
 
             HWPFDocument daDoc = HWPFTestDataSamples.OpenSampleFile(illustrativeDocFile);
 
-            if (false)
-            { // TODO - delete or resurrect this code
-                Range range1 = daDoc.GetRange();
-                Section section1 = range1.GetSection(0);
-                Paragraph para1 = section1.GetParagraph(2);
-                String text1 = para1.GetCharacterRun(0).Text + para1.GetCharacterRun(1).Text +
-                para1.GetCharacterRun(2).Text;
+            //if (false)
+            //{ // TODO - delete or resurrect this code
+            //    Range range1 = daDoc.GetRange();
+            //    Section section1 = range1.GetSection(0);
+            //    Paragraph para1 = section1.GetParagraph(2);
+            //    String text1 = para1.GetCharacterRun(0).Text + para1.GetCharacterRun(1).Text +
+            //    para1.GetCharacterRun(2).Text;
 
-                Console.WriteLine(text1);
-            }
+            //    Console.WriteLine(text1);
+            //}
 
             Range range = new Range(insertionPoint, (insertionPoint + 2), daDoc);
             range.InsertBefore(textToInsert);

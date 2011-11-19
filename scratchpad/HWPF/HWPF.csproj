@@ -41,10 +41,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Iesi.Collections, Version=1.0.1.0, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\solution\Lib\Iesi.Collections.dll</HintPath>
-    </Reference>
     <Reference Include="Ionic.Zip, Version=1.9.1.5, Culture=neutral, PublicKeyToken=edbe51ad942a3f5c, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\solution\Lib\Ionic.Zip.dll</HintPath>
@@ -54,19 +50,21 @@
       <HintPath>..\..\solution\Lib\NPOI.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.configuration" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Converter\AbstractWordConverter.cs" />
-    <Compile Include="Converter\AbstractWordUtils.cs" />
-    <Compile Include="Converter\DefaultFontReplacer.cs" />
+    <Compile Include="Converter\AbstractWordUtils.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Converter\DefaultFontReplacer.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Converter\HtmlDocumentFacade.cs" />
     <Compile Include="Converter\FontReplacer.cs" />
     <Compile Include="Converter\NumberFormatter.cs" />
     <Compile Include="Converter\PicturesManager.cs" />
-    <Compile Include="Converter\WordToHtmlConverter.cs" />
-    <Compile Include="Converter\WordToHtmlUtils.cs" />
     <Compile Include="Extractor\Word6Extractor.cs" />
     <Compile Include="Extractor\WordExtractor.cs" />
     <Compile Include="HWPFDocument.cs" />
@@ -81,6 +79,8 @@
     <Compile Include="Model\CHPBinTable.cs" />
     <Compile Include="Model\CHPFormattedDiskPage.cs" />
     <Compile Include="Model\CHPX.cs" />
+    <Compile Include="Model\Class1.cs" />
+    <Compile Include="Model\FSPADocumentPart.cs" />
     <Compile Include="Model\ComplexFileTable.cs" />
     <Compile Include="Model\CPSplitCalculator.cs" />
     <Compile Include="Model\DocumentProperties.cs" />
@@ -99,7 +99,6 @@
     <Compile Include="Model\FootnoteReferenceDescriptor.cs" />
     <Compile Include="Model\FormattedDiskPage.cs" />
     <Compile Include="Model\FSPA.cs" />
-    <Compile Include="Model\FSPADocumentPart.cs" />
     <Compile Include="Model\FSPATable.cs" />
     <Compile Include="Model\GenericPropertyNode.cs">
       <SubType>Code</SubType>
@@ -124,7 +123,6 @@
     <Compile Include="Model\PAPFormattedDiskPage.cs" />
     <Compile Include="Model\PAPX.cs" />
     <Compile Include="Model\ParagraphHeight.cs" />
-    <Compile Include="Model\PictureDescriptor.cs" />
     <Compile Include="Model\PicturesTable.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -133,6 +131,7 @@
     </Compile>
     <Compile Include="Model\PlexOfCps.cs" />
     <Compile Include="Model\PlexOfField.cs" />
+    <Compile Include="Model\PropertyModifier.cs" />
     <Compile Include="Model\PropertyNode.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -167,6 +166,9 @@
     </Compile>
     <Compile Include="Model\Types\FLDAbstractType.cs" />
     <Compile Include="Model\Types\FRDAbstractType.cs" />
+    <Compile Include="Model\Types\FSPAAbstractType.cs" />
+    <Compile Include="Model\Types\HRESIAbstractType.cs" />
+    <Compile Include="Model\Types\LFOAbstractType.cs" />
     <Compile Include="Model\Types\PAPAbstractType.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -179,6 +181,7 @@
     <Compile Include="Model\Types\TCAbstractType.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Model\Types\TLPAbstractType.cs" />
     <Compile Include="Model\UnhandledDataStructure.cs" />
     <Compile Include="Model\UPX.cs">
       <SubType>Code</SubType>
@@ -230,7 +233,6 @@
     <Compile Include="UserModel\DocumentPosition.cs" />
     <Compile Include="UserModel\DropCapSpecifier.cs" />
     <Compile Include="UserModel\Field.cs" />
-    <Compile Include="UserModel\Fields.cs" />
     <Compile Include="UserModel\HeaderStories.cs" />
     <Compile Include="UserModel\HWPFList.cs" />
     <Compile Include="UserModel\LineSpacingDescriptor.cs" />
@@ -241,9 +243,7 @@
     <Compile Include="UserModel\ObjectsPool.cs" />
     <Compile Include="UserModel\OfficeDrawing.cs" />
     <Compile Include="UserModel\OfficeDrawings.cs" />
-    <Compile Include="UserModel\OfficeDrawingsImpl.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="UserModel\OfficeDrawingsImpl.cs" />
     <Compile Include="UserModel\Paragraph.cs" />
     <Compile Include="UserModel\ParagraphProperties.cs" />
     <Compile Include="UserModel\Picture.cs" />
@@ -256,6 +256,7 @@
     <Compile Include="UserModel\ShadingDescriptor.cs" />
     <Compile Include="UserModel\Shape.cs" />
     <Compile Include="UserModel\Table.cs" />
+    <Compile Include="UserModel\TableAutoformatLookSpecifier.cs" />
     <Compile Include="UserModel\TableCell.cs" />
     <Compile Include="UserModel\TableCellDescriptor.cs" />
     <Compile Include="UserModel\TableIterator.cs" />

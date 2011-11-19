@@ -22,6 +22,7 @@ namespace NPOI.HWPF.Model
     using System.Collections.Generic;
     using NPOI.Util;
     using System;
+    using NPOI.HWPF.Model.IO;
     /**
      * Represents a PAP FKP. The style properties for paragraph and character Runs
      * are stored in fkps. There are PAP fkps for paragraph properties and CHP fkps
@@ -46,28 +47,43 @@ namespace NPOI.HWPF.Model
 
         private List<PAPX> _papxList = new List<PAPX>();
         private List<PAPX> _overFlow;
-        private byte[] _dataStream;
 
 
-        public PAPFormattedDiskPage(byte[] dataStream)
+        public PAPFormattedDiskPage(byte[] dataStream):this()
         {
-            _dataStream = dataStream;
+            
         }
 
+        public PAPFormattedDiskPage()
+        {
+        }
         /**
          * Creates a PAPFormattedDiskPage from a 512 byte array
          */
+        [Obsolete]
         public PAPFormattedDiskPage(byte[] documentStream, byte[] dataStream, int offset, int fcMin, TextPieceTable tpt)
-            : base(documentStream, offset)
+            : this(documentStream, dataStream, offset, tpt )
+        {
+        }
+        /**
+ * Creates a PAPFormattedDiskPage from a 512 byte array
+ */
+        public PAPFormattedDiskPage(byte[] documentStream, byte[] dataStream,
+                int offset, CharIndexTranslator translator)
+            :base(documentStream, offset)
         {
             for (int x = 0; x < _crun; x++)
             {
-                int startAt = GetStart(x);
-                int endAt = GetEnd(x);
-                _papxList.Add(new PAPX(startAt, endAt, tpt, GetGrpprl(x), GetParagraphHeight(x), dataStream));
+                int bytesStartAt = GetStart(x);
+                int bytesEndAt = GetEnd(x);
+
+                int charStartAt = translator.GetCharIndex(bytesStartAt);
+                int charEndAt = translator.GetCharIndex(bytesEndAt, charStartAt);
+
+                PAPX papx = new PAPX(charStartAt, charEndAt, GetGrpprl(x), GetParagraphHeight(x), dataStream);
+                _papxList.Add(papx);
             }
             _fkp = null;
-            _dataStream = dataStream;
         }
 
         /**
@@ -138,7 +154,8 @@ namespace NPOI.HWPF.Model
          * @param fcMin The file offset in the main stream where text begins.
          * @return A byte array representing this data structure.
          */
-        internal byte[] ToArray(int fcMin)
+        internal byte[] ToByteArray(HWPFStream dataStream,
+            CharIndexTranslator translator)
         {
             byte[] buf = new byte[512];
             int size = _papxList.Count;
@@ -164,23 +181,23 @@ namespace NPOI.HWPF.Model
 
                 // check to see if we have enough room for an FC, a BX, and the grpprl
                 // and the 1 byte size of the grpprl.
-                int Addition = 0;
+                int addition = 0;
                 if (!Arrays.Equals(grpprl, lastGrpprl))
                 {
-                    Addition = (FC_SIZE + BX_SIZE + grpprlLength + 1);
+                    addition = (FC_SIZE + BX_SIZE + grpprlLength + 1);
                 }
                 else
                 {
-                    Addition = (FC_SIZE + BX_SIZE);
+                    addition = (FC_SIZE + BX_SIZE);
                 }
 
-                totalSize += Addition;
+                totalSize += addition;
 
                 // if size is uneven we will have to add one so the first grpprl falls
                 // on a word boundary
                 if (totalSize > 511 + (index % 2))
                 {
-                    totalSize -= Addition;
+                    totalSize -= addition;
                     break;
                 }
 
@@ -220,6 +237,7 @@ namespace NPOI.HWPF.Model
                 // is grpprl huge?
                 if (grpprl.Length > 488)
                 {
+                    /*
                     // if so do we have storage at GetHugeGrpprloffset()
                     int hugeGrpprlOffset = papx.GetHugeGrpprlOffset();
                     if (hugeGrpprlOffset == -1) // then we have no storage...
@@ -237,18 +255,25 @@ namespace NPOI.HWPF.Model
                         throw new InvalidOperationException(
                             "This Paragraph's dataStream storage is too small.");
                     }
+                   
 
                     // store grpprl at hugeGrpprlOffset
                     Array.Copy(grpprl, 2, _dataStream, hugeGrpprlOffset + 2,
                                      grpprl.Length - 2); // grpprl.Length-2 because we don't store the istd
                     LittleEndian.PutUShort(_dataStream, hugeGrpprlOffset, grpprl.Length - 2);
+                      */
+
+                    byte[] hugePapx = new byte[grpprl.Length - 2];
+                    System.Array.Copy(grpprl, 2, hugePapx, 0, grpprl.Length - 2);
+                    int dataStreamOffset = dataStream.Offset;
+                    dataStream.Write(hugePapx);
 
                     // grpprl = grpprl Containing only a sprmPHugePapx2
                     int istd = LittleEndian.GetUShort(grpprl, 0);
                     grpprl = new byte[8];
                     LittleEndian.PutUShort(grpprl, 0, istd);
                     LittleEndian.PutUShort(grpprl, 2, 0x6646); // sprmPHugePapx2
-                    LittleEndian.PutInt(grpprl, 4, hugeGrpprlOffset);
+                    LittleEndian.PutInt(grpprl, 4, dataStreamOffset);
                 }
 
                 bool same = Arrays.Equals(lastGrpprl, grpprl);
@@ -257,7 +282,7 @@ namespace NPOI.HWPF.Model
                     grpprlOffset -= (grpprl.Length + (2 - grpprl.Length % 2));
                     grpprlOffset -= (grpprlOffset % 2);
                 }
-                LittleEndian.PutInt(buf, fcOffset, papx.StartBytes + fcMin);
+                LittleEndian.PutInt(buf, fcOffset, translator.GetByteIndex(papx.Start));
                 buf[bxOffset] = (byte)(grpprlOffset / 2);
                 Array.Copy(phe, 0, buf, bxOffset + 1, phe.Length);
 
@@ -285,7 +310,7 @@ namespace NPOI.HWPF.Model
 
             }
 
-            LittleEndian.PutInt(buf, fcOffset, papx.EndBytes + fcMin);
+            LittleEndian.PutInt(buf, fcOffset, translator.GetByteIndex(papx.End));
             return buf;
         }
 

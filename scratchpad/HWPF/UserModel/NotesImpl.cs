@@ -44,10 +44,10 @@ namespace NPOI.HWPF.UserModel
         {
             UpdateAnchorToIndexMap();
 
+            if(!anchorToIndexMap.ContainsKey(anchorPosition))
+                return -1; 
             int index = anchorToIndexMap
-                    [anchorPosition];
-            if (index == null)
-                return -1;
+                    [anchorPosition];               
 
             return index;
         }

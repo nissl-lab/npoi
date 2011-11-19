@@ -181,7 +181,7 @@ namespace NPOI.HWPF.Model
         /**
          * Returns the Length, in characters
          */
-        public int CharacterLength
+        public virtual int CharacterLength
         {
             get
             {
@@ -191,7 +191,7 @@ namespace NPOI.HWPF.Model
         /**
          * Returns the Length, in bytes
          */
-        public int BytesLength
+        public virtual int BytesLength
         {
             get
             {
@@ -214,7 +214,7 @@ namespace NPOI.HWPF.Model
         /**
          * Returns the character position we start at.
          */
-        public int GetCP()
+        public virtual int GetCP()
         {
             return Start;
         }

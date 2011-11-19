@@ -19,7 +19,7 @@ using NPOI.HWPF.Model;
 using System.Collections.Generic;
 using NPOI.HWPF.UserModel;
 using NPOI.Util;
-namespace NPOI.HWPF.Usermodel
+namespace NPOI.HWPF.UserModel
 {
 
     /**
@@ -55,7 +55,7 @@ namespace NPOI.HWPF.Usermodel
 
         public List<Bookmark> GetBookmarksAt(int startCp)
         {
-            updateSortedDescriptors();
+            UpdateSortedDescriptors();
 
             List<GenericPropertyNode> nodes = sortedDescriptors[startCp];
             if (nodes == null || nodes.Count == 0)
@@ -69,15 +69,18 @@ namespace NPOI.HWPF.Usermodel
             return result;
         }
 
-        public int GetBookmarksCount()
+        public int Count
         {
-            return bookmarksTables.GetDescriptorsFirstCount();
+            get
+            {
+                return bookmarksTables.GetDescriptorsFirstCount();
+            }
         }
 
         public Dictionary<int, List<Bookmark>> GetBookmarksStartedBetween(
                 int startInclusive, int endExclusive)
         {
-            updateSortedDescriptors();
+            UpdateSortedDescriptors();
 
             int startLookupIndex = Array.BinarySearch(this.sortedStartPositions,
                     startInclusive);
@@ -105,7 +108,7 @@ namespace NPOI.HWPF.Usermodel
             return result;
         }
 
-        private void updateSortedDescriptors()
+        private void UpdateSortedDescriptors()
         {
             if (sortedDescriptors != null)
                 return;
@@ -141,7 +144,7 @@ namespace NPOI.HWPF.Usermodel
             this.sortedStartPositions = indices;
         }
 
-        private class BookmarkImpl : Bookmark
+        internal class BookmarkImpl : Bookmark
         {
             private GenericPropertyNode first;
             private BookmarksTables bookmarksTables;
@@ -171,54 +174,61 @@ namespace NPOI.HWPF.Usermodel
                 return true;
             }
 
-            public int GetEnd()
+            public int End
             {
-                int currentIndex = bookmarksTables.GetDescriptorFirstIndex(first);
-                try
+                get
                 {
-                    GenericPropertyNode descriptorLim = bookmarksTables
-                            .GetDescriptorLim(currentIndex);
-                    return descriptorLim.Start;
-                }
-                catch (IndexOutOfRangeException)
-                {
-                    return first.End;
+                    int currentIndex = bookmarksTables.GetDescriptorFirstIndex(first);
+                    try
+                    {
+                        GenericPropertyNode descriptorLim = bookmarksTables
+                                .GetDescriptorLim(currentIndex);
+                        return descriptorLim.Start;
+                    }
+                    catch (IndexOutOfRangeException)
+                    {
+                        return first.End;
+                    }
                 }
             }
 
-            public String GetName()
+            public String Name
             {
-                int currentIndex = bookmarksTables.GetDescriptorFirstIndex(first);
-                try
+                get
                 {
-                    return bookmarksTables.GetName(currentIndex);
+                    int currentIndex = bookmarksTables.GetDescriptorFirstIndex(first);
+                    try
+                    {
+                        return bookmarksTables.GetName(currentIndex);
+                    }
+                    catch (IndexOutOfRangeException)
+                    {
+                        return "";
+                    }
                 }
-                catch (IndexOutOfRangeException)
+                set 
                 {
-                    return "";
+                    int currentIndex = bookmarksTables.GetDescriptorFirstIndex(first);
+                    bookmarksTables.SetName(currentIndex, value);   
                 }
             }
 
-            public int GetStart()
+            public int Start
             {
-                return first.Start;
+                get
+                {
+                    return first.Start;
+                }
             }
 
             public override int GetHashCode()
             {
                 return 31 + (first == null ? 0 : first.GetHashCode());
             }
-
-            public void SetName(String name)
-            {
-                int currentIndex = bookmarksTables.GetDescriptorFirstIndex(first);
-                bookmarksTables.SetName(currentIndex, name);
-            }
-
             public override String ToString()
             {
-                return "Bookmark [" + GetStart() + "; " + GetEnd() + "): name: "
-                        + GetName();
+                return "Bookmark [" + Start + "; " + End + "): name: "
+                        + Name;
             }
 
         }

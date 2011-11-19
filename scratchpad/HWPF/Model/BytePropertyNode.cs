@@ -39,6 +39,11 @@ namespace NPOI.HWPF.Model
                 translator.GetCharIndex(fcStart),
                 translator.GetCharIndex(fcEnd, translator.GetCharIndex(fcStart)), buf)
         {
+
+            if (fcStart > fcEnd)
+                throw new ArgumentException("fcStart (" + fcStart
+                        + ") > fcEnd (" + fcEnd + ")");
+
             this.startBytes = fcStart;
             this.endBytes = fcEnd;           
         }
@@ -53,13 +58,7 @@ namespace NPOI.HWPF.Model
             this.startBytes = -1;
             this.endBytes = -1;
         }
-
-        private static int GenerateCp(int val, bool IsUnicode)
-        {
-            if (IsUnicode)
-                return val / 2;
-            return val;
-        }
+        [Obsolete]
         public int StartBytes
         {
             get
@@ -67,6 +66,7 @@ namespace NPOI.HWPF.Model
                 return startBytes;
             }
         }
+        [Obsolete]
         public int EndBytes
         {
             get

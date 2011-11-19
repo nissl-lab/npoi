@@ -221,6 +221,33 @@ namespace NPOI.HWPF.Model
             return false;
         }
 
+        public int GetByteIndex(int charPos)
+        {
+            int byteCount = 0;
+            foreach (TextPiece tp in _textPieces)
+            {
+                if (charPos >= tp.End)
+                {
+                    byteCount = tp.PieceDescriptor.FilePosition
+                            + (tp.End - tp.Start)
+                            * (tp.IsUnicode ? 2 : 1);
+
+                    if (charPos == tp.End)
+                        break;
+
+                    continue;
+                }
+                if (charPos < tp.End)
+                {
+                    int left = charPos - tp.Start;
+                    byteCount = tp.PieceDescriptor.FilePosition + left
+                            * (tp.IsUnicode ? 2 : 1);
+                    break;
+                }
+            }
+            return byteCount;
+        }
+
         public int GetCharIndex(int bytePos)
         {
             return GetCharIndex(bytePos, 0);
@@ -340,7 +367,7 @@ namespace NPOI.HWPF.Model
             return false;
         }
 
-        public string Text
+        public StringBuilder Text
         {
             get
             {
@@ -359,7 +386,7 @@ namespace NPOI.HWPF.Model
                     docText.Append(toAppend);
                 }
 
-                return docText.ToString();
+                return docText;
             }
         }
 

@@ -146,7 +146,7 @@ namespace TestCases.HWPF.Usermodel
 
             Assert.AreEqual("Times New Roman", c1.GetFontName()); // No Calibri
             Assert.AreEqual("Arial Black", c7.GetFontName());
-            Assert.AreEqual(22, c1.GetFontSize());
+            Assert.AreEqual(20, c1.GetFontSize());
             Assert.AreEqual(32, c7.GetFontSize());
 
             // This document has 15 styles

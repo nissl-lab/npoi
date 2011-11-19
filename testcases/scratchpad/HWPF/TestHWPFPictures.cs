@@ -137,7 +137,7 @@ public class TestHWPFPictures  {
 	 * Pending the missing files being uploaded to
 	 *  bug #44937
 	 */
-    [TestMethod]
+    //[TestMethod]
 	public void BROKENtestEscherDrawing() {
 		HWPFDocument docD = HWPFTestDataSamples.OpenSampleFile(docDFile);
 		List<Picture> allPictures = docD.GetPicturesTable().GetAllPictures();

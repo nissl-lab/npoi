@@ -28,6 +28,6 @@ namespace NPOI.HWPF.UserModel
     {
         OfficeDrawing GetOfficeDrawingAt(int characterPosition);
 
-        IList<OfficeDrawing> GetOfficeDrawings();
+        List<OfficeDrawing> GetOfficeDrawings();
     }
 }

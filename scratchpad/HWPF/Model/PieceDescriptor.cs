@@ -31,7 +31,7 @@ namespace NPOI.HWPF.Model
         private static BitField fPaphNil = BitFieldFactory.GetInstance(0x02);
         private static BitField fCopied = BitFieldFactory.GetInstance(0x04);
         int fc;
-        short prm;
+        PropertyModifier prm;
         bool unicode;
 
 
@@ -41,7 +41,7 @@ namespace NPOI.HWPF.Model
             offset += LittleEndianConstants.SHORT_SIZE;
             fc = LittleEndian.GetInt(buf, offset);
             offset += LittleEndianConstants.INT_SIZE;
-            prm = LittleEndian.GetShort(buf, offset);
+            prm = new PropertyModifier(LittleEndian.GetShort(buf, offset));
 
             // see if this piece uses unicode.
             if ((fc & 0x40000000) == 0)
@@ -93,11 +93,20 @@ namespace NPOI.HWPF.Model
             offset += LittleEndianConstants.SHORT_SIZE;
             LittleEndian.PutInt(buf, offset, tempFc);
             offset += LittleEndianConstants.INT_SIZE;
-            LittleEndian.PutShort(buf, offset, prm);
+            LittleEndian.PutShort(buf, offset, prm.GetValue());
 
             return buf;
 
         }
+
+        public PropertyModifier Prm
+        {
+            get
+            {
+                return prm;
+            }
+        }
+
 
         public static int SizeInBytes
         {

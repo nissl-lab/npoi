@@ -42,7 +42,7 @@ namespace NPOI.HWPF.SPRM
 
                 //TAPXs are actually PAPXs so we have to make sure we are only trying to
                 //uncompress the right type of sprm.
-                if (sprm.Type == SprmOperation.TAP_TYPE)
+                if (sprm.Type == SprmOperation.TYPE_TAP)
                 {
                     UncompressTAPOperation(newProperties, sprm);
                 }
@@ -77,7 +77,7 @@ namespace NPOI.HWPF.SPRM
                  * TAPXs are actually PAPXs so we have to make sure we are only
                  * trying to uncompress the right type of sprm.
                  */
-                if (sprm.Type == SprmOperation.TAP_TYPE)
+                if (sprm.Type == SprmOperation.TYPE_TAP)
                 {
                     try
                     {

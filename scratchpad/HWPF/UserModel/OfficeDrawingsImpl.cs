@@ -14,296 +14,296 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 ==================================================================== */
-namespace NPOI.HWPF.UserModel{
-
-    using System.IO;
-    using System;
-    using System.Collections.Generic;
-    using System.Text;
-using NPOI.HWPF.Model;
+using System.Collections.Generic;
 using NPOI.DDF;
+using NPOI.HWPF.Model;
 using System.Collections;
-
-public class OfficeDrawingsImpl : OfficeDrawings
+using System.Collections.ObjectModel;
+using System;
+namespace NPOI.HWPF.UserModel
 {
-    private EscherRecordHolder _escherRecordHolder;
-    private FSPATable _fspaTable;
-    private byte[] _mainStream;
 
-    public OfficeDrawingsImpl( FSPATable fspaTable,
-            EscherRecordHolder escherRecordHolder, byte[] mainStream )
+    public class OfficeDrawingsImpl : OfficeDrawings
     {
-        this._fspaTable = fspaTable;
-        this._escherRecordHolder = escherRecordHolder;
-        this._mainStream = mainStream;
-    }
+        private EscherRecordHolder _escherRecordHolder;
+        private FSPATable _fspaTable;
+        private byte[] _mainStream;
 
-    private EscherBlipRecord GetBitmapRecord( int bitmapIndex )
-    {
-        List<EscherContainerRecord> bContainers = _escherRecordHolder
-                .GetBStoreContainers();
-        if ( bContainers == null || bContainers.Count != 1 )
-            return null;
-
-        EscherContainerRecord bContainer = bContainers[ 0 ];
-        //IList<EscherRecord> bitmapRecords = bContainer.ChildRecords;
-        IList bitmapRecords = bContainer.ChildRecords;
-
-        if ( bitmapRecords.Count < bitmapIndex )
-            return null;
-
-        EscherRecord imageRecord = bitmapRecords[ bitmapIndex - 1 ] as EscherRecord;
-
-        if ( imageRecord is EscherBlipRecord )
+        public OfficeDrawingsImpl(FSPATable fspaTable,
+                EscherRecordHolder escherRecordHolder, byte[] mainStream)
         {
-            return (EscherBlipRecord) imageRecord;
+            this._fspaTable = fspaTable;
+            this._escherRecordHolder = escherRecordHolder;
+            this._mainStream = mainStream;
         }
 
-        if ( imageRecord is EscherBSERecord )
+        private EscherBlipRecord GetBitmapRecord(int bitmapIndex)
         {
-            EscherBSERecord bseRecord = (EscherBSERecord) imageRecord;
+            List<EscherContainerRecord> bContainers = _escherRecordHolder
+                    .GetBStoreContainers();
+            if (bContainers == null || bContainers.Count != 1)
+                return null;
 
-            EscherBlipRecord blip = bseRecord.BlipRecord;
-            if ( blip != null )
+            EscherContainerRecord bContainer = bContainers[0];
+            IList bitmapRecords = bContainer.ChildRecords;
+
+            if (bitmapRecords.Count < bitmapIndex)
+                return null;
+
+            EscherRecord imageRecord = (EscherRecord)bitmapRecords[bitmapIndex - 1];
+
+            if (imageRecord is EscherBlipRecord)
             {
-                return blip;
+                return (EscherBlipRecord)imageRecord;
             }
 
-            if ( bseRecord.Offset > 0 )
+            if (imageRecord is EscherBSERecord)
             {
-                /*
-                 * Blip stored in delay stream, which in a word doc, is the main
-                 * stream
-                 */
-                EscherRecordFactory recordFactory = new DefaultEscherRecordFactory();
-                EscherRecord record = recordFactory.CreateRecord( _mainStream,
-                        bseRecord.Offset );
+                EscherBSERecord bseRecord = (EscherBSERecord)imageRecord;
 
-                if ( record is EscherBlipRecord )
+                EscherBlipRecord blip = bseRecord.BlipRecord;
+                if (blip != null)
                 {
-                    record.FillFields( _mainStream, bseRecord.Offset,
-                            recordFactory );
-                    return (EscherBlipRecord) record;
+                    return blip;
+                }
+
+                if (bseRecord.Offset > 0)
+                {
+                    /*
+                     * Blip stored in delay stream, which in a word doc, is the main
+                     * stream
+                     */
+                    EscherRecordFactory recordFactory = new DefaultEscherRecordFactory();
+                    EscherRecord record = recordFactory.CreateRecord(_mainStream,
+                            bseRecord.Offset);
+
+                    if (record is EscherBlipRecord)
+                    {
+                        record.FillFields(_mainStream, bseRecord.Offset,
+                                recordFactory);
+                        return (EscherBlipRecord)record;
+                    }
                 }
             }
-        }
 
-        return null;
-    }
-
-    private EscherContainerRecord GetEscherShapeRecordContainer(
-            int shapeId )
-    {
-        foreach ( EscherContainerRecord spContainer in _escherRecordHolder  .GetSpContainers() )
-        {
-            unchecked{
-            EscherSpRecord escherSpRecord = spContainer.GetChildById( (short) 0xF00A );
-        
-            if ( escherSpRecord != null                    && escherSpRecord.ShapeId == shapeId )
-                return spContainer;
-            }
-        }
-
-        return null;
-    }
-
-    public class OfficeDrawingImpl : OfficeDrawing
-    {
-        private OfficeDrawingsImpl drawings;
-        private FSPA fspa;
-        public OfficeDrawingImpl(OfficeDrawingsImpl drawings, FSPA fspa)
-        {
-            this.drawings = drawings;
-            this.fspa = fspa;
-        }
-        public HorizontalPositioning GetHorizontalPositioning()
-        {
-            int value = GetTertiaryPropertyValue(EscherProperties.GROUPSHAPE__POSH, -1);
-
-            switch (value)
-            {
-                case 0:
-                    return HorizontalPositioning.ABSOLUTE;
-                case 1:
-                    return HorizontalPositioning.LEFT;
-                case 2:
-                    return HorizontalPositioning.CENTER;
-                case 3:
-                    return HorizontalPositioning.RIGHT;
-                case 4:
-                    return HorizontalPositioning.INSIDE;
-                case 5:
-                    return HorizontalPositioning.OUTSIDE;
-            }
-
-            return HorizontalPositioning.ABSOLUTE;
-        }
-
-        public HorizontalRelativeElement GetHorizontalRelative()
-        {
-            int value = GetTertiaryPropertyValue(
-                    EscherProperties.GROUPSHAPE__POSRELH, -1);
-
-            switch (value)
-            {
-                case 1:
-                    return HorizontalRelativeElement.MARGIN;
-                case 2:
-                    return HorizontalRelativeElement.PAGE;
-                case 3:
-                    return HorizontalRelativeElement.TEXT;
-                case 4:
-                    return HorizontalRelativeElement.CHAR;
-            }
-
-            return HorizontalRelativeElement.TEXT;
-        }
-
-        public byte[] GetPictureData()
-        {
-            EscherContainerRecord shapeDescription = drawings.GetEscherShapeRecordContainer(GetShapeId());
-            if (shapeDescription == null)
-                return null;
-
-            EscherOptRecord escherOptRecord = (shapeDescription.GetChildById(EscherOptRecord.RECORD_ID) as EscherRecord) as EscherOptRecord;
-            if (escherOptRecord == null)
-                return null;
-
-            EscherSimpleProperty escherProperty = escherOptRecord.Lookup(EscherProperties.BLIP__BLIPTODISPLAY) as EscherSimpleProperty;
-            if (escherProperty == null)
-                return null;
-
-            int bitmapIndex = escherProperty.PropertyValue;
-            EscherBlipRecord escherBlipRecord = drawings.GetBitmapRecord(bitmapIndex);
-            if (escherBlipRecord == null)
-                return null;
-
-            return escherBlipRecord.PictureData;
-        }
-
-        public int GetRectangleBottom()
-        {
-            return fspa.GetYaBottom();
-        }
-
-        public int GetRectangleLeft()
-        {
-            return fspa.GetXaLeft();
-        }
-
-        public int GetRectangleRight()
-        {
-            return fspa.GetXaRight();
-        }
-
-        public int GetRectangleTop()
-        {
-            return fspa.GetYaTop();
-        }
-
-        public int GetShapeId()
-        {
-            return fspa.GetSpid();
-        }
-
-        private int GetTertiaryPropertyValue(int propertyId,
-                int defaultValue)
-        {
-            EscherContainerRecord shapeDescription =drawings.GetEscherShapeRecordContainer(GetShapeId());
-            if (shapeDescription == null)
-                return defaultValue;
-
-            EscherTertiaryOptRecord escherTertiaryOptRecord = (shapeDescription.GetChildById(EscherTertiaryOptRecord.RECORD_ID) as EscherRecord) as EscherTertiaryOptRecord ;
-            if (escherTertiaryOptRecord == null)
-                return defaultValue;
-
-            EscherSimpleProperty escherProperty = escherTertiaryOptRecord .Lookup(propertyId) as EscherSimpleProperty;
-            if (escherProperty == null)
-                return defaultValue;
-            int value = escherProperty.PropertyValue;
-
-            return value;
-        }
-
-        public VerticalPositioning GetVerticalPositioning()
-        {
-            int value = GetTertiaryPropertyValue(
-                    EscherProperties.GROUPSHAPE__POSV, -1);
-
-            switch (value)
-            {
-                case 0:
-                    return VerticalPositioning.ABSOLUTE;
-                case 1:
-                    return VerticalPositioning.TOP;
-                case 2:
-                    return VerticalPositioning.CENTER;
-                case 3:
-                    return VerticalPositioning.BOTTOM;
-                case 4:
-                    return VerticalPositioning.INSIDE;
-                case 5:
-                    return VerticalPositioning.OUTSIDE;
-            }
-
-            return VerticalPositioning.ABSOLUTE;
-        }
-
-        public VerticalRelativeElement GetVerticalRelativeElement()
-        {
-            int value = GetTertiaryPropertyValue(
-                    EscherProperties.GROUPSHAPE__POSV, -1);
-
-            switch (value)
-            {
-                case 1:
-                    return VerticalRelativeElement.MARGIN;
-                case 2:
-                    return VerticalRelativeElement.PAGE;
-                case 3:
-                    return VerticalRelativeElement.TEXT;
-                case 4:
-                    return VerticalRelativeElement.LINE;
-            }
-
-            return VerticalRelativeElement.TEXT;
-        }
-
-        public override String ToString()
-        {
-            return "OfficeDrawingImpl: " + fspa.ToString();
-        }
-    }
-
-    private OfficeDrawing GetOfficeDrawing( FSPA fspa )
-    {
-        return new OfficeDrawingImpl(this, fspa);
-    }
-
-    public OfficeDrawing GetOfficeDrawingAt( int characterPosition )
-    {
-        FSPA fspa = _fspaTable.GetFspaFromCp( characterPosition );
-        if ( fspa == null )
             return null;
-
-        return GetOfficeDrawing( fspa );
-    }
-
-
-    #region OfficeDrawings ≥…‘±
-
-
-    public IList<OfficeDrawing> GetOfficeDrawings()
-    {
-        List<OfficeDrawing> result = new List<OfficeDrawing>();
-        foreach (FSPA fspa in _fspaTable.GetShapes())
-        {
-            result.Add(GetOfficeDrawing(fspa));
         }
-        return result;
+
+        private EscherContainerRecord GetEscherShapeRecordContainer(
+                int shapeId)
+        {
+            foreach (EscherContainerRecord spContainer in _escherRecordHolder
+                    .GetSpContainers())
+            {
+                EscherSpRecord escherSpRecord = spContainer
+                        .GetChildById(unchecked((short)0xF00A));
+                if (escherSpRecord != null
+                        && escherSpRecord.ShapeId == shapeId)
+                    return spContainer;
+            }
+
+            return null;
+        }
+
+        private OfficeDrawing GetOfficeDrawing(FSPA fspa)
+        {
+            return new OfficeDrawingImpl(this,fspa);
+        }
+
+        public OfficeDrawing GetOfficeDrawingAt(int characterPosition)
+        {
+            FSPA fspa = _fspaTable.GetFspaFromCp(characterPosition);
+            if (fspa == null)
+                return null;
+
+            return GetOfficeDrawing(fspa);
+        }
+
+        public List<OfficeDrawing> GetOfficeDrawings()
+        {
+            List<OfficeDrawing> result = new List<OfficeDrawing>();
+            foreach (FSPA fspa in _fspaTable.GetShapes())
+            {
+                result.Add(GetOfficeDrawing(fspa));
+            }
+            return result;
+        }
+
+        internal class OfficeDrawingImpl : OfficeDrawing
+        {
+            FSPA fspa;
+            OfficeDrawingsImpl od;
+            public OfficeDrawingImpl(OfficeDrawingsImpl od,FSPA fspa)
+            {
+                this.fspa = fspa;
+                this.od = od;
+            }
+
+            public HorizontalPositioning GetHorizontalPositioning()
+            {
+                int value = GetTertiaryPropertyValue(
+                        EscherProperties.GROUPSHAPE__POSH, -1);
+
+                switch (value)
+                {
+                    case 0:
+                        return HorizontalPositioning.ABSOLUTE;
+                    case 1:
+                        return HorizontalPositioning.LEFT;
+                    case 2:
+                        return HorizontalPositioning.CENTER;
+                    case 3:
+                        return HorizontalPositioning.RIGHT;
+                    case 4:
+                        return HorizontalPositioning.INSIDE;
+                    case 5:
+                        return HorizontalPositioning.OUTSIDE;
+                }
+
+                return HorizontalPositioning.ABSOLUTE;
+            }
+
+            public HorizontalRelativeElement GetHorizontalRelative()
+            {
+                int value = GetTertiaryPropertyValue(
+                        EscherProperties.GROUPSHAPE__POSRELH, -1);
+
+                switch (value)
+                {
+                    case 1:
+                        return HorizontalRelativeElement.MARGIN;
+                    case 2:
+                        return HorizontalRelativeElement.PAGE;
+                    case 3:
+                        return HorizontalRelativeElement.TEXT;
+                    case 4:
+                        return HorizontalRelativeElement.CHAR;
+                }
+
+                return HorizontalRelativeElement.TEXT;
+            }
+
+            public byte[] GetPictureData()
+            {
+                EscherContainerRecord shapeDescription = od.GetEscherShapeRecordContainer(GetShapeId());
+                if (shapeDescription == null)
+                    return null;
+
+                EscherRecord escherOptRecord = (EscherRecord)shapeDescription
+                        .GetChildById(EscherOptRecord.RECORD_ID);
+                if (escherOptRecord == null)
+                    return null;
+
+                EscherSimpleProperty escherProperty = (EscherSimpleProperty)((EscherOptRecord)escherOptRecord)
+                        .Lookup(EscherProperties.BLIP__BLIPTODISPLAY);
+                if (escherProperty == null)
+                    return null;
+
+                int bitmapIndex = escherProperty.PropertyValue;
+                EscherBlipRecord escherBlipRecord = od.GetBitmapRecord(bitmapIndex);
+                if (escherBlipRecord == null)
+                    return null;
+
+                return escherBlipRecord.PictureData;
+            }
+
+            public int GetRectangleBottom()
+            {
+                return fspa.GetYaBottom();
+            }
+
+            public int GetRectangleLeft()
+            {
+                return fspa.GetXaLeft();
+            }
+
+            public int GetRectangleRight()
+            {
+                return fspa.GetXaRight();
+            }
+
+            public int GetRectangleTop()
+            {
+                return fspa.GetYaTop();
+            }
+
+            public int GetShapeId()
+            {
+                return fspa.GetSpid();
+            }
+
+            private int GetTertiaryPropertyValue(int propertyId,
+                    int defaultValue)
+            {
+                EscherContainerRecord shapeDescription = od.GetEscherShapeRecordContainer(GetShapeId());
+                if (shapeDescription == null)
+                    return defaultValue;
+
+                EscherRecord escherTertiaryOptRecord = (EscherRecord)shapeDescription
+                        .GetChildById(EscherTertiaryOptRecord.RECORD_ID);
+                if (escherTertiaryOptRecord == null)
+                    return defaultValue;
+
+                EscherSimpleProperty escherProperty = (EscherSimpleProperty)((EscherOptRecord)escherTertiaryOptRecord)
+                        .Lookup(propertyId);
+                if (escherProperty == null)
+                    return defaultValue;
+                int value = escherProperty.PropertyValue;
+
+                return value;
+            }
+
+            public VerticalPositioning GetVerticalPositioning()
+            {
+                int value = GetTertiaryPropertyValue(
+                        EscherProperties.GROUPSHAPE__POSV, -1);
+
+                switch (value)
+                {
+                    case 0:
+                        return VerticalPositioning.ABSOLUTE;
+                    case 1:
+                        return VerticalPositioning.TOP;
+                    case 2:
+                        return VerticalPositioning.CENTER;
+                    case 3:
+                        return VerticalPositioning.BOTTOM;
+                    case 4:
+                        return VerticalPositioning.INSIDE;
+                    case 5:
+                        return VerticalPositioning.OUTSIDE;
+                }
+
+                return VerticalPositioning.ABSOLUTE;
+            }
+
+            public VerticalRelativeElement GetVerticalRelativeElement()
+            {
+                int value = GetTertiaryPropertyValue(
+                        EscherProperties.GROUPSHAPE__POSV, -1);
+
+                switch (value)
+                {
+                    case 1:
+                        return VerticalRelativeElement.MARGIN;
+                    case 2:
+                        return VerticalRelativeElement.PAGE;
+                    case 3:
+                        return VerticalRelativeElement.TEXT;
+                    case 4:
+                        return VerticalRelativeElement.LINE;
+                }
+
+                return VerticalRelativeElement.TEXT;
+            }
+
+            public override String ToString()
+            {
+                return "OfficeDrawingImpl: " + fspa.ToString();
+            }
+        };
+
     }
-
-    #endregion
 }
 
-}
+

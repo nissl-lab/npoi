@@ -94,12 +94,13 @@ namespace NPOI.HWPF
             //do Ole stuff
 
         }
+ 
         /// <summary>
         /// This constructor loads a Word document from a POIFSFileSystem
         /// </summary>
         /// <param name="pfilesystem">The POIFSFileSystem that Contains the Word document.</param>
         public HWPFDocumentCore(POIFSFileSystem pfilesystem)
-            : this(pfilesystem.Root, pfilesystem)
+            : this(pfilesystem.Root)
         {
 
         }
@@ -108,8 +109,8 @@ namespace NPOI.HWPF
         /// </summary>
         /// <param name="directory">The POIFSFileSystem that Contains the Word document.</param>
         /// <param name="pfilesystem">If there is an unexpected IOException from the passed in POIFSFileSystem.</param>
-        public HWPFDocumentCore(DirectoryNode directory, POIFSFileSystem pfilesystem)
-            : base(directory, pfilesystem)
+        public HWPFDocumentCore(DirectoryNode directory)
+            : base(directory)
         {
             // Sort out the hpsf properties
 

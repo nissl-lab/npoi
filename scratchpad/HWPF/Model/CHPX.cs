@@ -33,13 +33,18 @@ namespace NPOI.HWPF.Model
 
     public class CHPX : BytePropertyNode
     {
-
+        internal CHPX(int charStart, int charEnd, SprmBuffer buf):
+            base(charStart, charEnd, buf)
+        {
+            
+        }
+        [Obsolete]
         public CHPX(int fcStart, int fcEnd, CharIndexTranslator translator, byte[] grpprl)
             : base(fcStart, translator.LookIndexBackward(fcEnd), translator, new SprmBuffer(grpprl))
         {
 
         }
-
+        [Obsolete]
         public CHPX(int fcStart, int fcEnd, CharIndexTranslator translator, SprmBuffer buf)
             : base(fcStart, translator.LookIndexBackward(fcEnd), translator, buf)
         {
@@ -59,8 +64,18 @@ namespace NPOI.HWPF.Model
 
         public CharacterProperties GetCharacterProperties(StyleSheet ss, short istd)
         {
+            if (ss == null)
+            {
+                // TODO Fix up for Word 6/95
+                return new CharacterProperties();
+            }
+
             CharacterProperties baseStyle = ss.GetCharacterStyle(istd);
-            CharacterProperties props = CharacterSprmUncompressor.UncompressCHP(baseStyle, GetGrpprl(), 0);
+            if (baseStyle == null)
+                baseStyle = new CharacterProperties();
+
+            CharacterProperties props = 
+                CharacterSprmUncompressor.UncompressCHP(baseStyle, GetGrpprl(), 0);
             return props;
         }
 

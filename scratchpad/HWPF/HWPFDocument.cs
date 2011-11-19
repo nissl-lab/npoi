@@ -28,6 +28,7 @@ namespace NPOI.HWPF
     using NPOI.POIFS.Common;
     using System.Collections.Generic;
     using System.Text;
+    using System.Configuration;
 
 
     /**
@@ -39,6 +40,10 @@ namespace NPOI.HWPF
      */
     public class HWPFDocument : HWPFDocumentCore
     {
+        private const String PROPERTY_PRESERVE_BIN_TABLES = "org.apache.poi.hwpf.preserveBinTables";
+        private const String PROPERTY_PRESERVE_TEXT_TABLE = "org.apache.poi.hwpf.preserveTextTable";
+
+
         /** And for making sense of CP lengths in the FIB */
         internal CPSplitCalculator _cpSplit;
 
@@ -49,7 +54,7 @@ namespace NPOI.HWPF
         protected byte[] _dataStream;
 
         /** Contains text buffer linked directly to single-piece document text piece */
-        protected string _text;
+        protected StringBuilder _text;
 
         /** Document wide Properties*/
         protected DocumentProperties _dop;
@@ -64,25 +69,23 @@ namespace NPOI.HWPF
         /** Holds the revision mark authors for this document. */
         protected RevisionMarkAuthorTable _rmat;
 
-        /** Holds pictures table */
-        protected PicturesTable _pictures;
-
-        /** Holds FSBA (shape) information */
-        protected FSPATable _fspa;
-
         /** Holds FSBA (shape) information */
         private FSPATable _fspaHeaders;
 
         /** Holds FSBA (shape) information */
         private FSPATable _fspaMain;
 
-        /** Escher Drawing Group information */
-        protected EscherRecordHolder _escherRecordHolder;
+        /** Holds pictures table */
+        protected PicturesTable _pictures;
+
+        /** Holds FSBA (shape) information */
+        protected FSPATable _fspa;
 
         /** Escher Drawing Group information */
         protected EscherRecordHolder _dgg;
 
         /** Holds Office Art objects */
+        [Obsolete]
         protected ShapesTable _officeArts;
 
         /** Holds Office Art objects */
@@ -97,13 +100,25 @@ namespace NPOI.HWPF
         /** Holds the bookmarks */
         protected Bookmarks _bookmarks;
 
-        /** Holds the fields */
-        protected Fields _fields;
+        /** Holds the ending notes tables */
+        protected NotesTables _endnotesTables = new NotesTables(NoteType.ENDNOTE);
+
+        /** Holds the footnotes */
+        protected Notes _endnotes;
+
+        /** Holds the footnotes tables */
+        protected NotesTables _footnotesTables = new NotesTables(NoteType.FOOTNOTE);
+
+        /** Holds the footnotes */
+        protected Notes _footnotes;
+
 
         protected HWPFDocument()
             : base()
         {
-
+            _endnotes = new NotesImpl(_endnotesTables);
+            _footnotes = new NotesImpl(_footnotesTables);
+            this._text = new StringBuilder("\r");
         }
 
         /**
@@ -117,7 +132,7 @@ namespace NPOI.HWPF
             : this(VerifyAndBuildPOIFS(istream))
         {
             //do Ole stuff
-
+            
         }
 
         /**
@@ -128,7 +143,7 @@ namespace NPOI.HWPF
          *         in POIFSFileSystem.
          */
         public HWPFDocument(POIFSFileSystem pfilesystem)
-            : this(pfilesystem.Root, pfilesystem)
+            : this(pfilesystem.Root)
         {
 
         }
@@ -142,9 +157,21 @@ namespace NPOI.HWPF
          * @throws IOException If there is an unexpected IOException from the passed
          *         in POIFSFileSystem.
          */
-        public HWPFDocument(DirectoryNode directory, POIFSFileSystem pfilesystem)
-            : base(directory, pfilesystem)
+        [Obsolete]
+        public HWPFDocument(DirectoryNode directory, POIFSFileSystem pfilesystem):this(directory)
         {
+            
+        }
+        /// <summary>
+        /// Initializes a new instance of the <see cref="HWPFDocument"/> class.
+        /// </summary>
+        /// <param name="directory">The directory.</param>
+        public HWPFDocument(DirectoryNode directory)
+            : base(directory)
+        {
+            _endnotes = new NotesImpl(_endnotesTables);
+            _footnotes = new NotesImpl(_footnotesTables);
+
             // Load the main stream and FIB
             // Also handles HPSF bits
 
@@ -188,7 +215,7 @@ namespace NPOI.HWPF
                 DocumentEntry dataProps =
                     (DocumentEntry)directory.GetEntry("Data");
                 _dataStream = new byte[dataProps.Size];
-                filesystem.CreatePOIFSDocumentReader("Data").Read(_dataStream);
+                directory.CreatePOIFSDocumentReader("Data").Read(_dataStream);
             }
             catch (FileNotFoundException)
             {
@@ -205,26 +232,64 @@ namespace NPOI.HWPF
             _cft = new ComplexFileTable(_mainStream, _tableStream, _fib.GetFcClx(), fcMin);
             TextPieceTable _tpt = _cft.GetTextPieceTable();
 
-            // Word XP and later all put in a zero Filled buffer in
-            //  front of the text. This screws up the system for offSets,
-            //  which assume we always start at zero. This is an adjustment.
-            int cpMin = _tpt.CpMin;
 
             // Now load the rest of the properties, which need to be adjusted
             //  for where text really begin
-            _cbt = new CHPBinTable(_mainStream, _tableStream, _fib.GetFcPlcfbteChpx(), _fib.GetLcbPlcfbteChpx(), cpMin, _tpt);
-            _pbt = new PAPBinTable(_mainStream, _tableStream, _dataStream, _fib.GetFcPlcfbtePapx(), _fib.GetLcbPlcfbtePapx(), cpMin, _tpt);
+            _cbt = new CHPBinTable(_mainStream, _tableStream, _fib.GetFcPlcfbteChpx(), _fib.GetLcbPlcfbteChpx(), _tpt);
+            _pbt = new PAPBinTable(_mainStream, _tableStream, _dataStream, _fib.GetFcPlcfbtePapx(), _fib.GetLcbPlcfbtePapx(), _tpt);
 
             _text = _tpt.Text;
 
-            // Read FSPA and Escher information
-            _fspa = new FSPATable(_tableStream, _fib.GetFcPlcspaMom(), _fib.GetLcbPlcspaMom(), TextTable.TextPieces);
+                    /*
+         * in this mode we preserving PAPX/CHPX structure from file, so text may
+         * miss from output, and text order may be corrupted
+         */
+        bool preserveBinTables = false;
+        try
+        {
+            preserveBinTables = Boolean.Parse( 
+                ConfigurationManager.AppSettings[PROPERTY_PRESERVE_BIN_TABLES] );
+        }
+        catch ( Exception)
+        {
+            // ignore;
+        }
 
-            // Read FSPA and Escher information
-            // _fspa = new FSPATable(_tableStream, _fib.getFcPlcspaMom(),
-            // _fib.getLcbPlcspaMom(), getTextTable().getTextPieces());
-            //_fspaHeaders = new FSPATable(_tableStream, _fib, FSPADocumentPart.HEADER);
-            //_fspaMain = new FSPATable(_tableStream, _fib, FSPADocumentPart.MAIN);
+        if ( !preserveBinTables )
+        {
+            _cbt.Rebuild( _cft );
+            _pbt.Rebuild( _text, _cft );
+        }
+
+        /*
+         * Property to disable text rebuilding. In this mode changing the text
+         * will lead to unpredictable behavior
+         */
+        bool preserveTextTable = false;
+        try
+        {
+            preserveTextTable = Boolean.Parse(
+                    ConfigurationManager.AppSettings[PROPERTY_PRESERVE_TEXT_TABLE] );
+        }
+        catch ( Exception)
+        {
+            // ignore;
+        }
+        if ( !preserveTextTable )
+        {
+            _cft = new ComplexFileTable();
+            _tpt = _cft.GetTextPieceTable();
+            TextPiece textPiece = new SinglentonTextPiece( _text );
+            _tpt.Add( textPiece );
+            _text = textPiece.GetStringBuilder();
+        }
+
+        // Read FSPA and Escher information
+        // _fspa = new FSPATable(_tableStream, _fib.getFcPlcspaMom(),
+        // _fib.getLcbPlcspaMom(), getTextTable().getTextPieces());
+        _fspaHeaders = new FSPATable( _tableStream, _fib,
+                FSPADocumentPart.HEADER );
+        _fspaMain = new FSPATable( _tableStream, _fib, FSPADocumentPart.MAIN );
 
             if (_fib.GetFcDggInfo() != 0)
             {
@@ -241,8 +306,8 @@ namespace NPOI.HWPF
             _officeArts = new ShapesTable(_tableStream, _fib);
 
             // And escher pictures
-            _officeDrawingsHeaders = new OfficeDrawingsImpl(_fspaHeaders, _escherRecordHolder, _mainStream);
-            _officeDrawingsMain = new OfficeDrawingsImpl(_fspaMain, _escherRecordHolder, _mainStream);
+            _officeDrawingsHeaders = new OfficeDrawingsImpl(_fspaHeaders, _dgg, _mainStream);
+            _officeDrawingsMain = new OfficeDrawingsImpl(_fspaMain, _dgg, _mainStream);
 
             _st = new SectionTable(_mainStream, _tableStream, _fib.GetFcPlcfsed(), _fib.GetLcbPlcfsed(), fcMin, _tpt, _cpSplit);
             _ss = new StyleSheet(_tableStream, _fib.GetFcStshf());
@@ -269,13 +334,14 @@ namespace NPOI.HWPF
                 _rmat = new RevisionMarkAuthorTable(_tableStream, rmarkOffset, rmarkLength);
             }
 
-            PlexOfCps plc = new PlexOfCps(_tableStream, _fib.GetFcPlcffldMom(), _fib.GetLcbPlcffldMom(), 2);
-            for (int x = 0; x < plc.Length; x++)
-            {
-                GenericPropertyNode node = plc.GetProperty(x);
-                byte[] fld = node.Bytes;
-                int breakpoint = 0;
-            }
+
+            _bookmarksTables = new BookmarksTables(_tableStream, _fib);
+            _bookmarks = new BookmarksImpl(_bookmarksTables);
+
+            _endnotesTables = new NotesTables(NoteType.ENDNOTE, _tableStream, _fib);
+            _endnotes = new NotesImpl(_endnotesTables);
+            _footnotesTables = new NotesTables(NoteType.FOOTNOTE, _tableStream, _fib);
+            _footnotes = new NotesImpl(_footnotesTables);
         }
 
         public override TextPieceTable TextTable
@@ -300,7 +366,7 @@ namespace NPOI.HWPF
         {
             get
             {
-                return _text;
+                return _text.ToString();
             }
         }
 
@@ -313,11 +379,11 @@ namespace NPOI.HWPF
         {
             return new Range(0, _text.Length, this);
         }
-            /**
-     * Array of {@link SubdocumentType}s ordered by document position and FIB
-     * field order
-     */
-    public static SubdocumentType[] ORDERED = new SubdocumentType[] {
+        /**
+ * Array of {@link SubdocumentType}s ordered by document position and FIB
+ * field order
+ */
+        public static SubdocumentType[] ORDERED = new SubdocumentType[] {
             SubdocumentType.MAIN, SubdocumentType.FOOTNOTE, 
             SubdocumentType.HEADER, SubdocumentType.MACRO, 
             SubdocumentType.ANNOTATION, SubdocumentType.ENDNOTE, SubdocumentType.TEXTBOX,
@@ -328,17 +394,6 @@ namespace NPOI.HWPF
          */
         public override Range GetRange()
         {
-
-            // First up, trigger a full-recalculate
-            // Needed in case of deletes etc
-            //GetOverallRange();
-
-            //// Now, return the real one
-            //return new Range(
-            //        _cpSplit.GetMainDocumentStart(),
-            //        _cpSplit.GetMainDocumentEnd(),
-            //        this
-            //);
             return GetRange(SubdocumentType.MAIN);
         }
 
@@ -363,11 +418,7 @@ namespace NPOI.HWPF
          */
         public Range GetFootnoteRange()
         {
-            return new Range(
-                    _cpSplit.GetFootnoteStart(),
-                    _cpSplit.GetFootnoteEnd(),
-                    this
-            );
+            return GetRange(SubdocumentType.FOOTNOTE);
         }
 
         /**
@@ -375,11 +426,7 @@ namespace NPOI.HWPF
         */
         public Range GetEndnoteRange()
         {
-            return new Range(
-                            _cpSplit.GetEndNoteStart(),
-                            _cpSplit.GetEndNoteEnd(),
-                            this
-        );
+            return GetRange(SubdocumentType.ENDNOTE);
         }
 
         /**
@@ -387,13 +434,17 @@ namespace NPOI.HWPF
         */
         public Range GetCommentsRange()
         {
-            return new Range(
-                            _cpSplit.GetCommentsStart(),
-                            _cpSplit.GetCommentsEnd(),
-                            this
-        );
+            return GetRange(SubdocumentType.ANNOTATION);
         }
-
+        /**
+ * Returns the {@link Range} which covers all textboxes.
+ * 
+ * @return the {@link Range} which covers all textboxes.
+ */
+        public Range GetMainTextboxRange()
+        {
+            return GetRange(SubdocumentType.TEXTBOX);
+        }
         /**
          * Returns the range which covers all "Header Stories".
          * A header story Contains a header, footer, end note
@@ -401,11 +452,7 @@ namespace NPOI.HWPF
          */
         public Range GetHeaderStoryRange()
         {
-            return new Range(
-                    _cpSplit.GetHeaderStoryStart(),
-                    _cpSplit.GetHeaderStoryEnd(),
-                    this
-            );
+            return GetRange(SubdocumentType.HEADER);
         }
 
         /**
@@ -458,31 +505,14 @@ namespace NPOI.HWPF
 
         public OfficeDrawings GetOfficeDrawingsHeaders()
         {
-            throw new NotImplementedException();
-            //return _officeDrawingsHeaders;
+            return _officeDrawingsHeaders;
         }
 
         public OfficeDrawings GetOfficeDrawingsMain()
         {
-            throw new NotImplementedException();
-            //return _officeDrawingsMain;
+            return _officeDrawingsMain;
         }
-        /**
-         * @return user-friendly interface to access document bookmarks
-         */
-        public Bookmarks GetBookmarks()
-        {
-            return _bookmarks;
-        }
-        /**
-         * Returns user-friendly interface to access document {@link Field}s
-         * 
-         * @return user-friendly interface to access document {@link Field}s
-         */
-        public Fields GetFields()
-        {
-            return _fields;
-        }
+
         /**
          * Writes out the word file that is represented by an instance of this class.
          *
@@ -526,7 +556,7 @@ namespace NPOI.HWPF
 
             // write out the Complex table, includes text.
             _fib.SetFcClx(tableOffset);
-            _cft.WriteTo(docSys);
+            _cft.WriteTo(mainStream, tableStream);
             _fib.SetLcbClx(tableStream.Offset - tableOffset);
             tableOffset = tableStream.Offset;
             int fcMac = mainStream.Offset;
@@ -537,11 +567,41 @@ namespace NPOI.HWPF
             _fib.SetLcbPlcfbteChpx(tableStream.Offset - tableOffset);
             tableOffset = tableStream.Offset;
 
+
             // write out the PAPBinTable.
             _fib.SetFcPlcfbtePapx(tableOffset);
-            _pbt.WriteTo(docSys, fcMin);
+            _pbt.WriteTo(mainStream, tableStream, _cft.GetTextPieceTable());
             _fib.SetLcbPlcfbtePapx(tableStream.Offset - tableOffset);
             tableOffset = tableStream.Offset;
+            /*
+              * plcfendRef (endnote reference position table) Written immediately
+              * after the previously recorded table if the document contains endnotes
+              * 
+              * plcfendTxt (endnote text position table) Written immediately after
+              * the plcfendRef if the document contains endnotes
+              * 
+              * Microsoft Office Word 97-2007 Binary File Format (.doc)
+              * Specification; Page 24 of 210
+              */
+            _endnotesTables.WriteRef(_fib, tableStream);
+            _endnotesTables.WriteTxt(_fib, tableStream);
+            tableOffset = tableStream.Offset;
+
+
+            /*
+             * plcffndRef (footnote reference position table) Written immediately
+             * after the stsh if the document contains footnotes
+             * 
+             * plcffndTxt (footnote text position table) Written immediately after
+             * the plcffndRef if the document contains footnotes
+             * 
+             * Microsoft Office Word 97-2007 Binary File Format (.doc)
+             * Specification; Page 24 of 210
+             */
+            _footnotesTables.WriteRef(_fib, tableStream);
+            _footnotesTables.WriteTxt(_fib, tableStream);
+            tableOffset = tableStream.Offset;
+
 
             // write out the SectionTable.
             _fib.SetFcPlcfsed(tableOffset);
@@ -555,10 +615,38 @@ namespace NPOI.HWPF
                 _fib.SetFcPlcfLst(tableOffset);
                 _lt.WriteListDataTo(tableStream);
                 _fib.SetLcbPlcfLst(tableStream.Offset - tableOffset);
+            }
 
+            /*
+             * plflfo (more list formats) Written immediately after the end of the
+             * plcflst and its accompanying data, if there are any lists defined in
+             * the document. This consists first of a PL of LFO records, followed by
+             * the allocated data (if any) hanging off the LFOs. The allocated data
+             * consists of the array of LFOLVLFs for each LFO (and each LFOLVLF is
+             * immediately followed by some LVLs).
+             * 
+             * Microsoft Office Word 97-2007 Binary File Format (.doc)
+             * Specification; Page 26 of 210
+             */
+
+            if (_lt != null)
+            {
                 _fib.SetFcPlfLfo(tableStream.Offset);
                 _lt.WriteListOverridesTo(tableStream);
                 _fib.SetLcbPlfLfo(tableStream.Offset - tableOffset);
+                tableOffset = tableStream.Offset;
+            }
+
+            /*
+  * sttbfBkmk (table of bookmark name strings) Written immediately after
+  * the previously recorded table, if the document contains bookmarks.
+  * 
+  * Microsoft Office Word 97-2007 Binary File Format (.doc)
+  * Specification; Page 27 of 210
+  */
+            if (_bookmarksTables != null)
+            {
+                _bookmarksTables.WriteSttbfBkmk(_fib, tableStream);
                 tableOffset = tableStream.Offset;
             }
 
@@ -594,6 +682,8 @@ namespace NPOI.HWPF
             _fib.SetLcbDop(_dop.GetSize());
             _dop.Serialize(buf, 0);
             tableStream.Write(buf);
+
+
 
             // set some variables in the FileInformationBlock.
             _fib.SetFcMin(fcMin);
@@ -667,6 +757,31 @@ namespace NPOI.HWPF
             Range r = new Range(start, start + length, this);
             r.Delete();
         }
+        /**
+ * @return user-friendly interface to access document bookmarks
+ */
+        public Bookmarks GetBookmarks()
+        {
+            return _bookmarks;
+        }
+
+
+        /**
+ * @return user-friendly interface to access document endnotes
+ */
+        public Notes GetEndnotes()
+        {
+            return _endnotes;
+        }
+
+        /**
+         * @return user-friendly interface to access document footnotes
+         */
+        public Notes GetFootnotes()
+        {
+            return _footnotes;
+        }
+
     }
 
 }

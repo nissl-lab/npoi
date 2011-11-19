@@ -93,7 +93,7 @@ namespace NPOI.HWPF.Extractor
 
                     ret = GetParagraphText(r);
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     // Something's up with turning the text pieces into paragraphs
                     // Fall back to ripping out the text pieces
@@ -114,7 +114,15 @@ namespace NPOI.HWPF.Extractor
                 return GetParagraphText(r);
             }
         }
+        public String[] MainTextboxText
+        {
+            get
+            {
+                Range r = doc.GetMainTextboxRange();
 
+                return GetParagraphText(r);
+            }
+        }
         public String[] EndnoteText
         {
             get

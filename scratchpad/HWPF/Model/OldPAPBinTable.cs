@@ -20,6 +20,8 @@ namespace NPOI.HWPF.Model
 {
     using NPOI.Util;
     using NPOI.POIFS.Common;
+    using System.Collections;
+    using System.Collections.Generic;
     /**
      * This class holds all of the paragraph formatting 
      *  properties from Old (Word 6 / Word 95) documents.
@@ -44,7 +46,7 @@ namespace NPOI.HWPF.Model
                 int pageOffset = POIFSConstants.SMALLER_BIG_BLOCK_SIZE * pageNum;
 
                 PAPFormattedDiskPage pfkp = new PAPFormattedDiskPage(documentStream,
-                  documentStream, pageOffset, fcMin, tpt);
+                  documentStream, pageOffset, tpt);
 
                 int fkpSize = pfkp.Size();
 
@@ -54,6 +56,7 @@ namespace NPOI.HWPF.Model
                     _paragraphs.Add(papx);
                 }
             }
+             _paragraphs.Sort((IComparer<PAPX>)PropertyNode.PAPXComparator.instance);
         }
     }
 

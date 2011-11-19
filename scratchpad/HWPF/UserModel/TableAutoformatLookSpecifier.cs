@@ -14,68 +14,57 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 ==================================================================== */
+using NPOI.HWPF.Model.Types;
+using System;
 namespace NPOI.HWPF.UserModel
 {
 
-public class TableAutoformatLookSpecifier : TLPAbstractType
-{
-    public static int SIZE = 4;
-
-    public TableAutoformatLookSpecifier()
+    public class TableAutoformatLookSpecifier : TLPAbstractType
     {
-        base();
-    }
+        public static int SIZE = 4;
 
-    public TableAutoformatLookSpecifier( byte[] data, int offset )
-    {
-        base();
-        FillFields( data, offset );
-    }
-
-    @Override
-    public TableAutoformatLookSpecifier Clone()
-    {
-        try
+        public TableAutoformatLookSpecifier()
+            : base()
         {
-            return (TableAutoformatLookSpecifier) super.Clone();
         }
-        catch ( CloneNotSupportedException e )
-        {
-            throw new Error( e.GetMessage(), e );
-        }
-    }
 
-    @Override
-    public bool Equals( Object obj )
-    {
-        if ( this == obj )
+        public TableAutoformatLookSpecifier(byte[] data, int offset)
+            : base()
+        {
+
+            FillFields(data, offset);
+        }
+
+        public override bool Equals(Object obj)
+        {
+            if (this == obj)
+                return true;
+            if (obj == null)
+                return false;
+            if (this.GetType() != obj.GetType())
+                return false;
+            TableAutoformatLookSpecifier other = (TableAutoformatLookSpecifier)obj;
+            if (field_1_itl != other.field_1_itl)
+                return false;
+            if (field_2_tlp_flags != other.field_2_tlp_flags)
+                return false;
             return true;
-        if ( obj == null )
-            return false;
-        if ( GetClass() != obj.GetClass() )
-            return false;
-        TableAutoformatLookSpecifier other = (TableAutoformatLookSpecifier) obj;
-        if ( field_1_itl != other.field_1_itl )
-            return false;
-        if ( field_2_tlp_flags != other.field_2_tlp_flags )
-            return false;
-        return true;
+        }
+
+        public override int GetHashCode()
+        {
+            int prime = 31;
+            int result = 1;
+            result = prime * result + field_1_itl;
+            result = prime * result + field_2_tlp_flags;
+            return result;
+        }
+
+        public bool IsEmpty()
+        {
+            return field_1_itl == 0 && field_2_tlp_flags == 0;
+        }
     }
 
-    @Override
-    public int hashCode()
-    {
-        int prime = 31;
-        int result = 1;
-        result = prime * result + field_1_itl;
-        result = prime * result + field_2_tlp_flags;
-        return result;
-    }
 
-    public bool IsEmpty()
-    {
-        return field_1_itl == 0 && field_2_tlp_flags == 0;
-    }
 }
-
-

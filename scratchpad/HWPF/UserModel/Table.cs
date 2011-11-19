@@ -16,44 +16,57 @@
 ==================================================================== */
 
 using System.Collections;
+using System.Collections.Generic;
 namespace NPOI.HWPF.UserModel
 {
 
     public class Table : Range
     {
-        ArrayList _rows;
+        List<TableRow> _rows;
 
         internal Table(int startIdx, int endIdx, Range parent, int levelNum)
             : base(startIdx, endIdx,  parent)
         {
+              _tableLevel = levelNum;
+              InitRows();
+        }
+        private int _tableLevel;
+        private bool _rowsFound = false;
+        private void InitRows()
+        {
+            if (_rowsFound)
+                return;
 
-            _rows = new ArrayList();
-            int numParagraphs = NumParagraphs;
-
+            _rows = new List<TableRow>();
             int rowStart = 0;
             int rowEnd = 0;
 
+            int numParagraphs = NumParagraphs;
             while (rowEnd < numParagraphs)
             {
-                Paragraph p = GetParagraph(rowEnd);
+                Paragraph startRowP = GetParagraph(rowStart);
+                Paragraph endRowP = GetParagraph(rowEnd);
                 rowEnd++;
-                if (p.IsTableRowEnd() && p.GetTableLevel() == levelNum)
+                if (endRowP.IsTableRowEnd()
+                        && endRowP.GetTableLevel() == _tableLevel)
                 {
-                    _rows.Add(new TableRow(rowStart, rowEnd, this, levelNum));
+                    _rows.Add(new TableRow(startRowP.StartOffset, endRowP
+                            .EndOffset, this, _tableLevel));
                     rowStart = rowEnd;
                 }
             }
+            _rowsFound = true;
         }
-
         public int NumRows
         {
             get
             {
+                InitRows();
                 return _rows.Count;
             }
         }
 
-        public int Type
+        public override int Type
         {
             get
             {

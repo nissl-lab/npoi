@@ -46,7 +46,7 @@ namespace NPOI.HWPF.SPRM
 
                 // PAPXs can contain table sprms if the paragraph marks the end of a
                 // table row
-                if (sprm.Type == SprmOperation.PAP_TYPE)
+                if (sprm.Type == SprmOperation.TYPE_PAP)
                 {
                     UncompressPAPOperation(newProperties, sprm);
                 }
@@ -358,6 +358,7 @@ namespace NPOI.HWPF.SPRM
                     newPAP.SetFAdjustRight(sprm.Operand!=0);
                     break;
                 case 0x49:
+                    // sprmPItap -- 0x6649
                     newPAP.SetItap(sprm.Operand);
                     break;
                 case 0x4a:
@@ -365,13 +366,16 @@ namespace NPOI.HWPF.SPRM
                     newPAP.SetItap((byte)(newPAP.GetItap() + sprm.Operand));
                     break;
                 case 0x4b:
+                    // sprmPFInnerTableCell -- 0x244b
                     newPAP.SetFInnerTableCell(sprm.Operand!=0);
                     break;
                 case 0x4c:
+                    // sprmPFInnerTtp -- 0x244c
                     newPAP.SetFTtpEmbedded(sprm.Operand!=0);
                     break;
                 case 0x61:
-                    // Logicial justification of the paragraph, eg left, centre, right
+                    // sprmPJc 
+                    newPAP.SetJustificationLogical((byte)sprm.Operand);
                     break;
                 default:
                     break;

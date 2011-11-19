@@ -33,13 +33,18 @@ namespace NPOI.HWPF
         private TextPieceTable tpt;
 
         public HWPFOldDocument(POIFSFileSystem fs)
-            : this(fs.Root, fs)
+            : this(fs.Root)
         {
 
         }
-
-        public HWPFOldDocument(DirectoryNode directory, POIFSFileSystem fs)
-            : base(directory, fs)
+        [Obsolete]
+        public HWPFOldDocument(DirectoryNode directory, POIFSFileSystem fs):this(directory)
+        {
+            
+        }
+        
+        public HWPFOldDocument(DirectoryNode directory)
+            : base(directory)
         {
 
 
@@ -124,7 +129,7 @@ namespace NPOI.HWPF
                 return tpt;
             }
         }
-        private string _text;
+        private StringBuilder _text;
         public override string Text
         {
             get
