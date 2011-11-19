@@ -90,6 +90,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimeSheetDemo", "..\..\exam
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LoanCalculator", "..\..\examples\hssf\LoanCalculator\LoanCalculator.csproj", "{1B2891A4-BD05-47E0-96FF-DAE36F220C6E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReadThumbsDB", "..\..\examples\poifs\ReadThumbsDB\ReadThumbsDB.csproj", "{D15333B0-16CE-43C4-98E1-43F772ACFA82}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
 		SccNumberOfProjects = 37
@@ -355,6 +357,12 @@ Global
 		{1B2891A4-BD05-47E0-96FF-DAE36F220C6E}.NPOI.Tools|Any CPU.Build.0 = Release|Any CPU
 		{1B2891A4-BD05-47E0-96FF-DAE36F220C6E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1B2891A4-BD05-47E0-96FF-DAE36F220C6E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D15333B0-16CE-43C4-98E1-43F772ACFA82}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D15333B0-16CE-43C4-98E1-43F772ACFA82}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D15333B0-16CE-43C4-98E1-43F772ACFA82}.NPOI.Tools|Any CPU.ActiveCfg = Release|Any CPU
+		{D15333B0-16CE-43C4-98E1-43F772ACFA82}.NPOI.Tools|Any CPU.Build.0 = Release|Any CPU
+		{D15333B0-16CE-43C4-98E1-43F772ACFA82}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D15333B0-16CE-43C4-98E1-43F772ACFA82}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
