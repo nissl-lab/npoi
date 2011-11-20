@@ -28,7 +28,7 @@ namespace NPOI.HWPF.UserModel
      * Represents embedded picture extracted from Word Document
      * @author Dmitry Romanov
      */
-    public class Picture: PictureDescriptor
+    public partial class Picture: PictureDescriptor
     {
         //private static POILogger log = POILogFactory.GetLogger(Picture.class);
 
@@ -61,6 +61,7 @@ namespace NPOI.HWPF.UserModel
     public static byte[] COMPRESSED2 = { (byte) 0xFE, 0x78, (byte) 0x9C };
 
         public Picture(int dataBlockStartOfsset, byte[] _dataStream, bool FillBytes)
+            //: base(_dataStream, dataBlockStartOfsset)
         {
             this._dataStream = _dataStream;
             this.dataBlockStartOfsset = dataBlockStartOfsset;
@@ -82,7 +83,7 @@ namespace NPOI.HWPF.UserModel
             }
         }
 
-        public Picture(byte[] _dataStream)
+        public Picture(byte[] _dataStream) : base()
         {
             this._dataStream = _dataStream;
             this.dataBlockStartOfsset = 0;

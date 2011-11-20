@@ -21,7 +21,7 @@ using System;
 using System.Collections.Generic;
 using NPOI.HWPF.Model;
 using NPOI.HWPF;
-namespace TestCases.HWPF.Usermodel
+namespace TestCases.HWPF.UserModel
 {
 
     /**

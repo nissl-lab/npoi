@@ -18,7 +18,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NPOI.HWPF;
 using TestCases.HWPF;
 using NPOI.HWPF.UserModel;
-namespace TestCase.HWPF.Model
+namespace TestCases.HWPF.Model
 {
     /**
      * Test cases for {@link NotesTables} and default implementation of

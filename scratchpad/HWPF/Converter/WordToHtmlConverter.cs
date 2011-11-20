@@ -163,7 +163,7 @@ namespace NPOI.HWPF.Converter
             XmlElement parent = currentBlock;
             foreach (Bookmark bookmark in rangeBookmarks)
             {
-                XmlElement bookmarkElement = htmlDocumentFacade.CreateBookmark(bookmark.GetName());
+                XmlElement bookmarkElement = htmlDocumentFacade.CreateBookmark(bookmark.Name);
                 parent.AppendChild(bookmarkElement);
                 parent = bookmarkElement;
             }
@@ -301,8 +301,8 @@ namespace NPOI.HWPF.Converter
         protected void ProcessImage(XmlElement currentBlock, bool inlined,
             Picture picture, String imageSourcePath)
         {
-            int aspectRatioX = picture.GetHorizontalScalingFactor();
-            int aspectRatioY = picture.GetVerticalScalingFactor();
+            int aspectRatioX = picture.HorizontalScalingFactor;
+            int aspectRatioY = picture.VerticalScalingFactor;
 
             StringBuilder style = new StringBuilder();
 
@@ -316,34 +316,34 @@ namespace NPOI.HWPF.Converter
 
             if (aspectRatioX > 0)
             {
-                imageWidth = picture.GetDxaGoal() * aspectRatioX / 1000
+                imageWidth = picture.DxaGoal * aspectRatioX / 1000
                         / AbstractWordUtils.TWIPS_PER_INCH;
-                cropRight = picture.GetDxaCropRight() * aspectRatioX / 1000
+                cropRight = picture.DxaCropRight * aspectRatioX / 1000
                         / AbstractWordUtils.TWIPS_PER_INCH;
-                cropLeft = picture.GetDxaCropLeft() * aspectRatioX / 1000
+                cropLeft = picture.DxaCropLeft * aspectRatioX / 1000
                         / AbstractWordUtils.TWIPS_PER_INCH;
             }
             else
             {
-                imageWidth = picture.GetDxaGoal() / AbstractWordUtils.TWIPS_PER_INCH;
-                cropRight = picture.GetDxaCropRight() / AbstractWordUtils.TWIPS_PER_INCH;
-                cropLeft = picture.GetDxaCropLeft() / AbstractWordUtils.TWIPS_PER_INCH;
+                imageWidth = picture.DxaGoal / AbstractWordUtils.TWIPS_PER_INCH;
+                cropRight = picture.DxaCropRight / AbstractWordUtils.TWIPS_PER_INCH;
+                cropLeft = picture.DxaCropLeft / AbstractWordUtils.TWIPS_PER_INCH;
             }
 
             if (aspectRatioY > 0)
             {
-                imageHeight = picture.GetDyaGoal() * aspectRatioY / 1000
+                imageHeight = picture.DyaGoal * aspectRatioY / 1000
                         / AbstractWordUtils.TWIPS_PER_INCH;
-                cropTop = picture.GetDyaCropTop() * aspectRatioY / 1000
+                cropTop = picture.DyaCropTop * aspectRatioY / 1000
                         / AbstractWordUtils.TWIPS_PER_INCH;
-                cropBottom = picture.GetDyaCropBottom() * aspectRatioY / 1000
+                cropBottom = picture.DyaCropBottom * aspectRatioY / 1000
                         / AbstractWordUtils.TWIPS_PER_INCH;
             }
             else
             {
-                imageHeight = picture.GetDyaGoal() / AbstractWordUtils.TWIPS_PER_INCH;
-                cropTop = picture.GetDyaCropTop() / AbstractWordUtils.TWIPS_PER_INCH;
-                cropBottom = picture.GetDyaCropBottom() / AbstractWordUtils.TWIPS_PER_INCH;
+                imageHeight = picture.DyaGoal / AbstractWordUtils.TWIPS_PER_INCH;
+                cropTop = picture.DyaCropTop / AbstractWordUtils.TWIPS_PER_INCH;
+                cropBottom = picture.DyaCropBottom / AbstractWordUtils.TWIPS_PER_INCH;
             }
 
             XmlElement root;

@@ -301,14 +301,14 @@ namespace NPOI.HWPF.Converter
                     iterator.MoveNext();
                     foreach (Bookmark bookmark in iterator.Current)
                     {
-                        if (bookmark.GetStart() == structure.Start
-                                && bookmark.GetEnd() == structure.End)
+                        if (bookmark.Start == structure.Start
+                                && bookmark.End == structure.End)
                         {
                             bookmarks.Add(bookmark);
                         }
                     }
 
-                    bookmarkStack.AddAll(bookmarks);
+                    bookmarkStack.AddRange(bookmarks);
                     try
                     {
                         int end = Math.Min(range.EndOffset, structure.End);
@@ -325,7 +325,7 @@ namespace NPOI.HWPF.Converter
                     }
                     finally
                     {
-                        bookmarkStack.RemoveAll(bookmarks);
+                        bookmarkStack.RemoveAll((e) => { return bookmarks.Contains(e); });
                     }
                 }
                 else if (structure.StructureObject is Field)

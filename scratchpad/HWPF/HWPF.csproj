@@ -55,6 +55,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Converter\AbstractWordConverter.cs" />
     <Compile Include="Converter\AbstractWordUtils.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -65,6 +66,8 @@
     <Compile Include="Converter\FontReplacer.cs" />
     <Compile Include="Converter\NumberFormatter.cs" />
     <Compile Include="Converter\PicturesManager.cs" />
+    <Compile Include="Converter\WordToHtmlConverter.cs" />
+    <Compile Include="Converter\WordToHtmlUtils.cs" />
     <Compile Include="Extractor\Word6Extractor.cs" />
     <Compile Include="Extractor\WordExtractor.cs" />
     <Compile Include="HWPFDocument.cs" />
@@ -250,6 +253,7 @@
     <Compile Include="UserModel\ParagraphProperties.cs" />
     <Compile Include="UserModel\Picture.cs" />
     <Compile Include="UserModel\PictureType.cs" />
+    <Compile Include="UserModel\Picture~1.cs" />
     <Compile Include="UserModel\Range.cs" />
     <Compile Include="UserModel\Section.cs">
       <SubType>Code</SubType>

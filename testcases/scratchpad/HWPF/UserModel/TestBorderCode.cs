@@ -19,7 +19,7 @@ using NPOI.HWPF.UserModel;
 using NPOI.HWPF;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-namespace TestCases.HWPF.Usermodel
+namespace TestCases.HWPF.UserModel
 {
 
     /**

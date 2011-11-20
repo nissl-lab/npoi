@@ -16,15 +16,15 @@
 ==================================================================== */
 
 using System;
-using System.Collections.Generic;
-using System.Text;
-using NPOI.Util;
-using NPOI.HWPF.UserModel;
 using System.Collections;
+using System.Collections.Generic;
+using System.IO;
+using System.Text;
 using System.Xml;
 using NPOI.HWPF.Model;
+using NPOI.HWPF.UserModel;
 using NPOI.POIFS.FileSystem;
-using System.IO;
+using NPOI.Util;
 
 
 namespace NPOI.HWPF.Converter
@@ -55,9 +55,10 @@ namespace NPOI.HWPF.Converter
                 for (int c = 0; c < tableRow.NumCells(); c++)
                 {
                     TableCell tableCell = tableRow.GetCell(c);
-
-                    edges.Add(tableCell.GetLeftEdge(),0);
-                    edges.Add(tableCell.GetLeftEdge() + tableCell.GetWidth(), 0);
+                    if (!edges.ContainsKey(tableCell.GetLeftEdge()))
+                        edges.Add(tableCell.GetLeftEdge(), 0);
+                    if (!edges.ContainsKey(tableCell.GetLeftEdge() + tableCell.GetWidth()))
+                        edges.Add(tableCell.GetLeftEdge() + tableCell.GetWidth(), 0);
                 }
             }
 

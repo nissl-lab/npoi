@@ -49,6 +49,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="HSSF\Converter\TestExcelToHtmlConverterSuite.cs" />
+    <Compile Include="HWPF\Converter\AbstractWordUtilsTest.cs" />
+    <Compile Include="HWPF\Converter\TestNumberFormatter.cs" />
+    <Compile Include="HWPF\Converter\TestWordToHtmlConverter.cs" />
     <Compile Include="HWPF\Extractor\TestDifferentRoutes.cs" />
     <Compile Include="HWPF\Extractor\TestWordExtractor.cs" />
     <Compile Include="HWPF\Extractor\TestWordExtractorBugs.cs" />
@@ -108,9 +111,6 @@
       <Project>{F040162E-F6F3-4B09-809B-3095A07A6687}</Project>
       <Name>HWPF</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="HWPF\Converter\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
