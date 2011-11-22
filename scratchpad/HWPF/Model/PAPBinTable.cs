@@ -202,7 +202,7 @@ namespace NPOI.HWPF.Model
 
             List<PAPX> oldPapxSortedByEndPos = new List<PAPX>(_paragraphs);
             oldPapxSortedByEndPos.Sort(
-                    (IComparer<PAPX>)PropertyNode.EndComparator.instance);
+                    (IComparer<PAPX>)PropertyNode.PAPXComparator.instance);
 
             logger.Log(POILogger.DEBUG, "PAPX sorted by end position in ",
                     DateTime.Now.Ticks - start, " ms");

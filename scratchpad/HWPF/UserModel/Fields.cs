@@ -10,6 +10,6 @@ namespace NPOI.HWPF.UserModel
     {
         Field GetFieldByStartOffset(FieldsDocumentPart documentPart, int offset);
 
-        Collection<Field> GetFields(FieldsDocumentPart part);
+        List<Field> GetFields(FieldsDocumentPart part);
     }
 }

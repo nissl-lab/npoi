@@ -25,6 +25,7 @@ namespace NPOI.HWPF.UserModel
     using NPOI.HWPF.SPRM;
     using System.IO;
     using NPOI.Util;
+    using System.Diagnostics;
     /**
      * This class is the central class of the HWPF object model. All properties that
      * apply to a range of characters in a Word document extend this class.
@@ -101,7 +102,7 @@ namespace NPOI.HWPF.UserModel
         protected bool _textRangeFound;
 
         /** All text pieces that belong to the document this Range belongs to. */
-        protected string _text;
+        protected StringBuilder _text;
 
         /** The start index in the text list for this Range. */
         protected int _textStart;
@@ -163,6 +164,7 @@ namespace NPOI.HWPF.UserModel
             _parent = parent;
 
             SanityCheckStartEnd();
+            SanityCheck();
         }
 
 
@@ -188,12 +190,25 @@ namespace NPOI.HWPF.UserModel
          *
          * @return true if it does and false if it doesn't
          */
+        [Obsolete]
         public bool UsesUnicode
         {
 
             get
             {
                 return true;
+            }
+        }
+        /**
+         * Gets the text that this Range contains.
+         *
+         * @return The text for this range.
+         */
+        public String Text
+        {
+            get
+            {
+                return _text.ToString().Substring(_start, _end - _start);
             }
         }
 
@@ -321,6 +336,8 @@ namespace NPOI.HWPF.UserModel
             // update the FIB.CCPText + friends fields
             AdjustFIB(text.Length);
 
+            SanityCheck();
+
             return GetCharacterRun(0);
         }
 
@@ -356,6 +373,7 @@ namespace NPOI.HWPF.UserModel
          * @return A new CharacterRun that has the given text and properties and is
          *         n ow a part of the document.
          */
+        [Obsolete]
         public CharacterRun InsertBefore(String text, CharacterProperties props)
         // 
         {
@@ -383,6 +401,7 @@ namespace NPOI.HWPF.UserModel
          * @return A new CharacterRun that has the given text and properties and is
          *         n ow a part of the document.
          */
+        [Obsolete]
         public CharacterRun InsertAfter(String text, CharacterProperties props)
         // 
         {
@@ -408,6 +427,7 @@ namespace NPOI.HWPF.UserModel
          *            The index into the stylesheet for the new paragraph.
          * @return The newly inserted paragraph.
          */
+        [Obsolete]
         public Paragraph InsertBefore(ParagraphProperties props, int styleIndex)
         // 
         {
@@ -429,6 +449,7 @@ namespace NPOI.HWPF.UserModel
          *            The text to insert.
          * @return A newly inserted paragraph.
          */
+        [Obsolete]
         protected Paragraph InsertBefore(ParagraphProperties props, int styleIndex, String text)
         // 
         {
@@ -457,7 +478,7 @@ namespace NPOI.HWPF.UserModel
          *            The index into the stylesheet for the new paragraph.
          * @return The newly inserted paragraph.
          */
-
+        [Obsolete]
         public Paragraph InsertAfter(ParagraphProperties props, int styleIndex)
         // 
         {
@@ -479,6 +500,7 @@ namespace NPOI.HWPF.UserModel
          *            The text to insert.
          * @return A newly inserted paragraph.
          */
+        [Obsolete]
         protected Paragraph InsertAfter(ParagraphProperties props, int styleIndex, String text)
         // 
         {
@@ -553,6 +575,7 @@ namespace NPOI.HWPF.UserModel
          *            The number of rows.
          * @return The empty Table that is now part of the document.
          */
+        [Obsolete]
         public Table InsertBefore(TableProperties props, int rows)
         {
             ParagraphProperties parProps = new ParagraphProperties();
@@ -575,6 +598,42 @@ namespace NPOI.HWPF.UserModel
             return new Table(_start, _start + (rows * (columns + 1)), this, 1);
         }
 
+        /**
+         * Inserts a simple table into the beginning of this range.
+         * 
+         * @param columns
+         *            The number of columns
+         * @param rows
+         *            The number of rows.
+         * @return The empty Table that is now part of the document.
+         */
+        public Table InsertTableBefore(short columns, int rows)
+        {
+            ParagraphProperties parProps = new ParagraphProperties();
+            parProps.SetFInTable(true);
+            parProps.SetItap(1);
+
+            int oldEnd = this._end;
+
+            for (int x = 0; x < rows; x++)
+            {
+                Paragraph cell = this.InsertBefore(parProps, StyleSheet.NIL_STYLE);
+                cell.InsertAfter(Convert.ToString('\u0007'));
+                for (int y = 1; y < columns; y++)
+                {
+                    cell = cell.InsertAfter(parProps, StyleSheet.NIL_STYLE);
+                    cell.InsertAfter(Convert.ToString('\u0007'));
+                }
+                cell = cell.InsertAfter(parProps, StyleSheet.NIL_STYLE,
+                        Convert.ToString('\u0007'));
+                cell.SetTableRowEnd(new TableProperties(columns));
+            }
+
+            int newEnd = this._end;
+            int diff = newEnd - oldEnd;
+
+            return new Table(_start, _start + diff, this, 1);
+        }
         /**
          * Inserts a list into the beginning of this range.
          *
@@ -704,16 +763,23 @@ namespace NPOI.HWPF.UserModel
             {
                 return null;
             }
-            //        short istd;
-            //if ( this is Paragraph )
-            //{
-            //    istd = ((Paragraph) this)._istd;
-            //}
-            //else
-            //{
+                    short istd;
+            if ( this is Paragraph )
+            {
+                istd = ((Paragraph) this)._istd;
+            }
+            else
+            {
             int[] point = FindRange(_paragraphs, Math.Max(chpx.Start, _start), Math.Min(chpx.End, _end));
+            InitParagraphs();
+ 			int parStart = Math.Max( point[0], _parStart );
+            if ( parStart >= _paragraphs.Count )
+            {
+                return null;
+            }
             PAPX papx = _paragraphs[point[0]];
-            short istd = papx.GetIstd();
+            istd = papx.GetIstd();
+			}
 
             CharacterRun chp = new CharacterRun(chpx, _doc.GetStyleSheet(), istd, this);
 
@@ -810,12 +876,12 @@ namespace NPOI.HWPF.UserModel
 
             if (r._parStart != 0)
             {
-                 Paragraph previous = new Paragraph(
-                    _paragraphs[r._parStart - 1], this );
-                if( previous.IsInTable()
-                    && previous.GetTableLevel()==tableLevel
+                Paragraph previous = new Paragraph(
+                   _paragraphs[r._parStart - 1], this);
+                if (previous.IsInTable()
+                    && previous.GetTableLevel() == tableLevel
                     && previous._sectionEnd >= r._sectionStart)
-                        throw new ArgumentException("This paragraph is not the first one in the table");
+                    throw new ArgumentException("This paragraph is not the first one in the table");
             }
 
             Range overallRange = _doc.GetOverallRange();
@@ -883,31 +949,80 @@ namespace NPOI.HWPF.UserModel
         }
 
         /**
-         * Gets the text that this Range contains.
-         *
-         * @return The text for this range.
-         */
-        public String Text
-        {
-            get
-            {
-                return _text.Substring(_start, _end - _start);
-            }
-        }
-
-        /**
          * Inits the section list indexes.
          */
         private void InitSections()
         {
             if (!_sectionRangeFound)
             {
-                int[] point = FindRange<SEPX>(_sections, _start, _end);
+                int[] point = FindRange<SEPX>(_sections,_sectionStart, _start, _end);
                 _sectionStart = point[0];
                 _sectionEnd = point[1];
                 _sectionRangeFound = true;
             }
         }
+
+
+        private static int BinarySearchStart<T>(List<T> rpl,
+            int start) where T : PropertyNode
+        {
+            if (rpl[0].Start >= start)
+                return 0;
+
+            int low = 0;
+            int high = rpl.Count - 1;
+
+            while (low <= high)
+            {
+                int mid = (low + high) >> 1;
+                PropertyNode node = rpl[mid];
+
+                if (node.Start < start)
+                {
+                    low = mid + 1;
+                }
+                else if (node.Start > start)
+                {
+                    high = mid - 1;
+                }
+                else
+                {
+                    return mid;
+                }
+            }
+            return low - 1;
+        }
+        private static int BinarySearchEnd<T>(List<T> rpl,
+                int foundStart, int end) where T : PropertyNode
+        {
+            if (rpl[rpl.Count - 1].End <= end)
+                return rpl.Count - 1;
+
+            int low = foundStart;
+            int high = rpl.Count - 1;
+
+            while (low <= high)
+            {
+                int mid = (low + high) >> 1;
+                PropertyNode node = rpl[mid];
+
+                if (node.End < end)
+                {
+                    low = mid + 1;
+                }
+                else if (node.End > end)
+                {
+                    high = mid - 1;
+                }
+                else
+                {
+                    return mid;
+                }
+            }
+            return low;
+        }
+
+
 
         /**
          * Used to find the list indexes of a particular property.
@@ -941,7 +1056,65 @@ namespace NPOI.HWPF.UserModel
 
             return new int[] { startIndex, endIndex + 1 };
         }
+	/**
+	 * Used to find the list indexes of a particular property.
+	 *
+	 * @param rpl
+	 *            A list of property nodes.
+	 * @param min
+	 *            A hint on where to start looking.
+	 * @param start
+	 *            The starting character offset.
+	 * @param end
+	 *            The ending character offset.
+	 * @return An int array of length 2. The first int is the start index and
+	 *         the second int is the end index.
+	 */
+	private int[] FindRange<T>(List<T> rpl, int min, int start, int end) where T : PropertyNode 
+    {
+		int x = min;
+		
+        if ( rpl.Count == min )
+            return new int[] { min, min };
 
+        T node = rpl[x];
+
+		while (node==null || (node.End <= start && x < rpl.Count - 1)) {
+			x++;
+
+            if (x>=rpl.Count) {
+                return new int[] {0, 0};
+            }
+
+			node = rpl[x];
+		}
+
+        if ( node.Start > end )
+        {
+            return new int[] { 0, 0 };
+        }
+
+        if ( node.End <= start )
+        {
+            return new int[] { rpl.Count, rpl.Count };
+        }
+
+        for ( int y = x; y < rpl.Count; y++ )
+        {
+            node = rpl[y];
+            if ( node == null )
+                continue;
+
+            if ( node.Start < end && node.End <= end )
+                continue;
+
+            if ( node.Start < end )
+                return new int[] { x, y +1 };
+
+            return new int[] { x, y };
+        }
+        return new int[] { x, rpl.Count };
+    }
         /**
          * reSets the list indexes.
          */
@@ -1043,66 +1216,6 @@ namespace NPOI.HWPF.UserModel
             }
         }
 
-        private static int BinarySearchStart<T>(List<T> rpl,
-            int start) where T : PropertyNode
-        {
-            if (rpl[0].Start >= start)
-                return 0;
-
-            int low = 0;
-            int high = rpl.Count - 1;
-
-            while (low <= high)
-            {
-                int mid = (low + high) >> 1;
-                PropertyNode node = rpl[mid];
-
-                if (node.Start < start)
-                {
-                    low = mid + 1;
-                }
-                else if (node.Start > start)
-                {
-                    high = mid - 1;
-                }
-                else
-                {
-                    return mid;
-                }
-            }
-            return low - 1;
-        }
-
-        private static int BinarySearchEnd<T>(List<T> rpl,
-                int foundStart, int end) where T : PropertyNode
-        {
-            if (rpl[rpl.Count - 1].End <= end)
-                return rpl.Count - 1;
-
-            int low = foundStart;
-            int high = rpl.Count - 1;
-
-            while (low <= high)
-            {
-                int mid = (low + high) >> 1;
-                PropertyNode node = rpl[mid];
-
-                if (node.End < end)
-                {
-                    low = mid + 1;
-                }
-                else if (node.End > end)
-                {
-                    high = mid - 1;
-                }
-                else
-                {
-                    return mid;
-                }
-            }
-            return low;
-        }
-
 
         public int StartOffset
         {
@@ -1119,15 +1232,58 @@ namespace NPOI.HWPF.UserModel
                 return _end;
             }
         }
+
+
+
         internal HWPFDocumentCore GetDocument()
         {
             return _doc;
         }
 
+
         public override String ToString()
         {
             return "Range from " + StartOffset + " to " + EndOffset
                     + " (chars)";
+        }
+        /**
+          * Method for debug purposes. Checks that all resolved elements are inside
+          * of current range.
+          */
+        public bool SanityCheck()
+        {
+            Debug.Assert(_start >= 0, "start < 0");
+            Debug.Assert(_start <= _text.Length, "start > text length");
+            Debug.Assert(_end >= 0, "end < 0");
+            Debug.Assert(_end <= _text.Length, "end > text length");
+            Debug.Assert(_start <= _end, "start > end");
+
+
+            if (_charRangeFound)
+            {
+                for (int c = _charStart; c < _charEnd; c++)
+                {
+                    CHPX chpx = _characters[c];
+
+                    int left = Math.Max(this._start, chpx.Start);
+                    int right = Math.Min(this._end, chpx.End);
+                    Debug.Assert(left < right, "left >= right");
+                }
+            }
+            if (_parRangeFound)
+            {
+                for (int p = _parStart; p < _parEnd; p++)
+                {
+                    PAPX papx = _paragraphs[p];
+
+                    int left = Math.Max(this._start, papx.Start);
+                    int right = Math.Min(this._end, papx.End);
+
+                    Debug.Assert(left < right, "left >= right");
+                }
+            }
+
+            return true;
         }
     }
 }

@@ -165,7 +165,7 @@ namespace NPOI.HWPF.Model
 
             List<CHPX> oldChpxSortedByStartPos = new List<CHPX>(_textRuns);
             oldChpxSortedByStartPos.Sort(
-                    (IComparer<CHPX>)PropertyNode.StartComparator.instance);
+                    (IComparer<CHPX>)PropertyNode.CHPXComparator.instance);
 
             logger.Log(POILogger.DEBUG, "CHPX sorted by start position in ",
                      DateTime.Now.Ticks - start, " ms");

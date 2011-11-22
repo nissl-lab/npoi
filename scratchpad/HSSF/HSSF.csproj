@@ -9,7 +9,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>NPOI.HSSF</RootNamespace>
-    <AssemblyName>NPOI.HSSF</AssemblyName>
+    <AssemblyName>NPOI.ScratchPad.HSSF</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

@@ -16,6 +16,8 @@
 ==================================================================== */
 
 using NPOI.HWPF.Model.Types;
+using System;
+using NPOI.Util;
 namespace NPOI.HWPF.UserModel
 {
 
@@ -30,23 +32,30 @@ namespace NPOI.HWPF.UserModel
             SetPhe(new byte[12]);
         }
 
-        //public Object Clone()
-        //{
-        //    base.Clone();
-        //    ParagraphProperties pp = (ParagraphProperties)
-        //    pp.SetAnld(GetAnld().Clone());
-        //    pp.SetBrcTop((BorderCode)GetBrcTop().Clone());
-        //    pp.SetBrcLeft((BorderCode)GetBrcLeft().Clone());
-        //    pp.SetBrcBottom((BorderCode)GetBrcBottom().Clone());
-        //    pp.SetBrcRight((BorderCode)GetBrcRight().Clone());
-        //    pp.SetBrcBetween((BorderCode)GetBrcBetween().Clone());
-        //    pp.SetBrcBar((BorderCode)GetBrcBar().Clone());
-        //    pp.SetDcs(GetDcs().Clone());
-        //    pp.SetLspd((LineSpacingDescriptor)GetLspd().Clone());
-        //    pp.SetShd((ShadingDescriptor)GetShd().Clone());
-        //    pp.SetPhe(GetPhe().Clone());
-        //    return pp;
-        //}
+        public override Object Clone()
+        {
+
+            ParagraphProperties pp = (ParagraphProperties)base.Clone();
+
+            byte[] anld=GetAnld();
+            byte[] anldcopy=new byte[anld.Length];
+            Array.Copy(anld,anldcopy,anld.Length);
+            pp.SetAnld(anldcopy);
+            pp.SetBrcTop((BorderCode)GetBrcTop().Clone());
+            pp.SetBrcLeft((BorderCode)GetBrcLeft().Clone());
+            pp.SetBrcBottom((BorderCode)GetBrcBottom().Clone());
+            pp.SetBrcRight((BorderCode)GetBrcRight().Clone());
+            pp.SetBrcBetween((BorderCode)GetBrcBetween().Clone());
+            pp.SetBrcBar((BorderCode)GetBrcBar().Clone());
+            pp.SetDcs((DropCapSpecifier)GetDcs().Clone());
+            pp.SetLspd((LineSpacingDescriptor)GetLspd().Clone());
+            pp.SetShd((ShadingDescriptor)GetShd().Clone());
+            byte[] phe = GetPhe();
+            byte[] phecopy = new byte[phe.Length];
+            Array.Copy(phe, phecopy, phe.Length);
+            pp.SetPhe(phecopy);
+            return pp;
+        }
 
         public BorderCode GetBarBorder()
         {

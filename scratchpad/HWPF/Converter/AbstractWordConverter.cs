@@ -638,7 +638,7 @@ namespace NPOI.HWPF.Converter
         protected void ProcessField(HWPFDocument wordDocument, Range parentRange,
                 int currentTableLevel, Field field, XmlElement currentBlock)
         {
-            switch (field.getType())
+            switch (field.Type)
             {
                 case 37: // page reference
                     {

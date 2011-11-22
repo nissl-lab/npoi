@@ -81,7 +81,7 @@ namespace NPOI.HWPF.UserModel
         public const short SPRM_FADJUSTRIGHT = 0x2448;
 
 
-        protected short _istd;
+        internal short _istd;
         protected ParagraphProperties _props;
         internal SprmBuffer _papx;
 

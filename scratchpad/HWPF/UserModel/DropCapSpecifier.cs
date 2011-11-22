@@ -19,6 +19,7 @@ namespace NPOI.HWPF.UserModel
 {
     using System;
     using NPOI.Util;
+    using NPOI.HWPF.Model;
 
     /**
      * This data structure Is used by a paragraph to determine how it should drop
@@ -28,7 +29,7 @@ namespace NPOI.HWPF.UserModel
      *
      * @author Ryan Ackley
      */
-    public class DropCapSpecifier
+    public class DropCapSpecifier:BaseObject
     {
         private short _info;
         private static BitField _type = BitFieldFactory.GetInstance(0x07);

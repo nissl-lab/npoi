@@ -118,7 +118,7 @@ namespace NPOI.HWPF
         /** Holds the fields */
         protected Fields _fields;
 
-        protected HWPFDocument()
+        public HWPFDocument()
             : base()
         {
             _endnotes = new NotesImpl(_endnotesTables);
@@ -350,7 +350,7 @@ namespace NPOI.HWPF
             _footnotes = new NotesImpl(_footnotesTables);
 
             _fieldsTables = new FieldsTables(_tableStream, _fib);
-            //_fields = new FieldsImpl(_fieldsTables);
+            _fields = new FieldsImpl(_fieldsTables);
         }
 
         public override TextPieceTable TextTable
@@ -371,11 +371,11 @@ namespace NPOI.HWPF
             return _dop;
         }
 
-        public override string Text
+        public override StringBuilder Text
         {
             get
             {
-                return _text.ToString();
+                return _text;
             }
         }
 

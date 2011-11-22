@@ -9,7 +9,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>NPOI.HWPF</RootNamespace>
-    <AssemblyName>NPOI.HWPF</AssemblyName>
+    <AssemblyName>NPOI.ScratchPad.HWPF</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkSubset>
@@ -27,7 +27,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>..\..\solution\Lib\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -239,7 +239,9 @@
     <Compile Include="UserModel\DocumentPosition.cs" />
     <Compile Include="UserModel\DropCapSpecifier.cs" />
     <Compile Include="UserModel\Field.cs" />
+    <Compile Include="UserModel\FieldImpl.cs" />
     <Compile Include="UserModel\Fields.cs" />
+    <Compile Include="UserModel\FieldsImpl.cs" />
     <Compile Include="UserModel\HeaderStories.cs" />
     <Compile Include="UserModel\HWPFList.cs" />
     <Compile Include="UserModel\LineSpacingDescriptor.cs" />

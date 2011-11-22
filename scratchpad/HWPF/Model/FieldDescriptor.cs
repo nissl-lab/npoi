@@ -21,85 +21,85 @@ using NPOI.HWPF.Model.Types;
 namespace NPOI.HWPF.Model
 {
 
-    public class FieldDescriptor:FLDAbstractType
+    public class FieldDescriptor : FLDAbstractType
     {
-    public static int FIELD_BEGIN_MARK = 0x13;
-    public static int FIELD_SEPARATOR_MARK = 0x14;
-    public static int FIELD_END_MARK = 0x15;
+        public const int FIELD_BEGIN_MARK = 0x13;
+        public const int FIELD_SEPARATOR_MARK = 0x14;
+        public const int FIELD_END_MARK = 0x15;
 
-    public FieldDescriptor( byte[] data )
-    {
-        FillFields( data, 0 );
-    }
+        public FieldDescriptor(byte[] data)
+        {
+            FillFields(data, 0);
+        }
 
-    public int GetBoundaryType()
-    {
-        return GetCh();
-    }
+        public int GetBoundaryType()
+        {
+            return GetCh();
+        }
 
-    public int GetFieldType()
-    {
-        if ( GetCh() != FIELD_BEGIN_MARK )
-            throw new NotSupportedException(
-                    "This field Is only defined for begin marks." );
-        return GetFlt();
-    }
+        public int GetFieldType()
+        {
+            if (GetCh() != FIELD_BEGIN_MARK)
+                throw new NotSupportedException(
+                        "This field Is only defined for begin marks.");
+            return GetFlt();
+        }
 
-    public bool IsZombieEmbed()
-    {
-        if ( GetCh() != FIELD_END_MARK )
-            throw new NotSupportedException(
-                    "This field Is only defined for end marks." );
-        return IsFZombieEmbed();
-    }
+        public bool IsZombieEmbed()
+        {
+            if (GetCh() != FIELD_END_MARK)
+                throw new NotSupportedException(
+                        "This field Is only defined for end marks.");
+            return IsFZombieEmbed();
+        }
 
-    public bool IsResultDirty()
-    {
-        if ( GetCh() != FIELD_END_MARK )
-            throw new NotSupportedException(
-                    "This field Is only defined for end marks." );
-        return IsFResultDirty();
-    }
+        public bool IsResultDirty()
+        {
+            if (GetCh() != FIELD_END_MARK)
+                throw new NotSupportedException(
+                        "This field Is only defined for end marks.");
+            return IsFResultDirty();
+        }
 
-    public bool IsResultEdited()
-    {
-        if ( GetCh() != FIELD_END_MARK )
-            throw new NotSupportedException(
-                    "This field Is only defined for end marks." );
-        return IsFResultEdited();
-    }
+        public bool IsResultEdited()
+        {
+            if (GetCh() != FIELD_END_MARK)
+                throw new NotSupportedException(
+                        "This field Is only defined for end marks.");
+            return IsFResultEdited();
+        }
 
-    public bool IsLocked()
-    {
-        if ( GetCh() != FIELD_END_MARK )
-            throw new NotSupportedException(
-                    "This field Is only defined for end marks." );
-        return IsFLocked();
-    }
+        public bool IsLocked()
+        {
+            if (GetCh() != FIELD_END_MARK)
+                throw new NotSupportedException(
+                        "This field Is only defined for end marks.");
+            return IsFLocked();
+        }
 
-    public bool IsPrivateResult()
-    {
-        if ( GetCh() != FIELD_END_MARK )
-            throw new NotSupportedException(
-                    "This field Is only defined for end marks." );
-        return IsFPrivateResult();
-    }
+        public bool IsPrivateResult()
+        {
+            if (GetCh() != FIELD_END_MARK)
+                throw new NotSupportedException(
+                        "This field Is only defined for end marks.");
+            return IsFPrivateResult();
+        }
 
-    public bool IsNested()
-    {
-        if ( GetCh() != FIELD_END_MARK )
-            throw new NotSupportedException(
-                    "This field Is only defined for end marks." );
-        return IsFNested();
-    }
+        public bool IsNested()
+        {
+            if (GetCh() != FIELD_END_MARK)
+                throw new NotSupportedException(
+                        "This field Is only defined for end marks.");
+            return IsFNested();
+        }
 
-    public bool IsHasSep()
-    {
-        if ( GetCh() != FIELD_END_MARK )
-            throw new NotSupportedException(
-                    "This field Is only defined for end marks." );
-        return IsFHasSep();
-    }
+        public bool IsHasSep()
+        {
+            if (GetCh() != FIELD_END_MARK)
+                throw new NotSupportedException(
+                        "This field Is only defined for end marks.");
+            return IsFHasSep();
+        }
     }
 }
 

@@ -152,7 +152,7 @@ namespace NPOI.HWPF
      * Internal method to access document text
      */
     
-        public abstract string Text{get;}
+        public abstract StringBuilder Text{get;}
 
         public abstract TextPieceTable TextTable { get; }
 

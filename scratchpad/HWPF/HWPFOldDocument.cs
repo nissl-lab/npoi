@@ -130,11 +130,11 @@ namespace NPOI.HWPF
             }
         }
         private StringBuilder _text;
-        public override string Text
+        public override StringBuilder Text
         {
             get
             {
-                return _text.ToString();
+                return _text;
             }
         }
 

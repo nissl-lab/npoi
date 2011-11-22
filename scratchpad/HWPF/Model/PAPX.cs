@@ -38,7 +38,6 @@ namespace NPOI.HWPF.Model
     {
 
         private ParagraphHeight _phe;
-        private int _hugeGrpprlOffset = -1;
 
         public PAPX(int charStart, int charEnd, SprmBuffer buf):
             base(charStart, charEnd, buf)
@@ -93,13 +92,13 @@ namespace NPOI.HWPF.Model
                         {
                             byte[] hugeGrpprl = new byte[grpprlSize + 2];
                             // copy original istd into huge Grpprl
-                            hugeGrpprl[0] = grpprl[0]; hugeGrpprl[1] = grpprl[1];
+                            hugeGrpprl[0] = grpprl[0]; 
+                            hugeGrpprl[1] = grpprl[1];
                             // copy Grpprl from dataStream
                             Array.Copy(datastream, hugeGrpprlOffset + 2, hugeGrpprl, 2,
                                              grpprlSize);
-                            // save a pointer to where we got the huge Grpprl from
-                            _hugeGrpprlOffset = hugeGrpprlOffset;
-                            return new SprmBuffer(hugeGrpprl);
+
+                            return new SprmBuffer(hugeGrpprl,2);
                         }
                     }
                 }
@@ -116,11 +115,6 @@ namespace NPOI.HWPF.Model
         public byte[] GetGrpprl()
         {
             return ((SprmBuffer)_buf).ToByteArray();
-        }
-
-        public int GetHugeGrpprlOffset()
-        {
-            return _hugeGrpprlOffset;
         }
 
         public short GetIstd()

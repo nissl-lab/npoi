@@ -19,13 +19,14 @@ namespace NPOI.HWPF.UserModel
 {
     using System;
     using NPOI.Util;
+    using NPOI.HWPF.Model;
 
     /**
      * This class Is used to determine line spacing for a paragraph.
      *
      * @author Ryan Ackley
      */
-    public class LineSpacingDescriptor
+    public class LineSpacingDescriptor:BaseObject
     {
         short _dyaLine;
         short _fMultiLinespace;

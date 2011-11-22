@@ -59,7 +59,7 @@ namespace NPOI.HWPF.UserModel
          */
         int GetMarkStartOffset();
 
-        int getType();
+        int Type { get; }
 
         bool HasSeparator();
 

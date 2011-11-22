@@ -21,8 +21,9 @@ namespace NPOI.HWPF.UserModel
 {
     using System;
     using NPOI.Util;
+    using NPOI.HWPF.Model;
 
-    public class BorderCode
+    public class BorderCode:BaseObject
     {
         public static int SIZE = 4;
         private short _info;
