@@ -117,9 +117,12 @@ namespace NPOI.HWPF.Converter
             htmlDocumentFacade.UpdateStylesheet();
         }
 
-        public override XmlDocument GetDocument()
+        public override XmlDocument Document
         {
-            return htmlDocumentFacade.Document;
+            get
+            {
+                return htmlDocumentFacade.Document;
+            }
         }
 
         protected override void OutputCharacters(XmlElement pElement, CharacterRun characterRun, string text)

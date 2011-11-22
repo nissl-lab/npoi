@@ -945,7 +945,7 @@ namespace NPOI.HWPF.UserModel
         /**
          * reSets the list indexes.
          */
-        private void Reset()
+        protected virtual void Reset()
         {
             _textRangeFound = false;
             _charRangeFound = false;

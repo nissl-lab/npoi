@@ -76,8 +76,22 @@ namespace NPOI.HWPF.UserModel
 
         public TableRow GetRow(int index)
         {
+            InitRows();
             return (TableRow)_rows[index];
         }
+
+        public int TableLevel
+        {
+            get
+            {
+                return _tableLevel;
+            }
+        }
+        protected override void Reset()
+        {
+            _rowsFound = false;
+        }
+       
     }
 
 }

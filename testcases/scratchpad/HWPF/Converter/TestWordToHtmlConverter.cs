@@ -68,7 +68,7 @@ namespace TestCases.HWPF.Converter
             wordToHtmlConverter.ProcessDocument(hwpfDocument);
 
             ;
-            return wordToHtmlConverter.GetDocument().InnerXml;
+            return wordToHtmlConverter.Document.InnerXml;
         }
         //[TestMethod]
         public void TestAIOOBTap()

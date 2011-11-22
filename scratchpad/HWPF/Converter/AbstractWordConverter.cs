@@ -134,7 +134,7 @@ namespace NPOI.HWPF.Converter
             Triplet updated = GetFontReplacer().Update(original);
             return updated;
         }
-        public abstract XmlDocument GetDocument();
+        public abstract XmlDocument Document { get; }
         public FontReplacer GetFontReplacer()
         {
             return fontReplacer;
@@ -832,7 +832,7 @@ namespace NPOI.HWPF.Converter
         }
 
         ////@SuppressWarnings( "unused" )
-        protected bool ProcessOle2(HWPFDocument wordDocument, XmlElement block,
+        protected virtual bool ProcessOle2(HWPFDocument wordDocument, XmlElement block,
                 NPOI.POIFS.FileSystem.Entry entry)
         {
             return false;

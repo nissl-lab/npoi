@@ -52,6 +52,7 @@
     <Compile Include="HWPF\Converter\AbstractWordUtilsTest.cs" />
     <Compile Include="HWPF\Converter\TestNumberFormatter.cs" />
     <Compile Include="HWPF\Converter\TestWordToHtmlConverter.cs" />
+    <Compile Include="HWPF\Converter\TestWordToTextConverter.cs" />
     <Compile Include="HWPF\Extractor\TestDifferentRoutes.cs" />
     <Compile Include="HWPF\Extractor\TestWordExtractor.cs" />
     <Compile Include="HWPF\Extractor\TestWordExtractorBugs.cs" />
