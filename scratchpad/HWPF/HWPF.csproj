@@ -253,7 +253,6 @@
     <Compile Include="UserModel\ParagraphProperties.cs" />
     <Compile Include="UserModel\Picture.cs" />
     <Compile Include="UserModel\PictureType.cs" />
-    <Compile Include="UserModel\Picture~1.cs" />
     <Compile Include="UserModel\Range.cs" />
     <Compile Include="UserModel\Section.cs">
       <SubType>Code</SubType>
