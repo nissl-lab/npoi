@@ -278,6 +278,23 @@ namespace TestCases.HWPF.UserModel
             Assert.AreEqual("10a8", picture.SuggestFullFileName());
             Assert.AreEqual("image/unknown", picture.MimeType);
         }
+        [TestMethod]
+        public void TestEquation()
+        {
+            HWPFDocument doc = HWPFTestDataSamples.OpenSampleFile("equation.doc");
+            PicturesTable pictures = doc.GetPicturesTable();
+
+            List<Picture> allPictures = pictures.GetAllPictures();
+            Assert.AreEqual(1, allPictures.Count);
+
+            Picture picture = allPictures[0];
+            Assert.IsNotNull(picture);
+            Assert.AreEqual(PictureType.EMF, picture.SuggestPictureType());
+            Assert.AreEqual(PictureType.EMF.Extension,
+                    picture.SuggestFileExtension());
+            Assert.AreEqual(PictureType.EMF.Mime, picture.MimeType);
+            Assert.AreEqual("0.emf", picture.SuggestFullFileName());
+        }
 
         /**
          * In word you can have floating or fixed pictures.
@@ -327,6 +344,39 @@ namespace TestCases.HWPF.UserModel
             Assert.AreEqual(16, image1s);
             Assert.AreEqual(4, escher8s);
             Assert.AreEqual(0, plain8s);
+        }
+        [TestMethod]
+        public void TestCroppedPictures()
+        {
+            HWPFDocument doc = HWPFTestDataSamples.OpenSampleFile("testCroppedPictures.doc");
+            List<Picture> pics = doc.GetPicturesTable().GetAllPictures();
+
+            Assert.IsNotNull(pics);
+            Assert.AreEqual(2, pics.Count);
+
+            Picture pic1 = pics[0];
+            Assert.AreEqual(27, pic1.AspectRatioX);
+            Assert.AreEqual(270, pic1.HorizontalScalingFactor);
+            Assert.AreEqual(27, pic1.AspectRatioY);
+            Assert.AreEqual(271, pic1.VerticalScalingFactor);
+            Assert.AreEqual(12000, pic1.DxaGoal);       // 21.17 cm / 2.54 cm/inch * 72dpi * 20 = 12000
+            Assert.AreEqual(9000, pic1.DyaGoal);        // 15.88 cm / 2.54 cm/inch * 72dpi * 20 = 9000
+            Assert.AreEqual(0, pic1.DxaCropLeft);
+            Assert.AreEqual(0, pic1.DxaCropRight);
+            Assert.AreEqual(0, pic1.DyaCropTop);
+            Assert.AreEqual(0, pic1.DyaCropBottom);
+
+            Picture pic2 = pics[1];
+            Assert.AreEqual(76, pic2.AspectRatioX);
+            Assert.AreEqual(764, pic2.HorizontalScalingFactor);
+            Assert.AreEqual(68, pic2.AspectRatioY);
+            Assert.AreEqual(685, pic2.VerticalScalingFactor);
+            Assert.AreEqual(12000, pic2.DxaGoal);       // 21.17 cm / 2.54 cm/inch * 72dpi * 20 = 12000
+            Assert.AreEqual(9000, pic2.DyaGoal);        // 15.88 cm / 2.54 cm/inch * 72dpi * 20 = 9000
+            Assert.AreEqual(0, pic2.DxaCropLeft);       // TODO YK: The Picture is cropped but HWPF reads the crop parameters all zeros
+            Assert.AreEqual(0, pic2.DxaCropRight);
+            Assert.AreEqual(0, pic2.DyaCropTop);
+            Assert.AreEqual(0, pic2.DyaCropBottom);
         }
     }
 }

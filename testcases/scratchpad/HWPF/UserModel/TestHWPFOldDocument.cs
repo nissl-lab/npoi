@@ -17,7 +17,7 @@
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TestCases.HWPF;
-namespace NPOI.HWPF.Usermodel
+namespace NPOI.HWPF.UserModel
 {
 
     /**
