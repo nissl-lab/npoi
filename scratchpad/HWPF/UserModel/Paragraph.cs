@@ -470,7 +470,7 @@ namespace NPOI.HWPF.UserModel
         internal void SetTableRowEnd(TableProperties props)
         {
             SetTableRowEnd(true);
-            byte[] grpprl = TableSprmCompressor.compressTableProperty(props);
+            byte[] grpprl = TableSprmCompressor.CompressTableProperty(props);
             _papx.Append(grpprl);
         }
 

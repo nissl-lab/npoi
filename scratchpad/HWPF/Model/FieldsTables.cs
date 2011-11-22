@@ -74,7 +74,7 @@ namespace NPOI.HWPF.Model
         private PlexOfCps ReadPLCF(byte[] tableStream, FileInformationBlock fib,
                 FieldsDocumentPart documentPart)
         {
-            int start = fib.GetFieldsPlcfOffSet(documentPart);
+            int start = fib.GetFieldsPlcfOffset(documentPart);
             int length = fib.GetFieldsPlcfLength(documentPart);
 
             if (start <= 0 || length <= 0)
@@ -88,7 +88,7 @@ namespace NPOI.HWPF.Model
         {
             if (plexOfCps == null || plexOfCps.Length == 0)
             {
-                fib.SetFieldsPlcfOffSet(part, outputStream.Offset);
+                fib.SetFieldsPlcfOffset(part, outputStream.Offset);
                 fib.SetFieldsPlcfLength(part, 0);
                 return 0;
             }
@@ -100,7 +100,7 @@ namespace NPOI.HWPF.Model
 
             outputStream.Write(data);
 
-            fib.SetFieldsPlcfOffSet(part, start);
+            fib.SetFieldsPlcfOffset(part, start);
             fib.SetFieldsPlcfLength(part, length);
 
             return length;

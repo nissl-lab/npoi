@@ -42,6 +42,14 @@ public class NoteType {
         this.fibTextPositionsFieldIndex = fibTextPositionsFieldIndex;
     }
 
+    public static NoteType[] Values
+    {
+        get
+        {
+            return new NoteType[] { NoteType.ENDNOTE, NoteType.FOOTNOTE };
+        }
+    }
+
     public int GetFibDescriptorsFieldIndex()
     {
         return fibDescriptorsFieldIndex;

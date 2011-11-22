@@ -28,7 +28,7 @@ namespace NPOI.HWPF.SPRM
         public TableSprmCompressor()
         {
         }
-        public static byte[] compressTableProperty(TableProperties newTAP)
+        public static byte[] CompressTableProperty(TableProperties newTAP)
         {
             int size = 0;
             ArrayList sprmList = new ArrayList();

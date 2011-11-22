@@ -42,6 +42,11 @@ namespace NPOI.HWPF.UserModel
         internal const int UNKNOWN_HEADER_SIZE = 0x49;
 
 
+        public static byte[] IHDR = new byte[] { (byte)'I', (byte)'H', (byte)'D', (byte)'R' };
+
+    public static byte[] COMPRESSED1 = { (byte) 0xFE, 0x78, (byte) 0xDA };
+    public static byte[] COMPRESSED2 = { (byte) 0xFE, 0x78, (byte) 0x9C };
+
         private int dataBlockStartOfsset;
         private int pictureBytesStartOffset;
         private int dataBlockSize;
@@ -50,34 +55,22 @@ namespace NPOI.HWPF.UserModel
         private byte[] rawContent;
         private byte[] content;
         private byte[] _dataStream;
-        private int aspectRatioX;
-        private int aspectRatioY;
         private int height = -1;
         private int width = -1;
 
-        public static byte[] IHDR = new byte[] { (byte)'I', (byte)'H', (byte)'D', (byte)'R' };
 
-    public static byte[] COMPRESSED1 = { (byte) 0xFE, 0x78, (byte) 0xDA };
-    public static byte[] COMPRESSED2 = { (byte) 0xFE, 0x78, (byte) 0x9C };
-
-        public Picture(int dataBlockStartOfsset, byte[] _dataStream, bool FillBytes)
+        public Picture(int dataBlockStartOfsset, byte[] _dataStream, bool fillBytes)
+            :base(_dataStream, dataBlockStartOfsset)
             //: base(_dataStream, dataBlockStartOfsset)
         {
+            
             this._dataStream = _dataStream;
             this.dataBlockStartOfsset = dataBlockStartOfsset;
             this.dataBlockSize = LittleEndian.GetInt(_dataStream, dataBlockStartOfsset);
             this.pictureBytesStartOffset = GetPictureBytesStartOffset(dataBlockStartOfsset, _dataStream, dataBlockSize);
             this.size = dataBlockSize - (pictureBytesStartOffset - dataBlockStartOfsset);
 
-            if (size < 0)
-            {
-
-            }
-
-            this.aspectRatioX = ExtractAspectRatioX(_dataStream, dataBlockStartOfsset);
-            this.aspectRatioY = ExtractAspectRatioY(_dataStream, dataBlockStartOfsset);
-
-            if (FillBytes)
+            if (fillBytes)
             {
                 FillImageContent();
             }
@@ -94,29 +87,19 @@ namespace NPOI.HWPF.UserModel
 
         private void FillWidthHeight()
         {
-            String ext = SuggestFileExtension();
+            PictureType pictureType = SuggestPictureType();
             // trying to extract width and height from pictures content:
-            if ("jpg".Equals(ext,StringComparison.InvariantCultureIgnoreCase))
+            if (pictureType == PictureType.JPEG)
             {
                 FillJPGWidthHeight();
             }
-            else if ("png".Equals(ext,StringComparison.InvariantCultureIgnoreCase))
+            else if (pictureType == PictureType.PNG)
             {
                 FillPNGWidthHeight();
             }
         }
 
-        private static int ExtractAspectRatioX(byte[] _dataStream, int dataBlockStartOffSet)
-        {
-            return LittleEndian.GetShort(_dataStream, dataBlockStartOffSet + 0x20) / 10;
-        }
-
-        private static int ExtractAspectRatioY(byte[] _dataStream, int dataBlockStartOffSet)
-        {
-            return LittleEndian.GetShort(_dataStream, dataBlockStartOffSet + 0x22) / 10;
-        }
-
-        /**
+       /**
          * Tries to suggest a filename: hex representation of picture structure offset in "Data" stream plus extension that
          * is tried to determine from first byte of picture's content.
          *
@@ -149,6 +132,15 @@ namespace NPOI.HWPF.UserModel
         }
 
         /**
+     * @return The offset of this picture in the picture bytes, used when
+     *         matching up with {@link CharacterRun#getPicOffset()}
+     */
+    public int getStartOffset()
+    {
+        return dataBlockStartOfsset;
+    }
+
+    /**
          * @return picture's content as byte array
          */
         public byte[] GetContent()
@@ -160,12 +152,15 @@ namespace NPOI.HWPF.UserModel
             return content;
         }
 
+    /**
+     * Returns picture's content as it stored in Word file, i.e. possibly in
+     * compressed form.
+     * 
+     * @return picture's content as it stored in Word file
+     */
         public byte[] GetRawContent()
         {
-            if (rawContent == null || rawContent.Length <= 0)
-            {
                 FillRawImageContent();
-            }
             return rawContent;
         }
 
@@ -188,9 +183,20 @@ namespace NPOI.HWPF.UserModel
         {
             get
             {
-                return aspectRatioX;
+                return mx/10;
             }
         }
+
+    /**
+     * @return Horizontal scaling factor supplied by user expressed in .001%
+     *         units
+     */
+    public int HorizontalScalingFactor
+    {
+get{
+        return mx;
+}
+    }
         /**
          * returns vertical aspect ratio for picture provided by user
          */
@@ -198,10 +204,91 @@ namespace NPOI.HWPF.UserModel
         {
             get
             {
-                return aspectRatioY;
+                return my/10;
             }
         }
 
+    /**
+     * @return Vertical scaling factor supplied by user expressed in .001% units
+     */
+    public int VerticalScalingFactor
+    {
+get{
+        return my;
+}
+    }
+
+    /**
+     * Gets the initial width of the picture, in twips, prior to cropping or
+     * scaling.
+     * 
+     * @return the initial width of the picture in twips
+     */
+    public int DxaGoal
+    {
+        get
+        {
+            return dxaGoal;
+        }
+    }
+
+    /**
+     * Gets the initial height of the picture, in twips, prior to cropping or
+     * scaling.
+     * 
+     * @return the initial width of the picture in twips
+     */
+    public int DyaGoal
+    {
+        get
+        {
+            return dyaGoal;
+        }
+    }
+
+    /**
+     * @return The amount the picture has been cropped on the left in twips
+     */
+    public int DxaCropLeft
+    {
+        get
+        {
+            return dxaCropLeft;
+        }
+    }
+
+    /**
+     * @return The amount the picture has been cropped on the top in twips
+     */
+    public int DyaCropTop
+    {
+        get
+        {
+            return dyaCropTop;
+        }
+    }
+
+    /**
+     * @return The amount the picture has been cropped on the right in twips
+     */
+    public int DxaCropRight
+    {
+        get
+        {
+            return dxaCropRight;
+        }
+    }
+
+    /**
+     * @return The amount the picture has been cropped on the bottom in twips
+     */
+    public int DyaCropBottom
+    {
+        get
+        {
+            return dyaCropBottom;
+        }
+    }
         /**
          * tries to suggest extension for picture's file by matching signatures of popular image formats to first bytes
          * of picture's contents
@@ -225,36 +312,7 @@ namespace NPOI.HWPF.UserModel
         {
             get
             {
-                String extension = SuggestFileExtension();
-                if ("jpg".Equals(extension))
-                {
-                    return "image/jpeg";
-                }
-                if ("png".Equals(extension))
-                {
-                    return "image/png";
-                }
-                if ("gif".Equals(extension))
-                {
-                    return "image/gif";
-                }
-                if ("bmp".Equals(extension))
-                {
-                    return "image/bmp";
-                }
-                if ("tiff".Equals(extension))
-                {
-                    return "image/tiff";
-                }
-                if ("wmf".Equals(extension))
-                {
-                    return "image/x-wmf";
-                }
-                if ("emf".Equals(extension))
-                {
-                    return "image/x-emf";
-                }
-                return "image/unknown";
+                return SuggestPictureType().Mime;
             }
         }
 
@@ -366,26 +424,19 @@ namespace NPOI.HWPF.UserModel
         private void FillJPGWidthHeight()
         {
             /*
-            http://www.codecomments.com/archive281-2004-3-158083.html
-
-            Algorhitm proposed by Patrick TJ McPhee:
-
-            read 2 bytes
-            make sure they are 'ffd8'x
-            repeatedly:
-            read 2 bytes
-            make sure the first one is 'ff'x
-            if the second one is 'd9'x stop
-            else if the second one is c0 or c2 (or possibly other values ...)
-            skip 2 bytes
-            read one byte into depth
-            read two bytes into height
-            read two bytes into width
-            else
-            read two bytes into length
-            skip forward length-2 bytes
-
-            Also used Ruby code snippet from: http://www.bigbold.com/snippets/posts/Show/805 for reference
+         * http://www.codecomments.com/archive281-2004-3-158083.html
+         * 
+         * Algorhitm proposed by Patrick TJ McPhee:
+         * 
+         * read 2 bytes make sure they are 'ffd8'x repeatedly: read 2 bytes make
+         * sure the first one is 'ff'x if the second one is 'd9'x stop else if
+         * the second one is c0 or c2 (or possibly other values ...) skip 2
+         * bytes read one byte into depth read two bytes into height read two
+         * bytes into width else read two bytes into length skip forward
+         * length-2 bytes
+         * 
+         * Also used Ruby code snippet from:
+         * http://www.bigbold.com/snippets/posts/show/805 for reference
             */
             int pointer = pictureBytesStartOffset + 2;
             int firstByte = _dataStream[pointer];

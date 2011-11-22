@@ -21,6 +21,7 @@ namespace NPOI.HWPF.Model
     using System.Collections;
     using NPOI.Util;
     using NPOI.HWPF.Model.IO;
+    using System.Collections.Generic;
 
     public class FIBFieldHandler
     {
@@ -127,7 +128,7 @@ namespace NPOI.HWPF.Model
 
 
         public FIBFieldHandler(byte[] mainStream, int offset, byte[] tableStream,
-                               ArrayList offsetList, bool areKnown)
+                               List<int> offsetList, bool areKnown)
         {
             int numFields = LittleEndian.GetShort(mainStream, offset);
             offset += LittleEndianConstants.SHORT_SIZE;

@@ -19,6 +19,9 @@ using NPOI.HWPF.Model.Types;
 using System.Collections;
 using NPOI.HWPF.Model.IO;
 using System;
+using System.Collections.Generic;
+using System.Text;
+using System.Reflection;
 namespace NPOI.HWPF.Model
 {
 
@@ -54,27 +57,113 @@ namespace NPOI.HWPF.Model
 
         public void FillVariableFields(byte[] mainDocument, byte[] tableStream)
         {
-            ArrayList fieldSet = new ArrayList();
-            fieldSet.Add(FIBFieldHandler.STSHF);
-            fieldSet.Add(FIBFieldHandler.CLX);
-            fieldSet.Add(FIBFieldHandler.DOP);
-            fieldSet.Add(FIBFieldHandler.PLCFBTECHPX);
-            fieldSet.Add(FIBFieldHandler.PLCFBTEPAPX);
-            fieldSet.Add(FIBFieldHandler.PLCFSED);
-            fieldSet.Add(FIBFieldHandler.PLCFLST);
-            fieldSet.Add(FIBFieldHandler.PLFLFO);
-            fieldSet.Add(FIBFieldHandler.PLCFFLDMOM);
-            fieldSet.Add(FIBFieldHandler.STTBFFFN);
-            fieldSet.Add(FIBFieldHandler.STTBFRMARK);
-            fieldSet.Add(FIBFieldHandler.STTBSAVEDBY);
-            fieldSet.Add(FIBFieldHandler.MODIFIED);
-
-
             _shortHandler = new FIBshortHandler(mainDocument);
             _longHandler = new FIBLongHandler(mainDocument, FIBshortHandler.START + _shortHandler.SizeInBytes());
+
+            List<int> knownFieldSet = new List<int>();
+            knownFieldSet.Add(FIBFieldHandler.STSHF);
+            knownFieldSet.Add(FIBFieldHandler.CLX);
+            knownFieldSet.Add(FIBFieldHandler.DOP);
+            knownFieldSet.Add(FIBFieldHandler.PLCFBTECHPX);
+            knownFieldSet.Add(FIBFieldHandler.PLCFBTEPAPX);
+            knownFieldSet.Add(FIBFieldHandler.PLCFSED);
+            knownFieldSet.Add(FIBFieldHandler.PLCFLST);
+            knownFieldSet.Add(FIBFieldHandler.PLFLFO);
+
+        // field info
+        foreach ( FieldsDocumentPart part in Enum.GetValues(typeof(FieldsDocumentPart)) )
+            knownFieldSet.Add((int)part);
+
+            // bookmarks
+            knownFieldSet.Add(FIBFieldHandler.PLCFBKF);
+            knownFieldSet.Add(FIBFieldHandler.PLCFBKL);
+            knownFieldSet.Add(FIBFieldHandler.STTBFBKMK);
+
+
+            // notes
+            foreach (NoteType noteType in NoteType.Values)
+            {
+                knownFieldSet.Add(noteType
+                        .GetFibDescriptorsFieldIndex());
+                knownFieldSet.Add(noteType
+                        .GetFibTextPositionsFieldIndex());
+            }
+
+            knownFieldSet.Add(FIBFieldHandler.STTBFFFN);
+            knownFieldSet.Add(FIBFieldHandler.STTBFRMARK);
+            knownFieldSet.Add(FIBFieldHandler.STTBSAVEDBY);
+            knownFieldSet.Add(FIBFieldHandler.MODIFIED);
+
+
             _fieldHandler = new FIBFieldHandler(mainDocument,
                                                 FIBshortHandler.START + _shortHandler.SizeInBytes() + _longHandler.SizeInBytes(),
-                                                tableStream, fieldSet, true);
+                                                tableStream, knownFieldSet, true);
+        }
+        public override String ToString()
+        {
+            StringBuilder stringBuilder = new StringBuilder(base.ToString());
+            stringBuilder.Append("[FIB2]\n");
+            stringBuilder.Append("\tSubdocuments info:\n");
+            foreach (SubdocumentType type in Enum.GetValues(typeof(SubdocumentType)))
+            {
+                stringBuilder.Append("\t\t");
+                stringBuilder.Append(type);
+                stringBuilder.Append(" has length of ");
+                stringBuilder.Append(GetSubdocumentTextStreamLength(type));
+                stringBuilder.Append(" char(s)\n");
+            }
+            stringBuilder.Append("\tFields PLCF info:\n");
+            foreach (FieldsDocumentPart part in Enum.GetValues(typeof(FieldsDocumentPart)))
+            {
+                stringBuilder.Append("\t\t");
+                stringBuilder.Append(part);
+                stringBuilder.Append(": PLCF starts at ");
+                stringBuilder.Append(GetFieldsPlcfOffset(part));
+                stringBuilder.Append(" and have length of ");
+                stringBuilder.Append(GetFieldsPlcfLength(part));
+                stringBuilder.Append("\n");
+            }
+            stringBuilder.Append("\tNotes PLCF info:\n");
+            foreach (NoteType noteType in NoteType.Values)
+            {
+                stringBuilder.Append("\t\t");
+                stringBuilder.Append(noteType);
+                stringBuilder.Append(": descriptions starts ");
+                stringBuilder.Append(GetNotesDescriptorsOffset(noteType));
+                stringBuilder.Append(" and have length of ");
+                stringBuilder.Append(GetNotesDescriptorsSize(noteType));
+                stringBuilder.Append(" bytes\n");
+                stringBuilder.Append("\t\t");
+                stringBuilder.Append(noteType);
+                stringBuilder.Append(": text positions starts ");
+                stringBuilder.Append(GetNotesTextPositionsOffset(noteType));
+                stringBuilder.Append(" and have length of ");
+                stringBuilder.Append(GetNotesTextPositionsSize(noteType));
+                stringBuilder.Append(" bytes\n");
+            }
+            try
+            {
+                stringBuilder.Append("\t.Net reflection info:\n");
+                foreach (MethodInfo method in typeof(FileInformationBlock).GetMethods())
+                {
+                    if (!method.Name.StartsWith("get")
+                            || !method.IsPublic
+                            || method.IsStatic
+                            || method.GetParameters().Length > 0)
+                        continue;
+                    stringBuilder.Append("\t\t");
+                    stringBuilder.Append(method.Name);
+                    stringBuilder.Append(" => ");
+                    stringBuilder.Append(method.Invoke(this, null));
+                    stringBuilder.Append("\n");
+                }
+            }
+            catch (Exception exc)
+            {
+                stringBuilder.Append("(exc: " + exc.Message + ")");
+            }
+            stringBuilder.Append("[/FIB2]\n");
+            return stringBuilder.ToString();
         }
 
         public int GetFcDop()
@@ -573,7 +662,7 @@ namespace NPOI.HWPF.Model
             _fieldHandler.ClearFields();
         }
 
-        public int GetFieldsPlcfOffSet(FieldsDocumentPart part)
+        public int GetFieldsPlcfOffset(FieldsDocumentPart part)
         {
             return _fieldHandler.GetFieldOffset((int)part);
         }
@@ -583,7 +672,7 @@ namespace NPOI.HWPF.Model
             return _fieldHandler.GetFieldSize((int)part);
         }
 
-        public void SetFieldsPlcfOffSet(FieldsDocumentPart part, int offSet)
+        public void SetFieldsPlcfOffset(FieldsDocumentPart part, int offSet)
         {
             _fieldHandler.SetFieldOffset((int)part, offSet);
         }
@@ -593,7 +682,127 @@ namespace NPOI.HWPF.Model
             _fieldHandler.SetFieldSize((int)part, length);
         }
 
+        [Obsolete]
+        public int GetFcPlcffldAtn()
+        {
+            return _fieldHandler.GetFieldOffset(FIBFieldHandler.PLCFFLDATN);
+        }
 
+        [Obsolete]
+        public int GetLcbPlcffldAtn()
+        {
+            return _fieldHandler.GetFieldSize(FIBFieldHandler.PLCFFLDATN);
+        }
+
+        [Obsolete]
+        public void SetFcPlcffldAtn(int offset)
+        {
+            _fieldHandler.SetFieldOffset(FIBFieldHandler.PLCFFLDATN, offset);
+        }
+
+        [Obsolete]
+        public void SetLcbPlcffldAtn(int size)
+        {
+            _fieldHandler.SetFieldSize(FIBFieldHandler.PLCFFLDATN, size);
+        }
+
+        [Obsolete]
+        public int GetFcPlcffldEdn()
+        {
+            return _fieldHandler.GetFieldOffset(FIBFieldHandler.PLCFFLDEDN);
+        }
+
+        [Obsolete]
+        public int GetLcbPlcffldEdn()
+        {
+            return _fieldHandler.GetFieldSize(FIBFieldHandler.PLCFFLDEDN);
+        }
+
+        [Obsolete]
+        public void SetFcPlcffldEdn(int offset)
+        {
+            _fieldHandler.SetFieldOffset(FIBFieldHandler.PLCFFLDEDN, offset);
+        }
+
+        [Obsolete]
+        public void SetLcbPlcffldEdn(int size)
+        {
+            _fieldHandler.SetFieldSize(FIBFieldHandler.PLCFFLDEDN, size);
+        }
+
+        [Obsolete]
+        public int GetFcPlcffldFtn()
+        {
+            return _fieldHandler.GetFieldOffset(FIBFieldHandler.PLCFFLDFTN);
+        }
+
+        [Obsolete]
+        public int GetLcbPlcffldFtn()
+        {
+            return _fieldHandler.GetFieldSize(FIBFieldHandler.PLCFFLDFTN);
+        }
+
+        [Obsolete]
+        public void SetFcPlcffldFtn(int offset)
+        {
+            _fieldHandler.SetFieldOffset(FIBFieldHandler.PLCFFLDFTN, offset);
+        }
+
+        [Obsolete]
+        public void SetLcbPlcffldFtn(int size)
+        {
+            _fieldHandler.SetFieldSize(FIBFieldHandler.PLCFFLDFTN, size);
+        }
+
+        [Obsolete]
+        public int GetFcPlcffldHdr()
+        {
+            return _fieldHandler.GetFieldOffset(FIBFieldHandler.PLCFFLDHDR);
+        }
+
+        [Obsolete]
+        public int GetLcbPlcffldHdr()
+        {
+            return _fieldHandler.GetFieldSize(FIBFieldHandler.PLCFFLDHDR);
+        }
+
+        [Obsolete]
+        public void SetFcPlcffldHdr(int offset)
+        {
+            _fieldHandler.SetFieldOffset(FIBFieldHandler.PLCFFLDHDR, offset);
+        }
+
+        [Obsolete]
+        public void SetLcbPlcffldHdr(int size)
+        {
+            _fieldHandler.SetFieldSize(FIBFieldHandler.PLCFFLDHDR, size);
+        }
+
+        [Obsolete]
+        public int GetFcPlcffldHdrtxbx()
+        {
+            return _fieldHandler.GetFieldOffset(FIBFieldHandler.PLCFFLDHDRTXBX);
+        }
+
+        [Obsolete]
+        public int GetLcbPlcffldHdrtxbx()
+        {
+            return _fieldHandler.GetFieldSize(FIBFieldHandler.PLCFFLDHDRTXBX);
+        }
+
+        [Obsolete]
+        public void SetFcPlcffldHdrtxbx(int offset)
+        {
+            _fieldHandler.SetFieldOffset(FIBFieldHandler.PLCFFLDHDRTXBX, offset);
+        }
+
+        [Obsolete]
+        public void SetLcbPlcffldHdrtxbx(int size)
+        {
+            _fieldHandler.SetFieldSize(FIBFieldHandler.PLCFFLDHDRTXBX, size);
+        }
+
+        [Obsolete]
         public int GetFcPlcffldMom()
         {
             return _fieldHandler.GetFieldOffset(FIBFieldHandler.PLCFFLDMOM);
@@ -602,6 +811,42 @@ namespace NPOI.HWPF.Model
         public int GetLcbPlcffldMom()
         {
             return _fieldHandler.GetFieldSize(FIBFieldHandler.PLCFFLDMOM);
+        }
+
+        [Obsolete]
+        public void SetFcPlcffldMom(int offset)
+        {
+            _fieldHandler.SetFieldOffset(FIBFieldHandler.PLCFFLDMOM, offset);
+        }
+
+        [Obsolete]
+        public void SetLcbPlcffldMom(int size)
+        {
+            _fieldHandler.SetFieldSize(FIBFieldHandler.PLCFFLDMOM, size);
+        }
+
+        [Obsolete]
+        public int GetFcPlcffldTxbx()
+        {
+            return _fieldHandler.GetFieldOffset(FIBFieldHandler.PLCFFLDTXBX);
+        }
+
+        [Obsolete]
+        public int GetLcbPlcffldTxbx()
+        {
+            return _fieldHandler.GetFieldSize(FIBFieldHandler.PLCFFLDTXBX);
+        }
+
+        [Obsolete]
+        public void SetFcPlcffldTxbx(int offset)
+        {
+            _fieldHandler.SetFieldOffset(FIBFieldHandler.PLCFFLDTXBX, offset);
+        }
+
+        [Obsolete]
+        public void SetLcbPlcffldTxbx(int size)
+        {
+            _fieldHandler.SetFieldSize(FIBFieldHandler.PLCFFLDTXBX, size);
         }
 
 
@@ -631,6 +876,7 @@ namespace NPOI.HWPF.Model
             return _fieldHandler.GetFieldOffset(FIBFieldHandler.PLCSPAMOM);
         }
 
+        [Obsolete]
         public int GetLcbPlcspaMom()
         {
             return _fieldHandler.GetFieldSize(FIBFieldHandler.PLCSPAMOM);

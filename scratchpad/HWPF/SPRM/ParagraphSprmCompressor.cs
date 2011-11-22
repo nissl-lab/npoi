@@ -36,6 +36,12 @@ namespace NPOI.HWPF.SPRM
             ArrayList sprmList = new ArrayList();
             int size = 0;
 
+            // Page 50 of public specification begins
+            if (newPAP.GetIstd() != oldPAP.GetIstd())
+            {
+                // sprmPIstd 
+                size += SprmUtils.AddSprm((short)0x4600, newPAP.GetIstd(), null, sprmList);
+            }
             if (newPAP.GetJc() != oldPAP.GetJc())
             {
                 // sprmPJc80 
@@ -78,6 +84,152 @@ namespace NPOI.HWPF.SPRM
             {
                 size += SprmUtils.AddSprm((short)0x240C, newPAP.GetFNoLnn(), sprmList);
             }
+
+            if (newPAP.GetItbdMac() != oldPAP.GetItbdMac() ||
+                !Arrays.Equals(newPAP.GetRgdxaTab(), oldPAP.GetRgdxaTab()) ||
+                !Arrays.Equals(newPAP.GetRgtbd(), oldPAP.GetRgtbd()))
+            {
+                /** @todo revisit this */
+                //      byte[] oldTabArray = oldPAP.GetRgdxaTab();
+                //      byte[] newTabArray = newPAP.GetRgdxaTab();
+                //      byte[] newTabDescriptors = newPAP.GetRgtbd();
+                //      byte[] varParam = new byte[2 + oldTabArray.Length + newTabArray.Length +
+                //                                 newTabDescriptors.Length];
+                //      varParam[0] = (byte)(oldTabArray.Length/2);
+                //      int offset = 1;
+                //      Array.Copy(oldTabArray, 0, varParam, offset, oldTabArray.Length);
+                //      offset += oldTabArray.Length;
+                //      varParam[offset] = (byte)(newTabArray.Length/2);
+                //      offset += 1;
+                //      Array.Copy(newTabArray, 0, varParam, offset, newTabArray.Length);
+                //      offset += newTabArray.Length;
+                //      Array.Copy(newTabDescriptors, 0, varParam, offset, newTabDescriptors.Length);
+                //
+                //      size += SprmUtils.AddSprm((short)0xC60D, 0, varParam, sprmList);
+            }
+            if (newPAP.GetDxaLeft() != oldPAP.GetDxaLeft())
+            {
+                // sprmPDxaLeft80 
+                size += SprmUtils.AddSprm(unchecked((short)0x840F), newPAP.GetDxaLeft(), null, sprmList);
+            }
+
+            // Page 51 of public specification begins
+            if (newPAP.GetDxaLeft1() != oldPAP.GetDxaLeft1())
+            {
+                // sprmPDxaLeft180 
+                size += SprmUtils.AddSprm(unchecked((short)0x8411), newPAP.GetDxaLeft1(), null, sprmList);
+            }
+            if (newPAP.GetDxaRight() != oldPAP.GetDxaRight())
+            {
+                // sprmPDxaRight80  
+                size += SprmUtils.AddSprm(unchecked((short)0x840E), newPAP.GetDxaRight(), null, sprmList);
+            }
+            if (newPAP.GetDxcLeft() != oldPAP.GetDxcLeft())
+            {
+                // sprmPDxcLeft
+                size += SprmUtils.AddSprm((short)0x4456, newPAP.GetDxcLeft(), null, sprmList);
+            }
+            if (newPAP.GetDxcLeft1() != oldPAP.GetDxcLeft1())
+            {
+                // sprmPDxcLeft1
+                size += SprmUtils.AddSprm((short)0x4457, newPAP.GetDxcLeft1(), null, sprmList);
+            }
+            if (newPAP.GetDxcRight() != oldPAP.GetDxcRight())
+            {
+                // sprmPDxcRight
+                size += SprmUtils.AddSprm((short)0x4455, newPAP.GetDxcRight(), null, sprmList);
+            }
+            if (!newPAP.GetLspd().Equals(oldPAP.GetLspd()))
+            {
+                // sprmPDyaLine
+                byte[] buf = new byte[4];
+                newPAP.GetLspd().Serialize(buf, 0);
+
+                size += SprmUtils.AddSprm((short)0x6412, LittleEndian.GetInt(buf), null, sprmList);
+            }
+            if (newPAP.GetDyaBefore() != oldPAP.GetDyaBefore())
+            {
+                // sprmPDyaBefore
+                size += SprmUtils.AddSprm(unchecked((short)0xA413), newPAP.GetDyaBefore(), null, sprmList);
+            }
+            if (newPAP.GetDyaAfter() != oldPAP.GetDyaAfter())
+            {
+                // sprmPDyaAfter
+                size += SprmUtils.AddSprm(unchecked((short)0xA414), newPAP.GetDyaAfter(), null, sprmList);
+            }
+            if (newPAP.GetFDyaBeforeAuto() != oldPAP.GetFDyaBeforeAuto())
+            {
+                // sprmPFDyaBeforeAuto
+                size += SprmUtils.AddSprm((short)0x245B, newPAP.GetFDyaBeforeAuto(), sprmList);
+            }
+            if (newPAP.GetFDyaAfterAuto() != oldPAP.GetFDyaAfterAuto())
+            {
+                // sprmPFDyaAfterAuto
+                size += SprmUtils.AddSprm((short)0x245C, newPAP.GetFDyaAfterAuto(), sprmList);
+            }
+            if (newPAP.GetFInTable() != oldPAP.GetFInTable())
+            {
+                // sprmPFInTable
+                size += SprmUtils.AddSprm((short)0x2416, newPAP.GetFInTable(), sprmList);
+            }
+            if (newPAP.GetFTtp() != oldPAP.GetFTtp())
+            {
+                // sprmPFTtp
+                size += SprmUtils.AddSprm((short)0x2417, newPAP.GetFTtp(), sprmList);
+            }
+            if (newPAP.GetDxaAbs() != oldPAP.GetDxaAbs())
+            {
+                // sprmPDxaAbs
+                size += SprmUtils.AddSprm(unchecked((short)0x8418), newPAP.GetDxaAbs(), null, sprmList);
+            }
+            if (newPAP.GetDyaAbs() != oldPAP.GetDyaAbs())
+            {
+                // sprmPDyaAbs
+                size += SprmUtils.AddSprm(unchecked((short)0x8419), newPAP.GetDyaAbs(), null, sprmList);
+            }
+
+            if (newPAP.GetDxaWidth() != oldPAP.GetDxaWidth())
+            {
+                // sprmPDxaWidth
+                size += SprmUtils.AddSprm(unchecked((short)0x841A), newPAP.GetDxaWidth(), null, sprmList);
+            }
+
+
+            if (newPAP.GetWr() != oldPAP.GetWr())
+            {
+                size += SprmUtils.AddSprm((short)0x2423, newPAP.GetWr(), null, sprmList);
+            }
+            if (newPAP.GetBrcBar().Equals(oldPAP.GetBrcBar()))
+            {
+                // XXX: sprm code 0x6428 is sprmPBrcBetween80, but accessed property linked to sprmPBrcBar80 (0x6629)
+                int brc = newPAP.GetBrcBar().ToInt();
+                size += SprmUtils.AddSprm((short)0x6428, brc, null, sprmList);
+            }
+            if (!newPAP.GetBrcBottom().Equals(oldPAP.GetBrcBottom()))
+            {
+                // sprmPBrcBottom80  
+                int brc = newPAP.GetBrcBottom().ToInt();
+                size += SprmUtils.AddSprm((short)0x6426, brc, null, sprmList);
+            }
+            if (!newPAP.GetBrcLeft().Equals(oldPAP.GetBrcLeft()))
+            {
+                // sprmPBrcLeft80  
+                int brc = newPAP.GetBrcLeft().ToInt();
+                size += SprmUtils.AddSprm((short)0x6425, brc, null, sprmList);
+            }
+            // Page 53 of public specification begins
+            if (!newPAP.GetBrcRight().Equals(oldPAP.GetBrcRight()))
+            {
+                // sprmPBrcRight80
+                int brc = newPAP.GetBrcRight().ToInt();
+                size += SprmUtils.AddSprm((short)0x6427, brc, null, sprmList);
+            }
+            if (!newPAP.GetBrcTop().Equals(oldPAP.GetBrcTop()))
+            {
+                // sprmPBrcTop80 
+                int brc = newPAP.GetBrcTop().ToInt();
+                size += SprmUtils.AddSprm((short)0x6424, brc, null, sprmList);
+            }
             if (newPAP.GetFNoAutoHyph() != oldPAP.GetFNoAutoHyph())
             {
                 size += SprmUtils.AddSprm((short)0x242A, newPAP.GetFNoAutoHyph(), sprmList);
@@ -116,78 +268,12 @@ namespace NPOI.HWPF.SPRM
             if (newPAP.GetFLocked() != oldPAP.GetFLocked())
             {
                 // sprmPFLocked
-                size += SprmUtils.AddSprm((short)0x2430, Convert.ToBoolean(newPAP.GetFLocked()), sprmList);
+                size += SprmUtils.AddSprm((short)0x2430, newPAP.GetFLocked(), sprmList);
             }
             if (newPAP.GetFWidowControl() != oldPAP.GetFWidowControl())
             {
                 // sprmPFWidowControl
-                size += SprmUtils.AddSprm((short)0x2431, newPAP.GetFWidowControl(),sprmList);
-            }
-            if (newPAP.GetItbdMac() != oldPAP.GetItbdMac() ||
-                !Arrays.Equals(newPAP.GetRgdxaTab(), oldPAP.GetRgdxaTab()) ||
-                !Arrays.Equals(newPAP.GetRgtbd(), oldPAP.GetRgtbd()))
-            {
-                /** @todo revisit this */
-                //      byte[] oldTabArray = oldPAP.GetRgdxaTab();
-                //      byte[] newTabArray = newPAP.GetRgdxaTab();
-                //      byte[] newTabDescriptors = newPAP.GetRgtbd();
-                //      byte[] varParam = new byte[2 + oldTabArray.Length + newTabArray.Length +
-                //                                 newTabDescriptors.Length];
-                //      varParam[0] = (byte)(oldTabArray.Length/2);
-                //      int offset = 1;
-                //      Array.Copy(oldTabArray, 0, varParam, offset, oldTabArray.Length);
-                //      offset += oldTabArray.Length;
-                //      varParam[offset] = (byte)(newTabArray.Length/2);
-                //      offset += 1;
-                //      Array.Copy(newTabArray, 0, varParam, offset, newTabArray.Length);
-                //      offset += newTabArray.Length;
-                //      Array.Copy(newTabDescriptors, 0, varParam, offset, newTabDescriptors.Length);
-                //
-                //      size += SprmUtils.AddSprm((short)0xC60D, 0, varParam, sprmList);
-            }
-            if (newPAP.GetDxaRight() != oldPAP.GetDxaRight())
-            {
-                size += SprmUtils.AddSprm(unchecked((short)0x840E), newPAP.GetDxaRight(), null, sprmList);
-            }
-            if (newPAP.GetDxaLeft() != oldPAP.GetDxaLeft())
-            {
-                size += SprmUtils.AddSprm(unchecked((short)0x840F), newPAP.GetDxaLeft(), null, sprmList);
-            }
-            if (newPAP.GetDxaLeft1() != oldPAP.GetDxaLeft1())
-            {
-                size += SprmUtils.AddSprm(unchecked((short)0x8411), newPAP.GetDxaLeft1(), null, sprmList);
-            }
-            if (!newPAP.GetLspd().Equals(oldPAP.GetLspd()))
-            {
-                // sprmPDyaLine
-                byte[] buf = new byte[4];
-                newPAP.GetLspd().Serialize(buf, 0);
-
-                size += SprmUtils.AddSprm((short)0x6412, LittleEndian.GetInt(buf), null, sprmList);
-            }
-            if (newPAP.GetDyaBefore() != oldPAP.GetDyaBefore())
-            {
-                // sprmPDyaBefore
-                size += SprmUtils.AddSprm(unchecked((short)0xA413), newPAP.GetDyaBefore(), null, sprmList);
-            }
-            if (newPAP.GetDyaAfter() != oldPAP.GetDyaAfter())
-            {
-                // sprmPDyaAfter
-                size += SprmUtils.AddSprm(unchecked((short)0xA414), newPAP.GetDyaAfter(), null, sprmList);
-            }
-            if (newPAP.GetFDyaBeforeAuto() != oldPAP.GetFDyaBeforeAuto())
-            {
-                // sprmPFDyaBeforeAuto
-                size += SprmUtils.AddSprm((short)0x245B, newPAP.GetFDyaBeforeAuto(), sprmList);
-            }
-            if (newPAP.GetFDyaAfterAuto() != oldPAP.GetFDyaAfterAuto())
-            {
-                // sprmPFDyaAfterAuto
-                size += SprmUtils.AddSprm((short)0x245C, newPAP.GetFDyaAfterAuto(), sprmList);
-            }
-            if (newPAP.GetDyaBefore() != oldPAP.GetDyaBefore())
-            {
-                size += SprmUtils.AddSprm((short)0x2404, newPAP.GetDyaBefore(), null, sprmList);
+                size += SprmUtils.AddSprm((short)0x2431, newPAP.GetFWidowControl(), sprmList);
             }
             if (newPAP.GetFKinsoku() != oldPAP.GetFKinsoku())
             {
@@ -238,77 +324,20 @@ namespace NPOI.HWPF.SPRM
                 size += SprmUtils.AddSprm((short)0x443A, val, null, sprmList);
             }
             if (!Arrays.Equals(newPAP.GetAnld(), oldPAP.GetAnld()))
-            {   
+            {
+                // sprmPAnld80 
                 size += SprmUtils.AddSprm(unchecked((short)0xC63E), 0, newPAP.GetAnld(), sprmList);
             }
-            if (newPAP.GetFInTable() != oldPAP.GetFInTable())
+            if (newPAP.GetFPropRMark() != oldPAP.GetFPropRMark() ||
+                newPAP.GetIbstPropRMark() != oldPAP.GetIbstPropRMark() ||
+                !newPAP.GetDttmPropRMark().Equals(oldPAP.GetDttmPropRMark()))
             {
-                // sprmPFInTable
-                size += SprmUtils.AddSprm((short)0x2416, newPAP.GetFInTable(), sprmList);
-            }
-            if (newPAP.GetFTtp() != oldPAP.GetFTtp())
-            {
-                // sprmPFTtp
-                size += SprmUtils.AddSprm((short)0x2417, newPAP.GetFTtp(), sprmList);
-            }
-            if (newPAP.GetWr() != oldPAP.GetWr())
-            {
-                // Page 52 of public specification begins
-                size += SprmUtils.AddSprm((short)0x2423, newPAP.GetWr(), null, sprmList);
-            }
-            if (newPAP.GetFLocked() != oldPAP.GetFLocked())
-            {
-                // sprmPFLocked
-                size += SprmUtils.AddSprm((short)0x2430, newPAP.GetFLocked(), sprmList);
-            }
-            if (newPAP.GetDxaAbs() != oldPAP.GetDxaAbs())
-            {
-                // sprmPDxaAbs
-                size += SprmUtils.AddSprm(unchecked((short)0x8418), newPAP.GetDxaAbs(), null, sprmList);
-            }
-            if (newPAP.GetDyaAbs() != oldPAP.GetDyaAbs())
-            {
-                // sprmPDyaAbs
-                size += SprmUtils.AddSprm(unchecked((short)0x8419), newPAP.GetDyaAbs(), null, sprmList);
-            }
-            if (newPAP.GetDxaWidth() != oldPAP.GetDxaWidth())
-            {
-                size += SprmUtils.AddSprm(unchecked((short)0x841A), newPAP.GetDxaWidth(), null, sprmList);
-            }
-            if (!newPAP.GetBrcTop().Equals(oldPAP.GetBrcTop()))
-            {
-                // sprmPBrcTop80 
-                int brc = newPAP.GetBrcTop().ToInt();
-                size += SprmUtils.AddSprm((short)0x6424, brc, null, sprmList);
-            }
-            if (!newPAP.GetBrcLeft().Equals(oldPAP.GetBrcLeft()))
-            {
-                // sprmPBrcLeft80  
-                int brc = newPAP.GetBrcLeft().ToInt();
-                size += SprmUtils.AddSprm((short)0x6425, brc, null, sprmList);
-            }
-            if (!newPAP.GetBrcBottom().Equals(oldPAP.GetBrcBottom()))
-            {
-                // sprmPBrcBottom80  
-                int brc = newPAP.GetBrcBottom().ToInt();
-                size += SprmUtils.AddSprm((short)0x6426, brc, null, sprmList);
-            }
-            // Page 53 of public specification begins
-            if (!newPAP.GetBrcRight().Equals(oldPAP.GetBrcRight()))
-            {
-                // sprmPBrcRight80
-                int brc = newPAP.GetBrcRight().ToInt();
-                size += SprmUtils.AddSprm((short)0x6427, brc, null, sprmList);
-            }
-            if (newPAP.GetBrcBar().Equals(oldPAP.GetBrcBar()))
-            {
-                // XXX: sprm code 0x6428 is sprmPBrcBetween80, but accessed property linked to sprmPBrcBar80 (0x6629)
-                int brc = newPAP.GetBrcBar().ToInt();
-                size += SprmUtils.AddSprm((short)0x6428, brc, null, sprmList);
-            }
-            if (newPAP.GetDxaFromText() != oldPAP.GetDxaFromText())
-            {
-                size += SprmUtils.AddSprm(unchecked((short)0x842F), newPAP.GetDxaFromText(), null, sprmList);
+                // sprmPPropRMark
+                byte[] buf = new byte[7];
+                buf[0] = (byte)(newPAP.GetFPropRMark() ? 1 : 0);
+                LittleEndian.PutShort(buf, 1, (short)newPAP.GetIbstPropRMark());
+                newPAP.GetDttmPropRMark().Serialize(buf, 3);
+                size += SprmUtils.AddSprm(unchecked((short)0xC63F), 0, buf, sprmList);
             }
             if (newPAP.GetLvl() != oldPAP.GetLvl())
             {
@@ -325,17 +354,7 @@ namespace NPOI.HWPF.SPRM
                 // sprmPFNumRMIns 
                 size += SprmUtils.AddSprm((short)0x2443, newPAP.GetFNumRMIns(), sprmList);
             }
-            if (newPAP.GetFPropRMark() != oldPAP.GetFPropRMark() ||
-                newPAP.GetIbstPropRMark() != oldPAP.GetIbstPropRMark() ||
-                !newPAP.GetDttmPropRMark().Equals(oldPAP.GetDttmPropRMark()))
-            {
-                // sprmPPropRMark
-                byte[] buf = new byte[7];
-                buf[0] = (byte)(newPAP.GetFPropRMark()?1:0);
-                LittleEndian.PutShort(buf, 1, (short)newPAP.GetIbstPropRMark());
-                newPAP.GetDttmPropRMark().Serialize(buf, 3);
-                size += SprmUtils.AddSprm(unchecked((short)0xC63F), 0, buf, sprmList);
-            }
+
             if (!Arrays.Equals(newPAP.GetNumrm(), oldPAP.GetNumrm()))
             {
                 // sprmPNumRM

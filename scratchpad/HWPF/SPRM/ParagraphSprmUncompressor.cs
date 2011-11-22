@@ -425,7 +425,7 @@ namespace NPOI.HWPF.SPRM
 
             for (int x = 0; x < tabPositions.Length; x++)
             {
-                int key = ((int)list[x]);
+                int key = (int)list[x];
                 tabPositions[x] = key;
                 tabDescriptors[x] = (byte)tabMap[key];
             }

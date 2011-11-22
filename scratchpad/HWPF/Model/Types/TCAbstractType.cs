@@ -46,11 +46,31 @@ namespace NPOI.HWPF.Model.Types
         private static BitField fVertMerge = BitFieldFactory.GetInstance(0x0020);
         private static BitField fVertRestart = BitFieldFactory.GetInstance(0x0040);
         private static BitField vertAlign = BitFieldFactory.GetInstance(0x0180);
-        protected short field_2_unused;
-        protected BorderCode field_3_brcTop;
-        protected BorderCode field_4_brcLeft;
-        protected BorderCode field_5_brcBottom;
-        protected BorderCode field_6_brcRight;
+        private static BitField ftsWidth = new BitField(0x0E00);
+        private static BitField fFitText = new BitField(0x1000);
+        private static BitField fNoWrap = new BitField(0x2000);
+        private static BitField fUnused = new BitField(0xC000);
+        protected short field_2_wWidth;
+        protected short field_3_wCellPaddingLeft;
+        protected short field_4_wCellPaddingTop;
+        protected short field_5_wCellPaddingBottom;
+        protected short field_6_wCellPaddingRight;
+        protected byte field_7_ftsCellPaddingLeft;
+        protected byte field_8_ftsCellPaddingTop;
+        protected byte field_9_ftsCellPaddingBottom;
+        protected byte field_10_ftsCellPaddingRight;
+        protected short field_11_wCellSpacingLeft;
+        protected short field_12_wCellSpacingTop;
+        protected short field_13_wCellSpacingBottom;
+        protected short field_14_wCellSpacingRight;
+        protected byte field_15_ftsCellSpacingLeft;
+        protected byte field_16_ftsCellSpacingTop;
+        protected byte field_17_ftsCellSpacingBottom;
+        protected byte field_18_ftsCellSpacingRight;
+        protected BorderCode field_19_brcTop;
+        protected BorderCode field_20_brcLeft;
+        protected BorderCode field_21_brcBottom;
+        protected BorderCode field_22_brcRight;
 
 
         public TCAbstractType()
@@ -58,27 +78,6 @@ namespace NPOI.HWPF.Model.Types
 
         }
 
-        protected void FillFields(byte[] data, int offset)
-        {
-            field_1_rgf = LittleEndian.GetShort(data, 0x0 + offset);
-            field_2_unused = LittleEndian.GetShort(data, 0x2 + offset);
-            field_3_brcTop = new BorderCode(data, 0x4 + offset);
-            field_4_brcLeft = new BorderCode(data, 0x8 + offset);
-            field_5_brcBottom = new BorderCode(data, 0xc + offset);
-            field_6_brcRight = new BorderCode(data, 0x10 + offset);
-
-        }
-
-        public void Serialize(byte[] data, int offset)
-        {
-            LittleEndian.PutShort(data, 0x0 + offset, (short)field_1_rgf); ;
-            LittleEndian.PutShort(data, 0x2 + offset, (short)field_2_unused); ;
-            field_3_brcTop.Serialize(data, 0x4 + offset); ;
-            field_4_brcLeft.Serialize(data, 0x8 + offset); ;
-            field_5_brcBottom.Serialize(data, 0xc + offset); ;
-            field_6_brcRight.Serialize(data, 0x10 + offset); ;
-
-        }
 
         public override String ToString()
         {
@@ -96,9 +95,61 @@ namespace NPOI.HWPF.Model.Types
             buffer.Append("         .fVertMerge               = ").Append(IsFVertMerge()).Append('\n');
             buffer.Append("         .fVertRestart             = ").Append(IsFVertRestart()).Append('\n');
             buffer.Append("         .vertAlign                = ").Append(GetVertAlign()).Append('\n');
+            buffer.Append("         .ftsWidth                 = ").Append(GetFtsWidth()).Append('\n');
+            buffer.Append("         .fFitText                 = ").Append(IsFFitText()).Append('\n');
+            buffer.Append("         .fNoWrap                  = ").Append(IsFNoWrap()).Append('\n');
+            buffer.Append("         .fUnused                  = ").Append(GetFUnused()).Append('\n');
 
-            buffer.Append("    .unused               = ");
-            buffer.Append(" (").Append(GetUnused()).Append(" )\n");
+            buffer.Append("    .wWidth               = ");
+            buffer.Append(" (").Append(GetWWidth()).Append(" )\n");
+
+            buffer.Append("    .wCellPaddingLeft     = ");
+            buffer.Append(" (").Append(GetWCellPaddingLeft()).Append(" )\n");
+
+            buffer.Append("    .wCellPaddingTop      = ");
+            buffer.Append(" (").Append(GetWCellPaddingTop()).Append(" )\n");
+
+            buffer.Append("    .wCellPaddingBottom   = ");
+            buffer.Append(" (").Append(GetWCellPaddingBottom()).Append(" )\n");
+
+            buffer.Append("    .wCellPaddingRight    = ");
+            buffer.Append(" (").Append(GetWCellPaddingRight()).Append(" )\n");
+
+            buffer.Append("    .ftsCellPaddingLeft   = ");
+            buffer.Append(" (").Append(GetFtsCellPaddingLeft()).Append(" )\n");
+
+            buffer.Append("    .ftsCellPaddingTop    = ");
+            buffer.Append(" (").Append(GetFtsCellPaddingTop()).Append(" )\n");
+
+            buffer.Append("    .ftsCellPaddingBottom = ");
+            buffer.Append(" (").Append(GetFtsCellPaddingBottom()).Append(" )\n");
+
+            buffer.Append("    .ftsCellPaddingRight  = ");
+            buffer.Append(" (").Append(GetFtsCellPaddingRight()).Append(" )\n");
+
+            buffer.Append("    .wCellSpacingLeft     = ");
+            buffer.Append(" (").Append(GetWCellSpacingLeft()).Append(" )\n");
+
+            buffer.Append("    .wCellSpacingTop      = ");
+            buffer.Append(" (").Append(GetWCellSpacingTop()).Append(" )\n");
+
+            buffer.Append("    .wCellSpacingBottom   = ");
+            buffer.Append(" (").Append(GetWCellSpacingBottom()).Append(" )\n");
+
+            buffer.Append("    .wCellSpacingRight    = ");
+            buffer.Append(" (").Append(GetWCellSpacingRight()).Append(" )\n");
+
+            buffer.Append("    .ftsCellSpacingLeft   = ");
+            buffer.Append(" (").Append(GetFtsCellSpacingLeft()).Append(" )\n");
+
+            buffer.Append("    .ftsCellSpacingTop    = ");
+            buffer.Append(" (").Append(GetFtsCellSpacingTop()).Append(" )\n");
+
+            buffer.Append("    .ftsCellSpacingBottom = ");
+            buffer.Append(" (").Append(GetFtsCellSpacingBottom()).Append(" )\n");
+
+            buffer.Append("    .ftsCellSpacingRight  = ");
+            buffer.Append(" (").Append(GetFtsCellSpacingRight()).Append(" )\n");
 
             buffer.Append("    .brcTop               = ");
             buffer.Append(" (").Append(GetBrcTop()).Append(" )\n");
@@ -121,7 +172,7 @@ namespace NPOI.HWPF.Model.Types
          */
         public int GetSize()
         {
-            return 4 + +2 + 2 + 4 + 4 + 4 + 4;
+            return 4 + +2 + 2 + 2 + 2 + 2 + 2 + 1 + 1 + 1 + 1 + 2 + 2 + 2 + 2 + 1 + 1 + 1 + 1 + 4 + 4 + 4 + 4;
         }
 
 
@@ -143,19 +194,275 @@ namespace NPOI.HWPF.Model.Types
         }
 
         /**
-         * Get the unused field for the TC record.
-         */
-        public short GetUnused()
+     * Get the wWidth field for the TC record.
+     */
+        public short GetWWidth()
         {
-            return field_2_unused;
+            return field_2_wWidth;
         }
 
         /**
-         * Set the unused field for the TC record.
+         * Set the wWidth field for the TC record.
          */
-        public void SetUnused(short field_2_unused)
+        public void SetWWidth(short field_2_wWidth)
         {
-            this.field_2_unused = field_2_unused;
+            this.field_2_wWidth = field_2_wWidth;
+        }
+
+        /**
+         * Get the wCellPaddingLeft field for the TC record.
+         */
+        public short GetWCellPaddingLeft()
+        {
+            return field_3_wCellPaddingLeft;
+        }
+
+        /**
+         * Set the wCellPaddingLeft field for the TC record.
+         */
+        public void SetWCellPaddingLeft(short field_3_wCellPaddingLeft)
+        {
+            this.field_3_wCellPaddingLeft = field_3_wCellPaddingLeft;
+        }
+
+        /**
+         * Get the wCellPaddingTop field for the TC record.
+         */
+        public short GetWCellPaddingTop()
+        {
+            return field_4_wCellPaddingTop;
+        }
+
+        /**
+         * Set the wCellPaddingTop field for the TC record.
+         */
+        public void SetWCellPaddingTop(short field_4_wCellPaddingTop)
+        {
+            this.field_4_wCellPaddingTop = field_4_wCellPaddingTop;
+        }
+
+        /**
+         * Get the wCellPaddingBottom field for the TC record.
+         */
+        public short GetWCellPaddingBottom()
+        {
+            return field_5_wCellPaddingBottom;
+        }
+
+        /**
+         * Set the wCellPaddingBottom field for the TC record.
+         */
+        public void SetWCellPaddingBottom(short field_5_wCellPaddingBottom)
+        {
+            this.field_5_wCellPaddingBottom = field_5_wCellPaddingBottom;
+        }
+
+        /**
+         * Get the wCellPaddingRight field for the TC record.
+         */
+        public short GetWCellPaddingRight()
+        {
+            return field_6_wCellPaddingRight;
+        }
+
+        /**
+         * Set the wCellPaddingRight field for the TC record.
+         */
+        public void SetWCellPaddingRight(short field_6_wCellPaddingRight)
+        {
+            this.field_6_wCellPaddingRight = field_6_wCellPaddingRight;
+        }
+
+        /**
+         * Get the ftsCellPaddingLeft field for the TC record.
+         */
+        public byte GetFtsCellPaddingLeft()
+        {
+            return field_7_ftsCellPaddingLeft;
+        }
+
+        /**
+         * Set the ftsCellPaddingLeft field for the TC record.
+         */
+        public void SetFtsCellPaddingLeft(byte field_7_ftsCellPaddingLeft)
+        {
+            this.field_7_ftsCellPaddingLeft = field_7_ftsCellPaddingLeft;
+        }
+
+        /**
+         * Get the ftsCellPaddingTop field for the TC record.
+         */
+        public byte GetFtsCellPaddingTop()
+        {
+            return field_8_ftsCellPaddingTop;
+        }
+
+        /**
+         * Set the ftsCellPaddingTop field for the TC record.
+         */
+        public void SetFtsCellPaddingTop(byte field_8_ftsCellPaddingTop)
+        {
+            this.field_8_ftsCellPaddingTop = field_8_ftsCellPaddingTop;
+        }
+
+        /**
+         * Get the ftsCellPaddingBottom field for the TC record.
+         */
+        public byte GetFtsCellPaddingBottom()
+        {
+            return field_9_ftsCellPaddingBottom;
+        }
+
+        /**
+         * Set the ftsCellPaddingBottom field for the TC record.
+         */
+        public void SetFtsCellPaddingBottom(byte field_9_ftsCellPaddingBottom)
+        {
+            this.field_9_ftsCellPaddingBottom = field_9_ftsCellPaddingBottom;
+        }
+
+        /**
+         * Get the ftsCellPaddingRight field for the TC record.
+         */
+        public byte GetFtsCellPaddingRight()
+        {
+            return field_10_ftsCellPaddingRight;
+        }
+
+        /**
+         * Set the ftsCellPaddingRight field for the TC record.
+         */
+        public void SetFtsCellPaddingRight(byte field_10_ftsCellPaddingRight)
+        {
+            this.field_10_ftsCellPaddingRight = field_10_ftsCellPaddingRight;
+        }
+
+        /**
+         * Get the wCellSpacingLeft field for the TC record.
+         */
+        public short GetWCellSpacingLeft()
+        {
+            return field_11_wCellSpacingLeft;
+        }
+
+        /**
+         * Set the wCellSpacingLeft field for the TC record.
+         */
+        public void SetWCellSpacingLeft(short field_11_wCellSpacingLeft)
+        {
+            this.field_11_wCellSpacingLeft = field_11_wCellSpacingLeft;
+        }
+
+        /**
+         * Get the wCellSpacingTop field for the TC record.
+         */
+        public short GetWCellSpacingTop()
+        {
+            return field_12_wCellSpacingTop;
+        }
+
+        /**
+         * Set the wCellSpacingTop field for the TC record.
+             */
+        public void SetWCellSpacingTop(short field_12_wCellSpacingTop)
+        {
+            this.field_12_wCellSpacingTop = field_12_wCellSpacingTop;
+        }
+
+        /**
+         * Get the wCellSpacingBottom field for the TC record.
+         */
+        public short GetWCellSpacingBottom()
+        {
+            return field_13_wCellSpacingBottom;
+        }
+
+        /**
+         * Set the wCellSpacingBottom field for the TC record.
+         */
+        public void SetWCellSpacingBottom(short field_13_wCellSpacingBottom)
+        {
+            this.field_13_wCellSpacingBottom = field_13_wCellSpacingBottom;
+        }
+
+        /**
+         * Get the wCellSpacingRight field for the TC record.
+         */
+        public short GetWCellSpacingRight()
+        {
+            return field_14_wCellSpacingRight;
+        }
+
+        /**
+         * Set the wCellSpacingRight field for the TC record.
+         */
+        public void SetWCellSpacingRight(short field_14_wCellSpacingRight)
+        {
+            this.field_14_wCellSpacingRight = field_14_wCellSpacingRight;
+        }
+
+        /**
+     * Get the ftsCellSpacingLeft field for the TC record.
+         */
+        public byte GetFtsCellSpacingLeft()
+        {
+            return field_15_ftsCellSpacingLeft;
+        }
+
+        /**
+         * Set the ftsCellSpacingLeft field for the TC record.
+         */
+        public void SetFtsCellSpacingLeft(byte field_15_ftsCellSpacingLeft)
+        {
+            this.field_15_ftsCellSpacingLeft = field_15_ftsCellSpacingLeft;
+        }
+
+        /**
+         * Get the ftsCellSpacingTop field for the TC record.
+         */
+        public byte GetFtsCellSpacingTop()
+        {
+            return field_16_ftsCellSpacingTop;
+        }
+
+        /**
+         * Set the ftsCellSpacingTop field for the TC record.
+         */
+        public void SetFtsCellSpacingTop(byte field_16_ftsCellSpacingTop)
+        {
+            this.field_16_ftsCellSpacingTop = field_16_ftsCellSpacingTop;
+        }
+
+        /**
+         * Get the ftsCellSpacingBottom field for the TC record.
+         */
+        public byte GetFtsCellSpacingBottom()
+        {
+            return field_17_ftsCellSpacingBottom;
+        }
+
+        /**
+         * Set the ftsCellSpacingBottom field for the TC record.
+         */
+        public void SetFtsCellSpacingBottom(byte field_17_ftsCellSpacingBottom)
+        {
+            this.field_17_ftsCellSpacingBottom = field_17_ftsCellSpacingBottom;
+        }
+
+        /**
+         * Get the ftsCellSpacingRight field for the TC record.
+         */
+        public byte GetFtsCellSpacingRight()
+        {
+            return field_18_ftsCellSpacingRight;
+        }
+
+        /**
+         * Set the ftsCellSpacingRight field for the TC record.
+         */
+        public void SetFtsCellSpacingRight(byte field_18_ftsCellSpacingRight)
+        {
+            this.field_18_ftsCellSpacingRight = field_18_ftsCellSpacingRight;
         }
 
         /**
@@ -163,15 +470,15 @@ namespace NPOI.HWPF.Model.Types
          */
         public BorderCode GetBrcTop()
         {
-            return field_3_brcTop;
+            return field_19_brcTop;
         }
 
         /**
          * Set the brcTop field for the TC record.
          */
-        public void SetBrcTop(BorderCode field_3_brcTop)
+        public void SetBrcTop(BorderCode field_19_brcTop)
         {
-            this.field_3_brcTop = field_3_brcTop;
+            this.field_19_brcTop = field_19_brcTop;
         }
 
         /**
@@ -179,15 +486,15 @@ namespace NPOI.HWPF.Model.Types
          */
         public BorderCode GetBrcLeft()
         {
-            return field_4_brcLeft;
+            return field_20_brcLeft;
         }
 
         /**
          * Set the brcLeft field for the TC record.
          */
-        public void SetBrcLeft(BorderCode field_4_brcLeft)
+        public void SetBrcLeft(BorderCode field_20_brcLeft)
         {
-            this.field_4_brcLeft = field_4_brcLeft;
+            this.field_20_brcLeft = field_20_brcLeft;
         }
 
         /**
@@ -195,15 +502,15 @@ namespace NPOI.HWPF.Model.Types
          */
         public BorderCode GetBrcBottom()
         {
-            return field_5_brcBottom;
+            return field_21_brcBottom;
         }
 
         /**
          * Set the brcBottom field for the TC record.
          */
-        public void SetBrcBottom(BorderCode field_5_brcBottom)
+        public void SetBrcBottom(BorderCode field_21_brcBottom)
         {
-            this.field_5_brcBottom = field_5_brcBottom;
+            this.field_21_brcBottom = field_21_brcBottom;
         }
 
         /**
@@ -211,15 +518,15 @@ namespace NPOI.HWPF.Model.Types
          */
         public BorderCode GetBrcRight()
         {
-            return field_6_brcRight;
+            return field_22_brcRight;
         }
 
         /**
          * Set the brcRight field for the TC record.
          */
-        public void SetBrcRight(BorderCode field_6_brcRight)
+        public void SetBrcRight(BorderCode field_22_brcRight)
         {
-            this.field_6_brcRight = field_6_brcRight;
+            this.field_22_brcRight = field_22_brcRight;
         }
 
         /**
@@ -390,6 +697,93 @@ namespace NPOI.HWPF.Model.Types
 
         }
 
+        /**
+         * Sets the ftsWidth field value.
+         * 
+         */
+        public void SetFtsWidth(byte value)
+        {
+            field_1_rgf = (short)ftsWidth.SetValue(field_1_rgf, value);
+
+
+        }
+
+        /**
+         * 
+         * @return  the ftsWidth field value.
+         */
+        public byte GetFtsWidth()
+        {
+            return (byte)ftsWidth.GetValue(field_1_rgf);
+
+        }
+
+        /**
+         * Sets the fFitText field value.
+         * 
+         */
+        public void SetFFitText(bool value)
+        {
+            field_1_rgf = (short)fFitText.SetBoolean(field_1_rgf, value);
+
+
+        }
+
+        /**
+         * 
+         * @return  the fFitText field value.
+         */
+        public bool IsFFitText()
+        {
+            return fFitText.IsSet(field_1_rgf);
+
+        }
+
+        /**
+         * Sets the fNoWrap field value.
+         * 
+         */
+        public void SetFNoWrap(bool value)
+        {
+            field_1_rgf = (short)fNoWrap.SetBoolean(field_1_rgf, value);
+
+
+        }
+
+        /**
+         * 
+         * @return  the fNoWrap field value.
+         */
+        public bool IsFNoWrap()
+        {
+            return fNoWrap.IsSet(field_1_rgf);
+
+        }
+
+        /**
+         * Sets the fUnused field value.
+         * 
+         */
+        public void SetFUnused(byte value)
+        {
+            field_1_rgf = (short)fUnused.SetValue(field_1_rgf, value);
+
+
+        }
+
+        /**
+         * 
+         * @return  the fUnused field value.
+         */
+        public byte GetFUnused()
+        {
+            return (byte)fUnused.GetValue(field_1_rgf);
+
+        }
+
 
     }
 }
+
+
+
