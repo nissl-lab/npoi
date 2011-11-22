@@ -170,7 +170,7 @@ namespace NPOI.OpenXml4Net.OPC
             Uri targetURI;
             try
             {
-                targetURI = new Uri(target);
+                targetURI = new Uri(target,UriKind.RelativeOrAbsolute);
             }
             catch (UriFormatException e)
             {

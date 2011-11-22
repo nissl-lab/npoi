@@ -7,6 +7,7 @@ using NPOI.OpenXml4Net.OPC.Internal.Marshallers;
 using NPOI.OpenXml4Net.OPC.Internal;
 using NPOI.OpenXml4Net.OPC.Internal.Unmarshallers;
 using NPOI.Util;
+using System.Text.RegularExpressions;
 
 namespace NPOI.OpenXml4Net.OPC
 {
@@ -494,6 +495,20 @@ public abstract class OPCPackage:RelationshipSource {
 			retArr.Add(GetPart(rel));
 		}
 		return retArr;
+	}
+    public List<PackagePart> GetPartsByName(Regex namePattern) {
+	    if (namePattern == null) {
+	        throw new ArgumentException("name pattern must not be null");
+	    }
+	    List<PackagePart> result = new List<PackagePart>();
+	    foreach (PackagePart part in partList.Values) {
+	        PackagePartName partName = part.PartName;
+	        String name = partName.Name;
+	        if(namePattern.IsMatch(name))
+	            result.Add(part);
+	        }
+	    
+	    return result;
 	}
 
 	/**

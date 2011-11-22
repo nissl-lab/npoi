@@ -55,7 +55,7 @@ namespace NPOI.OpenXml4Net.OPC
 	 * Constructor.
 	 */
 	public PackageRelationshipCollection() {
-		relationshipsByID = new SortedList<String, PackageRelationship>(new DuplicateComparer());
+		relationshipsByID = new SortedList<String, PackageRelationship>();
         relationshipsByType = new SortedList<String, PackageRelationship>(new DuplicateComparer());
 	}
     class DuplicateComparer : IComparer<string>
@@ -276,6 +276,8 @@ namespace NPOI.OpenXml4Net.OPC
 	 * @return The package relationship identified by the specified id.
 	 */
 	public PackageRelationship GetRelationshipByID(String id) {
+        if (!relationshipsByID.ContainsKey(id))
+            return null;
 		return relationshipsByID[id];
 	}
 
