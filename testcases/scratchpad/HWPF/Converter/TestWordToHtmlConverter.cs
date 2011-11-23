@@ -124,7 +124,7 @@ namespace TestCases.HWPF.Converter
 
             AssertContains(result, "<title>This is document title</title>");
             AssertContains(result,
-                    "<meta content=\"This is document keywords\" name=\"keywords\">");
+                    "<meta name=\"keywords\" content=\"This is document keywords\" />");
         }
         //[TestMethod]
         public void TestEmailhyperlink()
