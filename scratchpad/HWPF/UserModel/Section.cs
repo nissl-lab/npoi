@@ -116,7 +116,7 @@ namespace NPOI.HWPF.UserModel
          * @return page width (in twips) in current section. Default value is 12240
          *         twips
          */
-        public int GetPageWidth
+        public int PageWidth
         {
             get
             { 

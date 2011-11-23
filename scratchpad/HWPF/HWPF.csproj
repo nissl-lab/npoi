@@ -59,6 +59,9 @@
     <Compile Include="Converter\AbstractWordUtils.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Converter\WordToFoConverter.cs" />
+    <Compile Include="Converter\FoDocumentFacade.cs" />
+    <Compile Include="Converter\WordToFoUtils.cs" />
     <Compile Include="Converter\WordToTextConverter.cs" />
     <Compile Include="Converter\TextDocumentFacade.cs" />
     <Compile Include="Converter\DefaultFontReplacer.cs">

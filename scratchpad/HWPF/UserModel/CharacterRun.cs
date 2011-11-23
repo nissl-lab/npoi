@@ -622,5 +622,9 @@ namespace NPOI.HWPF.UserModel
             _props.SetIcoHighlight(color);
             _chpx.UpdateSprm(SPRM_HIGHLIGHT, color);
         }
+        public int getLanguageCode()
+        {
+            return _props.GetLidDefault();
+        }
     }
 }
