@@ -41,40 +41,40 @@ namespace TestCases.OPC
             // Expected values
             expectedValues = new Dictionary<PackagePartName, String>();
             expectedValues.Add(PackagingURIHelper.CreatePartName("/_rels/.rels"),
-                    "application/vnd.Openxmlformats-namespace.relationships+xml");
+                    "application/vnd.openxmlformats-package.relationships+xml");
 
             expectedValues
                     .Add(PackagingURIHelper.CreatePartName("/docProps/app.xml"),
-                            "application/vnd.Openxmlformats-officedocument.extended-properties+xml");
+                            "application/vnd.openxmlformats-officedocument.extended-properties+xml");
             expectedValues.Add(PackagingURIHelper
                     .CreatePartName("/docProps/core.xml"),
-                    "application/vnd.Openxmlformats-namespace.core-properties+xml");
+                    "application/vnd.openxmlformats-package.core-properties+xml");
             expectedValues.Add(PackagingURIHelper
                     .CreatePartName("/word/_rels/document.xml.rels"),
-                    "application/vnd.Openxmlformats-namespace.relationships+xml");
+                    "application/vnd.openxmlformats-package.relationships+xml");
             expectedValues
                     .Add(
                             PackagingURIHelper.CreatePartName("/word/document.xml"),
-                            "application/vnd.Openxmlformats-officedocument.wordProcessingml.document.main+xml");
+                            "application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml");
             expectedValues
                     .Add(PackagingURIHelper.CreatePartName("/word/fontTable.xml"),
-                            "application/vnd.Openxmlformats-officedocument.wordProcessingml.fontTable+xml");
+                            "application/vnd.openxmlformats-officedocument.wordprocessingml.fontTable+xml");
             expectedValues.Add(PackagingURIHelper
                     .CreatePartName("/word/media/image1.gif"), "image/gif");
             expectedValues
                     .Add(PackagingURIHelper.CreatePartName("/word/settings.xml"),
-                            "application/vnd.Openxmlformats-officedocument.wordProcessingml.Settings+xml");
+                            "application/vnd.openxmlformats-officedocument.wordprocessingml.settings+xml");
             expectedValues
                     .Add(PackagingURIHelper.CreatePartName("/word/styles.xml"),
-                            "application/vnd.Openxmlformats-officedocument.wordProcessingml.styles+xml");
+                            "application/vnd.openxmlformats-officedocument.wordprocessingml.styles+xml");
             expectedValues.Add(PackagingURIHelper
                     .CreatePartName("/word/theme/theme1.xml"),
-                    "application/vnd.Openxmlformats-officedocument.theme+xml");
+                    "application/vnd.openxmlformats-officedocument.theme+xml");
             expectedValues
                     .Add(
                             PackagingURIHelper
                                     .CreatePartName("/word/webSettings.xml"),
-                            "application/vnd.Openxmlformats-officedocument.wordProcessingml.webSettings+xml");
+                            "application/vnd.openxmlformats-officedocument.wordprocessingml.webSettings+xml");
         }
 
         /**

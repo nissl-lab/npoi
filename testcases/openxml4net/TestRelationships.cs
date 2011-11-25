@@ -133,7 +133,7 @@ namespace TestCases.OPC
 	        Assert.IsNotNull(mailto);
 	        Assert.AreEqual("rId3", mailto.Id);
 	        Assert.AreEqual("/xl/worksheets/sheet1.xml", mailto.SourceUri.ToString());
-	        Assert.AreEqual("mailto:dev@poi.apache.org?subject=XSSF%20Hyperlinks", mailto.TargetUri.ToString());
+	        Assert.AreEqual("mailto:dev@poi.apache.org?subject=XSSF%20Hyperlinks", mailto.TargetUri.AbsoluteUri);
         }
     
         /*

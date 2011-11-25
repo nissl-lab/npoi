@@ -110,11 +110,11 @@ namespace TestCases.OPC
         //    PackagePart corePart = pkg
         //            .CreatePart(
         //                    corePartName,
-        //                    "application/vnd.Openxmlformats-officedocument.wordProcessingml.document.main+xml");
+        //                    "application/vnd.openxmlformats-officedocument.wordProcessingml.document.main+xml");
 
         //    Document doc = DocumentHelper.CreateDocument();
         //    Namespace nsWordProcessinML = new Namespace("w",
-        //            "http://schemas.Openxmlformats.org/wordProcessingml/2006/main");
+        //            "http://schemas.openxmlformats.org/wordProcessingml/2006/main");
         //    Element elDocument = doc.AddElement(new QName("document",
         //            nsWordProcessinML));
         //    Element elBody = elDocument.AddElement(new QName("body",
@@ -147,7 +147,7 @@ namespace TestCases.OPC
         //    // Create main part relationship
         //    pkg.AddRelationship(corePartName, TargetMode.INTERNAL, PackageRelationshipTypes.CORE_DOCUMENT, "rId1");
         //    // Create main document part
-        //    PackagePart corePart = pkg.CreatePart(corePartName, "application/vnd.Openxmlformats-officedocument.spreadsheetml.sheet.main+xml");
+        //    PackagePart corePart = pkg.CreatePart(corePartName, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml");
         //    // Put in some dummy content
         //    Stream coreOut = corePart.GetOutputStream();
         //    coreOut.Write(Encoding.UTF8.GetBytes("<dummy-xml />"));
@@ -156,15 +156,15 @@ namespace TestCases.OPC
         //    // And another bit
         //    PackagePartName sheetPartName = PackagingURIHelper.CreatePartName("/xl/worksheets/sheet1.xml");
         //    PackageRelationship rel =
-        //         corePart.AddRelationship(sheetPartName, TargetMode.INTERNAL, "http://schemas.Openxmlformats.org/officeDocument/2006/relationships/worksheet", "rSheet1");
-        //    PackagePart part = pkg.CreatePart(sheetPartName, "application/vnd.Openxmlformats-officedocument.spreadsheetml.worksheet+xml");
+        //         corePart.AddRelationship(sheetPartName, TargetMode.INTERNAL, "http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet", "rSheet1");
+        //    PackagePart part = pkg.CreatePart(sheetPartName, "application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml");
         //    // Dummy content again
         //    coreOut = corePart.GetOutputStream();
         //    coreOut.Write("<dummy-xml2 />".GetBytes());
         //    coreOut.Close();
 
         //    //add a relationship with internal target: "#Sheet1!A1"
-        //    corePart.AddRelationship(new Uri("#Sheet1!A1",UriKind.Relative), TargetMode.INTERNAL, "http://schemas.Openxmlformats.org/officeDocument/2006/relationships/hyperlink", "rId2");
+        //    corePart.AddRelationship(new Uri("#Sheet1!A1",UriKind.Relative), TargetMode.INTERNAL, "http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink", "rId2");
 
         //    // Check things are as expected
         //    PackageRelationshipCollection coreRels =
@@ -195,7 +195,7 @@ namespace TestCases.OPC
         //    corePart = pkg.GetPart(coreRel);
         //    Assert.IsNotNull(corePart);
 
-        //    PackageRelationshipCollection rels = corePart.GetRelationshipsByType("http://schemas.Openxmlformats.org/officeDocument/2006/relationships/hyperlink");
+        //    PackageRelationshipCollection rels = corePart.GetRelationshipsByType("http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink");
         //    Assert.AreEqual(1, rels.Size);
         //    rel = rels.GetRelationship(0);
         //    Assert.AreEqual("Sheet1!A1", rel.TargetUri.OriginalString);
@@ -256,7 +256,7 @@ namespace TestCases.OPC
         //    // Create a content
         //    Document doc = DocumentHelper.CreateDocument();
         //    Namespace nsWordProcessinML = new Namespace("w",
-        //            "http://schemas.Openxmlformats.org/wordProcessingml/2006/main");
+        //            "http://schemas.openxmlformats.org/wordProcessingml/2006/main");
         //    Element elDocument = doc.AddElement(new QName("document",
         //            nsWordProcessinML));
         //    Element elBody = elDocument.AddElement(new QName("body",
@@ -358,33 +358,33 @@ namespace TestCases.OPC
             // Expected values
             expectedValues = new Dictionary<PackagePartName, String>();
             expectedValues.Add(PackagingURIHelper.CreatePartName("/_rels/.rels"),
-                    "application/vnd.Openxmlformats-namespace.relationships+xml");
+                    "application/vnd.openxmlformats-package.relationships+xml");
 
             expectedValues
                     .Add(PackagingURIHelper.CreatePartName("/docProps/app.xml"),
-                            "application/vnd.Openxmlformats-officedocument.extended-properties+xml");
+                            "application/vnd.openxmlformats-officedocument.extended-properties+xml");
             expectedValues.Add(PackagingURIHelper
                     .CreatePartName("/docProps/core.xml"),
-                    "application/vnd.Openxmlformats-namespace.core-properties+xml");
+                    "application/vnd.openxmlformats-package.core-properties+xml");
             expectedValues
                     .Add(PackagingURIHelper.CreatePartName("/word/fontTable.xml"),
-                            "application/vnd.Openxmlformats-officedocument.wordProcessingml.fontTable+xml");
+                            "application/vnd.openxmlformats-officedocument.wordprocessingml.fontTable+xml");
             expectedValues.Add(PackagingURIHelper
                     .CreatePartName("/word/media/image1.gif"), "image/gif");
             expectedValues
                     .Add(PackagingURIHelper.CreatePartName("/word/settings.xml"),
-                            "application/vnd.Openxmlformats-officedocument.wordProcessingml.Settings+xml");
+                            "application/vnd.openxmlformats-officedocument.wordprocessingml.settings+xml");
             expectedValues
                     .Add(PackagingURIHelper.CreatePartName("/word/styles.xml"),
-                            "application/vnd.Openxmlformats-officedocument.wordProcessingml.styles+xml");
+                            "application/vnd.openxmlformats-officedocument.wordprocessingml.styles+xml");
             expectedValues.Add(PackagingURIHelper
                     .CreatePartName("/word/theme/theme1.xml"),
-                    "application/vnd.Openxmlformats-officedocument.theme+xml");
+                    "application/vnd.openxmlformats-officedocument.theme+xml");
             expectedValues
                     .Add(
                             PackagingURIHelper
                                     .CreatePartName("/word/webSettings.xml"),
-                            "application/vnd.Openxmlformats-officedocument.wordProcessingml.webSettings+xml");
+                            "application/vnd.openxmlformats-officedocument.wordprocessingml.webSettings+xml");
 
             String filepath = OpenXml4NetTestDataSamples.GetSampleFileName("sample.docx");
 
@@ -418,14 +418,14 @@ namespace TestCases.OPC
             // Expected values
             expectedValues = new Dictionary<PackagePartName, String>();
             expectedValues.Add(PackagingURIHelper.CreatePartName("/_rels/.rels"),
-                    "application/vnd.Openxmlformats-namespace.relationships+xml");
+                    "application/vnd.openxmlformats-package.relationships+xml");
 
             expectedValues
                     .Add(PackagingURIHelper.CreatePartName("/docProps/app.xml"),
-                            "application/vnd.Openxmlformats-officedocument.extended-properties+xml");
+                            "application/vnd.openxmlformats-officedocument.extended-properties+xml");
             expectedValues.Add(PackagingURIHelper
                     .CreatePartName("/docProps/core.xml"),
-                    "application/vnd.Openxmlformats-namespace.core-properties+xml");
+                    "application/vnd.openxmlformats-package.core-properties+xml");
 
             String filepath = OpenXml4NetTestDataSamples.GetSampleFileName("sample.docx");
 
@@ -516,7 +516,7 @@ namespace TestCases.OPC
 
         private static ContentTypeManager GetContentTypeManager(OPCPackage pkg)
         {
-            FieldInfo f = typeof(OPCPackage).GetField("contentTypeManager");
+            FieldInfo f = typeof(OPCPackage).GetField("contentTypeManager",BindingFlags.NonPublic|BindingFlags.Instance);
             //f.SetAccessible(true);
             return (ContentTypeManager)f.GetValue(pkg);
         }
@@ -526,7 +526,7 @@ namespace TestCases.OPC
             String filepath = OpenXml4NetTestDataSamples.GetSampleFileName("sample.docx");
 
             OPCPackage pkg = OPCPackage.Open(filepath, PackageAccess.READ_WRITE);
-            List<PackagePart> rs = pkg.GetPartsByName(new Regex("/word/.*?\\.xml"));
+            List<PackagePart> rs = pkg.GetPartsByName(new Regex("^/word/.*?\\.xml$"));
             Dictionary<String, PackagePart> selected = new Dictionary<String, PackagePart>();
 
             foreach (PackagePart p in rs)

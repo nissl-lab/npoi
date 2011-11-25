@@ -459,7 +459,7 @@ namespace NPOI.OpenXml4Net.OPC
                 path="/";
             else
                 path = Path.GetDirectoryName(sourcePartUri.ToString()).Replace("\\", "/") + "/";
-            return new Uri(path+targetUri.ToString(),UriKind.RelativeOrAbsolute);
+            return new Uri(Path.Combine(path, targetUri.ToString()), UriKind.RelativeOrAbsolute);
         }
 
         /**
