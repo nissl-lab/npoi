@@ -15,42 +15,19 @@
    limitations under the License.
 ==================================================================== */
 
-using System;
-namespace NPOI.HSLF.Exceptions
-{
+namespace NPOI.HSLF.Model;
 
-    /**
-     * A generic exception that can be thrown by HSLF classes
-     *
-     * @author Yegor Kozlov
-     */
-    public class HSLFException : Exception
-    {
-
-        public HSLFException()
-            : base()
-        {
-
-        }
-
-        public HSLFException(String message)
-            : base(message)
-        {
-
-        }
-
-        public HSLFException(String message, Exception cause)
-            : base(message, cause)
-        {
-
-        }
-
-        public HSLFException(Exception innerEx)
-            :base("",innerEx)
-        { 
-            
-        }
-    }
-
+/**
+ * Date: Apr 17, 2008
+ *
+ * @author Yegor Kozlov
+ */
+public interface ShapeOutline {
+    java.awt.Shape GetOutline(Shape shape);
 
 }
+
+
+
+
+

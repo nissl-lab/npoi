@@ -35,7 +35,7 @@ namespace NPOI.HSLF.Record
     public abstract class Record
     {
         // For logging
-        //protected POILogger logger = POILogFactory.GetLogger(this.GetType());
+        protected POILogger logger = POILogFactory.GetLogger(typeof(Record));
 
         /**
          * Is this record type an Atom record (only has data),

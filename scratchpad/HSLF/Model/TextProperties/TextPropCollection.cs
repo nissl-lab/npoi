@@ -19,6 +19,7 @@ using NPOI.Util;
 using System.Collections.Generic;
 using System.IO;
 using System;
+using NPOI.HSLF.Record;
 namespace NPOI.HSLF.Model.TextProperties
 {
     /**
@@ -74,7 +75,7 @@ namespace NPOI.HSLF.Model.TextProperties
 		}
 		
 		// Add a copy of this property, in the right place to the list
-		TextProp textProp = (TextProp)base.Clone();
+		TextProp textProp = (TextProp)base1.Clone();
 		int pos = 0;
 		for(int i=0; i<textPropList.Count; i++) {
 			TextProp curProp = textPropList[i];

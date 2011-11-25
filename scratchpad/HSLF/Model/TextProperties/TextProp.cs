@@ -85,7 +85,8 @@ namespace NPOI.HSLF.Model.TextProperties
          */
         public Object Clone()
         {
-                return base.Clone();
+            TextProp tp = new TextProp(this.sizeOfDataBlock, this.maskInHeader, this.propName);
+            return tp;
         }
     }
 
