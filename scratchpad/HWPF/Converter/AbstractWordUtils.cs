@@ -402,28 +402,20 @@ namespace NPOI.HWPF.Converter
             return number.ToString();
         }
 
-        //public static HWPFDocumentCore loadDoc(DirectoryNode root)
-        //{
-        //    try
-        //    {
-        //        return new HWPFDocument(root);
-        //    }
-        //    catch (OldWordFileFormatException exc)
-        //    {
-        //        return new HWPFOldDocument(root);
-        //    }
-        //}
-        public static HWPFDocumentCore LoadDoc(POIFSFileSystem poifsFileSystem)
+        public static HWPFDocumentCore LoadDoc(DirectoryNode root)
         {
-            //return loadDoc( poifsFileSystem.getRoot() );
             try
             {
-                return new HWPFDocument(poifsFileSystem);
+                return new HWPFDocument(root);
             }
             catch (OldWordFileFormatException exc)
             {
-                return new HWPFOldDocument(poifsFileSystem);
+                return new HWPFOldDocument(root);
             }
+        }
+        public static HWPFDocumentCore LoadDoc(POIFSFileSystem poifsFileSystem)
+        {
+            return LoadDoc( poifsFileSystem.Root );
         }
         public static HWPFDocumentCore LoadDoc(Stream inputStream)
         {

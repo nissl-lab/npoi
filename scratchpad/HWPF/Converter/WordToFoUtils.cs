@@ -24,18 +24,17 @@ namespace NPOI.HWPF.Converter
     using NPOI.HWPF.UserModel;
     public class WordToFoUtils : AbstractWordUtils
     {
-        public static void compactInlines(XmlElement blockXmlElement)
+        public static void CompactInlines(XmlElement blockXmlElement)
         {
             CompactChildNodesR(blockXmlElement, "fo:inline");
         }
 
-        public static void setBold(XmlElement XmlElement, bool bold)
+        public static void SetBold(XmlElement XmlElement, bool bold)
         {
             XmlElement.SetAttribute("font-weight", bold ? "bold" : "normal");
         }
 
-        public static void setBorder(XmlElement XmlElement, BorderCode borderCode,
-                String where)
+        public static void SetBorder(XmlElement XmlElement, BorderCode borderCode, String where)
         {
             if (XmlElement == null)
                 throw new ArgumentException("XmlElement is null");
@@ -61,12 +60,11 @@ namespace NPOI.HWPF.Converter
             }
         }
 
-        public static void setCharactersProperties(
-                 CharacterRun characterRun, XmlElement inline)
+        public static void SetCharactersProperties(CharacterRun characterRun, XmlElement inline)
         {
             StringBuilder textDecorations = new StringBuilder();
 
-            setBorder(inline, characterRun.GetBorder(), string.Empty);
+            SetBorder(inline, characterRun.GetBorder(), string.Empty);
 
             if (characterRun.GetIco24() != -1)
             {
@@ -127,8 +125,7 @@ namespace NPOI.HWPF.Converter
             }
         }
 
-        public static void setFontFamily(XmlElement XmlElement,
-                 String fontFamily)
+        public static void SetFontFamily(XmlElement XmlElement, String fontFamily)
         {
             if (string.IsNullOrEmpty(fontFamily))
                 return;
@@ -136,12 +133,12 @@ namespace NPOI.HWPF.Converter
             XmlElement.SetAttribute("font-family", fontFamily);
         }
 
-        public static void setFontSize(XmlElement XmlElement, int fontSize)
+        public static void SetFontSize(XmlElement XmlElement, int fontSize)
         {
             XmlElement.SetAttribute("font-size", fontSize.ToString());
         }
 
-        public static void setIndent(Paragraph paragraph, XmlElement block)
+        public static void SetIndent(Paragraph paragraph, XmlElement block)
         {
             if (paragraph.GetFirstLineIndent() != 0)
             {
@@ -174,12 +171,12 @@ namespace NPOI.HWPF.Converter
             }
         }
 
-        public static void setItalic(XmlElement XmlElement, bool italic)
+        public static void SetItalic(XmlElement XmlElement, bool italic)
         {
             XmlElement.SetAttribute("font-style", italic ? "italic" : "normal");
         }
 
-        public static void setJustification(Paragraph paragraph,
+        public static void SetJustification(Paragraph paragraph,
                  XmlElement XmlElement)
         {
             String justification = GetJustification(paragraph.GetJustification());
@@ -187,27 +184,25 @@ namespace NPOI.HWPF.Converter
                 XmlElement.SetAttribute("text-align", justification);
         }
 
-        public static void setLanguage(CharacterRun characterRun,
-                 XmlElement inline)
+        public static void SetLanguage(CharacterRun characterRun, XmlElement inline)
         {
-            if ( characterRun.getLanguageCode() != 0 )
+            if (characterRun.getLanguageCode() != 0)
             {
-                 String language = GetLanguage( characterRun.getLanguageCode() );
-                if ( !string.IsNullOrEmpty( language ) )
-                    inline.SetAttribute( "language", language );
+                String language = GetLanguage(characterRun.getLanguageCode());
+                if (!string.IsNullOrEmpty(language))
+                    inline.SetAttribute("language", language);
             }
         }
 
-        public static void setParagraphProperties(Paragraph paragraph,
-                XmlElement block)
+        public static void SetParagraphProperties(Paragraph paragraph, XmlElement block)
         {
-            setIndent(paragraph, block);
-            setJustification(paragraph, block);
+            SetIndent(paragraph, block);
+            SetJustification(paragraph, block);
 
-            setBorder(block, paragraph.GetBottomBorder(), "bottom");
-            setBorder(block, paragraph.GetLeftBorder(), "left");
-            setBorder(block, paragraph.GetRightBorder(), "right");
-            setBorder(block, paragraph.GetTopBorder(), "top");
+            SetBorder(block, paragraph.GetBottomBorder(), "bottom");
+            SetBorder(block, paragraph.GetLeftBorder(), "left");
+            SetBorder(block, paragraph.GetRightBorder(), "right");
+            SetBorder(block, paragraph.GetTopBorder(), "top");
 
             if (paragraph.PageBreakBefore())
             {
@@ -230,8 +225,7 @@ namespace NPOI.HWPF.Converter
             block.SetAttribute("white-space-collapse", "false");
         }
 
-        public static void setPictureProperties(Picture picture,
-                XmlElement graphicXmlElement)
+        public static void SetPictureProperties(Picture picture, XmlElement graphicXmlElement)
         {
             int horizontalScale = picture.HorizontalScalingFactor;
             int verticalScale = picture.VerticalScalingFactor;
@@ -282,7 +276,7 @@ namespace NPOI.HWPF.Converter
             }
         }
 
-        public static void setTableCellProperties(TableRow tableRow,
+        public static void SetTableCellProperties(TableRow tableRow,
                 TableCell tableCell, XmlElement XmlElement, bool toppest,
                 bool bottomest, bool leftest, bool rightest)
         {
@@ -311,14 +305,13 @@ namespace NPOI.HWPF.Converter
                     .GetBrcRight() : rightest ? tableRow.GetRightBorder()
                     : tableRow.GetVerticalBorder();
 
-            setBorder(XmlElement, bottom, "bottom");
-            setBorder(XmlElement, left, "left");
-            setBorder(XmlElement, right, "right");
-            setBorder(XmlElement, top, "top");
+            SetBorder(XmlElement, bottom, "bottom");
+            SetBorder(XmlElement, left, "left");
+            SetBorder(XmlElement, right, "right");
+            SetBorder(XmlElement, top, "top");
         }
 
-        public static void setTableRowProperties(TableRow tableRow,
-                XmlElement tableRowXmlElement)
+        public static void SetTableRowProperties(TableRow tableRow, XmlElement tableRowXmlElement)
         {
             if (tableRow.GetRowHeight() > 0)
             {

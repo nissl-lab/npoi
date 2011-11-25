@@ -76,7 +76,7 @@ namespace NPOI.HWPF.Converter
             return inline;
         }
 
-        protected String createPageMaster(NPOI.HWPF.UserModel.Section section, String type,                int sectionIndex)
+        protected String CreatePageMaster(NPOI.HWPF.UserModel.Section section, String type, int sectionIndex)
         {
             float height = section.PageHeight / WordToFoUtils.TWIPS_PER_INCH;
             float width = section.PageWidth / WordToFoUtils.TWIPS_PER_INCH;
@@ -147,14 +147,14 @@ namespace NPOI.HWPF.Converter
             Triplet triplet = GetCharacterRunTriplet(characterRun);
 
             if (!string.IsNullOrEmpty(triplet.fontName))
-                WordToFoUtils.setFontFamily(inline, triplet.fontName);
-            WordToFoUtils.setBold(inline, triplet.bold);
-            WordToFoUtils.setItalic(inline, triplet.italic);
-            WordToFoUtils.setFontSize(inline, characterRun.GetFontSize() / 2);
-            WordToFoUtils.setCharactersProperties(characterRun, inline);
+                WordToFoUtils.SetFontFamily(inline, triplet.fontName);
+            WordToFoUtils.SetBold(inline, triplet.bold);
+            WordToFoUtils.SetItalic(inline, triplet.italic);
+            WordToFoUtils.SetFontSize(inline, characterRun.GetFontSize() / 2);
+            WordToFoUtils.SetCharactersProperties(characterRun, inline);
 
             if (IsOutputCharactersLanguage())
-                WordToFoUtils.setLanguage(characterRun, inline);
+                WordToFoUtils.SetLanguage(characterRun, inline);
 
             block.AppendChild(inline);
 
@@ -238,7 +238,7 @@ namespace NPOI.HWPF.Converter
 
             ProcessCharacters(wordDocument, int.MinValue, endnoteTextRange, endnote);
 
-            WordToFoUtils.compactInlines(endnote);
+            WordToFoUtils.CompactInlines(endnote);
             this.endnotes.Add(endnote);
         }
 
@@ -278,7 +278,7 @@ namespace NPOI.HWPF.Converter
 
             ProcessCharacters(wordDocument, int.MinValue, footnoteTextRange, footnoteBlock);
 
-            WordToFoUtils.compactInlines(footnoteBlock);
+            WordToFoUtils.CompactInlines(footnoteBlock);
         }
 
         protected override void ProcessHyperlink(HWPFDocumentCore wordDocument,
@@ -341,7 +341,7 @@ namespace NPOI.HWPF.Converter
         {
             XmlElement externalGraphic = foDocumentFacade
                    .CreateExternalGraphic(url);
-            WordToFoUtils.setPictureProperties(picture, externalGraphic);
+            WordToFoUtils.SetPictureProperties(picture, externalGraphic);
             currentBlock.AppendChild(externalGraphic);
         }
 
@@ -395,7 +395,7 @@ namespace NPOI.HWPF.Converter
             XmlElement block = foDocumentFacade.CreateBlock();
             parentFopElement.AppendChild(block);
 
-            WordToFoUtils.setParagraphProperties(paragraph, block);
+            WordToFoUtils.SetParagraphProperties(paragraph, block);
 
             int charRuns = paragraph.NumCharacterRuns;
 
@@ -425,14 +425,14 @@ namespace NPOI.HWPF.Converter
                 block.AppendChild(leader);
             }
 
-            WordToFoUtils.compactInlines(block);
+            WordToFoUtils.CompactInlines(block);
             return;
         }
 
         protected override void ProcessSection(HWPFDocumentCore wordDocument,
                 NPOI.HWPF.UserModel.Section section, int sectionCounter)
         {
-            String regularPage = createPageMaster(section, "page", sectionCounter);
+            String regularPage = CreatePageMaster(section, "page", sectionCounter);
 
             XmlElement pageSequence = foDocumentFacade.AddPageSequence(regularPage);
             XmlElement flow = foDocumentFacade.AddFlowToPageSequence(pageSequence, "xsl-region-body");
@@ -467,7 +467,7 @@ namespace NPOI.HWPF.Converter
                 TableRow tableRow = table.GetRow(r);
 
                 XmlElement tableRowElement = foDocumentFacade.CreateTableRow();
-                WordToFoUtils.setTableRowProperties(tableRow, tableRowElement);
+                WordToFoUtils.SetTableRowProperties(tableRow, tableRowElement);
 
                 // index of current element in tableCellEdges[]
                 int currentEdgeIndex = 0;
@@ -484,7 +484,7 @@ namespace NPOI.HWPF.Converter
                     }
 
                     XmlElement tableCellElement = foDocumentFacade.CreateTableCell();
-                    WordToFoUtils.setTableCellProperties(tableRow, tableCell,
+                    WordToFoUtils.SetTableCellProperties(tableRow, tableCell,
                             tableCellElement, r == 0, r == tableRows - 1, c == 0,
                             c == rowCells - 1);
 

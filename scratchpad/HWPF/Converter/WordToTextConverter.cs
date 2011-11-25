@@ -24,6 +24,7 @@ namespace NPOI.HWPF.Converter
     using NPOI.HWPF.UserModel;
     using NPOI.POIFS.FileSystem;
     using NPOI.Util;
+    using System.Reflection;
 
 
 
@@ -32,11 +33,11 @@ namespace NPOI.HWPF.Converter
         private static POILogger logger = POILogFactory
                 .GetLogger(typeof(WordToTextConverter));
 
-        //public static String GetText( DirectoryNode root )  
-        //{
-        //     HWPFDocumentCore wordDocument = AbstractWordUtils.LoadDoc( root );
-        //    return GetText( wordDocument );
-        //}
+        public static String GetText( DirectoryNode root )  
+        {
+             HWPFDocumentCore wordDocument = AbstractWordUtils.LoadDoc( root );
+            return GetText( wordDocument );
+        }
 
         public static String GetText(string docFile)
         {
@@ -240,8 +241,7 @@ namespace NPOI.HWPF.Converter
             note.AppendChild(textDocumentFacade.CreateText("\n"));
         }
 
-        protected override bool ProcessOle2(HWPFDocument wordDocument, XmlElement block,
-                Entry entry)
+        protected override bool ProcessOle2(HWPFDocument wordDocument, XmlElement block, Entry entry)
         {
             if (!(entry is DirectoryNode))
                 return false;
@@ -253,7 +253,8 @@ namespace NPOI.HWPF.Converter
              */
 
             //TODO: Not completed
-            /*if ( directoryNode.HasEntry( "WordDocument" ) )
+            //if ( directoryNode.HasEntry( "WordDocument" ) )
+            if ( directoryNode.GetEntry( "WordDocument" )!=null )
             {
                 String text = WordToTextConverter.GetText( (DirectoryNode) entry );
                 block.AppendChild( textDocumentFacade
@@ -263,7 +264,8 @@ namespace NPOI.HWPF.Converter
             }
 
             Object extractor;
-            try
+            
+            /*try
             {
                 Class<?> cls = Class
                         .ForName( "org.apache.poi.extractor.ExtractorFactory" );

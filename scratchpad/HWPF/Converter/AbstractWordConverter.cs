@@ -24,6 +24,7 @@ using System.Xml;
 using NPOI.HWPF.Model;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
+using NPOI.POIFS.FileSystem;
 
 
 namespace NPOI.HWPF.Converter
@@ -435,7 +436,7 @@ namespace NPOI.HWPF.Converter
                         }
                     }
 
-                    int skipTo = tryDeadField(wordDocument, range,
+                    int skipTo = TryDeadField(wordDocument, range,
                             currentTableLevel, c, block);
 
                     if (skipTo != c)
@@ -751,54 +752,40 @@ namespace NPOI.HWPF.Converter
         protected abstract void ProcessLineBreak(XmlElement block,
                 CharacterRun characterRun);
 
-        protected void ProcessNoteAnchor(HWPFDocument doc,
-                CharacterRun characterRun, XmlElement block)
+        protected void ProcessNoteAnchor(HWPFDocument doc, CharacterRun characterRun, XmlElement block)
         {
             {
-                
-            //    Notes footnotes = doc.getFootnotes();
-            //    int noteIndex = footnotes
-            //            .getNoteIndexByAnchorPosition(characterRun
-            //                    .StartOffset);
-            //    if (noteIndex != -1)
-            //    {
-            //        Range footnoteRange = doc.getFootnoteRange();
-            //        int rangeStartOffset = footnoteRange.StartOffset;
-            //        int noteTextStartOffset = footnotes
-            //                .getNoteTextStartOffset(noteIndex);
-            //        int noteTextEndOffset = footnotes
-            //                .getNoteTextEndOffset(noteIndex);
 
-            //        Range noteTextRange = new Range(rangeStartOffset
-            //                + noteTextStartOffset, rangeStartOffset
-            //                + noteTextEndOffset, doc);
+                Notes footnotes = doc.GetFootnotes();
+                int noteIndex = footnotes.GetNoteIndexByAnchorPosition(characterRun.StartOffset);
+                if (noteIndex != -1)
+                {
+                    Range footnoteRange = doc.GetFootnoteRange();
+                    int rangeStartOffset = footnoteRange.StartOffset;
+                    int noteTextStartOffset = footnotes.GetNoteTextStartOffSet(noteIndex);
+                    int noteTextEndOffset = footnotes.GetNoteTextEndOffSet(noteIndex);
 
-            //        processFootnoteAutonumbered(doc, noteIndex, block,
-            //                noteTextRange);
-            //        return;
-            //    }
+                    Range noteTextRange = new Range(rangeStartOffset + noteTextStartOffset, rangeStartOffset + noteTextEndOffset, doc);
+
+                    ProcessFootnoteAutonumbered(doc, noteIndex, block, noteTextRange);
+                    return;
+                }
             }
             {
-            //    Notes endnotes = doc.getEndnotes();
-            //    int noteIndex = endnotes.getNoteIndexByAnchorPosition(characterRun
-            //            .StartOffset);
-            //    if (noteIndex != -1)
-            //    {
-            //        Range endnoteRange = doc.getEndnoteRange();
-            //        int rangeStartOffset = endnoteRange.StartOffset;
-            //        int noteTextStartOffset = endnotes
-            //                .getNoteTextStartOffset(noteIndex);
-            //        int noteTextEndOffset = endnotes
-            //                .getNoteTextEndOffset(noteIndex);
+                Notes endnotes = doc.GetEndnotes();
+                int noteIndex = endnotes.GetNoteIndexByAnchorPosition(characterRun.StartOffset);
+                if (noteIndex != -1)
+                {
+                    Range endnoteRange = doc.GetEndnoteRange();
+                    int rangeStartOffset = endnoteRange.StartOffset;
+                    int noteTextStartOffset = endnotes.GetNoteTextStartOffSet(noteIndex);
+                    int noteTextEndOffset = endnotes.GetNoteTextEndOffSet(noteIndex);
 
-            //        Range noteTextRange = new Range(rangeStartOffset
-            //                + noteTextStartOffset, rangeStartOffset
-            //                + noteTextEndOffset, doc);
+                    Range noteTextRange = new Range(rangeStartOffset + noteTextStartOffset, rangeStartOffset + noteTextEndOffset, doc);
 
-            //        processEndnoteAutonumbered(doc, noteIndex, block,
-            //                noteTextRange);
-            //        return;
-            //    }
+                    ProcessEndnoteAutonumbered(doc, noteIndex, block, noteTextRange);
+                    return;
+                }
             }
             throw new NotImplementedException();
         }
@@ -807,28 +794,25 @@ namespace NPOI.HWPF.Converter
                 XmlElement block)
         {
             throw new NotImplementedException();
-            //    Entry entry = doc.getObjectsPool().getObjectById(
-            //            "_" + characterRun.getPicOffset() );
-            //    if ( entry == null )
-            //    {
-            //        logger.log( POILogger.WARN, "Referenced OLE2 object '",
-            //                Integer.valueOf( characterRun.getPicOffset() ),
-            //                "' not found in ObjectPool" );
-            //        return false;
-            //    }
+            //TODO: NO METHOD GetObjectsPool
+            //Entry entry = doc.GetObjectsPool().getObjectById(
+            //        "_" + characterRun.GetPicOffset());
+            //if (entry == null)
+            //{
+            //    logger.Log(POILogger.WARN, "Referenced OLE2 object '", (characterRun.GetPicOffset()).ToString(), "' not found in ObjectPool");
+            //    return false;
+            //}
 
-            //    try
-            //    {
-            //        return processOle2( doc, block, entry );
-            //    }
-            //    catch ( Exception exc )
-            //    {
-            //        logger.log( POILogger.WARN,
-            //                "Unable to convert internal OLE2 object '",
-            //                Integer.valueOf( characterRun.getPicOffset() ), "': ", exc,
-            //                exc );
-            //        return false;
-            //    }
+            //try
+            //{
+            //    return ProcessOle2(doc, block, entry);
+            //}
+            //catch (Exception exc)
+            //{
+            //    logger.Log(POILogger.WARN,
+            //            "Unable to convert internal OLE2 object '", (characterRun.GetPicOffset()).ToString(), "': ", exc, exc);
+            //    return false;
+            //}
         }
 
         ////@SuppressWarnings( "unused" )
@@ -945,7 +929,7 @@ namespace NPOI.HWPF.Converter
             this.picturesManager = fileManager;
         }
 
-        protected int tryDeadField(HWPFDocumentCore wordDocument, Range range,
+        protected int TryDeadField(HWPFDocumentCore wordDocument, Range range,
                 int currentTableLevel, int beginMark, XmlElement currentBlock)
         {
             int separatorMark = -1;
