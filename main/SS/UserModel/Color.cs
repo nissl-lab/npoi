@@ -4,7 +4,7 @@ using System.Text;
 
 namespace NPOI.SS.UserModel
 {
-    public interface Color
+    public interface IColor
     {
     }
 }

@@ -22,6 +22,7 @@ namespace NPOI.DDF
     using System.IO;
     using System.Collections;
     using NPOI.Util;
+    using System.Collections.Generic;
 
     /// <summary>
     /// The base abstract record from which all escher records are defined.  Subclasses will need
@@ -163,9 +164,9 @@ namespace NPOI.DDF
         /// </summary>
         /// <value>Returns the children of this record.  By default this will
         /// be an empty list.  EscherCotainerRecord is the only record that may contain children.</value>
-        public virtual IList ChildRecords
+        public virtual List<EscherRecord> ChildRecords
         {
-            get { return new ArrayList(); }
+            get { return new List<EscherRecord>(); }
             set { throw new ArgumentException("This record does not support child records."); }
         }
 

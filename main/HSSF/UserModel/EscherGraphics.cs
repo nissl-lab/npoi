@@ -23,6 +23,7 @@ namespace NPOI.HSSF.UserModel
     using System.Text;
 
     using System.Drawing;
+    using NPOI.SS.UserModel;
 
     /**
      * Translates Graphics calls into escher calls.  The translation Is lossy so
@@ -284,7 +285,7 @@ namespace NPOI.HSSF.UserModel
             y -= Convert.ToInt32((font.Size / verticalPixelsPerPoint) + 2 * verticalPixelsPerPoint);    // we want to Draw the shape from the top-left
             HSSFTextbox textbox = escherGroup.CreateTextbox(new HSSFChildAnchor(x, y, x + width, y + height));
             textbox.IsNoFill = (true);
-            textbox.LineStyle = (HSSFShape.LINESTYLE_NONE);
+            textbox.LineStyle = LineStyle.None;
             HSSFRichTextString s = new HSSFRichTextString(str);
             HSSFFont hssfFont = MatchFont(excelFont);
             s.ApplyFont(hssfFont);
@@ -343,7 +344,7 @@ namespace NPOI.HSSF.UserModel
         {
             HSSFSimpleShape shape = escherGroup.CreateShape(new HSSFChildAnchor(x, y, x + width, y + height));
             shape.ShapeType = (HSSFSimpleShape.OBJECT_TYPE_OVAL);
-            shape.LineStyle = (HSSFShape.LINESTYLE_NONE);
+            shape.LineStyle = LineStyle.None;
             shape.SetFillColor(foreground.R, foreground.G, foreground.B);
             shape.SetLineStyleColor(foreground.R, foreground.G, foreground.B);
         }
@@ -407,7 +408,7 @@ namespace NPOI.HSSF.UserModel
         {
             HSSFSimpleShape shape = escherGroup.CreateShape(new HSSFChildAnchor(x, y, x + width, y + height));
             shape.ShapeType = (HSSFSimpleShape.OBJECT_TYPE_RECTANGLE);
-            shape.LineStyle = (HSSFShape.LINESTYLE_NONE);
+            shape.LineStyle = LineStyle.None;
             shape.SetFillColor(foreground.R, foreground.G, foreground.B);
             shape.SetLineStyleColor(foreground.R, foreground.G, foreground.B);
         }

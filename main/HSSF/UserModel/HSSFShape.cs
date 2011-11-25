@@ -26,28 +26,15 @@ namespace NPOI.HSSF.UserModel
     [Serializable]
     public abstract class HSSFShape:IShape
     {
-        public static int LINEWIDTH_ONE_PT = 12700;
+        public static int LINEWIDTH_ONE_PT = 12700; // 12700 = 1pt
         public static int LINEWIDTH_DEFAULT = 9525;
-
-        public static int LINESTYLE_SOLID = 0;              // Solid (continuous) pen
-        public static int LINESTYLE_DASHSYS = 1;            // PS_DASH system   dash style
-        public static int LINESTYLE_DOTSYS = 2;             // PS_DOT system   dash style
-        public static int LINESTYLE_DASHDOTSYS = 3;         // PS_DASHDOT system dash style
-        public static int LINESTYLE_DASHDOTDOTSYS = 4;      // PS_DASHDOTDOT system dash style
-        public static int LINESTYLE_DOTGEL = 5;             // square dot style
-        public static int LINESTYLE_DASHGEL = 6;            // dash style
-        public static int LINESTYLE_LONGDASHGEL = 7;        // long dash style
-        public static int LINESTYLE_DASHDOTGEL = 8;         // dash short dash
-        public static int LINESTYLE_LONGDASHDOTGEL = 9;     // long dash short dash
-        public static int LINESTYLE_LONGDASHDOTDOTGEL = 10; // long dash short dash short dash
-        public static int LINESTYLE_NONE = -1;
 
         IShape parent;
         HSSFAnchor anchor;
         int lineStyleColor = 0x08000040;
         int fillColor = 0x08000009;
-        int lineWidth = LINEWIDTH_DEFAULT;    // 12700 = 1pt
-        int lineStyle = LINESTYLE_SOLID;
+        int lineWidth = LINEWIDTH_DEFAULT;    
+        LineStyle lineStyle = LineStyle.Solid;
         bool noFill = false;
 
         /// <summary>
@@ -156,7 +143,7 @@ namespace NPOI.HSSF.UserModel
         /// Gets or sets One of the constants in LINESTYLE_*
         /// </summary>
         /// <value>The line style.</value>
-        public int LineStyle
+        public LineStyle LineStyle
         {
             get { return lineStyle; }
             set { lineStyle = value; }

@@ -22,6 +22,7 @@ namespace NPOI.HSSF.Model
     using NPOI.DDF;
     using NPOI.HSSF.UserModel;
     using NPOI.HSSF.Record;
+    using NPOI.SS.UserModel;
 
     /// <summary>
     /// An abstract shape Is the lowlevel model for a shape.
@@ -138,11 +139,11 @@ namespace NPOI.HSSF.Model
                 opt.AddEscherProperty(new EscherSimpleProperty(EscherProperties.LINESTYLE__LINEWIDTH, shape.LineWidth));
                 options++;
             }
-            if (shape.LineStyle != HSSFShape.LINESTYLE_SOLID)
+            if (shape.LineStyle != LineStyle.Solid)
             {
-                opt.AddEscherProperty(new EscherSimpleProperty(EscherProperties.LINESTYLE__LINEDASHING, shape.LineStyle));
+                opt.AddEscherProperty(new EscherSimpleProperty(EscherProperties.LINESTYLE__LINEDASHING, (int)shape.LineStyle));
                 opt.AddEscherProperty(new EscherSimpleProperty(EscherProperties.LINESTYLE__LINEENDCAPSTYLE, 0));
-                if (shape.LineStyle == HSSFShape.LINESTYLE_NONE)
+                if (shape.LineStyle == LineStyle.None)
                     opt.AddEscherProperty(new EscherBoolProperty(EscherProperties.LINESTYLE__NOLINEDRAWDASH, 0x00080000));
                 else
                     opt.AddEscherProperty(new EscherBoolProperty(EscherProperties.LINESTYLE__NOLINEDRAWDASH, 0x00080008));

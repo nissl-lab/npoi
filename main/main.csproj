@@ -829,6 +829,7 @@
     <Compile Include="SS\UserModel\HorizontalAlignment.cs" />
     <Compile Include="SS\UserModel\Hyperlink.cs" />
     <Compile Include="SS\UserModel\IndexedColors.cs" />
+    <Compile Include="SS\UserModel\LineStyle.cs" />
     <Compile Include="SS\UserModel\Name.cs" />
     <Compile Include="SS\UserModel\PageOrder.cs" />
     <Compile Include="SS\UserModel\PaperSize.cs" />

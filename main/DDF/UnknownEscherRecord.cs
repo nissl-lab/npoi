@@ -22,6 +22,7 @@ namespace NPOI.DDF
     using System.Text;
     using System.Collections;
     using NPOI.Util;
+    using System.Collections.Generic;
 
     /// <summary>
     /// This record is used whenever a escher record is encountered that
@@ -34,7 +35,7 @@ namespace NPOI.DDF
 
         /** The data for this record not including the the 8 byte header */
         private byte[] thedata = NO_BYTES;
-        private IList childRecords = new ArrayList();
+        private List<EscherRecord> childRecords = new List<EscherRecord>();
 
         public UnknownEscherRecord()
         {
@@ -131,7 +132,7 @@ namespace NPOI.DDF
         /// that may contain children.
         /// </summary>
         /// <value></value>
-        public override IList ChildRecords
+        public override List<EscherRecord> ChildRecords
         {
             get { return childRecords; }
             set { this.childRecords = value; }

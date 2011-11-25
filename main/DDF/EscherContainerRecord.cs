@@ -23,6 +23,7 @@ namespace NPOI.DDF
     using System.Text;
     using System.Collections;
     using NPOI.Util;
+    using System.Collections.Generic;
 
 
     /// <summary>
@@ -41,7 +42,7 @@ namespace NPOI.DDF
         public const short SP_CONTAINER = unchecked((short)0xF004);
         public const short SOLVER_CONTAINER = unchecked((short)0xF005);
 
-        private IList childRecords = new ArrayList();
+        private List<EscherRecord> childRecords = new List<EscherRecord>();
 
         /// <summary>
         /// The contract of this method is to deSerialize an escher record including
@@ -149,12 +150,15 @@ namespace NPOI.DDF
         /// of the container.
         /// </summary>
         /// <value></value>
-        public override IList ChildRecords
+        public override List<EscherRecord> ChildRecords
         {
             get { return childRecords; }
             set { this.childRecords = value; }
         }
-
+        public List<EscherRecord>.Enumerator GetChildIterator()
+        {
+            return childRecords.GetEnumerator();
+        }
         /// <summary>
         /// Returns all of our children which are also
         /// EscherContainers (may be 0, 1, or vary rarely
