@@ -39,10 +39,10 @@ namespace NPOI.HSSF.UserModel
          */
         private ObjRecord record;
 
-        /**
-         * Reference to the filesystem, required for retrieving the object data.
-         */
-        private POIFSFileSystem poifs;
+    /**
+     * Reference to the filesystem root, required for retrieving the object data.
+     */
+    private DirectoryEntry _root;
 
         /**
          * Constructs object data by wrapping a lower level object record.
@@ -50,10 +50,10 @@ namespace NPOI.HSSF.UserModel
          * @param record the low-level object record.
          * @param poifs the filesystem, required for retrieving the object data.
          */
-        public HSSFObjectData(ObjRecord record, POIFSFileSystem poifs)
+        public HSSFObjectData(ObjRecord record, DirectoryEntry root)
         {
             this.record = record;
-            this.poifs = poifs;
+            _root = root;
         }
 
         /**
@@ -81,7 +81,7 @@ namespace NPOI.HSSF.UserModel
             int? streamId = ((EmbeddedObjectRefSubRecord)subRecord).StreamId;
             String streamName = "MBD" + HexDump.ToHex((int)streamId);
 
-            Entry entry = poifs.Root.GetEntry(streamName);
+            Entry entry = _root.GetEntry(streamName);
             if (entry is DirectoryEntry)
             {
                 return (DirectoryEntry)entry;

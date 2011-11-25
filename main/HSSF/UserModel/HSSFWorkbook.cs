@@ -276,7 +276,23 @@ namespace NPOI.HSSF.UserModel
         /// need to. If Set, will store all of the POIFSFileSystem
         /// in memory</param>
         public HSSFWorkbook(DirectoryNode directory, POIFSFileSystem fs, bool preserveNodes)
-            : base(directory, fs)
+            : this(directory, preserveNodes)
+        {
+        }
+            /**
+     * given a POI POIFSFileSystem object, and a specific directory
+     *  within it, read in its Workbook and populate the high and
+     *  low level models.  If you're reading in a workbook...start here.
+     *
+     * @param directory the POI filesystem directory to process from
+     * @param preserveNodes whether to preseve other nodes, such as
+     *        macros.  This takes more memory, so only say yes if you
+     *        need to. If set, will store all of the POIFSFileSystem
+     *        in memory
+     * @see org.apache.poi.poifs.filesystem.POIFSFileSystem
+     * @exception IOException if the stream cannot be read
+     */
+        public HSSFWorkbook(DirectoryNode directory, bool preserveNodes):base(directory)
         {
 
             String workbookName = GetWorkbookDirEntryName(directory);
@@ -287,7 +303,6 @@ namespace NPOI.HSSF.UserModel
             //  POIFS any more
             if (!preserveNodes)
             {
-                this.filesystem = null;
                 this.directory = null;
             }
 
@@ -1269,7 +1284,7 @@ namespace NPOI.HSSF.UserModel
                 excepts.Add("WORKBOOK");
 
                 // Copy over all the other nodes to our new poifs
-                CopyNodes(this.filesystem, fs, excepts);
+                CopyNodes(directory, fs.Root, excepts);
             }
             fs.WriteFileSystem(stream);
 
@@ -1823,7 +1838,7 @@ namespace NPOI.HSSF.UserModel
                         Object sub = subRecordIter.Current;
                         if (sub is EmbeddedObjectRefSubRecord)
                         {
-                            objects.Add(new HSSFObjectData((ObjRecord)obj, filesystem));
+                            objects.Add(new HSSFObjectData((ObjRecord)obj, directory));
                         }
                     }
                 }

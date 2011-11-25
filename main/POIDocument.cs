@@ -23,6 +23,7 @@ namespace NPOI
     using NPOI.Util;
     using NPOI.POIFS.FileSystem;
     using NPOI.HPSF;
+    using System.Collections.Generic;
 
 
     /// <summary>
@@ -38,8 +39,6 @@ namespace NPOI
         protected SummaryInformation sInf;
         /** Holds further metadata on our document */
         protected DocumentSummaryInformation dsInf;
-        /** The open POIFS FileSystem that contains our document */
-        protected POIFSFileSystem filesystem;
         /**	The directory that our document lives in */
         protected DirectoryNode directory;
 
@@ -258,24 +257,23 @@ namespace NPOI
         /// <param name="source">the source POIFS to copy from.</param>
         /// <param name="target">the target POIFS to copy to</param>
         /// <param name="excepts">a list of Strings specifying what nodes NOT to copy</param>
+        [Obsolete]
         protected void CopyNodes(POIFSFileSystem source, POIFSFileSystem target,
-                                  IList excepts)
+                                  List<String> excepts)
         {
-            //System.err.println("CopyNodes called");
-
-            DirectoryEntry root = source.Root;
-            DirectoryEntry newRoot = target.Root;
-
-            IEnumerator entries = root.Entries;
-
-            while (entries.MoveNext())
-            {
-                Entry entry = (Entry)entries.Current;
-                if (!isInList(entry.Name, excepts))
-                {
-                    CopyNodeRecursively(entry, newRoot);
-                }
-            }
+            POIUtils.CopyNodes(source, target, excepts);
+        }
+        /// <summary>
+        /// Copies nodes from one POIFS to the other minus the excepts
+        /// </summary>
+        /// <param name="source">the source POIFS to copy from.</param>
+        /// <param name="target">the target POIFS to copy to</param>
+        /// <param name="excepts">a list of Strings specifying what nodes NOT to copy</param>
+        [Obsolete]
+        protected void CopyNodes(DirectoryNode sourceRoot,
+                DirectoryNode targetRoot, List<String> excepts)
+        {
+            POIUtils.CopyNodes(sourceRoot, targetRoot, excepts);
         }
 
         /// <summary>
