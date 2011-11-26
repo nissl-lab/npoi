@@ -21,6 +21,7 @@ namespace NPOI.HSSF.Record.Formula.Functions
     using System.Text;
     using NPOI.HSSF.Record.Formula;
     using NPOI.HSSF.Record.Formula.Eval;
+    using NPOI.SS.Formula;
 
     /**
      * Common functionality used by VLOOKUP, HLOOKUP, LOOKUP and MATCH
@@ -106,18 +107,18 @@ namespace NPOI.HSSF.Record.Formula.Functions
             }
         }
 
-        public static ValueVector CreateRowVector(AreaEval tableArray, int relativeRowIndex)
+        public static ValueVector CreateRowVector(TwoDEval tableArray, int relativeRowIndex)
         {
-            return new RowVector(tableArray, relativeRowIndex);
+            return new RowVector((AreaEval)tableArray, relativeRowIndex);
         }
-        public static ValueVector CreateColumnVector(AreaEval tableArray, int relativeColumnIndex)
+        public static ValueVector CreateColumnVector(TwoDEval tableArray, int relativeColumnIndex)
         {
-            return new ColumnVector(tableArray, relativeColumnIndex);
+            return new ColumnVector((AreaEval)tableArray, relativeColumnIndex);
         }
         /**
  * @return <c>null</c> if the supplied area is neither a single row nor a single colum
  */
-        public static ValueVector CreateVector(AreaEval ae)
+        public static ValueVector CreateVector(TwoDEval ae)
         {
             if (ae.IsColumn)
             {

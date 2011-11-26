@@ -20,6 +20,7 @@ namespace NPOI.HSSF.Record.Formula.Functions
 {
     using System;
     using NPOI.HSSF.Record.Formula.Eval;
+    using NPOI.SS.Formula;
 
     /**
      * Implementation for Excel ROWS function.
@@ -32,9 +33,9 @@ namespace NPOI.HSSF.Record.Formula.Functions
         {
 
             int result;
-            if (arg0 is AreaEval)
+            if (arg0 is TwoDEval)
             {
-                result = ((AreaEval)arg0).Height;
+                result = ((TwoDEval)arg0).Height;
             }
             else if (arg0 is RefEval)
             {

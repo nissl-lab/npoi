@@ -19,6 +19,7 @@ namespace NPOI.HSSF.Record.Formula.Functions
 {
     using System;
     using NPOI.HSSF.Record.Formula.Eval;
+    using NPOI.SS.Formula;
     /**
      * Implementation of the VLOOKUP() function.<p/>
      * 
@@ -98,7 +99,7 @@ namespace NPOI.HSSF.Record.Formula.Functions
                 // Evaluation order:
                 // arg0 lookup_value, arg1 table_array, arg3 range_lookup, find lookup value, arg2 col_index, fetch result
                 ValueEval lookupValue = OperandResolver.GetSingleValue(arg0, srcRowIndex, srcColumnIndex);
-                AreaEval tableArray = LookupUtils.ResolveTableArrayArg(arg1);
+                TwoDEval tableArray = LookupUtils.ResolveTableArrayArg(arg1);
                 bool isRangeLookup = LookupUtils.ResolveRangeLookupArg(arg3, srcRowIndex, srcColumnIndex);
                 int rowIndex = LookupUtils.LookupIndexOfValue(lookupValue, LookupUtils.CreateColumnVector(tableArray, 0), isRangeLookup);
                 int colIndex = LookupUtils.ResolveRowOrColIndexArg(arg2, srcRowIndex, srcColumnIndex);
@@ -117,7 +118,7 @@ namespace NPOI.HSSF.Record.Formula.Functions
          * 
          * @(#VALUE!) if colIndex Is negative, (#REF!) if colIndex Is too high
          */
-        private ValueVector CreateResultColumnVector(AreaEval tableArray, int colIndex)
+        private ValueVector CreateResultColumnVector(TwoDEval tableArray, int colIndex)
         {
             if (colIndex >= tableArray.Width)
             {

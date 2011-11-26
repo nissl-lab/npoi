@@ -170,14 +170,14 @@ namespace NPOI.HSSF.Record.Formula.Eval
                 {
                     throw EvaluationException.InvalidValue();
                 }
-                return ae.GetValueAt(srcCellRow, ae.FirstColumn);
+                return ae.GetAbsoluteValue(srcCellRow, ae.FirstColumn);
             }
             if (!ae.IsRow)
             {
                 // multi-column, multi-row area
                 if (ae.ContainsRow(srcCellRow) && ae.ContainsColumn(srcCellCol))
                 {
-                    return ae.GetValueAt(ae.FirstRow, ae.FirstColumn);
+                    return ae.GetValue(ae.FirstRow, ae.FirstColumn);
                 }
                 throw EvaluationException.InvalidValue();
             }
@@ -185,7 +185,7 @@ namespace NPOI.HSSF.Record.Formula.Eval
             {
                 throw EvaluationException.InvalidValue();
             }
-            return ae.GetValueAt(ae.FirstRow, srcCellCol);
+            return ae.GetAbsoluteValue(ae.FirstRow, srcCellCol);
         }
 
         /**

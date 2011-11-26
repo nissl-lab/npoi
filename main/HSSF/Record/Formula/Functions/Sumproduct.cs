@@ -20,6 +20,7 @@ namespace NPOI.HSSF.Record.Formula.Functions
 {
     using System;
     using NPOI.HSSF.Record.Formula.Eval;
+    using NPOI.SS.Formula;
 
 
     /**
@@ -81,9 +82,9 @@ namespace NPOI.HSSF.Record.Formula.Functions
                 {
                     return EvaluateSingleProduct(args);
                 }
-                if (firstArg is AreaEval)
+                if (firstArg is TwoDEval)
                 {
-                    AreaEval ae = (AreaEval)firstArg;
+                    TwoDEval ae = (TwoDEval)firstArg;
                     if (ae.IsRow && ae.IsColumn)
                     {
                         return EvaluateSingleProduct(args);
@@ -198,7 +199,7 @@ namespace NPOI.HSSF.Record.Formula.Functions
             return new NumberEval(acc);
         }
 
-        private static void ThrowFirstError(AreaEval areaEval)
+        private static void ThrowFirstError(TwoDEval areaEval)
         {
             int height = areaEval.Height;
             int width = areaEval.Width;
@@ -206,7 +207,7 @@ namespace NPOI.HSSF.Record.Formula.Functions
             {
                 for (int rcIx = 0; rcIx < width; rcIx++)
                 {
-                    ValueEval ve = areaEval.GetRelativeValue(rrIx, rcIx);
+                    ValueEval ve = areaEval.GetValue(rrIx, rcIx);
                     if (ve is ErrorEval)
                     {
                         throw new EvaluationException((ErrorEval)ve);
@@ -214,11 +215,11 @@ namespace NPOI.HSSF.Record.Formula.Functions
                 }
             }
         }
-        private static bool AreasAllSameSize(AreaEval[] args, int height, int width)
+        private static bool AreasAllSameSize(TwoDEval[] args, int height, int width)
         {
             for (int i = 0; i < args.Length; i++)
             {
-                AreaEval areaEval = args[i];
+                TwoDEval areaEval = args[i];
                 // check that height and width match
                 if (areaEval.Height != height)
                 {

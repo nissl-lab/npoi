@@ -56,6 +56,27 @@ namespace NPOI.SS.Formula
             return _evaluator.GetEvalForCell(rowIx, colIx);
         }
 
+        public override TwoDEval GetRow(int rowIndex)
+        {
+            if (rowIndex >= Height)
+            {
+                throw new ArgumentException("Invalid rowIndex " + rowIndex
+                        + ".  Allowable range is (0.." + Height + ").");
+            }
+            int absRowIx = FirstRow + rowIndex;
+            return new LazyAreaEval(absRowIx, FirstColumn, absRowIx, LastColumn, _evaluator);
+        }
+        public override TwoDEval GetColumn(int columnIndex)
+        {
+            if (columnIndex >= Width)
+            {
+                throw new ArgumentException("Invalid columnIndex " + columnIndex
+                        + ".  Allowable range is (0.." + Width + ").");
+            }
+            int absColIx = FirstColumn + columnIndex;
+            return new LazyAreaEval(FirstRow, absColIx, LastRow, absColIx, _evaluator);
+        }
+
         public override AreaEval Offset(int relFirstRowIx, int relLastRowIx, int relFirstColIx, int relLastColIx)
         {
             AreaI area = new OffsetArea(FirstRow, FirstColumn,
@@ -76,6 +97,14 @@ namespace NPOI.SS.Formula
             sb.Append(crB.FormatAsString());
             sb.Append("]");
             return sb.ToString();
+        }
+        /**
+        * @return  whether cell at rowIndex and columnIndex is a subtotal
+        */
+        public override bool IsSubTotal(int rowIndex, int columnIndex)
+        {
+            // delegate the query to the sheet evaluator which has access to internal ptgs
+            return _evaluator.IsSubTotal(rowIndex, columnIndex);
         }
     }
 }

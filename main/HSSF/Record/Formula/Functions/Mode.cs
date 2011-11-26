@@ -14,8 +14,9 @@
 * See the License for the specific language governing permissions and
 * limitations Under the License.
 */
-/*
- * Created on May 15, 2005
+
+/**
+ * @author Amol S. Deshmukh &lt; amolweb at ya hoo dot com &gt;
  *
  */
 namespace NPOI.HSSF.Record.Formula.Functions
@@ -24,11 +25,14 @@ namespace NPOI.HSSF.Record.Formula.Functions
     using System.Collections;
     using NPOI.Util;
     using NPOI.HSSF.Record.Formula.Eval;
-
-    /**
-     * @author Amol S. Deshmukh &lt; amolweb at ya hoo dot com &gt;
-     *
-     */
+    using NPOI.SS.Formula;
+	/**
+	 * if v is zero length or contains no duplicates, return value is
+	 * Double.NaN. Else returns the value that occurs most times and if there is
+	 * a tie, returns the first such value.
+	 *
+	 * @param v
+	 */
     public class Mode : Function
     {
         public static double Evaluate(double[] v)
@@ -93,16 +97,16 @@ namespace NPOI.HSSF.Record.Formula.Functions
 
         private static void CollectValues(ValueEval arg, IList temp)
         {
-            if (arg is AreaEval)
+            if (arg is TwoDEval)
             {
-                AreaEval ae = (AreaEval)arg;
+                TwoDEval ae = (TwoDEval)arg;
                 int width = ae.Width;
                 int height = ae.Height;
                 for (int rrIx = 0; rrIx < height; rrIx++)
                 {
                     for (int rcIx = 0; rcIx < width; rcIx++)
                     {
-                        ValueEval ve1 = ae.GetRelativeValue(rrIx, rcIx);
+                        ValueEval ve1 = ae.GetValue(rrIx, rcIx);
                         CollectValue(ve1, temp, false);
                     }
                 }

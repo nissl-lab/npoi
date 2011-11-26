@@ -19,6 +19,7 @@ namespace NPOI.HSSF.Record.Formula.Eval
 {
     using System;
     using NPOI.HSSF.Record.Formula;
+    using NPOI.SS.Formula;
 
 
     /**
@@ -76,22 +77,10 @@ namespace NPOI.HSSF.Record.Formula.Eval
             get { return _lastRow; }
         }
 
-        public ValueEval GetValueAt(int row, int col)
-        {
-            int rowOffsetIx = row - _firstRow;
-            int colOffsetIx = col - _firstColumn;
 
-            if (rowOffsetIx < 0 || rowOffsetIx >= _nRows)
-            {
-                throw new ArgumentException("Specified row index (" + row
-                        + ") is outside the allowed range (" + _firstRow + ".." + _lastRow + ")");
-            }
-            if (colOffsetIx < 0 || colOffsetIx >= _nColumns)
-            {
-                throw new ArgumentException("Specified column index (" + col
-                        + ") is outside the allowed range (" + _firstColumn + ".." + col + ")");
-            }
-            return GetRelativeValue(rowOffsetIx, colOffsetIx);
+        public ValueEval GetValue(int row, int col)
+        {
+            return GetRelativeValue(row, col);
         }
 
         public bool Contains(int row, int col)
@@ -119,7 +108,23 @@ namespace NPOI.HSSF.Record.Formula.Eval
         {
             get { return _firstRow == _lastRow; }
         }
+        public ValueEval GetAbsoluteValue(int row, int col)
+        {
+            int rowOffsetIx = row - _firstRow;
+            int colOffsetIx = col - _firstColumn;
 
+            if (rowOffsetIx < 0 || rowOffsetIx >= _nRows)
+            {
+                throw new ArgumentException("Specified row index (" + row
+                        + ") is outside the allowed range (" + _firstRow + ".." + _lastRow + ")");
+            }
+            if (colOffsetIx < 0 || colOffsetIx >= _nColumns)
+            {
+                throw new ArgumentException("Specified column index (" + col
+                        + ") is outside the allowed range (" + _firstColumn + ".." + col + ")");
+            }
+            return GetRelativeValue(rowOffsetIx, colOffsetIx);
+        }
         public abstract ValueEval GetRelativeValue(int relativeRowIndex, int relativeColumnIndex);
 
 
@@ -135,6 +140,17 @@ namespace NPOI.HSSF.Record.Formula.Eval
         {
             get { return _lastRow - _firstRow + 1; }
         }
+
+        /**
+ * @return  whether cell at rowIndex and columnIndex is a subtotal.
+ * By default return false which means 'don't care about subtotals'
+*/
+        public virtual bool IsSubTotal(int rowIndex, int columnIndex)
+        {
+            return false;
+        }
+        public abstract TwoDEval GetRow(int rowIndex);
+        public abstract TwoDEval GetColumn(int columnIndex);
 
         public abstract AreaEval Offset(int relFirstRowIx, int relLastRowIx, int relFirstColIx, int relLastColIx);
     }

@@ -20,6 +20,7 @@ namespace NPOI.HSSF.Record.Formula.Functions
     using System;
     using NPOI.HSSF.Record.Formula.Eval;
     using NPOI.HSSF.Record.Formula.Functions;
+    using NPOI.SS.Formula;
 
     public class SingleValueVector : ValueVector
     {
@@ -137,9 +138,9 @@ namespace NPOI.HSSF.Record.Formula.Functions
                 RefEval re = (RefEval)eval;
                 return new SingleValueVector(re.InnerValueEval);
             }
-            if (eval is AreaEval)
+            if (eval is TwoDEval)
             {
-                ValueVector result = LookupUtils.CreateVector((AreaEval)eval);
+                ValueVector result = LookupUtils.CreateVector((TwoDEval)eval);
                 if (result == null)
                 {
                     throw new EvaluationException(ErrorEval.NA);

@@ -20,6 +20,7 @@ namespace NPOI.HSSF.Record.Formula.Functions
     using System;
     using System.Collections.Generic;
     using NPOI.HSSF.Record.Formula.Eval;
+    using NPOI.SS.Formula;
 
     /**
      * @author Amol S. Deshmukh &lt; amolweb at ya hoo dot com &gt;
@@ -128,13 +129,13 @@ namespace NPOI.HSSF.Record.Formula.Functions
         private void CollectValues(ValueEval operand, DoubleList temp)
         {
 
-		if (operand is AreaEval) {
-			AreaEval ae = (AreaEval) operand;
+		if (operand is TwoDEval) {
+            TwoDEval ae = (TwoDEval)operand;
 			int width = ae.Width;
 			int height = ae.Height;
 			for (int rrIx=0; rrIx<height; rrIx++) {
 				for (int rcIx=0; rcIx<width; rcIx++) {
-					ValueEval ve = ae.GetRelativeValue(rrIx, rcIx);
+					ValueEval ve = ae.GetValue(rrIx, rcIx);
 					CollectValue(ve, true, temp);
 				}
 			}

@@ -52,7 +52,7 @@ namespace NPOI.HSSF.Record.Formula.Eval
                 {
                     if (ae.ContainsColumn(srcCol))
                     {
-                        ValueEval ve = ae.GetValueAt(ae.FirstRow, srcCol);
+                        ValueEval ve = ae.GetValue(ae.FirstRow, srcCol);
                         retval = InternalResolveEval(eval);
                     }
                     else
@@ -64,7 +64,7 @@ namespace NPOI.HSSF.Record.Formula.Eval
                 {
                     if (ae.ContainsRow(srcRow))
                     {
-                        ValueEval ve = ae.GetValueAt(srcRow, ae.FirstColumn);
+                        ValueEval ve = ae.GetValue(srcRow, ae.FirstColumn);
                         retval = InternalResolveEval(eval);
                     }
                     else

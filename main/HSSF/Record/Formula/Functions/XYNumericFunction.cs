@@ -19,6 +19,7 @@ namespace NPOI.HSSF.Record.Formula.Functions
 {
     using System;
     using NPOI.HSSF.Record.Formula.Eval;
+    using NPOI.SS.Formula;
 
     public interface Accumulator
     {
@@ -88,10 +89,10 @@ namespace NPOI.HSSF.Record.Formula.Functions
         }
         private class AreaValueArray : ValueArray
         {
-            private AreaEval _ae;
+            private TwoDEval _ae;
             private int _width;
 
-            public AreaValueArray(AreaEval ae)
+            public AreaValueArray(TwoDEval ae)
                 : base(ae.Width * ae.Height)
             {
                 _ae = ae;
@@ -101,7 +102,7 @@ namespace NPOI.HSSF.Record.Formula.Functions
             {
                 int rowIx = index / _width;
                 int colIx = index % _width;
-                return _ae.GetRelativeValue(rowIx, colIx);
+                return _ae.GetValue(rowIx, colIx);
             }
         }
         protected class DoubleArrayPair
@@ -270,9 +271,9 @@ namespace NPOI.HSSF.Record.Formula.Functions
             {
                 throw new EvaluationException((ErrorEval)arg);
             }
-            if (arg is AreaEval)
+            if (arg is TwoDEval)
             {
-                return new AreaValueArray((AreaEval)arg);
+                return new AreaValueArray((TwoDEval)arg);
             }
             if (arg is RefEval)
             {

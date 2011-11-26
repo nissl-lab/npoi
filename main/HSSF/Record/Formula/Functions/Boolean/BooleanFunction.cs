@@ -22,6 +22,7 @@ namespace NPOI.HSSF.Record.Formula.Functions
 {
     using System;
     using NPOI.HSSF.Record.Formula.Eval;
+    using NPOI.SS.Formula;
 
     /**
      * @author Amol S. Deshmukh &lt; amolweb at ya hoo dot com &gt;
@@ -54,16 +55,16 @@ namespace NPOI.HSSF.Record.Formula.Functions
             for (int i = 0, iSize = args.Length; i < iSize; i++)
             {
                 ValueEval arg = args[i];
-                if (arg is AreaEval)
+                if (arg is TwoDEval)
                 {
-                    AreaEval ae = (AreaEval)arg;
+                    TwoDEval ae = (TwoDEval)arg;
                     int height = ae.Height;
                     int width = ae.Width;
                     for (int rrIx = 0; rrIx < height; rrIx++)
                     {
                         for (int rcIx = 0; rcIx < width; rcIx++)
                         {
-                            ValueEval ve = ae.GetRelativeValue(rrIx, rcIx);
+                            ValueEval ve = ae.GetValue(rrIx, rcIx);
                             tempVe = OperandResolver.CoerceValueToBoolean(ve, true);
                             if (tempVe != null)
                             {

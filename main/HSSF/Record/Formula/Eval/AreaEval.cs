@@ -21,12 +21,13 @@
 namespace NPOI.HSSF.Record.Formula.Eval
 {
     using System;
+    using NPOI.SS.Formula;
 
     /**
      * @author Amol S. Deshmukh &lt; amolweb at ya hoo dot com &gt;
      *  
      */
-    public interface AreaEval : ValueEval
+    public interface AreaEval : TwoDEval
     {
 
         /**
@@ -53,31 +54,6 @@ namespace NPOI.HSSF.Record.Formula.Eval
          */
         int LastColumn { get; }
 
-        /**
-         * returns true if the Area's start and end row indexes
-         * are same. This result of this method should agree
-         * with FirstRow() == LastRow().
-         */
-        bool IsRow { get; }
-
-        /**
-         * returns true if the Area's start and end col indexes
-         * are same. This result of this method should agree
-         * with FirstColumn() == LastColumn().
-         */
-        bool IsColumn { get; }
-        int Width { get; }
-        int Height { get; }
-        /**
-         * returns the ValueEval from the values array at the specified 
-         * row and col index. The specified indexes should be absolute indexes
-         * in the sheet and not relative indexes within the area. Also,
-         * if Contains(row, col) Evaluates to true, a null value will
-         * bre returned.
-         * @param row
-         * @param col
-         */
-        ValueEval GetValueAt(int row, int col);
 
         /**
          * returns true if the cell at row and col specified 
@@ -99,7 +75,12 @@ namespace NPOI.HSSF.Record.Formula.Eval
          * @param row
          */
         bool ContainsRow(int row);
-
+        /**
+ * @return the ValueEval from within this area at the specified row and col index. Never
+ * <code>null</code> (possibly {@link BlankEval}).  The specified indexes should be absolute
+ * indexes in the sheet and not relative indexes within the area.
+ */
+        ValueEval GetAbsoluteValue(int row, int col);
         /**
          * @return the ValueEval from within this area at the specified relativeRowIndex and 
          * relativeColumnIndex. Never <c>null</c> (possibly {@link BlankEval}). The

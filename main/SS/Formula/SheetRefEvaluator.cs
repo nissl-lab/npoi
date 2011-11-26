@@ -20,6 +20,8 @@ namespace NPOI.SS.Formula
 
     using System;
     using NPOI.HSSF.Record.Formula.Eval;
+    using NPOI.SS.UserModel;
+    using NPOI.HSSF.Record.Formula;
     /**
      * 
      * 
@@ -67,6 +69,33 @@ namespace NPOI.SS.Formula
                 }
                 return _sheet;
             }
+        }
+
+        /**
+ * @return  whether cell at rowIndex and columnIndex is a subtotal
+ * @see org.apache.poi.ss.formula.functions.Subtotal
+ */
+        public bool IsSubTotal(int rowIndex, int columnIndex)
+        {
+            bool subtotal = false;
+            EvaluationCell cell = Sheet.GetCell(rowIndex, columnIndex);
+            if (cell != null && cell.CellType == CellType.FORMULA)
+            {
+                IEvaluationWorkbook wb = _bookEvaluator.Workbook;
+                foreach (Ptg ptg in wb.GetFormulaTokens(cell))
+                {
+                    if (ptg is FuncVarPtg)
+                    {
+                        FuncVarPtg f = (FuncVarPtg)ptg;
+                        if ("SUBTOTAL".Equals(f.Name))
+                        {
+                            subtotal = true;
+                            break;
+                        }
+                    }
+                }
+            }
+            return subtotal;
         }
     }
 }
