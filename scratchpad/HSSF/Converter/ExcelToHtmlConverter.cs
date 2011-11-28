@@ -58,36 +58,55 @@ namespace NPOI.HSSF.Converter
         private HtmlDocumentFacade htmlDocumentFacade;
 
         private bool outputColumnHeaders = true;
+        /// <summary>
+        /// 是否输出列头
+        /// </summary>
         public bool OutputColumnHeaders
         {
             get { return outputColumnHeaders; }
             set { outputColumnHeaders = value; }
         }
         private bool outputHiddenColumns = false;
+        /// <summary>
+        /// 是否输出隐藏的列
+        /// </summary>
         public bool OutputHiddenColumns
         {
             get { return outputHiddenColumns; }
             set { outputHiddenColumns = value; }
         }
         private bool outputHiddenRows = false;
+        /// <summary>
+        /// 是否输出隐藏的行
+        /// </summary>
         public bool OutputHiddenRows
         {
             get { return outputHiddenRows; }
             set { outputHiddenRows = value; }
         }
         private bool outputLeadingSpacesAsNonBreaking = true;
+        /// <summary>
+        /// 是否输出文本前的空格
+        /// </summary>
         public bool OutputLeadingSpacesAsNonBreaking
         {
             get { return outputLeadingSpacesAsNonBreaking; }
             set { outputLeadingSpacesAsNonBreaking = value; }
         }
         private bool outputRowNumbers = true;
+        /// <summary>
+        /// 是否输出行号
+        /// </summary>
         public bool OutputRowNumbers
         {
             get { return outputRowNumbers; }
             set { outputRowNumbers = value; }
         }
         private bool useDivsToSpan = false;
+
+        /// <summary>
+        /// 在跨列的单元格使用DIV标记
+        /// </summary>
         public bool UseDivsToSpan
         {
             get { return useDivsToSpan; }
@@ -98,11 +117,14 @@ namespace NPOI.HSSF.Converter
             HSSFWorkbook workbook = ExcelToHtmlUtils.LoadXls(xlsFile);
             ExcelToHtmlConverter excelToHtmlConverter = new ExcelToHtmlConverter();
             excelToHtmlConverter.ProcessWorkbook(workbook);
-            return excelToHtmlConverter.GetDocument();
+            return excelToHtmlConverter.Document;
         }
-        public XmlDocument GetDocument()
+        public XmlDocument Document
         {
-            return htmlDocumentFacade.Document;
+            get
+            {
+                return htmlDocumentFacade.Document;
+            }
         }
         public void ProcessWorkbook(HSSFWorkbook workbook)
         {
@@ -527,7 +549,7 @@ namespace NPOI.HSSF.Converter
                      * is empty, add "&nbsp;" to output, so browser won't collapse
                      * and ignore cell
                      */
-                    value = "\u00A0";
+                    value = "\u00A0"; //“ ”全角空格
                 }
             }
 

@@ -66,7 +66,7 @@ namespace TestCases.HSSF.Converter
                 workbook = ExcelToHtmlUtils.LoadXls(fileName);
                 ExcelToHtmlConverter excelToHtmlConverter = new ExcelToHtmlConverter();
                 excelToHtmlConverter.ProcessWorkbook(workbook);
-                excelToHtmlConverter.GetDocument().Save(Path.ChangeExtension(fileName, "html")); ;
+                excelToHtmlConverter.Document.Save(Path.ChangeExtension(fileName, "html")); ;
         }
     }
 }

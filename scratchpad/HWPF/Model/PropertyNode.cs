@@ -122,6 +122,13 @@ using System.Collections.Generic;
                 Console.WriteLine("A property claimed to start before zero, at " + _cpStart + "! Resetting it to zero, and hoping for the best");
                 _cpStart = 0;
             }
+            if (_cpEnd < _cpStart)
+            {
+                Console.WriteLine("A property claimed to end (" + _cpEnd
+                        + ") before start! "
+                        + "Resetting end to start, and hoping for the best");
+                _cpEnd = _cpStart;
+            }
         }
 
         /**
@@ -222,6 +229,11 @@ using System.Collections.Generic;
             {
                 return 1;
             }
+        }
+
+        public override int GetHashCode()
+        {
+            return this._cpStart * 31 + this._buf.GetHashCode();
         }
     }
 }
