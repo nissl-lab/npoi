@@ -188,5 +188,9 @@ namespace NPOI.HSSF.Record
             return false;
         }
 
+        public override int GetHashCode ()
+        {
+            return Row ^ Column;
+        }
     }
 }

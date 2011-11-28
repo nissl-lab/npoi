@@ -82,6 +82,12 @@ namespace NPOI.HSSF.UserModel
                 return true;
             }
 
+            public override int GetHashCode ()
+            {
+                return _workbook.GetHashCode () ^ _sheet.GetHashCode () ^
+                    _srcRowNum ^ _srcColNum;
+            }
+
             /**
              * @return human Readable string for debug purposes
              */

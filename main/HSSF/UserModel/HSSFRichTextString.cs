@@ -319,7 +319,11 @@ namespace NPOI.HSSF.UserModel
                 return str.Equals(((HSSFRichTextString)o).String);
             }
             return false;
+        }
 
+        public override int GetHashCode ()
+        {
+            return str.GetHashCode ();
         }
 
         /// <summary>

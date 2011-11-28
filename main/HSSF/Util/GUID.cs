@@ -54,6 +54,11 @@ namespace NPOI.HSSF.Util
 			    && _d3 == other._d3 && _d4 == other._d4;
 		}
 
+		public override int GetHashCode ()
+		{
+			return _d1 ^ _d2 ^ _d3 ^ _d4.GetHashCode ();
+		}
+
 		public int D1
         {
             get{

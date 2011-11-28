@@ -41,8 +41,6 @@ using NPOI.SS.UserModel;
      */
     public class CellReference
     {
-
-
         /** The character ($) that signifies a row or column value is absolute instead of relative */
         private const char ABSOLUTE_REFERENCE_MARKER = '$';
         /** The character (!) that Separates sheet names from cell references */
@@ -582,6 +580,12 @@ using NPOI.SS.UserModel;
                 && _colIndex == cr._colIndex
                 && _isRowAbs == cr._isColAbs
                 && _isColAbs == cr._isColAbs;
+        }
+
+        public override int GetHashCode ()
+        {
+            return _isRowAbs.GetHashCode () ^ _isColAbs.GetHashCode () ^
+                _rowIndex ^ _colIndex;
         }
     }
 }

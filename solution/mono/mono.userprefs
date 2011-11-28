@@ -1,6 +1,12 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench />
+  <MonoDevelop.Ide.Workbench ActiveDocument="../../main/HSSF/Record/FormulaRecord.cs">
+    <Files>
+      <File FileName="../../main/HSSF/Record/Aggregates/FormulaRecordAggregate.cs" Line="286" Column="1" />
+      <File FileName="../../main/HSSF/Record/CellRecord.cs" Line="193" Column="32" />
+      <File FileName="../../main/HSSF/Record/FormulaRecord.cs" Line="450" Column="13" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>

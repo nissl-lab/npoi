@@ -835,5 +835,10 @@ namespace NPOI.HSSF.UserModel
             }
             return false;
         }
+
+        public override int GetHashCode ()
+        {
+            return RowNum;
+        }
     }
 }

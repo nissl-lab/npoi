@@ -373,6 +373,11 @@ namespace NPOI.HSSF.Record
             return false;
         }
 
+        public override int GetHashCode ()
+        {
+            return RowNumber;
+        }
+
         public override Object Clone()
         {
             RowRecord rec = new RowRecord(field_1_row_number);

@@ -67,6 +67,11 @@ namespace NPOI.HSSF.Record
             return _character == other._character && _fontIndex == other._fontIndex;
         }
 
+        public override int GetHashCode ()
+        {
+            return _character ^ _fontIndex;
+        }
+
         public int CompareTo(FormatRun r)
         {
             if (_character == r._character && _fontIndex == r._fontIndex)

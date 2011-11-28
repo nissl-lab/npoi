@@ -143,6 +143,10 @@ namespace NPOI.POIFS.Properties
                 return this == o;
             }
 
+            public override int GetHashCode ()
+            {
+                return base.GetHashCode ();
+            }
 
             /// <summary>
             /// Compare method. Assumes both parameters are non-null

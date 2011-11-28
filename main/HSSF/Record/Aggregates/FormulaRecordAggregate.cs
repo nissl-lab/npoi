@@ -278,6 +278,12 @@ namespace NPOI.HSSF.Record.Aggregates
         {
             return _formulaRecord.Equals(obj);
         }
+
+        public override int GetHashCode ()
+        {
+            return _formulaRecord.GetHashCode ();
+        }
+
         /// <summary>
         /// Returns a <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
         /// </summary>

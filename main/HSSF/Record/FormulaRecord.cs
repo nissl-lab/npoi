@@ -444,6 +444,12 @@ namespace NPOI.HSSF.Record
             }
             return false;
         }
+
+        public override int GetHashCode ()
+        {
+            return Row ^ Column;
+        }
+
         protected override void SerializeValue(LittleEndianOutput out1)
         {
             if (specialCachedValue == null)
