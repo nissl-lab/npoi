@@ -34,6 +34,7 @@ using NPOI.HPSF;
 using NPOI.POIFS.FileSystem;
 using NPOI.HSSF.UserModel;
 using NPOI.HSSF.Record;
+using NPOI.HWPF;
 
 namespace NPOI.Tools.POIFSBrowser
 {
@@ -50,6 +51,7 @@ namespace NPOI.Tools.POIFSBrowser
         private void OpenDocument(string path)
         {
             HSSFWorkbook hssfworkbook = null;
+            HWPFDocument hwpf = null;
 
             using (var stream = File.OpenRead(path))
             {
@@ -61,8 +63,12 @@ namespace NPOI.Tools.POIFSBrowser
                     {
                         hssfworkbook = new HSSFWorkbook(_currentFileSystem);
                     }
+                    else if (path.ToLower().IndexOf(".doc") > 0)
+                    {
+                        hwpf =new HWPFDocument(_currentFileSystem);
+                    }
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     MessageBox.Show("Error opening file. Possibly the file is not an OLE2 Compund file.",
                         "Open File Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -76,8 +82,10 @@ namespace NPOI.Tools.POIFSBrowser
                 documentTreeView.Nodes.Clear();
 
                 TreeNode[] children;
+                if (hssfworkbook !=null)
                     children = DirectoryTreeNode.GetChildren(_currentFileSystem.Root,hssfworkbook);
-                
+                else
+                    children = DirectoryTreeNode.GetChildren(_currentFileSystem.Root, hwpf);
                 documentTreeView.Nodes.AddRange(children);
                 documentTreeView.EndUpdate();
             }
@@ -171,6 +179,10 @@ namespace NPOI.Tools.POIFSBrowser
                 //    streamTabControl.TabPages.Add(tabPageProperties);
                 //}
 
+                if (!streamTabControl.TabPages.ContainsKey("tabPageBinary"))
+                {
+                    streamTabControl.TabPages.Add(tabPageBinary);
+                }
             }
 
         }

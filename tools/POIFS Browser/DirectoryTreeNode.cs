@@ -37,6 +37,9 @@ using NPOI.HSSF.Util;
 using NPOI.HSSF.UserModel;
 using NPOI.HSSF.Record.Aggregates;
 using NPOI.SS.Util;
+using NPOI.HWPF;
+using NPOI.HWPF.Model;
+using NPOI.HWPF.UserModel;
 
 namespace NPOI.Tools.POIFSBrowser
 {
@@ -78,7 +81,7 @@ namespace NPOI.Tools.POIFSBrowser
             ChangeImage("Folder");
         }
 
-        internal static TreeNode[] GetChildren(DirectoryNode node,HSSFWorkbook wb)
+        internal static TreeNode[] GetChildren(DirectoryNode node,object innerDoc)
         {
             var children = new List<AbstractTreeNode>();
 
@@ -104,7 +107,10 @@ namespace NPOI.Tools.POIFSBrowser
 
                     if (treeNode.Text.ToLower() == "workbook")
                     {
-                        HandleWorkbook(treeNode, wb);
+                        HandleWorkbook(treeNode, (HSSFWorkbook)innerDoc);
+                    }else if(treeNode.Text.ToLower() == "worddocument")
+                    {
+                        HandleWord(treeNode, (HWPFDocument)innerDoc);
                     }
 
                     #endregion
@@ -117,6 +123,47 @@ namespace NPOI.Tools.POIFSBrowser
 
             return children.ToArray();
         }
+
+        static void HandleWord(TreeNode treeNode, HWPFDocument hwpf)
+        {
+            TreeNode paragraphsNode = CreateFolderNode(treeNode, "Paragraphs");
+            List<PAPX> papxs = hwpf.ParagraphTable.GetParagraphs();
+            foreach (PAPX papx in papxs)
+            {
+                TreeNode tn = new TreeNode("PAPX");
+                paragraphsNode.Nodes.Add(tn);
+            }
+            foreach(FieldsDocumentPart part in Enum.GetValues(typeof(FieldsDocumentPart)))
+            {
+                LoadDocumentPart(hwpf, treeNode, part.ToString(), part);
+            }
+            TreeNode docTextNode = new TreeNode("DocumentText");
+            docTextNode.Tag = hwpf.GetDocumentText();
+            treeNode.Nodes.Add(docTextNode);            
+        }
+        static TreeNode CreateFolderNode(TreeNode parent, string name)
+        {
+            TreeNode newnode = new TreeNode(name);
+            newnode.ImageKey = "Folder";
+            newnode.SelectedImageKey = "Folder";
+            parent.Nodes.Add(newnode);
+            return newnode;
+        }
+        static void LoadDocumentPart(HWPFDocument hwpf,TreeNode parent,string partName,FieldsDocumentPart part)
+        {
+
+            TreeNode mainNode = new TreeNode(partName);
+            mainNode.ImageKey = "Folder";
+            mainNode.SelectedImageKey = "Folder";
+            parent.Nodes.Add(mainNode);
+            Fields fields = hwpf.GetFields();
+            foreach (Field field in fields.GetFields(part))
+            {
+                TreeNode tn = new TreeNode("Field");
+                mainNode.Nodes.Add(tn);
+            }
+        }
+
 
         static void HandleWorkbook(TreeNode treeNode,HSSFWorkbook hssfworkbook)
         {

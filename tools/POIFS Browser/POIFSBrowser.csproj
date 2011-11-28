@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="3.5" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -41,6 +41,10 @@
   <ItemGroup>
     <Reference Include="Ionic.Zip, Version=1.9.1.5, Culture=neutral, PublicKeyToken=edbe51ad942a3f5c, processorArchitecture=MSIL" />
     <Reference Include="NPOI, Version=1.2.4.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL" />
+    <Reference Include="NPOI.ScratchPad.HWPF, Version=1.3.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\solution\Lib\NPOI.ScratchPad.HWPF.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -54,13 +58,15 @@
     <Compile Include="AboutDialog.Designer.cs">
       <DependentUpon>AboutDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="AbstractRecordTreeNode.cs" />
+    <Compile Include="HWPF\AbstractHWPFTreeNode.cs" />
+    <Compile Include="HSSF\AbstractRecordTreeNode.cs" />
     <Compile Include="AbstractTreeNode.cs" />
-    <Compile Include="CellValueRecordTreeNode.cs" />
-    <Compile Include="CellRangeAddressTreeNode.cs" />
+    <Compile Include="HSSF\CellValueRecordTreeNode.cs" />
+    <Compile Include="HSSF\CellRangeAddressTreeNode.cs" />
     <Compile Include="DirectoryTreeNode.cs" />
     <Compile Include="DocumentTreeNode.cs" />
     <Compile Include="EscherRecordTreeNode.cs" />
+    <Compile Include="HWPF\PAPXTreeNode.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -95,9 +101,9 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="PropertyListViewItem.cs" />
-    <Compile Include="RecordTreeNode.cs" />
-    <Compile Include="SubRecordTreeNode.cs" />
-    <Compile Include="UnicodeStringTreeNode.cs" />
+    <Compile Include="HSSF\RecordTreeNode.cs" />
+    <Compile Include="HSSF\SubRecordTreeNode.cs" />
+    <Compile Include="HSSF\UnicodeStringTreeNode.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Open.png" />
@@ -109,9 +115,6 @@
     <None Include="Resources\NET_h_rgb_2.png" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\..\solution\Lib\Ionic.Zip.dll" />
-    <Content Include="..\..\solution\Lib\NPOI.dll">
-    </Content>
     <Content Include="Resources\arrow_refresh.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
