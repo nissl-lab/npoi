@@ -113,10 +113,8 @@ namespace NPOI.HPSF
 
             /* Put the custom property into this map. */
             if (oldID != null)
-            {
-                Object oldCp = base[oldID];
                 base.Remove(oldID);
-            }
+
             base[idKey]= cp;
             return cp;
         }

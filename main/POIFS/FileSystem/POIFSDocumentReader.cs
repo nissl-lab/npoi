@@ -264,14 +264,11 @@ namespace NPOI.POIFS.FileSystem
         public override long Seek(long offset, SeekOrigin origin)
         {
             if (!this.CanSeek)
-            {
                 throw new NotSupportedException();
-            }
-            int dwOrigin = 0;
+
             switch (origin)
             {
                 case SeekOrigin.Begin:
-                    dwOrigin = 0;
                     if (0L > offset)
                     {
                         throw new ArgumentOutOfRangeException("offset","offset must be positive");
@@ -280,12 +277,10 @@ namespace NPOI.POIFS.FileSystem
                     break;
 
                 case SeekOrigin.Current:
-                    dwOrigin = 1;
                     this.Position = (this.Position + offset) < this.Length ? (this.Position + offset) : this.Length;
                     break;
 
                 case SeekOrigin.End:
-                    dwOrigin = 2;
                     this.Position = this.Length;
                     break;
 
