@@ -220,8 +220,7 @@ namespace NPOI.HWPF.Converter
                 XmlElement currentBlock, Range range, int currentTableLevel,
                 IList<Bookmark> rangeBookmarks);
 
-        protected bool ProcessCharacters(HWPFDocumentCore wordDocument,
-             int currentTableLevel, Range range, XmlElement block)
+        protected bool ProcessCharacters(HWPFDocumentCore wordDocument,  int currentTableLevel, Range range, XmlElement block)
         {
             if (range == null)
                 return false;
@@ -385,9 +384,10 @@ namespace NPOI.HWPF.Converter
                     continue;
                 }
 
-                String text = characterRun.Text;
+                string text = characterRun.Text;
+                byte[] textByte = System.Text.Encoding.GetEncoding("iso-8859-1").GetBytes(text);
                 //if ( text.getBytes().length == 0 )
-                if (text.Length == 0)
+                if (textByte.Length == 0)
                     continue;
 
                 if (characterRun.IsSpecialCharacter())
@@ -412,7 +412,7 @@ namespace NPOI.HWPF.Converter
                         continue;
                     }
                 }
-                if (text[0] == FIELD_BEGIN_MARK)
+                if (textByte[0] == FIELD_BEGIN_MARK)
                 //if ( text.getBytes()[0] == FIELD_BEGIN_MARK )
                 {
                     if (wordDocument is HWPFDocument)
@@ -447,12 +447,12 @@ namespace NPOI.HWPF.Converter
 
                     continue;
                 }
-                if (text[0] == FIELD_SEPARATOR_MARK)
+                if (textByte[0] == FIELD_SEPARATOR_MARK)
                 {
                     // shall not appear without FIELD_BEGIN_MARK
                     continue;
                 }
-                if (text[0] == FIELD_END_MARK)
+                if (textByte[0] == FIELD_END_MARK)
                 {
                     // shall not appear without FIELD_BEGIN_MARK
                     continue;
@@ -793,26 +793,23 @@ namespace NPOI.HWPF.Converter
         private bool ProcessOle2(HWPFDocument doc, CharacterRun characterRun,
                 XmlElement block)
         {
-            throw new NotImplementedException();
-            //TODO: NO METHOD GetObjectsPool
-            //Entry entry = doc.GetObjectsPool().getObjectById(
-            //        "_" + characterRun.GetPicOffset());
-            //if (entry == null)
-            //{
-            //    logger.Log(POILogger.WARN, "Referenced OLE2 object '", (characterRun.GetPicOffset()).ToString(), "' not found in ObjectPool");
-            //    return false;
-            //}
+            Entry entry = doc.GetObjectsPool().GetObjectById("_" + characterRun.GetPicOffset());
+            if (entry == null)
+            {
+                logger.Log(POILogger.WARN, "Referenced OLE2 object '", (characterRun.GetPicOffset()).ToString(), "' not found in ObjectPool");
+                return false;
+            }
 
-            //try
-            //{
-            //    return ProcessOle2(doc, block, entry);
-            //}
-            //catch (Exception exc)
-            //{
-            //    logger.Log(POILogger.WARN,
-            //            "Unable to convert internal OLE2 object '", (characterRun.GetPicOffset()).ToString(), "': ", exc, exc);
-            //    return false;
-            //}
+            try
+            {
+                return ProcessOle2(doc, block, entry);
+            }
+            catch (Exception exc)
+            {
+                logger.Log(POILogger.WARN,
+                        "Unable to convert internal OLE2 object '", (characterRun.GetPicOffset()).ToString(), "': ", exc, exc);
+                return false;
+            }
         }
 
         ////@SuppressWarnings( "unused" )
@@ -939,11 +936,12 @@ namespace NPOI.HWPF.Converter
                 CharacterRun characterRun = range.GetCharacterRun(c);
 
                 String text = characterRun.Text;
-                if (text.Length == 0)
+                byte[] textByte = System.Text.Encoding.GetEncoding("iso-8859-1").GetBytes(text);
+                if (textByte.Length == 0)
                     //if (text.getBytes().length == 0)
                     continue;
 
-                if (text[0] == FIELD_BEGIN_MARK)
+                if (textByte[0] == FIELD_BEGIN_MARK)
                 {
                     // nested?
                     Field possibleField = ProcessDeadField(wordDocument, range,
@@ -959,7 +957,7 @@ namespace NPOI.HWPF.Converter
                     }
                 }
 
-                if (text[0] == FIELD_SEPARATOR_MARK)
+                if (textByte[0] == FIELD_SEPARATOR_MARK)
                 {
                     if (separatorMark != -1)
                     {
@@ -971,7 +969,7 @@ namespace NPOI.HWPF.Converter
                     continue;
                 }
 
-                if (text[0] == FIELD_END_MARK)
+                if (textByte[0] == FIELD_END_MARK)
                 {
                     if (endMark != -1)
                     {

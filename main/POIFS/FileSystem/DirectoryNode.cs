@@ -227,6 +227,12 @@ namespace NPOI.POIFS.FileSystem
             get { return _entries.Count; }
         }
 
+
+        public bool HasEntry(String name)
+        {
+            return name != null && _entries.ContainsKey(name);
+        }
+
         /// <summary>
         /// get a specified Entry by name
         /// </summary>

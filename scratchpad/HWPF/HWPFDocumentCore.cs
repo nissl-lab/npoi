@@ -30,6 +30,11 @@ namespace NPOI.HWPF
     /// </summary>
     public abstract class HWPFDocumentCore : POIDocument
     {
+        protected const String STREAM_OBJECT_POOL = "ObjectPool";
+        protected const String STREAM_WORD_DOCUMENT = "WordDocument";
+        /** Holds OLE2 objects */
+        protected ObjectPoolImpl _objectPool;
+
         /** The FIB */
         protected FileInformationBlock _fib;
 
@@ -117,10 +122,10 @@ namespace NPOI.HWPF
 
             // read in the main stream.
             DocumentEntry documentProps = (DocumentEntry)
-               directory.GetEntry("WordDocument");
+               directory.GetEntry(STREAM_WORD_DOCUMENT);
             _mainStream = new byte[documentProps.Size];
 
-            directory.CreatePOIFSDocumentReader("WordDocument").Read(_mainStream);
+            directory.CreatePOIFSDocumentReader(STREAM_WORD_DOCUMENT).Read(_mainStream);
 
             // Create our FIB, and check for the doc being encrypted
             _fib = new FileInformationBlock(_mainStream);
@@ -128,6 +133,17 @@ namespace NPOI.HWPF
             {
                 throw new EncryptedDocumentException("Cannot process encrypted word files!");
             }
+
+            DirectoryEntry objectPoolEntry;
+            try
+            {
+                objectPoolEntry = (DirectoryEntry)directory.GetEntry(STREAM_OBJECT_POOL);
+            }
+            catch (FileNotFoundException exc)
+            {
+                objectPoolEntry = null;
+            }
+            _objectPool = new ObjectPoolImpl(objectPoolEntry);
         }
 
         /// <summary>
@@ -196,6 +212,11 @@ namespace NPOI.HWPF
         public FileInformationBlock GetFileInformationBlock()
         {
             return _fib;
+        }
+
+        public ObjectsPool GetObjectsPool()
+        {
+            return _objectPool;
         }
     }
 }

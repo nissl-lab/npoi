@@ -253,8 +253,7 @@ namespace NPOI.HWPF.Converter
              */
 
             //TODO: Not completed
-            //if ( directoryNode.HasEntry( "WordDocument" ) )
-            if ( directoryNode.GetEntry( "WordDocument" )!=null )
+            if ( directoryNode.HasEntry( "WordDocument" ) )
             {
                 String text = WordToTextConverter.GetText( (DirectoryNode) entry );
                 block.AppendChild( textDocumentFacade
