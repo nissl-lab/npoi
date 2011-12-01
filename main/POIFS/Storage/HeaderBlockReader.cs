@@ -49,7 +49,7 @@ namespace NPOI.POIFS.Storage
          * What big block Size the file uses. Most files
          *  use 512 bytes, but a few use 4096
          */
-        private int bigBlockSize = POIFSConstants.BIG_BLOCK_SIZE;
+        private POIFSBigBlockSize bigBlockSize;
 
         // number of big block allocation table blocks (int)
         private int _bat_count;
@@ -61,7 +61,11 @@ namespace NPOI.POIFS.Storage
         // start of the small block allocation table (int index of small
         // block allocation table's first big block)
         private int _sbat_start;
-
+        	/**
+	 * Number of small block allocation table blocks (int)
+	 * (Number of MiniFAT Sectors in Microsoft parlance)
+	 */
+	private int _sbat_count;
         // big block index for extension to the big block allocation table
         private int _xbat_start;
         private int _xbat_count;
@@ -73,45 +77,23 @@ namespace NPOI.POIFS.Storage
         /// <param name="stream">the source Stream</param>
         public HeaderBlockReader(Stream stream)
         {
-    	    // At this point, we don't know how big our
-    	    //  block Sizes are
-    	    // So, Read the first 32 bytes to check, then
-    	    //  Read the rest of the block
             stream.Position = 0;
-
-    	    byte[] blockStart = new byte[32];
-    	    int bsCount = IOUtils.ReadFully(stream, blockStart);
-    	    if(bsCount != 32) {
-    		    AlertShortRead(bsCount);
-    	    }
-        	
-    	    // Figure out our block Size
-            //uSectorShift in StructuredStorageHeader struct
-    	    if(blockStart[30] == 12) {
-    		    bigBlockSize = POIFSConstants.LARGER_BIG_BLOCK_SIZE;
-    	    }
-            _data = new byte[ bigBlockSize ];
-            Array.Copy(blockStart, 0, _data, 0, blockStart.Length);
-        	
-    	    // Now we can Read the rest of our header
-            int byte_count = IOUtils.ReadFully(stream, _data, blockStart.Length, _data.Length - blockStart.Length);
-            if (byte_count+bsCount != bigBlockSize) {
-    		    AlertShortRead(byte_count);
-            }
+            this._data = ReadFirst512(stream);
 
             // verify signature
             long signature = LittleEndian.GetLong(_data, HeaderBlockConstants._signature_offset);
 
             if (signature != HeaderBlockConstants._signature)
             {
-			    // Is it one of the usual suspects?
-        	    byte[] OOXML_FILE_HEADER = POIFSConstants.OOXML_FILE_HEADER;
-			    if(_data[0] == OOXML_FILE_HEADER[0] && 
-					    _data[1] == OOXML_FILE_HEADER[1] && 
-					    _data[2] == OOXML_FILE_HEADER[2] &&
-					    _data[3] == OOXML_FILE_HEADER[3]) {
-				    throw new OfficeXmlFileException("The supplied data appears to be in the Office 2007+ XML. POI only supports OLE2 Office documents");
-			    }
+                // Is it one of the usual suspects?
+                byte[] OOXML_FILE_HEADER = POIFSConstants.OOXML_FILE_HEADER;
+                if (_data[0] == OOXML_FILE_HEADER[0] &&
+                        _data[1] == OOXML_FILE_HEADER[1] &&
+                        _data[2] == OOXML_FILE_HEADER[2] &&
+                        _data[3] == OOXML_FILE_HEADER[3])
+                {
+                    throw new OfficeXmlFileException("The supplied data appears to be in the Office 2007+ XML. POI only supports OLE2 Office documents");
+                }
                 if ((signature & unchecked((long)0xFF8FFFFFFFFFFFFFL)) == 0x0010000200040009L)
                 {
                     // BIFF2 raw stream starts with BOF (sid=0x0009, size=0x0004, data=0x00t0)
@@ -119,38 +101,74 @@ namespace NPOI.POIFS.Storage
                             + "POI only supports BIFF8 format");
                 }
 
-			    // Give a generic error
+                // Give a generic error
                 throw new IOException("Invalid header signature; Read "
-                                      + signature + ", expected "
-                                      + HeaderBlockConstants._signature);
+                                      + LongToHex(signature) + ", expected "
+                                      + LongToHex(HeaderBlockConstants._signature));
             }
-            //number of SECTs in the FAT chain
-            _bat_count = LittleEndian.GetInt(_data, HeaderBlockConstants._bat_count_offset);
-            //first SECT in the Directory chain
-            _property_start = LittleEndian.GetInt(_data, HeaderBlockConstants._property_start_offset);
-            //first SECT in the mini-FAT chain
-            _sbat_start = LittleEndian.GetInt(_data, HeaderBlockConstants._sbat_start_offset);
-            //first SECT in the DIF chain
-            _xbat_start = LittleEndian.GetInt(_data, HeaderBlockConstants._xbat_start_offset);
-            //number of SECTs in the DIF chain
-            _xbat_count = LittleEndian.GetInt(_data, HeaderBlockConstants._xbat_count_offset);
-        }
 
+            // Figure out our block size
+            if (_data[30] == 12)
+            {
+                this.bigBlockSize = POIFSConstants.LARGER_BIG_BLOCK_SIZE_DETAILS;
+            }
+            else if (_data[30] == 9)
+            {
+                this.bigBlockSize = POIFSConstants.SMALLER_BIG_BLOCK_SIZE_DETAILS;
+            }
+            else
+            {
+                throw new IOException("Unsupported blocksize  (2^" + _data[30] + "). Expected 2^9 or 2^12.");
+            }
+
+            // Setup the fields to read and write the counts and starts
+            _bat_count = new IntegerField(HeaderBlockConstants._bat_count_offset, _data).Value;
+            _property_start = new IntegerField(HeaderBlockConstants._property_start_offset, _data).Value;
+            _sbat_start = new IntegerField(HeaderBlockConstants._sbat_start_offset, _data).Value;
+            _sbat_count = new IntegerField(HeaderBlockConstants._sbat_block_count_offset, _data).Value;
+            _xbat_start = new IntegerField(HeaderBlockConstants._xbat_start_offset, _data).Value;
+            _xbat_count = new IntegerField(HeaderBlockConstants._xbat_count_offset, _data).Value;
+
+            // Fetch the rest of the block if needed
+            if (bigBlockSize.GetBigBlockSize() != 512)
+            {
+                int rest = bigBlockSize.GetBigBlockSize() - 512;
+                byte[] tmp = new byte[rest];
+                IOUtils.ReadFully(stream, tmp);
+            }
+        }
+	
+
+        private byte[] ReadFirst512(Stream stream)
+        {
+            // Grab the first 512 bytes
+            // (For 4096 sized blocks, the remaining 3584 bytes are zero)
+            byte[] data = new byte[512];
+            int bsCount = IOUtils.ReadFully(stream, data);
+            if (bsCount != 512)
+            {
+                AlertShortRead(bsCount, 512);
+            }
+            return data;
+        }
+        private static String LongToHex(long value)
+        {
+            return new String(HexDump.LongToHex(value));
+        }
         /// <summary>
         /// Alerts the short read.
         /// </summary>
         /// <param name="Read">The read.</param>
-        private void AlertShortRead(int Read)
+        private void AlertShortRead(int read,int expectedReadSize)
         {
-    	    if (Read == -1)
+            if (read < 0)
     		    //Cant have -1 bytes Read in the error message!
-    		    Read = 0;
-            String type = " byte" + ((Read == 1) ? ("")
-                                                       : ("s"));
+    		    read = 0;
+            String type = " byte" + ((read == 1) ? (""): ("s"));
 
             throw new IOException("Unable to Read entire header; "
-                                  + Read + type + " Read; expected "
-                                  + bigBlockSize + " bytes");
+                                  + read + type + " Read; expected "
+                                  + expectedReadSize + " bytes");
         }
 
         /// <summary>
@@ -223,7 +241,7 @@ namespace NPOI.POIFS.Storage
         /// </summary>
         /// <value>The size of the big block.</value>
         /// @return 
-        public int BigBlockSize
+        public POIFSBigBlockSize BigBlockSize
         {
     	    get{return bigBlockSize;}
         }

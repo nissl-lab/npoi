@@ -637,6 +637,7 @@
     <Compile Include="HSSF\UserModel\HSSFErrorConstants.cs" />
     <Compile Include="EncryptedDocumentException.cs" />
     <Compile Include="POIDocument.cs" />
+    <Compile Include="POIFS\Common\POIFSBigBlockSize.cs" />
     <Compile Include="POIFS\Common\POIFSConstants.cs" />
     <Compile Include="POIFS\Dev\POIFSLister.cs" />
     <Compile Include="POIFS\Dev\POIFSViewable.cs" />
@@ -668,11 +669,15 @@
     <Compile Include="POIFS\FileSystem\Entry.cs" />
     <Compile Include="POIFS\FileSystem\EntryNode.cs" />
     <Compile Include="POIFS\FileSystem\OfficeXmlFileException.cs" />
+    <Compile Include="POIFS\FileSystem\Ole10Native.cs" />
+    <Compile Include="POIFS\FileSystem\Ole10NativeException.cs" />
     <Compile Include="POIFS\FileSystem\POIFSDocument.cs" />
     <Compile Include="POIFS\FileSystem\POIFSDocumentPath.cs" />
     <Compile Include="POIFS\FileSystem\POIFSDocumentReader.cs" />
     <Compile Include="POIFS\FileSystem\POIFSDocumentWriter.cs" />
     <Compile Include="POIFS\FileSystem\POIFSFileSystem.cs" />
+    <Compile Include="POIFS\FileSystem\POIFSWriterEvent.cs" />
+    <Compile Include="POIFS\FileSystem\POIFSWriterListener.cs" />
     <Compile Include="POIFS\property\Child.cs" />
     <Compile Include="POIFS\property\DirectoryProperty.cs" />
     <Compile Include="POIFS\property\DocumentProperty.cs" />
@@ -689,6 +694,7 @@
     <Compile Include="POIFS\Storage\BlockList.cs" />
     <Compile Include="POIFS\Storage\BlockListImpl.cs" />
     <Compile Include="POIFS\Storage\BlockWritable.cs" />
+    <Compile Include="POIFS\Storage\DataInputBlock.cs" />
     <Compile Include="POIFS\Storage\DocumentBlock.cs" />
     <Compile Include="POIFS\Storage\HeaderBlockConstants.cs" />
     <Compile Include="POIFS\Storage\HeaderBlockReader.cs" />

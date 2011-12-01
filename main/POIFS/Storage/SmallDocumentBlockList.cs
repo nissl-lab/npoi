@@ -29,6 +29,7 @@
 using System;
 using System.Collections;
 using System.Text;
+using System.Collections.Generic;
 
 namespace NPOI.POIFS.Storage
 {
@@ -42,12 +43,9 @@ namespace NPOI.POIFS.Storage
         /// Initializes a new instance of the <see cref="SmallDocumentBlockList"/> class.
         /// </summary>
         /// <param name="blocks">a list of SmallDocumentBlock instances</param>
-        public SmallDocumentBlockList(IList blocks)
+        public SmallDocumentBlockList(List<SmallDocumentBlock> blocks)
         {
-            SmallDocumentBlock[] array = new SmallDocumentBlock[blocks.Count];
-            blocks.CopyTo(array, 0);
-            ListManagedBlock[] tmp = (ListManagedBlock[])array;
-            this.SetBlocks(ref tmp);
+            this.SetBlocks((ListManagedBlock[])blocks.ToArray());
         }
     }
 }

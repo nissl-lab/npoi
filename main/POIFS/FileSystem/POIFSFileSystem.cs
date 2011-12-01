@@ -70,7 +70,12 @@ namespace NPOI.POIFS.FileSystem
         private PropertyTable _property_table;
         private IList          _documents;
         private DirectoryNode _root;
-
+        /**
+ * What big block size the file uses. Most files
+ *  use 512 bytes, but a few use 4096
+ */
+        private POIFSBigBlockSize bigBlockSize =
+           POIFSConstants.SMALLER_BIG_BLOCK_SIZE_DETAILS;
 
         public void Dispose()
         {
@@ -84,11 +89,6 @@ namespace NPOI.POIFS.FileSystem
                 }
             }
         }
-        /**
-         * What big block size the file uses. Most files
-         *  use 512 bytes, but a few use 4096
-         */
-        private int bigBlockSize = POIFSConstants.BIG_BLOCK_SIZE;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="POIFSFileSystem"/> class.  intended for writing
@@ -499,7 +499,7 @@ namespace NPOI.POIFS.FileSystem
         /// <value>The size of the big block.</value>
         public int BigBlockSize 
         {
-    	    get{return bigBlockSize;}
+            get { return bigBlockSize.GetBigBlockSize(); }
         }
     }
 }

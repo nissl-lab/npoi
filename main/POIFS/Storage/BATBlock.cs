@@ -40,21 +40,36 @@ namespace NPOI.POIFS.Storage
     /// only through a static factory method: createBATBlocks.
     /// @author Marc Johnson (mjohnson at apache dot org)
     /// </summary>
-    public class BATBlock:BigBlock
+    public class BATBlock : BigBlock
     {
-        private static int  _entries_per_block      =
+        private static int _entries_per_block =
             POIFSConstants.BIG_BLOCK_SIZE / LittleEndianConstants.INT_SIZE;
-        private static int  _entries_per_xbat_block = _entries_per_block - 1;
-        private static int  _xbat_chain_offset      =
+        private static int _entries_per_xbat_block = _entries_per_block - 1;
+        private static int _xbat_chain_offset =
             _entries_per_xbat_block * LittleEndianConstants.INT_SIZE;
-        private static byte _default_value = ( byte ) 0xFF;
-        private IntegerField[]    _fields;
-        private byte[]            _data;
+        private static byte _default_value = (byte)0xFF;
+        private IntegerField[] _fields;
+        private byte[] _data;
+        /**
+         * For a regular fat block, these are 128 / 1024 
+         *  next sector values.
+         * For a XFat (DIFat) block, these are 127 / 1023
+         *  next sector values, then a chaining value.
+         */
+        private int[] _values;
+
+        /**
+         * Does this BATBlock have any free sectors in it?
+         */
+        private bool _has_free_sectors;
+
+        /**
+         * Where in the file are we?
+         */
+        private int ourBlockIndex;
 
         public override void Dispose()
         {
-            _data = null;
-            _fields = null;
 
         }
         /// <summary>
@@ -62,20 +77,97 @@ namespace NPOI.POIFS.Storage
         /// </summary>
         private BATBlock()
         {
-            _data = new byte[ POIFSConstants.BIG_BLOCK_SIZE ];
+            _data = new byte[POIFSConstants.BIG_BLOCK_SIZE];
             for (int i = 0; i < this._data.Length; i++)
             {
                 this._data[i] = _default_value;
             }
-            _fields = new IntegerField[ _entries_per_block ];
+            _fields = new IntegerField[_entries_per_block];
             int offset = 0;
 
             for (int j = 0; j < _entries_per_block; j++)
             {
-                _fields[ j ] = new IntegerField(offset);
-                offset       += LittleEndianConstants.INT_SIZE;
+                _fields[j] = new IntegerField(offset);
+                offset += LittleEndianConstants.INT_SIZE;
             }
         }
+        private BATBlock(POIFSBigBlockSize bigBlockSize)
+        { 
+        }
+        /**
+         * Create a single instance initialized (perhaps partially) with entries
+         *
+         * @param entries the array of block allocation table entries
+         * @param start_index the index of the first entry to be written
+         *                    to the block
+         * @param end_index the index, plus one, of the last entry to be
+         *                  written to the block (writing is for all index
+         *                  k, start_index <= k < end_index)
+         */
+
+        private BATBlock(POIFSBigBlockSize bigBlockSize, int[] entries,
+                         int start_index, int end_index)
+            : this(bigBlockSize)
+        {
+
+            for (int k = start_index; k < end_index; k++)
+            {
+                _values[k - start_index] = entries[k];
+            }
+
+            // Do we have any free sectors?
+            if (end_index - start_index == _values.Length)
+            {
+                RecomputeFree();
+            }
+        }
+        private void RecomputeFree()
+        {
+            bool hasFree = false;
+            for (int k = 0; k < _values.Length; k++)
+            {
+                if (_values[k] == POIFSConstants.UNUSED_BLOCK)
+                {
+                    hasFree = true;
+                    break;
+                }
+            }
+            _has_free_sectors = hasFree;
+        }
+        /**
+         * Create a single BATBlock from the byte buffer, which must hold at least
+         *  one big block of data to be read.
+         */
+        public static BATBlock CreateBATBlock(POIFSBigBlockSize bigBlockSize, BinaryReader data)
+        {
+            // Create an empty block
+            BATBlock block = new BATBlock(bigBlockSize);
+
+            // Fill it
+            byte[] buffer = new byte[LittleEndianConstants.INT_SIZE];
+            for (int i = 0; i < block._values.Length; i++)
+            {
+                data.Read(buffer,0,buffer.Length);
+                block._values[i] = LittleEndian.GetInt(buffer);
+            }
+            block.RecomputeFree();
+
+            // All done
+            return block;
+        }
+        ///**
+        // * Creates a single BATBlock, with all the values set to empty.
+        // */
+        //public static BATBlock CreateEmptyBATBlock(POIFSBigBlockSize bigBlockSize, bool isXBAT)
+        //{
+        //    BATBlock block = new BATBlock(bigBlockSize);
+        //    if (isXBAT)
+        //    {
+        //        block.SetXBATChain(bigBlockSize, POIFSConstants.END_OF_CHAIN);
+        //    }
+        //    return block;
+        //}
+
 
         /// <summary>
         /// Create an array of BATBlocks from an array of int block
@@ -83,20 +175,20 @@ namespace NPOI.POIFS.Storage
         /// </summary>
         /// <param name="entries">the array of int entries</param>
         /// <returns>the newly created array of BATBlocks</returns>
-        public static BATBlock [] CreateBATBlocks(int [] entries)
+        public static BATBlock[] CreateBATBlocks(int[] entries)
         {
-            int        block_count = CalculateStorageRequirements(entries.Length);
-            BATBlock[] blocks      = new BATBlock[ block_count ];
-            int        index       = 0;
-            int        remaining   = entries.Length;
+            int block_count = CalculateStorageRequirements(entries.Length);
+            BATBlock[] blocks = new BATBlock[block_count];
+            int index = 0;
+            int remaining = entries.Length;
 
             for (int j = 0; j < entries.Length; j += _entries_per_block)
             {
-                blocks[ index++ ] = new BATBlock(entries, j,
+                blocks[index++] = new BATBlock(entries, j,
                                                  (remaining > _entries_per_block)
                                                  ? j + _entries_per_block
                                                  : entries.Length);
-                remaining         -= _entries_per_block;
+                remaining -= _entries_per_block;
             }
             return blocks;
         }
@@ -108,31 +200,31 @@ namespace NPOI.POIFS.Storage
         /// <param name="entries">the array of int entries</param>
         /// <param name="startBlock">the start block of the array of XBAT blocks</param>
         /// <returns>the newly created array of BATBlocks</returns>
-        public static BATBlock [] CreateXBATBlocks(int [] entries,
+        public static BATBlock[] CreateXBATBlocks(int[] entries,
                                                    int startBlock)
         {
-            int        block_count =
+            int block_count =
                 CalculateXBATStorageRequirements(entries.Length);
-            BATBlock[] blocks      = new BATBlock[ block_count ];
-            int        index       = 0;
-            int        remaining   = entries.Length;
+            BATBlock[] blocks = new BATBlock[block_count];
+            int index = 0;
+            int remaining = entries.Length;
 
             if (block_count != 0)
             {
                 for (int j = 0; j < entries.Length; j += _entries_per_xbat_block)
                 {
-                    blocks[ index++ ] =
+                    blocks[index++] =
                         new BATBlock(entries, j,
                                      (remaining > _entries_per_xbat_block)
                                      ? j + _entries_per_xbat_block
                                      : entries.Length);
-                    remaining         -= _entries_per_xbat_block;
+                    remaining -= _entries_per_xbat_block;
                 }
                 for (index = 0; index < blocks.Length - 1; index++)
                 {
-                    blocks[ index ].XBATChain=startBlock + index + 1;
+                    blocks[index].SetXBATChain(startBlock + index + 1);
                 }
-                blocks[ index ].XBATChain=POIFSConstants.END_OF_CHAIN;
+                blocks[index].SetXBATChain(POIFSConstants.END_OF_CHAIN);
             }
             return blocks;
         }
@@ -159,14 +251,41 @@ namespace NPOI.POIFS.Storage
             return (entryCount + _entries_per_xbat_block - 1)
                    / _entries_per_xbat_block;
         }
+        /**
+         * Calculates the maximum size of a file which is addressable given the
+         *  number of FAT (BAT) sectors specified. (We don't care if those BAT
+         *  blocks come from the 109 in the header, or from header + XBATS, it
+         *  won't affect the calculation)
+         *  
+         * The actual file size will be between [size of fatCount-1 blocks] and
+         *   [size of fatCount blocks].
+         *  For 512 byte block sizes, this means we may over-estimate by up to 65kb.
+         *  For 4096 byte block sizes, this means we may over-estimate by up to 4mb
+         */
+        public int CalculateMaximumSize(POIFSBigBlockSize bigBlockSize,
+              int numBATs)
+        {
+            int size = 1; // Header isn't FAT addressed
 
+            // The header has up to 109 BATs, and extra ones are referenced
+            //  from XBATs
+            // However, all BATs can contain 128/1024 blocks
+            size += (numBATs * bigBlockSize.GetBATEntriesPerBlock());
+
+            // So far we've been in sector counts, turn into bytes
+            return size * bigBlockSize.GetBigBlockSize();
+        }
+        public int CalculateMaximumSize(HeaderBlockReader header)
+        {
+            return CalculateMaximumSize(header.BigBlockSize, header.BATCount);
+        }
         /// <summary>
         /// Gets the entries per block.
         /// </summary>
         /// <value>The number of entries per block</value>
         public static int EntriesPerBlock
         {
-            get{return _entries_per_block;}
+            get { return _entries_per_block; }
         }
 
         /// <summary>
@@ -175,7 +294,7 @@ namespace NPOI.POIFS.Storage
         /// <value>number of entries per XBAT block</value>
         public static int EntriesPerXBATBlock
         {
-            get{return _entries_per_xbat_block;}
+            get { return _entries_per_xbat_block; }
         }
 
         /// <summary>
@@ -184,12 +303,66 @@ namespace NPOI.POIFS.Storage
         /// <value>offset of chain index of XBAT block</value>
         public static int XBATChainOffset
         {
-            get{return _xbat_chain_offset;}
+            get { return _xbat_chain_offset; }
         }
 
-        private int XBATChain
+        private void SetXBATChain(int chainIndex)
         {
-            set { _fields[_entries_per_xbat_block].Set(value, _data); }
+            _fields[_entries_per_xbat_block].Set(chainIndex, _data);
+        }
+        /**
+         * Does this BATBlock have any free sectors in it, or
+         *  is it full?
+         */
+        public bool HasFreeSectors
+        {
+            get
+            {
+                return _has_free_sectors;
+            }
+        }
+
+        public int GetValueAt(int relativeOffset)
+        {
+            if (relativeOffset >= _values.Length)
+            {
+                throw new IndexOutOfRangeException(
+                      "Unable to fetch offset " + relativeOffset + " as the " +
+                      "BAT only contains " + _values.Length + " entries"
+                );
+            }
+            return _values[relativeOffset];
+        }
+        public void SetValueAt(int relativeOffset, int value)
+        {
+            int oldValue = _values[relativeOffset];
+            _values[relativeOffset] = value;
+
+            // Do we need to re-compute the free?
+            if (value == POIFSConstants.UNUSED_BLOCK)
+            {
+                _has_free_sectors = true;
+                return;
+            }
+            if (oldValue == POIFSConstants.UNUSED_BLOCK)
+            {
+                RecomputeFree();
+            }
+        }
+
+        /**
+         * Retrieve where in the file we live 
+         */
+        public int OurBlockIndex
+        {
+            get
+            {
+                return ourBlockIndex;
+            }
+            set
+            {
+                this.ourBlockIndex = value;
+            }
         }
 
         /// <summary>
@@ -202,13 +375,14 @@ namespace NPOI.POIFS.Storage
         /// written to the block (writing is for all index
         /// k, start_index less than k less than end_index)
         /// </param>
-        private BATBlock(int [] entries, int start_index,
-                         int end_index):this()
+        private BATBlock(int[] entries, int start_index,
+                         int end_index)
+            : this()
         {
-            
+
             for (int k = start_index; k < end_index; k++)
             {
-                _fields[ k - start_index ].Set(entries[ k ], _data);
+                _fields[k - start_index].Set(entries[k], _data);
             }
         }
 

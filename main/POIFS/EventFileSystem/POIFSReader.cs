@@ -73,28 +73,28 @@ namespace NPOI.POIFS.EventFileSystem
         {
 
             // Read the header block from the stream
-            HeaderBlockReader header_block_Reader = new HeaderBlockReader(stream);
+            HeaderBlockReader header_block_reader = new HeaderBlockReader(stream);
 
             // Read the rest of the stream into blocks
-            RawDataBlockList data_blocks = new RawDataBlockList(stream, header_block_Reader.BigBlockSize);
+            RawDataBlockList data_blocks = new RawDataBlockList(stream, header_block_reader.BigBlockSize);
 
             // Set up the block allocation table (necessary for the
             // data_blocks to be manageable
-            new BlockAllocationTableReader(header_block_Reader.BATCount,
-                                           header_block_Reader.BATArray,
-                                           header_block_Reader.XBATCount,
-                                           header_block_Reader.XBATIndex,
+            new BlockAllocationTableReader(header_block_reader.BATCount,
+                                           header_block_reader.BATArray,
+                                           header_block_reader.XBATCount,
+                                           header_block_reader.XBATIndex,
                                            data_blocks);
 
             // Get property table from the document
             PropertyTable properties =
-                new PropertyTable(header_block_Reader.PropertyStart,
+                new PropertyTable(header_block_reader.PropertyStart,
                                   data_blocks);
 
             // Process documents
             return ProcessProperties(SmallBlockTableReader
                 .GetSmallDocumentBlocks(data_blocks, properties
-                    .Root, header_block_Reader
+                    .Root, header_block_reader
                         .SBATStart), data_blocks, properties.Root
                             .Children, new POIFSDocumentPath());
         }

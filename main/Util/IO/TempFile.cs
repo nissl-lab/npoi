@@ -7,7 +7,7 @@ namespace NPOI.Util
 
     public class TempFile
     {
-        static Random rnd = new Random();
+        
 
         /**
          * Creates a temporary file.  Files are collected into one directory and by default are
@@ -16,16 +16,19 @@ namespace NPOI.Util
          * 
          * Dont forget to close all files or it might not be possible to delete them.
          */
-        public static FileStream CreateTempFile(String prefix, String suffix)
+        public static FileInfo CreateTempFile(String prefix, String suffix)
         {
+            
             //if (dir == null)
             //{
             //    dir = Directory.CreateDirectory(Path.GetTempPath()+@"\poifiles");               
             //}
+            Random rnd = new Random((int)DateTime.Now.Ticks);
+            string file=prefix + rnd.Next() + suffix;
+            FileStream newFile = File.Create(file);
+            newFile.Close();
 
-            FileStream newFile = File.Open(prefix + rnd.Next() + suffix,FileMode.OpenOrCreate);
-            
-            return newFile;
+            return new FileInfo(file);
         }
 
         public static string GetTempFilePath(String prefix, String suffix)
@@ -34,7 +37,7 @@ namespace NPOI.Util
             //{
             //    dir = Directory.CreateDirectory(Path.GetTempPath() + @"\poifiles");
             //}
-
+            Random rnd = new Random((int)DateTime.Now.Ticks);
             return prefix + rnd.Next() + suffix;
             //return dir.Name + "\\" + prefix + rnd.Next() + suffix;
         }

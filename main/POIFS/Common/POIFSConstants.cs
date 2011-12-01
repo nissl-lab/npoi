@@ -37,25 +37,36 @@ namespace NPOI.POIFS.Common
     {
         /** Most files use 512 bytes as their big block size */
         public const int SMALLER_BIG_BLOCK_SIZE = 0x0200;
-       /** Most files use 512 bytes as their big block size */
+
+        public static POIFSBigBlockSize SMALLER_BIG_BLOCK_SIZE_DETAILS = 
+       new POIFSBigBlockSize(SMALLER_BIG_BLOCK_SIZE, (short)9);
+    /** Some use 4096 bytes */
+    public const int LARGER_BIG_BLOCK_SIZE = 0x1000;
+    public static POIFSBigBlockSize LARGER_BIG_BLOCK_SIZE_DETAILS = 
+       new POIFSBigBlockSize(LARGER_BIG_BLOCK_SIZE, (short)12);
+        /** Most files use 512 bytes as their big block size */
         public const int BIG_BLOCK_SIZE = 0x0200;
 
         /** Most files use 512 bytes as their big block size */
         public const int MINI_BLOCK_SIZE = 64;
+            /** 
+     * The minimum size of a document before it's stored using 
+     *  Big Blocks (normal streams). Smaller documents go in the 
+     *  Mini Stream (SBAT / Small Blocks)
+     */
+    public const int BIG_BLOCK_MINIMUM_DOCUMENT_SIZE = 0x1000;
+    
+    /** The highest sector number you're allowed, 0xFFFFFFFA */
+    public const int LARGEST_REGULAR_SECTOR_NUMBER = -5;
 
-
-        /** Some use 4096 bytes */
-        public const int LARGER_BIG_BLOCK_SIZE = 0x1000;
-        /** The highest sector number you're allowed, 0xFFFFFFFA */
-        public const int LARGEST_REGULAR_SECTOR_NUMBER = -5;
-
-        public const int FATSECT = unchecked((int)0xfffffffd);
-        public const int DIFSECT = unchecked((int)0xfffffffc);
-        public const int END_OF_CHAIN = unchecked((int)0xfffffffe);
+    public const int FAT_SECTOR_BLOCK = -3;
+    public const int DIFAT_SECTOR_BLOCK = -4;
+        public const int END_OF_CHAIN = -2;
         public const int PROPERTY_SIZE  = 0x0080;
         //FREESECT
-        public const int UNUSED_BLOCK   = unchecked((int)0xffffffff);
+        public const int UNUSED_BLOCK   = -1;
     
-        public static byte[] OOXML_FILE_HEADER = new byte[] { 0x50, 0x4b, 0x03, 0x04 };
+        public static byte[] OOXML_FILE_HEADER = 
+            new byte[] { 0x50, 0x4b, 0x03, 0x04 };
     }
 }

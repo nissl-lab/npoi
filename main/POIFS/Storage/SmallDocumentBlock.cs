@@ -32,6 +32,7 @@ using System.Text;
 using System.IO;
 
 using NPOI.POIFS.Common;
+using System.Collections.Generic;
 
 namespace NPOI.POIFS.Storage
 {
@@ -155,9 +156,9 @@ namespace NPOI.POIFS.Storage
         /// </summary>
         /// <param name="blocks">the raw data containing the SmallDocumentBlock</param>
         /// <returns>a List of SmallDocumentBlock's extracted from the input</returns>
-        public static IList Extract(ListManagedBlock [] blocks)
+        public static List<SmallDocumentBlock> Extract(ListManagedBlock [] blocks)
         {
-            IList sdbs = new ArrayList();
+            List<SmallDocumentBlock> sdbs = new List<SmallDocumentBlock>();
 
             for (int j = 0; j < blocks.Length; j++)
             {

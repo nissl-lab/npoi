@@ -39,7 +39,7 @@ namespace NPOI.POIFS.Storage
         /// provide blocks to manage
         /// </summary>
         /// <param name="blocks">blocks to be managed</param> 
-        public virtual void SetBlocks(ref ListManagedBlock[] blocks)
+        public virtual void SetBlocks(ListManagedBlock[] blocks)
         {
             _blocks = blocks;
         }

@@ -27,6 +27,8 @@
 using System;
 using System.Collections;
 using System.IO;
+using NPOI.POIFS.Common;
+using System.Collections.Generic;
 
 namespace NPOI.POIFS.Storage
 {
@@ -42,13 +44,13 @@ namespace NPOI.POIFS.Storage
         /// </summary>
         /// <param name="stream">the InputStream from which the data will be read</param>
         /// <param name="bigBlockSize">The big block size, either 512 bytes or 4096 bytes</param>
-        public RawDataBlockList(Stream stream, int bigBlockSize)
+        public RawDataBlockList(Stream stream, POIFSBigBlockSize bigBlockSize)
         {
-            IList blocks = new ArrayList();
+            List<RawDataBlock> blocks = new List<RawDataBlock>();
 
             while (true)
             {
-                RawDataBlock block = new RawDataBlock(stream, bigBlockSize);
+                RawDataBlock block = new RawDataBlock(stream, bigBlockSize.GetBigBlockSize());
                 
                 // If there was data, add the block to the list
                 if(block.HasData) {
@@ -60,10 +62,7 @@ namespace NPOI.POIFS.Storage
                     break;
                 }
             }
-            RawDataBlock[] array = new RawDataBlock[blocks.Count];
-            blocks.CopyTo(array, 0);
-            ListManagedBlock[] tmp=(ListManagedBlock[])array;
-            SetBlocks(ref tmp);
+             SetBlocks((ListManagedBlock[])blocks.ToArray());
         }
     }
 }
