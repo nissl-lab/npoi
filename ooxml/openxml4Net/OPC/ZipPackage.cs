@@ -280,16 +280,18 @@ namespace NPOI.OpenXml4Net.OPC
 
                     string tempfilePath=GenerateTempFileName(FileHelper
                                     .GetDirectory(this.originalPackagePath));
-                    FileStream fs=NPOI.Util.TempFile.CreateTempFile(
+
+                    FileInfo fi=NPOI.Util.TempFile.CreateTempFile(
                             tempfilePath, ".tmp");
 
                     // Save the final package to a temporary file
                     try
                     {
+                        FileStream fs = File.OpenWrite(fi.FullName);
                         Save(fs);
                         this.zipArchive.Close(); // Close the zip archive to be
                         // able to delete it
-                        FileHelper.CopyFile(tempfilePath, this.originalPackagePath);
+                        FileHelper.CopyFile(fi.FullName, this.originalPackagePath);
                     }
                     finally
                     {
@@ -319,15 +321,16 @@ namespace NPOI.OpenXml4Net.OPC
          */
         private String GenerateTempFileName(string directory)
         {
-            string path=directory + "\\"
-                        + "OpenXml4Net" + System.DateTime.Now.Ticks;
-
-            FileStream tmpFilename = null ;
-
-            while (File.Exists(path))
+            FileInfo tmpFilename = null ;
+            string path = null;
+            do
             {
-                tmpFilename = new FileStream(path,FileMode.CreateNew);
-            }
+                path = directory + "\\"
+            + "OpenXml4Net" + System.DateTime.Now.Ticks;
+
+                tmpFilename = new FileInfo(path);
+            } while (File.Exists(path));
+
             return tmpFilename.Name; //FileHelper.getFilename(tmpFilename.Name);
         }
 

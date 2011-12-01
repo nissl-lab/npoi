@@ -22,7 +22,7 @@ namespace NPOI.OpenXml4Net.Util
 
         public void Close()
         {
-            //zipArchive.Dispose();
+            zipArchive.Close();
         }
 
         public IEnumerator Entries

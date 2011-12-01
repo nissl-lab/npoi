@@ -37,7 +37,7 @@ namespace NPOI.OpenXml4Net.OPC.Internal
          *             If an I/O error occur.
          */
         public static void CopyFile(string inpath, string outpath){
-            File.Copy(inpath, outpath);
+            File.Copy(inpath, outpath,true);
         }
 
         /**
