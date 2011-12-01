@@ -330,7 +330,7 @@ namespace TestCases.OPC
         /**
          * TODO: fix and enable
          */
-        [TestMethod]
+        //[TestMethod]
         public void disabled_testRemovePartRecursive()
         {
             String originalFile = OpenXml4NetTestDataSamples.GetSampleFileName("TestPackageCommon.docx");

@@ -22,6 +22,7 @@ namespace TestCases.HSSF.Record.Formula.Functions
     using System.Collections;
     using NPOI.HSSF.Record.Formula;
     using NPOI.HSSF.Record.Formula.Eval;
+    using NPOI.SS.Formula;
 
     /**
      * Test helper class for creating mock <c>Eval</c> objects
@@ -84,23 +85,92 @@ namespace TestCases.HSSF.Record.Formula.Functions
 
                 _values = values;
             }
+            private MockAreaEval(int firstRow, int firstColumn, int lastRow, int lastColumn, ValueEval[] values):base(firstRow, firstColumn, lastRow, lastColumn)
+            {
+                
+                _values = values;
+            }
             public override ValueEval GetRelativeValue(int relativeRowIndex, int relativeColumnIndex)
             {
-                if (relativeRowIndex < 0 || relativeRowIndex >= this.Height)
+                if (relativeRowIndex < 0 || relativeRowIndex >= Height)
                 {
                     throw new ArgumentException("row index out of range");
                 }
-                int width = this.Width;
-                if (relativeColumnIndex < 0 || relativeColumnIndex >= width)
+                if (relativeColumnIndex < 0 || relativeColumnIndex >= Width)
                 {
                     throw new ArgumentException("column index out of range");
                 }
-                int oneDimensionalIndex = relativeRowIndex * width + relativeColumnIndex;
+                int oneDimensionalIndex = relativeRowIndex * Width + relativeColumnIndex;
                 return _values[oneDimensionalIndex];
             }
             public override AreaEval Offset(int relFirstRowIx, int relLastRowIx, int relFirstColIx, int relLastColIx)
             {
-                throw new InvalidOperationException("Operation not implemented on this mock object");
+                if (relFirstRowIx < 0 || relFirstColIx < 0
+        || relLastRowIx >= Height || relLastColIx >= Width)
+                {
+                    throw new NotImplementedException("Operation not implemented on this mock object");
+                }
+
+                if (relFirstRowIx == 0 && relFirstColIx == 0
+                        && relLastRowIx == Height - 1 && relLastColIx == Width - 1)
+                {
+                    return this;
+                }
+                ValueEval[] values = Transpose(_values, Width, relFirstRowIx, relLastRowIx, relFirstColIx, relLastColIx);
+                return new MockAreaEval(FirstRow + relFirstRowIx, FirstColumn + relFirstColIx,
+                        FirstRow + relLastRowIx, FirstColumn + relLastColIx, values);
+            }
+            private static ValueEval[] Transpose(ValueEval[] srcValues, int srcWidth,
+                int relFirstRowIx, int relLastRowIx,
+                int relFirstColIx, int relLastColIx)
+            {
+                int height = relLastRowIx - relFirstRowIx + 1;
+                int width = relLastColIx - relFirstColIx + 1;
+                ValueEval[] result = new ValueEval[height * width];
+                for (int r = 0; r < height; r++)
+                {
+                    int srcRowIx = r + relFirstRowIx;
+                    for (int c = 0; c < width; c++)
+                    {
+                        int srcColIx = c + relFirstColIx;
+                        int destIx = r * width + c;
+                        int srcIx = srcRowIx * srcWidth + srcColIx;
+                        result[destIx] = srcValues[srcIx];
+                    }
+                }
+                return result;
+            }
+            public override TwoDEval GetRow(int rowIndex)
+            {
+                if (rowIndex >= Height)
+                {
+                    throw new ArgumentException("Invalid rowIndex " + rowIndex
+                            + ".  Allowable range is (0.." + Height + ").");
+                }
+                ValueEval[] values = new ValueEval[Width];
+                for (int i = 0; i < values.Length; i++)
+                {
+                    values[i] = GetRelativeValue(rowIndex, i);
+                }
+                return new MockAreaEval(rowIndex, FirstColumn, rowIndex, LastColumn, values);
+            }
+            public override TwoDEval GetColumn(int columnIndex)
+            {
+                if (columnIndex >= Width)
+                {
+                    throw new ArgumentException("Invalid columnIndex " + columnIndex
+                            + ".  Allowable range is (0.." + Width + ").");
+                }
+                ValueEval[] values = new ValueEval[Height];
+                for (int i = 0; i < values.Length; i++)
+                {
+                    values[i] = GetRelativeValue(i, columnIndex);
+                }
+                return new MockAreaEval(FirstRow, columnIndex, LastRow, columnIndex, values);
+            }
+            public override bool IsSubTotal(int rowIndex, int columnIndex)
+            {
+                throw new NotImplementedException();
             }
         }
 

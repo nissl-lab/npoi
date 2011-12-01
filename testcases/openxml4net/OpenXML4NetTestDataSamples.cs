@@ -27,7 +27,7 @@ namespace TestCases.OpenXml4Net
 
         public static FileInfo GetSampleFile(String sampleFileName)
         {
-            return new FileInfo(sampleFileName);
+            return new FileInfo(_samples.ResolvedDataDir+sampleFileName);
         }
 
         public static FileInfo GetOutputFile(String outputFileName)

@@ -70,7 +70,7 @@ namespace TestCases.POIFS.Storage
             {
                 data[j] = (byte)j;
             }
-            new RawDataBlockList(new MemoryStream(data), POIFSConstants.BIG_BLOCK_SIZE);
+            new RawDataBlockList(new MemoryStream(data), POIFSConstants.SMALLER_BIG_BLOCK_SIZE_DETAILS);
         }
 
         /**
@@ -81,7 +81,7 @@ namespace TestCases.POIFS.Storage
 
         public void TestEmptyConstructor()
         {
-            new RawDataBlockList(new MemoryStream(new byte[0]), POIFSConstants.BIG_BLOCK_SIZE);
+            new RawDataBlockList(new MemoryStream(new byte[0]), POIFSConstants.SMALLER_BIG_BLOCK_SIZE_DETAILS);
         }
 
         /**
@@ -108,7 +108,7 @@ namespace TestCases.POIFS.Storage
 
                 // Check we logged the error
                 logger.Reset();
-                new RawDataBlockList(new MemoryStream(data), POIFSConstants.BIG_BLOCK_SIZE);
+                new RawDataBlockList(new MemoryStream(data), POIFSConstants.SMALLER_BIG_BLOCK_SIZE_DETAILS);
                 Assert.AreEqual(1, logger.logged.Count);
             }
         }

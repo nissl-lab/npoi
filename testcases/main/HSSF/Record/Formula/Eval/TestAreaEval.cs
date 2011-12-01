@@ -24,6 +24,7 @@ namespace TestCases.HSSF.Record.Formula.Eval
     using NPOI.HSSF.Record.Formula;
     using NPOI.HSSF.Record.Formula.Eval;
     using TestCases.HSSF.Record.Formula.Functions;
+    using NPOI.SS.Formula;
     /**
      * Tests for <tt>AreaEval</tt>
      *  
@@ -46,8 +47,8 @@ namespace TestCases.HSSF.Record.Formula.Eval
 				new NumberEval(5),	
 				new NumberEval(6),	
 		};
-            AreaEval ae = EvalFactory.CreateAreaEval(ptg, values);
-            if (one == ae.GetValueAt(1, 2))
+            TwoDEval ae = (TwoDEval)EvalFactory.CreateAreaEval(ptg, values);
+            if (one == ae.GetValue(1, 2))
             {
                 throw new AssertFailedException("Identified bug 44950 a");
             }
@@ -60,9 +61,9 @@ namespace TestCases.HSSF.Record.Formula.Eval
 
         }
 
-        private static void Confirm(int expectedValue, AreaEval ae, int row, int col)
+        private static void Confirm(int expectedValue, TwoDEval ae, int row, int col)
         {
-            NumberEval v = (NumberEval)ae.GetValueAt(row, col);
+            NumberEval v = (NumberEval)((AreaEval)ae).GetAbsoluteValue(row, col);
             Assert.AreEqual(expectedValue, v.NumberValue, 0.0);
         }
 

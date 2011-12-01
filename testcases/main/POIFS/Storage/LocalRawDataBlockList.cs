@@ -56,7 +56,7 @@ namespace TestCases.POIFS.Storage
          */
 
         public LocalRawDataBlockList()
-            : base(new MemoryStream(new byte[0]), POIFSConstants.BIG_BLOCK_SIZE)
+            : base(new MemoryStream(new byte[0]), POIFSConstants.SMALLER_BIG_BLOCK_SIZE_DETAILS)
         {
             _list = new ArrayList();
             _array = null;

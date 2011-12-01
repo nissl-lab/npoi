@@ -2119,7 +2119,7 @@ namespace TestCases.POIFS.Storage
             ( byte ) 0xFF, ( byte ) 0xFF, ( byte ) 0xFF, ( byte ) 0xFF
         };
             RawDataBlockList data_blocks =
-                new RawDataBlockList(new MemoryStream(raw_data_array), POIFSConstants.BIG_BLOCK_SIZE);
+                new RawDataBlockList(new MemoryStream(raw_data_array), POIFSConstants.SMALLER_BIG_BLOCK_SIZE_DETAILS);
             int[] bat_array =
         {
             15

@@ -62,21 +62,21 @@ namespace TestCases.HSSF.Model
                     break;
                 }
                 String formula = cell.CellFormula;
-                //try
-                //{
+                try
+                {
                     ConfirmCell(cell, formula, wb);
-                //}
-                //catch (AssertFailedException e)
-                //{
-                //    Console.Error.WriteLine("Problem with row[" + rowIx + "] formula '" + formula + "'");
-                //    Console.Error.WriteLine(e.Message);
-                //    countFailures++;
-                //}
-                //catch (Exception e)
-                //{
-                //    Console.Error.WriteLine("Problem with row[" + rowIx + "] formula '" + formula + "'");
-                //    countErrors++;
-                //}
+                }
+                catch (AssertFailedException e)
+                {
+                    Console.Error.WriteLine("Problem with row[" + rowIx + "] formula '" + formula + "'");
+                    Console.Error.WriteLine(e.Message);
+                    countFailures++;
+                }
+                catch (Exception e)
+                {
+                    Console.Error.WriteLine("Problem with row[" + rowIx + "] formula '" + formula + "'");
+                    countErrors++;
+                }
                 rowIx++;
             }
             if (countErrors + countFailures > 0)

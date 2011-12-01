@@ -67,7 +67,7 @@ namespace TestCases.POIFS.Storage
                     new RawDataBlock(new MemoryStream(new byte[512]));
             }
             ListManagedBlock[] tmp=(ListManagedBlock[])blocks;
-            list.SetBlocks(ref tmp);
+            list.SetBlocks(tmp);
             for (int j = -2; j < 10; j++)
             {
                 list.Zap(j);
@@ -113,7 +113,7 @@ namespace TestCases.POIFS.Storage
                 blocks[j] = new RawDataBlock(stream);
             }
             ListManagedBlock[] tmp = (ListManagedBlock[])blocks;
-            list.SetBlocks(ref tmp);
+            list.SetBlocks(tmp);
 
             // verify that you can't Remove illegal indices
             for (int j = -2; j < 10; j++)
@@ -259,7 +259,7 @@ namespace TestCases.POIFS.Storage
                     new RawDataBlock(new MemoryStream(new byte[0])));
             }
             ListManagedBlock[] tmp = (ListManagedBlock[])raw_blocks.ToArray(typeof(RawDataBlock));
-            list.SetBlocks(ref tmp);
+            list.SetBlocks(tmp);
             int[] blocks =
         {
             0

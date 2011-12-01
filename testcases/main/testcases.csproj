@@ -190,7 +190,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="DDF\data\Container.dat" />
     <None Include="HPSF\data\Test0313rur.adm" />
     <None Include="HPSF\data\TestBug44375.xls" />
     <None Include="HPSF\data\TestChineseProperties.doc" />
@@ -521,6 +520,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="DDF\data\" />
     <Folder Include="HSSF\data\" />
     <Folder Include="SS\Util\" />
   </ItemGroup>

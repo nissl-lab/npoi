@@ -106,9 +106,13 @@ namespace TestCases.HSSF.Record.Formula.Eval
             {
 
             }
+            private MockAreaEval(int firstRow, int firstColumn, int lastRow, int lastColumn):base(firstRow, firstColumn, lastRow, lastColumn)
+            {
+                
+            }
             public override ValueEval GetRelativeValue(int relativeRowIndex, int relativeColumnIndex)
             {
-                throw new Exception("not expected to be called during this test");
+                throw new NotImplementedException("not expected to be called during this test");
             }
             public override AreaEval Offset(int relFirstRowIx, int relLastRowIx, int relFirstColIx,
                     int relLastColIx)
@@ -117,6 +121,24 @@ namespace TestCases.HSSF.Record.Formula.Eval
                         relFirstRowIx, relLastRowIx, relFirstColIx, relLastColIx);
 
                 return new MockAreaEval(area);
+            }
+            public override TwoDEval GetRow(int rowIndex)
+            {
+                if (rowIndex >= Height)
+                {
+                    throw new ArgumentException("Invalid rowIndex " + rowIndex
+                            + ".  Allowable range is (0.." + Height + ").");
+                }
+                return new MockAreaEval(rowIndex, FirstColumn, rowIndex, LastColumn);
+            }
+            public override TwoDEval GetColumn(int columnIndex)
+            {
+                if (columnIndex >= Width)
+                {
+                    throw new ArgumentException("Invalid columnIndex " + columnIndex
+                            + ".  Allowable range is (0.." + Width + ").");
+                }
+                return new MockAreaEval(FirstRow, columnIndex, LastRow, columnIndex);
             }
         }
         [TestMethod]
