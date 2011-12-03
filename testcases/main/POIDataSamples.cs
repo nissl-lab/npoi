@@ -119,20 +119,16 @@ namespace TestCases
                         + TEST_PROPERTY
                         + "' before running tests");
 
-            string dataDir = string.Format(@"{0}\{1}\", dataDirName, _moduleDir);
+            string dataDir = Path.Combine(dataDirName, _moduleDir);
             if (!Directory.Exists(dataDir))
             {
-                throw new IOException("Data dir '" + dataDirName + "\\" + _moduleDir
+                throw new IOException("Data dir '" + dataDir
                         + "' specified by system property '"
                         + TEST_PROPERTY + "' does not exist");
             }
-            //if (!File.Exists(dataDirName + "SampleSS.xls"))
-            //{
-            //    throw new IOException(dataDirName + "SampleSS.xls does not exist");
-            //}
 
             _sampleDataIsAvaliableOnClassPath = true;
-            _resolvedDataDir = dataDir;
+            _resolvedDataDir = dataDir + Path.DirectorySeparatorChar;
         }
 
         /**
