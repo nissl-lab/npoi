@@ -258,11 +258,8 @@ namespace TestCases.HSSF.Extractor
         [TestMethod]
         public void TestWithEmbededInOwn()
         {
-            // TODO - encapsulate sys prop 'POIFS.Testdata.path' similar to HSSFTestDataSamples
-            String pdirname = System.Configuration.ConfigurationSettings.AppSettings["POIFS.Testdata.path"];
-            String filename = pdirname + "/excel_with_embeded.xls";
             POIFSFileSystem fs = new POIFSFileSystem(
-                    new FileStream(filename, FileMode.Open, FileAccess.Read)
+                    HSSFTestDataSamples.OpenSampleFileStream("excel_with_embeded.xls")
             );
 
             DirectoryNode dirA = (DirectoryNode)fs.Root.GetEntry("MBD0000A3B5");
