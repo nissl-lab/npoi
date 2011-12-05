@@ -234,9 +234,9 @@ namespace NPOI.OpenXml4Net.OPC
             sb.Append(relationshipType == null ? " - relationshipType=null"
                     : " - relationshipType=" + relationshipType.ToString());
             sb.Append(source == null ? " - source=null" : " - source="
-                    + SourceUri.ToString());
+                    + SourceUri.OriginalString);
             sb.Append(targetUri == null ? " - target=null" : " - target="
-                    + TargetUri.ToString());
+                    + TargetUri.OriginalString);
             sb.Append(targetMode == null ? ",targetMode=null" : ",targetMode="
                     + targetMode.ToString());
             return sb.ToString();

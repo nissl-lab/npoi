@@ -134,13 +134,13 @@ namespace TestCases.OPC
                 zipContent.Add(entree.Name, byteArray);
 
                 /* copy in memory */
-                while ((count = zis.Read(data, 0, BUFFER_SIZE)) != -1)
+                while ((count = zis.Read(data, 0, BUFFER_SIZE)) != 0)
                 {
                     byteArray.Write(data, 0, count);
                 }
                 /* Flush the buffer */
                 byteArray.Flush();
-                byteArray.Close();
+                //byteArray.Close();
             }
 
             zis.Close();

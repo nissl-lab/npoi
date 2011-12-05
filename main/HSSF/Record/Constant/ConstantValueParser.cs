@@ -56,7 +56,7 @@ namespace NPOI.HSSF.Record.Constant
             object[] result = new Object[nValues];
             for (int i = 0; i < result.Length; i++)
             {
-                result.SetValue(ReadAConstantValue(in1),i);
+                result[i]=ReadAConstantValue(in1);
             }
             return result;
         }

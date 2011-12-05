@@ -269,7 +269,7 @@ public class PackagePropertiesPart:PackagePart,PackageProperties
 	 * @return A string representation of the last printed date.
 	 */
 	public String GetLastPrintedPropertyString() {
-		return GetDateValue(created);
+        return GetDateValue(lastPrinted);
 	}
 
 	/**
@@ -454,7 +454,7 @@ public class PackagePropertiesPart:PackagePart,PackageProperties
 	 * @see org.apache.poi.OpenXml4Net.opc.PackageProperties#setLastPrintedProperty(org.apache.poi.OpenXml4Net.util.Nullable)
 	 */
 	public void SetLastPrintedProperty(Nullable<DateTime> lastPrinted) {
-		if (lastPrinted.Value!=null)
+		if (lastPrinted!=null)
 			this.lastPrinted = lastPrinted;
 	}
 

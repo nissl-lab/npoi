@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using NPOI.Util;
 using System.IO;
@@ -33,7 +32,10 @@ namespace TestCases.OpenXml4Net
         public static FileInfo GetOutputFile(String outputFileName)
         {
             String suffix = outputFileName.Substring(outputFileName.LastIndexOf('.'));
-            return new FileInfo(TempFile.GetTempFilePath(outputFileName, suffix));
+            string path= TempFile.GetTempFilePath(outputFileName, suffix);
+            FileStream fs = File.Create(path);
+            fs.Close();
+            return new FileInfo(path);
         }
 
 

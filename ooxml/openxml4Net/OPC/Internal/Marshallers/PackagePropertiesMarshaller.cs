@@ -79,6 +79,12 @@ namespace NPOI.OpenXml4Net.OPC.Internal.Marshallers
             nsmgr.AddNamespace("dc",PackagePropertiesPart.NAMESPACE_DC_URI);
             nsmgr.AddNamespace("dcterms",PackagePropertiesPart.NAMESPACE_DCTERMS_URI);
             nsmgr.AddNamespace("xsi", PackagePropertiesPart.NAMESPACE_XSI_URI);
+
+            rootElem.SetAttribute("xmlns:cp", PackagePropertiesPart.NAMESPACE_CP_URI);
+            rootElem.SetAttribute("xmlns:dc", PackagePropertiesPart.NAMESPACE_DC_URI);
+            rootElem.SetAttribute("xmlns:dcterms", PackagePropertiesPart.NAMESPACE_DCTERMS_URI);
+            rootElem.SetAttribute("xmlns:xsi", PackagePropertiesPart.NAMESPACE_XSI_URI);
+
             xmlDoc.AppendChild(rootElem);
 
             AddCategory();
@@ -113,7 +119,7 @@ namespace NPOI.OpenXml4Net.OPC.Internal.Marshallers
             if (elems.Count==0)
             {
                 // Missing, we Add it
-                elem =xmlDoc.CreateElement(KEYWORD_CATEGORY, namespaceCoreProperties); 
+                elem =xmlDoc.CreateElement("cp", KEYWORD_CATEGORY, namespaceCoreProperties); 
                 xmlDoc.DocumentElement.AppendChild(elem);
             }
             else
@@ -136,7 +142,7 @@ namespace NPOI.OpenXml4Net.OPC.Internal.Marshallers
             if (elems.Count == 0)
             {
                 // Missing, we Add it
-                elem = xmlDoc.CreateElement(KEYWORD_CONTENT_STATUS, namespaceCoreProperties);
+                elem = xmlDoc.CreateElement("cp", KEYWORD_CONTENT_STATUS, namespaceCoreProperties);
                 xmlDoc.DocumentElement.AppendChild(elem);
             }
             else
@@ -159,7 +165,7 @@ namespace NPOI.OpenXml4Net.OPC.Internal.Marshallers
             if (elems.Count == 0)
             {
                 // Missing, we Add it
-                elem = xmlDoc.CreateElement(KEYWORD_CONTENT_TYPE, namespaceCoreProperties);
+                elem = xmlDoc.CreateElement("cp", KEYWORD_CONTENT_TYPE, namespaceCoreProperties);
                 xmlDoc.DocumentElement.AppendChild(elem);
             }
             else
@@ -177,12 +183,12 @@ namespace NPOI.OpenXml4Net.OPC.Internal.Marshallers
         {
             if (propsPart.GetCreatedProperty() == null)
                 return;
-            XmlNodeList elems = xmlDoc.DocumentElement.GetElementsByTagName(KEYWORD_CREATED, namespaceCoreProperties);
+            XmlNodeList elems = xmlDoc.DocumentElement.GetElementsByTagName(KEYWORD_CREATED,namespaceDcTerms);
             XmlElement elem = null;
             if (elems.Count == 0)
             {
                 // Missing, we Add it
-                elem = xmlDoc.CreateElement(KEYWORD_CREATED, namespaceCoreProperties);
+                elem = xmlDoc.CreateElement("dcterms", KEYWORD_CREATED, namespaceDcTerms);
                 xmlDoc.DocumentElement.AppendChild(elem);
             }
             else
@@ -190,8 +196,8 @@ namespace NPOI.OpenXml4Net.OPC.Internal.Marshallers
                 elem = (XmlElement)elems[0];
                 elem.InnerXml = "";// clear the old value
             }
+            elem.SetAttribute("type", namespaceXSI, "dcterms:W3CDTF");
             elem.InnerText = propsPart.GetCreatedPropertyString();
-            elem.SetAttribute("type",namespaceXSI,"dcterms:W3CDTF");
         }
 
         /**
@@ -207,7 +213,7 @@ namespace NPOI.OpenXml4Net.OPC.Internal.Marshallers
             if (elems.Count == 0)
             {
                 // Missing, we Add it
-                elem = xmlDoc.CreateElement(KEYWORD_CREATOR, namespaceDC);
+                elem = xmlDoc.CreateElement("dc", KEYWORD_CREATOR, namespaceDC);
                 xmlDoc.DocumentElement.AppendChild(elem);
             }
             else
@@ -232,7 +238,7 @@ namespace NPOI.OpenXml4Net.OPC.Internal.Marshallers
             if (elems.Count == 0)
             {
                 // Missing, we Add it
-                elem = xmlDoc.CreateElement(KEYWORD_DESCRIPTION, namespaceDC);
+                elem = xmlDoc.CreateElement("dc", KEYWORD_DESCRIPTION, namespaceDC);
                 xmlDoc.DocumentElement.AppendChild(elem);
             }
             else
@@ -257,7 +263,7 @@ namespace NPOI.OpenXml4Net.OPC.Internal.Marshallers
             if (elems.Count == 0)
             {
                 // Missing, we Add it
-                elem = xmlDoc.CreateElement(KEYWORD_IDENTIFIER, namespaceDC);
+                elem = xmlDoc.CreateElement("dc", KEYWORD_IDENTIFIER, namespaceDC);
                 xmlDoc.DocumentElement.AppendChild(elem);
             }
             else
@@ -282,7 +288,7 @@ namespace NPOI.OpenXml4Net.OPC.Internal.Marshallers
             if (elems.Count == 0)
             {
                 // Missing, we Add it
-                elem = xmlDoc.CreateElement(KEYWORD_KEYWORDS, namespaceCoreProperties);
+                elem = xmlDoc.CreateElement("cp", KEYWORD_KEYWORDS, namespaceCoreProperties);
                 xmlDoc.DocumentElement.AppendChild(elem);
             }
             else
@@ -306,7 +312,7 @@ namespace NPOI.OpenXml4Net.OPC.Internal.Marshallers
             if (elems.Count == 0)
             {
                 // Missing, we Add it
-                elem = xmlDoc.CreateElement(KEYWORD_LANGUAGE, namespaceDC);
+                elem = xmlDoc.CreateElement("dc", KEYWORD_LANGUAGE, namespaceDC);
                 xmlDoc.DocumentElement.AppendChild(elem);
             }
             else
@@ -330,7 +336,7 @@ namespace NPOI.OpenXml4Net.OPC.Internal.Marshallers
             if (elems.Count == 0)
             {
                 // Missing, we Add it
-                elem = xmlDoc.CreateElement(KEYWORD_LAST_MODIFIED_BY, namespaceCoreProperties);
+                elem = xmlDoc.CreateElement("cp", KEYWORD_LAST_MODIFIED_BY, namespaceCoreProperties);
                 xmlDoc.DocumentElement.AppendChild(elem);
             }
             else
@@ -355,7 +361,7 @@ namespace NPOI.OpenXml4Net.OPC.Internal.Marshallers
             if (elems.Count == 0)
             {
                 // Missing, we Add it
-                elem = xmlDoc.CreateElement(KEYWORD_LAST_PRINTED, namespaceCoreProperties);
+                elem = xmlDoc.CreateElement("cp", KEYWORD_LAST_PRINTED, namespaceCoreProperties);
                 xmlDoc.DocumentElement.AppendChild(elem);
             }
             else
@@ -379,7 +385,7 @@ namespace NPOI.OpenXml4Net.OPC.Internal.Marshallers
             if (elems.Count == 0)
             {
                 // Missing, we Add it
-                elem = xmlDoc.CreateElement(KEYWORD_MODIFIED, namespaceDcTerms);
+                elem = xmlDoc.CreateElement("dcterms", KEYWORD_MODIFIED, namespaceDcTerms);
                 xmlDoc.DocumentElement.AppendChild(elem);
             }
             else
@@ -404,7 +410,7 @@ namespace NPOI.OpenXml4Net.OPC.Internal.Marshallers
             if (elems.Count == 0)
             {
                 // Missing, we Add it
-                elem = xmlDoc.CreateElement(KEYWORD_REVISION, namespaceCoreProperties);
+                elem = xmlDoc.CreateElement("cp", KEYWORD_REVISION, namespaceCoreProperties);
                 xmlDoc.DocumentElement.AppendChild(elem);
             }
             else
@@ -428,7 +434,7 @@ namespace NPOI.OpenXml4Net.OPC.Internal.Marshallers
             if (elems.Count == 0)
             {
                 // Missing, we Add it
-                elem = xmlDoc.CreateElement(KEYWORD_SUBJECT, namespaceDC);
+                elem = xmlDoc.CreateElement("dc", KEYWORD_SUBJECT, namespaceDC);
                 xmlDoc.DocumentElement.AppendChild(elem);
             }
             else
@@ -452,7 +458,7 @@ namespace NPOI.OpenXml4Net.OPC.Internal.Marshallers
             if (elems.Count == 0)
             {
                 // Missing, we Add it
-                elem = xmlDoc.CreateElement(KEYWORD_TITLE, namespaceDC);
+                elem = xmlDoc.CreateElement("dc", KEYWORD_TITLE, namespaceDC);
                 xmlDoc.DocumentElement.AppendChild(elem);
             }
             else
@@ -473,7 +479,7 @@ namespace NPOI.OpenXml4Net.OPC.Internal.Marshallers
             if (elems.Count == 0)
             {
                 // Missing, we Add it
-                elem = xmlDoc.CreateElement(KEYWORD_VERSION, namespaceCoreProperties);
+                elem = xmlDoc.CreateElement("cp", KEYWORD_VERSION, namespaceCoreProperties);
                 xmlDoc.DocumentElement.AppendChild(elem);
             }
             else

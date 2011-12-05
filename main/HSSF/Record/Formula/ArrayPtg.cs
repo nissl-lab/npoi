@@ -171,7 +171,7 @@ namespace NPOI.HSSF.Record.Formula
                 throw new ArgumentException("Specified rowIx (" + rowIx
                         + ") is outside the allowed range (0.." + (token_2_rows - 1) + ")");
             }
-            return rowIx + token_2_rows * colIx;
+            return rowIx * token_1_columns + colIx;
         }
 
         public override void Write(LittleEndianOutput out1)

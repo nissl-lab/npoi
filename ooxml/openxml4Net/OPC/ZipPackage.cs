@@ -290,6 +290,7 @@ namespace NPOI.OpenXml4Net.OPC
                         FileStream fs = File.OpenWrite(fi.FullName);
                         Save(fs);
                         this.zipArchive.Close(); // Close the zip archive to be
+                        fs.Close();
                         // able to delete it
                         FileHelper.CopyFile(fi.FullName, this.originalPackagePath);
                     }

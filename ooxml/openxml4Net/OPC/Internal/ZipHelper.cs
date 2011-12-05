@@ -146,7 +146,8 @@ namespace NPOI.OpenXml4Net.OPC.Internal
                 {
                     return null;
                 }
-                return new ZipFile(path);
+
+                return new ZipFile(File.OpenRead(path));
             }
             catch (IOException)
             {

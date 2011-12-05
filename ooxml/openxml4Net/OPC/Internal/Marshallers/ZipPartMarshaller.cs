@@ -48,10 +48,10 @@ namespace NPOI.OpenXml4Net.OPC.Internal.Marshallers
                 Stream ins = part.GetInputStream();
                 byte[] buff = new byte[ZipHelper.READ_WRITE_FILE_BUFFER_SIZE];
                 int totalRead = 0;
-                while (ins.Length - ins.Position > 0)
+                while (true)
                 {
                     int resultRead = ins.Read(buff, 0, buff.Length);
-                    if (resultRead == -1)
+                    if (resultRead == 0)
                     {
                         // End of file reached
                         break;
@@ -132,7 +132,7 @@ namespace NPOI.OpenXml4Net.OPC.Internal.Marshallers
                 {
                     // Save the target as-is - we don't need to validate it,
                     //  alter it etc
-                    targetValue = uri.ToString();
+                    targetValue = uri.OriginalString;
 
                     // add TargetMode attribute (as it is external link external)
                     relElem.SetAttribute(
@@ -142,7 +142,7 @@ namespace NPOI.OpenXml4Net.OPC.Internal.Marshallers
                 else
                 {
                     targetValue = PackagingURIHelper.RelativizeUri(
-                            sourcePartURI, rel.TargetUri).OriginalString;
+                            sourcePartURI, rel.TargetUri, true).ToString();
                 }
                 relElem.SetAttribute(PackageRelationship.TARGET_ATTRIBUTE_NAME,
                         targetValue);

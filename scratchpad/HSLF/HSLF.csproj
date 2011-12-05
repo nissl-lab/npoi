@@ -55,6 +55,7 @@
     <Compile Include="Exceptions\InvalidRecordFormatException.cs" />
     <Compile Include="Exceptions\OldPowerPointFormatException.cs" />
     <Compile Include="Model\Comment.cs" />
+    <Compile Include="Model\MasterSheet.cs" />
     <Compile Include="Model\Shape.cs" />
     <Compile Include="Model\TextProperties\AlignmentTextProp.cs" />
     <Compile Include="Model\TextProperties\BitMaskTextProp.cs" />

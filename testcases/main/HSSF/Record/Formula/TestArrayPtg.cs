@@ -64,7 +64,7 @@ namespace TestCases.HSSF.Record.Formula
             Assert.AreEqual(3, ptg.ColumnCount);
             Assert.AreEqual(2, ptg.RowCount);
             object[][] values = ptg.GetTokenArrayValues();
-            Assert.AreEqual(6, values.Length);
+            Assert.AreEqual(2, values.Length);
 
 
             Assert.AreEqual(true, values[0][0]);

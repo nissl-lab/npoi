@@ -35,7 +35,8 @@ namespace NPOI.OpenXml4Net.Util
 
         public Stream GetInputStream(ZipEntry entry)
         {
-            return zipArchive.GetInputStream(entry);
+            Stream s = zipArchive.GetInputStream(entry);
+            return s;
         }
     }
 }

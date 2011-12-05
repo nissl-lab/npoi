@@ -4,6 +4,7 @@ namespace NPOI.Util
     using System;
     using System.Configuration;
     using System.IO;
+    using System.Threading;
 
     public class TempFile
     {
@@ -23,7 +24,7 @@ namespace NPOI.Util
             //{
             //    dir = Directory.CreateDirectory(Path.GetTempPath()+@"\poifiles");               
             //}
-            Random rnd = new Random((int)DateTime.Now.Ticks);
+            Random rnd = new Random(DateTime.Now.Millisecond);
             string file=prefix + rnd.Next() + suffix;
             FileStream newFile = File.Create(file);
             newFile.Close();
@@ -37,7 +38,8 @@ namespace NPOI.Util
             //{
             //    dir = Directory.CreateDirectory(Path.GetTempPath() + @"\poifiles");
             //}
-            Random rnd = new Random((int)DateTime.Now.Ticks);
+            Random rnd = new Random(DateTime.Now.Millisecond);
+            Thread.Sleep(10);
             return prefix + rnd.Next() + suffix;
             //return dir.Name + "\\" + prefix + rnd.Next() + suffix;
         }

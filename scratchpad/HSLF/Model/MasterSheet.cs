@@ -15,45 +15,51 @@
    limitations under the License.
 ==================================================================== */
 
-namespace NPOI.HSLF.Model;
+namespace NPOI.HSLF.Model
+{
 
-using NPOI.HSLF.record.SheetContainer;
-using NPOI.HSLF.Model.textproperties.TextProp;
-
-/**
- * The superclass of all master sheets - Slide masters, Notes masters, etc.
- *
- * For now it's empty. When we understand more about masters in ppt we will add the common functionality here.
- *
- * @author Yegor Kozlov
- */
-public abstract class MasterSheet : Sheet {
-    public MasterSheet(SheetContainer Container, int sheetNo){
-        base(Container, sheetNo);
-    }
+    using NPOI.HSLF.Record;
+    using NPOI.HSLF.Model;
+    using NPOI.HSLF.Model.TextProperties;
 
     /**
-     * Pickup a style attribute from the master.
-     * This is the "workhorse" which returns the default style attrubutes.
-     */
-    public abstract TextProp GetStyleAttribute(int txtype, int level, String name, bool IsCharacter) ;
-
-
-    /**
-     * Checks if the shape is a placeholder.
-     * (placeholders aren't normal shapes, they are visible only in the Edit Master mode)
+     * The superclass of all master sheets - Slide masters, Notes masters, etc.
      *
+     * For now it's empty. When we understand more about masters in ppt we will add the common functionality here.
      *
-     * @return true if the shape is a placeholder
+     * @author Yegor Kozlov
      */
-    public static bool IsPlaceholder(Shape shape){
-        if(!(shape is TextShape)) return false;
+    public abstract class MasterSheet : Sheet
+    {
+        public MasterSheet(SheetContainer Container, int sheetNo)
+            : base(Container, sheetNo)
+        {
 
-        TextShape tx = (TextShape)shape;
-        return tx.GetPlaceholderAtom() != null;
+        }
+
+        /**
+         * Pickup a style attribute from the master.
+         * This is the "workhorse" which returns the default style attrubutes.
+         */
+        public abstract TextProp GetStyleAttribute(int txtype, int level, String name, bool IsCharacter);
+
+
+        /**
+         * Checks if the shape is a placeholder.
+         * (placeholders aren't normal shapes, they are visible only in the Edit Master mode)
+         *
+         *
+         * @return true if the shape is a placeholder
+         */
+        public static bool IsPlaceholder(Shape shape)
+        {
+            if (!(shape is TextShape)) return false;
+
+            TextShape tx = (TextShape)shape;
+            return tx.GetPlaceholderAtom() != null;
+        }
     }
 }
-
 
 
 

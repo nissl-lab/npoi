@@ -237,7 +237,7 @@ namespace NPOI.OpenXml4Net.OPC
             }
 
             // Split the URI into several part and analyze each
-            String[] segments = partUri.ToString().Split('/');
+            String[] segments = partUri.OriginalString.Split('/');
             if (segments.Length <= 1 || !segments[0].Equals(""))
                 throw new InvalidFormatException(
                         "A part name shall not have empty segments [M1.3]: "
@@ -458,8 +458,8 @@ namespace NPOI.OpenXml4Net.OPC
         {
             if (otherPartName == null||thisPartName==null)
                 return -1;
-            return thisPartName.partNameURI.ToString().ToLower().CompareTo(
-                    otherPartName.partNameURI.ToString().ToLower());
+            return thisPartName.partNameURI.OriginalString.ToLower().CompareTo(
+                    otherPartName.partNameURI.OriginalString.ToLower());
         }
 
         public int CompareTo(object o)
@@ -467,8 +467,8 @@ namespace NPOI.OpenXml4Net.OPC
             if (o == null)
                 return -1;
             PackagePartName otherPartName = (PackagePartName)o;
-            return this.partNameURI.ToString().ToLower().CompareTo(
-            otherPartName.partNameURI.ToString().ToLower());
+            return this.partNameURI.OriginalString.ToLower().CompareTo(
+            otherPartName.partNameURI.OriginalString.ToLower());
         }
 
         /**
@@ -501,7 +501,7 @@ namespace NPOI.OpenXml4Net.OPC
         {
             get
             {
-                return this.partNameURI.ToString();
+                return this.partNameURI.OriginalString;
             }
         }
 
@@ -517,15 +517,15 @@ namespace NPOI.OpenXml4Net.OPC
             if (otherPartName == null
                     || !(otherPartName is PackagePartName))
                 return false;
-            return this.partNameURI.ToString().ToLower().Equals(
-                    ((PackagePartName)otherPartName).partNameURI.ToString()
+            return this.partNameURI.OriginalString.ToLower().Equals(
+                    ((PackagePartName)otherPartName).partNameURI.OriginalString
                             .ToLower());
         }
 
 
         public override int GetHashCode()
         {
-            return this.partNameURI.ToString().ToLower().GetHashCode();
+            return this.partNameURI.OriginalString.ToLower().GetHashCode();
         }
 
 

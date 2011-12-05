@@ -297,6 +297,7 @@ public abstract class OPCPackage:RelationshipSource {
 		if (this.packageAccess == PackageAccess.READ) {
 			logger
 					.Log(POILogger.WARN, "The close() method is intended to SAVE a package. This package is open in READ ONLY mode, use the revert() method instead !");
+            Revert();
 			return;
 		}
 
@@ -1281,7 +1282,7 @@ get{
 	 * 
 	 * @return <b>true</b> if the package is valid else <b>false</b>
 	 */
-	public bool validatePackage(OPCPackage pkg){
+	public bool ValidatePackage(OPCPackage pkg){
 		throw new InvalidOperationException("Not implemented yet !!!");
 	}
 
@@ -1300,11 +1301,8 @@ get{
 
 		this.ThrowExceptionIfReadOnly();
 		FileStream fos = null;
-		try {
-            fos = new FileStream(path, FileMode.Open);
-		} catch (FileNotFoundException e) {
-			throw;
-		}
+        fos = new FileStream(path, FileMode.OpenOrCreate);
+
 		this.Save(fos);
 	}
 

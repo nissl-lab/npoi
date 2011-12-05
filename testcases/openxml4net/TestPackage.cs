@@ -314,7 +314,7 @@ namespace TestCases.OPC
         {
             String originalFile = OpenXml4NetTestDataSamples.GetSampleFileName("TestPackageCommon.docx");
 
-            FileStream finp = new FileStream(originalFile, FileMode.Open);
+            FileStream finp = new FileStream(originalFile, FileMode.Open,FileAccess.Read);
 
             OPCPackage p = OPCPackage.Open(finp);
 
@@ -461,7 +461,7 @@ namespace TestCases.OPC
             FileHelper.CopyFile(origFile.FullName, tempFile);
 
             // Open the temp file
-            OPCPackage p = OPCPackage.Open(tempFile.ToString(), PackageAccess.READ_WRITE);
+            OPCPackage p = OPCPackage.Open(tempFile, PackageAccess.READ_WRITE);
             // Close it
             p.Close();
             // Delete it
@@ -469,7 +469,7 @@ namespace TestCases.OPC
 
             // Reset
             FileHelper.CopyFile(origFile.FullName, tempFile);
-            p = OPCPackage.Open(tempFile.ToString(), PackageAccess.READ_WRITE);
+            p = OPCPackage.Open(tempFile, PackageAccess.READ_WRITE);
 
             // Save it to the same file - not allowed
             try
@@ -477,7 +477,7 @@ namespace TestCases.OPC
                 p.Save(tempFile);
                 Assert.Fail("You shouldn't be able to call save(File) to overwrite the current file");
             }
-            catch (InvalidOperationException e) { }
+            catch (IOException) { }
 
             p.Close();
             // Delete it
@@ -486,7 +486,7 @@ namespace TestCases.OPC
 
             // Open it read only, then close and delete - allowed
             FileHelper.CopyFile(origFile.FullName, tempFile);
-            p = OPCPackage.Open(tempFile.ToString(), PackageAccess.READ);
+            p = OPCPackage.Open(tempFile, PackageAccess.READ);
             p.Close();
             File.Delete(tempFile);
         }
@@ -503,7 +503,7 @@ namespace TestCases.OPC
             FileHelper.CopyFile(origFile.FullName, tempFile);
 
             // Open the temp file
-            OPCPackage p = OPCPackage.Open(tempFile.ToString(), PackageAccess.READ_WRITE);
+            OPCPackage p = OPCPackage.Open(tempFile, PackageAccess.READ_WRITE);
 
             // Save it to a different file
             p.Save(tempFile2);

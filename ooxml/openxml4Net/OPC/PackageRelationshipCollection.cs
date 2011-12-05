@@ -336,7 +336,7 @@ namespace NPOI.OpenXml4Net.OPC
 				// TargetMode (default value "Internal")
 				string targetModeAttr = iterator.Current.GetAttribute(PackageRelationship.TARGET_MODE_ATTRIBUTE_NAME,xpathnav.NamespaceURI);
 				TargetMode targetMode = TargetMode.INTERNAL;
-				if (targetModeAttr != null) {
+				if (targetModeAttr != string.Empty) {
 					targetMode = targetModeAttr.ToLower()
 							.Equals("internal") ? TargetMode.INTERNAL
 							: TargetMode.EXTERNAL;
@@ -344,20 +344,13 @@ namespace NPOI.OpenXml4Net.OPC
 
 				// Target converted in URI
 				Uri target;
-				String value = "";
+                String value = string.Empty;
 				try {
                     value = iterator.Current.GetAttribute(
 							PackageRelationship.TARGET_ATTRIBUTE_NAME,xpathnav.NamespaceURI);
 
-					if (value.IndexOf("\\") != -1) {
-                        logger.Log(POILogger.INFO, "target contains \\ therefore not a valid URI"
-                                        + value + " replaced by /");
-						value = value.Replace("\\\\", "/");
-						// word can save external relationship with a \ instead
-						// of /
-					}
-
-					target = new Uri(value,UriKind.RelativeOrAbsolute);
+                    
+                    target = PackagingURIHelper.ToUri(value);
 				} catch (UriFormatException e) {
                     logger.Log(POILogger.ERROR, "Cannot convert " + value
                             + " in a valid relationship URI-> ignored", e);

@@ -273,8 +273,8 @@ namespace NPOI.OpenXml4Net.OPC
         public static Uri RelativizeUri(Uri sourceURI, Uri targetURI, bool msCompatible)
         {
             StringBuilder retVal = new StringBuilder();
-            String[] segmentsSource = sourceURI.OriginalString.Split(new char[] { '/' });
-            String[] segmentsTarget = targetURI.OriginalString.Split(new char[] { '/' });
+            String[] segmentsSource = sourceURI.ToString().Split(new char[] { '/' });
+            String[] segmentsTarget = targetURI.ToString().Split(new char[] { '/' });
 
             // If the source Uri is empty
             if (segmentsSource.Length == 0)
@@ -294,7 +294,7 @@ namespace NPOI.OpenXml4Net.OPC
             //  form must actually be an absolute Uri
             if (sourceURI.ToString().Equals("/"))
             {
-                String path = targetURI.OriginalString;
+                String path = targetURI.ToString();
                 if (msCompatible && path.Length > 0 && path[0] == '/')
                 {
                     try
@@ -453,13 +453,14 @@ namespace NPOI.OpenXml4Net.OPC
                 throw new ArgumentException("targetUri invalid - "
                         + targetUri);
             }
-
             string path;
             if(sourcePartUri.OriginalString=="/")
                 path="/";
             else
-                path = Path.GetDirectoryName(sourcePartUri.ToString()).Replace("\\", "/") + "/";
-            return new Uri(Path.Combine(path, targetUri.ToString()), UriKind.RelativeOrAbsolute);
+                path = Path.GetDirectoryName(sourcePartUri.OriginalString).Replace("\\", "/");
+
+            path = Path.Combine(path, targetUri.OriginalString).Replace("\\", "/");
+            return new Uri(path, UriKind.RelativeOrAbsolute);
         }
 
         /**
@@ -544,7 +545,7 @@ namespace NPOI.OpenXml4Net.OPC
             Uri partNameURI;
             try
             {
-                partNameURI = new Uri(partName,UriKind.Relative);
+              partNameURI = new Uri(partName,UriKind.Relative);
             }
             catch (UriFormatException e)
             {
@@ -653,7 +654,7 @@ namespace NPOI.OpenXml4Net.OPC
         public static String DecodeURI(Uri uri)
         {
             StringBuilder retVal = new StringBuilder();
-            String uriStr = uri.ToString();
+            String uriStr = uri.OriginalString;
             char c;
             for (int i = 0; i < uriStr.Length; ++i)
             {

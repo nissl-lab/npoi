@@ -221,7 +221,7 @@ namespace NPOI.SS.Util
 
         public override object ParseObject(string source, int pos)
         {
-            return DateTime.Parse(source.Substring(pos));
+            return DateTime.Parse(source.Substring(pos)).ToUniversalTime();
         }
     }
 }

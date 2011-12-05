@@ -380,7 +380,7 @@ namespace NPOI.HSLF.Model
             return _clientRecords;
         }
 
-        protected void updateClientData()
+        protected void UpdateClientData()
         {
             if (_clientData != null && _clientRecords != null)
             {

@@ -24,6 +24,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NPOI.SS.Util;
 using System;
 using NPOI.OpenXml4Net.OPC.Internal;
+using System.Globalization;
 namespace TestCases.OPC
 {
 
@@ -59,7 +60,7 @@ namespace TestCases.OPC
             OPCPackage p = OPCPackage.Open(inputPath, PackageAccess.READ_WRITE);
 
             SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
-            DateTime dateToInsert = DateTime.Parse("2007-05-12T08:00:00Z");
+            DateTime dateToInsert = DateTime.Parse("2007-05-12T08:00:00Z").ToUniversalTime();
 
             PackageProperties props = p.GetPackageProperties();
             props.SetCategoryProperty("MyCategory");
@@ -94,7 +95,7 @@ namespace TestCases.OPC
         private void CompareProperties(OPCPackage p)
         {
             SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
-            DateTime expectedDate = DateTime.Parse("2007-05-12T08:00:00Z");
+            DateTime expectedDate = DateTime.Parse("2007/05/12T08:00:00Z").ToUniversalTime();
 
             // Gets the core properties
             PackageProperties props = p.GetPackageProperties();
@@ -122,7 +123,7 @@ namespace TestCases.OPC
         {
             SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
             String strDate = "2007-05-12T08:00:00Z";
-            DateTime date = DateTime.Parse(strDate);
+            DateTime date = DateTime.Parse(strDate).ToUniversalTime();
 
             OPCPackage pkg = new ZipPackage();
             PackagePropertiesPart props = (PackagePropertiesPart)pkg.GetPackageProperties();
