@@ -12,12 +12,14 @@
     <AssemblyName>NPOI.OpenXml4Net</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>..\..\main\npoi.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>..\..\solution\Lib\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -51,6 +53,7 @@
     <Compile Include="Exceptions\InvalidFormatException.cs" />
     <Compile Include="Exceptions\OpenXML4NetException.cs" />
     <Compile Include="OPC\CertificateEmbeddingOption.cs" />
+    <Compile Include="OPC\CompressionOption.cs" />
     <Compile Include="OPC\Configuration.cs" />
     <Compile Include="OPC\ContentTypes.cs" />
     <Compile Include="OPC\EncryptionOption.cs" />
@@ -119,6 +122,11 @@
     <Compile Include="Util\ZipEntrySource.cs" />
     <Compile Include="Util\ZipFileZipEntrySource.cs" />
     <Compile Include="Util\ZipInputStreamZipEntrySource.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\main\npoi.snk">
+      <Link>npoi.snk</Link>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

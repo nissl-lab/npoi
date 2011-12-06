@@ -44,9 +44,9 @@ namespace TestCases.OpenXml4Net.OPC.Compliance
             OPCPackage pkg = OPCPackage.Create("TODELETEIFEXIST.docx");
             try
             {
-                PackagePartName name = PackagingURIHelper
+                PackagePartName name = PackagingUriHelper
                         .CreatePartName("/word/document.xml");
-                PackagePartName nameDerived = PackagingURIHelper
+                PackagePartName nameDerived = PackagingUriHelper
                         .CreatePartName("/word/document.xml/image1.gif");
                 pkg.CreatePart(name, ContentTypes.XML);
                 pkg.CreatePart(nameDerived, ContentTypes.EXTENSION_GIF);
@@ -96,8 +96,8 @@ namespace TestCases.OpenXml4Net.OPC.Compliance
             PackagePartName name2 = null;
             try
             {
-                name1 = PackagingURIHelper.CreatePartName("/word/document.xml");
-                name2 = PackagingURIHelper.CreatePartName("/word/document.xml");
+                name1 = PackagingUriHelper.CreatePartName("/word/document.xml");
+                name2 = PackagingUriHelper.CreatePartName("/word/document.xml");
             }
             catch (InvalidFormatException e)
             {
@@ -127,7 +127,7 @@ namespace TestCases.OpenXml4Net.OPC.Compliance
             PackagePartName partName = null;
             try
             {
-                partName = PackagingURIHelper.CreatePartName("/word/document.xml");
+                partName = PackagingUriHelper.CreatePartName("/word/document.xml");
             }
             catch (InvalidFormatException e)
             {
@@ -160,7 +160,7 @@ namespace TestCases.OpenXml4Net.OPC.Compliance
             PackagePartName name1 = null;
             try
             {
-                name1 = PackagingURIHelper
+                name1 = PackagingUriHelper
                         .CreatePartName("/test/_rels/document.xml.rels");
             }
             catch (InvalidFormatException e)
@@ -170,7 +170,7 @@ namespace TestCases.OpenXml4Net.OPC.Compliance
 
             try
             {
-                pkg.AddRelationship(name1, TargetMode.INTERNAL,
+                pkg.AddRelationship(name1, TargetMode.Internal,
                         PackageRelationshipTypes.CORE_DOCUMENT);
             }
             catch (InvalidOperationException e)

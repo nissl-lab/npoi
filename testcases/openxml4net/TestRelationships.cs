@@ -55,7 +55,7 @@ namespace TestCases.OPC
             foreach (String relId in relIds) {
                 PackageRelationship rel = corePart.GetRelationship(relId);
                 Assert.IsNotNull(rel);
-                PackagePartName relName = PackagingURIHelper.CreatePartName(rel.TargetUri);
+                PackagePartName relName = PackagingUriHelper.CreatePartName(rel.TargetUri);
                 PackagePart sheetPart = pkg.GetPart(relName);
                 Assert.AreEqual(1, sheetPart.Relationships.Size, "Number of relationships1 for " + sheetPart.PartName);
             }
@@ -70,7 +70,7 @@ namespace TestCases.OPC
             Stream is1 = OpenXml4NetTestDataSamples.OpenSampleStream("ExcelWithHyperlinks.xlsx");
             OPCPackage pkg = OPCPackage.Open(is1);
             PackagePart sheet = pkg.GetPart(
-        		    PackagingURIHelper.CreatePartName(SHEET_WITH_COMMENTS));
+        		    PackagingUriHelper.CreatePartName(SHEET_WITH_COMMENTS));
             Assert.IsNotNull(sheet);
             
             Assert.IsTrue(sheet.HasRelationships);
@@ -112,7 +112,7 @@ namespace TestCases.OPC
             Stream is1 = OpenXml4NetTestDataSamples.OpenSampleStream("ExcelWithHyperlinks.xlsx");
             OPCPackage pkg = OPCPackage.Open(is1);
 	        PackagePart sheet = pkg.GetPart(
-	    		    PackagingURIHelper.CreatePartName(SHEET_WITH_COMMENTS));
+	    		    PackagingUriHelper.CreatePartName(SHEET_WITH_COMMENTS));
 	        Assert.IsNotNull(sheet);
 
 	        // rId1 is url
@@ -147,7 +147,7 @@ namespace TestCases.OPC
     	    String filepath = OpenXml4NetTestDataSamples.GetSampleFileName("ExcelWithHyperlinks.xlsx");
 	        OPCPackage pkg = OPCPackage.Open(filepath, PackageAccess.READ_WRITE);
 	        PackagePart sheet = pkg.GetPart(
-	    		    PackagingURIHelper.CreatePartName(SHEET_WITH_COMMENTS));
+	    		    PackagingUriHelper.CreatePartName(SHEET_WITH_COMMENTS));
 	        Assert.IsNotNull(sheet);
     	    
 	        Assert.AreEqual(3, sheet.GetRelationshipsByType(HYPERLINK_REL_TYPE).Size);
@@ -193,7 +193,7 @@ namespace TestCases.OPC
     	    
 	        // Check again
 	        sheet = pkg.GetPart(
-	    		    PackagingURIHelper.CreatePartName(SHEET_WITH_COMMENTS));
+	    		    PackagingUriHelper.CreatePartName(SHEET_WITH_COMMENTS));
     	    
 	        Assert.AreEqual(6, sheet.GetRelationshipsByType(HYPERLINK_REL_TYPE).Size);
     	    
@@ -215,14 +215,14 @@ namespace TestCases.OPC
     	    OPCPackage pkg = OPCPackage.Create(baos);
         	
     	    PackagePart partA =
-    		    pkg.CreatePart(PackagingURIHelper.CreatePartName("/partA"), "text/plain");
+    		    pkg.CreatePart(PackagingUriHelper.CreatePartName("/partA"), "text/plain");
     	    PackagePart partB =
-    		    pkg.CreatePart(PackagingURIHelper.CreatePartName("/partB"), "image/png");
+    		    pkg.CreatePart(PackagingUriHelper.CreatePartName("/partB"), "image/png");
     	    Assert.IsNotNull(partA);
     	    Assert.IsNotNull(partB);
         	
     	    // Internal
-    	    partA.AddRelationship(partB.PartName, TargetMode.INTERNAL, "http://example/Rel");
+    	    partA.AddRelationship(partB.PartName, TargetMode.Internal, "http://example/Rel");
         	
     	    // External
     	    partA.AddExternalRelationship("http://poi.apache.org/", "http://example/poi");
@@ -241,8 +241,8 @@ namespace TestCases.OPC
     	    MemoryStream bais = new MemoryStream(baos.ToArray());
     	    pkg = OPCPackage.Open(bais);
         	
-    	    partA = pkg.GetPart(PackagingURIHelper.CreatePartName("/partA"));
-    	    partB = pkg.GetPart(PackagingURIHelper.CreatePartName("/partB"));
+    	    partA = pkg.GetPart(PackagingUriHelper.CreatePartName("/partA"));
+    	    partB = pkg.GetPart(PackagingUriHelper.CreatePartName("/partB"));
         	
         	
     	    // Check the relations
@@ -279,7 +279,7 @@ namespace TestCases.OPC
 
         public void Assert_50154(OPCPackage pkg) {
             Uri drawingUri = new Uri("/xl/drawings/drawing1.xml",UriKind.Relative);
-            PackagePart drawingPart = pkg.GetPart(PackagingURIHelper.CreatePartName(drawingUri));
+            PackagePart drawingPart = pkg.GetPart(PackagingUriHelper.CreatePartName(drawingUri));
             PackageRelationshipCollection drawingRels = drawingPart.Relationships;
 
             Assert.AreEqual(6, drawingRels.Size);
@@ -292,11 +292,11 @@ namespace TestCases.OPC
             PackageRelationship rId1 = drawingPart.GetRelationship("rId1");
             Uri parent = drawingPart.PartName.URI;
             Uri rel1 = new Uri(Path.Combine(parent.ToString(),rId1.TargetUri.ToString()),UriKind.Relative);
-            Uri rel11 = PackagingURIHelper.RelativizeUri(drawingPart.PartName.URI, rId1.TargetUri);
+            Uri rel11 = PackagingUriHelper.RelativizeUri(drawingPart.PartName.URI, rId1.TargetUri);
             Assert.AreEqual("#'Another Sheet'!A1", HttpUtility.UrlDecode(rel1.ToString().Split(new char[]{'/'})[3]));
 
             PackageRelationship rId2 = drawingPart.GetRelationship("rId2");
-            Uri rel2 = PackagingURIHelper.RelativizeUri(drawingPart.PartName.URI, rId2.TargetUri);
+            Uri rel2 = PackagingUriHelper.RelativizeUri(drawingPart.PartName.URI, rId2.TargetUri);
             Assert.AreEqual("../media/image1.png", rel2.OriginalString);
 
             PackageRelationship rId3 = drawingPart.GetRelationship("rId3");
@@ -327,11 +327,11 @@ namespace TestCases.OPC
     	OPCPackage pkg = OPCPackage.Create(baos);
 
     	PackagePart partA =
-    		pkg.CreatePart(PackagingURIHelper.CreatePartName("/partA"), "text/plain");
+    		pkg.CreatePart(PackagingUriHelper.CreatePartName("/partA"), "text/plain");
     	Assert.IsNotNull(partA);
 
     	// reference itself
-    	PackageRelationship rel1 = partA.AddRelationship(partA.PartName, TargetMode.INTERNAL, "partA");
+    	PackageRelationship rel1 = partA.AddRelationship(partA.PartName, TargetMode.Internal, "partA");
 
     	
     	// Save, and re-load
@@ -339,7 +339,7 @@ namespace TestCases.OPC
     	MemoryStream bais = new MemoryStream(baos.ToArray());
     	pkg = OPCPackage.Open(bais);
 
-    	partA = pkg.GetPart(PackagingURIHelper.CreatePartName("/partA"));
+    	partA = pkg.GetPart(PackagingUriHelper.CreatePartName("/partA"));
 
 
     	// Check the relations

@@ -177,7 +177,7 @@ namespace NPOI.OpenXml4Net.OPC
                 throw new ArgumentException("Invalid target - " + e);
             }
 
-            return relationships.AddRelationship(targetURI, TargetMode.EXTERNAL,
+            return relationships.AddRelationship(targetURI, TargetMode.External,
                     relationshipType, id);
         }
 
@@ -324,7 +324,7 @@ namespace NPOI.OpenXml4Net.OPC
             // Try to retrieve the target part
 
             if (this.IsRelationshipPart
-                    || PackagingURIHelper.IsRelationshipPartURI(targetURI))
+                    || PackagingUriHelper.IsRelationshipPartURI(targetURI))
             {
                 throw new InvalidOperationException(
                         "Rule M1.25: The Relationships part shall not have relationships to any other part.");
@@ -478,7 +478,18 @@ namespace NPOI.OpenXml4Net.OPC
             }
             return false;
         }
-
+        public Stream GetStream(FileMode mode)
+        {
+            return this.GetStream(mode, FileAccess.Write);
+        }
+        public Stream GetStream(FileMode mode, FileAccess access)
+        {
+            if (mode == FileMode.Create && access == FileAccess.Write)
+            {
+                return this.GetOutputStream();
+            }
+            return this.GetInputStream();
+        }
         /**
          * Get the input stream of this part to read its content.
          * 

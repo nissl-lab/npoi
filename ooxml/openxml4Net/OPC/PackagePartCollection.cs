@@ -34,12 +34,12 @@ namespace NPOI.OpenXml4Net.OPC
         public PackagePart Put(PackagePartName partName, PackagePart part)
         {
             String[] segments = partName.URI.OriginalString.Split(
-                    PackagingURIHelper.FORWARD_SLASH_CHAR);
+                    PackagingUriHelper.FORWARD_SLASH_CHAR);
             StringBuilder concatSeg = new StringBuilder();
             foreach (String seg in segments)
             {
                 if (!seg.Equals(""))
-                    concatSeg.Append(PackagingURIHelper.FORWARD_SLASH_CHAR);
+                    concatSeg.Append(PackagingUriHelper.FORWARD_SLASH_CHAR);
                 concatSeg.Append(seg);
                 if (this.registerPartNameStr.Contains(concatSeg.ToString()))
                 {

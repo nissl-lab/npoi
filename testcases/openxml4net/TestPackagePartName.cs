@@ -29,8 +29,8 @@ namespace TestCases.OPC
         [TestMethod]
         public void TestGetExtension()
         {
-            PackagePartName name1 = PackagingURIHelper.CreatePartName("/doc/props/document.xml");
-            PackagePartName name2 = PackagingURIHelper.CreatePartName("/root/document");
+            PackagePartName name1 = PackagingUriHelper.CreatePartName("/doc/props/document.xml");
+            PackagePartName name2 = PackagingUriHelper.CreatePartName("/root/document");
             Assert.AreEqual("xml", name1.Extension);
             Assert.AreEqual("", name2.Extension);
         }

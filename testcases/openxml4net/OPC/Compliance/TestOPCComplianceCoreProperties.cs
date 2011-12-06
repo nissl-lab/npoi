@@ -119,7 +119,7 @@ namespace TestCases.OpenXml4Net.OPC.Compliance
             Uri partUri = CreateURI("/docProps/core2.xml");
             try
             {
-                pkg.AddRelationship(PackagingURIHelper.CreatePartName(partUri), TargetMode.INTERNAL,
+                pkg.AddRelationship(PackagingUriHelper.CreatePartName(partUri), TargetMode.Internal,
                         PackageRelationshipTypes.CORE_PROPERTIES);
                 Assert.Fail("expected OPC compliance exception was not thrown");
             }
@@ -149,7 +149,7 @@ namespace TestCases.OpenXml4Net.OPC.Compliance
             Uri partUri = CreateURI("/docProps/core2.xml");
             try
             {
-                pkg.CreatePart(PackagingURIHelper.CreatePartName(partUri),
+                pkg.CreatePart(PackagingUriHelper.CreatePartName(partUri),
                         ContentTypes.CORE_PROPERTIES_PART);
                 Assert.Fail("expected OPC compliance exception was not thrown");
             }

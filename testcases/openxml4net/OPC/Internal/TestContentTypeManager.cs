@@ -68,10 +68,10 @@ namespace TestCases.OpenXml4Net.OPC.Internal
         {
             ContentTypeManager ctm = new ZipContentTypeManager(null, null);
 
-            PackagePartName name1 = PackagingURIHelper.CreatePartName("/foo/foo.XML");
-            PackagePartName name2 = PackagingURIHelper.CreatePartName("/foo/foo2.xml");
-            PackagePartName name3 = PackagingURIHelper.CreatePartName("/foo/doc.rels");
-            PackagePartName name4 = PackagingURIHelper.CreatePartName("/foo/doc.RELS");
+            PackagePartName name1 = PackagingUriHelper.CreatePartName("/foo/foo.XML");
+            PackagePartName name2 = PackagingUriHelper.CreatePartName("/foo/foo2.xml");
+            PackagePartName name3 = PackagingUriHelper.CreatePartName("/foo/doc.rels");
+            PackagePartName name4 = PackagingUriHelper.CreatePartName("/foo/doc.RELS");
 
             // Add content types
             ctm.AddContentType(name1, "foo-type1");
@@ -92,10 +92,10 @@ namespace TestCases.OpenXml4Net.OPC.Internal
         {
             ContentTypeManager ctm = new ZipContentTypeManager(null, null);
 
-            PackagePartName name1 = PackagingURIHelper.CreatePartName("/foo/foo.xml");
-            PackagePartName name2 = PackagingURIHelper.CreatePartName("/foo/foo2.xml");
-            PackagePartName name3 = PackagingURIHelper.CreatePartName("/foo/doc.rels");
-            PackagePartName name4 = PackagingURIHelper.CreatePartName("/foo/doc.RELS");
+            PackagePartName name1 = PackagingUriHelper.CreatePartName("/foo/foo.xml");
+            PackagePartName name2 = PackagingUriHelper.CreatePartName("/foo/foo2.xml");
+            PackagePartName name3 = PackagingUriHelper.CreatePartName("/foo/doc.rels");
+            PackagePartName name4 = PackagingUriHelper.CreatePartName("/foo/doc.RELS");
 
             // Add content types
             ctm.AddContentType(name1, "foo-type1");

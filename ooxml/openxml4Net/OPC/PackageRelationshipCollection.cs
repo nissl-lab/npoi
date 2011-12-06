@@ -169,11 +169,11 @@ namespace NPOI.OpenXml4Net.OPC
 	{
 		PackagePartName partName;
 		if (part == null) {
-			partName = PackagingURIHelper.PACKAGE_ROOT_PART_NAME;
+			partName = PackagingUriHelper.PACKAGE_ROOT_PART_NAME;
 		} else {
 			partName = part.PartName;
 		}
-		return PackagingURIHelper.GetRelationshipPartName(partName);
+		return PackagingUriHelper.GetRelationshipPartName(partName);
 	}
 
 	/**
@@ -335,11 +335,11 @@ namespace NPOI.OpenXml4Net.OPC
 
 				// TargetMode (default value "Internal")
 				string targetModeAttr = iterator.Current.GetAttribute(PackageRelationship.TARGET_MODE_ATTRIBUTE_NAME,xpathnav.NamespaceURI);
-				TargetMode targetMode = TargetMode.INTERNAL;
+				TargetMode targetMode = TargetMode.Internal;
 				if (targetModeAttr != string.Empty) {
 					targetMode = targetModeAttr.ToLower()
-							.Equals("internal") ? TargetMode.INTERNAL
-							: TargetMode.EXTERNAL;
+							.Equals("internal") ? TargetMode.Internal
+							: TargetMode.External;
 				}
 
 				// Target converted in URI
@@ -350,7 +350,7 @@ namespace NPOI.OpenXml4Net.OPC
 							PackageRelationship.TARGET_ATTRIBUTE_NAME,xpathnav.NamespaceURI);
 
                     
-                    target = PackagingURIHelper.ToUri(value);
+                    target = PackagingUriHelper.ToUri(value);
 				} catch (UriFormatException e) {
                     logger.Log(POILogger.ERROR, "Cannot convert " + value
                             + " in a valid relationship URI-> ignored", e);

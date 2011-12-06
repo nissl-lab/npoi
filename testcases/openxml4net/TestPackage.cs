@@ -72,18 +72,18 @@ namespace TestCases.OPC
             Assert.AreEqual(
                     "application/xml",
                     ctm.GetContentType(
-                            PackagingURIHelper.CreatePartName("/foo.xml")
+                            PackagingUriHelper.CreatePartName("/foo.xml")
                     )
             );
             Assert.AreEqual(
                     ContentTypes.RELATIONSHIPS_PART,
                     ctm.GetContentType(
-                            PackagingURIHelper.CreatePartName("/foo.rels")
+                            PackagingUriHelper.CreatePartName("/foo.rels")
                     )
             );
             Assert.IsNull(
                     ctm.GetContentType(
-                            PackagingURIHelper.CreatePartName("/foo.txt")
+                            PackagingUriHelper.CreatePartName("/foo.txt")
                     )
             );
         }
@@ -324,7 +324,7 @@ namespace TestCases.OPC
 
             // Check it has the usual bits
             Assert.IsTrue(p.HasRelationships);
-            Assert.IsTrue(p.ContainPart(PackagingURIHelper.CreatePartName("/_rels/.rels")));
+            Assert.IsTrue(p.ContainPart(PackagingUriHelper.CreatePartName("/_rels/.rels")));
         }
 
         /**
@@ -338,7 +338,7 @@ namespace TestCases.OPC
             FileInfo tempFile = OpenXml4NetTestDataSamples.GetOutputFile("TestPackageRemovePartRecursiveTMP.docx");
 
             OPCPackage p = OPCPackage.Open(originalFile, PackageAccess.READ_WRITE);
-            p.RemovePartRecursive(PackagingURIHelper.CreatePartName(new Uri(
+            p.RemovePartRecursive(PackagingUriHelper.CreatePartName(new Uri(
                     "/word/document.xml", UriKind.Relative)));
             p.Save(tempFile.FullName);
 
@@ -357,32 +357,32 @@ namespace TestCases.OPC
 
             // Expected values
             expectedValues = new Dictionary<PackagePartName, String>();
-            expectedValues.Add(PackagingURIHelper.CreatePartName("/_rels/.rels"),
+            expectedValues.Add(PackagingUriHelper.CreatePartName("/_rels/.rels"),
                     "application/vnd.openxmlformats-package.relationships+xml");
 
             expectedValues
-                    .Add(PackagingURIHelper.CreatePartName("/docProps/app.xml"),
+                    .Add(PackagingUriHelper.CreatePartName("/docProps/app.xml"),
                             "application/vnd.openxmlformats-officedocument.extended-properties+xml");
-            expectedValues.Add(PackagingURIHelper
+            expectedValues.Add(PackagingUriHelper
                     .CreatePartName("/docProps/core.xml"),
                     "application/vnd.openxmlformats-package.core-properties+xml");
             expectedValues
-                    .Add(PackagingURIHelper.CreatePartName("/word/fontTable.xml"),
+                    .Add(PackagingUriHelper.CreatePartName("/word/fontTable.xml"),
                             "application/vnd.openxmlformats-officedocument.wordprocessingml.fontTable+xml");
-            expectedValues.Add(PackagingURIHelper
+            expectedValues.Add(PackagingUriHelper
                     .CreatePartName("/word/media/image1.gif"), "image/gif");
             expectedValues
-                    .Add(PackagingURIHelper.CreatePartName("/word/settings.xml"),
+                    .Add(PackagingUriHelper.CreatePartName("/word/settings.xml"),
                             "application/vnd.openxmlformats-officedocument.wordprocessingml.settings+xml");
             expectedValues
-                    .Add(PackagingURIHelper.CreatePartName("/word/styles.xml"),
+                    .Add(PackagingUriHelper.CreatePartName("/word/styles.xml"),
                             "application/vnd.openxmlformats-officedocument.wordprocessingml.styles+xml");
-            expectedValues.Add(PackagingURIHelper
+            expectedValues.Add(PackagingUriHelper
                     .CreatePartName("/word/theme/theme1.xml"),
                     "application/vnd.openxmlformats-officedocument.theme+xml");
             expectedValues
                     .Add(
-                            PackagingURIHelper
+                            PackagingUriHelper
                                     .CreatePartName("/word/webSettings.xml"),
                             "application/vnd.openxmlformats-officedocument.wordprocessingml.webSettings+xml");
 
@@ -390,7 +390,7 @@ namespace TestCases.OPC
 
             OPCPackage p = OPCPackage.Open(filepath, PackageAccess.READ_WRITE);
             // Remove the core part
-            p.DeletePart(PackagingURIHelper.CreatePartName("/word/document.xml"));
+            p.DeletePart(PackagingUriHelper.CreatePartName("/word/document.xml"));
 
             foreach (PackagePart part in p.GetParts())
             {
@@ -417,13 +417,13 @@ namespace TestCases.OPC
 
             // Expected values
             expectedValues = new Dictionary<PackagePartName, String>();
-            expectedValues.Add(PackagingURIHelper.CreatePartName("/_rels/.rels"),
+            expectedValues.Add(PackagingUriHelper.CreatePartName("/_rels/.rels"),
                     "application/vnd.openxmlformats-package.relationships+xml");
 
             expectedValues
-                    .Add(PackagingURIHelper.CreatePartName("/docProps/app.xml"),
+                    .Add(PackagingUriHelper.CreatePartName("/docProps/app.xml"),
                             "application/vnd.openxmlformats-officedocument.extended-properties+xml");
-            expectedValues.Add(PackagingURIHelper
+            expectedValues.Add(PackagingUriHelper
                     .CreatePartName("/docProps/core.xml"),
                     "application/vnd.openxmlformats-package.core-properties+xml");
 
@@ -431,7 +431,7 @@ namespace TestCases.OPC
 
             OPCPackage p = OPCPackage.Open(filepath, PackageAccess.READ_WRITE);
             // Remove the core part
-            p.DeletePartRecursive(PackagingURIHelper.CreatePartName("/word/document.xml"));
+            p.DeletePartRecursive(PackagingUriHelper.CreatePartName("/word/document.xml"));
 
             foreach (PackagePart part in p.GetParts())
             {

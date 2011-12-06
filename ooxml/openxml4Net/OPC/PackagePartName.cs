@@ -70,7 +70,7 @@ namespace NPOI.OpenXml4Net.OPC
             }
             else
             {
-                if (!PackagingURIHelper.PACKAGE_ROOT_URI.Equals(uri))
+                if (!PackagingUriHelper.PACKAGE_ROOT_URI.Equals(uri))
                 {
                     throw new OpenXml4NetException(
                             "OCP conformance must be check for ALL part name except special cases : ['/']");
@@ -113,7 +113,7 @@ namespace NPOI.OpenXml4Net.OPC
             }
             else
             {
-                if (!PackagingURIHelper.PACKAGE_ROOT_URI.Equals(partURI))
+                if (!PackagingUriHelper.PACKAGE_ROOT_URI.Equals(partURI))
                 {
                     throw new OpenXml4NetException(
                             "OCP conformance must be check for ALL part name except special cases : ['/']");
@@ -137,8 +137,8 @@ namespace NPOI.OpenXml4Net.OPC
                 throw new ArgumentException("partUri");
 
             return Regex.IsMatch(partUri.OriginalString,
-                    "^.*/" + PackagingURIHelper.RELATIONSHIP_PART_SEGMENT_NAME + "/.*\\"
-                            + PackagingURIHelper.RELATIONSHIP_PART_EXTENSION_NAME
+                    "^.*/" + PackagingUriHelper.RELATIONSHIP_PART_SEGMENT_NAME + "/.*\\"
+                            + PackagingUriHelper.RELATIONSHIP_PART_EXTENSION_NAME
                             + "$");
         }
 
@@ -198,7 +198,7 @@ namespace NPOI.OpenXml4Net.OPC
 
             String uriPath = partURI.OriginalString;
             if (uriPath.Length == 0
-                    || ((uriPath.Length == 1) && (uriPath[0] == PackagingURIHelper.FORWARD_SLASH_CHAR)))
+                    || ((uriPath.Length == 1) && (uriPath[0] == PackagingUriHelper.FORWARD_SLASH_CHAR)))
                 throw new InvalidFormatException(
                         "A part name shall not be empty [M1.1]: "
                                 + partURI.OriginalString);
@@ -404,7 +404,7 @@ namespace NPOI.OpenXml4Net.OPC
         {
             String uriPath = partUri.OriginalString;
             if (uriPath.Length > 0
-                    && uriPath[0] != PackagingURIHelper.FORWARD_SLASH_CHAR)
+                    && uriPath[0] != PackagingUriHelper.FORWARD_SLASH_CHAR)
                 throw new InvalidFormatException(
                         "A part name shall start with a forward slash ('/') character [M1.4]: "
                                 + partUri.OriginalString);
@@ -425,7 +425,7 @@ namespace NPOI.OpenXml4Net.OPC
         {
             String uriPath = partUri.OriginalString;
             if (uriPath.Length > 0
-                    && uriPath[uriPath.Length - 1] == PackagingURIHelper.FORWARD_SLASH_CHAR)
+                    && uriPath[uriPath.Length - 1] == PackagingUriHelper.FORWARD_SLASH_CHAR)
                 throw new InvalidFormatException(
                         "A part name shall not have a forward slash as the last character [M1.5]: "
                                 + partUri.OriginalString);

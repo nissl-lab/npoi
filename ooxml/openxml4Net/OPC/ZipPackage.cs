@@ -191,7 +191,7 @@ namespace NPOI.OpenXml4Net.OPC
                 {
                     return null;
                 }
-                return PackagingURIHelper.CreatePartName(ZipHelper
+                return PackagingUriHelper.CreatePartName(ZipHelper
                         .GetOPCNameFromZipItemName(entry.Name));
             }
             catch (Exception e)
@@ -405,7 +405,7 @@ namespace NPOI.OpenXml4Net.OPC
                             this.packageProperties, zos);
                     // ... and to add its relationship ...
                     this.relationships.AddRelationship(this.packageProperties
-                            .PartName.URI, TargetMode.INTERNAL,
+                            .PartName.URI, TargetMode.Internal,
                             PackageRelationshipTypes.CORE_PROPERTIES, null);
                     // ... and the content if it has not been added yet.
                     if (!this.contentTypeManager
@@ -420,7 +420,7 @@ namespace NPOI.OpenXml4Net.OPC
                 // Save package relationships part.
                 logger.Log(POILogger.DEBUG,"Save package relationships");
                 ZipPartMarshaller.MarshallRelationshipPart(this.Relationships,
-                        PackagingURIHelper.PACKAGE_RELATIONSHIPS_ROOT_PART_NAME,
+                        PackagingUriHelper.PACKAGE_RELATIONSHIPS_ROOT_PART_NAME,
                         zos);
 
                 // Save content type part.

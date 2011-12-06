@@ -12,7 +12,7 @@ namespace NPOI.OpenXml4Net.OPC
      * @author Julien Chable, CDubet, Kim Ung
      * @version 0.1
      */
-    public class PackagingURIHelper
+    public class PackagingUriHelper
     {
 
         /**
@@ -81,7 +81,7 @@ namespace NPOI.OpenXml4Net.OPC
         public static PackagePartName PACKAGE_ROOT_PART_NAME;
 
         /* Static initialization */
-        static PackagingURIHelper()
+        static PackagingUriHelper()
         {
             RELATIONSHIP_PART_SEGMENT_NAME = "_rels";
             RELATIONSHIP_PART_EXTENSION_NAME = ".rels";
@@ -171,7 +171,7 @@ namespace NPOI.OpenXml4Net.OPC
                 while (--num2 >= 0)
                 {
                     char ch1 = path[num2];
-                    if (ch1 == PackagingURIHelper.FORWARD_SLASH_CHAR)
+                    if (ch1 == PackagingUriHelper.FORWARD_SLASH_CHAR)
                         return path.Substring(num2 + 1);
                 }
             }
@@ -203,7 +203,7 @@ namespace NPOI.OpenXml4Net.OPC
                 while (--num2 >= 0)
                 {
                     char ch1 = path[num2];
-                    if (ch1 == PackagingURIHelper.FORWARD_SLASH_CHAR)
+                    if (ch1 == PackagingUriHelper.FORWARD_SLASH_CHAR)
                     {
                         try
                         {
@@ -780,9 +780,9 @@ namespace NPOI.OpenXml4Net.OPC
             if (partName == null)
                 throw new ArgumentException("partName");
 
-            if (PackagingURIHelper.PACKAGE_ROOT_URI.OriginalString == partName.URI
+            if (PackagingUriHelper.PACKAGE_ROOT_URI.OriginalString == partName.URI
                     .OriginalString)
-                return PackagingURIHelper.PACKAGE_RELATIONSHIPS_ROOT_PART_NAME;
+                return PackagingUriHelper.PACKAGE_RELATIONSHIPS_ROOT_PART_NAME;
 
             if (partName.IsRelationshipPartURI())
                 throw new InvalidOperationException("Can't be a relationship part");
@@ -791,10 +791,10 @@ namespace NPOI.OpenXml4Net.OPC
             String filename = GetFilename(partName.URI);
             fullPath = fullPath.Substring(0, fullPath.Length - filename.Length);
             fullPath = Combine(fullPath,
-                    PackagingURIHelper.RELATIONSHIP_PART_SEGMENT_NAME);
+                    PackagingUriHelper.RELATIONSHIP_PART_SEGMENT_NAME);
             fullPath = Combine(fullPath, filename);
             fullPath = fullPath
-                    + PackagingURIHelper.RELATIONSHIP_PART_EXTENSION_NAME;
+                    + PackagingUriHelper.RELATIONSHIP_PART_EXTENSION_NAME;
 
             PackagePartName retPartName;
             try

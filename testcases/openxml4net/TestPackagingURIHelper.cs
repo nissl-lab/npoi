@@ -36,20 +36,20 @@ namespace TestCases.OPC
             Uri Uri4 = new Uri("#'My%20Sheet1'!A1", UriKind.Relative);
 
             // Document to image is down a directory
-            Uri retUri1to2 = PackagingURIHelper.RelativizeUri(Uri1, Uri2);
+            Uri retUri1to2 = PackagingUriHelper.RelativizeUri(Uri1, Uri2);
             Assert.AreEqual("media/image1.gif", retUri1to2.OriginalString);
             // Image to document is up a directory
-            Uri retUri2to1 = PackagingURIHelper.RelativizeUri(Uri2, Uri1);
+            Uri retUri2to1 = PackagingUriHelper.RelativizeUri(Uri2, Uri1);
             Assert.AreEqual("../document.xml", retUri2to1.OriginalString);
 
             // Document and CustomXML parts totally different [Julien C.]
             Uri UriCustomXml = new Uri("/customXml/item1.xml",UriKind.RelativeOrAbsolute);
             
-            Uri UriRes = PackagingURIHelper.RelativizeUri(Uri1, UriCustomXml);
+            Uri UriRes = PackagingUriHelper.RelativizeUri(Uri1, UriCustomXml);
             Assert.AreEqual("../customXml/item1.xml", UriRes.ToString());
 
             // Document to itself is the same place (empty Uri)
-            Uri retUri2 = PackagingURIHelper.RelativizeUri(Uri1, Uri1);
+            Uri retUri2 = PackagingUriHelper.RelativizeUri(Uri1, Uri1);
             // YK: the line below used to assert empty string which is wrong
             // if source and target are the same they should be relaitivized as the last segment,
             // see Bugzilla 51187
@@ -57,17 +57,17 @@ namespace TestCases.OPC
 
             // relativization against root
             Uri root = new Uri("/", UriKind.Relative);
-            UriRes = PackagingURIHelper.RelativizeUri(root, Uri1);
+            UriRes = PackagingUriHelper.RelativizeUri(root, Uri1);
             Assert.AreEqual("/word/document.xml", UriRes.ToString());
 
             //Uri compatible with MS Office and OpenOffice: leading slash is Removed
-            UriRes = PackagingURIHelper.RelativizeUri(root, Uri1, true);
+            UriRes = PackagingUriHelper.RelativizeUri(root, Uri1, true);
             Assert.AreEqual("word/document.xml", UriRes.ToString());
 
             //preserve Uri fragments
-            UriRes = PackagingURIHelper.RelativizeUri(Uri1, Uri3, true);
+            UriRes = PackagingUriHelper.RelativizeUri(Uri1, Uri3, true);
             Assert.AreEqual("media/image1.gif#Sheet1!A1", UriRes.ToString());
-            UriRes = PackagingURIHelper.RelativizeUri(root, Uri4, true);
+            UriRes = PackagingUriHelper.RelativizeUri(root, Uri4, true);
             Assert.AreEqual("#'My%20Sheet1'!A1", UriRes.ToString());
         }
 
@@ -77,16 +77,16 @@ namespace TestCases.OPC
         [TestMethod]
         public void TestCreatePartNameRelativeString()
         {
-            PackagePartName partNameToValid = PackagingURIHelper
+            PackagePartName partNameToValid = PackagingUriHelper
                     .CreatePartName("/word/media/image1.gif");
 
             OPCPackage pkg = OPCPackage.Create("DELETEIFEXISTS.docx");
             // Base part
-            PackagePartName nameBase = PackagingURIHelper
+            PackagePartName nameBase = PackagingUriHelper
                     .CreatePartName("/word/document.xml");
             PackagePart partBase = pkg.CreatePart(nameBase, ContentTypes.XML);
             // Relative part name
-            PackagePartName relativeName = PackagingURIHelper.CreatePartName(
+            PackagePartName relativeName = PackagingUriHelper.CreatePartName(
                     "media/image1.gif", partBase);
             Assert.AreEqual(partNameToValid
                     ,relativeName, "The part name must be equal to "
@@ -100,16 +100,16 @@ namespace TestCases.OPC
         [TestMethod]
         public void TestCreatePartNameRelativeUri()
         {
-            PackagePartName partNameToValid = PackagingURIHelper
+            PackagePartName partNameToValid = PackagingUriHelper
                     .CreatePartName("/word/media/image1.gif");
 
             OPCPackage pkg = OPCPackage.Create("DELETEIFEXISTS.docx");
             // Base part
-            PackagePartName nameBase = PackagingURIHelper
+            PackagePartName nameBase = PackagingUriHelper
                     .CreatePartName("/word/document.xml");
             PackagePart partBase = pkg.CreatePart(nameBase, ContentTypes.XML);
             // Relative part name
-            PackagePartName relativeName = PackagingURIHelper.CreatePartName(
+            PackagePartName relativeName = PackagingUriHelper.CreatePartName(
                     new Uri("media/image1.gif",UriKind.RelativeOrAbsolute), partBase);
             Assert.AreEqual(partNameToValid,relativeName, "The part name must be equal to "
                     + partNameToValid.Name);
@@ -129,7 +129,7 @@ namespace TestCases.OPC
             {
                 try
                 {
-                    Uri Uri = PackagingURIHelper.ToUri(s);
+                    Uri Uri = PackagingUriHelper.ToUri(s);
                 }
                 catch (UriFormatException e)
                 {

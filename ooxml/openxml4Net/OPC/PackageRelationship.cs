@@ -179,7 +179,7 @@ namespace NPOI.OpenXml4Net.OPC
             {
                 if (source == null)
                 {
-                    return PackagingURIHelper.PACKAGE_ROOT_URI;
+                    return PackagingUriHelper.PACKAGE_ROOT_URI;
                 }
                 return source.PartName.URI;
             }
@@ -207,7 +207,7 @@ namespace NPOI.OpenXml4Net.OPC
             {
                 // If it's an external target, we don't
                 //  need to apply our normal validation rules
-                if (targetMode == TargetMode.EXTERNAL)
+                if (targetMode == TargetMode.External)
                 {
                     return targetUri;
                 }
@@ -218,7 +218,7 @@ namespace NPOI.OpenXml4Net.OPC
                 if (!targetUri.ToString().StartsWith("/"))
                 {
                     // So it's a relative part name, try to resolve it
-                    return PackagingURIHelper.ResolvePartUri(SourceUri, targetUri);
+                    return PackagingUriHelper.ResolvePartUri(SourceUri, targetUri);
                 }
                 return targetUri;
             }

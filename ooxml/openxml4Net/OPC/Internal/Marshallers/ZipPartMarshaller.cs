@@ -70,7 +70,7 @@ namespace NPOI.OpenXml4Net.OPC.Internal.Marshallers
             // Saving relationship part
             if (part.HasRelationships)
             {
-                PackagePartName relationshipPartName = PackagingURIHelper
+                PackagePartName relationshipPartName = PackagingUriHelper
                         .GetRelationshipPartName(part.PartName);
 
                 MarshallRelationshipPart(part.Relationships,
@@ -110,7 +110,7 @@ namespace NPOI.OpenXml4Net.OPC.Internal.Marshallers
             // Target="http://www.custom.com/images/pic1.jpg"
             // Type="http://www.custom.com/external-resource"/>
 
-            Uri sourcePartURI = PackagingURIHelper
+            Uri sourcePartURI = PackagingUriHelper
                     .GetSourcePartUriFromRelationshipPartUri(relPartName.URI);
 
             foreach (PackageRelationship rel in rels)
@@ -128,7 +128,7 @@ namespace NPOI.OpenXml4Net.OPC.Internal.Marshallers
                 // the relationship Target
                 String targetValue;
                 Uri uri = rel.TargetUri;
-                if (rel.TargetMode == TargetMode.EXTERNAL)
+                if (rel.TargetMode == TargetMode.External)
                 {
                     // Save the target as-is - we don't need to validate it,
                     //  alter it etc
@@ -141,7 +141,7 @@ namespace NPOI.OpenXml4Net.OPC.Internal.Marshallers
                 }
                 else
                 {
-                    targetValue = PackagingURIHelper.RelativizeUri(
+                    targetValue = PackagingUriHelper.RelativizeUri(
                             sourcePartURI, rel.TargetUri, true).ToString();
                 }
                 relElem.SetAttribute(PackageRelationship.TARGET_ATTRIBUTE_NAME,
