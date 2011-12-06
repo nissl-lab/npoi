@@ -9,9 +9,11 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>TestCases</RootNamespace>
     <AssemblyName>TestCases</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <TargetFrameworkSubset>
+    </TargetFrameworkSubset>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -41,13 +43,11 @@
       <HintPath>..\..\solution\Lib\NPOI.dll</HintPath>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Core">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="HSLF\Util\TestSystemTimeUtils.cs" />
     <Compile Include="HSSF\Converter\TestExcelToHtmlConverterSuite.cs" />
     <Compile Include="HWPF\Converter\AbstractWordUtilsTest.cs" />
     <Compile Include="HWPF\Converter\TestNumberFormatter.cs" />
@@ -105,6 +105,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\scratchpad\HSLF\HSLF.csproj">
+      <Project>{EB09BCCA-0B45-4984-B4E6-BAD8C0A9F8A9}</Project>
+      <Name>HSLF</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\scratchpad\HSSF\HSSF.csproj">
       <Project>{236BB091-2BEE-4594-A8AB-4E35ED17371D}</Project>
       <Name>HSSF</Name>
