@@ -561,7 +561,7 @@ namespace NPOI.SS.UserModel
                 }
                 catch (Exception e)
                 {
-                    throw new Exception("Did you forGet to set the current" +
+                    throw new Exception("Did you forget to set the current" +
                             " row on the HSSFFormulaEvaluator?", e);
                 }
             }

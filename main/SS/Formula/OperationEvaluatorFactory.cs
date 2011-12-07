@@ -52,7 +52,7 @@ namespace NPOI.SS.Formula
             Add(m, LessEqualPtg.instance, RelationalOperationEval.LessEqualEval);
             Add(m, LessThanPtg.instance, RelationalOperationEval.LessThanEval);
             Add(m, NotEqualPtg.instance, RelationalOperationEval.NotEqualEval);
-
+            Add(m, ConcatPtg.instance, ConcatEval.instance);
             Add(m, AddPtg.instance, TwoOperandNumericOperation.AddEval);
             Add(m, DividePtg.instance, TwoOperandNumericOperation.DivideEval);
             Add(m, MultiplyPtg.instance, TwoOperandNumericOperation.MultiplyEval);
@@ -62,6 +62,8 @@ namespace NPOI.SS.Formula
             Add(m, UnaryMinusPtg.instance, UnaryMinusEval.instance);
             Add(m, UnaryPlusPtg.instance, UnaryPlusEval.instance);
             Add(m, RangePtg.instance, RangeEval.instance);
+            // TODO add https://svn.apache.org/repos/asf/poi/trunk/src/java/org/apache/poi/ss/formula/eval/IntersectionEval.java 
+            //Add(m, IntersectionPtg.instance, IntersectionEval.instance);
             return m;
         }
 

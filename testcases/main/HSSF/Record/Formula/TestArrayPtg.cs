@@ -107,7 +107,7 @@ namespace TestCases.HSSF.Record.Formula
          * A spReadsheet was added to make the ordering clearer.
          */
         [TestMethod]
-        public void TestElementOrderingInSpReadsheet()
+        public void TestElementOrderingInSpreadsheet()
         {
             HSSFWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("ex42564-elementOrder.xls");
 
