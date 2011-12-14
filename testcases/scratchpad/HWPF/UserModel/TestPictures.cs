@@ -127,7 +127,7 @@ namespace TestCases.HWPF.UserModel
             // pictures. Instead it has an office drawing object. Need to rewrite this Test after
             // revisiting the implementation of office drawing objects.
 
-            HWPFDocument doc = HWPFTestDataSamples.OpenSampleFile("emf_2003_image.doc");
+            HWPFDocument doc = HWPFTestDataSamples.OpenSampleFile("Bug41898.doc");
             List<Picture> pics = doc.GetPicturesTable().GetAllPictures();
 
             Assert.IsNotNull(pics);

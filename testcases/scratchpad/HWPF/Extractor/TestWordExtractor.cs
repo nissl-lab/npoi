@@ -339,7 +339,7 @@ namespace TestCases.HWPF.Extractor
         public void TestFirstParagraphFix()
         {
             extractor = new WordExtractor(
-                    POIDataSamples.GetDocumentInstance().OpenResourceAsStream("MBD001D0B89.doc")
+                    POIDataSamples.GetDocumentInstance().OpenResourceAsStream("Bug48075.doc")
             );
 
             String text = extractor.Text;
