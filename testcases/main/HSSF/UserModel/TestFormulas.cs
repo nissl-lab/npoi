@@ -166,6 +166,8 @@ namespace TestCases.HSSF.UserModel
         [TestMethod]
         public void TestFloat()
         {
+            // This Test depends on the american culture.
+            System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
             floatTest("*");
             floatTest("/");
         }

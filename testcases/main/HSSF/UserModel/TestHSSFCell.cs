@@ -42,7 +42,8 @@ namespace TestCases.HSSF.UserModel
         public TestHSSFCell()
             : base(HSSFITestDataProvider.Instance)
         {
-
+            // TestSetTypeStringOnFormulaCell and TestToString are depending on the american culture.
+            System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
         }
 
         private static HSSFWorkbook OpenSample(String sampleFileName)
