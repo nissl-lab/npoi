@@ -176,6 +176,9 @@ namespace TestCases.HSSF.UserModel
         [TestMethod]
         public void TestGetFormattedCellValueHSSFCell()
         {
+            // This Test depends on the american culture.
+            System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
+
             // Valid date formats -- cell values should be date formatted & not "555.555"
             IRow row = wb.GetSheetAt(0).GetRow(0);
             IEnumerator it = row.GetEnumerator();
