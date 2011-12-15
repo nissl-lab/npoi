@@ -541,7 +541,7 @@ namespace TestCases.HSSF.UserModel
 		if (isSame) {
 			return;
 		}
-        string tempdir=System.Configuration.ConfigurationSettings.AppSettings["java.io.tmpdir"];
+        string tempdir=System.Configuration.ConfigurationManager.AppSettings["java.io.tmpdir"];
 		FileStream generatedFile = File.Open(tempdir+"GeneratedTestDataValidation.xls",FileMode.OpenOrCreate);
 		try {
 

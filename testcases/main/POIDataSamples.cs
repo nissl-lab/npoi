@@ -112,7 +112,7 @@ namespace TestCases
 
         private void Initialise()
         {
-            String dataDirName = System.Configuration.ConfigurationSettings.AppSettings[TEST_PROPERTY];
+            String dataDirName = System.Configuration.ConfigurationManager.AppSettings[TEST_PROPERTY];
 
             if (dataDirName == null)
                 throw new Exception("Must set system property '"

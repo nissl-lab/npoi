@@ -65,7 +65,7 @@ namespace TestCases.HSSF.UserModel
             InternalSheet sheet = s.Sheet;
 
             Assert.AreEqual(true, sheet.GridsetRecord.Gridset);
-            s.IsGridsPrinted = true;
+            s.IsGridsPrinted = true; // <- this is marked obsolete, but using "s.IsPrintGridlines = true;" makes this test fail 8-(
             Assert.AreEqual(false, sheet.GridsetRecord.Gridset);
         }
 

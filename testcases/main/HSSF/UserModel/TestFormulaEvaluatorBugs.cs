@@ -45,7 +45,7 @@ namespace TestCases.HSSF.UserModel
         public void SetUp()
         {
 
-            tmpDirName = ConfigurationSettings.AppSettings["java.io.tmpdir"];
+            tmpDirName = ConfigurationManager.AppSettings["java.io.tmpdir"];
         }
 
         /**
