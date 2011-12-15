@@ -512,7 +512,7 @@ namespace TestCases.HSSF.UserModel
 
         /** cell with formula becomes null on cloning a sheet*/
         [TestMethod]
-        public void Test35084()
+        public new void Test35084()
         {
 
             HSSFWorkbook wb = new HSSFWorkbook();
@@ -529,7 +529,7 @@ namespace TestCases.HSSF.UserModel
 
         /** Test that new default column styles get applied */
         [TestMethod]
-        public void TestDefaultColumnStyle()
+        public new void TestDefaultColumnStyle()
         {
             HSSFWorkbook wb = new HSSFWorkbook();
             NPOI.SS.UserModel.ICellStyle style = wb.CreateCellStyle();

@@ -108,7 +108,7 @@ namespace TestCases.HSSF.UserModel
          * number on the row
          */
         [TestMethod]
-        public void TestLastCellNumIsCorrectAfterAddCell_bug43901()
+        public new void TestLastCellNumIsCorrectAfterAddCell_bug43901()
         {
             HSSFWorkbook book = new HSSFWorkbook();
             NPOI.SS.UserModel.ISheet sheet = book.CreateSheet("Test");

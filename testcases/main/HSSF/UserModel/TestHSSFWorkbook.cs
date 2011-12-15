@@ -138,7 +138,7 @@ namespace TestCases.HSSF.UserModel
             }
         }
         [TestMethod]
-        public void TestSheetSelection()
+        public new void TestSheetSelection()
         {
             HSSFWorkbook b = new HSSFWorkbook();
             b.CreateSheet("Sheet One");
