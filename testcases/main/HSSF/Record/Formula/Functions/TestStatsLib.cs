@@ -28,6 +28,7 @@ namespace TestCases.HSSF.Record.Formula.Functions
      * @author Amol S. Deshmukh &lt; amolweb at ya hoo dot com &gt;
      *
      */
+    [TestClass]
     public class TestStatsLib : AbstractNumericTestCase
     {
         [TestMethod]

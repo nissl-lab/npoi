@@ -30,9 +30,14 @@ namespace TestCases.SS.UserModel
      * Common superclass for testing {@link NPOI.XSSF.usermodel.XSSFCell}  and
      * {@link NPOI.HSSF.usermodel.HSSFCell}
      */
-    public abstract class BaseTestSheet
+    [TestClass]
+    public class BaseTestSheet
     {
        private ITestDataProvider _testDataProvider;
+
+       public BaseTestSheet()
+            : this(TestCases.HSSF.HSSFITestDataProvider.Instance)
+        {}
 
         protected BaseTestSheet(ITestDataProvider testDataProvider) {
              _testDataProvider = testDataProvider;

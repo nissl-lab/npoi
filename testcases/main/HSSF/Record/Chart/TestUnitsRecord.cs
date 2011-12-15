@@ -34,13 +34,14 @@ namespace TestCases.HSSF.Record
 
      * @author Glen Stampoultzis (glens at apache.org)
      */
+    [TestClass]
     public class TestUnitsRecord
     {
         byte[] data = new byte[] {
         (byte)0x00, (byte)0x00
     };
 
-        public TestUnitsRecord(String name)
+        public TestUnitsRecord()
         {
 
         }

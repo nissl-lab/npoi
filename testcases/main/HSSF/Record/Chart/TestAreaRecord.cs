@@ -34,6 +34,7 @@ namespace TestCases.HSSF.Record
      *
      * @author Glen Stampoultzis (glens at apache.org)
      */
+    [TestClass]
     public class TestAreaRecord
     {
         byte[] data = new byte[] {

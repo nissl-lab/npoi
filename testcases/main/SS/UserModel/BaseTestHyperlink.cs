@@ -25,10 +25,14 @@ namespace NPOI.SS.UserModel
      *
      * @author Yegor Kozlov
      */
-    public abstract class BaseTestHyperlink
+    [TestClass]
+    public class BaseTestHyperlink
     {
 
         protected ITestDataProvider _testDataProvider;
+        public BaseTestHyperlink()
+            : this(TestCases.HSSF.HSSFITestDataProvider.Instance)
+        {}
 
         /**
          * @param testDataProvider an object that provides test data in HSSF / XSSF specific way

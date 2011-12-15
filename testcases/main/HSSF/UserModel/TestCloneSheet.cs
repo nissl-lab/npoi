@@ -29,6 +29,7 @@ namespace TestCases.HSSF.UserModel
      *  Add that record to the sheet in the TestCloneSheetBasic method. 
      * @author  avik
      */
+    [TestClass]
     public class TestCloneSheet
     {
         [TestMethod]

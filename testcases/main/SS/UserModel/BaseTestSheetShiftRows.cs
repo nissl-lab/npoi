@@ -31,11 +31,14 @@ namespace TestCases.SS.UserModel
      * @author Shawn Laubach (slaubach at apache dot com)
      * @author Toshiaki Kamoshida (kamoshida.toshiaki at future dot co dot jp)
      */
-    public abstract class BaseTestSheetShiftRows
+    [TestClass]
+    public class BaseTestSheetShiftRows
     {
 
         private ITestDataProvider _testDataProvider;
-
+        public BaseTestSheetShiftRows()
+            : this(TestCases.HSSF.HSSFITestDataProvider.Instance)
+        { }
         protected BaseTestSheetShiftRows(ITestDataProvider testDataProvider)
         {
             _testDataProvider = testDataProvider;

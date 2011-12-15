@@ -33,6 +33,7 @@ namespace TestCases.HSSF.Record
 
      * @author Glen Stampoultzis (glens at apache.org)
      */
+    [TestClass]
     public class TestAreaFormatRecord
     {
         byte[] data = new byte[] {
@@ -45,7 +46,7 @@ namespace TestCases.HSSF.Record
 
     };
 
-        public TestAreaFormatRecord(String name)
+        public TestAreaFormatRecord()
         {
 
         }

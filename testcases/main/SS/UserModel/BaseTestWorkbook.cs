@@ -27,10 +27,16 @@ namespace TestCases.SS.UserModel
     /**
      * @author Yegor Kozlov
      */
-    public abstract class BaseTestWorkbook
+    [TestClass]
+    public class BaseTestWorkbook
     {
 
        private ITestDataProvider _testDataProvider;
+
+        public BaseTestWorkbook()
+       {
+           _testDataProvider = TestCases.HSSF.HSSFITestDataProvider.Instance;
+       }
 
        protected BaseTestWorkbook(ITestDataProvider testDataProvider)
        {
@@ -344,6 +350,9 @@ namespace TestCases.SS.UserModel
         [TestMethod]
         public void TestUnicodeInAll()
         {
+            // This Test depends on the american culture.
+            System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
+
             IWorkbook wb = _testDataProvider.CreateWorkbook();
             CreationHelper factory = wb.GetCreationHelper();
             //Create a unicode dataformat (Contains euro symbol)

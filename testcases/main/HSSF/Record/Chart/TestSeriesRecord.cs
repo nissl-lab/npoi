@@ -33,6 +33,7 @@ namespace TestCases.HSSF.Record
      *
      * @author Glen Stampoultzis (glens at apache.org)
      */
+    [TestClass]
     public class TestSeriesRecord
     {
         byte[] data = new byte[] {
@@ -44,7 +45,7 @@ namespace TestCases.HSSF.Record
             (byte)0x00,(byte)0x00       // num bubble values
         };
 
-        public TestSeriesRecord(String name)
+        public TestSeriesRecord()
         {
 
         }

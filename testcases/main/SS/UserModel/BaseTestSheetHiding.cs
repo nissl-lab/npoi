@@ -13,10 +13,15 @@ namespace TestCases.SS.UserModel
      *  with a WORKBOOK directory entry (instead of the more
      *  usual, Workbook)
      */
-    public abstract class BaseTestSheetHiding
+    [TestClass]
+    public class BaseTestSheetHiding
     {
         private ITestDataProvider _testDataProvider;
         private String _file1, _file2;
+
+        public BaseTestSheetHiding()
+            : this(HSSFITestDataProvider.Instance, "TwoSheetsOneHidden.xls", "TwoSheetsNoneHidden.xls")
+        { }
 
         protected BaseTestSheetHiding(ITestDataProvider testDataProvider, String file1, String file2)
         {

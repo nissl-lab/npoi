@@ -28,10 +28,15 @@ namespace TestCases.SS.UserModel
      * Common superclass for testing implementatiosn of
      *  {@link NPOI.SS.usermodel.Cell}
      */
-    public abstract class BaseTestCell
+    [TestClass]
+    public class BaseTestCell
     {
 
         protected ITestDataProvider _testDataProvider;
+
+        public BaseTestCell()
+            : this(TestCases.HSSF.HSSFITestDataProvider.Instance)
+        { }
 
         /**
          * @param testDataProvider an object that provides test data in HSSF / XSSF specific way

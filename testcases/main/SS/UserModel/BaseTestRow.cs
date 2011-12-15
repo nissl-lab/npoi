@@ -27,6 +27,7 @@ namespace TestCases.SS.UserModel
      * A base class for testing implementations of
      * {@link NPOI.SS.usermodel.Row}
      */
+    [TestClass]
     public abstract class BaseTestRow
     {
 
@@ -34,6 +35,9 @@ namespace TestCases.SS.UserModel
          * @return an object that provides test data in  / XSSF specific way
          */
         private ITestDataProvider _testDataProvider;
+        public BaseTestRow()
+            : this(TestCases.HSSF.HSSFITestDataProvider.Instance)
+        {}
         protected BaseTestRow(ITestDataProvider testDataProvider)
         {
             _testDataProvider = testDataProvider;

@@ -33,6 +33,7 @@ namespace TestCases.HSSF.Record
 
      * @author Glen Stampoultzis (glens at apache.org)
      */
+    [TestClass]
     public class TestAxisLineFormatRecord
     {
         byte[] data = new byte[] {

@@ -33,6 +33,7 @@ namespace TestCases.HSSF.Record
 
      * @author Glen Stampoultzis (glens at apache.org)
      */
+    [TestClass]
     public class TestNumberFormatIndexRecord
     {
         byte[] data = new byte[] {
@@ -44,6 +45,7 @@ namespace TestCases.HSSF.Record
 
         }
 
+        [TestMethod]
         public void TestLoad()
         {
 
@@ -55,6 +57,7 @@ namespace TestCases.HSSF.Record
 
         }
 
+        [TestMethod]
         public void TestStore()
         {
             NumberFormatIndexRecord record = new NumberFormatIndexRecord();

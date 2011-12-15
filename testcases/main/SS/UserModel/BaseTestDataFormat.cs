@@ -27,11 +27,14 @@ namespace TestCases.SS.UserModel
      * Tests of implementation of {@link DataFormat}
      *
      */
-    public abstract class BaseTestDataFormat
+    [TestClass]
+    public class BaseTestDataFormat
     {
 
         protected ITestDataProvider _testDataProvider;
-
+        public BaseTestDataFormat()
+            : this(TestCases.HSSF.HSSFITestDataProvider.Instance)
+        { }
         /**
          * @param testDataProvider an object that provides test data in HSSF / XSSF specific way
          */

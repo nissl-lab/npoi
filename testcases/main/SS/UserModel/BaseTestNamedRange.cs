@@ -27,11 +27,15 @@ namespace TestCases.SS.UserModel
      *
      * @author Yegor Kozlov
      */
-    public abstract class BaseTestNamedRange
+    [TestClass]
+    public class BaseTestNamedRange
     {
 
         protected ITestDataProvider _testDataProvider;
 
+        public BaseTestNamedRange()
+            : this(TestCases.HSSF.HSSFITestDataProvider.Instance)
+        { }
         /**
          * @param testDataProvider an object that provides test data in HSSF / XSSF specific way
          */

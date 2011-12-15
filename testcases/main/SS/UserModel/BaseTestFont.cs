@@ -25,10 +25,14 @@ namespace TestCases.SS.UserModel
     /**
      * @author Yegor Kozlov
      */
-    public abstract class BaseTestFont
+    [TestClass]
+    public class BaseTestFont
     {
         protected ITestDataProvider _testDataProvider;
 
+        public BaseTestFont()
+            : this(TestCases.HSSF.HSSFITestDataProvider.Instance)
+        { }
         /**
          * @param testDataProvider an object that provides test data in HSSF / XSSF specific way
          */

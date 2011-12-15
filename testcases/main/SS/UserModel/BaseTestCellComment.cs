@@ -26,11 +26,15 @@ namespace TestCases.SS.UserModel
      * Common superclass for testing implementatiosn of
      * {@link Comment}
      */
-    public abstract class BaseTestCellComment
+    [TestClass]
+    public class BaseTestCellComment
     {
 
         private ITestDataProvider _testDataProvider;
 
+        public BaseTestCellComment()
+            : this(TestCases.HSSF.HSSFITestDataProvider.Instance)
+        {}
         protected BaseTestCellComment(ITestDataProvider testDataProvider) {
             _testDataProvider = testDataProvider;
         }

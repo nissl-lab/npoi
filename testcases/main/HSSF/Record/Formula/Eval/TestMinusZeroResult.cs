@@ -39,6 +39,7 @@ namespace TestCases.HSSF.Record.Formula.Eval
      * </ol>
      * @author Josh Micich
      */
+    [TestClass]
     public class TestMinusZeroResult
     {
         private static double MINUS_ZERO = -0.0;
