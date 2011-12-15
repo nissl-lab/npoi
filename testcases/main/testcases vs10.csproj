@@ -1,0 +1,577 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{A920C2BA-8BFD-4F54-8401-7D1C0730F1F0}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>TestCases</RootNamespace>
+    <AssemblyName>NPOI.TestCases</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <SccProjectName>
+    </SccProjectName>
+    <SccLocalPath>
+    </SccLocalPath>
+    <SccAuxPath>
+    </SccAuxPath>
+    <SccProvider>
+    </SccProvider>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>npoi.snk</AssemblyOriginatorKeyFile>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <UpgradeBackupLocation />
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'NPOI.Tools|AnyCPU' ">
+    <OutputPath>bin\NPOI.Tools\</OutputPath>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="POIFS\Storage\TestBATBlock.cs" />
+    <Compile Include="POIFS\Storage\TestBlockListImpl.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Util\TestBitField.cs" />
+    <Compile Include="Util\TestByteField.cs" />
+    <Compile Include="Util\TestHexDump.cs" />
+    <Compile Include="Util\TestIntegerField.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Util\TestLittleEndian.cs" />
+    <Compile Include="Util\TestLongField.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Util\TestPOILogger.cs" />
+    <Compile Include="Util\TestPOILogFactory.cs" />
+    <Compile Include="Util\TestShortField.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="POIFS\Storage\TestSmallDocumentBlock.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="POIFS\Properties\LocalProperty.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="POIFS\Storage\TestDocumentBlock.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="POIFS\Storage\TestPropertyBlock.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="POIFS\Storage\TestSmallDocumentBlockList.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="POIFS\Storage\LocalRawDataBlockList.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="POIFS\Storage\TestBlockAllocationTableReader.cs" />
+    <Compile Include="POIFS\Storage\TestBlockAllocationTableWriter.cs" />
+    <Compile Include="POIFS\Storage\TestRawDataBlock.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Util\DummyPOILogger.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="POIFS\Storage\TestRawDataBlockList.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="POIFS\Storage\TestHeaderBlockReader.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="POIFS\Storage\TestHeaderBlockWriter.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="POIFS\Storage\TestSmallBlockTableReader.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="POIFS\Storage\TestSmallBlockTableWriter.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="POIFS\Properties\TestPropertyTable.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="POIFS\Properties\TestRootProperty.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="POIFS\FileSystem\SlowInputStream.cs" />
+    <Compile Include="POIFS\Properties\TestDirectoryProperty.cs" />
+    <Compile Include="POIFS\Properties\TestDocumentProperty.cs" />
+    <Compile Include="POIFS\Properties\TestPropertyFactory.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="POIFS\FileSystem\TestDirectoryNode.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="POIFS\FileSystem\TestDocument.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="POIFS\FileSystem\TestDocumentDescriptor.cs" />
+    <Compile Include="POIFS\FileSystem\TestDocumentInputStream.cs" />
+    <Compile Include="POIFS\FileSystem\TestDocumentNode.cs" />
+    <Compile Include="POIFS\FileSystem\TestDocumentOutputStream.cs" />
+    <Compile Include="POIFS\FileSystem\TestEmptyDocument.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="POIFS\FileSystem\TestPOIFSDocumentPath.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="DDF\TestEscherBlipRecord.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="DDF\TestEscherBlipWMFRecord.cs" />
+    <Compile Include="DDF\TestEscherBoolProperty.cs" />
+    <Compile Include="DDF\TestEscherBSERecord.cs" />
+    <Compile Include="DDF\TestEscherChildAnchorRecord.cs" />
+    <Compile Include="DDF\TestEscherClientAnchorRecord.cs" />
+    <Compile Include="DDF\TestEscherClientDataRecord.cs" />
+    <Compile Include="DDF\TestEscherContainerRecord.cs" />
+    <Compile Include="DDF\TestEscherDggRecord.cs" />
+    <Compile Include="DDF\TestEscherDgRecord.cs" />
+    <Compile Include="DDF\TestEscherOptRecord.cs" />
+    <Compile Include="DDF\TestEscherPropertyFactory.cs" />
+    <Compile Include="DDF\TestEscherSpgrRecord.cs" />
+    <Compile Include="DDF\TestEscherSplitMenuColorsRecord.cs" />
+    <Compile Include="DDF\TestEscherSpRecord.cs" />
+    <Compile Include="DDF\TestUnknownEscherRecord.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="HPSF\Basic\POIFile.cs" />
+    <Compile Include="HPSF\Basic\TestBasic.cs" />
+    <Compile Include="HPSF\Basic\TestWrite.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="HSSF\HSSFTestDataSamples.cs" />
+    <Compile Include="HSSF\Record\CF\TestCellRange.cs" />
+    <Compile Include="HSSF\Record\Constant\TestConstantValueParser.cs" />
+    <Compile Include="HSSF\Record\TestcaseRecordInputStream.cs" />
+    <Compile Include="HSSF\Util\TestAreaReference.cs" />
+    <Compile Include="HSSF\Util\TestCellReference.cs" />
+    <Compile Include="HSSF\Util\TestHSSFColor.cs" />
+    <Compile Include="HSSF\Util\TestRangeAddress.cs" />
+    <Compile Include="HSSF\Util\TestRKUtil.cs" />
+    <Compile Include="POIFS\FileSystem\TestOffice2007XMLException.cs" />
+    <Compile Include="POIFS\FileSystem\TestPOIFSFileSystem.cs" />
+    <Compile Include="POIFS\FileSystem\TestPropertySorter.cs" />
+    <Compile Include="Util\TestULongField.cs" />
+    <Compile Include="Util\TestClassID.cs" />
+    <Compile Include="HPSF\Basic\TestEmptyProperties.cs" />
+    <Compile Include="HPSF\Basic\TestMetaDataIPI.cs" />
+    <Compile Include="HPSF\Basic\TestReadAllFiles.cs" />
+    <Compile Include="HPSF\Basic\TestUnicode.cs" />
+    <Compile Include="HPSF\Basic\TestWriteWellKnown.cs" />
+    <Compile Include="HPSF\Basic\Util.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="HPSF\data\Test0313rur.adm" />
+    <None Include="HPSF\data\TestBug44375.xls" />
+    <None Include="HPSF\data\TestChineseProperties.doc" />
+    <None Include="HPSF\data\TestCorel.shw" />
+    <None Include="HPSF\data\TestEditTime.doc" />
+    <None Include="HPSF\data\TestGermanWord90.doc" />
+    <None Include="HPSF\data\TestMickey.doc" />
+    <None Include="HPSF\data\TestRobert_Flaherty.doc" />
+    <None Include="HPSF\data\TestSectionDictionary.doc" />
+    <None Include="HPSF\data\TestShiftJIS.doc" />
+    <None Include="HPSF\data\TestSolidWorks.sldprt" />
+    <None Include="HPSF\data\TestUnicode.xls" />
+    <None Include="npoi.snk" />
+    <None Include="POIFS\Data\excel_with_embeded.xls" />
+    <None Include="POIFS\Data\ppt_with_embeded.ppt" />
+    <None Include="POIFS\Data\ShortLastBlock.qwp" />
+    <None Include="POIFS\Data\ShortLastBlock.wps" />
+    <None Include="POIFS\Data\source-files\sample1.doc" />
+    <None Include="POIFS\Data\source-files\sample1.ppt" />
+    <None Include="POIFS\Data\source-files\sample1.xls" />
+    <None Include="POIFS\Data\source-files\sample2.doc" />
+    <None Include="POIFS\Data\source-files\sample2.ppt" />
+    <None Include="POIFS\Data\source-files\sample2.xls" />
+    <None Include="POIFS\Data\visio_with_embeded.xls" />
+    <None Include="POIFS\Data\word_with_embeded.doc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="HSSF\Record\Aggregates\TestCFRecordsAggregate.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="HSSF\Record\Aggregates\TestColumnInfoRecordsAggregate.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="HSSF\Record\Aggregates\TestFormulaRecordAggregate.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="HSSF\Record\Aggregates\TestRowRecordsAggregate.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="HSSF\Record\Aggregates\TestValueRecordsAggregate.cs" />
+    <Compile Include="HSSF\Record\TestPaletteRecord.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="HSSF\Model\TestDrawingManager.cs" />
+    <Compile Include="HSSF\Model\TestDrawingManager2.cs" />
+    <Compile Include="HSSF\Model\TestFormulaParser.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="HSSF\Model\TestFormulaParserEval.cs" />
+    <Compile Include="HSSF\Model\TestFormulaParserIf.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="HSSF\Model\TestRVA.cs" />
+    <Compile Include="HSSF\Model\TestSheet.cs" />
+    <Compile Include="HSSF\Model\TestSheetAdditional.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="HSSF\Record\Formula\AbstractPtgTestCase.cs" />
+    <Compile Include="HSSF\Record\Formula\Eval\TestAreaEval.cs" />
+    <Compile Include="HSSF\Record\Formula\Eval\TestCircularReferences.cs" />
+    <Compile Include="HSSF\Record\Formula\Eval\TestExternalFunction.cs" />
+    <Compile Include="HSSF\Record\Formula\Eval\TestFormulaBugs.cs" />
+    <Compile Include="HSSF\Record\Formula\Eval\TestFormulasFromSpreadsheet.cs" />
+    <Compile Include="HSSF\Record\Formula\Eval\TestPercentEval.cs" />
+    <Compile Include="HSSF\Record\Formula\Eval\TestUnaryPlusEval.cs" />
+    <Compile Include="HSSF\Record\Formula\Functions\AbstractNumericTestCase.cs" />
+    <Compile Include="HSSF\Record\Formula\Functions\EvalFactory.cs" />
+    <Compile Include="HSSF\Record\Formula\Functions\NumericFunctionInvoker.cs" />
+    <Compile Include="HSSF\Record\Formula\Functions\TestAverage.cs" />
+    <Compile Include="HSSF\Record\Formula\Functions\TestCountFuncs.cs" />
+    <Compile Include="HSSF\Record\Formula\Functions\TestDate.cs" />
+    <Compile Include="HSSF\Record\Formula\Functions\TestFinanceLib.cs" />
+    <Compile Include="HSSF\Record\Formula\Functions\TestIndex.cs" />
+    <Compile Include="HSSF\Record\Formula\Functions\TestIsBlank.cs" />
+    <Compile Include="HSSF\Record\Formula\Functions\TestLen.cs" />
+    <Compile Include="HSSF\Record\Formula\Functions\TestLookupFunctionsFromSpreadsheet.cs" />
+    <Compile Include="HSSF\Record\Formula\Functions\TestMatch.cs" />
+    <Compile Include="HSSF\Record\Formula\Functions\TestMathX.cs" />
+    <Compile Include="HSSF\Record\Formula\Functions\TestMid.cs" />
+    <Compile Include="HSSF\Record\Formula\Functions\TestOffset.cs" />
+    <Compile Include="HSSF\Record\Formula\Functions\TestPmt.cs" />
+    <Compile Include="HSSF\Record\Formula\Functions\TestRoundFuncs.cs" />
+    <Compile Include="HSSF\Record\Formula\Functions\TestRowCol.cs" />
+    <Compile Include="HSSF\Record\Formula\Functions\TestStatsLib.cs" />
+    <Compile Include="HSSF\Record\Formula\Functions\TestSumproduct.cs" />
+    <Compile Include="HSSF\Record\Formula\Functions\TestTFunc.cs" />
+    <Compile Include="HSSF\Record\Formula\Functions\TestTrim.cs" />
+    <Compile Include="HSSF\Record\Formula\Functions\TestXYNumericFunction.cs" />
+    <Compile Include="HSSF\Record\Formula\TestArea3DPtg.cs" />
+    <Compile Include="HSSF\Record\Formula\TestAreaErrPtg.cs" />
+    <Compile Include="HSSF\Record\Formula\TestAreaPtg.cs" />
+    <Compile Include="HSSF\Record\Formula\TestArrayPtg.cs" />
+    <Compile Include="HSSF\Record\Formula\TestErrPtg.cs" />
+    <Compile Include="HSSF\Record\Formula\TestExternalFunctionFormulas.cs" />
+    <Compile Include="HSSF\Record\Formula\TestFuncPtg.cs" />
+    <Compile Include="HSSF\Record\Formula\TestFuncVarPtg.cs" />
+    <Compile Include="HSSF\Record\Formula\TestIntersectionPtg.cs" />
+    <Compile Include="HSSF\Record\Formula\TestPercentPtg.cs" />
+    <Compile Include="HSSF\Record\Formula\TestRangePtg.cs" />
+    <Compile Include="HSSF\Record\Formula\TestRef3DPtg.cs" />
+    <Compile Include="HSSF\Record\Formula\TestReferencePtg.cs" />
+    <Compile Include="HSSF\Record\Formula\TestSheetNameFormatter.cs" />
+    <Compile Include="HSSF\Record\Formula\TestUnionPtg.cs" />
+    <Compile Include="HSSF\Record\Chart\TestAreaFormatRecord.cs" />
+    <Compile Include="HSSF\Record\Chart\TestAreaRecord.cs" />
+    <Compile Include="HSSF\Record\Chart\TestAxisLineFormatRecord.cs" />
+    <Compile Include="HSSF\Record\Chart\TestAxisOptionsRecord.cs" />
+    <Compile Include="HSSF\Record\Chart\TestAxisParentRecord.cs" />
+    <Compile Include="HSSF\Record\Chart\TestAxisRecord.cs" />
+    <Compile Include="HSSF\Record\Chart\TestAxisUsedRecord.cs" />
+    <Compile Include="HSSF\Record\Chart\TestBarRecord.cs" />
+    <Compile Include="HSSF\Record\TestBOFRecord.cs" />
+    <Compile Include="HSSF\Record\TestBoundSheetRecord.cs" />
+    <Compile Include="HSSF\Record\Chart\TestCategorySeriesAxisRecord.cs" />
+    <Compile Include="HSSF\Record\Chart\TestChartRecord.cs" />
+    <Compile Include="HSSF\Record\Chart\TestChartTitleFormatRecord.cs" />
+    <Compile Include="HSSF\Record\TestCommonObjectDataSubRecord.cs" />
+    <Compile Include="HSSF\Record\Chart\TestDataFormatRecord.cs" />
+    <Compile Include="HSSF\Record\Chart\TestDatRecord.cs" />
+    <Compile Include="HSSF\Record\Chart\TestDefaultDataLabelTextPropertiesRecord.cs" />
+    <Compile Include="HSSF\Record\TestDVALRecord.cs" />
+    <Compile Include="HSSF\Record\TestEmbeddedObjectRefSubRecord.cs" />
+    <Compile Include="HSSF\Record\TestEndSubRecord.cs" />
+    <Compile Include="HSSF\Record\Chart\TestFontBasisRecord.cs" />
+    <Compile Include="HSSF\Record\Chart\TestFontIndexRecord.cs" />
+    <Compile Include="HSSF\Record\Chart\TestFrameRecord.cs" />
+    <Compile Include="HSSF\Record\TestLabelRecord.cs" />
+    <Compile Include="HSSF\Record\Chart\TestLegendRecord.cs" />
+    <Compile Include="HSSF\Record\Chart\TestLineFormatRecord.cs" />
+    <Compile Include="HSSF\Record\Chart\TestLinkedDataRecord.cs" />
+    <Compile Include="HSSF\Record\TestMergeCellsRecord.cs" />
+    <Compile Include="HSSF\Record\TestNameRecord.cs" />
+    <Compile Include="HSSF\Record\TestNoteRecord.cs" />
+    <Compile Include="HSSF\Record\Chart\TestNumberFormatIndexRecord.cs" />
+    <Compile Include="HSSF\Record\Chart\TestObjectLinkRecord.cs" />
+    <Compile Include="HSSF\Record\TestObjRecord.cs" />
+    <Compile Include="HSSF\Record\TestPaneRecord.cs" />
+    <Compile Include="HSSF\Record\TestRecordFactory.cs" />
+    <Compile Include="HSSF\Record\TestSCLRecord.cs" />
+    <Compile Include="HSSF\Record\TestStringRecord.cs" />
+    <Compile Include="HSSF\Record\TestSubRecord.cs" />
+    <Compile Include="HSSF\Record\TestSupBookRecord.cs" />
+    <Compile Include="HSSF\Record\TestTextObjectRecord.cs" />
+    <Compile Include="HSSF\Record\Chart\TestTextRecord.cs" />
+    <Compile Include="HSSF\Record\TestUnicodeNameRecord.cs" />
+    <Compile Include="HSSF\Record\TestUnicodeString.cs" />
+    <Compile Include="HSSF\Record\Chart\TestUnitsRecord.cs" />
+    <Compile Include="HSSF\UserModel\FormulaExtractor.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="SS\Formula\TestCellCacheEntry.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="SS\Formula\FormulaParserTestHelper.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="SS\Formula\WorkbookEvaluatorTestHelper.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="HSSF\Record\TestCFHeaderRecord.cs" />
+    <Compile Include="HSSF\Record\TestCFRuleRecord.cs" />
+    <Compile Include="HSSF\Record\TestDrawingGroupRecord.cs" />
+    <Compile Include="HSSF\Record\TestEscherAggregate.cs" />
+    <Compile Include="HSSF\Record\TestExternalNameRecord.cs" />
+    <Compile Include="HSSF\Record\TestFormulaRecord.cs" />
+    <Compile Include="HSSF\Record\TestHyperlinkRecord.cs" />
+    <Compile Include="HSSF\Record\TestNoteStructureSubRecord.cs" />
+    <Compile Include="HSSF\Record\Chart\TestPlotAreaRecord.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="HSSF\Record\Chart\TestPlotGrowthRecord.cs" />
+    <Compile Include="HSSF\Record\Chart\TestSeriesChartGroupIndexRecord.cs" />
+    <Compile Include="HSSF\Record\Chart\TestSeriesIndexRecord.cs" />
+    <Compile Include="HSSF\Record\Chart\TestSeriesLabelsRecord.cs" />
+    <Compile Include="HSSF\Record\Chart\TestSeriesListRecord.cs" />
+    <Compile Include="HSSF\Record\Chart\TestSeriesRecord.cs" />
+    <Compile Include="HSSF\Record\Chart\TestSeriesTextRecord.cs" />
+    <Compile Include="HSSF\Record\Chart\TestSeriesToChartGroupRecord.cs" />
+    <Compile Include="HSSF\Record\TestSharedFormulaRecord.cs" />
+    <Compile Include="HSSF\Record\Chart\TestSheetPropertiesRecord.cs" />
+    <Compile Include="HSSF\Record\TestSSTDeserializer.cs" />
+    <Compile Include="HSSF\Record\TestSSTRecord.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="HSSF\Record\TestSSTRecordSizeCalculator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="HSSF\Record\Chart\TestTickRecord.cs" />
+    <Compile Include="HSSF\Record\Chart\TestValueRangeRecord.cs" />
+    <Compile Include="SS\Formula\EvaluationListener.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="SS\Formula\TestWorkbookEvaluator.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="SS\Formula\TestEvaluationCache.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="HSSF\UserModel\HSSFEvaluationTestHelper.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="HSSF\UserModel\RecordInspector.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="HSSF\UserModel\StreamUtility.cs" />
+    <Compile Include="HSSF\UserModel\TestBug42464.cs" />
+    <Compile Include="HSSF\UserModel\TestBug43093.cs" />
+    <Compile Include="HSSF\UserModel\TestCellStyle.cs" />
+    <Compile Include="HSSF\UserModel\TestCloneSheet.cs" />
+    <Compile Include="HSSF\UserModel\TestDataValidation.cs" />
+    <Compile Include="HSSF\UserModel\TestFontDetails.cs" />
+    <Compile Include="HSSF\UserModel\TestFormulaEvaluatorDocs.cs" />
+    <Compile Include="HSSF\UserModel\TestHSSFCell.cs" />
+    <Compile Include="HSSF\UserModel\TestHSSFClientAnchor.cs" />
+    <Compile Include="HSSF\UserModel\TestHSSFComment.cs" />
+    <Compile Include="HSSF\UserModel\TestHSSFConditionalFormatting.cs" />
+    <Compile Include="HSSF\UserModel\TestHSSFFormulaEvaluator.cs" />
+    <Compile Include="HSSF\UserModel\TestHSSFHeaderFooter.cs" />
+    <Compile Include="HSSF\UserModel\TestHSSFHyperlink.cs" />
+    <Compile Include="HSSF\UserModel\TestHSSFOptimiser.cs" />
+    <Compile Include="HSSF\UserModel\TestHSSFPalette.cs" />
+    <Compile Include="HSSF\UserModel\TestHSSFPatriarch.cs" />
+    <Compile Include="HSSF\UserModel\TestHSSFPicture.cs" />
+    <Compile Include="HSSF\UserModel\TestHSSFPictureData.cs" />
+    <Compile Include="HSSF\UserModel\TestHSSFRichTextString.cs" />
+    <Compile Include="HSSF\UserModel\TestHSSFRow.cs" />
+    <Compile Include="HSSF\UserModel\TestHSSFSheetOrder.cs" />
+    <Compile Include="HSSF\UserModel\TestHSSFSheetSetOrder.cs" />
+    <Compile Include="HSSF\UserModel\TestHSSFTextbox.cs" />
+    <Compile Include="HSSF\UserModel\TestLinkTable.cs" />
+    <Compile Include="HSSF\UserModel\TestOLE2Embeding.cs" />
+    <Compile Include="HSSF\UserModel\TestPOIFSProperties.cs" />
+    <Compile Include="HSSF\UserModel\TestReadWriteChart.cs" />
+    <Compile Include="HSSF\UserModel\TestRowStyle.cs" />
+    <Compile Include="HSSF\UserModel\TestSanityChecker.cs" />
+    <Compile Include="HSSF\UserModel\TestSheetHiding.cs" />
+    <Compile Include="HSSF\UserModel\TestSheetShiftRows.cs" />
+    <Compile Include="HSSF\UserModel\TestUnfixedBugs.cs" />
+    <Compile Include="HSSF\UserModel\TestUnicodeWorkbook.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="HSSF\UserModel\TestUppercaseWorkbook.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="HSSF\UserModel\TestWorkbook.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="HSSF\Record\Formula\Function\TestFunctionMetadataRegistry.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="HSSF\Record\Formula\Function\TestParseMissingBuiltInFuncs.cs" />
+    <Compile Include="HSSF\Record\Formula\Function\TestReadMissingBuiltInFuncs.cs" />
+    <Compile Include="HSSF\UserModel\TestFormulaEvaluatorBugs.cs" />
+    <Compile Include="HSSF\UserModel\TestFormulas.cs" />
+    <Compile Include="HSSF\UserModel\TestHSSFSheet.cs" />
+    <Compile Include="HSSF\UserModel\TestHSSFWorkbook.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Util\TestArrayUtil.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="HSSF\EventModel\TestEventRecordFactory.cs" />
+    <Compile Include="HSSF\EventModel\TestModelFactory.cs" />
+    <Compile Include="HSSF\EventUserModel\TestEventWorkbookBuilder.cs" />
+    <Compile Include="HSSF\EventUserModel\TestFormatTrackingHSSFListener.cs" />
+    <Compile Include="HSSF\EventUserModel\TestHSSFEventFactory.cs" />
+    <Compile Include="HSSF\EventUserModel\TestMissingRecordAwareHSSFListener.cs" />
+    <Compile Include="HSSF\Extractor\TestExcelExtractor.cs" />
+    <Compile Include="HSSF\Record\Formula\Atp\TestYearFracCalculator.cs" />
+    <Compile Include="HSSF\Record\Formula\Atp\TestYearFracCalculatorFromSpreadsheet.cs" />
+    <Compile Include="HSSF\Record\Formula\Functions\TestIndirect.cs" />
+    <Compile Include="HSSF\UserModel\SanityChecker.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="HSSF\UserModel\TestBugs.cs" />
+    <Compile Include="HSSF\UserModel\TestEscherGraphics.cs" />
+    <Compile Include="HSSF\UserModel\TestHSSFDataFormatter.cs" />
+    <Compile Include="HSSF\UserModel\TestHSSFDateUtil.cs" />
+    <Compile Include="Util\TestStringUtil.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="HSSF\HSSFITestDataProvider.cs" />
+    <Compile Include="HSSF\Model\TestLinkTable.cs" />
+    <Compile Include="HSSF\Model\TestRowBlocksReader.cs" />
+    <Compile Include="HSSF\Record\Aggregates\TestPageSettingsBlock.cs" />
+    <Compile Include="HSSF\Record\Formula\Eval\EvalInstances.cs" />
+    <Compile Include="HSSF\Record\Formula\Eval\TestDivideEval.cs" />
+    <Compile Include="HSSF\Record\Formula\Eval\TestEqualEval.cs" />
+    <Compile Include="HSSF\Record\Formula\Eval\TestMinusZeroResult.cs" />
+    <Compile Include="HSSF\Record\Formula\Eval\TestMissingArgEval.cs" />
+    <Compile Include="HSSF\Record\Formula\Eval\TestRangeEval.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="HSSF\Record\Formula\Functions\TestNper.cs" />
+    <Compile Include="HSSF\Record\Formula\Functions\TestValue.cs" />
+    <Compile Include="HSSF\Record\TestBoolErrRecord.cs" />
+    <Compile Include="HSSF\Record\TestFontRecord.cs" />
+    <Compile Include="HSSF\Record\TestNameCommentRecord.cs" />
+    <Compile Include="HSSF\Record\TestTextObjectBaseRecord.cs" />
+    <Compile Include="HSSF\Record\TestWriteAccessRecord.cs" />
+    <Compile Include="HSSF\UserModel\TestHSSFFont.cs" />
+    <Compile Include="HSSF\UserModel\TestHSSFDataFormat.cs" />
+    <Compile Include="HSSF\UserModel\TestHSSFSheetShiftRows.cs" />
+    <Compile Include="HSSF\UserModel\TestHSSFName.cs" />
+    <Compile Include="POIDataSamples.cs" />
+    <Compile Include="SS\ITestDataProvider.cs" />
+    <Compile Include="SS\TestSpreadsheetVersion.cs" />
+    <Compile Include="SS\UserModel\BaseTestCell.cs" />
+    <Compile Include="SS\UserModel\BaseTestCellComment.cs" />
+    <Compile Include="SS\UserModel\BaseTestDataFormat.cs" />
+    <Compile Include="SS\UserModel\BaseTestFont.cs" />
+    <Compile Include="SS\UserModel\BaseTestHyperlink.cs" />
+    <Compile Include="SS\UserModel\BaseTestNamedRange.cs" />
+    <Compile Include="SS\UserModel\BaseTestPicture.cs" />
+    <Compile Include="SS\UserModel\BaseTestRow.cs" />
+    <Compile Include="SS\UserModel\BaseTestSheet.cs" />
+    <Compile Include="SS\UserModel\BaseTestSheetHiding.cs" />
+    <Compile Include="SS\UserModel\BaseTestSheetShiftRows.cs" />
+    <Compile Include="SS\UserModel\BaseTestWorkbook.cs" />
+    <Compile Include="Util\TestLittleEndianStreams.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\main\main.csproj">
+      <Project>{4704E545-CEFF-46B6-ACEF-C8927830FA1C}</Project>
+      <Name>main</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="DDF\data\" />
+    <Folder Include="HSSF\data\" />
+    <Folder Include="SS\Util\" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.0">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4 %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
+      <Visible>False</Visible>
+      <ProductName>Windows Installer 3.1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

@@ -1,14 +1,14 @@
-Microsoft Visual Studio Solution File, Format Version 10.00
-# Visual Studio 2008
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8FDCF703-E2BD-4EBC-820D-77AAB214E9DC}"
 	ProjectSection(SolutionItems) = preProject
 		LocalTestRun.testrunconfig = LocalTestRun.testrunconfig
 		NPOI.vsmdi = NPOI.vsmdi
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "testcases", "..\..\testcases\main\testcases.csproj", "{A920C2BA-8BFD-4F54-8401-7D1C0730F1F0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "testcases", "..\..\testcases\main\testcases vs10.csproj", "{A920C2BA-8BFD-4F54-8401-7D1C0730F1F0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "main", "..\..\main\main.csproj", "{4704E545-CEFF-46B6-ACEF-C8927830FA1C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "main", "..\..\main\main vs10.csproj", "{4704E545-CEFF-46B6-ACEF-C8927830FA1C}"
 EndProject
 Global
 	GlobalSection(TestCaseManagementSettings) = postSolution
