@@ -48,7 +48,7 @@ namespace TestCases.HSSF.Record.Formula.Eval
             {
                 cv = fe.Evaluate(cell);
             }
-            catch (InvalidOperationException e)
+            catch (InvalidOperationException)
             {
                 throw new AssertFailedException("Missing args Evaluation not implemented (bug 43354");
             }

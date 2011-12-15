@@ -390,13 +390,13 @@ namespace TestCases.HSSF.UserModel
                 styA.VerifyBelongsToWorkbook(wbB);
                 Assert.Fail();
             }
-            catch (ArgumentException e) { }
+            catch (ArgumentException) { }
             try
             {
                 styB.VerifyBelongsToWorkbook(wbA);
                 Assert.Fail();
             }
-            catch (ArgumentException e) { }
+            catch (ArgumentException) { }
 
             ICell cellA = wbA.CreateSheet().CreateRow(0).CreateCell(0);
             ICell cellB = wbB.CreateSheet().CreateRow(0).CreateCell(0);

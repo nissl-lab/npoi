@@ -91,7 +91,7 @@ namespace TestCases.HSSF.UserModel
                 fs2.Root.GetEntry("WORKBOOK");
                 Assert.Fail();
             }
-            catch (FileNotFoundException e) { }
+            catch (FileNotFoundException) { }
 
             // And it can be Opened
             HSSFWorkbook wb2 = new HSSFWorkbook(fs2);

@@ -69,11 +69,11 @@ namespace TestCases.HSSF.Record.Formula.ATP
                     ProcessRow(row, cell, formulaEvaluator);
                     nSuccess++;
                 }
-                catch (AssertFailedException e)
+                catch (AssertFailedException)
                 {
                     nFailures++;
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     nUnexpectedErrors++;
                 }

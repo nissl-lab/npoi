@@ -60,7 +60,7 @@ namespace TestCases.HPSF.Basic
             "LANG environment variable to a proper value, e.g. " +
             "\"de_DE\".";
 
-        POIFile[] poiFiles;
+        //POIFile[] poiFiles;
 
         private TestContext testContextInstance;
 

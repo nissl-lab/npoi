@@ -39,15 +39,15 @@ namespace TestCases.HSSF.UserModel
     public class TestDataValidation
     {
 
-        /** Convenient access to ERROR_STYLE constants */
-        /*package*/
-        static HSSFDataValidation.ERRORSTYLE ES = HSSFDataValidation.ERRORSTYLE.INFO;
-        /** Convenient access to OPERATOR constants */
-        /*package*/
-        static DVConstraint.ValidationType VT = null;
-        /** Convenient access to OPERATOR constants */
-        /*package*/
-        static DVConstraint.OperatorType OP = null;
+        ///** Convenient access to ERROR_STYLE constants */
+        ///*package*/
+        //static HSSFDataValidation.ERRORSTYLE ES = HSSFDataValidation.ERRORSTYLE.INFO;
+        ///** Convenient access to OPERATOR constants */
+        ///*package*/
+        //static DVConstraint.ValidationType VT = null;
+        ///** Convenient access to OPERATOR constants */
+        ///*package*/
+        //static DVConstraint.OperatorType OP = null;
 
         private static void log(String msg)
         {

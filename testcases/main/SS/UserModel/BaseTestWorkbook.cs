@@ -50,7 +50,7 @@ namespace TestCases.SS.UserModel
                 wb.GetSheetAt(0);
                 Assert.Fail("should have thrown exceptiuon due to invalid sheet index");
             }
-            catch (ArgumentException e)
+            catch (ArgumentException)
             {
                 // expected during successful test
             }
@@ -92,7 +92,7 @@ namespace TestCases.SS.UserModel
                     wb.CreateSheet(sheetName);
                     Assert.Fail("should have thrown exception due to invalid sheet name: " + sheetName);
                 }
-                catch (ArgumentException e)
+                catch (ArgumentException)
                 {
                     // expected during successful test
                 }

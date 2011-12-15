@@ -49,7 +49,7 @@ namespace TestCases.HSSF.EventUserModel
                 POIFSFileSystem fs = new POIFSFileSystem(is1);
                 factory.ProcessWorkbookEvents(req, fs);
             }
-            catch (IOException e)
+            catch (IOException)
             {
                 throw;
             }

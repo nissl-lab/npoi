@@ -72,7 +72,7 @@ namespace TestCases.HSSF.Model
                     Console.Error.WriteLine(e.Message);
                     countFailures++;
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     Console.Error.WriteLine("Problem with row[" + rowIx + "] formula '" + formula + "'");
                     countErrors++;

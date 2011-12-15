@@ -37,7 +37,7 @@ namespace TestCases.HSSF.Model
         public void TestWithNamedRange()
         {
             HSSFWorkbook workbook = new HSSFWorkbook();
-            FormulaParser fp;
+            //FormulaParser fp;
             Ptg[] ptgs;
 
             NPOI.SS.UserModel.ISheet s = workbook.CreateSheet("Foo");

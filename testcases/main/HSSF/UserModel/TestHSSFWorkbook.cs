@@ -90,7 +90,7 @@ namespace TestCases.HSSF.UserModel
                 b.CreateSheet("name1");
                 Assert.Fail();
             }
-            catch (ArgumentException pass)
+            catch (ArgumentException)// pass
             {
             }
             b.CreateSheet();
@@ -99,7 +99,7 @@ namespace TestCases.HSSF.UserModel
                 b.SetSheetName(3, "name1");
                 Assert.Fail();
             }
-            catch (ArgumentException pass)
+            catch (ArgumentException)// pass
             {
             }
 
@@ -108,7 +108,7 @@ namespace TestCases.HSSF.UserModel
                 b.SetSheetName(3, "name1");
                 Assert.Fail();
             }
-            catch (ArgumentException pass)
+            catch (ArgumentException)// pass
             {
             }
 

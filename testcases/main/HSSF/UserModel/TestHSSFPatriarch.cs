@@ -60,7 +60,7 @@ namespace TestCases.HSSF.UserModel
             {
                 existingPatr = sheet.DrawingPatriarch;
             }
-            catch (NullReferenceException e)
+            catch (NullReferenceException)
             {
                 throw new AssertFailedException("Identified bug 44916");
             }

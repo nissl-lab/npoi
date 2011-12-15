@@ -1137,7 +1137,7 @@ namespace TestCases.HSSF.UserModel
                 obj.GetDirectory();
                 Assert.Fail();
             }
-            catch (FileNotFoundException e)
+            catch (FileNotFoundException)
             {
                 // expected during successful Test
             }

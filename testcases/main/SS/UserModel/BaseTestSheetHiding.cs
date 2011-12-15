@@ -92,7 +92,7 @@ namespace TestCases.SS.UserModel
                 wb.SetSheetHidden(0, -1);
                 Assert.Fail("expectd exception");
             }
-            catch (ArgumentException e)
+            catch (ArgumentException)
             {
                 // ok
             }
@@ -101,7 +101,7 @@ namespace TestCases.SS.UserModel
                 wb.SetSheetHidden(0, 3);
                 Assert.Fail("expectd exception");
             }
-            catch (ArgumentException e)
+            catch (ArgumentException)
             {
                 // ok
             }

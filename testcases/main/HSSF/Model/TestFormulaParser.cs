@@ -1180,7 +1180,7 @@ namespace TestCases.HSSF.Model
             {
                 HSSFFormulaParser.Parse("SUM(A!C7:A!C67)", wb);
             }
-            catch (IndexOutOfRangeException e)
+            catch (IndexOutOfRangeException)
             {
                 throw new AssertFailedException("Identified bug 42448");
             }

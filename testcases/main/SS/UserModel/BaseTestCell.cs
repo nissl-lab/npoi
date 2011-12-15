@@ -302,7 +302,7 @@ namespace TestCases.SS.UserModel
             {
                 cell.SetCellType(CellType.BOOLEAN);
             }
-            catch (InvalidCastException e)
+            catch (InvalidCastException)
             {
                 throw new AssertFailedException(
                         "Identified bug in conversion of cell from text to bool");
@@ -351,7 +351,7 @@ namespace TestCases.SS.UserModel
             {
                 cell.SetCellValue(2.5);
             }
-            catch (InvalidCastException e)
+            catch (InvalidCastException)
             {
                 throw new AssertFailedException("Identified bug 46479b");
             }

@@ -237,7 +237,7 @@ namespace TestCases.HSSF.UserModel
                 new AreaReference(name2.RefersToFormula);
                 Assert.Fail("attempt to supply an invalid reference to AreaReference constructor results in exception");
             }
-            catch (IndexOutOfRangeException e)
+            catch (IndexOutOfRangeException)
             { // TODO - use a different exception for this condition
                 // expected during successful Test
             }

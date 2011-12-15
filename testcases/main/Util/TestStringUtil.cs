@@ -127,7 +127,7 @@ namespace TestCases.Util
                 StringUtil.GetFromUnicodeBE(Test_data, -1, 16);
                 Assert.Fail("Should have caught IndexOutOfRangeException");
             }
-            catch (IndexOutOfRangeException ignored)
+            catch (IndexOutOfRangeException)// ignored
             {
                 // as expected
             }
@@ -137,7 +137,7 @@ namespace TestCases.Util
                 StringUtil.GetFromUnicodeBE(Test_data, 32, 16);
                 Assert.Fail("Should have caught IndexOutOfRangeException");
             }
-            catch (IndexOutOfRangeException ignored)
+            catch (IndexOutOfRangeException)// ignored
             {
                 // as expected
             }
@@ -147,7 +147,7 @@ namespace TestCases.Util
                 StringUtil.GetFromUnicodeBE(Test_data, 1, 16);
                 Assert.Fail("Should have caught ArgumentException");
             }
-            catch (ArgumentException ignored)
+            catch (ArgumentException)// ignored
             {
                 // as expected
             }
@@ -157,7 +157,7 @@ namespace TestCases.Util
                 StringUtil.GetFromUnicodeBE(Test_data, 1, -1);
                 Assert.Fail("Should have caught ArgumentException");
             }
-            catch (ArgumentException ignored)
+            catch (ArgumentException)// ignored
             {
                 // as expected
             }
@@ -197,7 +197,7 @@ namespace TestCases.Util
                         101 - expected_outPut.Length);
                 Assert.Fail("Should have caught ArgumentException");
             }
-            catch (ArgumentException ignored)
+            catch (ArgumentException)// ignored
             {
                 // as expected
             }
@@ -239,7 +239,7 @@ namespace TestCases.Util
                         101 - expected_outPut.Length);
                 Assert.Fail("Should have caught ArgumentException");
             }
-            catch (ArgumentException ignored)
+            catch (ArgumentException)// ignored
             {
                 // as expected
             }

@@ -476,7 +476,7 @@ namespace TestCases.HSSF.Record
             {
                 hr.ToString();
             }
-            catch (NullReferenceException e)
+            catch (NullReferenceException)
             {
                 throw new AssertFailedException("Identified bug with option URL and UNC set at same time");
             }

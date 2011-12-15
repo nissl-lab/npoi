@@ -713,7 +713,7 @@ namespace TestCases.HSSF.Model
 
                 cft = sheet.ConditionalFormattingTable; // lazy getter
             }
-            catch (InvalidCastException e)
+            catch (InvalidCastException)
             {
                 throw new AssertFailedException("Identified bug 46547b");
             }

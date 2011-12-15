@@ -113,7 +113,7 @@ namespace TestCases.SS.UserModel
                     name1.NameName = (name);
                     Assert.Fail("should have thrown exceptiuon due to invalid name: " + name);
                 }
-                catch (ArgumentException e)
+                catch (ArgumentException)
                 {
                     // expected during successful test
                     ;

@@ -256,7 +256,7 @@ namespace TestCases.HSSF.UserModel
             {
                 fe.EvaluateInCell(cell);
             }
-            catch (FormatException e)
+            catch (FormatException)
             {
                 Assert.Fail("Identified bug 44508");
             }

@@ -64,7 +64,7 @@ namespace TestCases.HSSF.UserModel
             HSSFWorkbook wb = new HSSFWorkbook();
             NPOI.SS.UserModel.ISheet s = wb.CreateSheet();
             IRow r = null;
-            ICell c = null;
+            //ICell c = null;
             IFont fnt = wb.CreateFont();
             NPOI.SS.UserModel.ICellStyle cs = wb.CreateCellStyle();
 
