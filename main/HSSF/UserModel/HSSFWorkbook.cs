@@ -34,6 +34,7 @@ namespace NPOI.HSSF.UserModel
     using NPOI.SS.Util;
     using NPOI.SS.UserModel;
     using NPOI.HSSF.Record.Formula.Udf;
+    using NPOI.Util;
 
 
     /// <summary>
@@ -1284,7 +1285,7 @@ namespace NPOI.HSSF.UserModel
                 excepts.Add("WORKBOOK");
 
                 // Copy over all the other nodes to our new poifs
-                CopyNodes(directory, fs.Root, excepts);
+                POIUtils.CopyNodes(directory, fs.Root, excepts);
             }
             fs.WriteFileSystem(stream);
 

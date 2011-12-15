@@ -54,7 +54,7 @@ namespace NPOI.HSSF.Record.Formula.Eval
 
         protected static Function[] functions = ProduceFunctions();
 
-        private static Hashtable freeRefFunctionsByIdMap;
+        // fix warning CS0169 "never used": private static Hashtable freeRefFunctionsByIdMap;
         private static FunctionMetadataRegistry _instance;
 
         private static FunctionMetadataRegistry GetInstance()

@@ -41,7 +41,7 @@ namespace NPOI.HSSF.Record
         private int[] bucketAbsoluteOffsets;
         /** OffSets relative the start of the current SST or continue record */
         private int[] bucketRelativeOffsets;
-        int startOfSST, startOfRecord;
+        // fix warning CS0169 "never used": int startOfSST, startOfRecord;
 
         public SSTSerializer(IntMapper strings, int numStrings, int numUniqueStrings)
         {

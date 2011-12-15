@@ -98,11 +98,11 @@ namespace NPOI.HSSF.Record
 
         private FontFormatting fontFormatting;
 
-        private byte field_8_align_text_break;
-        private byte field_9_align_text_rotation_angle;
-        private short field_10_align_indentation;
-        private short field_11_relative_indentation;
-        private short field_12_not_used;
+        // fix warning CS0414 "never used": private byte field_8_align_text_break;
+        // fix warning CS0414 "never used": private byte field_9_align_text_rotation_angle;
+        // fix warning CS0414 "never used": private short field_10_align_indentation;
+        // fix warning CS0414 "never used": private short field_11_relative_indentation;
+        // fix warning CS0414 "never used": private short field_12_not_used;
 
         private BorderFormatting borderFormatting;
 
@@ -126,11 +126,11 @@ namespace NPOI.HSSF.Record
             //TODO:: check what's this field used for
             field_6_not_used = unchecked((short)0x8002); // Excel seems to Write this value, but it doesn't seem to care what it Reads
             fontFormatting = null;
-            field_8_align_text_break = 0;
-            field_9_align_text_rotation_angle = 0;
-            field_10_align_indentation = 0;
-            field_11_relative_indentation = 0;
-            field_12_not_used = 0;
+            //field_8_align_text_break = 0;
+            //field_9_align_text_rotation_angle = 0;
+            //field_10_align_indentation = 0;
+            //field_11_relative_indentation = 0;
+            //field_12_not_used = 0;
             borderFormatting = null;
             patternFormatting = null;
             field_17_formula1 = FR.Formula.Create(Ptg.EMPTY_PTG_ARRAY);

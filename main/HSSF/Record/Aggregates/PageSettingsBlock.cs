@@ -48,7 +48,7 @@ namespace NPOI.HSSF.Record.Aggregates
         private RightMarginRecord _rightMargin;
         private TopMarginRecord _topMargin;
         private BottomMarginRecord _bottomMargin;
-        private Record _pls;
+        // fix warning CS0169 "never used": private Record _pls;
         private PrintSetupRecord printSetup;
         private Record _bitmap;
         private HeaderFooterRecord _headerFooter;

@@ -31,7 +31,7 @@ namespace NPOI.HSSF.Record.Formula.Functions
      */
     public class Substitute : TextFunction
     {
-        private static int Replace_ALL = -1;
+        // fix warning CS0414 "never used": private static int Replace_ALL = -1;
 
         /**
          *Substitutes text in a text string with new text, some number of times.

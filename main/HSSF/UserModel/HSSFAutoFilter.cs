@@ -10,8 +10,9 @@ namespace NPOI.HSSF.UserModel
 {
     public class HSSFAutoFilter
     {
-        AutoFilterInfoRecord autofilterinfo;
-        AutoFilterRecord autofilter;
+        // fix warning CS0649: Field 'autofilterinfo' is never assigned to, and will always have its default value null
+        // AutoFilterInfoRecord autofilterinfo;
+        // fix warning CS0169 "never used": AutoFilterRecord autofilter;
         FilterModeRecord filtermode;
 
         private HSSFSheet _sheet;
@@ -49,7 +50,7 @@ namespace NPOI.HSSF.UserModel
             //look for the FilterModeRecord
             NPOI.HSSF.Record.Record record = sheet.Sheet.FindFirstRecordBySid(FilterModeRecord.sid);
 
-            FilterModeRecord filtermode;
+            // this local variable hides the class one: FilterModeRecord filtermode;
             //if not found, add a new one
             if (record == null)
             {
@@ -80,10 +81,11 @@ namespace NPOI.HSSF.UserModel
             if(filtermode!=null)
                 sheet.Sheet.Records.Remove(filtermode);
         }
-        private void RemoveAutoFilterInfoRecord(HSSFSheet sheet)
-        {
-            if (autofilterinfo != null)
-                sheet.Sheet.Records.Remove(autofilterinfo);
-        }
+        // fix warning autofilterinfo "is never assigned":
+        //private void RemoveAutoFilterInfoRecord(HSSFSheet sheet)
+        //{
+        //    if (autofilterinfo != null)
+        //        sheet.Sheet.Records.Remove(autofilterinfo);
+        //}
     }
 }

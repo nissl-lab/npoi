@@ -62,7 +62,7 @@ namespace NPOI.HSSF.UserModel
 
         private CellType cellType;
         private HSSFRichTextString stringValue;
-        private short encoding = ENCODING_UNCHANGED;
+        // fix warning CS0414 "never used": private short encoding = ENCODING_UNCHANGED;
         private HSSFWorkbook book;
         private HSSFSheet sheet;
         private CellValueRecordInterface record;

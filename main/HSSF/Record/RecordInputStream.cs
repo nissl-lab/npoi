@@ -93,7 +93,7 @@ namespace NPOI.HSSF.Record
         protected int _currentDataLength = -1;
         protected int _nextSid = -1;
         private int _currentDataOffset = 0;
-        private long _initialposition;
+        // fix warning CS0169 "never used": private long _initialposition;
         private long pos = 0;
 
         /** Header {@link LittleEndianInput} facet of the wrapped {@link InputStream} */

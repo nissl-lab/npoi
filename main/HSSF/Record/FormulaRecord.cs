@@ -231,8 +231,8 @@ namespace NPOI.HSSF.Record
         /**
          * Since the NaN support seems sketchy (different constants) we'll store and spit it out directly
          */
-        private byte[] value_data;
-        private byte[] all_data; //if formula support is not enabled then
+        // fix warning CS0169 "never used": private byte[] value_data;
+        // fix warning CS0169 "never used": private byte[] all_data; //if formula support is not enabled then
         //we'll just store/reSerialize
 
         /** Creates new FormulaRecord */

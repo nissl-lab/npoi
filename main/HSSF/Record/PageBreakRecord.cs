@@ -44,7 +44,7 @@ namespace NPOI.HSSF.Record
         public const short HORIZONTAL_SID = (short)0x1B;
         public const short VERTICAL_SID = (short)0x1A;
         public short sid;
-        private short numBreaks;
+        // fix warning CS0169 "never used": private short numBreaks;
         private IList _breaks;
         private Hashtable _breakMap;
 

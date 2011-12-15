@@ -209,7 +209,7 @@ namespace NPOI.HSSF.Util
         {
             if (m_cellFrom == null)
                 m_cellFrom = "a1";
-            int tlX, tlY, rbX, rbY; //Tony Qu: not sure what's doing here
+            int tlX, tlY; // fix warning CS0168 "never used": , rbX, rbY; //Tony Qu: not sure what's doing here
             tlX = GetXPosition(m_cellFrom);
             tlY = GetYPosition(m_cellFrom);
             m_cellTo = NumTo26Sys(tlX + _width - 1);

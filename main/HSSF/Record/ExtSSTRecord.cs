@@ -49,7 +49,7 @@ namespace NPOI.HSSF.Record
         public const short sid = 0xff;
         private short field_1_strings_per_bucket = DEFAULT_BUCKET_SIZE;
         private InfoSubRecord[] _sstInfos;
-        private short _stringsPerBucket;
+        // fix warning CS0169 "never used": private short _stringsPerBucket;
 
         public ExtSSTRecord()
         {

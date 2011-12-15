@@ -1938,7 +1938,7 @@ namespace NPOI.HSSF.UserModel
              * This is the multiple that the font height is scaled by when determining the
              * boundary of rotated text.
              */
-            double fontHeightMultiple = 2.0;
+            // fix warning CS0219 "never used":  double fontHeightMultiple = 2.0;
 
 
 

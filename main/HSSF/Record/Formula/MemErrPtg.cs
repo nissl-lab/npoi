@@ -33,9 +33,9 @@ namespace NPOI.HSSF.Record.Formula
     public class MemErrPtg : MemAreaPtg
     {
         public new const short sid = 0x27;
-        private static int SIZE = 7;
-	    private int field_1_reserved;
-	    private short field_2_subex_len;
+        // fix warning CS0414 "never used": private static int SIZE = 7;
+	    private int field_1_reserved = 0;
+	    private short field_2_subex_len = 0;
 
         /** Creates new MemErrPtg */
 
