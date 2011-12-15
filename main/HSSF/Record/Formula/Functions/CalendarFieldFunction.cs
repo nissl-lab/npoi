@@ -38,7 +38,7 @@ namespace NPOI.HSSF.Record.Formula.Functions
         public const int DAY_OF_MONTH_ID=0x03;
 
         public static Function YEAR = new CalendarFieldFunction(YEAR_ID, false);
-        public static Function MONTH = new CalendarFieldFunction(MONTH_ID, true);
+        public static Function MONTH = new CalendarFieldFunction(MONTH_ID, false);
         public static Function DAY = new CalendarFieldFunction(DAY_OF_MONTH_ID, false);
 
         private int _dateFieldId;
