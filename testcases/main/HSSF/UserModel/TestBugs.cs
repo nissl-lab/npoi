@@ -45,6 +45,15 @@ namespace TestCases.HSSF.UserModel
     [TestClass]
     public class TestBugs
     {
+        /// <summary>
+        ///  Some of the tests are depending on the american culture.
+        /// </summary>
+        [ClassInitialize()]
+        public static void PrepareCultere(TestContext testContext)
+        {
+            System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
+        }
+
 
         private static HSSFWorkbook OpenSample(String sampleFileName)
         {
@@ -1417,7 +1426,7 @@ namespace TestCases.HSSF.UserModel
          */
         [TestMethod]
         public void Test43623()
-        {
+        {           
             HSSFWorkbook wb = OpenSample("43623.xls");
             Assert.AreEqual(1, wb.NumberOfSheets);
 

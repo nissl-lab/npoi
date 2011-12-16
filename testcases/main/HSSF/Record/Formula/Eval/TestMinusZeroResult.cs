@@ -44,6 +44,15 @@ namespace TestCases.HSSF.Record.Formula.Eval
     {
         private static double MINUS_ZERO = -0.0;
 
+        /// <summary>
+        ///  Some of the tests are depending on the american culture.
+        /// </summary>
+        [ClassInitialize()]
+        public static void PrepareCultere(TestContext testContext)
+        {
+            System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
+        }
+
         [TestMethod]
         public void TestSimpleOperators()
         {

@@ -38,6 +38,15 @@ namespace TestCases.HSSF.Model
     [TestClass]
     public class TestFormulaParser
     {
+        /// <summary>
+        ///  Some of the tests are depending on the american culture.
+        /// </summary>
+        [ClassInitialize()]
+        public static void PrepareCultere(TestContext testContext)
+        {
+            System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
+        }
+
 
         /**
          * @return Parsed token array alReady Confirmed not <c>null</c>
@@ -545,6 +554,9 @@ namespace TestCases.HSSF.Model
         [TestMethod]
         public void TestParseNumber()
         {
+            // This Test depends on the american culture.
+            System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US"); 
+            
             IntPtg ip;
 
             // bug 33160

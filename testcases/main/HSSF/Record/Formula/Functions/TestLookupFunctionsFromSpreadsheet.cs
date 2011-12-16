@@ -203,6 +203,9 @@ namespace TestCases.HSSF.Record.Formula.Functions
         [TestMethod]
         public void TestFunctionsFromTestSpreadsheet()
         {
+            // This test methods depends on the american culture.
+            System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
+
             HSSFWorkbook workbook = HSSFTestDataSamples.OpenSampleWorkbook(SS.FILENAME);
 
             ConfirmReadMeSheet(workbook);

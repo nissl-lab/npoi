@@ -36,6 +36,15 @@ namespace TestCases.HSSF.Record
     [TestClass]
     public class TestHyperlinkRecord
     {
+        /// <summary>
+        ///  Some of the tests are depending on the american culture.
+        /// </summary>
+        [ClassInitialize()]
+        public static void PrepareCultere(TestContext testContext)
+        {
+            System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
+        }
+
 
         //link to http://www.lakings.com/
         byte[] data1 = { 0x02, 0x00,    //First row of the hyperlink

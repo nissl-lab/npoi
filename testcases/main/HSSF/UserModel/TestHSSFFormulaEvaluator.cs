@@ -34,6 +34,14 @@ namespace TestCases.HSSF.UserModel
     [TestClass]
     public class TestHSSFFormulaEvaluator
     {
+        /// <summary>
+        ///  Some of the tests are depending on the american culture.
+        /// </summary>
+        [ClassInitialize()]
+        public static void PrepareCultere(TestContext testContext)
+        {
+            System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
+        }
 
         /**
          * Test that the HSSFFormulaEvaluator can Evaluate simple named ranges

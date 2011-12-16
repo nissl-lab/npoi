@@ -32,7 +32,14 @@ namespace TestCases.HSSF.Record.Formula.Eval
     [TestClass]
     public class TestEqualEval 
     {
-
+        /// <summary>
+        ///  Some of the tests are depending on the american culture.
+        /// </summary>
+        [ClassInitialize()]
+        public static void PrepareCultere(TestContext testContext)
+        {
+            System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
+        }
 
         /**
          * Test for bug observable at svn revision 692218 (Sep 2008)<br/>

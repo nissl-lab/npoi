@@ -31,6 +31,15 @@ namespace TestCases.Util
     [TestClass]
     public class TestLittleEndianStreams
     {
+        /// <summary>
+        ///  Some of the tests are depending on the american culture.
+        /// </summary>
+        [ClassInitialize()]
+        public static void PrepareCultere(TestContext testContext)
+        {
+            System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
+        }
+
         [TestMethod]
         public void TestRead()
         {

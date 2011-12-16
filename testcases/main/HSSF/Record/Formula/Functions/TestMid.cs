@@ -30,6 +30,15 @@ namespace TestCases.HSSF.Record.Formula.Functions
     [TestClass]
     public class TestMid
     {
+        /// <summary>
+        ///  Some of the tests are depending on the american culture.
+        /// </summary>
+        [ClassInitialize()]
+        public static void PrepareCultere(TestContext testContext)
+        {
+            System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
+        }
+
         private static ValueEval InvokeMid(ValueEval text, ValueEval startPos, ValueEval numChars)
         {
             ValueEval[] args = new ValueEval[] { text, startPos, numChars, };

@@ -46,6 +46,15 @@ namespace TestCases.HSSF.UserModel
         private HSSFShapeGroup escherGroupB;
         private EscherGraphics graphics;
 
+        /// <summary>
+        ///  Some of the tests are depending on the american culture.
+        /// </summary>
+        [ClassInitialize()]
+        public static void PrepareCultere(TestContext testContext)
+        {
+            System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
+        }
+
         [TestInitialize]
         public void SetUp()
         {

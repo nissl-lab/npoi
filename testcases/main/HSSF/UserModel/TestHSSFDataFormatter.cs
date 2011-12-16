@@ -40,6 +40,9 @@ namespace TestCases.HSSF.UserModel
 
         public TestHSSFDataFormatter()
         {
+            // One or more test methods depends on the american culture.
+            System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
+            
             // Create the formatter to Test
             formatter = new DataFormatter();
 

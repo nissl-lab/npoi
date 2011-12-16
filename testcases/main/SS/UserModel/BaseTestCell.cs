@@ -43,6 +43,8 @@ namespace TestCases.SS.UserModel
          */
         protected BaseTestCell(ITestDataProvider testDataProvider)
         {
+            // One or more test methods depends on the american culture.
+            System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
             _testDataProvider = testDataProvider;
         }
         [TestMethod]

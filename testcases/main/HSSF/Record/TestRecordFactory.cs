@@ -35,7 +35,14 @@ namespace TestCases.HSSF.Record
     [TestClass]
     public class TestRecordFactory
     {
-
+        /// <summary>
+        ///  Some of the tests are depending on the american culture.
+        /// </summary>
+        [ClassInitialize()]
+        public static void PrepareCultere(TestContext testContext)
+        {
+            System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
+        }
 
         /**
          * TEST NAME:  Test Basic Record Construction <P>
