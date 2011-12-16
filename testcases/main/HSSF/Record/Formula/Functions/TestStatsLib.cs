@@ -60,7 +60,7 @@ namespace TestCases.HSSF.Record.Formula.Functions
             v = new double[] { 123.12, 33.3333, 2d / 3d, 5.37828, 0.999 };
             d = StatsLib.devsq(v);
             x = 10953.7416965767;
-            Assert.AreEqual(x, d, "devsq ");
+            Assert.AreEqual(x, d,0.0000000001, "devsq ");
 
             v = new double[] { -1, -2, -3, -4, -5, -6, -7, -8, -9, -10 };
             d = StatsLib.devsq(v);
@@ -136,7 +136,7 @@ namespace TestCases.HSSF.Record.Formula.Functions
             v = new double[] { 123.12, 33.3333, 2d / 3d, 5.37828, 0.999 };
             d = StatsLib.avedev(v);
             x = 36.42176053333;
-            Assert.AreEqual(x, d, "avedev ");
+            Assert.AreEqual(x, d,0.0000000001, "avedev ");
 
             v = new double[] { -1, -2, -3, -4, -5, -6, -7, -8, -9, -10 };
             d = StatsLib.avedev(v);
@@ -250,7 +250,7 @@ namespace TestCases.HSSF.Record.Formula.Functions
             v = new double[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
             d = StatsLib.stdev(v);
             x = 3.02765035410;
-            Assert.AreEqual(x, d, "stdev ");
+            Assert.AreEqual(x, d,0.0000000001, "stdev ");
 
             v = new double[] { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 };
             d = StatsLib.stdev(v);
@@ -265,17 +265,17 @@ namespace TestCases.HSSF.Record.Formula.Functions
             v = new double[] { 1, 2, 1, 2, 1, 2, 1, 2, 1, 2 };
             d = StatsLib.stdev(v);
             x = 0.52704627669;
-            Assert.AreEqual(x, d, "stdev ");
+            Assert.AreEqual(x, d, 0.0000000001, "stdev ");
 
             v = new double[] { 123.12, 33.3333, 2d / 3d, 5.37828, 0.999 };
             d = StatsLib.stdev(v);
             x = 52.33006233652;
-            Assert.AreEqual(x, d, "stdev ");
+            Assert.AreEqual(x, d, 0.0000000001, "stdev ");
 
             v = new double[] { -1, -2, -3, -4, -5, -6, -7, -8, -9, -10 };
             d = StatsLib.stdev(v);
             x = 3.02765035410;
-            Assert.AreEqual(x, d, "stdev ");
+            Assert.AreEqual(x, d, 0.0000000001, "stdev ");
         }
     }
 }
