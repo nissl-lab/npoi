@@ -83,6 +83,8 @@ namespace TestCases.HSSF.Record.Formula.Functions
         [TestMethod]
         public void TestCountIf()
         {
+            // This Test depends on the american culture.
+            System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
 
             AreaEval range;
             ValueEval[] values;

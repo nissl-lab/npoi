@@ -39,6 +39,7 @@ namespace TestCases.HSSF.UserModel
     {
         //In POI bugzilla, this bug is taged as "RESOLVED WON'T FIX"
         [TestMethod]
+        [Ignore] // because of WON'T FIX
         public void Test43493()
         {
             // Has crazy corrupt sub-records on

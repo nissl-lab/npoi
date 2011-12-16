@@ -141,11 +141,9 @@ namespace TestCases.HSSF.Record.Formula.Eval
             }
         }
         [TestMethod]
+        [Ignore] // TODO port upstream patch https://svn.apache.org/viewvc?view=revision&revision=798771
         public void TestRounding_bug47598()
         {
-            // This Test depends on the american culture.
-            System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
-
             double x = 1 + 1.0028 - 0.9973; // should be 1.0055, but has IEEE rounding
             Assert.IsFalse(x == 1.0055);
 
