@@ -128,7 +128,7 @@ namespace NPOI.Util.IO
         public void ReadFully(byte[] buf, int off, int len)
         {
             CheckPosition(len);
-            System.Array.Copy(_buf, _ReadIndex, _buf, off, len);
+            System.Array.Copy(_buf, _ReadIndex, buf, off, len);
             _ReadIndex += len;
         }
         public void ReadFully(byte[] buf)

@@ -70,7 +70,6 @@ namespace TestCases.Util
          * array.
          */
         [TestMethod]
-        [Ignore] // TODO port upstream patch https://svn.apache.org/viewvc?view=revision&revision=836101
         public void TestReadFully()
         {
             byte[] srcBuf = HexRead.ReadFromString("99 88 77 66 55 44 33");
