@@ -83,7 +83,18 @@ namespace NPOI.HSSF.Util
 		public long D4
         {
             get{
-                return _d4;
+                //return _d4;
+                byte[] buf;
+
+                using (MemoryStream ms = new MemoryStream(8))
+                {
+                    BinaryWriter bw = new BinaryWriter(ms);
+                    bw.Write(_d4);
+                    buf = ms.ToArray();
+                    bw.Close();
+                }
+                Array.Reverse(buf);
+                return new LittleEndianByteArrayInputStream(buf).ReadLong();
             }
 		}
 

@@ -491,7 +491,6 @@ namespace TestCases.HSSF.Record
             }
         }
         [TestMethod]
-        [Ignore] // Assert.AreEqual failed. Expected:<0x9A0C0305E82C3301>. Actual:<0x01332CE805030C9A>.
         public void TestGUID()
         {
             GUID g;
@@ -505,7 +504,7 @@ namespace TestCases.HSSF.Record
 
             byte[] buf = new byte[16];
             g.Serialize(new LittleEndianByteArrayOutputStream(buf, 0));
-            String expectedDump = "[DF, 9B, 57, 13, 46, 02, CE, 8A, 01, 23, 45, 67, 89, AB, CD, EF]";
+            String expectedDump = "[DF, 9B, 57, 13, 46, 02, CE, 8A, 01, 23, 45, 67, 89, AB, CD, EF, ]";
             Assert.AreEqual(expectedDump, HexDump.ToHex(buf));
 
             // STD Moniker
