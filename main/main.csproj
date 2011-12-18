@@ -855,13 +855,21 @@
     <Compile Include="SS\UserModel\VerticalAlignment.cs" />
     <Compile Include="SS\UserModel\Workbook.cs" />
     <Compile Include="SS\Util\AreaReference.cs" />
+    <Compile Include="SS\Util\BigInteger.cs" />
     <Compile Include="SS\Util\CellRangeAddress.cs" />
     <Compile Include="SS\Util\CellRangeAddress8Bit.cs" />
     <Compile Include="SS\Util\CellRangeAddressBase.cs" />
     <Compile Include="SS\Util\CellRangeAddressList.cs" />
     <Compile Include="SS\Util\CellReference.cs" />
+    <Compile Include="SS\Util\ExpandedDouble.cs" />
     <Compile Include="SS\Util\Format.cs" />
     <Compile Include="SS\Util\IEEEDouble.cs" />
+    <Compile Include="SS\Util\MutableFPNumber.cs" />
+    <Compile Include="SS\Util\NormalisedDecimal.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="SS\Util\NumberComparer.cs" />
+    <Compile Include="SS\Util\NumberToTextConverter.cs" />
     <Compile Include="SS\Util\PaneInformation.cs" />
     <Compile Include="SS\Util\Region.cs" />
     <Compile Include="SS\Util\SheetReferences.cs" />
