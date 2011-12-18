@@ -38,31 +38,30 @@ namespace TestCases.SS.Util
          * up to contain the rendering as produced by Excel.
          */
         [TestMethod]
-        [Ignore]
         public void TestAllNumberToText()
         {
             int failureCount = 0;
 
-            NumberToTextConversionExamples.ExampleConversion[] examples = NumberToTextConversionExamples.GetExampleConversions();
+            ExampleConversion[] examples = NumberToTextConversionExamples.GetExampleConversions();
 
             for (int i = 0; i < examples.Length; i++)
             {
-                NumberToTextConversionExamples.ExampleConversion example = examples[i];
+                ExampleConversion example = examples[i];
                 try
                 {
-                    if (example.IsNaN)
+                    if (example.IsNaN())
                     {
-                        ConfirmNaN(example.RawDoubleBits, example.ExcelRendering);
+                        ConfirmNaN(example.GetRawDoubleBits(), example.GetExcelRendering());
                         continue;
                     }
-                    String actual = NumberToTextConverter.ToText(example.DoubleValue);
-                    if (!example.ExcelRendering.Equals(actual))
+                    String actual = NumberToTextConverter.ToText(example.GetDoubleValue());
+                    if (!example.GetExcelRendering().Equals(actual))
                     {
                         failureCount++;
                         String msg = "Error rendering for examples[" + i + "] "
                                 + FormatExample(example) + " "
                                 + " bad-result='" + actual + "' "
-                                + "Excel String=" + example.ExcelRendering;
+                                + "Excel String=" + example.GetExcelRendering();
                         //System.err.println(msg);
                         System.Console.WriteLine(msg);
                         continue;
@@ -84,11 +83,11 @@ namespace TestCases.SS.Util
             }
         }
 
-        private static String FormatExample(TestCases.SS.Util.NumberToTextConversionExamples.ExampleConversion example)
+        private static String FormatExample(ExampleConversion example)
         {
-            String hexLong = example.RawDoubleBits.ToString("X");
+            String hexLong = example.GetRawDoubleBits().ToString("X");
             String longRep = "0x" + "0000000000000000".Substring(hexLong.Length) + hexLong + "L";
-            return "ec(" + longRep + ", \"" + example.CSharpRendering + "\", \"" + example.ExcelRendering + "\")";
+            return "ec(" + longRep + ", \"" + example.GetJavaRendering() + "\", \"" + example.GetExcelRendering() + "\")";
         }
 
         /**
@@ -126,7 +125,6 @@ namespace TestCases.SS.Util
             Assert.AreEqual(excelRep, strExcel);
         }
         [TestMethod]
-        [Ignore]
         public void TestSimpleRendering_bug56156()
         {
             double dResult = 0.05 + 0.01; // values chosen to produce rounding anomaly
