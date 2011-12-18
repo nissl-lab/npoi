@@ -18,6 +18,7 @@
 namespace NPOI.SS.Util
 {
     using System;
+    using System.Text;
 
     /**
      * Represents a transformation of a 64 bit IEEE double quantity having a decimal exponent and a
@@ -48,7 +49,7 @@ namespace NPOI.SS.Util
          */
         private static int EXPONENT_OFFSET = 14;
 
-        private static BigDecimal BD_2_POW_24 = new BigDecimal(BigInt32.ONE.ShiftLeft(24));
+        private static decimal BD_2_POW_24 = new decimal((new BigInteger(1)<<24).LongValue());
 
         /**
          * log<sub>10</sub>(2)&times;2<sup>20</sup>
@@ -99,10 +100,11 @@ namespace NPOI.SS.Util
             switch (cc.Get64BitNormalisedExponent())
             {
                 case 46:
-                    if (cc.isAboveMinRep())
+                    if (cc.IsAboveMinRep())
                     {
                         break;
                     }
+                    goto case 44;
                 case 44:
                 case 45:
                     cc.multiplyByPowerOfTen(1);
@@ -112,10 +114,11 @@ namespace NPOI.SS.Util
                 case 48:
                     break;
                 case 49:
-                    if (cc.isBelowMaxRep())
+                    if (cc.IsBelowMaxRep())
                     {
                         break;
                     }
+                    goto case 50;
                 case 50:
                     cc.multiplyByPowerOfTen(-1);
                     pow10++;
@@ -124,7 +127,7 @@ namespace NPOI.SS.Util
                 default:
                     throw new InvalidOperationException("Bad binary exp " + cc.Get64BitNormalisedExponent() + ".");
             }
-            cc.normalise64bit();
+            cc.Normalise64bit();
 
             return cc.CreateNormalisedDecimal(pow10);
         }
@@ -132,7 +135,7 @@ namespace NPOI.SS.Util
         /**
          * Rounds at the digit with value 10<sup>decimalExponent</sup>
          */
-        public NormalisedDecimal roundUnits()
+        public NormalisedDecimal RoundUnits()
         {
             long wholePart = _wholePart;
             if (_fractionalPart >= FRAC_HALF)
@@ -167,7 +170,7 @@ namespace NPOI.SS.Util
         private int _fractionalPart;
 
 
-        NormalisedDecimal(long wholePart, int fracPart, int decimalExponent)
+        public NormalisedDecimal(long wholePart, int fracPart, int decimalExponent)
         {
             _wholePart = wholePart;
             _fractionalPart = fracPart;
@@ -185,18 +188,18 @@ namespace NPOI.SS.Util
          * The sign bit must be obtained from somewhere else.
          * @return a new {@link NormalisedDecimal} normalised to base 2 representation.
          */
-        public ExpandedDouble normaliseBaseTwo()
+        public ExpandedDouble NormaliseBaseTwo()
         {
-            MutableFPNumber cc = new MutableFPNumber(composeFrac(), 39);
+            MutableFPNumber cc = new MutableFPNumber(ComposeFrac(), 39);
             cc.multiplyByPowerOfTen(_relativeDecimalExponent);
-            cc.normalise64bit();
+            cc.Normalise64bit();
             return cc.CreateExpandedDouble();
         }
 
         /**
          * @return the significand as a fixed point number (with 24 fraction bits and 47-50 whole bits)
          */
-        BigInteger composeFrac()
+        BigInteger ComposeFrac()
         {
             long wp = _wholePart;
             int fp = _fractionalPart;
@@ -217,7 +220,7 @@ namespace NPOI.SS.Util
 
         public String GetSignificantDecimalDigits()
         {
-            return Long.ToString(_wholePart);
+            return _wholePart.ToString();
         }
         /**
          * Rounds the first whole digit position (considers only units digit, not frational part).
@@ -229,7 +232,7 @@ namespace NPOI.SS.Util
             long wp = _wholePart + 5; // rounds last digit
             StringBuilder sb = new StringBuilder(24);
             sb.Append(wp);
-            sb.SetCharAt(sb.Length - 1, '0');
+            sb[sb.Length - 1]= '0';
             return sb.ToString();
         }
 
@@ -261,9 +264,9 @@ namespace NPOI.SS.Util
             }
             return _fractionalPart - other._fractionalPart;
         }
-        public BigDecimal GetFractionalPart()
+        public decimal GetFractionalPart()
         {
-            return new BigDecimal(_fractionalPart).divide(BD_2_POW_24);
+            return new decimal(_fractionalPart)/(BD_2_POW_24);
         }
 
         private String GetFractionalDigits()
@@ -272,17 +275,17 @@ namespace NPOI.SS.Util
             {
                 return "0";
             }
-            return GetFractionalPart().ToString().substring(2);
+            return GetFractionalPart().ToString().Substring(2);
         }
 
 
-        public String ToString()
+        public override String ToString()
         {
 
             StringBuilder sb = new StringBuilder();
-            sb.Append(GetClass().getName());
+            sb.Append(this.GetType().Name);
             sb.Append(" [");
-            String ws = String.ValueOf(_wholePart);
+            String ws = _wholePart.ToString();
             sb.Append(ws[0]);
             sb.Append('.');
             sb.Append(ws.Substring(1));

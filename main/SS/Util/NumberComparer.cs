@@ -95,21 +95,21 @@ namespace NPOI.SS.Util
                     return CompareSubnormalNumbers(rawBitsA & IEEEDouble.FRAC_MASK, rawBitsB & IEEEDouble.FRAC_MASK, aIsNegative);
                 }
                 // else biasedExponentB is 1
-                return -compareAcrossSubnormalThreshold(rawBitsB, rawBitsA, aIsNegative);
+                return -CompareAcrossSubnormalThreshold(rawBitsB, rawBitsA, aIsNegative);
             }
             if (biasedExponentB == 0)
             {
                 // else biasedExponentA is 1
-                return +compareAcrossSubnormalThreshold(rawBitsA, rawBitsB, aIsNegative);
+                return +CompareAcrossSubnormalThreshold(rawBitsA, rawBitsB, aIsNegative);
             }
 
             // sign and exponents same, but fractional bits are different
 
             ExpandedDouble edA = ExpandedDouble.FromRawBitsAndExponent(rawBitsA, biasedExponentA - IEEEDouble.EXPONENT_BIAS);
             ExpandedDouble edB = ExpandedDouble.FromRawBitsAndExponent(rawBitsB, biasedExponentB - IEEEDouble.EXPONENT_BIAS);
-            NormalisedDecimal ndA = edA.normaliseBaseTen().roundUnits();
-            NormalisedDecimal ndB = edB.normaliseBaseTen().roundUnits();
-            cmp = ndA.compareNormalised(ndB);
+            NormalisedDecimal ndA = edA.NormaliseBaseTen().RoundUnits();
+            NormalisedDecimal ndB = edB.NormaliseBaseTen().RoundUnits();
+            cmp = ndA.CompareNormalised(ndB);
             if (aIsNegative)
             {
                 return -cmp;
@@ -135,7 +135,7 @@ namespace NPOI.SS.Util
          * @param isNegative both values are either negative or positive. This parameter affects the sign of the comparison result
          * @return usually <code>isNegative ? -1 : +1</code>
          */
-        private static int compareAcrossSubnormalThreshold(long normalRawBitsA, long subnormalRawBitsB, bool isNegative)
+        private static int CompareAcrossSubnormalThreshold(long normalRawBitsA, long subnormalRawBitsB, bool isNegative)
         {
             long fracB = subnormalRawBitsB & IEEEDouble.FRAC_MASK;
             if (fracB == 0)

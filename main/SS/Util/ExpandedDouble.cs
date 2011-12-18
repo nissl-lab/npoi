@@ -34,18 +34,18 @@ namespace NPOI.SS.Util
      *
      * @author Josh Micich
      */
-    class ExpandedDouble
+    public class ExpandedDouble
     {
-        private static BigInteger BI_FRAC_MASK = BigInt32.ValueOf(FRAC_MASK);
-        private static BigInteger BI_IMPLIED_FRAC_MSB = BigInt32.ValueOf(FRAC_ASSUMED_HIGH_BIT);
+        private static BigInteger BI_FRAC_MASK = new BigInteger(IEEEDouble.FRAC_MASK);
+        private static BigInteger BI_IMPLIED_FRAC_MSB = new BigInteger(IEEEDouble.FRAC_ASSUMED_HIGH_BIT);
 
         private static BigInteger GetFrac(long rawBits)
         {
-            return BigInt32.ValueOf(rawBits).and(BI_FRAC_MASK).or(BI_IMPLIED_FRAC_MSB).ShiftLeft(11);
+            return (new BigInteger(rawBits)&BI_FRAC_MASK|BI_IMPLIED_FRAC_MSB)<<11;
         }
 
 
-        public static ExpandedDouble fromRawBitsAndExponent(long rawBits, int exp)
+        public static ExpandedDouble FromRawBitsAndExponent(long rawBits, int exp)
         {
             return new ExpandedDouble(GetFrac(rawBits), exp);
         }
@@ -62,9 +62,9 @@ namespace NPOI.SS.Util
             if (biasedExp == 0)
             {
                 // sub-normal numbers
-                BigInteger frac = BigInt32.ValueOf(rawBits).and(BI_FRAC_MASK);
-                int expAdj = 64 - frac.bitLength();
-                _significand = frac.ShiftLeft(expAdj);
+                BigInteger frac = new BigInteger(rawBits)&BI_FRAC_MASK;
+                int expAdj = 64 - frac.bitCount();
+                _significand = frac<<expAdj;
                 _binaryExponent = (biasedExp & 0x07FF) - 1023 - expAdj;
             }
             else
@@ -75,9 +75,9 @@ namespace NPOI.SS.Util
             }
         }
 
-        ExpandedDouble(BigInteger frac, int binaryExp)
+        public ExpandedDouble(BigInteger frac, int binaryExp)
         {
-            if (frac.bitLength() != 64)
+            if (frac.bitCount() != 64)
             {
                 throw new ArgumentException("bad bit length");
             }
