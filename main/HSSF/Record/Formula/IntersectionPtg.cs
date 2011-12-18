@@ -52,10 +52,6 @@ namespace NPOI.HSSF.Record.Formula
         }
 
 
-        public override void WriteBytes(byte[] array, int offset)
-        {
-            array[offset + 0] = sid;
-        }
 
         /** Implementation of method from Ptg */
         public override String ToFormulaString()

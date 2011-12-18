@@ -52,12 +52,6 @@ namespace NPOI.HSSF.Record.Formula
 		    out1.WriteInt(unused1);
 		    out1.WriteInt(unused2);
         }
-        public override void WriteBytes(byte[] array, int offset)
-        {
-            LittleEndian.PutByte(array, offset + 0, sid + PtgClass);
-            LittleEndian.PutInt(array, offset + 1, unused1);
-            LittleEndian.PutInt(array, offset + 5, unused2);
-        }
 
         public override String ToFormulaString()
         {

@@ -374,7 +374,7 @@ namespace NPOI.SS.Formula
                         // Excel prefers To encode 'SUM()' as a tAttr Token, but this evaluator
                         // expects the equivalent function Token
                         byte nArgs = 1;  // tAttrSum always Has 1 parameter
-                        ptg = new FuncVarPtg("SUM", nArgs);
+                        ptg = FuncVarPtg.Create("SUM", nArgs);
                     }
                     if (attrPtg.IsOptimizedChoose) {
 					ValueEval arg0 = stack.Pop();

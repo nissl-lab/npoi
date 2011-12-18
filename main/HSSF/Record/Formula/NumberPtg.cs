@@ -67,11 +67,6 @@ namespace NPOI.HSSF.Record.Formula
             out1.WriteDouble(Value);
         }
 
-        public override void WriteBytes(byte[] array, int offset)
-        {
-            array[offset + 0] = sid;
-            LittleEndian.PutDouble(array, offset + 1, Value);
-        }
         public override int Size
         {
             get { return SIZE; }

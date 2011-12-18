@@ -56,12 +56,6 @@ namespace NPOI.HSSF.Record.Formula
             out1.WriteByte(field_1_value ? 1 : 0);
         }
 
-        public override void WriteBytes(byte[] array, int offset)
-        {
-            array[offset + 0] = sid;
-            array[offset + 1] = (byte)(field_1_value ? 1 : 0);
-        }
-
         public override int Size
         {
             get { return SIZE; }

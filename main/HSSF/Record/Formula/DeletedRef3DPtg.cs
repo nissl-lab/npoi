@@ -73,11 +73,5 @@ namespace NPOI.HSSF.Record.Formula
             out1.WriteShort(field_1_index_extern_sheet);
             out1.WriteInt(unused1);
         }
-        public override void WriteBytes(byte[] data, int offset)
-        {
-            LittleEndian.PutByte(data, 0 + offset, sid + PtgClass);
-            LittleEndian.PutUShort(data, 1 + offset, field_1_index_extern_sheet);
-            LittleEndian.PutInt(data, 3 + offset, unused1);
-        }
     }
 }

@@ -52,12 +52,6 @@ namespace NPOI.HSSF.Record.Formula
 		    out1.WriteShort(field_2_subex_len);
         }
 
-        public override void WriteBytes(byte[] array, int offset)
-        {
-            base.WriteBytes(array, offset);
-            array[offset] = (byte)(sid + PtgClass);
-        }
-
 
         public override String ToFormulaString()
         {

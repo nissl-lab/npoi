@@ -92,12 +92,6 @@ namespace NPOI.HSSF.Record.Formula
             out1.WriteShort(ExternSheetIndex);
             WriteCoordinates(out1);
         }
-        public override void WriteBytes(byte[] array, int offset)
-        {
-            LittleEndian.PutByte(array, 0 + offset, sid + PtgClass);
-            LittleEndian.PutUShort(array, 1 + offset, ExternSheetIndex);
-            WriteCoordinates(array, offset + 3);
-        }
 
         public override int Size
         {

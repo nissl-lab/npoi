@@ -51,9 +51,6 @@ namespace NPOI.HSSF.Record.Formula
         public override void Write(LittleEndianOutput out1)
         {
         }
-        public override void WriteBytes(byte[] array, int offset)
-        {
-        }
 
         public override int Size
         {

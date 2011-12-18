@@ -23,7 +23,7 @@ namespace NPOI.HSSF.Record.Formula
     using NPOI.Util;
     using NPOI.HSSF.Record;
     using NPOI.HSSF.Record.Constant;
-    
+
     using NPOI.Util.IO;
 
     /**
@@ -42,30 +42,32 @@ namespace NPOI.HSSF.Record.Formula
         public const byte sid = 0x20;
 
         private const int RESERVED_FIELD_LEN = 7;
-        	/** 
-	 * The size of the plain tArray token written within the standard formula tokens
-	 * (not including the data which comes after all formula tokens)
-	 */
-	public const int PLAIN_TOKEN_SIZE = 1+RESERVED_FIELD_LEN;
+        /** 
+ * The size of the plain tArray token written within the standard formula tokens
+ * (not including the data which comes after all formula tokens)
+ */
+        public const int PLAIN_TOKEN_SIZE = 1 + RESERVED_FIELD_LEN;
 
-	private static byte[] DEFAULT_RESERVED_DATA = new byte[RESERVED_FIELD_LEN];
+        private static byte[] DEFAULT_RESERVED_DATA = new byte[RESERVED_FIELD_LEN];
 
-        // TODO - fix up field visibility and subclasses
-        private byte[] field_1_reserved;
+        	// 7 bytes of data (stored as an int, short and byte here)
+	private int _reserved0Int;
+	private int _reserved1Short;
+	private int _reserved2Byte;
 
         // data from these fields comes after the Ptg data of all tokens in current formula
-        private short token_1_columns;
-        private short token_2_rows;
-        private Object[] token_3_arrayValues;
+        private int _nColumns;
+        private int _nRows;
+        private Object[] _arrayValues;
 
-        public ArrayPtg(LittleEndianInput in1)
+        ArrayPtg(int reserved0, int reserved1, int reserved2, int nColumns, int nRows, Object[] arrayValues)
         {
-            field_1_reserved = new byte[RESERVED_FIELD_LEN];
-            // TODO - Add ReadFully method to RecordInputStream
-            for (int i = 0; i < RESERVED_FIELD_LEN; i++)
-            {
-                field_1_reserved[i] = (byte)in1.ReadByte();
-            }
+            _reserved0Int = reserved0;
+            _reserved1Short = reserved1;
+            _reserved2Byte = reserved2;
+            _nColumns = nColumns;
+            _nRows = nRows;
+            _arrayValues = arrayValues;
         }
         /**
          * @param values2d array values arranged in rows
@@ -75,10 +77,10 @@ namespace NPOI.HSSF.Record.Formula
             int nColumns = values2d[0].Length;
             int nRows = values2d.Length;
             // convert 2-d to 1-d array (row by row according to getValueIndex())
-            token_1_columns = (short)nColumns;
-            token_2_rows = (short)nRows;
+            _nColumns = (short)nColumns;
+            _nRows = (short)nRows;
 
-            Object[] vv = new Object[token_1_columns * token_2_rows];
+            Object[] vv = new Object[_nColumns * _nRows];
             for (int r = 0; r < nRows; r++)
             {
                 Object[] rowData = values2d[r];
@@ -88,22 +90,24 @@ namespace NPOI.HSSF.Record.Formula
                 }
             }
 
-            token_3_arrayValues = vv;
-            field_1_reserved = DEFAULT_RESERVED_DATA;
+            _arrayValues = vv;
+            _reserved0Int = 0;
+            _reserved1Short = 0;
+            _reserved2Byte = 0;
         }
         public Object[][] GetTokenArrayValues()
         {
-            if (token_3_arrayValues == null)
+            if (_arrayValues == null)
             {
                 throw new InvalidOperationException("array values not read yet");
             }
-            Object[][] result = new Object[token_2_rows][];
-            for (int r = 0; r < token_2_rows; r++)
+            Object[][] result = new Object[_nRows][];
+            for (int r = 0; r < _nRows; r++)
             {
-                result[r]= new object[token_1_columns];
-                for (int c = 0; c < token_1_columns; c++)
+                result[r] = new object[_nColumns];
+                for (int c = 0; c < _nColumns; c++)
                 {
-                    result[r][c] = token_3_arrayValues[GetValueIndex(c, r)];
+                    result[r][c] = _arrayValues[GetValueIndex(c, r)];
                 }
             }
             return result;
@@ -113,28 +117,6 @@ namespace NPOI.HSSF.Record.Formula
         public override bool IsBaseToken
         {
             get { return false; }
-        }
-
-        /** 
-         * Read in the actual token (array) values. This occurs 
-         * AFTER the last Ptg in the expression.
-         * See page 304-305 of Excel97-2007BinaryFileFormat(xls)Specification.pdf
-         */
-        public void ReadTokenValues(LittleEndianInput in1)
-        {
-            short nColumns = (short)in1.ReadUByte();
-            short nRows = in1.ReadShort();
-            //The token_1_columns and token_2_rows do not follow the documentation.
-            //The number of physical rows and columns is actually +1 of these values.
-            //Which is not explicitly documented.
-            nColumns++;
-            nRows++;
-
-            token_1_columns = nColumns;
-            token_2_rows = nRows;
-
-            int totalCount = nRows * nColumns;
-            token_3_arrayValues = ConstantValueParser.Parse(in1, totalCount);
         }
 
         public override String ToString()
@@ -147,7 +129,7 @@ namespace NPOI.HSSF.Record.Formula
             {
                 for (int y = 0; y < RowCount; y++)
                 {
-                    Object o = token_3_arrayValues.GetValue(GetValueIndex(x, y));
+                    Object o = _arrayValues.GetValue(GetValueIndex(x, y));
                     buffer.Append("[").Append(x).Append("][").Append(y).Append("] = ").Append(o).Append("\n");
                 }
             }
@@ -161,53 +143,49 @@ namespace NPOI.HSSF.Record.Formula
         /* package */
         public int GetValueIndex(int colIx, int rowIx)
         {
-            if (colIx < 0 || colIx >= token_1_columns)
+            if (colIx < 0 || colIx >= _nColumns)
             {
                 throw new ArgumentException("Specified colIx (" + colIx
-                        + ") is outside the allowed range (0.." + (token_1_columns - 1) + ")");
+                        + ") is outside the allowed range (0.." + (_nColumns - 1) + ")");
             }
-            if (rowIx < 0 || rowIx >= token_2_rows)
+            if (rowIx < 0 || rowIx >= _nRows)
             {
                 throw new ArgumentException("Specified rowIx (" + rowIx
-                        + ") is outside the allowed range (0.." + (token_2_rows - 1) + ")");
+                        + ") is outside the allowed range (0.." + (_nRows - 1) + ")");
             }
-            return rowIx * token_1_columns + colIx;
+            return rowIx * _nColumns + colIx;
         }
 
         public override void Write(LittleEndianOutput out1)
         {
-       		out1.WriteByte(sid + PtgClass);
-     		out1.Write(field_1_reserved);
-        }
-        public override void WriteBytes(byte[] data, int offset)
-        {
-
-            LittleEndian.PutByte(data, offset + 0, sid + PtgClass);
-            Array.Copy(field_1_reserved, 0, data, offset + 1, RESERVED_FIELD_LEN);
+            out1.WriteByte(sid + PtgClass);
+	        out1.WriteInt(_reserved0Int);
+	        out1.WriteShort(_reserved1Short);
+	        out1.WriteByte(_reserved2Byte);
         }
 
         public int WriteTokenValueBytes(LittleEndianOutput out1)
         {
 
-		    out1.WriteByte(token_1_columns-1);
-		    out1.WriteShort(token_2_rows-1);
-            ConstantValueParser.Encode(out1, token_3_arrayValues);
-            return 3 + ConstantValueParser.GetEncodedSize(token_3_arrayValues);
+            out1.WriteByte(_nColumns - 1);
+            out1.WriteShort(_nRows - 1);
+            ConstantValueParser.Encode(out1, _arrayValues);
+            return 3 + ConstantValueParser.GetEncodedSize(_arrayValues);
         }
 
-        public short RowCount
+        public int RowCount
         {
             get
             {
-                return token_2_rows;
+                return _nRows;
             }
         }
 
-        public short ColumnCount
+        public int ColumnCount
         {
             get
             {
-                return token_1_columns;
+                return _nColumns;
             }
         }
 
@@ -217,7 +195,7 @@ namespace NPOI.HSSF.Record.Formula
             get
             {
                 int size = 1 + 7 + 1 + 2;
-                size += ConstantValueParser.GetEncodedSize(token_3_arrayValues);
+                size += ConstantValueParser.GetEncodedSize(_arrayValues);
                 return size;
             }
         }
@@ -238,7 +216,7 @@ namespace NPOI.HSSF.Record.Formula
                     {
                         b.Append(",");
                     }
-                    Object o = token_3_arrayValues.GetValue(GetValueIndex(x, y));
+                    Object o = _arrayValues.GetValue(GetValueIndex(x, y));
                     b.Append(GetConstantText(o));
                 }
             }
@@ -277,12 +255,80 @@ namespace NPOI.HSSF.Record.Formula
             get { return Ptg.CLASS_ARRAY; }
         }
 
-        public override Object Clone()
+
+        /**
+ * Represents the initial plain tArray token (without the constant data that trails the whole
+ * formula).  Objects of this class are only temporary and cannot be used as {@link Ptg}s.
+ * These temporary objects get converted to {@link ArrayPtg} by the
+ * {@link #finishReading(LittleEndianInput)} method.
+ */
+        public class Initial : Ptg
         {
-            ArrayPtg ptg = (ArrayPtg)base.Clone();
-            ptg.field_1_reserved = (byte[])field_1_reserved.Clone();
-            ptg.token_3_arrayValues = (Object[])token_3_arrayValues.Clone();
-            return ptg;
+            private int _reserved0;
+            private int _reserved1;
+            private int _reserved2;
+
+            public Initial(LittleEndianInput in1)
+            {
+                _reserved0 = in1.ReadInt();
+                _reserved1 = in1.ReadUShort();
+                _reserved2 = in1.ReadUByte();
+            }
+            private static Exception Invalid()
+            {
+                throw new InvalidOperationException("This object is a partially initialised tArray, and cannot be used as a Ptg");
+            }
+            public override byte DefaultOperandClass
+            {
+                get
+                {
+                    throw Invalid();
+                }
+            }
+            public override int Size
+            {
+                get
+                {
+                    return PLAIN_TOKEN_SIZE;
+                }
+            }
+            public override bool IsBaseToken
+            {
+                get
+                {
+                    return false;
+                }
+            }
+            public override String ToFormulaString()
+            {
+                throw Invalid();
+            }
+            public override void Write(LittleEndianOutput out1)
+            {
+                throw Invalid();
+            }
+            /**
+             * Read in the actual token (array) values. This occurs
+             * AFTER the last Ptg in the expression.
+             * See page 304-305 of Excel97-2007BinaryFileFormat(xls)Specification.pdf
+             */
+            public ArrayPtg FinishReading(LittleEndianInput in1)
+            {
+                int nColumns = in1.ReadUByte();
+                short nRows = in1.ReadShort();
+                //The token_1_columns and token_2_rows do not follow the documentation.
+                //The number of physical rows and columns is actually +1 of these values.
+                //Which is not explicitly documented.
+                nColumns++;
+                nRows++;
+
+                int totalCount = nRows * nColumns;
+                Object[] arrayValues = ConstantValueParser.Parse(in1, totalCount);
+
+                ArrayPtg result = new ArrayPtg(_reserved0, _reserved1, _reserved2, nColumns, nRows, arrayValues);
+                result.PtgClass = this.PtgClass;
+                return result;
+            }
         }
     }
 }

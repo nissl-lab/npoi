@@ -57,11 +57,6 @@ namespace NPOI.HSSF.Record.Formula
             out1.WriteByte(sid + PtgClass);
             out1.WriteShort(field_1_len_ref_subexpression);
         }
-        public override void WriteBytes(byte[] array, int offset)
-        {
-            array[offset + 0] = sid;
-            LittleEndian.PutUShort(array, offset + 1, field_1_len_ref_subexpression);
-        }
 
         public override String ToFormulaString()
         {

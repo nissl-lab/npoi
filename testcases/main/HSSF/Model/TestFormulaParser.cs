@@ -422,7 +422,7 @@ namespace TestCases.HSSF.Model
             HSSFWorkbook book = new HSSFWorkbook();
 
             Ptg[] ptgs = {
-				new FuncPtg(10),
+				FuncPtg.Create(10),
 		};
             Assert.AreEqual("NA()", HSSFFormulaParser.ToFormulaString(book, ptgs));
         }

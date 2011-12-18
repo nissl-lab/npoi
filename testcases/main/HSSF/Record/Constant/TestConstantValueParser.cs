@@ -64,7 +64,7 @@ namespace TestCases.HSSF.Record.Constant
 
         [TestMethod]
 	    public void TestDecode() {
-		    RecordInputStream inStream = TestcaseRecordInputStream.CreateWithFakeSid(SAMPLE_ENCODING);
+            LittleEndianInput inStream = TestcaseRecordInputStream.CreateLittleEndian(SAMPLE_ENCODING);
 
             object[] values = ConstantValueParser.Parse(inStream, 4);
 		    for (int i = 0; i < values.Length; i++) {

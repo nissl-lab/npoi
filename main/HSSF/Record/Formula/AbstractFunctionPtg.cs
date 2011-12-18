@@ -19,7 +19,7 @@ namespace NPOI.HSSF.Record.Formula
 {
     using System;
     using System.Text;
-    
+
     using NPOI.HSSF.Record.Formula.Function;
     using NPOI.HSSF.Record.Formula;
 
@@ -45,8 +45,16 @@ namespace NPOI.HSSF.Record.Formula
         protected byte returnClass;
         protected byte[] paramClass;
 
-        protected byte field_1_num_args;
-        protected short field_2_fnc_index;
+        protected byte _numberOfArgs;
+        protected short _functionIndex;
+
+        protected AbstractFunctionPtg(int functionIndex, int pReturnClass, byte[] paramTypes, int nParams)
+        {
+            _numberOfArgs = (byte)nParams;
+            _functionIndex = (short)functionIndex;
+            returnClass = (byte)pReturnClass;
+            paramClass = paramTypes;
+        }
 
         public override bool IsBaseToken
         {
@@ -57,19 +65,27 @@ namespace NPOI.HSSF.Record.Formula
         {
             StringBuilder sb = new StringBuilder(64);
             sb.Append(GetType().Name).Append(" [");
-            sb.Append(field_2_fnc_index).Append(" ").Append(field_1_num_args);
+            sb.Append(LookupName(_functionIndex));
+            sb.Append(" nArgs=").Append(_numberOfArgs);
             sb.Append("]");
             return sb.ToString();
         }
 
         public short GetFunctionIndex()
         {
-            return field_2_fnc_index;
+            return _functionIndex;
+        }
+        public override int NumberOfOperands
+        {
+            get
+            {
+                return _numberOfArgs;
+            }
         }
 
         public String Name
         {
-            get { return LookupName(field_2_fnc_index); }
+            get { return LookupName(_functionIndex); }
         }
         /**
          * external functions Get some special Processing
@@ -77,7 +93,7 @@ namespace NPOI.HSSF.Record.Formula
          */
         public bool IsExternalFunction
         {
-            get { return field_2_fnc_index == FUNCTION_INDEX_EXTERNAL; }
+            get { return _functionIndex == FUNCTION_INDEX_EXTERNAL; }
         }
 
         public override String ToFormulaString()
@@ -116,19 +132,6 @@ namespace NPOI.HSSF.Record.Formula
             buf.Append(")");
         }
 
-
-        /**
-         * Used to detect whether a function name found in a formula is one of the standard excel functions
-         * 
-         * The name matching is case insensitive.
-         * @return <c>true</c> if the name specifies a standard worksheet function,
-         *  <c>false</c> if the name should be assumed to be an external function.
-         */
-        public static bool IsInternalFunctionName(String name)
-        {
-            short ix = FunctionMetadataRegistry.LookupIndexByName(name.ToUpper());
-            return ix >= 0;
-        }
         /**
          * Used to detect whether a function name found in a formula is one of the standard excel functions
          * 

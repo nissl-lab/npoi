@@ -25,6 +25,7 @@ namespace NPOI.SS.Formula
     using NPOI.HSSF.Record.Formula;
     using NPOI.HSSF.Record.Formula.Eval;
     using NPOI.HSSF.Record.Formula.Functions;
+    using NPOI.SS.Formula.Eval;
 
     /**
      * This class Creates <tt>OperationEval</tt> instances To help evaluate <tt>OperationPtg</tt>
@@ -62,8 +63,7 @@ namespace NPOI.SS.Formula
             Add(m, UnaryMinusPtg.instance, UnaryMinusEval.instance);
             Add(m, UnaryPlusPtg.instance, UnaryPlusEval.instance);
             Add(m, RangePtg.instance, RangeEval.instance);
-            // TODO add https://svn.apache.org/repos/asf/poi/trunk/src/java/org/apache/poi/ss/formula/eval/IntersectionEval.java 
-            //Add(m, IntersectionPtg.instance, IntersectionEval.instance);
+            Add(m, IntersectionPtg.instance, IntersectionEval.instance);
             return m;
         }
 

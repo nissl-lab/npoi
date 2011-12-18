@@ -90,12 +90,6 @@ namespace NPOI.HSSF.Record.Formula
             out1.WriteByte((byte)field_1_error_code);
         }
 
-        public override void WriteBytes(byte[] array, int offset)
-        {
-            array[offset] = (byte)(sid + PtgClass);
-            array[offset + 1] = (byte)field_1_error_code;
-        }
-
         public override String ToFormulaString()
         {
             return HSSFErrorConstants.GetText(field_1_error_code);

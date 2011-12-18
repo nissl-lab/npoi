@@ -60,6 +60,12 @@ namespace TestCases.HSSF.Record.Formula
 		2, 2, 0, 0, 70, 71, // "FG"
 	};
 
+        private static ArrayPtg Create(byte[] initialData, byte[] constantData)
+        {
+            ArrayPtg.Initial ptgInit = new ArrayPtg.Initial(TestcaseRecordInputStream.CreateLittleEndian(initialData));
+            return ptgInit.FinishReading(TestcaseRecordInputStream.CreateLittleEndian(constantData));
+        }
+
         /**
          * Lots of problems with ArrayPtg's encoding of 
          */
@@ -67,9 +73,7 @@ namespace TestCases.HSSF.Record.Formula
         public void TestReadWriteTokenValueBytes()
         {
 
-            ArrayPtg ptg = new ArrayPtg(TestcaseRecordInputStream.CreateWithFakeSid(ENCODED_PTG_DATA));
-
-            ptg.ReadTokenValues(TestcaseRecordInputStream.CreateWithFakeSid(ENCODED_CONSTANT_DATA));
+            ArrayPtg ptg = Create(ENCODED_PTG_DATA, ENCODED_CONSTANT_DATA); 
             Assert.AreEqual(3, ptg.ColumnCount);
             Assert.AreEqual(2, ptg.RowCount);
             object[][] values = ptg.GetTokenArrayValues();
@@ -99,8 +103,7 @@ namespace TestCases.HSSF.Record.Formula
         [Ignore] // Assert.AreEqual failed. Expected:<2>. Actual:<1>. 	
         public void TestElementOrdering()
         {
-            ArrayPtg ptg = new ArrayPtg(TestcaseRecordInputStream.CreateWithFakeSid(ENCODED_PTG_DATA));
-            ptg.ReadTokenValues(TestcaseRecordInputStream.CreateWithFakeSid(ENCODED_CONSTANT_DATA));
+            ArrayPtg ptg = Create(ENCODED_PTG_DATA, ENCODED_CONSTANT_DATA);
             Assert.AreEqual(3, ptg.ColumnCount);
             Assert.AreEqual(2, ptg.RowCount);
 

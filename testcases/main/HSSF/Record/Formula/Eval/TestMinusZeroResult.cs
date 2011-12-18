@@ -94,7 +94,7 @@ namespace TestCases.HSSF.Record.Formula.Eval
         }
 
         /**
-         * Uses {@link ConcatEval} to force number-to-text conversion
+         * Uses ConcatEval to force number-to-text conversion
          */
         private static void ConfirmTextRendering(String expRendering, double d)
         {

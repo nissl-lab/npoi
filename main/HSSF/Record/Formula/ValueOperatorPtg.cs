@@ -50,10 +50,6 @@ namespace NPOI.HSSF.Record.Formula
         {
             out1.WriteByte(Sid + PtgClass);
         }
-        public override void WriteBytes(byte[] array, int offset)
-        {
-            array[offset + 0] = Sid;
-        }
 
         protected abstract byte Sid { get; }
 

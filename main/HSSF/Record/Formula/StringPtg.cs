@@ -105,20 +105,6 @@ namespace NPOI.HSSF.Record.Formula
                 StringUtil.PutCompressedUnicode(field_3_string, out1);
             }
         }
-        public override void WriteBytes(byte[] array, int offset)
-        {
-            array[offset + 0] = sid;
-            array[offset + 1] = (byte)field_1_Length;
-            array[offset + 2] = field_2_options;
-            if (fHighByte.IsSet(field_2_options))
-            {
-                StringUtil.PutUnicodeLE(Value, array, offset + 3);
-            }
-            else
-            {
-                StringUtil.PutCompressedUnicode(Value, array, offset + 3);
-            }
-        }
 
         public override int Size
         {

@@ -49,7 +49,7 @@ namespace NPOI.HSSF.Record.Formula
         private static BitField optiIf = BitFieldFactory.GetInstance(0x02);
         private static BitField optiChoose = BitFieldFactory.GetInstance(0x04);
         private static BitField optiSkip = BitFieldFactory.GetInstance(0x08); // skip
-        private static BitField sum = BitFieldFactory.GetInstance(0x10);
+        private static BitField optiSum = BitFieldFactory.GetInstance(0x10);
         private static BitField baxcel = BitFieldFactory.GetInstance(0x20); // 'assignment-style formula in a macro sheet'
         private static BitField space = BitFieldFactory.GetInstance(0x40);
 
@@ -138,6 +138,10 @@ namespace NPOI.HSSF.Record.Formula
         {
             return new AttrPtg(optiSkip.Set(0), dist, null, -1);
         }
+        public static AttrPtg GetSumSingle()
+        {
+            return new AttrPtg(optiSum.Set(0), 0, null, -1);
+        }
 
         public bool IsSemiVolatile
         {
@@ -157,8 +161,8 @@ namespace NPOI.HSSF.Record.Formula
 
         public bool IsSum
         {
-            get { return sum.IsSet(field_1_options); }
-            set { field_1_options = sum.SetByteBoolean(field_1_options, value); }
+            get { return optiSum.IsSet(field_1_options); }
+            set { field_1_options = optiSum.SetByteBoolean(field_1_options, value); }
         }
 
         // lets hope no one uses this anymore
@@ -257,27 +261,6 @@ namespace NPOI.HSSF.Record.Formula
 
         }
 
-        public override void WriteBytes(byte[] array, int offset)
-        {
-            LittleEndian.PutByte(array, offset + 0, sid);
-            LittleEndian.PutByte(array, offset + 1, field_1_options);
-            LittleEndian.PutShort(array, offset + 2, field_2_data);
-            int[] jt = _jumpTable;
-            if (jt != null)
-            {
-                int joff = offset + 4;
-                LittleEndian.PutUShort(array, joff, _chooseFuncOffset);
-                joff += 2;
-                for (int i = 0; i < jt.Length; i++)
-                {
-                    LittleEndian.PutUShort(array, joff, jt[i]);
-                    joff += 2;
-                }
-                LittleEndian.PutUShort(array, joff, _chooseFuncOffset);
-            }
-
-        }
-
 
         public override int Size
         {
@@ -340,7 +323,7 @@ namespace NPOI.HSSF.Record.Formula
             {
                 return "";
             }
-            if (sum.IsSet(field_1_options))
+            if (optiSum.IsSet(field_1_options))
             {
                 return "SUM";
             }

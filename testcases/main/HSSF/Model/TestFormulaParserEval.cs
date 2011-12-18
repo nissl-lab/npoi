@@ -37,38 +37,37 @@ namespace TestCases.HSSF.Model
         public void TestWithNamedRange()
         {
             HSSFWorkbook workbook = new HSSFWorkbook();
-            //FormulaParser fp;
-            Ptg[] ptgs;
 
-            NPOI.SS.UserModel.ISheet s = workbook.CreateSheet("Foo");
+            ISheet s = workbook.CreateSheet("Foo");
             s.CreateRow(0).CreateCell((short)0).SetCellValue(1.1);
             s.CreateRow(1).CreateCell((short)0).SetCellValue(2.3);
             s.CreateRow(2).CreateCell((short)2).SetCellValue(3.1);
 
-            NPOI.SS.UserModel.IName name = workbook.CreateName();
+            IName name = workbook.CreateName();
             name.NameName = ("testName");
             name.RefersToFormula = ("A1:A2");
 
-            ptgs = HSSFFormulaParser.Parse("SUM(testName)", workbook);
-            Assert.IsTrue(ptgs.Length == 2, "two tokens expected, got " + ptgs.Length);
-            Assert.AreEqual(typeof(NamePtg), ptgs[0].GetType());
-            Assert.AreEqual(typeof(FuncVarPtg), ptgs[1].GetType());
+            ConfirmParseFormula(workbook);
 
             // Now make it a single cell
             name.RefersToFormula = ("C3");
-
-            ptgs = HSSFFormulaParser.Parse("SUM(testName)", workbook);
-            Assert.IsTrue(ptgs.Length == 2, "two tokens expected, got " + ptgs.Length);
-            Assert.AreEqual(typeof(NamePtg), ptgs[0].GetType());
-            Assert.AreEqual(typeof(FuncVarPtg), ptgs[1].GetType());
+            ConfirmParseFormula(workbook);
 
             // And make it non-contiguous
             name.RefersToFormula = ("A1:A2,C3");
-            ptgs = HSSFFormulaParser.Parse("SUM(testName)", workbook);
+            ConfirmParseFormula(workbook);
+        }
+        	/**
+	 * Makes sure that a formula referring to the named range parses properly
+	 */
+        private static void ConfirmParseFormula(HSSFWorkbook workbook)
+        {
+            Ptg[] ptgs = HSSFFormulaParser.Parse("SUM(testName)", workbook);
             Assert.IsTrue(ptgs.Length == 2, "two tokens expected, got " + ptgs.Length);
             Assert.AreEqual(typeof(NamePtg), ptgs[0].GetType());
-            Assert.AreEqual(typeof(FuncVarPtg), ptgs[1].GetType());
+            Assert.AreEqual(typeof(AttrPtg), ptgs[1].GetType());
         }
+
         [TestMethod]
         public void TestEvaluateFormulaWithRowBeyond32768_Bug44539()
         {

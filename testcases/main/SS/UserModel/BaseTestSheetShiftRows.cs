@@ -31,7 +31,6 @@ namespace TestCases.SS.UserModel
      * @author Shawn Laubach (slaubach at apache dot com)
      * @author Toshiaki Kamoshida (kamoshida.toshiaki at future dot co dot jp)
      */
-    [TestClass]
     public class BaseTestSheetShiftRows
     {
 

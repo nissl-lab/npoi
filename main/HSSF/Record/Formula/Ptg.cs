@@ -59,66 +59,30 @@ namespace NPOI.HSSF.Record.Formula
         {
 		    ArrayList temp = new ArrayList(4 + size / 2);
 		    int pos = 0;
-		    ArrayList arrayPtgs = null;
+			bool hasArrayPtgs = false;
 		    while (pos < size) {
 			    Ptg ptg = Ptg.CreatePtg( in1 );
-			    if (ptg is ArrayPtg) {
-				    if (arrayPtgs == null) {
-					    arrayPtgs = new ArrayList(5);
-				    }
-				    arrayPtgs.Add(ptg);
-				    pos += ArrayPtg.PLAIN_TOKEN_SIZE;
-			    } else {
-				    pos += ptg.Size;
+			    if (ptg is ArrayPtg.Initial) {
+					hasArrayPtgs = true;
 			    }
+				 pos += ptg.Size;
 			    temp.Add( ptg );
 		    }
 		    if(pos != size) {
 			    throw new Exception("Ptg array size mismatch");
 		    }
-		    if (arrayPtgs != null) {
-			    for (int i=0;i<arrayPtgs.Count;i++) {
-				    ArrayPtg p = (ArrayPtg)arrayPtgs[i];
-				    p.ReadTokenValues(in1);
-			    }
-		    }
+		    if (hasArrayPtgs) {
+			Ptg[] result = ToPtgArray(temp);
+			for (int i=0;i<result.Length;i++) {
+				if (result[i] is ArrayPtg.Initial) {
+					result[i] = ((ArrayPtg.Initial) result[i]).FinishReading(in1);
+				}
+			}
+			return result;		    
+			}
 		    return ToPtgArray(temp);
         }
-        public static bool DoesFormulaReferToDeletedCell(Ptg[] ptgs)
-        {
-            for (int i = 0; i < ptgs.Length; i++)
-            {
-                if (IsDeletedCellRef(ptgs[i]))
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
-        private static bool IsDeletedCellRef(Ptg ptg)
-        {
-            if (ptg == ErrPtg.REF_INVALID)
-            {
-                return true;
-            }
-            if (ptg is DeletedArea3DPtg)
-            {
-                return true;
-            }
-            if (ptg is DeletedRef3DPtg)
-            {
-                return true;
-            }
-            if (ptg is AreaErrPtg)
-            {
-                return true;
-            }
-            if (ptg is RefErrorPtg)
-            {
-                return true;
-            }
-            return false;
-        }
+
         public static Ptg CreatePtg(LittleEndianInput in1)
         {
             byte id = (byte)in1.ReadByte();
@@ -145,10 +109,6 @@ namespace NPOI.HSSF.Record.Formula
 
             return retval;
         }
-
-        /** Write this Ptg to a byte array*/
-        public abstract void WriteBytes(byte[] array, int offset);
-
         private static Ptg CreateClassifiedPtg(byte id, LittleEndianInput in1)
         {
 
@@ -156,9 +116,9 @@ namespace NPOI.HSSF.Record.Formula
 
             switch (baseId)
             {
-                case ArrayPtg.sid: return new ArrayPtg(in1);    // 0x20, 0x40, 0x60
-                case FuncPtg.sid: return new FuncPtg(in1);     // 0x21, 0x41, 0x61
-                case FuncVarPtg.sid: return new FuncVarPtg(in1);  // 0x22, 0x42, 0x62
+                case ArrayPtg.sid: return new ArrayPtg.Initial(in1);    // 0x20, 0x40, 0x60
+                case FuncPtg.sid: return FuncPtg.Create(in1);     // 0x21, 0x41, 0x61
+                case FuncVarPtg.sid: return FuncVarPtg.Create(in1);  // 0x22, 0x42, 0x62
                 case NamePtg.sid: return new NamePtg(in1);     // 0x23, 0x43, 0x63
                 case RefPtg.sid: return new RefPtg(in1);      // 0x24, 0x44, 0x64
                 case AreaPtg.sid: return new AreaPtg(in1);     // 0x25, 0x45, 0x65
@@ -176,7 +136,7 @@ namespace NPOI.HSSF.Record.Formula
                 case DeletedRef3DPtg.sid: return new DeletedRef3DPtg(in1);   // 0x3c, 0x5c, 0x7c
                 case DeletedArea3DPtg.sid: return new DeletedArea3DPtg(in1); // 0x3d, 0x5d, 0x7d
             }
-            throw new InvalidOperationException(" Unknown Ptg in Formula: 0x" +
+            throw new NotSupportedException(" Unknown Ptg in Formula: 0x" +
                        StringUtil.ToHexString(id) + " (" + (int)id + ")");
         }
 
@@ -185,8 +145,7 @@ namespace NPOI.HSSF.Record.Formula
             switch (id)
             {
                 case 0x00: return new UnknownPtg(); // TODO - not a real Ptg
-                case ExpPtg.sid: 
-                    return new ExpPtg(in1);          // 0x01
+                case ExpPtg.sid: return new ExpPtg(in1);          // 0x01
                 case TblPtg.sid: return new TblPtg(in1);          // 0x02
                 case AddPtg.sid: return AddPtg.instance;         // 0x03
                 case SubtractPtg.sid: return SubtractPtg.instance;    // 0x04
@@ -210,8 +169,7 @@ namespace NPOI.HSSF.Record.Formula
                 case MissingArgPtg.sid: return MissingArgPtg.instance;  // 0x16
 
                 case StringPtg.sid: return new StringPtg(in1);       // 0x17
-                case AttrPtg.sid:
-                case 0x1a: return new AttrPtg(in1); // 0x19
+                case AttrPtg.sid: return new AttrPtg(in1); // 0x19
                 case ErrPtg.sid: return new ErrPtg(in1);          // 0x1c
                 case BoolPtg.sid: return new BoolPtg(in1);         // 0x1d
                 case IntPtg.sid: return new IntPtg(in1);          // 0x1e
@@ -219,25 +177,14 @@ namespace NPOI.HSSF.Record.Formula
             }
             throw new Exception("Unexpected base token id (" + id + ")");
         }
-        /**
- * Used to calculate value that should be encoded at the start of the encoded Ptg token array;
- * @return the size of the encoded Ptg tokens not including any trailing array data.
- */
-        public static int GetEncodedSizeWithoutArrayData(Ptg[] ptgs)
+        private static Ptg[] ToPtgArray(ArrayList l)
         {
-            int result = 0;
-            for (int i = 0; i < ptgs.Length; i++)
+            if (l.Count==0)
             {
-                Ptg ptg = ptgs[i];
-                if (ptg is ArrayPtg)
-                {
-                    result += ArrayPtg.PLAIN_TOKEN_SIZE;
-                }
-                else
-                {
-                    result += ptg.Size;
-                }
+                return EMPTY_PTG_ARRAY;
             }
+            
+            Ptg[] result = (Ptg[])l.ToArray(typeof(Ptg));
             return result;
         }
         /**
@@ -269,16 +216,7 @@ namespace NPOI.HSSF.Record.Formula
             }
 
         }
-        private static Ptg[] ToPtgArray(ArrayList l)
-        {
-            if (l.Count==0)
-            {
-                return EMPTY_PTG_ARRAY;
-            }
-            
-            Ptg[] result = (Ptg[])l.ToArray(typeof(Ptg));
-            return result;
-        }
+
         // TODO - several duplicates of this code should be refactored here
         public static int GetEncodedSize(Ptg[] ptgs)
         {
@@ -289,6 +227,28 @@ namespace NPOI.HSSF.Record.Formula
             }
             return result;
         }
+        /**
+ * Used to calculate value that should be encoded at the start of the encoded Ptg token array;
+ * @return the size of the encoded Ptg tokens not including any trailing array data.
+ */
+        public static int GetEncodedSizeWithoutArrayData(Ptg[] ptgs)
+        {
+            int result = 0;
+            for (int i = 0; i < ptgs.Length; i++)
+            {
+                Ptg ptg = ptgs[i];
+                if (ptg is ArrayPtg)
+                {
+                    result += ArrayPtg.PLAIN_TOKEN_SIZE;
+                }
+                else
+                {
+                    result += ptg.Size;
+                }
+            }
+            return result;
+        }
+
         /**
          * Writes the ptgs to the data buffer, starting at the specified offset.  
          *
@@ -333,27 +293,7 @@ namespace NPOI.HSSF.Record.Formula
  * @return <c>false</c> if this token is classified as 'reference', 'value', or 'array'
  */
         public abstract bool IsBaseToken { get; }
-        /**
- * Debug / diagnostic method to get this token's 'operand class' type.
- * @return 'R' for 'reference', 'V' for 'value', 'A' for 'array' and '.' for base tokens
- */
-        public char RVAType
-        {
-            get
-            {
-                if (IsBaseToken)
-                {
-                    return '.';
-                }
-                switch (ptgClass)
-                {
-                    case Ptg.CLASS_REF: return 'R';
-                    case Ptg.CLASS_VALUE: return 'V';
-                    case Ptg.CLASS_ARRAY: return 'A';
-                }
-                throw new InvalidOperationException("Unknown operand class (" + ptgClass + ")");
-            }
-        }
+
 
         /** Write this Ptg to a byte array*/
         public abstract void Write(LittleEndianOutput out1);
@@ -396,6 +336,28 @@ namespace NPOI.HSSF.Record.Formula
 
         public abstract byte DefaultOperandClass { get; }
 
+        /**
+ * Debug / diagnostic method to get this token's 'operand class' type.
+ * @return 'R' for 'reference', 'V' for 'value', 'A' for 'array' and '.' for base tokens
+ */
+        public char RVAType
+        {
+            get
+            {
+                if (IsBaseToken)
+                {
+                    return '.';
+                }
+                switch (ptgClass)
+                {
+                    case Ptg.CLASS_REF: return 'R';
+                    case Ptg.CLASS_VALUE: return 'V';
+                    case Ptg.CLASS_ARRAY: return 'A';
+                }
+                throw new InvalidOperationException("Unknown operand class (" + ptgClass + ")");
+            }
+        }
+
         #region ICloneable Members
 
         object ICloneable.Clone()
@@ -404,5 +366,39 @@ namespace NPOI.HSSF.Record.Formula
         }
 
         #endregion
+
+	public static bool DoesFormulaReferToDeletedCell(Ptg[] ptgs) {
+		for (int i = 0; i < ptgs.Length; i++) {
+			if (IsDeletedCellRef(ptgs[i])) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+        private static bool IsDeletedCellRef(Ptg ptg)
+        {
+            if (ptg == ErrPtg.REF_INVALID)
+            {
+                return true;
+            }
+            if (ptg is DeletedArea3DPtg)
+            {
+                return true;
+            }
+            if (ptg is DeletedRef3DPtg)
+            {
+                return true;
+            }
+            if (ptg is AreaErrPtg)
+            {
+                return true;
+            }
+            if (ptg is RefErrorPtg)
+            {
+                return true;
+            }
+            return false;
+        }
     }
 }

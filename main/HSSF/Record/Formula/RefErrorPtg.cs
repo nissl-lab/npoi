@@ -59,11 +59,6 @@ namespace NPOI.HSSF.Record.Formula
             out1.WriteByte(sid + PtgClass);
             out1.WriteInt(field_1_reserved);
         }
-        public override void WriteBytes(byte[] array, int offset)
-        {
-            array[offset] = (byte)(sid + PtgClass);
-            LittleEndian.PutInt(array, offset + 1, field_1_reserved);
-        }
         public int Reserved
         {
             get{return field_1_reserved;}

@@ -23,6 +23,7 @@ namespace TestCases.HSSF.Record
     using NPOI.HSSF.Record;
     using NPOI.Util;
     using System.Text;
+    using NPOI.Util.IO;
 
     /**
      * A Record Input Stream derivative that makes access to byte arrays used in the
@@ -36,41 +37,32 @@ namespace TestCases.HSSF.Record
 	    private TestcaseRecordInputStream() {
 		    // no instances of this class
 	    }
-    	
-	    /**
-	     * Prepends a mock record identifier to the supplied data and opens a record input stream 
-	     */
-	    public static RecordInputStream CreateWithFakeSid(byte[] data) {
-		    return Create(-5555, data);
-    		
-	    }
+        /// <summary>
+        /// Prepends a mock record identifier to the supplied data and opens a record input stream
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        public static LittleEndianInput CreateLittleEndian(byte[] data)
+        {
+            return new LittleEndianByteArrayInputStream(data);
+
+        }
 	    public static RecordInputStream Create(int sid, byte[] data) {
 		    return Create(MergeDataAndSid(sid, data.Length, data));
 	    }
-	    /**
-	     * First 4 bytes of <tt>data</tt> are assumed to be record identifier and length. The supplied 
-	     * <tt>data</tt> can contain multiple records (sequentially encoded in the same way) 
-	     */
+        /// <summary>
+        ///First 4 bytes of data are assumed to be record identifier and length. The supplied 
+	    ///data can contain multiple records (sequentially encoded in the same way) 
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
 	    public static RecordInputStream Create(byte[] data) {
 		    Stream inputStream = new MemoryStream(data);
 		    RecordInputStream result = new RecordInputStream(inputStream);
 		    result.NextRecord();
 		    return result;
 	    }
-    	
-        /**
-         * Convenience constructor
-         */
-    //    public TestcaseRecordInputStream(int sid, byte[] data)
-    //    {
-    //      super(new ByteArrayInputStream(mergeDataAndSid(sid, data.length, data)));
-    //      nextRecord();
-    //    }
-    //    public TestcaseRecordInputStream(short sid, short length, byte[] data)
-    //    {
-    //      super(new ByteArrayInputStream(mergeDataAndSid(sid, length, data)));
-    //      nextRecord();
-    //    }
+
 
         public static byte[] MergeDataAndSid(int sid, int length, byte[] data)
         {
@@ -80,12 +72,13 @@ namespace TestCases.HSSF.Record
           Array.Copy(data, 0, result, 4, data.Length);
           return result;
         }
-        	/**
-	 * Confirms data sections are equal
-	 * @param msgPrefix message prefix to be displayed in case of failure
-	 * @param expectedData - just raw data (without ushort sid, ushort size)
-	 * @param actualRecordBytes this includes 4 prefix bytes (sid & size)
-	 */
+        /// <summary>
+        /// Confirms data sections are equal
+        /// </summary>
+        /// <param name="msgPrefix">message prefix to be displayed in case of failure</param>
+        /// <param name="expectedSid"></param>
+        /// <param name="expectedData">just raw data (without ushort sid, ushort size)</param>
+        /// <param name="actualRecordBytes">this includes 4 prefix bytes (sid & size)</param>
         public static void ConfirmRecordEncoding(String msgPrefix, int expectedSid, byte[] expectedData, byte[] actualRecordBytes)
         {
             int expectedDataSize = expectedData.Length;
@@ -106,11 +99,12 @@ namespace TestCases.HSSF.Record
                     throw new AssertFailedException(sb.ToString());
                 }
         }
-        /**
-         * Confirms data sections are equal
-         * @param expectedData - just raw data (without sid or size short ints)
-         * @param actualRecordBytes this includes 4 prefix bytes (sid & size)
-         */
+        /// <summary>
+        /// Confirms data sections are equal
+        /// </summary>
+        /// <param name="expectedSid">just raw data (without sid or size short ints)</param>
+        /// <param name="expectedData"></param>
+        /// <param name="actualRecordBytes">this includes 4 prefix bytes (sid & size)</param>
         public static void ConfirmRecordEncoding(int expectedSid, byte[] expectedData, byte[] actualRecordBytes)
         {
             ConfirmRecordEncoding(null, expectedSid, expectedData, actualRecordBytes);

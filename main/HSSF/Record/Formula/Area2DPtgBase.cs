@@ -52,11 +52,6 @@ namespace NPOI.HSSF.Record.Formula
             out1.WriteByte(Sid + PtgClass);
             WriteCoordinates(out1);
         }
-        public override void WriteBytes(byte[] array, int offset)
-        {
-            LittleEndian.PutByte(array, offset + 0, Sid + PtgClass);
-            WriteCoordinates(array, offset + 1);
-        }
         public Area2DPtgBase(String arearef)
             : base(arearef)
         {

@@ -26,7 +26,7 @@ namespace NPOI.SS.Formula
     using NPOI.HSSF.Record;
     using NPOI.HSSF.Record.Formula;
     using NPOI.HSSF.Record.Formula.Function;
-    
+
     using NPOI.SS.Util;
     using NPOI.HSSF.Record.Constant;
     using NPOI.HSSF.UserModel;
@@ -104,6 +104,52 @@ namespace NPOI.SS.Formula
                 else
                 {
                     sb.Append(_name);
+                }
+                sb.Append("]");
+                return sb.ToString();
+            }
+        }
+        private class SheetIdentifier
+        {
+
+
+            private String _bookName;
+            private Identifier _sheetIdentifier;
+            public SheetIdentifier(String bookName, Identifier sheetIdentifier)
+            {
+                _bookName = bookName;
+                _sheetIdentifier = sheetIdentifier;
+            }
+            public String BookName
+            {
+                get
+                {
+                    return _bookName;
+                }
+            }
+            public Identifier SheetID
+            {
+                get
+                {
+                    return _sheetIdentifier;
+                }
+            }
+            public override String ToString()
+            {
+                StringBuilder sb = new StringBuilder(64);
+                sb.Append(this.GetType().Name);
+                sb.Append(" [");
+                if (_bookName != null)
+                {
+                    sb.Append(" [").Append(_sheetIdentifier.Name).Append("]");
+                }
+                if (_sheetIdentifier.IsQuoted)
+                {
+                    sb.Append("'").Append(_sheetIdentifier.Name).Append("'");
+                }
+                else
+                {
+                    sb.Append(_sheetIdentifier.Name);
                 }
                 sb.Append("]");
                 return sb.ToString();
@@ -275,56 +321,23 @@ namespace NPOI.SS.Formula
         }
         private String ParseUnquotedIdentifier()
         {
-            Identifier iden = ParseIdentifier();
-            if (iden.IsQuoted)
+            if (look == '\'')
             {
                 throw expected("unquoted identifier");
             }
-            return iden.Name;
-        }
-        /**
-         * Parses a sheet name, named range name, or simple cell reference.<br/>
-         * Note - identifiers in Excel can contain dots, so this method may return a String
-         * which may need To be converted To an area reference.  For example, this method
-         * may return a value like "A1..B2", in which case the caller must convert it To
-         * an area reference like "A1:B2"
-         */
-        private Identifier ParseIdentifier()
-        {
             StringBuilder sb = new StringBuilder();
-            if (!IsAlpha(look) && look != '\'' && look != '[')
+            while (Char.IsLetterOrDigit(look) || look == '.')
             {
-                throw expected("Name");
+                sb.Append(look);
+                GetChar();
             }
-            bool IsQuoted = look == '\'';
-            if (IsQuoted)
+            if (sb.Length < 1)
             {
-                Match('\'');
-                bool done = look == '\'';
-                while (!done)
-                {
-                    sb.Append(look);
-                    GetChar();
-                    if (look == '\'')
-                    {
-                        Match('\'');
-                        done = look != '\'';
-                    }
-                }
+                return null;
             }
-            else
-            {
-                // allow for any sequence of dots and identifier chars
-                // special case of two consecutive dots is best treated in the calling code
-                while (IsAlNum(look) || look == '.' || look == '[' || look == ']')
-                {
-                    sb.Append(look);
-                    GetChar();
-                }
-            }
-            return new Identifier(sb.ToString(), IsQuoted);
-        }
 
+            return sb.ToString();
+        }
         /** Get a Number */
         private String GetNum()
         {
@@ -337,56 +350,598 @@ namespace NPOI.SS.Formula
             }
             return value.Length == 0 ? null : value.ToString();
         }
-        private class SheetIdentifier
+
+        private ParseNode ParseRangeExpression()
+        {
+            ParseNode result = ParseRangeable();
+            bool hasRange = false;
+            while (look == ':')
+            {
+                int pos = pointer;
+                GetChar();
+                ParseNode nextPart = ParseRangeable();
+                // Note - no range simplification here. An expr like "A1:B2:C3:D4:E5" should be
+                // grouped into area ref pairs like: "(A1:B2):(C3:D4):E5"
+                // Furthermore, Excel doesn't seem to simplify
+                // expressions like "Sheet1!A1:Sheet1:B2" into "Sheet1!A1:B2"
+
+                CheckValidRangeOperand("LHS", pos, result);
+                CheckValidRangeOperand("RHS", pos, nextPart);
+
+                ParseNode[] children = { result, nextPart, };
+                result = new ParseNode(RangePtg.instance, children);
+                hasRange = true;
+            }
+            if (hasRange)
+            {
+                return AugmentWithMemPtg(result);
+            }
+            return result;
+        }
+        private static ParseNode AugmentWithMemPtg(ParseNode root)
+        {
+            Ptg memPtg;
+            if (NeedsMemFunc(root))
+            {
+                memPtg = new MemFuncPtg(root.EncodedSize);
+            }
+            else
+            {
+                memPtg = new MemAreaPtg(root.EncodedSize);
+            }
+            return new ParseNode(memPtg, root);
+        }
+        /**
+ * From OOO doc: "Whenever one operand of the reference subexpression is a function,
+ *  a defined name, a 3D reference, or an external reference (and no error occurs),
+ *  a tMemFunc token is used"
+ *
+ */
+        private static bool NeedsMemFunc(ParseNode root)
+        {
+            Ptg token = root.GetToken();
+            if (token is AbstractFunctionPtg)
+            {
+                return true;
+            }
+            if (token is ExternSheetReferenceToken)
+            { // 3D refs
+                return true;
+            }
+            if (token is NamePtg || token is NameXPtg)
+            { // 3D refs
+                return true;
+            }
+
+            if (token is OperationPtg || token is ParenthesisPtg)
+            {
+                // expect RangePtg, but perhaps also UnionPtg, IntersectionPtg etc
+                foreach (ParseNode child in root.GetChildren())
+                {
+                    if (NeedsMemFunc(child))
+                    {
+                        return true;
+                    }
+                }
+                return false;
+            }
+            if (token is OperandPtg)
+            {
+                return false;
+            }
+            if (token is OperationPtg)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+
+
+
+        /**
+ *
+ * @return <code>true</code> if the specified character may be used in a defined name
+ */
+        private static bool IsValidDefinedNameChar(char ch)
+        {
+            if (Char.IsLetterOrDigit(ch))
+            {
+                return true;
+            }
+            switch (ch)
+            {
+                case '.':
+                case '_':
+                case '?':
+                case '\\': // of all things
+                    return true;
+            }
+            return false;
+        }
+        /**
+ * @param currentParsePosition used to format a potential error message
+ */
+        private void CheckValidRangeOperand(String sideName, int currentParsePosition, ParseNode pn)
+        {
+            if (!IsValidRangeOperand(pn))
+            {
+                throw new FormulaParseException("The " + sideName
+                        + " of the range operator ':' at position "
+                        + currentParsePosition + " is not a proper reference.");
+            }
+        }
+        /**
+          * @return false if sub-expression represented the specified ParseNode definitely
+          * cannot appear on either side of the range (':') operator
+          */
+        private bool IsValidRangeOperand(ParseNode a)
+        {
+            Ptg tkn = a.GetToken();
+            // Note - order is important for these instance-of checks
+            if (tkn is OperandPtg)
+            {
+                // notably cell refs and area refs
+                return true;
+            }
+
+            // next 2 are special cases of OperationPtg
+            if (tkn is AbstractFunctionPtg)
+            {
+                AbstractFunctionPtg afp = (AbstractFunctionPtg)tkn;
+                byte returnClass = afp.DefaultOperandClass;
+                return Ptg.CLASS_REF == returnClass;
+            }
+            if (tkn is ValueOperatorPtg)
+            {
+                return false;
+            }
+            if (tkn is OperationPtg)
+            {
+                return true;
+            }
+
+            // one special case of ControlPtg
+            if (tkn is ParenthesisPtg)
+            {
+                // parenthesis Ptg should have only one child
+                return IsValidRangeOperand(a.GetChildren()[0]);
+            }
+
+            // one special case of ScalarConstantPtg
+            if (tkn == ErrPtg.REF_INVALID)
+            {
+                return true;
+            }
+
+            // All other ControlPtgs and ScalarConstantPtgs cannot be used with ':'
+            return false;
+        }
+
+
+
+
+        /**
+ * Parses area refs (things which could be the operand of ':') and simple factors
+ * Examples
+ * <pre>
+ *   A$1
+ *   $A$1 :  $B1
+ *   A1 .......	C2
+ *   Sheet1 !$A1
+ *   a..b!A1
+ *   'my sheet'!A1
+ *   .my.sheet!A1
+ *   my.named..range.
+ *   foo.bar(123.456, "abc")
+ *   123.456
+ *   "abc"
+ *   true
+ * </pre>
+ *
+ */
+        private ParseNode ParseRangeable()
+        {
+            SkipWhite();
+            int savePointer = pointer;
+            SheetIdentifier sheetIden = ParseSheetName();
+            if (sheetIden == null)
+            {
+                ResetPointer(savePointer);
+            }
+            else
+            {
+                SkipWhite();
+                savePointer = pointer;
+            }
+
+            SimpleRangePart part1 = ParseSimpleRangePart();
+            if (part1 == null)
+            {
+                if (sheetIden != null)
+                {
+                    throw new FormulaParseException("Cell reference expected after sheet name at index "
+                            + pointer + ".");
+                }
+                return ParseNonRange(savePointer);
+            }
+            bool whiteAfterPart1 = IsWhite(look);
+            if (whiteAfterPart1)
+            {
+                SkipWhite();
+            }
+
+            if (look == ':')
+            {
+                int colonPos = pointer;
+                GetChar();
+                SkipWhite();
+                SimpleRangePart part2 = ParseSimpleRangePart();
+                if (part2 != null && !part1.IsCompatibleForArea(part2))
+                {
+                    // second part is not compatible with an area ref e.g. S!A1:S!B2
+                    // where S might be a sheet name (that looks like a column name)
+
+                    part2 = null;
+                }
+                if (part2 == null)
+                {
+                    // second part is not compatible with an area ref e.g. A1:OFFSET(B2, 1, 2)
+                    // reset and let caller use explicit range operator
+                    ResetPointer(colonPos);
+                    if (!part1.IsCell)
+                    {
+                        String prefix;
+                        if (sheetIden == null)
+                        {
+                            prefix = "";
+                        }
+                        else
+                        {
+                            prefix = "'" + sheetIden.SheetID.Name + '!';
+                        }
+                        throw new FormulaParseException(prefix + part1.Rep + "' is not a proper reference.");
+                    }
+                    return CreateAreaRefParseNode(sheetIden, part1, part2);
+                }
+                return CreateAreaRefParseNode(sheetIden, part1, part2);
+            }
+
+            if (look == '.')
+            {
+                GetChar();
+                int dotCount = 1;
+                while (look == '.')
+                {
+                    dotCount++;
+                    GetChar();
+                }
+                bool whiteBeforePart2 = IsWhite(look);
+
+                SkipWhite();
+                SimpleRangePart part2 = ParseSimpleRangePart();
+                String part1And2 = formulaString.Substring(savePointer - 1, pointer - savePointer);
+                if (part2 == null)
+                {
+                    if (sheetIden != null)
+                    {
+                        throw new FormulaParseException("Complete area reference expected after sheet name at index "
+                                + pointer + ".");
+                    }
+                    return ParseNonRange(savePointer);
+                }
+
+
+                if (whiteAfterPart1 || whiteBeforePart2)
+                {
+                    if (part1.IsRowOrColumn || part2.IsRowOrColumn)
+                    {
+                        // "A .. B" not valid syntax for "A:B"
+                        // and there's no other valid expression that fits this grammar
+                        throw new FormulaParseException("Dotted range (full row or column) expression '"
+                                + part1And2 + "' must not contain whitespace.");
+                    }
+                    return CreateAreaRefParseNode(sheetIden, part1, part2);
+                }
+
+                if (dotCount == 1 && part1.IsRow && part2.IsRow)
+                {
+                    // actually, this is looking more like a number
+                    return ParseNonRange(savePointer);
+                }
+
+                if (part1.IsRowOrColumn || part2.IsRowOrColumn)
+                {
+                    if (dotCount != 2)
+                    {
+                        throw new FormulaParseException("Dotted range (full row or column) expression '" + part1And2
+                                + "' must have exactly 2 dots.");
+                    }
+                }
+                return CreateAreaRefParseNode(sheetIden, part1, part2);
+            }
+            if (part1.IsCell && IsValidCellReference(part1.Rep))
+            {
+                return CreateAreaRefParseNode(sheetIden, part1, null);
+            }
+            if (sheetIden != null)
+            {
+                throw new FormulaParseException("Second part of cell reference expected after sheet name at index "
+                        + pointer + ".");
+            }
+
+            return ParseNonRange(savePointer);
+        }
+
+        /**
+  * Parses simple factors that are not primitive ranges or range components
+  * i.e. '!', ':'(and equiv '...') do not appear
+  * Examples
+  * <pre>
+  *   my.named...range.
+  *   foo.bar(123.456, "abc")
+  *   123.456
+  *   "abc"
+  *   true
+  * </pre>
+  */
+        private ParseNode ParseNonRange(int savePointer)
+        {
+            ResetPointer(savePointer);
+
+            if (Char.IsDigit(look))
+            {
+                return new ParseNode(ParseNumber());
+            }
+            if (look == '"')
+            {
+                return new ParseNode(new StringPtg(ParseStringLiteral()));
+            }
+            // from now on we can only be dealing with non-quoted identifiers
+            // which will either be named ranges or functions
+            StringBuilder sb = new StringBuilder();
+
+            if (!Char.IsLetter(look))
+            {
+                throw expected("number, string, or defined name");
+            }
+            while (IsValidDefinedNameChar(look))
+            {
+                sb.Append(look);
+                GetChar();
+            }
+            SkipWhite();
+            String name = sb.ToString();
+            if (look == '(')
+            {
+                return Function(name);
+            }
+            if (name.Equals("TRUE", StringComparison.InvariantCultureIgnoreCase) || name.Equals("FALSE", StringComparison.InvariantCultureIgnoreCase))
+            {
+                return new ParseNode(new BoolPtg(name.ToUpper()));
+            }
+            if (book == null)
+            {
+                // Only test cases omit the book (expecting it not to be needed)
+                throw new InvalidOperationException("Need book to evaluate name '" + name + "'");
+            }
+            IEvaluationName evalName = book.GetName(name, _sheetIndex);
+            if (evalName == null)
+            {
+                throw new FormulaParseException("Specified named range '"
+                        + name + "' does not exist in the current workbook.");
+            }
+            if (evalName.IsRange)
+            {
+                return new ParseNode(evalName.CreatePtg());
+            }
+            // TODO - what about NameX ?
+            throw new FormulaParseException("Specified name '"
+                    + name + "' is not a range as expected.");
+        }
+
+        /**
+ *
+ * @param sheetIden may be <code>null</code>
+ * @param part1
+ * @param part2 may be <code>null</code>
+ */
+        private ParseNode CreateAreaRefParseNode(SheetIdentifier sheetIden, SimpleRangePart part1,
+                SimpleRangePart part2)
         {
 
-
-            private String _bookName;
-            private Identifier _sheetIdentifier;
-            public SheetIdentifier(String bookName, Identifier sheetIdentifier)
+            int extIx;
+            if (sheetIden == null)
             {
-                _bookName = bookName;
-                _sheetIdentifier = sheetIdentifier;
+                extIx = Int32.MinValue;
             }
-            public String BookName
+            else
             {
-                get
+                String sName = sheetIden.SheetID.Name;
+                if (sheetIden.BookName == null)
                 {
-                    return _bookName;
-                }
-            }
-            public Identifier SheetID
-            {
-                get
-                {
-                    return _sheetIdentifier;
-                }
-            }
-            public override String ToString()
-            {
-                StringBuilder sb = new StringBuilder(64);
-                sb.Append(this.GetType().Name);
-                sb.Append(" [");
-                if (_bookName != null)
-                {
-                    sb.Append(" [").Append(_sheetIdentifier.Name).Append("]");
-                }
-                if (_sheetIdentifier.IsQuoted)
-                {
-                    sb.Append("'").Append(_sheetIdentifier.Name).Append("'");
+                    extIx = book.GetExternalSheetIndex(sName);
                 }
                 else
                 {
-                    sb.Append(_sheetIdentifier.Name);
+                    extIx = book.GetExternalSheetIndex(sheetIden.BookName, sName);
                 }
-                sb.Append("]");
-                return sb.ToString();
             }
+            Ptg ptg;
+            if (part2 == null)
+            {
+                CellReference cr = part1.getCellReference();
+                if (sheetIden == null)
+                {
+                    ptg = new RefPtg(cr);
+                }
+                else
+                {
+                    ptg = new Ref3DPtg(cr, extIx);
+                }
+            }
+            else
+            {
+                AreaReference areaRef = CreateAreaRef(part1, part2);
+
+                if (sheetIden == null)
+                {
+                    ptg = new AreaPtg(areaRef);
+                }
+                else
+                {
+                    ptg = new Area3DPtg(areaRef, extIx);
+                }
+            }
+            return new ParseNode(ptg);
+        }
+        private static AreaReference CreateAreaRef(SimpleRangePart part1, SimpleRangePart part2)
+        {
+            if (!part1.IsCompatibleForArea(part2))
+            {
+                throw new FormulaParseException("has incompatible parts: '"
+                        + part1.Rep + "' and '" + part2.Rep + "'.");
+            }
+            if (part1.IsRow)
+            {
+                return AreaReference.GetWholeRow(part1.Rep, part2.Rep);
+            }
+            if (part1.IsColumn)
+            {
+                return AreaReference.GetWholeColumn(part1.Rep, part2.Rep);
+            }
+            return new AreaReference(part1.getCellReference(), part2.getCellReference());
+        }
+        private string CELL_REF_PATTERN = "^(\\$?[A-Za-z]+)(\\$?[0-9]+)?";
+
+
+
+
+        /**
+  * Parses out a potential LHS or RHS of a ':' intended to produce a plain AreaRef.  Normally these are
+  * proper cell references but they could also be row or column refs like "$AC" or "10"
+  * @return <code>null</code> (and leaves {@link #_pointer} unchanged if a proper range part does not parse out
+  */
+        private SimpleRangePart ParseSimpleRangePart()
+        {
+            int ptr = pointer - 1; // TODO avoid StringIndexOutOfBounds
+            bool hasDigits = false;
+            bool hasLetters = false;
+            while (ptr < formulaLength)
+            {
+                char ch = formulaString[ptr];
+                if (Char.IsDigit(ch))
+                {
+                    hasDigits = true;
+                }
+                else if (Char.IsLetter(ch))
+                {
+                    hasLetters = true;
+                }
+                else if (ch == '$')
+                {
+                    //
+                }
+                else
+                {
+                    break;
+                }
+                ptr++;
+            }
+            if (ptr <= pointer - 1)
+            {
+                return null;
+            }
+            String rep = formulaString.Substring(pointer - 1, ptr - pointer + 1);
+
+            Regex pattern = new Regex(CELL_REF_PATTERN);
+
+            if (!pattern.IsMatch(rep))
+            {
+                return null;
+            }
+            // Check range bounds against grid max
+            if (hasLetters && hasDigits)
+            {
+                if (!IsValidCellReference(rep))
+                {
+                    return null;
+                }
+            }
+            else if (hasLetters)
+            {
+                if (!CellReference.IsColumnWithnRange(rep.Replace("$", ""), _ssVersion))
+                {
+                    return null;
+                }
+            }
+            else if (hasDigits)
+            {
+                int i;
+                try
+                {
+                    i = Int32.Parse(rep.Replace("$", ""));
+                }
+                catch (FormatException)
+                {
+                    return null;
+                }
+                if (i < 1 || i > 65536)
+                {
+                    return null;
+                }
+            }
+            else
+            {
+                // just dollars ? can this happen?
+                return null;
+            }
+
+
+            ResetPointer(ptr + 1); // stepping forward
+            return new SimpleRangePart(rep, hasLetters, hasDigits);
         }
 
-        	/**
-	 * A1, $A1, A$1, $A$1, A, 1
-	 */
+
+
+        /**
+         * 
+         * "A1", "B3" -> "A1:B3"   
+         * "sheet1!A1", "B3" -> "sheet1!A1:B3"
+         * 
+         * @return <c>null</c> if the range expression cannot / shouldn't be reduced.
+         */
+        private static Ptg ReduceRangeExpression(Ptg ptgA, Ptg ptgB)
+        {
+            if (!(ptgB is RefPtg))
+            {
+                // only when second ref is simple 2-D ref can the range 
+                // expression be converted To an area ref
+                return null;
+            }
+            RefPtg refB = (RefPtg)ptgB;
+
+            if (ptgA is RefPtg)
+            {
+                RefPtg refA = (RefPtg)ptgA;
+                return new AreaPtg(refA.Row, refB.Row, refA.Column, refB.Column,
+                        refA.IsRowRelative, refB.IsRowRelative, refA.IsColRelative, refB.IsColRelative);
+            }
+            if (ptgA is Ref3DPtg)
+            {
+                Ref3DPtg refA = (Ref3DPtg)ptgA;
+                return new Area3DPtg(refA.Row, refB.Row, refA.Column, refB.Column,
+                        refA.IsRowRelative, refB.IsRowRelative, refA.IsColRelative, refB.IsColRelative,
+                        refA.ExternSheetIndex);
+            }
+            // Note - other operand types (like AreaPtg) which probably can't evaluate 
+            // do not cause validation errors at Parse time
+            return null;
+        }
+        /**
+     * A1, $A1, A$1, $A$1, A, 1
+     */
         private class SimpleRangePart
         {
             public enum PartType
@@ -431,6 +986,7 @@ namespace NPOI.SS.Formula
                     return _type != PartType.CELL;
                 }
             }
+
 
             public CellReference getCellReference()
             {
@@ -557,10 +1113,9 @@ namespace NPOI.SS.Formula
             }
             return null;
         }
-
         /**
- * very similar to {@link SheetNameFormatter#isSpecialChar(char)}
- */
+  * very similar to {@link SheetNameFormatter#isSpecialChar(char)}
+  */
         private bool IsUnquotedSheetNameChar(char ch)
         {
             if (Char.IsLetterOrDigit(ch))
@@ -589,644 +1144,36 @@ namespace NPOI.SS.Formula
                 look = (char)0;
             }
         }
-        /**
- *
- * @return <code>true</code> if the specified character may be used in a defined name
- */
-        private static bool IsValidDefinedNameChar(char ch)
-        {
-            if (Char.IsLetterOrDigit(ch))
-            {
-                return true;
-            }
-            switch (ch)
-            {
-                case '.':
-                case '_':
-                case '?':
-                case '\\': // of all things
-                    return true;
-            }
-            return false;
-        }
-
-        /**
- * Parses simple factors that are not primitive ranges or range components
- * i.e. '!', ':'(and equiv '...') do not appear
- * Examples
- * <pre>
- *   my.named...range.
- *   foo.bar(123.456, "abc")
- *   123.456
- *   "abc"
- *   true
- * </pre>
- */
-        private ParseNode ParseNonRange(int savePointer)
-        {
-            ResetPointer(savePointer);
-
-            if (Char.IsDigit(look))
-            {
-                return new ParseNode(ParseNumber());
-            }
-            if (look == '"')
-            {
-                return new ParseNode(new StringPtg(ParseStringLiteral()));
-            }
-            // from now on we can only be dealing with non-quoted identifiers
-            // which will either be named ranges or functions
-            StringBuilder sb = new StringBuilder();
-
-            if (!Char.IsLetter(look))
-            {
-                throw expected("number, string, or defined name");
-            }
-            while (IsValidDefinedNameChar(look))
-            {
-                sb.Append(look);
-                GetChar();
-            }
-            SkipWhite();
-            String name = sb.ToString();
-            if (look == '(')
-            {
-                return Function(name);
-            }
-            if (name.Equals("TRUE",StringComparison.InvariantCultureIgnoreCase) || name.Equals("FALSE",StringComparison.InvariantCultureIgnoreCase))
-            {
-                return new ParseNode(new BoolPtg(name.ToUpper()));
-            }
-            if (book == null)
-            {
-                // Only test cases omit the book (expecting it not to be needed)
-                throw new InvalidOperationException("Need book to evaluate name '" + name + "'");
-            }
-            IEvaluationName evalName = book.GetName(name, _sheetIndex);
-            if (evalName == null)
-            {
-                throw new FormulaParseException("Specified named range '"
-                        + name + "' does not exist in the current workbook.");
-            }
-            if (evalName.IsRange)
-            {
-                return new ParseNode(evalName.CreatePtg());
-            }
-            // TODO - what about NameX ?
-            throw new FormulaParseException("Specified name '"
-                    + name + "' is not a range as expected.");
-        }
-
-        /**
- * Parses area refs (things which could be the operand of ':') and simple factors
- * Examples
- * <pre>
- *   A$1
- *   $A$1 :  $B1
- *   A1 .......	C2
- *   Sheet1 !$A1
- *   a..b!A1
- *   'my sheet'!A1
- *   .my.sheet!A1
- *   my.named..range.
- *   foo.bar(123.456, "abc")
- *   123.456
- *   "abc"
- *   true
- * </pre>
- *
- */
-        private ParseNode ParseRangeable()
-        {
-            SkipWhite();
-            int savePointer = pointer;
-            SheetIdentifier sheetIden = ParseSheetName();
-            if (sheetIden == null)
-            {
-                ResetPointer(savePointer);
-            }
-            else
-            {
-                SkipWhite();
-                savePointer = pointer;
-            }
-
-            SimpleRangePart part1 = ParseSimpleRangePart();
-            if (part1 == null)
-            {
-                if (sheetIden != null)
-                {
-                    throw new FormulaParseException("Cell reference expected after sheet name at index "
-                            + pointer + ".");
-                }
-                return ParseNonRange(savePointer);
-            }
-            bool whiteAfterPart1 = IsWhite(look);
-            if (whiteAfterPart1)
-            {
-                SkipWhite();
-            }
-
-            if (look == ':')
-            {
-                int colonPos = pointer;
-                GetChar();
-                SkipWhite();
-                SimpleRangePart part2 = ParseSimpleRangePart();
-                if (part2 != null && !part1.IsCompatibleForArea(part2))
-                {
-                    // second part is not compatible with an area ref e.g. S!A1:S!B2
-                    // where S might be a sheet name (that looks like a column name)
-
-                    part2 = null;
-                }
-                if (part2 == null)
-                {
-                    // second part is not compatible with an area ref e.g. A1:OFFSET(B2, 1, 2)
-                    // reset and let caller use explicit range operator
-                    ResetPointer(colonPos);
-                    if (!part1.IsCell)
-                    {
-                        String prefix;
-                        if (sheetIden == null)
-                        {
-                            prefix = "";
-                        }
-                        else
-                        {
-                            prefix = "'" + sheetIden.SheetID.Name + '!';
-                        }
-                        throw new FormulaParseException(prefix + part1.Rep + "' is not a proper reference.");
-                    }
-                    return CreateAreaRefParseNode(sheetIden, part1, part2);
-                }
-                return CreateAreaRefParseNode(sheetIden, part1, part2);
-            }
-
-            if (look == '.')
-            {
-                GetChar();
-                int dotCount = 1;
-                while (look == '.')
-                {
-                    dotCount++;
-                    GetChar();
-                }
-                bool whiteBeforePart2 = IsWhite(look);
-
-                SkipWhite();
-                SimpleRangePart part2 = ParseSimpleRangePart();
-                String part1And2 = formulaString.Substring(savePointer - 1,pointer -savePointer);
-                if (part2 == null)
-                {
-                    if (sheetIden != null)
-                    {
-                        throw new FormulaParseException("Complete area reference expected after sheet name at index "
-                                + pointer + ".");
-                    }
-                    return ParseNonRange(savePointer);
-                }
-
-
-                if (whiteAfterPart1 || whiteBeforePart2)
-                {
-                    if (part1.IsRowOrColumn || part2.IsRowOrColumn)
-                    {
-                        // "A .. B" not valid syntax for "A:B"
-                        // and there's no other valid expression that fits this grammar
-                        throw new FormulaParseException("Dotted range (full row or column) expression '"
-                                + part1And2 + "' must not contain whitespace.");
-                    }
-                    return CreateAreaRefParseNode(sheetIden, part1, part2);
-                }
-
-                if (dotCount == 1 && part1.IsRow && part2.IsRow)
-                {
-                    // actually, this is looking more like a number
-                    return ParseNonRange(savePointer);
-                }
-
-                if (part1.IsRowOrColumn || part2.IsRowOrColumn)
-                {
-                    if (dotCount != 2)
-                    {
-                        throw new FormulaParseException("Dotted range (full row or column) expression '" + part1And2
-                                + "' must have exactly 2 dots.");
-                    }
-                }
-                return CreateAreaRefParseNode(sheetIden, part1, part2);
-            }
-            if (part1.IsCell && IsValidCellReference(part1.Rep))
-            {
-                return CreateAreaRefParseNode(sheetIden, part1, null);
-            }
-            if (sheetIden != null)
-            {
-                throw new FormulaParseException("Second part of cell reference expected after sheet name at index "
-                        + pointer + ".");
-            }
-
-            return ParseNonRange(savePointer);
-        }
-        private static AreaReference CreateAreaRef(SimpleRangePart part1, SimpleRangePart part2)
-        {
-            if (!part1.IsCompatibleForArea(part2))
-            {
-                throw new FormulaParseException("has incompatible parts: '"
-                        + part1.Rep + "' and '" + part2.Rep + "'.");
-            }
-            if (part1.IsRow)
-            {
-                return AreaReference.GetWholeRow(part1.Rep, part2.Rep);
-            }
-            if (part1.IsColumn)
-            {
-                return AreaReference.GetWholeColumn(part1.Rep, part2.Rep);
-            }
-            return new AreaReference(part1.getCellReference(), part2.getCellReference());
-        }
-
-        	/**
-	 *
-	 * @param sheetIden may be <code>null</code>
-	 * @param part1
-	 * @param part2 may be <code>null</code>
-	 */
-        private ParseNode CreateAreaRefParseNode(SheetIdentifier sheetIden, SimpleRangePart part1,
-                SimpleRangePart part2)
-        {
-
-            int extIx;
-            if (sheetIden == null)
-            {
-                extIx = Int32.MinValue;
-            }
-            else
-            {
-                String sName = sheetIden.SheetID.Name;
-                if (sheetIden.BookName == null)
-                {
-                    extIx = book.GetExternalSheetIndex(sName);
-                }
-                else
-                {
-                    extIx = book.GetExternalSheetIndex(sheetIden.BookName, sName);
-                }
-            }
-            Ptg ptg;
-            if (part2 == null)
-            {
-                CellReference cr = part1.getCellReference();
-                if (sheetIden == null)
-                {
-                    ptg = new RefPtg(cr);
-                }
-                else
-                {
-                    ptg = new Ref3DPtg(cr, extIx);
-                }
-            }
-            else
-            {
-                AreaReference areaRef = CreateAreaRef(part1, part2);
-
-                if (sheetIden == null)
-                {
-                    ptg = new AreaPtg(areaRef);
-                }
-                else
-                {
-                    ptg = new Area3DPtg(areaRef, extIx);
-                }
-            }
-            return new ParseNode(ptg);
-        }
-
-        //private ParseNode ParseFunctionReferenceOrName()
-        //{
-        //    Identifier iden = ParseIdentifier();
-        //    if (look == '(')
-        //    {
-        //        //This is a Function
-        //        return Function(iden.Name);
-        //    }
-        //    if (!iden.IsQuoted)
-        //    {
-        //        String name = iden.Name;
-        //        if (name.Equals("TRUE",StringComparison.InvariantCultureIgnoreCase)
-        //            || name.Equals("FALSE", StringComparison.InvariantCultureIgnoreCase))
-        //        {
-        //            return new ParseNode(new BoolPtg(name.ToUpper()));
-        //        }
-        //    }
-        //    return ParseRangeExpression(iden);
-        //}
-
-        private ParseNode ParseRangeExpression()
-        {
-            ParseNode result = ParseRangeable();
-            bool hasRange = false;
-            while (look == ':')
-            {
-                int pos = pointer;
-                GetChar();
-                ParseNode nextPart = ParseRangeable();
-                // Note - no range simplification here. An expr like "A1:B2:C3:D4:E5" should be
-                // grouped into area ref pairs like: "(A1:B2):(C3:D4):E5"
-                // Furthermore, Excel doesn't seem to simplify
-                // expressions like "Sheet1!A1:Sheet1:B2" into "Sheet1!A1:B2"
-
-                CheckValidRangeOperand("LHS", pos, result);
-                CheckValidRangeOperand("RHS", pos, nextPart);
-
-                ParseNode[] children = { result, nextPart, };
-                result = new ParseNode(RangePtg.instance, children);
-                hasRange = true;
-            }
-            if (hasRange)
-            {
-                return AugmentWithMemPtg(result);
-            }
-            return result;
-        }
-        /**
- * From OOO doc: "Whenever one operand of the reference subexpression is a function,
- *  a defined name, a 3D reference, or an external reference (and no error occurs),
- *  a tMemFunc token is used"
- *
- */
-        private static bool NeedsMemFunc(ParseNode root)
-        {
-            Ptg token = root.GetToken();
-            if (token is AbstractFunctionPtg)
-            {
-                return true;
-            }
-            if (token is ExternSheetReferenceToken)
-            { // 3D refs
-                return true;
-            }
-            if (token is NamePtg || token is NameXPtg)
-            { // 3D refs
-                return true;
-            }
-
-            if (token is OperationPtg||token is ParenthesisPtg)
-            {
-                // expect RangePtg, but perhaps also UnionPtg, IntersectionPtg etc
-                foreach (ParseNode child in root.GetChildren())
-                {
-                    if (NeedsMemFunc(child))
-                    {
-                        return true;
-                    }
-                }
-                return false;
-            }
-            if (token is OperandPtg)
-            {
-                return false;
-            }
-            if (token is OperationPtg)
-            {
-                return true;
-            }
-
-            return false;
-        }
-
-        private static ParseNode AugmentWithMemPtg(ParseNode root)
-        {
-            Ptg memPtg;
-            if (NeedsMemFunc(root))
-            {
-                memPtg = new MemFuncPtg(root.EncodedSize);
-            }
-            else
-            {
-                memPtg = new MemAreaPtg(root.EncodedSize);
-            }
-            return new ParseNode(memPtg, root);
-        }
-
-        /**
- * @param currentParsePosition used to format a potential error message
- */
-        private void CheckValidRangeOperand(String sideName, int currentParsePosition, ParseNode pn)
-        {
-            if (!IsValidRangeOperand(pn))
-            {
-                throw new FormulaParseException("The " + sideName
-                        + " of the range operator ':' at position "
-                        + currentParsePosition + " is not a proper reference.");
-            }
-        }
-        /**
-         * @return false if sub-expression represented the specified ParseNode definitely
-         * cannot appear on either side of the range (':') operator
-         */
-        private bool IsValidRangeOperand(ParseNode a)
-        {
-            Ptg tkn = a.GetToken();
-            // Note - order is important for these instance-of checks
-            if (tkn is OperandPtg)
-            {
-                // notably cell refs and area refs
-                return true;
-            }
-
-            // next 2 are special cases of OperationPtg
-            if (tkn is AbstractFunctionPtg)
-            {
-                AbstractFunctionPtg afp = (AbstractFunctionPtg)tkn;
-                byte returnClass = afp.DefaultOperandClass;
-                return Ptg.CLASS_REF == returnClass;
-            }
-            if (tkn is ValueOperatorPtg)
-            {
-                return false;
-            }
-            if (tkn is OperationPtg)
-            {
-                return true;
-            }
-
-            // one special case of ControlPtg
-            if (tkn is ParenthesisPtg)
-            {
-                // parenthesis Ptg should have only one child
-                return IsValidRangeOperand(a.GetChildren()[0]);
-            }
-
-            // one special case of ScalarConstantPtg
-            if (tkn == ErrPtg.REF_INVALID)
-            {
-                return true;
-            }
-
-            // All other ControlPtgs and ScalarConstantPtgs cannot be used with ':'
-            return false;
-        }
-        /**
-         * 
-         * "A1", "B3" -> "A1:B3"   
-         * "sheet1!A1", "B3" -> "sheet1!A1:B3"
-         * 
-         * @return <c>null</c> if the range expression cannot / shouldn't be reduced.
-         */
-        private static Ptg ReduceRangeExpression(Ptg ptgA, Ptg ptgB)
-        {
-            if (!(ptgB is RefPtg))
-            {
-                // only when second ref is simple 2-D ref can the range 
-                // expression be converted To an area ref
-                return null;
-            }
-            RefPtg refB = (RefPtg)ptgB;
-
-            if (ptgA is RefPtg)
-            {
-                RefPtg refA = (RefPtg)ptgA;
-                return new AreaPtg(refA.Row, refB.Row, refA.Column, refB.Column,
-                        refA.IsRowRelative, refB.IsRowRelative, refA.IsColRelative, refB.IsColRelative);
-            }
-            if (ptgA is Ref3DPtg)
-            {
-                Ref3DPtg refA = (Ref3DPtg)ptgA;
-                return new Area3DPtg(refA.Row, refB.Row, refA.Column, refB.Column,
-                        refA.IsRowRelative, refB.IsRowRelative, refA.IsColRelative, refB.IsColRelative,
-                        refA.ExternSheetIndex);
-            }
-            // Note - other operand types (like AreaPtg) which probably can't evaluate 
-            // do not cause validation errors at Parse time
-            return null;
-        }
-
-        //private Ptg ParseNameOrCellRef(Identifier iden)
-        //{
-
-        //    if (look == '!')
-        //    {
-        //        GetChar();
-        //        // 3-D ref
-        //        // this code assumes iden is a sheetName
-        //        // TODO - handle <book name> ! <named range name>
-        //        int externIdx = GetExternalSheetIndex(iden.Name);
-        //        String secondIden = ParseUnquotedIdentifier();
-        //        AreaReference areaRef = ParseArea(secondIden);
-        //        if (areaRef == null)
-        //        {
-        //            return new Ref3DPtg(secondIden, (short)externIdx);
-        //        }
-        //        // will happen if dots are used instead of colon
-        //        return new Area3DPtg(areaRef.FormatAsString(), (short)externIdx);
-        //    }
-
-        //    String name = iden.Name;
-        //    AreaReference areaRef2 = ParseArea(name);
-        //    if (areaRef2 != null)
-        //    {
-        //        // will happen if dots are used instead of colon
-        //        return new AreaPtg(areaRef2.FormatAsString());
-        //    }
-        //    // This can be either a cell ref or a named range
-
-
-        //    int nameType = CellReference.ClassifyCellReference(name);
-        //    if (nameType == NameType.CELL)
-        //    {
-        //        return new RefPtg(name);
-        //    }
-        //    if (look == ':')
-        //    {
-        //        if (nameType == NameType.COLUMN)
-        //        {
-        //            GetChar();
-        //            String secondIden = ParseUnquotedIdentifier();
-        //            if (CellReference.ClassifyCellReference(secondIden) != NameType.COLUMN)
-        //            {
-        //                throw new FormulaParseException("Expected full column after '" + name
-        //                        + ":' but got '" + secondIden + "'");
-        //            }
-        //            return new AreaPtg(name + ":" + secondIden);
-        //        }
-        //    }
-        //    if (nameType != NameType.NAMED_RANGE)
-        //    {
-        //        new FormulaParseException("Name '" + name
-        //            + "' does not look like a cell reference or named range");
-        //    }
-        //    EvaluationName evalName = book.GetName(name,_sheetIndex);
-        //    if (evalName == null)
-        //    {
-        //        throw new FormulaParseException("Specified named range '"
-        //                + name + "' does not exist in the current workbook.");
-        //    }
-        //    if (evalName.IsRange)
-        //    {
-        //        return evalName.CreatePtg();
-        //    }
-        //    throw new FormulaParseException("Specified name '"
-        //                + name + "' is not a range as expected");
-        //}
-
-        private int GetExternalSheetIndex(String name)
-        {
-            if (name[0]== '[')
-            {
-                // we have a sheet name qualified with workbook name e.g. '[MyData.xls]Sheet1'
-                int pos = name.LastIndexOf(']'); // safe because sheet names never have ']'
-                String wbName = name.Substring(1, pos - 1);
-                String sheetName = name.Substring(pos + 1);
-                return book.GetExternalSheetIndex(wbName, sheetName);
-            }
-            return book.GetExternalSheetIndex(name);
-        }
-
-        /**
-         * @param name an 'identifier' like string (i.e. contains alphanums, and dots)
-         * @return <c>null</c> if name cannot be split at a dot
-         */
-        private AreaReference ParseArea(String name)
-        {
-            int dotPos = name.IndexOf('.');
-            if (dotPos < 0)
-            {
-                return null;
-            }
-            int dotCount = 1;
-            while (dotCount < name.Length && name[dotPos + dotCount] == '.')
-            {
-                dotCount++;
-                if (dotCount > 3)
-                {
-                    // four or more consecutive dots does not convert To ':'
-                    return null;
-                }
-            }
-            // This expression is only valid as an area ref, if the LHS and RHS of the dot(s) are both
-            // cell refs.  Otherwise, this expression must be a named range name
-            String partA = name.Substring(0, dotPos);
-            if (!IsValidCellReference(partA))
-            {
-                return null;
-            }
-            String partB = name.Substring(dotPos + dotCount);
-            if (!IsValidCellReference(partB))
-            {
-                return null;
-            }
-            CellReference topLeft = new CellReference(partA);
-            CellReference bottomRight = new CellReference(partB);
-            return new AreaReference(topLeft, bottomRight);
-        }
 
         /**
          * @return <c>true</c> if the specified name is a valid cell reference
          */
-        private static bool IsValidCellReference(String str)
+        private bool IsValidCellReference(String str)
         {
-            return CellReference.ClassifyCellReference(str, _ssVersion) == NameType.CELL;
+            //check range bounds against grid max
+            bool result = CellReference.ClassifyCellReference(str, _ssVersion) == NameType.CELL;
+            if (result)
+            {
+                /**
+                 * Check if the argument is a function. Certain names can be either a cell reference or a function name
+                 * depending on the contenxt. Compare the following examples in Excel 2007:
+                 * (a) LOG10(100) + 1
+                 * (b) LOG10 + 1
+                 * In (a) LOG10 is a name of a built-in function. In (b) LOG10 is a cell reference
+                 */
+                bool isFunc = FunctionMetadataRegistry.GetFunctionByName(str.ToUpper()) != null;
+                if (isFunc)
+                {
+                    int savePointer = pointer;
+                    ResetPointer(pointer + str.Length);
+                    SkipWhite();
+                    // open bracket indicates that the argument is a function,
+                    // the returning value should be false, i.e. "not a valid cell reference"
+                    result = look != '(';
+                    ResetPointer(savePointer);
+                }
+            }
+            return result;
         }
 
 
@@ -1281,8 +1228,7 @@ namespace NPOI.SS.Formula
          * Generates the variable Function ptg for the formula.
          * 
          * For IF Formulas, Additional PTGs are Added To the Tokens
-         * @param name a {@link NamePtg} or {@link NameXPtg} or <c>null</c>
-         * @param numArgs
+	 * @param name a {@link NamePtg} or {@link NameXPtg} or <code>null</code>
          * @return Ptg a null is returned if we're in an IF formula, it needs extreme manipulation and is handled in this Function
          */
         private ParseNode GetFunction(String name, Ptg namePtg, ParseNode[] args)
@@ -1300,7 +1246,7 @@ namespace NPOI.SS.Formula
                 ParseNode[] allArgs = new ParseNode[numArgs + 1];
                 allArgs[0] = new ParseNode(namePtg);
                 System.Array.Copy(args, 0, allArgs, 1, numArgs);
-                return new ParseNode(new FuncVarPtg(name, (byte)(numArgs + 1)), allArgs);
+                return new ParseNode(FuncVarPtg.Create(name, (byte)(numArgs + 1)), allArgs);
             }
 
             if (namePtg != null)
@@ -1309,16 +1255,22 @@ namespace NPOI.SS.Formula
             }
             bool IsVarArgs = !fm.HasFixedArgsLength;
             int funcIx = fm.Index;
+		if (funcIx == FunctionMetadataRegistry.FUNCTION_INDEX_SUM && args.Length == 1) {
+			// Excel encodes the sum of a single argument as tAttrSum
+			// POI does the same for consistency, but this is not critical
+			return new ParseNode(AttrPtg.GetSumSingle(), args);
+			// The code below would encode tFuncVar(SUM) which seems to do no harm
+		}
             ValidateNumArgs(args.Length, fm);
 
             AbstractFunctionPtg retval;
             if (IsVarArgs)
             {
-                retval = new FuncVarPtg(name, (byte)numArgs);
+                retval = FuncVarPtg.Create(name, (byte)numArgs);
             }
             else
             {
-                retval = new FuncPtg(funcIx);
+                retval = FuncPtg.Create(funcIx);
             }
             return new ParseNode(retval, args);
         }
@@ -1400,7 +1352,7 @@ namespace NPOI.SS.Formula
                     throw expected("',' or ')'");
                 }
             }
-             ParseNode[] result = (ParseNode[])temp.ToArray(typeof(ParseNode));
+            ParseNode[] result = (ParseNode[])temp.ToArray(typeof(ParseNode));
             return result;
         }
 
@@ -1435,91 +1387,6 @@ namespace NPOI.SS.Formula
                 result = new ParseNode(PercentPtg.instance, result);
             }
         }
-        private string CELL_REF_PATTERN = "^(\\$?[A-Za-z]+)(\\$?[0-9]+)?";
-        /**
- * Parses out a potential LHS or RHS of a ':' intended to produce a plain AreaRef.  Normally these are
- * proper cell references but they could also be row or column refs like "$AC" or "10"
- * @return <code>null</code> (and leaves {@link #_pointer} unchanged if a proper range part does not parse out
- */
-        private SimpleRangePart ParseSimpleRangePart()
-        {
-            int ptr = pointer - 1; // TODO avoid StringIndexOutOfBounds
-            bool hasDigits = false;
-            bool hasLetters = false;
-            while (ptr < formulaLength)
-            {
-                char ch = formulaString[ptr];
-                if (Char.IsDigit(ch))
-                {
-                    hasDigits = true;
-                }
-                else if (Char.IsLetter(ch))
-                {
-                    hasLetters = true;
-                }
-                else if (ch == '$')
-                {
-                    //
-                }
-                else
-                {
-                    break;
-                }
-                ptr++;
-            }
-            if (ptr <= pointer - 1)
-            {
-                return null;
-            }
-            String rep = formulaString.Substring(pointer - 1, ptr-pointer+1);
-
-            Regex pattern = new Regex(CELL_REF_PATTERN);
-
-            if (!pattern.IsMatch(rep))
-            {
-                return null;
-            }
-            // Check range bounds against grid max
-            if (hasLetters && hasDigits)
-            {
-                if (!IsValidCellReference(rep))
-                {
-                    return null;
-                }
-            }
-            else if (hasLetters)
-            {
-                if (!CellReference.IsColumnWithnRange(rep.Replace("$", ""),_ssVersion))
-                {
-                    return null;
-                }
-            }
-            else if (hasDigits)
-            {
-                int i;
-                try
-                {
-                    i = Int32.Parse(rep.Replace("$", ""));
-                }
-                catch (FormatException)
-                {
-                    return null;
-                }
-                if (i < 1 || i > 65536)
-                {
-                    return null;
-                }
-            }
-            else
-            {
-                // just dollars ? can this happen?
-                return null;
-            }
-
-
-            ResetPointer(ptr + 1); // stepping forward
-            return new SimpleRangePart(rep, hasLetters, hasDigits);
-        }
 
 
 
@@ -1535,10 +1402,10 @@ namespace NPOI.SS.Formula
                     return new ParseNode(ErrPtg.ValueOf(ParseErrorLiteral()));
                 case '-':
                     Match('-');
-                    return new ParseNode(UnaryMinusPtg.instance, PowerFactor());
+                    return ParseUnary(false);
                 case '+':
                     Match('+');
-                    return new ParseNode(UnaryPlusPtg.instance, PowerFactor());
+                    return ParseUnary(true);
                 case '(':
                     Match('(');
                     ParseNode inside = ComparisonExpression();
@@ -1560,10 +1427,42 @@ namespace NPOI.SS.Formula
             {
                 return new ParseNode(ParseNumber());
             }
-            // else - assume number
-            return new ParseNode(ParseNumber());
+            throw expected("cell ref or constant literal");
         }
+        private ParseNode ParseUnary(bool isPlus)
+        {
 
+            bool numberFollows = IsDigit(look) || look == '.';
+            ParseNode factor = PowerFactor();
+
+            if (numberFollows)
+            {
+                // + or - directly next to a number is parsed with the number
+
+                Ptg token = factor.GetToken();
+                if (token is NumberPtg)
+                {
+                    if (isPlus)
+                    {
+                        return factor;
+                    }
+                    token = new NumberPtg(-((NumberPtg)token).Value);
+                    return new ParseNode(token);
+                }
+                if (token is IntPtg)
+                {
+                    if (isPlus)
+                    {
+                        return factor;
+                    }
+                    int intVal = ((IntPtg)token).Value;
+                    // note - cannot use IntPtg for negatives
+                    token = new NumberPtg(-intVal);
+                    return new ParseNode(token);
+                }
+            }
+            return new ParseNode(isPlus ? UnaryPlusPtg.instance : UnaryMinusPtg.instance, factor);
+        }
 
         private ParseNode ParseArray()
         {
@@ -1584,7 +1483,7 @@ namespace NPOI.SS.Formula
             }
             int nRows = rowsData.Count;
             Object[][] values2d = new Object[nRows][];
-            values2d=(Object[][])rowsData.ToArray();
+            values2d = (Object[][])rowsData.ToArray();
             int nColumns = values2d[0].Length;
             CheckRowLengths(values2d, nColumns);
 
@@ -1626,7 +1525,7 @@ namespace NPOI.SS.Formula
             }
 
             Object[] result = new Object[temp.Count];
-            result=temp.ToArray();
+            result = temp.ToArray();
             return result;
         }
 
@@ -1650,11 +1549,11 @@ namespace NPOI.SS.Formula
         private Boolean ParseBooleanLiteral()
         {
             String iden = ParseUnquotedIdentifier();
-            if ("TRUE".Equals(iden,StringComparison.InvariantCultureIgnoreCase))
+            if ("TRUE".Equals(iden, StringComparison.InvariantCultureIgnoreCase))
             {
                 return true;
             }
-            if ("FALSE".Equals(iden,StringComparison.InvariantCultureIgnoreCase))
+            if ("FALSE".Equals(iden, StringComparison.InvariantCultureIgnoreCase))
             {
                 return false;
             }

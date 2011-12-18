@@ -40,7 +40,7 @@ namespace TestCases.HSSF.Record.Formula
             0,
         };
 
-            FuncPtg ptg = new FuncPtg(TestcaseRecordInputStream.CreateWithFakeSid(fakeData));
+            FuncPtg ptg = FuncPtg.Create(TestcaseRecordInputStream.CreateLittleEndian(fakeData));
             Assert.AreEqual(0x20, ptg.GetFunctionIndex(), "Len formula index is1 not 32(20H)");
             Assert.AreEqual(1, ptg.NumberOfOperands, "Number of operands in the len formula");
             Assert.AreEqual("LEN", ptg.Name, "Function Name");
@@ -49,7 +49,7 @@ namespace TestCases.HSSF.Record.Formula
         [TestMethod]
         public void TestClone()
         {
-            FuncPtg funcPtg = new FuncPtg(27); // ROUND() - takes 2 args
+            FuncPtg funcPtg = FuncPtg.Create(27); // ROUND() - takes 2 args
 
             FuncPtg clone = (FuncPtg)funcPtg.Clone();
             if (clone.NumberOfOperands == 0)

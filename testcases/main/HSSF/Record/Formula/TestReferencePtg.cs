@@ -25,6 +25,7 @@ namespace TestCases.HSSF.Record.Formula
 
     using TestCases.HSSF;
     using NPOI.HSSF.Record;
+    using NPOI.Util.IO;
 
     /**
      * Tests for {@link RefPtg}.
@@ -103,7 +104,7 @@ namespace TestCases.HSSF.Record.Formula
         [TestMethod]
         public void TestReadWrite_tRefN_bug45091()
         {
-            RecordInputStream in1 = TestcaseRecordInputStream.CreateWithFakeSid(tRefN_data);
+            LittleEndianInput in1 = TestcaseRecordInputStream.CreateLittleEndian(tRefN_data);
             Ptg[] ptgs = Ptg.ReadTokens(tRefN_data.Length, in1);
             byte[] outData = new byte[5];
             Ptg.SerializePtgs(ptgs, outData, 0);

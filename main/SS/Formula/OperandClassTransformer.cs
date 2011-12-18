@@ -106,7 +106,13 @@ namespace NPOI.SS.Formula
                 SetSimpleValueFuncClass((AbstractFunctionPtg)token, desiredOperandClass, callerForceArrayFlag);
                 return;
             }
-
+		if (IsSingleArgSum(token)) {
+			// Need to process the argument of SUM with transformFunctionNode below
+			// so make a dummy FuncVarPtg for that call.
+			token = FuncVarPtg.SUM;
+			// Note - the tAttrSum token (node.getToken()) is a base
+			// token so does not need to have its operand class set
+		}
             if (token is ValueOperatorPtg || token is ControlPtg
                 || token is MemFuncPtg
 				|| token is MemAreaPtg
@@ -148,7 +154,15 @@ namespace NPOI.SS.Formula
             }
             token.PtgClass = (TransformClass(token.PtgClass, desiredOperandClass, callerForceArrayFlag));
         }
-
+        private static bool IsSingleArgSum(Ptg token)
+        {
+            if (token is AttrPtg)
+            {
+                AttrPtg attrPtg = (AttrPtg)token;
+                return attrPtg.IsSum;
+            }
+            return false;
+        }
         private static bool IsSimpleValueFunction(Ptg token)
         {
             if (token is AbstractFunctionPtg)
