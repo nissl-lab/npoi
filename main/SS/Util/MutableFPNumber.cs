@@ -18,7 +18,7 @@
 namespace NPOI.SS.Util
 {
     using System;
-
+    using NPOI.Util;
     public class MutableFPNumber
     {
 
@@ -35,13 +35,15 @@ namespace NPOI.SS.Util
          *
          *  This frac value rounds to '1' followed by fourteen zeros with an incremented decimal exponent
          */
-        private static BigInteger BI_MIN_BASE = new BigInteger("0B5E620F47FFFE666", 16);
+        //private static BigInteger BI_MIN_BASE = new BigInteger("0B5E620F47FFFE666", 16);
+        private static BigInteger BI_MIN_BASE = new BigInteger(new int[] { -1243209484, 2147477094 }, 1);
         /**
          * For 'Base-10 normalised form'<br/>
          * The maximum {@link #_frac} value when {@link #_binaryExponent} == 49
          * (10^15-0.5) * 2^14
          */
-        private static BigInteger BI_MAX_BASE = new BigInteger("0E35FA9319FFFE000", 16);
+        //private static BigInteger BI_MAX_BASE = new BigInteger("0E35FA9319FFFE000", 16);
+        private static BigInteger BI_MAX_BASE = new BigInteger(new int[] { -480270031, -1610620928 }, 1);
 
         /**
          * Width of a long
@@ -67,7 +69,7 @@ namespace NPOI.SS.Util
         }
         public void Normalise64bit()
         {
-            int oldBitLen = _significand.bitCount();
+            int oldBitLen = _significand.BitLength();
             int sc = oldBitLen - C_64;
             if (sc == 0)
             {
@@ -90,7 +92,7 @@ namespace NPOI.SS.Util
                 throw new InvalidOperationException();
             }
             _significand = Rounder.Round(_significand, sc);
-            if (_significand.bitCount() > oldBitLen)
+            if (_significand.BitLength() > oldBitLen)
             {
                 sc++;
                 _binaryExponent++;
@@ -99,19 +101,21 @@ namespace NPOI.SS.Util
         }
         public int Get64BitNormalisedExponent()
         {
-            return _binaryExponent + _significand.bitCount() - C_64;
-
+            //return _binaryExponent + _significand.BitCount() - C_64;
+            return _binaryExponent + _significand.BitLength() - C_64;
         }
 
         public bool IsBelowMaxRep()
         {
-            int sc = _significand.bitCount() - C_64;
-            return _significand<(BI_MAX_BASE<<(sc));
+            int sc = _significand.BitLength() - C_64;
+            //return _significand<(BI_MAX_BASE<<(sc));
+            return _significand.CompareTo(BI_MAX_BASE.shiftLeft(sc)) < 0;
         }
         public bool IsAboveMinRep()
         {
-            int sc = _significand.bitCount() - C_64;
-            return _significand>(BI_MIN_BASE<<(sc));
+            int sc = _significand.BitLength() - C_64;
+            return _significand.CompareTo(BI_MIN_BASE.shiftLeft(sc)) > 0;
+            //return _significand>(BI_MIN_BASE<<(sc));
         }
         public NormalisedDecimal CreateNormalisedDecimal(int pow10)
         {
@@ -138,7 +142,7 @@ namespace NPOI.SS.Util
             _significand = _significand*multiplicand;
             _binaryExponent += multiplierShift;
             // check for too much precision
-            int sc = (_significand.bitCount() - MIN_PRECISION) & unchecked((int)0xFFFFFFE0);
+            int sc = (_significand.BitLength() - MIN_PRECISION) & unchecked((int)0xFFFFFFE0);
             // mask Makes multiples of 32 which optimises BigInt32.ShiftRight
             if (sc > 0)
             {
@@ -181,7 +185,7 @@ namespace NPOI.SS.Util
          */
         private class TenPower
         {
-            private static BigInteger FIVE = new BigInteger("5",10);
+            private static BigInteger FIVE = new BigInteger(5L);// new BigInteger("5",10);
             private static TenPower[] _cache = new TenPower[350];
 
             public BigInteger _multiplicand;
@@ -191,17 +195,17 @@ namespace NPOI.SS.Util
 
             private TenPower(int index)
             {
-                BigInteger fivePowIndex = FIVE.ModPow(new BigInteger(index),FIVE);
-
-                int bitsDueToFiveFactors = fivePowIndex.bitCount();
+                //BigInteger fivePowIndex = FIVE.ModPow(new BigInteger(index),FIVE);
+                BigInteger fivePowIndex = FIVE.pow(index);
+                int bitsDueToFiveFactors = fivePowIndex.BitLength();
                 int px = 80 + bitsDueToFiveFactors;
                 BigInteger fx = (new BigInteger(1)<<px)/(fivePowIndex);
-                int adj = fx.bitCount() - 80;
+                int adj = fx.BitLength() - 80;
                 _divisor = fx>>(adj);
                 bitsDueToFiveFactors -= adj;
 
                 _divisorShift = -(bitsDueToFiveFactors + index + 80);
-                int sc = fivePowIndex.bitCount() - 68;
+                int sc = fivePowIndex.BitLength() - 68;
                 if (sc > 0)
                 {
                     _multiplierShift = index + sc;

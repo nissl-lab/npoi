@@ -19,6 +19,7 @@ namespace NPOI.SS.Util
 {
     using System;
     using System.Text;
+    using NPOI.Util;
 
     /**
      * Represents a transformation of a 64 bit IEEE double quantity having a decimal exponent and a

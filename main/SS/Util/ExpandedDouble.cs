@@ -19,7 +19,7 @@ using System;
 namespace NPOI.SS.Util
 {
 
-
+    using NPOI.Util;
     /**
      * Represents a 64 bit IEEE double quantity expressed with both decimal and binary exponents
      * Does not handle negative numbers or zero
@@ -63,7 +63,7 @@ namespace NPOI.SS.Util
             {
                 // sub-normal numbers
                 BigInteger frac = new BigInteger(rawBits)&BI_FRAC_MASK;
-                int expAdj = 64 - frac.bitCount();
+                int expAdj = 64 - frac.BitLength();
                 _significand = frac<<expAdj;
                 _binaryExponent = (biasedExp & 0x07FF) - 1023 - expAdj;
             }
@@ -77,7 +77,7 @@ namespace NPOI.SS.Util
 
         public ExpandedDouble(BigInteger frac, int binaryExp)
         {
-            if (frac.bitCount() != 64)
+            if (frac.BitLength() != 64)
             {
                 throw new ArgumentException("bad bit length");
             }

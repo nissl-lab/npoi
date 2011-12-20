@@ -185,5 +185,16 @@ namespace NPOI.Util
                     Math.Min(source.Length, newLength));
             return result;
         }
+
+        internal static int[] CopyOfRange(int[] original, int from, int to)
+        {
+            int newLength = to - from;
+            if (newLength < 0)
+                throw new ArgumentException(from + " > " + to);
+            int[] copy = new int[newLength];
+            Array.Copy(original, from, copy, 0,
+                             Math.Min(original.Length - from, newLength));
+            return copy;
+        }
     }
 }

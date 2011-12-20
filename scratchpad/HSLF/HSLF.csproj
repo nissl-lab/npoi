@@ -12,10 +12,14 @@
     <AssemblyName>NPOI.ScratchPad.HSLF</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <SccProjectName>SAK</SccProjectName>
-    <SccLocalPath>SAK</SccLocalPath>
-    <SccAuxPath>SAK</SccAuxPath>
-    <SccProvider>SAK</SccProvider>
+    <SccProjectName>
+    </SccProjectName>
+    <SccLocalPath>
+    </SccLocalPath>
+    <SccAuxPath>
+    </SccAuxPath>
+    <SccProvider>
+    </SccProvider>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -55,8 +59,6 @@
     <Compile Include="Exceptions\InvalidRecordFormatException.cs" />
     <Compile Include="Exceptions\OldPowerPointFormatException.cs" />
     <Compile Include="Model\Comment.cs" />
-    <Compile Include="Model\MasterSheet.cs" />
-    <Compile Include="Model\Shape.cs" />
     <Compile Include="Model\TextProperties\AlignmentTextProp.cs" />
     <Compile Include="Model\TextProperties\BitMaskTextProp.cs" />
     <Compile Include="Model\TextProperties\CharFlagsTextProp.cs" />

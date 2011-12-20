@@ -855,7 +855,6 @@
     <Compile Include="SS\UserModel\VerticalAlignment.cs" />
     <Compile Include="SS\UserModel\Workbook.cs" />
     <Compile Include="SS\Util\AreaReference.cs" />
-    <Compile Include="SS\Util\BigInteger.cs" />
     <Compile Include="SS\Util\CellRangeAddress.cs" />
     <Compile Include="SS\Util\CellRangeAddress8Bit.cs" />
     <Compile Include="SS\Util\CellRangeAddressBase.cs" />
@@ -876,6 +875,7 @@
     <Compile Include="SS\Util\SSCellRange.cs" />
     <Compile Include="SS\Util\WorkbookUtil.cs" />
     <Compile Include="Util\Arrays.cs" />
+    <Compile Include="Util\BigInteger.cs" />
     <Compile Include="Util\BitField.cs" />
     <Compile Include="Util\BitFieldFactory.cs" />
     <Compile Include="Util\ByteField.cs" />
@@ -906,6 +906,7 @@
     <Compile Include="Util\LittleEndianConstants.cs" />
     <Compile Include="Util\LongField.cs" />
     <Compile Include="Util\NullLogger.cs" />
+    <Compile Include="Util\Operator.cs" />
     <Compile Include="Util\POILogFactory.cs" />
     <Compile Include="Util\POILogger.cs" />
     <Compile Include="Util\ShortField.cs" />

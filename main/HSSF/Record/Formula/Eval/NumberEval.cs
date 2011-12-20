@@ -22,6 +22,7 @@ namespace NPOI.HSSF.Record.Formula.Eval
 {
     using System;
     using NPOI.HSSF.Record.Formula;
+    using NPOI.SS.Util;
 
     /**
      * @author Amol S. Deshmukh &lt; amolweb at ya hoo dot com &gt;
@@ -32,54 +33,55 @@ namespace NPOI.HSSF.Record.Formula.Eval
 
         public static NumberEval ZERO = new NumberEval(0);
 
-        private double value;
-        private String stringValue;
+        private double _value;
+        private String _stringValue;
 
 
         public NumberEval(Ptg ptg)
         {
             if (ptg is IntPtg)
             {
-                this.value = ((IntPtg)ptg).Value;
+                this._value = ((IntPtg)ptg).Value;
             }
             else if (ptg is NumberPtg)
             {
-                this.value = ((NumberPtg)ptg).Value;
+                this._value = ((NumberPtg)ptg).Value;
             }
         }
 
         public NumberEval(double value)
         {
-            this.value = value;
+            this._value = value;
         }
 
         public double NumberValue
         {
-            get { return value; }
+            get { return _value; }
         }
 
         public String StringValue
         {
             get
             {// TODO: limit to 15 decimal places
-                if (stringValue == null)
-                    MakeString();
-                return stringValue;
+                if (_stringValue == null)
+                    //MakeString();
+                    _stringValue = NumberToTextConverter.ToText(_value);
+                return _stringValue;
             }
         }
 
         protected void MakeString()
         {
-            if (!double.IsNaN(value))
+            if (!double.IsNaN(_value))
             {
-                double lvalue = Math.Round(value);
-                if (lvalue == value)
+                double lvalue = Math.Round(_value);
+                if (lvalue == _value)
                 {
-                    stringValue = lvalue.ToString();
+                    _stringValue = lvalue.ToString();
                 }
                 else
                 {
-                    stringValue = value.ToString();
+                    _stringValue = _value.ToString();
                 }
             }
         }

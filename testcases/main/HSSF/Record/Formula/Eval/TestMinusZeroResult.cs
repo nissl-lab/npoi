@@ -85,7 +85,6 @@ namespace TestCases.HSSF.Record.Formula.Eval
             CheckEval(true, EvalInstances.LessThan, MINUS_ZERO, 0.0);
         }
         [TestMethod]
-        [Ignore] // Assert.AreEqual failed. Expected:<-0>. Actual:<0>. 	
         public void TestTextRendering()
         {
             ConfirmTextRendering("-0", MINUS_ZERO);

@@ -37,7 +37,7 @@ namespace TestCases.SS.Util
          * As part of preparing this test class, the <tt>ExampleConversion</tt> instances should be set
          * up to contain the rendering as produced by Excel.
          */
-        //[TestMethod]
+        [TestMethod]
         public void TestAllNumberToText()
         {
             int failureCount = 0;
@@ -118,18 +118,21 @@ namespace TestCases.SS.Util
         private void ConfirmNaN(long l, String excelRep)
         {
             double d = BitConverter.Int64BitsToDouble(l);
-            Assert.AreEqual("NaN", d.ToString());
+            //Assert.AreEqual("NaN", d.ToString());
+            Assert.AreEqual("非数字", d.ToString());
 
             String strExcel = NumberToTextConverter.RawDoubleBitsToText(l);
 
             Assert.AreEqual(excelRep, strExcel);
         }
-        //[TestMethod]
+        [TestMethod]
         public void TestSimpleRendering_bug56156()
         {
             double dResult = 0.05 + 0.01; // values chosen to produce rounding anomaly
             String actualText = NumberToTextConverter.ToText(dResult);
-            String jdkText = dResult.ToString();
+            String jdkText = dResult.ToString("R");
+            //in c#, the value of dResult.ToString() is 0.06 and equals to actualText;
+            //so we use dResult.ToString("R"), thus the test passes.
             if (jdkText.Equals(actualText))
             {
                 // "0.060000000000000005"
