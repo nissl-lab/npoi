@@ -50,8 +50,8 @@ namespace NPOI.DDF
         public EscherProperty(short propertyNumber, bool isComplex, bool isBlipId)
         {
             this.id = (short)(propertyNumber +
-                    (isComplex ? 0x8000 : 0x0) +
-                    (isBlipId ? 0x4000 : 0x0));
+                    (isComplex ? unchecked((short)0x8000) : 0x0) +
+                    (isBlipId ? (short)0x4000 : 0x0));
         }
 
         /// <summary>
@@ -100,7 +100,7 @@ namespace NPOI.DDF
         /// <value>The name.</value>
         public virtual String Name
         {
-            get { return EscherProperties.GetPropertyName(id); }
+            get { return EscherProperties.GetPropertyName(PropertyNumber); }
         }
 
         /// <summary>
