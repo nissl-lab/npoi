@@ -50,7 +50,7 @@ namespace NPOI.SS.Util
          */
         private static int EXPONENT_OFFSET = 14;
 
-        private static decimal BD_2_POW_24 = new decimal((new BigInteger(1)<<24).LongValue());
+        private static decimal BD_2_POW_24 = new decimal((BigInteger.ONE << 24).LongValue());
 
         /**
          * log<sub>10</sub>(2)&times;2<sup>20</sup>

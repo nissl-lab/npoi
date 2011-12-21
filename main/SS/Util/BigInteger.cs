@@ -165,6 +165,11 @@ public class BigInteger
 	1901, 1907, 1913, 1931, 1933, 1949, 1951, 1973, 1979, 1987, 1993, 1997, 1999 };
 
 
+    public static BigInteger ONE=new BigInteger(1);
+    public static BigInteger ZERO=new BigInteger(0);
+    
+
+
     private uint[] data = null;             // stores bytes from the Big Integer
     public int dataLength;                 // number of actual chars used
 
