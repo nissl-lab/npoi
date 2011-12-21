@@ -200,7 +200,7 @@ namespace NPOI.SS.Util
         /**
          * @return the significand as a fixed point number (with 24 fraction bits and 47-50 whole bits)
          */
-        BigInteger ComposeFrac()
+        public BigInteger ComposeFrac()
         {
             long wp = _wholePart;
             int fp = _fractionalPart;

@@ -43,8 +43,8 @@ namespace TestCases.SS.Util
             }
             Assert.AreEqual(2, hd.GetBinaryExponent());
             BigInteger frac = hd.GetSignificand();
-            Assert.AreEqual(64, frac.bitCount());
-            Assert.AreEqual(1, frac.bitCount());
+            Assert.AreEqual(64, frac.BitLength());
+            Assert.AreEqual(1, frac.BitCount());
         }
         [TestMethod]
         public void TestSubnormal()
@@ -57,8 +57,8 @@ namespace TestCases.SS.Util
             }
             Assert.AreEqual(-1086, hd.GetBinaryExponent());
             BigInteger frac = hd.GetSignificand();
-            Assert.AreEqual(64, frac.bitCount());
-            Assert.AreEqual(1, frac.bitCount());
+            Assert.AreEqual(64, frac.BitLength());
+            Assert.AreEqual(1, frac.BitCount());
         }
 
         /**
@@ -127,15 +127,15 @@ namespace TestCases.SS.Util
                         + FormatDoubleAsHex(a) + ") bin exp mismatch");
                 return false;
             }
-            BigInteger diff = ed3.GetSignificand() - (ed1.GetSignificand()).Abs();
-            if (diff.signum() == 0)
+            BigInteger diff = ed3.GetSignificand() - (ed1.GetSignificand()).abs();
+            if (diff.Signum() == 0)
             {
                 return true;
             }
             // original quantity only has 53 bits of precision
             // these quantities may have errors in the 64th bit, which hopefully don't make any difference
 
-            if (diff.bitCount() < 2)
+            if (diff.BitCount() < 2)
             {
                 // errors in the 64th bit happen from time to time
                 // this is well below the 53 bits of precision required
@@ -161,20 +161,21 @@ namespace TestCases.SS.Util
 
         public static String GetBaseDecimal(ExpandedDouble hd)
         {
-            int gg = 64 - hd.GetBinaryExponent() - 1;
+            /*int gg = 64 - hd.GetBinaryExponent() - 1;
             BigDecimal bd = new BigDecimal(hd.GetSignificand()).divide(new BigDecimal(BigInteger.ONE<<gg));
             int excessPrecision = bd.precision() - 23;
             if (excessPrecision > 0)
             {
                 bd = bd.SetScale(bd.scale() - excessPrecision, BigDecimal.ROUND_HALF_UP);
             }
-            return bd.unscaledValue().ToString();
+            return bd.unscaledValue().ToString();*/
+            throw new NotImplementedException("This Method need BigDecimal class");
         }
         public static BigInteger GetNearby(NormalisedDecimal md, int offset)
         {
             BigInteger frac = md.ComposeFrac();
-            int be = frac.bitCount() - 24 - 1;
-            int sc = frac.bitCount() - 64;
+            int be = frac.BitLength() - 24 - 1;
+            int sc = frac.BitLength() - 64;
             return GetNearby(frac >> (sc), be, offset);
         }
 
@@ -187,7 +188,7 @@ namespace TestCases.SS.Util
         {
             int nExtraBits = 1;
             int nDec = (int)Math.Round(3.0 + (64 + nExtraBits) * Math.Log10(2.0));
-            BigInteger newFrac = (significand << nExtraBits) + offset;
+            BigInteger newFrac = (significand << nExtraBits).add(new BigInteger(offset));
 
             int gg = 64 + nExtraBits - binExp - 1;
 
@@ -199,31 +200,32 @@ namespace TestCases.SS.Util
             else
             {
                 BigInteger frac = newFrac;
-                while (frac.bitCount() + binExp < 180)
+                while (frac.BitLength() + binExp < 180)
                 {
                     frac = frac*(BigInteger.TEN);
                 }
-                int binaryExp = binExp - newFrac.bitCount() + frac.bitCount();
+                int binaryExp = binExp - newFrac.BitLength() + frac.BitLength();
 
-                bd = new decimal((frac >> (frac.bitCount() - binaryExp - 1)).LongValue());
+                bd = new decimal((frac >> (frac.BitLength() - binaryExp - 1)).LongValue());
             }
-            int excessPrecision = bd.Precision() - nDec;
+            /*int excessPrecision = bd.Precision() - nDec;
             if (excessPrecision > 0)
             {
                 bd = bd.SetScale(bd.Scale() - excessPrecision, BigDecimal.ROUND_HALF_UP);
             }
-            return bd.unscaledValue();
+            return bd.unscaledValue();*/
+            throw new NotImplementedException();
         }
 
         private static void CheckNormaliseBaseTenResult(ExpandedDouble orig, NormalisedDecimal result)
         {
             String sigDigs = result.GetSignificantDecimalDigits();
             BigInteger frac = orig.GetSignificand();
-            while (frac.bitCount() + orig.GetBinaryExponent() < 200)
+            while (frac.BitLength() + orig.GetBinaryExponent() < 200)
             {
                 frac = frac * (BIG_POW_10);
             }
-            int binaryExp = orig.GetBinaryExponent() - orig.GetSignificand().bitCount();
+            int binaryExp = orig.GetBinaryExponent() - orig.GetSignificand().BitLength();
 
             String origDigs = (frac << (binaryExp + 1)).ToString(10);
 
@@ -241,7 +243,7 @@ namespace TestCases.SS.Util
             {
                 return;
             }
-            BigInteger diff = (subDigsB - subDigsO).Abs();
+            BigInteger diff = (subDigsB - subDigsO).abs();
             if (diff.IntValue() > 100)
             {
                 // 100/32768 ~= 0.003

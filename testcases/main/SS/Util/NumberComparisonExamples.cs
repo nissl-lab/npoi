@@ -70,7 +70,7 @@ namespace TestCases.SS.Util
             // no instances of this class
         }
 
- 
+
 
         private static ComparisonExample[] examples = InitExamples();
 
@@ -154,6 +154,7 @@ namespace TestCases.SS.Util
             }
 
             ComparisonExample[] result = new ComparisonExample[temp.Count];
+            temp.CopyTo(result);
             return result;
         }
 
@@ -182,21 +183,23 @@ namespace TestCases.SS.Util
             return result;
         }
 
-        public static ComparisonExample[] GetComparisonExamples2() {
-        ComparisonExample[] result=new ComparisonExample[examples.Length];
-        Array.Copy(examples,result,examples.Length);
+        public static ComparisonExample[] GetComparisonExamples2()
+        {
+            ComparisonExample[] result = new ComparisonExample[examples.Length];
+            Array.Copy(examples, result, examples.Length);
 
-		for (int i = 0; i < result.Length; i++) {
-			int ha = ("a"+i).GetHashCode();
-			double a = ha * Math.Pow(0.75, ha % 100);
-			int hb = ("b"+i).GetHashCode();
-			double b = hb * Math.Pow(0.75, hb % 100);
+            for (int i = 0; i < result.Length; i++)
+            {
+                int ha = ("a" + i).GetHashCode();
+                double a = ha * Math.Pow(0.75, ha % 100);
+                int hb = ("b" + i).GetHashCode();
+                double b = hb * Math.Pow(0.75, hb % 100);
 
-			result[i] = new ComparisonExample(BitConverter.DoubleToInt64Bits(a), BitConverter.DoubleToInt64Bits(b), a>b?1:(a==b)?0:-1);
-		}
+                result[i] = new ComparisonExample(BitConverter.DoubleToInt64Bits(a), BitConverter.DoubleToInt64Bits(b), a > b ? 1 : (a == b) ? 0 : -1);
+            }
 
-		return result;
-	}
+            return result;
+        }
     }
 
 }

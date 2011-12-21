@@ -85,6 +85,7 @@ namespace NPOI.Util
         public static long INFLATED = long.MinValue;
         public const int MIN_RADIX = 2;
         public const int MAX_RADIX = 36;
+        private static String[] zeros = new String[64];
         //Constructors
         static BigInteger()
         {
@@ -95,6 +96,9 @@ namespace NPOI.Util
                 posConst[i] = new BigInteger(magnitude, 1);
                 negConst[i] = new BigInteger(magnitude, -1);
             }
+            zeros[63] = "000000000000000000000000000000000000000000000000000000000000000";
+            for (int i = 0; i < 63; i++)
+                zeros[i] = zeros[63].Substring(0, i);
         }
         /**
      * This internal constructor differs from its public cousin
@@ -311,6 +315,74 @@ namespace NPOI.Util
             }
         }
         /**
+     * Returns the String representation of this BigInteger in the
+     * given radix.  If the radix is outside the range from {@link
+     * Character#MIN_RADIX} to {@link Character#MAX_RADIX} inclusive,
+     * it will default to 10 (as is the case for
+     * {@code Integer.toString}).  The digit-to-character mapping
+     * provided by {@code Character.forDigit} is used, and a minus
+     * sign is prepended if appropriate.  (This representation is
+     * compatible with the {@link #BigInteger(String, int) (String,
+     * int)} constructor.)
+     *
+     * @param  radix  radix of the String representation.
+     * @return String representation of this BigInteger in the given radix.
+     * @see    Integer#toString
+     * @see    Character#forDigit
+     * @see    #BigInteger(java.lang.String, int)
+     */
+        public String ToString(int radix)
+        {
+            if (_signum == 0)
+                return "0";
+            if (radix < MIN_RADIX || radix > MAX_RADIX)
+                radix = 10;
+
+            //now this method only support 10 radix rendering
+            if (radix != 10)
+                throw new ArgumentException("Only support 10 radix rendering");
+
+            // Compute upper bound on number of digit groups and allocate space
+            int maxNumDigitGroups = (4 * mag.Length + 6) / 7;
+            String[] digitGroup = new String[maxNumDigitGroups];
+
+            // Translate number to string, a digit group at a time
+            BigInteger tmp = this.abs();
+            int numGroups = 0;
+            while (tmp._signum != 0)
+            {
+                BigInteger d = longRadix[radix];
+
+                MutableBigInteger q = new MutableBigInteger(),
+                                  a = new MutableBigInteger(tmp.mag),
+                                  b = new MutableBigInteger(d.mag);
+                MutableBigInteger r = a.divide(b, q);
+                BigInteger q2 = q.toBigInteger(tmp._signum * d._signum);
+                BigInteger r2 = r.toBigInteger(tmp._signum * d._signum);
+
+                //digitGroup[numGroups++] = Long.toString(r2.longValue(), radix);
+                digitGroup[numGroups++] = r2.LongValue().ToString();
+                tmp = q2;
+            }
+
+            // Put sign (if any) and first digit group into result buffer
+            StringBuilder buf = new StringBuilder(numGroups * digitsPerLong[radix] + 1);
+            if (_signum < 0)
+                buf.Append('-');
+            buf.Append(digitGroup[numGroups - 1]);
+
+            // Append remaining digit groups padded with leading zeros
+            for (int i = numGroups - 2; i >= 0; i--)
+            {
+                // Prepend (any) leading zeros for this digit group
+                int numLeadingZeros = digitsPerLong[radix] - digitGroup[i].Length;
+                if (numLeadingZeros != 0)
+                    buf.Append(zeros[numLeadingZeros]);
+                buf.Append(digitGroup[i]);
+            }
+            return buf.ToString();
+        }
+        /**
      * The BigInteger constant zero.
      *
      * @since   1.2
@@ -502,7 +574,7 @@ namespace NPOI.Util
                     result = trustedStripLeadingZeroInts(result);
                 }
                 exponent = Operator.UnsignedRightShift(exponent, 1);
-                if ( exponent!= 0)
+                if (exponent != 0)
                 {
                     baseToPow2 = squareToLen(baseToPow2, baseToPow2.Length, null);
                     baseToPow2 = trustedStripLeadingZeroInts(baseToPow2);
@@ -615,8 +687,8 @@ namespace NPOI.Util
             {
                 long piece = (x[j] & LONG_MASK);
                 long product = piece * piece;
-                z[i++] = (lastProductLowWord << 31) | (int)Operator.UnsignedRightShift (product , 33);
-                z[i++] = (int)Operator.UnsignedRightShift(product , 1);
+                z[i++] = (lastProductLowWord << 31) | (int)Operator.UnsignedRightShift(product, 33);
+                z[i++] = (int)Operator.UnsignedRightShift(product, 1);
                 lastProductLowWord = (int)product;
             }
 
@@ -857,6 +929,40 @@ namespace NPOI.Util
 
             return result;
         }
+        /*
+     * The following two arrays are used for fast String conversions.  Both
+     * are indexed by radix.  The first is the number of digits of the given
+     * radix that can fit in a Java long without "going negative", i.e., the
+     * highest integer n such that radix**n < 2**63.  The second is the
+     * "long radix" that tears each number into "long digits", each of which
+     * consists of the number of digits in the corresponding element in
+     * digitsPerLong (longRadix[i] = i**digitPerLong[i]).  Both arrays have
+     * nonsense values in their 0 and 1 elements, as radixes 0 and 1 are not
+     * used.
+     */
+        private static int[] digitsPerLong = {0, 0,
+        62, 39, 31, 27, 24, 22, 20, 19, 18, 18, 17, 17, 16, 16, 15, 15, 15, 14,
+        14, 14, 14, 13, 13, 13, 13, 13, 13, 12, 12, 12, 12, 12, 12, 12, 12};
+
+        private static BigInteger[] longRadix = {null, null,
+        valueOf(0x4000000000000000L), valueOf(0x383d9170b85ff80bL),
+        valueOf(0x4000000000000000L), valueOf(0x6765c793fa10079dL),
+        valueOf(0x41c21cb8e1000000L), valueOf(0x3642798750226111L),
+        valueOf(0x1000000000000000L), valueOf(0x12bf307ae81ffd59L),
+        valueOf( 0xde0b6b3a7640000L), valueOf(0x4d28cb56c33fa539L),
+        valueOf(0x1eca170c00000000L), valueOf(0x780c7372621bd74dL),
+        valueOf(0x1e39a5057d810000L), valueOf(0x5b27ac993df97701L),
+        valueOf(0x1000000000000000L), valueOf(0x27b95e997e21d9f1L),
+        valueOf(0x5da0e1e53c5c8000L), valueOf( 0xb16a458ef403f19L),
+        valueOf(0x16bcc41e90000000L), valueOf(0x2d04b7fdd9c0ef49L),
+        valueOf(0x5658597bcaa24000L), valueOf( 0x6feb266931a75b7L),
+        valueOf( 0xc29e98000000000L), valueOf(0x14adf4b7320334b9L),
+        valueOf(0x226ed36478bfa000L), valueOf(0x383d9170b85ff80bL),
+        valueOf(0x5a3c23e39c000000L), valueOf( 0x4e900abb53e6b71L),
+        valueOf( 0x7600ec618141000L), valueOf( 0xaee5720ee830681L),
+        valueOf(0x1000000000000000L), valueOf(0x172588ad4f5f0981L),
+        valueOf(0x211e44f7d02c1000L), valueOf(0x2ee56725f06e5c71L),
+        valueOf(0x41c21cb8e1000000L)};
 
         // bitsPerDigit in the given radix times 1024
         // Rounded up to avoid underallocation.
@@ -938,11 +1044,11 @@ namespace NPOI.Util
             if (i == 0)
                 return 32;
             int n = 1;
-            if (Operator.UnsignedRightShift( i , 16) == 0) { n += 16; i <<= 16; }
-            if (Operator.UnsignedRightShift( i , 24) == 0) { n += 8; i <<= 8; }
-            if (Operator.UnsignedRightShift( i , 28) == 0) { n += 4; i <<= 4; }
-            if (Operator.UnsignedRightShift( i , 30) == 0) { n += 2; i <<= 2; }
-            n -= Operator.UnsignedRightShift(i , 31);
+            if (Operator.UnsignedRightShift(i, 16) == 0) { n += 16; i <<= 16; }
+            if (Operator.UnsignedRightShift(i, 24) == 0) { n += 8; i <<= 8; }
+            if (Operator.UnsignedRightShift(i, 28) == 0) { n += 4; i <<= 4; }
+            if (Operator.UnsignedRightShift(i, 30) == 0) { n += 2; i <<= 2; }
+            n -= Operator.UnsignedRightShift(i, 31);
             return n;
         }
         /**
@@ -1860,7 +1966,7 @@ namespace NPOI.Util
             for (int i = offset, j = bstart; i < len + offset; )
             {
                 int bv = bval[j++];
-                long hb = (Operator.UnsignedRightShift(bv , 1) + carry) & LONG_MASK;
+                long hb = (Operator.UnsignedRightShift(bv, 1) + carry) & LONG_MASK;
                 long v = val[i++] & LONG_MASK;
                 if (v != hb)
                     return v < hb ? -1 : 1;
@@ -2072,7 +2178,7 @@ namespace NPOI.Util
         {
             if (intLen == 0)
                 return;
-            int nInts = Operator.UnsignedRightShift(n , 5);
+            int nInts = Operator.UnsignedRightShift(n, 5);
             int nBits = n & 0x1F;
             this.intLen -= nInts;
             if (nBits == 0)
@@ -2102,7 +2208,7 @@ namespace NPOI.Util
              */
             if (intLen == 0)
                 return;
-            int nInts = Operator.UnsignedRightShift( n , 5);
+            int nInts = Operator.UnsignedRightShift(n, 5);
             int nBits = n & 0x1F;
             int bitsInHighWord = BigInteger.BitLengthForInt(_value[offset]);
 
@@ -2162,7 +2268,7 @@ namespace NPOI.Util
                 long sum = (a[j] & LONG_MASK) +
                            (result[j + offset] & LONG_MASK) + carry;
                 result[j + offset] = (int)sum;
-                carry = Operator.UnsignedRightShift(sum , 32);
+                carry = Operator.UnsignedRightShift(sum, 32);
             }
             return (int)carry;
         }
@@ -2183,7 +2289,7 @@ namespace NPOI.Util
                 long product = (a[j] & LONG_MASK) * xLong + carry;
                 long difference = q[offset] - product;
                 q[offset--] = (int)difference;
-                carry = Operator.UnsignedRightShift(product , 32)
+                carry = Operator.UnsignedRightShift(product, 32)
                          + (((difference & LONG_MASK) >
                              (((~(int)product) & LONG_MASK))) ? 1 : 0);
             }
@@ -2203,9 +2309,9 @@ namespace NPOI.Util
             {
                 int b = c;
                 c = val[i - 1];
-                val[i] = (c << n2) | Operator.UnsignedRightShift(b , n);
+                val[i] = (c << n2) | Operator.UnsignedRightShift(b, n);
             }
-            val[offset] = Operator.UnsignedRightShift(val[offset],  n);
+            val[offset] = Operator.UnsignedRightShift(val[offset], n);
         }
 
         /**
@@ -2221,7 +2327,7 @@ namespace NPOI.Util
             {
                 int b = c;
                 c = val[i + 1];
-                val[i] = (b << n) | Operator.UnsignedRightShift(c , n2);
+                val[i] = (b << n) | Operator.UnsignedRightShift(c, n2);
             }
             val[offset + intLen - 1] <<= n;
         }
@@ -2249,7 +2355,7 @@ namespace NPOI.Util
                 sum = (_value[x + offset] & LONG_MASK) +
                     (addend._value[y + addend.offset] & LONG_MASK) + carry;
                 result[rstart--] = (int)sum;
-                carry = Operator.UnsignedRightShift(sum , 32);
+                carry = Operator.UnsignedRightShift(sum, 32);
             }
 
             // Add remainder of the longer number
@@ -2260,14 +2366,14 @@ namespace NPOI.Util
                     return;
                 sum = (_value[x + offset] & LONG_MASK) + carry;
                 result[rstart--] = (int)sum;
-                carry = Operator.UnsignedRightShift(sum , 32);
+                carry = Operator.UnsignedRightShift(sum, 32);
             }
             while (y > 0)
             {
                 y--;
                 sum = (addend._value[y + addend.offset] & LONG_MASK) + carry;
                 result[rstart--] = (int)sum;
-                carry = Operator.UnsignedRightShift(sum , 32);
+                carry = Operator.UnsignedRightShift(sum, 32);
             }
 
             if (carry > 0)
@@ -2415,7 +2521,7 @@ namespace NPOI.Util
                 long product = (y._value[j + y.offset] & LONG_MASK) *
                                (_value[xLen - 1 + offset] & LONG_MASK) + carry;
                 z._value[k] = (int)product;
-                carry = Operator.UnsignedRightShift(product , 32);
+                carry = Operator.UnsignedRightShift(product, 32);
             }
             z._value[xLen - 1] = (int)carry;
 
@@ -2429,7 +2535,7 @@ namespace NPOI.Util
                                    (_value[i + offset] & LONG_MASK) +
                                    (z._value[k] & LONG_MASK) + carry;
                     z._value[k] = (int)product;
-                    carry = Operator.UnsignedRightShift(product , 32);
+                    carry = Operator.UnsignedRightShift(product, 32);
                 }
                 z._value[i] = (int)carry;
             }
@@ -2465,7 +2571,7 @@ namespace NPOI.Util
             {
                 long product = ylong * (_value[i + offset] & LONG_MASK) + carry;
                 zval[i + 1] = (int)product;
-                carry = Operator.UnsignedRightShift(product , 32);
+                carry = Operator.UnsignedRightShift(product, 32);
             }
 
             if (carry == 0)
@@ -2629,7 +2735,7 @@ namespace NPOI.Util
             if (v < 0)
                 v = -v;
 
-            int d = (int)Operator.UnsignedRightShift(v , 32);
+            int d = (int)Operator.UnsignedRightShift(v, 32);
             quotient.clear();
             // Special case on word divisor
             if (d == 0)
@@ -2800,7 +2906,7 @@ namespace NPOI.Util
             }
 
             // Approximate the quotient and remainder
-            long q = Operator.UnsignedRightShift(n, 1) / Operator.UnsignedRightShift(dLong , 1);
+            long q = Operator.UnsignedRightShift(n, 1) / Operator.UnsignedRightShift(dLong, 1);
             long r = n - q * dLong;
 
             // Correct the approximation
@@ -2931,7 +3037,7 @@ namespace NPOI.Util
                 else
                 {
                     b -= a;
-                    b = Operator.UnsignedRightShift(b,BigInteger.NumberOfTrailingZeros(b));
+                    b = Operator.UnsignedRightShift(b, BigInteger.NumberOfTrailingZeros(b));
                 }
             }
             return a << t;
@@ -3012,7 +3118,7 @@ namespace NPOI.Util
             tLong = (k == 64 ? tLong : tLong & ((1L << k) - 1));
 
             MutableBigInteger result = new MutableBigInteger(new int[2]);
-            result._value[0] = (int)Operator.UnsignedRightShift(tLong , 32);
+            result._value[0] = (int)Operator.UnsignedRightShift(tLong, 32);
             result._value[1] = (int)tLong;
             result.intLen = 2;
             result.normalize();

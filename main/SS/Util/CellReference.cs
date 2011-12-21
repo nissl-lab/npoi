@@ -87,6 +87,10 @@ using NPOI.SS.UserModel;
          */
         public CellReference(String cellRef)
         {
+            if (cellRef.EndsWith("#REF!"))
+            {
+                throw new ArgumentException("Cell reference invalid: " + cellRef);
+            }
             String[] parts = SeparateRefParts(cellRef);
             _sheetName = parts[0];
             String colRef = parts[1];
