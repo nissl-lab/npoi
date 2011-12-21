@@ -485,7 +485,7 @@ namespace NPOI.HSSF.UserModel
                     int sstIndex = ((LabelSSTRecord)record).SSTIndex;
                     return book.Workbook.GetSSTString(sstIndex).String;
                 case CellType.NUMERIC:
-                    return ((NumberRecord)record).Value.ToString();
+                    return NumberToTextConverter.ToText(((NumberRecord)record).Value);
                 case CellType.ERROR:
                     return HSSFErrorConstants.GetText(((BoolErrRecord)record).ErrorValue);
                 case CellType.FORMULA:
@@ -504,7 +504,7 @@ namespace NPOI.HSSF.UserModel
                 case CellType.STRING:
                     return fra.StringValue;
                 case CellType.NUMERIC:
-                    return fr.Value.ToString(); //return NumberToTextConverter.toText(fr.Value);
+                    return NumberToTextConverter.ToText(fr.Value); 
                 case CellType.ERROR:
                     return HSSFErrorConstants.GetText(fr.CachedErrorValue);
             }

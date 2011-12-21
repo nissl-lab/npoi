@@ -22,6 +22,7 @@ namespace NPOI.HSSF.Record.Formula
     using NPOI.HSSF.Record;
     using NPOI.Util;
     using NPOI.Util.IO;
+    using NPOI.SS.Util;
 
     /**
      * Number
@@ -74,7 +75,7 @@ namespace NPOI.HSSF.Record.Formula
 
         public override String ToFormulaString()
         {
-            return "" + Value;
+            return NumberToTextConverter.ToText(Value);
         }
     }
 }

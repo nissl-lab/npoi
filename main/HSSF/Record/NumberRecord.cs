@@ -31,6 +31,7 @@ namespace NPOI.HSSF.Record
     using System.Text;
     using System.IO;
     using System.Collections;
+    using NPOI.SS.Util;
 
     /**
      * Contains a numeric cell value. 
@@ -70,7 +71,7 @@ namespace NPOI.HSSF.Record
         }
         protected override void AppendValueText(StringBuilder sb)
         {
-            sb.Append("  .value= ").Append(field_4_value.ToString());
+            sb.Append("  .value= ").Append(NumberToTextConverter.ToText(field_4_value));
         }
 
         protected override void SerializeValue(LittleEndianOutput out1)

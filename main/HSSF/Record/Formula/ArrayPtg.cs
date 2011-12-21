@@ -25,6 +25,7 @@ namespace NPOI.HSSF.Record.Formula
     using NPOI.HSSF.Record.Constant;
 
     using NPOI.Util.IO;
+    using NPOI.SS.Util;
 
     /**
      * ArrayPtg - handles arrays
@@ -235,9 +236,9 @@ namespace NPOI.HSSF.Record.Formula
             {
                 return "\"" + (String)o + "\"";
             }
-            if (o is Double)
+            if (o is Double||o is double)
             {
-                return ((Double)o).ToString();
+                return NumberToTextConverter.ToText((Double)o);
             }
             if (o is bool || o is Boolean)
             {
