@@ -514,11 +514,15 @@
     <Compile Include="SS\UserModel\BaseTestWorkbook.cs" />
     <Compile Include="SS\Util\NumberComparisonExamples.cs" />
     <Compile Include="SS\Util\NumberToTextConversionExamples.cs" />
+    <Compile Include="SS\Util\TestCellRangeAddress.cs" />
+    <Compile Include="SS\Util\TestCellReference.cs" />
     <Compile Include="SS\Util\TestExpandedDouble.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="SS\Util\TestNumberComparer.cs" />
     <Compile Include="SS\Util\TestNumberToTextConverter.cs" />
+    <Compile Include="SS\Util\TestSheetBuilder.cs" />
+    <Compile Include="SS\Util\TestWorkbookUtil.cs" />
     <Compile Include="Util\TestLittleEndianStreams.cs" />
   </ItemGroup>
   <ItemGroup>
