@@ -160,6 +160,7 @@ namespace NPOI.HPSF
          * Specifies this {@link PropertySet}'s "classID" field. See
          * the HPFS documentation for details!
          */
+        [NonSerialized]
         protected ClassID classID;
 
         /// <summary>

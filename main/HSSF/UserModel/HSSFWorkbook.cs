@@ -411,6 +411,7 @@ namespace NPOI.HSSF.UserModel
             //if (log.Check(POILogger.DEBUG))
             //    log.Log(POILogger.DEBUG, "ConvertLabelRecords exit");
         }
+        [NonSerialized]
         private NPOI.SS.UserModel.MissingCellPolicy missingCellPolicy = NPOI.SS.UserModel.MissingCellPolicy.RETURN_NULL_AND_BLANK;
         /// <summary>
         /// Retrieves the current policy on what to do when
@@ -1369,6 +1370,7 @@ namespace NPOI.HSSF.UserModel
  * The locator of user-defined functions.
  * By default includes functions from the Excel Analysis Toolpack
  */
+        [NonSerialized]
         private UDFFinder _udfFinder = UDFFinder.DEFAULT;
 
         /**

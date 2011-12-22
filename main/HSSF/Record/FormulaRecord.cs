@@ -217,11 +217,13 @@ namespace NPOI.HSSF.Record
         private BitField calcOnLoad = BitFieldFactory.GetInstance(0x0002);
         private BitField sharedFormula = BitFieldFactory.GetInstance(0x0008);
         private int field_6_zero;
+        [NonSerialized]
         private NPOI.SS.Formula.Formula field_8_parsed_expr;
 
         /**
 * Since the NaN support seems sketchy (different constants) we'll store and spit it out directly
 */
+        [NonSerialized]
         private SpecialCachedValue specialCachedValue;
 
 

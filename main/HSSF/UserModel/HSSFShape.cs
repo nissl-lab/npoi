@@ -30,6 +30,7 @@ namespace NPOI.HSSF.UserModel
         public static int LINEWIDTH_DEFAULT = 9525;
 
         IShape parent;
+        [NonSerialized]
         HSSFAnchor anchor;
         int lineStyleColor = 0x08000040;
         int fillColor = 0x08000009;

@@ -1634,6 +1634,7 @@ namespace NPOI.HSSF.UserModel
                     escherRecord.Display(0);
             }
         }
+        [NonSerialized]
         private HSSFPatriarch _patriarch;
 
         /// <summary>

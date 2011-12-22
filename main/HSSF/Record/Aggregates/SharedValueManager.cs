@@ -118,6 +118,7 @@ namespace NPOI.HSSF.Record.Aggregates
         private List<TableRecord> _tableRecords;
         private Dictionary<SharedFormulaRecord, SharedFormulaGroup> _groupsBySharedFormulaRecord;
         /** cached for optimization purposes */
+        [NonSerialized]
         private SharedFormulaGroup[] _groups;
 
         private SharedValueManager(SharedFormulaRecord[] sharedFormulaRecords,
@@ -207,6 +208,7 @@ namespace NPOI.HSSF.Record.Aggregates
             return _groups;
         }
 
+        [NonSerialized]
         private SharedFormulaGroupComparator SVGComparator = new SharedFormulaGroupComparator();
         private class SharedFormulaGroupComparator : Comparer<SharedFormulaGroup>
         {

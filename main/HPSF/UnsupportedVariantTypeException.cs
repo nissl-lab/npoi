@@ -39,6 +39,7 @@ namespace NPOI.HPSF
     /// <a href="mailto:klute@rainer-klute.de">&lt;klute@rainer-klute.de&gt;</a>
     /// @since 2003-08-05
     /// </summary>
+    [Serializable]
     public abstract class UnsupportedVariantTypeException : VariantTypeException
     {
 

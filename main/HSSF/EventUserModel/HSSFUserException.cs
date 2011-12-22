@@ -34,6 +34,7 @@ namespace NPOI.HSSF.EventUserModel
     /// @author Rainer Klute (klute@rainer-klute.de)
     /// @author Carey Sublette (careysub@earthling.net)
     /// </remarks>
+    [Serializable]
     public class HSSFUserException : Exception
     {
 

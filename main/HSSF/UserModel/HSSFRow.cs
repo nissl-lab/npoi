@@ -49,6 +49,7 @@ namespace NPOI.HSSF.UserModel
          * reference to low level representation
          */
 
+        [NonSerialized]
         private RowRecord row;
 
         /**

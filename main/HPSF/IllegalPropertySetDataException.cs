@@ -38,6 +38,7 @@ namespace NPOI.HPSF
     /// @author Drew Varner(Drew.Varner atDomain sc.edu)
     /// @since 2002-05-26
     /// </summary>
+    [Serializable]
     public class IllegalPropertySetDataException : HPSFRuntimeException
     {
 

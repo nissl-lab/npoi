@@ -54,6 +54,7 @@ namespace NPOI.POIFS.FileSystem
         private POIFSFileSystem   _filesystem;
 
         // the path described by this document
+        [NonSerialized]
         private POIFSDocumentPath _path;
 
         /// <summary>

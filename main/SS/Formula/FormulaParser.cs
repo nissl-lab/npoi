@@ -37,6 +37,7 @@ namespace NPOI.SS.Formula
     /// Specific exception thrown when a supplied formula does not Parse properly.
     ///  Primarily used by test cases when testing for specific parsing exceptions.
     /// </summary>
+    [Serializable]
     public class FormulaParseException : Exception
     {
         /// <summary>

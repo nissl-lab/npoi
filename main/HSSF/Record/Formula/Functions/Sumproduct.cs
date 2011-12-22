@@ -47,7 +47,7 @@ namespace NPOI.SS.Formula.Functions
      */
     public class Sumproduct : Function
     {
-
+        [Serializable]
         private class EvalEx : Exception
         {
             private ErrorEval _error;

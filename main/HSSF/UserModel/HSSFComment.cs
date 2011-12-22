@@ -37,7 +37,9 @@ namespace NPOI.HSSF.UserModel
         private int col, row;
         private String author;
 
+        [NonSerialized]
         private NoteRecord note = null;
+        [NonSerialized]
         private TextObjectRecord txo = null;
 
         /// <summary>

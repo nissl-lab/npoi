@@ -21,6 +21,7 @@ namespace NPOI.SS.Formula
     using System.Text;
     using System.Collections;
 
+    [Serializable]
     public class WorkbookNotFoundException : Exception
     {
         public WorkbookNotFoundException(String msg):base(msg)

@@ -52,38 +52,60 @@ namespace NPOI.HSSF.Model
 
         int preoffset = 0;            // offset of the sheet in a new file
         protected int dimsloc = -1;  // TODO - Is it legal for dims record to be missing?
+        [NonSerialized]
         protected DimensionsRecord dims;
+        [NonSerialized]
         protected DefaultColWidthRecord defaultcolwidth = null;
+        [NonSerialized]
         protected DefaultRowHeightRecord defaultrowheight = null;
+        [NonSerialized]
         protected GridsetRecord gridset = null;
+        [NonSerialized]
         protected PrintSetupRecord printSetup = null;
+        [NonSerialized]
         protected HeaderRecord header = null;
+        [NonSerialized]
         protected FooterRecord footer = null;
+        [NonSerialized]
         protected PrintGridlinesRecord printGridlines = null;
+        [NonSerialized]
         protected WindowTwoRecord windowTwo = null;
+        [NonSerialized]
         protected MergeCellsRecord merged = null;
         /** java object always present, but if empty no BIFF records are written */
+        [NonSerialized]
         private MergedCellsTable _mergedCellsTable;
+        [NonSerialized]
         protected RowRecordsAggregate _rowsAggregate;
+        [NonSerialized]
         private PageSettingsBlock _psBlock;
         protected Margin[] margins = null;
         //protected IList mergedRecords = new ArrayList();
 
+        [NonSerialized]
         protected SelectionRecord selection = null;
         //protected ColumnInfoRecordsAggregate columns = null;
         //protected ValueRecordsAggregate cells = null;
         /*package*/
+        [NonSerialized]
         public ColumnInfoRecordsAggregate _columnInfos;
         /** the DimensionsRecord is always present */
+        [NonSerialized]
         private DimensionsRecord _dimensions;
+        [NonSerialized]
         private DataValidityTable _dataValidityTable = null;
         //private IEnumerator valueRecEnumerator = null;
         private IEnumerator rowRecEnumerator = null;
         protected int eofLoc = 0;
+        [NonSerialized]
         private GutsRecord _gutsRecord;
+        [NonSerialized]
         protected PageBreakRecord rowBreaks = null;
+        [NonSerialized]
         protected PageBreakRecord colBreaks = null;
+        [NonSerialized]
         protected ConditionalFormattingTable condFormatting;
+        [NonSerialized]
         protected SheetExtRecord sheetext;
         protected List<RecordBase> records = null;
 
@@ -1862,6 +1884,7 @@ namespace NPOI.HSSF.Model
         
         //'Worksheet Protection Block'<br/>
         //Aggregate object is always present, but possibly empty.
+        [NonSerialized]
         private WorksheetProtectionBlock _protectionBlock = new WorksheetProtectionBlock();
         
         public WorksheetProtectionBlock ProtectionBlock

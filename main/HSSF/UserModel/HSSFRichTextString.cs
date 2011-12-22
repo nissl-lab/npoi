@@ -37,6 +37,7 @@ namespace NPOI.HSSF.UserModel
         /** Place holder for indicating that NO_FONT has been applied here */
         public const short NO_FONT = 0;
 
+        [NonSerialized]
         private UnicodeString str;
         private InternalWorkbook book;
         private LabelSSTRecord record;

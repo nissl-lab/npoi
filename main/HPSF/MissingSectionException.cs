@@ -38,6 +38,7 @@ namespace NPOI.HPSF
     /// <a href="mailto:klute@rainer-klute.de">&lt;klute@rainer-klute.de&gt;</a>
     /// @since 2006-02-08
     /// </summary>
+    [Serializable]
     public class MissingSectionException : HPSFRuntimeException
     {
 

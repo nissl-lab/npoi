@@ -37,6 +37,7 @@ namespace NPOI.HPSF
     /// <a href="mailto:klute@rainer-klute.de">&lt;klute@rainer-klute.de&gt;</a>
     /// @since 2004-06-21
     /// </summary>
+    [Serializable]
     public class IllegalVariantTypeException : VariantTypeException
     {
 

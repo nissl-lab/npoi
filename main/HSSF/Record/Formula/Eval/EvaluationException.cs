@@ -108,6 +108,7 @@ namespace NPOI.SS.Formula.Eval
      * 
      * @author Josh Micich
      */
+    [Serializable]
     public class EvaluationException : Exception
     {
         private ErrorEval _errorEval;

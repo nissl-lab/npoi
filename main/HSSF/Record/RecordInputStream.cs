@@ -30,7 +30,7 @@ namespace NPOI.HSSF.Record
     using NPOI.HSSF.Record.Crypto;
 
 
-
+    [Serializable]
     public class LeftoverDataException : Exception
     {
         public LeftoverDataException(int sid, int remainingByteCount)

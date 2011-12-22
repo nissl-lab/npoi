@@ -82,15 +82,18 @@ namespace NPOI.HSSF.Model
         /**
          * this Contains the Worksheet record objects
          */
+        [NonSerialized]
         protected WorkbookRecordList records = new WorkbookRecordList();
 
         /**
          * this Contains a reference to the SSTRecord so that new stings can be Added
          * to it.
          */
+        [NonSerialized]
         protected SSTRecord sst = null;
 
 
+        [NonSerialized]
         private LinkTable linkTable; // optionally occurs if there are  references in the document. (4.10.3)
 
         /**
@@ -107,11 +110,16 @@ namespace NPOI.HSSF.Model
         protected int numfonts = 0;   // hold the number of font records
         private short maxformatid = -1;  // holds the max format id
         private bool uses1904datewindowing = false;  // whether 1904 date windowing is being used
+        [NonSerialized]
         private DrawingManager2 drawingManager;
         private IList escherBSERecords ;  // EscherBSERecord
+        [NonSerialized]
         private WindowOneRecord windowOne;
+        [NonSerialized]
         private FileSharingRecord fileShare;
+        [NonSerialized]
         private WriteAccessRecord writeAccess;
+        [NonSerialized]
         private WriteProtectRecord writeProtect;
 
         //private static POILogger log = POILogFactory.GetLogger(typeof(Workbook));

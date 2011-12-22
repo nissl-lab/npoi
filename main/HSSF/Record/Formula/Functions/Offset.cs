@@ -49,6 +49,7 @@ namespace NPOI.SS.Formula.Functions
          * Exceptions are used within this class to help simplify flow control when error conditions
          * are enCountered 
          */
+        [Serializable]
         private class EvalEx : Exception
         {
             private ErrorEval _error;

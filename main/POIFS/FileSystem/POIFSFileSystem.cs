@@ -66,7 +66,8 @@ namespace NPOI.POIFS.FileSystem
         public static Stream CreateNonClosingInputStream(Stream stream) {
             return new CloseIgnoringInputStream(stream);
         }
-        
+
+        [NonSerialized]
         private PropertyTable _property_table;
         private IList          _documents;
         private DirectoryNode _root;
@@ -74,6 +75,7 @@ namespace NPOI.POIFS.FileSystem
  * What big block size the file uses. Most files
  *  use 512 bytes, but a few use 4096
  */
+        [NonSerialized]
         private POIFSBigBlockSize bigBlockSize =
            POIFSConstants.SMALLER_BIG_BLOCK_SIZE_DETAILS;
 

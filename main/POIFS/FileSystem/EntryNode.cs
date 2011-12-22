@@ -45,6 +45,7 @@ namespace NPOI.POIFS.FileSystem
     {
 
         // the DocumentProperty backing this object
+        [NonSerialized]
         private Property _property;
 
         // this object's parent Entry

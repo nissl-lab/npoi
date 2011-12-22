@@ -38,6 +38,7 @@ namespace NPOI.HPSF
     /// <a href="mailto:klute@rainer-klute.de">&lt;klute@rainer-klute.de&gt;</a>
     /// @since 2002-09-03 
     /// </summary>
+    [Serializable]
     public class NoFormatIDException : HPSFRuntimeException
     {
 

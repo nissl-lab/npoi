@@ -24,6 +24,7 @@ namespace NPOI.HSSF.Record
     /// <summary>
     /// Used by records to indicate invalid format/data.
     /// </summary>
+    [Serializable]
     public class RecordFormatException : Exception
     {
         public RecordFormatException(String exception):base(exception)

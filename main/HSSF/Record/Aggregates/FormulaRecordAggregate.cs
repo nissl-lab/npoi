@@ -40,6 +40,7 @@ namespace NPOI.HSSF.Record.Aggregates
         private SharedValueManager _sharedValueManager;
         /** caches the calculated result of the formula */
         private StringRecord _stringRecord;
+        [NonSerialized]
         private SharedFormulaRecord _sharedFormulaRecord;
         /// <summary>
         /// Initializes a new instance of the <see cref="FormulaRecordAggregate"/> class.
