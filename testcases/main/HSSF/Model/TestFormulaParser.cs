@@ -248,7 +248,51 @@ namespace TestCases.HSSF.Model
             cell = row.CreateCell((short)0);
             cell.CellFormula = ("Cash_Flow!A1");
         }
+        /** bug 49725, defined names with underscore */
+        [TestMethod]
+        public void TestNamesWithUnderscore()
+        {
+            HSSFWorkbook wb = new HSSFWorkbook(); //or new XSSFWorkbook();
+            ISheet sheet = wb.CreateSheet("NamesWithUnderscore");
 
+            IName nm;
+
+            nm = wb.CreateName();
+            nm.NameName=("DA6_LEO_WBS_Number");
+            nm.RefersToFormula=("33");
+
+            nm = wb.CreateName();
+            nm.NameName=("DA6_LEO_WBS_Name");
+            nm.RefersToFormula=("33");
+
+            nm = wb.CreateName();
+            nm.NameName=("A1_");
+            nm.RefersToFormula=("22");
+
+            nm = wb.CreateName();
+            nm.NameName=("_A1");
+            nm.RefersToFormula=("11");
+
+            nm = wb.CreateName();
+            nm.NameName=("A_1");
+            nm.RefersToFormula=("44");
+
+            nm = wb.CreateName();
+            nm.NameName=("A_1_");
+            nm.RefersToFormula=("44");
+
+            IRow row = sheet.CreateRow(0);
+            ICell cell = row.CreateCell(0);
+
+            cell.CellFormula=("DA6_LEO_WBS_Number*2");
+            Assert.AreEqual("DA6_LEO_WBS_Number*2", cell.CellFormula);
+
+            cell.CellFormula = ("(A1_*_A1+A_1)/A_1_");
+            Assert.AreEqual("(A1_*_A1+A_1)/A_1_", cell.CellFormula);
+
+            cell.CellFormula = ("INDEX(DA6_LEO_WBS_Name,MATCH($A3,DA6_LEO_WBS_Number,0))");
+            Assert.AreEqual("INDEX(DA6_LEO_WBS_Name,MATCH($A3,DA6_LEO_WBS_Number,0))", cell.CellFormula);
+        }
         // bug 38396 : Formula with exponential numbers not Parsed correctly.
         [TestMethod]
         public void TestExponentialParsing()
@@ -324,11 +368,11 @@ namespace TestCases.HSSF.Model
 
             cell.CellFormula = ("13E-15/3");
             formula = cell.CellFormula;
-            Assert.AreEqual("1.3E-14/3", formula, "Exponential formula string");
+            Assert.AreEqual("0.000000000000013/3", formula, "Exponential formula string");
 
             cell.CellFormula = ("-13E-15/3");
             formula = cell.CellFormula;
-            Assert.AreEqual("-1.3E-14/3", formula, "Exponential formula string");
+            Assert.AreEqual("-0.000000000000013/3", formula, "Exponential formula string");
 
             cell.CellFormula = ("1.3E3/3");
             formula = cell.CellFormula;
@@ -340,11 +384,11 @@ namespace TestCases.HSSF.Model
 
             cell.CellFormula = ("1300000000000000/3");
             formula = cell.CellFormula;
-            Assert.AreEqual("1.3E+15/3", formula, "Exponential formula string");
+            Assert.AreEqual("1300000000000000/3", formula, "Exponential formula string");
 
             cell.CellFormula = ("-1300000000000000/3");
             formula = cell.CellFormula;
-            Assert.AreEqual("-1.3E+15/3", formula, "Exponential formula string");
+            Assert.AreEqual("-1300000000000000/3", formula, "Exponential formula string");
 
             cell.CellFormula = ("-10E-1/3.1E2*4E3/3E4");
             formula = cell.CellFormula;
@@ -370,7 +414,7 @@ namespace TestCases.HSSF.Model
 
             cell.CellFormula = ("+.1");
             formula = cell.CellFormula;
-            Assert.AreEqual("+0.1", formula);
+            Assert.AreEqual("0.1", formula);
 
             cell.CellFormula = ("-.1");
             formula = cell.CellFormula;
@@ -543,6 +587,50 @@ namespace TestCases.HSSF.Model
             }
             return ptgs;
         }
+
+
+        /**
+         * There may be multiple ways to encode an expression involving {@link UnaryPlusPtg}
+         * or {@link UnaryMinusPtg}.  These may be perfectly equivalent from a formula
+         * evaluation perspective, or formula rendering.  However, differences in the way
+         * POI encodes formulas may cause unnecessary confusion.  These non-critical tests
+         * check that POI follows the same encoding rules as Excel.
+         */
+        [TestMethod]
+        public void TestExactEncodingOfUnaryPlusAndMinus()
+        {
+            // as tested in Excel:
+            ConfirmUnary("-3", -3, typeof(NumberPtg));
+            ConfirmUnary("--4", -4, typeof(NumberPtg), typeof(UnaryMinusPtg));
+            ConfirmUnary("+++5", 5, typeof(IntPtg), typeof(UnaryPlusPtg), typeof(UnaryPlusPtg));
+            ConfirmUnary("++-6", -6, typeof(NumberPtg), typeof(UnaryPlusPtg), typeof(UnaryPlusPtg));
+
+            // Spaces muck things up a bit.  It would be clearer why the following cases are
+            // reasonable if POI encoded tAttrSpace in the right places.
+            // Otherwise these differences look capricious.
+            ConfirmUnary("+ 12", 12, typeof(IntPtg), typeof(UnaryPlusPtg));
+            ConfirmUnary("- 13", 13, typeof(IntPtg), typeof(UnaryMinusPtg));
+        }
+        private static void ConfirmUnary(String formulaText, double val, params Type[] expectedTokenTypes)
+        {
+            Ptg[] ptgs = ParseFormula(formulaText);
+            ConfirmTokenClasses(ptgs, expectedTokenTypes);
+            Ptg ptg0 = ptgs[0];
+            if (ptg0 is IntPtg)
+            {
+                IntPtg intPtg = (IntPtg)ptg0;
+                Assert.AreEqual((int)val, intPtg.Value);
+            }
+            else if (ptg0 is NumberPtg)
+            {
+                NumberPtg numberPtg = (NumberPtg)ptg0;
+                Assert.AreEqual(val, numberPtg.Value, 0.0);
+            }
+            else
+            {
+                Assert.Fail("bad ptg0 " + ptg0);
+            }
+        }
         [TestMethod]
         public void TestPower()
         {
@@ -561,8 +649,8 @@ namespace TestCases.HSSF.Model
         public void TestParseNumber()
         {
             // This Test depends on the american culture.
-            System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US"); 
-            
+            System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
+
             IntPtg ip;
 
             // bug 33160
@@ -877,7 +965,7 @@ namespace TestCases.HSSF.Model
             Assert.AreEqual(15, mf.LenRefSubexpression);
         }
         /* package */
-        internal void ConfirmTokenClasses(Ptg[] ptgs, params Type[] expectedClasses)
+        private static void ConfirmTokenClasses(Ptg[] ptgs, params Type[] expectedClasses)
         {
             Assert.AreEqual(expectedClasses.Length, ptgs.Length);
             for (int i = 0; i < expectedClasses.Length; i++)
