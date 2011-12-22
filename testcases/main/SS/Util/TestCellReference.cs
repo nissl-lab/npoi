@@ -209,21 +209,21 @@ namespace TestCases.SS.Util
                 new CellReference("Sheet1!#REF!");
                 Assert.Fail("Shouldn't be able to create a #REF! refence");
             }
-            catch (ArgumentException e) { }
+            catch (ArgumentException) { }
 
             try
             {
                 new CellReference("'MySheetName'!#REF!");
                 Assert.Fail("Shouldn't be able to create a #REF! refence");
             }
-            catch (ArgumentException e) { }
+            catch (ArgumentException) { }
 
             try
             {
                 new CellReference("#REF!");
                 Assert.Fail("Shouldn't be able to create a #REF! refence");
             }
-            catch (ArgumentException e) { }
+            catch (ArgumentException) { }
         }
 
         private static void ConfirmCrInRange(bool expResult, String colStr, String rowStr,
