@@ -17,20 +17,17 @@
 
 namespace TestCases.HSSF.UserModel
 {
-    using System.IO;
-    using System.Text;
     using System;
+    using System.Reflection;
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
     using NPOI.HSSF.Model;
     using NPOI.HSSF.Record;
+    using NPOI.HSSF.UserModel;
     using NPOI.SS.Formula;
+    using NPOI.SS.Formula.PTG;
     using NPOI.SS.UserModel;
     using NPOI.SS.Util;
-    using System.Reflection;
-    using NPOI.HSSF.UserModel;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-    using NPOI.SS.Formula;
     using TestCases.SS.UserModel;
-    using NPOI.SS.Formula.PTG;
 
     /**
      * Tests various functionality having to do with {@link NPOI.SS.usermodel.Name}.

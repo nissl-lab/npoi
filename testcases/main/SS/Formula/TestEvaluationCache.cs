@@ -19,21 +19,17 @@ namespace TestCases.SS.Formula
 {
 
     using System;
-    using System.Text;
     using System.Collections;
-
-    using NPOI.HSSF.Model;
-    using NPOI.SS.Formula;
-    using NPOI.HSSF.UserModel;
-    using NPOI.SS.Formula.Eval;
-
-    using NPOI.SS.Formula;
-    using NPOI.SS.Util;
-    using NPOI.SS.UserModel;
-
-    using TestCases.HSSF.UserModel;
+    using System.Text;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NPOI.HSSF.Model;
+    using NPOI.HSSF.UserModel;
+    using NPOI.SS.Formula;
+    using NPOI.SS.Formula.Eval;
     using NPOI.SS.Formula.PTG;
+    using NPOI.SS.UserModel;
+    using NPOI.SS.Util;
+    using TestCases.HSSF.UserModel;
 
 
     /**

@@ -19,23 +19,20 @@ namespace NPOI.HSSF.UserModel
 {
 
     using System;
-    using System.IO;
-    using System.Text;
     using System.Collections;
     using System.Collections.Generic;
-
-
+    using System.IO;
+    using System.Text;
     using NPOI.DDF;
-    using NPOI.HSSF.Record;
-    using NPOI.SS.Formula;
     using NPOI.HSSF.Model;
+    using NPOI.HSSF.Record;
     using NPOI.POIFS.FileSystem;
     using NPOI.SS.Formula;
-    using NPOI.SS.Util;
-    using NPOI.SS.UserModel;
-    using NPOI.SS.Formula.Udf;
-    using NPOI.Util;
     using NPOI.SS.Formula.PTG;
+    using NPOI.SS.Formula.Udf;
+    using NPOI.SS.UserModel;
+    using NPOI.SS.Util;
+    using NPOI.Util;
 
 
     /// <summary>

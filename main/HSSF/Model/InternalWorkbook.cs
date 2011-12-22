@@ -19,16 +19,12 @@
 namespace NPOI.HSSF.Model
 {
     using System;
-    using System.IO;
     using System.Collections;
-
+    using System.Collections.Generic;
+    using NPOI.DDF;
     using NPOI.HSSF.Record;
     using NPOI.HSSF.Util;
-    using NPOI.Util;
-    using NPOI.DDF;
     using NPOI.SS.Formula;
-    using NPOI.SS.Formula;
-    using System.Collections.Generic;
     using NPOI.SS.Formula.PTG;
 
 

@@ -18,20 +18,18 @@
 namespace TestCases.HSSF.UserModel
 {
     using System;
-    using System.IO;
-    using System.Configuration;
     using System.Collections;
-    using NPOI.SS.Formula;
-    using NPOI.HSSF.Record.Aggregates;
-    using NPOI.SS.Formula;
-    using NPOI.HSSF.UserModel;
+    using System.Configuration;
+    using System.IO;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
-    using TestCases.SS.Formula;
-
+    using NPOI.HSSF.Record.Aggregates;
+    using NPOI.HSSF.UserModel;
+    using NPOI.SS.Formula;
     using NPOI.SS.Formula.Eval;
+    using NPOI.SS.Formula.PTG;
     using NPOI.SS.UserModel;
     using TestCases.HSSF;
-    using NPOI.SS.Formula.PTG;
+    using TestCases.SS.Formula;
     /**
      * 
      */

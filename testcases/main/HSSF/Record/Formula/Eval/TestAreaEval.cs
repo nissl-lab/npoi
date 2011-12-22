@@ -17,15 +17,11 @@
 
 namespace TestCases.SS.Formula.Eval
 {
-    using System;
-    using System.Collections;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
-
     using NPOI.SS.Formula;
     using NPOI.SS.Formula.Eval;
-    using TestCases.SS.Formula.Functions;
-    using NPOI.SS.Formula;
     using NPOI.SS.Formula.PTG;
+    using TestCases.SS.Formula.Functions;
     /**
      * Tests for <tt>AreaEval</tt>
      *  

@@ -19,17 +19,11 @@ namespace NPOI.HSSF.UserModel
 {
     using System;
     using System.Collections;
-    using System.Globalization;
-    using System.Reflection;
-
-    using NPOI.Util;
-    using NPOI.HSSF.Model;
     using NPOI.SS.Formula;
     using NPOI.SS.Formula.Eval;
-    using NPOI.SS.Formula;
+    using NPOI.SS.Formula.PTG;
     using NPOI.SS.Formula.Udf;
     using NPOI.SS.UserModel;
-    using NPOI.SS.Formula.PTG;
 
     /**
      * @author Amol S. Deshmukh &lt; amolweb at ya hoo dot com &gt;

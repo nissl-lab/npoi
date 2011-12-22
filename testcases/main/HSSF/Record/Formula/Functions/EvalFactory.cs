@@ -19,10 +19,8 @@
 namespace TestCases.SS.Formula.Functions
 {
     using System;
-    using System.Collections;
     using NPOI.SS.Formula;
     using NPOI.SS.Formula.Eval;
-    using NPOI.SS.Formula;
     using NPOI.SS.Formula.PTG;
 
     /**

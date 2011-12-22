@@ -18,19 +18,14 @@
 namespace NPOI.HSSF.UserModel
 {
     using System;
-    using System.Collections;
-
-    using NPOI.Util;
     //using NPOI.HSSF.Model;
     using NPOI.HSSF.Record;
-    using NPOI.SS.Formula;
-    using NPOI.SS.Formula.Eval;
     using NPOI.HSSF.Record.Aggregates;
-    using NPOI.SS.Formula;
     using NPOI.SS;
-    using NPOI.SS.UserModel;
-    using NPOI.SS.Formula.Udf;
+    using NPOI.SS.Formula;
     using NPOI.SS.Formula.PTG;
+    using NPOI.SS.Formula.Udf;
+    using NPOI.SS.UserModel;
    
     /**
      * Internal POI use only

@@ -21,11 +21,10 @@ namespace NPOI.HSSF.Record.Chart
 {
     using System;
     using System.Text;
-    using NPOI.Util;
-    using NPOI.Util.IO;
-    using NPOI.SS.Formula;
     using NPOI.SS.Formula;
     using NPOI.SS.Formula.PTG;
+    using NPOI.Util;
+    using NPOI.Util.IO;
 
     /**
      * Describes a linked data record.  This record referes to the series data or text.

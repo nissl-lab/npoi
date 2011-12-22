@@ -20,11 +20,9 @@ namespace TestCases.HSSF.Model
     using System;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using NPOI.HSSF.Model;
-    using NPOI.SS.Formula;
     using NPOI.HSSF.UserModel;
-    using NPOI.SS.Formula;
-    using NPOI.SS.UserModel;
     using NPOI.SS.Formula.PTG;
+    using NPOI.SS.UserModel;
 
     /**
      * Test the low level formula parser functionality,

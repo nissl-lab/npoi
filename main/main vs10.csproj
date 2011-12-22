@@ -71,6 +71,7 @@
     <Compile Include="DDF\EscherTertiaryOptRecord.cs" />
     <Compile Include="HSSF\Record\Aggregates\ChartSubstreamRecordAggregate.cs" />
     <Compile Include="HSSF\Record\Aggregates\WorksheetProtectionBlock.cs" />
+    <Compile Include="HSSF\Record\Formula\Eval\IntersectionEval.cs" />
     <Compile Include="HSSF\Record\Formula\TwoDEval.cs" />
     <Compile Include="HSSF\Record\FtCblsSubRecord.cs" />
     <Compile Include="OldFileFormatException.cs" />
@@ -880,14 +881,23 @@
     <Compile Include="SS\Util\CellRangeAddressBase.cs" />
     <Compile Include="SS\Util\CellRangeAddressList.cs" />
     <Compile Include="SS\Util\CellReference.cs" />
+    <Compile Include="SS\Util\ExpandedDouble.cs" />
     <Compile Include="SS\Util\Format.cs" />
     <Compile Include="SS\Util\IEEEDouble.cs" />
+    <Compile Include="SS\Util\MutableFPNumber.cs" />
+    <Compile Include="SS\Util\NormalisedDecimal.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="SS\Util\NumberComparer.cs" />
+    <Compile Include="SS\Util\NumberToTextConverter.cs" />
     <Compile Include="SS\Util\PaneInformation.cs" />
     <Compile Include="SS\Util\Region.cs" />
+    <Compile Include="SS\Util\SheetBuilder.cs" />
     <Compile Include="SS\Util\SheetReferences.cs" />
     <Compile Include="SS\Util\SSCellRange.cs" />
     <Compile Include="SS\Util\WorkbookUtil.cs" />
     <Compile Include="Util\Arrays.cs" />
+    <Compile Include="Util\BigInteger.cs" />
     <Compile Include="Util\BitField.cs" />
     <Compile Include="Util\BitFieldFactory.cs" />
     <Compile Include="Util\ByteField.cs" />
@@ -918,6 +928,7 @@
     <Compile Include="Util\LittleEndianConstants.cs" />
     <Compile Include="Util\LongField.cs" />
     <Compile Include="Util\NullLogger.cs" />
+    <Compile Include="Util\Operator.cs" />
     <Compile Include="Util\POILogFactory.cs" />
     <Compile Include="Util\POILogger.cs" />
     <Compile Include="Util\ShortField.cs" />

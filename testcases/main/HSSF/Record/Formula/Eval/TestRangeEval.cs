@@ -18,18 +18,14 @@
 namespace TestCases.SS.Formula.Eval
 {
 
-    using NPOI.SS.Formula.Eval;
-    using TestCases.SS.Formula.Functions;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-    using HSSFFunctions = NPOI.SS.Formula.Functions;
     using System;
-    using NPOI.SS.Formula;
-    using NPOI.HSSF.Record.Aggregates;
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
     using NPOI.HSSF.UserModel;
     using NPOI.SS.Formula;
+    using NPOI.SS.Formula.Eval;
+    using NPOI.SS.Formula.PTG;
     using NPOI.SS.UserModel;
     using NPOI.SS.Util;
-    using NPOI.SS.Formula.PTG;
 
     /**
      * Test for unary plus operator Evaluator.

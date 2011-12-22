@@ -20,22 +20,15 @@ namespace NPOI.HSSF.UserModel
 {
     using System;
     using System.Collections;
-    using System.Globalization;
+    using System.Collections.Generic;
     using System.IO;
-    using System.Runtime.Serialization.Formatters.Binary;
-
-    using NPOI.Util;
     using NPOI.HSSF.Model;
     using NPOI.HSSF.Record;
-    using NPOI.HSSF.Util;
-    using NPOI.SS.Formula;
     using NPOI.HSSF.Record.Aggregates;
-    using System.Collections.Generic;
     using NPOI.SS;
+    using NPOI.SS.Formula.PTG;
     using NPOI.SS.UserModel;
     using NPOI.SS.Util;
-    using NPOI.SS.Formula;
-    using NPOI.SS.Formula.PTG;
 
     /// <summary>
     /// High level representation of a cell in a row of a spReadsheet.

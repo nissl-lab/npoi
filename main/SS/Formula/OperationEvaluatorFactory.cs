@@ -22,10 +22,8 @@ namespace NPOI.SS.Formula
     using System.Collections;
     using System.Reflection;
 
-    using NPOI.SS.Formula;
     using NPOI.SS.Formula.Eval;
     using NPOI.SS.Formula.Functions;
-    using NPOI.SS.Formula.Eval;
     using NPOI.SS.Formula.PTG;
 
     /**

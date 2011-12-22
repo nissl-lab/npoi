@@ -18,28 +18,20 @@
 namespace NPOI.HSSF.UserModel
 {
     using System;
-    using System.IO;
-    using System.Text;
-    using NPOI.DDF;
-    using NPOI.Util;
-    using NPOI.HSSF;
-    using NPOI.HSSF.Record;
-    using NPOI.SS.Formula;
-    using NPOI.HSSF.Model;
-    using NPOI.SS.Util;
-    using NPOI.HSSF.UserModel;
-    using NPOI.POIFS.FileSystem;
     using System.Collections;
     using System.Collections.Generic;
-
-    using NPOI.HSSF.Record.Aggregates;
-    using NPOI.SS.Formula;
     using System.Windows.Forms;
-    using NPOI.HSSF.Util;
+    using NPOI.DDF;
+    using NPOI.HSSF.Model;
+    using NPOI.HSSF.Record;
+    using NPOI.HSSF.Record.Aggregates;
     using NPOI.HSSF.Record.AutoFilter;
-    using NPOI.SS.UserModel;
+    using NPOI.HSSF.Util;
     using NPOI.SS;
+    using NPOI.SS.Formula;
     using NPOI.SS.Formula.PTG;
+    using NPOI.SS.UserModel;
+    using NPOI.SS.Util;
 
 
     /// <summary>
