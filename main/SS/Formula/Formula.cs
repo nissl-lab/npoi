@@ -20,10 +20,11 @@ namespace NPOI.SS.Formula
     using System;
     using System.Collections;
     using NPOI.HSSF.Record;
-    using NPOI.HSSF.Record.Formula;
+    using NPOI.SS.Formula;
     using NPOI.Util;
     using NPOI.Util.IO;
     using NPOI.SS.Util;
+    using NPOI.SS.Formula.PTG;
 
     /**
      * Encapsulates an encoded formula token array. 

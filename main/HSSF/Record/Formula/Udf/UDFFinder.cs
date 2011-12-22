@@ -15,11 +15,11 @@
    limitations under the License.
 ==================================================================== */
 
-namespace NPOI.HSSF.Record.Formula.Udf
+namespace NPOI.SS.Formula.Udf
 {
     using System;
-    using NPOI.HSSF.Record.Formula.Atp;
-    using NPOI.HSSF.Record.Formula.Functions;
+    using NPOI.SS.Formula.Atp;
+    using NPOI.SS.Formula.Functions;
 
     /**
      * Common interface for "Add-in" libraries and user defined function libraries.

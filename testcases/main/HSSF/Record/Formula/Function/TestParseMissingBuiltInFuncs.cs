@@ -15,15 +15,16 @@
    limitations under the License.
 ==================================================================== */
 
-namespace TestCases.HSSF.Record.Formula.Function
+namespace TestCases.SS.Formula.Function
 {
     using System;
 
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using NPOI.HSSF.Model;
-    using NPOI.HSSF.Record.Formula;
+    using NPOI.SS.Formula;
     using NPOI.HSSF.UserModel;
-    using NPOI.HSSF.Record.Formula.Function;
+    using NPOI.SS.Formula.Function;
+    using NPOI.SS.Formula.PTG;
     /**
      * Tests parsing of some built-in functions that were not properly
      * registered in POI as of bug #44675, #44733 (March/April 2008).

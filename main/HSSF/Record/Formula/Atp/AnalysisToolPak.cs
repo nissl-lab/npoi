@@ -15,14 +15,14 @@
    limitations under the License.
 ==================================================================== */
 
-namespace NPOI.HSSF.Record.Formula.Atp
+namespace NPOI.SS.Formula.Atp
 {
     using System;
     using System.Collections;
-    using NPOI.HSSF.Record.Formula.Eval;
-    using NPOI.HSSF.Record.Formula.Functions;
+    using NPOI.SS.Formula.Eval;
+    using NPOI.SS.Formula.Functions;
     using NPOI.SS.Formula;
-    using NPOI.HSSF.Record.Formula.Udf;
+    using NPOI.SS.Formula.Udf;
 
     public class NotImplemented : FreeRefFunction
     {

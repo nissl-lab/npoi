@@ -24,11 +24,12 @@ namespace NPOI.HSSF.UserModel
 
     using NPOI.Util;
     using NPOI.HSSF.Model;
-    using NPOI.HSSF.Record.Formula;
-    using NPOI.HSSF.Record.Formula.Eval;
     using NPOI.SS.Formula;
-    using NPOI.HSSF.Record.Formula.Udf;
+    using NPOI.SS.Formula.Eval;
+    using NPOI.SS.Formula;
+    using NPOI.SS.Formula.Udf;
     using NPOI.SS.UserModel;
+    using NPOI.SS.Formula.PTG;
 
     /**
      * @author Amol S. Deshmukh &lt; amolweb at ya hoo dot com &gt;

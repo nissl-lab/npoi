@@ -21,8 +21,8 @@ namespace NPOI.HSSF.UserModel
     using System.Collections;
     using System.Text.RegularExpressions;
     using NPOI.HSSF.Model;
-    using NPOI.HSSF.Record.Formula;
     using NPOI.SS.Formula;
+    using NPOI.SS.Formula.PTG;
     using NPOI.HSSF.Record;
 
     public class FormulaPair

@@ -24,7 +24,8 @@ namespace NPOI.HSSF.Record.Chart
     using NPOI.Util;
     using NPOI.Util.IO;
     using NPOI.SS.Formula;
-    using NPOI.HSSF.Record.Formula;
+    using NPOI.SS.Formula;
+    using NPOI.SS.Formula.PTG;
 
     /**
      * Describes a linked data record.  This record referes to the series data or text.

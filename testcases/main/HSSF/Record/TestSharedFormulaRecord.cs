@@ -20,8 +20,9 @@ namespace TestCases.HSSF.Record
     using System;
     using System.Collections;
     using NPOI.HSSF.Record;
-    using NPOI.HSSF.Record.Formula;
+    using NPOI.SS.Formula;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NPOI.SS.Formula.PTG;
 
     /**
      * @author Josh Micich

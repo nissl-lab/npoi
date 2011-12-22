@@ -19,12 +19,12 @@
  * @author Amol S. Deshmukh &lt; amolweb at ya hoo dot com &gt;
  *
  */
-namespace NPOI.HSSF.Record.Formula.Functions
+namespace NPOI.SS.Formula.Functions
 {
     using System;
     using System.Collections;
     using NPOI.Util;
-    using NPOI.HSSF.Record.Formula.Eval;
+    using NPOI.SS.Formula.Eval;
     using NPOI.SS.Formula;
 	/**
 	 * if v is zero length or contains no duplicates, return value is

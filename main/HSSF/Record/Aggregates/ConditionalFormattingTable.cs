@@ -24,7 +24,8 @@ namespace NPOI.HSSF.Record.Aggregates
 
     using NPOI.HSSF.Model;
     using NPOI.HSSF.Record;
-    using NPOI.HSSF.Record.Formula;
+    using NPOI.SS.Formula;
+    using NPOI.SS.Formula.PTG;
 
     /**
      * Holds all the conditional formatting for a workbook sheet.<p/>

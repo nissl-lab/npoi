@@ -2,7 +2,8 @@
 using System.Text;
 using NPOI.Util.IO;
 using NPOI.Util;
-using NPOI.HSSF.Record.Formula;
+using NPOI.SS.Formula;
+using NPOI.SS.Formula.PTG;
 
 namespace NPOI.HSSF.Record
 {

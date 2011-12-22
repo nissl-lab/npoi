@@ -20,9 +20,10 @@ namespace NPOI.SS.Formula
 
     using System;
     using System.Text;
-    using NPOI.HSSF.Record.Formula;
-    using NPOI.HSSF.Record.Formula.Eval;
+    using NPOI.SS.Formula;
+    using NPOI.SS.Formula.Eval;
     using NPOI.SS.Util;
+    using NPOI.SS.Formula.PTG;
 
     /**
      *

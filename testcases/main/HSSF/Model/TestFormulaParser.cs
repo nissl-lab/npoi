@@ -20,7 +20,7 @@ namespace TestCases.HSSF.Model
     using System;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using NPOI.HSSF.Model;
-    using NPOI.HSSF.Record.Formula;
+    using NPOI.SS.Formula;
     using NPOI.HSSF.UserModel;
     using TestCases.SS.Formula;
     using NPOI.SS.UserModel;
@@ -30,6 +30,7 @@ namespace TestCases.HSSF.Model
     using NPOI.Util.IO;
     using TestCases.HSSF.UserModel;
     using NPOI.HSSF.Record.Constant;
+    using NPOI.SS.Formula.PTG;
 
     /**
      * Test the low level formula Parser functionality. High level Tests are to
@@ -272,6 +273,9 @@ namespace TestCases.HSSF.Model
             Assert.IsTrue((ptgs[1] is IntPtg), "IntPtg");
             Assert.IsTrue((ptgs[2] is DividePtg), "DividePtg");
         }
+        /// <summary>
+        /// Tests the exponential in sheet.
+        /// </summary>
         [TestMethod]
         public void TestExponentialInSheet()
         {
@@ -1004,7 +1008,6 @@ namespace TestCases.HSSF.Model
 
         }
         [TestMethod]
-        [Ignore] // Assert.AreEqual failed. Expected:<{1,2,2,#REF!;FALSE,3,3,2}>. Actual:<{1,False;2,3;2,3;#REF!,2}>. 	
         public void TestParseArray()
         {
             Ptg[] ptgs;
@@ -1018,7 +1021,6 @@ namespace TestCases.HSSF.Model
             Assert.AreEqual(false, values[1][0]);
         }
         [TestMethod]
-        [Ignore] // Wrong encoding of array element value
         public void TestParseStringElementInArray()
         {
             Ptg[] ptgs;

@@ -22,12 +22,13 @@ namespace TestCases.HSSF.Record
 
     using NPOI.HSSF.Record;
     using NPOI.HSSF.Record.CF;
-    using NPOI.HSSF.Record.Formula;
+    using NPOI.SS.Formula;
     using NPOI.HSSF.UserModel;
     using NPOI.HSSF.Model;
     using NPOI.HSSF.Util;
     using NPOI.Util;
     using NPOI.SS.UserModel;
+    using NPOI.SS.Formula.PTG;
 
     /**
      * Tests the serialization and deserialization of the TestCFRuleRecord

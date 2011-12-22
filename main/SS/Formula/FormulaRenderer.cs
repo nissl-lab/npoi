@@ -22,7 +22,8 @@ namespace NPOI.SS.Formula
     using System.Text;
     using System.Collections;
 
-    using NPOI.HSSF.Record.Formula;
+    using NPOI.SS.Formula;
+    using NPOI.SS.Formula.PTG;
 
     /**
      * Common logic for rendering formulas.<br/>

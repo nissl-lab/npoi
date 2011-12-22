@@ -21,7 +21,7 @@ namespace TestCases.HSSF.Util
     using System.IO;
     using NPOI.HSSF.Util;
     //using NPOI.HSSF.Model;
-    using NPOI.HSSF.Record.Formula;
+    using NPOI.SS.Formula;
     using NPOI.HSSF.Record;
     using NPOI.HSSF.UserModel;
 
@@ -31,6 +31,7 @@ namespace TestCases.HSSF.Util
     using NPOI.SS.UserModel;
     using NPOI.SS.Util;
     using NPOI.HSSF.Model;
+    using NPOI.SS.Formula.PTG;
 
     [TestClass]
     public class TestAreaReference

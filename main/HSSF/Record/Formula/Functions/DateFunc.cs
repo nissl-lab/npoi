@@ -14,10 +14,10 @@
 * See the License for the specific language governing permissions and
 * limitations Under the License.
 */
-namespace NPOI.HSSF.Record.Formula.Functions
+namespace NPOI.SS.Formula.Functions
 {
     using System;
-    using NPOI.HSSF.Record.Formula.Eval;
+    using NPOI.SS.Formula.Eval;
     using System.Globalization;
     using NPOI.SS.UserModel;
 

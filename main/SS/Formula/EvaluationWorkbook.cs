@@ -19,8 +19,9 @@ namespace NPOI.SS.Formula
 {
 
     using System;
-    using NPOI.HSSF.Record.Formula;
-    using NPOI.HSSF.Record.Formula.Udf;
+    using NPOI.SS.Formula;
+    using NPOI.SS.Formula.Udf;
+    using NPOI.SS.Formula.PTG;
 
     public class ExternalSheet
     {

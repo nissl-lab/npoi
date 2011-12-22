@@ -24,7 +24,7 @@ namespace NPOI.HSSF.Model
 
     using NPOI.HSSF.Record;
     using NPOI.HSSF.Record.Aggregates;
-    using NPOI.HSSF.Record.Formula;
+    using NPOI.SS.Formula;
     using NPOI.Util;
     using NPOI.HSSF.Util;
     using NPOI.SS.Formula;

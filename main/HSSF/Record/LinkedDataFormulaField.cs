@@ -25,7 +25,8 @@ namespace NPOI.HSSF.Record
     using System.Text;
 
     using System.Collections;
-    using NPOI.HSSF.Record.Formula;
+    using NPOI.SS.Formula;
+    using NPOI.SS.Formula.PTG;
 
     /**
      * Not implemented yet. May commit it anyway just so people can see

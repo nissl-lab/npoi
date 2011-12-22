@@ -20,7 +20,7 @@ namespace NPOI.SS.Formula
 
     using System;
     using System.Collections;
-    using NPOI.HSSF.Record.Formula.Eval;
+    using NPOI.SS.Formula.Eval;
 
 
     /**

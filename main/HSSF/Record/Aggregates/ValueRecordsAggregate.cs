@@ -26,8 +26,9 @@ namespace NPOI.HSSF.Record.Aggregates
     using NPOI.DDF;
     using NPOI.Util;
     using NPOI.HSSF.Record;
-    using NPOI.HSSF.Record.Formula;
+    using NPOI.SS.Formula;
     using NPOI.HSSF.Model;
+    using NPOI.SS.Formula.PTG;
 
     /**
      *

@@ -22,10 +22,11 @@ namespace NPOI.SS.Formula
     using System.Collections;
     using System.Reflection;
 
-    using NPOI.HSSF.Record.Formula;
-    using NPOI.HSSF.Record.Formula.Eval;
-    using NPOI.HSSF.Record.Formula.Functions;
+    using NPOI.SS.Formula;
     using NPOI.SS.Formula.Eval;
+    using NPOI.SS.Formula.Functions;
+    using NPOI.SS.Formula.Eval;
+    using NPOI.SS.Formula.PTG;
 
     /**
      * This class Creates <tt>OperationEval</tt> instances To help evaluate <tt>OperationPtg</tt>
@@ -68,7 +69,7 @@ namespace NPOI.SS.Formula
         }
 
         private static void Add(Hashtable m, OperationPtg ptgKey,
-            Function instance)
+            NPOI.SS.Formula.Functions.Function instance)
         {
             // make sure ptg has single private constructor because map lookups assume singleton keys
             ConstructorInfo[] cc = ptgKey.GetType().GetConstructors();
@@ -90,7 +91,7 @@ namespace NPOI.SS.Formula
 		if(ptg == null) {
 			throw new ArgumentException("ptg must not be null");
 		}
-		Function result = _instancesByPtgClass[ptg] as Function;
+        NPOI.SS.Formula.Functions.Function result = _instancesByPtgClass[ptg] as NPOI.SS.Formula.Functions.Function;
 
 		if (result != null) {
 			return  result.Evaluate(args, ec.RowIndex, (short) ec.ColumnIndex);
@@ -100,9 +101,9 @@ namespace NPOI.SS.Formula
 			AbstractFunctionPtg fptg = (AbstractFunctionPtg)ptg;
 			int functionIndex = fptg.GetFunctionIndex();
 			switch (functionIndex) {
-				case NPOI.HSSF.Record.Formula.Function.FunctionMetadataRegistry.FUNCTION_INDEX_INDIRECT:
+				case NPOI.SS.Formula.Function.FunctionMetadataRegistry.FUNCTION_INDEX_INDIRECT:
 					return Indirect.instance.Evaluate(args, ec);
-                case NPOI.HSSF.Record.Formula.Function.FunctionMetadataRegistry.FUNCTION_INDEX_EXTERNAL:
+                case NPOI.SS.Formula.Function.FunctionMetadataRegistry.FUNCTION_INDEX_EXTERNAL:
 					return UserDefinedFunction.instance.Evaluate(args, ec);
 			}
 

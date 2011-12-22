@@ -24,8 +24,9 @@ namespace NPOI.HSSF.UserModel
     using NPOI.HSSF.Model;
     using NPOI.HSSF.Record;
     using NPOI.HSSF.Record.Chart;
-    using NPOI.HSSF.Record.Formula;
+    using NPOI.SS.Formula;
     using NPOI.SS.Util;
+    using NPOI.SS.Formula.PTG;
 
 
     public enum HSSFChartType : int

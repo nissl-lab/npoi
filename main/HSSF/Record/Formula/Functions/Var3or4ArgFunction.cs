@@ -15,9 +15,9 @@
    limitations under the License.
 ==================================================================== */
 
-namespace NPOI.HSSF.Record.Formula.Functions
+namespace NPOI.SS.Formula.Functions
 {
-    using NPOI.HSSF.Record.Formula.Eval;
+    using NPOI.SS.Formula.Eval;
 
     /**
      * Convenience base class for any function which must take three or four

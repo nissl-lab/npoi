@@ -159,7 +159,6 @@ namespace TestCases.HSSF.UserModel
  * versions (prior to bug 46213 / r717883) crash instead.
  */
         [TestMethod]
-        [Ignore] // the first ConfirmStringRecord(sheet, true);: Assert.AreEqual failed. Expected:<31>. Actual:<29>. 	
         public void TestCachedTypeChange()
         {
             HSSFSheet sheet = (HSSFSheet)new HSSFWorkbook().CreateSheet("Sheet1");

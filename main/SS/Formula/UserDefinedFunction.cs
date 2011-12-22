@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using NPOI.HSSF.Record.Formula.Eval;
-using NPOI.HSSF.Record.Formula.Functions;
+using NPOI.SS.Formula.Eval;
+using NPOI.SS.Formula.Functions;
 
 namespace NPOI.SS.Formula
 {

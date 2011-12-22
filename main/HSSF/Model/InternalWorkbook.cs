@@ -26,9 +26,10 @@ namespace NPOI.HSSF.Model
     using NPOI.HSSF.Util;
     using NPOI.Util;
     using NPOI.DDF;
-    using NPOI.HSSF.Record.Formula;
+    using NPOI.SS.Formula;
     using NPOI.SS.Formula;
     using System.Collections.Generic;
+    using NPOI.SS.Formula.PTG;
 
 
     /**

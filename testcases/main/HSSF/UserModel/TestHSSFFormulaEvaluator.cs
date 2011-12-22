@@ -25,7 +25,7 @@ namespace TestCases.HSSF.UserModel
     using TestCases.HSSF;
     using NPOI.SS.Formula;
     using TestCases.SS.Formula;
-    using NPOI.HSSF.Record.Formula.Eval;
+    using NPOI.SS.Formula.Eval;
     using NPOI.HSSF.Record;
     /**
      * 

@@ -19,8 +19,9 @@ namespace NPOI.HSSF.Model
 {
     using System;
 
-    using NPOI.HSSF.Record.Formula;
-    using NPOI.HSSF.Record.Formula.Function;
+    using NPOI.SS.Formula;
+    using NPOI.SS.Formula.Function;
+    using NPOI.SS.Formula.PTG;
     /**
      * Represents a syntactic element from a formula by encapsulating the corresponding <tt>Ptg</tt>
      * token.  Each <tt>ParseNode</tt> may have child <tt>ParseNode</tt>s in the case when the wrapped

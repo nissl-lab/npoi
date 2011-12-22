@@ -16,13 +16,14 @@
 ==================================================================== */
 
 
-namespace TestCases.HSSF.Record.Formula.Functions
+namespace TestCases.SS.Formula.Functions
 {
     using System;
     using System.Collections;
-    using NPOI.HSSF.Record.Formula;
-    using NPOI.HSSF.Record.Formula.Eval;
     using NPOI.SS.Formula;
+    using NPOI.SS.Formula.Eval;
+    using NPOI.SS.Formula;
+    using NPOI.SS.Formula.PTG;
 
     /**
      * Test helper class for creating mock <c>Eval</c> objects

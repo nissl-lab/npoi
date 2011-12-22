@@ -24,12 +24,13 @@ namespace TestCases.HSSF.UserModel
     using TestCases.HSSF;
     using NPOI.HSSF.Model;
     using NPOI.HSSF.Record;
-    using NPOI.HSSF.Record.Formula;
+    using NPOI.SS.Formula;
     using NPOI.Util;
     using NPOI.HSSF.UserModel;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using NPOI.DDF;
     using TestCases.SS.UserModel;
+    using NPOI.SS.Formula.PTG;
     /**
      *
      */

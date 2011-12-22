@@ -18,11 +18,11 @@
  * Created on May 15, 2005
  *
  */
-namespace NPOI.HSSF.Record.Formula.Functions
+namespace NPOI.SS.Formula.Functions
 {
     using System;
     using System.Text;
-    using NPOI.HSSF.Record.Formula.Eval;
+    using NPOI.SS.Formula.Eval;
 
     /**
      * An implementation of the Replace function:

@@ -19,13 +19,14 @@ namespace NPOI.SS.Formula
 {
     using System;
     using System.Collections;
-    using NPOI.HSSF.Record.Formula;
-    using NPOI.HSSF.Record.Formula.Eval;
+    using NPOI.SS.Formula;
+    using NPOI.SS.Formula.Eval;
     using NPOI.SS.Util;
-    using NPOI.HSSF.Record.Formula.Functions;
-    using NPOI.HSSF.Record.Formula.Udf;
+    using NPOI.SS.Formula.Functions;
+    using NPOI.SS.Formula.Udf;
     using System.Collections.Generic;
     using NPOI.SS.UserModel;
+    using NPOI.SS.Formula.PTG;
 
     /**
      * Evaluates formula cells.<p/>

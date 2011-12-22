@@ -18,9 +18,9 @@
  * Created on May 9, 2005
  *
  */
-namespace NPOI.HSSF.Record.Formula.Functions
+namespace NPOI.SS.Formula.Functions
 {
-    using NPOI.HSSF.Record.Formula.Eval;
+    using NPOI.SS.Formula.Eval;
 
     public class And : BooleanFunction
     {

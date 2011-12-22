@@ -23,7 +23,8 @@ namespace NPOI.HSSF.Record.Aggregates
     using System.Text;
     using NPOI.HSSF.Record;
     using NPOI.SS.Util;
-    using NPOI.HSSF.Record.Formula;
+    using NPOI.SS.Formula;
+    using NPOI.SS.Formula.PTG;
 
     /// <summary>
     /// The formula record aggregate is used to join toGether the formula record and it's

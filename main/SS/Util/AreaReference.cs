@@ -21,7 +21,7 @@ namespace NPOI.SS.Util
     using System;
     using System.Text;
     using System.Collections;
-    using NPOI.HSSF.Record.Formula;
+    using NPOI.SS.Formula;
 
     public class AreaReference
     {

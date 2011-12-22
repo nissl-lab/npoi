@@ -22,7 +22,7 @@ namespace TestCases.HSSF.UserModel
     using System.IO;
     using NPOI.HSSF.Record;
     using NPOI.HSSF.Record.Aggregates;
-    using NPOI.HSSF.Record.Formula;
+    using NPOI.SS.Formula;
     using NPOI.HSSF.UserModel;
     
     using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -30,6 +30,7 @@ namespace TestCases.HSSF.UserModel
     using TestCases.HSSF;
     using NPOI.SS.UserModel;
     using NPOI.SS.Util;
+    using NPOI.SS.Formula.PTG;
 
     /**
      * 

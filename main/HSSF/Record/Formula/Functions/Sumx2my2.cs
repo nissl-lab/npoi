@@ -15,7 +15,7 @@
 * limitations Under the License.
 */
 
-namespace NPOI.HSSF.Record.Formula.Functions
+namespace NPOI.SS.Formula.Functions
 {
 
     /**

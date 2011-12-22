@@ -5,13 +5,13 @@
  * found in the file LICENSE.txt
  */
 
-namespace TestCases.HSSF.Record.Formula.Functions
+namespace TestCases.SS.Formula.Functions
 {
     using System;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using NPOI.HSSF.UserModel;
 
-    using NPOI.HSSF.Record.Formula.Functions;
+    using NPOI.SS.Formula.Functions;
 
 
     /**

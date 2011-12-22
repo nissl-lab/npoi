@@ -28,13 +28,14 @@ namespace TestCases.HSSF.UserModel
     using NPOI.HSSF.UserModel;
     //using NPOI.HSSF.Model;
     using NPOI.HSSF.Record;
-    using NPOI.HSSF.Record.Formula;
+    using NPOI.SS.Formula;
     using NPOI.HSSF.Record.Aggregates;
     using NPOI.SS.Util;
     using NPOI.Util;
     using NPOI.SS.UserModel;
     using NPOI.HSSF.Model;
     using System.Collections.Generic;
+    using NPOI.SS.Formula.PTG;
 
     /**
      * Testcases for bugs entered in bugzilla
@@ -1425,7 +1426,6 @@ namespace TestCases.HSSF.UserModel
          *  Expected ExpPtg to be converted from Shared to Non-Shared...
          */
         [TestMethod]
-        [Ignore] // Assert.AreEqual failed. Expected:<{=sin(B1:B9){9,1)[0][0]>. Actual:<SIN(B1:B9)>
         public void Test43623()
         {           
             HSSFWorkbook wb = OpenSample("43623.xls");

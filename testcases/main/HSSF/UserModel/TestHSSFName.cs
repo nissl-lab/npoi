@@ -28,8 +28,9 @@ namespace TestCases.HSSF.UserModel
     using System.Reflection;
     using NPOI.HSSF.UserModel;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
-    using NPOI.HSSF.Record.Formula;
+    using NPOI.SS.Formula;
     using TestCases.SS.UserModel;
+    using NPOI.SS.Formula.PTG;
 
     /**
      * Tests various functionality having to do with {@link NPOI.SS.usermodel.Name}.
@@ -237,7 +238,7 @@ namespace TestCases.HSSF.UserModel
                 new AreaReference(name2.RefersToFormula);
                 Assert.Fail("attempt to supply an invalid reference to AreaReference constructor results in exception");
             }
-            catch (IndexOutOfRangeException)
+            catch (ArgumentException)
             { // TODO - use a different exception for this condition
                 // expected during successful Test
             }

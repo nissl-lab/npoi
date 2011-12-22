@@ -15,16 +15,17 @@
    limitations under the License.
 ==================================================================== */
 
-namespace TestCases.HSSF.Record.Formula.Eval
+namespace TestCases.SS.Formula.Eval
 {
     using System;
     using System.Collections;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-    using NPOI.HSSF.Record.Formula;
-    using NPOI.HSSF.Record.Formula.Eval;
-    using TestCases.HSSF.Record.Formula.Functions;
     using NPOI.SS.Formula;
+    using NPOI.SS.Formula.Eval;
+    using TestCases.SS.Formula.Functions;
+    using NPOI.SS.Formula;
+    using NPOI.SS.Formula.PTG;
     /**
      * Tests for <tt>AreaEval</tt>
      *  

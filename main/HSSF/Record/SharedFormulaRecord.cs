@@ -19,9 +19,10 @@ namespace NPOI.HSSF.Record
 {
     using System;
     using System.Text;
-    using NPOI.HSSF.Record.Formula;
+    using NPOI.SS.Formula;
     using System.Collections;
     using NPOI.Util;
+    using NPOI.SS.Formula.PTG;
 
     /**
      * Title:        SharedFormulaRecord

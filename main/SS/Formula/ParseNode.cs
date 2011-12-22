@@ -20,8 +20,8 @@ namespace NPOI.SS.Formula
 
     using System;
     using System.Text;
-    using NPOI.HSSF.Record.Formula;
-    using NPOI.HSSF.Record.Formula.Function;
+    using NPOI.SS.Formula.PTG;
+    using NPOI.SS.Formula.Function;
     /**
      * Represents a syntactic element from a formula by encapsulating the corresponding <tt>Ptg</tt>
      * Token.  Each <tt>ParseNode</tt> may have child <tt>ParseNode</tt>s in the case when the wrapped

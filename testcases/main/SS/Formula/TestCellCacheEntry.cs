@@ -19,7 +19,7 @@ namespace TestCases.SS.Formula
 {
 
     using System;
-    using NPOI.HSSF.Record.Formula.Eval;
+    using NPOI.SS.Formula.Eval;
     using NPOI.SS.Formula;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 

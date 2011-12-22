@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using NPOI.HSSF.Record.Formula.Eval;
+using NPOI.SS.Formula.Eval;
 
-namespace NPOI.HSSF.Record.Formula.Functions
+namespace NPOI.SS.Formula.Functions
 {
     public class SearchFind : Var2or3ArgFunction
     {

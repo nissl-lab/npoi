@@ -26,7 +26,8 @@ namespace NPOI.HSSF.UserModel
     using NPOI.Util;
     using NPOI.HSSF.Model;
     using NPOI.HSSF.Util;
-    using NPOI.HSSF.Record.Formula;
+    using NPOI.SS.Formula;
+    using NPOI.SS.Formula.PTG;
 
 
     /// <summary>

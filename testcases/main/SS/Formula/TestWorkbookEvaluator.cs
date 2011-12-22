@@ -20,12 +20,12 @@ namespace TestCases.SS.Formula
 
     using System;
     using TestCases.HSSF;
-    using NPOI.HSSF.Record.Formula;
-    using NPOI.HSSF.UserModel;
     using NPOI.SS.Formula;
-    using NPOI.HSSF.Record.Formula.Eval;
+    using NPOI.HSSF.UserModel;
+    using NPOI.SS.Formula.Eval;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using NPOI.SS.UserModel;
+    using NPOI.SS.Formula.PTG;
 
     /**
      * Tests {@link WorkbookEvaluator}.

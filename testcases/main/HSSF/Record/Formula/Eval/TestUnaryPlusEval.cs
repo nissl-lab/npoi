@@ -16,14 +16,15 @@
 */
 
 
-namespace TestCases.HSSF.Record.Formula.Eval
+namespace TestCases.SS.Formula.Eval
 {
     using System;
-    using NPOI.HSSF.Record.Formula;
-    using NPOI.HSSF.Record.Formula.Eval;
-    using TestCases.HSSF.Record.Formula.Functions;
+    using NPOI.SS.Formula;
+    using NPOI.SS.Formula.Eval;
+    using TestCases.SS.Formula.Functions;
 
     using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NPOI.SS.Formula.PTG;
 
     /**
      * Test for unary plus operator evaluator.

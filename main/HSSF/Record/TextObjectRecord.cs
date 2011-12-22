@@ -25,9 +25,10 @@ namespace NPOI.HSSF.Record
     using NPOI.HSSF.UserModel;
     using NPOI.Util.IO;
 
-    using NPOI.HSSF.Record.Formula;
+    using NPOI.SS.Formula;
     using NPOI.SS.UserModel;
     using NPOI.HSSF.Record.Cont;
+    using NPOI.SS.Formula.PTG;
 
     public class TextObjectRecord : ContinuableRecord
     {

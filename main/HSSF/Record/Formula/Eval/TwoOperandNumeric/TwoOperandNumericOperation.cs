@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using NPOI.HSSF.Record.Formula.Functions;
+using NPOI.SS.Formula.Functions;
 
-namespace NPOI.HSSF.Record.Formula.Eval
+namespace NPOI.SS.Formula.Eval
 {
 
     public abstract class TwoOperandNumericOperation : Fixed2ArgFunction
@@ -52,10 +52,10 @@ namespace NPOI.HSSF.Record.Formula.Eval
 
         public abstract double Evaluate(double d0, double d1);
 
-        public static NPOI.HSSF.Record.Formula.Functions.Function AddEval = new AddEval();
-        public static NPOI.HSSF.Record.Formula.Functions.Function DivideEval = new DivideEval();
-        public static NPOI.HSSF.Record.Formula.Functions.Function MultiplyEval = new MultiplyEval();
-        public static NPOI.HSSF.Record.Formula.Functions.Function PowerEval = new PowerEval();
-        public static NPOI.HSSF.Record.Formula.Functions.Function SubtractEval = new SubtractEval();
+        public static NPOI.SS.Formula.Functions.Function AddEval = new AddEval();
+        public static NPOI.SS.Formula.Functions.Function DivideEval = new DivideEval();
+        public static NPOI.SS.Formula.Functions.Function MultiplyEval = new MultiplyEval();
+        public static NPOI.SS.Formula.Functions.Function PowerEval = new PowerEval();
+        public static NPOI.SS.Formula.Functions.Function SubtractEval = new SubtractEval();
     }
 }

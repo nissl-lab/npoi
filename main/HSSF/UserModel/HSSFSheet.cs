@@ -24,7 +24,7 @@ namespace NPOI.HSSF.UserModel
     using NPOI.Util;
     using NPOI.HSSF;
     using NPOI.HSSF.Record;
-    using NPOI.HSSF.Record.Formula;
+    using NPOI.SS.Formula;
     using NPOI.HSSF.Model;
     using NPOI.SS.Util;
     using NPOI.HSSF.UserModel;
@@ -39,6 +39,7 @@ namespace NPOI.HSSF.UserModel
     using NPOI.HSSF.Record.AutoFilter;
     using NPOI.SS.UserModel;
     using NPOI.SS;
+    using NPOI.SS.Formula.PTG;
 
 
     /// <summary>

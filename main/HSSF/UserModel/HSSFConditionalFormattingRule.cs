@@ -22,10 +22,11 @@ namespace NPOI.HSSF.UserModel
     using System.Text;
 
     using NPOI.HSSF.Record;
-    using NPOI.HSSF.Record.Formula;
+    using NPOI.SS.Formula;
     using NPOI.HSSF.Model;
     using NPOI.HSSF.Record.CF;
     using NPOI.SS.Formula;
+    using NPOI.SS.Formula.PTG;
 
     /**
      * 

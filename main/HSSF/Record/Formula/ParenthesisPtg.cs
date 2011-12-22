@@ -16,7 +16,7 @@
 ==================================================================== */
 
 
-namespace NPOI.HSSF.Record.Formula
+namespace NPOI.SS.Formula.PTG
 {
     using System;
     using System.Text;

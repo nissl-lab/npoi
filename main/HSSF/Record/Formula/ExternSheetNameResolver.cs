@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace NPOI.HSSF.Record.Formula
+namespace NPOI.SS.Formula.PTG
 {
     using NPOI.SS.Formula;
     public class ExternSheetNameResolver

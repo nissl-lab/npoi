@@ -15,7 +15,7 @@
    limitations Under the License.
 ==================================================================== */
 
-namespace NPOI.HSSF.Record.Formula.Eval
+namespace NPOI.SS.Formula.Eval
 {
     using System;
     /**

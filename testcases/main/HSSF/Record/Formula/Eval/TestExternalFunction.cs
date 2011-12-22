@@ -15,16 +15,17 @@
    limitations under the License.
 ==================================================================== */
 
-namespace TestCases.HSSF.Record.Formula.Eval
+namespace TestCases.SS.Formula.Eval
 {
     using System;
     using NPOI.HSSF.UserModel;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
-    using NPOI.HSSF.Record.Formula.Eval;
+    using NPOI.SS.Formula.Eval;
     using NPOI.SS.UserModel;
-    using NPOI.HSSF.Record.Formula.Udf;
-    using NPOI.HSSF.Record.Formula.Functions;
+    using NPOI.SS.Formula.Udf;
+    using NPOI.SS.Formula.Functions;
     using NPOI.SS.Formula;
+    using TestCases.HSSF;
 
     /**
      * 

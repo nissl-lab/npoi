@@ -28,13 +28,14 @@ namespace NPOI.HSSF.UserModel
     using NPOI.HSSF.Model;
     using NPOI.HSSF.Record;
     using NPOI.HSSF.Util;
-    using NPOI.HSSF.Record.Formula;
+    using NPOI.SS.Formula;
     using NPOI.HSSF.Record.Aggregates;
     using System.Collections.Generic;
     using NPOI.SS;
     using NPOI.SS.UserModel;
     using NPOI.SS.Util;
     using NPOI.SS.Formula;
+    using NPOI.SS.Formula.PTG;
 
     /// <summary>
     /// High level representation of a cell in a row of a spReadsheet.
@@ -1114,7 +1115,7 @@ namespace NPOI.HSSF.UserModel
                 case CellType.BOOLEAN:
                     return BooleanCellValue ? "TRUE" : "FALSE";
                 case CellType.ERROR:
-                    return NPOI.HSSF.Record.Formula.Eval.ErrorEval.GetText(((BoolErrRecord)record).ErrorValue);
+                    return NPOI.SS.Formula.Eval.ErrorEval.GetText(((BoolErrRecord)record).ErrorValue);
                 case CellType.FORMULA:
                     return CellFormula;
                 case CellType.NUMERIC:

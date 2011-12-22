@@ -21,11 +21,12 @@ namespace NPOI.HSSF.UserModel
     using System;
     using System.IO;
     using System.Text;
-    using NPOI.HSSF.Record.Formula.Eval;
-    using NPOI.HSSF.Record.Formula;
+    using NPOI.SS.Formula.Eval;
+    using NPOI.SS.Formula;
 
     using System.Collections;
     using System.Reflection;
+    using NPOI.SS.Formula.PTG;
 
 
     /**

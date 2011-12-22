@@ -15,7 +15,7 @@
    limitations Under the License.
 ==================================================================== */
 
-namespace NPOI.HSSF.Record.Formula.Function
+namespace NPOI.SS.Formula.Function
 {
     using System;
     using System.Text;

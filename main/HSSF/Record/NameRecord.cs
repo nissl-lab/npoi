@@ -27,9 +27,10 @@ namespace NPOI.HSSF.Record
     using NPOI.HSSF.Record;
     using NPOI.HSSF.Util;
     using NPOI.HSSF.UserModel;
-    using NPOI.HSSF.Record.Formula;
+    using NPOI.SS.Formula;
     using SSFormula=NPOI.SS.Formula;
     using NPOI.HSSF.Record.Cont;
+    using NPOI.SS.Formula.PTG;
 
     /**
      * Title:        Name Record (aka Named Range) 

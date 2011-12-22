@@ -21,9 +21,10 @@ namespace NPOI.HSSF.Record
     using System;
     using System.Text;
     using NPOI.Util;
-    using NPOI.HSSF.Record.Formula;
+    using NPOI.SS.Formula;
     using NPOI.SS.Formula;
     using NPOI.SS.Util;
+    using NPOI.SS.Formula.PTG;
 
     /**
      * ARRAY (0x0221)<p/>

@@ -15,13 +15,13 @@
    limitations under the License.
 ==================================================================== */
 
-namespace TestCases.HSSF.Record.Formula.Eval
+namespace TestCases.SS.Formula.Eval
 {
 
-    using NPOI.HSSF.Record.Formula.Eval;
-    using TestCases.HSSF.Record.Formula.Functions;
+    using NPOI.SS.Formula.Eval;
+    using TestCases.SS.Formula.Functions;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
-    using HSSFFunctions = NPOI.HSSF.Record.Formula.Functions;
+    using HSSFFunctions = NPOI.SS.Formula.Functions;
     using System;
     using NPOI.Util;
 
@@ -77,7 +77,6 @@ namespace TestCases.HSSF.Record.Formula.Eval
          * Gets to the comparison operator)
          */
         [TestMethod]
-        [Ignore] // Assert.AreEqual failed. Expected:<False>. Actual:<True>. 	
         public void TestComparisonOperators()
         {
             CheckEval(false, EvalInstances.Equal, 0.0, MINUS_ZERO);

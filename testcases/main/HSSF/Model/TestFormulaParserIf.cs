@@ -19,9 +19,10 @@ namespace TestCases.HSSF.Model
 {
     using System;
     using NPOI.HSSF.Model;
-    using NPOI.HSSF.Record.Formula;
+    using NPOI.SS.Formula;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using NPOI.HSSF.UserModel;
+    using NPOI.SS.Formula.PTG;
 
     /**
      * Tests <tt>FormulaParser</tt> specifically with respect to IF() functions

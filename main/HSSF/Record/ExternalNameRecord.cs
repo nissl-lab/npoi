@@ -22,7 +22,7 @@ namespace NPOI.HSSF.Record
     using System.Text;
     using System.Collections;
     using NPOI.Util;
-    using NPOI.HSSF.Record.Formula;
+    using NPOI.SS.Formula;
     using NPOI.HSSF.Record.Constant;
     using NPOI.Util.IO;
 

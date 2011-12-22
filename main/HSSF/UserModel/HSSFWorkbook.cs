@@ -27,14 +27,15 @@ namespace NPOI.HSSF.UserModel
 
     using NPOI.DDF;
     using NPOI.HSSF.Record;
-    using NPOI.HSSF.Record.Formula;
+    using NPOI.SS.Formula;
     using NPOI.HSSF.Model;
     using NPOI.POIFS.FileSystem;
     using NPOI.SS.Formula;
     using NPOI.SS.Util;
     using NPOI.SS.UserModel;
-    using NPOI.HSSF.Record.Formula.Udf;
+    using NPOI.SS.Formula.Udf;
     using NPOI.Util;
+    using NPOI.SS.Formula.PTG;
 
 
     /// <summary>

@@ -21,16 +21,17 @@ namespace TestCases.HSSF.UserModel
     using System.IO;
     using System.Configuration;
     using System.Collections;
-    using NPOI.HSSF.Record.Formula;
+    using NPOI.SS.Formula;
     using NPOI.HSSF.Record.Aggregates;
     using NPOI.SS.Formula;
     using NPOI.HSSF.UserModel;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using TestCases.SS.Formula;
 
-    using NPOI.HSSF.Record.Formula.Eval;
+    using NPOI.SS.Formula.Eval;
     using NPOI.SS.UserModel;
     using TestCases.HSSF;
+    using NPOI.SS.Formula.PTG;
     /**
      * 
      */
@@ -353,7 +354,6 @@ namespace TestCases.HSSF.UserModel
          * The HSSFFormula evaluator performance benefits greatly from caching of intermediate cell values
          */
         [TestMethod]
-        [Ignore] // Assert.AreEqual(8, evalListener.GetCountCacheHits()); - the below mentionen short-circuit-if optimisation seam not to work: Assert.AreEqual failed. Expected:<8>. Actual:<24>. 	
         public void TestSlowEvaluate45376()
         {
             /*

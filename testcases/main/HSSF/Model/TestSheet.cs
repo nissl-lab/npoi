@@ -29,7 +29,7 @@ namespace TestCases.HSSF.Model
     using TestCases.HSSF.UserModel;
     using System.Collections.Generic;
     using NPOI.HSSF.UserModel;
-    using NPOI.HSSF.Record.Formula;
+    using NPOI.SS.Formula;
     using NPOI.Util;
     using NPOI.DDF;
 

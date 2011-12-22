@@ -27,7 +27,7 @@ namespace NPOI.HSSF.Extractor
     using NPOI.POIFS.FileSystem;
     using NPOI;
     using NPOI.HPSF;
-    using NPOI.HSSF.Record.Formula.Eval;
+    using NPOI.SS.Formula.Eval;
     using NPOI.HSSF.EventUserModel;
     using NPOI.HSSF.Model;
     //using NPOI.HSSF.Util;

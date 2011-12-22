@@ -15,10 +15,10 @@
    limitations under the License.
 ==================================================================== */
 
-namespace TestCases.HSSF.Record.Formula.Eval
+namespace TestCases.SS.Formula.Eval
 {
-    using NPOI.HSSF.Record.Formula.Eval;
-    using TestCases.HSSF.Record.Formula.Functions;
+    using NPOI.SS.Formula.Eval;
+    using TestCases.SS.Formula.Functions;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     /**
      * Test for divide operator Evaluator.

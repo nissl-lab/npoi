@@ -23,9 +23,9 @@ namespace TestCases.SS.Formula
     using System.Collections;
 
     using NPOI.HSSF.Model;
-    using NPOI.HSSF.Record.Formula;
+    using NPOI.SS.Formula;
     using NPOI.HSSF.UserModel;
-    using NPOI.HSSF.Record.Formula.Eval;
+    using NPOI.SS.Formula.Eval;
 
     using NPOI.SS.Formula;
     using NPOI.SS.Util;
@@ -33,6 +33,7 @@ namespace TestCases.SS.Formula
 
     using TestCases.HSSF.UserModel;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NPOI.SS.Formula.PTG;
 
 
     /**
@@ -339,7 +340,6 @@ namespace TestCases.SS.Formula
             return ms;
         }
         [TestMethod]
-        [Ignore] // the first ConfirmLog failed: Log Lengths mismatch
         public void TestMediumComplex()
         {
             MySheet ms = CreateMediumComplex();

@@ -16,7 +16,7 @@
    limitations Under the License.
 ==================================================================== */
 
-namespace NPOI.HSSF.Record.Formula
+namespace NPOI.SS.Formula.PTG
 {
     using System;
     using System.Text;

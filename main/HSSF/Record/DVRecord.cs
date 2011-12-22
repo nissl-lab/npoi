@@ -23,9 +23,10 @@ namespace NPOI.HSSF.Record
     using System.Collections;
     using NPOI.SS.Util;
 
-    using NPOI.HSSF.Record.Formula;
+    using NPOI.SS.Formula;
     using NPOI.Util;
     using NPOI.Util.IO;
+    using NPOI.SS.Formula.PTG;
     
 
 

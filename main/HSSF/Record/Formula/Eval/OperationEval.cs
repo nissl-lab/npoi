@@ -18,7 +18,7 @@
  * Created on May 8, 2005
  *
  */
-namespace NPOI.HSSF.Record.Formula.Eval
+namespace NPOI.SS.Formula.Eval
 {
 
     /**

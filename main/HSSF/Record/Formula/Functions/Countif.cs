@@ -16,12 +16,12 @@
 */
 
 
-namespace NPOI.HSSF.Record.Formula.Functions
+namespace NPOI.SS.Formula.Functions
 {
     using System;
     using System.Text;
     using System.Text.RegularExpressions;
-    using NPOI.HSSF.Record.Formula.Eval;
+    using NPOI.SS.Formula.Eval;
 
     /**
      * Implementation for the function COUNTIF<p/>

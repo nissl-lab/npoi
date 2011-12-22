@@ -23,13 +23,14 @@ namespace NPOI.HSSF.UserModel
     using NPOI.Util;
     //using NPOI.HSSF.Model;
     using NPOI.HSSF.Record;
-    using NPOI.HSSF.Record.Formula;
-    using NPOI.HSSF.Record.Formula.Eval;
+    using NPOI.SS.Formula;
+    using NPOI.SS.Formula.Eval;
     using NPOI.HSSF.Record.Aggregates;
     using NPOI.SS.Formula;
     using NPOI.SS;
     using NPOI.SS.UserModel;
-    using NPOI.HSSF.Record.Formula.Udf;
+    using NPOI.SS.Formula.Udf;
+    using NPOI.SS.Formula.PTG;
    
     /**
      * Internal POI use only

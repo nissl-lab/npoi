@@ -14,10 +14,11 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 ==================================================================== */
-
-using NPOI.HSSF.Record.Formula.Functions;
-using NPOI.HSSF.Record.Formula.Eval;
 using System;
+using NPOI.SS.Formula.Functions;
+using NPOI.SS.Formula.Eval;
+using NPOI.SS.Formula.Function;
+
 namespace NPOI.SS.Formula.Eval
 {
 
@@ -27,7 +28,7 @@ namespace NPOI.SS.Formula.Eval
     public class IntersectionEval : Fixed2ArgFunction
     {
 
-        public static Function instance = new IntersectionEval();
+        public static NPOI.SS.Formula.Functions.Function instance = new IntersectionEval();
 
         private IntersectionEval()
         {

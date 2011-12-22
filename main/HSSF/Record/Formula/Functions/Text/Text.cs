@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using NPOI.HSSF.Record.Formula.Eval;
+using NPOI.SS.Formula.Eval;
 using System.Text.RegularExpressions;
 using NPOI.SS.Util;
 
-namespace NPOI.HSSF.Record.Formula.Functions.Text
+namespace NPOI.SS.Formula.Functions.Text
 {
     public class Text : Fixed2ArgFunction
     {

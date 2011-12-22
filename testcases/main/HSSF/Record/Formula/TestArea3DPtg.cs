@@ -16,12 +16,13 @@
 ==================================================================== */
 
 
-namespace TestCases.HSSF.Record.Formula
+namespace TestCases.SS.Formula
 {
     using System;
-    using NPOI.HSSF.Record.Formula;
+    using NPOI.SS.Formula;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using NPOI.HSSF.UserModel;
+    using NPOI.SS.Formula.PTG;
 
     /**
      * Tests for Area3DPtg

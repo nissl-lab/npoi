@@ -23,10 +23,11 @@ namespace NPOI.HSSF.Record
     using NPOI.HSSF.Record;
     using NPOI.Util;
     using NPOI.HSSF.UserModel;
-    using NPOI.HSSF.Record.Formula;
+    using NPOI.SS.Formula;
     using NPOI.HSSF.Record.CF;
     using FR=NPOI.SS.Formula;
     using NPOI.Util.IO;
+    using NPOI.SS.Formula.PTG;
 
     public enum ComparisonOperator : byte
     {

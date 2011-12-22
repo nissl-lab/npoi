@@ -15,15 +15,15 @@
    limitations under the License.
 ==================================================================== */
 
-namespace TestCases.HSSF.Record.Formula.ATP
+namespace TestCases.SS.Formula.ATP
 {
     using System;
     using System.IO;
     using System.Collections;
     using TestCases.HSSF;
-    using NPOI.HSSF.Record.Formula.Eval;
+    using NPOI.SS.Formula.Eval;
     using NPOI.HSSF.UserModel;
-    using NPOI.HSSF.Record.Formula.Atp;
+    using NPOI.SS.Formula.Atp;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using NPOI.SS.UserModel;
     /**

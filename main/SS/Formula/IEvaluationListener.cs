@@ -18,8 +18,8 @@
 namespace NPOI.SS.Formula
 {
 
-    using NPOI.HSSF.Record.Formula;
-    using NPOI.HSSF.Record.Formula.Eval;
+    using NPOI.SS.Formula;
+    using NPOI.SS.Formula.Eval;
     
 
     /**

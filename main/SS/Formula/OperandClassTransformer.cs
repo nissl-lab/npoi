@@ -19,7 +19,8 @@ namespace NPOI.SS.Formula
 {
 
     using System;
-    using NPOI.HSSF.Record.Formula;
+    using NPOI.SS.Formula;
+    using NPOI.SS.Formula.PTG;
 
     /**
      * This class performs 'operand class' transformation. Non-base Tokens are classified into three 

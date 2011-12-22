@@ -1,10 +1,11 @@
 ﻿namespace NPOI.SS.Formula
 {
     using System;
-    using NPOI.HSSF.Record.Formula.Eval;
-    using NPOI.HSSF.Record.Formula.Functions;
+    using NPOI.SS.Formula.Eval;
+    using NPOI.SS.Formula.Functions;
     using NPOI.SS.Util;
-    using NPOI.HSSF.Record.Formula;
+    using NPOI.SS.Formula;
+    using NPOI.SS.Formula.PTG;
     /**
      * Contains all the contextual information required to Evaluate an operation
      * within a formula

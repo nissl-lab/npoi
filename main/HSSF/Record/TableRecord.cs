@@ -22,7 +22,7 @@ namespace NPOI.HSSF.Record
     using System.Collections;
     using NPOI.Util;
     using NPOI.HSSF.Util;
-    using NPOI.HSSF.Record.Formula;
+    using NPOI.SS.Formula;
     using NPOI.SS.Util;
     /**
      * DATATABLE (0x0236)<p/>

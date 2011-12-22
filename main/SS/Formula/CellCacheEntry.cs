@@ -19,7 +19,7 @@ namespace NPOI.SS.Formula
 {
 
     using System;
-    using NPOI.HSSF.Record.Formula.Eval;
+    using NPOI.SS.Formula.Eval;
     /**
      * Stores the parameters that identify the evaluation of one cell.<br/>
      */

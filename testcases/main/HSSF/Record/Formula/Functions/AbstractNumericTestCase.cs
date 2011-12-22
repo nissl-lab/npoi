@@ -18,7 +18,7 @@
  * Created on May 29, 2005
  *
  */
-namespace TestCases.HSSF.Record.Formula.Functions
+namespace TestCases.SS.Formula.Functions
 {
     using System;
     using Microsoft.VisualStudio.TestTools.UnitTesting;

@@ -15,11 +15,11 @@
    limitations under the License.
 ==================================================================== */
 
-namespace TestCases.HSSF.Record.Formula.Function
+namespace TestCases.SS.Formula.Function
 {
     using System;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
-    using NPOI.HSSF.Record.Formula.Function;
+    using NPOI.SS.Formula.Function;
     /**
      * 
      * @author Josh Micich

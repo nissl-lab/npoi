@@ -15,7 +15,7 @@
    limitations under the License.
 ==================================================================== */
 
-namespace TestCases.HSSF.Record.Formula
+namespace TestCases.SS.Formula
 {
     using System;
     using System.IO;

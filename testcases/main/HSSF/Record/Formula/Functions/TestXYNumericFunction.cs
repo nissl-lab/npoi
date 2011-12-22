@@ -15,13 +15,13 @@
    limitations under the License.
 ==================================================================== */
 
-namespace TestCases.HSSF.Record.Formula.Functions
+namespace TestCases.SS.Formula.Functions
 {
     using System;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
-    using NPOI.HSSF.Record.Formula.Functions;
-    using NPOI.HSSF.Record.Formula;
-    using NPOI.HSSF.Record.Formula.Eval;
+    using NPOI.SS.Formula.Functions;
+    using NPOI.SS.Formula;
+    using NPOI.SS.Formula.Eval;
     /**
      * Tests for Excel functions SUMX2MY2(), SUMX2PY2(), SUMXMY2()
      * 

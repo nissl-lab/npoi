@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Text;
-using NPOI.HSSF.Record.Formula.Eval;
-using HSSFFunctions=NPOI.HSSF.Record.Formula.Functions;
+using NPOI.SS.Formula.Eval;
+using HSSFFunctions=NPOI.SS.Formula.Functions;
 
-namespace TestCases.HSSF.Record.Formula.Eval
+namespace TestCases.SS.Formula.Eval
 {
     internal class EvalInstances
     {

@@ -18,13 +18,13 @@
  * Created on May 8, 2005
  *
  */
-namespace NPOI.HSSF.Record.Formula.Eval
+namespace NPOI.SS.Formula.Eval
 {
     using System;
     using System.Collections;
-    using NPOI.HSSF.Record.Formula.Functions;
-    using NPOI.HSSF.Record.Formula;
-    using NPOI.HSSF.Record.Formula.Function;
+    using NPOI.SS.Formula.Functions;
+    using NPOI.SS.Formula;
+    using NPOI.SS.Formula.Function;
 
     /**
      * @author Amol S. Deshmukh &lt; amolweb at ya hoo dot com &gt;

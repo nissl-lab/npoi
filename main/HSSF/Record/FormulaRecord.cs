@@ -32,8 +32,9 @@ namespace NPOI.HSSF.Record
     using NPOI.SS.Formula;
     using NPOI.HSSF.UserModel;
     using NPOI.Util.IO;
-    using NPOI.HSSF.Record.Formula;
-    using NPOI.HSSF.Record.Formula.Eval;
+    using NPOI.SS.Formula;
+    using NPOI.SS.Formula.Eval;
+    using NPOI.SS.Formula.PTG;
 
     /**
  * Manages the cached formula result values of other types besides numeric.

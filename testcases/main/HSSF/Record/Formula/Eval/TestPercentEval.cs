@@ -15,15 +15,15 @@
    limitations under the License.
 ==================================================================== */
 
-namespace TestCases.HSSF.Record.Formula.Eval
+namespace TestCases.SS.Formula.Eval
 {
     using System;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-    using NPOI.HSSF.Record.Formula;
-    using TestCases.HSSF.Record.Formula.Functions;
+    using NPOI.SS.Formula;
+    using TestCases.SS.Formula.Functions;
     using NPOI.HSSF.UserModel;
-    using NPOI.HSSF.Record.Formula.Eval;
+    using NPOI.SS.Formula.Eval;
     using NPOI.SS.UserModel;
 
     /**
@@ -49,7 +49,7 @@ namespace TestCases.HSSF.Record.Formula.Eval
 			arg,	
 		};
 
-            NPOI.HSSF.Record.Formula.Functions.Function opEval = PercentEval.instance;
+            NPOI.SS.Formula.Functions.Function opEval = PercentEval.instance;
             double result = NumericFunctionInvoker.Invoke(opEval, args, -1, (short)-1);
 
             Assert.AreEqual(expectedResult, result, 0);

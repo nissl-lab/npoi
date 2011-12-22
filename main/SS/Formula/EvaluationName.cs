@@ -19,7 +19,7 @@ namespace NPOI.SS.Formula
 {
 
     using System;
-    using NPOI.HSSF.Record.Formula;
+    using NPOI.SS.Formula.PTG;
     /**
      * Abstracts a name record for formula evaluation.<br/>
      * 

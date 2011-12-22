@@ -27,9 +27,10 @@ namespace TestCases.HSSF.EventUserModel
     using NPOI.HSSF.UserModel;
     using NPOI.HSSF.Record;
     using NPOI.POIFS.FileSystem;
-    using NPOI.HSSF.Record.Formula;
+    using NPOI.SS.Formula;
 
     using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NPOI.SS.Formula.PTG;
 
 
     [TestClass]

@@ -15,11 +15,11 @@
    limitations under the License.
 ==================================================================== */
 
-namespace NPOI.HSSF.Record.Formula.Atp
+namespace NPOI.SS.Formula.Atp
 {
     using System;
-    using NPOI.HSSF.Record.Formula.Eval;
-    using NPOI.HSSF.Record.Formula.Functions;
+    using NPOI.SS.Formula.Eval;
+    using NPOI.SS.Formula.Functions;
     using NPOI.SS.Formula;
     /**
      * Implementation of Excel 'Analysis ToolPak' function ISEVEN() ISODD()<br/>

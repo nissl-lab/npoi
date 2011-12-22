@@ -36,7 +36,8 @@ namespace TestCases.HSSF.UserModel
     using NPOI.HSSF.Record.AutoFilter;
     using System.Collections.Generic;
     using System.Collections;
-    using NPOI.HSSF.Record.Formula;
+    using NPOI.SS.Formula;
+    using NPOI.SS.Formula.PTG;
 
     /**
      * Tests NPOI.SS.UserModel.Sheet.  This Test case is very incomplete at the moment.
@@ -575,7 +576,6 @@ namespace TestCases.HSSF.UserModel
             workbook = HSSFTestDataSamples.WriteOutAndReadBack(workbook);
         }
         [TestMethod]
-        [Ignore] // Assert.IsTrue(sheet.GetColumnWidth(0) <= maxWithRow1And2, "Column autosized with only one row: wrong width"); Assert.IsTrue failed. Column autosized with only one row: wrong width
         public void TestAutoSizeColumn()
         {
             HSSFWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("43902.xls");

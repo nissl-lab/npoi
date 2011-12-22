@@ -23,7 +23,8 @@ namespace NPOI.HSSF.Model
     using System.Collections.Generic;
 
     using NPOI.HSSF.Record;
-    using NPOI.HSSF.Record.Formula;
+    using NPOI.SS.Formula;
+    using NPOI.SS.Formula.PTG;
 
     /**
      * Link Table (OOO pdf reference: 4.10.3 ) <p/>

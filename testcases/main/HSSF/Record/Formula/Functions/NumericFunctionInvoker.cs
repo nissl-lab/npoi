@@ -16,12 +16,12 @@
 ==================================================================== */
 
 
-namespace TestCases.HSSF.Record.Formula.Functions
+namespace TestCases.SS.Formula.Functions
 {
     using System;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
-    using NPOI.HSSF.Record.Formula.Eval;
-    using NPOI.HSSF.Record.Formula.Functions;
+    using NPOI.SS.Formula.Eval;
+    using NPOI.SS.Formula.Functions;
 
     /**
      * Test helper class for invoking functions with numeric results.

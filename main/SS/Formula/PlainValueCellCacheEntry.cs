@@ -18,7 +18,7 @@
 namespace NPOI.SS.Formula
 {
 
-    using NPOI.HSSF.Record.Formula.Eval;
+    using NPOI.SS.Formula.Eval;
 
     /**
      * Used for non-formula cells, primarily To keep track of the referencing (formula) cells.

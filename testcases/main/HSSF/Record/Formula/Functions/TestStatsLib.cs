@@ -18,11 +18,11 @@
  * Created on May 30, 2005
  *
  */
-namespace TestCases.HSSF.Record.Formula.Functions
+namespace TestCases.SS.Formula.Functions
 {
     using System;
-    using NPOI.HSSF.Record.Formula.Functions;
-    using NPOI.HSSF.Record.Formula.Eval;
+    using NPOI.SS.Formula.Functions;
+    using NPOI.SS.Formula.Eval;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     /**
      * @author Amol S. Deshmukh &lt; amolweb at ya hoo dot com &gt;

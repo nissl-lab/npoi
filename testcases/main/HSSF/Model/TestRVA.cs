@@ -22,11 +22,12 @@ namespace TestCases.HSSF.Model
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     using TestCases.HSSF;
-    using NPOI.HSSF.Record.Formula;
+    using NPOI.SS.Formula;
     using NPOI.HSSF.UserModel;
     using NPOI.HSSF.Model;
     using TestCases.HSSF.UserModel;
     using NPOI.SS.UserModel;
+    using NPOI.SS.Formula.PTG;
 
     /**
      * Tests 'operand class' transformation performed by
@@ -48,7 +49,6 @@ namespace TestCases.HSSF.Model
         }
 
         [TestMethod]
-        [Ignore] // Problem with row[33] formula 'MODE({2,6;3,5;4,4})' and row[35] formula 'COLUMNS(SIN({2;3;4}+1)+1)'
         public void TestFormulas()
         {
             HSSFWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("testRVA.xls");

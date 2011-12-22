@@ -15,10 +15,10 @@
    limitations under the License.
 ==================================================================== */
 
-namespace NPOI.HSSF.Record.Formula.Udf
+namespace NPOI.SS.Formula.Udf
 {
     using System;
-    using NPOI.HSSF.Record.Formula.Functions;
+    using NPOI.SS.Formula.Functions;
     using System.Collections.Generic;
 
     /**

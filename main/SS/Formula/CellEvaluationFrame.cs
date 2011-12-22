@@ -21,7 +21,7 @@ namespace NPOI.SS.Formula
     using System;
     using System.Collections;
     using System.Text;
-    using NPOI.HSSF.Record.Formula.Eval;
+    using NPOI.SS.Formula.Eval;
 
     /**
      * Stores details about the current evaluation of a cell.<br/>

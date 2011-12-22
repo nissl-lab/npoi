@@ -24,9 +24,10 @@ namespace NPOI.HSSF.Record
     using System.Text;
     using System.IO;
 
-    using NPOI.HSSF.Record.Formula;
+    using NPOI.SS.Formula;
     using NPOI.Util;
     using NPOI.Util.IO;
+    using NPOI.SS.Formula.PTG;
 
     /**
      * A sub-record within the OBJ record which stores a reference to an object
