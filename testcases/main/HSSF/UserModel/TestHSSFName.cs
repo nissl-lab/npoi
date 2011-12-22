@@ -81,8 +81,10 @@ namespace TestCases.HSSF.UserModel
             Assert.AreEqual("Print_Titles", nr1.NameName);
             if (false)
             {
+#if !HIDE_UNREACHABLE_CODE
                 //     TODO - full column references not rendering properly, absolute markers not present either
                 Assert.AreEqual("FirstSheet!$A:$A,FirstSheet!$1:$3", nr1.RefersToFormula);
+#endif
             }
             else
             {

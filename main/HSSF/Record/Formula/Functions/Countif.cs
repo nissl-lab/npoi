@@ -231,6 +231,7 @@ namespace NPOI.SS.Formula.Functions
                         // bool values when the tarGet(x) Is a string
                         return false;
                     }
+#if !HIDE_UNREACHABLE_CODE
                     StringEval se = (StringEval)x;
                     bool? val = ParseBoolean(se.StringValue);
                     
@@ -240,6 +241,7 @@ namespace NPOI.SS.Formula.Functions
                         return false;
                     }
                     testValue = BoolToInt(val);
+#endif
                 }
                 else if (x is BoolEval)
                 {

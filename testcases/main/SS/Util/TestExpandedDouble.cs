@@ -118,7 +118,7 @@ namespace TestCases.SS.Util
             catch (Exception e)
             {
                 Console.WriteLine("example[" + i + "] ("
-                        + FormatDoubleAsHex(a) + ") exception:");
+                        + FormatDoubleAsHex(a) + ") exception: " + e.Message);
                 return false;
             }
             if (ed3.GetBinaryExponent() != ed1.GetBinaryExponent())

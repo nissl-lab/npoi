@@ -532,9 +532,11 @@ namespace TestCases.HSSF.UserModel
 		byte[] generatedContent = baos.ToArray();
 		bool isSame;
 		if (false) {
-			// TODO - Add proof spreadsheet and compare
+#if !HIDE_UNREACHABLE_CODE
+            // TODO - Add proof spreadsheet and compare
 			Stream proofStream = HSSFTestDataSamples.OpenSampleFileStream("TestDataValidation.xls");
 			isSame = CompareStreams(proofStream, generatedContent);
+#endif
 		}
 		isSame = true;
 		

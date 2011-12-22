@@ -82,6 +82,7 @@ namespace TestCases.HSSF.UserModel
                 Ptg[] ptgs = r.ParsedExpression;
 
                 String cellRef = new CellReference(row.RowNum, cell.ColumnIndex, false, false).FormatAsString();
+#if !HIDE_UNREACHABLE_CODE
                 if (false && cellRef.Equals("BP24"))
                 { 
                     Console.Write(cellRef);
@@ -93,6 +94,7 @@ namespace TestCases.HSSF.UserModel
                     }
                     Console.WriteLine("-> " + cell.CellFormula);
                 }
+#endif
 
                 NPOI.SS.UserModel.CellValue evalResult = eval.Evaluate(cell);
                 Assert.IsNotNull(evalResult);

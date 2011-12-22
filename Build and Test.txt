@@ -1,0 +1,67 @@
+
+Build
+=====
+
+Getting the latest source code is described at
+https://code.google.com/p/npoi/source/checkout
+
+
+The build itself depends on your IDE and your target.
+
+Select the solution from the appropriate solution folder:
+
+- visualstudio - Visual Studio 2008
+- visualstudio2010 - Visual Studio 2010
+- mono 
+
+The name of the solution defines the target: 
+- NPOI.sln for the library NPOI itself.
+- NPOITest.sln for the library together with a test suite.
+
+
+
+Test Suite
+==========
+
+Prior to execute the test suite, the test data must be downloaded, too.
+The test data is available from the Apache POI project as described on
+https://poi.apache.org/subversion.html
+
+Copy the content of testcases/test-data to the same folder within NPOI.
+
+Load the the NPOITest.sln into your IDE, build the project and execute 
+all the unit tests.
+
+At the time of this writing (2011-12-22) it is required to execute some
+of the failed tests again. Nevertheless there some unit test failing.
+
+Here are some numbers (2011-12-22):
+unit tests: 1268
+passed in the first run: 1244
+passed in the second run: 7
+passed in the third run: 1
+always failing: 16 
+
+There are 8 unit tests flagged with the [Ignore] attribute:
+- testcases\main\HSSF\Model\TestFormulaParser.cs(1053):        [Ignore] // Identified bug - failed to parse negative array element.
+- testcases\main\HSSF\Model\TestFormulaParser.cs(1081):        [Ignore] // "Sheet1!$C1...B$4" Assert.AreEqual failed. Expected:<Sheet1!B1:$C$4>. Actual:<Sheet1!B$4:$C1>. 	
+- testcases\main\HSSF\Model\TestFormulaParser.cs(1210):        [Ignore] // Assert.Fail failed. difference at token[7]: expected (AttrPtg) but got (FuncVarPtg)
+- testcases\main\HSSF\Model\TestFormulaParser.cs(1240):        [Ignore] // Test method TestCases.HSSF.Model.TestFormulaParser.TestUnionOfFullCollFullRowRef threw exception: NPOI.SS.Formula.FormulaParseException: The LHS of the range operator ':' at position 2 is not a proper reference.
+- testcases\main\HSSF\Model\TestFormulaParser.cs(1299):        [Ignore] // Assert.Fail failed. difference at token[16]: expected (AttrPtg) but got (FuncVarPtg)
+- testcases\main\HSSF\Record\Formula\Eval\TestEqualEval.cs(144):        [Ignore] // TODO port upstream patch https://svn.apache.org/viewvc?view=revision&revision=798771
+- testcases\main\HSSF\UserModel\TestHSSFFormulaEvaluator.cs(122):        [Ignore] // Identified bug 46479a https://issues.apache.org/bugzilla/show_bug.cgi?id=46479 fixed in POI in two commits https://svn.apache.org/viewvc?view=revision&revision=731715 and https://svn.apache.org/viewvc?view=revision&revision=886951
+- testcases\main\HSSF\UserModel\TestUnfixedBugs.cs(42):        [Ignore] // because of WON'T FIX
+
+Patches to make the unit tests work as expected are greatly appreciated.
+
+
+Conditional Defines
+===================
+
+There are some intentional warnings "Unreachable code detected". Each of the
+code areas describes the intention of the unreachable code in comments. 
+To avoid these warnings it is possible to define HIDE_UNREACHABLE_CODE 
+in the project settings. The conditional compilation symbols are located in 
+Build in the General group.
+
+

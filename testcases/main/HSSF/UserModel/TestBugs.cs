@@ -72,6 +72,7 @@ namespace TestCases.HSSF.UserModel
             { // set to false to output Test files
                 return;
             }
+#if !HIDE_UNREACHABLE_CODE
             string file = TempFile.GetTempFilePath(simpleFileName + "#", ".xls");
             FileStream out1 = new FileStream(file, FileMode.Create);
             wb.Write(out1);
@@ -82,6 +83,7 @@ namespace TestCases.HSSF.UserModel
                 throw new Exception("File was not written");
             }
             Console.WriteLine("Open file '" + Path.GetFullPath(file) + "' in Excel");
+#endif
         }
 
         /** Test reading AND writing a complicated workbook
@@ -405,6 +407,7 @@ namespace TestCases.HSSF.UserModel
 
             if (false)
             {
+#if !HIDE_UNREACHABLE_CODE
                 // THAI code page
                 Console.WriteLine("a1=" + unicodeString(a1));
                 Console.WriteLine("a2=" + unicodeString(a2));
@@ -417,6 +420,7 @@ namespace TestCases.HSSF.UserModel
                 // US+THAI
                 Console.WriteLine("d1=" + unicodeString(d1));
                 Console.WriteLine("d2=" + unicodeString(d2));
+#endif
             }
             ConfirmSameCellText(a1, a2);
             ConfirmSameCellText(b1, b2);

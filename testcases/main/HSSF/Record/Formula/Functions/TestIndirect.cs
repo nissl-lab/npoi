@@ -127,8 +127,10 @@ namespace TestCases.SS.Formula.Functions
             Confirm(feA, c, "INDIRECT(\"Sheet3!A1\")", ErrorEval.REF_INVALID); // unknown sheet
             if (false)
             { // TODO - support Evaluation of defined names
+#if !HIDE_UNREACHABLE_CODE
                 Confirm(feA, c, "INDIRECT(\"Sheet1!IW1\")", ErrorEval.REF_INVALID); // bad column
                 Confirm(feA, c, "INDIRECT(\"Sheet1!A65537\")", ErrorEval.REF_INVALID); // bad row
+#endif
             }
             Confirm(feA, c, "INDIRECT(\"Sheet1!A 1\")", ErrorEval.REF_INVALID); // space in cell ref
         }
