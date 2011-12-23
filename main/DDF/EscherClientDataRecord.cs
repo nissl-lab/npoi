@@ -111,22 +111,23 @@ namespace NPOI.DDF
             String nl = Environment.NewLine;
 
             String extraData;
-            MemoryStream b = new MemoryStream();
-            try
+            using (MemoryStream b = new MemoryStream())
             {
-                HexDump.Dump(this.remainingData, 0, b, 0);
-                extraData = b.ToString();
+                try
+                {
+                    HexDump.Dump(this.remainingData, 0, b, 0);
+                    extraData = b.ToString();
+                }
+                catch (Exception)
+                {
+                    extraData = "error\n";
+                }
+                return GetType().Name + ":" + nl +
+                        "  RecordId: 0x" + HexDump.ToHex(RECORD_ID) + nl +
+                        "  Options: 0x" + HexDump.ToHex(Options) + nl;
+                //"  Extra Data:" + nl +
+                //extraData;
             }
-            catch (Exception)
-            {
-                extraData = "error\n";
-            }
-            return GetType().Name + ":" + nl +
-                    "  RecordId: 0x" + HexDump.ToHex(RECORD_ID) + nl +
-                    "  Options: 0x" + HexDump.ToHex(Options) + nl;
-                    //"  Extra Data:" + nl +
-                    //extraData;
-
         }
 
         /**

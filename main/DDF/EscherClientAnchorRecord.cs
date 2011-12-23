@@ -164,30 +164,31 @@ namespace NPOI.DDF
             String nl = Environment.NewLine;
 
             String extraData;
-            MemoryStream b = new MemoryStream();
-            try
+            using (MemoryStream b = new MemoryStream())
             {
-                HexDump.Dump(this.remainingData, 0, b, 0);
-                extraData = b.ToString();
+                try
+                {
+                    HexDump.Dump(this.remainingData, 0, b, 0);
+                    extraData = b.ToString();
+                }
+                catch (Exception)
+                {
+                    extraData = "error\n";
+                }
+                return GetType().Name + ":" + nl +
+                        "  RecordId: 0x" + HexDump.ToHex(RECORD_ID) + nl +
+                        "  Options: 0x" + HexDump.ToHex(Options) + nl +
+                        "  Flag: " + field_1_flag + nl +
+                        "  Col1: " + field_2_col1 + nl +
+                        "  DX1: " + field_3_dx1 + nl +
+                        "  Row1: " + field_4_row1 + nl +
+                        "  DY1: " + field_5_dy1 + nl +
+                        "  Col2: " + field_6_col2 + nl +
+                        "  DX2: " + field_7_dx2 + nl +
+                        "  Row2: " + field_8_row2 + nl +
+                        "  DY2: " + field_9_dy2 + nl;
+                //"  Extra Data:" + nl + extraData;
             }
-            catch (Exception)
-            {
-                extraData = "error\n";
-            }
-            return GetType().Name + ":" + nl +
-                    "  RecordId: 0x" + HexDump.ToHex(RECORD_ID) + nl +
-                    "  Options: 0x" + HexDump.ToHex(Options) + nl +
-                    "  Flag: " + field_1_flag + nl +
-                    "  Col1: " + field_2_col1 + nl +
-                    "  DX1: " + field_3_dx1 + nl +
-                    "  Row1: " + field_4_row1 + nl +
-                    "  DY1: " + field_5_dy1 + nl +
-                    "  Col2: " + field_6_col2 + nl +
-                    "  DX2: " + field_7_dx2 + nl +
-                    "  Row2: " + field_8_row2 + nl +
-                    "  DY2: " + field_9_dy2 + nl;
-                    //"  Extra Data:" + nl + extraData;
-
         }
 
         /// <summary>

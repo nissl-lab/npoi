@@ -387,15 +387,16 @@ namespace NPOI.DDF
                     while (Read != -1 && Read < nDumpSize)
                         Read += in1.Read(buf, Read, buf.Length);
 
-                    MemoryStream bin = new MemoryStream(buf);
-                    
-                    ZlibStream in2 = new ZlibStream(bin, CompressionMode.Decompress, false);
-                    int bytesToDump = -1;
-                    HexDump.Dump(in2, 0, bytesToDump);
+                    using (MemoryStream bin = new MemoryStream(buf))
+                    {
+                        ZlibStream in2 = new ZlibStream(bin, CompressionMode.Decompress, false);
+                        int bytesToDump = -1;
+                        HexDump.Dump(in2, 0, bytesToDump);
 
-                    recordBytesRemaining -= nDumpSize;
-                    remainingBytes -= nDumpSize;
-                    in2.Close();
+                        recordBytesRemaining -= nDumpSize;
+                        remainingBytes -= nDumpSize;
+                        in2.Close();
+                    }
                 }
 
                 bool isContainer = (options & (short)0x000F) == (short)0x000F;

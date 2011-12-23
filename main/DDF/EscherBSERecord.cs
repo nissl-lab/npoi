@@ -334,32 +334,34 @@ namespace NPOI.DDF
             String nl = Environment.NewLine;
 
             String extraData;
-            MemoryStream b = new MemoryStream();
-            try
+            using (MemoryStream b = new MemoryStream())
             {
-                HexDump.Dump(this.remainingData, 0, b, 0);
-                extraData = b.ToString();
+                try
+                {
+                    HexDump.Dump(this.remainingData, 0, b, 0);
+                    extraData = b.ToString();
+                }
+                catch (Exception e)
+                {
+                    extraData = e.ToString();
+                }
+                return GetType().Name + ":" + nl +
+                        "  RecordId: 0x" + HexDump.ToHex(RECORD_ID) + nl +
+                        "  Options: 0x" + HexDump.ToHex(Options) + nl +
+                        "  BlipTypeWin32: " + field_1_blipTypeWin32 + nl +
+                        "  BlipTypeMacOS: " + field_2_blipTypeMacOS + nl +
+                        "  SUID: " + HexDump.ToHex(field_3_uid) + nl +
+                        "  Tag: " + field_4_tag + nl +
+                        "  Size: " + field_5_size + nl +
+                        "  Ref: " + field_6_ref + nl +
+                        "  Offset: " + field_7_offset + nl +
+                        "  Usage: " + field_8_usage + nl +
+                        "  Name: " + field_9_name + nl +
+                        "  Unused2: " + field_10_unused2 + nl +
+                        "  Unused3: " + field_11_unused3 + nl +
+                        "  blipRecord: " + (field_12_blipRecord == null ? "null" : field_12_blipRecord.ToString()) + nl;
+                //"  Extra Data:" + nl + extraData;
             }
-            catch (Exception e)
-            {
-                extraData = e.ToString();
-            }
-            return GetType().Name + ":" + nl +
-                    "  RecordId: 0x" + HexDump.ToHex(RECORD_ID) + nl +
-                    "  Options: 0x" + HexDump.ToHex(Options) + nl +
-                    "  BlipTypeWin32: " + field_1_blipTypeWin32 + nl +
-                    "  BlipTypeMacOS: " + field_2_blipTypeMacOS + nl +
-                    "  SUID: " + HexDump.ToHex(field_3_uid) + nl +
-                    "  Tag: " + field_4_tag + nl +
-                    "  Size: " + field_5_size + nl +
-                    "  Ref: " + field_6_ref + nl +
-                    "  Offset: " + field_7_offset + nl +
-                    "  Usage: " + field_8_usage + nl +
-                    "  Name: " + field_9_name + nl +
-                    "  Unused2: " + field_10_unused2 + nl +
-                    "  Unused3: " + field_11_unused3 + nl +
-                    "  blipRecord: " + (field_12_blipRecord == null ? "null" : field_12_blipRecord.ToString()) + nl;
-                    //"  Extra Data:" + nl + extraData;
         }
 
         /// <summary>

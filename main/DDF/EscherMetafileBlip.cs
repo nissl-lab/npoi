@@ -305,28 +305,30 @@ namespace NPOI.DDF
             String nl = Environment.NewLine;
 
             String extraData;
-            MemoryStream b = new MemoryStream();
-            try
+            using (MemoryStream b = new MemoryStream())
             {
-                HexDump.Dump( this.field_pictureData, 0, b, 0 );
-                extraData = b.ToString();
+                try
+                {
+                    HexDump.Dump(this.field_pictureData, 0, b, 0);
+                    extraData = b.ToString();
+                }
+                catch (Exception e)
+                {
+                    extraData = e.ToString();
+                }
+                return GetType().Name + ":" + nl +
+                        "  RecordId: 0x" + HexDump.ToHex(RecordId) + nl +
+                        "  Options: 0x" + HexDump.ToHex(Options) + nl +
+                        "  UID: 0x" + HexDump.ToHex(field_1_UID) + nl +
+                        (field_2_UID == null ? "" : ("  UID2: 0x" + HexDump.ToHex(field_2_UID) + nl)) +
+                        "  Uncompressed Size: " + HexDump.ToHex(field_2_cb) + nl +
+                        "  Bounds: " + Bounds + nl +
+                        "  Size in EMU: " + SizeEMU + nl +
+                        "  Compressed Size: " + HexDump.ToHex(field_5_cbSave) + nl +
+                        "  Compression: " + HexDump.ToHex(field_6_fCompression) + nl +
+                        "  Filter: " + HexDump.ToHex(field_7_fFilter) + nl +
+                        "  Extra Data:" + nl + extraData;
             }
-            catch ( Exception e )
-            {
-                extraData = e.ToString();
-            }
-            return GetType().Name + ":" + nl +
-                    "  RecordId: 0x" + HexDump.ToHex( RecordId ) + nl +
-                    "  Options: 0x" + HexDump.ToHex( Options ) + nl +
-                    "  UID: 0x" + HexDump.ToHex( field_1_UID ) + nl +
-                    (field_2_UID == null ? "" : ("  UID2: 0x" + HexDump.ToHex( field_2_UID ) + nl)) +
-                    "  Uncompressed Size: " + HexDump.ToHex( field_2_cb ) + nl +
-                    "  Bounds: " + Bounds + nl +
-                    "  Size in EMU: " + SizeEMU + nl +
-                    "  Compressed Size: " + HexDump.ToHex( field_5_cbSave ) + nl +
-                    "  Compression: " + HexDump.ToHex( field_6_fCompression ) + nl +
-                    "  Filter: " + HexDump.ToHex( field_7_fFilter ) + nl +
-                    "  Extra Data:" + nl + extraData;
         }
 
         /// <summary>

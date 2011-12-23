@@ -281,31 +281,33 @@ namespace NPOI.DDF
             String nl = Environment.NewLine;
 
             String extraData;
-            MemoryStream b = new MemoryStream();
-            try
+            using (MemoryStream b = new MemoryStream())
             {
-                HexDump.Dump(this.field_12_data, 0, b, 0);
-                extraData = b.ToString();
+                try
+                {
+                    HexDump.Dump(this.field_12_data, 0, b, 0);
+                    extraData = b.ToString();
+                }
+                catch (Exception e)
+                {
+                    extraData = e.ToString();
+                }
+                return GetType().Name + ":" + nl +
+                        "  RecordId: 0x" + HexDump.ToHex(RecordId) + nl +
+                        "  Options: 0x" + HexDump.ToHex(Options) + nl +
+                        "  Secondary UID: " + HexDump.ToHex(field_1_secondaryUID) + nl +
+                        "  CacheOfSize: " + field_2_cacheOfSize + nl +
+                        "  BoundaryTop: " + field_3_boundaryTop + nl +
+                        "  BoundaryLeft: " + field_4_boundaryLeft + nl +
+                        "  BoundaryWidth: " + field_5_boundaryWidth + nl +
+                        "  BoundaryHeight: " + field_6_boundaryHeight + nl +
+                        "  X: " + field_7_width + nl +
+                        "  Y: " + field_8_height + nl +
+                        "  CacheOfSavedSize: " + field_9_cacheOfSavedSize + nl +
+                        "  CompressionFlag: " + field_10_compressionFlag + nl +
+                        "  Filter: " + field_11_filter + nl;
+                //"  Data:" + nl + extraData;
             }
-            catch (Exception e)
-            {
-                extraData = e.ToString();
-            }
-            return GetType().Name + ":" + nl +
-                    "  RecordId: 0x" + HexDump.ToHex(RecordId) + nl +
-                    "  Options: 0x" + HexDump.ToHex(Options) + nl +
-                    "  Secondary UID: " + HexDump.ToHex(field_1_secondaryUID) + nl +
-                    "  CacheOfSize: " + field_2_cacheOfSize + nl +
-                    "  BoundaryTop: " + field_3_boundaryTop + nl +
-                    "  BoundaryLeft: " + field_4_boundaryLeft + nl +
-                    "  BoundaryWidth: " + field_5_boundaryWidth + nl +
-                    "  BoundaryHeight: " + field_6_boundaryHeight + nl +
-                    "  X: " + field_7_width + nl +
-                    "  Y: " + field_8_height + nl +
-                    "  CacheOfSavedSize: " + field_9_cacheOfSavedSize + nl +
-                    "  CompressionFlag: " + field_10_compressionFlag + nl +
-                    "  Filter: " + field_11_filter + nl;
-                    //"  Data:" + nl + extraData;
         }
 
         /// <summary>
@@ -315,28 +317,29 @@ namespace NPOI.DDF
         /// <returns></returns>
         public static byte[] Compress(byte[] data)
         {
-            MemoryStream out1 = new MemoryStream();
-            ZlibStream deflaterOutputStream = new ZlibStream(out1, CompressionMode.Compress);
-            try
+            using (MemoryStream out1 = new MemoryStream())
             {
-                //for (int i = 0; i < data.Length; i++)
-                //deflaterOutputStream.WriteByte(data[i]);
-                deflaterOutputStream.Write(data, 0, data.Length);   //Tony Qu changed the code
-                return out1.ToArray();
-            }
-            catch (IOException e)
-            {
-                throw new RecordFormatException(e.ToString());
-            }
-            finally
-            {
-                out1.Close();
-                if (deflaterOutputStream != null)
+                ZlibStream deflaterOutputStream = new ZlibStream(out1, CompressionMode.Compress);
+                try
                 {
-                    deflaterOutputStream.Close();
+                    //for (int i = 0; i < data.Length; i++)
+                    //deflaterOutputStream.WriteByte(data[i]);
+                    deflaterOutputStream.Write(data, 0, data.Length);   //Tony Qu changed the code
+                    return out1.ToArray();
+                }
+                catch (IOException e)
+                {
+                    throw new RecordFormatException(e.ToString());
+                }
+                finally
+                {
+                    out1.Close();
+                    if (deflaterOutputStream != null)
+                    {
+                        deflaterOutputStream.Close();
+                    }
                 }
             }
-            
         }
 
         /// <summary>
@@ -350,27 +353,29 @@ namespace NPOI.DDF
         {
             byte[] compressedData = new byte[Length];
             Array.Copy(data, pos + 50, compressedData, 0, Length);
-            ZlibStream inflaterInputStream = new ZlibStream(new MemoryStream(compressedData),CompressionMode.Decompress);
-            MemoryStream out1 = new MemoryStream();
-            int c;
-            try
+            ZlibStream inflaterInputStream = new ZlibStream(new MemoryStream(compressedData), CompressionMode.Decompress);
+            using (MemoryStream out1 = new MemoryStream())
             {
-                while ((c = inflaterInputStream.ReadByte()) != -1)
-                    out1.WriteByte((byte)c);
-                return out1.ToArray();
-            }
-            catch (IOException e)
-            {
-                throw new RecordFormatException(e.ToString());
-            }
-            finally
-            {
-                out1.Close();
-                if (inflaterInputStream != null)
+                int c;
+                try
                 {
-                    inflaterInputStream.Close();
+                    while ((c = inflaterInputStream.ReadByte()) != -1)
+                        out1.WriteByte((byte)c);
+                    return out1.ToArray();
                 }
-            }            
+                catch (IOException e)
+                {
+                    throw new RecordFormatException(e.ToString());
+                }
+                finally
+                {
+                    out1.Close();
+                    if (inflaterInputStream != null)
+                    {
+                        inflaterInputStream.Close();
+                    }
+                }
+            }
         }
 
     }

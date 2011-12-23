@@ -139,16 +139,19 @@ namespace NPOI.DDF
             ZlibStream in1 = null;
             try
             {
-                in1 = new ZlibStream(
-                    new MemoryStream(data), CompressionMode.Decompress);
-
-                byte[] buf = new byte[4096];
-                int ReadBytes;
-                while ((ReadBytes = in1.Read(buf, 0, buf.Length)) > 0)
+                using (var ms = new MemoryStream(data))
                 {
-                    out1.Write(buf, 0, ReadBytes);
+                    in1 = new ZlibStream(
+                        ms, CompressionMode.Decompress);
+
+                    byte[] buf = new byte[4096];
+                    int ReadBytes;
+                    while ((ReadBytes = in1.Read(buf, 0, buf.Length)) > 0)
+                    {
+                        out1.Write(buf, 0, ReadBytes);
+                    }
+                    return out1.ToArray();
                 }
-                return out1.ToArray();
             }
             catch (IOException e)
             {
@@ -266,27 +269,29 @@ namespace NPOI.DDF
             String nl = Environment.NewLine;
 
             String extraData;
-            MemoryStream b = new MemoryStream();
-            try
+            using (MemoryStream b = new MemoryStream())
             {
-                HexDump.Dump(this.field_pictureData, 0, b, 0);
-                extraData = b.ToString();
+                try
+                {
+                    HexDump.Dump(this.field_pictureData, 0, b, 0);
+                    extraData = b.ToString();
+                }
+                catch (Exception e)
+                {
+                    extraData = e.ToString();
+                }
+                return GetType().Name + ":" + nl +
+                        "  RecordId: 0x" + HexDump.ToHex(RecordId) + nl +
+                        "  Options: 0x" + HexDump.ToHex(Options) + nl +
+                        "  UID: 0x" + HexDump.ToHex(field_1_UID) + nl +
+                        "  Uncompressed Size: " + HexDump.ToHex(field_2_cb) + nl +
+                        "  Bounds: " + Bounds + nl +
+                        "  Size in EMU: " + SizeEMU + nl +
+                        "  Compressed Size: " + HexDump.ToHex(field_5_cbSave) + nl +
+                        "  Compression: " + HexDump.ToHex(field_6_fCompression) + nl +
+                        "  Filter: " + HexDump.ToHex(field_7_fFilter) + nl +
+                        "  Extra Data:" + nl + extraData;
             }
-            catch (Exception e)
-            {
-                extraData = e.ToString();
-            }
-            return GetType().Name + ":" + nl +
-                    "  RecordId: 0x" + HexDump.ToHex(RecordId) + nl +
-                    "  Options: 0x" + HexDump.ToHex(Options) + nl +
-                    "  UID: 0x" + HexDump.ToHex(field_1_UID) + nl +
-                    "  Uncompressed Size: " + HexDump.ToHex(field_2_cb) + nl +
-                    "  Bounds: " + Bounds + nl +
-                    "  Size in EMU: " + SizeEMU + nl +
-                    "  Compressed Size: " + HexDump.ToHex(field_5_cbSave) + nl +
-                    "  Compression: " + HexDump.ToHex(field_6_fCompression) + nl +
-                    "  Filter: " + HexDump.ToHex(field_7_fFilter) + nl +
-                    "  Extra Data:" + nl + extraData;
         }
 
     }
