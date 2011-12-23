@@ -41,20 +41,21 @@ namespace NPOI.Util.IO
         /// <remarks>Tony Qu changed the code</remarks>
         public static byte[] ToByteArray(Stream stream)
         {
-            MemoryStream baos = new MemoryStream();
-
-            byte[] buffer = new byte[4096];
-            int read = -2;
-            while (read != -1 && read != 0)
+            using (MemoryStream baos = new MemoryStream())
             {
-                read = stream.Read(buffer, 0, buffer.Length);
-                if (read > 0)
+                byte[] buffer = new byte[4096];
+                int read = -2;
+                while (read != -1 && read != 0)
                 {
-                    baos.Write(buffer, 0, read);
+                    read = stream.Read(buffer, 0, buffer.Length);
+                    if (read > 0)
+                    {
+                        baos.Write(buffer, 0, read);
+                    }
                 }
-            }
 
-            return baos.ToArray();
+                return baos.ToArray();
+            }
         }
 
         /// <summary>

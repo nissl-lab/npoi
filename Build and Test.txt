@@ -37,7 +37,7 @@ of the failed tests again. Nevertheless there some unit test failing.
 
 Here are some numbers (2011-12-22):
 unit tests: 1270
-passed in the first run: 1246 (failed 22)
+passed in the first run: 1246 (failed 22 - 23)
 passed in the second run: 7
 always failing: 14
 
@@ -67,6 +67,8 @@ Failed	TestNamesWithUnderscore	            	Test method TestCases.HSSF.Model.Tes
 Failed	TestParseArray	            	Assert.AreEqual failed. Expected:<{1,2,2,#REF!;FALSE,3,3,2}>. Actual:<{1,False;2,3;2,3;#REF!,2}>. 	
 Failed	TestParseStringElementInArray	            	Wrong encoding of array element value	
 Failed	TestSlowEvaluate45376	            	Assert.AreEqual failed. Expected:<8>. Actual:<24>. 	
+
+If TestCases.HSSF.Model.TestFormulaParser.TestNumbers fails retry it again.
 
 
 Patches to make the unit tests work as expected are greatly appreciated.

@@ -74,11 +74,13 @@ namespace NPOI.POIFS.FileSystem
             }
 
             POIFSDocumentReader dis = poifs.CreatePOIFSDocumentReader(OLE10_NATIVE);
-            MemoryStream bos = new MemoryStream();
-            IOUtils.Copy(dis, bos);
-            byte[] data = bos.ToArray();
+            using (MemoryStream bos = new MemoryStream())
+            {
+                IOUtils.Copy(dis, bos);
+                byte[] data = bos.ToArray();
 
-            return new Ole10Native(data, 0, plain);
+                return new Ole10Native(data, 0, plain);
+            }
         }
 
         /**

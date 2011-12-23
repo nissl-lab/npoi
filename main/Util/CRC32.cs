@@ -106,12 +106,14 @@ namespace NPOI.Util
         /// <returns></returns>
         public long FileCRC(string sInputFilename)
         {
-            FileStream inFile = new System.IO.FileStream(sInputFilename, System.IO.FileMode.Open, System.IO.FileAccess.Read);
-            byte[] bInput = new byte[inFile.Length];
-            inFile.Read(bInput, 0, bInput.Length);
-            inFile.Close();
+            using (FileStream inFile = new System.IO.FileStream(sInputFilename, System.IO.FileMode.Open, System.IO.FileAccess.Read))
+            {
+                byte[] bInput = new byte[inFile.Length];
+                inFile.Read(bInput, 0, bInput.Length);
+                inFile.Close();
 
-            return (long)ByteCRC(ref bInput);
+                return (long)ByteCRC(ref bInput);
+            }
         }
 
         /// <summary>

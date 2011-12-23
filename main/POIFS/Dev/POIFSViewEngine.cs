@@ -133,14 +133,16 @@ namespace NPOI.POIFS.Dev
                 indentPrefix.Append(indentString);
             }
 
-            StringReader reader= new StringReader(data);
-            string line=reader.ReadLine();
-            while(line!=null)
+            using (StringReader reader = new StringReader(data))
             {
-                finalBuffer.Append(indentPrefix).Append(line).Append(Environment.NewLine);
-                line = reader.ReadLine();
+                string line = reader.ReadLine();
+                while (line != null)
+                {
+                    finalBuffer.Append(indentPrefix).Append(line).Append(Environment.NewLine);
+                    line = reader.ReadLine();
+                }
+                return finalBuffer.ToString();
             }
-            return finalBuffer.ToString();
         }
     }
 }

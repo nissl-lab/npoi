@@ -134,21 +134,23 @@ namespace NPOI.POIFS.Storage
         public static SmallDocumentBlock [] Convert(BlockWritable [] store,
                                                     int size)
         {
-            MemoryStream stream = new MemoryStream();
-
-            for (int j = 0; j < store.Length; j++)
+            using (MemoryStream stream = new MemoryStream())
             {
-                store[ j ].WriteBlocks(stream);
-            }
-            byte[]               data = stream.ToArray();
-            SmallDocumentBlock[] rval =
-                new SmallDocumentBlock[ ConvertToBlockCount(size) ];
 
-            for (int index = 0; index < rval.Length; index++)
-            {
-                rval[ index ] = new SmallDocumentBlock(data, index);
+                for (int j = 0; j < store.Length; j++)
+                {
+                    store[j].WriteBlocks(stream);
+                }
+                byte[] data = stream.ToArray();
+                SmallDocumentBlock[] rval =
+                    new SmallDocumentBlock[ConvertToBlockCount(size)];
+
+                for (int index = 0; index < rval.Length; index++)
+                {
+                    rval[index] = new SmallDocumentBlock(data, index);
+                }
+                return rval;
             }
-            return rval;
         }
 
         /// <summary>

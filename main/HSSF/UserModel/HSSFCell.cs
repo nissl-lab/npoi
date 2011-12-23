@@ -786,17 +786,17 @@ namespace NPOI.HSSF.UserModel
                 if (cellType == CellType.STRING)
                 {
                     throw new InvalidDataException(
-                        "You cannot Get a date value from a String based cell");
+                        "You cannot get a date value from a String based cell");
                 }
                 if (cellType == CellType.BOOLEAN)
                 {
                     throw new InvalidDataException(
-                        "You cannot Get a date value from a bool cell");
+                        "You cannot get a date value from a bool cell");
                 }
                 if (cellType == CellType.ERROR)
                 {
                     throw new InvalidDataException(
-                        "You cannot Get a date value from an error cell");
+                        "You cannot get a date value from an error cell");
                 }
                 double value = this.NumericCellValue;
                 if (book.Workbook.IsUsing1904DateWindowing)

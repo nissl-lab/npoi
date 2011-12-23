@@ -111,8 +111,10 @@ namespace NPOI.Util
         /// <returns></returns>
         public static byte[] ReadData( String filename, String section )
         {
-            FileStream stream = new FileStream(filename, FileMode.Open, FileAccess.Read);
-            return ReadData(stream, section);
+            using (FileStream stream = new FileStream(filename, FileMode.Open, FileAccess.Read))
+            {
+                return ReadData(stream, section);
+            }
         }
 
         /// <summary>
@@ -205,7 +207,10 @@ namespace NPOI.Util
         /// <returns></returns>
         public static byte[] ReadFromString(String data)
         {
-            return ReadData(new MemoryStream(Encoding.UTF8.GetBytes(data)), -1);
+            using (var ms = new MemoryStream(Encoding.UTF8.GetBytes(data)))
+            {
+                return ReadData(ms, -1);
+            }
         }
 
         /// <summary>

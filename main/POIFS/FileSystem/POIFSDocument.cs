@@ -88,9 +88,21 @@ namespace NPOI.POIFS.FileSystem
         }
         public void Dispose()
         {
-            _big_store = null;
+            if (null != _big_store)
+            {
+                _big_store.Dispose();
+                _big_store = null;
+            }
+            if (null != _property)
+            {
+                _property.Dispose();
             _property = null;
-            _small_store = null;
+            }
+            if (null != _small_store)
+            {
+                _small_store.Dispose();
+                _small_store = null;
+            }
         }
         /// <summary>
         /// Constructor from small blocks
@@ -332,39 +344,43 @@ namespace NPOI.POIFS.FileSystem
                 object[] objArray = new object[1];
                 try
                 {
-                    MemoryStream stream = new MemoryStream();
-                    BlockWritable[] blocks = null;
-                    if (this._big_store.Valid)
+                    using (MemoryStream stream = new MemoryStream())
                     {
-                        blocks = this._big_store.Blocks;
-                    }
-                    else if (this._small_store.Valid)
-                    {
-                        blocks = this._small_store.Blocks;
-                    }
-                    if (blocks != null)
-                    {
-                        for (int i = 0; i < blocks.Length; i++)
+                        BlockWritable[] blocks = null;
+                        if (this._big_store.Valid)
                         {
-                            blocks[i].WriteBlocks(stream);
+                            blocks = this._big_store.Blocks;
                         }
-                        byte[] sourceArray = stream.ToArray();
-                        if (sourceArray.Length > this._property.Size)
+                        else if (this._small_store.Valid)
                         {
-                            byte[] buffer2 = new byte[this._property.Size];
-                            Array.Copy(sourceArray, 0, buffer2, 0, buffer2.Length);
-                            sourceArray = buffer2;
+                            blocks = this._small_store.Blocks;
                         }
-                        stream = new MemoryStream();
-                        HexDump.Dump(sourceArray, 0L, stream, 0);
-                        byte[] buffer = stream.GetBuffer();
-                        char[] destinationArray = new char[(int)stream.Length];
-                        Array.Copy(buffer, 0, destinationArray, 0, destinationArray.Length);
-                        message = new string(destinationArray);
-                    }
-                    else
-                    {
-                        message = "<NO DATA>";
+                        if (blocks != null)
+                        {
+                            for (int i = 0; i < blocks.Length; i++)
+                            {
+                                blocks[i].WriteBlocks(stream);
+                            }
+                            byte[] sourceArray = stream.ToArray();
+                            if (sourceArray.Length > this._property.Size)
+                            {
+                                byte[] buffer2 = new byte[this._property.Size];
+                                Array.Copy(sourceArray, 0, buffer2, 0, buffer2.Length);
+                                sourceArray = buffer2;
+                            }
+                            using (var ms = new MemoryStream())
+                            {
+                                HexDump.Dump(sourceArray, 0L, ms, 0);
+                                byte[] buffer = ms.GetBuffer();
+                                char[] destinationArray = new char[(int)ms.Length];
+                                Array.Copy(buffer, 0, destinationArray, 0, destinationArray.Length);
+                                message = new string(destinationArray);
+                            }
+                        }
+                        else
+                        {
+                            message = "<NO DATA>";
+                        }
                     }
                 }
                 catch (IOException exception)
@@ -475,10 +491,12 @@ namespace NPOI.POIFS.FileSystem
                 {
                     if (this.Valid && (this.BeforeWriting != null))
                     {
-                        MemoryStream stream = new MemoryStream(this.size);
-                        POIFSDocumentWriter stream2 = new POIFSDocumentWriter(stream, this.size);
-                        //OnBeforeWriting(new POIFSWriterEventArgs(stream2, this.path, this.name, this.size));
-                        this.bigBlocks = DocumentBlock.Convert(stream.ToArray(), this.size);
+                        using (MemoryStream stream = new MemoryStream(this.size))
+                        {
+                            POIFSDocumentWriter stream2 = new POIFSDocumentWriter(stream, this.size);
+                            //OnBeforeWriting(new POIFSWriterEventArgs(stream2, this.path, this.name, this.size));
+                            this.bigBlocks = DocumentBlock.Convert(stream.ToArray(), this.size);
+                        }
                     }
                     return this.bigBlocks;
                 }
@@ -577,10 +595,12 @@ namespace NPOI.POIFS.FileSystem
                 {
                     if (this.Valid && (this.BeforeWriting != null))
                     {
-                        MemoryStream stream = new MemoryStream(this.size);
-                        POIFSDocumentWriter stream2 = new POIFSDocumentWriter(stream, this.size);
-                        OnBeforeWriting(new POIFSWriterEventArgs(stream2,this.path,this.name,this.size));
-                        this.smallBlocks = SmallDocumentBlock.Convert(stream.ToArray(), this.size);
+                        using (MemoryStream stream = new MemoryStream(this.size))
+                        {
+                            POIFSDocumentWriter stream2 = new POIFSDocumentWriter(stream, this.size);
+                            OnBeforeWriting(new POIFSWriterEventArgs(stream2, this.path, this.name, this.size));
+                            this.smallBlocks = SmallDocumentBlock.Convert(stream.ToArray(), this.size);
+                        }
                     }
                     return this.smallBlocks;
                 }

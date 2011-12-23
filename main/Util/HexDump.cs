@@ -133,30 +133,32 @@ namespace NPOI.Util
 
         public static void Dump(Stream inStream, int start, int bytesToDump)
         {
-            MemoryStream stream = new MemoryStream();
-            if (bytesToDump == -1)
+            using (MemoryStream stream = new MemoryStream())
             {
-                int c = inStream.ReadByte();
-                while (c != -1)
-                {
-                    stream.WriteByte((byte)c);
-                    c = inStream.ReadByte();
-                }
-            }
-            else
-            {
-                int bytesRemaining = bytesToDump;
-                while (bytesRemaining-- > 0)
+                if (bytesToDump == -1)
                 {
                     int c = inStream.ReadByte();
-                    if (c == -1)
-                        break;
-                    else
+                    while (c != -1)
+                    {
                         stream.WriteByte((byte)c);
+                        c = inStream.ReadByte();
+                    }
                 }
+                else
+                {
+                    int bytesRemaining = bytesToDump;
+                    while (bytesRemaining-- > 0)
+                    {
+                        int c = inStream.ReadByte();
+                        if (c == -1)
+                            break;
+                        else
+                            stream.WriteByte((byte)c);
+                    }
+                }
+                byte[] data = stream.ToArray();
+                Dump(data, 0L, null, start, data.Length);
             }
-            byte[] data = stream.ToArray();
-            Dump(data, 0L, null, start, data.Length);
         }
 
         public static void Dump(byte[] data, long offset, Stream stream, int index, int length)

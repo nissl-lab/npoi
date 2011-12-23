@@ -55,15 +55,18 @@ namespace NPOI.POIFS.Dev
             }
             try
             {
-                POIFSViewable fs = (POIFSViewable)
-                    new POIFSFileSystem(File.OpenRead(filename));
-                IList          strings = POIFSViewEngine.InspectViewable(fs, true,
-                                            0, "  ");
-                IEnumerator      iter    = strings.GetEnumerator();
-
-                while (iter.MoveNext())
+                using (var fileStream = File.OpenRead(filename))
                 {
-                    Console.Write(iter.Current);
+                    POIFSViewable fs = (POIFSViewable)new POIFSFileSystem(fileStream);
+                
+                    IList strings = POIFSViewEngine.InspectViewable(fs, true,
+                                                0, "  ");
+                    IEnumerator iter = strings.GetEnumerator();
+
+                    while (iter.MoveNext())
+                    {
+                        Console.Write(iter.Current);
+                    }
                 }
             }
             catch (IOException e)

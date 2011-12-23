@@ -320,9 +320,11 @@ namespace NPOI
             else
             {
                 DocumentEntry dentry = (DocumentEntry)entry;
-                POIFSDocumentReader dstream = new POIFSDocumentReader(dentry);
-                target.CreateDocument(dentry.Name, dstream);
-                dstream.Close();
+                using (POIFSDocumentReader dstream = new POIFSDocumentReader(dentry))
+                {
+                    target.CreateDocument(dentry.Name, dstream);
+                    // call by using: dstream.Close();
+                }
             }
         }
     }
