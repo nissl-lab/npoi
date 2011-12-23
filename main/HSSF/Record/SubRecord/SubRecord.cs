@@ -61,13 +61,15 @@ namespace NPOI.HSSF.Record
         public byte[] Serialize()
         {
             int size = DataSize + 4;
-            MemoryStream baos = new MemoryStream(size);
-            Serialize(new LittleEndianOutputStream(baos));
-            if (baos.Length != size)
+            using (MemoryStream baos = new MemoryStream(size))
             {
-                throw new Exception("write size mismatch");
+                Serialize(new LittleEndianOutputStream(baos));
+                if (baos.Length != size)
+                {
+                    throw new Exception("write size mismatch");
+                }
+                return baos.ToArray();
             }
-            return baos.ToArray();
         }
         /**
  * Wether this record terminates the sub-record stream.

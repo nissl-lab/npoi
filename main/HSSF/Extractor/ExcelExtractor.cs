@@ -34,7 +34,7 @@ namespace NPOI.HSSF.Extractor
     /// indexing by something like Lucene, but not really
     /// intended for display to the user.
     /// </summary>
-    public class ExcelExtractor : POIOLE2TextExtractor
+    public class ExcelExtractor : POIOLE2TextExtractor, IDisposable
     {
         private HSSFWorkbook wb;
         private bool includeSheetNames = true;
@@ -59,6 +59,15 @@ namespace NPOI.HSSF.Extractor
             : this(new HSSFWorkbook(fs))
         {
 
+        }
+
+        public void Dispose()
+        {
+            if (null != wb)
+            {
+                wb.Dispose();
+                wb = null;
+            }
         }
         /// <summary>
         ///  Should header and footer be included? Default is true

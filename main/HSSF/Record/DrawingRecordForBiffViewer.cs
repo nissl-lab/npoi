@@ -48,11 +48,12 @@ namespace NPOI.HSSF.Record
         private static RecordInputStream ConvertToInputStream(DrawingRecord r)
         {
             byte[] data = r.Serialize();
-            RecordInputStream rinp = new RecordInputStream(
-                    new MemoryStream(data)
-            );
-            rinp.NextRecord();
-            return rinp;
+            using (var ms = new MemoryStream(data))
+            {
+                RecordInputStream rinp = new RecordInputStream(ms);
+                rinp.NextRecord();
+                return rinp;
+            }
         }
 
         protected override String RecordName

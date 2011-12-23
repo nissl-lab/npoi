@@ -60,38 +60,40 @@ namespace NPOI.SS.Formula.Function
 
         public static FunctionMetadataRegistry CreateRegistry()
         {
-            StringReader br = new StringReader(Resource1.functionMetadata);
-
-            FunctionDataBuilder fdb = new FunctionDataBuilder(400);
-
-            try
+            using (StringReader br = new StringReader(Resource1.functionMetadata))
             {
-                while (true)
+
+                FunctionDataBuilder fdb = new FunctionDataBuilder(400);
+
+                try
                 {
-                    String line = br.ReadLine();
-                    if (line == null)
+                    while (true)
                     {
-                        break;
+                        String line = br.ReadLine();
+                        if (line == null)
+                        {
+                            break;
+                        }
+                        if (line.Length < 1 || line[0] == '#')
+                        {
+                            continue;
+                        }
+                        String TrimLine = line.Trim();
+                        if (TrimLine.Length < 1)
+                        {
+                            continue;
+                        }
+                        ProcessLine(fdb, line);
                     }
-                    if (line.Length < 1 || line[0] == '#')
-                    {
-                        continue;
-                    }
-                    String TrimLine = line.Trim();
-                    if (TrimLine.Length < 1)
-                    {
-                        continue;
-                    }
-                    ProcessLine(fdb, line);
+                    br.Close();
                 }
-                br.Close();
-            }
-            catch (IOException)
-            {
-                throw;
-            }
+                catch (IOException)
+                {
+                    throw;
+                }
 
-            return fdb.Build();
+                return fdb.Build();
+            }
         }
 
         private static void ProcessLine(FunctionDataBuilder fdb, String line)

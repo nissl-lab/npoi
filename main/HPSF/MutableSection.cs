@@ -299,13 +299,14 @@ namespace NPOI.HPSF
         /// <returns>the section's Length in bytes.</returns>
         private int CalcSize()
         {
-               MemoryStream out1 = new MemoryStream();
+            using (MemoryStream out1 = new MemoryStream())
+            {
                 Write(out1);
                 /* Pad To multiple of 4 bytes so that even the Windows shell (explorer)
                  * shows custom properties. */
                 sectionBytes = Util.Pad4(out1.ToArray());
-                out1.Close();
                 return sectionBytes.Length;
+            }
         }
 
 
@@ -347,103 +348,107 @@ namespace NPOI.HPSF
             }
 
             /* The properties are written To this stream. */
-            MemoryStream propertyStream =
-                new MemoryStream();
-
-            /* The property list is established here. After each property that has
-             * been written To "propertyStream", a property list entry is written To
-             * "propertyListStream". */
-            MemoryStream propertyListStream =
-                new MemoryStream();
-
-            /* Maintain the current position in the list. */
-            int position = 0;
-
-            /* Increase the position variable by the size of the property list so
-             * that it points behind the property list and To the beginning of the
-             * properties themselves. */
-            position += 2 * LittleEndianConstants.INT_SIZE +
-                        PropertyCount * 2 * LittleEndianConstants.INT_SIZE;
-
-            /* Writing the section's dictionary it tricky. If there is a dictionary
-             * (property 0) the codepage property (property 1) must be Set, Too. */
-            int codepage = -1;
-            if (GetProperty(PropertyIDMap.PID_DICTIONARY) != null)
+            using (MemoryStream propertyStream =
+                new MemoryStream())
             {
-                Object p1 = GetProperty(PropertyIDMap.PID_CODEPAGE);
-                if (p1 != null)
+
+                /* The property list is established here. After each property that has
+                 * been written To "propertyStream", a property list entry is written To
+                 * "propertyListStream". */
+                using (MemoryStream propertyListStream =
+                     new MemoryStream())
                 {
-                    if (!(p1 is int))
-                        throw new IllegalPropertySetDataException
-                            ("The codepage property (ID = 1) must be an " +
-                             "Integer object.");
+
+                    /* Maintain the current position in the list. */
+                    int position = 0;
+
+                    /* Increase the position variable by the size of the property list so
+                     * that it points behind the property list and To the beginning of the
+                     * properties themselves. */
+                    position += 2 * LittleEndianConstants.INT_SIZE +
+                                PropertyCount * 2 * LittleEndianConstants.INT_SIZE;
+
+                    /* Writing the section's dictionary it tricky. If there is a dictionary
+                     * (property 0) the codepage property (property 1) must be Set, Too. */
+                    int codepage = -1;
+                    if (GetProperty(PropertyIDMap.PID_DICTIONARY) != null)
+                    {
+                        Object p1 = GetProperty(PropertyIDMap.PID_CODEPAGE);
+                        if (p1 != null)
+                        {
+                            if (!(p1 is int))
+                                throw new IllegalPropertySetDataException
+                                    ("The codepage property (ID = 1) must be an " +
+                                     "Integer object.");
+                        }
+                        else
+                            /* Warning: The codepage property is not Set although a
+                             * dictionary is present. In order To cope with this problem we
+                             * Add the codepage property and Set it To Unicode. */
+                            SetProperty(PropertyIDMap.PID_CODEPAGE, Variant.VT_I2,
+                                        (int)Constants.CP_UNICODE);
+                        codepage = Codepage;
+                    }
+
+
+
+                    ///* Sort the property list by their property IDs: */
+                    preprops.Sort(new PropertyComparer());
+
+                    /* Write the properties and the property list into their respective
+                     * streams: */
+                    for (int i = 0; i < preprops.Count; i++)
+                    {
+                        MutableProperty p = (MutableProperty)preprops[i];
+                        long id = p.ID;
+
+                        /* Write the property list entry. */
+                        TypeWriter.WriteUIntToStream(propertyListStream, (uint)p.ID);
+                        TypeWriter.WriteUIntToStream(propertyListStream, (uint)position);
+
+                        /* If the property ID is not equal 0 we Write the property and all
+                         * is fine. However, if it Equals 0 we have To Write the section's
+                         * dictionary which has an implicit type only and an explicit
+                         * value. */
+                        if (id != 0)
+                        {
+                            /* Write the property and update the position To the next
+                             * property. */
+                            position += p.Write(propertyStream, Codepage);
+                        }
+                        else
+                        {
+                            if (codepage == -1)
+                                throw new IllegalPropertySetDataException
+                                    ("Codepage (property 1) is undefined.");
+                            position += WriteDictionary(propertyStream, dictionary,
+                                                        codepage);
+                        }
+                    }
+                    propertyStream.Close();
+                    propertyListStream.Close();
+
+                    /* Write the section: */
+                    byte[] pb1 = propertyListStream.ToArray();
+                    byte[] pb2 = propertyStream.ToArray();
+
+                    /* Write the section's Length: */
+                    TypeWriter.WriteToStream(out1, LittleEndianConstants.INT_SIZE * 2 +
+                                                  pb1.Length + pb2.Length);
+
+                    /* Write the section's number of properties: */
+                    TypeWriter.WriteToStream(out1, PropertyCount);
+
+                    /* Write the property list: */
+                    out1.Write(pb1, 0, pb1.Length);
+
+                    /* Write the properties: */
+                    out1.Write(pb2, 0, pb2.Length);
+
+                    int streamLength = LittleEndianConstants.INT_SIZE * 2 + pb1.Length + pb2.Length;
+                    return streamLength;
                 }
-                else
-                    /* Warning: The codepage property is not Set although a
-                     * dictionary is present. In order To cope with this problem we
-                     * Add the codepage property and Set it To Unicode. */
-                    SetProperty(PropertyIDMap.PID_CODEPAGE, Variant.VT_I2,
-                                (int)Constants.CP_UNICODE);
-                codepage = Codepage;
             }
-
-
-
-            ///* Sort the property list by their property IDs: */
-            preprops.Sort(new PropertyComparer());
-
-            /* Write the properties and the property list into their respective
-             * streams: */
-            for (int i = 0; i < preprops.Count;i++ )
-            {
-                MutableProperty p = (MutableProperty)preprops[i];
-                long id = p.ID;
-
-                /* Write the property list entry. */
-                TypeWriter.WriteUIntToStream(propertyListStream, (uint)p.ID);
-                TypeWriter.WriteUIntToStream(propertyListStream, (uint)position);
-
-                /* If the property ID is not equal 0 we Write the property and all
-                 * is fine. However, if it Equals 0 we have To Write the section's
-                 * dictionary which has an implicit type only and an explicit
-                 * value. */
-                if (id != 0)
-                {
-                    /* Write the property and update the position To the next
-                     * property. */
-                    position += p.Write(propertyStream, Codepage);
-                }
-                else
-                {
-                    if (codepage == -1)
-                        throw new IllegalPropertySetDataException
-                            ("Codepage (property 1) is undefined.");
-                    position += WriteDictionary(propertyStream, dictionary,
-                                                codepage);
-                }
-            }
-            propertyStream.Close();
-            propertyListStream.Close();
-
-            /* Write the section: */
-            byte[] pb1 = propertyListStream.ToArray();
-            byte[] pb2 = propertyStream.ToArray();
-
-            /* Write the section's Length: */
-            TypeWriter.WriteToStream(out1, LittleEndianConstants.INT_SIZE * 2 +
-                                          pb1.Length + pb2.Length);
-
-            /* Write the section's number of properties: */
-            TypeWriter.WriteToStream(out1, PropertyCount);
-
-            /* Write the property list: */
-            out1.Write(pb1,0,pb1.Length);
-
-            /* Write the properties: */
-            out1.Write(pb2,0,pb2.Length);
-
-            int streamLength = LittleEndianConstants.INT_SIZE * 2 + pb1.Length + pb2.Length;
-            return streamLength;
         }
 
 

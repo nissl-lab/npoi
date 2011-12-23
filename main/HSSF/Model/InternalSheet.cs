@@ -140,6 +140,16 @@ namespace NPOI.HSSF.Model
             {
                 this.condFormatting.Dispose();
             }
+            if (null != _protectionBlock)
+            {
+                _protectionBlock.Dispose();
+                _protectionBlock = null;
+            }
+            if (null != _columnInfos)
+            {
+                _columnInfos.Dispose();
+                _columnInfos = null;
+            }
         }
         /// <summary>
         /// Clones the low level records of this sheet and returns the new sheet instance.
@@ -311,16 +321,18 @@ namespace NPOI.HSSF.Model
                 
                 if (recSid == BOFRecord.sid)
                 {
-                    ChartSubstreamRecordAggregate chartAgg = new ChartSubstreamRecordAggregate(rs);
-                    //if (false)
-                    //{
+                    using (ChartSubstreamRecordAggregate chartAgg = new ChartSubstreamRecordAggregate(rs))
+                    {
+                        //if (false)
+                        //{
                         // TODO - would like to keep the chart aggregate packed, but one unit test needs attention
-                    //    records.Add(chartAgg);
-                    //}
-                    //else
-                    //{
+                        //    records.Add(chartAgg);
+                        //}
+                        //else
+                        //{
                         SpillAggregate(chartAgg, records);
-                    //}
+                        //}
+                    }
                     continue;
                 }
                 Record rec = rs.GetNext();
@@ -2253,9 +2265,8 @@ namespace NPOI.HSSF.Model
         {
             if (_dataValidityTable == null)
             {
-                DataValidityTable result = new DataValidityTable();
-                RecordOrderer.AddNewSheetRecord(records, result);
-                _dataValidityTable = result;
+                _dataValidityTable = new DataValidityTable();
+                RecordOrderer.AddNewSheetRecord(records, _dataValidityTable);
             }
             return _dataValidityTable;
         }

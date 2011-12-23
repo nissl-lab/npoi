@@ -52,27 +52,29 @@ namespace NPOI.HSSF.Record.Crypto
             }
 
             byte[] kd;
-            MD5 md5 = new MD5CryptoServiceProvider();
-            byte[] passwordHash = md5.ComputeHash(passwordData);
-
-            md5.Initialize();
-
-            byte[] data=new byte[passwordHash.Length*16 + docIdData.Length*16];
-
-            int offset=0;
-            for (int i = 0; i < 16; i++)
+            using (MD5 md5 = new MD5CryptoServiceProvider())
             {
-                Array.Copy(passwordHash, 0, data, offset, PASSWORD_HASH_NUMBER_OF_BYTES_USED);
-                offset+=passwordHash.Length;
-                Array.Copy(docIdData,0,data,offset,docIdData.Length);
-                offset += docIdData.Length;                
-            }
-            kd = md5.ComputeHash(data);
-            byte[] result = new byte[KEY_DIGEST_LENGTH];
-            Array.Copy(kd, 0, result, 0, KEY_DIGEST_LENGTH);
-            md5.Clear();
+                byte[] passwordHash = md5.ComputeHash(passwordData);
 
-            return result;
+                md5.Initialize();
+
+                byte[] data = new byte[passwordHash.Length * 16 + docIdData.Length * 16];
+
+                int offset = 0;
+                for (int i = 0; i < 16; i++)
+                {
+                    Array.Copy(passwordHash, 0, data, offset, PASSWORD_HASH_NUMBER_OF_BYTES_USED);
+                    offset += passwordHash.Length;
+                    Array.Copy(docIdData, 0, data, offset, docIdData.Length);
+                    offset += docIdData.Length;
+                }
+                kd = md5.ComputeHash(data);
+                byte[] result = new byte[KEY_DIGEST_LENGTH];
+                Array.Copy(kd, 0, result, 0, KEY_DIGEST_LENGTH);
+                md5.Clear();
+
+                return result;
+            }
         }
 
         /**
@@ -93,16 +95,18 @@ namespace NPOI.HSSF.Record.Crypto
             Array.Copy(saltHash, saltHashPrime, saltHash.Length);
             rc4.Encrypt(saltHashPrime);
 
-            MD5 md5 = new MD5CryptoServiceProvider();
-            byte[] finalSaltResult = md5.ComputeHash(saltDataPrime);
+            using (MD5 md5 = new MD5CryptoServiceProvider())
+            {
+                byte[] finalSaltResult = md5.ComputeHash(saltDataPrime);
 
-            //if (false)
-            //{ // set true to see a valid saltHash value
-            //    byte[] saltHashThatWouldWork = xor(saltHash, xor(saltHashPrime, finalSaltResult));
-            //    Console.WriteLine(HexDump.ToHex(saltHashThatWouldWork));
-            //}
+                //if (false)
+                //{ // set true to see a valid saltHash value
+                //    byte[] saltHashThatWouldWork = xor(saltHash, xor(saltHashPrime, finalSaltResult));
+                //    Console.WriteLine(HexDump.ToHex(saltHashThatWouldWork));
+                //}
 
-            return Arrays.Equals(saltHashPrime, finalSaltResult);
+                return Arrays.Equals(saltHashPrime, finalSaltResult);
+            }
         }
 
         private static byte[] xor(byte[] a, byte[] b)
@@ -130,17 +134,20 @@ namespace NPOI.HSSF.Record.Crypto
          */
         internal RC4 CreateRC4(int keyBlockNo)
         {
-            MD5 md5 = new MD5CryptoServiceProvider();
+            using (MD5 md5 = new MD5CryptoServiceProvider())
+            {
+                using (MemoryStream baos = new MemoryStream(4))
+                {
+                    new LittleEndianOutputStream(baos).WriteInt(keyBlockNo);
+                    byte[] baosToArray = baos.ToArray();
+                    byte[] data = new byte[baosToArray.Length + _keyDigest.Length];
+                    Array.Copy(_keyDigest, 0, data, 0, _keyDigest.Length);
+                    Array.Copy(baosToArray, 0, data, _keyDigest.Length, baosToArray.Length);
 
-            MemoryStream baos = new MemoryStream(4);
-            new LittleEndianOutputStream(baos).WriteInt(keyBlockNo);
-            byte[] baosToArray = baos.ToArray();
-            byte[] data = new byte[baosToArray.Length + _keyDigest.Length];
-            Array.Copy(_keyDigest, 0, data, 0, _keyDigest.Length);
-            Array.Copy(baosToArray, 0, data, _keyDigest.Length,baosToArray.Length);
-
-            byte[] digest = md5.ComputeHash(data);
-            return new RC4(digest);
+                    byte[] digest = md5.ComputeHash(data);
+                    return new RC4(digest);
+                }
+            }
         }
 
 

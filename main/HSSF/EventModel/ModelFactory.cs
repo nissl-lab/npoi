@@ -33,7 +33,7 @@ namespace NPOI.HSSF.EventModel
      * @see org.apache.poi.hssf.eventmodel.EventRecordFactory
      * @author Andrew C. Oliver acoliver@apache.org
      */
-    public class ModelFactory : ERFListener
+    public sealed class ModelFactory : ERFListener, IDisposable
     {
 
         Model currentmodel;
@@ -45,9 +45,18 @@ namespace NPOI.HSSF.EventModel
          */
         public ModelFactory(): base()
         {
+            currentmodel = null;
             listeners = new ArrayList(1);
         }
 
+        public void Dispose()
+        {
+            if (null != currentmodel)
+            {
+                currentmodel.Dispose();
+                currentmodel = null;
+            }
+        }
         /**
          * register a ModelFactoryListener so that it can receive 
          * Models as they are created.

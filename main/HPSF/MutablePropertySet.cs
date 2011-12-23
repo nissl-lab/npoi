@@ -258,11 +258,13 @@ namespace NPOI.HPSF
         /// <returns>the contents of this property set stream</returns>
         public virtual Stream ToStream()
         {
-            MemoryStream psStream = new MemoryStream();
-            Write(psStream);
-            psStream.Close();
-            byte[] streamData = psStream.ToArray();
-            return new MemoryStream(streamData);
+            using (MemoryStream psStream = new MemoryStream())
+            {
+                Write(psStream);
+                psStream.Close();
+                byte[] streamData = psStream.ToArray();
+                return new MemoryStream(streamData);
+            }
         }
 
         /// <summary>

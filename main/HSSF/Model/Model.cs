@@ -23,7 +23,7 @@ namespace NPOI.HSSF.Model
      * 
      * @author Andrew C. Oliver androliv@cisco.com
      */
-    public interface Model
+    public interface Model : System.IDisposable
     {
 
     }

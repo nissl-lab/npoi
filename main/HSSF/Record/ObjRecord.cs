@@ -93,39 +93,42 @@ namespace NPOI.HSSF.Record
             //    throw new RecordFormatException(msg);
             //}
             subrecords = new List<SubRecord>();
-            MemoryStream bais = new MemoryStream(subRecordData);
-            LittleEndianInputStream subRecStream = new LittleEndianInputStream(bais);
-            CommonObjectDataSubRecord cmo = (CommonObjectDataSubRecord)SubRecord.CreateSubRecord(subRecStream, 0);
-            subrecords.Add(cmo);
-            while (true)
+            using (MemoryStream bais = new MemoryStream(subRecordData))
             {
-                SubRecord subRecord = SubRecord.CreateSubRecord(subRecStream, cmo.ObjectType);
-                subrecords.Add(subRecord);
-             	if (subRecord.IsTerminating) {
-				    break;
-			    }
-            }
-            int nRemainingBytes = subRecStream.Available();
-            if (nRemainingBytes > 0)
-            {
-                // At present (Oct-2008), most unit test samples have (subRecordData.length % 2 == 0)
-                _isPaddedToQuadByteMultiple = subRecordData.Length % MAX_PAD_ALIGNMENT == 0;
-                if (nRemainingBytes >= (_isPaddedToQuadByteMultiple ? MAX_PAD_ALIGNMENT : NORMAL_PAD_ALIGNMENT))
+                LittleEndianInputStream subRecStream = new LittleEndianInputStream(bais);
+                CommonObjectDataSubRecord cmo = (CommonObjectDataSubRecord)SubRecord.CreateSubRecord(subRecStream, 0);
+                subrecords.Add(cmo);
+                while (true)
                 {
-                    if (!CanPaddingBeDiscarded(subRecordData, nRemainingBytes))
+                    SubRecord subRecord = SubRecord.CreateSubRecord(subRecStream, cmo.ObjectType);
+                    subrecords.Add(subRecord);
+                    if (subRecord.IsTerminating)
                     {
-                        String msg = "Leftover " + nRemainingBytes
-                            + " bytes in subrecord data " + HexDump.ToHex(subRecordData);
-                        throw new RecordFormatException(msg);
+                        break;
                     }
+                }
+                int nRemainingBytes = subRecStream.Available();
+                if (nRemainingBytes > 0)
+                {
+                    // At present (Oct-2008), most unit test samples have (subRecordData.length % 2 == 0)
+                    _isPaddedToQuadByteMultiple = subRecordData.Length % MAX_PAD_ALIGNMENT == 0;
+                    if (nRemainingBytes >= (_isPaddedToQuadByteMultiple ? MAX_PAD_ALIGNMENT : NORMAL_PAD_ALIGNMENT))
+                    {
+                        if (!CanPaddingBeDiscarded(subRecordData, nRemainingBytes))
+                        {
+                            String msg = "Leftover " + nRemainingBytes
+                                + " bytes in subrecord data " + HexDump.ToHex(subRecordData);
+                            throw new RecordFormatException(msg);
+                        }
+                        _isPaddedToQuadByteMultiple = false;
+                    }
+                }
+                else
+                {
                     _isPaddedToQuadByteMultiple = false;
                 }
+                _uninterpretedData = null;
             }
-            else
-            {
-                _isPaddedToQuadByteMultiple = false;
-            }
-            _uninterpretedData = null;
         }
         /**
      * Some XLS files have ObjRecords with nearly 8Kb of excessive padding. These were probably

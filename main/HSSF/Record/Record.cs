@@ -110,15 +110,18 @@ namespace NPOI.HSSF.Record
             // Do it via a re-serialization
             // It's a cheat, but it works...
             byte[] b = Serialize();
-            RecordInputStream rinp = new RecordInputStream(new MemoryStream(b));
-            rinp.NextRecord();
-
-            Record[] r = RecordFactory.CreateRecord(rinp);
-            if (r.Length != 1)
+            using (var ms = new MemoryStream(b))
             {
-                throw new InvalidOperationException("Re-serialised a record to clone it, but got " + r.Length + " records back!");
+                RecordInputStream rinp = new RecordInputStream(ms);
+                rinp.NextRecord();
+
+                Record[] r = RecordFactory.CreateRecord(rinp);
+                if (r.Length != 1)
+                {
+                    throw new InvalidOperationException("Re-serialised a record to clone it, but got " + r.Length + " records back!");
+                }
+                return r[0];
             }
-            return r[0];
         }
     }
 }

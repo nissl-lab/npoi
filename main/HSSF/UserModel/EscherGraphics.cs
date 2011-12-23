@@ -59,7 +59,7 @@ namespace NPOI.HSSF.UserModel
      *
      * @author Glen Stampoultzis (glens at apache.org)
      */
-    public class EscherGraphics
+    public class EscherGraphics : IDisposable
     {
         private HSSFShapeGroup escherGroup;
         private HSSFWorkbook workbook;
@@ -121,6 +121,14 @@ namespace NPOI.HSSF.UserModel
         //        this(escherGroup, workbook, forecolor, 1.0f);
         //    }
 
+        public void Dispose()
+        {
+            if (null != font)
+            {
+                font.Dispose();
+                font = null;
+            }
+        }
 
         public void ClearRect(int x, int y, int width, int height)
         {
@@ -270,26 +278,20 @@ namespace NPOI.HSSF.UserModel
             if (str == null || str.Equals(""))
                 return;
 
-            Font excelFont = font;
-            if (font.Name.Equals("SansSerif"))
+            using (Font excelFont = new Font(font.Name.Equals("SansSerif") ? "Arial" : font.Name, (int)(font.Size / verticalPixelsPerPoint), font.Style))
             {
-                excelFont = new Font("Arial", (int)(font.Size / verticalPixelsPerPoint), font.Style);
+                FontDetails d = StaticFontMetrics.GetFontDetails(excelFont);
+                int width = (int)((d.GetStringWidth(str) * 8) + 12);
+                int height = (int)((font.Size / verticalPixelsPerPoint) + 6) * 2;
+                y -= Convert.ToInt32((font.Size / verticalPixelsPerPoint) + 2 * verticalPixelsPerPoint);    // we want to Draw the shape from the top-left
+                HSSFTextbox textbox = escherGroup.CreateTextbox(new HSSFChildAnchor(x, y, x + width, y + height));
+                textbox.IsNoFill = (true);
+                textbox.LineStyle = LineStyle.None;
+                HSSFRichTextString s = new HSSFRichTextString(str);
+                HSSFFont hssfFont = MatchFont(excelFont);
+                s.ApplyFont(hssfFont);
+                textbox.String = (s);
             }
-            else
-            {
-                excelFont = new Font(font.Name, (int)(font.Size / verticalPixelsPerPoint), font.Style);
-            }
-            FontDetails d = StaticFontMetrics.GetFontDetails(excelFont);
-            int width = (int)((d.GetStringWidth(str) * 8) + 12);
-            int height = (int)((font.Size / verticalPixelsPerPoint) + 6) * 2;
-            y -= Convert.ToInt32((font.Size / verticalPixelsPerPoint) + 2 * verticalPixelsPerPoint);    // we want to Draw the shape from the top-left
-            HSSFTextbox textbox = escherGroup.CreateTextbox(new HSSFChildAnchor(x, y, x + width, y + height));
-            textbox.IsNoFill = (true);
-            textbox.LineStyle = LineStyle.None;
-            HSSFRichTextString s = new HSSFRichTextString(str);
-            HSSFFont hssfFont = MatchFont(excelFont);
-            s.ApplyFont(hssfFont);
-            textbox.String = (s);
         }
 
         private HSSFFont MatchFont(Font font)

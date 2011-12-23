@@ -259,9 +259,13 @@ namespace NPOI.HSSF.UserModel
             byte[] data = bse.BlipRecord.PictureData;
             //int type = bse.BlipTypeWin32;
 
-            Image img = Image.FromStream(new MemoryStream(data));
-            return img.Size;
-
+            using (var ms = new MemoryStream(data))
+            {
+                using (Image img = Image.FromStream(ms))
+                {
+                    return img.Size;
+                }
+            }
             //switch (type)
             //{
             //    //we can calculate the preferred size only for JPEG and PNG

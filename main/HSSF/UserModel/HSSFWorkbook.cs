@@ -1263,33 +1263,35 @@ namespace NPOI.HSSF.UserModel
         public override void Write(Stream stream)
         {
             byte[] bytes = GetBytes();
-            POIFSFileSystem fs = new POIFSFileSystem();
-            // For tracking what we've written out, used if we're
-            //  going to be preserving nodes
-            List<string> excepts = new List<string>(1);
-
-            MemoryStream newMemoryStream = new MemoryStream(bytes);
-            // Write out the Workbook stream
-            fs.CreateDocument(newMemoryStream, "Workbook");
-
-            // Write out our HPFS properties, if we have them
-            WriteProperties(fs, excepts);
-
-            if (preserveNodes)
+            using (POIFSFileSystem fs = new POIFSFileSystem())
             {
-                // Don't Write out the old Workbook, we'll be doing our new one
-                excepts.Add("Workbook");
-                // If the file had WORKBOOK instead of Workbook, we'll Write it
-                //  out correctly shortly, so don't include the old one
-                excepts.Add("WORKBOOK");
+                // For tracking what we've written out, used if we're
+                //  going to be preserving nodes
+                List<string> excepts = new List<string>(1);
 
-                // Copy over all the other nodes to our new poifs
-                POIUtils.CopyNodes(directory, fs.Root, excepts);
+                using (MemoryStream newMemoryStream = new MemoryStream(bytes))
+                {
+                    // Write out the Workbook stream
+                    fs.CreateDocument(newMemoryStream, "Workbook");
+
+                    // Write out our HPFS properties, if we have them
+                    WriteProperties(fs, excepts);
+
+                    if (preserveNodes)
+                    {
+                        // Don't Write out the old Workbook, we'll be doing our new one
+                        excepts.Add("Workbook");
+                        // If the file had WORKBOOK instead of Workbook, we'll Write it
+                        //  out correctly shortly, so don't include the old one
+                        excepts.Add("WORKBOOK");
+
+                        // Copy over all the other nodes to our new poifs
+                        POIUtils.CopyNodes(directory, fs.Root, excepts);
+                    }
+                    fs.WriteFileSystem(stream);
+
+                }
             }
-            fs.WriteFileSystem(stream);
-
-            fs.Dispose();
-            newMemoryStream.Dispose();
             bytes = null;
         }
 
@@ -1323,11 +1325,13 @@ namespace NPOI.HSSF.UserModel
             for (int k = 0; k < nSheets; k++)
             {
                 workbook.SetSheetBof(k, totalsize);
-                SheetRecordCollector src = new SheetRecordCollector();
-                sheets[k].Sheet.VisitContainedRecords(src, totalsize);
+                using (SheetRecordCollector src = new SheetRecordCollector())
+                {
+                    sheets[k].Sheet.VisitContainedRecords(src, totalsize);
 
-                totalsize += src.TotalSize;
-                srCollectors[k] = src;
+                    totalsize += src.TotalSize;
+                    srCollectors[k] = src;
+                }
             }
 
 

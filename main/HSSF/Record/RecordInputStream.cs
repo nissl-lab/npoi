@@ -498,20 +498,22 @@ namespace NPOI.HSSF.Record
         {
             //Using a ByteArrayOutputStream is just an easy way to Get a
             //growable array of the data.
-            MemoryStream out1 = new MemoryStream(2 * MAX_RECORD_DATA_SIZE);
-
-            while (true)
+            using (MemoryStream out1 = new MemoryStream(2 * MAX_RECORD_DATA_SIZE))
             {
-                byte[] b = ReadRemainder();
-                out1.Write(b, 0, b.Length);
-                if (!IsContinueNext)
-                {
-                    break;
-                }
-                NextRecord();
-            }
 
-            return out1.ToArray();
+                while (true)
+                {
+                    byte[] b = ReadRemainder();
+                    out1.Write(b, 0, b.Length);
+                    if (!IsContinueNext)
+                    {
+                        break;
+                    }
+                    NextRecord();
+                }
+
+                return out1.ToArray();
+            }
         }
 
         /** The remaining number of bytes in the <i>current</i> record.
