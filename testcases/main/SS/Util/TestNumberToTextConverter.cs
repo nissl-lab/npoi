@@ -40,6 +40,9 @@ namespace TestCases.SS.Util
         [TestMethod]
         public void TestAllNumberToText()
         {
+            // This Test depends on the american culture.
+            System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
+
             int failureCount = 0;
 
             NumberToTextConversionExamples.ExampleConversion[] examples = NumberToTextConversionExamples.GetExampleConversions();
@@ -118,8 +121,8 @@ namespace TestCases.SS.Util
         private void ConfirmNaN(long l, String excelRep)
         {
             double d = BitConverter.Int64BitsToDouble(l);
-            //Assert.AreEqual("NaN", d.ToString());
-            Assert.AreEqual("非数字", d.ToString());
+            Assert.AreEqual("NaN", d.ToString());
+            //to make this assert work, please set the CurrentCulture above, too.  Assert.AreEqual("非数字", d.ToString());
 
             String strExcel = NumberToTextConverter.RawDoubleBitsToText(l);
 

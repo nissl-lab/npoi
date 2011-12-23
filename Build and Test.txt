@@ -36,11 +36,10 @@ At the time of this writing (2011-12-22) it is required to execute some
 of the failed tests again. Nevertheless there some unit test failing.
 
 Here are some numbers (2011-12-22):
-unit tests: 1268
-passed in the first run: 1244
+unit tests: 1270
+passed in the first run: 1246 (failed 22)
 passed in the second run: 7
-passed in the third run: 1
-always failing: 16 
+always failing: 14
 
 There are 8 unit tests flagged with the [Ignore] attribute:
 - testcases\main\HSSF\Model\TestFormulaParser.cs(1053):        [Ignore] // Identified bug - failed to parse negative array element.
@@ -51,6 +50,24 @@ There are 8 unit tests flagged with the [Ignore] attribute:
 - testcases\main\HSSF\Record\Formula\Eval\TestEqualEval.cs(144):        [Ignore] // TODO port upstream patch https://svn.apache.org/viewvc?view=revision&revision=798771
 - testcases\main\HSSF\UserModel\TestHSSFFormulaEvaluator.cs(122):        [Ignore] // Identified bug 46479a https://issues.apache.org/bugzilla/show_bug.cgi?id=46479 fixed in POI in two commits https://svn.apache.org/viewvc?view=revision&revision=731715 and https://svn.apache.org/viewvc?view=revision&revision=886951
 - testcases\main\HSSF\UserModel\TestUnfixedBugs.cs(42):        [Ignore] // because of WON'T FIX
+
+
+These are the failing test cases:
+Failed	Test43623	            	Assert.AreEqual failed. Expected:<{=sin(B1:B9){9,1)[0][0]>. Actual:<SIN(B1:B9)>. 	
+Failed	TestAutoSizeColumn	            	Assert.IsTrue failed. Column autosized with only one row: wrong width	
+Failed	TestCachedTypeChange	            	Assert.AreEqual failed. Expected:<31>. Actual:<29>. 	
+Failed	TestComparisonOperators	            	Assert.AreEqual failed. Expected:<False>. Actual:<True>. 	
+Failed	TestElementOrdering	            	Assert.AreEqual failed. Expected:<2>. Actual:<1>. 	
+Failed	TestElementOrderingInSpreadsheet	            	Assert.AreEqual failed. Expected:<SUM({1,2,3;4,5,6;7,8,9;10,11,12;13,14,15})>. Actual:<SUM({1,6,11;2,7,12;3,8,13;4,9,14;5,10,15})>. 	
+Failed	TestFormulas	            	One or more RVA tests failed: countFailures=2 countFailures=0. See stderr for details.	
+Failed	TestGetDataBackAgain	            	Assert.AreEqual failed. Expected:<3>. Actual:<4>. 	
+Failed	TestMediumComplex	            	Log Lengths mismatch	
+Failed	TestMixedContinue	            	Assert.AreEqual failed. Expected:<373>. Actual:<357>. 	
+Failed	TestNamesWithUnderscore	            	Test method TestCases.HSSF.Model.TestFormulaParser.TestNamesWithUnderscore threw exception: ...	
+Failed	TestParseArray	            	Assert.AreEqual failed. Expected:<{1,2,2,#REF!;FALSE,3,3,2}>. Actual:<{1,False;2,3;2,3;#REF!,2}>. 	
+Failed	TestParseStringElementInArray	            	Wrong encoding of array element value	
+Failed	TestSlowEvaluate45376	            	Assert.AreEqual failed. Expected:<8>. Actual:<24>. 	
+
 
 Patches to make the unit tests work as expected are greatly appreciated.
 
