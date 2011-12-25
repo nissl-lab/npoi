@@ -89,7 +89,11 @@ namespace NPOI.OpenXml4Net.OPC
             return retPackage;
         }
 
-
+        public static Package Create()
+        {
+            Stream memStream = new MemoryStream();
+            return Package.Create(memStream);
+        }
         /**
          * @deprecated use {@link OPCPackage#create(File)} 
          */

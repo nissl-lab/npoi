@@ -626,7 +626,7 @@ public abstract class OPCPackage:RelationshipSource {
 						// Core properties case
 						if (unmarshallPart is PackagePropertiesPart)
 							this.packageProperties = (PackagePropertiesPart) unmarshallPart;
-					} catch (IOException ioe) {
+					} catch (IOException) {
                         logger.Log(POILogger.WARN, "Unmarshall operation : IOException for "
                                 + part.PartName);
 						continue;
@@ -644,7 +644,10 @@ public abstract class OPCPackage:RelationshipSource {
 		}
 		return new List<PackagePart>(partList.Values);
 	}
-
+    public PackagePart CreatePart(Uri partName, String contentType)
+    {
+        return this.CreatePart(new PackagePartName(partName.OriginalString,true), contentType, true);
+    }
 	/**
 	 * Create and Add a part, with the specified name and content type, to the
 	 * package.
@@ -660,8 +663,8 @@ public abstract class OPCPackage:RelationshipSource {
 	 *             Create nor recognize packages with equivalent part names.
 	 * @see #CreatePartImpl(PackagePartName, String, bool) 
 	 */
-	public PackagePart CreatePart(PackagePartName PartName, String contentType) {
-		return this.CreatePart(PartName, contentType, true);
+	public PackagePart CreatePart(PackagePartName partName, String contentType) {
+		return this.CreatePart(partName, contentType, true);
 	}
 
 	/**
@@ -683,10 +686,10 @@ public abstract class OPCPackage:RelationshipSource {
 	 *             Create nor recognize packages with equivalent part names.
 	 * @see {@link#CreatePartImpl(URI, String)}
 	 */
-	public PackagePart CreatePart(PackagePartName PartName, String contentType,
+	public PackagePart CreatePart(PackagePartName partName, String contentType,
 			bool loadRelationships) {
 		ThrowExceptionIfReadOnly();
-		if (PartName == null) {
+		if (partName == null) {
 			throw new ArgumentException("PartName");
 		}
 
@@ -697,7 +700,7 @@ public abstract class OPCPackage:RelationshipSource {
         bool pnDeleted = false;
         foreach(PackagePartName pn in partList.Keys)
         {
-            if (PartName.Name.StartsWith(pn.Name))
+            if (partName.Name.StartsWith(pn.Name))
             {
                 pnFound=true;
                 if (partList[pn].IsDeleted)
@@ -713,7 +716,7 @@ public abstract class OPCPackage:RelationshipSource {
         {
 			throw new InvalidOperationException(
 					"A part with the name '"
-							+ PartName.Name
+							+ partName.Name
 							+ "' already exists : Packages shall not contain equivalent part names and package implementers shall neither Create nor recognize packages with equivalent part names. [M1.12]");
 		}
 
@@ -733,10 +736,10 @@ public abstract class OPCPackage:RelationshipSource {
 
 		/* End check OPC compliance */
 
-		PackagePart part = this.CreatePartImpl(PartName, contentType,
+		PackagePart part = this.CreatePartImpl(partName, contentType,
 				loadRelationships);
-		this.contentTypeManager.AddContentType(PartName, contentType);
-		this.partList[PartName] = part;
+		this.contentTypeManager.AddContentType(partName, contentType);
+		this.partList[partName] = part;
 		this.isDirty = true;
 		return part;
 	}
@@ -756,9 +759,9 @@ public abstract class OPCPackage:RelationshipSource {
 	 * @return The new part.
 	 * @see #CreatePart(PackagePartName, String)
 	 */
-	public PackagePart CreatePart(PackagePartName PartName, String contentType,
+	public PackagePart CreatePart(PackagePartName partName, String contentType,
 			MemoryStream content) {
-		PackagePart AddedPart = this.CreatePart(PartName, contentType);
+		PackagePart AddedPart = this.CreatePart(partName, contentType);
 		if (AddedPart == null) {
 			return null;
 		}
@@ -1346,6 +1349,7 @@ get{
         fos = new FileStream(path, FileMode.OpenOrCreate);
 
 		this.Save(fos);
+        fos.Close();
 	}
 
 	/**

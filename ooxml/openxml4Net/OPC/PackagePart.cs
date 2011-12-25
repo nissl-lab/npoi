@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.IO;
 using NPOI.OpenXml4Net.OPC.Internal;
+using NPOI.OpenXml4Net.Exceptions;
 
 
 namespace NPOI.OpenXml4Net.OPC
@@ -472,9 +473,9 @@ namespace NPOI.OpenXml4Net.OPC
                         return true;
                 }
             }
-            finally
-            {
-
+            catch (InvalidFormatException)
+            { 
+            
             }
             return false;
         }
