@@ -10,7 +10,10 @@ namespace CreateBasicOOXMLFile
     {
         static void Main(string[] args)
         {
+            //create ooxml file in memory
             Package p = Package.Create();
+
+            //create package parts
             PackagePartName pn1=new PackagePartName(new Uri("/a/abcd/e",UriKind.Relative),true);
             if (!p.ContainPart(pn1))
                 p.CreatePart(pn1, MediaTypeNames.Text.Plain);
@@ -18,7 +21,11 @@ namespace CreateBasicOOXMLFile
             PackagePartName pn2 = new PackagePartName(new Uri("/b/test.xml", UriKind.Relative), true);
             if (!p.ContainPart(pn2))
                 p.CreatePart(pn2, MediaTypeNames.Text.Xml);
+
+            //save file 
             p.Save("test.zip");
+
+            //don't forget to close it
             p.Close();
         }
     }
