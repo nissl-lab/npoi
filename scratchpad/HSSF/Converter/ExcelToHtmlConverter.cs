@@ -25,7 +25,7 @@ namespace NPOI.HSSF.Converter
     using NPOI.HPSF;
     using NPOI.SS.Util;
     using NPOI.SS.UserModel;
-    using NPOI.HSSF.Record.Formula.Eval;
+    using NPOI.SS.Formula.Eval;
     using NPOI.Util;
     using NPOI.HSSF.Util;
     using System.Diagnostics;
