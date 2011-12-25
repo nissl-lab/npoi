@@ -205,15 +205,15 @@ namespace NPOI.SS.Formula.PTG
         {
             StringBuilder b = new StringBuilder();
             b.Append("{");
-            for (int x = 0; x < ColumnCount; x++)
+            for (int y = 0; y < RowCount; y++)
             {
-                if (x > 0)
+                if (y > 0)
                 {
                     b.Append(";");
                 }
-                for (int y = 0; y < RowCount; y++)
+                for (int x = 0; x < ColumnCount; x++)
                 {
-                    if (y > 0)
+                    if (x > 0)
                     {
                         b.Append(",");
                     }
@@ -242,7 +242,7 @@ namespace NPOI.SS.Formula.PTG
             }
             if (o is bool || o is Boolean)
             {
-                return ((bool)o).ToString();
+                return ((bool)o).ToString().ToUpper();
             }
             if (o is ErrorConstant)
             {

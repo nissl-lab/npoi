@@ -133,7 +133,7 @@ namespace TestCases.SS.Formula
             {
                 throw new AssertFailedException("Identified bug 42564 b");
             }
-            Assert.AreEqual("SUM({1,2,3;4,5,6;7,8,9;10,11,12;13,14,15})", formula);
+            Assert.AreEqual("SUM({1,2,3,4,5;6,7,8,9,10;11,12,13,14,15})", formula);
         }
     }
 }

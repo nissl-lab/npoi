@@ -704,7 +704,7 @@ namespace NPOI.SS.Formula
             // which will either be named ranges or functions
             StringBuilder sb = new StringBuilder();
 
-            if (!Char.IsLetter(look))
+            if (!Char.IsLetter(look) && look != '_')
             {
                 throw expected("number, string, or defined name");
             }
@@ -841,9 +841,9 @@ namespace NPOI.SS.Formula
                 {
                     hasLetters = true;
                 }
-                else if (ch == '$')
+                else if (ch == '$' || ch == '_')    //fix poi bug 49725
                 {
-                    //
+                    //do nothing
                 }
                 else
                 {
