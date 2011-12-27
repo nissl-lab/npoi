@@ -32,14 +32,14 @@ Copy the content of testcases/test-data to the same folder within NPOI.
 Load the the NPOITest.sln into your IDE, build the project and execute 
 all the unit tests.
 
-At the time of this writing (2011-12-22) it is required to execute some
+At the time of this writing (2011-12-27) it is required to execute some
 of the failed tests again. Nevertheless there some unit test failing.
 
-Here are some numbers (2011-12-22):
+Here are some numbers (2011-12-27):
 unit tests: 1270
-passed in the first run: 1246 (failed 22 - 23)
+passed in the first run: 1251 (failed 17 - 19)
 passed in the second run: 7
-always failing: 14
+always failing: 10
 
 There are 8 unit tests flagged with the [Ignore] attribute:
 - testcases\main\HSSF\Model\TestFormulaParser.cs(1053):        [Ignore] // Identified bug - failed to parse negative array element.
@@ -58,13 +58,9 @@ Failed	TestAutoSizeColumn	            	Assert.IsTrue failed. Column autosized wi
 Failed	TestCachedTypeChange	            	Assert.AreEqual failed. Expected:<31>. Actual:<29>. 	
 Failed	TestComparisonOperators	            	Assert.AreEqual failed. Expected:<False>. Actual:<True>. 	
 Failed	TestElementOrdering	            	Assert.AreEqual failed. Expected:<2>. Actual:<1>. 	
-Failed	TestElementOrderingInSpreadsheet	            	Assert.AreEqual failed. Expected:<SUM({1,2,3;4,5,6;7,8,9;10,11,12;13,14,15})>. Actual:<SUM({1,6,11;2,7,12;3,8,13;4,9,14;5,10,15})>. 	
 Failed	TestFormulas	            	One or more RVA tests failed: countFailures=2 countFailures=0. See stderr for details.	
 Failed	TestGetDataBackAgain	            	Assert.AreEqual failed. Expected:<3>. Actual:<4>. 	
 Failed	TestMediumComplex	            	Log Lengths mismatch	
-Failed	TestMixedContinue	            	Assert.AreEqual failed. Expected:<373>. Actual:<357>. 	
-Failed	TestNamesWithUnderscore	            	Test method TestCases.HSSF.Model.TestFormulaParser.TestNamesWithUnderscore threw exception: ...	
-Failed	TestParseArray	            	Assert.AreEqual failed. Expected:<{1,2,2,#REF!;FALSE,3,3,2}>. Actual:<{1,False;2,3;2,3;#REF!,2}>. 	
 Failed	TestParseStringElementInArray	            	Wrong encoding of array element value	
 Failed	TestSlowEvaluate45376	            	Assert.AreEqual failed. Expected:<8>. Actual:<24>. 	
 

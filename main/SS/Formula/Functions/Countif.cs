@@ -228,7 +228,7 @@ namespace NPOI.SS.Formula.Functions
                     if (true)
                     { // Change to false to observe more intuitive behaviour
                         // Note - Unlike with numbers, it seems that COUNTA never Matches 
-                        // bool values when the tarGet(x) Is a string
+                        // bool values when the target(x) Is a string
                         return false;
                     }
 #if !HIDE_UNREACHABLE_CODE
