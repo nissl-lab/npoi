@@ -46,10 +46,6 @@ namespace NPOI.HSSF.Record.Aggregates
         {
             _cfHeaders = new ArrayList();
         }
-        public override void Dispose()
-        {
-            _cfHeaders = null;
-        }
 
         public ConditionalFormattingTable(RecordStream rs)
         {

@@ -56,14 +56,6 @@ namespace NPOI.HSSF.Record.Aggregates
         {
         }
 
-        public override void Dispose()
-        {
-            _rowRecords = null;
-            _unknownRecords = null;
-            _valuesAgg.Dispose();
-            _sharedValueManager.Dispose();
-        }
-
         public CellValueRecordInterface[] GetValueRecords()
         {
             return _valuesAgg.GetValueRecords();

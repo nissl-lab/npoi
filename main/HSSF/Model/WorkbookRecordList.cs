@@ -28,7 +28,7 @@ namespace NPOI.HSSF.Model
     /// <summary>
     /// List for records in Workbook
     /// </summary>
-    public class WorkbookRecordList:IDisposable
+    public class WorkbookRecordList
     {
         private List<Record> records = new List<Record>();
 
@@ -44,11 +44,6 @@ namespace NPOI.HSSF.Model
         private int palettepos = -1;   // hold the position of the palette, if applicable
 
 
-        public void Dispose()
-        {
-            if(records!=null)
-                records.Clear();
-        }
         /// <summary>
         /// Gets or sets the records.
         /// </summary>

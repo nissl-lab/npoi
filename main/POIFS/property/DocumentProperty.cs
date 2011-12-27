@@ -43,10 +43,6 @@ namespace NPOI.POIFS.Properties
         private POIFSDocument _document;
 
 
-        public override void Dispose()
-        {
-            _document = null;
-        }
         /// <summary>
         /// Initializes a new instance of the <see cref="DocumentProperty"/> class.
         /// </summary>

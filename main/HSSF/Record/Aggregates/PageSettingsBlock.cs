@@ -78,10 +78,6 @@ namespace NPOI.HSSF.Record.Aggregates
             _vCenter = CreateVCenter();
             printSetup = CreatePrintSetup();
         }
-        public override void Dispose()
-        {
-
-        }
         /**
          * @return <c>true</c> if the specified Record sid is one belonging to the 
          * 'Page Settings Block'.

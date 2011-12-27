@@ -124,6 +124,8 @@ namespace NPOI.POIFS.Storage
             {
                 if (!HasData)
                 {
+                    // TODO return null instead of raising an unexpected exception (CA1065)
+                    //return null;
                     throw new IOException("Cannot return empty data");
                 }
                 return _data;

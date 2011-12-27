@@ -54,15 +54,6 @@ namespace NPOI.POIFS.Storage
                     return false;
                 }
             }
-            public override void Dispose()
-            {
-                
-            }
-        }
-
-        public override void Dispose()
-        {
-            _properties = null;
         }
 
         private static int _properties_per_block =

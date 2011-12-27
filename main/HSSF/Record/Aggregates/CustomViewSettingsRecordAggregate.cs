@@ -101,14 +101,6 @@ namespace NPOI.HSSF.Record.Aggregates
         {
             _recs.Add(r);
         }
-        public override void Dispose()
-        {
-            if (null != _psBlock)
-            {
-                _psBlock.Dispose();
-                _psBlock = null;
-            }            
-        }
     }
 }
 

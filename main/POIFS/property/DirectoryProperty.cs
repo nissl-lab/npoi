@@ -44,12 +44,6 @@ namespace NPOI.POIFS.Properties
         // Set of children's names
         private IList  _children_names;
 
-        public override void Dispose()
-        {
-            _children = null;
-            _children_names = null;
-        }
-
         /// <summary>
         /// Initializes a new instance of the <see cref="DirectoryProperty"/> class.
         /// </summary>

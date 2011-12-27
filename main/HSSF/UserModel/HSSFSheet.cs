@@ -46,7 +46,7 @@ namespace NPOI.HSSF.UserModel
     /// @author  Yegor Kozlov (yegor at apache.org) (Autosizing columns)
     /// </remarks>
     [Serializable]
-    public class HSSFSheet : IDisposable, NPOI.SS.UserModel.ISheet
+    public class HSSFSheet : NPOI.SS.UserModel.ISheet
     {
 
         /**
@@ -83,13 +83,6 @@ namespace NPOI.HSSF.UserModel
             this.book = _workbook.Workbook;
         }
 
-        public void Dispose()
-        {
-            if (_sheet != null)
-            {
-                _sheet.Dispose();
-            }
-        }
         /// <summary>
         /// Creates an HSSFSheet representing the given Sheet object.  Should only be
         /// called by HSSFWorkbook when Reading in an exisiting file.

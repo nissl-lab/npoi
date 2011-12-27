@@ -44,7 +44,7 @@ namespace NPOI.POIFS.FileSystem
     /// This class manages a document in the POIFS filesystem.
     /// @author Marc Johnson (mjohnson at apache dot org)
     /// </summary>
-    public class POIFSDocument : BATManaged, BlockWritable, POIFSViewable,IDisposable
+    public class POIFSDocument : BATManaged, BlockWritable, POIFSViewable
     {
         private BigBlockStore _big_store;
         private DocumentProperty _property;
@@ -86,24 +86,7 @@ namespace NPOI.POIFS.FileSystem
                 this._small_store = new SmallBlockStore(this, new BlockWritable[0]);
             }
         }
-        public void Dispose()
-        {
-            if (null != _big_store)
-            {
-                _big_store.Dispose();
-                _big_store = null;
-            }
-            if (null != _property)
-            {
-                _property.Dispose();
-            _property = null;
-            }
-            if (null != _small_store)
-            {
-                _small_store.Dispose();
-                _small_store = null;
-            }
-        }
+
         /// <summary>
         /// Constructor from small blocks
         /// </summary>
@@ -405,21 +388,13 @@ namespace NPOI.POIFS.FileSystem
         }
 
         // Nested Types
-        internal class BigBlockStore:IDisposable
+        internal class BigBlockStore
         {
             private DocumentBlock[] bigBlocks;
             private POIFSDocument enclosingInstance;
             private string name;
             private POIFSDocumentPath path;
             private int size;
-
-            public void Dispose()
-            {
-                bigBlocks = null;
-                enclosingInstance = null;
-                name = null;
-                path = null;
-            }
 
             internal BigBlockStore(POIFSDocument enclosingInstance, object[] blocks)
             {
@@ -536,21 +511,13 @@ namespace NPOI.POIFS.FileSystem
             }
         }
 
-        internal class SmallBlockStore : IDisposable
+        internal class SmallBlockStore
         {
             private POIFSDocument enclosingInstance;
             private string name;
             private POIFSDocumentPath path;
             private int size;
             private SmallDocumentBlock[] smallBlocks;
-
-            public void Dispose()
-            {
-                enclosingInstance = null;
-                path = null;
-                smallBlocks = null;
-                name = null;
-            }
 
             internal SmallBlockStore(POIFSDocument enclosingInstance, object[] blocks)
             {

@@ -40,7 +40,7 @@ namespace NPOI.HSSF.Record.Aggregates
      * @author Josh Micich
      */
     [Serializable]
-    public abstract class RecordAggregate : RecordBase,IDisposable
+    public abstract class RecordAggregate : RecordBase
     {
         public virtual short Sid
         {
@@ -49,7 +49,7 @@ namespace NPOI.HSSF.Record.Aggregates
                 throw new NotImplementedException("Should not be called");
             }
         }
-        public abstract void Dispose();
+        // there seams to be nothing to free: public abstract void Dispose();
         /**
          * Visit each of the atomic BIFF records contained in this {@link RecordAggregate} in the order
          * that they should be written to file.  Implementors may or may not return the actual 

@@ -45,7 +45,7 @@ namespace NPOI.HSSF.Model
     /// @author  Jean-Pierre Paris (jean-pierre.paris at m4x dot org) (Just a little)
     /// </remarks>
     [Serializable]
-    public class InternalSheet : Model, IDisposable
+    public class InternalSheet : Model
     {
 
         //private static POILogger log = POILogFactory.GetLogger(typeof(Sheet));
@@ -118,39 +118,6 @@ namespace NPOI.HSSF.Model
         //public static byte PANE_UPPER_LEFT = (byte)3;
 
 
-        public void Dispose()
-        {
-            if (this._mergedCellsTable != null)
-            {
-                this._mergedCellsTable.Dispose();
-            }
-            if (this._rowsAggregate != null)
-            {
-                this._rowsAggregate.Dispose();
-            }
-            if (this._dataValidityTable != null)
-            {
-                this._dataValidityTable.Dispose();
-            }
-            if (this._psBlock != null)
-            {
-                this._psBlock.Dispose();
-            }
-            if (this.condFormatting != null)
-            {
-                this.condFormatting.Dispose();
-            }
-            if (null != _protectionBlock)
-            {
-                _protectionBlock.Dispose();
-                _protectionBlock = null;
-            }
-            if (null != _columnInfos)
-            {
-                _columnInfos.Dispose();
-                _columnInfos = null;
-            }
-        }
         /// <summary>
         /// Clones the low level records of this sheet and returns the new sheet instance.
         /// This method is implemented by Adding methods for deep cloning to all records that
@@ -321,18 +288,16 @@ namespace NPOI.HSSF.Model
                 
                 if (recSid == BOFRecord.sid)
                 {
-                    using (ChartSubstreamRecordAggregate chartAgg = new ChartSubstreamRecordAggregate(rs))
-                    {
-                        //if (false)
-                        //{
-                        // TODO - would like to keep the chart aggregate packed, but one unit test needs attention
-                        //    records.Add(chartAgg);
-                        //}
-                        //else
-                        //{
-                        SpillAggregate(chartAgg, records);
-                        //}
-                    }
+                    ChartSubstreamRecordAggregate chartAgg = new ChartSubstreamRecordAggregate(rs);
+                    //if (false)
+                    //{
+                    // TODO - would like to keep the chart aggregate packed, but one unit test needs attention
+                    //    records.Add(chartAgg);
+                    //}
+                    //else
+                    //{
+                    SpillAggregate(chartAgg, records);
+                    //}
                     continue;
                 }
                 Record rec = rs.GetNext();

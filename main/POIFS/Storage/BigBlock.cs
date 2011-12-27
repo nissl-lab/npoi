@@ -38,7 +38,7 @@ namespace NPOI.POIFS.Storage
     /// make the class public.
     /// @author Marc Johnson (mjohnson at apache dot org)
     /// </summary>
-    public abstract class BigBlock : BlockWritable,IDisposable
+    public abstract class BigBlock : BlockWritable
     {
         /// <summary>
         /// Default implementation of write for extending classes that
@@ -65,7 +65,6 @@ namespace NPOI.POIFS.Storage
         /// <param name="stream">the OutputStream to which the stored data should be written </param>
         internal abstract void WriteData(Stream stream);
 
-        public abstract void Dispose();
     }
 
 

@@ -43,10 +43,6 @@ namespace NPOI.POIFS.Storage
         private byte[] _data;
         private int _bytes_Read;
 
-        public override void Dispose()
-        {
-            _data = null;
-        }
         /// <summary>
         /// create a document block from a raw data block
         /// </summary>

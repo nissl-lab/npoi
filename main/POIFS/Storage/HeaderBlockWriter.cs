@@ -41,7 +41,7 @@ namespace NPOI.POIFS.Storage
     /// </summary>
     public class HeaderBlockWriter : BigBlock
     {
-            private static byte _default_value = ( byte ) 0xFF;
+        private static byte _default_value = (byte)0xFF;
 
         // number of big block allocation table blocks (int)
         private IntegerField      _bat_count;
@@ -62,16 +62,6 @@ namespace NPOI.POIFS.Storage
         private IntegerField      _xbat_count;
         private byte[]            _data;
 
-        public override void Dispose()
-        {
-            _data = null;
-            _bat_count = null;
-            _property_start = null;
-            _sbat_start = null;
-            _sbat_block_count = null;
-            _xbat_count = null;
-            _xbat_start = null;
-        }
         /// <summary>
         /// Create a single instance initialized with default values
         /// </summary>

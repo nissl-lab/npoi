@@ -39,7 +39,7 @@ namespace NPOI.HSSF.Record.Aggregates
      * @author Jason Height (jheight at chariot dot net dot au)
      */
 
-    public class ValueRecordsAggregate:IDisposable
+    public class ValueRecordsAggregate
     {
         const int MAX_ROW_INDEX = 0XFFFF;
         const int INDEX_NOT_SET = -1;
@@ -60,11 +60,6 @@ namespace NPOI.HSSF.Record.Aggregates
             firstcell = firstCellIx;
             lastcell = lastCellIx;
             records = pRecords;
-        }
-
-        public void Dispose()
-        {
-            records = null;
         }
 
         public void InsertCell(CellValueRecordInterface cell)

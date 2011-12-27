@@ -300,8 +300,6 @@ namespace NPOI.HSSF.Record.Aggregates
                 return _passwordRecord.Password;
             }
         }
-        public override void Dispose()
-        { }
     }
 }
 

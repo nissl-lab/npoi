@@ -32,10 +32,6 @@ namespace TestCases.POIFS.Properties
 {
     internal class LocalProperty : Property
     {
-        public override void Dispose()
-        {
-            
-        }
         /// <summary>
         /// Initializes a new instance of the <see cref="LocalProperty"/> class.
         /// </summary>

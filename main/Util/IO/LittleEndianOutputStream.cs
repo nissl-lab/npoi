@@ -28,7 +28,20 @@ namespace NPOI.Util.IO
     {
         public void Dispose()
         {
-            out1.Dispose();
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                if (null != out1)
+                {
+                    out1.Dispose();
+                    out1 = null;
+                }
+            }
         }
 
         Stream out1 = null;

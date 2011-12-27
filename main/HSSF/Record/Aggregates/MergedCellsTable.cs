@@ -29,7 +29,7 @@ namespace NPOI.HSSF.Record.Aggregates
      * 
      * @author Josh Micich
      */
-    public class MergedCellsTable : RecordAggregate,IDisposable
+    public class MergedCellsTable : RecordAggregate
     {
         private const int MAX_MERGED_REGIONS = 1027; // enforced by the 8224 byte limit
 
@@ -42,10 +42,7 @@ namespace NPOI.HSSF.Record.Aggregates
         {
             _mergedRegions = new List<CellRangeAddress>();
         }
-        public override void Dispose()
-        {
-
-        }
+       
         /**
          * Reads zero or more consecutive {@link MergeCellsRecord}s
          * @param rs

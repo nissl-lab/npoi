@@ -29,7 +29,7 @@ namespace NPOI.HSSF.Record.Aggregates
     /// @author Josh Micich
     /// </summary>
     [Serializable]
-    public class SharedValueManager : IDisposable
+    public class SharedValueManager
     {
 
         private class SharedFormulaGroup
@@ -357,8 +357,5 @@ namespace NPOI.HSSF.Record.Aggregates
             return null;
         }
 
-        public void Dispose()
-        {
-        }
     }
 }

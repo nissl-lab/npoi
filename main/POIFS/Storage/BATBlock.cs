@@ -68,10 +68,6 @@ namespace NPOI.POIFS.Storage
          */
         private int ourBlockIndex;
 
-        public override void Dispose()
-        {
-
-        }
         /// <summary>
         /// Create a single instance initialized with default values
         /// </summary>

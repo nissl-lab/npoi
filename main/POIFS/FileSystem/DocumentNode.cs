@@ -30,15 +30,11 @@ namespace NPOI.POIFS.FileSystem
     /// Simple implementation of DocumentEntry
     /// @author Marc Johnson (mjohnson at apache dot org)
     /// </summary>
-    public class DocumentNode : EntryNode, POIFSViewable, DocumentEntry,IDisposable
+    public class DocumentNode : EntryNode, POIFSViewable, DocumentEntry
     {
         // underlying POIFSDocument instance
         private POIFSDocument _document;
 
-        public void Dispose()
-        {
-            _document = null;
-        }
         /**
          * create a DocumentNode. This method Is not public by design; it
          * Is intended strictly for the internal use of this package

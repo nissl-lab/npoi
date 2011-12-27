@@ -8,14 +8,14 @@ namespace NPOI.SS.Formula.Eval
 
     public abstract class TwoOperandNumericOperation : Fixed2ArgFunction
     {
-        public int Type
-        {
-            get
-            {
-                // TODO - remove
-                throw new Exception("obsolete code should not be called");
-            }
-        }
+        //public int Type
+        //{
+        //    get
+        //    {
+        //        // TODO - remove
+        //        throw new Exception("obsolete code should not be called");
+        //    }
+        //}
         protected double SingleOperandEvaluate(ValueEval arg, int srcCellRow, int srcCellCol)
         {
             ValueEval ve = OperandResolver.GetSingleValue(arg, srcCellRow, srcCellCol);

@@ -53,15 +53,8 @@ namespace NPOI.HSSF.Model
      * @version 1.0-pre
      */
     [Serializable]
-    public class InternalWorkbook : Model,IDisposable
+    public class InternalWorkbook : Model
     {
-        public void Dispose()
-        {
-            if (this.linkTable!=null)
-                this.linkTable.Dispose();
-            if(this.records!=null)
-                this.records.Dispose();
-        }
         /**
          * Excel silently truncates long sheet names to 31 chars.
          * This constant is used to ensure uniqueness in the first 31 chars

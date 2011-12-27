@@ -40,12 +40,6 @@ namespace NPOI.HSSF.Record.Aggregates
          */
         private IList _validationList;
 
-        public override void Dispose()
-        {            
-            _validationList = null;
-            _headerRec = null;
-        }
-
         public DataValidityTable(RecordStream rs)
         {
             _headerRec = (DVALRecord)rs.GetNext();

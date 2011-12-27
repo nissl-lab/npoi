@@ -44,7 +44,7 @@ namespace NPOI.HSSF.UserModel
     /// @author  Glen Stampoultzis (glens at apache.org)
     /// @author  Shawn Laubach (slaubach at apache dot org)
     [Serializable]
-    public class HSSFWorkbook : POIDocument,IDisposable,NPOI.SS.UserModel.IWorkbook
+    public class HSSFWorkbook : POIDocument,NPOI.SS.UserModel.IWorkbook
     {
         //private static int DEBUG = POILogger.DEBUG;
         private const int MAX_ROW = 0xFFFF;
@@ -111,22 +111,20 @@ namespace NPOI.HSSF.UserModel
 
         //private static POILogger log = POILogFactory.GetLogger(typeof(HSSFWorkbook));
 
-
-        public override void Dispose()
+        public void Dispose()
         {
-            if (this.workbook != null)
-            {
-                this.workbook.Dispose();
-            }
-            if (_sheets != null)
-            {
-                foreach (HSSFSheet sheet in _sheets)
-                {
-                    if(sheet!=null)
-                        sheet.Dispose();
-                }
-            }
+            Dispose(true);
+            GC.SuppressFinalize(this);
         }
+
+        // TODO: the Workbook has nothing to free - but removing this breaks the interface IWorkbook, e.g. as seen in TestNPOIBug6341()
+        protected virtual void Dispose(bool disposing)
+        {
+            //if (disposing)
+            //{
+            //}
+        }
+
         public NPOI.SS.UserModel.CreationHelper GetCreationHelper()
         {
             return new HSSFCreationHelper(this);
@@ -1263,35 +1261,35 @@ namespace NPOI.HSSF.UserModel
         public override void Write(Stream stream)
         {
             byte[] bytes = GetBytes();
-            using (POIFSFileSystem fs = new POIFSFileSystem())
+            POIFSFileSystem fs = new POIFSFileSystem();
+            
+            // For tracking what we've written out, used if we're
+            //  going to be preserving nodes
+            List<string> excepts = new List<string>(1);
+
+            using (MemoryStream newMemoryStream = new MemoryStream(bytes))
             {
-                // For tracking what we've written out, used if we're
-                //  going to be preserving nodes
-                List<string> excepts = new List<string>(1);
+                // Write out the Workbook stream
+                fs.CreateDocument(newMemoryStream, "Workbook");
 
-                using (MemoryStream newMemoryStream = new MemoryStream(bytes))
+                // Write out our HPFS properties, if we have them
+                WriteProperties(fs, excepts);
+
+                if (preserveNodes)
                 {
-                    // Write out the Workbook stream
-                    fs.CreateDocument(newMemoryStream, "Workbook");
+                    // Don't Write out the old Workbook, we'll be doing our new one
+                    excepts.Add("Workbook");
+                    // If the file had WORKBOOK instead of Workbook, we'll Write it
+                    //  out correctly shortly, so don't include the old one
+                    excepts.Add("WORKBOOK");
 
-                    // Write out our HPFS properties, if we have them
-                    WriteProperties(fs, excepts);
-
-                    if (preserveNodes)
-                    {
-                        // Don't Write out the old Workbook, we'll be doing our new one
-                        excepts.Add("Workbook");
-                        // If the file had WORKBOOK instead of Workbook, we'll Write it
-                        //  out correctly shortly, so don't include the old one
-                        excepts.Add("WORKBOOK");
-
-                        // Copy over all the other nodes to our new poifs
-                        POIUtils.CopyNodes(directory, fs.Root, excepts);
-                    }
-                    fs.WriteFileSystem(stream);
-
+                    // Copy over all the other nodes to our new poifs
+                    POIUtils.CopyNodes(directory, fs.Root, excepts);
                 }
+                fs.WriteFileSystem(stream);
+
             }
+            
             bytes = null;
         }
 

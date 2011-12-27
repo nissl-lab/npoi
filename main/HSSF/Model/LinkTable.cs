@@ -57,14 +57,9 @@ namespace NPOI.HSSF.Model
      *
      * @author Josh Micich
      */
-    public class LinkTable:IDisposable
+    public class LinkTable
     {
         // TODO make this class into a record aggregate
-        public void Dispose()
-        {
-            if(_workbookRecordList!=null)
-                this._workbookRecordList.Dispose();
-        }
 
         private static ExternSheetRecord ReadExtSheetRecord(RecordStream rs)
         {

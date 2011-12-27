@@ -46,7 +46,7 @@ namespace NPOI.POIFS.FileSystem
     /// @author Marc Johnson (mjohnson at apache dot org) 
     /// </summary>
     [Serializable]
-    public class POIFSFileSystem : POIFSViewable,IDisposable
+    public class POIFSFileSystem : POIFSViewable
     {
         //private static POILogger _logger =
         //        POILogFactory.GetLogger(typeof(POIFSFileSystem));
@@ -79,18 +79,19 @@ namespace NPOI.POIFS.FileSystem
         private POIFSBigBlockSize bigBlockSize =
            POIFSConstants.SMALLER_BIG_BLOCK_SIZE_DETAILS;
 
-        public void Dispose()
-        {
-            if (_documents != null)
-            {
-                for (int i = 0; i < _documents.Count; i++)
-                {
-                    POIFSDocument doc=(POIFSDocument)_documents[i];
-                    if(doc!=null)
-                        doc.Dispose();
-                }
-            }
-        }
+        // there is nothing to dispose
+        //public void Dispose()
+        //{
+        //    Dispose(true);
+        //    GC.SuppressFinalize(this);
+        //}
+
+        //protected virtual void Dispose(bool disposing)
+        //{
+        //    if (disposing)
+        //    {
+        //    }
+        //}
 
         /// <summary>
         /// Initializes a new instance of the <see cref="POIFSFileSystem"/> class.  intended for writing
@@ -283,51 +284,50 @@ namespace NPOI.POIFS.FileSystem
             int               batStartBlock       = bat.CreateBlocks();
 
             // Get the extended block allocation table blocks
-            using (HeaderBlockWriter header_block_Writer = new HeaderBlockWriter())
+            HeaderBlockWriter header_block_Writer = new HeaderBlockWriter();
+            
+            BATBlock[] xbat_blocks =
+                header_block_Writer.SetBATBlocks(bat.CountBlocks,
+                                                    batStartBlock);
+
+            // Set the property table start block
+            header_block_Writer.PropertyStart = _property_table.StartBlock;
+
+            // Set the small block allocation table start block
+            header_block_Writer.SBATStart = sbtw.SBAT.StartBlock;
+
+            // Set the small block allocation table block count
+            header_block_Writer.SBATBlockCount = sbtw.SBATBlockCount;
+
+            // the header is now properly initialized. Make a list of
+            // Writers (the header block, followed by the documents, the
+            // property table, the small block store, the small block
+            // allocation table, the block allocation table, and the
+            // extended block allocation table blocks)
+            ArrayList Writers = new ArrayList();
+
+            Writers.Add(header_block_Writer);
+            Writers.AddRange(_documents);
+            Writers.Add(_property_table);
+            Writers.Add(sbtw);
+            Writers.Add(sbtw.SBAT);
+            Writers.Add(bat);
+            for (int j = 0; j < xbat_blocks.Length; j++)
             {
-                BATBlock[] xbat_blocks =
-                    header_block_Writer.SetBATBlocks(bat.CountBlocks,
-                                                     batStartBlock);
-
-                // Set the property table start block
-                header_block_Writer.PropertyStart = _property_table.StartBlock;
-
-                // Set the small block allocation table start block
-                header_block_Writer.SBATStart = sbtw.SBAT.StartBlock;
-
-                // Set the small block allocation table block count
-                header_block_Writer.SBATBlockCount = sbtw.SBATBlockCount;
-
-                // the header is now properly initialized. Make a list of
-                // Writers (the header block, followed by the documents, the
-                // property table, the small block store, the small block
-                // allocation table, the block allocation table, and the
-                // extended block allocation table blocks)
-                ArrayList Writers = new ArrayList();
-
-                Writers.Add(header_block_Writer);
-                Writers.AddRange(_documents);
-                Writers.Add(_property_table);
-                Writers.Add(sbtw);
-                Writers.Add(sbtw.SBAT);
-                Writers.Add(bat);
-                for (int j = 0; j < xbat_blocks.Length; j++)
-                {
-                    Writers.Add(xbat_blocks[j]);
-                }
-
-                // now, Write everything out
-                iter = Writers.GetEnumerator();
-                while (iter.MoveNext())
-                {
-                    BlockWritable Writer = (BlockWritable)iter.Current;
-
-                    Writer.WriteBlocks(stream);
-                }
-
-                Writers = null;
-                iter = null;
+                Writers.Add(xbat_blocks[j]);
             }
+
+            // now, Write everything out
+            iter = Writers.GetEnumerator();
+            while (iter.MoveNext())
+            {
+                BlockWritable Writer = (BlockWritable)iter.Current;
+
+                Writer.WriteBlocks(stream);
+            }
+
+            Writers = null;
+            iter = null;
         }
 
         /// <summary>

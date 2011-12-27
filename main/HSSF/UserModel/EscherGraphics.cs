@@ -123,10 +123,19 @@ namespace NPOI.HSSF.UserModel
 
         public void Dispose()
         {
-            if (null != font)
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
             {
-                font.Dispose();
-                font = null;
+                if (null != font)
+                {
+                    font.Dispose();
+                    font = null;
+                }
             }
         }
 

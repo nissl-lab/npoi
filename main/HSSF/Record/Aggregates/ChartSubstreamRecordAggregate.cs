@@ -96,16 +96,7 @@ namespace NPOI.HSSF.Record.Aggregates
             rv.VisitRecord(EOFRecord.instance);
         }
 
-        public override void Dispose()
-        {
-            if (null != _psBlock)
-            {
-                _psBlock.Dispose();
-                _psBlock = null;
-            }        
-        }
     }
-
 }
 
 

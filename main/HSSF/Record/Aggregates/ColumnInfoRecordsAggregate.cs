@@ -51,10 +51,6 @@ namespace NPOI.HSSF.Record.Aggregates
         //    int     size     = 0;
         ArrayList records = null;
 
-        public override void Dispose()
-        {
-            records = null;
-        }
         /// <summary>
         /// Initializes a new instance of the <see cref="ColumnInfoRecordsAggregate"/> class.
         /// </summary>

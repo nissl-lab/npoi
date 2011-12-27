@@ -108,10 +108,6 @@ namespace NPOI.HSSF.Record.Aggregates
                 return arec != null;
             }
         }
-        public override void Dispose()
-        {
-            _sharedValueManager.Dispose();
-        }
 
         /// <summary>
         /// called by the class that is responsible for writing this sucker.

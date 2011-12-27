@@ -33,7 +33,7 @@ namespace NPOI
     /// </summary>
     /// <remarks>@author Nick Burch</remarks>
     [Serializable]
-    public abstract class POIDocument:IDisposable
+    public abstract class POIDocument
     {
         /** Holds metadata on our document */
         protected SummaryInformation sInf;
@@ -72,10 +72,11 @@ namespace NPOI
         {
             
         }
-        public virtual void Dispose()
-        {
-
-        }
+        // nothing to dispose
+        //public virtual void Dispose()
+        //{
+        //
+        //}
         /// <summary>
         /// Fetch the Document Summary Information of the document
         /// </summary>

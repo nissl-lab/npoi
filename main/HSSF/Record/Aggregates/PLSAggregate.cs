@@ -45,9 +45,5 @@ namespace NPOI.HSSF.Record.Aggregates
             }
         }
 
-        public override void Dispose()
-        {
-
-        }
     }
 }

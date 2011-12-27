@@ -43,7 +43,10 @@ namespace TestCases.HSSF
         }
         public static HSSFWorkbook OpenSampleWorkbook(String sampleFileName)
         {
-            return new HSSFWorkbook(_inst.OpenResourceAsStream(sampleFileName));
+            using (var sampleStream = _inst.OpenResourceAsStream(sampleFileName))
+            {
+                return new HSSFWorkbook(sampleStream);
+            }
         }
         /**
          * Writes a spReadsheet to a <tt>MemoryStream</tt> and Reads it back
@@ -52,9 +55,11 @@ namespace TestCases.HSSF
          */
         public static HSSFWorkbook WriteOutAndReadBack(HSSFWorkbook original)
         {
-                MemoryStream baos = new MemoryStream(4096);
+            using (MemoryStream baos = new MemoryStream(4096))
+            {
                 original.Write(baos);
                 return new HSSFWorkbook(baos);
+            }
         }
 
 

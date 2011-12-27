@@ -73,11 +73,6 @@ namespace NPOI.HSSF.Record.Aggregates
             }
         }
 
-        public override void Dispose()
-        {
-            header = null;
-            rules = null;
-        }
 
         public CFRecordsAggregate(CellRangeAddress[] regions, CFRuleRecord[] rules)
             : this(new CFHeaderRecord(regions, rules.Length), rules)

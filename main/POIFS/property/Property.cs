@@ -41,7 +41,7 @@ namespace NPOI.POIFS.Properties
     /// implementing POIFS Property behavior.
     /// @author Marc Johnson (mjohnson at apache dot org)
     /// </summary>
-    public abstract class Property:Child, POIFSViewable,IDisposable
+    public abstract class Property:Child, POIFSViewable
     {
         private const byte   _default_fill             = ( byte ) 0x00;
         private const int    _name_size_offset         = 0x40;
@@ -90,7 +90,6 @@ namespace NPOI.POIFS.Properties
         private Child               _next_child;
         private Child               _previous_child;
 
-        public abstract void Dispose();
         /// <summary>
         /// Initializes a new instance of the <see cref="Property"/> class.
         /// </summary>
