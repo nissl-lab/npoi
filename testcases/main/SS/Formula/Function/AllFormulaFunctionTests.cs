@@ -15,28 +15,24 @@
    limitations under the License.
 ==================================================================== */
 
-namespace NPOI.SS.Formula
-{
+namespace NPOI.SS.Formula.function;
 
-    using NPOI.HSSF.UserModel;
+using junit.framework.Test;
+using junit.framework.TestSuite;
 
-    /**
-     * Allows Tests to execute {@link WorkbookEvaluator}s and track the internal workings.
-     *
-     * @author Josh Micich
-     */
-    public class WorkbookEvaluatorTestHelper
-    {
-
-        private WorkbookEvaluatorTestHelper()
-        {
-            // no instances of this class
-        }
-
-        public static WorkbookEvaluator CreateEvaluator(HSSFWorkbook wb, EvaluationListener listener)
-        {
-            return new WorkbookEvaluator(HSSFEvaluationWorkbook.Create(wb), listener, null, null);
-        }
-    }
-
+/**
+ * Collects all Tests for this <tt>NPOI.hssf.Record.Formula.function</tt>.
+ * 
+ * @author Josh Micich
+ */
+public class AllFormulaFunctionTests {
+	
+	public static Test suite() {
+		TestSuite result = new TestSuite(AllFormulaFunctionTests.class.GetName());
+		result.AddTestSuite(TestFunctionMetadataRegistry.class);
+		result.AddTestSuite(TestParseMissingBuiltInFuncs.class);
+		result.AddTestSuite(TestReadMissingBuiltInFuncs.class);
+		return result;
+	}
 }
+

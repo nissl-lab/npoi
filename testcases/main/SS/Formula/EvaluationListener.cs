@@ -1,7 +1,7 @@
 /* ====================================================================
    Licensed to the Apache Software Foundation (ASF) under one or more
    contributor license agreements.  See the NOTICE file distributed with
-   this work for additional information regarding copyright ownership.
+   this work for Additional information regarding copyright ownership.
    The ASF licenses this file to You under the Apache License, Version 2.0
    (the "License"); you may not use this file except in compliance with
    the License.  You may obtain a copy of the License at
@@ -15,59 +15,56 @@
    limitations under the License.
 ==================================================================== */
 
-namespace TestCases.SS.Formula
+namespace NPOI.SS.Formula
 {
-
-    using NPOI.SS.Formula;
     using NPOI.SS.Formula.Eval;
-
 
     /**
      * Tests should extend this class if they need to track the internal working of the {@link WorkbookEvaluator}.<br/>
-     * 
+     *
      * Default method implementations all do nothing
-     * 
+     *
      * @author Josh Micich
      */
-    public abstract class EvaluationListener :
-        IEvaluationListener
+    public abstract class EvaluationListener : IEvaluationListener
     {
-
         public virtual void OnCacheHit(int sheetIndex, int rowIndex, int columnIndex, ValueEval result)
         {
-            // do nothing 
+            // do nothing
         }
         public virtual void OnReadPlainValue(int sheetIndex, int rowIndex, int columnIndex, ICacheEntry entry)
         {
-            // do nothing 
+            // do nothing
         }
         public virtual void OnStartEvaluate(EvaluationCell cell, ICacheEntry entry)
         {
-            // do nothing 
+            // do nothing
         }
         public virtual void OnEndEvaluate(ICacheEntry entry, ValueEval result)
         {
-            // do nothing 
+            // do nothing
         }
         public virtual void OnClearWholeCache()
         {
-            // do nothing 
+            // do nothing
         }
         public virtual void OnClearCachedValue(ICacheEntry entry)
         {
-            // do nothing 
+            // do nothing
+        }
+        public virtual void OnChangeFromBlankValue(int sheetIndex, int rowIndex, int columnIndex,
+                EvaluationCell cell, ICacheEntry entry)
+        {
+            // do nothing
         }
         public virtual void SortDependentCachedValues(ICacheEntry[] entries)
         {
-            // do nothing 
+            // do nothing
         }
         public virtual void OnClearDependentCachedValue(ICacheEntry entry, int depth)
         {
-            // do nothing 
-        }
-        public virtual void OnChangeFromBlankValue(int sheetIndex, int rowIndex, int columnIndex, EvaluationCell cell, ICacheEntry entry)
-        {
-            // do nothing 
+            // do nothing
         }
     }
+
 }

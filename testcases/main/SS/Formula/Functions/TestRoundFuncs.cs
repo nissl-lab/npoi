@@ -15,28 +15,37 @@
    limitations under the License.
 ==================================================================== */
 
-namespace NPOI.SS.Formula
-{
+namespace NPOI.SS.Formula.functions;
 
-    using NPOI.HSSF.UserModel;
+using junit.framework.TestCase;
 
-    /**
-     * Allows Tests to execute {@link WorkbookEvaluator}s and track the internal workings.
-     *
-     * @author Josh Micich
-     */
-    public class WorkbookEvaluatorTestHelper
-    {
+using NPOI.SS.Formula.Eval.ErrorEval;
+using NPOI.SS.Formula.Eval.ValueEval;
+using NPOI.SS.Formula.Eval.NumberEval;
+using NPOI.SS.Formula.Eval.StringEval;
 
-        private WorkbookEvaluatorTestHelper()
-        {
-            // no instances of this class
-        }
+/**
+ * Test cases for ROUND(), ROUNDUP(), ROUNDDOWN()
+ *
+ * @author Josh Micich
+ */
+public class TestRoundFuncs  {
+	private static NumericFunction F = null;
+	public void TestRounddownWithStringArg() {
 
-        public static WorkbookEvaluator CreateEvaluator(HSSFWorkbook wb, EvaluationListener listener)
-        {
-            return new WorkbookEvaluator(HSSFEvaluationWorkbook.Create(wb), listener, null, null);
-        }
-    }
+		ValueEval strArg = new StringEval("abc");
+		ValueEval[] args = { strArg, new NumberEval(2), };
+		ValueEval result = F.ROUNDDOWN.Evaluate(args, -1, (short)-1);
+		Assert.AreEqual(ErrorEval.VALUE_INVALID, result);
+	}
+
+	public void TestRoundupWithStringArg() {
+
+		ValueEval strArg = new StringEval("abc");
+		ValueEval[] args = { strArg, new NumberEval(2), };
+		ValueEval result = F.ROUNDUP.Evaluate(args, -1, (short)-1);
+		Assert.AreEqual(ErrorEval.VALUE_INVALID, result);
+	}
 
 }
+

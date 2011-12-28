@@ -27,6 +27,7 @@ namespace TestCases.SS.Formula
      * 
      * @author Josh Micich
      */
+    [Obsolete]//this class has removed from poi
     public class FormulaParserTestHelper
     {
         public static void ConfirmParseException(Exception e, String expectedMessage)

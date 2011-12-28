@@ -15,28 +15,31 @@
    limitations under the License.
 ==================================================================== */
 
-namespace NPOI.SS.Formula
-{
+namespace NPOI.SS.Formula.function;
 
-    using NPOI.HSSF.UserModel;
+using junit.framework.TestCase;
 
-    /**
-     * Allows Tests to execute {@link WorkbookEvaluator}s and track the internal workings.
-     *
-     * @author Josh Micich
-     */
-    public class WorkbookEvaluatorTestHelper
-    {
+/**
+ * 
+ * @author Josh Micich
+ */
+public class TestFunctionMetadataRegistry  {
 
-        private WorkbookEvaluatorTestHelper()
-        {
-            // no instances of this class
-        }
+	public void TestWellKnownFunctions() {
+		ConfirmFunction(0, "COUNT");
+		ConfirmFunction(1, "IF");
 
-        public static WorkbookEvaluator CreateEvaluator(HSSFWorkbook wb, EvaluationListener listener)
-        {
-            return new WorkbookEvaluator(HSSFEvaluationWorkbook.Create(wb), listener, null, null);
-        }
-    }
+	}
 
+	private static void ConfirmFunction(int index, String funcName) {
+		FunctionMetadata fm;
+		fm = FunctionMetadataRegistry.GetFunctionByIndex(index);
+		assertNotNull(fm);
+		Assert.AreEqual(funcName, fm.GetName());
+
+		fm = FunctionMetadataRegistry.GetFunctionByName(funcName);
+		assertNotNull(fm);
+		Assert.AreEqual(index, fm.GetIndex());
+	}
 }
+

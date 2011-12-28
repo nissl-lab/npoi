@@ -15,30 +15,33 @@
    limitations under the License.
 ==================================================================== */
 
-namespace NPOI.SS.Formula;
+namespace NPOI.SS.Formula.Eval;
 
-using junit.framework.TestCase;
-
-using NPOI.SS.Formula.Eval.NumberEval;
-using NPOI.SS.Formula.Eval.ValueEval;
+using junit.framework.Test;
+using junit.framework.TestSuite;
 
 /**
- * Tests {@link NPOI.SS.Formula.CellCacheEntry}.
+ * Collects all Tests the namespace <tt>NPOI.hssf.Record.Formula.Eval</tt>.
  *
  * @author Josh Micich
  */
-public class TestCellCacheEntry  {
+public class AllFormulaEvalTests {
 
-	public void TestBasic() {
-		CellCacheEntry pcce = new PlainValueCellCacheEntry(new NumberEval(42.0));
-		ValueEval ve = pcce.GetValue();
-		Assert.AreEqual(42, ((NumberEval)ve).GetNumberValue(), 0.0);
-		
-		FormulaCellCacheEntry fcce = new FormulaCellCacheEntry();
-		fcce.updateFormulaResult(new NumberEval(10.0), CellCacheEntry.EMPTY_ARRAY, null);
-		
-		ve = fcce.GetValue();
-		Assert.AreEqual(10, ((NumberEval)ve).GetNumberValue(), 0.0);
+	public static Test suite() {
+		TestSuite result = new TestSuite(AllFormulaEvalTests.class.GetName());
+		result.AddTestSuite(TestAreaEval.class);
+		result.AddTestSuite(TestCircularReferences.class);
+		result.AddTestSuite(TestDivideEval.class);
+		result.AddTestSuite(TestEqualEval.class);
+		result.AddTestSuite(TestExternalFunction.class);
+		result.AddTestSuite(TestFormulaBugs.class);
+		result.AddTestSuite(TestFormulasFromSpreadsheet.class);
+		result.AddTestSuite(TestMinusZeroResult.class);
+		result.AddTestSuite(TestMissingArgEval.class);
+		result.AddTestSuite(TestPercentEval.class);
+		result.AddTestSuite(TestRangeEval.class);
+		result.AddTestSuite(TestUnaryPlusEval.class);
+		return result;
 	}
 }
 

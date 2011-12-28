@@ -31,6 +31,7 @@ namespace NPOI.SS.Formula.PTG
      * 
      * @author Stephen Wolke (smwolke at geistig.com)
      */
+    [TestClass]
     public class TestExternalNameReference
     {
         double MARKUP_COST = 1.9d;
@@ -42,6 +43,7 @@ namespace NPOI.SS.Formula.PTG
         /**
          * Tests <tt>NameXPtg for external cell reference by name</tt> and logic in Workbook below that   
          */
+        [TestMethod]
         public void TestReadCalcSheet()
         {
             try
@@ -65,10 +67,10 @@ namespace NPOI.SS.Formula.PTG
             }
             catch (Exception e)
             {
-                Assert.Fail();
+                Assert.Fail(e.Message);
             }
         }
-
+        [TestMethod]
         public void TestReadReferencedSheet()
         {
             try
@@ -82,10 +84,10 @@ namespace NPOI.SS.Formula.PTG
             }
             catch (Exception e)
             {
-                Assert.Fail();
+                Assert.Fail(e.Message);
             }
         }
-
+        [TestMethod]
         public void TestEvaluate()
         {
             HSSFWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("XRefCalc.xls");

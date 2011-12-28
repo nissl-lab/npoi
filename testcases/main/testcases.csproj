@@ -342,15 +342,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="SS\Formula\TestCellCacheEntry.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="SS\Formula\FormulaParserTestHelper.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="SS\Formula\WorkbookEvaluatorTestHelper.cs" />
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="HSSF\Record\TestCFHeaderRecord.cs" />
     <Compile Include="HSSF\Record\TestCFRuleRecord.cs" />
     <Compile Include="HSSF\Record\TestDrawingGroupRecord.cs" />
@@ -381,13 +372,6 @@
     </Compile>
     <Compile Include="HSSF\Record\Chart\TestTickRecord.cs" />
     <Compile Include="HSSF\Record\Chart\TestValueRangeRecord.cs" />
-    <Compile Include="SS\Formula\EvaluationListener.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="SS\Formula\TestWorkbookEvaluator.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="SS\Formula\TestEvaluationCache.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="HSSF\UserModel\HSSFEvaluationTestHelper.cs" />
@@ -498,6 +482,13 @@
     <Compile Include="HSSF\UserModel\TestHSSFSheetShiftRows.cs" />
     <Compile Include="HSSF\UserModel\TestHSSFName.cs" />
     <Compile Include="POIDataSamples.cs" />
+    <Compile Include="SS\Formula\Constant\TestConstantValueParser.cs" />
+    <Compile Include="SS\Formula\EvaluationListener.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="SS\Formula\FormulaParserTestHelper.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="SS\Formula\PTG\AbstractPtgTestCase.cs" />
     <Compile Include="SS\Formula\PTG\TestArea3DPtg.cs" />
     <Compile Include="SS\Formula\PTG\TestAreaErrPtg.cs" />
@@ -515,6 +506,9 @@
     <Compile Include="SS\Formula\PTG\TestRef3DPtg.cs" />
     <Compile Include="SS\Formula\PTG\TestReferencePtg.cs" />
     <Compile Include="SS\Formula\PTG\TestUnionPtg.cs" />
+    <Compile Include="SS\Formula\WorkbookEvaluatorTestHelper.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="SS\ITestDataProvider.cs" />
     <Compile Include="SS\TestSpreadsheetVersion.cs" />
     <Compile Include="SS\UserModel\BaseTestCell.cs" />
@@ -553,6 +547,7 @@
   <ItemGroup>
     <Folder Include="DDF\data\" />
     <Folder Include="HSSF\data\" />
+    <Folder Include="SS\Formula\Atp\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
