@@ -168,12 +168,15 @@ using System.Configuration;
             //File f = new File(ESCHER_DATA_PATH, "Container.dat");
             Assert.IsTrue(File.Exists(ESCHER_DATA_PATH+"Container.dat"));
 
-            FileStream finp = new FileStream(ESCHER_DATA_PATH+"Container.dat",FileMode.Open,FileAccess.Read);
-            byte[] data = IOUtils.ToByteArray(finp);
-            finp.Close();
-            // This used to fail with an OutOfMemory
-            EscherContainerRecord record = new EscherContainerRecord();
-            record.FillFields(data, 0, new DefaultEscherRecordFactory());
+            using (FileStream finp = new FileStream(ESCHER_DATA_PATH + "Container.dat", FileMode.Open, FileAccess.Read))
+            {
+                byte[] data = IOUtils.ToByteArray(finp);
+                finp.Close();
+
+                // This used to fail with an OutOfMemory
+                EscherContainerRecord record = new EscherContainerRecord();
+                record.FillFields(data, 0, new DefaultEscherRecordFactory());
+            }
         }
     }
 }

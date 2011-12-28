@@ -182,7 +182,7 @@ namespace NPOI.SS.Formula
                 // TODO - if we are confident that this sanity check is not required, we can Remove 'value' from plain value cache entry  
                 if (!AreValuesEqual(result.GetValue(), value))
                 {
-                    throw new InvalidOperationException("value Changed");
+                    throw new InvalidOperationException("value changed");
                 }
                 if (_evaluationListener != null)
                 {

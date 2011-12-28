@@ -21,6 +21,8 @@
     </SccAuxPath>
     <SccProvider>
     </SccProvider>
+    <TargetFrameworkSubset>
+    </TargetFrameworkSubset>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>npoi.snk</AssemblyOriginatorKeyFile>
     <FileUpgradeFlags>
@@ -362,15 +364,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="SS\Formula\TestCellCacheEntry.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="SS\Formula\FormulaParserTestHelper.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="SS\Formula\WorkbookEvaluatorTestHelper.cs" />
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="HSSF\Record\TestCFHeaderRecord.cs" />
     <Compile Include="HSSF\Record\TestCFRuleRecord.cs" />
     <Compile Include="HSSF\Record\TestDrawingGroupRecord.cs" />
@@ -401,13 +394,6 @@
     </Compile>
     <Compile Include="HSSF\Record\Chart\TestTickRecord.cs" />
     <Compile Include="HSSF\Record\Chart\TestValueRangeRecord.cs" />
-    <Compile Include="SS\Formula\EvaluationListener.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="SS\Formula\TestWorkbookEvaluator.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="SS\Formula\TestEvaluationCache.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="HSSF\UserModel\HSSFEvaluationTestHelper.cs" />
@@ -518,6 +504,44 @@
     <Compile Include="HSSF\UserModel\TestHSSFSheetShiftRows.cs" />
     <Compile Include="HSSF\UserModel\TestHSSFName.cs" />
     <Compile Include="POIDataSamples.cs" />
+    <Compile Include="SS\Formula\Atp\TestYearFracCalculator.cs" />
+    <Compile Include="SS\Formula\Atp\TestYearFracCalculatorFromSpreadsheet.cs" />
+    <Compile Include="SS\Formula\Constant\TestConstantValueParser.cs" />
+    <Compile Include="SS\Formula\EvaluationListener.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="SS\Formula\FormulaParserTestHelper.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="SS\Formula\Function\TestFunctionMetadataRegistry.cs" />
+    <Compile Include="SS\Formula\Function\TestParseMissingBuiltInFuncs.cs" />
+    <Compile Include="SS\Formula\Function\TestReadMissingBuiltInFuncs.cs" />
+    <Compile Include="SS\Formula\PTG\AbstractPtgTestCase.cs" />
+    <Compile Include="SS\Formula\PTG\TestArea3DPtg.cs" />
+    <Compile Include="SS\Formula\PTG\TestAreaErrPtg.cs" />
+    <Compile Include="SS\Formula\PTG\TestAreaPtg.cs" />
+    <Compile Include="SS\Formula\PTG\TestArrayPtg.cs" />
+    <Compile Include="SS\Formula\PTG\TestAttrPtg.cs" />
+    <Compile Include="SS\Formula\PTG\TestErrPtg.cs" />
+    <Compile Include="SS\Formula\PTG\TestExternalFunctionFormulas.cs" />
+    <Compile Include="SS\Formula\PTG\TestExternalNameReference.cs" />
+    <Compile Include="SS\Formula\PTG\TestFuncPtg.cs" />
+    <Compile Include="SS\Formula\PTG\TestFuncVarPtg.cs" />
+    <Compile Include="SS\Formula\PTG\TestIntersectionPtg.cs" />
+    <Compile Include="SS\Formula\PTG\TestPercentPtg.cs" />
+    <Compile Include="SS\Formula\PTG\TestRangePtg.cs" />
+    <Compile Include="SS\Formula\PTG\TestRef3DPtg.cs" />
+    <Compile Include="SS\Formula\PTG\TestReferencePtg.cs" />
+    <Compile Include="SS\Formula\PTG\TestUnionPtg.cs" />
+    <Compile Include="SS\Formula\TestCellCacheEntry.cs" />
+    <Compile Include="SS\Formula\TestEvaluationCache.cs" />
+    <Compile Include="SS\Formula\TestFormulaShifter.cs" />
+    <Compile Include="SS\Formula\TestPlainCellCache.cs" />
+    <Compile Include="SS\Formula\TestSheetNameFormatter.cs" />
+    <Compile Include="SS\Formula\TestWorkbookEvaluator.cs" />
+    <Compile Include="SS\Formula\WorkbookEvaluatorTestHelper.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="SS\ITestDataProvider.cs" />
     <Compile Include="SS\TestSpreadsheetVersion.cs" />
     <Compile Include="SS\UserModel\BaseTestCell.cs" />
@@ -532,7 +556,9 @@
     <Compile Include="SS\UserModel\BaseTestSheetHiding.cs" />
     <Compile Include="SS\UserModel\BaseTestSheetShiftRows.cs" />
     <Compile Include="SS\UserModel\BaseTestWorkbook.cs" />
+    <Compile Include="SS\Util\NumberComparingSpreadsheetGenerator.cs" />
     <Compile Include="SS\Util\NumberComparisonExamples.cs" />
+    <Compile Include="SS\Util\NumberRenderingSpreadsheetGenerator.cs" />
     <Compile Include="SS\Util\NumberToTextConversionExamples.cs" />
     <Compile Include="SS\Util\TestCellRangeAddress.cs" />
     <Compile Include="SS\Util\TestCellReference.cs" />
@@ -554,6 +580,7 @@
   <ItemGroup>
     <Folder Include="DDF\data\" />
     <Folder Include="HSSF\data\" />
+    <Folder Include="SS\Formula\Atp\" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0">

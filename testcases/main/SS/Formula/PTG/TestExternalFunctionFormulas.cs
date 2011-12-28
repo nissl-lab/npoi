@@ -49,14 +49,17 @@ namespace NPOI.SS.Formula.PTG
             Assert.AreEqual(expectedFormula, cellFormula);
         }
         [TestMethod]
-        public void TestParse()
+        public void TestParseFormulaContainingExternalFunction()
         {
+            System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
+
             HSSFWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("externalFunctionExample.xls");
             Ptg[] ptgs = HSSFFormulaParser.Parse("YEARFRAC(B1,C1)", wb);
             Assert.AreEqual(4, ptgs.Length);
             Assert.AreEqual(typeof(NameXPtg), ptgs[0].GetType());
 
             wb.GetSheetAt(0).GetRow(0).CreateCell(6).CellFormula = ("YEARFRAC(C1,B1)");
+#if !HIDE_UNREACHABLE_CODE
             if (false)
             {
                 // In case you fancy Checking in excel
@@ -73,10 +76,13 @@ namespace NPOI.SS.Formula.PTG
                     throw e;
                 }
             }
+#endif
         }
         [TestMethod]
-        public void TestEvaluate()
+        public void TestEvaluateFormulaContainingExternalFunction()
         {
+            System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US"); 
+            
             HSSFWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("externalFunctionExample.xls");
             ISheet sheet = wb.GetSheetAt(0);
             HSSFFormulaEvaluator fe = new HSSFFormulaEvaluator(wb);

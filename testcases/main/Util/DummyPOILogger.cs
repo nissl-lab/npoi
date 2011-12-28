@@ -39,7 +39,7 @@ namespace TestCases.Util
 	    public ArrayList logged = new ArrayList(); 
 
 	    public void Reset() {
-		    logged = new ArrayList();
+		    logged.Clear(); // = new ArrayList();
 	    }
 
         public override bool Check(int level)

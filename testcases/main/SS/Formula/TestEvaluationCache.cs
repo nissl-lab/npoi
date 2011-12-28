@@ -22,12 +22,9 @@ namespace NPOI.SS.Formula
     using NPOI.SS.Formula.PTG;
     using NPOI.SS.Formula.Eval;
     using NPOI.HSSF.UserModel;
-    using NPOI.HSSF.Util;
-    using NPOI.SS.Formula;
     using NPOI.SS.UserModel;
     using System;
     using System.Collections.Generic;
-    using NPOI.Util;
     using System.Text;
     using NPOI.SS.Util;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -98,26 +95,26 @@ namespace NPOI.SS.Formula
             }
             public override void OnCacheHit(int sheetIndex, int rowIndex, int columnIndex, ValueEval result)
             {
-                log("hit", rowIndex, columnIndex, result);
+                Log("hit", rowIndex, columnIndex, result);
             }
             public override void OnReadPlainValue(int sheetIndex, int rowIndex, int columnIndex, ICacheEntry entry)
             {
                 Loc loc = new Loc(0, sheetIndex, rowIndex, columnIndex);
                 if (!_plainCellLocsByCacheEntry.ContainsKey(entry))
                     _plainCellLocsByCacheEntry.Add(entry, loc);
-                log("value", rowIndex, columnIndex, entry.GetValue());
+                Log("value", rowIndex, columnIndex, entry.GetValue());
             }
             public override void OnStartEvaluate(EvaluationCell cell, ICacheEntry entry)
             {
                 if (!_formulaCellsByCacheEntry.ContainsKey(entry))
                     _formulaCellsByCacheEntry.Add(entry, cell);
                 ICell hc = _book.GetSheetAt(0).GetRow(cell.RowIndex).GetCell(cell.ColumnIndex);
-                log("start", cell.RowIndex, cell.ColumnIndex, FormulaExtractor.GetPtgs(hc));
+                Log("start", cell.RowIndex, cell.ColumnIndex, FormulaExtractor.GetPtgs(hc));
             }
             public override void OnEndEvaluate(ICacheEntry entry, ValueEval result)
             {
                 EvaluationCell cell = _formulaCellsByCacheEntry[(entry)];
-                log("end", cell.RowIndex, cell.ColumnIndex, result);
+                Log("end", cell.RowIndex, cell.ColumnIndex, result);
             }
             public override void OnClearCachedValue(ICacheEntry entry)
             {
@@ -139,7 +136,7 @@ namespace NPOI.SS.Formula
                     rowIndex = cell.RowIndex;
                     columnIndex = cell.ColumnIndex;
                 }
-                log("clear", rowIndex, columnIndex, entry.GetValue());
+                Log("clear", rowIndex, columnIndex, entry.GetValue());
             }
             public override void SortDependentCachedValues(ICacheEntry[] entries)
             {
@@ -148,13 +145,13 @@ namespace NPOI.SS.Formula
             public override void OnClearDependentCachedValue(ICacheEntry entry, int depth)
             {
                 EvaluationCell cell = _formulaCellsByCacheEntry.ContainsKey(entry) ? _formulaCellsByCacheEntry[(entry)] : null;
-                log("clear" + depth, cell.RowIndex, cell.ColumnIndex, entry.GetValue());
+                Log("clear" + depth, cell.RowIndex, cell.ColumnIndex, entry.GetValue());
             }
 
             public override void OnChangeFromBlankValue(int sheetIndex, int rowIndex, int columnIndex,
                     EvaluationCell cell, ICacheEntry entry)
             {
-                log("changeFromBlank", rowIndex, columnIndex, entry.GetValue());
+                Log("changeFromBlank", rowIndex, columnIndex, entry.GetValue());
                 if (entry.GetValue() == null)
                 { // hack to tell the difference between formula and plain value
                     // perhaps the API could be improved: onChangeFromBlankToValue, onChangeFromBlankToFormula
@@ -168,18 +165,18 @@ namespace NPOI.SS.Formula
                         _plainCellLocsByCacheEntry.Add(entry, loc);
                 }
             }
-            private void log(String tag, int rowIndex, int columnIndex, Object value)
+            private void Log(String tag, int rowIndex, int columnIndex, Object value)
             {
                 StringBuilder sb = new StringBuilder(64);
                 sb.Append(tag).Append(' ');
                 sb.Append(new CellReference(rowIndex, columnIndex, false, false).FormatAsString());
                 if (value != null)
                 {
-                    sb.Append(' ').Append(formatValue(value));
+                    sb.Append(' ').Append(FormatValue(value));
                 }
                 _logList.Add(sb.ToString());
             }
-            private String formatValue(Object value)
+            private String FormatValue(Object value)
             {
                 if (value is Ptg[])
                 {
@@ -268,7 +265,7 @@ namespace NPOI.SS.Formula
             public void SetCellFormula(String cellRefText, String formulaText)
             {
                 ICell cell = GetOrCreateCell(cellRefText);
-                cell.CellFormula=(formulaText);
+                cell.CellFormula = formulaText;
                 _Evaluator.NotifyUpdateCell(WrapCell(cell));
             }
 
@@ -628,6 +625,8 @@ namespace NPOI.SS.Formula
         [TestMethod]
         public void TestBlankCellChangedToValueCell_bug46053()
         {
+            System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
+
             HSSFWorkbook wb = new HSSFWorkbook();
             ISheet sheet = wb.CreateSheet("Sheet1");
             IRow row = sheet.CreateRow(0);
@@ -635,7 +634,7 @@ namespace NPOI.SS.Formula
             ICell cellB1 = row.CreateCell(1);
             HSSFFormulaEvaluator fe = new HSSFFormulaEvaluator(wb);
 
-            cellA1.CellFormula=("B1+2.2");
+            cellA1.CellFormula = "B1+2.2";
             cellB1.SetCellValue(1.5);
 
             fe.NotifyUpdateCell(cellA1);
@@ -667,6 +666,7 @@ namespace NPOI.SS.Formula
         [TestMethod]
         public void TestBlankCellChangedToValueCell()
         {
+            System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US"); 
 
             MySheet ms = new MySheet();
 
@@ -812,7 +812,7 @@ namespace NPOI.SS.Formula
             //formula referring all sheets Created below
             row = summary.CreateRow(0);
             ICell summaryCell = row.CreateCell(0);
-            summaryCell.CellFormula=("SUM(A2:A" + (numberOfSheets + 2) + ")");
+            summaryCell.CellFormula = "SUM(A2:A" + (numberOfSheets + 2) + ")";
 
 
             //create sheets with cells having (different) numbers
@@ -827,7 +827,7 @@ namespace NPOI.SS.Formula
 
                 row = summary.CreateRow(i);
                 cell = row.CreateCell(0);
-                cell.CellFormula=("new" + i + "!A1");
+                cell.CellFormula = "new" + i + "!A1";
 
             }
 

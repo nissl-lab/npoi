@@ -43,7 +43,7 @@ namespace TestCases.POIFS.Storage
      *
      * @author Marc Johnson
      */
-
+    [TestClass]
     public class TestRawDataBlockList
     {
 
@@ -62,6 +62,7 @@ namespace TestCases.POIFS.Storage
          *
          * @exception IOException
          */
+        [TestMethod]
         public void TestNormalConstructor()
         {
             byte[] data = new byte[2560];
@@ -78,7 +79,7 @@ namespace TestCases.POIFS.Storage
          *
          * @exception IOException
          */
-
+        [TestMethod]
         public void TestEmptyConstructor()
         {
             new RawDataBlockList(new MemoryStream(new byte[0]), POIFSConstants.SMALLER_BIG_BLOCK_SIZE_DETAILS);
@@ -87,13 +88,14 @@ namespace TestCases.POIFS.Storage
         /**
          * Test creating a short RawDataBlockList
          */
-
+        [TestMethod]
         public void TestShortConstructor()
         {
             // Get the logger to be used
             DummyPOILogger logger = (DummyPOILogger)POILogFactory.GetLogger(
                     typeof(RawDataBlock)
             );
+            logger.Reset(); // the logger may have been used before
             Assert.AreEqual(0, logger.logged.Count);
 
             // Test for various short sizes

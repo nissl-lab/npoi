@@ -104,6 +104,8 @@ namespace TestCases.SS.Formula
         [TestMethod]
         public void TestElementOrdering()
         {
+            System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
+
             ArrayPtg ptg = Create(ENCODED_PTG_DATA, ENCODED_CONSTANT_DATA);
             Assert.AreEqual(3, ptg.ColumnCount);
             Assert.AreEqual(2, ptg.RowCount);

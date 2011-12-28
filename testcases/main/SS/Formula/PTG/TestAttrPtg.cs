@@ -18,10 +18,7 @@
 namespace NPOI.SS.Formula.PTG
 {
     using System;
-    using NPOI.HSSF.UserModel;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
-    using NPOI.SS.UserModel;
-    using NPOI.HSSF.Model;
     using NPOI.Util;
     using NPOI.Util.IO;
     using TestCases.HSSF.Record;
@@ -49,7 +46,7 @@ namespace NPOI.SS.Formula.PTG
             {
                 Ptg.SerializePtgs(ptgs, data2, 0);
             }
-            catch (IndexOutOfRangeException e)
+            catch (IndexOutOfRangeException)
             {
                 throw new AssertFailedException("incorrect re-serialization of tAttrChoose");
             }

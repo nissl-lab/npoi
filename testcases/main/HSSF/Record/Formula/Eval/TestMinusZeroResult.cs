@@ -79,6 +79,8 @@ namespace TestCases.SS.Formula.Eval
         [TestMethod]
         public void TestComparisonOperators()
         {
+            System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
+
             CheckEval(false, EvalInstances.Equal, 0.0, MINUS_ZERO);
             CheckEval(true, EvalInstances.GreaterThan, 0.0, MINUS_ZERO);
             CheckEval(true, EvalInstances.LessThan, MINUS_ZERO, 0.0);

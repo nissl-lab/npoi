@@ -109,38 +109,40 @@ namespace TestCases.HPSF.Basic
         [TestMethod]
         public void TestNoFormatID()
         {
-            FileStream file = _samples.GetFile(POI_FS);
-            //FileStream filename = File.OpenRead(dataDir + POI_FS);
-            //filename.deleteOnExit();
+            using (FileStream file = _samples.GetFile(POI_FS))
+            {
+                //FileStream filename = File.OpenRead(dataDir + POI_FS);
+                //filename.deleteOnExit();
 
-            /* Create a mutable property Set with a section that does not have the
-             * formatID Set: */
-            FileStream out1 = file;
-            POIFSFileSystem poiFs = new POIFSFileSystem();
-            MutablePropertySet ps = new MutablePropertySet();
-            ps.ClearSections();
-            ps.AddSection(new MutableSection());
+                /* Create a mutable property Set with a section that does not have the
+                 * formatID Set: */
+                FileStream out1 = file;
+                POIFSFileSystem poiFs = new POIFSFileSystem();
+                MutablePropertySet ps = new MutablePropertySet();
+                ps.ClearSections();
+                ps.AddSection(new MutableSection());
 
-            /* Write it to a POIFS and the latter to disk: */
-            try
-            {
-                MemoryStream psStream = new MemoryStream();
-                ps.Write(psStream);
-                psStream.Close();
-                byte[] streamData = psStream.ToArray();
-                poiFs.CreateDocument(new MemoryStream(streamData),
-                                     SummaryInformation.DEFAULT_STREAM_NAME);
-                poiFs.WriteFileSystem(out1);
-                out1.Close();
-                Assert.Fail("Should have thrown a NoFormatIDException.");
-            }
-            catch (Exception ex)
-            {
-                Assert.IsTrue(ex is NoFormatIDException);
-            }
-            finally
-            {
-                out1.Close();
+                /* Write it to a POIFS and the latter to disk: */
+                try
+                {
+                    MemoryStream psStream = new MemoryStream();
+                    ps.Write(psStream);
+                    psStream.Close();
+                    byte[] streamData = psStream.ToArray();
+                    poiFs.CreateDocument(new MemoryStream(streamData),
+                                         SummaryInformation.DEFAULT_STREAM_NAME);
+                    poiFs.WriteFileSystem(out1);
+                    out1.Close();
+                    Assert.Fail("Should have thrown a NoFormatIDException.");
+                }
+                catch (Exception ex)
+                {
+                    Assert.IsTrue(ex is NoFormatIDException);
+                }
+                finally
+                {
+                    out1.Close();
+                }
             }
         }
 
@@ -158,31 +160,33 @@ namespace TestCases.HPSF.Basic
         public void TestWriteEmptyPropertySet()
         {
 
-            FileStream file = _samples.GetFile(POI_FS);
-            //filename.deleteOnExit();
+            using (FileStream file = _samples.GetFile(POI_FS))
+            {
+                //filename.deleteOnExit();
 
-            /* Create a mutable property Set and Write it to a POIFS: */
-            FileStream out1 = file;
-            POIFSFileSystem poiFs = new POIFSFileSystem();
-            MutablePropertySet ps = new MutablePropertySet();
-            MutableSection s = (MutableSection)ps.Sections[0];
-            s.SetFormatID(SectionIDMap.SUMMARY_INFORMATION_ID);
+                /* Create a mutable property Set and Write it to a POIFS: */
+                FileStream out1 = file;
+                POIFSFileSystem poiFs = new POIFSFileSystem();
+                MutablePropertySet ps = new MutablePropertySet();
+                MutableSection s = (MutableSection)ps.Sections[0];
+                s.SetFormatID(SectionIDMap.SUMMARY_INFORMATION_ID);
 
-            MemoryStream psStream = new MemoryStream();
-            ps.Write(psStream);
-            psStream.Close();
-            byte[] streamData = psStream.ToArray();
-            poiFs.CreateDocument(new MemoryStream(streamData),
-                                 SummaryInformation.DEFAULT_STREAM_NAME);
-            poiFs.WriteFileSystem(out1);
-            //out1.Close();
-            file.Position = 0;
-            /* Read the POIFS: */
-            POIFSReader reader3 = new POIFSReader();
-            reader3.StreamReaded += new POIFSReaderEventHandler(reader3_StreamReaded);
-            reader3.Read(file);
-            file.Close();
-            //File.Delete(dataDir + POI_FS);
+                MemoryStream psStream = new MemoryStream();
+                ps.Write(psStream);
+                psStream.Close();
+                byte[] streamData = psStream.ToArray();
+                poiFs.CreateDocument(new MemoryStream(streamData),
+                                     SummaryInformation.DEFAULT_STREAM_NAME);
+                poiFs.WriteFileSystem(out1);
+                //out1.Close();
+                file.Position = 0;
+                /* Read the POIFS: */
+                POIFSReader reader3 = new POIFSReader();
+                reader3.StreamReaded += new POIFSReaderEventHandler(reader3_StreamReaded);
+                reader3.Read(file);
+                file.Close();
+                //File.Delete(dataDir + POI_FS);
+            }
         }
 
         void reader3_StreamReaded(object sender, POIFSReaderEventArgs e)

@@ -113,7 +113,7 @@ namespace NPOI.SS.UserModel
         /**
          * @return Returns the errorValue.
          */
-        //the return value shoud be sbyte? the byte in java is signed(-128~127) and is unsiged(0~255) in c#.
+        //the return value should be sbyte? the byte in java is signed(-128~127) and is unsiged(0~255) in c#.
         //if use byte, the test NPOI.SS.Formula.TestWorkbookEvaluator.TestResultOutsideRange failed.
         public sbyte ErrorValue
         {

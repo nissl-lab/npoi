@@ -75,8 +75,10 @@ namespace TestCases.HPSF.Basic
         {
             //FileStream data =File.OpenRead(dataDir+POI_FS);
             POIDataSamples samples = POIDataSamples.GetHPSFInstance();
-            Stream data = (Stream)samples.OpenResourceAsStream(POI_FS);
-            poiFiles = Util.ReadPOIFiles(data);
+            using (Stream data = (Stream)samples.OpenResourceAsStream(POI_FS))
+            {
+                poiFiles = Util.ReadPOIFiles(data);
+            }
         }
 
 

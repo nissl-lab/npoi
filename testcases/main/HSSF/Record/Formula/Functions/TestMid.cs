@@ -61,7 +61,6 @@ namespace TestCases.SS.Formula.Functions
         [TestMethod]
         public void TestBasic()
         {
-
             ConfirmMid(new StringEval("galactic"), new NumberEval(3), new NumberEval(4), "lact");
         }
 
@@ -71,6 +70,8 @@ namespace TestCases.SS.Formula.Functions
         [TestMethod]
         public void TestUnusualArgs()
         {
+            System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
+
             // startPos with fractional digits
             ConfirmMid(new StringEval("galactic"), new NumberEval(3.1), new NumberEval(4), "lact");
 

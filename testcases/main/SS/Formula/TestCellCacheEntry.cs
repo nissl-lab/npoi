@@ -30,7 +30,7 @@ namespace NPOI.SS.Formula
     public class TestCellCacheEntry
     {
         [TestMethod]
-        public void TestBasic()
+        public void TestBasicCellCacheEntry()
         {
             CellCacheEntry pcce = new PlainValueCellCacheEntry(new NumberEval(42.0));
             ValueEval ve = pcce.GetValue();

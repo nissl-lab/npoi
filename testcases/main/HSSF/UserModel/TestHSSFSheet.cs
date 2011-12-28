@@ -75,7 +75,9 @@ namespace TestCases.HSSF.UserModel
             InternalSheet sheet = s.Sheet;
 
             Assert.AreEqual(true, sheet.GridsetRecord.Gridset);
+#pragma warning disable 0618 //  warning CS0618: 'NPOI.HSSF.UserModel.HSSFSheet.IsGridsPrinted' is obsolete: 'Please use IsPrintGridlines instead'
             s.IsGridsPrinted = true; // <- this is marked obsolete, but using "s.IsPrintGridlines = true;" makes this test fail 8-(
+#pragma warning restore 0618
             Assert.AreEqual(false, sheet.GridsetRecord.Gridset);
         }
 

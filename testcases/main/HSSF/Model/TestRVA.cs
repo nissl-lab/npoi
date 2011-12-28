@@ -49,7 +49,7 @@ namespace TestCases.HSSF.Model
         }
 
         [TestMethod]
-        public void TestFormulas()
+        public void TestFormulasRVA()
         {
             HSSFWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("testRVA.xls");
             NPOI.SS.UserModel.ISheet sheet = wb.GetSheetAt(0);

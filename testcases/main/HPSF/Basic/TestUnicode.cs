@@ -37,12 +37,12 @@ namespace TestCases.HPSF.Basic
     public class TestUnicode
     {
         //static string dataDir = @"..\..\..\TestCases\HPSF\data\";
-        static String POI_FS = "TestUnicode.xls";
-        static String[] POI_FILES = new String[]
+        private static String POI_FS = "TestUnicode.xls";
+        private static String[] POI_FILES = new String[]
         {
             "\x0005DocumentSummaryInformation",
         };
-        FileStream data;
+//        FileStream data;
         //POIFile[] poiFiles;
 
 
@@ -56,12 +56,12 @@ namespace TestCases.HPSF.Basic
         { 
         }
 
-        [TestInitialize]
-        public void Setup()
-        {
-            POIDataSamples samples = POIDataSamples.GetHPSFInstance();
-            data = samples.GetFile(POI_FS);
-        }
+        //[TestInitialize]
+        //public void Setup()
+        //{
+        //    POIDataSamples samples = POIDataSamples.GetHPSFInstance();
+        //    data = samples.GetFile(POI_FS);
+        //}
 
 
 
@@ -76,23 +76,28 @@ namespace TestCases.HPSF.Basic
         [TestMethod]
         public void TestPropertySetMethods()
         {
-            POIFile poiFile = Util.ReadPOIFiles(data, POI_FILES)[1];
-            byte[] b = poiFile.GetBytes();
-            PropertySet ps =
-                PropertySetFactory.Create(new MemoryStream(b));
-            Assert.IsTrue(ps.IsDocumentSummaryInformation, "IsDocumentSummaryInformation");
-            Assert.AreEqual(ps.SectionCount, 2);
-            Section s = (Section)ps.Sections[1];
-            Assert.AreEqual(s.GetProperty(1),
-                                (int)Constants.CP_UTF16);
-            Assert.AreEqual(s.GetProperty(2),
-                                -96070278);
-            Assert.AreEqual(s.GetProperty(3),
-                                "MCon_Info zu Office bei Schreiner");
-            Assert.AreEqual(s.GetProperty(4),
-                                "petrovitsch@schreiner-online.de");
-            Assert.AreEqual(s.GetProperty(5),
-                                "Petrovitsch, Wilhelm");
+            POIDataSamples samples = POIDataSamples.GetHPSFInstance();
+            using (FileStream data = samples.GetFile(POI_FS))
+            {
+
+                POIFile poiFile = Util.ReadPOIFiles(data, POI_FILES)[1];
+                byte[] b = poiFile.GetBytes();
+                PropertySet ps =
+                    PropertySetFactory.Create(new MemoryStream(b));
+                Assert.IsTrue(ps.IsDocumentSummaryInformation, "IsDocumentSummaryInformation");
+                Assert.AreEqual(ps.SectionCount, 2);
+                Section s = (Section)ps.Sections[1];
+                Assert.AreEqual(s.GetProperty(1),
+                                    (int)Constants.CP_UTF16);
+                Assert.AreEqual(s.GetProperty(2),
+                                    -96070278);
+                Assert.AreEqual(s.GetProperty(3),
+                                    "MCon_Info zu Office bei Schreiner");
+                Assert.AreEqual(s.GetProperty(4),
+                                    "petrovitsch@schreiner-online.de");
+                Assert.AreEqual(s.GetProperty(5),
+                                    "Petrovitsch, Wilhelm");
+            }
         }
     }
 }

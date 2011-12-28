@@ -70,17 +70,19 @@ namespace TestCases.HPSF.Basic
                     if (files[i].EndsWith("1"))
                         continue;
 
-                    FileStream f = new FileStream(files[i], FileMode.Open,FileAccess.Read);
-                    /* Read the POI filesystem's property Set streams: */
-                    POIFile[] psf1 = Util.ReadPropertySets(f);
-
-                    for (int j = 0; j < psf1.Length; j++)
+                    using (FileStream f = new FileStream(files[i], FileMode.Open, FileAccess.Read))
                     {
-                        Stream in1 =
-                            new MemoryStream(psf1[j].GetBytes());
-                        PropertySet a=PropertySetFactory.Create(in1);
+                        /* Read the POI filesystem's property Set streams: */
+                        POIFile[] psf1 = Util.ReadPropertySets(f);
+
+                        for (int j = 0; j < psf1.Length; j++)
+                        {
+                            Stream in1 =
+                                new MemoryStream(psf1[j].GetBytes());
+                            PropertySet a = PropertySetFactory.Create(in1);
+                        }
+                        f.Close();
                     }
-                    f.Close();
                 }
             }
             catch (Exception t)

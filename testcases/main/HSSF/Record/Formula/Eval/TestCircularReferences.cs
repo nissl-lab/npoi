@@ -52,7 +52,7 @@ namespace TestCases.SS.Formula.Eval
         private static void ConfirmCycleErrorCode(NPOI.SS.UserModel.CellValue cellValue)
         {
             Assert.IsTrue(cellValue.CellType == NPOI.SS.UserModel.CellType.ERROR);
-            Assert.AreEqual((byte)ErrorEval.CIRCULAR_REF_ERROR.ErrorCode, cellValue.ErrorValue);
+            Assert.AreEqual(ErrorEval.CIRCULAR_REF_ERROR.ErrorCode, cellValue.ErrorValue);
         }
 
 

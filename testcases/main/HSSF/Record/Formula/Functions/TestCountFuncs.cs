@@ -181,6 +181,8 @@ namespace TestCases.SS.Formula.Functions
         [TestMethod]
         public void TestCountifComparisons()
         {
+            System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
+
             I_MatchPredicate mp;
 
             mp = Countif.CreateCriteriaPredicate(new StringEval(">5"));

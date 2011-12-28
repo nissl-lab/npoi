@@ -111,6 +111,7 @@ namespace TestCases.POIFS.Storage
         {
             //// Get the logger to be used
             DummyPOILogger logger = (DummyPOILogger)POILogFactory.GetLogger(typeof(RawDataBlock));
+            logger.Reset(); // the logger may have been used before
             Assert.AreEqual(0, logger.logged.Count);
 
             // Test for various data sizes
@@ -167,6 +168,7 @@ namespace TestCases.POIFS.Storage
         {
             // Get the logger to be used
             DummyPOILogger logger = (DummyPOILogger)POILogFactory.GetLogger(typeof(RawDataBlock));
+            logger.Reset(); // the logger may have been used before
             Assert.AreEqual(0, logger.logged.Count);
 
             // Test for various ok data sizes

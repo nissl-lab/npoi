@@ -175,14 +175,14 @@ namespace NPOI.SS.Formula
             ISheet sheet = wb.CreateSheet("Sheet1");
             IRow row = sheet.CreateRow(0);
             ICell cell = row.CreateCell(0);
-            cell.CellFormula = ("1+IF(1,,)");
+            cell.CellFormula = "1+IF(1,,)";
             HSSFFormulaEvaluator fe = new HSSFFormulaEvaluator(wb);
             CellValue cv;
             try
             {
                 cv = fe.Evaluate(cell);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 throw new AssertFailedException("Missing arg result not being handled correctly.");
             }
@@ -191,7 +191,7 @@ namespace NPOI.SS.Formula
             Assert.AreEqual(1.0, cv.NumberValue, 0.0);
 
             // check with string operand
-            cell.CellFormula = ("\"abc\"&IF(1,,)");
+            cell.CellFormula = "\"abc\"&IF(1,,)";
             fe.NotifySetFormula(cell);
             cv = fe.Evaluate(cell);
             Assert.AreEqual(CellType.STRING, cv.CellType);
@@ -199,7 +199,7 @@ namespace NPOI.SS.Formula
             Assert.AreEqual("abc", cv.StringValue);
 
             // check CHOOSE()
-            cell.CellFormula = ("\"abc\"&CHOOSE(2,5,,9)");
+            cell.CellFormula = "\"abc\"&CHOOSE(2,5,,9)";
             fe.NotifySetFormula(cell);
             cv = fe.Evaluate(cell);
             Assert.AreEqual(CellType.STRING, cv.CellType);
@@ -214,9 +214,11 @@ namespace NPOI.SS.Formula
         [TestMethod]
         public void TestResultOutsideRange()
         {
+            System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
+
             HSSFWorkbook wb = new HSSFWorkbook();
             ICell cell = wb.CreateSheet("Sheet1").CreateRow(0).CreateCell(0);
-            cell.CellFormula = ("D2:D5"); // IF(TRUE,D2:D5,D2) or  OFFSET(D2:D5,0,0) would work too
+            cell.CellFormula = "D2:D5"; // IF(TRUE,D2:D5,D2) or  OFFSET(D2:D5,0,0) would work too
             FormulaEvaluator fe = wb.GetCreationHelper().CreateFormulaEvaluator();
             CellValue cv;
             try
@@ -229,14 +231,14 @@ namespace NPOI.SS.Formula
                 {
                     throw new AssertFailedException("Identified bug in result dereferencing");
                 }
-                throw e;
+                throw;
             }
             Assert.AreEqual(CellType.ERROR, cv.CellType);
             Assert.AreEqual(ErrorConstants.ERROR_VALUE, cv.ErrorValue);
 
             // verify circular refs are still detected properly
             fe.ClearAllCachedResultValues();
-            cell.CellFormula = ("OFFSET(A1,0,0)");
+            cell.CellFormula = "OFFSET(A1,0,0)";
             cv = fe.Evaluate(cell);
             Assert.AreEqual(CellType.ERROR, cv.CellType);
             Assert.AreEqual(ErrorEval.CIRCULAR_REF_ERROR.ErrorCode, cv.ErrorValue);

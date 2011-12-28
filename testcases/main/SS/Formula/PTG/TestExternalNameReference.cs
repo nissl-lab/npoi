@@ -34,7 +34,7 @@ namespace NPOI.SS.Formula.PTG
     [TestClass]
     public class TestExternalNameReference
     {
-        double MARKUP_COST = 1.9d;
+        // not used: double MARKUP_COST = 1.9d;
         double MARKUP_COST_1 = 1.8d;
         double MARKUP_COST_2 = 1.5d;
         double PART_COST = 12.3d;
@@ -88,7 +88,7 @@ namespace NPOI.SS.Formula.PTG
             }
         }
         [TestMethod]
-        public void TestEvaluate()
+        public void TestEvaluateExternalNameReference()
         {
             HSSFWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("XRefCalc.xls");
             HSSFWorkbook wb2 = HSSFTestDataSamples.OpenSampleWorkbook("XRefCalcData.xls");

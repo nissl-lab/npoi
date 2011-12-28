@@ -55,8 +55,10 @@ namespace TestCases.SS.Formula.Eval
             Assert.AreEqual(expectedResult, result, 0);
         }
         [TestMethod]
-        public void TestBasic()
+        public void TestBasicPercentEval()
         {
+            System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
+
             Confirm(new NumberEval(5), 0.05);
             Confirm(new NumberEval(3000), 30.0);
             Confirm(new NumberEval(-150), -1.5);
@@ -64,7 +66,7 @@ namespace TestCases.SS.Formula.Eval
             Confirm(BoolEval.TRUE, 0.01);
         }
         [TestMethod]
-        public void TestInSpreadSheet()
+        public void TestInSpreadSheetPercentEval()
         {
             HSSFWorkbook wb = new HSSFWorkbook();
             NPOI.SS.UserModel.ISheet sheet = wb.CreateSheet("Sheet1");

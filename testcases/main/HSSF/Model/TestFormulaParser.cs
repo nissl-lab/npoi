@@ -395,8 +395,10 @@ namespace TestCases.HSSF.Model
             Assert.AreEqual("-1/310*4000/30000", formula, "Exponential formula string");
         }
         [TestMethod]
-        public void TestNumbers()
+        public void TestNumbersFormulaParser()
         {
+            System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
+
             HSSFWorkbook wb = new HSSFWorkbook();
 
             wb.CreateSheet("Cash_Flow");
@@ -435,7 +437,7 @@ namespace TestCases.HSSF.Model
             Assert.AreEqual("1", formula);
         }
         [TestMethod]
-        public void TestRanges()
+        public void TestRangesFormulaParser()
         {
             HSSFWorkbook wb = new HSSFWorkbook();
 
@@ -807,7 +809,12 @@ namespace TestCases.HSSF.Model
             }
             catch (Exception e)
             {
-                FormulaParserTestHelper.ConfirmParseException(e);
+                if (!(e is FormulaParseException))
+                {
+                    String failMsg = "Expected FormulaParseException, but got (" + e.GetType().Name + "):";
+                    Console.WriteLine(failMsg);
+                    throw new AssertFailedException(failMsg);
+                }
             }
         }
         [TestMethod]

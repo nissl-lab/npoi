@@ -59,8 +59,9 @@ namespace TestCases.SS.Formula.Functions
             Assert.AreEqual(ErrorEval.VALUE_INVALID, result);
         }
         [TestMethod]
-        public void TestBasic()
+        public void TestBasicValuesInFormulaFunctions()
         {
+            System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US"); 
 
             ConfirmValue("100", 100);
             ConfirmValue("-2.3", -2.3);
@@ -86,7 +87,7 @@ namespace TestCases.SS.Formula.Functions
         }
 
         [TestMethod]
-        public void TestErrors()
+        public void TestErrorsInFormulaFunctions()
         {
             ConfirmValueError("1+1");
             ConfirmValueError("1 1");

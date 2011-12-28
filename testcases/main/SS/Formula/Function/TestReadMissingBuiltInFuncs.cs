@@ -128,7 +128,7 @@ namespace NPOI.SS.Formula.Function
                 // some other unexpected error
                 throw e;
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 throw new AssertFailedException("found err- DBCS() registered with -1 args");
             }
@@ -182,10 +182,12 @@ namespace NPOI.SS.Formula.Function
                 throw e;
             }
             String result = sheet.GetRow(rowIx).GetCell(0).CellFormula;
+#if !HIDE_UNREACHABLE_CODE
             if (false)
             {
                 System.Console.Error.WriteLine(result);
             }
+#endif
             return result;
         }
         private static AssertFailedException afe(String msg)

@@ -1438,6 +1438,8 @@ using NPOI.POIFS.FileSystem;
         [TestMethod]
         public void Test43623()
         {
+            System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
+
             HSSFWorkbook wb = OpenSample("43623.xls");
             Assert.AreEqual(1, wb.NumberOfSheets);
 
@@ -2261,7 +2263,7 @@ using NPOI.POIFS.FileSystem;
             {
                 s.Header.Center = (s250); // 256 bytes required
             }
-            catch (ArgumentException e)
+            catch (ArgumentException)
             {
                 throw new AssertFailedException("Identified bug 47244b - header can be more than 256 bytes");
             }
@@ -2270,7 +2272,7 @@ using NPOI.POIFS.FileSystem;
             {
                 s.Header.Center = (s251); // 257 bytes required
             }
-            catch (ArgumentException e)
+            catch (ArgumentException)
             {
                 throw new AssertFailedException("Identified bug 47244b - header can be more than 256 bytes");
             }
@@ -2288,7 +2290,7 @@ using NPOI.POIFS.FileSystem;
             {
                 s.Footer.Center = (s250); // 256 bytes required
             }
-            catch (ArgumentException e)
+            catch (ArgumentException)
             {
                 throw new AssertFailedException("Identified bug 47244b - footer can be more than 256 bytes");
             }
@@ -2297,7 +2299,7 @@ using NPOI.POIFS.FileSystem;
             {
                 s.Footer.Center = (s251); // 257 bytes required
             }
-            catch (ArgumentException e)
+            catch (ArgumentException)
             {
                 throw new AssertFailedException("Identified bug 47244b - footer can be more than 256 bytes");
             }
@@ -2373,6 +2375,7 @@ using NPOI.POIFS.FileSystem;
             Assert.AreEqual("[Formulas2.xls]Sheet1!B2", row.GetCell(1).CellFormula);
             Assert.AreEqual(112.0, row.GetCell(1).NumericCellValue);
 
+#if !HIDE_UNREACHABLE_CODE
             // TODO - Fix these so they work...
             if (1 == 2)
             {
@@ -2386,6 +2389,7 @@ using NPOI.POIFS.FileSystem;
                 Assert.AreEqual("'[\u0005$http://example.com/FormulaRefs.xls]Sheet1'!B1", row.GetCell(1).CellFormula);
                 Assert.AreEqual(234.0, row.GetCell(1).NumericCellValue);
             }
+#endif
         }
         [TestMethod]
         public void Test47251()
@@ -2436,6 +2440,8 @@ using NPOI.POIFS.FileSystem;
         [TestMethod]
         public void Test48968()
         {
+            System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
+
             HSSFWorkbook wb = OpenSample("48968.xls");
             Assert.AreEqual(1, wb.NumberOfSheets);
 
