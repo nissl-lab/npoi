@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Text;
 using System.Diagnostics;
 
@@ -40,7 +39,9 @@ namespace NPOI.Util
         * @deprecated Deprecated since logical value is offset from stored
         * value and correction factor is applied in accessor method.
         */
+#if !HIDE_UNREACHABLE_CODE
         [Obsolete]
+#endif
         private int bitCount;
 
         /**
@@ -52,7 +53,9 @@ namespace NPOI.Util
          * @deprecated Deprecated since logical value is offset from stored
          * value and correction factor is applied in accessor method.
          */
+#if !HIDE_UNREACHABLE_CODE
         [Obsolete]
+#endif
         private int bitLength;
 
         /**
@@ -64,8 +67,8 @@ namespace NPOI.Util
          * @deprecated Deprecated since logical value is offset from stored
          * value and correction factor is applied in accessor method.
          */
-        [Obsolete]
-        private int lowestSetBit;
+       // [Obsolete]
+       // never used private int lowestSetBit;
 
         /**
          * Two plus the index of the lowest-order int in the magnitude of this
@@ -75,7 +78,9 @@ namespace NPOI.Util
          * @deprecated Deprecated since logical value is offset from stored
          * value and correction factor is applied in accessor method.
          */
+#if !HIDE_UNREACHABLE_CODE
         [Obsolete]
+#endif
         private int firstNonzeroIntNum;
 
         /**

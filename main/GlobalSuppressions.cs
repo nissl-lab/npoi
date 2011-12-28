@@ -47,26 +47,21 @@
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2237:MarkISerializableTypesWithSerializable", Scope = "type", Target = "NPOI.HPSF.Wellknown.PropertyIDMap")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2237:MarkISerializableTypesWithSerializable", Scope = "type", Target = "NPOI.HPSF.CustomProperties")]
 
+// there is no non breaking fix:
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope", Scope = "member", Target = "NPOI.HPSF.MutablePropertySet.#GetStream()")]
+
 // The code seems okay to me:
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times", Scope = "member", Target = "NPOI.DDF.EscherBlipWMFRecord.#Compress(System.Byte[])")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times", Scope = "member", Target = "NPOI.HSSF.Util.GUID.#D4")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times", Scope = "member", Target = "NPOI.DDF.EscherBlipWMFRecord.#Decompress(System.Byte[],System.Int32,System.Int32)")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times", Scope = "member", Target = "NPOI.DDF.EscherDump.#DumpOld(System.Int64,System.IO.Stream)")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times", Scope = "member", Target = "NPOI.DDF.EscherPictBlip.#InflatePictureData(System.Byte[])")]
 
 // The lock is in a static class - not sure: use a static member for the lock!?
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2002:DoNotLockOnObjectsWithWeakIdentity", Scope = "member", Target = "NPOI.Util.HexDump.#Dump(System.Byte[],System.Int64,System.IO.Stream,System.Int32,System.Int32)")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2002:DoNotLockOnObjectsWithWeakIdentity", Scope = "member", Target = "NPOI.Util.HexDump.#Dump(System.Byte[],System.Int64,System.IO.Stream,System.Int32)")]
 
-// TODO - reenable because either fixed or indented use - in the long run there should be added some more Dispose() methods to fix the remaining
-
-// for now ignored - often this message is not fixable and normally calling Dispose multiple time should not harm
-[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times", Scope = "member", Target = "NPOI.HPSF.MutablePropertySet.#ToStream()")]
-[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times", Scope = "member", Target = "NPOI.HPSF.MutableSection.#Write(System.IO.Stream)")]
-[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times", Scope = "member", Target = "NPOI.DDF.EscherBlipWMFRecord.#Decompress(System.Byte[],System.Int32,System.Int32)")]
-[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times", Scope = "member", Target = "NPOI.DDF.EscherPictBlip.#InflatePictureData(System.Byte[])")]
-[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times", Scope = "member", Target = "NPOI.Util.CRC32.#FileCRC(System.String)")]
-[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times", Scope = "member", Target = "NPOI.SS.Formula.Function.FunctionMetadataReader.#CreateRegistry()")]
-[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times", Scope = "member", Target = "NPOI.DDF.EscherDump.#DumpOld(System.Int64,System.IO.Stream)")]
-
-// these not implemented exception are acceptable for my
+// these not implemented exception are acceptable for me:
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Scope = "member", Target = "NPOI.HPSF.DocumentSummaryInformation.#HeadingPair")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Scope = "member", Target = "NPOI.HPSF.DocumentSummaryInformation.#Docparts")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Scope = "member", Target = "NPOI.HSSF.Extractor.EventBasedExcelExtractor.#DocSummaryInformation")]
@@ -91,6 +86,3 @@
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Scope = "member", Target = "NPOI.HSSF.Extractor.ExcelExtractor.#Text")]
 
 
-// TODO
-
-[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope", Scope = "member", Target = "NPOI.HPSF.MutablePropertySet.#GetStream()")]

@@ -355,26 +355,20 @@ namespace NPOI.DDF
             Array.Copy(data, pos + 50, compressedData, 0, Length);
             using (var ms = new MemoryStream(compressedData))
             {
-                ZlibStream inflaterInputStream = new ZlibStream(ms, CompressionMode.Decompress);
-                using (MemoryStream out1 = new MemoryStream())
+                using (ZlibStream inflaterInputStream = new ZlibStream(ms, CompressionMode.Decompress))
                 {
-                    int c;
-                    try
+                    using (MemoryStream out1 = new MemoryStream())
                     {
-                        while ((c = inflaterInputStream.ReadByte()) != -1)
-                            out1.WriteByte((byte)c);
-                        return out1.ToArray();
-                    }
-                    catch (IOException e)
-                    {
-                        throw new RecordFormatException(e.ToString());
-                    }
-                    finally
-                    {
-                        out1.Close();
-                        if (inflaterInputStream != null)
+                        int c;
+                        try
                         {
-                            inflaterInputStream.Close();
+                            while ((c = inflaterInputStream.ReadByte()) != -1)
+                                out1.WriteByte((byte)c);
+                            return out1.ToArray();
+                        }
+                        catch (IOException e)
+                        {
+                            throw new RecordFormatException(e.ToString());
                         }
                     }
                 }

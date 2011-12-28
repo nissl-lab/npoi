@@ -389,13 +389,14 @@ namespace NPOI.DDF
 
                     using (MemoryStream bin = new MemoryStream(buf))
                     {
-                        ZlibStream in2 = new ZlibStream(bin, CompressionMode.Decompress, false);
-                        int bytesToDump = -1;
-                        HexDump.Dump(in2, 0, bytesToDump);
+                        using (ZlibStream in2 = new ZlibStream(bin, CompressionMode.Decompress, false))
+                        {
+                            int bytesToDump = -1;
+                            HexDump.Dump(in2, 0, bytesToDump);
 
-                        recordBytesRemaining -= nDumpSize;
-                        remainingBytes -= nDumpSize;
-                        in2.Close();
+                            recordBytesRemaining -= nDumpSize;
+                            remainingBytes -= nDumpSize;
+                        }
                     }
                 }
 

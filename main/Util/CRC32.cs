@@ -110,7 +110,6 @@ namespace NPOI.Util
             {
                 byte[] bInput = new byte[inFile.Length];
                 inFile.Read(bInput, 0, bInput.Length);
-                inFile.Close();
 
                 return (long)ByteCRC(ref bInput);
             }

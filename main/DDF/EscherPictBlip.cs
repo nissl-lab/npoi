@@ -135,35 +135,28 @@ namespace NPOI.DDF
         /// <returns>the inflated picture data.</returns>
         private static byte[] InflatePictureData(byte[] data)
         {
-            MemoryStream out1 = new MemoryStream();
-            ZlibStream in1 = null;
-            try
+            using (MemoryStream out1 = new MemoryStream())
             {
-                using (var ms = new MemoryStream(data))
+                try
                 {
-                    in1 = new ZlibStream(
-                        ms, CompressionMode.Decompress);
-
-                    byte[] buf = new byte[4096];
-                    int ReadBytes;
-                    while ((ReadBytes = in1.Read(buf, 0, buf.Length)) > 0)
+                    using (var ms = new MemoryStream(data))
                     {
-                        out1.Write(buf, 0, ReadBytes);
+                        using (ZlibStream in1 = new ZlibStream(ms, CompressionMode.Decompress))
+                        {
+                            byte[] buf = new byte[4096];
+                            int ReadBytes;
+                            while ((ReadBytes = in1.Read(buf, 0, buf.Length)) > 0)
+                            {
+                                out1.Write(buf, 0, ReadBytes);
+                            }
+                            return out1.ToArray();
+                        }
                     }
-                    return out1.ToArray();
                 }
-            }
-            catch (IOException e)
-            {
-                log.Log(POILogger.INFO, "Possibly corrupt compression or non-compressed data", e);
-                return data;
-            }
-            finally
-            {
-                out1.Close();
-                if (in1 != null)
+                catch (IOException e)
                 {
-                    in1.Close();
+                    log.Log(POILogger.INFO, "Possibly corrupt compression or non-compressed data", e);
+                    return data;
                 }
             }
         }

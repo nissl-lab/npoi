@@ -425,8 +425,8 @@ namespace NPOI.HPSF
                                                         codepage);
                         }
                     }
-                    propertyStream.Close();
-                    propertyListStream.Close();
+                    propertyStream.Flush();
+                    propertyListStream.Flush();
 
                     /* Write the section: */
                     byte[] pb1 = propertyListStream.ToArray();

@@ -85,7 +85,6 @@ namespace NPOI.SS.Formula.Function
                         }
                         ProcessLine(fdb, line);
                     }
-                    br.Close();
                 }
                 catch (IOException)
                 {

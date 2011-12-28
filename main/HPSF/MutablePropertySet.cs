@@ -261,7 +261,7 @@ namespace NPOI.HPSF
             using (MemoryStream psStream = new MemoryStream())
             {
                 Write(psStream);
-                psStream.Close();
+                psStream.Flush();
                 byte[] streamData = psStream.ToArray();
                 return new MemoryStream(streamData);
             }
