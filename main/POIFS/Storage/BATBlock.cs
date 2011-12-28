@@ -56,12 +56,12 @@ namespace NPOI.POIFS.Storage
          * For a XFat (DIFat) block, these are 127 / 1023
          *  next sector values, then a chaining value.
          */
-        private int[] _values;
+        //private int[] _values; 
 
         /**
          * Does this BATBlock have any free sectors in it?
          */
-        private bool _has_free_sectors;
+    //    private bool _has_free_sectors;
 
         /**
          * Where in the file are we?
@@ -87,9 +87,10 @@ namespace NPOI.POIFS.Storage
                 offset += LittleEndianConstants.INT_SIZE;
             }
         }
-        private BATBlock(POIFSBigBlockSize bigBlockSize)
-        { 
-        }
+        //private BATBlock(POIFSBigBlockSize bigBlockSize)
+        //{
+         
+        //}
         /**
          * Create a single instance initialized (perhaps partially) with entries
          *
@@ -101,56 +102,56 @@ namespace NPOI.POIFS.Storage
          *                  k, start_index <= k < end_index)
          */
 
-        private BATBlock(POIFSBigBlockSize bigBlockSize, int[] entries,
-                         int start_index, int end_index)
-            : this(bigBlockSize)
-        {
+        //private BATBlock(POIFSBigBlockSize bigBlockSize, int[] entries,
+        //                 int start_index, int end_index)
+        //    : this(bigBlockSize)
+        //{
 
-            for (int k = start_index; k < end_index; k++)
-            {
-                _values[k - start_index] = entries[k];
-            }
+        //    for (int k = start_index; k < end_index; k++)
+        //    {
+        //        _values[k - start_index] = entries[k];
+        //    }
 
-            // Do we have any free sectors?
-            if (end_index - start_index == _values.Length)
-            {
-                RecomputeFree();
-            }
-        }
-        private void RecomputeFree()
-        {
-            bool hasFree = false;
-            for (int k = 0; k < _values.Length; k++)
-            {
-                if (_values[k] == POIFSConstants.UNUSED_BLOCK)
-                {
-                    hasFree = true;
-                    break;
-                }
-            }
-            _has_free_sectors = hasFree;
-        }
-        /**
-         * Create a single BATBlock from the byte buffer, which must hold at least
-         *  one big block of data to be read.
-         */
-        public static BATBlock CreateBATBlock(POIFSBigBlockSize bigBlockSize, BinaryReader data)
-        {
-            // Create an empty block
-            BATBlock block = new BATBlock(bigBlockSize);
+        //    // Do we have any free sectors?
+        //    if (end_index - start_index == _values.Length)
+        //    {
+        //        RecomputeFree();
+        //    }
+        //}
+        //private void RecomputeFree()
+        //{
+        //    bool hasFree = false;
+        //    for (int k = 0; k < _values.Length; k++)
+        //    {
+        //        if (_values[k] == POIFSConstants.UNUSED_BLOCK)
+        //        {
+        //            hasFree = true;
+        //            break;
+        //        }
+        //    }
+        //    _has_free_sectors = hasFree;
+        //}
+        ///**
+        // * Create a single BATBlock from the byte buffer, which must hold at least
+        // *  one big block of data to be read.
+        // */
+        //public static BATBlock CreateBATBlock(POIFSBigBlockSize bigBlockSize, BinaryReader data)
+        //{
+        //    // Create an empty block
+        //    BATBlock block = new BATBlock(bigBlockSize);
 
-            // Fill it
-            byte[] buffer = new byte[LittleEndianConstants.INT_SIZE];
-            for (int i = 0; i < block._values.Length; i++)
-            {
-                data.Read(buffer,0,buffer.Length);
-                block._values[i] = LittleEndian.GetInt(buffer);
-            }
-            block.RecomputeFree();
+        //    // Fill it
+        //    byte[] buffer = new byte[LittleEndianConstants.INT_SIZE];
+        //    for (int i = 0; i < block._values.Length; i++)
+        //    {
+        //        data.Read(buffer,0,buffer.Length);
+        //        block._values[i] = LittleEndian.GetInt(buffer);
+        //    }
+        //    block.RecomputeFree();
 
-            // All done
-            return block;
-        }
+        //    // All done
+        //    return block;
+        //}
         ///**
         // * Creates a single BATBlock, with all the values set to empty.
         // */
@@ -310,41 +311,41 @@ namespace NPOI.POIFS.Storage
          * Does this BATBlock have any free sectors in it, or
          *  is it full?
          */
-        public bool HasFreeSectors
-        {
-            get
-            {
-                return _has_free_sectors;
-            }
-        }
+        //public bool HasFreeSectors
+        //{
+        //    get
+        //    {
+        //        return _has_free_sectors;
+        //    }
+        //}
 
-        public int GetValueAt(int relativeOffset)
-        {
-            if (relativeOffset >= _values.Length)
-            {
-                throw new IndexOutOfRangeException(
-                      "Unable to fetch offset " + relativeOffset + " as the " +
-                      "BAT only contains " + _values.Length + " entries"
-                );
-            }
-            return _values[relativeOffset];
-        }
-        public void SetValueAt(int relativeOffset, int value)
-        {
-            int oldValue = _values[relativeOffset];
-            _values[relativeOffset] = value;
+        //public int GetValueAt(int relativeOffset)
+        //{
+        //    if (relativeOffset >= _values.Length)
+        //    {
+        //        throw new IndexOutOfRangeException(
+        //              "Unable to fetch offset " + relativeOffset + " as the " +
+        //              "BAT only contains " + _values.Length + " entries"
+        //        );
+        //    }
+        //    return _values[relativeOffset];
+        //}
+        //public void SetValueAt(int relativeOffset, int value)
+        //{
+        //    int oldValue = _values[relativeOffset];
+        //    _values[relativeOffset] = value;
 
-            // Do we need to re-compute the free?
-            if (value == POIFSConstants.UNUSED_BLOCK)
-            {
-                _has_free_sectors = true;
-                return;
-            }
-            if (oldValue == POIFSConstants.UNUSED_BLOCK)
-            {
-                RecomputeFree();
-            }
-        }
+        //    // Do we need to re-compute the free?
+        //    if (value == POIFSConstants.UNUSED_BLOCK)
+        //    {
+        //        _has_free_sectors = true;
+        //        return;
+        //    }
+        //    if (oldValue == POIFSConstants.UNUSED_BLOCK)
+        //    {
+        //        RecomputeFree();
+        //    }
+        //}
 
         /**
          * Retrieve where in the file we live 
