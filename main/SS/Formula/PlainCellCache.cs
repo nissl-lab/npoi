@@ -20,11 +20,12 @@ namespace NPOI.SS.Formula
 
     using System;
     using System.Collections;
+    using NPOI.Util;
 
     public class Loc
     {
 
-        private int _bookSheetColumn;
+        private long _bookSheetColumn;
 
         private int _rowIndex;
 
@@ -34,10 +35,9 @@ namespace NPOI.SS.Formula
             _rowIndex = rowIndex;
         }
 
-        public static int ToBookSheetColumn(int bookIndex, int sheetIndex, int columnIndex)
+        public static long ToBookSheetColumn(int bookIndex, int sheetIndex, int columnIndex)
         {
-            return ((bookIndex & 0x00FF) << 24) + ((sheetIndex & 0x00FF) << 16)
-                    + ((columnIndex & 0xFFFF) << 0);
+            return ((bookIndex & 0xFFFFL) << 48) + ((sheetIndex & 0xFFFFL) << 32) + ((columnIndex & 0xFFFFL) << 0);
         }
 
         public Loc(int bookSheetColumn, int rowIndex)
@@ -45,10 +45,9 @@ namespace NPOI.SS.Formula
             _bookSheetColumn = bookSheetColumn;
             _rowIndex = rowIndex;
         }
-
         public override int GetHashCode()
         {
-            return _bookSheetColumn + 17 * _rowIndex;
+            return (int)(_bookSheetColumn ^ (Operator.UnsignedRightShift(_bookSheetColumn , 32))) + 17 * _rowIndex;
         }
 
         public override bool Equals(Object obj)
@@ -68,7 +67,22 @@ namespace NPOI.SS.Formula
         {
             get
             {
-                return _bookSheetColumn & 0x000FFFF;
+                return (int)(_bookSheetColumn & 0x000FFFF);
+            }
+        }
+        public int SheetIndex
+        {
+            get
+            {
+                return (int)((_bookSheetColumn >> 32) & 0xFFFF);
+            }
+        }
+
+        public int BookIndex
+        {
+            get
+            {
+                return (int)((_bookSheetColumn >> 48) & 0xFFFF);
             }
         }
     }
@@ -76,7 +90,7 @@ namespace NPOI.SS.Formula
      *
      * @author Josh Micich
      */
-    class PlainCellCache
+    public class PlainCellCache
     {
 
         private Hashtable _plainValueEntriesByLoc;

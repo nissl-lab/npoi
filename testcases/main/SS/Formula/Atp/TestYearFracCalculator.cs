@@ -15,54 +15,61 @@
    limitations under the License.
 ==================================================================== */
 
-namespace NPOI.SS.Formula.atp;
+namespace NPOI.SS.Formula.Atp
+{
 
 
+    using NPOI.SS.Formula.Eval;
+    using NPOI.SS.UserModel;
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using System;
+    using System.Globalization;
 
+    /**
+     * Specific Test cases for YearFracCalculator
+     */
+    [TestClass]
+    public class TestYearFracCalculator
+    {
+        [TestMethod]
+        public void TestBasis1()
+        {
+            Confirm(md(1999, 1, 1), md(1999, 4, 5), 1, 0.257534247);
+            Confirm(md(1999, 4, 1), md(1999, 4, 5), 1, 0.010958904);
+            Confirm(md(1999, 4, 1), md(1999, 4, 4), 1, 0.008219178);
+            Confirm(md(1999, 4, 2), md(1999, 4, 5), 1, 0.008219178);
+            Confirm(md(1999, 3, 31), md(1999, 4, 3), 1, 0.008219178);
+            Confirm(md(1999, 4, 5), md(1999, 4, 8), 1, 0.008219178);
+            Confirm(md(1999, 4, 4), md(1999, 4, 7), 1, 0.008219178);
+            Confirm(md(2000, 2, 5), md(2000, 6, 1), 0, 0.322222222);
+        }
 
-using junit.framework.TestCase;
+        private void Confirm(double startDate, double endDate, int basis, double expectedValue)
+        {
+            double actualValue;
+            try
+            {
+                actualValue = YearFracCalculator.Calculate(startDate, endDate, basis);
+            }
+            catch (EvaluationException e)
+            {
+                throw e;
+            }
+            double diff = actualValue - expectedValue;
+            if (Math.Abs(diff) > 0.000000001)
+            {
+                double hours = diff * 365 * 24;
+                Console.WriteLine(startDate + " " + endDate + " off by " + hours + " hours");
+                Assert.AreEqual(expectedValue, actualValue, 0.000000001);
+            }
 
-using NPOI.SS.Formula.Eval.EvaluationException;
-using NPOI.SS.UserModel.DateUtil;
+        }
 
-/**
- * Specific Test cases for YearFracCalculator
- */
-public class TestYearFracCalculator  {
+        private static double md(int year, int month, int day)
+        {
+            DateTime d = new DateTime(year, month, day, 0, 0, 0, 0);
+            return DateUtil.GetExcelDate(d);
+        }
+    }
 
-	public void TestBasis1() {
-		Confirm(md(1999, 1, 1), md(1999, 4, 5), 1, 0.257534247);
-		Confirm(md(1999, 4, 1), md(1999, 4, 5), 1, 0.010958904);
-		Confirm(md(1999, 4, 1), md(1999, 4, 4), 1, 0.008219178);
-		Confirm(md(1999, 4, 2), md(1999, 4, 5), 1, 0.008219178);
-		Confirm(md(1999, 3, 31), md(1999, 4, 3), 1, 0.008219178);
-		Confirm(md(1999, 4, 5), md(1999, 4, 8), 1, 0.008219178);
-		Confirm(md(1999, 4, 4), md(1999, 4, 7), 1, 0.008219178);
-		Confirm(md(2000, 2, 5), md(2000, 6, 1), 0, 0.322222222);
-	}
-
-	private void Confirm(double startDate, double endDate, int basis, double expectedValue) {
-		double actualValue;
-		try {
-			actualValue = YearFracCalculator.calculate(startDate, endDate, basis);
-		} catch (EvaluationException e) {
-			throw new RuntimeException(e);
-		}
-		double diff = actualValue - expectedValue;
-		if (Math.abs(diff) >  0.000000001) {
-			double hours = diff * 365 * 24;
-			Console.WriteLine(startDate + " " + endDate + " off by " + hours + " hours");
-			Assert.AreEqual(expectedValue, actualValue, 0.000000001);
-		}
-		
-	}
-
-	private static double md(int year, int month, int day) {
-		Calendar c = new GregorianCalendar();
-		
-		c.Set(year, month-1, day, 0, 0, 0);
-		c.Set(Calendar.MILLISECOND, 0);
-		return DateUtil.GetExcelDate(c.GetTime());
-	}
 }
-

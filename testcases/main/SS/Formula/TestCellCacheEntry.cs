@@ -15,30 +15,33 @@
    limitations under the License.
 ==================================================================== */
 
-namespace NPOI.SS.Formula;
+namespace NPOI.SS.Formula
+{
 
-using junit.framework.TestCase;
+    using NPOI.SS.Formula.Eval;
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-using NPOI.SS.Formula.Eval.NumberEval;
-using NPOI.SS.Formula.Eval.ValueEval;
+    /**
+     * Tests {@link NPOI.SS.Formula.CellCacheEntry}.
+     *
+     * @author Josh Micich
+     */
+    [TestClass]
+    public class TestCellCacheEntry
+    {
+        [TestMethod]
+        public void TestBasic()
+        {
+            CellCacheEntry pcce = new PlainValueCellCacheEntry(new NumberEval(42.0));
+            ValueEval ve = pcce.GetValue();
+            Assert.AreEqual(42, ((NumberEval)ve).NumberValue, 0.0);
 
-/**
- * Tests {@link NPOI.SS.Formula.CellCacheEntry}.
- *
- * @author Josh Micich
- */
-public class TestCellCacheEntry  {
+            FormulaCellCacheEntry fcce = new FormulaCellCacheEntry();
+            fcce.UpdateFormulaResult(new NumberEval(10.0), CellCacheEntry.EMPTY_ARRAY, null);
 
-	public void TestBasic() {
-		CellCacheEntry pcce = new PlainValueCellCacheEntry(new NumberEval(42.0));
-		ValueEval ve = pcce.GetValue();
-		Assert.AreEqual(42, ((NumberEval)ve).GetNumberValue(), 0.0);
-		
-		FormulaCellCacheEntry fcce = new FormulaCellCacheEntry();
-		fcce.updateFormulaResult(new NumberEval(10.0), CellCacheEntry.EMPTY_ARRAY, null);
-		
-		ve = fcce.GetValue();
-		Assert.AreEqual(10, ((NumberEval)ve).GetNumberValue(), 0.0);
-	}
+            ve = fcce.GetValue();
+            Assert.AreEqual(10, ((NumberEval)ve).NumberValue, 0.0);
+        }
+    }
+
 }
-

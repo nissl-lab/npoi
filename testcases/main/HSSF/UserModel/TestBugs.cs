@@ -36,6 +36,7 @@ namespace TestCases.HSSF.UserModel
     using NPOI.HSSF.Model;
     using System.Collections.Generic;
     using NPOI.SS.Formula.PTG;
+using NPOI.POIFS.FileSystem;
 
     /**
      * Testcases for bugs entered in bugzilla
@@ -111,6 +112,7 @@ namespace TestCases.HSSF.UserModel
         /**Test writing a hyperlink
          * Open resulting sheet in Excel and Check that A1 contains a hyperlink*/
         [TestMethod]
+        [Ignore]//not found in poi
         public void Test23094()
         {
             HSSFWorkbook wb = new HSSFWorkbook();
@@ -220,6 +222,7 @@ namespace TestCases.HSSF.UserModel
         /** another Test for the number of unique strings issue
          *Test Opening the resulting file in Excel*/
         [TestMethod]
+        [Ignore] //this test was not found in poi 3.8beta4
         public void Test22568()
         {
             int r = 2000; int c = 3;
@@ -337,6 +340,7 @@ namespace TestCases.HSSF.UserModel
             }
         }
         [TestMethod]
+        [Ignore] ///not found in poi 3.8beat4
         public void Test18800()
         {
             HSSFWorkbook book = new HSSFWorkbook();
@@ -356,6 +360,7 @@ namespace TestCases.HSSF.UserModel
          * Merged regions were being Removed from the parent in cloned sheets
          */
         [TestMethod]
+        [Ignore] //this test was not found in poi 3.8beta4
         public void Test22720()
         {
             HSSFWorkbook workBook = new HSSFWorkbook();
@@ -496,6 +501,7 @@ namespace TestCases.HSSF.UserModel
             }
         }
         [TestMethod]
+        [Ignore]// not found in poi
         public void Test28031()
         {
             HSSFWorkbook wb = new HSSFWorkbook();
@@ -1431,7 +1437,7 @@ namespace TestCases.HSSF.UserModel
          */
         [TestMethod]
         public void Test43623()
-        {           
+        {
             HSSFWorkbook wb = OpenSample("43623.xls");
             Assert.AreEqual(1, wb.NumberOfSheets);
 
@@ -2134,7 +2140,7 @@ namespace TestCases.HSSF.UserModel
                     List<String> collecteddStyles = new List<String>();
                     for (short i = 0; i < numCellStyles; i++)
                     {
-                        HSSFCellStyle cellStyle = wb.GetCellStyleAt(i);
+                        ICellStyle cellStyle = wb.GetCellStyleAt(i);
                         String styleName = cellStyle.GetUserStyleName();
                         if (styleName != null)
                         {
@@ -2218,6 +2224,587 @@ namespace TestCases.HSSF.UserModel
             Assert.AreEqual(1, wb.NumberOfSheets);
         }
 
+        /**
+     * The resolution for bug 45777 assumed that the maximum text length in a header / footer
+     * record was 256 bytes.  This assumption appears to be wrong.  Since the fix for bug 47244,
+     * POI now supports header / footer text lengths beyond 256 bytes.
+     */
+        [TestMethod]
+        public void Test45777()
+        {
+            HSSFWorkbook wb = new HSSFWorkbook();
+            ISheet s = wb.CreateSheet();
 
+            char[] cc248 = new char[248];
+            Arrays.Fill(cc248, 'x');
+            String s248 = new String(cc248);
+
+            String s249 = s248 + "1";
+            String s250 = s248 + "12";
+            String s251 = s248 + "123";
+            Assert.AreEqual(248, s248.Length);
+            Assert.AreEqual(249, s249.Length);
+            Assert.AreEqual(250, s250.Length);
+            Assert.AreEqual(251, s251.Length);
+
+
+            // Try on headers
+            s.Header.Center = (s248);
+            Assert.AreEqual(254, ((HSSFHeader)s.Header).RawTextLength);
+            WriteOutAndReadBack(wb);
+
+            s.Header.Center = (s251);
+            Assert.AreEqual(257, ((HSSFHeader)s.Header).RawTextLength);
+            WriteOutAndReadBack(wb);
+
+            try
+            {
+                s.Header.Center = (s250); // 256 bytes required
+            }
+            catch (ArgumentException e)
+            {
+                throw new AssertFailedException("Identified bug 47244b - header can be more than 256 bytes");
+            }
+
+            try
+            {
+                s.Header.Center = (s251); // 257 bytes required
+            }
+            catch (ArgumentException e)
+            {
+                throw new AssertFailedException("Identified bug 47244b - header can be more than 256 bytes");
+            }
+
+            // Now try on footers
+            s.Footer.Center = (s248);
+            Assert.AreEqual(254, ((HSSFFooter)s.Footer).RawTextLength);
+            WriteOutAndReadBack(wb);
+
+            s.Footer.Center = (s251);
+            Assert.AreEqual(257, ((HSSFFooter)s.Footer).RawTextLength);
+            WriteOutAndReadBack(wb);
+
+            try
+            {
+                s.Footer.Center = (s250); // 256 bytes required
+            }
+            catch (ArgumentException e)
+            {
+                throw new AssertFailedException("Identified bug 47244b - footer can be more than 256 bytes");
+            }
+
+            try
+            {
+                s.Footer.Center = (s251); // 257 bytes required
+            }
+            catch (ArgumentException e)
+            {
+                throw new AssertFailedException("Identified bug 47244b - footer can be more than 256 bytes");
+            }
+        }
+        /**
+     * Problems with formula references to 
+     *  sheets via URLs
+     */
+        [TestMethod]
+        public void Test45970()
+        {
+            HSSFWorkbook wb = OpenSample("FormulaRefs.xls");
+            Assert.AreEqual(3, wb.NumberOfSheets);
+
+            ISheet s = wb.GetSheetAt(0);
+            IRow row;
+
+            row = s.GetRow(0);
+            Assert.AreEqual(CellType.NUMERIC, row.GetCell(1).CellType);
+            Assert.AreEqual(112.0, row.GetCell(1).NumericCellValue);
+
+            row = s.GetRow(1);
+            Assert.AreEqual(CellType.FORMULA, row.GetCell(1).CellType);
+            Assert.AreEqual("B1", row.GetCell(1).CellFormula);
+            Assert.AreEqual(112.0, row.GetCell(1).NumericCellValue);
+
+            row = s.GetRow(2);
+            Assert.AreEqual(CellType.FORMULA, row.GetCell(1).CellType);
+            Assert.AreEqual("Sheet1!B1", row.GetCell(1).CellFormula);
+            Assert.AreEqual(112.0, row.GetCell(1).NumericCellValue);
+
+            row = s.GetRow(3);
+            Assert.AreEqual(CellType.FORMULA, row.GetCell(1).CellType);
+            Assert.AreEqual("[Formulas2.xls]Sheet1!B2", row.GetCell(1).CellFormula);
+            Assert.AreEqual(112.0, row.GetCell(1).NumericCellValue);
+
+            row = s.GetRow(4);
+            Assert.AreEqual(CellType.FORMULA, row.GetCell(1).CellType);
+            Assert.AreEqual("'[\u0005$http://gagravarr.org/FormulaRefs.xls]Sheet1'!B1", row.GetCell(1).CellFormula);
+            Assert.AreEqual(112.0, row.GetCell(1).NumericCellValue);
+
+            // Change 4
+            row.GetCell(1).CellFormula = ("'[\u0005$http://gagravarr.org/FormulaRefs2.xls]Sheet1'!B2");
+            row.GetCell(1).SetCellValue(123.0);
+
+            // Add 5
+            row = s.CreateRow(5);
+            row.CreateCell(1, CellType.FORMULA);
+            row.GetCell(1).CellFormula = ("'[\u0005$http://example.com/FormulaRefs.xls]Sheet1'!B1");
+            row.GetCell(1).SetCellValue(234.0);
+
+
+            // Re-test
+            wb = WriteOutAndReadBack(wb);
+            s = wb.GetSheetAt(0);
+
+            row = s.GetRow(0);
+            Assert.AreEqual(CellType.NUMERIC, row.GetCell(1).CellType);
+            Assert.AreEqual(112.0, row.GetCell(1).NumericCellValue);
+
+            row = s.GetRow(1);
+            Assert.AreEqual(CellType.FORMULA, row.GetCell(1).CellType);
+            Assert.AreEqual("B1", row.GetCell(1).CellFormula);
+            Assert.AreEqual(112.0, row.GetCell(1).NumericCellValue);
+
+            row = s.GetRow(2);
+            Assert.AreEqual(CellType.FORMULA, row.GetCell(1).CellType);
+            Assert.AreEqual("Sheet1!B1", row.GetCell(1).CellFormula);
+            Assert.AreEqual(112.0, row.GetCell(1).NumericCellValue);
+
+            row = s.GetRow(3);
+            Assert.AreEqual(CellType.FORMULA, row.GetCell(1).CellType);
+            Assert.AreEqual("[Formulas2.xls]Sheet1!B2", row.GetCell(1).CellFormula);
+            Assert.AreEqual(112.0, row.GetCell(1).NumericCellValue);
+
+            // TODO - Fix these so they work...
+            if (1 == 2)
+            {
+                row = s.GetRow(4);
+                Assert.AreEqual(CellType.FORMULA, row.GetCell(1).CellType);
+                Assert.AreEqual("'[\u0005$http://gagravarr.org/FormulaRefs2.xls]Sheet1'!B2", row.GetCell(1).CellFormula);
+                Assert.AreEqual(123.0, row.GetCell(1).NumericCellValue);
+
+                row = s.GetRow(5);
+                Assert.AreEqual(CellType.FORMULA, row.GetCell(1).CellType);
+                Assert.AreEqual("'[\u0005$http://example.com/FormulaRefs.xls]Sheet1'!B1", row.GetCell(1).CellFormula);
+                Assert.AreEqual(234.0, row.GetCell(1).NumericCellValue);
+            }
+        }
+        [TestMethod]
+        public void Test47251()
+        {
+            OpenSample("47251.xls");
+        }
+        /**
+     * Round trip a file with an unusual UnicodeString/ExtRst record parts
+     */
+        [TestMethod]
+        public void Test47847()
+        {
+            HSSFWorkbook wb = OpenSample("47847.xls");
+            Assert.AreEqual(3, wb.NumberOfSheets);
+
+            // Find the SST record
+            UnicodeString withExt = wb.Workbook.GetSSTString(0);
+            UnicodeString withoutExt = wb.Workbook.GetSSTString(31);
+
+            Assert.AreEqual("O:Alloc:Qty", withExt.String);
+            Assert.IsTrue((withExt.OptionFlags & 0x0004) == 0x0004);
+
+            Assert.AreEqual("RT", withoutExt.String);
+            Assert.IsTrue((withoutExt.OptionFlags & 0x0004) == 0x0000);
+
+            // Something about continues...
+
+
+            // Write out and re-read
+            wb = WriteOutAndReadBack(wb);
+            Assert.AreEqual(3, wb.NumberOfSheets);
+
+            // Check it's the same now
+            withExt = wb.Workbook.GetSSTString(0);
+            withoutExt = wb.Workbook.GetSSTString(31);
+
+            Assert.AreEqual("O:Alloc:Qty", withExt.String);
+            Assert.IsTrue((withExt.OptionFlags & 0x0004) == 0x0004);
+
+            Assert.AreEqual("RT", withoutExt.String);
+            Assert.IsTrue((withoutExt.OptionFlags & 0x0004) == 0x0000);
+        }
+        [TestMethod]
+        public void Test48026()
+        {
+            OpenSample("48026.xls");
+        }
+        [TestMethod]
+        public void Test48968()
+        {
+            HSSFWorkbook wb = OpenSample("48968.xls");
+            Assert.AreEqual(1, wb.NumberOfSheets);
+
+            DataFormatter fmt = new DataFormatter();
+
+            // Check the dates
+            ISheet s = wb.GetSheetAt(0);
+            ICell cell_d20110325 = s.GetRow(0).GetCell(0);
+            ICell cell_d19000102 = s.GetRow(11).GetCell(0);
+            ICell cell_d19000100 = s.GetRow(21).GetCell(0);
+            Assert.AreEqual(s.GetRow(0).GetCell(3).StringCellValue, fmt.FormatCellValue(cell_d20110325));
+            Assert.AreEqual(s.GetRow(11).GetCell(3).StringCellValue, fmt.FormatCellValue(cell_d19000102));
+            // There is no such thing as 00/01/1900...
+            Assert.AreEqual("00/01/1900 06:14:24", s.GetRow(21).GetCell(3).StringCellValue);
+            Assert.AreEqual("31/12/1899 06:14:24", fmt.FormatCellValue(cell_d19000100));
+
+            // Check the cached values
+            Assert.AreEqual("HOUR(A1)", s.GetRow(5).GetCell(0).CellFormula);
+            Assert.AreEqual(11.0, s.GetRow(5).GetCell(0).NumericCellValue);
+            Assert.AreEqual("MINUTE(A1)", s.GetRow(6).GetCell(0).CellFormula);
+            Assert.AreEqual(39.0, s.GetRow(6).GetCell(0).NumericCellValue);
+            Assert.AreEqual("SECOND(A1)", s.GetRow(7).GetCell(0).CellFormula);
+            Assert.AreEqual(54.0, s.GetRow(7).GetCell(0).NumericCellValue);
+
+            // Re-evaulate and check
+            HSSFFormulaEvaluator.EvaluateAllFormulaCells(wb);
+            Assert.AreEqual("HOUR(A1)", s.GetRow(5).GetCell(0).CellFormula);
+            Assert.AreEqual(11.0, s.GetRow(5).GetCell(0).NumericCellValue);
+            Assert.AreEqual("MINUTE(A1)", s.GetRow(6).GetCell(0).CellFormula);
+            Assert.AreEqual(39.0, s.GetRow(6).GetCell(0).NumericCellValue);
+            Assert.AreEqual("SECOND(A1)", s.GetRow(7).GetCell(0).CellFormula);
+            Assert.AreEqual(54.0, s.GetRow(7).GetCell(0).NumericCellValue);
+
+            // Push the time forward a bit and check
+            double date = s.GetRow(0).GetCell(0).NumericCellValue;
+            s.GetRow(0).GetCell(0).SetCellValue(date + 1.26);
+
+            HSSFFormulaEvaluator.EvaluateAllFormulaCells(wb);
+            Assert.AreEqual("HOUR(A1)", s.GetRow(5).GetCell(0).CellFormula);
+            Assert.AreEqual(11.0 + 6.0, s.GetRow(5).GetCell(0).NumericCellValue);
+            Assert.AreEqual("MINUTE(A1)", s.GetRow(6).GetCell(0).CellFormula);
+            Assert.AreEqual(39.0 + 14.0 + 1, s.GetRow(6).GetCell(0).NumericCellValue);
+            Assert.AreEqual("SECOND(A1)", s.GetRow(7).GetCell(0).CellFormula);
+            Assert.AreEqual(54.0 + 24.0 - 60, s.GetRow(7).GetCell(0).NumericCellValue);
+        }
+        /**
+        * Problem with cloning a sheet with a chart
+        *  contained in it.
+        */
+        [TestMethod]
+        public void Test49096()
+        {
+            HSSFWorkbook wb = OpenSample("49096.xls");
+            Assert.AreEqual(1, wb.NumberOfSheets);
+
+            Assert.IsNotNull(wb.GetSheetAt(0));
+            wb.CloneSheet(0);
+            Assert.AreEqual(2, wb.NumberOfSheets);
+
+            wb = WriteOutAndReadBack(wb);
+            Assert.AreEqual(2, wb.NumberOfSheets);
+        }
+        
+        [TestMethod]
+        public void Test49219()
+        {
+            HSSFWorkbook wb = OpenSample("49219.xls");
+            Assert.AreEqual(1, wb.NumberOfSheets);
+            Assert.AreEqual("DGATE", wb.GetSheetAt(0).GetRow(1).GetCell(0).StringCellValue);
+        }
+        /**
+         * Setting the user style name on custom styles
+         */
+        [TestMethod]
+        public void Test49689()
+        {
+            HSSFWorkbook wb = new HSSFWorkbook();
+            ISheet s = wb.CreateSheet("Test");
+            IRow r = s.CreateRow(0);
+            ICell c = r.CreateCell(0);
+            
+            ICellStyle cs1 = wb.CreateCellStyle();
+            ICellStyle cs2 = wb.CreateCellStyle();
+            ICellStyle cs3 = wb.CreateCellStyle();
+            throw new NotImplementedException("not find property UserStyleName");
+            /*Assert.AreEqual(21, cs1.Index);
+            cs1.UserStyleName = ("Testing");
+
+            Assert.AreEqual(22, cs2.Index);
+            cs2.UserStyleName = ("Testing 2");
+
+            Assert.AreEqual(23, cs3.Index);
+            cs3.UserStyleName = ("Testing 3");
+
+            // Set one
+            c.CellStyle = (cs1);
+
+            // Write out and read back
+            wb = WriteOutAndReadBack(wb);
+
+            // Re-check
+            Assert.AreEqual("Testing", wb.GetCellStyleAt((short)21).UserStyleName);
+            Assert.AreEqual("Testing 2", wb.GetCellStyleAt((short)22).UserStyleName);
+            Assert.AreEqual("Testing 3", wb.GetCellStyleAt((short)23).UserStyleName);*/
+        }
+        [TestMethod]
+        public void Test49751()
+        {
+            throw new NotImplementedException("HSSFCellStyle requires UserStyleName property!");
+            /*HSSFWorkbook wb = OpenSample("49751.xls");
+            short numCellStyles = wb.NumCellStyles;
+            List<String> namedStyles = Arrays.AsList(
+                    "20% - Accent1", "20% - Accent2", "20% - Accent3", "20% - Accent4", "20% - Accent5",
+                    "20% - Accent6", "40% - Accent1", "40% - Accent2", "40% - Accent3", "40% - Accent4",
+                    "40% - Accent5", "40% - Accent6", "60% - Accent1", "60% - Accent2", "60% - Accent3",
+                    "60% - Accent4", "60% - Accent5", "60% - Accent6", "Accent1", "Accent2", "Accent3",
+                    "Accent4", "Accent5", "Accent6", "Bad", "Calculation", "Check Cell", "Explanatory Text",
+                    "Good", "Heading 1", "Heading 2", "Heading 3", "Heading 4", "Input", "Linked Cell",
+                    "Neutral", "Note", "Output", "Title", "Total", "Warning Text");
+
+            List<String> collecteddStyles = new List<String>();
+            for (short i = 0; i < numCellStyles; i++)
+            {
+                ICellStyle cellStyle = wb.GetCellStyleAt(i);
+                String styleName = cellStyle.UserStyleName;
+                if (styleName != null)
+                {
+                    collecteddStyles.Add(styleName);
+                }
+            }
+            Assert.IsTrue(namedStyles.ContainsAll(collecteddStyles));*/
+        }
+        /**
+        * Last row number when shifting rows
+        */
+        [TestMethod]
+        public void Test50416LastRowNumber()
+        {
+            // Create the workbook with 1 sheet which contains 3 rows
+            HSSFWorkbook workbook = new HSSFWorkbook();
+            ISheet sheet = workbook.CreateSheet("Bug50416");
+            IRow row1 = sheet.CreateRow(0);
+            ICell cellA_1 = row1.CreateCell(0, CellType.STRING);
+            cellA_1.SetCellValue("Cell A,1");
+            IRow row2 = sheet.CreateRow(1);
+            ICell cellA_2 = row2.CreateCell(0, CellType.STRING);
+            cellA_2.SetCellValue("Cell A,2");
+            IRow row3 = sheet.CreateRow(2);
+            ICell cellA_3 = row3.CreateCell(0, CellType.STRING);
+            cellA_3.SetCellValue("Cell A,3");
+
+            // Test the last Row number it currently correct
+            Assert.AreEqual(2, sheet.LastRowNum);
+
+            // Shift the first row to the end
+            sheet.ShiftRows(0, 0, 3);
+            Assert.AreEqual(3, sheet.LastRowNum);
+            Assert.AreEqual(-1, sheet.GetRow(0).LastCellNum);
+            Assert.AreEqual("Cell A,2", sheet.GetRow(1).GetCell(0).StringCellValue);
+            Assert.AreEqual("Cell A,3", sheet.GetRow(2).GetCell(0).StringCellValue);
+            Assert.AreEqual("Cell A,1", sheet.GetRow(3).GetCell(0).StringCellValue);
+
+            // Shift the 2nd row up to the first one
+            sheet.ShiftRows(1, 1, -1);
+            Assert.AreEqual(3, sheet.LastRowNum);
+            Assert.AreEqual("Cell A,2", sheet.GetRow(0).GetCell(0).StringCellValue);
+            Assert.AreEqual(-1, sheet.GetRow(1).LastCellNum);
+            Assert.AreEqual("Cell A,3", sheet.GetRow(2).GetCell(0).StringCellValue);
+            Assert.AreEqual("Cell A,1", sheet.GetRow(3).GetCell(0).StringCellValue);
+
+            // Shift the 4th row up into the gap in the 3rd row
+            sheet.ShiftRows(3, 3, -2);
+            Assert.AreEqual(2, sheet.LastRowNum);
+            Assert.AreEqual("Cell A,2", sheet.GetRow(0).GetCell(0).StringCellValue);
+            Assert.AreEqual("Cell A,1", sheet.GetRow(1).GetCell(0).StringCellValue);
+            Assert.AreEqual("Cell A,3", sheet.GetRow(2).GetCell(0).StringCellValue);
+            Assert.AreEqual(-1, sheet.GetRow(3).LastCellNum);
+
+            // Now zap the empty 4th row - won't do anything
+            sheet.RemoveRow(sheet.GetRow(3));
+
+            // Test again the last row number which should be 2
+            Assert.AreEqual(2, sheet.LastRowNum);
+            Assert.AreEqual("Cell A,2", sheet.GetRow(0).GetCell(0).StringCellValue);
+            Assert.AreEqual("Cell A,1", sheet.GetRow(1).GetCell(0).StringCellValue);
+            Assert.AreEqual("Cell A,3", sheet.GetRow(2).GetCell(0).StringCellValue);
+        }
+        [TestMethod]
+        public void Test50426()
+        {
+            HSSFWorkbook wb = OpenSample("50426.xls");
+            WriteOutAndReadBack(wb);
+        }
+        /**
+         * If you send a file between Excel and OpenOffice enough, something
+         *  will turn the "General" format into "GENERAL"
+         */
+        [TestMethod]
+        public void Test50756()
+        {
+            HSSFWorkbook wb = OpenSample("50756.xls");
+            ISheet s = wb.GetSheetAt(0);
+            IRow r17 = s.GetRow(16);
+            IRow r18 = s.GetRow(17);
+            throw new NotImplementedException("not found class HSSFDataFormatter");
+            /*HSSFDataFormatter df = new HSSFDataFormatter();
+
+            Assert.AreEqual(10.0, r17.GetCell(1).NumericCellValue);
+            Assert.AreEqual(20.0, r17.GetCell(2).NumericCellValue);
+            Assert.AreEqual(20.0, r17.GetCell(3).NumericCellValue);
+            Assert.AreEqual("GENERAL", r17.GetCell(1).CellStyle.GetDataFormatString());
+            Assert.AreEqual("GENERAL", r17.GetCell(2).CellStyle.GetDataFormatString());
+            Assert.AreEqual("GENERAL", r17.GetCell(3).CellStyle.GetDataFormatString());
+            Assert.AreEqual("10", df.formatCellValue(r17.GetCell(1)));
+            Assert.AreEqual("20", df.formatCellValue(r17.GetCell(2)));
+            Assert.AreEqual("20", df.formatCellValue(r17.GetCell(3)));
+
+            Assert.AreEqual(16.0, r18.GetCell(1).NumericCellValue);
+            Assert.AreEqual(35.0, r18.GetCell(2).NumericCellValue);
+            Assert.AreEqual(123.0, r18.GetCell(3).NumericCellValue);
+            Assert.AreEqual("GENERAL", r18.GetCell(1).CellStyle.GetDataFormatString());
+            Assert.AreEqual("GENERAL", r18.GetCell(2).CellStyle.GetDataFormatString());
+            Assert.AreEqual("GENERAL", r18.GetCell(3).CellStyle.GetDataFormatString());
+            Assert.AreEqual("16", df.formatCellValue(r18.GetCell(1)));
+            Assert.AreEqual("35", df.formatCellValue(r18.GetCell(2)));
+            Assert.AreEqual("123", df.formatCellValue(r18.GetCell(3)));*/
+        }
+        public void Test50779()
+        {
+            HSSFWorkbook wb1 = OpenSample("50779_1.xls");
+            WriteOutAndReadBack(wb1);
+
+            HSSFWorkbook wb2 = OpenSample("50779_2.xls");
+            WriteOutAndReadBack(wb2);
+        }
+        /**
+         * A protected sheet with comments, when written out by
+         *  POI, ends up upsetting excel.
+         * TODO Identify the cause and add extra asserts for
+         *  the bit excel cares about
+         */
+        [TestMethod]
+        public void Test50833()
+        {
+            HSSFWorkbook wb = OpenSample("50833.xls");
+            ISheet s = wb.GetSheetAt(0);
+            Assert.AreEqual("Sheet1", s.SheetName);
+            Assert.AreEqual(false, s.Protect);
+
+            ICell c = s.GetRow(0).GetCell(0);
+            Assert.AreEqual("test cell value", c.RichStringCellValue.String);
+
+            IComment cmt = c.CellComment;
+            Assert.IsNotNull(cmt);
+            Assert.AreEqual("Robert Lawrence", cmt.Author);
+            Assert.AreEqual("Robert Lawrence:\ntest comment", cmt.String.String);
+
+            // Reload
+            wb = WriteOutAndReadBack(wb);
+            s = wb.GetSheetAt(0);
+            c = s.GetRow(0).GetCell(0);
+
+            // Re-check the comment
+            cmt = c.CellComment;
+            Assert.IsNotNull(cmt);
+            Assert.AreEqual("Robert Lawrence", cmt.Author);
+            Assert.AreEqual("Robert Lawrence:\ntest comment", cmt.String.String);
+
+            // TODO Identify what excel doesn't like, and check for that
+        }
+        /**
+         * The spec says that ChartEndObjectRecord has 6 reserved
+         *  bytes on the end, but we sometimes find files without... 
+         */
+        [TestMethod]
+        public void Test50939()
+        {
+            HSSFWorkbook wb = OpenSample("50939.xls");
+            Assert.AreEqual(2, wb.NumberOfSheets);
+        }
+        /**
+         * HLookup and VLookup with optional arguments 
+         */
+        [TestMethod]
+        public void Test51024()
+        {
+            HSSFWorkbook wb = new HSSFWorkbook();
+            ISheet s = wb.CreateSheet();
+            IRow r1 = s.CreateRow(0);
+            IRow r2 = s.CreateRow(1);
+
+            r1.CreateCell(0).SetCellValue("v A1");
+            r2.CreateCell(0).SetCellValue("v A2");
+            r1.CreateCell(1).SetCellValue("v B1");
+
+            ICell c = r1.CreateCell(4);
+
+            HSSFFormulaEvaluator eval = new HSSFFormulaEvaluator(wb);
+
+            c.CellFormula = ("VLOOKUP(\"v A1\", A1:B2, 1)");
+            Assert.AreEqual("v A1", eval.Evaluate(c).StringValue);
+
+            c.CellFormula = ("VLOOKUP(\"v A1\", A1:B2, 1, 1)");
+            Assert.AreEqual("v A1", eval.Evaluate(c).StringValue);
+
+            c.CellFormula = ("VLOOKUP(\"v A1\", A1:B2, 1, )");
+            Assert.AreEqual("v A1", eval.Evaluate(c).StringValue);
+
+
+            c.CellFormula = ("HLOOKUP(\"v A1\", A1:B2, 1)");
+            Assert.AreEqual("v A1", eval.Evaluate(c).StringValue);
+
+            c.CellFormula = ("HLOOKUP(\"v A1\", A1:B2, 1, 1)");
+            Assert.AreEqual("v A1", eval.Evaluate(c).StringValue);
+
+            c.CellFormula = ("HLOOKUP(\"v A1\", A1:B2, 1, )");
+            Assert.AreEqual("v A1", eval.Evaluate(c).StringValue);
+        }
+        /**
+         * File with exactly 256 data blocks (+header block)
+         *  shouldn't break on POIFS loading 
+         */
+        [TestMethod]
+        public void Test51461()
+        {
+            throw new NotImplementedException("not find class NPOIFSFileSystem");
+            //byte[] data = HSSFITestDataProvider.Instance.GetTestDataFileContent("51461.xls");
+
+            //HSSFWorkbook wbPOIFS = new HSSFWorkbook(new POIFSFileSystem(
+            //      new MemoryStream(data)).Root, false);
+            //HSSFWorkbook wbNPOIFS = new HSSFWorkbook(new NPOIFSFileSystem(
+            //      new MemoryStream(data)).Root, false);
+
+            //Assert.AreEqual(2, wbPOIFS.NumberOfSheets);
+            //Assert.AreEqual(2, wbNPOIFS.NumberOfSheets);
+        }
+        /**
+        * Large row numbers and NPOIFS vs POIFS
+        */
+        [TestMethod]
+        public void Test51535()
+        {
+            throw new NotImplementedException("not find class NPOIFSFileSystem");
+            //byte[] data = HSSFITestDataProvider.Instance.GetTestDataFileContent("51535.xls");
+
+            //HSSFWorkbook wbPOIFS = new HSSFWorkbook(new POIFSFileSystem(
+            //      new MemoryStream(data)).Root, false);
+            //HSSFWorkbook wbNPOIFS = new HSSFWorkbook(new NPOIFSFileSystem(
+            //      new MemoryStream(data)).Root, false);
+
+            //foreach (HSSFWorkbook wb in new HSSFWorkbook[] { wbPOIFS, wbNPOIFS })
+            //{
+            //    Assert.AreEqual(3, wb.NumberOfSheets);
+
+            //    // Check directly
+            //    ISheet s = wb.GetSheetAt(0);
+            //    Assert.AreEqual("Top Left Cell", s.GetRow(0).GetCell(0).StringCellValue);
+            //    Assert.AreEqual("Top Right Cell", s.GetRow(0).GetCell(255).StringCellValue);
+            //    Assert.AreEqual("Bottom Left Cell", s.GetRow(65535).GetCell(0).StringCellValue);
+            //    Assert.AreEqual("Bottom Right Cell", s.GetRow(65535).GetCell(255).StringCellValue);
+
+            //    // Extract and check
+            //    ExcelExtractor ex = new ExcelExtractor(wb);
+            //    String text = ex.getText();
+            //    Assert.IsTrue(text.Contains("Top Left Cell"));
+            //    Assert.IsTrue(text.Contains("Top Right Cell"));
+            //    Assert.IsTrue(text.Contains("Bottom Left Cell"));
+            //    Assert.IsTrue(text.Contains("Bottom Right Cell"));
+            //}
+        }
     }
 }

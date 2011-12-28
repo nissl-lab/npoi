@@ -28,6 +28,7 @@ namespace NPOI.SS.Formula.PTG
     /**
      * Common superclass of 2-D area refs 
      */
+    [Serializable]
     public abstract class Area2DPtgBase : AreaPtgBase
     {
         private static int SIZE = 9;

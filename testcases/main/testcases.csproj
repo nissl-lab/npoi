@@ -482,6 +482,8 @@
     <Compile Include="HSSF\UserModel\TestHSSFSheetShiftRows.cs" />
     <Compile Include="HSSF\UserModel\TestHSSFName.cs" />
     <Compile Include="POIDataSamples.cs" />
+    <Compile Include="SS\Formula\Atp\TestYearFracCalculator.cs" />
+    <Compile Include="SS\Formula\Atp\TestYearFracCalculatorFromSpreadsheet.cs" />
     <Compile Include="SS\Formula\Constant\TestConstantValueParser.cs" />
     <Compile Include="SS\Formula\EvaluationListener.cs">
       <SubType>Code</SubType>
@@ -489,6 +491,9 @@
     <Compile Include="SS\Formula\FormulaParserTestHelper.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="SS\Formula\Function\TestFunctionMetadataRegistry.cs" />
+    <Compile Include="SS\Formula\Function\TestParseMissingBuiltInFuncs.cs" />
+    <Compile Include="SS\Formula\Function\TestReadMissingBuiltInFuncs.cs" />
     <Compile Include="SS\Formula\PTG\AbstractPtgTestCase.cs" />
     <Compile Include="SS\Formula\PTG\TestArea3DPtg.cs" />
     <Compile Include="SS\Formula\PTG\TestAreaErrPtg.cs" />
@@ -506,6 +511,12 @@
     <Compile Include="SS\Formula\PTG\TestRef3DPtg.cs" />
     <Compile Include="SS\Formula\PTG\TestReferencePtg.cs" />
     <Compile Include="SS\Formula\PTG\TestUnionPtg.cs" />
+    <Compile Include="SS\Formula\TestCellCacheEntry.cs" />
+    <Compile Include="SS\Formula\TestEvaluationCache.cs" />
+    <Compile Include="SS\Formula\TestFormulaShifter.cs" />
+    <Compile Include="SS\Formula\TestPlainCellCache.cs" />
+    <Compile Include="SS\Formula\TestSheetNameFormatter.cs" />
+    <Compile Include="SS\Formula\TestWorkbookEvaluator.cs" />
     <Compile Include="SS\Formula\WorkbookEvaluatorTestHelper.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -547,7 +558,6 @@
   <ItemGroup>
     <Folder Include="DDF\data\" />
     <Folder Include="HSSF\data\" />
-    <Folder Include="SS\Formula\Atp\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -14,181 +14,195 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 ==================================================================== */
-namespace NPOI.SS.Formula.atp;
+namespace NPOI.SS.Formula.Atp
+{
+    using NPOI.HSSF.UserModel;
+    using NPOI.SS.UserModel;
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NPOI.HSSF.Model;
+    using System;
+    using TestCases.HSSF;
+    using NPOI.SS.Util;
+    using NPOI.SS.Formula.Eval;
 
-using junit.framework.TestCase;
+    /**
+     * Testcase for 'Analysis Toolpak' function RANDBETWEEN()
+     * 
+     * @author Brendan Nolan
+     */
+    [TestClass]
+    public class TestRandBetween
+    {
 
-using NPOI.hssf.HSSFTestDataSamples;
-using NPOI.SS.Formula.Eval.ErrorEval;
-using NPOI.SS.UserModel.Cell;
-using NPOI.SS.UserModel.FormulaEvaluator;
-using NPOI.SS.UserModel.Row;
-using NPOI.SS.UserModel.Sheet;
-using NPOI.SS.UserModel.Workbook;
+        private HSSFWorkbook wb;
+        private FormulaEvaluator Evaluator;
+        private ICell bottomValueCell;
+        private ICell topValueCell;
+        private ICell formulaCell;
 
-/**
- * Testcase for 'Analysis Toolpak' function RANDBETWEEN()
- * 
- * @author Brendan Nolan
- */
-public class TestRandBetween  {
+        [TestInitialize]
+        public void SetUp()
+        {
+            wb = HSSFTestDataSamples.OpenSampleWorkbook("TestRandBetween.xls");
+            Evaluator = wb.GetCreationHelper().CreateFormulaEvaluator();
 
-	private Workbook wb;
-	private FormulaEvaluator Evaluator;
-	private Cell bottomValueCell;
-	private Cell topValueCell;
-	private Cell formulaCell;
-	
-	
-	protected void SetUp() throws Exception {
-		super.SetUp();
-		wb = HSSFTestDataSamples.OpenSampleWorkbook("TestRandBetween.xls");
-		Evaluator = wb.GetCreationHelper().CreateFormulaEvaluator();
-		
-		Sheet sheet = wb.CreateSheet("RandBetweenSheet");
-		Row row = sheet.CreateRow(0);
-		bottomValueCell = row.CreateCell(0);
-		topValueCell = row.CreateCell(1);
-		formulaCell = row.CreateCell(2, Cell.CELL_TYPE_FORMULA);
-	}
-	
-	
-	protected void tearDown() throws Exception {
-		// TODO Auto-generated method stub
-		super.tearDown();
-	}
-	
-	/**
-	 * Check where values are the same
-	 */
-	public void TestRandBetweenSameValues() {
-		
-		Evaluator.clearAllCachedResultValues();
-		formulaCell.SetCellFormula("RANDBETWEEN(1,1)");
-		Evaluator.evaluateFormulaCell(formulaCell);
-		Assert.AreEqual(1, formulaCell.GetNumericCellValue(), 0);
-		Evaluator.clearAllCachedResultValues();
-		formulaCell.SetCellFormula("RANDBETWEEN(-1,-1)");
-		Evaluator.evaluateFormulaCell(formulaCell);
-		Assert.AreEqual(-1, formulaCell.GetNumericCellValue(), 0);
+            ISheet sheet = wb.CreateSheet("RandBetweenSheet");
+            IRow row = sheet.CreateRow(0);
+            bottomValueCell = row.CreateCell(0);
+            topValueCell = row.CreateCell(1);
+            formulaCell = row.CreateCell(2, CellType.FORMULA);
+        }
 
-	}
-	
-	/**
-	 * Check special case where rounded up bottom value is greater than 
-	 * top value.
-	 */
-	public void TestRandBetweenSpecialCase() {
-		
 
-		bottomValueCell.SetCellValue(0.05);		
-		topValueCell.SetCellValue(0.1);
-		formulaCell.SetCellFormula("RANDBETWEEN($A$1,$B$1)");
-		Evaluator.clearAllCachedResultValues();
-		Evaluator.evaluateFormulaCell(formulaCell);
-		Assert.AreEqual(1, formulaCell.GetNumericCellValue(), 0);
-		bottomValueCell.SetCellValue(-0.1);		
-		topValueCell.SetCellValue(-0.05);
-		formulaCell.SetCellFormula("RANDBETWEEN($A$1,$B$1)");
-		Evaluator.clearAllCachedResultValues();
-		Evaluator.evaluateFormulaCell(formulaCell);
-		Assert.AreEqual(0, formulaCell.GetNumericCellValue(), 0);
-		bottomValueCell.SetCellValue(-1.1);		
-		topValueCell.SetCellValue(-1.05);
-		formulaCell.SetCellFormula("RANDBETWEEN($A$1,$B$1)");
-		Evaluator.clearAllCachedResultValues();
-		Evaluator.evaluateFormulaCell(formulaCell);
-		Assert.AreEqual(-1, formulaCell.GetNumericCellValue(), 0);
-		bottomValueCell.SetCellValue(-1.1);		
-		topValueCell.SetCellValue(-1.1);
-		formulaCell.SetCellFormula("RANDBETWEEN($A$1,$B$1)");
-		Evaluator.clearAllCachedResultValues();
-		Evaluator.evaluateFormulaCell(formulaCell);
-		Assert.AreEqual(-1, formulaCell.GetNumericCellValue(), 0);
-	}
-	
-	/**
-	 * Check top value of BLANK which Excel will Evaluate as 0
-	 */
-	public void TestRandBetweenTopBlank() {
+        protected void tearDown()
+        {
+            // TODO Auto-generated method stub
+        }
 
-		bottomValueCell.SetCellValue(-1);		
-		topValueCell.SetCellType(Cell.CELL_TYPE_BLANK);
-		formulaCell.SetCellFormula("RANDBETWEEN($A$1,$B$1)");
-		Evaluator.clearAllCachedResultValues();
-		Evaluator.evaluateFormulaCell(formulaCell);
-		Assert.IsTrue(formulaCell.GetNumericCellValue() == 0 || formulaCell.GetNumericCellValue() == -1);
-	
-	}
-	/**
-	 * Check where input values are of wrong type
-	 */
-	public void TestRandBetweenWrongInputTypes() {
-		// Check case where bottom input is of the wrong type
-		bottomValueCell.SetCellValue("STRING");		
-		topValueCell.SetCellValue(1);
-		formulaCell.SetCellFormula("RANDBETWEEN($A$1,$B$1)");
-		Evaluator.clearAllCachedResultValues();
-		Evaluator.evaluateFormulaCell(formulaCell);
-		Assert.AreEqual(Cell.CELL_TYPE_ERROR, formulaCell.GetCachedFormulaResultType());
-		Assert.AreEqual(ErrorEval.VALUE_INVALID.GetErrorCode(), formulaCell.GetErrorCellValue());
-		
-		
-		// Check case where top input is of the wrong type
-		bottomValueCell.SetCellValue(1);
-		topValueCell.SetCellValue("STRING");		
-		formulaCell.SetCellFormula("RANDBETWEEN($A$1,$B$1)");
-		Evaluator.clearAllCachedResultValues();
-		Evaluator.evaluateFormulaCell(formulaCell);
-		Assert.AreEqual(Cell.CELL_TYPE_ERROR, formulaCell.GetCachedFormulaResultType());
-		Assert.AreEqual(ErrorEval.VALUE_INVALID.GetErrorCode(), formulaCell.GetErrorCellValue());
+        /**
+         * Check where values are the same
+         */
+        [TestMethod]
+        public void TestRandBetweenSameValues()
+        {
 
-		// Check case where both inputs are of wrong type
-		bottomValueCell.SetCellValue("STRING");
-		topValueCell.SetCellValue("STRING");		
-		formulaCell.SetCellFormula("RANDBETWEEN($A$1,$B$1)");
-		Evaluator.clearAllCachedResultValues();
-		Evaluator.evaluateFormulaCell(formulaCell);
-		Assert.AreEqual(Cell.CELL_TYPE_ERROR, formulaCell.GetCachedFormulaResultType());
-		Assert.AreEqual(ErrorEval.VALUE_INVALID.GetErrorCode(), formulaCell.GetErrorCellValue());
-	
-	}
-	
-	/**
-	 * Check case where bottom is greater than top
-	 */
-	public void TestRandBetweenBottomGreaterThanTop() {
+            Evaluator.ClearAllCachedResultValues();
+            formulaCell.CellFormula = ("RANDBETWEEN(1,1)");
+            Evaluator.EvaluateFormulaCell(formulaCell);
+            Assert.AreEqual(1, formulaCell.NumericCellValue, 0);
+            Evaluator.ClearAllCachedResultValues();
+            formulaCell.CellFormula = ("RANDBETWEEN(-1,-1)");
+            Evaluator.EvaluateFormulaCell(formulaCell);
+            Assert.AreEqual(-1, formulaCell.NumericCellValue, 0);
 
-		// Check case where bottom is greater than top
-		bottomValueCell.SetCellValue(1);		
-		topValueCell.SetCellValue(0);
-		formulaCell.SetCellFormula("RANDBETWEEN($A$1,$B$1)");
-		Evaluator.clearAllCachedResultValues();
-		Evaluator.evaluateFormulaCell(formulaCell);
-		Assert.AreEqual(Cell.CELL_TYPE_ERROR, formulaCell.GetCachedFormulaResultType());
-		Assert.AreEqual(ErrorEval.NUM_ERROR.GetErrorCode(), formulaCell.GetErrorCellValue());		
-		bottomValueCell.SetCellValue(1);		
-		topValueCell.SetCellType(Cell.CELL_TYPE_BLANK);
-		formulaCell.SetCellFormula("RANDBETWEEN($A$1,$B$1)");
-		Evaluator.clearAllCachedResultValues();
-		Evaluator.evaluateFormulaCell(formulaCell);
-		Assert.AreEqual(Cell.CELL_TYPE_ERROR, formulaCell.GetCachedFormulaResultType());
-		Assert.AreEqual(ErrorEval.NUM_ERROR.GetErrorCode(), formulaCell.GetErrorCellValue());
-	}
-	
-	/**
-	 * Boundary check of Double MIN and MAX values
-	 */
-	public void TestRandBetweenBoundaryCheck() {
+        }
 
-		bottomValueCell.SetCellValue(Double.MinValue);		
-		topValueCell.SetCellValue(Double.MaxValue);
-		formulaCell.SetCellFormula("RANDBETWEEN($A$1,$B$1)");
-		Evaluator.clearAllCachedResultValues();
-		Evaluator.evaluateFormulaCell(formulaCell);
-		Assert.IsTrue(formulaCell.GetNumericCellValue() >= Double.MinValue && formulaCell.GetNumericCellValue() <= Double.MaxValue);		
-		
-	}
-	
+        /**
+         * Check special case where rounded up bottom value is greater than 
+         * top value.
+         */
+        [TestMethod]
+        public void TestRandBetweenSpecialCase()
+        {
+
+
+            bottomValueCell.SetCellValue(0.05);
+            topValueCell.SetCellValue(0.1);
+            formulaCell.CellFormula = ("RANDBETWEEN($A$1,$B$1)");
+            Evaluator.ClearAllCachedResultValues();
+            Evaluator.EvaluateFormulaCell(formulaCell);
+            Assert.AreEqual(1, formulaCell.NumericCellValue, 0);
+            bottomValueCell.SetCellValue(-0.1);
+            topValueCell.SetCellValue(-0.05);
+            formulaCell.CellFormula = ("RANDBETWEEN($A$1,$B$1)");
+            Evaluator.ClearAllCachedResultValues();
+            Evaluator.EvaluateFormulaCell(formulaCell);
+            Assert.AreEqual(0, formulaCell.NumericCellValue, 0);
+            bottomValueCell.SetCellValue(-1.1);
+            topValueCell.SetCellValue(-1.05);
+            formulaCell.CellFormula = ("RANDBETWEEN($A$1,$B$1)");
+            Evaluator.ClearAllCachedResultValues();
+            Evaluator.EvaluateFormulaCell(formulaCell);
+            Assert.AreEqual(-1, formulaCell.NumericCellValue, 0);
+            bottomValueCell.SetCellValue(-1.1);
+            topValueCell.SetCellValue(-1.1);
+            formulaCell.CellFormula = ("RANDBETWEEN($A$1,$B$1)");
+            Evaluator.ClearAllCachedResultValues();
+            Evaluator.EvaluateFormulaCell(formulaCell);
+            Assert.AreEqual(-1, formulaCell.NumericCellValue, 0);
+        }
+
+        /**
+         * Check top value of BLANK which Excel will Evaluate as 0
+         */
+        [TestMethod]
+        public void TestRandBetweenTopBlank()
+        {
+
+            bottomValueCell.SetCellValue(-1);
+            topValueCell.SetCellType(CellType.BLANK);
+            formulaCell.CellFormula = ("RANDBETWEEN($A$1,$B$1)");
+            Evaluator.ClearAllCachedResultValues();
+            Evaluator.EvaluateFormulaCell(formulaCell);
+            Assert.IsTrue(formulaCell.NumericCellValue == 0 || formulaCell.NumericCellValue == -1);
+
+        }
+        /**
+         * Check where input values are of wrong type
+         */
+        [TestMethod]
+        public void TestRandBetweenWrongInputTypes()
+        {
+            // Check case where bottom input is of the wrong type
+            bottomValueCell.SetCellValue("STRING");
+            topValueCell.SetCellValue(1);
+            formulaCell.CellFormula = ("RANDBETWEEN($A$1,$B$1)");
+            Evaluator.ClearAllCachedResultValues();
+            Evaluator.EvaluateFormulaCell(formulaCell);
+            Assert.AreEqual(CellType.ERROR, formulaCell.CachedFormulaResultType);
+            Assert.AreEqual(ErrorEval.VALUE_INVALID.ErrorCode, formulaCell.ErrorCellValue);
+
+
+            // Check case where top input is of the wrong type
+            bottomValueCell.SetCellValue(1);
+            topValueCell.SetCellValue("STRING");
+            formulaCell.CellFormula = ("RANDBETWEEN($A$1,$B$1)");
+            Evaluator.ClearAllCachedResultValues();
+            Evaluator.EvaluateFormulaCell(formulaCell);
+            Assert.AreEqual(CellType.ERROR, formulaCell.CachedFormulaResultType);
+            Assert.AreEqual(ErrorEval.VALUE_INVALID.ErrorCode, formulaCell.ErrorCellValue);
+
+            // Check case where both inputs are of wrong type
+            bottomValueCell.SetCellValue("STRING");
+            topValueCell.SetCellValue("STRING");
+            formulaCell.CellFormula = ("RANDBETWEEN($A$1,$B$1)");
+            Evaluator.ClearAllCachedResultValues();
+            Evaluator.EvaluateFormulaCell(formulaCell);
+            Assert.AreEqual(CellType.ERROR, formulaCell.CachedFormulaResultType);
+            Assert.AreEqual(ErrorEval.VALUE_INVALID.ErrorCode, formulaCell.ErrorCellValue);
+
+        }
+
+        /**
+         * Check case where bottom is greater than top
+         */
+        [TestMethod]
+        public void TestRandBetweenBottomGreaterThanTop()
+        {
+
+            // Check case where bottom is greater than top
+            bottomValueCell.SetCellValue(1);
+            topValueCell.SetCellValue(0);
+            formulaCell.CellFormula = ("RANDBETWEEN($A$1,$B$1)");
+            Evaluator.ClearAllCachedResultValues();
+            Evaluator.EvaluateFormulaCell(formulaCell);
+            Assert.AreEqual(CellType.ERROR, formulaCell.CachedFormulaResultType);
+            Assert.AreEqual(ErrorEval.NUM_ERROR.ErrorCode, formulaCell.ErrorCellValue);
+            bottomValueCell.SetCellValue(1);
+            topValueCell.SetCellType(CellType.BLANK);
+            formulaCell.CellFormula = ("RANDBETWEEN($A$1,$B$1)");
+            Evaluator.ClearAllCachedResultValues();
+            Evaluator.EvaluateFormulaCell(formulaCell);
+            Assert.AreEqual(CellType.ERROR, formulaCell.CachedFormulaResultType);
+            Assert.AreEqual(ErrorEval.NUM_ERROR.ErrorCode, formulaCell.ErrorCellValue);
+        }
+
+        /**
+         * Boundary check of Double MIN and MAX values
+         */
+        [TestMethod]
+        public void TestRandBetweenBoundaryCheck()
+        {
+
+            bottomValueCell.SetCellValue(Double.MinValue);
+            topValueCell.SetCellValue(Double.MaxValue);
+            formulaCell.CellFormula = ("RANDBETWEEN($A$1,$B$1)");
+            Evaluator.ClearAllCachedResultValues();
+            Evaluator.EvaluateFormulaCell(formulaCell);
+            Assert.IsTrue(formulaCell.NumericCellValue >= Double.MinValue && formulaCell.NumericCellValue <= Double.MaxValue);
+
+        }
+
+    }
+
 }
-

@@ -410,7 +410,7 @@ public class ExcelFileFormatDocFunctionExtractor {
 		}
 	}
 
-	private static void extractFunctionData(FunctionDataCollector fdc, InputStream is) {
+	private static void extractFunctionData(FunctionDataCollector fdc, InputStream is1) {
 		XMLReader xr;
 
 		try {
@@ -427,7 +427,7 @@ public class ExcelFileFormatDocFunctionExtractor {
 		}
 		xr.SetContentHandler(new EFFDocHandler(fdc));
 
-		InputSource inSrc = new InputSource(is);
+		InputSource inSrc = new InputSource(is1);
 
 		try {
 			xr.Parse(inSrc);

@@ -15,165 +15,188 @@
    limitations under the License.
 ==================================================================== */
 
-namespace NPOI.SS.Formula.atp;
+namespace NPOI.SS.Formula.Atp
+{
 
 
 
+    using NPOI.SS.Formula.Eval;
+    using NPOI.HSSF.UserModel;
+    using TestCases.HSSF;
+    using NPOI.SS.UserModel;
+    using System.Collections;
+    using System;
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using System.IO;
 
 
+    /**
+     * Tests YearFracCalculator using Test-cases listed in a sample spreadsheet
+     * 
+     * @author Josh Micich
+     */
+    [TestClass]
+    public class TestYearFracCalculatorFromSpreadsheet
+    {
 
-using junit.framework.Assert;
-using junit.framework.AssertionFailedError;
-using junit.framework.ComparisonFailure;
-using junit.framework.TestCase;
+        private static class SS
+        {
 
-using NPOI.hssf.HSSFTestDataSamples;
-using NPOI.SS.Formula.Eval.EvaluationException;
-using NPOI.hssf.UserModel.HSSFCell;
-using NPOI.hssf.UserModel.HSSFDateUtil;
-using NPOI.hssf.UserModel.HSSFFormulaEvaluator;
-using NPOI.hssf.UserModel.HSSFRow;
-using NPOI.hssf.UserModel.HSSFSheet;
-using NPOI.hssf.UserModel.HSSFWorkbook;
+            public static int BASIS_COLUMN = 1; // "B"
+            public static int START_YEAR_COLUMN = 2; // "C"
+            public static int END_YEAR_COLUMN = 5; // "F"
+            public static int YEARFRAC_FORMULA_COLUMN = 11; // "L"
+            public static int EXPECTED_RESULT_COLUMN = 13; // "N"
+        }
+        [TestMethod]
+        public void TestAll()
+        {
 
-/**
- * Tests YearFracCalculator using Test-cases listed in a sample spreadsheet
- * 
- * @author Josh Micich
- */
-public class TestYearFracCalculatorFromSpreadsheet  {
-	
-	private static class SS {
+            HSSFWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("yearfracExamples.xls");
+            ISheet sheet = wb.GetSheetAt(0);
+            HSSFFormulaEvaluator formulaEvaluator = new HSSFFormulaEvaluator(wb);
+            int nSuccess = 0;
+            int nFailures = 0;
+            int nUnexpectedErrors = 0;
+            IEnumerator rowIterator = sheet.GetRowEnumerator();
+            while (rowIterator.MoveNext())
+            {
+                IRow row = (IRow)rowIterator.Current;
 
-		public static int BASIS_COLUMN = 1; // "B"
-		public static int START_YEAR_COLUMN = 2; // "C"
-		public static int END_YEAR_COLUMN = 5; // "F"
-		public static int YEARFRAC_FORMULA_COLUMN = 11; // "L"
-		public static int EXPECTED_RESULT_COLUMN = 13; // "N"
-	}
+                ICell cell = row.GetCell(SS.YEARFRAC_FORMULA_COLUMN);
+                if (cell == null || cell.CellType != CellType.FORMULA)
+                {
+                    continue;
+                }
+                try
+                {
+                    ProcessRow(row, cell, formulaEvaluator);
+                    nSuccess++;
+                }
+                catch (SystemException e)
+                {
+                    nUnexpectedErrors++;
+                    printshortStackTrace(System.Console.Error, e);
+                }
+                catch (AssertFailedException e)
+                {
+                    nFailures++;
+                    printshortStackTrace(System.Console.Error, e);
+                }
+            }
+            if (nUnexpectedErrors + nFailures > 0)
+            {
+                String msg = nFailures + " failures(s) and " + nUnexpectedErrors
+                    + " unexpected errors(s) occurred. See stderr for details";
+                throw new AssertFailedException(msg);
+            }
+            if (nSuccess < 1)
+            {
+                throw new Exception("No Test sample cases found");
+            }
+        }
 
-	public void TestAll() {
+        private static void ProcessRow(IRow row, ICell cell, HSSFFormulaEvaluator formulaEvaluator)
+        {
+
+            double startDate = MakeDate(row, SS.START_YEAR_COLUMN);
+            double endDate = MakeDate(row, SS.END_YEAR_COLUMN);
+
+            int basis = GetIntCell(row, SS.BASIS_COLUMN);
+
+            double expectedValue = GetDoubleCell(row, SS.EXPECTED_RESULT_COLUMN);
+
+            double actualValue;
+            try
+            {
+                actualValue = YearFracCalculator.Calculate(startDate, endDate, basis);
+            }
+            catch (EvaluationException e)
+            {
+                throw e;
+            }
+            if (expectedValue != actualValue)
+            {
+                throw new Exception("Direct calculate failed - row " + (row.RowNum + 1) +
+                        "excepted value " + expectedValue.ToString() + "actual value " + actualValue.ToString());
+            }
+            actualValue = formulaEvaluator.Evaluate(cell).NumberValue;
+            if (expectedValue != actualValue)
+            {
+
+                throw new Exception("Formula Evaluate failed - row " + (row.RowNum + 1) +
+                        "excepted value " + expectedValue.ToString() + "actual value " + actualValue.ToString());
+            }
+        }
+
+        private static double MakeDate(IRow row, int yearColumn)
+        {
+            int year = GetIntCell(row, yearColumn + 0);
+            int month = GetIntCell(row, yearColumn + 1);
+            int day = GetIntCell(row, yearColumn + 2);
+            DateTime d = new DateTime(year, month, day, 0, 0, 0, 0);
+            return DateUtil.GetExcelDate(d);
+        }
+
+        private static int GetIntCell(IRow row, int colIx)
+        {
+            double dVal = GetDoubleCell(row, colIx);
+            if (Math.Floor(dVal) != dVal)
+            {
+                throw new SystemException("Non integer value (" + dVal
+                        + ") cell found at column " + (char)('A' + colIx));
+            }
+            return (int)dVal;
+        }
+
+        private static double GetDoubleCell(IRow row, int colIx)
+        {
+            ICell cell = row.GetCell(colIx);
+            if (cell == null)
+            {
+                throw new SystemException("No cell found at column " + colIx);
+            }
+            double dVal = cell.NumericCellValue;
+            return dVal;
+        }
+
+        /**
+         * Useful to keep output concise when expecting many failures to be reported by this Test case
+         * TODO - refactor duplicates in other Test~FromSpreadsheet classes
+         */
+        private static void printshortStackTrace(TextWriter ps, Exception e)
+        {
+            ps.Write(e.StackTrace);
+            /*StackTraceElement[] stes = e.StackTrace;
 		
-		HSSFWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("yearfracExamples.xls");
-		HSSFSheet sheet = wb.GetSheetAt(0);
-		HSSFFormulaEvaluator formulaEvaluator = new HSSFFormulaEvaluator(wb);
-		int nSuccess = 0;
-		int nFailures = 0;
-		int nUnexpectedErrors = 0;
-		Iterator rowIterator = sheet.rowIterator();
-		while(rowIterator.HasNext()) {
-			HSSFRow row = (HSSFRow) rowIterator.next();
-			
-			HSSFCell cell = row.GetCell(SS.YEARFRAC_FORMULA_COLUMN);
-			if (cell == null || cell.GetCellType() != HSSFCell.CELL_TYPE_FORMULA) {
-				continue;
-			}
-			try {
-				ProcessRow(row, cell, formulaEvaluator);
-				nSuccess++;
-			} catch (RuntimeException e) {
-				nUnexpectedErrors ++;
-				printshortStackTrace(System.err, e);
-			} catch (AssertionFailedError e) {
-				nFailures ++;
-				printshortStackTrace(System.err, e);
-			}
-		}
-		if (nUnexpectedErrors + nFailures > 0) {
-			String msg = nFailures + " failures(s) and " + nUnexpectedErrors 
-				+ " unexpected errors(s) occurred. See stderr for details";
-			throw new AssertionFailedError(msg);
-		}
-		if (nSuccess < 1) {
-			throw new RuntimeException("No Test sample cases found");
-		}
-	}
-	
-	private static void ProcessRow(HSSFRow row, HSSFCell cell, HSSFFormulaEvaluator formulaEvaluator) {
-		
-		double startDate = MakeDate(row, SS.START_YEAR_COLUMN);
-		double endDate = MakeDate(row, SS.END_YEAR_COLUMN);
-		
-		int basis = GetIntCell(row, SS.BASIS_COLUMN);
-		
-		double expectedValue = GetDoubleCell(row, SS.EXPECTED_RESULT_COLUMN);
-		
-		double actualValue;
-		try {
-			actualValue = YearFracCalculator.calculate(startDate, endDate, basis);
-		} catch (EvaluationException e) {
-			throw new RuntimeException(e);
-		}
-		if (expectedValue != actualValue) {
-			throw new ComparisonFailure("Direct calculate failed - row " + (row.GetRowNum()+1), 
-					String.ValueOf(expectedValue), String.ValueOf(actualValue));
-		}
-		actualValue = formulaEvaluator.Evaluate(cell).GetNumberValue();
-		if (expectedValue != actualValue) {
-			throw new ComparisonFailure("Formula Evaluate failed - row " + (row.GetRowNum()+1), 
-					String.ValueOf(expectedValue), String.ValueOf(actualValue));
-		}
-	}
+            int startIx = 0;
+            // skip any top frames inside junit.framework.Assert
+            while(startIx<stes.Length) {
+                if(!stes[startIx].GetClassName().Equals(typeof(Assert).Name)) {
+                    break;
+                }
+                startIx++;
+            }
+            // skip bottom frames (part of junit framework)
+            int endIx = startIx+1;
+            while(endIx < stes.Length) {
+                if (stes[endIx].GetClassName().Equals(typeof(Assert).Name))
+                {
+                    break;
+                }
+                endIx++;
+            }
+            if(startIx >= endIx) {
+                // something went wrong. just print the whole stack trace
+                e.printStackTrace(ps);
+            }
+            endIx -= 4; // skip 4 frames of reflection invocation
+            ps.println(e.ToString());
+            for(int i=startIx; i<endIx; i++) {
+                ps.println("\tat " + stes[i].ToString());
+            }
+             * */
+        }
+    }
 
-	private static double MakeDate(HSSFRow row, int yearColumn) {
-		int year = GetIntCell(row, yearColumn + 0);
-		int month = GetIntCell(row, yearColumn + 1);
-		int day = GetIntCell(row, yearColumn + 2);
-		Calendar c = new GregorianCalendar(year, month-1, day, 0, 0, 0);
-		c.Set(Calendar.MILLISECOND, 0);
-		return HSSFDateUtil.GetExcelDate(c.GetTime());
-	}
-
-	private static int GetIntCell(HSSFRow row, int colIx) {
-		double dVal = GetDoubleCell(row, colIx);
-		if (Math.floor(dVal) != dVal) {
-			throw new RuntimeException("Non integer value (" + dVal 
-					+ ") cell found at column " + (char)('A' + colIx));
-		}
-		return (int)dVal;
-	}
-
-	private static double GetDoubleCell(HSSFRow row, int colIx) {
-		HSSFCell cell = row.GetCell(colIx);
-		if (cell == null) {
-			throw new RuntimeException("No cell found at column " + colIx);
-		}
-		double dVal = cell.GetNumericCellValue();
-		return dVal;
-	}
-
-	/**
-	 * Useful to keep output concise when expecting many failures to be reported by this Test case
-	 * TODO - refactor duplicates in other Test~FromSpreadsheet classes
-	 */
-	private static void printshortStackTrace(PrintStream ps, Throwable e) {
-		StackTraceElement[] stes = e.GetStackTrace();
-		
-		int startIx = 0;
-		// skip any top frames inside junit.framework.Assert
-		while(startIx<stes.Length) {
-			if(!stes[startIx].GetClassName().Equals(Assert.class.GetName())) {
-				break;
-			}
-			startIx++;
-		}
-		// skip bottom frames (part of junit framework)
-		int endIx = startIx+1;
-		while(endIx < stes.Length) {
-			if(stes[endIx].GetClassName().Equals(TestCase.class.GetName())) {
-				break;
-			}
-			endIx++;
-		}
-		if(startIx >= endIx) {
-			// something went wrong. just print the whole stack trace
-			e.printStackTrace(ps);
-		}
-		endIx -= 4; // skip 4 frames of reflection invocation
-		ps.println(e.ToString());
-		for(int i=startIx; i<endIx; i++) {
-			ps.println("\tat " + stes[i].ToString());
-		}
-	}
 }
-

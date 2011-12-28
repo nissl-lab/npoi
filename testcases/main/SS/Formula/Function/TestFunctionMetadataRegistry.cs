@@ -15,31 +15,36 @@
    limitations under the License.
 ==================================================================== */
 
-namespace NPOI.SS.Formula.function;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
+namespace NPOI.SS.Formula.Function
+{
+    /**
+     * 
+     * @author Josh Micich
+     */
+    [TestClass]
+    public class TestFunctionMetadataRegistry
+    {
+        [TestMethod]
+        public void TestWellKnownFunctions()
+        {
+            ConfirmFunction(0, "COUNT");
+            ConfirmFunction(1, "IF");
 
-using junit.framework.TestCase;
+        }
 
-/**
- * 
- * @author Josh Micich
- */
-public class TestFunctionMetadataRegistry  {
+        private static void ConfirmFunction(int index, String funcName)
+        {
+            FunctionMetadata fm;
+            fm = FunctionMetadataRegistry.GetFunctionByIndex(index);
+            Assert.IsNotNull(fm);
+            Assert.AreEqual(funcName, fm.Name);
 
-	public void TestWellKnownFunctions() {
-		ConfirmFunction(0, "COUNT");
-		ConfirmFunction(1, "IF");
+            fm = FunctionMetadataRegistry.GetFunctionByName(funcName);
+            Assert.IsNotNull(fm);
+            Assert.AreEqual(index, fm.Index);
+        }
+    }
 
-	}
-
-	private static void ConfirmFunction(int index, String funcName) {
-		FunctionMetadata fm;
-		fm = FunctionMetadataRegistry.GetFunctionByIndex(index);
-		assertNotNull(fm);
-		Assert.AreEqual(funcName, fm.GetName());
-
-		fm = FunctionMetadataRegistry.GetFunctionByName(funcName);
-		assertNotNull(fm);
-		Assert.AreEqual(index, fm.GetIndex());
-	}
 }
-

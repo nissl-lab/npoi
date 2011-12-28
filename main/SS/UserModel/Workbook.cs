@@ -20,6 +20,7 @@ namespace NPOI.SS.UserModel
     using System;
     using System.Collections;
     using System.IO;
+    using NPOI.SS.Formula.Udf;
 
     public enum SheetState : int
     {
@@ -448,6 +449,13 @@ namespace NPOI.SS.UserModel
          * @param hidden 0 for not hidden, 1 for hidden, 2 for very hidden
          */
         void SetSheetHidden(int sheetIx, int hidden);
+
+        /**
+     * Register a new toolpack in this workbook.
+     *
+     * @param toopack the toolpack to register
+     */
+        void AddToolPack(UDFFinder toopack);
 
     }
 }
