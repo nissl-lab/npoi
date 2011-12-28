@@ -111,20 +111,6 @@ namespace NPOI.HSSF.UserModel
 
         //private static POILogger log = POILogFactory.GetLogger(typeof(HSSFWorkbook));
 
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        // TODO: the Workbook has nothing to free - but removing this breaks the interface IWorkbook, e.g. as seen in TestNPOIBug6341()
-        protected virtual void Dispose(bool disposing)
-        {
-            //if (disposing)
-            //{
-            //}
-        }
-
         public NPOI.SS.UserModel.CreationHelper GetCreationHelper()
         {
             return new HSSFCreationHelper(this);

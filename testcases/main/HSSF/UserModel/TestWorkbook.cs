@@ -577,16 +577,15 @@ namespace TestCases.HSSF.UserModel
         [TestMethod]
         public void TestNPOIBug6341()
         {
-            using (HSSFWorkbook workbook = OpenSample("Simple.xls"))
             {
+                HSSFWorkbook workbook = OpenSample("Simple.xls");           
                 int i = workbook.ActiveSheetIndex;
             }
-            using (HSSFWorkbook workbook = OpenSample("blankworkbook.xls"))
             {
+                HSSFWorkbook workbook = OpenSample("blankworkbook.xls");
                 int i = workbook.ActiveSheetIndex;
             }
             HSSFWorkbook workbook2 = OpenSample("blankworkbook.xls");
-            workbook2.Dispose();
             NPOI.SS.UserModel.ISheet sheet=workbook2.GetSheetAt(1);
         }
     }

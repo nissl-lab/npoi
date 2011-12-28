@@ -54,7 +54,7 @@ namespace NPOI.SS.UserModel
      * will construct whether they are Reading or writing a workbook.  It is also the
      * top level object for creating new sheets/etc.
      */
-    public interface IWorkbook : IDisposable
+    public interface IWorkbook
     {
 
 
