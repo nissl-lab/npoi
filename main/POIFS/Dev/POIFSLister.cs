@@ -37,10 +37,11 @@ namespace NPOI.POIFS.Dev
     {
         public static void ViewFile(String filename)
         {
-            POIFSFileSystem fs = new POIFSFileSystem(
-                    new FileStream(filename, FileMode.Open)
-            );
-            DisplayDirectory(fs.Root, "");
+            using (var stream = new FileStream(filename, FileMode.Open))
+            {
+                POIFSFileSystem fs = new POIFSFileSystem(stream);
+                DisplayDirectory(fs.Root, "");
+            }
         }
 
         public static void DisplayDirectory(DirectoryNode dir, String indent)

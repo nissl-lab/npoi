@@ -231,14 +231,16 @@ namespace NPOI
             try
             {
                 MutablePropertySet mSet = new MutablePropertySet(Set);
-                MemoryStream bOut = new MemoryStream();
-
-                mSet.Write(bOut);
-                byte[] data = bOut.ToArray();
-                MemoryStream bIn = new MemoryStream(data);
-                outFS.CreateDocument(bIn, name);
-
-                //logger.Log(POILogger.INFO, "Wrote property Set " + name + " of size " + data.Length);
+                using (MemoryStream bOut = new MemoryStream())
+                {
+                    mSet.Write(bOut);
+                    byte[] data = bOut.ToArray();
+                    using (MemoryStream bIn = new MemoryStream(data))
+                    {
+                        outFS.CreateDocument(bIn, name);
+                    }
+                    //logger.Log(POILogger.INFO, "Wrote property Set " + name + " of size " + data.Length);
+                }
             }
             catch (WritingNotSupportedException)
             {
