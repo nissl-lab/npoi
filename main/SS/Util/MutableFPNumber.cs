@@ -109,12 +109,12 @@ namespace NPOI.SS.Util
         {
             int sc = _significand.BitLength() - C_64;
             //return _significand<(BI_MAX_BASE<<(sc));
-            return _significand.CompareTo(BI_MAX_BASE.shiftLeft(sc)) < 0;
+            return _significand.CompareTo(BI_MAX_BASE.ShiftLeft(sc)) < 0;
         }
         public bool IsAboveMinRep()
         {
             int sc = _significand.BitLength() - C_64;
-            return _significand.CompareTo(BI_MIN_BASE.shiftLeft(sc)) > 0;
+            return _significand.CompareTo(BI_MIN_BASE.ShiftLeft(sc)) > 0;
             //return _significand>(BI_MIN_BASE<<(sc));
         }
         public NormalisedDecimal CreateNormalisedDecimal(int pow10)
@@ -196,7 +196,7 @@ namespace NPOI.SS.Util
             private TenPower(int index)
             {
                 //BigInteger fivePowIndex = FIVE.ModPow(new BigInteger(index),FIVE);
-                BigInteger fivePowIndex = FIVE.pow(index);
+                BigInteger fivePowIndex = FIVE.Pow(index);
                 int bitsDueToFiveFactors = fivePowIndex.BitLength();
                 int px = 80 + bitsDueToFiveFactors;
                 BigInteger fx = (BigInteger.ONE << px) / (fivePowIndex);

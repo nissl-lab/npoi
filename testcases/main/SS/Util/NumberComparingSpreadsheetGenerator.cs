@@ -132,7 +132,7 @@ namespace TestCases.SS.Util
             return sb.ToString();
         }
 
-        public static void main(String[] args)
+        public static void Main(String[] args)
         {
 
             IWorkbook wb = new HSSFWorkbook();
@@ -147,9 +147,9 @@ namespace TestCases.SS.Util
 
             FileInfo outputFile = new FileInfo("ExcelNumberCompare.xls");
 
-                FileStream os = File.OpenWrite(outputFile.FullName);
-                wb.Write(os);
-                os.Close();
+            FileStream os = File.OpenWrite(outputFile.FullName);
+            wb.Write(os);
+            os.Close();
 
             Console.WriteLine("Finished writing '" + outputFile.FullName + "'");
         }

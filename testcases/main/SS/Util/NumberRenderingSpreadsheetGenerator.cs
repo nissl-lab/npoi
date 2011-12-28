@@ -22,6 +22,7 @@ using NPOI.Util;
 using NPOI.SS.UserModel;
 using System.Text;
 using System.IO;
+
 namespace TestCases.SS.Util
 {
 
@@ -139,45 +140,45 @@ namespace TestCases.SS.Util
             return sb.ToString();
         }
 
-        public static void main(String[] args)
+        public static void Main(String[] args)
         {
             WriteJavaDoc();
 
             HSSFWorkbook wb = new HSSFWorkbook();
             SheetWriter sw = new SheetWriter(wb);
 
-            ExampleConversion[] exampleValues = NumberToTextConversionExamples.GetExampleConversions();
+            NumberToTextConversionExamples.ExampleConversion[] exampleValues = NumberToTextConversionExamples.GetExampleConversions();
             for (int i = 0; i < exampleValues.Length; i++)
             {
-                ExampleConversion example = exampleValues[i];
-                sw.AddTestRow(example.GetRawDoubleBits(), example.GetExcelRendering());
+                TestCases.SS.Util.NumberToTextConversionExamples.ExampleConversion example = exampleValues[i];
+                sw.AddTestRow(example.RawDoubleBits, example.ExcelRendering);
             }
 
             MemoryStream baos = new MemoryStream();
-                wb.Write(baos);
+            wb.Write(baos);
             byte[] fileContent = baos.ToArray();
             ReplaceNaNs(fileContent, sw.GetReplacementNaNs());
 
 
             FileInfo outputFile = new FileInfo("ExcelNumberRendering.xls");
 
-                FileStream os = File.OpenWrite(outputFile.FullName);
-                os.Write(fileContent,0,fileContent.Length);
-                os.Close();
+            FileStream os = File.OpenWrite(outputFile.FullName);
+            os.Write(fileContent, 0, fileContent.Length);
+            os.Close();
             Console.WriteLine("Finished writing '" + outputFile.FullName + "'");
         }
 
         public static void WriteJavaDoc()
         {
 
-            ExampleConversion[] exampleConversions = NumberToTextConversionExamples.GetExampleConversions();
+            NumberToTextConversionExamples.ExampleConversion[] exampleConversions = NumberToTextConversionExamples.GetExampleConversions();
             for (int i = 0; i < exampleConversions.Length; i++)
             {
-                ExampleConversion ec = exampleConversions[i];
+                NumberToTextConversionExamples.ExampleConversion ec = exampleConversions[i];
                 String line = " * <tr><td>"
-                    + FormatLongAsHex(ec.GetRawDoubleBits())
-                    + "</td><td>" + ec.GetDoubleValue().ToString()
-                    + "</td><td>" + ec.GetExcelRendering() + "</td></tr>";
+                    + FormatLongAsHex(ec.RawDoubleBits)
+                    + "</td><td>" + ec.DoubleValue.ToString()
+                    + "</td><td>" + ec.ExcelRendering + "</td></tr>";
 
                 Console.WriteLine(line);
             }
@@ -226,7 +227,7 @@ namespace TestCases.SS.Util
         {
             Stream is1 = new MemoryStream(fileContent, offset, 8);
             long l;
-                l = LittleEndian.ReadLong(is1);
+            l = LittleEndian.ReadLong(is1);
             return "0x" + StringUtil.ToHexString(l).ToUpper();
         }
 

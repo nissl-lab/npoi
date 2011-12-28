@@ -274,18 +274,9 @@ namespace NPOI.Util
             // Find first nonzero byte
             for (keep = 0; keep < vlen && val[keep] == 0; keep++)
                 ;
-            return keep == 0 ? val : copyOfRange(val, keep, vlen);
+            return keep == 0 ? val : Arrays.CopyOfRange(val, keep, vlen);
         }
-        public static int[] copyOfRange(int[] original, int from, int to)
-        {
-            int newLength = to - from;
-            if (newLength < 0)
-                throw new ArgumentException(from + " > " + to);
-            int[] copy = new int[newLength];
-            Array.Copy(original, from, copy, 0,
-                             Math.Min(original.Length - from, newLength));
-            return copy;
-        }
+
         // Multiply x array times word y in place, and add word z
         private static void destructiveMulAdd(int[] x, int y, int z)
         {
@@ -347,7 +338,7 @@ namespace NPOI.Util
             String[] digitGroup = new String[maxNumDigitGroups];
 
             // Translate number to string, a digit group at a time
-            BigInteger tmp = this.abs();
+            BigInteger tmp = this.Abs();
             int numGroups = 0;
             while (tmp._signum != 0)
             {
@@ -394,19 +385,19 @@ namespace NPOI.Util
          *
          * @since   1.2
          */
-        public static BigInteger ONE = valueOf(1);
+        public static BigInteger ONE = ValueOf(1);
 
         /**
          * The BigInteger constant two.  (Not exported.)
          */
-        private static BigInteger TWO = valueOf(2);
+        private static BigInteger TWO = ValueOf(2);
 
         /**
          * The BigInteger constant ten.
          *
          * @since   1.5
          */
-        public static BigInteger TEN = valueOf(10);
+        public static BigInteger TEN = ValueOf(10);
         /**
      * Returns a BigInteger whose value is equal to that of the
      * specified {@code long}.  This "static factory method" is
@@ -416,7 +407,7 @@ namespace NPOI.Util
      * @param  val value of the BigInteger to return.
      * @return a BigInteger with the specified value.
      */
-        public static BigInteger valueOf(long val)
+        public static BigInteger ValueOf(long val)
         {
             // If -MAX_CONSTANT < val < MAX_CONSTANT, return stashed constant
             if (val == 0)
@@ -530,9 +521,9 @@ namespace NPOI.Util
      *
      * @return {@code abs(this)}
      */
-        public BigInteger abs()
+        public BigInteger Abs()
         {
-            return (_signum >= 0 ? this : this.negate());
+            return (_signum >= 0 ? this : this.Negate());
         }
 
         /**
@@ -540,7 +531,7 @@ namespace NPOI.Util
          *
          * @return {@code -this}
          */
-        public BigInteger negate()
+        public BigInteger Negate()
         {
             return new BigInteger(this.mag, -this._signum);
         }
@@ -553,7 +544,7 @@ namespace NPOI.Util
      * @throws ArithmeticException {@code exponent} is negative.  (This would
      *         cause the operation to yield a non-integer value.)
      */
-        public BigInteger pow(int exponent)
+        public BigInteger Pow(int exponent)
         {
             if (exponent < 0)
                 throw new ArithmeticException("Negative exponent");
@@ -701,13 +692,13 @@ namespace NPOI.Util
             }
 
             // Shift back up and set low bit
-            primitiveLeftShift(z, zlen, 1);
+            PrimitiveLeftShift(z, zlen, 1);
             z[zlen - 1] |= x[len - 1] & 1;
 
             return z;
         }
         // shifts a up to len left n bits assumes no leading zeros, 0<=n<32
-        public static void primitiveLeftShift(int[] a, int len, int n)
+        public static void PrimitiveLeftShift(int[] a, int len, int n)
         {
             if (len == 0 || n == 0)
                 return;
@@ -945,24 +936,24 @@ namespace NPOI.Util
         14, 14, 14, 13, 13, 13, 13, 13, 13, 12, 12, 12, 12, 12, 12, 12, 12};
 
         private static BigInteger[] longRadix = {null, null,
-        valueOf(0x4000000000000000L), valueOf(0x383d9170b85ff80bL),
-        valueOf(0x4000000000000000L), valueOf(0x6765c793fa10079dL),
-        valueOf(0x41c21cb8e1000000L), valueOf(0x3642798750226111L),
-        valueOf(0x1000000000000000L), valueOf(0x12bf307ae81ffd59L),
-        valueOf( 0xde0b6b3a7640000L), valueOf(0x4d28cb56c33fa539L),
-        valueOf(0x1eca170c00000000L), valueOf(0x780c7372621bd74dL),
-        valueOf(0x1e39a5057d810000L), valueOf(0x5b27ac993df97701L),
-        valueOf(0x1000000000000000L), valueOf(0x27b95e997e21d9f1L),
-        valueOf(0x5da0e1e53c5c8000L), valueOf( 0xb16a458ef403f19L),
-        valueOf(0x16bcc41e90000000L), valueOf(0x2d04b7fdd9c0ef49L),
-        valueOf(0x5658597bcaa24000L), valueOf( 0x6feb266931a75b7L),
-        valueOf( 0xc29e98000000000L), valueOf(0x14adf4b7320334b9L),
-        valueOf(0x226ed36478bfa000L), valueOf(0x383d9170b85ff80bL),
-        valueOf(0x5a3c23e39c000000L), valueOf( 0x4e900abb53e6b71L),
-        valueOf( 0x7600ec618141000L), valueOf( 0xaee5720ee830681L),
-        valueOf(0x1000000000000000L), valueOf(0x172588ad4f5f0981L),
-        valueOf(0x211e44f7d02c1000L), valueOf(0x2ee56725f06e5c71L),
-        valueOf(0x41c21cb8e1000000L)};
+        ValueOf(0x4000000000000000L), ValueOf(0x383d9170b85ff80bL),
+        ValueOf(0x4000000000000000L), ValueOf(0x6765c793fa10079dL),
+        ValueOf(0x41c21cb8e1000000L), ValueOf(0x3642798750226111L),
+        ValueOf(0x1000000000000000L), ValueOf(0x12bf307ae81ffd59L),
+        ValueOf( 0xde0b6b3a7640000L), ValueOf(0x4d28cb56c33fa539L),
+        ValueOf(0x1eca170c00000000L), ValueOf(0x780c7372621bd74dL),
+        ValueOf(0x1e39a5057d810000L), ValueOf(0x5b27ac993df97701L),
+        ValueOf(0x1000000000000000L), ValueOf(0x27b95e997e21d9f1L),
+        ValueOf(0x5da0e1e53c5c8000L), ValueOf( 0xb16a458ef403f19L),
+        ValueOf(0x16bcc41e90000000L), ValueOf(0x2d04b7fdd9c0ef49L),
+        ValueOf(0x5658597bcaa24000L), ValueOf( 0x6feb266931a75b7L),
+        ValueOf( 0xc29e98000000000L), ValueOf(0x14adf4b7320334b9L),
+        ValueOf(0x226ed36478bfa000L), ValueOf(0x383d9170b85ff80bL),
+        ValueOf(0x5a3c23e39c000000L), ValueOf( 0x4e900abb53e6b71L),
+        ValueOf( 0x7600ec618141000L), ValueOf( 0xaee5720ee830681L),
+        ValueOf(0x1000000000000000L), ValueOf(0x172588ad4f5f0981L),
+        ValueOf(0x211e44f7d02c1000L), ValueOf(0x2ee56725f06e5c71L),
+        ValueOf(0x41c21cb8e1000000L)};
 
         // bitsPerDigit in the given radix times 1024
         // Rounded up to avoid underallocation.
@@ -1237,7 +1228,7 @@ namespace NPOI.Util
             result = getInt(0);
             return result;
         }
-        public BigInteger shiftLeft(int n)
+        public BigInteger ShiftLeft(int n)
         {
             if (_signum == 0)
                 return ZERO;
@@ -1251,7 +1242,7 @@ namespace NPOI.Util
                 }
                 else
                 {
-                    return shiftRight(-n);
+                    return ShiftRight(-n);
                 }
             }
 
@@ -1322,7 +1313,7 @@ namespace NPOI.Util
      *         Integer.MIN_VALUE}.
      * @see #shiftLeft
      */
-        public BigInteger shiftRight(int n)
+        public BigInteger ShiftRight(int n)
         {
             if (n == 0)
                 return this;
@@ -1334,7 +1325,7 @@ namespace NPOI.Util
                 }
                 else
                 {
-                    return shiftLeft(-n);
+                    return ShiftLeft(-n);
                 }
             }
 
@@ -1384,12 +1375,12 @@ namespace NPOI.Util
                     onesLost = (mag[magLen - nInts - 1] << (32 - nBits) != 0);
 
                 if (onesLost)
-                    newMag = javaIncrement(newMag);
+                    newMag = Increment(newMag);
             }
 
             return new BigInteger(newMag, _signum);
         }
-        int[] javaIncrement(int[] val)
+        int[] Increment(int[] val)
         {
             int lastSum = 0;
             for (int i = val.Length - 1; i >= 0 && lastSum == 0; i--)
@@ -1417,7 +1408,7 @@ namespace NPOI.Util
      *
      * @return {@code ~this}
      */
-        public BigInteger not()
+        public BigInteger Not()
         {
             int[] result = new int[intLength()];
             for (int i = 0; i < result.Length; i++)
@@ -1433,7 +1424,7 @@ namespace NPOI.Util
      * @param val value to be OR'ed with this BigInteger.
      * @return {@code this | val}
      */
-        public BigInteger or(BigInteger val)
+        public BigInteger Or(BigInteger val)
         {
             int[] result = new int[Math.Max(intLength(), val.intLength())];
             for (int i = 0; i < result.Length; i++)
@@ -1451,7 +1442,7 @@ namespace NPOI.Util
             if (v == 0 || _signum == 0)
                 return ZERO;
             if (v == INFLATED)
-                return multiply(BigInteger.valueOf(v));
+                return Multiply(BigInteger.ValueOf(v));
             int rsign = (v > 0 ? _signum : -_signum);
             if (v < 0)
                 v = -v;
@@ -1493,7 +1484,7 @@ namespace NPOI.Util
      * @param  val value to be multiplied by this BigInteger.
      * @return {@code this * val}
      */
-        public BigInteger multiply(BigInteger val)
+        public BigInteger Multiply(BigInteger val)
         {
             if (val._signum == 0 || _signum == 0)
                 return ZERO;
@@ -1509,7 +1500,7 @@ namespace NPOI.Util
      * @param  val value to be added to this BigInteger.
      * @return {@code this + val}
      */
-        public BigInteger add(BigInteger val)
+        public BigInteger Add(BigInteger val)
         {
             if (val._signum == 0)
                 return this;
@@ -1580,12 +1571,12 @@ namespace NPOI.Util
      * @param  val value to be subtracted from this BigInteger.
      * @return {@code this - val}
      */
-        public BigInteger subtract(BigInteger val)
+        public BigInteger Subtract(BigInteger val)
         {
             if (val._signum == 0)
                 return this;
             if (_signum == 0)
-                return val.negate();
+                return val.Negate();
             if (val._signum != _signum)
                 return new BigInteger(add(mag, val.mag), _signum);
 
@@ -1638,7 +1629,7 @@ namespace NPOI.Util
      * @return {@code this / val}
      * @throws ArithmeticException if {@code val} is zero.
      */
-        public BigInteger divide(BigInteger val)
+        public BigInteger Divide(BigInteger val)
         {
             MutableBigInteger q = new MutableBigInteger(),
                               a = new MutableBigInteger(this.mag),
@@ -1653,7 +1644,7 @@ namespace NPOI.Util
         //***********************************************************************
         public static BigInteger operator >>(BigInteger bi1, int shiftVal)
         {
-            return bi1.shiftRight(shiftVal);
+            return bi1.ShiftRight(shiftVal);
         }
         //***********************************************************************
         // Overloading of unary << operators
@@ -1661,7 +1652,7 @@ namespace NPOI.Util
 
         public static BigInteger operator <<(BigInteger bi1, int shiftVal)
         {
-            return bi1.shiftLeft(shiftVal);
+            return bi1.ShiftLeft(shiftVal);
         }
         //***********************************************************************
         // Overloading of bitwise AND operator
@@ -1676,28 +1667,28 @@ namespace NPOI.Util
         //***********************************************************************
         public static BigInteger operator |(BigInteger bi1, BigInteger bi2)
         {
-            return bi1.or(bi2);
+            return bi1.Or(bi2);
         }
         //***********************************************************************
         // Overloading of bitwise mul operator
         //***********************************************************************
         public static BigInteger operator *(BigInteger bi1, BigInteger bi2)
         {
-            return bi1.multiply(bi2);
+            return bi1.Multiply(bi2);
         }
         //***********************************************************************
         // Overloading of bitwise add operator
         //***********************************************************************
         public static BigInteger operator +(BigInteger bi1, BigInteger bi2)
         {
-            return bi1.add(bi2);
+            return bi1.Add(bi2);
         }
         //***********************************************************************
         // Overloading of bitwise subtract operator
         //***********************************************************************
         public static BigInteger operator -(BigInteger bi1, BigInteger bi2)
         {
-            return bi1.subtract(bi2);
+            return bi1.Subtract(bi2);
         }
         public static bool operator <(BigInteger bi1, BigInteger bi2)
         {
@@ -1709,7 +1700,7 @@ namespace NPOI.Util
         }
         public static BigInteger operator /(BigInteger bi1, BigInteger bi2)
         {
-            return bi1.divide(bi2);
+            return bi1.Divide(bi2);
         }
         #endregion
     }
@@ -2780,7 +2771,7 @@ namespace NPOI.Util
             if (shift > 0)
             {
                 // First shift will not grow array
-                BigInteger.primitiveLeftShift(divisor, dlen, shift);
+                BigInteger.PrimitiveLeftShift(divisor, dlen, shift);
                 // But this one might
                 rem.leftShift(shift);
             }

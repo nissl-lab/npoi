@@ -127,7 +127,7 @@ namespace TestCases.SS.Util
                         + FormatDoubleAsHex(a) + ") bin exp mismatch");
                 return false;
             }
-            BigInteger diff = ed3.GetSignificand() - (ed1.GetSignificand()).abs();
+            BigInteger diff = ed3.GetSignificand() - (ed1.GetSignificand()).Abs();
             if (diff.Signum() == 0)
             {
                 return true;
@@ -188,7 +188,7 @@ namespace TestCases.SS.Util
         {
             int nExtraBits = 1;
             int nDec = (int)Math.Round(3.0 + (64 + nExtraBits) * Math.Log10(2.0));
-            BigInteger newFrac = (significand << nExtraBits).add(new BigInteger(offset));
+            BigInteger newFrac = (significand << nExtraBits).Add(new BigInteger(offset));
 
             int gg = 64 + nExtraBits - binExp - 1;
 
@@ -243,7 +243,7 @@ namespace TestCases.SS.Util
             {
                 return;
             }
-            BigInteger diff = (subDigsB - subDigsO).abs();
+            BigInteger diff = (subDigsB - subDigsO).Abs();
             if (diff.IntValue() > 100)
             {
                 // 100/32768 ~= 0.003
