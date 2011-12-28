@@ -153,14 +153,15 @@ namespace NPOI.SS.Formula.PTG
             get { return column.GetValue(field_2_col); }
             set
             {
-                if (value < 0 || value >= 0x100)
+                /*
+                 if (value < 0 || value >= 0x100)
                 {
                     throw new ArgumentException("Specified colIx (" + value + ") is out of range");
-                }
+                }*/
                 field_2_col = column.SetValue(field_2_col, value);
             }
         }
-        protected String FormatReferenceAsString()
+        public String FormatReferenceAsString()
         {
             // Only make cell references as needed. Memory is an issue
             CellReference cr = new CellReference(Row, Column, !IsRowRelative, !IsColRelative);
