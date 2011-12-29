@@ -52,6 +52,7 @@ namespace TestCases.SS.Formula.Eval
         [TestMethod]
         public void TestParseDouble_bug49723()
         {
+            System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
 
             String value = ".1";
 
@@ -71,6 +72,7 @@ namespace TestCases.SS.Formula.Eval
         [TestMethod]
         public void TestParseDoubleValidStrings()
         {
+            System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
 
             String[] values = new String[] { ".19", "0.19", "1.9", "1E4", "-.19", "-0.19", "8.5", "-1E4", ".5E6", "+1.5", "+1E5", "  +1E5  " };
 
@@ -90,6 +92,7 @@ namespace TestCases.SS.Formula.Eval
         [TestMethod]
         public void TestParseDoubleInvalidStrings()
         {
+            System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
 
             String[] values = new String[] { "-", "ABC", "-X", "1E5a", "InfInity", "NaN", ".5F", "1,000" };
 

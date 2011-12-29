@@ -44,6 +44,8 @@ namespace TestCases.SS.Formula.Eval
         [TestMethod]
         public void TestBasic()
         {
+            System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US"); 
+            
             Confirm(new NumberEval(5), new NumberEval(2), 2.5);
             Confirm(new NumberEval(3), new NumberEval(16), 0.1875);
             Confirm(new NumberEval(-150), new NumberEval(-15), 10.0);
