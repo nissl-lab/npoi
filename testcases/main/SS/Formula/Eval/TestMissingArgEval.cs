@@ -15,61 +15,64 @@
    limitations under the License.
 ==================================================================== */
 
-namespace NPOI.SS.Formula.Eval;
+namespace TestCases.SS.Formula.Eval
+{
 
+    using System;
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NPOI.HSSF.UserModel;
+    using NPOI.SS.UserModel;
 
+    /**
+     * Tests for {@link MissingArgEval}
+     *
+     * @author Josh Micich
+     */
+    [TestClass]
+    public class TestMissingArgEval
+    {
+        [TestMethod]
+        public void TestEvaluateMissingArgs()
+        {
+            HSSFWorkbook wb = new HSSFWorkbook();
+            HSSFFormulaEvaluator fe = new HSSFFormulaEvaluator(wb);
+            ISheet sheet = wb.CreateSheet("Sheet1");
+            ICell cell = sheet.CreateRow(0).CreateCell(0);
 
-using junit.framework.AssertionFailedError;
-using junit.framework.TestCase;
+            cell.CellFormula=("if(true,)");
+            fe.ClearAllCachedResultValues();
+            CellValue cv;
+            try
+            {
+                cv = fe.Evaluate(cell);
+            }
+            catch (Exception e)
+            {
+                Console.Error.WriteLine(e.Message);
+                throw new AssertFailedException("Missing args Evaluation not implemented (bug 43354");
+            }
+            // MissingArg -> BlankEval -> zero (as formula result)
+            Assert.AreEqual(0.0, cv.NumberValue, 0.0);
 
-using NPOI.hssf.UserModel.HSSFCell;
-using NPOI.hssf.UserModel.HSSFFormulaEvaluator;
-using NPOI.hssf.UserModel.HSSFSheet;
-using NPOI.hssf.UserModel.HSSFWorkbook;
-using NPOI.SS.UserModel.CellValue;
+            // MissingArg -> BlankEval -> empty string (in concatenation)
+            cell.CellFormula=("\"abc\"&if(true,)");
+            fe.ClearAllCachedResultValues();
+            Assert.AreEqual("abc", fe.Evaluate(cell).StringValue);
+        }
+        [TestMethod]
+        public void TestCountFuncs()
+        {
+            HSSFWorkbook wb = new HSSFWorkbook();
+            HSSFFormulaEvaluator fe = new HSSFFormulaEvaluator(wb);
+            ISheet sheet = wb.CreateSheet("Sheet1");
+            ICell cell = sheet.CreateRow(0).CreateCell(0);
 
-/**
- * Tests for {@link MissingArgEval}
- *
- * @author Josh Micich
- */
-public class TestMissingArgEval  {
-	
-	public void TestEvaluateMissingArgs() {
-		HSSFWorkbook wb = new HSSFWorkbook();
-		HSSFFormulaEvaluator fe = new HSSFFormulaEvaluator(wb);
-		HSSFSheet sheet = wb.CreateSheet("Sheet1");
-		HSSFCell cell = sheet.CreateRow(0).createCell(0);
-		
-		cell.SetCellFormula("if(true,)"); 
-		fe.ClearAllCachedResultValues();
-		CellValue cv;
-		try {
-			cv = fe.Evaluate(cell);
-		} catch (EmptyStackException e) {
-			throw new AssertionFailedError("Missing args Evaluation not implemented (bug 43354");
-		}
-		// MissingArg -> BlankEval -> zero (as formula result)
-		Assert.AreEqual(0.0, cv.GetNumberValue(), 0.0);
-		
-		// MissingArg -> BlankEval -> empty string (in concatenation)
-		cell.SetCellFormula("\"abc\"&if(true,)"); 
-		fe.ClearAllCachedResultValues();
-		Assert.AreEqual("abc", fe.Evaluate(cell).StringValue);
-	}
-	
-	public void TestCountFuncs() {
-		HSSFWorkbook wb = new HSSFWorkbook();
-		HSSFFormulaEvaluator fe = new HSSFFormulaEvaluator(wb);
-		HSSFSheet sheet = wb.CreateSheet("Sheet1");
-		HSSFCell cell = sheet.CreateRow(0).createCell(0);
-		
-		cell.SetCellFormula("COUNT(C5,,,,)"); // 4 missing args, C5 is blank 
-		Assert.AreEqual(4.0, fe.Evaluate(cell).GetNumberValue(), 0.0);
+            cell.CellFormula=("COUNT(C5,,,,)"); // 4 missing args, C5 is blank 
+            Assert.AreEqual(4.0, fe.Evaluate(cell).NumberValue, 0.0);
 
-		cell.SetCellFormula("COUNTA(C5,,)"); // 2 missing args, C5 is blank 
-		fe.ClearAllCachedResultValues();
-		Assert.AreEqual(2.0, fe.Evaluate(cell).GetNumberValue(), 0.0);
-	}
+            cell.CellFormula=("COUNTA(C5,,)"); // 2 missing args, C5 is blank 
+            fe.ClearAllCachedResultValues();
+            Assert.AreEqual(2.0, fe.Evaluate(cell).NumberValue, 0.0);
+        }
+    }
 }
-

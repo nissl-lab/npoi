@@ -41,7 +41,7 @@ namespace NPOI.SS.Formula.Functions
 
         private static Accumulator XSquaredPlusYSquaredAccumulator = new Accumulator3();
 
-	    protected override Accumulator CreateAccumulator() {
+	    public override Accumulator CreateAccumulator() {
 		    return XSquaredPlusYSquaredAccumulator;
 	    }
     }

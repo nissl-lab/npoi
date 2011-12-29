@@ -247,15 +247,6 @@
     <Compile Include="HSSF\Model\TestSheetAdditional.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="HSSF\Record\Formula\AbstractPtgTestCase.cs" />
-    <Compile Include="HSSF\Record\Formula\Eval\TestAreaEval.cs" />
-    <Compile Include="HSSF\Record\Formula\Eval\TestCircularReferences.cs" />
-    <Compile Include="HSSF\Record\Formula\Eval\TestExternalFunction.cs" />
-    <Compile Include="HSSF\Record\Formula\Eval\TestFormulaBugs.cs" />
-    <Compile Include="HSSF\Record\Formula\Eval\TestFormulasFromSpreadsheet.cs" />
-    <Compile Include="HSSF\Record\Formula\Eval\TestPercentEval.cs" />
-    <Compile Include="HSSF\Record\Formula\Eval\TestUnaryPlusEval.cs" />
-    <Compile Include="HSSF\Record\Formula\Functions\AbstractNumericTestCase.cs" />
     <Compile Include="HSSF\Record\Formula\Functions\EvalFactory.cs" />
     <Compile Include="HSSF\Record\Formula\Functions\NumericFunctionInvoker.cs" />
     <Compile Include="HSSF\Record\Formula\Functions\TestAverage.cs" />
@@ -267,7 +258,6 @@
     <Compile Include="HSSF\Record\Formula\Functions\TestLen.cs" />
     <Compile Include="HSSF\Record\Formula\Functions\TestLookupFunctionsFromSpreadsheet.cs" />
     <Compile Include="HSSF\Record\Formula\Functions\TestMatch.cs" />
-    <Compile Include="HSSF\Record\Formula\Functions\TestMathX.cs" />
     <Compile Include="HSSF\Record\Formula\Functions\TestMid.cs" />
     <Compile Include="HSSF\Record\Formula\Functions\TestOffset.cs" />
     <Compile Include="HSSF\Record\Formula\Functions\TestPmt.cs" />
@@ -278,21 +268,6 @@
     <Compile Include="HSSF\Record\Formula\Functions\TestTFunc.cs" />
     <Compile Include="HSSF\Record\Formula\Functions\TestTrim.cs" />
     <Compile Include="HSSF\Record\Formula\Functions\TestXYNumericFunction.cs" />
-    <Compile Include="HSSF\Record\Formula\TestArea3DPtg.cs" />
-    <Compile Include="HSSF\Record\Formula\TestAreaErrPtg.cs" />
-    <Compile Include="HSSF\Record\Formula\TestAreaPtg.cs" />
-    <Compile Include="HSSF\Record\Formula\TestArrayPtg.cs" />
-    <Compile Include="HSSF\Record\Formula\TestErrPtg.cs" />
-    <Compile Include="HSSF\Record\Formula\TestExternalFunctionFormulas.cs" />
-    <Compile Include="HSSF\Record\Formula\TestFuncPtg.cs" />
-    <Compile Include="HSSF\Record\Formula\TestFuncVarPtg.cs" />
-    <Compile Include="HSSF\Record\Formula\TestIntersectionPtg.cs" />
-    <Compile Include="HSSF\Record\Formula\TestPercentPtg.cs" />
-    <Compile Include="HSSF\Record\Formula\TestRangePtg.cs" />
-    <Compile Include="HSSF\Record\Formula\TestRef3DPtg.cs" />
-    <Compile Include="HSSF\Record\Formula\TestReferencePtg.cs" />
-    <Compile Include="HSSF\Record\Formula\TestSheetNameFormatter.cs" />
-    <Compile Include="HSSF\Record\Formula\TestUnionPtg.cs" />
     <Compile Include="HSSF\Record\Chart\TestAreaFormatRecord.cs" />
     <Compile Include="HSSF\Record\Chart\TestAreaRecord.cs" />
     <Compile Include="HSSF\Record\Chart\TestAxisLineFormatRecord.cs" />
@@ -423,11 +398,6 @@
     <Compile Include="HSSF\UserModel\TestWorkbook.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="HSSF\Record\Formula\Function\TestFunctionMetadataRegistry.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="HSSF\Record\Formula\Function\TestParseMissingBuiltInFuncs.cs" />
-    <Compile Include="HSSF\Record\Formula\Function\TestReadMissingBuiltInFuncs.cs" />
     <Compile Include="HSSF\UserModel\TestFormulaEvaluatorBugs.cs" />
     <Compile Include="HSSF\UserModel\TestFormulas.cs" />
     <Compile Include="HSSF\UserModel\TestHSSFSheet.cs" />
@@ -444,8 +414,6 @@
     <Compile Include="HSSF\EventUserModel\TestHSSFEventFactory.cs" />
     <Compile Include="HSSF\EventUserModel\TestMissingRecordAwareHSSFListener.cs" />
     <Compile Include="HSSF\Extractor\TestExcelExtractor.cs" />
-    <Compile Include="HSSF\Record\Formula\Atp\TestYearFracCalculator.cs" />
-    <Compile Include="HSSF\Record\Formula\Atp\TestYearFracCalculatorFromSpreadsheet.cs" />
     <Compile Include="HSSF\Record\Formula\Functions\TestIndirect.cs" />
     <Compile Include="HSSF\UserModel\SanityChecker.cs">
       <SubType>Code</SubType>
@@ -458,18 +426,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DDF\TestEscherProperty.cs" />
+    <Compile Include="Exceptions\ComparisonFailure.cs" />
     <Compile Include="HSSF\HSSFITestDataProvider.cs" />
     <Compile Include="HSSF\Model\TestLinkTable.cs" />
     <Compile Include="HSSF\Model\TestRowBlocksReader.cs" />
     <Compile Include="HSSF\Record\Aggregates\TestPageSettingsBlock.cs" />
-    <Compile Include="HSSF\Record\Formula\Eval\EvalInstances.cs" />
-    <Compile Include="HSSF\Record\Formula\Eval\TestDivideEval.cs" />
-    <Compile Include="HSSF\Record\Formula\Eval\TestEqualEval.cs" />
-    <Compile Include="HSSF\Record\Formula\Eval\TestMinusZeroResult.cs" />
-    <Compile Include="HSSF\Record\Formula\Eval\TestMissingArgEval.cs" />
-    <Compile Include="HSSF\Record\Formula\Eval\TestRangeEval.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="HSSF\Record\Formula\Functions\TestNper.cs" />
     <Compile Include="HSSF\Record\Formula\Functions\TestValue.cs" />
     <Compile Include="HSSF\Record\TestBoolErrRecord.cs" />
@@ -488,9 +449,23 @@
     <Compile Include="SS\Formula\EvaluationListener.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="SS\Formula\FormulaParserTestHelper.cs">
+    <Compile Include="SS\Formula\Eval\EvalInstances.cs" />
+    <Compile Include="SS\Formula\Eval\TestAreaEval.cs" />
+    <Compile Include="SS\Formula\Eval\TestCircularReferences.cs" />
+    <Compile Include="SS\Formula\Eval\TestDivideEval.cs" />
+    <Compile Include="SS\Formula\Eval\TestEqualEval.cs" />
+    <Compile Include="SS\Formula\Eval\TestExternalFunction.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="SS\Formula\Eval\TestFormulaBugs.cs" />
+    <Compile Include="SS\Formula\Eval\TestFormulasFromSpreadsheet.cs" />
+    <Compile Include="SS\Formula\Eval\TestMinusZeroResult.cs" />
+    <Compile Include="SS\Formula\Eval\TestMissingArgEval.cs" />
+    <Compile Include="SS\Formula\Eval\TestOperandResolver.cs" />
+    <Compile Include="SS\Formula\Eval\TestPercentEval.cs" />
+    <Compile Include="SS\Formula\Eval\TestRangeEval.cs" />
+    <Compile Include="SS\Formula\Eval\TestUnaryPlusEval.cs" />
+    <Compile Include="SS\Formula\Functions\AbstractNumericTestCase.cs" />
     <Compile Include="SS\Formula\Function\TestFunctionMetadataRegistry.cs" />
     <Compile Include="SS\Formula\Function\TestParseMissingBuiltInFuncs.cs" />
     <Compile Include="SS\Formula\Function\TestReadMissingBuiltInFuncs.cs" />
@@ -558,6 +533,7 @@
   <ItemGroup>
     <Folder Include="DDF\data\" />
     <Folder Include="HSSF\data\" />
+    <Folder Include="SS\Formula\Eval\Forked\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

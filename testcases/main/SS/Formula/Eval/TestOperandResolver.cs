@@ -15,76 +15,90 @@
    limitations under the License.
 ==================================================================== */
 
-namespace NPOI.SS.Formula.Eval;
+using System;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+namespace NPOI.SS.Formula.Eval
+{
 
-using junit.framework.AssertionFailedError;
-using junit.framework.TestCase;
+    /**
+     * Tests for <tt>OperandResolver</tt>
+     *
+     * @author Brendan Nolan
+     */
+    [TestClass]
+    public class TestOperandResolver
+    {
+        [TestMethod]
+        public void TestParseDouble_bug48472()
+        {
 
-/**
- * Tests for <tt>OperandResolver</tt>
- *
- * @author Brendan Nolan
- */
-public class TestOperandResolver  {
+            String value = "-";
 
-	public void TestParseDouble_bug48472() {
-		
-		String value = "-";
-		
-		Double ResolvedValue = null;
-		
-		try {
-			ResolvedValue = OperandResolver.ParseDouble(value);
-		} catch (StringIndexOutOfBoundsException e) { 
-			throw new AssertionFailedError("Identified bug 48472");
-		}
-		
-		Assert.AreEqual(null, ResolvedValue);
-		
-	}
-	
-	public void TestParseDouble_bug49723() {
-		
-		String value = ".1";
-		
-		Double ResolvedValue = null;
-		
-		ResolvedValue = OperandResolver.ParseDouble(value);
-		
-		assertNotNull("Identified bug 49723", ResolvedValue);
-		
-	}
-	
-	/**
-	 * 
-	 * Tests that a list of valid strings all return a non null value from {@link OperandResolver#ParseDouble(String)}
-	 * 
-	 */
-	public void TestParseDoubleValidStrings() {
-				
-		String[] values = new String[]{".19", "0.19", "1.9", "1E4", "-.19", "-0.19", "8.5","-1E4", ".5E6","+1.5","+1E5", "  +1E5  "};
-		
-		foreach (String value in values) {
-			Assert.IsTrue(OperandResolver.ParseDouble(value) != null);
-			Assert.AreEqual(OperandResolver.ParseDouble(value), Double.ParseDouble(value));
-		}
+            Double ResolvedValue;
 
-	}
-	
-	/**
-	 * 
-	 * Tests that a list of invalid strings all return null from {@link OperandResolver#ParseDouble(String)}
-	 * 
-	 */
-	public void TestParseDoubleInvalidStrings() {
-		
-		String[] values = new String[]{"-", "ABC", "-X", "1E5a", "InfInity", "NaN", ".5F", "1,000"};
-		
-		foreach (String value in values) {
-			Assert.AreEqual(null, OperandResolver.ParseDouble(value));
-		}
+            try
+            {
+                ResolvedValue = OperandResolver.ParseDouble(value);
+            }
+            catch (Exception)
+            {
+                throw new AssertFailedException("Identified bug 48472");
+            }
 
-	}
-	
+            Assert.AreEqual(null, ResolvedValue);
+
+        }
+        [TestMethod]
+        public void TestParseDouble_bug49723()
+        {
+
+            String value = ".1";
+
+            Double ResolvedValue;
+
+            ResolvedValue = OperandResolver.ParseDouble(value);
+
+            Assert.IsNotNull(ResolvedValue, "Identified bug 49723");
+
+        }
+
+        /**
+         * 
+         * Tests that a list of valid strings all return a non null value from {@link OperandResolver#ParseDouble(String)}
+         * 
+         */
+        [TestMethod]
+        public void TestParseDoubleValidStrings()
+        {
+
+            String[] values = new String[] { ".19", "0.19", "1.9", "1E4", "-.19", "-0.19", "8.5", "-1E4", ".5E6", "+1.5", "+1E5", "  +1E5  " };
+
+            foreach (String value in values)
+            {
+                Assert.IsTrue(!Double.IsNaN(OperandResolver.ParseDouble(value)));
+                Assert.AreEqual(OperandResolver.ParseDouble(value), Double.Parse(value));
+            }
+
+        }
+
+        /**
+         * 
+         * Tests that a list of invalid strings all return null from {@link OperandResolver#ParseDouble(String)}
+         * 
+         */
+        [TestMethod]
+        public void TestParseDoubleInvalidStrings()
+        {
+
+            String[] values = new String[] { "-", "ABC", "-X", "1E5a", "InfInity", "NaN", ".5F", "1,000" };
+
+            foreach (String value in values)
+            {
+                Assert.AreEqual(null, OperandResolver.ParseDouble(value));
+            }
+
+        }
+
+    }
+
 }
-

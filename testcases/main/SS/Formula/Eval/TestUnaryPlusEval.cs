@@ -15,45 +15,50 @@
    limitations under the License.
 ==================================================================== */
 
-namespace NPOI.SS.Formula.Eval;
+namespace TestCases.SS.Formula.Eval
+{
 
-using junit.framework.TestCase;
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NPOI.SS.Formula.Eval;
+    using NPOI.SS.Formula.PTG;
+    using TestCases.SS.Formula.Functions;
 
-using NPOI.SS.Formula.PTG.AreaPtg;
-using NPOI.SS.Formula.functions.EvalFactory;
-using NPOI.SS.Formula.functions.NumericFunctionInvoker;
+    /**
+     * Test for unary plus operator Evaluator.
+     *
+     * @author Josh Micich
+     */
+    [TestClass]
+    public class TestUnaryPlusEval
+    {
 
-/**
- * Test for unary plus operator Evaluator.
- *
- * @author Josh Micich
- */
-public class TestUnaryPlusEval  {
+        /**
+         * Test for bug observable at svn revision 618865 (5-Feb-2008)<br/>
+         * The code for handling column operands had been copy-pasted from the row handling code.
+         */
+        [TestMethod]
+        public void TestColumnOperand()
+        {
 
-	/**
-	 * Test for bug observable at svn revision 618865 (5-Feb-2008)<br/>
-	 * The code for handling column operands had been copy-pasted from the row handling code.
-	 */
-	public void TestColumnOperand() {
-
-		short firstRow = (short)8;
-		short lastRow = (short)12;
-		short colNum = (short)5;
-		AreaPtg areaPtg = new AreaPtg(firstRow, lastRow, colNum, colNum, false, false, false, false);
-		ValueEval[] values = {
+            short firstRow = (short)8;
+            short lastRow = (short)12;
+            short colNum = (short)5;
+            AreaPtg areaPtg = new AreaPtg(firstRow, lastRow, colNum, colNum, false, false, false, false);
+            ValueEval[] values = {
 				new NumberEval(27),
 				new NumberEval(29),
 				new NumberEval(35),	// value in row 10
 				new NumberEval(37),
 				new NumberEval(38),
 		};
-		ValueEval[] args = {
+            ValueEval[] args = {
 			EvalFactory.CreateAreaEval(areaPtg, values),
 		};
 
-		double result = NumericFunctionInvoker.invoke(EvalInstances.UnaryPlus, args, 10, (short)20);
+            double result = NumericFunctionInvoker.Invoke(EvalInstances.UnaryPlus, args, 10, (short)20);
 
-		Assert.AreEqual(35, result, 0);
-	}
+            Assert.AreEqual(35, result, 0);
+        }
+    }
+
 }
-

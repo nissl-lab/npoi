@@ -15,138 +15,156 @@
    limitations under the License.
 ==================================================================== */
 
-namespace NPOI.SS.Formula.Eval;
+namespace NPOI.SS.Formula.Eval
+{
+    using System;
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NPOI.SS.Formula.Functions;
+    using NPOI.Util;
+    using TestCases.Exceptions;
 
-using junit.framework.ComparisonFailure;
-using junit.framework.TestCase;
+    /**
+     * IEEE 754 defines a quantity '-0.0' which is distinct from '0.0'.
+     * Negative zero is not easy to observe in Excel, since it is usually Converted to 0.0.
+     * (Note - the results of XLL Add-in functions don't seem to be Converted, so they are one
+     * reliable avenue to observe Excel's treatment of '-0.0' as an operand.)
+     * <p/>
+     * POI attempts to emulate Excel faithfully, so this class Tests
+     * two aspects of '-0.0' in formula Evaluation:
+     * <ol>
+     * <li>For most operation results '-0.0' is Converted to '0.0'.</li>
+     * <li>Comparison operators have slightly different rules regarding '-0.0'.</li>
+     * </ol>
+     * @author Josh Micich
+     */
+    [TestClass]
+    public class TestMinusZeroResult
+    {
+        private static double MINUS_ZERO = -0.0;
 
-using NPOI.SS.Formula.functions.Function;
-using NPOI.Util.HexDump;
+        // convenient access to namepace
+        //no use private static EvalInstances EI = null;
+        [TestMethod]
+        public void TestSimpleOperators()
+        {
 
-/**
- * IEEE 754 defines a quantity '-0.0' which is distinct from '0.0'.
- * Negative zero is not easy to observe in Excel, since it is usually Converted to 0.0.
- * (Note - the results of XLL Add-in functions don't seem to be Converted, so they are one
- * reliable avenue to observe Excel's treatment of '-0.0' as an operand.)
- * <p/>
- * POI attempts to emulate Excel faithfully, so this class Tests
- * two aspects of '-0.0' in formula Evaluation:
- * <ol>
- * <li>For most operation results '-0.0' is Converted to '0.0'.</li>
- * <li>Comparison operators have slightly different rules regarding '-0.0'.</li>
- * </ol>
- * @author Josh Micich
- */
-public class TestMinusZeroResult  {
-	private static double MINUS_ZERO = -0.0;
+            // unary plus is a no-op
+            CheckEval(MINUS_ZERO, UnaryPlusEval.instance, MINUS_ZERO);
 
-	// convenient access to namepace
-	private static EvalInstances EI = null;
+            // most simple operators convert -0.0 to +0.0
+            CheckEval(0.0, EvalInstances.UnaryMinus, 0.0);
+            CheckEval(0.0, EvalInstances.Percent, MINUS_ZERO);
+            CheckEval(0.0, EvalInstances.Multiply, MINUS_ZERO, 1.0);
+            CheckEval(0.0, EvalInstances.Divide, MINUS_ZERO, 1.0);
+            CheckEval(0.0, EvalInstances.Power, MINUS_ZERO, 1.0);
 
-	public void TestSimpleOperators() {
+            // but SubtractEval does not convert -0.0, so '-' and '+' work like java
+            CheckEval(MINUS_ZERO, EvalInstances.Subtract, MINUS_ZERO, 0.0); // this is the main point of bug 47198
+            CheckEval(0.0, EvalInstances.Add, MINUS_ZERO, 0.0);
+        }
 
-		// unary plus is a no-op
-		CheckEval(MINUS_ZERO, UnaryPlusEval.instance, MINUS_ZERO);
+        /**
+         * These results are hard to see in Excel (since -0.0 is usually Converted to +0.0 before it
+         * Gets to the comparison operator)
+         */
+        [TestMethod]
+        public void TestComparisonOperators()
+        {
+            System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
 
-		// most simple operators convert -0.0 to +0.0
-		CheckEval(0.0, EI.UnaryMinus, 0.0);
-		CheckEval(0.0, EI.Percent, MINUS_ZERO);
-		CheckEval(0.0, EI.Multiply, MINUS_ZERO, 1.0);
-		CheckEval(0.0, EI.Divide, MINUS_ZERO, 1.0);
-		CheckEval(0.0, EI.Power, MINUS_ZERO, 1.0);
+            CheckEval(false, EvalInstances.Equal, 0.0, MINUS_ZERO);
+            CheckEval(true, EvalInstances.GreaterThan, 0.0, MINUS_ZERO);
+            CheckEval(true, EvalInstances.LessThan, MINUS_ZERO, 0.0);
+        }
+        [TestMethod]
+        public void TestTextRendering()
+        {
+            ConfirmTextRendering("-0", MINUS_ZERO);
+            // sub-normal negative numbers also display as '-0'
+            ConfirmTextRendering("-0", BitConverter.Int64BitsToDouble(unchecked((long)0x8000100020003000L)));
+        }
 
-		// but SubtractEval does not convert -0.0, so '-' and '+' work like java
-		CheckEval(MINUS_ZERO, EI.Subtract, MINUS_ZERO, 0.0); // this is the main point of bug 47198
-		CheckEval(0.0, EI.Add, MINUS_ZERO, 0.0);
-	}
+        /**
+         * Uses {@link ConcatEval} to force number-to-text conversion
+         */
+        private static void ConfirmTextRendering(String expRendering, double d)
+        {
+            ValueEval[] args = { StringEval.EMPTY_INSTANCE, new NumberEval(d), };
+            StringEval se = (StringEval)EvalInstances.Concat.Evaluate(args, -1, (short)-1);
+            String result = se.StringValue;
+            Assert.AreEqual(expRendering, result);
+        }
 
-	/**
-	 * These results are hard to see in Excel (since -0.0 is usually Converted to +0.0 before it
-	 * Gets to the comparison operator)
-	 */
-	public void TestComparisonOperators() {
-		CheckEval(false, EI.Equal, 0.0, MINUS_ZERO);
-		CheckEval(true, EI.GreaterThan, 0.0, MINUS_ZERO);
-		CheckEval(true, EI.LessThan, MINUS_ZERO, 0.0);
-	}
+        private static void CheckEval(double expectedResult, Function instance, params double[] dArgs)
+        {
+            NumberEval result = (NumberEval)Evaluate(instance, dArgs);
+            assertDouble(expectedResult, result.NumberValue);
+        }
+        private static void CheckEval(bool expectedResult, Function instance, params double[] dArgs)
+        {
+            BoolEval result = (BoolEval)Evaluate(instance, dArgs);
+            Assert.AreEqual(expectedResult, result.BooleanValue);
+        }
+        private static ValueEval Evaluate(Function instance, params double[] dArgs)
+        {
+            ValueEval[] evalArgs;
+            evalArgs = new ValueEval[dArgs.Length];
+            for (int i = 0; i < evalArgs.Length; i++)
+            {
+                evalArgs[i] = new NumberEval(dArgs[i]);
+            }
+            ValueEval r = instance.Evaluate(evalArgs, -1, (short)-1);
+            return r;
+        }
 
-	public void TestTextRendering() {
-		ConfirmTextRendering("-0", MINUS_ZERO);
-		// sub-normal negative numbers also display as '-0'
-		ConfirmTextRendering("-0", BitConverter.Int64BitsToDouble(0x8000100020003000L));
-	}
+        /**
+         * Not really a POI Test - just Shows similar behaviour of '-0.0' in Java.
+         */
+        [TestMethod]
+        public void TestJava()
+        {
 
-	/**
-	 * Uses {@link ConcatEval} to force number-to-text conversion
-	 */
-	private static void ConfirmTextRendering(String expRendering, double d) {
-		ValueEval[] args = { StringEval.EMPTY_INSTANCE, new NumberEval(d), };
-		StringEval se = (StringEval) EI.Concat.Evaluate(args, -1, (short)-1);
-		String result = se.StringValue;
-		Assert.AreEqual(expRendering, result);
-	}
+            Assert.AreEqual(unchecked((long)0x8000000000000000L), BitConverter.DoubleToInt64Bits(MINUS_ZERO));
 
-	private static void CheckEval(double expectedResult, Function instance, double... dArgs) {
-		NumberEval result = (NumberEval) Evaluate(instance, dArgs);
-		assertDouble(expectedResult, result.GetNumberValue());
-	}
-	private static void CheckEval(bool expectedResult, Function instance, double... dArgs) {
-		BoolEval result = (BoolEval) Evaluate(instance, dArgs);
-		Assert.AreEqual(expectedResult, result.GetBooleanValue());
-	}
-	private static ValueEval Evaluate(Function instance, double... dArgs) {
-		ValueEval[] EvalArgs;
-		EvalArgs = new ValueEval[dArgs.Length];
-		for (int i = 0; i < EvalArgs.Length; i++) {
-			EvalArgs[i] = new NumberEval(dArgs[i]);
-		}
-		ValueEval r = instance.Evaluate(evalArgs, -1, (short)-1);
-		return r;
-	}
+            // The simple operators consider all zeros to be the same
+            //Assert.IsTrue(MINUS_ZERO == MINUS_ZERO);
+            Assert.IsTrue(MINUS_ZERO == +0.0);
+            Assert.IsFalse(MINUS_ZERO < +0.0);
 
-	/**
-	 * Not really a POI Test - just Shows similar behaviour of '-0.0' in Java.
-	 */
-	public void TestJava() {
+            // Double.Compare() considers them different
+            //Assert.IsTrue((MINUS_ZERO - +0.0) < 0);
 
-		Assert.AreEqual(0x8000000000000000L, Double.doubleToLongBits(MINUS_ZERO));
+            // multiplying zero by any negative quantity yields minus zero
+            assertDouble(MINUS_ZERO, 0.0 * -1);
+            assertDouble(MINUS_ZERO, 0.0 * -1e300);
+            assertDouble(MINUS_ZERO, 0.0 * -1e-300);
 
-		// The simple operators consider all zeros to be the same
-		Assert.IsTrue(MINUS_ZERO == MINUS_ZERO);
-		Assert.IsTrue(MINUS_ZERO == +0.0);
-		Assert.IsFalse(MINUS_ZERO < +0.0);
+            // minus zero can be produced as a result of underflow
+            assertDouble(MINUS_ZERO, -1e-300 / 1e100);
 
-		// Double.Compare() considers them different
-		Assert.IsTrue(Double.Compare(MINUS_ZERO, +0.0) < 0);
+            // multiplying or dividing minus zero by a positive quantity yields minus zero
+            assertDouble(MINUS_ZERO, MINUS_ZERO * 1.0);
+            assertDouble(MINUS_ZERO, MINUS_ZERO / 1.0);
 
-		// multiplying zero by any negative quantity yields minus zero
-		assertDouble(MINUS_ZERO, 0.0*-1);
-		assertDouble(MINUS_ZERO, 0.0*-1e300);
-		assertDouble(MINUS_ZERO, 0.0*-1e-300);
+            // subtracting positive zero gives minus zero
+            assertDouble(MINUS_ZERO, MINUS_ZERO - 0.0);
+            // BUT Adding positive zero gives positive zero
+            assertDouble(0.0, MINUS_ZERO + 0.0);  // <<----
+        }
 
-		// minus zero can be produced as a result of underflow
-		assertDouble(MINUS_ZERO, -1e-300 / 1e100);
+        /**
+         * Just so there is no ambiguity.  The two double values have to be exactly equal
+         */
+        private static void assertDouble(double a, double b)
+        {
+            long bitsA = BitConverter.DoubleToInt64Bits(a);
+            long bitsB = BitConverter.DoubleToInt64Bits(b);
+            if (bitsA != bitsB)
+            {
+                throw new ComparisonFailure("value different to expected",
+                        new String(HexDump.LongToHex(bitsA)), new String(HexDump.LongToHex(bitsB)));
+            }
+        }
+    }
 
-		// multiplying or dividing minus zero by a positive quantity yields minus zero
-		assertDouble(MINUS_ZERO, MINUS_ZERO * 1.0);
-		assertDouble(MINUS_ZERO, MINUS_ZERO / 1.0);
-
-		// subtracting positive zero gives minus zero
-		assertDouble(MINUS_ZERO, MINUS_ZERO - 0.0);
-		// BUT Adding positive zero gives positive zero
-		assertDouble(0.0, MINUS_ZERO + 0.0);  // <<----
-	}
-
-	/**
-	 * Just so there is no ambiguity.  The two double values have to be exactly equal
-	 */
-	private static void assertDouble(double a, double b) {
-		long bitsA = Double.doubleToLongBits(a);
-		long bitsB = Double.doubleToLongBits(b);
-		if (bitsA != bitsB) {
-			throw new ComparisonFailure("value different to expected",
-					new String(HexDump.longToHex(bitsA)), new String(HexDump.longToHex(bitsB)));
-		}
-	}
 }
-

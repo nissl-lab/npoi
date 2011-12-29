@@ -15,26 +15,28 @@
    limitations under the License.
 ==================================================================== */
 
-namespace NPOI.SS.Formula.Eval;
+namespace NPOI.SS.Formula.Eval
+{
+    using NPOI.SS.Formula.PTG;
+    using NPOI.SS.Formula.Functions;
+    using TestCases.SS.Formula.Functions;
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-using junit.framework.AssertionFailedError;
-using junit.framework.TestCase;
-
-using NPOI.SS.Formula.PTG.AreaPtg;
-using NPOI.SS.Formula.functions.EvalFactory;
-
-/**
- * Tests for <tt>AreaEval</tt>
- *
- * @author Josh Micich
- */
-public class TestAreaEval  {
-
-	public void TestGetValue_bug44950() {
-		// TODO - this Test probably isn't Testing much anymore
-		AreaPtg ptg = new AreaPtg("B2:D3");
-		NumberEval one = new NumberEval(1);
-		ValueEval[] values = {
+    /**
+     * Tests for <tt>AreaEval</tt>
+     *
+     * @author Josh Micich
+     */
+    [TestClass]
+    public class TestAreaEval
+    {
+        [TestMethod]
+        public void TestGetValue_bug44950()
+        {
+            // TODO - this Test probably isn't Testing much anymore
+            AreaPtg ptg = new AreaPtg("B2:D3");
+            NumberEval one = new NumberEval(1);
+            ValueEval[] values = {
 				one,
 				new NumberEval(2),
 				new NumberEval(3),
@@ -42,22 +44,25 @@ public class TestAreaEval  {
 				new NumberEval(5),
 				new NumberEval(6),
 		};
-		AreaEval ae = EvalFactory.CreateAreaEval(ptg, values);
-		if (one == ae.GetAbsoluteValue(1, 2)) {
-			throw new AssertionFailedError("Identified bug 44950 a");
-		}
-		Confirm(1, ae, 1, 1);
-		Confirm(2, ae, 1, 2);
-		Confirm(3, ae, 1, 3);
-		Confirm(4, ae, 2, 1);
-		Confirm(5, ae, 2, 2);
-		Confirm(6, ae, 2, 3);
+            AreaEval ae = EvalFactory.CreateAreaEval(ptg, values);
+            if (one == ae.GetAbsoluteValue(1, 2))
+            {
+                throw new AssertFailedException("Identified bug 44950 a");
+            }
+            Confirm(1, ae, 1, 1);
+            Confirm(2, ae, 1, 2);
+            Confirm(3, ae, 1, 3);
+            Confirm(4, ae, 2, 1);
+            Confirm(5, ae, 2, 2);
+            Confirm(6, ae, 2, 3);
 
-	}
+        }
 
-	private static void Confirm(int expectedValue, AreaEval ae, int row, int col) {
-		NumberEval v = (NumberEval) ae.GetAbsoluteValue(row, col);
-		Assert.AreEqual(expectedValue, v.GetNumberValue(), 0.0);
-	}
+        private static void Confirm(int expectedValue, AreaEval ae, int row, int col)
+        {
+            NumberEval v = (NumberEval)ae.GetAbsoluteValue(row, col);
+            Assert.AreEqual(expectedValue, v.NumberValue, 0.0);
+        }
+    }
+
 }
-

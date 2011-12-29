@@ -15,40 +15,44 @@
    limitations under the License.
 ==================================================================== */
 
-namespace NPOI.SS.Formula.Eval;
+namespace NPOI.SS.Formula.Eval
+{
 
-using NPOI.SS.Formula.functions.Function;
+    using NPOI.SS.Formula.Functions;
 
-/**
- * Collects eval instances for easy access by Tests in this package
- *
- * @author Josh Micich
- */
-final class EvalInstances {
-	private EvalInstances() {
-		// no instances of this class
-	}
+    /**
+     * Collects eval instances for easy access by Tests in this package
+     *
+     * @author Josh Micich
+     */
+    public class EvalInstances
+    {
+        private EvalInstances()
+        {
+            // no instances of this class
+        }
 
-	public static Function Add = TwoOperandNumericOperation.AddEval;
-	public static Function Subtract = TwoOperandNumericOperation.SubtractEval;
-	public static Function Multiply = TwoOperandNumericOperation.MultiplyEval;
-	public static Function Divide = TwoOperandNumericOperation.DivideEval;
+        public static Function Add = TwoOperandNumericOperation.AddEval;
+        public static Function Subtract = TwoOperandNumericOperation.SubtractEval;
+        public static Function Multiply = TwoOperandNumericOperation.MultiplyEval;
+        public static Function Divide = TwoOperandNumericOperation.DivideEval;
 
-	public static Function Power = TwoOperandNumericOperation.PowerEval;
+        public static Function Power = TwoOperandNumericOperation.PowerEval;
 
-	public static Function Percent = PercentEval.instance;
+        public static Function Percent = PercentEval.instance;
 
-	public static Function UnaryMinus = UnaryMinusEval.instance;
-	public static Function UnaryPlus = UnaryPlusEval.instance;
+        public static Function UnaryMinus = UnaryMinusEval.instance;
+        public static Function UnaryPlus = UnaryPlusEval.instance;
 
-	public static Function Equal = RelationalOperationEval.EqualEval;
-	public static Function LessThan = RelationalOperationEval.LessThanEval;
-	public static Function LessEqual = RelationalOperationEval.LessEqualEval;
-	public static Function GreaterThan = RelationalOperationEval.GreaterThanEval;
-	public static Function GreaterEqual = RelationalOperationEval.GreaterEqualEval;
-	public static Function NotEqual = RelationalOperationEval.NotEqualEval;
+        public static Function Equal = RelationalOperationEval.EqualEval;
+        public static Function LessThan = RelationalOperationEval.LessThanEval;
+        public static Function LessEqual = RelationalOperationEval.LessEqualEval;
+        public static Function GreaterThan = RelationalOperationEval.GreaterThanEval;
+        public static Function GreaterEqual = RelationalOperationEval.GreaterEqualEval;
+        public static Function NotEqual = RelationalOperationEval.NotEqualEval;
 
-	public static Function Range = RangeEval.instance;
-	public static Function Concat = ConcatEval.instance;
+        public static Function Range = RangeEval.instance;
+        public static Function Concat = ConcatEval.instance;
+    }
+
 }
-

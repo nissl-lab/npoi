@@ -15,82 +15,92 @@
    limitations under the License.
 ==================================================================== */
 
-namespace NPOI.SS.Formula.Eval;
+namespace TestCases.SS.Formula.Eval
+{
 
-using junit.framework.TestCase;
+    using System;
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NPOI.HSSF.UserModel;
+    using NPOI.SS.Formula;
+    using NPOI.SS.Formula.Eval;
+    using NPOI.SS.Formula.Functions;
+    using NPOI.SS.Formula.Udf;
+    using NPOI.SS.UserModel;
+    using TestCases.HSSF;
 
-using NPOI.hssf.HSSFTestDataSamples;
-using NPOI.SS.Formula.functions.FreeRefFunction;
-using NPOI.SS.Formula.udf.DefaultUDFFinder;
-using NPOI.SS.Formula.udf.AggregatingUDFFinder;
-using NPOI.SS.Formula.udf.UDFFinder;
-using NPOI.hssf.UserModel.HSSFCell;
-using NPOI.hssf.UserModel.HSSFFormulaEvaluator;
-using NPOI.hssf.UserModel.HSSFRow;
-using NPOI.hssf.UserModel.HSSFSheet;
-using NPOI.hssf.UserModel.HSSFWorkbook;
-using NPOI.SS.Formula.OperationEvaluationContext;
+    /**
+     * @author Josh Micich
+     * @author Petr Udalau - registering UDFs in workbook and using ToolPacks.
+     */
+    [TestClass]
+    public class TestExternalFunction
+    {
 
-/**
- * @author Josh Micich
- * @author Petr Udalau - registering UDFs in workbook and using ToolPacks.
- */
-public class TestExternalFunction  {
+        private class MyFunc : FreeRefFunction
+        {
+            public MyFunc()
+            {
+                //
+            }
 
-	private static class MyFunc : FreeRefFunction {
-		public MyFunc() {
-			//
-		}
+            public ValueEval Evaluate(ValueEval[] args, OperationEvaluationContext ec)
+            {
+                if (args.Length != 1 || !(args[0] is StringEval))
+                {
+                    return ErrorEval.VALUE_INVALID;
+                }
+                StringEval input = (StringEval)args[0];
+                return new StringEval(input.StringValue + "abc");
+            }
+        }
 
-		public ValueEval Evaluate(ValueEval[] args, OperationEvaluationContext ec) {
-			if (args.Length != 1 || !(args[0] is StringEval)) {
-				return ErrorEval.VALUE_INVALID;
-			}
-			StringEval input = (StringEval) args[0];
-			return new StringEval(input.StringValue + "abc");
-		}
-	}
+        private class MyFunc2 : FreeRefFunction
+        {
+            public MyFunc2()
+            {
+                //
+            }
 
-	private static class MyFunc2 : FreeRefFunction {
-		public MyFunc2() {
-			//
-		}
+            public ValueEval Evaluate(ValueEval[] args, OperationEvaluationContext ec)
+            {
+                if (args.Length != 1 || !(args[0] is StringEval))
+                {
+                    return ErrorEval.VALUE_INVALID;
+                }
+                StringEval input = (StringEval)args[0];
+                return new StringEval(input.StringValue + "abc2");
+            }
+        }
 
-		public ValueEval Evaluate(ValueEval[] args, OperationEvaluationContext ec) {
-			if (args.Length != 1 || !(args[0] is StringEval)) {
-				return ErrorEval.VALUE_INVALID;
-			}
-			StringEval input = (StringEval) args[0];
-			return new StringEval(input.StringValue + "abc2");
-		}
-	}
+        /**
+         * Checks that an external function can Get invoked from the formula
+         * Evaluator.
+         */
+        [TestMethod]
+        public void TestInvoke()
+        {
+            HSSFWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("testNames.xls");
+            ISheet sheet = wb.GetSheetAt(0);
 
-	/**
-	 * Checks that an external function can Get invoked from the formula
-	 * Evaluator.
-	 */
-	public void TestInvoke() {
-		HSSFWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("testNames.xls");
-		HSSFSheet sheet = wb.GetSheetAt(0);
-
-		/**
-		 * register the two Test UDFs in a UDF Finder, to be passed to the Evaluator
-		 */
-		UDFFinder udff1 = new DefaultUDFFinder(new String[] { "myFunc", },
-				new FreeRefFunction[] { new MyFunc(), });
-		UDFFinder udff2 = new DefaultUDFFinder(new String[] { "myFunc2", },
-				new FreeRefFunction[] { new MyFunc2(), });
-		UDFFinder udff = new AggregatingUDFFinder(udff1, udff2);
+            /**
+             * register the two Test UDFs in a UDF Finder, to be passed to the Evaluator
+             */
+            UDFFinder udff1 = new DefaultUDFFinder(new String[] { "myFunc", },
+                    new FreeRefFunction[] { new MyFunc(), });
+            UDFFinder udff2 = new DefaultUDFFinder(new String[] { "myFunc2", },
+                    new FreeRefFunction[] { new MyFunc2(), });
+            UDFFinder udff = new AggregatingUDFFinder(udff1, udff2);
 
 
-		HSSFRow row = sheet.GetRow(0);
-		HSSFCell myFuncCell = row.GetCell(1); // =myFunc("_")
+            IRow row = sheet.GetRow(0);
+            ICell myFuncCell = row.GetCell(1); // =myFunc("_")
 
-		HSSFCell myFunc2Cell = row.GetCell(2); // =myFunc2("_")
+            ICell myFunc2Cell = row.GetCell(2); // =myFunc2("_")
 
-		HSSFFormulaEvaluator fe = HSSFFormulaEvaluator.Create(wb, null, udff);
-		Assert.AreEqual("_abc", fe.Evaluate(myFuncCell).StringValue);
-		Assert.AreEqual("_abc2", fe.Evaluate(myFunc2Cell).StringValue);
-	}
+            HSSFFormulaEvaluator fe = HSSFFormulaEvaluator.Create(wb, null, udff);
+            Assert.AreEqual("_abc", fe.Evaluate(myFuncCell).StringValue);
+            Assert.AreEqual("_abc2", fe.Evaluate(myFunc2Cell).StringValue);
+        }
+    }
+
 }
-

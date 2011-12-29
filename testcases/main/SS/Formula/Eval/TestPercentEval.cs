@@ -15,70 +15,78 @@
    limitations under the License.
 ==================================================================== */
 
-namespace NPOI.SS.Formula.Eval;
+namespace TestCases.SS.Formula.Eval
+{
 
-using junit.framework.AssertionFailedError;
-using junit.framework.TestCase;
+    using System;
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NPOI.HSSF.UserModel;
+    using NPOI.SS.Formula.Eval;
+    using NPOI.SS.UserModel;
+    using TestCases.SS.Formula.Functions;
 
-using NPOI.SS.Formula.functions.EvalFactory;
-using NPOI.SS.Formula.functions.NumericFunctionInvoker;
-using NPOI.hssf.UserModel.HSSFCell;
-using NPOI.hssf.UserModel.HSSFFormulaEvaluator;
-using NPOI.hssf.UserModel.HSSFRow;
-using NPOI.hssf.UserModel.HSSFSheet;
-using NPOI.hssf.UserModel.HSSFWorkbook;
-using NPOI.SS.UserModel.CellValue;
+    /**
+     * Test for percent operator Evaluator.
+     *
+     * @author Josh Micich
+     */
+    [TestClass]
+    public class TestPercentEval
+    {
 
-/**
- * Test for percent operator Evaluator.
- *
- * @author Josh Micich
- */
-public class TestPercentEval  {
-
-	private static void Confirm(ValueEval arg, double expectedResult) {
-		ValueEval[] args = {
+        private static void Confirm(ValueEval arg, double expectedResult)
+        {
+            ValueEval[] args = {
 			arg,
 		};
 
-		double result = NumericFunctionInvoker.invoke(PercentEval.instance, args, 0, 0);
+            double result = NumericFunctionInvoker.Invoke(PercentEval.instance, args, 0, 0);
 
-		Assert.AreEqual(expectedResult, result, 0);
-	}
+            Assert.AreEqual(expectedResult, result, 0);
+        }
+        [TestMethod]
+        public void TestBasic()
+        {
+            Confirm(new NumberEval(5), 0.05);
+            Confirm(new NumberEval(3000), 30.0);
+            Confirm(new NumberEval(-150), -1.5);
+            Confirm(new StringEval("0.2"), 0.002);
+            Confirm(BoolEval.TRUE, 0.01);
+        }
+        [TestMethod]
+        public void Test1x1Area()
+        {
+            AreaEval ae = EvalFactory.CreateAreaEval("B2:B2", new ValueEval[] { new NumberEval(50), });
+            Confirm(ae, 0.5);
+        }
+        [TestMethod]
+        public void TestInSpreadSheet()
+        {
+            HSSFWorkbook wb = new HSSFWorkbook();
+            ISheet sheet = wb.CreateSheet("Sheet1");
+            IRow row = sheet.CreateRow(0);
+            ICell cell = row.CreateCell(0);
+            cell.CellFormula=("B1%");
+            row.CreateCell(1).SetCellValue(50.0);
 
-	public void TestBasic() {
-		Confirm(new NumberEval(5), 0.05);
-		Confirm(new NumberEval(3000), 30.0);
-		Confirm(new NumberEval(-150), -1.5);
-		Confirm(new StringEval("0.2"), 0.002);
-		Confirm(BoolEval.TRUE, 0.01);
-	}
+            HSSFFormulaEvaluator fe = new HSSFFormulaEvaluator(wb);
+            CellValue cv;
+            try
+            {
+                cv = fe.Evaluate(cell);
+            }
+            catch (SystemException e)
+            {
+                if (e.InnerException is NullReferenceException)
+                {
+                    throw new AssertFailedException("Identified bug 44608");
+                }
+                // else some other unexpected error
+                throw e;
+            }
+            Assert.AreEqual(CellType.NUMERIC, cv.CellType);
+            Assert.AreEqual(0.5, cv.NumberValue, 0.0);
+        }
+    }
 
-	public void Test1x1Area() {
-		AreaEval ae = EvalFactory.CreateAreaEval("B2:B2", new ValueEval[] { new NumberEval(50), });
-		Confirm(ae, 0.5);
-	}
-	public void TestInSpreadSheet() {
-		HSSFWorkbook wb = new HSSFWorkbook();
-		HSSFSheet sheet = wb.CreateSheet("Sheet1");
-		HSSFRow row = sheet.CreateRow(0);
-		HSSFCell cell = row.CreateCell(0);
-		cell.SetCellFormula("B1%");
-		row.CreateCell(1).SetCellValue(50.0);
-
-		HSSFFormulaEvaluator fe = new HSSFFormulaEvaluator(wb);
-		CellValue cv;
-		try {
-			cv = fe.Evaluate(cell);
-		} catch (RuntimeException e) {
-			if(e.GetCause() is NullPointerException) {
-				throw new AssertionFailedError("Identified bug 44608");
-			}
-			// else some other unexpected error
-			throw e;
-		}
-		Assert.AreEqual(HSSFCell.CELL_TYPE_NUMERIC, cv.GetCellType());
-		Assert.AreEqual(0.5, cv.GetNumberValue(), 0.0);
-	}
 }
-

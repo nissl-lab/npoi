@@ -96,6 +96,19 @@ namespace NPOI.HSSF.UserModel
         {
             _bookEvaluator = new WorkbookEvaluator(HSSFEvaluationWorkbook.Create(workbook), stabilityClassifier, udfFinder);
         }
+
+        /**
+	 * @param stabilityClassifier used to optimise caching performance. Pass <code>null</code>
+	 * for the (conservative) assumption that any cell may have its definition changed after
+	 * evaluation begins.
+	 * @param udfFinder pass <code>null</code> for default (AnalysisToolPak only)
+	 */
+        public static HSSFFormulaEvaluator Create(IWorkbook workbook, IStabilityClassifier stabilityClassifier, UDFFinder udfFinder)
+        {
+            return new HSSFFormulaEvaluator(workbook, stabilityClassifier, udfFinder);
+        }
+
+
         private static void SetCellType(ICell cell, CellValue cv)
         {
             CellType cellType = cv.CellType;

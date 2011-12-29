@@ -154,7 +154,7 @@ namespace NPOI.SS.Formula.Functions
         /**
  * Constructs a new instance of the Accumulator used to calculated this function
  */
-        protected abstract Accumulator CreateAccumulator();
+        public abstract Accumulator CreateAccumulator();
 
         private double EvaluateInternal(ValueVector x, ValueVector y, int size)
         {
