@@ -48,7 +48,6 @@ namespace NPOI.Util
         private static readonly int[] _shifts = new int[] { 60, 56, 52, 48, 44, 40, 36, 32, 28, 24, 20, 16, 12, 8, 4, 0 };
         public static readonly string EOL = Environment.NewLine;
 
-
         private HexDump()
         {
         }
@@ -125,7 +124,7 @@ namespace NPOI.Util
 
         public static void Dump(byte[] data, long offset, Stream stream, int index)
         {
-            lock (typeof(HexDump))
+            //lock (typeof(HexDump))
             {
                 Dump(data, offset, stream, index, data.Length - index);
             }
@@ -163,7 +162,7 @@ namespace NPOI.Util
 
         public static void Dump(byte[] data, long offset, Stream stream, int index, int length)
         {
-            lock (typeof(HexDump))
+            //lock (typeof(HexDump))
             {
                 if (data.Length == 0)
                 {

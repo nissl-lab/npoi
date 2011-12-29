@@ -9,7 +9,7 @@
 // You do not need to add suppressions to this file manually.
 
 
-// TODO fix warnings, but I am not interested in these warnings at the moment:
+// TODO fix warnings:
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors", Scope = "member", Target = "NPOI.SS.Formula.PTG.AreaPtgBase.#.ctor(NPOI.SS.Util.AreaReference)")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors", Scope = "member", Target = "NPOI.SS.Formula.PTG.AreaPtgBase.#.ctor(System.Int32,System.Int32,System.Int32,System.Int32,System.Boolean,System.Boolean,System.Boolean,System.Boolean)")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors", Scope = "member", Target = "NPOI.SS.Formula.PTG.AreaPtgBase.#.ctor(System.String)")]
@@ -38,7 +38,7 @@
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors", Scope = "member", Target = "NPOI.HPSF.SummaryInformation.#.ctor(NPOI.HPSF.PropertySet)")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors", Scope = "member", Target = "NPOI.HSSF.Model.TextboxShape.#.ctor(NPOI.HSSF.UserModel.HSSFTextbox,System.Int32)")]
 
-// TODO fix later:
+// TODO fix warnings:
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2240:ImplementISerializableCorrectly", Scope = "type", Target = "NPOI.HPSF.VariantTypeException")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2240:ImplementISerializableCorrectly", Scope = "type", Target = "NPOI.SS.Formula.Eval.EvaluationException")]
 
@@ -57,10 +57,6 @@
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times", Scope = "member", Target = "NPOI.DDF.EscherDump.#DumpOld(System.Int64,System.IO.Stream)")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times", Scope = "member", Target = "NPOI.DDF.EscherPictBlip.#InflatePictureData(System.Byte[])")]
 
-// The lock is in a static class - not sure: use a static member for the lock!?
-[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2002:DoNotLockOnObjectsWithWeakIdentity", Scope = "member", Target = "NPOI.Util.HexDump.#Dump(System.Byte[],System.Int64,System.IO.Stream,System.Int32,System.Int32)")]
-[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2002:DoNotLockOnObjectsWithWeakIdentity", Scope = "member", Target = "NPOI.Util.HexDump.#Dump(System.Byte[],System.Int64,System.IO.Stream,System.Int32)")]
-
 // these not implemented exception are acceptable for me:
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Scope = "member", Target = "NPOI.HPSF.DocumentSummaryInformation.#HeadingPair")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Scope = "member", Target = "NPOI.HPSF.DocumentSummaryInformation.#Docparts")]
@@ -68,12 +64,10 @@
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Scope = "member", Target = "NPOI.HSSF.Extractor.EventBasedExcelExtractor.#SummaryInformation")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Scope = "member", Target = "NPOI.HSSF.Record.Aggregates.RecordAggregate.#Sid")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Scope = "member", Target = "NPOI.SS.Formula.PTG.ControlPtg.#DefaultOperandClass")]
-
-// seems a workaround for malformed input
+// seems like a workaround for malformed input - ignore:
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Scope = "member", Target = "NPOI.HSSF.Record.RecordInputStream.#HasNextRecord")]
-// fix proposed in code
+// TODO: apply fix that is proposed in the code:
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Scope = "member", Target = "NPOI.POIFS.Storage.RawDataBlock.#Data")]
-
 // I am not sure on how to fix these - the expected behavior of NPOI will change
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Scope = "member", Target = "NPOI.HPSF.PropertySet.#SingleSection")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Scope = "member", Target = "NPOI.HPSF.PropertySet.#GetHashCode()")]
