@@ -15,21 +15,22 @@
    limitations under the License.
 ==================================================================== */
 
-namespace NPOI.SS.Formula
+namespace TestCases.SS.Formula
 {
 
-    using NPOI.HSSF.Model;
-    using NPOI.SS.Formula.PTG;
-    using NPOI.SS.Formula.Eval;
-    using NPOI.HSSF.UserModel;
-    using NPOI.SS.UserModel;
     using System;
     using System.Collections.Generic;
-    using System.Text;
-    using NPOI.SS.Util;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-    using TestCases.HSSF.UserModel;
     using System.IO;
+    using System.Text;
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NPOI.HSSF.Model;
+    using NPOI.HSSF.UserModel;
+    using NPOI.SS.Formula;
+    using NPOI.SS.Formula.Eval;
+    using NPOI.SS.Formula.PTG;
+    using NPOI.SS.UserModel;
+    using NPOI.SS.Util;
+    using TestCases.HSSF.UserModel;
 
     /**
      * Tests {@link NPOI.SS.Formula.EvaluationCache}.  Makes sure that where possible (previously calculated) cached

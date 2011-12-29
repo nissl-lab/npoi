@@ -15,16 +15,17 @@
    limitations under the License.
 ==================================================================== */
 
-namespace NPOI.SS.Formula
+namespace TestCases.SS.Formula
 {
 
-    using NPOI.SS.Formula.PTG;
-    using NPOI.SS.Formula.Eval;
-    using NPOI.SS.UserModel;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-    using TestCases.HSSF;
-    using NPOI.HSSF.UserModel;
     using System;
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NPOI.HSSF.UserModel;
+    using NPOI.SS.Formula;
+    using NPOI.SS.Formula.Eval;
+    using NPOI.SS.Formula.PTG;
+    using NPOI.SS.UserModel;
+    using TestCases.HSSF;
 
     /**
      * Tests {@link WorkbookEvaluator}.

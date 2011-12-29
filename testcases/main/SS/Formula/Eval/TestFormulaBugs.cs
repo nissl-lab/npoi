@@ -100,7 +100,7 @@ namespace TestCases.SS.Formula.Eval
             cell.CellFormula = ("isnumber(b1)");
             cell = row.CreateCell(3); // D5
             cell.CellFormula = ("IF(ISNUMBER(b1),b1,b2)");
-
+#if !HIDE_UNREACHABLE_CODE
             if (false)
             { // Set true to check excel file manually
                 // bug report mentions 'Editing the formula in excel "fixes" the problem.'
@@ -115,7 +115,7 @@ namespace TestCases.SS.Formula.Eval
                     throw new SystemException(e.Message);
                 }
             }
-
+#endif
             // use POI's Evaluator as an extra sanity check
             HSSFFormulaEvaluator fe = new HSSFFormulaEvaluator(wb);
             CellValue cv;

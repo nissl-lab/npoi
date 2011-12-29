@@ -15,13 +15,11 @@
    limitations under the License.
 ==================================================================== */
 
-namespace NPOI.SS.Formula.Constant
+namespace TestCases.SS.Formula.Constant
 {
-    using NPOI.HSSF.UserModel;
-    using NPOI.SS.Formula.Eval;
-    using NPOI.SS.UserModel;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using NPOI.HSSF.Record.Constant;
+    using NPOI.HSSF.UserModel;
     using NPOI.Util;
     using NPOI.Util.IO;
     using TestCases.HSSF.Record;

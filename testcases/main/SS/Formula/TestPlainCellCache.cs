@@ -17,15 +17,12 @@
  * ====================================================================
  */
 
-namespace NPOI.SS.Formula
+namespace TestCases.SS.Formula
 {
 
-    using NPOI.HSSF.Util;
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
     using NPOI.SS.Formula;
     using NPOI.SS.Formula.Eval;
-    using NPOI.SS.Formula.PTG;
-    using NPOI.SS.UserModel;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 
 

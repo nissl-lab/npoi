@@ -15,16 +15,14 @@
    limitations under the License.
 ==================================================================== */
 
-namespace NPOI.SS.Formula.PTG
+namespace TestCases.SS.Formula.PTG
 {
-
+    using System;
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
     using NPOI.HSSF.UserModel;
     using NPOI.SS.UserModel;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-    using NPOI.HSSF.Model;
-    using System;
-    using TestCases.HSSF;
     using NPOI.SS.Util;
+    using TestCases.HSSF;
     /**
      * Tests for proper calculation of named ranges from external workbooks.
      * 

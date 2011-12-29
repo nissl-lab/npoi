@@ -15,12 +15,11 @@
    limitations under the License.
 ==================================================================== */
 
-namespace NPOI.SS.Formula.PTG
+namespace TestCases.SS.Formula.PTG
 {
-    using TestCases.HSSF.UserModel;
-    using TestCases.HSSF;
-    using NPOI.HSSF.UserModel;
     using System;
+    using NPOI.HSSF.UserModel;
+    using TestCases.HSSF;
 
     /**
      * Convenient abstract class to reduce the amount of boilerplate code needed

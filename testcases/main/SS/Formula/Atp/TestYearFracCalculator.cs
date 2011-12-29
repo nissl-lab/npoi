@@ -15,15 +15,15 @@
    limitations under the License.
 ==================================================================== */
 
-namespace NPOI.SS.Formula.Atp
+namespace TestCases.SS.Formula.Atp
 {
 
 
+    using System;
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NPOI.SS.Formula.Atp;
     using NPOI.SS.Formula.Eval;
     using NPOI.SS.UserModel;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-    using System;
-    using System.Globalization;
 
     /**
      * Specific Test cases for YearFracCalculator

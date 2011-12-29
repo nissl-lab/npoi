@@ -15,11 +15,10 @@
    limitations under the License.
 ==================================================================== */
 
-namespace NPOI.SS.Formula.PTG
+namespace TestCases.SS.Formula.PTG
 {
-    using System;
-    using NPOI.HSSF.UserModel;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NPOI.HSSF.UserModel;
     using NPOI.SS.UserModel;
 
     /**

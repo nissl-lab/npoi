@@ -17,7 +17,8 @@
 
 using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-namespace NPOI.SS.Formula.Eval
+using NPOI.SS.Formula.Eval;
+namespace TestCases.SS.Formula.Eval
 {
 
     /**

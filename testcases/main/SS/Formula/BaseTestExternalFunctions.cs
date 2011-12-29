@@ -14,16 +14,16 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 ==================================================================== */
-namespace NPOI.SS.Formula
+namespace TestCases.SS.Formula
 {
 
+    using System;
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NPOI.SS.Formula;
     using NPOI.SS.Formula.Eval;
     using NPOI.SS.Formula.Functions;
     using NPOI.SS.Formula.Udf;
     using NPOI.SS.UserModel;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-    using System;
-    using NPOI.HSSF.UserModel;
     using TestCases.SS;
 
     /**

@@ -15,10 +15,11 @@
    limitations under the License.
 ==================================================================== */
 
-namespace NPOI.SS.Formula
+namespace TestCases.SS.Formula
 {
 
     using NPOI.HSSF.UserModel;
+    using NPOI.SS.Formula;
 
     /**
      * Allows Tests to execute {@link WorkbookEvaluator}s and track the internal workings.

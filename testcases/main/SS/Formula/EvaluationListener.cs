@@ -15,9 +15,10 @@
    limitations under the License.
 ==================================================================== */
 
-namespace NPOI.SS.Formula
+namespace TestCases.SS.Formula
 {
     using NPOI.SS.Formula.Eval;
+    using NPOI.SS.Formula;
 
     /**
      * Tests should extend this class if they need to track the internal working of the {@link WorkbookEvaluator}.<br/>

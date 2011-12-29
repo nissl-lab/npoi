@@ -15,7 +15,8 @@
    limitations under the License.
 ==================================================================== */
 
-namespace TestCases.SS.Formula.Eval{
+namespace TestCases.SS.Formula.Eval
+{
 
     using System;
     using System.IO;
@@ -26,286 +27,320 @@ namespace TestCases.SS.Formula.Eval{
     using TestCases.HSSF;
     using TestCases.SS.Formula.Functions;
 
-/**
- * Tests formulas and operators as loaded from a Test data spreadsheet.<p/>
- * This class does not Test implementors of <tt>Function</tt> and <tt>OperationEval</tt> in
- * isolation.  Much of the Evaluation engine (i.e. <tt>HSSFFormulaEvaluator</tt>, ...) Gets
- * exercised as well.  Tests for bug fixes and specific/tricky behaviour can be found in the
- * corresponding Test class (<tt>TestXxxx</tt>) of the target (<tt>Xxxx</tt>) implementor,
- * where execution can be observed more easily.
- *
- * @author Amol S. Deshmukh &lt; amolweb at ya hoo dot com &gt;
- */
-public class TestFormulasFromSpreadsheet  {
+    /**
+     * Tests formulas and operators as loaded from a Test data spreadsheet.<p/>
+     * This class does not Test implementors of <tt>Function</tt> and <tt>OperationEval</tt> in
+     * isolation.  Much of the Evaluation engine (i.e. <tt>HSSFFormulaEvaluator</tt>, ...) Gets
+     * exercised as well.  Tests for bug fixes and specific/tricky behaviour can be found in the
+     * corresponding Test class (<tt>TestXxxx</tt>) of the target (<tt>Xxxx</tt>) implementor,
+     * where execution can be observed more easily.
+     *
+     * @author Amol S. Deshmukh &lt; amolweb at ya hoo dot com &gt;
+     */
+    public class TestFormulasFromSpreadsheet
+    {
 
-	private static class Result {
-		public const int SOME_EVALUATIONS_FAILED = -1;
-        public const int ALL_EVALUATIONS_SUCCEEDED = +1;
-        public const int NO_EVALUATIONS_FOUND = 0;
-	}
+        private static class Result
+        {
+            public const int SOME_EVALUATIONS_FAILED = -1;
+            public const int ALL_EVALUATIONS_SUCCEEDED = +1;
+            public const int NO_EVALUATIONS_FOUND = 0;
+        }
 
-	/**
-	 * This class defines constants for navigating around the Test data spreadsheet used for these Tests.
-	 */
-	private static class SS {
+        /**
+         * This class defines constants for navigating around the Test data spreadsheet used for these Tests.
+         */
+        private static class SS
+        {
 
-		/**
-		 * Name of the Test spreadsheet (found in the standard Test data folder)
-		 */
-		public static String FILENAME = "FormulaEvalTestData.xls";
-		/**
-		 * Row (zero-based) in the Test spreadsheet where the operator examples start.
-		 */
-		public static int START_OPERATORS_ROW_INDEX = 22; // Row '23'
-		/**
-		 * Row (zero-based) in the Test spreadsheet where the function examples start.
-		 */
-		public static int START_FUNCTIONS_ROW_INDEX = 95; // Row '96'
-		/**
-		 * Index of the column that Contains the function names
-		 */
-		public static int COLUMN_INDEX_FUNCTION_NAME = 1; // Column 'B'
+            /**
+             * Name of the Test spreadsheet (found in the standard Test data folder)
+             */
+            public static String FILENAME = "FormulaEvalTestData.xls";
+            /**
+             * Row (zero-based) in the Test spreadsheet where the operator examples start.
+             */
+            public static int START_OPERATORS_ROW_INDEX = 22; // Row '23'
+            /**
+             * Row (zero-based) in the Test spreadsheet where the function examples start.
+             */
+            public static int START_FUNCTIONS_ROW_INDEX = 95; // Row '96'
+            /**
+             * Index of the column that Contains the function names
+             */
+            public static int COLUMN_INDEX_FUNCTION_NAME = 1; // Column 'B'
 
-		/**
-		 * Used to indicate when there are no more functions left
-		 */
-		public static String FUNCTION_NAMES_END_SENTINEL = "<END-OF-FUNCTIONS>";
+            /**
+             * Used to indicate when there are no more functions left
+             */
+            public static String FUNCTION_NAMES_END_SENTINEL = "<END-OF-FUNCTIONS>";
 
-		/**
-		 * Index of the column where the Test values start (for each function)
-		 */
-		public static short COLUMN_INDEX_FIRST_TEST_VALUE = 3; // Column 'D'
+            /**
+             * Index of the column where the Test values start (for each function)
+             */
+            public static short COLUMN_INDEX_FIRST_TEST_VALUE = 3; // Column 'D'
 
-		/**
-		 * Each function takes 4 rows in the Test spreadsheet
-		 */
-		public static int NUMBER_OF_ROWS_PER_FUNCTION = 4;
-	}
+            /**
+             * Each function takes 4 rows in the Test spreadsheet
+             */
+            public static int NUMBER_OF_ROWS_PER_FUNCTION = 4;
+        }
 
-	private HSSFWorkbook workbook;
-	private ISheet sheet;
-	// Note - multiple failures are aggregated before ending.
-	// If one or more functions fail, a single AssertFailedException is thrown at the end
-	private int _functionFailureCount;
-	private int _functionSuccessCount;
-	private int _EvaluationFailureCount;
-	private int _EvaluationSuccessCount;
+        private HSSFWorkbook workbook;
+        private ISheet sheet;
+        // Note - multiple failures are aggregated before ending.
+        // If one or more functions fail, a single AssertFailedException is thrown at the end
+        private int _functionFailureCount;
+        private int _functionSuccessCount;
+        private int _EvaluationFailureCount;
+        private int _EvaluationSuccessCount;
 
-	private static ICell GetExpectedValueCell(IRow row, int columnIndex) {
-		if (row == null) {
-			return null;
-		}
-		return row.GetCell(columnIndex);
-	}
-
-
-	private static void ConfirmExpectedResult(String msg, ICell expected, CellValue actual) {
-		if (expected == null) {
-			throw new AssertFailedException(msg + " - Bad Setup data expected value is null");
-		}
-		if(actual == null) {
-			throw new AssertFailedException(msg + " - actual value was null");
-		}
-
-		switch (expected.CellType) {
-			case CellType.BLANK:
-                Assert.AreEqual(CellType.BLANK, actual.CellType, msg);
-				break;
-			case CellType.BOOLEAN:
-                Assert.AreEqual(CellType.BOOLEAN, actual.CellType, msg);
-                Assert.AreEqual(expected.BooleanCellValue, actual.BooleanValue, msg);
-				break;
-			case CellType.ERROR:
-                Assert.AreEqual(CellType.ERROR, actual.CellType, msg);
-				Assert.AreEqual(msg, ErrorEval.GetText(expected.ErrorCellValue), ErrorEval.GetText(actual.ErrorValue));
-				break;
-			case CellType.FORMULA: // will never be used, since we will call method After formula Evaluation
-				throw new AssertFailedException("Cannot expect formula as result of formula Evaluation: " + msg);
-			case CellType.NUMERIC:
-                Assert.AreEqual(CellType.NUMERIC, actual.CellType, msg);
-                AbstractNumericTestCase.AssertEqual(msg, expected.NumericCellValue, actual.NumberValue, AbstractNumericTestCase.POS_ZERO, AbstractNumericTestCase.DIFF_TOLERANCE_FACTOR);
-				break;
-			case CellType.STRING:
-                Assert.AreEqual(CellType.STRING, actual.CellType, msg);
-				Assert.AreEqual(msg, expected.RichStringCellValue.String, actual.StringValue);
-				break;
-		}
-	}
+        private static ICell GetExpectedValueCell(IRow row, int columnIndex)
+        {
+            if (row == null)
+            {
+                return null;
+            }
+            return row.GetCell(columnIndex);
+        }
 
 
-	protected void SetUp() {
-		if (workbook == null) {
-			workbook = HSSFTestDataSamples.OpenSampleWorkbook(SS.FILENAME);
-			sheet = workbook.GetSheetAt( 0 );
-		}
-		_functionFailureCount = 0;
-		_functionSuccessCount = 0;
-		_EvaluationFailureCount = 0;
-		_EvaluationSuccessCount = 0;
-	}
+        private static void ConfirmExpectedResult(String msg, ICell expected, CellValue actual)
+        {
+            if (expected == null)
+            {
+                throw new AssertFailedException(msg + " - Bad Setup data expected value is null");
+            }
+            if (actual == null)
+            {
+                throw new AssertFailedException(msg + " - actual value was null");
+            }
 
-	public void TestFunctionsFromTestSpreadsheet() {
+            switch (expected.CellType)
+            {
+                case CellType.BLANK:
+                    Assert.AreEqual(CellType.BLANK, actual.CellType, msg);
+                    break;
+                case CellType.BOOLEAN:
+                    Assert.AreEqual(CellType.BOOLEAN, actual.CellType, msg);
+                    Assert.AreEqual(expected.BooleanCellValue, actual.BooleanValue, msg);
+                    break;
+                case CellType.ERROR:
+                    Assert.AreEqual(CellType.ERROR, actual.CellType, msg);
+                    Assert.AreEqual(msg, ErrorEval.GetText(expected.ErrorCellValue), ErrorEval.GetText(actual.ErrorValue));
+                    break;
+                case CellType.FORMULA: // will never be used, since we will call method After formula Evaluation
+                    throw new AssertFailedException("Cannot expect formula as result of formula Evaluation: " + msg);
+                case CellType.NUMERIC:
+                    Assert.AreEqual(CellType.NUMERIC, actual.CellType, msg);
+                    AbstractNumericTestCase.AssertEqual(msg, expected.NumericCellValue, actual.NumberValue, AbstractNumericTestCase.POS_ZERO, AbstractNumericTestCase.DIFF_TOLERANCE_FACTOR);
+                    break;
+                case CellType.STRING:
+                    Assert.AreEqual(CellType.STRING, actual.CellType, msg);
+                    Assert.AreEqual(msg, expected.RichStringCellValue.String, actual.StringValue);
+                    break;
+            }
+        }
 
-		ProcessFunctionGroup(SS.START_OPERATORS_ROW_INDEX, null);
-		ProcessFunctionGroup(SS.START_FUNCTIONS_ROW_INDEX, null);
-		// example for debugging individual functions/operators:
-//		ProcessFunctionGroup(SS.START_OPERATORS_ROW_INDEX, "ConcatEval");
-//		ProcessFunctionGroup(SS.START_FUNCTIONS_ROW_INDEX, "AVERAGE");
 
-		// confirm results
-		String successMsg = "There were "
-				+ _EvaluationSuccessCount + " successful Evaluation(s) and "
-				+ _functionSuccessCount + " function(s) without error";
-		if(_functionFailureCount > 0) {
-			String msg = _functionFailureCount + " function(s) failed in "
-			+ _EvaluationFailureCount + " Evaluation(s).  " + successMsg;
-			throw new AssertFailedException(msg);
-		}
+        protected void SetUp()
+        {
+            if (workbook == null)
+            {
+                workbook = HSSFTestDataSamples.OpenSampleWorkbook(SS.FILENAME);
+                sheet = workbook.GetSheetAt(0);
+            }
+            _functionFailureCount = 0;
+            _functionSuccessCount = 0;
+            _EvaluationFailureCount = 0;
+            _EvaluationSuccessCount = 0;
+        }
+
+        public void TestFunctionsFromTestSpreadsheet()
+        {
+
+            ProcessFunctionGroup(SS.START_OPERATORS_ROW_INDEX, null);
+            ProcessFunctionGroup(SS.START_FUNCTIONS_ROW_INDEX, null);
+            // example for debugging individual functions/operators:
+            //		ProcessFunctionGroup(SS.START_OPERATORS_ROW_INDEX, "ConcatEval");
+            //		ProcessFunctionGroup(SS.START_FUNCTIONS_ROW_INDEX, "AVERAGE");
+
+            // confirm results
+            String successMsg = "There were "
+                    + _EvaluationSuccessCount + " successful Evaluation(s) and "
+                    + _functionSuccessCount + " function(s) without error";
+            if (_functionFailureCount > 0)
+            {
+                String msg = _functionFailureCount + " function(s) failed in "
+                + _EvaluationFailureCount + " Evaluation(s).  " + successMsg;
+                throw new AssertFailedException(msg);
+            }
+#if !HIDE_UNREACHABLE_CODE
 		if(false) { // normally no output for successful Tests
 			Console.WriteLine(this.GetType().Name + ": " + successMsg);
 		}
-	}
+#endif
+        }
 
-	/**
-	 * @param startRowIndex row index in the spreadsheet where the first function/operator is found
-	 * @param TestFocusFunctionName name of a single function/operator to Test alone.
-	 * Typically pass <code>null</code> to Test all functions
-	 */
-	private void ProcessFunctionGroup(int startRowIndex, String testFocusFunctionName) {
-		HSSFFormulaEvaluator evaluator = new HSSFFormulaEvaluator(workbook);
+        /**
+         * @param startRowIndex row index in the spreadsheet where the first function/operator is found
+         * @param TestFocusFunctionName name of a single function/operator to Test alone.
+         * Typically pass <code>null</code> to Test all functions
+         */
+        private void ProcessFunctionGroup(int startRowIndex, String testFocusFunctionName)
+        {
+            HSSFFormulaEvaluator evaluator = new HSSFFormulaEvaluator(workbook);
 
-		int rowIndex = startRowIndex;
-		while (true) {
-			IRow r = sheet.GetRow(rowIndex);
-			String targetFunctionName = GetTargetFunctionName(r);
-			if(targetFunctionName == null) {
-				throw new AssertFailedException("Test spreadsheet cell empty on row ("
-						+ (rowIndex+1) + "). Expected function name or '"
-						+ SS.FUNCTION_NAMES_END_SENTINEL + "'");
-			}
-			if(targetFunctionName.Equals(SS.FUNCTION_NAMES_END_SENTINEL)) {
-				// found end of functions list
-				break;
-			}
-			if(testFocusFunctionName == null || targetFunctionName.Equals(testFocusFunctionName, StringComparison.CurrentCultureIgnoreCase)) {
-
-				// expected results are on the row below
-				IRow expectedValuesRow = sheet.GetRow(rowIndex + 1);
-				if(expectedValuesRow == null) {
-					int missingRowNum = rowIndex + 2; //+1 for 1-based, +1 for next row
-					throw new AssertFailedException("Missing expected values row for function '"
-							+ targetFunctionName + " (row " + missingRowNum + ")");
-				}
-				switch(ProcessFunctionRow(evaluator, targetFunctionName, r, expectedValuesRow)) {
-					case Result.ALL_EVALUATIONS_SUCCEEDED: _functionSuccessCount++; break;
-					case Result.SOME_EVALUATIONS_FAILED: _functionFailureCount++; break;
-					default:
-						throw new SystemException("unexpected result");
-					case Result.NO_EVALUATIONS_FOUND: // do nothing
-                        break;
-				}
-			}
-			rowIndex += SS.NUMBER_OF_ROWS_PER_FUNCTION;
-		}
-	}
-
-	/**
-	 *
-	 * @return a constant from the local Result class denoting whether there were any Evaluation
-	 * cases, and whether they all succeeded.
-	 */
-	private int ProcessFunctionRow(HSSFFormulaEvaluator Evaluator, String targetFunctionName,
-			IRow formulasRow, IRow expectedValuesRow) {
-
-		int result = Result.NO_EVALUATIONS_FOUND; // so far
-		short endcolnum = (short)formulasRow.LastCellNum;
-
-		// iterate across the row for all the Evaluation cases
-		for (int colnum=SS.COLUMN_INDEX_FIRST_TEST_VALUE; colnum < endcolnum; colnum++) {
-			ICell c = formulasRow.GetCell(colnum);
-			if (c == null || c.CellType != CellType.FORMULA) {
-				continue;
-			}
-
-			CellValue actualValue = Evaluator.Evaluate(c);
-
-			ICell expectedValueCell = GetExpectedValueCell(expectedValuesRow, colnum);
-			try {
-				ConfirmExpectedResult("Function '" + targetFunctionName + "': Formula: " + c.CellFormula + " @ " + formulasRow.RowNum + ":" + colnum,
-						expectedValueCell, actualValue);
-				_EvaluationSuccessCount ++;
-				if(result != Result.SOME_EVALUATIONS_FAILED) {
-					result = Result.ALL_EVALUATIONS_SUCCEEDED;
-				}
-			} catch (AssertFailedException e) {
-				_EvaluationFailureCount ++;
-				printshortStackTrace(System.Console.Error, e);
-				result = Result.SOME_EVALUATIONS_FAILED;
-			}
-		}
-		return result;
-	}
-
-	/**
-	 * Useful to keep output concise when expecting many failures to be reported by this Test case
-	 */
-    private static void printshortStackTrace(TextWriter ps, AssertFailedException e)
-    {
-        ps.WriteLine(e.Message);
-        ps.WriteLine(e.StackTrace);
-		/*StackTraceElement[] stes = e.GetStackTrace();
-
-		int startIx = 0;
-		// skip any top frames inside junit.framework.Assert
-		while(startIx<stes.Length) {
-			if(!stes[startIx].GetClassName().Equals(typeof(Assert).Name)) {
-				break;
-			}
-			startIx++;
-		}
-		// skip bottom frames (part of junit framework)
-		int endIx = startIx+1;
-		while(endIx < stes.Length) {
-            if (stes[endIx].GetClassName().Equals(typeof(Assert).Name))
+            int rowIndex = startRowIndex;
+            while (true)
             {
-				break;
-			}
-			endIx++;
-		}
-		if(startIx >= endIx) {
-			// something went wrong. just print the whole stack trace
-			e.printStackTrace(ps);
-		}
-		endIx -= 4; // skip 4 frames of reflection invocation
-		ps.println(e.ToString());
-		for(int i=startIx; i<endIx; i++) {
-			ps.println("\tat " + stes[i].ToString());
-		}*/
-	}
+                IRow r = sheet.GetRow(rowIndex);
+                String targetFunctionName = GetTargetFunctionName(r);
+                if (targetFunctionName == null)
+                {
+                    throw new AssertFailedException("Test spreadsheet cell empty on row ("
+                            + (rowIndex + 1) + "). Expected function name or '"
+                            + SS.FUNCTION_NAMES_END_SENTINEL + "'");
+                }
+                if (targetFunctionName.Equals(SS.FUNCTION_NAMES_END_SENTINEL))
+                {
+                    // found end of functions list
+                    break;
+                }
+                if (testFocusFunctionName == null || targetFunctionName.Equals(testFocusFunctionName, StringComparison.CurrentCultureIgnoreCase))
+                {
 
-	/**
-	 * @return <code>null</code> if cell is missing, empty or blank
-	 */
-	private static String GetTargetFunctionName(IRow r) {
-		if(r == null) {
-			System.Console.Error.WriteLine("Warning - given null row, can't figure out function name");
-			return null;
-		}
-		ICell cell = r.GetCell(SS.COLUMN_INDEX_FUNCTION_NAME);
-		if(cell == null) {
-            System.Console.Error.WriteLine("Warning - Row " + r.RowNum + " has no cell " + SS.COLUMN_INDEX_FUNCTION_NAME + ", can't figure out function name");
-			return null;
-		}
-		if(cell.CellType == CellType.BLANK) {
-			return null;
-		}
-		if(cell.CellType == CellType.STRING) {
-			return cell.RichStringCellValue.String;
-		}
+                    // expected results are on the row below
+                    IRow expectedValuesRow = sheet.GetRow(rowIndex + 1);
+                    if (expectedValuesRow == null)
+                    {
+                        int missingRowNum = rowIndex + 2; //+1 for 1-based, +1 for next row
+                        throw new AssertFailedException("Missing expected values row for function '"
+                                + targetFunctionName + " (row " + missingRowNum + ")");
+                    }
+                    switch (ProcessFunctionRow(evaluator, targetFunctionName, r, expectedValuesRow))
+                    {
+                        case Result.ALL_EVALUATIONS_SUCCEEDED: _functionSuccessCount++; break;
+                        case Result.SOME_EVALUATIONS_FAILED: _functionFailureCount++; break;
+                        default:
+                            throw new SystemException("unexpected result");
+                        case Result.NO_EVALUATIONS_FOUND: // do nothing
+                            break;
+                    }
+                }
+                rowIndex += SS.NUMBER_OF_ROWS_PER_FUNCTION;
+            }
+        }
 
-		throw new AssertFailedException("Bad cell type for 'function name' column: ("
-				+ cell.CellType + ") row (" + (r.RowNum +1) + ")");
-	}
-}
+        /**
+         *
+         * @return a constant from the local Result class denoting whether there were any Evaluation
+         * cases, and whether they all succeeded.
+         */
+        private int ProcessFunctionRow(HSSFFormulaEvaluator Evaluator, String targetFunctionName,
+                IRow formulasRow, IRow expectedValuesRow)
+        {
+
+            int result = Result.NO_EVALUATIONS_FOUND; // so far
+            short endcolnum = (short)formulasRow.LastCellNum;
+
+            // iterate across the row for all the Evaluation cases
+            for (int colnum = SS.COLUMN_INDEX_FIRST_TEST_VALUE; colnum < endcolnum; colnum++)
+            {
+                ICell c = formulasRow.GetCell(colnum);
+                if (c == null || c.CellType != CellType.FORMULA)
+                {
+                    continue;
+                }
+
+                CellValue actualValue = Evaluator.Evaluate(c);
+
+                ICell expectedValueCell = GetExpectedValueCell(expectedValuesRow, colnum);
+                try
+                {
+                    ConfirmExpectedResult("Function '" + targetFunctionName + "': Formula: " + c.CellFormula + " @ " + formulasRow.RowNum + ":" + colnum,
+                            expectedValueCell, actualValue);
+                    _EvaluationSuccessCount++;
+                    if (result != Result.SOME_EVALUATIONS_FAILED)
+                    {
+                        result = Result.ALL_EVALUATIONS_SUCCEEDED;
+                    }
+                }
+                catch (AssertFailedException e)
+                {
+                    _EvaluationFailureCount++;
+                    printshortStackTrace(System.Console.Error, e);
+                    result = Result.SOME_EVALUATIONS_FAILED;
+                }
+            }
+            return result;
+        }
+
+        /**
+         * Useful to keep output concise when expecting many failures to be reported by this Test case
+         */
+        private static void printshortStackTrace(TextWriter ps, AssertFailedException e)
+        {
+            ps.WriteLine(e.Message);
+            ps.WriteLine(e.StackTrace);
+            /*StackTraceElement[] stes = e.GetStackTrace();
+
+            int startIx = 0;
+            // skip any top frames inside junit.framework.Assert
+            while(startIx<stes.Length) {
+                if(!stes[startIx].GetClassName().Equals(typeof(Assert).Name)) {
+                    break;
+                }
+                startIx++;
+            }
+            // skip bottom frames (part of junit framework)
+            int endIx = startIx+1;
+            while(endIx < stes.Length) {
+                if (stes[endIx].GetClassName().Equals(typeof(Assert).Name))
+                {
+                    break;
+                }
+                endIx++;
+            }
+            if(startIx >= endIx) {
+                // something went wrong. just print the whole stack trace
+                e.printStackTrace(ps);
+            }
+            endIx -= 4; // skip 4 frames of reflection invocation
+            ps.println(e.ToString());
+            for(int i=startIx; i<endIx; i++) {
+                ps.println("\tat " + stes[i].ToString());
+            }*/
+        }
+
+        /**
+         * @return <code>null</code> if cell is missing, empty or blank
+         */
+        private static String GetTargetFunctionName(IRow r)
+        {
+            if (r == null)
+            {
+                System.Console.Error.WriteLine("Warning - given null row, can't figure out function name");
+                return null;
+            }
+            ICell cell = r.GetCell(SS.COLUMN_INDEX_FUNCTION_NAME);
+            if (cell == null)
+            {
+                System.Console.Error.WriteLine("Warning - Row " + r.RowNum + " has no cell " + SS.COLUMN_INDEX_FUNCTION_NAME + ", can't figure out function name");
+                return null;
+            }
+            if (cell.CellType == CellType.BLANK)
+            {
+                return null;
+            }
+            if (cell.CellType == CellType.STRING)
+            {
+                return cell.RichStringCellValue.String;
+            }
+
+            throw new AssertFailedException("Bad cell type for 'function name' column: ("
+                    + cell.CellType + ") row (" + (r.RowNum + 1) + ")");
+        }
+    }
 
 }

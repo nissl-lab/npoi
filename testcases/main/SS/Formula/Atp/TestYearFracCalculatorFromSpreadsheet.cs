@@ -15,19 +15,17 @@
    limitations under the License.
 ==================================================================== */
 
-namespace NPOI.SS.Formula.Atp
+namespace TestCases.SS.Formula.Atp
 {
-
-
-
-    using NPOI.SS.Formula.Eval;
-    using NPOI.HSSF.UserModel;
-    using TestCases.HSSF;
-    using NPOI.SS.UserModel;
-    using System.Collections;
     using System;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using System.Collections;
     using System.IO;
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NPOI.HSSF.UserModel;
+    using NPOI.SS.Formula.Atp;
+    using NPOI.SS.Formula.Eval;
+    using NPOI.SS.UserModel;
+    using TestCases.HSSF;
 
 
     /**

@@ -15,12 +15,13 @@
    limitations under the License.
 ==================================================================== */
 
-namespace NPOI.SS.Formula.Eval
+namespace TestCases.SS.Formula.Eval
 {
     using NPOI.SS.Formula.PTG;
     using NPOI.SS.Formula.Functions;
     using TestCases.SS.Formula.Functions;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NPOI.SS.Formula.Eval;
 
     /**
      * Tests for <tt>AreaEval</tt>

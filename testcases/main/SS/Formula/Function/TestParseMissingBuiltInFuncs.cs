@@ -15,7 +15,7 @@
    limitations under the License.
 ==================================================================== */
 
-namespace NPOI.SS.Formula.Function
+namespace TestCases.SS.Formula.Function
 {
 
     using NPOI.HSSF.Model;

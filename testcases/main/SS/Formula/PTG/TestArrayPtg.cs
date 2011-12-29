@@ -15,18 +15,15 @@
    limitations under the License.
 ==================================================================== */
 
-namespace NPOI.SS.Formula.PTG
+namespace TestCases.SS.Formula.PTG
 {
-
-
     using System;
-    using NPOI.HSSF.UserModel;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
-    using NPOI.SS.UserModel;
-    using NPOI.HSSF.Model;
+    using NPOI.HSSF.UserModel;
+    using NPOI.SS.Formula.PTG;
     using NPOI.Util;
-    using TestCases.HSSF;
     using NPOI.Util.IO;
+    using TestCases.HSSF;
     using TestCases.HSSF.Record;
     /**
      * Tests for <tt>ArrayPtg</tt>

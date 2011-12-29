@@ -15,9 +15,10 @@
    limitations under the License.
 ==================================================================== */
 
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-namespace NPOI.SS.Formula.Function
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NPOI.SS.Formula.Function;
+namespace TestCases.SS.Formula.Function
 {
     /**
      * 

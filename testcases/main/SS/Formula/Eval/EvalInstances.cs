@@ -15,10 +15,11 @@
    limitations under the License.
 ==================================================================== */
 
-namespace NPOI.SS.Formula.Eval
+namespace TestCases.SS.Formula.Eval
 {
 
     using NPOI.SS.Formula.Functions;
+    using NPOI.SS.Formula.Eval;
 
     /**
      * Collects eval instances for easy access by Tests in this package
