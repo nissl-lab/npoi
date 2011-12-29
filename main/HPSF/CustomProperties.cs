@@ -88,7 +88,7 @@ namespace NPOI.HPSF
         public Object Put(Object name, Object customProperty)
         {
             CustomProperty cp = (CustomProperty)customProperty;
-            if (name == null ||(string)name=="")     //tony qu changed the code
+            if (string.IsNullOrEmpty((string)name))     //tony qu changed the code
             {
                 /* Ignoring a property without a name. */
                 isPure = false;

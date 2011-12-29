@@ -284,7 +284,7 @@ namespace NPOI.HSSF.UserModel
 
         public void DrawString(String str, int x, int y)
         {
-            if (str == null || str.Equals(""))
+            if (string.IsNullOrEmpty(str))
                 return;
 
             using (Font excelFont = new Font(font.Name.Equals("SansSerif") ? "Arial" : font.Name, (int)(font.Size / verticalPixelsPerPoint), font.Style))

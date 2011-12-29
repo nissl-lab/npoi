@@ -141,7 +141,7 @@ namespace NPOI.HSSF.Util
         public static bool IsSheetNameOk(String _sheetName)
         {
             bool res = false;
-            if ((_sheetName != null) && !_sheetName.Equals(""))
+            if (!string.IsNullOrEmpty(_sheetName))
             {
                 res = intern_isSheetNameOk(_sheetName, true);
             }
@@ -338,7 +338,7 @@ namespace NPOI.HSSF.Util
         private static bool IsLetter(String _str)
         {
             bool res = true;
-            if (!_str.Equals(""))
+            if (!string.IsNullOrEmpty(_str))
             {
                 for (int i = 0; i < _str.Length; i++)
                 {
@@ -428,7 +428,7 @@ namespace NPOI.HSSF.Util
         {
             int sum = 0;
             int multiplier = 1;
-            if (_s != "")
+            if (!string.IsNullOrEmpty(_s))
             {
                 for (int i = _s.Length - 1; i >= 0; i--)
                 {
