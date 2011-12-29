@@ -70,9 +70,9 @@ namespace NPOI.Util
         /// <param name="data">the byte array to read the value from</param>
         /// <exception cref="IndexOutOfRangeException">if the offset is not
         /// within the range of 0..(data.length - 1)</exception> 
-        public ShortField(int offset, byte [] data)
+        public ShortField(int offset, byte[] data)
+            : this(offset)
         {
-            this._offset=offset;
             ReadFromBytes(data);
         }
 
@@ -85,9 +85,9 @@ namespace NPOI.Util
         /// <param name="value">the initial value</param>
         /// <param name="data">the byte array to write the value to</param>
         /// <exception cref="IndexOutOfRangeException">if offset is negative</exception>
-        public ShortField(int offset, short value, ref byte [] data)
+        public ShortField(int offset, short value, ref byte[] data)
+            : this(offset)
         {
-            this._offset=offset;
             Set(value, ref data);
         }
 
@@ -149,6 +149,18 @@ namespace NPOI.Util
         public void WriteToBytes(byte [] data)
         {
             LittleEndian.PutShort(data, _offset, _value);
+        }
+
+        /// <summary>
+        /// Same as using the constructor <see cref="ShortField"/> with the same
+        /// parameter list. Avoid creation of an useless object.
+        /// </summary>
+        /// <param name="offset">offset of the field within its byte array</param>
+        /// <param name="value">the initial value</param>
+        /// <param name="data">the byte array to write the value to</param>
+        public static void Write(int offset, short value, ref byte[] data)
+        {
+            LittleEndian.PutShort(data, offset, value);
         }
 
         /// <summary>

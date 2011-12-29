@@ -63,7 +63,8 @@ namespace NPOI.SS.Formula
             {
                 throw new ArgumentException("Must provide at least one collaborating worbook");
             }
-            new CollaboratingWorkbooksEnvironment(workbookNames, evaluators, nItems);
+            var env = new CollaboratingWorkbooksEnvironment(workbookNames, evaluators, nItems);
+            HookNewEnvironment(evaluators, env);
         }
 
         private CollaboratingWorkbooksEnvironment(String[] workbookNames, WorkbookEvaluator[] evaluators, int nItems)
@@ -88,7 +89,7 @@ namespace NPOI.SS.Formula
                 m[wbName] = wbEval;
             }
             UnhookOldEnvironments(evaluators);
-            HookNewEnvironment(evaluators, this);
+            //HookNewEnvironment(evaluators, this); - moved to Setup method above
             _unhooked = false;
             _evaluators = evaluators;
             _evaluatorsByName = m;

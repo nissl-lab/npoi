@@ -249,12 +249,12 @@ namespace NPOI.POIFS.Properties
 
                 for (; j < limit; j++)
                 {
-                    new ShortField(offset, (short)char_array[j], ref _raw_data);
+                    ShortField.Write(offset, (short)char_array[j], ref _raw_data);
                     offset += LittleEndianConstants.SHORT_SIZE;
                 }
                 for (; j < _max_name_length + 1; j++)
                 {
-                    new ShortField(offset, (short)0, ref _raw_data);
+                    ShortField.Write(offset, (short)0, ref _raw_data);
                     offset += LittleEndianConstants.SHORT_SIZE;
                 }
 

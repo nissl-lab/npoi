@@ -115,6 +115,14 @@ namespace TestCases.Util
                 new IntegerField(0, _test_array[ j ], array);
                 Assert.AreEqual(_test_array[ j ], new IntegerField(0, array).Value);
             }
+
+            // same test as above, but using the static method
+            for (int j = 0; j < _test_array.Length; j++)
+            {
+                array = new byte[ 4 ];
+                IntegerField.Write(0, _test_array[j], array);
+                Assert.AreEqual(_test_array[ j ], new IntegerField(0, array).Value);
+            }
         }
 
         /**

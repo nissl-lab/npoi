@@ -72,24 +72,24 @@ namespace NPOI.POIFS.Storage
             {
                 this._data[i] = _default_value;
             }
-            new LongField(HeaderBlockConstants._signature_offset, HeaderBlockConstants._signature, _data);
-            new IntegerField(0x08, 0, _data);
-            new IntegerField(0x0c, 0, _data);
-            new IntegerField(0x10, 0, _data);
-            new IntegerField(0x14, 0, _data);
-            new ShortField(0x18, ( short ) 0x3b, ref _data);
-            new ShortField(0x1a, ( short ) 0x3, ref _data);
-            new ShortField(0x1c, ( short ) -2, ref _data);
-            new ShortField(0x1e, ( short ) 0x9, ref _data);
-            new IntegerField(0x20, 0x6, _data);
-            new IntegerField(0x24, 0, _data);
-            new IntegerField(0x28, 0, _data);
+            LongField.Write(HeaderBlockConstants._signature_offset, HeaderBlockConstants._signature, _data);
+            IntegerField.Write(0x08, 0, _data);
+            IntegerField.Write(0x0c, 0, _data);
+            IntegerField.Write(0x10, 0, _data);
+            IntegerField.Write(0x14, 0, _data);
+            ShortField.Write(0x18, (short)0x3b, ref _data);
+            ShortField.Write(0x1a, (short)0x3, ref _data);
+            ShortField.Write(0x1c, (short)-2, ref _data);
+            ShortField.Write(0x1e, (short)0x9, ref _data);
+            IntegerField.Write(0x20, 0x6, _data);
+            IntegerField.Write(0x24, 0, _data);
+            IntegerField.Write(0x28, 0, _data);
             _bat_count = new IntegerField(HeaderBlockConstants._bat_count_offset, 0, _data);
             _property_start = new IntegerField(HeaderBlockConstants._property_start_offset,
                                                POIFSConstants.END_OF_CHAIN,
                                                _data);
-            new IntegerField(0x34, 0, _data);
-            new IntegerField(0x38, 0x1000, _data);
+            IntegerField.Write(0x34, 0, _data);
+            IntegerField.Write(0x38, 0x1000, _data);
             _sbat_start = new IntegerField(HeaderBlockConstants._sbat_start_offset,
                                            POIFSConstants.END_OF_CHAIN, _data);
             _sbat_block_count = new IntegerField(HeaderBlockConstants._sbat_block_count_offset, 0,
@@ -119,7 +119,7 @@ namespace NPOI.POIFS.Storage
 
             for (int j = 0; j < limit; j++)
             {
-                new IntegerField(offset, startBlock + j, _data);
+                IntegerField.Write(offset, startBlock + j, _data);
                 offset += LittleEndianConstants.INT_SIZE;
             }
             if (blockCount > HeaderBlockConstants._max_bats_in_header)

@@ -66,9 +66,9 @@ namespace NPOI.Util
         /// </summary>
         /// <param name="offset">offset of the field within its byte array</param>
         /// <param name="data">the byte array to Read the value from</param>
-        public IntegerField(int offset,byte [] data)
+        public IntegerField(int offset, byte[] data)
+            : this(offset)
         {
-            this._offset = offset;
             ReadFromBytes(data);
         }
 
@@ -79,9 +79,9 @@ namespace NPOI.Util
         /// <param name="offset">offset of the field within its byte array</param>
         /// <param name="value">the initial value</param>
         /// <param name="data">the byte array to write the value to</param>
-        public IntegerField(int offset, int value, byte [] data)
+        public IntegerField(int offset, int value, byte[] data)
+            : this(offset)
         {
-            this._offset = offset;
             Set(value, data);
         }
 
@@ -135,6 +135,18 @@ namespace NPOI.Util
         public void WriteToBytes(byte [] data)
         {
             LittleEndian.PutInt(data, _offset, _value);
+        }
+
+        /// <summary>
+        /// Same as using the constructor <see cref="IntegerField"/> with the same
+        /// parameter list. Avoid creation of an useless object.
+        /// </summary>
+        /// <param name="offset">offset of the field within its byte array</param>
+        /// <param name="value">the initial value</param>
+        /// <param name="data">the byte array to write the value to</param>
+        public static void Write(int offset, int value, byte[] data)
+        {
+            LittleEndian.PutInt(data, offset, value);
         }
 
         /// <summary>
