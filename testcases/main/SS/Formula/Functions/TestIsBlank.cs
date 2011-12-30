@@ -15,45 +15,44 @@
    limitations under the License.
 ==================================================================== */
 
-namespace NPOI.SS.Formula.functions;
+namespace TestCases.SS.Formula.Functions
+{
+    using NPOI.HSSF.UserModel;
+    using NPOI.SS.UserModel;
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    /**
+     * Tests for Excel function ISBLANK()
+     * 
+     * @author Josh Micich
+     */
+    [TestClass]
+    public class TestIsBlank
+    {
+        [TestMethod]
+        public void Test3DArea()
+        {
+            HSSFWorkbook wb = new HSSFWorkbook();
+            ISheet sheet1 = wb.CreateSheet();
+            wb.SetSheetName(0, "Sheet1");
+            wb.CreateSheet();
+            wb.SetSheetName(1, "Sheet2");
+            IRow row = sheet1.CreateRow(0);
+            ICell cell = row.CreateCell(0);
 
-using junit.framework.TestCase;
 
-using NPOI.hssf.UserModel.HSSFCell;
-using NPOI.hssf.UserModel.HSSFFormulaEvaluator;
-using NPOI.hssf.UserModel.HSSFRow;
-using NPOI.hssf.UserModel.HSSFSheet;
-using NPOI.hssf.UserModel.HSSFWorkbook;
-using NPOI.SS.UserModel.CellValue;
-/**
- * Tests for Excel function ISBLANK()
- * 
- * @author Josh Micich
- */
-public class TestIsBlank  {
+            cell.CellFormula=("isblank(Sheet2!A1:A1)");
 
-	public void Test3DArea() {
-        HSSFWorkbook wb = new HSSFWorkbook();
-        HSSFSheet sheet1 = wb.CreateSheet();
-        wb.SetSheetName(0, "Sheet1");
-        wb.CreateSheet();
-        wb.SetSheetName(1, "Sheet2");
-        HSSFRow row = sheet1.CreateRow(0);
-        HSSFCell cell = row.CreateCell(0);
+            HSSFFormulaEvaluator fe = new HSSFFormulaEvaluator(wb);
+            CellValue result = fe.Evaluate(cell);
+            Assert.AreEqual(CellType.BOOLEAN, result.CellType);
+            Assert.AreEqual(true, result.BooleanValue);
 
-         
-        cell.SetCellFormula("isblank(Sheet2!A1:A1)");
-        
-        HSSFFormulaEvaluator fe = new HSSFFormulaEvaluator(wb);
-        CellValue result = fe.Evaluate(cell);
-        Assert.AreEqual(HSSFCell.CELL_TYPE_BOOLEAN, result.GetCellType());
-        Assert.AreEqual(true, result.GetBooleanValue());
-        
-        cell.SetCellFormula("isblank(D7:D7)");
-        
-        result = fe.Evaluate(cell);
-        Assert.AreEqual(HSSFCell.CELL_TYPE_BOOLEAN, result.GetCellType());
-        Assert.AreEqual(true, result.GetBooleanValue());
-   }
+            cell.CellFormula=("isblank(D7:D7)");
+
+            result = fe.Evaluate(cell);
+            Assert.AreEqual(CellType.BOOLEAN, result.CellType);
+            Assert.AreEqual(true, result.BooleanValue);
+        }
+    }
+
 }
-

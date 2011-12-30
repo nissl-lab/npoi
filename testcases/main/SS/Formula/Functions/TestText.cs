@@ -15,100 +15,103 @@
    limitations under the License.
 ==================================================================== */
 
-namespace NPOI.SS.Formula.functions;
+namespace TestCases.SS.Formula.Functions
+{
 
+    using NPOI.SS.Formula.Eval;
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using System;
+    using NPOI.SS.Util;
+    using NPOI.SS.Formula.Functions;
 
+    /**
+     * Test case for TEXT()
+     *
+     * @author Stephen Wolke (smwolke at geistig.com)
+     */
+    [TestClass]
+    public class TestText
+    {
+        //private static TextFunction T = null;
+        [TestMethod]
+        public void TestTextWithStringFirstArg()
+        {
 
+            ValueEval strArg = new StringEval("abc");
+            ValueEval formatArg = new StringEval("abc");
+            ValueEval[] args = { strArg, formatArg };
+            ValueEval result = TextFunction.TEXT.Evaluate(args, -1, (short)-1);
+            Assert.AreEqual(ErrorEval.VALUE_INVALID, result);
+        }
+        [TestMethod]
+        public void TestTextWithDeciamlFormatSecondArg()
+        {
+            throw new NotImplementedException();
+            /*ValueEval numArg = new NumberEval(321321.321);
+            ValueEval formatArg = new StringEval("#,###.00000");
+            ValueEval[] args = { numArg, formatArg };
+            ValueEval result = T.TEXT.Evaluate(args, -1, (short)-1);
+            char groupSeparator = new DecimalFormatSymbols(Locale.GetDefault()).GetGroupingSeparator();
+            char decimalSeparator = new DecimalFormatSymbols(Locale.GetDefault()).GetDecimalSeparator();
+            ValueEval testResult = new StringEval("321" + groupSeparator + "321" + decimalSeparator + "32100");
+            Assert.AreEqual(testResult.ToString(), result.ToString());
+            numArg = new NumberEval(321.321);
+            formatArg = new StringEval("00000.00000");
+            args[0] = numArg;
+            args[1] = formatArg;
+            result = T.TEXT.Evaluate(args, -1, (short)-1);
+            testResult = new StringEval("00321" + decimalSeparator + "32100");
+            Assert.AreEqual(testResult.ToString(), result.ToString());
 
+            formatArg = new StringEval("$#.#");
+            args[1] = formatArg;
+            result = T.TEXT.Evaluate(args, -1, (short)-1);
+            testResult = new StringEval("$321" + decimalSeparator + "3");
+            Assert.AreEqual(testResult.ToString(), result.ToString());*/
+        }
+        [TestMethod]
+        public void TestTextWithFractionFormatSecondArg()
+        {
 
+            ValueEval numArg = new NumberEval(321.321);
+            ValueEval formatArg = new StringEval("# #/#");
+            ValueEval[] args = { numArg, formatArg };
+            ValueEval result = TextFunction.TEXT.Evaluate(args, -1, (short)-1);
+            ValueEval testResult = new StringEval("321 1/3");
+            Assert.AreEqual(testResult.ToString(), result.ToString());
 
-using junit.framework.TestCase;
-using NPOI.SS.Formula.Eval.ErrorEval;
-using NPOI.SS.Formula.Eval.NumberEval;
-using NPOI.SS.Formula.Eval.ValueEval;
-using NPOI.SS.Formula.Eval.StringEval;
+            formatArg = new StringEval("# #/##");
+            args[1] = formatArg;
+            result = TextFunction.TEXT.Evaluate(args, -1, (short)-1);
+            testResult = new StringEval("321 26/81");
+            Assert.AreEqual(testResult.ToString(), result.ToString());
 
-/**
- * Test case for TEXT()
- *
- * @author Stephen Wolke (smwolke at geistig.com)
- */
-public class TestText  {
-	private static TextFunction T = null;
+            formatArg = new StringEval("#/##");
+            args[1] = formatArg;
+            result = TextFunction.TEXT.Evaluate(args, -1, (short)-1);
+            testResult = new StringEval("26027/81");
+            Assert.AreEqual(testResult.ToString(), result.ToString());
+        }
+        [TestMethod]
+        public void TestTextWithDateFormatSecondArg()
+        {
 
-	public void TestTextWithStringFirstArg() {
+            ValueEval numArg = new NumberEval(321.321);
+            ValueEval formatArg = new StringEval("dd:MM:yyyy hh:mm:ss");
+            ValueEval[] args = { numArg, formatArg };
+            ValueEval result = TextFunction.TEXT.Evaluate(args, -1, (short)-1);
+            ValueEval testResult = new StringEval("16:11:1900 07:42:14");
+            Assert.AreEqual(testResult.ToString(), result.ToString());
 
-		ValueEval strArg = new StringEval("abc");
-		ValueEval formatArg = new StringEval("abc");
-		ValueEval[] args = { strArg, formatArg };
-		ValueEval result = T.TEXT.Evaluate(args, -1, (short)-1);
-		Assert.AreEqual(ErrorEval.VALUE_INVALID, result);
-	}
+            // this line is intended to compute how "November" would look like in the current locale
+            String november = new SimpleDateFormat("MMMM").Format(new DateTime(2010, 10, 15));
 
-	public void TestTextWithDeciamlFormatSecondArg() {
+            formatArg = new StringEval("MMMM dd, yyyy");
+            args[1] = formatArg;
+            result = TextFunction.TEXT.Evaluate(args, -1, (short)-1);
+            testResult = new StringEval(november + " 16, 1900");
+            Assert.AreEqual(testResult.ToString(), result.ToString());
+        }
+    }
 
-		ValueEval numArg = new NumberEval(321321.321);
-		ValueEval formatArg = new StringEval("#,###.00000");
-		ValueEval[] args = { numArg, formatArg };
-		ValueEval result = T.TEXT.Evaluate(args, -1, (short)-1);
-		char groupSeparator = new DecimalFormatSymbols(Locale.GetDefault()).GetGroupingSeparator();
-		char decimalSeparator = new DecimalFormatSymbols(Locale.GetDefault()).GetDecimalSeparator();
-		ValueEval TestResult = new StringEval("321" + groupSeparator + "321" + decimalSeparator + "32100");
-		Assert.AreEqual(testResult.ToString(), result.ToString());
-		numArg = new NumberEval(321.321);
-		formatArg = new StringEval("00000.00000");
-		args[0] = numArg;
-		args[1] = formatArg;
-		result = T.TEXT.Evaluate(args, -1, (short)-1);
-	 TestResult = new StringEval("00321" + decimalSeparator + "32100");
-		Assert.AreEqual(testResult.ToString(), result.ToString());
-
-		formatArg = new StringEval("$#.#");
-		args[1] = formatArg;
-		result = T.TEXT.Evaluate(args, -1, (short)-1);
-	 TestResult = new StringEval("$321" + decimalSeparator + "3");
-		Assert.AreEqual(testResult.ToString(), result.ToString());
-	}
-
-	public void TestTextWithFractionFormatSecondArg() {
-
-		ValueEval numArg = new NumberEval(321.321);
-		ValueEval formatArg = new StringEval("# #/#");
-		ValueEval[] args = { numArg, formatArg };
-		ValueEval result = T.TEXT.Evaluate(args, -1, (short)-1);
-		ValueEval TestResult = new StringEval("321 1/3");
-		Assert.AreEqual(testResult.ToString(), result.ToString());
-
-		formatArg = new StringEval("# #/##");
-		args[1] = formatArg;
-		result = T.TEXT.Evaluate(args, -1, (short)-1);
-	 TestResult = new StringEval("321 26/81");
-		Assert.AreEqual(testResult.ToString(), result.ToString());
-
-		formatArg = new StringEval("#/##");
-		args[1] = formatArg;
-		result = T.TEXT.Evaluate(args, -1, (short)-1);
-	 TestResult = new StringEval("26027/81");
-		Assert.AreEqual(testResult.ToString(), result.ToString());
-	}
-
-	public void TestTextWithDateFormatSecondArg() {
-
-		ValueEval numArg = new NumberEval(321.321);
-		ValueEval formatArg = new StringEval("dd:MM:yyyy hh:mm:ss");
-		ValueEval[] args = { numArg, formatArg };
-		ValueEval result = T.TEXT.Evaluate(args, -1, (short)-1);
-		ValueEval TestResult = new StringEval("16:11:1900 07:42:14");
-		Assert.AreEqual(testResult.ToString(), result.ToString());
-
-		// this line is intended to compute how "November" would look like in the current locale
-		String november = new SimpleDateFormat("MMMM").format(new GregorianCalendar(2010,10,15).GetTime());
-
-		formatArg = new StringEval("MMMM dd, yyyy");
-		args[1] = formatArg;
-		result = T.TEXT.Evaluate(args, -1, (short)-1);
-	 TestResult = new StringEval(november + " 16, 1900");
-		Assert.AreEqual(testResult.ToString(), result.ToString());
-	}
 }
-

@@ -15,81 +15,87 @@
    limitations under the License.
 ==================================================================== */
 
-namespace NPOI.SS.Formula.functions;
+namespace TestCases.SS.Formula.Functions
+{
+    using NPOI.SS.Formula.Eval;
+    using System;
+    using NPOI.SS.Formula.Functions;
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-using junit.framework.TestCase;
+    /**
+     * Tests for {@link Value}
+     *
+     * @author Josh Micich
+     */
+    [TestClass]
+    public class TestValue
+    {
 
-using NPOI.SS.Formula.Eval.ErrorEval;
-using NPOI.SS.Formula.Eval.NumberEval;
-using NPOI.SS.Formula.Eval.StringEval;
-using NPOI.SS.Formula.Eval.ValueEval;
+        private static ValueEval invokeValue(String strText)
+        {
+            ValueEval[] args = new ValueEval[] { new StringEval(strText), };
+            return new Value().Evaluate(args, -1, (short)-1);
+        }
 
-/**
- * Tests for {@link Value}
- *
- * @author Josh Micich
- */
-public class TestValue  {
+        private static void ConfirmValue(String strText, double expected)
+        {
+            ValueEval result = invokeValue(strText);
+            Assert.AreEqual(typeof(NumberEval), result.GetType());
+            Assert.AreEqual(expected, ((NumberEval)result).NumberValue, 0.0);
+        }
 
-	private static ValueEval invokeValue(String strText) {
-		ValueEval[] args = new ValueEval[] { new StringEval(strText), };
-		return new Value().Evaluate(args, -1, (short) -1);
-	}
+        private static void ConfirmValueError(String strText)
+        {
+            ValueEval result = invokeValue(strText);
+            Assert.AreEqual(typeof(ErrorEval), result.GetType());
+            Assert.AreEqual(ErrorEval.VALUE_INVALID, result);
+        }
+        [TestMethod]
+        public void TestBasic()
+        {
 
-	private static void ConfirmValue(String strText, double expected) {
-		ValueEval result = invokeValue(strText);
-		Assert.AreEqual(NumberEval.class, result.GetType());
-		Assert.AreEqual(expected, ((NumberEval) result).GetNumberValue(), 0.0);
-	}
+            ConfirmValue("100", 100);
+            ConfirmValue("-2.3", -2.3);
+            ConfirmValue(".5", 0.5);
+            ConfirmValue(".5e2", 50);
+            ConfirmValue(".5e-2", 0.005);
+            ConfirmValue(".5e+2", 50);
+            ConfirmValue("+5", 5);
+            ConfirmValue("$1,000", 1000);
+            ConfirmValue("100.5e1", 1005);
+            ConfirmValue("1,0000", 10000);
+            ConfirmValue("1,000,0000", 10000000);
+            ConfirmValue("1,000,0000,00000", 1000000000000.0);
+            ConfirmValue(" 100 ", 100);
+            ConfirmValue(" + 100", 100);
+            ConfirmValue("10000", 10000);
+            ConfirmValue("$-5", -5);
+            ConfirmValue("$.5", 0.5);
+            ConfirmValue("123e+5", 12300000);
+            ConfirmValue("1,000e2", 100000);
+            ConfirmValue("$10e2", 1000);
+            ConfirmValue("$1,000e2", 100000);
+        }
+        [TestMethod]
+        public void TestErrors()
+        {
+            ConfirmValueError("1+1");
+            ConfirmValueError("1 1");
+            ConfirmValueError("1,00.0");
+            ConfirmValueError("1,00");
+            ConfirmValueError("$1,00.5e1");
+            ConfirmValueError("1,00.5e1");
+            ConfirmValueError("1,0,000");
+            ConfirmValueError("1,00,000");
+            ConfirmValueError("++100");
+            ConfirmValueError("$$5");
+            ConfirmValueError("-");
+            ConfirmValueError("+");
+            ConfirmValueError("$");
+            ConfirmValueError(",300");
+            ConfirmValueError("0.233,4");
+            ConfirmValueError("1e2.5");
+        }
+    }
 
-	private static void ConfirmValueError(String strText) {
-		ValueEval result = invokeValue(strText);
-		Assert.AreEqual(ErrorEval.class, result.GetType());
-		Assert.AreEqual(ErrorEval.VALUE_INVALID, result);
-	}
-
-	public void TestBasic() {
-
-		ConfirmValue("100", 100);
-		ConfirmValue("-2.3", -2.3);
-		ConfirmValue(".5", 0.5);
-		ConfirmValue(".5e2", 50);
-		ConfirmValue(".5e-2", 0.005);
-		ConfirmValue(".5e+2", 50);
-		ConfirmValue("+5", 5);
-		ConfirmValue("$1,000", 1000);
-		ConfirmValue("100.5e1", 1005);
-		ConfirmValue("1,0000", 10000);
-		ConfirmValue("1,000,0000", 10000000);
-		ConfirmValue("1,000,0000,00000", 1000000000000.0);
-		ConfirmValue(" 100 ", 100);
-		ConfirmValue(" + 100", 100);
-		ConfirmValue("10000", 10000);
-		ConfirmValue("$-5", -5);
-		ConfirmValue("$.5", 0.5);
-		ConfirmValue("123e+5", 12300000);
-		ConfirmValue("1,000e2", 100000);
-		ConfirmValue("$10e2", 1000);
-		ConfirmValue("$1,000e2", 100000);
-	}
-
-	public void TestErrors() {
-		ConfirmValueError("1+1");
-		ConfirmValueError("1 1");
-		ConfirmValueError("1,00.0");
-		ConfirmValueError("1,00");
-		ConfirmValueError("$1,00.5e1");
-		ConfirmValueError("1,00.5e1");
-		ConfirmValueError("1,0,000");
-		ConfirmValueError("1,00,000");
-		ConfirmValueError("++100");
-		ConfirmValueError("$$5");
-		ConfirmValueError("-");
-		ConfirmValueError("+");
-		ConfirmValueError("$");
-		ConfirmValueError(",300");
-		ConfirmValueError("0.233,4");
-		ConfirmValueError("1e2.5");
-	}
 }
-

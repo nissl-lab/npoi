@@ -15,65 +15,72 @@
    limitations under the License.
 ==================================================================== */
 
-namespace NPOI.SS.Formula.functions;
+namespace TestCases.SS.Formula.Functions
+{
 
-using junit.framework.TestCase;
-
-using NPOI.SS.Formula.Eval.BlankEval;
-using NPOI.SS.Formula.Eval.BoolEval;
-using NPOI.SS.Formula.Eval.ErrorEval;
-using NPOI.SS.Formula.Eval.NumberEval;
-using NPOI.SS.Formula.Eval.StringEval;
-using NPOI.SS.Formula.Eval.ValueEval;
-/**
- * Tests for Excel function TRIM()
- *
- * @author Josh Micich
- */
-public class TestTrim  {
+    using NPOI.SS.Formula.Eval;
+    using NPOI.SS.Formula.Functions;
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using System;
+    /**
+     * Tests for Excel function TRIM()
+     *
+     * @author Josh Micich
+     */
+    [TestClass]
+    public class TestTrim
+    {
 
 
-	private static ValueEval invokeTrim(ValueEval text) {
-		ValueEval[] args = new ValueEval[] { text, };
-		return TextFunction.TRIM.Evaluate(args, -1, (short)-1);
-	}
+        private static ValueEval invokeTrim(ValueEval text)
+        {
+            ValueEval[] args = new ValueEval[] { text, };
+            return TextFunction.TRIM.Evaluate(args, -1, (short)-1);
+        }
 
-	private void ConfirmTrim(ValueEval text, String expected) {
-		ValueEval result = invokeTrim(text);
-		Assert.AreEqual(StringEval.class, result.GetType());
-		Assert.AreEqual(expected, ((StringEval)result).StringValue);
-	}
+        private void ConfirmTrim(ValueEval text, String expected)
+        {
+            ValueEval result = invokeTrim(text);
+            Assert.AreEqual(typeof(StringEval), result.GetType());
+            Assert.AreEqual(expected, ((StringEval)result).StringValue);
+        }
 
-	private void ConfirmTrim(ValueEval text, ErrorEval expectedError) {
-		ValueEval result = invokeTrim(text);
-		Assert.AreEqual(ErrorEval.class, result.GetType());
-		Assert.AreEqual(expectedError.GetErrorCode(), ((ErrorEval)result).GetErrorCode());
-	}
+        private void ConfirmTrim(ValueEval text, ErrorEval expectedError)
+        {
+            ValueEval result = invokeTrim(text);
+            Assert.AreEqual(typeof(ErrorEval), result.GetType());
+            Assert.AreEqual(expectedError.ErrorCode, ((ErrorEval)result).ErrorCode);
+        }
+        [TestMethod]
+        public void TestBasic()
+        {
 
-	public void TestBasic() {
+            ConfirmTrim(new StringEval(" hi "), "hi");
+            ConfirmTrim(new StringEval("hi "), "hi");
+            ConfirmTrim(new StringEval("  hi"), "hi");
+            ConfirmTrim(new StringEval(" hi there  "), "hi there");
+            ConfirmTrim(new StringEval(""), "");
+            ConfirmTrim(new StringEval("   "), "");
+        }
 
-		ConfirmTrim(new StringEval(" hi "), "hi");
-		ConfirmTrim(new StringEval("hi "), "hi");
-		ConfirmTrim(new StringEval("  hi"), "hi");
-		ConfirmTrim(new StringEval(" hi there  "), "hi there");
-		ConfirmTrim(new StringEval(""), "");
-		ConfirmTrim(new StringEval("   "), "");
-	}
+        /**
+         * Valid cases where text arg is not exactly a string
+         */
+        [TestMethod]
+        public void TestUnusualArgs()
+        {
 
-	/**
-	 * Valid cases where text arg is not exactly a string
-	 */
-	public void TestUnusualArgs() {
+            // text (first) arg type is number, other args are strings with fractional digits
+            ConfirmTrim(new NumberEval(123456), "123456");
+            ConfirmTrim(BoolEval.FALSE, "FALSE");
+            ConfirmTrim(BoolEval.TRUE, "TRUE");
+            ConfirmTrim(BlankEval.instance, "");
+        }
+        [TestMethod]
+        public void TestErrors()
+        {
+            ConfirmTrim(ErrorEval.NAME_INVALID, ErrorEval.NAME_INVALID);
+        }
+    }
 
-		// text (first) arg type is number, other args are strings with fractional digits
-		ConfirmTrim(new NumberEval(123456), "123456");
-		ConfirmTrim(BoolEval.FALSE, "FALSE");
-		ConfirmTrim(BoolEval.TRUE, "TRUE");
-		ConfirmTrim(BlankEval.instance, "");
-	}
-
-	public void TestErrors() {
-		ConfirmTrim(ErrorEval.NAME_INVALID, ErrorEval.NAME_INVALID);
-	}
 }
-

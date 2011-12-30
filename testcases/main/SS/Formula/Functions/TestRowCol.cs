@@ -15,84 +15,96 @@
    limitations under the License.
 ==================================================================== */
 
-namespace NPOI.SS.Formula.functions;
+namespace TestCases.SS.Formula.Functions
+{
 
-using junit.framework.TestCase;
+    using NPOI.SS.Formula.Eval;
+    using NPOI.SS.Formula.Functions;
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using System;
 
-using NPOI.SS.Formula.Eval.ValueEval;
+    /**
+     * Tests for ROW(), ROWS(), COLUMN(), COLUMNS()
+     *
+     * @author Josh Micich
+     */
+    [TestClass]
+    public class TestRowCol
+    {
+        [TestMethod]
+        public void TestCol()
+        {
+            Function target = new Column();
+            {
+                ValueEval[] args = { EvalFactory.CreateRefEval("C5"), };
+                double actual = NumericFunctionInvoker.Invoke(target, args);
+                Assert.AreEqual(3, actual, 0D);
+            }
+            {
+                ValueEval[] args = { EvalFactory.CreateAreaEval("E2:H12", new ValueEval[44]), };
+                double actual = NumericFunctionInvoker.Invoke(target, args);
+                Assert.AreEqual(5, actual, 0D);
+            }
+        }
+        [TestMethod]
+        public void TestRow()
+        {
+            //throw new NotImplementedException();
+            Function target = new Row();
+            {
+                ValueEval[] args = { EvalFactory.CreateRefEval("C5"), };
+                double actual = NumericFunctionInvoker.Invoke(target, args);
+                Assert.AreEqual(5, actual, 0D);
+            }
+            {
+                ValueEval[] args = { EvalFactory.CreateAreaEval("E2:H12", new ValueEval[44]), };
+                double actual = NumericFunctionInvoker.Invoke(target, args);
+                Assert.AreEqual(2, actual, 0D);
+            }
+        }
+        [TestMethod]
+        public void TestColumns()
+        {
 
-/**
- * Tests for ROW(), ROWS(), COLUMN(), COLUMNS()
- *
- * @author Josh Micich
- */
-public class TestRowCol  {
+            ConfirmColumnsFunc("A1:F1", 6, 1);
+            ConfirmColumnsFunc("A1:C2", 3, 2);
+            ConfirmColumnsFunc("A1:B3", 2, 3);
+            ConfirmColumnsFunc("A1:A6", 1, 6);
 
-	public void TestCol() {
-		Function target = new Column();
-		{
-			ValueEval[] args = { EvalFactory.CreateRefEval("C5"), };
-			double actual = NumericFunctionInvoker.invoke(target, args);
-			Assert.AreEqual(3, actual, 0D);
-		}
-		{
-			ValueEval[] args = { EvalFactory.CreateAreaEval("E2:H12", new ValueEval[44]), };
-			double actual = NumericFunctionInvoker.invoke(target, args);
-			Assert.AreEqual(5, actual, 0D);
-		}
-	}
+            ValueEval[] args = { EvalFactory.CreateRefEval("C5"), };
+            double actual = NumericFunctionInvoker.Invoke(new Columns(), args);
+            Assert.AreEqual(1, actual, 0D);
+        }
+        [TestMethod]
+        public void TestRows()
+        {
 
-	public void TestRow() {
-		Function target = new RowFunc();
-		{
-			ValueEval[] args = { EvalFactory.CreateRefEval("C5"), };
-			double actual = NumericFunctionInvoker.invoke(target, args);
-			Assert.AreEqual(5, actual, 0D);
-		}
-		{
-			ValueEval[] args = { EvalFactory.CreateAreaEval("E2:H12", new ValueEval[44]), };
-			double actual = NumericFunctionInvoker.invoke(target, args);
-			Assert.AreEqual(2, actual, 0D);
-		}
-	}
+            ConfirmRowsFunc("A1:F1", 6, 1);
+            ConfirmRowsFunc("A1:C2", 3, 2);
+            ConfirmRowsFunc("A1:B3", 2, 3);
+            ConfirmRowsFunc("A1:A6", 1, 6);
 
-	public void TestColumns() {
+            ValueEval[] args = { EvalFactory.CreateRefEval("C5"), };
+            double actual = NumericFunctionInvoker.Invoke(new Rows(), args);
+            Assert.AreEqual(1, actual, 0D);
+        }
 
-		ConfirmColumnsFunc("A1:F1", 6, 1);
-		ConfirmColumnsFunc("A1:C2", 3, 2);
-		ConfirmColumnsFunc("A1:B3", 2, 3);
-		ConfirmColumnsFunc("A1:A6", 1, 6);
+        private static void ConfirmRowsFunc(String areaRefStr, int nCols, int nRows)
+        {
+            ValueEval[] args = { EvalFactory.CreateAreaEval(areaRefStr, new ValueEval[nCols * nRows]), };
 
-		ValueEval[] args = { EvalFactory.CreateRefEval("C5"), };
-		double actual = NumericFunctionInvoker.invoke(new Columns(), args);
-		Assert.AreEqual(1, actual, 0D);
-	}
-
-	public void TestRows() {
-
-		ConfirmRowsFunc("A1:F1", 6, 1);
-		ConfirmRowsFunc("A1:C2", 3, 2);
-		ConfirmRowsFunc("A1:B3", 2, 3);
-		ConfirmRowsFunc("A1:A6", 1, 6);
-
-		ValueEval[] args = { EvalFactory.CreateRefEval("C5"), };
-		double actual = NumericFunctionInvoker.invoke(new Rows(), args);
-		Assert.AreEqual(1, actual, 0D);
-	}
-
-	private static void ConfirmRowsFunc(String areaRefStr, int nCols, int nRows) {
-		ValueEval[] args = { EvalFactory.CreateAreaEval(areaRefStr, new ValueEval[nCols * nRows]), };
-
-		double actual = NumericFunctionInvoker.invoke(new Rows(), args);
-		Assert.AreEqual(nRows, actual, 0D);
-	}
+            double actual = NumericFunctionInvoker.Invoke(new Rows(), args);
+            Assert.AreEqual(nRows, actual, 0D);
+        }
 
 
-	private static void ConfirmColumnsFunc(String areaRefStr, int nCols, int nRows) {
-		ValueEval[] args = { EvalFactory.CreateAreaEval(areaRefStr, new ValueEval[nCols * nRows]), };
+        private static void ConfirmColumnsFunc(String areaRefStr, int nCols, int nRows)
+        {
+            ValueEval[] args = { EvalFactory.CreateAreaEval(areaRefStr, new ValueEval[nCols * nRows]), };
 
-		double actual = NumericFunctionInvoker.invoke(new Columns(), args);
-		Assert.AreEqual(nCols, actual, 0D);
-	}
+            double actual = NumericFunctionInvoker.Invoke(new Columns(), args);
+            Assert.AreEqual(nCols, actual, 0D);
+        }
+    }
+
 }
-

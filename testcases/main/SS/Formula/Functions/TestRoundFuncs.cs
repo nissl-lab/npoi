@@ -15,37 +15,40 @@
    limitations under the License.
 ==================================================================== */
 
-namespace NPOI.SS.Formula.functions;
+namespace TestCases.SS.Formula.Functions
+{
 
-using junit.framework.TestCase;
+    using NPOI.SS.Formula.Eval;
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NPOI.SS.Formula.Functions;
 
-using NPOI.SS.Formula.Eval.ErrorEval;
-using NPOI.SS.Formula.Eval.ValueEval;
-using NPOI.SS.Formula.Eval.NumberEval;
-using NPOI.SS.Formula.Eval.StringEval;
+    /**
+     * Test cases for ROUND(), ROUNDUP(), ROUNDDOWN()
+     *
+     * @author Josh Micich
+     */
+    [TestClass]
+    public class TestRoundFuncs
+    {
+        //private static NumericFunction F = null;
+        [TestMethod]
+        public void TestRounddownWithStringArg()
+        {
 
-/**
- * Test cases for ROUND(), ROUNDUP(), ROUNDDOWN()
- *
- * @author Josh Micich
- */
-public class TestRoundFuncs  {
-	private static NumericFunction F = null;
-	public void TestRounddownWithStringArg() {
+            ValueEval strArg = new StringEval("abc");
+            ValueEval[] args = { strArg, new NumberEval(2), };
+            ValueEval result = NumericFunction.ROUNDDOWN.Evaluate(args, -1, (short)-1);
+            Assert.AreEqual(ErrorEval.VALUE_INVALID, result);
+        }
+        [TestMethod]
+        public void TestRoundupWithStringArg()
+        {
 
-		ValueEval strArg = new StringEval("abc");
-		ValueEval[] args = { strArg, new NumberEval(2), };
-		ValueEval result = F.ROUNDDOWN.Evaluate(args, -1, (short)-1);
-		Assert.AreEqual(ErrorEval.VALUE_INVALID, result);
-	}
+            ValueEval strArg = new StringEval("abc");
+            ValueEval[] args = { strArg, new NumberEval(2), };
+            ValueEval result = NumericFunction.ROUNDUP.Evaluate(args, -1, (short)-1);
+            Assert.AreEqual(ErrorEval.VALUE_INVALID, result);
+        }
 
-	public void TestRoundupWithStringArg() {
-
-		ValueEval strArg = new StringEval("abc");
-		ValueEval[] args = { strArg, new NumberEval(2), };
-		ValueEval result = F.ROUNDUP.Evaluate(args, -1, (short)-1);
-		Assert.AreEqual(ErrorEval.VALUE_INVALID, result);
-	}
-
+    }
 }
-

@@ -304,7 +304,7 @@ namespace NPOI.SS.Formula.Functions
         /**
          * OFFSet's numeric arguments (2..5) have similar Processing rules
          */
-        private static int EvaluateIntArg(ValueEval eval, int srcCellRow, int srcCellCol)
+        public static int EvaluateIntArg(ValueEval eval, int srcCellRow, int srcCellCol)
         {
 
             double d = EvaluateDoubleArg(eval, srcCellRow, srcCellCol);

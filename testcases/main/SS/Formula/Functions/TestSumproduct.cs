@@ -15,104 +15,112 @@
    limitations under the License.
 ==================================================================== */
 
-namespace NPOI.SS.Formula.functions;
+namespace TestCases.SS.Formula.Functions
+{
 
-using junit.framework.TestCase;
+    using NPOI.SS.Formula.Eval;
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NPOI.SS.Formula.Functions;
 
-using NPOI.SS.Formula.Eval.AreaEval;
-using NPOI.SS.Formula.Eval.ErrorEval;
-using NPOI.SS.Formula.Eval.NumberEval;
-using NPOI.SS.Formula.Eval.NumericValueEval;
-using NPOI.SS.Formula.Eval.RefEval;
-using NPOI.SS.Formula.Eval.ValueEval;
+    /**
+     * Test cases for SUMPRODUCT()
+     *
+     * @author Josh Micich
+     */
+    [TestClass]
+    public class TestSumproduct
+    {
 
-/**
- * Test cases for SUMPRODUCT()
- *
- * @author Josh Micich
- */
-public class TestSumproduct  {
+        private static ValueEval invokeSumproduct(ValueEval[] args)
+        {
+            // srcCellRow and srcCellColumn are ignored by SUMPRODUCT
+            return new Sumproduct().Evaluate(args, -1, (short)-1);
+        }
+        private static void ConfirmDouble(double expected, ValueEval actualEval)
+        {
+            if (!(actualEval is NumericValueEval))
+            {
+                Assert.Fail("Expected numeric result");
+            }
+            NumericValueEval nve = (NumericValueEval)actualEval;
+            Assert.AreEqual(expected, nve.NumberValue, 0);
+        }
+        [TestMethod]
+        public void TestScalarSimple()
+        {
 
-	private static ValueEval invokeSumproduct(ValueEval[] args) {
-		// srcCellRow and srcCellColumn are ignored by SUMPRODUCT
-		return new Sumproduct().Evaluate(args, -1, (short)-1);
-	}
-	private static void ConfirmDouble(double expected, ValueEval actualEval) {
-		if(!(actualEval is NumericValueEval)) {
-			Assert.Fail("Expected numeric result");
-		}
-		NumericValueEval nve = (NumericValueEval)actualEval;
-		Assert.AreEqual(expected, nve.GetNumberValue(), 0);
-	}
-
-	public void TestScalarSimple() {
-
-		RefEval refEval = EvalFactory.CreateRefEval("A1", new NumberEval(3));
-		ValueEval[] args = {
+            RefEval refEval = EvalFactory.CreateRefEval("A1", new NumberEval(3));
+            ValueEval[] args = {
 			refEval,
 			new NumberEval(2),
 		};
-		ValueEval result = invokeSumproduct(args);
-		ConfirmDouble(6D, result);
-	}
-
-	public void TestAreaSimple() {
-		ValueEval[] aValues = {
+            ValueEval result = invokeSumproduct(args);
+            ConfirmDouble(6D, result);
+        }
+        [TestMethod]
+        public void TestAreaSimple()
+        {
+            ValueEval[] aValues = {
 			new NumberEval(2),
 			new NumberEval(4),
 			new NumberEval(5),
 		};
-		ValueEval[] bValues = {
+            ValueEval[] bValues = {
 			new NumberEval(3),
 			new NumberEval(6),
 			new NumberEval(7),
 		};
-		AreaEval aeA = EvalFactory.CreateAreaEval("A1:A3", aValues);
-		AreaEval aeB = EvalFactory.CreateAreaEval("B1:B3", bValues);
+            AreaEval aeA = EvalFactory.CreateAreaEval("A1:A3", aValues);
+            AreaEval aeB = EvalFactory.CreateAreaEval("B1:B3", bValues);
 
-		ValueEval[] args = { aeA, aeB, };
-		ValueEval result = invokeSumproduct(args);
-		ConfirmDouble(65D, result);
-	}
+            ValueEval[] args = { aeA, aeB, };
+            ValueEval result = invokeSumproduct(args);
+            ConfirmDouble(65D, result);
+        }
 
-	/**
-	 * For scalar products, the terms may be 1x1 area refs
-	 */
-	public void TestOneByOneArea() {
+        /**
+         * For scalar products, the terms may be 1x1 area refs
+         */
+        [TestMethod]
+        public void TestOneByOneArea()
+        {
 
-		AreaEval ae = EvalFactory.CreateAreaEval("A1:A1", new ValueEval[] { new NumberEval(7), });
+            AreaEval ae = EvalFactory.CreateAreaEval("A1:A1", new ValueEval[] { new NumberEval(7), });
 
-		ValueEval[] args = {
+            ValueEval[] args = {
 				ae,
 				new NumberEval(2),
 			};
-		ValueEval result = invokeSumproduct(args);
-		ConfirmDouble(14D, result);
-	}
+            ValueEval result = invokeSumproduct(args);
+            ConfirmDouble(14D, result);
+        }
+        [TestMethod]
+        public void TestMismatchAreaDimensions()
+        {
 
-	public void TestMismatchAreaDimensions() {
+            AreaEval aeA = EvalFactory.CreateAreaEval("A1:A3", new ValueEval[3]);
+            AreaEval aeB = EvalFactory.CreateAreaEval("B1:D1", new ValueEval[3]);
 
-		AreaEval aeA = EvalFactory.CreateAreaEval("A1:A3", new ValueEval[3]);
-		AreaEval aeB = EvalFactory.CreateAreaEval("B1:D1", new ValueEval[3]);
+            ValueEval[] args;
+            args = new ValueEval[] { aeA, aeB, };
+            Assert.AreEqual(ErrorEval.VALUE_INVALID, invokeSumproduct(args));
 
-		ValueEval[] args;
-		args = new ValueEval[] { aeA, aeB, };
-		Assert.AreEqual(ErrorEval.VALUE_INVALID, invokeSumproduct(args));
-
-		args = new ValueEval[] { aeA, new NumberEval(5), };
-		Assert.AreEqual(ErrorEval.VALUE_INVALID, invokeSumproduct(args));
-	}
-
-	public void TestAreaWithErrorCell() {
-		ValueEval[] aValues = {
+            args = new ValueEval[] { aeA, new NumberEval(5), };
+            Assert.AreEqual(ErrorEval.VALUE_INVALID, invokeSumproduct(args));
+        }
+        [TestMethod]
+        public void TestAreaWithErrorCell()
+        {
+            ValueEval[] aValues = {
 			ErrorEval.REF_INVALID,
 			null,
 		};
-		AreaEval aeA = EvalFactory.CreateAreaEval("A1:A2", aValues);
-		AreaEval aeB = EvalFactory.CreateAreaEval("B1:B2", new ValueEval[2]);
+            AreaEval aeA = EvalFactory.CreateAreaEval("A1:A2", aValues);
+            AreaEval aeB = EvalFactory.CreateAreaEval("B1:B2", new ValueEval[2]);
 
-		ValueEval[] args = { aeA, aeB, };
-		Assert.AreEqual(ErrorEval.REF_INVALID, invokeSumproduct(args));
-	}
+            ValueEval[] args = { aeA, aeB, };
+            Assert.AreEqual(ErrorEval.REF_INVALID, invokeSumproduct(args));
+        }
+    }
+
 }
-

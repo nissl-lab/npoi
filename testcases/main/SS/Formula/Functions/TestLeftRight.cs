@@ -15,60 +15,63 @@
    limitations under the License.
 ==================================================================== */
 
-namespace NPOI.SS.Formula.functions;
+namespace TestCases.SS.Formula.Functions
+{
+    using System;
+    using NPOI.SS.Formula.Eval;
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NPOI.SS.Formula.Functions;
 
-using NPOI.SS.Formula.Eval.ErrorEval;
-using NPOI.SS.Formula.Eval.NumberEval;
-using NPOI.SS.Formula.Eval.StringEval;
-using NPOI.SS.Formula.Eval.ValueEval;
+    /**
+     * 
+     * Test cases for {@link TextFunction#LEFT} and {@link TextFunction#RIGHT}
+     * 
+     * @author Brendan Nolan
+     *
+     */
+    [TestClass]
+    public class TestLeftRight
+    {
 
-using junit.framework.TestCase;
+        private static NumberEval NEGATIVE_OPERAND = new NumberEval(-1.0);
+        private static StringEval ANY_STRING_VALUE = new StringEval("ANYSTRINGVALUE");
 
-/**
- * 
- * Test cases for {@link TextFunction#LEFT} and {@link TextFunction#RIGHT}
- * 
- * @author Brendan Nolan
- *
- */
-public class TestLeftRight  {
 
-	private static NumberEval NEGATIVE_OPERAND = new NumberEval(-1.0);
-	private static StringEval ANY_STRING_VALUE = new StringEval("ANYSTRINGVALUE");
+        private static ValueEval invokeLeft(ValueEval text, ValueEval operand)
+        {
+            ValueEval[] args = new ValueEval[] { text, operand };
+            return TextFunction.LEFT.Evaluate(args, -1, (short)-1);
+        }
 
-	
-	private static ValueEval invokeLeft(ValueEval text, ValueEval operand) {
-		ValueEval[] args = new ValueEval[] { text, operand };
-		return TextFunction.LEFT.Evaluate(args, -1, (short)-1);
-	}
-	
-	private static ValueEval invokeRight(ValueEval text, ValueEval operand) {
-		ValueEval[] args = new ValueEval[] { text, operand };
-		return TextFunction.RIGHT.Evaluate(args, -1, (short)-1);
-	}
-	
-	public void TestLeftRight_bug49841() {
+        private static ValueEval invokeRight(ValueEval text, ValueEval operand)
+        {
+            ValueEval[] args = new ValueEval[] { text, operand };
+            return TextFunction.RIGHT.Evaluate(args, -1, (short)-1);
+        }
+        [TestMethod]
+        public void TestLeftRight_bug49841()
+        {
 
-		try {
-			invokeLeft(ANY_STRING_VALUE, NEGATIVE_OPERAND);
-			invokeRight(ANY_STRING_VALUE, NEGATIVE_OPERAND);
-		} catch (StringIndexOutOfBoundsException e) {
-			Assert.Fail("Identified bug 49841");
-		}
+            try
+            {
+                invokeLeft(ANY_STRING_VALUE, NEGATIVE_OPERAND);
+                invokeRight(ANY_STRING_VALUE, NEGATIVE_OPERAND);
+            }
+            catch (IndexOutOfRangeException)
+            {
+                Assert.Fail("Identified bug 49841");
+            }
 
-	}
-	
-	public void TestLeftRightNegativeOperand() {
-		
-		Assert.AreEqual(ErrorEval.VALUE_INVALID, invokeRight(ANY_STRING_VALUE, NEGATIVE_OPERAND));		
-		Assert.AreEqual(ErrorEval.VALUE_INVALID, invokeLeft(ANY_STRING_VALUE, NEGATIVE_OPERAND));
+        }
+        [TestMethod]
+        public void TestLeftRightNegativeOperand()
+        {
 
-	}
-	
-	
-	
-	
+            Assert.AreEqual(ErrorEval.VALUE_INVALID, invokeRight(ANY_STRING_VALUE, NEGATIVE_OPERAND));
+            Assert.AreEqual(ErrorEval.VALUE_INVALID, invokeLeft(ANY_STRING_VALUE, NEGATIVE_OPERAND));
 
-	
+        }
+
+    }
+
 }
-

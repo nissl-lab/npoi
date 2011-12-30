@@ -520,7 +520,7 @@ namespace NPOI.SS.Formula
          * @return a <tt>NumberEval</tt>, <tt>StringEval</tt>, <tt>BoolEval</tt>,
          *  <tt>BlankEval</tt> or <tt>ErrorEval</tt>. Never <c>null</c>.
          */
-        private static ValueEval DereferenceResult(ValueEval evaluationResult, int srcRowNum, int srcColNum)
+        public static ValueEval DereferenceResult(ValueEval evaluationResult, int srcRowNum, int srcColNum)
         {
             ValueEval value;
             try

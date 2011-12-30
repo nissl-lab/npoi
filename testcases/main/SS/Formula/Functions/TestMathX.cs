@@ -500,7 +500,7 @@ namespace TestCases.SS.Formula.Functions
             d[16] = 17.1; d[17] = 18.1; d[18] = 19.1; d[19] = 20.1;
 
             double s = MathX.sumsq(d);
-            Assert.AreEqual( 2912.2, s,"Sumsq ");
+            Assert.AreEqual( 2912.2, s, "Sumsq ");
 
             d = new double[1000];
             s = MathX.sumsq(d);

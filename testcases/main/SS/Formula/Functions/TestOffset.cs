@@ -15,86 +15,94 @@
    limitations under the License.
 ==================================================================== */
 
-namespace NPOI.SS.Formula.functions;
+namespace TestCases.SS.Formula.Functions
+{
 
-using junit.framework.AssertionFailedError;
-using junit.framework.TestCase;
+    using NPOI.SS.Formula.Eval;
+    using NPOI.SS.Formula.Functions;
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-using NPOI.SS.Formula.Eval.EvaluationException;
-using NPOI.SS.Formula.Eval.NumberEval;
-using NPOI.SS.Formula.functions.Offset.LinearOffsetRange;
+    /**
+     * Tests for OFFSET function implementation
+     *
+     * @author Josh Micich
+     */
+    [TestClass]
+    public class TestOffset
+    {
 
-/**
- * Tests for OFFSET function implementation
- *
- * @author Josh Micich
- */
-public class TestOffset  {
+        private static void ConfirmDoubleConvert(double doubleVal, int expected)
+        {
+            try
+            {
+                Assert.AreEqual(expected, Offset.EvaluateIntArg(new NumberEval(doubleVal), -1, -1));
+            }
+            catch (EvaluationException e)
+            {
+                throw new AssertFailedException("Unexpected error '" + e.GetErrorEval().ToString() + "'.");
+            }
+        }
+        /**
+         * Excel's double to int conversion (for function 'OFFSET()') behaves more like Math.floor().
+         * Note - negative values are not symmetrical
+         * Fractional values are silently tRuncated.
+         * TRuncation is toward negative infInity.
+         */
+        [TestMethod]
+        public void TestDoubleConversion()
+        {
 
-	private static void ConfirmDoubleConvert(double doubleVal, int expected) {
-		try {
-			Assert.AreEqual(expected, Offset.EvaluateIntArg(new NumberEval(doubleVal), -1, -1));
-		} catch (EvaluationException e) {
-			throw new AssertionFailedError("Unexpected error '" + e.GetErrorEval().ToString() + "'.");
-		}
-	}
-	/**
-	 * Excel's double to int conversion (for function 'OFFSET()') behaves more like Math.floor().
-	 * Note - negative values are not symmetrical
-	 * Fractional values are silently tRuncated.
-	 * TRuncation is toward negative infInity.
-	 */
-	public void TestDoubleConversion() {
+            ConfirmDoubleConvert(100.09, 100);
+            ConfirmDoubleConvert(100.01, 100);
+            ConfirmDoubleConvert(100.00, 100);
+            ConfirmDoubleConvert(99.99, 99);
 
-		ConfirmDoubleConvert(100.09, 100);
-		ConfirmDoubleConvert(100.01, 100);
-		ConfirmDoubleConvert(100.00, 100);
-		ConfirmDoubleConvert(99.99, 99);
+            ConfirmDoubleConvert(+2.01, +2);
+            ConfirmDoubleConvert(+2.00, +2);
+            ConfirmDoubleConvert(+1.99, +1);
+            ConfirmDoubleConvert(+1.01, +1);
+            ConfirmDoubleConvert(+1.00, +1);
+            ConfirmDoubleConvert(+0.99, 0);
+            ConfirmDoubleConvert(+0.01, 0);
+            ConfirmDoubleConvert(0.00, 0);
+            ConfirmDoubleConvert(-0.01, -1);
+            ConfirmDoubleConvert(-0.99, -1);
+            ConfirmDoubleConvert(-1.00, -1);
+            ConfirmDoubleConvert(-1.01, -2);
+            ConfirmDoubleConvert(-1.99, -2);
+            ConfirmDoubleConvert(-2.00, -2);
+            ConfirmDoubleConvert(-2.01, -3);
+        }
+        [TestMethod]
+        public void TestLinearOffsetRange()
+        {
+            Offset.LinearOffsetRange lor;
 
-		ConfirmDoubleConvert(+2.01, +2);
-		ConfirmDoubleConvert(+2.00, +2);
-		ConfirmDoubleConvert(+1.99, +1);
-		ConfirmDoubleConvert(+1.01, +1);
-		ConfirmDoubleConvert(+1.00, +1);
-		ConfirmDoubleConvert(+0.99,  0);
-		ConfirmDoubleConvert(+0.01,  0);
-		ConfirmDoubleConvert( 0.00,  0);
-		ConfirmDoubleConvert(-0.01, -1);
-		ConfirmDoubleConvert(-0.99, -1);
-		ConfirmDoubleConvert(-1.00, -1);
-		ConfirmDoubleConvert(-1.01, -2);
-		ConfirmDoubleConvert(-1.99, -2);
-		ConfirmDoubleConvert(-2.00, -2);
-		ConfirmDoubleConvert(-2.01, -3);
-	}
+            lor = new Offset.LinearOffsetRange(3, 2);
+            Assert.AreEqual(3, lor.FirstIndex);
+            Assert.AreEqual(4, lor.LastIndex);
+            lor = lor.NormaliseAndTranslate(0); // expected no change
+            Assert.AreEqual(3, lor.FirstIndex);
+            Assert.AreEqual(4, lor.LastIndex);
 
-	public void TestLinearOffsetRange() {
-		LinearOffsetRange lor;
+            lor = lor.NormaliseAndTranslate(5);
+            Assert.AreEqual(8, lor.FirstIndex);
+            Assert.AreEqual(9, lor.LastIndex);
 
-		lor = new LinearOffsetRange(3, 2);
-		Assert.AreEqual(3, lor.GetFirstIndex());
-		Assert.AreEqual(4, lor.GetLastIndex());
-		lor = lor.normaliseAndTranslate(0); // expected no change
-		Assert.AreEqual(3, lor.GetFirstIndex());
-		Assert.AreEqual(4, lor.GetLastIndex());
+            // negative length
 
-		lor = lor.normaliseAndTranslate(5);
-		Assert.AreEqual(8, lor.GetFirstIndex());
-		Assert.AreEqual(9, lor.GetLastIndex());
-
-		// negative length
-
-		lor = new LinearOffsetRange(6, -4).normaliseAndTranslate(0);
-		Assert.AreEqual(3, lor.GetFirstIndex());
-		Assert.AreEqual(6, lor.GetLastIndex());
+            lor = new Offset.LinearOffsetRange(6, -4).NormaliseAndTranslate(0);
+            Assert.AreEqual(3, lor.FirstIndex);
+            Assert.AreEqual(6, lor.LastIndex);
 
 
-		// bounds Checking
-		lor = new LinearOffsetRange(0, 100);
-		Assert.IsFalse(lor.IsOutOfBounds(0, 16383));
-		lor = lor.normaliseAndTranslate(16300);
-		Assert.IsTrue(lor.IsOutOfBounds(0, 16383));
-		Assert.IsFalse(lor.IsOutOfBounds(0, 65535));
-	}
+            // bounds Checking
+            lor = new Offset.LinearOffsetRange(0, 100);
+            Assert.IsFalse(lor.IsOutOfBounds(0, 16383));
+            lor = lor.NormaliseAndTranslate(16300);
+            Assert.IsTrue(lor.IsOutOfBounds(0, 16383));
+            Assert.IsFalse(lor.IsOutOfBounds(0, 65535));
+        }
+    }
+
 }
-

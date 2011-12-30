@@ -15,98 +15,115 @@
    limitations under the License.
 ==================================================================== */
 
-namespace NPOI.SS.Formula.functions;
+namespace TestCases.SS.Formula.Functions
+{
+    using System;
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NPOI.SS.Formula.Eval;
+    using NPOI.SS.Formula.Functions;
 
-using junit.framework.AssertionFailedError;
+    /**
+     * Test helper class for invoking functions with numeric results.
+     *
+     * @author Josh Micich
+     */
+    public class NumericFunctionInvoker
+    {
 
-using NPOI.SS.Formula.Eval.ErrorEval;
-using NPOI.SS.Formula.Eval.NumericValueEval;
-using NPOI.SS.Formula.Eval.ValueEval;
-using NPOI.SS.Formula.Eval.NotImplementedException;
+        private NumericFunctionInvoker()
+        {
+            // no instances of this class
+        }
 
-/**
- * Test helper class for invoking functions with numeric results.
- *
- * @author Josh Micich
- */
-public class NumericFunctionInvoker {
+        private class NumericEvalEx : Exception
+        {
+            public NumericEvalEx(String msg)
+                : base(msg)
+            {
+            }
+        }
 
-	private NumericFunctionInvoker() {
-		// no instances of this class
-	}
+        /**
+         * Invokes the specified function with the arguments.
+         * <p/>
+         * Assumes that the cell coordinate parameters of
+         *  <code>Function.Evaluate(args, srcCellRow, srcCellCol)</code>
+         * are not required.
+         * <p/>
+         * This method cannot be used for Confirming error return codes.  Any non-numeric Evaluation
+         * result causes the current junit Test to fail.
+         */
+        public static double Invoke(Function f, ValueEval[] args)
+        {
+            return Invoke(f, args, -1, -1);
+        }
+        /**
+         * Invokes the specified operator with the arguments.
+         * <p/>
+         * This method cannot be used for Confirming error return codes.  Any non-numeric Evaluation
+         * result causes the current junit Test to fail.
+         */
+        public static double Invoke(Function f, ValueEval[] args, int srcCellRow, int srcCellCol)
+        {
+            try
+            {
+                return invokeInternal(f, args, srcCellRow, srcCellCol);
+            }
+            catch (NumericEvalEx e)
+            {
+                throw new AssertFailedException("Evaluation of function (" + f.GetType().Name
+                        + ") failed: " + e.Message);
+            }
+        }
+        /**
+         * Formats nicer error messages for the junit output
+         */
+        private static double invokeInternal(Function target, ValueEval[] args, int srcCellRow, int srcCellCol)
+        {
+            ValueEval EvalResult = null;
+            try
+            {
+                EvalResult = target.Evaluate(args, srcCellRow, (short)srcCellCol);
+            }
+            catch (NotImplementedException e)
+            {
+                throw new NumericEvalEx("Not implemented:" + e.Message);
+            }
 
-	private static class NumericEvalEx : Exception {
-		public NumericEvalEx(String msg) {
-			base(msg);
-		}
-	}
+            if (EvalResult == null)
+            {
+                throw new NumericEvalEx("Result object was null");
+            }
+            if (EvalResult is ErrorEval)
+            {
+                ErrorEval ee = (ErrorEval)EvalResult;
+                throw new NumericEvalEx(formatErrorMessage(ee));
+            }
+            if (!(EvalResult is NumericValueEval))
+            {
+                throw new NumericEvalEx("Result object type (" + EvalResult.GetType().Name
+                        + ") is invalid.  Expected implementor of ("
+                        + typeof(NumericValueEval).Name + ")");
+            }
 
-	/**
-	 * Invokes the specified function with the arguments.
-	 * <p/>
-	 * Assumes that the cell coordinate parameters of
-	 *  <code>Function.Evaluate(args, srcCellRow, srcCellCol)</code>
-	 * are not required.
-	 * <p/>
-	 * This method cannot be used for Confirming error return codes.  Any non-numeric Evaluation
-	 * result causes the current junit Test to fail.
-	 */
-	public static double invoke(Function f, ValueEval[] args) {
-		return invoke(f, args, -1, -1);
-	}
-	/**
-	 * Invokes the specified operator with the arguments.
-	 * <p/>
-	 * This method cannot be used for Confirming error return codes.  Any non-numeric Evaluation
-	 * result causes the current junit Test to fail.
-	 */
-	public static double invoke(Function f, ValueEval[] args, int srcCellRow, int srcCellCol) {
-		try {
-			return invokeInternal(f, args, srcCellRow, srcCellCol);
-		} catch (NumericEvalEx e) {
-			throw new AssertionFailedError("Evaluation of function (" + f.GetType().GetName()
-					+ ") failed: " + e.GetMessage());
-		}
-	}
-	/**
-	 * Formats nicer error messages for the junit output
-	 */
-	private static double invokeInternal(Function target, ValueEval[] args, int srcCellRow, int srcCellCol)
-				throws NumericEvalEx {
-		ValueEval EvalResult;
-		try {
-			EvalResult = target.Evaluate(args, srcCellRow, (short)srcCellCol);
-		} catch (NotImplementedException e) {
-			throw new NumericEvalEx("Not implemented:" + e.GetMessage());
-		}
-
-		if(EvalResult == null) {
-			throw new NumericEvalEx("Result object was null");
-		}
-		if(EvalResult is ErrorEval) {
-			ErrorEval ee = (ErrorEval) EvalResult;
-			throw new NumericEvalEx(formatErrorMessage(ee));
-		}
-		if(!(EvalResult is NumericValueEval)) {
-			throw new NumericEvalEx("Result object type (" + EvalResult.GetType().GetName()
-					+ ") is invalid.  Expected implementor of ("
-					+ NumericValueEval.class.GetName() + ")");
-		}
-
-		NumericValueEval result = (NumericValueEval) EvalResult;
-		return result.GetNumberValue();
-	}
-	private static String formatErrorMessage(ErrorEval ee) {
-		if(errorCodesAreEqual(ee, ErrorEval.VALUE_INVALID)) {
-			return "Error code: #VALUE! (invalid value)";
-		}
-		return "Error code=" + ee.GetErrorCode();
-	}
-	private static bool errorCodesAreEqual(ErrorEval a, ErrorEval b) {
-		if(a==b) {
-			return true;
-		}
-		return a.GetErrorCode() == b.GetErrorCode();
-	}
+            NumericValueEval result = (NumericValueEval)EvalResult;
+            return result.NumberValue;
+        }
+        private static String formatErrorMessage(ErrorEval ee)
+        {
+            if (errorCodesAreEqual(ee, ErrorEval.VALUE_INVALID))
+            {
+                return "Error code: #VALUE! (invalid value)";
+            }
+            return "Error code=" + ee.ErrorCode;
+        }
+        private static bool errorCodesAreEqual(ErrorEval a, ErrorEval b)
+        {
+            if (a == b)
+            {
+                return true;
+            }
+            return a.ErrorCode == b.ErrorCode;
+        }
+    }
 }
-

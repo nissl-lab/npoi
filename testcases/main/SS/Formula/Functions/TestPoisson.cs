@@ -15,98 +15,99 @@
    limitations under the License.
 ==================================================================== */
 
-namespace NPOI.SS.Formula.functions;
+namespace TestCases.SS.Formula.Functions
+{
 
-using junit.framework.TestCase;
+    using NPOI.SS.Formula.Eval;
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NPOI.SS.Formula.Functions;
 
-using NPOI.SS.Formula.Eval.BoolEval;
-using NPOI.SS.Formula.Eval.ErrorEval;
-using NPOI.SS.Formula.Eval.NumberEval;
-using NPOI.SS.Formula.Eval.ValueEval;
-
-/**
- * Tests for Excel function POISSON(x,mean,cumulative)
- * @author Kalpesh Parmar
- */
-public class TestPoisson  {
-
-    private static double DELTA = 1E-15;
-
-    private static ValueEval invokePoisson(double x, double mean, bool cumulative)
+    /**
+     * Tests for Excel function POISSON(x,mean,cumulative)
+     * @author Kalpesh Parmar
+     */
+    [TestClass]
+    public class TestPoisson
     {
 
-        ValueEval[] valueEvals = new ValueEval[3];
-        valueEvals[0] = new NumberEval(x);
-        valueEvals[1] = new NumberEval(mean);
-        valueEvals[2] = BoolEval.ValueOf(cumulative);
+        private static double DELTA = 1E-15;
 
-        return NumericFunction.POISSON.Evaluate(valueEvals,-1,-1);
-	}
+        private static ValueEval invokePoisson(double x, double mean, bool cumulative)
+        {
 
-    public void TestCumulativeProbability()
-    {
-        double x = 1;
-        double mean = 0.2;
-        double result = 0.9824769036935787; // known result
+            ValueEval[] valueEvals = new ValueEval[3];
+            valueEvals[0] = new NumberEval(x);
+            valueEvals[1] = new NumberEval(mean);
+            valueEvals[2] = BoolEval.ValueOf(cumulative);
 
-        NumberEval myResult = (NumberEval)invokePoisson(x,mean,true);
+            return NumericFunction.POISSON.Evaluate(valueEvals, -1, -1);
+        }
+        [TestMethod]
+        public void TestCumulativeProbability()
+        {
+            double x = 1;
+            double mean = 0.2;
+            double result = 0.9824769036935787; // known result
 
-        Assert.AreEqual(myResult.GetNumberValue(), result, DELTA);
+            NumberEval myResult = (NumberEval)invokePoisson(x, mean, true);
+
+            Assert.AreEqual(myResult.NumberValue, result, DELTA);
+        }
+        [TestMethod]
+        public void TestNonCumulativeProbability()
+        {
+            double x = 0;
+            double mean = 0.2;
+            double result = 0.8187307530779818; // known result
+
+            NumberEval myResult = (NumberEval)invokePoisson(x, mean, false);
+
+            Assert.AreEqual(myResult.NumberValue, result, DELTA);
+        }
+        [TestMethod]
+        public void TestNegativeMean()
+        {
+            double x = 0;
+            double mean = -0.2;
+
+            ErrorEval myResult = (ErrorEval)invokePoisson(x, mean, false);
+
+            Assert.AreEqual(ErrorEval.NUM_ERROR.ErrorCode, myResult.ErrorCode);
+        }
+        [TestMethod]
+        public void TestNegativeX()
+        {
+            double x = -1;
+            double mean = 0.2;
+
+            ErrorEval myResult = (ErrorEval)invokePoisson(x, mean, false);
+
+            Assert.AreEqual(ErrorEval.NUM_ERROR.ErrorCode, myResult.ErrorCode);
+        }
+
+
+        [TestMethod]
+        public void TestXAsDecimalNumber()
+        {
+            double x = 1.1;
+            double mean = 0.2;
+            double result = 0.9824769036935787; // known result
+
+            NumberEval myResult = (NumberEval)invokePoisson(x, mean, true);
+
+            Assert.AreEqual(myResult.NumberValue, result, DELTA);
+        }
+        [TestMethod]
+        public void TestXZeroMeanZero()
+        {
+            double x = 0;
+            double mean = 0;
+            double result = 1; // known result in excel
+
+            NumberEval myResult = (NumberEval)invokePoisson(x, mean, true);
+
+            Assert.AreEqual(myResult.NumberValue, result, DELTA);
+        }
     }
 
-    public void TestNonCumulativeProbability()
-    {
-        double x = 0;
-        double mean = 0.2;
-        double result = 0.8187307530779818; // known result
-        
-        NumberEval myResult = (NumberEval)invokePoisson(x,mean,false);
-
-        Assert.AreEqual(myResult.GetNumberValue(), result, DELTA);
-    }
-
-    public void TestNegativeMean()
-    {
-        double x = 0;
-        double mean = -0.2;
-
-        ErrorEval myResult = (ErrorEval)invokePoisson(x,mean,false);
-
-        Assert.AreEqual(ErrorEval.NUM_ERROR.GetErrorCode(), myResult.GetErrorCode());
-    }
-
-    public void TestNegativeX()
-    {
-        double x = -1;
-        double mean = 0.2;
-
-        ErrorEval myResult = (ErrorEval)invokePoisson(x,mean,false);
-
-        Assert.AreEqual(ErrorEval.NUM_ERROR.GetErrorCode(), myResult.GetErrorCode());    
-    }
-
-
-
-    public void TestXAsDecimalNumber()
-    {
-        double x = 1.1;
-        double mean = 0.2;
-        double result = 0.9824769036935787; // known result
-
-        NumberEval myResult = (NumberEval)invokePoisson(x,mean,true);
-
-        Assert.AreEqual(myResult.GetNumberValue(), result, DELTA);
-    }
-
-    public void TestXZeroMeanZero()
-    {
-        double x = 0;
-        double mean = 0;
-        double result = 1; // known result in excel
-
-        NumberEval myResult = (NumberEval)invokePoisson(x,mean,true);
-
-        Assert.AreEqual(myResult.GetNumberValue(), result, DELTA);
-    }
 }
-

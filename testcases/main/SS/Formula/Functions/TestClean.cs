@@ -14,53 +14,57 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 ==================================================================== */
-namespace NPOI.SS.Formula.functions;
+namespace TestCases.SS.Formula.Functions
+{
+    using NPOI.HSSF.UserModel;
+    using NPOI.SS.UserModel;
+    using System;
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    [TestClass]
+    public class TestClean
+    {
+        [TestMethod]
+        public void TestClean1()
+        {
+            HSSFWorkbook wb = new HSSFWorkbook();
+            ICell cell = wb.CreateSheet().CreateRow(0).CreateCell(0);
+            HSSFFormulaEvaluator fe = new HSSFFormulaEvaluator(wb);
 
-using NPOI.hssf.UserModel.HSSFCell;
-using NPOI.hssf.UserModel.HSSFFormulaEvaluator;
-using NPOI.hssf.UserModel.HSSFWorkbook;
-using NPOI.SS.UserModel.CellValue;
-
-using junit.framework.TestCase;
-
-public class TestClean  {
-
-    public void TestClean() {
-        HSSFWorkbook wb = new HSSFWorkbook();
-        HSSFCell cell = wb.CreateSheet().createRow(0).createCell(0);
-        HSSFFormulaEvaluator fe = new HSSFFormulaEvaluator(wb);
-
-        String[] asserts = {
+            String[] asserts = {
             "aniket\u0007\u0017\u0019", "aniket",
             "\u0011aniket\u0007\u0017\u0010", "aniket",
             "\u0011aniket\u0007\u0017\u007F", "aniket\u007F",
             "\u2116aniket\u2211\uFB5E\u2039", "\u2116aniket\u2211\uFB5E\u2039",
         };
 
-        for(int i = 0; i < asserts.Length; i+= 2){
-            String formulaText = "CLEAN(\"" + asserts[i] + "\")";
-            ConfirmResult(fe, cell, formulaText, asserts[i + 1]);
-        }
+            for (int i = 0; i < asserts.Length; i += 2)
+            {
+                String formulaText = "CLEAN(\"" + asserts[i] + "\")";
+                ConfirmResult(fe, cell, formulaText, asserts[i + 1]);
+            }
 
-        asserts = new String[] {
+            asserts = new String[] {
             "CHAR(7)&\"text\"&CHAR(7)", "text",
             "CHAR(7)&\"text\"&CHAR(17)", "text",
             "CHAR(181)&\"text\"&CHAR(190)", "\u00B5text\u00BE",
             "\"text\"&CHAR(160)&\"'\"", "text\u00A0'",
         };
-        for(int i = 0; i < asserts.Length; i+= 2){
-            String formulaText = "CLEAN(" + asserts[i] + ")";
-            ConfirmResult(fe, cell, formulaText, asserts[i + 1]);
+            for (int i = 0; i < asserts.Length; i += 2)
+            {
+                String formulaText = "CLEAN(" + asserts[i] + ")";
+                ConfirmResult(fe, cell, formulaText, asserts[i + 1]);
+            }
+        }
+
+        private static void ConfirmResult(HSSFFormulaEvaluator fe, ICell cell, String formulaText,
+                                          String expectedResult)
+        {
+            cell.CellFormula = (formulaText);
+            fe.NotifyUpdateCell(cell);
+            CellValue result = fe.Evaluate(cell);
+            Assert.AreEqual(result.CellType, CellType.STRING);
+            Assert.AreEqual(expectedResult, result.StringValue);
         }
     }
 
-    private static void ConfirmResult(HSSFFormulaEvaluator fe, HSSFCell cell, String formulaText,
-                                      String expectedResult) {
-        cell.SetCellFormula(formulaText);
-        fe.NotifyUpdateCell(cell);
-        CellValue result = fe.Evaluate(cell);
-        Assert.AreEqual(result.GetCellType(), HSSFCell.CELL_TYPE_STRING);
-        Assert.AreEqual(expectedResult, result.StringValue);
-    }
 }
-

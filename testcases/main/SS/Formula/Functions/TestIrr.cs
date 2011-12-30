@@ -15,115 +15,131 @@
    limitations under the License.
 ==================================================================== */
 
-namespace NPOI.SS.Formula.functions;
+namespace TestCases.SS.Formula.Functions
+{
+    using System;
+    using System.Text;
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NPOI.HSSF.UserModel;
+    using NPOI.SS.UserModel;
+    using TestCases.HSSF;
 
-using junit.framework.TestCase;
-using junit.framework.AssertionFailedError;
-using NPOI.hssf.UserModel.*;
-using NPOI.hssf.HSSFTestDataSamples;
-using NPOI.SS.UserModel.CellValue;
+    /**
+     * Tests for {@link Irr}
+     *
+     * @author Marcel May
+     */
+    [TestClass]
+    public class TestIrr
+    {
+        [TestMethod]
+        public void TestIrr1()
+        {
+            // http://en.wikipedia.org/wiki/Internal_rate_of_return#Example
+            double[] incomes = { -4000d, 1200d, 1410d, 1875d, 1050d };
+            double irr = Irr.irr(incomes);
+            double irrRounded = Math.Round(irr * 1000d) / 1000d;
+            Assert.AreEqual(0.143d, irrRounded, "irr");
 
-/**
- * Tests for {@link Irr}
- *
- * @author Marcel May
- */
-public class TestIrr  {
+            // http://www.techonthenet.com/excel/formulas/irr.php
+            incomes = new double[] { -7500d, 3000d, 5000d, 1200d, 4000d };
+            irr = Irr.irr(incomes);
+            irrRounded = Math.Round(irr * 100d) / 100d;
+            Assert.AreEqual(0.28d, irrRounded, "irr");
 
-    public void TestIrr() {
-        // http://en.wikipedia.org/wiki/Internal_rate_of_return#Example
-        double[] incomes = {-4000d, 1200d, 1410d, 1875d, 1050d};
-        double irr = Irr.irr(incomes);
-        double irrRounded = Math.round(irr * 1000d) / 1000d;
-        Assert.AreEqual("irr", 0.143d, irrRounded);
+            incomes = new double[] { -10000d, 3400d, 6500d, 1000d };
+            irr = Irr.irr(incomes);
+            irrRounded = Math.Round(irr * 100d) / 100d;
+            Assert.AreEqual(0.05, irrRounded, "irr");
 
-        // http://www.techonthenet.com/excel/formulas/irr.php
-        incomes = new double[]{-7500d, 3000d, 5000d, 1200d, 4000d};
-        irr = Irr.irr(incomes);
-        irrRounded = Math.round(irr * 100d) / 100d;
-        Assert.AreEqual("irr", 0.28d, irrRounded);
+            incomes = new double[] { 100d, -10d, -110d };
+            irr = Irr.irr(incomes);
+            irrRounded = Math.Round(irr * 100d) / 100d;
+            Assert.AreEqual(0.1, irrRounded, "irr");
 
-        incomes = new double[]{-10000d, 3400d, 6500d, 1000d};
-        irr = Irr.irr(incomes);
-        irrRounded = Math.round(irr * 100d) / 100d;
-        Assert.AreEqual("irr", 0.05, irrRounded);
+            incomes = new double[] { -70000d, 12000, 15000 };
+            irr = Irr.irr(incomes, -0.1);
+            irrRounded = Math.Round(irr * 100d) / 100d;
+            Assert.AreEqual(-0.44, irrRounded, "irr");
+        }
+        [TestMethod]
+        public void TestEvaluateInSheet()
+        {
+            HSSFWorkbook wb = new HSSFWorkbook();
+            ISheet sheet = wb.CreateSheet("Sheet1");
+            IRow row = sheet.CreateRow(0);
 
-        incomes = new double[]{100d, -10d, -110d};
-        irr = Irr.irr(incomes);
-        irrRounded = Math.round(irr * 100d) / 100d;
-        Assert.AreEqual("irr", 0.1, irrRounded);
+            row.CreateCell(0).SetCellValue(-4000d);
+            row.CreateCell(1).SetCellValue(1200d);
+            row.CreateCell(2).SetCellValue(1410d);
+            row.CreateCell(3).SetCellValue(1875d);
+            row.CreateCell(4).SetCellValue(1050d);
 
-        incomes = new double[]{-70000d, 12000, 15000};
-        irr = Irr.irr(incomes, -0.1);
-        irrRounded = Math.round(irr * 100d) / 100d;
-        Assert.AreEqual("irr", -0.44, irrRounded);
-    }
+            ICell cell = row.CreateCell(5);
+            cell.CellFormula = ("IRR(A1:E1)");
 
-    public void TestEvaluateInSheet() {
-        HSSFWorkbook wb = new HSSFWorkbook();
-        HSSFSheet sheet = wb.CreateSheet("Sheet1");
-        HSSFRow row = sheet.CreateRow(0);
+            HSSFFormulaEvaluator fe = new HSSFFormulaEvaluator(wb);
+            fe.ClearAllCachedResultValues();
+            fe.EvaluateFormulaCell(cell);
+            double res = cell.NumericCellValue;
+            Assert.AreEqual(0.143d, Math.Round(res * 1000d) / 1000d);
+        }
+        [TestMethod]
+        public void TestIrrFromSpreadsheet()
+        {
+            HSSFWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("IrrNpvTestCaseData.xls");
+            ISheet sheet = wb.GetSheet("IRR-NPV");
+            HSSFFormulaEvaluator fe = new HSSFFormulaEvaluator(wb);
+            StringBuilder failures = new StringBuilder();
+            int failureCount = 0;
+            // TODO YK: Formulas in rows 16 and 17 operate with ArrayPtg which isn't yet supported
+            // FormulaEvaluator as of r1041407 throws "Unexpected ptg class (NPOI.SS.Formula.PTG.ArrayPtg)"
+            for (int rownum = 9; rownum <= 15; rownum++)
+            {
+                IRow row = sheet.GetRow(rownum);
+                ICell cellA = row.GetCell(0);
+                try
+                {
+                    CellValue cv = fe.Evaluate(cellA);
+                    assertFormulaResult(cv, cellA);
+                }
+                catch (Exception e)
+                {
+                    if (failures.Length > 0) failures.Append('\n');
+                    failures.Append("Row[" + (cellA.RowIndex + 1) + "]: " + cellA.CellFormula + " ");
+                    failures.Append(e.Message);
+                    failureCount++;
+                }
 
-        row.CreateCell(0).SetCellValue(-4000d);
-        row.CreateCell(1).SetCellValue(1200d);
-        row.CreateCell(2).SetCellValue(1410d);
-        row.CreateCell(3).SetCellValue(1875d);
-        row.CreateCell(4).SetCellValue(1050d);
-
-        HSSFCell cell = row.CreateCell(5);
-        cell.SetCellFormula("IRR(A1:E1)");
-
-        HSSFFormulaEvaluator fe = new HSSFFormulaEvaluator(wb);
-        fe.ClearAllCachedResultValues();
-        fe.EvaluateFormulaCell(cell);
-        double res = cell.GetNumericCellValue();
-        Assert.AreEqual(0.143d, Math.round(res * 1000d) / 1000d);
-    }
-
-    public void TestIrrFromSpreadsheet(){
-        HSSFWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("IrrNpvTestCaseData.xls");
-        HSSFSheet sheet = wb.GetSheet("IRR-NPV");
-        HSSFFormulaEvaluator fe = new HSSFFormulaEvaluator(wb);
-        StringBuilder failures = new StringBuilder();
-        int failureCount = 0;
-        // TODO YK: Formulas in rows 16 and 17 operate with ArrayPtg which isn't yet supported
-        // FormulaEvaluator as of r1041407 throws "Unexpected ptg class (NPOI.SS.Formula.PTG.ArrayPtg)"
-        for(int rownum = 9; rownum <= 15; rownum++){
-            HSSFRow row = sheet.GetRow(rownum);
-            HSSFCell cellA = row.GetCell(0);
-            try {
-                CellValue cv = fe.Evaluate(cellA);
-                assertFormulaResult(cv, cellA);
-            } catch (Throwable e){
-                if(failures.Length > 0) failures.Append('\n');
-                failures.Append("Row[" + (cellA.RowIndex + 1)+ "]: " + cellA.GetCellFormula() + " ");
-                failures.Append(e.GetMessage());
-                failureCount++;
+                ICell cellC = row.GetCell(2); //IRR-NPV relationship: NPV(IRR(values), values) = 0
+                try
+                {
+                    CellValue cv = fe.Evaluate(cellC);
+                    Assert.AreEqual(0, cv.NumberValue, 0.0001);  // should agree within 0.01%
+                }
+                catch (Exception e)
+                {
+                    if (failures.Length > 0) failures.Append('\n');
+                    failures.Append("Row[" + (cellC.RowIndex + 1) + "]: " + cellC.CellFormula + " ");
+                    failures.Append(e.Message);
+                    failureCount++;
+                }
             }
 
-            HSSFCell cellC = row.GetCell(2); //IRR-NPV relationship: NPV(IRR(values), values) = 0
-            try {
-                CellValue cv = fe.Evaluate(cellC);
-                Assert.AreEqual(0, cv.GetNumberValue(), 0.0001);  // should agree within 0.01%
-            } catch (Throwable e){
-                if(failures.Length > 0) failures.Append('\n');
-                failures.Append("Row[" + (cellC.RowIndex + 1)+ "]: " + cellC.GetCellFormula() + " ");
-                failures.Append(e.GetMessage());
-                failureCount++;
+            if (failures.Length > 0)
+            {
+                throw new AssertFailedException(failureCount + " IRR assertions failed:\n" + failures.ToString());
             }
+
         }
 
-        if(failures.Length > 0) {
-            throw new AssertionFailedError(failureCount + " IRR assertions failed:\n" + failures.ToString());
+        private static void assertFormulaResult(CellValue cv, ICell cell)
+        {
+            double actualValue = cv.NumberValue;
+            double expectedValue = cell.NumericCellValue; // cached formula result calculated by Excel
+            Assert.AreEqual(CellType.NUMERIC, cv.CellType, "Invalid formula result: " + cv.ToString());
+            Assert.AreEqual(expectedValue, actualValue, 1E-4); // should agree within 0.01%
         }
-
     }
 
-    private static void assertFormulaResult(CellValue cv, HSSFCell cell){
-        double actualValue = cv.GetNumberValue();
-        double expectedValue = cell.GetNumericCellValue(); // cached formula result calculated by Excel
-        Assert.AreEqual("Invalid formula result: " + cv.ToString(), HSSFCell.CELL_TYPE_NUMERIC, cv.GetCellType());
-        Assert.AreEqual(expectedValue, actualValue, 1E-4); // should agree within 0.01%
-    }
 }
-

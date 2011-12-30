@@ -15,73 +15,83 @@
    limitations under the License.
 ==================================================================== */
 
-namespace NPOI.SS.Formula.functions;
+namespace TestCases.SS.Formula.Functions
+{
 
-using junit.framework.AssertionFailedError;
-using junit.framework.TestCase;
+    using NPOI.SS.Formula.Eval;
+    using NPOI.HSSF.UserModel;
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NPOI.SS.Formula.Functions;
 
-using NPOI.SS.Formula.Eval.ErrorEval;
-using NPOI.SS.Formula.Eval.ValueEval;
-using NPOI.SS.Formula.Eval.NumberEval;
-using NPOI.hssf.UserModel.HSSFErrorConstants;
+    /**
+     * @author Josh Micich
+     */
+    [TestClass]
+    public class TestPmt
+    {
 
-/**
- * @author Josh Micich
- */
-public class TestPmt  {
+        private static void Confirm(double expected, NumberEval ne)
+        {
+            // only asserting accuracy to 4 fractional digits
+            Assert.AreEqual(expected, ne.NumberValue, 0.00005);
+        }
+        private static ValueEval invoke(ValueEval[] args)
+        {
+            return FinanceFunction.PMT.Evaluate(args, -1, (short)-1);
+        }
+        /**
+         * Invocation when not expecting an error result
+         */
+        private static NumberEval invokeNormal(ValueEval[] args)
+        {
+            ValueEval ev = invoke(args);
+            if (ev is ErrorEval)
+            {
+                throw new AssertFailedException("Normal Evaluation failed with error code: "
+                        + ev.ToString());
+            }
+            return (NumberEval)ev;
+        }
 
-	private static void Confirm(double expected, NumberEval ne) {
-		// only asserting accuracy to 4 fractional digits
-		Assert.AreEqual(expected, ne.GetNumberValue(), 0.00005);
-	}
-	private static ValueEval invoke(ValueEval[] args) {
-		return FinanceFunction.PMT.Evaluate(args, -1, (short)-1);
-	}
-	/**
-	 * Invocation when not expecting an error result
-	 */
-	private static NumberEval invokeNormal(ValueEval[] args) {
-		ValueEval ev = invoke(args);
-		if(ev is ErrorEval) {
-			throw new AssertionFailedError("Normal Evaluation failed with error code: "
-					+ ev.ToString());
-		}
-		return (NumberEval) ev;
-	}
-
-	private static void Confirm(double expected, double rate, double nper, double pv, double fv, bool IsBeginning) {
-		ValueEval[] args = {
+        private static void Confirm(double expected, double rate, double nper, double pv, double fv, bool isBeginning)
+        {
+            ValueEval[] args = {
 				new NumberEval(rate),
 				new NumberEval(nper),
 				new NumberEval(pv),
 				new NumberEval(fv),
 				new NumberEval(isBeginning ? 1 : 0),
 		};
-		Confirm(expected, invokeNormal(args));
-	}
+            Confirm(expected, invokeNormal(args));
+        }
 
+        [TestMethod]
+        public void TestBasic()
+        {
+            Confirm(-1037.0321, (0.08 / 12), 10, 10000, 0, false);
+            Confirm(-1030.1643, (0.08 / 12), 10, 10000, 0, true);
+        }
+        [TestMethod]
+        public void Test3args()
+        {
 
-	public void TestBasic() {
-		Confirm(-1037.0321, (0.08/12), 10, 10000, 0, false);
-		Confirm(-1030.1643, (0.08/12), 10, 10000, 0, true);
-	}
-
-	public void Test3args() {
-
-		ValueEval[] args = {
+            ValueEval[] args = {
 				new NumberEval(0.005),
 				new NumberEval(24),
 				new NumberEval(1000),
 		};
-		ValueEval ev = invoke(args);
-		if(ev is ErrorEval) {
-			ErrorEval err = (ErrorEval) ev;
-			if(err.GetErrorCode() == HSSFErrorConstants.ERROR_VALUE) {
-				throw new AssertionFailedError("Identified bug 44691");
-			}
-		}
+            ValueEval ev = invoke(args);
+            if (ev is ErrorEval)
+            {
+                ErrorEval err = (ErrorEval)ev;
+                if (err.ErrorCode == HSSFErrorConstants.ERROR_VALUE)
+                {
+                    throw new AssertFailedException("Identified bug 44691");
+                }
+            }
 
-		Confirm(-44.3206, invokeNormal(args));
-	}
+            Confirm(-44.3206, invokeNormal(args));
+        }
+    }
+
 }
-

@@ -15,52 +15,55 @@
    limitations under the License.
 ==================================================================== */
 
-namespace NPOI.SS.Formula.functions;
 
-using junit.framework.TestCase;
+namespace TestCases.SS.Formula.Functions
+{
+    using NPOI.SS.Formula.Eval;
+    using NPOI.SS.Formula.Functions;
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NPOI.HSSF.UserModel;
+    using NPOI.SS.UserModel;
 
-using NPOI.SS.Formula.Eval.NumberEval;
-using NPOI.SS.Formula.Eval.ValueEval;
-using NPOI.hssf.UserModel.HSSFCell;
-using NPOI.hssf.UserModel.HSSFErrorConstants;
-using NPOI.hssf.UserModel.HSSFFormulaEvaluator;
-using NPOI.hssf.UserModel.HSSFSheet;
-using NPOI.hssf.UserModel.HSSFWorkbook;
+    /**
+     * Tests for {@link FinanceFunction#NPER}
+     *
+     * @author Josh Micich
+     */
+    [TestClass]
+    public class TestNper
+    {
+        [TestMethod]
+        public void TestSimpleEvaluate()
+        {
 
-/**
- * Tests for {@link FinanceFunction#NPER}
- *
- * @author Josh Micich
- */
-public class TestNper  {
-	public void TestSimpleEvaluate() {
-
-		ValueEval[] args = {
+            ValueEval[] args = {
 			new NumberEval(0.05),
 			new NumberEval(250),
 			new NumberEval(-1000),
 		};
-		ValueEval result = FinanceFunction.NPER.Evaluate(args, 0, (short)0);
+            ValueEval result = FinanceFunction.NPER.Evaluate(args, 0, (short)0);
 
-		Assert.AreEqual(NumberEval.class, result.GetType());
-		Assert.AreEqual(4.57353557, ((NumberEval)result).GetNumberValue(), 0.00000001);
-	}
+            Assert.AreEqual(typeof(NumberEval), result.GetType());
+            Assert.AreEqual(4.57353557, ((NumberEval)result).NumberValue, 0.00000001);
+        }
+        [TestMethod]
+        public void TestEvaluate_bug_45732()
+        {
+            HSSFWorkbook wb = new HSSFWorkbook();
+            ISheet sheet = wb.CreateSheet("Sheet1");
+            ICell cell = sheet.CreateRow(0).CreateCell(0);
 
-	public void TestEvaluate_bug_45732() {
-		HSSFWorkbook wb = new HSSFWorkbook();
-		HSSFSheet sheet = wb.CreateSheet("Sheet1");
-		HSSFCell cell = sheet.CreateRow(0).createCell(0);
+            cell.CellFormula = ("NPER(12,4500,100000,100000)");
+            cell.SetCellValue(15.0);
+            Assert.AreEqual("NPER(12,4500,100000,100000)", cell.CellFormula);
+            Assert.AreEqual(CellType.NUMERIC, cell.CachedFormulaResultType);
+            Assert.AreEqual(15.0, cell.NumericCellValue, 0.0);
 
-		cell.SetCellFormula("NPER(12,4500,100000,100000)");
-		cell.SetCellValue(15.0);
-		Assert.AreEqual("NPER(12,4500,100000,100000)", cell.GetCellFormula());
-		Assert.AreEqual(HSSFCell.CELL_TYPE_NUMERIC, cell.GetCachedFormulaResultType());
-		Assert.AreEqual(15.0, cell.GetNumericCellValue(), 0.0);
+            HSSFFormulaEvaluator fe = new HSSFFormulaEvaluator(wb);
+            fe.EvaluateFormulaCell(cell);
+            Assert.AreEqual(CellType.ERROR, cell.CachedFormulaResultType);
+            Assert.AreEqual(HSSFErrorConstants.ERROR_NUM, cell.ErrorCellValue);
+        }
+    }
 
-		HSSFFormulaEvaluator fe = new HSSFFormulaEvaluator(wb);
-		fe.EvaluateFormulaCell(cell);
-		Assert.AreEqual(HSSFCell.CELL_TYPE_ERROR, cell.GetCachedFormulaResultType());
-		Assert.AreEqual(HSSFErrorConstants.ERROR_NUM, cell.GetErrorCellValue());
-	}
 }
-

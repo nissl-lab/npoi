@@ -15,46 +15,47 @@
    limitations under the License.
 ==================================================================== */
 
-namespace NPOI.SS.Formula.functions;
+namespace TestCases.SS.Formula.Functions
+{
+    using NPOI.SS.Formula.Eval;
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NPOI.SS.Formula.Functions;
 
-using NPOI.SS.Formula.Eval.ErrorEval;
-using NPOI.SS.Formula.Eval.ValueEval;
-using NPOI.SS.Formula.Eval.NumberEval;
-using NPOI.SS.Formula.Eval.StringEval;
+    /**
+     * Test case for TRUNC()
+     *
+     * @author Stephen Wolke (smwolke at geistig.com)
+     */
+    public class TestTRunc : AbstractNumericTestCase
+    {
+        private static NumericFunction F = null;
+        public void TestTRuncWithStringArg()
+        {
 
-/**
- * Test case for TRUNC()
- *
- * @author Stephen Wolke (smwolke at geistig.com)
- */
-public class TestTRunc : AbstractNumericTestCase {
-	private static NumericFunction F = null;
-	public void TestTRuncWithStringArg() {
+            ValueEval strArg = new StringEval("abc");
+            ValueEval[] args = { strArg, new NumberEval(2) };
+            ValueEval result = NumericFunction.TRUNC.Evaluate(args, -1, (short)-1);
+            Assert.AreEqual(ErrorEval.VALUE_INVALID, result);
+        }
 
-		ValueEval strArg = new StringEval("abc");
-		ValueEval[] args = { strArg, new NumberEval(2) };
-		ValueEval result = F.TRUNC.Evaluate(args, -1, (short)-1);
-		Assert.AreEqual(ErrorEval.VALUE_INVALID, result);
-	}
-
-	public void TestTRuncWithWholeNumber() {
+        public void TestTRuncWithWholeNumber() {
 		ValueEval[] args = { new NumberEval(200), new NumberEval(2) };
-		@SuppressWarnings("static-access")
-		ValueEval result = F.TRUNC.Evaluate(args, -1, (short)-1);
-		Assert.AreEqual("TRUNC", (new NumberEval(200d)).GetNumberValue(), ((NumberEval)result).GetNumberValue());
+        ValueEval result = NumericFunction.TRUNC.Evaluate(args, -1, (short)-1);
+		Assert.AreEqual( (new NumberEval(200d)).NumberValue, ((NumberEval)result).NumberValue,"TRUNC");
 	}
-	
-	public void TestTRuncWithDecimalNumber() {
-		ValueEval[] args = { new NumberEval(2.612777), new NumberEval(3) };
-		@SuppressWarnings("static-access")
-		ValueEval result = F.TRUNC.Evaluate(args, -1, (short)-1);
-		Assert.AreEqual("TRUNC", (new NumberEval(2.612d)).GetNumberValue(), ((NumberEval)result).GetNumberValue());
-	}
-	
-	public void TestTRuncWithDecimalNumberOneArg() {
-		ValueEval[] args = { new NumberEval(2.612777) };
-		ValueEval result = F.TRUNC.Evaluate(args, -1, (short)-1);
-		Assert.AreEqual("TRUNC", (new NumberEval(2d)).GetNumberValue(), ((NumberEval)result).GetNumberValue());
-	}
-}
 
+        public void TestTRuncWithDecimalNumber() {
+		ValueEval[] args = { new NumberEval(2.612777), new NumberEval(3) };
+        ValueEval result = NumericFunction.TRUNC.Evaluate(args, -1, (short)-1);
+		Assert.AreEqual( (new NumberEval(2.612d)).NumberValue, ((NumberEval)result).NumberValue,"TRUNC");
+	}
+
+        public void TestTRuncWithDecimalNumberOneArg()
+        {
+            ValueEval[] args = { new NumberEval(2.612777) };
+            ValueEval result = NumericFunction.TRUNC.Evaluate(args, -1, (short)-1);
+            Assert.AreEqual( (new NumberEval(2d)).NumberValue, ((NumberEval)result).NumberValue,"TRUNC");
+        }
+    }
+
+}

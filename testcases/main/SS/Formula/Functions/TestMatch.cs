@@ -15,46 +15,49 @@
    limitations under the License.
 ==================================================================== */
 
-namespace NPOI.SS.Formula.functions;
+namespace TestCases.SS.Formula.Functions
+{
 
-using junit.framework.TestCase;
+    using System;
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NPOI.SS.Formula.Eval;
+    using TestCases.SS.Formula.Functions;
+    using NPOI.SS.Formula.Functions;
 
-using NPOI.SS.Formula.Eval.AreaEval;
-using NPOI.SS.Formula.Eval.BoolEval;
-using NPOI.SS.Formula.Eval.ErrorEval;
-using NPOI.SS.Formula.Eval.NumberEval;
-using NPOI.SS.Formula.Eval.NumericValueEval;
-using NPOI.SS.Formula.Eval.StringEval;
-using NPOI.SS.Formula.Eval.ValueEval;
-
-/**
- * Test cases for MATCH()
- *
- * @author Josh Micich
- */
-public class TestMatch  {
-	/** less than or equal to */
-	private static NumberEval MATCH_LARGEST_LTE = new NumberEval(1);
-	private static NumberEval MATCH_EXACT = new NumberEval(0);
-	/** greater than or equal to */
-	private static NumberEval MATCH_SMALLEST_GTE = new NumberEval(-1);
+    /**
+     * Test cases for MATCH()
+     *
+     * @author Josh Micich
+     */
+    [TestClass]
+    public class TestMatch
+    {
+        /** less than or equal to */
+        private static NumberEval MATCH_LARGEST_LTE = new NumberEval(1);
+        private static NumberEval MATCH_EXACT = new NumberEval(0);
+        /** greater than or equal to */
+        private static NumberEval MATCH_SMALLEST_GTE = new NumberEval(-1);
 
 
-	private static ValueEval invokeMatch(ValueEval Lookup_value, ValueEval Lookup_array, ValueEval match_type) {
-		ValueEval[] args = { Lookup_value, Lookup_array, match_type, };
-		return new Match().Evaluate(args, -1, (short)-1);
-	}
-	private static void ConfirmInt(int expected, ValueEval actualEval) {
-		if(!(actualEval is NumericValueEval)) {
-			Assert.Fail("Expected numeric result");
-		}
-		NumericValueEval nve = (NumericValueEval)actualEval;
-		Assert.AreEqual(expected, nve.GetNumberValue(), 0);
-	}
+        private static ValueEval invokeMatch(ValueEval Lookup_value, ValueEval Lookup_array, ValueEval match_type)
+        {
+            ValueEval[] args = { Lookup_value, Lookup_array, match_type, };
+            return new Match().Evaluate(args, -1, (short)-1);
+        }
+        private static void ConfirmInt(int expected, ValueEval actualEval)
+        {
+            if (!(actualEval is NumericValueEval))
+            {
+                Assert.Fail("Expected numeric result");
+            }
+            NumericValueEval nve = (NumericValueEval)actualEval;
+            Assert.AreEqual(expected, nve.NumberValue, 0);
+        }
+        [TestMethod]
+        public void TestSimpleNumber()
+        {
 
-	public void TestSimpleNumber() {
-
-		ValueEval[] values = {
+            ValueEval[] values = {
 			new NumberEval(4),
 			new NumberEval(5),
 			new NumberEval(10),
@@ -62,19 +65,20 @@ public class TestMatch  {
 			new NumberEval(25),
 		};
 
-		AreaEval ae = EvalFactory.CreateAreaEval("A1:A5", values);
+            AreaEval ae = EvalFactory.CreateAreaEval("A1:A5", values);
 
-		ConfirmInt(2, invokeMatch(new NumberEval(5), ae, MATCH_LARGEST_LTE));
-		ConfirmInt(2, invokeMatch(new NumberEval(5), ae, MATCH_EXACT));
-		ConfirmInt(4, invokeMatch(new NumberEval(10), ae, MATCH_LARGEST_LTE));
-		ConfirmInt(3, invokeMatch(new NumberEval(10), ae, MATCH_EXACT));
-		ConfirmInt(4, invokeMatch(new NumberEval(20), ae, MATCH_LARGEST_LTE));
-		Assert.AreEqual(ErrorEval.NA, invokeMatch(new NumberEval(20), ae, MATCH_EXACT));
-	}
+            ConfirmInt(2, invokeMatch(new NumberEval(5), ae, MATCH_LARGEST_LTE));
+            ConfirmInt(2, invokeMatch(new NumberEval(5), ae, MATCH_EXACT));
+            ConfirmInt(4, invokeMatch(new NumberEval(10), ae, MATCH_LARGEST_LTE));
+            ConfirmInt(3, invokeMatch(new NumberEval(10), ae, MATCH_EXACT));
+            ConfirmInt(4, invokeMatch(new NumberEval(20), ae, MATCH_LARGEST_LTE));
+            Assert.AreEqual(ErrorEval.NA, invokeMatch(new NumberEval(20), ae, MATCH_EXACT));
+        }
+        [TestMethod]
+        public void TestReversedNumber()
+        {
 
-	public void TestReversedNumber() {
-
-		ValueEval[] values = {
+            ValueEval[] values = {
 			new NumberEval(25),
 			new NumberEval(10),
 			new NumberEval(10),
@@ -82,19 +86,20 @@ public class TestMatch  {
 			new NumberEval(4),
 		};
 
-		AreaEval ae = EvalFactory.CreateAreaEval("A1:A5", values);
+            AreaEval ae = EvalFactory.CreateAreaEval("A1:A5", values);
 
-		ConfirmInt(2, invokeMatch(new NumberEval(10), ae, MATCH_SMALLEST_GTE));
-		ConfirmInt(2, invokeMatch(new NumberEval(10), ae, MATCH_EXACT));
-		ConfirmInt(4, invokeMatch(new NumberEval(9), ae, MATCH_SMALLEST_GTE));
-		ConfirmInt(1, invokeMatch(new NumberEval(20), ae, MATCH_SMALLEST_GTE));
-		Assert.AreEqual(ErrorEval.NA, invokeMatch(new NumberEval(20), ae, MATCH_EXACT));
-		Assert.AreEqual(ErrorEval.NA, invokeMatch(new NumberEval(26), ae, MATCH_SMALLEST_GTE));
-	}
+            ConfirmInt(2, invokeMatch(new NumberEval(10), ae, MATCH_SMALLEST_GTE));
+            ConfirmInt(2, invokeMatch(new NumberEval(10), ae, MATCH_EXACT));
+            ConfirmInt(4, invokeMatch(new NumberEval(9), ae, MATCH_SMALLEST_GTE));
+            ConfirmInt(1, invokeMatch(new NumberEval(20), ae, MATCH_SMALLEST_GTE));
+            Assert.AreEqual(ErrorEval.NA, invokeMatch(new NumberEval(20), ae, MATCH_EXACT));
+            Assert.AreEqual(ErrorEval.NA, invokeMatch(new NumberEval(26), ae, MATCH_SMALLEST_GTE));
+        }
+        [TestMethod]
+        public void TestSimpleString()
+        {
 
-	public void TestSimpleString() {
-
-		ValueEval[] values = {
+            ValueEval[] values = {
 			new StringEval("Albert"),
 			new StringEval("Charles"),
 			new StringEval("Ed"),
@@ -102,38 +107,40 @@ public class TestMatch  {
 			new StringEval("Ian"),
 		};
 
-		AreaEval ae = EvalFactory.CreateAreaEval("A1:A5", values);
+            AreaEval ae = EvalFactory.CreateAreaEval("A1:A5", values);
 
-		// Note String comparisons are case insensitive
-		ConfirmInt(3, invokeMatch(new StringEval("Ed"), ae, MATCH_LARGEST_LTE));
-		ConfirmInt(3, invokeMatch(new StringEval("eD"), ae, MATCH_LARGEST_LTE));
-		ConfirmInt(3, invokeMatch(new StringEval("Ed"), ae, MATCH_EXACT));
-		ConfirmInt(3, invokeMatch(new StringEval("ed"), ae, MATCH_EXACT));
-		ConfirmInt(4, invokeMatch(new StringEval("Hugh"), ae, MATCH_LARGEST_LTE));
-		Assert.AreEqual(ErrorEval.NA, invokeMatch(new StringEval("Hugh"), ae, MATCH_EXACT));
-	}
+            // Note String comparisons are case insensitive
+            ConfirmInt(3, invokeMatch(new StringEval("Ed"), ae, MATCH_LARGEST_LTE));
+            ConfirmInt(3, invokeMatch(new StringEval("eD"), ae, MATCH_LARGEST_LTE));
+            ConfirmInt(3, invokeMatch(new StringEval("Ed"), ae, MATCH_EXACT));
+            ConfirmInt(3, invokeMatch(new StringEval("ed"), ae, MATCH_EXACT));
+            ConfirmInt(4, invokeMatch(new StringEval("Hugh"), ae, MATCH_LARGEST_LTE));
+            Assert.AreEqual(ErrorEval.NA, invokeMatch(new StringEval("Hugh"), ae, MATCH_EXACT));
+        }
+        [TestMethod]
+        public void TestSimpleBoolean()
+        {
 
-	public void TestSimpleBoolean() {
-
-		ValueEval[] values = {
+            ValueEval[] values = {
 				BoolEval.FALSE,
 				BoolEval.FALSE,
 				BoolEval.TRUE,
 				BoolEval.TRUE,
 		};
 
-		AreaEval ae = EvalFactory.CreateAreaEval("A1:A4", values);
+            AreaEval ae = EvalFactory.CreateAreaEval("A1:A4", values);
 
-		// Note String comparisons are case insensitive
-		ConfirmInt(2, invokeMatch(BoolEval.FALSE, ae, MATCH_LARGEST_LTE));
-		ConfirmInt(1, invokeMatch(BoolEval.FALSE, ae, MATCH_EXACT));
-		ConfirmInt(4, invokeMatch(BoolEval.TRUE, ae, MATCH_LARGEST_LTE));
-		ConfirmInt(3, invokeMatch(BoolEval.TRUE, ae, MATCH_EXACT));
-	}
+            // Note String comparisons are case insensitive
+            ConfirmInt(2, invokeMatch(BoolEval.FALSE, ae, MATCH_LARGEST_LTE));
+            ConfirmInt(1, invokeMatch(BoolEval.FALSE, ae, MATCH_EXACT));
+            ConfirmInt(4, invokeMatch(BoolEval.TRUE, ae, MATCH_LARGEST_LTE));
+            ConfirmInt(3, invokeMatch(BoolEval.TRUE, ae, MATCH_EXACT));
+        }
+        [TestMethod]
+        public void TestHeterogeneous()
+        {
 
-	public void TestHeterogeneous() {
-
-		ValueEval[] values = {
+            ValueEval[] values = {
 				new NumberEval(4),
 				BoolEval.FALSE,
 				new NumberEval(5),
@@ -149,37 +156,39 @@ public class TestMatch  {
 				new StringEval("Ed"),
 		};
 
-		AreaEval ae = EvalFactory.CreateAreaEval("A1:A13", values);
+            AreaEval ae = EvalFactory.CreateAreaEval("A1:A13", values);
 
-		Assert.AreEqual(ErrorEval.NA, invokeMatch(new StringEval("Aaron"), ae, MATCH_LARGEST_LTE));
+            Assert.AreEqual(ErrorEval.NA, invokeMatch(new StringEval("Aaron"), ae, MATCH_LARGEST_LTE));
 
-		ConfirmInt(5, invokeMatch(BoolEval.FALSE, ae, MATCH_LARGEST_LTE));
-		ConfirmInt(2, invokeMatch(BoolEval.FALSE, ae, MATCH_EXACT));
-		ConfirmInt(3, invokeMatch(new NumberEval(5), ae, MATCH_LARGEST_LTE));
-		ConfirmInt(3, invokeMatch(new NumberEval(5), ae, MATCH_EXACT));
+            ConfirmInt(5, invokeMatch(BoolEval.FALSE, ae, MATCH_LARGEST_LTE));
+            ConfirmInt(2, invokeMatch(BoolEval.FALSE, ae, MATCH_EXACT));
+            ConfirmInt(3, invokeMatch(new NumberEval(5), ae, MATCH_LARGEST_LTE));
+            ConfirmInt(3, invokeMatch(new NumberEval(5), ae, MATCH_EXACT));
 
-		ConfirmInt(8, invokeMatch(new StringEval("CHARLES"), ae, MATCH_EXACT));
+            ConfirmInt(8, invokeMatch(new StringEval("CHARLES"), ae, MATCH_EXACT));
 
-		ConfirmInt(4, invokeMatch(new StringEval("Ben"), ae, MATCH_LARGEST_LTE));
+            ConfirmInt(4, invokeMatch(new StringEval("Ben"), ae, MATCH_LARGEST_LTE));
 
-		ConfirmInt(13, invokeMatch(new StringEval("ED"), ae, MATCH_LARGEST_LTE));
-		ConfirmInt(9, invokeMatch(new StringEval("ED"), ae, MATCH_EXACT));
+            ConfirmInt(13, invokeMatch(new StringEval("ED"), ae, MATCH_LARGEST_LTE));
+            ConfirmInt(9, invokeMatch(new StringEval("ED"), ae, MATCH_EXACT));
 
-		ConfirmInt(13, invokeMatch(new StringEval("Hugh"), ae, MATCH_LARGEST_LTE));
-		Assert.AreEqual(ErrorEval.NA, invokeMatch(new StringEval("Hugh"), ae, MATCH_EXACT));
+            ConfirmInt(13, invokeMatch(new StringEval("Hugh"), ae, MATCH_LARGEST_LTE));
+            Assert.AreEqual(ErrorEval.NA, invokeMatch(new StringEval("Hugh"), ae, MATCH_EXACT));
 
-		ConfirmInt(11, invokeMatch(new NumberEval(30), ae, MATCH_LARGEST_LTE));
-		ConfirmInt(12, invokeMatch(BoolEval.TRUE, ae, MATCH_LARGEST_LTE));
-	}
+            ConfirmInt(11, invokeMatch(new NumberEval(30), ae, MATCH_LARGEST_LTE));
+            ConfirmInt(12, invokeMatch(BoolEval.TRUE, ae, MATCH_LARGEST_LTE));
+        }
 
 
-	/**
-	 * Ensures that the match_type argument can be an <tt>AreaEval</tt>.<br/>
-	 * Bugzilla 44421
-	 */
-	public void TestMatchArgTypeArea() {
+        /**
+         * Ensures that the match_type argument can be an <tt>AreaEval</tt>.<br/>
+         * Bugzilla 44421
+         */
+        [TestMethod]
+        public void TestMatchArgTypeArea()
+        {
 
-		ValueEval[] values = {
+            ValueEval[] values = {
 			new NumberEval(4),
 			new NumberEval(5),
 			new NumberEval(10),
@@ -187,20 +196,25 @@ public class TestMatch  {
 			new NumberEval(25),
 		};
 
-		AreaEval ae = EvalFactory.CreateAreaEval("A1:A5", values);
+            AreaEval ae = EvalFactory.CreateAreaEval("A1:A5", values);
 
-		AreaEval matchAE = EvalFactory.CreateAreaEval("C1:C1", new ValueEval[] { MATCH_LARGEST_LTE, });
+            AreaEval matchAE = EvalFactory.CreateAreaEval("C1:C1", new ValueEval[] { MATCH_LARGEST_LTE, });
 
-		try {
-			ConfirmInt(4, invokeMatch(new NumberEval(10), ae, matchAE));
-		} catch (RuntimeException e) {
-			if(e.GetMessage().startsWith("Unexpected match_type type")) {
-				// identified bug 44421
-				Assert.Fail(e.GetMessage());
-			}
-			// some other error ??
-			throw e;
-		}
-	}
+            try
+            {
+                ConfirmInt(4, invokeMatch(new NumberEval(10), ae, matchAE));
+            }
+            catch (Exception e)
+            {
+                if (e.Message.StartsWith("Unexpected match_type type"))
+                {
+                    // identified bug 44421
+                    Assert.Fail(e.Message);
+                }
+                // some other error ??
+                throw e;
+            }
+        }
+    }
+
 }
-

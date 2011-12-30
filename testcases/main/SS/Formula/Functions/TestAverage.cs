@@ -15,50 +15,52 @@
    limitations under the License.
 ==================================================================== */
 
-namespace NPOI.SS.Formula.functions;
+using NPOI.SS.Formula.Eval;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+namespace NPOI.SS.Formula.Functions
+{
 
-using junit.framework.TestCase;
+    /**
+     * Tests for Excel function AVERAGE()
+     *
+     * @author Josh Micich
+     */
+    [TestClass]
+    public class TestAverage
+    {
 
-using NPOI.SS.Formula.Eval.BlankEval;
-using NPOI.SS.Formula.Eval.BoolEval;
-using NPOI.SS.Formula.Eval.ErrorEval;
-using NPOI.SS.Formula.Eval.NumberEval;
-using NPOI.SS.Formula.Eval.ValueEval;
-/**
- * Tests for Excel function AVERAGE()
- *
- * @author Josh Micich
- */
-public class TestAverage  {
+        private static ValueEval InvokeAverage(ValueEval[] args)
+        {
+            return AggregateFunction.AVERAGE.Evaluate(args, -1, (short)-1);
+        }
 
-	private static ValueEval invokeAverage(ValueEval[] args) {
-		return AggregateFunction.AVERAGE.Evaluate(args, -1, (short)-1);
-	}
+        private void ConfirmAverage(ValueEval[] args, double expected)
+        {
+            ValueEval result = InvokeAverage(args);
+            Assert.AreEqual(typeof(NumberEval), result.GetType());
+            Assert.AreEqual(expected, ((NumberEval)result).NumberValue, 0);
+        }
 
-	private void ConfirmAverage(ValueEval[] args, double expected) {
-		ValueEval result = invokeAverage(args);
-		Assert.AreEqual(NumberEval.class, result.GetType());
-		Assert.AreEqual(expected, ((NumberEval)result).GetNumberValue(), 0);
-	}
+        private void ConfirmAverage(ValueEval[] args, ErrorEval expectedError)
+        {
+            ValueEval result = InvokeAverage(args);
+            Assert.AreEqual(typeof(ErrorEval), result.GetType());
+            Assert.AreEqual(expectedError.ErrorCode, ((ErrorEval)result).ErrorCode);
+        }
+        [TestMethod]
+        public void TestBasic()
+        {
 
-	private void ConfirmAverage(ValueEval[] args, ErrorEval expectedError) {
-		ValueEval result = invokeAverage(args);
-		Assert.AreEqual(ErrorEval.class, result.GetType());
-		Assert.AreEqual(expectedError.GetErrorCode(), ((ErrorEval)result).GetErrorCode());
-	}
-
-	public void TestBasic() {
-
-		ValueEval[] values = {
+            ValueEval[] values = {
 				new NumberEval(1),
 				new NumberEval(2),
 				new NumberEval(3),
 				new NumberEval(4),
 		};
 
-		ConfirmAverage(values, 2.5);
+            ConfirmAverage(values, 2.5);
 
-		values = new ValueEval[] {
+            values = new ValueEval[] {
 				new NumberEval(1),
 				new NumberEval(2),
 				BlankEval.instance,
@@ -68,32 +70,36 @@ public class TestAverage  {
 				BlankEval.instance,
 		};
 
-		ConfirmAverage(values, 2.5);
-	}
+            ConfirmAverage(values, 2.5);
+        }
 
-	/**
-	 * Valid cases where values are not pure numbers
-	 */
-	public void TestUnusualArgs() {
-		ValueEval[] values = {
+        /**
+         * Valid cases where values are not pure numbers
+         */
+        [TestMethod]
+        public void TestUnusualArgs()
+        {
+            ValueEval[] values = {
 				new NumberEval(1),
 				new NumberEval(2),
 				BoolEval.TRUE,
 				BoolEval.FALSE,
 		};
 
-		ConfirmAverage(values, 1.0);
+            ConfirmAverage(values, 1.0);
 
-	}
-
-	public void TestErrors() {
-		ValueEval[] values = {
+        }
+        [TestMethod]
+        public void TestErrors()
+        {
+            ValueEval[] values = {
 				new NumberEval(1),
 				ErrorEval.NAME_INVALID,
 				new NumberEval(3),
 				ErrorEval.DIV_ZERO,
 		};
-		ConfirmAverage(values, ErrorEval.NAME_INVALID);
-	}
-}
+            ConfirmAverage(values, ErrorEval.NAME_INVALID);
+        }
+    }
 
+}

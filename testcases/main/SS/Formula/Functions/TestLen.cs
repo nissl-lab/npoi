@@ -15,59 +15,66 @@
    limitations under the License.
 ==================================================================== */
 
-namespace NPOI.SS.Formula.functions;
+namespace TestCases.SS.Formula.Functions
+{
 
-using junit.framework.TestCase;
+    using NPOI.SS.Formula.Eval;
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NPOI.SS.Formula.Functions;
 
-using NPOI.SS.Formula.Eval.BlankEval;
-using NPOI.SS.Formula.Eval.BoolEval;
-using NPOI.SS.Formula.Eval.ErrorEval;
-using NPOI.SS.Formula.Eval.NumberEval;
-using NPOI.SS.Formula.Eval.StringEval;
-using NPOI.SS.Formula.Eval.ValueEval;
-/**
- * Tests for Excel function LEN()
- *
- * @author Josh Micich
- */
-public class TestLen  {
+    /**
+     * Tests for Excel function LEN()
+     *
+     * @author Josh Micich
+     */
+    [TestClass]
+    public class TestLen
+    {
 
-	private static ValueEval invokeLen(ValueEval text) {
-		ValueEval[] args = new ValueEval[] { text, };
-		return TextFunction.LEN.Evaluate(args, -1, (short)-1);
-	}
+        private static ValueEval invokeLen(ValueEval text)
+        {
+            ValueEval[] args = new ValueEval[] { text, };
+            return TextFunction.LEN.Evaluate(args, -1, (short)-1);
+        }
 
-	private void ConfirmLen(ValueEval text, int expected) {
-		ValueEval result = invokeLen(text);
-		Assert.AreEqual(NumberEval.class, result.GetType());
-		Assert.AreEqual(expected, ((NumberEval)result).GetNumberValue(), 0);
-	}
+        private void ConfirmLen(ValueEval text, int expected)
+        {
+            ValueEval result = invokeLen(text);
+            Assert.AreEqual(typeof(NumberEval), result.GetType());
+            Assert.AreEqual(expected, ((NumberEval)result).NumberValue, 0);
+        }
 
-	private void ConfirmLen(ValueEval text, ErrorEval expectedError) {
-		ValueEval result = invokeLen(text);
-		Assert.AreEqual(ErrorEval.class, result.GetType());
-		Assert.AreEqual(expectedError.GetErrorCode(), ((ErrorEval)result).GetErrorCode());
-	}
+        private void ConfirmLen(ValueEval text, ErrorEval expectedError)
+        {
+            ValueEval result = invokeLen(text);
+            Assert.AreEqual(typeof(ErrorEval), result.GetType());
+            Assert.AreEqual(expectedError.ErrorCode, ((ErrorEval)result).ErrorCode);
+        }
+        [TestMethod]
+        public void TestBasic()
+        {
 
-	public void TestBasic() {
+            ConfirmLen(new StringEval("galactic"), 8);
+        }
 
-		ConfirmLen(new StringEval("galactic"), 8);
-	}
+        /**
+         * Valid cases where text arg is not exactly a string
+         */
+        [TestMethod]
+        public void TestUnusualArgs()
+        {
 
-	/**
-	 * Valid cases where text arg is not exactly a string
-	 */
-	public void TestUnusualArgs() {
+            // text (first) arg type is number, other args are strings with fractional digits
+            ConfirmLen(new NumberEval(123456), 6);
+            ConfirmLen(BoolEval.FALSE, 5);
+            ConfirmLen(BoolEval.TRUE, 4);
+            ConfirmLen(BlankEval.instance, 0);
+        }
 
-		// text (first) arg type is number, other args are strings with fractional digits
-		ConfirmLen(new NumberEval(123456), 6);
-		ConfirmLen(BoolEval.FALSE, 5);
-		ConfirmLen(BoolEval.TRUE, 4);
-		ConfirmLen(BlankEval.instance, 0);
-	}
+        public void TestErrors()
+        {
+            ConfirmLen(ErrorEval.NAME_INVALID, ErrorEval.NAME_INVALID);
+        }
+    }
 
-	public void TestErrors() {
-		ConfirmLen(ErrorEval.NAME_INVALID, ErrorEval.NAME_INVALID);
-	}
 }
-

@@ -15,122 +15,136 @@
    limitations under the License.
 ==================================================================== */
 
-namespace NPOI.SS.Formula.functions;
+namespace TestCases.SS.Formula.Functions
+{
 
-using junit.framework.TestCase;
+    using NPOI.SS.Formula.Eval;
+    using NPOI.SS.Formula.Functions;
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using System;
+    /**
+     * Tests for Excel functions SUMX2MY2(), SUMX2PY2(), SUMXMY2()
+     *
+     * @author Josh Micich
+     */
+    [TestClass]
+    public class TestXYNumericFunction
+    {
+        private static Function SUM_SQUARES = new Sumx2py2();
+        private static Function DIFF_SQUARES = new Sumx2my2();
+        private static Function SUM_SQUARES_OF_DIFFS = new Sumxmy2();
 
-using NPOI.SS.Formula.Eval.ErrorEval;
-using NPOI.SS.Formula.Eval.NumberEval;
-using NPOI.SS.Formula.Eval.ValueEval;
-/**
- * Tests for Excel functions SUMX2MY2(), SUMX2PY2(), SUMXMY2()
- *
- * @author Josh Micich
- */
-public class TestXYNumericFunction  {
-	private static Function SUM_SQUARES = new Sumx2py2();
-	private static Function DIFF_SQUARES = new Sumx2my2();
-	private static Function SUM_SQUARES_OF_DIFFS = new Sumxmy2();
+        private static ValueEval invoke(Function function, ValueEval xArray, ValueEval yArray)
+        {
+            ValueEval[] args = new ValueEval[] { xArray, yArray, };
+            return function.Evaluate(args, -1, (short)-1);
+        }
 
-	private static ValueEval invoke(Function function, ValueEval xArray, ValueEval yArray) {
-		ValueEval[] args = new ValueEval[] { xArray, yArray, };
-		return function.Evaluate(args, -1, (short)-1);
-	}
+        private void Confirm(Function function, ValueEval xArray, ValueEval yArray, double expected)
+        {
+            ValueEval result = invoke(function, xArray, yArray);
+            Assert.AreEqual(typeof(NumberEval), result.GetType());
+            Assert.AreEqual(expected, ((NumberEval)result).NumberValue, 0);
+        }
+        private void ConfirmError(Function function, ValueEval xArray, ValueEval yArray, ErrorEval expectedError)
+        {
+            ValueEval result = invoke(function, xArray, yArray);
+            Assert.AreEqual(typeof(ErrorEval), result.GetType());
+            Assert.AreEqual(expectedError.ErrorCode, ((ErrorEval)result).ErrorCode);
+        }
 
-	private void Confirm(Function function, ValueEval xArray, ValueEval yArray, double expected) {
-		ValueEval result = invoke(function, xArray, yArray);
-		Assert.AreEqual(NumberEval.class, result.GetType());
-		Assert.AreEqual(expected, ((NumberEval)result).GetNumberValue(), 0);
-	}
-	private void ConfirmError(Function function, ValueEval xArray, ValueEval yArray, ErrorEval expectedError) {
-		ValueEval result = invoke(function, xArray, yArray);
-		Assert.AreEqual(ErrorEval.class, result.GetType());
-		Assert.AreEqual(expectedError.GetErrorCode(), ((ErrorEval)result).GetErrorCode());
-	}
-
-	private void ConfirmError(ValueEval xArray, ValueEval yArray, ErrorEval expectedError) {
-		ConfirmError(SUM_SQUARES, xArray, yArray, expectedError);
-		ConfirmError(DIFF_SQUARES, xArray, yArray, expectedError);
-		ConfirmError(SUM_SQUARES_OF_DIFFS, xArray, yArray, expectedError);
-	}
-
-	public void TestBasic() {
-		ValueEval[] xValues = {
+        private void ConfirmError(ValueEval xArray, ValueEval yArray, ErrorEval expectedError)
+        {
+            ConfirmError(SUM_SQUARES, xArray, yArray, expectedError);
+            ConfirmError(DIFF_SQUARES, xArray, yArray, expectedError);
+            ConfirmError(SUM_SQUARES_OF_DIFFS, xArray, yArray, expectedError);
+        }
+        [TestMethod]
+        public void TestBasic()
+        {
+            ValueEval[] xValues = {
 			new NumberEval(1),
 			new NumberEval(2),
 		};
-		ValueEval areaEvalX = CreateAreaEval(xValues);
-		Confirm(SUM_SQUARES, areaEvalX, areaEvalX, 10.0);
-		Confirm(DIFF_SQUARES, areaEvalX, areaEvalX, 0.0);
-		Confirm(SUM_SQUARES_OF_DIFFS, areaEvalX, areaEvalX, 0.0);
+            ValueEval areaEvalX = CreateAreaEval(xValues);
+            Confirm(SUM_SQUARES, areaEvalX, areaEvalX, 10.0);
+            Confirm(DIFF_SQUARES, areaEvalX, areaEvalX, 0.0);
+            Confirm(SUM_SQUARES_OF_DIFFS, areaEvalX, areaEvalX, 0.0);
 
-		ValueEval[] yValues = {
+            ValueEval[] yValues = {
 			new NumberEval(3),
 			new NumberEval(4),
 		};
-		ValueEval areaEvalY = CreateAreaEval(yValues);
-		Confirm(SUM_SQUARES, areaEvalX, areaEvalY, 30.0);
-		Confirm(DIFF_SQUARES, areaEvalX, areaEvalY, -20.0);
-		Confirm(SUM_SQUARES_OF_DIFFS, areaEvalX, areaEvalY, 8.0);
-	}
+            ValueEval areaEvalY = CreateAreaEval(yValues);
+            Confirm(SUM_SQUARES, areaEvalX, areaEvalY, 30.0);
+            Confirm(DIFF_SQUARES, areaEvalX, areaEvalY, -20.0);
+            Confirm(SUM_SQUARES_OF_DIFFS, areaEvalX, areaEvalY, 8.0);
+        }
 
-	/**
-	 * number of items in array is not limited to 30
-	 */
-	public void TestLargeArrays() {
-		ValueEval[] xValues = CreateMockNumberArray(100, 3);
-		ValueEval[] yValues = CreateMockNumberArray(100, 2);
+        /**
+         * number of items in array is not limited to 30
+         */
+        [TestMethod]
+        public void TestLargeArrays()
+        {
+            ValueEval[] xValues = CreateMockNumberArray(100, 3);
+            ValueEval[] yValues = CreateMockNumberArray(100, 2);
 
-		Confirm(SUM_SQUARES, CreateAreaEval(xValues), CreateAreaEval(yValues), 1300.0);
-		Confirm(DIFF_SQUARES, CreateAreaEval(xValues), CreateAreaEval(yValues), 500.0);
-		Confirm(SUM_SQUARES_OF_DIFFS, CreateAreaEval(xValues), CreateAreaEval(yValues), 100.0);
-	}
+            Confirm(SUM_SQUARES, CreateAreaEval(xValues), CreateAreaEval(yValues), 1300.0);
+            Confirm(DIFF_SQUARES, CreateAreaEval(xValues), CreateAreaEval(yValues), 500.0);
+            Confirm(SUM_SQUARES_OF_DIFFS, CreateAreaEval(xValues), CreateAreaEval(yValues), 100.0);
+        }
 
 
-	private ValueEval[] CreateMockNumberArray(int size, double value) {
-		ValueEval[] result = new ValueEval[size];
-		for (int i = 0; i < result.Length; i++) {
-			result[i] = new NumberEval(value);
-		}
-		return result;
-	}
+        private ValueEval[] CreateMockNumberArray(int size, double value)
+        {
+            ValueEval[] result = new ValueEval[size];
+            for (int i = 0; i < result.Length; i++)
+            {
+                result[i] = new NumberEval(value);
+            }
+            return result;
+        }
 
-	private static ValueEval CreateAreaEval(ValueEval[] values) {
-		String refStr = "A1:A" + values.Length;
-		return EvalFactory.CreateAreaEval(refStr, values);
-	}
-
-	public void TestErrors() {
-		ValueEval[] xValues = {
+        private static ValueEval CreateAreaEval(ValueEval[] values)
+        {
+            String refStr = "A1:A" + values.Length;
+            return EvalFactory.CreateAreaEval(refStr, values);
+        }
+        [TestMethod]
+        public void TestErrors()
+        {
+            ValueEval[] xValues = {
 				ErrorEval.REF_INVALID,
 				new NumberEval(2),
 		};
-		ValueEval areaEvalX = CreateAreaEval(xValues);
-		ValueEval[] yValues = {
+            ValueEval areaEvalX = CreateAreaEval(xValues);
+            ValueEval[] yValues = {
 				new NumberEval(2),
 				ErrorEval.NULL_INTERSECTION,
 		};
-		ValueEval areaEvalY = CreateAreaEval(yValues);
-		ValueEval[] zValues = { // wrong size
+            ValueEval areaEvalY = CreateAreaEval(yValues);
+            ValueEval[] zValues = { // wrong size
 				new NumberEval(2),
 		};
-		ValueEval areaEvalZ = CreateAreaEval(zValues);
+            ValueEval areaEvalZ = CreateAreaEval(zValues);
 
-		// if either arg is an error, that error propagates
-		ConfirmError(ErrorEval.REF_INVALID, ErrorEval.NAME_INVALID, ErrorEval.REF_INVALID);
-		ConfirmError(areaEvalX, ErrorEval.NAME_INVALID, ErrorEval.NAME_INVALID);
-		ConfirmError(ErrorEval.NAME_INVALID, areaEvalX, ErrorEval.NAME_INVALID);
+            // if either arg is an error, that error propagates
+            ConfirmError(ErrorEval.REF_INVALID, ErrorEval.NAME_INVALID, ErrorEval.REF_INVALID);
+            ConfirmError(areaEvalX, ErrorEval.NAME_INVALID, ErrorEval.NAME_INVALID);
+            ConfirmError(ErrorEval.NAME_INVALID, areaEvalX, ErrorEval.NAME_INVALID);
 
-		// array sizes must match
-		ConfirmError(areaEvalX, areaEvalZ, ErrorEval.NA);
-		ConfirmError(areaEvalZ, areaEvalY, ErrorEval.NA);
+            // array sizes must match
+            ConfirmError(areaEvalX, areaEvalZ, ErrorEval.NA);
+            ConfirmError(areaEvalZ, areaEvalY, ErrorEval.NA);
 
-		// any error in an array item propagates up
-		ConfirmError(areaEvalX, areaEvalX, ErrorEval.REF_INVALID);
+            // any error in an array item propagates up
+            ConfirmError(areaEvalX, areaEvalX, ErrorEval.REF_INVALID);
 
-		// search for errors array by array, not pair by pair
-		ConfirmError(areaEvalX, areaEvalY, ErrorEval.REF_INVALID);
-		ConfirmError(areaEvalY, areaEvalX, ErrorEval.NULL_INTERSECTION);
-	}
+            // search for errors array by array, not pair by pair
+            ConfirmError(areaEvalX, areaEvalY, ErrorEval.REF_INVALID);
+            ConfirmError(areaEvalY, areaEvalX, ErrorEval.NULL_INTERSECTION);
+        }
+    }
+
 }
-

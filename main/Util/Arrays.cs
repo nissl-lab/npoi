@@ -54,6 +54,13 @@ namespace NPOI.Util
                 array[i] = defaultValue;
             }
         }
+        public static void Fill<T>(T[] array, T defaultValue)
+        {
+            for (int i = 0; i < array.Length; i++)
+            {
+                array[i] = defaultValue;
+            }
+        }
         /// <summary>
         /// Convert Array to ArrayList
         /// </summary>
