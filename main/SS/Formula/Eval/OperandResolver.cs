@@ -274,7 +274,7 @@ namespace NPOI.SS.Formula.Eval
                 text = text.Substring(1).Trim();
             }
 
-            if (!Char.IsDigit(text[0]))
+            if (text.Length==0||!Char.IsDigit(text[0]))
             {
                 // avoid using Exception to tell when string is not a number
                 return double.NaN;

@@ -15,6 +15,11 @@ namespace NPOI.HSSF.Record
 
         private short printSize;
 
+        public PrintSizeRecord()
+        { 
+        
+        }
+
         public PrintSizeRecord(RecordInputStream in1)
         {
             printSize = in1.ReadShort();
@@ -39,6 +44,12 @@ namespace NPOI.HSSF.Record
         public override short Sid
         {
             get { return sid; }
+        }
+        public override object Clone()
+        {
+            PrintSizeRecord pzr = new PrintSizeRecord();
+            pzr.printSize = this.printSize;
+            return pzr;
         }
     }
 }

@@ -27,22 +27,37 @@ namespace NPOI.SS.Formula.Functions
      * @author Amol S. Deshmukh &lt; amolweb at ya hoo dot com &gt;
      *
      */
-    public class LeftRight : TextFunction
+    public class LeftRight : Var1or2ArgFunction
     {
-
+        private static ValueEval DEFAULT_ARG1 = new NumberEval(1.0);
         private bool _isLeft;
         public LeftRight(bool isLeft)
         {
             _isLeft = isLeft;
         }
-        public override ValueEval EvaluateFunc(ValueEval[] args, int srcCellRow, int srcCellCol)
+        public override ValueEval Evaluate(int srcRowIndex, int srcColumnIndex, ValueEval arg0)
         {
-            if (args.Length != 2)
+            return Evaluate(srcRowIndex, srcColumnIndex, arg0, DEFAULT_ARG1);
+        }
+        public override ValueEval Evaluate(int srcRowIndex, int srcColumnIndex, ValueEval arg0,
+				ValueEval arg1)
+        {
+            String arg;
+            int index;
+            try
+            {
+                arg = TextFunction.EvaluateStringArg(arg0, srcRowIndex, srcColumnIndex);
+                index = TextFunction.EvaluateIntArg(arg1, srcRowIndex, srcColumnIndex);
+            }
+            catch (EvaluationException e)
+            {
+                return e.GetErrorEval();
+            }
+
+            if (index < 0)
             {
                 return ErrorEval.VALUE_INVALID;
             }
-            String arg = EvaluateStringArg(args[0], srcCellRow, srcCellCol);
-            int index = EvaluateIntArg(args[1], srcCellRow, srcCellCol);
 
             String result;
             if (_isLeft)

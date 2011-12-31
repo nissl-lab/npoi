@@ -76,7 +76,11 @@ namespace NPOI.SS.Formula.Functions
                 return e.GetErrorEval();
             }
         }
-
+        internal static bool IsPrintable(char c)
+        {
+            int charCode = (int)c;
+            return charCode >= 32;
+        }
         public abstract ValueEval EvaluateFunc(ValueEval[] args, int srcCellRow, int srcCellCol);
 
         /* ---------------------------------------------------------------------- */
@@ -142,5 +146,9 @@ namespace NPOI.SS.Formula.Functions
         ///</para>
         ///</summary>
         public static Function SEARCH = new SearchFind(false);
+
+        public static Function CLEAN = new Clean();
+        public static Function CHAR = new CHAR();
+
     }
 }

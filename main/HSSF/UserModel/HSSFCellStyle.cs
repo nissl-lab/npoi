@@ -31,7 +31,7 @@ namespace NPOI.HSSF.UserModel
     /// @author  Andrew C. Oliver (acoliver at apache dot org)
     /// @author Jason Height (jheight at chariot dot net dot au)
     /// </summary>
-    public class HSSFCellStyle : NPOI.SS.UserModel.ICellStyle
+    public class HSSFCellStyle : ICellStyle
     {
         private ExtendedFormatRecord format = null;
         private short index = 0;
@@ -568,7 +568,6 @@ namespace NPOI.HSSF.UserModel
                 CheckDefaultBackgroundFills();
             }
         }
-
         /**
  * Gets the name of the user defined style.
  * Returns null for built in styles, and
@@ -602,7 +601,7 @@ namespace NPOI.HSSF.UserModel
                 {
                     throw new ArgumentException("Unable to set user specified style names for built in styles!");
                 }
-                sr.Name = value;
+                sr.Name  = value;
             }
         }
 

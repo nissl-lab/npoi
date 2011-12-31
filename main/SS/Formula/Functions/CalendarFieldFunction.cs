@@ -1,7 +1,7 @@
 /* ====================================================================
    Licensed to the Apache Software Foundation (ASF) under one or more
    contributor license agreements.  See the NOTICE file distributed with
-   this work for additional information regarding copyright ownership.
+   this work for Additional information regarding copyright ownership.
    The ASF licenses this file to You under the Apache License, Version 2.0
    (the "License"); you may not use this file except in compliance with
    the License.  You may obtain a copy of the License at
@@ -17,51 +17,45 @@
 
 namespace NPOI.SS.Formula.Functions
 {
-    using System;
     using NPOI.SS.Formula.Eval;
-    
-
-    //import java.util.Calendar;
-    //import java.util.Date;
-    //import java.util.GregorianCalendar;
+    using NPOI.SS.UserModel;
+    using System;
 
     /**
-     * Implementation of Excel functions DAY, MONTH and YEAR
-     * 
-     * 
-     * @author Guenter Kickinger g.kickinger@gmx.net
+     * Implementation of Excel functions Date parsing functions:
+     *  Date - DAY, MONTH and YEAR
+     *  Time - HOUR, MINUTE and SECOND
      */
-    public class CalendarFieldFunction : Function
+    public class CalendarFieldFunction : Fixed1ArgFunction
     {
-        public const int YEAR_ID=0x01;
-        public const int MONTH_ID=0x02;
-        public const int DAY_OF_MONTH_ID=0x03;
+        public const int YEAR_ID = 0x01;
+        public const int MONTH_ID = 0x02;
+        public const int DAY_OF_MONTH_ID = 0x03;
+        public const int HOUR_OF_DAY_ID = 0x04;
+        public const int MINUTE_ID = 0x05;
+        public const int SECOND_ID = 0x06;
 
-        public static Function YEAR = new CalendarFieldFunction(YEAR_ID, false);
-        public static Function MONTH = new CalendarFieldFunction(MONTH_ID, false);
-        public static Function DAY = new CalendarFieldFunction(DAY_OF_MONTH_ID, false);
+        public static Function YEAR = new CalendarFieldFunction(YEAR_ID);
+        public static Function MONTH = new CalendarFieldFunction(MONTH_ID);
+        public static Function DAY = new CalendarFieldFunction(DAY_OF_MONTH_ID);
+        public static Function HOUR = new CalendarFieldFunction(HOUR_OF_DAY_ID);
+        public static Function MINUTE = new CalendarFieldFunction(MINUTE_ID);
+        public static Function SECOND = new CalendarFieldFunction(SECOND_ID);
 
         private int _dateFieldId;
-        private bool _needsOneBaseAdjustment;
 
-        private CalendarFieldFunction(int dateFieldId, bool needsOneBaseAdjustment)
+        private CalendarFieldFunction(int dateFieldId)
         {
             _dateFieldId = dateFieldId;
-            _needsOneBaseAdjustment = needsOneBaseAdjustment;
         }
 
-        public ValueEval Evaluate(ValueEval[] operands, int srcCellRow, int srcCellCol)
+        public override ValueEval Evaluate(int srcRowIndex, int srcColumnIndex, ValueEval arg0)
         {
-            if (operands.Length != 1)
-            {
-                return ErrorEval.VALUE_INVALID;
-            }
-
-            int val;
+            double val;
             try
             {
-                ValueEval ve = OperandResolver.GetSingleValue(operands[0], srcCellRow, srcCellCol);
-                val = OperandResolver.CoerceValueToInt(ve);
+                ValueEval ve = OperandResolver.GetSingleValue(arg0, srcRowIndex, srcColumnIndex);
+                val = OperandResolver.CoerceValueToDouble(ve);
             }
             catch (EvaluationException e)
             {
@@ -74,9 +68,9 @@ namespace NPOI.SS.Formula.Functions
             return new NumberEval(GetCalField(val));
         }
 
-        private int GetCalField(int serialDay)
+        private int GetCalField(double serialDate)
         {
-            if (serialDay == 0)
+            if (serialDate == 0)
             {
                 // Special weird case
                 // day zero should be 31-Dec-1899,  but Excel seems to think it is 0-Jan-1900
@@ -88,11 +82,11 @@ namespace NPOI.SS.Formula.Functions
                 }
                 throw new InvalidOperationException("bad date field " + _dateFieldId);
             }
-            DateTime d = NPOI.SS.UserModel.DateUtil.GetJavaDate(serialDay, false); // TODO fix 1900/1904 problem
+            DateTime d = DateUtil.GetJavaDate(serialDate, false); // TODO fix 1900/1904 problem
 
             //Calendar c = new GregorianCalendar();
             //c.setTime(d);
-            int result=0;
+            int result = 0;
             if (_dateFieldId == YEAR_ID)
             {
                 result = d.Year;
@@ -105,11 +99,21 @@ namespace NPOI.SS.Formula.Functions
             {
                 result = d.Day;
             }
-            if (_needsOneBaseAdjustment)
+            else if (_dateFieldId == HOUR_OF_DAY_ID)
             {
-                result++;
+                result = d.Hour;
+            }
+            else if (_dateFieldId == MINUTE_ID)
+            {
+                result = d.Minute;
+            }
+            else if (_dateFieldId == SECOND_ID)
+            {
+                result = d.Second;
             }
             return result;
         }
     }
 }
+
+

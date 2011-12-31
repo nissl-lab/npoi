@@ -666,6 +666,7 @@
     <Compile Include="SS\Formula\Functions\MultiOperandNumericFunction.cs" />
     <Compile Include="SS\Formula\Functions\Na.cs" />
     <Compile Include="SS\Formula\Functions\NotImplementedFunction.cs" />
+    <Compile Include="SS\Formula\Functions\Now.cs" />
     <Compile Include="SS\Formula\Functions\Nper.cs" />
     <Compile Include="SS\Formula\Functions\Npv.cs" />
     <Compile Include="SS\Formula\Functions\Numeric\Abs.cs" />
@@ -707,6 +708,8 @@
     <Compile Include="SS\Formula\Functions\Sumx2py2.cs" />
     <Compile Include="SS\Formula\Functions\Sumxmy2.cs" />
     <Compile Include="SS\Formula\Functions\T.cs" />
+    <Compile Include="SS\Formula\Functions\Text\CHAR.cs" />
+    <Compile Include="SS\Formula\Functions\Text\Clean.cs" />
     <Compile Include="SS\Formula\Functions\Text\Concatenate.cs" />
     <Compile Include="SS\Formula\Functions\Text\Exact.cs" />
     <Compile Include="SS\Formula\Functions\Text\LeftRight.cs" />
@@ -720,6 +723,7 @@
     <Compile Include="SS\Formula\Functions\Text\TextFunction.cs" />
     <Compile Include="SS\Formula\Functions\Text\Trim.cs" />
     <Compile Include="SS\Formula\Functions\Text\Upper.cs" />
+    <Compile Include="SS\Formula\Functions\TimeFunc.cs" />
     <Compile Include="SS\Formula\Functions\Today.cs" />
     <Compile Include="SS\Formula\Functions\Value.cs" />
     <Compile Include="SS\Formula\Functions\Var1or2ArgFunction.cs" />
