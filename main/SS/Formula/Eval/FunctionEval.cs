@@ -298,7 +298,7 @@ namespace NPOI.SS.Formula.Eval
             retval[214] = new NotImplementedFunction(); // ASC
             retval[215] = new NotImplementedFunction(); // DBCS
             retval[216] = new NotImplementedFunction(); // RANK
-            retval[219] = new NotImplementedFunction(); // AddRESS
+            retval[219] = new Address(); // AddRESS
             retval[220] = new Days360(); // DAYS360
             retval[221] = new NotImplementedFunction(); // TODAY
             retval[222] = new NotImplementedFunction(); // VDB

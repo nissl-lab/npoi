@@ -601,6 +601,7 @@
     <Compile Include="SS\Formula\FormulaRenderingWorkbook.cs" />
     <Compile Include="SS\Formula\FormulaType.cs" />
     <Compile Include="SS\Formula\FormulaUsedBlankCellSet.cs" />
+    <Compile Include="SS\Formula\Functions\Address.cs" />
     <Compile Include="SS\Formula\Functions\AggregateFunction.cs" />
     <Compile Include="SS\Formula\Functions\Boolean\And.cs" />
     <Compile Include="SS\Formula\Functions\Boolean\BooleanFunction.cs" />

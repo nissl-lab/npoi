@@ -2646,8 +2646,7 @@ using NPOI.POIFS.FileSystem;
             ISheet s = wb.GetSheetAt(0);
             IRow r17 = s.GetRow(16);
             IRow r18 = s.GetRow(17);
-            throw new NotImplementedException("not found class HSSFDataFormatter");
-            /*HSSFDataFormatter df = new HSSFDataFormatter();
+            DataFormatter df = new DataFormatter();
 
             Assert.AreEqual(10.0, r17.GetCell(1).NumericCellValue);
             Assert.AreEqual(20.0, r17.GetCell(2).NumericCellValue);
@@ -2655,9 +2654,9 @@ using NPOI.POIFS.FileSystem;
             Assert.AreEqual("GENERAL", r17.GetCell(1).CellStyle.GetDataFormatString());
             Assert.AreEqual("GENERAL", r17.GetCell(2).CellStyle.GetDataFormatString());
             Assert.AreEqual("GENERAL", r17.GetCell(3).CellStyle.GetDataFormatString());
-            Assert.AreEqual("10", df.formatCellValue(r17.GetCell(1)));
-            Assert.AreEqual("20", df.formatCellValue(r17.GetCell(2)));
-            Assert.AreEqual("20", df.formatCellValue(r17.GetCell(3)));
+            Assert.AreEqual("10", df.FormatCellValue(r17.GetCell(1)));
+            Assert.AreEqual("20", df.FormatCellValue(r17.GetCell(2)));
+            Assert.AreEqual("20", df.FormatCellValue(r17.GetCell(3)));
 
             Assert.AreEqual(16.0, r18.GetCell(1).NumericCellValue);
             Assert.AreEqual(35.0, r18.GetCell(2).NumericCellValue);
@@ -2665,9 +2664,9 @@ using NPOI.POIFS.FileSystem;
             Assert.AreEqual("GENERAL", r18.GetCell(1).CellStyle.GetDataFormatString());
             Assert.AreEqual("GENERAL", r18.GetCell(2).CellStyle.GetDataFormatString());
             Assert.AreEqual("GENERAL", r18.GetCell(3).CellStyle.GetDataFormatString());
-            Assert.AreEqual("16", df.formatCellValue(r18.GetCell(1)));
-            Assert.AreEqual("35", df.formatCellValue(r18.GetCell(2)));
-            Assert.AreEqual("123", df.formatCellValue(r18.GetCell(3)));*/
+            Assert.AreEqual("16", df.FormatCellValue(r18.GetCell(1)));
+            Assert.AreEqual("35", df.FormatCellValue(r18.GetCell(2)));
+            Assert.AreEqual("123", df.FormatCellValue(r18.GetCell(3)));
         }
         public void Test50779()
         {

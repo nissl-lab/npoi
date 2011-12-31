@@ -46,28 +46,32 @@ namespace TestCases.SS.Formula.Functions
         [TestMethod]
         public void TestTextWithDeciamlFormatSecondArg()
         {
-            throw new NotImplementedException();
-            /*ValueEval numArg = new NumberEval(321321.321);
+            ValueEval numArg = new NumberEval(321321.321);
             ValueEval formatArg = new StringEval("#,###.00000");
             ValueEval[] args = { numArg, formatArg };
-            ValueEval result = T.TEXT.Evaluate(args, -1, (short)-1);
-            char groupSeparator = new DecimalFormatSymbols(Locale.GetDefault()).GetGroupingSeparator();
-            char decimalSeparator = new DecimalFormatSymbols(Locale.GetDefault()).GetDecimalSeparator();
+            ValueEval result = TextFunction.TEXT.Evaluate(args, -1, (short)-1);
+            //char groupSeparator = new DecimalFormatSymbols(Locale.GetDefault()).GetGroupingSeparator();
+            //char decimalSeparator = new DecimalFormatSymbols(Locale.GetDefault()).GetDecimalSeparator();
+            
+            System.Globalization.CultureInfo ci =  System.Globalization.CultureInfo.InstalledUICulture;
+            string groupSeparator = ci.NumberFormat.NumberGroupSeparator;
+            string decimalSeparator = ci.NumberFormat.NumberDecimalSeparator; ;
+
             ValueEval testResult = new StringEval("321" + groupSeparator + "321" + decimalSeparator + "32100");
             Assert.AreEqual(testResult.ToString(), result.ToString());
             numArg = new NumberEval(321.321);
             formatArg = new StringEval("00000.00000");
             args[0] = numArg;
             args[1] = formatArg;
-            result = T.TEXT.Evaluate(args, -1, (short)-1);
+            result = TextFunction.TEXT.Evaluate(args, -1, (short)-1);
             testResult = new StringEval("00321" + decimalSeparator + "32100");
             Assert.AreEqual(testResult.ToString(), result.ToString());
 
             formatArg = new StringEval("$#.#");
             args[1] = formatArg;
-            result = T.TEXT.Evaluate(args, -1, (short)-1);
+            result = TextFunction.TEXT.Evaluate(args, -1, (short)-1);
             testResult = new StringEval("$321" + decimalSeparator + "3");
-            Assert.AreEqual(testResult.ToString(), result.ToString());*/
+            Assert.AreEqual(testResult.ToString(), result.ToString());
         }
         [TestMethod]
         public void TestTextWithFractionFormatSecondArg()
