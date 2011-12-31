@@ -67,7 +67,7 @@ namespace NPOI.SS.Formula.Atp
                         basis = EvaluateIntArg(args[2], srcCellRow, srcCellCol);
                         break;
                     case 2:
-                        basis = EvaluateIntArg(args[2], srcCellRow, srcCellCol);
+                        //basis = EvaluateIntArg(args[2], srcCellRow, srcCellCol);
                         break;
                     default:
                         return ErrorEval.VALUE_INVALID;

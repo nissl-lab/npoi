@@ -45,7 +45,7 @@ namespace NPOI.SS.Formula.PTG
         private int field_2_col;
         private static BitField rowRelative = BitFieldFactory.GetInstance(0x8000);
         private static BitField colRelative = BitFieldFactory.GetInstance(0x4000);
-        private static BitField column = BitFieldFactory.GetInstance(0x00FF);
+        private static BitField column = BitFieldFactory.GetInstance(0x3FFF);
 
         protected RefPtgBase()
         {

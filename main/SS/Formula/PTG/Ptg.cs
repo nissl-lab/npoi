@@ -94,11 +94,11 @@ namespace NPOI.SS.Formula.PTG
 
             Ptg retval = CreateClassifiedPtg(id, in1);
 
-            if (id > 0x60)
+            if (id >= 0x60)
             {
                 retval.PtgClass = CLASS_ARRAY;
             }
-            else if (id > 0x40)
+            else if (id >= 0x40)
             {
                 retval.PtgClass = CLASS_VALUE;
             }

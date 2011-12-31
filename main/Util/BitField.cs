@@ -149,7 +149,7 @@ namespace NPOI.Util
         /// <returns>the selected bits, shifted right appropriately</returns>
         public int GetValue(int holder)
         {
-            return (this.GetRawValue(holder) >> this._shift_count);
+            return Operator.UnsignedRightShift(this.GetRawValue(holder) , this._shift_count);
         }
 
         /// <summary>

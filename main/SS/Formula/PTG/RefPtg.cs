@@ -37,7 +37,8 @@ namespace NPOI.SS.Formula.PTG
          * Takes in a String representation of a cell reference and Fills out the
          * numeric fields.
          */
-        public RefPtg(String cellref) : base(cellref)
+        public RefPtg(String cellref)
+            : base(new CellReference(cellref))
         {
 
         }

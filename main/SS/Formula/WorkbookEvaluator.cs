@@ -242,19 +242,24 @@ namespace NPOI.SS.Formula
         private ValueEval EvaluateAny(EvaluationCell srcCell, int sheetIndex,
                     int rowIndex, int columnIndex, EvaluationTracker tracker)
         {
-
+            bool shouldCellDependencyBeRecorded = _stabilityClassifier == null ? true
+                    : !_stabilityClassifier.IsCellFinal(sheetIndex, rowIndex, columnIndex);
+            ValueEval result;
             if (srcCell == null || srcCell.CellType != CellType.FORMULA)
             {
-                ValueEval result = GetValueFromNonFormulaCell(srcCell);
-                tracker.AcceptPlainValueDependency(_workbookIx, sheetIndex, rowIndex, columnIndex, result);
+                result = GetValueFromNonFormulaCell(srcCell);
+                if (shouldCellDependencyBeRecorded)
+                {
+                    tracker.AcceptPlainValueDependency(_workbookIx, sheetIndex, rowIndex, columnIndex, result);
+                }
                 return result;
             }
 
             FormulaCellCacheEntry cce = _cache.GetOrCreateFormulaCellEntry(srcCell);
-            //if (cce.IsInputSensitive)
-            //{
+            if (shouldCellDependencyBeRecorded || cce.IsInputSensitive)
+            {
                 tracker.AcceptFormulaDependency(cce);
-            //}
+            }
             IEvaluationListener evalListener = _evaluationListener;
             if (cce.GetValue() == null)
             {
@@ -266,8 +271,6 @@ namespace NPOI.SS.Formula
 
                 try
                 {
-                    ValueEval result;
-
                     Ptg[] ptgs = _workbook.GetFormulaTokens(srcCell);
                     if (evalListener == null)
                     {
@@ -305,7 +308,12 @@ namespace NPOI.SS.Formula
                 CellReference cr = new CellReference(rowIndex, columnIndex);
                 LogDebug("Evaluated " + sheetName + "!" + cr.FormatAsString() + " To " + cce.GetValue().ToString());
             }
-            return cce.GetValue();
+            // Usually (result === cce.getValue())
+            // But sometimes: (result==ErrorEval.CIRCULAR_REF_ERROR, cce.getValue()==null)
+            // When circular references are detected, the cache entry is only updated for
+            // the top evaluation frame
+            //return cce.GetValue();
+            return result;
         }
         /**
  * Adds the current cell reference to the exception for easier debugging.
