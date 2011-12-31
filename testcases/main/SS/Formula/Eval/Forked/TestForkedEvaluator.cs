@@ -17,103 +17,120 @@
 
 namespace NPOI.SS.Formula.Eval.Forked
 {
-using NPOI.SS.Formula.Eval;
-using NPOI.HSSF.UserModel;
-using NPOI.SS.Formula;
-using NPOI.SS.UserModel;
+    using System;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NPOI.HSSF.UserModel;
+    using NPOI.SS.Formula;
+    using NPOI.SS.Formula.Eval;
+    using NPOI.SS.UserModel;
+    using TestCases.SS.Formula.Eval.Forked;
 
-/**
- * @author Josh Micich
- */
-public class TestForkedEvaluator  {
-	/**
-	 * Set up a calculation workbook with input cells nicely segregated on a
-	 * sheet called "Inputs"
-	 */
-	private static HSSFWorkbook CreateWorkbook() {
-		HSSFWorkbook wb = new HSSFWorkbook();
-		ISheet sheet1 = wb.CreateSheet("Inputs");
-		ISheet sheet2 = wb.CreateSheet("Calculations");
-		IRow row;
-		row = sheet2.CreateRow(0);
-		row.CreateCell(0).CellFormula=("B1*Inputs!A1-Inputs!B1");
-		row.CreateCell(1).SetCellValue(5.0); // Calculations!B1
-
-		// some default input values
-		row = sheet1.CreateRow(0);
-		row.CreateCell(0).SetCellValue(2.0); // Inputs!A1
-		row.CreateCell(1).SetCellValue(3.0); // Inputs!B1
-		return wb;
-	}
-    private class stabilityClassifier:IStabilityClassifier
+    /**
+     * @author Josh Micich
+     */
+    [TestClass]
+    public class TestForkedEvaluator
     {
-    public override bool  IsCellFinal(int sheetIndex, int rowIndex, int columnIndex)
-{
- 	return sheetIndex == 1;
-}
-}
-	/**
-	 * Shows a basic use-case for {@link ForkedEvaluator}
-	 */
-	public void TestBasic() {
-		HSSFWorkbook wb = CreateWorkbook();
+        /**
+         * Set up a calculation workbook with input cells nicely segregated on a
+         * sheet called "Inputs"
+         */
+        private static HSSFWorkbook CreateWorkbook()
+        {
+            HSSFWorkbook wb = new HSSFWorkbook();
+            ISheet sheet1 = wb.CreateSheet("Inputs");
+            ISheet sheet2 = wb.CreateSheet("Calculations");
+            IRow row;
+            row = sheet2.CreateRow(0);
+            row.CreateCell(0).CellFormula = ("B1*Inputs!A1-Inputs!B1");
+            row.CreateCell(1).SetCellValue(5.0); // Calculations!B1
 
-		// The stability classifier is useful to reduce memory consumption of caching logic
-		IStabilityClassifier stabilityClassifier = new stabilityClassifier();
+            // some default input values
+            row = sheet1.CreateRow(0);
+            row.CreateCell(0).SetCellValue(2.0); // Inputs!A1
+            row.CreateCell(1).SetCellValue(3.0); // Inputs!B1
+            return wb;
+        }
+        private class stabilityClassifier : IStabilityClassifier
+        {
+            public override bool IsCellFinal(int sheetIndex, int rowIndex, int columnIndex)
+            {
+                return sheetIndex == 1;
+            }
+        }
+        /**
+         * Shows a basic use-case for {@link ForkedEvaluator}
+         */
+        [TestMethod]
+        public void TestBasic()
+        {
+            HSSFWorkbook wb = CreateWorkbook();
 
-		ForkedEvaluator fe1 = ForkedEvaluator.Create(wb, stabilityClassifier, null);
-		ForkedEvaluator fe2 = ForkedEvaluator.Create(wb, stabilityClassifier, null);
+            // The stability classifier is useful to reduce memory consumption of caching logic
+            IStabilityClassifier stabilityClassifier = new stabilityClassifier();
 
-		// fe1 and fe2 can be used concurrently on separate threads
+            ForkedEvaluator fe1 = ForkedEvaluator.Create(wb, stabilityClassifier, null);
+            ForkedEvaluator fe2 = ForkedEvaluator.Create(wb, stabilityClassifier, null);
 
-		fe1.updateCell("Inputs", 0, 0, new NumberEval(4.0));
-		fe1.updateCell("Inputs", 0, 1, new NumberEval(1.1));
+            // fe1 and fe2 can be used concurrently on separate threads
 
-		fe2.updateCell("Inputs", 0, 0, new NumberEval(1.2));
-		fe2.updateCell("Inputs", 0, 1, new NumberEval(2.0));
+            fe1.updateCell("Inputs", 0, 0, new NumberEval(4.0));
+            fe1.updateCell("Inputs", 0, 1, new NumberEval(1.1));
 
-		Assert.AreEqual(18.9, ((NumberEval) fe1.Evaluate("Calculations", 0, 0)).GetNumberValue(), 0.0);
-		Assert.AreEqual(4.0, ((NumberEval) fe2.Evaluate("Calculations", 0, 0)).GetNumberValue(), 0.0);
-		fe1.updateCell("Inputs", 0, 0, new NumberEval(3.0));
-		Assert.AreEqual(13.9, ((NumberEval) fe1.Evaluate("Calculations", 0, 0)).GetNumberValue(), 0.0);
-	}
+            fe2.updateCell("Inputs", 0, 0, new NumberEval(1.2));
+            fe2.updateCell("Inputs", 0, 1, new NumberEval(2.0));
 
-	/**
-	 * As of Sep 2009, the Forked Evaluator can update values from existing cells (this is because
-	 * the underlying 'master' cell is used as a key into the calculation cache.  Prior to the fix
-	 * for this bug, an attempt to update a missing cell would result in NPE.  This junit Tests for
-	 * a more meaningful error message.<br/>
-	 *
-	 * An alternate solution might involve allowing empty cells to be Created as necessary.  That
-	 * was considered less desirable because so far, the underlying 'master' workbook is strictly
-	 * <i>read-only</i> with respect to the ForkedEvaluator.
-	 */
-	public void TestMissingInputCell() {
-		HSSFWorkbook wb = CreateWorkbook();
+            Assert.AreEqual(18.9, ((NumberEval)fe1.Evaluate("Calculations", 0, 0)).NumberValue, 0.0);
+            Assert.AreEqual(4.0, ((NumberEval)fe2.Evaluate("Calculations", 0, 0)).NumberValue, 0.0);
+            fe1.updateCell("Inputs", 0, 0, new NumberEval(3.0));
+            Assert.AreEqual(13.9, ((NumberEval)fe1.Evaluate("Calculations", 0, 0)).NumberValue, 0.0);
+        }
 
-		ForkedEvaluator fe = ForkedEvaluator.Create(wb, null, null);
+        /**
+         * As of Sep 2009, the Forked Evaluator can update values from existing cells (this is because
+         * the underlying 'master' cell is used as a key into the calculation cache.  Prior to the fix
+         * for this bug, an attempt to update a missing cell would result in NPE.  This junit Tests for
+         * a more meaningful error message.<br/>
+         *
+         * An alternate solution might involve allowing empty cells to be Created as necessary.  That
+         * was considered less desirable because so far, the underlying 'master' workbook is strictly
+         * <i>read-only</i> with respect to the ForkedEvaluator.
+         */
+        [TestMethod]
+        public void TestMissingInputCell()
+        {
+            HSSFWorkbook wb = CreateWorkbook();
 
-		// attempt update input at cell A2 (which is missing)
-		try {
-			fe.updateCell("Inputs", 1, 0, new NumberEval(4.0));
-			throw new AssertFailedException(
-					"Expected exception to be thrown due to missing input cell");
-		} catch (NullPointerException e) {
-			StackTraceElement[] stes = e.GetStackTrace();
-			if (stes[0].GetMethodName().Equals("getIdentityKey")) {
-				throw new AssertFailedException("Identified bug with update of missing input cell");
-			}
-			throw e;
-		} catch (UnsupportedOperationException e) {
-			if (e.GetMessage().Equals(
-					"Underlying cell 'A2' is missing in master sheet.")) {
-				// expected during successful Test
-			} else {
-				throw e;
-			}
-		}
-	}
-}
+            ForkedEvaluator fe = ForkedEvaluator.Create(wb, null, null);
+
+            // attempt update input at cell A2 (which is missing)
+            try
+            {
+                fe.updateCell("Inputs", 1, 0, new NumberEval(4.0));
+                throw new AssertFailedException(
+                        "Expected exception to be thrown due to missing input cell");
+            }
+            catch (NullReferenceException e)
+            {
+                if (e.TargetSite.Equals("IdentityKey"))
+                {
+                    throw new AssertFailedException("Identified bug with update of missing input cell");
+                }
+                throw e;
+            }
+            catch (InvalidOperationException e)
+            {
+                if (e.Message.Equals(
+                        "Underlying cell 'A2' is missing in master sheet."))
+                {
+                    // expected during successful Test
+                }
+                else
+                {
+                    throw e;
+                }
+            }
+        }
+    }
 
 }

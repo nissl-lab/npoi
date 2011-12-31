@@ -450,9 +450,11 @@
     <Compile Include="SS\Formula\Functions\TestAverage.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="SS\Formula\Functions\TestCalendarFieldFunction.cs" />
     <Compile Include="SS\Formula\Functions\TestClean.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="SS\Formula\Functions\TestCountFuncs.cs" />
     <Compile Include="SS\Formula\Functions\TestDate.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -555,7 +557,7 @@
   <ItemGroup>
     <Folder Include="DDF\data\" />
     <Folder Include="HSSF\data\" />
-    <Folder Include="HSSF\Record\Formula\Functions\" />
+    <Folder Include="HSSF\Record\Formula\" />
     <Folder Include="SS\Formula\Eval\Forked\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

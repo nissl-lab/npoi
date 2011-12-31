@@ -32,11 +32,12 @@ namespace TestCases.SS.Formula.Functions
      *
      * @author Josh Micich
      */
+    [TestClass]
     public class TestCountFuncs
     {
 
         private static String NULL = null;
-
+        [TestMethod]
         public void TestCountBlank()
         {
 
@@ -65,7 +66,7 @@ namespace TestCases.SS.Formula.Functions
             range = EvalFactory.CreateAreaEval("A1:B3", values);
             ConfirmCountBlank(2, range);
         }
-
+        [TestMethod]
         public void TestCountA()
         {
 
@@ -96,7 +97,7 @@ namespace TestCases.SS.Formula.Functions
 		};
             ConfirmCountA(59, args);
         }
-
+        [TestMethod]
         public void TestCountIf()
         {
 
@@ -134,7 +135,7 @@ namespace TestCases.SS.Formula.Functions
             // when criteria is an expression (starting with a comparison operator)
             ConfirmCountIf(2, range, new StringEval(">0.5"));
         }
-
+        [TestMethod]
         public void TestCriteriaPredicateNe_Bug46647()
         {
             I_MatchPredicate mp = Countif.CreateCriteriaPredicate(new StringEval("<>aa"), 0, 0);
@@ -191,6 +192,7 @@ namespace TestCases.SS.Formula.Functions
         /**
          * special case where the criteria argument is a cell reference
          */
+        [TestMethod]
         public void TestCountIfWithCriteriaReference()
         {
 
@@ -239,6 +241,7 @@ namespace TestCases.SS.Formula.Functions
         /**
          * the criteria arg is mostly handled by {@link OperandResolver#getSingleValue(NPOI.SS.Formula.Eval.ValueEval, int, int)}}
          */
+        [TestMethod]
         public void TestCountifAreaCriteria()
         {
             int srcColIx = 2; // anything but column A
@@ -274,7 +277,7 @@ namespace TestCases.SS.Formula.Functions
             ConfirmPredicate(false, mp, ErrorEval.DIV_ZERO);
             ConfirmPredicate(true, mp, ErrorEval.VALUE_INVALID);
         }
-
+        [TestMethod]
         public void TestCountifEmptyStringCriteria()
         {
             I_MatchPredicate mp;
@@ -294,7 +297,7 @@ namespace TestCases.SS.Formula.Functions
             ConfirmPredicate(false, mp, NULL);
             ConfirmPredicate(true, mp, "");
         }
-
+        [TestMethod]
         public void TestCountifComparisons()
         {
             I_MatchPredicate mp;
@@ -337,6 +340,7 @@ namespace TestCases.SS.Formula.Functions
          * the criteria arg value can be an error code (the error does not
          * propagate to the COUNTIF result).
          */
+        [TestMethod]
         public void TestCountifErrorCriteria()
         {
             I_MatchPredicate mp;
@@ -361,7 +365,7 @@ namespace TestCases.SS.Formula.Functions
             ConfirmPredicate(false, mp, ErrorEval.DIV_ZERO);
             ConfirmPredicate(false, mp, ErrorEval.REF_INVALID);
         }
-
+        [TestMethod]
         public void TestWildCards()
         {
             I_MatchPredicate mp;
@@ -394,6 +398,7 @@ namespace TestCases.SS.Formula.Functions
             ConfirmPredicate(true, mp, "12812");
             ConfirmPredicate(false, mp, "128812");
         }
+        [TestMethod]
         public void TestNotQuiteWildCards()
         {
             I_MatchPredicate mp;
@@ -423,19 +428,19 @@ namespace TestCases.SS.Formula.Functions
         }
         private static void ConfirmPredicate(bool expectedResult, I_MatchPredicate matchPredicate, String value)
         {
-            ValueEval ev = (value == null) ? BlankEval.instance : new StringEval(value);
+            ValueEval ev = (value == null) ? BlankEval.instance : (ValueEval)new StringEval(value);
             Assert.AreEqual(expectedResult, matchPredicate.Matches(ev));
         }
         private static void ConfirmPredicate(bool expectedResult, I_MatchPredicate matchPredicate, ErrorEval value)
         {
             Assert.AreEqual(expectedResult, matchPredicate.Matches(value));
         }
-
+        [TestMethod]
         public void TestCountifFromSpreadsheet()
         {
             TestCountFunctionFromSpreadsheet("countifExamples.xls", 1, 2, 3, "countif");
         }
-
+        [TestMethod]
         public void TestCountBlankFromSpreadsheet()
         {
             TestCountFunctionFromSpreadsheet("countblankExamples.xls", 1, 3, 4, "countblank");
