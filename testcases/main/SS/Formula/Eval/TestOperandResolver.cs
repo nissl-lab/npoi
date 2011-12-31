@@ -46,7 +46,7 @@ namespace TestCases.SS.Formula.Eval
                 throw new AssertFailedException("Identified bug 48472");
             }
 
-            Assert.AreEqual(null, ResolvedValue);
+            Assert.AreEqual(double.NaN, ResolvedValue);
 
         }
         [TestMethod]
@@ -78,7 +78,7 @@ namespace TestCases.SS.Formula.Eval
 
             foreach (String value in values)
             {
-                Assert.IsTrue(!Double.IsNaN(OperandResolver.ParseDouble(value)));
+                Assert.AreNotEqual(double.NaN,OperandResolver.ParseDouble(value));  //this bug is caused by double.Parse
                 Assert.AreEqual(OperandResolver.ParseDouble(value), Double.Parse(value));
             }
 
@@ -94,11 +94,11 @@ namespace TestCases.SS.Formula.Eval
         {
             System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
 
-            String[] values = new String[] { "-", "ABC", "-X", "1E5a", "InfInity", "NaN", ".5F", "1,000" };
+            String[] values = new String[] { "-", "ABC", "-X", "1E5a", "Infinity", "NaN", ".5F" };    //, "1,000" };
 
             foreach (String value in values)
             {
-                Assert.AreEqual(null, OperandResolver.ParseDouble(value));
+                Assert.AreEqual(double.NaN, OperandResolver.ParseDouble(value));
             }
 
         }

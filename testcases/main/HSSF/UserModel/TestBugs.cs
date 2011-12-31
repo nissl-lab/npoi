@@ -2522,12 +2522,12 @@ using NPOI.POIFS.FileSystem;
             ISheet s = wb.CreateSheet("Test");
             IRow r = s.CreateRow(0);
             ICell c = r.CreateCell(0);
+
+            HSSFCellStyle cs1 = (HSSFCellStyle)wb.CreateCellStyle();
+            HSSFCellStyle cs2 = (HSSFCellStyle)wb.CreateCellStyle();
+            HSSFCellStyle cs3 = (HSSFCellStyle)wb.CreateCellStyle();
             
-            ICellStyle cs1 = wb.CreateCellStyle();
-            ICellStyle cs2 = wb.CreateCellStyle();
-            ICellStyle cs3 = wb.CreateCellStyle();
-            throw new NotImplementedException("not find property UserStyleName");
-            /*Assert.AreEqual(21, cs1.Index);
+            Assert.AreEqual(21, cs1.Index);
             cs1.UserStyleName = ("Testing");
 
             Assert.AreEqual(22, cs2.Index);
@@ -2543,36 +2543,37 @@ using NPOI.POIFS.FileSystem;
             wb = WriteOutAndReadBack(wb);
 
             // Re-check
-            Assert.AreEqual("Testing", wb.GetCellStyleAt((short)21).UserStyleName);
-            Assert.AreEqual("Testing 2", wb.GetCellStyleAt((short)22).UserStyleName);
-            Assert.AreEqual("Testing 3", wb.GetCellStyleAt((short)23).UserStyleName);*/
+            Assert.AreEqual("Testing", ((HSSFCellStyle)wb.GetCellStyleAt((short)21)).UserStyleName);
+            Assert.AreEqual("Testing 2", ((HSSFCellStyle)wb.GetCellStyleAt((short)22)).UserStyleName);
+            Assert.AreEqual("Testing 3", ((HSSFCellStyle)wb.GetCellStyleAt((short)23)).UserStyleName);
         }
         [TestMethod]
         public void Test49751()
         {
-            throw new NotImplementedException("HSSFCellStyle requires UserStyleName property!");
-            /*HSSFWorkbook wb = OpenSample("49751.xls");
+            HSSFWorkbook wb = OpenSample("49751.xls");
             short numCellStyles = wb.NumCellStyles;
-            List<String> namedStyles = Arrays.AsList(
-                    "20% - Accent1", "20% - Accent2", "20% - Accent3", "20% - Accent4", "20% - Accent5",
-                    "20% - Accent6", "40% - Accent1", "40% - Accent2", "40% - Accent3", "40% - Accent4",
-                    "40% - Accent5", "40% - Accent6", "60% - Accent1", "60% - Accent2", "60% - Accent3",
-                    "60% - Accent4", "60% - Accent5", "60% - Accent6", "Accent1", "Accent2", "Accent3",
-                    "Accent4", "Accent5", "Accent6", "Bad", "Calculation", "Check Cell", "Explanatory Text",
-                    "Good", "Heading 1", "Heading 2", "Heading 3", "Heading 4", "Input", "Linked Cell",
-                    "Neutral", "Note", "Output", "Title", "Total", "Warning Text");
+            string[] namedStyles = new string[]{
+            "20% - Accent1", "20% - Accent2", "20% - Accent3", "20% - Accent4", "20% - Accent5",
+            "20% - Accent6", "40% - Accent1", "40% - Accent2", "40% - Accent3", "40% - Accent4",
+            "40% - Accent5", "40% - Accent6", "60% - Accent1", "60% - Accent2", "60% - Accent3",
+            "60% - Accent4", "60% - Accent5", "60% - Accent6", "Accent1", "Accent2", "Accent3",
+            "Accent4", "Accent5", "Accent6", "Bad", "Calculation", "Check Cell", "Explanatory Text",
+            "Good", "Heading 1", "Heading 2", "Heading 3", "Heading 4", "Input", "Linked Cell",
+            "Neutral", "Note", "Output", "Title", "Total", "Warning Text"};
+
+            ArrayList namedStylesList = Arrays.AsList(namedStyles);
 
             List<String> collecteddStyles = new List<String>();
             for (short i = 0; i < numCellStyles; i++)
             {
-                ICellStyle cellStyle = wb.GetCellStyleAt(i);
+                HSSFCellStyle cellStyle = (HSSFCellStyle)wb.GetCellStyleAt(i);
                 String styleName = cellStyle.UserStyleName;
                 if (styleName != null)
                 {
                     collecteddStyles.Add(styleName);
+                    Assert.IsTrue(namedStylesList.Contains(styleName));
                 }
             }
-            Assert.IsTrue(namedStyles.ContainsAll(collecteddStyles));*/
         }
         /**
         * Last row number when shifting rows

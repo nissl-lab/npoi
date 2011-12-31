@@ -82,7 +82,7 @@ namespace TestCases.SS.Formula.Functions
             ValueEval[] args = { numArg, formatArg };
             ValueEval result = TextFunction.TEXT.Evaluate(args, -1, (short)-1);
             ValueEval testResult = new StringEval("321 1/3");
-            Assert.AreEqual(testResult.ToString(), result.ToString());
+            Assert.AreEqual(testResult.ToString(), result.ToString());  //this bug is caused by DecimalFormat
 
             formatArg = new StringEval("# #/##");
             args[1] = formatArg;
