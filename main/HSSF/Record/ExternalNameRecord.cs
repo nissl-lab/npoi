@@ -25,6 +25,7 @@ namespace NPOI.HSSF.Record
     using NPOI.SS.Formula;
     using NPOI.HSSF.Record.Constant;
     using NPOI.Util.IO;
+    using NPOI.SS.Formula.PTG;
 
 
     /**
@@ -66,7 +67,10 @@ namespace NPOI.HSSF.Record
          * (logical) number of rows in the {@link #_ddeValues} array
          */
         private int _nRows;
-
+        public ExternalNameRecord()
+        {
+            field_2_ixals = 0;
+        }
         public ExternalNameRecord(RecordInputStream in1)
         {
             field_1_option_flag = in1.ReadShort();
@@ -170,9 +174,17 @@ namespace NPOI.HSSF.Record
         public String Text
         {
             get { return field_4_name; }
+            set { field_4_name = value; }
         }
 
-
+        public Ptg[] GetParsedExpression()
+        {
+            return Formula.GetTokens(field_5_name_definition);
+        }
+        public void SetParsedExpression(Ptg[] ptgs)
+        {
+            field_5_name_definition = Formula.Create(ptgs);
+        }
         protected override int DataSize
         {
             get

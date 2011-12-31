@@ -419,6 +419,8 @@
     <Compile Include="HSSF\UserModel\TestHSSFSheetShiftRows.cs" />
     <Compile Include="HSSF\UserModel\TestHSSFName.cs" />
     <Compile Include="POIDataSamples.cs" />
+    <Compile Include="SS\Formula\Atp\TestMRound.cs" />
+    <Compile Include="SS\Formula\Atp\TestRandBetween.cs" />
     <Compile Include="SS\Formula\Atp\TestYearFracCalculator.cs" />
     <Compile Include="SS\Formula\Atp\TestYearFracCalculatorFromSpreadsheet.cs" />
     <Compile Include="SS\Formula\Constant\TestConstantValueParser.cs" />

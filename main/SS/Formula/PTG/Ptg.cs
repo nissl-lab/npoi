@@ -29,7 +29,7 @@ namespace NPOI.SS.Formula.PTG
 
     using NPOI.SS.Util;
     using NPOI.Util.IO;
-    
+
     /**
      * <tt>Ptg</tt> represents a syntactic token in a formula.  'PTG' is an acronym for 
      * '<b>p</b>arse <b>t</b>hin<b>g</b>'.  Originally, the name referred to the single 
@@ -47,7 +47,7 @@ namespace NPOI.SS.Formula.PTG
      * @author Jason Height (jheight at chariot dot net dot au)
      */
     [Serializable]
-    public abstract class Ptg:ICloneable
+    public abstract class Ptg : ICloneable
     {
         public static Ptg[] EMPTY_PTG_ARRAY = { };
 
@@ -57,30 +57,36 @@ namespace NPOI.SS.Formula.PTG
          */
         public static Ptg[] ReadTokens(int size, LittleEndianInput in1)
         {
-		    ArrayList temp = new ArrayList(4 + size / 2);
-		    int pos = 0;
-			bool hasArrayPtgs = false;
-		    while (pos < size) {
-			    Ptg ptg = Ptg.CreatePtg( in1 );
-			    if (ptg is ArrayPtg.Initial) {
-					hasArrayPtgs = true;
-			    }
-				 pos += ptg.Size;
-			    temp.Add( ptg );
-		    }
-		    if(pos != size) {
-			    throw new Exception("Ptg array size mismatch");
-		    }
-		    if (hasArrayPtgs) {
-			Ptg[] result = ToPtgArray(temp);
-			for (int i=0;i<result.Length;i++) {
-				if (result[i] is ArrayPtg.Initial) {
-					result[i] = ((ArrayPtg.Initial) result[i]).FinishReading(in1);
-				}
-			}
-			return result;		    
-			}
-		    return ToPtgArray(temp);
+            ArrayList temp = new ArrayList(4 + size / 2);
+            int pos = 0;
+            bool hasArrayPtgs = false;
+            while (pos < size)
+            {
+                Ptg ptg = Ptg.CreatePtg(in1);
+                if (ptg is ArrayPtg.Initial)
+                {
+                    hasArrayPtgs = true;
+                }
+                pos += ptg.Size;
+                temp.Add(ptg);
+            }
+            if (pos != size)
+            {
+                throw new Exception("Ptg array size mismatch");
+            }
+            if (hasArrayPtgs)
+            {
+                Ptg[] result = ToPtgArray(temp);
+                for (int i = 0; i < result.Length; i++)
+                {
+                    if (result[i] is ArrayPtg.Initial)
+                    {
+                        result[i] = ((ArrayPtg.Initial)result[i]).FinishReading(in1);
+                    }
+                }
+                return result;
+            }
+            return ToPtgArray(temp);
         }
 
         public static Ptg CreatePtg(LittleEndianInput in1)
@@ -179,11 +185,11 @@ namespace NPOI.SS.Formula.PTG
         }
         private static Ptg[] ToPtgArray(ArrayList l)
         {
-            if (l.Count==0)
+            if (l.Count == 0)
             {
                 return EMPTY_PTG_ARRAY;
             }
-            
+
             Ptg[] result = (Ptg[])l.ToArray(typeof(Ptg));
             return result;
         }
@@ -217,7 +223,11 @@ namespace NPOI.SS.Formula.PTG
 
         }
 
-        // TODO - several duplicates of this code should be refactored here
+        /**
+	 * This method will return the same result as {@link #getEncodedSizeWithoutArrayData(Ptg[])}
+	 * if there are no array tokens present.
+	 * @return the full size taken to encode the specified <tt>Ptg</tt>s
+	 */
         public static int GetEncodedSize(Ptg[] ptgs)
         {
             int result = 0;
@@ -258,31 +268,36 @@ namespace NPOI.SS.Formula.PTG
          */
         public static int SerializePtgs(Ptg[] ptgs, byte[] array, int offset)
         {
-		    int size = ptgs.Length;
+            int size = ptgs.Length;
 
             LittleEndianByteArrayOutputStream out1 = new LittleEndianByteArrayOutputStream(array, offset);
 
-		    ArrayList arrayPtgs = null;
+            ArrayList arrayPtgs = null;
 
-		    for (int k = 0; k < size; k++) {
-			    Ptg ptg = ptgs[k];
+            for (int k = 0; k < size; k++)
+            {
+                Ptg ptg = ptgs[k];
 
-			    ptg.Write(out1);
-			    if (ptg is ArrayPtg) {
-				    if (arrayPtgs == null) {
-					    arrayPtgs = new ArrayList(5);
-				    }
-				    arrayPtgs.Add(ptg);
-				    
-			    }
-		    }
-		    if (arrayPtgs != null) {
-			    for (int i=0;i<arrayPtgs.Count;i++) {
-				    ArrayPtg p = (ArrayPtg)arrayPtgs[i];
-				    p.WriteTokenValueBytes(out1);
-			    }
-		    }
-		    return out1.WriteIndex - offset;;
+                ptg.Write(out1);
+                if (ptg is ArrayPtg)
+                {
+                    if (arrayPtgs == null)
+                    {
+                        arrayPtgs = new ArrayList(5);
+                    }
+                    arrayPtgs.Add(ptg);
+
+                }
+            }
+            if (arrayPtgs != null)
+            {
+                for (int i = 0; i < arrayPtgs.Count; i++)
+                {
+                    ArrayPtg p = (ArrayPtg)arrayPtgs[i];
+                    p.WriteTokenValueBytes(out1);
+                }
+            }
+            return out1.WriteIndex - offset; ;
         }
 
         /**
@@ -367,14 +382,17 @@ namespace NPOI.SS.Formula.PTG
 
         #endregion
 
-	public static bool DoesFormulaReferToDeletedCell(Ptg[] ptgs) {
-		for (int i = 0; i < ptgs.Length; i++) {
-			if (IsDeletedCellRef(ptgs[i])) {
-				return true;
-			}
-		}
-		return false;
-	}
+        public static bool DoesFormulaReferToDeletedCell(Ptg[] ptgs)
+        {
+            for (int i = 0; i < ptgs.Length; i++)
+            {
+                if (IsDeletedCellRef(ptgs[i]))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
 
         private static bool IsDeletedCellRef(Ptg ptg)
         {

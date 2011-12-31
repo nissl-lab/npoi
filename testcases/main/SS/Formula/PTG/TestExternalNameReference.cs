@@ -86,7 +86,7 @@ namespace TestCases.SS.Formula.PTG
             }
         }
         [TestMethod]
-        public void TestEvaluateExternalNameReference()
+        public void TestEvaluate()
         {
             HSSFWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("XRefCalc.xls");
             HSSFWorkbook wb2 = HSSFTestDataSamples.OpenSampleWorkbook("XRefCalcData.xls");

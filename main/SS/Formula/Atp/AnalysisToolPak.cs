@@ -120,7 +120,7 @@ namespace NPOI.SS.Formula.Atp
             r(m, "ISODD", ParityFunction.IS_ODD);
             r(m, "LCM", null);
             r(m, "MDURATION", null);
-            r(m, "MROUND", null);
+            r(m, "MROUND", MRound.Instance);
             r(m, "MULTINOMIAL", null);
             r(m, "NETWORKDAYS", null);
             r(m, "NOMINAL", null);
@@ -135,7 +135,7 @@ namespace NPOI.SS.Formula.Atp
             r(m, "PRICEDISC", null);
             r(m, "PRICEMAT", null);
             r(m, "QUOTIENT", null);
-            r(m, "RAND BETWEEN", null);
+            r(m, "RANDBETWEEN", RandBetween.Instance);
             r(m, "RECEIVED", null);
             r(m, "SERIESSUM", null);
             r(m, "SQRTPI", null);

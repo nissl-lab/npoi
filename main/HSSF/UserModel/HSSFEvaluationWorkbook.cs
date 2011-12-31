@@ -69,7 +69,7 @@ namespace NPOI.HSSF.UserModel
 
         public NameXPtg GetNameXPtg(String name)
         {
-            return _iBook.GetNameXPtg(name);
+            return _iBook.GetNameXPtg(name, _uBook.GetUDFFinder());
         }
 
         public IEvaluationName GetName(String name,int sheetIndex)

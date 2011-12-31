@@ -534,7 +534,9 @@
       <DependentUpon>Resource1.resx</DependentUpon>
     </Compile>
     <Compile Include="SS\Formula\Atp\AnalysisToolPak.cs" />
+    <Compile Include="SS\Formula\Atp\MRound.cs" />
     <Compile Include="SS\Formula\Atp\ParityFunction.cs" />
+    <Compile Include="SS\Formula\Atp\RandBetween.cs" />
     <Compile Include="SS\Formula\Atp\YearFrac.cs" />
     <Compile Include="SS\Formula\Atp\YearFracCalculator.cs" />
     <Compile Include="SS\Formula\CellCacheEntry.cs" />
@@ -931,7 +933,6 @@
   <ItemGroup>
     <Folder Include="HSSF\Dev\" />
     <Folder Include="SS\Formula\Constant\" />
-	<Folder Include="SS\Formula\PTG\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -176,7 +176,7 @@ namespace NPOI.SS.Formula
          */
         private char look;
 
-        private FormulaParsingWorkbook book;
+        private FormulaParsingWorkbook _book;
 
         private int _sheetIndex;
 
@@ -196,7 +196,7 @@ namespace NPOI.SS.Formula
         {
             formulaString = formula;
             pointer = 0;
-            this.book = book;
+            this._book = book;
 
             _ssVersion = book == null ? SpreadsheetVersion.EXCEL97 : book.GetSpreadsheetVersion();
             formulaLength = formulaString.Length;
@@ -723,12 +723,12 @@ namespace NPOI.SS.Formula
             {
                 return new ParseNode(new BoolPtg(name.ToUpper()));
             }
-            if (book == null)
+            if (_book == null)
             {
                 // Only test cases omit the book (expecting it not to be needed)
                 throw new InvalidOperationException("Need book to evaluate name '" + name + "'");
             }
-            IEvaluationName evalName = book.GetName(name, _sheetIndex);
+            IEvaluationName evalName = _book.GetName(name, _sheetIndex);
             if (evalName == null)
             {
                 throw new FormulaParseException("Specified named range '"
@@ -763,11 +763,11 @@ namespace NPOI.SS.Formula
                 String sName = sheetIden.SheetID.Name;
                 if (sheetIden.BookName == null)
                 {
-                    extIx = book.GetExternalSheetIndex(sName);
+                    extIx = _book.GetExternalSheetIndex(sName);
                 }
                 else
                 {
-                    extIx = book.GetExternalSheetIndex(sheetIden.BookName, sName);
+                    extIx = _book.GetExternalSheetIndex(sheetIden.BookName, sName);
                 }
             }
             Ptg ptg;
@@ -1194,11 +1194,17 @@ namespace NPOI.SS.Formula
                 // user defined Function
                 // in the Token tree, the name is more or less the first argument
 
-                IEvaluationName hName = book.GetName(name, _sheetIndex);
+                if (_book == null)
+                {
+                    // Only test cases omit the book (expecting it not to be needed)
+                    throw new InvalidOperationException("Need book to evaluate name '" + name + "'");
+                }
+
+                IEvaluationName hName = _book.GetName(name, _sheetIndex);
                 if (hName == null)
                 {
 
-                    nameToken = book.GetNameXPtg(name);
+                    nameToken = _book.GetNameXPtg(name);
                     if (nameToken == null)
                     {
                         throw new FormulaParseException("Name '" + name

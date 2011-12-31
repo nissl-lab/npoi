@@ -26,6 +26,7 @@ namespace NPOI.HSSF.Model
     using NPOI.HSSF.Util;
     using NPOI.SS.Formula;
     using NPOI.SS.Formula.PTG;
+    using NPOI.SS.Formula.Udf;
 
 
     /**
@@ -2260,10 +2261,29 @@ namespace NPOI.HSSF.Model
                 return linkTable.NumNames;
             }
         }
-        public NameXPtg GetNameXPtg(String name)
+        /**
+     *
+     * @param name the  name of an external function, typically a name of a UDF
+     * @param udf  locator of user-defiend functions to resolve names of VBA and Add-In functions
+     * @return the external name or null
+     */
+        public NameXPtg GetNameXPtg(String name, UDFFinder udf)
         {
-            return OrCreateLinkTable.GetNameXPtg(name);
+            LinkTable lnk = OrCreateLinkTable;
+            NameXPtg xptg = lnk.GetNameXPtg(name);
+
+            if (xptg == null && udf.FindFunction(name) != null)
+            {
+                // the name was not found in the list of external names
+                // check if the Workbook's UDFFinder is aware about it and register the name if it is
+                xptg = lnk.AddNameXPtg(name);
+            }
+            return xptg;
         }
+        //public NameXPtg GetNameXPtg(String name)
+        //{
+        //    return OrCreateLinkTable.GetNameXPtg(name);
+        //}
         /** Gets the name record
          * @param index name index
          * @return name record

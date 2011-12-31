@@ -664,6 +664,10 @@ namespace NPOI.HSSF.UserModel
             }
             set
             {
+                if (IsPartOfArrayFormulaGroup)
+                {
+                    NotifyArrayFormulaChanging();
+                }
                 int row = record.Row;
                 int col = record.Column;
                 short styleIndex = record.XFIndex;

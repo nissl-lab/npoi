@@ -14,7 +14,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 ==================================================================== */
-namespace NPOI.SS.Formula.Atp
+namespace TestCases.SS.Formula.Atp
 {
     using NPOI.HSSF.UserModel;
     using NPOI.SS.UserModel;

@@ -115,7 +115,17 @@ namespace NPOI.HSSF.Model
             private SupBookRecord _externalBookRecord;
             private ExternalNameRecord[] _externalNameRecords;
             private CRNBlock[] _crnBlocks;
-
+            /**
+         * Create a new block for registering add-in functions
+         *
+         * @see org.apache.poi.hssf.model.LinkTable#addNameXPtg(String)
+         */
+            public ExternalBookBlock()
+            {
+                _externalBookRecord = SupBookRecord.CreateAddInFunctions();
+                _externalNameRecords = new ExternalNameRecord[0];
+                _crnBlocks = new CRNBlock[0];
+            }
             public ExternalBookBlock(RecordStream rs)
             {
                 _externalBookRecord = (SupBookRecord)rs.GetNext();
@@ -123,8 +133,8 @@ namespace NPOI.HSSF.Model
                 while (rs.PeekNextClass() == typeof(ExternalNameRecord))
                 {
                     temp.Add(rs.GetNext());
-                }                
-                _externalNameRecords =(ExternalNameRecord[]) temp.ToArray(typeof(ExternalNameRecord));
+                }
+                _externalNameRecords = (ExternalNameRecord[])temp.ToArray(typeof(ExternalNameRecord));
 
                 temp.Clear();
 
@@ -134,8 +144,21 @@ namespace NPOI.HSSF.Model
                 }
                 _crnBlocks = (CRNBlock[])temp.ToArray(typeof(CRNBlock));
             }
-
-
+            public int NumberOfNames
+            {
+                get
+                {
+                    return _externalNameRecords.Length;
+                }
+            }
+            public int AddExternalName(ExternalNameRecord rec)
+            {
+                ExternalNameRecord[] tmp = new ExternalNameRecord[_externalNameRecords.Length + 1];
+                Array.Copy(_externalNameRecords, 0, tmp, 0, _externalNameRecords.Length);
+                tmp[tmp.Length - 1] = rec;
+                _externalNameRecords = tmp;
+                return _externalNameRecords.Length - 1;
+            }
             public ExternalBookBlock(short numberOfSheets)
             {
                 _externalBookRecord = SupBookRecord.CreateInternalReferences(numberOfSheets);
@@ -160,7 +183,7 @@ namespace NPOI.HSSF.Model
             {
                 for (int i = 0; i < _externalNameRecords.Length; i++)
                 {
-                    if (_externalNameRecords[i].Text.Equals(name,StringComparison.InvariantCultureIgnoreCase))
+                    if (_externalNameRecords[i].Text.Equals(name, StringComparison.InvariantCultureIgnoreCase))
                     {
                         return i;
                     }
@@ -181,7 +204,7 @@ namespace NPOI.HSSF.Model
         private int _recordCount;
         private WorkbookRecordList _workbookRecordList; // TODO - would be nice to Remove this
 
-        public LinkTable(List<Record> inputList, int startIndex, WorkbookRecordList workbookRecordList,Dictionary<String, NameCommentRecord> commentRecords)
+        public LinkTable(List<Record> inputList, int startIndex, WorkbookRecordList workbookRecordList, Dictionary<String, NameCommentRecord> commentRecords)
         {
 
             _workbookRecordList = workbookRecordList;
@@ -194,12 +217,12 @@ namespace NPOI.HSSF.Model
             }
 
             //_externalBookBlocks = new ExternalBookBlock[temp.Count];
-            _externalBookBlocks=(ExternalBookBlock[])temp.ToArray(typeof(ExternalBookBlock));
+            _externalBookBlocks = (ExternalBookBlock[])temp.ToArray(typeof(ExternalBookBlock));
             temp.Clear();
 
             if (_externalBookBlocks.Length > 0)
             {
-			// If any ExternalBookBlock present, there is always 1 of ExternSheetRecord
+                // If any ExternalBookBlock present, there is always 1 of ExternSheetRecord
                 if (rs.PeekNextClass() != typeof(ExternSheetRecord))
                 {
                     // not quite - if written by google docs
@@ -238,11 +261,11 @@ namespace NPOI.HSSF.Model
             }
 
             _recordCount = rs.GetCountRead();
-            for(int i=startIndex;i< startIndex + _recordCount;i++)
+            for (int i = startIndex; i < startIndex + _recordCount; i++)
             {
                 _workbookRecordList.Records.Add(inputList[i]);
             }
-            
+
         }
 
         public LinkTable(short numberOfSheets, WorkbookRecordList workbookRecordList)
@@ -362,7 +385,73 @@ namespace NPOI.HSSF.Model
             _workbookRecordList.Add(idx + countNames, name);
 
         }
+        /**
+     * Register an external name in this workbook
+     *
+     * @param name  the name to register
+     * @return a NameXPtg describing this name 
+     */
+        public NameXPtg AddNameXPtg(String name)
+        {
+            int extBlockIndex = -1;
+            ExternalBookBlock extBlock = null;
 
+            // find ExternalBlock for Add-In functions and remember its index
+            for (int i = 0; i < _externalBookBlocks.Length; i++)
+            {
+                SupBookRecord ebr = _externalBookBlocks[i].GetExternalBookRecord();
+                if (ebr.IsAddInFunctions)
+                {
+                    extBlock = _externalBookBlocks[i];
+                    extBlockIndex = i;
+                    break;
+                }
+            }
+            // An ExternalBlock for Add-In functions was not found. Create a new one.
+            if (extBlock == null)
+            {
+                extBlock = new ExternalBookBlock();
+
+                ExternalBookBlock[] tmp = new ExternalBookBlock[_externalBookBlocks.Length + 1];
+                Array.Copy(_externalBookBlocks, 0, tmp, 0, _externalBookBlocks.Length);
+                tmp[tmp.Length - 1] = extBlock;
+                _externalBookBlocks = tmp;
+
+                extBlockIndex = _externalBookBlocks.Length - 1;
+
+                // add the created SupBookRecord before ExternSheetRecord
+                int idx = FindFirstRecordLocBySid(ExternSheetRecord.sid);
+                _workbookRecordList.Add(idx, extBlock.GetExternalBookRecord());
+
+                // register the SupBookRecord in the ExternSheetRecord
+                // -2 means that the scope of this name is Workbook and the reference applies to the entire workbook.
+                _externSheetRecord.AddRef(_externalBookBlocks.Length - 1, -2, -2);
+            }
+
+            // create a ExternalNameRecord that will describe this name
+            ExternalNameRecord extNameRecord = new ExternalNameRecord();
+            extNameRecord.Text = (name);
+            // The docs don't explain why Excel set the formula to #REF!
+            extNameRecord.SetParsedExpression(new Ptg[] { ErrPtg.REF_INVALID });
+
+            int nameIndex = extBlock.AddExternalName(extNameRecord);
+            int supLinkIndex = 0;
+            // find the posistion of the Add-In SupBookRecord in the workbook stream,
+            // the created ExternalNameRecord will be appended to it
+            for (IEnumerator iterator = _workbookRecordList.GetEnumerator(); iterator.MoveNext(); supLinkIndex++)
+            {
+                Record record = (Record)iterator.Current;
+                if (record is SupBookRecord)
+                {
+                    if (((SupBookRecord)record).IsAddInFunctions) break;
+                }
+            }
+            int numberOfNames = extBlock.NumberOfNames;
+            // a new name is inserted in the end of the SupBookRecord, after the last name
+            _workbookRecordList.Add(supLinkIndex + numberOfNames, extNameRecord);
+            int ix = _externSheetRecord.GetRefIxForSheet(extBlockIndex, -2 /* the scope is workbook*/);
+            return new NameXPtg(ix, nameIndex);
+        }
         public void RemoveName(int namenum)
         {
             _definedNames.RemoveAt(namenum);
