@@ -92,7 +92,7 @@ namespace NPOI.SS.Formula.Eval
                         // Excel considers -0.0 == 0.0 which is different to Double.compare()
                         return 0;
                     }
-                    return nA.NumberValue.CompareTo(nB.NumberValue);
+                    return NumberComparer.Compare(nA.NumberValue, nB.NumberValue);
                 }
             }
             throw new ArgumentException("Bad operand types (" + va.GetType().Name + "), ("

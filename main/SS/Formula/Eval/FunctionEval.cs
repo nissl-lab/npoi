@@ -419,7 +419,7 @@ namespace NPOI.SS.Formula.Eval
             retval[344] = new NotImplementedFunction(); // SUBTOTAL
             retval[345] = new NotImplementedFunction(); // SUMIF
             retval[346] = new Countif(); // COUNTIF
-            retval[347] = new NotImplementedFunction(); // COUNTBLANK
+            retval[347] = new Countblank(); // COUNTBLANK
             retval[348] = new NotImplementedFunction(); // SCENARIOGet
             retval[349] = new NotImplementedFunction(); // OPTIONSLISTSGet
             retval[350] = new NotImplementedFunction(); // IsPMT

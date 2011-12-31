@@ -617,6 +617,7 @@
     <Compile Include="SS\Formula\Functions\Combin.cs" />
     <Compile Include="SS\Formula\Functions\Count.cs" />
     <Compile Include="SS\Formula\Functions\Counta.cs" />
+    <Compile Include="SS\Formula\Functions\Countblank.cs" />
     <Compile Include="SS\Formula\Functions\Countif.cs" />
     <Compile Include="SS\Formula\Functions\CountUtils.cs" />
     <Compile Include="SS\Formula\Functions\DateFunc.cs" />

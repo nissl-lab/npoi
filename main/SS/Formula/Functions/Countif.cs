@@ -22,6 +22,7 @@ namespace NPOI.SS.Formula.Functions
     using System.Text;
     using System.Text.RegularExpressions;
     using NPOI.SS.Formula.Eval;
+    using NPOI.SS.UserModel;
 
     /**
      * Implementation for the function COUNTIF<p/>
@@ -35,7 +36,7 @@ namespace NPOI.SS.Formula.Functions
      * 
      * @author Josh Micich
      */
-    public class Countif : Function
+    public class Countif : Fixed2ArgFunction
     {
         private class CmpOp
         {
@@ -142,7 +143,7 @@ namespace NPOI.SS.Formula.Functions
                     case NONE:
                     case EQ:
                         return cmpResult == 0;
-                    case NE: return cmpResult == 0;
+                    case NE: return cmpResult != 0;
                     case LT: return cmpResult < 0;
                     case LE: return cmpResult <= 0;
                     case GT: return cmpResult > 0;
@@ -158,92 +159,178 @@ namespace NPOI.SS.Formula.Functions
                 sb.Append(" [").Append(_representation).Append("]");
                 return sb.ToString();
             }
+            public String Representation
+            {
+                get
+                {
+                    return _representation;
+                }
+            }
+        }
+        private abstract class MatcherBase : I_MatchPredicate
+        {
+            private CmpOp _operator;
+
+            protected MatcherBase(CmpOp operator1)
+            {
+                _operator = operator1;
+            }
+            protected int Code
+            {
+                get
+                {
+                    return _operator.Code;
+                }
+            }
+            protected bool Evaluate(int cmpResult)
+            {
+                return _operator.Evaluate(cmpResult);
+            }
+            protected bool Evaluate(bool cmpResult)
+            {
+                return _operator.Evaluate(cmpResult);
+            }
+            public override String ToString()
+            {
+                StringBuilder sb = new StringBuilder(64);
+                sb.Append(this.GetType().Name).Append(" [");
+                sb.Append(_operator.Representation);
+                sb.Append(ValueText);
+                sb.Append("]");
+                return sb.ToString();
+            }
+            protected abstract String ValueText { get; }
+
+            public abstract bool Matches(ValueEval x);
         }
 
-        private class NumberMatcher : I_MatchPredicate
+        private class ErrorMatcher : MatcherBase
+        {
+
+            private int _value;
+
+            public ErrorMatcher(int errorCode, CmpOp operator1)
+                : base(operator1)
+            {
+                ;
+                _value = errorCode;
+            }
+            protected override String ValueText
+            {
+                get
+                {
+                    return ErrorConstants.GetText(_value);
+                }
+            }
+
+            public override bool Matches(ValueEval x)
+            {
+                if (x is ErrorEval)
+                {
+                    int testValue = ((ErrorEval)x).ErrorCode;
+                    return Evaluate(testValue - _value);
+                }
+                return false;
+            }
+        }
+        private class NumberMatcher : MatcherBase
         {
 
             private double _value;
-		    private CmpOp _operator;
 
-		    public NumberMatcher(double value, CmpOp optr) {
-			    _value = value;
-			    _operator = optr;
-		    }
+            public NumberMatcher(double value, CmpOp optr)
+                : base(optr)
+            {
+                _value = value;
+            }
 
-            public bool Matches(ValueEval x)
+            public override bool Matches(ValueEval x)
             {
                 double testValue;
                 if (x is StringEval)
                 {
-                    // if the tarGet(x) Is a string, but Parses as a number
-                    // it may still Count as a match
+                    // if the target(x) is a string, but parses as a number
+                    // it may still count as a match, only for the equality operator
+                    switch (Code)
+                    {
+                        case CmpOp.EQ:
+                        case CmpOp.NONE:
+                            break;
+                        case CmpOp.NE:
+                            // Always matches (inconsistent with above two cases).
+                            // for example '<>123' matches '123', '4', 'abc', etc
+                            return true;
+                        default:
+                            // never matches (also inconsistent with above three cases).
+                            // for example '>5' does not match '6',
+                            return false;
+                    }
                     StringEval se = (StringEval)x;
-                    double val = OperandResolver.ParseDouble(se.StringValue);
+                    Double val = OperandResolver.ParseDouble(se.StringValue);
                     if (double.IsNaN(val))
                     {
-                        // x Is text that Is not a number
+                        // x is text that is not a number
                         return false;
                     }
-                    testValue = val;
+                    return _value == val;
                 }
-                else if (x is NumberEval)
+                else if ((x is NumberEval))
                 {
                     NumberEval ne = (NumberEval)x;
                     testValue = ne.NumberValue;
                 }
-                else 
+                else
                 {
                     return false;
                 }
-                return _operator.Evaluate(testValue.CompareTo(_value));
+                return Evaluate(testValue.CompareTo(_value));
+            }
+
+            protected override string ValueText
+            {
+                get { return _value.ToString(); }
             }
         }
-        private class BooleanMatcher : I_MatchPredicate
+        private class BooleanMatcher : MatcherBase
         {
 
             private int _value;
-            private CmpOp _operator;
 
-            public BooleanMatcher(bool value,CmpOp optr)
+            public BooleanMatcher(bool value, CmpOp optr)
+                : base(optr)
             {
                 _value = BoolToInt(value);
-                _operator = optr;
             }
 
-            private static int BoolToInt(bool? value)
+            private static int BoolToInt(bool value)
             {
-                if (value == null)
-                {
-                    throw new ArgumentException("null Boolean cannot be converted to Integer");
-                }
-                return value==true ? 1 : 0;
+                return value == true ? 1 : 0;
             }
 
-            public bool Matches(ValueEval x)
+            public override bool Matches(ValueEval x)
             {
-                int testValue=0;
+                int testValue;
                 if (x is StringEval)
                 {
+#if !HIDE_UNREACHABLE_CODE
+
                     if (true)
-                    { // Change to false to observe more intuitive behaviour
-                        // Note - Unlike with numbers, it seems that COUNTA never Matches 
-                        // bool values when the target(x) Is a string
+                    { // change to false to observe more intuitive behaviour
+                        // Note - Unlike with numbers, it seems that COUNTIF never matches
+                        // boolean values when the target(x) is a string
                         return false;
                     }
-#if !HIDE_UNREACHABLE_CODE
+#endif
                     StringEval se = (StringEval)x;
-                    bool? val = ParseBoolean(se.StringValue);
-                    
-                    if (val==null)
+                    Boolean? val = ParseBoolean(se.StringValue);
+                    if (val == null)
                     {
                         // x is text that is not a boolean
                         return false;
                     }
-                    testValue = BoolToInt(val);
-#endif
+                    testValue = BoolToInt(val.Value);
                 }
-                else if (x is BoolEval)
+                else if ((x is BoolEval))
                 {
                     BoolEval be = (BoolEval)x;
                     testValue = BoolToInt(be.BooleanValue);
@@ -252,66 +339,76 @@ namespace NPOI.SS.Formula.Functions
                 {
                     return false;
                 }
-                return _operator.Evaluate(testValue - _value);
+                return Evaluate(testValue - _value);
+            }
+
+            protected override string ValueText
+            {
+                get { return _value == 1 ? "TRUE" : "FALSE"; }
             }
         }
-        private class StringMatcher : I_MatchPredicate
+        private class StringMatcher : MatcherBase
         {
 
             private String _value;
             private CmpOp _operator;
             private Regex _pattern;
 
-            public StringMatcher(String value, CmpOp optr)
+            public StringMatcher(String value, CmpOp optr):base(optr)
             {
-			    _value = value;
-			    _operator = optr;
-			    switch(optr.Code) {
-				    case CmpOp.NONE:
-				    case CmpOp.EQ:
-				    case CmpOp.NE:
-					    _pattern = GetWildCardPattern(value);
-					    break;
-				    default:
-					    _pattern = null;
+                _value = value;
+                _operator = optr;
+                switch (optr.Code)
+                {
+                    case CmpOp.NONE:
+                    case CmpOp.EQ:
+                    case CmpOp.NE:
+                        _pattern = GetWildCardPattern(value);
                         break;
-			    }
+                    default:
+                        _pattern = null;
+                        break;
+                }
             }
 
-            public bool Matches(ValueEval x)
+            public override bool Matches(ValueEval x)
             {
-			    if (x is BlankEval) {
-				    switch(_operator.Code) {
-					    case CmpOp.NONE:
-					    case CmpOp.EQ:
-						    return _value.Length == 0;
-				    }
-				    // no other criteria matches a blank cell
-				    return false;
-			    }
-			    if(!(x is StringEval)) {
-				    // must always be string
-				    // even if match str is wild, but contains only digits
-				    // e.g. '4*7', NumberEval(4567) does not match
-				    return false;
-			    }
-			    String testedValue = ((StringEval) x).StringValue;
-			    if ((testedValue.Length < 1 && _value.Length < 1)
-                    ||_value=="<>") 
+                if (x is BlankEval)
                 {
-				    // odd case: criteria '=' behaves differently to criteria ''
+                    switch (_operator.Code)
+                    {
+                        case CmpOp.NONE:
+                        case CmpOp.EQ:
+                            return _value.Length == 0;
+                    }
+                    // no other criteria matches a blank cell
+                    return false;
+                }
+                if (!(x is StringEval))
+                {
+                    // must always be string
+                    // even if match str is wild, but contains only digits
+                    // e.g. '4*7', NumberEval(4567) does not match
+                    return false;
+                }
+                String testedValue = ((StringEval)x).StringValue;
+                if ((testedValue.Length < 1 && _value.Length < 1))
+                {
+                    // odd case: criteria '=' behaves differently to criteria ''
 
-				    switch(_operator.Code) {
-					    case CmpOp.NONE: return true;
-					    case CmpOp.EQ:   return false;
-					    case CmpOp.NE:   return true;
-				    }
-				    return false;
-			    }
-			    if (_pattern != null) {
-				    return _operator.Evaluate(_pattern.IsMatch(testedValue));
-			    }
-                return _operator.Evaluate(testedValue.CompareTo(_value));
+                    switch (_operator.Code)
+                    {
+                        case CmpOp.NONE: return true;
+                        case CmpOp.EQ: return false;
+                        case CmpOp.NE: return true;
+                    }
+                    return false;
+                }
+                if (_pattern != null)
+                {
+                    return Evaluate(_pattern.IsMatch(testedValue));
+                }
+                return Evaluate(testedValue.CompareTo(_value));
             }
 
             /// <summary>
@@ -349,7 +446,8 @@ namespace NPOI.SS.Formula.Functions
                                     case '?':
                                     case '*':
                                         hasWildCard = true;
-                                        sb.Append("\\").Append(ch);
+                                        //sb.Append("\\").Append(ch);
+                                        sb.Append('[').Append(ch).Append(']');
                                         i++; // Note - incrementing loop variable here
                                         continue;
                                 }
@@ -377,65 +475,94 @@ namespace NPOI.SS.Formula.Functions
                 }
                 return null;
             }
+
+            protected override string ValueText
+            {
+                get
+                {
+                    if (_pattern == null)
+                    {
+                        return _value;
+                    }
+                    return _pattern.ToString();
+                }
+            }
         }
 
-        public ValueEval Evaluate(ValueEval[] args, int srcCellRow, int srcCellCol)
-        {
-            switch (args.Length)
-            {
-                case 2:
-                    // expected
-                    break;
-                default:
-                    // TODO - it doesn't seem to be possible to enter COUNTIF() into Excel with the wrong arg Count
-                    // perhaps this should be an exception
-                    return ErrorEval.VALUE_INVALID;
-            }
-
-            ValueEval range = (ValueEval)args[0];
-            ValueEval criteriaArg = args[1];
-            if (criteriaArg is RefEval)
-            {
-                // criteria Is not a literal value, but a cell reference
-                // for example COUNTIF(B2:D4, E1)
-                RefEval re = (RefEval)criteriaArg;
-                criteriaArg = re.InnerValueEval;
-            }
-            else
-            {
-                // other non literal tokens such as function calls, have been fully Evaluated
-                // for example COUNTIF(B2:D4, COLUMN(E1))
-            }
-            if (criteriaArg is BlankEval)
-            {
-                return NumberEval.ZERO;
-            }
-            I_MatchPredicate mp = CreateCriteriaPredicate(criteriaArg);
-            return CountMatchingCellsInArea(range, mp);
-        }
+        
         /**
-         * @return the number of Evaluated cells in the range that match the specified criteria
-         */
-        private ValueEval CountMatchingCellsInArea(ValueEval rangeArg, I_MatchPredicate criteriaPredicate)
+	 * @return the number of evaluated cells in the range that match the specified criteria
+	 */
+        private double CountMatchingCellsInArea(ValueEval rangeArg, I_MatchPredicate criteriaPredicate)
         {
-            int result;
             if (rangeArg is RefEval)
             {
-                result = CountUtils.CountMatchingCell((RefEval)rangeArg, criteriaPredicate);
+                return CountUtils.CountMatchingCell((RefEval)rangeArg, criteriaPredicate);
             }
-            else if (rangeArg is AreaEval)
+            else if (rangeArg is TwoDEval)
             {
-                result = CountUtils.CountMatchingCellsInArea((AreaEval)rangeArg, criteriaPredicate);
+                return CountUtils.CountMatchingCellsInArea((TwoDEval)rangeArg, criteriaPredicate);
             }
             else
             {
                 throw new ArgumentException("Bad range arg type (" + rangeArg.GetType().Name + ")");
             }
-            return new NumberEval(result);
         }
-
-        public static I_MatchPredicate CreateCriteriaPredicate(ValueEval evaluatedCriteriaArg)
+        
+        
+        /**
+	 *
+	 * @return the de-referenced criteria arg (possibly {@link ErrorEval})
+	 */
+        private static ValueEval EvaluateCriteriaArg(ValueEval arg, int srcRowIndex, int srcColumnIndex)
         {
+            try
+            {
+                return OperandResolver.GetSingleValue(arg, srcRowIndex, (short)srcColumnIndex);
+            }
+            catch (EvaluationException e)
+            {
+                return e.GetErrorEval();
+            }
+        }
+        /**
+	 * When the second argument is a string, many things are possible
+	 */
+        private static I_MatchPredicate CreateGeneralMatchPredicate(StringEval stringEval)
+        {
+            String value = stringEval.StringValue;
+            CmpOp operator1 = CmpOp.GetOperator(value);
+            value = value.Substring(operator1.Length);
+
+            bool? booleanVal = ParseBoolean(value);
+            if (booleanVal != null)
+            {
+                return new BooleanMatcher(booleanVal.Value, operator1);
+            }
+
+            Double doubleVal = OperandResolver.ParseDouble(value);
+            if (!double.IsNaN(doubleVal))
+            {
+                return new NumberMatcher(doubleVal, operator1);
+            }
+            ErrorEval ee = ParseError(value);
+            if (ee != null)
+            {
+                return new ErrorMatcher(ee.ErrorCode, operator1);
+            }
+
+            //else - just a plain string with no interpretation.
+            return new StringMatcher(value, operator1);
+        }
+        /**
+	 * Creates a criteria predicate object for the supplied criteria arg
+	 * @return <code>null</code> if the arg evaluates to blank.
+	 */
+        public static I_MatchPredicate CreateCriteriaPredicate(ValueEval arg, int srcRowIndex, int srcColumnIndex)
+        {
+
+            ValueEval evaluatedCriteriaArg = EvaluateCriteriaArg(arg, srcRowIndex, srcColumnIndex);
+
             if (evaluatedCriteriaArg is NumberEval)
             {
                 return new NumberMatcher(((NumberEval)evaluatedCriteriaArg).NumberValue, CmpOp.OP_NONE);
@@ -449,6 +576,10 @@ namespace NPOI.SS.Formula.Functions
             {
                 return CreateGeneralMatchPredicate((StringEval)evaluatedCriteriaArg);
             }
+            if (evaluatedCriteriaArg is ErrorEval)
+            {
+                return new ErrorMatcher(((ErrorEval)evaluatedCriteriaArg).ErrorCode, CmpOp.OP_NONE);
+            }
             if (evaluatedCriteriaArg == BlankEval.instance)
             {
                 return null;
@@ -456,30 +587,21 @@ namespace NPOI.SS.Formula.Functions
             throw new Exception("Unexpected type for criteria ("
                     + evaluatedCriteriaArg.GetType().Name + ")");
         }
-
-        /**
-         * When the second argument Is a string, many things are possible
-         */
-        private static I_MatchPredicate CreateGeneralMatchPredicate(StringEval stringEval)
+        private static ErrorEval ParseError(String value)
         {
-            String value = stringEval.StringValue;
-            CmpOp optr = CmpOp.GetOperator(value);
-            value = value.Substring(optr.Length);
-
-            bool? boolVal= ParseBoolean(value);
-            if(boolVal!=null)
+            if (value.Length < 4 || value[0] != '#')
             {
-			    return new BooleanMatcher(boolVal==true?true:false, optr);
-		    }
+                return null;
+            }
+            if (value.Equals("#NULL!")) return ErrorEval.NULL_INTERSECTION;
+            if (value.Equals("#DIV/0!")) return ErrorEval.DIV_ZERO;
+            if (value.Equals("#VALUE!")) return ErrorEval.VALUE_INVALID;
+            if (value.Equals("#REF!")) return ErrorEval.REF_INVALID;
+            if (value.Equals("#NAME?")) return ErrorEval.NAME_INVALID;
+            if (value.Equals("#NUM!")) return ErrorEval.NUM_ERROR;
+            if (value.Equals("#N/A")) return ErrorEval.NA;
 
-
-		    Double doubleVal = OperandResolver.ParseDouble(value);
-		    if(!double.IsNaN(doubleVal)) {
-			    return new NumberMatcher(doubleVal, optr);
-		    }
-
-		    //else - just a plain string with no interpretation.
-            return new StringMatcher(value, optr);
+            return null;
         }
         /**
          * bool literals ('TRUE', 'FALSE') treated similarly but NOT same as numbers. 
@@ -495,7 +617,7 @@ namespace NPOI.SS.Formula.Functions
             {
                 case 't':
                 case 'T':
-                    if ("TRUE".Equals(strRep,StringComparison.InvariantCultureIgnoreCase))
+                    if ("TRUE".Equals(strRep, StringComparison.InvariantCultureIgnoreCase))
                     {
                         return true;
                     }
@@ -508,7 +630,19 @@ namespace NPOI.SS.Formula.Functions
                     }
                     break;
             }
-            return null ;
+            return null;
+        }
+
+        public override ValueEval Evaluate(int srcRowIndex, int srcColumnIndex, ValueEval arg0, ValueEval arg1)
+        {
+            I_MatchPredicate mp = CreateCriteriaPredicate(arg1, srcRowIndex, srcColumnIndex);
+            if (mp == null)
+            {
+                // If the criteria arg is a reference to a blank cell, countif always returns zero.
+                return NumberEval.ZERO;
+            }
+            double result = CountMatchingCellsInArea(arg0, mp);
+            return new NumberEval(result);
         }
     }
 }

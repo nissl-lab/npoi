@@ -41,5 +41,6 @@ namespace NPOI.SS.Formula
         String StringCellValue { get; }
         bool BooleanCellValue { get; }
         int ErrorCellValue { get; }
+        Object IdentityKey { get; }
     }
 }

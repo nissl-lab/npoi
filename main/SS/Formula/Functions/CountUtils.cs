@@ -26,6 +26,10 @@ namespace NPOI.SS.Formula.Functions
     {
         bool Matches(ValueEval x);
     }
+    public interface I_MatchAreaPredicate : I_MatchPredicate
+    {
+        bool Matches(TwoDEval x, int rowIndex, int columnIndex);
+    }
     /**
      * Common logic for COUNT, COUNTA and COUNTIF
      *
@@ -88,6 +92,35 @@ namespace NPOI.SS.Formula.Functions
                 return CountUtils.CountMatchingCell((RefEval)eval, criteriaPredicate);
             }
             return criteriaPredicate.Matches(eval) ? 1 : 0;
+        }
+        /**
+	 * @return the number of evaluated cells in the range that match the specified criteria
+	 */
+        public static int CountMatchingCellsInArea(TwoDEval areaEval, I_MatchPredicate criteriaPredicate)
+        {
+            int result = 0;
+
+            int height = areaEval.Height;
+            int width = areaEval.Width;
+            for (int rrIx = 0; rrIx < height; rrIx++)
+            {
+                for (int rcIx = 0; rcIx < width; rcIx++)
+                {
+                    ValueEval ve = areaEval.GetValue(rrIx, rcIx);
+
+                    if (criteriaPredicate is I_MatchAreaPredicate)
+                    {
+                        I_MatchAreaPredicate areaPredicate = (I_MatchAreaPredicate)criteriaPredicate;
+                        if (!areaPredicate.Matches(areaEval, rrIx, rcIx)) continue;
+                    }
+
+                    if (criteriaPredicate.Matches(ve))
+                    {
+                        result++;
+                    }
+                }
+            }
+            return result;
         }
     }
 }

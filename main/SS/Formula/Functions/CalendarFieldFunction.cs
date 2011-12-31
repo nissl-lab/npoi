@@ -70,7 +70,7 @@ namespace NPOI.SS.Formula.Functions
 
         private int GetCalField(double serialDate)
         {
-            if (serialDate == 0)
+            if ((int)serialDate == 0)
             {
                 // Special weird case
                 // day zero should be 31-Dec-1899,  but Excel seems to think it is 0-Jan-1900
@@ -115,5 +115,4 @@ namespace NPOI.SS.Formula.Functions
         }
     }
 }
-
 

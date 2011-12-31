@@ -118,5 +118,11 @@ namespace NPOI.HSSF.UserModel
                 return _cell.RichStringCellValue.String;
             }
         }
+
+
+        public object IdentityKey
+        {
+            get { return _cell; }
+        }
     }
 }
