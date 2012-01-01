@@ -184,7 +184,22 @@ namespace NPOI.SS.Formula.Functions
             AggregateFunction arg = (AggregateFunction)func;
             return new SubtotalInstance(arg);
         }
-
+        internal class ValueCollector : MultiOperandNumericFunction
+        {
+            private static ValueCollector instance = new ValueCollector();
+            public ValueCollector() :
+                base(false, false)
+            {
+            }
+            public static double[] CollectValues(params ValueEval[] operands)
+            {
+                return instance.GetNumberArray(operands);
+            }
+            protected internal override double Evaluate(double[] values)
+            {
+                throw new InvalidOperationException("should not be called");
+            }
+        }
         protected AggregateFunction()
             : base(false, false)
         {

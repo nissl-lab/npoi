@@ -149,7 +149,7 @@ namespace NPOI.SS.Formula.Eval
             retval[59] = FinanceFunction.PMT; // PMT
             retval[60] = new NotImplementedFunction(); // RATE
             retval[61] = new NotImplementedFunction(); // MIRR
-            retval[62] = new NotImplementedFunction(); // IRR
+            retval[62] = new Irr(); // IRR
             retval[63] = new Rand(); // RAND
             retval[64] = new Match(); // MATCH
             retval[65] = DateFunc.instance; // DATE

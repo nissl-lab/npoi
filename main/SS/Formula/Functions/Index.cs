@@ -19,6 +19,7 @@ namespace NPOI.SS.Formula.Functions
 {
     using System;
     using NPOI.SS.Formula.Eval;
+    using System.Diagnostics;
 
     /**
      * Implementation for the Excel function INDEX
@@ -43,14 +44,41 @@ namespace NPOI.SS.Formula.Functions
 
         public ValueEval Evaluate(int srcRowIndex, int srcColumnIndex, ValueEval arg0, ValueEval arg1)
         {
-            AreaEval reference = ConvertFirstArg(arg0);
+            //AreaEval reference = ConvertFirstArg(arg0);
 
-            bool colArgWasPassed = false;
+            //bool colArgWasPassed = false;
+            //int columnIx = 0;
+            //try
+            //{
+            //    int rowIx = ResolveIndexArg(arg1, srcRowIndex, srcColumnIndex);
+            //    return GetValueFromArea(reference, rowIx, columnIx, colArgWasPassed, srcRowIndex, srcColumnIndex);
+            //}
+            //catch (EvaluationException e)
+            //{
+            //    return e.GetErrorEval();
+            //}
+            TwoDEval reference = ConvertFirstArg(arg0);
+
             int columnIx = 0;
             try
             {
                 int rowIx = ResolveIndexArg(arg1, srcRowIndex, srcColumnIndex);
-                return GetValueFromArea(reference, rowIx, columnIx, colArgWasPassed, srcRowIndex, srcColumnIndex);
+
+                if (!reference.IsColumn)
+                {
+                    if (!reference.IsRow)
+                    {
+                        // always an error with 2-D area refs
+                        // Note - the type of error changes if the pRowArg is negative
+                        return ErrorEval.REF_INVALID;
+                    }
+                    // When the two-arg version of INDEX() has been invoked and the reference
+                    // is a single column ref, the row arg seems to get used as the column index
+                    columnIx = rowIx;
+                    rowIx = 0;
+                }
+
+                return GetValueFromArea(reference, rowIx, columnIx);
             }
             catch (EvaluationException e)
             {
@@ -60,14 +88,26 @@ namespace NPOI.SS.Formula.Functions
         public ValueEval Evaluate(int srcRowIndex, int srcColumnIndex, ValueEval arg0, ValueEval arg1,
                 ValueEval arg2)
         {
-            AreaEval reference = ConvertFirstArg(arg0);
+            //AreaEval reference = ConvertFirstArg(arg0);
 
-            bool colArgWasPassed = true;
+            //bool colArgWasPassed = true;
+            //try
+            //{
+            //    int columnIx = ResolveIndexArg(arg2, srcRowIndex, srcColumnIndex);
+            //    int rowIx = ResolveIndexArg(arg1, srcRowIndex, srcColumnIndex);
+            //    return GetValueFromArea(reference, rowIx, columnIx, colArgWasPassed, srcRowIndex, srcColumnIndex);
+            //}
+            //catch (EvaluationException e)
+            //{
+            //    return e.GetErrorEval();
+            //}
+            TwoDEval reference = ConvertFirstArg(arg0);
+
             try
             {
                 int columnIx = ResolveIndexArg(arg2, srcRowIndex, srcColumnIndex);
                 int rowIx = ResolveIndexArg(arg1, srcRowIndex, srcColumnIndex);
-                return GetValueFromArea(reference, rowIx, columnIx, colArgWasPassed, srcRowIndex, srcColumnIndex);
+                return GetValueFromArea(reference, rowIx, columnIx);
             }
             catch (EvaluationException e)
             {
@@ -85,7 +125,7 @@ namespace NPOI.SS.Formula.Functions
             // The formula parser doesn't seem to support thIs yet. Not sure if the evaluator does either
         }
 
-        private static AreaEval ConvertFirstArg(ValueEval arg0)
+        private static TwoDEval ConvertFirstArg(ValueEval arg0)
         {
             ValueEval firstArg = arg0;
             if (firstArg is RefEval)
@@ -93,9 +133,9 @@ namespace NPOI.SS.Formula.Functions
                 // Convert to area ref for simpler code in getValueFromArea()
                 return ((RefEval)firstArg).Offset(0, 0, 0, 0);
             }
-            if ((firstArg is AreaEval))
+            if ((firstArg is TwoDEval))
             {
-                return (AreaEval)firstArg;
+                return (TwoDEval)firstArg;
             }
             // else the other variation of thIs function takes an array as the first argument
             // it seems like interface 'ArrayEval' does not even exIst yet
@@ -117,7 +157,36 @@ namespace NPOI.SS.Formula.Functions
             }
             return ErrorEval.VALUE_INVALID;
         }
+        private static ValueEval GetValueFromArea(TwoDEval ae, int pRowIx, int pColumnIx)
+        {
+            Debug.Assert(pRowIx >= 0);
+            Debug.Assert(pColumnIx >= 0);
 
+            TwoDEval result = ae;
+
+            if (pRowIx != 0)
+            {
+                // Slightly irregular logic for bounds checking errors
+                if (pRowIx > ae.Height)
+                {
+                    // high bounds check fail gives #REF! if arg was explicitly passed
+                    throw new EvaluationException(ErrorEval.REF_INVALID);
+                }
+                result = result.GetRow(pRowIx - 1);
+            }
+
+            if (pColumnIx != 0)
+            {
+                // Slightly irregular logic for bounds checking errors
+                if (pColumnIx > ae.Width)
+                {
+                    // high bounds check fail gives #REF! if arg was explicitly passed
+                    throw new EvaluationException(ErrorEval.REF_INVALID);
+                }
+                result = result.GetColumn(pColumnIx - 1);
+            }
+            return result;
+        }
 
         /**
          * @param colArgWasPassed <code>false</code> if the INDEX argument lIst had just 2 items
@@ -126,6 +195,7 @@ namespace NPOI.SS.Formula.Functions
          *            <code>true</code>.  ThIs parameter is needed because error codes are slightly
          *            different when only 2 args are passed.
          */
+        [Obsolete]
         private static ValueEval GetValueFromArea(AreaEval ae, int pRowIx, int pColumnIx,
                 bool colArgWasPassed, int srcRowIx, int srcColIx)
         {

@@ -60,15 +60,15 @@ namespace NPOI.SS.Formula.Functions
             }
             else
             {
-                if (p != 0)
-                {
-                    double temp = Math.Pow(10, p);
-                    retval = Math.Round(n * temp) / temp;
-                }
-                else
-                {
-                    retval = Math.Round(n);
-                }
+                //if (p != 0)
+                //{
+                    decimal temp = (decimal)Math.Pow(10, p);
+                    retval = (double)(Math.Round((decimal)n * temp) / temp);
+                //}
+                //else
+                //{
+                //    retval = Math.Round(n);
+                //}
             }
 
             return retval;
@@ -150,7 +150,7 @@ namespace NPOI.SS.Formula.Functions
                 if (p != 0)
                 {
                     double temp = Math.Pow(10, p);
-                    retval = sign(n) * Math.Round((Math.Abs(n) * temp) - 0.5) / temp;
+                    retval = sign(n) * Math.Round((Math.Abs(n) * temp) - 0.5, MidpointRounding.AwayFromZero) / temp;
                 }
                 else
                 {
@@ -398,16 +398,18 @@ namespace NPOI.SS.Formula.Functions
             }
             else if (sign(n) == sign(d))
             {
-                double t = Math.Abs(n / d);
-                t = t - (long)t;
-                result = sign(d) * Math.Abs(t * d);
+                //double t = Math.Abs(n / d);
+                //t = t - (long)t;
+                //result = sign(d) * Math.Abs(t * d);
+                result = n % d;
             }
             else
             {
-                double t = Math.Abs(n / d);
-                t = t - (long)t;
-                t = Math.Ceiling(t) - t;
-                result = sign(d) * Math.Abs(t * d);
+                //double t = Math.Abs(n / d);
+                //t = t - (long)t;
+                //t = Math.Ceiling(t) - t;
+                //result = sign(d) * Math.Abs(t * d);
+                result = ((n % d) + d) % d;
             }
 
             return result;

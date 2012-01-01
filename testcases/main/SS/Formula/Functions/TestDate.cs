@@ -47,6 +47,7 @@ namespace TestCases.SS.Formula.Functions
          * TODO - create MissingArgEval and modify the formula Evaluator to handle this
          */
         [TestMethod]
+        [Ignore]
         public void DISABLEDtestSomeArgumentsMissing()
         {
             Confirm("DATE(, 1, 0)", 0.0);

@@ -405,6 +405,7 @@
   <ItemGroup>
     <Compile Include="DDF\TestEscherProperty.cs" />
     <Compile Include="Exceptions\ComparisonFailure.cs" />
+    <Compile Include="Exceptions\RuntimeException.cs" />
     <Compile Include="HSSF\HSSFITestDataProvider.cs" />
     <Compile Include="HSSF\Model\TestLinkTable.cs" />
     <Compile Include="HSSF\Model\TestRowBlocksReader.cs" />
@@ -458,6 +459,7 @@
     <Compile Include="SS\Formula\Functions\TestDate.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="SS\Formula\Functions\TestDays360.cs" />
     <Compile Include="SS\Formula\Functions\TestFinanceLib.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -471,17 +473,21 @@
     <Compile Include="SS\Formula\Functions\TestIndirect.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="SS\Formula\Functions\TestIrr.cs" />
     <Compile Include="SS\Formula\Functions\TestIsBlank.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="SS\Formula\Functions\TestLeftRight.cs" />
     <Compile Include="SS\Formula\Functions\TestLen.cs" />
+    <Compile Include="SS\Formula\Functions\TestLookupFunctionsFromSpreadsheet.cs" />
     <Compile Include="SS\Formula\Functions\TestMatch.cs" />
+    <Compile Include="SS\Formula\Functions\TestMathX.cs" />
     <Compile Include="SS\Formula\Functions\TestMid.cs" />
     <Compile Include="SS\Formula\Functions\TestNper.cs" />
     <Compile Include="SS\Formula\Functions\TestNpv.cs" />
     <Compile Include="SS\Formula\Functions\TestOffset.cs" />
     <Compile Include="SS\Formula\Functions\TestPmt.cs" />
+    <Compile Include="SS\Formula\Functions\TestPoisson.cs" />
     <Compile Include="SS\Formula\Functions\TestRoundFuncs.cs" />
     <Compile Include="SS\Formula\Functions\TestRowCol.cs" />
     <Compile Include="SS\Formula\Functions\TestStatsLib.cs" />

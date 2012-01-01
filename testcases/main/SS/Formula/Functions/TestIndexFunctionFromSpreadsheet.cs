@@ -101,7 +101,7 @@ namespace TestCases.SS.Formula.Functions
                     Assert.AreEqual(expected.NumericCellValue, actual.NumberValue, 0.0, msg);
                     break;
                 case CellType.STRING:
-                    Assert.AreEqual(msg, expected.RichStringCellValue.String, actual.StringValue);
+                    Assert.AreEqual(expected.RichStringCellValue.String, actual.StringValue, msg);
                     break;
             }
         }

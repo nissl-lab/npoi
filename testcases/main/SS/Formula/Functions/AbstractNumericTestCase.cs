@@ -69,9 +69,9 @@ namespace TestCases.SS.Formula.Functions
             }
         }
 
-        public static void AssertEqual(String msg, double basEval, double Checkval)
+        public static void AssertEqual(String msg, double baseval, double checkval)
         {
-            Assert.AreEqual(basEval, Checkval, DIFF_TOLERANCE_FACTOR, msg, POS_ZERO);
+            AssertEqual(msg, baseval, checkval, POS_ZERO, DIFF_TOLERANCE_FACTOR);
         }
 
     }

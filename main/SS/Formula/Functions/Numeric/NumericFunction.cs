@@ -167,5 +167,6 @@ namespace NPOI.SS.Formula.Functions
 
         public static Function LOG = new Log();
         public static Function TRUNC = new Trunc();
+        public static Function POISSON = new Poisson();
     }
 }

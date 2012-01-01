@@ -23,6 +23,7 @@ namespace TestCases.SS.Formula.Functions
     using NPOI.HSSF.UserModel;
     using NPOI.SS.UserModel;
     using TestCases.HSSF;
+    using NPOI.SS.Formula.Functions;
 
     /**
      * Tests for {@link Irr}

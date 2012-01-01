@@ -42,19 +42,19 @@ namespace TestCases.SS.Formula.Functions
             Assert.IsTrue(Double.IsNaN(d), "Acosh 0 is NaN");
 
             d = MathX.acosh(1);
-            Assert.AreEqual(0, d, "Acosh 1 ");
+            AssertEqual("Acosh 1 ",0, d);
 
             d = MathX.acosh(-1);
             Assert.IsTrue(Double.IsNaN(d), "Acosh -1 is NaN");
 
             d = MathX.acosh(100);
-            Assert.AreEqual( 5.298292366d, d,"Acosh 100 ");
+            AssertEqual("Acosh 100 ", 5.298292366d, d);
 
             d = MathX.acosh(101.001);
-            Assert.AreEqual(5.308253091d, d, "Acosh 101.001 ");
+            AssertEqual("Acosh 101.001 ",5.308253091d, d);
 
             d = MathX.acosh(200000);
-            Assert.AreEqual(12.89921983d, d, "Acosh 200000 ");
+            AssertEqual("Acosh 200000 ",12.89921983d, d);
 
         }
         [TestMethod]
@@ -63,25 +63,25 @@ namespace TestCases.SS.Formula.Functions
             double d = 0;
 
             d = MathX.asinh(0);
-            Assert.AreEqual(d, 0, "asinh 0");
+            AssertEqual("asinh 0",d, 0);
 
             d = MathX.asinh(1);
-            Assert.AreEqual(0.881373587, d, "asinh 1 ");
+            AssertEqual("asinh 1 ",0.881373587, d);
 
             d = MathX.asinh(-1);
-            Assert.AreEqual(-0.881373587, d, "asinh -1 ");
+            AssertEqual("asinh -1 ",-0.881373587, d);
 
             d = MathX.asinh(-100);
-            Assert.AreEqual(-5.298342366, d, "asinh -100 ");
+            AssertEqual("asinh -100 ",-5.298342366, d);
 
             d = MathX.asinh(100);
-            Assert.AreEqual(5.298342366, d, "asinh 100 ");
+            AssertEqual("asinh 100 ",5.298342366, d);
 
             d = MathX.asinh(200000);
-            Assert.AreEqual(12.899219826096400, d, "asinh 200000");
+            AssertEqual("asinh 200000",12.899219826096400, d);
 
             d = MathX.asinh(-200000);
-            Assert.AreEqual(-12.899223853137, d, "asinh -200000 ");
+            AssertEqual("asinh -200000 ",-12.899223853137, d);
 
         }
         [TestMethod]
@@ -89,31 +89,31 @@ namespace TestCases.SS.Formula.Functions
         {
             double d = 0;
             d = MathX.atanh(0);
-            Assert.AreEqual( d, 0,"atanh 0");
+            AssertEqual("atanh 0", d, 0);
 
             d = MathX.atanh(1);
-            Assert.AreEqual( Double.PositiveInfinity, d,"atanh 1 ");
+            AssertEqual("atanh 1 ", Double.PositiveInfinity, d);
 
             d = MathX.atanh(-1);
-            Assert.AreEqual( Double.NegativeInfinity, d,"atanh -1 ");
+            AssertEqual("atanh -1 ", Double.NegativeInfinity, d);
 
             d = MathX.atanh(-100);
-            Assert.AreEqual( Double.NaN, d,"atanh -100 ");
+            AssertEqual("atanh -100 ", Double.NaN, d);
             
             d = MathX.atanh(100);
-            Assert.AreEqual( Double.NaN, d,"atanh 100 ");
+            AssertEqual("atanh 100 ", Double.NaN, d);
 
             d = MathX.atanh(200000);
-            Assert.AreEqual( Double.NaN, d,"atanh 200000");
+            AssertEqual("atanh 200000", Double.NaN, d);
 
             d = MathX.atanh(-200000);
-            Assert.AreEqual( Double.NaN, d,"atanh -200000 ");
+            AssertEqual("atanh -200000 ", Double.NaN, d);
 
             d = MathX.atanh(0.1);
-            Assert.AreEqual( 0.100335348, d,"atanh 0.1");
+            AssertEqual("atanh 0.1", 0.100335348, d);
 
             d = MathX.atanh(-0.1);
-            Assert.AreEqual( -0.100335348, d,"atanh -0.1 ");
+            AssertEqual("atanh -0.1 ", -0.100335348, d);
 
         }
         [TestMethod]
@@ -121,31 +121,31 @@ namespace TestCases.SS.Formula.Functions
         {
             double d = 0;
             d = MathX.cosh(0);
-            Assert.AreEqual( 1, d,"cosh 0");
+            AssertEqual("cosh 0", 1, d);
 
             d = MathX.cosh(1);
-            Assert.AreEqual( 1.543080635, d,"cosh 1 ");
+            AssertEqual("cosh 1 ", 1.543080635, d);
 
             d = MathX.cosh(-1);
-            Assert.AreEqual( 1.543080635, d,"cosh -1 ");
+            AssertEqual("cosh -1 ", 1.543080635, d);
 
             d = MathX.cosh(-100);
-            Assert.AreEqual( 1.344058570908070E+43, d,"cosh -100 ");
+            AssertEqual("cosh -100 ", 1.344058570908070E+43, d);
 
             d = MathX.cosh(100);
-            Assert.AreEqual( 1.344058570908070E+43, d,"cosh 100 ");
+            AssertEqual("cosh 100 ", 1.344058570908070E+43, d);
 
             d = MathX.cosh(15);
-            Assert.AreEqual( 1634508.686, d,"cosh 15");
+            AssertEqual("cosh 15", 1634508.686, d);
 
             d = MathX.cosh(-15);
-            Assert.AreEqual( 1634508.686, d,"cosh -15 ");
+            AssertEqual("cosh -15 ", 1634508.686, d);
 
             d = MathX.cosh(0.1);
-            Assert.AreEqual( 1.005004168, d,"cosh 0.1");
+            AssertEqual("cosh 0.1", 1.005004168, d);
 
             d = MathX.cosh(-0.1);
-            Assert.AreEqual( 1.005004168, d,"cosh -0.1 ");
+            AssertEqual("cosh -0.1 ", 1.005004168, d);
 
         }
         [TestMethod]
@@ -153,31 +153,31 @@ namespace TestCases.SS.Formula.Functions
         {
             double d = 0;
             d = MathX.tanh(0);
-            Assert.AreEqual( 0, d,"tanh 0");
+            AssertEqual("tanh 0", 0, d);
 
             d = MathX.tanh(1);
-            Assert.AreEqual( 0.761594156, d,"tanh 1 ");
+            AssertEqual("tanh 1 ", 0.761594156, d);
 
             d = MathX.tanh(-1);
-            Assert.AreEqual( -0.761594156, d,"tanh -1 ");
+            AssertEqual("tanh -1 ", -0.761594156, d);
 
             d = MathX.tanh(-100);
-            Assert.AreEqual( -1, d,"tanh -100 ");
+            AssertEqual("tanh -100 ", -1, d);
 
             d = MathX.tanh(100);
-            Assert.AreEqual( 1, d,"tanh 100 ");
+            AssertEqual("tanh 100 ", 1, d);
 
             d = MathX.tanh(15);
-            Assert.AreEqual( 1, d,"tanh 15");
+            AssertEqual("tanh 15", 1, d);
 
             d = MathX.tanh(-15);
-            Assert.AreEqual( -1, d,"tanh -15 ");
+            AssertEqual("tanh -15 ", -1, d);
 
             d = MathX.tanh(0.1);
-            Assert.AreEqual( 0.099667995, d,"tanh 0.1");
+            AssertEqual("tanh 0.1", 0.099667995, d);
 
             d = MathX.tanh(-0.1);
-            Assert.AreEqual( -0.099667995, d,"tanh -0.1 ");
+            AssertEqual("tanh -0.1 ", -0.099667995, d);
 
         }
         [TestMethod]
@@ -191,11 +191,11 @@ namespace TestCases.SS.Formula.Functions
             d[16] = 17.1; d[17] = 18.1; d[18] = 19.1; d[19] = 20.1;
 
             double m = MathX.max(d);
-            Assert.AreEqual( 20.1, m,"Max ");
+            AssertEqual("Max ", 20.1, m);
 
             d = new double[1000];
             m = MathX.max(d);
-            Assert.AreEqual( 0, m,"Max ");
+            AssertEqual("Max ", 0, m);
 
             d[0] = -1.1; d[1] = 2.1; d[2] = -3.1; d[3] = 4.1;
             d[4] = -5.1; d[5] = 6.1; d[6] = -7.1; d[7] = 8.1;
@@ -203,7 +203,7 @@ namespace TestCases.SS.Formula.Functions
             d[12] = -13.1; d[13] = 14.1; d[14] = -15.1; d[15] = 16.1;
             d[16] = -17.1; d[17] = 18.1; d[18] = -19.1; d[19] = 20.1;
             m = MathX.max(d);
-            Assert.AreEqual( 20.1, m,"Max ");
+            AssertEqual("Max ", 20.1, m);
 
             d = new double[20];
             d[0] = -1.1; d[1] = -2.1; d[2] = -3.1; d[3] = -4.1;
@@ -212,7 +212,7 @@ namespace TestCases.SS.Formula.Functions
             d[12] = -13.1; d[13] = -14.1; d[14] = -15.1; d[15] = -16.1;
             d[16] = -17.1; d[17] = -18.1; d[18] = -19.1; d[19] = -20.1;
             m = MathX.max(d);
-            Assert.AreEqual( -1.1, m,"Max ");
+            AssertEqual("Max ", -1.1, m);
 
         }
         [TestMethod]
@@ -226,7 +226,7 @@ namespace TestCases.SS.Formula.Functions
             d[16] = 17.1; d[17] = 18.1; d[18] = 19.1; d[19] = 20.1;
 
             double m = MathX.min(d);
-            Assert.AreEqual( 0, m,"Min ");
+            AssertEqual("Min ", 0, m);
 
             d = new double[20];
             d[0] = 1.1; d[1] = 2.1; d[2] = 3.1; d[3] = 4.1;
@@ -236,11 +236,11 @@ namespace TestCases.SS.Formula.Functions
             d[16] = 17.1; d[17] = 18.1; d[18] = 19.1; d[19] = 20.1;
 
             m = MathX.min(d);
-            Assert.AreEqual( 1.1, m,"Min ");
+            AssertEqual("Min ", 1.1, m);
 
             d = new double[1000];
             m = MathX.min(d);
-            Assert.AreEqual( 0, m,"Min ");
+            AssertEqual("Min ", 0, m);
 
             d[0] = -1.1; d[1] = 2.1; d[2] = -3.1; d[3] = 4.1;
             d[4] = -5.1; d[5] = 6.1; d[6] = -7.1; d[7] = 8.1;
@@ -248,7 +248,7 @@ namespace TestCases.SS.Formula.Functions
             d[12] = -13.1; d[13] = 14.1; d[14] = -15.1; d[15] = 16.1;
             d[16] = -17.1; d[17] = 18.1; d[18] = -19.1; d[19] = 20.1;
             m = MathX.min(d);
-            Assert.AreEqual( -19.1, m,"Min ");
+            AssertEqual("Min ", -19.1, m);
 
             d = new double[20];
             d[0] = -1.1; d[1] = -2.1; d[2] = -3.1; d[3] = -4.1;
@@ -257,7 +257,7 @@ namespace TestCases.SS.Formula.Functions
             d[12] = -13.1; d[13] = -14.1; d[14] = -15.1; d[15] = -16.1;
             d[16] = -17.1; d[17] = -18.1; d[18] = -19.1; d[19] = -20.1;
             m = MathX.min(d);
-            Assert.AreEqual( -20.1, m,"Min ");
+            AssertEqual("Min ", -20.1, m);
         }
         [TestMethod]
         public void TestProduct()
@@ -270,7 +270,7 @@ namespace TestCases.SS.Formula.Functions
             d[16] = 17.1; d[17] = 18.1; d[18] = 19.1; d[19] = 20.1;
 
             double m = MathX.min(d);
-            Assert.AreEqual( 0, m,"Min ");
+            AssertEqual("Min ", 0, m);
 
             d = new double[20];
             d[0] = 1.1; d[1] = 2.1; d[2] = 3.1; d[3] = 4.1;
@@ -280,11 +280,11 @@ namespace TestCases.SS.Formula.Functions
             d[16] = 17.1; d[17] = 18.1; d[18] = 19.1; d[19] = 20.1;
 
             m = MathX.min(d);
-            Assert.AreEqual( 1.1, m,"Min ");
+            AssertEqual("Min ", 1.1, m);
 
             d = new double[1000];
             m = MathX.min(d);
-            Assert.AreEqual( 0, m,"Min ");
+            AssertEqual("Min ", 0, m);
 
             d[0] = -1.1; d[1] = 2.1; d[2] = -3.1; d[3] = 4.1;
             d[4] = -5.1; d[5] = 6.1; d[6] = -7.1; d[7] = 8.1;
@@ -292,7 +292,7 @@ namespace TestCases.SS.Formula.Functions
             d[12] = -13.1; d[13] = 14.1; d[14] = -15.1; d[15] = 16.1;
             d[16] = -17.1; d[17] = 18.1; d[18] = -19.1; d[19] = 20.1;
             m = MathX.min(d);
-            Assert.AreEqual( -19.1, m,"Min ");
+            AssertEqual("Min ", -19.1, m);
 
             d = new double[20];
             d[0] = -1.1; d[1] = -2.1; d[2] = -3.1; d[3] = -4.1;
@@ -301,7 +301,7 @@ namespace TestCases.SS.Formula.Functions
             d[12] = -13.1; d[13] = -14.1; d[14] = -15.1; d[15] = -16.1;
             d[16] = -17.1; d[17] = -18.1; d[18] = -19.1; d[19] = -20.1;
             m = MathX.min(d);
-            Assert.AreEqual( -20.1, m,"Min ");
+            AssertEqual("Min ", -20.1, m);
         }
         [TestMethod]
         public void TestMod()
@@ -327,47 +327,47 @@ namespace TestCases.SS.Formula.Functions
             int n = 100;
             int k = 50;
             double d = MathX.nChooseK(n, k);
-            Assert.AreEqual( 1.00891344545564E29, d,"NChooseK ");
+            AssertEqual("NChooseK ", 1.00891344545564E29, d);
 
             n = -1; k = 1;
             d = MathX.nChooseK(n, k);
-            Assert.AreEqual( Double.NaN, d,"NChooseK ");
+            AssertEqual("NChooseK ", Double.NaN, d);
 
             n = 1; k = -1;
             d = MathX.nChooseK(n, k);
-            Assert.AreEqual( Double.NaN, d,"NChooseK ");
+            AssertEqual("NChooseK ", Double.NaN, d);
 
             n = 0; k = 1;
             d = MathX.nChooseK(n, k);
-            Assert.AreEqual( Double.NaN, d,"NChooseK ");
+            AssertEqual("NChooseK ", Double.NaN, d);
 
             n = 1; k = 0;
             d = MathX.nChooseK(n, k);
-            Assert.AreEqual( 1, d,"NChooseK ");
+            AssertEqual("NChooseK ", 1, d);
 
             n = 10; k = 9;
             d = MathX.nChooseK(n, k);
-            Assert.AreEqual( 10, d,"NChooseK ");
+            AssertEqual("NChooseK ", 10, d);
 
             n = 10; k = 10;
             d = MathX.nChooseK(n, k);
-            Assert.AreEqual( 1, d,"NChooseK ");
+            AssertEqual("NChooseK ", 1, d);
 
             n = 10; k = 1;
             d = MathX.nChooseK(n, k);
-            Assert.AreEqual( 10, d,"NChooseK ");
+            AssertEqual("NChooseK ", 10, d);
 
             n = 1000; k = 1;
             d = MathX.nChooseK(n, k);
-            Assert.AreEqual( 1000, d,"NChooseK "); // awesome ;)
+            AssertEqual("NChooseK ", 1000, d); // awesome ;)
 
             n = 1000; k = 2;
             d = MathX.nChooseK(n, k);
-            Assert.AreEqual( 499500, d,"NChooseK "); // awesome ;)
+            AssertEqual("NChooseK ", 499500, d); // awesome ;)
 
             n = 13; k = 7;
             d = MathX.nChooseK(n, k);
-            Assert.AreEqual( 1716, d,"NChooseK ");
+            AssertEqual("NChooseK ", 1716, d);
 
         }
         [TestMethod]
@@ -379,48 +379,48 @@ namespace TestCases.SS.Formula.Functions
             double d = 0;
 
 
-            Assert.AreEqual( minus, MathX.sign(minus),"Sign ");
-            Assert.AreEqual( plus, MathX.sign(plus),"Sign ");
-            Assert.AreEqual( zero, MathX.sign(zero),"Sign ");
+            AssertEqual("Sign ", minus, MathX.sign(minus));
+            AssertEqual("Sign ", plus, MathX.sign(plus));
+            AssertEqual("Sign ", zero, MathX.sign(zero));
 
             d = 0;
-            Assert.AreEqual( zero, MathX.sign(d),"Sign ");
+            AssertEqual("Sign ", zero, MathX.sign(d));
 
             d = -1.000001;
-            Assert.AreEqual( minus, MathX.sign(d),"Sign ");
+            AssertEqual("Sign ", minus, MathX.sign(d));
 
             d = -.000001;
-            Assert.AreEqual( minus, MathX.sign(d),"Sign ");
+            AssertEqual("Sign ", minus, MathX.sign(d));
 
             d = -1E-200;
-            Assert.AreEqual( minus, MathX.sign(d),"Sign ");
+            AssertEqual("Sign ", minus, MathX.sign(d));
 
             d = Double.NegativeInfinity;
-            Assert.AreEqual( minus, MathX.sign(d),"Sign ");
+            AssertEqual("Sign ", minus, MathX.sign(d));
 
             d = -200.11;
-            Assert.AreEqual( minus, MathX.sign(d),"Sign ");
+            AssertEqual("Sign ", minus, MathX.sign(d));
 
             d = -2000000000000.11;
-            Assert.AreEqual( minus, MathX.sign(d),"Sign ");
+            AssertEqual("Sign ", minus, MathX.sign(d));
 
             d = 1.000001;
-            Assert.AreEqual( plus, MathX.sign(d),"Sign ");
+            AssertEqual("Sign ", plus, MathX.sign(d));
 
             d = .000001;
-            Assert.AreEqual( plus, MathX.sign(d),"Sign ");
+            AssertEqual("Sign ", plus, MathX.sign(d));
 
             d = 1E-200;
-            Assert.AreEqual( plus, MathX.sign(d),"Sign ");
+            AssertEqual("Sign ", plus, MathX.sign(d));
 
             d = Double.PositiveInfinity;
-            Assert.AreEqual( plus, MathX.sign(d),"Sign ");
+            AssertEqual("Sign ", plus, MathX.sign(d));
 
             d = 200.11;
-            Assert.AreEqual( plus, MathX.sign(d),"Sign ");
+            AssertEqual("Sign ", plus, MathX.sign(d));
 
             d = 2000000000000.11;
-            Assert.AreEqual( plus, MathX.sign(d),"Sign ");
+            AssertEqual("Sign ", plus, MathX.sign(d));
 
         }
         [TestMethod]
@@ -428,31 +428,31 @@ namespace TestCases.SS.Formula.Functions
         {
             double d = 0;
             d = MathX.sinh(0);
-            Assert.AreEqual( 0, d,"sinh 0");
+            AssertEqual("sinh 0", 0, d);
 
             d = MathX.sinh(1);
-            Assert.AreEqual( 1.175201194, d,"sinh 1 ");
+            AssertEqual("sinh 1 ", 1.175201194, d);
 
             d = MathX.sinh(-1);
-            Assert.AreEqual( -1.175201194, d,"sinh -1 ");
+            AssertEqual("sinh -1 ", -1.175201194, d);
 
             d = MathX.sinh(-100);
-            Assert.AreEqual( -1.344058570908070E+43, d,"sinh -100 ");
+            AssertEqual("sinh -100 ", -1.344058570908070E+43, d);
 
             d = MathX.sinh(100);
-            Assert.AreEqual( 1.344058570908070E+43, d,"sinh 100 ");
+            AssertEqual("sinh 100 ", 1.344058570908070E+43, d);
 
             d = MathX.sinh(15);
-            Assert.AreEqual( 1634508.686, d,"sinh 15");
+            AssertEqual("sinh 15", 1634508.686, d);
 
             d = MathX.sinh(-15);
-            Assert.AreEqual( -1634508.686, d,"sinh -15 ");
+            AssertEqual("sinh -15 ", -1634508.686, d);
 
             d = MathX.sinh(0.1);
-            Assert.AreEqual( 0.10016675, d,"sinh 0.1");
+            AssertEqual("sinh 0.1", 0.10016675, d);
 
             d = MathX.sinh(-0.1);
-            Assert.AreEqual( -0.10016675, d,"sinh -0.1 ");
+            AssertEqual("sinh -0.1 ", -0.10016675, d);
 
         }
         [TestMethod]
@@ -466,11 +466,11 @@ namespace TestCases.SS.Formula.Functions
             d[16] = 17.1; d[17] = 18.1; d[18] = 19.1; d[19] = 20.1;
 
             double s = MathX.sum(d);
-            Assert.AreEqual( 212, s,"Sum ");
+            AssertEqual( "Sum ", 212, s );
 
             d = new double[1000];
             s = MathX.sum(d);
-            Assert.AreEqual( 0, s,"Sum ");
+            AssertEqual("Sum ", 0d, s);
 
             d[0] = -1.1; d[1] = 2.1; d[2] = -3.1; d[3] = 4.1;
             d[4] = -5.1; d[5] = 6.1; d[6] = -7.1; d[7] = 8.1;
@@ -478,7 +478,7 @@ namespace TestCases.SS.Formula.Functions
             d[12] = -13.1; d[13] = 14.1; d[14] = -15.1; d[15] = 16.1;
             d[16] = -17.1; d[17] = 18.1; d[18] = -19.1; d[19] = 20.1;
             s = MathX.sum(d);
-            Assert.AreEqual( 10, s,"Sum ");
+            AssertEqual("Sum ", 10d, s);
 
             d[0] = -1.1; d[1] = -2.1; d[2] = -3.1; d[3] = -4.1;
             d[4] = -5.1; d[5] = -6.1; d[6] = -7.1; d[7] = -8.1;
@@ -486,7 +486,7 @@ namespace TestCases.SS.Formula.Functions
             d[12] = -13.1; d[13] = -14.1; d[14] = -15.1; d[15] = -16.1;
             d[16] = -17.1; d[17] = -18.1; d[18] = -19.1; d[19] = -20.1;
             s = MathX.sum(d);
-            Assert.AreEqual( -212, s,"Sum ");
+            AssertEqual("Sum ", -212d, s);
 
         }
         [TestMethod]
@@ -500,11 +500,11 @@ namespace TestCases.SS.Formula.Functions
             d[16] = 17.1; d[17] = 18.1; d[18] = 19.1; d[19] = 20.1;
 
             double s = MathX.sumsq(d);
-            Assert.AreEqual( 2912.2, s, "Sumsq ");
+            AssertEqual("Sumsq ", 2912.2, s);
 
             d = new double[1000];
             s = MathX.sumsq(d);
-            Assert.AreEqual( 0, s,"Sumsq ");
+            AssertEqual("Sumsq ", 0, s);
 
             d[0] = -1.1; d[1] = 2.1; d[2] = -3.1; d[3] = 4.1;
             d[4] = -5.1; d[5] = 6.1; d[6] = -7.1; d[7] = 8.1;
@@ -512,7 +512,7 @@ namespace TestCases.SS.Formula.Functions
             d[12] = -13.1; d[13] = 14.1; d[14] = -15.1; d[15] = 16.1;
             d[16] = -17.1; d[17] = 18.1; d[18] = -19.1; d[19] = 20.1;
             s = MathX.sumsq(d);
-            Assert.AreEqual( 2912.2, s,"Sumsq ");
+            AssertEqual("Sumsq ", 2912.2, s);
 
             d[0] = -1.1; d[1] = -2.1; d[2] = -3.1; d[3] = -4.1;
             d[4] = -5.1; d[5] = -6.1; d[6] = -7.1; d[7] = -8.1;
@@ -520,7 +520,7 @@ namespace TestCases.SS.Formula.Functions
             d[12] = -13.1; d[13] = -14.1; d[14] = -15.1; d[15] = -16.1;
             d[16] = -17.1; d[17] = -18.1; d[18] = -19.1; d[19] = -20.1;
             s = MathX.sumsq(d);
-            Assert.AreEqual( 2912.2, s,"Sumsq ");
+            AssertEqual("Sumsq ", 2912.2, s);
         }
         [TestMethod]
         public void TestFactorial()
@@ -530,27 +530,27 @@ namespace TestCases.SS.Formula.Functions
 
             n = 0;
             s = MathX.factorial(n);
-            Assert.AreEqual( 1, s,"Factorial ");
+            AssertEqual("Factorial ", 1, s);
 
             n = 1;
             s = MathX.factorial(n);
-            Assert.AreEqual( 1, s,"Factorial ");
+            AssertEqual("Factorial ", 1, s);
 
             n = 10;
             s = MathX.factorial(n);
-            Assert.AreEqual( 3628800, s,"Factorial ");
+            AssertEqual("Factorial ", 3628800, s);
 
             n = 99;
             s = MathX.factorial(n);
-            Assert.AreEqual( 9.33262154439E+155, s,"Factorial ");
+            AssertEqual("Factorial ", 9.33262154439E+155, s);
 
             n = -1;
             s = MathX.factorial(n);
-            Assert.AreEqual( Double.NaN, s,"Factorial ");
+            AssertEqual("Factorial ", Double.NaN, s);
 
             n = Int32.MaxValue;
             s = MathX.factorial(n);
-            Assert.AreEqual( Double.PositiveInfinity, s,"Factorial ");
+            AssertEqual("Factorial ", Double.PositiveInfinity, s);
         }
         [TestMethod]
         public void TestSumx2my2()
@@ -661,49 +661,49 @@ namespace TestCases.SS.Formula.Functions
             int p = 0;
 
             d = 0; p = 0;
-            Assert.AreEqual( 0, MathX.round(d, p),"round ");
+            AssertEqual("round ", 0, MathX.round(d, p));
 
             d = 10; p = 0;
-            Assert.AreEqual( 10, MathX.round(d, p),"round ");
+            AssertEqual("round ", 10, MathX.round(d, p));
 
             d = 123.23; p = 0;
-            Assert.AreEqual( 123, MathX.round(d, p),"round ");
+            AssertEqual("round ", 123, MathX.round(d, p));
 
             d = -123.23; p = 0;
-            Assert.AreEqual( -123, MathX.round(d, p),"round ");
+            AssertEqual("round ", -123, MathX.round(d, p));
 
             d = 123.12; p = 2;
-            Assert.AreEqual( 123.12, MathX.round(d, p),"round ");
+            AssertEqual("round ", 123.12, MathX.round(d, p));
 
             d = 88.123459; p = 5;
-            Assert.AreEqual( 88.12346, MathX.round(d, p),"round ");
+            AssertEqual("round ", 88.12346, MathX.round(d, p));
 
             d = 0; p = 2;
-            Assert.AreEqual( 0, MathX.round(d, p),"round ");
+            AssertEqual("round ", 0, MathX.round(d, p));
 
             d = 0; p = -1;
-            Assert.AreEqual( 0, MathX.round(d, p),"round ");
+            AssertEqual("round ", 0, MathX.round(d, p));
 
             d = 0.01; p = -1;
-            Assert.AreEqual( 0, MathX.round(d, p),"round ");
+            AssertEqual("round ", 0, MathX.round(d, p));
 
             d = 123.12; p = -2;
-            Assert.AreEqual( 100, MathX.round(d, p),"round ");
+            AssertEqual("round ", 100, MathX.round(d, p));
 
             d = 88.123459; p = -3;
-            Assert.AreEqual( 0, MathX.round(d, p),"round ");
+            AssertEqual("round ", 0, MathX.round(d, p));
 
             d = 49.00000001; p = -1;
-            Assert.AreEqual( 50, MathX.round(d, p),"round ");
+            AssertEqual("round ", 50, MathX.round(d, p));
 
             d = 149.999999; p = -2;
-            Assert.AreEqual( 100, MathX.round(d, p),"round ");
+            AssertEqual("round ", 100, MathX.round(d, p));
 
             d = 150.0; p = -2;
-            Assert.AreEqual( 200, MathX.round(d, p),"round ");
+            AssertEqual("round ", 200, MathX.round(d, p));
 
             d = 2162.615d; p = 2;
-            Assert.AreEqual( 2162.62d, MathX.round(d, p),"round ");
+            AssertEqual("round ", 2162.62d, MathX.round(d, p));
         }
         [TestMethod]
         public void TestRoundDown()
@@ -712,46 +712,46 @@ namespace TestCases.SS.Formula.Functions
             int p = 0;
 
             d = 0; p = 0;
-            Assert.AreEqual( 0, MathX.roundDown(d, p),"roundDown ");
+            AssertEqual("roundDown ", 0, MathX.roundDown(d, p));
 
             d = 10; p = 0;
-            Assert.AreEqual( 10, MathX.roundDown(d, p),"roundDown ");
+            AssertEqual("roundDown ", 10, MathX.roundDown(d, p));
 
             d = 123.99; p = 0;
-            Assert.AreEqual( 123, MathX.roundDown(d, p),"roundDown ");
+            AssertEqual("roundDown ", 123, MathX.roundDown(d, p));
 
             d = -123.99; p = 0;
-            Assert.AreEqual( -123, MathX.roundDown(d, p),"roundDown ");
+            AssertEqual("roundDown ", -123, MathX.roundDown(d, p));
 
             d = 123.99; p = 2;
-            Assert.AreEqual( 123.99, MathX.roundDown(d, p),"roundDown ");
+            AssertEqual("roundDown ", 123.99, MathX.roundDown(d, p));
 
             d = 88.123459; p = 5;
-            Assert.AreEqual( 88.12345, MathX.roundDown(d, p),"roundDown ");
+            AssertEqual("roundDown ", 88.12345, MathX.roundDown(d, p));
 
             d = 0; p = 2;
-            Assert.AreEqual( 0, MathX.roundDown(d, p),"roundDown ");
+            AssertEqual("roundDown ", 0, MathX.roundDown(d, p));
 
             d = 0; p = -1;
-            Assert.AreEqual( 0, MathX.roundDown(d, p),"roundDown ");
+            AssertEqual("roundDown ", 0, MathX.roundDown(d, p));
 
             d = 0.01; p = -1;
-            Assert.AreEqual( 0, MathX.roundDown(d, p),"roundDown ");
+            AssertEqual("roundDown ", 0, MathX.roundDown(d, p));
 
             d = 199.12; p = -2;
-            Assert.AreEqual( 100, MathX.roundDown(d, p),"roundDown ");
+            AssertEqual("roundDown ", 100, MathX.roundDown(d, p));
 
             d = 88.123459; p = -3;
-            Assert.AreEqual( 0, MathX.roundDown(d, p),"roundDown ");
+            AssertEqual("roundDown ", 0, MathX.roundDown(d, p));
 
             d = 99.00000001; p = -1;
-            Assert.AreEqual( 90, MathX.roundDown(d, p),"roundDown ");
+            AssertEqual("roundDown ", 90, MathX.roundDown(d, p));
 
             d = 100.00001; p = -2;
-            Assert.AreEqual( 100, MathX.roundDown(d, p),"roundDown ");
+            AssertEqual("roundDown ", 100, MathX.roundDown(d, p));
 
             d = 150.0; p = -2;
-            Assert.AreEqual( 100, MathX.roundDown(d, p),"roundDown ");
+            AssertEqual("roundDown ", 100, MathX.roundDown(d, p));
         }
         [TestMethod]
         public void TestRoundUp()
@@ -760,46 +760,46 @@ namespace TestCases.SS.Formula.Functions
             int p = 0;
 
             d = 0; p = 0;
-            Assert.AreEqual( 0, MathX.roundUp(d, p),"roundUp ");
+            AssertEqual("roundUp ", 0, MathX.roundUp(d, p));
 
             d = 10; p = 0;
-            Assert.AreEqual( 10, MathX.roundUp(d, p),"roundUp ");
+            AssertEqual("roundUp ", 10, MathX.roundUp(d, p));
 
             d = 123.23; p = 0;
-            Assert.AreEqual( 124, MathX.roundUp(d, p),"roundUp ");
+            AssertEqual("roundUp ", 124, MathX.roundUp(d, p));
 
             d = -123.23; p = 0;
-            Assert.AreEqual( -124, MathX.roundUp(d, p),"roundUp ");
+            AssertEqual("roundUp ", -124, MathX.roundUp(d, p));
 
             d = 123.12; p = 2;
-            Assert.AreEqual( 123.12, MathX.roundUp(d, p),"roundUp ");
+            AssertEqual("roundUp ", 123.12, MathX.roundUp(d, p));
 
             d = 88.123459; p = 5;
-            Assert.AreEqual( 88.12346, MathX.roundUp(d, p),"roundUp ");
+            AssertEqual("roundUp ", 88.12346, MathX.roundUp(d, p));
 
             d = 0; p = 2;
-            Assert.AreEqual( 0, MathX.roundUp(d, p),"roundUp ");
+            AssertEqual("roundUp ", 0, MathX.roundUp(d, p));
 
             d = 0; p = -1;
-            Assert.AreEqual( 0, MathX.roundUp(d, p),"roundUp ");
+            AssertEqual("roundUp ", 0, MathX.roundUp(d, p));
 
             d = 0.01; p = -1;
-            Assert.AreEqual( 10, MathX.roundUp(d, p),"roundUp ");
+            AssertEqual("roundUp ", 10, MathX.roundUp(d, p));
 
             d = 123.12; p = -2;
-            Assert.AreEqual( 200, MathX.roundUp(d, p),"roundUp ");
+            AssertEqual("roundUp ", 200, MathX.roundUp(d, p));
 
             d = 88.123459; p = -3;
-            Assert.AreEqual( 1000, MathX.roundUp(d, p),"roundUp ");
+            AssertEqual("roundUp ", 1000, MathX.roundUp(d, p));
 
             d = 49.00000001; p = -1;
-            Assert.AreEqual( 50, MathX.roundUp(d, p),"roundUp ");
+            AssertEqual("roundUp ", 50, MathX.roundUp(d, p));
 
             d = 149.999999; p = -2;
-            Assert.AreEqual( 200, MathX.roundUp(d, p),"roundUp ");
+            AssertEqual("roundUp ", 200, MathX.roundUp(d, p));
 
             d = 150.0; p = -2;
-            Assert.AreEqual( 200, MathX.roundUp(d, p),"roundUp ");
+            AssertEqual("roundUp ", 200, MathX.roundUp(d, p));
         }
         [TestMethod]
         public void TestCeiling()
@@ -808,52 +808,52 @@ namespace TestCases.SS.Formula.Functions
             double s = 0;
 
             d = 0; s = 0;
-            Assert.AreEqual( 0, MathX.ceiling(d, s),"ceiling ");
+            AssertEqual("ceiling ", 0, MathX.ceiling(d, s));
 
             d = 1; s = 0;
-            Assert.AreEqual( 0, MathX.ceiling(d, s),"ceiling ");
+            AssertEqual("ceiling ", 0, MathX.ceiling(d, s));
 
             d = 0; s = 1;
-            Assert.AreEqual( 0, MathX.ceiling(d, s),"ceiling ");
+            AssertEqual("ceiling ", 0, MathX.ceiling(d, s));
 
             d = -1; s = 0;
-            Assert.AreEqual( 0, MathX.ceiling(d, s),"ceiling ");
+            AssertEqual("ceiling ", 0, MathX.ceiling(d, s));
 
             d = 0; s = -1;
-            Assert.AreEqual( 0, MathX.ceiling(d, s),"ceiling ");
+            AssertEqual("ceiling ", 0, MathX.ceiling(d, s));
 
             d = 10; s = 1.11;
-            Assert.AreEqual( 11.1, MathX.ceiling(d, s),"ceiling ");
+            AssertEqual("ceiling ", 11.1, MathX.ceiling(d, s));
 
             d = 11.12333; s = 0.03499;
-            Assert.AreEqual( 11.12682, MathX.ceiling(d, s),"ceiling ");
+            AssertEqual("ceiling ", 11.12682, MathX.ceiling(d, s));
 
             d = -11.12333; s = 0.03499;
-            Assert.AreEqual( Double.NaN, MathX.ceiling(d, s),"ceiling ");
+            AssertEqual("ceiling ", Double.NaN, MathX.ceiling(d, s));
 
             d = 11.12333; s = -0.03499;
-            Assert.AreEqual( Double.NaN, MathX.ceiling(d, s),"ceiling ");
+            AssertEqual("ceiling ", Double.NaN, MathX.ceiling(d, s));
 
             d = -11.12333; s = -0.03499;
-            Assert.AreEqual( -11.12682, MathX.ceiling(d, s),"ceiling ");
+            AssertEqual("ceiling ", -11.12682, MathX.ceiling(d, s));
 
             d = 100; s = 0.001;
-            Assert.AreEqual( 100, MathX.ceiling(d, s),"ceiling ");
+            AssertEqual("ceiling ", 100, MathX.ceiling(d, s));
 
             d = -0.001; s = -9.99;
-            Assert.AreEqual( -9.99, MathX.ceiling(d, s),"ceiling ");
+            AssertEqual("ceiling ", -9.99, MathX.ceiling(d, s));
 
             d = 4.42; s = 0.05;
-            Assert.AreEqual( 4.45, MathX.ceiling(d, s),"ceiling ");
+            AssertEqual("ceiling ", 4.45, MathX.ceiling(d, s));
 
             d = 0.05; s = 4.42;
-            Assert.AreEqual( 4.42, MathX.ceiling(d, s),"ceiling ");
+            AssertEqual("ceiling ", 4.42, MathX.ceiling(d, s));
 
             d = 0.6666; s = 3.33;
-            Assert.AreEqual( 3.33, MathX.ceiling(d, s),"ceiling ");
+            AssertEqual("ceiling ", 3.33, MathX.ceiling(d, s));
 
             d = 2d / 3; s = 3.33;
-            Assert.AreEqual( 3.33, MathX.ceiling(d, s),"ceiling ");
+            AssertEqual("ceiling ", 3.33, MathX.ceiling(d, s));
         }
         [TestMethod]
         public void TestFloor()
@@ -862,52 +862,52 @@ namespace TestCases.SS.Formula.Functions
             double s = 0;
 
             d = 0; s = 0;
-            Assert.AreEqual( 0, MathX.floor(d, s),"floor ");
+            AssertEqual("floor ", 0, MathX.floor(d, s));
 
             d = 1; s = 0;
-            Assert.AreEqual( Double.NaN, MathX.floor(d, s),"floor ");
+            AssertEqual("floor ", Double.NaN, MathX.floor(d, s));
 
             d = 0; s = 1;
-            Assert.AreEqual( 0, MathX.floor(d, s),"floor ");
+            AssertEqual("floor ", 0, MathX.floor(d, s));
 
             d = -1; s = 0;
-            Assert.AreEqual( Double.NaN, MathX.floor(d, s),"floor ");
+            AssertEqual("floor ", Double.NaN, MathX.floor(d, s));
 
             d = 0; s = -1;
-            Assert.AreEqual( 0, MathX.floor(d, s),"floor ");
+            AssertEqual("floor ", 0, MathX.floor(d, s));
 
             d = 10; s = 1.11;
-            Assert.AreEqual( 9.99, MathX.floor(d, s),"floor ");
+            AssertEqual("floor ", 9.99, MathX.floor(d, s));
 
             d = 11.12333; s = 0.03499;
-            Assert.AreEqual( 11.09183, MathX.floor(d, s),"floor ");
+            AssertEqual("floor ", 11.09183, MathX.floor(d, s));
 
             d = -11.12333; s = 0.03499;
-            Assert.AreEqual( Double.NaN, MathX.floor(d, s),"floor ");
+            AssertEqual("floor ", Double.NaN, MathX.floor(d, s));
 
             d = 11.12333; s = -0.03499;
-            Assert.AreEqual( Double.NaN, MathX.floor(d, s),"floor ");
+            AssertEqual("floor ", Double.NaN, MathX.floor(d, s));
 
             d = -11.12333; s = -0.03499;
-            Assert.AreEqual( -11.09183, MathX.floor(d, s),"floor ");
+            AssertEqual("floor ", -11.09183, MathX.floor(d, s));
 
             d = 100; s = 0.001;
-            Assert.AreEqual( 100, MathX.floor(d, s),"floor ");
+            AssertEqual("floor ", 100, MathX.floor(d, s));
 
             d = -0.001; s = -9.99;
-            Assert.AreEqual( 0, MathX.floor(d, s),"floor ");
+            AssertEqual("floor ", 0, MathX.floor(d, s));
 
             d = 4.42; s = 0.05;
-            Assert.AreEqual( 4.4, MathX.floor(d, s),"floor ");
+            AssertEqual("floor ", 4.4, MathX.floor(d, s));
 
             d = 0.05; s = 4.42;
-            Assert.AreEqual( 0, MathX.floor(d, s),"floor ");
+            AssertEqual("floor ", 0, MathX.floor(d, s));
 
             d = 0.6666; s = 3.33;
-            Assert.AreEqual( 0, MathX.floor(d, s),"floor ");
+            AssertEqual("floor ", 0, MathX.floor(d, s));
 
             d = 2d / 3; s = 3.33;
-            Assert.AreEqual( 0, MathX.floor(d, s),"floor ");
+            AssertEqual("floor ", 0, MathX.floor(d, s));
         }
 
     }

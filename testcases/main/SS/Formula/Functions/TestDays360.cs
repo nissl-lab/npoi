@@ -21,6 +21,7 @@ namespace TestCases.SS.Formula.Functions
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using NPOI.SS.Formula.Eval;
     using NPOI.SS.UserModel;
+    using NPOI.SS.Formula.Functions;
 
     /**
      * @author Josh Micich
@@ -46,7 +47,7 @@ namespace TestCases.SS.Formula.Functions
             //c.SetTimeInMillis(d.GetTime());
             //c.Add(Calendar.DAY_OF_MONTH, -1);
             //return c.GetTime();
-            return d.AddMonths(-1);
+            return d.AddDays(-1);
         }
         private static String fmt(DateTime d)
         {
@@ -87,7 +88,6 @@ namespace TestCases.SS.Formula.Functions
          * The <tt>method</tt> parameter only Makes a difference when the second parameter
          * is the last day of the month that does <em>not</em> have 30 days.
          */
-        [TestMethod]
         public void DISABLED_testMonthBoundaries()
         {
             // jan

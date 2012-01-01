@@ -648,6 +648,7 @@
     <Compile Include="SS\Formula\Functions\Index.cs" />
     <Compile Include="SS\Formula\Functions\Indirect.cs" />
     <Compile Include="SS\Formula\Functions\Int.cs" />
+    <Compile Include="SS\Formula\Functions\Irr.cs" />
     <Compile Include="SS\Formula\Functions\Logical\Isblank.cs" />
     <Compile Include="SS\Formula\Functions\Logical\Iserror.cs" />
     <Compile Include="SS\Formula\Functions\Logical\Islogical.cs" />
@@ -685,6 +686,7 @@
     <Compile Include="SS\Formula\Functions\Numeric\Log10.cs" />
     <Compile Include="SS\Formula\Functions\Numeric\NumericFunction.cs" />
     <Compile Include="SS\Formula\Functions\Numeric\Pi.cs" />
+    <Compile Include="SS\Formula\Functions\Numeric\Poisson.cs" />
     <Compile Include="SS\Formula\Functions\Numeric\Rand.cs" />
     <Compile Include="SS\Formula\Functions\Numeric\Round.cs" />
     <Compile Include="SS\Formula\Functions\Numeric\Rounddown.cs" />
