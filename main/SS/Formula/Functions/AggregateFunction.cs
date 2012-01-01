@@ -165,7 +165,7 @@ namespace NPOI.SS.Formula.Functions
         /**
                  *  ignore nested subtotals.
                  */
-        public bool IsSubtotalCounted
+        public override bool IsSubtotalCounted
         {
             get
             {

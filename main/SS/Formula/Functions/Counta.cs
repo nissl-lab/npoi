@@ -89,7 +89,7 @@ namespace NPOI.SS.Formula.Functions
             }
         }
         private static I_MatchPredicate subtotalPredicate = new SubtotalPredicate();
-        public class SubtotalPredicate : I_MatchPredicate
+        public class SubtotalPredicate : I_MatchAreaPredicate
         {
             public bool Matches(ValueEval valueEval)
             {
@@ -103,6 +103,7 @@ namespace NPOI.SS.Formula.Functions
             {
                 return !areEval.IsSubTotal(rowIndex, columnIndex);
             }
+
         }
         public static Counta SubtotalInstance()
         {

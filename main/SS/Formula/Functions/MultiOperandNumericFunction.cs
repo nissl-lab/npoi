@@ -32,34 +32,34 @@ namespace NPOI.SS.Formula.Functions
     {
         static double[] EMPTY_DOUBLE_ARRAY = { };
         private bool _isReferenceBoolCounted;
-	    private bool _isBlankCounted;
+        private bool _isBlankCounted;
 
-       protected MultiOperandNumericFunction(bool isReferenceBoolCounted, bool isBlankCounted) 
-       {
-		_isReferenceBoolCounted = isReferenceBoolCounted;
-		_isBlankCounted = isBlankCounted;
-       }
-       protected internal abstract double Evaluate(double[] values);
+        protected MultiOperandNumericFunction(bool isReferenceBoolCounted, bool isBlankCounted)
+        {
+            _isReferenceBoolCounted = isReferenceBoolCounted;
+            _isBlankCounted = isBlankCounted;
+        }
+        protected internal abstract double Evaluate(double[] values);
 
-       public ValueEval Evaluate(ValueEval[] args, int srcCellRow, int srcCellCol)
-       {
+        public ValueEval Evaluate(ValueEval[] args, int srcCellRow, int srcCellCol)
+        {
 
-           double d;
-           try
-           {
-               double[] values = GetNumberArray(args);
-               d = Evaluate(values);
-           }
-           catch (EvaluationException e)
-           {
-               return e.GetErrorEval();
-           }
+            double d;
+            try
+            {
+                double[] values = GetNumberArray(args);
+                d = Evaluate(values);
+            }
+            catch (EvaluationException e)
+            {
+                return e.GetErrorEval();
+            }
 
-           if (Double.IsNaN(d) || Double.IsInfinity(d))
-               return ErrorEval.NUM_ERROR;
+            if (Double.IsNaN(d) || Double.IsInfinity(d))
+                return ErrorEval.NUM_ERROR;
 
-           return new NumberEval(d);
-       }
+            return new NumberEval(d);
+        }
 
         private class DoubleList
         {
@@ -123,94 +123,121 @@ namespace NPOI.SS.Formula.Functions
                 return DEFAULT_MAX_NUM_OPERANDS;
             }
         }
-        	/**
-	 * Collects values from a single argument
-	 */
+        /**
+     *  Whether to count nested subtotals.
+     */
+        public virtual bool IsSubtotalCounted
+        {
+            get
+            {
+                return true;
+            }
+        }
+        /**
+ * Collects values from a single argument
+ */
         private void CollectValues(ValueEval operand, DoubleList temp)
         {
 
-		if (operand is TwoDEval) {
-            TwoDEval ae = (TwoDEval)operand;
-			int width = ae.Width;
-			int height = ae.Height;
-			for (int rrIx=0; rrIx<height; rrIx++) {
-				for (int rcIx=0; rcIx<width; rcIx++) {
-					ValueEval ve = ae.GetValue(rrIx, rcIx);
-					CollectValue(ve, true, temp);
-				}
-			}
-			return;
-		}
-		if (operand is RefEval) {
-			RefEval re = (RefEval) operand;
-			CollectValue(re.InnerValueEval, true, temp);
-			return;
-		}
-		CollectValue((ValueEval)operand, false, temp);
-	}
-	private void CollectValue(ValueEval ve, bool isViaReference, DoubleList temp)
-    {
-		if (ve == null) {
-			throw new ArgumentException("ve must not be null");
-		}
-		if (ve is NumberEval) {
-			NumberEval ne = (NumberEval) ve;
-			temp.Add(ne.NumberValue);
-			return;
-		}
-		if (ve is ErrorEval) {
-			throw new EvaluationException((ErrorEval) ve);
-		}
-		if (ve is StringEval) {
-			if (isViaReference) {
-				// ignore all ref strings
-				return;
-			}
-			String s = ((StringEval) ve).StringValue;
-			Double d = OperandResolver.ParseDouble(s);
-			if(double.IsNaN(d)) {
-				throw new EvaluationException(ErrorEval.VALUE_INVALID);
-			}
-			temp.Add(d);
-			return;
-		}
-		if (ve is BoolEval) {
-			if (!isViaReference || _isReferenceBoolCounted) {
-				BoolEval boolEval = (BoolEval) ve;
-				temp.Add(boolEval.NumberValue);
-			}
-			return;
-		}
-		if (ve == BlankEval.instance) {
-			if (_isBlankCounted) {
-				temp.Add(0.0);
-			}
-			return;
-		}
-		throw new InvalidOperationException("Invalid ValueEval type passed for conversion: ("
-				+ ve.GetType() + ")");
-	}
-	/**
-	 * Returns a double array that contains values for the numeric cells
-	 * from among the list of operands. Blanks and Blank equivalent cells
-	 * are ignored. Error operands or cells containing operands of type
-	 * that are considered invalid and would result in #VALUE! error in
-	 * excel cause this function to return <c>null</c>.
-	 *
-	 * @return never <c>null</c>
-	 */
-	protected double[] GetNumberArray(ValueEval[] operands)
-    {
-		if (operands.Length > MaxNumOperands) {
-			throw EvaluationException.InvalidValue();
-		}
-		DoubleList retval = new DoubleList();
+            if (operand is TwoDEval)
+            {
+                TwoDEval ae = (TwoDEval)operand;
+                int width = ae.Width;
+                int height = ae.Height;
+                for (int rrIx = 0; rrIx < height; rrIx++)
+                {
+                    for (int rcIx = 0; rcIx < width; rcIx++)
+                    {
+                        ValueEval ve = ae.GetValue(rrIx, rcIx);
+                        if (!IsSubtotalCounted && ae.IsSubTotal(rrIx, rcIx)) continue;
+                        CollectValue(ve, true, temp);
+                    }
+                }
+                return;
+            }
+            if (operand is RefEval)
+            {
+                RefEval re = (RefEval)operand;
+                CollectValue(re.InnerValueEval, true, temp);
+                return;
+            }
+            CollectValue((ValueEval)operand, false, temp);
+        }
+        private void CollectValue(ValueEval ve, bool isViaReference, DoubleList temp)
+        {
+            if (ve == null)
+            {
+                throw new ArgumentException("ve must not be null");
+            }
+            if (ve is NumberEval)
+            {
+                NumberEval ne = (NumberEval)ve;
+                temp.Add(ne.NumberValue);
+                return;
+            }
+            if (ve is ErrorEval)
+            {
+                throw new EvaluationException((ErrorEval)ve);
+            }
+            if (ve is StringEval)
+            {
+                if (isViaReference)
+                {
+                    // ignore all ref strings
+                    return;
+                }
+                String s = ((StringEval)ve).StringValue;
+                Double d = OperandResolver.ParseDouble(s);
+                if (double.IsNaN(d))
+                {
+                    throw new EvaluationException(ErrorEval.VALUE_INVALID);
+                }
+                temp.Add(d);
+                return;
+            }
+            if (ve is BoolEval)
+            {
+                if (!isViaReference || _isReferenceBoolCounted)
+                {
+                    BoolEval boolEval = (BoolEval)ve;
+                    temp.Add(boolEval.NumberValue);
+                }
+                return;
+            }
+            if (ve == BlankEval.instance)
+            {
+                if (_isBlankCounted)
+                {
+                    temp.Add(0.0);
+                }
+                return;
+            }
+            throw new InvalidOperationException("Invalid ValueEval type passed for conversion: ("
+                    + ve.GetType() + ")");
+        }
+        /**
+         * Returns a double array that contains values for the numeric cells
+         * from among the list of operands. Blanks and Blank equivalent cells
+         * are ignored. Error operands or cells containing operands of type
+         * that are considered invalid and would result in #VALUE! error in
+         * excel cause this function to return <c>null</c>.
+         *
+         * @return never <c>null</c>
+         */
+        protected double[] GetNumberArray(ValueEval[] operands)
+        {
+            if (operands.Length > MaxNumOperands)
+            {
+                throw EvaluationException.InvalidValue();
+            }
+            DoubleList retval = new DoubleList();
 
-		for (int i=0, iSize=operands.Length; i<iSize; i++) {
-			CollectValues(operands[i], retval);
-		}
-		return retval.ToArray();
-	}
+            for (int i = 0, iSize = operands.Length; i < iSize; i++)
+            {
+                CollectValues(operands[i], retval);
+            }
+            return retval.ToArray();
+        }
         /**
          * Ensures that a two dimensional array has all sub-arrays present and the same Length
          * @return <c>false</c> if any sub-array Is missing, or Is of different Length

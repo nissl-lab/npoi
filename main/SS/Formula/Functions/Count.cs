@@ -93,12 +93,19 @@ namespace NPOI.SS.Formula.Functions
             }
         }
         private static I_MatchPredicate defaultPredicate = new DefaultPredicate();
-        private class SubtotalPredicate : I_MatchPredicate
+        private class SubtotalPredicate : I_MatchAreaPredicate
         {
             public bool Matches(ValueEval valueEval)
             {
                 return defaultPredicate.Matches(valueEval);
             }
+
+
+            public bool Matches(TwoDEval x, int rowIndex, int columnIndex)
+            {
+                return !x.IsSubTotal(rowIndex, columnIndex);
+            }
+
         }
 
         private static I_MatchPredicate subtotalPredicate = new SubtotalPredicate();

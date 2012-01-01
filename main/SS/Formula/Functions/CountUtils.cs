@@ -45,28 +45,6 @@ namespace NPOI.SS.Formula.Functions
 
 
         /**
-         * @return the number of evaluated cells in the range that match the specified criteria
-         */
-        public static int CountMatchingCellsInArea(AreaEval areaEval, I_MatchPredicate criteriaPredicate)
-        {
-            int result = 0;
-
-            int height = areaEval.Height;
-            int width = areaEval.Width;
-            for (int rrIx = 0; rrIx < height; rrIx++)
-            {
-                for (int rcIx = 0; rcIx < width; rcIx++)
-                {
-                    ValueEval ve = areaEval.GetRelativeValue(rrIx, rcIx);
-                    if (criteriaPredicate.Matches(ve))
-                    {
-                        result++;
-                    }
-                }
-            }
-            return result;
-        }
-        /**
          * @return 1 if the evaluated cell matches the specified criteria
          */
         public static int CountMatchingCell(RefEval refEval, I_MatchPredicate criteriaPredicate)
@@ -83,9 +61,9 @@ namespace NPOI.SS.Formula.Functions
             {
                 throw new ArgumentException("eval must not be null");
             }
-            if (eval is AreaEval)
+            if (eval is TwoDEval)
             {
-                return CountUtils.CountMatchingCellsInArea((AreaEval)eval, criteriaPredicate);
+                return CountUtils.CountMatchingCellsInArea((TwoDEval)eval, criteriaPredicate);
             }
             if (eval is RefEval)
             {
