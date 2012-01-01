@@ -131,12 +131,12 @@ namespace DrawingInXls
             // Create a couple of textboxes
             Textbox textbox1 = patriarch.CreateTextbox(
                     new HSSFClientAnchor(0, 0, 0, 0, (short)1, 1, (short)2, 2));
-            textbox1.String = (new HSSFRichTextString("This is a test"));
+            textbox1.String = new HSSFRichTextString("This is a test");
             Textbox textbox2 = patriarch.CreateTextbox(
                     new HSSFClientAnchor(0, 0, 900, 100, (short)3, 3, (short)3, 4));
-            textbox2.String = (new HSSFRichTextString("Woo"));
+            textbox2.String = new HSSFRichTextString("Woo");
             textbox2.SetFillColor(200, 0, 0);
-            textbox2.LineStyle = (HSSFSimpleShape.LINESTYLE_DOTGEL);
+            textbox2.LineStyle = LineStyle.DotGel;
              
             // Create third one with some fancy font styling.
             Textbox textbox3 = patriarch.CreateTextbox(
@@ -146,10 +146,10 @@ namespace DrawingInXls
             font.Underline = (byte)FontUnderlineType.DOUBLE;
             HSSFRichTextString str = new HSSFRichTextString("Woo!!!");
             str.ApplyFont(2, 5, font);
-            textbox3.String = (str);
-            textbox3.FillColor = (0x08000030);
-            textbox3.LineStyle = (HSSFSimpleShape.LINESTYLE_NONE);  // no line around the textbox.
-            textbox3.IsNoFill = (true);    // make it transparent
+            textbox3.String = str;
+            textbox3.FillColor = 0x08000030;
+            textbox3.LineStyle = LineStyle.None;  // no line around the textbox.
+            textbox3.IsNoFill = true;    // make it transparent
         }
 
         private static void DrawOval(HSSFPatriarch patriarch)
@@ -158,11 +158,11 @@ namespace DrawingInXls
             HSSFClientAnchor a = new HSSFClientAnchor();
             a.SetAnchor((short)2, 2, 20, 20, (short)2, 2, 190, 80);
             HSSFSimpleShape s = patriarch.CreateSimpleShape(a);
-            s.ShapeType = (HSSFSimpleShape.OBJECT_TYPE_OVAL);
+            s.ShapeType = HSSFSimpleShape.OBJECT_TYPE_OVAL;
             s.SetLineStyleColor(10, 10, 10);
             s.SetFillColor(90, 10, 200);
-            s.LineWidth = (HSSFShape.LINEWIDTH_ONE_PT * 3);
-            s.LineStyle = (HSSFShape.LINESTYLE_DOTSYS);
+            s.LineWidth = HSSFShape.LINEWIDTH_ONE_PT * 3;
+            s.LineStyle = LineStyle.DotSys;
         }
 
         private static void DrawPolygon(HSSFPatriarch patriarch)
@@ -194,7 +194,7 @@ namespace DrawingInXls
                 HSSFClientAnchor a2 = new HSSFClientAnchor();
                 a2.SetAnchor((short)2, 2, x1, y1, (short)2, 2, x2, y2);
                 HSSFSimpleShape shape2 = patriarch.CreateSimpleShape(a2);
-                shape2.ShapeType = (HSSFSimpleShape.OBJECT_TYPE_LINE);
+                shape2.ShapeType = HSSFSimpleShape.OBJECT_TYPE_LINE;
                 shape2.SetLineStyleColor(color);
                 y1 -= 10;
                 y2 -= 10;

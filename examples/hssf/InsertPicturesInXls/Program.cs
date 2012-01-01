@@ -53,7 +53,7 @@ namespace InsertPicturesInXls
             HSSFPicture picture = (HSSFPicture)patriarch.CreatePicture(anchor, LoadImage("../../image/HumpbackWhale.jpg", hssfworkbook));
             //Reset the image to the original size.
             picture.Resize();
-            picture.LineStyle = HSSFPicture.LINESTYLE_DASHDOTGEL;
+            picture.LineStyle = LineStyle.DashDotGel;
 
             WriteToFile();
         }
