@@ -80,7 +80,7 @@ namespace NPOI.SS.Formula.Functions
                     case MONTH_ID: return 1;
                     case DAY_OF_MONTH_ID: return 0;
                 }
-                throw new InvalidOperationException("bad date field " + _dateFieldId);
+                //throw new InvalidOperationException("bad date field " + _dateFieldId);
             }
             DateTime d = DateUtil.GetJavaDate(serialDate, false); // TODO fix 1900/1904 problem
 

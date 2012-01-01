@@ -23,6 +23,7 @@ namespace TestCases.HSSF.UserModel
     using TestCases.HSSF;
     using NPOI.HSSF.UserModel;
     using NPOI.SS.UserModel;
+    using TestCases.SS.UserModel;
     /**
      * Tests HSSFHyperlink.
      *

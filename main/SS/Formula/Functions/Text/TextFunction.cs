@@ -124,7 +124,7 @@ namespace NPOI.SS.Formula.Functions
 
         public static Function EXACT = new Exact();
 
-        public static Function TEXT = new Text.Text();
+        public static Function TEXT = new Text();
         /**
          * @author Torstein Tauno Svendsen (torstei@officenet.no)
          */

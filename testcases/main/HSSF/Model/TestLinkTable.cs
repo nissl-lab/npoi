@@ -15,7 +15,7 @@
    limitations under the License.
 ==================================================================== */
 
-namespace NPOI.HSSF.Model
+namespace TestCases.HSSF.Model
 {
     using System;
     using NPOI.HSSF.Record;
@@ -26,6 +26,7 @@ namespace NPOI.HSSF.Model
     using NPOI.Util;
     using System.Collections.Generic;
     using System.Collections;
+    using NPOI.HSSF.Model;
 
     /**
      * Tests for {@link LinkTable}

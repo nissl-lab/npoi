@@ -5,7 +5,7 @@ using NPOI.SS.Formula.Eval;
 using System.Text.RegularExpressions;
 using NPOI.SS.Util;
 
-namespace NPOI.SS.Formula.Functions.Text
+namespace NPOI.SS.Formula.Functions
 {
     public class Text : Fixed2ArgFunction
     {

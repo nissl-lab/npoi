@@ -15,12 +15,13 @@
    limitations under the License.
 ==================================================================== */
 
-namespace NPOI.HSSF.Record
+namespace TestCases.HSSF.Record
 {
     using System;
     using NPOI.Util;
     using TestCases.HSSF.Record;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NPOI.HSSF.Record;
 
 
     /**

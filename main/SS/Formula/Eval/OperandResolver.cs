@@ -18,6 +18,7 @@
 namespace NPOI.SS.Formula.Eval
 {
     using System;
+    using System.Text.RegularExpressions;
 
     /**
      * Provides functionality for evaluating arguments to functions and operators.
@@ -26,7 +27,16 @@ namespace NPOI.SS.Formula.Eval
      */
     public class OperandResolver
     {
-
+        // Based on regular expression defined in JavaDoc at {@link java.lang.Double#valueOf}
+        // modified to remove support for NaN, Infinity, Hexadecimal support and floating type suffixes
+        private const String Digits = "\\d+";
+        private const String Exp = "[eE][+-]?" + Digits;
+        private const String fpRegex =
+                    ("[\\x00-\\x20]*" +
+                     "[+-]?(" +
+                     "(((" + Digits + "(\\.)?(" + Digits + "?)(" + Exp + ")?)|" +
+                     "(\\.(" + Digits + ")(" + Exp + ")?))))" +
+                     "[\\x00-\\x20]*");
         private OperandResolver()
         {
             // no instances of this class
@@ -114,12 +124,7 @@ namespace NPOI.SS.Formula.Eval
                 int srcCellRow, int srcCellCol)
         {
             ValueEval result = ChooseSingleElementFromAreaInternal(ae, srcCellRow, srcCellCol);
-            if (result == null)
-            {
-                // This seems to be required because AreaEval.Values array may contain nulls.
-                // perhaps that should not be allowed.
-                result = BlankEval.instance;
-            }
+            
             if (result is ErrorEval)
             {
                 throw new EvaluationException((ErrorEval)result);
@@ -235,7 +240,7 @@ namespace NPOI.SS.Formula.Eval
             if (ev is StringEval)
             {
                 double dd = ParseDouble(((StringEval)ev).StringValue);
-                if (double.IsNaN(dd) )
+                if (double.IsNaN(dd))
                 {
                     throw EvaluationException.InvalidValue();
                 }
@@ -262,35 +267,51 @@ namespace NPOI.SS.Formula.Eval
          */
         public static double ParseDouble(String pText)
         {
-            String text = pText.Trim();
-            if (text.Length < 1)
+            //if (Regex.Match(fpRegex, pText).Success)
+                try
+                {
+                    double ret = double.Parse(pText);
+                    if (double.IsInfinity(ret))
+                        return double.NaN;
+                    return ret;
+                }
+                catch (Exception)
+                {
+                    return Double.NaN;
+                }
+            //else
             {
-                return double.NaN;
+                //return Double.NaN;
             }
-            bool isPositive = true;
-            if (text[0] == '-')
-            {
-                isPositive = false;
-                text = text.Substring(1).Trim();
-            }
+            //String text = pText.Trim();
+            //if (text.Length < 1)
+            //{
+            //    return double.NaN;
+            //}
+            //bool isPositive = true;
+            //if (text[0] == '-')
+            //{
+            //    isPositive = false;
+            //    text = text.Substring(1).Trim();
+            //}
 
-            if (text.Length==0||!Char.IsDigit(text[0]))
-            {
-                // avoid using Exception to tell when string is not a number
-                return double.NaN;
-            }
-            // TODO - support notation like '1E3' (==1000)
+            //if (text.Length == 0 || !Char.IsDigit(text[0]))
+            //{
+            //    // avoid using Exception to tell when string is not a number
+            //    return double.NaN;
+            //}
+            //// TODO - support notation like '1E3' (==1000)
 
-            double val;
-            try
-            {
-                val = double.Parse(text);
-            }
-            catch
-            {
-                return double.NaN;
-            }
-            return isPositive ? +val : -val;
+            //double val;
+            //try
+            //{
+            //    val = double.Parse(text);
+            //}
+            //catch
+            //{
+            //    return double.NaN;
+            //}
+            //return isPositive ? +val : -val;
         }
 
         /**
