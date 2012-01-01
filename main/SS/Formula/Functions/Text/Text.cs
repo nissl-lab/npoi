@@ -23,8 +23,17 @@ namespace NPOI.SS.Formula.Functions.Text
             {
                 return e.GetErrorEval();
             }
-            if (Regex.Match(s1, @"[\d,\#,\.,\$,\,]+").Success)
+            if (Regex.Match(s1, "[y|m|M|d|s|h]+").Success)
             {
+                //may be datetime string
+                ValueEval result = TryParseDateTime(s0, s1);
+                if (result != ErrorEval.VALUE_INVALID)
+                    return result;
+            }
+            //The regular expression needs ^ and $. 
+            if (Regex.Match(s1, @"^[\d,\#,\.,\$,\,]+$").Success)
+            {
+                //TODO: simulate DecimalFormat class in java.
                 FormatBase formatter = new DecimalFormat(s1);
                 return new StringEval(formatter.Format(s0));
             }
@@ -85,19 +94,24 @@ namespace NPOI.SS.Formula.Functions.Text
             }
             else
             {
-                try
-                {
-                    FormatBase dateFormatter = new SimpleDateFormat(s1);
-                    DateTime dt = new DateTime(1899, 11, 30, 0, 0, 0);
-                    dt.AddDays((int)Math.Floor(s0));
-                    double dayFraction = s0 - Math.Floor(s0);
-                    dt.AddMilliseconds((int)Math.Round(dayFraction * 24 * 60 * 60 * 1000));
-                    return new StringEval(dateFormatter.Format(dt));
-                }
-                catch (Exception)
-                {
-                    return ErrorEval.VALUE_INVALID;
-                }
+                return TryParseDateTime(s0, s1);
+            }
+        }
+        private ValueEval TryParseDateTime(double s0, string s1)
+        {
+            try
+            {
+                FormatBase dateFormatter = new SimpleDateFormat(s1);
+                //first month of java Gregorian Calendar month field is 0
+                DateTime dt = new DateTime(1899, 12, 30, 0, 0, 0);
+                dt = dt.AddDays((int)Math.Floor(s0));
+                double dayFraction = s0 - Math.Floor(s0);
+                dt = dt.AddMilliseconds((int)Math.Round(dayFraction * 24 * 60 * 60 * 1000));
+                return new StringEval(dateFormatter.Format(dt));
+            }
+            catch (Exception)
+            {
+                return ErrorEval.VALUE_INVALID;
             }
         }
     }

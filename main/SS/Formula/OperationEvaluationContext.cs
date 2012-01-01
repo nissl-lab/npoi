@@ -171,8 +171,12 @@
                 case NameType.BAD_CELL_OR_NAMED_RANGE:
                     return ErrorEval.REF_INVALID;
                 case NameType.NAMED_RANGE:
-                    throw new Exception("Cannot Evaluate '" + refStrPart1
-                            + "'. Indirect Evaluation of defined names not supported yet");
+                    IEvaluationName nm = ((FormulaParsingWorkbook)_workbook).GetName(refStrPart1, _sheetIndex);
+                    if (!nm.IsRange)
+                    {
+                        throw new Exception("Specified name '" + refStrPart1 + "' is not a range as expected.");
+                    }
+                    return _bookEvaluator.EvaluateNameFormula(nm.NameDefinition, this);
             }
             if (refStrPart2 == null)
             {

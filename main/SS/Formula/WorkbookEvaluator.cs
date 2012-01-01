@@ -639,7 +639,7 @@ namespace NPOI.SS.Formula
 
             throw new Exception("Unexpected ptg class (" + ptg.GetType().Name + ")");
         }
-        private ValueEval EvaluateNameFormula(Ptg[] ptgs, OperationEvaluationContext ec)
+        internal ValueEval EvaluateNameFormula(Ptg[] ptgs, OperationEvaluationContext ec)
         {
             if (ptgs.Length > 1)
             {

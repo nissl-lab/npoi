@@ -23,8 +23,9 @@ namespace NPOI.SS.Formula.Functions
     using System;
     using NPOI.SS.Formula.Eval;
 
-    public class Npv : Function2Arg, Function3Arg, Function4Arg
+    public class Npv : Function
     {
+        [Obsolete]
         public ValueEval Evaluate(int srcRowIndex, int srcColumnIndex, ValueEval arg0, ValueEval arg1)
         {
             double result;
@@ -41,6 +42,7 @@ namespace NPOI.SS.Formula.Functions
             }
             return new NumberEval(result);
         }
+        [Obsolete]
         public ValueEval Evaluate(int srcRowIndex, int srcColumnIndex, ValueEval arg0, ValueEval arg1,
                 ValueEval arg2)
         {
@@ -59,6 +61,7 @@ namespace NPOI.SS.Formula.Functions
             }
             return new NumberEval(result);
         }
+        [Obsolete]
         public ValueEval Evaluate(int srcRowIndex, int srcColumnIndex, ValueEval arg0, ValueEval arg1,
                 ValueEval arg2, ValueEval arg3)
         {
@@ -86,24 +89,23 @@ namespace NPOI.SS.Formula.Functions
             {
                 return ErrorEval.VALUE_INVALID;
             }
-            int np = nArgs - 1;
-            double[] ds = new double[np];
-            double result;
+
             try
             {
                 double rate = NumericFunction.SingleOperandEvaluate(args[0], srcRowIndex, srcColumnIndex);
-                for (int i = 0; i < ds.Length; i++)
-                {
-                    ds[i] = NumericFunction.SingleOperandEvaluate(args[i + 1], srcRowIndex, srcColumnIndex);
-                }
-                result = Evaluate(rate, ds);
+                // convert tail arguments into an array of doubles
+                ValueEval[] vargs = new ValueEval[args.Length - 1];
+                Array.Copy(args, 1, vargs, 0, vargs.Length);
+                double[] values = AggregateFunction.ValueCollector.CollectValues(vargs);
+
+                double result = FinanceLib.npv(rate, values);
                 NumericFunction.CheckValue(result);
+                return new NumberEval(result);
             }
             catch (EvaluationException e)
             {
                 return e.GetErrorEval();
             }
-            return new NumberEval(result);
         }
 
         private static double Evaluate(double rate, params double[] ds)

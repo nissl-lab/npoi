@@ -99,7 +99,7 @@ namespace TestCases.SS.Formula.Functions
         [TestMethod]
         public void TestTextWithDateFormatSecondArg()
         {
-
+            System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.GetCultureInfo("en-US");
             ValueEval numArg = new NumberEval(321.321);
             ValueEval formatArg = new StringEval("dd:MM:yyyy hh:mm:ss");
             ValueEval[] args = { numArg, formatArg };
@@ -108,7 +108,7 @@ namespace TestCases.SS.Formula.Functions
             Assert.AreEqual(testResult.ToString(), result.ToString());
 
             // this line is intended to compute how "November" would look like in the current locale
-            String november = new SimpleDateFormat("MMMM").Format(new DateTime(2010, 10, 15));
+            String november = new SimpleDateFormat("MMMM").Format(new DateTime(2010, 11, 15));
 
             formatArg = new StringEval("MMMM dd, yyyy");
             args[1] = formatArg;
