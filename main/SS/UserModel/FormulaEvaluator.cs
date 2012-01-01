@@ -58,7 +58,15 @@ namespace NPOI.SS.UserModel
          * @param cell
          */
         CellValue Evaluate(ICell cell);
-
+        /**
+        * Loops over all cells in all sheets of the associated workbook.
+        * For cells that contain formulas, their formulas are evaluated, 
+        *  and the results are saved. These cells remain as formula cells.
+        * For cells that do not contain formulas, no changes are made.
+        * This is a helpful wrapper around looping over all cells, and 
+        *  calling evaluateFormulaCell on each one.
+         */
+        void EvaluateAll(); 
 
         /**
          * If cell Contains formula, it Evaluates the formula,

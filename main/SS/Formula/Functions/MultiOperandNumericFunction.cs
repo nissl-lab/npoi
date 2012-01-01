@@ -39,7 +39,7 @@ namespace NPOI.SS.Formula.Functions
 		_isReferenceBoolCounted = isReferenceBoolCounted;
 		_isBlankCounted = isBlankCounted;
        }
-       protected abstract double Evaluate(double[] values);
+       protected internal abstract double Evaluate(double[] values);
 
        public ValueEval Evaluate(ValueEval[] args, int srcCellRow, int srcCellCol)
        {

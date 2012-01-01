@@ -17,15 +17,13 @@
 
 namespace TestCases.SS.Formula.Functions
 {
-    using NPOI.SS.Formula;
-    using NPOI.SS.Formula.Eval;
-
-    using NPOI.SS.UserModel;
-    using NPOI.SS.Util;
+    using System;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using NPOI.HSSF.UserModel;
+    using NPOI.SS.Formula.Eval;
+    using NPOI.SS.Formula.Functions;
+    using NPOI.SS.UserModel;
     using TestCases.HSSF;
-    using System;
 
 
 
@@ -34,6 +32,7 @@ namespace TestCases.SS.Formula.Functions
      *
      * @author Paul Tomlin
      */
+    [TestClass]
     public class TestSubtotal
     {
         private static int FUNCTION_AVERAGE = 1;
@@ -68,7 +67,7 @@ namespace TestCases.SS.Formula.Functions
             Assert.AreEqual(typeof(NumberEval), result.GetType());
             Assert.AreEqual(expected, ((NumberEval)result).NumberValue, 0.0);
         }
-
+        [TestMethod]
         public void TestBasics()
         {
             ConfirmSubtotal(FUNCTION_SUM, 55.0);
@@ -79,7 +78,7 @@ namespace TestCases.SS.Formula.Functions
             ConfirmSubtotal(FUNCTION_PRODUCT, 3628800.0);
             ConfirmSubtotal(FUNCTION_STDEV, 3.0276503540974917);
         }
-
+        [TestMethod]
         public void TestAvg()
         {
 
@@ -109,7 +108,7 @@ namespace TestCases.SS.Formula.Functions
             Assert.AreEqual(8.0, a6.NumericCellValue);
             Assert.AreEqual(3.0, a7.NumericCellValue);
         }
-
+        [TestMethod]
         public void TestSum()
         {
 
@@ -139,7 +138,7 @@ namespace TestCases.SS.Formula.Functions
             Assert.AreEqual(26.0, a6.NumericCellValue);
             Assert.AreEqual(12.0, a7.NumericCellValue);
         }
-
+        [TestMethod]
         public void TestCount()
         {
 
@@ -169,7 +168,7 @@ namespace TestCases.SS.Formula.Functions
             Assert.AreEqual(6.0, a6.NumericCellValue);
             Assert.AreEqual(2.0, a7.NumericCellValue);
         }
-
+        [TestMethod]
         public void TestCounta()
         {
 
@@ -199,7 +198,7 @@ namespace TestCases.SS.Formula.Functions
             Assert.AreEqual(8.0, a6.NumericCellValue);
             Assert.AreEqual(3.0, a7.NumericCellValue);
         }
-
+        [TestMethod]
         public void TestMax()
         {
 
@@ -229,7 +228,7 @@ namespace TestCases.SS.Formula.Functions
             Assert.AreEqual(16.0, a6.NumericCellValue);
             Assert.AreEqual(7.0, a7.NumericCellValue);
         }
-
+        [TestMethod]
         public void TestMin()
         {
 
@@ -259,7 +258,7 @@ namespace TestCases.SS.Formula.Functions
             Assert.AreEqual(4.0, a6.NumericCellValue);
             Assert.AreEqual(1.0, a7.NumericCellValue);
         }
-
+        [TestMethod]
         public void TestStdev()
         {
 
@@ -289,7 +288,7 @@ namespace TestCases.SS.Formula.Functions
             Assert.AreEqual(7.65685, a6.NumericCellValue, 0.0001);
             Assert.AreEqual(2.82842, a7.NumericCellValue, 0.0001);
         }
-
+        [TestMethod]
         public void Test50209()
         {
             IWorkbook wb = new HSSFWorkbook();
@@ -315,7 +314,7 @@ namespace TestCases.SS.Formula.Functions
                 throw new Exception(msg + ": " + value.FormatAsString());
             Assert.AreEqual(expected, value.NumberValue, msg);
         }
-
+        [TestMethod]
         public void TestFunctionsFromTestSpreadsheet()
         {
             HSSFWorkbook workbook = HSSFTestDataSamples.OpenSampleWorkbook("SubtotalsNested.xls");

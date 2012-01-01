@@ -32,7 +32,17 @@ namespace NPOI.SS.Formula.Functions
      */
     public class Counta : Function
     {
+        private I_MatchPredicate _predicate;
 
+        public Counta()
+        {
+            _predicate = defaultPredicate;
+        }
+
+        private Counta(I_MatchPredicate criteriaPredicate)
+        {
+            _predicate = criteriaPredicate;
+        }
         public ValueEval Evaluate(ValueEval[] args, int srcCellRow, int srcCellCol)
         {
             int nArgs = args.Length;
@@ -55,13 +65,14 @@ namespace NPOI.SS.Formula.Functions
 
             for (int i = 0; i < nArgs; i++)
             {
-                temp += CountUtils.CountArg(args[i], predicate);
+                temp += CountUtils.CountArg(args[i], _predicate);
 
             }
             return new NumberEval(temp);
         }
-        private static I_MatchPredicate predicate = new MatchPredicate1();
-        public class MatchPredicate1 : I_MatchPredicate
+
+        private static I_MatchPredicate defaultPredicate = new DefaultPredicate();
+        public class DefaultPredicate : I_MatchPredicate
         {
             public bool Matches(ValueEval valueEval)
             {
@@ -76,6 +87,26 @@ namespace NPOI.SS.Formula.Functions
                 // Note - everything but BlankEval counts
                 return true;
             }
+        }
+        private static I_MatchPredicate subtotalPredicate = new SubtotalPredicate();
+        public class SubtotalPredicate : I_MatchPredicate
+        {
+            public bool Matches(ValueEval valueEval)
+            {
+                return defaultPredicate.Matches(valueEval);
+            }
+
+            /**
+             * don't count cells that are subtotals
+             */
+            public bool Matches(TwoDEval areEval, int rowIndex, int columnIndex)
+            {
+                return !areEval.IsSubTotal(rowIndex, columnIndex);
+            }
+        }
+        public static Counta SubtotalInstance()
+        {
+            return new Counta(subtotalPredicate);
         }
     }
 }

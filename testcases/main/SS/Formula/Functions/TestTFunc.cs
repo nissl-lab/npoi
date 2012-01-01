@@ -21,6 +21,7 @@ namespace TestCases.SS.Formula.Functions
     using NPOI.SS.Formula.Eval;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using System;
+    using NPOI.SS.Formula.Functions;
 
 
     /**

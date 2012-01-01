@@ -83,7 +83,8 @@ namespace TestCases.HSSF.Model
             sheet.CreateRow(32768).CreateCell((short)0).SetCellValue(31);
             sheet.CreateRow(32769).CreateCell((short)0).SetCellValue(11);
 
-            HSSFFormulaEvaluator fe = new HSSFFormulaEvaluator(sheet, wb);
+            //HSSFFormulaEvaluator fe = new HSSFFormulaEvaluator(sheet, wb);
+            HSSFFormulaEvaluator fe = new HSSFFormulaEvaluator(wb);
             NPOI.SS.UserModel.CellValue result;
             try
             {

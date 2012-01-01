@@ -66,7 +66,25 @@ namespace NPOI.SS.Formula.Functions
             }
             return r;
         }
+        public static double var(double[] v)
+        {
+            double r = Double.NaN;
+            if (v != null && v.Length > 1)
+            {
+                r = devsq(v) / (v.Length - 1);
+            }
+            return r;
+        }
 
+        public static double varp(double[] v)
+        {
+            double r = Double.NaN;
+            if (v != null && v.Length > 1)
+            {
+                r = devsq(v) / v.Length;
+            }
+            return r;
+        }
         /**
          * if v Is zero Length or Contains no duplicates, return value
          * Is double.NaN. Else returns the value that occurs most times

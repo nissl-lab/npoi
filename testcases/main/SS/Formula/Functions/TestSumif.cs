@@ -20,6 +20,7 @@ namespace TestCases.SS.Formula.Functions
 
     using NPOI.SS.Formula.Eval;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NPOI.SS.Formula.Functions;
 
     /**
      * Test cases for SUMPRODUCT()

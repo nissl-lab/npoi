@@ -29,10 +29,9 @@ namespace NPOI.HSSF.UserModel
      * @author Amol S. Deshmukh &lt; amolweb at ya hoo dot com &gt;
      * 
      */
-    public class HSSFFormulaEvaluator:FormulaEvaluator
+    public class HSSFFormulaEvaluator : FormulaEvaluator
     {
         private WorkbookEvaluator _bookEvaluator;
-
         // params to lookup the right constructor using reflection
         private static Type[] VALUE_CONTRUCTOR_CLASS_ARRAY = new Type[] { typeof(Ptg) };
 
@@ -63,7 +62,7 @@ namespace NPOI.HSSF.UserModel
         protected IRow row;
         protected ISheet sheet;
         protected IWorkbook workbook;
-
+        [Obsolete]
         public HSSFFormulaEvaluator(ISheet sheet, IWorkbook workbook)
             : this(workbook)
         {
@@ -74,7 +73,7 @@ namespace NPOI.HSSF.UserModel
         public HSSFFormulaEvaluator(IWorkbook workbook)
             : this(workbook, null)
         {
-            
+            this.workbook = workbook;
         }
         /**
  * @param stabilityClassifier used to optimise caching performance. Pass <code>null</code>
@@ -84,7 +83,7 @@ namespace NPOI.HSSF.UserModel
         public HSSFFormulaEvaluator(IWorkbook workbook, IStabilityClassifier stabilityClassifier)
             : this(workbook, stabilityClassifier, null)
         {
-            
+
         }
 
 
@@ -121,10 +120,10 @@ namespace NPOI.HSSF.UserModel
                     cell.SetCellType(cellType);
                     return;
                 case CellType.BLANK:
-                // never happens - blanks eventually get translated to zero
+                    // never happens - blanks eventually get translated to zero
                     break;
                 case CellType.FORMULA:
-                // this will never happen, we have already evaluated the formula
+                    // this will never happen, we have already evaluated the formula
                     break;
             }
             throw new InvalidOperationException("Unexpected cell value type (" + cellType + ")");
@@ -360,27 +359,49 @@ namespace NPOI.HSSF.UserModel
          */
         public static void EvaluateAllFormulaCells(HSSFWorkbook wb)
         {
+            EvaluateAllFormulaCells(wb, new HSSFFormulaEvaluator(wb));
+        }
+        /**
+           * Loops over all cells in all sheets of the supplied
+           *  workbook.
+           * For cells that contain formulas, their formulas are
+           *  evaluated, and the results are saved. These cells
+           *  remain as formula cells.
+           * For cells that do not contain formulas, no changes
+           *  are made.
+           * This is a helpful wrapper around looping over all
+           *  cells, and calling evaluateFormulaCell on each one.
+           */
+        public static void EvaluateAllFormulaCells(IWorkbook wb)
+        {
+            FormulaEvaluator evaluator = wb.GetCreationHelper().CreateFormulaEvaluator();
+            EvaluateAllFormulaCells(wb, evaluator);
+        }
+        private static void EvaluateAllFormulaCells(IWorkbook wb, FormulaEvaluator evaluator)
+        {
             for (int i = 0; i < wb.NumberOfSheets; i++)
             {
                 ISheet sheet = wb.GetSheetAt(i);
-                HSSFFormulaEvaluator evaluator = new HSSFFormulaEvaluator(sheet, wb);
 
-                for (IEnumerator rit = sheet.GetRowEnumerator(); rit.MoveNext(); )
+                for (IEnumerator it = sheet.GetRowEnumerator(); it.MoveNext(); )
                 {
-                    HSSFRow r = (HSSFRow)rit.Current;
-                    //evaluator.SetCurrentRow(r);
-
-                    for (IEnumerator cit = r.GetEnumerator(); cit.MoveNext(); )
+                    IRow r = (IRow)it.Current;
+                    foreach (ICell c in r.Cells)
                     {
-                        ICell c = (HSSFCell)cit.Current;
                         if (c.CellType == CellType.FORMULA)
+                        {
                             evaluator.EvaluateFormulaCell(c);
+                        }
                     }
                 }
             }
         }
 
 
+        public void EvaluateAll()
+        {
+            HSSFFormulaEvaluator.EvaluateAllFormulaCells(workbook, this);
+        }
 
     }
 }

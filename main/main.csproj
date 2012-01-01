@@ -694,6 +694,7 @@
     <Compile Include="SS\Formula\Functions\Numeric\Sqrt.cs" />
     <Compile Include="SS\Formula\Functions\Numeric\Tan.cs" />
     <Compile Include="SS\Formula\Functions\Numeric\Tanh.cs" />
+    <Compile Include="SS\Formula\Functions\Numeric\Trunc.cs" />
     <Compile Include="SS\Formula\Functions\Odd.cs" />
     <Compile Include="SS\Formula\Functions\Offset.cs" />
     <Compile Include="SS\Formula\Functions\Pmt.cs" />
@@ -704,6 +705,8 @@
     <Compile Include="SS\Formula\Functions\Rows.cs" />
     <Compile Include="SS\Formula\Functions\Sign.cs" />
     <Compile Include="SS\Formula\Functions\StatsLib.cs" />
+    <Compile Include="SS\Formula\Functions\Subtotal.cs" />
+    <Compile Include="SS\Formula\Functions\Sumif.cs" />
     <Compile Include="SS\Formula\Functions\Sumproduct.cs" />
     <Compile Include="SS\Formula\Functions\Sumx2my2.cs" />
     <Compile Include="SS\Formula\Functions\Sumx2py2.cs" />

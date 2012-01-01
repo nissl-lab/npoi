@@ -15,6 +15,7 @@
    limitations under the License.
 ==================================================================== */
 
+using NPOI.SS.Formula.Functions;
 namespace NPOI.SS.Formula.Functions
 {
     using System;
@@ -22,14 +23,14 @@ namespace NPOI.SS.Formula.Functions
 
     public class AVEDEV : AggregateFunction
     {
-        protected override double Evaluate(double[] values)
+        protected internal override double Evaluate(double[] values)
         {
             return StatsLib.avedev(values);
         }
     }
     public class AVERAGE : AggregateFunction
     {
-        protected override double Evaluate(double[] values)
+        protected internal override double Evaluate(double[] values)
         {
             if (values.Length < 1)
             {
@@ -40,21 +41,21 @@ namespace NPOI.SS.Formula.Functions
     }
     public class DEVSQ : AggregateFunction
     {
-        protected override double Evaluate(double[] values)
+        protected internal override double Evaluate(double[] values)
         {
             return StatsLib.devsq(values);
         }
     }
     public class SUM : AggregateFunction
     {
-        protected override double Evaluate(double[] values)
+        protected internal override double Evaluate(double[] values)
         {
             return MathX.sum(values);
         }
     }
     public class LARGE : AggregateFunction
     {
-        protected override double Evaluate(double[] ops)
+        protected internal override double Evaluate(double[] ops)
         {
             if (ops.Length < 2)
             {
@@ -68,35 +69,35 @@ namespace NPOI.SS.Formula.Functions
     }
     public class MAX : AggregateFunction
     {
-        protected override double Evaluate(double[] values)
+        protected internal override double Evaluate(double[] values)
         {
             return values.Length > 0 ? MathX.max(values) : 0;
         }
     }
     public class MIN : AggregateFunction
     {
-        protected override double Evaluate(double[] values)
+        protected internal override double Evaluate(double[] values)
         {
             return values.Length > 0 ? MathX.min(values) : 0;
         }
     }
     public class MEDIAN : AggregateFunction
     {
-        protected override double Evaluate(double[] values)
+        protected internal override double Evaluate(double[] values)
         {
             return StatsLib.median(values);
         }
     }
     public class PRODUCT : AggregateFunction
     {
-        protected override double Evaluate(double[] values)
+        protected internal override double Evaluate(double[] values)
         {
             return MathX.product(values);
         }
     }
     public class SMALL : AggregateFunction
     {
-        protected override double Evaluate(double[] ops)
+        protected internal override double Evaluate(double[] ops)
         {
             if (ops.Length < 2)
             {
@@ -110,7 +111,7 @@ namespace NPOI.SS.Formula.Functions
     }
     public class STDEV : AggregateFunction
     {
-        protected override double Evaluate(double[] values)
+        protected internal override double Evaluate(double[] values)
         {
             if (values.Length < 1)
             {
@@ -121,9 +122,55 @@ namespace NPOI.SS.Formula.Functions
     }
     public class SUMSQ : AggregateFunction
     {
-        protected override double Evaluate(double[] values)
+        protected internal override double Evaluate(double[] values)
         {
             return MathX.sumsq(values);
+        }
+    }
+    public class VAR : AggregateFunction
+    {
+        protected internal override double Evaluate(double[] values)
+        {
+            if (values.Length < 1)
+            {
+                throw new EvaluationException(ErrorEval.DIV_ZERO);
+            }
+            return StatsLib.var(values);
+        }
+    };
+    public class VARP : AggregateFunction
+    {
+        protected internal override double Evaluate(double[] values)
+        {
+            if (values.Length < 1)
+            {
+                throw new EvaluationException(ErrorEval.DIV_ZERO);
+            }
+            return StatsLib.varp(values);
+        }
+    };
+
+    public class SubtotalInstance : AggregateFunction
+    {
+        private AggregateFunction _func;
+        public SubtotalInstance(AggregateFunction func)
+        {
+            _func = func;
+        }
+
+        protected internal override double Evaluate(double[] values)
+        {
+            return _func.Evaluate(values);
+        }
+        /**
+                 *  ignore nested subtotals.
+                 */
+        public bool IsSubtotalCounted
+        {
+            get
+            {
+                return false;
+            }
         }
     }
     /**
@@ -132,6 +179,11 @@ namespace NPOI.SS.Formula.Functions
      */
     public abstract class AggregateFunction : MultiOperandNumericFunction
     {
+        public static Function SubtotalInstance(Function func)
+        {
+            AggregateFunction arg = (AggregateFunction)func;
+            return new SubtotalInstance(arg);
+        }
 
         protected AggregateFunction()
             : base(false, false)
@@ -151,5 +203,7 @@ namespace NPOI.SS.Formula.Functions
         public static Function STDEV = new STDEV();
         public static Function SUM = new SUM();
         public static Function SUMSQ = new SUMSQ();
+        public static Function VAR = new VAR();
+        public static Function VARP = new VARP();
     }
 }

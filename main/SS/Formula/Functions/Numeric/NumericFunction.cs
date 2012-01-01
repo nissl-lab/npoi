@@ -166,5 +166,6 @@ namespace NPOI.SS.Formula.Functions
         public static Function ROUNDUP=new Roundup();
 
         public static Function LOG = new Log();
+        public static Function TRUNC = new Trunc();
     }
 }

@@ -36,7 +36,17 @@ namespace NPOI.SS.Formula.Functions
      */
     public class Count : Function
     {
+        private I_MatchPredicate _predicate;
 
+        public Count()
+        {
+            _predicate = defaultPredicate;
+        }
+
+        private Count(I_MatchPredicate criteriaPredicate)
+        {
+            _predicate = criteriaPredicate;
+        }
         public ValueEval Evaluate(ValueEval[] args, int srcCellRow, int srcCellCol)
         {
             int nArgs = args.Length;
@@ -56,13 +66,13 @@ namespace NPOI.SS.Formula.Functions
 
             for (int i = 0; i < nArgs; i++)
             {
-                temp += CountUtils.CountArg(args[i], predicate);
+                temp += CountUtils.CountArg(args[i], _predicate);
 
             }
             return new NumberEval(temp);
         }
 
-        private class I_MatchPredicate1 : I_MatchPredicate
+        private class DefaultPredicate : I_MatchPredicate
         {
             public bool Matches(ValueEval valueEval)
             {
@@ -82,6 +92,28 @@ namespace NPOI.SS.Formula.Functions
                 return false;
             }
         }
-        private static I_MatchPredicate predicate = new I_MatchPredicate1();
+        private static I_MatchPredicate defaultPredicate = new DefaultPredicate();
+        private class SubtotalPredicate : I_MatchPredicate
+        {
+            public bool Matches(ValueEval valueEval)
+            {
+                return defaultPredicate.Matches(valueEval);
+            }
+        }
+
+        private static I_MatchPredicate subtotalPredicate = new SubtotalPredicate();
+        /**
+     *  Create an instance of Count to use in {@link Subtotal}
+     * <p>
+     *     If there are other subtotals within argument refs (or nested subtotals),
+     *     these nested subtotals are ignored to avoid double counting.
+     * </p>
+     *
+     *  @see Subtotal
+     */
+        public static Count SubtotalInstance()
+        {
+            return new Count(subtotalPredicate);
+        }
     }
 }

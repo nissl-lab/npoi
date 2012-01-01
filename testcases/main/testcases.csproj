@@ -484,10 +484,15 @@
     <Compile Include="SS\Formula\Functions\TestPmt.cs" />
     <Compile Include="SS\Formula\Functions\TestRoundFuncs.cs" />
     <Compile Include="SS\Formula\Functions\TestRowCol.cs" />
+    <Compile Include="SS\Formula\Functions\TestStatsLib.cs" />
+    <Compile Include="SS\Formula\Functions\TestSubtotal.cs" />
+    <Compile Include="SS\Formula\Functions\TestSumif.cs" />
     <Compile Include="SS\Formula\Functions\TestSumproduct.cs" />
     <Compile Include="SS\Formula\Functions\TestText.cs" />
+    <Compile Include="SS\Formula\Functions\TestTFunc.cs" />
     <Compile Include="SS\Formula\Functions\TestTime.cs" />
     <Compile Include="SS\Formula\Functions\TestTrim.cs" />
+    <Compile Include="SS\Formula\Functions\TestTrunc.cs" />
     <Compile Include="SS\Formula\Functions\TestValue.cs" />
     <Compile Include="SS\Formula\Functions\TestXYNumericFunction.cs" />
     <Compile Include="SS\Formula\Function\TestFunctionMetadataRegistry.cs" />

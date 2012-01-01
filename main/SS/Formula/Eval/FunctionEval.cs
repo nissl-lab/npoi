@@ -280,7 +280,7 @@ namespace NPOI.SS.Formula.Eval
             retval[194] = new NotImplementedFunction(); // VARP
             retval[195] = new NotImplementedFunction(); // DSTDEVP
             retval[196] = new NotImplementedFunction(); // DVARP
-            retval[197] = new NotImplementedFunction(); // TRUNC
+            retval[197] = NumericFunction.TRUNC; // TRUNC
             retval[198] = LogicalFunction.ISLOGICAL; // IsLOGICAL
             retval[199] = new NotImplementedFunction(); // DCOUNTA
             retval[200] = new NotImplementedFunction(); // DELETEBAR
@@ -416,8 +416,8 @@ namespace NPOI.SS.Formula.Eval
             retval[341] = new NotImplementedFunction(); // GetPIVOTITEM
             retval[342] = NumericFunction.RADIANS; ; // RADIANS
             retval[343] = NumericFunction.DEGREES; // DEGREES
-            retval[344] = new NotImplementedFunction(); // SUBTOTAL
-            retval[345] = new NotImplementedFunction(); // SUMIF
+            retval[344] = new Subtotal(); // SUBTOTAL
+            retval[345] = new Sumif(); // SUMIF
             retval[346] = new Countif(); // COUNTIF
             retval[347] = new Countblank(); // COUNTBLANK
             retval[348] = new NotImplementedFunction(); // SCENARIOGet
