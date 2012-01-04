@@ -4,6 +4,7 @@ using System.Text;
 using NPOI.Util;
 using NPOI.HSSF.Record;
 using NPOI.Util.IO;
+using NPOI.SS.Formula;
 
 namespace NPOI.SS.Util
 {
@@ -32,7 +33,7 @@ namespace NPOI.SS.Util
             }
             return in1.ReadUShort();
         }
-
+        [Obsolete]
         public int Serialize(int offset, byte[] data)
         {
             LittleEndian.PutUShort(data, offset + 0, FirstRow);
@@ -50,10 +51,26 @@ namespace NPOI.SS.Util
         }
         public String FormatAsString()
         {
+            return FormatAsString(string.Empty, false);
+        }
+        /**
+     * @return the text format of this range using specified sheet name.
+     */
+        public String FormatAsString(String sheetName, bool useAbsoluteAddress)
+        {
             StringBuilder sb = new StringBuilder();
-            CellReference cellRefFrom = new CellReference(FirstRow, FirstColumn);
-            CellReference cellRefTo = new CellReference(LastRow, LastColumn);
+            if (sheetName != null)
+            {
+                sb.Append(SheetNameFormatter.Format(sheetName));
+                sb.Append("!");
+            }
+            CellReference cellRefFrom = new CellReference(FirstRow, FirstColumn,
+                    useAbsoluteAddress, useAbsoluteAddress);
+            CellReference cellRefTo = new CellReference(LastRow, LastColumn,
+                    useAbsoluteAddress, useAbsoluteAddress);
             sb.Append(cellRefFrom.FormatAsString());
+
+            //for a single-cell reference return A1 instead of A1:A1
             if (!cellRefFrom.Equals(cellRefTo))
             {
                 sb.Append(':');
