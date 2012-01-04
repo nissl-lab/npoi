@@ -169,7 +169,6 @@
     </Compile>
     <Compile Include="HSSF\HSSFTestDataSamples.cs" />
     <Compile Include="HSSF\Record\CF\TestCellRange.cs" />
-    <Compile Include="HSSF\Record\Constant\TestConstantValueParser.cs" />
     <Compile Include="HSSF\Record\TestcaseRecordInputStream.cs" />
     <Compile Include="HSSF\Util\TestAreaReference.cs" />
     <Compile Include="HSSF\Util\TestCellReference.cs" />
@@ -568,7 +567,6 @@
   <ItemGroup>
     <Folder Include="DDF\data\" />
     <Folder Include="HSSF\data\" />
-    <Folder Include="HSSF\Record\Formula\" />
     <Folder Include="SS\Formula\Eval\Forked\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

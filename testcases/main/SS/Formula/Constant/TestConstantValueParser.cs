@@ -18,11 +18,11 @@
 namespace TestCases.SS.Formula.Constant
 {
     using Microsoft.VisualStudio.TestTools.UnitTesting;
-    using NPOI.HSSF.Record.Constant;
     using NPOI.HSSF.UserModel;
     using NPOI.Util;
     using NPOI.Util.IO;
     using TestCases.HSSF.Record;
+    using NPOI.SS.Formula.Constant;
     /**
      * 
      * @author Josh Micich

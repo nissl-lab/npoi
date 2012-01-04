@@ -20,9 +20,9 @@ namespace NPOI.HSSF.Record
 
     using System;
     using System.Text;
-    using NPOI.HSSF.Record.Constant;
     using NPOI.Util;
     using NPOI.Util.IO;
+    using NPOI.SS.Formula.Constant;
 
     /**
      * Title:       CRN  

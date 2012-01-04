@@ -28,10 +28,10 @@ namespace NPOI.SS.Formula
     using NPOI.SS.Formula.Function;
 
     using NPOI.SS.Util;
-    using NPOI.HSSF.Record.Constant;
     using NPOI.HSSF.UserModel;
     using System.Collections.Generic;
     using NPOI.SS.Formula.PTG;
+    using NPOI.SS.Formula.Constant;
 
     /// <summary>
     /// Specific exception thrown when a supplied formula does not Parse properly.

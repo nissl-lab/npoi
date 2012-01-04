@@ -250,8 +250,8 @@
     <Compile Include="HSSF\Record\Chart\ValueRangeRecord.cs" />
     <Compile Include="HSSF\Record\CodepageRecord.cs" />
     <Compile Include="HSSF\Record\ColumnInfoRecord.cs" />
-    <Compile Include="HSSF\Record\Constant\ConstantValueParser.cs" />
-    <Compile Include="HSSF\Record\Constant\ErrorConstant.cs" />
+    <Compile Include="SS\Formula\Constant\ConstantValueParser.cs" />
+    <Compile Include="SS\Formula\Constant\ErrorConstant.cs" />
     <Compile Include="HSSF\Record\ContinueRecord.cs" />
     <Compile Include="HSSF\Record\Cont\ContinuableRecord.cs" />
     <Compile Include="HSSF\Record\Cont\ContinuableRecordOutput.cs" />
@@ -943,7 +943,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="HSSF\Dev\" />
-    <Folder Include="SS\Formula\Constant\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -21,7 +21,6 @@ namespace TestCases.HSSF.Model
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using NPOI.HSSF.Model;
     using NPOI.HSSF.Record;
-    using NPOI.HSSF.Record.Constant;
     using NPOI.HSSF.UserModel;
     using NPOI.SS.Formula;
     using NPOI.SS.Formula.PTG;
@@ -30,6 +29,7 @@ namespace TestCases.HSSF.Model
     using NPOI.Util.IO;
     using TestCases.HSSF.UserModel;
     using TestCases.SS.Formula;
+    using NPOI.SS.Formula.Constant;
 
     /**
      * Test the low level formula Parser functionality. High level Tests are to

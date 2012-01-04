@@ -22,10 +22,10 @@ namespace NPOI.SS.Formula.PTG
     using System.Text;
     using NPOI.Util;
     using NPOI.HSSF.Record;
-    using NPOI.HSSF.Record.Constant;
 
     using NPOI.Util.IO;
     using NPOI.SS.Util;
+    using NPOI.SS.Formula.Constant;
 
     /**
      * ArrayPtg - handles arrays

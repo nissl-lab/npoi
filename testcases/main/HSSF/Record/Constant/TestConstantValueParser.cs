@@ -19,10 +19,10 @@ namespace TestCases.HSSF.Record.Constant
 {
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using NPOI.HSSF.Record;
-    using NPOI.HSSF.Record.Constant;
     using NPOI.HSSF.UserModel;
     using NPOI.Util;
     using NPOI.Util.IO;
+    using NPOI.SS.Formula.Constant;
 
     /**
      * 
