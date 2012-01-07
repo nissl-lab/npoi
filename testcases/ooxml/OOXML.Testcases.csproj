@@ -53,6 +53,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestDetectAsOOXML.cs" />
     <Compile Include="TestPOIXMLDocument.cs" />
+    <Compile Include="Util\TestIdentifierManager.cs" />
+    <Compile Include="XSSF\Util\TestCTColComparator.cs" />
+    <Compile Include="XSSF\Util\TestNumericRanges.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\ooxml\OOXML.csproj">
