@@ -59,7 +59,7 @@ public class POIXMLDocumentPart {
      */
     protected static PackagePart GetTargetPart(OPCPackage pkg, PackageRelationship rel)
      {
-        PackagePartName relName = PackagingURIHelper.CreatePartName(rel.TargetUri);
+        PackagePartName relName = PackagingUriHelper.CreatePartName(rel.TargetUri);
         PackagePart part = pkg.GetPart(relName);
         if (part == null) {
             throw new ArgumentException("No part found for relationship " + rel);
@@ -347,12 +347,12 @@ public class POIXMLDocumentPart {
      */
     protected POIXMLDocumentPart CreateRelationship(POIXMLRelation descriptor, POIXMLFactory factory, int idx, bool noRelation){
         try {
-            PackagePartName ppName = PackagingURIHelper.CreatePartName(descriptor.GetFileName(idx));
+            PackagePartName ppName = PackagingUriHelper.CreatePartName(descriptor.GetFileName(idx));
             PackageRelationship rel = null;
             PackagePart part = packagePart.Package.CreatePart(ppName, descriptor.ContentType);
             if(!noRelation) {
                 /* only add to relations, if according relationship is being Created. */
-                rel = packagePart.AddRelationship(ppName, TargetMode.INTERNAL, descriptor.Relation);
+                rel = packagePart.AddRelationship(ppName, TargetMode.Internal, descriptor.Relation);
             }
             POIXMLDocumentPart doc = factory.CreateDocumentPart(descriptor);
             doc.packageRel = rel;
@@ -379,7 +379,7 @@ public class POIXMLDocumentPart {
     {
         PackageRelationshipCollection rels = packagePart.Relationships;
         foreach (PackageRelationship rel in rels) {
-            if(rel.TargetMode == TargetMode.INTERNAL){
+            if(rel.TargetMode == TargetMode.Internal){
                 Uri uri = rel.TargetUri;
 
                 PackagePart p;
@@ -390,7 +390,7 @@ public class POIXMLDocumentPart {
                      */
                     p = null;
                 } else {
-                    PackagePartName relName = PackagingURIHelper.CreatePartName(uri);
+                    PackagePartName relName = PackagingUriHelper.CreatePartName(uri);
                     p = packagePart.Package.GetPart(relName);
                     if(p == null) {
                         logger.Log(POILogger.ERROR, "Skipped invalid entry " + rel.TargetUri);

@@ -126,8 +126,8 @@ namespace NPOI
             {
                 try
                 {
-                    PackagePartName prtname = PackagingURIHelper.CreatePartName("/docProps/app.xml");
-                    pkg.AddRelationship(prtname, TargetMode.INTERNAL, "http://schemas.openxmlformats.org/officeDocument/2006/relationships/extended-properties");
+                    PackagePartName prtname = PackagingUriHelper.CreatePartName("/docProps/app.xml");
+                    pkg.AddRelationship(prtname, TargetMode.Internal, "http://schemas.openxmlformats.org/officeDocument/2006/relationships/extended-properties");
                     extPart = pkg.CreatePart(prtname, "application/vnd.openxmlformats-officedocument.extended-properties+xml");
                 }
                 catch (InvalidFormatException e)
@@ -139,8 +139,8 @@ namespace NPOI
             {
                 try
                 {
-                    PackagePartName prtname = PackagingURIHelper.CreatePartName("/docProps/custom.xml");
-                    pkg.AddRelationship(prtname, TargetMode.INTERNAL, "http://schemas.openxmlformats.org/officeDocument/2006/relationships/custom-properties");
+                    PackagePartName prtname = PackagingUriHelper.CreatePartName("/docProps/custom.xml");
+                    pkg.AddRelationship(prtname, TargetMode.Internal, "http://schemas.openxmlformats.org/officeDocument/2006/relationships/custom-properties");
                     custPart = pkg.CreatePart(prtname, "application/vnd.openxmlformats-officedocument.custom-properties+xml");
                 }
                 catch (InvalidFormatException e)

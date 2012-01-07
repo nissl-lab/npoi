@@ -46,7 +46,7 @@ namespace NPOI.Util
         /**
          * List of segments of available identifiers
          */
-        private LinkedList<Segment> segments;
+        private List<Segment> segments;
 
         /**
          * @param lowerbound the lower limit of the id-range to manage. Must be greater than or equal to {@link #MIN_ID}.
@@ -75,27 +75,28 @@ namespace NPOI.Util
             }
             this.lowerbound = lowerbound;
             this.upperbound = upperbound;
-            this.segments = new LinkedList<Segment>();
-            segments.AddAfter(new LinkedListNode<Segment>(),new Segment(lowerbound, upperbound));
+            this.segments = new List<Segment>();
+            segments.Add(new Segment(lowerbound, upperbound));
         }
 
-        public long reserve(long id)
+        public long Reserve(long id)
         {
             if (id < lowerbound || id > upperbound)
             {
                 throw new ArgumentException("Value for parameter 'id' was out of bounds");
             }
-            verifyIdentifiersLeft();
+            VerifyIdentifiersLeft();
 
             if (id == upperbound)
             {
-                Segment lastSegment = segments.Last.Value;
+                int lastid = segments.Count - 1;
+                Segment lastSegment = segments[lastid];
                 if (lastSegment.end == upperbound)
                 {
                     lastSegment.end = upperbound - 1;
                     if (lastSegment.start > lastSegment.end)
                     {
-                        segments.RemoveLast();
+                        segments.RemoveAt(lastid);
                     }
                     return id;
                 }
@@ -104,56 +105,56 @@ namespace NPOI.Util
 
             if (id == lowerbound)
             {
-                Segment firstSegment = segments.First.Value;
+                Segment firstSegment = segments[0];
                 if (firstSegment.start == lowerbound)
                 {
                     firstSegment.start = lowerbound + 1;
                     if (firstSegment.end < firstSegment.start)
                     {
-                        segments.RemoveFirst();
+                        segments.RemoveAt(0);
                     }
                     return id;
                 }
                 return ReserveNew();
             }
 
-            LinkedList<Segment>.Enumerator iter = segments.GetEnumerator();
-            while (iter.MoveNext())
-            {
-                Segment segment = iter.Current;
-                if (segment.end < id)
-                {
-                    continue;
-                }
-                else if (segment.start > id)
-                {
-                    break;
-                }
-                else if (segment.start == id)
-                {
-                    segment.start = id + 1;
-                    if (segment.end < segment.start)
+            
+            for (int i = 0; i < segments.Count; i++)
+            { 
+                    Segment segment = segments[i];
+                    if (segment.end < id)
                     {
-                        iter.Remove();
+                        continue;
                     }
-                    return id;
-                }
-                else if (segment.end == id)
-                {
-                    segment.end = id - 1;
-                    if (segment.start > segment.end)
+                    else if (segment.start > id)
                     {
-                        iter.Remove();
+                        break;
                     }
-                    return id;
+                    else if (segment.start == id)
+                    {
+                        segment.start = id + 1;
+                        if (segment.end < segment.start)
+                        {
+                            segments.Remove(segment);
+                        }
+                        return id;
+                    }
+                    else if (segment.end == id)
+                    {
+                        segment.end = id - 1;
+                        if (segment.start > segment.end)
+                        {
+                            segments.Remove(segment);
+                        }
+                        return id;
+                    }
+                    else
+                    {
+                        segments.Add(new Segment(id + 1, segment.end));
+                        segment.end = id - 1;
+                        return id;
+                    }
                 }
-                else
-                {
-                    iter.Add(new Segment(id + 1, segment.end));
-                    segment.end = id - 1;
-                    return id;
-                }
-            }
             return ReserveNew();
         }
 
@@ -163,13 +164,13 @@ namespace NPOI.Util
          */
         public long ReserveNew()
         {
-            verifyIdentifiersLeft();
-            Segment segment = segments.First.Value;
+            VerifyIdentifiersLeft();
+            Segment segment = segments[0];
             long result = segment.start;
             segment.start += 1;
             if (segment.start > segment.end)
             {
-                segments.RemoveFirst();
+                segments.RemoveAt(0);
             }
             return result;
         }
@@ -181,7 +182,7 @@ namespace NPOI.Util
          * @return true, if the identifier was reserved and has been successfully
          * released, false, if the identifier was not reserved.
          */
-        public bool release(long id)
+        public bool Release(long id)
         {
             if (id < lowerbound || id > upperbound)
             {
@@ -190,7 +191,8 @@ namespace NPOI.Util
 
             if (id == upperbound)
             {
-                Segment lastSegment = segments.Last.Value;
+                int lastid = segments.Count - 1;
+                Segment lastSegment = segments[lastid];
                 if (lastSegment.end == upperbound - 1)
                 {
                     lastSegment.end = upperbound;
@@ -209,7 +211,7 @@ namespace NPOI.Util
 
             if (id == lowerbound)
             {
-                Segment firstSegment = segments.GetFirst();
+                Segment firstSegment = segments[0];
                 if (firstSegment.start == lowerbound + 1)
                 {
                     firstSegment.start = lowerbound;
@@ -221,26 +223,25 @@ namespace NPOI.Util
                 }
                 else
                 {
-                    segments.AddFirst(new Segment(lowerbound, lowerbound));
+                    segments.Insert(0,new Segment(lowerbound, lowerbound));
                     return true;
                 }
             }
 
             long higher = id + 1;
             long lower = id - 1;
-            ListIterator<Segment> iter = segments.GetEnumerator();
 
-            while (iter.hasNext())
+            for (int i = 0; i < segments.Count; i++)
             {
-                Segment segment = iter.next();
+
+                Segment segment = segments[0];
                 if (segment.end < lower)
                 {
                     continue;
                 }
                 if (segment.start > higher)
                 {
-                    iter.previous();
-                    iter.Add(new Segment(id, id));
+                    segments.Insert(i,new Segment(id, id));
                     return true;
                 }
                 if (segment.start == higher)
@@ -252,13 +253,13 @@ namespace NPOI.Util
                 {
                     segment.end = id;
                     /* check if releasing this elements glues two segments into one */
-                    if (iter.hasNext())
+                    if (i+1<segments.Count)
                     {
-                        Segment next = iter.next();
+                        Segment next = segments[i + 1];
                         if (next.start == segment.end + 1)
                         {
                             segment.end = next.end;
-                            iter.Remove();
+                            segments.Remove(next);
                         }
                     }
                     return true;
@@ -286,15 +287,15 @@ namespace NPOI.Util
         /**
          * 
          */
-        private void verifyIdentifiersLeft()
+        private void VerifyIdentifiersLeft()
         {
-            if (segments.isEmpty())
+            if (segments.Count==0)
             {
-                throw new IllegalStateException("No identifiers left");
+                throw new InvalidOperationException("No identifiers left");
             }
         }
 
-        private class Segment
+        internal class Segment
         {
 
             public Segment(long start, long end)
@@ -311,7 +312,7 @@ namespace NPOI.Util
              * 
              * @see java.lang.Object#ToString()
              */
-            public String ToString()
+            public override String ToString()
             {
                 return "[" + start + "; " + end + "]";
             }
