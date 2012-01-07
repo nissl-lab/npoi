@@ -4,7 +4,7 @@ using System.Text;
 using NPOI.OpenXml4Net.OPC;
 using System.Net.Mime;
 
-namespace CreateBasicOOXMLFile
+namespace NPOI.Examples.CreateBasicOOXMLFile
 {
     class Program
     {

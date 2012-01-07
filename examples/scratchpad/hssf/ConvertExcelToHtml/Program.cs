@@ -22,7 +22,7 @@ using NPOI.HSSF.UserModel;
 using NPOI.HSSF.Converter;
 using System.IO;
 
-namespace ConvertExcelToHtml
+namespace NPOI.Examples.ConvertExcelToHtml
 {
     class Program
     {
@@ -30,7 +30,7 @@ namespace ConvertExcelToHtml
         {
             HSSFWorkbook workbook;
             //the excel file to convert
-            string fileName = @"..\..\..\..\..\testcases\test-data\spreadsheet\19599-1.xls";
+            string fileName = "19599-1.xls";
             fileName = Path.Combine(Environment.CurrentDirectory, fileName);
             workbook = ExcelToHtmlUtils.LoadXls(fileName);
 
