@@ -78,6 +78,28 @@ namespace NPOI.SS.Util
             }
             return sb.ToString();
         }
+        public String FormatAsString(String sheetName, bool useAbsoluteAddress)
+        {
+            StringBuilder sb = new StringBuilder();
+            if (sheetName != null)
+            {
+                sb.Append(SheetNameFormatter.Format(sheetName));
+                sb.Append("!");
+            }
+            CellReference cellRefFrom = new CellReference(FirstRow, FirstColumn,
+                    useAbsoluteAddress, useAbsoluteAddress);
+            CellReference cellRefTo = new CellReference(LastRow, LastColumn,
+                    useAbsoluteAddress, useAbsoluteAddress);
+            sb.Append(cellRefFrom.FormatAsString());
+
+            //for a single-cell reference return A1 instead of A1:A1
+            if (!cellRefFrom.Equals(cellRefTo))
+            {
+                sb.Append(':');
+                sb.Append(cellRefTo.FormatAsString());
+            }
+            return sb.ToString();
+        }
         public CellRangeAddress Copy()
         {
             return new CellRangeAddress(FirstRow, LastRow, FirstColumn, LastColumn);
