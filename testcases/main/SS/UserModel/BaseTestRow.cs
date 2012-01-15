@@ -18,31 +18,32 @@
 namespace TestCases.SS.UserModel
 {
     using System;
-    using NPOI.SS;
-    using NPOI.SS.UserModel;
+
+
+
     using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+    using NPOI.SS;
     using System.Collections;
+    using TestCases.SS;
+    using NPOI.SS.UserModel;
 
     /**
-     * A base class for testing implementations of
-     * {@link NPOI.SS.usermodel.Row}
+     * A base class for Testing implementations of
+     * {@link NPOI.SS.UserModel.Row}
      */
     [TestClass]
-    public abstract class BaseTestRow
+    public class BaseTestRow
     {
 
-        /**
-         * @return an object that provides test data in  / XSSF specific way
-         */
         private ITestDataProvider _testDataProvider;
         public BaseTestRow()
             : this(TestCases.HSSF.HSSFITestDataProvider.Instance)
-        {}
-        protected BaseTestRow(ITestDataProvider testDataProvider)
+        { }
+        protected BaseTestRow(ITestDataProvider TestDataProvider)
         {
-            _testDataProvider = testDataProvider;
+            _testDataProvider = TestDataProvider;
         }
-
         [TestMethod]
         public void TestLastAndFirstColumns()
         {
@@ -52,7 +53,7 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual(-1, row.FirstCellNum);
             Assert.AreEqual(-1, row.LastCellNum);
 
-            //Getting cells from an empty row should returns null
+            //getting cells from an empty row should returns null
             for (int i = 0; i < 10; i++) Assert.IsNull(row.GetCell(i));
 
             row.CreateCell(2);
@@ -71,7 +72,7 @@ namespace TestCases.SS.UserModel
 
         /**
          * Make sure that there is no cross-talk between rows especially with GetFirstCellNum and GetLastCellNum
-         * This test was Added in response to bug report 44987.
+         * This Test was Added in response to bug report 44987.
          */
         [TestMethod]
         public void TestBoundsInMultipleRows()
@@ -122,7 +123,7 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual(1, row.FirstCellNum);
             Assert.AreEqual(1, row.PhysicalNumberOfCells);
             row.RemoveCell(row.GetCell(1));
-            Assert.AreEqual(0, row.LastCellNum);
+            Assert.AreEqual(-1, row.LastCellNum);
             Assert.AreEqual(-1, row.FirstCellNum);
             Assert.AreEqual(0, row.PhysicalNumberOfCells);
 
@@ -133,7 +134,6 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual(-1, row.FirstCellNum);
             Assert.AreEqual(0, row.PhysicalNumberOfCells);
         }
-
         public void BaseTestRowBounds(int maxRowNum)
         {
             IWorkbook workbook = _testDataProvider.CreateWorkbook();
@@ -148,7 +148,7 @@ namespace TestCases.SS.UserModel
             }
             catch (ArgumentException e)
             {
-                // expected during successful test
+                // expected during successful Test
                 Assert.IsTrue(e.Message.StartsWith("Invalid row number (-1)"));
             }
 
@@ -162,11 +162,10 @@ namespace TestCases.SS.UserModel
             }
             catch (ArgumentException e)
             {
-                // expected during successful test
+                // expected during successful Test
                 Assert.AreEqual("Invalid row number (" + (maxRowNum + 1) + ") outside allowable range (0.." + maxRowNum + ")", e.Message);
             }
         }
-
         public void BaseTestCellBounds(int maxCellNum)
         {
             IWorkbook workbook = _testDataProvider.CreateWorkbook();
@@ -176,29 +175,29 @@ namespace TestCases.SS.UserModel
             //Test low cell bound
             try
             {
-                ICell cell = row.CreateCell(-1);
+                row.CreateCell(-1);
                 Assert.Fail("expected exception");
             }
             catch (ArgumentException e)
             {
-                // expected during successful test
+                // expected during successful Test
                 Assert.IsTrue(e.Message.StartsWith("Invalid column index (-1)"));
             }
 
             //Test high cell bound
             try
             {
-                ICell cell = row.CreateCell(maxCellNum + 1);
+                row.CreateCell(maxCellNum + 1);
                 Assert.Fail("expected exception");
             }
             catch (ArgumentException e)
             {
-                // expected during successful test
+                // expected during successful Test
                 Assert.IsTrue(e.Message.StartsWith("Invalid column index (" + (maxCellNum + 1) + ")"));
             }
             for (int i = 0; i < maxCellNum; i++)
             {
-                ICell cell = row.CreateCell(i);
+                row.CreateCell(i);
             }
             Assert.AreEqual(maxCellNum, row.PhysicalNumberOfCells);
             workbook = _testDataProvider.WriteOutAndReadBack(workbook);
@@ -292,7 +291,7 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual(CellType.BLANK, row.GetCell(4, MissingCellPolicy.CREATE_NULL_AS_BLANK).CellType);
             Assert.AreEqual(CellType.NUMERIC, row.GetCell(5, MissingCellPolicy.CREATE_NULL_AS_BLANK).CellType);
 
-            // Check Created ones get the right column
+            // Check Created ones Get the right column
             Assert.AreEqual(0, row.GetCell(0, MissingCellPolicy.CREATE_NULL_AS_BLANK).ColumnIndex);
             Assert.AreEqual(1, row.GetCell(1, MissingCellPolicy.CREATE_NULL_AS_BLANK).ColumnIndex);
             Assert.AreEqual(2, row.GetCell(2, MissingCellPolicy.CREATE_NULL_AS_BLANK).ColumnIndex);
@@ -321,24 +320,24 @@ namespace TestCases.SS.UserModel
 
             Assert.AreEqual(sheet.DefaultRowHeight, row1.Height);
 
-            sheet.DefaultRowHeightInPoints = (20);
-            row1.Height = ((short)-1); //reset the row height
+            sheet.DefaultRowHeightInPoints = (/*setter*/20);
+            row1.Height = (/*setter*/(short)-1); //reset the row height
             Assert.AreEqual(20.0f, row1.HeightInPoints, 0F);
             Assert.AreEqual(20 * 20, row1.Height);
 
             IRow row2 = sheet.CreateRow(1);
-            row2.Height = ((short)310);
+            row2.Height = (/*setter*/(short)310);
             Assert.AreEqual(310, row2.Height);
             Assert.AreEqual(310F / 20, row2.HeightInPoints, 0F);
 
             IRow row3 = sheet.CreateRow(2);
-            row3.HeightInPoints = (25.5f);
+            row3.HeightInPoints = (/*setter*/25.5f);
             Assert.AreEqual((short)(25.5f * 20), row3.Height);
             Assert.AreEqual(25.5f, row3.HeightInPoints, 0F);
 
             IRow row4 = sheet.CreateRow(3);
             Assert.IsFalse(row4.ZeroHeight);
-            row4.ZeroHeight = (true);
+            row4.ZeroHeight = (/*setter*/true);
             Assert.IsTrue(row4.ZeroHeight);
 
             workbook = _testDataProvider.WriteOutAndReadBack(workbook);
@@ -367,7 +366,7 @@ namespace TestCases.SS.UserModel
          * Test Adding cells to a row in various places and see if we can find them again.
          */
         [TestMethod]
-        public void TestGetCellEnumerator()
+        public void TestCellIterator()
         {
             IWorkbook wb = _testDataProvider.CreateWorkbook();
             ISheet sheet = wb.CreateSheet();
@@ -423,9 +422,45 @@ namespace TestCases.SS.UserModel
             Assert.IsTrue(cell2 == it.Current);
             Assert.AreEqual(CellType.STRING, cell5.CellType);
         }
+        [TestMethod]
+        public void TestRowStyle()
+        {
+            IWorkbook workbook = _testDataProvider.CreateWorkbook();
+            ISheet sheet = workbook.CreateSheet("test");
+            IRow row1 = sheet.CreateRow(0);
+            IRow row2 = sheet.CreateRow(1);
+
+            // Won't be styled currently
+            Assert.AreEqual(false, row1.IsFormatted);
+            Assert.AreEqual(false, row2.IsFormatted);
+            Assert.AreEqual(null, row1.RowStyle);
+            Assert.AreEqual(null, row2.RowStyle);
+
+            // Style one
+            ICellStyle style = workbook.CreateCellStyle();
+            style.DataFormat = (/*setter*/(short)4);
+            row2.RowStyle = (/*setter*/style);
+
+            // Check
+            Assert.AreEqual(false, row1.IsFormatted);
+            Assert.AreEqual(true, row2.IsFormatted);
+            Assert.AreEqual(null, row1.RowStyle);
+            Assert.AreEqual(style, row2.RowStyle);
+
+            // Save, load and re-check
+            workbook = _testDataProvider.WriteOutAndReadBack(workbook);
+            sheet = workbook.GetSheetAt(0);
+
+            row1 = sheet.GetRow(0);
+            row2 = sheet.GetRow(1);
+            style = workbook.GetCellStyleAt(style.Index);
+
+            Assert.AreEqual(false, row1.IsFormatted);
+            Assert.AreEqual(true, row2.IsFormatted);
+            Assert.AreEqual(null, row1.RowStyle);
+            Assert.AreEqual(style, row2.RowStyle);
+            Assert.AreEqual(4, style.DataFormat);
+        }
     }
 
 }
-
-
-

@@ -577,6 +577,11 @@ namespace NPOI.HSSF.UserModel
         /// <param name="name">The name.</param>
         public void SetSheetName(int sheetIx, String name)
         {
+            if (name == null)
+            {
+                throw new ArgumentException("sheetName must not be null");
+            }
+
             if (workbook.ContainsSheetName(name, sheetIx))
             {
                 throw new ArgumentException("The workbook already contains a sheet with this name");
@@ -643,7 +648,11 @@ namespace NPOI.HSSF.UserModel
             ValidateSheetIndex(sheetIx);
             workbook.SetSheetHidden(sheetIx, hidden);
         }
-
+        public void SetSheetHidden(int sheetIx, bool hidden)
+        {
+            ValidateSheetIndex(sheetIx);
+            workbook.SetSheetHidden(sheetIx, hidden);
+        }
         /// <summary>
         /// Returns the index of the sheet by his name
         /// </summary>

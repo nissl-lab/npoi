@@ -313,7 +313,11 @@ namespace NPOI.SS.UserModel
          * @return true => protection enabled; false => protection disabled
          */
         bool Protect { get; }
-
+        /**
+         * Sets the protection enabled as well as the password
+         * @param password to set for protection. Pass <code>null</code> to remove protection
+         */
+        void ProtectSheet(String password);
         /**
          * Answer whether scenario protection is enabled or disabled
          *

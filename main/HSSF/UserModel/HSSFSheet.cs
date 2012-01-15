@@ -547,10 +547,47 @@ namespace NPOI.HSSF.UserModel
         /// <returns>index of this region</returns>
         public int AddMergedRegion(NPOI.SS.Util.CellRangeAddress region)
         {
+            region.Validate(SpreadsheetVersion.EXCEL97);
+            // throw IllegalStateException if the argument CellRangeAddress intersects with
+            // a multi-cell array formula defined in this sheet
+            ValidateArrayFormulas(region);
+
             return _sheet.AddMergedRegion(region.FirstRow,
                     region.FirstColumn,
                     region.LastRow,
                     region.LastColumn);
+        }
+        private void ValidateArrayFormulas(CellRangeAddress region)
+        {
+            int firstRow = region.FirstRow;
+            int firstColumn = region.FirstColumn;
+            int lastRow = region.LastRow;
+            int lastColumn = region.LastColumn;
+            for (int rowIn = firstRow; rowIn <= lastRow; rowIn++)
+            {
+                for (int colIn = firstColumn; colIn <= lastColumn; colIn++)
+                {
+                    HSSFRow row = (HSSFRow)GetRow(rowIn);
+                    if (row == null) continue;
+
+                    HSSFCell cell = (HSSFCell)row.GetCell(colIn);
+                    if (cell == null) continue;
+
+                    if (cell.IsPartOfArrayFormulaGroup)
+                    {
+                        CellRangeAddress arrayRange = cell.GetArrayFormulaRange();
+                        if (arrayRange.NumberOfCells > 1 &&
+                                (arrayRange.IsInRange(region.FirstRow, region.FirstColumn) ||
+                                  arrayRange.IsInRange(region.FirstRow, region.FirstColumn)))
+                        {
+                            String msg = "The range " + region.FormatAsString() + " intersects with a multi-cell array formula. " +
+                                    "You cannot merge cells of an array.";
+                            throw new InvalidOperationException(msg);
+                        }
+                    }
+                }
+            }
+
         }
         /// <summary>
         /// Whether a record must be Inserted or not at generation to indicate that

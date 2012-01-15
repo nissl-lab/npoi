@@ -50,6 +50,13 @@ namespace NPOI.SS.UserModel
          */
         void NotifyDeleteCell(ICell cell);
         /**
+         * Should be called to tell the cell value cache that the specified (value or formula) cell
+         * has changed.
+         * Failure to call this method after changing cell values will cause incorrect behaviour
+         * of the evaluate~ methods of this class
+         */
+        void NotifyUpdateCell(ICell cell);
+        /**
          * If cell Contains a formula, the formula is Evaluated and returned,
          * else the CellValue simply copies the appropriate cell value from
          * the cell and also its cell type. This method should be preferred over

@@ -169,7 +169,7 @@ namespace TestCases.SS.UserModel
             // Check that asking for the same font
             //  multiple times gives you the same thing.
             // Otherwise, our Tests wouldn't work!
-            Assert.AreEqual(wb.GetFontAt((short)0), wb.GetFontAt((short)0));
+            Assert.AreSame(wb.GetFontAt((short)0), wb.GetFontAt((short)0));
 
             // Look for a new font we have
             //  yet to add
@@ -208,7 +208,7 @@ namespace TestCases.SS.UserModel
                     "Thingy", false, true, (short)2, (byte)2
                 )
             );
-            Assert.AreEqual(nf,
+            Assert.AreSame(nf,
                    wb.FindFont(
                        (short)FontBoldWeight.BOLD, (short)123, (short)(22 * 20),
                        "Thingy", false, true, (short)2, (byte)2

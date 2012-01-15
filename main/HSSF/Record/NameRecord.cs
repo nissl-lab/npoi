@@ -285,6 +285,24 @@ namespace NPOI.HSSF.Record
                 return nChars;
             }
         }
+
+        /**
+	 * Indicates that the defined name refers to a user-defined function.
+	 * This attribute is used when there is an add-in or other code project associated with the file.
+	 *
+	 * @param function <code>true</code> indicates the name refers to a function.
+	 */
+        public void SetFunction(bool function)
+        {
+            if (function)
+            {
+                field_1_option_flag |= (short)Option.OPT_FUNCTION_NAME;
+            }
+            else
+            {
+                field_1_option_flag &= (short)(~Option.OPT_FUNCTION_NAME);
+            }
+        }
         /**
  * @return <c>true</c> if name has a formula (named range or defined value)
  */

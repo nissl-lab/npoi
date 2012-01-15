@@ -166,7 +166,12 @@ namespace NPOI.SS.UserModel
          * @see Sheet#GetDefaultRowHeightInPoints()
          */
         float HeightInPoints { get; set; }
-
+        /**
+        * Is this row formatted? Most aren't, but some rows
+        *  do have whole-row styles. For those that do, you
+        *  can get the formatting from {@link #getRowStyle()}
+        */
+        bool IsFormatted { get; }
         /**
          * @return Cell iterator of the physically defined cells.  Note element 4 may
          * actually be row cell depending on how many are defined!

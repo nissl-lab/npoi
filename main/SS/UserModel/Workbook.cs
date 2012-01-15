@@ -449,7 +449,7 @@ namespace NPOI.SS.UserModel
          * @param hidden 0 for not hidden, 1 for hidden, 2 for very hidden
          */
         void SetSheetHidden(int sheetIx, int hidden);
-
+        void SetSheetHidden(int sheetIx, bool hidden);
         /**
      * Register a new toolpack in this workbook.
      *

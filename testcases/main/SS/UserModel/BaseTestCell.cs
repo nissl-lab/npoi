@@ -87,7 +87,7 @@ namespace TestCases.SS.UserModel
 
             DateTime dt = DateTime.Now.AddMilliseconds(123456789);
             cell.SetCellValue(dt);
-            Assert.IsTrue((dt.Ticks - cell.DateCellValue.Ticks)>=-20000);
+            Assert.IsTrue((dt.Ticks - cell.DateCellValue.Ticks) >= -20000);
             Assert.AreEqual(CellType.NUMERIC, cell.CellType);
             AssertProhibitedValueAccess(cell, CellType.BOOLEAN, CellType.STRING,
                     CellType.FORMULA, CellType.ERROR);
@@ -197,12 +197,12 @@ namespace TestCases.SS.UserModel
             ICellStyle cs = wb.CreateCellStyle();
             IFont f = wb.CreateFont();
             f.FontHeightInPoints = 20;
-            f.Color=(IndexedColors.RED.Index);
-            f.Boldweight= (int)FontBoldWeight.BOLD;
+            f.Color = (IndexedColors.RED.Index);
+            f.Boldweight = (int)FontBoldWeight.BOLD;
             f.FontName = "Arial Unicode MS";
             cs.FillBackgroundColor = 3;
             cs.SetFont(f);
-            cs.BorderTop=CellBorderType.THIN;
+            cs.BorderTop = CellBorderType.THIN;
             cs.BorderRight = CellBorderType.THIN;
             cs.BorderLeft = CellBorderType.THIN;
             cs.BorderBottom = CellBorderType.THIN;
@@ -372,7 +372,7 @@ namespace TestCases.SS.UserModel
             cell.SetCellValue(true);
             try
             {
-                object a=cell.BooleanCellValue;
+                object a = cell.BooleanCellValue;
             }
             catch (InvalidOperationException e)
             {
@@ -550,34 +550,96 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual(i1, i2);
         }
 
+        /**
+         * Excel's implementation of floating number arithmetic does not fully adhere to IEEE 754:
+         *
+         * From http://support.microsoft.com/kb/78113:
+         *
+         * <ul>
+         * <li> Positive/Negative InfInities:
+         *   InfInities occur when you divide by 0. Excel does not support infInities, rather,
+         *   it gives a #DIV/0! error in these cases.
+         * </li>
+         * <li>
+         *   Not-a-Number (NaN):
+         *   NaN is used to represent invalid operations (such as infInity/infinity, 
+         *   infInity-infinity, or the square root of -1). NaNs allow a program to
+         *   continue past an invalid operation. Excel instead immediately generates
+         *   an error such as #NUM! or #DIV/0!.
+         * </li>
+         * </ul>
+         */
         [TestMethod]
-        public void TestIsMergedCell()
+        public void TestNanAndInfInity()
         {
             IWorkbook wb = _testDataProvider.CreateWorkbook();
-            ISheet sheet = wb.CreateSheet();
-            IRow row = sheet.CreateRow(0);
-            ICell cell1 = row.CreateCell(0);
-            ICell cell2 = row.CreateCell(1);
-            ICell cell3 = row.CreateCell(3);
-            IRow row2 = sheet.CreateRow(1);
-            ICell cell4 = row2.CreateCell(0);
-            ICell cell5 = row2.CreateCell(2);
-            ICell cell6 = row2.CreateCell(5);
+            ISheet workSheet = wb.CreateSheet("Sheet1");
+            IRow row = workSheet.CreateRow(0);
 
-            
-            CellRangeAddress region = new CellRangeAddress(1, 3, 0, 2);
-            sheet.AddMergedRegion(region);
-            Assert.IsFalse(cell1.IsMergedCell);
-            Assert.IsFalse(cell2.IsMergedCell);
-            Assert.IsFalse(cell3.IsMergedCell);
-            Assert.IsTrue(cell4.IsMergedCell);
-            Assert.IsTrue(cell5.IsMergedCell);
-            Assert.IsFalse(cell6.IsMergedCell);
+            ICell cell0 = row.CreateCell(0);
+            cell0.SetCellValue(Double.NaN);
+            Assert.AreEqual(CellType.ERROR, cell0.CellType, "Double.NaN should change cell type to CELL_TYPE_ERROR");
+            Assert.AreEqual(ErrorConstants.ERROR_NUM, cell0.ErrorCellValue, "Double.NaN should change cell value to #NUM!");
 
+            ICell cell1 = row.CreateCell(1);
+            cell1.SetCellValue(Double.PositiveInfinity);
+            Assert.AreEqual(CellType.ERROR, cell1.CellType, "Double.PositiveInfinity should change cell type to CELL_TYPE_ERROR");
+            Assert.AreEqual(ErrorConstants.ERROR_DIV_0, cell1.ErrorCellValue, "Double.POSITIVE_INFINITY should change cell value to #DIV/0!");
+
+            ICell cell2 = row.CreateCell(2);
+            cell2.SetCellValue(Double.NegativeInfinity);
+            Assert.AreEqual(CellType.ERROR, cell2.CellType, "Double.NegativeInfinity should change cell type to CELL_TYPE_ERROR");
+            Assert.AreEqual(ErrorConstants.ERROR_DIV_0, cell2.ErrorCellValue, "Double.NEGATIVE_INFINITY should change cell value to #DIV/0!");
+
+            wb = _testDataProvider.WriteOutAndReadBack(wb);
+            row = wb.GetSheetAt(0).GetRow(0);
+
+            cell0 = row.GetCell(0);
+            Assert.AreEqual(CellType.ERROR, cell0.CellType);
+            Assert.AreEqual(ErrorConstants.ERROR_NUM, cell0.ErrorCellValue);
+
+            cell1 = row.GetCell(1);
+            Assert.AreEqual(CellType.ERROR, cell1.CellType);
+            Assert.AreEqual(ErrorConstants.ERROR_DIV_0, cell1.ErrorCellValue);
+
+            cell2 = row.GetCell(2);
+            Assert.AreEqual(CellType.ERROR, cell2.CellType);
+            Assert.AreEqual(ErrorConstants.ERROR_DIV_0, cell2.ErrorCellValue);
+        }
+        [TestMethod]
+        public void TestDefaultStyleProperties()
+        {
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+
+            ICell cell = wb.CreateSheet("Sheet1").CreateRow(0).CreateCell(0);
+            ICellStyle style = cell.CellStyle;
+
+            Assert.IsTrue(style.IsLocked);
+            Assert.IsFalse(style.IsHidden);
+            Assert.AreEqual(0, style.Indention);
+            Assert.AreEqual(0, style.FontIndex);
+            Assert.AreEqual(0, (int)style.Alignment);
+            Assert.AreEqual(0, style.DataFormat);
+            Assert.AreEqual(false, style.WrapText);
+
+            ICellStyle style2 = wb.CreateCellStyle();
+            Assert.IsTrue(style2.IsLocked);
+            Assert.IsFalse(style2.IsHidden);
+            style2.IsLocked = (/*setter*/false);
+            style2.IsHidden = (/*setter*/true);
+            Assert.IsFalse(style2.IsLocked);
+            Assert.IsTrue(style2.IsHidden);
+
+            wb = _testDataProvider.WriteOutAndReadBack(wb);
+            cell = wb.GetSheetAt(0).GetRow(0).GetCell(0);
+            style = cell.CellStyle;
+            Assert.IsFalse(style2.IsLocked);
+            Assert.IsTrue(style2.IsHidden);
+
+            style2.IsLocked = (/*setter*/true);
+            style2.IsHidden = (/*setter*/false);
+            Assert.IsTrue(style2.IsLocked);
+            Assert.IsFalse(style2.IsHidden);
         }
     }
 }
-
-
-
-

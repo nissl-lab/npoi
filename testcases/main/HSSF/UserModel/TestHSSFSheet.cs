@@ -394,7 +394,7 @@ namespace TestCases.HSSF.UserModel
             Assert.AreEqual(expectedHashA, sheet2.Password);
         }
         [TestMethod]
-        public void TestProtectSheet()
+        public new void TestProtectSheet()
         {
             short expected = unchecked((short)0xfef1);
             HSSFWorkbook wb = new HSSFWorkbook();

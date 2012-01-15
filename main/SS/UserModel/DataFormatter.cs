@@ -83,6 +83,25 @@ namespace NPOI.SS.UserModel
         /** A regex to find patterns like [$$-1009] and [$�-452]. */
         private static string specialPatternGroup = "(\\[\\$[^-\\]]*-[0-9A-Z]+\\])";
 
+        /**
+     * A regex to match the colour formattings rules.
+     * Allowed colours are: Black, Blue, Cyan, Green,
+     *  Magenta, Red, White, Yellow, "Color n" (1<=n<=56)
+     */
+        private static string colorPattern = "(\\[BLACK\\])|(\\[BLUE\\])|(\\[CYAN\\])|(\\[GREEN\\])|" +
+            "(\\[MAGENTA\\])|(\\[RED\\])|(\\[WHITE\\])|(\\[YELLOW\\])|" +
+            "(\\[COLOR\\s*\\d\\])|(\\[COLOR\\s*[0-5]\\d\\])";
+        /**
+      * Cells formatted with a date or time format and which contain invalid date or time values
+     *  show 255 pound signs ("#").
+      */
+        private static String invalidDateTimeString;
+        static DataFormatter()
+        {
+            StringBuilder buf = new StringBuilder();
+            for (int i = 0; i < 255; i++) buf.Append('#');
+            invalidDateTimeString = buf.ToString();
+        }
         /** <em>General</em> FormatBase for whole numbers. */
         private static DecimalFormat generalWholeNumFormat = new DecimalFormat("0");
 
@@ -193,7 +212,7 @@ namespace NPOI.SS.UserModel
             String formatStr = Regex.Replace(sFormat, "\\[[a-zA-Z]*\\]", "");
 
             // try to extract special characters like currency
-            
+
             MatchCollection matches = Regex.Matches(formatStr, specialPatternGroup);
             foreach (Match match in matches)
             {
@@ -201,7 +220,7 @@ namespace NPOI.SS.UserModel
                 int beginpos = matchedstring.IndexOf('$') + 1;
                 int endpos = matchedstring.IndexOf('-');
                 String symbol = matchedstring.Substring(beginpos, endpos - beginpos + 1);
-                
+
                 if (symbol.IndexOf('$') > -1)
                 {
                     StringBuilder sb = new StringBuilder();
@@ -210,10 +229,10 @@ namespace NPOI.SS.UserModel
                     sb.Append(symbol.Substring(symbol.IndexOf('$'), symbol.Length));
                     symbol = sb.ToString();
                 }
-                matchedstring=Regex.Replace(matchedstring,specialPatternGroup,symbol);
+                matchedstring = Regex.Replace(matchedstring, specialPatternGroup, symbol);
 
-                formatStr = formatStr.Remove(match.Index,match.Length);
-                formatStr = formatStr.Insert(match.Index,matchedstring);
+                formatStr = formatStr.Remove(match.Index, match.Length);
+                formatStr = formatStr.Insert(match.Index, matchedstring);
             }
 
             if (formatStr == null || formatStr.Trim().Length == 0)
@@ -309,7 +328,7 @@ namespace NPOI.SS.UserModel
                         int index = (int)ms[i];
                         if (sb[index] == 'M')
                         {
-                            sb[index]='m';
+                            sb[index] = 'm';
                         }
                     }
                     mIsMonth = true;
@@ -487,13 +506,28 @@ namespace NPOI.SS.UserModel
          */
         public String FormatRawCellContents(double value, int formatIndex, String formatString)
         {
+            return FormatRawCellContents(value, formatIndex, formatString, false);
+        }
+        /**
+     * Formats the given raw cell value, based on the supplied
+     *  format index and string, according to excel style rules.
+     * @see #formatCellValue(Cell)
+     */
+        public String FormatRawCellContents(double value, int formatIndex, String formatString, bool use1904Windowing)
+        {
             // Is it a date?
             if (DateUtil.IsADateFormat(formatIndex, formatString) &&
                     DateUtil.IsValidExcelDate(value))
             {
 
                 FormatBase dateFormat = GetFormat(value, formatIndex, formatString);
-                DateTime d = DateUtil.GetJavaDate(value);
+                //TODO: port class ExcelStyleDateFormatter
+                /*if(dateFormat is ExcelStyleDateFormatter) {
+                   // Hint about the raw excel value
+                   ((ExcelStyleDateFormatter)dateFormat).setDateToBeFormatted(value);
+                }*/
+
+                DateTime d = DateUtil.GetJavaDate(value, use1904Windowing);
                 if (dateFormat == null)
                 {
                     return d.ToString();
@@ -508,7 +542,6 @@ namespace NPOI.SS.UserModel
             }
             return numberFormat.Format(value);
         }
-
         /**
          * 
          * Returns the Formatted value of a cell as a <tt>String</tt> regardless
@@ -636,7 +669,7 @@ namespace NPOI.SS.UserModel
          */
         public void AddFormat(String excelformatStr, FormatBase format)
         {
-            formats[excelformatStr]= format;
+            formats[excelformatStr] = format;
         }
 
         // Some custom Formats

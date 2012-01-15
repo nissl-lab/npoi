@@ -40,7 +40,7 @@ namespace TestCases.HSSF.UserModel
 * [Bug 49928] formatCellValue returns incorrect value for \u00a3 formatted cells
 */
         [TestMethod]
-        public void Test49928()
+        public new void Test49928()
         {
             HSSFWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("49928.xls");
             string poundFmt = "\"\u00a3\"#,##0;[Red]\\-\"\u00a3\"#,##0";

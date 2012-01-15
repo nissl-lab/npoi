@@ -18,18 +18,19 @@
 namespace TestCases.SS.UserModel
 {
     using System;
+
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+
     using NPOI.SS;
     using NPOI.SS.Util;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
     using TestCases.SS;
-    using System.Collections;
     using NPOI.SS.UserModel;
 
     /**
      * Tests row Shifting capabilities.
      *
      * @author Shawn Laubach (slaubach at apache dot com)
-     * @author Toshiaki Kamoshida (kamoshida.toshiaki at future dot co dot jp)
+     * @author Toshiaki Kamoshida (kamoshida.Toshiaki at future dot co dot jp)
      */
     [TestClass]
     public class BaseTestSheetShiftRows
@@ -37,11 +38,12 @@ namespace TestCases.SS.UserModel
 
         private ITestDataProvider _testDataProvider;
         public BaseTestSheetShiftRows()
-            : this(TestCases.HSSF.HSSFITestDataProvider.Instance)
-        { }
-        protected BaseTestSheetShiftRows(ITestDataProvider testDataProvider)
         {
-            _testDataProvider = testDataProvider;
+            _testDataProvider = TestCases.HSSF.HSSFITestDataProvider.Instance;
+        }
+        protected BaseTestSheetShiftRows(ITestDataProvider TestDataProvider)
+        {
+            _testDataProvider = TestDataProvider;
         }
 
         /**
@@ -50,10 +52,10 @@ namespace TestCases.SS.UserModel
          * Check.  This ensures that if some Changes code that breaks
          * writing or what not, they realize it.
          *
-         * @param sampleName the sample file to test against
+         * @param sampleName the sample file to Test against
          */
-        
-        public void BaseTestShiftRows()
+        [TestMethod]
+        public void TestShiftRows()
         {
             // Read Initial file in
             String sampleName = "SimpleMultiCell." + _testDataProvider.StandardFileNameExtension;
@@ -75,7 +77,7 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual(s.GetRow(3).PhysicalNumberOfCells, 4);
             Assert.AreEqual(s.GetRow(4).PhysicalNumberOfCells, 5);
 
-            // Shift rows 1-3 down 3 in the current one.  This tests when
+            // Shift rows 1-3 down 3 in the current one.  This Tests when
             // 1 row is blank.  Write to a another temp file
             s.ShiftRows(0, 2, 3);
             wb = _testDataProvider.WriteOutAndReadBack(wb);
@@ -113,7 +115,7 @@ namespace TestCases.SS.UserModel
          * Tests when rows are null.
          */
         [TestMethod]
-        public void BaseTestShiftRow()
+        public void TestShiftRow()
         {
             IWorkbook b = _testDataProvider.CreateWorkbook();
             ISheet s = b.CreateSheet();
@@ -126,7 +128,7 @@ namespace TestCases.SS.UserModel
          * Tests when Shifting the first row.
          */
         [TestMethod]
-        public void BaseTestActiveCell()
+        public void TestActiveCell()
         {
             IWorkbook b = _testDataProvider.CreateWorkbook();
             ISheet s = b.CreateSheet();
@@ -138,11 +140,10 @@ namespace TestCases.SS.UserModel
 
         /**
          * When Shifting rows, the page breaks should go with it
-         *
          */
         [TestMethod]
-        public void BaseTestShiftRowBreaks()
-        {
+        public void TestShiftRowBreaks()
+        { // TODO - enable XSSF Test
             IWorkbook b = _testDataProvider.CreateWorkbook();
             ISheet s = b.CreateSheet();
             IRow row = s.CreateRow(4);
@@ -152,10 +153,10 @@ namespace TestCases.SS.UserModel
             s.ShiftRows(4, 4, 2);
             Assert.IsTrue(s.IsRowBroken(6), "Row number 6 should have a pagebreak");
         }
-
         [TestMethod]
-        public void BaseTestShiftWithComments()
-        {
+        public void TestShiftWithComments()
+        { // TODO - enable XSSF Test
+
             IWorkbook wb = _testDataProvider.OpenSampleWorkbook("comments." + _testDataProvider.StandardFileNameExtension);
 
             ISheet sheet = wb.GetSheet("Sheet1");
@@ -174,7 +175,7 @@ namespace TestCases.SS.UserModel
             String comment4 = sheet.GetCellComment(3, 0).String.String;
             Assert.AreEqual(comment4, "comment top row4 (index3)\n");
 
-            // Shifting all but first line down to test comments Shifting
+            // Shifting all but first line down to Test comments Shifting
             sheet.ShiftRows(1, sheet.LastRowNum, 1, true, true);
 
             // Test that comments were Shifted as expected
@@ -198,7 +199,7 @@ namespace TestCases.SS.UserModel
             sheet = wb.GetSheet("Sheet1");
             Assert.AreEqual(4, sheet.LastRowNum);
 
-            // Verify comments are in the position expected after the shift
+            // Verify comments are in the position expected After the shift
             Assert.IsNotNull(sheet.GetCellComment(0, 0));
             Assert.IsNull(sheet.GetCellComment(1, 0));
             Assert.IsNull(sheet.GetCellComment(2, 0));
@@ -213,7 +214,7 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual(comment4, comment4_Shifted);
         }
         [TestMethod]
-        public void BaseTestShiftWithNames()
+        public void TestShiftWithNames()
         {
             IWorkbook wb = _testDataProvider.CreateWorkbook();
             ISheet sheet1 = wb.CreateSheet("Sheet1");
@@ -223,23 +224,23 @@ namespace TestCases.SS.UserModel
             row.CreateCell(1).SetCellValue(2.2);
 
             IName name1 = wb.CreateName();
-            name1.NameName = ("name1");
-            name1.RefersToFormula = ("Sheet1!$A$1+Sheet1!$B$1");
+            name1.NameName = (/*setter*/"name1");
+            name1.RefersToFormula = (/*setter*/"Sheet1!$A$1+Sheet1!$B$1");
 
             IName name2 = wb.CreateName();
-            name2.NameName = ("name2");
-            name2.RefersToFormula = ("Sheet1!$A$1");
+            name2.NameName = (/*setter*/"name2");
+            name2.RefersToFormula = (/*setter*/"Sheet1!$A$1");
 
             //refers to A1 but on Sheet2. Should stay unaffected.
             IName name3 = wb.CreateName();
-            name3.NameName = ("name3");
-            name3.RefersToFormula = ("Sheet2!$A$1");
+            name3.NameName = (/*setter*/"name3");
+            name3.RefersToFormula = (/*setter*/"Sheet2!$A$1");
 
             //The scope of this one is Sheet2. Should stay unaffected.
             IName name4 = wb.CreateName();
-            name4.NameName = ("name4");
-            name4.RefersToFormula = ("A1");
-            name4.SheetIndex = (1);
+            name4.NameName = (/*setter*/"name4");
+            name4.RefersToFormula = (/*setter*/"A1");
+            name4.SheetIndex = (/*setter*/1);
 
             sheet1.ShiftRows(0, 1, 2);  //shift down the top row on Sheet1.
             name1 = wb.GetNameAt(0);
@@ -256,7 +257,7 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual("A1", name4.RefersToFormula);
         }
         [TestMethod]
-        public void BaseTestShiftWithMergedRegions()
+        public void TestShiftWithMergedRegions()
         {
             IWorkbook wb = _testDataProvider.CreateWorkbook();
             ISheet sheet = wb.CreateSheet();
@@ -275,11 +276,9 @@ namespace TestCases.SS.UserModel
 
         /**
          * See bug #34023
-         *
-         * @param sampleName the sample file to test against
          */
         [TestMethod]
-        public void BaseTestShiftWithFormulas()
+        public void TestShiftWithFormulas()
         {
             IWorkbook wb = _testDataProvider.OpenSampleWorkbook("ForShifting." + _testDataProvider.StandardFileNameExtension);
 
@@ -300,7 +299,7 @@ namespace TestCases.SS.UserModel
             // Row index 1 -> 11 (row "2" -> row "12")
             sheet.ShiftRows(1, 1, 10);
 
-            // Now check what sheet looks like after move
+            // Now check what sheet looks like After Move
 
             // no Changes on row "1"
             ConfirmRow(sheet, 0, 1, 171, 1, "ROW(D1)", "100+B1", "COUNT(D1:E1)");
@@ -308,7 +307,7 @@ namespace TestCases.SS.UserModel
             // row "2" is now empty
             ConfirmEmptyRow(sheet, 1);
 
-            // Row "2" moved to row "12", and the formula has been updated.
+            // Row "2" Moved to row "12", and the formula has been updated.
             // note however that the cached formula result (2) has not been updated. (POI differs from Excel here)
             ConfirmRow(sheet, 11, 2, 172, 1, "ROW(D12)", "100+B12", "COUNT(D12:E12)");
 
@@ -321,7 +320,7 @@ namespace TestCases.SS.UserModel
 
             // Formulas on rows that weren't Shifted:
             ConfirmCell(sheet, 6, 1, 271, "200+B1");
-            ConfirmCell(sheet, 7, 1, 272, "200+B12"); // this one moved
+            ConfirmCell(sheet, 7, 1, 272, "200+B12"); // this one Moved
             ConfirmCell(sheet, 8, 1, 273, "200+B3");
 
             // check formulas on other sheets
@@ -353,8 +352,3 @@ namespace TestCases.SS.UserModel
         }
     }
 }
-
-
-
-
-

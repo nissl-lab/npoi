@@ -73,7 +73,35 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual(customFmt, df.GetFormat((short)customIdx));
         }
 
+        /**
+     * [Bug 49928] formatCellValue returns incorrect value for \u00a3 formatted cells
+     */
+        public virtual void Test49928()
+        {
+        }
+        protected String poundFmt = "\"\u00a3\"#,##0;[Red]\\-\"\u00a3\"#,##0";
+        public void doTest49928Core(IWorkbook wb)
+        {
+            DataFormatter df = new DataFormatter();
 
+            ISheet sheet = wb.GetSheetAt(0);
+            ICell cell = sheet.GetRow(0).GetCell(0);
+            ICellStyle style = cell.CellStyle;
+
+            String poundFmt = "\"\u00a3\"#,##0;[Red]\\-\"\u00a3\"#,##0";
+            // not expected normally, id of a custom format should be greater 
+            // than BuiltinFormats.FIRST_USER_DEFINED_FORMAT_INDEX
+            short poundFmtIdx = 6;
+
+            Assert.AreEqual(poundFmt, style.GetDataFormatString());
+            Assert.AreEqual(poundFmtIdx, style.DataFormat);
+            Assert.AreEqual("\u00a31", df.FormatCellValue(cell));
+
+
+            IDataFormat dataFormat = wb.CreateDataFormat();
+            Assert.AreEqual(poundFmtIdx, dataFormat.GetFormat(poundFmt));
+            Assert.AreEqual(poundFmt, dataFormat.GetFormat(poundFmtIdx));
+        }
     }
 }
 

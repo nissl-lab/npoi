@@ -76,6 +76,13 @@ namespace NPOI.SS.UserModel
          * @return the user comment for this named range
          */
         String Comment { get; set; }
+        /**
+         * Indicates that the defined name refers to a user-defined function.
+         * This attribute is used when there is an add-in or other code project associated with the file.
+         *
+         * @param value <code>true</code> indicates the name refers to a function.
+         */
+        void SetFunction(bool value);
     }
 
 }

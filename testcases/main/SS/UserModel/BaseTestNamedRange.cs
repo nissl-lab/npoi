@@ -15,15 +15,17 @@
    limitations under the License.
 ==================================================================== */
 
-using NPOI.SS.UserModel;
-using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using NPOI.SS.Util;
 namespace TestCases.SS.UserModel
 {
 
+
+    using System;
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NPOI.SS.UserModel;
+    using NPOI.SS.Util;
+
     /**
-     * Tests of implementations of {@link NPOI.SS.usermodel.Name}.
+     * Tests of implementations of {@link NPOI.ss.usermodel.Name}.
      *
      * @author Yegor Kozlov
      */
@@ -31,17 +33,13 @@ namespace TestCases.SS.UserModel
     public class BaseTestNamedRange
     {
 
-        protected ITestDataProvider _testDataProvider;
-
+        private ITestDataProvider _testDataProvider;
         public BaseTestNamedRange()
             : this(TestCases.HSSF.HSSFITestDataProvider.Instance)
         { }
-        /**
-         * @param testDataProvider an object that provides test data in HSSF / XSSF specific way
-         */
-        protected BaseTestNamedRange(ITestDataProvider testDataProvider)
+        protected BaseTestNamedRange(ITestDataProvider TestDataProvider)
         {
-            _testDataProvider = testDataProvider;
+            _testDataProvider = TestDataProvider;
         }
         [TestMethod]
         public void TestCreate()
@@ -54,7 +52,7 @@ namespace TestCases.SS.UserModel
             IName name1 = wb.CreateName();
             name1.NameName = ("testOne");
 
-            //Setting a duplicate name should throw ArgumentException
+            //setting a duplicate name should throw ArgumentException
             IName name2 = wb.CreateName();
             try
             {
@@ -119,8 +117,7 @@ namespace TestCases.SS.UserModel
                 }
                 catch (ArgumentException)
                 {
-                    // expected during successful test
-                    ;
+                    // expected during successful Test
                 }
             }
         }
@@ -226,7 +223,7 @@ namespace TestCases.SS.UserModel
         /**
          * Test case provided by czhang@cambian.com (Chun Zhang)
          * <p>
-         * Addresses Bug <a href="http://issues.apache.org/bugzilla/Show_bug.cgi?id=13775" tarGet="_bug">#13775</a>
+         * Addresses Bug <a href="http://issues.apache.org/bugzilla/Show_bug.cgi?id=13775" target="_bug">#13775</a>
          */
         [TestMethod]
         public void TestMultiNamedRange()
@@ -328,7 +325,7 @@ namespace TestCases.SS.UserModel
             workbook = _testDataProvider.WriteOutAndReadBack(workbook);
 
             String retrievedPrintArea = workbook.GetPrintArea(0);
-            Assert.IsNotNull(retrievedPrintArea,"Print Area not defined for first sheet");
+            Assert.IsNotNull(retrievedPrintArea, "Print Area not defined for first sheet");
             Assert.AreEqual("'" + sheetName + "'!$A$1:$B$1", retrievedPrintArea, "References Match");
         }
 
@@ -366,7 +363,7 @@ namespace TestCases.SS.UserModel
             Assert.IsNotNull(retrievedPrintArea, "Print Area Not Found (Sheet 3)");
             Assert.AreEqual("Sheet3!" + reference3, retrievedPrintArea);
 
-            // Check print areas after re-reading workbook
+            // Check print areas After re-reading workbook
             workbook = _testDataProvider.WriteOutAndReadBack(workbook);
 
             retrievedPrintArea = workbook.GetPrintArea(0);
@@ -484,7 +481,7 @@ namespace TestCases.SS.UserModel
         public void TestNamedCell_1()
         {
 
-            // Setup for this testcase
+            // Setup for this Testcase
             String sheetName = "Test Named Cell";
             String cellName = "named_cell";
             String cellValue = "TEST Value";
@@ -504,7 +501,7 @@ namespace TestCases.SS.UserModel
             IName aNamedCell = wb.GetNameAt(namedCellIdx);
             Assert.IsNotNull(aNamedCell);
 
-            // retrieve the cell at the named range and test its contents
+            // retrieve the cell at the named range and Test its contents
             AreaReference aref = new AreaReference(aNamedCell.RefersToFormula);
             Assert.IsTrue(aref.IsSingleCell, "Should be exactly 1 cell in the named cell :'" + cellName + "'");
 
@@ -525,7 +522,7 @@ namespace TestCases.SS.UserModel
         public void TestNamedCell_2()
         {
 
-            // Setup for this testcase
+            // Setup for this Testcase
             String sname = "TestSheet", cname = "TestName", cvalue = "TestVal";
             IWorkbook wb = _testDataProvider.CreateWorkbook();
             CreationHelper factory = wb.GetCreationHelper();
@@ -543,7 +540,7 @@ namespace TestCases.SS.UserModel
             IName aNamedCell = wb.GetNameAt(namedCellIdx);
             Assert.IsNotNull(aNamedCell);
 
-            // retrieve the cell at the named range and test its contents
+            // retrieve the cell at the named range and Test its contents
             CellReference cref = new CellReference(aNamedCell.RefersToFormula);
             Assert.IsNotNull(cref);
             ISheet s = wb.GetSheet(cref.SheetName);
@@ -555,23 +552,23 @@ namespace TestCases.SS.UserModel
 
 
         /**
-         * Bugzilla attachment 23444 (from bug 46973) has a NAME record with the following encoding: 
+         * Bugzilla attachment 23444 (from bug 46973) has a NAME record with the following encoding:
          * <pre>
          * 00000000 | 18 00 17 00 00 00 00 08 00 00 00 00 00 00 00 00 | ................
          * 00000010 | 00 00 00 55 50 53 53 74 61 74 65                | ...UPSState
-         * </pre>     
-         * 
-         * This caused trouble for anything that requires {@link HSSFName#RefersToFormula}
+         * </pre>
+         *
+         * This caused trouble for anything that requires {@link Name#getRefersToFormula()}
          * It is easy enough to re-create the the same data (by not Setting the formula). Excel
          * seems to gracefully remove this unInitialized name record.  It would be nice if POI
-         * could do the same, but that would involve adjusting subsequent name indexes across 
+         * could do the same, but that would involve adjusting subsequent name indexes across
          * all formulas. <p/>
-         * 
-         * For the moment, POI has been made to behave more sensibly with unInitialised name 
+         *
+         * For the moment, POI has been made to behave more sensibly with unInitialised name
          * records.
          */
         [TestMethod]
-        public void TestUnInitialisedNameRefersToFormula_bug46973()
+        public void TestUnInitialisedNameGetRefersToFormula_bug46973()
         {
             IWorkbook wb = _testDataProvider.CreateWorkbook();
             IName n = wb.CreateName();
@@ -590,7 +587,7 @@ namespace TestCases.SS.UserModel
                 throw e;
             }
             Assert.IsNull(formula);
-            Assert.IsFalse(n.IsDeleted); // according to exact defInition of IsDeleted
+            Assert.IsFalse(n.IsDeleted); // according to exact defInition of isDeleted()
         }
         [TestMethod]
         public void TestDeletedCell()
@@ -614,17 +611,44 @@ namespace TestCases.SS.UserModel
             IName n = wb.CreateName();
             Assert.IsFalse(n.IsFunctionName);
 
-            n.IsFunctionName =false;
+            n.SetFunction(false);
             Assert.IsFalse(n.IsFunctionName);
 
-            n.IsFunctionName = true;
+            n.SetFunction(true);
             Assert.IsTrue(n.IsFunctionName);
 
-            n.IsFunctionName = false; 
+            n.SetFunction(false);
             Assert.IsFalse(n.IsFunctionName);
         }
+        [TestMethod]
+        public void TestDefferedSetting()
+        {
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            IName n1 = wb.CreateName();
+            Assert.IsNull(n1.RefersToFormula);
+            Assert.AreEqual("", n1.NameName);
+
+            IName n2 = wb.CreateName();
+            Assert.IsNull(n2.RefersToFormula);
+            Assert.AreEqual("", n2.NameName);
+
+            n1.NameName = ("sale_1");
+            n1.RefersToFormula = ("10");
+
+            n2.NameName = ("sale_2");
+            n2.RefersToFormula = ("20");
+
+            try
+            {
+                n2.NameName = ("sale_1");
+                Assert.Fail("Expected exception");
+            }
+            catch (Exception e)
+            {
+                Assert.AreEqual("The workbook already contains this name: sale_1", e.Message);
+            }
+
+        }
     }
+
 }
-
-
-

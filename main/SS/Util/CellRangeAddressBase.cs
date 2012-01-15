@@ -59,7 +59,45 @@ namespace NPOI.SS.Util
             return true;
         }
 
+        /**
+	 * Validate the range limits against the supplied version of Excel
+	 *
+	 * @param ssVersion the version of Excel to validate against
+	 * @throws IllegalArgumentException if the range limits are outside of the allowed range
+	 */
+        public void Validate(SpreadsheetVersion ssVersion)
+        {
+            ValidateRow(_firstRow, ssVersion);
+            ValidateRow(_lastRow, ssVersion);
+            ValidateColumn(_firstCol, ssVersion);
+            ValidateColumn(_lastCol, ssVersion);
+        }
+        /**
+	 * Runs a bounds check for row numbers
+	 * @param row
+	 */
+        private static void ValidateRow(int row, SpreadsheetVersion ssVersion)
+        {
+            int maxrow = ssVersion.LastRowIndex;
+            if (row > maxrow) throw new ArgumentException("Maximum row number is " + maxrow);
+            if (row < 0) throw new ArgumentException("Minumum row number is 0");
+        }
 
+        /**
+         * Runs a bounds check for column numbers
+         * @param column
+         */
+        private static void ValidateColumn(int column, SpreadsheetVersion ssVersion)
+        {
+            int maxcol = ssVersion.LastColumnIndex;
+            if (column > maxcol) throw new ArgumentException("Maximum column number is " + maxcol);
+            if (column < 0) throw new ArgumentException("Minimum column number is 0");
+        }
+        public bool IsInRange(int rowInd, int colInd)
+        {
+            return _firstRow <= rowInd && rowInd <= _lastRow &&
+                    _firstCol <= colInd && colInd <= _lastCol;
+        }
         public bool IsFullColumnRange
         {
             get
@@ -135,7 +173,9 @@ namespace NPOI.SS.Util
         }
         public override String ToString()
         {
-            return GetType().Name + " [" + _firstRow + ", " + _lastRow + ", " + _firstCol + ", " + _lastCol + "]";
+            CellReference crA = new CellReference(_firstRow, _firstCol);
+            CellReference crB = new CellReference(_lastRow, _lastCol);
+            return GetType().Name + " [" + crA.FormatAsString() + ":" + crB.FormatAsString() + "]";
         }
     }
 }
