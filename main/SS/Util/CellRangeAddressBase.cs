@@ -16,9 +16,9 @@ namespace NPOI.SS.Util
     {
 
         /** max 65536 rows in BIFF8 */
-        private const int LAST_ROW_INDEX = 0x00FFFF;
+        //private const int LAST_ROW_INDEX = 0x00FFFF;
         /** max 256 columns in BIFF8 */
-        private const int LAST_COLUMN_INDEX = 0x00FF;
+        //private const int LAST_COLUMN_INDEX = 0x00FF;
 
         private int _firstRow;
         private int _firstCol;
@@ -27,37 +27,37 @@ namespace NPOI.SS.Util
 
         protected CellRangeAddressBase(int firstRow, int lastRow, int firstCol, int lastCol)
         {
-            if (!IsValid(firstRow, lastRow, firstCol, lastCol))
-            {
-                throw new ArgumentException("invalid cell range (" + firstRow + ", " + lastRow
-                        + ", " + firstCol + ", " + lastCol + ")");
-            }
+            //if (!IsValid(firstRow, lastRow, firstCol, lastCol))
+            //{
+            //    throw new ArgumentException("invalid cell range (" + firstRow + ", " + lastRow
+            //            + ", " + firstCol + ", " + lastCol + ")");
+            //}
             _firstRow = firstRow;
             _lastRow = lastRow;
             _firstCol = firstCol;
             _lastCol = lastCol;
         }
-        private static bool IsValid(int firstRow, int lastRow, int firstColumn, int lastColumn)
-        {
-            if (lastRow < 0 || lastRow > LAST_ROW_INDEX)
-            {
-                return false;
-            }
-            if (firstRow < 0 || firstRow > LAST_ROW_INDEX)
-            {
-                return false;
-            }
+        //private static bool IsValid(int firstRow, int lastRow, int firstColumn, int lastColumn)
+        //{
+        //    if (lastRow < 0 || lastRow > LAST_ROW_INDEX)
+        //    {
+        //        return false;
+        //    }
+        //    if (firstRow < 0 || firstRow > LAST_ROW_INDEX)
+        //    {
+        //        return false;
+        //    }
 
-            if (lastColumn < 0 || lastColumn > LAST_COLUMN_INDEX)
-            {
-                return false;
-            }
-            if (firstColumn < 0 || firstColumn > LAST_COLUMN_INDEX)
-            {
-                return false;
-            }
-            return true;
-        }
+        //    if (lastColumn < 0 || lastColumn > LAST_COLUMN_INDEX)
+        //    {
+        //        return false;
+        //    }
+        //    if (firstColumn < 0 || firstColumn > LAST_COLUMN_INDEX)
+        //    {
+        //        return false;
+        //    }
+        //    return true;
+        //}
 
         /**
 	 * Validate the range limits against the supplied version of Excel
@@ -102,14 +102,14 @@ namespace NPOI.SS.Util
         {
             get
             {
-                return _firstRow == 0 && _lastRow == LAST_ROW_INDEX;
+                return _firstRow == 0 && _lastRow ==SpreadsheetVersion.EXCEL97.LastRowIndex;
             }
         }
         public bool IsFullRowRange
         {
             get
             {
-                return _firstCol == 0 && _lastCol == LAST_COLUMN_INDEX;
+                return _firstCol == 0 && _lastCol == SpreadsheetVersion.EXCEL97.LastColumnIndex;
             }
         }
 

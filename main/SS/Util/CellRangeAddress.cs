@@ -51,7 +51,7 @@ namespace NPOI.SS.Util
         }
         public String FormatAsString()
         {
-            return FormatAsString(string.Empty, false);
+            return FormatAsString(null, false);
         }
         /**
      * @return the text format of this range using specified sheet name.

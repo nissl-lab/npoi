@@ -122,7 +122,8 @@ namespace NPOI.SS.Util
 
             public void Dispose()
             {
-                throw new NotImplementedException();
+                //do nothing?
+                //throw new NotImplementedException();
             }
 
             #endregion
@@ -207,7 +208,8 @@ namespace NPOI.SS.Util
 
         public IEnumerator<K> GetEnumerator()
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
+            return new ArrayIterator<K>(_flattenedArray);
         }
 
         #endregion

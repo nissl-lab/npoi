@@ -23,6 +23,7 @@ namespace TestCases.SS.UserModel
     using NPOI.SS.UserModel;
     using NPOI.SS.Util;
     using TestCases.SS;
+    using NPOI.Util;
 
     /**
      * Common superclass for Testing usermodel API for array formulas.<br/>
@@ -207,7 +208,7 @@ namespace TestCases.SS.UserModel
             // remove the formula cells in C4:C6
             ICellRange<ICell> dcells = sheet.RemoveArrayFormula(cr.TopLeftCell);
             // RemoveArrayFormula should return the same cells as SetArrayFormula
-            Assert.IsTrue(Array.Equals(cr.FlattenedCells, dcells.FlattenedCells));
+            Assert.IsTrue(Arrays.Equals(cr.FlattenedCells, dcells.FlattenedCells));
 
             foreach (ICell acell in cr)
             {
@@ -542,7 +543,7 @@ namespace TestCases.SS.UserModel
             }
             catch (InvalidOperationException e)
             {
-                String msg = "Row[rownum=0] Contains cell(s) included in a multi-cell array formula. You cannot change part of an array.";
+                String msg = "Row[rownum=0] contains cell(s) included in a multi-cell array formula. You cannot change part of an array.";
                 Assert.AreEqual(msg, e.Message);
             }
             /*

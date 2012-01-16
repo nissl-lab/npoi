@@ -196,7 +196,8 @@ namespace NPOI.SS.Formula
                     {
                         return Ptg.CLASS_VALUE;
                     }
-                    break;
+                    return Ptg.CLASS_ARRAY;
+                    //break;
                 // else fall through
                 case Ptg.CLASS_ARRAY:
                     return Ptg.CLASS_ARRAY;
