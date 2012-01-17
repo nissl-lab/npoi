@@ -31,7 +31,7 @@ namespace NPOI.HSSF.Record
      * @author Jason Height (jheight at chariot dot net dot au)
      * @version 2.0-pre
      */
-    public class RowRecord : Record, IComparable
+    public class RowRecord : StandardRecord, IComparable
     {
         public const short sid = 0x208;
         public static int ENCODED_SIZE = 20;
@@ -42,6 +42,7 @@ namespace NPOI.HSSF.Record
         /** The maximum row number that excel can handle (zero based) ie 65536 rows Is
          *  max number of rows.
          */
+        [Obsolete]
         public const int MAX_ROW_NUMBER = 65535;
 
         private int field_1_row_number;
@@ -66,14 +67,15 @@ namespace NPOI.HSSF.Record
         public RowRecord(int rowNumber)
         {
             field_1_row_number = rowNumber;
-            field_2_first_col = -1;
-            field_3_last_col = -1;
+            //field_2_first_col = -1;
+            //field_3_last_col = -1;
             field_4_height = (short)0x00FF;
             field_5_optimize = (short)0;
             field_6_reserved = (short)0;
             field_7_option_flags = OPTION_BITS_ALWAYS_SET; // seems necessary for outlining
 
             field_8_xf_index = (short)0xf;
+            SetEmpty();
         }
 
         /**
@@ -313,22 +315,25 @@ namespace NPOI.HSSF.Record
             return buffer.ToString();
         }
 
-        public override int Serialize(int offset, byte [] data)
+
+        public override void Serialize(NPOI.Util.IO.LittleEndianOutput out1)
         {
-            LittleEndian.PutShort(data, 0 + offset, sid);
-            LittleEndian.PutShort(data, 2 + offset, (short)16);
-            LittleEndian.PutShort(data, 4 + offset, (short)RowNumber);
-            LittleEndian.PutUShort(data, 6 + offset, FirstCol == -1 ? (short)0 : FirstCol);
-            LittleEndian.PutUShort(data, 8 + offset, LastCol == -1 ? (short)0 : LastCol);
-            LittleEndian.PutShort(data, 10 + offset, Height);
-            LittleEndian.PutShort(data, 12 + offset, Optimize);
-            LittleEndian.PutShort(data, 14 + offset, field_6_reserved);
-            LittleEndian.PutShort(data, 16 + offset, OptionFlags);
-
-            LittleEndian.PutShort(data, 18 + offset, XFIndex);
-            return RecordSize;
+            out1.WriteShort(RowNumber);
+            out1.WriteShort(FirstCol == -1 ? (short)0 : FirstCol);
+            out1.WriteShort(LastCol == -1 ? (short)0 : LastCol);
+            out1.WriteShort(Height);
+            out1.WriteShort(Optimize);
+            out1.WriteShort(field_6_reserved);
+            out1.WriteShort(OptionFlags);
+            out1.WriteShort(XFIndex);
         }
-
+        protected override int DataSize
+        {
+            get
+            {
+                return ENCODED_SIZE - 4;
+            }
+        }
         public override int RecordSize
         {
             get { return 20; }

@@ -22,6 +22,7 @@ namespace NPOI.HSSF.Record
     using System.IO;
     using System.Text;
     using NPOI.Util;
+    using NPOI.Util.IO;
 
     /**
      * Title: COLINFO Record<p/>
@@ -30,14 +31,14 @@ namespace NPOI.HSSF.Record
      * @author Andrew C. Oliver (acoliver at apache dot org)
      * @version 2.0-pre
      */
-    public class ColumnInfoRecord : Record
+    public class ColumnInfoRecord : StandardRecord
     {
         public const short sid = 0x7d;
-        private int field_1_first_col;
-        private int field_2_last_col;
-        private int field_3_col_width;
-        private int field_4_xf_index;
-        private int field_5_options;
+        private int _first_col;
+        private int _last_col;
+        private int _col_width;
+        private int _xf_index;
+        private int _options;
         private static BitField hidden = BitFieldFactory.GetInstance(0x01);
         private static BitField outlevel = BitFieldFactory.GetInstance(0x0700);
         private static BitField collapsed = BitFieldFactory.GetInstance(0x1000);
@@ -47,8 +48,8 @@ namespace NPOI.HSSF.Record
         public ColumnInfoRecord()
         {
             this.ColumnWidth = 2275;
-            field_5_options = 2;
-            field_4_xf_index = 0x0f;
+            _options = 2;
+            _xf_index = 0x0f;
             field_6_reserved = 2; // seems to be the most common value
         }
 
@@ -59,20 +60,26 @@ namespace NPOI.HSSF.Record
 
         public ColumnInfoRecord(RecordInputStream in1)
         {
-            field_1_first_col = in1.ReadUShort();
-            field_2_last_col = in1.ReadUShort();
-            field_3_col_width = in1.ReadShort();
-            field_4_xf_index = in1.ReadShort();
-            field_5_options = in1.ReadShort();
+            _first_col = in1.ReadUShort();
+            _last_col = in1.ReadUShort();
+            _col_width = in1.ReadUShort();
+            _xf_index = in1.ReadUShort();
+            _options = in1.ReadUShort();
             switch (in1.Remaining)
             {
                 case 2: // usual case
-                    field_6_reserved = in1.ReadShort();
+                    field_6_reserved = in1.ReadUShort();
                     break;
                 case 1:
                     // often COLINFO Gets encoded 1 byte short
                     // shouldn't matter because this field Is Unused
                     field_6_reserved = in1.ReadByte();
+                    break;
+                case 0:
+                    // According to bugzilla 48332,
+                    // "SoftArtisans OfficeWriter for Excel" totally skips field 6
+                    // Excel seems to be OK with this, and assumes zero.
+                    field_6_reserved = 0;
                     break;
                 default:
                     throw new Exception("Unusual record size remaining=(" + in1.Remaining + ")");
@@ -83,15 +90,15 @@ namespace NPOI.HSSF.Record
          */
         public bool FormatMatches(ColumnInfoRecord other)
         {
-            if (field_4_xf_index != other.field_4_xf_index)
+            if (_xf_index != other._xf_index)
             {
                 return false;
             }
-            if (field_5_options != other.field_5_options)
+            if (_options != other._options)
             {
                 return false;
             }
-            if (field_3_col_width != other.field_3_col_width)
+            if (_col_width != other._col_width)
             {
                 return false;
             }
@@ -105,8 +112,8 @@ namespace NPOI.HSSF.Record
 
         public int FirstColumn
         {
-            get{return field_1_first_col;}
-            set { field_1_first_col = value; }
+            get{return _first_col;}
+            set { _first_col = value; }
         }
 
         /**
@@ -116,8 +123,8 @@ namespace NPOI.HSSF.Record
 
         public int LastColumn
         {
-            get { return field_2_last_col; }
-            set { field_2_last_col = value; }
+            get { return _last_col; }
+            set { _last_col = value; }
         }
 
         /**
@@ -129,9 +136,9 @@ namespace NPOI.HSSF.Record
         {
             get
             {
-                return field_3_col_width;
+                return _col_width;
             }
-            set { field_3_col_width = value; }
+            set { _col_width = value; }
         }
 
         /**
@@ -142,8 +149,8 @@ namespace NPOI.HSSF.Record
 
         public int XFIndex
         {
-            get { return field_4_xf_index; }
-            set { field_4_xf_index = value; }
+            get { return _xf_index; }
+            set { _xf_index = value; }
         }
 
         /**
@@ -153,8 +160,8 @@ namespace NPOI.HSSF.Record
 
         public int Options
         {
-            get { return field_5_options; }
-            set { field_5_options = value; }
+            get { return _options; }
+            set { _options = value; }
         }
 
         // start options bitfield
@@ -167,8 +174,8 @@ namespace NPOI.HSSF.Record
 
         public bool IsHidden
         {
-            get { return hidden.IsSet(field_5_options); }
-            set { field_5_options = hidden.SetBoolean(field_5_options, value); }
+            get { return hidden.IsSet(_options); }
+            set { _options = hidden.SetBoolean(_options, value); }
         }
 
         /**
@@ -179,8 +186,8 @@ namespace NPOI.HSSF.Record
 
         public int OutlineLevel
         {
-            get { return outlevel.GetValue(field_5_options); }
-            set { field_5_options = outlevel.SetValue(field_5_options, value); }
+            get { return outlevel.GetValue(_options); }
+            set { _options = outlevel.SetValue(_options, value); }
         }
 
         /**
@@ -191,10 +198,10 @@ namespace NPOI.HSSF.Record
 
         public bool IsCollapsed
         {
-            get { return collapsed.IsSet(field_5_options); }
+            get { return collapsed.IsSet(_options); }
             set
             {
-                field_5_options = collapsed.SetBoolean(field_5_options,
+                _options = collapsed.SetBoolean(_options,
                                                     value);
             }
         }
@@ -206,31 +213,27 @@ namespace NPOI.HSSF.Record
 
         public bool ContainsColumn(int columnIndex)
         {
-            return field_1_first_col <= columnIndex && columnIndex <= field_2_last_col;
+            return _first_col <= columnIndex && columnIndex <= _last_col;
         }
         public bool IsAdjacentBefore(ColumnInfoRecord other)
         {
-            return field_2_last_col == other.field_1_first_col - 1;
+            return _last_col == other._first_col - 1;
         }
 
-        public override int Serialize(int offset, byte [] data)
+        protected override int DataSize
         {
-            LittleEndian.PutShort(data, 0 + offset, sid);
-            LittleEndian.PutUShort(data, 2 + offset, 12);
-            LittleEndian.PutUShort(data, 4 + offset, FirstColumn);
-            LittleEndian.PutUShort(data, 6 + offset, LastColumn);
-            LittleEndian.PutUShort(data, 8 + offset, ColumnWidth);
-            LittleEndian.PutUShort(data, 10 + offset, XFIndex);
-            LittleEndian.PutUShort(data, 12 + offset, field_5_options);
-            LittleEndian.PutUShort(data, 14 + offset, field_6_reserved);
-            return RecordSize;
+            get { return 12; }
         }
 
-        public override int RecordSize
+        public override void Serialize(LittleEndianOutput out1)
         {
-            get { return 16; }
+            out1.WriteShort(FirstColumn);
+            out1.WriteShort(LastColumn);
+            out1.WriteShort(ColumnWidth);
+            out1.WriteShort(XFIndex);
+            out1.WriteShort(_options);
+            out1.WriteShort(field_6_reserved);
         }
-
         public override String ToString()
         {
             StringBuilder buffer = new StringBuilder();
@@ -256,13 +259,15 @@ namespace NPOI.HSSF.Record
         public override Object Clone()
         {
             ColumnInfoRecord rec = new ColumnInfoRecord();
-            rec.field_1_first_col = field_1_first_col;
-            rec.field_2_last_col = field_2_last_col;
-            rec.field_3_col_width = field_3_col_width;
-            rec.field_4_xf_index = field_4_xf_index;
-            rec.field_5_options = field_5_options;
+            rec._first_col = _first_col;
+            rec._last_col = _last_col;
+            rec._col_width = _col_width;
+            rec._xf_index = _xf_index;
+            rec._options = _options;
             rec.field_6_reserved = field_6_reserved;
             return rec;
         }
+
+        
     }
 }

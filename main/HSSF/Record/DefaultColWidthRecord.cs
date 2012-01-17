@@ -37,10 +37,14 @@ namespace NPOI.HSSF.Record
     public class DefaultColWidthRecord : StandardRecord
     {
         public const short sid = 0x55;
-        private short field_1_col_width;
-
+        private int field_1_col_width;
+        /**
+     *  The default column width is 8 characters
+     */
+        public static int DEFAULT_COLUMN_WIDTH = 0x0008;
         public DefaultColWidthRecord()
         {
+            field_1_col_width = DEFAULT_COLUMN_WIDTH;
         }
 
         /**
@@ -50,7 +54,7 @@ namespace NPOI.HSSF.Record
 
         public DefaultColWidthRecord(RecordInputStream in1)
         {
-            field_1_col_width = in1.ReadShort();
+            field_1_col_width = in1.ReadUShort();
         }
 
 
@@ -59,7 +63,7 @@ namespace NPOI.HSSF.Record
          * @return defaultwidth for columns
          */
 
-        public short ColWidth
+        public int ColWidth
         {
             get
             {

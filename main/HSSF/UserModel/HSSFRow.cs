@@ -217,7 +217,7 @@ namespace NPOI.HSSF.UserModel
             ICell r = RetrieveCell(cellIx);
 
             if (cells.Count == 0)
-                return -1;
+                return 0;
 
             while (r == null)
             {
@@ -261,6 +261,7 @@ namespace NPOI.HSSF.UserModel
                     // added cell is within first and last cells
                 }
             }
+            // TODO - RowRecord column boundaries need to be updated for cell comments too
             return hcell;
         }
 
@@ -300,7 +301,7 @@ namespace NPOI.HSSF.UserModel
                 if ((value < 0) || (value > maxrow))
                 {
                     throw new ArgumentException("Invalid row number (" + value
-                            + ") outside allowable range (0.." + RowRecord.MAX_ROW_NUMBER + ")");
+                            + ") outside allowable range (0.." + maxrow + ")");
                 }
                 this.rowNum = value;
                 if (row != null)
@@ -437,6 +438,7 @@ namespace NPOI.HSSF.UserModel
         /// </summary>
         /// <param name="cellnum">0 based column number</param>
         /// <returns>Cell representing that column or null if Undefined.</returns>
+        [Obsolete]
         public ICell GetCell(short cellnum)
         {
             int ushortCellNum = cellnum & 0x0000FFFF; // avoid sign extension
@@ -495,14 +497,14 @@ namespace NPOI.HSSF.UserModel
         /// Get the number of the first cell contained in this row.
         /// </summary>
         /// <value>the first logical cell in the row, or -1 if the row does not contain any cells.</value>
-        public int FirstCellNum
+        public short FirstCellNum
         {
             get
             {
                 if (row.IsEmpty)
                     return -1;
                 else
-                    return row.FirstCol;
+                    return (short)row.FirstCol;
             }
         }
 
@@ -526,7 +528,7 @@ namespace NPOI.HSSF.UserModel
         /// //... do something with cell
         /// }
         /// </example>
-        public int LastCellNum
+        public short LastCellNum
         {
             get
             {
@@ -534,7 +536,7 @@ namespace NPOI.HSSF.UserModel
                 {
                     return -1;
                 }
-                return row.LastCol;
+                return (short)row.LastCol;
             }
         }
 
@@ -575,12 +577,22 @@ namespace NPOI.HSSF.UserModel
         /// <value>rowheight or 0xff for Undefined (use sheet default)</value>
         public short Height
         {
-            get { return row.Height; }
+            get
+            {
+                short height = row.Height;
+
+                //The low-order 15 bits contain the row height.
+                //The 0x8000 bit indicates that the row is standard height (optional)
+                if ((height & 0x8000) != 0) height = sheet.Sheet.DefaultRowHeight;
+                else height &= 0x7FFF;
+
+                return height;
+            }
             set
             {
                 if (value == -1)
                 {
-                    row.Height = 20*20;
+                    row.Height = 20 * 20;
                 }
                 else
                 {
@@ -669,6 +681,7 @@ namespace NPOI.HSSF.UserModel
         /// </summary>
         /// <param name="firstcell">The first cell index.</param>
         /// <returns></returns>
+        [Obsolete]
         private short FindFirstCell(int firstcell)
         {
             short cellnum = (short)(firstcell + 1);

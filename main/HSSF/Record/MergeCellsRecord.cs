@@ -37,7 +37,7 @@ namespace NPOI.HSSF.Record
      * @author Andrew C. Oliver (acoliver at apache dot org)
      * @version 2.0-pre
      */
-    public class MergeCellsRecord : Record, ICloneable
+    public class MergeCellsRecord : StandardRecord, ICloneable
     {
         public const short sid = 0xe5;
 
@@ -102,11 +102,11 @@ namespace NPOI.HSSF.Record
         {
             return _regions[_startIndex + index];
         }
-        public override int RecordSize
+        protected override int DataSize
         {
             get
             {
-                return 4 + CellRangeAddressList.GetEncodedSize(_numberOfRegions);
+                return CellRangeAddressList.GetEncodedSize(_numberOfRegions);
             }
         }
 
@@ -114,22 +114,16 @@ namespace NPOI.HSSF.Record
         {
             get { return sid; }
         }
-
-        public override int Serialize(int offset, byte[] data)
+        public override void Serialize(NPOI.Util.IO.LittleEndianOutput out1)
         {
-            int dataSize = CellRangeAddressList.GetEncodedSize(_numberOfRegions);
-
-            LittleEndian.PutUShort(data, offset + 0, sid);
-            LittleEndian.PutUShort(data, offset + 2, dataSize);
             int nItems = _numberOfRegions;
-            LittleEndian.PutUShort(data, offset + 4, nItems);
-            int pos = 6;
+            out1.WriteShort(nItems);
             for (int i = 0; i < _numberOfRegions; i++)
             {
-                pos += _regions[_startIndex + i].Serialize(offset + pos, data);
+                _regions[_startIndex + i].Serialize(out1);
             }
-            return 4 + dataSize;
         }
+        
 
         public override String ToString()
         {

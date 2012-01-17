@@ -147,7 +147,8 @@ namespace NPOI.HSSF.Record
             get { return field_4_name; }
             set { 
                 field_4_name = value;
-                //TODO Set name Length and string options
+                field_3_stringHasMultibyte = StringUtil.HasMultibyte(value);
+                field_1_xf_index = isBuiltinFlag.Clear(field_1_xf_index);
             }
         }
 

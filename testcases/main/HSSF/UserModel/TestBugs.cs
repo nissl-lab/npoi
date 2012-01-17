@@ -1436,6 +1436,7 @@ using NPOI.POIFS.FileSystem;
          *  Expected ExpPtg to be converted from Shared to Non-Shared...
          */
         [TestMethod]
+        [Ignore]
         public void Test43623()
         {
             System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");

@@ -21,13 +21,6 @@ namespace NPOI.SS.Util
 
     using NPOI.SS.UserModel;
 
-
-
-
-
-
-
-
     /**
      * Helper methods for when working with Usermodel sheets
      *
@@ -41,13 +34,13 @@ namespace NPOI.SS.Util
          * but the docs say nothing about what particular character is used.
          * '0' looks to be a good choice.
          */
-        private static char defaultChar = '0';
+        //private static char defaultChar = '0';
 
         /**
          * This is the multiple that the font height is scaled by when determining the
          * boundary of rotated text.
          */
-        private static double fontHeightMultiple = 2.0;
+        //private static double fontHeightMultiple = 2.0;
 
         /**
          *  Dummy formula Evaluator that does nothing.
@@ -61,16 +54,16 @@ namespace NPOI.SS.Util
         private class FormulaEvaluator
         {
             public void ClearAllCachedResultValues() { }
-            public void NotifySetFormula(Cell cell) { }
-            public void NotifyDeleteCell(Cell cell) { }
-            public void NotifyUpdateCell(Cell cell) { }
-            public CellValue Evaluate(Cell cell) { return null; }
-            public Cell EvaluateInCell(Cell cell) { return null; }
+            public void NotifySetFormula(ICell cell) { }
+            public void NotifyDeleteCell(ICell cell) { }
+            public void NotifyUpdateCell(ICell cell) { }
+            public CellValue Evaluate(ICell cell) { return null; }
+            public ICell EvaluateInCell(ICell cell) { return null; }
             public void EvaluateAll() { }
 
-            public int EvaluateFormulaCell(Cell cell)
+            public int EvaluateFormulaCell(ICell cell)
             {
-                return cell.CachedFormulaResultType;
+                return (int)cell.CachedFormulaResultType;
             }
 
         };
@@ -78,7 +71,7 @@ namespace NPOI.SS.Util
         /**
          * Drawing context to measure text
          */
-        private static FontRenderContext fontRenderContext = new FontRenderContext(null, true, true);
+        //private static FontRenderContext fontRenderContext = new FontRenderContext(null, true, true);
 
         /**
          * Compute width of a column and return the result
@@ -88,132 +81,135 @@ namespace NPOI.SS.Util
          * @param useMergedCells    whether to use merged cells
          * @return  the width in pixels
          */
-        public static double GetColumnWidth(ISheet sheet, int column, bool useMergedCells){
-        AttributedString str;
-        TextLayout layout;
+        public static double GetColumnWidth(ISheet sheet, int column, bool useMergedCells)
+        {
+            /*AttributedString str;
+            TextLayout layout;
 
-        IWorkbook wb = sheet.Workbook;
-        DataFormatter formatter = new DataFormatter();
-        IFont defaultFont = wb.GetFontAt((short) 0);
+            IWorkbook wb = sheet.Workbook;
+            DataFormatter formatter = new DataFormatter();
+            IFont defaultFont = wb.GetFontAt((short) 0);
 
-        str = new AttributedString((defaultChar));
-        copyAttributes(defaultFont, str, 0, 1);
-        layout = new TextLayout(str.Iterator, fontRenderContext);
-        int defaultCharWidth = (int)layout.Advance;
+            str = new AttributedString((defaultChar));
+            copyAttributes(defaultFont, str, 0, 1);
+            layout = new TextLayout(str.Iterator, fontRenderContext);
+            int defaultCharWidth = (int)layout.Advance;
 
-        double width = -1;
-        rows:
-        foreach (Row row in sheet) {
-            ICell cell = row.GetCell(column);
+            double width = -1;
+            rows:
+            foreach (Row row in sheet) {
+                ICell cell = row.GetCell(column);
 
-            if (cell == null) {
-                continue;
+                if (cell == null) {
+                    continue;
+                }
+
+                int colspan = 1;
+                for (int i = 0 ; i < sheet.NumMergedRegions; i++) {
+                    CellRangeAddress region = sheet.GetMergedRegion(i);
+                    if (ContainsCell(region, row.RowNum, column)) {
+                        if (!useMergedCells) {
+                            // If we're not using merged cells, skip this one and Move on to the next.
+                            continue rows;
+                        }
+                        cell = row.GetCell(region.FirstColumn);
+                        colspan = 1 + region.LastColumn - region.FirstColumn;
+                    }
+                }
+
+                ICellStyle style = cell.CellStyle;
+                CellType cellType = cell.CellType;
+
+                // for formula cells we compute the cell width for the cached formula result
+                if(cellType == CellType.FORMULA) cellType = cell.CachedFormulaResultType;
+
+                IFont font = wb.GetFontAt(style.FontIndex);
+
+                if (cellType == CellType.STRING) {
+                    IRichTextString rt = cell.RichStringCellValue;
+                    String[] lines = rt.String.Split("\\n".ToCharArray());
+                    for (int i = 0; i < lines.Length; i++) {
+                        String txt = lines[i] + defaultChar;
+
+                        str = new AttributedString(txt);
+                        copyAttributes(font, str, 0, txt.Length);
+
+                        if (rt.NumFormattingRuns > 0) {
+                            // TODO: support rich text fragments
+                        }
+
+                        layout = new TextLayout(str.Iterator, fontRenderContext);
+                        if(style.Rotation != 0){
+                            /*
+                             * Transform the text using a scale so that it's height is increased by a multiple of the leading,
+                             * and then rotate the text before computing the bounds. The scale results in some whitespace around
+                             * the unrotated top and bottom of the text that normally wouldn't be present if unscaled, but
+                             * is Added by the standard Excel autosize.
+                             *
+                            AffineTransform trans = new AffineTransform();
+                            trans.Concatenate(AffineTransform.GetRotateInstance(style.Rotation*2.0*Math.PI/360.0));
+                            trans.Concatenate(
+                            AffineTransform.GetScaleInstance(1, fontHeightMultiple)
+                            );
+                            width = Math.Max(width, ((layout.GetOutline(trans).Bounds.Width / colspan) / defaultCharWidth) + cell.CellStyle.Indention);
+                        } else {
+                            width = Math.Max(width, ((layout.Bounds.Width / colspan) / defaultCharWidth) + cell.CellStyle.Indention);
+                        }
+                    }
+                } else {
+                    String sval = null;
+                    if (cellType == CellType.NUMERIC) {
+                        // Try to Get it formatted to look the same as excel
+                        try {
+                            sval = formatter.FormatCellValue(cell, dummyEvaluator);
+                        } catch (Exception e) {
+                            sval = cell.NumericCellValue.ToString();
+                        }
+                    } else if (cellType == CellType.BOOLEAN) {
+                        sval =cell.BooleanCellValue.ToString().ToUpper();
+                    }
+                    if(sval != null) {
+                        String txt = sval + defaultChar;
+                        str = new AttributedString(txt);
+                        copyAttributes(font, str, 0, txt.Length);
+
+                        layout = new TextLayout(str.Iterator, fontRenderContext);
+                        if(style.Rotation != 0){
+                            /*
+                             * Transform the text using a scale so that it's height is increased by a multiple of the leading,
+                             * and then rotate the text before computing the bounds. The scale results in some whitespace around
+                             * the unrotated top and bottom of the text that normally wouldn't be present if unscaled, but
+                             * is Added by the standard Excel autosize.
+                             *
+                            AffineTransform trans = new AffineTransform();
+                            trans.Concatenate(AffineTransform.GetRotateInstance(style.Rotation*2.0*Math.PI/360.0));
+                            trans.Concatenate(
+                            AffineTransform.GetScaleInstance(1, fontHeightMultiple)
+                            );
+                            width = Math.Max(width, ((layout.GetOutline(trans).Bounds.Width / colspan) / defaultCharWidth) + cell.CellStyle.Indention);
+                        } else {
+                            width = Math.Max(width, ((layout.Bounds.Width / colspan) / defaultCharWidth) + cell.CellStyle.Indention);
+                        }
+                    }
+                }
+
             }
-
-            int colspan = 1;
-            for (int i = 0 ; i < sheet.NumMergedRegions; i++) {
-                CellRangeAddress region = sheet.GetMergedRegion(i);
-                if (ContainsCell(region, row.RowNum, column)) {
-                    if (!useMergedCells) {
-                        // If we're not using merged cells, skip this one and Move on to the next.
-                        continue rows;
-                    }
-                    cell = row.GetCell(region.FirstColumn);
-                    colspan = 1 + region.LastColumn - region.FirstColumn;
-                }
-            }
-
-            ICellStyle style = cell.CellStyle;
-            CellType cellType = cell.CellType;
-
-            // for formula cells we compute the cell width for the cached formula result
-            if(cellType == CellType.FORMULA) cellType = cell.CachedFormulaResultType;
-
-            IFont font = wb.GetFontAt(style.FontIndex);
-
-            if (cellType == CellType.STRING) {
-                IRichTextString rt = cell.RichStringCellValue;
-                String[] lines = rt.String.Split("\\n".ToCharArray());
-                for (int i = 0; i < lines.Length; i++) {
-                    String txt = lines[i] + defaultChar;
-
-                    str = new AttributedString(txt);
-                    copyAttributes(font, str, 0, txt.Length);
-
-                    if (rt.NumFormattingRuns > 0) {
-                        // TODO: support rich text fragments
-                    }
-
-                    layout = new TextLayout(str.Iterator, fontRenderContext);
-                    if(style.Rotation != 0){
-                        /*
-                         * Transform the text using a scale so that it's height is increased by a multiple of the leading,
-                         * and then rotate the text before computing the bounds. The scale results in some whitespace around
-                         * the unrotated top and bottom of the text that normally wouldn't be present if unscaled, but
-                         * is Added by the standard Excel autosize.
-                         */
-                        AffineTransform trans = new AffineTransform();
-                        trans.Concatenate(AffineTransform.GetRotateInstance(style.Rotation*2.0*Math.PI/360.0));
-                        trans.Concatenate(
-                        AffineTransform.GetScaleInstance(1, fontHeightMultiple)
-                        );
-                        width = Math.Max(width, ((layout.GetOutline(trans).Bounds.Width / colspan) / defaultCharWidth) + cell.CellStyle.Indention);
-                    } else {
-                        width = Math.Max(width, ((layout.Bounds.Width / colspan) / defaultCharWidth) + cell.CellStyle.Indention);
-                    }
-                }
-            } else {
-                String sval = null;
-                if (cellType == CellType.NUMERIC) {
-                    // Try to Get it formatted to look the same as excel
-                    try {
-                        sval = formatter.FormatCellValue(cell, dummyEvaluator);
-                    } catch (Exception e) {
-                        sval = cell.NumericCellValue.ToString();
-                    }
-                } else if (cellType == CellType.BOOLEAN) {
-                    sval =cell.BooleanCellValue.ToString().ToUpper();
-                }
-                if(sval != null) {
-                    String txt = sval + defaultChar;
-                    str = new AttributedString(txt);
-                    copyAttributes(font, str, 0, txt.Length);
-
-                    layout = new TextLayout(str.Iterator, fontRenderContext);
-                    if(style.Rotation != 0){
-                        /*
-                         * Transform the text using a scale so that it's height is increased by a multiple of the leading,
-                         * and then rotate the text before computing the bounds. The scale results in some whitespace around
-                         * the unrotated top and bottom of the text that normally wouldn't be present if unscaled, but
-                         * is Added by the standard Excel autosize.
-                         */
-                        AffineTransform trans = new AffineTransform();
-                        trans.Concatenate(AffineTransform.GetRotateInstance(style.Rotation*2.0*Math.PI/360.0));
-                        trans.Concatenate(
-                        AffineTransform.GetScaleInstance(1, fontHeightMultiple)
-                        );
-                        width = Math.Max(width, ((layout.GetOutline(trans).Bounds.Width / colspan) / defaultCharWidth) + cell.CellStyle.Indention);
-                    } else {
-                        width = Math.Max(width, ((layout.Bounds.Width / colspan) / defaultCharWidth) + cell.CellStyle.Indention);
-                    }
-                }
-            }
-
+            return width;*/
+            throw new NotImplementedException();
         }
-        return width;        
-    }
 
         /**
          * Copy text attributes from the supplied Font to Java2D AttributedString
          */
-        private static void copyAttributes(IFont font, AttributedString str, int startIdx, int endIdx)
+        /*private static void copyAttributes(IFont font, AttributedString str, int startIdx, int endIdx)
         {
             str.AddAttribute(TextAttribute.FAMILY, font.FontName, startIdx, endIdx);
             str.AddAttribute(TextAttribute.SIZE, (float)font.FontHeightInPoints);
             if (font.Boldweight == (short)FontBoldWeight.BOLD) str.AddAttribute(TextAttribute.WEIGHT, TextAttribute.WEIGHT_BOLD, startIdx, endIdx);
             if (font.IsItalic) str.AddAttribute(TextAttribute.POSTURE, TextAttribute.POSTURE_OBLIQUE, startIdx, endIdx);
             if (font.Underline == (byte)FontUnderlineType.SINGLE) str.AddAttribute(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON, startIdx, endIdx);
-        }
+            
+        }*/
 
         public static bool ContainsCell(CellRangeAddress cr, int rowIx, int colIx)
         {

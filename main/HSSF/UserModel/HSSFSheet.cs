@@ -1196,7 +1196,9 @@ namespace NPOI.HSSF.UserModel
                 if (!(inStart && inEnd)) continue;
 
                 //only Shift if the region outside the Shifted rows is not merged too
-                if (!ContainsCell(merged, startRow - 1, 0) && !ContainsCell(merged, endRow + 1, 0))
+                //if (!ContainsCell(merged, startRow - 1, 0) && !ContainsCell(merged, endRow + 1, 0))
+                if(!SheetUtil.ContainsCell(merged, startRow-1, 0) &&
+                 !SheetUtil.ContainsCell(merged, endRow+1, 0))
                 {
                     merged.FirstRow = (merged.FirstRow + n);
                     merged.LastRow = (merged.LastRow + n);
@@ -1219,6 +1221,7 @@ namespace NPOI.HSSF.UserModel
             }
 
         }
+        [Obsolete]
         private static bool ContainsCell(NPOI.SS.Util.CellRangeAddress cr, int rowIx, int colIx)
         {
             if (cr.FirstRow <= rowIx && cr.LastRow >= rowIx
@@ -1283,10 +1286,15 @@ namespace NPOI.HSSF.UserModel
                 s = startRow;
                 inc = 1;
             }
-            else
+            else if (n > 0)
             {
                 s = endRow;
                 inc = -1;
+            }
+            else
+            {
+                // Nothing to do
+                return;
             }
 
             NoteRecord[] noteRecs;
@@ -1380,8 +1388,51 @@ namespace NPOI.HSSF.UserModel
                     }
                 }
             }
-            if (endRow == lastrow || endRow + n > lastrow) lastrow = Math.Min(endRow + n, SpreadsheetVersion.EXCEL97.LastRowIndex);
-            if (startRow == firstrow || startRow + n < firstrow) firstrow = Math.Max(startRow + n, 0);
+            // Re-compute the first and last rows of the sheet as needed
+            if (n > 0)
+            {
+                // Rows are moving down
+                if (startRow == firstrow)
+                {
+                    // Need to walk forward to find the first non-blank row
+                    firstrow = Math.Max(startRow + n, 0);
+                    for (int i = startRow + 1; i < startRow + n; i++)
+                    {
+                        if (GetRow(i) != null)
+                        {
+                            firstrow = i;
+                            break;
+                        }
+                    }
+                }
+                if (endRow + n > lastrow)
+                {
+                    lastrow = Math.Min(endRow + n, SpreadsheetVersion.EXCEL97.LastRowIndex);
+                }
+            }
+            else
+            {
+                // Rows are moving up
+                if (startRow + n < firstrow)
+                {
+                    firstrow = Math.Max(startRow + n, 0);
+                }
+                if (endRow == lastrow)
+                {
+                    // Need to walk backward to find the last non-blank row
+                    lastrow = Math.Min(endRow + n, SpreadsheetVersion.EXCEL97.LastRowIndex);
+                    for (int i = endRow - 1; i > endRow + n; i++)
+                    {
+                        if (GetRow(i) != null)
+                        {
+                            lastrow = i;
+                            break;
+                        }
+                    }
+                }
+            }
+            //if (endRow == lastrow || endRow + n > lastrow) lastrow = Math.Min(endRow + n, SpreadsheetVersion.EXCEL97.LastRowIndex);
+            //if (startRow == firstrow || startRow + n < firstrow) firstrow = Math.Max(startRow + n, 0);
 
             // Update any formulas on this _sheet that point to
             //  rows which have been moved
@@ -1440,8 +1491,8 @@ namespace NPOI.HSSF.UserModel
         /// <param name="topRow">Left column visible in right pane.</param>
         public void CreateFreezePane(int colSplit, int rowSplit, int leftmostColumn, int topRow)
         {
-            if (colSplit < 0 || colSplit > 255) throw new ArgumentException("Column must be between 0 and 255");
-            if (rowSplit < 0 || rowSplit > 65535) throw new ArgumentException("Row must be between 0 and 65535");
+            ValidateColumn(colSplit);
+            ValidateRow(rowSplit);
             if (leftmostColumn < colSplit) throw new ArgumentException("leftmostColumn parameter must not be less than colSplit parameter");
             if (topRow < rowSplit) throw new ArgumentException("topRow parameter must not be less than leftmostColumn parameter");
             Sheet.CreateFreezePane(colSplit, rowSplit, topRow, leftmostColumn);
@@ -1630,7 +1681,8 @@ namespace NPOI.HSSF.UserModel
         /// <param name="row">The row.</param>
         protected void ValidateRow(int row)
         {
-            if (row > 65535) throw new ArgumentException("Maximum row number is 65535");
+            int maxrow = SpreadsheetVersion.EXCEL97.LastRowIndex;
+            if (row > maxrow) throw new ArgumentException("Maximum row number is " + maxrow.ToString());
             if (row < 0) throw new ArgumentException("Minumum row number is 0");
         }
 
@@ -1640,7 +1692,8 @@ namespace NPOI.HSSF.UserModel
         /// <param name="column">The column.</param>
         protected void ValidateColumn(int column)
         {
-            if (column > 255) throw new ArgumentException("Maximum column number is 255");
+            int maxcol = SpreadsheetVersion.EXCEL97.LastColumnIndex;
+            if (column > maxcol) throw new ArgumentException("Maximum column number is " + maxcol.ToString());
             if (column < 0) throw new ArgumentException("Minimum column number is 0");
         }
 

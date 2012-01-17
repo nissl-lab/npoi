@@ -112,7 +112,7 @@ namespace NPOI.SS.UserModel
          * @return short representing the first logical cell in the row,
          *  or -1 if the row does not contain any cells.
          */
-        int FirstCellNum { get; }
+        short FirstCellNum { get; }
 
         /**
          * Gets the index of the last cell Contained in this row <b>PLUS ONE</b>. The result also
@@ -133,7 +133,7 @@ namespace NPOI.SS.UserModel
          * @return short representing the last logical cell in the row <b>PLUS ONE</b>,
          *   or -1 if the row does not contain any cells.
          */
-        int LastCellNum { get; }
+        short LastCellNum { get; }
 
         /**
          * Gets the number of defined cells (NOT number of cells in the actual row!).

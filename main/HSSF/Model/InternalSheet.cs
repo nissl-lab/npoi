@@ -1713,6 +1713,16 @@ namespace NPOI.HSSF.Model
             if (paneLoc != -1)
                 records.RemoveAt(paneLoc);
 
+            // If both colSplit and rowSplit are zero then the existing freeze pane is removed
+            if (colSplit == 0 && rowSplit == 0)
+            {
+                windowTwo.FreezePanes = (false);
+                windowTwo.FreezePanesNoSplit = (false);
+                SelectionRecord sel = (SelectionRecord)FindFirstRecordBySid(SelectionRecord.sid);
+                sel.Pane = (PaneInformation.PANE_UPPER_LEFT);
+                return;
+            }
+
             int loc = FindFirstRecordLocBySid(WindowTwoRecord.sid);
             PaneRecord pane = new PaneRecord();
             pane.X = ((short)colSplit);
@@ -1726,7 +1736,7 @@ namespace NPOI.HSSF.Model
             }
             else if (colSplit == 0)
             {
-                pane.LeftColumn = ((short)64);
+                pane.LeftColumn = ((short)0);
                 pane.ActivePane = ((short)2);
             }
             else
@@ -1738,8 +1748,8 @@ namespace NPOI.HSSF.Model
             windowTwo.FreezePanes = (true);
             windowTwo.FreezePanesNoSplit = (true);
 
-            SelectionRecord sel = (SelectionRecord)FindFirstRecordBySid(SelectionRecord.sid);
-            sel.Pane = ((byte)pane.ActivePane);
+            SelectionRecord sel1 = (SelectionRecord)FindFirstRecordBySid(SelectionRecord.sid);
+            sel1.Pane = ((byte)pane.ActivePane);
 
         }
 
