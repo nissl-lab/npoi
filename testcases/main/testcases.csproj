@@ -338,7 +338,6 @@
     <Compile Include="HSSF\UserModel\TestBug43093.cs" />
     <Compile Include="HSSF\UserModel\TestCellStyle.cs" />
     <Compile Include="HSSF\UserModel\TestCloneSheet.cs" />
-    <Compile Include="HSSF\UserModel\TestDataValidation.cs" />
     <Compile Include="HSSF\UserModel\TestFontDetails.cs" />
     <Compile Include="HSSF\UserModel\TestFormulaEvaluatorDocs.cs" />
     <Compile Include="HSSF\UserModel\TestHSSFCell.cs" />
@@ -414,6 +413,7 @@
     <Compile Include="HSSF\Record\TestNameCommentRecord.cs" />
     <Compile Include="HSSF\Record\TestTextObjectBaseRecord.cs" />
     <Compile Include="HSSF\Record\TestWriteAccessRecord.cs" />
+    <Compile Include="HSSF\UserModel\TestDataValidation.cs" />
     <Compile Include="HSSF\UserModel\TestHSSFFont.cs" />
     <Compile Include="HSSF\UserModel\TestHSSFDataFormat.cs" />
     <Compile Include="HSSF\UserModel\TestHSSFSheetShiftRows.cs" />
@@ -535,6 +535,7 @@
     <Compile Include="SS\UserModel\BaseTestCell.cs" />
     <Compile Include="SS\UserModel\BaseTestCellComment.cs" />
     <Compile Include="SS\UserModel\BaseTestDataFormat.cs" />
+    <Compile Include="SS\UserModel\BaseTestDataValidation.cs" />
     <Compile Include="SS\UserModel\BaseTestFont.cs" />
     <Compile Include="SS\UserModel\BaseTestFormulaEvaluator.cs" />
     <Compile Include="SS\UserModel\BaseTestHyperlink.cs" />

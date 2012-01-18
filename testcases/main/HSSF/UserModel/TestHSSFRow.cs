@@ -155,7 +155,7 @@ namespace TestCases.HSSF.UserModel
             Assert.AreEqual(COL_IX + 1, row.LastCellNum);
             row.RemoveCell(cell);
             Assert.AreEqual(-1, row.FirstCellNum);
-            Assert.AreEqual(0, row.LastCellNum);
+            Assert.AreEqual(-1, row.LastCellNum);
         }
     }
 }

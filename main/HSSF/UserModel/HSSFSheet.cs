@@ -34,6 +34,7 @@ namespace NPOI.HSSF.UserModel
     using NPOI.SS.Util;
 
 
+
     /// <summary>
     /// High level representation of a worksheet.
     /// </summary>
@@ -426,15 +427,17 @@ namespace NPOI.HSSF.UserModel
         /// Creates a data validation object
         /// </summary>
         /// <param name="dataValidation">The Data validation object settings</param>
-        public void AddValidationData(HSSFDataValidation dataValidation)
+        public void AddValidationData(IDataValidation dataValidation)
         {
             if (dataValidation == null)
             {
                 throw new ArgumentException("objValidation must not be null");
             }
+
+            HSSFDataValidation hssfDataValidation = (HSSFDataValidation)dataValidation;
             DataValidityTable dvt = _sheet.GetOrCreateDataValidityTable();
 
-            DVRecord dvRecord = dataValidation.CreateDVRecord(_workbook);
+            DVRecord dvRecord = hssfDataValidation.CreateDVRecord(this);
             dvt.AddDataValidation(dvRecord);
         }
 
@@ -2306,6 +2309,10 @@ namespace NPOI.HSSF.UserModel
                 int idx = wb.GetSheetIndex(this);
                 return wb.GetSheetName(idx);
             }
+        }
+        public DataValidationHelper GetDataValidationHelper()
+        {
+            return new HSSFDataValidationHelper(this);
         }
 
         public HSSFAutoFilter SetAutoFilter(CellRangeAddress range)

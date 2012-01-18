@@ -1,9 +1,10 @@
 /* ====================================================================
-   Copyright 2002-2004   Apache Software Foundation
-
-   Licensed under the Apache License, Version 2.0 (the "License");
-   you may not use this file except in compliance with the License.
-   You may obtain a copy of the License at
+   Licensed to the Apache Software Foundation (ASF) under one or more
+   contributor license agreements.  See the NOTICE file distributed with
+   this work for Additional information regarding copyright ownership.
+   The ASF licenses this file to You under the Apache License, Version 2.0
+   (the "License"); you may not use this file except in compliance with
+   the License.  You may obtain a copy of the License at
 
        http://www.apache.org/licenses/LICENSE-2.0
 
@@ -17,106 +18,50 @@
 namespace NPOI.HSSF.UserModel
 {
     using System;
-    using System.Text;
-    using System.Collections;
-    using System.Text.RegularExpressions;
     using NPOI.HSSF.Model;
-    using NPOI.SS.Formula;
     using NPOI.SS.Formula.PTG;
-    using NPOI.HSSF.Record;
+    using NPOI.SS.Formula;
+    using NPOI.SS.UserModel;
+    using System.Text;
+    using NPOI.SS.Util;
 
-    public class FormulaPair
-    {
-
-        private Ptg[] _formula1;
-        private Ptg[] _formula2;
-
-        public FormulaPair(Ptg[] formula1, Ptg[] formula2)
-        {
-            _formula1 = formula1;
-            _formula2 = formula2;
-        }
-        public Ptg[] Formula1
-        {
-            get
-            {
-                return _formula1;
-            }
-        }
-        public Ptg[] Formula2
-        {
-            get
-            {
-                return _formula2;
-            }
-        }
-
-    }
     /**
      * 
      * @author Josh Micich
      */
-    public class DVConstraint
+    public class DVConstraint : IDataValidationConstraint
     {
-        /**
-         * ValidationType enum
-         */
-        public class ValidationType
+        /* package */
+        public class FormulaPair
         {
-            /** 'Any value' type - value not restricted */
-            public const int ANY = 0x00;
-            /** Integer ('Whole number') type */
-            public const int INTEGER = 0x01;
-            /** Decimal type */
-            public const int DECIMAL = 0x02;
-            /** List type ( combo box type ) */
-            public const int LIST = 0x03;
-            /** Date type */
-            public const int DATE = 0x04;
-            /** Time type */
-            public const int TIME = 0x05;
-            /** String length type */
-            public const int TEXT_LENGTH = 0x06;
-            /** Formula ( 'Custom' ) type */
-            public const int FORMULA = 0x07;
-        }
-        /**
-         * Condition operator enum
-         */
-        public class OperatorType
-        {
-            private OperatorType()
+
+            private Ptg[] _formula1;
+            private Ptg[] _formula2;
+
+            public FormulaPair(Ptg[] formula1, Ptg[] formula2)
             {
-                // no instances of this class
+                _formula1 = formula1;
+                _formula2 = formula2;
             }
-
-            public const int BETWEEN = 0x00;
-            public const int NOT_BETWEEN = 0x01;
-            public const int EQUAL = 0x02;
-            public const int NOT_EQUAL = 0x03;
-            public const int GREATER_THAN = 0x04;
-            public const int LESS_THAN = 0x05;
-            public const int GREATER_OR_EQUAL = 0x06;
-            public const int LESS_OR_EQUAL = 0x07;
-            /** default value to supply when the operator type is not used */
-            public const int IGNORED = BETWEEN;
-
-            /* package */
-            internal static void ValidateSecondArg(int comparisonOperator, String paramValue)
+            public Ptg[] Formula1
             {
-                switch (comparisonOperator)
+                get
                 {
-                    case BETWEEN:
-                    case NOT_BETWEEN:
-                        if (paramValue == null)
-                        {
-                            throw new ArgumentException("expr2 must be supplied for 'between' comparisons");
-                        }
-                        break;
-                    // all other operators don't need second arg
+                    return _formula1;
                 }
             }
+            public Ptg[] Formula2
+            {
+                get
+                {
+                    return _formula2;
+                }
+            }
+
         }
+
+        // convenient access to ValidationType namespace
+        //private static ValidationType VT = null;
 
 
         private int _validationType;
@@ -146,20 +91,22 @@ namespace NPOI.HSSF.UserModel
          * Creates a list constraint
          */
         private DVConstraint(String listFormula, String[] excplicitListValues)
-            :  this(ValidationType.LIST, OperatorType.IGNORED,
+            : this(ValidationType.LIST, OperatorType.IGNORED,
                 listFormula, null, Double.NaN, Double.NaN, excplicitListValues)
         {
-
+            ;
         }
 
         /**
          * Creates a number based data validation constraint. The text values entered for expr1 and expr2
          * can be either standard Excel formulas or formatted number values. If the expression starts 
-         * with '=' it is parsed as a formula, otherwise it is parsed as a formatted number. 
+         * with '=' it is Parsed as a formula, otherwise it is Parsed as a formatted number. 
          * 
-         * @param validationType one of {@link ValidationType#ANY}, {@link ValidationType#DECIMAL},
-         * {@link ValidationType#INTEGER}, {@link ValidationType#TEXT_LENGTH}
-         * @param comparisonOperator any constant from {@link OperatorType} enum
+         * @param validationType one of {@link NPOI.SS.UserModel.DataValidationConstraint.ValidationType#ANY},
+         * {@link NPOI.SS.UserModel.DataValidationConstraint.ValidationType#DECIMAL},
+         * {@link NPOI.SS.UserModel.DataValidationConstraint.ValidationType#INTEGER},
+         * {@link NPOI.SS.UserModel.DataValidationConstraint.ValidationType#TEXT_LENGTH}
+         * @param comparisonOperator any constant from {@link NPOI.SS.UserModel.DataValidationConstraint.OperatorType} enum
          * @param expr1 date formula (when first char is '=') or formatted number value
          * @param expr2 date formula (when first char is '=') or formatted number value
          */
@@ -188,10 +135,10 @@ namespace NPOI.HSSF.UserModel
                             + validationType + ") not supported with this method");
             }
             // formula1 and value1 are mutually exclusive
-            String formula1 = getFormulaFromTextExpression(expr1);
+            String formula1 = GetFormulaFromTextExpression(expr1);
             Double value1 = formula1 == null ? ConvertNumber(expr1) : double.NaN;
             // formula2 and value2 are mutually exclusive
-            String formula2 = getFormulaFromTextExpression(expr2);
+            String formula2 = GetFormulaFromTextExpression(expr2);
             Double value2 = formula2 == null ? ConvertNumber(expr2) : double.NaN;
             return new DVConstraint(validationType, comparisonOperator, formula1, formula2, value1, value2, null);
         }
@@ -209,11 +156,11 @@ namespace NPOI.HSSF.UserModel
         /**
          * Creates a time based data validation constraint. The text values entered for expr1 and expr2
          * can be either standard Excel formulas or formatted time values. If the expression starts 
-         * with '=' it is parsed as a formula, otherwise it is parsed as a formatted time.  To parse 
+         * with '=' it is Parsed as a formula, otherwise it is Parsed as a formatted time.  To parse 
          * formatted times, two formats are supported:  "HH:MM" or "HH:MM:SS".  This is contrary to 
          * Excel which uses the default time format from the OS.
          * 
-         * @param comparisonOperator constant from {@link OperatorType} enum
+         * @param comparisonOperator constant from {@link NPOI.SS.UserModel.DataValidationConstraint.OperatorType} enum
          * @param expr1 date formula (when first char is '=') or formatted time value
          * @param expr2 date formula (when first char is '=') or formatted time value
          */
@@ -226,22 +173,22 @@ namespace NPOI.HSSF.UserModel
             OperatorType.ValidateSecondArg(comparisonOperator, expr1);
 
             // formula1 and value1 are mutually exclusive
-            String formula1 = getFormulaFromTextExpression(expr1);
-            Double value1 = formula1 == null ? ConvertTime(expr1) :double.NaN;
+            String formula1 = GetFormulaFromTextExpression(expr1);
+            Double value1 = formula1 == null ? ConvertTime(expr1) : Double.NaN;
             // formula2 and value2 are mutually exclusive
-            String formula2 = getFormulaFromTextExpression(expr2);
-            Double value2 = formula2 == null ? ConvertTime(expr2) : double.NaN;
+            String formula2 = GetFormulaFromTextExpression(expr2);
+            Double value2 = formula2 == null ? ConvertTime(expr2) : Double.NaN;
             return new DVConstraint(ValidationType.TIME, comparisonOperator, formula1, formula2, value1, value2, null);
-
         }
+
         /**
          * Creates a date based data validation constraint. The text values entered for expr1 and expr2
          * can be either standard Excel formulas or formatted date values. If the expression starts 
-         * with '=' it is parsed as a formula, otherwise it is parsed as a formatted date (Excel uses 
+         * with '=' it is Parsed as a formula, otherwise it is Parsed as a formatted date (Excel uses 
          * the same convention).  To parse formatted dates, a date format needs to be specified.  This
          * is contrary to Excel which uses the default short date format from the OS.
          * 
-         * @param comparisonOperator constant from {@link OperatorType} enum
+         * @param comparisonOperator constant from {@link NPOI.SS.UserModel.DataValidationConstraint.OperatorType} enum
          * @param expr1 date formula (when first char is '=') or formatted date value
          * @param expr2 date formula (when first char is '=') or formatted date value
          * @param dateFormat ignored if both expr1 and expr2 are formulas.  Default value is "YYYY/MM/DD"
@@ -255,29 +202,29 @@ namespace NPOI.HSSF.UserModel
                 throw new ArgumentException("expr1 must be supplied");
             }
             OperatorType.ValidateSecondArg(comparisonOperator, expr2);
-            
+            SimpleDateFormat df = dateFormat == null ? null : new SimpleDateFormat(dateFormat);
 
             // formula1 and value1 are mutually exclusive
-            String formula1 = getFormulaFromTextExpression(expr1);
-            Double value1 = formula1 == null ? ConvertDate(expr1, dateFormat) : Double.NaN;
+            String formula1 = GetFormulaFromTextExpression(expr1);
+            Double value1 = formula1 == null ? ConvertDate(expr1, df) : Double.NaN;
             // formula2 and value2 are mutually exclusive
-            String formula2 = getFormulaFromTextExpression(expr2);
-            Double value2 = formula2 == null ? ConvertDate(expr2, dateFormat) : Double.NaN;
+            String formula2 = GetFormulaFromTextExpression(expr2);
+            Double value2 = formula2 == null ? ConvertDate(expr2, df) : Double.NaN;
             return new DVConstraint(ValidationType.DATE, comparisonOperator, formula1, formula2, value1, value2, null);
         }
 
         /**
          * Distinguishes formula expressions from simple value expressions.  This logic is only 
-         * required by a few factory methods in this class that Create data validation constraints
+         * required by a few factory methods in this class that create data validation constraints
          * from more or less the same parameters that would have been entered in the Excel UI.  The
          * data validation dialog box uses the convention that formulas begin with '='.  Other methods
          * in this class follow the POI convention (formulas and values are distinct), so the '=' 
          * convention is not used there.
          *  
          * @param textExpr a formula or value expression
-         * @return all text after '=' if textExpr begins with '='. Otherwise <c>null</c> if textExpr does not begin with '='
+         * @return all text After '=' if textExpr begins with '='. Otherwise <code>null</code> if textExpr does not begin with '='
          */
-        private static String getFormulaFromTextExpression(String textExpr)
+        private static String GetFormulaFromTextExpression(String textExpr)
         {
             if (textExpr == null)
             {
@@ -296,7 +243,7 @@ namespace NPOI.HSSF.UserModel
 
 
         /**
-         * @return <c>null</c> if numberStr is <c>null</c>
+         * @return <code>null</code> if numberStr is <code>null</code>
          */
         private static Double ConvertNumber(String numberStr)
         {
@@ -306,7 +253,7 @@ namespace NPOI.HSSF.UserModel
             }
             try
             {
-                return Double.Parse(numberStr);
+                return double.Parse(numberStr);
             }
             catch (FormatException)
             {
@@ -316,7 +263,7 @@ namespace NPOI.HSSF.UserModel
         }
 
         /**
-         * @return <c>null</c> if timeStr is <c>null</c>
+         * @return <code>null</code> if timeStr is <code>null</code>
          */
         private static Double ConvertTime(String timeStr)
         {
@@ -324,13 +271,13 @@ namespace NPOI.HSSF.UserModel
             {
                 return Double.NaN;
             }
-            return NPOI.SS.UserModel.DateUtil.ConvertTime(timeStr);
+            return HSSFDateUtil.ConvertTime(timeStr);
         }
         /**
-         * @param dateFormat pass <c>null</c> for default YYYYMMDD
-         * @return <c>null</c> if timeStr is <c>null</c>
+         * @param dateFormat pass <code>null</code> for default YYYYMMDD
+         * @return <code>null</code> if timeStr is <code>null</code>
          */
-        private static Double ConvertDate(String dateStr, string dateFormat)
+        private static Double ConvertDate(String dateStr, SimpleDateFormat dateFormat)
         {
             if (dateStr == null)
             {
@@ -339,7 +286,7 @@ namespace NPOI.HSSF.UserModel
             DateTime dateVal;
             if (dateFormat == null)
             {
-                dateVal = DateTime.Parse(dateStr);
+                dateVal = HSSFDateUtil.ParseYYYYMMDDDate(dateStr);
             }
             else
             {
@@ -353,7 +300,7 @@ namespace NPOI.HSSF.UserModel
                             + "' using specified format '" + dateFormat + "'", e);
                 }
             }
-            return NPOI.SS.UserModel.DateUtil.GetExcelDate(dateVal);
+            return HSSFDateUtil.GetExcelDate(dateVal);
         }
 
         public static DVConstraint CreateCustomFormulaConstraint(String formula)
@@ -362,87 +309,19 @@ namespace NPOI.HSSF.UserModel
             {
                 throw new ArgumentException("formula must be supplied");
             }
-            return new DVConstraint(ValidationType.FORMULA, OperatorType.IGNORED, formula, null, Double.NaN, Double.NaN, null);
+            return new DVConstraint(ValidationType.FORMULA, OperatorType.IGNORED, formula, null, double.NaN, double.NaN, null);
         }
 
-        /**
-         * @return both parsed formulas (for expression 1 and 2). 
-         */
-        /* package */
-        public FormulaPair CreateFormulas(HSSFWorkbook workbook)
-        {
-            Ptg[] formula1;
-            Ptg[] formula2;
-            if (IsListValidationType)
-            {
-                formula1 = CreateListFormula(workbook);
-                formula2 = Ptg.EMPTY_PTG_ARRAY;
-            }
-            else
-            {
-                formula1 = ConvertDoubleFormula(_formula1, _value1, workbook);
-                formula2 = ConvertDoubleFormula(_formula2, _value2, workbook);
-            }
-            return new FormulaPair(formula1, formula2);
-        }
-
-        private Ptg[] CreateListFormula(HSSFWorkbook workbook)
-        {
-
-            if (_explicitListValues == null)
-            {
-                // formula is parsed with slightly different RVA rules: (root node type must be 'reference')
-                return HSSFFormulaParser.Parse(_formula1, workbook, FormulaType.DATAVALIDATION_LIST);
-                // To do: Excel places restrictions on the available operations within a list formula.
-                // Some things like union and intersection are not allowed.
-            }
-            // explicit list was provided
-            StringBuilder sb = new StringBuilder(_explicitListValues.Length * 16);
-            for (int i = 0; i < _explicitListValues.Length; i++)
-            {
-                if (i > 0)
-                {
-                    sb.Append('\0'); // list delimiter is the nul char
-                }
-                sb.Append(_explicitListValues[i]);
-
-            }
-            return new Ptg[] { new StringPtg(sb.ToString()), };
-        }
-
-        /**
-         * @return The parsed token array representing the formula or value specified. 
-         * Empty array if both formula and value are <c>null</c>
-         */
-        private static Ptg[] ConvertDoubleFormula(String formula, Double value, HSSFWorkbook workbook)
-        {
-            if (formula == null)
-            {
-                if (double.IsNaN(value))
-                {
-                    return Ptg.EMPTY_PTG_ARRAY;
-                }
-                return new Ptg[] { new NumberPtg(value), };
-            }
-            if (!double.IsNaN(value))
-            {
-                throw new InvalidOperationException("Both formula and value cannot be present");
-            }
-            return HSSFFormulaParser.Parse(formula, workbook);
-        }
-
-
-        /**
-         * @return data validation type of this constraint
-         * @see ValidationType
+        /* (non-Javadoc)
+         * @see NPOI.HSSF.UserModel.DataValidationConstraint#getValidationType()
          */
         public int GetValidationType()
         {
-               return _validationType;
+            return _validationType;
         }
         /**
          * Convenience method
-         * @return <c>true</c> if this constraint is a 'list' validation
+         * @return <code>true</code> if this constraint is a 'list' validation
          */
         public bool IsListValidationType
         {
@@ -453,7 +332,7 @@ namespace NPOI.HSSF.UserModel
         }
         /**
          * Convenience method
-         * @return <c>true</c> if this constraint is a 'list' validation with explicit values
+         * @return <code>true</code> if this constraint is a 'list' validation with explicit values
          */
         public bool IsExplicitList
         {
@@ -462,18 +341,19 @@ namespace NPOI.HSSF.UserModel
                 return _validationType == ValidationType.LIST && _explicitListValues != null;
             }
         }
-        /**
-         * @return the operator used for this constraint
-         * @see OperatorType
-         */
+
         public int Operator
         {
             get
             {
                 return _operator;
             }
-            set { _operator = value; }
+            set
+            {
+                _operator = value;
+            }
         }
+
 
         public String[] ExplicitListValues
         {
@@ -491,8 +371,8 @@ namespace NPOI.HSSF.UserModel
                 _explicitListValues = value;
             }
         }
-        /**
-         * @return the formula for expression 1. May be <c>null</c>
+        /* (non-Javadoc)
+         * @see NPOI.HSSF.UserModel.DataValidationConstraint#getFormula1()
          */
         public String Formula1
         {
@@ -502,13 +382,14 @@ namespace NPOI.HSSF.UserModel
             }
             set
             {
-                _value1 = Double.NaN;
+                _value1 = double.NaN;
                 _explicitListValues = null;
                 _formula1 = value;
             }
         }
-        /**
-         * @return the formula for expression 2. May be <c>null</c>
+
+        /* (non-Javadoc)
+         * @see NPOI.HSSF.UserModel.DataValidationConstraint#getFormula2()
          */
         public String Formula2
         {
@@ -518,14 +399,15 @@ namespace NPOI.HSSF.UserModel
             }
             set
             {
-                _value2 = Double.NaN;
+                _value2 = double.NaN;
                 _formula2 = value;
             }
         }
 
+
         /**
-         * @return the numeric value for expression 1. May be <c>null</c>
-         */
+        * @return the numeric value for expression 1. May be <c>null</c>
+        */
         public Double Value1
         {
             get
@@ -556,5 +438,73 @@ namespace NPOI.HSSF.UserModel
             }
         }
 
+        /**
+         * @return both Parsed formulas (for expression 1 and 2). 
+         */
+        /* package */
+        public FormulaPair CreateFormulas(HSSFSheet sheet)
+        {
+            Ptg[] formula1;
+            Ptg[] formula2;
+            if (IsListValidationType)
+            {
+                formula1 = CreateListFormula(sheet);
+                formula2 = Ptg.EMPTY_PTG_ARRAY;
+            }
+            else
+            {
+                formula1 = ConvertDoubleFormula(_formula1, _value1, sheet);
+                formula2 = ConvertDoubleFormula(_formula2, _value2, sheet);
+            }
+            return new FormulaPair(formula1, formula2);
+        }
+
+        private Ptg[] CreateListFormula(HSSFSheet sheet)
+        {
+
+            if (_explicitListValues == null)
+            {
+                IWorkbook wb = sheet.Workbook;
+                // formula is Parsed with slightly different RVA rules: (root node type must be 'reference')
+                return HSSFFormulaParser.Parse(_formula1, (HSSFWorkbook)wb, FormulaType.DATAVALIDATION_LIST, wb.GetSheetIndex(sheet));
+                // To do: Excel places restrictions on the available operations within a list formula.
+                // Some things like union and intersection are not allowed.
+            }
+            // explicit list was provided
+            StringBuilder sb = new StringBuilder(_explicitListValues.Length * 16);
+            for (int i = 0; i < _explicitListValues.Length; i++)
+            {
+                if (i > 0)
+                {
+                    sb.Append('\0'); // list delimiter is the nul char
+                }
+                sb.Append(_explicitListValues[i]);
+
+            }
+            return new Ptg[] { new StringPtg(sb.ToString()), };
+        }
+
+        /**
+         * @return The Parsed token array representing the formula or value specified. 
+         * Empty array if both formula and value are <code>null</code>
+         */
+        private static Ptg[] ConvertDoubleFormula(String formula, Double value, HSSFSheet sheet)
+        {
+            if (formula == null)
+            {
+                if (value == double.NaN)
+                {
+                    return Ptg.EMPTY_PTG_ARRAY;
+                }
+                return new Ptg[] { new NumberPtg(value), };
+            }
+            if (!double.IsNaN(value))
+            {
+                throw new InvalidOperationException("Both formula and value cannot be present");
+            }
+            IWorkbook wb = sheet.Workbook;
+            return HSSFFormulaParser.Parse(formula, (HSSFWorkbook)wb, FormulaType.CELL, wb.GetSheetIndex(sheet));
+        }
     }
+
 }

@@ -10,5 +10,9 @@ namespace TestCases.Exceptions
             : base(message)
         {
         }
+        public RuntimeException(Exception e)
+            : base("", e)
+        {
+        }
     }
 }

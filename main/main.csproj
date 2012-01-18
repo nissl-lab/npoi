@@ -51,6 +51,10 @@
     <Compile Include="HSSF\Record\Aggregates\ChartSubstreamRecordAggregate.cs" />
     <Compile Include="HSSF\Record\Aggregates\WorksheetProtectionBlock.cs" />
     <Compile Include="HSSF\Record\FtCblsSubRecord.cs" />
+    <Compile Include="HSSF\UserModel\DVConstraint.cs" />
+    <Compile Include="HSSF\UserModel\HSSFDataValidation.cs" />
+    <Compile Include="HSSF\UserModel\HSSFDataValidationHelper.java.cs" />
+    <Compile Include="HSSF\UserModel\HSSFDateUtil.java.cs" />
     <Compile Include="OldFileFormatException.cs" />
     <Compile Include="DDF\DefaultEscherRecordFactory.cs" />
     <Compile Include="DDF\EscherArrayProperty.cs" />
@@ -471,7 +475,6 @@
     <Compile Include="POITextExtractor.cs" />
     <Compile Include="HSSF\Util\HSSFCellUtil.cs" />
     <Compile Include="HSSF\Util\HSSFRegionUtil.cs" />
-    <Compile Include="HSSF\UserModel\DVConstraint.cs" />
     <Compile Include="HSSF\UserModel\EscherGraphics.cs" />
     <Compile Include="HSSF\UserModel\EvaluationCycleDetector.cs" />
     <Compile Include="HSSF\UserModel\EvaluationCycleDetectorManager.cs" />
@@ -489,7 +492,6 @@
     <Compile Include="HSSF\UserModel\HSSFConditionalFormattingRule.cs" />
     <Compile Include="HSSF\UserModel\HSSFCreationHelper.cs" />
     <Compile Include="HSSF\UserModel\HSSFDataFormat.cs" />
-    <Compile Include="HSSF\UserModel\HSSFDataValidation.cs" />
     <Compile Include="HSSF\UserModel\HSSFEvaluationCell.cs" />
     <Compile Include="HSSF\UserModel\HSSFEvaluationSheet.cs" />
     <Compile Include="HSSF\UserModel\HSSFEvaluationWorkbook.cs" />
@@ -851,6 +853,9 @@
     <Compile Include="SS\UserModel\CreationHelper.cs" />
     <Compile Include="SS\UserModel\DataFormat.cs" />
     <Compile Include="SS\UserModel\DataFormatter.cs" />
+    <Compile Include="SS\UserModel\DataValidation.cs" />
+    <Compile Include="SS\UserModel\DataValidationConstraint.cs" />
+    <Compile Include="SS\UserModel\DataValidationHelper.cs" />
     <Compile Include="SS\UserModel\DateUtil.cs" />
     <Compile Include="SS\UserModel\Drawing.cs" />
     <Compile Include="SS\UserModel\ErrorConstants.cs" />

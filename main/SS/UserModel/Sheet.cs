@@ -619,6 +619,13 @@ namespace NPOI.SS.UserModel
         ICellRange<ICell> RemoveArrayFormula(ICell cell);
 
         bool IsMergedRegion(CellRangeAddress mergedRegion);
+
+        DataValidationHelper GetDataValidationHelper();
+        /**
+	 * Creates a data validation object
+	 * @param dataValidation The Data validation object settings
+	 */
+        void AddValidationData(IDataValidation dataValidation);
     }
 
 }
