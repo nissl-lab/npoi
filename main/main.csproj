@@ -896,6 +896,7 @@
     <Compile Include="SS\Util\CellRangeAddressBase.cs" />
     <Compile Include="SS\Util\CellRangeAddressList.cs" />
     <Compile Include="SS\Util\CellReference.cs" />
+    <Compile Include="SS\Util\CellUtil.cs" />
     <Compile Include="SS\Util\Cellwalk\CellHandler.cs" />
     <Compile Include="SS\Util\Cellwalk\CellWalk.cs" />
     <Compile Include="SS\Util\Cellwalk\CellWalkContext.cs" />
@@ -911,6 +912,7 @@
     <Compile Include="SS\Util\NumberToTextConverter.cs" />
     <Compile Include="SS\Util\PaneInformation.cs" />
     <Compile Include="SS\Util\Region.cs" />
+    <Compile Include="SS\Util\RegionUtil.cs" />
     <Compile Include="SS\Util\SheetBuilder.cs" />
     <Compile Include="SS\Util\SheetReferences.cs" />
     <Compile Include="SS\Util\SheetUtil.cs">
