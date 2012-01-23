@@ -15,7 +15,7 @@
    limitations under the License.
 ==================================================================== */
 
-namespace NPOI.HSSF.UserModel
+namespace TestCases.HSSF.UserModel
 {
     using System;
     using System.IO;
@@ -29,6 +29,7 @@ namespace NPOI.HSSF.UserModel
     using TestCases.HSSF;
     using TestCases.HSSF.UserModel;
     using TestCases.SS.UserModel;
+    using NPOI.HSSF.UserModel;
 
     /**
      * Class for Testing Excel's data validation mechanism

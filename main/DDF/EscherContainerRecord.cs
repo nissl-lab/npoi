@@ -152,8 +152,20 @@ namespace NPOI.DDF
         /// <value></value>
         public override List<EscherRecord> ChildRecords
         {
-            get { return childRecords; }
-            set { this.childRecords = value; }
+            get { return new List<EscherRecord>(childRecords); }
+            set {
+                if (value == childRecords)
+                {
+                    throw new InvalidOperationException("Child records private data member has escaped");
+                }
+                childRecords.Clear();
+                childRecords.AddRange(value);
+            }
+        }
+
+        public bool RemoveChildRecord(EscherRecord toBeRemoved)
+        {
+            return childRecords.Remove(toBeRemoved);
         }
         public List<EscherRecord>.Enumerator GetChildIterator()
         {
@@ -165,17 +177,17 @@ namespace NPOI.DDF
         /// 2 or 3)
         /// </summary>
         /// <value>The child containers.</value>
-        public IList ChildContainers
+        public IList<EscherContainerRecord> ChildContainers
         {
             get
             {
-                IList containers = new ArrayList();
+                IList<EscherContainerRecord> containers = new List<EscherContainerRecord>();
                 for (IEnumerator iterator = ChildRecords.GetEnumerator(); iterator.MoveNext(); )
                 {
                     EscherRecord r = (EscherRecord)iterator.Current;
                     if (r is EscherContainerRecord)
                     {
-                        containers.Add(r);
+                        containers.Add((EscherContainerRecord)r);
                     }
                 }
                 return containers;

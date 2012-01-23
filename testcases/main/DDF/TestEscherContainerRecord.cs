@@ -139,8 +139,9 @@ using System.Configuration;
             Assert.AreEqual(expected, r.ToString());
         }
 
-        private class TestRecordA : EscherRecord
+        private class DummyEscherRecord : EscherRecord
         {
+            public DummyEscherRecord() { }
             public override int FillFields(byte[] data, int offset, EscherRecordFactory recordFactory)
             { return 0; }
             public override int Serialize(int offset, byte[] data, EscherSerializationListener listener)
@@ -153,7 +154,7 @@ using System.Configuration;
         {
             EscherContainerRecord r = new EscherContainerRecord();
 
-            r.AddChildRecord(new TestRecordA());
+            r.AddChildRecord(new DummyEscherRecord());
 
             Assert.AreEqual(18, r.RecordSize);
         }
@@ -177,6 +178,39 @@ using System.Configuration;
                 EscherContainerRecord record = new EscherContainerRecord();
                 record.FillFields(data, 0, new DefaultEscherRecordFactory());
             }
+        }
+        /**
+	 * Ensure {@link EscherContainerRecord} doesn't spill its guts everywhere
+	 */
+        [TestMethod]
+        public void TestChildren()
+        {
+            EscherContainerRecord ecr = new EscherContainerRecord();
+            List<EscherRecord> children0 = ecr.ChildRecords;
+            Assert.AreEqual(0, children0.Count);
+
+            EscherRecord chA = new DummyEscherRecord();
+            EscherRecord chB = new DummyEscherRecord();
+            EscherRecord chC = new DummyEscherRecord();
+
+            ecr.AddChildRecord(chA);
+            ecr.AddChildRecord(chB);
+            children0.Add(chC);
+
+            List<EscherRecord> children1 = ecr.ChildRecords;
+            Assert.IsTrue(children0 != children1);
+            Assert.AreEqual(2, children1.Count);
+            Assert.AreEqual(chA, children1[0]);
+            Assert.AreEqual(chB, children1[1]);
+
+            Assert.AreEqual(1, children0.Count); // first copy unchanged
+
+            ecr.ChildRecords=(children0);
+            ecr.AddChildRecord(chA);
+            List<EscherRecord> children2 = ecr.ChildRecords;
+            Assert.AreEqual(2, children2.Count);
+            Assert.AreEqual(chC, children2[0]);
+            Assert.AreEqual(chA, children2[1]);
         }
     }
 }

@@ -61,6 +61,7 @@ namespace NPOI.DDF
         private byte field_7_fFilter;
 
         private byte[] raw_pictureData;
+        private byte[] remainingData;
 
         /// <summary>
         /// This method deSerializes the record from a byte array.
@@ -97,6 +98,7 @@ namespace NPOI.DDF
 
             raw_pictureData = new byte[field_5_cbSave];
             Array.Copy( data, pos, raw_pictureData, 0, field_5_cbSave );
+            pos += field_5_cbSave;
 
             // 0 means DEFLATE compression
             // 0xFE means no compression
@@ -108,7 +110,12 @@ namespace NPOI.DDF
             {
                 field_pictureData = raw_pictureData;
             }
-
+            int remaining = bytesAfterHeader - pos + offset + HEADER_SIZE;
+            if (remaining > 0)
+            {
+                remainingData = new byte[remaining];
+                Array.Copy(data, pos, remainingData, 0, remaining);
+            }
             return bytesAfterHeader + HEADER_SIZE;
         }
 
@@ -143,7 +150,12 @@ namespace NPOI.DDF
             data[pos] = field_7_fFilter; pos++;
 
             Array.Copy( raw_pictureData, 0, data, pos, raw_pictureData.Length );
-
+            pos += raw_pictureData.Length;
+            if (remainingData != null)
+            {
+                Array.Copy(remainingData, 0, data, pos, remainingData.Length); 
+                pos += remainingData.Length;
+            }
             listener.AfterRecordSerialize(offset + RecordSize, RecordId, RecordSize, this);
             return RecordSize;
         }
@@ -195,6 +207,7 @@ namespace NPOI.DDF
             get
             {
                 int size = 8 + 50 + raw_pictureData.Length;
+                if (remainingData != null) size += remainingData.Length;
                 if ((Options ^ Signature) == 0x10)
                 {
                     size += field_2_UID.Length;
@@ -293,7 +306,13 @@ namespace NPOI.DDF
             get{return (field_6_fCompression == 0);}
             set { field_6_fCompression = value ? (byte)0 : (byte)0xFE; }
         }
-
+        public byte[] RemainingData
+        {
+            get
+            {
+                return remainingData;
+            }
+        }
         /// <summary>
         /// Returns a <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
         /// </summary>
@@ -327,7 +346,9 @@ namespace NPOI.DDF
                         "  Compressed Size: " + HexDump.ToHex(field_5_cbSave) + nl +
                         "  Compression: " + HexDump.ToHex(field_6_fCompression) + nl +
                         "  Filter: " + HexDump.ToHex(field_7_fFilter) + nl +
-                        "  Extra Data:" + nl + extraData;
+                        "  Extra Data:" + nl + extraData +
+                        (remainingData == null ? null : ("\n" +
+                        " Remaining Data: " + HexDump.ToHex(remainingData, 32)));
             }
         }
 

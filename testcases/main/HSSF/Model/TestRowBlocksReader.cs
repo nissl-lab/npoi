@@ -15,13 +15,14 @@
    limitations under the License.
 ==================================================================== */
 
-namespace NPOI.HSSF.Model
+namespace TestCases.HSSF.Model
 {
     using System;
     using NPOI.HSSF.Record;
     using NPOI.HSSF.Record.PivotTable;
     using NPOI.Util;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NPOI.HSSF.Model;
 
     /**
      * Tests for {@link RowBlocksReader}

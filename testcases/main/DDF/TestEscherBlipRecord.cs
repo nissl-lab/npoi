@@ -154,5 +154,26 @@ namespace TestCases.DDF
             byte[] ser = record.Serialize();
             Assert.IsTrue(Arrays.Equals(data, ser));
         }
+
+        /**
+     * The test data was created from pl031405.xls attached to Bugzilla #47143
+     */
+        [TestMethod]
+        public void Test47143()
+        {
+            byte[] data = _samples.ReadFile("47143.dat");
+            EscherBSERecord bse = new EscherBSERecord();
+            bse.FillFields(data, 0, new DefaultEscherRecordFactory());
+            bse.ToString(); //assert that toString() works
+            Assert.IsTrue(bse.BlipRecord is EscherMetafileBlip);
+
+            EscherMetafileBlip blip = (EscherMetafileBlip)bse.BlipRecord;
+            blip.ToString(); //assert that toString() works
+            byte[] remaining = blip.RemainingData;
+            Assert.IsNotNull(remaining);
+
+            byte[] ser = bse.Serialize();  //serialize and assert against the source data
+            Assert.IsTrue(Arrays.Equals(data, ser));
+        }
     }
 }

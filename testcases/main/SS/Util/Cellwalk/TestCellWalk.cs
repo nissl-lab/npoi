@@ -14,7 +14,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
    ==================================================================== */
-namespace TestCaes.SS.Util.CellWalk
+namespace TestCases.SS.Util.CellWalk
 {
 
     using NPOI.SS.UserModel;

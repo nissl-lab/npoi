@@ -24,6 +24,7 @@ namespace NPOI.HSSF.Record
     using NPOI.HSSF.UserModel;
     using NPOI.HSSF.Model;
     using NPOI.Util;
+    using System.Collections.Generic;
 
     internal class SerializationListener : EscherSerializationListener
     {
@@ -571,7 +572,7 @@ namespace NPOI.HSSF.Record
             topContainer = (EscherContainerRecord)
                 topContainer.ChildContainers[0];
 
-            IList tcc = topContainer.ChildContainers;
+            IList<EscherContainerRecord> tcc = topContainer.ChildContainers;
             if (tcc.Count == 0)
             {
                 throw new InvalidOperationException("No child escher containers at the point that should hold the patriach data, and one container per top level shape!");
