@@ -65,7 +65,7 @@ namespace NPOI.DDF
                 bytesWritten += childBytesWritten;
                 offset += childBytesWritten;
                 bytesRemaining -= childBytesWritten;
-                ChildRecords.Add(child);
+                AddChildRecord(child);
                 if (offset >= data.Length && bytesRemaining > 0)
                 {
                     Console.WriteLine("WARNING: " + bytesRemaining + " bytes remaining but no space left");
