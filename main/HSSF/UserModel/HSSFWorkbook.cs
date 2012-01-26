@@ -44,7 +44,7 @@ namespace NPOI.HSSF.UserModel
     /// @author  Glen Stampoultzis (glens at apache.org)
     /// @author  Shawn Laubach (slaubach at apache dot org)
     [Serializable]
-    public class HSSFWorkbook : POIDocument,NPOI.SS.UserModel.IWorkbook
+    public class HSSFWorkbook : POIDocument, NPOI.SS.UserModel.IWorkbook
     {
         //private static int DEBUG = POILogger.DEBUG;
         private const int MAX_ROW = 0xFFFF;
@@ -1855,5 +1855,18 @@ namespace NPOI.HSSF.UserModel
                 return bytes;
             }
         }
+
+        /// <summary>
+        /// Support foreach ISheet, e.g.
+        /// HSSFWorkbook workbook = new HSSFWorkbook();
+        /// foreach(ISheet sheet in workbook) ...
+        /// </summary>
+        /// <returns>Enumeration of all the sheets of this workbook</returns>
+        public IEnumerator GetEnumerator()
+        {
+            return _sheets.GetEnumerator();
+        }
+
+
     }
 }
