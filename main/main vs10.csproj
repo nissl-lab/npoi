@@ -73,6 +73,10 @@
     <Compile Include="HSSF\Record\Aggregates\ChartSubstreamRecordAggregate.cs" />
     <Compile Include="HSSF\Record\Aggregates\WorksheetProtectionBlock.cs" />
     <Compile Include="HSSF\Record\FtCblsSubRecord.cs" />
+    <Compile Include="HSSF\UserModel\DVConstraint.cs" />
+    <Compile Include="HSSF\UserModel\HSSFDataValidation.cs" />
+    <Compile Include="HSSF\UserModel\HSSFDataValidationHelper.java.cs" />
+    <Compile Include="HSSF\UserModel\HSSFDateUtil.java.cs" />
     <Compile Include="OldFileFormatException.cs" />
     <Compile Include="DDF\DefaultEscherRecordFactory.cs" />
     <Compile Include="DDF\EscherArrayProperty.cs" />
@@ -272,8 +276,8 @@
     <Compile Include="HSSF\Record\Chart\ValueRangeRecord.cs" />
     <Compile Include="HSSF\Record\CodepageRecord.cs" />
     <Compile Include="HSSF\Record\ColumnInfoRecord.cs" />
-    <Compile Include="HSSF\Record\Constant\ConstantValueParser.cs" />
-    <Compile Include="HSSF\Record\Constant\ErrorConstant.cs" />
+    <Compile Include="SS\Formula\Constant\ConstantValueParser.cs" />
+    <Compile Include="SS\Formula\Constant\ErrorConstant.cs" />
     <Compile Include="HSSF\Record\ContinueRecord.cs" />
     <Compile Include="HSSF\Record\Cont\ContinuableRecord.cs" />
     <Compile Include="HSSF\Record\Cont\ContinuableRecordOutput.cs" />
@@ -493,7 +497,6 @@
     <Compile Include="POITextExtractor.cs" />
     <Compile Include="HSSF\Util\HSSFCellUtil.cs" />
     <Compile Include="HSSF\Util\HSSFRegionUtil.cs" />
-    <Compile Include="HSSF\UserModel\DVConstraint.cs" />
     <Compile Include="HSSF\UserModel\EscherGraphics.cs" />
     <Compile Include="HSSF\UserModel\EvaluationCycleDetector.cs" />
     <Compile Include="HSSF\UserModel\EvaluationCycleDetectorManager.cs" />
@@ -511,7 +514,6 @@
     <Compile Include="HSSF\UserModel\HSSFConditionalFormattingRule.cs" />
     <Compile Include="HSSF\UserModel\HSSFCreationHelper.cs" />
     <Compile Include="HSSF\UserModel\HSSFDataFormat.cs" />
-    <Compile Include="HSSF\UserModel\HSSFDataValidation.cs" />
     <Compile Include="HSSF\UserModel\HSSFEvaluationCell.cs" />
     <Compile Include="HSSF\UserModel\HSSFEvaluationSheet.cs" />
     <Compile Include="HSSF\UserModel\HSSFEvaluationWorkbook.cs" />
@@ -556,7 +558,9 @@
       <DependentUpon>Resource1.resx</DependentUpon>
     </Compile>
     <Compile Include="SS\Formula\Atp\AnalysisToolPak.cs" />
+    <Compile Include="SS\Formula\Atp\MRound.cs" />
     <Compile Include="SS\Formula\Atp\ParityFunction.cs" />
+    <Compile Include="SS\Formula\Atp\RandBetween.cs" />
     <Compile Include="SS\Formula\Atp\YearFrac.cs" />
     <Compile Include="SS\Formula\Atp\YearFracCalculator.cs" />
     <Compile Include="SS\Formula\CellCacheEntry.cs" />
@@ -621,6 +625,7 @@
     <Compile Include="SS\Formula\FormulaRenderingWorkbook.cs" />
     <Compile Include="SS\Formula\FormulaType.cs" />
     <Compile Include="SS\Formula\FormulaUsedBlankCellSet.cs" />
+    <Compile Include="SS\Formula\Functions\Address.cs" />
     <Compile Include="SS\Formula\Functions\AggregateFunction.cs" />
     <Compile Include="SS\Formula\Functions\Boolean\And.cs" />
     <Compile Include="SS\Formula\Functions\Boolean\BooleanFunction.cs" />
@@ -636,6 +641,7 @@
     <Compile Include="SS\Formula\Functions\Combin.cs" />
     <Compile Include="SS\Formula\Functions\Count.cs" />
     <Compile Include="SS\Formula\Functions\Counta.cs" />
+    <Compile Include="SS\Formula\Functions\Countblank.cs" />
     <Compile Include="SS\Formula\Functions\Countif.cs" />
     <Compile Include="SS\Formula\Functions\CountUtils.cs" />
     <Compile Include="SS\Formula\Functions\DateFunc.cs" />
@@ -666,6 +672,7 @@
     <Compile Include="SS\Formula\Functions\Index.cs" />
     <Compile Include="SS\Formula\Functions\Indirect.cs" />
     <Compile Include="SS\Formula\Functions\Int.cs" />
+    <Compile Include="SS\Formula\Functions\Irr.cs" />
     <Compile Include="SS\Formula\Functions\Logical\Isblank.cs" />
     <Compile Include="SS\Formula\Functions\Logical\Iserror.cs" />
     <Compile Include="SS\Formula\Functions\Logical\Islogical.cs" />
@@ -685,6 +692,7 @@
     <Compile Include="SS\Formula\Functions\MultiOperandNumericFunction.cs" />
     <Compile Include="SS\Formula\Functions\Na.cs" />
     <Compile Include="SS\Formula\Functions\NotImplementedFunction.cs" />
+    <Compile Include="SS\Formula\Functions\Now.cs" />
     <Compile Include="SS\Formula\Functions\Nper.cs" />
     <Compile Include="SS\Formula\Functions\Npv.cs" />
     <Compile Include="SS\Formula\Functions\Numeric\Abs.cs" />
@@ -702,6 +710,7 @@
     <Compile Include="SS\Formula\Functions\Numeric\Log10.cs" />
     <Compile Include="SS\Formula\Functions\Numeric\NumericFunction.cs" />
     <Compile Include="SS\Formula\Functions\Numeric\Pi.cs" />
+    <Compile Include="SS\Formula\Functions\Numeric\Poisson.cs" />
     <Compile Include="SS\Formula\Functions\Numeric\Rand.cs" />
     <Compile Include="SS\Formula\Functions\Numeric\Round.cs" />
     <Compile Include="SS\Formula\Functions\Numeric\Rounddown.cs" />
@@ -711,6 +720,7 @@
     <Compile Include="SS\Formula\Functions\Numeric\Sqrt.cs" />
     <Compile Include="SS\Formula\Functions\Numeric\Tan.cs" />
     <Compile Include="SS\Formula\Functions\Numeric\Tanh.cs" />
+    <Compile Include="SS\Formula\Functions\Numeric\Trunc.cs" />
     <Compile Include="SS\Formula\Functions\Odd.cs" />
     <Compile Include="SS\Formula\Functions\Offset.cs" />
     <Compile Include="SS\Formula\Functions\Pmt.cs" />
@@ -721,11 +731,15 @@
     <Compile Include="SS\Formula\Functions\Rows.cs" />
     <Compile Include="SS\Formula\Functions\Sign.cs" />
     <Compile Include="SS\Formula\Functions\StatsLib.cs" />
+    <Compile Include="SS\Formula\Functions\Subtotal.cs" />
+    <Compile Include="SS\Formula\Functions\Sumif.cs" />
     <Compile Include="SS\Formula\Functions\Sumproduct.cs" />
     <Compile Include="SS\Formula\Functions\Sumx2my2.cs" />
     <Compile Include="SS\Formula\Functions\Sumx2py2.cs" />
     <Compile Include="SS\Formula\Functions\Sumxmy2.cs" />
     <Compile Include="SS\Formula\Functions\T.cs" />
+    <Compile Include="SS\Formula\Functions\Text\CHAR.cs" />
+    <Compile Include="SS\Formula\Functions\Text\Clean.cs" />
     <Compile Include="SS\Formula\Functions\Text\Concatenate.cs" />
     <Compile Include="SS\Formula\Functions\Text\Exact.cs" />
     <Compile Include="SS\Formula\Functions\Text\LeftRight.cs" />
@@ -739,6 +753,7 @@
     <Compile Include="SS\Formula\Functions\Text\TextFunction.cs" />
     <Compile Include="SS\Formula\Functions\Text\Trim.cs" />
     <Compile Include="SS\Formula\Functions\Text\Upper.cs" />
+    <Compile Include="SS\Formula\Functions\TimeFunc.cs" />
     <Compile Include="SS\Formula\Functions\Today.cs" />
     <Compile Include="SS\Formula\Functions\Value.cs" />
     <Compile Include="SS\Formula\Functions\Var1or2ArgFunction.cs" />
@@ -831,17 +846,44 @@
     <Compile Include="SS\Formula\WorkbookDependentFormula.cs" />
     <Compile Include="SS\Formula\WorkbookEvaluator.cs" />
     <Compile Include="SS\SpreadsheetVersion.cs" />
+    <Compile Include="SS\UserModel\AutoFilter.cs" />
+    <Compile Include="SS\UserModel\BorderFormatting.cs" />
     <Compile Include="SS\UserModel\BorderStyle.cs" />
+    <Compile Include="SS\UserModel\BuiltinFormats.cs" />
     <Compile Include="SS\UserModel\Cell.cs" />
     <Compile Include="SS\UserModel\CellRange.cs" />
     <Compile Include="SS\UserModel\CellStyle.cs" />
     <Compile Include="SS\UserModel\CellValue.cs" />
+    <Compile Include="SS\UserModel\Chart.cs" />
+    <Compile Include="SS\UserModel\Chart\AxisCrossBetween.cs" />
+    <Compile Include="SS\UserModel\Chart\AxisCrosses.cs" />
+    <Compile Include="SS\UserModel\Chart\AxisOrientation.cs" />
+    <Compile Include="SS\UserModel\Chart\AxisPosition.cs" />
+    <Compile Include="SS\UserModel\Chart\ChartAxis.cs" />
+    <Compile Include="SS\UserModel\Chart\ChartAxisFactory.cs" />
+    <Compile Include="SS\UserModel\Chart\ChartData.cs" />
+    <Compile Include="SS\UserModel\Chart\ChartDataFactory.cs" />
+    <Compile Include="SS\UserModel\Chart\ChartLegend.cs" />
+    <Compile Include="SS\UserModel\Chart\LayoutMode.cs" />
+    <Compile Include="SS\UserModel\Chart\LayoutTarget.cs" />
+    <Compile Include="SS\UserModel\Chart\LegendPosition.cs" />
+    <Compile Include="SS\UserModel\Chart\ManualLayout.cs" />
+    <Compile Include="SS\UserModel\Chart\ManuallyPositionable.cs" />
+    <Compile Include="SS\UserModel\Chart\ScatterChartData.cs" />
+    <Compile Include="SS\UserModel\Chart\ScatterChartSerie.cs" />
+    <Compile Include="SS\UserModel\Chart\ValueAxis.cs" />
     <Compile Include="SS\UserModel\ClientAnchor.cs" />
     <Compile Include="SS\UserModel\Color.cs" />
     <Compile Include="SS\UserModel\Comment.cs" />
+    <Compile Include="SS\UserModel\ComparisonOperator.cs" />
+    <Compile Include="SS\UserModel\ConditionalFormatting.cs" />
+    <Compile Include="SS\UserModel\ConditionalFormattingRule.cs" />
     <Compile Include="SS\UserModel\CreationHelper.cs" />
     <Compile Include="SS\UserModel\DataFormat.cs" />
     <Compile Include="SS\UserModel\DataFormatter.cs" />
+    <Compile Include="SS\UserModel\DataValidation.cs" />
+    <Compile Include="SS\UserModel\DataValidationConstraint.cs" />
+    <Compile Include="SS\UserModel\DataValidationHelper.cs" />
     <Compile Include="SS\UserModel\DateUtil.cs" />
     <Compile Include="SS\UserModel\Drawing.cs" />
     <Compile Include="SS\UserModel\ErrorConstants.cs" />
@@ -849,6 +891,7 @@
     <Compile Include="SS\UserModel\Font.cs" />
     <Compile Include="SS\UserModel\FontCharset.cs" />
     <Compile Include="SS\UserModel\FontFamily.cs" />
+    <Compile Include="SS\UserModel\FontFormatting.cs" />
     <Compile Include="SS\UserModel\FontScheme.cs" />
     <Compile Include="SS\UserModel\FontUnderline.cs" />
     <Compile Include="SS\UserModel\Footer.cs" />
@@ -863,6 +906,7 @@
     <Compile Include="SS\UserModel\Name.cs" />
     <Compile Include="SS\UserModel\PageOrder.cs" />
     <Compile Include="SS\UserModel\PaperSize.cs" />
+    <Compile Include="SS\UserModel\PatternFormatting.cs" />
     <Compile Include="SS\UserModel\Picture.cs" />
     <Compile Include="SS\UserModel\PictureData.cs" />
     <Compile Include="SS\UserModel\PrintCellComments.cs" />
@@ -873,6 +917,7 @@
     <Compile Include="SS\UserModel\Shape.cs" />
     <Compile Include="SS\UserModel\ShapeTypes.cs" />
     <Compile Include="SS\UserModel\Sheet.cs" />
+    <Compile Include="SS\UserModel\SheetConditionalFormatting.cs" />
     <Compile Include="SS\UserModel\Textbox.cs" />
     <Compile Include="SS\UserModel\VerticalAlignment.cs" />
     <Compile Include="SS\UserModel\Workbook.cs" />
@@ -882,6 +927,11 @@
     <Compile Include="SS\Util\CellRangeAddressBase.cs" />
     <Compile Include="SS\Util\CellRangeAddressList.cs" />
     <Compile Include="SS\Util\CellReference.cs" />
+    <Compile Include="SS\Util\CellUtil.cs" />
+    <Compile Include="SS\Util\Cellwalk\CellHandler.cs" />
+    <Compile Include="SS\Util\Cellwalk\CellWalk.cs" />
+    <Compile Include="SS\Util\Cellwalk\CellWalkContext.cs" />
+    <Compile Include="SS\Util\DataMarker.cs" />
     <Compile Include="SS\Util\ExpandedDouble.cs" />
     <Compile Include="SS\Util\Format.cs" />
     <Compile Include="SS\Util\IEEEDouble.cs" />
@@ -893,8 +943,12 @@
     <Compile Include="SS\Util\NumberToTextConverter.cs" />
     <Compile Include="SS\Util\PaneInformation.cs" />
     <Compile Include="SS\Util\Region.cs" />
+    <Compile Include="SS\Util\RegionUtil.cs" />
     <Compile Include="SS\Util\SheetBuilder.cs" />
     <Compile Include="SS\Util\SheetReferences.cs" />
+    <Compile Include="SS\Util\SheetUtil.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="SS\Util\SSCellRange.cs" />
     <Compile Include="SS\Util\WorkbookUtil.cs" />
     <Compile Include="Util\Arrays.cs" />

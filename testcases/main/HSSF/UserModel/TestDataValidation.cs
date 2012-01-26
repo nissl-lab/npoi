@@ -60,6 +60,7 @@ namespace TestCases.HSSF.UserModel
                 throw new RuntimeException(e);
             }
             byte[] generatedContent = baos.ToArray();
+#if !HIDE_UNREACHABLE_CODE
             bool isSame;
             if (false)
             {
@@ -103,7 +104,7 @@ namespace TestCases.HSSF.UserModel
             Console.WriteLine("The generated file has been saved to '" + tempDir + "' for manual inspection.");
 
             Assert.Fail("Generated file differs from proof copy.  See sysout comments for details on how to fix.");
-
+#endif
         }
 
         private static bool CompareStreams(Stream isA, byte[] generatedContent)
@@ -175,6 +176,7 @@ namespace TestCases.HSSF.UserModel
 
             byte[] wbData = baos.ToArray();
 
+#if !HIDE_UNREACHABLE_CODE
             if (false)
             { // TODO (Jul 2008) fix EventRecordFactory to process unknown records, (and DV records for that matter)
 
@@ -196,6 +198,7 @@ namespace TestCases.HSSF.UserModel
                 }
             }
             // else verify record ordering by navigating the raw bytes
+#endif
 
             byte[] dvHeaderRecStart = { (byte)0xB2, 0x01, 0x12, 0x00, };
             int dvHeaderOffset = FindIndex(wbData, dvHeaderRecStart);

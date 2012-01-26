@@ -40,6 +40,8 @@ namespace TestCases.SS.Formula.Atp
         [TestMethod]
         public void TestEvaluate()
         {
+            System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US"); 
+            
             HSSFWorkbook wb = new HSSFWorkbook();
             ISheet sh = wb.CreateSheet();
             ICell cell1 = sh.CreateRow(0).CreateCell(0);

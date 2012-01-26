@@ -428,6 +428,7 @@ namespace TestCases.SS.UserModel
         [TestMethod]
         public void TestUnicodeInAll()
         {
+            System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
             IWorkbook wb = _testDataProvider.CreateWorkbook();
             CreationHelper factory = wb.GetCreationHelper(/*getter*/);
             //Create a unicode dataformat (Contains euro symbol)

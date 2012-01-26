@@ -191,7 +191,6 @@
     </Compile>
     <Compile Include="HSSF\HSSFTestDataSamples.cs" />
     <Compile Include="HSSF\Record\CF\TestCellRange.cs" />
-    <Compile Include="HSSF\Record\Constant\TestConstantValueParser.cs" />
     <Compile Include="HSSF\Record\TestcaseRecordInputStream.cs" />
     <Compile Include="HSSF\Util\TestAreaReference.cs" />
     <Compile Include="HSSF\Util\TestCellReference.cs" />
@@ -269,27 +268,6 @@
     <Compile Include="HSSF\Model\TestSheetAdditional.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="HSSF\Record\Formula\Functions\EvalFactory.cs" />
-    <Compile Include="HSSF\Record\Formula\Functions\NumericFunctionInvoker.cs" />
-    <Compile Include="HSSF\Record\Formula\Functions\TestAverage.cs" />
-    <Compile Include="HSSF\Record\Formula\Functions\TestCountFuncs.cs" />
-    <Compile Include="HSSF\Record\Formula\Functions\TestDate.cs" />
-    <Compile Include="HSSF\Record\Formula\Functions\TestFinanceLib.cs" />
-    <Compile Include="HSSF\Record\Formula\Functions\TestIndex.cs" />
-    <Compile Include="HSSF\Record\Formula\Functions\TestIsBlank.cs" />
-    <Compile Include="HSSF\Record\Formula\Functions\TestLen.cs" />
-    <Compile Include="HSSF\Record\Formula\Functions\TestLookupFunctionsFromSpreadsheet.cs" />
-    <Compile Include="HSSF\Record\Formula\Functions\TestMatch.cs" />
-    <Compile Include="HSSF\Record\Formula\Functions\TestMid.cs" />
-    <Compile Include="HSSF\Record\Formula\Functions\TestOffset.cs" />
-    <Compile Include="HSSF\Record\Formula\Functions\TestPmt.cs" />
-    <Compile Include="HSSF\Record\Formula\Functions\TestRoundFuncs.cs" />
-    <Compile Include="HSSF\Record\Formula\Functions\TestRowCol.cs" />
-    <Compile Include="HSSF\Record\Formula\Functions\TestStatsLib.cs" />
-    <Compile Include="HSSF\Record\Formula\Functions\TestSumproduct.cs" />
-    <Compile Include="HSSF\Record\Formula\Functions\TestTFunc.cs" />
-    <Compile Include="HSSF\Record\Formula\Functions\TestTrim.cs" />
-    <Compile Include="HSSF\Record\Formula\Functions\TestXYNumericFunction.cs" />
     <Compile Include="HSSF\Record\Chart\TestAreaFormatRecord.cs" />
     <Compile Include="HSSF\Record\Chart\TestAreaRecord.cs" />
     <Compile Include="HSSF\Record\Chart\TestAxisLineFormatRecord.cs" />
@@ -382,7 +360,6 @@
     <Compile Include="HSSF\UserModel\TestBug43093.cs" />
     <Compile Include="HSSF\UserModel\TestCellStyle.cs" />
     <Compile Include="HSSF\UserModel\TestCloneSheet.cs" />
-    <Compile Include="HSSF\UserModel\TestDataValidation.cs" />
     <Compile Include="HSSF\UserModel\TestFontDetails.cs" />
     <Compile Include="HSSF\UserModel\TestFormulaEvaluatorDocs.cs" />
     <Compile Include="HSSF\UserModel\TestHSSFCell.cs" />
@@ -436,7 +413,6 @@
     <Compile Include="HSSF\EventUserModel\TestHSSFEventFactory.cs" />
     <Compile Include="HSSF\EventUserModel\TestMissingRecordAwareHSSFListener.cs" />
     <Compile Include="HSSF\Extractor\TestExcelExtractor.cs" />
-    <Compile Include="HSSF\Record\Formula\Functions\TestIndirect.cs" />
     <Compile Include="HSSF\UserModel\SanityChecker.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -449,22 +425,24 @@
   <ItemGroup>
     <Compile Include="DDF\TestEscherProperty.cs" />
     <Compile Include="Exceptions\ComparisonFailure.cs" />
+    <Compile Include="Exceptions\RuntimeException.cs" />
     <Compile Include="HSSF\HSSFITestDataProvider.cs" />
     <Compile Include="HSSF\Model\TestLinkTable.cs" />
     <Compile Include="HSSF\Model\TestRowBlocksReader.cs" />
     <Compile Include="HSSF\Record\Aggregates\TestPageSettingsBlock.cs" />
-    <Compile Include="HSSF\Record\Formula\Functions\TestNper.cs" />
-    <Compile Include="HSSF\Record\Formula\Functions\TestValue.cs" />
     <Compile Include="HSSF\Record\TestBoolErrRecord.cs" />
     <Compile Include="HSSF\Record\TestFontRecord.cs" />
     <Compile Include="HSSF\Record\TestNameCommentRecord.cs" />
     <Compile Include="HSSF\Record\TestTextObjectBaseRecord.cs" />
     <Compile Include="HSSF\Record\TestWriteAccessRecord.cs" />
+    <Compile Include="HSSF\UserModel\TestDataValidation.cs" />
     <Compile Include="HSSF\UserModel\TestHSSFFont.cs" />
     <Compile Include="HSSF\UserModel\TestHSSFDataFormat.cs" />
     <Compile Include="HSSF\UserModel\TestHSSFSheetShiftRows.cs" />
     <Compile Include="HSSF\UserModel\TestHSSFName.cs" />
     <Compile Include="POIDataSamples.cs" />
+    <Compile Include="SS\Formula\Atp\TestMRound.cs" />
+    <Compile Include="SS\Formula\Atp\TestRandBetween.cs" />
     <Compile Include="SS\Formula\Atp\TestYearFracCalculator.cs" />
     <Compile Include="SS\Formula\Atp\TestYearFracCalculatorFromSpreadsheet.cs" />
     <Compile Include="SS\Formula\Constant\TestConstantValueParser.cs" />
@@ -488,6 +466,62 @@
     <Compile Include="SS\Formula\Eval\TestRangeEval.cs" />
     <Compile Include="SS\Formula\Eval\TestUnaryPlusEval.cs" />
     <Compile Include="SS\Formula\Functions\AbstractNumericTestCase.cs" />
+    <Compile Include="SS\Formula\Functions\EvalFactory.cs" />
+    <Compile Include="SS\Formula\Functions\NumericFunctionInvoker.cs" />
+    <Compile Include="SS\Formula\Functions\TestAddress.cs" />
+    <Compile Include="SS\Formula\Functions\TestAverage.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="SS\Formula\Functions\TestCalendarFieldFunction.cs" />
+    <Compile Include="SS\Formula\Functions\TestClean.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="SS\Formula\Functions\TestCountFuncs.cs" />
+    <Compile Include="SS\Formula\Functions\TestDate.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="SS\Formula\Functions\TestDays360.cs" />
+    <Compile Include="SS\Formula\Functions\TestFinanceLib.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="SS\Formula\Functions\TestFind.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="SS\Formula\Functions\TestIndex.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="SS\Formula\Functions\TestIndexFunctionFromSpreadsheet.cs" />
+    <Compile Include="SS\Formula\Functions\TestIndirect.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="SS\Formula\Functions\TestIrr.cs" />
+    <Compile Include="SS\Formula\Functions\TestIsBlank.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="SS\Formula\Functions\TestLeftRight.cs" />
+    <Compile Include="SS\Formula\Functions\TestLen.cs" />
+    <Compile Include="SS\Formula\Functions\TestLookupFunctionsFromSpreadsheet.cs" />
+    <Compile Include="SS\Formula\Functions\TestMatch.cs" />
+    <Compile Include="SS\Formula\Functions\TestMathX.cs" />
+    <Compile Include="SS\Formula\Functions\TestMid.cs" />
+    <Compile Include="SS\Formula\Functions\TestNper.cs" />
+    <Compile Include="SS\Formula\Functions\TestNpv.cs" />
+    <Compile Include="SS\Formula\Functions\TestOffset.cs" />
+    <Compile Include="SS\Formula\Functions\TestPmt.cs" />
+    <Compile Include="SS\Formula\Functions\TestPoisson.cs" />
+    <Compile Include="SS\Formula\Functions\TestRoundFuncs.cs" />
+    <Compile Include="SS\Formula\Functions\TestRowCol.cs" />
+    <Compile Include="SS\Formula\Functions\TestStatsLib.cs" />
+    <Compile Include="SS\Formula\Functions\TestSubtotal.cs" />
+    <Compile Include="SS\Formula\Functions\TestSumif.cs" />
+    <Compile Include="SS\Formula\Functions\TestSumproduct.cs" />
+    <Compile Include="SS\Formula\Functions\TestText.cs" />
+    <Compile Include="SS\Formula\Functions\TestTFunc.cs" />
+    <Compile Include="SS\Formula\Functions\TestTime.cs" />
+    <Compile Include="SS\Formula\Functions\TestTrim.cs" />
+    <Compile Include="SS\Formula\Functions\TestTrunc.cs" />
+    <Compile Include="SS\Formula\Functions\TestValue.cs" />
+    <Compile Include="SS\Formula\Functions\TestXYNumericFunction.cs" />
     <Compile Include="SS\Formula\Function\TestFunctionMetadataRegistry.cs" />
     <Compile Include="SS\Formula\Function\TestParseMissingBuiltInFuncs.cs" />
     <Compile Include="SS\Formula\Function\TestReadMissingBuiltInFuncs.cs" />
@@ -519,18 +553,35 @@
     </Compile>
     <Compile Include="SS\ITestDataProvider.cs" />
     <Compile Include="SS\TestSpreadsheetVersion.cs" />
+    <Compile Include="SS\UserModel\BaseTestBugzillaIssues.cs" />
     <Compile Include="SS\UserModel\BaseTestCell.cs" />
     <Compile Include="SS\UserModel\BaseTestCellComment.cs" />
+    <Compile Include="SS\UserModel\BaseTestConditionalFormatting.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="SS\UserModel\BaseTestDataFormat.cs" />
+    <Compile Include="SS\UserModel\BaseTestDataValidation.cs" />
     <Compile Include="SS\UserModel\BaseTestFont.cs" />
+    <Compile Include="SS\UserModel\BaseTestFormulaEvaluator.cs" />
     <Compile Include="SS\UserModel\BaseTestHyperlink.cs" />
-    <Compile Include="SS\UserModel\BaseTestNamedRange.cs" />
+    <Compile Include="SS\UserModel\BaseTestNamedRange.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="SS\UserModel\BaseTestPicture.cs" />
-    <Compile Include="SS\UserModel\BaseTestRow.cs" />
-    <Compile Include="SS\UserModel\BaseTestSheet.cs" />
+    <Compile Include="SS\UserModel\BaseTestRow.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="SS\UserModel\BaseTestSheet.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="SS\UserModel\BaseTestSheetAutosizeColumn.java.cs" />
     <Compile Include="SS\UserModel\BaseTestSheetHiding.cs" />
-    <Compile Include="SS\UserModel\BaseTestSheetShiftRows.cs" />
+    <Compile Include="SS\UserModel\BaseTestSheetShiftRows.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="SS\UserModel\BaseTestSheetUpdateArrayFormulas.cs" />
     <Compile Include="SS\UserModel\BaseTestWorkbook.cs" />
+    <Compile Include="SS\Util\Cellwalk\TestCellWalk.cs" />
     <Compile Include="SS\Util\NumberComparingSpreadsheetGenerator.cs" />
     <Compile Include="SS\Util\NumberComparisonExamples.cs" />
     <Compile Include="SS\Util\NumberRenderingSpreadsheetGenerator.cs" />

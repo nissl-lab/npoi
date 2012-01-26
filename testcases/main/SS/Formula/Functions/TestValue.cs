@@ -53,6 +53,7 @@ namespace TestCases.SS.Formula.Functions
         [TestMethod]
         public void TestBasic()
         {
+            System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
 
             ConfirmValue("100", 100);
             ConfirmValue("-2.3", -2.3);
