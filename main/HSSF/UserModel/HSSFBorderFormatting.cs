@@ -20,6 +20,7 @@ namespace NPOI.HSSF.UserModel
     using System;
     using NPOI.HSSF.Record;
     using NPOI.HSSF.Record.CF;
+    using NPOI.SS.UserModel;
 
     /**
      * High level representation for Border Formatting component
@@ -28,7 +29,7 @@ namespace NPOI.HSSF.UserModel
      * @author Dmitriy Kumshayev
      *
      */
-    public class HSSFBorderFormatting
+    public class HSSFBorderFormatting : IBorderFormatting
     {
         private CFRuleRecord cfRuleRecord;
         private BorderFormatting borderFormatting;

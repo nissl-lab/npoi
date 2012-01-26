@@ -626,6 +626,19 @@ namespace NPOI.SS.UserModel
 	 * @param dataValidation The Data validation object settings
 	 */
         void AddValidationData(IDataValidation dataValidation);
+        /**
+     * Enable filtering for a range of cells
+     * 
+     * @param range the range of cells to filter
+     */
+        IAutoFilter SetAutoFilter(CellRangeAddress range);
+
+        /**
+         * The 'Conditional Formatting' facet for this <tt>Sheet</tt>
+         *
+         * @return  conditional formatting rule for this sheet
+         */
+        ISheetConditionalFormatting SheetConditionalFormatting { get; }
     }
 
 }

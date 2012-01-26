@@ -29,7 +29,7 @@ namespace NPOI.HSSF.UserModel
      * @author Dmitriy Kumshayev
      *
      */
-    public class HSSFFontFormatting
+    public class HSSFFontFormatting : IFontFormatting
     {
 
         private FontFormatting fontFormatting;

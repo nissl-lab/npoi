@@ -24,25 +24,31 @@ namespace NPOI.HSSF.UserModel
     using NPOI.HSSF.Model;
     using NPOI.HSSF.Record.Aggregates;
     using NPOI.SS.Util;
+    using NPOI.SS.UserModel;
 
 
     /// <summary>
     /// The Conditional Formatting facet of HSSFSheet
     /// @author Dmitriy Kumshayev
     /// </summary>
-    public class HSSFSheetConditionalFormatting
+    public class HSSFSheetConditionalFormatting : ISheetConditionalFormatting
     {
 
-        private HSSFWorkbook _workbook;
+        //private HSSFWorkbook _workbook;
+        private HSSFSheet _sheet;
         private ConditionalFormattingTable _conditionalFormattingTable;
 
         /* package */
-        public HSSFSheetConditionalFormatting(HSSFWorkbook workbook, InternalSheet sheet)
+        //public HSSFSheetConditionalFormatting(HSSFWorkbook workbook, InternalSheet sheet)
+        //{
+        //    _workbook = workbook;
+        //    _conditionalFormattingTable = sheet.ConditionalFormattingTable;
+        //}
+        public HSSFSheetConditionalFormatting(HSSFSheet sheet)
         {
-            _workbook = workbook;
-            _conditionalFormattingTable = sheet.ConditionalFormattingTable;
+            _sheet = sheet;
+            _conditionalFormattingTable = sheet.Sheet.ConditionalFormattingTable;
         }
-
         /// <summary>
         /// A factory method allowing to Create a conditional formatting rule
         /// with a cell comparison operator
@@ -53,14 +59,14 @@ namespace NPOI.HSSF.UserModel
         /// <param name="formula2">second formula (only used with HSSFConditionalFormattingRule#COMPARISON_OPERATOR_BETWEEN 
         /// and HSSFConditionalFormattingRule#COMPARISON_OPERATOR_NOT_BETWEEN operations)</param>
         /// <returns></returns>
-        public HSSFConditionalFormattingRule CreateConditionalFormattingRule(
-                ComparisonOperator comparisonOperation,
+        public IConditionalFormattingRule CreateConditionalFormattingRule(
+                byte comparisonOperation,
                 String formula1,
                 String formula2)
         {
 
-            HSSFWorkbook wb = _workbook;
-            CFRuleRecord rr = CFRuleRecord.Create(wb, comparisonOperation, formula1, formula2);
+            HSSFWorkbook wb = (HSSFWorkbook)_sheet.Workbook;
+            CFRuleRecord rr = CFRuleRecord.Create(wb, (NPOI.HSSF.Record.ComparisonOperator)  comparisonOperation, formula1, formula2);
             return new HSSFConditionalFormattingRule(wb, rr);
         }
 
@@ -71,13 +77,20 @@ namespace NPOI.HSSF.UserModel
         /// </summary>
         /// <param name="formula">formula for the valued, Compared with the cell</param>
         /// <returns></returns>
-        public HSSFConditionalFormattingRule CreateConditionalFormattingRule(String formula)
+        public IConditionalFormattingRule CreateConditionalFormattingRule(String formula)
         {
-            HSSFWorkbook wb = _workbook;
-            CFRuleRecord rr = CFRuleRecord.Create(wb, formula);
+            HSSFWorkbook wb = (HSSFWorkbook)_sheet.Workbook;
+            CFRuleRecord rr = CFRuleRecord.Create(_sheet, formula);
             return new HSSFConditionalFormattingRule(wb, rr);
         }
-
+        public IConditionalFormattingRule CreateConditionalFormattingRule(
+            byte comparisonOperation,
+            String formula1)
+        {
+            HSSFWorkbook wb = (HSSFWorkbook)_sheet.Workbook;
+            CFRuleRecord rr = CFRuleRecord.Create(_sheet, comparisonOperation, formula1, null);
+            return new HSSFConditionalFormattingRule(wb, rr);
+        }
         /// <summary>
         /// Adds a copy of HSSFConditionalFormatting object to the sheet
         /// This method could be used to copy HSSFConditionalFormatting object
@@ -89,9 +102,9 @@ namespace NPOI.HSSF.UserModel
         /// HSSFConditionalFormatting cf = sheet.GetConditionalFormattingAt(index);
         /// newSheet.AddConditionalFormatting(cf);
         /// </example>
-        public int AddConditionalFormatting(HSSFConditionalFormatting cf)
+        public int AddConditionalFormatting(IConditionalFormatting cf)
         {
-            CFRecordsAggregate cfraClone = cf.CFRecordsAggregate.CloneCFAggregate();
+            CFRecordsAggregate cfraClone = ((HSSFConditionalFormatting)cf).CFRecordsAggregate.CloneCFAggregate();
 
             return _conditionalFormattingTable.Add(cfraClone);
         }
@@ -102,7 +115,7 @@ namespace NPOI.HSSF.UserModel
         /// <param name="regions">list of rectangular regions to apply conditional formatting rules</param>
         /// <param name="cfRules">Set of up to three conditional formatting rules</param>
         /// <returns>index of the newly Created Conditional Formatting object</returns>
-        public int AddConditionalFormatting(CellRangeAddress[] regions, HSSFConditionalFormattingRule[] cfRules)
+        public int AddConditionalFormatting(CellRangeAddress[] regions, IConditionalFormattingRule[] cfRules)
         {
             if (regions == null)
             {
@@ -124,23 +137,16 @@ namespace NPOI.HSSF.UserModel
             CFRuleRecord[] rules = new CFRuleRecord[cfRules.Length];
             for (int i = 0; i != cfRules.Length; i++)
             {
-                rules[i] = cfRules[i].CfRuleRecord;
+                rules[i] = ((HSSFConditionalFormattingRule)cfRules[i]).CfRuleRecord;
             }
             CFRecordsAggregate cfra = new CFRecordsAggregate(regions, rules);
             return _conditionalFormattingTable.Add(cfra);
         }
-
-        /// <summary>
-        /// Adds the conditional formatting.
-        /// </summary>
-        /// <param name="regions">The regions.</param>
-        /// <param name="rule1">The rule1.</param>
-        /// <returns></returns>
         public int AddConditionalFormatting(CellRangeAddress[] regions,
-                HSSFConditionalFormattingRule rule1)
+            HSSFConditionalFormattingRule rule1)
         {
             return AddConditionalFormatting(regions,
-                    new HSSFConditionalFormattingRule[]
+                    rule1 == null ? null : new HSSFConditionalFormattingRule[]
 				{
 					rule1
 				});
@@ -151,16 +157,28 @@ namespace NPOI.HSSF.UserModel
         /// </summary>
         /// <param name="regions">The regions.</param>
         /// <param name="rule1">The rule1.</param>
+        /// <returns></returns>
+        public int AddConditionalFormatting(CellRangeAddress[] regions,
+                IConditionalFormattingRule rule1)
+        {
+            return AddConditionalFormatting(regions, (HSSFConditionalFormattingRule)rule1);
+        }
+
+        /// <summary>
+        /// Adds the conditional formatting.
+        /// </summary>
+        /// <param name="regions">The regions.</param>
+        /// <param name="rule1">The rule1.</param>
         /// <param name="rule2">The rule2.</param>
         /// <returns></returns>
         public int AddConditionalFormatting(CellRangeAddress[] regions,
-                HSSFConditionalFormattingRule rule1,
-                HSSFConditionalFormattingRule rule2)
+                IConditionalFormattingRule rule1,
+                IConditionalFormattingRule rule2)
         {
             return AddConditionalFormatting(regions,
                     new HSSFConditionalFormattingRule[]
 				{
-						rule1, rule2
+						(HSSFConditionalFormattingRule)rule1, (HSSFConditionalFormattingRule)rule2
 				});
         }
 
@@ -171,14 +189,14 @@ namespace NPOI.HSSF.UserModel
         /// </summary>
         /// <param name="index">Conditional Formatting object</param>
         /// <returns></returns>
-        public HSSFConditionalFormatting GetConditionalFormattingAt(int index)
+        public IConditionalFormatting GetConditionalFormattingAt(int index)
         {
             CFRecordsAggregate cf = _conditionalFormattingTable.Get(index);
             if (cf == null)
             {
                 return null;
             }
-            return new HSSFConditionalFormatting(_workbook, cf);
+            return new HSSFConditionalFormatting((HSSFWorkbook)_sheet.Workbook, cf);
         }
 
         /// <summary>

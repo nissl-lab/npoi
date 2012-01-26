@@ -23,6 +23,7 @@ namespace NPOI.HSSF.UserModel
     using NPOI.HSSF.Record.CF;
     using NPOI.HSSF.Record.Aggregates;
     using NPOI.SS.Util;
+    using NPOI.SS.UserModel;
 
     /// <summary>
     /// HSSFConditionalFormatting class encapsulates all Settings of Conditional Formatting.
@@ -55,7 +56,7 @@ namespace NPOI.HSSF.UserModel
     /// sheet.AddConditionalFormatting(regions, rule);
     /// </example>
     /// <remarks>@author Dmitriy Kumshayev</remarks>
-    public class HSSFConditionalFormatting
+    public class HSSFConditionalFormatting : IConditionalFormatting
     {
         private HSSFWorkbook _workbook;
         private CFRecordsAggregate cfAggregate;
@@ -118,7 +119,10 @@ namespace NPOI.HSSF.UserModel
         {
             cfAggregate.SetRule(idx, cfRule.CfRuleRecord);
         }
-
+        public void SetRule(int idx, IConditionalFormattingRule cfRule)
+        {
+            SetRule(idx, (HSSFConditionalFormattingRule)cfRule);
+        }
         /// <summary>
         /// Add a Conditional Formatting rule.
         /// Excel allows to Create up to 3 Conditional Formatting rules.
@@ -128,18 +132,20 @@ namespace NPOI.HSSF.UserModel
         {
             cfAggregate.AddRule(cfRule.CfRuleRecord);
         }
-
+        public void AddRule(IConditionalFormattingRule cfRule)
+        {
+            AddRule((HSSFConditionalFormattingRule)cfRule);
+        }
         /// <summary>
         /// Gets the Conditional Formatting rule at position idx
         /// </summary>
         /// <param name="idx">The index.</param>
         /// <returns></returns>
-        public HSSFConditionalFormattingRule GetRule(int idx)
+        public IConditionalFormattingRule GetRule(int idx)
         {
             CFRuleRecord ruleRecord = cfAggregate.GetRule(idx);
             return new HSSFConditionalFormattingRule(_workbook, ruleRecord);
         }
-
         /// <summary>
         /// Gets the number of Conditional Formatting rules.
         /// </summary>

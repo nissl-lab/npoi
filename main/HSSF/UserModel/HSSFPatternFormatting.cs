@@ -23,12 +23,13 @@ namespace NPOI.HSSF.UserModel
 
     using NPOI.HSSF.Record;
     using NPOI.HSSF.Record.CF;
+    using NPOI.SS.UserModel;
 
     /// <summary>
     /// High level representation for Conditional Formatting Settings
     /// @author Dmitriy Kumshayev
     /// </summary>
-    public class HSSFPatternFormatting
+    public class HSSFPatternFormatting : IPatternFormatting
     {
         /**  No background */
         public static short NO_Fill = PatternFormatting.NO_Fill;

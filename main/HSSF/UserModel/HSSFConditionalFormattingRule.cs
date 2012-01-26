@@ -23,6 +23,7 @@ namespace NPOI.HSSF.UserModel
     using NPOI.HSSF.Record;
     using NPOI.HSSF.Record.CF;
     using NPOI.SS.Formula.PTG;
+    using NPOI.SS.UserModel;
 
     /**
      * 
@@ -33,7 +34,7 @@ namespace NPOI.HSSF.UserModel
      * @author Dmitriy Kumshayev
      */
 
-    public class HSSFConditionalFormattingRule
+    public class HSSFConditionalFormattingRule : IConditionalFormattingRule
     {
         private static byte CELL_COMPARISON = CFRuleRecord.CONDITION_TYPE_CELL_VALUE_IS;
 
@@ -74,7 +75,7 @@ namespace NPOI.HSSF.UserModel
         /**
          * @return - font formatting object  if defined,  <c>null</c> otherwise
          */
-        public HSSFFontFormatting GetFontFormatting()
+        public IFontFormatting GetFontFormatting()
         {
             return GetFontFormatting(false);
         }
@@ -83,7 +84,7 @@ namespace NPOI.HSSF.UserModel
          * otherwise just return existing object.
          * @return - font formatting object, never returns <c>null</c>. 
          */
-        public HSSFFontFormatting CreateFontFormatting()
+        public IFontFormatting CreateFontFormatting()
         {
             return GetFontFormatting(true);
         }
@@ -110,7 +111,7 @@ namespace NPOI.HSSF.UserModel
         /**
          * @return - border formatting object  if defined,  <c>null</c> otherwise
          */
-        public HSSFBorderFormatting GetBorderFormatting()
+        public IBorderFormatting GetBorderFormatting()
         {
             return GetBorderFormatting(false);
         }
@@ -119,7 +120,7 @@ namespace NPOI.HSSF.UserModel
          * otherwise just return existing object.
          * @return - border formatting object, never returns <c>null</c>. 
          */
-        public HSSFBorderFormatting CreateBorderFormatting()
+        public IBorderFormatting CreateBorderFormatting()
         {
             return GetBorderFormatting(true);
         }
@@ -147,7 +148,7 @@ namespace NPOI.HSSF.UserModel
         /**
          * @return - pattern formatting object  if defined, <c>null</c> otherwise
          */
-        public HSSFPatternFormatting GetPatternFormatting()
+        public IPatternFormatting GetPatternFormatting()
         {
             return GetPatternFormatting(false);
         }
@@ -156,9 +157,29 @@ namespace NPOI.HSSF.UserModel
          * otherwise just return existing object.
          * @return - pattern formatting object, never returns <c>null</c>. 
          */
-        public HSSFPatternFormatting CreatePatternFormatting()
+        public IPatternFormatting CreatePatternFormatting()
         {
             return GetPatternFormatting(true);
+        }
+        /**
+	     * @return -  the conditiontype for the cfrule
+	     */
+        public byte ConditionType
+        {
+            get
+            {
+                return cfRuleRecord.ConditionType;
+            }
+        }
+        /**
+	     * @return - the comparisionoperatation for the cfrule
+	     */
+        public byte ComparisonOperation
+        {
+            get
+            {
+                return cfRuleRecord.ComparisonOperation;
+            }
         }
 
         public String Formula1
@@ -179,8 +200,8 @@ namespace NPOI.HSSF.UserModel
                     byte comparisonOperation = cfRuleRecord.ComparisonOperation;
                     switch (comparisonOperation)
                     {
-                        case (byte)ComparisonOperator.BETWEEN:
-                        case (byte)ComparisonOperator.NOT_BETWEEN:
+                        case (byte)NPOI.SS.UserModel.ComparisonOperator.BETWEEN:
+                        case (byte)NPOI.SS.UserModel.ComparisonOperator.NOT_BETWEEN:
                             return ToFormulaString(cfRuleRecord.ParsedExpression2);
                     }
                 }

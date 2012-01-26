@@ -142,8 +142,8 @@ namespace NPOI.HSSF.Record
             :this(conditionType, comparisonOperation)
         {
             
-            field_1_condition_type = CONDITION_TYPE_CELL_VALUE_IS;
-            field_2_comparison_operator = (byte)comparisonOperation;
+            //field_1_condition_type = CONDITION_TYPE_CELL_VALUE_IS;
+            //field_2_comparison_operator = (byte)comparisonOperation;
             field_17_formula1 = FR.Formula.Create(formula1);
             field_18_formula2 = FR.Formula.Create(formula2);
         }
@@ -201,7 +201,22 @@ namespace NPOI.HSSF.Record
             Ptg[] formula2 = ParseFormula(formulaText2, workbook);
             return new CFRuleRecord(CONDITION_TYPE_CELL_VALUE_IS, comparisonOperation, formula1, formula2);
         }
-
+        public static CFRuleRecord Create(HSSFSheet sheet, String formulaText)
+        {
+            Ptg[] formula1 = ParseFormula(formulaText, sheet);
+            return new CFRuleRecord(CONDITION_TYPE_FORMULA, ComparisonOperator.NO_COMPARISON,
+                    formula1, null);
+        }
+        /**
+         * Creates a new comparison operation rule
+         */
+        public static CFRuleRecord Create(HSSFSheet sheet, byte comparisonOperation,
+                String formulaText1, String formulaText2)
+        {
+            Ptg[] formula1 = ParseFormula(formulaText1, sheet);
+            Ptg[] formula2 = ParseFormula(formulaText2, sheet);
+            return new CFRuleRecord(CONDITION_TYPE_CELL_VALUE_IS, (ComparisonOperator)comparisonOperation, formula1, formula2);
+        }
         public CFRuleRecord(RecordInputStream in1)
         {
             field_1_condition_type = (byte)in1.ReadByte();
@@ -555,6 +570,23 @@ namespace NPOI.HSSF.Record
                 return null;
             }
             return HSSFFormulaParser.Parse(formula, workbook);
+        }
+        /**
+	 * TODO - parse conditional format formulas properly i.e. produce tRefN and tAreaN instead of tRef and tArea
+	 * this call will produce the wrong results if the formula contains any cell references
+	 * One approach might be to apply the inverse of SharedFormulaRecord.convertSharedFormulas(Stack, int, int)
+	 * Note - two extra parameters (rowIx & colIx) will be required. They probably come from one of the Region objects.
+	 *
+	 * @return <code>null</code> if <tt>formula</tt> was null.
+	 */
+        private static Ptg[] ParseFormula(String formula, HSSFSheet sheet)
+        {
+            if (formula == null)
+            {
+                return null;
+            }
+            int sheetIndex = sheet.Workbook.GetSheetIndex(sheet);
+            return HSSFFormulaParser.Parse(formula, (HSSFWorkbook)sheet.Workbook, FormulaType.CELL, sheetIndex);
         }
     }
 }

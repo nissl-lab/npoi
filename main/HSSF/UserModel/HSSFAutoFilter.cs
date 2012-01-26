@@ -6,10 +6,11 @@ using NPOI.SS.Formula;
 using NPOI.HSSF.Model;
 using NPOI.HSSF.Record;
 using NPOI.SS.Formula.PTG;
+using NPOI.SS.UserModel;
 
 namespace NPOI.HSSF.UserModel
 {
-    public class HSSFAutoFilter
+    public class HSSFAutoFilter : IAutoFilter
     {
         // fix warning CS0649: Field 'autofilterinfo' is never assigned to, and will always have its default value null
         // AutoFilterInfoRecord autofilterinfo;

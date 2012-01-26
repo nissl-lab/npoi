@@ -2260,11 +2260,11 @@ namespace NPOI.HSSF.UserModel
         /// Gets the sheet conditional formatting.
         /// </summary>
         /// <value>The sheet conditional formatting.</value>
-        public HSSFSheetConditionalFormatting SheetConditionalFormatting
+        public ISheetConditionalFormatting SheetConditionalFormatting
         {
             get
             {
-                return new HSSFSheetConditionalFormatting(_workbook, _sheet);
+                return new HSSFSheetConditionalFormatting(this);
             }
         }
         /// <summary>
@@ -2315,7 +2315,7 @@ namespace NPOI.HSSF.UserModel
             return new HSSFDataValidationHelper(this);
         }
 
-        public HSSFAutoFilter SetAutoFilter(CellRangeAddress range)
+        public IAutoFilter SetAutoFilter(CellRangeAddress range)
         {
 
 
@@ -2352,6 +2352,5 @@ namespace NPOI.HSSF.UserModel
 
             return new HSSFAutoFilter(this);
         }
-
     }
 }

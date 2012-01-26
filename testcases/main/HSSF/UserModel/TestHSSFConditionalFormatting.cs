@@ -40,23 +40,23 @@ namespace TestCases.HSSF.UserModel
             HSSFSheet sheet = (HSSFSheet)workbook.CreateSheet();
             String formula = "7";
 
-            HSSFSheetConditionalFormatting sheetCF = sheet.SheetConditionalFormatting;
+            HSSFSheetConditionalFormatting sheetCF = (HSSFSheetConditionalFormatting)sheet.SheetConditionalFormatting;
 
-            HSSFConditionalFormattingRule rule1 = sheetCF.CreateConditionalFormattingRule(formula);
-            HSSFFontFormatting fontFmt = rule1.CreateFontFormatting();
+            HSSFConditionalFormattingRule rule1 = (HSSFConditionalFormattingRule)sheetCF.CreateConditionalFormattingRule(formula);
+            HSSFFontFormatting fontFmt = (HSSFFontFormatting)rule1.CreateFontFormatting();
             fontFmt.SetFontStyle(true, false);
 
-            HSSFBorderFormatting bordFmt = rule1.CreateBorderFormatting();
+            HSSFBorderFormatting bordFmt = (HSSFBorderFormatting)rule1.CreateBorderFormatting();
             bordFmt.BorderBottom= (short)BorderStyle.THIN;
             bordFmt.BorderTop= (short)BorderStyle.THICK;
             bordFmt.BorderLeft= (short)BorderStyle.DASHED;
             bordFmt.BorderRight= (short)BorderStyle.DOTTED;
 
-            HSSFPatternFormatting patternFmt = rule1.CreatePatternFormatting();
+            HSSFPatternFormatting patternFmt = (HSSFPatternFormatting)rule1.CreatePatternFormatting();
             patternFmt.FillBackgroundColor= (HSSFColor.YELLOW.index);
 
 
-            HSSFConditionalFormattingRule rule2 = sheetCF.CreateConditionalFormattingRule(ComparisonOperator.BETWEEN, "1", "2");
+            HSSFConditionalFormattingRule rule2 = (HSSFConditionalFormattingRule)sheetCF.CreateConditionalFormattingRule(NPOI.SS.UserModel.ComparisonOperator.BETWEEN, "1", "2");
             HSSFConditionalFormattingRule[] cfRules =
 		    {
 			    rule1, rule2
@@ -74,7 +74,7 @@ namespace TestCases.HSSF.UserModel
             Assert.AreEqual(2, sheetCF.NumConditionalFormattings);
             sheetCF.RemoveConditionalFormatting(1);
             Assert.AreEqual(1, sheetCF.NumConditionalFormattings);
-            HSSFConditionalFormatting cf = sheetCF.GetConditionalFormattingAt(0);
+            HSSFConditionalFormatting cf = (HSSFConditionalFormatting)sheetCF.GetConditionalFormattingAt(0);
             Assert.IsNotNull(cf);
 
             regions = cf.GetFormattingRanges();
@@ -88,28 +88,28 @@ namespace TestCases.HSSF.UserModel
 
             Assert.AreEqual(2, cf.NumberOfRules);
 
-            rule1 = cf.GetRule(0);
+            rule1 = (HSSFConditionalFormattingRule)cf.GetRule(0);
             Assert.AreEqual("7", rule1.Formula1);
             Assert.IsNull(rule1.Formula2);
 
-            HSSFFontFormatting r1fp = rule1.GetFontFormatting();
+            HSSFFontFormatting r1fp = (HSSFFontFormatting)rule1.GetFontFormatting();
             Assert.IsNotNull(r1fp);
 
             Assert.IsTrue(r1fp.IsItalic);
             Assert.IsFalse(r1fp.IsBold);
 
-            HSSFBorderFormatting r1bf = rule1.GetBorderFormatting();
+            HSSFBorderFormatting r1bf = (HSSFBorderFormatting)rule1.GetBorderFormatting();
             Assert.IsNotNull(r1bf);
             Assert.AreEqual(BorderFormatting.BORDER_THIN, r1bf.BorderBottom);
             Assert.AreEqual(BorderFormatting.BORDER_THICK, r1bf.BorderTop);
             Assert.AreEqual(BorderFormatting.BORDER_DASHED, r1bf.BorderLeft);
             Assert.AreEqual(BorderFormatting.BORDER_DOTTED, r1bf.BorderRight);
 
-            HSSFPatternFormatting r1pf = rule1.GetPatternFormatting();
+            HSSFPatternFormatting r1pf = (HSSFPatternFormatting)rule1.GetPatternFormatting();
             Assert.IsNotNull(r1pf);
             Assert.AreEqual(HSSFColor.YELLOW.index, r1pf.FillBackgroundColor);
 
-            rule2 = cf.GetRule(1);
+            rule2 = (HSSFConditionalFormattingRule)cf.GetRule(1);
             Assert.AreEqual("2", rule2.Formula2);
             Assert.AreEqual("1", rule2.Formula1);
         }
@@ -121,17 +121,17 @@ namespace TestCases.HSSF.UserModel
             HSSFSheet sheet = (HSSFSheet)wb.CreateSheet();
             String formula = "7";
 
-            HSSFSheetConditionalFormatting sheetCF = sheet.SheetConditionalFormatting;
+            HSSFSheetConditionalFormatting sheetCF = (HSSFSheetConditionalFormatting)sheet.SheetConditionalFormatting;
 
-            HSSFConditionalFormattingRule rule1 = sheetCF.CreateConditionalFormattingRule(formula);
-            HSSFFontFormatting fontFmt = rule1.CreateFontFormatting();
+            HSSFConditionalFormattingRule rule1 = (HSSFConditionalFormattingRule)sheetCF.CreateConditionalFormattingRule(formula);
+            HSSFFontFormatting fontFmt = (HSSFFontFormatting)rule1.CreateFontFormatting();
             fontFmt.SetFontStyle(true, false);
 
-            HSSFPatternFormatting patternFmt = rule1.CreatePatternFormatting();
+            HSSFPatternFormatting patternFmt = (HSSFPatternFormatting)rule1.CreatePatternFormatting();
             patternFmt.FillBackgroundColor = (HSSFColor.YELLOW.index);
 
 
-            HSSFConditionalFormattingRule rule2 = sheetCF.CreateConditionalFormattingRule(ComparisonOperator.BETWEEN, "1", "2");
+            HSSFConditionalFormattingRule rule2 = (HSSFConditionalFormattingRule)sheetCF.CreateConditionalFormattingRule(NPOI.SS.UserModel.ComparisonOperator.BETWEEN, "1", "2");
             HSSFConditionalFormattingRule[] cfRules =
 		    {
 			    rule1, rule2
@@ -165,14 +165,14 @@ namespace TestCases.HSSF.UserModel
             HSSFWorkbook wb = new HSSFWorkbook();
             HSSFSheet sheet = (HSSFSheet)wb.CreateSheet();
 
-            HSSFSheetConditionalFormatting sheetCF = sheet.SheetConditionalFormatting;
+            HSSFSheetConditionalFormatting sheetCF = (HSSFSheetConditionalFormatting)sheet.SheetConditionalFormatting;
 
-            HSSFConditionalFormattingRule rule1 = sheetCF.CreateConditionalFormattingRule(
-                    ComparisonOperator.BETWEEN, "sum(A10:A15)", "1+sum(B16:B30)");
-            HSSFFontFormatting fontFmt = rule1.CreateFontFormatting();
+            HSSFConditionalFormattingRule rule1 = (HSSFConditionalFormattingRule)sheetCF.CreateConditionalFormattingRule(
+                    NPOI.SS.UserModel.ComparisonOperator.BETWEEN, "sum(A10:A15)", "1+sum(B16:B30)");
+            HSSFFontFormatting fontFmt = (HSSFFontFormatting)rule1.CreateFontFormatting();
             fontFmt.SetFontStyle(true, false);
 
-            HSSFPatternFormatting patternFmt = rule1.CreatePatternFormatting();
+            HSSFPatternFormatting patternFmt = (HSSFPatternFormatting)rule1.CreatePatternFormatting();
             patternFmt.FillBackgroundColor = (HSSFColor.YELLOW.index);
             HSSFConditionalFormattingRule[] cfRules = { rule1, };
 
@@ -190,12 +190,12 @@ namespace TestCases.HSSF.UserModel
 
             // This row shift should only affect the formulas
             sheet.ShiftRows(14, 17, 8);
-            HSSFConditionalFormatting cf = sheetCF.GetConditionalFormattingAt(0);
+            HSSFConditionalFormatting cf = (HSSFConditionalFormatting)sheetCF.GetConditionalFormattingAt(0);
             Assert.AreEqual("SUM(A10:A23)", cf.GetRule(0).Formula1);
             Assert.AreEqual("1+SUM(B24:B30)", cf.GetRule(0).Formula2);
 
             sheet.ShiftRows(0, 8, 21);
-            cf = sheetCF.GetConditionalFormattingAt(0);
+            cf = (HSSFConditionalFormatting)sheetCF.GetConditionalFormattingAt(0);
             Assert.AreEqual("SUM(A10:A21)", cf.GetRule(0).Formula1);
             Assert.AreEqual("1+SUM(#REF!)", cf.GetRule(0).Formula2);
         }

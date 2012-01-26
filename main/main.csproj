@@ -824,7 +824,10 @@
     <Compile Include="SS\Formula\WorkbookDependentFormula.cs" />
     <Compile Include="SS\Formula\WorkbookEvaluator.cs" />
     <Compile Include="SS\SpreadsheetVersion.cs" />
+    <Compile Include="SS\UserModel\AutoFilter.cs" />
+    <Compile Include="SS\UserModel\BorderFormatting.cs" />
     <Compile Include="SS\UserModel\BorderStyle.cs" />
+    <Compile Include="SS\UserModel\BuiltinFormats.cs" />
     <Compile Include="SS\UserModel\Cell.cs" />
     <Compile Include="SS\UserModel\CellRange.cs" />
     <Compile Include="SS\UserModel\CellStyle.cs" />
@@ -850,6 +853,9 @@
     <Compile Include="SS\UserModel\ClientAnchor.cs" />
     <Compile Include="SS\UserModel\Color.cs" />
     <Compile Include="SS\UserModel\Comment.cs" />
+    <Compile Include="SS\UserModel\ComparisonOperator.cs" />
+    <Compile Include="SS\UserModel\ConditionalFormatting.cs" />
+    <Compile Include="SS\UserModel\ConditionalFormattingRule.cs" />
     <Compile Include="SS\UserModel\CreationHelper.cs" />
     <Compile Include="SS\UserModel\DataFormat.cs" />
     <Compile Include="SS\UserModel\DataFormatter.cs" />
@@ -863,6 +869,7 @@
     <Compile Include="SS\UserModel\Font.cs" />
     <Compile Include="SS\UserModel\FontCharset.cs" />
     <Compile Include="SS\UserModel\FontFamily.cs" />
+    <Compile Include="SS\UserModel\FontFormatting.cs" />
     <Compile Include="SS\UserModel\FontScheme.cs" />
     <Compile Include="SS\UserModel\FontUnderline.cs" />
     <Compile Include="SS\UserModel\Footer.cs" />
@@ -877,6 +884,7 @@
     <Compile Include="SS\UserModel\Name.cs" />
     <Compile Include="SS\UserModel\PageOrder.cs" />
     <Compile Include="SS\UserModel\PaperSize.cs" />
+    <Compile Include="SS\UserModel\PatternFormatting.cs" />
     <Compile Include="SS\UserModel\Picture.cs" />
     <Compile Include="SS\UserModel\PictureData.cs" />
     <Compile Include="SS\UserModel\PrintCellComments.cs" />
@@ -887,6 +895,7 @@
     <Compile Include="SS\UserModel\Shape.cs" />
     <Compile Include="SS\UserModel\ShapeTypes.cs" />
     <Compile Include="SS\UserModel\Sheet.cs" />
+    <Compile Include="SS\UserModel\SheetConditionalFormatting.cs" />
     <Compile Include="SS\UserModel\Textbox.cs" />
     <Compile Include="SS\UserModel\VerticalAlignment.cs" />
     <Compile Include="SS\UserModel\Workbook.cs" />

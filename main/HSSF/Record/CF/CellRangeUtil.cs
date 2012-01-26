@@ -123,7 +123,7 @@ namespace NPOI.HSSF.Record.CF
 					// overwrite range1 with first result 
 					cellRangeList[i]= mergeResult[0];
 					// remove range2
-					cellRangeList.Remove(j--);
+					cellRangeList.RemoveAt(j--);
 					// Add any extra results beyond the first
 					for(int k=1; k<mergeResult.Length; k++) {
 						j++;

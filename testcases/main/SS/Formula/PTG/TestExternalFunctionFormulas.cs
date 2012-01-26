@@ -50,7 +50,7 @@ namespace TestCases.SS.Formula.PTG
             Assert.AreEqual(expectedFormula, cellFormula);
         }
         [TestMethod]
-        public void TestParseFormulaContainingExternalFunction()
+        public void TestParse()
         {
             System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
 
@@ -80,7 +80,7 @@ namespace TestCases.SS.Formula.PTG
 #endif
         }
         [TestMethod]
-        public void TestEvaluateFormulaContainingExternalFunction()
+        public void TestEvaluate()
         {
             System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US"); 
             

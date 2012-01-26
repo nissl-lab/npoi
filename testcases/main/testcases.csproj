@@ -534,6 +534,9 @@
     <Compile Include="SS\UserModel\BaseTestBugzillaIssues.cs" />
     <Compile Include="SS\UserModel\BaseTestCell.cs" />
     <Compile Include="SS\UserModel\BaseTestCellComment.cs" />
+    <Compile Include="SS\UserModel\BaseTestConditionalFormatting.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="SS\UserModel\BaseTestDataFormat.cs" />
     <Compile Include="SS\UserModel\BaseTestDataValidation.cs" />
     <Compile Include="SS\UserModel\BaseTestFont.cs" />

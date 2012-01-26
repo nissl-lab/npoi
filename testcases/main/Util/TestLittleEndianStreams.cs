@@ -35,7 +35,7 @@ namespace TestCases.Util
         ///  Some of the tests are depending on the american culture.
         /// </summary>
         [ClassInitialize()]
-        public static void PrepareCultere(TestContext testContext)
+        public static void PrepareCulture(TestContext testContext)
         {
             System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
         }
