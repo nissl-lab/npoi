@@ -469,7 +469,7 @@ namespace TestCases.HSSF.Model
         }
         /**
          * Prior to bug 45066, POI would Get the estimated sheet size wrong
-         * when an <tt>UncalcedRecord</tt> was present.<p/>
+         * when an <c>UncalcedRecord</c> was present.<p/>
          */
         [TestMethod]
         public void TestUncalcSize_bug45066()
@@ -492,7 +492,7 @@ namespace TestCases.HSSF.Model
         }
 
         /**
-         * Prior to bug 45145 <tt>RowRecordsAggregate</tt> and <tt>ValueRecordsAggregate</tt> could
+         * Prior to bug 45145 <c>RowRecordsAggregate</c> and <c>ValueRecordsAggregate</c> could
          * sometimes occur in reverse order.  This Test reproduces one of those situations and makes
          * sure that RRA comes before VRA.<br/>
          *

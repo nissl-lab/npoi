@@ -162,7 +162,7 @@ namespace NPOI.SS.Formula.Functions
         }
 
 
-        /**
+        /*
          * If d < 0, returns short -1
          * <br/>
          * If d > 0, returns short 1
@@ -340,11 +340,11 @@ namespace NPOI.SS.Formula.Functions
         /**
          * <br/> for all n >= 1; factorial n = n * (n-1) * (n-2) * ... * 1 
          * <br/> else if n == 0; factorial n = 1
-         * <br/> else if n < 0; factorial n = double.NaN
+         * <br/> else if n &lt; 0; factorial n = double.NaN
          * <br/> Loss of precision can occur if n Is large enough.
          * If n Is large so that the resulting value would be greater 
          * than double.MAX_VALUE; double.POSITIVE_INFINITY Is returned.
-         * If n < 0, double.NaN Is returned. 
+         * If n &lt; 0, double.NaN Is returned. 
          * @param n
          */
         public static double factorial(int n)

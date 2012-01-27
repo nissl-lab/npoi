@@ -27,7 +27,7 @@ namespace TestCases.HSSF.UserModel
     using NPOI.SS.Formula.PTG;
 
     /**
-     * Test utility class to Get <tt>Ptg</tt> arrays out of formula cells
+     * Test utility class to Get <c>Ptg</c> arrays out of formula cells
      * 
      * @author Josh Micich
      */

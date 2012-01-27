@@ -113,18 +113,18 @@ namespace NPOI.Util
             return true;
         }
         /**
-         * Returns <tt>true</tt> if the two specified arrays of Objects are
+         * Returns <c>true</c> if the two specified arrays of Objects are
          * <i>equal</i> to one another.  The two arrays are considered equal if
          * both arrays contain the same number of elements, and all corresponding
-         * pairs of elements in the two arrays are equal.  Two objects <tt>e1</tt>
-         * and <tt>e2</tt> are considered <i>equal</i> if <tt>(e1==null ? e2==null
-         * : e1.equals(e2))</tt>.  In other words, the two arrays are equal if
+         * pairs of elements in the two arrays are equal.  Two objects <c>e1</c>
+         * and <c>e2</c> are considered <i>equal</i> if <c>(e1==null ? e2==null
+         * : e1.equals(e2))</c>.  In other words, the two arrays are equal if
          * they contain the same elements in the same order.  Also, two array
-         * references are considered equal if both are <tt>null</tt>.<p>
+         * references are considered equal if both are <c>null</c>.
          *
          * @param a one array to be tested for equality
          * @param a2 the other array to be tested for equality
-         * @return <tt>true</tt> if the two arrays are equal
+         * @return <c>true</c> if the two arrays are equal
          */
         public static bool Equals(Object[] a, Object[] a2)
         {

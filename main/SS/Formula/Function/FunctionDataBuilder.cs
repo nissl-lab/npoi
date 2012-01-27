@@ -23,8 +23,8 @@ namespace NPOI.SS.Formula.Function
 
 
     /**
-     * Temporarily collects <tt>FunctionMetadata</tt> instances for creation of a
-     * <tt>FunctionMetadataRegistry</tt>.
+     * Temporarily collects <c>FunctionMetadata</c> instances for creation of a
+     * <c>FunctionMetadataRegistry</c>.
      * 
      * @author Josh Micich
      */

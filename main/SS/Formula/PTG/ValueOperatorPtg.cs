@@ -34,7 +34,7 @@ namespace NPOI.SS.Formula.PTG
     {
 
         /**
-         * All Operator <tt>Ptg</tt>s are base tokens (i.e. are not RVA classified)  
+         * All Operator <c>Ptg</c>s are base tokens (i.e. are not RVA classified)  
          */
         public override bool IsBaseToken
         {

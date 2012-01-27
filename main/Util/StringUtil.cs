@@ -286,7 +286,7 @@ namespace NPOI.Util
         }
 
         /**
-         * InputStream <tt>in</tt> is expected to contain:
+         * InputStream <c>in</c> is expected to contain:
          * <ol>
          * <li>ushort nChars</li>
          * <li>byte is16BitFlag</li>
@@ -306,7 +306,7 @@ namespace NPOI.Util
             return ReadUnicodeLE(in1, nChars);
         }
         /**
-         * InputStream <tt>in</tt> is expected to contain:
+         * InputStream <c>in</c> is expected to contain:
          * <ol>
          * <li>byte is16BitFlag</li>
          * <li>byte[]/char[] characterData</li>
@@ -327,7 +327,7 @@ namespace NPOI.Util
             return ReadUnicodeLE(in1, nChars);
         }
         /**
-         * OutputStream <tt>out</tt> will get:
+         * OutputStream <c>out</c> will get:
          * <ol>
          * <li>ushort nChars</li>
          * <li>byte is16BitFlag</li>
@@ -352,7 +352,7 @@ namespace NPOI.Util
             }
         }
         /**
-         * OutputStream <tt>out</tt> will get:
+         * OutputStream <c>out</c> will get:
          * <ol>
          * <li>byte is16BitFlag</li>
          * <li>byte[]/char[] characterData</li>

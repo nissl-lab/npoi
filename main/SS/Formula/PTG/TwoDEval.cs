@@ -38,13 +38,13 @@ namespace NPOI.SS.Formula
         int Height { get;}
 
         /**
-         * @return <code>true</code> if the area has just a single row, this also includes
+         * @return <c>true</c> if the area has just a single row, this also includes
          * the trivial case when the area has just a single cell.
          */
         bool IsRow { get; }
 
         /**
-         * @return <code>true</code> if the area has just a single column, this also includes
+         * @return <c>true</c> if the area has just a single column, this also includes
          * the trivial case when the area has just a single cell.
          */
         bool IsColumn { get; }

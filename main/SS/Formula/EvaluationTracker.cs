@@ -53,11 +53,11 @@ namespace NPOI.SS.Formula
          *
          * In the case of a <c>true</c> return code, the caller should
          * continue evaluation of the specified cell, and also be sure To call
-         * <tt>endEvaluate()</tt> when complete.<br/>
+         * <c>endEvaluate()</c> when complete.<br/>
          *
          * In the case of a <c>null</c> return code, the caller should
          * return an evaluation result of
-         * <tt>ErrorEval.CIRCULAR_REF_ERROR<tt>, and not call <tt>endEvaluate()</tt>.
+         * <c>ErrorEval.CIRCULAR_REF_ERROR</c>, and not call <c>endEvaluate()</c>.
          * <br/>
          * @return <c>false</c> if the specified cell is already being evaluated
          */
@@ -92,7 +92,7 @@ namespace NPOI.SS.Formula
         /**
          * Notifies this evaluation tracker that the evaluation of the specified cell is complete. <p/>
          *
-         * Every successful call To <tt>startEvaluate</tt> must be followed by a call To <tt>endEvaluate</tt> (recommended in a finally block) To enable
+         * Every successful call To <c>startEvaluate</c> must be followed by a call To <c>endEvaluate</c> (recommended in a finally block) To enable
          * proper tracking of which cells are being evaluated at any point in time.<p/>
          *
          * Assuming a well behaved client, parameters To this method would not be

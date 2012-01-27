@@ -31,7 +31,7 @@ namespace TestCases.HSSF.Model
 
     /**
      * Tests 'operand class' transformation performed by
-     * <tt>OperandClassTransformer</tt> by comparing its results with those
+     * <c>OperandClassTransformer</c> by comparing its results with those
      * directly produced by Excel (in a sample spReadsheet).
      * 
      * @author Josh Micich

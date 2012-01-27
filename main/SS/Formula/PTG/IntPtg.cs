@@ -39,7 +39,7 @@ namespace NPOI.SS.Formula.PTG
         /**
          * Excel represents integers 0..65535 with the tInt token. 
          * @return <c>true</c> if the specified value is within the range of values 
-         * <tt>IntPtg</tt> can represent. 
+         * <c>IntPtg</c> can represent. 
          */
         public static bool IsInRange(int i)
         {

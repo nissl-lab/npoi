@@ -58,15 +58,15 @@ namespace NPOI.Util
 #endif
         private int bitLength;
 
-        /**
-         * Two plus the lowest set bit of this BigInteger, as returned by
-         * getLowestSetBit().
-         *
-         * @serial
-         * @see #getLowestSetBit
-         * @deprecated Deprecated since logical value is offset from stored
-         * value and correction factor is applied in accessor method.
-         */
+        // /**
+        // * Two plus the lowest set bit of this BigInteger, as returned by
+        // * getLowestSetBit().
+        // *
+        // * @serial
+        // * @see #getLowestSetBit
+        // * @deprecated Deprecated since logical value is offset from stored
+        // * value and correction factor is applied in accessor method.
+        // */
        // [Obsolete]
        // never used private int lowestSetBit;
 
@@ -445,12 +445,12 @@ namespace NPOI.Util
         }
         // Miscellaneous Bit Operations
 
-        /**
+        /*
          * Returns the number of bits in the minimal two's-complement
          * representation of this BigInteger, <i>excluding</i> a sign bit.
          * For positive BigIntegers, this is equivalent to the number of bits in
          * the ordinary binary representation.  (Computes
-         * {@code (ceil(log2(this < 0 ? -this : this+1)))}.)
+         * <c>(ceil(log2(this <&lt; 0 ? -this : this+1)))</c>.)
          *
          * @return number of bits in the minimal two's-complement
          *         representation of this BigInteger, <i>excluding</i> a sign bit.
@@ -541,11 +541,11 @@ namespace NPOI.Util
             return new BigInteger(this.mag, -this._signum);
         }
         /**
-     * Returns a BigInteger whose value is <tt>(this<sup>exponent</sup>)</tt>.
+     * Returns a BigInteger whose value is <c>(this<sup>exponent</sup>)</c>.
      * Note that {@code exponent} is an integer rather than a BigInteger.
      *
      * @param  exponent exponent to which this BigInteger is to be raised.
-     * @return <tt>this<sup>exponent</sup></tt>
+     * @return <c>this<sup>exponent</sup></c>
      * @throws ArithmeticException {@code exponent} is negative.  (This would
      *         cause the operation to yield a non-integer value.)
      */
@@ -1021,11 +1021,11 @@ namespace NPOI.Util
          * specified value has no one-bits in its two's complement representation,
          * in other words if it is equal to zero.
          *
-         * <p>Note that this method is closely related to the logarithm base 2.
+         * Note that this method is closely related to the logarithm base 2.
          * For all positive {@code int} values x:
          * <ul>
-         * <li>floor(log<sub>2</sub>(x)) = {@code 31 - numberOfLeadingZeros(x)}
-         * <li>ceil(log<sub>2</sub>(x)) = {@code 32 - numberOfLeadingZeros(x - 1)}
+         * <li>floor(log<sub>2</sub>(x)) = {@code 31 - numberOfLeadingZeros(x)}</li>
+         * <li>ceil(log<sub>2</sub>(x)) = {@code 32 - numberOfLeadingZeros(x - 1)}</li>
          * </ul>
          *
          * @return the number of zero bits preceding the highest-order
@@ -1218,7 +1218,7 @@ namespace NPOI.Util
      * conversion is analogous to a
      * <i>narrowing primitive conversion</i> from {@code long} to
      * {@code int} as defined in section 5.1.3 of
-     * <cite>The Java&trade; Language Specification</cite>:
+     * <cite>The Java(TM) Language Specification</cite>:
      * if this BigInteger is too big to fit in an
      * {@code int}, only the low-order 32 bits are returned.
      * Note that this conversion can lose information about the
@@ -1289,7 +1289,7 @@ namespace NPOI.Util
      * conversion is analogous to a
      * <i>narrowing primitive conversion</i> from {@code long} to
      * {@code int} as defined in section 5.1.3 of
-     * <cite>The Java&trade; Language Specification</cite>:
+     * <cite>The Java(TM) Language Specification</cite>:
      * if this BigInteger is too big to fit in a
      * {@code long}, only the low-order 64 bits are returned.
      * Note that this conversion can lose information about the
@@ -1310,7 +1310,7 @@ namespace NPOI.Util
      * Returns a BigInteger whose value is {@code (this >> n)}.  Sign
      * extension is performed.  The shift distance, {@code n}, may be
      * negative, in which case this method performs a left shift.
-     * (Computes <tt>floor(this / 2<sup>n</sup>)</tt>.)
+     * (Computes <c>floor(this / 2<sup>n</sup>)</c>.)
      *
      * @param  n shift distance, in bits.
      * @return {@code this >> n}
@@ -1860,7 +1860,7 @@ namespace NPOI.Util
             return new BigInteger(getMagnitudeArray(), sign);
         }
 
-        /**
+        /*
          * Convert this MutableBigInteger to BigDecimal object with the specified sign
          * and scale.
          */
@@ -1901,7 +1901,7 @@ namespace NPOI.Util
         /**
          * Compare the magnitude of two MutableBigIntegers. Returns -1, 0 or 1
          * as this MutableBigInteger is numerically less than, equal to, or
-         * greater than <tt>b</tt>.
+         * greater than <c>b</c>.
          */
         int compare(MutableBigInteger b)
         {
@@ -2146,7 +2146,7 @@ namespace NPOI.Util
         /**
          * Returns true iff this MutableBigInteger is in normal form. A
          * MutableBigInteger is in normal form if it has no leading zeros
-         * after the offset, and intLen + offset <= value.Length.
+         * after the offset, and intLen + offset &lt;= value.Length.
          */
         bool isNormal()
         {
@@ -2745,7 +2745,7 @@ namespace NPOI.Util
 
         /**
          * Divide this MutableBigInteger by the divisor represented by its magnitude
-         * array. The quotient will be placed into the provided quotient object &
+         * array. The quotient will be placed into the provided quotient object &amp;
          * the remainder object is returned.
          */
         private MutableBigInteger divideMagnitude(int[] divisor,

@@ -59,7 +59,7 @@ namespace NPOI.SS.Formula
         }
 
         /**
-         * Traverses the supplied formula parse tree, calling <tt>Ptg.SetClass()</tt> for each non-base
+         * Traverses the supplied formula parse tree, calling <c>Ptg.SetClass()</c> for each non-base
          * Token To Set its operand class.
          */
         public void TransformFormula(ParseNode rootNode)

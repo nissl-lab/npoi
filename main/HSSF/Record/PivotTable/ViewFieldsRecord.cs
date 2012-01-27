@@ -32,7 +32,7 @@ namespace NPOI.HSSF.Record.PivotTable
     {
         public static short sid = 0x00B1;
 
-        /** the value of the <tt>cchName</tt> field when the name is not present */
+        /** the value of the <c>cchName</c> field when the name is not present */
         private static int STRING_NOT_PRESENT_LEN = -1;
 
         private int sxaxis;

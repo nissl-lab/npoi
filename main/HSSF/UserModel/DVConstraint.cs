@@ -192,7 +192,7 @@ namespace NPOI.HSSF.UserModel
          * @param expr1 date formula (when first char is '=') or formatted date value
          * @param expr2 date formula (when first char is '=') or formatted date value
          * @param dateFormat ignored if both expr1 and expr2 are formulas.  Default value is "YYYY/MM/DD"
-         * otherwise any other valid argument for <tt>SimpleDateFormat</tt> can be used
+         * otherwise any other valid argument for <c>SimpleDateFormat</c> can be used
          * @see <a href='http://java.sun.com/j2se/1.5.0/docs/api/java/text/DateFormat.html'>SimpleDateFormat</a>
          */
         public static DVConstraint CreateDateConstraint(int comparisonOperator, String expr1, String expr2, String dateFormat)
@@ -321,7 +321,7 @@ namespace NPOI.HSSF.UserModel
         }
         /**
          * Convenience method
-         * @return <code>true</code> if this constraint is a 'list' validation
+         * @return <c>true</c> if this constraint is a 'list' validation
          */
         public bool IsListValidationType
         {
@@ -332,7 +332,7 @@ namespace NPOI.HSSF.UserModel
         }
         /**
          * Convenience method
-         * @return <code>true</code> if this constraint is a 'list' validation with explicit values
+         * @return <c>true</c> if this constraint is a 'list' validation with explicit values
          */
         public bool IsExplicitList
         {

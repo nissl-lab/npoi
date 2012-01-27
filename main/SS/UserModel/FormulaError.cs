@@ -60,10 +60,10 @@ namespace NPOI.SS.UserModel
          */
         public static FormulaError REF = new FormulaError(0x17, "#REF!");
 
-        /**
+        /*
          * Intended to indicate when what looks like a name is used, but no such name has been defined.
          * <p>Example:
-         * XYZ/3, where XYZ is not a defined name. Total is & A10,
+         * XYZ/3, where XYZ is not a defined name. Total is &amp; A10,
          * where neither Total nor is is a defined name. Presumably, "Total is " & A10
          * was intended. SUM(A1C10), where the range A1:C10 was intended.
          * </p>

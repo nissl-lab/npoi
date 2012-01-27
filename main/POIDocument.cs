@@ -269,8 +269,8 @@ namespace NPOI
         /// <summary>
         /// Copies nodes from one POIFS to the other minus the excepts
         /// </summary>
-        /// <param name="source">the source POIFS to copy from.</param>
-        /// <param name="target">the target POIFS to copy to</param>
+        /// <param name="sourceRoot">the source POIFS to copy from.</param>
+        /// <param name="targetRoot">the target POIFS to copy to</param>
         /// <param name="excepts">a list of Strings specifying what nodes NOT to copy</param>
         [Obsolete]
         protected void CopyNodes(DirectoryNode sourceRoot,

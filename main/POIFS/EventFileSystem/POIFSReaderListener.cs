@@ -15,17 +15,17 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 ==================================================================== */
-        
 
 
-/**
- * Interface POIFSReaderListener
- *
- * @author Marc Johnson (mjohnson at apache dot org)
- * @version %I%, %G%
- */
+
 namespace NPOI.POIFS.EventFileSystem
 {
+    /**
+     * Interface POIFSReaderListener
+     *
+     * @author Marc Johnson (mjohnson at apache dot org)
+     * @version %I%, %G%
+     */
     public interface POIFSReaderListener
     {
 

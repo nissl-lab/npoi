@@ -59,12 +59,12 @@ namespace NPOI.POIFS.FileSystem
         /// </value>
         bool IsDocumentEntry { get; }
 
-        /// <summary>
-        /// Get this Entry's parent (the DirectoryEntry that owns this
-        /// Entry). All Entry objects, except the root Entry, has a parent.
-        /// </summary>
-        /// <value>this Entry's parent; null iff this Is the root Entry</value>
-        /// This property is moved to EntryNode
+        ///// <summary>
+        ///// Get this Entry's parent (the DirectoryEntry that owns this
+        ///// Entry). All Entry objects, except the root Entry, has a parent.
+        ///// </summary>
+        ///// <value>this Entry's parent; null iff this Is the root Entry</value>
+        ///// This property is moved to EntryNode
         //Entry Parent { get; }
 
         /// <summary>

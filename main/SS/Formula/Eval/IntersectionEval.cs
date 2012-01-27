@@ -57,7 +57,7 @@ namespace NPOI.SS.Formula.Eval
 
         /**
          * @return simple rectangular {@link AreaEval} which represents the intersection of areas
-         * <tt>aeA</tt> and <tt>aeB</tt>. If the two areas do not intersect, the result is <code>null</code>.
+         * <c>aeA</c> and <c>aeB</c>. If the two areas do not intersect, the result is <code>null</code>.
          */
         private static AreaEval ResolveRange(AreaEval aeA, AreaEval aeB)
         {

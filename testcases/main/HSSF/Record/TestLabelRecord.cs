@@ -24,7 +24,7 @@ namespace TestCases.HSSF.Record
     using NPOI.HSSF.Record;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     /**
-     * Tests for <tt>LabelRecord</tt>
+     * Tests for <c>LabelRecord</c>
      * 
      * @author Josh Micich
      */

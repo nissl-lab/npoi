@@ -27,15 +27,13 @@ namespace NPOI.SS.Formula.Functions
     /**
      * @author Amol S. Deshmukh &lt; amolweb at ya hoo dot com &gt;
      * Here are the general rules concerning bool functions:
-     * <ol>
-     * <li> Blanks are not either true or false
-     * <li> Strings are not either true or false (even strings "true" 
-     * or "TRUE" or "0" etc.)
-     * <li> Numbers: 0 Is false. Any other number Is TRUE.
-     * <li> References are Evaluated and above rules apply.
-     * <li> Areas: Individual cells in area are Evaluated and Checked to 
+     * 
+     * - Blanks are not either true or false
+     * - Strings are not either true or false (even strings "true" or "TRUE" or "0" etc.)
+     * - Numbers: 0 Is false. Any other number Is TRUE.
+     * - References are Evaluated and above rules apply.
+     * - Areas: Individual cells in area are Evaluated and Checked to 
      * see if they are blanks, strings etc.
-     * </ol>
      */
     public abstract class BooleanFunction : Function
     {

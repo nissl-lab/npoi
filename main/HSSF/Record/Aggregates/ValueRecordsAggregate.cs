@@ -251,10 +251,10 @@ namespace NPOI.HSSF.Record.Aggregates
 
         /**
          * Sometimes the shared formula flag "seems" to be erroneously Set, in which case there is no 
-         * call to <tt>SharedFormulaRecord.ConvertSharedFormulaRecord</tt> and hence the 
-         * <tt>ParsedExpression</tt> field of this <tt>FormulaRecord</tt> will not Get updated.<br/>
+         * call to <c>SharedFormulaRecord.ConvertSharedFormulaRecord</c> and hence the 
+         * <c>ParsedExpression</c> field of this <c>FormulaRecord</c> will not Get updated.<br/>
          * As it turns out, this is not a problem, because in these circumstances, the existing value
-         * for <tt>ParsedExpression</tt> is perfectly OK.<p/>
+         * for <c>ParsedExpression</c> is perfectly OK.<p/>
          * 
          * This method may also be used for Setting breakpoints to help diagnose Issues regarding the
          * abnormally-Set 'shared formula' flags. 

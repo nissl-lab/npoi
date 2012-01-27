@@ -30,7 +30,7 @@ namespace NPOI.HSSF.UserModel
 
 
     /**
-     * This class Creates <tt>OperationEval</tt> instances to help evaluate <tt>OperationPtg</tt>
+     * This class Creates <c>OperationEval</c> instances to help evaluate <c>OperationPtg</c>
      * formula tokens.
      * 
      * @author Josh Micich

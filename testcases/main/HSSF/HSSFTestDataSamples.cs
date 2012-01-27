@@ -49,8 +49,8 @@ namespace TestCases.HSSF
             }
         }
         /**
-         * Writes a spReadsheet to a <tt>MemoryStream</tt> and Reads it back
-         * from a <tt>ByteArrayStream</tt>.<p/>
+         * Writes a spReadsheet to a <c>MemoryStream</c> and Reads it back
+         * from a <c>ByteArrayStream</c>.<p/>
          * Useful for verifying that the serialisation round trip
          */
         public static HSSFWorkbook WriteOutAndReadBack(HSSFWorkbook original)

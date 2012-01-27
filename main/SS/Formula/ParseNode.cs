@@ -23,9 +23,9 @@ namespace NPOI.SS.Formula
     using NPOI.SS.Formula.PTG;
     using NPOI.SS.Formula.Function;
     /**
-     * Represents a syntactic element from a formula by encapsulating the corresponding <tt>Ptg</tt>
-     * Token.  Each <tt>ParseNode</tt> may have child <tt>ParseNode</tt>s in the case when the wrapped
-     * <tt>Ptg</tt> is non-atomic.
+     * Represents a syntactic element from a formula by encapsulating the corresponding <c>Ptg</c>
+     * Token.  Each <c>ParseNode</c> may have child <c>ParseNode</c>s in the case when the wrapped
+     * <c>Ptg</c> is non-atomic.
      * 
      * @author Josh Micich
      */
@@ -91,7 +91,7 @@ namespace NPOI.SS.Formula
         }
 
         /**
-         * Collects the array of <tt>Ptg</tt> Tokens for the specified tree.
+         * Collects the array of <c>Ptg</c> Tokens for the specified tree.
          */
         public static Ptg[] ToTokenArray(ParseNode rootNode)
         {

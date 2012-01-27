@@ -26,7 +26,7 @@ namespace TestCases.SS.Formula.PTG
     using TestCases.HSSF;
     using TestCases.HSSF.Record;
     /**
-     * Tests for <tt>ArrayPtg</tt>
+     * Tests for <c>ArrayPtg</c>
      *
      * @author Josh Micich
      */

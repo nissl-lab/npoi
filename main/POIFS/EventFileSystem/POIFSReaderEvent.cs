@@ -21,15 +21,15 @@ using System.IO;
 
 using NPOI.POIFS.FileSystem;
 
+namespace NPOI.POIFS.EventFileSystem
+{
+
 /**
  * Class POIFSReaderEvent
  *
  * @author Marc Johnson (mjohnson at apache dot org)
  * @version %I%, %G%
  */
-
-namespace NPOI.POIFS.EventFileSystem
-{
     public class POIFSReaderEvent
     {
         private Stream stream;

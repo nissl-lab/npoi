@@ -31,7 +31,7 @@ namespace NPOI.Util.IO
     public interface DelayableLittleEndianOutput : LittleEndianOutput
     {
         /**
-         * Creates an output stream intended for outputting a sequence of <tt>size</tt> bytes.
+         * Creates an output stream intended for outputting a sequence of <c>size</c> bytes.
          */
         LittleEndianOutput CreateDelayedOutput(int size);
     }

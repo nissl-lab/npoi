@@ -54,7 +54,7 @@ namespace TestCases.HSSF.Record
 	    };
 
         /**
-         * The method <tt>SharedFormulaRecord.convertSharedFormulas()</tt> converts formulas from
+         * The method <c>SharedFormulaRecord.convertSharedFormulas()</c> converts formulas from
          * 'shared formula' to 'single cell formula' format.  It is1 important that token operand
          * classes are preserved during this transformation, because Excel may not tolerate the
          * incorrect encoding.  The formula here is1 one such example (Excel displays #VALUE!).

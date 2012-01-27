@@ -24,7 +24,7 @@ namespace TestCases.SS.Formula.Eval
     using NPOI.SS.Formula.Eval;
 
     /**
-     * Tests for <tt>AreaEval</tt>
+     * Tests for <c>AreaEval</c>
      *
      * @author Josh Micich
      */

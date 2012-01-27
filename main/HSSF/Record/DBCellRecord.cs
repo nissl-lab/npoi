@@ -152,7 +152,7 @@ namespace NPOI.HSSF.Record
         }
 
         /**
-         *  @returns the size of the Group of <tt>DBCellRecord</tt>s needed to encode
+         *  @returns the size of the Group of <c>DBCellRecord</c>s needed to encode
          *  the specified number of blocks and rows
          */
         public static int CalculateSizeOfRecords(int nBlocks, int nRows)

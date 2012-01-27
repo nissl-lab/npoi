@@ -225,15 +225,15 @@ namespace NPOI.SS.Formula
          * Some notable cases:
          *    <blockquote><table border="0" cellpAdding="1" cellspacing="0" 
          *                 summary="Notable cases.">
-         *      <tr><th>Input&nbsp;</th><th>Result&nbsp;</th><th>Comments</th></tr>
-         *      <tr><td>"A1"&nbsp;&nbsp;</td><td>true</td><td>&nbsp;</td></tr>
-         *      <tr><td>"a111"&nbsp;&nbsp;</td><td>true</td><td>&nbsp;</td></tr>
-         *      <tr><td>"AA"&nbsp;&nbsp;</td><td>false</td><td>&nbsp;</td></tr>
-         *      <tr><td>"aa1"&nbsp;&nbsp;</td><td>true</td><td>&nbsp;</td></tr>
-         *      <tr><td>"A1A"&nbsp;&nbsp;</td><td>false</td><td>&nbsp;</td></tr>
-         *      <tr><td>"A1A1"&nbsp;&nbsp;</td><td>false</td><td>&nbsp;</td></tr>
-         *      <tr><td>"A$1:$C$20"&nbsp;&nbsp;</td><td>false</td><td>Not a plain cell reference</td></tr>
-         *      <tr><td>"SALES20080101"&nbsp;&nbsp;</td><td>true</td>
+         *      <tr><th>Input </th><th>Result </th><th>Comments</th></tr>
+         *      <tr><td>"A1" </td><td>true</td><td> </td></tr>
+         *      <tr><td>"a111" </td><td>true</td><td> </td></tr>
+         *      <tr><td>"AA" </td><td>false</td><td> </td></tr>
+         *      <tr><td>"aa1" </td><td>true</td><td> </td></tr>
+         *      <tr><td>"A1A" </td><td>false</td><td> </td></tr>
+         *      <tr><td>"A1A1" </td><td>false</td><td> </td></tr>
+         *      <tr><td>"A$1:$C$20" </td><td>false</td><td>Not a plain cell reference</td></tr>
+         *      <tr><td>"SALES20080101" </td><td>true</td>
          *      		<td>Still needs delimiting even though well out of range</td></tr>
          *    </table></blockquote>
          *  

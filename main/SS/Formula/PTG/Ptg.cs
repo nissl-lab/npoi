@@ -31,16 +31,16 @@ namespace NPOI.SS.Formula.PTG
     using NPOI.Util.IO;
 
     /**
-     * <tt>Ptg</tt> represents a syntactic token in a formula.  'PTG' is an acronym for 
+     * <c>Ptg</c> represents a syntactic token in a formula.  'PTG' is an acronym for 
      * '<b>p</b>arse <b>t</b>hin<b>g</b>'.  Originally, the name referred to the single 
-     * byte identifier at the start of the token, but in POI, <tt>Ptg</tt> encapsulates
+     * byte identifier at the start of the token, but in POI, <c>Ptg</c> encapsulates
      * the whole formula token (initial byte + value data).
      * 
      * 
-     * <tt>Ptg</tt>s are logically arranged in a tree representing the structure of the
-     * Parsed formula.  However, in BIFF files <tt>Ptg</tt>s are written/Read in 
+     * <c>Ptg</c>s are logically arranged in a tree representing the structure of the
+     * Parsed formula.  However, in BIFF files <c>Ptg</c>s are written/Read in 
      * <em>Reverse-Polish Notation</em> order. The RPN ordering also simplifies formula
-     * evaluation logic, so POI mostly accesses <tt>Ptg</tt>s in the same way.
+     * evaluation logic, so POI mostly accesses <c>Ptg</c>s in the same way.
      *
      * @author  andy
      * @author avik
@@ -52,8 +52,8 @@ namespace NPOI.SS.Formula.PTG
         public static Ptg[] EMPTY_PTG_ARRAY = { };
 
         /**
-         * Reads <tt>size</tt> bytes of the input stream, to Create an array of <tt>Ptg</tt>s.
-         * Extra data (beyond <tt>size</tt>) may be Read if and <tt>ArrayPtg</tt>s are present.
+         * Reads <c>size</c> bytes of the input stream, to Create an array of <c>Ptg</c>s.
+         * Extra data (beyond <c>size</c>) may be Read if and <c>ArrayPtg</c>s are present.
          */
         public static Ptg[] ReadTokens(int size, LittleEndianInput in1)
         {
@@ -194,7 +194,7 @@ namespace NPOI.SS.Formula.PTG
             return result;
         }
         /**
-         * @return a distinct copy of this <tt>Ptg</tt> if the class is mutable, or the same instance
+         * @return a distinct copy of this <c>Ptg</c> if the class is mutable, or the same instance
          * if the class is immutable.
          */
         public Ptg Copy()
@@ -226,7 +226,7 @@ namespace NPOI.SS.Formula.PTG
         /**
 	 * This method will return the same result as {@link #getEncodedSizeWithoutArrayData(Ptg[])}
 	 * if there are no array tokens present.
-	 * @return the full size taken to encode the specified <tt>Ptg</tt>s
+	 * @return the full size taken to encode the specified <c>Ptg</c>s
 	 */
         public static int GetEncodedSize(Ptg[] ptgs)
         {

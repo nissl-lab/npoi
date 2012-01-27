@@ -39,6 +39,8 @@ namespace TestCases.SS.UserModel
         [TestMethod]
         public void TestLocale()
         {
+            System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.GetCultureInfo("en-US");
+
             DataFormatter dfUS = new DataFormatter();
 
             Assert.AreEqual("1234", dfUS.FormatRawCellContents(1234, -1, "@"));
@@ -59,6 +61,8 @@ namespace TestCases.SS.UserModel
         [TestMethod]
         public void TestColours()
         {
+            System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.GetCultureInfo("en-US");
+
             //DataFormatter dfUS = new DataFormatter(Locale.US);
             DataFormatter dfUS = new DataFormatter();
 
@@ -90,6 +94,8 @@ namespace TestCases.SS.UserModel
         [TestMethod]
         public void TestColoursAndBrackets()
         {
+            System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.GetCultureInfo("en-US");
+
             //DataFormatter dfUS = new DataFormatter(Locale.US);
             DataFormatter dfUS = new DataFormatter();
 
@@ -141,6 +147,8 @@ namespace TestCases.SS.UserModel
         [TestMethod]
         public void TestNegativeZero()
         {
+            System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.GetCultureInfo("en-US");
+
             //DataFormatter dfUS = new DataFormatter(Locale.US);
             DataFormatter dfUS = new DataFormatter();
 
@@ -189,6 +197,8 @@ namespace TestCases.SS.UserModel
         [TestMethod]
         public void TestPAddingSpaces()
         {
+            System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.GetCultureInfo("en-US");
+
             //DataFormatter dfUS = new DataFormatter(Locale.US);
             DataFormatter dfUS = new DataFormatter();
             Assert.AreEqual("12.34", dfUS.FormatRawCellContents(12.343, -1, "##.##_ "));
@@ -208,6 +218,8 @@ namespace TestCases.SS.UserModel
         [TestMethod]
         public void TestPAddingSpacesCSV()
         {
+            System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.GetCultureInfo("en-US");
+
             //DataFormatter dfUS = new DataFormatter(Locale.US);
             DataFormatter dfUS = new DataFormatter(true);
             Assert.AreEqual("12.34 ", dfUS.FormatRawCellContents(12.343, -1, "##.##_ "));
@@ -370,6 +382,8 @@ namespace TestCases.SS.UserModel
         [TestMethod]
         public void TestScientificNotation()
         {
+            System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.GetCultureInfo("en-US");
+
             //DataFormatter dfUS = new DataFormatter(Locale.US);
             DataFormatter dfUS = new DataFormatter();
 
@@ -408,6 +422,8 @@ namespace TestCases.SS.UserModel
         [TestMethod]
         public void TestOther()
         {
+            System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.GetCultureInfo("en-US");
+
             //DataFormatter dfUS = new DataFormatter(Locale.US);
             DataFormatter dfUS = new DataFormatter(true);
             Assert.AreEqual(" 12.34 ", dfUS.FormatRawCellContents(12.34, -1, "_-* #,##0.00_-;-* #,##0.00_-;_-* \"-\"??_-;_-@_-"));

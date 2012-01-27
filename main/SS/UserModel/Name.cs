@@ -59,7 +59,7 @@ namespace NPOI.SS.UserModel
         /**
          * Checks if this name points to a cell that no longer exists
          *
-         * @return <code>true</code> if the name refers to a deleted cell, <code>false</code> otherwise
+         * @return <c>true</c> if the name refers to a deleted cell, <c>false</c> otherwise
          */
         bool IsDeleted { get; }
 
@@ -80,7 +80,7 @@ namespace NPOI.SS.UserModel
          * Indicates that the defined name refers to a user-defined function.
          * This attribute is used when there is an add-in or other code project associated with the file.
          *
-         * @param value <code>true</code> indicates the name refers to a function.
+         * @param value <c>true</c> indicates the name refers to a function.
          */
         void SetFunction(bool value);
     }

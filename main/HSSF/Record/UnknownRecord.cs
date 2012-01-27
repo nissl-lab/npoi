@@ -219,7 +219,7 @@ namespace NPOI.HSSF.Record
             return null;
         }
         /**
- * @return <code>true</code> if the unknown record id has been observed in POI unit tests
+ * @return <c>true</c> if the unknown record id has been observed in POI unit tests
  */
         private static bool IsObservedButUnknown(int sid)
         {

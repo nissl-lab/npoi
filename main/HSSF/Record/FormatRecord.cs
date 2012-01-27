@@ -131,7 +131,7 @@ namespace NPOI.HSSF.Record
             return field_1_index_code;
         }
 
-        /**
+        /*
          * Get the format string Length
          *
          * @return the Length of the format string

@@ -140,7 +140,7 @@ namespace NPOI.HSSF.Record
             }
 
             /**
-             * <code>false</code> in some test cases
+             * <c>false</c> in some test cases
              */
             public bool HasBOFRecord
             {
@@ -182,7 +182,7 @@ namespace NPOI.HSSF.Record
 
 
         /**
-         * @param shouldIncludeContinueRecords caller can pass <code>false</code> if loose
+         * @param shouldIncludeContinueRecords caller can pass <c>false</c> if loose
          * {@link ContinueRecord}s should be skipped (this is sometimes useful in event based
          * processing).
          */

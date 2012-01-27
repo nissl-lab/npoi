@@ -35,7 +35,7 @@ namespace TestCases.SS.Formula.PTG
          * The operand classes of the parameters to SUM() should be Coerced to 'reference' not 'value'.
          * In the case of SUM, Excel Evaluates the formula to '#VALUE!' if a parameter operand class is
          * wrong.  In other cases Excel seems to tolerate bad operand classes.</p>
-         * This functionality is related to the SetParameterRVA() methods of <tt>FormulaParser</tt>
+         * This functionality is related to the SetParameterRVA() methods of <c>FormulaParser</c>
          */
         [TestMethod]
         public void TestOperandClass()

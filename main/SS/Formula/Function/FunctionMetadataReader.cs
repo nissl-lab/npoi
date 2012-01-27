@@ -27,7 +27,7 @@ namespace NPOI.SS.Formula.Function
     using NPOI.SS.Formula.PTG;
 
     /**
-     * Converts the text meta-data file into a <tt>FunctionMetadataRegistry</tt>
+     * Converts the text meta-data file into a <c>FunctionMetadataRegistry</c>
      * 
      * @author Josh Micich
      */

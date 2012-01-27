@@ -412,7 +412,6 @@ namespace NPOI.Util
         /// Puts the U short.
         /// </summary>
         /// <param name="data">the byte array</param>
-        /// <param name="offset">a starting offset into the byte array</param>
         /// <param name="value">The value.</param>
         public static void PutUShort(byte[] data, int value)
         {

@@ -365,7 +365,7 @@ namespace NPOI.HSSF.UserModel
          *  hold the <i>x</i> and <i>y</i> coordinates.
          * 
          * This Draws the polygon, with <c>nPoint</c> line segments.
-         * The first <c>nPoint&nbsp;-&nbsp;1</c> line segments are
+         * The first <c>nPoint - 1</c> line segments are
          *  Drawn between sequential points 
          *  (<c>xPoints[i],yPoints[i],xPoints[i+1],yPoints[i+1]</c>).
          * The line segment Is a closing one, from the last point to 

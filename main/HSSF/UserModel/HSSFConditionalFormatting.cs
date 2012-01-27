@@ -35,7 +35,7 @@ namespace NPOI.HSSF.UserModel
     /// or to modify existing Conditional Formatting Settings (formatting regions and/or rules).
     /// Use {@link HSSFSheet#GetConditionalFormattingAt(int)} to Get access to an instance of this class.
     /// To Create a new Conditional Formatting Set use the following approach:
-
+    /// 
     /// // Define a Conditional Formatting rule, which triggers formatting
     /// // when cell's value Is greater or equal than 100.0 and
     /// // applies patternFormatting defined below.

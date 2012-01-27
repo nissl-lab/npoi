@@ -11,7 +11,7 @@ namespace NPOI.SS.Util
     public class CellRangeAddressList
     {
         /**
- * List of <tt>CellRangeAddress</tt>es. Each structure represents a cell range
+ * List of <c>CellRangeAddress</c>es. Each structure represents a cell range
  */
         private ArrayList _list;
 
@@ -20,8 +20,8 @@ namespace NPOI.SS.Util
             _list = new ArrayList();
         }
         /**
-         * Convenience constructor for creating a <tt>CellRangeAddressList</tt> with a single 
-         * <tt>CellRangeAddress</tt>.  Other <tt>CellRangeAddress</tt>es may be Added later.
+         * Convenience constructor for creating a <c>CellRangeAddressList</c> with a single 
+         * <c>CellRangeAddress</c>.  Other <c>CellRangeAddress</c>es may be Added later.
          */
         public CellRangeAddressList(int firstRow, int lastRow, int firstCol, int lastCol)
             : this()
@@ -92,7 +92,7 @@ namespace NPOI.SS.Util
         }
 
         /**
-         * @return <tt>CellRangeAddress</tt> at the given index
+         * @return <c>CellRangeAddress</c> at the given index
          */
         public CellRangeAddress GetCellRangeAddress(int index)
         {

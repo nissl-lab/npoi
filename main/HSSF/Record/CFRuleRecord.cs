@@ -559,9 +559,9 @@ namespace NPOI.HSSF.Record
          * TODO - Parse conditional format formulas properly i.e. produce tRefN and tAreaN instead of tRef and tArea
          * this call will produce the wrong results if the formula Contains any cell references
          * One approach might be to apply the inverse of SharedFormulaRecord.ConvertSharedFormulas(Stack, int, int)
-         * Note - two extra parameters (rowIx & colIx) will be required. They probably come from one of the Region objects.
+         * Note - two extra parameters (rowIx &amp;colIx) will be required. They probably come from one of the Region objects.
          * 
-         * @return <c>null</c> if <tt>formula</tt> was null.
+         * @return <c>null</c> if <c>formula</c> was null.
          */
         private static Ptg[] ParseFormula(String formula, HSSFWorkbook workbook)
         {
@@ -575,9 +575,9 @@ namespace NPOI.HSSF.Record
 	 * TODO - parse conditional format formulas properly i.e. produce tRefN and tAreaN instead of tRef and tArea
 	 * this call will produce the wrong results if the formula contains any cell references
 	 * One approach might be to apply the inverse of SharedFormulaRecord.convertSharedFormulas(Stack, int, int)
-	 * Note - two extra parameters (rowIx & colIx) will be required. They probably come from one of the Region objects.
+	 * Note - two extra parameters (rowIx &amp; colIx) will be required. They probably come from one of the Region objects.
 	 *
-	 * @return <code>null</code> if <tt>formula</tt> was null.
+	 * @return <code>null</code> if <c>formula</c> was null.
 	 */
         private static Ptg[] ParseFormula(String formula, HSSFSheet sheet)
         {

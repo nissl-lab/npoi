@@ -173,21 +173,21 @@ namespace NPOI.SS.Formula.Functions
 
         /**
          * Processes the third argument to VLOOKUP, or HLOOKUP (<b>col_index_num</b> 
-         * or <b>row_index_num</b> respectively).<br>
+         * or <b>row_index_num</b> respectively).<br/>
          * Sample behaviour:
          *    <table border="0" cellpAdding="1" cellspacing="2" summary="Sample behaviour">
-         *      <tr><th>Input&nbsp;&nbsp;&nbsp;Return</th><th>Value&nbsp;&nbsp;</th><th>Thrown Error</th></tr>
-         *      <tr><td>5</td><td>4</td><td>&nbsp;</td></tr>
-         *      <tr><td>2.9</td><td>2</td><td>&nbsp;</td></tr>
-         *      <tr><td>"5"</td><td>4</td><td>&nbsp;</td></tr>
-         *      <tr><td>"2.18e1"</td><td>21</td><td>&nbsp;</td></tr>
+         *      <tr><th>Input Return</th><th>Value </th><th>Thrown Error</th></tr>
+         *      <tr><td>5</td><td>4</td><td> </td></tr>
+         *      <tr><td>2.9</td><td>2</td><td> </td></tr>
+         *      <tr><td>"5"</td><td>4</td><td> </td></tr>
+         *      <tr><td>"2.18e1"</td><td>21</td><td> </td></tr>
          *      <tr><td>"-$2"</td><td>-3</td><td>*</td></tr>
          *      <tr><td>FALSE</td><td>-1</td><td>*</td></tr>
-         *      <tr><td>TRUE</td><td>0</td><td>&nbsp;</td></tr>
-         *      <tr><td>"TRUE"</td><td>&nbsp;</td><td>#REF!</td></tr>
-         *      <tr><td>"abc"</td><td>&nbsp;</td><td>#REF!</td></tr>
-         *      <tr><td>""</td><td>&nbsp;</td><td>#REF!</td></tr>
-         *      <tr><td>&lt;blank&gt;</td><td>&nbsp;</td><td>#VALUE!</td></tr>
+         *      <tr><td>TRUE</td><td>0</td><td> </td></tr>
+         *      <tr><td>"TRUE"</td><td> </td><td>#REF!</td></tr>
+         *      <tr><td>"abc"</td><td> </td><td>#REF!</td></tr>
+         *      <tr><td>""</td><td> </td><td>#REF!</td></tr>
+         *      <tr><td>&lt;blank&gt;</td><td> </td><td>#VALUE!</td></tr>
          *    </table><br/>
          *    
          *  * Note - out of range errors (both too high and too low) are handled by the caller. 
@@ -491,7 +491,7 @@ namespace NPOI.SS.Formula.Functions
     * Changes behaviour when the Evaluated 'mid' value has a different type to the lookup value.<p/>
     * 
     * A simple int might have done the same job, but there Is risk in confusion with the well 
-    * known <tt>Comparable.CompareTo()</tt> and <tt>Comparator.Compare()</tt> which both use
+    * known <c>Comparable.CompareTo()</c> and <c>Comparator.Compare()</c> which both use
     * a ubiquitous 3 value result encoding.
     */
     public class CompareResult
@@ -666,7 +666,7 @@ namespace NPOI.SS.Formula.Functions
         }
     }
     /**
-    * Represents a single row or column within an <tt>AreaEval</tt>.
+    * Represents a single row or column within an <c>AreaEval</c>.
     */
     public interface ValueVector
     {
@@ -678,8 +678,8 @@ namespace NPOI.SS.Formula.Functions
     public interface LookupValueComparer
     {
         /**
-         * @return one of 4 instances or <tt>CompareResult</tt>: <tt>LESS_THAN</tt>, <tt>EQUAL</tt>, 
-         * <tt>GREATER_THAN</tt> or <tt>TYPE_MISMATCH</tt>
+         * @return one of 4 instances or <c>CompareResult</c>: <c>LESS_THAN</c>, <c>EQUAL</c>, 
+         * <c>GREATER_THAN</c> or <c>TYPE_MISMATCH</c>
          */
         CompareResult CompareTo(ValueEval other);
     }

@@ -42,7 +42,7 @@ namespace NPOI.SS.Formula.Eval
         /**
          * Convenience method for the following:<br/>
          * <c>(b ? BoolEval.TRUE : BoolEval.FALSE)</c>
-         * @return a <tt>BoolEval</tt> instance representing <tt>b</tt>.
+         * @return a <c>BoolEval</c> instance representing <c>b</c>.
          */
         public static BoolEval ValueOf(bool b)
         {

@@ -42,9 +42,9 @@ namespace NPOI.HSSF.Record.CF
         /**
          * 
          * @param firstRow
-         * @param lastRow pass <tt>-1</tt> for full column ranges
+         * @param lastRow pass <c>-1</c> for full column ranges
          * @param firstColumn
-         * @param lastColumn  pass <tt>-1</tt> for full row ranges
+         * @param lastColumn  pass <c>-1</c> for full row ranges
          */
         public CellRange(int firstRow, int lastRow, int firstColumn, int lastColumn)
         {
@@ -61,7 +61,7 @@ namespace NPOI.HSSF.Record.CF
 
         /** 
          * Range arithmetic Is easier when using a large positive number for 'max row or column' 
-         * instead of <tt>-1</tt>. 
+         * instead of <c>-1</c>. 
          */
         private static int ConvertM1ToMax(int lastIx, int maxIndex)
         {
@@ -177,9 +177,9 @@ namespace NPOI.HSSF.Record.CF
         }
 
         /**
-         * Do all possible cell merges between cells of the list so that:<br>
-         * 	<li>if a cell range Is completely inside of another cell range, it Gets Removed from the list 
-         * 	<li>if two cells have a shared border, merge them into one bigger cell range
+         * Do all possible cell merges between cells of the list so that:<br/>
+         * 	- if a cell range Is completely inside of another cell range, it Gets Removed from the list 
+         * 	- if two cells have a shared border, merge them into one bigger cell range
          * @param cellRangeList
          * @return updated List of cell ranges
          */
@@ -297,7 +297,7 @@ namespace NPOI.HSSF.Record.CF
 
         /**
          * @param range never a full row or full column range
-         * @return an array including <b>this</b> <tt>CellRange</tt> and all parts of <tt>range</tt> 
+         * @return an array including <b>this</b> <c>CellRange</c> and all parts of <c>range</c> 
          * outside of this range  
          */
         private CellRange[] sliceUp(CellRange range)
@@ -463,7 +463,7 @@ namespace NPOI.HSSF.Record.CF
         /**
          * Check if the specified cell range Has a shared border with the current range.
          * 
-         * @return <code>true</code> if the ranges have a complete shared border (i.e.
+         * @return <c>true</c> if the ranges have a complete shared border (i.e.
          * the two ranges toGether make a simple rectangular region.
          */
         public bool HasExactSharedBorder(CellRange range)
@@ -521,7 +521,7 @@ namespace NPOI.HSSF.Record.CF
         }
 
         /**
-         * @return true if a < b
+         * @return true if a &lt; b
          */
         private static bool lt(int a, int b)
         {
@@ -529,7 +529,7 @@ namespace NPOI.HSSF.Record.CF
         }
 
         /**
-         * @return true if a <= b
+         * @return true if a &lt;= b
          */
         private static bool le(int a, int b)
         {

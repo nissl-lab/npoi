@@ -83,7 +83,7 @@ namespace NPOI.SS.UserModel
         /** A regex to find patterns like [$$-1009] and [$�-452]. */
         private static string specialPatternGroup = "(\\[\\$[^-\\]]*-[0-9A-Z]+\\])";
         
-        /**
+        /*
      * A regex to match the colour formattings rules.
      * Allowed colours are: Black, Blue, Cyan, Green,
      *  Magenta, Red, White, Yellow, "Color n" (1<=n<=56)
@@ -111,7 +111,7 @@ namespace NPOI.SS.UserModel
         /** A default FormatBase to use when a number pattern cannot be Parsed. */
         private FormatBase defaultNumFormat;
 
-        /**
+        /*
          * A map to cache formats.
          *  Map<String,FormatBase> Formats
          */
@@ -568,7 +568,7 @@ namespace NPOI.SS.UserModel
         }
 
         /**
-         * Returns the Formatted value of an Excel date as a <tt>String</tt> based
+         * Returns the Formatted value of an Excel date as a <c>String</c> based
          * on the cell's <c>DataFormat</c>. i.e. "Thursday, January 02, 2003"
          * , "01/02/2003" , "02-Jan" , etc.
          *
@@ -587,7 +587,7 @@ namespace NPOI.SS.UserModel
         }
 
         /**
-         * Returns the Formatted value of an Excel number as a <tt>String</tt>
+         * Returns the Formatted value of an Excel number as a <c>String</c>
          * based on the cell's <c>DataFormat</c>. Supported Formats include
          * currency, percents, decimals, phone number, SSN, etc.:
          * "61.54%", "$100.00", "(800) 555-1234".
@@ -674,7 +674,7 @@ namespace NPOI.SS.UserModel
         }
         /**
          * 
-         * Returns the Formatted value of a cell as a <tt>String</tt> regardless
+         * Returns the Formatted value of a cell as a <c>String</c> regardless
          * of the cell type. If the Excel FormatBase pattern cannot be Parsed then the
          * cell value will be Formatted using a default FormatBase.
          * 
@@ -692,7 +692,7 @@ namespace NPOI.SS.UserModel
 
         /**
          * 
-         * Returns the Formatted value of a cell as a <tt>String</tt> regardless
+         * Returns the Formatted value of a cell as a <c>String</c> regardless
          * of the cell type. If the Excel FormatBase pattern cannot be Parsed then the
          * cell value will be Formatted using a default FormatBase.
          * 

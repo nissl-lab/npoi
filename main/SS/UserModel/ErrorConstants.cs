@@ -67,7 +67,7 @@ namespace NPOI.SS.UserModel
         }
 
         /**
-         * @return <code>true</code> if the specified error code is a standard Excel error code. 
+         * @return <c>true</c> if the specified error code is a standard Excel error code. 
          */
         public static bool IsValidCode(int errorCode)
         {

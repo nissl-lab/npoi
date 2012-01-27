@@ -33,7 +33,7 @@ namespace NPOI.HSSF.Record.Aggregates
     }
 
     /**
-     * <tt>RecordAggregate</tt>s are groups of of BIFF <tt>Record</tt>s that are typically stored 
+     * <c>RecordAggregate</c>s are groups of of BIFF <c>Record</c>s that are typically stored 
      * together and/or updated together.  Workbook / Sheet records are typically stored in a sequential
      * list, which does not provide much structure to coordinate updates.
      * 

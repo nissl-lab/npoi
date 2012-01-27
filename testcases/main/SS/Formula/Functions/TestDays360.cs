@@ -85,7 +85,7 @@ namespace TestCases.SS.Formula.Functions
 
         }
         /**
-         * The <tt>method</tt> parameter only Makes a difference when the second parameter
+         * The <c>method</c> parameter only Makes a difference when the second parameter
          * is the last day of the month that does <em>not</em> have 30 days.
          */
         public void DISABLED_testMonthBoundaries()

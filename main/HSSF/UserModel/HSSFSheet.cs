@@ -73,26 +73,26 @@ namespace NPOI.HSSF.UserModel
         //private static POILogger log = POILogFactory.GetLogger(typeof(HSSFSheet));
 
         /// <summary>
-        /// Creates new HSSFSheet   - called by HSSFWorkbook to Create a _sheet from
-        /// scratch.  You should not be calling this from application code (its protected anyhow).
+        /// Creates new HSSFSheet - called by HSSFWorkbook to create a _sheet from
+        /// scratch. You should not be calling this from application code (its protected anyhow).
         /// </summary>
-        /// <param name="_workbook">The HSSF Workbook object associated with the _sheet..</param>
-        /// <see cref="NPOI.HSSF.UserModel.HSSFWorkbook.CreateSheet"/>
-        public HSSFSheet(HSSFWorkbook _workbook)
+        /// <param name="workbook">The HSSF Workbook object associated with the _sheet.</param>
+        /// <see cref="NPOI.HSSF.UserModel.HSSFWorkbook.CreateSheet()"/>
+        public HSSFSheet(HSSFWorkbook workbook)
         {
             _sheet = InternalSheet.CreateSheet();
             rows = new Dictionary<int, NPOI.SS.UserModel.IRow>();
-            this._workbook = _workbook;
-            this.book = _workbook.Workbook;
+            this._workbook = workbook;
+            this.book = workbook.Workbook;
         }
 
         /// <summary>
         /// Creates an HSSFSheet representing the given Sheet object.  Should only be
-        /// called by HSSFWorkbook when Reading in an exisiting file.
+        /// called by HSSFWorkbook when reading in an exisiting file.
         /// </summary>
-        /// <param name="_workbook">The HSSF Workbook object associated with the _sheet.</param>
-        /// <param name="_sheet">lowlevel Sheet object this _sheet will represent</param>
-        /// <see cref="NPOI.HSSF.UserModel.HSSFWorkbook.CreateSheet"/>
+        /// <param name="workbook">The HSSF Workbook object associated with the _sheet.</param>
+        /// <param name="sheet">lowlevel Sheet object this _sheet will represent</param>
+        /// <see cref="NPOI.HSSF.UserModel.HSSFWorkbook(NPOI.POIFS.FileSystem.DirectoryNode, bool)"/>
         public HSSFSheet(HSSFWorkbook workbook, InternalSheet sheet)
         {
             this._sheet = sheet;
@@ -104,8 +104,8 @@ namespace NPOI.HSSF.UserModel
         /// <summary>
         /// Clones the _sheet.
         /// </summary>
-        /// <param name="_workbook">The _workbook.</param>
-        /// <returns></returns>
+        /// <param name="workbook">The _workbook.</param>
+        /// <returns>the cloned sheet</returns>
         public HSSFSheet CloneSheet(HSSFWorkbook workbook)
         {
             return new HSSFSheet(workbook, _sheet.CloneSheet());
@@ -114,7 +114,7 @@ namespace NPOI.HSSF.UserModel
         /// <summary>
         /// used internally to Set the properties given a Sheet object
         /// </summary>
-        /// <param name="_sheet">The _sheet.</param>
+        /// <param name="sheet">The _sheet.</param>
         private void SetPropertiesFromSheet(InternalSheet sheet)
         {
 
@@ -428,7 +428,7 @@ namespace NPOI.HSSF.UserModel
         /// <summary>
         /// Creates a data validation object
         /// </summary>
-        /// <param name="dataValidation">The Data validation object settings</param>
+        /// <param name="dataValidation">The data validation object settings</param>
         public void AddValidationData(IDataValidation dataValidation)
         {
             if (dataValidation == null)
@@ -664,12 +664,11 @@ namespace NPOI.HSSF.UserModel
             }
         }
 
-        /**
-         * Gets the region at a particular index
-         * @param index of the region to fetch
-         * @return the merged region (simple eh?)
-         */
-
+        /// <summary>
+        /// Gets the region at a particular index
+        /// </summary>
+        /// <param name="index">of the region to fetch</param>
+        /// <returns>the merged region (simple eh?)</returns>
         //public NPOI.SS.Util.Region GetMergedRegionAt(int index)
         //{
         //    NPOI.SS.Util.CellRangeAddress cra = GetMergedRegion(index);
@@ -687,24 +686,30 @@ namespace NPOI.HSSF.UserModel
         /// <summary>
         /// Gets the row enumerator.
         /// </summary>
-        /// <returns></returns>
-        /// @return an iterator of the PHYSICAL rows.  Meaning the 3rd element may not
+        /// <returns>
+        /// an iterator of the PHYSICAL rows.  Meaning the 3rd element may not
         /// be the third row if say for instance the second row is Undefined.
-        /// Call RowNum on each row if you care which one it Is.
+        /// Call RowNum on each row if you care which one it is.
+        /// </returns>
         public IEnumerator GetRowEnumerator()
         {
             return rows.Values.GetEnumerator();
         }
+
+        // be explicit to iterate over the rows
         ///// <summary>
         ///// Alias for GetRowEnumerator() to allow
         ///// foreach loops
         ///// </summary>
-        ///// <returns></returns>
+        ///// <returns>
+        ///// an iterator of the PHYSICAL rows.  Meaning the 3rd element may not
+        ///// be the third row if say for instance the second row is Undefined.
+        ///// Call RowNum on each row if you care which one it is.
+        ///// </returns>
         //public IEnumerator GetEnumerator()
         //{
         //    return GetRowEnumerator();
         //}
-
 
         /// <summary>
         /// used internally in the API to Get the low level Sheet record represented by this
@@ -728,10 +733,10 @@ namespace NPOI.HSSF.UserModel
         /// <summary>
         /// Sets the active cell range.
         /// </summary>
-        /// <param name="firstrow">The firstrow.</param>
-        /// <param name="lastrow">The lastrow.</param>
-        /// <param name="firstcolumn">The firstcolumn.</param>
-        /// <param name="lastcolumn">The lastcolumn.</param>
+        /// <param name="firstRow">The first row.</param>
+        /// <param name="lastRow">The last row.</param>
+        /// <param name="firstColumn">The first column.</param>
+        /// <param name="lastColumn">The last column.</param>
         public void SetActiveCellRange(int firstRow, int lastRow, int firstColumn, int lastColumn)
         {
             this._sheet.SetActiveCellRange(firstRow, lastRow, firstColumn, lastColumn);
@@ -986,14 +991,16 @@ namespace NPOI.HSSF.UserModel
             get { return Sheet.GetWindowTwo().IsActive; }
             set { Sheet.GetWindowTwo().IsActive = (value); }
         }
-        /**
- * Sets whether sheet is selected.
- * @param sel Whether to select the sheet or deselect the sheet.
- */
+
+        /// <summary>
+        /// Sets whether sheet is selected.
+        /// </summary>
+        /// <param name="sel">Whether to select the sheet or deselect the sheet.</param> 
         public void SetActive(bool sel)
         {
             this.Sheet.WindowTwo.IsActive = sel;
         }
+
         private WorksheetProtectionBlock ProtectionBlock
         {
             get
@@ -1528,6 +1535,9 @@ namespace NPOI.HSSF.UserModel
         /// <param name="topRow">Left column visible in right pane.</param>
         /// <param name="activePane">Active pane.  One of: PANE_LOWER_RIGHT,PANE_UPPER_RIGHT, PANE_LOWER_LEFT, PANE_UPPER_LEFT</param>
         public void CreateSplitPane(int xSplitPos, int ySplitPos, int leftmostColumn, int topRow, NPOI.SS.UserModel.PanePosition activePane)
+        //this would have the same parameter sequence as the internal method and matches the content of the description above,
+        // if this signature changed do it in ISheet, too.
+        // public void CreateSplitPane(int xSplitPos, int ySplitPos, int topRow, int leftmostColumn, NPOI.SS.UserModel.PanePosition activePane)
         {
             Sheet.CreateSplitPane(xSplitPos, ySplitPos, topRow, leftmostColumn, activePane);
         }
@@ -1790,8 +1800,7 @@ namespace NPOI.HSSF.UserModel
         }
 
         /// <summary>
-        /// Returns the top-level drawing patriach, if there Is
-        /// one.
+        /// Returns the top-level drawing patriach, if there is one.
         /// This will hold any graphics or charts for the _sheet.
         /// WARNING - calling this will trigger a parsing of the
         /// associated escher records. Any that aren't supported
@@ -1882,6 +1891,12 @@ namespace NPOI.HSSF.UserModel
         {
             _sheet.GroupRowRange(fromRow, toRow, true);
         }
+
+        /// <summary>
+        /// Remove a Array Formula from this sheet.  All cells contained in the Array Formula range are removed as well
+        /// </summary>
+        /// <param name="cell">any cell within Array Formula range</param>
+        /// <returns>the <see cref="ICellRange{ICell}"/> of cells affected by this change</returns>
         public ICellRange<ICell> RemoveArrayFormula(ICell cell)
         {
             if (cell.Sheet != this)
@@ -1905,9 +1920,10 @@ namespace NPOI.HSSF.UserModel
             }
             return result;
         }
-        /**
- * Also creates cells if they don't exist
- */
+
+        /// <summary>
+        /// Also creates cells if they don't exist.
+        /// </summary>
         private ICellRange<ICell> GetCellRange(CellRangeAddress range)
         {
             int firstRow = range.FirstRow;
@@ -1936,6 +1952,13 @@ namespace NPOI.HSSF.UserModel
             }
             return SSCellRange<ICell>.Create(firstRow, firstColumn, height, width, temp, typeof(HSSFCell));
         }
+
+        /// <summary>
+        /// Sets array formula to specified region for result.
+        /// </summary>
+        /// <param name="formula">text representation of the formula</param>
+        /// <param name="range">Region of array formula for result</param>
+        /// <returns>the <see cref="ICellRange{ICell}"/> of cells affected by this change</returns>
         public ICellRange<ICell> SetArrayFormula(String formula, CellRangeAddress range)
         {
             // make sure the formula parses OK first
@@ -2015,14 +2038,14 @@ namespace NPOI.HSSF.UserModel
         /// <param name="useMergedCells">whether to use the contents of merged cells when calculating the width of the column</param>
         public void AutoSizeColumn(int column, bool useMergedCells)
         {
-            /**
+            /*
              * Excel measures columns in Units of 1/256th of a Char width
              * but the docs say nothing about what particular Char is used.
              * '0' looks to be a good choice.
              */
             char defaultChar = '0';
 
-            /**
+            /*
              * This is the multiple that the font height is scaled by when determining the
              * boundary of rotated text.
              */
@@ -2224,6 +2247,12 @@ namespace NPOI.HSSF.UserModel
                 SetColumnWidth(column, (int)width);
             }
         }
+
+        /// <summary>
+        /// Checks if the provided region is part of the merged regions.
+        /// </summary>
+        /// <param name="mergedRegion">Region searched in the merged regions</param>
+        /// <returns><c>true</c>, when the region is contained in at least one of the merged regions</returns>
         public bool IsMergedRegion(CellRangeAddress mergedRegion)
         {
             foreach (CellRangeAddress range in _sheet.MergedRecords.MergedRegions)
@@ -2318,6 +2347,9 @@ namespace NPOI.HSSF.UserModel
                 return dvRecords;
             }
         }
+        /// <summary>
+        /// Provide a reference to the parent workbook.
+        /// </summary>
         public NPOI.SS.UserModel.IWorkbook Workbook
         {
             get
@@ -2326,11 +2358,9 @@ namespace NPOI.HSSF.UserModel
             }
         }
 
-        /**
- * Returns the name of this _sheet
- *
- * @return the name of this _sheet
- */
+        /// <summary>
+        /// Returns the name of this _sheet
+        /// </summary>
         public String SheetName
         {
             get
@@ -2340,15 +2370,22 @@ namespace NPOI.HSSF.UserModel
                 return wb.GetSheetName(idx);
             }
         }
+
+        /// <summary>
+        /// Create an instance of a DataValidationHelper.
+        /// </summary>
+        /// <returns>Instance of a DataValidationHelper</returns>
         public DataValidationHelper GetDataValidationHelper()
         {
             return new HSSFDataValidationHelper(this);
         }
 
+        /// <summary>
+        /// Enable filtering for a range of cells
+        /// </summary>
+        /// <param name="range">the range of cells to filter</param>
         public IAutoFilter SetAutoFilter(CellRangeAddress range)
         {
-
-
             InternalWorkbook workbook = _workbook.Workbook;
             int sheetIndex = _workbook.GetSheetIndex(this);
 

@@ -118,7 +118,7 @@ namespace NPOI.Util
         /// <summary>
         /// Stream CRC
         /// </summary>
-        /// <param name="sInputFilename">the input stream</param>
+        /// <param name="inFile">the input stream</param>
         /// <returns></returns>
         public long StreamCRC(Stream inFile)
         {

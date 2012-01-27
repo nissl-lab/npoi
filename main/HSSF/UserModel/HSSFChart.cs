@@ -70,7 +70,7 @@ namespace NPOI.HSSF.UserModel
 
         /**
          * Creates a bar chart.  API needs some work. :)
-         * <p>
+         *
          * NOTE:  Does not yet work...  checking it in just so others
          * can take a look.
          */

@@ -58,7 +58,7 @@ namespace TestCases.SS.Util
         }
     }
     /**
-     * Contains specific examples of <tt>double</tt> value pairs and their comparison result according to Excel.
+     * Contains specific examples of <c>double</c> value pairs and their comparison result according to Excel.
      *
      * @author Josh Micich
      */

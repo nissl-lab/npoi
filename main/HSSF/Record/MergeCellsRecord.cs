@@ -30,10 +30,10 @@ namespace NPOI.HSSF.Record
 
     /**
      * Title: Merged Cells Record
-     * <br>
+     * 
      * Description:  Optional record defining a square area of cells to "merged" into
-     *               one cell. <br>
-     * REFERENCE:  NONE (UNDOCUMENTED PRESENTLY) <br>
+     *               one cell. 
+     * REFERENCE:  NONE (UNDOCUMENTED PRESENTLY) 
      * @author Andrew C. Oliver (acoliver at apache dot org)
      * @version 2.0-pre
      */

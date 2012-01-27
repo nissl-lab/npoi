@@ -181,7 +181,7 @@ namespace TestCases.SS.Formula.Functions
 
 
         /**
-         * Ensures that the match_type argument can be an <tt>AreaEval</tt>.<br/>
+         * Ensures that the match_type argument can be an <c>AreaEval</c>.<br/>
          * Bugzilla 44421
          */
         [TestMethod]

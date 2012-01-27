@@ -139,14 +139,14 @@
          * the current workbook is assumed.  Note - to Evaluate formulas which use multiple workbooks,
          * a {@link CollaboratingWorkbooksEnvironment} must be set up.
          * @param sheetName the name of the sheet Containing the reference.  May be <code>null</code>
-         * (when <tt>workbookName</tt> is also null) in which case the current workbook and sheet is
+         * (when <c>workbookName</c> is also null) in which case the current workbook and sheet is
          * assumed.
          * @param refStrPart1 the single cell reference or first part of the area reference.  Must not
          * be <code>null</code>.
          * @param refStrPart2 the second part of the area reference. For single cell references this
          * parameter must be <code>null</code>
-         * @param isA1Style specifies the format for <tt>refStrPart1</tt> and <tt>refStrPart2</tt>.
-         * Pass <code>true</code> for 'A1' style and <code>false</code> for 'R1C1' style.
+         * @param isA1Style specifies the format for <c>refStrPart1</c> and <c>refStrPart2</c>.
+         * Pass <c>true</c> for 'A1' style and <c>false</c> for 'R1C1' style.
          * TODO - currently POI only supports 'A1' reference style
          * @return a {@link RefEval} or {@link AreaEval}
          */

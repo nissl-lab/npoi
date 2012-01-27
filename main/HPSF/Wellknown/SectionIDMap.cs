@@ -34,8 +34,8 @@ namespace NPOI.HPSF.Wellknown
     /// <summary>
     /// Maps section format IDs To {@link PropertyIDMap}s. It Is
     /// initialized with two well-known section format IDs: those of the
-    /// <tt>\005SummaryInformation</tt> stream and the
-    /// <tt>\005DocumentSummaryInformation</tt> stream.
+    /// <c>\005SummaryInformation</c> stream and the
+    /// <c>\005DocumentSummaryInformation</c> stream.
     /// If you have a section format ID you can use it as a key To query
     /// this map.  If you Get a {@link PropertyIDMap} returned your section
     /// is well-known and you can query the {@link PropertyIDMap} for PID
@@ -160,7 +160,7 @@ namespace NPOI.HPSF.Wellknown
         /// ID.
         /// </summary>
         /// <param name="sectionFormatID">A section format ID as a 
-        /// <tt>byte[]</tt></param>
+        /// <c>byte[]</c></param>
         /// <returns>the property ID map</returns>
         public Object Get(Object sectionFormatID)
         {

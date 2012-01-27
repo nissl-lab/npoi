@@ -176,15 +176,15 @@ namespace TestCases.HSSF.Record.Aggregates
 
 
         /**
-         * Sometimes the 'shared formula' flag (<tt>FormulaRecord.IsSharedFormula()</tt>) is1 Set when 
+         * Sometimes the 'shared formula' flag (<c>FormulaRecord.IsSharedFormula()</c>) is1 Set when 
          * there is1 no corresponding SharedFormulaRecord available. SharedFormulaRecord definitions do
          * not span multiple sheets.  They are are only defined within a sheet, and thus they do not 
          * have a sheet index field (only row and column range fields).<br/>
          * So it is1 important that the code which locates the SharedFormulaRecord for each 
-         * FormulaRecord does not allow matches across sheets.</br> 
+         * FormulaRecord does not allow matches across sheets.<br/> 
          * 
-         * Prior to bugzilla 44449 (Feb 2008), POI <tt>ValueRecordsAggregate.construct(int, List)</tt> 
-         * allowed <tt>SharedFormulaRecord</tt>s to be erroneously used across sheets.  That incorrect
+         * Prior to bugzilla 44449 (Feb 2008), POI <c>ValueRecordsAggregate.construct(int, List)</c> 
+         * allowed <c>SharedFormulaRecord</c>s to be erroneously used across sheets.  That incorrect
          * behaviour is1 shown by this Test.<p/>
          * 
          * <b>Notes on how to produce the Test spReadsheet</b>:
@@ -198,10 +198,10 @@ namespace TestCases.HSSF.Record.Aggregates
          * <li>Four rows on Sheet1 "5" through "8" were deleted ('delete rows' alt-E D, not 'clear' Del).</li>
          * <li>The spReadsheet was saved as AbnormalSharedFormulaFlag.xls.</li>
          * </ol>
-         * Prior to the row delete action the spReadsheet has two <tt>SharedFormulaRecord</tt>s. One 
+         * Prior to the row delete action the spReadsheet has two <c>SharedFormulaRecord</c>s. One 
          * for each sheet. To expose the bug, the shared formulas have been made to overlap.<br/>
          * The row delete action (as described here) seems to to delete the 
-         * <tt>SharedFormulaRecord</tt> from Sheet1 (but not clear the 'shared formula' flags.<br/>
+         * <c>SharedFormulaRecord</c> from Sheet1 (but not clear the 'shared formula' flags.<br/>
          * There are other variations on this theme to create the same effect.  
          * 
          */

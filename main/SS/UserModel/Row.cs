@@ -20,10 +20,11 @@ namespace NPOI.SS.UserModel
     using System;
     using System.Collections.Generic;
     using System.Collections;
-    /**
-     * Used to specify the different possible policies
-     *  if for the case of null and blank cells
-     */
+
+    /// <summary>
+    /// Used to specify the different possible policies
+    /// if for the case of null and blank cells
+    /// </summary>    
     public class MissingCellPolicy
     {
         private static int NEXT_ID = 1;
@@ -32,163 +33,175 @@ namespace NPOI.SS.UserModel
         {
             this.id = NEXT_ID++;
         }
-        /** Missing cells are returned as null, Blank cells are returned as normal */
+        /// <summary>Missing cells are returned as null, Blank cells are returned as normal</summary>
         public static MissingCellPolicy RETURN_NULL_AND_BLANK = new MissingCellPolicy();
-        /** Missing cells are returned as null, as are blank cells */
+        /// <summary>Missing cells are returned as null, as are blank cells</summary>
         public static MissingCellPolicy RETURN_BLANK_AS_NULL = new MissingCellPolicy();
-        /** A new, blank cell is Created for missing cells. Blank cells are returned as normal */
+        /// <summary>A new, blank cell is Created for missing cells. Blank cells are returned as normal</summary>
         public static MissingCellPolicy CREATE_NULL_AS_BLANK = new MissingCellPolicy();
     }
-    /**
-     * High level representation of a row of a spreadsheet.
-     */
+
+    /// <summary>
+    /// High level representation of a row of a spreadsheet.
+    /// </summary>    
     public interface IRow
     {
-
-        /**
-         * Use this to create new cells within the row and return it.
-         * <p>
-         * The cell that is returned is a {@link Cell#CELL_TYPE_BLANK}. The type can be Changed
-         * either through calling <code>SetCellValue</code> or <code>SetCellType</code>.
-         *
-         * @param column - the column number this cell represents
-         * @return Cell a high level representation of the Created cell.
-         * @throws ArgumentException if columnIndex < 0 or greater than the maximum number of supported columns
-         * (255 for *.xls, 1048576 for *.xlsx)
-         */
+        /// <summary>
+        /// Use this to create new cells within the row and return it.
+        /// 
+        /// The cell that is returned is a <see cref="ICell"/>/<see cref="CellType.BLANK"/>.
+        /// The type can be changed either through calling <c>SetCellValue</c> or <c>SetCellType</c>.
+        /// </summary>
+        /// <param name="column">the column number this cell represents</param>
+        /// <returns>Cell a high level representation of the created cell.</returns>
+        /// <throws>
+        /// ArgumentException if columnIndex &lt; 0 or greater than the maximum number of supported columns
+        /// (255 for *.xls, 1048576 for *.xlsx)
+        /// </throws>
         ICell CreateCell(int column);
 
-        /**
-         * Use this to create new cells within the row and return it.
-         * <p>
-         * The cell that is returned is a {@link Cell#CELL_TYPE_BLANK}. The type can be Changed
-         * either through calling SetCellValue or SetCellType.
-         *
-         * @param column - the column number this cell represents
-         * @return Cell a high level representation of the Created cell.
-         * @throws ArgumentException if columnIndex < 0 or greate than a maximum number of supported columns
-         * (255 for *.xls, 1048576 for *.xlsx)
-         */
+        /// <summary>
+        /// Use this to create new cells within the row and return it.
+        /// 
+        /// The cell that is returned is a <see cref="ICell"/>/<see cref="CellType.BLANK"/>. The type can be changed
+        /// either through calling <code>SetCellValue</code> or <code>SetCellType</code>.
+        /// </summary>
+        /// <param name="column">the column number this cell represents</param>
+        /// <param name="type"></param>
+        /// <returns>Cell a high level representation of the created cell.</returns>
+        /// <throws>ArgumentException if columnIndex &lt; 0 or greater than the maximum number of supported columns
+        /// (255 for *.xls, 1048576 for *.xlsx)
+        /// </throws>
         ICell CreateCell(int column, NPOI.SS.UserModel.CellType type);
 
-        /**
-         * Remove the Cell from this row.
-         *
-         * @param cell the cell to remove
-         */
+        /// <summary>
+        /// Remove the Cell from this row.
+        /// </summary>
+        /// <param name="cell">the cell to remove</param>
         void RemoveCell(ICell cell);
 
-        /**
-         * Get row number this row represents
-         *
-         * @return the row number (0 based)
-         */
+        /// <summary>
+        /// Get row number this row represents
+        /// </summary>        
+        /// <returns>the row number (0 based)</returns>
         int RowNum { get; set; }
 
-        /**
-         * Get the cell representing a given column (logical cell) 0-based.  If you
-         * ask for a cell that is not defined....you get a null.
-         *
-         * @param cellnum  0 based column number
-         * @return Cell representing that column or null if undefined.
-         * @see #GetCell(int, NPOI.SS.usermodel.Row.MissingCellPolicy)
-         */
+        /// <summary>
+        /// Get the cell representing a given column (logical cell) 0-based.  If you
+        /// ask for a cell that is not defined....you get a null.
+        /// </summary>
+        /// <param name="cellnum">0 based column number</param>
+        /// <returns>Cell representing that column or null if undefined.</returns>
+        /// <see cref="GetCell(int, NPOI.SS.UserModel.MissingCellPolicy)"/>
         ICell GetCell(int cellnum);
 
-        /**
-         * Returns the cell at the given (0 based) index, with the specified {@link NPOI.SS.usermodel.Row.MissingCellPolicy}
-         *
-         * @return the cell at the given (0 based) index
-         * @throws ArgumentException if cellnum < 0 or the specified MissingCellPolicy is invalid
-         * @see Row#RETURN_NULL_AND_BLANK
-         * @see Row#RETURN_BLANK_AS_NULL
-         * @see Row#CREATE_NULL_AS_BLANK
-         */
+        /// <summary>
+        /// Returns the cell at the given (0 based) index, with the specified {@link NPOI.SS.usermodel.Row.MissingCellPolicy}
+        /// </summary>
+        /// <returns>the cell at the given (0 based) index</returns>
+        /// <throws>ArgumentException if cellnum &lt; 0 or the specified MissingCellPolicy is invalid</throws>
+        /// <see cref="MissingCellPolicy.RETURN_NULL_AND_BLANK"/>
+        /// <see cref="MissingCellPolicy.RETURN_BLANK_AS_NULL"/>
+        /// <see cref="MissingCellPolicy.CREATE_NULL_AS_BLANK"/>
         ICell GetCell(int cellnum, MissingCellPolicy policy);
 
-        /**
-         * Get the number of the first cell Contained in this row.
-         *
-         * @return short representing the first logical cell in the row,
-         *  or -1 if the row does not contain any cells.
-         */
+        /// <summary>
+        /// Get the number of the first cell Contained in this row.
+        /// </summary>
+        /// <returns>
+        /// short representing the first logical cell in the row,
+        /// or -1 if the row does not contain any cells.
+        /// </returns>
         short FirstCellNum { get; }
 
-        /**
-         * Gets the index of the last cell Contained in this row <b>PLUS ONE</b>. The result also
-         * happens to be the 1-based column number of the last cell.  This value can be used as a
-         * standard upper bound when iterating over cells:
-         * <pre>
-         * short minColIx = row.GetFirstCellNum();
-         * short maxColIx = row.GetLastCellNum();
-         * for(short colIx=minColIx; colIx&lt;maxColIx; colIx++) {
-         *   Cell cell = row.GetCell(colIx);
-         *   if(cell == null) {
-         *     continue;
-         *   }
-         *   //... do something with cell
-         * }
-         * </pre>
-         *
-         * @return short representing the last logical cell in the row <b>PLUS ONE</b>,
-         *   or -1 if the row does not contain any cells.
-         */
+        /// <summary>
+        /// Gets the index of the last cell Contained in this row <b>PLUS ONE</b>. The result also
+        /// happens to be the 1-based column number of the last cell.  This value can be used as a
+        /// standard upper bound when iterating over cells:
+        /// <pre>
+        /// short minColIx = row.GetFirstCellNum();
+        /// short maxColIx = row.GetLastCellNum();
+        /// for(short colIx=minColIx; colIx&lt;maxColIx; colIx++) {
+        /// Cell cell = row.GetCell(colIx);
+        /// if(cell == null) {
+        /// continue;
+        /// }
+        /// //... do something with cell
+        /// }
+        /// </pre>
+        /// </summary>
+        /// <returns>
+        /// short representing the last logical cell in the row <b>PLUS ONE</b>,
+        /// or -1 if the row does not contain any cells.
+        /// </returns>
         short LastCellNum { get; }
 
-        /**
-         * Gets the number of defined cells (NOT number of cells in the actual row!).
-         * That is to say if only columns 0,4,5 have values then there would be 3.
-         *
-         * @return int representing the number of defined cells in the row.
-         */
+        /// <summary>
+        /// Gets the number of defined cells (NOT number of cells in the actual row!).
+        /// That is to say if only columns 0,4,5 have values then there would be 3.
+        /// </summary>
+        /// <returns>int representing the number of defined cells in the row.</returns>
         int PhysicalNumberOfCells { get; }
 
-        /**
-         * Get whether or not to display this row with 0 height
-         *
-         * @return - zHeight height is zero or not.
-         */
+        /// <summary>
+        /// Get whether or not to display this row with 0 height
+        /// </summary>
+        /// <returns>zHeight height is zero or not.</returns>
         bool ZeroHeight { get; set; }
 
-        /**
-         * Get the row's height measured in twips (1/20th of a point). If the height is not Set, the default worksheet value is returned,
-         * See {@link Sheet#GetDefaultRowHeightInPoints()}
-         *
-         * @return row height measured in twips (1/20th of a point)
-         */
+        /// <summary>
+        /// Get the row's height measured in twips (1/20th of a point). 
+        /// If the height is not set, the default worksheet value is returned,
+        /// <see cref="ISheet.DefaultRowHeightInPoints"/>
+        /// </summary>
+        /// <returns>row height measured in twips (1/20th of a point)</returns>
         short Height { get; set; }
 
-        /**
-         * Returns row height measured in point size. If the height is not Set, the default worksheet value is returned,
-         * See {@link Sheet#GetDefaultRowHeightInPoints()}
-         *
-         * @return row height measured in point size
-         * @see Sheet#GetDefaultRowHeightInPoints()
-         */
+        /// <summary>
+        /// Returns row height measured in point size. 
+        /// If the height is not set, the default worksheet value is returned,
+        /// <see cref="ISheet.DefaultRowHeightInPoints"/>
+        /// </summary>
+        /// <returns>row height measured in point size
+        /// <see cref="ISheet.DefaultRowHeightInPoints"/>
+        /// </returns>
         float HeightInPoints { get; set; }
-        /**
-        * Is this row formatted? Most aren't, but some rows
-        *  do have whole-row styles. For those that do, you
-        *  can get the formatting from {@link #getRowStyle()}
-        */
+        /// <summary>
+        /// Is this row formatted? Most aren't, but some rows
+        /// do have whole-row styles. For those that do, you
+        /// can get the formatting from <see cref="RowStyle"/>
+        /// </summary>
         bool IsFormatted { get; }
-        /**
-         * @return Cell iterator of the physically defined cells.  Note element 4 may
-         * actually be row cell depending on how many are defined!
-         */
+        /// <summary>
+        /// Cell iterator of the physically defined cells.  Note element 4 may
+        /// actually be row cell depending on how many are defined!
+        /// </summary>
         IEnumerator GetEnumerator();
 
-        /**
-         * Returns the Sheet this row belongs to
-         *
-         * @return the Sheet that owns this row
-         */
+        /// <summary>
+        /// Returns the Sheet this row belongs to
+        /// </summary>
+        /// <returns>the Sheet that owns this row</returns>
         ISheet Sheet { get; }
 
+        /// <summary>
+        /// Returns the whole-row cell styles. Most rows won't
+        /// have one of these, so will return null. Call IsFormmated to check first
+        /// </summary>
+        /// <value>The row style.</value>
         ICellStyle RowStyle { get; set; }
 
-        void MoveCell(ICell cell, int idx);
+        /// <summary>
+        /// Moves the supplied cell to a new column, which
+        /// must not already have a cell there!
+        /// </summary>
+        /// <param name="cell">The cell to move</param>
+        /// <param name="newColumn">The new column number (0 based)</param>
+        void MoveCell(ICell cell, int newColumn);
 
+        /// <summary>
+        /// Get cells in the row
+        /// </summary>
         List<ICell> Cells { get; }
     }
 }

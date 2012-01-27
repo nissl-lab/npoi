@@ -39,7 +39,7 @@ namespace TestCases.SS.Formula.PTG
         double NEW_QUANT = 7.0d;
         double NEW_PART_COST = 15.3d;
         /**
-         * Tests <tt>NameXPtg for external cell reference by name</tt> and logic in Workbook below that   
+         * Tests <c>NameXPtg for external cell reference by name</c> and logic in Workbook below that   
          */
         [TestMethod]
         public void TestReadCalcSheet()

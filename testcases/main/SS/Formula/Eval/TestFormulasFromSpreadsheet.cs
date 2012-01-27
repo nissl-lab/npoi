@@ -29,10 +29,10 @@ namespace TestCases.SS.Formula.Eval
 
     /**
      * Tests formulas and operators as loaded from a Test data spreadsheet.<p/>
-     * This class does not Test implementors of <tt>Function</tt> and <tt>OperationEval</tt> in
-     * isolation.  Much of the Evaluation engine (i.e. <tt>HSSFFormulaEvaluator</tt>, ...) Gets
+     * This class does not Test implementors of <c>Function</c> and <c>OperationEval</c> in
+     * isolation.  Much of the Evaluation engine (i.e. <c>HSSFFormulaEvaluator</c>, ...) Gets
      * exercised as well.  Tests for bug fixes and specific/tricky behaviour can be found in the
-     * corresponding Test class (<tt>TestXxxx</tt>) of the target (<tt>Xxxx</tt>) implementor,
+     * corresponding Test class (<c>TestXxxx</c>) of the target (<c>Xxxx</c>) implementor,
      * where execution can be observed more easily.
      *
      * @author Amol S. Deshmukh &lt; amolweb at ya hoo dot com &gt;

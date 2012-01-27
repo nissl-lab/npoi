@@ -15,10 +15,6 @@
 * limitations Under the License.
 */
 
-/**
- * @author Amol S. Deshmukh &lt; amolweb at ya hoo dot com &gt;
- *
- */
 namespace NPOI.SS.Formula.Functions
 {
     using System;
@@ -26,15 +22,19 @@ namespace NPOI.SS.Formula.Functions
     using NPOI.Util;
     using NPOI.SS.Formula.Eval;
     using NPOI.SS.Formula;
-	/**
-	 * if v is zero length or contains no duplicates, return value is
-	 * Double.NaN. Else returns the value that occurs most times and if there is
-	 * a tie, returns the first such value.
-	 *
-	 * @param v
-	 */
+    /**
+     * @author Amol S. Deshmukh &lt; amolweb at ya hoo dot com &gt;
+     *
+     */
     public class Mode : Function
     {
+        /**
+         * if v is zero length or contains no duplicates, return value is
+         * Double.NaN. Else returns the value that occurs most times and if there is
+         * a tie, returns the first such value.
+         *
+         * @param v
+         */
         public static double Evaluate(double[] v)
         {
             if (v.Length < 2)

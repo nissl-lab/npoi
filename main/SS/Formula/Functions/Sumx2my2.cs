@@ -18,7 +18,7 @@
 namespace NPOI.SS.Formula.Functions
 {
 
-    /**
+    /*
      * Implementation of Excel function SUMX2MY2()<p/>
      * 
      * Calculates the sum of differences of squares in two arrays of the same size.<br/>

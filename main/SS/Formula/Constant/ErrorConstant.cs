@@ -24,7 +24,7 @@ namespace NPOI.SS.Formula.Constant
     /// <summary>
     /// Represents a constant error code value as encoded in a constant values array.
     /// This class is a type-safe wrapper for a 16-bit int value performing a similar job to
-    /// <tt>ErrorEval</tt>
+    /// <c>ErrorEval</c>
     /// </summary>
     ///<remarks> @author Josh Micich</remarks>
     public class ErrorConstant {

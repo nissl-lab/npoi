@@ -24,7 +24,7 @@ namespace TestCases.SS.Util
 {
 
     /**
-     * Contains specific examples of <tt>double</tt> values and their rendering in Excel.
+     * Contains specific examples of <c>double</c> values and their rendering in Excel.
      *
      * @author Josh Micich
      */

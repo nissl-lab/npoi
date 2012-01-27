@@ -29,7 +29,7 @@ namespace NPOI.HSSF.Util
      *
      *
      * REFERENCE:  
-     * @author IgOr KaTz && EuGeNe BuMaGiN (Tal Moshaiov) (VistaPortal LDT.)
+     * @author IgOr KaTz &amp; EuGeNe BuMaGiN (Tal Moshaiov) (VistaPortal LDT.)
     @version 1.0
      */
 

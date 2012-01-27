@@ -25,7 +25,7 @@ namespace TestCases
         private static POIDataSamples _instHSMF;
 
         private string _resolvedDataDir;
-        /** <code>true</code> if standard system propery is not set,
+        /** <c>true</c> if standard system propery is not set,
          * but the data is available on the test runtime classpath */
         private bool _sampleDataIsAvaliableOnClassPath;
         private String _moduleDir;
@@ -134,7 +134,7 @@ namespace TestCases
         /**
  * Opens a sample file from the standard HSSF test data directory
  * 
- * @return an Open <tt>Stream</tt> for the specified sample file
+ * @return an Open <c>Stream</c> for the specified sample file
  */
         public Stream OpenResourceAsStream(String sampleFileName)
         {

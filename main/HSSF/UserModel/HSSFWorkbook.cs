@@ -1607,7 +1607,7 @@ namespace NPOI.HSSF.UserModel
             return new HSSFPalette(workbook.CustomPalette);
         }
 
-        ///** Test only. Do not use */
+        // /** Test only. Do not use */
         //public void InsertChartRecord()
         //{
         //    int loc = workbook.FindFirstRecordLocBySid(SSTRecord.sid);
@@ -1660,7 +1660,7 @@ namespace NPOI.HSSF.UserModel
         /// </summary>
         /// <param name="pictureData">The bytes of the picture</param>
         /// <param name="format">The format of the picture.  One of 
-        /// PictureType.*
+        /// PictureType.</param>
         /// <returns>the index to this picture (1 based).</returns>
         public int AddPicture(byte[] pictureData, NPOI.SS.UserModel.PictureType format)
         {

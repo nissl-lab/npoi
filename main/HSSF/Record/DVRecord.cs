@@ -298,7 +298,7 @@ namespace NPOI.HSSF.Record
 
         public override String ToString()
         {
-            /** @todo DVRecord string representation */
+            /* @todo DVRecord string representation */
             StringBuilder buffer = new StringBuilder();
 
             return buffer.ToString();

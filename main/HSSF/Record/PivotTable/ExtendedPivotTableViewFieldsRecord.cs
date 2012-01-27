@@ -32,7 +32,7 @@ namespace NPOI.HSSF.Record.PivotTable
     {
         public const short sid = 0x0100;
 
-        /** the value of the <tt>cchSubName</tt> field when the subName is not present */
+        /** the value of the <c>cchSubName</c> field when the subName is not present */
         private const int STRING_NOT_PRESENT_LEN = 0xFFFF;
 
         private int grbit1;

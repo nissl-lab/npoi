@@ -33,7 +33,7 @@ namespace NPOI.SS.UserModel
      */
     public interface IAutoFilter
     {
-        /**
+        /*
          * Apply a custom filter
          *
          * <p>
@@ -62,7 +62,7 @@ namespace NPOI.SS.UserModel
          */
 
 
-        /**
+        /*
          * Apply a filter against a list of values
          *
          * <p>

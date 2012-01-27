@@ -500,8 +500,8 @@ namespace NPOI.SS.Formula
         /**
  * Calculates the number of tokens that the evaluator should skip upon reaching a tAttrSkip.
  *
- * @return the number of tokens (starting from <tt>startIndex+1</tt>) that need to be skipped
- * to achieve the specified <tt>distInBytes</tt> skip distance.
+ * @return the number of tokens (starting from <c>startIndex+1</c>) that need to be skipped
+ * to achieve the specified <c>distInBytes</c> skip distance.
  */
         private static int CountTokensToBeSkipped(Ptg[] ptgs, int startIndex, int distInBytes)
         {
@@ -525,8 +525,8 @@ namespace NPOI.SS.Formula
         /**
          * Dereferences a single value from any AreaEval or RefEval evaluation result.
          * If the supplied evaluationResult is just a plain value, it is returned as-is.
-         * @return a <tt>NumberEval</tt>, <tt>StringEval</tt>, <tt>BoolEval</tt>,
-         *  <tt>BlankEval</tt> or <tt>ErrorEval</tt>. Never <c>null</c>.
+         * @return a <c>NumberEval</c>, <c>StringEval</c>, <c>BoolEval</c>,
+         *  <c>BlankEval</c> or <c>ErrorEval</c>. Never <c>null</c>.
          */
         public static ValueEval DereferenceResult(ValueEval evaluationResult, int srcRowNum, int srcColNum)
         {

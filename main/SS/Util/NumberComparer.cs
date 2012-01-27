@@ -14,7 +14,7 @@ namespace NPOI.SS.Util
          * decimal digits of precision and a decimal exponent, before completing the comparison.
          * <p/>
          * In Excel formula evaluation, expressions like "(0.06-0.01)=0.05" evaluate to "TRUE" even
-         * though the equivalent java expression is <code>false</code>.  In examples like this,
+         * though the equivalent java expression is <c>false</c>.  In examples like this,
          * Excel achieves the effect by having additional logic for comparison operations.
          * <p/>
          * <p/>
@@ -33,7 +33,7 @@ namespace NPOI.SS.Util
          * implemented in POI (as of Jul-2009).
          *
          * @return <code>negative, 0, or positive</code> according to the standard Excel comparison
-         * of values <tt>a</tt> and <tt>b</tt>.
+         * of values <c>a</c> and <c>b</c>.
          */
         public static int Compare(double a, double b)
         {

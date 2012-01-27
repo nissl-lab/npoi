@@ -50,7 +50,7 @@ namespace NPOI.SS.Formula
 
         }
     }
-    /**
+    /*
      * This class Parses a formula string into a List of Tokens in RPN order.
      * Inspired by
      *           Lets Build a Compiler, by Jack Crenshaw
@@ -60,7 +60,7 @@ namespace NPOI.SS.Formula
      * <factor> ::= <number> | (<expression>) | <cellRef> | <function>
      * <function> ::= <functionName> ([expression [, expression]*])
      *
-     *  @author Avik Sengupta <avik at apache dot org>
+     *  @author Avik Sengupta (avik at apache dot org)
      *  @author Andrew C. oliver (acoliver at apache dot org)
      *  @author Eric Ladner (eladner at goldinc dot com)
      *  @author Cameron Riley (criley at ekmail.com)
@@ -444,7 +444,7 @@ namespace NPOI.SS.Formula
 
         /**
  *
- * @return <code>true</code> if the specified character may be used in a defined name
+ * @return <c>true</c> if the specified character may be used in a defined name
  */
         private static bool IsValidDefinedNameChar(char ch)
         {
@@ -1024,9 +1024,9 @@ namespace NPOI.SS.Formula
             }
 
             /**
-             * @return <code>true</code> if the two range parts can be combined in an
+             * @return <c>true</c> if the two range parts can be combined in an
              * {@link AreaPtg} ( Note - the explicit range operator (:) may still be valid
-             * when this method returns <code>false</code> )
+             * when this method returns <c>false</c> )
              */
             public bool IsCompatibleForArea(SimpleRangePart part2)
             {
@@ -1156,7 +1156,7 @@ namespace NPOI.SS.Formula
             bool result = CellReference.ClassifyCellReference(str, _ssVersion) == NameType.CELL;
             if (result)
             {
-                /**
+                /*
                  * Check if the argument is a function. Certain names can be either a cell reference or a function name
                  * depending on the contenxt. Compare the following examples in Excel 2007:
                  * (a) LOG10(100) + 1
@@ -1890,7 +1890,7 @@ namespace NPOI.SS.Formula
 
         //{--------------------------------------------------------------}
         //{ Parse and Translate an Assignment Statement }
-        /**
+        /*
     procedure Assignment;
     var Name: string[8];
     begin

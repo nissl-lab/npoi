@@ -37,7 +37,7 @@ namespace TestCases.SS.Formula.Functions
      * functions have more complex Test cases and Test data Setup.
      *
      * Tests for bug fixes and specific/tricky behaviour can be found in the corresponding Test class
-     * (<tt>TestXxxx</tt>) of the target (<tt>Xxxx</tt>) implementor, where execution can be observed
+     * (<c>TestXxxx</c>) of the target (<c>Xxxx</c>) implementor, where execution can be observed
      *  more easily.
      *
      * @author Josh Micich

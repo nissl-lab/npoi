@@ -58,6 +58,8 @@ namespace TestCases.HSSF.EventUserModel
         [TestMethod]
         public void TestFormats()
         {
+            System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.GetCultureInfo("en-US");
+
             ProcessFile("MissingBits.xls");
 
             Assert.AreEqual("_(*#,##0_);_(*(#,##0);_(* \"-\"_);_(@_)", listener.GetFormatString(41));

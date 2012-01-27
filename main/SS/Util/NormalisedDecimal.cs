@@ -21,7 +21,7 @@ namespace NPOI.SS.Util
     using System.Text;
     using NPOI.Util;
 
-    /**
+    /*
      * Represents a transformation of a 64 bit IEEE double quantity having a decimal exponent and a
      * fixed point (15 decimal digit) significand.  Some quirks of Excel's calculation behaviour are
      * simpler to reproduce with numeric quantities in this format.  This class is currently used to
@@ -35,11 +35,11 @@ namespace NPOI.SS.Util
      * This class does not handle negative numbers or zero.
      * <p/>
      * The value of a {@link NormalisedDecimal} is given by<br/>
-     * <tt> significand &times; 10<sup>decimalExponent</sup></tt>
+     * <c> significand &times; 10<sup>decimalExponent</sup></c>
      * <br/>
      * where:<br/>
      *
-     * <tt>significand</tt> = wholePart + fractionalPart / 2<sup>24</sup><br/>
+     * <c>significand</c> = wholePart + fractionalPart / 2<sup>24</sup><br/>
      *
      * @author Josh Micich
      */
@@ -52,7 +52,7 @@ namespace NPOI.SS.Util
 
         private static decimal BD_2_POW_24 = new decimal((BigInteger.ONE << 24).LongValue());
 
-        /**
+        /*
          * log<sub>10</sub>(2)&times;2<sup>20</sup>
          */
         private static int LOG_BASE_10_OF_2_TIMES_2_POW_20 = 315653; // 315652.8287

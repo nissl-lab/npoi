@@ -14,7 +14,7 @@ public class WorkbookUtil {
 	 * Creates a valid sheet name, which is conform to the rules.
 	 * In any case, the result safely can be used for 
 	 * {@link org.apache.poi.ss.usermodel.Workbook#setSheetName(int, String)}.
-	 * <br>
+	 * <br/>
 	 * Rules:
 	 * <ul>
 	 * <li>never null</li>
@@ -68,7 +68,7 @@ public class WorkbookUtil {
      * Validates sheet name.
      *
      * <p>
-     * The character count <tt>MUST</tt> be greater than or equal to 1 and less than or equal to 31.
+     * The character count <c>MUST</c> be greater than or equal to 1 and less than or equal to 31.
      * The string MUST NOT contain the any of the following characters:
      * <ul>
      * <li> 0x0000 </li>

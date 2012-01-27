@@ -23,24 +23,24 @@ namespace NPOI.SS.Formula.Functions
     using NPOI.SS.Formula;
 
 
-    /**
+    /*
      * Implementation for the Excel function SUMPRODUCT<p/>
      * 
      * Syntax : <br/>
      *  SUMPRODUCT ( array1[, array2[, array3[, ...]]])
      *    <table border="0" cellpAdding="1" cellspacing="0" summary="Parameter descriptions">
-     *      <tr><th>array1, ... arrayN&nbsp;&nbsp;</th><td>typically area references, 
+     *      <tr><th>array1, ... arrayN </th><td>typically area references, 
      *      possibly cell references or scalar values</td></tr>
      *    </table><br/>
      *    
      * Let A<b>n</b><sub>(<b>i</b>,<b>j</b>)</sub> represent the element in the <b>i</b>th row <b>j</b>th column 
      * of the <b>n</b>th array<br/>   
      * Assuming each array has the same dimensions (W, H), the result Is defined as:<br/>    
-     * SUMPRODUCT = &Sigma;<sub><b>i</b>: 1..H</sub> &nbsp;
-     * 	(&nbsp; &Sigma;<sub><b>j</b>: 1..W</sub> &nbsp;
-     * 	  (&nbsp; &Pi;<sub><b>n</b>: 1..N</sub> 
-     * 			A<b>n</b><sub>(<b>i</b>,<b>j</b>)</sub>&nbsp;
-     *    )&nbsp;
+     * SUMPRODUCT = &Sigma;<sub><b>i</b>: 1..H</sub>  
+     * 	(  &Sigma;<sub><b>j</b>: 1..W</sub>  
+     * 	  (  &Pi;<sub><b>n</b>: 1..N</sub> 
+     * 			A<b>n</b><sub>(<b>i</b>,<b>j</b>)</sub> 
+     *    ) 
      *  ) 
      * 
      * @author Josh Micich

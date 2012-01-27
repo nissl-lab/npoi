@@ -70,6 +70,8 @@ namespace TestCases.SS.UserModel
         [TestMethod]
         public void TestNumericCells()
         {
+            System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.GetCultureInfo("en-US");
+
             IWorkbook workbook = _testDataProvider.CreateWorkbook();
             IDataFormat df = workbook.GetCreationHelper().CreateDataFormat();
             ISheet sheet = workbook.CreateSheet();

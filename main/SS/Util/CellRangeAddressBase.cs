@@ -15,9 +15,9 @@ namespace NPOI.SS.Util
     public abstract class CellRangeAddressBase
     {
 
-        /** max 65536 rows in BIFF8 */
+        // /** max 65536 rows in BIFF8 */
         //private const int LAST_ROW_INDEX = 0x00FFFF;
-        /** max 256 columns in BIFF8 */
+        // /** max 256 columns in BIFF8 */
         //private const int LAST_COLUMN_INDEX = 0x00FF;
 
         private int _firstRow;

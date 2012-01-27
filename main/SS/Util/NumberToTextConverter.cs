@@ -21,13 +21,13 @@ namespace NPOI.SS.Util
 {
 
 
-    /**
+    /*
      * Excel Converts numbers to text with different rules to those of java, so
-     *  <code>Double.ToString(value)</tt> won't do.
+     *  <c>Double.ToString(value)</c> won't do.
      * <ul>
      * <li>No more than 15 significant figures are output (java does 18).</li>
      * <li>The sign char for the exponent is included even if positive</li>
-     * <li>Special values (<tt>NaN</tt> and <tt>InfInity</tt>) Get rendered like the ordinary
+     * <li>Special values (<c>NaN</c> and <c>InfInity</c>) Get rendered like the ordinary
      * number that the bit pattern represents.</li>
      * <li>Denormalised values (between &plusmn;2<sup>-1074</sup> and &plusmn;2<sup>-1022</sup>
      *  are displayed as "0"</sup>
@@ -124,9 +124,9 @@ namespace NPOI.SS.Util
         }
 
         /**
-         * Converts the supplied <tt>value</tt> to the text representation that Excel would give if
+         * Converts the supplied <c>value</c> to the text representation that Excel would give if
          * the value were to appear in an unformatted cell, or as a literal number in a formula.<br/>
-         * Note - the results from this method differ slightly from those of <tt>Double.ToString()</tt>
+         * Note - the results from this method differ slightly from those of <c>Double.ToString()</c>
          * In some special cases Excel behaves quite differently.  This function attempts to reproduce
          * those results.
          */

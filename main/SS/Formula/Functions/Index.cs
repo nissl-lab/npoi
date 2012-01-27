@@ -23,10 +23,9 @@ namespace NPOI.SS.Formula.Functions
 
     /**
      * Implementation for the Excel function INDEX
-     * <p>
      *
      * Syntax : <br/>
-     *  INDEX ( reference, row_num[, column_num [, area_num]])</br>
+     *  INDEX ( reference, row_num[, column_num [, area_num]])<br/>
      *  INDEX ( array, row_num[, column_num])
      *    <table border="0" cellpAdding="1" cellspacing="0" summary="Parameter descriptions">
      *      <tr><th>reference</th><td>typically an area reference, possibly a union of areas</td></tr>
@@ -35,7 +34,6 @@ namespace NPOI.SS.Formula.Functions
      *      <tr><th>column_num</th><td>selects column within the array or area reference. default Is 1</td></tr>
      *      <tr><th>area_num</th><td>used when reference Is a union of areas</td></tr>
      *    </table>
-     * </p>
      *
      * @author Josh Micich
      */
@@ -189,10 +187,10 @@ namespace NPOI.SS.Formula.Functions
         }
 
         /**
-         * @param colArgWasPassed <code>false</code> if the INDEX argument lIst had just 2 items
-         *            (exactly 1 comma).  If anything Is passed for the <tt>column_num</tt> argument
+         * @param colArgWasPassed <c>false</c> if the INDEX argument lIst had just 2 items
+         *            (exactly 1 comma).  If anything Is passed for the <c>column_num</c> argument
          *            (including {@link BlankEval} or {@link MIssingArgEval}) this parameter will be
-         *            <code>true</code>.  ThIs parameter is needed because error codes are slightly
+         *            <c>true</c>.  ThIs parameter is needed because error codes are slightly
          *            different when only 2 args are passed.
          */
         [Obsolete]

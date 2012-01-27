@@ -81,7 +81,7 @@ namespace NPOI.SS.Formula.Functions
          * <p>
          * Starting with the guess, the method cycles through the calculation until the result
          * is accurate within 0.00001 percent. If IRR can't find a result that works
-         * after 20 tries, the Double.NaN<> is returned.
+         * after 20 tries, the Double.NaN is returned.
          * </p>
          * <p>
          *   The implementation is inspired by the NewtonSolver from the Apache Commons-Math library,

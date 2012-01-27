@@ -209,7 +209,7 @@ namespace NPOI.SS.Util
 
         /**
          * Note - if this area reference refers to a single cell, the return value of this method will
-         * be identical to that of <tt>GetFirstCell()</tt>
+         * be identical to that of <c>GetFirstCell()</c>
          * @return the second cell reference which defines this area.  For multi-cell areas, this is 
          * cell diagonally opposite the 'first cell'.  Usually this cell is in the lower right corner 
          * of the area (but this is not a requirement).
@@ -255,7 +255,7 @@ namespace NPOI.SS.Util
          *      <tr><td>A1:A1</td><td>Single cell area reference without sheet</td></tr>
          *      <tr><td>A1:$C$1</td><td>Multi-cell area reference without sheet</td></tr>
          *      <tr><td>Sheet1!A$1:B4</td><td>Standard sheet name</td></tr>
-         *      <tr><td>'O''Brien''s Sales'!B5:C6'&nbsp;</td><td>Sheet name with special Chars</td></tr>
+         *      <tr><td>'O''Brien''s Sales'!B5:C6' </td><td>Sheet name with special Chars</td></tr>
          *    </table>
          * @return the text representation of this area reference as it would appear in a formula.
          */

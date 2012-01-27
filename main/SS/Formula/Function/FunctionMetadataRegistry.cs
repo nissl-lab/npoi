@@ -21,7 +21,7 @@ namespace NPOI.SS.Formula.Function
     using System.Collections;
 
     /**
-     * Allows clients to Get <tt>FunctionMetadata</tt> instances for any built-in function of Excel.
+     * Allows clients to Get <c>FunctionMetadata</c> instances for any built-in function of Excel.
      * 
      * @author Josh Micich
      */

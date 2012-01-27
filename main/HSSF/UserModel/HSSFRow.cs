@@ -31,7 +31,7 @@ namespace NPOI.HSSF.UserModel
     /// <summary>
     /// High level representation of a row of a spReadsheet.
     /// Only rows that have cells should be Added to a Sheet.
-    /// @author  Andrew C. Oliver (acoliver at apache dot org)
+    /// @author Andrew C. Oliver (acoliver at apache dot org)
     /// @author Glen Stampoultzis (glens at apache.org)
     /// </summary>
     [Serializable]
@@ -39,7 +39,9 @@ namespace NPOI.HSSF.UserModel
     {
 
 
-        // used for collections
+        /// <summary>
+        /// used for collections
+        /// </summary>
         public const int INITIAL_CAPACITY = 5;
 
         private int rowNum;
@@ -65,6 +67,7 @@ namespace NPOI.HSSF.UserModel
         private HSSFSheet sheet;
 
         // TODO - ditch this constructor
+        [Obsolete]
         public HSSFRow()
         {
         }
@@ -103,12 +106,12 @@ namespace NPOI.HSSF.UserModel
 
         }
         /// <summary>
-        /// Use this to Create new cells within the row and return it.
-        /// The cell that is returned is a CELL_TYPE_BLANK. The type can be Changed
-        /// either through calling <c>SetCellValue</c> or <c>SetCellType</c>.
+        /// Use this to create new cells within the row and return it.
+        /// The cell that is returned is a CELL_TYPE_BLANK (<see cref="ICell"/>/<see cref="CellType.BLANK"/>). 
+        /// The type can be changed either through calling <c>SetCellValue</c> or <c>SetCellType</c>.
         /// </summary>
         /// <param name="column">the column number this cell represents</param>
-        /// <returns>a high level representation of the Created cell.</returns>
+        /// <returns>a high level representation of the created cell.</returns>
         public ICell CreateCell(int column)
         {
             return this.CreateCell(column, CellType.BLANK);
@@ -265,6 +268,9 @@ namespace NPOI.HSSF.UserModel
             return hcell;
         }
 
+        /// <summary>
+        /// true, when the row is invisible. This is the case when the height is zero.
+        /// </summary>
         public bool IsHidden
         {
             get { return this.ZeroHeight; }
@@ -431,13 +437,14 @@ namespace NPOI.HSSF.UserModel
         /// <summary>
         /// Get the hssfcell representing a given column (logical cell)
         /// 0-based.  If you ask for a cell that is not defined then
-        /// you Get a null, Unless you have Set a different
+        /// you get a null, unless you have set a different
         /// MissingCellPolicy on the base workbook.
+        /// 
         /// Short method signature provided to retain binary
         /// compatibility.
         /// </summary>
         /// <param name="cellnum">0 based column number</param>
-        /// <returns>Cell representing that column or null if Undefined.</returns>
+        /// <returns>Cell representing that column or null if undefined.</returns>
         [Obsolete]
         public ICell GetCell(short cellnum)
         {
@@ -448,11 +455,11 @@ namespace NPOI.HSSF.UserModel
         /// <summary>
         /// Get the hssfcell representing a given column (logical cell)
         /// 0-based.  If you ask for a cell that is not defined then
-        /// you Get a null, Unless you have Set a different
-        /// on the base workbook.
+        /// you get a null, unless you have set a different
+        /// MissingCellPolicy on the base workbook.
         /// </summary>
         /// <param name="cellnum">0 based column number</param>
-        /// <returns>Cell representing that column or null if Undefined.</returns>
+        /// <returns>Cell representing that column or null if undefined.</returns>
         public ICell GetCell(int cellnum)
         {
             return GetCell(cellnum, book.MissingCellPolicy);
@@ -572,7 +579,7 @@ namespace NPOI.HSSF.UserModel
         }
 
         /// <summary>
-        /// Get or sets the row's height or ff (-1) for Undefined/default-height in twips (1/20th of a point)
+        /// Get or sets the row's height or ff (-1) for undefined/default-height in twips (1/20th of a point)
         /// </summary>
         /// <value>rowheight or 0xff for Undefined (use sheet default)</value>
         public short Height
@@ -729,7 +736,7 @@ namespace NPOI.HSSF.UserModel
         //    return GetCellEnumerator();
         //}
 
-        /**
+        /*
          * An iterator over the (physical) cells in the row.
          */
         //private class CellEnumerator : IEnumerator
@@ -850,6 +857,9 @@ namespace NPOI.HSSF.UserModel
             return false;
         }
 
+        /// <summary>
+        /// Returns a hash code. In this case it is the number of the row.
+        /// </summary>
         public override int GetHashCode ()
         {
             return RowNum;

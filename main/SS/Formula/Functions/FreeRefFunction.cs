@@ -28,10 +28,10 @@ namespace NPOI.SS.Formula.Functions
      * argument.<br/>
      * Two important functions with this feature are <b>INDIRECT</b> and <b>OFFSet</b><p/>
      *  
-     * In POI, the <tt>HSSFFormulaEvaluator</tt> Evaluates every cell in each reference argument before
+     * In POI, the <c>HSSFFormulaEvaluator</c> Evaluates every cell in each reference argument before
      * calling the function.  This means that functions using fixed references do not need access to
-     * the rest of the workbook to execute.  Hence the <tt>Evaluate()</tt> method on the common
-     * interface <tt>Function</tt> does not take a workbook parameter.  
+     * the rest of the workbook to execute.  Hence the <c>Evaluate()</c> method on the common
+     * interface <c>Function</c> does not take a workbook parameter.  
      * 
      * This interface recognises the requirement of some functions to freely Create and Evaluate 
      * references beyond those passed in as arguments.
@@ -45,7 +45,7 @@ namespace NPOI.SS.Formula.Functions
          *             nor are any of its elements.
          * @param ec primarily used to identify the source cell Containing the formula being Evaluated.
          *             may also be used to dynamically create reference evals.
-         * @return never <code>null</code>. Possibly an instance of <tt>ErrorEval</tt> in the case of
+         * @return never <code>null</code>. Possibly an instance of <c>ErrorEval</c> in the case of
          * a specified Excel error (Exceptions are never thrown to represent Excel errors).
          */
         ValueEval Evaluate(ValueEval[] args, OperationEvaluationContext ec);

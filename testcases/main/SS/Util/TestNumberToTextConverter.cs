@@ -33,8 +33,8 @@ namespace TestCases.SS.Util
     public class TestNumberToTextConverter
     {
         /**
-         * Confirms that <tt>ExcelNumberToTextConverter.toText(d)</tt> produces the right results.
-         * As part of preparing this test class, the <tt>ExampleConversion</tt> instances should be set
+         * Confirms that <c>ExcelNumberToTextConverter.toText(d)</c> produces the right results.
+         * As part of preparing this test class, the <c>ExampleConversion</c> instances should be set
          * up to contain the rendering as produced by Excel.
          */
         [TestMethod]
@@ -104,14 +104,14 @@ namespace TestCases.SS.Util
          * values as a plain number. That is the unusual functionality that this method is testing.<p/>   
          * 
          * There are multiple encodings (bit patterns) for NaN, and CPUs and applications can convert
-         * to a preferred NaN encoding  (Java prefers <tt>0x7FF8000000000000L</tt>).  Besides the 
+         * to a preferred NaN encoding  (Java prefers <c>0x7FF8000000000000L</c>).  Besides the 
          * special encoding in {@link FormulaRecord.SpecialCachedValue}, it is not known how/whether 
          * Excel attempts to encode NaN values.
          * 
          * Observed NaN behaviour on HotSpot/Windows:
-         * <tt>Double.longBitsToDouble()</tt> will set one bit 51 (the NaN signaling flag) if it isn't
-         *  already. <tt>Double.doubleToLongBits()</tt> will return a double with bit pattern 
-         *  <tt>0x7FF8000000000000L</tt> for any NaN bit pattern supplied.<br/>
+         * <c>Double.longBitsToDouble()</c> will set one bit 51 (the NaN signaling flag) if it isn't
+         *  already. <c>Double.doubleToLongBits()</c> will return a double with bit pattern 
+         *  <c>0x7FF8000000000000L</c> for any NaN bit pattern supplied.<br/>
          * Differences are likely to be observed with other architectures.<p/>
          *  
          * <p/>

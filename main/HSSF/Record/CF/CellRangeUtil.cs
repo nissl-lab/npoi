@@ -203,7 +203,7 @@ namespace NPOI.HSSF.Record.CF
 
         /**
          * @param crB never a full row or full column range
-         * @return an array including <b>this</b> <tt>CellRange</tt> and all parts of <tt>range</tt> 
+         * @return an array including <b>this</b> <c>CellRange</c> and all parts of <c>range</c> 
          * outside of this range  
          */
         private static CellRangeAddress[] SliceUp(CellRangeAddress crA, CellRangeAddress crB)
@@ -362,7 +362,7 @@ namespace NPOI.HSSF.Record.CF
         }
 
         /**
-         * @return true if a < b
+         * @return true if a &lt; b
          */
         private static bool lt(int a, int b)
         {
@@ -370,7 +370,7 @@ namespace NPOI.HSSF.Record.CF
         }
 
         /**
-         * @return true if a <= b
+         * @return true if a &lt;= b
          */
         private static bool le(int a, int b)
         {

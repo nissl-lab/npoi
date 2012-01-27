@@ -37,7 +37,7 @@ namespace TestCases.SS.Formula.PTG
     {
 
         /**
-         * Tests <tt>NameXPtg.ToFormulaString(Workbook)</tt> and logic in Workbook below that   
+         * Tests <c>NameXPtg.ToFormulaString(Workbook)</c> and logic in Workbook below that   
          */
         [TestMethod]
         public void TestReadFormulaContainingExternalFunction()

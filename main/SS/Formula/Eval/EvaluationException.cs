@@ -20,10 +20,10 @@ namespace NPOI.SS.Formula.Eval
     using System;
     /**
      * This class is used to simplify error handling logic <i>within</i> operator and function
-     * implementations.   Note - <tt>OperationEval.Evaluate()</tt> and <tt>Function.Evaluate()</tt>
+     * implementations.   Note - <c>OperationEval.Evaluate()</c> and <c>Function.Evaluate()</c>
      * method signatures do not throw this exception so it cannot propagate outside.<p/>
      * 
-     * Here is an example coded without <tt>EvaluationException</tt>, to show how it can help:
+     * Here is an example coded without <c>EvaluationException</c>, to show how it can help:
      * <pre>
      * public Eval Evaluate(Eval[] args, int srcRow, short srcCol) {
      *	// ...
@@ -37,7 +37,7 @@ namespace NPOI.SS.Formula.Eval
      *	double temp = 0;
      *	AreaEval area = (AreaEval)arg0;
      *	ValueEval[] values = area.LittleEndianConstants.BYTE_SIZE;
-     *	for (int i = 0; i < values.Length; i++) {
+     *	for (int i = 0; i &lt; values.Length; i++) {
      *		ValueEval ve = values[i];
      *		if(ve is ErrorEval) {
      *			return ve;
@@ -53,7 +53,7 @@ namespace NPOI.SS.Formula.Eval
      * In this example, if any error is encountered while Processing the arguments, an error is 
      * returned immediately. This code is difficult to refactor due to all the points where errors
      * are returned.<br/>
-     * Using <tt>EvaluationException</tt> allows the error returning code to be consolidated to one
+     * Using <c>EvaluationException</c> allows the error returning code to be consolidated to one
      * place.<p/>
      * <pre>
      * public Eval Evaluate(Eval[] args, int srcRow, short srcCol) {
@@ -79,7 +79,7 @@ namespace NPOI.SS.Formula.Eval
      *
      *private double sumValues(ValueEval[] values){
      *	double temp = 0;
-     *	for (int i = 0; i < values.Length; i++) {
+     *	for (int i = 0; i &lt; values.Length; i++) {
      *		ValueEval ve = values[i];
      *		if (ve is ErrorEval) {
      *			throw new EvaluationException((ErrorEval) ve);
@@ -101,7 +101,7 @@ namespace NPOI.SS.Formula.Eval
      *  error), because exceptions conveniently propagate up the call stack regardless of execution 
      *  points or the number of levels of nested calls.<p/>
      *  
-     * <b>Note</b> - Only standard evaluation errors are represented by <tt>EvaluationException</tt> (
+     * <b>Note</b> - Only standard evaluation errors are represented by <c>EvaluationException</c> (
      * i.e. conditions expected to be encountered when evaluating arbitrary Excel formulas). Conditions
      * that could never occur in an Excel spReadsheet should result in runtime exceptions. Care should
      * be taken to not translate any POI internal error into an Excel evaluation error code.   

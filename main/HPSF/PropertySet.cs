@@ -81,7 +81,7 @@ namespace NPOI.HPSF
 
         /// <summary>
         /// Gets or sets the property Set stream's low-level "byte order"
-        /// field. It is always <tt>0xFFFE</tt>
+        /// field. It is always <c>0xFFFE</c>
         /// </summary>
         /// <value>The property Set stream's low-level "byte order" field..</value>
         public virtual int ByteOrder
@@ -106,7 +106,7 @@ namespace NPOI.HPSF
 
         /// <summary>
         /// Gets or sets the property Set stream's low-level "format"
-        /// field. It is always <tt>0x0000</tt>
+        /// field. It is always <c>0x0000</c>
         /// </summary>
         /// <value>The property Set stream's low-level "format" field.</value>
         public virtual int Format

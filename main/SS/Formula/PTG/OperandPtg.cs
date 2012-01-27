@@ -26,7 +26,7 @@ namespace NPOI.SS.Formula.PTG
     {
 
         /**
-         * All Operand <tt>Ptg</tt>s are classifed ('relative', 'value', 'array')  
+         * All Operand <c>Ptg</c>s are classifed ('relative', 'value', 'array')  
          */
         public override bool IsBaseToken
         {

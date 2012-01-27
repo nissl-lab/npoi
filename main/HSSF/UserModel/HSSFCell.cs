@@ -109,11 +109,10 @@ namespace NPOI.HSSF.UserModel
 
         /// <summary>
         /// Creates an Cell from a CellValueRecordInterface.  HSSFSheet uses this when
-        /// Reading in cells from an existing sheet.
+        /// reading in cells from an existing sheet.
         /// </summary>
         /// <param name="book">Workbook record of the workbook containing this cell</param>
         /// <param name="sheet">Sheet record of the sheet containing this cell</param>
-        /// <param name="row">The row.</param>
         /// <param name="cval">the Cell Value Record we wish to represent</param>
         public HSSFCell(HSSFWorkbook book, HSSFSheet sheet, CellValueRecordInterface cval)
         {
@@ -1070,7 +1069,7 @@ namespace NPOI.HSSF.UserModel
         /// <summary>
         /// Checks the bounds.
         /// </summary>
-        /// <param name="cellNum">The cell num.</param>
+        /// <param name="cellIndex">The cell num.</param>
         /// <exception cref="Exception">if the bounds are exceeded.</exception>
         private void CheckBounds(int cellIndex)
         {

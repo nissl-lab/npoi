@@ -30,7 +30,7 @@ namespace NPOI.HSSF.Record
      *  from the Excel-97 format.
      * Supports only external links for now (eg http://) 
      *
-     * @author      Mark Hissink Muller <a href="mailto:mark@hissinkmuller.nl >mark&064;hissinkmuller.nl</a>
+     * @author      Mark Hissink Muller <a href="mailto:mark@hissinkmuller.nl">mark@hissinkmuller.nl</a>
      * @author      Yegor Kozlov (yegor at apache dot org)
      */
     public class HyperlinkRecord : StandardRecord
@@ -125,7 +125,7 @@ namespace NPOI.HSSF.Record
             // 16-byte GUID
             _guid = new GUID(in1);
 
-            /**
+            /*
              * streamVersion (4 bytes): An unsigned integer that specifies the version number
              * of the serialization implementation used to save this structure. This value MUST equal 2.
              */
@@ -159,7 +159,7 @@ namespace NPOI.HSSF.Record
                 if (URL_MONIKER.Equals(_moniker))
                 {
                     int length = in1.ReadInt();
-                    /**
+                    /*
                      * The value of <code>length<code> be either the byte size of the url field
                      * (including the terminating NULL character) or the byte size of the url field plus 24.
                      * If the value of this field is set to the byte size of the url field,
@@ -175,7 +175,7 @@ namespace NPOI.HSSF.Record
                     {
                         int nChars = (length - TAIL_SIZE) / 2;
                         _address = in1.ReadUnicodeLEString(nChars);
-                        /**
+                        /*
                          * TODO: make sense of the remaining bytes
                          * According to the spec they consist of:
                          * 1. 16-byte  GUID: This field MUST equal

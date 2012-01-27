@@ -1086,7 +1086,7 @@ namespace NPOI.HSSF.Model
             records.Add(records.Count - 2, sst);
         }
 
-        /**
+        /*
          * Serializes all records int the worksheet section into a big byte array. Use
          * this to Write the Workbook out.
          *

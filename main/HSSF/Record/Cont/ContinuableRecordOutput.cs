@@ -104,7 +104,7 @@ namespace NPOI.HSSF.Record.Cont
          * Notes:
          * <ul>
          * <li>The value of the 'is16bitEncoded' flag is determined by the actual character data 
-         * of <tt>text</tt></li>
+         * of <c>text</c></li>
          * <li>The string options flag is never separated (by a {@link ContinueRecord}) from the
          * first chunk of character data it refers to.</li>
          * <li>The 'ushort Length' field is assumed to have been explicitly written earlier.  Hence, 
@@ -146,7 +146,7 @@ namespace NPOI.HSSF.Record.Cont
          * Notes:
          * <ul> 
          * <li>The value of the 'is16bitEncoded' flag is determined by the actual character data 
-         * of <tt>text</tt></li>
+         * of <c>text</c></li>
          * <li>The string header fields are never separated (by a {@link ContinueRecord}) from the
          * first chunk of character data (i.e. the first character is always encoded in the same
          * record as the string header).</li>

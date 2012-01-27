@@ -37,7 +37,7 @@ namespace NPOI.SS.Formula.Functions
      * </ul>
      * For more info on the terms/abbreviations please use the references below 
      * (hyperlinks are subject to Change):
-     * </br>Online References:
+     * <br/>Online References:
      * <ol>
      * <li>GNU Emacs Calc 2.02 Manual: http://theory.uwinnipeg.ca/gnu/calc/calc_203.html</li>
      * <li>Yahoo Financial Glossary: http://biz.yahoo.com/f/g/nn.html#y</li>

@@ -73,7 +73,7 @@ namespace NPOI.HSSF.Record
         }
         /**
  * Wether this record terminates the sub-record stream.
- * There are two cases when this method must be overridden and return <code>true</code>
+ * There are two cases when this method must be overridden and return <c>true</c>
  *  - EndSubRecord (sid = 0x00)
  *  - LbsDataSubRecord (sid = 0x12)
  *

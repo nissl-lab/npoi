@@ -64,6 +64,8 @@ namespace TestCases.SS.Formula.Functions
         [TestMethod]
         public void TestUnusualArgs()
         {
+            System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.GetCultureInfo("en-US");
+
             // startPos with fractional digits
             ConfirmMid(new StringEval("galactic"), new NumberEval(3.1), new NumberEval(4), "lact");
 

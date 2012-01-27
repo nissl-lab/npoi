@@ -23,7 +23,7 @@ namespace NPOI.HSSF.UserModel
 
     /**
      * Instances of this class keep track of multiple dependent cell evaluations due
-     * to recursive calls to <tt>HSSFFormulaEvaluator.internalEvaluate()</tt>.
+     * to recursive calls to <c>HSSFFormulaEvaluator.internalEvaluate()</c>.
      * The main purpose of this class Is to detect an attempt to evaluate a cell
      * that Is alReady being evaluated. In other words, it detects circular
      * references in spReadsheet formulas.
@@ -119,11 +119,11 @@ namespace NPOI.HSSF.UserModel
          * 
          * In the case of a <c>true</c> return code, the caller should
          * continue evaluation of the specified cell, and also be sure to call
-         * <tt>endEvaluate()</tt> when complete.<br/>
+         * <c>endEvaluate()</c> when complete.<br/>
          * 
          * In the case of a <c>false</c> return code, the caller should
          * return an evaluation result of
-         * <tt>ErrorEval.CIRCULAR_REF_ERROR<tt>, and not call <tt>endEvaluate()</tt>.  
+         * <c>ErrorEval.CIRCULAR_REF_ERROR</c>, and not call <c>endEvaluate()</c>.  
          * <br/>
          * @return <c>true</c> if the specified cell has not been visited yet in the current 
          * evaluation. <c>false</c> if the specified cell Is alReady being evaluated.
@@ -143,8 +143,8 @@ namespace NPOI.HSSF.UserModel
          * Notifies this evaluation tracker that the evaluation of the specified
          * cell Is complete. <p/>
          * 
-         * Every successful call to <tt>startEvaluate</tt> must be followed by a
-         * call to <tt>endEvaluate</tt> (recommended in a finally block) to enable
+         * Every successful call to <c>startEvaluate</c> must be followed by a
+         * call to <c>endEvaluate</c> (recommended in a finally block) to enable
          * proper tracking of which cells are being evaluated at any point in time.<p/>
          * 
          * Assuming a well behaved client, parameters to this method would not be

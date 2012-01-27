@@ -158,7 +158,7 @@ namespace TestCases.SS.Formula.Functions
 
         /**
          * Confirms that the result is an area ref with the specified coordinates
-         * @return <tt>ve</tt> cast to {@link AreaEval} if it is valid
+         * @return <c>ve</c> cast to {@link AreaEval} if it is valid
          */
         private static AreaEval ConfirmAreaEval(String refText, ValueEval ve)
         {

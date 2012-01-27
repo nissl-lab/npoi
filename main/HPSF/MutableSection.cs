@@ -392,7 +392,7 @@ namespace NPOI.HPSF
 
 
 
-                    ///* Sort the property list by their property IDs: */
+                    /* Sort the property list by their property IDs: */
                     preprops.Sort(new PropertyComparer());
 
                     /* Write the properties and the property list into their respective

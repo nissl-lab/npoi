@@ -75,7 +75,7 @@ namespace NPOI.HSSF.Extractor
         /// <summary>
         /// Should sheet names be included? Default is true
         /// </summary>
-        /// <param name="includeSheetNames">if set to <c>true</c> [include sheet names].</param>
+        /// <value>if set to <c>true</c> [include sheet names].</value>
         public bool IncludeSheetNames
         {
             get {
@@ -90,7 +90,7 @@ namespace NPOI.HSSF.Extractor
         /// Should we return the formula itself, and not
         /// the result it produces? Default is false
         /// </summary>
-        /// <param name="formulasNotResults">if set to <c>true</c> [formulas not results].</param>
+        /// <value>if set to <c>true</c> [formulas not results].</value>
         public bool FormulasNotResults
         {
             get 
@@ -105,7 +105,7 @@ namespace NPOI.HSSF.Extractor
         /// <summary>
         /// Should cell comments be included? Default is false
         /// </summary>
-        /// <param name="includeCellComments">if set to <c>true</c> [include cell comments].</param>
+        /// <value>if set to <c>true</c> [include cell comments].</value>
         public bool IncludeCellComments
         {
             get
@@ -122,7 +122,7 @@ namespace NPOI.HSSF.Extractor
         /// output cells that are present in the file and are
         /// non-blank.
         /// </summary>
-        /// <param name="includeBlankCells">if set to <c>true</c> [include blank cells].</param>
+        /// <value>if set to <c>true</c> [include blank cells].</value>
         public bool IncludeBlankCells
         {
             get

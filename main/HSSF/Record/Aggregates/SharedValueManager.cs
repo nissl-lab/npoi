@@ -103,7 +103,7 @@ namespace NPOI.HSSF.Record.Aggregates
             /**
              * Note - the 'first cell' of a shared formula group is not always the top-left cell
              * of the enclosing range.
-             * @return <code>true</code> if the specified coordinates correspond to the 'first cell'
+             * @return <c>true</c> if the specified coordinates correspond to the 'first cell'
              * of this shared formula group.
              */
             public bool IsFirstCell(int row, int column)
@@ -151,7 +151,7 @@ namespace NPOI.HSSF.Record.Aggregates
          * @param recs list of sheet records (possibly Contains records for other parts of the Excel file)
          * @param startIx index of first row/cell record for current sheet
          * @param endIx one past index of last row/cell record for current sheet.  It is important
-         * that this code does not inadvertently collect <tt>SharedFormulaRecord</tt>s from any other
+         * that this code does not inadvertently collect <c>SharedFormulaRecord</c>s from any other
          * sheet (which could happen if endIx is chosen poorly).  (see bug 44449)
          */
         public static SharedValueManager Create(SharedFormulaRecord[] sharedFormulaRecords,
@@ -298,7 +298,7 @@ namespace NPOI.HSSF.Record.Aggregates
         }
 
         /**
-         * Converts all {@link FormulaRecord}s handled by <tt>sharedFormulaRecord</tt>
+         * Converts all {@link FormulaRecord}s handled by <c>sharedFormulaRecord</c>
          * to plain unshared formulas
          */
         public void Unlink(SharedFormulaRecord sharedFormulaRecord)

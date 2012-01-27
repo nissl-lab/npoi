@@ -35,7 +35,7 @@ namespace TestCases.HSSF.UserModel
         /**
          * Compares two streams with expected differences in specified regions.  The streams are
          * expected to be of equal Length and comparison is always byte for byte.  That is -
-         * differences can only involve exchanging each individual byte for another single byte.<br>
+         * differences can only involve exchanging each individual byte for another single byte.<br/>
          * Both input streams are Closed.
          *  
          * @param allowableDifferenceRegions array of integer pairs: (offset, Length). 

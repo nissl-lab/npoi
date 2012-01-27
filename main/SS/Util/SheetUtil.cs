@@ -29,17 +29,17 @@ namespace NPOI.SS.Util
     public class SheetUtil
     {
 
-        /**
-         * Excel measures columns in units of 1/256th of a character width
-         * but the docs say nothing about what particular character is used.
-         * '0' looks to be a good choice.
-         */
+        // /**
+        // * Excel measures columns in units of 1/256th of a character width
+        // * but the docs say nothing about what particular character is used.
+        // * '0' looks to be a good choice.
+        // */
         //private static char defaultChar = '0';
 
-        /**
-         * This is the multiple that the font height is scaled by when determining the
-         * boundary of rotated text.
-         */
+        // /**
+        // * This is the multiple that the font height is scaled by when determining the
+        // * boundary of rotated text.
+        // */
         //private static double fontHeightMultiple = 2.0;
 
         /**
@@ -68,9 +68,9 @@ namespace NPOI.SS.Util
 
         };
 
-        /**
-         * Drawing context to measure text
-         */
+        // /**
+        // * Drawing context to measure text
+        // */
         //private static FontRenderContext fontRenderContext = new FontRenderContext(null, true, true);
 
         /**

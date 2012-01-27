@@ -74,7 +74,7 @@ namespace NPOI.SS.Formula.Functions
      * * Note regarding <i>order</i> - For the <b>match_type</b> cases that require the lookup_array to
      *  be ordered, MATCH() can produce incorrect results if this requirement Is not met.  Observed
      *  behaviour in Excel Is to return the lowest index value for which every item after that index
-     *  breaks the match rule.<br>
+     *  breaks the match rule.<br/>
      *  The (ascending) sort order expected by MATCH() Is:<br/>
      *  numbers (low to high), strings (A to Z), bool (FALSE to TRUE)<br/>
      *  MATCH() ignores all elements in the lookup_array with a different type to the lookup_value. 

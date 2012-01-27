@@ -61,7 +61,7 @@ namespace NPOI.HSSF.Record
         }
 
         /**
-         * @return <c>null</c> if the double value encoded by <tt>valueLongBits</tt> 
+         * @return <c>null</c> if the double value encoded by <c>valueLongBits</c> 
          * is a normal (non NaN) double value.
          */
         public static SpecialCachedValue Create(long valueLongBits)
@@ -227,7 +227,7 @@ namespace NPOI.HSSF.Record
         private SpecialCachedValue specialCachedValue;
 
 
-        /**
+        /*
          * Since the NaN support seems sketchy (different constants) we'll store and spit it out directly
          */
         // fix warning CS0169 "never used": private byte[] value_data;

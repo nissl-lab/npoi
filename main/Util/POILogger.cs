@@ -78,7 +78,7 @@ namespace NPOI.Util
          */
         abstract public bool Check(int level);
 
-        /**
+        /*
          * Log a message. Lazily appends Object parameters together.
          *
          * @param level One of DEBUG, INFO, WARN, ERROR, FATAL

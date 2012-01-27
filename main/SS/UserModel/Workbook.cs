@@ -22,29 +22,32 @@ namespace NPOI.SS.UserModel
     using System.IO;
     using NPOI.SS.Formula.Udf;
 
+    /// <summary>
+    /// Indicate the state of the sheet.
+    /// </summary>
     public enum SheetState : int
     {
         /** Indicates the sheet is visible.
          * 
-         * @see #setSheetHidden(int, int)
+         * @see SetSheetHidden(int, int)
          */
         VISIBLE = 0,
         /**
          * Indicates the book window is hidden, but can be shown by the user via the user interface.
          *
-         * @see #setSheetHidden(int, int)
+         * @see SetSheetHidden(int, int)
          */
         HIDDEN = 1,
 
         /**
          * Indicates the sheet is hidden and cannot be shown in the user interface (UI).
          *
-         * <p>
+         * 
          * In Excel this state is only available programmatically in VBA:
          * <code>ThisWorkbook.Sheets("MySheetName").Visible = xlSheetVeryHidden </code>
-         * </p>
+         * 
          *
-         * @see #setSheetHidden(int, int)
+         * @see SetSheetHidden(int, int)
          */
         VERY_HIDDEN = 2
     }
@@ -167,7 +170,7 @@ namespace NPOI.SS.UserModel
         /**
          * Get the Sheet object at the given index.
          *
-         * @param index of the sheet number (0-based physical & logical)
+         * @param index of the sheet number (0-based physical &amp; logical)
          * @return Sheet at the provided index
          */
         ISheet GetSheetAt(int index);
@@ -192,7 +195,7 @@ namespace NPOI.SS.UserModel
          * File->PageSetup->Sheet).  This is function is included in the workbook
          * because it Creates/modifies name records which are stored at the
          * workbook level.
-         * <p>
+         * 
          * To set just repeating columns:
          * <pre>
          *  workbook.SetRepeatingRowsAndColumns(0,0,1,-1-1);
@@ -303,7 +306,7 @@ namespace NPOI.SS.UserModel
          * this method performs a case-insensitive search.
          *
          * @param name the name of the defined name
-         * @return zero based index of the defined name. <tt>-1</tt> if not found.
+         * @return zero based index of the defined name. <c>-1</c> if not found.
          */
         int GetNameIndex(String name);
 
@@ -317,13 +320,13 @@ namespace NPOI.SS.UserModel
         /**
          * Remove a defined name by name
          *
-          * @param name the name of the defined name
+         * @param name the name of the defined name
          */
         void RemoveName(String name);
 
         /**
         * Sets the printarea for the sheet provided
-        * <p>
+        * 
         * i.e. Reference = $A$1:$B$2
         * @param sheetIndex Zero-based sheet index (0 Represents the first sheet to keep consistent with java)
         * @param reference Valid name Reference for the Print Area
@@ -360,10 +363,9 @@ namespace NPOI.SS.UserModel
         /**
          * Retrieves the current policy on what to do when
          *  Getting missing or blank cells from a row.
-         * <p>
+         * 
          * The default is to return blank and null cells.
          *  {@link MissingCellPolicy}
-         * </p>
          */
         MissingCellPolicy MissingCellPolicy { get; set; }
 
@@ -400,33 +402,33 @@ namespace NPOI.SS.UserModel
 
         /**
          * Returns an object that handles instantiating concrete
-         * classes of the various instances one needs for  HSSF and XSSF.
+         * classes of the various instances one needs for HSSF and XSSF.
          */
         CreationHelper GetCreationHelper();
 
         /**
-         * @return <code>false</code> if this workbook is not visible in the GUI
+         * @return <c>false</c> if this workbook is not visible in the GUI
          */
         bool IsHidden { get; set; }
         /**
          * Check whether a sheet is hidden.
-         * <p>
+         *  
          * Note that a sheet could instead be set to be very hidden, which is different
          *  ({@link #isSheetVeryHidden(int)})
-         * </p>
+         *  
          * @param sheetIx Number
-         * @return <code>true</code> if sheet is hidden
+         * @return <c>true</c> if sheet is hidden
          */
         bool IsSheetHidden(int sheetIx);
 
         /**
          * Check whether a sheet is very hidden.
-         * <p>
+         * 
          * This is different from the normal hidden status
          *  ({@link #isSheetHidden(int)})
-         * </p>
+         * 
          * @param sheetIx sheet index to check
-         * @return <code>true</code> if sheet is very hidden
+         * @return <c>true</c> if sheet is very hidden
          */
         bool IsSheetVeryHidden(int sheetIx);
 
@@ -449,12 +451,22 @@ namespace NPOI.SS.UserModel
          * @param hidden 0 for not hidden, 1 for hidden, 2 for very hidden
          */
         void SetSheetHidden(int sheetIx, int hidden);
+        /**
+         * Hide or unhide a sheet.
+         * <pre>
+         *  0 = not hidden
+         *  1 = hidden
+         *  2 = very hidden.
+         * </pre>
+         * @param sheetIx The sheet number
+         * @param hidden false for not hidden, true for hidden
+         */
         void SetSheetHidden(int sheetIx, bool hidden);
         /**
-     * Register a new toolpack in this workbook.
-     *
-     * @param toopack the toolpack to register
-     */
+         * Register a new toolpack in this workbook.
+         *
+         * @param toopack the toolpack to register
+         */
         void AddToolPack(UDFFinder toopack);
 
     }

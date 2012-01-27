@@ -57,6 +57,7 @@ namespace NPOI.POIFS.Storage
         /// blocks are removed from the list.
         /// </summary>
         /// <param name="startBlock">the index of the first block in the stream</param>
+        /// <param name="headerPropertiesStartBlock"></param>
         /// <returns>the stream as an array of correctly ordered blocks</returns>
         ListManagedBlock[] FetchBlocks(int startBlock,int headerPropertiesStartBlock);
 

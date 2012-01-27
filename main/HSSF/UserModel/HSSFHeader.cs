@@ -39,7 +39,7 @@ namespace NPOI.HSSF.UserModel
         /// <summary>
         /// Initializes a new instance of the <see cref="HSSFFooter"/> class.
         /// </summary>
-        /// <param name="footerRecord">Footer record to Create the footer with</param>
+        /// <param name="psb">Footer record to Create the footer with</param>
         public HSSFHeader(PageSettingsBlock psb)
         {
             _psb = psb;

@@ -73,7 +73,7 @@ namespace NPOI.SS.Formula
          * @param sheetIndex zero based index into workbook sheet list
          * @param rowIndex zero based row index of cell
          * @param columnIndex zero based column index of cell
-         * @return <code>false</code> if the evaluating application may need to modify the specified 
+         * @return <c>false</c> if the evaluating application may need to modify the specified 
          * cell between calls to the evaluator. 
          */
         public abstract bool IsCellFinal(int sheetIndex, int rowIndex, int columnIndex);

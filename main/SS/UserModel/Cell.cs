@@ -320,7 +320,7 @@ namespace NPOI.SS.UserModel
         CellRangeAddress GetArrayFormulaRange();
 
         /**
-         * @return <code>true</code> if this cell is part of group of cells having a common array formula.
+         * @return <c>true</c> if this cell is part of group of cells having a common array formula.
          */
         bool IsPartOfArrayFormulaGroup { get; }
 

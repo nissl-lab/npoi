@@ -290,7 +290,7 @@ namespace NPOI.HSSF.Record
 	 * Indicates that the defined name refers to a user-defined function.
 	 * This attribute is used when there is an add-in or other code project associated with the file.
 	 *
-	 * @param function <code>true</code> indicates the name refers to a function.
+	 * @param function <c>true</c> indicates the name refers to a function.
 	 */
         public void SetFunction(bool function)
         {

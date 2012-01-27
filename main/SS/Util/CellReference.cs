@@ -497,8 +497,8 @@ using NPOI.SS.UserModel;
          * <p/>
          * <blockquote><table border="0" cellpadding="1" cellspacing="0" 
          *                 summary="Notable cases.">
-         *   <tr><th>Version&nbsp;&nbsp;</th><th>File Format&nbsp;&nbsp;</th>
-         *   	<th>Last Column&nbsp;&nbsp;</th><th>Last Row</th></tr>
+         *   <tr><th>Version </th><th>File Format </th>
+         *   	<th>Last Column </th><th>Last Row</th></tr>
          *   <tr><td>97-2003</td><td>BIFF8</td><td>"IV" (2^8)</td><td>65536 (2^14)</td></tr>
          *   <tr><td>2007</td><td>BIFF12</td><td>"XFD" (2^14)</td><td>1048576 (2^20)</td></tr>
          * </table></blockquote>
@@ -506,8 +506,8 @@ using NPOI.SS.UserModel;
          * this method:
          * <blockquote><table border="0" cellpadding="1" cellspacing="0" 
          *                 summary="Notable cases.">
-         *   <tr><th>Input&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
-         *       <th>Result&nbsp;</th></tr>
+         *   <tr><th>Input    </th>
+         *       <th>Result </th></tr>
          *   <tr><td>"A", "1"</td><td>true</td></tr>
          *   <tr><td>"a", "111"</td><td>true</td></tr>
          *   <tr><td>"A", "65536"</td><td>true</td></tr>

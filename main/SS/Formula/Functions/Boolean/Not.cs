@@ -24,7 +24,7 @@ namespace NPOI.SS.Formula.Functions
     using NPOI.SS.Formula.Eval;
 
 
-    /**
+    /*
      * @author Amol S. Deshmukh &lt; amol at apache dot org &gt;
      * The NOT bool function. Returns negation of specified value
      * (treated as a bool). If the specified arg Is a number,

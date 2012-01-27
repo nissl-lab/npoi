@@ -72,6 +72,7 @@ namespace NPOI.DDF
         /// </summary>
         /// <param name="offset"></param>
         /// <param name="data"></param>
+        /// <param name="listener">a listener for begin and end serialization events.</param>
         /// <returns>the number of bytes written.</returns>
         public override int Serialize(int offset, byte[] data, EscherSerializationListener listener)
         {

@@ -27,7 +27,7 @@ namespace NPOI.SS.Formula
     using NPOI.SS.Formula.PTG;
 
     /**
-     * This class Creates <tt>OperationEval</tt> instances To help evaluate <tt>OperationPtg</tt>
+     * This class Creates <c>OperationEval</c> instances To help evaluate <c>OperationPtg</c>
      * formula Tokens.
      * 
      * @author Josh Micich

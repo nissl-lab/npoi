@@ -71,7 +71,7 @@ namespace NPOI.Util.IO
 
         /// <summary>
         /// Same as the normal 
-        /// <tt>in.Read(b, off, len)</tt>
+        /// <c>in.Read(b, off, len)</c>
         /// , but tries to ensure that the entire len number of bytes is Read.
         /// If the end of file is reached before any bytes are Read, returns -1.
         /// If the end of the file is reached after some bytes are

@@ -50,6 +50,7 @@ namespace NPOI.HSSF.UserModel
         /// </summary>
         /// <param name="book">lowlevel Workbook object associated with the sheet.</param>
         /// <param name="name">the Name Record</param>
+        /// <param name="comment"></param>
         internal HSSFName(HSSFWorkbook book, NameRecord name, NameCommentRecord comment)
         {
             this.book = book;
@@ -233,7 +234,7 @@ namespace NPOI.HSSF.UserModel
      * Indicates that the defined name refers to a user-defined function.
      * This attribute is used when there is an add-in or other code project associated with the file.
      *
-     * @param value <code>true</code> indicates the name refers to a function.
+     * @param value <c>true</c> indicates the name refers to a function.
      */
         public void SetFunction(bool value)
         {

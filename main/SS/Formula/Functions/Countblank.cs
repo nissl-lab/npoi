@@ -24,7 +24,7 @@ namespace NPOI.SS.Formula.Functions
      * <p>
      *  Syntax: COUNTBLANK ( range )
      *    <table border="0" cellpadding="1" cellspacing="0" summary="Parameter descriptions">
-     *      <tr><th>range&nbsp;&nbsp;&nbsp;</th><td>is the range of cells to count blanks</td></tr>
+     *      <tr><th>range </th><td>is the range of cells to count blanks</td></tr>
      *    </table>
      * </p>
      *

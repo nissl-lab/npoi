@@ -20,17 +20,17 @@ namespace NPOI.SS.Util
 {
 
     using NPOI.Util;
-    /**
+    /*
      * Represents a 64 bit IEEE double quantity expressed with both decimal and binary exponents
      * Does not handle negative numbers or zero
      * <p/>
      * The value of a {@link ExpandedDouble} is given by<br/>
-     * <tt> a &times; 2<sup>b</sup></tt>
+     * <c> a &times; 2<sup>b</sup></c>
      * <br/>
      * where:<br/>
      *
-     * <tt>a</tt> = <i>significand</i><br/>
-     * <tt>b</tt> = <i>binaryExponent</i> - bitLength(significand) + 1<br/>
+     * <c>a</c> = <i>significand</i><br/>
+     * <c>b</c> = <i>binaryExponent</i> - bitLength(significand) + 1<br/>
      *
      * @author Josh Micich
      */

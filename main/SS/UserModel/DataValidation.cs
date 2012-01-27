@@ -41,17 +41,17 @@ namespace NPOI.SS.UserModel
         /// </summary>
         int ErrorStyle { get; set; }
         /// <summary>
-        /// Sets if this object allows empty as a valid value.Retrieve the Settings for empty cells allowed.
-        /// @param  allowed <code>true</code> if this object should treats empty as valid value , <code>false</code>  otherwise
+        /// Setting this allows an empty object as a valid value. Retrieve the settings for empty cells allowed.
         /// @return True if this object should treats empty as valid value , false otherwise
         /// </summary>
+        /// <value><c>true</c> if this object should treats empty as valid value, <c>false</c>  otherwise</value>
         bool EmptyCellAllowed { get; set; }
         /// <summary>
         /// Useful for list validation objects .
         /// Useful only list validation objects . This method always returns false if the object isn't a list validation object
         /// </summary>
         bool SuppressDropDownArrow { get; set; }
-        /**
+        /*
          * Useful for list validation objects .
          * 
          * @param suppress
@@ -61,37 +61,38 @@ namespace NPOI.SS.UserModel
          */
         //void SetSuppressDropDownArrow(bool suppress);
 
-        /**
+        /*
          * Useful only list validation objects . This method always returns false if
          * the object isn't a list validation object
          * 
-         * @return <code>true</code> if a list should display the values into a drop down list ,
-         *         <code>false</code> otherwise .
+         * @return <c>true</c> if a list should display the values into a drop down list ,
+         *         <c>false</c> otherwise .
          */
         //bool GetSuppressDropDownArrow();
-        bool ShowPromptBox { get; set; }
+
         /**
          * Sets the behaviour when a cell which belongs to this object is selected
          * 
-         * @param show <code>true</code> if an prompt box should be displayed , <code>false</code> otherwise
+         * <value><c>true</c> if an prompt box should be displayed , <c>false</c> otherwise</value>
          */
+        bool ShowPromptBox { get; set; }
         //void SetShowPromptBox(bool Show);
 
-        /**
-         * @return <code>true</code> if an prompt box should be displayed , <code>false</code> otherwise
+        /*
+         * @return <c>true</c> if an prompt box should be displayed , <c>false</c> otherwise
          */
         //bool GetShowPromptBox();
 
         /**
          * Sets the behaviour when an invalid value is entered
          * 
-         * @param show <code>true</code> if an error box should be displayed , <code>false</code> otherwise
+         * <value><c>true</c> if an error box should be displayed , <c>false</c> otherwise</value>
          */
         bool ShowErrorBox { get; set; }
         //void SetShowErrorBox(bool Show);
 
-        /**
-         * @return <code>true</code> if an error box should be displayed , <code>false</code> otherwise
+        /*
+         * @return <c>true</c> if an error box should be displayed , <c>false</c> otherwise
          */
         //bool GetShowErrorBox();
 

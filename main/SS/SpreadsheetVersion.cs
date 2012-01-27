@@ -39,7 +39,7 @@ namespace NPOI.SS
          * <li>Number of conditional format conditions on a cell is unlimited
          * (actually limited by available memory in Excel)</li>
          * <li>Length of text cell contents is unlimited </li>
-         * <ul>
+         * </ul>
          */
         public static SpreadsheetVersion EXCEL2007 = new SpreadsheetVersion(0x100000, 0x4000, 255, Int32.MaxValue, Int32.MaxValue);
 

@@ -23,7 +23,7 @@ namespace NPOI.SS.UserModel
         /**
          * Sets whether this comment is visible.
          *
-         * @return <code>true</code> if the comment is visible, <code>false</code> otherwise
+         * @return <c>true</c> if the comment is visible, <c>false</c> otherwise
          */
         bool Visible { get; set; }
 

@@ -48,8 +48,8 @@ namespace NPOI.SS.Formula.Eval
          * @param arg the Evaluated argument as passed to the function or operator.
          * @param srcCellRow used when arg is a single column AreaRef
          * @param srcCellCol used when arg is a single row AreaRef
-         * @return a <tt>NumberEval</tt>, <tt>StringEval</tt>, <tt>BoolEval</tt> or <tt>BlankEval</tt>.
-         * Never <c>null</c> or <tt>ErrorEval</tt>.
+         * @return a <c>NumberEval</c>, <c>StringEval</c>, <c>BoolEval</c> or <c>BlankEval</c>.
+         * Never <c>null</c> or <c>ErrorEval</c>.
          * @throws EvaluationException(#VALUE!) if srcCellRow or srcCellCol do not properly index into
          *  an AreaEval.  If the actual value retrieved is an ErrorEval, a corresponding 
          *  EvaluationException is thrown.
@@ -82,19 +82,19 @@ namespace NPOI.SS.Formula.Eval
          * both selection from a single row area and a single column area in the same formula.
          * 
          *    <table border="1" cellpAdding="1" cellspacing="1" summary="sample spReadsheet">
-         *      <tr><th>&nbsp;</th><th>&nbsp;A&nbsp;</th><th>&nbsp;B&nbsp;</th><th>&nbsp;C&nbsp;</th><th>&nbsp;D&nbsp;</th></tr>
-         *      <tr><th>1</th><td>15</td><td>20</td><td>25</td><td>&nbsp;</td></tr>
-         *      <tr><th>2</th><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>200</td></tr>
-         *      <tr><th>3</th><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>300</td></tr>
-         *      <tr><th>3</th><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>400</td></tr>
+         *      <tr><th> </th><th> A </th><th> B </th><th> C </th><th> D </th></tr>
+         *      <tr><th>1</th><td>15</td><td>20</td><td>25</td><td> </td></tr>
+         *      <tr><th>2</th><td> </td><td> </td><td> </td><td>200</td></tr>
+         *      <tr><th>3</th><td> </td><td> </td><td> </td><td>300</td></tr>
+         *      <tr><th>3</th><td> </td><td> </td><td> </td><td>400</td></tr>
          *    </table>
          * 
          * If the formula "=1000+A1:B1+D2:D3" is put into the 9 cells from A2 to C4, the spReadsheet
          * will look like this:
          * 
          *    <table border="1" cellpAdding="1" cellspacing="1" summary="sample spReadsheet">
-         *      <tr><th>&nbsp;</th><th>&nbsp;A&nbsp;</th><th>&nbsp;B&nbsp;</th><th>&nbsp;C&nbsp;</th><th>&nbsp;D&nbsp;</th></tr>
-         *      <tr><th>1</th><td>15</td><td>20</td><td>25</td><td>&nbsp;</td></tr>
+         *      <tr><th> </th><th> A </th><th> B </th><th> C </th><th> D </th></tr>
+         *      <tr><th>1</th><td>15</td><td>20</td><td>25</td><td> </td></tr>
          *      <tr><th>2</th><td>1215</td><td>1220</td><td>#VALUE!</td><td>200</td></tr>
          *      <tr><th>3</th><td>1315</td><td>1320</td><td>#VALUE!</td><td>300</td></tr>
          *      <tr><th>4</th><td>#VALUE!</td><td>#VALUE!</td><td>#VALUE!</td><td>400</td></tr>
@@ -109,14 +109,14 @@ namespace NPOI.SS.Formula.Eval
          * 
          * Of course with carefully (or carelessly) chosen parameters, cyclic references can occur and
          * hence this method <b>can</b> throw a 'circular reference' EvaluationException.  Note that 
-         * this method does not attempt to detect cycles.  Every cell in the specified Area <tt>ae</tt>
+         * this method does not attempt to detect cycles.  Every cell in the specified Area <c>ae</c>
          * has already been Evaluated prior to this method call.  Any cell (or cell<b>s</b>) part of 
-         * <tt>ae</tt> that would incur a cyclic reference error if selected by this method, will 
-         * already have the value <t>ErrorEval.CIRCULAR_REF_ERROR</tt> upon entry to this method.  It
+         * <c>ae</c> that would incur a cyclic reference error if selected by this method, will 
+         * already have the value <c>ErrorEval.CIRCULAR_REF_ERROR</c> upon entry to this method.  It
          * is assumed logic exists elsewhere to produce this behaviour.
          * 
          * @return whatever the selected cell's Evaluated value Is.  Never <c>null</c>. Never
-         *  <tt>ErrorEval</tt>.
+         *  <c>ErrorEval</c>.
          * @if there is a problem with indexing into the area, or if the
          *  Evaluated cell has an error.
          */
@@ -134,7 +134,7 @@ namespace NPOI.SS.Formula.Eval
         }
 
         /**
-         * @return possibly  <tt>ErrorEval</tt>, and <c>null</c> 
+         * @return possibly  <c>ErrorEval</c>, and <c>null</c> 
          */
         private static ValueEval ChooseSingleElementFromAreaInternal(AreaEval ae,
                 int srcCellRow, int srcCellCol)
@@ -195,13 +195,13 @@ namespace NPOI.SS.Formula.Eval
 
         /**
          * Applies some conversion rules if the supplied value is not already an integer.<br/>
-         * Value is first Coerced to a <tt>double</tt> ( See <tt>CoerceValueTodouble()</tt> ).<p/>
+         * Value is first Coerced to a <c>double</c> ( See <c>CoerceValueTodouble()</c> ).<p/>
          * 
          * Excel typically Converts doubles to integers by truncating toward negative infinity.<br/>
          * The equivalent java code Is:<br/>
-         * &nbsp;&nbsp;<c>return (int)Math.floor(d);</c><br/>
+         *  <c>return (int)Math.floor(d);</c><br/>
          * <b>not</b>:<br/>
-         * &nbsp;&nbsp;<c>return (int)d; // wrong - rounds toward zero</c> 
+         *  <c>return (int)d; // wrong - rounds toward zero</c> 
          * 
          */
         public static int CoerceValueToInt(ValueEval ev)
@@ -218,13 +218,13 @@ namespace NPOI.SS.Formula.Eval
 
         /**
          * Applies some conversion rules if the supplied value is not already a number.
-         * Note - <tt>BlankEval</tt> is not supported and must be handled by the caller. 
-         * @param ev must be a <tt>NumberEval</tt>, <tt>StringEval</tt> or <tt>BoolEval</tt>
+         * Note - <c>BlankEval</c> is not supported and must be handled by the caller. 
+         * @param ev must be a <c>NumberEval</c>, <c>StringEval</c> or <c>BoolEval</c>
          * @return actual, Parsed or interpreted double value (respectively).
          * @throws EvaluationException(#VALUE!) only if a StringEval is supplied and cannot be Parsed
-         * as a double (See <tt>Parsedouble()</tt> for allowable formats).
-         * @throws Exception if the supplied parameter is not <tt>NumberEval</tt>,
-         *  <tt>StringEval</tt> or <tt>BoolEval</tt>
+         * as a double (See <c>Parsedouble()</c> for allowable formats).
+         * @throws Exception if the supplied parameter is not <c>NumberEval</c>,
+         *  <c>StringEval</c> or <c>BoolEval</c>
          */
         public static double CoerceValueToDouble(ValueEval ev)
         {
@@ -315,7 +315,7 @@ namespace NPOI.SS.Formula.Eval
         }
 
         /**
-         * @param ve must be a <tt>NumberEval</tt>, <tt>StringEval</tt>, <tt>BoolEval</tt>, or <tt>BlankEval</tt>
+         * @param ve must be a <c>NumberEval</c>, <c>StringEval</c>, <c>BoolEval</c>, or <c>BlankEval</c>
          * @return the Converted string value. never <c>null</c>
          */
         public static String CoerceValueToString(ValueEval ve)

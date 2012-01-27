@@ -50,7 +50,7 @@ namespace NPOI.SS.Formula.Functions
      * <b>VLOOKUP</b>(<b>lookup_value</b>, <b>lookup_vector</b>, result_vector)<p/>
      * 
      * <b>lookup_value</b>  The value to be found in the lookup vector.<br/>
-     * <b>lookup_vector</> An area reference for the lookup data. <br/>
+     * <b>lookup_vector</b> An area reference for the lookup data. <br/>
      * <b>result_vector</b> Single row or single column area reference from which the result value Is chosen.<br/>
      * 
      * @author Josh Micich

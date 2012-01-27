@@ -24,7 +24,7 @@ namespace NPOI.SS.UserModel
      * When a font defInition is part of a theme defInition, then the font is categorized as either a major or minor font scheme component.
      * When a new theme is chosen, every font that is part of a theme defInition is updated to use the new major or minor font defInition for that
      * theme.
-     * Usually major fonts are used for styles like headings, and minor fonts are used for body & paragraph text.
+     * Usually major fonts are used for styles like headings, and minor fonts are used for body and paragraph text.
      *
      * @author Gisella Bronzetti
      */

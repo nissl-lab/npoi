@@ -109,7 +109,7 @@ namespace NPOI.SS.Formula.Functions
              * 
              * @param translationAmount may be zero negative or positive
              * 
-             * @return the equivalent <tt>LinearOffsetRange</tt> with a positive Length, moved by the
+             * @return the equivalent <c>LinearOffsetRange</c> with a positive Length, moved by the
              * specified translationAmount.
              */
             public LinearOffsetRange NormaliseAndTranslate(int translationAmount)

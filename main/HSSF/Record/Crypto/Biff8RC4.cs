@@ -92,7 +92,7 @@ namespace NPOI.HSSF.Record.Crypto
         /**
          * TODO: Additionally, the lbPlyPos (position_of_BOF) field of the BoundSheet8 record MUST NOT be encrypted.
          *
-         * @return <code>true</code> if record type specified by <tt>sid</tt> is never encrypted
+         * @return <c>true</c> if record type specified by <c>sid</c> is never encrypted
          */
         private static bool IsNeverEncryptedRecord(int sid)
         {

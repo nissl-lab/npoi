@@ -101,18 +101,17 @@ namespace NPOI.SS.Formula.Functions
         ///</summary>
         public static Function TRIM = new Trim();
 
-        /**
+        /*
          * @author Manda Wilson &lt; wilson at c bio dot msk cc dot org &gt;
         */
         ///<summary>
         ///An implementation of the MID function
-        ///<para>
+        ///
         ///MID returns a specific number of
         ///characters from a text string, starting at the specified position.
-        ///</para>
-        ///<para>
-        ///Syntax: MID(text, start_num, num_chars)
-        ///</para>
+        ///
+        /// Syntax: MID(text, start_num, num_chars)
+        ///</summary>
         public static Function MID = new Mid();
 
 

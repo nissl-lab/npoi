@@ -22,7 +22,7 @@ namespace TestCases.SS.Formula.Eval
 {
 
     /**
-     * Tests for <tt>OperandResolver</tt>
+     * Tests for <c>OperandResolver</c>
      *
      * @author Brendan Nolan
      */

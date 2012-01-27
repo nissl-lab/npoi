@@ -66,10 +66,10 @@ namespace NPOI.SS.Formula
             return Read(encodedTokenLen, in1, encodedTokenLen);
         }
         /**
-         * When there are no array constants present, <tt>encodedTokenLen</tt>==<tt>totalEncodedLen</tt>
+         * When there are no array constants present, <c>encodedTokenLen</c>==<c>totalEncodedLen</c>
          * @param encodedTokenLen number of bytes in the stream taken by the plain formula tokens
          * @param totalEncodedLen the total number of bytes in the formula (includes trailing encoding
-         * for array constants, but does not include 2 bytes for initial <tt>ushort encodedTokenLen</tt> field.
+         * for array constants, but does not include 2 bytes for initial <c>ushort encodedTokenLen</c> field.
          * @return A new formula object as read from the stream.  Possibly empty, never <code>null</code>.
          */
         public static Formula Read(int encodedTokenLen, LittleEndianInput in1, int totalEncodedLen)
@@ -119,7 +119,7 @@ namespace NPOI.SS.Formula
          * <li>tokenData</li>
          * <li>arrayConstantData (optional)</li>
          * </ul>
-         * Note - this value is different to <tt>tokenDataLength</tt>
+         * Note - this value is different to <c>tokenDataLength</c>
          */
         public int EncodedSize
         {
@@ -147,7 +147,7 @@ namespace NPOI.SS.Formula
          * Creates a {@link Formula} object from a supplied {@link Ptg} array. 
          * Handles <code>null</code>s OK.
          * @param ptgs may be <code>null</code>
-         * @return Never <code>null</code> (Possibly empty if the supplied <tt>ptgs</tt> is <code>null</code>)
+         * @return Never <code>null</code> (Possibly empty if the supplied <c>ptgs</c> is <code>null</code>)
          */
         public static Formula Create(Ptg[] ptgs)
         {
@@ -166,7 +166,7 @@ namespace NPOI.SS.Formula
          * Handles <code>null</code>s OK.
          * 
          * @param formula may be <code>null</code>
-         * @return possibly <code>null</code> (if the supplied <tt>formula</tt> is <code>null</code>)
+         * @return possibly <code>null</code> (if the supplied <c>formula</c> is <code>null</code>)
          */
         public static Ptg[] GetTokens(Formula formula)
         {
@@ -189,7 +189,7 @@ namespace NPOI.SS.Formula
          * returned by this method will  match the top left corner of the range of that grouping. 
          * The return value is usually not the same as the location of the cell containing this formula.
          * 
-         * @return the firstRow & firstColumn of an array formula or shared formula that this formula
+         * @return the firstRow &amp; firstColumn of an array formula or shared formula that this formula
          * belongs to.  <code>null</code> if this formula is not part of an array or shared formula.
          */
         public CellReference ExpReference

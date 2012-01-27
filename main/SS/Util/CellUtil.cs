@@ -355,7 +355,7 @@ namespace NPOI.SS.Util
         }
 
         /**
-         *  Looks for text in the cell that should be unicode, like &alpha; and provides the
+         *  Looks for text in the cell that should be unicode, like an alpha and provides the
          *  unicode version of it.
          *
          *@param  cell  The cell to check for unicode values

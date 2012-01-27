@@ -41,7 +41,7 @@ namespace TestCases.HSSF.Record.CF
 		    biggest, tenthColumn, tenthRow, box10x10, box9x9, box10to20c, oneCell,
 	    };
     	
-	    /** cross-reference of <tt>contains()</tt> operations for sampleRanges against itself */
+	    /** cross-reference of <c>contains()</c> operations for sampleRanges against itself */
 	    private static bool[,] containsExpectedResults =
         {
 	    //               biggest, tenthColumn, tenthRow, box10x10, box9x9, box10to20c, oneCell

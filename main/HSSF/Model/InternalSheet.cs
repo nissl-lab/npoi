@@ -152,7 +152,7 @@ namespace NPOI.HSSF.Model
         /// subsequent calls will return values in (physical) sequence or NULL when you get to the end.
         /// </summary>
         /// <returns>the next value record or NULL if there are no more</returns>
-        /// <see cref="SetLoc(int)"/>
+        // <see cref="SetLoc(int)"/>
         public CellValueRecordInterface[] GetValueRecords()
         {
             return _rowsAggregate.GetValueRecords();
@@ -187,7 +187,7 @@ namespace NPOI.HSSF.Model
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Sheet"/> class.
+        /// Initializes a new instance of the <see cref="InternalSheet"/> class.
         /// </summary>
         /// <param name="rs">The stream.</param>
         private InternalSheet(RecordStream rs)
@@ -585,10 +585,10 @@ namespace NPOI.HSSF.Model
                 return MergedRecords.NumberOfMergedRegions;
             }
         }
-        /// <summary>
-        /// Find correct position to Add new CF record
-        /// </summary>
-        /// <returns></returns>
+        ///// <summary>
+        ///// Find correct position to Add new CF record
+        ///// </summary>
+        ///// <returns></returns>
         //private int FindConditionalFormattingPosition()
         //{
         //    // This is default.
@@ -1432,10 +1432,10 @@ namespace NPOI.HSSF.Model
         /// <summary>
         /// Sets the active cell range.
         /// </summary>
-        /// <param name="firstrow">The firstrow.</param>
-        /// <param name="lastrow">The lastrow.</param>
-        /// <param name="firstcolumn">The firstcolumn.</param>
-        /// <param name="lastcolumn">The lastcolumn.</param>
+        /// <param name="firstRow">The firstrow.</param>
+        /// <param name="lastRow">The lastrow.</param>
+        /// <param name="firstColumn">The firstcolumn.</param>
+        /// <param name="lastColumn">The lastcolumn.</param>
         public void SetActiveCellRange(int firstRow, int lastRow, int firstColumn, int lastColumn)
         {
             List<CellRangeAddress8Bit> cellranges = new List<CellRangeAddress8Bit>();
@@ -1659,7 +1659,7 @@ namespace NPOI.HSSF.Model
         }
 
         /**
- * @return <code>true</code> if gridlines are printed
+ * @return <c>true</c> if gridlines are printed
  */
         public bool IsGridsPrinted
         {

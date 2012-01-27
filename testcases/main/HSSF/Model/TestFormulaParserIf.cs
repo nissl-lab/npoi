@@ -25,7 +25,7 @@ namespace TestCases.HSSF.Model
     using NPOI.SS.Formula.PTG;
 
     /**
-     * Tests <tt>FormulaParser</tt> specifically with respect to IF() functions
+     * Tests <c>FormulaParser</c> specifically with respect to IF() functions
      */
     [TestClass]
     public class TestFormulaParserIf

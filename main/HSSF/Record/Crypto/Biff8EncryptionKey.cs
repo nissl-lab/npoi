@@ -78,7 +78,7 @@ namespace NPOI.HSSF.Record.Crypto
         }
 
         /**
-         * @return <code>true</code> if the keyDigest is compatible with the specified saltData and saltHash
+         * @return <c>true</c> if the keyDigest is compatible with the specified saltData and saltHash
          */
         public bool Validate(byte[] saltData, byte[] saltHash)
         {

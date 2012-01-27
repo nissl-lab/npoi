@@ -202,8 +202,9 @@ namespace NPOI.SS.UserModel
         }
 
         /**
-         * Get the format index that matches the given format string
-         * <p/>
+         * Get the format index that matches the given format string.
+         * 
+         * <p>
          * Automatically Converts "text" to excel's format string to represent text.
          * </p>
          * @param pFmt string matching a built-in format

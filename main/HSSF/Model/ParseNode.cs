@@ -23,9 +23,9 @@ namespace NPOI.HSSF.Model
     using NPOI.SS.Formula.Function;
     using NPOI.SS.Formula.PTG;
     /**
-     * Represents a syntactic element from a formula by encapsulating the corresponding <tt>Ptg</tt>
-     * token.  Each <tt>ParseNode</tt> may have child <tt>ParseNode</tt>s in the case when the wrapped
-     * <tt>Ptg</tt> is non-atomic.
+     * Represents a syntactic element from a formula by encapsulating the corresponding <c>Ptg</c>
+     * token.  Each <c>ParseNode</c> may have child <c>ParseNode</c>s in the case when the wrapped
+     * <c>Ptg</c> is non-atomic.
      * 
      * @author Josh Micich
      */

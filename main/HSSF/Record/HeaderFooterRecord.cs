@@ -78,11 +78,11 @@ namespace NPOI.HSSF.Record
 
         /**
          * If this header belongs to a specific sheet view , the sheet view?s GUID will be saved here.
-         * <p>
+         * 
          * If it is zero, it means the current sheet. Otherwise, this field MUST match the guid field
          * of the preceding {@link UserSViewBegin} record.
          *
-         * @return the sheet view?s GUID
+         * @return the sheet view's GUID
          */
         public byte[] Guid
         {

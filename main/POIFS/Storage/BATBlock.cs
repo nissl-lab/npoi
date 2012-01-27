@@ -50,17 +50,17 @@ namespace NPOI.POIFS.Storage
         private static byte _default_value = (byte)0xFF;
         private IntegerField[] _fields;
         private byte[] _data;
-        /**
-         * For a regular fat block, these are 128 / 1024 
-         *  next sector values.
-         * For a XFat (DIFat) block, these are 127 / 1023
-         *  next sector values, then a chaining value.
-         */
+        // /**
+        // * For a regular fat block, these are 128 / 1024 
+        // *  next sector values.
+        // * For a XFat (DIFat) block, these are 127 / 1023
+        // *  next sector values, then a chaining value.
+        // */
         //private int[] _values; 
 
-        /**
-         * Does this BATBlock have any free sectors in it?
-         */
+        // /**
+        // * Does this BATBlock have any free sectors in it?
+        // */
     //    private bool _has_free_sectors;
 
         /**
@@ -91,7 +91,7 @@ namespace NPOI.POIFS.Storage
         //{
          
         //}
-        /**
+        /*
          * Create a single instance initialized (perhaps partially) with entries
          *
          * @param entries the array of block allocation table entries
@@ -131,7 +131,7 @@ namespace NPOI.POIFS.Storage
         //    }
         //    _has_free_sectors = hasFree;
         //}
-        ///**
+        // /**
         // * Create a single BATBlock from the byte buffer, which must hold at least
         // *  one big block of data to be read.
         // */
@@ -152,7 +152,7 @@ namespace NPOI.POIFS.Storage
         //    // All done
         //    return block;
         //}
-        ///**
+        // /**
         // * Creates a single BATBlock, with all the values set to empty.
         // */
         //public static BATBlock CreateEmptyBATBlock(POIFSBigBlockSize bigBlockSize, bool isXBAT)
@@ -307,10 +307,10 @@ namespace NPOI.POIFS.Storage
         {
             _fields[_entries_per_xbat_block].Set(chainIndex, _data);
         }
-        /**
-         * Does this BATBlock have any free sectors in it, or
-         *  is it full?
-         */
+        // /**
+        // * Does this BATBlock have any free sectors in it, or
+        // *  is it full?
+        // */
         //public bool HasFreeSectors
         //{
         //    get

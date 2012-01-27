@@ -20,7 +20,7 @@ namespace NPOI.POIFS.Storage
 {
 
     /**
-     * Wraps a <tt>byte</tt> array and provides simple data input access.
+     * Wraps a <c>byte</c> array and provides simple data input access.
      * Internally, this class maintains a buffer read index, so that for the most part, primitive
      * data can be read in a data-input-stream-like manner.<p/>
      *
@@ -34,7 +34,7 @@ namespace NPOI.POIFS.Storage
      * {@link #readLongLE()}) have corresponding 'spanning Read' methods which (when required) perform
      * a read across the block boundary.  These spanning read methods take the previous
      * {@link DataInputBlock} as a parameter.
-     * Reads of larger amounts of data (into <tt>byte</tt> array buffers) must be managed by the caller
+     * Reads of larger amounts of data (into <c>byte</c> array buffers) must be managed by the caller
      * since these could conceivably involve more than two blocks.
      *
      * @author Josh Micich
@@ -67,7 +67,7 @@ namespace NPOI.POIFS.Storage
         }
 
         /**
-         * Reads a <tt>short</tt> which was encoded in <em>little endian</em> format.
+         * Reads a <c>short</c> which was encoded in <em>little endian</em> format.
          */
         public int ReadUshortLE()
         {
@@ -80,7 +80,7 @@ namespace NPOI.POIFS.Storage
         }
 
         /**
-         * Reads a <tt>short</tt> which spans the end of <tt>prevBlock</tt> and the start of this block.
+         * Reads a <c>short</c> which spans the end of <c>prevBlock</c> and the start of this block.
          */
         public int ReadUshortLE(DataInputBlock prevBlock)
         {
@@ -93,7 +93,7 @@ namespace NPOI.POIFS.Storage
         }
 
         /**
-         * Reads an <tt>int</tt> which was encoded in <em>little endian</em> format.
+         * Reads an <c>int</c> which was encoded in <em>little endian</em> format.
          */
         public int ReadIntLE()
         {
@@ -108,7 +108,7 @@ namespace NPOI.POIFS.Storage
         }
 
         /**
-         * Reads an <tt>int</tt> which spans the end of <tt>prevBlock</tt> and the start of this block.
+         * Reads an <c>int</c> which spans the end of <c>prevBlock</c> and the start of this block.
          */
         public int ReadIntLE(DataInputBlock prevBlock, int prevBlockAvailable)
         {
@@ -123,7 +123,7 @@ namespace NPOI.POIFS.Storage
         }
 
         /**
-         * Reads a <tt>long</tt> which was encoded in <em>little endian</em> format.
+         * Reads a <c>long</c> which was encoded in <em>little endian</em> format.
          */
         public long ReadLongLE()
         {
@@ -149,7 +149,7 @@ namespace NPOI.POIFS.Storage
         }
 
         /**
-         * Reads a <tt>long</tt> which spans the end of <tt>prevBlock</tt> and the start of this block.
+         * Reads a <c>long</c> which spans the end of <c>prevBlock</c> and the start of this block.
          */
         public long ReadLongLE(DataInputBlock prevBlock, int prevBlockAvailable)
         {
@@ -190,7 +190,7 @@ namespace NPOI.POIFS.Storage
         }
 
         /**
-         * Reads <tt>len</tt> bytes from this block into the supplied buffer.
+         * Reads <c>len</c> bytes from this block into the supplied buffer.
          */
         public void ReadFully(byte[] buf, int off, int len)
         {

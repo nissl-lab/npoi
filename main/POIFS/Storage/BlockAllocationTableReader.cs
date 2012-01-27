@@ -159,6 +159,7 @@ namespace NPOI.POIFS.Storage
         /// associated blocks. The associated blocks are Removed from the block list
         /// </summary>
         /// <param name="startBlock">the first block in the chain</param>
+        /// <param name="headerPropertiesStartBlock"></param>
         /// <param name="blockList">the raw data block list</param>
         /// <returns>array of ListManagedBlocks, in their correct order</returns>
         public ListManagedBlock[] FetchBlocks(int startBlock, int headerPropertiesStartBlock,

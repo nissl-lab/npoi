@@ -50,7 +50,7 @@ namespace NPOI.HSSF.Record.Aggregates
         }
 
         /**
-         * @return <code>true</code> if the specified Record sid is one belonging to
+         * @return <c>true</c> if the specified Record sid is one belonging to
          *         the 'Page Settings Block'.
          */
         public static bool IsComponentRecord(int sid)

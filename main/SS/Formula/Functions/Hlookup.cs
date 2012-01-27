@@ -73,7 +73,7 @@ namespace NPOI.SS.Formula.Functions
 
 
         /**
-         * Returns one column from an <tt>AreaEval</tt>
+         * Returns one column from an <c>AreaEval</c>
          * 
          * @(#VALUE!) if colIndex Is negative, (#REF!) if colIndex Is too high
          */

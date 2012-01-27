@@ -24,7 +24,7 @@ namespace NPOI.SS.UserModel
     using NPOI.SS.Util;
 
     /**
-     * The 'Conditional Formatting' facet of <tt>Sheet</tt>
+     * The 'Conditional Formatting' facet of <c>Sheet</c>
      *
      * @author Dmitriy Kumshayev
      * @author Yegor Kozlov
@@ -93,7 +93,7 @@ namespace NPOI.SS.UserModel
          * </p>
          *
          * @param comparisonOperation - MUST be a constant value from
-         *		 <tt>{@link ComparisonOperator}</tt>: <p>
+         *		 <c>{@link ComparisonOperator}</c>: <p>
          * <ul>
          *		 <li>BETWEEN</li>
          *		 <li>NOT_BETWEEN</li>
@@ -122,7 +122,7 @@ namespace NPOI.SS.UserModel
          * </p>
          *
          * @param comparisonOperation  MUST be a constant value from
-         *		 <tt>{@link ComparisonOperator}</tt> except  BETWEEN and NOT_BETWEEN
+         *		 <c>{@link ComparisonOperator}</c> except  BETWEEN and NOT_BETWEEN
          *
          * @param formula  the formula to determine if the conditional formatting is applied
          */

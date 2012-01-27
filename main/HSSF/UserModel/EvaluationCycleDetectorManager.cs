@@ -22,9 +22,9 @@ namespace NPOI.HSSF.UserModel
     using System.Threading;
 
     /**
-     * This class makes an <tt>EvaluationCycleDetector</tt> instance available to
-     * each thRead via a <tt>ThReadLocal</tt> in order to avoid Adding a parameter
-     * to a few protected methods within <tt>HSSFFormulaEvaluator</tt>.
+     * This class makes an <c>EvaluationCycleDetector</c> instance available to
+     * each thRead via a <c>ThReadLocal</c> in order to avoid Adding a parameter
+     * to a few protected methods within <c>HSSFFormulaEvaluator</c>.
      * 
      * @author Josh Micich
      */

@@ -28,7 +28,7 @@ namespace NPOI.HSSF.UserModel
     using System.Collections.Generic;
     using NPOI.SS.UserModel;
 
-    /**
+    /*
      * Identifies both built-in and user defined formats within a workbook.<p/>
      * See {@link BuiltinFormats} for a list of supported built-in formats.<p/>
      *
@@ -64,7 +64,7 @@ namespace NPOI.HSSF.UserModel
         /// Construncts a new data formatter.  It takes a workbook to have
         /// access to the workbooks format records.
         /// </summary>
-        /// <param name="workbook">the workbook the formats are tied to..</param>
+        /// <param name="workbook">the workbook the formats are tied to.</param>
         public HSSFDataFormat(InternalWorkbook workbook)
         {
             this.workbook = workbook;
@@ -117,7 +117,7 @@ namespace NPOI.HSSF.UserModel
         /// string, creating a new format entry if required.
         /// Aliases text to the proper format as required.
         /// </summary>
-        /// <param name="format">The format string matching a built in format.</param>
+        /// <param name="pFormat">The format string matching a built in format.</param>
         /// <returns>index of format.</returns>
         public short GetFormat(String pFormat)
         {

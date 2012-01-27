@@ -162,7 +162,7 @@ namespace NPOI.SS.Formula.PTG
          * Resolves internal function names into function indexes.
          * 
          * The name matching is case insensitive.
-         * @return the standard worksheet function index if found, otherwise <tt>FUNCTION_INDEX_EXTERNAL</tt>
+         * @return the standard worksheet function index if found, otherwise <c>FUNCTION_INDEX_EXTERNAL</c>
          */
         protected static short LookupIndex(String name)
         {

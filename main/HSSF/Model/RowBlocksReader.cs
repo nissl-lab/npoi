@@ -112,7 +112,7 @@ namespace NPOI.HSSF.Model
         /**
          * Some unconventional apps place {@link MergeCellsRecord}s within the row block.  They 
          * actually should be in the {@link MergedCellsTable} which is much later (see bug 45699).
-         * @return any loose  <tt>MergeCellsRecord</tt>s found
+         * @return any loose  <c>MergeCellsRecord</c>s found
          */
         public MergeCellsRecord[] LooseMergedCells
         {

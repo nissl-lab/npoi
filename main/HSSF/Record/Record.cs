@@ -75,7 +75,7 @@ namespace NPOI.HSSF.Record
             get { return Serialize().Length; }
         }
 
-        ///**
+        // /**
         // * tells whether this type of record Contains a value
         // */
 
@@ -84,7 +84,7 @@ namespace NPOI.HSSF.Record
         //    get { return false; }
         //}
 
-        ///**
+        // /**
         // * DBCELL, ROW, VALUES all say yes
         // */
 

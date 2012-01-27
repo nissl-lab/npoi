@@ -29,7 +29,7 @@ namespace NPOI.SS.Formula.Functions
      * 
      * Syntax: COUNTIF ( range, criteria )
      *    <table border="0" cellpAdding="1" cellspacing="0" summary="Parameter descriptions">
-     *      <tr><th>range&nbsp;&nbsp;&nbsp;</th><td>is the range of cells to be Counted based on the criteria</td></tr>
+     *      <tr><th>range </th><td>is the range of cells to be Counted based on the criteria</td></tr>
      *      <tr><th>criteria</th><td>is used to determine which cells to Count</td></tr>
      *    </table>
      * <p/>

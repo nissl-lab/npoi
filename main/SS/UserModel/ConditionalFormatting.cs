@@ -47,7 +47,7 @@ namespace NPOI.SS.UserModel
      *  </UL>
      *
      * Use {@link NPOI.HSSF.UserModel.Sheet#getSheetConditionalFormatting()} to Get access to an instance of this class.
-     * <P>
+     * 
      * To create a new Conditional Formatting Set use the following approach:
      *
      * <PRE>
@@ -82,7 +82,7 @@ namespace NPOI.SS.UserModel
     {
 
         /**
-         * @return array of <tt>CellRangeAddress</tt>s. Never <code>null</code>
+         * @return array of <c>CellRangeAddress</c>s. Never <code>null</code>
          */
         CellRangeAddress[] GetFormattingRanges();
 

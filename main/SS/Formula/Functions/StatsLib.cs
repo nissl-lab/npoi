@@ -165,7 +165,7 @@ namespace NPOI.SS.Formula.Functions
             return r;
         }
 
-        /**
+        /*
          * returns the kth largest element in the array. Duplicates
          * are considered as distinct values. Hence, eg.
          * for array {1,2,4,3,3} & k=2, returned value Is 3.
@@ -187,7 +187,7 @@ namespace NPOI.SS.Formula.Functions
             return r;
         }
 
-        /**
+        /*
          * returns the kth smallest element in the array. Duplicates
          * are considered as distinct values. Hence, eg.
          * for array {1,1,2,4,3,3} & k=2, returned value Is 1.

@@ -52,7 +52,7 @@ namespace NPOI.HSSF.Util
          * it takes to Create it once per request but you will not hold onto it
          * if you have none of those requests.
          *
-         * @return a hashtable containing all colors keyed by <tt>int</tt> excel-style palette indexes
+         * @return a hashtable containing all colors keyed by <c>int</c> excel-style palette indexes
          */
         public static Hashtable GetIndexHash()
         {

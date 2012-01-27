@@ -84,7 +84,7 @@ namespace NPOI.HSSF.Extractor
         /// <summary>
         /// Should sheet names be included? Default is true
         /// </summary>
-        /// <param name="includeSheetNames">if set to <c>true</c> [include sheet names].</param>
+        /// <value>if set to <c>true</c> [include sheet names].</value>
         public bool IncludeSheetNames
         {
             get
@@ -100,7 +100,7 @@ namespace NPOI.HSSF.Extractor
         /// Should we return the formula itself, and not
         /// the result it produces? Default is false
         /// </summary>
-        /// <param name="formulasNotResults">if set to <c>true</c> [formulas not results].</param>
+        /// <value>if set to <c>true</c> [formulas not results].</value>
         public bool FormulasNotResults
         {
             get 
