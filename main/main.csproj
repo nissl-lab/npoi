@@ -865,6 +865,9 @@
     <Compile Include="SS\UserModel\DateUtil.cs" />
     <Compile Include="SS\UserModel\Drawing.cs" />
     <Compile Include="SS\UserModel\ErrorConstants.cs" />
+    <Compile Include="SS\UserModel\ExcelStyleDateFormatter.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="SS\UserModel\FillPatternType.cs" />
     <Compile Include="SS\UserModel\Font.cs" />
     <Compile Include="SS\UserModel\FontCharset.cs" />

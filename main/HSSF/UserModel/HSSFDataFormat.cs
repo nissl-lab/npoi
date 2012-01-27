@@ -28,64 +28,30 @@ namespace NPOI.HSSF.UserModel
     using System.Collections.Generic;
     using NPOI.SS.UserModel;
 
-    /// <summary>
-    /// Utility to identify builtin formats.  Now can handle user defined data formats also.  The following Is a list of the formats as
-    /// returned by this class.
-    /// </summary>
-    /// <remark>
-    ///  @author  Andrew C. Oliver (acoliver at apache dot org)
-    ///  @author  Shawn M. Laubach (slaubach at apache dot org)
-    ///  </remark>
-    ///  <example>
-    ///       0, "General"
-    ///       1, "0"
-    ///       2, "0.00"
-    ///       3, "#,##0"
-    ///       4, "#,##0.00"
-    ///       5, "($#,##0_);($#,##0)"
-    ///       6, "($#,##0_);[Red]($#,##0)"
-    ///       7, "($#,##0.00);($#,##0.00)"
-    ///       8, "($#,##0.00_);[Red]($#,##0.00)"
-    ///       9, "0%"
-    ///       0xa, "0.00%"
-    ///       0xb, "0.00E+00"
-    ///       0xc, "# ?/?"
-    ///       0xd, "# ??/??"
-    ///       0xe, "m/d/yy"
-    ///       0xf, "d-mmm-yy"
-    ///       0x10, "d-mmm"
-    ///       0x11, "mmm-yy"
-    ///       0x12, "h:mm AM/PM"
-    ///       0x13, "h:mm:ss AM/PM"
-    ///       0x14, "h:mm"
-    ///       0x15, "h:mm:ss"
-    ///       0x16, "m/d/yy h:mm"
-    ///
-    ///       // 0x17 - 0x24 reserved for international and Undocumented
-    ///       0x25, "(#,##0_);(#,##0)"
-    ///       0x26, "(#,##0_);[Red](#,##0)"
-    ///       0x27, "(#,##0.00_);(#,##0.00)"
-    ///       0x28, "(#,##0.00_);[Red](#,##0.00)"
-    ///       0x29, "_(///#,##0_);_(///(#,##0);_(/// \"-\"_);_(@_)"
-    ///       0x2a, "_($///#,##0_);_($///(#,##0);_($/// \"-\"_);_(@_)"
-    ///       0x2b, "_(///#,##0.00_);_(///(#,##0.00);_(///\"-\"??_);_(@_)"
-    ///       0x2c, "_($///#,##0.00_);_($///(#,##0.00);_($///\"-\"??_);_(@_)"
-    ///       0x2d, "mm:ss"
-    ///       0x2e, "[h]:mm:ss"
-    ///       0x2f, "mm:ss.0"
-    ///       0x30, "##0.0E+0"
-    ///       0x31, "@" - This Is text format.
-    ///       0x31  "text" - Alias for "@"
-    ///  </example>
+    /**
+     * Identifies both built-in and user defined formats within a workbook.<p/>
+     * See {@link BuiltinFormats} for a list of supported built-in formats.<p/>
+     *
+     * <b>International Formats</b><br/>
+     * Since version 2003 Excel has supported international formats.  These are denoted
+     * with a prefix "[$-xxx]" (where xxx is a 1-7 digit hexadecimal number).
+     * See the Microsoft article
+     * <a href="http://office.microsoft.com/assistance/hfws.aspx?AssetID=HA010346351033&CTT=6&Origin=EC010272491033">
+     *   Creating international number formats
+     * </a> for more details on these codes.
+     *
+     * @author  Andrew C. Oliver (acoliver at apache dot org)
+     * @author  Shawn M. Laubach (slaubach at apache dot org)
+     */
     [Serializable]
-    public class HSSFDataFormat: IDataFormat
+    public class HSSFDataFormat : IDataFormat
     {
-        	/**
-	 * The first user-defined format starts at 164.
-	 */
-	public const int FIRST_USER_DEFINED_FORMAT_INDEX = 164;
+        /**
+ * The first user-defined format starts at 164.
+ */
+        public const int FIRST_USER_DEFINED_FORMAT_INDEX = 164;
 
-        private static List<string> builtinFormats = CreateBuiltinFormats();
+        private static List<string> builtinFormats = new List<string>(BuiltinFormats.GetAll());
 
         private List<string> formats = new List<string>();
         private InternalWorkbook workbook;
@@ -114,67 +80,6 @@ namespace NPOI.HSSF.UserModel
             }
         }
 
-        //synchonized
-        private static List<string> CreateBuiltinFormats()
-        {
-            List<string> builtinFormats = new List<string>();
-            builtinFormats.Insert(0, "General");
-            builtinFormats.Insert(1, "0");
-            builtinFormats.Insert(2, "0.00");
-            builtinFormats.Insert(3, "#,##0");
-            builtinFormats.Insert(4, "#,##0.00");
-            builtinFormats.Insert(5, "($#,##0_);($#,##0)");
-            builtinFormats.Insert(6, "($#,##0_);[Red]($#,##0)");
-            builtinFormats.Insert(7, "($#,##0.00);($#,##0.00)");
-            builtinFormats.Insert(8, "($#,##0.00_);[Red]($#,##0.00)");
-            builtinFormats.Insert(9, "0%");
-            builtinFormats.Insert(0xa, "0.00%");
-            builtinFormats.Insert(0xb, "0.00E+00");
-            builtinFormats.Insert(0xc, "# ?/?");
-            builtinFormats.Insert(0xd, "# ??/??");
-            builtinFormats.Insert(0xe, "m/d/yy");
-            builtinFormats.Insert(0xf, "d-mmm-yy");
-            builtinFormats.Insert(0x10, "d-mmm");
-            builtinFormats.Insert(0x11, "mmm-yy");
-            builtinFormats.Insert(0x12, "h:mm AM/PM");
-            builtinFormats.Insert(0x13, "h:mm:ss AM/PM");
-            builtinFormats.Insert(0x14, "h:mm");
-            builtinFormats.Insert(0x15, "h:mm:ss");
-            builtinFormats.Insert(0x16, "m/d/yy h:mm");
-
-            // 0x17 - 0x24 reserved for international and Undocumented
-            builtinFormats.Insert(0x17, "0x17");
-            builtinFormats.Insert(0x18, "0x18");
-            builtinFormats.Insert(0x19, "0x19");
-            builtinFormats.Insert(0x1a, "0x1a");
-            builtinFormats.Insert(0x1b, "0x1b");
-            builtinFormats.Insert(0x1c, "0x1c");
-            builtinFormats.Insert(0x1d, "0x1d");
-            builtinFormats.Insert(0x1e, "0x1e");
-            builtinFormats.Insert(0x1f, "0x1f");
-            builtinFormats.Insert(0x20, "0x20");
-            builtinFormats.Insert(0x21, "0x21");
-            builtinFormats.Insert(0x22, "0x22");
-            builtinFormats.Insert(0x23, "0x23");
-            builtinFormats.Insert(0x24, "0x24");
-
-            // 0x17 - 0x24 reserved for international and Undocumented
-            builtinFormats.Insert(0x25, "(#,##0_);(#,##0)");
-            builtinFormats.Insert(0x26, "(#,##0_);[Red](#,##0)");
-            builtinFormats.Insert(0x27, "(#,##0.00_);(#,##0.00)");
-            builtinFormats.Insert(0x28, "(#,##0.00_);[Red](#,##0.00)");
-            builtinFormats.Insert(0x29, "_(*#,##0_);_(*(#,##0);_(* \"-\"_);_(@_)");
-            builtinFormats.Insert(0x2a, "_($*#,##0_);_($*(#,##0);_($* \"-\"_);_(@_)");
-            builtinFormats.Insert(0x2b, "_(*#,##0.00_);_(*(#,##0.00);_(*\"-\"??_);_(@_)");
-            builtinFormats.Insert(0x2c,
-                    "_($*#,##0.00_);_($*(#,##0.00);_($*\"-\"??_);_(@_)");
-            builtinFormats.Insert(0x2d, "mm:ss");
-            builtinFormats.Insert(0x2e, "[h]:mm:ss");
-            builtinFormats.Insert(0x2f, "mm:ss.0");
-            builtinFormats.Insert(0x30, "##0.0E+0");
-            builtinFormats.Insert(0x31, "@");
-            return builtinFormats;
-        }
 
         public static List<string> GetBuiltinFormats()
         {
@@ -317,6 +222,16 @@ namespace NPOI.HSSF.UserModel
                 return builtinFormats.Count;
             }
         }
-
+        /**
+	     * Ensures that the formats list can hold entries
+	     *  up to and including the entry with this index
+	     */
+        private void EnsureFormatsSize(int index)
+        {
+            if (formats.Count <= index)
+            {
+                formats.Capacity = (index + 1);
+            }
+        }
     }
 }

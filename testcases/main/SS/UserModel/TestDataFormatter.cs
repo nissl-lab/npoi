@@ -209,7 +209,7 @@ namespace TestCases.SS.UserModel
         public void TestPAddingSpacesCSV()
         {
             //DataFormatter dfUS = new DataFormatter(Locale.US);
-            DataFormatter dfUS = new DataFormatter();
+            DataFormatter dfUS = new DataFormatter(true);
             Assert.AreEqual("12.34 ", dfUS.FormatRawCellContents(12.343, -1, "##.##_ "));
             Assert.AreEqual("-12.34 ", dfUS.FormatRawCellContents(-12.343, -1, "##.##_ "));
             Assert.AreEqual(". ", dfUS.FormatRawCellContents(0.0, -1, "##.##_ "));
@@ -263,7 +263,7 @@ namespace TestCases.SS.UserModel
         {
             //DataFormatter dfUS = new DataFormatter(Locale.US);
             DataFormatter dfUS = new DataFormatter();
-
+            System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.GetCultureInfo("en-US");
             double hour = 1.0 / 24.0;
 
             Assert.AreEqual("01:00", dfUS.FormatRawCellContents(1 * hour, -1, "hh:mm"));
@@ -362,7 +362,7 @@ namespace TestCases.SS.UserModel
         {
             //DataFormatter dfUS = new DataFormatter(Locale.US);
             DataFormatter dfUS = new DataFormatter();
-
+            System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.GetCultureInfo("en-US");
             Assert.AreEqual("1899-12-31 00:00:00", dfUS.FormatRawCellContents(0.0, -1, "yyyy-mm-dd hh:mm:ss"));
             Assert.AreEqual("1899-12-31 00:00:00", dfUS.FormatRawCellContents(0.0, -1, "yyyy-mm-dd hh:mm:ss", false));
             Assert.AreEqual("1904-01-01 00:00:00", dfUS.FormatRawCellContents(0.0, -1, "yyyy-mm-dd hh:mm:ss", true));
@@ -382,10 +382,12 @@ namespace TestCases.SS.UserModel
         {
             //DataFormatter df1 = new DataFormatter(Locale.US);
             DataFormatter df1 = new DataFormatter();
-            Assert.AreEqual("-1.0", df1.FormatRawCellContents(-1, -1, "mm/dd/yyyy"));
-
+            //Assert.AreEqual("-1.0", df1.FormatRawCellContents(-1, -1, "mm/dd/yyyy"));
+            //in java -1.toString() is "-1.0", but in C# -1.ToString() is "-1".
+            Assert.AreEqual("-1", df1.FormatRawCellContents(-1, -1, "mm/dd/yyyy"));
+            System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.GetCultureInfo("en-US");
             //DataFormatter df2 = new DataFormatter(Locale.US);
-            DataFormatter df2 = new DataFormatter();
+            DataFormatter df2 = new DataFormatter(true);
             Assert.AreEqual("###############################################################################################################################################################################################################################################################",
                     df2.FormatRawCellContents(-1, -1, "mm/dd/yyyy"));
         }
@@ -394,7 +396,6 @@ namespace TestCases.SS.UserModel
         {
             //DataFormatter dfUS = new DataFormatter(Locale.US);
             DataFormatter dfUS = new DataFormatter();
-
             Assert.AreEqual("1901-01-01", dfUS.FormatRawCellContents(367.0, -1, "yyyy-mm-dd"));
             Assert.AreEqual("1901-01-01", dfUS.FormatRawCellContents(367.0, -1, "yyyy\\-mm\\-dd"));
 
@@ -408,8 +409,7 @@ namespace TestCases.SS.UserModel
         public void TestOther()
         {
             //DataFormatter dfUS = new DataFormatter(Locale.US);
-            DataFormatter dfUS = new DataFormatter();
-
+            DataFormatter dfUS = new DataFormatter(true);
             Assert.AreEqual(" 12.34 ", dfUS.FormatRawCellContents(12.34, -1, "_-* #,##0.00_-;-* #,##0.00_-;_-* \"-\"??_-;_-@_-"));
             Assert.AreEqual("-12.34 ", dfUS.FormatRawCellContents(-12.34, -1, "_-* #,##0.00_-;-* #,##0.00_-;_-* \"-\"??_-;_-@_-"));
             Assert.AreEqual(" -   ", dfUS.FormatRawCellContents(0.0, -1, "_-* #,##0.00_-;-* #,##0.00_-;_-* \"-\"??_-;_-@_-"));

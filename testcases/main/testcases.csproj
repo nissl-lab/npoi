@@ -552,13 +552,14 @@
     <Compile Include="SS\UserModel\BaseTestSheet.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="SS\UserModel\BaseTestSheetAutosizeColumn.java.cs" />
+    <Compile Include="SS\UserModel\BaseTestSheetAutosizeColumn.cs" />
     <Compile Include="SS\UserModel\BaseTestSheetHiding.cs" />
     <Compile Include="SS\UserModel\BaseTestSheetShiftRows.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="SS\UserModel\BaseTestSheetUpdateArrayFormulas.cs" />
     <Compile Include="SS\UserModel\BaseTestWorkbook.cs" />
+    <Compile Include="SS\UserModel\TestDataFormatter.cs" />
     <Compile Include="SS\Util\Cellwalk\TestCellWalk.cs" />
     <Compile Include="SS\Util\NumberComparingSpreadsheetGenerator.cs" />
     <Compile Include="SS\Util\NumberComparisonExamples.cs" />

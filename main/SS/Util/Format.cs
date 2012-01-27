@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Globalization;
 
 namespace NPOI.SS.Util
 {
@@ -175,11 +176,13 @@ namespace NPOI.SS.Util
         {
             if (pattern.IndexOf("'") != -1)
             {
-                return ((double)obj).ToString();
+                //return ((double)obj).ToString();
+                return Convert.ToDouble(obj).ToString();
             }
             else
             {
-                return ((double)obj).ToString(pattern) ;
+                return Convert.ToDouble(obj).ToString(pattern);
+                //return ((double)obj).ToString(pattern) ;
             }
         }
 
@@ -192,6 +195,12 @@ namespace NPOI.SS.Util
         {
             return System.Decimal.Parse(source.Substring(pos));
         }
+        public bool ParseIntegerOnly
+        {
+            get;
+            set;
+        }
+        
     }
 
     public class SimpleDateFormat : FormatBase
@@ -201,7 +210,7 @@ namespace NPOI.SS.Util
             
         }
 
-        private string pattern;
+        protected string pattern;
 
         public SimpleDateFormat(string pattern)
         {
@@ -210,18 +219,46 @@ namespace NPOI.SS.Util
 
         public override string Format(object obj)
         {
-            String result = ((DateTime)obj).ToString(pattern);
+            String result = ((DateTime)obj).ToString(pattern, DateTimeFormatInfo.InvariantInfo);
             return result;
         }
 
         public override StringBuilder Format(object obj, StringBuilder toAppendTo)
         {
-            return toAppendTo.Append(Format((DateTime)obj));
+            return toAppendTo.Append(this.Format((DateTime)obj));
         }
 
         public override object ParseObject(string source, int pos)
         {
             return DateTime.Parse(source.Substring(pos)).ToUniversalTime();
+        }
+    }
+
+    /**
+     * Format class that does nothing and always returns a constant string.
+     *
+     * This format is used to simulate Excel's handling of a format string
+     * of all # when the value is 0. Excel will output "", Java will output "0".
+     *
+     * @see DataFormatter#createFormat(double, int, String)
+     */
+   public class ConstantStringFormat : FormatBase {
+        private static DecimalFormat df = new DecimalFormat("##########");
+        private String str;
+        public ConstantStringFormat(String s) {
+            str = s;
+        }
+        public override string Format(object obj)
+        {
+            return str;
+        }
+        public override StringBuilder Format(Object obj, StringBuilder toAppendTo)
+        {
+            return toAppendTo.Append(str);
+        }
+
+        public override Object ParseObject(String source, int pos) {
+            return df.ParseObject(source, pos);
         }
     }
 }

@@ -24,6 +24,8 @@ namespace TestCases.SS.UserModel
     using NPOI.SS.Util;
     using NPOI.SS.UserModel;
     using System.Collections;
+    using System.IO;
+    using NPOI.HSSF.UserModel;
 
 
 
@@ -87,7 +89,8 @@ namespace TestCases.SS.UserModel
             row.CreateCell(5).SetCellValue("10.0000");
 
             // autosize not-Evaluated cells, formula cells are sized as if the result is 0
-            for (int i = 0; i < 6; i++) sheet.AutoSizeColumn(i);
+            for (int i = 0; i < 6; i++) 
+                sheet.AutoSizeColumn(i);
 
             Assert.IsTrue(sheet.GetColumnWidth(0) < sheet.GetColumnWidth(1));  // width of '0' is less then width of '10'
             Assert.AreEqual(sheet.GetColumnWidth(1), sheet.GetColumnWidth(2)); // 10 and '10' should be sized Equally
@@ -174,7 +177,8 @@ namespace TestCases.SS.UserModel
             cell7.CellStyle = (/*setter*/style3); // should be sized as 'Jan'
 
             // autosize not-Evaluated cells, formula cells are sized as if the result is 0
-            for (int i = 0; i < 8; i++) sheet.AutoSizeColumn(i);
+            for (int i = 0; i < 8; i++) 
+                sheet.AutoSizeColumn(i);
 
             Assert.AreEqual(sheet.GetColumnWidth(2), sheet.GetColumnWidth(1)); // date formatted as 'm'
             Assert.IsTrue(sheet.GetColumnWidth(3) > sheet.GetColumnWidth(1));  // 'mmm' is wider than 'm'

@@ -82,7 +82,7 @@ namespace NPOI.SS.UserModel
 
         /** A regex to find patterns like [$$-1009] and [$�-452]. */
         private static string specialPatternGroup = "(\\[\\$[^-\\]]*-[0-9A-Z]+\\])";
-
+        
         /**
      * A regex to match the colour formattings rules.
      * Allowed colours are: Black, Blue, Cyan, Green,
@@ -116,7 +116,7 @@ namespace NPOI.SS.UserModel
          *  Map<String,FormatBase> Formats
          */
         private Hashtable formats;
-
+        private bool emulateCsv = false;
         /**
          * Constructor
          */
@@ -141,7 +141,11 @@ namespace NPOI.SS.UserModel
             AddFormat("000\\-00\\-0000", ssnFormat);
             AddFormat("000-00-0000", ssnFormat);
         }
-
+        public DataFormatter(bool emulateCsv)
+            : this()
+        {
+            this.emulateCsv = emulateCsv;
+        }
         /**
          * Return a FormatBase for the given cell if one exists, otherwise try to
          * Create one. This method will return <c>null</c> if the any of the
@@ -173,6 +177,11 @@ namespace NPOI.SS.UserModel
 
         private FormatBase GetFormat(double cellValue, int formatIndex, String formatStr)
         {
+            // Excel's # with value 0 will output empty where Java will output 0. This hack removes the # from the format.
+            if (emulateCsv && cellValue == 0.0 && formatStr.Contains("#") && !formatStr.Contains("0"))
+            {
+                formatStr = formatStr.Replace("#", "");
+            }
             FormatBase format = (FormatBase)formats[formatStr];
             if (format != null)
             {
@@ -209,7 +218,7 @@ namespace NPOI.SS.UserModel
         private FormatBase CreateFormat(double cellValue, int formatIndex, String sFormat)
         {
             // remove color Formatting if present
-            String formatStr = Regex.Replace(sFormat, "\\[[a-zA-Z]*\\]", "");
+            String formatStr = Regex.Replace(sFormat, colorPattern, "", RegexOptions.IgnoreCase);
 
             // try to extract special characters like currency
 
@@ -249,6 +258,10 @@ namespace NPOI.SS.UserModel
             if (Regex.IsMatch(formatStr, numPattern))
             {
                 return CreateNumberFormat(formatStr, cellValue);
+            }
+            if (emulateCsv)
+            {
+                return new ConstantStringFormat(cleanFormatForNumber(formatStr));
             }
             // TODO - when does this occur?
             return null;
@@ -360,7 +373,8 @@ namespace NPOI.SS.UserModel
 
             try
             {
-                return new SimpleDateFormat(formatStr);
+                //return new SimpleDateFormat(formatStr);
+                return new ExcelStyleDateFormatter(formatStr);
             }
             catch (ArgumentException)
             {
@@ -372,48 +386,142 @@ namespace NPOI.SS.UserModel
 
         }
 
-        private FormatBase CreateNumberFormat(String formatStr, double cellValue)
+        private String cleanFormatForNumber(String formatStr)
         {
             StringBuilder sb = new StringBuilder(formatStr);
-            for (int i = 0; i < sb.Length; i++)
+
+            if (emulateCsv)
             {
-                char c = sb[i];
-                //handle (#,##0_);
-                if (c == '(')
+                // Requested spacers with "_" are replaced by a single space.
+                // Full-column-width padding "*" are removed.
+                // Not processing fractions at this time. Replace ? with space.
+                // This matches CSV output.
+                for (int i = 0; i < sb.Length; i++)
                 {
-                    int idx = sb.ToString().IndexOf(")", i);
-                    if (idx > -1 && sb[idx - 1] == '_')
+                    char c = sb[i];
+                    if (c == '_' || c == '*' || c == '?')
                     {
-                        sb.Remove(idx, 1);
-                        sb.Remove(idx - 1, 1);
-                        sb.Remove(i, 1);
-                        i--;
+                        if (i > 0 && sb[(i - 1)] == '\\')
+                        {
+                            // It's escaped, don't worry
+                            continue;
+                        }
+                        if (c == '?')
+                        {
+                            sb[i] = ' ';
+                        }
+                        else if (i < sb.Length - 1)
+                        {
+                            // Remove the character we're supposed
+                            //  to match the space of / pad to the
+                            //  column width with
+                            if (c == '_')
+                            {
+                                sb[i + 1] = ' ';
+                            }
+                            else
+                            {
+                                sb.Remove(i + 1, 1);
+                            }
+                            // Remove the character too
+                            sb.Remove(i, 1);
+                        }
                     }
                 }
-                else if (c == ')' && i > 0 && sb[i - 1] == '_')
+            }
+            else
+            {
+                // If they requested spacers, with "_",
+                //  remove those as we don't do spacing
+                // If they requested full-column-width
+                //  padding, with "*", remove those too
+                for (int i = 0; i < sb.Length; i++)
                 {
-                    sb.Remove(i, 1);
-                    sb.Remove(i - 1, 1);
-                    i--;
-                    // remove quotes and back slashes
+                    char c = sb[i];
+                    if (c == '_' || c == '*')
+                    {
+                        if (i > 0 && sb[(i - 1)] == '\\')
+                        {
+                            // It's escaped, don't worry
+                            continue;
+                        }
+                        if (i < sb.Length - 1)
+                        {
+                            // Remove the character we're supposed
+                            //  to match the space of / pad to the
+                            //  column width with
+                            sb.Remove(i + 1, 1);
+                        }
+                        // Remove the _ too
+                        sb.Remove(i, 1);
+                    }
                 }
-                else if (c == '\\' || c == '"')
+            }
+
+            // Now, handle the other aspects like 
+            //  quoting and scientific notation
+            for (int i = 0; i < sb.Length; i++)
+            {
+                char c = sb[(i)];
+                // remove quotes and back slashes
+                if (c == '\\' || c == '"')
                 {
                     sb.Remove(i, 1);
                     i--;
 
                     // for scientific/engineering notation
                 }
-                else if (c == '+' && i > 0 && sb[i - 1] == 'E')
+                else if (c == '+' && i > 0 && sb[(i - 1)] == 'E')
                 {
                     sb.Remove(i, 1);
                     i--;
                 }
             }
 
+            return sb.ToString();
+        }
+        private FormatBase CreateNumberFormat(String formatStr, double cellValue)
+        {
+            //StringBuilder sb = new StringBuilder(formatStr);
+            //for (int i = 0; i < sb.Length; i++)
+            //{
+            //    char c = sb[i];
+            //    //handle (#,##0_);
+            //    if (c == '(')
+            //    {
+            //        int idx = sb.ToString().IndexOf(")", i);
+            //        if (idx > -1 && sb[idx - 1] == '_')
+            //        {
+            //            sb.Remove(idx, 1);
+            //            sb.Remove(idx - 1, 1);
+            //            sb.Remove(i, 1);
+            //            i--;
+            //        }
+            //    }
+            //    else if (c == ')' && i > 0 && sb[i - 1] == '_')
+            //    {
+            //        sb.Remove(i, 1);
+            //        sb.Remove(i - 1, 1);
+            //        i--;
+            //        // remove quotes and back slashes
+            //    }
+            //    else if (c == '\\' || c == '"')
+            //    {
+            //        sb.Remove(i, 1);
+            //        i--;
+
+            //        // for scientific/engineering notation
+            //    }
+            //    else if (c == '+' && i > 0 && sb[i - 1] == 'E')
+            //    {
+            //        sb.Remove(i, 1);
+            //        i--;
+            //    }
+            //}
+            String format = cleanFormatForNumber(formatStr);
             try
             {
-                return new DecimalFormat(sb.ToString());
+                return new DecimalFormat(format);
             }
             catch (ArgumentException)
             {
@@ -509,6 +617,18 @@ namespace NPOI.SS.UserModel
             return FormatRawCellContents(value, formatIndex, formatString, false);
         }
         /**
+     * Performs Excel-style date formatting, using the
+     *  supplied Date and format
+     */
+        private String PerformDateFormatting(DateTime d, FormatBase dateFormat)
+        {
+            if (dateFormat != null)
+            {
+                return dateFormat.Format(d);
+            }
+            return d.ToString();
+        }
+        /**
      * Formats the given raw cell value, based on the supplied
      *  format index and string, according to excel style rules.
      * @see #formatCellValue(Cell)
@@ -516,23 +636,27 @@ namespace NPOI.SS.UserModel
         public String FormatRawCellContents(double value, int formatIndex, String formatString, bool use1904Windowing)
         {
             // Is it a date?
-            if (DateUtil.IsADateFormat(formatIndex, formatString) &&
-                    DateUtil.IsValidExcelDate(value))
+            if (DateUtil.IsADateFormat(formatIndex, formatString) )
             {
-
-                FormatBase dateFormat = GetFormat(value, formatIndex, formatString);
-                //TODO: port class ExcelStyleDateFormatter
-                /*if(dateFormat is ExcelStyleDateFormatter) {
-                   // Hint about the raw excel value
-                   ((ExcelStyleDateFormatter)dateFormat).setDateToBeFormatted(value);
-                }*/
-
-                DateTime d = DateUtil.GetJavaDate(value, use1904Windowing);
-                if (dateFormat == null)
+                if (DateUtil.IsValidExcelDate(value))
                 {
-                    return d.ToString();
+                    FormatBase dateFormat = GetFormat(value, formatIndex, formatString);
+                    //TODO: port class ExcelStyleDateFormatter
+                    if (dateFormat is ExcelStyleDateFormatter)
+                    {
+                        // Hint about the raw excel value
+                        ((ExcelStyleDateFormatter)dateFormat).SetDateToBeFormatted(value);
+                    }
+
+                    DateTime d = DateUtil.GetJavaDate(value, use1904Windowing);
+                    return PerformDateFormatting(d, dateFormat);
                 }
-                return dateFormat.Format(d);
+
+                // RK: Invalid dates are 255 #s.
+                if (emulateCsv)
+                {
+                    return invalidDateTimeString;
+                }
             }
             // else Number
             FormatBase numberFormat = GetFormat(value, formatIndex, formatString);
@@ -540,7 +664,13 @@ namespace NPOI.SS.UserModel
             {
                 return value.ToString();
             }
-            return numberFormat.Format(value);
+            // RK: This hack handles scientific notation by adding the missing + back.
+            String result = numberFormat.Format(value);
+            if (result.Contains("E") && !result.Contains("E-"))
+            {
+                result = result.Replace("E", "E+");
+            }
+            return result;
         }
         /**
          * 

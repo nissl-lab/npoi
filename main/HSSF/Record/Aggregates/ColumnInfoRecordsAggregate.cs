@@ -131,6 +131,7 @@ namespace NPOI.HSSF.Record.Aggregates
             {
                 ColumnInfoRecord ci = (ColumnInfoRecord)records[k];
                 ci = (ColumnInfoRecord)ci.Clone();
+                rec.records.Add(ci);    
             }
             return rec;
         }

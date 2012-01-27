@@ -391,6 +391,14 @@ namespace NPOI.SS.UserModel
                 sb.Append(c);
             }
             fs = sb.ToString();
+
+
+            // short-circuit if it indicates elapsed time: [h], [m] or [s]
+            if (Regex.IsMatch(fs, "^\\[([hH]+|[mM]+|[sS]+)\\]"))
+            {
+                return true;
+            }
+
             // If it starts with [$-...], then could be a date, but
             //  who knows what that starting bit Is all about
             fs = Regex.Replace(fs, "^\\[\\$\\-.*?\\]", "");
@@ -408,7 +416,7 @@ namespace NPOI.SS.UserModel
             // Otherwise, Check it's only made up, in any case, of:
             //  y m d h s - / , . :
             // optionally followed by AM/PM
-            if (Regex.IsMatch(fs, "^[yYmMdDhHsS\\-/,. :\"\\\\]+0?[ampAMP/]*$"))
+            if (Regex.IsMatch(fs, @"^[\[\]yYmMdDhHsS\-/,. :\""\\]+0*[ampAMP/]*$"))
             {
                 return true;
             }

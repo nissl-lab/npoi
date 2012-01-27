@@ -32,6 +32,8 @@ namespace NPOI.HSSF.UserModel
     using NPOI.SS.Formula.PTG;
     using NPOI.SS.UserModel;
     using NPOI.SS.Util;
+    using System.Drawing;
+    using System.Windows.Forms.VisualStyles;
 
 
 
@@ -668,14 +670,20 @@ namespace NPOI.HSSF.UserModel
          * @return the merged region (simple eh?)
          */
 
-        public Region GetMergedRegionAt(int index)
+        //public NPOI.SS.Util.Region GetMergedRegionAt(int index)
+        //{
+        //    NPOI.SS.Util.CellRangeAddress cra = GetMergedRegion(index);
+
+        //    return new NPOI.SS.Util.Region(cra.FirstRow, (short)cra.FirstColumn,
+        //            cra.LastRow, (short)cra.LastColumn);
+        //}
+        /**
+         * @return the merged region at the specified index
+         */
+        public CellRangeAddress etMergedRegion(int index)
         {
-            NPOI.SS.Util.CellRangeAddress cra = GetMergedRegion(index);
-
-            return new Region(cra.FirstRow, (short)cra.FirstColumn,
-                    cra.LastRow, (short)cra.LastColumn);
+            return _sheet.GetMergedRegionAt(index);
         }
-
         /// <summary>
         /// Gets the row enumerator.
         /// </summary>
@@ -2023,7 +2031,8 @@ namespace NPOI.HSSF.UserModel
 
 
             //FontRenderContext frc = new FontRenderContext(null, true, true);
-
+            DataFormatter formatter = new DataFormatter();
+            SheetUtil.DummyEvaluator dummyEvaluator = new SheetUtil.DummyEvaluator();
             HSSFWorkbook wb = new HSSFWorkbook(book);
             NPOI.SS.UserModel.IFont defaultFont = wb.GetFontAt((short)0);
 
@@ -2033,6 +2042,9 @@ namespace NPOI.HSSF.UserModel
             System.Drawing.Font font = HSSFFont2Font((HSSFFont)defaultFont);
             int defaultCharWidth = TextRenderer.MeasureText("" + new String(defaultChar, 1), font).Width;
 
+            Bitmap bmp = new Bitmap(2048, 100);
+            Graphics g = Graphics.FromImage(bmp);
+            //SizeF sf = g.MeasureString("x0", font);
             double width = -1;
 
             bool skipthisrow = false;
@@ -2065,8 +2077,14 @@ namespace NPOI.HSSF.UserModel
 
                 NPOI.SS.UserModel.ICellStyle style = cell.CellStyle;
                 NPOI.SS.UserModel.IFont font1 = wb.GetFontAt(style.FontIndex);
+                
 
-                if (cell.CellType == NPOI.SS.UserModel.CellType.STRING)
+                CellType cellType = cell.CellType;
+
+                // for formula cells we compute the cell width for the cached formula result
+                if (cellType == CellType.FORMULA) cellType = cell.CachedFormulaResultType;
+
+                if (cellType == NPOI.SS.UserModel.CellType.STRING)
                 {
                     HSSFRichTextString rt = (HSSFRichTextString)cell.RichStringCellValue;
                     String[] lines = rt.String.Split(new char[] { '\n' });
@@ -2075,6 +2093,7 @@ namespace NPOI.HSSF.UserModel
                         String txt = lines[k] + defaultChar;
                         //str = new AttributedString(txt);
                         //copyAttributes(font1, str, 0, txt.Length);
+                        font = HSSFFont2Font((HSSFFont)font1);
 
                         if (rt.NumFormattingRuns > 0)
                         {
@@ -2113,40 +2132,50 @@ namespace NPOI.HSSF.UserModel
                         else
                         {
                             //width = Math.Max(width, ((TextRenderer.MeasureText(txt, font).Width / colspan) / defaultCharWidth) + cell.CellStyle.Indention);
-                            width = Math.Max(width, (TextRenderer.MeasureText(txt, font).Width * 1.0 / colspan / defaultCharWidth) * 2 + cell.CellStyle.Indention);
+                            double w = Math.Round(g.MeasureString(txt, font).Width, 0, MidpointRounding.ToEven);
+                            width = Math.Max(width, (w / colspan / defaultCharWidth) * 2 + cell.CellStyle.Indention);
                         }
                     }
                 }
                 else
                 {
                     String sval = null;
-                    if (cell.CellType == NPOI.SS.UserModel.CellType.NUMERIC)
+                    if (cellType == NPOI.SS.UserModel.CellType.NUMERIC)
                     {
-                        NPOI.SS.UserModel.IDataFormat dataformat = wb.CreateDataFormat();
-                        short idx = style.DataFormat;
-                        String format = "General";
-                        if (idx >= 0)
-                        {
-                            format = dataformat.GetFormat(idx).Replace("\"", "");
-                        }
-                        double value = cell.NumericCellValue;
+                        //NPOI.SS.UserModel.IDataFormat dataformat = wb.CreateDataFormat();
+                        //short idx = style.DataFormat;
+                        //String format = "General";
+                        //if (idx >= 0)
+                        //{
+                        //    format = dataformat.GetFormat(idx).Replace("\"", "");
+                        //}
+                        //double value = cell.NumericCellValue;
+                        //try
+                        //{
+                        //    if ("General".Equals(format))
+                        //        sval = "" + value;
+                        //    else
+                        //    {
+                        //        sval = value.ToString("F");
+                        //    }
+                        //}
+                        //catch (Exception)
+                        //{
+                        //    sval = "" + value;
+                        //}
+                        // Try to get it formatted to look the same as excel
                         try
                         {
-                            if ("General".Equals(format))
-                                sval = "" + value;
-                            else
-                            {
-                                sval = value.ToString("F");
-                            }
+                            sval = formatter.FormatCellValue(cell, dummyEvaluator);
                         }
-                        catch (Exception)
+                        catch (Exception e)
                         {
-                            sval = "" + value;
+                            sval = cell.NumericCellValue.ToString("F");
                         }
                     }
-                    else if (cell.CellType == NPOI.SS.UserModel.CellType.BOOLEAN)
+                    else if (cellType == NPOI.SS.UserModel.CellType.BOOLEAN)
                     {
-                        sval = cell.BooleanCellValue.ToString();
+                        sval = cell.BooleanCellValue.ToString().ToUpper();
                     }
                     if (sval != null)
                     {
@@ -2176,7 +2205,8 @@ namespace NPOI.HSSF.UserModel
                         else
                         {
                             //width = Math.Max(width, ((TextRenderer.MeasureText(txt, font).Width / colspan) / defaultCharWidth) + cell.CellStyle.Indention);
-                            width = Math.Max(width, (TextRenderer.MeasureText(txt, font).Width * 1.0 / colspan / defaultCharWidth) * 2 + cell.CellStyle.Indention);
+                            double w = Math.Round(g.MeasureString(txt, font).Width, 0, MidpointRounding.ToEven);
+                            width = Math.Max(width, (w * 1.0 / colspan / defaultCharWidth) * 2 + cell.CellStyle.Indention);
                         }
                     }
                 }
