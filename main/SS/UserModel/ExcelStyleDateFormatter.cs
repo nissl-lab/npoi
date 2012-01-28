@@ -128,7 +128,9 @@ namespace NPOI.SS.UserModel
             // Do the normal format
             string s = string.Empty;
             if (Regex.IsMatch(pattern, "[yYmMdDhHsS\\-/,. :\"\\\\]+0?[ampAMP/]*"))
+            {
                 s = date.ToString(pattern, DateTimeFormatInfo.InvariantInfo);
+            }
             else
                 s = pattern;
 

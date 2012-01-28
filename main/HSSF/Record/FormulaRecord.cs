@@ -298,7 +298,10 @@ namespace NPOI.HSSF.Record
         public double Value
         {
             get { return field_4_value; }
-            set { field_4_value = value; }
+            set { 
+                field_4_value = value; 
+                specialCachedValue = null;
+            }
         }
 
         /**

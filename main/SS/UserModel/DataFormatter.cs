@@ -23,6 +23,7 @@ namespace NPOI.SS.UserModel
     using System.Text.RegularExpressions;
 
     using NPOI.SS.Util;
+using System.Globalization;
 
 
 
@@ -118,10 +119,18 @@ namespace NPOI.SS.UserModel
         private Hashtable formats;
         private bool emulateCsv = false;
         /**
+     * Creates a formatter using the {@link Locale#getDefault() default locale}.
+     */
+        public DataFormatter()
+            : this(false)
+        {
+        }
+        /**
          * Constructor
          */
-        public DataFormatter()
+        public DataFormatter(CultureInfo culture)
         {
+            System.Threading.Thread.CurrentThread.CurrentCulture = culture;
             formats = new Hashtable();
 
             // init built-in Formats
@@ -142,8 +151,19 @@ namespace NPOI.SS.UserModel
             AddFormat("000-00-0000", ssnFormat);
         }
         public DataFormatter(bool emulateCsv)
-            : this()
+            : this(CultureInfo.CurrentCulture)
         {
+            this.emulateCsv = emulateCsv;
+        }
+        /**
+         * Creates a formatter using the given locale.
+         *
+         * @param  emulateCsv whether to emulate CSV output.
+         */
+        public DataFormatter(CultureInfo locale, bool emulateCsv)
+            : this(locale)
+        {
+
             this.emulateCsv = emulateCsv;
         }
         /**
@@ -318,7 +338,7 @@ namespace NPOI.SS.UserModel
                         sb.Append('H');
                     }
                 }
-                else if (c == 'm')
+                else if (c == 'm' || c == 'M')
                 {
                     if (mIsMonth)
                     {

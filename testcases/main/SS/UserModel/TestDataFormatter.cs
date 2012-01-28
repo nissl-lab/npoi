@@ -39,19 +39,15 @@ namespace TestCases.SS.UserModel
         [TestMethod]
         public void TestLocale()
         {
-            System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.GetCultureInfo("en-US");
-
-            DataFormatter dfUS = new DataFormatter();
+            DataFormatter dfUS = new DataFormatter(System.Globalization.CultureInfo.GetCultureInfo("en-US"));
 
             Assert.AreEqual("1234", dfUS.FormatRawCellContents(1234, -1, "@"));
             Assert.AreEqual("12.34", dfUS.FormatRawCellContents(12.34, -1, "@"));
 
-            System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.GetCultureInfo("fr-FR");
-            DataFormatter dfFR = new DataFormatter();
+            DataFormatter dfFR = new DataFormatter(System.Globalization.CultureInfo.GetCultureInfo("fr-FR"));
 
             Assert.AreEqual("1234", dfFR.FormatRawCellContents(1234, -1, "@"));
             Assert.AreEqual("12,34", dfFR.FormatRawCellContents(12.34, -1, "@"));
-            System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.GetCultureInfo("en-US");
         }
 
         /**
@@ -61,10 +57,8 @@ namespace TestCases.SS.UserModel
         [TestMethod]
         public void TestColours()
         {
-            System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.GetCultureInfo("en-US");
-
             //DataFormatter dfUS = new DataFormatter(Locale.US);
-            DataFormatter dfUS = new DataFormatter();
+            DataFormatter dfUS = new DataFormatter(System.Globalization.CultureInfo.GetCultureInfo("en-US"));
 
             String[] formats = new String[] {
              "##.##",
@@ -94,10 +88,8 @@ namespace TestCases.SS.UserModel
         [TestMethod]
         public void TestColoursAndBrackets()
         {
-            System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.GetCultureInfo("en-US");
-
             //DataFormatter dfUS = new DataFormatter(Locale.US);
-            DataFormatter dfUS = new DataFormatter();
+            DataFormatter dfUS = new DataFormatter(System.Globalization.CultureInfo.GetCultureInfo("en-US"));
 
             // Without currency symbols
             String[] formats = new String[] {
@@ -147,10 +139,8 @@ namespace TestCases.SS.UserModel
         [TestMethod]
         public void TestNegativeZero()
         {
-            System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.GetCultureInfo("en-US");
-
             //DataFormatter dfUS = new DataFormatter(Locale.US);
-            DataFormatter dfUS = new DataFormatter();
+            DataFormatter dfUS = new DataFormatter(System.Globalization.CultureInfo.GetCultureInfo("en-US"));
 
             String all2dp = "00.00";
             String alln1dp = "(00.0)";
@@ -197,10 +187,8 @@ namespace TestCases.SS.UserModel
         [TestMethod]
         public void TestPAddingSpaces()
         {
-            System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.GetCultureInfo("en-US");
-
             //DataFormatter dfUS = new DataFormatter(Locale.US);
-            DataFormatter dfUS = new DataFormatter();
+            DataFormatter dfUS = new DataFormatter(System.Globalization.CultureInfo.GetCultureInfo("en-US"));
             Assert.AreEqual("12.34", dfUS.FormatRawCellContents(12.343, -1, "##.##_ "));
             Assert.AreEqual("12.34", dfUS.FormatRawCellContents(12.343, -1, "##.##_1"));
             Assert.AreEqual("12.34", dfUS.FormatRawCellContents(12.343, -1, "##.##_)"));
@@ -218,10 +206,8 @@ namespace TestCases.SS.UserModel
         [TestMethod]
         public void TestPAddingSpacesCSV()
         {
-            System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.GetCultureInfo("en-US");
-
             //DataFormatter dfUS = new DataFormatter(Locale.US);
-            DataFormatter dfUS = new DataFormatter(true);
+            DataFormatter dfUS = new DataFormatter(System.Globalization.CultureInfo.GetCultureInfo("en-US"), true);
             Assert.AreEqual("12.34 ", dfUS.FormatRawCellContents(12.343, -1, "##.##_ "));
             Assert.AreEqual("-12.34 ", dfUS.FormatRawCellContents(-12.343, -1, "##.##_ "));
             Assert.AreEqual(". ", dfUS.FormatRawCellContents(0.0, -1, "##.##_ "));
@@ -257,7 +243,7 @@ namespace TestCases.SS.UserModel
         public void TestMMMMM()
         {
             //DataFormatter dfUS = new DataFormatter(Locale.US);
-            DataFormatter dfUS = new DataFormatter();
+            DataFormatter dfUS = new DataFormatter(System.Globalization.CultureInfo.GetCultureInfo("en-US"));
 
             DateTime c = new DateTime(2010, 6, 1, 2, 0, 0, 0);
             System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.GetCultureInfo("en-US");
@@ -274,8 +260,7 @@ namespace TestCases.SS.UserModel
         public void TestElapsedTime()
         {
             //DataFormatter dfUS = new DataFormatter(Locale.US);
-            DataFormatter dfUS = new DataFormatter();
-            System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.GetCultureInfo("en-US");
+            DataFormatter dfUS = new DataFormatter(System.Globalization.CultureInfo.GetCultureInfo("en-US"));
             double hour = 1.0 / 24.0;
 
             Assert.AreEqual("01:00", dfUS.FormatRawCellContents(1 * hour, -1, "hh:mm"));
@@ -373,8 +358,7 @@ namespace TestCases.SS.UserModel
         public void TestDateWindowing()
         {
             //DataFormatter dfUS = new DataFormatter(Locale.US);
-            DataFormatter dfUS = new DataFormatter();
-            System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.GetCultureInfo("en-US");
+            DataFormatter dfUS = new DataFormatter(System.Globalization.CultureInfo.GetCultureInfo("en-US"));
             Assert.AreEqual("1899-12-31 00:00:00", dfUS.FormatRawCellContents(0.0, -1, "yyyy-mm-dd hh:mm:ss"));
             Assert.AreEqual("1899-12-31 00:00:00", dfUS.FormatRawCellContents(0.0, -1, "yyyy-mm-dd hh:mm:ss", false));
             Assert.AreEqual("1904-01-01 00:00:00", dfUS.FormatRawCellContents(0.0, -1, "yyyy-mm-dd hh:mm:ss", true));
@@ -382,10 +366,8 @@ namespace TestCases.SS.UserModel
         [TestMethod]
         public void TestScientificNotation()
         {
-            System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.GetCultureInfo("en-US");
-
             //DataFormatter dfUS = new DataFormatter(Locale.US);
-            DataFormatter dfUS = new DataFormatter();
+            DataFormatter dfUS = new DataFormatter(System.Globalization.CultureInfo.GetCultureInfo("en-US"));
 
             Assert.AreEqual("1.23E+01", dfUS.FormatRawCellContents(12.343, -1, "0.00E+00"));
             Assert.AreEqual("-1.23E+01", dfUS.FormatRawCellContents(-12.343, -1, "0.00E+00"));
@@ -395,21 +377,19 @@ namespace TestCases.SS.UserModel
         public void TestInvalidDate()
         {
             //DataFormatter df1 = new DataFormatter(Locale.US);
-            DataFormatter df1 = new DataFormatter();
+            DataFormatter df1 = new DataFormatter(System.Globalization.CultureInfo.GetCultureInfo("en-US"));
             //Assert.AreEqual("-1.0", df1.FormatRawCellContents(-1, -1, "mm/dd/yyyy"));
             //in java -1.toString() is "-1.0", but in C# -1.ToString() is "-1".
             Assert.AreEqual("-1", df1.FormatRawCellContents(-1, -1, "mm/dd/yyyy"));
-            System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.GetCultureInfo("en-US");
             //DataFormatter df2 = new DataFormatter(Locale.US);
-            DataFormatter df2 = new DataFormatter(true);
+            DataFormatter df2 = new DataFormatter(System.Globalization.CultureInfo.GetCultureInfo("en-US"), true);
             Assert.AreEqual("###############################################################################################################################################################################################################################################################",
                     df2.FormatRawCellContents(-1, -1, "mm/dd/yyyy"));
         }
         [TestMethod]
         public void TestEscapes()
         {
-            //DataFormatter dfUS = new DataFormatter(Locale.US);
-            DataFormatter dfUS = new DataFormatter();
+            DataFormatter dfUS = new DataFormatter(System.Globalization.CultureInfo.GetCultureInfo("en-US"));
             Assert.AreEqual("1901-01-01", dfUS.FormatRawCellContents(367.0, -1, "yyyy-mm-dd"));
             Assert.AreEqual("1901-01-01", dfUS.FormatRawCellContents(367.0, -1, "yyyy\\-mm\\-dd"));
 
@@ -422,10 +402,8 @@ namespace TestCases.SS.UserModel
         [TestMethod]
         public void TestOther()
         {
-            System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.GetCultureInfo("en-US");
-
-            //DataFormatter dfUS = new DataFormatter(Locale.US);
-            DataFormatter dfUS = new DataFormatter(true);
+            //DataFormatter dfUS = new DataFormatter(Locale.US, true);
+            DataFormatter dfUS = new DataFormatter(System.Globalization.CultureInfo.GetCultureInfo("en-US"), true);
             Assert.AreEqual(" 12.34 ", dfUS.FormatRawCellContents(12.34, -1, "_-* #,##0.00_-;-* #,##0.00_-;_-* \"-\"??_-;_-@_-"));
             Assert.AreEqual("-12.34 ", dfUS.FormatRawCellContents(-12.34, -1, "_-* #,##0.00_-;-* #,##0.00_-;_-* \"-\"??_-;_-@_-"));
             Assert.AreEqual(" -   ", dfUS.FormatRawCellContents(0.0, -1, "_-* #,##0.00_-;-* #,##0.00_-;_-* \"-\"??_-;_-@_-"));

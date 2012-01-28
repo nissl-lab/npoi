@@ -49,12 +49,12 @@ namespace NPOI.SS.Formula.PTG
  */
         public const int PLAIN_TOKEN_SIZE = 1 + RESERVED_FIELD_LEN;
 
-        private static byte[] DEFAULT_RESERVED_DATA = new byte[RESERVED_FIELD_LEN];
+        //private static byte[] DEFAULT_RESERVED_DATA = new byte[RESERVED_FIELD_LEN];
 
-        	// 7 bytes of data (stored as an int, short and byte here)
-	private int _reserved0Int;
-	private int _reserved1Short;
-	private int _reserved2Byte;
+        // 7 bytes of data (stored as an int, short and byte here)
+        private int _reserved0Int;
+        private int _reserved1Short;
+        private int _reserved2Byte;
 
         // data from these fields comes after the Ptg data of all tokens in current formula
         private int _nColumns;
@@ -160,9 +160,9 @@ namespace NPOI.SS.Formula.PTG
         public override void Write(LittleEndianOutput out1)
         {
             out1.WriteByte(sid + PtgClass);
-	        out1.WriteInt(_reserved0Int);
-	        out1.WriteShort(_reserved1Short);
-	        out1.WriteByte(_reserved2Byte);
+            out1.WriteInt(_reserved0Int);
+            out1.WriteShort(_reserved1Short);
+            out1.WriteByte(_reserved2Byte);
         }
 
         public int WriteTokenValueBytes(LittleEndianOutput out1)
@@ -236,7 +236,7 @@ namespace NPOI.SS.Formula.PTG
             {
                 return "\"" + (String)o + "\"";
             }
-            if (o is Double||o is double)
+            if (o is Double || o is double)
             {
                 return NumberToTextConverter.ToText((Double)o);
             }

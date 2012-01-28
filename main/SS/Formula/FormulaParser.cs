@@ -1542,16 +1542,20 @@ namespace NPOI.SS.Formula
             SkipWhite();
             switch (look)
             {
-                case '"': return new UnicodeString(ParseStringLiteral());
+                case '"': return ParseStringLiteral();
                 case '#': return ErrorConstant.ValueOf(ParseErrorLiteral());
                 case 'F':
                 case 'f':
                 case 'T':
                 case 't':
                     return ParseBooleanLiteral();
+                case '-':
+                    Match('-');
+                    SkipWhite();
+                    return ConvertArrayNumber(ParseNumber(), false);
             }
             // else assume number
-            return ConvertArrayNumber(ParseNumber());
+            return ConvertArrayNumber(ParseNumber(), true);
         }
 
         private Boolean ParseBooleanLiteral()
@@ -1568,17 +1572,26 @@ namespace NPOI.SS.Formula
             throw expected("'TRUE' or 'FALSE'");
         }
 
-        private static Double ConvertArrayNumber(Ptg ptg)
+        private static Double ConvertArrayNumber(Ptg ptg, bool isPositive)
         {
+            double value;
             if (ptg is IntPtg)
             {
-                return ((IntPtg)ptg).Value;
+                value = ((IntPtg)ptg).Value;
             }
-            if (ptg is NumberPtg)
+            else if (ptg is NumberPtg)
             {
-                return ((NumberPtg)ptg).Value;
+                value = ((NumberPtg)ptg).Value;
             }
-            throw new Exception("Unexpected ptg (" + ptg.GetType().Name + ")");
+            else
+            {
+                throw new Exception("Unexpected ptg (" + ptg.GetType().Name + ")");
+            }
+            if (!isPositive)
+            {
+                value = -value;
+            }
+            return value;
         }
 
         private Ptg ParseNumber()

@@ -7,6 +7,7 @@ using NPOI.Util.IO;
 
 namespace NPOI.HSSF.Record
 {
+    [Obsolete("this class has been removed from poi.")]
     public class SheetExtRecord:StandardRecord
     {
         short rt = 0;

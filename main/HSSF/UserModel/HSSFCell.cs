@@ -512,23 +512,39 @@ namespace NPOI.HSSF.UserModel
         /// will Change the cell to a numeric cell and Set its value.</param>
         public void SetCellValue(double value)
         {
-            int row = record.Row;
-            int col = record.Column;
-            short styleIndex = record.XFIndex;
-
-            switch (cellType)
+            if(double.IsInfinity(value))
             {
-                case CellType.NUMERIC:
-                    ((NumberRecord)record).Value = value;
-                    break;
-                case CellType.FORMULA:
-                    ((FormulaRecordAggregate)record).SetCachedDoubleResult(value);
-                    break;
-                default:
-                    SetCellType(CellType.NUMERIC, false, row, col, styleIndex);
-                    ((NumberRecord)record).Value = value;
-                    break;
+                // Excel does not support positive/negative infinities,
+                // rather, it gives a #DIV/0! error in these cases.
+                SetCellErrorValue(FormulaError.DIV0.Code);
             }
+            else if (double.IsNaN(value))
+            {
+                // Excel does not support Not-a-Number (NaN),
+                // instead it immediately generates a #NUM! error.
+                SetCellErrorValue(FormulaError.NUM.Code);
+            }
+            else
+            {
+                int row = record.Row;
+                int col = record.Column;
+                short styleIndex = record.XFIndex;
+
+                switch (cellType)
+                {
+                    case CellType.NUMERIC:
+                        ((NumberRecord)record).Value = value;
+                        break;
+                    case CellType.FORMULA:
+                        ((FormulaRecordAggregate)record).SetCachedDoubleResult(value);
+                        break;
+                    default:
+                        SetCellType(CellType.NUMERIC, false, row, col, styleIndex);
+                        ((NumberRecord)record).Value = value;
+                        break;
+                }
+            }
+        
         }
 
         /// <summary>

@@ -15,15 +15,18 @@
    limitations under the License.
 ==================================================================== */
 
-namespace TestCases.HSSF.UserModel
+namespace NPOI.HSSF.UserModel
 {
     using System;
-    using System.Text;
-    using NPOI.HSSF.UserModel;
+
+    using NPOI.HSSF;
+    using NPOI.SS.UserModel;
+
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using System.Collections;
+    using TestCases.HSSF;
     using NPOI.SS.Util;
-    using NPOI.SS.UserModel;
+
     /**
      * Unit Tests for HSSFDataFormatter.java
      *
@@ -34,154 +37,175 @@ namespace TestCases.HSSF.UserModel
     public class TestHSSFDataFormatter
     {
 
-        private DataFormatter formatter;
+        private HSSFDataFormatter formatter;
         private HSSFWorkbook wb;
-
 
         public TestHSSFDataFormatter()
         {
             // One or more test methods depends on the american culture.
             System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
-            
-            // Create the formatter to Test
-            formatter = new DataFormatter();
+            // create the formatter to Test
+            formatter = new HSSFDataFormatter();
 
-            // Create a workbook to Test with
+            // create a workbook to Test with
             wb = new HSSFWorkbook();
-            NPOI.SS.UserModel.ISheet sheet = wb.CreateSheet();
+            ISheet sheet = wb.CreateSheet();
             IDataFormat format = wb.CreateDataFormat();
 
-            // Create a row and put some cells in it
+            // create a row and Put some cells in it
             IRow row = sheet.CreateRow(0);
 
             // date value for July 8 1901 1:19 PM
             double dateNum = 555.555;
+            // date value for July 8 1901 11:23 AM
+            double timeNum = 555.47431;
 
             //valid date formats -- all should have "Jul" in output
-            String[] goodDatePatterns ={
-			    "[$-F800]dddd\\,\\ mmmm\\ dd\\,\\ yyyy",
-			    "mmm/d/yy\\ h:mm PM;@",
-			    "mmmm/d/yy\\ h:mm;@",
-			    "mmmm/d;@",
-			    "mmmm/d/yy;@",
-			    "mmm/dd/yy;@",
-			    "[$-409]d\\-mmm;@",
-			    "[$-409]d\\-mmm\\-yy;@",
-			    "[$-409]dd\\-mmm\\-yy;@",
-			    "[$-409]mmm\\-yy;@",
-			    "[$-409]mmmm\\-yy;@",
-			    "[$-409]mmmm\\ d\\,\\ yyyy;@",
-			    "[$-409]mmm/d/yy\\ h:mm:ss;@",
-			    "[$-409]mmmm/d/yy\\ h:mm:ss am;@",
-			    "[$-409]mmmmm;@",
-			    "[$-409]mmmmm\\-yy;@",
-			    "mmmm/d/yyyy;@",
-			    "[$-409]d\\-mmm\\-yyyy;@"
-		    };
+            String[] goodDatePatterns = {
+			"[$-F800]dddd\\,\\ mmmm\\ dd\\,\\ yyyy",
+			"mmm/d/yy\\ h:mm PM;@",
+			"mmmm/d/yy\\ h:mm;@",
+			"mmmm/d;@",
+			"mmmm/d/yy;@",
+			"mmm/dd/yy;@",
+			"[$-409]d\\-mmm;@",
+			"[$-409]d\\-mmm\\-yy;@",
+			"[$-409]dd\\-mmm\\-yy;@",
+			"[$-409]mmm\\-yy;@",
+			"[$-409]mmmm\\-yy;@",
+			"[$-409]mmmm\\ d\\,\\ yyyy;@",
+			"[$-409]mmm/d/yy\\ h:mm:ss;@",
+			"[$-409]mmmm/d/yy\\ h:mm:ss am;@",
+			"[$-409]mmmmm;@",
+			"[$-409]mmmmm\\-yy;@",
+			"mmmm/d/yyyy;@",
+			"[$-409]d\\-mmm\\-yyyy;@"
+		};
+
+            //valid time formats - all should have 11:23 in output
+            String[] goodTimePatterns = {
+		   "HH:MM",
+		   "HH:MM:SS",
+		   "HH:MM;HH:MM;HH:MM", 
+		   // This is fun - blue if positive time,
+		   //  red if negative time or green for zero!
+         "[BLUE]HH:MM;[RED]HH:MM;[GREEN]HH:MM", 
+		   "yyyy-mm-dd hh:mm",
+         "yyyy-mm-dd hh:mm:ss",
+		};
 
             // valid number formats
             String[] goodNumPatterns = {
-				    "#,##0.0000",
-				    "#,##0;[Red]#,##0",
-				    "(#,##0.00_);(#,##0.00)",
-				    "($#,##0.00_);[Red]($#,##0.00)",
-				    "$#,##0.00",
-				    "[$�-809]#,##0.00",
-				    "[$�-2] #,##0.00",
-				    "0000.00000%",
-				    "0.000E+00",
-				    "0.00E+00",
-		    };
+				"#,##0.0000",
+				"#,##0;[Red]#,##0",
+				"(#,##0.00_);(#,##0.00)",
+				"($#,##0.00_);[Red]($#,##0.00)",
+				"$#,##0.00",
+				"[$-809]#,##0.00", // international format
+				"[$-2]#,##0.00", // international format
+				"0000.00000%",
+				"0.000E+00",
+				"0.00E+00",
+				"[BLACK]0.00;[COLOR 5]##.##",
+		};
 
             // invalid date formats -- will throw exception in DecimalFormat ctor
             String[] badNumPatterns = {
-				    "#,#$'#0.0000",
-				    "'#','#ABC#0;##,##0",
-				    "000 '123 4'5'6 000",
-				    "#''0#0'1#10L16EE"
-		    };
+				"#,#$'#0.0000",
+				"'#','#ABC#0;##,##0",
+				"000 '123 4'5'6 000",
+				"#''0#0'1#10L16EE"
+		};
 
-            // Create cells with good date patterns
+            // create cells with good date patterns
             for (int i = 0; i < goodDatePatterns.Length; i++)
             {
                 ICell cell = row.CreateCell(i);
                 cell.SetCellValue(dateNum);
-                NPOI.SS.UserModel.ICellStyle cellStyle = wb.CreateCellStyle();
-                cellStyle.DataFormat = (format.GetFormat(goodDatePatterns[i]));
-                cell.CellStyle = (cellStyle);
+                ICellStyle cellStyle = wb.CreateCellStyle();
+                cellStyle.DataFormat = (/*setter*/format.GetFormat(goodDatePatterns[i]));
+                cell.CellStyle = (/*setter*/cellStyle);
             }
             row = sheet.CreateRow(1);
 
-            // Create cells with num patterns
+            // create cells with time patterns
+            for (int i = 0; i < goodTimePatterns.Length; i++)
+            {
+                ICell cell = row.CreateCell(i);
+                cell.SetCellValue(timeNum);
+                ICellStyle cellStyle = wb.CreateCellStyle();
+                cellStyle.DataFormat = (/*setter*/format.GetFormat(goodTimePatterns[i]));
+                cell.CellStyle = (/*setter*/cellStyle);
+            }
+            row = sheet.CreateRow(2);
+
+            // create cells with num patterns
             for (int i = 0; i < goodNumPatterns.Length; i++)
             {
                 ICell cell = row.CreateCell(i);
                 cell.SetCellValue(-1234567890.12345);
-                NPOI.SS.UserModel.ICellStyle cellStyle = wb.CreateCellStyle();
-                cellStyle.DataFormat = (format.GetFormat(goodNumPatterns[i]));
-                cell.CellStyle = (cellStyle);
+                ICellStyle cellStyle = wb.CreateCellStyle();
+                cellStyle.DataFormat = (/*setter*/format.GetFormat(goodNumPatterns[i]));
+                cell.CellStyle = (/*setter*/cellStyle);
             }
-            row = sheet.CreateRow(2);
+            row = sheet.CreateRow(3);
 
-            // Create cells with bad num patterns
+            // create cells with bad num patterns
             for (int i = 0; i < badNumPatterns.Length; i++)
             {
                 ICell cell = row.CreateCell(i);
                 cell.SetCellValue(1234567890.12345);
-                NPOI.SS.UserModel.ICellStyle cellStyle = wb.CreateCellStyle();
-                cellStyle.DataFormat = (format.GetFormat(badNumPatterns[i]));
-                cell.CellStyle = (cellStyle);
+                ICellStyle cellStyle = wb.CreateCellStyle();
+                cellStyle.DataFormat = (/*setter*/format.GetFormat(badNumPatterns[i]));
+                cell.CellStyle = (/*setter*/cellStyle);
             }
 
             // Built in formats
 
             { // Zip + 4 format
-                row = sheet.CreateRow(3);
+                row = sheet.CreateRow(4);
                 ICell cell = row.CreateCell(0);
                 cell.SetCellValue(123456789);
-                NPOI.SS.UserModel.ICellStyle cellStyle = wb.CreateCellStyle();
-                cellStyle.DataFormat = (format.GetFormat("00000-0000"));
-                cell.CellStyle = (cellStyle);
+                ICellStyle cellStyle = wb.CreateCellStyle();
+                cellStyle.DataFormat = (/*setter*/format.GetFormat("00000-0000"));
+                cell.CellStyle = (/*setter*/cellStyle);
             }
 
             { // Phone number format
-                row = sheet.CreateRow(4);
+                row = sheet.CreateRow(5);
                 ICell cell = row.CreateCell(0);
                 cell.SetCellValue(5551234567D);
-                NPOI.SS.UserModel.ICellStyle cellStyle = wb.CreateCellStyle();
-                cellStyle.DataFormat = (format.GetFormat("[<=9999999]###-####;(###) ###-####"));
-                cell.CellStyle = (cellStyle);
+                ICellStyle cellStyle = wb.CreateCellStyle();
+                cellStyle.DataFormat = (/*setter*/format.GetFormat("[<=9999999]###-####;(###) ###-####"));
+                cell.CellStyle = (/*setter*/cellStyle);
             }
 
             { // SSN format
-                row = sheet.CreateRow(5);
+                row = sheet.CreateRow(6);
                 ICell cell = row.CreateCell(0);
                 cell.SetCellValue(444551234);
-                NPOI.SS.UserModel.ICellStyle cellStyle = wb.CreateCellStyle();
-                cellStyle.DataFormat = (format.GetFormat("000-00-0000"));
-                cell.CellStyle = (cellStyle);
+                ICellStyle cellStyle = wb.CreateCellStyle();
+                cellStyle.DataFormat = (/*setter*/format.GetFormat("000-00-0000"));
+                cell.CellStyle = (/*setter*/cellStyle);
             }
 
             { // formula cell
-                row = sheet.CreateRow(6);
+                row = sheet.CreateRow(7);
                 ICell cell = row.CreateCell(0);
-                cell.SetCellType(NPOI.SS.UserModel.CellType.FORMULA);
-                cell.CellFormula = ("SUM(12.25,12.25)/100");
-                NPOI.SS.UserModel.ICellStyle cellStyle = wb.CreateCellStyle();
-                cellStyle.DataFormat = (format.GetFormat("##.00%;"));
-                cell.CellStyle = (cellStyle);
+                cell.SetCellType(CellType.FORMULA);
+                cell.CellFormula = (/*setter*/"SUM(12.25,12.25)/100");
+                ICellStyle cellStyle = wb.CreateCellStyle();
+                cellStyle.DataFormat = (/*setter*/format.GetFormat("##.00%;"));
+                cell.CellStyle = (/*setter*/cellStyle);
             }
         }
 
         /**
-         * Test getting formatted values from numeric and date cells.
+         * Test Getting formatted values from numeric and date cells.
          */
         [TestMethod]
         public void TestGetFormattedCellValueHSSFCell()
         {
-            // This Test depends on the american culture.
-            System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
-
             // Valid date formats -- cell values should be date formatted & not "555.555"
             IRow row = wb.GetSheetAt(0).GetRow(0);
             IEnumerator it = row.GetEnumerator();
@@ -189,14 +213,44 @@ namespace TestCases.HSSF.UserModel
             while (it.MoveNext())
             {
                 ICell cell = (ICell)it.Current;
-                log(formatter.FormatCellValue(cell));
+                String fmtval = formatter.FormatCellValue(cell);
+                log(fmtval);
 
                 // should not be equal to "555.555"
-                Assert.IsTrue(!"555.555".Equals(formatter.FormatCellValue(cell)));
+                Assert.IsTrue(DateUtil.IsCellDateFormatted(cell));
+                Assert.IsTrue(!"555.555".Equals(fmtval));
 
-                // should contain "Jul" in the String
-                string result = formatter.FormatCellValue(cell);
-                Assert.IsTrue(result.IndexOf("Jul") > -1 || result.IndexOf("七月") > -1);
+                String fmt = cell.CellStyle.GetDataFormatString();
+
+                //assert the correct month form, as in the original Excel format
+                String monthPtrn = fmt.IndexOf("mmmm") != -1 ? "MMMM" : "MMM";
+                // this line is intended to compute how "July" would look like in the current locale
+                String jul = new SimpleDateFormat(monthPtrn).Format(new DateTime(2010, 7, 15));
+                // special case for MMMMM = 1st letter of month name
+                if (fmt.IndexOf("mmmmm") > -1)
+                {
+                    jul = jul.Substring(0, 1);
+                }
+                // check we found july properly
+                Assert.IsTrue(fmtval.IndexOf(jul) > -1, "Format came out incorrect - " + fmt);
+            }
+
+            row = wb.GetSheetAt(0).GetRow(1);
+            it = row.GetEnumerator();
+            log("==== VALID TIME FORMATS ====");
+            while (it.MoveNext())
+            {
+                ICell cell = (ICell)it.Current;
+                String fmt = cell.CellStyle.GetDataFormatString();
+                String fmtval = formatter.FormatCellValue(cell);
+                log(fmtval);
+
+                // should not be equal to "555.47431"
+                Assert.IsTrue(DateUtil.IsCellDateFormatted(cell));
+                Assert.IsTrue(!"555.47431".Equals(fmtval));
+
+                // check we found the time properly
+                Assert.IsTrue(fmtval.IndexOf("11:23") > -1, "Format came out incorrect - " + fmt);
             }
 
             // Test number formats
@@ -213,37 +267,39 @@ namespace TestCases.HSSF.UserModel
             }
 
             // Test bad number formats
-            row = wb.GetSheetAt(0).GetRow(2);
+            row = wb.GetSheetAt(0).GetRow(3);
             it = row.GetEnumerator();
             log("\n==== INVALID NUMBER FORMATS ====");
             while (it.MoveNext())
             {
                 ICell cell = (ICell)it.Current;
                 log(formatter.FormatCellValue(cell));
-                // should be equal to "1234567890.12345"
-                Assert.AreEqual("1234567890.12345", formatter.FormatCellValue(cell));
+                // should be equal to "1234567890.12345" 
+                // in some locales the the decimal delimiter is a comma, not a dot
+                string decimalSeparator = System.Globalization.CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator;
+                Assert.AreEqual("1234567890" + decimalSeparator + "12345", formatter.FormatCellValue(cell));
             }
 
             // Test Zip+4 format
-            row = wb.GetSheetAt(0).GetRow(3);
-            ICell cell2 = row.GetCell(0);
+            row = wb.GetSheetAt(0).GetRow(4);
+            ICell cell1 = row.GetCell(0);
             log("\n==== ZIP FORMAT ====");
-            log(formatter.FormatCellValue(cell2));
-            Assert.AreEqual("12345-6789", formatter.FormatCellValue(cell2));
+            log(formatter.FormatCellValue(cell1));
+            Assert.AreEqual("12345-6789", formatter.FormatCellValue(cell1));
 
             // Test phone number format
-            row = wb.GetSheetAt(0).GetRow(4);
-            cell2 = row.GetCell(0);
+            row = wb.GetSheetAt(0).GetRow(5);
+            cell1 = row.GetCell(0);
             log("\n==== PHONE FORMAT ====");
-            log(formatter.FormatCellValue(cell2));
-            Assert.AreEqual("(555) 123-4567", formatter.FormatCellValue(cell2));
+            log(formatter.FormatCellValue(cell1));
+            Assert.AreEqual("(555) 123-4567", formatter.FormatCellValue(cell1));
 
             // Test SSN format
-            row = wb.GetSheetAt(0).GetRow(5);
-            cell2 = row.GetCell(0);
+            row = wb.GetSheetAt(0).GetRow(6);
+            cell1 = row.GetCell(0);
             log("\n==== SSN FORMAT ====");
-            log(formatter.FormatCellValue(cell2));
-            Assert.AreEqual("444-55-1234", formatter.FormatCellValue(cell2));
+            log(formatter.FormatCellValue(cell1));
+            Assert.AreEqual("444-55-1234", formatter.FormatCellValue(cell1));
 
             // null Test-- null cell should result in empty String
             Assert.AreEqual(formatter.FormatCellValue(null), "");
@@ -255,52 +311,75 @@ namespace TestCases.HSSF.UserModel
         public void TestGetFormattedCellValueHSSFCellHSSFFormulaEvaluator()
         {
             // Test formula format
-            IRow row = wb.GetSheetAt(0).GetRow(6);
+            IRow row = wb.GetSheetAt(0).GetRow(7);
             ICell cell = row.GetCell(0);
             log("\n==== FORMULA CELL ====");
 
-            // first without a formula evaluator
-            log(formatter.FormatCellValue(cell) + "\t (without evaluator)");
+            // first without a formula Evaluator
+            log(formatter.FormatCellValue(cell) + "\t (without Evaluator)");
             Assert.AreEqual("SUM(12.25,12.25)/100", formatter.FormatCellValue(cell));
 
-            // now with a formula evaluator
-            HSSFFormulaEvaluator evaluator = new HSSFFormulaEvaluator(wb);
-            log(formatter.FormatCellValue(cell, evaluator) + "\t\t\t (with evaluator)");
-            Assert.AreEqual("24.50%", formatter.FormatCellValue(cell, evaluator));
+            // now with a formula Evaluator
+            HSSFFormulaEvaluator Evaluator = new HSSFFormulaEvaluator(wb);
+            log(formatter.FormatCellValue(cell, Evaluator) + "\t\t\t (with Evaluator)");
+            string decimalSeparator = System.Globalization.CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator;
+            Assert.AreEqual(formatter.FormatCellValue(cell, Evaluator), "24" + decimalSeparator + "50%");
+
         }
 
         /**
          * Test using a default number format. The format should be used when a
-         * format pattern cannot be parsed by DecimalFormat.
+         * format pattern cannot be Parsed by DecimalFormat.
          */
         [TestMethod]
         public void TestSetDefaultNumberFormat()
         {
-            IRow row = wb.GetSheetAt(0).GetRow(2);
+            IRow row = wb.GetSheetAt(0).GetRow(3);
             IEnumerator it = row.GetEnumerator();
             FormatBase defaultFormat = new DecimalFormat("Balance $#,#00.00 USD;Balance -$#,#00.00 USD");
             formatter.SetDefaultNumberFormat(defaultFormat);
-
-            log("\n==== DEFAULT NUMBER FORMAT ====");
-
             Random rand = new Random((int)DateTime.Now.ToFileTime());
+            log("\n==== DEFAULT NUMBER FORMAT ====");
             while (it.MoveNext())
             {
                 ICell cell = (ICell)it.Current;
                 cell.SetCellValue(cell.NumericCellValue * rand.Next() / 1000000 - 1000);
-                string result = formatter.FormatCellValue(cell);
-                log(result);
-                Assert.IsTrue(result.StartsWith("Balance "));
-                Assert.IsTrue(result.EndsWith(" USD"));
+                log(formatter.FormatCellValue(cell));
+                Assert.IsTrue(formatter.FormatCellValue(cell).StartsWith("Balance "));
+                Assert.IsTrue(formatter.FormatCellValue(cell).EndsWith(" USD"));
             }
         }
+
+        /**
+         * A format of "@" means use the general format
+         */
+        [TestMethod]
+        public void TestGeneralAtFormat()
+        {
+            IWorkbook workbook = HSSFTestDataSamples.OpenSampleWorkbook("47154.xls");
+            ISheet sheet = workbook.GetSheetAt(0);
+            IRow row = sheet.GetRow(0);
+            ICell cellA1 = row.GetCell(0);
+
+            Assert.AreEqual(CellType.NUMERIC, cellA1.CellType);
+            Assert.AreEqual(2345.0, cellA1.NumericCellValue, 0.0001);
+            Assert.AreEqual("@", cellA1.CellStyle.GetDataFormatString());
+
+            HSSFDataFormatter f = new HSSFDataFormatter();
+
+            Assert.AreEqual("2345", f.FormatCellValue(cellA1));
+        }
+
+        /**
+         * Tests various formattings of dates and numbers
+         */
         [TestMethod]
         public void TestFromFile()
         {
-            HSSFWorkbook workbook = HSSFTestDataSamples.OpenSampleWorkbook("Formatting.xls");
+            IWorkbook workbook = HSSFTestDataSamples.OpenSampleWorkbook("Formatting.xls");
             ISheet sheet = workbook.GetSheetAt(0);
 
-            DataFormatter f = new DataFormatter();
+            HSSFDataFormatter f = new HSSFDataFormatter();
 
             // This one is one of the nasty auto-locale changing ones...
             Assert.AreEqual("dd/mm/yyyy", sheet.GetRow(1).GetCell(0).StringCellValue);
@@ -350,32 +429,12 @@ namespace TestCases.HSSF.UserModel
             Assert.AreEqual("\u00a310.52", f.FormatCellValue(sheet.GetRow(12).GetCell(1)));
         }
 
-        /**
- * A format of "@" means use the general format
- */
-        [TestMethod]
-        public void TestGeneralAtFormat()
-        {
-            HSSFWorkbook workbook = HSSFTestDataSamples.OpenSampleWorkbook("47154.xls");
-            ISheet sheet = workbook.GetSheetAt(0);
-            IRow row = sheet.GetRow(0);
-            ICell cellA1 = row.GetCell(0);
-
-            Assert.AreEqual(CellType.NUMERIC, cellA1.CellType);
-            Assert.AreEqual(2345.0, cellA1.NumericCellValue, 0.0001);
-            Assert.AreEqual("@", cellA1.CellStyle.GetDataFormatString());
-
-            DataFormatter f = new DataFormatter();
-
-            Assert.AreEqual("2345", f.FormatCellValue(cellA1));
-        }
-
         private static void log(String msg)
         {
-            //if (false)
-            //{ // successful Tests should be silent
+            //if (false) { // successful Tests should be silent
             Console.WriteLine(msg);
             //}
         }
     }
+
 }
