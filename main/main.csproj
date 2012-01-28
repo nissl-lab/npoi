@@ -24,6 +24,8 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>
+    </DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -53,8 +55,8 @@
     <Compile Include="HSSF\Record\FtCblsSubRecord.cs" />
     <Compile Include="HSSF\UserModel\DVConstraint.cs" />
     <Compile Include="HSSF\UserModel\HSSFDataValidation.cs" />
-    <Compile Include="HSSF\UserModel\HSSFDataValidationHelper.java.cs" />
-    <Compile Include="HSSF\UserModel\HSSFDateUtil.java.cs" />
+    <Compile Include="HSSF\UserModel\HSSFDataValidationHelper.cs" />
+    <Compile Include="HSSF\UserModel\HSSFDateUtil.cs" />
     <Compile Include="OldFileFormatException.cs" />
     <Compile Include="DDF\DefaultEscherRecordFactory.cs" />
     <Compile Include="DDF\EscherArrayProperty.cs" />

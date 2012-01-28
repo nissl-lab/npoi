@@ -149,7 +149,7 @@ namespace TestCases.SS.UserModel
         [TestMethod]
         public void TestHide()
         {
-            wbU.SetSheetHidden(0, true);
+            wbU.SetSheetHidden(0,SheetState.HIDDEN);
             Assert.IsTrue(wbU.IsSheetHidden(0));
             Assert.IsFalse(wbU.IsSheetHidden(1));
             IWorkbook wb2 = _testDataProvider.WriteOutAndReadBack(wbU);
@@ -164,7 +164,7 @@ namespace TestCases.SS.UserModel
         [TestMethod]
         public void TestUnHide()
         {
-            wbH.SetSheetHidden(0, false);
+            wbH.SetSheetHidden(0,SheetState.VISIBLE);
             Assert.IsFalse(wbH.IsSheetHidden(0));
             Assert.IsFalse(wbH.IsSheetHidden(1));
             IWorkbook wb2 = _testDataProvider.WriteOutAndReadBack(wbH);
