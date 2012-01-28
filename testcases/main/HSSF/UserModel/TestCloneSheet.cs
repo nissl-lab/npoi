@@ -23,6 +23,7 @@ namespace TestCases.HSSF.UserModel
     using NPOI.HSSF.UserModel;
     using NPOI.SS.Util;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NPOI.SS.UserModel;
     /**
      * Test the ability to clone a sheet. 
      *  If Adding new records that belong to a sheet (as opposed to a book)
@@ -36,10 +37,9 @@ namespace TestCases.HSSF.UserModel
         public void TestCloneSheetBasic()
         {
             HSSFWorkbook b = new HSSFWorkbook();
-            NPOI.SS.UserModel.ISheet s = b.CreateSheet("Test");
+            ISheet s = b.CreateSheet("Test");
             s.AddMergedRegion(new CellRangeAddress(0, 1, 0, 1));
-            NPOI.SS.UserModel.ISheet clonedSheet = b.CloneSheet(0);
-
+            ISheet clonedSheet = b.CloneSheet(0);
             Assert.AreEqual(1, clonedSheet.NumMergedRegions, "One merged area");
         }
 
@@ -51,11 +51,11 @@ namespace TestCases.HSSF.UserModel
         public void TestPageBreakClones()
         {
             HSSFWorkbook b = new HSSFWorkbook();
-            NPOI.SS.UserModel.ISheet s = b.CreateSheet("Test");
+            ISheet s = b.CreateSheet("Test");
             s.SetRowBreak(3);
             s.SetColumnBreak((short)6);
 
-            NPOI.SS.UserModel.ISheet clone = b.CloneSheet(0);
+            ISheet clone = b.CloneSheet(0);
             Assert.IsTrue(clone.IsRowBroken(3), "Row 3 not broken");
             Assert.IsTrue(clone.IsColumnBroken((short)6), "Column 6 not broken");
 

@@ -48,280 +48,183 @@ namespace NPOI.SS.UserModel
     public interface ICell
     {
 
-        /**
-         * Returns column index of this cell
-         *
-         * @return zero-based column index of a column in a sheet.
-         */
+        /// <summary>
+        /// zero-based column index of a column in a sheet.
+        /// </summary>
         int ColumnIndex
         {
             get;
             set;
         }
 
-        /**
-         * Returns row index of a row in the sheet that Contains this cell
-         *
-         * @return zero-based row index of a row in the sheet that Contains this cell
-         */
+        /// <summary>
+        /// zero-based row index of a row in the sheet that contains this cell
+        /// </summary>
         int RowIndex { get; }
 
-        /**
-         * Returns the sheet this cell belongs to
-         *
-         * @return the sheet this cell belongs to
-         */
+        /// <summary>
+        /// the sheet this cell belongs to
+        /// </summary>
         ISheet Sheet { get; }
 
-        /**
-         * Returns the Row this cell belongs to
-         *
-         * @return the Row that owns this cell
-         */
+        /// <summary>
+        /// the row this cell belongs to
+        /// </summary>
         IRow Row { get; }
 
-        /**
-         * Set the cells type (numeric, formula or string)
-         *
-         * @throws ArgumentException if the specified cell type is invalid
-         * @see #CELL_TYPE_NUMERIC
-         * @see #CELL_TYPE_STRING
-         * @see #CELL_TYPE_FORMULA
-         * @see #CELL_TYPE_BLANK
-         * @see #CELL_TYPE_BOOLEAN
-         * @see #CELL_TYPE_ERROR
-         */
+        /// <summary>
+        /// Set the cells type (numeric, formula or string)
+        /// </summary>
         CellType CellType
         {
             get;
         }
-        /**
- * Set the cells type (numeric, formula or string)
- *
- * @throws IllegalArgumentException if the specified cell type is invalid
- * @see #CELL_TYPE_NUMERIC
- * @see #CELL_TYPE_STRING
- * @see #CELL_TYPE_FORMULA
- * @see #CELL_TYPE_BLANK
- * @see #CELL_TYPE_BOOLEAN
- * @see #CELL_TYPE_ERROR
- */
-        /**
-* Set a error value for the cell
-*
-* @param value the error value to set this cell to.  For formulas we'll set the
-*        precalculated value , for errors we'll set
-*        its value. For other types we will change the cell to an error
-*        cell and set its value.
-* @see FormulaError
-*/
 
+        /// <summary>
+        /// Set the cells type (numeric, formula or string)
+        /// </summary>
+        /// <param name="cellType"></param>
         void SetCellType(CellType cellType);
-        /**
-         * Only valid for formula cells
-         * @return one of ({@link #CELL_TYPE_NUMERIC}, {@link #CELL_TYPE_STRING},
-         *     {@link #CELL_TYPE_BOOLEAN}, {@link #CELL_TYPE_ERROR}) depending
-         * on the cached value of the formula
-         */
 
 
+        /// <summary>
+        /// Only valid for formula cells
+        /// </summary>
+        CellType CachedFormulaResultType { get; }
 
-        NPOI.SS.UserModel.CellType CachedFormulaResultType { get; }
-
-        /**
-         * Set a numeric value for the cell
-         *
-         * @param value  the numeric value to set this cell to.  For formulas we'll set the
-         *        precalculated value, for numerics we'll set its value. For other types we
-         *        will change the cell to a numeric cell and set its value.
-         */
+   
+        /// <summary>
+        /// Set a numeric value for the cell
+        /// </summary>
+        /// <param name="value">the numeric value to set this cell to.  For formulas we'll set the
+        ///  precalculated value, for numerics we'll set its value. For other types we will change 
+        ///  the cell to a numeric cell and set its value.
+        /// </param>
         void SetCellValue(double value);
-        /**
-         * Set a error value for the cell
-         *
-         * @param value the error value to set this cell to.  For formulas we'll set the
-         *        precalculated value , for errors we'll set
-         *        its value. For other types we will change the cell to an error
-         *        cell and set its value.
-         * @see FormulaError
-         */
+
+        /// <summary>
+        /// Set a error value for the cell
+        /// </summary>
+        /// <param name="value">the error value to set this cell to.  For formulas we'll set the 
+        /// precalculated value , for errors we'll set its value. For other types we will change 
+        /// the cell to an error cell and set its value.
+        /// </param>
         void SetCellErrorValue(byte value);
-        /**
-         * Converts the supplied date to its equivalent Excel numeric value and Sets
-         * that into the cell.
-         * <p/>
-         * <b>Note</b> - There is actually no 'DATE' cell type in Excel. In many
-         * cases (when entering date values), Excel automatically adjusts the
-         * <i>cell style</i> to some date format, creating the illusion that the cell
-         * data type is now something besides {@link Cell#CELL_TYPE_NUMERIC}.  POI
-         * does not attempt to replicate this behaviour.  To make a numeric cell
-         * display as a date, use {@link #SetCellStyle(CellStyle)} etc.
-         *
-         * @param value the numeric value to set this cell to.  For formulas we'll set the
-         *        precalculated value, for numerics we'll set its value. For other types we
-         *        will change the cell to a numerics cell and set its value.
-         */
+
+        /// <summary>
+        /// Converts the supplied date to its equivalent Excel numeric value and Sets that into the cell.
+        /// </summary>
+        /// <param name="value">the numeric value to set this cell to.  For formulas we'll set the
+        ///  precalculated value, for numerics we'll set its value. For other types we will change 
+        ///  the cell to a numerics cell and set its value.
+        /// </param>
         void SetCellValue(DateTime value);
 
-        /**
-         * Set a rich string value for the cell.
-         *
-         * @param value  value to set the cell to.  For formulas we'll set the formula
-         * string, for String cells we'll set its value.  For other types we will
-         * change the cell to a string cell and set its value.
-         * If value is null then we will change the cell to a Blank cell.
-         */
+        /// <summary>
+        /// Set a rich string value for the cell.
+        /// </summary>
+        /// <param name="value">value to set the cell to.  For formulas we'll set the formula
+        /// string, for String cells we'll set its value.  For other types we will
+        ///  change the cell to a string cell and set its value.
+        ///  If value is null then we will change the cell to a Blank cell.
+        ///  </param>
         void SetCellValue(IRichTextString value);
 
-        /**
-         * Set a string value for the cell.
-         *
-         * @param value  value to set the cell to.  For formulas we'll set the formula
-         * string, for String cells we'll set its value.  For other types we will
-         * change the cell to a string cell and set its value.
-         * If value is null then we will change the cell to a Blank cell.
-         */
+        /// <summary>
+        /// Set a string value for the cell.
+        /// </summary>
+        /// <param name="value">value to set the cell to.  For formulas we'll set the formula 
+        /// string, for String cells we'll set its value.  For other types we will 
+        /// change the cell to a string cell and set its value. 
+        /// If value is null then we will change the cell to a blank cell.
+        /// </param>
         void SetCellValue(String value);
 
-        /**
-         * Return a formula for the cell, for example, <code>SUM(C4:E4)</code>
-         *
-         * @return a formula for the cell
-         * @throws InvalidOperationException if the cell type returned by {@link #GetCellType()} is not CELL_TYPE_FORMULA
-         */
+        /// <summary>
+        /// Return a formula for the cell
+        /// </summary>
+        /// <exception cref="InvalidOperationException">if the cell type returned by GetCellType() is not CELL_TYPE_FORMULA </exception>
         String CellFormula { get; set; }
 
-        /**
-         * Get the value of the cell as a number.
-         * <p>
-         * For strings we throw an exception. For blank cells we return a 0.
-         * For formulas or error cells we return the precalculated value;
-         * </p>
-         * @return the value of the cell as a number
-         * @throws InvalidOperationException if the cell type returned by {@link #GetCellType()} is CELL_TYPE_STRING
-         * @exception FormatException if the cell value isn't a parsable <code>double</code>.
-         * @see DataFormatter for turning this number into a string similar to that which Excel would render this number as.
-         */
+        /// <summary>
+        /// Get the value of the cell as a number.
+        /// </summary>
+        /// <exception cref="InvalidOperationException">if the cell type returned by GetCellType() is CELL_TYPE_STRING</exception>
+        /// <exception cref="FormatException">if the cell value isn't a parsable double</exception>
         double NumericCellValue { get; }
 
-        /**
-         * Get the value of the cell as a date.
-         * <p>
-         * For strings we throw an exception. For blank cells we return a null.
-         * </p>
-         * @return the value of the cell as a date
-         * @throws InvalidOperationException if the cell type returned by {@link #GetCellType()} is CELL_TYPE_STRING
-         * @exception FormatException if the cell value isn't a parsable <code>double</code>.
-         * @see DataFormatter for formatting  this date into a string similar to how excel does.
-         */
+        /// <summary>
+        /// Get the value of the cell as a date.
+        /// </summary>
+        /// <exception cref="InvalidOperationException">if the cell type returned by GetCellType() is CELL_TYPE_STRING</exception>
+        /// <exception cref="FormatException">if the cell value isn't a parsable double</exception>
         DateTime DateCellValue { get; }
 
-        /**
-         * Get the value of the cell as a XSSFRichTextString
-         * <p>
-         * For numeric cells we throw an exception. For blank cells we return an empty string.
-         * For formula cells we return the pre-calculated value.
-         * </p>
-         * @return the value of the cell as a XSSFRichTextString
-         */
+        /// <summary>
+        /// Get the value of the cell RichTextString
+        /// </summary>
         IRichTextString RichStringCellValue { get; }
-        /**
- * Get the value of the cell as an error code.
- * <p>
- * For strings, numbers, and booleans, we throw an exception.
- * For blank cells we return a 0.
- * </p>
- *
- * @return the value of the cell as an error code
- * @throws IllegalStateException if the cell type returned by {@link #getCellType()} isn't CELL_TYPE_ERROR
- * @see FormulaError for error codes
- */
+
+        /// <summary>
+        /// Get the value of the cell as an error code.
+        /// </summary>
         byte ErrorCellValue { get; }
 
-        /**
-         * Get the value of the cell as a string
-         * <p>
-         * For numeric cells we throw an exception. For blank cells we return an empty string.
-         * For formulaCells that are not string Formulas, we return empty String.
-         * </p>
-         * @return the value of the cell as a string
-         */
+        /// <summary>
+        /// Get the value of the cell as a string
+        /// </summary>
         String StringCellValue { get; }
 
-        /**
-         * Set a bool value for the cell
-         *
-         * @param value the bool value to set this cell to.  For formulas we'll set the
-         *        precalculated value, for bools we'll set its value. For other types we
-         *        will change the cell to a bool cell and set its value.
-         */
+        /// <summary>
+        /// Set a bool value for the cell
+        /// </summary>
+        /// <param name="value"></param>
         void SetCellValue(bool value);
 
-        /**
-         * Set a error value for the cell
-         *
-         * @param value the error value to set this cell to.  For formulas we'll set the
-         *        precalculated value , for errors we'll set
-         *        its value. For other types we will change the cell to an error
-         *        cell and set its value.
-         * @see FormulaError
-         */
+        /// <summary>
+        /// Set a error value for the cell
+        /// </summary>
         byte CellErrorValue { get; set; }
 
-        /**
-         * Get the value of the cell as a bool.
-         * <p>
-         * For strings, numbers, and errors, we throw an exception. For blank cells we return a false.
-         * </p>
-         * @return the value of the cell as a bool
-         * @throws InvalidOperationException if the cell type returned by {@link #GetCellType()}
-         *   is not CELL_TYPE_BOOLEAN, CELL_TYPE_BLANK or CELL_TYPE_FORMULA
-         */
+        /// <summary>
+        /// Get the value of the cell as a bool.
+        /// </summary>
         bool BooleanCellValue { get; }
 
-        /**
-         * Return the cell's style.
-         *
-         * @return the cell's style. Always not-null. Default cell style has zero index and can be obtained as
-         * <code>workbook.GetCellStyleAt(0)</code>
-         * @see Workbook#GetCellStyleAt(short)
-         */
+        /// <summary>
+        /// Return the cell's style.
+        /// </summary>
         ICellStyle CellStyle { get; set; }
 
-        /**
-         * Sets this cell as the active cell for the worksheet
-         */
+        /// <summary>
+        /// Sets this cell as the active cell for the worksheet
+        /// </summary>
         void SetAsActiveCell();
 
-        /**
-         * Returns comment associated with this cell
-         *
-         * @return comment associated with this cell or <code>null</code> if not found
-         */
+        /// <summary>
+        /// comment associated with this cell
+        /// </summary>
         IComment CellComment { get; set; }
 
-        /**
-         * Removes the comment for this cell, if there is one.
-         */
+        /// <summary>
+        /// Removes the comment for this cell, if there is one.
+        /// </summary>
         void RemoveCellComment();
 
-        /**
-         * Returns hyperlink associated with this cell
-         *
-         * @return hyperlink associated with this cell or <code>null</code> if not found
-         */
+         /// <summary>
+        /// hyperlink associated with this cell
+        /// </summary>
         IHyperlink Hyperlink { get; set; }
 
-        /**
-         * Only valid for array formula cells
-         *
-         * @return range of the array formula group that the cell belongs to.
-         */
+        /// <summary>
+        ///  Only valid for array formula cells
+        /// </summary>
+        /// <returns>range of the array formula group that the cell belongs to.</returns>
         CellRangeAddress GetArrayFormulaRange();
 
-        /**
-         * @return <c>true</c> if this cell is part of group of cells having a common array formula.
-         */
+        /// <summary>
+        /// if this cell is part of group of cells having a common array formula.
+        /// </summary>
         bool IsPartOfArrayFormulaGroup { get; }
 
         bool IsMergedCell { get; }
