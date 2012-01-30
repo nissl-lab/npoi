@@ -253,18 +253,18 @@ namespace NPOI.SS.Util
             //throw new NotImplementedException();
         }
 
-        /**
-         * Copy text attributes from the supplied Font to Java2D AttributedString
-         */
-        /*private static void copyAttributes(IFont font, AttributedString str, int startIdx, int endIdx)
-        {
-            str.AddAttribute(TextAttribute.FAMILY, font.FontName, startIdx, endIdx);
-            str.AddAttribute(TextAttribute.SIZE, (float)font.FontHeightInPoints);
-            if (font.Boldweight == (short)FontBoldWeight.BOLD) str.AddAttribute(TextAttribute.WEIGHT, TextAttribute.WEIGHT_BOLD, startIdx, endIdx);
-            if (font.IsItalic) str.AddAttribute(TextAttribute.POSTURE, TextAttribute.POSTURE_OBLIQUE, startIdx, endIdx);
-            if (font.Underline == (byte)FontUnderlineType.SINGLE) str.AddAttribute(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON, startIdx, endIdx);
-            
-        }*/
+        // /**
+        // * Copy text attributes from the supplied Font to Java2D AttributedString
+        // */
+        //private static void copyAttributes(IFont font, AttributedString str, int startIdx, int endIdx)
+        //{
+        //    str.AddAttribute(TextAttribute.FAMILY, font.FontName, startIdx, endIdx);
+        //    str.AddAttribute(TextAttribute.SIZE, (float)font.FontHeightInPoints);
+        //    if (font.Boldweight == (short)FontBoldWeight.BOLD) str.AddAttribute(TextAttribute.WEIGHT, TextAttribute.WEIGHT_BOLD, startIdx, endIdx);
+        //    if (font.IsItalic) str.AddAttribute(TextAttribute.POSTURE, TextAttribute.POSTURE_OBLIQUE, startIdx, endIdx);
+        //    if (font.Underline == (byte)FontUnderlineType.SINGLE) str.AddAttribute(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON, startIdx, endIdx);           
+        //}
+
         /// <summary>
         /// Convert HSSFFont to Font.
         /// </summary>

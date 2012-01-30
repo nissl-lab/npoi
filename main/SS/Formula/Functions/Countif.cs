@@ -313,14 +313,12 @@ namespace NPOI.SS.Formula.Functions
                 if (x is StringEval)
                 {
 #if !HIDE_UNREACHABLE_CODE
-
                     if (true)
                     { // change to false to observe more intuitive behaviour
                         // Note - Unlike with numbers, it seems that COUNTIF never matches
                         // boolean values when the target(x) is a string
                         return false;
                     }
-#endif
                     StringEval se = (StringEval)x;
                     Boolean? val = ParseBoolean(se.StringValue);
                     if (val == null)
@@ -329,6 +327,9 @@ namespace NPOI.SS.Formula.Functions
                         return false;
                     }
                     testValue = BoolToInt(val.Value);
+#else
+                    return false;
+#endif
                 }
                 else if ((x is BoolEval))
                 {

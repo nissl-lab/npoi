@@ -665,11 +665,11 @@ namespace NPOI.HSSF.UserModel
             }
         }
 
-        /// <summary>
-        /// Gets the region at a particular index
-        /// </summary>
-        /// <param name="index">of the region to fetch</param>
-        /// <returns>the merged region (simple eh?)</returns>
+        ///// <summary>
+        ///// Gets the region at a particular index
+        ///// </summary>
+        ///// <param name="index">of the region to fetch</param>
+        ///// <returns>the merged region (simple eh?)</returns>
         //public NPOI.SS.Util.Region GetMergedRegionAt(int index)
         //{
         //    NPOI.SS.Util.CellRangeAddress cra = GetMergedRegion(index);
@@ -677,13 +677,7 @@ namespace NPOI.HSSF.UserModel
         //    return new NPOI.SS.Util.Region(cra.FirstRow, (short)cra.FirstColumn,
         //            cra.LastRow, (short)cra.LastColumn);
         //}
-        /**
-         * @return the merged region at the specified index
-         */
-        public CellRangeAddress etMergedRegion(int index)
-        {
-            return _sheet.GetMergedRegionAt(index);
-        }
+
         /// <summary>
         /// Gets the row enumerator.
         /// </summary>

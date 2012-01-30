@@ -145,7 +145,7 @@ namespace NPOI.SS.UserModel
         /// <summary>
         /// Get the Sheet object at the given index.
         /// </summary>
-        /// <param name="index">index of the sheet number (0-based physical & logical)</param>
+        /// <param name="index">index of the sheet number (0-based physical &amp; logical)</param>
         /// <returns>Sheet at the provided index</returns>
         ISheet GetSheetAt(int index);
 
