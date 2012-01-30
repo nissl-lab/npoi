@@ -33,7 +33,7 @@ Load the the NPOITest.sln into your IDE, build the project and execute
 all the unit tests.
 
 Here are some numbers (2012-01-30):
-unit tests: 1469, passed: 1455 (failed 14)
+unit tests: 1469, passed: 1454 (failed 15)
 
 There are unit tests flagged with the [Ignore] attribute:
 - testcases\main\HSSF\Model\TestFormulaParser.cs(1148):        [Ignore] // Identified bug - failed to parse negative array element.
@@ -62,13 +62,14 @@ Failed    Test51461                    Test method TestCases.HSSF.UserModel.Test
 Failed    Test51535                    Test method TestCases.HSSF.UserModel.TestBugs.Test51535 threw exception: ...    
 
 Failed    TestCachedTypeChange                  Assert.AreEqual failed. Expected:<31>. Actual:<29>.     
+Failed    TestCountIf                           Assert.AreEqual failed. Expected a difference no greater than <0> between expected value <2> and actual value <3>.     
+Failed    TestCountifFromSpreadsheet            3 countif Evaluations failed. See stderr for more details    
 Failed    TestExternalNameReferenceEvaluate     Test method TestCases.SS.Formula.PTG.TestExternalNameReference.TestExternalNameReferenceEvaluate threw exception: ...    
 Failed    TestTrackingHSSFListenerFormats       Assert.AreEqual failed. Expected:<_(*#,##0_);_(*(#,##0);_(* "-"_);_(@_)>. Actual:<_("$"* #,##0_);_("$"* (#,##0);_("$"* "-"_);_(@_)>.     
 Failed    TestGetDataBackAgain                  Assert.AreEqual failed. Expected:<3>. Actual:<4>.     
 Failed    TestRedundantUpdate                   Test method TestCases.SS.Formula.TestEvaluationCache.TestRedundantUpdate threw exception: ...    
 Failed    TestSlowEvaluate45376                 Assert.AreEqual failed. Expected:<8>. Actual:<24>.     
 Failed    TestTrackingHSSFListenerFormats       Assert.AreEqual failed. Expected:<_(*#,##0_);_(*(#,##0);_(* "-"_);_(@_)>. Actual:<_("$"* #,##0_);_("$"* (#,##0);_("$"* "-"_);_(@_)>.     
-Failed    TestStripFields                       Assert.IsTrue failed. Field.ALL_FIELDS must be initialized before the following tests are working. HeaderFooter.Field.ALL_FIELDS.Count: 0.     
 
 Patches to make the unit tests work as expected are greatly appreciated. 
 This belongs to the failing and to the ignored ones.

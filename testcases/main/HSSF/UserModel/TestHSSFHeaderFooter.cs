@@ -72,9 +72,9 @@ namespace TestCases.HSSF.UserModel
             String withOtherAnds = "I am a&P Test header&&";
             String withOtherAnds2 = "I am a&P Test header&a&b";
 
-            Assert.IsTrue(0 < HeaderFooter.Field.ALL_FIELDS.Count,
-                string.Format(CultureInfo.InvariantCulture, "Field.ALL_FIELDS must be initialized before the following tests are working. HeaderFooter.Field.ALL_FIELDS.Count: {0}. ",
-                HeaderFooter.Field.ALL_FIELDS.Count));
+            Assert.IsTrue(0 < HeaderFooter.Fields.AllFields.Count,
+                string.Format(CultureInfo.InvariantCulture, "Fields.AllFields must be initialized before the following tests are working. Fields.AllFields.Count: {0}. ",
+                HeaderFooter.Fields.AllFields.Count));
 
             Assert.AreEqual(simple, HSSFHeader.StripFields(simple));
             Assert.AreEqual(simple, HeaderFooter.StripFields(withPage));

@@ -21,6 +21,8 @@ namespace NPOI.HSSF.UserModel
     using System.Collections;
     using System.Text.RegularExpressions;
     using System.Text;
+    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
 
     /// <summary>
     /// Common class for HSSFHeader and HSSFFooter
@@ -30,9 +32,9 @@ namespace NPOI.HSSF.UserModel
         protected bool stripFields = false;
 
         /**
- * @return the internal text representation (combining center, left and right parts).
- * Possibly empty string if no header or footer is set.  Never <code>null</code>.
- */
+         * @return the internal text representation (combining center, left and right parts).
+         * Possibly empty string if no header or footer is set.  Never <c>null</c>.
+         */
         protected abstract String RawText { get; }
         //the test case Test45777 in TestCases.HSSF.UserModel.TestBugs.cs need test RawText length.
         //so this property is added.
@@ -381,10 +383,9 @@ namespace NPOI.HSSF.UserModel
                 return text;
             }
 
-            // Firstly, do the easy ones which Are static
-            for (int i = 0; i < Field.ALL_FIELDS.Count; i++)
+            foreach(Field field in Fields.AllFields)
             {
-                String seq = ((Field)Field.ALL_FIELDS[i]).sequence;
+                String seq = field.sequence;
                 while ((pos = text.IndexOf(seq)) > -1)
                 {
                     text = text.Substring(0, pos) +
@@ -393,7 +394,7 @@ namespace NPOI.HSSF.UserModel
             }
 
             // Now do the tricky, dynamic ones
-            // These Are things like font sizes and font names
+            // These are things like font sizes and font names
 
             text = Regex.Replace(text,@"\&\d+", "");
             text = Regex.Replace(text,"\\&\".*?,.*?\"", "");
@@ -421,24 +422,25 @@ namespace NPOI.HSSF.UserModel
             }
         }
 
+        // this abstract class does not initialize the static field that are required for the the StripFields method.
+        public static Field SHEET_NAME_FIELD { get { return Fields.Instance.SHEET_NAME_FIELD; } }
+        public static Field DATE_FIELD { get { return Fields.Instance.DATE_FIELD; } }
+        public static Field FILE_FIELD { get { return Fields.Instance.FILE_FIELD; } }
+        public static Field FULL_FILE_FIELD { get { return Fields.Instance.FULL_FILE_FIELD; } }
+        public static Field PAGE_FIELD { get { return Fields.Instance.PAGE_FIELD; } }
+        public static Field TIME_FIELD { get { return Fields.Instance.TIME_FIELD; } }
+        public static Field NUM_PAGES_FIELD { get { return Fields.Instance.NUM_PAGES_FIELD; } }
 
-        public static Field SHEET_NAME_FIELD = new Field("&A");
-        public static Field DATE_FIELD = new Field("&D");
-        public static Field FILE_FIELD = new Field("&F");
-        public static Field FULL_FILE_FIELD = new Field("&Z");
-        public static Field PAGE_FIELD = new Field("&P");
-        public static Field TIME_FIELD = new Field("&T");
-        public static Field NUM_PAGES_FIELD = new Field("&N");
+        public static Field PICTURE_FIELD { get { return Fields.Instance.PICTURE_FIELD; } }
 
-        public static Field PICTURE_FIELD = new Field("&G");
+        public static PairField BOLD_FIELD { get { return Fields.Instance.BOLD_FIELD; } }
+        public static PairField ITALIC_FIELD { get { return Fields.Instance.ITALIC_FIELD; } }
+        public static PairField STRIKETHROUGH_FIELD { get { return Fields.Instance.STRIKETHROUGH_FIELD; } }
+        public static PairField SUBSCRIPT_FIELD { get { return Fields.Instance.SUBSCRIPT_FIELD; } }
+        public static PairField SUPERSCRIPT_FIELD { get { return Fields.Instance.SUPERSCRIPT_FIELD; } }
+        public static PairField UNDERLINE_FIELD { get { return Fields.Instance.UNDERLINE_FIELD; } }
+        public static PairField DOUBLE_UNDERLINE_FIELD { get { return Fields.Instance.DOUBLE_UNDERLINE_FIELD; } }
 
-        public static PairField BOLD_FIELD = new PairField("&B");
-        public static PairField ITALIC_FIELD = new PairField("&I");
-        public static PairField STRIKETHROUGH_FIELD = new PairField("&S");
-        public static PairField SUBSCRIPT_FIELD = new PairField("&Y");
-        public static PairField SUPERSCRIPT_FIELD = new PairField("&X");
-        public static PairField UNDERLINE_FIELD = new PairField("&U");
-        public static PairField DOUBLE_UNDERLINE_FIELD = new PairField("&E");
 
         /// <summary>
         /// Represents a special field in a header or footer,
@@ -446,14 +448,18 @@ namespace NPOI.HSSF.UserModel
         /// </summary>
         public class Field
         {
-            public static ArrayList ALL_FIELDS = new ArrayList();
+            [Obsolete("Use the generic list Fields.AllFields instead.")]
+            public static ArrayList ALL_FIELDS { get { return new ArrayList(Fields.AllFields); } }
+
             /** The character sequence that marks this field */
             public String sequence;
-            public Field(String sequence)
+            public Field(Fields fields, String sequence)
             {
                 this.sequence = sequence;
-                ALL_FIELDS.Add(this);
+                fields.Add(this);
             }
+
+
         }
         /// <summary>
         /// A special field that normally comes in a pair, eg
@@ -461,11 +467,92 @@ namespace NPOI.HSSF.UserModel
         /// </summary>
         public class PairField : Field
         {
-            public PairField(String sequence)
-                : base(sequence)
+            public PairField(Fields fields, String sequence)
+                : base(fields, sequence)
             {
 
             }
         }
+
+
+        public class Fields
+        {
+            private List<Field> allFields = new List<Field>();
+            public static ReadOnlyCollection<Field> AllFields { get { return Instance.allFields.AsReadOnly(); } }
+
+            public Field SHEET_NAME_FIELD { get; private set; }
+            public Field DATE_FIELD { get; private set; }
+            public Field FILE_FIELD { get; private set; }
+            public Field FULL_FILE_FIELD { get; private set; }
+            public Field PAGE_FIELD { get; private set; }
+            public Field TIME_FIELD { get; private set; }
+            public Field NUM_PAGES_FIELD { get; private set; }
+
+            public Field PICTURE_FIELD { get; private set; }
+
+            public PairField BOLD_FIELD { get; private set; }
+            public PairField ITALIC_FIELD { get; private set; }
+            public PairField STRIKETHROUGH_FIELD { get; private set; }
+            public PairField SUBSCRIPT_FIELD { get; private set; }
+            public PairField SUPERSCRIPT_FIELD { get; private set; }
+            public PairField UNDERLINE_FIELD { get; private set; }
+            public PairField DOUBLE_UNDERLINE_FIELD { get; private set; }
+
+
+            #region Singleton Implementation
+            /// <summary>
+            /// Instance to this class.
+            /// </summary>
+            static private readonly Fields instance = new Fields();
+
+            /// <summary>
+            /// Explicit static constructor to tell C# compiler not to mark type as beforefieldinit.
+            /// </summary>
+            static Fields()
+            { }
+
+            /// <summary>
+            /// Initialize AllFields.
+            /// </summary>
+            private Fields()
+            {
+                SHEET_NAME_FIELD = new Field(this, "&A");
+                DATE_FIELD = new Field(this, "&D");
+                FILE_FIELD = new Field(this, "&F");
+                FULL_FILE_FIELD = new Field(this, "&Z");
+                PAGE_FIELD = new Field(this, "&P");
+                TIME_FIELD = new Field(this, "&T");
+                NUM_PAGES_FIELD = new Field(this, "&N");
+
+                PICTURE_FIELD = new Field(this, "&G");
+
+                BOLD_FIELD = new PairField(this, "&B");
+                ITALIC_FIELD = new PairField(this, "&I");
+                STRIKETHROUGH_FIELD = new PairField(this, "&S");
+                SUBSCRIPT_FIELD = new PairField(this, "&Y");
+                SUPERSCRIPT_FIELD = new PairField(this, "&X");
+                UNDERLINE_FIELD = new PairField(this, "&U");
+                DOUBLE_UNDERLINE_FIELD = new PairField(this, "&E");
+            }
+
+            /// <summary>
+            /// Accessing the initialized instance.
+            /// </summary>
+            public static Fields Instance
+            {
+                get
+                {
+                    return instance;
+                }
+            }
+            #endregion Singleton Implementation
+
+            internal void Add(Field field)
+            {
+                allFields.Add(field);
+            }
+        }
+
+
     }
 }
