@@ -683,28 +683,28 @@ namespace NPOI.HSSF.UserModel
         /// </summary>
         /// <returns>
         /// an iterator of the PHYSICAL rows.  Meaning the 3rd element may not
-        /// be the third row if say for instance the second row is Undefined.
-        /// Call RowNum on each row if you care which one it is.
+        /// be the third row if say for instance the second row is undefined.
+        /// Call <see cref="NPOI.SS.UserModel.IRow.RowNum"/> on each row 
+        /// if you care which one it is.
         /// </returns>
         public IEnumerator GetRowEnumerator()
         {
             return rows.Values.GetEnumerator();
         }
 
-        // be explicit to iterate over the rows
-        ///// <summary>
-        ///// Alias for GetRowEnumerator() to allow
-        ///// foreach loops
-        ///// </summary>
-        ///// <returns>
-        ///// an iterator of the PHYSICAL rows.  Meaning the 3rd element may not
-        ///// be the third row if say for instance the second row is Undefined.
-        ///// Call RowNum on each row if you care which one it is.
-        ///// </returns>
-        //public IEnumerator GetEnumerator()
-        //{
-        //    return GetRowEnumerator();
-        //}
+        /// <summary>
+        /// Alias for GetRowEnumerator() to allow <c>foreach</c> loops.
+        /// </summary>
+        /// <returns>
+        /// an iterator of the PHYSICAL rows.  Meaning the 3rd element may not
+        /// be the third row if say for instance the second row is undefined.
+        /// Call <see cref="NPOI.SS.UserModel.IRow.RowNum"/> on each row 
+        /// if you care which one it is.
+        /// </returns>
+        public IEnumerator GetEnumerator()
+        {
+            return GetRowEnumerator();
+        }
 
         /// <summary>
         /// used internally in the API to Get the low level Sheet record represented by this

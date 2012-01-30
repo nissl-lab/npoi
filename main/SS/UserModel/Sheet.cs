@@ -221,9 +221,26 @@ namespace NPOI.SS.UserModel
         NPOI.SS.Util.CellRangeAddress GetMergedRegion(int index);
 
         /// <summary>
-        /// Returns an iterator of the physical rows
+        /// Gets the row enumerator.
         /// </summary>
+        /// <returns>
+        /// an iterator of the PHYSICAL rows.  Meaning the 3rd element may not
+        /// be the third row if say for instance the second row is undefined.
+        /// Call <see cref="NPOI.SS.UserModel.IRow.RowNum"/> on each row 
+        /// if you care which one it is.
+        /// </returns>
         System.Collections.IEnumerator GetRowEnumerator();
+
+        /// <summary>
+        /// Alias for GetRowEnumerator() to allow <c>foreach</c> loops.
+        /// </summary>
+        /// <returns>
+        /// an iterator of the PHYSICAL rows.  Meaning the 3rd element may not
+        /// be the third row if say for instance the second row is undefined.
+        /// Call <see cref="NPOI.SS.UserModel.IRow.RowNum"/> on each row 
+        /// if you care which one it is.
+        /// </returns>
+        System.Collections.IEnumerator GetEnumerator();
 
         /// <summary>
         /// Gets the flag indicating whether the window should show 0 (zero) in cells Containing zero value.
