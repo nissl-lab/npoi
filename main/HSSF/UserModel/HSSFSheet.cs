@@ -1532,8 +1532,8 @@ namespace NPOI.HSSF.UserModel
         /// </summary>
         /// <param name="xSplitPos">Horizonatal position of split (in 1/20th of a point).</param>
         /// <param name="ySplitPos">Vertical position of split (in 1/20th of a point).</param>
-        /// <param name="leftmostColumn">Top row visible in bottom pane</param>
-        /// <param name="topRow">Left column visible in right pane.</param>
+        /// <param name="leftmostColumn">Left column visible in right pane.</param>
+        /// <param name="topRow">Top row visible in bottom pane.</param>
         /// <param name="activePane">Active pane.  One of: PANE_LOWER_RIGHT,PANE_UPPER_RIGHT, PANE_LOWER_LEFT, PANE_UPPER_LEFT</param>
         public void CreateSplitPane(int xSplitPos, int ySplitPos, int leftmostColumn, int topRow, NPOI.SS.UserModel.PanePosition activePane)
         //this would have the same parameter sequence as the internal method and matches the content of the description above,

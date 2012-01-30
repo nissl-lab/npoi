@@ -418,7 +418,6 @@
     </Compile>
     <Compile Include="HSSF\UserModel\TestBugs.cs" />
     <Compile Include="HSSF\UserModel\TestEscherGraphics.cs" />
-    <Compile Include="HSSF\UserModel\TestHSSFDataFormatter.cs" />
     <Compile Include="HSSF\UserModel\TestHSSFDateUtil.cs" />
     <Compile Include="Util\TestStringUtil.cs" />
   </ItemGroup>
@@ -436,6 +435,7 @@
     <Compile Include="HSSF\Record\TestTextObjectBaseRecord.cs" />
     <Compile Include="HSSF\Record\TestWriteAccessRecord.cs" />
     <Compile Include="HSSF\UserModel\TestDataValidation.cs" />
+    <Compile Include="HSSF\UserModel\TestHSSFDataFormatter.cs" />
     <Compile Include="HSSF\UserModel\TestHSSFFont.cs" />
     <Compile Include="HSSF\UserModel\TestHSSFDataFormat.cs" />
     <Compile Include="HSSF\UserModel\TestHSSFSheetShiftRows.cs" />

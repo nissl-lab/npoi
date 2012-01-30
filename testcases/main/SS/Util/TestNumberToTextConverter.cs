@@ -32,6 +32,15 @@ namespace TestCases.SS.Util
     [TestClass]
     public class TestNumberToTextConverter
     {
+        /// <summary>
+        ///  Some of the tests are depending on the american culture.
+        /// </summary>
+        [TestInitialize()]
+        public void InitializeCultere()
+        {
+            System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
+        }
+
         /**
          * Confirms that <c>ExcelNumberToTextConverter.toText(d)</c> produces the right results.
          * As part of preparing this test class, the <c>ExampleConversion</c> instances should be set
@@ -40,9 +49,6 @@ namespace TestCases.SS.Util
         [TestMethod]
         public void TestAllNumberToText()
         {
-            // This Test depends on the american culture.
-            System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
-
             int failureCount = 0;
 
             NumberToTextConversionExamples.ExampleConversion[] examples = NumberToTextConversionExamples.GetExampleConversions();

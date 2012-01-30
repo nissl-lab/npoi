@@ -42,8 +42,8 @@ namespace TestCases.HSSF.Model
         /// <summary>
         ///  Some of the tests are depending on the american culture.
         /// </summary>
-        [ClassInitialize()]
-        public static void PrepareCultere(TestContext testContext)
+        [TestInitialize()]
+        public void InitializeCultere()
         {
             System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
         }

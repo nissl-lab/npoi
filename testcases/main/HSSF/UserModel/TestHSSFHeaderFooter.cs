@@ -23,6 +23,7 @@ namespace TestCases.HSSF.UserModel
     using NPOI.HSSF.UserModel;
     using TestCases.HSSF;
     using NPOI.SS.UserModel;
+    using System.Globalization;
 
     /**
      * Tests row shifting capabilities.
@@ -71,7 +72,12 @@ namespace TestCases.HSSF.UserModel
             String withOtherAnds = "I am a&P Test header&&";
             String withOtherAnds2 = "I am a&P Test header&a&b";
 
+            Assert.IsTrue(0 < HeaderFooter.Field.ALL_FIELDS.Count,
+                string.Format(CultureInfo.InvariantCulture, "Field.ALL_FIELDS must be initialized before the following tests are working. HeaderFooter.Field.ALL_FIELDS.Count: {0}. ",
+                HeaderFooter.Field.ALL_FIELDS.Count));
+
             Assert.AreEqual(simple, HSSFHeader.StripFields(simple));
+            Assert.AreEqual(simple, HeaderFooter.StripFields(withPage));
             Assert.AreEqual(simple, HSSFHeader.StripFields(withPage));
             Assert.AreEqual(simple, HSSFHeader.StripFields(withLots));
             Assert.AreEqual(simple, HSSFHeader.StripFields(withFont));

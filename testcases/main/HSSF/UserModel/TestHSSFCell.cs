@@ -161,7 +161,6 @@ namespace TestCases.HSSF.UserModel
         [TestMethod]
         public void TestCachedTypeChange()
         {
-            System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
             HSSFSheet sheet = (HSSFSheet)new HSSFWorkbook().CreateSheet("Sheet1");
             HSSFCell cell = (HSSFCell)sheet.CreateRow(0).CreateCell(0);
             cell.CellFormula = ("A1");

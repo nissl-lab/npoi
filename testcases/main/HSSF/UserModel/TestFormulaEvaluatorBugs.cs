@@ -39,18 +39,10 @@ namespace TestCases.HSSF.UserModel
         private static bool OUTPUT_TEST_FILES = false;
         private String tmpDirName;
 
-        /// <summary>
-        ///  Some of the tests are depending on the american culture.
-        /// </summary>
-        [ClassInitialize()]
-        public static void PrepareCultere(TestContext testContext)
-        {
-            System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
-        }
-
         [TestInitialize]
         public void SetUp()
         {
+            System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
 
             tmpDirName = ConfigurationManager.AppSettings["java.io.tmpdir"];
         }

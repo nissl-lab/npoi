@@ -38,6 +38,16 @@ namespace TestCases.SS.Formula.PTG
         double PART_COST = 12.3d;
         double NEW_QUANT = 7.0d;
         double NEW_PART_COST = 15.3d;
+
+        /// <summary>
+        ///  Some of the tests are depending on the american culture.
+        /// </summary>
+        [TestInitialize()]
+        public void InitializeCultere()
+        {
+            System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
+        }
+
         /**
          * Tests <c>NameXPtg for external cell reference by name</c> and logic in Workbook below that   
          */
@@ -86,7 +96,7 @@ namespace TestCases.SS.Formula.PTG
             }
         }
         [TestMethod]
-        public void TestEvaluate()
+        public void TestExternalNameReferenceEvaluate()
         {
             HSSFWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("XRefCalc.xls");
             HSSFWorkbook wb2 = HSSFTestDataSamples.OpenSampleWorkbook("XRefCalcData.xls");

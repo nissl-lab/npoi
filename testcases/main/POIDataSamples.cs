@@ -9,8 +9,8 @@ namespace TestCases
     public class POIDataSamples
     {
         /**
- * Name of the system property that defined path to the test data.
- */
+         * Name of the system property that defined path to the test data.
+         */
         public static String TEST_PROPERTY = "POI.testdata.path";
 
         private static POIDataSamples _instSlideshow;
@@ -31,9 +31,9 @@ namespace TestCases
         private String _moduleDir;
 
         /**
- *
- * @param moduleDir   the name of the directory containing the test files
- */
+         *
+         * @param moduleDir   the name of the directory containing the test files
+         */
         private POIDataSamples(String moduleDir)
         {
             _moduleDir = moduleDir;
@@ -112,6 +112,9 @@ namespace TestCases
 
         private void Initialise()
         {
+            //  Some of the tests are depending on the american culture.
+            System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
+
             String dataDirName = System.Configuration.ConfigurationManager.AppSettings[TEST_PROPERTY];
 
             if (dataDirName == null)
@@ -178,11 +181,11 @@ namespace TestCases
             }
         }
         /**
- *
- * @param sampleFileName    the name of the test file
- * @return
- * @throws RuntimeException if the file was not found
- */
+         *
+         * @param sampleFileName    the name of the test file
+         * @return
+         * @throws RuntimeException if the file was not found
+         */
         public FileStream GetFile(String sampleFileName)
         {
             string path = _resolvedDataDir+ sampleFileName;
@@ -214,8 +217,8 @@ namespace TestCases
             return Directory.GetFiles(_resolvedDataDir, searchPattern);
         }
         /**
- * @return byte array of sample file content from file found in standard hssf test data dir 
- */
+         * @return byte array of sample file content from file found in standard hssf test data dir 
+         */
         public byte[] ReadFile(String fileName)
         {
             MemoryStream bos = new MemoryStream();

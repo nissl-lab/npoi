@@ -458,7 +458,7 @@ namespace TestCases.SS.Formula
 
             ConfirmEvaluate(ms, "B2", 91);
             ConfirmLog(ms, new String[] {
-			"hit B2 91",  // further Confirmation that B2 was not Cleared due to changing D1 above
+			"hit B2 91",  // further Confirmation that B2 was not cleared due to changing D1 above
 		});
 
             // things should be back to normal now
@@ -471,8 +471,8 @@ namespace TestCases.SS.Formula
         }
 
         /**
-         * verifies that when updating a plain cell, depending (formula) cell cached values are Cleared
-         * only when the plain cell's value actually Changes
+         * verifies that when updating a plain cell, depending (formula) cell cached values are cleared
+         * only when the plain cell's value actually changes
          */
         [TestMethod]
         public void TestRedundantUpdate()

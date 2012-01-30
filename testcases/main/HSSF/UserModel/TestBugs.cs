@@ -50,8 +50,8 @@ using NPOI.POIFS.FileSystem;
         /// <summary>
         ///  Some of the tests are depending on the american culture.
         /// </summary>
-        [ClassInitialize()]
-        public static void PrepareCultere(TestContext testContext)
+        [TestInitialize()]
+        public void InitializeCultere()
         {
             System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
         }
@@ -1439,8 +1439,6 @@ using NPOI.POIFS.FileSystem;
         [Ignore]
         public void Test43623()
         {
-            System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
-
             HSSFWorkbook wb = OpenSample("43623.xls");
             Assert.AreEqual(1, wb.NumberOfSheets);
 
@@ -2441,8 +2439,6 @@ using NPOI.POIFS.FileSystem;
         [TestMethod]
         public void Test48968()
         {
-            System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
-
             HSSFWorkbook wb = OpenSample("48968.xls");
             Assert.AreEqual(1, wb.NumberOfSheets);
 

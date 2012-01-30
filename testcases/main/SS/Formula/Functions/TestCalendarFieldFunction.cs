@@ -35,6 +35,7 @@ namespace TestCases.SS.Formula.Functions
         [TestInitialize]
         public void SetUp()
         {
+            System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
             HSSFWorkbook wb = new HSSFWorkbook();
             ISheet sheet = wb.CreateSheet("new sheet");
             cell11 = sheet.CreateRow(0).CreateCell(0);

@@ -149,7 +149,6 @@ namespace TestCases.SS.UserModel
             String p2dp_n1dp_z0 = "00.00;(00.0);0";
             String all2dpTSP = "00.00_x";
             String p2dp_n2dpTSP = "00.00_x;(00.00)_x";
-            String p2dp_n1dpTSP = "00.00_x;(00.0)_x";
 
             Assert.AreEqual("12.34", dfUS.FormatRawCellContents(12.343, -1, all2dp));
             Assert.AreEqual("12.34", dfUS.FormatRawCellContents(12.343, -1, p2dp_n1dp));
@@ -175,6 +174,7 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual("12.34", dfUS.FormatRawCellContents(12.343, -1, all2dpTSP));
             Assert.AreEqual("12.34", dfUS.FormatRawCellContents(12.343, -1, p2dp_n2dpTSP));
             Assert.AreEqual("(12.34)", dfUS.FormatRawCellContents(-12.343, -1, p2dp_n2dpTSP));
+            //String p2dp_n1dpTSP = "00.00_x;(00.0)_x";
             //       Assert.AreEqual("12.34", dfUS.FormatRawCellContents(12.343, -1, p2dp_n1dpTSP));
             //       Assert.AreEqual("(12.3)", dfUS.FormatRawCellContents(-12.343, -1, p2dp_n1dpTSP));
         }

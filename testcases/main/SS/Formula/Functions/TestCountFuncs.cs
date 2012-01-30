@@ -37,6 +37,16 @@ namespace TestCases.SS.Formula.Functions
     {
 
         private static String NULL = null;
+
+        /// <summary>
+        ///  Some of the tests are depending on the american culture.
+        /// </summary>
+        [TestInitialize()]
+        public void InitializeCultere()
+        {
+            System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
+        }
+
         [TestMethod]
         public void TestCountBlank()
         {

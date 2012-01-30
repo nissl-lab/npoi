@@ -70,8 +70,8 @@ namespace NPOI.SS.Formula
             _workbookIx = 0;
             _stabilityClassifier = stabilityClassifier;
 
-           AggregatingUDFFinder defaultToolkit = // workbook can be null in unit tests
-            workbook == null ? null : (AggregatingUDFFinder)workbook.GetUDFFinder();
+            AggregatingUDFFinder defaultToolkit = // workbook can be null in unit tests
+                workbook == null ? null : (AggregatingUDFFinder)workbook.GetUDFFinder();
             if(defaultToolkit != null && udfFinder != null) {
                 defaultToolkit.Add(udfFinder);
             }
@@ -205,9 +205,9 @@ namespace NPOI.SS.Formula
             return _workbook.ConvertFromExternSheetIndex(externSheetIndex);
         }
         /**
- * Case-insensitive.
- * @return -1 if sheet with specified name does not exist
- */
+         * Case-insensitive.
+         * @return -1 if sheet with specified name does not exist
+         */
         /* package */
         public int GetSheetIndex(String sheetName)
         {
