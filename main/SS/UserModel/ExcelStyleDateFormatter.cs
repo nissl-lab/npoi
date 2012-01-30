@@ -105,6 +105,9 @@ namespace NPOI.SS.UserModel
             t = t.Replace("s.000", "s.fff");
             t = t.Replace("s.00", "s." + LL_BRACKET_SYMBOL);
             t = t.Replace("s.0", "s." + L_BRACKET_SYMBOL);
+            //only one char 'M'
+            //see http://msdn.microsoft.com/en-us/library/8kb3ddd4.aspx#UsingSingleSpecifiers
+            t = Regex.Replace(t, "(?<![M%])M(?!M)", "%M");
             return t;
         }
 
@@ -133,7 +136,7 @@ namespace NPOI.SS.UserModel
             }
             else
                 s = pattern;
-
+            
             // Now handle our special cases
             if (s.IndexOf(MMMMM_START_SYMBOL) != -1)
             {

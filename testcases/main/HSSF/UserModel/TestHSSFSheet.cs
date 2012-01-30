@@ -582,7 +582,7 @@ namespace TestCases.HSSF.UserModel
         {
             HSSFWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("43902.xls");
             String sheetName = "my sheet";
-            HSSFSheet sheet = (HSSFSheet)wb.CreateSheet();
+            HSSFSheet sheet = (HSSFSheet)wb.GetSheet(sheetName);
 
             // Can't use literal numbers for column sizes, as
             //  will come out with different values on different
