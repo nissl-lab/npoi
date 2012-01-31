@@ -46,9 +46,11 @@ namespace NPOI.SS.UserModel
     }
 
     /// <summary>
-    /// High level representation of a Excel workbook.  This is the first object most users 
-    /// will construct whether they are Reading or writing a workbook.  It is also the
+    /// High level interface of a Excel workbook.  This is the first object most users 
+    /// will construct whether they are reading or writing a workbook.  It is also the
     /// top level object for creating new sheets/etc.
+    /// This interface is shared between the implementation specific to xls and xlsx.
+    /// This way it is possible to access Excel workbooks stored in both formats.
     /// </summary>
     public interface IWorkbook
     {
@@ -155,6 +157,14 @@ namespace NPOI.SS.UserModel
         /// <param name="name">name of the sheet</param>
         /// <returns>Sheet with the name provided or null if it does not exist</returns>
         ISheet GetSheet(String name);
+
+        /// <summary>
+        /// Support foreach ISheet, e.g.
+        /// HSSFWorkbook workbook = new HSSFWorkbook();
+        /// foreach(ISheet sheet in workbook) ...
+        /// </summary>
+        /// <returns>Enumeration of all the sheets of this workbook</returns>
+        IEnumerator GetEnumerator();
 
         /// <summary>
         /// Removes sheet at the given index

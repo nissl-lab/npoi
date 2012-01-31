@@ -36,8 +36,8 @@ namespace NPOI.HSSF.UserModel
 
 
     /// <summary>
-    /// High level representation of a workbook.  This Is the first object most users
-    /// will construct whether they are Reading or writing a workbook.  It Is also the
+    /// High level representation of a workbook.  This is the first object most users
+    /// will construct whether they are reading or writing a workbook.  It is also the
     /// top level object for creating new sheets/etc.
     /// </summary>
     /// @author  Andrew C. Oliver (acoliver at apache dot org)
@@ -50,14 +50,14 @@ namespace NPOI.HSSF.UserModel
         private const int MAX_ROW = 0xFFFF;
         private const short MAX_COLUMN = (short)0x00FF;
 
-            /**
-     * The maximum number of cell styles in a .xls workbook.
-     * The 'official' limit is 4,000, but POI allows a slightly larger number.
-     * This extra delta takes into account built-in styles that are automatically
-     * created for new workbooks
-     *
-     * See http://office.microsoft.com/en-us/excel-help/excel-specifications-and-limits-HP005199291.aspx
-     */
+        /**
+         * The maximum number of cell styles in a .xls workbook.
+         * The 'official' limit is 4,000, but POI allows a slightly larger number.
+         * This extra delta takes into account built-in styles that are automatically
+         * created for new workbooks
+         *
+         * See http://office.microsoft.com/en-us/excel-help/excel-specifications-and-limits-HP005199291.aspx
+         */
         private const int MAX_STYLES = 4030;
 
         /**
