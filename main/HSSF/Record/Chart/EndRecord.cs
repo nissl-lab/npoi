@@ -75,5 +75,11 @@ namespace NPOI.HSSF.Record.Chart
         {
             get { return sid; }
         }
+        public override Object Clone()
+        {
+            EndRecord er = new EndRecord();
+            // No data so nothing to copy
+            return er;
+        }
     }
 }
