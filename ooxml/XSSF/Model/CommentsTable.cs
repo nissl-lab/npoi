@@ -1,0 +1,192 @@
+/* ====================================================================
+   Licensed to the Apache Software Foundation (ASF) under one or more
+   contributor license agreements.  See the NOTICE file distributed with
+   this work for Additional information regarding copyright ownership.
+   The ASF licenses this file to You under the Apache License, Version 2.0
+   (the "License"); you may not use this file except in compliance with
+   the License.  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+==================================================================== */
+namespace NPOI.XSSF.Model
+{
+    using NPOI.XSSF.UserModel;
+    using System.IO;
+    using System.Xml;
+    using NPOI.OpenXml4Net.OPC;
+    using OpenXmlFormats.Spreadsheet;
+    using System.Collections.Generic;
+    using System;
+
+    public class CommentsTable : POIXMLDocumentPart
+    {
+        private CT_Comments comments;
+        /**
+         * XML Beans uses a list, which is very slow
+         *  to search, so we wrap things with our own
+         *  map for fast Lookup.
+         */
+        private Dictionary<String, CT_Comment> commentRefs;
+
+        public CommentsTable()
+            : base()
+        {
+
+            comments = new CT_Comments();
+            comments.AddNewCommentList();
+            comments.AddNewAuthors().AddAuthor("");
+        }
+
+        public CommentsTable(PackagePart part, PackageRelationship rel)
+            : base(part, rel)
+        {
+
+            ReadFrom(part.GetInputStream());
+        }
+
+        public void ReadFrom(Stream is1)
+        {
+            try
+            {
+                CommentsDocument doc = CommentsDocument.Factory.Parse(is1);
+                comments = doc.GetComments();
+            }
+            catch (XmlException e)
+            {
+                throw new IOException(e.Message);
+            }
+        }
+        public void WriteTo(Stream out1)
+        {
+            CommentsDocument doc = CommentsDocument.Factory.newInstance();
+            doc.SetComments(comments);
+            doc.save(out1);
+        }
+
+
+        protected void Commit()
+        {
+            PackagePart part = GetPackagePart();
+            Stream out1 = part.GetOutputStream();
+            WriteTo(out1);
+            out1.Close();
+        }
+
+        /**
+         * Called after the reference is updated, so that
+         *  we can reflect that in our cache
+         */
+        public void ReferenceUpdated(String oldReference, CT_Comment comment)
+        {
+            if (commentRefs != null)
+            {
+                commentRefs.Remove(oldReference);
+                commentRefs[comment.@ref] = comment;
+            }
+        }
+
+        public int GetNumberOfComments()
+        {
+            return comments.commentList.SizeOfCommentArray();
+        }
+
+        public int GetNumberOfAuthors()
+        {
+            return comments.authors.SizeOfAuthorArray();
+        }
+
+        public String GetAuthor(long authorId)
+        {
+            return comments.authors.GetAuthorArray((int)authorId);
+        }
+
+        public int FindAuthor(String author)
+        {
+            for (int i = 0; i < comments.authors.SizeOfAuthorArray(); i++)
+            {
+                if (comments.authors.GetAuthorArray(i).Equals(author))
+                {
+                    return i;
+                }
+            }
+            return AddNewAuthor(author);
+        }
+
+        //public XSSFComment FindCellComment(String cellRef)
+        //{
+        //    CT_Comment ct = GetCTComment(cellRef);
+        //    return ct == null ? null : new XSSFComment(this, ct, null);
+        //}
+
+        public CT_Comment GetCTComment(String cellRef)
+        {
+            // Create the cache if needed
+            if (commentRefs == null)
+            {
+                commentRefs = new Dictionary<String, CT_Comment>();
+                foreach (CT_Comment comment in comments.commentList.comment)
+                {
+                    commentRefs[comment.@ref] = comment;
+                }
+            }
+
+            // Return the comment, or null if not known
+            return commentRefs[cellRef];
+        }
+
+        public CT_Comment CreateComment()
+        {
+            CT_Comment ct = comments.commentList.AddNewComment();
+            ct.@ref = "A1";
+            ct.authorId = 0;
+
+            if (commentRefs != null)
+            {
+                commentRefs[ct.@ref] = ct;
+            }
+            return ct;
+        }
+
+        public bool RemoveComment(String cellRef)
+        {
+            CT_CommentList lst = comments.commentList;
+            if (lst != null) for (int i = 0; i < lst.SizeOfCommentArray(); i++)
+                {
+                    CT_Comment comment = lst.GetCommentArray(i);
+                    if (cellRef.Equals(comment.@ref))
+                    {
+                        lst.RemoveComment(i);
+
+                        if (commentRefs != null)
+                        {
+                            commentRefs.Remove(cellRef);
+                        }
+                        return true;
+                    }
+                }
+            return false;
+        }
+
+        private int AddNewAuthor(String author)
+        {
+            int index = comments.authors.SizeOfAuthorArray();
+            comments.authors.Insert(index, author);
+            return index;
+        }
+
+        public CT_Comments GetCTComments()
+        {
+            return comments;
+        }
+    }
+
+}
+
+
+
