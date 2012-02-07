@@ -31,18 +31,18 @@ using NPOI.UTIL.POILogger;
 using NPOI.XSSF.model.CalculationChain;
 using NPOI.XSSF.model.StylesTable;
 using org.Openxmlformats.schemas.spreadsheetml.x2006.main.CT_Cell;
-using org.Openxmlformats.schemas.spreadsheetml.x2006.main.CTRow;
+using org.Openxmlformats.schemas.spreadsheetml.x2006.main.CT_Row;
 
 /**
  * High level representation of a row of a spreadsheet.
  */
-public class XSSFRow : Row, Comparable<XSSFRow> {
-    private static POILogger _logger = POILogFactory.GetLogger(XSSFRow.class);
+public class XSSFRow : IRow, Comparable<XSSFRow> {
+    private static POILogger _logger = POILogFactory.GetLogger(typeof(XSSFRow));
 
     /**
      * the xml bean Containing all cell defInitions for this row
      */
-    private CTRow _row;
+    private CT_Row _row;
 
     /**
      * Cells of this row keyed by their column indexes.
@@ -62,7 +62,7 @@ public class XSSFRow : Row, Comparable<XSSFRow> {
      * @param sheet the parent sheet.
      */
     @SuppressWarnings("deprecation") //YK: GetXYZArray() array accessors are deprecated in xmlbeans with JDK 1.5 support
-    protected XSSFRow(CTRow row, XSSFSheet sheet) {
+    protected XSSFRow(CT_Row row, XSSFSheet sheet) {
         _row = row;
         _sheet = sheet;
         _cells = new TreeDictionary<int, XSSFCell>();
@@ -425,12 +425,12 @@ public class XSSFRow : Row, Comparable<XSSFRow> {
     }
 
     /**
-     * Returns the underlying CTRow xml bean Containing all cell defInitions in this row
+     * Returns the underlying CT_Row xml bean Containing all cell defInitions in this row
      *
-     * @return the underlying CTRow xml bean
+     * @return the underlying CT_Row xml bean
      */
     
-    public CTRow GetCTRow(){
+    public CT_Row GetCT_Row(){
     	return _row;
     }
 
@@ -440,7 +440,7 @@ public class XSSFRow : Row, Comparable<XSSFRow> {
      * @see NPOI.XSSF.usermodel.XSSFSheet#Write(java.io.OutputStream) ()
      */
     protected void onDocumentWrite(){
-        // check if cells in the CTRow are ordered
+        // check if cells in the CT_Row are ordered
         bool IsOrdered = true;
         if(_row.sizeOfCArray() != _cells.Count) isOrdered = false;
         else {

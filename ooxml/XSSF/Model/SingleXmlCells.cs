@@ -15,93 +15,98 @@
    limitations under the License.
 ==================================================================== */
 
-namespace NPOI.XSSF.model;
-
-using java.io.IOException;
-using java.io.Stream;
-using java.io.Stream;
-using java.util.List;
-using java.util.Vector;
-
-using org.apache.poi.POIXMLDocumentPart;
-using org.apache.poi.Openxml4j.opc.PackagePart;
-using org.apache.poi.Openxml4j.opc.PackageRelationship;
-using NPOI.XSSF.usermodel.XSSFSheet;
-using NPOI.XSSF.usermodel.helpers.XSSFSingleXmlCell;
-using org.apache.xmlbeans.XmlException;
-using org.Openxmlformats.schemas.spreadsheetml.x2006.main.CTSingleXmlCell;
-using org.Openxmlformats.schemas.spreadsheetml.x2006.main.CTSingleXmlCells;
-using org.Openxmlformats.schemas.spreadsheetml.x2006.main.SingleXmlCellsDocument;
+using System.Xml;
+using System.IO;
+using NPOI.OpenXml4Net.OPC;
+using NPOI.XSSF.UserModel.Helpers;
+using NPOI.OpenXmlFormats.Spreadsheet;
+using System.Collections.Generic;
+namespace NPOI.XSSF.Model
+{
 
 
-/**
- * 
- * This class : the Single Cell Tables Part (Open Office XML Part 4:
- * chapter 3.5.2)
- * 
- *
- * @author Roberto Manicardi
- */
-public class SingleXmlCells : POIXMLDocumentPart {
-	
-	
-	private CTSingleXmlCells SingleXMLCells;
+    /**
+     * 
+     * This class : the Single Cell Tables Part (Open Office XML Part 4:
+     * chapter 3.5.2)
+     * 
+     *
+     * @author Roberto Manicardi
+     */
+    public class SingleXmlCells : POIXMLDocumentPart
+    {
 
-	public SingleXmlCells() {
-		base();
-		SingleXMLCells = CTSingleXmlCells.Factory.newInstance();
 
-	}
+        private CT_SingleXmlCells SingleXMLCells;
 
-	public SingleXmlCells(PackagePart part, PackageRelationship rel)
-		  {
-		base(part, rel);
-		ReadFrom(part.GetStream());
-	}
+        public SingleXmlCells()
+            : base()
+        {
 
-	public void ReadFrom(Stream is)  {
-		try {
-			SingleXmlCellsDocument doc = SingleXmlCellsDocument.Factory.Parse(is);
-			SingleXMLCells = doc.GetSingleXmlCells();
-		} catch (XmlException e) {
-			throw new IOException(e.GetLocalizedMessage());
-		}
-	}
-	
-	public XSSFSheet GetXSSFSheet(){
-		return (XSSFSheet) GetParent();
-	}
+            SingleXMLCells = new CT_SingleXmlCells();
+        }
 
-	protected void WriteTo(Stream out)  {
-		SingleXmlCellsDocument doc = SingleXmlCellsDocument.Factory.newInstance();
-		doc.SetSingleXmlCells(SingleXMLCells);
-		doc.save(out, DEFAULT_XML_OPTIONS);
-	}
+        public SingleXmlCells(PackagePart part, PackageRelationship rel)
+            : base(part, rel)
+        {
 
-	
-	protected void Commit()  {
-		PackagePart part = GetPackagePart();
-		Stream out = part.GetStream();
-		WriteTo(out);
-		out.Close();
-	}
-	
-	public CTSingleXmlCells GetCTSingleXMLCells(){
-		return SingleXMLCells;
-	}
-	
-	/**
-	 * 
-	 * @return all the SimpleXmlCell Contained in this SingleXmlCells element
-	 */
-	public List<XSSFSingleXmlCell> GetAllSimpleXmlCell(){
-		List<XSSFSingleXmlCell> list = new Vector<XSSFSingleXmlCell>();
-		
-		for(CTSingleXmlCell SingleXmlCell: SingleXMLCells.GetSingleXmlCellList()){			
-			list.Add(new XSSFSingleXmlCell(SingleXmlCell,this));
-		}		
-		return list;
-	}
+            ReadFrom(part.GetInputStream());
+        }
+
+        public void ReadFrom(Stream is1)
+        {
+            try
+            {
+                SingleXmlCellsDocument doc = SingleXmlCellsDocument.Factory.Parse(is1);
+                SingleXMLCells = doc.GetSingleXmlCells();
+            }
+            catch (XmlException e)
+            {
+                throw new IOException(e.Message);
+            }
+        }
+
+        public XSSFSheet GetXSSFSheet()
+        {
+            return (XSSFSheet)GetParent();
+        }
+
+        protected void WriteTo(Stream out1)
+        {
+            SingleXmlCellsDocument doc = SingleXmlCellsDocument.Factory.newInstance();
+            doc.SetSingleXmlCells(SingleXMLCells);
+            doc.save(out1);
+        }
+
+
+        protected void Commit()
+        {
+            PackagePart part = GetPackagePart();
+            Stream out1 = part.GetOutputStream();
+            WriteTo(out1);
+            out1.Close();
+        }
+
+        public CT_SingleXmlCells GetCTSingleXMLCells()
+        {
+            return SingleXMLCells;
+        }
+
+        /**
+         * 
+         * @return all the SimpleXmlCell Contained in this SingleXmlCells element
+         */
+        public List<XSSFSingleXmlCell> GetAllSimpleXmlCell()
+        {
+            List<XSSFSingleXmlCell> list = new List<XSSFSingleXmlCell>();
+
+            foreach (CT_SingleXmlCell SingleXmlCell in SingleXMLCells.singleXmlCell)
+            {
+                list.Add(new XSSFSingleXmlCell(SingleXmlCell, this));
+            }
+            return list;
+        }
+    }
 }
 
 

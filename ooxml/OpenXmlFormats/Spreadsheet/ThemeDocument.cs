@@ -30,5 +30,10 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             return stylesheet;
         }
+
+        public void Save(Stream stream)
+        {
+            serializer.Serialize(stream, stylesheet);
+        }
     }
 }

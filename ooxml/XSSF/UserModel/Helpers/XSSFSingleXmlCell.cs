@@ -15,79 +15,84 @@
    limitations under the License.
 ==================================================================== */
 
-namespace NPOI.XSSF.usermodel.helpers;
+using NPOI.OpenXmlFormats.Spreadsheet;
+using System;
+using NPOI.SS.Util;
+using NPOI.XSSF.Model;
+namespace NPOI.XSSF.UserModel.Helpers
+{
 
-using NPOI.SS.util.CellReference;
-using NPOI.XSSF.model.SingleXmlCells;
-using NPOI.XSSF.usermodel.XSSFCell;
-using NPOI.XSSF.usermodel.XSSFRow;
-using org.Openxmlformats.schemas.spreadsheetml.x2006.main.CTSingleXmlCell;
-using org.Openxmlformats.schemas.spreadsheetml.x2006.main.CTXmlCellPr;
-using org.Openxmlformats.schemas.spreadsheetml.x2006.main.CTXmlPr;
-using org.Openxmlformats.schemas.spreadsheetml.x2006.main.STXmlDataType.Enum;
+    /**
+     * 
+     * This class is a wrapper around the CTSingleXmlCell  (Open Office XML Part 4:
+     * chapter 3.5.2.1) 
+     * 
 
-/**
- * 
- * This class is a wrapper around the CTSingleXmlCell  (Open Office XML Part 4:
- * chapter 3.5.2.1) 
- * 
+     * 
+     * @author Roberto Manicardi
+     *
+     */
+    public class XSSFSingleXmlCell
+    {
 
- * 
- * @author Roberto Manicardi
- *
- */
-public class XSSFSingleXmlCell {
-	
-	private CTSingleXmlCell SingleXmlCell;
-	private SingleXmlCells parent;
-	
-	
-	public XSSFSingleXmlCell(CTSingleXmlCell SingleXmlCell, SingleXmlCells parent){
-		this.SingleXmlCell = SingleXmlCell;
-		this.parent = parent;
-	}
-	
-	/**
-	 * Gets the XSSFCell referenced by the R attribute or Creates a new one if cell doesn't exists
-	 * @return the referenced XSSFCell, null if the cell reference is invalid
-	 */
-	public XSSFCell GetReferencedCell(){
-		XSSFCell cell = null;
-		
-		
-		CellReference cellReference =  new CellReference(SingleXmlCell.GetR()); 
-		
-		XSSFRow row = parent.GetXSSFSheet().GetRow(cellReference.getRow());
-		if(row==null){
-			row = parent.GetXSSFSheet().CreateRow(cellReference.getRow());
-		}
-		
-		cell = row.GetCell(cellReference.GetCol());  
-		if(cell==null){
-			cell = row.CreateCell(cellReference.GetCol());
-		}
-		
-		
-		return cell;
-	}
-	
-	public String GetXpath(){
-		CTXmlCellPr xmlCellPr = SingleXmlCell.GetXmlCellPr();
-		CTXmlPr xmlPr = xmlCellPr.GetXmlPr();
-		String xpath = xmlPr.GetXpath();
-		return xpath;
-	}
-	
-	public long GetMapId(){
-		return SingleXmlCell.GetXmlCellPr().getXmlPr().getMapId();
-	}
+        private CT_SingleXmlCell SingleXmlCell;
+        private SingleXmlCells parent;
 
-	public Enum GetXmlDataType() {
-		CTXmlCellPr xmlCellPr = SingleXmlCell.GetXmlCellPr();
-		CTXmlPr xmlPr = xmlCellPr.GetXmlPr();
-		return xmlPr.GetXmlDataType();
-	}
+
+        public XSSFSingleXmlCell(CT_SingleXmlCell SingleXmlCell, SingleXmlCells parent)
+        {
+            this.SingleXmlCell = SingleXmlCell;
+            this.parent = parent;
+        }
+
+        /**
+         * Gets the XSSFCell referenced by the R attribute or Creates a new one if cell doesn't exists
+         * @return the referenced XSSFCell, null if the cell reference is invalid
+         */
+        public XSSFCell GetReferencedCell()
+        {
+            XSSFCell cell = null;
+
+
+            CellReference cellReference = new CellReference(SingleXmlCell.r);
+
+            XSSFRow row = parent.GetXSSFSheet().GetRow(cellReference.Row);
+            if (row == null)
+            {
+                row = parent.GetXSSFSheet().CreateRow(cellReference.Row);
+            }
+
+            cell = row.GetCell(cellReference.Col);
+            if (cell == null)
+            {
+                cell = row.CreateCell(cellReference.Col);
+            }
+
+
+            return cell;
+        }
+
+        public String GetXpath()
+        {
+            CT_XmlCellPr xmlCellPr = SingleXmlCell.xmlCellPr;
+            CT_XmlPr xmlPr = xmlCellPr.xmlPr;
+            String xpath = xmlPr.xpath;
+            return xpath;
+        }
+
+        public long GetMapId()
+        {
+            return SingleXmlCell.xmlCellPr.xmlPr.mapId;
+        }
+
+        public Enum GetXmlDataType()
+        {
+            CT_XmlCellPr xmlCellPr = SingleXmlCell.xmlCellPr;
+            CT_XmlPr xmlPr = xmlCellPr.xmlPr;
+            return xmlPr.xmlDataType;
+        }
+
+    }
+
 
 }
-
-

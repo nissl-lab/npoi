@@ -72,6 +72,7 @@
     <Compile Include="Spreadsheet\SstDocument.cs" />
     <Compile Include="Spreadsheet\SupplementaryWorkbooks.cs" />
     <Compile Include="Spreadsheet\Styles.cs" />
+    <Compile Include="Spreadsheet\TableDocument.cs" />
     <Compile Include="Spreadsheet\ThemeDocument.cs" />
     <Compile Include="Spreadsheet\Workbook.cs" />
   </ItemGroup>

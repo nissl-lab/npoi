@@ -24,165 +24,173 @@ using System.IO;
 using NPOI.OpenXmlFormats.Spreadsheet;
 using NPOI.Util;
 using System.Collections;
-namespace NPOI.XSSF.usermodel;
+using NPOI.XSSF.UserModel.Helpers;
+namespace NPOI.XSSF.UserModel
+{
 
-using java.io.IOException;
-using java.io.InputStream;
-using java.io.OutputStream;
-using java.util.Arrays;
-using java.util.List;
-using java.util.Vector;
+    /**
+     * 
+     * This class : the Table Part (Open Office XML Part 4:
+     * chapter 3.5.1)
+     * 
+     * This implementation works under the assumption that a table Contains mappings to a subtree of an XML.
+     * The root element of this subtree an occur multiple times (one for each row of the table). The child nodes
+     * of the root element can be only attributes or element with maxOccurs=1 property set
+     * 
+     *
+     * @author Roberto Manicardi
+     */
+    public class XSSFTable : POIXMLDocumentPart
+    {
 
-using org.apache.poi.POIXMLDocumentPart;
-using org.apache.poi.Openxml4j.opc.PackagePart;
-using org.apache.poi.Openxml4j.opc.PackageRelationship;
-using NPOI.SS.util.CellReference;
-using NPOI.XSSF.usermodel.helpers.XSSFXmlColumnPr;
-using org.apache.xmlbeans.XmlException;
-using org.Openxmlformats.schemas.spreadsheetml.x2006.main.CTTable;
-using org.Openxmlformats.schemas.spreadsheetml.x2006.main.CT_TableColumn;
-using org.Openxmlformats.schemas.spreadsheetml.x2006.main.TableDocument;
+        private CT_Table ctTable;
+        private List<XSSFXmlColumnPr> xmlColumnPr;
+        private CellReference startCellReference;
+        private CellReference endCellReference;
+        private String commonXPath;
 
-/**
- * 
- * This class : the Table Part (Open Office XML Part 4:
- * chapter 3.5.1)
- * 
- * This implementation works under the assumption that a table Contains mappings to a subtree of an XML.
- * The root element of this subtree an occur multiple times (one for each row of the table). The child nodes
- * of the root element can be only attributes or element with maxOccurs=1 property set
- * 
- *
- * @author Roberto Manicardi
- */
-public class XSSFTable : POIXMLDocumentPart {
-	
-	private CT_Table ctTable;
-	private List<XSSFXmlColumnPr> xmlColumnPr;
-	private CellReference startCellReference;
-	private CellReference endCellReference;	
-	private String commonXPath; 
-	
-	
-	public XSSFTable():base() {
-		
-		ctTable = new CT_Table();
 
-	}
-
-	public XSSFTable(PackagePart part, PackageRelationship rel):base(part, rel)
-		  {
-		
-		ReadFrom(part.GetInputStream());
-	}
-
-	public void ReadFrom(Stream is1)  {
-		try {
-			TableDocument doc = TableDocument.Factory.Parse(is1);
-			ctTable = doc.GetTable();
-		} catch (XmlException e) {
-			throw new IOException(e.Message);
-		}
-	}
-	
-	public XSSFSheet GetXSSFSheet(){
-		return (XSSFSheet) GetParent();
-	}
-
-	public void WriteTo(Stream out1)  {
-		TableDocument doc = TableDocument.Factory.newInstance();
-		doc.SetTable(ctTable);
-		doc.Save(out1);
-	}
-
-	
-	protected void Commit()  {
-		PackagePart part = GetPackagePart();
-		Stream out1 = part.GetOutputStream();
-		WriteTo(out1);
-		out1.Close();
-	}
-	
-	public CTTable GetCTTable(){
-		return ctTable;
-	}
-	
-	/**
-	 * Checks if this Table element Contains even a single mapping to the map identified by id
-	 * @param id the XSSFMap ID
-	 * @return true if the Table element contain mappings
-	 */
-	public bool MapsTo(long id){
-		bool maps =false;
-		
-		List<XSSFXmlColumnPr> pointers = GetXmlColumnPrs();
-		
-		foreach(XSSFXmlColumnPr pointer in pointers){
-			if(pointer.GetMapId()==id){
-				maps=true;
-				break;
-			}
-		}
-		
-		return maps;
-	}
-
-	
-	/**
-	 * 
-	 * Calculates the xpath of the root element for the table. This will be the common part
-	 * of all the mapping's xpaths
-	 * 
-	 * @return the xpath of the table's root element
-	 */
-	public String GetCommonXpath() {
-		
-		if(commonXPath == null){
-		
-		Array commonTokens;
-		
-		foreach(CT_TableColumn column in ctTable.tableColumns.tableColumn)
+        public XSSFTable()
+            : base()
         {
-			if(column.xmlColumnPr!=null){
-				String xpath = column.xmlColumnPr.getXpath();
-				String[] tokens =  xpath.Split(new char[]{'/'});
-				if(commonTokens.Length==0){
-					commonTokens = tokens;
-					
-				}else{
-					int maxLenght = commonTokens.Length>tokens.Length? tokens.Length:commonTokens.Length;
-					for(int i =0; i<maxLenght;i++){
-						if(!commonTokens.GetValue(i).Equals(tokens[i])){
-						 ArrayList subCommonTokens = Arrays.AsList(commonTokens).GetRange(0, i);
-						 commonTokens = subCommonTokens.ToArray(typeof(string));
-						 break;
-						 
-						 
-						}
-					}
-				}
-				
-			}
-		}
-		
-		
-		commonXPath ="";
-		
-		for(int i = 1 ; i< commonTokens.Length;i++){
-			commonXPath +="/"+commonTokens.GetValue(i);
-		
-		}
-		}
-		
-		return commonXPath;
-	}
 
-	
-	public List<XSSFXmlColumnPr> GetXmlColumnPrs() {
+            ctTable = new CT_Table();
+
+        }
+
+        public XSSFTable(PackagePart part, PackageRelationship rel)
+            : base(part, rel)
+        {
+
+            ReadFrom(part.GetInputStream());
+        }
+
+        public void ReadFrom(Stream is1)
+        {
+            try
+            {
+                TableDocument doc = TableDocument.Parse(is1);
+                ctTable = doc.GetTable();
+            }
+            catch (XmlException e)
+            {
+                throw new IOException(e.Message);
+            }
+        }
+
+        public XSSFSheet GetXSSFSheet()
+        {
+            return (XSSFSheet)GetParent();
+        }
+
+        public void WriteTo(Stream out1)
+        {
+            TableDocument doc = new TableDocument();
+            doc.SetTable(ctTable);
+            doc.Save(out1);
+        }
+
+
+        protected void Commit()
+        {
+            PackagePart part = GetPackagePart();
+            Stream out1 = part.GetOutputStream();
+            WriteTo(out1);
+            out1.Close();
+        }
+
+        public CT_Table GetCTTable()
+        {
+            return ctTable;
+        }
+
+        /**
+         * Checks if this Table element Contains even a single mapping to the map identified by id
+         * @param id the XSSFMap ID
+         * @return true if the Table element contain mappings
+         */
+        public bool MapsTo(long id)
+        {
+            bool maps = false;
+
+            List<XSSFXmlColumnPr> pointers = GetXmlColumnPrs();
+
+            foreach (XSSFXmlColumnPr pointer in pointers)
+            {
+                if (pointer.GetMapId() == id)
+                {
+                    maps = true;
+                    break;
+                }
+            }
+
+            return maps;
+        }
+
+
+        /**
+         * 
+         * Calculates the xpath of the root element for the table. This will be the common part
+         * of all the mapping's xpaths
+         * 
+         * @return the xpath of the table's root element
+         */
+        public String GetCommonXpath()
+        {
+
+            if (commonXPath == null)
+            {
+
+                Array commonTokens={};
+
+                foreach (CT_TableColumn column in ctTable.tableColumns.tableColumn)
+                {
+                    if (column.xmlColumnPr != null)
+                    {
+                        String xpath = column.xmlColumnPr.xpath;
+                        String[] tokens = xpath.Split(new char[] { '/' });
+                        if (commonTokens.Length == 0)
+                        {
+                            commonTokens = tokens;
+                        }
+                        else
+                        {
+                            int maxLenght = commonTokens.Length > tokens.Length ? tokens.Length : commonTokens.Length;
+                            for (int i = 0; i < maxLenght; i++)
+                            {
+                                if (!commonTokens.GetValue(i).Equals(tokens[i]))
+                                {
+                                    ArrayList subCommonTokens = Arrays.AsList(commonTokens).GetRange(0, i);
+                                    commonTokens = subCommonTokens.ToArray(typeof(string));
+                                    break;
+
+
+                                }
+                            }
+                        }
+
+                    }
+                }
+
+
+                commonXPath = "";
+
+                for (int i = 1; i < commonTokens.Length; i++)
+                {
+                    commonXPath += "/" + commonTokens.GetValue(i);
+
+                }
+            }
+
+            return commonXPath;
+        }
+
+
+        public List<XSSFXmlColumnPr> GetXmlColumnPrs() {
 		
 		if(xmlColumnPr==null){
 			xmlColumnPr = new Vector<XSSFXmlColumnPr>();
-			for(CT_TableColumn column:ctTable.GetTableColumns().getTableColumnList()){
+			foreach(CT_TableColumn column in ctTable.tableColumns.tableColumn){
 				if(column.XmlColumnPr!=null){
 					XSSFXmlColumnPr columnPr = new XSSFXmlColumnPr(this,column,column.XmlColumnPr);
 					xmlColumnPr.Add(columnPr);
@@ -191,92 +199,103 @@ public class XSSFTable : POIXMLDocumentPart {
 		}
 		return xmlColumnPr;
 	}
-	
-	/**
-	 * @return the name of the Table, if set
-	 */
-	public String GetName() {
-	   return ctTable.name;
-	}
-	
-	/**
-	 * Changes the name of the Table
-	 */
-	public void SetName(String name) {
-	   ctTable.name = name;
-	}
 
-   /**
-    * @return the display name of the Table, if set
-    */
-   public String GetDisplayName() {
-      return ctTable.displayName;
-   }
+        /**
+         * @return the name of the Table, if set
+         */
+        public String GetName()
+        {
+            return ctTable.name;
+        }
 
-   /**
-    * Changes the display name of the Table
-    */
-   public void SetDisplayName(String name) {
-      ctTable.displayName = (name);
-   }
+        /**
+         * Changes the name of the Table
+         */
+        public void SetName(String name)
+        {
+            ctTable.name = name;
+        }
 
-	/**
-	 * @return  the number of mapped table columns (see Open Office XML Part 4: chapter 3.5.1.4)
-	 */
-	public long GetNumerOfMappedColumns(){
-		return ctTable.tableColumns.count;
-	}
-	
-	
-	/**
-	 * @return The reference for the cell in the top-left part of the table
-	 * (see Open Office XML Part 4: chapter 3.5.1.2, attribute ref) 
-	 *
-	 */
-	public CellReference GetStartCellReference() {
-		
-		if(startCellReference==null){			
-				String ref1 = ctTable.@ref;
-				String[] boundaries = ref1.Split(new char[]{':'});
-				String from = boundaries[0];
-				startCellReference = new CellReference(from);
-		}
-		return startCellReference;
-	}
-	
-	/**
-	 * @return The reference for the cell in the bottom-right part of the table
-	 * (see Open Office XML Part 4: chapter 3.5.1.2, attribute ref)
-	 *
-	 */
-	public CellReference GetEndCellReference() {
-		
-		if(endCellReference==null){
-			
-				String ref1 = ctTable.@ref;
-				String[] boundaries = ref1.Split(new char[]{':'});
-				String from = boundaries[1];
-				endCellReference = new CellReference(from);
-		}
-		return endCellReference;
-	}
-	
-	
-	/**
-	 *  @return the total number of rows in the selection. (Note: in this version autofiltering is ignored)
-	 *
-	 */
-	public int GetRowCount(){
-		
-		
-		CellReference from = GetStartCellReference();
-		CellReference to = GetEndCellReference();
-		
-		int rowCount = -1;
-		if (from!=null && to!=null){
-		 rowCount = to.Row-from.Row;
-		}
-		return rowCount;
-	}
-}
+        /**
+         * @return the display name of the Table, if set
+         */
+        public String GetDisplayName()
+        {
+            return ctTable.displayName;
+        }
+
+        /**
+         * Changes the display name of the Table
+         */
+        public void SetDisplayName(String name)
+        {
+            ctTable.displayName = (name);
+        }
+
+        /**
+         * @return  the number of mapped table columns (see Open Office XML Part 4: chapter 3.5.1.4)
+         */
+        public long GetNumerOfMappedColumns()
+        {
+            return ctTable.tableColumns.count;
+        }
+
+
+        /**
+         * @return The reference for the cell in the top-left part of the table
+         * (see Open Office XML Part 4: chapter 3.5.1.2, attribute ref) 
+         *
+         */
+        public CellReference GetStartCellReference()
+        {
+
+            if (startCellReference == null)
+            {
+                String ref1 = ctTable.@ref;
+                String[] boundaries = ref1.Split(new char[] { ':' });
+                String from = boundaries[0];
+                startCellReference = new CellReference(from);
+            }
+            return startCellReference;
+        }
+
+        /**
+         * @return The reference for the cell in the bottom-right part of the table
+         * (see Open Office XML Part 4: chapter 3.5.1.2, attribute ref)
+         *
+         */
+        public CellReference GetEndCellReference()
+        {
+
+            if (endCellReference == null)
+            {
+
+                String ref1 = ctTable.@ref;
+                String[] boundaries = ref1.Split(new char[] { ':' });
+                String from = boundaries[1];
+                endCellReference = new CellReference(from);
+            }
+            return endCellReference;
+        }
+
+
+        /**
+         *  @return the total number of rows in the selection. (Note: in this version autofiltering is ignored)
+         *
+         */
+        public int GetRowCount()
+        {
+
+
+            CellReference from = GetStartCellReference();
+            CellReference to = GetEndCellReference();
+
+            int rowCount = -1;
+            if (from != null && to != null)
+            {
+                rowCount = to.Row - from.Row;
+            }
+            return rowCount;
+        }
+    }
 }

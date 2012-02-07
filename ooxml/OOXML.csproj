@@ -71,6 +71,7 @@
     </Compile>
     <Compile Include="XSSF\Model\IndexedUDFFinder.cs" />
     <Compile Include="XSSF\Model\SharedStringsTable.cs" />
+    <Compile Include="XSSF\Model\SingleXmlCells.cs" />
     <Compile Include="XSSF\Model\ThemesTable.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -79,12 +80,18 @@
     <Compile Include="XSSF\UserModel\Extensions\XSSFCellFill.cs" />
     <Compile Include="XSSF\UserModel\Extensions\XSSFHeaderFooter.cs" />
     <Compile Include="XSSF\UserModel\Helpers\HeaderFooterHelper.cs" />
+    <Compile Include="XSSF\UserModel\Helpers\XSSFSingleXmlCell.cs" />
+    <Compile Include="XSSF\UserModel\Helpers\XSSFXmlColumnPr.cs" />
     <Compile Include="XSSF\UserModel\XSSFAnchor.cs" />
     <Compile Include="XSSF\UserModel\XSSFColor.cs" />
     <Compile Include="XSSF\UserModel\XSSFEvenFooter.cs" />
     <Compile Include="XSSF\UserModel\XSSFEvenHeader.cs" />
+    <Compile Include="XSSF\UserModel\XSSFName.cs" />
     <Compile Include="XSSF\UserModel\XSSFOddFooter.cs" />
     <Compile Include="XSSF\UserModel\XSSFOddHeader.cs" />
+    <Compile Include="XSSF\UserModel\XSSFTable.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="XSSF\Util\CTColComparator.cs">
       <SubType>Code</SubType>
     </Compile>

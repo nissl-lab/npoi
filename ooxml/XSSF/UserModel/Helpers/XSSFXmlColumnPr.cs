@@ -15,74 +15,80 @@
    limitations under the License.
 ==================================================================== */
 
-namespace NPOI.XSSF.usermodel.helpers;
+using NPOI.XSSF.UserModel;
+using NPOI.OpenXmlFormats.Spreadsheet;
+using System;
+namespace NPOI.XSSF.UserModel.Helpers
+{
 
-using NPOI.XSSF.usermodel.XSSFTable;
-using org.Openxmlformats.schemas.spreadsheetml.x2006.main.CTTableColumn;
-using org.Openxmlformats.schemas.spreadsheetml.x2006.main.CTXmlColumnPr;
-using org.Openxmlformats.schemas.spreadsheetml.x2006.main.STXmlDataType.Enum;
+
+    /**
+     * 
+     * This class is a wrapper around the CT_XmlColumnPr (Open Office XML Part 4:
+     * chapter 3.5.1.7)
+     * 
+     *
+     * @author Roberto Manicardi
+     */
+    public class XSSFXmlColumnPr
+    {
+
+        private XSSFTable table;
+        private CT_TableColumn ctTableColumn;
+        private CT_XmlColumnPr ctXmlColumnPr;
+
+        public XSSFXmlColumnPr(XSSFTable table, CT_TableColumn ctTableColum, CT_XmlColumnPr CT_XmlColumnPr)
+        {
+            this.table = table;
+            this.ctTableColumn = ctTableColum;
+            this.ctXmlColumnPr = CT_XmlColumnPr;
+        }
+
+        public long GetMapId()
+        {
+            return ctXmlColumnPr.mapId;
+        }
+
+        public String GetXPath()
+        {
+            return ctXmlColumnPr.xpath;
+            
+        }
+        /**
+         * (see Open Office XML Part 4: chapter 3.5.1.3)
+         * @return An integer representing the unique identifier of this column. 
+         */
+        public long GetId()
+        {
+            return ctTableColumn.id;
+        }
 
 
-/**
- * 
- * This class is a wrapper around the CTXmlColumnPr (Open Office XML Part 4:
- * chapter 3.5.1.7)
- * 
- *
- * @author Roberto Manicardi
- */
-public class XSSFXmlColumnPr {
-	
-	private XSSFTable table;
-	private CTTableColumn ctTableColumn;
-	private CTXmlColumnPr ctXmlColumnPr;
-	
-	public XSSFXmlColumnPr(XSSFTable table ,CTTableColumn ctTableColum,CTXmlColumnPr ctXmlColumnPr){
-		this.table = table;
-		this.ctTableColumn = ctTableColum;
-		this.ctXmlColumnPr = ctXmlColumnPr;
-	}
-	
-	public long GetMapId(){
-		return ctXmlColumnPr.GetMapId();
-	}
-	
-	public String GetXPath(){
-		return ctXmlColumnPr.GetXpath();
-	}
-	/**
-	 * (see Open Office XML Part 4: chapter 3.5.1.3)
-	 * @return An integer representing the unique identifier of this column. 
-	 */
-	public long GetId(){
-		return ctTableColumn.GetId();
-	}
-	
-	
-	/**
-	 * If the XPath is, for example, /Node1/Node2/Node3 and /Node1/Node2 is the common XPath for the table, the local XPath is /Node3
-	 * 	
-	 * @return the local XPath 
-	 */
-	public String GetLocalXPath(){
-		String localXPath = "";
-		int numberOfCommonXPathAxis = table.GetCommonXpath().split("/").Length-1;
-		
-		String[] xPathTokens = ctXmlColumnPr.GetXpath().split("/");
-		for(int i=numberOfCommonXPathAxis; i<xPathTokens.Length;i++){
-			localXPath += "/" +xPathTokens[i];
-		}
-		return localXPath;
-	}
+        /**
+         * If the XPath is, for example, /Node1/Node2/Node3 and /Node1/Node2 is the common XPath for the table, the local XPath is /Node3
+         * 	
+         * @return the local XPath 
+         */
+        public String GetLocalXPath()
+        {
+            throw new NotImplementedException();
+            String localXPath = "";
+            int numberOfCommonXPathAxis = table.GetCommonXpath().Split(new char[] { '/' }).Length - 1;
 
-	public Enum GetXmlDataType() {
-		
-		return ctXmlColumnPr.GetXmlDataType();
-	}
-	
-	
-	
-	
+            String[] xPathTokens = ctXmlColumnPr.xpath.Split(new char[] { '/' });
+            for (int i = numberOfCommonXPathAxis; i < xPathTokens.Length; i++)
+            {
+                localXPath += "/" + xPathTokens[i];
+            }
+            return localXPath;
+        }
+
+        public ST_XmlDataType GetXmlDataType()
+        {
+
+            return ctXmlColumnPr.xmlDataType;
+        }
+    }
 
 }
 
