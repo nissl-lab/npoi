@@ -22,7 +22,7 @@ namespace NPOI
     using NPOI.OpenXml4Net.OPC.Internal;
     using System;
     using System.Collections.Generic;
-    using OpenXmlFormats;
+    using NPOI.OpenXmlFormats;
 
     /**
      * A {@link POITextExtractor} for returning the textual

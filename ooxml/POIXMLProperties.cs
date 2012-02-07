@@ -22,7 +22,7 @@ namespace NPOI
     using NPOI.OpenXml4Net.OPC;
     using NPOI.OpenXml4Net.OPC.Internal;
     using NPOI.OpenXml4Net.Exceptions;
-    using OpenXmlFormats;
+    using NPOI.OpenXmlFormats;
 
 
     /**

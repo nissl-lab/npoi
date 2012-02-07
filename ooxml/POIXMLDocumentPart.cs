@@ -301,7 +301,7 @@ public class POIXMLDocumentPart {
      *  </code></pre>
      *
      */
-    protected void commit()  {
+    protected virtual void Commit()  {
 
     }
 
@@ -312,7 +312,7 @@ public class POIXMLDocumentPart {
      * @param alreadySaved    context set Containing already visited nodes
      */
     protected void OnSave(List<PackagePart> alreadySaved) {
-        commit();
+        Commit();
         alreadySaved.Add(this.GetPackagePart());
         foreach(POIXMLDocumentPart p in relations.Values){
             if (!alreadySaved.Contains(p.GetPackagePart())) {

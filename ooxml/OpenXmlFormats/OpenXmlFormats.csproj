@@ -1,0 +1,88 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="3.5" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{29E4D389-8B1B-45D8-B197-06116395F5ED}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>NPOI.OpenXmlFormats</RootNamespace>
+    <AssemblyName>NPOI.OpenXmlFormats</AssemblyName>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Drawing\BaseTypes.cs" />
+    <Compile Include="Drawing\BaseStylesheet.cs" />
+    <Compile Include="DocumentPropertiesCustom.cs" />
+    <Compile Include="Drawing\Compatibility.cs" />
+    <Compile Include="Drawing\ShapeGeometry.cs" />
+    <Compile Include="Drawing\ShapeStyle.cs" />
+    <Compile Include="Drawing\ShapeProperties.cs" />
+    <Compile Include="Drawing\Text.cs" />
+    <Compile Include="Drawing\ShapeEffects.cs" />
+    <Compile Include="Drawing\StyleSheet.cs" />
+    <Compile Include="OOXMLFactory.cs" />
+    <Compile Include="PropertiesDocument.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="CustomXmlDataProperties.cs" />
+    <Compile Include="DocumentPropertiesExtended.cs" />
+    <Compile Include="DocumentPropertiesVariantTypes.cs" />
+    <Compile Include="CustomXmlSchemaProperties.cs" />
+    <Compile Include="AdditionalCharacteristics.cs" />
+    <Compile Include="Bibliography.cs" />
+    <Compile Include="Spreadsheet\AutoFilter.cs" />
+    <Compile Include="Spreadsheet\BaseTypes.cs" />
+    <Compile Include="Spreadsheet\CalcChainDocument.cs" />
+    <Compile Include="Spreadsheet\Comments.cs" />
+    <Compile Include="Spreadsheet\SharedStringTable.cs" />
+    <Compile Include="Spreadsheet\SharedWorkbookRevisions.cs" />
+    <Compile Include="Spreadsheet\SharedWorkbookUserNames.cs" />
+    <Compile Include="Spreadsheet\Sheet.cs" />
+    <Compile Include="Spreadsheet\SheetMetadata.cs" />
+    <Compile Include="Spreadsheet\SingleCellTable.cs" />
+    <Compile Include="Spreadsheet\CalculationChain.cs" />
+    <Compile Include="Spreadsheet\ExternalConnections.cs" />
+    <Compile Include="Spreadsheet\QueryTable.cs" />
+    <Compile Include="Spreadsheet\SstDocument.cs" />
+    <Compile Include="Spreadsheet\SupplementaryWorkbooks.cs" />
+    <Compile Include="Spreadsheet\Styles.cs" />
+    <Compile Include="Spreadsheet\ThemeDocument.cs" />
+    <Compile Include="Spreadsheet\Workbook.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Word\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
