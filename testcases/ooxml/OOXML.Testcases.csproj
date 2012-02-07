@@ -55,6 +55,7 @@
     <Compile Include="TestPOIXMLDocument.cs" />
     <Compile Include="Util\TestIdentifierManager.cs" />
     <Compile Include="XSSF\Util\TestCTColComparator.cs" />
+    <Compile Include="XSSF\Util\TestEvilUnclosedBRFixingInputStream.cs" />
     <Compile Include="XSSF\Util\TestNumericRanges.cs" />
   </ItemGroup>
   <ItemGroup>

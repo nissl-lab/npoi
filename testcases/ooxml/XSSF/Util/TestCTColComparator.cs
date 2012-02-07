@@ -15,7 +15,7 @@
    limitations under the License.
 ==================================================================== */
 
-using OpenXmlFormats.Spreadsheet;
+using NPOI.OpenXmlFormats.Spreadsheet;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NPOI.Util;
 using System;
