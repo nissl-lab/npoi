@@ -83,7 +83,6 @@
     <Compile Include="XSSF\UserModel\XSSFColor.cs" />
     <Compile Include="XSSF\UserModel\XSSFEvenFooter.cs" />
     <Compile Include="XSSF\UserModel\XSSFEvenHeader.cs" />
-    <Compile Include="XSSF\UserModel\XSSFFont.cs" />
     <Compile Include="XSSF\UserModel\XSSFOddFooter.cs" />
     <Compile Include="XSSF\UserModel\XSSFOddHeader.cs" />
     <Compile Include="XSSF\Util\CTColComparator.cs">

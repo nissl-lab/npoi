@@ -15,6 +15,15 @@
    limitations under the License.
 ==================================================================== */
 
+using System.Xml;
+using System.Collections.Generic;
+using NPOI.SS.Util;
+using System;
+using NPOI.OpenXml4Net.OPC;
+using System.IO;
+using NPOI.OpenXmlFormats.Spreadsheet;
+using NPOI.Util;
+using System.Collections;
 namespace NPOI.XSSF.usermodel;
 
 using java.io.IOException;
@@ -31,7 +40,7 @@ using NPOI.SS.util.CellReference;
 using NPOI.XSSF.usermodel.helpers.XSSFXmlColumnPr;
 using org.apache.xmlbeans.XmlException;
 using org.Openxmlformats.schemas.spreadsheetml.x2006.main.CTTable;
-using org.Openxmlformats.schemas.spreadsheetml.x2006.main.CTTableColumn;
+using org.Openxmlformats.schemas.spreadsheetml.x2006.main.CT_TableColumn;
 using org.Openxmlformats.schemas.spreadsheetml.x2006.main.TableDocument;
 
 /**
@@ -48,31 +57,31 @@ using org.Openxmlformats.schemas.spreadsheetml.x2006.main.TableDocument;
  */
 public class XSSFTable : POIXMLDocumentPart {
 	
-	private CTTable ctTable;
+	private CT_Table ctTable;
 	private List<XSSFXmlColumnPr> xmlColumnPr;
 	private CellReference startCellReference;
 	private CellReference endCellReference;	
 	private String commonXPath; 
 	
 	
-	public XSSFTable() {
-		base();
-		ctTable = CTTable.Factory.newInstance();
+	public XSSFTable():base() {
+		
+		ctTable = new CT_Table();
 
 	}
 
-	public XSSFTable(PackagePart part, PackageRelationship rel)
+	public XSSFTable(PackagePart part, PackageRelationship rel):base(part, rel)
 		  {
-		base(part, rel);
+		
 		ReadFrom(part.GetInputStream());
 	}
 
-	public void ReadFrom(InputStream is)  {
+	public void ReadFrom(Stream is1)  {
 		try {
-			TableDocument doc = TableDocument.Factory.Parse(is);
+			TableDocument doc = TableDocument.Factory.Parse(is1);
 			ctTable = doc.GetTable();
 		} catch (XmlException e) {
-			throw new IOException(e.GetLocalizedMessage());
+			throw new IOException(e.Message);
 		}
 	}
 	
@@ -80,18 +89,18 @@ public class XSSFTable : POIXMLDocumentPart {
 		return (XSSFSheet) GetParent();
 	}
 
-	public void WriteTo(OutputStream out)  {
+	public void WriteTo(Stream out1)  {
 		TableDocument doc = TableDocument.Factory.newInstance();
 		doc.SetTable(ctTable);
-		doc.save(out, DEFAULT_XML_OPTIONS);
+		doc.Save(out1);
 	}
 
 	
 	protected void Commit()  {
 		PackagePart part = GetPackagePart();
-		OutputStream out = part.GetOutputStream();
-		WriteTo(out);
-		out.Close();
+		Stream out1 = part.GetOutputStream();
+		WriteTo(out1);
+		out1.Close();
 	}
 	
 	public CTTable GetCTTable(){
@@ -103,12 +112,12 @@ public class XSSFTable : POIXMLDocumentPart {
 	 * @param id the XSSFMap ID
 	 * @return true if the Table element contain mappings
 	 */
-	public bool mapsTo(long id){
+	public bool MapsTo(long id){
 		bool maps =false;
 		
 		List<XSSFXmlColumnPr> pointers = GetXmlColumnPrs();
 		
-		for(XSSFXmlColumnPr pointer: pointers){
+		foreach(XSSFXmlColumnPr pointer in pointers){
 			if(pointer.GetMapId()==id){
 				maps=true;
 				break;
@@ -130,24 +139,22 @@ public class XSSFTable : POIXMLDocumentPart {
 		
 		if(commonXPath == null){
 		
-		String[] commonTokens ={};
+		Array commonTokens;
 		
-		for(CTTableColumn column :ctTable.GetTableColumns().getTableColumnList()){
-			if(column.GetXmlColumnPr()!=null){
-				String xpath = column.GetXmlColumnPr().getXpath();
-				String[] tokens =  xpath.split("/");
+		foreach(CT_TableColumn column in ctTable.tableColumns.tableColumn)
+        {
+			if(column.xmlColumnPr!=null){
+				String xpath = column.xmlColumnPr.getXpath();
+				String[] tokens =  xpath.Split(new char[]{'/'});
 				if(commonTokens.Length==0){
 					commonTokens = tokens;
 					
 				}else{
 					int maxLenght = commonTokens.Length>tokens.Length? tokens.Length:commonTokens.Length;
 					for(int i =0; i<maxLenght;i++){
-						if(!commonTokens[i].Equals(tokens[i])){
-						 List<String> subCommonTokens = Arrays.asList(commonTokens).GetRange(0, i);
-						 
-						 String[] Container = {};
-						 
-						 commonTokens = subCommonTokens.ToArray(Container);
+						if(!commonTokens.GetValue(i).Equals(tokens[i])){
+						 ArrayList subCommonTokens = Arrays.AsList(commonTokens).GetRange(0, i);
+						 commonTokens = subCommonTokens.ToArray(typeof(string));
 						 break;
 						 
 						 
@@ -162,7 +169,7 @@ public class XSSFTable : POIXMLDocumentPart {
 		commonXPath ="";
 		
 		for(int i = 1 ; i< commonTokens.Length;i++){
-			commonXPath +="/"+commonTokens[i];
+			commonXPath +="/"+commonTokens.GetValue(i);
 		
 		}
 		}
@@ -175,9 +182,9 @@ public class XSSFTable : POIXMLDocumentPart {
 		
 		if(xmlColumnPr==null){
 			xmlColumnPr = new Vector<XSSFXmlColumnPr>();
-			for(CTTableColumn column:ctTable.GetTableColumns().getTableColumnList()){
-				if(column.GetXmlColumnPr()!=null){
-					XSSFXmlColumnPr columnPr = new XSSFXmlColumnPr(this,column,column.GetXmlColumnPr());
+			for(CT_TableColumn column:ctTable.GetTableColumns().getTableColumnList()){
+				if(column.XmlColumnPr!=null){
+					XSSFXmlColumnPr columnPr = new XSSFXmlColumnPr(this,column,column.XmlColumnPr);
 					xmlColumnPr.Add(columnPr);
 				}
 			}
@@ -189,39 +196,35 @@ public class XSSFTable : POIXMLDocumentPart {
 	 * @return the name of the Table, if set
 	 */
 	public String GetName() {
-	   return ctTable.GetName();
+	   return ctTable.name;
 	}
 	
 	/**
 	 * Changes the name of the Table
 	 */
 	public void SetName(String name) {
-	   if(name == null) {
-	      ctTable.unSetName();
-	      return;
-	   }
-	   ctTable.SetName(name);
+	   ctTable.name = name;
 	}
 
    /**
     * @return the display name of the Table, if set
     */
    public String GetDisplayName() {
-      return ctTable.GetDisplayName();
+      return ctTable.displayName;
    }
 
    /**
     * Changes the display name of the Table
     */
    public void SetDisplayName(String name) {
-      ctTable.SetDisplayName(name);
+      ctTable.displayName = (name);
    }
 
 	/**
 	 * @return  the number of mapped table columns (see Open Office XML Part 4: chapter 3.5.1.4)
 	 */
 	public long GetNumerOfMappedColumns(){
-		return ctTable.GetTableColumns().getCount();
+		return ctTable.tableColumns.count;
 	}
 	
 	
@@ -233,8 +236,8 @@ public class XSSFTable : POIXMLDocumentPart {
 	public CellReference GetStartCellReference() {
 		
 		if(startCellReference==null){			
-				String ref = ctTable.GetRef();
-				String[] boundaries = ref.split(":");
+				String ref1 = ctTable.@ref;
+				String[] boundaries = ref1.Split(new char[]{':'});
 				String from = boundaries[0];
 				startCellReference = new CellReference(from);
 		}
@@ -250,8 +253,8 @@ public class XSSFTable : POIXMLDocumentPart {
 		
 		if(endCellReference==null){
 			
-				String ref = ctTable.GetRef();
-				String[] boundaries = ref.split(":");
+				String ref1 = ctTable.@ref;
+				String[] boundaries = ref1.Split(new char[]{':'});
 				String from = boundaries[1];
 				endCellReference = new CellReference(from);
 		}
@@ -271,9 +274,9 @@ public class XSSFTable : POIXMLDocumentPart {
 		
 		int rowCount = -1;
 		if (from!=null && to!=null){
-		 rowCount = to.GetRow()-from.getRow();
+		 rowCount = to.Row-from.Row;
 		}
 		return rowCount;
 	}
 }
-
+}

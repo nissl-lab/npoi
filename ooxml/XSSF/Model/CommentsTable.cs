@@ -54,7 +54,7 @@ namespace NPOI.XSSF.Model
         {
             try
             {
-                CommentsDocument doc = CommentsDocument.Factory.Parse(is1);
+                CommentsDocument doc = CommentsDocument.Parse(is1);
                 comments = doc.GetComments();
             }
             catch (XmlException e)
@@ -64,9 +64,9 @@ namespace NPOI.XSSF.Model
         }
         public void WriteTo(Stream out1)
         {
-            CommentsDocument doc = CommentsDocument.Factory.newInstance();
+            CommentsDocument doc = new CommentsDocument();
             doc.SetComments(comments);
-            doc.save(out1);
+            doc.Save(out1);
         }
 
 
