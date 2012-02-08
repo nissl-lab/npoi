@@ -189,7 +189,7 @@ namespace TestCases.Util
             Assert.AreEqual(16, BitFieldFactory.GetInstance(16).SetByteBoolean((byte)0, true));
             Assert.AreEqual(32, BitFieldFactory.GetInstance(32).SetByteBoolean((byte)0, true));
             Assert.AreEqual(64, BitFieldFactory.GetInstance(64).SetByteBoolean((byte)0, true));
-            Assert.AreEqual(128,BitFieldFactory.GetInstance(128).SetByteBoolean((byte)0, true));
+            Assert.AreEqual(128, BitFieldFactory.GetInstance(128).SetByteBoolean((byte)0, true));
             Assert.AreEqual(0, BitFieldFactory.GetInstance(1).SetByteBoolean((byte)1, false));
             Assert.AreEqual(0, BitFieldFactory.GetInstance(2).SetByteBoolean((byte)2, false));
             Assert.AreEqual(0, BitFieldFactory.GetInstance(4).SetByteBoolean((byte)4, false));
@@ -197,9 +197,9 @@ namespace TestCases.Util
             Assert.AreEqual(0, BitFieldFactory.GetInstance(16).SetByteBoolean((byte)16, false));
             Assert.AreEqual(0, BitFieldFactory.GetInstance(32).SetByteBoolean((byte)32, false));
             Assert.AreEqual(0, BitFieldFactory.GetInstance(64).SetByteBoolean((byte)64, false));
-            Assert.AreEqual(0, BitFieldFactory.GetInstance(127).SetByteBoolean((byte)127,false));
+            Assert.AreEqual(0, BitFieldFactory.GetInstance(127).SetByteBoolean((byte)127, false));
             Assert.AreEqual(254, BitFieldFactory.GetInstance(1).SetByteBoolean((byte)254, false));
-            byte clearedBit = BitFieldFactory.GetInstance(0x40).SetByteBoolean(unchecked((byte)-63),false);
+            byte clearedBit = BitFieldFactory.GetInstance(0x40).SetByteBoolean(unchecked((byte)-63), false);
 
             Assert.AreEqual(false, BitFieldFactory.GetInstance(0x40).IsSet(clearedBit));
         }
@@ -210,7 +210,7 @@ namespace TestCases.Util
         public void TestClear()
         {
             Assert.AreEqual(bf_multi.Clear(-1), unchecked((Int32)0xFFFFC07F));
-            Assert.AreEqual(bf_single.Clear(-1),unchecked((Int32)0xFFFFBFFF));
+            Assert.AreEqual(bf_single.Clear(-1), unchecked((Int32)0xFFFFBFFF));
         }
 
         /// <summary>
@@ -266,6 +266,15 @@ namespace TestCases.Util
             Assert.AreEqual(bf_single.ClearShort((short)-1),
                          bf_single.SetShortBoolean((short)-1, false));
         }
-
+        [TestMethod]
+        public void TestSetLargeValues()
+        {
+            BitField bf1 = new BitField(0xF), bf2 = new BitField(0xF0000000);
+            int a = 0;
+            a = bf1.SetValue(a, 9);
+            a = bf2.SetValue(a, 9);
+            Assert.AreEqual(9, bf1.GetValue(a));
+            Assert.AreEqual(9, bf2.GetValue(a));
+        }
     }
 }

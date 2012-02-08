@@ -40,13 +40,6 @@ namespace TestCases.Util
     [TestClass]
     public class TestShortField
     {
-        public TestShortField()
-        {
-            //
-            // TODO: Add constructor logic here
-            //
-        }
-
         static private short[] _test_array =
         {
             short.MinValue, ( short ) -1, ( short ) 0, ( short ) 1,

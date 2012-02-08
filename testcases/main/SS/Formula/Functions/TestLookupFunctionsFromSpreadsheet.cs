@@ -30,6 +30,7 @@ namespace TestCases.SS.Formula.Functions
     using TestCases.Exceptions;
     using System.IO;
     using TestCases.HSSF;
+    using NPOI.Util;
 
     /**
      * Tests lookup functions (VLOOKUP, HLOOKUP, LOOKUP, MATCH) as loaded from a Test data spreadsheet.<p/>

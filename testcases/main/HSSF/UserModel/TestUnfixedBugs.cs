@@ -24,6 +24,7 @@ namespace TestCases.HSSF.UserModel
     using TestCases.HSSF;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using NPOI.HSSF.Record;
+    using NPOI.Util;
 
     /**
      * @author aviks

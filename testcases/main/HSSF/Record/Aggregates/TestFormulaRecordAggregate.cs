@@ -27,6 +27,7 @@ namespace TestCases.HSSF.Record.Aggregates
     using NPOI.HSSF.Record;
     using NPOI.HSSF.Record.Aggregates;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NPOI.Util;
 
     /**
      *

@@ -23,6 +23,7 @@ namespace TestCases.SS.Formula.Function
     using TestCases.HSSF;
     using NPOI.SS.UserModel;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NPOI.Util;
 
     /**
      * Tests Reading from a sample spreadsheet some built-in functions that were not properly

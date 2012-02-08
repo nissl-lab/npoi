@@ -30,6 +30,7 @@ namespace TestCases.HSSF.UserModel
     using TestCases.HSSF.UserModel;
     using TestCases.SS.UserModel;
     using NPOI.HSSF.UserModel;
+    using NPOI.Util;
 
     /**
      * Class for Testing Excel's data validation mechanism

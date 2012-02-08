@@ -178,7 +178,6 @@
     <Compile Include="POIFS\FileSystem\TestOffice2007XMLException.cs" />
     <Compile Include="POIFS\FileSystem\TestPOIFSFileSystem.cs" />
     <Compile Include="POIFS\FileSystem\TestPropertySorter.cs" />
-    <Compile Include="Util\TestULongField.cs" />
     <Compile Include="Util\TestClassID.cs" />
     <Compile Include="HPSF\Basic\TestEmptyProperties.cs" />
     <Compile Include="HPSF\Basic\TestMetaDataIPI.cs" />
@@ -402,7 +401,6 @@
   <ItemGroup>
     <Compile Include="DDF\TestEscherProperty.cs" />
     <Compile Include="Exceptions\ComparisonFailure.cs" />
-    <Compile Include="Exceptions\RuntimeException.cs" />
     <Compile Include="HSSF\HSSFITestDataProvider.cs" />
     <Compile Include="HSSF\Model\TestLinkTable.cs" />
     <Compile Include="HSSF\Model\TestRowBlocksReader.cs" />
@@ -574,7 +572,9 @@
     <Compile Include="SS\Util\TestNumberToTextConverter.cs" />
     <Compile Include="SS\Util\TestSheetBuilder.cs" />
     <Compile Include="SS\Util\TestWorkbookUtil.cs" />
+    <Compile Include="Util\TestIntList.cs" />
     <Compile Include="Util\TestLittleEndianStreams.cs" />
+    <Compile Include="Util\TestShortList.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\main\main.csproj">

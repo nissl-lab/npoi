@@ -20,6 +20,7 @@ namespace TestCases.HSSF.Record
     using System;
     using NPOI.HSSF.Record;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NPOI.Util;
     /**
      * 
      * @author Josh Micich

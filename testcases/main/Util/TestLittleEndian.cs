@@ -28,7 +28,7 @@
 using System;
 using System.IO;
 using System.Collections.Generic;
-
+using System.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NPOI.Util;
 
@@ -434,6 +434,28 @@ namespace TestCases.Util
         {
             Assert.AreEqual(0xffff, LittleEndian.GetUShort(new byte[] { unchecked((byte)0xff), unchecked((byte)0xff) }, 0));
         }
+        [TestMethod]
+        public void TestEffective()
+        {
+            byte[] data = new byte[2048];
+            //Stopwatch w1 = new Stopwatch();
+            //w1.Start();
+            //for (int t = 0; t < 10000;t++ )
+                for (int i = 0; i > -1024; i--)
+                    LittleEndian.PutShort(data, Math.Abs(i) * 2, (short)(i - 1));
+                for (int j = 0; j > -1024; j--)
+                    Assert.AreEqual((short)(j - 1), LittleEndian.GetShort(data, Math.Abs(j) * 2));
+            //w1.Stop();
+            //System.Console.WriteLine(w1.ElapsedMilliseconds);
 
+
+            Stopwatch w2 = new Stopwatch();
+            w2.Start();
+            for (int t = 0; t < 10000; t++)
+                for (int i = 0; i < 1024; i++)
+                    LittleEndian.PutUShort2(data, i * 2, i + 1);
+            w2.Stop();
+            System.Console.WriteLine(w2.ElapsedMilliseconds);
+        }
     }
 }
