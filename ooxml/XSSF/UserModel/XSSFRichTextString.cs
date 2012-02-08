@@ -21,6 +21,7 @@ using NPOI.OpenXmlFormats.Spreadsheet;
 using System;
 using System.Text;
 using System.Collections.Generic;
+using NPOI.XSSF.Model;
 namespace NPOI.XSSF.UserModel
 {
 
@@ -160,7 +161,7 @@ namespace NPOI.XSSF.UserModel
          * Sets the font of the entire string.
          * @param font          The font to use.
          */
-        public void ApplyFont(Font font)
+        public void ApplyFont(IFont font)
         {
             String text = GetString();
             ApplyFont(0, text.Length, font);
@@ -177,7 +178,7 @@ namespace NPOI.XSSF.UserModel
             if (styles == null)
             {
                 font = new XSSFFont();
-                font.SetFontName("#" + fontIndex);
+                font.FontName = ("#" + fontIndex);
             }
             else
             {
@@ -201,9 +202,9 @@ namespace NPOI.XSSF.UserModel
                 st.AddNewR().SetT(st.GetT());
                 st.unsetT();
             }
-            CTRElt lt = st.AddNewR();
+            CT_RElt lt = st.AddNewR();
             lt.SetT(text);
-            CTRPrElt pr = lt.AddNewRPr();
+            CT_RPrElt pr = lt.AddNewRPr();
             if (font != null) SetRunAttributes(font.GetCTFont(), pr);
         }
 
@@ -254,8 +255,8 @@ namespace NPOI.XSSF.UserModel
         public void ClearFormatting()
         {
             String text = GetString();
-            st.SetRArray(null);
-            st.SetT(text);
+            st.r = (null);
+            st.t = (text);
         }
 
         /**
@@ -271,10 +272,10 @@ namespace NPOI.XSSF.UserModel
             int pos = 0;
             for (int i = 0; i < st.sizeOfRArray(); i++)
             {
-                CTRElt r = st.GetRArray(i);
+                CT_RElt r = st.GetRArray(i);
                 if (i == index) return pos;
 
-                pos += r.GetT().Length;
+                pos += r.t.Length;
             }
             return -1;
         }
@@ -287,12 +288,12 @@ namespace NPOI.XSSF.UserModel
          */
         public int GetLengthOfFormattingRun(int index)
         {
-            if (st.sizeOfRArray() == 0) return length();
+            if (st.sizeOfRArray() == 0) return Length();
 
             for (int i = 0; i < st.sizeOfRArray(); i++)
             {
-                CTRElt r = st.GetRArray(i);
-                if (i == index) return r.GetT().Length;
+                CT_RElt r = st.GetRArray(i);
+                if (i == index) return r.t.Length;
             }
             return -1;
         }
@@ -393,7 +394,7 @@ namespace NPOI.XSSF.UserModel
                     return fnt;
                 }
 
-                pos += r.GetT().Length;
+                pos += r.t.Length;
             }
             return null;
 
@@ -445,27 +446,27 @@ namespace NPOI.XSSF.UserModel
             return ctFont;
         }
 
-        /**
-         * Add the xml:spaces="preserve" attribute if the string has leading or trailing spaces
-         *
-         * @param xs    the string to check
-         */
-        protected static void preserveSpaces(ST_Xstring xs)
-        {
-            String text = xs.StringValue;
-            if (text != null && text.Length > 0)
-            {
-                char firstChar = text[0];
-                char lastChar = text[text.Length - 1];
-                if (Char.IsWhiteSpace(firstChar) || Char.IsWhiteSpace(lastChar))
-                {
-                    XmlCursor c = xs.newCursor();
-                    c.ToNextToken();
-                    c.insertAttributeWithValue(new QName("http://www.w3.org/XML/1998/namespace", "space"), "preserve");
-                    c.dispose();
-                }
-            }
-        }
+        ///**
+        // * Add the xml:spaces="preserve" attribute if the string has leading or trailing spaces
+        // *
+        // * @param xs    the string to check
+        // */
+        //protected static void preserveSpaces(ST_Xstring xs)
+        //{
+        //    String text = xs.StringValue;
+        //    if (text != null && text.Length > 0)
+        //    {
+        //        char firstChar = text[0];
+        //        char lastChar = text[text.Length - 1];
+        //        if (Char.IsWhiteSpace(firstChar) || Char.IsWhiteSpace(lastChar))
+        //        {
+        //            XmlCursor c = xs.newCursor();
+        //            c.ToNextToken();
+        //            c.insertAttributeWithValue(new QName("http://www.w3.org/XML/1998/namespace", "space"), "preserve");
+        //            c.dispose();
+        //        }
+        //    }
+        //}
 
         /**
          * For all characters which cannot be represented in XML as defined by the XML 1.0 specification,

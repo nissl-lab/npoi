@@ -40,7 +40,7 @@ namespace NPOI.XSSF.UserModel
          *
          * @param type - the type of hyperlink to create
          */
-        protected XSSFHyperlink(int type)
+        public XSSFHyperlink(int type)
         {
             _type = type;
             _ctHyperlink = new CT_Hyperlink();
@@ -52,7 +52,7 @@ namespace NPOI.XSSF.UserModel
          * @param ctHyperlink the xml bean Containing xml properties
          * @param hyperlinkRel the relationship in the underlying OPC namespace which stores the actual link's Address
          */
-        protected XSSFHyperlink(CT_Hyperlink ctHyperlink, PackageRelationship hyperlinkRel)
+        public XSSFHyperlink(CT_Hyperlink ctHyperlink, PackageRelationship hyperlinkRel)
         {
             _ctHyperlink = ctHyperlink;
             _externalRel = hyperlinkRel;
@@ -125,7 +125,7 @@ namespace NPOI.XSSF.UserModel
             {
                 // Generate the relation
                 PackageRelationship rel =
-                        sheetPart.AddExternalRelationship(_location, XSSFRelation.SHEET_HYPERLINKS.GetRelation());
+                        sheetPart.AddExternalRelationship(_location, XSSFRelation.SHEET_HYPERLINKS.Relation);
 
                 // Update the r:id
                 _ctHyperlink.id = rel.Id;

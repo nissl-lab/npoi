@@ -40,9 +40,12 @@
     <Compile Include="Drawing\BaseStylesheet.cs" />
     <Compile Include="DocumentPropertiesCustom.cs" />
     <Compile Include="Drawing\Compatibility.cs" />
+    <Compile Include="Drawing\Gvml.cs" />
+    <Compile Include="Drawing\Picture.cs" />
     <Compile Include="Drawing\ShapeGeometry.cs" />
     <Compile Include="Drawing\ShapeStyle.cs" />
     <Compile Include="Drawing\ShapeProperties.cs" />
+    <Compile Include="Drawing\SpreadsheetDrawing.cs" />
     <Compile Include="Drawing\Text.cs" />
     <Compile Include="Drawing\ShapeEffects.cs" />
     <Compile Include="Drawing\StyleSheet.cs" />
@@ -69,6 +72,7 @@
     <Compile Include="Spreadsheet\CalculationChain.cs" />
     <Compile Include="Spreadsheet\ExternalConnections.cs" />
     <Compile Include="Spreadsheet\QueryTable.cs" />
+    <Compile Include="Spreadsheet\CustomXmlMappings.cs" />
     <Compile Include="Spreadsheet\SstDocument.cs" />
     <Compile Include="Spreadsheet\SupplementaryWorkbooks.cs" />
     <Compile Include="Spreadsheet\Styles.cs" />

@@ -1,0 +1,238 @@
+/*
+ *  ====================================================================
+ *    Licensed to the Apache Software Foundation (ASF) under one or more
+ *    contributor license agreements.  See the NOTICE file distributed with
+ *    this work for Additional information regarding copyright ownership.
+ *    The ASF licenses this file to You under the Apache License, Version 2.0
+ *    (the "License"); you may not use this file except in compliance with
+ *    the License.  You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ * ====================================================================
+ */
+
+namespace NPOI.xssf.usermodel;
+
+using NPOI.ss.usermodel.ConditionalFormatting;
+using NPOI.ss.usermodel.ConditionalFormattingRule;
+using NPOI.ss.usermodel.SheetConditionalFormatting;
+using NPOI.ss.usermodel.ComparisonOperator;
+using NPOI.ss.util.CellRangeAddress;
+using NPOI.ss.SpreadsheetVersion;
+using NPOI.hssf.record.cf.CellRangeUtil;
+using org.apache.xmlbeans.XmlObject;
+using org.Openxmlformats.schemas.spreadsheetml.x2006.main.CTCfRule;
+using org.Openxmlformats.schemas.spreadsheetml.x2006.main.STCfType;
+using org.Openxmlformats.schemas.spreadsheetml.x2006.main.CTConditionalFormatting;
+using org.Openxmlformats.schemas.spreadsheetml.x2006.main.STConditionalFormattingOperator;
+using org.Openxmlformats.schemas.spreadsheetml.x2006.main.CTWorksheet;
+
+
+
+
+
+/**
+ * @author Yegor Kozlov
+ */
+public class XSSFSheetConditionalFormatting : ISheetConditionalFormatting {
+    private XSSFSheet _sheet;
+
+    /* namespace */ XSSFSheetConditionalFormatting(XSSFSheet sheet) {
+        _sheet = sheet;
+    }
+
+    /**
+     * A factory method allowing to create a conditional formatting rule
+     * with a cell comparison operator<p/>
+     * TODO - formulas Containing cell references are currently not Parsed properly
+     *
+     * @param comparisonOperation - a constant value from
+     *		 <tt>{@link NPOI.hssf.record.CFRuleRecord.ComparisonOperator}</tt>: <p>
+     * <ul>
+     *		 <li>BETWEEN</li>
+     *		 <li>NOT_BETWEEN</li>
+     *		 <li>EQUAL</li>
+     *		 <li>NOT_EQUAL</li>
+     *		 <li>GT</li>
+     *		 <li>LT</li>
+     *		 <li>GE</li>
+     *		 <li>LE</li>
+     * </ul>
+     * </p>
+     * @param formula1 - formula for the valued, Compared with the cell
+     * @param formula2 - second formula (only used with
+     * {@link NPOI.ss.usermodel.ComparisonOperator#BETWEEN}) and
+     * {@link NPOI.ss.usermodel.ComparisonOperator#NOT_BETWEEN} operations)
+     */
+    public XSSFConditionalFormattingRule CreateConditionalFormattingRule(
+            byte comparisonOperation,
+            String formula1,
+            String formula2) {
+
+        XSSFConditionalFormattingRule rule = new XSSFConditionalFormattingRule(_sheet);
+        CTCfRule cfRule = rule.GetCTCfRule();
+        cfRule.AddFormula(formula1);
+        if(formula2 != null) cfRule.AddFormula(formula2);
+        cfRule.SetType(ST_CfType.CELL_IS);
+        ST_ConditionalFormattingOperator.Enum operator;
+        switch (comparisonOperation){
+            case ComparisonOperator.BETWEEN: operator = STConditionalFormattingOperator.BETWEEN; break;
+            case ComparisonOperator.NOT_BETWEEN: operator = STConditionalFormattingOperator.NOT_BETWEEN; break;
+            case ComparisonOperator.LT: operator = STConditionalFormattingOperator.LESS_THAN; break;
+            case ComparisonOperator.LE: operator = STConditionalFormattingOperator.LESS_THAN_OR_EQUAL; break;
+            case ComparisonOperator.GT: operator = STConditionalFormattingOperator.GREATER_THAN; break;
+            case ComparisonOperator.GE: operator = STConditionalFormattingOperator.GREATER_THAN_OR_EQUAL; break;
+            case ComparisonOperator.EQUAL: operator = STConditionalFormattingOperator.EQUAL; break;
+            case ComparisonOperator.NOT_EQUAL: operator = STConditionalFormattingOperator.NOT_EQUAL; break;
+            default: throw new ArgumentException("Unknown comparison operator: " + comparisonOperation);
+        }
+        cfRule.SetOperator(operator);
+
+        return rule;
+    }
+
+    public XSSFConditionalFormattingRule CreateConditionalFormattingRule(
+            byte comparisonOperation,
+            String formula) {
+
+        return CreateConditionalFormattingRule(comparisonOperation, formula, null);
+    }
+
+    /**
+     * A factory method allowing to create a conditional formatting rule with a formula.<br>
+     *
+     * @param formula - formula for the valued, Compared with the cell
+     */
+    public XSSFConditionalFormattingRule CreateConditionalFormattingRule(String formula) {
+        XSSFConditionalFormattingRule rule = new XSSFConditionalFormattingRule(_sheet);
+        CTCfRule cfRule = rule.GetCTCfRule();
+        cfRule.AddFormula(formula);
+        cfRule.SetType(STCfType.EXPRESSION);
+        return rule;
+    }
+
+    public int AddConditionalFormatting(CellRangeAddress[] regions, ConditionalFormattingRule[] cfRules) {
+        if (regions == null) {
+            throw new ArgumentException("regions must not be null");
+        }
+        foreach(CellRangeAddress range in regions) range.validate(SpreadsheetVersion.EXCEL2007);
+
+        if (cfRules == null) {
+            throw new ArgumentException("cfRules must not be null");
+        }
+        if (cfRules.Length == 0) {
+            throw new ArgumentException("cfRules must not be empty");
+        }
+        if (cfRules.Length > 3) {
+            throw new ArgumentException("Number of rules must not exceed 3");
+        }
+        XSSFConditionalFormattingRule[] hfRules;
+        if(cfRules is XSSFConditionalFormattingRule[]) hfRules = (XSSFConditionalFormattingRule[])cfRules;
+        else {
+            hfRules = new XSSFConditionalFormattingRule[cfRules.Length];
+            Array.Copy(cfRules, 0, hfRules, 0, hfRules.Length);
+        }
+        CellRangeAddress[] mergeCellRanges = CellRangeUtil.mergeCellRanges(regions);
+        CTConditionalFormatting cf = _sheet.GetCTWorksheet().AddNewConditionalFormatting();
+        List<String> refs = new List<String>();
+        foreach(CellRangeAddress a in mergeCellRanges) refs.Add(a.formatAsString());
+        cf.SetSqref(refs);
+
+
+        int priority = 1;
+        foreach(CTConditionalFormatting c in _sheet.GetCTWorksheet().GetConditionalFormattingList()){
+            priority += c.sizeOfCfRuleArray();
+        }
+
+        foreach(ConditionalFormattingRule rule in cfRules){
+            XSSFConditionalFormattingRule xRule = (XSSFConditionalFormattingRule)rule;
+            xRule.GetCTCfRule().SetPriority(priority++);
+            cf.AddNewCfRule().Set(xRule.GetCTCfRule());
+        }
+        return _sheet.GetCTWorksheet().sizeOfConditionalFormattingArray() - 1;
+    }
+
+    public int AddConditionalFormatting(CellRangeAddress[] regions,
+            ConditionalFormattingRule rule1)
+    {
+        return AddConditionalFormatting(regions,
+                rule1 == null ? null : new XSSFConditionalFormattingRule[] {
+                (XSSFConditionalFormattingRule)rule1
+        });
+    }
+
+    public int AddConditionalFormatting(CellRangeAddress[] regions,
+            ConditionalFormattingRule rule1, ConditionalFormattingRule rule2)
+    {
+        return AddConditionalFormatting(regions,
+                rule1 == null ? null : new XSSFConditionalFormattingRule[] {
+                    (XSSFConditionalFormattingRule)rule1,
+                    (XSSFConditionalFormattingRule)rule2
+            });
+    }
+
+    /**
+     * Adds a copy of HSSFConditionalFormatting object to the sheet
+     * <p>This method could be used to copy HSSFConditionalFormatting object
+     * from one sheet to another. For example:
+     * <pre>
+     * HSSFConditionalFormatting cf = sheet.GetConditionalFormattingAt(index);
+     * newSheet.AddConditionalFormatting(cf);
+     * </pre>
+     *
+     * @param cf HSSFConditionalFormatting object
+     * @return index of the new Conditional Formatting object
+     */
+    public int AddConditionalFormatting( ConditionalFormatting cf ) {
+        XSSFConditionalFormatting xcf = (XSSFConditionalFormatting)cf;
+        CTWorksheet sh = _sheet.GetCTWorksheet();
+        sh.AddNewConditionalFormatting().Set(xcf.GetCTConditionalFormatting().copy());
+        return sh.sizeOfConditionalFormattingArray() - 1;
+    }
+
+    /**
+    * Gets Conditional Formatting object at a particular index
+    *
+    * @param index
+    *			of the Conditional Formatting object to fetch
+    * @return Conditional Formatting object
+    */
+    public XSSFConditionalFormatting GetConditionalFormattingAt(int index) {
+        CheckIndex(index);
+        CTConditionalFormatting cf = _sheet.GetCTWorksheet().GetConditionalFormattingArray(index);
+        return new XSSFConditionalFormatting(_sheet, cf);
+    }
+
+    /**
+    * @return number of Conditional Formatting objects of the sheet
+    */
+    public int GetNumConditionalFormattings() {
+        return _sheet.GetCTWorksheet().sizeOfConditionalFormattingArray();
+    }
+
+    /**
+    * Removes a Conditional Formatting object by index
+    * @param index of a Conditional Formatting object to remove
+    */
+    public void RemoveConditionalFormatting(int index) {
+        CheckIndex(index);
+        _sheet.GetCTWorksheet().GetConditionalFormattingList().Remove(index);
+    }
+
+    private void CheckIndex(int index) {
+        int cnt = GetNumConditionalFormattings();
+        if (index < 0 || index >= cnt) {
+            throw new ArgumentException("Specified CF index " + index
+                    + " is outside the allowable range (0.." + (cnt - 1) + ")");
+        }
+    }
+
+}
+
+

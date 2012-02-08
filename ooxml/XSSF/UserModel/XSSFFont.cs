@@ -71,7 +71,7 @@ namespace NPOI.XSSF.UserModel
         /**
          * Create a new XSSFont. This method is protected to be used only by XSSFWorkbook
          */
-        protected XSSFFont()
+        public XSSFFont()
         {
             this._ctFont = new CT_Font();
             FontName = DEFAULT_FONT_NAME;

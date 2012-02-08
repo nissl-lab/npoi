@@ -23,6 +23,13 @@ namespace NPOI.XSSF.UserModel.Extensions
     using NPOI.XSSF.UserModel;
     using NPOI.XSSF.Model;
     using NPOI.SS.UserModel;
+    /**
+ * The enumeration value indicating the side being used for a cell border.
+ */
+    public enum BorderSide
+    {
+        TOP, RIGHT, BOTTOM, LEFT
+    }
 
     /**
      * This element Contains border formatting information, specifying border defInition formats (left, right, top, bottom, diagonal)
@@ -71,13 +78,6 @@ namespace NPOI.XSSF.UserModel.Extensions
             this._theme = themes;
         }
 
-        /**
-         * The enumeration value indicating the side being used for a cell border.
-         */
-        public enum BorderSide
-        {
-            TOP, RIGHT, BOTTOM, LEFT
-        }
 
         /**
          * Returns the underlying XML bean.

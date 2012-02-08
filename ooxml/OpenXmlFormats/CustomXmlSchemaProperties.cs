@@ -33,7 +33,7 @@ namespace NPOI.OpenXmlFormats
         }
     }
 
-    public class CT_Schema
+    public partial class CT_Schema
     {
 
         private string uriField;

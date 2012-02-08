@@ -16,6 +16,7 @@
 ==================================================================== */
 using NPOI.SS.UserModel;
 using System;
+using NPOI.XSSF.Model;
 namespace NPOI.XSSF.UserModel
 {
 
@@ -27,7 +28,7 @@ namespace NPOI.XSSF.UserModel
     {
         private StylesTable stylesSource;
 
-        protected XSSFDataFormat(StylesTable stylesSource)
+        public XSSFDataFormat(StylesTable stylesSource)
         {
             this.stylesSource = stylesSource;
         }

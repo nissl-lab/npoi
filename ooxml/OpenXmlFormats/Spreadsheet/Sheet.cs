@@ -2958,7 +2958,45 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.widthField = value;
             }
         }
-
+        public bool isSetBestFit()
+        {
+            return true;
+        }
+        public bool isSetCustomWidth()
+        {
+            return true;
+        }
+        public bool isSetHidden()
+        {
+            return true;
+        }
+        public bool isSetStyle()
+        {
+            return true;
+        }
+        public bool isSetWidth()
+        {
+            return true;
+        }
+                 public bool isSetCollapsed()
+        {
+            return true;
+        }
+                public bool isSetPhonetic()
+        {
+            return true;
+        }
+                public bool isSetOutlineLevel()
+        {
+            return true;
+        }
+            
+            
+            
+            
+            
+            
+            
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool widthSpecified
         {
@@ -3352,6 +3390,11 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.cmField = ((uint)(0));
             this.vmField = ((uint)(0));
             this.phField = false;
+        }
+
+        public bool IsSetF()
+        {
+            return f != null;
         }
 
         public CT_CellFormula f
@@ -6110,6 +6153,11 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.equalAverageField = false;
         }
 
+
+        public int sizeOfFormulaArray()
+        {
+            return formula.Count;
+        }
         public List<string> formula
         {
             get
@@ -9669,6 +9717,15 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         public CT_Cols()
         {
             this.colField = new List<CT_Col>();
+        }
+
+        public int sizeOfColArray()
+        {
+            return col.Count;
+        }
+        public CT_Col GetColArray(int index)
+        {
+            return col[index];
         }
 
         public List<CT_Col> col

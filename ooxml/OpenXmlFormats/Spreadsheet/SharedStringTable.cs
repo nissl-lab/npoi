@@ -1290,6 +1290,10 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             //this.leftField = new CT_BorderPr();
             this.outlineField = true;
         }
+        public bool IsSetBorder()
+        {
+            return this.left != null || this.right != null || this.top != null || this.bottom != null;
+        }
         public CT_BorderPr AddNewTop()
         {
             this.topField = new CT_BorderPr();
@@ -2002,6 +2006,20 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.pivotButtonField = false;
         }
 
+       public bool IsSetAlignment()
+       {
+        return this.alignmentField==null;
+       }
+        public void UnsetAlignment()
+        {
+            this.alignmentField=null;
+        }
+                  public bool IsSetExtLst()
+        {
+            return this.extLst==null;
+        }
+
+                        
         public CT_CellAlignment alignment
         {
             get
@@ -2661,7 +2679,10 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.rPhField = new List<CT_PhoneticRun>();
             this.rField = new List<CT_RElt>();
         }
-
+        public int sizeOfRArray()
+        {
+            return r.Count;
+        }
         public string t
         {
             get
@@ -2793,6 +2814,28 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.itemsElementNameField = value;
             }
         }
+        public int sizeOfBArray()
+        {
+            throw new NotImplementedException();
+        }
+        public int sizeOfUArray()
+        {
+            throw new NotImplementedException();
+        }
+        public int sizeOfIArray()
+        {
+            throw new NotImplementedException();
+        }
+        public int sizeOfColorArray()
+        {
+            throw new NotImplementedException();
+        }
+        public int sizeOfSzArray()
+        {
+            throw new NotImplementedException();
+        }
+
+        
     }
 
 

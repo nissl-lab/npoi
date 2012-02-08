@@ -21,6 +21,7 @@ using NPOI.OpenXml4Net.OPC;
 using NPOI.XSSF.UserModel.Helpers;
 using NPOI.OpenXmlFormats.Spreadsheet;
 using System.Collections.Generic;
+using NPOI.XSSF.UserModel;
 namespace NPOI.XSSF.Model
 {
 

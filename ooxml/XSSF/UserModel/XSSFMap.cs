@@ -15,109 +15,119 @@
    limitations under the License.
 ==================================================================== */
 
-namespace NPOI.xssf.usermodel;
-
-
-
-
-using NPOI.POIXMLDocumentPart;
-using NPOI.util.Internal;
-using NPOI.xssf.Model.MapInfo;
-using NPOI.xssf.Model.SingleXmlCells;
-using NPOI.xssf.usermodel.helpers.XSSFSingleXmlCell;
-using org.Openxmlformats.schemas.spreadsheetml.x2006.main.CTMap;
-using org.Openxmlformats.schemas.spreadsheetml.x2006.main.CTSchema;
-using org.w3c.dom.Node;
-
-/**
- * This class : the Map element (Open Office XML Part 4:
- * chapter 3.16.2)
- * <p/>
- * This element Contains all of the properties related to the XML map,
- * and the behaviors expected during data refresh operations.
- *
- * @author Roberto Manicardi
- */
-
-
-public class XSSFMap {
-
-    private CTMap ctMap;
-
-    private MapInfo mapInfo;
-
-
-    public XSSFMap(CTMap ctMap, MapInfo mapInfo) {
-        this.ctMap = ctMap;
-        this.mapInfo = mapInfo;
-    }
-
-
-    
-    public CTMap GetCtMap() {
-        return ctMap;
-    }
-
-
-    
-    public CTSchema GetCTSchema() {
-        String schemaId = ctMap.GetSchemaID();
-        return mapInfo.GetCTSchemaById(schemaId);
-    }
-
-    public Node GetSchema() {
-        Node xmlSchema = null;
-
-        CTSchema schema = GetCTSchema();
-        xmlSchema = schema.GetDomNode().GetFirstChild();
-
-        return xmlSchema;
-    }
-
+using System;
+using NPOI.OpenXmlFormats.Spreadsheet;
+using NPOI.XSSF.UserModel.Helpers;
+using System.Collections.Generic;
+using NPOI.XSSF.Model;
+namespace NPOI.XSSF.UserModel
+{
     /**
-     * @return the list of Single Xml Cells that provide a map rule to this mapping.
+     * This class : the Map element (Open Office XML Part 4:
+     * chapter 3.16.2)
+     * <p/>
+     * This element Contains all of the properties related to the XML map,
+     * and the behaviors expected during data refresh operations.
+     *
+     * @author Roberto Manicardi
      */
-    public List<XSSFSingleXmlCell> GetRelatedSingleXMLCell() {
-        List<XSSFSingleXmlCell> relatedSimpleXmlCells = new Vector<XSSFSingleXmlCell>();
 
-        int sheetNumber = mapInfo.GetWorkbook().GetNumberOfSheets();
-        for (int i = 0; i < sheetNumber; i++) {
-            XSSFSheet sheet = mapInfo.GetWorkbook().GetSheetAt(i);
-            foreach (POIXMLDocumentPart p in sheet.GetRelations()) {
-                if (p is SingleXmlCells) {
-                    SingleXmlCells SingleXMLCells = (SingleXmlCells) p;
-                    foreach (XSSFSingleXmlCell cell in SingleXMLCells.GetAllSimpleXmlCell()) {
-                        if (cell.GetMapId() == ctMap.GetID()) {
-                            relatedSimpleXmlCells.Add(cell);
+
+    public class XSSFMap
+    {
+
+        private CT_Map ctMap;
+
+        private MapInfo mapInfo;
+
+
+        public XSSFMap(CT_Map ctMap, MapInfo mapInfo)
+        {
+            this.ctMap = ctMap;
+            this.mapInfo = mapInfo;
+        }
+
+
+
+        public CT_Map GetCtMap()
+        {
+            return ctMap;
+        }
+
+
+
+        public CT_Schema GetCTSchema()
+        {
+            String schemaId = ctMap.SchemaID;
+            return mapInfo.GetCTSchemaById(schemaId);
+        }
+
+        //public Node GetSchema()
+        //{
+        //    Node xmlSchema = null;
+
+        //    CT_Schema schema = GetCTSchema();
+        //    xmlSchema = schema.GetDomNode().GetFirstChild();
+
+        //    return xmlSchema;
+        //}
+
+        /**
+         * @return the list of Single Xml Cells that provide a map rule to this mapping.
+         */
+        public List<XSSFSingleXmlCell> GetRelatedSingleXMLCell()
+        {
+            List<XSSFSingleXmlCell> relatedSimpleXmlCells = new List<XSSFSingleXmlCell>();
+
+            int sheetNumber = mapInfo.GetWorkbook().GetNumberOfSheets();
+            for (int i = 0; i < sheetNumber; i++)
+            {
+                XSSFSheet sheet = mapInfo.GetWorkbook().GetSheetAt(i);
+                foreach (POIXMLDocumentPart p in sheet.GetRelations())
+                {
+                    if (p is SingleXmlCells)
+                    {
+                        SingleXmlCells SingleXMLCells = (SingleXmlCells)p;
+                        foreach (XSSFSingleXmlCell cell in SingleXMLCells.GetAllSimpleXmlCell())
+                        {
+                            if (cell.GetMapId() == ctMap.ID)
+                            {
+                                relatedSimpleXmlCells.Add(cell);
+                            }
                         }
                     }
                 }
             }
+            return relatedSimpleXmlCells;
         }
-        return relatedSimpleXmlCells;
-    }
 
-    /**
-     * @return the list of all Tables that provide a map rule to this mapping
-     */
-    public List<XSSFTable> GetRelatedTables() {
+        /**
+         * @return the list of all Tables that provide a map rule to this mapping
+         */
+        public List<XSSFTable> GetRelatedTables()
+        {
 
-        List<XSSFTable> tables = new Vector<XSSFTable>();
-        int sheetNumber = mapInfo.GetWorkbook().GetNumberOfSheets();
+            List<XSSFTable> tables = new List<XSSFTable>();
+            int sheetNumber = mapInfo.GetWorkbook().GetNumberOfSheets();
 
-        for (int i = 0; i < sheetNumber; i++) {
-            XSSFSheet sheet = mapInfo.GetWorkbook().GetSheetAt(i);
-            foreach (POIXMLDocumentPart p in sheet.GetRelations()) {
-                if (p.GetPackageRelationship().GetRelationshipType().Equals(XSSFRelation.TABLE.GetRelation())) {
-                    XSSFTable table = (XSSFTable) p;
-                    if (table.mapsTo(ctMap.GetID())) {
-                        tables.Add(table);
+            for (int i = 0; i < sheetNumber; i++)
+            {
+                XSSFSheet sheet = mapInfo.GetWorkbook().GetSheetAt(i);
+                foreach (POIXMLDocumentPart p in sheet.GetRelations())
+                {
+                    if (p.GetPackageRelationship().RelationshipType.Equals(XSSFRelation.TABLE.GetRelation()))
+                    {
+                        XSSFTable table = (XSSFTable)p;
+                        if (table.MapsTo(ctMap.ID))
+                        {
+                            tables.Add(table);
+                        }
                     }
                 }
             }
-        }
 
-        return tables;
+            return tables;
+        }
     }
 }
 

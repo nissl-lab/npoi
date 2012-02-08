@@ -19,6 +19,7 @@ using NPOI.OpenXmlFormats.Spreadsheet;
 using NPOI.XSSF.Model;
 using System;
 using NPOI.SS.Util;
+using NPOI.OpenXmlFormats.Dml;
 namespace NPOI.XSSF.UserModel
 {
 
@@ -182,7 +183,7 @@ namespace NPOI.XSSF.UserModel
          *
          * @param string  the XSSFRichTextString used by this object.
          */
-        public void SetString(RichTextString str)
+        public void SetString(IRichTextString str)
         {
             if (!(str is XSSFRichTextString))
             {

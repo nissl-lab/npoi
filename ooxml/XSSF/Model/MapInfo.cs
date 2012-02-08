@@ -15,117 +15,123 @@
    limitations under the License.
 ==================================================================== */
 
-namespace NPOI.XSSF.model;
+using System.Xml;
+using System.Collections.Generic;
+using System.IO;
+using NPOI.OpenXmlFormats;
+using NPOI.OpenXml4Net.OPC;
+using NPOI.OpenXmlFormats.Spreadsheet;
+using System;
+using NPOI.XSSF.UserModel;
+namespace NPOI.XSSF.Model
+{
 
-using java.io.IOException;
-using java.io.Stream;
-using java.io.Stream;
-using java.util.Collection;
-using java.util.HashMap;
-using java.util.Map;
 
-
-using org.apache.poi.POIXMLDocumentPart;
-using org.apache.poi.Openxml4j.opc.PackagePart;
-using org.apache.poi.Openxml4j.opc.PackageRelationship;
-using NPOI.XSSF.usermodel.XSSFMap;
-using NPOI.XSSF.usermodel.XSSFWorkbook;
-using org.apache.xmlbeans.XmlException;
-using org.Openxmlformats.schemas.spreadsheetml.x2006.main.CTMap;
-using org.Openxmlformats.schemas.spreadsheetml.x2006.main.CTMapInfo;
-using org.Openxmlformats.schemas.spreadsheetml.x2006.main.CTSchema;
-using org.Openxmlformats.schemas.spreadsheetml.x2006.main.MapInfoDocument;
-
-/**
- * 
- * This class : the Custom XML Mapping Part (Open Office XML Part 1:
- * chapter 12.3.6)
- * 
- * An instance of this part type Contains a schema for an XML file, and
- * information on the behavior that is used when allowing this custom XML schema
- * to be mapped into the spreadsheet.
- * 
- * @author Roberto Manicardi
- */
-
-public class MapInfo : POIXMLDocumentPart {
-
-	private CTMapInfo mapInfo;
-	
-	private Dictionary<int, XSSFMap> maps ;
-
-	public MapInfo() {
-		base();
-		mapInfo = CTMapInfo.Factory.newInstance();
-
-	}
-
-	public MapInfo(PackagePart part, PackageRelationship rel)
-		  {
-		base(part, rel);
-		ReadFrom(part.GetStream());
-	}
-
-	public void ReadFrom(Stream is)  {
-		try {
-			MapInfoDocument doc = MapInfoDocument.Factory.Parse(is);
-			mapInfo = doc.GetMapInfo();
-
-            maps= new Dictionary<int, XSSFMap>();
-            for(CTMap map :mapInfo.GetMapList()){
-                maps.Put((int)map.GetID(), new XSSFMap(map,this));
-            }
-
-		} catch (XmlException e) {
-			throw new IOException(e.GetLocalizedMessage());
-		}
-	}
-	
-	/**
-     * Returns the parent XSSFWorkbook
-     *
-     * @return the parent XSSFWorkbook
+    /**
+     * 
+     * This class : the Custom XML Mapping Part (Open Office XML Part 1:
+     * chapter 12.3.6)
+     * 
+     * An instance of this part type Contains a schema for an XML file, and
+     * information on the behavior that is used when allowing this custom XML schema
+     * to be mapped into the spreadsheet.
+     * 
+     * @author Roberto Manicardi
      */
-    public XSSFWorkbook GetWorkbook() {
-        return (XSSFWorkbook)GetParent();
-    }
-	
-	/**
-	 * 
-	 * @return the internal data object
-	 */
-	public CTMapInfo GetCTMapInfo(){
-		return mapInfo;
-		
-	}
 
-	/**
-	 * Gets the
-	 * @param schemaId the schema ID
-	 * @return CTSchema by it's ID
-	 */
-	public CTSchema GetCTSchemaById(String schemaId){
-		CTSchema xmlSchema = null;
+    public class MapInfo : POIXMLDocumentPart
+    {
 
-		for(CTSchema schema: mapInfo.GetSchemaList()){
-			if(schema.GetID().Equals(schemaId)){
-				xmlSchema = schema;
-				break;
-			}
-		}
-		return xmlSchema;
-	}
-	
-	
-	public XSSFMap GetXSSFMapById(int id){
-		return maps.Get(id);
-	}
-	
-	public XSSFMap GetXSSFMapByName(String name){
+        private CT_MapInfo mapInfo;
+
+        private Dictionary<int, XSSFMap> maps;
+
+        public MapInfo()
+            : base()
+        {
+
+            mapInfo = new CT_MapInfo();
+
+        }
+
+        public MapInfo(PackagePart part, PackageRelationship rel)
+            : base(part, rel)
+        {
+
+            ReadFrom(part.GetInputStream());
+        }
+
+        public void ReadFrom(Stream is1)
+        {
+            try
+            {
+                MapInfoDocument doc = MapInfoDocument.Factory.Parse(is1);
+                mapInfo = doc.GetMapInfo();
+
+                maps = new Dictionary<int, XSSFMap>();
+                foreach (CT_Map map in mapInfo.Map)
+                {
+                    maps[(int)map.ID] = new XSSFMap(map, this);
+                }
+
+            }
+            catch (XmlException e)
+            {
+                throw new IOException(e.Message);
+            }
+        }
+
+        /**
+         * Returns the parent XSSFWorkbook
+         *
+         * @return the parent XSSFWorkbook
+         */
+        public XSSFWorkbook GetWorkbook()
+        {
+            return (XSSFWorkbook)GetParent();
+        }
+
+        /**
+         * 
+         * @return the internal data object
+         */
+        public CT_MapInfo GetCTMapInfo()
+        {
+            return mapInfo;
+
+        }
+
+        /**
+         * Gets the
+         * @param schemaId the schema ID
+         * @return CTSchema by it's ID
+         */
+        public NPOI.OpenXmlFormats.Spreadsheet.CT_Schema GetCTSchemaById(String schemaId)
+        {
+            NPOI.OpenXmlFormats.Spreadsheet.CT_Schema xmlSchema = null;
+
+            foreach (NPOI.OpenXmlFormats.Spreadsheet.CT_Schema schema in mapInfo.Schema)
+            {
+                if (schema.ID.Equals(schemaId))
+                {
+                    xmlSchema = schema;
+                    break;
+                }
+            }
+            return xmlSchema;
+        }
+
+
+        public XSSFMap GetXSSFMapById(int id)
+        {
+            return maps[id];
+        }
+
+        public XSSFMap GetXSSFMapByName(String name){
 		
 		XSSFMap matchedMap = null;
 		
-		for(XSSFMap map :maps.values()){
+		foreach(XSSFMap map in maps.Values){
 			if(map.GetCtMap().GetName()!=null && map.GetCtMap().GetName().Equals(name)){
 				matchedMap = map;
 			}
@@ -133,33 +139,34 @@ public class MapInfo : POIXMLDocumentPart {
 		
 		return matchedMap;
 	}
-	
-	/**
-	 * 
-	 * @return all the mappings configured in this document
-	 */
-	public Collection<XSSFMap> GetAllXSSFMaps(){
-		return maps.values();
-	}
 
-	protected void WriteTo(Stream out)  {
-		MapInfoDocument doc = MapInfoDocument.Factory.newInstance();
-		doc.SetMapInfo(mapInfo);
-		doc.save(out, DEFAULT_XML_OPTIONS);
-	}
+        /**
+         * 
+         * @return all the mappings configured in this document
+         */
+        public ICollection<XSSFMap> GetAllXSSFMaps()
+        {
+            return maps.Values;
+        }
 
-	
-	protected void Commit()  {
-		PackagePart part = GetPackagePart();
-		Stream out = part.GetStream();
-		WriteTo(out);
-		out.Close();
-	}
+        protected void WriteTo(Stream out1)
+        {
+            MapInfoDocument doc = MapInfoDocument.Factory.newInstance();
+            doc.SetMapInfo(mapInfo);
+            doc.Save(out1);
+        }
 
+
+        protected void Commit()
+        {
+            PackagePart part = GetPackagePart();
+            Stream out1 = part.GetOutputStream();
+            WriteTo(out1);
+            out1.Close();
+        }
+
+    }
 }
-
-
-
 
 
 

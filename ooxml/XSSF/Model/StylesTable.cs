@@ -24,6 +24,7 @@ using System.IO;
 using System;
 using NPOI.Util;
 using System.Xml;
+using NPOI.XSSF.UserModel.Extensions;
 
 namespace NPOI.XSSF.Model
 {
@@ -36,7 +37,7 @@ namespace NPOI.XSSF.Model
      */
     public class StylesTable : POIXMLDocumentPart
     {
-        private Dictionary<int, String> numberFormats = new LinkedDictionary<int, String>();
+        private Dictionary<int, String> numberFormats = new Dictionary<int, String>();
         private List<XSSFFont> fonts = new List<XSSFFont>();
         private List<XSSFCellFill> Fills = new List<XSSFCellFill>();
         private List<XSSFCellBorder> borders = new List<XSSFCellBorder>();
@@ -110,15 +111,15 @@ namespace NPOI.XSSF.Model
             // Grab all the different bits we care about
 			CT_NumFmts ctfmts = styleSheet.numFmts;
             if( ctfmts != null){
-                foreach (CT_NumFmt nfmt in ctfmts.GetNumFmtArray()) {
-                    numberFormats.Put((int)nfmt.GetNumFmtId(), nfmt.GetFormatCode());
+                foreach (CT_NumFmt nfmt in ctfmts.numFmt) {
+                    numberFormats[(int)nfmt.numFmtId]= nfmt.formatCode;
                 }
             }
 
             CT_Fonts ctfonts = styleSheet.fonts;
             if(ctfonts != null){
 				int idx = 0;
-				foreach (CT_Font font in ctfonts.GetFontArray()) {
+				foreach (CT_Font font in ctfonts.font) {
 				   // Create the font and save it. Themes Table supplied later
 					XSSFFont f = new XSSFFont(font, idx);
 					fonts.Add(f);
@@ -127,26 +128,29 @@ namespace NPOI.XSSF.Model
 			}
             CT_Fills ctFills = styleSheet.fills;
             if(ctFills != null){
-                foreach (CT_Fill fill in ctFills.GetFillArray()) {
-                    Fills.Add(new XSSFCellFill(Fill));
+                foreach (CT_Fill fill in ctFills.fill) {
+                    Fills.Add(new XSSFCellFill(fill));
                 }
             }
 
             CT_Borders ctborders = styleSheet.borders;
             if(ctborders != null) {
-                foreach (CT_Border border in ctborders.GetBorderArray()) {
+                foreach (CT_Border border in ctborders.border) {
                     borders.Add(new XSSFCellBorder(border));
                 }
             }
 
             CT_CellXfs cellXfs = styleSheet.cellXfs;
-            if(cellXfs != null) xfs.AddRange(Arrays.AsList(cellXfs.GetXfArray()));
+            if(cellXfs != null) 
+                xfs.AddRange(cellXfs.xf);
 
             CT_CellStyleXfs cellStyleXfs = styleSheet.cellStyleXfs;
-            if(cellStyleXfs != null) styleXfs.AddRange(Arrays.AsList(cellStyleXfs.GetXfArray()));
+            if(cellStyleXfs != null) 
+                styleXfs.AddRange(cellStyleXfs.xf);
 
-            CT_Dxfs styleDxfs = styleSheet.GetDxfs();
-            if (styleDxfs != null) dxfs.AddRange(Arrays.AsList(styleDxfs.GetDxfArray()));
+            CT_Dxfs styleDxfs = styleSheet.dxfs;
+            if (styleDxfs != null) 
+                dxfs.AddRange(styleDxfs.dxf);
 
 		} catch (XmlException e) {
 			throw new IOException(e.Message);
