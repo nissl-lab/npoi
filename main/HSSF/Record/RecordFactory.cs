@@ -166,7 +166,6 @@ namespace NPOI.HSSF.Record
 		        typeof(WriteAccessRecord),
 		        typeof(WriteProtectRecord),
 		        typeof(WSBoolRecord),
-                typeof(SheetExtRecord),
 
                 // chart records
 		        typeof(BeginRecord),

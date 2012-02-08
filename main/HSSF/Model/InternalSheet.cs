@@ -105,8 +105,6 @@ namespace NPOI.HSSF.Model
         protected PageBreakRecord colBreaks = null;
         [NonSerialized]
         protected ConditionalFormattingTable condFormatting;
-        [NonSerialized]
-        protected SheetExtRecord sheetext;
         protected List<RecordBase> records = null;
 
         /** Add an UncalcedRecord if not true indicating formulas have not been calculated */
@@ -369,10 +367,6 @@ namespace NPOI.HSSF.Model
                 {
                     windowTwo = (WindowTwoRecord)rec;
                 }
-                else if (recSid == SheetExtRecord.sid)
-                {
-                    sheetext = (SheetExtRecord)rec;
-                }
                 else if (recSid == GutsRecord.sid)
                 {
                     _gutsRecord = (GutsRecord)rec;
@@ -491,8 +485,6 @@ namespace NPOI.HSSF.Model
             records.Add(selection);
 
             records.Add(_mergedCellsTable); // MCT comes after 'Sheet View Settings'
-            sheetext = new SheetExtRecord();
-            records.Add(sheetext);
             records.Add(EOFRecord.instance);
 
             //if (log.Check(POILogger.DEBUG))
@@ -1603,34 +1595,6 @@ namespace NPOI.HSSF.Model
         {
             get { return header; }
             set { header = value; }
-        }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether this instance is auto tab color.
-        /// </summary>
-        /// <value>
-        /// 	<c>true</c> if this instance is auto tab color; otherwise, <c>false</c>.
-        /// </value>
-        public bool IsAutoTabColor
-        {
-            get { return sheetext.IsAutoColor; }
-            set
-            {
-                sheetext.IsAutoColor = value;
-            }
-        }
-
-        public short TabColorIndex
-        {
-            get { return sheetext.TabColorIndex; }
-            set
-            {
-                if ((value <= 0x08 || value >= 0x3F) && value != 0x7F)
-                {
-                    throw new ArgumentException("invalid color index");
-                }
-                sheetext.TabColorIndex = value;
-            }
         }
 
         public WindowTwoRecord GetWindowTwo()

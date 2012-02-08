@@ -426,11 +426,11 @@ namespace TestCases.HSSF.UserModel
                 throw new AssertFailedException("Identified bug 47363a - PASSWORD after DIMENSION");
             }
             // Check that protection block is together, and before DIMENSION
-            ConfirmRecordClass(recs, nRecs - 5, typeof(DimensionsRecord));
-            ConfirmRecordClass(recs, nRecs - 10, typeof(ProtectRecord));
-            ConfirmRecordClass(recs, nRecs - 9, typeof(ObjectProtectRecord));
-            ConfirmRecordClass(recs, nRecs - 8, typeof(ScenarioProtectRecord));
-            ConfirmRecordClass(recs, nRecs - 7, typeof(PasswordRecord));
+            ConfirmRecordClass(recs, nRecs - 4, typeof(DimensionsRecord));
+            ConfirmRecordClass(recs, nRecs - 9, typeof(ProtectRecord));
+            ConfirmRecordClass(recs, nRecs - 8, typeof(ObjectProtectRecord));
+            ConfirmRecordClass(recs, nRecs - 7, typeof(ScenarioProtectRecord));
+            ConfirmRecordClass(recs, nRecs - 6, typeof(PasswordRecord));
         }
         private void ConfirmRecordClass(Record[] recs, int index, Type cls)
         {

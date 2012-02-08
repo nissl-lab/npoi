@@ -365,7 +365,6 @@
     <Compile Include="HSSF\Record\SelectionRecord.cs" />
     <Compile Include="HSSF\Record\SharedFormulaRecord.cs" />
     <Compile Include="HSSF\Record\SharedValueRecordBase.cs" />
-    <Compile Include="HSSF\Record\SheetExtRecord.cs" />
     <Compile Include="HSSF\Record\SSTDeserializer.cs" />
     <Compile Include="HSSF\Record\SSTRecord.cs" />
     <Compile Include="HSSF\Record\SSTSerializer.cs" />

@@ -685,7 +685,7 @@ namespace TestCases.HSSF.Model
             InternalSheet sheet = InternalSheet.CreateSheet();
 
             IList sheetRecs = sheet.Records;
-            Assert.AreEqual(24, sheetRecs.Count);
+            Assert.AreEqual(23, sheetRecs.Count);
 
             FormulaShifter shifter = FormulaShifter.CreateForRowShift(0, 0, 0, 1);
             sheet.UpdateFormulasAfterCellShift(shifter, 0);
@@ -693,7 +693,7 @@ namespace TestCases.HSSF.Model
             {
                 throw new AssertFailedException("Identified bug 46547a");
             }
-            Assert.AreEqual(24, sheetRecs.Count);
+            Assert.AreEqual(23, sheetRecs.Count);
         }
         /**
          * Bug 46547 happened when attempting to Add conditional formatting to a sheet
