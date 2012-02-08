@@ -24,13 +24,14 @@ namespace NPOI.HSSF.Record
     using NPOI.HSSF.Record.CF;
     using NPOI.HSSF.Util;
     using NPOI.SS.Util;
+    using NPOI.Util.IO;
 
     /**
      * Conditional Formatting Header record (CFHEADER)
      * 
      * @author Dmitriy Kumshayev
      */
-    public class CFHeaderRecord : Record
+    public class CFHeaderRecord : StandardRecord
     {
         public const short sid = 0x1B0;
 
@@ -136,7 +137,7 @@ namespace NPOI.HSSF.Record
             return buffer.ToString();
         }
 
-        private int DataSize
+        protected override int DataSize
         {
             get
             {
@@ -146,26 +147,12 @@ namespace NPOI.HSSF.Record
             }
         }
 
-        /**
-         * @return byte array containing instance data
-         */
-
-        public override int Serialize(int offset, byte[] data)
+        public override void Serialize(LittleEndianOutput out1)
         {
-            int dataSize = DataSize;
-
-            LittleEndian.PutUShort(data, 0 + offset, sid);
-            LittleEndian.PutUShort(data, 2 + offset, dataSize);
-            LittleEndian.PutUShort(data, 4 + offset, field_1_numcf);
-            LittleEndian.PutUShort(data, 6 + offset, field_2_need_recalculation);
-            field_3_enclosing_cell_range.Serialize(8 + offset, data);
-            field_4_cell_ranges.Serialize(16 + offset, data);
-            return 4 + dataSize;
-        }
-
-        public override int RecordSize
-        {
-            get { return 4 + DataSize; }
+            out1.WriteShort(field_1_numcf);
+            out1.WriteShort(field_2_need_recalculation);
+            field_3_enclosing_cell_range.Serialize(out1);
+            field_4_cell_ranges.Serialize(out1);
         }
 
 
