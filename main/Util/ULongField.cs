@@ -35,6 +35,7 @@ namespace NPOI.Util
     /// <summary>
     /// 
     /// </summary>
+    [Obsolete]
     public class ULongField
     {
         private ulong      _value;

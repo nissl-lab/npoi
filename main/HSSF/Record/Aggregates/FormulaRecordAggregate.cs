@@ -25,6 +25,7 @@ namespace NPOI.HSSF.Record.Aggregates
     using NPOI.SS.Util;
     using NPOI.SS.Formula;
     using NPOI.SS.Formula.PTG;
+    using NPOI.Util;
 
     /// <summary>
     /// The formula record aggregate is used to join toGether the formula record and it's

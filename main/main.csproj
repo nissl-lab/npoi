@@ -352,7 +352,6 @@
     <Compile Include="HSSF\Record\RecordBase.cs" />
     <Compile Include="HSSF\Record\RecordFactory.cs" />
     <Compile Include="HSSF\Record\RecordFactoryInputStream.cs" />
-    <Compile Include="HSSF\Record\RecordFormatException.cs" />
     <Compile Include="HSSF\Record\RecordInputStream.cs" />
     <Compile Include="HSSF\Record\RefModeRecord.cs" />
     <Compile Include="HSSF\Record\RefreshAllRecord.cs" />
@@ -952,8 +951,9 @@
     <Compile Include="Util\HexDump.cs" />
     <Compile Include="Util\HexRead.cs" />
     <Compile Include="Util\IntegerField.cs" />
+    <Compile Include="Util\IntList.cs" />
     <Compile Include="Util\IO\DelayableLittleEndianOutput.cs" />
-    <Compile Include="Util\IO\IOUtils.cs" />
+    <Compile Include="Util\IOUtils.cs" />
     <Compile Include="Util\IO\LittleEndianByteArrayInputStream.cs" />
     <Compile Include="Util\IO\LittleEndianByteArrayOutputStream.cs" />
     <Compile Include="Util\IO\LittleEndianInput.cs" />
@@ -965,13 +965,16 @@
     <Compile Include="Util\LittleEndian.cs" />
     <Compile Include="Util\LittleEndianConstants.cs" />
     <Compile Include="Util\LongField.cs" />
+    <Compile Include="Util\LZWDecompresser.cs" />
     <Compile Include="Util\NullLogger.cs" />
     <Compile Include="Util\Operator.cs" />
     <Compile Include="Util\POILogFactory.cs" />
     <Compile Include="Util\POILogger.cs" />
+    <Compile Include="Util\RecordFormatException.cs" />
+    <Compile Include="Util\RuntimeException.cs" />
     <Compile Include="Util\ShortField.cs" />
+    <Compile Include="Util\ShortList.cs" />
     <Compile Include="Util\StringUtil.cs" />
-    <Compile Include="Util\ULongField.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="npoi.snk" />

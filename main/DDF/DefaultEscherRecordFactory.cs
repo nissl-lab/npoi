@@ -23,6 +23,7 @@ namespace NPOI.DDF
     using System.Reflection;
     using System.Text;
     using NPOI.HSSF.Record;
+    using NPOI.Util;
 
     /// <summary>
     /// Generates escher records when provided the byte array containing those records.
