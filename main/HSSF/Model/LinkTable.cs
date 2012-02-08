@@ -518,7 +518,11 @@ namespace NPOI.HSSF.Model
                 return null;
             }
             int shIx = _externSheetRecord.GetFirstSheetIndexFromRefIndex(extRefIndex);
-            String usSheetName = (String)ebr.SheetNames.GetValue(shIx);
+            String usSheetName = null;
+            if (shIx >= 0)
+            {
+                usSheetName = (String)ebr.SheetNames.GetValue(shIx);
+            }
             return new String[] {
 				ebr.URL,
 				usSheetName,
