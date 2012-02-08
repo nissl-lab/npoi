@@ -636,6 +636,10 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             throw new NotImplementedException();
         }
+        public int SetFontArray(CT_Font[] font)
+        {
+            throw new NotImplementedException();
+        }
 
         public int SetVertAlignArray(CT_Color[] array)
         {

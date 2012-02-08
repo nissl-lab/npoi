@@ -548,13 +548,13 @@ namespace NPOI.XSSF.UserModel
         // * Perform a registration of ourselves 
         // *  to the style table
         // */
-        //public long RegisterTo(StylesTable styles)
-        //{
-        //    this._themes = styles.GetTheme();
-        //    short idx = (short)styles.PutFont(this, true);
-        //    this._index = idx;
-        //    return idx;
-        //}
+        public long RegisterTo(StylesTable styles)
+        {
+            this._themes = styles.GetTheme();
+            short idx = (short)styles.PutFont(this, true);
+            this._index = idx;
+            return idx;
+        }
         /**
          * Records the Themes Table that is associated with
          *  the current font, used when looking up theme
@@ -597,25 +597,20 @@ namespace NPOI.XSSF.UserModel
          * @return the font family to use
          * @see NPOI.SS.usermodel.FontFamily
          */
-        public int GetFamily()
+        public int Family
         {
-            CT_IntProperty family = _ctFont.sizeOfFamilyArray() == 0 ? _ctFont.AddNewFamily() : _ctFont.GetFamilyArray(0);
-            return family == null ? FontFamily.NOT_APPLICABLE.Value : FontFamily.ValueOf(family.val).Value;
+            get
+            {
+                CT_IntProperty family = _ctFont.sizeOfFamilyArray() == 0 ? _ctFont.AddNewFamily() : _ctFont.GetFamilyArray(0);
+                return family == null ? FontFamily.NOT_APPLICABLE.Value : FontFamily.ValueOf(family.val).Value;
+            }
+            set 
+            {
+                CT_IntProperty family = _ctFont.sizeOfFamilyArray() == 0 ? _ctFont.AddNewFamily() : _ctFont.GetFamilyArray(0);
+                family.val = value;
+            }
         }
 
-        /**
-         * Set the font family this font belongs to.
-         * A font family is a set of fonts having common stroke width and serif characteristics.
-         * The font name overrides when there are conflicting values.
-         *
-         * @param value - font family
-         * @see FontFamily
-         */
-        public void SetFamily(int value)
-        {
-            CT_IntProperty family = _ctFont.sizeOfFamilyArray() == 0 ? _ctFont.AddNewFamily() : _ctFont.GetFamilyArray(0);
-            family.val = value;
-        }
 
         /**
          * set an enumeration representing the font family this font belongs to.

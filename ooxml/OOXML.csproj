@@ -72,6 +72,7 @@
     <Compile Include="XSSF\Model\IndexedUDFFinder.cs" />
     <Compile Include="XSSF\Model\SharedStringsTable.cs" />
     <Compile Include="XSSF\Model\SingleXmlCells.cs" />
+    <Compile Include="XSSF\Model\StylesTable.cs" />
     <Compile Include="XSSF\Model\ThemesTable.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -84,11 +85,15 @@
     <Compile Include="XSSF\UserModel\Helpers\XSSFXmlColumnPr.cs" />
     <Compile Include="XSSF\UserModel\XSSFAnchor.cs" />
     <Compile Include="XSSF\UserModel\XSSFColor.cs" />
+    <Compile Include="XSSF\UserModel\XSSFDataFormat.cs" />
     <Compile Include="XSSF\UserModel\XSSFEvenFooter.cs" />
     <Compile Include="XSSF\UserModel\XSSFEvenHeader.cs" />
+    <Compile Include="XSSF\UserModel\XSSFFont.cs" />
     <Compile Include="XSSF\UserModel\XSSFName.cs" />
+    <Compile Include="XSSF\UserModel\XSSFHyperlink.cs" />
     <Compile Include="XSSF\UserModel\XSSFOddFooter.cs" />
     <Compile Include="XSSF\UserModel\XSSFOddHeader.cs" />
+    <Compile Include="XSSF\UserModel\XSSFRichTextString.cs" />
     <Compile Include="XSSF\UserModel\XSSFTable.cs">
       <SubType>Code</SubType>
     </Compile>
