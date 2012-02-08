@@ -156,13 +156,13 @@ namespace NPOI.HPSF
              * Read the section Length.
              */
             size = (int)LittleEndian.GetUInt(src, o1);
-            o1 += LittleEndianConstants.INT_SIZE;
+            o1 += LittleEndianConsts.INT_SIZE;
 
             /*
              * Read the number of properties.
              */
             int propertyCount = (int)LittleEndian.GetUInt(src, o1);
-            o1 += LittleEndianConstants.INT_SIZE;
+            o1 += LittleEndianConsts.INT_SIZE;
 
             /*
              * Read the properties. The offset is positioned at the first
@@ -200,11 +200,11 @@ namespace NPOI.HPSF
 
                 /* Read the property ID. */
                 ple.id = (int)LittleEndian.GetUInt(src, pass1OffSet);
-                pass1OffSet += LittleEndianConstants.INT_SIZE;
+                pass1OffSet += LittleEndianConsts.INT_SIZE;
 
                 /* OffSet from the section's start. */
                 ple.offset = (int)LittleEndian.GetUInt(src, pass1OffSet);
-                pass1OffSet += LittleEndianConstants.INT_SIZE;
+                pass1OffSet += LittleEndianConsts.INT_SIZE;
 
                 /* Add the entry To the property list. */
                 propertyList.Add(ple);
@@ -252,7 +252,7 @@ namespace NPOI.HPSF
                      * VT_I2. */
                     int o = (int)(this.offset + ple.offset);
                     long type = LittleEndian.GetUInt(src, o);
-                    o += LittleEndianConstants.INT_SIZE;
+                    o += LittleEndianConsts.INT_SIZE;
 
                     if (type != Variant.VT_I2)
                         throw new HPSFRuntimeException

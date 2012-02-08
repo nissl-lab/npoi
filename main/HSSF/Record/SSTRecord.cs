@@ -55,17 +55,17 @@ namespace NPOI.HSSF.Record
 
         /** standard record overhead: two shorts (record id plus data space size)*/
         public const int STD_RECORD_OVERHEAD =
-                2 * LittleEndianConstants.SHORT_SIZE;
+                2 * LittleEndianConsts.SHORT_SIZE;
 
         /** SST overhead: the standard record overhead, plus the number of strings and the number of Unique strings -- two ints */
         public const int SST_RECORD_OVERHEAD =
-                (STD_RECORD_OVERHEAD + (2 * LittleEndianConstants.INT_SIZE));
+                (STD_RECORD_OVERHEAD + (2 * LittleEndianConsts.INT_SIZE));
 
         /** how much data can we stuff into an SST record? That would be _max minus the standard SST record overhead */
         public const int MAX_DATA_SPACE = MAX_RECORD_SIZE - SST_RECORD_OVERHEAD;
 
         /** overhead for each string includes the string's Char count (a short) and the flag describing its Charistics (a byte) */
-        public const int STRING_MINIMAL_OVERHEAD = LittleEndianConstants.SHORT_SIZE + LittleEndianConstants.BYTE_SIZE;
+        public const int STRING_MINIMAL_OVERHEAD = LittleEndianConsts.SHORT_SIZE + LittleEndianConsts.BYTE_SIZE;
 
         public const short sid = 0xfc;
 

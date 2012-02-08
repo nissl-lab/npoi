@@ -81,12 +81,12 @@ namespace TestCases.POIFS.Storage
             for (int k = start; k <= end; k++)
             {
                 LittleEndian.PutInt(data, offset, k);
-                offset += LittleEndianConstants.INT_SIZE;
+                offset += LittleEndianConsts.INT_SIZE;
             }
             while (offset != 508)
             {
                 LittleEndian.PutInt(data, offset, -1);
-                offset += LittleEndianConstants.INT_SIZE;
+                offset += LittleEndianConsts.INT_SIZE;
             }
             LittleEndian.PutInt(data, offset, chain);
             Add(new RawDataBlock(new MemoryStream(data)));
@@ -121,7 +121,7 @@ namespace TestCases.POIFS.Storage
                 {
                     LittleEndian.PutInt(data, offset, index + 1);
                 }
-                offset += LittleEndianConstants.INT_SIZE;
+                offset += LittleEndianConsts.INT_SIZE;
             }
             Add(new RawDataBlock(new MemoryStream(data)));
         }

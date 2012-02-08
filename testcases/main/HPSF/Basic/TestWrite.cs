@@ -568,7 +568,7 @@ namespace TestCases.HPSF.Basic
             out1.Close();
             byte[] b = out1.ToArray();
             Object objRead =
-                VariantSupport.Read(b, 0, b.Length + LittleEndianConstants.INT_SIZE,
+                VariantSupport.Read(b, 0, b.Length + LittleEndianConsts.INT_SIZE,
                                     variantType, codepage);
             if (objRead is byte[])
             {

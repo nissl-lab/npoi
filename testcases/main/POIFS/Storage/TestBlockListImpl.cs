@@ -205,49 +205,49 @@ namespace TestCases.POIFS.Storage
             int offset = 0;
 
             LittleEndian.PutInt(data, offset, -3);   // for the BAT block itself
-            offset += LittleEndianConstants.INT_SIZE;
+            offset += LittleEndianConsts.INT_SIZE;
 
             // document 1: Is at end of file alReady; start block = -2
             // document 2: has only one block; start block = 1
             LittleEndian.PutInt(data, offset, -2);
-            offset += LittleEndianConstants.INT_SIZE;
+            offset += LittleEndianConsts.INT_SIZE;
 
             // document 3: has a loop in it; start block = 2
             LittleEndian.PutInt(data, offset, 2);
-            offset += LittleEndianConstants.INT_SIZE;
+            offset += LittleEndianConsts.INT_SIZE;
 
             // document 4: peeks into document 2's data; start block = 3
             LittleEndian.PutInt(data, offset, 4);
-            offset += LittleEndianConstants.INT_SIZE;
+            offset += LittleEndianConsts.INT_SIZE;
             LittleEndian.PutInt(data, offset, 1);
-            offset += LittleEndianConstants.INT_SIZE;
+            offset += LittleEndianConsts.INT_SIZE;
 
             // document 5: includes an unused block; start block = 5
             LittleEndian.PutInt(data, offset, 6);
-            offset += LittleEndianConstants.INT_SIZE;
+            offset += LittleEndianConsts.INT_SIZE;
             LittleEndian.PutInt(data, offset, -1);
-            offset += LittleEndianConstants.INT_SIZE;
+            offset += LittleEndianConsts.INT_SIZE;
 
             // document 6: includes a BAT block; start block = 7
             LittleEndian.PutInt(data, offset, 8);
-            offset += LittleEndianConstants.INT_SIZE;
+            offset += LittleEndianConsts.INT_SIZE;
             LittleEndian.PutInt(data, offset, 0);
-            offset += LittleEndianConstants.INT_SIZE;
+            offset += LittleEndianConsts.INT_SIZE;
 
             // document 7: includes an XBAT block; start block = 9
             LittleEndian.PutInt(data, offset, 10);
-            offset += LittleEndianConstants.INT_SIZE;
+            offset += LittleEndianConsts.INT_SIZE;
             LittleEndian.PutInt(data, offset, -4);
-            offset += LittleEndianConstants.INT_SIZE;
+            offset += LittleEndianConsts.INT_SIZE;
 
             // document 8: goes off into space; start block = 11;
             LittleEndian.PutInt(data, offset, 1000);
-            offset += LittleEndianConstants.INT_SIZE;
+            offset += LittleEndianConsts.INT_SIZE;
 
             // document 9: no screw ups; start block = 12;
             int index = 13;
 
-            for (; offset < 508; offset += LittleEndianConstants.INT_SIZE)
+            for (; offset < 508; offset += LittleEndianConsts.INT_SIZE)
             {
                 LittleEndian.PutInt(data, offset, index++);
             }

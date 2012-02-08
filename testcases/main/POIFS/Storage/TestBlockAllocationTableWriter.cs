@@ -159,7 +159,7 @@ namespace TestCases.POIFS.Storage
                 for (int j = 0; j < limit; j++)
                 {
                     LittleEndian.PutInt(expected, offset, block_index++);
-                    offset += LittleEndianConstants.INT_SIZE;
+                    offset += LittleEndianConsts.INT_SIZE;
                 }
                 LittleEndian.PutInt(expected, offset,
                                     POIFSConstants.END_OF_CHAIN);
@@ -169,7 +169,7 @@ namespace TestCases.POIFS.Storage
 
             // Add BAT block indices
             LittleEndian.PutInt(expected, offset, block_index++);
-            offset += LittleEndianConstants.INT_SIZE;
+            offset += LittleEndianConsts.INT_SIZE;
             LittleEndian.PutInt(expected, offset, POIFSConstants.END_OF_CHAIN);
             for (int k = 0; k < expected.Length; k++)
             {

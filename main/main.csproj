@@ -963,7 +963,7 @@
     <Compile Include="Util\IO\PushbackStream.cs" />
     <Compile Include="Util\IO\TempFile.cs" />
     <Compile Include="Util\LittleEndian.cs" />
-    <Compile Include="Util\LittleEndianConstants.cs" />
+    <Compile Include="Util\LittleEndianConsts.cs" />
     <Compile Include="Util\LongField.cs" />
     <Compile Include="Util\LZWDecompresser.cs" />
     <Compile Include="Util\NullLogger.cs" />

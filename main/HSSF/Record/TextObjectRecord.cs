@@ -175,7 +175,7 @@ namespace NPOI.HSSF.Record
                     return 0;
                 }
                 int encodedTextSize = 0;
-                int textBytesLength = _text.Length * LittleEndianConstants.SHORT_SIZE;
+                int textBytesLength = _text.Length * LittleEndianConsts.SHORT_SIZE;
                 while (textBytesLength > 0)
                 {
                     int chunkSize = Math.Min(RecordInputStream.MAX_RECORD_DATA_SIZE - 2, textBytesLength);

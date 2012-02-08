@@ -75,7 +75,7 @@ namespace NPOI.Util
 
         public static double GetDouble(byte[] data, int offset)
         {
-            return BitConverter.Int64BitsToDouble(GetNumber(data, offset, LittleEndianConstants.DOUBLE_SIZE));
+            return BitConverter.Int64BitsToDouble(GetNumber(data, offset, LittleEndianConsts.DOUBLE_SIZE));
         }
 
         public static int GetInt(byte[] data)
@@ -85,7 +85,7 @@ namespace NPOI.Util
 
         public static int GetInt(byte[] data, int offset)
         {
-            return (int)GetNumber(data, offset, LittleEndianConstants.INT_SIZE);
+            return (int)GetNumber(data, offset, LittleEndianConsts.INT_SIZE);
         }
 
         public static long GetLong(byte[] data)
@@ -95,7 +95,7 @@ namespace NPOI.Util
 
         public static long GetLong(byte[] data, int offset)
         {
-            return GetNumber(data, offset, LittleEndianConstants.LONG_SIZE);
+            return GetNumber(data, offset, LittleEndianConsts.LONG_SIZE);
         }
 
         public static ulong GetULong(byte[] data)
@@ -137,7 +137,7 @@ namespace NPOI.Util
         /// <returns>the short (16-bit) value</returns>
         public static short GetShort(byte[] data, int offset)
         {
-            return (short)GetNumber(data, offset, LittleEndianConstants.SHORT_SIZE);
+            return (short)GetNumber(data, offset, LittleEndianConsts.SHORT_SIZE);
         }
 
         /// <summary>
@@ -158,7 +158,7 @@ namespace NPOI.Util
         /// <returns></returns>
         public static uint GetUInt(byte[] data, int offset)
         {
-            uint num = (uint)GetNumber(data, offset, LittleEndianConstants.INT_SIZE);
+            uint num = (uint)GetNumber(data, offset, LittleEndianConsts.INT_SIZE);
             if (num < 0)
             {
                 return (uint)(0x100000000L + num);
@@ -184,7 +184,7 @@ namespace NPOI.Util
         /// <returns></returns>
         public static byte GetUByte(byte[] data, int offset)
         {
-            return (byte)GetNumber(data, offset, LittleEndianConstants.BYTE_SIZE);
+            return (byte)GetNumber(data, offset, LittleEndianConsts.BYTE_SIZE);
         }
 
         /// <summary>
@@ -205,7 +205,7 @@ namespace NPOI.Util
         /// <returns>the unsigned short (16-bit) value in an integer</returns>
         public static ushort GetUShort(byte[] data, int offset)
         {
-            short num = (short)GetNumber(data, offset, LittleEndianConstants.SHORT_SIZE);
+            short num = (short)GetNumber(data, offset, LittleEndianConsts.SHORT_SIZE);
             if (num < 0)
             {
                 return (ushort)(0x10000 + num);
@@ -233,11 +233,11 @@ namespace NPOI.Util
         {
             if (double.IsNaN(value))
             {
-                PutNumber( data, offset, -276939487313920L, LittleEndianConstants.DOUBLE_SIZE);
+                PutNumber( data, offset, -276939487313920L, LittleEndianConsts.DOUBLE_SIZE);
             }
             else
             {
-                PutNumber( data, offset, BitConverter.DoubleToInt64Bits(value), LittleEndianConstants.DOUBLE_SIZE);
+                PutNumber( data, offset, BitConverter.DoubleToInt64Bits(value), LittleEndianConsts.DOUBLE_SIZE);
             }   
         }
 
@@ -259,7 +259,7 @@ namespace NPOI.Util
         /// <param name="value">The value.</param>
         public static void PutInt(byte[] data, int offset, int value)
         {
-            PutNumber( data, offset,Convert.ToInt64(value), LittleEndianConstants.INT_SIZE);
+            PutNumber( data, offset,Convert.ToInt64(value), LittleEndianConsts.INT_SIZE);
         }
 
         /// <summary>
@@ -280,7 +280,7 @@ namespace NPOI.Util
         /// <param name="value">The value.</param>
         public static void PutUInt(byte[] data, int offset, uint value)
         {
-            PutNumber(data, offset, Convert.ToInt64(value), LittleEndianConstants.UINT_SIZE);
+            PutNumber(data, offset, Convert.ToInt64(value), LittleEndianConsts.UINT_SIZE);
         }
 
         /// <summary>
@@ -301,7 +301,7 @@ namespace NPOI.Util
         /// <param name="value">The value.</param>
         public static void PutLong(byte[] data, int offset, long value)
         {
-            PutNumber( data, offset, value, LittleEndianConstants.LONG_SIZE);
+            PutNumber( data, offset, value, LittleEndianConsts.LONG_SIZE);
         }
 
         /// <summary>
@@ -322,7 +322,7 @@ namespace NPOI.Util
         /// <param name="value">The value.</param>
         public static void PutULong(byte[] data, int offset, ulong value)
         {
-            PutNumber(data, offset, value, LittleEndianConstants.ULONG_SIZE);
+            PutNumber(data, offset, value, LittleEndianConsts.ULONG_SIZE);
         }
 
         /// <summary>
@@ -379,7 +379,7 @@ namespace NPOI.Util
         /// <param name="value">The value.</param>
         public static void PutShort(byte[] data, int offset, short value)
         {
-            PutNumber( data, offset, Convert.ToInt64(value), LittleEndianConstants.SHORT_SIZE);
+            PutNumber( data, offset, Convert.ToInt64(value), LittleEndianConsts.SHORT_SIZE);
         }
 
         /// <summary>
@@ -390,10 +390,10 @@ namespace NPOI.Util
         /// <param name="value">The value.</param>
         public static void PutShortArray(byte[] data, int offset, short[] value)
         {
-            PutNumber( data, offset, Convert.ToInt64(value.Length), LittleEndianConstants.SHORT_SIZE);
+            PutNumber( data, offset, Convert.ToInt64(value.Length), LittleEndianConsts.SHORT_SIZE);
             for (int i = 0; i < value.Length; i++)
             {
-                PutNumber( data, (offset + 2) + (i * 2), Convert.ToInt64(value[i]), LittleEndianConstants.SHORT_SIZE);
+                PutNumber( data, (offset + 2) + (i * 2), Convert.ToInt64(value[i]), LittleEndianConsts.SHORT_SIZE);
             }
         }
 
@@ -405,7 +405,7 @@ namespace NPOI.Util
         /// <param name="value">The value.</param>
         public static void PutByte(byte[] data, int offset, int value)
         {
-            PutNumber(data, offset, value, LittleEndianConstants.BYTE_SIZE);
+            PutNumber(data, offset, value, LittleEndianConsts.BYTE_SIZE);
         }
 
         /// <summary>
@@ -415,7 +415,7 @@ namespace NPOI.Util
         /// <param name="value">The value.</param>
         public static void PutUShort(byte[] data, int value)
         {
-            PutNumber(data, 0, Convert.ToInt64(value), LittleEndianConstants.SHORT_SIZE);
+            PutNumber(data, 0, Convert.ToInt64(value), LittleEndianConsts.SHORT_SIZE);
         }
 
         /// <summary>
@@ -426,9 +426,8 @@ namespace NPOI.Util
         /// <param name="value">The value.</param>
         public static void PutUShort(byte[] data, int offset, int value)
         {
-            PutNumber( data, offset, Convert.ToInt64(value), LittleEndianConstants.SHORT_SIZE);
+            PutNumber( data, offset, Convert.ToInt64(value), LittleEndianConsts.SHORT_SIZE);
         }
-
         /// <summary>
         /// Reads from stream.
         /// </summary>
@@ -461,7 +460,7 @@ namespace NPOI.Util
         /// <returns></returns>
         public static int ReadInt(Stream stream)
         {
-            return GetInt(ReadFromStream(stream, LittleEndianConstants.INT_SIZE));
+            return GetInt(ReadFromStream(stream, LittleEndianConsts.INT_SIZE));
         }
 
         /// <summary>
@@ -471,7 +470,7 @@ namespace NPOI.Util
         /// <returns></returns>
         public static long ReadLong(Stream stream)
         {
-            return GetLong(ReadFromStream(stream, LittleEndianConstants.LONG_SIZE));
+            return GetLong(ReadFromStream(stream, LittleEndianConsts.LONG_SIZE));
         }
 
         /// <summary>
@@ -481,7 +480,7 @@ namespace NPOI.Util
         /// <returns></returns>
         public static ulong ReadULong(Stream stream)
         {
-            return GetULong(ReadFromStream(stream, LittleEndianConstants.LONG_SIZE));
+            return GetULong(ReadFromStream(stream, LittleEndianConsts.LONG_SIZE));
         }
 
         /// <summary>
@@ -491,7 +490,7 @@ namespace NPOI.Util
         /// <returns></returns>
         public static short ReadShort(Stream stream)
         {
-            return GetShort(ReadFromStream(stream, LittleEndianConstants.SHORT_SIZE));
+            return GetShort(ReadFromStream(stream, LittleEndianConsts.SHORT_SIZE));
         }
 
         /// <summary>

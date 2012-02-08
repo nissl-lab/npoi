@@ -134,9 +134,9 @@ namespace NPOI.HSSF.Record
         /** This method will Read a byte from the current record*/
         public int Read()
         {
-            CheckRecordPosition(LittleEndianConstants.BYTE_SIZE);
-            _currentDataOffset += LittleEndianConstants.BYTE_SIZE;
-            pos += LittleEndianConstants.BYTE_SIZE;
+            CheckRecordPosition(LittleEndianConsts.BYTE_SIZE);
+            _currentDataOffset += LittleEndianConsts.BYTE_SIZE;
+            pos += LittleEndianConsts.BYTE_SIZE;
             return _dataInput.ReadByte();
         }
 
@@ -263,7 +263,7 @@ namespace NPOI.HSSF.Record
             _currentSid = _nextSid;
             _currentDataOffset = 0;
             _currentDataLength = _bhi.ReadDataSize();
-            pos += LittleEndianConstants.SHORT_SIZE;
+            pos += LittleEndianConsts.SHORT_SIZE;
             if (_currentDataLength > MAX_RECORD_DATA_SIZE)
             {
                 throw new RecordFormatException("The content of an excel record cannot exceed "
@@ -293,9 +293,9 @@ namespace NPOI.HSSF.Record
          */
         public override int ReadByte()
         {
-            CheckRecordPosition(LittleEndianConstants.BYTE_SIZE);
-            _currentDataOffset += LittleEndianConstants.BYTE_SIZE;
-            pos += LittleEndianConstants.BYTE_SIZE;
+            CheckRecordPosition(LittleEndianConsts.BYTE_SIZE);
+            _currentDataOffset += LittleEndianConsts.BYTE_SIZE;
+            pos += LittleEndianConsts.BYTE_SIZE;
             return _dataInput.ReadByte();
         }
 
@@ -304,25 +304,25 @@ namespace NPOI.HSSF.Record
          */
         public short ReadShort()
         {
-            CheckRecordPosition(LittleEndianConstants.SHORT_SIZE);
-            _currentDataOffset += LittleEndianConstants.SHORT_SIZE;
-            pos += LittleEndianConstants.SHORT_SIZE;
+            CheckRecordPosition(LittleEndianConsts.SHORT_SIZE);
+            _currentDataOffset += LittleEndianConsts.SHORT_SIZE;
+            pos += LittleEndianConsts.SHORT_SIZE;
             return _dataInput.ReadShort();
         }
 
         public int ReadInt()
         {
-            CheckRecordPosition(LittleEndianConstants.INT_SIZE);
-            _currentDataOffset += LittleEndianConstants.INT_SIZE;
-            pos += LittleEndianConstants.INT_SIZE;
+            CheckRecordPosition(LittleEndianConsts.INT_SIZE);
+            _currentDataOffset += LittleEndianConsts.INT_SIZE;
+            pos += LittleEndianConsts.INT_SIZE;
             return _dataInput.ReadInt();
         }
 
         public long ReadLong()
         {
-            CheckRecordPosition(LittleEndianConstants.LONG_SIZE);
-            _currentDataOffset += LittleEndianConstants.LONG_SIZE;
-            pos += LittleEndianConstants.LONG_SIZE;
+            CheckRecordPosition(LittleEndianConsts.LONG_SIZE);
+            _currentDataOffset += LittleEndianConsts.LONG_SIZE;
+            pos += LittleEndianConsts.LONG_SIZE;
             return _dataInput.ReadLong();
         }
 
@@ -345,16 +345,16 @@ namespace NPOI.HSSF.Record
          */
         public int ReadUShort()
         {
-            CheckRecordPosition(LittleEndianConstants.SHORT_SIZE);
-            _currentDataOffset += LittleEndianConstants.SHORT_SIZE;
-            pos += LittleEndianConstants.SHORT_SIZE;
+            CheckRecordPosition(LittleEndianConsts.SHORT_SIZE);
+            _currentDataOffset += LittleEndianConsts.SHORT_SIZE;
+            pos += LittleEndianConsts.SHORT_SIZE;
             return _dataInput.ReadUShort();
         }
 
         public double ReadDouble()
         {
-            CheckRecordPosition(LittleEndianConstants.DOUBLE_SIZE);
-            _currentDataOffset += LittleEndianConstants.DOUBLE_SIZE;
+            CheckRecordPosition(LittleEndianConsts.DOUBLE_SIZE);
+            _currentDataOffset += LittleEndianConsts.DOUBLE_SIZE;
 
             long valueLongBits = _dataInput.ReadLong();
             double result = BitConverter.Int64BitsToDouble(valueLongBits);
@@ -365,7 +365,7 @@ namespace NPOI.HSSF.Record
             //{
             //throw new Exception("Did not expect to read NaN"); // (Because Excel typically doesn't write NaN
             //}
-            pos += LittleEndianConstants.DOUBLE_SIZE;
+            pos += LittleEndianConsts.DOUBLE_SIZE;
             return result;
         }
         public void ReadFully(byte[] buf)
@@ -413,7 +413,7 @@ namespace NPOI.HSSF.Record
             int curLen = 0;
             while (true)
             {
-                int availableChars = isCompressedEncoding ? Remaining : Remaining / LittleEndianConstants.SHORT_SIZE;
+                int availableChars = isCompressedEncoding ? Remaining : Remaining / LittleEndianConsts.SHORT_SIZE;
                 if (requestedLength - curLen <= availableChars)
                 {
                     // enough space in current record, so just read it out

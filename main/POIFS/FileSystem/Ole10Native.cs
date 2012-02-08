@@ -112,7 +112,7 @@ namespace NPOI.POIFS.FileSystem
             }
 
             totalSize = LittleEndian.GetInt(data, ofs);
-            ofs += LittleEndianConstants.INT_SIZE;
+            ofs += LittleEndianConsts.INT_SIZE;
 
             if (plain)
             {
@@ -129,7 +129,7 @@ namespace NPOI.POIFS.FileSystem
             else
             {
                 flags1 = LittleEndian.GetShort(data, ofs);
-                ofs += LittleEndianConstants.SHORT_SIZE;
+                ofs += LittleEndianConsts.SHORT_SIZE;
                 int len = GetStringLength(data, ofs);
                 label = StringUtil.GetFromCompressedUnicode(data, ofs, len - 1);
                 ofs += len;
@@ -137,7 +137,7 @@ namespace NPOI.POIFS.FileSystem
                 fileName = StringUtil.GetFromCompressedUnicode(data, ofs, len - 1);
                 ofs += len;
                 flags2 = LittleEndian.GetShort(data, ofs);
-                ofs += LittleEndianConstants.SHORT_SIZE;
+                ofs += LittleEndianConsts.SHORT_SIZE;
                 len = LittleEndian.GetUByte(data, ofs);
                 unknown1 = new byte[len];
                 ofs += len;
@@ -148,10 +148,10 @@ namespace NPOI.POIFS.FileSystem
                 command = StringUtil.GetFromCompressedUnicode(data, ofs, len - 1);
                 ofs += len;
 
-                if (totalSize + LittleEndianConstants.INT_SIZE - ofs > LittleEndianConstants.INT_SIZE)
+                if (totalSize + LittleEndianConsts.INT_SIZE - ofs > LittleEndianConsts.INT_SIZE)
                 {
                     dataSize = LittleEndian.GetInt(data, ofs);
-                    ofs += LittleEndianConstants.INT_SIZE;
+                    ofs += LittleEndianConsts.INT_SIZE;
 
                     if (dataSize > totalSize || dataSize < 0)
                     {
@@ -165,7 +165,7 @@ namespace NPOI.POIFS.FileSystem
                     if (unknown1.Length > 0)
                     {
                         flags3 = LittleEndian.GetShort(data, ofs);
-                        ofs += LittleEndianConstants.SHORT_SIZE;
+                        ofs += LittleEndianConsts.SHORT_SIZE;
                     }
                     else
                     {

@@ -156,7 +156,7 @@ namespace NPOI.HPSF
 
             int o = (int)offset;
             type = LittleEndian.GetUInt(src, o);
-            o += LittleEndianConstants.INT_SIZE;
+            o += LittleEndianConsts.INT_SIZE;
 
             try
             {
@@ -201,7 +201,7 @@ namespace NPOI.HPSF
              * Read the number of dictionary entries.
              */
             long nrEntries = LittleEndian.GetUInt(src, o);
-            o += LittleEndianConstants.INT_SIZE;
+            o += LittleEndianConsts.INT_SIZE;
 
             Hashtable m = new Hashtable((int)nrEntries, (float)1.0);
 
@@ -211,7 +211,7 @@ namespace NPOI.HPSF
                 {
                     /* The key. */
                     long id = LittleEndian.GetUInt(src, o);
-                    o += LittleEndianConstants.INT_SIZE;
+                    o += LittleEndianConsts.INT_SIZE;
 
                     /* The value (a string). The Length is the either the
                      * number of (two-byte) characters if the character Set is Unicode
@@ -219,7 +219,7 @@ namespace NPOI.HPSF
                      * The Length includes terminating 0x00 bytes which we have To strip
                      * off To Create a Java string. */
                     long sLength = LittleEndian.GetUInt(src, o);
-                    o += LittleEndianConstants.INT_SIZE;
+                    o += LittleEndianConsts.INT_SIZE;
 
                     /* Read the string. */
                     StringBuilder b = new StringBuilder();

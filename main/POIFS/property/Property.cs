@@ -46,7 +46,7 @@ namespace NPOI.POIFS.Properties
         private const byte   _default_fill             = ( byte ) 0x00;
         private const int    _name_size_offset         = 0x40;
         private const int    _max_name_length          =
-                (_name_size_offset / LittleEndianConstants.SHORT_SIZE) - 1;
+                (_name_size_offset / LittleEndianConsts.SHORT_SIZE) - 1;
 
         protected const int  _NO_INDEX                 = -1;
 
@@ -157,7 +157,7 @@ namespace NPOI.POIFS.Properties
             _start_block       = new IntegerField(_start_block_offset, _raw_data);
             _size              = new IntegerField(_size_offset, _raw_data);
             _index             = index;
-            int name_length = (_name_size.Value / LittleEndianConstants.SHORT_SIZE)
+            int name_length = (_name_size.Value / LittleEndianConsts.SHORT_SIZE)
                               - 1;
 
             if (name_length < 1)
@@ -173,7 +173,7 @@ namespace NPOI.POIFS.Properties
                 {
                     char_array[ j ] = ( char ) new ShortField(name_offset,
                                                               _raw_data).Value;
-                    name_offset     += LittleEndianConstants.SHORT_SIZE;
+                    name_offset     += LittleEndianConsts.SHORT_SIZE;
                 }
                 _name = new String(char_array, 0, name_length);
             }
@@ -250,18 +250,18 @@ namespace NPOI.POIFS.Properties
                 for (; j < limit; j++)
                 {
                     ShortField.Write(offset, (short)char_array[j], ref _raw_data);
-                    offset += LittleEndianConstants.SHORT_SIZE;
+                    offset += LittleEndianConsts.SHORT_SIZE;
                 }
                 for (; j < _max_name_length + 1; j++)
                 {
                     ShortField.Write(offset, (short)0, ref _raw_data);
-                    offset += LittleEndianConstants.SHORT_SIZE;
+                    offset += LittleEndianConsts.SHORT_SIZE;
                 }
 
                 // double the count, and include the null at the end
                 _name_size
                     .Set((short)((limit + 1)
-                                    * LittleEndianConstants.SHORT_SIZE), ref _raw_data);
+                                    * LittleEndianConsts.SHORT_SIZE), ref _raw_data);
             }
         }
 

@@ -43,10 +43,10 @@ namespace NPOI.POIFS.Storage
     public class BATBlock : BigBlock
     {
         private static int _entries_per_block =
-            POIFSConstants.BIG_BLOCK_SIZE / LittleEndianConstants.INT_SIZE;
+            POIFSConstants.BIG_BLOCK_SIZE / LittleEndianConsts.INT_SIZE;
         private static int _entries_per_xbat_block = _entries_per_block - 1;
         private static int _xbat_chain_offset =
-            _entries_per_xbat_block * LittleEndianConstants.INT_SIZE;
+            _entries_per_xbat_block * LittleEndianConsts.INT_SIZE;
         private static byte _default_value = (byte)0xFF;
         private IntegerField[] _fields;
         private byte[] _data;
@@ -84,7 +84,7 @@ namespace NPOI.POIFS.Storage
             for (int j = 0; j < _entries_per_block; j++)
             {
                 _fields[j] = new IntegerField(offset);
-                offset += LittleEndianConstants.INT_SIZE;
+                offset += LittleEndianConsts.INT_SIZE;
             }
         }
         //private BATBlock(POIFSBigBlockSize bigBlockSize)

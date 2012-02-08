@@ -31,7 +31,7 @@ using System.Text;
 
 namespace NPOI.Util
 {
-    public class LittleEndianConstants
+    public class LittleEndianConsts
     {
         public const int BYTE_SIZE = 1;
         public const int SHORT_SIZE = 2;

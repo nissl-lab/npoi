@@ -43,7 +43,7 @@ namespace NPOI.POIFS.Storage
         public const int  _bat_array_offset        = 0x4c;
         public const int _max_bats_in_header =
             (POIFSConstants.BIG_BLOCK_SIZE - _bat_array_offset)
-            / LittleEndianConstants.INT_SIZE;
+            / LittleEndianConsts.INT_SIZE;
 
         // useful offsets
         public const int _signature_offset = 0;

@@ -147,7 +147,7 @@ namespace NPOI.HPSF
         {
             Object value;
             int o1 = offset;
-            int l1 = Length - LittleEndianConstants.INT_SIZE;
+            int l1 = Length - LittleEndianConsts.INT_SIZE;
             long lType = type;
 
             /* Instead of trying To Read 8-bit characters from a Unicode string,
@@ -205,7 +205,7 @@ namespace NPOI.HPSF
                          * as a Date object.
                          */
                         int low = LittleEndian.GetInt(src, o1);
-                        o1 += LittleEndianConstants.INT_SIZE;
+                        o1 += LittleEndianConsts.INT_SIZE;
                         int high = LittleEndian.GetInt(src, o1);
                         if (low == 0 && high == 0)
                             value = null;
@@ -220,9 +220,9 @@ namespace NPOI.HPSF
                          * String object. The 0x00 bytes at the end must be
                          * stripped.
                          */
-                        int first = o1 + LittleEndianConstants.INT_SIZE;
+                        int first = o1 + LittleEndianConsts.INT_SIZE;
                         long last = first + LittleEndian.GetUInt(src, o1) - 1;
-                        o1 += LittleEndianConstants.INT_SIZE;
+                        o1 += LittleEndianConsts.INT_SIZE;
                         while (src[(int)last] == 0 && first <= last)
                             last--;
                         int l = (int)(last - first + 1);
@@ -238,10 +238,10 @@ namespace NPOI.HPSF
                          * a String object. The 0x00 bytes at the end must be
                          * stripped.
                          */
-                        int first = o1 + LittleEndianConstants.INT_SIZE;
+                        int first = o1 + LittleEndianConsts.INT_SIZE;
                         long last = first + LittleEndian.GetUInt(src, o1) - 1;
                         long l = last - first;
-                        o1 += LittleEndianConstants.INT_SIZE;
+                        o1 += LittleEndianConsts.INT_SIZE;
                         StringBuilder b = new StringBuilder((int)(last - first));
                         for (int i = 0; i <= l; i++)
                         {
@@ -370,7 +370,7 @@ namespace NPOI.HPSF
                 case Variant.VT_EMPTY:
                     {
                         TypeWriter.WriteUIntToStream(out1, Variant.VT_EMPTY);
-                        length = LittleEndianConstants.INT_SIZE;
+                        length = LittleEndianConsts.INT_SIZE;
                         break;
                     }
                 case Variant.VT_I2:
@@ -384,7 +384,7 @@ namespace NPOI.HPSF
                             x=(short)((int)value);
                         }
                         TypeWriter.WriteToStream(out1, x);
-                        length = LittleEndianConstants.SHORT_SIZE;
+                        length = LittleEndianConsts.SHORT_SIZE;
                         break;
                     }
                 case Variant.VT_I4:
@@ -402,7 +402,7 @@ namespace NPOI.HPSF
                 case Variant.VT_I8:
                     {
                         TypeWriter.WriteToStream(out1, Convert.ToInt64(value));
-                        length = LittleEndianConstants.LONG_SIZE;
+                        length = LittleEndianConsts.LONG_SIZE;
                         break;
                     }
                 case Variant.VT_R8:

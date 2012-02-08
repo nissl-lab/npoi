@@ -79,14 +79,14 @@ namespace NPOI.HSSF.Record
             // 1223 void XclImpOleObj::ReadPictFmla( XclImpStream& rStrm, sal_uInt16 nRecSize )
 
             int streamIdOffset = in1.ReadShort(); // OOO calls this 'nFmlaLen'
-            int remaining = size - LittleEndianConstants.SHORT_SIZE;
+            int remaining = size - LittleEndianConsts.SHORT_SIZE;
 
             int dataLenAfterFormula = remaining - streamIdOffset;
             int formulaSize = in1.ReadUShort();
 
-            remaining -= LittleEndianConstants.SHORT_SIZE;
+            remaining -= LittleEndianConsts.SHORT_SIZE;
             field_1_unknown_int = in1.ReadInt();
-            remaining -= LittleEndianConstants.INT_SIZE;
+            remaining -= LittleEndianConsts.INT_SIZE;
             byte[] formulaRawBytes = ReadRawData(in1, formulaSize);
             remaining -= formulaSize;
             field_2_refPtg = ReadRefPtg(formulaRawBytes);
@@ -107,18 +107,18 @@ namespace NPOI.HSSF.Record
             if (remaining >= dataLenAfterFormula + 3)
             {
                 int tag = in1.ReadByte();
-                stringByteCount = LittleEndianConstants.BYTE_SIZE;
+                stringByteCount = LittleEndianConsts.BYTE_SIZE;
                 if (tag != 0x03)
                 {
                     throw new RecordFormatException("Expected byte 0x03 here");
                 }
                 int nChars = in1.ReadUShort();
-                stringByteCount += LittleEndianConstants.SHORT_SIZE;
+                stringByteCount += LittleEndianConsts.SHORT_SIZE;
                 if (nChars > 0)
                 {
                     // OOO: the 4th way Xcl stores a unicode string: not even a Grbit byte present if Length 0
                     field_3_unicode_flag = (in1.ReadByte() & 0x01) != 0;
-                    stringByteCount += LittleEndianConstants.BYTE_SIZE;
+                    stringByteCount += LittleEndianConsts.BYTE_SIZE;
                     if (field_3_unicode_flag)
                     {
                         field_4_ole_classname = StringUtil.ReadUnicodeLE(in1,nChars);
@@ -145,7 +145,7 @@ namespace NPOI.HSSF.Record
             if (((stringByteCount + formulaSize) % 2) != 0)
             {
                 int b = in1.ReadByte();
-                remaining -= LittleEndianConstants.BYTE_SIZE;
+                remaining -= LittleEndianConsts.BYTE_SIZE;
                 if (field_2_refPtg != null && field_4_ole_classname == null)
                 {
                     field_4_unknownByte = (byte)b;
@@ -164,7 +164,7 @@ namespace NPOI.HSSF.Record
             if (dataLenAfterFormula >= 4)
             {
                 field_5_stream_id = in1.ReadInt();
-                remaining -= LittleEndianConstants.INT_SIZE;
+                remaining -= LittleEndianConsts.INT_SIZE;
             }
             else
             {

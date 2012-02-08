@@ -268,7 +268,7 @@ namespace NPOI.SS.Formula.PTG
             {
                 if (_jumpTable != null)
                 {
-                    return SIZE + (_jumpTable.Length + 1) * LittleEndianConstants.SHORT_SIZE;
+                    return SIZE + (_jumpTable.Length + 1) * LittleEndianConsts.SHORT_SIZE;
                 }
                return SIZE;
             }

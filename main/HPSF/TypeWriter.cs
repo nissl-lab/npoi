@@ -49,7 +49,7 @@ namespace NPOI.HPSF
         /// <returns></returns>
         public static int WriteToStream(Stream out1, short n)
         {
-            int Length = LittleEndianConstants.SHORT_SIZE;
+            int Length = LittleEndianConsts.SHORT_SIZE;
             byte[] buffer = new byte[Length];
             LittleEndian.PutShort(buffer, 0, n); // FIXME: unsigned
             out1.Write(buffer, 0, Length);
@@ -68,7 +68,7 @@ namespace NPOI.HPSF
          */
         public static int WriteToStream(Stream out1, int n)
         {
-            int l = LittleEndianConstants.INT_SIZE;
+            int l = LittleEndianConsts.INT_SIZE;
             byte[] buffer = new byte[l];
             LittleEndian.PutInt(buffer, 0, n);
             out1.Write(buffer, 0, l);
@@ -85,7 +85,7 @@ namespace NPOI.HPSF
  */
         public static int WriteToStream(Stream out1, uint n)
         {
-            int l = LittleEndianConstants.INT_SIZE;
+            int l = LittleEndianConsts.INT_SIZE;
             byte[] buffer = new byte[l];
             LittleEndian.PutUInt(buffer, 0, n);
             out1.Write(buffer, 0, l);
@@ -104,7 +104,7 @@ namespace NPOI.HPSF
          */
         public static int WriteToStream(Stream out1, long n)
         {
-            int l = LittleEndianConstants.LONG_SIZE;
+            int l = LittleEndianConsts.LONG_SIZE;
             byte[] buffer = new byte[l];
             LittleEndian.PutLong(buffer, 0, n);
             out1.Write(buffer, 0, l);
@@ -219,7 +219,7 @@ namespace NPOI.HPSF
          */
         public static int WriteToStream(Stream out1, double n)
         {
-            int l = LittleEndianConstants.DOUBLE_SIZE;
+            int l = LittleEndianConsts.DOUBLE_SIZE;
             byte[] buffer = new byte[l];
             LittleEndian.PutDouble(buffer, 0, n);
             out1.Write(buffer, 0, l);

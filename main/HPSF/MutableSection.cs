@@ -365,8 +365,8 @@ namespace NPOI.HPSF
                     /* Increase the position variable by the size of the property list so
                      * that it points behind the property list and To the beginning of the
                      * properties themselves. */
-                    position += 2 * LittleEndianConstants.INT_SIZE +
-                                PropertyCount * 2 * LittleEndianConstants.INT_SIZE;
+                    position += 2 * LittleEndianConsts.INT_SIZE +
+                                PropertyCount * 2 * LittleEndianConsts.INT_SIZE;
 
                     /* Writing the section's dictionary it tricky. If there is a dictionary
                      * (property 0) the codepage property (property 1) must be Set, Too. */
@@ -433,7 +433,7 @@ namespace NPOI.HPSF
                     byte[] pb2 = propertyStream.ToArray();
 
                     /* Write the section's Length: */
-                    TypeWriter.WriteToStream(out1, LittleEndianConstants.INT_SIZE * 2 +
+                    TypeWriter.WriteToStream(out1, LittleEndianConsts.INT_SIZE * 2 +
                                                   pb1.Length + pb2.Length);
 
                     /* Write the section's number of properties: */
@@ -445,7 +445,7 @@ namespace NPOI.HPSF
                     /* Write the properties: */
                     out1.Write(pb2, 0, pb2.Length);
 
-                    int streamLength = LittleEndianConstants.INT_SIZE * 2 + pb1.Length + pb2.Length;
+                    int streamLength = LittleEndianConsts.INT_SIZE * 2 + pb1.Length + pb2.Length;
                     return streamLength;
                 }
             }

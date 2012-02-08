@@ -105,9 +105,9 @@ namespace NPOI.HPSF
         private int OFFSet_HEADER =
             BYTE_ORDER_ASSERTION.Length + /* Byte order    */
             FORMAT_ASSERTION.Length +     /* Format        */
-            LittleEndianConstants.INT_SIZE + /* OS version    */
+            LittleEndianConsts.INT_SIZE + /* OS version    */
             ClassID.LENGTH +              /* Class ID      */
-            LittleEndianConstants.INT_SIZE;  /* Section count */
+            LittleEndianConsts.INT_SIZE;  /* Section count */
 
 
 
@@ -205,7 +205,7 @@ namespace NPOI.HPSF
             /* Write the section list, i.e. the references To the sections. Each
              * entry in the section list consist of the section's class ID and the
              * section's offset relative To the beginning of the stream. */
-            offset += nrSections * (ClassID.Length + LittleEndianConstants.INT_SIZE);
+            offset += nrSections * (ClassID.Length + LittleEndianConsts.INT_SIZE);
             int sectionsBegin = offset;
             for (IEnumerator i = sections.GetEnumerator(); i.MoveNext(); )
             {

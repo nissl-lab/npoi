@@ -115,7 +115,7 @@ namespace NPOI.POIFS.Storage
                         blocks[block_index++] =
                             (RawDataBlock)raw_block_list
                                 .Remove(LittleEndian.GetInt(data, offset));
-                        offset += LittleEndianConstants.INT_SIZE;
+                        offset += LittleEndianConsts.INT_SIZE;
                     }
                     chain_index = LittleEndian.GetInt(data, chain_index_offset);
                     if (chain_index == POIFSConstants.END_OF_CHAIN)
@@ -270,7 +270,7 @@ namespace NPOI.POIFS.Storage
                         raw_blocks.Zap(_entries.Count);
                     }
                     _entries.Add(entry);
-                    offset += LittleEndianConstants.INT_SIZE;
+                    offset += LittleEndianConsts.INT_SIZE;
                 }
 
                 // discard block

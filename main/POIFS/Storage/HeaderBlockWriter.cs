@@ -120,7 +120,7 @@ namespace NPOI.POIFS.Storage
             for (int j = 0; j < limit; j++)
             {
                 IntegerField.Write(offset, startBlock + j, _data);
-                offset += LittleEndianConstants.INT_SIZE;
+                offset += LittleEndianConsts.INT_SIZE;
             }
             if (blockCount > HeaderBlockConstants._max_bats_in_header)
             {

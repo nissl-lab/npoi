@@ -212,7 +212,7 @@ namespace NPOI.POIFS.Storage
                 for (int j = 0; j < HeaderBlockConstants._max_bats_in_header; j++)
                 {
                     result[ j ] = LittleEndian.GetInt(_data, offset);
-                    offset      += LittleEndianConstants.INT_SIZE;
+                    offset      += LittleEndianConsts.INT_SIZE;
                 }
                 return result;
             }

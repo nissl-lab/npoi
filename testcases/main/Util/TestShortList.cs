@@ -95,7 +95,7 @@ namespace NPOI.Util
                 list.Add(list.Count + 1, (short)8);
                 Assert.Fail("should have thrown exception");
             }
-            catch (IndexOutOfRangeException e)
+            catch (IndexOutOfRangeException)
             {
 
                 // as expected
@@ -311,7 +311,7 @@ namespace NPOI.Util
                         Assert.Fail("should have gotten exception");
                     }
                 }
-                catch (IndexOutOfRangeException e)
+                catch (IndexOutOfRangeException)
                 {
                     if (j != 1000)
                     {
@@ -414,7 +414,7 @@ namespace NPOI.Util
                 list.Remove(0);
                 Assert.Fail("should have caught IndexOutOfRangeException");
             }
-            catch (IndexOutOfRangeException e)
+            catch (IndexOutOfRangeException)
             {
 
                 // as expected

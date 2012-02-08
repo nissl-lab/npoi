@@ -988,24 +988,24 @@ namespace TestCases.POIFS.Storage
                 Assert.AreEqual(correct,
                              LittleEndian.GetInt(copy, offset), "XBAT entry " + k);
                 correct++;
-                offset += LittleEndianConstants.INT_SIZE;
+                offset += LittleEndianConsts.INT_SIZE;
             }
             Assert.AreEqual(0x01234567 + 257,
                          LittleEndian.GetInt(copy, offset), "XBAT Chain");
-            offset += LittleEndianConstants.INT_SIZE;
+            offset += LittleEndianConsts.INT_SIZE;
             k++;
             for (; k < 148; k++)
             {
                 Assert.AreEqual(correct,
                              LittleEndian.GetInt(copy, offset), "XBAT entry " + k);
                 correct++;
-                offset += LittleEndianConstants.INT_SIZE;
+                offset += LittleEndianConsts.INT_SIZE;
             }
             for (; k < 255; k++)
             {
                 Assert.AreEqual(-1,
                              LittleEndian.GetInt(copy, offset), "XBAT entry " + k);
-                offset += LittleEndianConstants.INT_SIZE;
+                offset += LittleEndianConsts.INT_SIZE;
             }
             Assert.AreEqual(-2,
                          LittleEndian.GetInt(copy, offset), "XBAT End of chain");

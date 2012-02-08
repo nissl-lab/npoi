@@ -58,7 +58,7 @@ namespace NPOI.POIFS.Common
 
         public int GetBATEntriesPerBlock()
         {
-            return bigBlockSize / LittleEndianConstants.INT_SIZE;
+            return bigBlockSize / LittleEndianConsts.INT_SIZE;
         }
         public int GetXBATEntriesPerBlock()
         {
@@ -66,7 +66,7 @@ namespace NPOI.POIFS.Common
         }
         public int GetNextXBATChainOffset()
         {
-            return GetXBATEntriesPerBlock() * LittleEndianConstants.INT_SIZE;
+            return GetXBATEntriesPerBlock() * LittleEndianConsts.INT_SIZE;
         }
     }
 

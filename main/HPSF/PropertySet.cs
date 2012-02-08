@@ -345,23 +345,23 @@ namespace NPOI.HPSF
              */
             int o = offset;
             int byteOrder = LittleEndian.GetUShort(src, o);
-            o += LittleEndianConstants.SHORT_SIZE;
-            byte[] temp = new byte[LittleEndianConstants.SHORT_SIZE];
+            o += LittleEndianConsts.SHORT_SIZE;
+            byte[] temp = new byte[LittleEndianConsts.SHORT_SIZE];
             LittleEndian.PutShort(temp, (short)byteOrder);
             if (!Arrays.Equals(temp, BYTE_ORDER_ASSERTION))
                 return false;
             int format = LittleEndian.GetUShort(src, o);
-            o += LittleEndianConstants.SHORT_SIZE;
-            temp = new byte[LittleEndianConstants.SHORT_SIZE];
+            o += LittleEndianConsts.SHORT_SIZE;
+            temp = new byte[LittleEndianConsts.SHORT_SIZE];
             LittleEndian.PutShort(temp, (short)format);
             if (!Arrays.Equals(temp, FORMAT_ASSERTION))
                 return false;
             long osVersion = LittleEndian.GetUInt(src, offset);
-            o += LittleEndianConstants.INT_SIZE;
+            o += LittleEndianConsts.INT_SIZE;
             ClassID classID = new ClassID(src, offset);
             o += ClassID.LENGTH;
             long sectionCount = LittleEndian.GetUInt(src, o);
-            o += LittleEndianConstants.INT_SIZE;
+            o += LittleEndianConsts.INT_SIZE;
             if (sectionCount < 0)
                 return false;
             return true;
@@ -387,15 +387,15 @@ namespace NPOI.HPSF
              */
             int o = offset;
             byteOrder = LittleEndian.GetUShort(src, o);
-            o += LittleEndianConstants.SHORT_SIZE;
+            o += LittleEndianConsts.SHORT_SIZE;
             format = LittleEndian.GetUShort(src, o);
-            o += LittleEndianConstants.SHORT_SIZE;
+            o += LittleEndianConsts.SHORT_SIZE;
             osVersion = (int)LittleEndian.GetUInt(src, o);
-            o += LittleEndianConstants.INT_SIZE;
+            o += LittleEndianConsts.INT_SIZE;
             classID = new ClassID(src, o);
             o += ClassID.LENGTH;
             int sectionCount = LittleEndian.GetInt(src, o);
-            o += LittleEndianConstants.INT_SIZE;
+            o += LittleEndianConsts.INT_SIZE;
             if (sectionCount < 0)
                 throw new HPSFRuntimeException("Section count " + sectionCount +
                                                " is negative.");
@@ -422,7 +422,7 @@ namespace NPOI.HPSF
             for (int i = 0; i < sectionCount; i++)
             {
                 Section s = new Section(src, o);
-                o += ClassID.Length + LittleEndianConstants.INT_SIZE;
+                o += ClassID.Length + LittleEndianConsts.INT_SIZE;
                 sections.Add(s);
             }
         }
