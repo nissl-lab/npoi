@@ -393,4 +393,20 @@ namespace NPOI.POIFS.Storage
             WriteData(stream, _data);
         }
     }
+    public class BATBlockAndIndex {
+       private int index;
+       private BATBlock block;
+       public BATBlockAndIndex(int index, BATBlock block) {
+          this.index = index;
+          this.block = block;
+       }
+       public int Index 
+       {
+           get { return index; }
+       }
+       public BATBlock Block
+       {
+           get { return block; }
+       }
+    }
 }
