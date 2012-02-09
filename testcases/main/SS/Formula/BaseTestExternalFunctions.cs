@@ -34,54 +34,11 @@ namespace TestCases.SS.Formula
     [TestClass]
     public class BaseTestExternalFunctions
     {
-        // define two custom user-defined functions
-        private class MyFunc : FreeRefFunction
-        {
-            public MyFunc()
-            {
-                //
-            }
-
-            public ValueEval Evaluate(ValueEval[] args, OperationEvaluationContext ec)
-            {
-                if (args.Length != 1 || !(args[0] is StringEval))
-                {
-                    return ErrorEval.VALUE_INVALID;
-                }
-                StringEval input = (StringEval)args[0];
-                return new StringEval(input.StringValue + "abc");
-            }
-        }
-
-        private class MyFunc2 : FreeRefFunction
-        {
-            public MyFunc2()
-            {
-                //
-            }
-
-            public ValueEval Evaluate(ValueEval[] args, OperationEvaluationContext ec)
-            {
-                if (args.Length != 1 || !(args[0] is StringEval))
-                {
-                    return ErrorEval.VALUE_INVALID;
-                }
-                StringEval input = (StringEval)args[0];
-                return new StringEval(input.StringValue + "abc2");
-            }
-        }
-
-        /**
-         * register the two Test UDFs in a UDF Finder, to be passed to the workbook
-         */
-        private static UDFFinder customToolpack = new DefaultUDFFinder(
-                new String[] { "myFunc", "myFunc2" },
-                new FreeRefFunction[] { new MyFunc(), new MyFunc2() }
-        );
-
-
         protected ITestDataProvider _testDataProvider;
-
+        public BaseTestExternalFunctions()
+        {
+            _testDataProvider = TestCases.HSSF.HSSFITestDataProvider.Instance;
+        }
         /**
          * @param TestDataProvider an object that provides Test data in HSSF / XSSF specific way
          */
@@ -153,6 +110,51 @@ namespace TestCases.SS.Formula
             Assert.AreEqual(CellType.BOOLEAN, Evaluator.EvaluateFormulaCell(cell3));
 
         }
+
+        // define two custom user-defined functions
+        private class MyFunc : FreeRefFunction
+        {
+            public MyFunc()
+            {
+                //
+            }
+
+            public ValueEval Evaluate(ValueEval[] args, OperationEvaluationContext ec)
+            {
+                if (args.Length != 1 || !(args[0] is StringEval))
+                {
+                    return ErrorEval.VALUE_INVALID;
+                }
+                StringEval input = (StringEval)args[0];
+                return new StringEval(input.StringValue + "abc");
+            }
+        }
+
+        private class MyFunc2 : FreeRefFunction
+        {
+            public MyFunc2()
+            {
+                //
+            }
+
+            public ValueEval Evaluate(ValueEval[] args, OperationEvaluationContext ec)
+            {
+                if (args.Length != 1 || !(args[0] is StringEval))
+                {
+                    return ErrorEval.VALUE_INVALID;
+                }
+                StringEval input = (StringEval)args[0];
+                return new StringEval(input.StringValue + "abc2");
+            }
+        }
+
+        /**
+         * register the two Test UDFs in a UDF Finder, to be passed to the workbook
+         */
+        private static UDFFinder customToolpack = new DefaultUDFFinder(
+                new String[] { "myFunc", "myFunc2" },
+                new FreeRefFunction[] { new MyFunc(), new MyFunc2() }
+        );
 
     }
 

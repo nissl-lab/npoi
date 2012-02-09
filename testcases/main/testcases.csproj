@@ -421,6 +421,7 @@
     <Compile Include="SS\Formula\Atp\TestRandBetween.cs" />
     <Compile Include="SS\Formula\Atp\TestYearFracCalculator.cs" />
     <Compile Include="SS\Formula\Atp\TestYearFracCalculatorFromSpreadsheet.cs" />
+    <Compile Include="SS\Formula\BaseTestExternalFunctions.cs" />
     <Compile Include="SS\Formula\Constant\TestConstantValueParser.cs" />
     <Compile Include="SS\Formula\EvaluationListener.cs">
       <SubType>Code</SubType>

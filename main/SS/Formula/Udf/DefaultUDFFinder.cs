@@ -42,14 +42,14 @@ namespace NPOI.SS.Formula.Udf
             Dictionary<String, FreeRefFunction> m = new Dictionary<String, FreeRefFunction>(nFuncs * 3 / 2);
             for (int i = 0; i < functionImpls.Length; i++)
             {
-                m[functionNames[i]]= functionImpls[i];
+                m[functionNames[i].ToUpper()]= functionImpls[i];
             }
             _functionsByName = m;
         }
 
         public override FreeRefFunction FindFunction(String name)
         {
-            if (!_functionsByName.ContainsKey(name))
+            if (!_functionsByName.ContainsKey(name.ToUpper()))
                 return null;
             
             return _functionsByName[name];

@@ -157,5 +157,16 @@ namespace NPOI.Util.Collections
 		{
 			get { return impl.SyncRoot; }
 		}
-	}
+
+
+        /// <summary>
+        /// Removes all of the elements from this set.
+        /// The set will be empty after this call returns.
+        /// </summary>
+        public void Clear()
+        {
+            impl.Clear();
+        }
+
+    }
 }

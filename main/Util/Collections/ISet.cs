@@ -53,5 +53,10 @@ namespace NPOI.Util.Collections
         /// </summary>
         /// <param name="o">The o.</param>
 		void Remove(object o);
+        /// <summary>
+        /// Removes all of the elements from this set (optional operation).
+        /// The set will be empty after this call returns.
+        /// </summary>
+        void Clear();
 	}
 }
