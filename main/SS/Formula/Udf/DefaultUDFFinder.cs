@@ -51,8 +51,8 @@ namespace NPOI.SS.Formula.Udf
         {
             if (!_functionsByName.ContainsKey(name.ToUpper()))
                 return null;
-            
-            return _functionsByName[name];
+
+            return _functionsByName[name.ToUpper()];
         }
     }
 
