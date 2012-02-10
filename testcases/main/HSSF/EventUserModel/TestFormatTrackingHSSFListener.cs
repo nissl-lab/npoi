@@ -56,15 +56,13 @@ namespace TestCases.HSSF.EventUserModel
             }
         }
         [TestMethod]
-        public void TestTrackingHSSFListenerFormats()
+        public void TestFormats()
         {
-           // System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.GetCultureInfo("en-US");
-
             ProcessFile("MissingBits.xls");
 
-            Assert.AreEqual("_(*#,##0_);_(*(#,##0);_(* \"-\"_);_(@_)", listener.GetFormatString(41));
-            Assert.AreEqual("_($*#,##0_);_($*(#,##0);_($* \"-\"_);_(@_)", listener.GetFormatString(42));
-            Assert.AreEqual("_(*#,##0.00_);_(*(#,##0.00);_(*\"-\"??_);_(@_)", listener.GetFormatString(43));
+            Assert.AreEqual("_(\"$\"* #,##0_);_(\"$\"* (#,##0);_(\"$\"* \"-\"_);_(@_)", listener.GetFormatString(41));
+            Assert.AreEqual("_(* #,##0_);_(* (#,##0);_(* \"-\"_);_(@_)", listener.GetFormatString(42));
+            Assert.AreEqual("_(\"$\"* #,##0.00_);_(\"$\"* (#,##0.00);_(\"$\"* \"-\"??_);_(@_)", listener.GetFormatString(43));
         }
 
         /**
