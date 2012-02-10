@@ -24,6 +24,7 @@ namespace TestCases.HSSF.Record
     using NPOI.Util.Collections;
     using NPOI.HSSF.Record;
     using NPOI.HSSF.Record.Cont;
+    using NPOI.Util;
 
 
     /**
@@ -37,7 +38,7 @@ namespace TestCases.HSSF.Record
         private static String SMALL_STRING = "Small string";
         private static int COMPRESSED_PLAIN_STRING_OVERHEAD = 3;
         //    private List recordLengths;
-        private IntMapper strings;
+        private IntMapper<UnicodeString> strings;
         private static int OPTION_FIELD_SIZE = 1;
 
         public TestSSTRecordSizeCalculator()
@@ -118,7 +119,7 @@ namespace TestCases.HSSF.Record
         [TestInitialize]
         public void SetUp()
         {
-            strings = new IntMapper();
+            strings = new IntMapper<UnicodeString>();
         }
 
         private static UnicodeString MakeUnicodeString(int size)

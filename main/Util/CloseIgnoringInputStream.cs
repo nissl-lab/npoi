@@ -28,7 +28,7 @@
 using System;
 using System.IO;
 
-namespace NPOI.POIFS.FileSystem
+namespace NPOI.Util
 {
     internal class CloseIgnoringInputStream : Stream
     {
@@ -91,7 +91,7 @@ namespace NPOI.POIFS.FileSystem
         {
             get
             {
-                return (long)this._is.Length;
+                return this._is.Length;
             }
         }
 
@@ -99,11 +99,11 @@ namespace NPOI.POIFS.FileSystem
         {
             get
             {
-                return (long)this._is.Position;
+                return this._is.Position;
             }
             set
             {
-                this._is.Position = Convert.ToInt32(value);
+                this._is.Position = value;
             }
         }
         public override void Write(byte[] buffer, int offset, int count)

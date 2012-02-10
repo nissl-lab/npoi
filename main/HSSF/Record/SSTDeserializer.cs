@@ -34,9 +34,9 @@ namespace NPOI.HSSF.Record
     public class SSTDeserializer
     {
 
-        private IntMapper strings;
+        private IntMapper<UnicodeString> strings;
 
-        public SSTDeserializer(IntMapper strings)
+        public SSTDeserializer(IntMapper<UnicodeString> strings)
         {
             this.strings = strings;
         }
@@ -56,7 +56,7 @@ namespace NPOI.HSSF.Record
             }
         }
 
-        static public void AddToStringTable(IntMapper strings, UnicodeString str)
+        static public void AddToStringTable(IntMapper<UnicodeString> strings, UnicodeString str)
         {
             strings.Add(str);
         }

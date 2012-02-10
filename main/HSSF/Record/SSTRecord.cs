@@ -74,7 +74,7 @@ namespace NPOI.HSSF.Record
 
         /** according to docs ONLY SST */
         private int field_2_num_unique_strings;
-        private IntMapper field_3_strings;
+        private IntMapper<UnicodeString> field_3_strings;
 
         private SSTDeserializer deserializer;
 
@@ -90,7 +90,7 @@ namespace NPOI.HSSF.Record
         {
             field_1_num_strings = 0;
             field_2_num_unique_strings = 0;
-            field_3_strings = new IntMapper();
+            field_3_strings = new IntMapper<UnicodeString>();
             deserializer = new SSTDeserializer(field_3_strings);
         }
 
@@ -107,7 +107,7 @@ namespace NPOI.HSSF.Record
             // we initialize our fields
             field_1_num_strings = in1.ReadInt();
             field_2_num_unique_strings = in1.ReadInt();
-            field_3_strings = new IntMapper();
+            field_3_strings = new IntMapper<UnicodeString>();
             deserializer = new SSTDeserializer(field_3_strings);
             deserializer.ManufactureStrings(field_2_num_unique_strings, in1);
         }

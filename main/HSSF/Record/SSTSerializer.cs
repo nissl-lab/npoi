@@ -35,7 +35,7 @@ namespace NPOI.HSSF.Record
         private int _numStrings;
         private int _numUniqueStrings;
 
-        private IntMapper strings;
+        private IntMapper<UnicodeString> strings;
 
         /** OffSets from the beginning of the SST record (even across continuations) */
         private int[] bucketAbsoluteOffsets;
@@ -43,7 +43,7 @@ namespace NPOI.HSSF.Record
         private int[] bucketRelativeOffsets;
         // fix warning CS0169 "never used": int startOfSST, startOfRecord;
 
-        public SSTSerializer(IntMapper strings, int numStrings, int numUniqueStrings)
+        public SSTSerializer(IntMapper<UnicodeString> strings, int numStrings, int numUniqueStrings)
         {
             this.strings = strings;
             _numStrings = numStrings;
@@ -83,7 +83,7 @@ namespace NPOI.HSSF.Record
             return GetUnicodeString(strings, index);
         }
 
-        private static UnicodeString GetUnicodeString(IntMapper strings, int index)
+        private static UnicodeString GetUnicodeString(IntMapper<UnicodeString> strings, int index)
         {
             return (UnicodeString)strings[index];
         }

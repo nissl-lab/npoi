@@ -64,7 +64,7 @@ namespace TestCases.HSSF.Record
             RecordInputStream in1 = TestcaseRecordInputStream.Create(Concat(header, continueBytes));
 
 
-            IntMapper strings = new IntMapper();
+            IntMapper<UnicodeString> strings = new IntMapper<UnicodeString>();
             SSTDeserializer deserializer = new SSTDeserializer(strings);
             deserializer.ManufactureStrings(1, in1);
 
@@ -77,7 +77,7 @@ namespace TestCases.HSSF.Record
             byte[] continueBytes = ReadSampleHexData("evencontinuation.txt", "continue1", ContinueRecord.sid);
             RecordInputStream in1 = TestcaseRecordInputStream.Create(Concat(header, continueBytes));
 
-            IntMapper strings = new IntMapper();
+            IntMapper<UnicodeString> strings = new IntMapper<UnicodeString>();
             SSTDeserializer deserializer = new SSTDeserializer(strings);
             deserializer.ManufactureStrings(2, in1);
 
@@ -99,7 +99,7 @@ namespace TestCases.HSSF.Record
             bytes = Concat(bytes, continue2);
             RecordInputStream in1 = TestcaseRecordInputStream.Create(bytes);
 
-            IntMapper strings = new IntMapper();
+            IntMapper<UnicodeString> strings = new IntMapper<UnicodeString>();
             SSTDeserializer deserializer = new SSTDeserializer(strings);
             deserializer.ManufactureStrings(2, in1);
 
@@ -113,7 +113,7 @@ namespace TestCases.HSSF.Record
             byte[] continueBytes = ReadSampleHexData("extendedtextstrings.txt", "rich-continue1", ContinueRecord.sid);
             RecordInputStream in1 = TestcaseRecordInputStream.Create(Concat(header, continueBytes));
 
-            IntMapper strings = new IntMapper();
+            IntMapper<UnicodeString> strings = new IntMapper<UnicodeString>();
             SSTDeserializer deserializer = new SSTDeserializer(strings);
             deserializer.ManufactureStrings(1, in1);
 
@@ -124,7 +124,7 @@ namespace TestCases.HSSF.Record
             continueBytes = ReadSampleHexData("extendedtextstrings.txt", "norich-continue1", ContinueRecord.sid);
             in1 = TestcaseRecordInputStream.Create(Concat(header, continueBytes));
 
-            strings = new IntMapper();
+            strings = new IntMapper<UnicodeString>();
             deserializer = new SSTDeserializer(strings);
             deserializer.ManufactureStrings(1, in1);
 

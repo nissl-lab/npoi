@@ -426,7 +426,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POIFS\FileSystem\BATManaged.cs" />
-    <Compile Include="POIFS\FileSystem\CloseIgnoringInputStream.cs" />
+    <Compile Include="Util\CloseIgnoringInputStream.cs" />
     <Compile Include="POIFS\FileSystem\DirectoryEntry.cs" />
     <Compile Include="POIFS\FileSystem\DirectoryNode.cs" />
     <Compile Include="POIFS\FileSystem\DocumentDescriptor.cs" />
@@ -943,7 +943,6 @@
     <Compile Include="Util\ClassID.cs" />
     <Compile Include="Util\Collections\EmptyEnumerable.cs" />
     <Compile Include="Util\Collections\HashSet.cs" />
-    <Compile Include="Util\Collections\IntMapper.cs" />
     <Compile Include="Util\Collections\ISet.cs" />
     <Compile Include="Util\Collections\Properties.cs" />
     <Compile Include="Util\Collections\StringTokenizer.cs" />
@@ -953,6 +952,7 @@
     <Compile Include="Util\HexRead.cs" />
     <Compile Include="Util\IntegerField.cs" />
     <Compile Include="Util\IntList.cs" />
+    <Compile Include="Util\IntMapper.cs" />
     <Compile Include="Util\IO\DelayableLittleEndianOutput.cs" />
     <Compile Include="Util\IOUtils.cs" />
     <Compile Include="Util\IO\LittleEndianByteArrayInputStream.cs" />
@@ -976,6 +976,7 @@
     <Compile Include="Util\ShortField.cs" />
     <Compile Include="Util\ShortList.cs" />
     <Compile Include="Util\StringUtil.cs" />
+    <Compile Include="Util\SystemOutLogger.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="npoi.snk" />
