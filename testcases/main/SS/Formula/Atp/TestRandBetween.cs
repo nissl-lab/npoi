@@ -35,7 +35,7 @@ namespace TestCases.SS.Formula.Atp
     {
 
         private HSSFWorkbook wb;
-        private FormulaEvaluator Evaluator;
+        private IFormulaEvaluator Evaluator;
         private ICell bottomValueCell;
         private ICell topValueCell;
         private ICell formulaCell;

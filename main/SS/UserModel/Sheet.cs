@@ -698,7 +698,7 @@ namespace NPOI.SS.UserModel
         /// Create an instance of a DataValidationHelper.
         /// </summary>
         /// <returns>Instance of a DataValidationHelper</returns>
-        DataValidationHelper GetDataValidationHelper();
+        IDataValidationHelper GetDataValidationHelper();
 
         /// <summary>
         /// Creates a data validation object

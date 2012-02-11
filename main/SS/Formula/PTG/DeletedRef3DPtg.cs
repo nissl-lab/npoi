@@ -50,7 +50,7 @@ namespace NPOI.SS.Formula.PTG
             field_1_index_extern_sheet = externSheetIndex;
             unused1 = 0;
         }
-        public String ToFormulaString(FormulaRenderingWorkbook book)
+        public String ToFormulaString(IFormulaRenderingWorkbook book)
         {
             return ExternSheetNameResolver.PrependSheetName(book, field_1_index_extern_sheet,
                 HSSFErrorConstants.GetText(HSSFErrorConstants.ERROR_REF));

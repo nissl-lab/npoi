@@ -8,7 +8,7 @@ namespace NPOI.SS.Formula.PTG
     public class ExternSheetNameResolver
     {
 
-        public static String PrependSheetName(FormulaRenderingWorkbook book, int field_1_index_extern_sheet, String cellRefText)
+        public static String PrependSheetName(IFormulaRenderingWorkbook book, int field_1_index_extern_sheet, String cellRefText)
         {
             ExternalSheet externalSheet = book.GetExternalSheet(field_1_index_extern_sheet);
             StringBuilder sb;

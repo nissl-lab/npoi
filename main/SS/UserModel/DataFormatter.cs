@@ -727,7 +727,7 @@ using System.Globalization;
          * @param evaluator The HSSFFormulaEvaluator (can be null)
          * @return a string value of the cell
          */
-        public String FormatCellValue(ICell cell, FormulaEvaluator evaluator)
+        public String FormatCellValue(ICell cell, IFormulaEvaluator evaluator)
         {
 
             if (cell == null)

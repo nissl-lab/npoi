@@ -301,7 +301,7 @@ namespace TestCases.SS.UserModel
             ICell s2E4 = s2r3.CreateCell(4);
             s2E4.CellFormula = (/*setter*/"SUM(s3!B2:C3)");
 
-            FormulaEvaluator eva = xlw.GetCreationHelper().CreateFormulaEvaluator();
+            IFormulaEvaluator eva = xlw.GetCreationHelper().CreateFormulaEvaluator();
             double d = eva.Evaluate(s2E4).NumberValue;
 
             Assert.AreEqual(d, (311 + 312 + 321 + 322), 0.0000001);

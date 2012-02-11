@@ -37,7 +37,7 @@ namespace TestCases.SS.Formula
         {
             // do nothing
         }
-        public virtual void OnStartEvaluate(EvaluationCell cell, ICacheEntry entry)
+        public virtual void OnStartEvaluate(IEvaluationCell cell, ICacheEntry entry)
         {
             // do nothing
         }
@@ -54,7 +54,7 @@ namespace TestCases.SS.Formula
             // do nothing
         }
         public virtual void OnChangeFromBlankValue(int sheetIndex, int rowIndex, int columnIndex,
-                EvaluationCell cell, ICacheEntry entry)
+                IEvaluationCell cell, ICacheEntry entry)
         {
             // do nothing
         }

@@ -334,7 +334,7 @@ namespace TestCases.HSSF.UserModel
             {
                 _countCacheHits++;
             }
-            public override void OnStartEvaluate(EvaluationCell cell, ICacheEntry entry)
+            public override void OnStartEvaluate(IEvaluationCell cell, ICacheEntry entry)
             {
                 _countCacheMisses++;
             }

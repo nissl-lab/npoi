@@ -78,7 +78,7 @@ namespace NPOI.SS.Formula.PTG
             get { return SIZE; }
         }
 
-        public String ToFormulaString(FormulaRenderingWorkbook book)
+        public String ToFormulaString(IFormulaRenderingWorkbook book)
         {
             // -1 to convert definedNameIndex from 1-based to zero-based
             return book.ResolveNameXText(this);

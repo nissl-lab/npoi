@@ -32,7 +32,7 @@ namespace NPOI.HSSF.UserModel
      * 
      * @author Josh Micich
      */
-    public class HSSFEvaluationWorkbook : FormulaRenderingWorkbook, IEvaluationWorkbook, FormulaParsingWorkbook
+    public class HSSFEvaluationWorkbook : IFormulaRenderingWorkbook, IEvaluationWorkbook, FormulaParsingWorkbook
     {
 
         private HSSFWorkbook _uBook;
@@ -85,7 +85,7 @@ namespace NPOI.HSSF.UserModel
             return sheetIndex == -1 ? null : GetName(name, -1);
         }
 
-        public int GetSheetIndex(EvaluationSheet evalSheet)
+        public int GetSheetIndex(IEvaluationSheet evalSheet)
         {
             HSSFSheet sheet = ((HSSFEvaluationSheet)evalSheet).HSSFSheet;
             return _uBook.GetSheetIndex(sheet);
@@ -100,7 +100,7 @@ namespace NPOI.HSSF.UserModel
             return _uBook.GetSheetName(sheetIndex);
         }
 
-        public EvaluationSheet GetSheet(int sheetIndex)
+        public IEvaluationSheet GetSheet(int sheetIndex)
         {
             return new HSSFEvaluationSheet((HSSFSheet)_uBook.GetSheetAt(sheetIndex));
         }
@@ -132,7 +132,7 @@ namespace NPOI.HSSF.UserModel
             int ix = namePtg.Index;
             return new Name(_iBook.GetNameRecord(ix), ix);
         }
-        public Ptg[] GetFormulaTokens(EvaluationCell evalCell)
+        public Ptg[] GetFormulaTokens(IEvaluationCell evalCell)
         {
             ICell cell = ((HSSFEvaluationCell)evalCell).HSSFCell;
             //if (false)

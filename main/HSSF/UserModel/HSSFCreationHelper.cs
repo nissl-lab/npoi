@@ -53,7 +53,7 @@ namespace NPOI.HSSF.UserModel
          *
          * @return a HSSFFormulaEvaluator instance
          */
-        public NPOI.SS.UserModel.FormulaEvaluator CreateFormulaEvaluator()
+        public NPOI.SS.UserModel.IFormulaEvaluator CreateFormulaEvaluator()
         {
             return new HSSFFormulaEvaluator(workbook);
         }

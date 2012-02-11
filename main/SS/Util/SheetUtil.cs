@@ -54,8 +54,8 @@ namespace NPOI.SS.Util
          *
          *  See Bugzilla #50021 
          */
-        private FormulaEvaluator dummyEvaluator = new DummyEvaluator();
-        public class DummyEvaluator : FormulaEvaluator
+        private IFormulaEvaluator dummyEvaluator = new DummyEvaluator();
+        public class DummyEvaluator : IFormulaEvaluator
         {
             public void ClearAllCachedResultValues() { }
             public void NotifySetFormula(ICell cell) { }

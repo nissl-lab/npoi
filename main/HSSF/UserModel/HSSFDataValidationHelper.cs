@@ -27,7 +27,7 @@ namespace NPOI.HSSF.UserModel
      * @author <a href="rjankiraman@emptoris.com">Radhakrishnan J</a>
      * 
      */
-    public class HSSFDataValidationHelper : DataValidationHelper
+    public class HSSFDataValidationHelper : IDataValidationHelper
     {
         private HSSFSheet sheet;
 

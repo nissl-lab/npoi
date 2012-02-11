@@ -35,7 +35,7 @@ namespace NPOI.SS.Formula.PTG
      * @author Jason Height (jheight at chariot dot net dot au)
      * @version 1.0-pre
      */
-    public class Ref3DPtg : RefPtgBase, WorkbookDependentFormula, ExternSheetReferenceToken
+    public class Ref3DPtg : RefPtgBase, WorkbookDependentFormula, IExternSheetReferenceToken
     {
         public const byte sid = 0x3a;
         private static int SIZE = 7; // 6 + 1 for Ptg
@@ -107,7 +107,7 @@ namespace NPOI.SS.Formula.PTG
          * @return text representation of this cell reference that can be used in text 
          * formulas. The sheet name will Get properly delimited if required.
          */
-        public String ToFormulaString(FormulaRenderingWorkbook book)
+        public String ToFormulaString(IFormulaRenderingWorkbook book)
         {
             return ExternSheetNameResolver.PrependSheetName(book, field_1_index_extern_sheet, FormatReferenceAsString());
         }

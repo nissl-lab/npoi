@@ -25,13 +25,13 @@ namespace NPOI.HSSF.UserModel
     /// HSSF wrapper for a cell under evaluation
     /// @author Josh Micich
     /// </summary>
-    public class HSSFEvaluationCell : EvaluationCell
+    public class HSSFEvaluationCell : IEvaluationCell
     {
 
-        private EvaluationSheet _evalSheet;
+        private IEvaluationSheet _evalSheet;
         private NPOI.SS.UserModel.ICell _cell;
 
-        public HSSFEvaluationCell(NPOI.SS.UserModel.ICell cell, EvaluationSheet evalSheet)
+        public HSSFEvaluationCell(NPOI.SS.UserModel.ICell cell, IEvaluationSheet evalSheet)
         {
             _cell = cell;
             _evalSheet = evalSheet;
@@ -104,7 +104,7 @@ namespace NPOI.HSSF.UserModel
                 return _cell.RowIndex;
             }
         }
-        public EvaluationSheet Sheet
+        public IEvaluationSheet Sheet
         {
             get
             {

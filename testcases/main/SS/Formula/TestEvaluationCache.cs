@@ -46,20 +46,20 @@ namespace TestCases.SS.Formula
         private class FormulaCellCacheEntryComparer : IComparer<ICacheEntry>
         {
 
-            private Dictionary<ICacheEntry, EvaluationCell> _formulaCellsByCacheEntry;
+            private Dictionary<ICacheEntry, IEvaluationCell> _formulaCellsByCacheEntry;
 
-            public FormulaCellCacheEntryComparer(Dictionary<ICacheEntry, EvaluationCell> formulaCellsByCacheEntry)
+            public FormulaCellCacheEntryComparer(Dictionary<ICacheEntry, IEvaluationCell> formulaCellsByCacheEntry)
             {
                 _formulaCellsByCacheEntry = formulaCellsByCacheEntry;
             }
-            private EvaluationCell GetCell(ICacheEntry a)
+            private IEvaluationCell GetCell(ICacheEntry a)
             {
                 return _formulaCellsByCacheEntry[a];
             }
             public int Compare(ICacheEntry oa, ICacheEntry ob)
             {
-                EvaluationCell a = GetCell(oa);
-                EvaluationCell b = GetCell(ob);
+                IEvaluationCell a = GetCell(oa);
+                IEvaluationCell b = GetCell(ob);
                 int cmp;
                 cmp = a.RowIndex - b.RowIndex;
                 if (cmp != 0)
@@ -84,14 +84,14 @@ namespace TestCases.SS.Formula
 
             private List<String> _logList;
             private HSSFWorkbook _book;
-            private Dictionary<ICacheEntry, EvaluationCell> _formulaCellsByCacheEntry;
+            private Dictionary<ICacheEntry, IEvaluationCell> _formulaCellsByCacheEntry;
             private Dictionary<ICacheEntry, Loc> _plainCellLocsByCacheEntry;
 
             public EvalListener(HSSFWorkbook wb)
             {
                 _book = wb;
                 _logList = new List<String>();
-                _formulaCellsByCacheEntry = new Dictionary<ICacheEntry, EvaluationCell>();
+                _formulaCellsByCacheEntry = new Dictionary<ICacheEntry, IEvaluationCell>();
                 _plainCellLocsByCacheEntry = new Dictionary<ICacheEntry, Loc>();
             }
             public override void OnCacheHit(int sheetIndex, int rowIndex, int columnIndex, ValueEval result)
@@ -105,7 +105,7 @@ namespace TestCases.SS.Formula
                     _plainCellLocsByCacheEntry.Add(entry, loc);
                 Log("value", rowIndex, columnIndex, entry.GetValue());
             }
-            public override void OnStartEvaluate(EvaluationCell cell, ICacheEntry entry)
+            public override void OnStartEvaluate(IEvaluationCell cell, ICacheEntry entry)
             {
                 if (!_formulaCellsByCacheEntry.ContainsKey(entry))
                     _formulaCellsByCacheEntry.Add(entry, cell);
@@ -114,14 +114,14 @@ namespace TestCases.SS.Formula
             }
             public override void OnEndEvaluate(ICacheEntry entry, ValueEval result)
             {
-                EvaluationCell cell = _formulaCellsByCacheEntry[(entry)];
+                IEvaluationCell cell = _formulaCellsByCacheEntry[(entry)];
                 Log("end", cell.RowIndex, cell.ColumnIndex, result);
             }
             public override void OnClearCachedValue(ICacheEntry entry)
             {
                 int rowIndex;
                 int columnIndex;
-                EvaluationCell cell = _formulaCellsByCacheEntry.ContainsKey(entry) ? _formulaCellsByCacheEntry[entry] : null;
+                IEvaluationCell cell = _formulaCellsByCacheEntry.ContainsKey(entry) ? _formulaCellsByCacheEntry[entry] : null;
                 if (cell == null)
                 {
                     Loc loc = _plainCellLocsByCacheEntry.ContainsKey(entry) ? _plainCellLocsByCacheEntry[entry] : null;
@@ -145,12 +145,12 @@ namespace TestCases.SS.Formula
             }
             public override void OnClearDependentCachedValue(ICacheEntry entry, int depth)
             {
-                EvaluationCell cell = _formulaCellsByCacheEntry.ContainsKey(entry) ? _formulaCellsByCacheEntry[(entry)] : null;
+                IEvaluationCell cell = _formulaCellsByCacheEntry.ContainsKey(entry) ? _formulaCellsByCacheEntry[(entry)] : null;
                 Log("clear" + depth, cell.RowIndex, cell.ColumnIndex, entry.GetValue());
             }
 
             public override void OnChangeFromBlankValue(int sheetIndex, int rowIndex, int columnIndex,
-                    EvaluationCell cell, ICacheEntry entry)
+                    IEvaluationCell cell, ICacheEntry entry)
             {
                 Log("changeFromBlank", rowIndex, columnIndex, entry.GetValue());
                 if (entry.GetValue() == null)
@@ -242,7 +242,7 @@ namespace TestCases.SS.Formula
                 _sheet = _wb.CreateSheet("Sheet1");
             }
 
-            private static EvaluationCell WrapCell(ICell cell)
+            private static IEvaluationCell WrapCell(ICell cell)
             {
                 return HSSFEvaluationTestHelper.WrapCell(cell);
             }
@@ -792,7 +792,7 @@ namespace TestCases.SS.Formula
 
 
             //calculate
-            FormulaEvaluator Evaluator = wb.GetCreationHelper().CreateFormulaEvaluator();
+            IFormulaEvaluator Evaluator = wb.GetCreationHelper().CreateFormulaEvaluator();
             Evaluator.EvaluateFormulaCell(summaryCell);
         }
 
@@ -834,7 +834,7 @@ namespace TestCases.SS.Formula
 
 
             //calculate
-            FormulaEvaluator Evaluator = wb.GetCreationHelper().CreateFormulaEvaluator();
+            IFormulaEvaluator Evaluator = wb.GetCreationHelper().CreateFormulaEvaluator();
             Evaluator.EvaluateFormulaCell(summaryCell);
             Assert.AreEqual(8394753.0, summaryCell.NumericCellValue);
         }

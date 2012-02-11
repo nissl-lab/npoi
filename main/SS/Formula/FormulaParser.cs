@@ -406,7 +406,7 @@ namespace NPOI.SS.Formula
             {
                 return true;
             }
-            if (token is ExternSheetReferenceToken)
+            if (token is IExternSheetReferenceToken)
             { // 3D refs
                 return true;
             }

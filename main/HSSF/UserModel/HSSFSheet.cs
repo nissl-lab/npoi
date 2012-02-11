@@ -2156,7 +2156,7 @@ namespace NPOI.HSSF.UserModel
         /// Create an instance of a DataValidationHelper.
         /// </summary>
         /// <returns>Instance of a DataValidationHelper</returns>
-        public DataValidationHelper GetDataValidationHelper()
+        public IDataValidationHelper GetDataValidationHelper()
         {
             return new HSSFDataValidationHelper(this);
         }

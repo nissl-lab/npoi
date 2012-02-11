@@ -47,7 +47,7 @@ namespace NPOI.SS.Formula
             _formulaCellCache = new FormulaCellCache();
         }
 
-        public void NotifyUpdateCell(int bookIndex, int sheetIndex, EvaluationCell cell)
+        public void NotifyUpdateCell(int bookIndex, int sheetIndex, IEvaluationCell cell)
         {
             FormulaCellCacheEntry fcce = _formulaCellCache.Get(cell);
 
@@ -226,7 +226,7 @@ namespace NPOI.SS.Formula
             throw new InvalidOperationException("Unexpected value class (" + cls.Name + ")");
         }
 
-        public FormulaCellCacheEntry GetOrCreateFormulaCellEntry(EvaluationCell cell)
+        public FormulaCellCacheEntry GetOrCreateFormulaCellEntry(IEvaluationCell cell)
         {            
             FormulaCellCacheEntry result = _formulaCellCache.Get(cell);
             if (result == null)
@@ -250,7 +250,7 @@ namespace NPOI.SS.Formula
             _plainCellCache.Clear();
             _formulaCellCache.Clear();
         }
-        public void NotifyDeleteCell(int bookIndex, int sheetIndex, EvaluationCell cell)
+        public void NotifyDeleteCell(int bookIndex, int sheetIndex, IEvaluationCell cell)
         {
 
             if (cell.CellType == NPOI.SS.UserModel.CellType.FORMULA)

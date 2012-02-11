@@ -86,7 +86,7 @@ namespace TestCases.SS.UserModel
             {
                 int rowNum = _currentRowIndex++;
 
-                DataValidationHelper dataValidationHelper = _sheet.GetDataValidationHelper();
+                IDataValidationHelper dataValidationHelper = _sheet.GetDataValidationHelper();
                 IDataValidationConstraint dc = CreateConstraint(dataValidationHelper, operatorType, firstFormula, secondFormula, explicitListValues);
 
                 IDataValidation dv = dataValidationHelper.CreateValidation(dc, new CellRangeAddressList(rowNum, rowNum, 0, 0));
@@ -112,7 +112,7 @@ namespace TestCases.SS.UserModel
                 }
                 WriteOtherSettings(_sheet, _style_1, promptDescr);
             }
-            private IDataValidationConstraint CreateConstraint(DataValidationHelper dataValidationHelper, int operatorType, String firstFormula,
+            private IDataValidationConstraint CreateConstraint(IDataValidationHelper dataValidationHelper, int operatorType, String firstFormula,
                     String secondFormula, String[] explicitListValues)
             {
                 if (_validationType == ValidationType.LIST)

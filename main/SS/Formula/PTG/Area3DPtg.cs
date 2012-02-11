@@ -40,7 +40,7 @@ namespace NPOI.SS.Formula.PTG
      * @version 1.0-pre
      */
     [Serializable]
-    public class Area3DPtg : AreaPtgBase, WorkbookDependentFormula, ExternSheetReferenceToken
+    public class Area3DPtg : AreaPtgBase, WorkbookDependentFormula, IExternSheetReferenceToken
     {
         public const byte sid = 0x3b;
         private static int SIZE = 11; // 10 + 1 for Ptg
@@ -136,7 +136,7 @@ namespace NPOI.SS.Formula.PTG
  * @return text representation of this area reference that can be used in text
  *  formulas. The sheet name will get properly delimited if required.
  */
-        public String ToFormulaString(FormulaRenderingWorkbook book)
+        public String ToFormulaString(IFormulaRenderingWorkbook book)
         {
             return ExternSheetNameResolver.PrependSheetName(book, field_1_index_extern_sheet, FormatReferenceAsString());
         }

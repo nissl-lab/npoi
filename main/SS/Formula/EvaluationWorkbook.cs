@@ -55,10 +55,10 @@ namespace NPOI.SS.Formula
         /**
          * @return -1 if the specified sheet is from a different book
          */
-        int GetSheetIndex(EvaluationSheet sheet);
+        int GetSheetIndex(IEvaluationSheet sheet);
         int GetSheetIndex(String sheetName);
 
-        EvaluationSheet GetSheet(int sheetIndex);
+        IEvaluationSheet GetSheet(int sheetIndex);
 
         /**
          * @return <c>null</c> if externSheetIndex refers To a sheet inside the current workbook
@@ -69,7 +69,7 @@ namespace NPOI.SS.Formula
         IEvaluationName GetName(NamePtg namePtg);
         IEvaluationName GetName(String name, int sheetIndex);
         String ResolveNameXText(NameXPtg ptg);
-        Ptg[] GetFormulaTokens(EvaluationCell cell);
+        Ptg[] GetFormulaTokens(IEvaluationCell cell);
         UDFFinder GetUDFFinder();
     }
 

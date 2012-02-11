@@ -29,7 +29,7 @@ namespace NPOI.SS.Formula
      * 
      * @author Josh Micich
      */
-    public interface FormulaRenderingWorkbook
+    public interface IFormulaRenderingWorkbook
     {
 
         /**

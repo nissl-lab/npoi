@@ -220,7 +220,7 @@ namespace TestCases.SS.Formula
             HSSFWorkbook wb = new HSSFWorkbook();
             ICell cell = wb.CreateSheet("Sheet1").CreateRow(0).CreateCell(0);
             cell.CellFormula = "D2:D5"; // IF(TRUE,D2:D5,D2) or  OFFSET(D2:D5,0,0) would work too
-            FormulaEvaluator fe = wb.GetCreationHelper().CreateFormulaEvaluator();
+            IFormulaEvaluator fe = wb.GetCreationHelper().CreateFormulaEvaluator();
             CellValue cv;
             try
             {

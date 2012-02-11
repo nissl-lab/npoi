@@ -175,7 +175,7 @@ namespace TestCases.SS.Formula.Functions
             Confirm(feA, cellA, "INDIRECT(\"'[Figures for January]Sheet1'!A11\")", 50); // points to cellB
         }
 
-        private static void Confirm(FormulaEvaluator fe, ICell cell, String formula,
+        private static void Confirm(IFormulaEvaluator fe, ICell cell, String formula,
                 double expectedResult)
         {
             fe.ClearAllCachedResultValues();
@@ -187,7 +187,7 @@ namespace TestCases.SS.Formula.Functions
             }
             Assert.AreEqual(expectedResult, cv.NumberValue, 0.0);
         }
-        private static void Confirm(FormulaEvaluator fe, ICell cell, String formula,
+        private static void Confirm(IFormulaEvaluator fe, ICell cell, String formula,
                 ErrorEval expectedResult)
         {
             fe.ClearAllCachedResultValues();

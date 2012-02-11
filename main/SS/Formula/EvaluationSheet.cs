@@ -25,12 +25,12 @@ namespace NPOI.SS.Formula
      * 
      * @author Josh Micich
      */
-    public interface EvaluationSheet
+    public interface IEvaluationSheet
     {
 
         /**
          * @return <c>null</c> if there is no cell at the specified coordinates
          */
-        EvaluationCell GetCell(int rowIndex, int columnIndex);
+        IEvaluationCell GetCell(int rowIndex, int columnIndex);
     }
 }

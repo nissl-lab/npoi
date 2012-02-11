@@ -29,7 +29,7 @@ namespace NPOI.HSSF.UserModel
      * @author Amol S. Deshmukh &lt; amolweb at ya hoo dot com &gt;
      * 
      */
-    public class HSSFFormulaEvaluator : FormulaEvaluator
+    public class HSSFFormulaEvaluator : IFormulaEvaluator
     {
         private WorkbookEvaluator _bookEvaluator;
         // params to lookup the right constructor using reflection
@@ -374,10 +374,10 @@ namespace NPOI.HSSF.UserModel
            */
         public static void EvaluateAllFormulaCells(IWorkbook wb)
         {
-            FormulaEvaluator evaluator = wb.GetCreationHelper().CreateFormulaEvaluator();
+            IFormulaEvaluator evaluator = wb.GetCreationHelper().CreateFormulaEvaluator();
             EvaluateAllFormulaCells(wb, evaluator);
         }
-        private static void EvaluateAllFormulaCells(IWorkbook wb, FormulaEvaluator evaluator)
+        private static void EvaluateAllFormulaCells(IWorkbook wb, IFormulaEvaluator evaluator)
         {
             for (int i = 0; i < wb.NumberOfSheets; i++)
             {

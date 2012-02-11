@@ -77,7 +77,7 @@ namespace TestCases.SS.Formula
             cell3.CellFormula=("MYFUNC2(\"C1\")&\"-\"&A2");  //where A2 is defined above
             Assert.AreEqual("MYFUNC2(\"C1\")&\"-\"&A2", cell3.CellFormula);
 
-            FormulaEvaluator Evaluator = wb.GetCreationHelper().CreateFormulaEvaluator();
+            IFormulaEvaluator Evaluator = wb.GetCreationHelper().CreateFormulaEvaluator();
             Assert.AreEqual(2.0, Evaluator.Evaluate(cell1).NumberValue);
             Assert.AreEqual("B1abc", Evaluator.Evaluate(cell2).StringValue);
             Assert.AreEqual("C1abc2-B1abc", Evaluator.Evaluate(cell3).StringValue);
@@ -92,7 +92,7 @@ namespace TestCases.SS.Formula
         public void baseTestInvokeATP(String testFile)
         {
             IWorkbook wb = _testDataProvider.OpenSampleWorkbook(testFile);
-            FormulaEvaluator Evaluator = wb.GetCreationHelper().CreateFormulaEvaluator();
+            IFormulaEvaluator Evaluator = wb.GetCreationHelper().CreateFormulaEvaluator();
 
             ISheet sh = wb.GetSheetAt(0);
             // these two are not imlemented in r

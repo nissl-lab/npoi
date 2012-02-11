@@ -205,7 +205,7 @@ namespace TestCases.HSSF.UserModel
             {
                 _evalCount = 0;
             }
-            public override void OnStartEvaluate(EvaluationCell cell, ICacheEntry entry)
+            public override void OnStartEvaluate(IEvaluationCell cell, ICacheEntry entry)
             {
                 _evalCount++;
             }

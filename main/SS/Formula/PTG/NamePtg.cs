@@ -75,7 +75,7 @@ namespace NPOI.SS.Formula.PTG
             get { return SIZE; }
         }
 
-        public String ToFormulaString(FormulaRenderingWorkbook book)
+        public String ToFormulaString(IFormulaRenderingWorkbook book)
         {
             return book.GetNameText(this);
         }

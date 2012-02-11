@@ -59,7 +59,7 @@ namespace TestCases.SS.UserModel
             c2.CellFormula = (/*setter*/"10/2");
             Assert.AreEqual(0.0, c2.NumericCellValue, 0.0);
 
-            FormulaEvaluator fe = wb.GetCreationHelper().CreateFormulaEvaluator();
+            IFormulaEvaluator fe = wb.GetCreationHelper().CreateFormulaEvaluator();
 
             fe.EvaluateFormulaCell(c1);
             fe.EvaluateFormulaCell(c2);
@@ -98,7 +98,7 @@ namespace TestCases.SS.UserModel
 
 
             // Evaluate and Test
-            FormulaEvaluator fe = wb.GetCreationHelper().CreateFormulaEvaluator();
+            IFormulaEvaluator fe = wb.GetCreationHelper().CreateFormulaEvaluator();
 
             fe.EvaluateFormulaCell(c1);
             fe.EvaluateFormulaCell(c2);
@@ -117,7 +117,7 @@ namespace TestCases.SS.UserModel
 
             ISheet sheet = wb.GetSheetAt(0);
 
-            FormulaEvaluator Evaluator = wb.GetCreationHelper().CreateFormulaEvaluator();
+            IFormulaEvaluator Evaluator = wb.GetCreationHelper().CreateFormulaEvaluator();
             ICell cell;
 
             cell = sheet.GetRow(1).GetCell(0);
@@ -167,7 +167,7 @@ namespace TestCases.SS.UserModel
             row.CreateCell(1).CellFormula = (/*setter*/"sales_1");
             row.CreateCell(2).CellFormula = (/*setter*/"sales_1*3");
 
-            FormulaEvaluator Evaluator = wb.GetCreationHelper().CreateFormulaEvaluator();
+            IFormulaEvaluator Evaluator = wb.GetCreationHelper().CreateFormulaEvaluator();
             Assert.AreEqual(3.0, Evaluator.Evaluate(sh1.GetRow(0).GetCell(1)).NumberValue, 0.0);
             Assert.AreEqual(6.0, Evaluator.Evaluate(sh1.GetRow(0).GetCell(2)).NumberValue, 0.0);
 
@@ -202,7 +202,7 @@ namespace TestCases.SS.UserModel
             SetValue(sheet, 3, 6, 100.0);
 
 
-            FormulaEvaluator fe = wb.GetCreationHelper().CreateFormulaEvaluator();
+            IFormulaEvaluator fe = wb.GetCreationHelper().CreateFormulaEvaluator();
             Assert.AreEqual(26.0, fe.Evaluate(cell0).NumberValue, 0.0);
             Assert.AreEqual(56.0, fe.Evaluate(cell1).NumberValue, 0.0);
         }
@@ -210,7 +210,7 @@ namespace TestCases.SS.UserModel
         public void TestRepeatedEvaluation()
         {
             IWorkbook wb = _testDataProvider.CreateWorkbook();
-            FormulaEvaluator fe = wb.GetCreationHelper().CreateFormulaEvaluator();
+            IFormulaEvaluator fe = wb.GetCreationHelper().CreateFormulaEvaluator();
             ISheet sheet = wb.CreateSheet("Sheet1");
             IRow r = sheet.CreateRow(0);
             ICell c = r.CreateCell(0, CellType.FORMULA);
@@ -264,7 +264,7 @@ namespace TestCases.SS.UserModel
         public void TestEvaluateBlank()
         {
             IWorkbook wb = _testDataProvider.CreateWorkbook();
-            FormulaEvaluator fe = wb.GetCreationHelper().CreateFormulaEvaluator();
+            IFormulaEvaluator fe = wb.GetCreationHelper().CreateFormulaEvaluator();
             Assert.IsNull(fe.Evaluate(null));
             ISheet sheet = wb.CreateSheet("Sheet1");
             ICell cell = sheet.CreateRow(0).CreateCell(0);
@@ -284,7 +284,7 @@ namespace TestCases.SS.UserModel
             ICell cellA1 = row.CreateCell(0);
             ICell cellB1 = row.CreateCell(1);
             cellB1.CellFormula = (/*setter*/"A1+1");
-            FormulaEvaluator fe = wb.GetCreationHelper().CreateFormulaEvaluator();
+            IFormulaEvaluator fe = wb.GetCreationHelper().CreateFormulaEvaluator();
 
             cellA1.CellErrorValue = (/*setter*/(byte)ErrorConstants.ERROR_NAME);
             fe.EvaluateFormulaCell(cellB1);
@@ -319,7 +319,7 @@ namespace TestCases.SS.UserModel
             cellC1.CellFormula = (/*setter*/"roundup(a1,2)");
             ICell cellD1 = row.CreateCell(3);
             cellD1.CellFormula = (/*setter*/"rounddown(a1,2)");
-            FormulaEvaluator fe = wb.GetCreationHelper().CreateFormulaEvaluator();
+            IFormulaEvaluator fe = wb.GetCreationHelper().CreateFormulaEvaluator();
 
             Assert.AreEqual(2162.62, fe.EvaluateInCell(cellB1).NumericCellValue, 0.0);
             Assert.AreEqual(2162.62, fe.EvaluateInCell(cellC1).NumericCellValue, 0.0);

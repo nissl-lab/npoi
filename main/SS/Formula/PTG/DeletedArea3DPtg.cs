@@ -53,7 +53,7 @@ namespace NPOI.SS.Formula.PTG
             unused1 = in1.ReadInt();
             unused2 = in1.ReadInt();
         }
-        public String ToFormulaString(FormulaRenderingWorkbook book)
+        public String ToFormulaString(IFormulaRenderingWorkbook book)
         {
             return ExternSheetNameResolver.PrependSheetName(book, field_1_index_extern_sheet,
                     HSSFErrorConstants.GetText(HSSFErrorConstants.ERROR_REF));

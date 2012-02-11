@@ -28,6 +28,6 @@ namespace NPOI.SS.Formula
      */
     public interface WorkbookDependentFormula
     {
-        String ToFormulaString(FormulaRenderingWorkbook book);
+        String ToFormulaString(IFormulaRenderingWorkbook book);
     }
 }

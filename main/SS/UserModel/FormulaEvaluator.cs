@@ -28,7 +28,7 @@ namespace NPOI.SS.UserModel
      * @author Amol S. Deshmukh &lt; amolweb at ya hoo dot com &gt;
      * @author Josh Micich
      */
-    public interface FormulaEvaluator
+    public interface IFormulaEvaluator
     {
 
         /**

@@ -42,7 +42,7 @@ namespace NPOI.SS.Formula
          * @param ptgs  must not be <c>null</c>
          * @return a human readable String
          */
-        public static String ToFormulaString(FormulaRenderingWorkbook book, Ptg[] ptgs)
+        public static String ToFormulaString(IFormulaRenderingWorkbook book, Ptg[] ptgs)
         {
             if (ptgs == null || ptgs.Length == 0)
             {

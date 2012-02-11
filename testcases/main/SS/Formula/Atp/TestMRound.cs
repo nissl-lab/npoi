@@ -57,7 +57,7 @@ namespace TestCases.SS.Formula.Atp
 
             double accuracy = 1E-9;
 
-            FormulaEvaluator Evaluator = wb.GetCreationHelper().CreateFormulaEvaluator();
+            IFormulaEvaluator Evaluator = wb.GetCreationHelper().CreateFormulaEvaluator();
 
             Assert.AreEqual(9.0, Evaluator.Evaluate(cell1).NumberValue, accuracy, "Rounds 10 to a nearest multiple of 3 (9)");
 

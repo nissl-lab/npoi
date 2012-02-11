@@ -50,7 +50,7 @@ namespace TestCases.SS.UserModel
 
         // TODO should we have this stuff in the FormulaEvaluator?
         private void EvaluateWorkbook(IWorkbook workbook){
-        FormulaEvaluator eval = workbook.GetCreationHelper().CreateFormulaEvaluator();
+        IFormulaEvaluator eval = workbook.GetCreationHelper().CreateFormulaEvaluator();
         for(int i=0; i < workbook.NumberOfSheets; i++) {
             ISheet sheet = workbook.GetSheetAt(i);
             IEnumerator rows = sheet.GetRowEnumerator();

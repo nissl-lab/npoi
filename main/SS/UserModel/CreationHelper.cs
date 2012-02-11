@@ -52,7 +52,7 @@ namespace NPOI.SS.UserModel
          *
          * @return a FormulaEvaluator instance
          */
-        FormulaEvaluator CreateFormulaEvaluator();
+        IFormulaEvaluator CreateFormulaEvaluator();
 
         IClientAnchor CreateClientAnchor();
     }

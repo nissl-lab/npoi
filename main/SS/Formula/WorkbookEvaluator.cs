@@ -99,7 +99,7 @@ namespace NPOI.SS.Formula
                 return _workbook;
             }
         }
-        internal EvaluationSheet GetSheet(int sheetIndex)
+        internal IEvaluationSheet GetSheet(int sheetIndex)
         {
             return _workbook.GetSheet(sheetIndex);
         }
@@ -169,7 +169,7 @@ namespace NPOI.SS.Formula
          * Should be called To tell the cell value cache that the specified (value or formula) cell 
          * Has Changed.
          */
-        public void NotifyUpdateCell(EvaluationCell cell)
+        public void NotifyUpdateCell(IEvaluationCell cell)
         {
             int sheetIndex = GetSheetIndex(cell.Sheet);
             _cache.NotifyUpdateCell(_workbookIx, sheetIndex, cell);
@@ -178,13 +178,13 @@ namespace NPOI.SS.Formula
          * Should be called To tell the cell value cache that the specified cell Has just been
          * deleted. 
          */
-        public void NotifyDeleteCell(EvaluationCell cell)
+        public void NotifyDeleteCell(IEvaluationCell cell)
         {
             int sheetIndex = GetSheetIndex(cell.Sheet);
             _cache.NotifyDeleteCell(_workbookIx, sheetIndex, cell);
         }
 
-        public int GetSheetIndex(EvaluationSheet sheet)
+        public int GetSheetIndex(IEvaluationSheet sheet)
         {
             object result = _sheetIndexesBySheet[sheet];
             if (result == null)
@@ -229,7 +229,7 @@ namespace NPOI.SS.Formula
             return result;
         }
 
-        public ValueEval Evaluate(EvaluationCell srcCell)
+        public ValueEval Evaluate(IEvaluationCell srcCell)
         {
             int sheetIndex = GetSheetIndex(srcCell.Sheet);
             return EvaluateAny(srcCell, sheetIndex, srcCell.RowIndex, srcCell.ColumnIndex, new EvaluationTracker(_cache));
@@ -239,7 +239,7 @@ namespace NPOI.SS.Formula
         /**
          * @return never <c>null</c>, never {@link BlankEval}
          */
-        private ValueEval EvaluateAny(EvaluationCell srcCell, int sheetIndex,
+        private ValueEval EvaluateAny(IEvaluationCell srcCell, int sheetIndex,
                     int rowIndex, int columnIndex, EvaluationTracker tracker)
         {
             bool shouldCellDependencyBeRecorded = _stabilityClassifier == null ? true
@@ -342,7 +342,7 @@ namespace NPOI.SS.Formula
          * @return {@link BlankEval} if cell is <c>null</c> or blank, never <c>null</c>
          */
         /* package */
-        internal static ValueEval GetValueFromNonFormulaCell(EvaluationCell cell)
+        internal static ValueEval GetValueFromNonFormulaCell(IEvaluationCell cell)
         {
             if (cell == null)
             {
@@ -652,11 +652,11 @@ namespace NPOI.SS.Formula
          * Used by the lazy ref evals whenever they need To Get the value of a contained cell.
          */
         /* package */
-        public ValueEval EvaluateReference(EvaluationSheet sheet, int sheetIndex, int rowIndex,
+        public ValueEval EvaluateReference(IEvaluationSheet sheet, int sheetIndex, int rowIndex,
             int columnIndex, EvaluationTracker tracker)
         {
 
-            EvaluationCell cell = sheet.GetCell(rowIndex, columnIndex);
+            IEvaluationCell cell = sheet.GetCell(rowIndex, columnIndex);
             return EvaluateAny(cell, sheetIndex, rowIndex, columnIndex, tracker);
         }
 

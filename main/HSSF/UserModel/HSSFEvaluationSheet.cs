@@ -27,7 +27,7 @@ namespace NPOI.HSSF.UserModel
      * 
      * @author Josh Micich
      */
-    public class HSSFEvaluationSheet : EvaluationSheet
+    public class HSSFEvaluationSheet : IEvaluationSheet
     {
 
         private HSSFSheet _hs;
@@ -44,7 +44,7 @@ namespace NPOI.HSSF.UserModel
                 return _hs;
             }
         }
-        public EvaluationCell GetCell(int rowIndex, int columnIndex)
+        public IEvaluationCell GetCell(int rowIndex, int columnIndex)
         {
             HSSFRow row = (HSSFRow)_hs.GetRow(rowIndex);
             if (row == null)

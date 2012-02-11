@@ -562,7 +562,7 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual("sale_4", sale_4.NameName);
             Assert.AreEqual("'To be Renamed'!$A$3", sale_4.RefersToFormula);
 
-            FormulaEvaluator Evaluator = wb.GetCreationHelper(/*getter*/).CreateFormulaEvaluator();
+            IFormulaEvaluator Evaluator = wb.GetCreationHelper(/*getter*/).CreateFormulaEvaluator();
 
             ICell cell0 = sh1.GetRow(0).GetCell(0);
             ICell cell1 = sh1.GetRow(1).GetCell(0);
@@ -628,7 +628,7 @@ namespace TestCases.SS.UserModel
         {
             IWorkbook wb = _testDataProvider.OpenSampleWorkbook(sampleFile);
 
-            FormulaEvaluator Evaluator = wb.GetCreationHelper(/*getter*/).CreateFormulaEvaluator();
+            IFormulaEvaluator Evaluator = wb.GetCreationHelper(/*getter*/).CreateFormulaEvaluator();
 
             ISheet sheet = wb.GetSheetAt(0);
 

@@ -84,7 +84,7 @@ namespace TestCases.SS.Formula.Functions
 
             IWorkbook wb = new HSSFWorkbook();
 
-            FormulaEvaluator fe = wb.GetCreationHelper().CreateFormulaEvaluator();
+            IFormulaEvaluator fe = wb.GetCreationHelper().CreateFormulaEvaluator();
 
             ISheet sh = wb.CreateSheet();
             ICell a1 = sh.CreateRow(0).CreateCell(0);
@@ -114,7 +114,7 @@ namespace TestCases.SS.Formula.Functions
 
             IWorkbook wb = new HSSFWorkbook();
 
-            FormulaEvaluator fe = wb.GetCreationHelper().CreateFormulaEvaluator();
+            IFormulaEvaluator fe = wb.GetCreationHelper().CreateFormulaEvaluator();
 
             ISheet sh = wb.CreateSheet();
             ICell a1 = sh.CreateRow(0).CreateCell(0);
@@ -144,7 +144,7 @@ namespace TestCases.SS.Formula.Functions
 
             IWorkbook wb = new HSSFWorkbook();
 
-            FormulaEvaluator fe = wb.GetCreationHelper().CreateFormulaEvaluator();
+            IFormulaEvaluator fe = wb.GetCreationHelper().CreateFormulaEvaluator();
 
             ISheet sh = wb.CreateSheet();
             ICell a1 = sh.CreateRow(0).CreateCell(0);
@@ -174,7 +174,7 @@ namespace TestCases.SS.Formula.Functions
 
             IWorkbook wb = new HSSFWorkbook();
 
-            FormulaEvaluator fe = wb.GetCreationHelper().CreateFormulaEvaluator();
+            IFormulaEvaluator fe = wb.GetCreationHelper().CreateFormulaEvaluator();
 
             ISheet sh = wb.CreateSheet();
             ICell a1 = sh.CreateRow(0).CreateCell(0);
@@ -204,7 +204,7 @@ namespace TestCases.SS.Formula.Functions
 
             IWorkbook wb = new HSSFWorkbook();
 
-            FormulaEvaluator fe = wb.GetCreationHelper().CreateFormulaEvaluator();
+            IFormulaEvaluator fe = wb.GetCreationHelper().CreateFormulaEvaluator();
 
             ISheet sh = wb.CreateSheet();
             ICell a1 = sh.CreateRow(0).CreateCell(0);
@@ -234,7 +234,7 @@ namespace TestCases.SS.Formula.Functions
 
             IWorkbook wb = new HSSFWorkbook();
 
-            FormulaEvaluator fe = wb.GetCreationHelper().CreateFormulaEvaluator();
+            IFormulaEvaluator fe = wb.GetCreationHelper().CreateFormulaEvaluator();
 
             ISheet sh = wb.CreateSheet();
             ICell a1 = sh.CreateRow(0).CreateCell(0);
@@ -264,7 +264,7 @@ namespace TestCases.SS.Formula.Functions
 
             IWorkbook wb = new HSSFWorkbook();
 
-            FormulaEvaluator fe = wb.GetCreationHelper().CreateFormulaEvaluator();
+            IFormulaEvaluator fe = wb.GetCreationHelper().CreateFormulaEvaluator();
 
             ISheet sh = wb.CreateSheet();
             ICell a1 = sh.CreateRow(0).CreateCell(0);
@@ -300,13 +300,13 @@ namespace TestCases.SS.Formula.Functions
             ICell a3 = sh.CreateRow(2).CreateCell(0);
             a3.CellFormula = ("SUBTOTAL(9,A1:A2)");
 
-            FormulaEvaluator fe = wb.GetCreationHelper().CreateFormulaEvaluator();
+            IFormulaEvaluator fe = wb.GetCreationHelper().CreateFormulaEvaluator();
             fe.EvaluateAll();
             Assert.AreEqual(1.0, a2.NumericCellValue);
             Assert.AreEqual(1.0, a3.NumericCellValue);
         }
 
-        private static void ConfirmExpectedResult(FormulaEvaluator Evaluator, String msg, ICell cell, double expected)
+        private static void ConfirmExpectedResult(IFormulaEvaluator Evaluator, String msg, ICell cell, double expected)
         {
 
             CellValue value = Evaluator.Evaluate(cell);
@@ -319,7 +319,7 @@ namespace TestCases.SS.Formula.Functions
         {
             HSSFWorkbook workbook = HSSFTestDataSamples.OpenSampleWorkbook("SubtotalsNested.xls");
             ISheet sheet = workbook.GetSheetAt(0);
-            FormulaEvaluator evaluator = workbook.GetCreationHelper().CreateFormulaEvaluator();
+            IFormulaEvaluator evaluator = workbook.GetCreationHelper().CreateFormulaEvaluator();
 
             Assert.AreEqual(10.0, sheet.GetRow(0).GetCell(0).NumericCellValue, "A1");
             Assert.AreEqual(20.0, sheet.GetRow(1).GetCell(0).NumericCellValue, "A2");

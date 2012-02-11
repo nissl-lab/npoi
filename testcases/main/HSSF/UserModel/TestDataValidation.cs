@@ -153,7 +153,7 @@ namespace TestCases.HSSF.UserModel
             IWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("dvEmpty.xls");
             int dvRow = 0;
             ISheet sheet = wb.GetSheetAt(0);
-            DataValidationHelper dataValidationHelper = sheet.GetDataValidationHelper();
+            IDataValidationHelper dataValidationHelper = sheet.GetDataValidationHelper();
             IDataValidationConstraint dc = dataValidationHelper.CreateintConstraint(OperatorType.EQUAL, "42", null);
             IDataValidation dv = dataValidationHelper.CreateValidation(dc, new CellRangeAddressList(dvRow, dvRow, 0, 0));
 

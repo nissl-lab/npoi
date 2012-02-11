@@ -24,7 +24,7 @@ namespace NPOI.SS.UserModel
      * @author <a href="rjankiraman@emptoris.com">Radhakrishnan J</a>
      * 
      */
-    public interface DataValidationHelper
+    public interface IDataValidationHelper
     {
 
         IDataValidationConstraint CreateFormulaListConstraint(String listFormula);

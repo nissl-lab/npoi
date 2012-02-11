@@ -25,7 +25,7 @@ namespace NPOI.SS.Formula
      * 
      * @author Josh Micich
      */
-    public interface ExternSheetReferenceToken
+    public interface IExternSheetReferenceToken
     {
         int ExternSheetIndex{get;}
     }

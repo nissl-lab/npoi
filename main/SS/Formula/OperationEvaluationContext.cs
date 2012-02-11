@@ -56,7 +56,7 @@
             }
         }
 
-        SheetRefEvaluator CreateExternSheetRefEvaluator(ExternSheetReferenceToken ptg)
+        SheetRefEvaluator CreateExternSheetRefEvaluator(IExternSheetReferenceToken ptg)
         {
             return CreateExternSheetRefEvaluator(ptg.ExternSheetIndex);
         }

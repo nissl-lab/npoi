@@ -400,7 +400,7 @@ namespace TestCases.SS.UserModel
             // default cached formula result is numeric zero
             Assert.AreEqual(0.0, cellA1.NumericCellValue, 0.0);
 
-            FormulaEvaluator fe = cellA1.Sheet.Workbook.GetCreationHelper().CreateFormulaEvaluator();
+            IFormulaEvaluator fe = cellA1.Sheet.Workbook.GetCreationHelper().CreateFormulaEvaluator();
 
             fe.EvaluateFormulaCell(cellA1);
             Assert.AreEqual("abc", cellA1.StringCellValue);
@@ -420,7 +420,7 @@ namespace TestCases.SS.UserModel
         public void TestSetTypeStringOnFormulaCell()
         {
             ICell cellA1 = CreateACell();
-            FormulaEvaluator fe = cellA1.Sheet.Workbook.GetCreationHelper().CreateFormulaEvaluator();
+            IFormulaEvaluator fe = cellA1.Sheet.Workbook.GetCreationHelper().CreateFormulaEvaluator();
 
             cellA1.CellFormula = ("\"DEF\"");
             fe.ClearAllCachedResultValues();

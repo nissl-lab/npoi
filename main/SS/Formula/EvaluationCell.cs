@@ -18,6 +18,7 @@
 namespace NPOI.SS.Formula
 {
     using System;
+    using NPOI.SS.UserModel;
     /**
      * Abstracts a cell for the purpose of formula evaluation.  This interface represents both formula
      * and non-formula cells.<br/>
@@ -29,13 +30,13 @@ namespace NPOI.SS.Formula
      * 
      * @author Josh Micich
      */
-    public interface EvaluationCell
+    public interface IEvaluationCell
     {
         // consider method Object GetUnderlyingCell() To reduce memory consumption in formula cell cache
-        EvaluationSheet Sheet { get; }
+        IEvaluationSheet Sheet { get; }
         int RowIndex { get; }
         int ColumnIndex { get; }
-        NPOI.SS.UserModel.CellType CellType { get; }
+        CellType CellType { get; }
 
         double NumericCellValue { get; }
         String StringCellValue { get; }

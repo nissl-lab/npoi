@@ -33,7 +33,7 @@ namespace NPOI.SS.Formula
 
         private WorkbookEvaluator _bookEvaluator;
         private EvaluationTracker _tracker;
-        private EvaluationSheet _sheet;
+        private IEvaluationSheet _sheet;
         private int _sheetIndex;
 
         public SheetRefEvaluator(WorkbookEvaluator bookEvaluator, EvaluationTracker tracker, int sheetIndex)
@@ -60,7 +60,7 @@ namespace NPOI.SS.Formula
             return _bookEvaluator.EvaluateReference(this.Sheet, _sheetIndex, rowIndex, columnIndex, _tracker);
         }
 
-        private EvaluationSheet Sheet
+        private IEvaluationSheet Sheet
         {
             get
             {
@@ -79,7 +79,7 @@ namespace NPOI.SS.Formula
         public bool IsSubTotal(int rowIndex, int columnIndex)
         {
             bool subtotal = false;
-            EvaluationCell cell = Sheet.GetCell(rowIndex, columnIndex);
+            IEvaluationCell cell = Sheet.GetCell(rowIndex, columnIndex);
             if (cell != null && cell.CellType == CellType.FORMULA)
             {
                 IEvaluationWorkbook wb = _bookEvaluator.Workbook;
