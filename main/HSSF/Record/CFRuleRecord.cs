@@ -28,19 +28,20 @@ namespace NPOI.HSSF.Record
     using FR=NPOI.SS.Formula;
 
     using NPOI.SS.Formula.PTG;
+    using NPOI.SS.UserModel;
 
-    public enum ComparisonOperator : byte
-    {
-        NO_COMPARISON = 0,
-        BETWEEN = 1,
-        NOT_BETWEEN = 2,
-        EQUAL = 3,
-        NOT_EQUAL = 4,
-        GT = 5,
-        LT = 6,
-        GE = 7,
-        LE = 8
-    }
+    //public enum ComparisonOperator : byte
+    //{
+    //    NO_COMPARISON = 0,
+    //    BETWEEN = 1,
+    //    NOT_BETWEEN = 2,
+    //    EQUAL = 3,
+    //    NOT_EQUAL = 4,
+    //    GT = 5,
+    //    LT = 6,
+    //    GE = 7,
+    //    LE = 8
+    //}
     /**
      * Conditional Formatting Rule Record.
      * @author Dmitriy Kumshayev

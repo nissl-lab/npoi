@@ -110,7 +110,7 @@ namespace NPOI.SS.UserModel
          * {@link ComparisonOperator#BETWEEN}) and {@link ComparisonOperator#NOT_BETWEEN} operations)
          */
         IConditionalFormattingRule CreateConditionalFormattingRule(
-                byte comparisonOperation,
+                ComparisonOperator comparisonOperation,
                 String formula1,
                 String formula2);
 
@@ -127,7 +127,7 @@ namespace NPOI.SS.UserModel
          * @param formula  the formula to determine if the conditional formatting is applied
          */
         IConditionalFormattingRule CreateConditionalFormattingRule(
-                byte comparisonOperation,
+                ComparisonOperator comparisonOperation,
                 String formula);
 
         /**

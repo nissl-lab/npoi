@@ -60,13 +60,13 @@ namespace NPOI.HSSF.UserModel
         /// and HSSFConditionalFormattingRule#COMPARISON_OPERATOR_NOT_BETWEEN operations)</param>
         /// <returns></returns>
         public IConditionalFormattingRule CreateConditionalFormattingRule(
-                byte comparisonOperation,
+                ComparisonOperator comparisonOperation,
                 String formula1,
                 String formula2)
         {
 
             HSSFWorkbook wb = (HSSFWorkbook)_sheet.Workbook;
-            CFRuleRecord rr = CFRuleRecord.Create(wb, (NPOI.HSSF.Record.ComparisonOperator)  comparisonOperation, formula1, formula2);
+            CFRuleRecord rr = CFRuleRecord.Create(wb, (ComparisonOperator)  comparisonOperation, formula1, formula2);
             return new HSSFConditionalFormattingRule(wb, rr);
         }
 
@@ -84,11 +84,11 @@ namespace NPOI.HSSF.UserModel
             return new HSSFConditionalFormattingRule(wb, rr);
         }
         public IConditionalFormattingRule CreateConditionalFormattingRule(
-            byte comparisonOperation,
+            ComparisonOperator comparisonOperation,
             String formula1)
         {
             HSSFWorkbook wb = (HSSFWorkbook)_sheet.Workbook;
-            CFRuleRecord rr = CFRuleRecord.Create(_sheet, comparisonOperation, formula1, null);
+            CFRuleRecord rr = CFRuleRecord.Create(_sheet, (byte)comparisonOperation, formula1, null);
             return new HSSFConditionalFormattingRule(wb, rr);
         }
         /// <summary>
