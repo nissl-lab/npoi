@@ -361,6 +361,11 @@ namespace NPOI.SS.UserModel
         bool ScenarioProtect { get; }
 
         /// <summary>
+        /// Gets or sets the tab color of the _sheet
+        /// </summary>
+        short TabColorIndex { get; set; }
+
+        /// <summary>
         /// Returns the top-level drawing patriach, if there is one.
         /// This will hold any graphics or charts for the _sheet.
         /// WARNING - calling this will trigger a parsing of the

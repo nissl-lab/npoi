@@ -3,11 +3,14 @@ using System.Collections.Generic;
 using System.Text;
 
 using NPOI.Util;
-using NPOI.Util.IO;
 
 namespace NPOI.HSSF.Record
 {
-    [Obsolete("this class has been removed from poi.")]
+    //Don't remove this class
+
+    /// <summary>
+    /// 
+    /// </summary>
     public class SheetExtRecord:StandardRecord
     {
         short rt = 0;
@@ -104,7 +107,7 @@ namespace NPOI.HSSF.Record
         {
             get { return sid; }
         }
-        public override void Serialize(LittleEndianOutput out1)
+        public override void Serialize(ILittleEndianOutput out1)
         {
             out1.WriteShort(rt);
             out1.WriteShort(grbitFrt);

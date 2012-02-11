@@ -1830,6 +1830,24 @@ namespace NPOI.HSSF.UserModel
         }
 
         /// <summary>
+        /// Gets or sets the tab color of the _sheet
+        /// </summary>
+        public short TabColorIndex
+        {
+            get { return _sheet.TabColorIndex; }
+            set { _sheet.TabColorIndex = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets whether the tab color of _sheet is automatic
+        /// </summary>
+        public bool IsAutoTabColor
+        {
+            get { return _sheet.IsAutoTabColor; }
+            set { _sheet.IsAutoTabColor = value; }
+        }
+
+        /// <summary>
         /// Expands or collapses a column Group.
         /// </summary>
         /// <param name="columnNumber">One of the columns in the Group.</param>

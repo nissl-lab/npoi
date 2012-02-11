@@ -28,6 +28,7 @@ namespace TestCases.HSSF.Record.Aggregates
     using NPOI.HSSF.UserModel;
     using NPOI.HSSF.Util;
     using NPOI.SS.Util;
+    using NPOI.SS.UserModel;
 
     /**
      * Tests the serialization and deserialization of the CFRecordsAggregate

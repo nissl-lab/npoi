@@ -53,6 +53,7 @@
     <Compile Include="HSSF\Record\Aggregates\ChartSubstreamRecordAggregate.cs" />
     <Compile Include="HSSF\Record\Aggregates\WorksheetProtectionBlock.cs" />
     <Compile Include="HSSF\Record\FtCblsSubRecord.cs" />
+    <Compile Include="HSSF\Record\SheetExtRecord.cs" />
     <Compile Include="HSSF\UserModel\DVConstraint.cs" />
     <Compile Include="HSSF\UserModel\HSSFDataFormatter.cs" />
     <Compile Include="HSSF\UserModel\HSSFDataValidation.cs" />
@@ -258,6 +259,9 @@
     <Compile Include="HSSF\Record\CodepageRecord.cs" />
     <Compile Include="HSSF\Record\ColumnInfoRecord.cs" />
     <Compile Include="POIFS\FileSystem\BlockStore.cs" />
+    <Compile Include="POIFS\NIO\ByteArrayBackedDataSource.cs" />
+    <Compile Include="POIFS\NIO\FileBackedDataSource.cs" />
+    <Compile Include="POIFS\NIO\DataSource.cs" />
     <Compile Include="SS\Formula\Constant\ConstantValueParser.cs" />
     <Compile Include="SS\Formula\Constant\ErrorConstant.cs" />
     <Compile Include="HSSF\Record\ContinueRecord.cs" />

@@ -190,7 +190,8 @@ namespace TestCases.HSSF.UserModel
         private static void ConfirmStringRecord(HSSFSheet sheet, bool isPresent)
         {
             Record[] recs = RecordInspector.GetRecords(sheet, 0);
-            Assert.AreEqual(isPresent ? 28 : 27, recs.Length);
+            Assert.AreEqual(isPresent ? 29 : 28, recs.Length); //for SheetExtRecord
+            //Assert.AreEqual(isPresent ? 28 : 27, recs.Length);
             int index = 22;
             Record fr = recs[index++];
             Assert.AreEqual(typeof(FormulaRecord), fr.GetType());

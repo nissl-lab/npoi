@@ -283,7 +283,7 @@ namespace TestCases.HSSF.Record
         [TestMethod]
         public void TestWrite() {
 		    HSSFWorkbook workbook = new HSSFWorkbook();
-		    CFRuleRecord rr = CFRuleRecord.Create(workbook, NPOI.HSSF.Record.ComparisonOperator.BETWEEN, "5", "10");
+		    CFRuleRecord rr = CFRuleRecord.Create(workbook, ComparisonOperator.BETWEEN, "5", "10");
 
 		    PatternFormatting patternFormatting = new PatternFormatting();
 		    patternFormatting.FillPattern=(PatternFormatting.BRICKS);
