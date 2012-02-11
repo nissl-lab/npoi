@@ -17,87 +17,102 @@
  * ====================================================================
  */
 
-namespace NPOI.xssf.usermodel;
+using NPOI.SS.UserModel;
+using NPOI.OpenXmlFormats.Spreadsheet;
+using System.Collections.Generic;
+using NPOI.SS.Util;
+using System;
+namespace NPOI.XSSF.UserModel
+{
 
-using NPOI.ss.usermodel.ConditionalFormatting;
-using NPOI.ss.usermodel.ConditionalFormattingRule;
-using NPOI.ss.util.CellRangeAddress;
-using org.Openxmlformats.schemas.spreadsheetml.x2006.main.CTConditionalFormatting;
 
-
-
-/**
- * @author Yegor Kozlov
- */
-public class XSSFConditionalFormatting : ConditionalFormatting {
-    private CTConditionalFormatting _cf;
-    private XSSFSheet _sh;
-
-    /*package*/ XSSFConditionalFormatting(XSSFSheet sh){
-        _cf = CTConditionalFormatting.Factory.newInstance();
-        _sh = sh;
-    }
-
-    /*package*/ XSSFConditionalFormatting(XSSFSheet sh, CTConditionalFormatting cf){
-        _cf = cf;
-        _sh = sh;
-    }
-
-    /*package*/  CTConditionalFormatting GetCTConditionalFormatting(){
-        return _cf;
-    }
 
     /**
-      * @return array of <tt>CellRangeAddress</tt>s. Never <code>null</code>
-      */
-     public CellRangeAddress[] GetFormattingRanges(){
-         List<CellRangeAddress> lst = new List<CellRangeAddress>();
-         foreach (Object stRef in _cf.GetSqref()) {
-             String[] regions = stRef.ToString().split(" ");
-             for (int i = 0; i < regions.Length; i++) {
-                 lst.Add(CellRangeAddress.ValueOf(regions[i]));
-             }
-         }
-         return lst.ToArray(new CellRangeAddress[lst.Count]);
-     }
+     * @author Yegor Kozlov
+     */
+    public class XSSFConditionalFormatting : IConditionalFormatting
+    {
+        private CT_ConditionalFormatting _cf;
+        private XSSFSheet _sh;
 
-     /**
-      * Replaces an existing Conditional Formatting rule at position idx.
-      * Excel allows to create up to 3 Conditional Formatting rules.
-      * This method can be useful to modify existing  Conditional Formatting rules.
-      *
-      * @param idx position of the rule. Should be between 0 and 2.
-      * @param cfRule - Conditional Formatting rule
-      */
-     public void SetRule(int idx, ConditionalFormattingRule cfRule){
-         XSSFConditionalFormattingRule xRule = (XSSFConditionalFormattingRule)cfRule;
-         _cf.GetCfRuleArray(idx).Set(xRule.GetCTCfRule());
-     }
+        /*package*/
+        internal XSSFConditionalFormatting(XSSFSheet sh)
+        {
+            _cf = new CT_ConditionalFormatting();
+            _sh = sh;
+        }
 
-     /**
-      * Add a Conditional Formatting rule.
-      * Excel allows to create up to 3 Conditional Formatting rules.
-      *
-      * @param cfRule - Conditional Formatting rule
-      */
-     public void AddRule(ConditionalFormattingRule cfRule){
-        XSSFConditionalFormattingRule xRule = (XSSFConditionalFormattingRule)cfRule;
-         _cf.AddNewCfRule().Set(xRule.GetCTCfRule());
-     }
+        /*package*/
+        internal XSSFConditionalFormatting(XSSFSheet sh, CT_ConditionalFormatting cf)
+        {
+            _cf = cf;
+            _sh = sh;
+        }
 
-     /**
-      * @return the Conditional Formatting rule at position idx.
-      */
-     public XSSFConditionalFormattingRule GetRule(int idx){
-         return new XSSFConditionalFormattingRule(_sh, _cf.GetCfRuleArray(idx));
-     }
+        /*package*/
+        internal CT_ConditionalFormatting GetCTConditionalFormatting()
+        {
+            return _cf;
+        }
 
-     /**
-      * @return number of Conditional Formatting rules.
-      */
-     public int GetNumberOfRules(){
-         return _cf.sizeOfCfRuleArray();
-     }
+        /**
+          * @return array of <tt>CellRangeAddress</tt>s. Never <code>null</code>
+          */
+        public CellRangeAddress[] GetFormattingRanges()
+        {
+            List<CellRangeAddress> lst = new List<CellRangeAddress>();
+            foreach (Object stRef in _cf.sqref)
+            {
+                String[] regions = stRef.ToString().Split(new char[] { ' ' });
+                for (int i = 0; i < regions.Length; i++)
+                {
+                    lst.Add(CellRangeAddress.ValueOf(regions[i]));
+                }
+            }
+            return lst.ToArray();
+        }
+
+        /**
+         * Replaces an existing Conditional Formatting rule at position idx.
+         * Excel allows to create up to 3 Conditional Formatting rules.
+         * This method can be useful to modify existing  Conditional Formatting rules.
+         *
+         * @param idx position of the rule. Should be between 0 and 2.
+         * @param cfRule - Conditional Formatting rule
+         */
+        public void SetRule(int idx, IConditionalFormattingRule cfRule)
+        {
+            XSSFConditionalFormattingRule xRule = (XSSFConditionalFormattingRule)cfRule;
+            _cf.GetCfRuleArray(idx).Set(xRule.GetCTCfRule());
+        }
+
+        /**
+         * Add a Conditional Formatting rule.
+         * Excel allows to create up to 3 Conditional Formatting rules.
+         *
+         * @param cfRule - Conditional Formatting rule
+         */
+        public void AddRule(IConditionalFormattingRule cfRule)
+        {
+            XSSFConditionalFormattingRule xRule = (XSSFConditionalFormattingRule)cfRule;
+            _cf.AddNewCfRule().Set(xRule.GetCTCfRule());
+        }
+
+        /**
+         * @return the Conditional Formatting rule at position idx.
+         */
+        public XSSFConditionalFormattingRule GetRule(int idx)
+        {
+            return new XSSFConditionalFormattingRule(_sh, _cf.GetCfRuleArray(idx));
+        }
+
+        /**
+         * @return number of Conditional Formatting rules.
+         */
+        public int GetNumberOfRules()
+        {
+            return _cf.sizeOfCfRuleArray();
+        }
+    }
 }
-
 

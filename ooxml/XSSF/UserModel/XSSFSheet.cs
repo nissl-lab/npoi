@@ -28,6 +28,7 @@ using NPOI.OpenXml4Net.Exceptions;
 using NPOI.OpenXml4Net.OPC;
 using NPOI.SS;
 using NPOI.XSSF.UserModel.Helpers;
+using NPOI.HSSF.Record;
 namespace NPOI.XSSF.UserModel
 {
     /**
@@ -368,9 +369,9 @@ namespace NPOI.XSSF.UserModel
             if (ctDrawing == null)
             {
                 //drawingNumber = #drawings.Count + 1
-                int drawingNumber = GetPackagePart().Package.GetPartsByContentType(XSSFRelation.DRAWINGS.getContentType()).Count + 1;
+                int drawingNumber = GetPackagePart().Package.GetPartsByContentType(XSSFRelation.DRAWINGS.ContentType).Count + 1;
                 drawing = (XSSFDrawing)CreateRelationship(XSSFRelation.DRAWINGS, XSSFFactory.GetInstance(), drawingNumber);
-                String relId = drawing.GetPackageRelationship().id;
+                String relId = drawing.GetPackageRelationship().Id;
 
                 //add CT_Drawing element which indicates that this sheet Contains drawing components built on the drawingML platform.
                 //The relationship Id references the part Containing the drawingML defInitions.
@@ -385,7 +386,7 @@ namespace NPOI.XSSF.UserModel
                     if (p is XSSFDrawing)
                     {
                         XSSFDrawing dr = (XSSFDrawing)p;
-                        String drId = dr.GetPackageRelationship().id;
+                        String drId = dr.GetPackageRelationship().Id;
                         if (drId.Equals(ctDrawing.id))
                         {
                             drawing = dr;
@@ -1123,14 +1124,14 @@ namespace NPOI.XSSF.UserModel
             if (password != null)
             {
                 CT_SheetProtection sheetProtection = worksheet.AddNewSheetProtection();
-                sheetProtection.xSetPassword(stringToExcelPassword(password));
-                sheetProtection.SetSheet(true);
-                sheetProtection.SetScenarios(true);
-                sheetProtection.SetObjects(true);
+                sheetProtection.password = StringToExcelPassword(password).ToBytes();
+                sheetProtection.sheet = (true);
+                sheetProtection.scenarios = (true);
+                sheetProtection.objects = (true);
             }
             else
             {
-                worksheet.unSetSheetProtection();
+                worksheet.UnsetSheetProtection();
             }
         }
 
@@ -1141,10 +1142,10 @@ namespace NPOI.XSSF.UserModel
          * @param password the password string you wish convert to an {@link STUnsignedshortHex}
          * @return {@link STUnsignedshortHex} that Contains Excel hashed password in Hex format
          */
-        private ST_UnsignedshortHex stringToExcelPassword(String password)
+        private ST_UnsignedshortHex StringToExcelPassword(String password)
         {
-            ST_UnsignedshortHex hexPassword = ST_UnsignedshortHex.Factory.newInstance();
-            hexPassword.SetStringValue(String.valueOf(HexDump.shortToHex(PasswordRecord.HashPassword(password))).substring(2));
+            ST_UnsignedshortHex hexPassword = new ST_UnsignedshortHex();
+            hexPassword.StringValue = HexDump.ShortToHex(PasswordRecord.HashPassword(password)).ToString().Substring(2);
             return hexPassword;
         }
 
@@ -3435,7 +3436,7 @@ namespace NPOI.XSSF.UserModel
         }
 
 
-        public DataValidationHelper GetDataValidationHelper()
+        public IDataValidationHelper GetDataValidationHelper()
         {
             return dataValidationHelper;
         }

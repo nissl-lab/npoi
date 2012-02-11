@@ -15,6 +15,20 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     using System.Collections.Generic;
     using NPOI.OpenXmlFormats.Dml;
 
+    public class ST_UnsignedshortHex
+    {
+        string stringValueField = null;
+        public string StringValue
+        {
+            get { return stringValueField; }
+            set { stringValueField = value; }
+        }
+        public byte[] ToBytes()
+        {
+            throw new NotImplementedException();
+        }
+    }
+
     public class CT_Stylesheet
     {
 
@@ -210,11 +224,44 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             this.extLstField = new CT_ExtensionList();
             this.protectionField = new CT_CellProtection();
-            this.borderField = new CT_Border();
+            //this.borderField = new CT_Border();
             this.alignmentField = new CT_CellAlignment();
-            this.fillField = new CT_Fill();
+            //this.fillField = new CT_Fill();
             this.numFmtField = new CT_NumFmt();
-            this.fontField = new CT_Font();
+            //this.fontField = new CT_Font();
+        }
+
+        public bool IsSetBorder()
+        {
+            return borderField != null;
+        }
+        public CT_Font AddNewFont()
+        {
+            CT_Font font = new CT_Font();
+            this.fontField = font;
+            return font;
+        }
+
+        public CT_Fill AddNewFill()
+        {
+            CT_Fill fill = new CT_Fill();
+            this.fillField = fill;
+            return fill;
+        }
+        
+        public CT_Border AddNewBorder()
+        {
+            CT_Border border = new CT_Border();
+            this.borderField = border;
+            return border;
+        }
+        public bool IsSetFont()
+        {
+            return fontField != null;
+        }
+        public bool IsSetFill()
+        {
+            return fillField != null;
         }
 
         public CT_Font font

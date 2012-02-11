@@ -58,6 +58,7 @@
     <Compile Include="CustomXmlSchemaProperties.cs" />
     <Compile Include="AdditionalCharacteristics.cs" />
     <Compile Include="Bibliography.cs" />
+    <Compile Include="RelationshipReference.cs" />
     <Compile Include="Spreadsheet\AutoFilter.cs" />
     <Compile Include="Spreadsheet\BaseTypes.cs" />
     <Compile Include="Spreadsheet\CalcChainDocument.cs" />

@@ -33,31 +33,31 @@ namespace NPOI.XSSF.UserModel
         private XSSFSheet _sh;
 
         /*package*/
-        XSSFConditionalFormattingRule(XSSFSheet sh)
+        internal XSSFConditionalFormattingRule(XSSFSheet sh)
         {
             _cfRule = new CT_CfRule();
             _sh = sh;
         }
 
         /*package*/
-        XSSFConditionalFormattingRule(XSSFSheet sh, CT_CfRule cfRule)
+        internal XSSFConditionalFormattingRule(XSSFSheet sh, CT_CfRule cfRule)
         {
             _cfRule = cfRule;
             _sh = sh;
         }
 
         /*package*/
-        CT_CfRule GetCT_CfRule()
+        internal CT_CfRule GetCTCfRule()
         {
             return _cfRule;
         }
 
         /*package*/
-        CT_Dxf GetDxf(bool create)
+        internal CT_Dxf GetDxf(bool create)
         {
             StylesTable styles = _sh.GetWorkbook().GetStylesSource();
             CT_Dxf dxf = null;
-            if (styles._getDXfsSize() > 0 && _cfRule.IsSetDxfId())
+            if (styles._GetDXfsSize() > 0 && _cfRule.IsSetDxfId())
             {
                 int dxfId = (int)_cfRule.dxfId;
                 dxf = styles.GetDxfAt(dxfId);
@@ -183,8 +183,8 @@ namespace NPOI.XSSF.UserModel
         {
             switch (_cfRule.type)
             {
-                case ST_CfType.expression: return IConditionalFormattingRule.CONDITION_TYPE_FORMULA;
-                case ST_CfType.cellIs: return IConditionalFormattingRule.CONDITION_TYPE_CELL_VALUE_IS;
+                case ST_CfType.expression: return (byte)ConditionType.FORMULA;
+                case ST_CfType.cellIs: return (byte)ConditionType.CELL_VALUE_IS;
             }
             return 0;
         }

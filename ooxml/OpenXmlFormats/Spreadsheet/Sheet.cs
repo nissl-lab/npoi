@@ -319,7 +319,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.pageSetupField = new CT_PageSetup();
             this.pageMarginsField = new CT_PageMargins();
             this.printOptionsField = new CT_PrintOptions();
-            this.hyperlinksField = new List<CT_Hyperlink>();
+            //this.hyperlinksField = new List<CT_Hyperlink>();
             this.dataValidationsField = new CT_DataValidations();
             this.conditionalFormattingField = new List<CT_ConditionalFormatting>();
             this.phoneticPrField = new CT_PhoneticPr();
@@ -330,7 +330,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.autoFilterField = new CT_AutoFilter();
             this.scenariosField = new CT_Scenarios();
             this.protectedRangesField = new List<CT_ProtectedRange>();
-            this.sheetProtectionField = new CT_SheetProtection();
+            //this.sheetProtectionField = new CT_SheetProtection();
             this.sheetCalcPrField = new CT_SheetCalcPr();
             this.sheetDataField = new List<CT_Row>();
             this.colsField = new List<CT_Col>();
@@ -338,6 +338,19 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.sheetViewsField = new CT_SheetViews();
             this.dimensionField = new CT_SheetDimension();
             this.sheetPrField = new CT_SheetPr();
+        }
+        public bool IsSetHyperLinks()
+        {
+            return this.hyperlinks != null;
+        }
+        public int sizeOfConditionalFormattingArray()
+        {
+            return this.conditionalFormatting.Count;
+        }
+
+        public void UnsetSheetProtection()
+        {
+            this.sheetProtectionField = null;
         }
 
         public CT_SheetPr sheetPr
@@ -6037,7 +6050,20 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.cfRuleField = new List<CT_CfRule>();
             this.pivotField = false;
         }
-
+        public int sizeOfCfRuleArray()
+        {
+            return cfRule.Count;
+        }
+        public CT_CfRule GetCfRuleArray(int index)
+        {
+            return cfRule[index];
+        }
+        public CT_CfRule AddNewCfRule()
+        {
+            CT_CfRule rule = new CT_CfRule();
+            this.cfRule.Add(rule);
+            return rule;
+        }
         public List<CT_CfRule> cfRule
         {
             get
@@ -6153,10 +6179,31 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.equalAverageField = false;
         }
 
+        public void AddFormula(string formula)
+        {
+            this.formula.Add(formula);
+        }
 
+        public void Set(CT_CfRule src)
+        {
+            this.formula = src.formula;
+            this.stopIfTrue = src.stopIfTrue;
+            this.bottom = src.bottom;
+            this.percent = src.percent;
+            this.equalAverage = src.equalAverage;
+            this.aboveAverage = src.aboveAverage;
+            this.colorScale = src.colorScale;
+            this.dataBar = src.dataBar;
+            this.iconSet = src.iconSet;
+            this.extLst = src.extLst;
+        }
         public int sizeOfFormulaArray()
         {
             return formula.Count;
+        }
+        public String GetFormulaArray(int index)
+        {
+            return formula[index];
         }
         public List<string> formula
         {

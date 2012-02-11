@@ -22,6 +22,8 @@ using NPOI.OpenXmlFormats.Dml;
 using NPOI.XSSF.Model;
 using System.IO;
 using NPOI.OpenXmlFormats.Spreadsheet;
+using NPOI.SS.UserModel;
+using NPOI.OpenXmlFormats;
 namespace NPOI.XSSF.UserModel
 {
 
@@ -35,7 +37,7 @@ namespace NPOI.XSSF.UserModel
         /**
          * Root element of the SpreadsheetML Drawing part
          */
-        private CT_Drawing Drawing;
+        private CT_Drawing drawing;
         private bool isNew;
         private long numOfGraphicFrames = 0L;
 
@@ -51,7 +53,7 @@ namespace NPOI.XSSF.UserModel
             : base()
         {
 
-            Drawing = newDrawing();
+            drawing = newDrawing();
             isNew = true;
         }
 
@@ -67,7 +69,7 @@ namespace NPOI.XSSF.UserModel
             : base(part, rel)
         {
 
-            Drawing = CT_Drawing.Factory.Parse(part.GetInputStream());
+            drawing = CT_Drawing.Parse(part.GetInputStream());
         }
 
         /**
@@ -77,7 +79,7 @@ namespace NPOI.XSSF.UserModel
          */
         private static CT_Drawing newDrawing()
         {
-            return CT_Drawing.Factory.newInstance();
+            return new CT_Drawing();
         }
 
         /**
@@ -86,9 +88,9 @@ namespace NPOI.XSSF.UserModel
          * @return the underlying CT_Drawing bean
          */
 
-        public CT_Drawing GetCT_Drawing()
+        public CT_Drawing GetCTDrawing()
         {
-            return Drawing;
+            return drawing;
         }
 
 
@@ -100,15 +102,15 @@ namespace NPOI.XSSF.UserModel
                 xmlns:a="http://schemas.Openxmlformats.org/drawingml/2006/main"
                 xmlns:xdr="http://schemas.Openxmlformats.org/drawingml/2006/spreadsheetDrawing">
         */
-        if(isNew) xmlOptions.SetSaveSyntheticDocumentElement(new QName(CT_Drawing.type.GetName().GetNamespaceURI(), "wsDr", "xdr"));
+        //if(isNew) xmlOptions.SetSaveSyntheticDocumentElement(new QName(CT_Drawing.type.GetName().GetNamespaceURI(), "wsDr", "xdr"));
         Dictionary<String, String> map = new Dictionary<String, String>();
         map[NAMESPACE_A]= "a";
-        map[STRelationshipId.type.GetName().GetNamespaceURI()]= "r";
+        map[ST_RelationshipId.NamespaceURI]= "r";
         //xmlOptions.SetSaveSuggestedPrefixes(map);
 
         PackagePart part = GetPackagePart();
         Stream out1 = part.GetOutputStream();
-        Drawing.Save(out1);
+        drawing.Save(out1);
         out1.Close();
     }
 
@@ -164,7 +166,7 @@ namespace NPOI.XSSF.UserModel
             return shape;
         }
 
-        public XSSFPicture CreatePicture(ClientAnchor anchor, int pictureIndex)
+        public XSSFPicture CreatePicture(IClientAnchor anchor, int pictureIndex)
         {
             return CreatePicture((XSSFClientAnchor)anchor, pictureIndex);
         }
@@ -191,7 +193,7 @@ namespace NPOI.XSSF.UserModel
             return chart;
         }
 
-        public XSSFChart CreateChart(ClientAnchor anchor)
+        public XSSFChart CreateChart(IClientAnchor anchor)
         {
             return CreateChart((XSSFClientAnchor)anchor);
         }
@@ -204,10 +206,10 @@ namespace NPOI.XSSF.UserModel
          */
         protected PackageRelationship AddPictureReference(int pictureIndex)
         {
-            XSSFWorkbook wb = (XSSFWorkbook)getParent().GetParent();
+            XSSFWorkbook wb = (XSSFWorkbook)GetParent().GetParent();
             XSSFPictureData data = wb.GetAllPictures().Get(pictureIndex);
             PackagePartName ppName = data.GetPackagePart().GetPartName();
-            PackageRelationship rel = GetPackagePart().AddRelationship(ppName, TargetMode.INTERNAL, XSSFRelation.IMAGES.GetRelation());
+            PackageRelationship rel = GetPackagePart().AddRelationship(ppName, TargetMode.Internal, XSSFRelation.IMAGES.Relation);
             AddRelation(rel.GetId(), new XSSFPictureData(data.GetPackagePart(), rel));
             return rel;
         }
@@ -276,7 +278,7 @@ namespace NPOI.XSSF.UserModel
          *               to the sheet.
          * @return the newly Created comment.
          */
-        public XSSFComment CreateCellComment(ClientAnchor anchor)
+        public XSSFComment CreateCellComment(IClientAnchor anchor)
         {
             XSSFClientAnchor ca = (XSSFClientAnchor)anchor;
             XSSFSheet sheet = (XSSFSheet)GetParent();
@@ -292,7 +294,7 @@ namespace NPOI.XSSF.UserModel
                         ca.GetCol2() + ", 0, " + ca.GetRow2() + ", 0";
                 vmlShape.GetClientDataArray(0).SetAnchorArray(0, position);
             }
-            XSSFComment shape = new XSSFComment(comments, comments.newComment(), vmlShape);
+            XSSFComment shape = new XSSFComment(comments, comments.CreateComment(), vmlShape);
             shape.SetColumn(ca.GetCol1());
             shape.SetRow(ca.GetRow1());
             return shape;
@@ -342,27 +344,32 @@ namespace NPOI.XSSF.UserModel
          */
         private CT_TwoCellAnchor CreateTwoCellAnchor(XSSFClientAnchor anchor)
         {
-            CT_TwoCellAnchor ctAnchor = Drawing.AddNewTwoCellAnchor();
-            ctAnchor.SetFrom(anchor.GetFrom());
-            ctAnchor.SetTo(anchor.GetTo());
+            CT_TwoCellAnchor ctAnchor = drawing.AddNewTwoCellAnchor();
+            ctAnchor.from =(anchor.GetFrom());
+            ctAnchor.to = (anchor.GetTo());
             ctAnchor.AddNewClientData();
-            anchor.SetTo(ctAnchor.GetTo());
-            anchor.SetFrom(ctAnchor.GetFrom());
-            ST_EditAs.Enum aditAs;
+            anchor.SetTo(ctAnchor.to);
+            anchor.SetFrom(ctAnchor.from);
+            ST_EditAs aditAs;
             switch (anchor.GetAnchorType())
             {
-                case ClientAnchor.DONT_MOVE_AND_RESIZE: aditAs = STEditAs.ABSOLUTE; break;
-                case ClientAnchor.MOVE_AND_RESIZE: aditAs = STEditAs.TWO_CELL; break;
-                case ClientAnchor.MOVE_DONT_RESIZE: aditAs = STEditAs.ONE_CELL; break;
-                default: aditAs = STEditAs.ONE_CELL;
+                case AnchorType.DONT_MOVE_AND_RESIZE: 
+                    aditAs = ST_EditAs.absolute; break;
+                case AnchorType.MOVE_AND_RESIZE: 
+                    aditAs = ST_EditAs.twoCell; break;
+                case AnchorType.MOVE_DONT_RESIZE: 
+                    aditAs = ST_EditAs.oneCell; break;
+                default: 
+                    aditAs = ST_EditAs.oneCell;
+                    break;
             }
-            ctAnchor.SetEditAs(aditAs);
+            ctAnchor.editAs = (aditAs);
             return ctAnchor;
         }
 
         private long newShapeId()
         {
-            return Drawing.sizeOfTwoCellAnchorArray() + 1;
+            return drawing.sizeOfTwoCellAnchorArray() + 1;
         }
     }
 }

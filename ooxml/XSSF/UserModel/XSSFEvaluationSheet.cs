@@ -15,38 +15,43 @@
    limitations under the License.
 ==================================================================== */
 
-namespace NPOI.xssf.usermodel;
+using NPOI.SS.Formula;
+namespace NPOI.XSSF.UserModel
+{
 
-using NPOI.ss.formula.EvaluationCell;
-using NPOI.ss.formula.EvaluationSheet;
+    /**
+     * XSSF wrapper for a sheet under Evaluation
+     * 
+     * @author Josh Micich
+     */
+    public class XSSFEvaluationSheet : IEvaluationSheet
+    {
 
-/**
- * XSSF wrapper for a sheet under Evaluation
- * 
- * @author Josh Micich
- */
-final class XSSFEvaluationSheet : EvaluationSheet {
+        private XSSFSheet _xs;
 
-	private XSSFSheet _xs;
+        public XSSFEvaluationSheet(XSSFSheet sheet)
+        {
+            _xs = sheet;
+        }
 
-	public XSSFEvaluationSheet(XSSFSheet sheet) {
-		_xs = sheet;
-	}
-
-	public XSSFSheet GetXSSFSheet() {
-		return _xs;
-	}
-	public EvaluationCell GetCell(int rowIndex, int columnIndex) {
-		XSSFRow row = _xs.GetRow(rowIndex);
-		if (row == null) {
-			return null;
-		}
-		XSSFCell cell = row.GetCell(columnIndex);
-		if (cell == null) {
-			return null;
-		}
-		return new XSSFEvaluationCell(cell, this);
-	}
+        public XSSFSheet GetXSSFSheet()
+        {
+            return _xs;
+        }
+        public IEvaluationCell GetCell(int rowIndex, int columnIndex)
+        {
+            XSSFRow row = _xs.GetRow(rowIndex);
+            if (row == null)
+            {
+                return null;
+            }
+            XSSFCell cell = row.GetCell(columnIndex);
+            if (cell == null)
+            {
+                return null;
+            }
+            return new XSSFEvaluationCell(cell, this);
+        }
+    }
 }
-
 
