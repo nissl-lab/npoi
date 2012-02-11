@@ -100,7 +100,7 @@ namespace NPOI.SS.UserModel
          *
          * @return the conditional format operator
          */
-        byte ComparisonOperation { get; }
+        ComparisonOperator ComparisonOperation { get; }
 
         /**
          * The formula used to Evaluate the first operand for the conditional formatting rule.

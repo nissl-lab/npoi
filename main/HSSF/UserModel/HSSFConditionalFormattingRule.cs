@@ -174,11 +174,11 @@ namespace NPOI.HSSF.UserModel
         /**
 	     * @return - the comparisionoperatation for the cfrule
 	     */
-        public byte ComparisonOperation
+        public ComparisonOperator ComparisonOperation
         {
             get
             {
-                return cfRuleRecord.ComparisonOperation;
+                return (ComparisonOperator)cfRuleRecord.ComparisonOperation;
             }
         }
 
