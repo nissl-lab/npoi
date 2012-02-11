@@ -44,20 +44,20 @@ namespace ConditionalFormattingInXls
 
             HSSFSheet sheet1 = (HSSFSheet)hssfworkbook.CreateSheet("Sheet1");
 
-            HSSFSheetConditionalFormatting hscf = sheet1.SheetConditionalFormatting;
+            ISheetConditionalFormatting hscf = sheet1.SheetConditionalFormatting;
 
 
             // Define a Conditional Formatting rule, which triggers formatting
             // when cell's value is bigger than 55 and smaller than 500
             // applies patternFormatting defined below.
-            HSSFConditionalFormattingRule rule = hscf.CreateConditionalFormattingRule(
+            IConditionalFormattingRule rule = hscf.CreateConditionalFormattingRule(
                 ComparisonOperator.BETWEEN,
                 "55", // 1st formula 
                 "500"     // 2nd formula 
             );
 
             // Create pattern with red background
-            HSSFPatternFormatting patternFmt = rule.CreatePatternFormatting();
+            IPatternFormatting patternFmt = rule.CreatePatternFormatting();
             patternFmt.FillBackgroundColor = NPOI.HSSF.Util.HSSFColor.RED.index;
 
             //// Define a region containing first column
