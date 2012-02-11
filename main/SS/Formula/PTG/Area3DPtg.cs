@@ -26,7 +26,7 @@ namespace NPOI.SS.Formula.PTG
     using NPOI.SS.Util;
     
     using NPOI.SS.Formula;
-    using NPOI.Util.IO;
+
     
 
 
@@ -60,7 +60,7 @@ namespace NPOI.SS.Formula.PTG
         {
             ExternSheetIndex=(externIdx);
         }
-        public Area3DPtg(LittleEndianInput in1)
+        public Area3DPtg(ILittleEndianInput in1)
         {
             field_1_index_extern_sheet = in1.ReadShort();
             ReadCoordinates(in1);
@@ -86,7 +86,7 @@ namespace NPOI.SS.Formula.PTG
             return sb.ToString();
         }
 
-        public override void Write(LittleEndianOutput out1)
+        public override void Write(ILittleEndianOutput out1)
         {
             out1.WriteByte(sid + PtgClass);
             out1.WriteShort(field_1_index_extern_sheet);

@@ -23,7 +23,7 @@ namespace TestCases.SS.Formula.PTG
     using NPOI.SS.Formula.PTG;
     using NPOI.SS.UserModel;
     using NPOI.Util;
-    using NPOI.Util.IO;
+
     using TestCases.HSSF;
     using TestCases.HSSF.Record;
 
@@ -89,7 +89,7 @@ namespace TestCases.SS.Formula.PTG
         [TestMethod]
         public void TestReadWrite_tRefN_bug45091()
         {
-            LittleEndianInput in1 = TestcaseRecordInputStream.CreateLittleEndian(tRefN_data);
+            ILittleEndianInput in1 = TestcaseRecordInputStream.CreateLittleEndian(tRefN_data);
             Ptg[] ptgs = Ptg.ReadTokens(tRefN_data.Length, in1);
             byte[] outData = new byte[5];
             Ptg.SerializePtgs(ptgs, outData, 0);

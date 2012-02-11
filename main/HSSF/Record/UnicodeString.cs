@@ -21,7 +21,7 @@ namespace NPOI.HSSF.Record
     using System.Text;
     using NPOI.HSSF.Record.Cont;
     using NPOI.Util;
-    using NPOI.Util.IO;
+
     using System.Collections.Generic;
     public class FormatRun : IComparable<FormatRun>
     {
@@ -34,7 +34,7 @@ namespace NPOI.HSSF.Record
             this._fontIndex = fontIndex;
         }
 
-        public FormatRun(LittleEndianInput in1)
+        public FormatRun(ILittleEndianInput in1)
             : this(in1.ReadShort(), in1.ReadShort())
         {
 
@@ -90,7 +90,7 @@ namespace NPOI.HSSF.Record
             return "character=" + _character + ",fontIndex=" + _fontIndex;
         }
 
-        public void Serialize(LittleEndianOutput out1)
+        public void Serialize(ILittleEndianOutput out1)
         {
             out1.WriteShort(_character);
             out1.WriteShort(_fontIndex);

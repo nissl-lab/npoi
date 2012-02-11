@@ -23,7 +23,7 @@ namespace NPOI.SS.Formula.PTG
     
     using NPOI.Util;
     using NPOI.HSSF.Record;
-    using NPOI.Util.IO;
+
 
     /**
      * String Stores a String value in a formula value stored in the format
@@ -51,7 +51,7 @@ namespace NPOI.SS.Formula.PTG
         private String field_3_string;
 
         /** Create a StringPtg from a stream */
-        public StringPtg(LittleEndianInput in1)
+        public StringPtg(ILittleEndianInput in1)
         {
             int field_1_length = in1.ReadUByte();
 			field_2_options = (byte)in1.ReadByte();
@@ -91,7 +91,7 @@ namespace NPOI.SS.Formula.PTG
             get { return field_3_string; }
         }
 
-        public override void Write(LittleEndianOutput out1)
+        public override void Write(ILittleEndianOutput out1)
         {
             out1.WriteByte(sid + PtgClass);
             out1.WriteByte(field_3_string.Length); // Note - nChars is 8-bit

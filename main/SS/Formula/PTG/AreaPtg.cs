@@ -19,7 +19,7 @@ namespace NPOI.SS.Formula.PTG
 {
     using System;
     using NPOI.HSSF.Record;
-    using NPOI.Util.IO;
+    using NPOI.Util;
     using NPOI.SS.Util;
 
     /**
@@ -37,7 +37,7 @@ namespace NPOI.SS.Formula.PTG
         {
 
         }
-        public AreaPtg(LittleEndianInput in1)
+        public AreaPtg(ILittleEndianInput in1)
             : base(in1)
         {
 

@@ -23,7 +23,7 @@ namespace NPOI.SS.Formula.PTG
     using NPOI.HSSF.Record;
     
     using NPOI.SS.Formula.Function;
-    using NPOI.Util.IO;
+
 
     /**
      * @author aviks
@@ -37,7 +37,7 @@ namespace NPOI.SS.Formula.PTG
         public const byte sid = 0x21;
         public static int SIZE = 3;
         // not used: private int numParams = 0;
-    public static FuncPtg Create(LittleEndianInput in1) {
+    public static FuncPtg Create(ILittleEndianInput in1) {
         return Create(in1.ReadUShort());
     }
     private FuncPtg(int funcIndex, FunctionMetadata fm):
@@ -52,7 +52,7 @@ namespace NPOI.SS.Formula.PTG
         return new FuncPtg(functionIndex, fm);
     }
 
-        public override void Write(LittleEndianOutput out1)
+        public override void Write(ILittleEndianOutput out1)
         {
             out1.WriteByte(sid + PtgClass);
             out1.WriteShort(_functionIndex);

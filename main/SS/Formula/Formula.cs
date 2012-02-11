@@ -22,7 +22,7 @@ namespace NPOI.SS.Formula
     using NPOI.HSSF.Record;
     using NPOI.SS.Formula;
     using NPOI.Util;
-    using NPOI.Util.IO;
+
     using NPOI.SS.Util;
     using NPOI.SS.Formula.PTG;
 
@@ -61,7 +61,7 @@ namespace NPOI.SS.Formula
         /**
          * Convenience method for {@link #read(int, LittleEndianInput, int)}
          */
-        public static Formula Read(int encodedTokenLen, LittleEndianInput in1)
+        public static Formula Read(int encodedTokenLen, ILittleEndianInput in1)
         {
             return Read(encodedTokenLen, in1, encodedTokenLen);
         }
@@ -72,7 +72,7 @@ namespace NPOI.SS.Formula
          * for array constants, but does not include 2 bytes for initial <c>ushort encodedTokenLen</c> field.
          * @return A new formula object as read from the stream.  Possibly empty, never <code>null</code>.
          */
-        public static Formula Read(int encodedTokenLen, LittleEndianInput in1, int totalEncodedLen)
+        public static Formula Read(int encodedTokenLen, ILittleEndianInput in1, int totalEncodedLen)
         {
             byte[] byteEncoding = new byte[totalEncodedLen];
             in1.ReadFully(byteEncoding);
@@ -83,7 +83,7 @@ namespace NPOI.SS.Formula
         {
             get
             {
-                LittleEndianInput in1 = new LittleEndianByteArrayInputStream(_byteEncoding);
+                ILittleEndianInput in1 = new LittleEndianByteArrayInputStream(_byteEncoding);
                 return Ptg.ReadTokens(_encodedTokenLen, in1);
             }
         }
@@ -95,17 +95,17 @@ namespace NPOI.SS.Formula
          * <li>arrayConstantData (if present)</li>
          * </ul>
          */
-        public void Serialize(LittleEndianOutput out1)
+        public void Serialize(ILittleEndianOutput out1)
         {
             out1.WriteShort(_encodedTokenLen);
             out1.Write(_byteEncoding);
         }
 
-        public void SerializeTokens(LittleEndianOutput out1)
+        public void SerializeTokens(ILittleEndianOutput out1)
         {
             out1.Write(_byteEncoding, 0, _encodedTokenLen);
         }
-        public void SerializeArrayConstantData(LittleEndianOutput out1)
+        public void SerializeArrayConstantData(ILittleEndianOutput out1)
         {
             int len = _byteEncoding.Length - _encodedTokenLen;
             out1.Write(_byteEncoding, _encodedTokenLen, len);

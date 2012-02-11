@@ -114,7 +114,7 @@ namespace NPOI.HSSF.Record
         {
             get { return sid; }
         }
-        public override void Serialize(NPOI.Util.IO.LittleEndianOutput out1)
+        public override void Serialize(ILittleEndianOutput out1)
         {
             int nItems = _numberOfRegions;
             out1.WriteShort(nItems);

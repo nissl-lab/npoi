@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Text;
-using NPOI.Util.IO;
 using NPOI.Util;
 
 namespace NPOI.HSSF.Record
@@ -28,7 +27,7 @@ namespace NPOI.HSSF.Record
         
         }
 
-        public ScrollableObjectSubRecord(LittleEndianInput in1, int size)
+        public ScrollableObjectSubRecord(ILittleEndianInput in1, int size)
         {
             if (size !=this.DataSize)
             {
@@ -45,7 +44,7 @@ namespace NPOI.HSSF.Record
             field_8_options = in1.ReadShort();
         }
 
-        public override void Serialize(LittleEndianOutput out1)
+        public override void Serialize(ILittleEndianOutput out1)
         {
             out1.WriteShort(sid);
             out1.WriteShort(DataSize);

@@ -19,7 +19,7 @@ namespace NPOI.HSSF.Record
 {
 
     using NPOI.Util;
-    using NPOI.Util.IO;
+
     using System.Text;
     using System;
 
@@ -51,7 +51,7 @@ namespace NPOI.HSSF.Record
             field_7_comment_text = comment;
         }
 
-        public override void Serialize(LittleEndianOutput out1)
+        public override void Serialize(ILittleEndianOutput out1)
         {
             int field_4_name_length = field_6_name_text.Length;
             int field_5_comment_length = field_7_comment_text.Length;
@@ -83,7 +83,7 @@ namespace NPOI.HSSF.Record
          */
         public NameCommentRecord(RecordInputStream ris)
         {
-            LittleEndianInput in1 = ris;
+            ILittleEndianInput in1 = ris;
             field_1_record_type = in1.ReadShort();
             field_2_frt_cell_ref_flag = in1.ReadShort();
             field_3_reserved = in1.ReadLong();

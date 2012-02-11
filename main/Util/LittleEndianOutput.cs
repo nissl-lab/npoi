@@ -15,23 +15,20 @@
    limitations under the License.
 ==================================================================== */
 
-namespace NPOI.Util.IO
+namespace NPOI.Util
 {
     /**
      * 
      * @author Josh Micich
      */
-    public interface LittleEndianInput
+    public interface ILittleEndianOutput
     {
-        int Available();
-        int ReadByte();
-        int ReadUByte();
-        short ReadShort();
-        int ReadUShort();
-        int ReadInt();
-        long ReadLong();
-        double ReadDouble();
-        void ReadFully(byte[] buf);
-        void ReadFully(byte[] buf, int off, int len);
+        void WriteByte(int v);
+        void WriteShort(int v);
+        void WriteInt(int v);
+        void WriteLong(long v);
+        void WriteDouble(double v);
+        void Write(byte[] b);
+        void Write(byte[] b, int offset, int len);
     }
 }

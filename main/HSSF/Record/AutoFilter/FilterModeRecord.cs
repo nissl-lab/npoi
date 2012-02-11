@@ -24,7 +24,7 @@ namespace NPOI.HSSF.Record.AutoFilter
             get { return 0; }
         }
 
-        public override void Serialize(NPOI.Util.IO.LittleEndianOutput out1)
+        public override void Serialize(NPOI.Util.ILittleEndianOutput out1)
         {
             
         }

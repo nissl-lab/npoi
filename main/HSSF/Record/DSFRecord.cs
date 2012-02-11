@@ -23,7 +23,7 @@ namespace NPOI.HSSF.Record
     using System;
     using System.Text;
     using NPOI.Util;
-    using NPOI.Util.IO;
+
 
     /**
      * Title: double Stream Flag Record
@@ -78,7 +78,7 @@ namespace NPOI.HSSF.Record
             return buffer.ToString();
         }
 
-        public override void Serialize(LittleEndianOutput out1)
+        public override void Serialize(ILittleEndianOutput out1)
         {
             out1.WriteShort(_options);
         }

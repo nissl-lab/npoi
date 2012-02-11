@@ -23,7 +23,7 @@ namespace NPOI.HSSF.Record
     using System;
     using System.Text;
     using NPOI.Util;
-    using NPOI.Util.IO;
+
 
 
     /**
@@ -50,7 +50,7 @@ namespace NPOI.HSSF.Record
          * @param in the RecordInputstream to Read the record from
          */
 
-        public GroupMarkerSubRecord(LittleEndianInput in1, int size)
+        public GroupMarkerSubRecord(ILittleEndianInput in1, int size)
         {
             byte[] buf = new byte[size];
             in1.ReadFully(buf);
@@ -68,7 +68,7 @@ namespace NPOI.HSSF.Record
             return buffer.ToString();
         }
 
-        public override void Serialize(LittleEndianOutput out1)
+        public override void Serialize(ILittleEndianOutput out1)
         {
             out1.WriteShort(sid);
             out1.WriteShort(reserved.Length);

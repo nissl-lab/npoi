@@ -22,7 +22,7 @@ namespace NPOI.HSSF.Record
     using System;
     using System.Text;
     using NPOI.Util;
-    using NPOI.Util.IO;
+
 
     /**
      * The text record is used to define text stored on a chart.
@@ -186,7 +186,7 @@ namespace NPOI.HSSF.Record
             return buffer.ToString();
         }
 
-        public override void Serialize(LittleEndianOutput out1)
+        public override void Serialize(ILittleEndianOutput out1)
         {
             out1.WriteByte(field_1_horizontalAlignment);
             out1.WriteByte(field_2_verticalAlignment);

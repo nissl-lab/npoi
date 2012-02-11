@@ -41,7 +41,7 @@ namespace NPOI.SS.Util
             LittleEndian.PutByte(data, offset + 5, LastColumn);
             return ENCODED_SIZE;
         }
-        public void Serialize(NPOI.Util.IO.LittleEndianOutput out1)
+        public void Serialize(ILittleEndianOutput out1)
         {
             out1.WriteShort(FirstRow);
             out1.WriteShort(LastRow);

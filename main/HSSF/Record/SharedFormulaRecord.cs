@@ -156,7 +156,7 @@ namespace NPOI.HSSF.Record
             }
             return newPtgStack;
         }
-        protected override void SerializeExtraData(NPOI.Util.IO.LittleEndianOutput out1)
+        protected override void SerializeExtraData(ILittleEndianOutput out1)
         {
             out1.WriteShort(field_5_reserved);
             field_7_parsed_expr.Serialize(out1);

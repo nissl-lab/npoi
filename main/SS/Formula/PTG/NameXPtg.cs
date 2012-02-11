@@ -23,7 +23,7 @@ namespace NPOI.SS.Formula.PTG
     using NPOI.HSSF.Record;
     using NPOI.Util;
     using NPOI.SS.Formula;
-    using NPOI.Util.IO;
+
 
     /**
      *
@@ -58,13 +58,13 @@ namespace NPOI.SS.Formula.PTG
             
         }
 
-        public NameXPtg(LittleEndianInput in1)
+        public NameXPtg(ILittleEndianInput in1)
             :this(in1.ReadUShort(), in1.ReadUShort(), in1.ReadUShort())
         {
 
         }
 
-        public override void Write(LittleEndianOutput out1)
+        public override void Write(ILittleEndianOutput out1)
         {
 		    out1.WriteByte(sid + PtgClass);
 		    out1.WriteShort(_sheetRefIndex);

@@ -22,7 +22,7 @@ namespace NPOI.HSSF.Record
     using System;
     using System.Text;
     using NPOI.Util;
-    using NPOI.Util.IO;
+
 
 
     /**
@@ -81,7 +81,7 @@ namespace NPOI.HSSF.Record
             sb.Append(HexDump.ShortToHex(XFIndex));
         }
 
-        protected override void SerializeValue(LittleEndianOutput out1)
+        protected override void SerializeValue(ILittleEndianOutput out1)
         {
             out1.WriteInt(SSTIndex);
         }

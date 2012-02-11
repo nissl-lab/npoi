@@ -19,7 +19,7 @@ namespace NPOI.HSSF.Record
 {
     using System;
 using NPOI.Util;
-using NPOI.Util.IO;
+
 /**
  * Common header/footer base class
  *
@@ -97,7 +97,7 @@ using NPOI.Util.IO;
             }
         }
 
-        public override void Serialize(LittleEndianOutput out1)
+        public override void Serialize(ILittleEndianOutput out1)
         {
             if (TextLength > 0)
             {

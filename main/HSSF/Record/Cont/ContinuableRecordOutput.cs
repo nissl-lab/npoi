@@ -18,7 +18,7 @@
 namespace NPOI.HSSF.Record.Cont
 {
     using System;
-    using NPOI.Util.IO;
+
     using NPOI.HSSF.Record;
     using NPOI.Util;
 
@@ -29,14 +29,14 @@ namespace NPOI.HSSF.Record.Cont
      * 
      * @author Josh Micich
      */
-    public class ContinuableRecordOutput : LittleEndianOutput
+    public class ContinuableRecordOutput : ILittleEndianOutput
     {
 
-        private LittleEndianOutput _out;
+        private ILittleEndianOutput _out;
         private UnknownLengthRecordOutput _ulrOutput;
         private int _totalPreviousRecordsSize;
 
-        internal ContinuableRecordOutput(LittleEndianOutput out1, int sid)
+        internal ContinuableRecordOutput(ILittleEndianOutput out1, int sid)
         {
             _ulrOutput = new UnknownLengthRecordOutput(out1, sid);
             _out = out1;
@@ -267,12 +267,12 @@ namespace NPOI.HSSF.Record.Cont
         ///**
         // * Allows optimised usage of {@link ContinuableRecordOutput} for sizing purposes only.
         // */
-        private static LittleEndianOutput NOPOutput = new DelayableLittleEndianOutput1();
+        private static ILittleEndianOutput NOPOutput = new DelayableLittleEndianOutput1();
 
-        class DelayableLittleEndianOutput1 : DelayableLittleEndianOutput
+        class DelayableLittleEndianOutput1 : IDelayableLittleEndianOutput
         {
 
-            public LittleEndianOutput CreateDelayedOutput(int size)
+            public ILittleEndianOutput CreateDelayedOutput(int size)
             {
                 return this;
             }

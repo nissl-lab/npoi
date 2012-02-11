@@ -31,7 +31,7 @@ using System.Collections;
 using System.IO;
 
 using NPOI.Util;
-using NPOI.Util.IO;
+
 using NPOI.POIFS.Common;
 using NPOI.POIFS.FileSystem;
 

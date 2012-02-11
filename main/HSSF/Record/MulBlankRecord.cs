@@ -30,7 +30,7 @@ namespace NPOI.HSSF.Record
     using System.Collections;
     using System.IO;
     using NPOI.HSSF.Util;
-    using NPOI.Util.IO;
+
     /**
      * Title:        Mulitple Blank cell record 
      * Description:  Represents a  Set of columns in a row with no value but with styling.
@@ -173,7 +173,7 @@ namespace NPOI.HSSF.Record
             get { return 6 + field_3_xfs.Length * 2; }
         }
 
-        public override void Serialize(LittleEndianOutput out1)
+        public override void Serialize(ILittleEndianOutput out1)
         {
             out1.WriteShort(field_1_row);
             out1.WriteShort(field_2_first_col);

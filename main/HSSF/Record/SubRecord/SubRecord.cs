@@ -22,7 +22,7 @@ namespace NPOI.HSSF.Record
     using System;
     using System.Text;
     using System.IO;
-    using NPOI.Util.IO;
+
     using NPOI.Util;
     using NPOI.SS.Formula;
     /**
@@ -30,7 +30,7 @@ namespace NPOI.HSSF.Record
      */
     public abstract class SubRecord : ICloneable
     {
-        public static SubRecord CreateSubRecord(LittleEndianInput in1, CommonObjectType cmoOt)
+        public static SubRecord CreateSubRecord(ILittleEndianInput in1, CommonObjectType cmoOt)
         {
             int sid = in1.ReadUShort();
             int secondUShort = in1.ReadUShort(); // Often (but not always) the datasize for the sub-record
@@ -57,7 +57,7 @@ namespace NPOI.HSSF.Record
         }
         public abstract short Sid { get; }
         public abstract int DataSize { get; }
-        public abstract void Serialize(LittleEndianOutput out1);
+        public abstract void Serialize(ILittleEndianOutput out1);
         public byte[] Serialize()
         {
             int size = DataSize + 4;
@@ -96,7 +96,7 @@ namespace NPOI.HSSF.Record
          private int _sid;
          private byte[] _data;
 
-         public UnknownSubRecord(LittleEndianInput in1, int sid, int size)
+         public UnknownSubRecord(ILittleEndianInput in1, int sid, int size)
          {
              _sid = sid;
              byte[] buf = new byte[size];
@@ -117,7 +117,7 @@ namespace NPOI.HSSF.Record
                  return (short)_sid;
              }
          }
-         public override void Serialize(LittleEndianOutput out1)
+         public override void Serialize(ILittleEndianOutput out1)
          {
              out1.WriteShort(_sid);
              out1.WriteShort(_data.Length);

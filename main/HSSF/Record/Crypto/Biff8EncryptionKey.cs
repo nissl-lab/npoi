@@ -5,7 +5,7 @@ namespace NPOI.HSSF.Record.Crypto
     using System.Collections.Generic;
 
     using NPOI.Util;
-    using NPOI.Util.IO;
+
     
     using System.Security.Cryptography;
 

@@ -23,7 +23,7 @@ namespace NPOI.HSSF.Record.Chart
     using System;
     using System.Text;
     using NPOI.Util;
-    using NPOI.Util.IO;
+
 
     /**
      * The bar record is used to define a bar chart.
@@ -90,7 +90,7 @@ namespace NPOI.HSSF.Record.Chart
             return buffer.ToString();
         }
 
-        public override void Serialize(LittleEndianOutput out1)
+        public override void Serialize(ILittleEndianOutput out1)
         {
             out1.WriteShort(field_1_barSpace);
             out1.WriteShort(field_2_categorySpace);

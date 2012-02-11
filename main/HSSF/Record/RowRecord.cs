@@ -316,7 +316,7 @@ namespace NPOI.HSSF.Record
         }
 
 
-        public override void Serialize(NPOI.Util.IO.LittleEndianOutput out1)
+        public override void Serialize(ILittleEndianOutput out1)
         {
             out1.WriteShort(RowNumber);
             out1.WriteShort(FirstCol == -1 ? (short)0 : FirstCol);

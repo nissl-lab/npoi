@@ -22,7 +22,7 @@ namespace NPOI.SS.Formula.PTG
     using NPOI.Util;
     using NPOI.HSSF.Record;
     
-    using NPOI.Util.IO;
+
 
     /**
      * @author Glen Stampoultzis (glens at apache.org)
@@ -36,7 +36,7 @@ namespace NPOI.SS.Formula.PTG
         /**Creates new function pointer from a byte array
          * usually called while Reading an excel file.
          */
-        public MemFuncPtg(LittleEndianInput in1)
+        public MemFuncPtg(ILittleEndianInput in1)
             : this(in1.ReadUShort())
         {
 
@@ -52,7 +52,7 @@ namespace NPOI.SS.Formula.PTG
             get { return 3; }
         }
 
-        public override void Write(LittleEndianOutput out1)
+        public override void Write(ILittleEndianOutput out1)
         {
             out1.WriteByte(sid + PtgClass);
             out1.WriteShort(field_1_len_ref_subexpression);

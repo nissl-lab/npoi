@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using NPOI.Util;
 
 namespace NPOI.HSSF.Record.Chart
 {
@@ -51,7 +52,7 @@ namespace NPOI.HSSF.Record.Chart
             get { return 20; }
         }
 
-        public override void Serialize(NPOI.Util.IO.LittleEndianOutput out1)
+        public override void Serialize(ILittleEndianOutput out1)
         {
             out1.WriteShort(mdTopLt);
             out1.WriteShort(mdBotRt);

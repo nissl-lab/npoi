@@ -20,7 +20,7 @@ namespace NPOI.SS.Formula.PTG
     using System;
     using System.Collections;
     
-    using NPOI.Util.IO;
+    using NPOI.Util;
 
     //import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 
@@ -46,7 +46,7 @@ namespace NPOI.SS.Formula.PTG
             get { return Ptg.CLASS_VALUE; }
         }
 
-        public override void Write(LittleEndianOutput out1)
+        public override void Write(ILittleEndianOutput out1)
         {
             out1.WriteByte(Sid + PtgClass);
         }

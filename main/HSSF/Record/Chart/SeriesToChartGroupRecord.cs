@@ -23,7 +23,7 @@ namespace NPOI.HSSF.Record.Chart
     using System;
     using System.Text;
     using NPOI.Util;
-    using NPOI.Util.IO;
+
 
     /**
      * Indicates the chart-group index for a series.  The order probably defines the mapping.  So the 0th record probably means the 0th series.  The only field in this of course defines which chart Group the 0th series (for instance) would map to.  Confusing?  Well thats because it Is.  (p 522 BCG)
@@ -70,7 +70,7 @@ namespace NPOI.HSSF.Record.Chart
             return buffer.ToString();
         }
 
-        public override void Serialize(LittleEndianOutput out1)
+        public override void Serialize(ILittleEndianOutput out1)
         {
             out1.WriteShort(field_1_chartGroupIndex);
         }

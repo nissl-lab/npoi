@@ -21,7 +21,7 @@ namespace NPOI.HSSF.Record.PivotTable
     using System.Text;
     using NPOI.HSSF.Record;
     using NPOI.Util;
-    using NPOI.Util.IO;
+
 
     /**
      * SXVD - View Fields (0x00B1)<br/>
@@ -69,7 +69,7 @@ namespace NPOI.HSSF.Record.PivotTable
         }
 
 
-        public override void Serialize(LittleEndianOutput out1)
+        public override void Serialize(ILittleEndianOutput out1)
         {
 
             out1.WriteShort(sxaxis);

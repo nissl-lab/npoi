@@ -19,7 +19,7 @@ namespace NPOI.HSSF.Record
 {
     using System;
     using System.Text;
-    using NPOI.Util.IO;
+    using NPOI.Util;
 
 
     /**
@@ -62,6 +62,6 @@ namespace NPOI.HSSF.Record
          * 
          * The subclass must write the exact number of bytes as reported by {@link Record#getDataSize()}
          */
-        public abstract void Serialize(LittleEndianOutput out1);
+        public abstract void Serialize(ILittleEndianOutput out1);
     }
 }

@@ -19,7 +19,7 @@ namespace NPOI.HSSF.Record.Crypto
 {
     using System;
     using System.IO;
-    using NPOI.Util.IO;
+    using NPOI.Util;
 
     using NPOI.HSSF.Record;
 
@@ -27,20 +27,20 @@ namespace NPOI.HSSF.Record.Crypto
      *
      * @author Josh Micich
      */
-    public class Biff8DecryptingStream : BiffHeaderInput, LittleEndianInput
+    public class Biff8DecryptingStream : BiffHeaderInput, ILittleEndianInput
     {
 
-        private LittleEndianInput _le;
+        private ILittleEndianInput _le;
         private Biff8RC4 _rc4;
 
         public Biff8DecryptingStream(Stream in1, int InitialOffSet, Biff8EncryptionKey key)
         {
             _rc4 = new Biff8RC4(InitialOffSet, key);
 
-            if (in1 is LittleEndianInput)
+            if (in1 is ILittleEndianInput)
             {
                 // accessing directly is an optimisation
-                _le = (LittleEndianInput)in1;
+                _le = (ILittleEndianInput)in1;
             }
             else
             {

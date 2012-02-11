@@ -21,7 +21,7 @@ namespace NPOI.SS.Formula.PTG
     using System.Text;
     using NPOI.HSSF.Record;
     using NPOI.Util;
-    using NPOI.Util.IO;
+
 
     /**
      * This ptg indicates a data table.
@@ -46,13 +46,13 @@ namespace NPOI.SS.Formula.PTG
         /** The column number of the upper left corner */
         private int field_2_first_col;
 
-        public TblPtg(LittleEndianInput in1)
+        public TblPtg(ILittleEndianInput in1)
         {
             field_1_first_row = in1.ReadUShort();
             field_2_first_col = in1.ReadUShort();
         }
 
-        public override void Write(LittleEndianOutput out1)
+        public override void Write(ILittleEndianOutput out1)
         {
             out1.WriteByte(sid + PtgClass);
             out1.WriteShort(field_1_first_row);

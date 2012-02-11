@@ -36,7 +36,7 @@ namespace NPOI.HSSF.Record.AutoFilter
             set { field_1_cEntries = value; }
         }
 
-        public override void Serialize(NPOI.Util.IO.LittleEndianOutput out1)
+        public override void Serialize(NPOI.Util.ILittleEndianOutput out1)
         {
             out1.WriteShort(field_1_cEntries);
         }

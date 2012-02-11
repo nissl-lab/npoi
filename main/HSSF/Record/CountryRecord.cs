@@ -24,7 +24,7 @@ namespace NPOI.HSSF.Record
     using System.IO;
     using System.Text;
     using NPOI.Util;
-using NPOI.Util.IO;
+
 
     /**
      * Title:        Country Record (aka WIN.INI country)
@@ -102,7 +102,7 @@ using NPOI.Util.IO;
             return buffer.ToString();
         }
 
-        public override void Serialize(LittleEndianOutput out1)
+        public override void Serialize(ILittleEndianOutput out1)
         {
             out1.WriteShort(DefaultCountry);
             out1.WriteShort(CurrentCountry);

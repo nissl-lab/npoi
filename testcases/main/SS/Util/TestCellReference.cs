@@ -18,7 +18,7 @@
 using NPOI.SS.Util;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TestCases.HSSF.Record;
-using NPOI.Util.IO;
+
 using System.IO;
 using System;
 using NPOI.SS;

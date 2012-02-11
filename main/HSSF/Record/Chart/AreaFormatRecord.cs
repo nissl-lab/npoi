@@ -23,7 +23,7 @@ namespace NPOI.HSSF.Record.Chart
     using System;
     using System.Text;
     using NPOI.Util;
-    using NPOI.Util.IO;
+
 
     /**
      * The area format record is used to define the colours and patterns for an area.
@@ -124,7 +124,7 @@ namespace NPOI.HSSF.Record.Chart
             return buffer.ToString();
         }
 
-        public override void Serialize(LittleEndianOutput out1)
+        public override void Serialize(ILittleEndianOutput out1)
         {
             out1.WriteInt(field_1_foregroundColor);
             out1.WriteInt(field_2_backgroundColor);

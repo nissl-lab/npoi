@@ -113,7 +113,13 @@ namespace NPOI.Util
         /// <param name="stream">the Stream from which the value is to be read</param>
         public virtual void ReadFromStream(Stream stream)
         {
-            this._value = LittleEndian.ReadFromStream(stream, LittleEndianConsts.BYTE_SIZE)[0];
+            //this._value = LittleEndian.ReadFromStream(stream, LittleEndianConsts.BYTE_SIZE)[0];
+            int ib = stream.ReadByte();
+            if (ib < 0)
+            {
+                throw new BufferUnderflowException();
+            }
+            _value = (byte)ib;
         }
 
         /// <summary>

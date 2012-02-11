@@ -21,7 +21,7 @@ namespace NPOI.SS.Formula.PTG
     using System.Text;
     using NPOI.HSSF.Record;
     
-    using NPOI.Util.IO;
+    using NPOI.Util;
     using NPOI.HSSF.UserModel;
 
     /**
@@ -78,13 +78,13 @@ namespace NPOI.SS.Formula.PTG
             field_1_error_code = errorCode;
         }
 
-        public ErrPtg(LittleEndianInput in1)
+        public ErrPtg(ILittleEndianInput in1)
             : this(in1.ReadByte())
         {
             
         }
 
-        public override void Write(LittleEndianOutput out1)
+        public override void Write(ILittleEndianOutput out1)
         {
             out1.WriteByte(sid + PtgClass);
             out1.WriteByte((byte)field_1_error_code);

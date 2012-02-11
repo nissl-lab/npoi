@@ -20,7 +20,7 @@ namespace NPOI.HSSF.Record
     using System;
     using System.Text;
     using NPOI.Util;
-    using NPOI.Util.IO;
+
 
     public class DrawingRecord : StandardRecord
     {
@@ -44,7 +44,7 @@ namespace NPOI.HSSF.Record
             contd = record;
         }
 
-        public override void Serialize(LittleEndianOutput out1)
+        public override void Serialize(ILittleEndianOutput out1)
         {
             out1.Write(recordData);
         }

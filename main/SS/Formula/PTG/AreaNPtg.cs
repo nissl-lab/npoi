@@ -18,7 +18,7 @@
 namespace NPOI.SS.Formula.PTG
 {
     using NPOI.HSSF.Record;
-    using NPOI.Util.IO;
+    using NPOI.Util;
 
     /**
      * Specifies a rectangular area of cells A1:A4 for instance.
@@ -28,7 +28,7 @@ namespace NPOI.SS.Formula.PTG
     {
         public const short sid = 0x2D;
 
-        public AreaNPtg(LittleEndianInput in1)
+        public AreaNPtg(ILittleEndianInput in1)
             : base(in1)
         {
 

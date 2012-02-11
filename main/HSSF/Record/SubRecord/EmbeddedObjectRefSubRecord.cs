@@ -26,7 +26,7 @@ namespace NPOI.HSSF.Record
 
     using NPOI.SS.Formula;
     using NPOI.Util;
-    using NPOI.Util.IO;
+
     using NPOI.SS.Formula.PTG;
 
     /**
@@ -71,7 +71,7 @@ namespace NPOI.HSSF.Record
          *
          * @param in the record input stream.
          */
-        public EmbeddedObjectRefSubRecord(LittleEndianInput in1, int size)
+        public EmbeddedObjectRefSubRecord(ILittleEndianInput in1, int size)
         {
             // Much guess-work going on here due to lack of any documentation.
             // See similar source code in OOO:
@@ -185,7 +185,7 @@ namespace NPOI.HSSF.Record
         {
             using (var ms = new MemoryStream(formulaRawBytes))
             {
-                LittleEndianInput in1 = new LittleEndianInputStream(ms);
+                ILittleEndianInput in1 = new LittleEndianInputStream(ms);
                 byte ptgSid = (byte)in1.ReadByte();
                 switch (ptgSid)
                 {
@@ -198,7 +198,7 @@ namespace NPOI.HSSF.Record
             }
         }
 
-        private static byte[] ReadRawData(LittleEndianInput in1, int size)
+        private static byte[] ReadRawData(ILittleEndianInput in1, int size)
         {
             if (size < 0)
             {
@@ -269,7 +269,7 @@ namespace NPOI.HSSF.Record
             }
         }
 
-        public override void Serialize(LittleEndianOutput out1)
+        public override void Serialize(ILittleEndianOutput out1)
         {
             int formulaSize = field_2_refPtg == null ? field_2_unknownFormulaData.Length : field_2_refPtg.Size;
             int idOffset = GetStreamIDOffset(formulaSize);

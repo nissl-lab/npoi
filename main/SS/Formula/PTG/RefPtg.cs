@@ -20,7 +20,7 @@ namespace NPOI.SS.Formula.PTG
     using System;
     using System.Text;
     using NPOI.HSSF.Record;
-    using NPOI.Util.IO;
+    using NPOI.Util;
     using NPOI.SS.Util;
 
     /**
@@ -52,7 +52,7 @@ namespace NPOI.SS.Formula.PTG
             IsColRelative = isColumnRelative;
         }
 
-        public RefPtg(LittleEndianInput in1)
+        public RefPtg(ILittleEndianInput in1)
             : base(in1)
         {
 

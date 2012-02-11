@@ -23,7 +23,7 @@ namespace NPOI.SS.Formula.PTG
     using NPOI.SS.Util;
     using NPOI.HSSF.Record;
     
-    using NPOI.Util.IO;
+
 
     /**
      * Specifies a rectangular area of cells A1:A4 for instance.
@@ -103,14 +103,14 @@ namespace NPOI.SS.Formula.PTG
             IsFirstColRelative = firstColRelative;
             IsLastColRelative = lastColRelative;
         }
-        protected void ReadCoordinates(LittleEndianInput in1)
+        protected void ReadCoordinates(ILittleEndianInput in1)
         {
             field_1_first_row = in1.ReadUShort();
             field_2_last_row = in1.ReadUShort();
             field_3_first_column = in1.ReadUShort();
             field_4_last_column = in1.ReadUShort();
         }
-        protected void WriteCoordinates(LittleEndianOutput out1)
+        protected void WriteCoordinates(ILittleEndianOutput out1)
         {
 		    out1.WriteShort(field_1_first_row);
 		    out1.WriteShort(field_2_last_row);

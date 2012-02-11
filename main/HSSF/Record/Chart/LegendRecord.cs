@@ -24,7 +24,7 @@ namespace NPOI.HSSF.Record.Chart
     using System.Text;
     using System.Collections;
     using NPOI.Util;
-    using NPOI.Util.IO;
+
 
     /**
      * Defines a legend for a chart.
@@ -128,7 +128,7 @@ namespace NPOI.HSSF.Record.Chart
             return buffer.ToString();
         }
 
-        public override void Serialize(LittleEndianOutput out1)
+        public override void Serialize(ILittleEndianOutput out1)
         {
             out1.WriteInt(field_1_xAxisUpperLeft);
             out1.WriteInt(field_2_yAxisUpperLeft);

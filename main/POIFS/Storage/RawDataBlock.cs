@@ -32,7 +32,7 @@ using System.IO;
 
 using NPOI.POIFS.Common;
 using NPOI.Util;
-using NPOI.Util.IO;
+
 
 namespace NPOI.POIFS.Storage
 {

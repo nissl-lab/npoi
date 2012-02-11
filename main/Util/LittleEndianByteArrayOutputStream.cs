@@ -15,19 +15,16 @@
    limitations under the License.
 ==================================================================== */
 
-namespace NPOI.Util.IO
+namespace NPOI.Util
 {
     using System;
     using System.IO;
 
-
-    /**
-     * Adapts a plain byte array to {@link LittleEndianOutput} 
-     * 
-     * 
-     * @author Josh Micich
-     */
-    public class LittleEndianByteArrayOutputStream : LittleEndianOutput, DelayableLittleEndianOutput
+    /// <summary>
+    /// Adapts a plain byte array to <see cref="T:NPOI.Util.ILittleEndianOutput"/>
+    /// </summary>
+    /// <remarks>@author Josh Micich</remarks>
+    public class LittleEndianByteArrayOutputStream : ILittleEndianOutput, IDelayableLittleEndianOutput
     {
         private byte[] _buf;
         private int _endIndex;
@@ -59,7 +56,7 @@ namespace NPOI.Util.IO
         {
             if (i > _endIndex - _writeIndex)
             {
-                throw new Exception(string.Format("Buffer overrun i={0};endIndex={1};writeIndex={2}",i,_endIndex,_writeIndex));
+                throw new RuntimeException(string.Format("Buffer overrun i={0};endIndex={1};writeIndex={2}", i, _endIndex, _writeIndex));
             }
         }
 
@@ -119,10 +116,10 @@ namespace NPOI.Util.IO
                 return _writeIndex;
             }
         }
-        public LittleEndianOutput CreateDelayedOutput(int size)
+        public ILittleEndianOutput CreateDelayedOutput(int size)
         {
             CheckPosition(size);
-            LittleEndianOutput result = new LittleEndianByteArrayOutputStream(_buf, _writeIndex, size);
+            ILittleEndianOutput result = new LittleEndianByteArrayOutputStream(_buf, _writeIndex, size);
             _writeIndex += size;
             return result;
         }

@@ -21,7 +21,7 @@ namespace NPOI.SS.Formula.PTG
     
     using NPOI.HSSF.Record;
     using NPOI.Util;
-    using NPOI.Util.IO;
+
     using NPOI.SS.Util;
 
     /**
@@ -38,7 +38,7 @@ namespace NPOI.SS.Formula.PTG
         private double field_1_value;
 
         /** Create a NumberPtg from a byte array Read from disk */
-        public NumberPtg(LittleEndianInput in1)
+        public NumberPtg(ILittleEndianInput in1)
         {
             field_1_value = in1.ReadDouble();
         }
@@ -62,7 +62,7 @@ namespace NPOI.SS.Formula.PTG
             get { return field_1_value; }
         }
 
-        public override void Write(LittleEndianOutput out1)
+        public override void Write(ILittleEndianOutput out1)
         {
             out1.WriteByte(sid + PtgClass);
             out1.WriteDouble(Value);

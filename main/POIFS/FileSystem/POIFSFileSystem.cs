@@ -36,7 +36,7 @@ using NPOI.POIFS.Storage;
 using NPOI.POIFS.EventFileSystem;
 using NPOI.POIFS.Common;
 using NPOI.Util;
-using NPOI.Util.IO;
+
 
 namespace NPOI.POIFS.FileSystem
 {

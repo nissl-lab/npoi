@@ -21,7 +21,7 @@ namespace NPOI.SS.Formula.Constant
     using System.Text;
     using NPOI.Util;
     using NPOI.HSSF.Record;
-    using NPOI.Util.IO;
+
 
 
     /**
@@ -51,7 +51,7 @@ namespace NPOI.SS.Formula.Constant
             // no instances of this class
         }
 
-        public static object[] Parse(LittleEndianInput in1, int nValues)
+        public static object[] Parse(ILittleEndianInput in1, int nValues)
         {
             object[] result = new Object[nValues];
             for (int i = 0; i < result.Length; i++)
@@ -61,7 +61,7 @@ namespace NPOI.SS.Formula.Constant
             return result;
         }
 
-        private static object ReadAConstantValue(LittleEndianInput in1)
+        private static object ReadAConstantValue(ILittleEndianInput in1)
         {
             byte grbit = (byte)in1.ReadByte();
             switch (grbit)
@@ -85,7 +85,7 @@ namespace NPOI.SS.Formula.Constant
             throw new Exception("Unknown grbit value (" + grbit + ")");
         }
 
-        private static Object ReadBoolean(LittleEndianInput in1)
+        private static Object ReadBoolean(ILittleEndianInput in1)
         {
             byte val = (byte)in1.ReadLong(); // 7 bytes 'not used'
             switch (val)
@@ -129,7 +129,7 @@ namespace NPOI.SS.Formula.Constant
             return StringUtil.GetEncodedSize(strVal);
         }
 
-        public static void Encode(LittleEndianOutput out1, Array values)
+        public static void Encode(ILittleEndianOutput out1, Array values)
         {
             for (int i = 0; i < values.Length; i++)
             {
@@ -137,7 +137,7 @@ namespace NPOI.SS.Formula.Constant
             }
         }
 
-        private static void EncodeSingleValue(LittleEndianOutput out1, Object value)
+        private static void EncodeSingleValue(ILittleEndianOutput out1, Object value)
         {
             if (value == EMPTY_REPRESENTATION)
             {

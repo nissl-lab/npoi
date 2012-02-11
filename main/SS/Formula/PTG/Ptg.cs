@@ -28,7 +28,7 @@ namespace NPOI.SS.Formula.PTG
     using NPOI.HSSF.Record;
 
     using NPOI.SS.Util;
-    using NPOI.Util.IO;
+
 
     /**
      * <c>Ptg</c> represents a syntactic token in a formula.  'PTG' is an acronym for 
@@ -55,7 +55,7 @@ namespace NPOI.SS.Formula.PTG
          * Reads <c>size</c> bytes of the input stream, to Create an array of <c>Ptg</c>s.
          * Extra data (beyond <c>size</c>) may be Read if and <c>ArrayPtg</c>s are present.
          */
-        public static Ptg[] ReadTokens(int size, LittleEndianInput in1)
+        public static Ptg[] ReadTokens(int size, ILittleEndianInput in1)
         {
             ArrayList temp = new ArrayList(4 + size / 2);
             int pos = 0;
@@ -89,7 +89,7 @@ namespace NPOI.SS.Formula.PTG
             return ToPtgArray(temp);
         }
 
-        public static Ptg CreatePtg(LittleEndianInput in1)
+        public static Ptg CreatePtg(ILittleEndianInput in1)
         {
             byte id = (byte)in1.ReadByte();
 
@@ -115,7 +115,7 @@ namespace NPOI.SS.Formula.PTG
 
             return retval;
         }
-        private static Ptg CreateClassifiedPtg(byte id, LittleEndianInput in1)
+        private static Ptg CreateClassifiedPtg(byte id, ILittleEndianInput in1)
         {
 
             int baseId = id & 0x1F | 0x20;
@@ -146,7 +146,7 @@ namespace NPOI.SS.Formula.PTG
                        StringUtil.ToHexString(id) + " (" + (int)id + ")");
         }
 
-        private static Ptg CreateBasePtg(byte id, LittleEndianInput in1)
+        private static Ptg CreateBasePtg(byte id, ILittleEndianInput in1)
         {
             switch (id)
             {
@@ -311,7 +311,7 @@ namespace NPOI.SS.Formula.PTG
 
 
         /** Write this Ptg to a byte array*/
-        public abstract void Write(LittleEndianOutput out1);
+        public abstract void Write(ILittleEndianOutput out1);
 
         /**
          * return a string representation of this token alone

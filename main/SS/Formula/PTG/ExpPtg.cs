@@ -23,7 +23,7 @@ namespace NPOI.SS.Formula.PTG
     using NPOI.Util;
     using NPOI.HSSF.Record;
     
-    using NPOI.Util.IO;
+
 
     /**
      *
@@ -38,7 +38,7 @@ namespace NPOI.SS.Formula.PTG
         private short field_1_first_row;
         private short field_2_first_col;
 
-        public ExpPtg(LittleEndianInput in1)
+        public ExpPtg(ILittleEndianInput in1)
         {
             field_1_first_row = in1.ReadShort();
             field_2_first_col = in1.ReadShort();
@@ -50,7 +50,7 @@ namespace NPOI.SS.Formula.PTG
             this.field_2_first_col = (short)firstCol;
         }
 
-        public override void Write(LittleEndianOutput out1)
+        public override void Write(ILittleEndianOutput out1)
         {
             out1.WriteByte(sid + PtgClass);
             out1.WriteShort(field_1_first_row);

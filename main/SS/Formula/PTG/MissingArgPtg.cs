@@ -20,7 +20,7 @@ namespace NPOI.SS.Formula.PTG
     using System;
     using System.Text;
     
-    using NPOI.Util.IO;
+    using NPOI.Util;
 
     /**
      * Missing Function Arguments
@@ -39,7 +39,7 @@ namespace NPOI.SS.Formula.PTG
         {
         }
 
-        public override void Write(LittleEndianOutput out1)
+        public override void Write(ILittleEndianOutput out1)
         {
             out1.WriteByte(sid + PtgClass);
         }

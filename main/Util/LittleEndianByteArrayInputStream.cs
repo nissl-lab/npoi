@@ -15,18 +15,16 @@
    limitations under the License.
 ==================================================================== */
 
-namespace NPOI.Util.IO
+namespace NPOI.Util
 {
     using System;
     using System.IO;
 
-    /**
-     * Adapts a plain byte array to {@link LittleEndianInput} 
-     * 
-     * 
-     * @author Josh Micich
-     */
-    public class LittleEndianByteArrayInputStream : LittleEndianInput
+    /// <summary>
+    /// Adapts a plain byte array to <see cref="T:NPOI.Util.ILittleEndianInput"/>
+    /// </summary>
+    /// <remarks>@author Josh Micich</remarks>
+    public class LittleEndianByteArrayInputStream : ILittleEndianInput
     {
         private byte[] _buf;
         private int _endIndex;
@@ -57,7 +55,7 @@ namespace NPOI.Util.IO
         {
             if (i > _endIndex - _ReadIndex)
             {
-                throw new Exception("Buffer overrun");
+                throw new RuntimeException("Buffer overrun");
             }
         }
 

@@ -24,7 +24,7 @@ namespace NPOI.HSSF.Record.Chart
     using NPOI.SS.Formula;
     using NPOI.SS.Formula.PTG;
     using NPOI.Util;
-    using NPOI.Util.IO;
+
 
     /**
      * Describes a linked data record.  This record referes to the series data or text.
@@ -103,7 +103,7 @@ namespace NPOI.HSSF.Record.Chart
             return buffer.ToString();
         }
 
-        public override void Serialize(LittleEndianOutput out1)
+        public override void Serialize(ILittleEndianOutput out1)
         {
             out1.WriteByte(field_1_linkType);
             out1.WriteByte(field_2_referenceType);

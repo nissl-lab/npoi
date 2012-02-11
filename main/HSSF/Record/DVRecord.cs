@@ -25,7 +25,7 @@ namespace NPOI.HSSF.Record
 
     using NPOI.SS.Formula;
     using NPOI.Util;
-    using NPOI.Util.IO;
+
     using NPOI.SS.Formula.PTG;
     
 
@@ -304,7 +304,7 @@ namespace NPOI.HSSF.Record
             return buffer.ToString();
         }
 
-        public override void Serialize(LittleEndianOutput out1)
+        public override void Serialize(ILittleEndianOutput out1)
         {
 
             out1.WriteInt(_option_flags);
@@ -323,7 +323,7 @@ namespace NPOI.HSSF.Record
 
             _regions.Serialize(out1);
         }
-        private static void SerializeUnicodeString(UnicodeString us, LittleEndianOutput out1)
+        private static void SerializeUnicodeString(UnicodeString us, ILittleEndianOutput out1)
         {
             StringUtil.WriteUnicodeString(out1, us.String);
         }

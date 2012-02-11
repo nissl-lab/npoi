@@ -22,7 +22,7 @@ namespace NPOI.HSSF.Record
     using System.Text;
     using NPOI.Util;
     using System;
-    using NPOI.Util.IO;
+
 
 /**
  * End Of File record.
@@ -64,7 +64,7 @@ public class EOFRecord: StandardRecord
         return buffer.ToString();
     }
 
-    public override void Serialize(LittleEndianOutput out1)
+    public override void Serialize(ILittleEndianOutput out1)
     {
     }
 

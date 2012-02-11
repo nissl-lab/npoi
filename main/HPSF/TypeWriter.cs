@@ -83,6 +83,7 @@ namespace NPOI.HPSF
  * @exception IOException if an I/O error occurs
  * @return The number of bytes written To the output stream. 
  */
+        [Obsolete]
         public static int WriteToStream(Stream out1, uint n)
         {
             int l = LittleEndianConsts.INT_SIZE;

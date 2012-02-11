@@ -22,7 +22,7 @@ namespace NPOI.SS.Formula.PTG
     using System.Collections;
     using NPOI.HSSF.Record;
     using NPOI.Util;
-    using NPOI.Util.IO;
+
     using NPOI.SS.Util;
 
     /**
@@ -42,13 +42,13 @@ namespace NPOI.SS.Formula.PTG
         {
             
         }
-        protected Area2DPtgBase(LittleEndianInput in1)
+        protected Area2DPtgBase(ILittleEndianInput in1)
         {
             ReadCoordinates(in1);
         }
         protected abstract byte Sid { get; }
 
-        public override void Write(LittleEndianOutput out1)
+        public override void Write(ILittleEndianOutput out1)
         {
             out1.WriteByte(Sid + PtgClass);
             WriteCoordinates(out1);

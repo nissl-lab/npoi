@@ -20,7 +20,7 @@ namespace NPOI.POIFS.FileSystem
     using System;
     using NPOI.Util;
     using System.IO;
-    using NPOI.Util.IO;
+
 
 
 
@@ -138,7 +138,7 @@ namespace NPOI.POIFS.FileSystem
                 ofs += len;
                 flags2 = LittleEndian.GetShort(data, ofs);
                 ofs += LittleEndianConsts.SHORT_SIZE;
-                len = LittleEndian.GetUByte(data, ofs);
+                len = LittleEndian.GetUnsignedByte(data, ofs);
                 unknown1 = new byte[len];
                 ofs += len;
                 len = 3;

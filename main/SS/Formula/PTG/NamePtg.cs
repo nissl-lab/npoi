@@ -23,7 +23,7 @@ namespace NPOI.SS.Formula.PTG
     using NPOI.HSSF.Record;
     using NPOI.Util;
     using NPOI.SS.Formula;
-    using NPOI.Util.IO;
+
 
     /**
      *
@@ -48,7 +48,7 @@ namespace NPOI.SS.Formula.PTG
 
         /** Creates new NamePtg */
 
-        public NamePtg(LittleEndianInput in1)
+        public NamePtg(ILittleEndianInput in1)
         {
             field_1_label_index = in1.ReadShort();
             field_2_zero = in1.ReadShort();
@@ -62,7 +62,7 @@ namespace NPOI.SS.Formula.PTG
             get { return field_1_label_index - 1; } // Convert to zero based
         }
 
-        public override void Write(LittleEndianOutput out1)
+        public override void Write(ILittleEndianOutput out1)
         {
 		    out1.WriteByte(sid + PtgClass);
 		    out1.WriteShort(field_1_label_index);

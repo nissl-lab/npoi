@@ -42,14 +42,372 @@ namespace NPOI.Util
     /// @author     Marc Johnson (mjohnson at apache dot org)
     /// @author     Andrew Oliver (acoliver at apache dot org)
     /// </remarks>
-    public class LittleEndian 
+    public class LittleEndian : LittleEndianConsts
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="LittleEndian"/> class.
         /// </summary>
         private LittleEndian()
         {
+            // no instances of this class
         }
+
+        /// <summary>
+        /// get a short value from a byte array
+        /// </summary>
+        /// <param name="data">the byte array</param>
+        /// <param name="offset">a starting offset into the byte array</param>
+        /// <returns>the short (16-bit) value</returns>
+        public static short GetShort(byte[] data, int offset)
+        {
+            int b0 = data[offset] & 0xFF;
+            int b1 = data[offset + 1] & 0xFF;
+            return (short)((b1 << 8) + (b0 << 0));
+            //return (short)GetNumber(data, offset, LittleEndianConsts.SHORT_SIZE);
+        }
+
+        /// <summary>
+        /// get an unsigned short value from a byte array
+        /// </summary>
+        /// <param name="data">the byte array</param>
+        /// <param name="offset">a starting offset into the byte array</param>
+        /// <returns>the unsigned short (16-bit) value in an integer</returns>
+        public static int GetUShort(byte[] data, int offset)
+        {
+            //short num = (short)GetNumber(data, offset, LittleEndianConsts.SHORT_SIZE);
+            //if (num < 0)
+            //{
+            //    return (ushort)(0x10000 + num);
+            //}
+            //return (ushort)num;
+            int b0 = data[offset] & 0xFF;
+            int b1 = data[offset + 1] & 0xFF;
+            return (b1 << 8) + (b0 << 0);
+        }
+
+        /// <summary>
+        /// get a short value from a byte array
+        /// </summary>
+        /// <param name="data">a starting offset into the byte array</param>
+        /// <returns>the short (16-bit) value</returns>
+        public static short GetShort(byte[] data)
+        {
+            return GetShort(data, 0);
+        }
+
+        /// <summary>
+        /// get a short value from a byte array
+        /// </summary>
+        /// <param name="data">the unsigned short (16-bit) value in an integer</param>
+        /// <returns></returns>
+        public static int GetUShort(byte[] data)
+        {
+            return GetUShort(data, 0);
+        }
+
+        /// <summary>
+        /// get an int value from a byte array
+        /// </summary>
+        /// <param name="data">the byte array</param>
+        /// <param name="offset">a starting offset into the byte array</param>
+        /// <returns>the int (32-bit) value</returns>
+        public static int GetInt(byte[] data, int offset)
+        {
+            //return (int)GetNumber(data, offset, LittleEndianConsts.INT_SIZE);
+            int i = offset;
+            int b0 = data[i++] & 0xFF;
+            int b1 = data[i++] & 0xFF;
+            int b2 = data[i++] & 0xFF;
+            int b3 = data[i++] & 0xFF;
+            return (b3 << 24) + (b2 << 16) + (b1 << 8) + (b0 << 0);
+        }
+
+        /// <summary>
+        /// get an int value from the beginning of a byte array
+        /// </summary>
+        /// <param name="data">the byte array</param>
+        /// <returns>the int (32-bit) value</returns>
+        public static int GetInt(byte[] data)
+        {
+            return GetInt(data, 0);
+        }
+
+        /// <summary>
+        /// Gets the U int.
+        /// </summary>
+        /// <param name="data">the byte array</param>
+        /// <param name="offset">a starting offset into the byte array</param>
+        /// <returns>the unsigned int (32-bit) value in a long</returns>
+        public static long GetUInt(byte[] data, int offset)
+        {
+            //uint num = (uint)GetNumber(data, offset, LittleEndianConsts.INT_SIZE);
+            //if (num < 0)
+            //{
+            //    return (uint)(0x100000000L + num);
+            //}
+            //return num;
+            long retNum = GetInt(data, offset);
+            return retNum & 0x00FFFFFFFFL;
+        }
+
+        /// <summary>
+        /// Gets the U int.
+        /// </summary>
+        /// <param name="data">the byte array</param>
+        /// <returns>the unsigned int (32-bit) value in a long</returns>
+        public static long GetUInt(byte[] data)
+        {
+            return GetUInt(data, 0);
+        }
+
+        /// <summary>
+        /// get a long value from a byte array
+        /// </summary>
+        /// <param name="data">the byte array</param>
+        /// <param name="offset">a starting offset into the byte array</param>
+        /// <returns>the long (64-bit) value</returns>
+        public static long GetLong(byte[] data, int offset)
+        {
+            //return GetNumber(data, offset, LittleEndianConsts.LONG_SIZE);
+            long result = 0;
+
+            for (int j = offset + LONG_SIZE - 1; j >= offset; j--)
+            {
+                result <<= 8;
+                result |= 0xffL & data[j];
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// get a double value from a byte array, reads it in little endian format
+        /// then converts the resulting revolting IEEE 754 (curse them) floating
+        /// point number to a c# double
+        /// </summary>
+        /// <param name="data">the byte array</param>
+        /// <param name="offset">a starting offset into the byte array</param>
+        /// <returns>the double (64-bit) value</returns>
+        public static double GetDouble(byte[] data, int offset)
+        {
+            return BitConverter.Int64BitsToDouble(GetLong(data, offset));
+        }
+
+        /// <summary>
+        /// Puts the short.
+        /// </summary>
+        /// <param name="data">the byte array</param>
+        /// <param name="offset">a starting offset into the byte array</param>
+        /// <param name="value">The value.</param>
+        public static void PutShort(byte[] data, int offset, short value)
+        {
+            int i = offset;
+            data[i++] = (byte)((value >> 0) & 0xFF);
+            data[i++] = (byte)((value >> 8) & 0xFF);
+            //PutNumber(data, offset, Convert.ToInt64(value), LittleEndianConsts.SHORT_SIZE);
+        }
+
+        /// <summary>
+        /// Added for consistency with other put~() methods
+        /// </summary>
+        /// <param name="data">the byte array</param>
+        /// <param name="offset">a starting offset into the byte array</param>
+        /// <param name="value">The value.</param>
+        public static void PutByte(byte[] data, int offset, int value)
+        {
+            data[offset] = (byte)value;
+            //PutNumber(data, offset, value, LittleEndianConsts.BYTE_SIZE);
+        }
+
+
+        /// <summary>
+        /// Puts the U short.
+        /// </summary>
+        /// <param name="data">the byte array</param>
+        /// <param name="offset">a starting offset into the byte array</param>
+        /// <param name="value">The value.</param>
+        public static void PutUShort(byte[] data, int offset, int value)
+        {
+            //PutNumber(data, offset, Convert.ToInt64(value), LittleEndianConsts.SHORT_SIZE);
+            int i = offset;
+            data[i++] = (byte)((value >> 0) & 0xFF);
+            data[i++] = (byte)((value >> 8) & 0xFF);
+        }
+
+
+        /// <summary>
+        /// put a short value into beginning of a byte array
+        /// </summary>
+        /// <param name="data">the byte array</param>
+        /// <param name="value">the short (16-bit) value</param>
+        public static void PutShort(byte[] data, short value)
+        {
+            PutShort(data, 0, value);
+        }
+
+        /// <summary>
+        /// put an int value into a byte array
+        /// </summary>
+        /// <param name="data">the byte array</param>
+        /// <param name="offset">a starting offset into the byte array</param>
+        /// <param name="value">the int (32-bit) value</param>
+        public static void PutInt(byte[] data, int offset, int value)
+        {
+            int i = offset;
+            data[i++] = (byte)((value >> 0) & 0xFF);
+            data[i++] = (byte)((value >> 8) & 0xFF);
+            data[i++] = (byte)((value >> 16) & 0xFF);
+            data[i++] = (byte)((value >> 24) & 0xFF);
+        }
+
+        /// <summary>
+        /// put an int value into beginning of a byte array
+        /// </summary>
+        /// <param name="data">the byte array</param>
+        /// <param name="value">the int (32-bit) value</param>
+        public static void PutInt(byte[] data, int value)
+        {
+            PutInt(data, 0, value);
+        }
+
+        /// <summary>
+        /// put a long value into a byte array
+        /// </summary>
+        /// <param name="data">the byte array</param>
+        /// <param name="offset">a starting offset into the byte array</param>
+        /// <param name="value">the long (64-bit) value</param>
+        public static void PutLong(byte[] data, int offset, long value)
+        {
+            //PutNumber(data, offset, value, LittleEndianConsts.LONG_SIZE);
+            int limit = LONG_SIZE + offset;
+            long v = value;
+
+            for (int j = offset; j < limit; j++)
+            {
+                data[j] = (byte)(v & 0xFF);
+                v >>= 8;
+            }
+        }
+
+
+        /// <summary>
+        /// put a double value into a byte array
+        /// </summary>
+        /// <param name="data">the byte array</param>
+        /// <param name="offset">a starting offset into the byte array</param>
+        /// <param name="value">the double (64-bit) value</param>
+        public static void PutDouble(byte[] data, int offset, double value)
+        {
+            long lvalue = 0L;
+            if (double.IsNaN(value))
+            {
+                lvalue = -276939487313920L;
+                //PutNumber(data, offset, -276939487313920L, LittleEndianConsts.DOUBLE_SIZE);
+            }
+            else
+            {
+                lvalue = BitConverter.DoubleToInt64Bits(value);
+                //PutNumber(data, offset, BitConverter.DoubleToInt64Bits(value), LittleEndianConsts.DOUBLE_SIZE);
+            }
+            PutLong(data, offset, lvalue);
+        }
+
+        /// <summary>
+        /// Reads the short.
+        /// </summary>
+        /// <param name="stream">The stream.</param>
+        /// <returns></returns>
+        public static short ReadShort(Stream stream)
+        {
+            //return GetShort(ReadFromStream(stream, LittleEndianConsts.SHORT_SIZE));
+            return (short)ReadUShort(stream);
+        }
+
+        public static int ReadUShort(Stream stream)
+        {
+            int ch1 = stream.ReadByte();
+            int ch2 = stream.ReadByte();
+            if ((ch1 | ch2) < 0)
+            {
+                throw new BufferUnderrunException();
+            }
+            return (ch2 << 8) + (ch1 << 0);
+        }
+        /// <summary>
+        /// get an int value from an Stream
+        /// </summary>
+        /// <param name="stream">the Stream from which the int is to be read</param>
+        /// <returns>the int (32-bit) value</returns>
+        /// <exception cref="T:System.IO.IOException">will be propagated back to the caller</exception>
+        /// <exception cref="T:NPOI.Util.BufferUnderrunException">if the stream cannot provide enough bytes</exception>
+        public static int ReadInt(Stream stream)
+        {
+            //return GetInt(ReadFromStream(stream, LittleEndianConsts.INT_SIZE));
+            int ch1 = stream.ReadByte();
+            int ch2 = stream.ReadByte();
+            int ch3 = stream.ReadByte();
+            int ch4 = stream.ReadByte();
+            if ((ch1 | ch2 | ch3 | ch4) < 0)
+            {
+                throw new BufferUnderrunException();
+            }
+            return (ch4 << 24) + (ch3 << 16) + (ch2 << 8) + (ch1 << 0);
+        }
+
+        /// <summary>
+        /// get a long value from a Stream
+        /// </summary>
+        /// <param name="stream">the Stream from which the long is to be read</param>
+        /// <returns>the long (64-bit) value</returns>
+        /// <exception cref="T:System.IO.IOException">will be propagated back to the caller</exception>
+        /// <exception cref="T:NPOI.Util.BufferUnderrunException">if the stream cannot provide enough bytes</exception>
+        public static long ReadLong(Stream stream)
+        {
+            //return GetLong(ReadFromStream(stream, LittleEndianConsts.LONG_SIZE));
+            int ch1 = stream.ReadByte();
+            int ch2 = stream.ReadByte();
+            int ch3 = stream.ReadByte();
+            int ch4 = stream.ReadByte();
+            int ch5 = stream.ReadByte();
+            int ch6 = stream.ReadByte();
+            int ch7 = stream.ReadByte();
+            int ch8 = stream.ReadByte();
+            if ((ch1 | ch2 | ch3 | ch4 | ch5 | ch6 | ch7 | ch8) < 0)
+            {
+                throw new BufferUnderrunException();
+            }
+
+            return
+                ((long)ch8 << 56) +
+                ((long)ch7 << 48) +
+                ((long)ch6 << 40) +
+                ((long)ch5 << 32) +
+                ((long)ch4 << 24) + // cast to long to preserve bit 31 (sign bit for ints)
+                      (ch3 << 16) +
+                      (ch2 << 8) +
+                      (ch1 << 0);
+        }
+
+        /// <summary>
+        /// Us the byte to int.
+        /// </summary>
+        /// <param name="b">The b.</param>
+        /// <returns></returns>
+        public static int UByteToInt(byte b)
+        {
+            return (((b & 0x80) != 0) ? ((b & 0x7f) + 0x80) : b);
+        }
+
+        /// <summary>
+        /// get the unsigned value of a byte.
+        /// </summary>
+        /// <param name="data">the byte array.</param>
+        /// <param name="offset">a starting offset into the byte array.</param>
+        /// <returns>the unsigned value of the byte as a 32 bit integer</returns>
+        public static int GetUnsignedByte(byte[] data, int offset)
+        {
+            return data[offset] & 0xFF;
+        }
+
 
         /// <summary>
         /// Copy a portion of a byte array
@@ -68,46 +426,30 @@ namespace NPOI.Util
             return destinationArray;
         }
 
+        //Are the following methods Obsoleted?
+        [Obsolete]
         public static double GetDouble(byte[] data)
         {
             return GetDouble(data, 0);
         }
-
-        public static double GetDouble(byte[] data, int offset)
-        {
-            return BitConverter.Int64BitsToDouble(GetNumber(data, offset, LittleEndianConsts.DOUBLE_SIZE));
-        }
-
-        public static int GetInt(byte[] data)
-        {
-            return GetInt(data, 0);
-        }
-
-        public static int GetInt(byte[] data, int offset)
-        {
-            return (int)GetNumber(data, offset, LittleEndianConsts.INT_SIZE);
-        }
-
+        [Obsolete]
         public static long GetLong(byte[] data)
         {
             return GetLong(data, 0);
         }
 
-        public static long GetLong(byte[] data, int offset)
-        {
-            return GetNumber(data, offset, LittleEndianConsts.LONG_SIZE);
-        }
 
+        [Obsolete]
         public static ulong GetULong(byte[] data)
         {
             return GetULong(data, 0);
         }
-
+        [Obsolete]
         public static ulong GetULong(byte[] data, int offset)
         {
             return BitConverter.ToUInt64(data, offset);
         }
-
+        [Obsolete]
         private static long GetNumber(byte[] data, int offset, int size)
         {
             long num = 0L;
@@ -119,58 +461,20 @@ namespace NPOI.Util
             return num;
         }
 
-        /// <summary>
-        /// get a short value from a byte array
-        /// </summary>
-        /// <param name="data">a starting offset into the byte array</param>
-        /// <returns>the short (16-bit) value</returns>
-        public static short GetShort(byte[] data)
-        {
-            return GetShort(data, 0);
-        }
+        
 
-        /// <summary>
-        /// get a short value from a byte array
-        /// </summary>
-        /// <param name="data">the byte array</param>
-        /// <param name="offset">a starting offset into the byte array</param>
-        /// <returns>the short (16-bit) value</returns>
-        public static short GetShort(byte[] data, int offset)
-        {
-            return (short)GetNumber(data, offset, LittleEndianConsts.SHORT_SIZE);
-        }
+        
 
-        /// <summary>
-        /// Gets the U int.
-        /// </summary>
-        /// <param name="data">the byte array</param>
-        /// <returns></returns>
-        public static uint GetUInt(byte[] data)
-        {
-            return GetUInt(data, 0);
-        }
+        
 
-        /// <summary>
-        /// Gets the U int.
-        /// </summary>
-        /// <param name="data">the byte array</param>
-        /// <param name="offset">a starting offset into the byte array</param>
-        /// <returns></returns>
-        public static uint GetUInt(byte[] data, int offset)
-        {
-            uint num = (uint)GetNumber(data, offset, LittleEndianConsts.INT_SIZE);
-            if (num < 0)
-            {
-                return (uint)(0x100000000L + num);
-            }
-            return num;
-        }
+        
 
         /// <summary>
         /// Gets the unsigned byte.
         /// </summary>
         /// <param name="data">the byte array</param>
         /// <returns></returns>
+        [Obsolete]
         public static byte GetUByte(byte[] data)
         {
             return GetUByte(data, 0);
@@ -182,91 +486,36 @@ namespace NPOI.Util
         /// <param name="data">the byte array</param>
         /// <param name="offset">a starting offset into the byte array</param>
         /// <returns></returns>
+        [Obsolete]
         public static byte GetUByte(byte[] data, int offset)
         {
             return (byte)GetNumber(data, offset, LittleEndianConsts.BYTE_SIZE);
         }
+        
 
-        /// <summary>
-        /// get a short value from a byte array
-        /// </summary>
-        /// <param name="data">the unsigned short (16-bit) value in an integer</param>
-        /// <returns></returns>
-        public static ushort GetUShort(byte[] data)
-        {
-            return GetUShort(data, 0);
-        }
-
-        /// <summary>
-        /// get an unsigned short value from a byte array
-        /// </summary>
-        /// <param name="data">the byte array</param>
-        /// <param name="offset">a starting offset into the byte array</param>
-        /// <returns>the unsigned short (16-bit) value in an integer</returns>
-        public static ushort GetUShort(byte[] data, int offset)
-        {
-            short num = (short)GetNumber(data, offset, LittleEndianConsts.SHORT_SIZE);
-            if (num < 0)
-            {
-                return (ushort)(0x10000 + num);
-            }
-            return (ushort)num;
-        }
+        
 
         /// <summary>
         /// Puts the double.
         /// </summary>
         /// <param name="data">the byte array</param>
         /// <param name="value">The value.</param>
+        [Obsolete]
         public static void PutDouble(byte[] data, double value)
         {
             PutDouble(data, 0, value);
         }
 
-        /// <summary>
-        /// Puts the double.
-        /// </summary>
-        /// <param name="data">the byte array</param>
-        /// <param name="offset">a starting offset into the byte array</param>
-        /// <param name="value">The value.</param>
-        public static void PutDouble(byte[] data, int offset, double value)
-        {
-            if (double.IsNaN(value))
-            {
-                PutNumber( data, offset, -276939487313920L, LittleEndianConsts.DOUBLE_SIZE);
-            }
-            else
-            {
-                PutNumber( data, offset, BitConverter.DoubleToInt64Bits(value), LittleEndianConsts.DOUBLE_SIZE);
-            }   
-        }
+        
 
-        /// <summary>
-        /// Puts the int.
-        /// </summary>
-        /// <param name="data">the byte array</param>
-        /// <param name="value">The value.</param>
-        public static void PutInt(byte[] data, int value)
-        {
-            PutInt(data, 0, value);
-        }
-
-        /// <summary>
-        /// Puts the int.
-        /// </summary>
-        /// <param name="data">the byte array</param>
-        /// <param name="offset">a starting offset into the byte array</param>
-        /// <param name="value">The value.</param>
-        public static void PutInt(byte[] data, int offset, int value)
-        {
-            PutNumber( data, offset,Convert.ToInt64(value), LittleEndianConsts.INT_SIZE);
-        }
+        
 
         /// <summary>
         /// Puts the uint.
         /// </summary>
         /// <param name="data">the byte array</param>
         /// <param name="value">The value.</param>
+        [Obsolete]
         public static void PutUInt(byte[] data, uint value)
         {
             PutUInt(data, 0, value);
@@ -278,6 +527,7 @@ namespace NPOI.Util
         /// <param name="data">the byte array</param>
         /// <param name="offset">a starting offset into the byte array</param>
         /// <param name="value">The value.</param>
+        [Obsolete]
         public static void PutUInt(byte[] data, int offset, uint value)
         {
             PutNumber(data, offset, Convert.ToInt64(value), LittleEndianConsts.UINT_SIZE);
@@ -288,27 +538,20 @@ namespace NPOI.Util
         /// </summary>
         /// <param name="data">the byte array</param>
         /// <param name="value">The value.</param>
+        [Obsolete]
         public static void PutLong(byte[] data, long value)
         {
             PutLong(data, 0, value);
         }
 
-        /// <summary>
-        /// Puts the long.
-        /// </summary>
-        /// <param name="data">the byte array</param>
-        /// <param name="offset">a starting offset into the byte array</param>
-        /// <param name="value">The value.</param>
-        public static void PutLong(byte[] data, int offset, long value)
-        {
-            PutNumber( data, offset, value, LittleEndianConsts.LONG_SIZE);
-        }
+        
 
         /// <summary>
         /// Puts the long.
         /// </summary>
         /// <param name="data">the byte array</param>
         /// <param name="value">The value.</param>
+        [Obsolete]
         public static void PutULong(byte[] data, ulong value)
         {
             PutULong(data, 0, value);
@@ -320,6 +563,7 @@ namespace NPOI.Util
         /// <param name="data">the byte array</param>
         /// <param name="offset">a starting offset into the byte array</param>
         /// <param name="value">The value.</param>
+        [Obsolete]
         public static void PutULong(byte[] data, int offset, ulong value)
         {
             PutNumber(data, offset, value, LittleEndianConsts.ULONG_SIZE);
@@ -332,6 +576,7 @@ namespace NPOI.Util
         /// <param name="offset">a starting offset into the byte array</param>
         /// <param name="value">The value.</param>
         /// <param name="size">The size.</param>
+        [Obsolete]
         private static void PutNumber(byte[] data, int offset, long value, int size)
         {
             int limit = size + offset;
@@ -350,6 +595,7 @@ namespace NPOI.Util
         /// <param name="offset">a starting offset into the byte array</param>
         /// <param name="value">The value.</param>
         /// <param name="size">The size.</param>
+        [Obsolete]
         private static void PutNumber(byte[] data, int offset, ulong value, int size)
         {
             int limit = size + offset;
@@ -362,32 +608,12 @@ namespace NPOI.Util
         }
 
         /// <summary>
-        /// Puts the short.
-        /// </summary>
-        /// <param name="data">the byte array</param>
-        /// <param name="value">The value.</param>
-        public static void PutShort(byte[] data, short value)
-        {
-            PutShort(data, 0, value);
-        }
-
-        /// <summary>
-        /// Puts the short.
-        /// </summary>
-        /// <param name="data">the byte array</param>
-        /// <param name="offset">a starting offset into the byte array</param>
-        /// <param name="value">The value.</param>
-        public static void PutShort(byte[] data, int offset, short value)
-        {
-            PutNumber( data, offset, Convert.ToInt64(value), LittleEndianConsts.SHORT_SIZE);
-        }
-
-        /// <summary>
         /// Puts the short array.
         /// </summary>
         /// <param name="data">the byte array</param>
         /// <param name="offset">a starting offset into the byte array</param>
         /// <param name="value">The value.</param>
+        [Obsolete]
         public static void PutShortArray(byte[] data, int offset, short[] value)
         {
             PutNumber( data, offset, Convert.ToInt64(value.Length), LittleEndianConsts.SHORT_SIZE);
@@ -397,43 +623,27 @@ namespace NPOI.Util
             }
         }
 
-        /// <summary>
-        /// Added for consistency with other put~() methods
-        /// </summary>
-        /// <param name="data">the byte array</param>
-        /// <param name="offset">a starting offset into the byte array</param>
-        /// <param name="value">The value.</param>
-        public static void PutByte(byte[] data, int offset, int value)
-        {
-            PutNumber(data, offset, value, LittleEndianConsts.BYTE_SIZE);
-        }
+        
 
         /// <summary>
         /// Puts the U short.
         /// </summary>
         /// <param name="data">the byte array</param>
         /// <param name="value">The value.</param>
+        [Obsolete]
         public static void PutUShort(byte[] data, int value)
         {
             PutNumber(data, 0, Convert.ToInt64(value), LittleEndianConsts.SHORT_SIZE);
         }
 
-        /// <summary>
-        /// Puts the U short.
-        /// </summary>
-        /// <param name="data">the byte array</param>
-        /// <param name="offset">a starting offset into the byte array</param>
-        /// <param name="value">The value.</param>
-        public static void PutUShort(byte[] data, int offset, int value)
-        {
-            PutNumber( data, offset, Convert.ToInt64(value), LittleEndianConsts.SHORT_SIZE);
-        }
+
         /// <summary>
         /// Reads from stream.
         /// </summary>
         /// <param name="stream">The stream.</param>
         /// <param name="size">The size.</param>
         /// <returns></returns>
+        [Obsolete]
         public static byte[] ReadFromStream(Stream stream, int size)
         {
             byte[] buffer = new byte[size];
@@ -453,55 +663,22 @@ namespace NPOI.Util
             return buffer;
         }
 
-        /// <summary>
-        /// Reads the int.
-        /// </summary>
-        /// <param name="stream">The stream.</param>
-        /// <returns></returns>
-        public static int ReadInt(Stream stream)
-        {
-            return GetInt(ReadFromStream(stream, LittleEndianConsts.INT_SIZE));
-        }
+        
 
         /// <summary>
         /// Reads the long.
         /// </summary>
         /// <param name="stream">The stream.</param>
         /// <returns></returns>
-        public static long ReadLong(Stream stream)
-        {
-            return GetLong(ReadFromStream(stream, LittleEndianConsts.LONG_SIZE));
-        }
-
-        /// <summary>
-        /// Reads the long.
-        /// </summary>
-        /// <param name="stream">The stream.</param>
-        /// <returns></returns>
+        [Obsolete]
         public static ulong ReadULong(Stream stream)
         {
             return GetULong(ReadFromStream(stream, LittleEndianConsts.LONG_SIZE));
         }
 
-        /// <summary>
-        /// Reads the short.
-        /// </summary>
-        /// <param name="stream">The stream.</param>
-        /// <returns></returns>
-        public static short ReadShort(Stream stream)
-        {
-            return GetShort(ReadFromStream(stream, LittleEndianConsts.SHORT_SIZE));
-        }
+        
 
-        /// <summary>
-        /// Us the byte to int.
-        /// </summary>
-        /// <param name="b">The b.</param>
-        /// <returns></returns>
-        public static int UByteToInt(byte b)
-        {
-            return (((b & 0x80) != 0) ? ((b & 0x7f) + 0x80) : b);
-        }
+        
     }
     // Nested Types
     [Serializable]
@@ -510,6 +687,13 @@ namespace NPOI.Util
         // Methods
         internal BufferUnderrunException()
             : base("buffer underrun")
+        {
+        }
+    }
+    public class BufferUnderflowException : RuntimeException
+    {
+        public BufferUnderflowException()
+            : base("Buffer Underflow")
         {
         }
     }

@@ -23,7 +23,7 @@ namespace TestCases.HSSF.Record
     using NPOI.HSSF.Record;
     using NPOI.Util;
     using System.Text;
-    using NPOI.Util.IO;
+
 
     /**
      * A Record Input Stream derivative that makes access to byte arrays used in the
@@ -42,7 +42,7 @@ namespace TestCases.HSSF.Record
         /// </summary>
         /// <param name="data"></param>
         /// <returns></returns>
-        public static LittleEndianInput CreateLittleEndian(byte[] data)
+        public static ILittleEndianInput CreateLittleEndian(byte[] data)
         {
             return new LittleEndianByteArrayInputStream(data);
 

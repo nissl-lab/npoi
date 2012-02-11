@@ -23,7 +23,7 @@ namespace NPOI.HSSF.Record.Chart
     using System;
     using System.Text;
     using NPOI.Util;
-    using NPOI.Util.IO;
+
 
     /**
      * The axis size and location
@@ -96,7 +96,7 @@ namespace NPOI.HSSF.Record.Chart
             return buffer.ToString();
         }
 
-        public override void Serialize(LittleEndianOutput out1)
+        public override void Serialize(ILittleEndianOutput out1)
         {
             out1.WriteShort(field_1_axisType);
             out1.WriteInt(field_2_x);

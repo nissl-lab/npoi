@@ -17,7 +17,7 @@ limitations under the License.
 using NPOI.SS.Util;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TestCases.HSSF.Record;
-using NPOI.Util.IO;
+using NPOI.Util;
 using System.IO;
 namespace TestCases.SS.Util
 {

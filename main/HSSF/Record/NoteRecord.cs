@@ -20,7 +20,7 @@ namespace NPOI.HSSF.Record
     using System.Text;
     using System;
     using NPOI.Util;
-using NPOI.Util.IO;
+
 
     /**
      * NOTE: Comment Associated with a Cell (1Ch)
@@ -108,7 +108,7 @@ using NPOI.Util.IO;
          *
          * @return size of the record
          */
-        public override void Serialize(LittleEndianOutput out1)
+        public override void Serialize(ILittleEndianOutput out1)
         {
             out1.WriteShort(field_1_row);
 		    out1.WriteShort(field_2_col);

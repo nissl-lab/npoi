@@ -21,7 +21,7 @@ namespace NPOI.HSSF.Record.Chart
     using System.IO;
     using System.Text;
     using NPOI.Util;
-    using NPOI.Util.IO;
+
 
     /**
      * STARTOBJECT - Chart Future Record Type Start Object (0x0854)<br/>
@@ -65,7 +65,7 @@ namespace NPOI.HSSF.Record.Chart
             }
         }
 
-        public override void Serialize(LittleEndianOutput out1)
+        public override void Serialize(ILittleEndianOutput out1)
         {
             out1.WriteShort(rt);
             out1.WriteShort(grbitFrt);

@@ -20,7 +20,7 @@ namespace NPOI.HSSF.Record
     using System;
     using System.Text;
     using NPOI.Util;
-    using NPOI.Util.IO;
+
     using System.IO;
     using System.Collections;
     using System.Collections.Generic;

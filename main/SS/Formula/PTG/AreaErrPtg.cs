@@ -21,7 +21,7 @@ namespace NPOI.SS.Formula.PTG
     using NPOI.HSSF.Record;
     
     using NPOI.Util;
-    using NPOI.Util.IO;
+
     using NPOI.HSSF.UserModel;
 
     /**
@@ -35,7 +35,7 @@ namespace NPOI.SS.Formula.PTG
         private int unused1;
         private int unused2;
 
-        public AreaErrPtg(LittleEndianInput in1)
+        public AreaErrPtg(ILittleEndianInput in1)
         {
             // 8 bytes unused:
             unused1 = in1.ReadInt();
@@ -46,7 +46,7 @@ namespace NPOI.SS.Formula.PTG
             unused1 = 0;
             unused2 = 0;
         }
-        public override void Write(LittleEndianOutput out1)
+        public override void Write(ILittleEndianOutput out1)
         {
 		    out1.WriteByte(sid + PtgClass);
 		    out1.WriteInt(unused1);

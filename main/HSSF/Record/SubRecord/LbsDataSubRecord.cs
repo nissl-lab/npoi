@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Text;
-using NPOI.Util.IO;
 using NPOI.Util;
 using NPOI.SS.Formula;
 using NPOI.SS.Formula.PTG;
@@ -79,7 +78,7 @@ namespace NPOI.HSSF.Record
      * @param cbFContinued the seconf short in the record header
      * @param cmoOt the Containing Obj's {@link CommonObjectDataSubRecord#field_1_objectType}
      */
-        public LbsDataSubRecord(LittleEndianInput in1, int cbFContinued, int cmoOt)
+        public LbsDataSubRecord(ILittleEndianInput in1, int cbFContinued, int cmoOt)
         {
             _cbFContinued = cbFContinued;
 
@@ -217,7 +216,7 @@ namespace NPOI.HSSF.Record
                 return result;
             }
         }
-        public override void Serialize(LittleEndianOutput out1)
+        public override void Serialize(ILittleEndianOutput out1)
         {
             out1.WriteShort(sid);
             out1.WriteShort(_cbFContinued); // note - this is *not* the size
@@ -270,7 +269,7 @@ namespace NPOI.HSSF.Record
         }
         private static Ptg ReadRefPtg(byte[] formulaRawBytes)
         {
-            LittleEndianInput in1 = new LittleEndianByteArrayInputStream(formulaRawBytes);
+            ILittleEndianInput in1 = new LittleEndianByteArrayInputStream(formulaRawBytes);
             byte ptgSid = (byte)in1.ReadByte();
             switch (ptgSid)
             {
@@ -372,7 +371,7 @@ namespace NPOI.HSSF.Record
             _unused = 0;
         }
 
-        public LbsDropData(LittleEndianInput in1){
+        public LbsDropData(ILittleEndianInput in1){
             _wStyle = in1.ReadUShort();
             _cLine = in1.ReadUShort();
             _dxMin = in1.ReadUShort();
@@ -382,7 +381,7 @@ namespace NPOI.HSSF.Record
             }
         }
 
-        public void Serialize(LittleEndianOutput out1) {
+        public void Serialize(ILittleEndianOutput out1) {
             out1.WriteShort(_wStyle);
             out1.WriteShort(_cLine);
             out1.WriteShort(_dxMin);

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using NPOI.Util.IO;
+using NPOI.Util;
 
 namespace NPOI.HSSF.Record.AutoFilter
 {
@@ -98,7 +98,7 @@ namespace NPOI.HSSF.Record.AutoFilter
                 return 10;
             }
         }
-        public int Serialize(LittleEndianOutput out1)
+        public int Serialize(ILittleEndianOutput out1)
         {
             out1.WriteByte((byte)vt);
             switch (vt)

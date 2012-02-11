@@ -23,7 +23,7 @@ namespace NPOI.HSSF.Record
     using NPOI.Util;
     using System;
     using System.Text;
-    using NPOI.Util.IO;
+
 
     /**
      * The end data record is used to denote the end of the subrecords.
@@ -49,7 +49,7 @@ namespace NPOI.HSSF.Record
          * @param in the RecordInputstream to Read the record from
          */
 
-        public EndSubRecord(LittleEndianInput in1, int size)
+        public EndSubRecord(ILittleEndianInput in1, int size)
         {
             if ((size & 0xFF) != ENCODED_SIZE)
             { // mask out random crap in upper byte
@@ -75,7 +75,7 @@ namespace NPOI.HSSF.Record
             return buffer.ToString();
         }
 
-        public override void Serialize(LittleEndianOutput out1)
+        public override void Serialize(ILittleEndianOutput out1)
         {
             out1.WriteShort(sid);
             out1.WriteShort(ENCODED_SIZE);

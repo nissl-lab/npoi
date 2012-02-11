@@ -24,7 +24,7 @@ namespace NPOI.HSSF.Record
     using NPOI.HSSF.Record.CF;
     using NPOI.HSSF.Util;
     using NPOI.SS.Util;
-    using NPOI.Util.IO;
+
 
     /**
      * Conditional Formatting Header record (CFHEADER)
@@ -147,7 +147,7 @@ namespace NPOI.HSSF.Record
             }
         }
 
-        public override void Serialize(LittleEndianOutput out1)
+        public override void Serialize(ILittleEndianOutput out1)
         {
             out1.WriteShort(field_1_numcf);
             out1.WriteShort(field_2_need_recalculation);

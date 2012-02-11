@@ -19,7 +19,7 @@ namespace NPOI.HSSF.Record.Cont
 {
     using System;
     using NPOI.HSSF.Record;
-    using NPOI.Util.IO;
+    using NPOI.Util;
     /**
      * Allows the writing of BIFF records when the 'ushort size' header field is not known in advance.
      * When the client is finished writing data, it calls {@link #terminate()}, at which point this 
@@ -27,25 +27,25 @@ namespace NPOI.HSSF.Record.Cont
      * 
      * @author Josh Micich
      */
-    class UnknownLengthRecordOutput : LittleEndianOutput
+    class UnknownLengthRecordOutput : ILittleEndianOutput
     {
         private static int MAX_DATA_SIZE = RecordInputStream.MAX_RECORD_DATA_SIZE;
 
-        private LittleEndianOutput _originalOut;
+        private ILittleEndianOutput _originalOut;
         /** for writing the 'ushort size'  field once its value is known */
-        private LittleEndianOutput _dataSizeOutput;
+        private ILittleEndianOutput _dataSizeOutput;
         private byte[] _byteBuffer;
-        private LittleEndianOutput _out;
+        private ILittleEndianOutput _out;
         private int _size;
 
-        public UnknownLengthRecordOutput(LittleEndianOutput out1, int sid)
+        public UnknownLengthRecordOutput(ILittleEndianOutput out1, int sid)
         {
             _originalOut = out1;
             out1.WriteShort(sid);
-            if (out1 is DelayableLittleEndianOutput)
+            if (out1 is IDelayableLittleEndianOutput)
             {
                 // optimisation
-                DelayableLittleEndianOutput dleo = (DelayableLittleEndianOutput)out1;
+                IDelayableLittleEndianOutput dleo = (IDelayableLittleEndianOutput)out1;
                 _dataSizeOutput = dleo.CreateDelayedOutput(2);
                 _byteBuffer = null;
                 _out = out1;

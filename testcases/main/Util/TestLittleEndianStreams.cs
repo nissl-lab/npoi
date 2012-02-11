@@ -20,7 +20,7 @@ namespace TestCases.Util
     using System;
     using System.IO;
     using NPOI.Util;
-    using NPOI.Util.IO;
+
 
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     /**
@@ -44,7 +44,7 @@ namespace TestCases.Util
         public void TestRead()
         {
             MemoryStream baos = new MemoryStream();
-            LittleEndianOutput leo = new LittleEndianOutputStream(baos);
+            ILittleEndianOutput leo = new LittleEndianOutputStream(baos);
             leo.WriteInt(12345678);
             leo.WriteShort(12345);
             leo.WriteByte(123);
@@ -53,7 +53,7 @@ namespace TestCases.Util
             leo.WriteLong(1234567890123456789L);
             leo.WriteDouble(123.456);
 
-            LittleEndianInput lei = new LittleEndianInputStream(new MemoryStream(baos.ToArray()));
+            ILittleEndianInput lei = new LittleEndianInputStream(new MemoryStream(baos.ToArray()));
 
             Assert.AreEqual(12345678, lei.ReadInt());
             Assert.AreEqual(12345, lei.ReadShort());
@@ -73,7 +73,7 @@ namespace TestCases.Util
         public void TestReadFully()
         {
             byte[] srcBuf = HexRead.ReadFromString("99 88 77 66 55 44 33");
-            LittleEndianInput lei = new LittleEndianByteArrayInputStream(srcBuf);
+            ILittleEndianInput lei = new LittleEndianByteArrayInputStream(srcBuf);
 
             // do Initial read to increment the read index beyond zero
             Assert.AreEqual(0x8899, lei.ReadUShort());

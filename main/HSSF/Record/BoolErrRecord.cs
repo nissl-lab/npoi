@@ -29,7 +29,6 @@ namespace NPOI.HSSF.Record
     using System.IO;
     using System.Text;
     using NPOI.Util;
-    using NPOI.Util.IO;
     using NPOI.SS.UserModel;
 
     /**
@@ -188,7 +187,7 @@ namespace NPOI.HSSF.Record
             }
         }
 
-        protected override void SerializeValue(LittleEndianOutput out1)
+        protected override void SerializeValue(ILittleEndianOutput out1)
         {
             out1.WriteByte(_value);
             out1.WriteByte(_isError ? 1 : 0);

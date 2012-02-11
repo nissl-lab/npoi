@@ -22,7 +22,7 @@ namespace NPOI.HSSF.Record.Chart
     using System;
     using System.Text;
     using NPOI.Util;
-    using NPOI.Util.IO;
+
 
     /**
      * preceeds and identifies a frame as belonging to the plot area.
@@ -62,7 +62,7 @@ namespace NPOI.HSSF.Record.Chart
             return buffer.ToString();
         }
 
-        public override void Serialize(LittleEndianOutput out1)
+        public override void Serialize(ILittleEndianOutput out1)
         {
         }
 

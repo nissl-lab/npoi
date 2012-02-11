@@ -20,7 +20,7 @@ namespace NPOI.SS.Formula.PTG
     using System;
     using System.Text;
     
-    using NPOI.Util.IO;
+    using NPOI.Util;
 
     /**
      * @author Daniel Noll (daniel at nuix dot com dot au)
@@ -47,7 +47,7 @@ namespace NPOI.SS.Formula.PTG
             get { return SIZE; }
         }
 
-        public override void Write(LittleEndianOutput out1)
+        public override void Write(ILittleEndianOutput out1)
         {
             out1.WriteByte(sid + PtgClass);
         }

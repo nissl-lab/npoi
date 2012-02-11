@@ -22,7 +22,7 @@ namespace NPOI.SS.Formula.PTG
     
     using NPOI.HSSF.Record;
     using NPOI.Util;
-    using NPOI.Util.IO;
+
 
     /**
      * @author Daniel Noll (daniel at nuix dot com dot au)
@@ -42,7 +42,7 @@ namespace NPOI.SS.Formula.PTG
             field_2_subex_len = subexLen;
         }
 
-        public MemAreaPtg(LittleEndianInput in1)
+        public MemAreaPtg(ILittleEndianInput in1)
         {
             field_1_reserved = in1.ReadInt();
             field_2_subex_len = in1.ReadShort();
@@ -60,7 +60,7 @@ namespace NPOI.SS.Formula.PTG
             set { field_2_subex_len = value; }
         }
 
-        public override void Write(LittleEndianOutput out1)
+        public override void Write(ILittleEndianOutput out1)
         {
 		    out1.WriteByte(sid + PtgClass);
 		    out1.WriteInt(field_1_reserved);

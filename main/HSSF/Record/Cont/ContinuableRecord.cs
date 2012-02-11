@@ -19,7 +19,7 @@ namespace NPOI.HSSF.Record.Cont
 {
     using System;
     using NPOI.HSSF.Record;
-    using NPOI.Util.IO;
+    using NPOI.Util;
 
     /**
      * Common superclass of all records that can produce {@link ContinueRecord}s while being Serialized.
@@ -65,7 +65,7 @@ namespace NPOI.HSSF.Record.Cont
 
         public override int Serialize(int offset, byte[] data)
         {
-            LittleEndianOutput leo = new LittleEndianByteArrayOutputStream(data, offset);
+            ILittleEndianOutput leo = new LittleEndianByteArrayOutputStream(data, offset);
             ContinuableRecordOutput out1 = new ContinuableRecordOutput(leo, this.Sid);
             Serialize(out1);
             out1.Terminate();

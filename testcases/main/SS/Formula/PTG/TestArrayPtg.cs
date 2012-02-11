@@ -22,7 +22,7 @@ namespace TestCases.SS.Formula.PTG
     using NPOI.HSSF.UserModel;
     using NPOI.SS.Formula.PTG;
     using NPOI.Util;
-    using NPOI.Util.IO;
+
     using TestCases.HSSF;
     using TestCases.HSSF.Record;
     /**
@@ -159,7 +159,7 @@ namespace TestCases.SS.Formula.PTG
             // Force encoded operand class for tArray
             fullData[0] = (byte)(ArrayPtg.sid + operandClass);
 
-            LittleEndianInput in1 = TestcaseRecordInputStream.CreateLittleEndian(fullData);
+            ILittleEndianInput in1 = TestcaseRecordInputStream.CreateLittleEndian(fullData);
 
             Ptg[] ptgs = Ptg.ReadTokens(ENCODED_PTG_DATA.Length, in1);
             Assert.AreEqual(1, ptgs.Length);

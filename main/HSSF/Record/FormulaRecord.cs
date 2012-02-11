@@ -30,7 +30,7 @@ namespace NPOI.HSSF.Record
     using NPOI.SS.Formula.Eval;
     using NPOI.SS.Formula.PTG;
     using NPOI.Util;
-    using NPOI.Util.IO;
+
 
     /**
  * Manages the cached formula result values of other types besides numeric.
@@ -95,7 +95,7 @@ namespace NPOI.HSSF.Record
         //    System.Array.Copy(_variableData, 0, data, offset, VARIABLE_DATA_LENGTH);
         //    LittleEndian.PutUShort(data, offset + VARIABLE_DATA_LENGTH, 0xFFFF);
         //}
-        public void Serialize(LittleEndianOutput out1) {
+        public void Serialize(ILittleEndianOutput out1) {
 			out1.Write(_variableData);
 			out1.WriteShort(0xFFFF);
 		}
@@ -452,7 +452,7 @@ namespace NPOI.HSSF.Record
             return Row ^ Column;
         }
 
-        protected override void SerializeValue(LittleEndianOutput out1)
+        protected override void SerializeValue(ILittleEndianOutput out1)
         {
             if (specialCachedValue == null)
             {

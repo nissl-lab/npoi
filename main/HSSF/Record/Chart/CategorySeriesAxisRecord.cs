@@ -24,7 +24,7 @@ namespace NPOI.HSSF.Record.Chart
     using System.IO;
     using System.Text;
     using NPOI.Util;
-    using NPOI.Util.IO;
+
     /**
      * This record refers to a category or series axis and is used to specify label/tickmark frequency.
      * NOTE: This source is automatically generated please do not modify this file.  Either subclass or
@@ -94,7 +94,7 @@ namespace NPOI.HSSF.Record.Chart
             return buffer.ToString();
         }
 
-        public override void Serialize(LittleEndianOutput out1)
+        public override void Serialize(ILittleEndianOutput out1)
         {
             out1.WriteShort(field_1_crossingPoint);
             out1.WriteShort(field_2_labelFrequency);

@@ -24,7 +24,7 @@ namespace NPOI.HSSF.Record
     using System.Text;
     using System.Collections;
     using NPOI.Util;
-    using NPOI.Util.IO;
+
 
     public class RefSubRecord
     {
@@ -90,7 +90,7 @@ namespace NPOI.HSSF.Record
          * @param data byte array containing instance data
          * @return number of bytes written
          */
-        public void Serialize(LittleEndianOutput out1)
+        public void Serialize(ILittleEndianOutput out1)
         {
             out1.WriteShort(_extBookIndex);
             out1.WriteShort(_firstSheetIndex);
@@ -261,7 +261,7 @@ namespace NPOI.HSSF.Record
          * @param data byte array containing instance data
          * @return number of bytes written
          */
-        public override void Serialize(LittleEndianOutput out1)
+        public override void Serialize(ILittleEndianOutput out1)
         {
             int nItems = _list.Count;
 

@@ -20,7 +20,7 @@ namespace TestCases.SS.Formula.Constant
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using NPOI.HSSF.UserModel;
     using NPOI.Util;
-    using NPOI.Util.IO;
+
     using TestCases.HSSF.Record;
     using NPOI.SS.Formula.Constant;
     /**
@@ -65,7 +65,7 @@ namespace TestCases.SS.Formula.Constant
         [TestMethod]
         public void TestDecode()
         {
-            LittleEndianInput in1 = TestcaseRecordInputStream.CreateLittleEndian(SAMPLE_ENCODING);
+            ILittleEndianInput in1 = TestcaseRecordInputStream.CreateLittleEndian(SAMPLE_ENCODING);
 
             object[] values = ConstantValueParser.Parse(in1, 4);
             for (int i = 0; i < values.Length; i++)

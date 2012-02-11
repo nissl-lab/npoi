@@ -26,7 +26,7 @@ namespace NPOI.HSSF.Record
 {
 
     using NPOI.Util;
-    using NPOI.Util.IO;
+
     using System;
     using System.Text;
     using System.IO;
@@ -74,7 +74,7 @@ namespace NPOI.HSSF.Record
             sb.Append("  .value= ").Append(NumberToTextConverter.ToText(field_4_value));
         }
 
-        protected override void SerializeValue(LittleEndianOutput out1)
+        protected override void SerializeValue(ILittleEndianOutput out1)
         {
             out1.WriteDouble(Value);
         }

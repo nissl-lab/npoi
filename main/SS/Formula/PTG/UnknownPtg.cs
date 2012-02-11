@@ -21,7 +21,7 @@ namespace NPOI.SS.Formula.PTG
 
     
     using NPOI.HSSF.Record;
-    using NPOI.Util.IO;
+    using NPOI.Util;
 
 
     /**
@@ -48,7 +48,7 @@ namespace NPOI.SS.Formula.PTG
         {
             get { return true; }
         }
-        public override void Write(LittleEndianOutput out1)
+        public override void Write(ILittleEndianOutput out1)
         {
         }
 

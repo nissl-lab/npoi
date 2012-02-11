@@ -28,7 +28,7 @@ namespace NPOI.HSSF.Record
     using System;
     using System.Text;
     using NPOI.Util;
-    using NPOI.Util.IO;
+
 
     /**
      * Extended SST table info subrecord
@@ -94,7 +94,7 @@ namespace NPOI.HSSF.Record
             return buffer.ToString();
         }
 
-        public void Serialize(LittleEndianOutput out1)
+        public void Serialize(ILittleEndianOutput out1)
         {
             out1.WriteInt(field_1_stream_pos);
             out1.WriteShort(field_2_bucket_sst_offset);

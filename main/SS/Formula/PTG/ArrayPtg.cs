@@ -23,7 +23,7 @@ namespace NPOI.SS.Formula.PTG
     using NPOI.Util;
     using NPOI.HSSF.Record;
 
-    using NPOI.Util.IO;
+
     using NPOI.SS.Util;
     using NPOI.SS.Formula.Constant;
 
@@ -157,7 +157,7 @@ namespace NPOI.SS.Formula.PTG
             return rowIx * _nColumns + colIx;
         }
 
-        public override void Write(LittleEndianOutput out1)
+        public override void Write(ILittleEndianOutput out1)
         {
             out1.WriteByte(sid + PtgClass);
             out1.WriteInt(_reserved0Int);
@@ -165,7 +165,7 @@ namespace NPOI.SS.Formula.PTG
             out1.WriteByte(_reserved2Byte);
         }
 
-        public int WriteTokenValueBytes(LittleEndianOutput out1)
+        public int WriteTokenValueBytes(ILittleEndianOutput out1)
         {
 
             out1.WriteByte(_nColumns - 1);
@@ -269,7 +269,7 @@ namespace NPOI.SS.Formula.PTG
             private int _reserved1;
             private int _reserved2;
 
-            public Initial(LittleEndianInput in1)
+            public Initial(ILittleEndianInput in1)
             {
                 _reserved0 = in1.ReadInt();
                 _reserved1 = in1.ReadUShort();
@@ -304,7 +304,7 @@ namespace NPOI.SS.Formula.PTG
             {
                 throw Invalid();
             }
-            public override void Write(LittleEndianOutput out1)
+            public override void Write(ILittleEndianOutput out1)
             {
                 throw Invalid();
             }
@@ -313,7 +313,7 @@ namespace NPOI.SS.Formula.PTG
              * AFTER the last Ptg in the expression.
              * See page 304-305 of Excel97-2007BinaryFileFormat(xls)Specification.pdf
              */
-            public ArrayPtg FinishReading(LittleEndianInput in1)
+            public ArrayPtg FinishReading(ILittleEndianInput in1)
             {
                 int nColumns = in1.ReadUByte();
                 short nRows = in1.ReadShort();

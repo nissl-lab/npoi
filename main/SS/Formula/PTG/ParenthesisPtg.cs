@@ -23,7 +23,7 @@ namespace NPOI.SS.Formula.PTG
     
     using NPOI.HSSF.Record;
     using System.Collections;
-    using NPOI.Util.IO;
+    using NPOI.Util;
 
     /**
      * While formula tokens are stored in RPN order and thus do not need parenthesis for 
@@ -46,7 +46,7 @@ namespace NPOI.SS.Formula.PTG
             // enforce singleton
         }
 
-        public override void Write(LittleEndianOutput out1)
+        public override void Write(ILittleEndianOutput out1)
         {
             out1.WriteByte(sid + PtgClass);
         }

@@ -101,9 +101,9 @@ namespace NPOI.HSSF.Record
         }
         protected abstract int ExtraDataSize { get; }
 
-        protected abstract void SerializeExtraData(NPOI.Util.IO.LittleEndianOutput out1);
+        protected abstract void SerializeExtraData(ILittleEndianOutput out1);
 
-        public override void Serialize(NPOI.Util.IO.LittleEndianOutput out1)
+        public override void Serialize(ILittleEndianOutput out1)
         {
             _range.Serialize(out1);
             SerializeExtraData(out1);

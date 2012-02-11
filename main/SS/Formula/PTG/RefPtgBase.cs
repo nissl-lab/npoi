@@ -23,7 +23,7 @@ namespace NPOI.SS.Formula.PTG
     using NPOI.HSSF.Record;
     
     using NPOI.SS.Util;
-    using NPOI.Util.IO;
+
 
     /**
      * ReferencePtgBase - handles references (such as A1, A2, IA4)
@@ -79,17 +79,17 @@ namespace NPOI.SS.Formula.PTG
             this.IsColRelative = isColumnRelative;
         }
 
-        protected RefPtgBase(LittleEndianInput in1)
+        protected RefPtgBase(ILittleEndianInput in1)
         {
             field_1_row = in1.ReadUShort();
             field_2_col = in1.ReadUShort();
         }
-        protected void ReadCoordinates(LittleEndianInput in1)
+        protected void ReadCoordinates(ILittleEndianInput in1)
         {
             field_1_row = in1.ReadUShort();
             field_2_col = in1.ReadUShort();
         }
-        protected void WriteCoordinates(LittleEndianOutput out1)
+        protected void WriteCoordinates(ILittleEndianOutput out1)
         {
             out1.WriteShort(field_1_row);
             out1.WriteShort(field_2_col);

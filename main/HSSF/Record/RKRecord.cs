@@ -24,7 +24,7 @@ namespace NPOI.HSSF.Record
     using System.Collections;
     using NPOI.Util;
     using NPOI.HSSF.Util;
-    using NPOI.Util.IO;
+
 
     /**
      * Title:        RK Record
@@ -130,7 +130,7 @@ namespace NPOI.HSSF.Record
             sb.Append("  .value= ").Append(RKNumber);
         }
 
-        protected override void SerializeValue(LittleEndianOutput out1)
+        protected override void SerializeValue(ILittleEndianOutput out1)
         {
             out1.WriteInt(field_4_rk_number);
         }

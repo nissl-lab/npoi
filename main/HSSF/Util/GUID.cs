@@ -2,7 +2,6 @@
 using System.Text;
 using System.IO;
 using NPOI.Util;
-using NPOI.Util.IO;
 using NPOI.HSSF.Record;
 
 namespace NPOI.HSSF.Util
@@ -27,7 +26,7 @@ namespace NPOI.HSSF.Util
 		 */
 		private long _d4;
 
-		public GUID(LittleEndianInput in1) 
+		public GUID(ILittleEndianInput in1) 
             :this(in1.ReadInt(), in1.ReadUShort(), in1.ReadUShort(), in1.ReadLong())
         {
 			
@@ -40,7 +39,7 @@ namespace NPOI.HSSF.Util
 			_d4 = d4;
 		}
 
-		public void Serialize(LittleEndianOutput out1) {
+		public void Serialize(ILittleEndianOutput out1) {
 			out1.WriteInt(_d1);
 			out1.WriteShort(_d2);
 			out1.WriteShort(_d3);

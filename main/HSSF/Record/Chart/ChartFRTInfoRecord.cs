@@ -22,7 +22,7 @@ namespace NPOI.HSSF.Record.Chart
     using System.Text;
     using NPOI.HSSF.Record;
     using NPOI.Util;
-    using NPOI.Util.IO;
+
 
     /**
      * CHARTFRTINFO - Chart Future Record Type Info (0x0850)<br/>
@@ -51,7 +51,7 @@ namespace NPOI.HSSF.Record.Chart
                 rtLast = in1.ReadShort();
             }
 
-            public void Serialize(LittleEndianOutput out1)
+            public void Serialize(ILittleEndianOutput out1)
             {
                 out1.WriteShort(rtFirst);
                 out1.WriteShort(rtLast);
@@ -92,7 +92,7 @@ namespace NPOI.HSSF.Record.Chart
         }
 
 
-        public override void Serialize(LittleEndianOutput out1)
+        public override void Serialize(ILittleEndianOutput out1)
         {
 
             out1.WriteShort(rt);

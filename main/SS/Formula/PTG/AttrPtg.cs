@@ -22,7 +22,7 @@ namespace NPOI.SS.Formula.PTG
     using NPOI.Util;
     using NPOI.HSSF.Record;
     
-    using NPOI.Util.IO;
+
 
     /**
      * "Special Attributes"
@@ -79,7 +79,7 @@ namespace NPOI.SS.Formula.PTG
             _chooseFuncOffset = -1;
         }
 
-        public AttrPtg(LittleEndianInput in1)
+        public AttrPtg(ILittleEndianInput in1)
         {
             field_1_options =(byte)in1.ReadByte();
             field_2_data = in1.ReadShort();
@@ -243,7 +243,7 @@ namespace NPOI.SS.Formula.PTG
             return sb.ToString();
         }
 
-        public override void Write(LittleEndianOutput out1)
+        public override void Write(ILittleEndianOutput out1)
         {
             out1.WriteByte(sid + PtgClass);
             out1.WriteByte(field_1_options);

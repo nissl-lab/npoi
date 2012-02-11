@@ -21,7 +21,7 @@ namespace NPOI.HSSF.Record
     using System;
     using System.Text;
     using NPOI.Util;
-    using NPOI.Util.IO;
+
     using NPOI.SS.Formula.Constant;
 
     /**
@@ -82,7 +82,7 @@ namespace NPOI.HSSF.Record
             }
         }
 
-        public override void Serialize(LittleEndianOutput out1)
+        public override void Serialize(ILittleEndianOutput out1)
         {
             out1.WriteByte(field_1_last_column_index);
             out1.WriteByte(field_2_first_column_index);

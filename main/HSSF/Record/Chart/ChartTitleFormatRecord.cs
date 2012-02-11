@@ -25,7 +25,7 @@ namespace NPOI.HSSF.Record.Chart
     using System.Collections;
     using System.Text;
     using NPOI.Util;
-    using NPOI.Util.IO;
+
 
     /**
      * Describes the formatting runs associated with a chart title.
@@ -62,7 +62,7 @@ namespace NPOI.HSSF.Record.Chart
             {
                 get { return m_fontIndex; }
             }
-            public void Serialize(LittleEndianOutput out1)
+            public void Serialize(ILittleEndianOutput out1)
             {
                 out1.WriteShort(m_offset);
                 out1.WriteShort(m_fontIndex);
@@ -92,7 +92,7 @@ namespace NPOI.HSSF.Record.Chart
                 m_formats.Add(ctf);
             }
         }
-        public override void Serialize(LittleEndianOutput out1)
+        public override void Serialize(ILittleEndianOutput out1)
         {
             out1.WriteShort(m_formats.Count);
             for (int i = 0; i < m_formats.Count; i++)

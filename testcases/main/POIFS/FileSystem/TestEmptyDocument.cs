@@ -33,7 +33,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 using NPOI.POIFS.FileSystem;
 using NPOI.Util;
-using NPOI.Util.IO;
+
 using NPOI.POIFS.Storage;
 using NPOI.POIFS.Properties;
 using NPOI.POIFS.EventFileSystem;

@@ -20,7 +20,7 @@ namespace NPOI.HSSF.Record
     using System;
     using System.Text;
     using NPOI.Util;
-    using NPOI.Util.IO;
+
     using System.Collections;
 
     /**
@@ -53,7 +53,7 @@ namespace NPOI.HSSF.Record
          * Constructs a NoteStructureSubRecord and Sets its fields appropriately.
          *
          */
-        public NoteStructureSubRecord(LittleEndianInput in1, int size)
+        public NoteStructureSubRecord(ILittleEndianInput in1, int size)
         {
             if (size != ENCODED_SIZE) {
                 throw new RecordFormatException("Unexpected size (" + size + ")");
@@ -88,7 +88,7 @@ namespace NPOI.HSSF.Record
          *
          * @return size of the record
          */
-        public override void Serialize(LittleEndianOutput out1)
+        public override void Serialize(ILittleEndianOutput out1)
         {
             out1.WriteShort(sid);
             out1.WriteShort(reserved.Length);

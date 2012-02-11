@@ -156,7 +156,7 @@ namespace NPOI.HSSF.Record.AutoFilter
             return rec;
         }
 
-        public override void Serialize(NPOI.Util.IO.LittleEndianOutput out1)
+        public override void Serialize(ILittleEndianOutput out1)
         {
             out1.WriteShort(field_1_iEntry);
             out1.WriteShort(field_2_grbit);

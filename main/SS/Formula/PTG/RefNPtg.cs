@@ -20,7 +20,7 @@ namespace NPOI.SS.Formula.PTG
     using System;
     using System.Text;
     using NPOI.HSSF.Record;
-    using NPOI.Util.IO;
+    using NPOI.Util;
 
     /**
      * RefNPtg
@@ -32,7 +32,7 @@ namespace NPOI.SS.Formula.PTG
 
         /** Creates new ValueReferencePtg */
 
-        public RefNPtg(LittleEndianInput in1)
+        public RefNPtg(ILittleEndianInput in1)
             : base(in1)
         {
 

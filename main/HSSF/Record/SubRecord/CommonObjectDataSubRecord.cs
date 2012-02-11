@@ -24,7 +24,7 @@ namespace NPOI.HSSF.Record
     using System.IO;
     using System.Text;
     using NPOI.Util;
-    using NPOI.Util.IO;
+
 
 
     /**
@@ -97,7 +97,7 @@ namespace NPOI.HSSF.Record
          * @param in the RecordInputstream to Read the record from
          */
 
-        public CommonObjectDataSubRecord(LittleEndianInput in1, int size)
+        public CommonObjectDataSubRecord(ILittleEndianInput in1, int size)
         {
             if (size != 18)
             {
@@ -150,7 +150,7 @@ namespace NPOI.HSSF.Record
             return buffer.ToString();
         }
 
-        public override void Serialize(LittleEndianOutput out1)
+        public override void Serialize(ILittleEndianOutput out1)
         {
             out1.WriteShort(sid);
             out1.WriteShort(DataSize);

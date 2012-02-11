@@ -27,7 +27,7 @@ namespace TestCases.DDF
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using NPOI.DDF;
     using NPOI.Util;
-    using NPOI.Util.IO;
+
 using System.Configuration;
 
     [TestClass]

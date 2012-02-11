@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using NPOI.Util;
-using NPOI.Util.IO;
+
 
 namespace NPOI.HSSF.Record
 {
@@ -22,7 +22,7 @@ namespace NPOI.HSSF.Record
             reserved = new byte[ENCODED_SIZE];
         }
 
-        public FtCblsSubRecord(LittleEndianInput in1, int size)
+        public FtCblsSubRecord(ILittleEndianInput in1, int size)
         {
             if (size != ENCODED_SIZE)
             {
@@ -54,7 +54,7 @@ namespace NPOI.HSSF.Record
          *
          * @param out the stream to serialize into
          */
-        public override void Serialize(LittleEndianOutput out1)
+        public override void Serialize(ILittleEndianOutput out1)
         {
             out1.WriteShort(sid);
             out1.WriteShort(reserved.Length);

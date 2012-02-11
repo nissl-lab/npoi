@@ -115,13 +115,13 @@ namespace TestCases.Util
         [TestMethod]
         public void TestGetDouble()
         {
-            Assert.AreEqual(_DOUBLEs[ 0 ], LittleEndian.GetDouble(_DOUBLE_array), 0.000001 );
+            Assert.AreEqual(_DOUBLEs[ 0 ], LittleEndian.GetDouble(_DOUBLE_array, 0), 0.000001 );
             Assert.AreEqual(_DOUBLEs[ 1 ], LittleEndian.GetDouble( _DOUBLE_array, LittleEndianConsts.DOUBLE_SIZE), 0.000001);
-            Assert.IsTrue(Double.IsNaN(LittleEndian.GetDouble(_nan_DOUBLE_array)));
+            Assert.IsTrue(Double.IsNaN(LittleEndian.GetDouble(_nan_DOUBLE_array, 0)));
 
-            double nan = LittleEndian.GetDouble(_nan_DOUBLE_array);
+            double nan = LittleEndian.GetDouble(_nan_DOUBLE_array, 0);
             byte[] data = new byte[8];
-            LittleEndian.PutDouble(data, nan);
+            LittleEndian.PutDouble(data, 0, nan);
             for ( int i = 0; i < data.Length; i++ )
             {
                 byte b = data[i];
@@ -165,7 +165,7 @@ namespace TestCases.Util
 
             expected[ 0 ] = unchecked((long)0xFFFFFFFFFFFFFF01L);
             expected[ 1 ] = 0x02FFFFFFFFFFFFFFL;
-            Assert.AreEqual(expected[ 0 ], LittleEndian.GetLong(testdata));
+            Assert.AreEqual(expected[ 0 ], LittleEndian.GetLong(testdata, 0));
             Assert.AreEqual(expected[ 1 ], LittleEndian.GetLong(testdata, 1));
         }
 
@@ -218,7 +218,7 @@ namespace TestCases.Util
         {
             byte[] received = new byte[ LittleEndianConsts.DOUBLE_SIZE + 1 ];
 
-            LittleEndian.PutDouble(received, _DOUBLEs[ 0 ]);
+            LittleEndian.PutDouble(received, 0,  _DOUBLEs[ 0 ]);
             Assert.IsTrue(ba_equivalent(received, _DOUBLE_array, 0,
                                      LittleEndianConsts.DOUBLE_SIZE));
             LittleEndian.PutDouble(received, 1, _DOUBLEs[ 1 ]);
@@ -249,7 +249,7 @@ namespace TestCases.Util
 
             testdata[ 0 ] = unchecked((long)0xFFFFFFFFFFFFFF01L);
             testdata[ 1 ] = 0x02FFFFFFFFFFFFFFL;
-            LittleEndian.PutLong(received, testdata[ 0 ]);
+            LittleEndian.PutLong(received, 0, testdata[ 0 ]);
             Assert.IsTrue(ba_equivalent(received, expected, 0,
                                      LittleEndianConsts.LONG_SIZE));
             LittleEndian.PutLong(received, 1, testdata[ 1 ]);
@@ -274,14 +274,9 @@ namespace TestCases.Util
             Stream stream         = new MemoryStream(_good_array);
             int         count          = 0;
 
-            while (true)
+            while ((stream.Length - stream.Position) > 0)
             {
                 short value = LittleEndian.ReadShort(stream);
-
-                if (value == 0)
-                {
-                    break;
-                }
                 Assert.AreEqual(value, expected_value);
                 count++;
             }
@@ -307,14 +302,9 @@ namespace TestCases.Util
             Stream stream         = new MemoryStream(_good_array);
             int         count          = 0;
 
-            while (true)
+            while ((stream.Length - stream.Position) > 0)
             {
                 int value = LittleEndian.ReadInt(stream);
-
-                if (value == 0)
-                {
-                    break;
-                }
                 Assert.AreEqual(value, expected_value);
                 count++;
             }
@@ -339,14 +329,9 @@ namespace TestCases.Util
             Stream stream         = new MemoryStream(_good_array);
             int         count          = 0;
 
-            while (true)
+            while ((stream.Length - stream.Position) > 0)
             {
                 long value = LittleEndian.ReadLong(stream);
-
-                if (value == 0)
-                {
-                    break;
-                }
                 Assert.AreEqual(value, expected_value);
                 count++;
             }
@@ -365,27 +350,27 @@ namespace TestCases.Util
             }
         }
 
-        [TestMethod]
-        public void TestReadFromStream()
-        {
-            Stream stream = new MemoryStream(_good_array);
-            byte[]      value  = LittleEndian.ReadFromStream(stream,
-                                     _good_array.Length);
+        //[TestMethod]
+        //public void TestReadFromStream()
+        //{
+        //    Stream stream = new MemoryStream(_good_array);
+        //    byte[]      value  = LittleEndian.ReadFromStream(stream,
+        //                             _good_array.Length);
 
-            Assert.IsTrue(ba_equivalent(value, _good_array, 0, _good_array.Length));
-            stream = new MemoryStream(_good_array);
-            try
-            {
-                value = LittleEndian.ReadFromStream(stream,
-                                                    _good_array.Length + 1);
-                Assert.Fail("Should have caught BufferUnderrunException");
-            }
-            catch (BufferUnderrunException )
-            {
+        //    Assert.IsTrue(ba_equivalent(value, _good_array, 0, _good_array.Length));
+        //    stream = new MemoryStream(_good_array);
+        //    try
+        //    {
+        //        value = LittleEndian.ReadFromStream(stream,
+        //                                            _good_array.Length + 1);
+        //        Assert.Fail("Should have caught BufferUnderrunException");
+        //    }
+        //    catch (BufferUnderrunException )
+        //    {
 
-                // as expected
-            }
-        }
+        //        // as expected
+        //    }
+        //}
         [TestMethod]
         public void TestUnsignedByteToInt()
         {

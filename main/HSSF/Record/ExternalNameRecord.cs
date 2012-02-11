@@ -23,7 +23,7 @@ namespace NPOI.HSSF.Record
     using System.Collections;
     using NPOI.Util;
     using NPOI.SS.Formula;
-    using NPOI.Util.IO;
+
     using NPOI.SS.Formula.PTG;
     using NPOI.SS.Formula.Constant;
 
@@ -207,7 +207,7 @@ namespace NPOI.HSSF.Record
             }
         }
 
-        public override void Serialize(LittleEndianOutput out1)
+        public override void Serialize(ILittleEndianOutput out1)
         {
             out1.WriteShort(field_1_option_flag);
             out1.WriteShort(field_2_ixals);

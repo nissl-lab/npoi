@@ -89,7 +89,7 @@ namespace NPOI.HSSF.Record
                     + _formula.EncodedSize;
             }
         }
-        protected override void SerializeExtraData(NPOI.Util.IO.LittleEndianOutput out1)
+        protected override void SerializeExtraData(ILittleEndianOutput out1)
         {
             out1.WriteShort(_options);
             out1.WriteInt(_field3notUsed);

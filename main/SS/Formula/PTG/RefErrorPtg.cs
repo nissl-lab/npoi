@@ -22,7 +22,7 @@ namespace NPOI.SS.Formula.PTG
     using NPOI.HSSF.Record;
     
     using NPOI.Util;
-    using NPOI.Util.IO;
+
 
     /**
      * RefError - handles deleted cell reference
@@ -40,7 +40,7 @@ namespace NPOI.SS.Formula.PTG
             field_1_reserved = 0;
         }
 
-        public RefErrorPtg(LittleEndianInput in1)
+        public RefErrorPtg(ILittleEndianInput in1)
         {
             field_1_reserved = in1.ReadInt();
 
@@ -54,7 +54,7 @@ namespace NPOI.SS.Formula.PTG
             return buffer.ToString();
         }
 
-        public override void Write(LittleEndianOutput out1)
+        public override void Write(ILittleEndianOutput out1)
         {
             out1.WriteByte(sid + PtgClass);
             out1.WriteInt(field_1_reserved);

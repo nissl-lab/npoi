@@ -21,7 +21,7 @@ namespace NPOI.SS.Formula.PTG
     using System.Text;
     
     using NPOI.HSSF.Record;
-    using NPOI.Util.IO;
+    using NPOI.Util;
 
     /**
      *
@@ -39,13 +39,13 @@ namespace NPOI.SS.Formula.PTG
 
         /** Creates new MemErrPtg */
 
-        public MemErrPtg(LittleEndianInput in1)
+        public MemErrPtg(ILittleEndianInput in1)
             : base(in1)
         {
         
         }
 
-        public override void Write(LittleEndianOutput out1)
+        public override void Write(ILittleEndianOutput out1)
         {
 		    out1.WriteByte(sid + PtgClass);
 		    out1.WriteInt(field_1_reserved);

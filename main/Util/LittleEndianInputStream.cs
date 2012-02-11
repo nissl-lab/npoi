@@ -15,20 +15,21 @@
    limitations under the License.
 ==================================================================== */
 
-namespace NPOI.Util.IO
+namespace NPOI.Util
 {
     using System;
     using System.IO;
 
-    /**
-     * Wraps an {@link InputStream} providing {@link LittleEndianInput}<p/>
-     * 
-     * This class does not buffer any input, so the stream Read position maintained 
-     * by this class is consistent with that of the inner stream.
-     * 
-     * @author Josh Micich
-     */
-    public class LittleEndianInputStream :LittleEndianInput
+    /// <summary>
+    /// Wraps an <see cref="T:System.IO.Stream"/> providing <see cref="T:NPOI.Util.ILittleEndianInput"/><p/>
+    /// 
+    /// This class does not buffer any input, so the stream Read position maintained
+    /// by this class is consistent with that of the inner stream.
+    /// </summary>
+    /// <remarks>
+    /// @author Josh Micich
+    /// </remarks>
+    public class LittleEndianInputStream : ILittleEndianInput
     {
         Stream in1 = null;
 
@@ -52,9 +53,9 @@ namespace NPOI.Util.IO
             {
                 ch = in1.ReadByte();
             }
-            catch (IOException)
+            catch (IOException e)
             {
-                throw;
+                throw new RuntimeException(e);
             }
             CheckEOF(ch);
             return ch;
@@ -76,65 +77,73 @@ namespace NPOI.Util.IO
                 ch3 = in1.ReadByte();
                 ch4 = in1.ReadByte();
             }
-            catch (IOException)
+            catch (IOException e)
             {
-                throw;
+                throw new RuntimeException(e);
             }
             CheckEOF(ch1 | ch2 | ch3 | ch4);
             return (ch4 << 24) + (ch3 << 16) + (ch2 << 8) + (ch1 << 0);
         }
-        public long ReadLong() {
-		int b0;
-		int b1;
-		int b2;
-		int b3;
-		int b4;
-		int b5;
-		int b6;
-		int b7;
-		try {
-			b0 = in1.ReadByte();
-			b1 = in1.ReadByte();
-			b2 = in1.ReadByte();
-			b3 = in1.ReadByte();
-			b4 = in1.ReadByte();
-			b5 = in1.ReadByte();
-			b6 = in1.ReadByte();
-			b7 = in1.ReadByte();
-		} catch (IOException) {
-			throw;
-		}
-		CheckEOF(b0 | b1 | b2 | b3 | b4 | b5 | b6 | b7);
-		return (((long)b7 << 56) +
-				((long)b6 << 48) +
-				((long)b5 << 40) +
-				((long)b4 << 32) +
-				((long)b3 << 24) +
-				(b2 << 16) +
-				(b1 <<  8) +
-				(b0 <<  0));
-	}
+        public long ReadLong()
+        {
+            int b0;
+            int b1;
+            int b2;
+            int b3;
+            int b4;
+            int b5;
+            int b6;
+            int b7;
+            try
+            {
+                b0 = in1.ReadByte();
+                b1 = in1.ReadByte();
+                b2 = in1.ReadByte();
+                b3 = in1.ReadByte();
+                b4 = in1.ReadByte();
+                b5 = in1.ReadByte();
+                b6 = in1.ReadByte();
+                b7 = in1.ReadByte();
+            }
+            catch (IOException e)
+            {
+                throw new RuntimeException(e);
+            }
+            CheckEOF(b0 | b1 | b2 | b3 | b4 | b5 | b6 | b7);
+            return (((long)b7 << 56) +
+                    ((long)b6 << 48) +
+                    ((long)b5 << 40) +
+                    ((long)b4 << 32) +
+                    ((long)b3 << 24) +
+                    (b2 << 16) +
+                    (b1 << 8) +
+                    (b0 << 0));
+        }
         public short ReadShort()
         {
             return (short)ReadUShort();
         }
-        public int ReadUShort() {
-		int ch1;
-		int ch2;
-		try {
-			ch1 = in1.ReadByte();
-			ch2 = in1.ReadByte();
-		} catch (IOException) {
-			throw;
-		}
-		CheckEOF(ch1 | ch2);
-		return (ch2 << 8) + (ch1 << 0);
-	}
+        public int ReadUShort()
+        {
+            int ch1;
+            int ch2;
+            try
+            {
+                ch1 = in1.ReadByte();
+                ch2 = in1.ReadByte();
+            }
+            catch (IOException e)
+            {
+                throw new RuntimeException(e);
+            }
+            CheckEOF(ch1 | ch2);
+            return (ch2 << 8) + (ch1 << 0);
+        }
         private static void CheckEOF(int value)
         {
             if (value < 0)
             {
-                throw new Exception("Unexpected end-of-file");
+                throw new RuntimeException("Unexpected end-of-file");
             }
         }
 
@@ -153,12 +162,12 @@ namespace NPOI.Util.IO
                 {
                     ch = (byte)in1.ReadByte();
                 }
-                catch (IOException)
+                catch (IOException e)
                 {
-                    throw;
+                    throw new RuntimeException(e);
                 }
-                //CheckEOF(ch);
-                buf[i] = (byte)ch;
+                CheckEOF(ch);
+                buf[i] = ch;
             }
         }
     }

@@ -22,7 +22,7 @@ namespace NPOI.SS.Formula.PTG
     using NPOI.Util;
     using NPOI.HSSF.Record;
     using NPOI.SS.Formula.Function;
-    using NPOI.Util.IO;
+
 
     /**
      *
@@ -47,7 +47,7 @@ namespace NPOI.SS.Formula.PTG
             /**Creates new function pointer from a byte array
      * usually called while reading an excel file.
      */
-    public static FuncVarPtg Create(LittleEndianInput in1)  {
+    public static FuncVarPtg Create(ILittleEndianInput in1)  {
         return Create(in1.ReadByte(), in1.ReadShort());
     }
 
@@ -70,7 +70,7 @@ namespace NPOI.SS.Formula.PTG
     }
 
 
-        public override void Write(LittleEndianOutput out1)
+        public override void Write(ILittleEndianOutput out1)
         {
             out1.WriteByte(sid + PtgClass);
             out1.WriteByte(_numberOfArgs);

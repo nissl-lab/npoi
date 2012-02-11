@@ -25,7 +25,7 @@ namespace NPOI.HSSF.Record
     using System.Text;
     using System.Collections;
     using NPOI.Util;
-    using NPOI.Util.IO;
+
 
 
     /**
@@ -251,7 +251,7 @@ namespace NPOI.HSSF.Record
             return buffer.ToString();
         }
 
-        public override void Serialize(LittleEndianOutput out1)
+        public override void Serialize(ILittleEndianOutput out1)
         {
             out1.WriteShort(Version);
             out1.WriteShort(Type);

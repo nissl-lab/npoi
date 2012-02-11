@@ -31,7 +31,7 @@
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>..\..\solution\Lib\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
+    <DefineConstants>TRACE;HIDE_UNREACHABLE_CODE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -426,6 +426,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POIFS\FileSystem\BATManaged.cs" />
+    <Compile Include="Util\BlockingInputStream.cs" />
     <Compile Include="Util\CloseIgnoringInputStream.cs" />
     <Compile Include="POIFS\FileSystem\DirectoryEntry.cs" />
     <Compile Include="POIFS\FileSystem\DirectoryNode.cs" />
@@ -953,16 +954,14 @@
     <Compile Include="Util\IntegerField.cs" />
     <Compile Include="Util\IntList.cs" />
     <Compile Include="Util\IntMapper.cs" />
-    <Compile Include="Util\IO\DelayableLittleEndianOutput.cs" />
+    <Compile Include="Util\DelayableLittleEndianOutput.cs" />
     <Compile Include="Util\IOUtils.cs" />
-    <Compile Include="Util\IO\LittleEndianByteArrayInputStream.cs" />
-    <Compile Include="Util\IO\LittleEndianByteArrayOutputStream.cs" />
-    <Compile Include="Util\IO\LittleEndianInput.cs" />
-    <Compile Include="Util\IO\LittleEndianInputStream.cs" />
-    <Compile Include="Util\IO\LittleEndianOutput.cs" />
-    <Compile Include="Util\IO\LittleEndianOutputStream.cs" />
-    <Compile Include="Util\IO\PushbackStream.cs" />
-    <Compile Include="Util\IO\TempFile.cs" />
+    <Compile Include="Util\LittleEndianByteArrayInputStream.cs" />
+    <Compile Include="Util\LittleEndianByteArrayOutputStream.cs" />
+    <Compile Include="Util\LittleEndianInput.cs" />
+    <Compile Include="Util\LittleEndianInputStream.cs" />
+    <Compile Include="Util\LittleEndianOutput.cs" />
+    <Compile Include="Util\LittleEndianOutputStream.cs" />
     <Compile Include="Util\LittleEndian.cs" />
     <Compile Include="Util\LittleEndianConsts.cs" />
     <Compile Include="Util\LongField.cs" />
@@ -971,12 +970,14 @@
     <Compile Include="Util\Operator.cs" />
     <Compile Include="Util\POILogFactory.cs" />
     <Compile Include="Util\POILogger.cs" />
+    <Compile Include="Util\PushbackStream.cs" />
     <Compile Include="Util\RecordFormatException.cs" />
     <Compile Include="Util\RuntimeException.cs" />
     <Compile Include="Util\ShortField.cs" />
     <Compile Include="Util\ShortList.cs" />
     <Compile Include="Util\StringUtil.cs" />
     <Compile Include="Util\SystemOutLogger.cs" />
+    <Compile Include="Util\TempFile.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="npoi.snk" />

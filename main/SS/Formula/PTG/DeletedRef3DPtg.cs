@@ -23,7 +23,7 @@ namespace NPOI.SS.Formula.PTG
     using NPOI.Util;
     using NPOI.HSSF.Record;
     
-    using NPOI.Util.IO;
+
     using NPOI.HSSF.UserModel;
 
     /**
@@ -40,7 +40,7 @@ namespace NPOI.SS.Formula.PTG
         private int unused1;
 
         /** Creates new DeletedRef3DPtg */
-        public DeletedRef3DPtg(LittleEndianInput in1)
+        public DeletedRef3DPtg(ILittleEndianInput in1)
         {
             field_1_index_extern_sheet = in1.ReadUShort();
             unused1 = in1.ReadInt();
@@ -67,7 +67,7 @@ namespace NPOI.SS.Formula.PTG
         {
             get { return 7; }
         }
-        public override void Write(LittleEndianOutput out1)
+        public override void Write(ILittleEndianOutput out1)
         {
             out1.WriteByte(sid + PtgClass);
             out1.WriteShort(field_1_index_extern_sheet);

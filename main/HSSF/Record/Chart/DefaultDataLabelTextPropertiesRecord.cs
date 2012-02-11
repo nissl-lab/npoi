@@ -24,7 +24,7 @@ namespace NPOI.HSSF.Record.Chart
     using System;
 
     using NPOI.Util;
-    using NPOI.Util.IO;
+
 
     public enum CategoryDataType:short
     {
@@ -78,7 +78,7 @@ namespace NPOI.HSSF.Record.Chart
             return buffer.ToString();
         }
 
-        public override void Serialize(LittleEndianOutput out1)
+        public override void Serialize(ILittleEndianOutput out1)
         {
             out1.WriteShort(field_1_categoryDataType);
         }

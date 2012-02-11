@@ -21,7 +21,7 @@ namespace TestCases.SS.Formula.PTG
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using NPOI.SS.Formula.PTG;
     using NPOI.Util;
-    using NPOI.Util.IO;
+
     using TestCases.HSSF.Record;
 
     /**
@@ -40,7 +40,7 @@ namespace TestCases.SS.Formula.PTG
         public void TestReSerializeAttrChoose()
         {
             byte[] data = HexRead.ReadFromString("19, 04, 03, 00, 08, 00, 11, 00, 1A, 00, 23, 00");
-            LittleEndianInput in1 = TestcaseRecordInputStream.CreateLittleEndian(data);
+            ILittleEndianInput in1 = TestcaseRecordInputStream.CreateLittleEndian(data);
             Ptg[] ptgs = Ptg.ReadTokens(data.Length, in1);
             byte[] data2 = new byte[data.Length];
             try

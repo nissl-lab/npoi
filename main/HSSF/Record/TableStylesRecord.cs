@@ -20,7 +20,7 @@ namespace NPOI.HSSF.Record
     using System;
     using NPOI.Util;
     using System.Text;
-    using NPOI.Util.IO;
+
 
     /**
      * TABLESTYLES (0x088E)<br/>
@@ -53,7 +53,7 @@ namespace NPOI.HSSF.Record
             rgchDefPivotStyle = in1.ReadUnicodeLEString(cchDefPivotStyle);
         }
 
-        public override void Serialize(LittleEndianOutput out1)
+        public override void Serialize(ILittleEndianOutput out1)
         {
             out1.WriteShort(rt);
             out1.WriteShort(grbitFrt);

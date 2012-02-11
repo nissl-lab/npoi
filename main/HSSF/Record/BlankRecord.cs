@@ -137,7 +137,7 @@ namespace NPOI.HSSF.Record
          * @return byte array containing instance data
          */
 
-        public override void Serialize(NPOI.Util.IO.LittleEndianOutput out1)
+        public override void Serialize(ILittleEndianOutput out1)
         {
             out1.WriteShort(Row);
             out1.WriteShort(Column);

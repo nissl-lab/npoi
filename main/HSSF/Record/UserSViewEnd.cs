@@ -22,7 +22,7 @@ namespace NPOI.HSSF.Record
     using NPOI.HSSF.Record.Aggregates;
     using NPOI.Util;
 
-    using NPOI.Util.IO;
+
     using System.Text;
 
     /**
@@ -54,7 +54,7 @@ namespace NPOI.HSSF.Record
         /**
          * spit the record out AS IS. no interpretation or identification
          */
-        public override void Serialize(LittleEndianOutput out1)
+        public override void Serialize(ILittleEndianOutput out1)
         {
             out1.Write(_rawData);
         }

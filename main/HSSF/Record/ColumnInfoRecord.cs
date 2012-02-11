@@ -22,7 +22,7 @@ namespace NPOI.HSSF.Record
     using System.IO;
     using System.Text;
     using NPOI.Util;
-    using NPOI.Util.IO;
+
 
     /**
      * Title: COLINFO Record<p/>
@@ -225,7 +225,7 @@ namespace NPOI.HSSF.Record
             get { return 12; }
         }
 
-        public override void Serialize(LittleEndianOutput out1)
+        public override void Serialize(ILittleEndianOutput out1)
         {
             out1.WriteShort(FirstColumn);
             out1.WriteShort(LastColumn);

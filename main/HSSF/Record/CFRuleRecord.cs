@@ -26,7 +26,7 @@ namespace NPOI.HSSF.Record
     using NPOI.SS.Formula;
     using NPOI.HSSF.Record.CF;
     using FR=NPOI.SS.Formula;
-    using NPOI.Util.IO;
+
     using NPOI.SS.Formula.PTG;
 
     public enum ComparisonOperator : byte
@@ -457,7 +457,7 @@ namespace NPOI.HSSF.Record
          * @param data byte array containing instance data
          * @return number of bytes written
          */
-        public override void Serialize(LittleEndianOutput out1)
+        public override void Serialize(ILittleEndianOutput out1)
         {
 		    int formula1Len=GetFormulaSize(field_17_formula1);
 		    int formula2Len=GetFormulaSize(field_18_formula2);

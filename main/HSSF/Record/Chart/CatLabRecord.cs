@@ -21,7 +21,7 @@ namespace NPOI.HSSF.Record.Chart
     using System.Text;
     using NPOI.HSSF.Record;
     using NPOI.Util;
-    using NPOI.Util.IO;
+
 
     /**
      * CATLAB - Category Labels (0x0856)<br/>
@@ -75,7 +75,7 @@ namespace NPOI.HSSF.Record.Chart
             }
         }
 
-        public override void Serialize(LittleEndianOutput out1)
+        public override void Serialize(ILittleEndianOutput out1)
         {
 
             out1.WriteShort(rt);

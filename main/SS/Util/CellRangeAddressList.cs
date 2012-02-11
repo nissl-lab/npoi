@@ -5,7 +5,7 @@ using System.Text;
 namespace NPOI.SS.Util
 {
     using NPOI.Util;
-    using NPOI.Util.IO;
+
     using NPOI.HSSF.Record;
 
     public class CellRangeAddressList
@@ -104,7 +104,7 @@ namespace NPOI.SS.Util
             Serialize(new LittleEndianByteArrayOutputStream(data, offset, totalSize));
             return totalSize;
         }
-        public void Serialize(LittleEndianOutput out1)
+        public void Serialize(ILittleEndianOutput out1)
         {
             int nItems = _list.Count;
             out1.WriteShort(nItems);

@@ -22,7 +22,7 @@ namespace NPOI.HSSF.Record
     using System;
     using System.Text;
     using NPOI.Util;
-    using NPOI.Util.IO;
+
 
     /**
      * Title:        Style Record
@@ -200,7 +200,7 @@ namespace NPOI.HSSF.Record
                               | ((new_value << ShiftLeft) & mask));
         }
 
-        public override void Serialize(LittleEndianOutput o)
+        public override void Serialize(ILittleEndianOutput o)
         {
             o.WriteShort(field_1_xf_index);
             if (IsBuiltin)

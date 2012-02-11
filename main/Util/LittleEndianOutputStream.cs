@@ -15,16 +15,16 @@
    limitations under the License.
 ==================================================================== */
 
-namespace NPOI.Util.IO
+namespace NPOI.Util
 {
     using System;
     using System.IO;
 
-    /**
-     * 
-     * @author Josh Micich
-     */
-    public class LittleEndianOutputStream : LittleEndianOutput,IDisposable
+    /// <summary>
+    /// Wraps an <see cref="T:System.IO.Stream"/> providing <see cref="T:NPOI.Util.ILittleEndianOutput"/>
+    /// </summary>
+    /// <remarks>@author Josh Micich</remarks>
+    public class LittleEndianOutputStream : ILittleEndianOutput, IDisposable
     {
         public void Dispose()
         {
@@ -57,9 +57,9 @@ namespace NPOI.Util.IO
             {
                 out1.WriteByte((byte)v);
             }
-            catch (IOException)
+            catch (IOException e)
             {
-                throw;
+                throw new RuntimeException(e);
             }
         }
 
@@ -81,9 +81,9 @@ namespace NPOI.Util.IO
                 out1.WriteByte((byte)b2);
                 out1.WriteByte((byte)b3);
             }
-            catch (IOException)
+            catch (IOException e)
             {
-                throw;
+                throw new RuntimeException(e);
             }
         }
 
@@ -97,20 +97,40 @@ namespace NPOI.Util.IO
         {
             int b1 = (v >> 8) & 0xFF;
             int b0 = (v >> 0) & 0xFF;
+            try
+            {
                 out1.WriteByte((byte)b0);
                 out1.WriteByte((byte)b1);
-
+            }
+            catch (IOException e)
+            {
+                throw new RuntimeException(e);
+            }
         }
         public void Write(byte[] b)
         {
             // suppress IOException for interface method
-                out1.Write(b, 0, b.Length);
 
+            try
+            {
+                out1.Write(b, 0, b.Length);
+            }
+            catch (IOException e)
+            {
+                throw new RuntimeException(e);
+            }
         }
         public void Write(byte[] b, int off, int len)
         {
             // suppress IOException for interface method
+            try
+            {
                 out1.Write(b, off, len);
+            }
+            catch (IOException e)
+            {
+                throw new RuntimeException(e);
+            }
         }
     }
 }

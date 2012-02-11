@@ -63,7 +63,7 @@ namespace TestCases.SS.Formula
                 cell2.CellFormula=("MYFUNC(\"B1\")");
                 Assert.Fail("Should fail because MYFUNC is an unknown function");
             }
-            catch (FormulaParseException e)
+            catch (FormulaParseException)
             {
                 ; //expected
             }

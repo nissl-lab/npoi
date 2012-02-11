@@ -29,7 +29,7 @@
 using System;
 using System.Collections;
 using System.Text;
-using NPOI.Util.IO;
+
 
 
 namespace NPOI.Util
@@ -170,7 +170,7 @@ namespace NPOI.Util
                 throw;
             }
         }
-        public static void PutCompressedUnicode(String input, LittleEndianOutput out1)
+        public static void PutCompressedUnicode(String input, ILittleEndianOutput out1)
         {
             byte[] bytes;
             try
@@ -198,7 +198,7 @@ namespace NPOI.Util
              byte[] bytes = Encoding.GetEncoding("UTF-16LE").GetBytes(input);
              Array.Copy(bytes, 0, output, offset, bytes.Length);
         }
-        public static void PutUnicodeLE(String input, LittleEndianOutput out1)
+        public static void PutUnicodeLE(String input, ILittleEndianOutput out1)
         {
             byte[] bytes;
             try
@@ -266,7 +266,7 @@ namespace NPOI.Util
             return false;
         }
 
-        public static String ReadCompressedUnicode(LittleEndianInput in1, int nChars)
+        public static String ReadCompressedUnicode(ILittleEndianInput in1, int nChars)
         {
             char[] buf = new char[nChars];
             for (int i = 0; i < buf.Length; i++)
@@ -275,7 +275,7 @@ namespace NPOI.Util
             }
             return new String(buf);
         }
-        public static String ReadUnicodeLE(LittleEndianInput in1, int nChars)
+        public static String ReadUnicodeLE(ILittleEndianInput in1, int nChars)
         {
             char[] buf = new char[nChars];
             for (int i = 0; i < buf.Length; i++)
@@ -294,7 +294,7 @@ namespace NPOI.Util
          * </ol>
          * For this encoding, the is16BitFlag is always present even if nChars==0.
          */
-        public static String ReadUnicodeString(LittleEndianInput in1)
+        public static String ReadUnicodeString(ILittleEndianInput in1)
         {
 
             int nChars = in1.ReadUShort();
@@ -317,7 +317,7 @@ namespace NPOI.Util
          * as a ushort immediately before the is16BitFlag. Otherwise, {@link 
          * #readUnicodeString(LittleEndianInput)} can be used. 
          */
-        public static String ReadUnicodeString(LittleEndianInput in1, int nChars)
+        public static String ReadUnicodeString(ILittleEndianInput in1, int nChars)
         {
             byte is16Bit = (byte)in1.ReadByte();
             if ((is16Bit & 0x01) == 0)
@@ -335,7 +335,7 @@ namespace NPOI.Util
          * </ol>
          * For this encoding, the is16BitFlag is always present even if nChars==0.
          */
-        public static void WriteUnicodeString(LittleEndianOutput out1, String value)
+        public static void WriteUnicodeString(ILittleEndianOutput out1, String value)
         {
 
             int nChars = value.Length;
@@ -363,7 +363,7 @@ namespace NPOI.Util
          * as a ushort immediately before the is16BitFlag. Otherwise, {@link 
          * #writeUnicodeString(LittleEndianOutput, String)} can be used. 
          */
-        public static void WriteUnicodeStringFlagAndData(LittleEndianOutput out1, String value)
+        public static void WriteUnicodeStringFlagAndData(ILittleEndianOutput out1, String value)
         {
             bool is16Bit = HasMultibyte(value);
             out1.WriteByte(is16Bit ? 0x01 : 0x00);

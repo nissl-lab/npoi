@@ -29,7 +29,7 @@ namespace NPOI.HSSF.Record.CF
     using System.Collections;
     using NPOI.HSSF.Record;
     using NPOI.Util;
-    using NPOI.Util.IO;
+
     using NPOI.SS.UserModel;
 
 
@@ -462,7 +462,7 @@ namespace NPOI.HSSF.Record.CF
             offset += 4;
             return 8;
         }
-        public void Serialize(LittleEndianOutput out1)
+        public void Serialize(ILittleEndianOutput out1)
         {
             out1.WriteInt(field_13_border_styles1);
             out1.WriteInt(field_14_border_styles2);

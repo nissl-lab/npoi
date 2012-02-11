@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using NPOI.Util;
 using NPOI.HSSF.Record;
-using NPOI.Util.IO;
+
 using NPOI.SS.Formula;
 
 namespace NPOI.SS.Util
@@ -42,7 +42,7 @@ namespace NPOI.SS.Util
             LittleEndian.PutUShort(data, offset + 6, LastColumn);
             return ENCODED_SIZE;
         }
-        public void Serialize(LittleEndianOutput out1)
+        public void Serialize(ILittleEndianOutput out1)
         {
             out1.WriteShort(FirstRow);
             out1.WriteShort(LastRow);

@@ -26,7 +26,7 @@ namespace NPOI.HSSF.Record
     using System.IO;
     using System.Text;
 
-    using NPOI.Util.IO;
+
     using NPOI.HSSF.Record.Crypto;
 
 
@@ -42,14 +42,14 @@ namespace NPOI.HSSF.Record
     internal class SimpleHeaderInput : BiffHeaderInput
     {
 
-        private LittleEndianInput _lei;
+        private ILittleEndianInput _lei;
 
-        internal static LittleEndianInput GetLEI(Stream in1)
+        internal static ILittleEndianInput GetLEI(Stream in1)
         {
-            if (in1 is LittleEndianInput)
+            if (in1 is ILittleEndianInput)
             {
                 // accessing directly is an optimisation
-                return (LittleEndianInput)in1;
+                return (ILittleEndianInput)in1;
             }
             // less optimal, but should work OK just the same. Often occurs in junit tests.
             return new LittleEndianInputStream(in1);
@@ -79,7 +79,7 @@ namespace NPOI.HSSF.Record
      * @author Jason Height (jheight @ apache dot org)
      */
 
-    public class RecordInputStream : Stream, LittleEndianInput
+    public class RecordInputStream : Stream, ILittleEndianInput
     {
         /** Maximum size of a single record (minus the 4 byte header) without a continue*/
         public static short MAX_RECORD_DATA_SIZE = 8224;
@@ -99,7 +99,7 @@ namespace NPOI.HSSF.Record
         /** Header {@link LittleEndianInput} facet of the wrapped {@link InputStream} */
         private BiffHeaderInput _bhi;
         /** Data {@link LittleEndianInput} facet of the wrapped {@link InputStream} */
-        private LittleEndianInput _dataInput;
+        private ILittleEndianInput _dataInput;
         /** the record identifier of the BIFF record currently being read */
 
         protected byte[] data = new byte[MAX_RECORD_DATA_SIZE];

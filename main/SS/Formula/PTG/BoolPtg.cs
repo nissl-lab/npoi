@@ -19,7 +19,7 @@ namespace NPOI.SS.Formula.PTG
 {
     using System;
     using NPOI.HSSF.Record;
-    using NPOI.Util.IO;
+    using NPOI.Util;
 
     /**
      * bool (bool)
@@ -34,7 +34,7 @@ namespace NPOI.SS.Formula.PTG
         public const byte sid = 0x1d;
         private bool field_1_value;
 
-        public BoolPtg(LittleEndianInput in1)
+        public BoolPtg(ILittleEndianInput in1)
         {
             field_1_value = (in1.ReadByte() == 1);
         }
@@ -50,7 +50,7 @@ namespace NPOI.SS.Formula.PTG
             get { return field_1_value; }
         }
 
-        public override void Write(LittleEndianOutput out1)
+        public override void Write(ILittleEndianOutput out1)
         {
             out1.WriteByte(sid + PtgClass);
             out1.WriteByte(field_1_value ? 1 : 0);

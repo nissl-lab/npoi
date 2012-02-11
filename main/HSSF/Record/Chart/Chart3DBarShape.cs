@@ -41,7 +41,7 @@ namespace NPOI.HSSF.Record.Chart
             buffer.Append("[/Chart3DBarShape]\n");
             return buffer.ToString();
         }
-        public override void Serialize(NPOI.Util.IO.LittleEndianOutput out1)
+        public override void Serialize(ILittleEndianOutput out1)
         {
             out1.WriteByte(field_1_riser);
             out1.WriteByte(field_2_taper);

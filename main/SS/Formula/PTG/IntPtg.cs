@@ -22,7 +22,7 @@ namespace NPOI.SS.Formula.PTG
     using NPOI.Util;
     using NPOI.HSSF.Record;
     
-    using NPOI.Util.IO;
+
 
     /**
      * Integer (unsigned short integer)
@@ -50,7 +50,7 @@ namespace NPOI.SS.Formula.PTG
         public const byte sid = 0x1e;
         private int field_1_value;
 
-        public IntPtg(LittleEndianInput in1)
+        public IntPtg(ILittleEndianInput in1)
             : this(in1.ReadUShort())
         {
             
@@ -70,7 +70,7 @@ namespace NPOI.SS.Formula.PTG
             get { return field_1_value; }
         }
 
-        public override void Write(LittleEndianOutput out1)
+        public override void Write(ILittleEndianOutput out1)
         {
             out1.WriteByte(sid + PtgClass);
             out1.WriteShort(Value);

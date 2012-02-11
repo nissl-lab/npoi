@@ -19,7 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using NPOI.Util;
-using NPOI.Util.IO;
+
 
 namespace NPOI.HSSF.Record
 {
@@ -142,14 +142,14 @@ namespace NPOI.HSSF.Record
         /**
          * writes out the value data for this cell record
          */
-        protected abstract void SerializeValue(LittleEndianOutput out1);
+        protected abstract void SerializeValue(ILittleEndianOutput out1);
 
         /**
          * @return the size (in bytes) of the value data for this cell record
          */
         protected abstract int ValueDataSize { get; }
 
-        public override void Serialize(LittleEndianOutput out1)
+        public override void Serialize(ILittleEndianOutput out1)
         {
             out1.WriteShort(Row);
             out1.WriteShort(Column);

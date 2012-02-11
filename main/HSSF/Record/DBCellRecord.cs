@@ -137,7 +137,7 @@ namespace NPOI.HSSF.Record
             buffer.Append("[/DBCELL]\n");
             return buffer.ToString();
         }
-        public override void Serialize(NPOI.Util.IO.LittleEndianOutput out1)
+        public override void Serialize(ILittleEndianOutput out1)
         {
             out1.WriteInt(field_1_row_offset);
             for (int k = 0; k < field_2_cell_offsets.Length; k++)

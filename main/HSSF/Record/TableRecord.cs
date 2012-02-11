@@ -178,7 +178,7 @@ namespace NPOI.HSSF.Record
                 + 8; // 4 short fields
             }
         }
-        protected override void SerializeExtraData(NPOI.Util.IO.LittleEndianOutput out1)
+        protected override void SerializeExtraData(ILittleEndianOutput out1)
         {
             out1.WriteByte(field_5_flags);
             out1.WriteByte(field_6_res);
