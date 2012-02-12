@@ -46,7 +46,7 @@ namespace TestCases.SS.UserModel
         public void TestBasicTypes()
         {
             IWorkbook wb = _testDataProvider.CreateWorkbook();
-            CreationHelper CreateHelper = wb.GetCreationHelper();
+            ICreationHelper CreateHelper = wb.GetCreationHelper();
 
             ICell cell;
             IHyperlink link;

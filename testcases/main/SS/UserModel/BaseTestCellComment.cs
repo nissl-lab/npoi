@@ -60,7 +60,7 @@ namespace TestCases.SS.UserModel
             int cellColumn = 1;
 
             IWorkbook wb = _testDataProvider.CreateWorkbook();
-            CreationHelper factory = wb.GetCreationHelper();
+            ICreationHelper factory = wb.GetCreationHelper();
 
             ISheet sheet = wb.CreateSheet();
             Assert.IsNull(sheet.GetCellComment(cellRow, cellColumn));
@@ -169,7 +169,7 @@ namespace TestCases.SS.UserModel
         {
 
             IWorkbook wb = _testDataProvider.OpenSampleWorkbook("SimpleWithComments." + _testDataProvider.StandardFileNameExtension);
-            CreationHelper factory = wb.GetCreationHelper();
+            ICreationHelper factory = wb.GetCreationHelper();
 
             ISheet sheet = wb.GetSheetAt(0);
 
@@ -237,7 +237,7 @@ namespace TestCases.SS.UserModel
         {
             IWorkbook wb = _testDataProvider.CreateWorkbook();
 
-            CreationHelper factory = wb.GetCreationHelper();
+            ICreationHelper factory = wb.GetCreationHelper();
 
             ISheet sheet = wb.CreateSheet();
 

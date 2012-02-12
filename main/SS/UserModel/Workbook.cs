@@ -357,7 +357,7 @@ namespace NPOI.SS.UserModel
         /// the various instances one needs for  HSSF and XSSF.
         /// </summary>
         /// <returns></returns>
-        CreationHelper GetCreationHelper();
+        ICreationHelper GetCreationHelper();
 
         /// <summary>
         /// if this workbook is not visible in the GUI

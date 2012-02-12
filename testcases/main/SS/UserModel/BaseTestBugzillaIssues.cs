@@ -80,7 +80,7 @@ namespace TestCases.SS.UserModel
         {
             IWorkbook wb = _testDataProvider.CreateWorkbook();
             ISheet sheet = wb.CreateSheet();
-            CreationHelper factory = wb.GetCreationHelper();
+            ICreationHelper factory = wb.GetCreationHelper();
 
             String tmp1 = null;
             String tmp2 = null;

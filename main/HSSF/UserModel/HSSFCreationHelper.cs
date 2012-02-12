@@ -20,7 +20,7 @@ namespace NPOI.HSSF.UserModel
     using System;
     using NPOI.SS.UserModel;
 
-    public class HSSFCreationHelper : CreationHelper
+    public class HSSFCreationHelper : ICreationHelper
     {
         private HSSFWorkbook workbook;
         private HSSFDataFormat dataFormat;

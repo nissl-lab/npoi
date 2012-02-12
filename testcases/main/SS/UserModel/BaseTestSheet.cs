@@ -130,7 +130,7 @@ namespace TestCases.SS.UserModel
         public void TestCloneSheet()
         {
             IWorkbook workbook = _testDataProvider.CreateWorkbook();
-            CreationHelper factory = workbook.GetCreationHelper();
+            ICreationHelper factory = workbook.GetCreationHelper();
             ISheet sheet = workbook.CreateSheet("Test Clone");
             IRow row = sheet.CreateRow(0);
             ICell cell = row.CreateCell(0);
@@ -166,7 +166,7 @@ namespace TestCases.SS.UserModel
         public void TestCloneSheetMultipleTimes()
         {
             IWorkbook workbook = _testDataProvider.CreateWorkbook();
-            CreationHelper factory = workbook.GetCreationHelper();
+            ICreationHelper factory = workbook.GetCreationHelper();
             ISheet sheet = workbook.CreateSheet("Test Clone");
             IRow row = sheet.CreateRow(0);
             ICell cell = row.CreateCell(0);
@@ -318,7 +318,7 @@ namespace TestCases.SS.UserModel
         public void TestShiftMerged()
         {
             IWorkbook wb = _testDataProvider.CreateWorkbook();
-            CreationHelper factory = wb.GetCreationHelper();
+            ICreationHelper factory = wb.GetCreationHelper();
             ISheet sheet = wb.CreateSheet();
             IRow row = sheet.CreateRow(0);
             ICell cell = row.CreateCell(0);

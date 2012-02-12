@@ -141,7 +141,7 @@ namespace NPOI.HSSF.UserModel
         /// <summary>
         /// Gets or sets the rich text string used by this comment.
         /// </summary>   
-        public override NPOI.SS.UserModel.IRichTextString String
+        public override IRichTextString String
         {
             get { return base.String; }
             set

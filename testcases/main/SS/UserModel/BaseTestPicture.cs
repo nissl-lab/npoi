@@ -36,7 +36,7 @@ namespace TestCases.SS.UserModel
             IWorkbook wb = _testDataProvider.CreateWorkbook();
             ISheet sh1 = wb.CreateSheet();
             IDrawing p1 = sh1.CreateDrawingPatriarch();
-            CreationHelper factory = wb.GetCreationHelper();
+            ICreationHelper factory = wb.GetCreationHelper();
 
             byte[] pictureData = _testDataProvider.GetTestDataFileContent("logoKarmokar4.png");
             int idx1 = wb.AddPicture(pictureData,PictureType.PNG);

@@ -54,7 +54,7 @@ namespace TestCases.SS.UserModel
             ISheet sheet = book.CreateSheet("test");
             IRow row = sheet.CreateRow(0);
 
-            CreationHelper factory = book.GetCreationHelper();
+            ICreationHelper factory = book.GetCreationHelper();
             ICell cell = row.CreateCell(0);
 
             cell.SetCellValue(1.2);
@@ -234,7 +234,7 @@ namespace TestCases.SS.UserModel
         {
             IWorkbook wb = _testDataProvider.CreateWorkbook();
             IRow r = wb.CreateSheet("Sheet1").CreateRow(0);
-            CreationHelper factory = wb.GetCreationHelper();
+            ICreationHelper factory = wb.GetCreationHelper();
 
             r.CreateCell(0).SetCellValue(true);
             r.CreateCell(1).SetCellValue(1.5);

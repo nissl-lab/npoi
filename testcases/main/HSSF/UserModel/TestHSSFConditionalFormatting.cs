@@ -56,7 +56,7 @@ namespace TestCases.HSSF.UserModel
             patternFmt.FillBackgroundColor= (HSSFColor.YELLOW.index);
 
 
-            HSSFConditionalFormattingRule rule2 = (HSSFConditionalFormattingRule)sheetCF.CreateConditionalFormattingRule(NPOI.SS.UserModel.ComparisonOperator.BETWEEN, "1", "2");
+            HSSFConditionalFormattingRule rule2 = (HSSFConditionalFormattingRule)sheetCF.CreateConditionalFormattingRule(ComparisonOperator.BETWEEN, "1", "2");
             HSSFConditionalFormattingRule[] cfRules =
 		    {
 			    rule1, rule2
@@ -131,7 +131,7 @@ namespace TestCases.HSSF.UserModel
             patternFmt.FillBackgroundColor = (HSSFColor.YELLOW.index);
 
 
-            HSSFConditionalFormattingRule rule2 = (HSSFConditionalFormattingRule)sheetCF.CreateConditionalFormattingRule(NPOI.SS.UserModel.ComparisonOperator.BETWEEN, "1", "2");
+            HSSFConditionalFormattingRule rule2 = (HSSFConditionalFormattingRule)sheetCF.CreateConditionalFormattingRule(ComparisonOperator.BETWEEN, "1", "2");
             HSSFConditionalFormattingRule[] cfRules =
 		    {
 			    rule1, rule2
@@ -168,7 +168,7 @@ namespace TestCases.HSSF.UserModel
             HSSFSheetConditionalFormatting sheetCF = (HSSFSheetConditionalFormatting)sheet.SheetConditionalFormatting;
 
             HSSFConditionalFormattingRule rule1 = (HSSFConditionalFormattingRule)sheetCF.CreateConditionalFormattingRule(
-                    NPOI.SS.UserModel.ComparisonOperator.BETWEEN, "sum(A10:A15)", "1+sum(B16:B30)");
+                    ComparisonOperator.BETWEEN, "sum(A10:A15)", "1+sum(B16:B30)");
             HSSFFontFormatting fontFmt = (HSSFFontFormatting)rule1.CreateFontFormatting();
             fontFmt.SetFontStyle(true, false);
 

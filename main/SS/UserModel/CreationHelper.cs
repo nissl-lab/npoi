@@ -29,7 +29,7 @@ namespace NPOI.SS.UserModel
      *  about if you're dealing with HSSF or XSSF, despite
      *  Java being quite rubbish.
      */
-    public interface CreationHelper
+    public interface ICreationHelper
     {
         /**
          * Creates a new RichTextString instance

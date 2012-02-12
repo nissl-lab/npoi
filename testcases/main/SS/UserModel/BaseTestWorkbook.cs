@@ -430,7 +430,7 @@ namespace TestCases.SS.UserModel
         {
             System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
             IWorkbook wb = _testDataProvider.CreateWorkbook();
-            CreationHelper factory = wb.GetCreationHelper(/*getter*/);
+            ICreationHelper factory = wb.GetCreationHelper(/*getter*/);
             //Create a unicode dataformat (Contains euro symbol)
             IDataFormat df = wb.CreateDataFormat();
             String formatStr = "_([$\u20ac-2]\\\\\\ * #,##0.00_);_([$\u20ac-2]\\\\\\ * \\\\\\(#,##0.00\\\\\\);_([$\u20ac-2]\\\\\\ *\\\"\\-\\\\\"??_);_(@_)";

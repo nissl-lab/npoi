@@ -487,7 +487,7 @@ namespace TestCases.SS.UserModel
             String cellValue = "TEST Value";
             IWorkbook wb = _testDataProvider.CreateWorkbook();
             ISheet sheet = wb.CreateSheet(sheetName);
-            CreationHelper factory = wb.GetCreationHelper();
+            ICreationHelper factory = wb.GetCreationHelper();
             sheet.CreateRow(0).CreateCell(0).SetCellValue(factory.CreateRichTextString(cellValue));
 
             // create named range for a single cell using areareference
@@ -525,7 +525,7 @@ namespace TestCases.SS.UserModel
             // Setup for this Testcase
             String sname = "TestSheet", cname = "TestName", cvalue = "TestVal";
             IWorkbook wb = _testDataProvider.CreateWorkbook();
-            CreationHelper factory = wb.GetCreationHelper();
+            ICreationHelper factory = wb.GetCreationHelper();
             ISheet sheet = wb.CreateSheet(sname);
             sheet.CreateRow(0).CreateCell(0).SetCellValue(factory.CreateRichTextString(cvalue));
 

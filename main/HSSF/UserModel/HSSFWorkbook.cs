@@ -111,7 +111,7 @@ namespace NPOI.HSSF.UserModel
 
         //private static POILogger log = POILogFactory.GetLogger(typeof(HSSFWorkbook));
 
-        public NPOI.SS.UserModel.CreationHelper GetCreationHelper()
+        public NPOI.SS.UserModel.ICreationHelper GetCreationHelper()
         {
             return new HSSFCreationHelper(this);
         }
