@@ -50,8 +50,8 @@ namespace NPOI.DDF
         public EscherProperty(short propertyNumber, bool isComplex, bool isBlipId)
         {
             this.id = (short)(propertyNumber +
-                    (isComplex ? unchecked((short)0x8000) : 0x0) +
-                    (isBlipId ? (short)0x4000 : 0x0));
+                    (isComplex ? unchecked((short)0x8000) : (short)0x0) +
+                    (isBlipId ? (short)0x4000 : (short)0x0));
         }
 
         /// <summary>
