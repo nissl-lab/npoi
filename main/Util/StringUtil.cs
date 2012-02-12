@@ -72,7 +72,7 @@ namespace NPOI.Util
 			    throw new ArgumentException("Illegal Length");
 		    }
 
-			return UnicodeEncoding.Unicode.GetString(str, offset, len * 2);
+			return Encoding.Unicode.GetString(str, offset, len * 2);
 	    }
 
         /// <summary>
