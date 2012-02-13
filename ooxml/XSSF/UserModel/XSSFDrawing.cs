@@ -132,8 +132,8 @@ namespace NPOI.XSSF.UserModel
             long shapeId = newShapeId();
             CT_TwoCellAnchor ctAnchor = CreateTwoCellAnchor(anchor);
             CT_Shape ctShape = ctAnchor.AddNewSp();
-            ctShape.Set(XSSFSimpleShape.prototype());
-            ctShape.GetNvSpPr().GetCNvPr().SetId(shapeId);
+            ctShape.Set(XSSFSimpleShape.Prototype());
+            ctShape.nvSpPr.cNvPr.id=(uint)shapeId;
             XSSFTextBox shape = new XSSFTextBox(this, ctShape);
             shape.anchor = anchor;
             return shape;
@@ -156,7 +156,7 @@ namespace NPOI.XSSF.UserModel
             long shapeId = newShapeId();
             CT_TwoCellAnchor ctAnchor = CreateTwoCellAnchor(anchor);
             CT_Picture ctShape = ctAnchor.AddNewPic();
-            ctShape.Set(XSSFPicture.prototype());
+            ctShape.Set(XSSFPicture.Prototype());
 
             ctShape.nvPicPr.cNvPr.id = (uint)shapeId;
 
@@ -181,7 +181,7 @@ namespace NPOI.XSSF.UserModel
         public XSSFChart CreateChart(XSSFClientAnchor anchor)
         {
             int chartNumber = GetPackagePart().Package.
-                GetPartsByContentType(XSSFRelation.CHART.GetContentType()).Count + 1;
+                GetPartsByContentType(XSSFRelation.CHART.ContentType).Count + 1;
 
             XSSFChart chart = (XSSFChart)CreateRelationship(
                     XSSFRelation.CHART, XSSFFactory.GetInstance(), chartNumber);

@@ -113,7 +113,7 @@ namespace NPOI.XSSF.UserModel
          * @param workbook - the workbook object associated with the name
          * @see NPOI.XSSF.usermodel.XSSFWorkbook#CreateName()
          */
-        protected XSSFName(CT_DefinedName name, XSSFWorkbook workbook)
+        public XSSFName(CT_DefinedName name, XSSFWorkbook workbook)
         {
             _workbook = workbook;
             _ctName = name;
@@ -122,7 +122,7 @@ namespace NPOI.XSSF.UserModel
         /**
          * Returns the underlying named range object
          */
-        protected CT_DefinedName GetCTName()
+        public CT_DefinedName GetCTName()
         {
             return _ctName;
         }

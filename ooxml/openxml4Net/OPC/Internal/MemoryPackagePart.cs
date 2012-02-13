@@ -4,7 +4,7 @@ using System.Text;
 using System.IO;
 using NPOI.OpenXml4Net.OPC.Internal.Marshallers;
 using NPOI.OpenXml4Net.Exceptions;
-using NPOI.Util.IO;
+using NPOI.Util;
 
 namespace NPOI.OpenXml4Net.OPC.Internal
 {

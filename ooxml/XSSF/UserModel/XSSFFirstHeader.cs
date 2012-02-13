@@ -17,46 +17,60 @@
 
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel.Extensions;
-using System;
 using NPOI.OpenXmlFormats.Spreadsheet;
+using System;
 namespace NPOI.XSSF.UserModel
 {
 
     /**
-     * Odd page header value. Corresponds to odd printed pages. 
-     * Odd page(s) in the sheet may not be printed, for example, if the print area is specified to be 
-     * a range such that it falls outside an odd page's scope.
+     * 
+     * First page header content. Corresponds to first printed page.
+     * The first logical page in the sheet may not be printed, for example, if the print area is specified to 
+     * be a range such that it falls outside the first page's scope.
      *
      */
-    public class XSSFOddHeader : XSSFHeaderFooter, IHeader
+    public class XSSFFirstHeader : XSSFHeaderFooter, IHeader
     {
 
         /**
-         * Create an instance of XSSFOddHeader from the supplied XML bean
-         * @see XSSFSheet#GetOddHeader()
+         * Create an instance of XSSFFirstHeader from the supplied XML bean
+         * @see XSSFSheet#getFirstHeader()
          * @param headerFooter
          */
-        public XSSFOddHeader(CT_HeaderFooter headerFooter)
+        public XSSFFirstHeader(CT_HeaderFooter headerFooter)
             : base(headerFooter)
         {
 
+            headerFooter.differentFirst = (true);
         }
 
         /**
          * Get the content text representing this header
          * @return text
          */
-        public override String Text
+        public String GetText()
         {
-            get
+            return GetHeaderFooter().firstHeader;
+        }
+
+        /**
+         * Set a text for the header. If null unset the value
+         * @see XSSFHeaderFooter to see how to create a string with Header/Footer Formatting Syntax
+         * @param text - a string representing the header. 
+         */
+        public void SetText(String text)
+        {
+            if (text == null)
             {
-                return GetHeaderFooter().oddHeader;
+                GetHeaderFooter().firstHeader = null;
             }
-            set
+            else
             {
-                GetHeaderFooter().oddHeader = value;
+                GetHeaderFooter().firstHeader = (text);
             }
         }
+
     }
 }
+
 

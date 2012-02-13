@@ -56,16 +56,16 @@ namespace NPOI.XSSF.UserModel
          * @param row the xml bean Containing all cell defInitions for this row.
          * @param sheet the parent sheet.
          */
-        protected XSSFRow(CT_Row row, XSSFSheet sheet)
+        public XSSFRow(CT_Row row, XSSFSheet sheet)
         {
             _row = row;
             _sheet = sheet;
             _cells = new Dictionary<int, XSSFCell>();
-            foreach (CT_Cell c in row.GetCArray())
+            foreach (CT_Cell c in row.c)
             {
                 XSSFCell cell = new XSSFCell(this, c);
                 _cells[cell.ColumnIndex] = cell;
-                sheet.onReadCell(cell);
+                sheet.OnReadCell(cell);
             }
         }
 

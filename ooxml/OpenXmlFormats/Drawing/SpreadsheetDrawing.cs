@@ -151,6 +151,38 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
     }
+    public class CT_GroupShape
+    {
+        CT_GroupShapeProperties grpSpPrField;
+        CT_GroupShapeNonVisual nvGrpSpPrField;
+        public CT_GroupShapeNonVisual nvGrpSpPr
+        {
+            get { return nvGrpSpPrField; }
+            set { nvGrpSpPrField = value; }
+        }
+        public CT_GroupShapeProperties grpSpPr
+        {
+            get { return grpSpPrField; }
+            set { grpSpPrField = value; }
+        
+        }
+    }
+    public class CT_GroupShapeNonVisual
+    {
+        CT_NonVisualDrawingProps cNvPrField;
+        CT_NonVisualGroupDrawingShapeProps cNvGrpSpPrField;
+
+        public CT_NonVisualDrawingProps cNvPr
+        {
+            get { return cNvPrField; }
+            set { cNvPrField = value; }
+        }
+        public CT_NonVisualGroupDrawingShapeProps cNvGrpSpPr
+        {
+            get { return cNvGrpSpPrField; }
+            set { cNvGrpSpPrField = value; }
+        }
+    }
     public class CT_Marker
     {
         public int col

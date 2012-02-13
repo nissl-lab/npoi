@@ -14,7 +14,7 @@ namespace NPOI.OpenXmlFormats
         { 
             
         }
-        public string NamespaceURI
+        public static string NamespaceURI
         { 
             get{
                 return "http://schemas.openxmlformats.org/officeDocument/2006/relationships";

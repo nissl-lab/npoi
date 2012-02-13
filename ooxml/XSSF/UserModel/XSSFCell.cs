@@ -79,7 +79,7 @@ namespace NPOI.XSSF.UserModel
          * @param row the parent row.
          * @param cell the xml bean Containing information about the cell.
          */
-        protected XSSFCell(XSSFRow row, CT_Cell cell)
+        public XSSFCell(XSSFRow row, CT_Cell cell)
         {
             _cell = cell;
             _row = row;
@@ -87,8 +87,8 @@ namespace NPOI.XSSF.UserModel
             {
                 _cellNum = new CellReference(cell.r).Col;
             }
-            _sharedStringSource = row.Sheet.GetWorkbook().GetSharedStringSource();
-            _stylesSource = row.Sheet.GetWorkbook().GetStylesSource();
+            _sharedStringSource = row.Sheet.Workbook.GetSharedStringSource();
+            _stylesSource = row.Sheet.Workbook.GetStylesSource();
         }
 
         /**

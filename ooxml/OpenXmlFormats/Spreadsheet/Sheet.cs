@@ -334,9 +334,9 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.sheetCalcPrField = new CT_SheetCalcPr();
             this.sheetDataField = new List<CT_Row>();
             this.colsField = new List<CT_Col>();
-            this.sheetFormatPrField = new CT_SheetFormatPr();
+            //this.sheetFormatPrField = new CT_SheetFormatPr();
             this.sheetViewsField = new CT_SheetViews();
-            this.dimensionField = new CT_SheetDimension();
+            //this.dimensionField = new CT_SheetDimension();
             this.sheetPrField = new CT_SheetPr();
         }
         public bool IsSetHyperLinks()
@@ -351,6 +351,22 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         public void UnsetSheetProtection()
         {
             this.sheetProtectionField = null;
+        }
+
+        public CT_SheetFormatPr AddNewSheetFormatPr()
+        {
+            this.sheetFormatPrField = new CT_SheetFormatPr();
+            return sheetFormatPrField;
+        }
+        public CT_SheetDimension AddNewDimension()
+        {
+            this.dimensionField = new CT_SheetDimension();
+            return dimensionField;
+        }
+        public List<CT_Row> AddNewSheetData()
+        {
+            this.sheetDataField = new List<CT_Row>();
+            return sheetDataField;
         }
 
         public CT_SheetPr sheetPr
@@ -401,8 +417,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 4)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("col", typeof(CT_Col), IsNullable = false)]
+        [XmlArrayAttribute(Order = 4)]
+        [XmlArrayItemAttribute("col", typeof(CT_Col), IsNullable = false)]
         public List<CT_Col> cols
         {
             get
@@ -415,8 +431,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 5)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("row", IsNullable = false)]
+        [XmlArrayAttribute(Order = 5)]
+        [XmlArrayItemAttribute("row", IsNullable = false)]
         public List<CT_Row> sheetData
         {
             get
@@ -453,8 +469,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 8)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("protectedRange", IsNullable = false)]
+        [XmlArrayAttribute(Order = 8)]
+        [XmlArrayItemAttribute("protectedRange", IsNullable = false)]
         public List<CT_ProtectedRange> protectedRanges
         {
             get
@@ -515,8 +531,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 13)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("customSheetView", IsNullable = false)]
+        [XmlArrayAttribute(Order = 13)]
+        [XmlArrayItemAttribute("customSheetView", IsNullable = false)]
         public List<CT_CustomSheetView> customSheetViews
         {
             get
@@ -577,8 +593,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 18)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("hyperlink", IsNullable = false)]
+        [XmlArrayAttribute(Order = 18)]
+        [XmlArrayItemAttribute("hyperlink", IsNullable = false)]
         public List<CT_Hyperlink> hyperlinks
         {
             get
@@ -663,8 +679,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 25)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("customPr", IsNullable = false)]
+        [XmlArrayAttribute(Order = 25)]
+        [XmlArrayItemAttribute("customPr", IsNullable = false)]
         public List<CT_CustomProperty> customProperties
         {
             get
@@ -677,8 +693,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 26)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("cellWatch", IsNullable = false)]
+        [XmlArrayAttribute(Order = 26)]
+        [XmlArrayItemAttribute("cellWatch", IsNullable = false)]
         public List<CT_CellWatch> cellWatches
         {
             get
@@ -703,8 +719,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 28)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("cellSmartTags", IsNullable = false)]
+        [XmlArrayAttribute(Order = 28)]
+        [XmlArrayItemAttribute("cellSmartTags", IsNullable = false)]
         public List<CT_CellSmartTags> smartTags
         {
             get
@@ -765,8 +781,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 33)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("oleObject", IsNullable = false)]
+        [XmlArrayAttribute(Order = 33)]
+        [XmlArrayItemAttribute("oleObject", IsNullable = false)]
         public List<CT_OleObject> oleObjects
         {
             get
@@ -779,8 +795,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 34)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("control", IsNullable = false)]
+        [XmlArrayAttribute(Order = 34)]
+        [XmlArrayItemAttribute("control", IsNullable = false)]
         public List<CT_Control> controls
         {
             get
@@ -1908,7 +1924,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnoreAttribute()]
         public bool axisSpecified
         {
             get
@@ -2138,7 +2154,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnoreAttribute()]
         public bool fieldSpecified
         {
             get
@@ -2279,7 +2295,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnoreAttribute()]
         public bool axisSpecified
         {
             get
@@ -2304,7 +2320,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnoreAttribute()]
         public bool fieldPositionSpecified
         {
             get
@@ -2356,7 +2372,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnoreAttribute()]
         public bool countSpecified
         {
             get
@@ -2472,7 +2488,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnoreAttribute()]
         public bool fieldSpecified
         {
             get
@@ -2497,7 +2513,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnoreAttribute()]
         public bool countSpecified
         {
             get
@@ -2796,7 +2812,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnoreAttribute()]
         public bool defaultColWidthSpecified
         {
             get
@@ -2898,6 +2914,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.outlineLevelColField = value;
             }
         }
+
     }
 
     public class CT_Col
@@ -3010,7 +3027,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             
             
             
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnoreAttribute()]
         public bool widthSpecified
         {
             get
@@ -3202,7 +3219,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnoreAttribute()]
         public bool rSpecified
         {
             get
@@ -3265,7 +3282,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnoreAttribute()]
         public bool htSpecified
         {
             get
@@ -3718,7 +3735,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnoreAttribute()]
         public bool siSpecified
         {
             get
@@ -3744,7 +3761,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlTextAttribute()]
+        [XmlTextAttribute()]
         public string Value
         {
             get
@@ -4210,7 +4227,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnoreAttribute()]
         public bool currentSpecified
         {
             get
@@ -4235,7 +4252,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnoreAttribute()]
         public bool showSpecified
         {
             get
@@ -4349,7 +4366,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnoreAttribute()]
         public bool countSpecified
         {
             get
@@ -4470,7 +4487,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnoreAttribute()]
         public bool numFmtIdSpecified
         {
             get
@@ -4609,7 +4626,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnoreAttribute()]
         public bool countSpecified
         {
             get
@@ -6000,7 +6017,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnoreAttribute()]
         public bool countSpecified
         {
             get
@@ -6277,7 +6294,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnoreAttribute()]
         public bool typeSpecified
         {
             get
@@ -6302,7 +6319,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnoreAttribute()]
         public bool dxfIdSpecified
         {
             get
@@ -6391,7 +6408,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnoreAttribute()]
         public bool operatorSpecified
         {
             get
@@ -6428,7 +6445,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnoreAttribute()]
         public bool timePeriodSpecified
         {
             get
@@ -6453,7 +6470,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnoreAttribute()]
         public bool rankSpecified
         {
             get
@@ -6478,7 +6495,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnoreAttribute()]
         public bool stdDevSpecified
         {
             get
@@ -6999,7 +7016,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnoreAttribute()]
         public bool xWindowSpecified
         {
             get
@@ -7024,7 +7041,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnoreAttribute()]
         public bool yWindowSpecified
         {
             get
@@ -7049,7 +7066,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnoreAttribute()]
         public bool countSpecified
         {
             get
@@ -7982,7 +7999,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnoreAttribute()]
         public bool oleUpdateSpecified
         {
             get
@@ -8137,7 +8154,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnoreAttribute()]
         public bool countSpecified
         {
             get
@@ -8339,7 +8356,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnoreAttribute()]
         public bool countSpecified
         {
             get
@@ -8453,8 +8470,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 3)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("customSheetView", IsNullable = false)]
+        [XmlArrayAttribute(Order = 3)]
+        [XmlArrayItemAttribute("customSheetView", IsNullable = false)]
         public List<CT_CustomChartsheetView> customSheetViews
         {
             get
@@ -9200,8 +9217,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 4)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("customSheetView", IsNullable = false)]
+        [XmlArrayAttribute(Order = 4)]
+        [XmlArrayItemAttribute("customSheetView", IsNullable = false)]
         public List<CT_CustomSheetView> customSheetViews
         {
             get
@@ -9298,8 +9315,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 12)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("oleObject", IsNullable = false)]
+        [XmlArrayAttribute(Order = 12)]
+        [XmlArrayItemAttribute("oleObject", IsNullable = false)]
         public List<CT_OleObject> oleObjects
         {
             get
@@ -9458,8 +9475,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 4)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("col", typeof(CT_Col), IsNullable = false)]
+        [XmlArrayAttribute(Order = 4)]
+        [XmlArrayItemAttribute("col", typeof(CT_Col), IsNullable = false)]
         public List<CT_Col> cols
         {
             get
@@ -9472,8 +9489,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 5)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("row", IsNullable = false)]
+        [XmlArrayAttribute(Order = 5)]
+        [XmlArrayItemAttribute("row", IsNullable = false)]
         public List<CT_Row> sheetData
         {
             get
@@ -9534,8 +9551,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 10)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("customSheetView", IsNullable = false)]
+        [XmlArrayAttribute(Order = 10)]
+        [XmlArrayItemAttribute("customSheetView", IsNullable = false)]
         public List<CT_CustomSheetView> customSheetViews
         {
             get
@@ -9644,8 +9661,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 19)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("customPr", IsNullable = false)]
+        [XmlArrayAttribute(Order = 19)]
+        [XmlArrayItemAttribute("customPr", IsNullable = false)]
         public List<CT_CustomProperty> customProperties
         {
             get
@@ -9706,8 +9723,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 24)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("oleObject", IsNullable = false)]
+        [XmlArrayAttribute(Order = 24)]
+        [XmlArrayItemAttribute("oleObject", IsNullable = false)]
         public List<CT_OleObject> oleObjects
         {
             get

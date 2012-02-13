@@ -100,7 +100,10 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.themeField = value;
             }
         }
-
+        public void SetVal(long val)
+        {
+            throw new NotImplementedException();
+        }
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool themeSpecified
         {

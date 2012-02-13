@@ -2683,6 +2683,10 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             return r.Count;
         }
+        public CT_RElt GetRArray(int index)
+        {
+            return this.rField[index];
+        }
         public string t
         {
             get

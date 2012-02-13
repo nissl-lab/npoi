@@ -15,48 +15,25 @@
    limitations under the License.
 ==================================================================== */
 
-using NPOI.SS.UserModel;
-using NPOI.XSSF.UserModel.Extensions;
-using System;
-using NPOI.OpenXmlFormats.Spreadsheet;
 namespace NPOI.XSSF.UserModel
 {
 
+
     /**
-     * Odd page header value. Corresponds to odd printed pages. 
-     * Odd page(s) in the sheet may not be printed, for example, if the print area is specified to be 
-     * a range such that it falls outside an odd page's scope.
+     * Represents autofiltering for the specified worksheet.
      *
+     * @author Yegor Kozlov
      */
-    public class XSSFOddHeader : XSSFHeaderFooter, IHeader
+    public class XSSFAutoFilter : IAutoFilter
     {
+        private XSSFSheet _sheet;
 
-        /**
-         * Create an instance of XSSFOddHeader from the supplied XML bean
-         * @see XSSFSheet#GetOddHeader()
-         * @param headerFooter
-         */
-        public XSSFOddHeader(CT_HeaderFooter headerFooter)
-            : base(headerFooter)
+        public XSSFAutoFilter(XSSFSheet sheet)
         {
-
+            _sheet = sheet;
         }
 
-        /**
-         * Get the content text representing this header
-         * @return text
-         */
-        public override String Text
-        {
-            get
-            {
-                return GetHeaderFooter().oddHeader;
-            }
-            set
-            {
-                GetHeaderFooter().oddHeader = value;
-            }
-        }
     }
 }
+
 

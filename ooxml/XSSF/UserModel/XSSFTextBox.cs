@@ -15,48 +15,24 @@
    limitations under the License.
 ==================================================================== */
 
-using NPOI.SS.UserModel;
-using NPOI.XSSF.UserModel.Extensions;
-using System;
-using NPOI.OpenXmlFormats.Spreadsheet;
+using NPOI.OpenXmlFormats.Dml;
 namespace NPOI.XSSF.UserModel
 {
 
     /**
-     * Odd page header value. Corresponds to odd printed pages. 
-     * Odd page(s) in the sheet may not be printed, for example, if the print area is specified to be 
-     * a range such that it falls outside an odd page's scope.
+     * Represents a text box in a SpreadsheetML Drawing.
      *
+     * @author Yegor Kozlov
      */
-    public class XSSFOddHeader : XSSFHeaderFooter, IHeader
+    public class XSSFTextBox : XSSFSimpleShape
     {
 
-        /**
-         * Create an instance of XSSFOddHeader from the supplied XML bean
-         * @see XSSFSheet#GetOddHeader()
-         * @param headerFooter
-         */
-        public XSSFOddHeader(CT_HeaderFooter headerFooter)
-            : base(headerFooter)
+        internal XSSFTextBox(XSSFDrawing drawing, CT_Shape ctShape)
+            : base(drawing, ctShape)
         {
 
-        }
-
-        /**
-         * Get the content text representing this header
-         * @return text
-         */
-        public override String Text
-        {
-            get
-            {
-                return GetHeaderFooter().oddHeader;
-            }
-            set
-            {
-                GetHeaderFooter().oddHeader = value;
-            }
         }
     }
 }
+
 

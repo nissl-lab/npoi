@@ -19,7 +19,7 @@ using NPOI.OpenXml4Net.OPC;
 using NPOI.OpenXml4Net.Exceptions;
 using System;
 using System.IO;
-using NPOI.Util.IO;
+using NPOI.Util;
 namespace NPOI.Util
 {
 

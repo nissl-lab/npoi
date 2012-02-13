@@ -113,7 +113,7 @@ namespace NPOI.XSSF.UserModel
                 //style table is not Set, remember fontIndex and Set the run properties later,
                 //when SetStylesTableReference is called
                 font = new XSSFFont();
-                font.SetFontName("#" + fontIndex);
+                font.FontName = ("#" + fontIndex);
             }
             else
             {
@@ -148,12 +148,12 @@ namespace NPOI.XSSF.UserModel
             String text = GetString();
             XSSFFont xssfFont = (XSSFFont)font;
 
-            TreeDictionary<int, CTRPrElt> formats = GetFormatMap(st);
-            CTRPrElt fmt = CTRPrElt.Factory.newInstance();
+            Dictionary<int, CT_RPrElt> formats = GetFormatMap(st);
+            CT_RPrElt fmt = CT_RPrElt.Factory.newInstance();
             SetRunAttributes(xssfFont.GetCTFont(), fmt);
             ApplyFont(formats, startIndex, endIndex, fmt);
 
-            CT_Rst newSt = buildCT_Rst(text, formats);
+            CT_Rst newSt = buildCTRst(text, formats);
             st.Set(newSt);
         }
 
@@ -203,7 +203,7 @@ namespace NPOI.XSSF.UserModel
                 st.unsetT();
             }
             CT_RElt lt = st.AddNewR();
-            lt.SetT(text);
+            lt.t= (text);
             CT_RPrElt pr = lt.AddNewRPr();
             if (font != null) SetRunAttributes(font.GetCTFont(), pr);
         }
@@ -508,7 +508,7 @@ namespace NPOI.XSSF.UserModel
 
 
 
-        CT_Rst buildCT_Rst(String text, Dictionary<int, CT_RPrElt> formats)
+        CT_Rst buildCTRst(String text, Dictionary<int, CT_RPrElt> formats)
         {
             if (text.Length != formats.lastKey())
             {

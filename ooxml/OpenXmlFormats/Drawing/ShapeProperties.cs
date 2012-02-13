@@ -48,7 +48,7 @@ namespace NPOI.OpenXmlFormats.Dml
             this.scene3dField = new CT_Scene3D();
             this.effectDagField = new CT_EffectContainer();
             this.effectLstField = new CT_EffectList();
-            this.lnField = new CT_LineProperties();
+            //this.lnField = new CT_LineProperties();
             this.grpFillField = new CT_GroupFillProperties();
             this.pattFillField = new CT_PatternFillProperties();
             this.blipFillField = new CT_BlipFillProperties();
@@ -58,6 +58,31 @@ namespace NPOI.OpenXmlFormats.Dml
             this.prstGeomField = new CT_PresetGeometry2D();
             this.custGeomField = new CT_CustomGeometry2D();
             this.xfrmField = new CT_Transform2D();
+        }
+        public bool IsSetPattFill()
+        {
+            return this.pattFillField!=null;
+        }
+        public bool IsSetSolidFill()
+        {
+            return this.solidFillField != null;
+        }
+        public bool IsSetLn()
+        {
+            return this.lnField != null;
+        }
+        public CT_LineProperties AddNewLn()
+        {
+            this.lnField = new CT_LineProperties();
+            return lnField;
+        }
+        public void unsetPattFill()
+        {
+            this.pattFill = null;
+        }
+        public void unsetSolidFill()
+        {
+            this.solidFill = null;
         }
 
         public CT_Transform2D xfrm

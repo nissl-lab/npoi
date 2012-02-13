@@ -1879,10 +1879,19 @@ namespace NPOI.OpenXmlFormats.Dml
             this.prstDashField = new CT_PresetLineDashProperties();
             this.pattFillField = new CT_PatternFillProperties();
             this.gradFillField = new CT_GradientFillProperties();
-            this.solidFillField = new CT_SolidColorFillProperties();
+            //this.solidFillField = new CT_SolidColorFillProperties();
             this.noFillField = new CT_NoFillProperties();
         }
 
+        public CT_SolidColorFillProperties AddNewSolidFill()
+        {
+            this.solidFillField = new CT_SolidColorFillProperties();
+            return this.solidFillField;
+        }
+        public bool IsSetSolidFill()
+        {
+            return this.solidFillField != null;
+        }
         public CT_NoFillProperties noFill
         {
             get
