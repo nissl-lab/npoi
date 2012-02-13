@@ -56,6 +56,18 @@ namespace NPOI.Util
 
                 return baos.ToArray();
             }
+
+        public static byte[] ToByteArray(ByteBuffer buffer, int length)
+        {
+            if (buffer.HasBuffer && buffer.Offset == 0)
+            {
+                // The backing array should work out fine for us
+                return buffer.Buffer;
+            }
+
+            byte[] data = new byte[length];
+            buffer.Read(data);
+            return data;
         }
 
         /// <summary>
