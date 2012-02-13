@@ -133,7 +133,7 @@ namespace TestCases.SS.UserModel
             ISheetConditionalFormatting sheetCF = sh.SheetConditionalFormatting;
 
             IConditionalFormattingRule rule1 = sheetCF.CreateConditionalFormattingRule("SUM(A1:A5)>10");
-            Assert.AreEqual((byte)ConditionType.FORMULA, rule1.ConditionType);
+            Assert.AreEqual(ConditionType.FORMULA, rule1.ConditionType);
             Assert.AreEqual("SUM(A1:A5)>10", rule1.Formula1);
             int formatIndex1 = sheetCF.AddConditionalFormatting(
                     new CellRangeAddress[]{
@@ -169,56 +169,56 @@ namespace TestCases.SS.UserModel
 
             IConditionalFormattingRule rule1 = sheetCF.CreateConditionalFormattingRule(
                     ComparisonOperator.EQUAL, "SUM(A1:A5)+10");
-            Assert.AreEqual((byte)ConditionType.CELL_VALUE_IS, rule1.ConditionType);
+            Assert.AreEqual(ConditionType.CELL_VALUE_IS, rule1.ConditionType);
             Assert.AreEqual("SUM(A1:A5)+10", rule1.Formula1);
             Assert.AreEqual(ComparisonOperator.EQUAL, rule1.ComparisonOperation);
 
             IConditionalFormattingRule rule2 = sheetCF.CreateConditionalFormattingRule(
                     ComparisonOperator.NOT_EQUAL, "15");
-            Assert.AreEqual((byte)ConditionType.CELL_VALUE_IS, rule2.ConditionType);
+            Assert.AreEqual(ConditionType.CELL_VALUE_IS, rule2.ConditionType);
             Assert.AreEqual("15", rule2.Formula1);
             Assert.AreEqual(ComparisonOperator.NOT_EQUAL, rule2.ComparisonOperation);
 
             IConditionalFormattingRule rule3 = sheetCF.CreateConditionalFormattingRule(
                     ComparisonOperator.NOT_EQUAL, "15");
-            Assert.AreEqual((byte)ConditionType.CELL_VALUE_IS, rule3.ConditionType);
+            Assert.AreEqual(ConditionType.CELL_VALUE_IS, rule3.ConditionType);
             Assert.AreEqual("15", rule3.Formula1);
             Assert.AreEqual(ComparisonOperator.NOT_EQUAL, rule3.ComparisonOperation);
 
             IConditionalFormattingRule rule4 = sheetCF.CreateConditionalFormattingRule(
                     ComparisonOperator.GT, "0");
-            Assert.AreEqual((byte)ConditionType.CELL_VALUE_IS, rule4.ConditionType);
+            Assert.AreEqual(ConditionType.CELL_VALUE_IS, rule4.ConditionType);
             Assert.AreEqual("0", rule4.Formula1);
             Assert.AreEqual(ComparisonOperator.GT, rule4.ComparisonOperation);
 
             IConditionalFormattingRule rule5 = sheetCF.CreateConditionalFormattingRule(
                     ComparisonOperator.LT, "0");
-            Assert.AreEqual((byte)ConditionType.CELL_VALUE_IS, rule5.ConditionType);
+            Assert.AreEqual(ConditionType.CELL_VALUE_IS, rule5.ConditionType);
             Assert.AreEqual("0", rule5.Formula1);
             Assert.AreEqual(ComparisonOperator.LT, rule5.ComparisonOperation);
 
             IConditionalFormattingRule rule6 = sheetCF.CreateConditionalFormattingRule(
                     ComparisonOperator.GE, "0");
-            Assert.AreEqual((byte)ConditionType.CELL_VALUE_IS, rule6.ConditionType);
+            Assert.AreEqual(ConditionType.CELL_VALUE_IS, rule6.ConditionType);
             Assert.AreEqual("0", rule6.Formula1);
             Assert.AreEqual(ComparisonOperator.GE, rule6.ComparisonOperation);
 
             IConditionalFormattingRule rule7 = sheetCF.CreateConditionalFormattingRule(
                     ComparisonOperator.LE, "0");
-            Assert.AreEqual((byte)ConditionType.CELL_VALUE_IS, rule7.ConditionType);
+            Assert.AreEqual(ConditionType.CELL_VALUE_IS, rule7.ConditionType);
             Assert.AreEqual("0", rule7.Formula1);
             Assert.AreEqual(ComparisonOperator.LE, rule7.ComparisonOperation);
 
             IConditionalFormattingRule rule8 = sheetCF.CreateConditionalFormattingRule(
                     ComparisonOperator.BETWEEN, "0", "5");
-            Assert.AreEqual((byte)ConditionType.CELL_VALUE_IS, rule8.ConditionType);
+            Assert.AreEqual(ConditionType.CELL_VALUE_IS, rule8.ConditionType);
             Assert.AreEqual("0", rule8.Formula1);
             Assert.AreEqual("5", rule8.Formula2);
             Assert.AreEqual(ComparisonOperator.BETWEEN, rule8.ComparisonOperation);
 
             IConditionalFormattingRule rule9 = sheetCF.CreateConditionalFormattingRule(
                     ComparisonOperator.NOT_BETWEEN, "0", "5");
-            Assert.AreEqual((byte)ConditionType.CELL_VALUE_IS, rule9.ConditionType);
+            Assert.AreEqual(ConditionType.CELL_VALUE_IS, rule9.ConditionType);
             Assert.AreEqual("0", rule9.Formula1);
             Assert.AreEqual("5", rule9.Formula2);
             Assert.AreEqual(ComparisonOperator.NOT_BETWEEN, rule9.ComparisonOperation);
@@ -257,10 +257,10 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual(2, sheet2cf.NumberOfRules);
             Assert.AreEqual("SUM(A1:A5)+10", sheet2cf.GetRule(0).Formula1);
             Assert.AreEqual(ComparisonOperator.EQUAL, sheet2cf.GetRule(0).ComparisonOperation);
-            Assert.AreEqual((byte)ConditionType.CELL_VALUE_IS, sheet2cf.GetRule(0).ConditionType);
+            Assert.AreEqual(ConditionType.CELL_VALUE_IS, sheet2cf.GetRule(0).ConditionType);
             Assert.AreEqual("15", sheet2cf.GetRule(1).Formula1);
             Assert.AreEqual(ComparisonOperator.NOT_EQUAL, sheet2cf.GetRule(1).ComparisonOperation);
-            Assert.AreEqual((byte)ConditionType.CELL_VALUE_IS, sheet2cf.GetRule(1).ConditionType);
+            Assert.AreEqual(ConditionType.CELL_VALUE_IS, sheet2cf.GetRule(1).ConditionType);
         }
         [TestMethod]
         public void TestRemove()
