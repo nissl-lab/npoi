@@ -89,7 +89,7 @@ namespace NPOI.SS.UserModel
          *
          * @return the type of condition
          */
-        byte ConditionType { get; }
+        ConditionType ConditionType { get; }
 
         /**
          * The comparison function used when the type of conditional formatting is Set to

@@ -164,11 +164,11 @@ namespace NPOI.HSSF.UserModel
         /**
 	     * @return -  the conditiontype for the cfrule
 	     */
-        public byte ConditionType
+        public ConditionType ConditionType
         {
             get
             {
-                return cfRuleRecord.ConditionType;
+                return (ConditionType)cfRuleRecord.ConditionType;
             }
         }
         /**
