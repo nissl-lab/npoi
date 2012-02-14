@@ -20,6 +20,7 @@ namespace NPOI.HSSF.Record
 {
     using System;
     using System.Collections;
+    using System.Collections.Generic;
 
     /**
      * HorizontalPageBreak record that stores page breaks at rows
@@ -31,7 +32,7 @@ namespace NPOI.HSSF.Record
     public class HorizontalPageBreakRecord : PageBreakRecord
     {
 
-        public new const short sid = PageBreakRecord.HORIZONTAL_SID;
+        public new const short sid = 0x001B;
 
         /**
          * 
@@ -61,10 +62,10 @@ namespace NPOI.HSSF.Record
         public override Object Clone()
         {
             PageBreakRecord result = new HorizontalPageBreakRecord();
-            IEnumerator iterator = GetBreaksEnumerator();
+            IEnumerator<Break> iterator = GetBreaksEnumerator();
             while (iterator.MoveNext())
             {
-                Break original = (Break)iterator.Current;
+                Break original = iterator.Current;
                 result.AddBreak(original.main, original.subFrom, original.subTo);
             }
             return result;

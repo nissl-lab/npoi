@@ -34,9 +34,9 @@ namespace NPOI.HSSF.Record
     {
         public const short sid = 0x207;
         private bool _is16bitUnicode;
-        int field_1_string_length;
-        private String field_3_string;
-
+        //int field_1_string_length;
+        //private String field_3_string;
+        private String _text;
 
         public StringRecord()
         {
@@ -49,16 +49,16 @@ namespace NPOI.HSSF.Record
          */
         public StringRecord(RecordInputStream in1)
         {
-            field_1_string_length = in1.ReadShort();
+            int field_1_string_length = in1.ReadShort();
             _is16bitUnicode = in1.ReadByte() != 0x00;
 
             if (_is16bitUnicode)
             {
-                field_3_string = in1.ReadUnicodeLEString(field_1_string_length);
+                _text = in1.ReadUnicodeLEString(field_1_string_length);
             }
             else
             {
-                field_3_string = in1.ReadCompressedUnicode(field_1_string_length);
+                _text = in1.ReadCompressedUnicode(field_1_string_length);
             }
         }
 
@@ -73,21 +73,21 @@ namespace NPOI.HSSF.Record
          */
         protected override void Serialize(ContinuableRecordOutput out1)
         {
-            out1.WriteShort(this.field_3_string.Length);
-            out1.WriteStringData(this.field_3_string);
+            out1.WriteShort(this._text.Length);
+            out1.WriteStringData(this._text);
         }
-        public void ProcessContinueRecord(byte[] data)
-        {
+        //public void ProcessContinueRecord(byte[] data)
+        //{
 
-            if (!_is16bitUnicode)
-            {
-                field_3_string += StringUtil.GetFromUnicodeLE(data, 0, field_1_string_length - field_3_string.Length);
-            }
-            else
-            {
-                field_3_string += StringUtil.GetFromCompressedUnicode(data, 0, field_1_string_length - field_3_string.Length);
-            }
-        } 
+        //    if (!_is16bitUnicode)
+        //    {
+        //        field_3_string += StringUtil.GetFromUnicodeLE(data, 0, field_1_string_length - field_3_string.Length);
+        //    }
+        //    else
+        //    {
+        //        field_3_string += StringUtil.GetFromCompressedUnicode(data, 0, field_1_string_length - field_3_string.Length);
+        //    }
+        //} 
         /**
          * return the non static version of the id for this record.
          */
@@ -101,10 +101,10 @@ namespace NPOI.HSSF.Record
          */
         public String String
         {
-            get { return field_3_string; }
+            get { return _text; }
             set
             {
-                this.field_3_string = value;
+                this._text = value;
                 this._is16bitUnicode = StringUtil.HasMultibyte(value);
             }
         }
@@ -116,7 +116,7 @@ namespace NPOI.HSSF.Record
 
             buffer.Append("[STRING]\n");
             buffer.Append("    .string            = ")
-                .Append(field_3_string).Append("\n");
+                .Append(_text).Append("\n");
             buffer.Append("[/STRING]\n");
             return buffer.ToString();
         }
@@ -125,7 +125,7 @@ namespace NPOI.HSSF.Record
         {
             StringRecord rec = new StringRecord();
             rec._is16bitUnicode = this._is16bitUnicode;
-            rec.field_3_string = this.field_3_string;
+            rec._text = this._text;
             return rec;
         }
 

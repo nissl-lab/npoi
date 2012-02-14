@@ -64,7 +64,6 @@ namespace NPOI.HSSF.Record
         private int field_4_reserved5;
         private int field_5_reserved6;
         private int field_8_reserved7;
-
         /*
          * Note - the next three fields are very similar to those on
          * EmbededObjectRefSubRecord(ftPictFmla 0x0009)
@@ -74,7 +73,7 @@ namespace NPOI.HSSF.Record
          */
         private int _unknownPreFormulaInt;
         /** expect tRef, tRef3D, tArea, tArea3D or tName */
-        private Ptg _linkRefPtg;
+        private OperandPtg _linkRefPtg;
         /**
          * Not clear if needed .  Excel seems to be OK if this byte is not present. 
          * Value is often the same as the earlier firstColumn byte. */
@@ -113,7 +112,7 @@ namespace NPOI.HSSF.Record
                     throw new RecordFormatException("Read " + ptgs.Length
                             + " tokens but expected exactly 1");
                 }
-                _linkRefPtg = ptgs[0];
+                _linkRefPtg = (OperandPtg)ptgs[0];
                 if (in1.Remaining > 0)
                 {
                     _unknownPostFormulaByte = (byte)in1.ReadByte();

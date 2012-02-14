@@ -39,7 +39,7 @@ namespace NPOI.HSSF.Record
      */
 
     public class SelectionRecord
-       : Record
+       : StandardRecord
     {
         public const short sid = 0x1d;
         private byte field_1_pane;
@@ -156,26 +156,20 @@ namespace NPOI.HSSF.Record
             return buffer.ToString();
         }
 
-        //hacked to provide one cell reference to 0,0 - 0,0
-        public override int Serialize(int offset, byte [] data)
+        public override void Serialize(ILittleEndianOutput out1)
         {
-            LittleEndian.PutUShort(data, 0 + offset, sid);
-            LittleEndian.PutUShort(data, 2 + offset, this.DataSize);
-            
-            LittleEndian.PutByte(data, 4 + offset,this.Pane);
-            LittleEndian.PutUShort(data, 5 + offset, this.ActiveCellRow);
-            LittleEndian.PutUShort(data, 7 + offset, this.ActiveCellCol);
-            LittleEndian.PutUShort(data, 9 + offset, this.ActiveCellRef);
-            LittleEndian.PutUShort(data, 11 + offset, field_6_refs.Length);
-
+            out1.WriteByte(Pane);
+            out1.WriteShort(ActiveCellRow);
+            out1.WriteShort(ActiveCellCol);
+            out1.WriteShort(ActiveCellRef);
+            int nRefs = field_6_refs.Length;
+            out1.WriteShort(nRefs);
             for (int i = 0; i < field_6_refs.Length; i++)
             {
-                CellRangeAddress8Bit r = field_6_refs[i];
-                r.Serialize(offset + 13 + i * CellRangeAddress8Bit.ENCODED_SIZE, data);
+                field_6_refs[i].Serialize(out1);
             }
-            return 4 + DataSize;
         }
-        private int DataSize
+        protected override int DataSize
         {
             get
             {
@@ -183,10 +177,7 @@ namespace NPOI.HSSF.Record
                     + CellRangeAddress8Bit.GetEncodedSize(field_6_refs.Length);
             }
         }
-        public override int RecordSize
-        {
-            get { return 4 + DataSize; }
-        }
+
 
         public override short Sid
         {

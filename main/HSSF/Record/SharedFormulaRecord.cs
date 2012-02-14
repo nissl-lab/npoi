@@ -23,6 +23,8 @@ namespace NPOI.HSSF.Record
     using System.Collections;
     using NPOI.Util;
     using NPOI.SS.Formula.PTG;
+    using NPOI.SS.Util;
+    using NPOI.SS;
 
     /**
      * Title:        SharedFormulaRecord
@@ -44,17 +46,23 @@ namespace NPOI.HSSF.Record
         private NPOI.SS.Formula.Formula field_7_parsed_expr;
 
         public SharedFormulaRecord()
+            : this(new CellRangeAddress8Bit(0, 0, 0, 0))
         {
-            field_7_parsed_expr = NPOI.SS.Formula.Formula.Create(Ptg.EMPTY_PTG_ARRAY);
+            //field_7_parsed_expr = NPOI.SS.Formula.Formula.Create(Ptg.EMPTY_PTG_ARRAY);
         }
-
+        private SharedFormulaRecord(CellRangeAddress8Bit range):
+            base(range)
+        {
+            field_7_parsed_expr = Formula.Create(Ptg.EMPTY_PTG_ARRAY);
+        }
         /**
          * @param in the RecordInputstream to Read the record from
          */
 
-        public SharedFormulaRecord(RecordInputStream in1):base(in1)
+        public SharedFormulaRecord(RecordInputStream in1)
+            : base(in1)
         {
-            field_5_reserved        = in1.ReadShort();
+            field_5_reserved = in1.ReadShort();
             int field_6_expression_len = in1.ReadShort();
             int nAvailableBytes = in1.Available();
             field_7_parsed_expr = NPOI.SS.Formula.Formula.Read(field_6_expression_len, in1, nAvailableBytes);
@@ -99,63 +107,12 @@ namespace NPOI.HSSF.Record
         }
         public override Object Clone()
         {
-            //Because this record is converted to individual Formula records, this method is not required.
-            throw new NotSupportedException("Cannot clone a SharedFormulaRecord");
+            SharedFormulaRecord result = new SharedFormulaRecord(Range);
+            result.field_5_reserved = field_5_reserved;
+            result.field_7_parsed_expr = field_7_parsed_expr.Copy();
+            return result;
         }
-        /**
-         * Creates a non shared formula from the shared formula counterpart<br/>
-         *
-         * Perhaps this functionality could be implemented in terms of the raw
-         * byte array inside {@link Formula}.
-         */
-        public static Ptg[] ConvertSharedFormulas(Ptg[] ptgs, int formulaRow, int formulaColumn)
-        {
-
-            Ptg[] newPtgStack = new Ptg[ptgs.Length];
-
-            for (int k = 0; k < ptgs.Length; k++)
-            {
-                Ptg ptg = ptgs[k];
-                byte originalOperandClass = unchecked((byte)-1);
-                if (!ptg.IsBaseToken)
-                {
-                    originalOperandClass = ptg.PtgClass;
-                }
-                if (ptg is RefPtgBase)
-                {
-                    RefPtgBase refNPtg = (RefPtgBase)ptg;
-                    ptg = new RefPtg(FixupRelativeRow(formulaRow, refNPtg.Row, refNPtg.IsRowRelative),
-                                         FixupRelativeColumn(formulaColumn, refNPtg.Column, refNPtg.IsColRelative),
-                                         refNPtg.IsRowRelative,
-                                         refNPtg.IsColRelative);
-                    ptg.PtgClass = originalOperandClass;
-                }
-                else if (ptg is AreaPtgBase)
-                {
-                    AreaPtgBase areaNPtg = (AreaPtgBase)ptg;
-                    ptg = new AreaPtg(FixupRelativeRow(formulaRow, areaNPtg.FirstRow, areaNPtg.IsFirstRowRelative),
-                                    FixupRelativeRow(formulaRow, areaNPtg.LastRow, areaNPtg.IsLastRowRelative),
-                                    FixupRelativeColumn(formulaColumn, areaNPtg.FirstColumn, areaNPtg.IsFirstColRelative),
-                                    FixupRelativeColumn(formulaColumn, areaNPtg.LastColumn, areaNPtg.IsLastColRelative),
-                                    areaNPtg.IsFirstRowRelative,
-                                    areaNPtg.IsLastRowRelative,
-                                    areaNPtg.IsFirstColRelative,
-                                    areaNPtg.IsLastColRelative);
-                    ptg.PtgClass = originalOperandClass;
-                }
-                else if (ptg is OperandPtg)
-                {
-                    // Any subclass of OperandPtg is mutable, so it's safest to not share these instances.
-                    ptg = ((OperandPtg)ptg).Copy();
-                }
-                else
-                {
-                    // all other Ptgs are immutable and can be shared
-                }
-                newPtgStack[k] = ptg;
-            }
-            return newPtgStack;
-        }
+        
         protected override void SerializeExtraData(ILittleEndianOutput out1)
         {
             out1.WriteShort(field_5_reserved);
@@ -173,28 +130,15 @@ namespace NPOI.HSSF.Record
             {
                 throw new Exception("Shared Formula Conversion: Coding Error");
             }
-
-            return ConvertSharedFormulas(field_7_parsed_expr.Tokens, formulaRow, formulaColumn);
+            SharedFormula sf = new SharedFormula(SpreadsheetVersion.EXCEL97);
+            return sf.ConvertSharedFormulas(field_7_parsed_expr.Tokens, formulaRow, formulaColumn);
+            //return ConvertSharedFormulas(field_7_parsed_expr.Tokens, formulaRow, formulaColumn);
         }
 
-        private static int FixupRelativeColumn(int currentcolumn, int column, bool relative)
+        
+        public bool IsFormulaSame(SharedFormulaRecord other)
         {
-            if (relative)
-            {
-                // mask out upper bits to produce 'wrapping' at column 256 ("IV")
-                return (column + currentcolumn) & 0x00FF;
-            }
-            return column;
-        }
-
-        private static int FixupRelativeRow(int currentrow, int row, bool relative)
-        {
-            if (relative)
-            {
-                // mask out upper bits to produce 'wrapping' at row 65536
-                return (row + currentrow) & 0x00FFFF;
-            }
-            return row;
+            return field_7_parsed_expr.IsSame(other.field_7_parsed_expr);
         }
     }
 }

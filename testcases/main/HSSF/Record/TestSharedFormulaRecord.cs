@@ -23,6 +23,7 @@ namespace TestCases.HSSF.Record
     using NPOI.SS.Formula;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using NPOI.SS.Formula.PTG;
+    using NPOI.SS;
 
     /**
      * @author Josh Micich
@@ -66,8 +67,8 @@ namespace TestCases.HSSF.Record
             RecordInputStream in1 = TestcaseRecordInputStream.Create(0, SHARED_FORMULA_WITH_REF_ARRAYS_DATA);
             short encodedLen = in1.ReadShort();
             Ptg[] sharedFormula = Ptg.ReadTokens(encodedLen, in1);
-
-            Ptg[] convertedFormula = SharedFormulaRecord.ConvertSharedFormulas(sharedFormula, 100, 200);
+            SharedFormula sf = new SharedFormula(SpreadsheetVersion.EXCEL97);
+            Ptg[] convertedFormula = sf.ConvertSharedFormulas(sharedFormula, 100, 200);
 
             RefPtg refPtg = (RefPtg)convertedFormula[1];
             Assert.AreEqual("$C101", refPtg.ToFormulaString());

@@ -42,17 +42,26 @@ namespace NPOI.HSSF.Record
      */
 
     public class RecalcIdRecord
-       : Record
+       : StandardRecord
     {
         public const short sid = 0x1c1;
-        public short[] field_1_recalcids;
-
-        private bool isNeeded = true;
+        //public short[] field_1_recalcids;
 
         //private bool isNeeded = true;
-
+        private int _reserved0;
+        //private bool isNeeded = true;
+        /**
+     * An unsigned integer that specifies the recalculation engine identifier
+     * of the recalculation engine that performed the last recalculation.
+     * If the value is less than the recalculation engine identifier associated with the application,
+     * the application will recalculate the results of all formulas on
+     * this workbook immediately after loading the file
+     */
+        private int _engineId;
         public RecalcIdRecord()
         {
+            _reserved0 = 0;
+            _engineId = 0;
         }
 
         /**
@@ -62,11 +71,9 @@ namespace NPOI.HSSF.Record
 
         public RecalcIdRecord(RecordInputStream in1)
         {
-            field_1_recalcids = new short[in1.Remaining / 2];
-            for (int k = 0; k < field_1_recalcids.Length; k++)
-            {
-                field_1_recalcids[k] = in1.ReadShort();
-            }
+            in1.ReadUShort(); // field 'rt' should have value 0x01C1, but Excel doesn't care during reading
+    	_reserved0 = in1.ReadUShort();
+    	_engineId = in1.ReadInt();
         }
 
         /**
@@ -74,65 +81,49 @@ namespace NPOI.HSSF.Record
          * @param array of recalc id's
          */
 
-        public void SetRecalcIdArray(short[] array)
-        {
-            field_1_recalcids = array;
-        }
+        //public void SetRecalcIdArray(short[] array)
+        //{
+        //    field_1_recalcids = array;
+        //}
 
-        /**
-         * Get the recalc array.
-         * @return array of recalc id's
-         */
+        ///**
+        // * Get the recalc array.
+        // * @return array of recalc id's
+        // */
 
-        public short[] GetRecalcIdArray()
-        {
-            return field_1_recalcids;
-        }
+        //public short[] GetRecalcIdArray()
+        //{
+        //    return field_1_recalcids;
+        //}
 
         public bool IsNeeded
         {
-            get { return  isNeeded; }
-            set { this.isNeeded = value; }
+            get { return  true; }
         }
 
         public override String ToString()
         {
             StringBuilder buffer = new StringBuilder();
-
             buffer.Append("[RECALCID]\n");
-            buffer.Append("    .elements        = ").Append(field_1_recalcids.Length)
-                .Append("\n");
-            for (int k = 0; k < field_1_recalcids.Length; k++)
-            {
-                buffer.Append("    .element_" + k + "       = ")
-                    .Append(field_1_recalcids[k]).Append("\n");
-            }
+            buffer.Append("    .reserved = ").Append(HexDump.ShortToHex(_reserved0)).Append("\n");
+            buffer.Append("    .engineId = ").Append(HexDump.IntToHex(_engineId)).Append("\n");
             buffer.Append("[/RECALCID]\n");
             return buffer.ToString();
         }
 
-        public override int Serialize(int offset, byte [] data)
+        public override void Serialize(ILittleEndianOutput out1)
         {
-            short[] tabids = GetRecalcIdArray();
-            short Length = (short)(tabids.Length * 2);
-            int byteoffset = 4;
-
-            LittleEndian.PutShort(data, 0 + offset, sid);
-            LittleEndian.PutShort(data, 2 + offset,
-                                  ((short)Length));
-
-            // 2 (num bytes in a short)
-            for (int k = 0; k < (Length / 2); k++)
-            {
-                LittleEndian.PutShort(data, byteoffset + offset, tabids[k]);
-                byteoffset += 2;
-            }
-            return RecordSize;
+            out1.WriteShort(sid); // always write 'rt' field as 0x01C1
+            out1.WriteShort(_reserved0);
+            out1.WriteInt(_engineId);
         }
 
-        public override int RecordSize
+        protected override int DataSize
         {
-            get { return 4 + (GetRecalcIdArray().Length * 2); }
+            get
+            {
+                return 8;
+            }
         }
 
         public override short Sid

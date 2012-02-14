@@ -36,7 +36,7 @@ namespace NPOI.HSSF.Record
      */
 
     public class ScenarioProtectRecord
-       : Record
+       : StandardRecord
     {
         public const short sid = 0xdd;
         private short field_1_protect;
@@ -75,7 +75,13 @@ namespace NPOI.HSSF.Record
                 }
             }
         }
-
+        public override short Sid
+        {
+            get
+            {
+                return sid;
+            }
+        }
         public override String ToString()
         {
             StringBuilder buffer = new StringBuilder();
@@ -87,23 +93,17 @@ namespace NPOI.HSSF.Record
             return buffer.ToString();
         }
 
-        public override int Serialize(int offset, byte [] data)
+        public override void Serialize(ILittleEndianOutput out1)
         {
-            LittleEndian.PutShort(data, 0 + offset, sid);
-            LittleEndian.PutShort(data, 2 + offset,
-                                  ((short)0x02));   // 2 bytes (6 total)
-            LittleEndian.PutShort(data, 4 + offset, field_1_protect);
-            return RecordSize;
+            out1.WriteShort(field_1_protect);
         }
 
-        public override int RecordSize
+        protected override int DataSize
         {
-            get { return 6; }
-        }
-
-        public override short Sid
-        {
-            get { return sid; }
+            get
+            {
+                return 2;
+            }
         }
 
         public override Object Clone()

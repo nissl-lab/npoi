@@ -165,7 +165,7 @@ namespace NPOI.HSSF.Record
             {
                 return field_3_outline_style_level;
             }
-            set { field_3_outline_style_level = value; }
+            set { field_3_outline_style_level = value & 0x00FF; }
         }
 
         // end builtin records

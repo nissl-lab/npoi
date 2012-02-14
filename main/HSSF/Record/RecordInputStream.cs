@@ -82,7 +82,7 @@ namespace NPOI.HSSF.Record
     public class RecordInputStream : Stream, ILittleEndianInput
     {
         /** Maximum size of a single record (minus the 4 byte header) without a continue*/
-        public static short MAX_RECORD_DATA_SIZE = 8224;
+        public const short MAX_RECORD_DATA_SIZE = 8224;
         private static int INVALID_SID_VALUE = -1;
         private static int DATA_LEN_NEEDS_TO_BE_READ = -1;
         //private const int EOF_RECORD_ENCODED_SIZE = 4;

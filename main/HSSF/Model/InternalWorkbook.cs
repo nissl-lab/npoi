@@ -852,7 +852,7 @@ namespace NPOI.HSSF.Model
                 if (records.Tabpos > 0)
                 {
                     TabIdRecord tir = (TabIdRecord)records[records.Tabpos];
-                    if (tir.field_1_tabids.Length < boundsheets.Count)
+                    if (tir._tabids.Length < boundsheets.Count)
                     {
                         FixTabIdRecord();
                     }
@@ -1360,10 +1360,9 @@ namespace NPOI.HSSF.Model
 
         protected Record CreateWindowProtect()
         {
-            WindowProtectRecord retval = new WindowProtectRecord();
-
-            retval.Protect=false;   // by default even when we support it we won't
-            return retval;   // want it to be protected
+            // by default even when we support it we won't
+            // want it to be protected
+            return new WindowProtectRecord(false);
         }
 
         /**
@@ -1439,8 +1438,8 @@ namespace NPOI.HSSF.Model
             retval.Width=(short)0x3a5c;
             retval.Height=(short)0x23be;
             retval.Options=(short)0x38;
-            retval.SelectedTab=(short)0x0;
-            retval.DisplayedTab=(short)0x0;
+            retval.ActiveSheetIndex=(short)0x0;
+            retval.FirstVisibleTab = (short)0x0;
             retval.NumSelectedTabs=(short)1;
             retval.TabWidthRatio=(short)0x258;
             return retval;
@@ -1515,10 +1514,7 @@ namespace NPOI.HSSF.Model
 
         protected Record CreateRefreshAll()
         {
-            RefreshAllRecord retval = new RefreshAllRecord();
-
-            retval.RefreshAll=false;
-            return retval;
+            return new RefreshAllRecord(false);
         }
 
         /**
@@ -2096,12 +2092,9 @@ namespace NPOI.HSSF.Model
          * @see org.apache.poi.hssf.record.Record
          */
 
-        protected Record CreateUseSelFS()
+        private  UseSelFSRecord CreateUseSelFS()
         {
-            UseSelFSRecord retval = new UseSelFSRecord();
-
-            retval.SetFlag((short)0);
-            return retval;
+            return new UseSelFSRecord(false);
         }
 
         /**

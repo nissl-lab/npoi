@@ -30,13 +30,15 @@ namespace NPOI.HSSF.Record
      * @version 2.0-pre
      */
 
-    public class WindowProtectRecord: Record
+    public class WindowProtectRecord : StandardRecord
     {
         public const short sid = 0x19;
-        private short field_1_protect;
-
-        public WindowProtectRecord()
+        //private short field_1_protect;
+        private static BitField settingsProtectedFlag = BitFieldFactory.GetInstance(0x0001);
+        private int _options;
+        public WindowProtectRecord(int options)
         {
+            _options = options;
         }
 
         /**
@@ -45,10 +47,14 @@ namespace NPOI.HSSF.Record
          */
 
         public WindowProtectRecord(RecordInputStream in1)
+            : this(in1.ReadUShort())
         {
-            field_1_protect = in1.ReadShort();
         }
-
+        public WindowProtectRecord(bool protect)
+            :this(0)
+        {
+            Protect = (protect);
+        }
         /**
          * Is this window protected or not
          *
@@ -59,18 +65,20 @@ namespace NPOI.HSSF.Record
         {
             get
             {
-                return (field_1_protect == 1);
+                //return (field_1_protect == 1);
+                return settingsProtectedFlag.IsSet(_options);
             }
             set
             {
-                if (value == true)
-                {
-                    field_1_protect = 1;
-                }
-                else
-                {
-                    field_1_protect = 0;
-                }
+                _options = settingsProtectedFlag.SetBoolean(_options, value);
+                //if (value == true)
+                //{
+                //    field_1_protect = 1;
+                //}
+                //else
+                //{
+                //    field_1_protect = 0;
+                //}
             }
         }
 
@@ -85,19 +93,18 @@ namespace NPOI.HSSF.Record
             return buffer.ToString();
         }
 
-        public override int Serialize(int offset, byte [] data)
+        public override void Serialize(ILittleEndianOutput out1)
         {
-            LittleEndian.PutShort(data, 0 + offset, sid);
-            LittleEndian.PutShort(data, 2 + offset,
-                                  ((short)0x02));   // 2 bytes (6 total)
-            LittleEndian.PutShort(data, 4 + offset, field_1_protect);
-            return RecordSize;
+            out1.WriteShort(_options);
+        }
+        protected override int DataSize
+        {
+            get
+            {
+                return 2;
+            }
         }
 
-        public override int RecordSize
-        {
-            get { return 6; }
-        }
 
         public override short Sid
         {

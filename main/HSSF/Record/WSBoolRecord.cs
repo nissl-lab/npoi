@@ -47,26 +47,20 @@ namespace NPOI.HSSF.Record
             BitFieldFactory.GetInstance(0x01);                               // are automatic page breaks visible
 
         // bits 1 to 3 Unused
-        static private BitField dialog =
-            BitFieldFactory.GetInstance(0x10);                               // is sheet dialog sheet
-        static private BitField applystyles =
-            BitFieldFactory.GetInstance(0x20);                               // whether to apply automatic styles to outlines
-        static private BitField rowsumsbelow = BitFieldFactory.GetInstance(
-            0x40);                                            // whether summary rows will appear below detail in outlines
-        static private BitField rowsumsright = BitFieldFactory.GetInstance(
-            0x80);                                            // whether summary rows will appear right of the detail in outlines
-        static private BitField fittopage =
-            BitFieldFactory.GetInstance(0x01);                               // whether to fit stuff to the page
+        static private BitField dialog = BitFieldFactory.GetInstance(0x10);                               // is sheet dialog sheet
+        static private BitField applystyles = BitFieldFactory.GetInstance(0x20);                               // whether to apply automatic styles to outlines
+        static private BitField rowsumsbelow = BitFieldFactory.GetInstance(0x40);                                            // whether summary rows will appear below detail in outlines
+        static private BitField rowsumsright = BitFieldFactory.GetInstance(0x80);                                            // whether summary rows will appear right of the detail in outlines
+        static private BitField fittopage = BitFieldFactory.GetInstance(0x01);                               // whether to fit stuff to the page
 
         // bit 2 reserved
-        static private BitField Displayguts = BitFieldFactory.GetInstance(
-            0x06);                                            // whether to Display outline symbols (in the gutters)
+        static private BitField Displayguts = BitFieldFactory.GetInstance(0x06);                                            // whether to Display outline symbols (in the gutters)
 
         // bits 4-5 reserved
-        static private BitField alternateexpression =   // whether to use alternate expression eval
-            BitFieldFactory.GetInstance(0x40);
-        static private BitField alternateformula =   // whether to use alternate formula entry
-            BitFieldFactory.GetInstance(0x80);
+        static private BitField alternateexpression = BitFieldFactory.GetInstance(0x40); // whether to use alternate expression eval
+
+        static private BitField alternateformula = BitFieldFactory.GetInstance(0x80); // whether to use alternate formula entry
+
 
         public WSBoolRecord()
         {
@@ -79,11 +73,11 @@ namespace NPOI.HSSF.Record
 
         public WSBoolRecord(RecordInputStream in1)
         {
-        byte[] data = in1.ReadRemainder();
-        field_1_wsbool =
-            data[ 0 ];   
-        field_2_wsbool =
-            data[ 1 ];   
+            byte[] data = in1.ReadRemainder();
+            field_1_wsbool =
+                data[0];
+            field_2_wsbool =
+                data[1];
         }
 
 
@@ -111,7 +105,7 @@ namespace NPOI.HSSF.Record
             {
                 return autobreaks.IsSet(field_1_wsbool);
             }
-            set { field_1_wsbool = autobreaks.SetByteBoolean(field_1_wsbool,value); }
+            set { field_1_wsbool = autobreaks.SetByteBoolean(field_1_wsbool, value); }
         }
 
         /// <summary>
@@ -154,7 +148,7 @@ namespace NPOI.HSSF.Record
         /// <summary>
         /// Get the second byte (see bit Getters)
         /// </summary>
-         public byte WSBool2
+        public byte WSBool2
         {
             get
             {
@@ -165,8 +159,8 @@ namespace NPOI.HSSF.Record
 
 
         /// <summary>
-         /// fit to page option is on
-         /// </summary>
+        /// fit to page option is on
+        /// </summary>
         public bool FitToPage
         {
             get

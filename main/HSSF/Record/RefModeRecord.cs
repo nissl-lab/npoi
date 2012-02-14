@@ -34,7 +34,7 @@ namespace NPOI.HSSF.Record
      */
 
     public class RefModeRecord
-       : Record
+       : StandardRecord
     {
         public const short sid = 0xf;
         public const short USE_A1_MODE = 1;
@@ -80,19 +80,6 @@ namespace NPOI.HSSF.Record
             return buffer.ToString();
         }
 
-        public override int Serialize(int offset, byte [] data)
-        {
-            LittleEndian.PutShort(data, 0 + offset, sid);
-            LittleEndian.PutShort(data, 2 + offset, (short)0x2);
-            LittleEndian.PutShort(data, 4 + offset, Mode);
-            return RecordSize;
-        }
-
-        public override int RecordSize
-        {
-            get { return 6; }
-        }
-
         public override short Sid
         {
             get { return sid; }
@@ -103,6 +90,16 @@ namespace NPOI.HSSF.Record
             RefModeRecord rec = new RefModeRecord();
             rec.field_1_mode = field_1_mode;
             return rec;
+        }
+
+        protected override int DataSize
+        {
+            get { return 2; }
+        }
+
+        public override void Serialize(ILittleEndianOutput out1)
+        {
+            out1.WriteShort(Mode);
         }
     }
 }

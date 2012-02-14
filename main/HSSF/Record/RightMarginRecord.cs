@@ -28,7 +28,7 @@ namespace NPOI.HSSF.Record
     /**
      * Record for the right margin. * NOTE: This source was automatically generated. * @author Shawn Laubach (slaubach at apache dot org)
      */
-    public class RightMarginRecord : Record, Margin
+    public class RightMarginRecord : StandardRecord, Margin
     {
         public const short sid = 0x27;
         private double field_1_margin;
@@ -53,27 +53,24 @@ namespace NPOI.HSSF.Record
             return buffer.ToString();
         }
 
-        public override int Serialize(int offset, byte [] data)
-        {
-            LittleEndian.PutShort(data, 0 + offset, sid);
-            LittleEndian.PutShort(data, 2 + offset, (short)(RecordSize - 4));
-            LittleEndian.PutDouble(data, 4 + offset, field_1_margin);
-            return RecordSize;
-        }
-
-        /**
-         * Size of record (exluding 4 byte header)
-         */
-        public override int RecordSize 
-        { 
-            get { return 4 + 8; } 
-        }
+        
 
         public override short Sid 
         { 
             get { return sid; } 
         }
+        public override void Serialize(ILittleEndianOutput out1)
+        {
+            out1.WriteDouble(field_1_margin);
+        }
 
+        protected override int DataSize
+        {
+            get
+            {
+                return 8;
+            }
+        }
         /**
          * Get the margin field for the RightMargin record.
          */

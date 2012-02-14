@@ -62,7 +62,7 @@ namespace TestCases.HSSF.Record.Aggregates
         {
             IList records = new ArrayList();
             FormulaRecord formulaRecord = new FormulaRecord();
-            UnknownRecord unknownRecord = new UnknownRecord();
+            //UnknownRecord unknownRecord = new UnknownRecord();
             BlankRecord blankRecord = new BlankRecord();
             WindowOneRecord windowOneRecord = new WindowOneRecord();
             formulaRecord.Row = 1;

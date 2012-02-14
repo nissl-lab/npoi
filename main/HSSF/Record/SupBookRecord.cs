@@ -52,7 +52,7 @@ namespace NPOI.HSSF.Record
         }
         public static SupBookRecord CreateAddInFunctions()
         {
-            return new SupBookRecord(true, (short)0);
+            return new SupBookRecord(true, (short)1);
         }
         public static SupBookRecord CreateExternalReferences(String url, String[] sheetNames)
         {

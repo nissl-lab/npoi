@@ -1782,8 +1782,8 @@ using NPOI.POIFS.FileSystem;
                 }
             }
             Assert.IsNotNull(tr);
-            Assert.AreEqual(1, tr.field_1_tabids.Length);
-            Assert.AreEqual(0, tr.field_1_tabids[0]);
+            Assert.AreEqual(1, tr._tabids.Length);
+            Assert.AreEqual(0, tr._tabids[0]);
 
             // Ensure the print setup
             Assert.AreEqual("new_sheet!$A$1:$C$1", wb.GetPrintArea(0));

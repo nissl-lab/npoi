@@ -433,6 +433,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POIFS\FileSystem\BATManaged.cs" />
+    <Compile Include="SS\Formula\SharedFormula.cs" />
     <Compile Include="Util\BlockingInputStream.cs" />
     <Compile Include="Util\CloseIgnoringInputStream.cs" />
     <Compile Include="POIFS\FileSystem\DirectoryEntry.cs" />

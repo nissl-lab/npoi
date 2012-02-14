@@ -33,7 +33,7 @@ namespace NPOI.HSSF.Record
      */
 
     public class WindowOneRecord
-       : Record
+       : StandardRecord
     {
         public const short sid = 0x3d;
 
@@ -211,6 +211,7 @@ namespace NPOI.HSSF.Record
          * deprecated May 2008
          * @deprecated - Misleading name - use GetActiveSheetIndex() 
          */
+        [Obsolete]
         public short SelectedTab
         {
             get { return (short)ActiveSheetIndex; }
@@ -230,6 +231,7 @@ namespace NPOI.HSSF.Record
          * deprecated May 2008
          * @deprecated - Misleading name - use GetFirstVisibleTab() 
          */
+        [Obsolete]
         public short DisplayedTab
         {
             get { return (short)FirstVisibleTab; }
@@ -295,28 +297,27 @@ namespace NPOI.HSSF.Record
             return buffer.ToString();
         }
 
-        public override int Serialize(int offset, byte [] data)
+        
+        public override void Serialize(ILittleEndianOutput out1)
         {
-            LittleEndian.PutShort(data, 0 + offset, sid);
-            LittleEndian.PutShort(data, 2 + offset,
-                                  ((short)0x12));   // 18 bytes (22 total)
-            LittleEndian.PutShort(data, 4 + offset, HorizontalHold);
-            LittleEndian.PutShort(data, 6 + offset, VerticalHold);
-            LittleEndian.PutShort(data, 8 + offset, Width);
-            LittleEndian.PutShort(data, 10 + offset, Height);
-            LittleEndian.PutShort(data, 12 + offset, Options);
-            LittleEndian.PutUShort(data, 14 + offset, ActiveSheetIndex);
-            LittleEndian.PutUShort(data, 16 + offset, FirstVisibleTab);
-            LittleEndian.PutShort(data, 18 + offset, NumSelectedTabs);
-            LittleEndian.PutShort(data, 20 + offset, TabWidthRatio);
-            return RecordSize;
+            out1.WriteShort(HorizontalHold);
+            out1.WriteShort(VerticalHold);
+            out1.WriteShort(Width);
+            out1.WriteShort(Height);
+            out1.WriteShort(Options);
+            out1.WriteShort(ActiveSheetIndex);
+            out1.WriteShort(FirstVisibleTab);
+            out1.WriteShort(NumSelectedTabs);
+            out1.WriteShort(TabWidthRatio);
         }
 
-        public override int RecordSize
+        protected override int DataSize
         {
-            get { return 22; }
+            get
+            {
+                return 18;
+            }
         }
-
         public override short Sid
         {
             get { return sid; }

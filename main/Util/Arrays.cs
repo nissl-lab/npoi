@@ -61,6 +61,70 @@ namespace NPOI.Util
                 array[i] = defaultValue;
             }
         }
+        /**
+             * Assigns the specified byte value to each element of the specified
+             * range of the specified array of bytes.  The range to be filled
+             * extends from index <tt>fromIndex</tt>, inclusive, to index
+             * <tt>toIndex</tt>, exclusive.  (If <tt>fromIndex==toIndex</tt>, the
+             * range to be filled is empty.)
+             *
+             * @param a the array to be filled
+             * @param fromIndex 
+             *        
+             * @param toIndex 
+             *        
+             * @param val 
+             * @throws IllegalArgumentException if <tt>fromIndex &gt; toIndex</tt>
+             * @throws ArrayIndexOutOfBoundsException if <tt>fromIndex &lt; 0</tt> or
+             *         <tt>toIndex &gt; a.length</tt>
+             */
+        //
+
+        /// <summary>
+        /// Assigns the specified byte value to each element of the specified
+        /// range of the specified array of bytes.  The range to be filled
+        /// extends from index <tt>fromIndex</tt>, inclusive, to index
+        /// <tt>toIndex</tt>, exclusive.  (If <tt>fromIndex==toIndex</tt>, the
+        /// range to be filled is empty.)
+        /// 
+        /// @throws IllegalArgumentException if <tt>fromIndex &gt; toIndex</tt>
+        /// @throws ArrayIndexOutOfBoundsException if <tt>fromIndex &lt; 0</tt> or
+        ///         <tt>toIndex &gt; a.length</tt>
+        /// </summary>
+        /// <param name="a">the array to be filled</param>
+        /// <param name="fromIndex">the index of the first element (inclusive) to be filled with the specified value</param>
+        /// <param name="toIndex">the index of the last element (exclusive) to be filled with the specified value</param>
+        /// <param name="val">the value to be stored in all elements of the array</param>
+        public static void Fill(byte[] a, int fromIndex, int toIndex, byte val)
+        {
+            RangeCheck(a.Length, fromIndex, toIndex);
+            for (int i = fromIndex; i < toIndex; i++)
+                a[i] = val;
+        }
+
+        /// <summary>
+        /// Checks that {@code fromIndex} and {@code toIndex} are in
+        /// the range and throws an appropriate exception, if they aren't.
+        /// </summary>
+        /// <param name="length"></param>
+        /// <param name="fromIndex"></param>
+        /// <param name="toIndex"></param>
+        private static void RangeCheck(int length, int fromIndex, int toIndex)
+        {
+            if (fromIndex > toIndex)
+            {
+                throw new ArgumentException(
+                    "fromIndex(" + fromIndex + ") > toIndex(" + toIndex + ")");
+            }
+            if (fromIndex < 0)
+            {
+                throw new IndexOutOfRangeException("fromIndex(" + fromIndex + ")");
+            }
+            if (toIndex > length)
+            {
+                throw new IndexOutOfRangeException( "toIndex(" + toIndex + ")");
+            }
+        }
         /// <summary>
         /// Convert Array to ArrayList
         /// </summary>

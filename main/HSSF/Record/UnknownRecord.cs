@@ -49,20 +49,20 @@ namespace NPOI.HSSF.Record
         public const int BITMAP_00E9 = 0x00E9;
         public const int PHONETICPR_00EF = 0x00EF;
         public const int LABELRANGES_015F = 0x015F;
-      	public const int USERSVIEWBEGIN_01AA  = 0x01AA;
-    	public const int USERSVIEWEND_01AB    = 0x01AB;
+      	//public const int USERSVIEWBEGIN_01AA  = 0x01AA;
+    	//public const int USERSVIEWEND_01AB    = 0x01AB;
         public const int QUICKTIP_0800 = 0x0800;
         public const int SHEETEXT_0862 = 0x0862; // OOO calls this SHEETLAYOUT
         public const int SHEETPROTECTION_0867 = 0x0867;
         public const int RANGEPROTECTION_0868 = 0x0868;
         public const int HEADER_FOOTER_089C   = 0x089C;
-
+        public const int CODENAME_1BA = 0x01BA;
         private int _sid = 0;
         private byte[] _rawData = null;
 
-        public UnknownRecord()
-        {
-        }
+        //public UnknownRecord()
+        //{
+        //}
 
         /**
          * @param id    id of the record -not Validated, just stored for serialization
@@ -86,7 +86,13 @@ namespace NPOI.HSSF.Record
             _sid = in1.Sid;
             _rawData = in1.ReadRemainder();
 
-            //Console.WriteLine("UnknownRecord: 0x"+StringUtil.ToHexString(sid));
+            //if (false && GetBiffName(_sid) == null)
+            //{
+            //    // unknown sids in the range 0x0004-0x0013 are probably 'sub-records' of ObjectRecord
+            //    // those sids are in a different number space.
+            //    // TODO - put unknown OBJ sub-records in a different class
+            //    System.Console.WriteLine("Unknown record 0x" + _sid.ToString("X"));
+            //}
         }
 
 	/**
@@ -166,8 +172,6 @@ namespace NPOI.HSSF.Record
                 case LABELRANGES_015F: return "LABELRANGES";
                 case 0x01BA: return "CODENAME";
                 case 0x01A9: return "USERBVIEW";
-                case USERSVIEWBEGIN_01AA: return "USERSVIEWBEGIN";
-                case USERSVIEWEND_01AB: return "USERSVIEWEND";
                 case 0x01AD: return "QSI";
 
                 case 0x01C0: return "EXCEL9FILE";
@@ -179,7 +183,7 @@ namespace NPOI.HSSF.Record
 
                 case 0x0812: return "CONTINUEFRT";
                 case QUICKTIP_0800: return "QUICKTIP";
-                case SHEETEXT_0862: return "SHEETEXT";
+                //case SHEETEXT_0862: return "SHEETEXT";
                 case 0x0863: return "BOOKEXT";
                 case 0x0864: return "SXADDL";    // Pivot Table Additional Info
                 case SHEETPROTECTION_0867: return "SHEETPROTECTION";

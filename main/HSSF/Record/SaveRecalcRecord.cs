@@ -34,7 +34,7 @@ namespace NPOI.HSSF.Record
      */
 
     public class SaveRecalcRecord
-       : Record
+       : StandardRecord
     {
         public const short sid = 0x5f;
         private short field_1_recalc;
@@ -83,17 +83,14 @@ namespace NPOI.HSSF.Record
             return buffer.ToString();
         }
 
-        public override int Serialize(int offset, byte [] data)
+        public override void Serialize(ILittleEndianOutput out1)
         {
-            LittleEndian.PutShort(data, 0 + offset, sid);
-            LittleEndian.PutShort(data, 2 + offset, (short)0x2);
-            LittleEndian.PutShort(data, 4 + offset, field_1_recalc);
-            return RecordSize;
+            out1.WriteShort(field_1_recalc);
         }
 
-        public override int RecordSize
+        protected override int DataSize
         {
-            get { return 6; }
+            get { return 2; }
         }
 
         public override short Sid

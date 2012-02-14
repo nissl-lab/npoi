@@ -30,22 +30,23 @@ namespace NPOI.HSSF.Record
      * @author Olivier Leprince
      */
 
-    public class UncalcedRecord : Record
+    public class UncalcedRecord : StandardRecord
     {
         public const short sid = 0x5E;
-
+        private short _reserved;
         /**
          * Default constructor
          */
         public UncalcedRecord()
         {
+            _reserved = 0;
         }
         /**
          * Read constructor
          */
         public UncalcedRecord(RecordInputStream in1)
         {
-            short Unused = in1.ReadShort();
+            _reserved = in1.ReadShort();
 	    }
 
         public override short Sid
@@ -61,17 +62,14 @@ namespace NPOI.HSSF.Record
             return buffer.ToString();
         }
 
-        public override int Serialize(int offset, byte [] data)
+        public override void Serialize(ILittleEndianOutput out1)
         {
-            LittleEndian.PutShort(data, 0 + offset, sid);
-            LittleEndian.PutShort(data, 2 + offset, (short)2);
-            LittleEndian.PutShort(data, 4 + offset, (short)0); // Unused
-            return RecordSize;
+           out1.WriteShort(_reserved);
         }
 
-        public override int RecordSize
+        protected override int DataSize
         {
-            get { return UncalcedRecord.StaticRecordSize; }
+            get { return 2; }
         }
 
         public static int StaticRecordSize

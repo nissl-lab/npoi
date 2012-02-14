@@ -18,6 +18,7 @@
 namespace NPOI.SS.Formula.PTG
 {
     using System;
+    using NPOI.Util;
     /**
      * @author Josh Micich
      */
@@ -31,6 +32,17 @@ namespace NPOI.SS.Formula.PTG
         public override bool IsBaseToken
         {
             get { return false; }
+        }
+        public OperandPtg Copy()
+        {
+            try
+            {
+                return (OperandPtg)Clone();
+            }
+            catch (NotSupportedException e)
+            {
+                throw new RuntimeException(e);
+            }
         }
     }
 }

@@ -47,27 +47,23 @@ namespace NPOI.HSSF.Record
 
     public class SSTRecord : ContinuableRecord
     {
-
+        public const short sid = 0x00FC;
         private static UnicodeString EMPTY_STRING = new UnicodeString("");
 
         /** how big can an SST record be? As big as any record can be: 8228 bytes */
         public const int MAX_RECORD_SIZE = 8228;
 
         /** standard record overhead: two shorts (record id plus data space size)*/
-        public const int STD_RECORD_OVERHEAD =
-                2 * LittleEndianConsts.SHORT_SIZE;
+        public const int STD_RECORD_OVERHEAD =  2 * LittleEndianConsts.SHORT_SIZE;
 
         /** SST overhead: the standard record overhead, plus the number of strings and the number of Unique strings -- two ints */
-        public const int SST_RECORD_OVERHEAD =
-                (STD_RECORD_OVERHEAD + (2 * LittleEndianConsts.INT_SIZE));
+        public const int SST_RECORD_OVERHEAD =                (STD_RECORD_OVERHEAD + (2 * LittleEndianConsts.INT_SIZE));
 
         /** how much data can we stuff into an SST record? That would be _max minus the standard SST record overhead */
-        public const int MAX_DATA_SPACE = MAX_RECORD_SIZE - SST_RECORD_OVERHEAD;
+        public const int MAX_DATA_SPACE = RecordInputStream.MAX_RECORD_DATA_SIZE - 8;//MAX_RECORD_SIZE - SST_RECORD_OVERHEAD;
 
         /** overhead for each string includes the string's Char count (a short) and the flag describing its Charistics (a byte) */
-        public const int STRING_MINIMAL_OVERHEAD = LittleEndianConsts.SHORT_SIZE + LittleEndianConsts.BYTE_SIZE;
-
-        public const short sid = 0xfc;
+        //public const int STRING_MINIMAL_OVERHEAD = LittleEndianConsts.SHORT_SIZE + LittleEndianConsts.BYTE_SIZE;
 
         /** Union of strings in the SST and EXTSST */
         private int field_1_num_strings;

@@ -34,13 +34,15 @@ namespace NPOI.HSSF.Record
      */
 
     public class TabIdRecord
-       : Record
+       : StandardRecord
     {
         public const short sid = 0x13d;
-        public short[] field_1_tabids;
+        private static short[] EMPTY_SHORT_ARRAY = { };
+        public short[] _tabids;
 
         public TabIdRecord()
         {
+            _tabids = EMPTY_SHORT_ARRAY;
         }
 
         /**
@@ -50,10 +52,10 @@ namespace NPOI.HSSF.Record
 
         public TabIdRecord(RecordInputStream in1)
         {
-            field_1_tabids = new short[in1.Remaining / 2];
-            for (int k = 0; k < field_1_tabids.Length; k++)
+            _tabids = new short[in1.Remaining / 2];
+            for (int k = 0; k < _tabids.Length; k++)
             {
-                field_1_tabids[k] = in1.ReadShort();
+                _tabids[k] = in1.ReadShort();
             }
         }
 
@@ -64,7 +66,7 @@ namespace NPOI.HSSF.Record
 
         public void SetTabIdArray(short[] array)
         {
-            field_1_tabids = array;
+            _tabids = array;
         }
 
         /**
@@ -72,51 +74,67 @@ namespace NPOI.HSSF.Record
          * @return array of tab id's {0,1,2}
          */
 
-        public short[] GetTabIdArray()
-        {
-            return field_1_tabids;
-        }
+        //public short[] GetTabIdArray()
+        //{
+        //    return field_1_tabids;
+        //}
 
         public override String ToString()
         {
             StringBuilder buffer = new StringBuilder();
 
             buffer.Append("[TABID]\n");
-            buffer.Append("    .elements        = ").Append(field_1_tabids.Length)
+            buffer.Append("    .elements        = ").Append(_tabids.Length)
                 .Append("\n");
-            for (int k = 0; k < field_1_tabids.Length; k++)
+            for (int k = 0; k < _tabids.Length; k++)
             {
                 buffer.Append("    .element_" + k + "       = ")
-                    .Append(field_1_tabids[k]).Append("\n");
+                    .Append(_tabids[k]).Append("\n");
             }
             buffer.Append("[/TABID]\n");
             return buffer.ToString();
         }
 
-        public override int Serialize(int offset, byte [] data)
+        //public override int Serialize(int offset, byte [] data)
+        //{
+        //    short[] tabids = GetTabIdArray();
+        //    short Length = (short)(tabids.Length * 2);
+        //    int byteoffset = 4;
+
+        //    LittleEndian.PutShort(data, 0 + offset, sid);
+        //    LittleEndian.PutShort(data, 2 + offset,
+        //                          ((short)Length));   // nubmer tabids *
+
+        //    // 2 (num bytes in a short)
+        //    for (int k = 0; k < (Length / 2); k++)
+        //    {
+        //        LittleEndian.PutShort(data, byteoffset + offset, tabids[k]);
+        //        byteoffset += 2;
+        //    }
+        //    return RecordSize;
+        //}
+
+        //public override int RecordSize
+        //{
+        //    get { return 4 + (GetTabIdArray().Length * 2); }
+        //}
+        public override void Serialize(ILittleEndianOutput out1)
         {
-            short[] tabids = GetTabIdArray();
-            short Length = (short)(tabids.Length * 2);
-            int byteoffset = 4;
+            short[] tabids = _tabids;
 
-            LittleEndian.PutShort(data, 0 + offset, sid);
-            LittleEndian.PutShort(data, 2 + offset,
-                                  ((short)Length));   // nubmer tabids *
-
-            // 2 (num bytes in a short)
-            for (int k = 0; k < (Length / 2); k++)
+            for (int i = 0; i < tabids.Length; i++)
             {
-                LittleEndian.PutShort(data, byteoffset + offset, tabids[k]);
-                byteoffset += 2;
+                out1.WriteShort(tabids[i]);
             }
-            return RecordSize;
         }
 
-        public override int RecordSize
+        protected override int DataSize
         {
-            get { return 4 + (GetTabIdArray().Length * 2); }
+            get
+            {
+                return _tabids.Length * 2;
+            }
         }
-
         public override short Sid
         {
             get { return sid; }

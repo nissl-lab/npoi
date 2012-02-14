@@ -34,15 +34,16 @@ namespace NPOI.HSSF.Record
      */
 
     public class UseSelFSRecord
-       : Record
+       : StandardRecord
     {
         public static short sid = 0x160;
-        public static short TRUE = 1;
-        public static short FALSE = 0;
-        private short field_1_flag;
 
-        public UseSelFSRecord()
+        private static BitField useNaturalLanguageFormulasFlag = BitFieldFactory.GetInstance(0x0001);
+        private int _options;
+
+        public UseSelFSRecord(int options)
         {
+            _options = options;
         }
 
         /**
@@ -50,11 +51,15 @@ namespace NPOI.HSSF.Record
          * @param in the RecordInputstream to Read the record from
          */
 
-        public UseSelFSRecord(RecordInputStream in1)
+        public UseSelFSRecord(RecordInputStream in1) :
+            this(in1.ReadUShort())
         {
-            field_1_flag = in1.ReadShort();
         }
-
+        public UseSelFSRecord(bool b)
+            : this(0)
+        {
+            _options = useNaturalLanguageFormulasFlag.SetBoolean(_options, b);
+        }
         /**
          * turn the flag on or off
          *
@@ -63,10 +68,10 @@ namespace NPOI.HSSF.Record
          * @see #FALSE
          */
 
-        public void SetFlag(short flag)
-        {
-            field_1_flag = flag;
-        }
+        //public void SetFlag(short flag)
+        //{
+        //    field_1_flag = flag;
+        //}
 
         /**
          * returns whether we use natural language formulas or not
@@ -76,10 +81,10 @@ namespace NPOI.HSSF.Record
          * @see #FALSE
          */
 
-        public short GetFlag()
-        {
-            return field_1_flag;
-        }
+        //public short GetFlag()
+        //{
+        //    return field_1_flag;
+        //}
 
         public override String ToString()
         {
@@ -87,23 +92,22 @@ namespace NPOI.HSSF.Record
 
             buffer.Append("[USESELFS]\n");
             buffer.Append("    .flag            = ")
-                .Append(StringUtil.ToHexString(GetFlag())).Append("\n");
+                .Append(HexDump.ShortToHex(_options)).Append("\n");
             buffer.Append("[/USESELFS]\n");
             return buffer.ToString();
         }
 
-        public override int Serialize(int offset, byte [] data)
+        public override void Serialize(ILittleEndianOutput out1)
         {
-            LittleEndian.PutShort(data, 0 + offset, sid);
-            LittleEndian.PutShort(data, 2 + offset,
-                                  ((short)0x02));   // 2 bytes (6 total)
-            LittleEndian.PutShort(data, 4 + offset, GetFlag());
-            return RecordSize;
+            out1.WriteShort(_options);
         }
 
-        public override int RecordSize
+        protected override int DataSize
         {
-            get { return 6; }
+            get
+            {
+                return 2;
+            }
         }
 
         public override short Sid

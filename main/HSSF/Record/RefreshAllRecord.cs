@@ -34,13 +34,16 @@ namespace NPOI.HSSF.Record
      */
 
     public class RefreshAllRecord
-       : Record
+       : StandardRecord
     {
         public static short sid = 0x1B7;
-        private short field_1_refreshall;
+        //private short field_1_refreshall;
+        private static BitField refreshFlag = BitFieldFactory.GetInstance(0x0001);
 
-        public RefreshAllRecord()
-        {
+    private int _options;
+    public RefreshAllRecord(int options)
+    {
+        _options = options;
         }
 
         /**
@@ -49,10 +52,14 @@ namespace NPOI.HSSF.Record
          */
 
         public RefreshAllRecord(RecordInputStream in1)
+            : this(in1.ReadUShort())
         {
-            field_1_refreshall = in1.ReadShort();
         }
-
+        public RefreshAllRecord(bool refreshAll)
+            : this(0)
+        {
+            RefreshAll = (refreshAll);
+        }
         /**
          * Get whether to refresh all external data when loading a sheet
          * @return refreshall or not
@@ -60,17 +67,10 @@ namespace NPOI.HSSF.Record
 
         public bool RefreshAll
         {
-            get{return (field_1_refreshall == 1);}
+            get { return refreshFlag.IsSet(_options); }
             set
             {
-                if (value)
-                {
-                    field_1_refreshall = 1;
-                }
-                else
-                {
-                    field_1_refreshall = 0;
-                }
+                _options = refreshFlag.SetBoolean(_options, value);
             }
         }
 
@@ -85,23 +85,26 @@ namespace NPOI.HSSF.Record
             return buffer.ToString();
         }
 
-        public override int Serialize(int offset, byte [] data)
+        public override void Serialize(ILittleEndianOutput out1)
         {
-            LittleEndian.PutShort(data, 0 + offset, sid);
-            LittleEndian.PutShort(data, 2 + offset,
-                                  ((short)0x02));   // 2 bytes (6 total)
-            LittleEndian.PutShort(data, 4 + offset, field_1_refreshall);
-            return RecordSize;
+            out1.WriteShort(_options);
         }
 
-        public override int RecordSize
+        protected override int DataSize
         {
-            get { return 6; }
+            get
+            {
+                return 2;
+            }
         }
 
         public override short Sid
         {
             get { return sid; }
+        }
+        public override Object Clone()
+        {
+            return new RefreshAllRecord(_options);
         }
     }
 }

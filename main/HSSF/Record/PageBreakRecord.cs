@@ -22,6 +22,7 @@ namespace NPOI.HSSF.Record
     using System.Collections;
     using System.Text;
     using NPOI.Util;
+    using System.Collections.Generic;
 
 
     /**
@@ -35,17 +36,14 @@ namespace NPOI.HSSF.Record
      * @see VerticalPageBreakRecord
      * @author Danny Mui (dmui at apache dot org)
      */
-    public class PageBreakRecord : Record
+    public class PageBreakRecord : StandardRecord
     {
         private const bool IS_EMPTY_RECORD_WRITTEN = false;
         private static int[] EMPTY_INT_ARRAY = { };
 
-
-        public const short HORIZONTAL_SID = (short)0x1B;
-        public const short VERTICAL_SID = (short)0x1A;
         public short sid;
         // fix warning CS0169 "never used": private short numBreaks;
-        private IList _breaks;
+        private IList<Break> _breaks;
         private Hashtable _breakMap;
 
         /**
@@ -77,25 +75,24 @@ namespace NPOI.HSSF.Record
                 this.subTo = subTo;
             }
 
-            public int Serialize(int offset, byte[] data)
+            public void Serialize(ILittleEndianOutput out1)
             {
-                LittleEndian.PutUShort(data, offset + 0, main + 1);
-                LittleEndian.PutUShort(data, offset + 2, subFrom);
-                LittleEndian.PutUShort(data, offset + 4, subTo);
-                return ENCODED_SIZE;
+                out1.WriteShort(main + 1);
+                out1.WriteShort(subFrom);
+                out1.WriteShort(subTo);
             }
         }
 
         public PageBreakRecord()
         {
-            _breaks = new ArrayList();
+            _breaks = new List<Break>();
             _breakMap = new Hashtable();
         }
 
         public PageBreakRecord(RecordInputStream in1)
         {
             int nBreaks = in1.ReadShort();
-            _breaks = new ArrayList(nBreaks + 2);
+            _breaks = new List<Break>(nBreaks + 2);
             _breakMap = new Hashtable();
 
             for (int k = 0; k < nBreaks; k++)
@@ -111,28 +108,36 @@ namespace NPOI.HSSF.Record
             get { return sid; }
         }
 
-        public override int Serialize(int offset, byte[] data)
+        //public override int Serialize(int offset, byte[] data)
+        //{
+        //    int nBreaks = _breaks.Count;
+        //    if (!IS_EMPTY_RECORD_WRITTEN && nBreaks < 1)
+        //    {
+        //        return 0;
+        //    }
+        //    int dataSize = DataSize;
+        //    LittleEndian.PutUShort(data, offset + 0, Sid);
+        //    LittleEndian.PutUShort(data, offset + 2, dataSize);
+        //    LittleEndian.PutUShort(data, offset + 4, nBreaks);
+        //    int pos = 6;
+        //    for (int i = 0; i < nBreaks; i++)
+        //    {
+        //        Break br = (Break)_breaks[i];
+        //        pos += br.Serialize(offset + pos, data);
+        //    }
+
+        //    return 4 + dataSize;
+        //}
+        public override void Serialize(ILittleEndianOutput out1)
         {
             int nBreaks = _breaks.Count;
-            if (!IS_EMPTY_RECORD_WRITTEN && nBreaks < 1)
-            {
-                return 0;
-            }
-            int dataSize = DataSize;
-            LittleEndian.PutUShort(data, offset + 0, Sid);
-            LittleEndian.PutUShort(data, offset + 2, dataSize);
-            LittleEndian.PutUShort(data, offset + 4, nBreaks);
-            int pos = 6;
+            out1.WriteShort(nBreaks);
             for (int i = 0; i < nBreaks; i++)
             {
-                Break br = (Break)_breaks[i];
-                pos += br.Serialize(offset + pos, data);
+                _breaks[i].Serialize(out1);
             }
-
-            return 4 + dataSize;
         }
-
-        private int DataSize
+        protected override int DataSize
         {
             get
             {
@@ -140,26 +145,26 @@ namespace NPOI.HSSF.Record
             }
         }
 
-        public IEnumerator GetBreaksEnumerator()
+        public IEnumerator<Break> GetBreaksEnumerator()
         {
-            if (_breaks == null)
-                return new ArrayList().GetEnumerator();
-            else
-                return _breaks.GetEnumerator();
+            //if (_breaks == null)
+            //    return new ArrayList().GetEnumerator();
+            //else
+            return _breaks.GetEnumerator();
         }
 
         public override String ToString()
         {
             StringBuilder retval = new StringBuilder();
 
-            if (Sid != HORIZONTAL_SID && Sid != VERTICAL_SID)
-                return "[INVALIDPAGEBREAK]\n     .Sid =" + Sid + "[INVALIDPAGEBREAK]";
+            //if (Sid != HORIZONTAL_SID && Sid != VERTICAL_SID)
+            //    return "[INVALIDPAGEBREAK]\n     .Sid =" + Sid + "[INVALIDPAGEBREAK]";
 
             String label;
             String mainLabel;
             String subLabel;
 
-            if (Sid == HORIZONTAL_SID)
+            if (Sid == HorizontalPageBreakRecord.sid)
             {
                 label = "HORIZONTALPAGEBREAK";
                 mainLabel = "row";
@@ -197,11 +202,11 @@ namespace NPOI.HSSF.Record
          */
         public void AddBreak(int main, int subFrom, int subTo)
         {
-            if (_breaks == null)
-            {
-                _breaks = new ArrayList(NumBreaks + 10);
-                _breakMap = new Hashtable();
-            }
+            //if (_breaks == null)
+            //{
+            //    _breaks = new ArrayList(NumBreaks + 10);
+            //    _breakMap = new Hashtable();
+            //}
             int key = (int)main;
             Break region = (Break)_breakMap[key];
             if (region != null)
@@ -262,10 +267,10 @@ namespace NPOI.HSSF.Record
          */
         public Break GetBreak(int main)
         {
-            if (_breakMap == null)
-                return null;
-            int rowKey = (int)main;
-            return (Break)_breakMap[rowKey];
+            //if (_breakMap == null)
+            //    return null;
+            //int rowKey = (int)main;
+            return (Break)_breakMap[main];
         }
         public int[] GetBreaks()
         {
@@ -277,7 +282,7 @@ namespace NPOI.HSSF.Record
             int[] result = new int[count];
             for (int i = 0; i < count; i++)
             {
-                Break breakItem = (Break)_breaks[i];
+                Break breakItem = _breaks[i];
                 result[i] = breakItem.main;
             }
             return result;

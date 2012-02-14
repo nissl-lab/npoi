@@ -32,7 +32,7 @@ namespace NPOI.HSSF.Record
      */
 
     public class WriteProtectRecord
-       : Record
+       : StandardRecord
     {
         public const short sid = 0x86;
 
@@ -59,18 +59,17 @@ namespace NPOI.HSSF.Record
             return buffer.ToString();
         }
 
-        public override int Serialize(int offset, byte [] data)
+        public override void Serialize(ILittleEndianOutput out1)
         {
-            LittleEndian.PutShort(data, 0 + offset, sid);
-            LittleEndian.PutShort(data, 2 + offset, (short)0);
-
-            return RecordSize;
         }
 
-        public override int RecordSize
-        {
-            get { return 4; }
-        }
+       protected override int DataSize
+       {
+           get
+           {
+               return 0;
+           }
+       }
 
         public override short Sid
         {

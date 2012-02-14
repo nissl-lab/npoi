@@ -34,10 +34,10 @@ namespace NPOI.HSSF.Record
      */
 
     public class WindowTwoRecord
-       : Record
+       : StandardRecord
     {
         public const short sid = 0x23e;
-        private short field_1_options;
+        
 
         // bitfields
         private BitField displayFormulas = BitFieldFactory.GetInstance(0x01);
@@ -45,13 +45,9 @@ namespace NPOI.HSSF.Record
         private BitField displayRowColHeadings = BitFieldFactory.GetInstance(0x04);
         private BitField freezePanes = BitFieldFactory.GetInstance(0x08);
         private BitField displayZeros = BitFieldFactory.GetInstance(0x10);
-        private BitField defaultHeader =
-            BitFieldFactory.GetInstance(0x20);   // if false use color in field 4
-
-        // if true use default foreground
-        // for headers
-        private BitField arabic =
-            BitFieldFactory.GetInstance(0x40);   // for our desert dwelling friends
+        // if false use color in field 4 if true use default foreground for headers
+        private BitField defaultHeader =  BitFieldFactory.GetInstance(0x20);   
+        private BitField arabic = BitFieldFactory.GetInstance(0x40);   
         private BitField displayGuts = BitFieldFactory.GetInstance(0x80);
         private BitField freezePanesNoSplit = BitFieldFactory.GetInstance(0x100);
         private BitField selected = BitFieldFactory.GetInstance(0x200);
@@ -60,6 +56,8 @@ namespace NPOI.HSSF.Record
 
         // 4-7 reserved
         // end bitfields
+
+        private short field_1_options;
         private short field_2_top_row;
         private short field_3_left_col;
         private int field_4_header_color;
@@ -298,6 +296,7 @@ namespace NPOI.HSSF.Record
          * deprecated May 2008
          * @deprecated use IsActive()
          */
+        [Obsolete]
         public bool Paged
         {
             get
@@ -472,25 +471,24 @@ namespace NPOI.HSSF.Record
             return buffer.ToString();
         }
 
-        public override int Serialize(int offset, byte [] data)
+        public override void Serialize(ILittleEndianOutput out1)
         {
-            LittleEndian.PutShort(data, 0 + offset, sid);
-            LittleEndian.PutShort(data, 2 + offset, (short)18);
-            LittleEndian.PutShort(data, 4 + offset, Options);
-            LittleEndian.PutShort(data, 6 + offset, TopRow);
-            LittleEndian.PutShort(data, 8 + offset, LeftCol);
-            LittleEndian.PutInt(data, 10 + offset, HeaderColor);
-            LittleEndian.PutShort(data, 14 + offset, PageBreakZoom);
-            LittleEndian.PutShort(data, 16 + offset, NormalZoom);
-            LittleEndian.PutInt(data, 18 + offset, Reserved);
-            return RecordSize;
+            out1.WriteShort(Options);
+            out1.WriteShort(TopRow);
+            out1.WriteShort(LeftCol);
+            out1.WriteInt(HeaderColor);
+            out1.WriteShort(PageBreakZoom);
+            out1.WriteShort(NormalZoom);
+            out1.WriteInt(Reserved);
         }
 
-        public override int RecordSize
+        protected override int DataSize
         {
-            get { return 22; }
+            get
+            {
+                return 18;
+            }
         }
-
         public override short Sid
         {
             get { return sid; }

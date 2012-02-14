@@ -197,19 +197,20 @@ namespace NPOI.SS.Formula.PTG
          * @return a distinct copy of this <c>Ptg</c> if the class is mutable, or the same instance
          * if the class is immutable.
          */
-        public Ptg Copy()
-        {
-            // TODO - all base tokens are logically immutable, but AttrPtg needs some clean-up 
-            if (this is ValueOperatorPtg)
-            {
-                return this;
-            }
-            if (this is ScalarConstantPtg)
-            {
-                return this;
-            }
-            return (Ptg)Clone();
-        }
+        //[Obsolete]
+        //public Ptg Copy()
+        //{
+        //    // TODO - all base tokens are logically immutable, but AttrPtg needs some clean-up 
+        //    if (this is ValueOperatorPtg)
+        //    {
+        //        return this;
+        //    }
+        //    if (this is ScalarConstantPtg)
+        //    {
+        //        return this;
+        //    }
+        //    return (Ptg)Clone();
+        //}
         public virtual object Clone()
         {
             using (MemoryStream stream = new MemoryStream())
