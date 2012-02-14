@@ -76,45 +76,75 @@ namespace NPOI.HSSF.Record
             field_1_option_flag = in1.ReadShort();
             field_2_ixals = in1.ReadShort();
             field_3_not_used = in1.ReadShort();
-            int nameLength = in1.ReadUByte();
-            int multibyteFlag = in1.ReadUByte();
-            if (multibyteFlag == 0)
-            {
-                field_4_name = in1.ReadCompressedUnicode(nameLength);
-            }
-            else
-            {
-                field_4_name = in1.ReadUnicodeLEString(nameLength);
-            }            
-            if (!HasFormula)
-            {
-                if (!IsStdDocumentNameIdentifier && !IsOLELink && IsAutomaticLink)
-                {
-                    // both need to be incremented
-                    int nColumns = in1.ReadUByte() + 1;
-                    int nRows = in1.ReadShort() + 1;
+            int numChars = in1.ReadUByte();
+            field_4_name = StringUtil.ReadUnicodeString(in1, numChars);
 
-                    int totalCount = nRows * nColumns;
-                    _ddeValues = ConstantValueParser.Parse(in1, totalCount);
-                    _nColumns = nColumns;
-                    _nRows = nRows;
-                }
-
-                if (in1.Remaining > 0)
-                {
-                    throw ReadFail("Some Unread data (is formula present?)");
-                }
-                field_5_name_definition = null;
-                return;
-            }
-            int nBytesRemaining = in1.Available();
-            if (in1.Remaining <= 0)
+            // the record body can take different forms.
+            // The form is dictated by the values of 3-th and 4-th bits in field_1_option_flag
+            if (!IsOLELink && !IsStdDocumentNameIdentifier)
             {
-                throw ReadFail("Ran out of record data trying to read formula.");
+                // another switch: the fWantAdvise bit specifies whether the body describes
+                // an external defined name or a DDE data item
+                if (IsAutomaticLink)
+                {
+                    if (in1.Available() > 0)
+                    {
+                        //body specifies DDE data item
+                        int nColumns = in1.ReadUByte() + 1;
+                        int nRows = in1.ReadShort() + 1;
+
+                        int totalCount = nRows * nColumns;
+                        _ddeValues = ConstantValueParser.Parse(in1, totalCount);
+                        _nColumns = nColumns;
+                        _nRows = nRows;
+                    }
+                }
+                else
+                {
+                    //body specifies an external defined name
+                    int formulaLen = in1.ReadUShort();
+                    field_5_name_definition = Formula.Read(formulaLen, in1);
+                }
             }
-            short formulaLen = in1.ReadShort();
-            nBytesRemaining -= 2;
-            field_5_name_definition = NPOI.SS.Formula.Formula.Read(formulaLen, in1, nBytesRemaining);
+            //int nameLength = in1.ReadUByte();
+            //int multibyteFlag = in1.ReadUByte();
+            //if (multibyteFlag == 0)
+            //{
+            //    field_4_name = in1.ReadCompressedUnicode(nameLength);
+            //}
+            //else
+            //{
+            //    field_4_name = in1.ReadUnicodeLEString(nameLength);
+            //}
+            //if (!HasFormula)
+            //{
+            //    if (!IsStdDocumentNameIdentifier && !IsOLELink && IsAutomaticLink)
+            //    {
+            //        // both need to be incremented
+            //        int nColumns = in1.ReadUByte() + 1;
+            //        int nRows = in1.ReadShort() + 1;
+
+            //        int totalCount = nRows * nColumns;
+            //        _ddeValues = ConstantValueParser.Parse(in1, totalCount);
+            //        _nColumns = nColumns;
+            //        _nRows = nRows;
+            //    }
+
+            //    if (in1.Remaining > 0)
+            //    {
+            //        throw ReadFail("Some Unread data (is formula present?)");
+            //    }
+            //    field_5_name_definition = null;
+            //    return;
+            //}
+            //int nBytesRemaining = in1.Available();
+            //if (in1.Remaining <= 0)
+            //{
+            //    throw ReadFail("Ran out of record data trying to read formula.");
+            //}
+            //short formulaLen = in1.ReadShort();
+            //nBytesRemaining -= 2;
+            //field_5_name_definition = NPOI.SS.Formula.Formula.Read(formulaLen, in1, nBytesRemaining);
         }
 
         /**
@@ -139,14 +169,14 @@ namespace NPOI.HSSF.Record
          */
         public bool IsPicureLink
         {
-            get{return (field_1_option_flag & OPT_PICTURE_LINK) != 0;}
+            get { return (field_1_option_flag & OPT_PICTURE_LINK) != 0; }
         }
         /**
          * DDE links only. If <c>true</c>, this denotes the 'StdDocumentName'
          */
         public bool IsStdDocumentNameIdentifier
         {
-            get{return (field_1_option_flag & OPT_STD_DOCUMENT_NAME) != 0;}
+            get { return (field_1_option_flag & OPT_STD_DOCUMENT_NAME) != 0; }
         }
         public bool IsOLELink
         {
@@ -162,7 +192,7 @@ namespace NPOI.HSSF.Record
             {
                 return field_2_ixals;
             }
-            set 
+            set
             {
                 field_2_ixals = value;
             }
@@ -189,18 +219,34 @@ namespace NPOI.HSSF.Record
         {
             get
             {
-                int result = 3 * 2  // 3 short fields
-                    + 2 + field_4_name.Length; // nameLen and name
-                if (HasFormula)
+                //int result = 3 * 2  // 3 short fields
+                //    + 2 + field_4_name.Length; // nameLen and name
+                //if (HasFormula)
+                //{
+                //    result += field_5_name_definition.EncodedSize;
+                //}
+                //else
+                //{
+                //    if (_ddeValues != null)
+                //    {
+                //        result += 3; // byte, short
+                //        result += ConstantValueParser.GetEncodedSize(_ddeValues);
+                //    }
+                //}
+                //return result;
+                int result = 2 + 4;  // short and int
+                result += StringUtil.GetEncodedSize(field_4_name) - 1; //size is byte, not short 
+
+                if (!IsOLELink && !IsStdDocumentNameIdentifier)
                 {
-                    result += field_5_name_definition.EncodedSize;
-                }
-                else
-                {
-                    if (_ddeValues != null)
+                    if (IsAutomaticLink)
                     {
                         result += 3; // byte, short
                         result += ConstantValueParser.GetEncodedSize(_ddeValues);
+                    }
+                    else
+                    {
+                        result += field_5_name_definition.EncodedSize;
                     }
                 }
                 return result;
@@ -209,32 +255,52 @@ namespace NPOI.HSSF.Record
 
         public override void Serialize(ILittleEndianOutput out1)
         {
+            //out1.WriteShort(field_1_option_flag);
+            //out1.WriteShort(field_2_ixals);
+            //out1.WriteShort(field_3_not_used);
+            //int nameLen = field_4_name.Length;
+            //out1.WriteShort(nameLen);
+            //StringUtil.PutCompressedUnicode(field_4_name, out1);
+            //if (HasFormula)
+            //{
+            //    field_5_name_definition.Serialize(out1);
+            //}
+            //else
+            //{
+            //    if (_ddeValues != null)
+            //    {
+            //        out1.WriteByte(_nColumns - 1);
+            //        out1.WriteShort(_nRows - 1);
+            //        ConstantValueParser.Encode(out1, _ddeValues);
+            //    }
+            //}
             out1.WriteShort(field_1_option_flag);
             out1.WriteShort(field_2_ixals);
             out1.WriteShort(field_3_not_used);
-            int nameLen = field_4_name.Length;
-            out1.WriteShort(nameLen);
-            StringUtil.PutCompressedUnicode(field_4_name, out1);
-            if (HasFormula)
+
+            out1.WriteByte(field_4_name.Length);
+            StringUtil.WriteUnicodeStringFlagAndData(out1, field_4_name);
+
+            if (!IsOLELink && !IsStdDocumentNameIdentifier)
             {
-                field_5_name_definition.Serialize(out1);
-            }
-            else
-            {
-                if (_ddeValues != null)
+                if (IsAutomaticLink)
                 {
                     out1.WriteByte(_nColumns - 1);
                     out1.WriteShort(_nRows - 1);
                     ConstantValueParser.Encode(out1, _ddeValues);
                 }
+                else
+                {
+                    field_5_name_definition.Serialize(out1);
+                }
             }
         }
 
 
-        public override int RecordSize
-        {
-            get { return 4 + DataSize; }
-        }
+        //public override int RecordSize
+        //{
+        //    get { return 4 + DataSize; }
+        //}
 
         /*
          * Makes better error messages (while HasFormula() Is not reliable) 
@@ -290,10 +356,20 @@ namespace NPOI.HSSF.Record
         public override String ToString()
         {
             StringBuilder sb = new StringBuilder();
-            sb.Append(GetType().Name).Append(" [EXTERNALNAME ");
-            sb.Append(" ").Append(field_4_name);
-            sb.Append(" ix=").Append(field_2_ixals);
-            sb.Append("]");
+            sb.Append("[EXTERNALNAME]\n");
+            sb.Append("    .options      = ").Append(field_1_option_flag).Append("\n");
+            sb.Append("    .ix      = ").Append(field_2_ixals).Append("\n");
+            sb.Append("    .name    = ").Append(field_4_name).Append("\n");
+            if (field_5_name_definition != null)
+            {
+                Ptg[] ptgs = field_5_name_definition.Tokens;
+                for (int i = 0; i < ptgs.Length; i++)
+                {
+                    Ptg ptg = ptgs[i];
+                    sb.Append(ptg.ToString()).Append(ptg.RVAType).Append("\n");
+                }
+            }
+            sb.Append("[/EXTERNALNAME]\n");
             return sb.ToString();
         }
     }

@@ -33,7 +33,7 @@ namespace NPOI.HSSF.Record
      */
 
     public class GutsRecord
-       : Record
+       : StandardRecord
     {
         public const short sid = 0x80;
         private short field_1_left_row_gutter;   // size of the row gutter to the left of the rows
@@ -129,20 +129,20 @@ namespace NPOI.HSSF.Record
             return buffer.ToString();
         }
 
-        public override int Serialize(int offset, byte [] data)
+        public override void Serialize(ILittleEndianOutput out1)
         {
-            LittleEndian.PutShort(data, 0 + offset, sid);
-            LittleEndian.PutShort(data, 2 + offset, (short)0x8);
-            LittleEndian.PutShort(data, 4 + offset, LeftRowGutter);
-            LittleEndian.PutShort(data, 6 + offset, TopColGutter);
-            LittleEndian.PutShort(data, 8 + offset, RowLevelMax);
-            LittleEndian.PutShort(data, 10 + offset, ColLevelMax);
-            return RecordSize;
+            out1.WriteShort(LeftRowGutter);
+            out1.WriteShort(TopColGutter);
+            out1.WriteShort(RowLevelMax);
+            out1.WriteShort(ColLevelMax);
         }
 
-        public override int RecordSize
+        protected override int DataSize
         {
-            get { return 12; }
+            get
+            {
+                return 8;
+            }
         }
 
         public override short Sid

@@ -103,12 +103,16 @@ namespace TestCases.SS.Formula
                 Loc loc = new Loc(0, sheetIndex, rowIndex, columnIndex);
                 if (!_plainCellLocsByCacheEntry.ContainsKey(entry))
                     _plainCellLocsByCacheEntry.Add(entry, loc);
+                else
+                    _plainCellLocsByCacheEntry[entry] = loc;
                 Log("value", rowIndex, columnIndex, entry.GetValue());
             }
             public override void OnStartEvaluate(IEvaluationCell cell, ICacheEntry entry)
             {
                 if (!_formulaCellsByCacheEntry.ContainsKey(entry))
                     _formulaCellsByCacheEntry.Add(entry, cell);
+                else
+                    _formulaCellsByCacheEntry[entry] = cell;
                 ICell hc = _book.GetSheetAt(0).GetRow(cell.RowIndex).GetCell(cell.ColumnIndex);
                 Log("start", cell.RowIndex, cell.ColumnIndex, FormulaExtractor.GetPtgs(hc));
             }
@@ -156,14 +160,18 @@ namespace TestCases.SS.Formula
                 if (entry.GetValue() == null)
                 { // hack to tell the difference between formula and plain value
                     // perhaps the API could be improved: onChangeFromBlankToValue, onChangeFromBlankToFormula
-                    if (_formulaCellsByCacheEntry.ContainsKey(entry))
+                    if (!_formulaCellsByCacheEntry.ContainsKey(entry))
                         _formulaCellsByCacheEntry.Add(entry, cell);
+                    else
+                        _formulaCellsByCacheEntry[entry] = cell;
                 }
                 else
                 {
                     Loc loc = new Loc(0, sheetIndex, rowIndex, columnIndex);
-                    if (_plainCellLocsByCacheEntry.ContainsKey(entry))
+                    if (!_plainCellLocsByCacheEntry.ContainsKey(entry))
                         _plainCellLocsByCacheEntry.Add(entry, loc);
+                    else
+                        _plainCellLocsByCacheEntry[entry] = loc;
                 }
             }
             private void Log(String tag, int rowIndex, int columnIndex, Object value)

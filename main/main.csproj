@@ -259,6 +259,9 @@
     <Compile Include="HSSF\Record\CodepageRecord.cs" />
     <Compile Include="HSSF\Record\ColumnInfoRecord.cs" />
     <Compile Include="POIFS\FileSystem\BlockStore.cs" />
+    <Compile Include="POIFS\FileSystem\POIFSDocument.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="POIFS\NIO\ByteArrayBackedDataSource.cs" />
     <Compile Include="POIFS\NIO\FileBackedDataSource.cs" />
     <Compile Include="POIFS\NIO\DataSource.cs" />
@@ -442,7 +445,6 @@
     <Compile Include="POIFS\FileSystem\OfficeXmlFileException.cs" />
     <Compile Include="POIFS\FileSystem\Ole10Native.cs" />
     <Compile Include="POIFS\FileSystem\Ole10NativeException.cs" />
-    <Compile Include="POIFS\FileSystem\POIFSDocument.cs" />
     <Compile Include="POIFS\FileSystem\POIFSDocumentPath.cs" />
     <Compile Include="POIFS\FileSystem\POIFSDocumentReader.cs" />
     <Compile Include="POIFS\FileSystem\POIFSDocumentWriter.cs" />

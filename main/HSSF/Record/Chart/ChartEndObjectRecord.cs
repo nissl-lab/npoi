@@ -36,7 +36,7 @@ namespace NPOI.HSSF.Record.Chart
         private short rt;
         private short grbitFrt;
         private short iObjectKind;
-        private byte[] unused;
+        private byte[] reserved;
 
         public ChartEndObjectRecord(RecordInputStream in1)
         {
@@ -44,8 +44,20 @@ namespace NPOI.HSSF.Record.Chart
             grbitFrt = in1.ReadShort();
             iObjectKind = in1.ReadShort();
 
-            unused = new byte[6];
-            in1.ReadFully(unused);
+            reserved = new byte[6];
+            // The spec says that there should be 6 bytes at the
+            //  end, which must be there and must be zero
+            // However, sometimes Excel forgets them...
+            reserved = new byte[6];
+            if (in1.Available() == 0)
+            {
+                // They've gone missing...
+            }
+            else
+            {
+                // Read the reserved bytes 
+                in1.ReadFully(reserved);
+            }
         }
 
 
@@ -71,7 +83,7 @@ namespace NPOI.HSSF.Record.Chart
             out1.WriteShort(grbitFrt);
             out1.WriteShort(iObjectKind);
             // 6 bytes unused
-            out1.Write(unused);
+            out1.Write(reserved);
         }
 
         public override String ToString()
@@ -82,7 +94,7 @@ namespace NPOI.HSSF.Record.Chart
             buffer.Append("    .rt         =").Append(HexDump.ShortToHex(rt)).Append('\n');
             buffer.Append("    .grbitFrt   =").Append(HexDump.ShortToHex(grbitFrt)).Append('\n');
             buffer.Append("    .iObjectKind=").Append(HexDump.ShortToHex(iObjectKind)).Append('\n');
-            buffer.Append("    .unused     =").Append(HexDump.ToHex(unused)).Append('\n');
+            buffer.Append("    .unused     =").Append(HexDump.ToHex(reserved)).Append('\n');
             buffer.Append("[/ENDOBJECT]\n");
             return buffer.ToString();
         }
