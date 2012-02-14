@@ -178,25 +178,25 @@ namespace NPOI.XSSF.UserModel
          * @return the newly Created chart
          * @see NPOI.xssf.usermodel.XSSFDrawing#CreateChart(ClientAnchor)
          */
-        public XSSFChart CreateChart(XSSFClientAnchor anchor)
-        {
-            int chartNumber = GetPackagePart().Package.
-                GetPartsByContentType(XSSFRelation.CHART.ContentType).Count + 1;
+        //public XSSFChart CreateChart(XSSFClientAnchor anchor)
+        //{
+        //    int chartNumber = GetPackagePart().Package.
+        //        GetPartsByContentType(XSSFRelation.CHART.ContentType).Count + 1;
 
-            XSSFChart chart = (XSSFChart)CreateRelationship(
-                    XSSFRelation.CHART, XSSFFactory.GetInstance(), chartNumber);
-            String chartRelId = chart.GetPackageRelationship().GetId();
+        //    XSSFChart chart = (XSSFChart)CreateRelationship(
+        //            XSSFRelation.CHART, XSSFFactory.GetInstance(), chartNumber);
+        //    String chartRelId = chart.GetPackageRelationship().GetId();
 
-            XSSFGraphicFrame frame = CreateGraphicFrame(anchor);
-            frame.SetChart(chart, chartRelId);
+        //    XSSFGraphicFrame frame = CreateGraphicFrame(anchor);
+        //    frame.SetChart(chart, chartRelId);
 
-            return chart;
-        }
+        //    return chart;
+        //}
 
-        public XSSFChart CreateChart(IClientAnchor anchor)
-        {
-            return CreateChart((XSSFClientAnchor)anchor);
-        }
+        //public XSSFChart CreateChart(IClientAnchor anchor)
+        //{
+        //    return CreateChart((XSSFClientAnchor)anchor);
+        //}
 
         /**
          * Add the indexed picture to this Drawing relations
@@ -207,10 +207,10 @@ namespace NPOI.XSSF.UserModel
         protected PackageRelationship AddPictureReference(int pictureIndex)
         {
             XSSFWorkbook wb = (XSSFWorkbook)GetParent().GetParent();
-            XSSFPictureData data = wb.GetAllPictures().Get(pictureIndex);
-            PackagePartName ppName = data.GetPackagePart().GetPartName();
+            XSSFPictureData data = wb.GetAllPictures()[pictureIndex];
+            PackagePartName ppName = data.GetPackagePart().PartName;
             PackageRelationship rel = GetPackagePart().AddRelationship(ppName, TargetMode.Internal, XSSFRelation.IMAGES.Relation);
-            AddRelation(rel.GetId(), new XSSFPictureData(data.GetPackagePart(), rel));
+            AddRelation(rel.Id, new XSSFPictureData(data.GetPackagePart(), rel));
             return rel;
         }
 
@@ -227,7 +227,7 @@ namespace NPOI.XSSF.UserModel
             long shapeId = newShapeId();
             CT_TwoCellAnchor ctAnchor = CreateTwoCellAnchor(anchor);
             CT_Shape ctShape = ctAnchor.AddNewSp();
-            ctShape.Set(XSSFSimpleShape.prototype());
+            ctShape.Set(XSSFSimpleShape.Prototype());
             ctShape.nvSpPr.cNvPr.id=(uint)(shapeId);
             XSSFSimpleShape shape = new XSSFSimpleShape(this, ctShape);
             shape.anchor = anchor;
@@ -246,7 +246,7 @@ namespace NPOI.XSSF.UserModel
         {
             CT_TwoCellAnchor ctAnchor = CreateTwoCellAnchor(anchor);
             CT_Connector ctShape = ctAnchor.AddNewCxnSp();
-            ctShape.Set(XSSFConnector.prototype());
+            ctShape.Set(XSSFConnector.Prototype());
 
             XSSFConnector shape = new XSSFConnector(this, ctShape);
             shape.anchor = anchor;
@@ -265,7 +265,7 @@ namespace NPOI.XSSF.UserModel
         {
             CT_TwoCellAnchor ctAnchor = CreateTwoCellAnchor(anchor);
             CT_GroupShape ctGroup = ctAnchor.AddNewGrpSp();
-            ctGroup.Set(XSSFShapeGroup.prototype());
+            ctGroup.Set(XSSFShapeGroup.Prototype());
 
             XSSFShapeGroup shape = new XSSFShapeGroup(this, ctGroup);
             shape.anchor = anchor;
@@ -278,27 +278,27 @@ namespace NPOI.XSSF.UserModel
          *               to the sheet.
          * @return the newly Created comment.
          */
-        public XSSFComment CreateCellComment(IClientAnchor anchor)
-        {
-            XSSFClientAnchor ca = (XSSFClientAnchor)anchor;
-            XSSFSheet sheet = (XSSFSheet)GetParent();
+        //public XSSFComment CreateCellComment(IClientAnchor anchor)
+        //{
+        //    XSSFClientAnchor ca = (XSSFClientAnchor)anchor;
+        //    XSSFSheet sheet = (XSSFSheet)GetParent();
 
-            //create comments and vmlDrawing parts if they don't exist
-            CommentsTable comments = sheet.GetCommentsTable(true);
-            XSSFVMLDrawing vml = sheet.GetVMLDrawing(true);
-            schemasMicrosoftComVml.CT_Shape vmlShape = vml.newCommentShape();
-            if (ca.IsSet())
-            {
-                String position =
-                        ca.GetCol1() + ", 0, " + ca.GetRow1() + ", 0, " +
-                        ca.GetCol2() + ", 0, " + ca.GetRow2() + ", 0";
-                vmlShape.GetClientDataArray(0).SetAnchorArray(0, position);
-            }
-            XSSFComment shape = new XSSFComment(comments, comments.CreateComment(), vmlShape);
-            shape.SetColumn(ca.GetCol1());
-            shape.SetRow(ca.GetRow1());
-            return shape;
-        }
+        //    //create comments and vmlDrawing parts if they don't exist
+        //    CommentsTable comments = sheet.GetCommentsTable(true);
+        //    XSSFVMLDrawing vml = sheet.GetVMLDrawing(true);
+        //    schemasMicrosoftComVml.CT_Shape vmlShape = vml.newCommentShape();
+        //    if (ca.IsSet())
+        //    {
+        //        String position =
+        //                ca.GetCol1() + ", 0, " + ca.GetRow1() + ", 0, " +
+        //                ca.GetCol2() + ", 0, " + ca.GetRow2() + ", 0";
+        //        vmlShape.GetClientDataArray(0).SetAnchorArray(0, position);
+        //    }
+        //    XSSFComment shape = new XSSFComment(comments, comments.CreateComment(), vmlShape);
+        //    shape.SetColumn(ca.GetCol1());
+        //    shape.SetRow(ca.GetRow1());
+        //    return shape;
+        //}
 
         /**
          * Creates a new graphic frame.
@@ -311,7 +311,7 @@ namespace NPOI.XSSF.UserModel
         {
             CT_TwoCellAnchor ctAnchor = CreateTwoCellAnchor(anchor);
             CT_GraphicalObjectFrame ctGraphicFrame = ctAnchor.AddNewGraphicFrame();
-            ctGraphicFrame.Set(XSSFGraphicFrame.prototype());
+            ctGraphicFrame.Set(XSSFGraphicFrame.Prototype());
 
             long frameId = numOfGraphicFrames++;
             XSSFGraphicFrame graphicFrame = new XSSFGraphicFrame(this, ctGraphicFrame);
@@ -324,18 +324,18 @@ namespace NPOI.XSSF.UserModel
         /**
          * Returns all charts in this Drawing.
          */
-        public List<XSSFChart> GetCharts()
-        {
-            List<XSSFChart> charts = new List<XSSFChart>();
-            foreach (POIXMLDocumentPart part in GetRelations())
-            {
-                if (part is XSSFChart)
-                {
-                    charts.Add((XSSFChart)part);
-                }
-            }
-            return charts;
-        }
+        //public List<XSSFChart> GetCharts()
+        //{
+        //    List<XSSFChart> charts = new List<XSSFChart>();
+        //    foreach (POIXMLDocumentPart part in GetRelations())
+        //    {
+        //        if (part is XSSFChart)
+        //        {
+        //            charts.Add((XSSFChart)part);
+        //        }
+        //    }
+        //    return charts;
+        //}
 
         /**
          * Create and Initialize a CT_TwoCellAnchor that anchors a shape against top-left and bottom-right cells.

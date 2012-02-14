@@ -41,7 +41,7 @@ namespace NPOI.XSSF.UserModel
          * @param Drawing the XSSFDrawing that owns this shape
          * @param ctGroup the XML bean that stores this group content
          */
-        protected XSSFShapeGroup(XSSFDrawing drawing, CT_GroupShape ctGroup)
+        public XSSFShapeGroup(XSSFDrawing drawing, CT_GroupShape ctGroup)
         {
             this.drawing = drawing;
             this.ctGroup = ctGroup;
@@ -131,12 +131,12 @@ namespace NPOI.XSSF.UserModel
         public XSSFConnector CreateConnector(XSSFChildAnchor anchor)
         {
             CT_Connector ctShape = ctGroup.AddNewCxnSp();
-            ctShape.Set(XSSFConnector.prototype());
+            ctShape.Set(XSSFConnector.Prototype());
 
-            XSSFConnector shape = new XSSFConnector(getDrawing(), ctShape);
+            XSSFConnector shape = new XSSFConnector(GetDrawing(), ctShape);
             shape.parent = this;
             shape.anchor = anchor;
-            shape.GetCTConnector().GetSpPr().SetXfrm(anchor.GetCTTransform2D());
+            shape.GetCTConnector().spPr.xfrm = (anchor.GetCTTransform2D());
             return shape;
         }
 
@@ -153,12 +153,12 @@ namespace NPOI.XSSF.UserModel
             PackageRelationship rel = GetDrawing().AddPictureReference(pictureIndex);
 
             CT_Picture ctShape = ctGroup.AddNewPic();
-            ctShape.Set(XSSFPicture.prototype());
+            ctShape.Set(XSSFPicture.Prototype());
 
             XSSFPicture shape = new XSSFPicture(GetDrawing(), ctShape);
             shape.parent = this;
             shape.anchor = anchor;
-            shape.SetPictureReference(rel);
+            shape.pictureReference = (rel);
             return shape;
         }
 
@@ -174,7 +174,7 @@ namespace NPOI.XSSF.UserModel
          */
         public void SetCoordinates(int x1, int y1, int x2, int y2)
         {
-            CT_GroupTransform2D t2d = ctGroup.GetGrpSpPr().GetXfrm();
+            CT_GroupTransform2D t2d = ctGroup.grpSpPr.xfrm;
             CT_Point2D off = t2d.off;
             off.x = (x1);
             off.y = (y1);

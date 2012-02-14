@@ -38,7 +38,7 @@ namespace NPOI.XSSF.UserModel
          * @param Drawing the XSSFDrawing that owns this shape
          * @param ctShape the shape bean that holds all the shape properties
          */
-        protected XSSFConnector(XSSFDrawing drawing, CT_Connector ctShape)
+        public XSSFConnector(XSSFDrawing drawing, CT_Connector ctShape)
         {
             this.drawing = drawing;
             this.ctShape = ctShape;
@@ -48,7 +48,7 @@ namespace NPOI.XSSF.UserModel
          * Initialize default structure of a new auto-shape
          *
          */
-        protected static CT_Connector Prototype()
+        public static CT_Connector Prototype()
         {
             if (prototype == null)
             {
@@ -122,7 +122,7 @@ namespace NPOI.XSSF.UserModel
             ctShape.spPr.prstGeom.prst = (ST_ShapeType)(type);
         }
 
-        protected CT_ShapeProperties GetShapeProperties()
+        protected override CT_ShapeProperties GetShapeProperties()
         {
             return ctShape.spPr;
         }

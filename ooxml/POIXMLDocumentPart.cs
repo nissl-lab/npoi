@@ -417,14 +417,15 @@ public class POIXMLDocumentPart {
     /**
      * Fired when a new namespace part is Created
      */
-    protected void OnDocumentCreate()  {
+    protected virtual void OnDocumentCreate()  {
 
     }
 
     /**
      * Fired when a namespace part is read
      */
-    protected void OnDocumentRead()  {
+    protected virtual void OnDocumentRead()
+    {
 
     }
 
@@ -442,7 +443,8 @@ public class POIXMLDocumentPart {
     /**
      * Fired when a namespace part is about to be Removed from the namespace
      */
-    protected void onDocumentRemove()  {
+    protected virtual void onDocumentRemove()
+    {
 
     }
 }

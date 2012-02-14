@@ -17,175 +17,179 @@
  * ====================================================================
  */
 
-namespace NPOI.xssf.usermodel;
+using NPOI.OpenXmlFormats.Dml;
+using System;
+using NPOI.OpenXmlFormats;
+namespace NPOI.XSSF.UserModel
+{
 
-using javax.xml.namespace.QName;
+    /**
+     * Represents DrawingML GraphicalObjectFrame.
+     *
+     * @author Roman Kashitsyn
+     */
+    public class XSSFGraphicFrame
+    {
 
-using NPOI.Openxml4j.opc.PackageRelationship;
-using NPOI.util.Internal;
-using org.apache.xmlbeans.XmlObject;
-using org.apache.xmlbeans.XmlCursor;
-using org.Openxmlformats.schemas.Drawingml.x2006.spreadsheetDrawing.CTGraphicalObjectFrame;
-using org.Openxmlformats.schemas.Drawingml.x2006.spreadsheetDrawing.CTGraphicalObjectFrameNonVisual;
-using org.Openxmlformats.schemas.Drawingml.x2006.main.CTGraphicalObject;
-using org.Openxmlformats.schemas.Drawingml.x2006.main.CTGraphicalObjectData;
-using org.Openxmlformats.schemas.Drawingml.x2006.main.CTNonVisualDrawingProps;
-using org.Openxmlformats.schemas.Drawingml.x2006.main.CTTransform2D;
-using org.Openxmlformats.schemas.Drawingml.x2006.main.CTPoint2D;
-using org.Openxmlformats.schemas.Drawingml.x2006.main.CTPositiveSize2D;
-using org.Openxmlformats.schemas.officeDocument.x2006.relationships.STRelationshipId;
+        private static CT_GraphicalObjectFrame prototype = null;
 
-/**
- * Represents DrawingML GraphicalObjectFrame.
- *
- * @author Roman Kashitsyn
- */
-public class XSSFGraphicFrame {
+        private CT_GraphicalObjectFrame graphicFrame;
+        private XSSFDrawing Drawing;
+        private XSSFClientAnchor anchor;
 
-	private static CTGraphicalObjectFrame prototype = null;
+        /**
+         * Construct a new XSSFGraphicFrame object.
+         *
+         * @param Drawing the XSSFDrawing that owns this frame
+         * @param ctGraphicFrame the XML bean that stores this frame content
+         */
+        protected XSSFGraphicFrame(XSSFDrawing Drawing, CT_GraphicalObjectFrame ctGraphicFrame)
+        {
+            this.Drawing = Drawing;
+            this.graphicFrame = ctGraphicFrame;
+        }
 
-	private CTGraphicalObjectFrame graphicFrame;
-	private XSSFDrawing Drawing;
-	private XSSFClientAnchor anchor;
 
-	/**
-	 * Construct a new XSSFGraphicFrame object.
-	 *
-	 * @param Drawing the XSSFDrawing that owns this frame
-	 * @param ctGraphicFrame the XML bean that stores this frame content
-	 */
-	protected XSSFGraphicFrame(XSSFDrawing Drawing, CTGraphicalObjectFrame ctGraphicFrame) {
-		this.Drawing = Drawing;
-		this.graphicFrame = ctGraphicFrame;
-	}
+        public CT_GraphicalObjectFrame GetCTGraphicalObjectFrame()
+        {
+            return graphicFrame;
+        }
 
-	
-	public CTGraphicalObjectFrame GetCTGraphicalObjectFrame() {
-		return graphicFrame;
-	}
+        /**
+         * Initialize default structure of a new graphic frame
+         */
+        public static CT_GraphicalObjectFrame Prototype()
+        {
+            if (prototype == null)
+            {
+                CT_GraphicalObjectFrame graphicFrame = CT_GraphicalObjectFrame.Factory.newInstance();
 
-	/**
-	 * Initialize default structure of a new graphic frame
-	 */
-	protected static CTGraphicalObjectFrame prototype() {
-		if (prototype == null) {
-			CTGraphicalObjectFrame graphicFrame = CTGraphicalObjectFrame.Factory.newInstance();
+                CT_GraphicalObjectFrameNonVisual nvGraphic = graphicFrame.AddNewNvGraphicFramePr();
+                CT_NonVisualDrawingProps props = nvGraphic.AddNewCNvPr();
+                props.id = (0);
+                props.name = ("Diagramm 1");
+                nvGraphic.AddNewCNvGraphicFramePr();
 
-			CTGraphicalObjectFrameNonVisual nvGraphic = graphicFrame.AddNewNvGraphicFramePr();
-			CTNonVisualDrawingProps props = nvGraphic.AddNewCNvPr();
-			props.SetId(0);
-			props.SetName("Diagramm 1");
-			nvGraphic.AddNewCNvGraphicFramePr();
+                CT_Transform2D transform = graphicFrame.AddNewXfrm();
+                CT_PositiveSize2D extPoint = transform.AddNewExt();
+                CT_Point2D offPoint = transform.AddNewOff();
 
-			CTTransform2D transform = graphicFrame.AddNewXfrm();
-			CTPositiveSize2D extPoint = transform.AddNewExt();
-			CTPoint2D offPoint = transform.AddNewOff();
+                extPoint.cx=(0);
+                extPoint.cy=(0);
+                offPoint.x=(0);
+                offPoint.y=(0);
 
-			extPoint.SetCx(0);
-			extPoint.SetCy(0);
-			offPoint.SetX(0);
-			offPoint.SetY(0);
+                CT_GraphicalObject graphic = graphicFrame.AddNewGraphic();
 
-			CTGraphicalObject graphic = graphicFrame.AddNewGraphic();
+                prototype = graphicFrame;
+            }
+            return prototype;
+        }
 
-			prototype = graphicFrame;
-		}
-		return prototype;
-	}
+        /**
+         * Sets the frame macro.
+         */
+        public void SetMacro(String macro)
+        {
+            graphicFrame.macro = (macro);
+        }
 
-	/**
-	 * Sets the frame macro.
-	 */
-	public void SetMacro(String macro) {
-		graphicFrame.SetMacro(macro);
-	}
+        /**
+         * Sets the frame name.
+         */
+        public void SetName(String name)
+        {
+            GetNonVisualProperties().name = (name);
+        }
 
-	/**
-	 * Sets the frame name.
-	 */
-	public void SetName(String name) {
-	 GetNonVisualProperties().SetName(name);
-	}
+        /**
+         * Returns the frame name.
+         * @return name of the frame
+         */
+        public String GetName()
+        {
+            return GetNonVisualProperties().name;
+        }
 
-	/**
-	 * Returns the frame name.
-	 * @return name of the frame
-	 */
-	public String GetName() {
-		return GetNonVisualProperties().GetName();
-	}
+        private CT_NonVisualDrawingProps GetNonVisualProperties()
+        {
+            CT_GraphicalObjectFrameNonVisual nvGraphic = graphicFrame.nvGraphicFramePr;
+            return nvGraphic.cNvPr;
+        }
 
-	private CTNonVisualDrawingProps GetNonVisualProperties() {
-		CTGraphicalObjectFrameNonVisual nvGraphic = graphicFrame.GetNvGraphicFramePr();
-		return nvGraphic.GetCNvPr();
-	}
+        /**
+         * Attaches frame to an anchor.
+         */
+        public void SetAnchor(XSSFClientAnchor anchor)
+        {
+            this.anchor = anchor;
+        }
 
-	/**
-	 * Attaches frame to an anchor.
-	 */
-	protected void SetAnchor(XSSFClientAnchor anchor) {
-		this.anchor = anchor;
-	}
+        /**
+         * Returns the frame anchor.
+         * @return the anchor this frame is attached to
+         */
+        public XSSFClientAnchor GetAnchor()
+        {
+            return anchor;
+        }
 
-	/**
-	 * Returns the frame anchor.
-	 * @return the anchor this frame is attached to
-	 */
-	public XSSFClientAnchor GetAnchor() {
-		return anchor;
-	}
+        /**
+         * Assign a DrawingML chart to the graphic frame.
+         */
+        //protected void SetChart(XSSFChart chart, String relId)
+        //{
+        //    CT_GraphicalObjectData data = graphicFrame.graphic.AddNewGraphicData();
+        //    AppendChartElement(data, relId);
+        //    chart.SetGraphicFrame(this);
+        //    return;
+        //}
 
-	/**
-	 * Assign a DrawingML chart to the graphic frame.
-	 */
-	protected void SetChart(XSSFChart chart, String relId) {
-		CTGraphicalObjectData data = graphicFrame.GetGraphic().AddNewGraphicData();
-		AppendChartElement(data, relId);
-		chart.SetGraphicFrame(this);
-		return;
-	}
+        /**
+         * Gets the frame id.
+         */
+        public long GetId()
+        {
+            return graphicFrame.nvGraphicFramePr.cNvPr.id;
+        }
 
-	/**
-	 * Gets the frame id.
-	 */
-	public long GetId() {
-		return graphicFrame.GetNvGraphicFramePr().GetCNvPr().GetId();
-	}
+        /**
+         * Sets the frame id.
+         */
+        public void SetId(long id)
+        {
+            graphicFrame.nvGraphicFramePr.cNvPr.id = (uint)id;
+        }
 
-	/**
-	 * Sets the frame id.
-	 */
-	protected void SetId(long id) {
-		graphicFrame.GetNvGraphicFramePr().GetCNvPr().SetId(id);
-	}
+        /**
+         * The low level code to insert {@code <c:chart>} tag into
+         * {@code<a:graphicData>}.
+         *
+         * Here is the schema (ECMA-376):
+         * <pre>
+         * {@code
+         * <complexType name="CT_GraphicalObjectData">
+         *   <sequence>
+         *     <any minOccurs="0" maxOccurs="unbounded" ProcessContents="strict"/>
+         *   </sequence>
+         *   <attribute name="uri" type="xsd:token"/>
+         * </complexType>
+         * }
+         * </pre>
+         */
+        private void AppendChartElement(CT_GraphicalObjectData data, String id)
+        {
+            String r_namespaceUri = ST_RelationshipId.NamespaceURI;
+            String c_namespaceUri = XSSFDrawing.NAMESPACE_C;
+            XmlCursor cursor = data.newCursor();
+            cursor.ToNextToken();
+            cursor.beginElement(new QName(c_namespaceUri, "chart", "c"));
+            cursor.insertAttributeWithValue(new QName(r_namespaceUri, "id", "r"), id);
+            cursor.dispose();
+            data.SetUri(c_namespaceUri);
+        }
 
-	/**
-	 * The low level code to insert {@code <c:chart>} tag into
-	 * {@code<a:graphicData>}.
-	 *
-	 * Here is the schema (ECMA-376):
-	 * <pre>
-	 * {@code
-	 * <complexType name="CT_GraphicalObjectData">
-	 *   <sequence>
-	 *     <any minOccurs="0" maxOccurs="unbounded" ProcessContents="strict"/>
-	 *   </sequence>
-	 *   <attribute name="uri" type="xsd:token"/>
-	 * </complexType>
-	 * }
-	 * </pre>
-	 */
-	private void AppendChartElement(CTGraphicalObjectData data, String id) {
-		String r_namespaceUri = STRelationshipId.type.GetName().GetNamespaceURI();
-		String c_namespaceUri = XSSFDrawing.NAMESPACE_C;
-		XmlCursor cursor = data.newCursor();
-		cursor.ToNextToken();
-		cursor.beginElement(new QName(c_namespaceUri, "chart", "c"));
-		cursor.insertAttributeWithValue(new QName(r_namespaceUri, "id", "r"), id);
-		cursor.dispose();
-		data.SetUri(c_namespaceUri);
-	}
-
+    }
 }
 
 

@@ -2838,8 +2838,49 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             throw new NotImplementedException();
         }
-
+        public int sizeOfRFontArray()
+        {
+            throw new NotImplementedException();
+        }
+        public int sizeOfFamilyArray()
+        {
+            throw new NotImplementedException();
+        }
+        public int sizeOfSchemeArray()
+        {
+            throw new NotImplementedException();
+        }
+        public int sizeOfCharsetArray()
+        {
+            throw new NotImplementedException();
+        }           
+        public int sizeOfCondenseArray()
+        {
+            throw new NotImplementedException();
+        }       
+        public int sizeOfExtendArray()
+        {
+            throw new NotImplementedException();
+        }           
+        public int sizeOfVertAlignArray()
+        {
+            throw new NotImplementedException();
+        }
+        public int sizeOfOutlineArray()
+        {
+            throw new NotImplementedException();
+        }
+        public int sizeOfShadowArray()
+        {
+            throw new NotImplementedException();
+        }
+        public int sizeOfStrikeArray()
+        {
+            throw new NotImplementedException();
+        }
         
+            
+            
     }
 
 

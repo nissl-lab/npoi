@@ -31,21 +31,21 @@ namespace NPOI.XSSF.UserModel
         /**
          * Creates a new XSSFRichTextString for you.
          */
-        public XSSFRichTextString CreateRichTextString(String text)
+        public IRichTextString CreateRichTextString(String text)
         {
             XSSFRichTextString rt = new XSSFRichTextString(text);
             rt.SetStylesTableReference(workbook.GetStylesSource());
             return rt;
         }
 
-        public XSSFDataFormat CreateDataFormat()
+        public IDataFormat CreateDataFormat()
         {
             return workbook.CreateDataFormat();
         }
 
-        public XSSFHyperlink CreateHyperlink(int type)
+        public IHyperlink CreateHyperlink(HyperlinkType type)
         {
-            return new XSSFHyperlink(type);
+            return new XSSFHyperlink((int)type);
         }
 
         /**
@@ -53,7 +53,7 @@ namespace NPOI.XSSF.UserModel
          *
          * @return a XSSFFormulaEvaluator instance
          */
-        public XSSFFormulaEvaluator CreateFormulaEvaluator()
+        public IFormulaEvaluator CreateFormulaEvaluator()
         {
             return new XSSFFormulaEvaluator(workbook);
         }
@@ -65,7 +65,7 @@ namespace NPOI.XSSF.UserModel
          * @return a XSSFClientAnchor instance
          * @see NPOI.ss.usermodel.Drawing
          */
-        public XSSFClientAnchor CreateClientAnchor()
+        public IClientAnchor CreateClientAnchor()
         {
             return new XSSFClientAnchor();
         }

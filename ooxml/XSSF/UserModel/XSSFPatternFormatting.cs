@@ -32,52 +32,60 @@ namespace NPOI.XSSF.UserModel
             _fill = fill;
         }
 
-        public short GetFillBackgroundColor()
+        public short FillBackgroundColor
         {
-            if (!_fill.IsSetPatternFill()) return 0;
+            get
+            {
+                if (!_fill.IsSetPatternFill()) return 0;
 
-            return (short)_fill.GetPatternFill().bgColor.indexed;
-        }
-
-        public short GetFillForegroundColor()
-        {
-            if (!_fill.IsSetPatternFill() || !_fill.GetPatternFill().IsSetFgColor())
-                return 0;
-
-            return (short)_fill.GetPatternFill().fgColor.indexed;
-        }
-
-        public short GetFillPattern()
-        {
-            if (!_fill.IsSetPatternFill() || !_fill.GetPatternFill().IsSetPatternType()) return NO_FILL;
-
-            return (short)(_fill.GetPatternFill().patternType - 1);
-        }
-
-        public void SetFillBackgroundColor(short bg)
-        {
-            CT_PatternFill ptrn = 
+                return (short)_fill.GetPatternFill().bgColor.indexed;
+            }
+            set 
+            {
+                CT_PatternFill ptrn =
                 _fill.IsSetPatternFill() ? _fill.GetPatternFill() : _fill.AddNewPatternFill();
-            CT_Color bgColor = new CT_Color();
-            bgColor.indexed=(bg);
-            ptrn.bgColor=(bgColor);
+                CT_Color bgColor = new CT_Color();
+                bgColor.indexed = value;
+                ptrn.bgColor = (bgColor);
+            }
         }
 
-        public void SetFillForegroundColor(short fg)
+        public short FillForegroundColor
         {
-            CT_PatternFill ptrn = _fill.IsSetPatternFill() ? _fill.GetPatternFill() : _fill.AddNewPatternFill();
-            CT_Color fgColor = new CT_Color();
-            fgColor.indexed=(fg);
-            ptrn.fgColor=(fgColor);
+            get
+            {
+                if (!_fill.IsSetPatternFill() || !_fill.GetPatternFill().IsSetFgColor())
+                    return 0;
+
+                return (short)_fill.GetPatternFill().fgColor.indexed;
+            }
+            set 
+            {
+                CT_PatternFill ptrn = _fill.IsSetPatternFill() ? _fill.GetPatternFill() : _fill.AddNewPatternFill();
+                CT_Color fgColor = new CT_Color();
+                fgColor.indexed = (value);
+                ptrn.fgColor = (fgColor);
+            }
         }
 
-        public void SetFillPattern(short fp)
+        public short FillPattern
         {
-            CT_PatternFill ptrn = _fill.IsSetPatternFill() ? _fill.GetPatternFill() : _fill.AddNewPatternFill();
-            if (fp == NO_FILL) 
-                ptrn.patternType=ST_PatternType.none;
-            else ptrn.patternType = (ST_PatternType)(fp + 1);
+            get
+            {
+                if (!_fill.IsSetPatternFill() || !_fill.GetPatternFill().IsSetPatternType())
+                    return (short)FillPatternType.NO_FILL;
+
+                return (short)(_fill.GetPatternFill().patternType - 1);
+            }
+            set 
+            {
+                CT_PatternFill ptrn = _fill.IsSetPatternFill() ? _fill.GetPatternFill() : _fill.AddNewPatternFill();
+                if (value == (short)FillPatternType.NO_FILL)
+                    ptrn.patternType = ST_PatternType.none;
+                else ptrn.patternType = (ST_PatternType)(value + 1);
+            }
         }
+
     }
 
 }

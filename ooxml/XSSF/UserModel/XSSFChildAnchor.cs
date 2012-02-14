@@ -47,49 +47,59 @@ namespace NPOI.XSSF.UserModel
         }
 
 
-        public CT_Transform2D GetCT_Transform2D()
+        public CT_Transform2D GetCTTransform2D()
         {
             return t2d;
         }
 
-        public int GetDx1()
+        public override int Dx1
         {
-            return (int)t2d.off.x;
+            get
+            {
+                return (int)t2d.off.x;
+
+            }
+            set 
+            {
+                t2d.off.y = (value);
+            }
         }
 
-        public void SetDx1(int dx1)
+        public override int Dy1
         {
-            t2d.off.y = (dx1);
+            get
+            {
+                return (int)t2d.off.y;
+            }
+            set 
+            {
+                t2d.off.y = (value);
+            }
         }
 
-        public int GetDy1()
+        public override int Dy2
         {
-            return (int)t2d.off.y;
+            get
+            {
+                return (int)(Dy1 + t2d.ext.cy);
+            }
+            set 
+            {
+                t2d.ext.cy = (value - Dy1);
+            }
         }
 
-        public void SetDy1(int dy1)
-        {
-            t2d.off.y = (dy1);
-        }
 
-        public int GetDy2()
+        public override int Dx2
         {
-            return (int)(Dy1 + t2d.ext.cy);
-        }
-
-        public void SetDy2(int dy2)
-        {
-            t2d.ext.cy = (dy2 - GetDy1());
-        }
-
-        public int GetDx2()
-        {
-            return (int)(Dx1 + t2d.ext.cx);
-        }
-
-        public void SetDx2(int dx2)
-        {
-            t2d.ext.cx = (dx2 - GetDx1());
+            get
+            {
+                return (int)(Dx1 + t2d.ext.cx);
+            }
+            set 
+            {
+                t2d.ext.cx = (value - Dx1);
+            }
         }
     }
 

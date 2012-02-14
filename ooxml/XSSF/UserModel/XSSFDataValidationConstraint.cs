@@ -81,7 +81,7 @@ namespace NPOI.XSSF.UserModel
             //FIXME: Need to confirm if this is not a formula.
             if (ValidationType.LIST == validationType)
             {
-                explicitListOfValues = formula1.split(",");
+                explicitListOfValues = formula1.Split(new char[]{','});
             }
         }
 
@@ -96,25 +96,46 @@ namespace NPOI.XSSF.UserModel
         /* (non-Javadoc)
          * @see NPOI.ss.usermodel.DataValidationConstraint#getFormula1()
          */
-        public String GetFormula1()
+        public String Formula1
         {
-            return formula1;
+            get
+            {
+                return formula1;
+            }
+            set 
+            {
+                this.formula1 = RemoveLeadingEquals(value);
+            }
         }
 
         /* (non-Javadoc)
          * @see NPOI.ss.usermodel.DataValidationConstraint#getFormula2()
          */
-        public String GetFormula2()
+        public String Formula2
         {
-            return formula2;
+            get
+            {
+                return formula2;
+            }
+            set 
+            {
+                this.formula2 = RemoveLeadingEquals(value);
+            }
         }
 
         /* (non-Javadoc)
          * @see NPOI.ss.usermodel.DataValidationConstraint#getOperator()
          */
-        public int GetOperator()
+        public int Operator
         {
-            return operator1;
+            get
+            {
+                return operator1;
+            }
+            set 
+            {
+                this.operator1 = value;
+            }
         }
 
         /* (non-Javadoc)
@@ -144,16 +165,8 @@ namespace NPOI.XSSF.UserModel
                     builder.Append(string1);
                 }
                 builder.Append("\"");
-                SetFormula1(builder.ToString());
+                Formula1 = builder.ToString();
             }
-        }
-
-        /* (non-Javadoc)
-         * @see NPOI.ss.usermodel.DataValidationConstraint#setFormula1(java.lang.String)
-         */
-        public void SetFormula1(String formula1)
-        {
-            this.formula1 = RemoveLeadingEquals(formula1);
         }
 
         protected String RemoveLeadingEquals(String formula1)
@@ -161,23 +174,7 @@ namespace NPOI.XSSF.UserModel
             return IsFormulaEmpty(formula1) ? formula1 : formula1[0] == '=' ? formula1.Substring(1) : formula1;
         }
 
-        /* (non-Javadoc)
-         * @see NPOI.ss.usermodel.DataValidationConstraint#setFormula2(java.lang.String)
-         */
-        public void SetFormula2(String formula2)
-        {
-            this.formula2 = RemoveLeadingEquals(formula2);
-        }
-
-        /* (non-Javadoc)
-         * @see NPOI.ss.usermodel.DataValidationConstraint#setOperator(int)
-         */
-        public void SetOperator(int operator1)
-        {
-            this.operator1 = operator1;
-        }
-
-        public void validate()
+        public void Validate()
         {
             if (validationType == ValidationType.ANY)
             {
@@ -220,8 +217,8 @@ namespace NPOI.XSSF.UserModel
         public String PrettyPrint()
         {
             StringBuilder builder = new StringBuilder();
-            ST_DataValidationType vt = XSSFDataValidation.validationTypeMappings.Get(validationType);
-            Enum ot = XSSFDataValidation.operatorTypeMappings.Get(operator1);
+            ST_DataValidationType vt = XSSFDataValidation.ValidationTypeMappings.Get(validationType);
+            Enum ot = XSSFDataValidation.operatorTypeMappings[operator1];
             builder.Append(vt);
             builder.Append(' ');
             if (validationType != ValidationType.ANY)

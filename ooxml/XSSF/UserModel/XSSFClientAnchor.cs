@@ -156,7 +156,7 @@ namespace NPOI.XSSF.UserModel
         }
 
         #region IClientAnchor Members
-        public int Dx1
+        public override int Dx1
         {
             get
             {
@@ -168,7 +168,7 @@ namespace NPOI.XSSF.UserModel
             }
         }
 
-        public int Dy1
+        public override int Dy1
         {
             get
             {
@@ -180,7 +180,7 @@ namespace NPOI.XSSF.UserModel
             }
         }
 
-        public int Dy2
+        public override int Dy2
         {
             get
             {
@@ -192,7 +192,7 @@ namespace NPOI.XSSF.UserModel
             }
         }
 
-        public int Dx2
+        public override int Dx2
         {
             get
             {

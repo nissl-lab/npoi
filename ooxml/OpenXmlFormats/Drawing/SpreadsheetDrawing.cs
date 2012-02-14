@@ -39,6 +39,59 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
     }
+    public class CT_GraphicalObjectFrameNonVisual
+    {
+
+        CT_NonVisualDrawingProps cNvPrField;
+        CT_NonVisualGraphicFrameProperties cNvGraphicFramePrField;
+
+        public CT_NonVisualDrawingProps cNvPr
+        {
+            get { return cNvPrField; }
+            set { cNvPrField = value; }
+        }
+        public CT_NonVisualGraphicFrameProperties cNvGraphicFramePr
+        {
+            get { return cNvGraphicFramePrField; }
+            set { cNvGraphicFramePrField = value; }
+        }
+    }
+    public class CT_GraphicalObjectFrame
+    {
+        CT_GraphicalObjectFrameNonVisual nvGraphicFramePrField;
+        CT_Transform2D xfrmField;
+        CT_GraphicalObject graphicField;
+        private string macroField;
+        private bool fPublishedField;
+        public CT_GraphicalObjectFrameNonVisual nvGraphicFramePr
+        {
+            get { return nvGraphicFramePrField; }
+            set { nvGraphicFramePrField = value; }
+        }
+        public CT_Transform2D xfrm
+        {
+            get { return xfrmField; }
+            set { xfrmField = value; }
+        }
+        [XmlAttributeAttribute()]
+        public string macro
+        {
+            get { return macroField; }
+            set { macroField = value; }
+        }
+        [XmlAttributeAttribute()]
+        public bool fPublished
+        {
+            get { return fPublishedField; }
+            set { fPublishedField = value; }
+        }
+        
+        public CT_GraphicalObject graphic
+        {
+            get { return graphicField; }
+            set { graphicField = value; }
+        }
+    }
     public class CT_Shape : EG_ObjectChoices
     {
         private CT_ShapeNonVisual nvSpPrField;

@@ -61,7 +61,7 @@ namespace NPOI.XSSF.Model
             : base()
         {
 
-            doc = StyleSheetDocument();
+            doc = new StyleSheetDocument();
             doc.AddNewStyleSheet();
             // Initialization required in order to make the document Readable by MSExcel
             Initialize();
@@ -104,7 +104,7 @@ namespace NPOI.XSSF.Model
 
         protected void ReadFrom(Stream is1)  {
 		try {
-			doc = StyleSheetDocument.Factory.Parse(is1);
+			doc = StyleSheetDocument.Parse(is1);
 
             CT_Stylesheet styleSheet = doc.GetStyleSheet();
 
@@ -453,11 +453,11 @@ namespace NPOI.XSSF.Model
 		}
 
 		// Save
-		doc.save(out1);
+		doc.Save(out1);
 	}
 
 
-        protected void Commit()
+        protected override void Commit()
         {
             PackagePart part = GetPackagePart();
             Stream out1 = part.GetOutputStream();

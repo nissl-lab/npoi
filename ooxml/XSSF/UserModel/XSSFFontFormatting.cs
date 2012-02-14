@@ -30,7 +30,7 @@ namespace NPOI.XSSF.UserModel
         CT_Font _font;
 
         /*package*/
-        XSSFFontFormatting(CT_Font font)
+        internal XSSFFontFormatting(CT_Font font)
         {
             _font = font;
         }
@@ -43,56 +43,50 @@ namespace NPOI.XSSF.UserModel
          * @see #SS_SUPER
          * @see #SS_SUB
          */
-        public short GetEscapementType()
+        public FontSuperScript EscapementType
         {
-            if (_font.sizeOfVertAlignArray() == 0) return SS_NONE;
-
-            CT_VerticalAlignFontProperty prop = _font.GetVertAlignArray(0);
-            return (short)(prop.val - 1);
-        }
-
-        /**
-         * Set the escapement type for the font
-         *
-         * @param escapementType  super or subscript option
-         * @see #SS_NONE
-         * @see #SS_SUPER
-         * @see #SS_SUB
-         */
-        public void SetEscapementType(short escapementType)
-        {
-            _font.SetVertAlignArray(null);
-            if (escapementType != SS_NONE)
+            get
             {
-                _font.AddNewVertAlign().SetVal((ST_VerticalAlignRun)(escapementType + 1));
+                if (_font.sizeOfVertAlignArray() == 0) return FontSuperScript.NONE;
+
+                CT_VerticalAlignFontProperty prop = _font.GetVertAlignArray(0);
+                return (short)(prop.val - 1);
+            }
+            set 
+            {
+                _font.SetVertAlignArray(null);
+                if (value != FontSuperScript.NONE)
+                {
+                    _font.AddNewVertAlign().SetVal((ST_VerticalAlignRun)(value + 1));
+                }
             }
         }
+
 
         /**
          * @return font color index
          */
-        public short GetFontColorIndex()
+        public short FontColorIndex
         {
-            if (_font.sizeOfColorArray() == 0) return -1;
-
-            int idx = 0;
-            CT_Color color = _font.GetColorArray(0);
-            if (color.IsSetIndexed()) idx = (int)color.indexed;
-            return (short)idx;
-        }
-
-
-        /**
-         * @param color font color index
-         */
-        public void SetFontColorIndex(short color)
-        {
-            _font.SetColorArray(null);
-            if (color != -1)
+            get
             {
-                _font.AddNewColor().indexed = (color);
+                if (_font.sizeOfColorArray() == 0) return -1;
+
+                int idx = 0;
+                CT_Color color = _font.GetColorArray(0);
+                if (color.IsSetIndexed()) idx = (int)color.indexed;
+                return (short)idx;
+            }
+            set 
+            {
+                _font.SetColorArray(null);
+                if (value != -1)
+                {
+                    _font.AddNewColor().indexed = (value);
+                }
             }
         }
+
 
         /**
          *
@@ -110,25 +104,22 @@ namespace NPOI.XSSF.UserModel
          *
          * @return fontheight (in points/20); or -1 if not modified
          */
-        public int GetFontHeight()
+        public int FontHeight
         {
-            if (_font.sizeOfSzArray() == 0) return -1;
-
-            CT_FontSize sz = _font.GetSzArray(0);
-            return (short)(20 * sz.val);
-        }
-
-        /**
-         * Sets the height of the font in 1/20th point units
-         *
-         * @param height the height in twips (in points/20)
-         */
-        public void SetFontHeight(int height)
-        {
-            _font.SetSzArray(null);
-            if (height != -1)
+            get
             {
-                _font.AddNewSz().SetVal((double)height / 20);
+                if (_font.sizeOfSzArray() == 0) return -1;
+
+                CT_FontSize sz = _font.GetSzArray(0);
+                return (short)(20 * sz.val);
+            }
+            set 
+            {
+                _font.SetSzArray(null);
+                if (value != -1)
+                {
+                    _font.AddNewSz().val = (double)value / 20;
+                }
             }
         }
 
@@ -143,58 +134,56 @@ namespace NPOI.XSSF.UserModel
          * @see #U_SINGLE_ACCOUNTING
          * @see #U_DOUBLE_ACCOUNTING
          */
-        public short GetUnderlineType()
+        public FontUnderlineType UnderlineType
         {
-            if (_font.sizeOfUArray() == 0) return FontUnderline.NONE;
-            CT_UnderlineProperty u = _font.GetUArray(0);
-            switch (u.val)
+            get
             {
-                case ST_UnderlineValues.single: return FontUnderline.SINGLE;
-                case ST_UnderlineValues.@double: return FontUnderline.DOUBLE;
-                case ST_UnderlineValues.singleAccounting: return FontUnderline.SINGLE_ACCOUNTING;
-                case ST_UnderlineValues.doubleAccounting: return FontUnderline.DOUBLE_ACCOUNTING;
-                default: return FontUnderline.NONE;
+                if (_font.sizeOfUArray() == 0) return FontUnderlineType.NONE;
+                CT_UnderlineProperty u = _font.GetUArray(0);
+                switch (u.val)
+                {
+                    case ST_UnderlineValues.single: return FontUnderlineType.SINGLE;
+                    case ST_UnderlineValues.@double: return FontUnderlineType.DOUBLE;
+                    case ST_UnderlineValues.singleAccounting: return FontUnderlineType.SINGLE_ACCOUNTING;
+                    case ST_UnderlineValues.doubleAccounting: return FontUnderlineType.DOUBLE_ACCOUNTING;
+                    default: return FontUnderlineType.NONE;
+                }
+            }
+            set 
+            {
+                _font.SetUArray(null);
+                if (value != FontUnderlineType.NONE)
+                {
+                    FontUnderline fenum = FontUnderline.ValueOf(value);
+                    ST_UnderlineValues val = (ST_UnderlineValues)(fenum.Value);
+                    _font.AddNewU().val = val;
+                }
             }
         }
 
-        /**
-         * Set the type of underlining type for the font
-         *
-         * @param underlineType  super or subscript option
-         *
-         * @see #U_NONE
-         * @see #U_SINGLE
-         * @see #U_DOUBLE
-         * @see #U_SINGLE_ACCOUNTING
-         * @see #U_DOUBLE_ACCOUNTING
-         */
-        public void SetUnderlineType(short underlineType)
-        {
-            _font.SetUArray(null);
-            if (underlineType != U_NONE)
-            {
-                FontUnderline fenum = FontUnderline.ValueOf(underlineType);
-                ST_UnderlineValues val = (ST_UnderlineValues)(fenum.Value);
-                _font.AddNewU().val =val;
-            }
-        }
 
         /**
          * Get whether the font weight is Set to bold or not
          *
          * @return bold - whether the font is bold or not
          */
-        public bool IsBold()
+        public bool IsBold
         {
-            return _font.sizeOfBArray() == 1 && _font.GetBArray(0).val;
+            get
+            {
+                return _font.sizeOfBArray() == 1 && _font.GetBArray(0).val;
+            }
         }
 
         /**
          * @return true if font style was Set to <i>italic</i>
          */
-        public bool IsItalic()
+        public bool IsItalic
         {
-            return _font.sizeOfIArray() == 1 && _font.GetIArray(0).GetVal();
+            get
+            {
+                return _font.sizeOfIArray() == 1 && _font.GetIArray(0).GetVal();
+            }
         }
 
         /**

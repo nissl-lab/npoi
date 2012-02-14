@@ -40,6 +40,8 @@
     <Compile Include="Drawing\BaseStylesheet.cs" />
     <Compile Include="DocumentPropertiesCustom.cs" />
     <Compile Include="Drawing\Compatibility.cs" />
+    <Compile Include="Drawing\GraphicalObjectAnimation.cs" />
+    <Compile Include="Drawing\GraphicalObject.cs" />
     <Compile Include="Drawing\Gvml.cs" />
     <Compile Include="Drawing\Picture.cs" />
     <Compile Include="Drawing\ShapeGeometry.cs" />
@@ -75,11 +77,13 @@
     <Compile Include="Spreadsheet\QueryTable.cs" />
     <Compile Include="Spreadsheet\CustomXmlMappings.cs" />
     <Compile Include="Spreadsheet\SstDocument.cs" />
+    <Compile Include="Spreadsheet\StyleSheetDocument.cs" />
     <Compile Include="Spreadsheet\SupplementaryWorkbooks.cs" />
     <Compile Include="Spreadsheet\Styles.cs" />
     <Compile Include="Spreadsheet\TableDocument.cs" />
     <Compile Include="Spreadsheet\ThemeDocument.cs" />
     <Compile Include="Spreadsheet\Workbook.cs" />
+    <Compile Include="Vml\SpreadsheetDrawing.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Word\" />

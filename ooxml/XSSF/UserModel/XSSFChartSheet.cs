@@ -15,99 +15,102 @@
    limitations under the License.
 ==================================================================== */
 
-namespace NPOI.xssf.usermodel;
-
-
-
-
-
-
-
-
-
-using javax.xml.namespace.QName;
-
-using NPOI.POIXMLException;
-using NPOI.Openxml4j.opc.PackagePart;
-using NPOI.Openxml4j.opc.PackageRelationship;
-using org.apache.xmlbeans.XmlException;
-using org.apache.xmlbeans.XmlOptions;
-using org.Openxmlformats.schemas.officeDocument.x2006.relationships.STRelationshipId;
-using org.Openxmlformats.schemas.spreadsheetml.x2006.main.CTChartsheet;
-using org.Openxmlformats.schemas.spreadsheetml.x2006.main.CTDrawing;
-using org.Openxmlformats.schemas.spreadsheetml.x2006.main.CTLegacyDrawing;
-using org.Openxmlformats.schemas.spreadsheetml.x2006.main.ChartsheetDocument;
-
-/**
- * High level representation of Sheet Parts that are of type 'chartsheet'.
- * <p>
- *  Chart sheet is a special kind of Sheet that Contains only chart and no data.
- * </p>
- *
- * @author Yegor Kozlov
- */
-public class XSSFChartSheet : XSSFSheet  {
-
-    private static byte[] BLANK_WORKSHEET = blankWorksheet();
-
-    protected CTChartsheet chartsheet;
-
-    protected XSSFChartSheet(PackagePart part, PackageRelationship rel) {
-        base(part, rel);
-    }
-
-    protected void Read(InputStream is)  {
-        //Initialize the supeclass with a blank worksheet
-        super.Read(new MemoryStream(BLANK_WORKSHEET));
-
-        try {
-            chartsheet = ChartsheetDocument.Factory.Parse(is).GetChartsheet();
-        } catch (XmlException e){
-            throw new POIXMLException(e);
-        }
-    }
+using NPOI.OpenXmlFormats.Spreadsheet;
+using System.IO;
+using System.Xml;
+using System.Collections.Generic;
+using System;
+using NPOI.OpenXmlFormats;
+using NPOI.Util;
+using NPOI.OpenXml4Net.OPC;
+namespace NPOI.XSSF.UserModel
+{
 
     /**
-     * Provide access to the CTChartsheet bean holding this sheet's data
+     * High level representation of Sheet Parts that are of type 'chartsheet'.
+     * <p>
+     *  Chart sheet is a special kind of Sheet that Contains only chart and no data.
+     * </p>
      *
-     * @return the CTChartsheet bean holding this sheet's data
+     * @author Yegor Kozlov
      */
-    public CTChartsheet GetCTChartsheet() {
-        return chartsheet;
-    }
+    public class XSSFChartSheet : XSSFSheet
+    {
 
-    
-    protected CTDrawing GetCTDrawing() {
-       return chartsheet.GetDrawing();
-    }
-    
-    
-    protected CTLegacyDrawing GetCTLegacyDrawing() {
-       return chartsheet.GetLegacyDrawing();
-    }
-    
-    
-    protected void Write(OutputStream out)  {
-        XmlOptions xmlOptions = new XmlOptions(DEFAULT_XML_OPTIONS);
-        xmlOptions.SetSaveSyntheticDocumentElement(
-                new QName(CTChartsheet.type.GetName().GetNamespaceURI(), "chartsheet"));
-        Dictionary<String, String> map = new Dictionary<String, String>();
-        map.Put(STRelationshipId.type.GetName().GetNamespaceURI(), "r");
-        xmlOptions.SetSaveSuggestedPrefixes(map);
+        private static byte[] BLANK_WORKSHEET = blankWorksheet();
 
-        chartsheet.save(out, xmlOptions);
+        protected CT_Chartsheet chartsheet;
 
-    }
+        protected XSSFChartSheet(PackagePart part, PackageRelationship rel)
+            : base(part, rel)
+        {
 
-    private static byte[] blankWorksheet(){
-        MemoryStream out = new MemoryStream();
-        try {
-            new XSSFSheet().Write(out);
-        } catch (IOException e){
-            throw new RuntimeException(e);
         }
-        return out.ToArray();
+
+        protected void Read(Stream is1)
+        {
+            //Initialize the supeclass with a blank worksheet
+            base.Read(new MemoryStream(BLANK_WORKSHEET));
+
+            try
+            {
+                chartsheet = ChartsheetDocument.Parse(is1).GetChartsheet();
+            }
+            catch (XmlException e)
+            {
+                throw new POIXMLException(e);
+            }
+        }
+
+        /**
+         * Provide access to the CTChartsheet bean holding this sheet's data
+         *
+         * @return the CTChartsheet bean holding this sheet's data
+         */
+        public CT_Chartsheet GetCTChartsheet()
+        {
+            return chartsheet;
+        }
+
+
+        protected CT_Drawing GetCTDrawing()
+        {
+            return chartsheet.drawing;
+        }
+
+
+        protected CT_LegacyDrawing GetCTLegacyDrawing()
+        {
+            return chartsheet.legacyDrawing;
+        }
+
+
+        protected void Write(Stream out1)
+        {
+            //XmlOptions xmlOptions = new XmlOptions(DEFAULT_XML_OPTIONS);
+            //xmlOptions.SetSaveSyntheticDocumentElement(
+             //       new QName(CT_Chartsheet.type.GetName().GetNamespaceURI(), "chartsheet"));
+            Dictionary<String, String> map = new Dictionary<String, String>();
+            map[ST_RelationshipId.NamespaceURI]= "r";
+
+            chartsheet.Save(out1);
+
+        }
+
+        private static byte[] blankWorksheet()
+        {
+            MemoryStream out1 = new MemoryStream();
+            try
+            {
+                new XSSFSheet().Write(out1);
+            }
+            catch (IOException e)
+            {
+                throw new RuntimeException(e);
+            }
+            return out1.ToArray();
+        }
     }
+
+
 }
-
-

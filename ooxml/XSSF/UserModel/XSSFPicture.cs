@@ -63,7 +63,7 @@ namespace NPOI.XSSF.UserModel
          *
          * @param Drawing the XSSFDrawing that owns this picture
          */
-        protected XSSFPicture(XSSFDrawing drawing, CT_Picture ctPicture)
+        public XSSFPicture(XSSFDrawing drawing, CT_Picture ctPicture)
         {
             this.drawing = drawing;
             this.ctPicture = ctPicture;

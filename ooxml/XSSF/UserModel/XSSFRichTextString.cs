@@ -79,9 +79,15 @@ namespace NPOI.XSSF.UserModel
         {
             st = new CT_Rst();
             st.t = str;
-            preserveSpaces(st.xgetT());
+            PreserveSpaces(st.xgetT());
         }
 
+
+
+        public void SetStylesTableReference(StylesTable stylestable)
+        {
+            this.styles = stylestable;
+        }
         /**
          * Create empty rich text string and Initialize it with empty string
          */
@@ -133,7 +139,7 @@ namespace NPOI.XSSF.UserModel
         {
             if (startIndex > endIndex)
                 throw new ArgumentException("Start index must be less than end index.");
-            if (startIndex < 0 || endIndex > length())
+            if (startIndex < 0 || endIndex > Length)
                 throw new ArgumentException("Start and end index not in range.");
             if (startIndex == endIndex)
                 return;
@@ -141,7 +147,7 @@ namespace NPOI.XSSF.UserModel
             if (st.sizeOfRArray() == 0 && st.IsSetT())
             {
                 //convert <t>string</t> into a text Run: <r><t>string</t></r>
-                st.AddNewR().SetT(st.GetT());
+                st.AddNewR().SetT(st.t);
                 st.unsetT();
             }
 
@@ -335,9 +341,12 @@ namespace NPOI.XSSF.UserModel
         /**
          * Returns the number of characters in this string.
          */
-        public int Length()
+        public int Length
         {
-            return GetString().Length;
+            get
+            {
+                return GetString().Length;
+            }
         }
 
         /**
@@ -431,6 +440,7 @@ namespace NPOI.XSSF.UserModel
                 if (c1.IsSetTheme()) c2.theme = (c1.theme);
                 if (c1.IsSetTint()) c2.tint = (c1.tint);
             }
+
             if (pr.sizeOfSzArray() > 0) ctFont.AddNewSz().SetVal(pr.GetSzArray(0).GetVal());
             if (pr.sizeOfRFontArray() > 0) ctFont.AddNewName().SetVal(pr.GetRFontArray(0).GetVal());
             if (pr.sizeOfFamilyArray() > 0) ctFont.AddNewFamily().SetVal(pr.GetFamilyArray(0).GetVal());
@@ -451,22 +461,22 @@ namespace NPOI.XSSF.UserModel
         // *
         // * @param xs    the string to check
         // */
-        //protected static void preserveSpaces(ST_Xstring xs)
-        //{
-        //    String text = xs.StringValue;
-        //    if (text != null && text.Length > 0)
-        //    {
-        //        char firstChar = text[0];
-        //        char lastChar = text[text.Length - 1];
-        //        if (Char.IsWhiteSpace(firstChar) || Char.IsWhiteSpace(lastChar))
-        //        {
-        //            XmlCursor c = xs.newCursor();
-        //            c.ToNextToken();
-        //            c.insertAttributeWithValue(new QName("http://www.w3.org/XML/1998/namespace", "space"), "preserve");
-        //            c.dispose();
-        //        }
-        //    }
-        //}
+        protected static void PreserveSpaces(string xs)
+        {
+            String text = xs.StringValue;
+            if (text != null && text.Length > 0)
+            {
+                char firstChar = text[0];
+                char lastChar = text[text.Length - 1];
+                if (Char.IsWhiteSpace(firstChar) || Char.IsWhiteSpace(lastChar))
+                {
+                    //XmlCursor c = xs.newCursor();
+                    //c.ToNextToken();
+                    //c.insertAttributeWithValue(new QName("http://www.w3.org/XML/1998/namespace", "space"), "preserve");
+                    //c.dispose();
+                }
+            }
+        }
 
         /**
          * For all characters which cannot be represented in XML as defined by the XML 1.0 specification,

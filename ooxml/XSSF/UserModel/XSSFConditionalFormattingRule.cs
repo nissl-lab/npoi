@@ -179,14 +179,17 @@ namespace NPOI.XSSF.UserModel
          *
          * @return the type of condition
          */
-        public byte GetConditionType()
+        public ConditionType ConditionType
         {
-            switch (_cfRule.type)
+            get
             {
-                case ST_CfType.expression: return (byte)ConditionType.FORMULA;
-                case ST_CfType.cellIs: return (byte)ConditionType.CELL_VALUE_IS;
+                switch (_cfRule.type)
+                {
+                    case ST_CfType.expression: return ConditionType.FORMULA;
+                    case ST_CfType.cellIs: return ConditionType.CELL_VALUE_IS;
+                }
+                return 0;
             }
-            return 0;
         }
 
         /**
@@ -198,23 +201,26 @@ namespace NPOI.XSSF.UserModel
          *
          * @return the conditional format operator
          */
-        public byte GetComparisonOperation()
+        public ComparisonOperator ComparisonOperation
         {
-            ST_ConditionalFormattingOperator op = _cfRule.@operator;
-            if (op == null) return ComparisonOperator.NO_COMPARISON;
-
-            switch (op)
+            get
             {
-                case ST_ConditionalFormattingOperator.lessThan: return ComparisonOperator.LT;
-                case ST_ConditionalFormattingOperator.lessThanOrEqual: return ComparisonOperator.LE;
-                case ST_ConditionalFormattingOperator.greaterThan: return ComparisonOperator.GT;
-                case ST_ConditionalFormattingOperator.greaterThanOrEqual: return ComparisonOperator.GE;
-                case ST_ConditionalFormattingOperator.equal: return ComparisonOperator.EQUAL;
-                case ST_ConditionalFormattingOperator.notEqual: return ComparisonOperator.NOT_EQUAL;
-                case ST_ConditionalFormattingOperator.between: return ComparisonOperator.BETWEEN;
-                case ST_ConditionalFormattingOperator.notBetween: return ComparisonOperator.NOT_BETWEEN;
+                ST_ConditionalFormattingOperator op = _cfRule.@operator;
+                if (op == null) return ComparisonOperator.NO_COMPARISON;
+
+                switch (op)
+                {
+                    case ST_ConditionalFormattingOperator.lessThan: return ComparisonOperator.LT;
+                    case ST_ConditionalFormattingOperator.lessThanOrEqual: return ComparisonOperator.LE;
+                    case ST_ConditionalFormattingOperator.greaterThan: return ComparisonOperator.GT;
+                    case ST_ConditionalFormattingOperator.greaterThanOrEqual: return ComparisonOperator.GE;
+                    case ST_ConditionalFormattingOperator.equal: return ComparisonOperator.EQUAL;
+                    case ST_ConditionalFormattingOperator.notEqual: return ComparisonOperator.NOT_EQUAL;
+                    case ST_ConditionalFormattingOperator.between: return ComparisonOperator.BETWEEN;
+                    case ST_ConditionalFormattingOperator.notBetween: return ComparisonOperator.NOT_BETWEEN;
+                }
+                return ComparisonOperator.NO_COMPARISON;
             }
-            return ComparisonOperator.NO_COMPARISON;
         }
 
         /**
@@ -231,9 +237,12 @@ namespace NPOI.XSSF.UserModel
          *
          * @return  the first formula
          */
-        public String GetFormula1()
+        public String Formula1
         {
-            return _cfRule.sizeOfFormulaArray() > 0 ? _cfRule.GetFormulaArray(0) : null;
+            get
+            {
+                return _cfRule.sizeOfFormulaArray() > 0 ? _cfRule.GetFormulaArray(0) : null;
+            }
         }
 
         /**
@@ -243,9 +252,12 @@ namespace NPOI.XSSF.UserModel
          *
          * @return  the second formula
          */
-        public String GetFormula2()
+        public String Formula2
         {
-            return _cfRule.sizeOfFormulaArray() == 2 ? _cfRule.GetFormulaArray(1) : null;
+            get
+            {
+                return _cfRule.sizeOfFormulaArray() == 2 ? _cfRule.GetFormulaArray(1) : null;
+            }
         }
     }
 }

@@ -40,7 +40,7 @@ namespace NPOI.XSSF.UserModel
         /**
          * The parent shape, always not-null for shapes in groups
          */
-        protected XSSFShapeGroup parent;
+        public XSSFShapeGroup parent;
 
         /**
          * anchor that is used by this shape
