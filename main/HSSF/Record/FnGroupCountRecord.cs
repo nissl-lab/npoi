@@ -33,7 +33,7 @@ namespace NPOI.HSSF.Record
      */
 
     public class FnGroupCountRecord
-       : Record
+       : StandardRecord
     {
         public const short sid = 0x9c;
 
@@ -80,18 +80,17 @@ namespace NPOI.HSSF.Record
             return buffer.ToString();
         }
 
-        public override int Serialize(int offset, byte [] data)
+        public override void Serialize(ILittleEndianOutput out1)
         {
-            LittleEndian.PutShort(data, 0 + offset, sid);
-            LittleEndian.PutShort(data, 2 + offset,
-                                  ((short)0x02));   // 2 bytes (6 total)
-            LittleEndian.PutShort(data, 4 + offset, this.Count);
-            return RecordSize;
+            out1.WriteShort(Count);
         }
 
-        public override int RecordSize
+        protected override int DataSize
         {
-            get { return 6; }
+            get
+            {
+                return 2;
+            }
         }
 
         public override short Sid

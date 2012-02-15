@@ -34,17 +34,21 @@ namespace NPOI.HSSF.Record
      */
 
     public class FormatRecord
-       : Record
+       : StandardRecord
     {
         public const short sid = 0x41e;
-        private short field_1_index_code;
+        private int field_1_index_code;
 
-        private short field_3_unicode_len;      // Unicode string Length
-        private bool field_3_unicode_flag;     // it Is not Undocumented - it Is Unicode flag
+        //private short field_3_unicode_len;      // Unicode string Length
+        //private bool field_3_unicode_flag;     // it Is not Undocumented - it Is Unicode flag
+        private bool field_3_hasMultibyte;
         private String field_4_formatstring;
 
-        public FormatRecord()
+        public FormatRecord(int indexCode, String fs)
         {
+            field_1_index_code = indexCode;
+            field_4_formatstring = fs;
+            field_3_hasMultibyte = StringUtil.HasMultibyte(fs);
         }
 
         /**
@@ -55,10 +59,10 @@ namespace NPOI.HSSF.Record
         public FormatRecord(RecordInputStream in1)
         {
             field_1_index_code = in1.ReadShort();
-            field_3_unicode_len = in1.ReadShort();
-            field_3_unicode_flag = (in1.ReadByte() & (byte)0x01) != 0;
+            int field_3_unicode_len = in1.ReadShort();
+            field_3_hasMultibyte = (in1.ReadByte() & (byte)0x01) != 0;
 
-            if (field_3_unicode_flag)
+            if (field_3_hasMultibyte)
             {
                 // Unicode
                 field_4_formatstring = in1.ReadUnicodeLEString(field_3_unicode_len);
@@ -69,56 +73,7 @@ namespace NPOI.HSSF.Record
                 field_4_formatstring = in1.ReadCompressedUnicode(field_3_unicode_len);
             }
         }
-
-        /**
-         * Set the format index code (for built in formats)
-         *
-         * @param index  the format index code
-         * @see org.apache.poi.hssf.model.Workbook
-         */
-
-        public void SetIndexCode(short index)
-        {
-            field_1_index_code = index;
-        }
-
-        /**
-         * Set the format string Length
-         *
-         * @param len  the Length of the format string
-         * @see #SetFormatString(String)
-         */
-
-        public void SetFormatStringLength(byte len)
-        {
-
-            field_3_unicode_len = len;
-        }
-
-        /**
-         * Set whether the string Is Unicode
-         *
-         * @param Unicode flag for whether string Is Unicode
-         */
-
-        public void SetUnicodeFlag(bool Unicode)
-        {
-            field_3_unicode_flag = Unicode;
-        }
-
-        /**
-         * Set the format string
-         *
-         * @param fs  the format string
-         * @see #SetFormatStringLength(byte)
-         */
-
-        public void SetFormatString(String fs)
-        {
-            field_4_formatstring = fs;
-            SetUnicodeFlag(StringUtil.HasMultibyte(fs));
-        }
-
+        
         /**
          * Get the format index code (for built in formats)
          *
@@ -126,32 +81,12 @@ namespace NPOI.HSSF.Record
          * @see org.apache.poi.hssf.model.Workbook
          */
 
-        public short GetIndexCode()
+        public int IndexCode
         {
-            return field_1_index_code;
-        }
-
-        /*
-         * Get the format string Length
-         *
-         * @return the Length of the format string
-         * @see #GetFormatString()
-         */
-
-        /* public short GetFormatStringLength
-         {
-             return field_3_unicode_flag ? field_3_unicode_len : field_2_formatstring_len;
-         }*/
-
-        /**
-         * Get whether the string Is Unicode
-         *
-         * @return flag for whether string Is Unicode
-         */
-
-        public bool GetUnicodeFlag()
-        {
-            return field_3_unicode_flag;
+            get
+            {
+                return field_1_index_code;
+            }
         }
 
         /**
@@ -160,9 +95,12 @@ namespace NPOI.HSSF.Record
          * @return the format string
          */
 
-        public String GetFormatString()
+        public String FormatString
         {
-            return field_4_formatstring;
+            get
+            {
+                return field_4_formatstring;
+            }
         }
 
         public override String ToString()
@@ -170,56 +108,46 @@ namespace NPOI.HSSF.Record
             StringBuilder buffer = new StringBuilder();
 
             buffer.Append("[FORMAT]\n");
-            buffer.Append("    .indexcode       = ")
-                .Append(StringUtil.ToHexString(GetIndexCode())).Append("\n");
-            /*
-            buffer.Append("    .formatstringlen = ")
-                .Append(StringUtil.ToHexString(GetFormatStringLength))
-                .Append("\n");
-            */
-            buffer.Append("    .unicode Length  = ")
-                .Append(StringUtil.ToHexString(field_3_unicode_len)).Append("\n");
-            buffer.Append("    .IsUnicode       = ")
-                .Append(field_3_unicode_flag).Append("\n");
-            buffer.Append("    .formatstring    = ").Append(GetFormatString())
-                .Append("\n");
+            buffer.Append("    .indexcode       = ").Append(HexDump.ShortToHex(IndexCode)).Append("\n");
+            buffer.Append("    .isUnicode       = ").Append(field_3_hasMultibyte).Append("\n");
+            buffer.Append("    .formatstring    = ").Append(FormatString).Append("\n");
             buffer.Append("[/FORMAT]\n");
             return buffer.ToString();
         }
 
-        public override int Serialize(int offset, byte [] data)
+        public override void Serialize(ILittleEndianOutput out1)
         {
-            LittleEndian.PutShort(data, 0 + offset, sid);
-            LittleEndian.PutShort(data, 2 + offset, (short)(2 + 2 + 1 + ((field_3_unicode_flag)
-                                                                      ? 2 * field_3_unicode_len
-                                                                      : field_3_unicode_len)));
-            // index + len + flag + format string Length
-            LittleEndian.PutShort(data, 4 + offset, GetIndexCode());
-            LittleEndian.PutShort(data, 6 + offset, field_3_unicode_len);
-            data[8 + offset] = (byte)((field_3_unicode_flag) ? 0x01 : 0x00);
+            String formatString = FormatString;
+            out1.WriteShort(IndexCode);
+            out1.WriteShort(formatString.Length);
+            out1.WriteByte(field_3_hasMultibyte ? 0x01 : 0x00);
 
-            if (field_3_unicode_flag)
+            if (field_3_hasMultibyte)
             {
-                // Unicode
-                StringUtil.PutUnicodeLE(GetFormatString(), data, 9 + offset);
+                StringUtil.PutUnicodeLE(formatString, out1);
             }
             else
             {
-                // not Unicode
-                StringUtil.PutCompressedUnicode(GetFormatString(), data, 9 + offset);
+                StringUtil.PutCompressedUnicode(formatString, out1);
             }
-
-            return RecordSize;
         }
-
-        public override int RecordSize
+        protected override int DataSize
         {
-            get { return 9 + ((field_3_unicode_flag) ? 2 * field_3_unicode_len : field_3_unicode_len); }
+            get
+            {
+                return 5 // 2 shorts + 1 byte
+                    + FormatString.Length * (field_3_hasMultibyte ? 2 : 1);
+            }
         }
 
         public override short Sid
         {
             get { return sid; }
+        }
+        public override Object Clone()
+        {
+            // immutable
+            return this;
         }
     }
 }

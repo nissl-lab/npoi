@@ -27,6 +27,7 @@ namespace NPOI.HSSF.Model
     using NPOI.SS.Formula;
     using NPOI.SS.Formula.PTG;
     using NPOI.SS.Formula.Udf;
+    using NPOI.SS.UserModel;
 
 
     /**
@@ -102,7 +103,7 @@ namespace NPOI.HSSF.Model
 
         protected int numxfs = 0;   // hold the number of extended format records
         protected int numfonts = 0;   // hold the number of font records
-        private short maxformatid = -1;  // holds the max format id
+        private int maxformatid = -1;  // holds the max format id
         private bool uses1904datewindowing = false;  // whether 1904 date windowing is being used
         [NonSerialized]
         private DrawingManager2 drawingManager;
@@ -231,7 +232,7 @@ namespace NPOI.HSSF.Model
                         //if (log.Check(POILogger.DEBUG))
                         //    log.Log(DEBUG, "found format record at " + k);
                         retval.formats.Add((FormatRecord)rec);
-                        retval.maxformatid = retval.maxformatid >= ((FormatRecord)rec).GetIndexCode() ? retval.maxformatid : ((FormatRecord)rec).GetIndexCode();
+                        retval.maxformatid = retval.maxformatid >= ((FormatRecord)rec).IndexCode ? retval.maxformatid : ((FormatRecord)rec).IndexCode;
                         break;
                     case DateWindow1904Record.sid:
                         //if (log.Check(POILogger.DEBUG))
@@ -359,7 +360,7 @@ namespace NPOI.HSSF.Model
             {
                 Record rec;
                 rec = retval.CreateFormat(i);
-                retval.maxformatid = retval.maxformatid >= ((FormatRecord)rec).GetIndexCode() ? retval.maxformatid : ((FormatRecord)rec).GetIndexCode();
+                retval.maxformatid = retval.maxformatid >= ((FormatRecord)rec).IndexCode ? retval.maxformatid : ((FormatRecord)rec).IndexCode;
                 formats.Add((FormatRecord)rec);
                 records.Add(rec);
             }
@@ -1568,69 +1569,69 @@ namespace NPOI.HSSF.Model
          * @see org.apache.poi.hssf.record.FormatRecord
          * @see org.apache.poi.hssf.record.Record
          */
+        
+        //protected Record CreateFormat(int id)
+        //{   // we'll need multiple editions for
+        //    FormatRecord retval = new FormatRecord();   // the differnt formats
 
-        protected Record CreateFormat(int id)
-        {   // we'll need multiple editions for
-            FormatRecord retval = new FormatRecord();   // the differnt formats
+        //    switch (id)
+        //    {
 
-            switch (id)
-            {
+        //        case 0:
+        //            retval.SetIndexCode((short)5);
+        //            retval.SetFormatStringLength((byte)0x17);
+        //            retval.SetFormatString("\"$\"#,##0_);\\(\"$\"#,##0\\)");
+        //            break;
 
-                case 0:
-                    retval.SetIndexCode((short)5);
-                    retval.SetFormatStringLength((byte)0x17);
-                    retval.SetFormatString("\"$\"#,##0_);\\(\"$\"#,##0\\)");
-                    break;
+        //        case 1:
+        //            retval.SetIndexCode((short)6);
+        //            retval.SetFormatStringLength((byte)0x1c);
+        //            retval.SetFormatString("\"$\"#,##0_);[Red]\\(\"$\"#,##0\\)");
+        //            break;
 
-                case 1:
-                    retval.SetIndexCode((short)6);
-                    retval.SetFormatStringLength((byte)0x1c);
-                    retval.SetFormatString("\"$\"#,##0_);[Red]\\(\"$\"#,##0\\)");
-                    break;
+        //        case 2:
+        //            retval.SetIndexCode((short)7);
+        //            retval.SetFormatStringLength((byte)0x1d);
+        //            retval.SetFormatString("\"$\"#,##0.00_);\\(\"$\"#,##0.00\\)");
+        //            break;
 
-                case 2:
-                    retval.SetIndexCode((short)7);
-                    retval.SetFormatStringLength((byte)0x1d);
-                    retval.SetFormatString("\"$\"#,##0.00_);\\(\"$\"#,##0.00\\)");
-                    break;
+        //        case 3:
+        //            retval.SetIndexCode((short)8);
+        //            retval.SetFormatStringLength((byte)0x22);
+        //            retval.SetFormatString(
+        //            "\"$\"#,##0.00_);[Red]\\(\"$\"#,##0.00\\)");
+        //            break;
 
-                case 3:
-                    retval.SetIndexCode((short)8);
-                    retval.SetFormatStringLength((byte)0x22);
-                    retval.SetFormatString(
-                    "\"$\"#,##0.00_);[Red]\\(\"$\"#,##0.00\\)");
-                    break;
+        //        case 4:
+        //            retval.SetIndexCode((short)0x2a);
+        //            retval.SetFormatStringLength((byte)0x32);
+        //            retval.SetFormatString(
+        //            "_(\"$\"* #,##0_);_(\"$\"* \\(#,##0\\);_(\"$\"* \"-\"_);_(@_)");
+        //            break;
 
-                case 4:
-                    retval.SetIndexCode((short)0x2a);
-                    retval.SetFormatStringLength((byte)0x32);
-                    retval.SetFormatString(
-                    "_(\"$\"* #,##0_);_(\"$\"* \\(#,##0\\);_(\"$\"* \"-\"_);_(@_)");
-                    break;
+        //        case 5:
+        //            retval.SetIndexCode((short)0x29);
+        //            retval.SetFormatStringLength((byte)0x29);
+        //            retval.SetFormatString(
+        //            "_(* #,##0_);_(* \\(#,##0\\);_(* \"-\"_);_(@_)");
+        //            break;
 
-                case 5:
-                    retval.SetIndexCode((short)0x29);
-                    retval.SetFormatStringLength((byte)0x29);
-                    retval.SetFormatString(
-                    "_(* #,##0_);_(* \\(#,##0\\);_(* \"-\"_);_(@_)");
-                    break;
+        //        case 6:
+        //            retval.SetIndexCode((short)0x2c);
+        //            retval.SetFormatStringLength((byte)0x3a);
+        //            retval.SetFormatString(
+        //            "_(\"$\"* #,##0.00_);_(\"$\"* \\(#,##0.00\\);_(\"$\"* \"-\"??_);_(@_)");
+        //            break;
 
-                case 6:
-                    retval.SetIndexCode((short)0x2c);
-                    retval.SetFormatStringLength((byte)0x3a);
-                    retval.SetFormatString(
-                    "_(\"$\"* #,##0.00_);_(\"$\"* \\(#,##0.00\\);_(\"$\"* \"-\"??_);_(@_)");
-                    break;
-
-                case 7:
-                    retval.SetIndexCode((short)0x2b);
-                    retval.SetFormatStringLength((byte)0x31);
-                    retval.SetFormatString(
-                    "_(* #,##0.00_);_(* \\(#,##0.00\\);_(* \"-\"??_);_(@_)");
-                    break;
-            }
-            return retval;
-        }
+        //        case 7:
+        //            retval.SetIndexCode((short)0x2b);
+        //            retval.SetFormatStringLength((byte)0x31);
+        //            retval.SetFormatString(
+        //            "_(* #,##0.00_);_(* \\(#,##0.00\\);_(* \"-\"??_);_(@_)");
+        //            break;
+        //    }
+        //    return retval;
+        //}
 
         /**
          * Creates an ExtendedFormatRecord object
@@ -2370,15 +2371,15 @@ namespace NPOI.HSSF.Model
             for (iterator = formats.GetEnumerator(); iterator.MoveNext(); )
             {
                 FormatRecord r = (FormatRecord)iterator.Current;
-                if (r.GetFormatString().Equals(format))
+                if (r.FormatString.Equals(format))
                 {
-                    return r.GetIndexCode();
+                    return (short)r.IndexCode;
                 }
             }
 
             if (CreateIfNotFound)
             {
-                return CreateFormat(format);
+                return (short)CreateFormat(format);
             }
 
             return -1;
@@ -2403,16 +2404,13 @@ namespace NPOI.HSSF.Model
          * @see org.apache.poi.hssf.record.FormatRecord
          * @see org.apache.poi.hssf.record.Record
          */
-        public short CreateFormat(String format)
+        public int CreateFormat(String formatString)
         {
             //        ++xfpos;	//These are to Ensure that positions are updated properly
             //        ++palettepos;
             //        ++bspos;
-            FormatRecord rec = new FormatRecord();
             maxformatid = maxformatid >= (short)0xa4 ? (short)(maxformatid + 1) : (short)0xa4; //Starting value from M$ empiracle study.
-            rec.SetIndexCode(maxformatid);
-            rec.SetFormatStringLength((byte)format.Length);
-            rec.SetFormatString(format);
+            FormatRecord rec = new FormatRecord(maxformatid, formatString);
 
             int pos = 0;
             while (pos < records.Count && records[pos].Sid != FormatRecord.sid)
@@ -2423,7 +2421,30 @@ namespace NPOI.HSSF.Model
             return maxformatid;
         }
 
+        /**
+     * Creates a FormatRecord object
+     * @param id    the number of the format record to create (meaning its position in
+     *        a file as M$ Excel would create it.)
+     */
+        private FormatRecord CreateFormat(int id)
+        {
+            // we'll need multiple editions for
+            // the different formats
 
+
+            switch (id)
+            {
+                case 0: return new FormatRecord(5, BuiltinFormats.GetBuiltinFormat(5));
+                case 1: return new FormatRecord(6, BuiltinFormats.GetBuiltinFormat(6));
+                case 2: return new FormatRecord(7, BuiltinFormats.GetBuiltinFormat(7));
+                case 3: return new FormatRecord(8, BuiltinFormats.GetBuiltinFormat(8));
+                case 4: return new FormatRecord(0x2a, BuiltinFormats.GetBuiltinFormat(0x2a));
+                case 5: return new FormatRecord(0x29, BuiltinFormats.GetBuiltinFormat(0x29));
+                case 6: return new FormatRecord(0x2c, BuiltinFormats.GetBuiltinFormat(0x2c));
+                case 7: return new FormatRecord(0x2b, BuiltinFormats.GetBuiltinFormat(0x2b));
+            }
+            throw new ArgumentException("Unexpected id " + id);
+        }
 
         /**
          * Returns the first occurance of a record matching a particular sid.
@@ -2851,7 +2872,7 @@ namespace NPOI.HSSF.Model
                     return false;
                 }
                 FileSharingRecord frec = FileSharing;
-                return (frec.IsReadOnly == 1);
+                return (frec.ReadOnly == 1);
             }
         }
 
@@ -2866,7 +2887,7 @@ namespace NPOI.HSSF.Model
             FileSharingRecord frec = FileSharing;
             WriteAccessRecord waccess = WriteAccess;
             WriteProtectRecord wprotect = WriteProtect;
-            frec.IsReadOnly=((short)1);
+            frec.ReadOnly=((short)1);
             frec.Password=(FileSharingRecord.HashPassword(password));
             frec.Username=(username);
             waccess.Username=(username);

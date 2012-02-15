@@ -497,7 +497,7 @@ namespace NPOI.HSSF.UserModel
             {
                 // Then we need to clone the format string,
                 //  and update the format record for this
-                short fmt = workbook.CreateFormat(
+                short fmt = (short)workbook.CreateFormat(
                         source.GetDataFormatString()
                 );
                 this.DataFormat=(fmt);

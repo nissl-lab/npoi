@@ -78,7 +78,7 @@ namespace NPOI.HSSF.EventUserModel
             if (record is FormatRecord)
             {
                 FormatRecord fr = (FormatRecord)record;
-                customFormatRecords[fr.GetIndexCode()] = fr;
+                customFormatRecords[fr.IndexCode] = fr;
             }
             else if (record is ExtendedFormatRecord)
             {
@@ -142,7 +142,7 @@ namespace NPOI.HSSF.EventUserModel
                 }
                 else
                 {
-                    format = tfr.GetFormatString();
+                    format = tfr.FormatString;
                 }
             }
             else

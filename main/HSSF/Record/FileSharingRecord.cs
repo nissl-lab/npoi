@@ -28,7 +28,7 @@ namespace NPOI.HSSF.Record
      * REFERENCE:  PG 314 Microsoft Excel 97 Developer's Kit (ISBN: 1-57231-498-2)<p/>
      * @author Andrew C. Oliver (acoliver at apache dot org)
      */
-    public class FileSharingRecord : Record
+    public class FileSharingRecord : StandardRecord
     {
 
         public const short sid = 0x5b;
@@ -93,7 +93,7 @@ namespace NPOI.HSSF.Record
          *
          * @return short  representing if this Is Read only (1 = true)
          */
-        public short IsReadOnly
+        public short ReadOnly
         {
             get
             {
@@ -114,20 +114,13 @@ namespace NPOI.HSSF.Record
             set { field_2_password = value; }
         }
 
-        /**
-         * @returns byte representing the Length of the username field
-         */
-        public short UsernameLength
-        {
-            get { return (short)field_3_username_value.Length; }
-        }
 
         /**
          * @returns username of the user that Created the file
          */
         public String Username
         {
-            get{return field_3_username_value;}
+            get { return field_3_username_value; }
             set { field_3_username_value = value; }
         }
 
@@ -137,7 +130,7 @@ namespace NPOI.HSSF.Record
 
             buffer.Append("[FILESHARING]\n");
             buffer.Append("    .Readonly       = ")
-                .Append(IsReadOnly == 1 ? "true" : "false").Append("\n");
+                .Append(ReadOnly == 1 ? "true" : "false").Append("\n");
             buffer.Append("    .password       = ")
                 .Append(StringUtil.ToHexString(Password)).Append("\n");
             buffer.Append("    .username       = ")
@@ -146,32 +139,29 @@ namespace NPOI.HSSF.Record
             return buffer.ToString();
         }
 
-        public override int Serialize(int offset, byte [] data)
+        public override void Serialize(ILittleEndianOutput out1)
         {
             // TODO - junit
-            LittleEndian.PutShort(data, 0 + offset, sid);
-            LittleEndian.PutShort(data, 2 + offset, (short)(RecordSize - 4));
-            LittleEndian.PutShort(data, 4 + offset, IsReadOnly);
-            LittleEndian.PutShort(data, 6 + offset, Password);
-            LittleEndian.PutShort(data, 8 + offset, UsernameLength);
-            if (UsernameLength > 0)
+            out1.WriteShort(ReadOnly);
+            out1.WriteShort(Password);
+            out1.WriteShort(field_3_username_value.Length);
+            if (field_3_username_value.Length > 0)
             {
-                LittleEndian.PutByte(data, 10 + offset, field_3_username_unicode_options);
-                StringUtil.PutCompressedUnicode(Username, data, 11 + offset);
+                out1.WriteByte(field_3_username_unicode_options);
+                StringUtil.PutCompressedUnicode(Username, out1);
             }
-            return RecordSize;
         }
 
-        public override int RecordSize
+        protected override int DataSize
         {
             get
             {
-                short nameLen = UsernameLength;
+                int nameLen = field_3_username_value.Length;
                 if (nameLen < 1)
                 {
-                    return 10;
+                    return 6;
                 }
-                return 11 + nameLen;
+                return 7 + nameLen;
             }
         }
 
@@ -189,9 +179,9 @@ namespace NPOI.HSSF.Record
         public override Object Clone()
         {
             FileSharingRecord Clone = new FileSharingRecord();
-            Clone.IsReadOnly=field_1_Readonly;
-            Clone.Password=field_2_password;
-            Clone.Username=field_3_username_value;
+            Clone.ReadOnly = field_1_Readonly;
+            Clone.Password = field_2_password;
+            Clone.Username = field_3_username_value;
             return Clone;
         }
     }

@@ -38,8 +38,7 @@ namespace NPOI.HSSF.Record
     public class FontRecord
        : StandardRecord
     {
-        public const short sid =
-            0x31;                                                 // docs are wrong (0x231 Microsoft Support site article Q184647)
+        public const short sid = 0x31;                                                 // docs are wrong (0x231 Microsoft Support site article Q184647)
         public static short SS_NONE = 0;
         public static short SS_SUPER = 1;
         public static short SS_SUB = 2;
@@ -53,16 +52,12 @@ namespace NPOI.HSSF.Record
         private short field_2_attributes;
 
         // 0 0x01 - Reserved bit must be 0
-        static private BitField italic =
-            BitFieldFactory.GetInstance(0x02);                                   // Is this font in italics
+        static private BitField italic = BitFieldFactory.GetInstance(0x02);                // Is this font in italics
 
         // 2 0x04 - reserved bit must be 0
-        static private BitField strikeout =
-            BitFieldFactory.GetInstance(0x08);                                   // Is this font has a line through the center
-        static private BitField macoutline = BitFieldFactory.GetInstance(
-            0x10);                                                // some weird macintosh thing....but who Understands those mac people anyhow
-        static private BitField macshadow = BitFieldFactory.GetInstance(
-            0x20);                                                // some weird macintosh thing....but who Understands those mac people anyhow
+        static private BitField strikeout = BitFieldFactory.GetInstance(0x08);    //is this font has a line through the center
+        static private BitField macoutline = BitFieldFactory.GetInstance(0x10);   // some weird macintosh thing....but who Understands those mac people anyhow
+        static private BitField macshadow = BitFieldFactory.GetInstance(0x20);      // some weird macintosh thing....but who Understands those mac people anyhow
 
         // 7-6 - reserved bits must be 0
         // the rest Is Unused
@@ -97,7 +92,7 @@ namespace NPOI.HSSF.Record
             field_8_charset = (byte)in1.ReadByte();
             field_9_zero = (byte)in1.ReadByte();
             int field_10_font_name_len = (byte)in1.ReadByte();
-            int unicodeFlags  = in1.ReadUByte(); // options byte present always (even if no character data)
+            int unicodeFlags = in1.ReadUByte(); // options byte present always (even if no character data)
 
             if (field_10_font_name_len > 0)
             {
@@ -149,9 +144,9 @@ namespace NPOI.HSSF.Record
             {
                 field_2_attributes = italic.SetShortBoolean(field_2_attributes, value);
             }
-            get 
-            { 
-                  return italic.IsSet(field_2_attributes); 
+            get
+            {
+                return italic.IsSet(field_2_attributes);
             }
         }
 
@@ -164,7 +159,7 @@ namespace NPOI.HSSF.Record
 
         public bool IsStrikeout
         {
-            set{field_2_attributes = strikeout.SetShortBoolean(field_2_attributes, value);}
+            set { field_2_attributes = strikeout.SetShortBoolean(field_2_attributes, value); }
             get { return strikeout.IsSet(field_2_attributes); }
         }
 
@@ -257,7 +252,7 @@ namespace NPOI.HSSF.Record
 
         public short FontHeight
         {
-            get{return field_1_font_height;}
+            get { return field_1_font_height; }
             set { field_1_font_height = value; }
         }
 
@@ -281,8 +276,8 @@ namespace NPOI.HSSF.Record
 
         public short ColorPaletteIndex
         {
-            get{return field_3_color_palette_index;}
-            set{field_3_color_palette_index =value;}
+            get { return field_3_color_palette_index; }
+            set { field_3_color_palette_index = value; }
         }
 
         /**
@@ -373,31 +368,36 @@ namespace NPOI.HSSF.Record
         public override void Serialize(ILittleEndianOutput out1)
         {
             out1.WriteShort(FontHeight);
-		    out1.WriteShort(Attributes);
-		    out1.WriteShort(ColorPaletteIndex);
-		    out1.WriteShort(BoldWeight);
-		    out1.WriteShort(SuperSubScript);
-		    out1.WriteByte(Underline);
-		    out1.WriteByte(Family);
-		    out1.WriteByte(Charset);
-		    out1.WriteByte(field_9_zero);
-		    int fontNameLen = field_11_font_name.Length;
-		    out1.WriteByte(fontNameLen);
-		    bool hasMultibyte = StringUtil.HasMultibyte(field_11_font_name);
-		    out1.WriteByte(hasMultibyte ? 0x01 : 0x00);
-		    if (fontNameLen > 0) {
-			    if (hasMultibyte) {
-			       StringUtil.PutUnicodeLE(field_11_font_name, out1);
-			    } else {
-				    StringUtil.PutCompressedUnicode(field_11_font_name, out1);
-			    }
-		    }
+            out1.WriteShort(Attributes);
+            out1.WriteShort(ColorPaletteIndex);
+            out1.WriteShort(BoldWeight);
+            out1.WriteShort(SuperSubScript);
+            out1.WriteByte(Underline);
+            out1.WriteByte(Family);
+            out1.WriteByte(Charset);
+            out1.WriteByte(field_9_zero);
+            int fontNameLen = field_11_font_name.Length;
+            out1.WriteByte(fontNameLen);
+            bool hasMultibyte = StringUtil.HasMultibyte(field_11_font_name);
+            out1.WriteByte(hasMultibyte ? 0x01 : 0x00);
+            if (fontNameLen > 0)
+            {
+                if (hasMultibyte)
+                {
+                    StringUtil.PutUnicodeLE(field_11_font_name, out1);
+                }
+                else
+                {
+                    StringUtil.PutCompressedUnicode(field_11_font_name, out1);
+                }
+            }
 
         }
 
         protected override int DataSize
         {
-            get {
+            get
+            {
                 int size = 16; // 5 shorts + 6 bytes
                 int fontNameLen = field_11_font_name.Length;
                 if (fontNameLen < 1)

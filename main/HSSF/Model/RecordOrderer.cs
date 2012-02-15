@@ -338,9 +338,11 @@ namespace NPOI.HSSF.Model
         {
             switch (sid)
             {
-                case UnknownRecord.SHEETEXT_0862:
+                //case UnknownRecord.SHEETEXT_0862:
+                case SheetExtRecord.sid:
                 case UnknownRecord.SHEETPROTECTION_0867:
-                case UnknownRecord.RANGEPROTECTION_0868:
+                //case UnknownRecord.RANGEPROTECTION_0868:
+                case FeatRecord.sid: 
                 case EOFRecord.sid:
                     return true;
             }

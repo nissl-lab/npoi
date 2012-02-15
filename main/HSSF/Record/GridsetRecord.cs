@@ -37,10 +37,10 @@ namespace NPOI.HSSF.Record
      */
 
     public class GridsetRecord
-       : Record
+       : StandardRecord
     {
         public const short sid = 0x82;
-        public short field_1_gridSet_flag;
+        public short field_1_gridset_flag;
 
         public GridsetRecord()
         {
@@ -53,7 +53,7 @@ namespace NPOI.HSSF.Record
 
         public GridsetRecord(RecordInputStream in1)
         {
-            field_1_gridSet_flag = in1.ReadShort();
+            field_1_gridset_flag = in1.ReadShort();
         }
 
         /**
@@ -66,17 +66,17 @@ namespace NPOI.HSSF.Record
         {
             get
             {
-                return (field_1_gridSet_flag == 1);
+                return (field_1_gridset_flag == 1);
             }
             set
             {
                 if (value == true)
                 {
-                    field_1_gridSet_flag = 1;
+                    field_1_gridset_flag = 1;
                 }
                 else
                 {
-                    field_1_gridSet_flag = 0;
+                    field_1_gridset_flag = 0;
                 }
             }
         }
@@ -85,24 +85,24 @@ namespace NPOI.HSSF.Record
         {
             StringBuilder buffer = new StringBuilder();
 
-            buffer.Append("[GRIDSet]\n");
-            buffer.Append("    .gridSet        = ").Append(Gridset)
+            buffer.Append("[GRIDSET]\n");
+            buffer.Append("    .gridset        = ").Append(Gridset)
                 .Append("\n");
-            buffer.Append("[/GRIDSet]\n");
+            buffer.Append("[/GRIDSET]\n");
             return buffer.ToString();
         }
 
-        public override int Serialize(int offset, byte [] data)
+        public override void Serialize(ILittleEndianOutput out1)
         {
-            LittleEndian.PutShort(data, 0 + offset, sid);
-            LittleEndian.PutShort(data, 2 + offset, (short)0x2);
-            LittleEndian.PutShort(data, 4 + offset, field_1_gridSet_flag);
-            return RecordSize;
+            out1.WriteShort(field_1_gridset_flag);
         }
 
-        public override int RecordSize
+        protected override int DataSize
         {
-            get { return 6; }
+            get
+            {
+                return 2;
+            }
         }
 
         public override short Sid
@@ -113,7 +113,7 @@ namespace NPOI.HSSF.Record
         public override Object Clone()
         {
             GridsetRecord rec = new GridsetRecord();
-            rec.field_1_gridSet_flag = field_1_gridSet_flag;
+            rec.field_1_gridset_flag = field_1_gridset_flag;
             return rec;
         }
     }

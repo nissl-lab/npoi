@@ -52,9 +52,9 @@ namespace NPOI.HSSF.Record
       	//public const int USERSVIEWBEGIN_01AA  = 0x01AA;
     	//public const int USERSVIEWEND_01AB    = 0x01AB;
         public const int QUICKTIP_0800 = 0x0800;
-        public const int SHEETEXT_0862 = 0x0862; // OOO calls this SHEETLAYOUT
+        //public const int SHEETEXT_0862 = 0x0862; // OOO calls this SHEETLAYOUT
         public const int SHEETPROTECTION_0867 = 0x0867;
-        public const int RANGEPROTECTION_0868 = 0x0868;
+        //public const int RANGEPROTECTION_0868 = 0x0868;
         public const int HEADER_FOOTER_089C   = 0x089C;
         public const int CODENAME_1BA = 0x01BA;
         private int _sid = 0;
@@ -187,7 +187,7 @@ namespace NPOI.HSSF.Record
                 case 0x0863: return "BOOKEXT";
                 case 0x0864: return "SXADDL";    // Pivot Table Additional Info
                 case SHEETPROTECTION_0867: return "SHEETPROTECTION";
-                case RANGEPROTECTION_0868: return "RANGEPROTECTION";
+                //case RANGEPROTECTION_0868: return "RANGEPROTECTION";
                 case 0x086B: return "DATALABEXTCONTENTS";
                 case 0x086C: return "CELLWATCH";
                 case 0x0874: return "DROPDOWNOBJIDS";

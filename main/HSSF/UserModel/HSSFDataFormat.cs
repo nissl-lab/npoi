@@ -72,11 +72,11 @@ namespace NPOI.HSSF.UserModel
             while (i.MoveNext())
             {
                 FormatRecord r = (FormatRecord)i.Current;
-                for (int j = formats.Count; formats.Count <= r.GetIndexCode(); j++)
+                for (int j = formats.Count; formats.Count <= r.IndexCode; j++)
                 {
                     formats.Add(null);
                 }
-                formats[r.GetIndexCode()] = r.GetFormatString();
+                formats[r.IndexCode] = r.FormatString;
             }
         }
 

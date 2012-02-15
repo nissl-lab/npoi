@@ -34,7 +34,7 @@ namespace NPOI.HSSF.Record
      */
 
     public class HCenterRecord
-       : Record
+       : StandardRecord
     {
         public const short sid = 0x83;
         private short field_1_hcenter;
@@ -64,7 +64,8 @@ namespace NPOI.HSSF.Record
             {
                 return (field_1_hcenter == 1);
             }
-            set {
+            set
+            {
                 if (value == true)
                 {
                     field_1_hcenter = 1;
@@ -87,17 +88,17 @@ namespace NPOI.HSSF.Record
             return buffer.ToString();
         }
 
-        public override int Serialize(int offset, byte [] data)
+        public override void Serialize(ILittleEndianOutput out1)
         {
-            LittleEndian.PutShort(data, 0 + offset, sid);
-            LittleEndian.PutShort(data, 2 + offset, (short)0x2);
-            LittleEndian.PutShort(data, 4 + offset, (short)field_1_hcenter);
-            return RecordSize;
+            out1.WriteShort(field_1_hcenter);
         }
 
-        public override int RecordSize
+        protected override int DataSize
         {
-            get { return 6; }
+            get
+            {
+                return 2;
+            }
         }
 
         public override short Sid

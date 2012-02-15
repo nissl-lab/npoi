@@ -52,6 +52,13 @@
     <Compile Include="DDF\EscherTertiaryOptRecord.cs" />
     <Compile Include="HSSF\Record\Aggregates\ChartSubstreamRecordAggregate.cs" />
     <Compile Include="HSSF\Record\Aggregates\WorksheetProtectionBlock.cs" />
+    <Compile Include="HSSF\Record\Common\FeatFormulaErr2.cs" />
+    <Compile Include="HSSF\Record\Common\FeatProtection.cs" />
+    <Compile Include="HSSF\Record\Common\FeatSmartTag.cs" />
+    <Compile Include="HSSF\Record\Common\FtrHeader.cs" />
+    <Compile Include="HSSF\Record\Common\SharedFeature.cs" />
+    <Compile Include="HSSF\Record\FeatHdrRecord.cs" />
+    <Compile Include="HSSF\Record\FeatRecord.cs" />
     <Compile Include="HSSF\Record\FtCblsSubRecord.cs" />
     <Compile Include="HSSF\Record\SheetExtRecord.cs" />
     <Compile Include="HSSF\UserModel\DVConstraint.cs" />
