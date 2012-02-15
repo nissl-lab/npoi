@@ -58,7 +58,6 @@
     <Compile Include="AboutDialog.Designer.cs">
       <DependentUpon>AboutDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="HWPF\AbstractHWPFTreeNode.cs" />
     <Compile Include="HSSF\AbstractRecordTreeNode.cs" />
     <Compile Include="AbstractTreeNode.cs" />
     <Compile Include="HSSF\CellValueRecordTreeNode.cs" />
@@ -66,7 +65,6 @@
     <Compile Include="DirectoryTreeNode.cs" />
     <Compile Include="DocumentTreeNode.cs" />
     <Compile Include="EscherRecordTreeNode.cs" />
-    <Compile Include="HWPF\PAPXTreeNode.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>

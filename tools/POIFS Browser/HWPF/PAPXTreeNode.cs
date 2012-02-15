@@ -5,7 +5,7 @@ using NPOI.HWPF.Model;
 
 namespace NPOI.Tools.POIFSBrowser.HWPF
 {
-    public class PAPXTreeNode:AbstractHWPFTreeNode
+    internal class PAPXTreeNode : AbstractHWPFTreeNode
     {
         public PAPXTreeNode(PAPX papx)
         {

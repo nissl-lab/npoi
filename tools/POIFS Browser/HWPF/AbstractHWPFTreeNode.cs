@@ -7,7 +7,7 @@ using System.Reflection;
 
 namespace NPOI.Tools.POIFSBrowser
 {
-    public class AbstractHWPFTreeNode : AbstractTreeNode
+    internal abstract class AbstractHWPFTreeNode : AbstractTreeNode
     {
         public object Record { get; set; }
         public abstract byte[] GetBytes();
