@@ -29,7 +29,7 @@ namespace NPOI.HSSF.Record
 
      * @author Glen Stampoultzis (glens at apache.org)
      */
-    public class PaneRecord : Record
+    public class PaneRecord : StandardRecord
     {
         public const short sid = 0x41;
         private short field_1_x;
@@ -42,6 +42,7 @@ namespace NPOI.HSSF.Record
         public static short ACTIVE_PANE_LOWER_LEFT = 2;
         // TODO - Remove obsolete field (it was deprecated May-2008 v3.1)
         /** @deprecated use ACTIVE_PANE_UPPER_LEFT */
+        [Obsolete]
         public static short ACTIVE_PANE_UPER_LEFT = 3;
         public static short ACTIVE_PANE_UPPER_LEFT = 3;
 
@@ -97,28 +98,21 @@ namespace NPOI.HSSF.Record
             return buffer.ToString();
         }
 
-        public override int Serialize(int offset, byte [] data)
+        public override void Serialize(ILittleEndianOutput out1)
         {
-            int pos = 0;
-
-            LittleEndian.PutShort(data, 0 + offset, sid);
-            LittleEndian.PutShort(data, 2 + offset, (short)(RecordSize - 4));
-
-            LittleEndian.PutShort(data, 4 + offset + pos, field_1_x);
-            LittleEndian.PutShort(data, 6 + offset + pos, field_2_y);
-            LittleEndian.PutShort(data, 8 + offset + pos, field_3_topRow);
-            LittleEndian.PutShort(data, 10 + offset + pos, field_4_leftColumn);
-            LittleEndian.PutShort(data, 12 + offset + pos, field_5_activePane);
-
-            return RecordSize;
+            out1.WriteShort(field_1_x);
+            out1.WriteShort(field_2_y);
+            out1.WriteShort(field_3_topRow);
+            out1.WriteShort(field_4_leftColumn);
+            out1.WriteShort(field_5_activePane);
         }
 
-        /**
-         * Size of record (exluding 4 byte header)
-         */
-        public override int RecordSize
+        protected override int DataSize
         {
-            get { return 4 + 2 + 2 + 2 + 2 + 2; }
+            get
+            {
+                return 2 + 2 + 2 + 2 + 2;
+            }
         }
 
         public override short Sid

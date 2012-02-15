@@ -39,13 +39,12 @@ namespace NPOI.HSSF.Record
      * @version 2.0-pre
      */
 
-    public class MulRKRecord : Record
+    public class MulRKRecord : StandardRecord
     {
         public const short sid = 0xbd;
-        //private short             field_1_row;
         private int field_1_row;
         private short field_2_first_col;
-        private ArrayList field_3_rks;
+        private RkRec[] field_3_rks;
         private short field_4_last_col;
 
         /** Creates new MulRKRecord */
@@ -64,7 +63,7 @@ namespace NPOI.HSSF.Record
         {
             field_1_row = in1.ReadUShort();
             field_2_first_col = in1.ReadShort();
-            field_3_rks = ParseRKs(in1);
+            field_3_rks = RkRec.ParseRKs(in1);
             field_4_last_col = in1.ReadShort();
         }
 
@@ -111,7 +110,7 @@ namespace NPOI.HSSF.Record
 
         public short GetXFAt(int coffset)
         {
-            return ((RkRec)field_3_rks[coffset]).xf;
+            return field_3_rks[coffset].xf;
         }
 
         /**
@@ -121,39 +120,36 @@ namespace NPOI.HSSF.Record
 
         public double GetRKNumberAt(int coffset)
         {
-            return RKUtil.DecodeNumber(((RkRec)field_3_rks[coffset]).rk);
+            return RKUtil.DecodeNumber(field_3_rks[coffset].rk);
         }
 
 
-        private ArrayList ParseRKs(RecordInputStream in1)
-        {
-            ArrayList retval = new ArrayList();
-            while ((in1.Remaining - 2) > 0)
-            {
-                RkRec rec = new RkRec();
+        //private ArrayList ParseRKs(RecordInputStream in1)
+        //{
+        //    ArrayList retval = new ArrayList();
+        //    while ((in1.Remaining - 2) > 0)
+        //    {
+        //        RkRec rec = new RkRec();
 
-                rec.xf = in1.ReadShort();
-                rec.rk = in1.ReadInt();
-                retval.Add(rec);
-            }
-            return retval;
-        }
+        //        rec.xf = in1.ReadShort();
+        //        rec.rk = in1.ReadInt();
+        //        retval.Add(rec);
+        //    }
+        //    return retval;
+        //}
 
         public override String ToString()
         {
             StringBuilder buffer = new StringBuilder();
 
             buffer.Append("[MULRK]\n");
-            buffer.Append("firstcol  = ")
-                .Append(StringUtil.ToHexString(FirstColumn)).Append("\n");
-            buffer.Append(" lastcol  = ")
-                .Append(StringUtil.ToHexString(LastColumn)).Append("\n");
+            buffer.Append("	.row	 = ").Append(HexDump.ShortToHex(Row)).Append("\n");
+            buffer.Append(" .firstcol= ").Append(StringUtil.ToHexString(FirstColumn)).Append("\n");
+            buffer.Append(" .lastcol = ").Append(StringUtil.ToHexString(LastColumn)).Append("\n");
             for (int k = 0; k < NumColumns; k++)
             {
-                buffer.Append("xf").Append(k).Append("        = ")
-                    .Append(StringUtil.ToHexString(GetXFAt(k))).Append("\n");
-                buffer.Append("rk").Append(k).Append("        = ")
-                    .Append(GetRKNumberAt(k)).Append("\n");
+                buffer.Append(" xf[").Append(k).Append("] = ").Append(StringUtil.ToHexString(GetXFAt(k))).Append("\n");
+                buffer.Append(" rk[").Append(k).Append("] = ").Append(GetRKNumberAt(k)).Append("\n");
             }
             buffer.Append("[/MULRK]\n");
             return buffer.ToString();
@@ -164,16 +160,41 @@ namespace NPOI.HSSF.Record
             get { return sid; }
         }
 
-        public override int Serialize(int offset, byte [] data)
+        public override void Serialize(ILittleEndianOutput out1)
         {
-            throw new RecordFormatException(
-                "Sorry, you can't Serialize a MulRK in this release");
+            throw new RecordFormatException("Sorry, you can't serialize MulRK in this release");
+        }
+        protected override int DataSize
+        {
+            get
+            {
+                throw new RecordFormatException("Sorry, you can't serialize MulRK in this release");
+            }
+        }
+        private class RkRec
+        {
+            public const int ENCODED_SIZE = 6;
+            public short xf;
+            public int rk;
+
+            private RkRec(RecordInputStream in1)
+            {
+                xf = in1.ReadShort();
+                rk = in1.ReadInt();
+            }
+
+            public static RkRec[] ParseRKs(RecordInputStream in1)
+            {
+                int nItems = (in1.Remaining - 2) / ENCODED_SIZE;
+                RkRec[] retval = new RkRec[nItems];
+                for (int i = 0; i < nItems; i++)
+                {
+                    retval[i] = new RkRec(in1);
+                }
+                return retval;
+            }
         }
     }
 
-    internal class RkRec
-    {
-        public short xf;
-        public int rk;
-    }
+    
 }

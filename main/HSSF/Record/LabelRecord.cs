@@ -166,7 +166,7 @@ namespace NPOI.HSSF.Record
                 .Append(StringUtil.ToHexString(Row)).Append("\n");
             buffer.Append("    .column         = ")
                 .Append(StringUtil.ToHexString(Column)).Append("\n");
-            buffer.Append("    .xFindex        = ")
+            buffer.Append("    .xfindex        = ")
                 .Append(StringUtil.ToHexString(XFIndex)).Append("\n");
             buffer.Append("    .string_len       = ")
                 .Append(StringUtil.ToHexString(field_4_string_len)).Append("\n");

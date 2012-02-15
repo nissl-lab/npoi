@@ -34,7 +34,7 @@ namespace NPOI.HSSF.Record
      */
 
     public class PaletteRecord
-       : Record
+       : StandardRecord
     {
         public const short sid = 0x92;
         /** The standard size of an XLS palette */
@@ -90,23 +90,21 @@ namespace NPOI.HSSF.Record
             return buffer.ToString();
         }
 
-        public override int Serialize(int offset, byte[] data)
+        public override void Serialize(ILittleEndianOutput out1)
         {
-            LittleEndian.PutShort(data, 0 + offset, sid);
-            LittleEndian.PutShort(data, 2 + offset, (short)(RecordSize - 4));
-            LittleEndian.PutShort(data, 4 + offset, (short)field_2_colors.Count);
-            for (int k = 0; k < field_2_colors.Count; k++)
+            out1.WriteShort(field_2_colors.Count);
+            for (int i = 0; i < field_2_colors.Count; i++)
             {
-                PColor c = (PColor)field_2_colors[k];
-                c.Serialize(data, (6 + offset + (k * 4)));
+                field_2_colors[i].Serialize(out1);
             }
-
-            return RecordSize;
         }
 
-        public override int RecordSize
+        protected override int DataSize
         {
-            get { return 4 + 2 + (field_2_colors.Count * 4); }
+            get
+            {
+                return 2 + field_2_colors.Count * PColor.ENCODED_SIZE;
+            }
         }
 
         public override short Sid
@@ -128,7 +126,7 @@ namespace NPOI.HSSF.Record
                 return null;
             }
             PColor color = (PColor)field_2_colors[i];
-            return new byte[] { color.red, color.green, color.blue };
+            return new byte[] { color._red, color._green, color._blue };
         }
 
         /**
@@ -233,37 +231,37 @@ namespace NPOI.HSSF.Record
      */
     class PColor
     {
-        public byte red;
-        public byte green;
-        public byte blue;
+        public static short ENCODED_SIZE = 4;
+        public byte _red;
+        public byte _green;
+        public byte _blue;
         public PColor(int red, int green, int blue)
         {
-            this.red = (byte)red;
-            this.green = (byte)green;
-            this.blue = (byte)blue;
+            this._red = (byte)red;
+            this._green = (byte)green;
+            this._blue = (byte)blue;
         }
 
           public PColor(RecordInputStream in1) {
-            red = (byte)in1.ReadByte();
-            green = (byte)in1.ReadByte();
-            blue = (byte)in1.ReadByte();
+            _red = (byte)in1.ReadByte();
+            _green = (byte)in1.ReadByte();
+            _blue = (byte)in1.ReadByte();
             in1.ReadByte(); // unused
           }
 
-        public void Serialize(byte[] data, int offset)
-        {
-            data[offset + 0] = red;
-            data[offset + 1] = green;
-            data[offset + 2] = blue;
-            data[offset + 3] = 0;
+        public void Serialize(ILittleEndianOutput out1) {
+            out1.WriteByte(_red);
+            out1.WriteByte(_green);
+            out1.WriteByte(_blue);
+            out1.WriteByte(0);
         }
 
         public override String ToString()
         {
             StringBuilder buffer = new StringBuilder();
-            buffer.Append("  red           = ").Append(red & 0xff).Append('\n');
-            buffer.Append("  green         = ").Append(green & 0xff).Append('\n');
-            buffer.Append("  blue          = ").Append(blue & 0xff).Append('\n');
+            buffer.Append("  red           = ").Append(_red & 0xff).Append('\n');
+            buffer.Append("  green         = ").Append(_green & 0xff).Append('\n');
+            buffer.Append("  blue          = ").Append(_blue & 0xff).Append('\n');
             return buffer.ToString();
         }
     }

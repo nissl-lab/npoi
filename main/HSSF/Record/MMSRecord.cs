@@ -35,9 +35,9 @@ namespace NPOI.HSSF.Record
      */
 
     public class MMSRecord
-       : Record
+       : StandardRecord
     {
-        public static short sid = 0xC1;
+        public const short sid = 0xC1;
         private byte field_1_AddMenuCount;   // = 0;
         private byte field_2_delMenuCount;   // = 0;
 
@@ -52,6 +52,10 @@ namespace NPOI.HSSF.Record
 
         public MMSRecord(RecordInputStream in1)
         {
+            if (in1.Remaining == 0)
+            {
+                return;
+            }
             field_1_AddMenuCount = (byte)in1.ReadByte();
             field_2_delMenuCount = (byte)in1.ReadByte();
         }
@@ -61,9 +65,16 @@ namespace NPOI.HSSF.Record
          * @param am  number of Add menu options
          */
 
-        public void SetAddMenuCount(byte am)
+        public byte AddMenuCount
         {
-            field_1_AddMenuCount = am;
+            get
+            {
+                return field_1_AddMenuCount;
+            }
+            set
+            {
+                field_1_AddMenuCount = value;
+            }
         }
 
         /**
@@ -71,57 +82,44 @@ namespace NPOI.HSSF.Record
          * @param dm  number of del menu options
          */
 
-        public void SetDelMenuCount(byte dm)
+        public byte DelMenuCount
         {
-            field_2_delMenuCount = dm;
+            get
+            {
+                return field_2_delMenuCount;
+            }
+            set
+            {
+                field_2_delMenuCount = value;
+            }
         }
 
-        /**
-         * Get number of Add menu options (should be 0)
-         * @return number of Add menu options
-         */
-
-        public byte GetAddMenuCount()
-        {
-            return field_1_AddMenuCount;
-        }
-
-        /**
-         * Get number of Add del options (should be 0)
-         * @return number of Add menu options
-         */
-
-        public byte GetDelMenuCount()
-        {
-            return field_2_delMenuCount;
-        }
 
         public override String ToString()
         {
             StringBuilder buffer = new StringBuilder();
 
             buffer.Append("[MMS]\n");
-            buffer.Append("    .AddMenu        = ")
-                .Append(StringUtil.ToHexString(GetAddMenuCount())).Append("\n");
+            buffer.Append("    .addMenu        = ")
+                .Append(StringUtil.ToHexString(AddMenuCount)).Append("\n");
             buffer.Append("    .delMenu        = ")
-                .Append(StringUtil.ToHexString(GetDelMenuCount())).Append("\n");
+                .Append(StringUtil.ToHexString(DelMenuCount)).Append("\n");
             buffer.Append("[/MMS]\n");
             return buffer.ToString();
         }
 
-        public override int Serialize(int offset, byte [] data)
+        public override void Serialize(ILittleEndianOutput out1)
         {
-            LittleEndian.PutShort(data, 0 + offset, sid);
-            LittleEndian.PutShort(data, 2 + offset,
-                                  ((short)0x02));   // 2 bytes (6 total)
-            data[4 + offset] = GetAddMenuCount();
-            data[5 + offset] = GetDelMenuCount();
-            return RecordSize;
+            out1.WriteByte(AddMenuCount);
+            out1.WriteByte(DelMenuCount);
         }
 
-        public override int RecordSize
+        protected override int DataSize
         {
-            get { return 6; }
+            get
+            {
+                return 2;
+            }
         }
 
         public override short Sid

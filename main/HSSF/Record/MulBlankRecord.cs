@@ -47,10 +47,10 @@ namespace NPOI.HSSF.Record
     {
         public const short sid = 0xbe;
         //private short             field_1_row;
-        private int field_1_row;
-        private int field_2_first_col;
-        private short[] field_3_xfs;
-        private int field_4_last_col;
+        private int _row;
+        private int _first_col;
+        private short[] _xfs;
+        private int _last_col;
 
         /** Creates new MulBlankRecord */
 
@@ -60,10 +60,10 @@ namespace NPOI.HSSF.Record
 
         public MulBlankRecord(int row, int firstCol, short[] xfs)
         {
-            field_1_row = row;
-            field_2_first_col = firstCol;
-            field_3_xfs = xfs;
-            field_4_last_col = firstCol + xfs.Length - 1;
+            _row = row;
+            _first_col = firstCol;
+            _xfs = xfs;
+            _last_col = firstCol + xfs.Length - 1;
         }
 
         /**
@@ -74,10 +74,10 @@ namespace NPOI.HSSF.Record
 
         public MulBlankRecord(RecordInputStream in1)
         {
-            field_1_row = in1.ReadUShort();
-            field_2_first_col = in1.ReadShort();
-            field_3_xfs = ParseXFs(in1);
-            field_4_last_col = in1.ReadShort();
+            _row = in1.ReadUShort();
+            _first_col = in1.ReadShort();
+            _xfs = ParseXFs(in1);
+            _last_col = in1.ReadShort();
         }
 
         /**
@@ -89,7 +89,7 @@ namespace NPOI.HSSF.Record
         //public short Row
         public int Row
         {
-            get { return field_1_row; }
+            get { return _row; }
         }
 
         /**
@@ -99,7 +99,7 @@ namespace NPOI.HSSF.Record
 
         public int FirstColumn
         {
-            get { return field_2_first_col; }
+            get { return _first_col; }
         }
 
         /**
@@ -109,7 +109,7 @@ namespace NPOI.HSSF.Record
 
         public int LastColumn
         {
-            get { return field_4_last_col; }
+            get { return _last_col; }
         }
 
         /**
@@ -119,7 +119,7 @@ namespace NPOI.HSSF.Record
 
         public int NumColumns
         {
-            get { return field_4_last_col - field_2_first_col + 1; }
+            get { return _last_col - _first_col + 1; }
         }
 
         /**
@@ -130,7 +130,7 @@ namespace NPOI.HSSF.Record
 
         public short GetXFAt(int coffset)
         {
-            return field_3_xfs[coffset];
+            return _xfs[coffset];
         }
 
         private short[] ParseXFs(RecordInputStream in1)
@@ -170,19 +170,19 @@ namespace NPOI.HSSF.Record
         }
         protected override int DataSize
         {
-            get { return 6 + field_3_xfs.Length * 2; }
+            get { return 6 + _xfs.Length * 2; }
         }
 
         public override void Serialize(ILittleEndianOutput out1)
         {
-            out1.WriteShort(field_1_row);
-            out1.WriteShort(field_2_first_col);
-            int nItems = field_3_xfs.Length;
+            out1.WriteShort(_row);
+            out1.WriteShort(_first_col);
+            int nItems = _xfs.Length;
             for (int i = 0; i < nItems; i++)
             {
-                out1.WriteShort(field_3_xfs[i]);
+                out1.WriteShort(_xfs[i]);
             }
-            out1.WriteShort(field_4_last_col);
+            out1.WriteShort(_last_col);
         }
         //poi bug 46776
         public override Object Clone()

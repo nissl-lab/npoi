@@ -323,9 +323,9 @@ namespace NPOI.HSSF.Model
             List<FormatRecord> formats = new List<FormatRecord>(8);
 
             records.Add(retval.CreateBOF());
-            records.Add(retval.CreateInterfaceHdr());
+            records.Add(new InterfaceHdrRecord(CODEPAGE));
             records.Add(retval.CreateMMS());
-            records.Add(retval.CreateInterfaceEnd());
+            records.Add(InterfaceEndRecord.Instance);
             records.Add(retval.CreateWriteAccess());
             records.Add(retval.CreateCodepage());
             records.Add(retval.CreateDSF());
@@ -1229,13 +1229,14 @@ namespace NPOI.HSSF.Model
          * @see org.apache.poi.hssf.record.Record
          * @return record containing a InterfaceHdrRecord
          */
-
+        [Obsolete]
         protected Record CreateInterfaceHdr()
         {
-            InterfaceHdrRecord retval = new InterfaceHdrRecord();
+            //InterfaceHdrRecord retval = new InterfaceHdrRecord(CODEPAGE);
 
-            retval.Codepage=CODEPAGE;
-            return retval;
+            //retval.Codepage=CODEPAGE;
+            //return retval;
+            return null;
         }
 
         /**
@@ -1249,8 +1250,8 @@ namespace NPOI.HSSF.Model
         {
             MMSRecord retval = new MMSRecord();
 
-            retval.SetAddMenuCount((byte)0);
-            retval.SetDelMenuCount((byte)0);
+            retval.AddMenuCount=((byte)0);
+            retval.DelMenuCount=((byte)0);
             return retval;
         }
 
@@ -1260,10 +1261,11 @@ namespace NPOI.HSSF.Model
          * @see org.apache.poi.hssf.record.Record
          * @return record containing a InterfaceEndRecord
          */
-
+        [Obsolete]
         protected Record CreateInterfaceEnd()
         {
-            return new InterfaceEndRecord();
+            //return new InterfaceEndRecord();
+            return null;
         }
 
         /**

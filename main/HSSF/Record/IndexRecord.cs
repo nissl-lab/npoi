@@ -40,12 +40,12 @@ namespace NPOI.HSSF.Record
        : StandardRecord
     {
         public const short sid = 0x20B;
-        public static int DBCELL_CAPACITY = 30;
+        //public static int DBCELL_CAPACITY = 30;
         public int field_1_zero;            // reserved must be 0
         public int field_2_first_row;       // first row on the sheet
         public int field_3_last_row_add1;   // last row
         public int field_4_zero;            // DefColWidth 
-        public List<int> field_5_dbcells;         // array of offsets to DBCELL records
+        public IntList field_5_dbcells;         // array of offsets to DBCELL records
 
         public IndexRecord()
         {
@@ -59,13 +59,17 @@ namespace NPOI.HSSF.Record
         public IndexRecord(RecordInputStream in1)
         {
             field_1_zero = in1.ReadInt();
+            if (field_1_zero != 0)
+            {
+                throw new RecordFormatException("Expected zero for field 1 but got " + field_1_zero);
+            }
             field_2_first_row = in1.ReadInt();
             field_3_last_row_add1 = in1.ReadInt();
             field_4_zero = in1.ReadInt();
 
             int nCells = in1.Remaining / 4;
             field_5_dbcells =
-                new List<int>(nCells);   // initial capacity of 30
+                new IntList(nCells);   // initial capacity of 30
             for (int i = 0; i < nCells; i++)
             {
                 field_5_dbcells.Add(in1.ReadInt());
@@ -78,14 +82,14 @@ namespace NPOI.HSSF.Record
         {
             if (field_5_dbcells == null)
             {
-                field_5_dbcells = new List<int>();
+                field_5_dbcells = new IntList();
             }
             field_5_dbcells.Add(cell);
         }
 
         public void SetDbcell(int cell, int value)
         {
-            field_5_dbcells[cell]=value;
+            field_5_dbcells.Set(cell, value);
         }
 
         public int FirstRow
@@ -121,7 +125,7 @@ namespace NPOI.HSSF.Record
 
         public int GetDbcellAt(int cellnum)
         {
-            return field_5_dbcells[cellnum];
+            return field_5_dbcells.Get(cellnum);
         }
 
         public override String ToString()
@@ -131,7 +135,7 @@ namespace NPOI.HSSF.Record
             buffer.Append("[INDEX]\n");
             buffer.Append("    .firstrow       = ")
                 .Append(StringUtil.ToHexString(FirstRow)).Append("\n");
-            buffer.Append("    .lastrowAdd1    = ")
+            buffer.Append("    .lastrowadd1    = ")
                 .Append(StringUtil.ToHexString(LastRowAdd1)).Append("\n");
             for (int k = 0; k < NumDbcells; k++)
             {
@@ -179,8 +183,8 @@ namespace NPOI.HSSF.Record
             rec.field_2_first_row = field_2_first_row;
             rec.field_3_last_row_add1 = field_3_last_row_add1;
             rec.field_4_zero = field_4_zero;
-            rec.field_5_dbcells = new List<int>();
-            rec.field_5_dbcells.AddRange(field_5_dbcells);
+            rec.field_5_dbcells = new IntList();
+            rec.field_5_dbcells.AddAll(field_5_dbcells);
             return rec;
         }
     }

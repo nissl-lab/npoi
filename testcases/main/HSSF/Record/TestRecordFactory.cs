@@ -84,8 +84,8 @@ namespace TestCases.HSSF.Record
                          record[0].GetType().Name);
             MMSRecord mmsRecord = (MMSRecord)record[0];
 
-            Assert.AreEqual(0, mmsRecord.GetAddMenuCount());
-            Assert.AreEqual(0, mmsRecord.GetDelMenuCount());
+            Assert.AreEqual(0, mmsRecord.AddMenuCount);
+            Assert.AreEqual(0, mmsRecord.DelMenuCount);
             Assert.AreEqual(6, mmsRecord.RecordSize);
             Assert.AreEqual(193, mmsRecord.Sid);
         }

@@ -37,13 +37,15 @@ namespace NPOI.HSSF.Record
      */
 
     public class IterationRecord
-       : Record
+       : StandardRecord
     {
         public const short sid = 0x11;
-        private short field_1_iteration;
-
-        public IterationRecord()
+        private static BitField iterationOn = BitFieldFactory.GetInstance(0x0001);
+        //private short field_1_iteration;
+        private int _flags;
+        public IterationRecord(bool iterateOn)
         {
+            _flags = iterationOn.SetBoolean(0, iterateOn);
         }
 
         /**
@@ -53,7 +55,7 @@ namespace NPOI.HSSF.Record
 
         public IterationRecord(RecordInputStream in1)
         {
-            field_1_iteration = in1.ReadShort();
+            _flags = in1.ReadShort();
         }
 
         /**
@@ -64,17 +66,10 @@ namespace NPOI.HSSF.Record
 
         public bool Iteration
         {
-            get { return (field_1_iteration == 1); }
+            get { return iterationOn.IsSet(_flags); }
             set
             {
-                if (value)
-                {
-                    field_1_iteration = 1;
-                }
-                else
-                {
-                    field_1_iteration = 0;
-                }
+                _flags = iterationOn.SetBoolean(_flags, value);
             }
         }
 
@@ -83,23 +78,23 @@ namespace NPOI.HSSF.Record
             StringBuilder buffer = new StringBuilder();
 
             buffer.Append("[ITERATION]\n");
-            buffer.Append("    .iteration      = ").Append(Iteration)
+            buffer.Append("    .flags      = ").Append(HexDump.ShortToHex(_flags))
                 .Append("\n");
             buffer.Append("[/ITERATION]\n");
             return buffer.ToString();
         }
 
-        public override int Serialize(int offset, byte [] data)
+        public override void Serialize(ILittleEndianOutput out1)
         {
-            LittleEndian.PutShort(data, 0 + offset, sid);
-            LittleEndian.PutShort(data, 2 + offset, (short)0x2);
-            LittleEndian.PutShort(data, 4 + offset, field_1_iteration);
-            return RecordSize;
+            out1.WriteShort(_flags);
         }
 
-        public override int RecordSize
+        protected override int DataSize
         {
-            get { return 6; }
+            get
+            {
+                return 2;
+            }
         }
 
         public override short Sid
@@ -109,9 +104,7 @@ namespace NPOI.HSSF.Record
 
         public override Object Clone()
         {
-            IterationRecord rec = new IterationRecord();
-            rec.field_1_iteration = field_1_iteration;
-            return rec;
+            return new IterationRecord(Iteration);
         }
     }
 }

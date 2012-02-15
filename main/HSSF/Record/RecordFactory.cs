@@ -15,7 +15,12 @@
    See the License for the specific language governing permissions and
    limitations Under the License.
 ==================================================================== */
-
+/* ================================================================
+ * About NPOI
+ * POI Version: 3.8 beta4
+ * Date: 2012-02-15
+ * 
+ * ==============================================================*/
 
 namespace NPOI.HSSF.Record
 {
@@ -43,12 +48,77 @@ namespace NPOI.HSSF.Record
 
     public class RecordFactory
     {
-        private static int NUM_RECORDS = 10000;
-        private static Type[] records;
+        private static int NUM_RECORDS = 512;
+        private static Type[] recordClasses;
+        #region inner Record Creater
+        private interface I_RecordCreator
+        {
+            Record Create(RecordInputStream in1);
+
+            Type GetRecordClass();
+        }
+        private class ReflectionConstructorRecordCreator : I_RecordCreator
+        {
+
+            private ConstructorInfo _c;
+            public ReflectionConstructorRecordCreator(ConstructorInfo c)
+            {
+                _c = c;
+            }
+            public Record Create(RecordInputStream in1)
+            {
+                Object[] args = { in1 };
+                try
+                {
+                    return (Record)_c.Invoke(args);
+                }
+                catch (Exception e)
+                {
+                    throw new RecordFormatException("Unable to construct record instance", e.InnerException);
+                }
+            }
+            public Type GetRecordClass()
+            {
+                return _c.DeclaringType;
+            }
+        }
+        /**
+         * A "create" method is used instead of the usual constructor if the created record might
+         * be of a different class to the declaring class.
+         */
+        private class ReflectionMethodRecordCreator : I_RecordCreator
+        {
+
+            private MethodInfo _m;
+            public ReflectionMethodRecordCreator(MethodInfo m)
+            {
+                _m = m;
+            }
+            public Record Create(RecordInputStream in1)
+            {
+                Object[] args = { in1 };
+                try
+                {
+                    return (Record)_m.Invoke(null, args);
+                }
+                catch (Exception e)
+                {
+                    throw new RecordFormatException("Unable to construct record instance", e.InnerException);
+                }
+            }
+            public Type GetRecordClass()
+            {
+                return _m.DeclaringType;
+            }
+        }
+        #endregion
+
+        private static Type[] CONSTRUCTOR_ARGS = new Type[] { typeof(RecordInputStream), };
+
 
         static RecordFactory()
         {
-            records = new Type[]
+            recordClasses = new Type[]
             {
 		        typeof(ArrayRecord),
                 typeof(AutoFilterInfoRecord),
@@ -206,7 +276,7 @@ namespace NPOI.HSSF.Record
                 typeof(PlotGrowthRecord),
                 //typeof(PosRecord),
                 typeof(SCLRecord),
-                typeof(SeriesChartGroupIndexRecord),
+                //typeof(SeriesChartGroupIndexRecord),
                 //typeof(SeriesIndexRecord),
                 typeof(SeriesLabelsRecord),
                 typeof(SeriesListRecord),
@@ -232,10 +302,32 @@ namespace NPOI.HSSF.Record
                 typeof(Excel9FileRecord)
             };
 
-            recordsMap=RecordsToMap(records);
+            _recordCreatorsById = RecordsToMap(recordClasses);
         }
-        private static Hashtable recordsMap;
+        //private static Hashtable recordsMap;
+        /**
+	     * cache of the recordsToMap();
+	     */
+        private static Dictionary<short, I_RecordCreator> _recordCreatorsById = null;//RecordsToMap(recordClasses);
 
+        private static short[] _allKnownRecordSIDs;
+        /**
+         * Debug / diagnosis method<br/>
+         * Gets the POI implementation class for a given <tt>sid</tt>.  Only a subset of the any BIFF
+         * records are actually interpreted by POI.  A few others are known but not interpreted
+         * (see {@link UnknownRecord#getBiffName(int)}).
+         * @return the POI implementation class for the specified record <tt>sid</tt>.
+         * <code>null</code> if the specified record is not interpreted by POI.
+         */
+        public static Type GetRecordClass(int sid)
+        {
+            I_RecordCreator rc = _recordCreatorsById[(short)sid];
+            if (rc == null)
+            {
+                return null;
+            }
+            return rc.GetRecordClass();
+        }
         /**
          * Changes the default capacity (10000) to handle larger files
          */
@@ -272,7 +364,7 @@ namespace NPOI.HSSF.Record
 
             return records;
         }
-
+        [Obsolete]
         private static void AddAll(List<Record> destList, Record[] srcRecs)
         {
             for (int i = 0; i < srcRecs.Length; i++)
@@ -301,8 +393,8 @@ namespace NPOI.HSSF.Record
             return new Record[] { record, };
         }
         /**
- * Converts a {@link MulBlankRecord} into an equivalent array of {@link BlankRecord}s
- */
+         * Converts a {@link MulBlankRecord} into an equivalent array of {@link BlankRecord}s
+         */
         public static BlankRecord[] ConvertBlankRecords(MulBlankRecord mbk)
         {
             BlankRecord[] mulRecs = new BlankRecord[mbk.NumColumns];
@@ -320,28 +412,14 @@ namespace NPOI.HSSF.Record
 
         public static Record CreateSingleRecord(RecordInputStream in1)
         {
-            ConstructorInfo constructor = (ConstructorInfo)recordsMap[in1.Sid];
-
-            if (constructor == null)
+            if (_recordCreatorsById.ContainsKey(in1.Sid))
+            {
+                I_RecordCreator constructor = _recordCreatorsById[in1.Sid];
+                return constructor.Create(in1);
+            }
+            else
             {
                 return new UnknownRecord(in1);
-            }
-
-            try
-            {
-                return (Record)constructor.Invoke(new object[] { in1 });
-            }
-            catch (TargetInvocationException e)
-            {
-                throw new RecordFormatException("Unable to construct record instance: "+in1.Sid, e.InnerException);
-            }
-            catch (ArgumentException)
-            {
-                throw;
-            }
-            catch (MethodAccessException)
-            {
-                throw;
             }
         }
         /// <summary>
@@ -383,25 +461,26 @@ namespace NPOI.HSSF.Record
         }
         public static short[] GetAllKnownRecordSIDs()
         {
-            short[] results = new short[recordsMap.Count];
-            int i = 0;
-
-            for (IEnumerator iterator = recordsMap.Keys.GetEnumerator();
-                    iterator.MoveNext(); )
+            if (_allKnownRecordSIDs == null)
             {
-                short sid = (short)iterator.Current;
+                short[] results = new short[_recordCreatorsById.Count];
+                int i = 0;
 
-                results[i++] = Convert.ToInt16(sid);
+                foreach (KeyValuePair<short, I_RecordCreator> kv in _recordCreatorsById)
+                {
+                    results[i++] = kv.Key;
+                }
+                Array.Sort(results);
+                _allKnownRecordSIDs = results;
             }
-            return results;
+
+            return (short[])_allKnownRecordSIDs.Clone();
         }
 
-        private static Hashtable RecordsToMap(Type[] records)
+        private static Dictionary<short, I_RecordCreator> RecordsToMap(Type[] records)
         {
-            Hashtable result = new Hashtable();
+            Dictionary<short, I_RecordCreator> result = new Dictionary<short, I_RecordCreator>();
             Hashtable uniqueRecClasses = new Hashtable(records.Length * 3 / 2);
-
-            ConstructorInfo constructor;
 
             for (int i = 0; i < records.Length; i++)
             {
@@ -421,24 +500,27 @@ namespace NPOI.HSSF.Record
                 }
                 uniqueRecClasses.Add(recClass, recClass);
 
-                short sid;
+                short sid = 0;
                 try
                 {
                     sid = (short)recClass.GetField("sid").GetValue(null);
-                    constructor = recClass.GetConstructor(new Type[]
-                    {
-                        typeof(RecordInputStream)
-                    });
                 }
                 catch (Exception ArgumentException)
                 {
                     throw new RecordFormatException(
                         "Unable to determine record types", ArgumentException);
                 }
-                result[sid]= constructor;
+                if (result.ContainsKey(sid))
+                {
+                    Type prevClass = result[sid].GetRecordClass();
+                    throw new RuntimeException("duplicate record sid 0x" + sid.ToString("X")
+                            + " for classes (" + recClass.Name + ") and (" + prevClass.Name + ")");
+                }
+                result[sid] = GetRecordCreator(recClass);
             }
             return result;
         }
+        [Obsolete]
         private static void CheckZeros(Stream in1, int avail)
         {
             int count = 0;
@@ -458,6 +540,30 @@ namespace NPOI.HSSF.Record
             if (avail != count)
             {
                 Console.Error.WriteLine("avail!=count (" + avail + "!=" + count + ").");
+            }
+        }
+
+        private static I_RecordCreator GetRecordCreator(Type recClass)
+        {
+            try
+            {
+                ConstructorInfo constructor;
+                constructor = recClass.GetConstructor(CONSTRUCTOR_ARGS);
+                if (constructor != null)
+                    return new ReflectionConstructorRecordCreator(constructor);
+            }
+            catch (Exception)
+            {
+                // fall through and look for other construction methods
+            }
+            try
+            {
+                MethodInfo m = recClass.GetMethod("Create", CONSTRUCTOR_ARGS);
+                return new ReflectionMethodRecordCreator(m);
+            }
+            catch (Exception)
+            {
+                throw new RuntimeException("Failed to find constructor or create method for (" + recClass.Name + ").");
             }
         }
 

@@ -33,7 +33,7 @@ namespace TestCases.HSSF.UserModel
     [TestClass]
     public class TestSanityChecker
     {
-
+        private static Record INTERFACEHDR = new InterfaceHdrRecord(InterfaceHdrRecord.CODEPAGE);
         private static BoundSheetRecord CreateBoundSheetRec()
         {
             return new BoundSheetRecord("Sheet1");
@@ -44,7 +44,7 @@ namespace TestCases.HSSF.UserModel
             SanityChecker c = new SanityChecker();
             ArrayList records = new ArrayList();
             records.Add(new BOFRecord());
-            records.Add(new InterfaceHdrRecord());
+            records.Add(INTERFACEHDR);
             records.Add(CreateBoundSheetRec());
             records.Add(EOFRecord.instance);
             TestSanityChecker.check = new SanityChecker.CheckRecord[]{
@@ -68,15 +68,15 @@ namespace TestCases.HSSF.UserModel
             ConfirmBadRecordOrder(check, new Record[] {
 				new BOFRecord(),
 				CreateBoundSheetRec(),
-				new InterfaceHdrRecord(),
+				INTERFACEHDR,
 				EOFRecord.instance,
 		    });
 
             ConfirmBadRecordOrder(check, new Record[] {
 				new BOFRecord(),
-				new InterfaceHdrRecord(),
+				INTERFACEHDR,
 				CreateBoundSheetRec(),
-				new InterfaceHdrRecord(),
+				INTERFACEHDR,
 				EOFRecord.instance,
 		    });
 
@@ -89,19 +89,19 @@ namespace TestCases.HSSF.UserModel
 		    });
 
             ConfirmBadRecordOrder(check, new Record[] {
-				new InterfaceHdrRecord(),
+				INTERFACEHDR,
 				CreateBoundSheetRec(),
 				EOFRecord.instance,
 		    });
 
             ConfirmBadRecordOrder(check, new Record[] {
 				new BOFRecord(),
-				new InterfaceHdrRecord(),
+				INTERFACEHDR,
 				EOFRecord.instance,
 		    });
 
             ConfirmBadRecordOrder(check, new Record[] {
-				new InterfaceHdrRecord(),
+				INTERFACEHDR,
 				CreateBoundSheetRec(),
 				new BOFRecord(),
 				EOFRecord.instance,
@@ -110,7 +110,7 @@ namespace TestCases.HSSF.UserModel
             ConfirmBadRecordOrder(check, new Record[] {
 				new BOFRecord(),
 				CreateBoundSheetRec(),
-				new InterfaceHdrRecord(),
+				INTERFACEHDR,
 				EOFRecord.instance,
 		    });
         }

@@ -32,10 +32,10 @@ namespace NPOI.HSSF.Record
      */
 
     public class InterfaceHdrRecord
-       : Record
+       : StandardRecord
     {
         public const short sid = 0xe1;
-        private short field_1_codepage;   // = 0;
+        private int _codepage;   // = 0;
 
         /**
          * suggested (and probably correct) default
@@ -43,8 +43,9 @@ namespace NPOI.HSSF.Record
 
         public static short CODEPAGE = (short)0x4b0;
 
-        public InterfaceHdrRecord()
+        public InterfaceHdrRecord(int codePage)
         {
+            _codepage = codePage;
         }
 
         /**
@@ -54,15 +55,15 @@ namespace NPOI.HSSF.Record
 
         public InterfaceHdrRecord(RecordInputStream in1)
         {
-            field_1_codepage = in1.ReadShort();
+            _codepage = in1.ReadShort();
         }
 
 
-        public short Codepage
-        {
-            get { return field_1_codepage; }
-            set { field_1_codepage = value; }
-        }
+        //public short Codepage
+        //{
+        //    get { return _codepage; }
+        //    set { _codepage = value; }
+        //}
 
         public override String ToString()
         {
@@ -70,23 +71,22 @@ namespace NPOI.HSSF.Record
 
             buffer.Append("[INTERFACEHDR]\n");
             buffer.Append("    .codepage        = ")
-                .Append(StringUtil.ToHexString(Codepage)).Append("\n");
+                .Append(StringUtil.ToHexString(_codepage)).Append("\n");
             buffer.Append("[/INTERFACEHDR]\n");
             return buffer.ToString();
         }
 
-        public override int Serialize(int offset, byte [] data)
+        public override void Serialize(ILittleEndianOutput out1)
         {
-            LittleEndian.PutShort(data, 0 + offset, sid);
-            LittleEndian.PutShort(data, 2 + offset,
-                                  ((short)0x02));   // 2 bytes (6 total)
-            LittleEndian.PutShort(data, 4 + offset, Codepage);
-            return RecordSize;
+            out1.WriteShort(_codepage);
         }
 
-        public override int RecordSize
+        protected override int DataSize
         {
-            get { return 6; }
+            get
+            {
+                return 2;
+            }
         }
 
         public override short Sid

@@ -991,10 +991,7 @@ namespace NPOI.HSSF.Model
         /// <returns>record containing a IterationRecord</returns>
         protected Record CreateIteration()
         {
-            IterationRecord retval = new IterationRecord();
-
-            retval.Iteration = (false);
-            return retval;
+            return new IterationRecord(false);
         }
 
         /// <summary>
