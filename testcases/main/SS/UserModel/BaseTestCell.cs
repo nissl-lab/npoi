@@ -202,10 +202,10 @@ namespace TestCases.SS.UserModel
             f.FontName = "Arial Unicode MS";
             cs.FillBackgroundColor = 3;
             cs.SetFont(f);
-            cs.BorderTop = CellBorderType.THIN;
-            cs.BorderRight = CellBorderType.THIN;
-            cs.BorderLeft = CellBorderType.THIN;
-            cs.BorderBottom = CellBorderType.THIN;
+            cs.BorderTop = BorderStyle.THIN;
+            cs.BorderRight = BorderStyle.THIN;
+            cs.BorderLeft = BorderStyle.THIN;
+            cs.BorderBottom = BorderStyle.THIN;
 
             r = s.CreateRow(0);
             c = r.CreateCell(0);
@@ -222,10 +222,10 @@ namespace TestCases.SS.UserModel
 
             Assert.IsNotNull(cs, "Formula Cell Style");
             Assert.IsTrue((cs.FontIndex == f.Index), "Font Index Matches");
-            Assert.IsTrue((cs.BorderTop == CellBorderType.THIN), "Top Border");
-            Assert.IsTrue((cs.BorderLeft == CellBorderType.THIN), "Left Border");
-            Assert.IsTrue((cs.BorderRight == CellBorderType.THIN), "Right Border");
-            Assert.IsTrue((cs.BorderBottom == CellBorderType.THIN), "Bottom Border");
+            Assert.IsTrue((cs.BorderTop == BorderStyle.THIN), "Top Border");
+            Assert.IsTrue((cs.BorderLeft == BorderStyle.THIN), "Left Border");
+            Assert.IsTrue((cs.BorderRight == BorderStyle.THIN), "Right Border");
+            Assert.IsTrue((cs.BorderBottom == BorderStyle.THIN), "Bottom Border");
         }
 
         /**tests the ToString() method of HSSFCell*/

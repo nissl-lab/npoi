@@ -238,13 +238,13 @@ namespace TestCases.SS.UserModel
                 cellStyle.FillPattern = (/*setter*/FillPatternType.SOLID_FOREGROUND);
                 cellStyle.VerticalAlignment = (/*setter*/VerticalAlignment.CENTER);
                 cellStyle.Alignment = (/*setter*/h_align);
-                cellStyle.BorderLeft = (/*setter*/CellBorderType.THIN);
+                cellStyle.BorderLeft = (/*setter*/BorderStyle.THIN);
                 cellStyle.LeftBorderColor = (/*setter*/IndexedColors.BLACK.Index);
-                cellStyle.BorderTop = (/*setter*/CellBorderType.THIN);
+                cellStyle.BorderTop = (/*setter*/BorderStyle.THIN);
                 cellStyle.TopBorderColor = (/*setter*/IndexedColors.BLACK.Index);
-                cellStyle.BorderRight = (/*setter*/CellBorderType.THIN);
+                cellStyle.BorderRight = (/*setter*/BorderStyle.THIN);
                 cellStyle.RightBorderColor = (/*setter*/IndexedColors.BLACK.Index);
-                cellStyle.BorderBottom = (/*setter*/CellBorderType.THIN);
+                cellStyle.BorderBottom = (/*setter*/BorderStyle.THIN);
                 cellStyle.BottomBorderColor = (/*setter*/IndexedColors.BLACK.Index);
 
                 return cellStyle;
@@ -265,13 +265,13 @@ namespace TestCases.SS.UserModel
                 cellStyle.FillPattern = (/*setter*/FillPatternType.SOLID_FOREGROUND);
                 cellStyle.Alignment = (/*setter*/HorizontalAlignment.CENTER);
                 cellStyle.VerticalAlignment = (/*setter*/VerticalAlignment.CENTER);
-                cellStyle.BorderLeft = (/*setter*/CellBorderType.THIN);
+                cellStyle.BorderLeft = (/*setter*/BorderStyle.THIN);
                 cellStyle.LeftBorderColor = (/*setter*/IndexedColors.WHITE.Index);
-                cellStyle.BorderTop = (/*setter*/CellBorderType.THIN);
+                cellStyle.BorderTop = (/*setter*/BorderStyle.THIN);
                 cellStyle.TopBorderColor = (/*setter*/IndexedColors.WHITE.Index);
-                cellStyle.BorderRight = (/*setter*/CellBorderType.THIN);
+                cellStyle.BorderRight = (/*setter*/BorderStyle.THIN);
                 cellStyle.RightBorderColor = (/*setter*/IndexedColors.WHITE.Index);
-                cellStyle.BorderBottom = (/*setter*/CellBorderType.THIN);
+                cellStyle.BorderBottom = (/*setter*/BorderStyle.THIN);
                 cellStyle.BottomBorderColor = (/*setter*/IndexedColors.WHITE.Index);
                 cellStyle.SetFont(font);
                 return cellStyle;

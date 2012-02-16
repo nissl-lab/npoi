@@ -33,7 +33,7 @@ using System.Security;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.2.4.0")]
-[assembly: AssemblyFileVersion("1.2.4.0")]
+[assembly: AssemblyVersion("1.2.5.0")]
+[assembly: AssemblyFileVersion("1.2.5.0")]
 //[assembly: InternalsVisibleTo("NPOI.TestCases,Culture=neutral,PublicKey=0df73ec7942b34e1",AllInternalsVisible=true)]
 [assembly: AllowPartiallyTrustedCallers]

@@ -197,10 +197,10 @@ namespace TestCases.HSSF.UserModel
         NPOI.SS.UserModel.ICellStyle cs = wb.CreateCellStyle();
         NPOI.SS.UserModel.ICellStyle cs2 = wb.CreateCellStyle();
 
-        cs.BorderBottom= (CellBorderType.THIN);
-        cs.BorderLeft= (CellBorderType.THIN);
-        cs.BorderRight= (CellBorderType.THIN);
-        cs.BorderTop= (CellBorderType.THIN);
+        cs.BorderBottom= (BorderStyle.THIN);
+        cs.BorderLeft= (BorderStyle.THIN);
+        cs.BorderRight= (BorderStyle.THIN);
+        cs.BorderTop= (BorderStyle.THIN);
         cs.FillForegroundColor= ( short ) 0xA;
         cs.FillPattern = FillPatternType.SOLID_FOREGROUND;
         fnt.Color= ( short ) 0xf;

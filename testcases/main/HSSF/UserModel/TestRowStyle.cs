@@ -138,10 +138,10 @@ namespace TestCases.HSSF.UserModel
             NPOI.SS.UserModel.ICellStyle cs = wb.CreateCellStyle();
             NPOI.SS.UserModel.ICellStyle cs2 = wb.CreateCellStyle();
 
-            cs.BorderBottom=(CellBorderType.THIN);
-            cs.BorderLeft=(CellBorderType.THIN);
-            cs.BorderRight=(CellBorderType.THIN);
-            cs.BorderTop=(CellBorderType.THIN);
+            cs.BorderBottom=(BorderStyle.THIN);
+            cs.BorderLeft=(BorderStyle.THIN);
+            cs.BorderRight=(BorderStyle.THIN);
+            cs.BorderTop=(BorderStyle.THIN);
             cs.FillForegroundColor=((short)0xA);
             cs.FillPattern = FillPatternType.SOLID_FOREGROUND;
             fnt.Color=((short)0xf);
@@ -178,10 +178,10 @@ namespace TestCases.HSSF.UserModel
                 Assert.IsNotNull(r, "Row is not null");
 
                 cs = r.RowStyle;
-                Assert.AreEqual(cs.BorderBottom, CellBorderType.THIN, "FillForegroundColor for row: ");
-                Assert.AreEqual(cs.BorderLeft, CellBorderType.THIN, "FillPattern for row: ");
-                Assert.AreEqual(cs.BorderRight, CellBorderType.THIN, "FillForegroundColor for row: ");
-                Assert.AreEqual(cs.BorderTop, CellBorderType.THIN, "FillPattern for row: ");
+                Assert.AreEqual(cs.BorderBottom, BorderStyle.THIN, "FillForegroundColor for row: ");
+                Assert.AreEqual(cs.BorderLeft, BorderStyle.THIN, "FillPattern for row: ");
+                Assert.AreEqual(cs.BorderRight, BorderStyle.THIN, "FillForegroundColor for row: ");
+                Assert.AreEqual(cs.BorderTop, BorderStyle.THIN, "FillPattern for row: ");
                 Assert.AreEqual(cs.FillForegroundColor, 0xA, "FillForegroundColor for row: ");
                 Assert.AreEqual((short)cs.FillPattern, (short)0x1, "FillPattern for row: ");
 
