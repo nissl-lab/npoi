@@ -66,7 +66,7 @@ namespace MergeCellsInXls
             sheet.AddMergedRegion(region);
 
             //set enclosed border for the merged region
-            ((HSSFSheet)sheet).SetEnclosedBorderOfRegion(region, CellBorderType.DOTTED, NPOI.HSSF.Util.HSSFColor.RED.index);
+            ((HSSFSheet)sheet).SetEnclosedBorderOfRegion(region, BorderStyle.DOTTED, NPOI.HSSF.Util.HSSFColor.RED.index);
 
             WriteToFile();
         }

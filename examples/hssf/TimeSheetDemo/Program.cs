@@ -209,13 +209,13 @@ namespace TimeSheetDemo
             style = wb.CreateCellStyle();
             style.Alignment = HorizontalAlignment.CENTER;
             style.WrapText = (true);
-            style.BorderRight = CellBorderType.THIN;
+            style.BorderRight = BorderStyle.THIN;
             style.RightBorderColor = (IndexedColors.BLACK.Index);
-            style.BorderLeft = CellBorderType.THIN;
+            style.BorderLeft = BorderStyle.THIN;
             style.LeftBorderColor = (IndexedColors.BLACK.Index);
-            style.BorderTop = CellBorderType.THIN;
+            style.BorderTop = BorderStyle.THIN;
             style.TopBorderColor = (IndexedColors.BLACK.Index);
-            style.BorderBottom = CellBorderType.THIN;
+            style.BorderBottom = BorderStyle.THIN;
             style.BottomBorderColor = (IndexedColors.BLACK.Index);
             styles.Add("cell", style);
 
