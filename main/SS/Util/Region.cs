@@ -27,7 +27,7 @@ namespace NPOI.SS.Util
      *
      * @author  Andrew C. Oliver acoliver at apache dot org
      */
-
+    [Obsolete]
     public class Region
     {
         private int rowFrom;

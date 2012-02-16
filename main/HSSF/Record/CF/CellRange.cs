@@ -25,6 +25,7 @@ namespace NPOI.HSSF.Record.CF
      * 
      * @author Dmitriy Kumshayev
      */
+    [Obsolete]
     public class CellRange
     {
         /** max 65536 rows in BIFF8 */

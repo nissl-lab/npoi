@@ -539,6 +539,7 @@ namespace NPOI.HSSF.UserModel
         /// </summary>
         /// <param name="region">The region (rowfrom/colfrom-rowto/colto) to merge.</param>
         /// <returns>index of this region</returns>
+        [Obsolete]
         public int AddMergedRegion(NPOI.SS.Util.Region region)
         {
             return _sheet.AddMergedRegion(region.RowFrom,

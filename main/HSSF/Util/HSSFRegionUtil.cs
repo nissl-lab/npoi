@@ -55,7 +55,7 @@ namespace NPOI.HSSF.Util
                 HSSFCellUtil.SetCellStyleProperty(cell, _workbook, _propertyName, _propertyValue);
             }
         }
-
+        [Obsolete]
         private static CellRangeAddress toCRA(Region region)
         {
             return Region.ConvertToCellRangeAddress(region);
