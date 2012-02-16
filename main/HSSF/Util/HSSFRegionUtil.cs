@@ -75,7 +75,7 @@ namespace NPOI.HSSF.Util
         /// <param name="region">The region that should have the border</param>
         /// <param name="sheet">The sheet that the region is on.</param>
         /// <param name="workbook">The workbook that the region is on.</param>
-        public static void SetBorderLeft(NPOI.SS.UserModel.CellBorderType border, CellRangeAddress region, HSSFSheet sheet,
+        public static void SetBorderLeft(NPOI.SS.UserModel.BorderStyle border, CellRangeAddress region, HSSFSheet sheet,
                 HSSFWorkbook workbook)
         {
             int rowStart = region.FirstRow;
@@ -129,7 +129,7 @@ namespace NPOI.HSSF.Util
         /// <param name="region">The region that should have the border</param>
         /// <param name="sheet">The sheet that the region is on.</param>
         /// <param name="workbook">The workbook that the region is on.</param>
-        public static void SetBorderRight(NPOI.SS.UserModel.CellBorderType border, CellRangeAddress region, HSSFSheet sheet,
+        public static void SetBorderRight(NPOI.SS.UserModel.BorderStyle border, CellRangeAddress region, HSSFSheet sheet,
                 HSSFWorkbook workbook)
         {
             int rowStart = region.FirstRow;
@@ -183,7 +183,7 @@ namespace NPOI.HSSF.Util
         /// <param name="region">The region that should have the border</param>
         /// <param name="sheet">The sheet that the region is on.</param>
         /// <param name="workbook">The workbook that the region is on.</param>
-        public static void SetBorderBottom(NPOI.SS.UserModel.CellBorderType border, CellRangeAddress region, HSSFSheet sheet,
+        public static void SetBorderBottom(NPOI.SS.UserModel.BorderStyle border, CellRangeAddress region, HSSFSheet sheet,
                 HSSFWorkbook workbook)
         {
             int colStart = region.FirstColumn;
@@ -237,7 +237,7 @@ namespace NPOI.HSSF.Util
         /// <param name="region">The region that should have the border</param>
         /// <param name="sheet">The sheet that the region is on.</param>
         /// <param name="workbook">The workbook that the region is on.</param>
-        public static void SetBorderTop(NPOI.SS.UserModel.CellBorderType border, CellRangeAddress region, HSSFSheet sheet,
+        public static void SetBorderTop(NPOI.SS.UserModel.BorderStyle border, CellRangeAddress region, HSSFSheet sheet,
                 HSSFWorkbook workbook)
         {
             int colStart = region.FirstColumn;

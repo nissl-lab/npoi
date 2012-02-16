@@ -276,10 +276,10 @@ namespace NPOI.HSSF.Util
                 NPOI.SS.UserModel.ICellStyle style, HSSFWorkbook workbook, Hashtable properties)
         {
             style.Alignment = (NPOI.SS.UserModel.HorizontalAlignment)GetShort(properties, ALIGNMENT);
-            style.BorderBottom = (NPOI.SS.UserModel.CellBorderType)GetShort(properties, BORDER_BOTTOM);
-            style.BorderLeft = (NPOI.SS.UserModel.CellBorderType)GetShort(properties, BORDER_LEFT);
-            style.BorderRight = (NPOI.SS.UserModel.CellBorderType)GetShort(properties, BORDER_RIGHT);
-            style.BorderTop = (NPOI.SS.UserModel.CellBorderType)GetShort(properties, BORDER_TOP);
+            style.BorderBottom = (NPOI.SS.UserModel.BorderStyle)GetShort(properties, BORDER_BOTTOM);
+            style.BorderLeft = (NPOI.SS.UserModel.BorderStyle)GetShort(properties, BORDER_LEFT);
+            style.BorderRight = (NPOI.SS.UserModel.BorderStyle)GetShort(properties, BORDER_RIGHT);
+            style.BorderTop = (NPOI.SS.UserModel.BorderStyle)GetShort(properties, BORDER_TOP);
             style.BottomBorderColor = (GetShort(properties, BOTTOM_BORDER_COLOR));
             style.DataFormat = (GetShort(properties, DATA_FORMAT));
             style.FillBackgroundColor = (GetShort(properties, FILL_BACKGROUND_COLOR));

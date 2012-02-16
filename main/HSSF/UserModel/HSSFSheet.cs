@@ -1081,7 +1081,7 @@ namespace NPOI.HSSF.UserModel
         /// <param name="region">The region.</param>
         /// <param name="borderType">Type of the border.</param>
         /// <param name="color">The color.</param>
-        public void SetEnclosedBorderOfRegion(CellRangeAddress region, NPOI.SS.UserModel.CellBorderType borderType, short color)
+        public void SetEnclosedBorderOfRegion(CellRangeAddress region, NPOI.SS.UserModel.BorderStyle borderType, short color)
         {
             HSSFRegionUtil.SetRightBorderColor(color, region, this, _workbook);
             HSSFRegionUtil.SetBorderRight(borderType, region, this, _workbook);
@@ -1098,7 +1098,7 @@ namespace NPOI.HSSF.UserModel
         /// <param name="region">The region.</param>
         /// <param name="borderType">Type of the border.</param>
         /// <param name="color">The color.</param>
-        public void SetBorderRightOfRegion(CellRangeAddress region, NPOI.SS.UserModel.CellBorderType borderType, short color)
+        public void SetBorderRightOfRegion(CellRangeAddress region, NPOI.SS.UserModel.BorderStyle borderType, short color)
         {
             HSSFRegionUtil.SetRightBorderColor(color, region, this, _workbook);
             HSSFRegionUtil.SetBorderRight(borderType, region, this, _workbook);
@@ -1110,7 +1110,7 @@ namespace NPOI.HSSF.UserModel
         /// <param name="region">The region.</param>
         /// <param name="borderType">Type of the border.</param>
         /// <param name="color">The color.</param>
-        public void SetBorderLeftOfRegion(CellRangeAddress region, NPOI.SS.UserModel.CellBorderType borderType, short color)
+        public void SetBorderLeftOfRegion(CellRangeAddress region, NPOI.SS.UserModel.BorderStyle borderType, short color)
         {
             HSSFRegionUtil.SetLeftBorderColor(color, region, this, _workbook);
             HSSFRegionUtil.SetBorderLeft(borderType, region, this, _workbook);
@@ -1122,7 +1122,7 @@ namespace NPOI.HSSF.UserModel
         /// <param name="region">The region.</param>
         /// <param name="borderType">Type of the border.</param>
         /// <param name="color">The color.</param>
-        public void SetBorderTopOfRegion(CellRangeAddress region, NPOI.SS.UserModel.CellBorderType borderType, short color)
+        public void SetBorderTopOfRegion(CellRangeAddress region, NPOI.SS.UserModel.BorderStyle borderType, short color)
         {
             HSSFRegionUtil.SetTopBorderColor(color, region, this, _workbook);
             HSSFRegionUtil.SetBorderTop(borderType, region, this, _workbook);
@@ -1134,7 +1134,7 @@ namespace NPOI.HSSF.UserModel
         /// <param name="region">The region.</param>
         /// <param name="borderType">Type of the border.</param>
         /// <param name="color">The color.</param>
-        public void SetBorderBottomOfRegion(CellRangeAddress region, NPOI.SS.UserModel.CellBorderType borderType, short color)
+        public void SetBorderBottomOfRegion(CellRangeAddress region, NPOI.SS.UserModel.BorderStyle borderType, short color)
         {
             HSSFRegionUtil.SetBottomBorderColor(color, region, this, _workbook);
             HSSFRegionUtil.SetBorderBottom(borderType, region, this, _workbook);

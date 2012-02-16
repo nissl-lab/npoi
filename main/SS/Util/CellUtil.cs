@@ -268,10 +268,10 @@ namespace NPOI.SS.Util
         private static void SetFormatProperties(ICellStyle style, IWorkbook workbook, Dictionary<String, Object> properties)
         {
             style.Alignment=(HorizontalAlignment)(GetShort(properties, ALIGNMENT));
-            style.BorderBottom=(CellBorderType)(GetShort(properties, BORDER_BOTTOM));
-            style.BorderLeft=(CellBorderType)(GetShort(properties, BORDER_LEFT));
-            style.BorderRight=(CellBorderType)(GetShort(properties, BORDER_RIGHT));
-            style.BorderTop=(CellBorderType)(GetShort(properties, BORDER_TOP));
+            style.BorderBottom=(BorderStyle)(GetShort(properties, BORDER_BOTTOM));
+            style.BorderLeft=(BorderStyle)(GetShort(properties, BORDER_LEFT));
+            style.BorderRight=(BorderStyle)(GetShort(properties, BORDER_RIGHT));
+            style.BorderTop=(BorderStyle)(GetShort(properties, BORDER_TOP));
             style.BottomBorderColor=(GetShort(properties, BOTTOM_BORDER_COLOR));
             style.DataFormat=(GetShort(properties, DATA_FORMAT));
             style.FillBackgroundColor=(GetShort(properties, FILL_BACKGROUND_COLOR));

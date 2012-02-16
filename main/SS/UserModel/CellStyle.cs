@@ -19,80 +19,6 @@ namespace NPOI.SS.UserModel
 {
     using System;
 
-
-    public enum CellBorderType : short
-    {
-        /// <summary>
-        /// No border
-        /// </summary>
-        NONE = 0x0,
-
-        /// <summary>
-        /// Thin border
-        /// </summary>
-
-        THIN = 0x1,
-
-        /// <summary>
-        /// Medium border
-        /// </summary>
-        MEDIUM = 0x2,
-
-        /// <summary>
-        ///dash border 
-        /// </summary>
-        DASHED = 0x3,
-
-        /// <summary>
-        ///dot border 
-        /// </summary>
-        HAIR = 0x4,
-
-        /// <summary>
-        ///Thick border 
-        /// </summary>
-        THICK = 0x5,
-
-        /// <summary>
-        /// double-line border
-        /// </summary>
-        DOUBLE = 0x6,
-
-        /// <summary>
-        /// hair-line border
-        /// </summary>
-        DOTTED = 0x7,
-
-        /// <summary>
-        /// Medium dashed border
-        /// </summary>
-        MEDIUM_DASHED = 0x8,
-
-        /// <summary>
-        /// dash-dot border
-        /// </summary>
-        DASH_DOT = 0x9,
-
-        /// <summary>
-        /// medium dash-dot border
-        /// </summary>
-        MEDIUM_DASH_DOT = 0xA,
-
-        /// <summary>
-        /// dash-dot-dot border
-        /// </summary>
-        DASH_DOT_DOT = 0xB,
-
-        /// <summary>
-        /// medium dash-dot-dot border
-        /// </summary>
-        MEDIUM_DASH_DOT_DOT = 0xC,
-
-        /// <summary>
-        /// slanted dash-dot border
-        /// </summary>
-        SLANTED_DASH_DOT = 0xD,
-    }
     public interface ICellStyle
     {
 
@@ -213,7 +139,7 @@ namespace NPOI.SS.UserModel
          * @see #BORDER_SLANTED_DASH_DOT
          */
 
-        CellBorderType BorderLeft { get; set; }
+        BorderStyle BorderLeft { get; set; }
 
 
         /**
@@ -235,7 +161,7 @@ namespace NPOI.SS.UserModel
          * @see #BORDER_SLANTED_DASH_DOT
          */
 
-        CellBorderType BorderRight { get; set; }
+        BorderStyle BorderRight { get; set; }
 
 
         /**
@@ -257,7 +183,7 @@ namespace NPOI.SS.UserModel
          * @see #BORDER_SLANTED_DASH_DOT
          */
 
-        CellBorderType BorderTop { get; set; }
+        BorderStyle BorderTop { get; set; }
 
 
         /**
@@ -278,7 +204,7 @@ namespace NPOI.SS.UserModel
          * @see #BORDER_MEDIUM_DASH_DOT_DOT
          * @see #BORDER_SLANTED_DASH_DOT
          */
-        CellBorderType BorderBottom { get; set; }
+        BorderStyle BorderBottom { get; set; }
 
 
         /**

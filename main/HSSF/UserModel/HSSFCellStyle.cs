@@ -304,9 +304,9 @@ namespace NPOI.HSSF.UserModel
         /// Gets or sets the type of border to use for the left border of the cell
         /// </summary>
         /// <value>The border type.</value>
-        public CellBorderType BorderLeft
+        public BorderStyle BorderLeft
         {
-            get { return (CellBorderType)format.BorderLeft; }
+            get { return (BorderStyle)format.BorderLeft; }
             set
             {
                 format.IsIndentNotParentBorder=(true);
@@ -318,9 +318,9 @@ namespace NPOI.HSSF.UserModel
         /// Gets or sets the type of border to use for the right border of the cell
         /// </summary>
         /// <value>The border type.</value>
-        public CellBorderType BorderRight
+        public BorderStyle BorderRight
         {
-            get { return (CellBorderType)format.BorderRight; }
+            get { return (BorderStyle)format.BorderRight; }
             set
             {
                 format.IsIndentNotParentBorder = (true);
@@ -332,9 +332,9 @@ namespace NPOI.HSSF.UserModel
         /// Gets or sets the type of border to use for the top border of the cell
         /// </summary>
         /// <value>The border type.</value>
-        public CellBorderType BorderTop
+        public BorderStyle BorderTop
         {
-            get { return (CellBorderType)format.BorderTop; }
+            get { return (BorderStyle)format.BorderTop; }
             set
             {
                 format.IsIndentNotParentBorder = (true);
@@ -346,9 +346,9 @@ namespace NPOI.HSSF.UserModel
         /// Gets or sets the type of border to use for the bottom border of the cell
         /// </summary>
         /// <value>The border type.</value>
-        public CellBorderType BorderBottom
+        public BorderStyle BorderBottom
         {
-            get { return (CellBorderType)format.BorderBottom; }
+            get { return (BorderStyle)format.BorderBottom; }
             set
             {
                 format.IsIndentNotParentBorder = true;
