@@ -171,10 +171,7 @@
     <Compile Include="HSSF\Record\CF\TestCellRange.cs" />
     <Compile Include="HSSF\Record\TestcaseRecordInputStream.cs" />
     <Compile Include="HSSF\Util\TestAreaReference.cs" />
-    <Compile Include="HSSF\Util\TestCellReference.cs" />
     <Compile Include="HSSF\Util\TestHSSFColor.cs" />
-    <Compile Include="HSSF\Util\TestRangeAddress.cs" />
-    <Compile Include="HSSF\Util\TestRKUtil.cs" />
     <Compile Include="POIFS\FileSystem\TestOffice2007XMLException.cs" />
     <Compile Include="POIFS\FileSystem\TestPOIFSFileSystem.cs" />
     <Compile Include="POIFS\FileSystem\TestPropertySorter.cs" />
@@ -416,6 +413,8 @@
     <Compile Include="HSSF\UserModel\TestHSSFDataFormat.cs" />
     <Compile Include="HSSF\UserModel\TestHSSFSheetShiftRows.cs" />
     <Compile Include="HSSF\UserModel\TestHSSFName.cs" />
+    <Compile Include="HSSF\Util\TestCellReference.cs" />
+    <Compile Include="HSSF\Util\TestRKUtil.cs" />
     <Compile Include="POIDataSamples.cs" />
     <Compile Include="SS\Formula\Atp\TestMRound.cs" />
     <Compile Include="SS\Formula\Atp\TestRandBetween.cs" />

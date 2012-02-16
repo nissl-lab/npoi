@@ -63,7 +63,7 @@ using NPOI.SS.UserModel;
  * Matches a run of one or more digits.  The run of digits is group 1.
  * The text may optionally be prefixed with a single '$'.
  */
-        private static string ROW_REF_PATTERN = @"^\\$?([0-9]+)$";
+        private static string ROW_REF_PATTERN = @"^\$?([0-9]+)$";
         /**
          * Named range names must start with a letter or underscore.  Subsequent characters may include
          * digits or dot.  (They can even end in dot).
