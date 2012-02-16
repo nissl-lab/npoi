@@ -48,25 +48,22 @@ namespace NPOI.XSSF.UserModel
          * Get the content text representing the footer
          * @return text
          */
-        public String GetText()
+        public override String Text
         {
-            return GetHeaderFooter().firstFooter;
-        }
-
-        /**
-         * Set a text for the footer. If null unset the value.
-         * @see XSSFHeaderFooter to see how to create a string with Header/Footer Formatting Syntax
-         * @param text - a string representing the footer. 
-         */
-        public void SetText(String text)
-        {
-            if (text == null)
+            get
             {
-                GetHeaderFooter().firstFooter = null;
+                return GetHeaderFooter().firstFooter;
             }
-            else
+            set 
             {
-                GetHeaderFooter().firstFooter = (text);
+                if (value == null)
+                {
+                    GetHeaderFooter().firstFooter = null;
+                }
+                else
+                {
+                    GetHeaderFooter().firstFooter = (value);
+                }
             }
         }
     }

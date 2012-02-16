@@ -45,11 +45,14 @@ namespace NPOI.XSSF.UserModel
 
         }
 
-        public Object GetIdentityKey()
+        public Object IdentityKey
         {
-            // save memory by just using the cell itself as the identity key
-            // Note - this assumes HSSFCell has not overridden hashCode and Equals
-            return _cell;
+            get
+            {
+                // save memory by just using the cell itself as the identity key
+                // Note - this assumes HSSFCell has not overridden hashCode and Equals
+                return _cell;
+            }
         }
 
         public XSSFCell GetXSSFCell()
@@ -77,13 +80,19 @@ namespace NPOI.XSSF.UserModel
                 return _cell.ColumnIndex;
             }
         }
-        public int GetErrorCellValue()
+        public int ErrorCellValue
         {
-            return _cell.GetErrorCellValue();
+            get
+            {
+                return _cell.GetErrorCellValue();
+            }
         }
-        public double GetNumericCellValue()
+        public double NumericCellValue
         {
-            return _cell.GetNumericCellValue();
+            get
+            {
+                return _cell.GetNumericCellValue();
+            }
         }
         public int RowIndex
         {
@@ -99,9 +108,12 @@ namespace NPOI.XSSF.UserModel
                 return _evalSheet;
             }
         }
-        public String GetStringCellValue()
+        public String StringCellValue
         {
-            return _cell.GetRichStringCellValue().GetString();
+            get
+            {
+                return _cell.GetRichStringCellValue().GetString();
+            }
         }
     }
 }

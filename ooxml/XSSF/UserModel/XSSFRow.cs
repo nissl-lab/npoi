@@ -128,10 +128,11 @@ namespace NPOI.XSSF.UserModel
          */
         public int CompareTo(XSSFRow row)
         {
-            int thisVal = this.GetRowNum();
-            if (row.GetSheet() != GetSheet()) throw new ArgumentException("The Compared rows must belong to the same XSSFSheet");
+            int thisVal = this.RowNum;
+            if (row.Sheet != Sheet) 
+                throw new ArgumentException("The Compared rows must belong to the same XSSFSheet");
 
-            int anotherVal = row.GetRowNum();
+            int anotherVal = row.RowNum;
             return (thisVal < anotherVal ? -1 : (thisVal == anotherVal ? 0 : 1));
         }
 
@@ -146,7 +147,7 @@ namespace NPOI.XSSF.UserModel
          * @throws ArgumentException if columnIndex < 0 or greater than 16384,
          *   the maximum number of columns supported by the SpreadsheetML format (.xlsx)
          */
-        public XSSFCell CreateCell(int columnIndex)
+        public ICell CreateCell(int columnIndex)
         {
             return CreateCell(columnIndex, CellType.BLANK);
         }
@@ -166,7 +167,7 @@ namespace NPOI.XSSF.UserModel
          * @see Cell#CELL_TYPE_NUMERIC
          * @see Cell#CELL_TYPE_STRING
          */
-        public XSSFCell CreateCell(int columnIndex, int type)
+        public ICell CreateCell(int columnIndex, CellType type)
         {
             CT_Cell CT_Cell;
             XSSFCell prev = _cells[columnIndex];
@@ -195,9 +196,9 @@ namespace NPOI.XSSF.UserModel
          *
          * @return the cell at the given (0 based) index
          */
-        public XSSFCell GetCell(int cellnum)
+        public ICell GetCell(int cellnum)
         {
-            return GetCell(cellnum, _sheet.GetWorkbook().getMissingCellPolicy());
+            return GetCell(cellnum, _sheet.GetWorkbook().GetMissingCellPolicy());
         }
 
         /**
@@ -209,16 +210,16 @@ namespace NPOI.XSSF.UserModel
          * @see Row#RETURN_BLANK_AS_NULL
          * @see Row#CREATE_NULL_AS_BLANK
          */
-        public XSSFCell GetCell(int cellnum, MissingCellPolicy policy)
+        public ICell GetCell(int cellnum, MissingCellPolicy policy)
         {
             if (cellnum < 0) throw new ArgumentException("Cell index must be >= 0");
 
             XSSFCell cell = (XSSFCell)_cells[cellnum];
-            if (policy == RETURN_NULL_AND_BLANK)
+            if (policy == MissingCellPolicy.RETURN_NULL_AND_BLANK)
             {
                 return cell;
             }
-            if (policy == RETURN_BLANK_AS_NULL)
+            if (policy == MissingCellPolicy.RETURN_BLANK_AS_NULL)
             {
                 if (cell == null) return cell;
                 if (cell.GetCellType() == CellType.BLANK)
@@ -227,11 +228,11 @@ namespace NPOI.XSSF.UserModel
                 }
                 return cell;
             }
-            if (policy == CREATE_NULL_AS_BLANK)
+            if (policy == MissingCellPolicy.CREATE_NULL_AS_BLANK)
             {
                 if (cell == null)
                 {
-                    return CreateCell((short)cellnum, CellType.BLANK);
+                    return CreateCell(cellnum, CellType.BLANK);
                 }
                 return cell;
             }
@@ -244,9 +245,12 @@ namespace NPOI.XSSF.UserModel
          * @return short representing the first logical cell in the row,
          *  or -1 if the row does not contain any cells.
          */
-        public short GetFirstCellNum()
+        public short FirstCellNum
         {
-            return (short)(_cells.Count == 0 ? -1 : _cells.firstKey());
+            get
+            {
+                return (short)(_cells.Count == 0 ? -1 : _cells.firstKey());
+            }
         }
 
         /**
@@ -268,9 +272,12 @@ namespace NPOI.XSSF.UserModel
          * @return short representing the last logical cell in the row <b>PLUS ONE</b>,
          *   or -1 if the row does not contain any cells.
          */
-        public short GetLastCellNum()
+        public short LastCellNum
         {
-            return (short)(_cells.Count == 0 ? -1 : (_cells.lastKey() + 1));
+            get
+            {
+                return (short)(_cells.Count == 0 ? -1 : (_cells.lastKey() + 1));
+            }
         }
 
         /**
@@ -279,9 +286,26 @@ namespace NPOI.XSSF.UserModel
          *
          * @return row height measured in twips (1/20th of a point)
          */
-        public short GetHeight()
+        public short Height
         {
-            return (short)(GetHeightInPoints() * 20);
+            get
+            {
+                return (short)(HeightInPoints * 20);
+            }
+            set 
+            {
+                if (value == -1)
+                {
+                    if (_row.IsSetHt()) _row.unSetHt();
+                    if (_row.IsSetCustomHeight()) _row.unSetCustomHeight();
+                }
+                else
+                {
+                    _row.ht = ((double)value / 20);
+                    _row.customHeight = (true);
+
+                }
+            }
         }
 
         /**
@@ -291,44 +315,23 @@ namespace NPOI.XSSF.UserModel
          * @return row height measured in point size
          * @see NPOI.XSSF.usermodel.XSSFSheet#GetDefaultRowHeightInPoints()
          */
-        public float GetHeightInPoints()
+        public float HeightInPoints
         {
-            if (this._row.IsSetHt())
+            get
             {
-                return (float)this._row.ht;
+                if (this._row.IsSetHt())
+                {
+                    return (float)this._row.ht;
+                }
+                return _sheet.DefaultRowHeightInPoints;
             }
-            return _sheet.GetDefaultRowHeightInPoints();
-        }
-
-        /**
-         *  Set the height in "twips" or  1/20th of a point.
-         *
-         * @param height the height in "twips" or  1/20th of a point. <code>-1</code>  reSets to the default height
-         */
-        public void SetHeight(short height)
-        {
-            if (height == -1)
+            set 
             {
-                if (_row.IsSetHt()) _row.unSetHt();
-                if (_row.IsSetCustomHeight()) _row.unSetCustomHeight();
-            }
-            else
-            {
-                _row.SetHt((double)height / 20);
-                _row.SetCustomHeight(true);
-
+                this.Height = (short)(value == -1 ? -1 : (value * 20));
             }
         }
 
-        /**
-         * Set the row's height in points.
-         *
-         * @param height the height in points. <code>-1</code>  reSets to the default height
-         */
-        public void SetHeightInPoints(float height)
-        {
-            SetHeight((short)(height == -1 ? -1 : (height * 20)));
-        }
+
 
         /**
          * Gets the number of defined cells (NOT number of cells in the actual row!).
@@ -336,9 +339,12 @@ namespace NPOI.XSSF.UserModel
          *
          * @return int representing the number of defined cells in the row.
          */
-        public int GetPhysicalNumberOfCells()
+        public int PhysicalNumberOfCells
         {
-            return _cells.Count;
+            get
+            {
+                return _cells.Count;
+            }
         }
 
         /**
@@ -346,75 +352,97 @@ namespace NPOI.XSSF.UserModel
          *
          * @return the row number (0 based)
          */
-        public int GetRowNum()
+        public int RowNum
         {
-            return (int)(_row.r - 1);
+            get
+            {
+                return (int)(_row.r - 1);
+            }
+            set 
+            {
+                int maxrow = SpreadsheetVersion.EXCEL2007.LastRowIndex;
+                if (value < 0 || value > maxrow)
+                {
+                    throw new ArgumentException("Invalid row number (" + value
+                            + ") outside allowable range (0.." + maxrow + ")");
+                }
+                _row.r = (uint)(value + 1);
+            }
         }
 
-        /**
-         * Set the row number of this row.
-         *
-         * @param rowIndex  the row number (0-based)
-         * @throws ArgumentException if rowNum < 0 or greater than 1048575
-         */
-        public void SetRowNum(int rowIndex)
-        {
-            int maxrow = SpreadsheetVersion.EXCEL2007.GetLastRowIndex();
-            if (rowIndex < 0 || rowIndex > maxrow)
-            {
-                throw new ArgumentException("Invalid row number (" + rowIndex
-                        + ") outside allowable range (0.." + maxrow + ")");
-            }
-            _row.r = (uint)(rowIndex + 1);
-        }
 
         /**
          * Get whether or not to display this row with 0 height
          *
          * @return - height is zero or not.
          */
-        public bool GetZeroHeight()
+        public bool ZeroHeight
         {
-            return this._row.hidden;
+            get
+            {
+                return this._row.hidden;
+            }
+            set 
+            {
+                this._row.hidden = value;                
+            }
         }
 
-        /**
-         * Set whether or not to display this row with 0 height
-         *
-         * @param height  height is zero or not.
-         */
-        public void SetZeroHeight(bool height)
-        {
-            this._row.hidden = (height);
-
-        }
 
         /**
          * Is this row formatted? Most aren't, but some rows
          *  do have whole-row styles. For those that do, you
          *  can get the formatting from {@link #GetRowStyle()}
          */
-        public bool IsFormatted()
+        public bool IsFormatted
         {
-            return _row.IsSetS();
+            get
+            {
+                return _row.IsSetS();
+            }
         }
         /**
          * Returns the whole-row cell style. Most rows won't
          *  have one of these, so will return null. Call
          *  {@link #isFormatted()} to check first.
          */
-        public XSSFCellStyle GetRowStyle()
+        public ICellStyle RowStyle
         {
-            if (!IsFormatted()) return null;
+            get
+            {
+                if (!IsFormatted) return null;
 
-            StylesTable stylesSource = GetSheet().getWorkbook().getStylesSource();
-            if (stylesSource.GetNumCellStyles() > 0)
-            {
-                return stylesSource.GetStyleAt((int)_row.s);
+                StylesTable stylesSource = Sheet.Workbook.StylesSource;
+                if (stylesSource.GetNumCellStyles() > 0)
+                {
+                    return stylesSource.GetStyleAt((int)_row.s);
+                }
+                else
+                {
+                    return null;
+                }
             }
-            else
+            set 
             {
-                return null;
+                if (value == null)
+                {
+                    if (_row.IsSetS())
+                    {
+                        _row.unSetS();
+                        _row.unSetCustomFormat();
+                    }
+                }
+                else
+                {
+                    StylesTable styleSource = Sheet.Workbook.getStylesSource();
+
+                    XSSFCellStyle xStyle = (XSSFCellStyle)value;
+                    xStyle.verifyBelongsToStylesSource(styleSource);
+
+                    long idx = styleSource.PutStyle(xStyle);
+                    _row.s = (uint)idx;
+                    _row.customFormat = (true);
+                }
             }
         }
 
@@ -425,25 +453,7 @@ namespace NPOI.XSSF.UserModel
          */
         public void SetRowStyle(ICellStyle style)
         {
-            if (style == null)
-            {
-                if (_row.IsSetS())
-                {
-                    _row.unSetS();
-                    _row.unSetCustomFormat();
-                }
-            }
-            else
-            {
-                StylesTable styleSource = Sheet.Workbook.getStylesSource();
 
-                XSSFCellStyle xStyle = (XSSFCellStyle)style;
-                xStyle.verifyBelongsToStylesSource(styleSource);
-
-                long idx = styleSource.PutStyle(xStyle);
-                _row.s= (uint)idx;
-                _row.customFormat = (true);
-            }
         }
 
         /**
@@ -465,7 +475,7 @@ namespace NPOI.XSSF.UserModel
             }
             if (cell.CellType == CellType.FORMULA)
             {
-                _sheet.GetWorkbook().onDeleteFormula(xcell);
+                _sheet.GetWorkbook().OnDeleteFormula(xcell);
             }
             _cells.Remove(cell.ColumnIndex);
         }
@@ -486,7 +496,7 @@ namespace NPOI.XSSF.UserModel
          *
          * @see NPOI.XSSF.usermodel.XSSFSheet#Write(java.io.OutputStream) ()
          */
-        protected void onDocumentWrite()
+        protected void OnDocumentWrite()
         {
             // check if cells in the CT_Row are ordered
             bool isOrdered = true;

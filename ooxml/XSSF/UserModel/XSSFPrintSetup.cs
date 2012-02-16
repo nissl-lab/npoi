@@ -448,6 +448,34 @@ namespace NPOI.XSSF.UserModel
             }
         }
 
+
+        #region IPrintSetup Members
+
+        public DisplayCellErrorType CellError
+        {
+            get
+            {
+                throw new System.NotImplementedException();
+            }
+            set
+            {
+                throw new System.NotImplementedException();
+            }
+        }
+
+        public bool EndNote
+        {
+            get
+            {
+                throw new System.NotImplementedException();
+            }
+            set
+            {
+                throw new System.NotImplementedException();
+            }
+        }
+
+        #endregion
     }
 }
 

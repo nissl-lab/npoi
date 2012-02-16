@@ -127,7 +127,7 @@ namespace NPOI.XSSF.UserModel
          * @return the underlying CT_Picture bean
          */
 
-        public CT_Picture GetCTPicture()
+        internal CT_Picture GetCTPicture()
         {
             return ctPicture;
         }
@@ -160,9 +160,9 @@ namespace NPOI.XSSF.UserModel
          */
         public void Resize(double scale)
         {
-            XSSFClientAnchor anchor = (XSSFClientAnchor)GetAnchor();
+            IClientAnchor anchor = (XSSFClientAnchor)GetAnchor();
 
-            XSSFClientAnchor pref = GetPreferredSize(scale);
+            IClientAnchor pref = GetPreferredSize(scale);
 
             int row2 = anchor.Row1 + (pref.Row2 - pref.Row1);
             int col2 = anchor.Col1 + (pref.Col2 - pref.Col1);
@@ -181,7 +181,7 @@ namespace NPOI.XSSF.UserModel
          *
          * @return XSSFClientAnchor with the preferred size for this image
          */
-        public XSSFClientAnchor GetPreferredSize()
+        public IClientAnchor GetPreferredSize()
         {
             return GetPreferredSize(1);
         }
@@ -192,7 +192,7 @@ namespace NPOI.XSSF.UserModel
          * @param scale the amount by which image dimensions are multiplied relative to the original size.
          * @return XSSFClientAnchor with the preferred size for this image
          */
-        public XSSFClientAnchor GetPreferredSize(double scale)
+        public IClientAnchor GetPreferredSize(double scale)
         {
             XSSFClientAnchor anchor = (XSSFClientAnchor)GetAnchor();
 
@@ -262,8 +262,8 @@ namespace NPOI.XSSF.UserModel
         {
             XSSFSheet sheet = (XSSFSheet)GetDrawing().GetParent();
 
-            XSSFRow row = sheet.GetRow(rowIndex);
-            float height = row != null ? row.GetHeightInPoints() : sheet.GetDefaultRowHeightInPoints();
+            IRow row = sheet.GetRow(rowIndex);
+            float height = row != null ? row.HeightInPoints : sheet.DefaultRowHeightInPoints;
             return height * PIXEL_DPI / POINT_DPI;
         }
 

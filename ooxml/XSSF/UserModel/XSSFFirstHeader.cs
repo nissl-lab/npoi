@@ -48,27 +48,25 @@ namespace NPOI.XSSF.UserModel
          * Get the content text representing this header
          * @return text
          */
-        public String GetText()
+        public override String Text
         {
-            return GetHeaderFooter().firstHeader;
+            get
+            {
+                return GetHeaderFooter().firstHeader;
+            }
+            set 
+            {
+                if (value == null)
+                {
+                    GetHeaderFooter().firstHeader = null;
+                }
+                else
+                {
+                    GetHeaderFooter().firstHeader = (value);
+                }            
+            }
         }
 
-        /**
-         * Set a text for the header. If null unset the value
-         * @see XSSFHeaderFooter to see how to create a string with Header/Footer Formatting Syntax
-         * @param text - a string representing the header. 
-         */
-        public void SetText(String text)
-        {
-            if (text == null)
-            {
-                GetHeaderFooter().firstHeader = null;
-            }
-            else
-            {
-                GetHeaderFooter().firstHeader = (text);
-            }
-        }
 
     }
 }

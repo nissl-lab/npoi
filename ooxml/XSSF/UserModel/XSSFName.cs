@@ -324,9 +324,12 @@ namespace NPOI.XSSF.UserModel
          *
          * @return <code>true</code> if this name refers to a user-defined function
          */
-        public bool IsFunctionName()
+        public bool IsFunctionName
         {
-            return GetFunction();
+            get
+            {
+                return GetFunction();
+            }
         }
 
         /**
@@ -334,20 +337,18 @@ namespace NPOI.XSSF.UserModel
          *
          * @return the user comment for this named range
          */
-        public String GetComment()
+        public String Comment
         {
-            return _ctName.comment;
+            get
+            {
+                return _ctName.comment;
+            }
+            set 
+            {
+                _ctName.comment = value;
+            }
         }
 
-        /**
-         * Specifies the comment the user provided when the name was Created.
-         *
-         * @param comment  the user comment for this named range
-         */
-        public void SetComment(String comment)
-        {
-            _ctName.comment = comment;
-        }
 
 
         public override int GetHashCode()

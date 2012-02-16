@@ -190,23 +190,15 @@ namespace NPOI.XSSF.UserModel
             }
         }
 
-        /**
-         * Get the type of horizontal alignment for the cell
-         *
-         * @return short - the type of alignment
-         * @see NPOI.ss.usermodel.CellStyle#ALIGN_GENERAL
-         * @see NPOI.ss.usermodel.CellStyle#ALIGN_LEFT
-         * @see NPOI.ss.usermodel.CellStyle#ALIGN_CENTER
-         * @see NPOI.ss.usermodel.CellStyle#ALIGN_RIGHT
-         * @see NPOI.ss.usermodel.CellStyle#ALIGN_FILL
-         * @see NPOI.ss.usermodel.CellStyle#ALIGN_JUSTIFY
-         * @see NPOI.ss.usermodel.CellStyle#ALIGN_CENTER_SELECTION
-         */
-        public short alignment
+        public HorizontalAlignment Alignment
         {
             get
             {
-                return (short)(GetAlignmentEnum());
+                return GetAlignmentEnum();
+            }
+            set 
+            {
+                GetCellAlignment().SetHorizontal(value);
             }
         }
 
@@ -226,86 +218,58 @@ namespace NPOI.XSSF.UserModel
             return HorizontalAlignment.GENERAL;
         }
 
-        /**
-         * Get the type of border to use for the bottom border of the cell
-         *
-         * @return short - border type
-         * @see NPOI.ss.usermodel.CellStyle#BorderStyle.NONE
-         * @see NPOI.ss.usermodel.CellStyle#BORDER_THIN
-         * @see NPOI.ss.usermodel.CellStyle#BORDER_MEDIUM
-         * @see NPOI.ss.usermodel.CellStyle#BORDER_DASHED
-         * @see NPOI.ss.usermodel.CellStyle#BORDER_DOTTED
-         * @see NPOI.ss.usermodel.CellStyle#BORDER_THICK
-         * @see NPOI.ss.usermodel.CellStyle#BORDER_DOUBLE
-         * @see NPOI.ss.usermodel.CellStyle#BORDER_HAIR
-         * @see NPOI.ss.usermodel.CellStyle#BORDER_MEDIUM_DASHED
-         * @see NPOI.ss.usermodel.CellStyle#BORDER_DASH_DOT
-         * @see NPOI.ss.usermodel.CellStyle#BORDER_MEDIUM_DASH_DOT
-         * @see NPOI.ss.usermodel.CellStyle#BORDER_DASH_DOT_DOT
-         * @see NPOI.ss.usermodel.CellStyle#BORDER_MEDIUM_DASH_DOT_DOT
-         * @see NPOI.ss.usermodel.CellStyle#BORDER_SLANTED_DASH_DOT
-         */
-        public short GetBorderBottom()
+        public BorderStyle BorderBottom
         {
-            if (!_cellXf.applyBorder) return (short)BorderStyle.NONE;
+            get
+            {
+                if (!_cellXf.applyBorder) return BorderStyle.NONE;
 
-            int idx = (int)_cellXf.borderId;
-            CT_Border ct = _stylesSource.GetBorderAt(idx).GetCT_Border();
-            ST_BorderStyle ptrn = ct.IsSetBottom() ? ct.bottom.style : null;
-            return ptrn == null ? (short)BorderStyle.NONE : (short)(ptrn - 1);
+                int idx = (int)_cellXf.borderId;
+                CT_Border ct = _stylesSource.GetBorderAt(idx).GetCTBorder();
+                ST_BorderStyle ptrn = ct.IsSetBottom() ? ct.bottom.style : null;
+                return ptrn == null ? BorderStyle.NONE : (BorderStyle)(ptrn - 1);
+            }
+            set 
+            {
+                CT_Border ct = GetCTBorder();
+                CT_BorderPr pr = ct.IsSetBottom() ? ct.bottom : ct.AddNewBottom();
+                if (value == BorderStyle.NONE) ct.unsetBottom();
+                else pr.style=(ST_BorderStyle)(value + 1);
+
+                int idx = _stylesSource.PutBorder(new XSSFCellBorder(ct, _theme));
+
+                _cellXf.borderId = (uint)idx;
+                _cellXf.applyBorder = (true);
+            }
         }
 
-        /**
-         * Get the type of border to use for the bottom border of the cell
-         *
-         * @return border type as Java enum
-         * @see BorderStyle
-         */
-        public BorderStyle GetBorderBottomEnum()
+
+        public BorderStyle BorderLeft
         {
-            int style = GetBorderBottom();
-            return (BorderStyle)Enum.GetValues(typeof(BorderStyle)).GetValue(style);
+            get
+            {
+                if (!_cellXf.applyBorder) return BorderStyle.NONE;
+
+                int idx = (int)_cellXf.borderId;
+                CT_Border ct = _stylesSource.GetBorderAt(idx).GetCTBorder();
+                ST_BorderStyle ptrn = ct.IsSetLeft() ? ct.left.style : null;
+                return ptrn == null ? BorderStyle.NONE : (BorderStyle)(ptrn - 1);
+            }
+            set 
+            {
+                CT_Border ct = GetCTBorder();
+                CT_BorderPr pr = ct.IsSetLeft() ? ct.left : ct.AddNewLeft();
+                if (value == BorderStyle.NONE) ct.unsetLeft();
+                else pr.style=(ST_BorderStyle)(value + 1);
+
+                int idx = _stylesSource.PutBorder(new XSSFCellBorder(ct, _theme));
+
+                _cellXf.borderId = (uint)idx;
+                _cellXf.applyBorder = (true);
+
+            }
         }
 
-        /**
-         * Get the type of border to use for the left border of the cell
-         *
-         * @return short - border type, default value is {@link NPOI.ss.usermodel.CellStyle#BorderStyle.NONE}
-         * @see NPOI.ss.usermodel.CellStyle#BorderStyle.NONE
-         * @see NPOI.ss.usermodel.CellStyle#BORDER_THIN
-         * @see NPOI.ss.usermodel.CellStyle#BORDER_MEDIUM
-         * @see NPOI.ss.usermodel.CellStyle#BORDER_DASHED
-         * @see NPOI.ss.usermodel.CellStyle#BORDER_DOTTED
-         * @see NPOI.ss.usermodel.CellStyle#BORDER_THICK
-         * @see NPOI.ss.usermodel.CellStyle#BORDER_DOUBLE
-         * @see NPOI.ss.usermodel.CellStyle#BORDER_HAIR
-         * @see NPOI.ss.usermodel.CellStyle#BORDER_MEDIUM_DASHED
-         * @see NPOI.ss.usermodel.CellStyle#BORDER_DASH_DOT
-         * @see NPOI.ss.usermodel.CellStyle#BORDER_MEDIUM_DASH_DOT
-         * @see NPOI.ss.usermodel.CellStyle#BORDER_DASH_DOT_DOT
-         * @see NPOI.ss.usermodel.CellStyle#BORDER_MEDIUM_DASH_DOT_DOT
-         * @see NPOI.ss.usermodel.CellStyle#BORDER_SLANTED_DASH_DOT
-         */
-        public short GetBorderLeft()
-        {
-            if (!_cellXf.applyBorder) return (short)BorderStyle.NONE;
-
-            int idx = (int)_cellXf.borderId;
-            CT_Border ct = _stylesSource.GetBorderAt(idx).GetCT_Border();
-            ST_BorderStyle ptrn = ct.IsSetLeft() ? ct.left.style : null;
-            return ptrn == null ? (short)BorderStyle.NONE : (short)(ptrn - 1);
-        }
-
-        /**
-         * Get the type of border to use for the left border of the cell
-         *
-         * @return border type, default value is {@link NPOI.ss.usermodel.BorderStyle#NONE}
-         */
-        public BorderStyle GetBorderLeftEnum()
-        {
-            int style = GetBorderLeft();
-            return (BorderStyle)Enum.GetValues(typeof(BorderStyle)).GetValue(style);
-        }
 
         /**
          * Get the type of border to use for the right border of the cell
@@ -326,65 +290,54 @@ namespace NPOI.XSSF.UserModel
          * @see NPOI.ss.usermodel.CellStyle#BORDER_MEDIUM_DASH_DOT_DOT
          * @see NPOI.ss.usermodel.CellStyle#BORDER_SLANTED_DASH_DOT
          */
-        public short GetBorderRight()
+        public BorderStyle BorderRight
         {
-            if (!_cellXf.applyBorder) return (short)BorderStyle.NONE;
+            get
+            {
+                if (!_cellXf.applyBorder) return BorderStyle.NONE;
 
-            int idx = (int)_cellXf.borderId;
-            CT_Border ct = _stylesSource.GetBorderAt(idx).GetCT_Border();
-            ST_BorderStyle ptrn = ct.IsSetRight() ? ct.GetRight().GetStyle() : null;
-            return ptrn == null ? BorderStyle.NONE : (short)(ptrn - 1);
+                int idx = (int)_cellXf.borderId;
+                CT_Border ct = _stylesSource.GetBorderAt(idx).GetCTBorder();
+                ST_BorderStyle ptrn = ct.IsSetRight() ? ct.right.style : null;
+                return ptrn == null ? BorderStyle.NONE : (BorderStyle)(ptrn - 1);
+            }
+            set 
+            {
+                CT_Border ct = GetCTBorder();
+                CT_BorderPr pr = ct.IsSetRight() ? ct.right : ct.AddNewRight();
+                if (value == BorderStyle.NONE) ct.unsetRight();
+                else pr.style = (ST_BorderStyle)((int)value + 1);
+
+                int idx = _stylesSource.PutBorder(new XSSFCellBorder(ct, _theme));
+
+                _cellXf.borderId = (uint)idx;
+                _cellXf.applyBorder = (true);
+            }
         }
 
-        /**
-         * Get the type of border to use for the right border of the cell
-         *
-         * @return border type, default value is {@link NPOI.ss.usermodel.BorderStyle#NONE}
-         */
-        public BorderStyle GetBorderRightEnum()
+        public BorderStyle BorderTop
         {
-            int style = GetBorderRight();
-            return (BorderStyle)Enum.GetValues(typeof(BorderStyle)).GetValue(style);
-        }
+            get
+            {
+                if (!_cellXf.applyBorder) return BorderStyle.NONE;
 
-        /**
-         * Get the type of border to use for the top border of the cell
-         *
-         * @return short - border type, default value is {@link NPOI.ss.usermodel.CellStyle#BorderStyle.NONE}
-         * @see NPOI.ss.usermodel.CellStyle#BorderStyle.NONE
-         * @see NPOI.ss.usermodel.CellStyle#BORDER_THIN
-         * @see NPOI.ss.usermodel.CellStyle#BORDER_MEDIUM
-         * @see NPOI.ss.usermodel.CellStyle#BORDER_DASHED
-         * @see NPOI.ss.usermodel.CellStyle#BORDER_DOTTED
-         * @see NPOI.ss.usermodel.CellStyle #BORDER_THICK
-         * @see NPOI.ss.usermodel.CellStyle#BORDER_DOUBLE
-         * @see NPOI.ss.usermodel.CellStyle#BORDER_HAIR
-         * @see NPOI.ss.usermodel.CellStyle#BORDER_MEDIUM_DASHED
-         * @see NPOI.ss.usermodel.CellStyle#BORDER_DASH_DOT
-         * @see NPOI.ss.usermodel.CellStyle#BORDER_MEDIUM_DASH_DOT
-         * @see NPOI.ss.usermodel.CellStyle#BORDER_DASH_DOT_DOT
-         * @see NPOI.ss.usermodel.CellStyle#BORDER_MEDIUM_DASH_DOT_DOT
-         * @see NPOI.ss.usermodel.CellStyle#BORDER_SLANTED_DASH_DOT
-         */
-        public short GetBorderTop()
-        {
-            if (!_cellXf.applyBorder) return BorderStyle.NONE;
+                int idx = (int)_cellXf.borderId;
+                CT_Border ct = _stylesSource.GetBorderAt(idx).GetCTBorder();
+                ST_BorderStyle ptrn = ct.IsSetTop() ? ct.top.style : null;
+                return ptrn == null ? BorderStyle.NONE : (BorderStyle)(ptrn - 1);
+            }
+            set 
+            {
+                CT_Border ct = GetCTBorder();
+                CT_BorderPr pr = ct.IsSetTop() ? ct.top : ct.AddNewTop();
+                if (value == BorderStyle.NONE) ct.unsetTop();
+                else pr.style = (ST_BorderStyle)(value + 1);
 
-            int idx = (int)_cellXf.borderId;
-            CT_Border ct = _stylesSource.GetBorderAt(idx).GetCT_Border();
-            ST_BorderStyle ptrn = ct.IsSetTop() ? ct.GetTop().GetStyle() : null;
-            return ptrn == null ? BorderStyle.NONE : (short)(ptrn - 1);
-        }
+                int idx = _stylesSource.PutBorder(new XSSFCellBorder(ct, _theme));
 
-        /**
-        * Get the type of border to use for the top border of the cell
-        *
-        * @return border type, default value is {@link NPOI.ss.usermodel.BorderStyle#NONE}
-        */
-        public BorderStyle GetBorderTopEnum()
-        {
-            int style = GetBorderTop();
-            return (BorderStyle)Enum.GetValues(typeof(BorderStyle)).GetValue(style);
+                _cellXf.borderId = (uint)idx;
+                _cellXf.applyBorder = (true);
+            }
         }
 
         /**
@@ -394,10 +347,13 @@ namespace NPOI.XSSF.UserModel
          * @return the index of the color defInition, default value is {@link NPOI.ss.usermodel.IndexedColors#AUTOMATIC}
          * @see NPOI.ss.usermodel.IndexedColors
          */
-        public short GetBottomBorderColor()
+        public short BottomBorderColor
         {
-            XSSFColor clr = GetBottomBorderXSSFColor();
-            return clr == null ? IndexedColors.BLACK.Index : clr.GetIndexed();
+            get
+            {
+                XSSFColor clr = GetBottomBorderXSSFColor();
+                return clr == null ? IndexedColors.BLACK.Index : clr.GetIndexed();
+            }
         }
 
         /**
@@ -420,9 +376,17 @@ namespace NPOI.XSSF.UserModel
          *
          * @return the index of the number format
          */
-        public short GetDataFormat()
+        public short DataFormat
         {
-            return (short)_cellXf.numFmtId;
+            get
+            {
+                return (short)_cellXf.numFmtId;
+            }
+            set 
+            {
+                _cellXf.applyNumberFormat = (true);
+                _cellXf.numFmtId = (uint)value;
+            }
         }
 
         /**
@@ -431,10 +395,13 @@ namespace NPOI.XSSF.UserModel
          *
          * @return the number format string
          */
-        public String GetDataFormatString()
+        public String DataFormatString
         {
-            int idx = GetDataFormat();
-            return new XSSFDataFormat(_stylesSource).GetFormat((short)idx);
+            get
+            {
+                int idx = DataFormat;
+                return new XSSFDataFormat(_stylesSource).GetFormat((short)idx);
+            }
         }
 
         /**
@@ -446,15 +413,19 @@ namespace NPOI.XSSF.UserModel
          * @return fill color, default value is {@link NPOI.ss.usermodel.IndexedColors#AUTOMATIC}
          * @see NPOI.ss.usermodel.IndexedColors
          */
-        public short GetFillBackgroundColor()
+        public short FillBackgroundColor
         {
-            XSSFColor clr = GetFillBackgroundXSSFColor();
-            return clr == null ? IndexedColors.AUTOMATIC.Index : clr.GetIndexed();
-        }
-
-        public XSSFColor GetFillBackgroundColorColor()
-        {
-            return GetFillBackgroundXSSFColor();
+            get
+            {
+                XSSFColor clr = FillBackgroundXSSFColor;
+                return clr == null ? IndexedColors.AUTOMATIC.Index : clr.GetIndexed();
+            }
+            set 
+            {
+                XSSFColor clr = new XSSFColor();
+                clr.SetIndexed(value);
+                SetFillBackgroundColor(clr);
+            }
         }
 
         /**
@@ -466,19 +437,22 @@ namespace NPOI.XSSF.UserModel
          * @see NPOI.xssf.usermodel.XSSFColor#getRgb()
          * @return XSSFColor - fill color or <code>null</code> if not Set
          */
-        public XSSFColor GetFillBackgroundXSSFColor()
+        public XSSFColor FillBackgroundXSSFColor
         {
-            if (!_cellXf.applyFill) return null;
-
-            int FillIndex = (int)_cellXf.fillId;
-            XSSFCellFill fg = _stylesSource.GetFillAt(FillIndex);
-
-            XSSFColor FillBackgroundColor = fg.GetFillBackgroundColor();
-            if (FillBackgroundColor != null && _theme != null)
+            get
             {
-                _theme.inheritFromThemeAsRequired(FillBackgroundColor);
+                if (!_cellXf.applyFill) return null;
+
+                int FillIndex = (int)_cellXf.fillId;
+                XSSFCellFill fg = _stylesSource.GetFillAt(FillIndex);
+
+                XSSFColor FillBackgroundColor = fg.GetFillBackgroundColor();
+                if (FillBackgroundColor != null && _theme != null)
+                {
+                    _theme.InheritFromThemeAsRequired(FillBackgroundColor);
+                }
+                return FillBackgroundColor;
             }
-            return FillBackgroundColor;
         }
 
         /**
@@ -490,60 +464,72 @@ namespace NPOI.XSSF.UserModel
          * @see IndexedColors
          * @return fill color, default value is {@link NPOI.ss.usermodel.IndexedColors#AUTOMATIC}
          */
-        public short GetFillForegroundColor()
+        public short FillForegroundColor
         {
-            XSSFColor clr = GetFillForegroundXSSFColor();
-            return clr == null ? IndexedColors.AUTOMATIC.Index : clr.GetIndexed();
+            get
+            {
+                XSSFColor clr = this.FillForegroundXSSFColor;
+                return clr == null ? IndexedColors.AUTOMATIC.Index : clr.GetIndexed();
+            }
+            set 
+            {
+                XSSFColor clr = new XSSFColor();
+                clr.SetIndexed(value);
+                SetFillForegroundColor(clr);
+            }
         }
-
-        public XSSFColor GetFillForegroundColorColor()
-        {
-            return GetFillForegroundXSSFColor();
-        }
-
         /**
          * Get the foreground fill color.
          *
          * @return XSSFColor - fill color or <code>null</code> if not Set
          */
-        public XSSFColor GetFillForegroundXSSFColor()
+        public XSSFColor FillForegroundXSSFColor
         {
-            if (!_cellXf.applyFill) return null;
-
-            int FillIndex = (int)_cellXf.fillId;
-            XSSFCellFill fg = _stylesSource.GetFillAt(FillIndex);
-
-            XSSFColor FillForegroundColor = fg.GetFillForegroundColor();
-            if (FillForegroundColor != null && _theme != null)
+            get
             {
-                _theme.inheritFromThemeAsRequired(FillForegroundColor);
+                if (!_cellXf.applyFill) return null;
+
+                int FillIndex = (int)_cellXf.fillId;
+                XSSFCellFill fg = _stylesSource.GetFillAt(FillIndex);
+
+                XSSFColor FillForegroundColor = fg.GetFillForegroundColor();
+                if (FillForegroundColor != null && _theme != null)
+                {
+                    _theme.InheritFromThemeAsRequired(FillForegroundColor);
+                }
+                return FillForegroundColor;
             }
-            return FillForegroundColor;
         }
 
 
-        public short GetFillPattern()
+        public FillPatternType FillPattern
         {
-            if (!_cellXf.applyFill) return 0;
+            get
+            {
+                if (!_cellXf.applyFill) return 0;
 
-            int FillIndex = (int)_cellXf.fillId;
-            XSSFCellFill fill = _stylesSource.GetFillAt(FillIndex);
+                int FillIndex = (int)_cellXf.fillId;
+                XSSFCellFill fill = _stylesSource.GetFillAt(FillIndex);
 
-            ST_PatternType ptrn = fill.GetPatternType();
-            if (ptrn == null) return CellStyle.NO_FILL;
-            return (short)(ptrn - 1);
+                ST_PatternType ptrn = fill.GetPatternType();
+                if (ptrn == null) return FillPatternType.NO_FILL;
+                return (FillPatternType)(ptrn - 1);
+            }
+            set 
+            {
+                CT_Fill ct = GetCTFill();
+                CT_PatternFill ptrn = ct.IsSetPatternFill() ? ct.GetPatternFill() : ct.AddNewPatternFill();
+                if (value == FillPatternType.NO_FILL && ptrn.IsSetPatternType()) 
+                    ptrn.unsetPatternType();
+                else ptrn.patternType = (ST_PatternType)(value + 1);
+
+                int idx = _stylesSource.PutFill(new XSSFCellFill(ct));
+
+                _cellXf.fillId = (uint)idx;
+                _cellXf.applyFill = (true);
+            }
         }
 
-        /**
-         * Get the fill pattern
-         *
-         * @return the fill pattern, default value is {@link NPOI.ss.usermodel.FillPatternType#NO_FILL}
-         */
-        public FillPatternType GetFillPatternEnum()
-        {
-            int style = GetFillPattern();
-            return FillPatternType.values()[style];
-        }
 
         /**
         * Gets the font for this style
@@ -564,9 +550,12 @@ namespace NPOI.XSSF.UserModel
          * @return short - font index
          * @see NPOI.xssf.usermodel.XSSFWorkbook#getFontAt(short)
          */
-        public short GetFontIndex()
+        public short FontIndex
         {
-            return (short)GetFontId();
+            get
+            {
+                return (short)GetFontId();
+            }
         }
 
         /**
@@ -574,13 +563,24 @@ namespace NPOI.XSSF.UserModel
          *
          * @return bool -  whether the cell using this style is hidden
          */
-        public bool GetHidden()
+        public bool IsHidden
         {
-            if (!_cellXf.IsSetProtection() || !_cellXf.protection.IsSetHidden())
+            get
             {
-                return false;
+                if (!_cellXf.IsSetProtection() || !_cellXf.protection.IsSetHidden())
+                {
+                    return false;
+                }
+                return _cellXf.protection.hidden;
             }
-            return _cellXf.protection.hidden;
+            set 
+            {
+                if (!_cellXf.IsSetProtection())
+                {
+                    _cellXf.AddNewProtection();
+                }
+                _cellXf.protection.hidden = (value);
+            }
         }
 
         /**
@@ -588,10 +588,17 @@ namespace NPOI.XSSF.UserModel
          *
          * @return indent - number of spaces
          */
-        public short GetIndention()
+        public short Indention
         {
-            CT_CellAlignment align = _cellXf.alignment;
-            return (short)(align == null ? 0 : align.indent);
+            get
+            {
+                CT_CellAlignment align = _cellXf.alignment;
+                return (short)(align == null ? 0 : align.indent);
+            }
+            set 
+            {
+                GetCellAlignment().SetIndent(value);
+            }
         }
 
         /**
@@ -613,10 +620,19 @@ namespace NPOI.XSSF.UserModel
          * @return the index of the color defInition, default value is {@link NPOI.ss.usermodel.IndexedColors#BLACK}
          * @see NPOI.ss.usermodel.IndexedColors
          */
-        public short GetLeftBorderColor()
+        public short LeftBorderColor
         {
-            XSSFColor clr = GetLeftBorderXSSFColor();
-            return clr == null ? IndexedColors.BLACK.Index : clr.GetIndexed();
+            get
+            {
+                XSSFColor clr = GetLeftBorderXSSFColor();
+                return clr == null ? IndexedColors.BLACK.Index : clr.GetIndexed();
+            }
+            set 
+            {
+                XSSFColor clr = new XSSFColor();
+                clr.SetIndexed(value);
+                SetLeftBorderColor(clr);
+            }
         }
 
         /**
@@ -640,13 +656,24 @@ namespace NPOI.XSSF.UserModel
          *
          * @return whether the cell using this style are locked
          */
-        public bool GetLocked()
+        public bool IsLocked
         {
-            if (!_cellXf.IsSetProtection() || !_cellXf.protection.IsSetLocked())
+            get
             {
-                return true;
+                if (!_cellXf.IsSetProtection() || !_cellXf.protection.IsSetLocked())
+                {
+                    return true;
+                }
+                return _cellXf.protection.locked;
             }
-            return _cellXf.protection.locked;
+            set 
+            {
+                if (!_cellXf.IsSetProtection())
+                {
+                    _cellXf.AddNewProtection();
+                }
+                _cellXf.protection.locked = value;
+            }
         }
 
         /**
@@ -655,10 +682,19 @@ namespace NPOI.XSSF.UserModel
          * @return the index of the color defInition, default value is {@link NPOI.ss.usermodel.IndexedColors#BLACK}
          * @see NPOI.ss.usermodel.IndexedColors
          */
-        public short GetRightBorderColor()
+        public short RightBorderColor
         {
-            XSSFColor clr = GetRightBorderXSSFColor();
-            return clr == null ? IndexedColors.BLACK.Index : clr.GetIndexed();
+            get
+            {
+                XSSFColor clr = GetRightBorderXSSFColor();
+                return clr == null ? IndexedColors.BLACK.Index : clr.GetIndexed();
+            }
+            set 
+            {
+                XSSFColor clr = new XSSFColor();
+                clr.SetIndexed(value);
+                SetRightBorderColor(clr);
+            }
         }
         /**
          * Get the color to use for the right border
@@ -689,10 +725,17 @@ namespace NPOI.XSSF.UserModel
          *
          * @return rotation degrees (between 0 and 180 degrees)
          */
-        public short GetRotation()
+        public short Rotation
         {
-            CT_CellAlignment align = _cellXf.alignment;
-            return (short)(align == null ? 0 : align.textRotation);
+            get
+            {
+                CT_CellAlignment align = _cellXf.alignment;
+                return (short)(align == null ? 0 : align.textRotation);
+            }
+            set 
+            {
+                GetCellAlignment().SetTextRotation(value);
+            }
         }
 
         /**
@@ -701,10 +744,19 @@ namespace NPOI.XSSF.UserModel
          * @return the index of the color defInition, default value is {@link NPOI.ss.usermodel.IndexedColors#BLACK}
          * @see NPOI.ss.usermodel.IndexedColors
          */
-        public short GetTopBorderColor()
+        public short TopBorderColor
         {
-            XSSFColor clr = GetTopBorderXSSFColor();
-            return clr == null ? IndexedColors.BLACK.Index : clr.GetIndexed();
+            get
+            {
+                XSSFColor clr = GetTopBorderXSSFColor();
+                return clr == null ? IndexedColors.BLACK.Index : clr.GetIndexed();
+            }
+            set 
+            {
+                XSSFColor clr = new XSSFColor();
+                clr.SetIndexed(value);
+                SetTopBorderColor(clr);
+            }
         }
 
         /**
@@ -731,9 +783,12 @@ namespace NPOI.XSSF.UserModel
          * @see NPOI.ss.usermodel.CellStyle#VERTICAL_BOTTOM
          * @see NPOI.ss.usermodel.CellStyle#VERTICAL_JUSTIFY
          */
-        public short GetVerticalAlignment()
+        public VerticalAlignment VerticalAlignment
         {
-            return (short)GetVerticalAlignmentEnum();
+            get
+            {
+                return GetVerticalAlignmentEnum();
+            }
         }
 
         /**
@@ -757,71 +812,20 @@ namespace NPOI.XSSF.UserModel
          *
          * @return  a bool value indicating if the text in a cell should be line-wrapped within the cell.
          */
-        public bool GetWrapText()
+        public bool WrapText
         {
-            CT_CellAlignment align = _cellXf.alignment;
-            return align != null && align.wrapText;
+            get
+            {
+                CT_CellAlignment align = _cellXf.alignment;
+                return align != null && align.wrapText;
+            }
+            set 
+            {
+                GetCellAlignment().SetWrapText(value);
+            }
         }
 
-        /**
-         * Set the type of horizontal alignment for the cell
-         *
-         * @param align - the type of alignment
-         * @see NPOI.ss.usermodel.CellStyle#ALIGN_GENERAL
-         * @see NPOI.ss.usermodel.CellStyle#ALIGN_LEFT
-         * @see NPOI.ss.usermodel.CellStyle#ALIGN_CENTER
-         * @see NPOI.ss.usermodel.CellStyle#ALIGN_RIGHT
-         * @see NPOI.ss.usermodel.CellStyle#ALIGN_FILL
-         * @see NPOI.ss.usermodel.CellStyle#ALIGN_JUSTIFY
-         * @see NPOI.ss.usermodel.CellStyle#ALIGN_CENTER_SELECTION
-         */
-        public void SetAlignment(short align)
-        {
-            GetCellAlignment().SetHorizontal(HorizontalAlignment.values()[align]);
-        }
 
-        /**
-         * Set the type of horizontal alignment for the cell
-         *
-         * @param align - the type of alignment
-         * @see NPOI.ss.usermodel.HorizontalAlignment
-         */
-        public void SetAlignment(HorizontalAlignment align)
-        {
-            SetAlignment((short)align);
-        }
-
-        /**
-         * Set the type of border to use for the bottom border of the cell
-         *
-         * @param border the type of border to use
-         * @see NPOI.ss.usermodel.CellStyle#BorderStyle.NONE
-         * @see NPOI.ss.usermodel.CellStyle#BORDER_THIN
-         * @see NPOI.ss.usermodel.CellStyle#BORDER_MEDIUM
-         * @see NPOI.ss.usermodel.CellStyle#BORDER_DASHED
-         * @see NPOI.ss.usermodel.CellStyle#BORDER_DOTTED
-         * @see NPOI.ss.usermodel.CellStyle#BORDER_THICK
-         * @see NPOI.ss.usermodel.CellStyle#BORDER_DOUBLE
-         * @see NPOI.ss.usermodel.CellStyle#BORDER_HAIR
-         * @see NPOI.ss.usermodel.CellStyle#BORDER_MEDIUM_DASHED
-         * @see NPOI.ss.usermodel.CellStyle#BORDER_DASH_DOT
-         * @see NPOI.ss.usermodel.CellStyle#BORDER_MEDIUM_DASH_DOT
-         * @see NPOI.ss.usermodel.CellStyle#BORDER_DASH_DOT_DOT
-         * @see NPOI.ss.usermodel.CellStyle#BORDER_MEDIUM_DASH_DOT_DOT
-         * @see NPOI.ss.usermodel.CellStyle#BORDER_SLANTED_DASH_DOT
-         */
-        public void SetBorderBottom(short border)
-        {
-            CT_Border ct = GetCT_Border();
-            CT_BorderPr pr = ct.IsSetBottom() ? ct.GetBottom() : ct.AddNewBottom();
-            if (border == BorderStyle.NONE) ct.unsetBottom();
-            else pr.SetStyle(ST_BorderStyle.Enum.forInt(border + 1));
-
-            int idx = _stylesSource.PutBorder(new XSSFCellBorder(ct, _theme));
-
-            _cellXf.borderId = (idx);
-            _cellXf.applyBorder = (true);
-        }
 
         /**
          * Set the type of border to use for the bottom border of the cell
@@ -831,133 +835,10 @@ namespace NPOI.XSSF.UserModel
          */
         public void SetBorderBottom(BorderStyle border)
         {
-            SetBorderBottom((short)border);
+            SetBorderBottom(border);
         }
 
-        /**
-         * Set the type of border to use for the left border of the cell
-         * @param border the type of border to use
-         * @see NPOI.ss.usermodel.CellStyle#BorderStyle.NONE
-         * @see NPOI.ss.usermodel.CellStyle#BORDER_THIN
-         * @see NPOI.ss.usermodel.CellStyle#BORDER_MEDIUM
-         * @see NPOI.ss.usermodel.CellStyle#BORDER_DASHED
-         * @see NPOI.ss.usermodel.CellStyle#BORDER_DOTTED
-         * @see NPOI.ss.usermodel.CellStyle#BORDER_THICK
-         * @see NPOI.ss.usermodel.CellStyle#BORDER_DOUBLE
-         * @see NPOI.ss.usermodel.CellStyle#BORDER_HAIR
-         * @see NPOI.ss.usermodel.CellStyle#BORDER_MEDIUM_DASHED
-         * @see NPOI.ss.usermodel.CellStyle#BORDER_DASH_DOT
-         * @see NPOI.ss.usermodel.CellStyle#BORDER_MEDIUM_DASH_DOT
-         * @see NPOI.ss.usermodel.CellStyle#BORDER_DASH_DOT_DOT
-         * @see NPOI.ss.usermodel.CellStyle#BORDER_MEDIUM_DASH_DOT_DOT
-         * @see NPOI.ss.usermodel.CellStyle#BORDER_SLANTED_DASH_DOT
-         */
-        public void SetBorderLeft(short border)
-        {
-            CT_Border ct = GetCT_Border();
-            CT_BorderPr pr = ct.IsSetLeft() ? ct.GetLeft() : ct.AddNewLeft();
-            if (border == BorderStyle.NONE) ct.unsetLeft();
-            else pr.SetStyle(ST_BorderStyle.Enum.forInt(border + 1));
 
-            int idx = _stylesSource.PutBorder(new XSSFCellBorder(ct, _theme));
-
-            _cellXf.borderId = (idx);
-            _cellXf.applyBorder = (true);
-        }
-
-        /**
-        * Set the type of border to use for the left border of the cell
-         *
-        * @param border the type of border to use
-        */
-        public void SetBorderLeft(BorderStyle border)
-        {
-            SetBorderLeft((short)border);
-        }
-
-        /**
-         * Set the type of border to use for the right border of the cell
-         *
-         * @param border the type of border to use
-         * @see NPOI.ss.usermodel.CellStyle#BorderStyle.NONE
-         * @see NPOI.ss.usermodel.CellStyle#BORDER_THIN
-         * @see NPOI.ss.usermodel.CellStyle#BORDER_MEDIUM
-         * @see NPOI.ss.usermodel.CellStyle#BORDER_DASHED
-         * @see NPOI.ss.usermodel.CellStyle#BORDER_DOTTED
-         * @see NPOI.ss.usermodel.CellStyle#BORDER_THICK
-         * @see NPOI.ss.usermodel.CellStyle#BORDER_DOUBLE
-         * @see NPOI.ss.usermodel.CellStyle#BORDER_HAIR
-         * @see NPOI.ss.usermodel.CellStyle#BORDER_MEDIUM_DASHED
-         * @see NPOI.ss.usermodel.CellStyle#BORDER_DASH_DOT
-         * @see NPOI.ss.usermodel.CellStyle#BORDER_MEDIUM_DASH_DOT
-         * @see NPOI.ss.usermodel.CellStyle#BORDER_DASH_DOT_DOT
-         * @see NPOI.ss.usermodel.CellStyle#BORDER_MEDIUM_DASH_DOT_DOT
-         * @see NPOI.ss.usermodel.CellStyle#BORDER_SLANTED_DASH_DOT
-         */
-        public void SetBorderRight(short border)
-        {
-            CT_Border ct = GetCT_Border();
-            CT_BorderPr pr = ct.IsSetRight() ? ct.GetRight() : ct.AddNewRight();
-            if (border == BorderStyle.NONE) ct.unsetRight();
-            else pr.SetStyle(ST_BorderStyle.Enum.forInt(border + 1));
-
-            int idx = _stylesSource.PutBorder(new XSSFCellBorder(ct, _theme));
-
-            _cellXf.borderId = (idx);
-            _cellXf.applyBorder = (true);
-        }
-
-        /**
-        * Set the type of border to use for the right border of the cell
-         *
-        * @param border the type of border to use
-        */
-        public void SetBorderRight(BorderStyle border)
-        {
-            SetBorderRight((short)border);
-        }
-
-        /**
-         * Set the type of border to use for the top border of the cell
-         *
-         * @param border the type of border to use
-         * @see NPOI.ss.usermodel.CellStyle#BorderStyle.NONE
-         * @see NPOI.ss.usermodel.CellStyle#BORDER_THIN
-         * @see NPOI.ss.usermodel.CellStyle#BORDER_MEDIUM
-         * @see NPOI.ss.usermodel.CellStyle#BORDER_DASHED
-         * @see NPOI.ss.usermodel.CellStyle#BORDER_DOTTED
-         * @see NPOI.ss.usermodel.CellStyle#BORDER_THICK
-         * @see NPOI.ss.usermodel.CellStyle#BORDER_DOUBLE
-         * @see NPOI.ss.usermodel.CellStyle#BORDER_HAIR
-         * @see NPOI.ss.usermodel.CellStyle#BORDER_MEDIUM_DASHED
-         * @see NPOI.ss.usermodel.CellStyle#BORDER_DASH_DOT
-         * @see NPOI.ss.usermodel.CellStyle#BORDER_MEDIUM_DASH_DOT
-         * @see NPOI.ss.usermodel.CellStyle#BORDER_DASH_DOT_DOT
-         * @see NPOI.ss.usermodel.CellStyle#BORDER_MEDIUM_DASH_DOT_DOT
-         * @see NPOI.ss.usermodel.CellStyle#BORDER_SLANTED_DASH_DOT
-         */
-        public void SetBorderTop(short border)
-        {
-            CT_Border ct = GetCT_Border();
-            CT_BorderPr pr = ct.IsSetTop() ? ct.GetTop() : ct.AddNewTop();
-            if (border == BorderStyle.NONE) ct.unsetTop();
-            else pr.SetStyle(ST_BorderStyle.Enum.forInt(border + 1));
-
-            int idx = _stylesSource.PutBorder(new XSSFCellBorder(ct, _theme));
-
-            _cellXf.borderId = (idx);
-            _cellXf.applyBorder = (true);
-        }
-
-        /**
-         * Set the type of border to use for the top border of the cell
-         *
-         * @param border the type of border to use
-         */
-        public void SetBorderTop(BorderStyle border)
-        {
-            SetBorderTop((short)border);
-        }
 
         /**
          * Set the color to use for the bottom border
@@ -978,7 +859,7 @@ namespace NPOI.XSSF.UserModel
          */
         public void SetBottomBorderColor(XSSFColor color)
         {
-            CT_Border ct = GetCT_Border();
+            CT_Border ct = GetCTBorder();
             if (color == null && !ct.IsSetBottom()) return;
 
             CT_BorderPr pr = ct.IsSetBottom() ? ct.GetBottom() : ct.AddNewBottom();
@@ -990,18 +871,6 @@ namespace NPOI.XSSF.UserModel
             _cellXf.borderId = (idx);
             _cellXf.applyBorder = (true);
         }
-
-        /**
-         * Set the index of a data format
-         *
-         * @param fmt the index of a data format
-         */
-        public void SetDataFormat(short fmt)
-        {
-            _cellXf.SetApplyNumberFormat(true);
-            _cellXf.SetNumFmtId(fmt);
-        }
-
         /**
          * Set the background fill color represented as a {@link XSSFColor} value.
          * <p>
@@ -1048,39 +917,6 @@ namespace NPOI.XSSF.UserModel
         }
 
         /**
-         * Set the background fill color represented as a indexed color value.
-         * <p>
-         * For example:
-         * <pre>
-         * cs.SetFillPattern(XSSFCellStyle.FINE_DOTS );
-         * cs.SetFillBackgroundXSSFColor(IndexedColors.RED.Index);
-         * </pre>
-         * optionally a Foreground and background fill can be applied:
-         * <i>Note: Ensure Foreground color is Set prior to background</i>
-         * <pre>
-         * cs.SetFillPattern(XSSFCellStyle.FINE_DOTS );
-         * cs.SetFillForegroundColor(IndexedColors.BLUE.Index);
-         * cs.SetFillBackgroundColor(IndexedColors.RED.Index);
-         * </pre>
-         * or, for the special case of SOLID_FILL:
-         * <pre>
-         * cs.SetFillPattern(XSSFCellStyle.SOLID_FOREGROUND );
-         * cs.SetFillForegroundColor(IndexedColors.RED.Index);
-         * </pre>
-         * It is necessary to Set the fill style in order
-         * for the color to be Shown in the cell.
-         *
-         * @param bg - the color to use
-         * @see NPOI.ss.usermodel.IndexedColors
-         */
-        public void SetFillBackgroundColor(short bg)
-        {
-            XSSFColor clr = new XSSFColor();
-            clr.SetIndexed(bg);
-            SetFillBackgroundColor(clr);
-        }
-
-        /**
         * Set the foreground fill color represented as a {@link XSSFColor} value.
          * <br/>
         * <i>Note: Ensure Foreground color is Set prior to background color.</i>
@@ -1109,20 +945,6 @@ namespace NPOI.XSSF.UserModel
         }
 
         /**
-         * Set the foreground fill color as a indexed color value
-         * <br/>
-         * <i>Note: Ensure Foreground color is Set prior to background color.</i>
-         * @param fg the color to use
-         * @see NPOI.ss.usermodel.IndexedColors
-         */
-        public void SetFillForegroundColor(short fg)
-        {
-            XSSFColor clr = new XSSFColor();
-            clr.SetIndexed(fg);
-            SetFillForegroundColor(clr);
-        }
-
-        /**
          * Get a <b>copy</b> of the currently used CT_Fill, if none is used, return a new instance.
          */
         private CT_Fill GetCTFill()
@@ -1145,7 +967,7 @@ namespace NPOI.XSSF.UserModel
         /**
          * Get a <b>copy</b> of the currently used CT_Border, if none is used, return a new instance.
          */
-        private CT_Border GetCT_Border()
+        private CT_Border GetCTBorder()
         {
             CT_Border ct;
             if (_cellXf.applyBorder)
@@ -1153,52 +975,13 @@ namespace NPOI.XSSF.UserModel
                 int idx = (int)_cellXf.borderId;
                 XSSFCellBorder cf = _stylesSource.GetBorderAt(idx);
 
-                ct = (CT_Border)cf.GetCT_Border().copy();
+                ct = (CT_Border)cf.GetCTBorder().Copy();
             }
             else
             {
                 ct = new CT_Border();
             }
             return ct;
-        }
-
-        /**
-         * This element is used to specify cell fill information for pattern and solid color cell Fills.
-         * For solid cell Fills (no pattern),  foregoRund color is used.
-         * For cell Fills with patterns specified, then the cell fill color is specified by the background color.
-         *
-         * @see NPOI.ss.usermodel.CellStyle#NO_FILL
-         * @see NPOI.ss.usermodel.CellStyle#SOLID_FOREGROUND
-         * @see NPOI.ss.usermodel.CellStyle#FINE_DOTS
-         * @see NPOI.ss.usermodel.CellStyle#ALT_BARS
-         * @see NPOI.ss.usermodel.CellStyle#SPARSE_DOTS
-         * @see NPOI.ss.usermodel.CellStyle#THICK_HORZ_BANDS
-         * @see NPOI.ss.usermodel.CellStyle#THICK_VERT_BANDS
-         * @see NPOI.ss.usermodel.CellStyle#THICK_BACKWARD_DIAG
-         * @see NPOI.ss.usermodel.CellStyle#THICK_FORWARD_DIAG
-         * @see NPOI.ss.usermodel.CellStyle#BIG_SPOTS
-         * @see NPOI.ss.usermodel.CellStyle#BRICKS
-         * @see NPOI.ss.usermodel.CellStyle#THIN_HORZ_BANDS
-         * @see NPOI.ss.usermodel.CellStyle#THIN_VERT_BANDS
-         * @see NPOI.ss.usermodel.CellStyle#THIN_BACKWARD_DIAG
-         * @see NPOI.ss.usermodel.CellStyle#THIN_FORWARD_DIAG
-         * @see NPOI.ss.usermodel.CellStyle#SQUARES
-         * @see NPOI.ss.usermodel.CellStyle#DIAMONDS
-         * @see #setFillBackgroundColor(short)
-         * @see #setFillForegroundColor(short)
-         * @param fp  fill pattern (set to {@link NPOI.ss.usermodel.CellStyle#SOLID_FOREGROUND} to fill w/foreground color)
-         */
-        public void SetFillPattern(short fp)
-        {
-            CT_Fill ct = GetCTFill();
-            CT_PatternFill ptrn = ct.IsSetPatternFill() ? ct.GetPatternFill() : ct.AddNewPatternFill();
-            if (fp == NO_FILL && ptrn.IsSetPatternType()) ptrn.unsetPatternType();
-            else ptrn.SetPatternType(ST_PatternType.Enum.forInt(fp + 1));
-
-            int idx = _stylesSource.PutFill(new XSSFCellFill(ct));
-
-            _cellXf.fillId = (uint)idx;
-            _cellXf.applyFill = (true);
         }
 
         /**
@@ -1237,50 +1020,13 @@ namespace NPOI.XSSF.UserModel
         }
 
         /**
-         * Set the cell's using this style to be hidden
-         *
-         * @param hidden - whether the cell using this style should be hidden
-         */
-        public void SetHidden(bool hidden)
-        {
-            if (!_cellXf.IsSetProtection())
-            {
-                _cellXf.AddNewProtection();
-            }
-            _cellXf.protection.hidden = (hidden);
-        }
-
-        /**
-         * Set the number of spaces to indent the text in the cell
-         *
-         * @param indent - number of spaces
-         */
-        public void SetIndention(short indent)
-        {
-            GetCellAlignment().SetIndent(indent);
-        }
-
-        /**
-         * Set the color to use for the left border as a indexed color value
-         *
-         * @param color the index of the color defInition
-         * @see NPOI.ss.usermodel.IndexedColors
-         */
-        public void SetLeftBorderColor(short color)
-        {
-            XSSFColor clr = new XSSFColor();
-            clr.SetIndexed(color);
-            SetLeftBorderColor(clr);
-        }
-
-        /**
          * Set the color to use for the left border as a {@link XSSFColor} value
          *
          * @param color the color to use
          */
         public void SetLeftBorderColor(XSSFColor color)
         {
-            CT_Border ct = GetCT_Border();
+            CT_Border ct = GetCTBorder();
             if (color == null && !ct.IsSetLeft()) return;
 
             CT_BorderPr pr = ct.IsSetLeft() ? ct.GetLeft() : ct.AddNewLeft();
@@ -1294,40 +1040,13 @@ namespace NPOI.XSSF.UserModel
         }
 
         /**
-         * Set the cell's using this style to be locked
-         *
-         * @param locked -  whether the cell using this style should be locked
-         */
-        public void SetLocked(bool locked)
-        {
-            if (!_cellXf.IsSetProtection())
-            {
-                _cellXf.AddNewProtection();
-            }
-            _cellXf.protection.locked = (locked);
-        }
-
-        /**
-         * Set the color to use for the right border
-         *
-         * @param color the index of the color defInition
-         * @see NPOI.ss.usermodel.IndexedColors
-         */
-        public void SetRightBorderColor(short color)
-        {
-            XSSFColor clr = new XSSFColor();
-            clr.SetIndexed(color);
-            SetRightBorderColor(clr);
-        }
-
-        /**
          * Set the color to use for the right border as a {@link XSSFColor} value
          *
          * @param color the color to use
          */
         public void SetRightBorderColor(XSSFColor color)
         {
-            CT_Border ct = GetCT_Border();
+            CT_Border ct = GetCTBorder();
             if (color == null && !ct.IsSetRight()) return;
 
             CT_BorderPr pr = ct.IsSetRight() ? ct.right : ct.AddNewRight();
@@ -1340,38 +1059,8 @@ namespace NPOI.XSSF.UserModel
             _cellXf.applyBorder = (true);
         }
 
-        /**
-         * Set the degree of rotation for the text in the cell
-         * <p>
-         * Expressed in degrees. Values range from 0 to 180. The first letter of
-         * the text is considered the center-point of the arc.
-         * <br/>
-         * For 0 - 90, the value represents degrees above horizon. For 91-180 the degrees below the
-         * horizon is calculated as:
-         * <br/>
-         * <code>[degrees below horizon] = 90 - textRotation.</code>
-         * </p>
-         *
-         * @param rotation - the rotation degrees (between 0 and 180 degrees)
-         */
-        public void SetRotation(short rotation)
-        {
-            GetCellAlignment().SetTextRotation(rotation);
-        }
 
 
-        /**
-         * Set the color to use for the top border
-         *
-         * @param color the index of the color defInition
-         * @see NPOI.ss.usermodel.IndexedColors
-         */
-        public void SetTopBorderColor(short color)
-        {
-            XSSFColor clr = new XSSFColor();
-            clr.SetIndexed(color);
-            SetTopBorderColor(clr);
-        }
 
         /**
          * Set the color to use for the top border as a {@link XSSFColor} value
@@ -1380,7 +1069,7 @@ namespace NPOI.XSSF.UserModel
          */
         public void SetTopBorderColor(XSSFColor color)
         {
-            CT_Border ct = GetCT_Border();
+            CT_Border ct = GetCTBorder();
             if (color == null && !ct.IsSetTop()) return;
 
             CT_BorderPr pr = ct.IsSetTop() ? ct.GetTop() : ct.AddNewTop();
@@ -1418,19 +1107,6 @@ namespace NPOI.XSSF.UserModel
             GetCellAlignment().SetVertical(align);
         }
 
-        /**
-         * Set whether the text should be wrapped.
-         * <p>
-         * Setting this flag to <code>true</code> make all content visible
-         * whithin a cell by displaying it on multiple lines
-         * </p>
-         *
-         * @param wrapped a bool value indicating if the text in a cell should be line-wrapped within the cell.
-         */
-        public void SetWrapText(bool wrapped)
-        {
-            GetCellAlignment().SetWrapText(wrapped);
-        }
 
         /**
          * Gets border color
@@ -1506,7 +1182,7 @@ namespace NPOI.XSSF.UserModel
          *
          * @return CT_CellAlignment
          */
-        private CT_CellAlignment GetCT_CellAlignment()
+        private CT_CellAlignment GetCTCellAlignment()
         {
             if (_cellXf.alignment == null)
             {

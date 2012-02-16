@@ -60,9 +60,12 @@ namespace NPOI.XSSF.UserModel
         /**
          * Gets the parent shape.
          */
-        public XSSFShapeGroup GetParent()
+        public XSSFShapeGroup Parent
         {
-            return parent;
+            get
+            {
+                return parent;
+            }
         }
 
         /**

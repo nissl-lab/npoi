@@ -83,10 +83,8 @@ namespace NPOI.XSSF.UserModel
          *
          * @return the picture data.
          */
-        public byte[] Data
+        public byte[] GetData()
         {
-            get
-            {
                 try
                 {
                     return IOUtils.ToByteArray(GetPackagePart().GetInputStream());
@@ -95,7 +93,6 @@ namespace NPOI.XSSF.UserModel
                 {
                     throw new POIXMLException(e);
                 }
-            }
         }
 
         /**

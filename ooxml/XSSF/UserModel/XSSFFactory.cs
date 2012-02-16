@@ -45,7 +45,7 @@ namespace NPOI.XSSF.UserModel
         }
 
 
-        public POIXMLDocumentPart CreateDocumentPart(POIXMLDocumentPart parent, PackageRelationship rel, PackagePart part)
+        public override POIXMLDocumentPart CreateDocumentPart(POIXMLDocumentPart parent, PackageRelationship rel, PackagePart part)
         {
             POIXMLRelation descriptor = XSSFRelation.GetInstance(rel.RelationshipType);
             if (descriptor == null || descriptor.RelationClass == null)
@@ -67,7 +67,7 @@ namespace NPOI.XSSF.UserModel
         }
 
 
-        public POIXMLDocumentPart NewDocumentPart(POIXMLRelation descriptor)
+        public override POIXMLDocumentPart CreateDocumentPart(POIXMLRelation descriptor)
         {
             try
             {

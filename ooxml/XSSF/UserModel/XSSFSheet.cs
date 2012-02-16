@@ -365,10 +365,10 @@ namespace NPOI.XSSF.UserModel
          *
          * @return a SpreadsheetML drawing
          */
-        public XSSFDrawing CreateDrawingPatriarch()
+        public IDrawing CreateDrawingPatriarch()
         {
             XSSFDrawing drawing = null;
-            CT_Drawing ctDrawing = GetCT_Drawing();
+            CT_Drawing ctDrawing = GetCTDrawing();
             if (ctDrawing == null)
             {
                 //drawingNumber = #drawings.Count + 1
@@ -553,7 +553,7 @@ namespace NPOI.XSSF.UserModel
          * use {@link NPOI.XSSF.usermodel.XSSFDrawing#CreateCellComment
          *  (NPOI.SS.usermodel.ClientAnchor)} instead
          */
-        public XSSFComment CreateComment()
+        public IComment CreateComment()
         {
             return CreateDrawingPatriarch().CreateCellComment(new XSSFClientAnchor());
         }
@@ -565,7 +565,7 @@ namespace NPOI.XSSF.UserModel
          * @return High level {@link XSSFRow} object representing a row in the sheet
          * @see #RemoveRow(NPOI.SS.usermodel.Row)
          */
-        public XSSFRow CreateRow(int rownum)
+        public virtual IRow CreateRow(int rownum)
         {
             CT_Row ctRow;
             XSSFRow prev = _rows[rownum];
@@ -615,7 +615,7 @@ namespace NPOI.XSSF.UserModel
             GetPane().activePane = (ST_Pane)(activePane);
         }
 
-        public XSSFComment GetCellComment(int row, int column)
+        public IComment GetCellComment(int row, int column)
         {
             if (sheetComments == null)
             {

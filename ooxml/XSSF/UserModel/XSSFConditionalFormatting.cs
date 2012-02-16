@@ -101,7 +101,7 @@ namespace NPOI.XSSF.UserModel
         /**
          * @return the Conditional Formatting rule at position idx.
          */
-        public XSSFConditionalFormattingRule GetRule(int idx)
+        public IConditionalFormattingRule GetRule(int idx)
         {
             return new XSSFConditionalFormattingRule(_sh, _cf.GetCfRuleArray(idx));
         }
@@ -109,9 +109,12 @@ namespace NPOI.XSSF.UserModel
         /**
          * @return number of Conditional Formatting rules.
          */
-        public int GetNumberOfRules()
+        public int NumberOfRules
         {
-            return _cf.sizeOfCfRuleArray();
+            get
+            {
+                return _cf.sizeOfCfRuleArray();
+            }
         }
     }
 }

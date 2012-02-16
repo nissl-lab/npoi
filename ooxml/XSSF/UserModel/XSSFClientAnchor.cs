@@ -122,12 +122,12 @@ namespace NPOI.XSSF.UserModel
          * @return starting anchor point
          */
 
-        public CT_Marker GetFrom()
+        internal CT_Marker GetFrom()
         {
             return cell1;
         }
 
-        protected void SetFrom(CT_Marker from)
+        internal void SetFrom(CT_Marker from)
         {
             cell1 = from;
         }
@@ -138,18 +138,18 @@ namespace NPOI.XSSF.UserModel
          * @return ending anchor point
          */
 
-        public CT_Marker GetTo()
+        internal CT_Marker GetTo()
         {
             return cell2;
         }
 
-        protected void SetTo(CT_Marker to)
+        internal void SetTo(CT_Marker to)
         {
             cell2 = to;
         }
 
 
-        public bool IsSet()
+        internal bool IsSet()
         {
             return !(cell1.col == 0 && cell2.col == 0 &&
                      cell1.row == 0 && cell2.row == 0);

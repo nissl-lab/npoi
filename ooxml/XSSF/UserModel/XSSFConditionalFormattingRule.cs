@@ -129,7 +129,7 @@ namespace NPOI.XSSF.UserModel
         /**
          * @return - font formatting object  if defined,  <code>null</code> otherwise
          */
-        public XSSFFontFormatting GetFontFormatting()
+        public IFontFormatting GetFontFormatting()
         {
             CT_Dxf dxf = GetDxf(false);
             if (dxf == null || !dxf.IsSetFont()) return null;
@@ -143,7 +143,7 @@ namespace NPOI.XSSF.UserModel
          *
          * @return - pattern formatting object, never returns <code>null</code>.
          */
-        public XSSFPatternFormatting CreatePatternFormatting()
+        public IPatternFormatting CreatePatternFormatting()
         {
             CT_Dxf dxf = GetDxf(true);
             CT_Fill fill;

@@ -94,7 +94,7 @@ namespace NPOI.XSSF.UserModel
         }
 
 
-        protected void Commit()  {
+        protected override void Commit()  {
  
         /*
             Saved Drawings must have the following namespaces Set:
@@ -149,7 +149,7 @@ namespace NPOI.XSSF.UserModel
          *
          * @return  the newly Created picture shape.
          */
-        public XSSFPicture CreatePicture(XSSFClientAnchor anchor, int pictureIndex)
+        public IPicture CreatePicture(XSSFClientAnchor anchor, int pictureIndex)
         {
             PackageRelationship rel = AddPictureReference(pictureIndex);
 
@@ -166,7 +166,7 @@ namespace NPOI.XSSF.UserModel
             return shape;
         }
 
-        public XSSFPicture CreatePicture(IClientAnchor anchor, int pictureIndex)
+        public IPicture CreatePicture(IClientAnchor anchor, int pictureIndex)
         {
             return CreatePicture((XSSFClientAnchor)anchor, pictureIndex);
         }
@@ -351,7 +351,7 @@ namespace NPOI.XSSF.UserModel
             anchor.SetTo(ctAnchor.to);
             anchor.SetFrom(ctAnchor.from);
             ST_EditAs aditAs;
-            switch (anchor.GetAnchorType())
+            switch (anchor.AnchorType)
             {
                 case AnchorType.DONT_MOVE_AND_RESIZE: 
                     aditAs = ST_EditAs.absolute; break;

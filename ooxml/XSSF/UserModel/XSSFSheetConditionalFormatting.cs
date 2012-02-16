@@ -225,9 +225,12 @@ namespace NPOI.XSSF.UserModel
         /**
         * @return number of Conditional Formatting objects of the sheet
         */
-        public int GetNumConditionalFormattings()
+        public int NumConditionalFormattings
         {
-            return _sheet.GetCTWorksheet().sizeOfConditionalFormattingArray();
+            get
+            {
+                return _sheet.GetCTWorksheet().sizeOfConditionalFormattingArray();
+            }
         }
 
         /**
@@ -242,7 +245,7 @@ namespace NPOI.XSSF.UserModel
 
         private void CheckIndex(int index)
         {
-            int cnt = GetNumConditionalFormattings();
+            int cnt = NumConditionalFormattings;
             if (index < 0 || index >= cnt)
             {
                 throw new ArgumentException("Specified CF index " + index

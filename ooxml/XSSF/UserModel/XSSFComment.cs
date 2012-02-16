@@ -58,20 +58,13 @@ namespace NPOI.XSSF.UserModel
             {
                 return _comments.GetAuthor((int)_comment.authorId);
             }
+            set 
+            {
+                _comment.authorId = (
+                    (uint)_comments.FindAuthor(value)
+                );
+            }
         }
-
-        /**
-         * Name of the original comment author. Default value is blank.
-         *
-         * @param author the name of the original author of the comment
-         */
-        public void SetAuthor(String author)
-        {
-            _comment.authorId = (
-                    (uint)_comments.FindAuthor(author)
-            );
-        }
-
         /**
          * @return the 0-based column of the cell that the comment is associated with.
          */
@@ -80,6 +73,26 @@ namespace NPOI.XSSF.UserModel
             get
             {
                 return new CellReference(_comment.@ref).Col;
+            }
+            set 
+            {
+                String oldRef = _comment.@ref;
+
+                CellReference ref1 = new CellReference(Row, value);
+                _comment.@ref = (ref1.FormatAsString());
+                _comments.ReferenceUpdated(oldRef, _comment);
+
+                if (_vmlShape != null)
+                {
+                    _vmlShape.GetClientDataArray(0).SetColumnArray(
+                          new BigInt[] { new Bigint(String.ValueOf(value)) }
+                    );
+
+                    // There is a very odd xmlbeans bug when changing the column
+                    //  arrays which can lead to corrupt pointer
+                    // This call seems to fix them again... See bug #50795
+                    _vmlShape.GetClientDataList().ToString();
+                }
             }
         }
 
@@ -92,90 +105,71 @@ namespace NPOI.XSSF.UserModel
             {
                 return new CellReference(_comment.@ref).Row;
             }
+            set 
+            {
+                String oldRef = _comment.@ref;
+
+                String newRef =
+                    (new CellReference(value, Column)).FormatAsString();
+                _comment.@ref = (newRef);
+                _comments.ReferenceUpdated(oldRef, _comment);
+
+                if (_vmlShape != null) 
+                    _vmlShape.GetClientDataArray(0)
+                        .SetRowArray(0, new Bigint(String.ValueOf(value)));
+            }
         }
 
         /**
          * @return whether the comment is visible
          */
-        public bool IsVisible()
+        public bool Visible
         {
-            bool visible = false;
-            if (_vmlShape != null)
+            get
             {
-                String style = _vmlShape.GetStyle();
-                visible = style != null && style.IndexOf("visibility:visible") != -1;
+                bool visible = false;
+                if (_vmlShape != null)
+                {
+                    String style = _vmlShape.GetStyle();
+                    visible = style != null && style.IndexOf("visibility:visible") != -1;
+                }
+                return visible;
             }
-            return visible;
-        }
-
-        /**
-         * @param visible whether the comment is visible
-         */
-        public void SetVisible(bool visible)
-        {
-            if (_vmlShape != null)
+            set 
             {
-                String style;
-                if (visible) style = "position:absolute;visibility:visible";
-                else style = "position:absolute;visibility:hidden";
-                _vmlShape.SetStyle(style);
+                if (_vmlShape != null)
+                {
+                    String style;
+                    if (value) style = "position:absolute;visibility:visible";
+                    else style = "position:absolute;visibility:hidden";
+                    _vmlShape.SetStyle(style);
+                }   
             }
-        }
-
-        /**
-         * Set the column of the cell that Contains the comment
-         *
-         * @param col the 0-based column of the cell that Contains the comment
-         */
-        public void SetColumn(int col)
-        {
-            String oldRef = _comment.@ref;
-
-            CellReference ref1 = new CellReference(Row, col);
-            _comment.@ref = (ref1.FormatAsString());
-            _comments.ReferenceUpdated(oldRef, _comment);
-
-            if (_vmlShape != null)
-            {
-                _vmlShape.GetClientDataArray(0).SetColumnArray(
-                      new BigInt[] { new Bigint(String.ValueOf(col)) }
-                );
-
-                // There is a very odd xmlbeans bug when changing the column
-                //  arrays which can lead to corrupt pointer
-                // This call seems to fix them again... See bug #50795
-                _vmlShape.GetClientDataList().ToString();
-            }
-        }
-
-        /**
-         * Set the row of the cell that Contains the comment
-         *
-         * @param row the 0-based row of the cell that Contains the comment
-         */
-        public void SetRow(int row)
-        {
-            String oldRef = _comment.@ref;
-
-            String newRef =
-                (new CellReference(row, Column)).FormatAsString();
-            _comment.@ref = (newRef);
-            _comments.ReferenceUpdated(oldRef, _comment);
-
-            if (_vmlShape != null) _vmlShape.GetClientDataArray(0).SetRowArray(0, new Bigint(String.ValueOf(row)));
         }
 
         /**
          * @return the rich text string of the comment
          */
-        public XSSFRichTextString GetString()
+        public IRichTextString String
         {
-            if (_str == null)
+            get
             {
-                CT_Rst rst = _comment.text;
-                if (rst != null) _str = new XSSFRichTextString(_comment.GetText());
+                if (_str == null)
+                {
+                    CT_Rst rst = _comment.text;
+                    if (rst != null) _str = new XSSFRichTextString(_comment.text);
+                }
+                return _str;
             }
-            return _str;
+            set 
+            {
+                if (!(value is XSSFRichTextString))
+                {
+                    throw new ArgumentException("Only XSSFRichTextString argument is supported");
+                }
+                _str = (XSSFRichTextString)value;
+                _comment.text = (_str.GetCTRst());
+            }
         }
 
         /**
@@ -183,19 +177,9 @@ namespace NPOI.XSSF.UserModel
          *
          * @param string  the XSSFRichTextString used by this object.
          */
-        public void SetString(IRichTextString str)
+        public void SetString(string str)
         {
-            if (!(str is XSSFRichTextString))
-            {
-                throw new ArgumentException("Only XSSFRichTextString argument is supported");
-            }
-            _str = (XSSFRichTextString)str;
-            _comment.text = (_str.GetCTRst());
-        }
-
-        public void SetString(String str)
-        {
-            SetString(new XSSFRichTextString(str));
+            this.String = (new XSSFRichTextString(str));
         }
 
         /**

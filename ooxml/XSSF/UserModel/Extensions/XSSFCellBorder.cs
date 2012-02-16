@@ -85,7 +85,7 @@ namespace NPOI.XSSF.UserModel.Extensions
          * @return CT_Border
          */
 
-        public CT_Border GetCT_Border()
+        public CT_Border GetCTBorder()
         {
             return border;
         }

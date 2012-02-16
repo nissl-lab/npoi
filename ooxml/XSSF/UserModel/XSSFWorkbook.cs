@@ -1553,7 +1553,7 @@ namespace NPOI.XSSF.UserModel
          *        <code>Workbook.SHEET_STATE_VERY_HIDDEN</code>.
          * @throws ArgumentException if the supplied sheet index or state is invalid
          */
-        public void SetSheetHidden(int sheetIx, int state)
+        public void SetSheetHidden(int sheetIx, SheetState state)
         {
             ValidateSheetIndex(sheetIx);
             WorkbookUtil.ValidateSheetState(state);
@@ -1567,7 +1567,7 @@ namespace NPOI.XSSF.UserModel
          *
          * @see XSSFCell#setCellFormula(String)
          */
-        protected void OnDeleteFormula(XSSFCell cell)
+        internal void OnDeleteFormula(XSSFCell cell)
         {
             if (calcChain != null)
             {

@@ -98,7 +98,7 @@ namespace NPOI.XSSF.UserModel
             this.ctDdataValidation.allowBlank = (true);
         }
 
-        CT_DataValidation GetCtDdataValidation()
+        CT_DataValidation GetCTDdataValidation()
         {
             return ctDdataValidation;
         }
@@ -123,76 +123,112 @@ namespace NPOI.XSSF.UserModel
             ctDdataValidation.prompt = (text);
         }
 
-        /* (non-Javadoc)
-         * @see NPOI.ss.usermodel.DataValidation#getEmptyCellAllowed()
-         */
-        public bool GetEmptyCellAllowed()
+        public bool EmptyCellAllowed
         {
-            return ctDdataValidation.allowBlank;
+            get
+            {
+                return ctDdataValidation.allowBlank;
+            }
+            set 
+            {
+                ctDdataValidation.allowBlank =value;
+            }
         }
 
-        /* (non-Javadoc)
-         * @see NPOI.ss.usermodel.DataValidation#getErrorBoxText()
-         */
-        public String GetErrorBoxText()
+        public String ErrorBoxText
         {
-            return ctDdataValidation.error;
+            get
+            {
+                return ctDdataValidation.error;
+            }
         }
 
-        /* (non-Javadoc)
-         * @see NPOI.ss.usermodel.DataValidation#getErrorBoxTitle()
-         */
-        public String GetErrorBoxTitle()
+        public String ErrorBoxTitle
         {
-            return ctDdataValidation.errorTitle;
+            get
+            {
+                return ctDdataValidation.errorTitle;
+            }
         }
 
-        /* (non-Javadoc)
-         * @see NPOI.ss.usermodel.DataValidation#getErrorStyle()
-         */
-        public int GetErrorStyle()
+        public int ErrorStyle
         {
-            return (int)ctDdataValidation.errorStyle;
+            get
+            {
+                return (int)ctDdataValidation.errorStyle;
+            }
+            set 
+            {
+
+                ctDdataValidation.errorStyle = (errorStyleMappings[value]);
+            }
         }
 
-        /* (non-Javadoc)
-         * @see NPOI.ss.usermodel.DataValidation#getPromptBoxText()
-         */
-        public String GetPromptBoxText()
+        public String PromptBoxText
         {
-            return ctDdataValidation.prompt;
+            get
+            {
+                return ctDdataValidation.prompt;
+            }
         }
 
         /* (non-Javadoc)
          * @see NPOI.ss.usermodel.DataValidation#getPromptBoxTitle()
          */
-        public String GetPromptBoxTitle()
+        public String PromptBoxTitle
         {
-            return ctDdataValidation.promptTitle;
+            get
+            {
+                return ctDdataValidation.promptTitle;
+            }
         }
 
         /* (non-Javadoc)
          * @see NPOI.ss.usermodel.DataValidation#getShowErrorBox()
          */
-        public bool GetShowErrorBox()
+        public bool ShowErrorBox
         {
-            return ctDdataValidation.showErrorMessage;
+            get
+            {
+                return ctDdataValidation.showErrorMessage;
+            }
+            set 
+            {
+                ctDdataValidation.showErrorMessage = value;
+            }
         }
 
         /* (non-Javadoc)
          * @see NPOI.ss.usermodel.DataValidation#getShowPromptBox()
          */
-        public bool GetShowPromptBox()
+        public bool ShowPromptBox
         {
-            return ctDdataValidation.showInputMessage;
+            get
+            {
+                return ctDdataValidation.showInputMessage;
+            }
+            set 
+            {
+                ctDdataValidation.showInputMessage = value;
+            }
         }
 
         /* (non-Javadoc)
          * @see NPOI.ss.usermodel.DataValidation#getSuppressDropDownArrow()
          */
-        public bool GetSuppressDropDownArrow()
+        public bool SuppressDropDownArrow
         {
-            return !ctDdataValidation.showDropDown;
+            get
+            {
+                return !ctDdataValidation.showDropDown;
+            }
+            set 
+            {
+                if (validationConstraint.GetValidationType() == ValidationType.LIST)
+                {
+                    ctDdataValidation.showDropDown = (!value);
+                }
+            }
         }
 
         /* (non-Javadoc)
@@ -203,52 +239,12 @@ namespace NPOI.XSSF.UserModel
             return validationConstraint;
         }
 
-        /* (non-Javadoc)
-         * @see NPOI.ss.usermodel.DataValidation#setEmptyCellAllowed(bool)
-         */
-        public void SetEmptyCellAllowed(bool allowed)
+        public CellRangeAddressList Regions
         {
-            ctDdataValidation.allowBlank = (allowed);
-        }
-
-        /* (non-Javadoc)
-         * @see NPOI.ss.usermodel.DataValidation#setErrorStyle(int)
-         */
-        public void SetErrorStyle(int errorStyle)
-        {
-            ctDdataValidation.errorStyle = (errorStyleMappings[errorStyle]);
-        }
-
-        /* (non-Javadoc)
-         * @see NPOI.ss.usermodel.DataValidation#setShowErrorBox(bool)
-         */
-        public void SetShowErrorBox(bool show)
-        {
-            ctDdataValidation.showErrorMessage = show;
-        }
-
-        /* (non-Javadoc)
-         * @see NPOI.ss.usermodel.DataValidation#setShowPromptBox(bool)
-         */
-        public void SetShowPromptBox(bool show)
-        {
-            ctDdataValidation.showInputMessage=show;
-        }
-
-        /* (non-Javadoc)
-         * @see NPOI.ss.usermodel.DataValidation#setSuppressDropDownArrow(bool)
-         */
-        public void SetSuppressDropDownArrow(bool suppress)
-        {
-            if (validationConstraint.GetValidationType() == ValidationType.LIST)
+            get
             {
-                ctDdataValidation.showDropDown=(!suppress);
+                return regions;
             }
-        }
-
-        public CellRangeAddressList GetRegions()
-        {
-            return regions;
         }
 
         public String PrettyPrint()

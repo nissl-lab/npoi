@@ -33,7 +33,7 @@ namespace NPOI.XSSF.UserModel
             this.worksheet = new CT_Worksheet();
         }
 
-        public XSSFRow CreateRow(int rowNum)
+        public override IRow CreateRow(int rowNum)
         {
             return null;
         }
