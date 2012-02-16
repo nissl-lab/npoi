@@ -40,7 +40,7 @@ namespace NPOI.HSSF.Record
      */
 
     public class CalcModeRecord
-       : Record
+       : StandardRecord
     {
         public const short sid = 0xD;
 
@@ -113,23 +113,23 @@ namespace NPOI.HSSF.Record
             StringBuilder buffer = new StringBuilder();
 
             buffer.Append("[CALCMODE]\n");
-            buffer.Append("    .Calcmode       = ")
+            buffer.Append("    .calcmode       = ")
                 .Append(StringUtil.ToHexString(GetCalcMode())).Append("\n");
             buffer.Append("[/CALCMODE]\n");
             return buffer.ToString();
         }
 
-        public override int Serialize(int offset, byte [] data)
+        public override void Serialize(ILittleEndianOutput out1)
         {
-            LittleEndian.PutShort(data, 0 + offset, sid);
-            LittleEndian.PutShort(data, 2 + offset, (short)0x2);
-            LittleEndian.PutShort(data, 4 + offset, GetCalcMode());
-            return RecordSize;
+            out1.WriteShort(GetCalcMode());
         }
 
-        public override int RecordSize
+        protected override int DataSize
         {
-            get { return 6; }
+            get
+            {
+                return 2;
+            }
         }
 
         public override short Sid

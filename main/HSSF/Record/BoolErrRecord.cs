@@ -43,12 +43,16 @@ namespace NPOI.HSSF.Record
     {
         public const short sid = 0x205;
         private int _value;
+        /**
+	 * If <code>true</code>, this record represents an error cell value, otherwise this record represents a boolean cell value
+	 */
         private bool _isError;
 
         /** Creates new BoolErrRecord */
 
         public BoolErrRecord()
         {
+            // fields uninitialised
         }
 
         /**

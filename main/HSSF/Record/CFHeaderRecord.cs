@@ -124,15 +124,12 @@ namespace NPOI.HSSF.Record
             buffer.Append("	.numCF			= ").Append(NumberOfConditionalFormats).Append("\n");
             buffer.Append("	.needRecalc	   = ").Append(NeedRecalculation).Append("\n");
             buffer.Append("	.enclosingCellRange= ").Append(EnclosingCellRange).Append("\n");
-            if (field_4_cell_ranges.CountRanges() > 0)
+            buffer.Append("	.cfranges=[");
+            for (int i = 0; i < field_4_cell_ranges.CountRanges(); i++)
             {
-                buffer.Append("	.cfranges=[");
-                for (int i = 0; i < field_4_cell_ranges.CountRanges(); i++)
-                {
-                    buffer.Append(i == 0 ? "" : ",").Append(field_4_cell_ranges.GetCellRangeAddress(i).ToString());
-                }
-                buffer.Append("]\n");
+                buffer.Append(i == 0 ? "" : ",").Append(field_4_cell_ranges.GetCellRangeAddress(i).ToString());
             }
+            buffer.Append("]\n");
             buffer.Append("[/CFHEADER]\n");
             return buffer.ToString();
         }

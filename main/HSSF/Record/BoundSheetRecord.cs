@@ -26,6 +26,7 @@ namespace NPOI.HSSF.Record
     using System.Text;
     using NPOI.Util;
     using NPOI.SS.Util;
+    using System.Collections.Generic;
 
     /**
      * Title:        Bound Sheet Record (aka BundleSheet) 
@@ -35,11 +36,10 @@ namespace NPOI.HSSF.Record
      * REFERENCE:  PG 291 Microsoft Excel 97 Developer's Kit (ISBN: 1-57231-498-2)
      * @author Andrew C. Oliver (acoliver at apache dot org)
      * @author Sergei Kozello (sergeikozello at mail.ru)
-     * @version 2.0-pre
      */
 
     public class BoundSheetRecord
-           : Record
+           : StandardRecord
     {
         public const short sid = 0x85;
 
@@ -139,19 +139,15 @@ namespace NPOI.HSSF.Record
             StringBuilder buffer = new StringBuilder();
 
             buffer.Append("[BOUNDSHEET]\n");
-            buffer.Append("    .bof             = ")
-                    .Append(HexDump.IntToHex(PositionOfBof)).Append("\n");
-            buffer.Append("    .optionflags     = ")
-                    .Append(HexDump.ShortToHex(field_2_option_flags)).Append("\n");
-            buffer.Append("    .sheetname Length= ")
-                    .Append(HexDump.ByteToHex(field_4_isMultibyteUnicode)).Append("\n");
-            buffer.Append("    .sheetname       = ").Append(Sheetname)
-                    .Append("\n");
+            buffer.Append("    .bof        = ").Append(HexDump.IntToHex(PositionOfBof)).Append("\n");
+            buffer.Append("    .options    = ").Append(HexDump.ShortToHex(field_2_option_flags)).Append("\n");
+            buffer.Append("    .unicodeflag= ").Append(HexDump.ByteToHex(field_4_isMultibyteUnicode)).Append("\n");
+            buffer.Append("    .sheetname  = ").Append(field_5_sheetname).Append("\n");
             buffer.Append("[/BOUNDSHEET]\n");
             return buffer.ToString();
         }
 
-        private int DataSize
+        protected override int DataSize
         {
             get
             {
@@ -159,50 +155,23 @@ namespace NPOI.HSSF.Record
             }
         }
 
-        public override int Serialize(int offset, byte [] data)
+        public override void Serialize(ILittleEndianOutput out1)
         {
-            LittleEndian.PutUShort(data, 0 + offset, sid);
-            LittleEndian.PutUShort(data, 2 + offset, DataSize);
-            LittleEndian.PutInt(data, 4 + offset, PositionOfBof);
-            LittleEndian.PutUShort(data, 8 + offset, field_2_option_flags);
+            out1.WriteInt(PositionOfBof);
+            out1.WriteShort(field_2_option_flags);
 
             String name = field_5_sheetname;
-            LittleEndian.PutByte(data, 10 + offset, name.Length);
-            LittleEndian.PutByte(data, 11 + offset, field_4_isMultibyteUnicode);
+            out1.WriteByte(name.Length);
+            out1.WriteByte(field_4_isMultibyteUnicode);
 
             if (IsMultibyte)
-                StringUtil.PutUnicodeLE(Sheetname, data, 12 + offset);
+            {
+                StringUtil.PutUnicodeLE(name, out1);
+            }
             else
-                StringUtil.PutCompressedUnicode(Sheetname, data, 12 + offset);
-
-
-            return RecordSize;
-
-            /*
-            byte[] fake = new byte[] {	(byte)0x85, 0x00, 			// sid
-                                            0x1a, 0x00, 			// Length
-                                            0x3C, 0x09, 0x00, 0x00, // bof
-                                            0x00, 0x00, 			// flags
-                                            0x09, 					// len( str )
-                                            0x01, 					// Unicode
-                                            // <str>
-                                            0x21, 0x04, 0x42, 0x04, 0x40, 0x04, 0x30, 0x04, 0x3D,
-                                            0x04, 0x38, 0x04, 0x47, 0x04, 0x3A, 0x04, 0x30, 0x04
-                                            // </str>
-                                        };
-
-                                        sid + len + bof + flags + len(str) + Unicode +   str
-                                         2  +  2  +  4  +   2   +    1     +    1    + len(str)
-
-            Array.Copy( fake, 0, data, offset, fake.Length );
-
-            return fake.Length;
-            */
-        }
-
-        public override int RecordSize
-        {
-            get { return 4 + DataSize; }
+            {
+                StringUtil.PutCompressedUnicode(name, out1);
+            }
         }
 
         public override short Sid
@@ -237,20 +206,12 @@ namespace NPOI.HSSF.Record
 
 
 
-	    private class BOFComparator:IComparer
+        private class BOFComparator : IComparer<BoundSheetRecord>
         {
 		    public int Compare(BoundSheetRecord bsr1, BoundSheetRecord bsr2) {
 			    return bsr1.PositionOfBof - bsr2.PositionOfBof;
 		    }
 
-            #region IComparer Members
-
-            int IComparer.Compare(object x, object y)
-            {
-                return Compare((BoundSheetRecord)x, (BoundSheetRecord)y);
-            }
-
-            #endregion
         };
     }
 }

@@ -29,11 +29,11 @@ namespace NPOI.HSSF.Record
      *
      * @author Josh Micich
      */
-    public class CRNCountRecord : Record
+    public class CRNCountRecord : StandardRecord
     {
         public const short sid = 0x59;
 
-        private static short BASE_RECORD_SIZE = 4;
+        private static short DATA_SIZE = 4;
 
 
         private int field_1_number_crn_records;
@@ -41,7 +41,7 @@ namespace NPOI.HSSF.Record
 
         public CRNCountRecord()
         {
-            throw new Exception("incomplete code");
+            throw new RuntimeException("incomplete code");
         }
 
         public CRNCountRecord(RecordInputStream in1)
@@ -74,18 +74,17 @@ namespace NPOI.HSSF.Record
             return sb.ToString();
         }
 
-        public override int Serialize(int offset, byte [] data)
+        public override void Serialize(ILittleEndianOutput out1)
         {
-            LittleEndian.PutShort(data, 0 + offset, sid);
-            LittleEndian.PutShort(data, 2 + offset, BASE_RECORD_SIZE);
-            LittleEndian.PutShort(data, 4 + offset, (short)field_1_number_crn_records);
-            LittleEndian.PutShort(data, 6 + offset, (short)field_2_sheet_table_index);
-            return RecordSize;
+            out1.WriteShort((short)field_1_number_crn_records);
+            out1.WriteShort((short)field_2_sheet_table_index);
         }
-
-        public override int RecordSize
+        protected override int DataSize
         {
-            get { return BASE_RECORD_SIZE + 4; }
+            get
+            {
+                return DATA_SIZE;
+            }
         }
 
         /**

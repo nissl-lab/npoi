@@ -36,18 +36,24 @@ namespace NPOI.HSSF.Record
      */
 
     public class DefaultRowHeightRecord
-       : Record
+       : StandardRecord
     {
         public const short sid = 0x225;
         private short field_1_option_flags;
         private short field_2_row_height;
-        BitField isHeightChanged = BitFieldFactory.GetInstance(0x01);
-        BitField isZeroHeight = BitFieldFactory.GetInstance(0x02);
-        BitField isThickTopBorder = BitFieldFactory.GetInstance(0x04);
-        BitField isThickBottomBorder = BitFieldFactory.GetInstance(0x08);
+        /**
+     * The default row height for empty rows is 255 twips (255 / 20 == 12.75 points)
+     */
+        public static short DEFAULT_ROW_HEIGHT = 0xFF;
+        //BitField isHeightChanged = BitFieldFactory.GetInstance(0x01);
+        //BitField isZeroHeight = BitFieldFactory.GetInstance(0x02);
+        //BitField isThickTopBorder = BitFieldFactory.GetInstance(0x04);
+        //BitField isThickBottomBorder = BitFieldFactory.GetInstance(0x08);
 
         public DefaultRowHeightRecord()
         {
+            field_1_option_flags = 0x0000;
+            field_2_row_height = DEFAULT_ROW_HEIGHT;
         }
 
        /// <summary>
@@ -67,31 +73,31 @@ namespace NPOI.HSSF.Record
         /// <summary>
         /// A bit that specifies whether the default settings for the row height have been changed.
         /// </summary>
-        public bool IsDefaultHeightChanged
-        {
-            get { return isHeightChanged.IsSet(field_1_option_flags); }
-            set { field_1_option_flags = isHeightChanged.SetShortBoolean(field_1_option_flags,value); }
-        }
-        /// <summary>
-        /// A bit that specifies whether empty rows have a height of zero.
-        /// </summary>
-        public bool IsZeroHeight
-        {
-            get { return isZeroHeight.IsSet(field_1_option_flags); }
-            set { field_1_option_flags=isZeroHeight.SetShortBoolean(field_1_option_flags,value); }
-        }
+        //public bool IsDefaultHeightChanged
+        //{
+        //    get { return isHeightChanged.IsSet(field_1_option_flags); }
+        //    set { field_1_option_flags = isHeightChanged.SetShortBoolean(field_1_option_flags,value); }
+        //}
+        ///// <summary>
+        ///// A bit that specifies whether empty rows have a height of zero.
+        ///// </summary>
+        //public bool IsZeroHeight
+        //{
+        //    get { return isZeroHeight.IsSet(field_1_option_flags); }
+        //    set { field_1_option_flags=isZeroHeight.SetShortBoolean(field_1_option_flags,value); }
+        //}
 
-        public bool IsThickTopBorder
-        {
-            get { return isThickTopBorder.IsSet(field_1_option_flags); }
-            set { field_1_option_flags = isThickTopBorder.SetShortBoolean(field_1_option_flags, value); }        
+        //public bool IsThickTopBorder
+        //{
+        //    get { return isThickTopBorder.IsSet(field_1_option_flags); }
+        //    set { field_1_option_flags = isThickTopBorder.SetShortBoolean(field_1_option_flags, value); }        
         
-        }
-        public bool IsThickBottomBorder
-        {
-            get { return isThickBottomBorder.IsSet(field_1_option_flags); }
-            set { field_1_option_flags = isThickBottomBorder.SetShortBoolean(field_1_option_flags, value); }
-        }
+        //}
+        //public bool IsThickBottomBorder
+        //{
+        //    get { return isThickBottomBorder.IsSet(field_1_option_flags); }
+        //    set { field_1_option_flags = isThickBottomBorder.SetShortBoolean(field_1_option_flags, value); }
+        //}
 
         /// <summary>
         /// Get the default row height
@@ -100,10 +106,6 @@ namespace NPOI.HSSF.Record
         {
             get { return field_2_row_height; }
             set {
-                if (value != field_2_row_height)
-                {
-                    IsDefaultHeightChanged = true;
-                }
                 field_2_row_height = value; 
             }
         }
@@ -122,18 +124,18 @@ namespace NPOI.HSSF.Record
             return buffer.ToString();
         }
 
-        public override int Serialize(int offset, byte [] data)
+        public override void Serialize(ILittleEndianOutput out1)
         {
-            LittleEndian.PutShort(data, 0 + offset, sid);
-            LittleEndian.PutShort(data, 2 + offset, (short)0x4);
-            LittleEndian.PutShort(data, 4 + offset, OptionFlags);
-            LittleEndian.PutShort(data, 6 + offset, RowHeight);
-            return RecordSize;
+            out1.WriteShort(OptionFlags);
+            out1.WriteShort(RowHeight);
         }
 
-        public override int RecordSize
+        protected override int DataSize
         {
-            get { return 8; }
+            get
+            {
+                return 4;
+            }
         }
 
         public override short Sid

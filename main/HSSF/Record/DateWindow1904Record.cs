@@ -34,7 +34,7 @@ namespace NPOI.HSSF.Record
      */
 
     public class DateWindow1904Record
-       : Record
+       : StandardRecord
     {
         public const short sid = 0x22;
         private short field_1_window;
@@ -69,24 +69,23 @@ namespace NPOI.HSSF.Record
             StringBuilder buffer = new StringBuilder();
 
             buffer.Append("[1904]\n");
-            buffer.Append("    .Is1904          = ")
+            buffer.Append("    .is1904          = ")
                 .Append(StringUtil.ToHexString(Windowing)).Append("\n");
             buffer.Append("[/1904]\n");
             return buffer.ToString();
         }
 
-        public override int Serialize(int offset, byte [] data)
+        public override void Serialize(ILittleEndianOutput out1)
         {
-            LittleEndian.PutShort(data, 0 + offset, sid);
-            LittleEndian.PutShort(data, 2 + offset,
-                                  ((short)0x02));   // 2 bytes (6 total)
-            LittleEndian.PutShort(data, 4 + offset, Windowing);
-            return RecordSize;
+            out1.WriteShort(Windowing);
         }
 
-        public override int RecordSize
+        protected override int DataSize
         {
-            get { return 6; }
+            get
+            {
+                return 2;
+            }
         }
 
         public override short Sid

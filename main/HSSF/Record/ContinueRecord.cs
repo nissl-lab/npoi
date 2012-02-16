@@ -15,7 +15,7 @@
    See the License for the specific language governing permissions and
    limitations Under the License.
 ==================================================================== */
-        
+
 
 namespace NPOI.HSSF.Record
 {
@@ -25,128 +25,143 @@ namespace NPOI.HSSF.Record
     using System.Text;
     using NPOI.Util;
 
-/**
- * Title:        Continue Record - Helper class used primarily for SST Records 
- * Description:  handles overflow for prior record in the input
- *               stream; content Is tailored to that prior record
- * @author Marc Johnson (mjohnson at apache dot org)
- * @author Andrew C. Oliver (acoliver at apache dot org)
- * @author Csaba Nagy (ncsaba at yahoo dot com)
- * @version 2.0-pre
- */
-
-public class ContinueRecord:Record,ICloneable
-{
-    public const short sid = 0x003C;
-    private byte[]            field_1_data;
-
     /**
-     * default constructor
+     * Title:        Continue Record - Helper class used primarily for SST Records 
+     * Description:  handles overflow for prior record in the input
+     *               stream; content Is tailored to that prior record
+     * @author Marc Johnson (mjohnson at apache dot org)
+     * @author Andrew C. Oliver (acoliver at apache dot org)
+     * @author Csaba Nagy (ncsaba at yahoo dot com)
+     * @version 2.0-pre
      */
 
-    public ContinueRecord()
+    public class ContinueRecord : StandardRecord, ICloneable
     {
-    }
+        public const short sid = 0x003C;
+        private byte[] field_1_data;
 
-    public ContinueRecord(byte[] data)
-    {
-        field_1_data = data;
-    }
+        /**
+         * default constructor
+         */
 
-    /**
-     * Main constructor -- kinda dummy because we don't validate or fill fields
-     *
-     * @param in the RecordInputstream to Read the record from
-     */
+        private ContinueRecord()
+        {
+        }
 
-    public ContinueRecord(RecordInputStream in1)
-    {
-        field_1_data = in1.ReadRemainder();
-    }
+        public ContinueRecord(byte[] data)
+        {
+            field_1_data = data;
+        }
 
-    /**
-     * USE ONLY within "ProcessContinue"
-     */
+        /**
+         * Main constructor -- kinda dummy because we don't validate or fill fields
+         *
+         * @param in the RecordInputstream to Read the record from
+         */
 
-    public sealed override byte [] Serialize()
-    {
-        byte[] retval = new byte[ field_1_data.Length + 4 ];
-        Serialize(0, retval);
-        return retval;
-    }
+        public ContinueRecord(RecordInputStream in1)
+        {
+            field_1_data = in1.ReadRemainder();
+        }
+        protected override int DataSize
+        {
+            get
+            {
+                return field_1_data.Length;
+            }
+        }
+        
+        public override void Serialize(ILittleEndianOutput out1)
+        {
+            out1.Write(field_1_data);
+        }
+        
+        /**
+         * USE ONLY within "ProcessContinue"
+         */
+        //public sealed override byte[] Serialize()
+        //{
+        //    byte[] retval = new byte[field_1_data.Length + 4];
+        //    Serialize(0, retval);
+        //    return retval;
+        //}
         /**
      * Writes the full encoding of a Continue record without making an instance
      */
-    public static int Write(byte[] destBuf, int destOffset, byte? initialDataByte, byte[] srcData) {
-        return Write(destBuf, destOffset, initialDataByte, srcData, 0, srcData.Length);
-    }
+        [Obsolete]
+        public static int Write(byte[] destBuf, int destOffset, byte? initialDataByte, byte[] srcData)
+        {
+            return Write(destBuf, destOffset, initialDataByte, srcData, 0, srcData.Length);
+        }
         /**
      * @param initialDataByte (optional - often used for unicode flag). 
      * If supplied, this will be written before srcData
      * @return the total number of bytes written
      */
-    public static int Write(byte[] destBuf, int destOffset, byte? initialDataByte, byte[] srcData, int srcOffset, int len) 
-    {
-        int totalLen = len + (initialDataByte == null ? 0 : 1);
-        LittleEndian.PutUShort(destBuf, destOffset, sid);
-        LittleEndian.PutUShort(destBuf, destOffset + 2, totalLen);
-        int pos = destOffset + 4;
-        if (initialDataByte != null)
+        [Obsolete]
+        public static int Write(byte[] destBuf, int destOffset, byte? initialDataByte, byte[] srcData, int srcOffset, int len)
         {
-            LittleEndian.PutByte(destBuf, pos, Convert.ToByte(initialDataByte));
-            pos += 1;
+            int totalLen = len + (initialDataByte == null ? 0 : 1);
+            LittleEndian.PutUShort(destBuf, destOffset, sid);
+            LittleEndian.PutUShort(destBuf, destOffset + 2, totalLen);
+            int pos = destOffset + 4;
+            if (initialDataByte != null)
+            {
+                LittleEndian.PutByte(destBuf, pos, Convert.ToByte(initialDataByte));
+                pos += 1;
+            }
+            Array.Copy(srcData, srcOffset, destBuf, pos, len);
+            return 4 + totalLen;
         }
-        Array.Copy(srcData, srcOffset, destBuf, pos, len);
-        return 4 + totalLen;
+        //public override int Serialize(int offset, byte[] data)
+        //{
+        //    return Write(data, offset, null, field_1_data);
+        //}
+
+        /**
+         * Get the data for continuation
+         * @return byte array containing all of the continued data
+         */
+
+        public byte[] Data
+        {
+            get { return field_1_data; }
+            set { field_1_data = value; }
+        }
+
+
+        /**
+         * Debugging toString
+         *
+         * @return string representation
+         */
+
+        public override String ToString()
+        {
+            StringBuilder buffer = new StringBuilder();
+
+            buffer.Append("[CONTINUE RECORD]\n");
+            buffer.Append("    .data        = ").Append(StringUtil.ToHexString(sid))
+                .Append("\n");
+            buffer.Append("[/CONTINUE RECORD]\n");
+            return buffer.ToString();
+        }
+
+        public override short Sid
+        {
+            get { return sid; }
+        }
+
+
+        /**
+         * Clone this record.
+         */
+        public override Object Clone()
+        {
+            ContinueRecord Clone = new ContinueRecord();
+            Clone.Data = (field_1_data);
+            return Clone;
+        }
+
     }
-    public override int Serialize(int offset, byte [] data)
-    {
-        return Write(data, offset, null, field_1_data);
-    }
-
-    /**
-     * Get the data for continuation
-     * @return byte array containing all of the continued data
-     */
-
-    public byte [] Data
-    {
-        get { return field_1_data; }
-        set { field_1_data = value; }
-    }
-
-
-    /**
-     * Debugging toString
-     *
-     * @return string representation
-     */
-
-    public override String ToString()
-    {
-        StringBuilder buffer = new StringBuilder();
-
-        buffer.Append("[CONTINUE RECORD]\n");
-        buffer.Append("    .id        = ").Append(StringUtil.ToHexString(sid))
-            .Append("\n");
-        buffer.Append("[/CONTINUE RECORD]\n");
-        return buffer.ToString();
-    }
-
-    public override short Sid
-    {
-        get { return sid; }
-    }
-
-
-    /**
-     * Clone this record.
-     */
-    public override Object Clone() {
-      ContinueRecord Clone = new ContinueRecord();
-      Clone.Data=(field_1_data);
-      return Clone;
-    }
-
-}
 }

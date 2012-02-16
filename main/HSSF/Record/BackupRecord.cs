@@ -32,7 +32,7 @@ namespace NPOI.HSSF.Record
      * @version 2.0-pre
      */
 
-    public class BackupRecord : Record
+    public class BackupRecord : StandardRecord
     {
         public const short sid = 0x40;
         private short field_1_backup;   // = 0;
@@ -74,18 +74,17 @@ namespace NPOI.HSSF.Record
             return buffer.ToString();
         }
 
-        public override int Serialize(int offset, byte [] data)
+        public override void Serialize(ILittleEndianOutput out1)
         {
-            LittleEndian.PutShort(data, 0 + offset, sid);
-            LittleEndian.PutShort(data, 2 + offset,
-                                  ((short)0x02));   // 2 bytes (6 total)
-            LittleEndian.PutShort(data, 4 + offset, Backup);
-            return RecordSize;
+            out1.WriteShort(Backup);
         }
 
-        public override int RecordSize
+        protected override int DataSize
         {
-            get { return 6; }
+            get
+            {
+                return 2;
+            }
         }
 
         public override short Sid

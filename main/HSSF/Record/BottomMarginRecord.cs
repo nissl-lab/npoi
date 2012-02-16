@@ -32,7 +32,7 @@ namespace NPOI.HSSF.Record
      * @author Shawn Laubach (slaubach at apache dot org)
      */
     public class BottomMarginRecord
-           : Record, Margin
+           : StandardRecord, Margin
     {
         public const short sid = 0x29;
         private double field_1_margin;
@@ -62,20 +62,17 @@ namespace NPOI.HSSF.Record
             return buffer.ToString();
         }
 
-        public override int Serialize(int offset, byte [] data)
+        public override void Serialize(ILittleEndianOutput out1)
         {
-            LittleEndian.PutShort(data, 0 + offset, sid);
-            LittleEndian.PutShort(data, 2 + offset, (short)(RecordSize - 4));
-            LittleEndian.PutDouble(data, 4 + offset, field_1_margin);
-            return RecordSize;
+            out1.WriteDouble(field_1_margin);
         }
 
-        /**
-         * Size of record (exluding 4 byte header)
-         */
-        public override int RecordSize
+        protected override int DataSize
         {
-            get { return 4 + 8; }
+            get
+            {
+                return 8;
+            }
         }
 
         public override short Sid
