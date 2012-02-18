@@ -142,10 +142,8 @@ namespace NPOI.HSSF.Record.Aggregates
         public RowRecordsAggregate(RecordStream rs, SharedValueManager svm)
             : this(svm)
         {
-            int count = 0;
             while (rs.HasNext())
             {
-                count++;
                 Record rec = rs.GetNext();
                 switch (rec.Sid)
                 {

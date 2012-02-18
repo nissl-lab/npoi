@@ -308,7 +308,7 @@ namespace NPOI.HSSF.Model
                     continue;
                 }
 
-
+                
                 if (recSid == UncalcedRecord.sid)
                 {
                     // don't Add UncalcedRecord to the list
@@ -316,22 +316,16 @@ namespace NPOI.HSSF.Model
                     continue;
                 }
 
-                /*if (recSid == BOFRecord.sid)
+                if (recSid == FeatRecord.sid ||
+                    recSid == FeatHdrRecord.sid)
                 {
-                    bofEofNestingLevel++;
-                    //if (log.Check(POILogger.DEBUG))
-                    //    log.Log(POILogger.DEBUG, "Hit BOF record. Nesting increased to " + bofEofNestingLevel);
-                }*/
+                    records.Add(rec);
+                    continue;
+                }
                 if (recSid == EOFRecord.sid)
                 {
-                    //--bofEofNestingLevel;
-                    //if (log.Check(POILogger.DEBUG))
-                    //    log.Log(POILogger.DEBUG, "Hit EOF record. Nesting decreased to " + bofEofNestingLevel);
-                    //if (bofEofNestingLevel == 0)
-                    //{
-                        records.Add(rec);
-                        break;
-                    //}
+                    records.Add(rec);
+                    break;
                 }
                 if (recSid == DimensionsRecord.sid)
                 {
