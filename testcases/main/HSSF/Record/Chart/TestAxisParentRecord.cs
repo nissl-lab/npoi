@@ -46,7 +46,7 @@ namespace TestCases.HSSF.Record
         {
 
         }
-        [TestInitialize]
+        [TestMethod]
         public void TestLoad()
         {
             AxisParentRecord record = new AxisParentRecord(TestcaseRecordInputStream.Create((short)0x1041, data));

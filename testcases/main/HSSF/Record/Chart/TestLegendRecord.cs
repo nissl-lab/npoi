@@ -45,7 +45,7 @@ namespace TestCases.HSSF.Record
         {
 
         }
-        [TestInitialize]
+        [TestMethod]
         public void TestLoad()
         {
             LegendRecord record = new LegendRecord(TestcaseRecordInputStream.Create((short)0x1015, data));

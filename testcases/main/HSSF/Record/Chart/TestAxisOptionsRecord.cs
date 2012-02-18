@@ -47,7 +47,7 @@ namespace TestCases.HSSF.Record
         {
 
         }
-        [TestInitialize]
+        [TestMethod]
         public void TestLoad()
         {
             AxisOptionsRecord record = new AxisOptionsRecord(TestcaseRecordInputStream.Create((short)0x1062, data));

@@ -51,7 +51,7 @@ namespace TestCases.HSSF.Record
         private static byte[] recdataNeedingPadding = {
     	    21, 0, 18, 0, 0, 0, 1, 0, 17, 96, 0, 0, 0, 0, 56, 111, unchecked((byte)-52), 3, 0, 0, 0, 0, 6, 0, 2, 0, 0, 0, 0, 0, 0, 0
         };
-        [TestInitialize]
+        [TestMethod]
         public void TestLoad()
         {
             ObjRecord record = new ObjRecord(TestcaseRecordInputStream.Create(ObjRecord.sid, recdata));

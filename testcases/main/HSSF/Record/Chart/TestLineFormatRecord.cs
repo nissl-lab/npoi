@@ -48,7 +48,7 @@ namespace TestCases.HSSF.Record
         {
 
         }
-        [TestInitialize]
+        [TestMethod]
         public void TestLoad()
         {
             LineFormatRecord record = new LineFormatRecord(TestcaseRecordInputStream.Create((short)0x1007, data));

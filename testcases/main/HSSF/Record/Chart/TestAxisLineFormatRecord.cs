@@ -44,7 +44,7 @@ namespace TestCases.HSSF.Record
         {
 
         }
-        [TestInitialize]
+        [TestMethod]
         public void TestLoad()
         {
             AxisLineFormatRecord record = new AxisLineFormatRecord(TestcaseRecordInputStream.Create((short)0x1021, data));

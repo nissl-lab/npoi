@@ -44,7 +44,7 @@ namespace TestCases.HSSF.Record
         {
 
         }
-        [TestInitialize]
+        [TestMethod]
         public void TestLoad()
         {
             ObjectLinkRecord record = new ObjectLinkRecord(TestcaseRecordInputStream.Create((short)0x1027, data));
