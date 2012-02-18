@@ -15,7 +15,7 @@
    limitations under the License.
 ==================================================================== */
 
-namespace TestCase.HSSF.Record.Common
+namespace TestCases.HSSF.Record.Common
 {
     using System;
     using System.IO;

@@ -77,6 +77,23 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="HSSF\Record\Common\TestUnicodeString.cs" />
+    <Compile Include="HSSF\Record\TestArrayRecord.cs" />
+    <Compile Include="HSSF\Record\TestAutoFilterInfoRecord.cs" />
+    <Compile Include="HSSF\Record\TestColumnInfoRecord.cs" />
+    <Compile Include="HSSF\Record\TestDrawingRecord.cs" />
+    <Compile Include="HSSF\Record\TestExtendedFormatRecord.cs" />
+    <Compile Include="HSSF\Record\TestExtSSTRecord.cs" />
+    <Compile Include="HSSF\Record\TestFeatRecord.cs" />
+    <Compile Include="HSSF\Record\TestFtCblsSubRecord.cs" />
+    <Compile Include="HSSF\Record\TestInterfaceEndRecord.cs" />
+    <Compile Include="HSSF\Record\TestLbsDataSubRecord.cs" />
+    <Compile Include="HSSF\Record\TestRecalcIdRecord.cs" />
+    <Compile Include="HSSF\Record\TestRecordFactoryInputStream.cs" />
+    <Compile Include="HSSF\Record\TestRecordInputStream.cs" />
+    <Compile Include="HSSF\Record\TestStyleRecord.cs" />
+    <Compile Include="HSSF\Record\TestTableRecord.cs" />
+    <Compile Include="HSSF\UserModel\HSSFTestHelper.cs" />
     <Compile Include="POIFS\Storage\TestBATBlock.cs" />
     <Compile Include="POIFS\Storage\TestBlockListImpl.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -86,6 +103,7 @@
     <Compile Include="Util\TestIntegerField.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Util\TestIntList.cs" />
     <Compile Include="Util\TestLittleEndian.cs" />
     <Compile Include="Util\TestLongField.cs">
       <SubType>Code</SubType>
@@ -200,7 +218,7 @@
     <Compile Include="POIFS\FileSystem\TestOffice2007XMLException.cs" />
     <Compile Include="POIFS\FileSystem\TestPOIFSFileSystem.cs" />
     <Compile Include="POIFS\FileSystem\TestPropertySorter.cs" />
-    <Compile Include="Util\TestULongField.cs" />
+    <Compile Include="Util\TestShortList.cs" />
     <Compile Include="Util\TestClassID.cs" />
     <Compile Include="HPSF\Basic\TestEmptyProperties.cs" />
     <Compile Include="HPSF\Basic\TestMetaDataIPI.cs" />
@@ -424,7 +442,6 @@
   <ItemGroup>
     <Compile Include="DDF\TestEscherProperty.cs" />
     <Compile Include="Exceptions\ComparisonFailure.cs" />
-    <Compile Include="Exceptions\RuntimeException.cs" />
     <Compile Include="HSSF\HSSFITestDataProvider.cs" />
     <Compile Include="HSSF\Model\TestLinkTable.cs" />
     <Compile Include="HSSF\Model\TestRowBlocksReader.cs" />
@@ -608,7 +625,6 @@
     <Folder Include="DDF\data\" />
     <Folder Include="HSSF\data\" />
     <Folder Include="SS\Formula\Eval\Forked\" />
-    <Folder Include="SS\Formula\Atp\" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0">

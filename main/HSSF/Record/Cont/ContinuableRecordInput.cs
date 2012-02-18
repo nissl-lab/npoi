@@ -17,7 +17,7 @@
  * ====================================================================
  */
 
-namespace NPOI.HSSF.Record.cont
+namespace NPOI.HSSF.Record.Cont
 {
 
     using NPOI.HSSF.Record;

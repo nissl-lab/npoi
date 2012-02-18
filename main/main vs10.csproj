@@ -72,8 +72,17 @@
     <Compile Include="DDF\AbstractEscherOptRecord.cs" />
     <Compile Include="DDF\EscherTertiaryOptRecord.cs" />
     <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="HSSF\EventUserModel\DummyRecord\DummyRecordBase.cs" />
     <Compile Include="HSSF\Record\Aggregates\ChartSubstreamRecordAggregate.cs" />
     <Compile Include="HSSF\Record\Aggregates\WorksheetProtectionBlock.cs" />
+    <Compile Include="HSSF\Record\Common\FeatFormulaErr2.cs" />
+    <Compile Include="HSSF\Record\Common\FeatProtection.cs" />
+    <Compile Include="HSSF\Record\Common\FeatSmartTag.cs" />
+    <Compile Include="HSSF\Record\Common\FtrHeader.cs" />
+    <Compile Include="HSSF\Record\Common\SharedFeature.cs" />
+    <Compile Include="HSSF\Record\Cont\ContinuableRecordInput.cs" />
+    <Compile Include="HSSF\Record\FeatHdrRecord.cs" />
+    <Compile Include="HSSF\Record\FeatRecord.cs" />
     <Compile Include="HSSF\Record\FtCblsSubRecord.cs" />
     <Compile Include="HSSF\UserModel\DVConstraint.cs" />
     <Compile Include="HSSF\UserModel\HSSFDataFormatter.cs" />
@@ -279,6 +288,9 @@
     <Compile Include="HSSF\Record\Chart\ValueRangeRecord.cs" />
     <Compile Include="HSSF\Record\CodepageRecord.cs" />
     <Compile Include="HSSF\Record\ColumnInfoRecord.cs" />
+    <Compile Include="POIFS\NIO\ByteArrayBackedDataSource.cs" />
+    <Compile Include="POIFS\NIO\DataSource.cs" />
+    <Compile Include="POIFS\NIO\FileBackedDataSource.cs" />
     <Compile Include="SS\Formula\Constant\ConstantValueParser.cs" />
     <Compile Include="SS\Formula\Constant\ErrorConstant.cs" />
     <Compile Include="HSSF\Record\ContinueRecord.cs" />
@@ -374,7 +386,6 @@
     <Compile Include="HSSF\Record\RecordBase.cs" />
     <Compile Include="HSSF\Record\RecordFactory.cs" />
     <Compile Include="HSSF\Record\RecordFactoryInputStream.cs" />
-    <Compile Include="HSSF\Record\RecordFormatException.cs" />
     <Compile Include="HSSF\Record\RecordInputStream.cs" />
     <Compile Include="HSSF\Record\RefModeRecord.cs" />
     <Compile Include="HSSF\Record\RefreshAllRecord.cs" />
@@ -449,7 +460,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POIFS\FileSystem\BATManaged.cs" />
-    <Compile Include="POIFS\FileSystem\CloseIgnoringInputStream.cs" />
     <Compile Include="POIFS\FileSystem\DirectoryEntry.cs" />
     <Compile Include="POIFS\FileSystem\DirectoryNode.cs" />
     <Compile Include="POIFS\FileSystem\DocumentDescriptor.cs" />
@@ -840,6 +850,7 @@
     <Compile Include="SS\Formula\PTG\UnionPtg.cs" />
     <Compile Include="SS\Formula\PTG\UnknownPtg.cs" />
     <Compile Include="SS\Formula\PTG\ValueOperatorPtg.cs" />
+    <Compile Include="SS\Formula\SharedFormula.cs" />
     <Compile Include="SS\Formula\SheetNameFormatter.cs" />
     <Compile Include="SS\Formula\SheetRefEvaluator.cs" />
     <Compile Include="SS\Formula\Udf\AggregatingUDFFinder.cs" />
@@ -858,23 +869,23 @@
     <Compile Include="SS\UserModel\CellStyle.cs" />
     <Compile Include="SS\UserModel\CellValue.cs" />
     <Compile Include="SS\UserModel\Chart.cs" />
-    <Compile Include="SS\UserModel\Chart\AxisCrossBetween.cs" />
-    <Compile Include="SS\UserModel\Chart\AxisCrosses.cs" />
-    <Compile Include="SS\UserModel\Chart\AxisOrientation.cs" />
-    <Compile Include="SS\UserModel\Chart\AxisPosition.cs" />
-    <Compile Include="SS\UserModel\Chart\ChartAxis.cs" />
-    <Compile Include="SS\UserModel\Chart\ChartAxisFactory.cs" />
-    <Compile Include="SS\UserModel\Chart\ChartData.cs" />
-    <Compile Include="SS\UserModel\Chart\ChartDataFactory.cs" />
-    <Compile Include="SS\UserModel\Chart\ChartLegend.cs" />
-    <Compile Include="SS\UserModel\Chart\LayoutMode.cs" />
-    <Compile Include="SS\UserModel\Chart\LayoutTarget.cs" />
-    <Compile Include="SS\UserModel\Chart\LegendPosition.cs" />
-    <Compile Include="SS\UserModel\Chart\ManualLayout.cs" />
-    <Compile Include="SS\UserModel\Chart\ManuallyPositionable.cs" />
-    <Compile Include="SS\UserModel\Chart\ScatterChartData.cs" />
-    <Compile Include="SS\UserModel\Chart\ScatterChartSerie.cs" />
-    <Compile Include="SS\UserModel\Chart\ValueAxis.cs" />
+    <Compile Include="SS\UserModel\Charts\AxisCrossBetween.cs" />
+    <Compile Include="SS\UserModel\Charts\AxisCrosses.cs" />
+    <Compile Include="SS\UserModel\Charts\AxisOrientation.cs" />
+    <Compile Include="SS\UserModel\Charts\AxisPosition.cs" />
+    <Compile Include="SS\UserModel\Charts\ChartAxis.cs" />
+    <Compile Include="SS\UserModel\Charts\ChartAxisFactory.cs" />
+    <Compile Include="SS\UserModel\Charts\ChartData.cs" />
+    <Compile Include="SS\UserModel\Charts\ChartDataFactory.cs" />
+    <Compile Include="SS\UserModel\Charts\ChartLegend.cs" />
+    <Compile Include="SS\UserModel\Charts\LayoutMode.cs" />
+    <Compile Include="SS\UserModel\Charts\LayoutTarget.cs" />
+    <Compile Include="SS\UserModel\Charts\LegendPosition.cs" />
+    <Compile Include="SS\UserModel\Charts\ManualLayout.cs" />
+    <Compile Include="SS\UserModel\Charts\ManuallyPositionable.cs" />
+    <Compile Include="SS\UserModel\Charts\ScatterChartData.cs" />
+    <Compile Include="SS\UserModel\Charts\ScatterChartSerie.cs" />
+    <Compile Include="SS\UserModel\Charts\ValueAxis.cs" />
     <Compile Include="SS\UserModel\ClientAnchor.cs" />
     <Compile Include="SS\UserModel\Color.cs" />
     <Compile Include="SS\UserModel\Comment.cs" />
@@ -961,40 +972,47 @@
     <Compile Include="Util\BigInteger.cs" />
     <Compile Include="Util\BitField.cs" />
     <Compile Include="Util\BitFieldFactory.cs" />
+    <Compile Include="Util\BlockingInputStream.cs" />
     <Compile Include="Util\ByteField.cs" />
     <Compile Include="Util\Character.cs" />
     <Compile Include="Util\ClassID.cs" />
+    <Compile Include="Util\CloseIgnoringInputStream.cs" />
     <Compile Include="Util\Collections\EmptyEnumerable.cs" />
     <Compile Include="Util\Collections\HashSet.cs" />
-    <Compile Include="Util\Collections\IntMapper.cs" />
     <Compile Include="Util\Collections\ISet.cs" />
     <Compile Include="Util\Collections\Properties.cs" />
     <Compile Include="Util\Collections\StringTokenizer.cs" />
     <Compile Include="Util\CRC32.cs" />
+    <Compile Include="Util\DelayableLittleEndianOutput.cs" />
     <Compile Include="Util\FixedField.cs" />
     <Compile Include="Util\HexDump.cs" />
     <Compile Include="Util\HexRead.cs" />
     <Compile Include="Util\IntegerField.cs" />
-    <Compile Include="Util\IO\DelayableLittleEndianOutput.cs" />
-    <Compile Include="Util\IO\IOUtils.cs" />
-    <Compile Include="Util\IO\LittleEndianByteArrayInputStream.cs" />
-    <Compile Include="Util\IO\LittleEndianByteArrayOutputStream.cs" />
-    <Compile Include="Util\IO\LittleEndianInput.cs" />
-    <Compile Include="Util\IO\LittleEndianInputStream.cs" />
-    <Compile Include="Util\IO\LittleEndianOutput.cs" />
-    <Compile Include="Util\IO\LittleEndianOutputStream.cs" />
-    <Compile Include="Util\IO\PushbackStream.cs" />
-    <Compile Include="Util\IO\TempFile.cs" />
+    <Compile Include="Util\IntList.cs" />
+    <Compile Include="Util\IntMapper.cs" />
+    <Compile Include="Util\IOUtils.cs" />
     <Compile Include="Util\LittleEndian.cs" />
-    <Compile Include="Util\LittleEndianConstants.cs" />
+    <Compile Include="Util\LittleEndianByteArrayInputStream.cs" />
+    <Compile Include="Util\LittleEndianByteArrayOutputStream.cs" />
+    <Compile Include="Util\LittleEndianConsts.cs" />
+    <Compile Include="Util\LittleEndianInput.cs" />
+    <Compile Include="Util\LittleEndianInputStream.cs" />
+    <Compile Include="Util\LittleEndianOutput.cs" />
+    <Compile Include="Util\LittleEndianOutputStream.cs" />
     <Compile Include="Util\LongField.cs" />
+    <Compile Include="Util\LZWDecompresser.cs" />
     <Compile Include="Util\NullLogger.cs" />
     <Compile Include="Util\Operator.cs" />
     <Compile Include="Util\POILogFactory.cs" />
     <Compile Include="Util\POILogger.cs" />
+    <Compile Include="Util\PushbackStream.cs" />
+    <Compile Include="Util\RecordFormatException.cs" />
+    <Compile Include="Util\RuntimeException.cs" />
     <Compile Include="Util\ShortField.cs" />
+    <Compile Include="Util\ShortList.cs" />
     <Compile Include="Util\StringUtil.cs" />
-    <Compile Include="Util\ULongField.cs" />
+    <Compile Include="Util\SystemOutLogger.cs" />
+    <Compile Include="Util\TempFile.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="npoi.snk" />
@@ -1007,7 +1025,6 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Lib\Ionic.Zip.dll" />
     <Content Include="Resources\functionMetadata.txt" />
   </ItemGroup>
   <ItemGroup>
