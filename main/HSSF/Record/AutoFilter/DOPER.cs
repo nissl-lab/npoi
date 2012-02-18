@@ -91,7 +91,7 @@ namespace NPOI.HSSF.Record.AutoFilter
                     break;
             }
         }
-        public int RecordSize
+        public override int RecordSize
         {
             get
             {
@@ -137,7 +137,7 @@ namespace NPOI.HSSF.Record.AutoFilter
         {
             throw new NotImplementedException("Please implement it in subclass");
         }
-        public int Serialize(int offset, byte[] data)
+        public override int Serialize(int offset, byte[] data)
         {
             LittleEndianByteArrayOutputStream out1 = new LittleEndianByteArrayOutputStream(data, offset,this.RecordSize);
             int result=this.Serialize(out1);

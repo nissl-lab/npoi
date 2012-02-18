@@ -66,7 +66,7 @@ namespace NPOI.HSSF.UserModel
         {
 
             HSSFWorkbook wb = (HSSFWorkbook)_sheet.Workbook;
-            CFRuleRecord rr = CFRuleRecord.Create(wb, (ComparisonOperator)  comparisonOperation, formula1, formula2);
+            CFRuleRecord rr = CFRuleRecord.Create(_sheet, (byte)comparisonOperation, formula1, formula2);
             return new HSSFConditionalFormattingRule(wb, rr);
         }
 

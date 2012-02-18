@@ -122,7 +122,7 @@ namespace NPOI.HSSF.UserModel
          */
         public EmbeddedObjectRefSubRecord FindObjectRecord()
         {
-            IEnumerator subRecordIter = record.GetSubRecords().GetEnumerator();
+            IEnumerator subRecordIter = record.SubRecords.GetEnumerator();
 
             while (subRecordIter.MoveNext())
             {

@@ -235,8 +235,22 @@ namespace NPOI.HSSF.Record.Cont
         }
         public void Write(byte[] b, int offset, int len)
         {
-            WriteContinueIfRequired(len);
-            _ulrOutput.Write(b, offset, len);
+            //WriteContinueIfRequired(len);
+            //_ulrOutput.Write(b, offset, len);
+            int i = 0;
+            while (true)
+            {
+                int nWritableChars = Math.Min(len - i, _ulrOutput.AvailableSpace / 1);
+                for (; nWritableChars > 0; nWritableChars--)
+                {
+                    _ulrOutput.WriteByte(b[offset + i++]);
+                }
+                if (i >= len)
+                {
+                    break;
+                }
+                WriteContinue();
+            }
         }
         public void WriteByte(int v)
         {

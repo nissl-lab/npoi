@@ -159,6 +159,11 @@ namespace NPOI.HSSF.Model
                 _externalNameRecords = tmp;
                 return _externalNameRecords.Length - 1;
             }
+            /**
+         * Create a new block for internal references. It is called when constructing a new LinkTable.
+         *
+         * @see org.apache.poi.hssf.model.LinkTable#LinkTable(int, WorkbookRecordList)
+         */
             public ExternalBookBlock(short numberOfSheets)
             {
                 _externalBookRecord = SupBookRecord.CreateInternalReferences(numberOfSheets);

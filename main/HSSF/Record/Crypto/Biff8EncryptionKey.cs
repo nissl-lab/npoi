@@ -58,13 +58,13 @@ namespace NPOI.HSSF.Record.Crypto
 
                 md5.Initialize();
 
-                byte[] data = new byte[passwordHash.Length * 16 + docIdData.Length * 16];
+                byte[] data = new byte[PASSWORD_HASH_NUMBER_OF_BYTES_USED * 16 + docIdData.Length * 16];
 
                 int offset = 0;
                 for (int i = 0; i < 16; i++)
                 {
                     Array.Copy(passwordHash, 0, data, offset, PASSWORD_HASH_NUMBER_OF_BYTES_USED);
-                    offset += passwordHash.Length;
+                    offset += PASSWORD_HASH_NUMBER_OF_BYTES_USED;// passwordHash.Length;
                     Array.Copy(docIdData, 0, data, offset, docIdData.Length);
                     offset += docIdData.Length;
                 }

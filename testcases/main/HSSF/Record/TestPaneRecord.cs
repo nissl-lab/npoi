@@ -47,7 +47,7 @@ namespace TestCases.HSSF.Record
         {
 
         }
-        [TestInitialize]
+        [TestMethod]
         public void TestLoad()
         {
             PaneRecord record = new PaneRecord(TestcaseRecordInputStream.Create((short)0x41, data));

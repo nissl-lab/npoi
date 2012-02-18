@@ -25,6 +25,7 @@ namespace TestCases.HSSF.Record
 
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using NPOI.SS.Formula.PTG;
+    using NPOI.HSSF.UserModel;
 
     /**
      * Tests the serialization and deserialization of the FormulaRecord
@@ -147,6 +148,50 @@ namespace TestCases.HSSF.Record
 
             FuncVarPtg choose = (FuncVarPtg)ptgs[8];
             Assert.AreEqual("CHOOSE", choose.Name);
+        }
+        [TestMethod]
+        public void TestReSerialize()
+        {
+            FormulaRecord formulaRecord = new FormulaRecord();
+            formulaRecord.Row = (/*setter*/1);
+            formulaRecord.Column = (/*setter*/(short)1);
+            formulaRecord.ParsedExpression = (/*setter*/new Ptg[] { new RefPtg("B$5"), });
+            formulaRecord.Value = (/*setter*/3.3);
+            byte[] ser = formulaRecord.Serialize();
+            Assert.AreEqual(31, ser.Length);
+
+            RecordInputStream in1 = TestcaseRecordInputStream.Create(ser);
+            FormulaRecord fr2 = new FormulaRecord(in1);
+            Assert.AreEqual(3.3, fr2.Value, 0.0);
+            Ptg[] ptgs = fr2.ParsedExpression;
+            Assert.AreEqual(1, ptgs.Length);
+            RefPtg rp = (RefPtg)ptgs[0];
+            Assert.AreEqual("B$5", rp.ToFormulaString());
+        }
+
+        /**
+         * Bug noticed while fixing 46479.  Operands of conditional operator ( ? : ) were swapped
+         * inside {@link FormulaRecord}
+         */
+        [TestMethod]
+        public void TestCachedValue_bug46479()
+        {
+            FormulaRecord fr0 = new FormulaRecord();
+            FormulaRecord fr1 = new FormulaRecord();
+            // Test some other cached value types 
+            fr0.Value = (/*setter*/3.5);
+            Assert.AreEqual(3.5, fr0.Value, 0.0);
+            fr0.SetCachedResultErrorCode (HSSFErrorConstants.ERROR_REF);
+            Assert.AreEqual(HSSFErrorConstants.ERROR_REF, fr0.CachedErrorValue);
+
+            fr0.SetCachedResultBoolean(false);
+            fr1.SetCachedResultBoolean(true);
+            if (fr0.CachedBooleanValue == true && fr1.CachedBooleanValue == false)
+            {
+                throw new AssertFailedException("Identified bug 46479c");
+            }
+            Assert.AreEqual(false, fr0.CachedBooleanValue);
+            Assert.AreEqual(true, fr1.CachedBooleanValue);
         }
     }
 }

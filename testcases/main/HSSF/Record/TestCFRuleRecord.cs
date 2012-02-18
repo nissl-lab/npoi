@@ -40,10 +40,35 @@ namespace TestCases.HSSF.Record
     public class TestCFRuleRecord
     {
         [TestMethod]
+        public void TestConstructors()
+        {
+            IWorkbook workbook = new HSSFWorkbook();
+            ISheet sheet = workbook.CreateSheet();
+
+            CFRuleRecord rule1 = CFRuleRecord.Create((HSSFSheet)sheet, "7");
+            Assert.AreEqual(CFRuleRecord.CONDITION_TYPE_FORMULA, rule1.ConditionType);
+            Assert.AreEqual((byte)ComparisonOperator.NO_COMPARISON, rule1.ComparisonOperation);
+            Assert.IsNotNull(rule1.ParsedExpression1);
+            Assert.AreSame(Ptg.EMPTY_PTG_ARRAY, rule1.ParsedExpression2);
+
+            CFRuleRecord rule2 = CFRuleRecord.Create((HSSFSheet)sheet, (byte)ComparisonOperator.BETWEEN, "2", "5");
+            Assert.AreEqual(CFRuleRecord.CONDITION_TYPE_CELL_VALUE_IS, rule2.ConditionType);
+            Assert.AreEqual((byte)ComparisonOperator.BETWEEN, rule2.ComparisonOperation);
+            Assert.IsNotNull(rule2.ParsedExpression1);
+            Assert.IsNotNull(rule2.ParsedExpression2);
+
+            CFRuleRecord rule3 = CFRuleRecord.Create((HSSFSheet)sheet, (byte)ComparisonOperator.EQUAL, null, null);
+            Assert.AreEqual(CFRuleRecord.CONDITION_TYPE_CELL_VALUE_IS, rule3.ConditionType);
+            Assert.AreEqual((byte)ComparisonOperator.EQUAL, rule3.ComparisonOperation);
+            Assert.AreSame(Ptg.EMPTY_PTG_ARRAY, rule3.ParsedExpression2);
+            Assert.AreSame(Ptg.EMPTY_PTG_ARRAY, rule3.ParsedExpression2);
+        }
+        [TestMethod]
         public void TestCreateCFRuleRecord()
         {
             HSSFWorkbook workbook = new HSSFWorkbook();
-            CFRuleRecord record = CFRuleRecord.Create(workbook, "7");
+            HSSFSheet sheet = (HSSFSheet)workbook.CreateSheet();
+            CFRuleRecord record = CFRuleRecord.Create(sheet, "7");
             TestCFRuleRecord1(record);
 
             // Serialize
@@ -283,7 +308,8 @@ namespace TestCases.HSSF.Record
         [TestMethod]
         public void TestWrite() {
 		    HSSFWorkbook workbook = new HSSFWorkbook();
-		    CFRuleRecord rr = CFRuleRecord.Create(workbook, ComparisonOperator.BETWEEN, "5", "10");
+            HSSFSheet sheet = (HSSFSheet)workbook.CreateSheet();
+            CFRuleRecord rr = CFRuleRecord.Create(sheet, (byte)ComparisonOperator.BETWEEN, "5", "10");
 
 		    PatternFormatting patternFormatting = new PatternFormatting();
 		    patternFormatting.FillPattern=(PatternFormatting.BRICKS);
@@ -332,32 +358,11 @@ namespace TestCases.HSSF.Record
 		    Assert.IsTrue(refNPtg.IsRowRelative);
     		    
 		    byte[] data = rr.Serialize();
-    		
-		    if (!CompareArrays(DATA_REFN, 0, data, 4, DATA_REFN.Length)) {
-			    Assert.Fail("Did not re-serialize correctly");
-		    }
+
+            TestcaseRecordInputStream.ConfirmRecordEncoding(CFRuleRecord.sid, DATA_REFN, data);
 	    }
 
-        private static bool CompareArrays(byte[] arrayA, int offsetA, byte[] arrayB, int offsetB, int length)
-        {
-
-            if (offsetA + length > arrayA.Length)
-            {
-                return false;
-            }
-            if (offsetB + length > arrayB.Length)
-            {
-                return false;
-            }
-            for (int i = 0; i < length; i++)
-            {
-                if (arrayA[i + offsetA] != arrayB[i + offsetB])
-                {
-                    return false;
-                }
-            }
-            return true;
-        }
+        
 
     }
 }

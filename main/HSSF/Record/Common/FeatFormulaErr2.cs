@@ -92,90 +92,116 @@ namespace NPOI.HSSF.Record.Common
             }
         }
 
-        public int _getRawErrorCheckValue()
+        public int RawErrorCheckValue
         {
-            return errorCheck;
+            get
+            {
+                return errorCheck;
+            }
         }
 
-        public bool GetCheckCalculationErrors()
+        public bool CheckCalculationErrors
         {
-            return checkCalculationErrors.IsSet(errorCheck);
-        }
-        public void SetCheckCalculationErrors(bool CheckCalculationErrors)
-        {
-            FeatFormulaErr2.checkCalculationErrors.SetBoolean(
-                    errorCheck, CheckCalculationErrors);
-        }
-
-        public bool GetCheckEmptyCellRef()
-        {
-            return checkEmptyCellRef.IsSet(errorCheck);
-        }
-        public void SetCheckEmptyCellRef(bool CheckEmptyCellRef)
-        {
-            FeatFormulaErr2.checkEmptyCellRef.SetBoolean(
-                    errorCheck, CheckEmptyCellRef);
+            get
+            {
+                return checkCalculationErrors.IsSet(errorCheck);
+            }
+            set
+            {
+                FeatFormulaErr2.checkCalculationErrors.SetBoolean(
+                        errorCheck, value);
+            }
         }
 
-        public bool GetCheckNumbersAsText()
+        public bool CheckEmptyCellRef
         {
-            return checkNumbersAsText.IsSet(errorCheck);
-        }
-        public void SetCheckNumbersAsText(bool CheckNumbersAsText)
-        {
-            FeatFormulaErr2.checkNumbersAsText.SetBoolean(
-                    errorCheck, CheckNumbersAsText);
-        }
-
-        public bool GetCheckInconsistentRanges()
-        {
-            return checkInconsistentRanges.IsSet(errorCheck);
-        }
-        public void SetCheckInconsistentRanges(bool CheckInconsistentRanges)
-        {
-            FeatFormulaErr2.checkInconsistentRanges.SetBoolean(
-                    errorCheck, CheckInconsistentRanges);
+            get
+            {
+                return checkEmptyCellRef.IsSet(errorCheck);
+            }
+            set
+            {
+                FeatFormulaErr2.checkEmptyCellRef.SetBoolean(
+                        errorCheck, value);
+            }
         }
 
-        public bool GetCheckInconsistentFormulas()
+        public bool CheckNumbersAsText
         {
-            return checkInconsistentFormulas.IsSet(errorCheck);
-        }
-        public void SetCheckInconsistentFormulas(
-                bool CheckInconsistentFormulas)
-        {
-            FeatFormulaErr2.checkInconsistentFormulas.SetBoolean(
-                    errorCheck, CheckInconsistentFormulas);
-        }
-
-        public bool GetCheckDateTimeFormats()
-        {
-            return checkDateTimeFormats.IsSet(errorCheck);
-        }
-        public void SetCheckDateTimeFormats(bool CheckDateTimeFormats)
-        {
-            FeatFormulaErr2.checkDateTimeFormats.SetBoolean(
-                    errorCheck, CheckDateTimeFormats);
+            get
+            {
+                return checkNumbersAsText.IsSet(errorCheck);
+            }
+            set
+            {
+                FeatFormulaErr2.checkNumbersAsText.SetBoolean(
+                        errorCheck, value);
+            }
         }
 
-        public bool GetCheckUnprotectedFormulas()
+        public bool CheckInconsistentRanges
         {
-            return checkUnprotectedFormulas.IsSet(errorCheck);
-        }
-        public void SetCheckUnprotectedFormulas(bool CheckUnprotectedFormulas)
-        {
-            FeatFormulaErr2.checkUnprotectedFormulas.SetBoolean(
-                    errorCheck, CheckUnprotectedFormulas);
+            get
+            {
+                return checkInconsistentRanges.IsSet(errorCheck);
+            }
+            set
+            {
+                FeatFormulaErr2.checkInconsistentRanges.SetBoolean(
+                        errorCheck, value);
+            }
         }
 
-        public bool GetPerformDataValidation()
+        public bool CheckInconsistentFormulas
         {
-            return performDataValidation.IsSet(errorCheck);
+            get
+            {
+                return checkInconsistentFormulas.IsSet(errorCheck);
+            }
+            set
+            {
+                FeatFormulaErr2.checkInconsistentFormulas.SetBoolean(
+                        errorCheck, value);
+            }
         }
-        public void SetPerformDataValidation(bool performDataValidation)
+
+        public bool CheckDateTimeFormats
         {
-            FeatFormulaErr2.performDataValidation.SetBoolean(
-                    errorCheck, performDataValidation);
+            get
+            {
+                return checkDateTimeFormats.IsSet(errorCheck);
+            }
+            set
+            {
+                FeatFormulaErr2.checkDateTimeFormats.SetBoolean(
+                        errorCheck, value);
+            }
+        }
+
+        public bool CheckUnprotectedFormulas
+        {
+            get
+            {
+                return checkUnprotectedFormulas.IsSet(errorCheck);
+            }
+            set
+            {
+                FeatFormulaErr2.checkUnprotectedFormulas.SetBoolean(
+                        errorCheck, value);
+            }
+        }
+
+        public bool PerformDataValidation
+        {
+            get
+            {
+                return performDataValidation.IsSet(errorCheck);
+            }
+            set
+            {
+                FeatFormulaErr2.performDataValidation.SetBoolean(
+                    errorCheck, value);
+            }
         }
     }
 

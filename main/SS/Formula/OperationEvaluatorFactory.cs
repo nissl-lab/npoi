@@ -35,7 +35,7 @@ namespace NPOI.SS.Formula
     class OperationEvaluatorFactory
     {
         private static Type[] OPERATION_CONSTRUCTOR_CLASS_ARRAY = new Type[] { typeof(Ptg) };
- 
+
         private static Hashtable _instancesByPtgClass = InitialiseInstancesMap();
 
         private OperationEvaluatorFactory()
@@ -52,6 +52,7 @@ namespace NPOI.SS.Formula
             Add(m, LessEqualPtg.instance, RelationalOperationEval.LessEqualEval);
             Add(m, LessThanPtg.instance, RelationalOperationEval.LessThanEval);
             Add(m, NotEqualPtg.instance, RelationalOperationEval.NotEqualEval);
+
             Add(m, ConcatPtg.instance, ConcatEval.instance);
             Add(m, AddPtg.instance, TwoOperandNumericOperation.AddEval);
             Add(m, DividePtg.instance, TwoOperandNumericOperation.DivideEval);
@@ -71,7 +72,7 @@ namespace NPOI.SS.Formula
         {
             // make sure ptg has single private constructor because map lookups assume singleton keys
             ConstructorInfo[] cc = ptgKey.GetType().GetConstructors();
-            if (cc.Length > 1 || (cc.Length>0&&!cc[0].IsPrivate))
+            if (cc.Length > 1 || (cc.Length > 0 && !cc[0].IsPrivate))
             {
                 throw new Exception("Failed to verify instance ("
                         + ptgKey.GetType().Name + ") is a singleton.");
@@ -85,29 +86,34 @@ namespace NPOI.SS.Formula
          * to the supplied operationPtg
          */
         public static ValueEval Evaluate(OperationPtg ptg, ValueEval[] args,
-                OperationEvaluationContext ec) {
-		if(ptg == null) {
-			throw new ArgumentException("ptg must not be null");
-		}
-        NPOI.SS.Formula.Functions.Function result = _instancesByPtgClass[ptg] as NPOI.SS.Formula.Functions.Function;
+                OperationEvaluationContext ec)
+        {
+            if (ptg == null)
+            {
+                throw new ArgumentException("ptg must not be null");
+            }
+            NPOI.SS.Formula.Functions.Function result = _instancesByPtgClass[ptg] as NPOI.SS.Formula.Functions.Function;
 
-		if (result != null) {
-			return  result.Evaluate(args, ec.RowIndex, (short) ec.ColumnIndex);
-		}
+            if (result != null)
+            {
+                return result.Evaluate(args, ec.RowIndex, (short)ec.ColumnIndex);
+            }
 
-		if (ptg is AbstractFunctionPtg) {
-			AbstractFunctionPtg fptg = (AbstractFunctionPtg)ptg;
-			int functionIndex = fptg.GetFunctionIndex();
-			switch (functionIndex) {
-				case NPOI.SS.Formula.Function.FunctionMetadataRegistry.FUNCTION_INDEX_INDIRECT:
-					return Indirect.instance.Evaluate(args, ec);
-                case NPOI.SS.Formula.Function.FunctionMetadataRegistry.FUNCTION_INDEX_EXTERNAL:
-					return UserDefinedFunction.instance.Evaluate(args, ec);
-			}
+            if (ptg is AbstractFunctionPtg)
+            {
+                AbstractFunctionPtg fptg = (AbstractFunctionPtg)ptg;
+                int functionIndex = fptg.GetFunctionIndex();
+                switch (functionIndex)
+                {
+                    case NPOI.SS.Formula.Function.FunctionMetadataRegistry.FUNCTION_INDEX_INDIRECT:
+                        return Indirect.instance.Evaluate(args, ec);
+                    case NPOI.SS.Formula.Function.FunctionMetadataRegistry.FUNCTION_INDEX_EXTERNAL:
+                        return UserDefinedFunction.instance.Evaluate(args, ec);
+                }
 
-            return FunctionEval.GetBasicFunction(functionIndex).Evaluate(args, ec.RowIndex, ec.ColumnIndex);
-		}
-		throw new Exception("Unexpected operation ptg class (" + ptg.GetType().Name + ")");
-	}
+                return FunctionEval.GetBasicFunction(functionIndex).Evaluate(args, ec.RowIndex, ec.ColumnIndex);
+            }
+            throw new Exception("Unexpected operation ptg class (" + ptg.GetType().Name + ")");
+        }
     }
 }

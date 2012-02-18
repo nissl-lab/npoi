@@ -1260,7 +1260,7 @@ namespace NPOI.HSSF.UserModel
                 else if (rec is ObjRecord)
                 {
                     ObjRecord obj = (ObjRecord)rec;
-                    SubRecord sub = (SubRecord)obj.GetSubRecords()[0];
+                    SubRecord sub = obj.SubRecords[0];
                     if (sub is CommonObjectDataSubRecord)
                     {
                         CommonObjectDataSubRecord cmo = (CommonObjectDataSubRecord)sub;

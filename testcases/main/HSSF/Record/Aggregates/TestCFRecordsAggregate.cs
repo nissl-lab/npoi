@@ -37,22 +37,19 @@ namespace TestCases.HSSF.Record.Aggregates
      * @author Dmitriy Kumshayev 
      */
     [TestClass]
-    public class CFRecordsAggregateTestCases
+    public class TestCFRecordsAggregate
     {
-        public CFRecordsAggregateTestCases()
-        { 
-        
-        }
 
         [TestMethod]
-        public void TestCFRecordsAggregate()
+        public void TestCFRecordsAggregate1()
         {
             HSSFWorkbook workbook = new HSSFWorkbook();
+            HSSFSheet sheet = (HSSFSheet)workbook.CreateSheet();
             IList recs = new ArrayList();
             CFHeaderRecord header = new CFHeaderRecord();
-            CFRuleRecord rule1 = CFRuleRecord.Create(workbook, "7");
-            CFRuleRecord rule2 = CFRuleRecord.Create(workbook, ComparisonOperator.BETWEEN, "2", "5");
-            CFRuleRecord rule3 = CFRuleRecord.Create(workbook, ComparisonOperator.GE, "100", null);
+            CFRuleRecord rule1 = CFRuleRecord.Create(sheet, "7");
+            CFRuleRecord rule2 = CFRuleRecord.Create(sheet, (byte)ComparisonOperator.BETWEEN, "2", "5");
+            CFRuleRecord rule3 = CFRuleRecord.Create(sheet, (byte)ComparisonOperator.GE, "100", null);
             header.NumberOfConditionalFormats = (3);
             CellRangeAddress[] cellRanges = {
 				new CellRangeAddress(0,1,0,0),
@@ -110,13 +107,14 @@ namespace TestCases.HSSF.Record.Aggregates
         public void TestNRules()
         {
             HSSFWorkbook workbook = new HSSFWorkbook();
+            HSSFSheet sheet = (HSSFSheet)workbook.CreateSheet();
             CellRangeAddress[] cellRanges = {
 				new CellRangeAddress(0,1,0,0),
 				new CellRangeAddress(0,1,2,2),
 		    };
             CFRuleRecord[] rules = {
-			CFRuleRecord.Create(workbook, "7"),
-			CFRuleRecord.Create(workbook, ComparisonOperator.BETWEEN, "2", "5"),
+			CFRuleRecord.Create(sheet, "7"),
+			CFRuleRecord.Create(sheet, (byte)ComparisonOperator.BETWEEN, "2", "5"),
 		    };
             CFRecordsAggregate agg = new CFRecordsAggregate(cellRanges, rules);
             byte[] serializedRecord = new byte[agg.RecordSize];

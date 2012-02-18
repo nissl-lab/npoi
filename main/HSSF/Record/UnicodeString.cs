@@ -18,105 +18,375 @@
 namespace NPOI.HSSF.Record
 {
     using System;
+    using System.Collections.Generic;
     using System.Text;
+    using NPOI.HSSF.Record;
+    using NPOI.HSSF.Record.cont;
     using NPOI.HSSF.Record.Cont;
     using NPOI.Util;
 
-    using System.Collections.Generic;
-    public class FormatRun : IComparable<FormatRun>
-    {
-        internal short _character;
-        internal short _fontIndex;
-
-        public FormatRun(short character, short fontIndex)
-        {
-            this._character = character;
-            this._fontIndex = fontIndex;
-        }
-
-        public FormatRun(ILittleEndianInput in1)
-            : this(in1.ReadShort(), in1.ReadShort())
-        {
-
-        }
-
-        public short CharacterPos
-        {
-            get
-            {
-                return _character;
-            }
-        }
-
-        public short FontIndex
-        {
-            get
-            {
-                return _fontIndex;
-            }
-        }
-
-        public override bool Equals(Object o)
-        {
-            if (!(o is FormatRun))
-            {
-                return false;
-            }
-            FormatRun other = (FormatRun)o;
-
-            return _character == other._character && _fontIndex == other._fontIndex;
-        }
-
-        public override int GetHashCode ()
-        {
-            return _character ^ _fontIndex;
-        }
-
-        public int CompareTo(FormatRun r)
-        {
-            if (_character == r._character && _fontIndex == r._fontIndex)
-            {
-                return 0;
-            }
-            if (_character == r._character)
-            {
-                return _fontIndex - r._fontIndex;
-            }
-            return _character - r._character;
-        }
-
-        public override String ToString()
-        {
-            return "character=" + _character + ",fontIndex=" + _fontIndex;
-        }
-
-        public void Serialize(ILittleEndianOutput out1)
-        {
-            out1.WriteShort(_character);
-            out1.WriteShort(_fontIndex);
-        }
-    }
     /**
      * Title: Unicode String<p/>
      * Description:  Unicode String - just standard fields that are in several records.
      *               It is considered more desirable then repeating it in all of them.<p/>
+     *               This is often called a XLUnicodeRichExtendedString in MS documentation.<p/>
      * REFERENCE:  PG 264 Microsoft Excel 97 Developer's Kit (ISBN: 1-57231-498-2)<p/>
-     * @author  Andrew C. Oliver
-     * @author Marc Johnson (mjohnson at apache dot org)
-     * @author Glen Stampoultzis (glens at apache.org)
+     * REFERENCE:  PG 951 Excel Binary File Format (.xls) Structure Specification v20091214 
      */
-    public class UnicodeString : IComparable
-    {
+    public class UnicodeString : IComparable<UnicodeString>
+    { // TODO - make this when the compatibility version is Removed
+        private static POILogger _logger = POILogFactory.GetLogger(typeof(UnicodeString));
+
         private short field_1_charCount;
         private byte field_2_optionflags;
         private String field_3_string;
         private List<FormatRun> field_4_format_Runs;
-        private byte[] field_5_ext_rst;
+        private ExtRst field_5_ext_rst;
         private static BitField highByte = BitFieldFactory.GetInstance(0x1);
+        // 0x2 is reserved
         private static BitField extBit = BitFieldFactory.GetInstance(0x4);
         private static BitField richText = BitFieldFactory.GetInstance(0x8);
 
+        public class FormatRun : IComparable<FormatRun>
+        {
+            internal short _character;
+            internal short _fontIndex;
 
+            public FormatRun(short character, short fontIndex)
+            {
+                this._character = character;
+                this._fontIndex = fontIndex;
+            }
+
+            public FormatRun(ILittleEndianInput in1) :
+                this(in1.ReadShort(), in1.ReadShort())
+            {
+            }
+
+            public short CharacterPos
+            {
+                get
+                {
+                    return _character;
+                }
+            }
+
+            public short FontIndex
+            {
+                get
+                {
+                    return _fontIndex;
+                }
+            }
+
+            public override bool Equals(Object o)
+            {
+                if (!(o is FormatRun))
+                {
+                    return false;
+                }
+                FormatRun other = (FormatRun)o;
+
+                return _character == other._character && _fontIndex == other._fontIndex;
+            }
+            public override int GetHashCode()
+            {
+                return base.GetHashCode();
+            }
+            public int CompareTo(FormatRun r)
+            {
+                if (_character == r._character && _fontIndex == r._fontIndex)
+                {
+                    return 0;
+                }
+                if (_character == r._character)
+                {
+                    return _fontIndex - r._fontIndex;
+                }
+                return _character - r._character;
+            }
+
+            public override String ToString()
+            {
+                return "character=" + _character + ",fontIndex=" + _fontIndex;
+            }
+
+            public void Serialize(ILittleEndianOutput out1)
+            {
+                out1.WriteShort(_character);
+                out1.WriteShort(_fontIndex);
+            }
+        }
+
+        // See page 681
+        public class ExtRst : IComparable<ExtRst>
+        {
+            private short reserved;
+
+            // This is a Phs (see page 881)
+            private short formattingFontIndex;
+            private short formattingOptions;
+
+            // This is a RPHSSub (see page 894)
+            private int numberOfRuns;
+            private String phoneticText;
+
+            // This is an array of PhRuns (see page 881)
+            private PhRun[] phRuns;
+            // Sometimes there's some cruft at the end
+            private byte[] extraData;
+
+            private void populateEmpty()
+            {
+                reserved = 1;
+                phoneticText = "";
+                phRuns = new PhRun[0];
+                extraData = new byte[0];
+            }
+            public override int GetHashCode()
+            {
+                return base.GetHashCode();
+            }
+            internal ExtRst()
+            {
+                populateEmpty();
+            }
+            internal ExtRst(ILittleEndianInput in1, int expectedLength)
+            {
+                reserved = in1.ReadShort();
+
+                // Old style detection (Reserved = 0xFF)
+                if (reserved == -1)
+                {
+                    populateEmpty();
+                    return;
+                }
+
+                // Spot corrupt records
+                if (reserved != 1)
+                {
+                    _logger.Log(POILogger.WARN, "Warning - ExtRst has wrong magic marker, expecting 1 but found " + reserved + " - ignoring");
+                    // Grab all the remaining data, and ignore it
+                    for (int i = 0; i < expectedLength - 2; i++)
+                    {
+                        in1.ReadByte();
+                    }
+                    // And make us be empty
+                    populateEmpty();
+                    return;
+                }
+
+                // Carry on Reading in as normal
+                short stringDataSize = in1.ReadShort();
+
+                formattingFontIndex = in1.ReadShort();
+                formattingOptions = in1.ReadShort();
+
+                // RPHSSub
+                numberOfRuns = in1.ReadUShort();
+                short length1 = in1.ReadShort();
+                // No really. Someone Clearly forgot to read
+                //  the docs on their datastructure...
+                short length2 = in1.ReadShort();
+                // And sometimes they write out garbage :(
+                if (length1 == 0 && length2 > 0)
+                {
+                    length2 = 0;
+                }
+                if (length1 != length2)
+                {
+                    throw new InvalidOperationException(
+                          "The two length fields of the Phonetic Text don't agree! " +
+                          length1 + " vs " + length2
+                    );
+                }
+                phoneticText = StringUtil.ReadUnicodeLE(in1, length1);
+
+                int RunData = stringDataSize - 4 - 6 - (2 * phoneticText.Length);
+                int numRuns = (RunData / 6);
+                phRuns = new PhRun[numRuns];
+                for (int i = 0; i < phRuns.Length; i++)
+                {
+                    phRuns[i] = new PhRun(in1);
+                }
+
+                int extraDataLength = RunData - (numRuns * 6);
+                if (extraDataLength < 0)
+                {
+                    //System.err.Println("Warning - ExtRst overran by " + (0-extraDataLength) + " bytes");
+                    extraDataLength = 0;
+                }
+                extraData = new byte[extraDataLength];
+                for (int i = 0; i < extraData.Length; i++)
+                {
+                    extraData[i] = (byte)in1.ReadByte();
+                }
+            }
+            /**
+             * Returns our size, excluding our 
+             *  4 byte header
+             */
+            internal int DataSize
+            {
+                get
+                {
+                    return 4 + 6 + (2 * phoneticText.Length) +
+                       (6 * phRuns.Length) + extraData.Length;
+                }
+            }
+            internal void Serialize(ContinuableRecordOutput out1)
+            {
+                int dataSize = DataSize;
+
+                out1.WriteContinueIfRequired(8);
+                out1.WriteShort(reserved);
+                out1.WriteShort(dataSize);
+                out1.WriteShort(formattingFontIndex);
+                out1.WriteShort(formattingOptions);
+
+                out1.WriteContinueIfRequired(6);
+                out1.WriteShort(numberOfRuns);
+                out1.WriteShort(phoneticText.Length);
+                out1.WriteShort(phoneticText.Length);
+
+                out1.WriteContinueIfRequired(phoneticText.Length * 2);
+                StringUtil.PutUnicodeLE(phoneticText, out1);
+
+                for (int i = 0; i < phRuns.Length; i++)
+                {
+                    phRuns[i].Serialize(out1);
+                }
+
+                out1.Write(extraData);
+            }
+
+            public override bool Equals(Object obj)
+            {
+                if (!(obj is ExtRst))
+                {
+                    return false;
+                }
+                ExtRst other = (ExtRst)obj;
+                return (CompareTo(other) == 0);
+            }
+            public int CompareTo(ExtRst o)
+            {
+                int result;
+
+                result = reserved - o.reserved;
+                if (result != 0) return result;
+                result = formattingFontIndex - o.formattingFontIndex;
+                if (result != 0) return result;
+                result = formattingOptions - o.formattingOptions;
+                if (result != 0) return result;
+                result = numberOfRuns - o.numberOfRuns;
+                if (result != 0) return result;
+
+                result = phoneticText.CompareTo(o.phoneticText);
+                if (result != 0) return result;
+
+                result = phRuns.Length - o.phRuns.Length;
+                if (result != 0) return result;
+                for (int i = 0; i < phRuns.Length; i++)
+                {
+                    result = phRuns[i].phoneticTextFirstCharacterOffset - o.phRuns[i].phoneticTextFirstCharacterOffset;
+                    if (result != 0) return result;
+                    result = phRuns[i].realTextFirstCharacterOffset - o.phRuns[i].realTextFirstCharacterOffset;
+                    if (result != 0) return result;
+                    result = phRuns[i].realTextFirstCharacterOffset - o.phRuns[i].realTextLength;
+                    if (result != 0) return result;
+                }
+
+                result = extraData.Length - o.extraData.Length;
+                if (result != 0) return result;
+
+                // If we Get here, it's the same
+                return 0;
+            }
+
+            internal ExtRst Clone()
+            {
+                ExtRst ext = new ExtRst();
+                ext.reserved = reserved;
+                ext.formattingFontIndex = formattingFontIndex;
+                ext.formattingOptions = formattingOptions;
+                ext.numberOfRuns = numberOfRuns;
+                ext.phoneticText = phoneticText;
+                ext.phRuns = new PhRun[phRuns.Length];
+                for (int i = 0; i < ext.phRuns.Length; i++)
+                {
+                    ext.phRuns[i] = new PhRun(
+                          phRuns[i].phoneticTextFirstCharacterOffset,
+                          phRuns[i].realTextFirstCharacterOffset,
+                          phRuns[i].realTextLength
+                    );
+                }
+                return ext;
+            }
+
+            public short FormattingFontIndex
+            {
+                get
+                {
+                    return formattingFontIndex;
+                }
+            }
+            public short FormattingOptions
+            {
+                get
+                {
+                    return formattingOptions;
+                }
+            }
+            public int NumberOfRuns
+            {
+                get
+                {
+                    return numberOfRuns;
+                }
+            }
+            public String PhoneticText
+            {
+                get
+                {
+                    return phoneticText;
+                }
+            }
+            public PhRun[] PhRuns
+            {
+                get
+                {
+                    return phRuns;
+                }
+            }
+        }
+        public class PhRun
+        {
+            internal int phoneticTextFirstCharacterOffset;
+            internal int realTextFirstCharacterOffset;
+            internal int realTextLength;
+
+            public PhRun(int phoneticTextFirstCharacterOffset,
+                 int realTextFirstCharacterOffset, int realTextLength)
+            {
+                this.phoneticTextFirstCharacterOffset = phoneticTextFirstCharacterOffset;
+                this.realTextFirstCharacterOffset = realTextFirstCharacterOffset;
+                this.realTextLength = realTextLength;
+            }
+            internal PhRun(ILittleEndianInput in1)
+            {
+                phoneticTextFirstCharacterOffset = in1.ReadUShort();
+                realTextFirstCharacterOffset = in1.ReadUShort();
+                realTextLength = in1.ReadUShort();
+            }
+            internal void Serialize(ContinuableRecordOutput out1)
+            {
+                out1.WriteContinueIfRequired(6);
+                out1.WriteShort(phoneticTextFirstCharacterOffset);
+                out1.WriteShort(realTextFirstCharacterOffset);
+                out1.WriteShort(realTextLength);
+            }
+        }
 
         private UnicodeString()
         {
@@ -125,7 +395,7 @@ namespace NPOI.HSSF.Record
 
         public UnicodeString(String str)
         {
-            this.String = str;
+            String = (str);
         }
 
 
@@ -139,11 +409,11 @@ namespace NPOI.HSSF.Record
         }
 
         /**
-         * Our handling of equals is inconsistent with CompareTo.  The trouble is because we don't truely understand
+         * Our handling of Equals is inconsistent with CompareTo.  The trouble is because we don't truely understand
          * rich text fields yet it's difficult to make a sound comparison.
          *
          * @param o     The object to Compare.
-         * @return      true if the object is actually equal.
+         * @return      true if the object is actually Equal.
          */
         public override bool Equals(Object o)
         {
@@ -161,44 +431,49 @@ namespace NPOI.HSSF.Record
 
             //OK string appears to be equal but now lets compare formatting Runs
             if ((field_4_format_Runs == null) && (other.field_4_format_Runs == null))
-                //Strings are equal, and there are not formatting Runs.
+                //Strings are Equal, and there are not formatting Runs.
                 return true;
             if (((field_4_format_Runs == null) && (other.field_4_format_Runs != null)) ||
                  (field_4_format_Runs != null) && (other.field_4_format_Runs == null))
-                //Strings are equal, but one or the other has formatting Runs
+                //Strings are Equal, but one or the other has formatting Runs
                 return false;
 
-            //Strings are equal, so now compare formatting Runs.
+            //Strings are Equal, so now compare formatting Runs.
             int size = field_4_format_Runs.Count;
             if (size != other.field_4_format_Runs.Count)
                 return false;
 
             for (int i = 0; i < size; i++)
             {
-                FormatRun Run1 = field_4_format_Runs[i];
-                FormatRun Run2 = other.field_4_format_Runs[i];
+                FormatRun Run1 = field_4_format_Runs[(i)];
+                FormatRun run2 = other.field_4_format_Runs[(i)];
 
-                if (!Run1.Equals(Run2))
+                if (!Run1.Equals(run2))
                     return false;
             }
 
-            //Well the format Runs are equal as well!, better check the ExtRst data
-            //Which by the way we dont know how to decode!
-            if ((field_5_ext_rst == null) && (other.field_5_ext_rst == null))
-                return true;
-            if (((field_5_ext_rst == null) && (other.field_5_ext_rst != null)) ||
-                ((field_5_ext_rst != null) && (other.field_5_ext_rst == null)))
-                return false;
-            size = field_5_ext_rst.Length;
-            if (size != field_5_ext_rst.Length)
-                return false;
-
-            //Check individual bytes!
-            for (int i = 0; i < size; i++)
+            // Well the format Runs are equal as well!, better check the ExtRst data
+            if (field_5_ext_rst == null && other.field_5_ext_rst == null)
             {
-                if (field_5_ext_rst[i] != other.field_5_ext_rst[i])
-                    return false;
+                // Good
             }
+            else if (field_5_ext_rst != null && other.field_5_ext_rst != null)
+            {
+                int extCmp = field_5_ext_rst.CompareTo(other.field_5_ext_rst);
+                if (extCmp == 0)
+                {
+                    // Good
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                return false;
+            }
+
             //Phew!! After all of that we have finally worked out that the strings
             //are identical.
             return true;
@@ -206,7 +481,7 @@ namespace NPOI.HSSF.Record
 
         /**
          * construct a unicode string record and fill its fields, ID is ignored
-         * @param in the RecordInPutstream to read the record from
+         * @param in the RecordInputstream to read the record from
          */
         public UnicodeString(RecordInputStream in1)
         {
@@ -226,8 +501,8 @@ namespace NPOI.HSSF.Record
                 extensionLength = in1.ReadInt();
             }
 
-            bool isCompressed = ((field_2_optionflags & 1) == 0);
-            if (isCompressed)
+            bool IsCompressed = ((field_2_optionflags & 1) == 0);
+            if (IsCompressed)
             {
                 field_3_string = in1.ReadCompressedUnicode(CharCount);
             }
@@ -248,10 +523,10 @@ namespace NPOI.HSSF.Record
 
             if (IsExtendedText && (extensionLength > 0))
             {
-                field_5_ext_rst = new byte[extensionLength];
-                for (int i = 0; i < extensionLength; i++)
+                field_5_ext_rst = new ExtRst(new ContinuableRecordInput(in1), extensionLength);
+                if (field_5_ext_rst.DataSize + 4 != extensionLength)
                 {
-                    field_5_ext_rst[i] = (byte)in1.ReadByte();
+                    _logger.Log(POILogger.WARN, "ExtRst was supposed to be " + extensionLength + " bytes long, but seems to actually be " + (field_5_ext_rst.DataSize + 4));
                 }
             }
         }
@@ -259,11 +534,11 @@ namespace NPOI.HSSF.Record
 
 
         /**
-         * get the number of characters in the string,
-         *  as an un-wrapped int
-         *
-         * @return number of characters
-         */
+             * get the number of characters in the string,
+             *  as an un-wrapped int
+             *
+             * @return number of characters
+             */
         public int CharCount
         {
             get
@@ -285,7 +560,7 @@ namespace NPOI.HSSF.Record
         }
 
         /**
-         * get the option flags which among other things return if this is a 16-bit or
+         * Get the option flags which among other things return if this is a 16-bit or
          * 8 bit string
          *
          * @return optionflags bitmask
@@ -303,9 +578,11 @@ namespace NPOI.HSSF.Record
                 field_2_optionflags = value;
             }
         }
+
+
         /**
-         * @return the actual string this Contains as a java String object
-         */
+             * @return the actual string this Contains as a java String object
+             */
         public String String
         {
             get
@@ -358,7 +635,7 @@ namespace NPOI.HSSF.Record
             {
                 return null;
             }
-            return field_4_format_Runs[index];
+            return field_4_format_Runs[(index)];
         }
 
         private int FindFormatRunAt(int characterPos)
@@ -366,7 +643,7 @@ namespace NPOI.HSSF.Record
             int size = field_4_format_Runs.Count;
             for (int i = 0; i < size; i++)
             {
-                FormatRun r = field_4_format_Runs[i];
+                FormatRun r = field_4_format_Runs[(i)];
                 if (r._character == characterPos)
                     return i;
                 else if (r._character > characterPos)
@@ -394,6 +671,7 @@ namespace NPOI.HSSF.Record
             field_4_format_Runs.Add(r);
             //Need to sort the font Runs to ensure that the font Runs appear in
             //character order
+            //collections.Sort(field_4_format_Runs);
             field_4_format_Runs.Sort();
 
             //Make sure that we now say that we are a rich string
@@ -426,13 +704,26 @@ namespace NPOI.HSSF.Record
         }
 
 
-        public void SetExtendedRst(byte[] ext_rst)
+        public ExtRst ExtendedRst
         {
-            if (ext_rst != null)
-                field_2_optionflags = extBit.SetByte(field_2_optionflags);
-            else field_2_optionflags = extBit.ClearByte(field_2_optionflags);
-            this.field_5_ext_rst = ext_rst;
+            get
+            {
+                return this.field_5_ext_rst;
+            }
+            set
+            {
+                if (value != null)
+                {
+                    field_2_optionflags = extBit.SetByte(field_2_optionflags);
+                }
+                else
+                {
+                    field_2_optionflags = extBit.ClearByte(field_2_optionflags);
+                }
+                this.field_5_ext_rst = value;
+            }
         }
+
 
 
         /**
@@ -453,14 +744,14 @@ namespace NPOI.HSSF.Record
         }
 
         /**
-         * unlike the real records we return the same as "GetString()" rather than debug info
-         * @see #GetDebugInfo()
+         * unlike the real records we return the same as "getString()" rather than debug info
+         * @see #getDebugInfo()
          * @return String value of the record
          */
 
         public override String ToString()
         {
-            return this.String;
+            return String;
         }
 
         /**
@@ -484,18 +775,24 @@ namespace NPOI.HSSF.Record
             {
                 for (int i = 0; i < field_4_format_Runs.Count; i++)
                 {
-                    FormatRun r = field_4_format_Runs[i];
+                    FormatRun r = field_4_format_Runs[(i)];
                     buffer.Append("      .format_Run" + i + "          = ").Append(r.ToString()).Append("\n");
                 }
             }
             if (field_5_ext_rst != null)
             {
-                buffer.Append("    .field_5_ext_rst          = ").Append("\n").Append(HexDump.ToHex(field_5_ext_rst)).Append("\n");
+                buffer.Append("    .field_5_ext_rst          = ").Append("\n");
+                buffer.Append(field_5_ext_rst.ToString()).Append("\n");
             }
             buffer.Append("[/UNICODESTRING]\n");
             return buffer.ToString();
         }
 
+        /**
+         * Serialises out the String. There are special rules
+         *  about where we can and can't split onto
+         *  Continue records.
+         */
         public void Serialize(ContinuableRecordOutput out1)
         {
             int numberOfRichTextRuns = 0;
@@ -506,9 +803,11 @@ namespace NPOI.HSSF.Record
             }
             if (IsExtendedText && field_5_ext_rst != null)
             {
-                extendedDataSize = field_5_ext_rst.Length;
+                extendedDataSize = 4 + field_5_ext_rst.DataSize;
             }
 
+            // Serialise the bulk of the String
+            // The WriteString handles tricky continue stuff for us
             out1.WriteString(field_3_string, numberOfRichTextRuns, extendedDataSize);
 
             if (numberOfRichTextRuns > 0)
@@ -521,69 +820,54 @@ namespace NPOI.HSSF.Record
                     {
                         out1.WriteContinue();
                     }
-                    FormatRun r = field_4_format_Runs[i];
+                    FormatRun r = field_4_format_Runs[(i)];
                     r.Serialize(out1);
                 }
             }
 
             if (extendedDataSize > 0)
             {
-                // OK ExtRst is actually not documented, so i am going to hope
-                // that we can actually continue on byte boundaries
-
-                int extPos = 0;
-                while (true)
-                {
-                    int nBytesToWrite = Math.Min(extendedDataSize - extPos, out1.AvailableSpace);
-                    out1.Write(field_5_ext_rst, extPos, nBytesToWrite);
-                    extPos += nBytesToWrite;
-                    if (extPos >= extendedDataSize)
-                    {
-                        break;
-                    }
-                    out1.WriteContinue();
-                }
+                field_5_ext_rst.Serialize(out1);
             }
         }
 
-        public int CompareTo(object obj)
+        public int CompareTo(UnicodeString str)
         {
-            UnicodeString str = (UnicodeString)obj;
-            int result = this.String.CompareTo(str.String);
 
-            //As per the equals method lets do this in stages
+            int result = String.CompareTo(str.String);
+
+            //As per the Equals method lets do this in stages
             if (result != 0)
                 return result;
 
             //OK string appears to be equal but now lets compare formatting Runs
             if ((field_4_format_Runs == null) && (str.field_4_format_Runs == null))
-                //Strings are equal, and there are no formatting Runs.
+                //Strings are Equal, and there are no formatting Runs.
                 return 0;
 
             if ((field_4_format_Runs == null) && (str.field_4_format_Runs != null))
-                //Strings are equal, but one or the other has formatting Runs
+                //Strings are Equal, but one or the other has formatting Runs
                 return 1;
             if ((field_4_format_Runs != null) && (str.field_4_format_Runs == null))
-                //Strings are equal, but one or the other has formatting Runs
+                //Strings are Equal, but one or the other has formatting Runs
                 return -1;
 
-            //Strings are equal, so now compare formatting Runs.
+            //Strings are Equal, so now compare formatting Runs.
             int size = field_4_format_Runs.Count;
             if (size != str.field_4_format_Runs.Count)
                 return size - str.field_4_format_Runs.Count;
 
             for (int i = 0; i < size; i++)
             {
-                FormatRun Run1 = field_4_format_Runs[i];
-                FormatRun Run2 = str.field_4_format_Runs[i];
+                FormatRun Run1 = field_4_format_Runs[(i)];
+                FormatRun run2 = str.field_4_format_Runs[(i)];
 
-                result = Run1.CompareTo(Run2);
+                result = Run1.CompareTo(run2);
                 if (result != 0)
                     return result;
             }
 
             //Well the format Runs are equal as well!, better check the ExtRst data
-            //Which by the way we don't know how to decode!
             if ((field_5_ext_rst == null) && (str.field_5_ext_rst == null))
                 return 0;
             if ((field_5_ext_rst == null) && (str.field_5_ext_rst != null))
@@ -591,16 +875,10 @@ namespace NPOI.HSSF.Record
             if ((field_5_ext_rst != null) && (str.field_5_ext_rst == null))
                 return -1;
 
-            size = field_5_ext_rst.Length;
-            if (size != field_5_ext_rst.Length)
-                return size - field_5_ext_rst.Length;
+            result = field_5_ext_rst.CompareTo(str.field_5_ext_rst);
+            if (result != 0)
+                return result;
 
-            //Check individual bytes!
-            for (int i = 0; i < size; i++)
-            {
-                if (field_5_ext_rst[i] != str.field_5_ext_rst[i])
-                    return field_5_ext_rst[i] - str.field_5_ext_rst[i];
-            }
             //Phew!! After all of that we have finally worked out that the strings
             //are identical.
             return 0;
@@ -638,12 +916,11 @@ namespace NPOI.HSSF.Record
             }
             if (field_5_ext_rst != null)
             {
-                str.field_5_ext_rst = new byte[field_5_ext_rst.Length];
-                Array.Copy(field_5_ext_rst, 0, str.field_5_ext_rst, 0,
-                                 field_5_ext_rst.Length);
+                str.field_5_ext_rst = field_5_ext_rst.Clone();
             }
 
             return str;
         }
     }
+
 }

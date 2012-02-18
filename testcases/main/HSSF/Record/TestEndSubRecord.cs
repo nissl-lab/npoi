@@ -37,11 +37,7 @@ namespace TestCases.HSSF.Record
     {
         byte[] data = new byte[]{};
 
-        public TestEndSubRecord()
-        {
-
-        }
-        [TestInitialize]
+        [TestMethod]
         public void TestLoad()
         {
             EndSubRecord record = new EndSubRecord(TestcaseRecordInputStream.Create((short)0x00,  data),data.Length);

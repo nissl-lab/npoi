@@ -270,7 +270,6 @@
     <Compile Include="HSSF\Record\Chart\TestLineFormatRecord.cs" />
     <Compile Include="HSSF\Record\Chart\TestLinkedDataRecord.cs" />
     <Compile Include="HSSF\Record\TestMergeCellsRecord.cs" />
-    <Compile Include="HSSF\Record\TestNameRecord.cs" />
     <Compile Include="HSSF\Record\TestNoteRecord.cs" />
     <Compile Include="HSSF\Record\Chart\TestNumberFormatIndexRecord.cs" />
     <Compile Include="HSSF\Record\Chart\TestObjectLinkRecord.cs" />
@@ -278,13 +277,9 @@
     <Compile Include="HSSF\Record\TestPaneRecord.cs" />
     <Compile Include="HSSF\Record\TestRecordFactory.cs" />
     <Compile Include="HSSF\Record\TestSCLRecord.cs" />
-    <Compile Include="HSSF\Record\TestStringRecord.cs" />
-    <Compile Include="HSSF\Record\TestSubRecord.cs" />
     <Compile Include="HSSF\Record\TestSupBookRecord.cs" />
-    <Compile Include="HSSF\Record\TestTextObjectRecord.cs" />
     <Compile Include="HSSF\Record\Chart\TestTextRecord.cs" />
     <Compile Include="HSSF\Record\TestUnicodeNameRecord.cs" />
-    <Compile Include="HSSF\Record\TestUnicodeString.cs" />
     <Compile Include="HSSF\Record\Chart\TestUnitsRecord.cs" />
     <Compile Include="HSSF\UserModel\FormulaExtractor.cs">
       <SubType>Code</SubType>
@@ -310,12 +305,8 @@
     <Compile Include="HSSF\Record\Chart\TestSeriesRecord.cs" />
     <Compile Include="HSSF\Record\Chart\TestSeriesTextRecord.cs" />
     <Compile Include="HSSF\Record\Chart\TestSeriesToChartGroupRecord.cs" />
-    <Compile Include="HSSF\Record\TestSharedFormulaRecord.cs" />
     <Compile Include="HSSF\Record\Chart\TestSheetPropertiesRecord.cs" />
     <Compile Include="HSSF\Record\TestSSTDeserializer.cs" />
-    <Compile Include="HSSF\Record\TestSSTRecord.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="HSSF\Record\TestSSTRecordSizeCalculator.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -402,11 +393,36 @@
     <Compile Include="HSSF\Model\TestLinkTable.cs" />
     <Compile Include="HSSF\Model\TestRowBlocksReader.cs" />
     <Compile Include="HSSF\Record\Aggregates\TestPageSettingsBlock.cs" />
+    <Compile Include="HSSF\Record\Common\TestUnicodeString.cs" />
+    <Compile Include="HSSF\Record\TestArrayRecord.cs" />
+    <Compile Include="HSSF\Record\TestAutoFilterInfoRecord.cs" />
     <Compile Include="HSSF\Record\TestBoolErrRecord.cs" />
+    <Compile Include="HSSF\Record\TestColumnInfoRecord.cs" />
+    <Compile Include="HSSF\Record\TestDrawingRecord.cs" />
+    <Compile Include="HSSF\Record\TestExtendedFormatRecord.cs" />
+    <Compile Include="HSSF\Record\TestExtSSTRecord.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="HSSF\Record\TestFeatRecord.cs" />
     <Compile Include="HSSF\Record\TestFontRecord.cs" />
+    <Compile Include="HSSF\Record\TestFtCblsSubRecord.cs" />
+    <Compile Include="HSSF\Record\TestInterfaceEndRecord.cs" />
+    <Compile Include="HSSF\Record\TestLbsDataSubRecord.cs" />
     <Compile Include="HSSF\Record\TestNameCommentRecord.cs" />
+    <Compile Include="HSSF\Record\TestNameRecord.cs" />
+    <Compile Include="HSSF\Record\TestRecalcIdRecord.cs" />
+    <Compile Include="HSSF\Record\TestRecordFactoryInputStream.cs" />
+    <Compile Include="HSSF\Record\TestRecordInputStream.cs" />
+    <Compile Include="HSSF\Record\TestSharedFormulaRecord.cs" />
+    <Compile Include="HSSF\Record\TestSSTRecord.cs" />
+    <Compile Include="HSSF\Record\TestStringRecord.cs" />
+    <Compile Include="HSSF\Record\TestStyleRecord.cs" />
+    <Compile Include="HSSF\Record\TestSubRecord.cs" />
+    <Compile Include="HSSF\Record\TestTableRecord.cs" />
     <Compile Include="HSSF\Record\TestTextObjectBaseRecord.cs" />
+    <Compile Include="HSSF\Record\TestTextObjectRecord.cs" />
     <Compile Include="HSSF\Record\TestWriteAccessRecord.cs" />
+    <Compile Include="HSSF\UserModel\HSSFTestHelper.cs" />
     <Compile Include="HSSF\UserModel\TestDataValidation.cs" />
     <Compile Include="HSSF\UserModel\TestHSSFDataFormatter.cs" />
     <Compile Include="HSSF\UserModel\TestHSSFFont.cs" />

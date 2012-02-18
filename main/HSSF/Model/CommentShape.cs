@@ -21,6 +21,7 @@ namespace NPOI.HSSF.Model
     using NPOI.DDF;
     using NPOI.HSSF.UserModel;
     using NPOI.HSSF.Record;
+    using System.Collections.Generic;
 
     /// <summary>
     /// Represents a cell comment.
@@ -46,7 +47,7 @@ namespace NPOI.HSSF.Model
             note = CreateNoteRecord(hssfShape, shapeId);
 
             ObjRecord obj = ObjRecord;
-            IList records = obj.GetSubRecords();
+            List<SubRecord> records = obj.SubRecords;
             int cmoIdx = 0;
             for (int i = 0; i < records.Count; i++)
             {

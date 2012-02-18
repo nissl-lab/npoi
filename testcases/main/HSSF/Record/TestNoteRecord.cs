@@ -21,6 +21,7 @@ namespace TestCases.HSSF.Record
     using System;
     using NPOI.HSSF.Record;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NPOI.Util;
 
     /**
      * Tests the serialization and deserialization of the NoteRecord
@@ -32,22 +33,18 @@ namespace TestCases.HSSF.Record
     [TestClass]
     public class TestNoteRecord
     {
-        private byte[] data = new byte[] {
-        0x06, 0x00, 0x01, 0x00, 0x02, 0x00, 0x02, 0x04, 0x1A, 0x00,
-        0x00, 0x41, 0x70, 0x61, 0x63, 0x68, 0x65, 0x20, 0x53, 0x6F,
-        0x66, 0x74, 0x77, 0x61, 0x72, 0x65, 0x20, 0x46, 0x6F, 0x75,
-        0x6E, 0x64, 0x61, 0x74, 0x69, 0x6F, 0x6E, 0x00
-    };
+        private byte[] testData = HexRead.ReadFromString(
+            "06 00 01 00 02 00 02 04 " +
+            "1A 00 00 " +
+            "41 70 61 63 68 65 20 53 6F 66 74 77 61 72 65 20 46 6F 75 6E 64 61 74 69 6F 6E " +
+            "00" // padding byte
+            );
 
-        public TestNoteRecord()
-        {
-
-        }
         [TestMethod]
         public void TestRead()
         {
 
-            NoteRecord record = new NoteRecord(TestcaseRecordInputStream.Create(NoteRecord.sid, data));
+            NoteRecord record = new NoteRecord(TestcaseRecordInputStream.Create(NoteRecord.sid, testData));
 
             Assert.AreEqual(NoteRecord.sid, record.Sid);
 
@@ -71,11 +68,7 @@ namespace TestCases.HSSF.Record
             record.Author = ("Apache Software Foundation");
 
             byte[] ser = record.Serialize();
-            Assert.AreEqual(ser.Length - 4, data.Length);
-
-            byte[] recdata = new byte[ser.Length - 4];
-            System.Array.Copy(ser, 4, recdata, 0, recdata.Length);
-            Assert.IsTrue(NPOI.Util.Arrays.Equals(data, recdata));
+            TestcaseRecordInputStream.ConfirmRecordEncoding(NoteRecord.sid, testData, ser);
         }
         [TestMethod]
         public void TestClone()
@@ -99,6 +92,54 @@ namespace TestCases.HSSF.Record
             byte[] src = record.Serialize();
             byte[] cln = cloned.Serialize();
             Assert.IsTrue(NPOI.Util.Arrays.Equals(src, cln));
+        }
+        [TestMethod]
+        public void TestUnicodeAuthor()
+        {
+            // This sample data was created by setting the 'user name' field in the 'Personalize' 
+            // section of Excel's options to \u30A2\u30D1\u30C3\u30C1\u65CF, and then 
+            // creating a cell comment.
+            byte[] data = HexRead.ReadFromString("01 00 01 00 00 00 03 00 " +
+                    "05 00 01 " + // len=5, 16bit
+                    "A2 30 D1 30 C3 30 C1 30 CF 65 " + // character data 
+                    "00 " // padding byte
+                    );
+            RecordInputStream in1 = TestcaseRecordInputStream.Create(NoteRecord.sid, data);
+            NoteRecord nr = new NoteRecord(in1);
+            if ("\u00A2\u0030\u00D1\u0030\u00C3".Equals(nr.Author))
+            {
+                throw new AssertFailedException("Identified bug in reading note with unicode author");
+            }
+            Assert.AreEqual("\u30A2\u30D1\u30C3\u30C1\u65CF", nr.Author);
+            Assert.IsTrue(nr.AuthorIsMultibyte);
+
+            byte[] ser = nr.Serialize();
+            TestcaseRecordInputStream.ConfirmRecordEncoding(NoteRecord.sid, data, ser);
+
+            // Re-check
+            in1 = TestcaseRecordInputStream.Create(ser);
+            nr = new NoteRecord(in1);
+            Assert.AreEqual("\u30A2\u30D1\u30C3\u30C1\u65CF", nr.Author);
+            Assert.IsTrue(nr.AuthorIsMultibyte);
+
+
+            // Change to a non unicode author, will stop being unicode
+            nr.Author = ("Simple");
+            ser = nr.Serialize();
+            in1 = TestcaseRecordInputStream.Create(ser);
+            nr = new NoteRecord(in1);
+
+            Assert.AreEqual("Simple", nr.Author);
+            Assert.IsFalse(nr.AuthorIsMultibyte);
+
+            // Now set it back again
+            nr.Author = ("Unicode\u1234");
+            ser = nr.Serialize();
+            in1 = TestcaseRecordInputStream.Create(ser);
+            nr = new NoteRecord(in1);
+
+            Assert.AreEqual("Unicode\u1234", nr.Author);
+            Assert.IsTrue(nr.AuthorIsMultibyte);
         }
     }
 }

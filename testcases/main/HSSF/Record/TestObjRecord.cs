@@ -58,7 +58,7 @@ namespace TestCases.HSSF.Record
 
             Assert.AreEqual(26, record.RecordSize - 4);
 
-            IList subrecords = record.GetSubRecords();
+            IList subrecords = record.SubRecords;
             Assert.AreEqual(2, subrecords.Count);
             Assert.IsTrue(subrecords[0] is CommonObjectDataSubRecord);
             Assert.IsTrue(subrecords[1] is EndSubRecord);
@@ -97,7 +97,7 @@ namespace TestCases.HSSF.Record
             System.Array.Copy(recordBytes, 4, bytes, 0, bytes.Length);
 
             record = new ObjRecord(TestcaseRecordInputStream.Create(ObjRecord.sid, bytes));
-            IList subrecords = record.GetSubRecords();
+            IList subrecords = record.SubRecords;
             Assert.AreEqual(2, subrecords.Count);
             Assert.IsTrue(subrecords[0] is CommonObjectDataSubRecord);
             Assert.IsTrue(subrecords[1] is EndSubRecord);
@@ -114,7 +114,7 @@ namespace TestCases.HSSF.Record
 
             Assert.AreEqual(36, record.RecordSize);
 
-            IList subrecords = record.GetSubRecords();
+            IList subrecords = record.SubRecords;
             Assert.AreEqual(3, subrecords.Count);
             Assert.AreEqual(typeof(CommonObjectDataSubRecord), subrecords[0].GetType());
             Assert.AreEqual(typeof(GroupMarkerSubRecord), subrecords[1].GetType());

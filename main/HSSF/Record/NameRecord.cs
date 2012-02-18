@@ -172,8 +172,10 @@ namespace NPOI.HSSF.Record
          *
          * @param in the RecordInputstream to Read the record from
          */
-        public NameRecord(RecordInputStream in1)
+        public NameRecord(RecordInputStream ris)
         {
+            byte[] remainder = ris.ReadAllContinuedRemainder();
+            ILittleEndianInput in1 = new LittleEndianByteArrayInputStream(remainder);
             field_1_option_flag                 = in1.ReadShort();
 		    field_2_keyboard_shortcut           = (byte)in1.ReadByte();
 		    int field_3_length_name_text        = in1.ReadByte();
@@ -191,9 +193,9 @@ namespace NPOI.HSSF.Record
 			    field_12_built_in_code = (byte)in1.ReadByte();
 		    } else {
 			    if (field_11_nameIsMultibyte) {
-				    field_12_name_text = in1.ReadUnicodeLEString(field_3_length_name_text);
+                    field_12_name_text = StringUtil.ReadUnicodeLE(in1, field_3_length_name_text);
 			    } else {
-				    field_12_name_text = in1.ReadCompressedUnicode(field_3_length_name_text);
+                    field_12_name_text = StringUtil.ReadCompressedUnicode(in1, field_3_length_name_text);
 			    }
 		    }
           int nBytesAvailable = in1.Available() - (field_7_length_custom_menu
@@ -201,10 +203,10 @@ namespace NPOI.HSSF.Record
 		    field_13_name_definition = SSFormula.Formula.Read(field_4_length_name_definition, in1, nBytesAvailable);
 
 		    //Who says that this can only ever be compressed unicode???
-		    field_14_custom_menu_text = in1.ReadCompressedUnicode(field_7_length_custom_menu);
-		    field_15_description_text = in1.ReadCompressedUnicode(field_8_length_description_text);
-		    field_16_help_topic_text  = in1.ReadCompressedUnicode(field_9_length_help_topic_text);
-		    field_17_status_bar_text  = in1.ReadCompressedUnicode(field_10_length_status_bar_text);
+            field_14_custom_menu_text = StringUtil.ReadCompressedUnicode(in1, field_7_length_custom_menu);
+            field_15_description_text = StringUtil.ReadCompressedUnicode(in1, field_8_length_description_text);
+            field_16_help_topic_text = StringUtil.ReadCompressedUnicode(in1, field_9_length_help_topic_text);
+            field_17_status_bar_text = StringUtil.ReadCompressedUnicode(in1, field_10_length_status_bar_text);
 
         }
 
@@ -478,7 +480,7 @@ namespace NPOI.HSSF.Record
             int field_8_length_description_text = field_15_description_text.Length;
             int field_9_length_help_topic_text = field_16_help_topic_text.Length;
             int field_10_length_status_bar_text = field_17_status_bar_text.Length;
-            int rawNameSize = NameRawSize;
+            //int rawNameSize = NameRawSize;
 
             // size defined below
             out1.WriteShort(OptionFlag);

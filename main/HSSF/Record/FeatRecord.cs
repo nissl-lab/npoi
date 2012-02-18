@@ -142,60 +142,74 @@ namespace NPOI.HSSF.Record
             }
         }
 
-        public int GetIsf_sharedFeatureType()
+        public int Isf_sharedFeatureType
         {
-            return isf_sharedFeatureType;
-        }
-
-        public long GetCbFeatData()
-        {
-            return cbFeatData;
-        }
-        public void SetCbFeatData(long cbFeatData)
-        {
-            this.cbFeatData = cbFeatData;
-        }
-
-        public CellRangeAddress[] GetCellRefs()
-        {
-            return cellRefs;
-        }
-        public void SetCellRefs(CellRangeAddress[] cellRefs)
-        {
-            this.cellRefs = cellRefs;
-        }
-
-        public SharedFeature GetSharedFeature()
-        {
-            return sharedFeature;
-        }
-        public void SetSharedFeature(SharedFeature feature)
-        {
-            this.sharedFeature = feature;
-
-            if (feature is FeatProtection)
+            get
             {
-                isf_sharedFeatureType = FeatHdrRecord.SHAREDFEATURES_ISFPROTECTION;
-            }
-            if (feature is FeatFormulaErr2)
-            {
-                isf_sharedFeatureType = FeatHdrRecord.SHAREDFEATURES_ISFFEC2;
-            }
-            if (feature is FeatSmartTag)
-            {
-                isf_sharedFeatureType = FeatHdrRecord.SHAREDFEATURES_ISFFACTOID;
-            }
-
-            if (isf_sharedFeatureType == FeatHdrRecord.SHAREDFEATURES_ISFFEC2)
-            {
-                cbFeatData = sharedFeature.DataSize;
-            }
-            else
-            {
-                cbFeatData = 0;
+                return isf_sharedFeatureType;
             }
         }
 
+        public long CbFeatData
+        {
+            get
+            {
+                return cbFeatData;
+            }
+            set
+            {
+                this.cbFeatData = value;
+            }
+        }
+
+
+        public CellRangeAddress[] CellRefs
+        {
+            get
+            {
+                return cellRefs;
+            }
+            set
+            {
+                this.cellRefs = value;
+            }
+        }
+        
+
+        public SharedFeature SharedFeature
+        {
+            get
+            {
+                return sharedFeature;
+            }
+            set
+            {
+                this.sharedFeature = value;
+
+                if (value is FeatProtection)
+                {
+                    isf_sharedFeatureType = FeatHdrRecord.SHAREDFEATURES_ISFPROTECTION;
+                }
+                if (value is FeatFormulaErr2)
+                {
+                    isf_sharedFeatureType = FeatHdrRecord.SHAREDFEATURES_ISFFEC2;
+                }
+                if (value is FeatSmartTag)
+                {
+                    isf_sharedFeatureType = FeatHdrRecord.SHAREDFEATURES_ISFFACTOID;
+                }
+
+                if (isf_sharedFeatureType == FeatHdrRecord.SHAREDFEATURES_ISFFEC2)
+                {
+                    cbFeatData = sharedFeature.DataSize;
+                }
+                else
+                {
+                    cbFeatData = 0;
+                }
+            }
+        }
+        
 
         //HACK: do a "cheat" Clone, see Record.java for more information
         public override Object Clone()

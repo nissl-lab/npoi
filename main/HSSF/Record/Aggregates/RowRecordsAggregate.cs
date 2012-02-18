@@ -236,6 +236,10 @@ namespace NPOI.HSSF.Record.Aggregates
         }
         public void RemoveCell(CellValueRecordInterface cvRec)
         {
+            if (cvRec is FormulaRecordAggregate)
+            {
+                ((FormulaRecordAggregate)cvRec).NotifyFormulaChanging();
+            }
             _valuesAgg.RemoveCell(cvRec);
         }
         public RowRecord GetRow(int rowIndex)

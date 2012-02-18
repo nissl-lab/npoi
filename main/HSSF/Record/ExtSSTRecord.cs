@@ -131,11 +131,17 @@ namespace NPOI.HSSF.Record
         }
 
         /** Returns the size of this record */
-        protected int DataSize
+        internal int DataSize
         {
             get { return 2 + InfoSubRecord.ENCODED_SIZE * _sstInfos.Length; }
         }
-
+        internal InfoSubRecord[] InfoSubRecords
+        {
+            get
+            {
+                return _sstInfos;
+            }
+        }
         public static int GetNumberOfInfoRecsForStrings(int numStrings)
         {
             int infoRecs = (numStrings / DEFAULT_BUCKET_SIZE);

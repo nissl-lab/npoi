@@ -22,6 +22,8 @@ namespace TestCases.HSSF.Record
     using System;
     using NPOI.HSSF.Record;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using System.Collections.Generic;
+    using NPOI.Util;
 
     /**
      * Tests BoundSheetRecord.
@@ -33,9 +35,7 @@ namespace TestCases.HSSF.Record
     [TestClass]
     public class TestBoundSheetRecord
     {
-        public TestBoundSheetRecord()
-        {
-        }
+
         [TestMethod]
         public void TestRecordLength()
         {
@@ -65,6 +65,85 @@ namespace TestCases.HSSF.Record
 
             }
 
+        }
+        [TestMethod]
+        public void TestDeSerializeUnicode() {
+
+		byte[] data = HexRead.ReadFromString(""
+			+ "85 00 1A 00" // sid, length
+			+ "3C 09 00 00" // bof
+			+ "00 00"// flags
+			+ "09 01" // str-len. unicode flag
+			// string data
+			+ "21 04 42 04 40 04"
+			+ "30 04 3D 04 38 04"
+			+ "47 04 3A 04 30 04"
+		);
+
+		RecordInputStream in1 = TestcaseRecordInputStream.Create(data);
+		BoundSheetRecord bsr = new BoundSheetRecord(in1);
+		// sheet name is unicode Russian for 'minor page'
+		Assert.AreEqual("\u0421\u0442\u0440\u0430\u043D\u0438\u0447\u043A\u0430", bsr.Sheetname);
+
+		byte[] data2 = bsr.Serialize();
+		Assert.IsTrue(Arrays.Equals(data, data2));
+	}
+        [TestMethod]
+        public void TestOrdering()
+        {
+            BoundSheetRecord bs1 = new BoundSheetRecord("SheetB");
+            BoundSheetRecord bs2 = new BoundSheetRecord("SheetC");
+            BoundSheetRecord bs3 = new BoundSheetRecord("SheetA");
+            bs1.PositionOfBof = (/*setter*/11);
+            bs2.PositionOfBof = (/*setter*/33);
+            bs3.PositionOfBof = (/*setter*/22);
+
+            List<BoundSheetRecord> l = new List<BoundSheetRecord>();
+            l.Add(bs1);
+            l.Add(bs2);
+            l.Add(bs3);
+
+            BoundSheetRecord[] r = BoundSheetRecord.OrderByBofPosition(l);
+            Assert.AreEqual(3, r.Length);
+            Assert.AreEqual(bs1, r[0]);
+            Assert.AreEqual(bs3, r[1]);
+            Assert.AreEqual(bs2, r[2]);
+        }
+        [TestMethod]
+        public void TestValidNames()
+        {
+            ConfirmValid("Sheet1", true);
+            ConfirmValid("O'Brien's sales", true);
+            ConfirmValid(" data # ", true);
+            ConfirmValid("data $1.00", true);
+
+            ConfirmValid("data?", false);
+            ConfirmValid("abc/def", false);
+            ConfirmValid("data[0]", false);
+            ConfirmValid("data*", false);
+            ConfirmValid("abc\\def", false);
+            ConfirmValid("'data", false);
+            ConfirmValid("data'", false);
+        }
+
+        private static void ConfirmValid(String sheetName, bool expectedResult)
+        {
+
+            try
+            {
+                new BoundSheetRecord(sheetName);
+                if (!expectedResult)
+                {
+                    throw new AssertFailedException("Expected sheet name '" + sheetName + "' to be invalid");
+                }
+            }
+            catch (ArgumentException)
+            {
+                if (expectedResult)
+                {
+                    throw new AssertFailedException("Expected sheet name '" + sheetName + "' to be valid");
+                }
+            }
         }
 
     }

@@ -25,7 +25,7 @@ namespace NPOI.HSSF.EventUserModel.DummyRecord
      * A dummy record to indicate that we've now had the last
      *  cell record for this row.
      */
-    public class LastCellOfRowDummyRecord : Record
+    public class LastCellOfRowDummyRecord : DummyRecordBase
     {
         private int row;
         private int lastColumnNumber;
@@ -55,15 +55,5 @@ namespace NPOI.HSSF.EventUserModel.DummyRecord
         {
             get { return lastColumnNumber; }
         }
-
-        public override short Sid
-        {
-            get { return -1; }
-        }
-        public override int Serialize(int offset, byte [] data)
-        {
-            return -1;
-        }
-
     }
 }

@@ -15,11 +15,12 @@
    limitations under the License.
 ==================================================================== */
 
-namespace NPOI.Util
+namespace TestCases.Util
 {
     using System;
 
     using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NPOI.Util;
 
     /**
      * Class to Test IntList

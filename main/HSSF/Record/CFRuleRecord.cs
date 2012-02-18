@@ -186,6 +186,7 @@ namespace NPOI.HSSF.Record
         /**
          * Creates a new comparison operation rule
          */
+        [Obsolete]
         public static CFRuleRecord Create(HSSFWorkbook workbook, String formulaText)
         {
             Ptg[] formula1 = ParseFormula(formulaText, workbook);
@@ -195,6 +196,7 @@ namespace NPOI.HSSF.Record
         /**
          * Creates a new comparison operation rule
          */
+        [Obsolete]
         public static CFRuleRecord Create(HSSFWorkbook workbook, ComparisonOperator comparisonOperation,
                 String formulaText1, String formulaText2)
         {

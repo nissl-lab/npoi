@@ -33,11 +33,6 @@ namespace TestCases.HSSF.Record
     [TestClass]
     public class TestPaletteRecord
     {
-        public TestPaletteRecord()
-        {
-
-        }
-
         /**
          * Tests that the default palette matches the constants of HSSFColor
          */

@@ -44,11 +44,7 @@ namespace TestCases.HSSF.Record
         (byte)0x00,(byte)0x00,
     };
 
-        public TestCommonObjectDataSubRecord()
-        {
-
-        }
-        [TestInitialize]
+        [TestMethod]
         public void TestLoad()
         {
             CommonObjectDataSubRecord record = new CommonObjectDataSubRecord(TestcaseRecordInputStream.Create((short)0x15, data),data.Length);

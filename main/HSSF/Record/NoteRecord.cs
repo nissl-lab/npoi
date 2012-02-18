@@ -212,7 +212,11 @@ namespace NPOI.HSSF.Record
         public String Author
         {
             get { return field_6_author; }
-            set { field_6_author = value; }
+            set
+            {
+                field_6_author = value;
+                field_5_hasMultibyte = StringUtil.HasMultibyte(value);
+            }
         }
 
         /**

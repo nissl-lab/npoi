@@ -1830,7 +1830,7 @@ namespace NPOI.HSSF.UserModel
                 {
                     // TODO: More convenient way of determining if there Is stored binary.
                     // TODO: Link to the data stored in the other stream.
-                    IEnumerator subRecordIter = ((ObjRecord)obj).GetSubRecords().GetEnumerator();
+                    IEnumerator subRecordIter = ((ObjRecord)obj).SubRecords.GetEnumerator();
                     while (subRecordIter.MoveNext())
                     {
                         Object sub = subRecordIter.Current;

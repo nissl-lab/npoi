@@ -50,13 +50,22 @@
   <ItemGroup>
     <Compile Include="DDF\AbstractEscherOptRecord.cs" />
     <Compile Include="DDF\EscherTertiaryOptRecord.cs" />
+    <Compile Include="HSSF\EventUserModel\DummyRecord\DummyRecordBase.cs" />
     <Compile Include="HSSF\Record\Aggregates\ChartSubstreamRecordAggregate.cs" />
     <Compile Include="HSSF\Record\Aggregates\WorksheetProtectionBlock.cs" />
+    <Compile Include="HSSF\Record\AutoFilter\AutoFilterRecord.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="HSSF\Record\AutoFilter\FilterModeRecord.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="HSSF\Record\Common\FeatFormulaErr2.cs" />
     <Compile Include="HSSF\Record\Common\FeatProtection.cs" />
     <Compile Include="HSSF\Record\Common\FeatSmartTag.cs" />
     <Compile Include="HSSF\Record\Common\FtrHeader.cs" />
     <Compile Include="HSSF\Record\Common\SharedFeature.cs" />
+    <Compile Include="HSSF\Record\UnicodeString.cs" />
+    <Compile Include="HSSF\Record\Cont\ContinuableRecordInput.cs" />
     <Compile Include="HSSF\Record\FeatHdrRecord.cs" />
     <Compile Include="HSSF\Record\FeatRecord.cs" />
     <Compile Include="HSSF\Record\FtCblsSubRecord.cs" />
@@ -192,9 +201,7 @@
     <Compile Include="HSSF\Record\Aggregates\ValueRecordsAggregate.cs" />
     <Compile Include="HSSF\Record\ArrayRecord.cs" />
     <Compile Include="HSSF\Record\AutoFilter\AutoFilterInfoRecord.cs" />
-    <Compile Include="HSSF\Record\AutoFilter\AutoFilterRecord.cs" />
     <Compile Include="HSSF\Record\AutoFilter\DOPER.cs" />
-    <Compile Include="HSSF\Record\AutoFilter\FilterModeRecord.cs" />
     <Compile Include="HSSF\Record\BackupRecord.cs" />
     <Compile Include="HSSF\Record\BiffHeaderInput.cs" />
     <Compile Include="HSSF\Record\BlankRecord.cs" />
@@ -210,7 +217,6 @@
     <Compile Include="HSSF\Record\CFHeaderRecord.cs" />
     <Compile Include="HSSF\Record\CFRuleRecord.cs" />
     <Compile Include="HSSF\Record\CF\BorderFormatting.cs" />
-    <Compile Include="HSSF\Record\CF\CellRange.cs" />
     <Compile Include="HSSF\Record\CF\CellRangeUtil.cs" />
     <Compile Include="HSSF\Record\CF\FontFormatting.cs" />
     <Compile Include="HSSF\Record\CF\PatternFormatting.cs" />
@@ -400,7 +406,6 @@
     <Compile Include="HSSF\Record\TextObjectRecord.cs" />
     <Compile Include="HSSF\Record\TopMarginRecord.cs" />
     <Compile Include="HSSF\Record\UncalcedRecord.cs" />
-    <Compile Include="HSSF\Record\UnicodeString.cs" />
     <Compile Include="HSSF\Record\UnknownRecord.cs" />
     <Compile Include="HSSF\Record\UserSViewBegin.cs" />
     <Compile Include="HSSF\Record\UserSViewEnd.cs" />

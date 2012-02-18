@@ -23,6 +23,9 @@ namespace TestCases.HSSF.Record
     using NPOI.HSSF.Record;
     using NPOI.SS.Util;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NPOI.HSSF.Record.Aggregates;
+    using System.Collections;
+    using NPOI.HSSF.Model;
 
     /**
      * Make sure the merge cells record behaves
@@ -60,6 +63,34 @@ namespace TestCases.HSSF.Record
                 "New Clone Col To doesnt match");
 
             Assert.IsFalse(merge.GetAreaAt(0) == clone.GetAreaAt(0));
+        }
+        [TestMethod]
+        public void testMCTable_bug46009()
+        {
+            MergedCellsTable mct = new MergedCellsTable();
+            ArrayList recList = new ArrayList();
+            CellRangeAddress[] cras = new CellRangeAddress[] {
+				new CellRangeAddress(0, 0, 0, 3), 
+		};
+            recList.Add(new MergeCellsRecord(cras, 0, 1));
+            RecordStream rs = new RecordStream(recList, 0);
+            mct.Read(rs);
+            try
+            {
+                mct.VisitContainedRecords(dummyRecordVisitor);
+            }
+            catch (Exception)
+            {
+                throw new AssertFailedException("Identified bug 46009");
+            }
+        }
+        DummyRecordVisitor dummyRecordVisitor = new DummyRecordVisitor();
+        private class DummyRecordVisitor : RecordVisitor
+        {
+            public void VisitRecord(Record r)
+            {
+                // do nothing
+            }
         }
     }
 }

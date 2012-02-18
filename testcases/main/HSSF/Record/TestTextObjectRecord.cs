@@ -1,8 +1,7 @@
-
 /* ====================================================================
    Licensed to the Apache Software Foundation (ASF) under one or more
    contributor license agreements.  See the NOTICE file distributed with
-   this work for additional information regarding copyright ownership.
+   this work for Additional information regarding copyright ownership.
    The ASF licenses this file to You under the Apache License, Version 2.0
    (the "License"); you may not use this file except in compliance with
    the License.  You may obtain a copy of the License at
@@ -10,7 +9,7 @@
        http://www.apache.org/licenses/LICENSE-2.0
 
    Unless required by applicable law or agreed to in writing, software
-   distributed under the License is1 distributed on an "AS IS" BASIS,
+   distributed under the License is distributed on an "AS IS" BASIS,
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and
    limitations under the License.
@@ -19,13 +18,16 @@
 namespace TestCases.HSSF.Record
 {
     using System;
-    using System.Collections;
     using System.IO;
     using System.Text;
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
     using NPOI.HSSF.UserModel;
+    using NPOI.SS.Formula.PTG;
+    using NPOI.SS.UserModel;
+    using NPOI.Util;
+    using TestCases.HSSF.Record;
     using NPOI.HSSF.Record;
 
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
     /**
      * Tests that serialization and deserialization of the TextObjectRecord .
      * Test data taken directly from a real Excel file.
@@ -36,20 +38,22 @@ namespace TestCases.HSSF.Record
     public class TestTextObjectRecord
     {
 
-        byte[] data = {(byte)0xB6, 0x01, 0x12, 0x00, 0x12, 0x02, 0x00, 0x00, 0x00, 0x00,
-                   0x00, 0x00, 0x00, 0x00, 0x0D, 0x00, 0x08, 0x00, 0x00, 0x00, 0x00,
-                   0x00, 0x3C, 0x00, 0x1B, 0x00, 0x01, 0x48, 0x00, 0x65, 0x00, 0x6C,
-                   0x00, 0x6C, 0x00, 0x6F, 0x00, 0x2C, 0x00, 0x20, 0x00, 0x57, 0x00,
-                   0x6F, 0x00, 0x72, 0x00, 0x6C, 0x00, 0x64, 0x00, 0x21, 0x00, 0x3C,
-                   0x00, 0x08, 0x00, 0x0D, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+        private static byte[] simpleData = HexRead.ReadFromString(
+            "B6 01 12 00 " +
+            "12 02 00 00 00 00 00 00" +
+            "00 00 0D 00 08 00    00 00" +
+            "00 00 " +
+            "3C 00 0E 00 " +
+            "00 48 65 6C 6C 6F 2C 20 57 6F 72 6C 64 21 " +
+            "3C 00 08 " +
+            "00 0D 00 00 00 00 00 00 00"
+        );
 
         [TestMethod]
         public void TestRead()
         {
 
-
-            RecordInputStream is1 = new RecordInputStream(new MemoryStream(data));
-            is1.NextRecord();
+            RecordInputStream is1 = TestcaseRecordInputStream.Create(simpleData);
             TextObjectRecord record = new TextObjectRecord(is1);
 
             Assert.AreEqual(TextObjectRecord.sid, record.Sid);
@@ -57,7 +61,6 @@ namespace TestCases.HSSF.Record
             Assert.AreEqual(TextObjectRecord.VERTICAL_TEXT_ALIGNMENT_TOP, record.VerticalTextAlignment);
             Assert.AreEqual(TextObjectRecord.TEXT_ORIENTATION_NONE, record.TextOrientation);
             Assert.AreEqual("Hello, World!", record.Str.String);
-
         }
         [TestMethod]
         public void TestWrite()
@@ -65,23 +68,22 @@ namespace TestCases.HSSF.Record
             HSSFRichTextString str = new HSSFRichTextString("Hello, World!");
 
             TextObjectRecord record = new TextObjectRecord();
-            record.Str = (str);
-            record.HorizontalTextAlignment = (TextObjectRecord.HORIZONTAL_TEXT_ALIGNMENT_LEFT_ALIGNED);
-            record.VerticalTextAlignment = (TextObjectRecord.VERTICAL_TEXT_ALIGNMENT_TOP);
-            record.IsTextLocked = (true);
-            record.TextOrientation = (TextObjectRecord.TEXT_ORIENTATION_NONE);
+            record.Str = (/*setter*/str);
+            record.HorizontalTextAlignment = (/*setter*/ TextObjectRecord.HORIZONTAL_TEXT_ALIGNMENT_LEFT_ALIGNED);
+            record.VerticalTextAlignment = (/*setter*/ TextObjectRecord.VERTICAL_TEXT_ALIGNMENT_TOP);
+            record.IsTextLocked = (/*setter*/ true);
+            record.TextOrientation = (/*setter*/ TextObjectRecord.TEXT_ORIENTATION_NONE);
 
             byte[] ser = record.Serialize();
-            //Assert.AreEqual(ser.Length , data.Length);
+            Assert.AreEqual(ser.Length, simpleData.Length);
 
-            //Assert.IsTrue(Arrays.Equals(data, ser));
+            Assert.IsTrue(Arrays.Equals(simpleData, ser));
 
-            //Read again
-            RecordInputStream is1 = new RecordInputStream(new MemoryStream(data));
-            is1.NextRecord();
+            //read again
+            RecordInputStream is1 = TestcaseRecordInputStream.Create(simpleData);
             record = new TextObjectRecord(is1);
-
         }
+
         /**
          * Zero {@link ContinueRecord}s follow a {@link TextObjectRecord} if the text is empty
          */
@@ -91,21 +93,21 @@ namespace TestCases.HSSF.Record
             HSSFRichTextString str = new HSSFRichTextString("");
 
             TextObjectRecord record = new TextObjectRecord();
-            record.Str = (str);
+            record.Str = (/*setter*/str);
 
             byte[] ser = record.Serialize();
 
-            int formatDataLen = NPOI.Util.LittleEndian.GetUShort(ser, 16);
+            int formatDataLen = LittleEndian.GetUShort(ser, 16);
             Assert.AreEqual(0, formatDataLen, "formatDataLength");
 
             Assert.AreEqual(22, ser.Length); // just the TXO record
 
             //read again
-            RecordInputStream is1 = new RecordInputStream(new MemoryStream(ser));
-            is1.NextRecord();
+            RecordInputStream is1 = TestcaseRecordInputStream.Create(ser);
             record = new TextObjectRecord(is1);
             Assert.AreEqual(0, record.Str.Length);
         }
+
         /**
          * Test that TextObjectRecord Serializes logs records properly.
          */
@@ -120,10 +122,10 @@ namespace TestCases.HSSF.Record
                 {
                     buff.Append("x");
                 }
-                NPOI.SS.UserModel.IRichTextString str = new HSSFRichTextString(buff.ToString());
+                IRichTextString str = new HSSFRichTextString(buff.ToString());
 
                 TextObjectRecord obj = new TextObjectRecord();
-                obj.Str = (str);
+                obj.Str = (/*setter*/str);
 
                 byte[] data = obj.Serialize();
                 RecordInputStream is1 = new RecordInputStream(new MemoryStream(data));
@@ -134,7 +136,6 @@ namespace TestCases.HSSF.Record
                 Assert.AreEqual(buff.Length, str.Length);
                 Assert.AreEqual(buff.ToString(), str.String);
             }
-
         }
 
         /**
@@ -147,18 +148,61 @@ namespace TestCases.HSSF.Record
             HSSFRichTextString str = new HSSFRichTextString(text);
 
             TextObjectRecord obj = new TextObjectRecord();
-            obj.Str = (str);
+            obj.Str = (/*setter*/ str);
 
 
-            TextObjectRecord cloned = (TextObjectRecord)obj.Clone();
-            Assert.AreEqual(obj.RecordSize, cloned.RecordSize);
-            Assert.AreEqual(obj.HorizontalTextAlignment, cloned.HorizontalTextAlignment);
-            Assert.AreEqual(obj.Str.String, cloned.Str.String);
+            TextObjectRecord Cloned = (TextObjectRecord)obj.Clone();
+            Assert.AreEqual(obj.RecordSize, Cloned.RecordSize);
+            Assert.AreEqual(obj.HorizontalTextAlignment, Cloned.HorizontalTextAlignment);
+            Assert.AreEqual(obj.Str.String, Cloned.Str.String);
 
-            //finally check that the serialized data is the same
+            //finally check that the Serialized data is the same
             byte[] src = obj.Serialize();
-            byte[] cln = cloned.Serialize();
-            Assert.IsTrue(NPOI.Util.Arrays.Equals(src, cln));
+            byte[] cln = Cloned.Serialize();
+            Assert.IsTrue(Arrays.Equals(src, cln));
+        }
+
+        /** similar to {@link #simpleData} but with link formula at end of TXO rec*/
+        private static byte[] linkData = HexRead.ReadFromString(
+                "B6 01 " + // TextObjectRecord.sid
+                "1E 00 " + // size 18
+                "44 02 02 00 00 00 00 00" +
+                "00 00 " +
+                "02 00 " + // strLen 2
+                "10 00 " + // 16 bytes for 2 format Runs
+                "00 00 00 00 " +
+
+                "05 00 " +          // formula size
+                "D4 F0 8A 03 " +    // unknownInt
+                "24 01 00 13 C0 " + //tRef(T2)
+                "13 " +             // ??
+
+                "3C 00 " + // ContinueRecord.sid
+                "03 00 " + // size 3
+                "00 " + // unicode compressed
+                "41 42 " + // 'AB'
+                "3C 00 " + // ContinueRecord.sid
+                "10 00 " + // size 16
+                "00 00 18 00 00 00 00 00 " +
+                "02 00 00 00 00 00 00 00 "
+            );
+
+        [TestMethod]
+        public void TestLinkFormula()
+        {
+            RecordInputStream is1 = new RecordInputStream(new MemoryStream(linkData));
+            is1.NextRecord();
+            TextObjectRecord rec = new TextObjectRecord(is1);
+
+            Ptg ptg = rec.LinkRefPtg;
+            Assert.IsNotNull(ptg);
+            Assert.AreEqual(typeof(RefPtg), ptg.GetType());
+            RefPtg rptg = (RefPtg)ptg;
+            Assert.AreEqual("T2", rptg.ToFormulaString());
+
+            byte[] data2 = rec.Serialize();
+            Assert.AreEqual(linkData.Length, data2.Length);
+            Assert.IsTrue(Arrays.Equals(linkData, data2));
         }
     }
 }

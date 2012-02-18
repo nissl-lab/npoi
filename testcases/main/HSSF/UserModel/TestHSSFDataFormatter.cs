@@ -15,7 +15,7 @@
    limitations under the License.
 ==================================================================== */
 
-namespace NPOI.HSSF.UserModel
+namespace TestCases.HSSF.UserModel
 {
     using System;
 
@@ -26,6 +26,7 @@ namespace NPOI.HSSF.UserModel
     using System.Collections;
     using TestCases.HSSF;
     using NPOI.SS.Util;
+    using NPOI.HSSF.UserModel;
 
     /**
      * Unit Tests for HSSFDataFormatter.java

@@ -40,10 +40,6 @@ namespace TestCases.HSSF.Record
       (byte)0x3,(byte)0x0,(byte)0x4,(byte)0x0
     };
 
-        public TestSCLRecord()
-        {
-
-        }
         [TestMethod]
         public void TestLoad()
         {

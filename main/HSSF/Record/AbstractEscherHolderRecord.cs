@@ -204,24 +204,24 @@ namespace NPOI.HSSF.Record
  *  do, a full record-aware serialise is needed, which
  *  allocates new ids / counts as needed.
  */
-        public override Record CloneViaReserialise()
-        {
-            // Do it via a re-serialise
-            // It's a cheat, but it works...
-            byte[] b = this.Serialize();
-            using (var ms = new System.IO.MemoryStream(b))
-            {
-                RecordInputStream rinp = new RecordInputStream(ms);
-                rinp.NextRecord();
+        //public override Record CloneViaReserialise()
+        //{
+        //    // Do it via a re-serialise
+        //    // It's a cheat, but it works...
+        //    byte[] b = this.Serialize();
+        //    using (var ms = new System.IO.MemoryStream(b))
+        //    {
+        //        RecordInputStream rinp = new RecordInputStream(ms);
+        //        rinp.NextRecord();
 
-                Record[] r = RecordFactory.CreateRecord(rinp);
-                if (r.Length != 1)
-                {
-                    throw new InvalidOperationException("Re-serialised a record to Clone it, but got " + r.Length + " records back!");
-                }
-                return r[0];
-            }
-        }
+        //        Record[] r = RecordFactory.CreateRecord(rinp);
+        //        if (r.Length != 1)
+        //        {
+        //            throw new InvalidOperationException("Re-serialised a record to Clone it, but got " + r.Length + " records back!");
+        //        }
+        //        return r[0];
+        //    }
+        //}
 
         public void AddEscherRecord(int index, EscherRecord element)
         {

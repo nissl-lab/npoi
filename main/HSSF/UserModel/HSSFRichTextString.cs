@@ -32,15 +32,15 @@ namespace NPOI.HSSF.UserModel
     /// @author Jason Height (jheight at apache.org)
     /// </summary> 
     [Serializable]
-    public class HSSFRichTextString : IComparable,NPOI.SS.UserModel.IRichTextString
+    public class HSSFRichTextString : IComparable<HSSFRichTextString>,NPOI.SS.UserModel.IRichTextString
     {
         /** Place holder for indicating that NO_FONT has been applied here */
         public const short NO_FONT = 0;
 
         [NonSerialized]
-        private UnicodeString str;
-        private InternalWorkbook book;
-        private LabelSSTRecord record;
+        private UnicodeString _string;
+        private InternalWorkbook _book;
+        private LabelSSTRecord _record;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="HSSFRichTextString"/> class.
@@ -58,8 +58,13 @@ namespace NPOI.HSSF.UserModel
         public HSSFRichTextString(String str)
         {
             if (str == null)
-                str = "";
-            this.str = new UnicodeString(str);
+            {
+                _string = new UnicodeString("");
+            }
+            else
+            {
+                this._string = new UnicodeString(str);
+            }
         }
 
         /// <summary>
@@ -71,7 +76,7 @@ namespace NPOI.HSSF.UserModel
         {
             SetWorkbookReferences(book, record);
 
-            this.str = book.GetSSTString(record.SSTIndex);
+            this._string = book.GetSSTString(record.SSTIndex);
         }
 
         /// <summary>
@@ -82,8 +87,8 @@ namespace NPOI.HSSF.UserModel
         /// <param name="record">The record.</param>
         public void SetWorkbookReferences(InternalWorkbook book, LabelSSTRecord record)
         {
-            this.book = book;
-            this.record = record;
+            this._book = book;
+            this._record = record;
         }
 
         /// <summary>
@@ -94,9 +99,9 @@ namespace NPOI.HSSF.UserModel
         /// <returns></returns>
         private UnicodeString CloneStringIfRequired()
         {
-            if (book == null)
-                return str;
-            UnicodeString s = (UnicodeString)str.Clone();
+            if (_book == null)
+                return _string;
+            UnicodeString s = (UnicodeString)_string.Clone();
             return s;
         }
 
@@ -105,13 +110,13 @@ namespace NPOI.HSSF.UserModel
         /// </summary>
         private void AddToSSTIfRequired()
         {
-            if (book != null)
+            if (_book != null)
             {
-                int index = book.AddSSTString(str);
-                record.SSTIndex = (index);
+                int index = _book.AddSSTString(_string);
+                _record.SSTIndex = (index);
                 //The act of Adding the string to the SST record may have meant that
                 //a extsing string was returned for the index, so update our local version
-                str = book.GetSSTString(index);
+                _string = _book.GetSSTString(index);
             }
         }
 
@@ -140,8 +145,8 @@ namespace NPOI.HSSF.UserModel
             }
 
             //Need to clear the current formatting between the startIndex and endIndex
-            str = CloneStringIfRequired();
-            System.Collections.Generic.List<FormatRun> formatting = str.FormatIterator();
+            _string = CloneStringIfRequired();
+            System.Collections.Generic.List<UnicodeString.FormatRun> formatting = _string.FormatIterator();
 
             ArrayList deletedFR = new ArrayList();
             if (formatting != null)
@@ -149,21 +154,21 @@ namespace NPOI.HSSF.UserModel
                 IEnumerator formats = formatting.GetEnumerator();
                 while (formats.MoveNext())
                 {
-                    FormatRun r = (FormatRun)formats.Current;
+                    UnicodeString.FormatRun r = (UnicodeString.FormatRun)formats.Current;
                     if ((r.CharacterPos >= startIndex) && (r.CharacterPos < endIndex))
                     {
                         deletedFR.Add(r);
                     }
                 }
             }
-            foreach(FormatRun fr in deletedFR)
+            foreach (UnicodeString.FormatRun fr in deletedFR)
             {
-                str.RemoveFormatRun(fr);
+                _string.RemoveFormatRun(fr);
             }
 
-            str.AddFormatRun(new FormatRun((short)startIndex, fontIndex));
+            _string.AddFormatRun(new UnicodeString.FormatRun((short)startIndex, fontIndex));
             if (endIndex != Length)
-                str.AddFormatRun(new FormatRun((short)endIndex, currentFont));
+                _string.AddFormatRun(new UnicodeString.FormatRun((short)endIndex, currentFont));
 
             AddToSSTIfRequired();
         }
@@ -185,7 +190,7 @@ namespace NPOI.HSSF.UserModel
         /// <param name="font">The font to use.</param>
         public void ApplyFont(NPOI.SS.UserModel.IFont font)
         {
-            ApplyFont(0, str.CharCount, font);
+            ApplyFont(0, _string.CharCount, font);
         }
 
         /// <summary>
@@ -193,8 +198,8 @@ namespace NPOI.HSSF.UserModel
         /// </summary>
         public void ClearFormatting()
         {
-            str = CloneStringIfRequired();
-            str.ClearFormatting();
+            _string = CloneStringIfRequired();
+            _string.ClearFormatting();
             AddToSSTIfRequired();
         }
 
@@ -204,7 +209,7 @@ namespace NPOI.HSSF.UserModel
         /// <value>The string.</value>
         public String String
         {
-            get { return str.String; }
+            get { return _string.String; }
         }
         /// <summary>
         /// Returns the raw, probably shared Unicode String.
@@ -218,7 +223,7 @@ namespace NPOI.HSSF.UserModel
         {
             get
             {
-                return str;
+                return _string;
             }
         }
 
@@ -229,7 +234,7 @@ namespace NPOI.HSSF.UserModel
         public UnicodeString UnicodeString
         {
             get { return CloneStringIfRequired(); }
-            set { this.str = value; }
+            set { this._string = value; }
         }
 
 
@@ -239,7 +244,7 @@ namespace NPOI.HSSF.UserModel
         /// <value>The length.</value>
         public int Length
         {
-            get { return str.CharCount; }
+            get { return _string.CharCount; }
         }
 
         /// <summary>
@@ -251,11 +256,11 @@ namespace NPOI.HSSF.UserModel
         /// index Is out of range.</returns>
         public short GetFontAtIndex(int index)
         {
-            int size = str.FormatRunCount;
-            FormatRun currentRun = null;
+            int size = _string.FormatRunCount;
+            UnicodeString.FormatRun currentRun = null;
             for (int i = 0; i < size; i++)
             {
-                FormatRun r = str.GetFormatRun(i);
+                UnicodeString.FormatRun r = _string.GetFormatRun(i);
                 if (r.CharacterPos > index)
                     break;
                 else currentRun = r;
@@ -272,7 +277,7 @@ namespace NPOI.HSSF.UserModel
         /// <value>The num formatting runs.</value>
         public int NumFormattingRuns
         {
-            get { return str.FormatRunCount; }
+            get { return _string.FormatRunCount; }
         }
 
         /// <summary>
@@ -282,7 +287,7 @@ namespace NPOI.HSSF.UserModel
         /// <returns>the index within the string.</returns>
         public int GetIndexOfFormattingRun(int index)
         {
-            FormatRun r = str.GetFormatRun(index);
+            UnicodeString.FormatRun r = _string.GetFormatRun(index);
             return r.CharacterPos;
         }
 
@@ -293,7 +298,7 @@ namespace NPOI.HSSF.UserModel
         /// <returns>the font number used.</returns>
         public short GetFontOfFormattingRun(int index)
         {
-            FormatRun r = str.GetFormatRun(index);
+            UnicodeString.FormatRun r = _string.GetFormatRun(index);
             return r.FontIndex;
         }
 
@@ -302,10 +307,9 @@ namespace NPOI.HSSF.UserModel
         /// </summary>
         /// <param name="o">The o.</param>
         /// <returns></returns>
-        public int CompareTo(Object o)
+        public int CompareTo(HSSFRichTextString r)
         {
-            HSSFRichTextString r = (HSSFRichTextString)o;
-            return str.CompareTo(r.String);
+            return _string.CompareTo(r._string);
         }
 
         /// <summary>
@@ -317,14 +321,14 @@ namespace NPOI.HSSF.UserModel
         {
             if (o is HSSFRichTextString)
             {
-                return str.Equals(((HSSFRichTextString)o).String);
+                return _string.Equals(((HSSFRichTextString)o).String);
             }
             return false;
         }
 
         public override int GetHashCode ()
         {
-            return str.GetHashCode ();
+            return _string.GetHashCode ();
         }
 
         /// <summary>
@@ -335,7 +339,7 @@ namespace NPOI.HSSF.UserModel
         /// </returns>
         public override String ToString()
         {
-            return str.ToString();
+            return _string.ToString();
         }
 
         /// <summary>
@@ -344,7 +348,7 @@ namespace NPOI.HSSF.UserModel
         /// <param name="fontIndex">Index of the font to apply.</param>
         public void ApplyFont(short fontIndex)
         {
-            ApplyFont(0, str.CharCount, fontIndex);
+            ApplyFont(0, _string.CharCount, fontIndex);
         }
     }
 }

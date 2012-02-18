@@ -57,9 +57,9 @@ namespace TestCases.HSSF.Record
             //Test a compressed small string that has rich text formatting
             s.String = "Test";
             s.OptionFlags = ((byte)0x8);
-            FormatRun r = new FormatRun((short)0, (short)1);
+            UnicodeString.FormatRun r = new UnicodeString.FormatRun((short)0, (short)1);
             s.AddFormatRun(r);
-            FormatRun r2 = new FormatRun((short)2, (short)2);
+            UnicodeString.FormatRun r2 = new UnicodeString.FormatRun((short)2, (short)2);
             s.AddFormatRun(r2);
             ConfirmSize(17, s);
 
@@ -71,13 +71,19 @@ namespace TestCases.HSSF.Record
             //Test a compressed small string that has rich text and extended text
             s.String = "Test";
             s.OptionFlags = ((byte)0xC);
-            s.SetExtendedRst(new byte[] { (byte)0x1, (byte)0x2, (byte)0x3, (byte)0x4, (byte)0x5 });
-            ConfirmSize(26, s);
+            ConfirmSize(17, s);
+            // Extended phonetics data
+            // Minimum size is 14
+            // Also adds 4 bytes to hold the length
+            s.ExtendedRst=(
+                  new UnicodeString.ExtRst()
+            );
+            ConfirmSize(35, s);
 
             //Test a uncompressed small string that has rich text and extended text
             s.String = STR_16_BIT;
             s.OptionFlags = ((byte)0xD);
-            ConfirmSize(30, s);
+            ConfirmSize(39, s);
         }
         [TestMethod]
         public void TestPerfectStringSize()
@@ -98,8 +104,8 @@ namespace TestCases.HSSF.Record
         {
             //Test a rich text string
             UnicodeString s = MakeUnicodeString(MAX_DATA_SIZE - 2 - 1 - 8 - 2);
-            s.AddFormatRun(new FormatRun((short)1, (short)0));
-            s.AddFormatRun(new FormatRun((short)2, (short)1));
+            s.AddFormatRun(new UnicodeString.FormatRun((short)1, (short)0));
+            s.AddFormatRun(new UnicodeString.FormatRun((short)2, (short)1));
             s.OptionFlags=((byte)0x8);
             ConfirmSize(MAX_DATA_SIZE, s);
 
@@ -107,8 +113,8 @@ namespace TestCases.HSSF.Record
             //Note that we can only ever Get to a maximim size of 8227 since an uncompressed
             //string is1 writing double bytes.
             s = MakeUnicodeString((MAX_DATA_SIZE - 2 - 1 - 8 - 2) / 2,true);
-            s.AddFormatRun(new FormatRun((short)1, (short)0));
-            s.AddFormatRun(new FormatRun((short)2, (short)1));
+            s.AddFormatRun(new UnicodeString.FormatRun((short)1, (short)0));
+            s.AddFormatRun(new UnicodeString.FormatRun((short)2, (short)1));
             s.OptionFlags = ((byte)0x9);
             ConfirmSize(MAX_DATA_SIZE - 1, s);
         }

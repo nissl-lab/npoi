@@ -38,13 +38,9 @@ namespace TestCases.HSSF.Record
         private static String SMALL_STRING = "Small string";
         private static int COMPRESSED_PLAIN_STRING_OVERHEAD = 3;
         //    private List recordLengths;
-        private IntMapper<UnicodeString> strings;
+        private IntMapper<UnicodeString> strings = new IntMapper<UnicodeString>();
         private static int OPTION_FIELD_SIZE = 1;
 
-        public TestSSTRecordSizeCalculator()
-        {
-
-        }
         [TestMethod]
         public void TestBasic()
         {
@@ -114,12 +110,6 @@ namespace TestCases.HSSF.Record
                     + COMPRESSED_PLAIN_STRING_OVERHEAD
                     + oneCharString.Length);
 
-        }
-
-        [TestInitialize]
-        public void SetUp()
-        {
-            strings = new IntMapper<UnicodeString>();
         }
 
         private static UnicodeString MakeUnicodeString(int size)

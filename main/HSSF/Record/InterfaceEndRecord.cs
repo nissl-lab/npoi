@@ -85,7 +85,14 @@ namespace NPOI.HSSF.Record
             //if(_unknownData != null) out1.Write(_unknownData);
             // no instance data
         }
-
+        /// <summary>
+        /// for test TestInterfaceEndRecord.TestCreate()
+        /// </summary>
+        /// <returns></returns>
+        public int GetDataSize()
+        {
+            return DataSize;
+        }
         protected override int DataSize
         {
             get 

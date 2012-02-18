@@ -195,11 +195,10 @@ namespace NPOI.HSSF.Record
 	     * Converts a List of {@link BoundSheetRecord}s to an array and sorts by the position of their
 	     * BOFs.
 	     */
-	    public static BoundSheetRecord[] OrderByBofPosition(ArrayList boundSheetRecords) 
+	    public static BoundSheetRecord[] OrderByBofPosition(List<BoundSheetRecord> boundSheetRecords) 
         {
 		    
-		    BoundSheetRecord[] bsrs = 
-                (BoundSheetRecord[])boundSheetRecords.ToArray(typeof(BoundSheetRecord));
+		    BoundSheetRecord[] bsrs = boundSheetRecords.ToArray();
 		    Array.Sort(bsrs, new BOFComparator());
 	 	    return bsrs;
 	    }

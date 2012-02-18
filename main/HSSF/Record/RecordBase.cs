@@ -9,7 +9,7 @@ namespace NPOI.HSSF.Record
      * 
      * @author Josh Micich
      */
-    public interface RecordBase
+    public abstract class RecordBase
     {
         /**
          * called by the class that is responsible for writing this sucker.
@@ -20,14 +20,14 @@ namespace NPOI.HSSF.Record
          * @param data byte array containing instance data
          * @return number of bytes written
          */
-        int Serialize(int offset, byte[] data);
+        public abstract int Serialize(int offset, byte[] data);
 
         /**
          * gives the current serialized size of the record. Should include the sid
          * and reclength (4 bytes).
          */
-        int RecordSize{get;}
+        public abstract int RecordSize { get; }
 
-        Record CloneViaReserialise();
+        //Record CloneViaReserialise();
     }
 }

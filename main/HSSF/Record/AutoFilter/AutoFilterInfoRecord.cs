@@ -35,7 +35,15 @@ namespace NPOI.HSSF.Record.AutoFilter
             get { return field_1_cEntries; }
             set { field_1_cEntries = value; }
         }
-
+        public override String ToString()
+        {
+            StringBuilder buffer = new StringBuilder();
+            buffer.Append("[AUTOFILTERINFO]\n");
+            buffer.Append("    .numEntries          = ")
+                .Append(field_1_cEntries).Append("\n");
+            buffer.Append("[/AUTOFILTERINFO]\n");
+            return buffer.ToString();
+        }
         public override void Serialize(NPOI.Util.ILittleEndianOutput out1)
         {
             out1.WriteShort(field_1_cEntries);

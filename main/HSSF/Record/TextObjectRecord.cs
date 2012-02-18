@@ -370,7 +370,13 @@ namespace NPOI.HSSF.Record
             get { return textLocked.IsSet(field_1_options); }
             set { field_1_options = textLocked.SetBoolean(field_1_options, value); }
         }
-
+        public Ptg LinkRefPtg
+        {
+            get
+            {
+                return _linkRefPtg;
+            }
+        }
         public override String ToString()
         {
             StringBuilder sb = new StringBuilder();

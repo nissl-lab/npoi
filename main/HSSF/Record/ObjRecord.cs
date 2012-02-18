@@ -237,9 +237,12 @@ namespace NPOI.HSSF.Record
             get { return sid; }
         }
 
-        public IList GetSubRecords()
+        public List<SubRecord> SubRecords
         {
-            return subrecords;
+            get
+            {
+                return subrecords;
+            }
         }
 
         public void ClearSubRecords()

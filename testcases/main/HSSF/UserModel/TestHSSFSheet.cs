@@ -844,7 +844,7 @@ namespace TestCases.HSSF.UserModel
             sh = (HSSFSheet)wb.GetSheetAt(0);
             ish = sh.Sheet;
             ObjRecord objRecord = (ObjRecord)ish.FindFirstRecordBySid(ObjRecord.sid);
-            IList subRecords = objRecord.GetSubRecords();
+            IList subRecords = objRecord.SubRecords;
             Assert.AreEqual(3, subRecords.Count);
             Assert.IsTrue(subRecords[0] is CommonObjectDataSubRecord);
             Assert.IsTrue(subRecords[1] is FtCblsSubRecord); // must be present, see Bug 51481

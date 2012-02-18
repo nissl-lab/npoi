@@ -46,7 +46,7 @@ namespace NPOI.HSSF.Record
         {
         }
 
-        public abstract int Serialize(int offset, byte[] data);
+        //public abstract int Serialize(int offset, byte[] data);
         /**
          * called by the class that is responsible for writing this sucker.
          * Subclasses should implement this so that their data is passed back in a
@@ -55,7 +55,7 @@ namespace NPOI.HSSF.Record
          * @return byte array containing instance data
          */
 
-        public virtual byte[] Serialize()
+        public byte[] Serialize()
         {
             byte[] retval = new byte[RecordSize];
 
@@ -67,13 +67,13 @@ namespace NPOI.HSSF.Record
          * gives the current Serialized size of the record. Should include the sid and recLength (4 bytes).
          */
 
-        public virtual int RecordSize
-        {
+        //public abstract int RecordSize { get; }
+        //{
 
             // this is kind od a stupid way to do it but for now we just Serialize
             // the record and return the size of the byte array
-            get { return Serialize().Length; }
-        }
+            //get { return Serialize().Length; }
+        //}
 
         // /**
         // * tells whether this type of record Contains a value
@@ -105,7 +105,7 @@ namespace NPOI.HSSF.Record
             throw new Exception("The class " + this.GetType().Name + " needs to define a Clone method");
         }
 
-        public virtual Record CloneViaReserialise() 
+        public Record CloneViaReserialise() 
         {
             // Do it via a re-serialization
             // It's a cheat, but it works...

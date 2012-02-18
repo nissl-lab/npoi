@@ -58,13 +58,13 @@ namespace NPOI.HSSF.Record.Aggregates
          */
         public abstract void VisitContainedRecords(RecordVisitor rv);
 
-        public virtual int Serialize(int offset, byte[] data)
+        public override int Serialize(int offset, byte[] data)
         {
             SerializingRecordVisitor srv = new SerializingRecordVisitor(data, offset);
             VisitContainedRecords(srv);
             return srv.CountBytesWritten();
         }
-        public virtual int RecordSize
+        public override int RecordSize
         {
             get
             {

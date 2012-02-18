@@ -25,7 +25,7 @@ namespace NPOI.HSSF.EventUserModel.DummyRecord
      * A dummy record for when we're missing a row, but still
      *  want to trigger something
      */
-    public class MissingRowDummyRecord : Record
+    public class MissingRowDummyRecord : DummyRecordBase
     {
         private int rowNumber;
 
@@ -34,14 +34,6 @@ namespace NPOI.HSSF.EventUserModel.DummyRecord
             this.rowNumber = rowNumber;
         }
 
-        public override short Sid
-        {
-            get { return -1; }
-        }
-        public override int Serialize(int offset, byte [] data)
-        {
-            return -1;
-        }
 
 
         public int RowNumber
