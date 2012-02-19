@@ -28,10 +28,12 @@ namespace NPOI.XSSF.UserModel.Helpers
     {
         XSSFEvaluationWorkbook _fpwb;
         int _sheetIndex = 0;
-        public XSSFFormulaRenderingWorkbook(XSSFEvaluationWorkbook fpwb, int sheetIndex)
+        string _name;
+        public XSSFFormulaRenderingWorkbook(XSSFEvaluationWorkbook fpwb, int sheetIndex,string name)
         {
             _fpwb = fpwb;
             _sheetIndex = sheetIndex;
+            string _name = name;
         }
         #region IFormulaRenderingWorkbook Members
 
@@ -42,7 +44,8 @@ namespace NPOI.XSSF.UserModel.Helpers
 
         public String GetSheetNameByExternSheet(int externSheetIndex)
         {
-            if (externSheetIndex == _sheetIndex) return name;
+            if (externSheetIndex == _sheetIndex) 
+                return _name;
             else return _fpwb.GetSheetNameByExternSheet(externSheetIndex);
         }
 
@@ -80,7 +83,7 @@ namespace NPOI.XSSF.UserModel.Helpers
          * <p/>
          * <p>
          * The idea is to parse every formula and render it back to string
-         * with the updated sheet name. The FormulaParsingWorkbook passed to the formula Parser
+         * with the updated sheet name. The IFormulaParsingWorkbook passed to the formula Parser
          * is constructed from the old workbook (sheet name is not yet updated) and
          * the FormulaRenderingWorkbook passed to FormulaRenderer#toFormulaString is a custom implementation that
          * returns the new sheet name.
@@ -95,12 +98,12 @@ namespace NPOI.XSSF.UserModel.Helpers
             /**
              * An instance of FormulaRenderingWorkbook that returns
              */
-            IFormulaRenderingWorkbook frwb = new XSSFFormulaRenderingWorkbook(_fpwb, sheetIndex);
+            IFormulaRenderingWorkbook frwb = new XSSFFormulaRenderingWorkbook(_fpwb, sheetIndex, name);
             // update named ranges
-            for (int i = 0; i < _wb.GetNumberOfNames(); i++)
+            for (int i = 0; i < _wb.NumberOfNames; i++)
             {
-                XSSFName nm = _wb.GetNameAt(i);
-                if (nm.GetSheetIndex() == -1 || nm.GetSheetIndex() == sheetIndex)
+                IName nm = _wb.GetNameAt(i);
+                if (nm.SheetIndex == -1 || nm.SheetIndex == sheetIndex)
                 {
                     UpdateName(nm, frwb);
                 }
@@ -150,15 +153,15 @@ namespace NPOI.XSSF.UserModel.Helpers
          * @param name the name to update
          * @param frwb the formula rendering workbbok that returns new sheet name
          */
-        private void UpdateName(XSSFName name, IFormulaRenderingWorkbook frwb)
+        private void UpdateName(IName name, IFormulaRenderingWorkbook frwb)
         {
-            String formula = name.GetRefersToFormula();
+            String formula = name.RefersToFormula;
             if (formula != null)
             {
-                int sheetIndex = name.GetSheetIndex();
+                int sheetIndex = name.SheetIndex;
                 Ptg[] ptgs = FormulaParser.Parse(formula, _fpwb, FormulaType.NAMEDRANGE, sheetIndex);
                 String updatedFormula = FormulaRenderer.ToFormulaString(frwb, ptgs);
-                if (!formula.Equals(updatedFormula)) name.SetRefersToFormula(updatedFormula);
+                if (!formula.Equals(updatedFormula)) name.RefersToFormula = (updatedFormula);
             }
         }
     }

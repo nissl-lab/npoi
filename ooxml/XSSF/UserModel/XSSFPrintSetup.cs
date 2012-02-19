@@ -80,7 +80,7 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
-                ST_Orientation val = pageSetup.orientation;
+                ST_Orientation? val = pageSetup.orientation;
                 return val == null ? PrintOrientation.DEFAULT : PrintOrientation.ValueOf((int)val);
             }
             set 
@@ -93,7 +93,7 @@ namespace NPOI.XSSF.UserModel
 
         public PrintCellComments GetCellComment()
         {
-            ST_CellComments val = pageSetup.cellComments;
+            ST_CellComments? val = pageSetup.cellComments;
             return val == null ? PrintCellComments.NONE : PrintCellComments.ValueOf((int)val);
         }
 

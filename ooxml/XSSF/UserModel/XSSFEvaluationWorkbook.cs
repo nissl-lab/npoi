@@ -24,6 +24,7 @@ namespace NPOI.XSSF.UserModel
     using NPOI.OpenXmlFormats.Spreadsheet;
     using NPOI.SS;
     using NPOI.SS.Formula.Udf;
+    using NPOI.SS.UserModel;
 
 
     /**
@@ -31,12 +32,13 @@ namespace NPOI.XSSF.UserModel
      *
      * @author Josh Micich
      */
-    public class XSSFEvaluationWorkbook : IFormulaRenderingWorkbook, IEvaluationWorkbook, FormulaParsingWorkbook
+    public class XSSFEvaluationWorkbook : IFormulaRenderingWorkbook, 
+        IEvaluationWorkbook, IFormulaParsingWorkbook
     {
 
         private XSSFWorkbook _uBook;
 
-        public static XSSFEvaluationWorkbook Create(XSSFWorkbook book)
+        public static XSSFEvaluationWorkbook Create(IWorkbook book)
         {
             if (book == null)
             {
@@ -45,9 +47,9 @@ namespace NPOI.XSSF.UserModel
             return new XSSFEvaluationWorkbook(book);
         }
 
-        private XSSFEvaluationWorkbook(XSSFWorkbook book)
+        private XSSFEvaluationWorkbook(IWorkbook book)
         {
-            _uBook = book;
+            _uBook = (XSSFWorkbook)book;
         }
 
         private int ConvertFromExternalSheetIndex(int externSheetIndex)
@@ -80,10 +82,10 @@ namespace NPOI.XSSF.UserModel
 
         public IEvaluationName GetName(String name, int sheetIndex)
         {
-            for (int i = 0; i < _uBook.GetNumberOfNames(); i++)
+            for (int i = 0; i < _uBook.NumberOfNames; i++)
             {
-                XSSFName nm = _uBook.GetNameAt(i);
-                String nameText = nm.GetNameName();
+                IName nm = _uBook.GetNameAt(i);
+                String nameText = nm.NameName;
                 if (name.Equals(nameText, StringComparison.InvariantCultureIgnoreCase) && nm.GetSheetIndex() == sheetIndex)
                 {
                     return new Name(_uBook.GetNameAt(i), i, this);
@@ -189,42 +191,58 @@ namespace NPOI.XSSF.UserModel
 
             private XSSFName _nameRecord;
             private int _index;
-            private FormulaParsingWorkbook _fpBook;
+            private IFormulaParsingWorkbook _fpBook;
 
-            public Name(XSSFName name, int index, FormulaParsingWorkbook fpBook)
+            public Name(IName name, int index, IFormulaParsingWorkbook fpBook)
             {
-                _nameRecord = name;
+                _nameRecord = (XSSFName)name;
                 _index = index;
                 _fpBook = fpBook;
             }
 
-            public Ptg[] GetNameDefInition()
+            public Ptg[] NameDefinition
             {
+                get
+                {
 
-                return FormulaParser.Parse(_nameRecord.GetRefersToFormula(), _fpBook, FormulaType.NAMEDRANGE, _nameRecord.GetSheetIndex());
+                    return FormulaParser.Parse(_nameRecord.RefersToFormula, _fpBook, 
+                        FormulaType.NAMEDRANGE, _nameRecord.SheetIndex);
+                }
             }
 
-            public String GetNameText()
+            public String NameText
             {
-                return _nameRecord.GetNameName();
+                get
+                {
+                    return _nameRecord.NameName;
+                }
             }
 
-            public bool HasFormula()
+            public bool HasFormula
             {
-                // TODO - no idea if this is right
-                CT_DefinedName ctn = _nameRecord.GetCTName();
-                String strVal = ctn.Value;
-                return !ctn.function && strVal != null && strVal.Length > 0;
+                get
+                {
+                    // TODO - no idea if this is right
+                    CT_DefinedName ctn = _nameRecord.GetCTName();
+                    String strVal = ctn.Value;
+                    return !ctn.function && strVal != null && strVal.Length > 0;
+                }
             }
 
-            public bool IsFunctionName()
+            public bool IsFunctionName
             {
-                return _nameRecord.IsFunctionName();
+                get
+                {
+                    return _nameRecord.IsFunctionName;
+                }
             }
 
-            public bool IsRange()
+            public bool IsRange
             {
-                return HasFormula(); // TODO - is this right?
+                get
+                {
+                    return HasFormula; // TODO - is this right?
+                }
             }
             public NamePtg CreatePtg()
             {

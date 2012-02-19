@@ -48,7 +48,7 @@ namespace NPOI.XSSF.UserModel.Helpers
         {
             List<CellRangeAddress> ShiftedRegions = new List<CellRangeAddress>();
             //move merged regions completely if they fall within the new region boundaries when they are Shifted
-            for (int i = 0; i < sheet.GetNumMergedRegions(); i++)
+            for (int i = 0; i < sheet.NumMergedRegions; i++)
             {
                 CellRangeAddress merged = sheet.GetMergedRegion(i);
 
@@ -102,21 +102,21 @@ namespace NPOI.XSSF.UserModel.Helpers
         /**
          * Updated named ranges
          */
-        public void updateNamedRanges(FormulaShifter Shifter)
+        public void UpdateNamedRanges(FormulaShifter shifter)
         {
-            XSSFWorkbook wb = sheet.GetWorkbook();
+            IWorkbook wb = sheet.Workbook;
             XSSFEvaluationWorkbook fpb = XSSFEvaluationWorkbook.Create(wb);
-            for (int i = 0; i < wb.GetNumberOfNames(); i++)
+            for (int i = 0; i < wb.NumberOfNames; i++)
             {
-                XSSFName name = wb.GetNameAt(i);
-                String formula = name.GetRefersToFormula();
-                int sheetIndex = name.GetSheetIndex();
+                IName name = wb.GetNameAt(i);
+                String formula = name.RefersToFormula;
+                int sheetIndex = name.SheetIndex;
 
                 Ptg[] ptgs = FormulaParser.Parse(formula, fpb, FormulaType.NAMEDRANGE, sheetIndex);
-                if (Shifter.AdjustFormula(ptgs, sheetIndex))
+                if (shifter.AdjustFormula(ptgs, sheetIndex))
                 {
-                    String ShiftedFmla = FormulaRenderer.ToFormulaString(fpb, ptgs);
-                    name.SetRefersToFormula(ShiftedFmla);
+                    String shiftedFmla = FormulaRenderer.ToFormulaString(fpb, ptgs);
+                    name.RefersToFormula = shiftedFmla;
                 }
 
             }
@@ -125,17 +125,17 @@ namespace NPOI.XSSF.UserModel.Helpers
         /**
          * Update formulas.
          */
-        public void UpdateFormulas(FormulaShifter Shifter)
+        public void UpdateFormulas(FormulaShifter shifter)
         {
             //update formulas on the parent sheet
-            UpdateSheetFormulas(sheet, Shifter);
+            UpdateSheetFormulas(sheet, shifter);
 
             //update formulas on other sheets
-            XSSFWorkbook wb = sheet.GetWorkbook();
+            IWorkbook wb = sheet.Workbook;
             foreach (XSSFSheet sh in wb)
             {
                 if (sheet == sh) continue;
-                UpdateSheetFormulas(sh, Shifter);
+                UpdateSheetFormulas(sh, shifter);
             }
         }
 
@@ -204,7 +204,7 @@ namespace NPOI.XSSF.UserModel.Helpers
         }
 
         public void UpdateConditionalFormatting(FormulaShifter Shifter) {
-        IWorkbook wb = sheet.GetWorkbook();
+        IWorkbook wb = sheet.Workbook;
         int sheetIndex = wb.GetSheetIndex(sheet);
 
 
@@ -281,7 +281,7 @@ namespace NPOI.XSSF.UserModel.Helpers
             {
                 return null;
             }
-            throw new InvalidOperationException("Unexpected Shifted ptg class (" + ptg0.GetClass().GetName() + ")");
+            throw new InvalidOperationException("Unexpected Shifted ptg class (" + ptg0.GetType().Name + ")");
         }
 
     }

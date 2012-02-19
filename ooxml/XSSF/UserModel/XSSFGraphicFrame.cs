@@ -43,7 +43,7 @@ namespace NPOI.XSSF.UserModel
          * @param Drawing the XSSFDrawing that owns this frame
          * @param ctGraphicFrame the XML bean that stores this frame content
          */
-        protected XSSFGraphicFrame(XSSFDrawing Drawing, CT_GraphicalObjectFrame ctGraphicFrame)
+        public XSSFGraphicFrame(XSSFDrawing Drawing, CT_GraphicalObjectFrame ctGraphicFrame)
         {
             this.Drawing = Drawing;
             this.graphicFrame = ctGraphicFrame;

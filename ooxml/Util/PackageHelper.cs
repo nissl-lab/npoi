@@ -64,7 +64,7 @@ namespace NPOI.Util
                     CopyProperties(pkg.GetPackageProperties(), dest.GetPackageProperties());
                     continue;
                 }
-                dest.AddRelationship(part.PartName, rel.TargetMode, rel.RelationshipType);
+                dest.AddRelationship(part.PartName, (TargetMode)rel.TargetMode, rel.RelationshipType);
                 part_tgt = dest.CreatePart(part.PartName, part.ContentType);
 
                 Stream out1 = part_tgt.GetOutputStream();

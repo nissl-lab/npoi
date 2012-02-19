@@ -20,6 +20,7 @@ using NPOI.OpenXmlFormats.Spreadsheet;
 using NPOI.XSSF.UserModel.Helpers;
 using System.Collections.Generic;
 using NPOI.XSSF.Model;
+using NPOI.SS.UserModel;
 namespace NPOI.XSSF.UserModel
 {
     /**
@@ -79,10 +80,10 @@ namespace NPOI.XSSF.UserModel
         {
             List<XSSFSingleXmlCell> relatedSimpleXmlCells = new List<XSSFSingleXmlCell>();
 
-            int sheetNumber = mapInfo.GetWorkbook().GetNumberOfSheets();
+            int sheetNumber = mapInfo.Workbook.NumberOfSheets;
             for (int i = 0; i < sheetNumber; i++)
             {
-                XSSFSheet sheet = mapInfo.GetWorkbook().GetSheetAt(i);
+                XSSFSheet sheet = (XSSFSheet)mapInfo.Workbook.GetSheetAt(i);
                 foreach (POIXMLDocumentPart p in sheet.GetRelations())
                 {
                     if (p is SingleXmlCells)
@@ -108,14 +109,14 @@ namespace NPOI.XSSF.UserModel
         {
 
             List<XSSFTable> tables = new List<XSSFTable>();
-            int sheetNumber = mapInfo.GetWorkbook().GetNumberOfSheets();
+            int sheetNumber = mapInfo.Workbook.NumberOfSheets;
 
             for (int i = 0; i < sheetNumber; i++)
             {
-                XSSFSheet sheet = mapInfo.GetWorkbook().GetSheetAt(i);
+                XSSFSheet sheet = (XSSFSheet)mapInfo.Workbook.GetSheetAt(i);
                 foreach (POIXMLDocumentPart p in sheet.GetRelations())
                 {
-                    if (p.GetPackageRelationship().RelationshipType.Equals(XSSFRelation.TABLE.GetRelation()))
+                    if (p.GetPackageRelationship().RelationshipType.Equals(XSSFRelation.TABLE.Relation))
                     {
                         XSSFTable table = (XSSFTable)p;
                         if (table.MapsTo(ctMap.ID))

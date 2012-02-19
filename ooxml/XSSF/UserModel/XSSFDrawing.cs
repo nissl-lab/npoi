@@ -127,7 +127,7 @@ namespace NPOI.XSSF.UserModel
          *                  to the sheet.
          * @return      the newly Created textbox.
          */
-        public XSSFTextBox CreateTextbox(XSSFClientAnchor anchor)
+        public ITextbox CreateTextbox(IClientAnchor anchor)
         {
             long shapeId = newShapeId();
             CT_TwoCellAnchor ctAnchor = CreateTwoCellAnchor(anchor);
@@ -135,7 +135,7 @@ namespace NPOI.XSSF.UserModel
             ctShape.Set(XSSFSimpleShape.Prototype());
             ctShape.nvSpPr.cNvPr.id=(uint)shapeId;
             XSSFTextBox shape = new XSSFTextBox(this, ctShape);
-            shape.anchor = anchor;
+            shape.anchor = (XSSFClientAnchor)anchor;
             return shape;
 
         }
@@ -207,7 +207,7 @@ namespace NPOI.XSSF.UserModel
         protected PackageRelationship AddPictureReference(int pictureIndex)
         {
             XSSFWorkbook wb = (XSSFWorkbook)GetParent().GetParent();
-            XSSFPictureData data = wb.GetAllPictures()[pictureIndex];
+            XSSFPictureData data = (XSSFPictureData)wb.GetAllPictures()[pictureIndex];
             PackagePartName ppName = data.GetPackagePart().PartName;
             PackageRelationship rel = GetPackagePart().AddRelationship(ppName, TargetMode.Internal, XSSFRelation.IMAGES.Relation);
             AddRelation(rel.Id, new XSSFPictureData(data.GetPackagePart(), rel));
@@ -278,27 +278,27 @@ namespace NPOI.XSSF.UserModel
          *               to the sheet.
          * @return the newly Created comment.
          */
-        //public XSSFComment CreateCellComment(IClientAnchor anchor)
-        //{
-        //    XSSFClientAnchor ca = (XSSFClientAnchor)anchor;
-        //    XSSFSheet sheet = (XSSFSheet)GetParent();
+        public IComment CreateCellComment(IClientAnchor anchor)
+        {
+            XSSFClientAnchor ca = (XSSFClientAnchor)anchor;
+            XSSFSheet sheet = (XSSFSheet)GetParent();
 
-        //    //create comments and vmlDrawing parts if they don't exist
-        //    CommentsTable comments = sheet.GetCommentsTable(true);
-        //    XSSFVMLDrawing vml = sheet.GetVMLDrawing(true);
-        //    schemasMicrosoftComVml.CT_Shape vmlShape = vml.newCommentShape();
-        //    if (ca.IsSet())
-        //    {
-        //        String position =
-        //                ca.GetCol1() + ", 0, " + ca.GetRow1() + ", 0, " +
-        //                ca.GetCol2() + ", 0, " + ca.GetRow2() + ", 0";
-        //        vmlShape.GetClientDataArray(0).SetAnchorArray(0, position);
-        //    }
-        //    XSSFComment shape = new XSSFComment(comments, comments.CreateComment(), vmlShape);
-        //    shape.SetColumn(ca.GetCol1());
-        //    shape.SetRow(ca.GetRow1());
-        //    return shape;
-        //}
+            //create comments and vmlDrawing parts if they don't exist
+            CommentsTable comments = sheet.GetCommentsTable(true);
+            //XSSFVMLDrawing vml = sheet.GetVMLDrawing(true);
+            //schemasMicrosoftComVml.CT_Shape vmlShape = vml.newCommentShape();
+            if (ca.IsSet())
+            {
+                String position =
+                        ca.Col1 + ", 0, " + ca.Row1 + ", 0, " +
+                        ca.Col2 + ", 0, " + ca.Row2 + ", 0";
+                vmlShape.GetClientDataArray(0).SetAnchorArray(0, position);
+            }
+            XSSFComment shape = new XSSFComment(comments, comments.CreateComment(), vmlShape);
+            shape.Column = (ca.Col1);
+            shape.Row = (ca.Row1);
+            return shape;
+        }
 
         /**
          * Creates a new graphic frame.
@@ -342,22 +342,23 @@ namespace NPOI.XSSF.UserModel
          *
          * @return a new CT_TwoCellAnchor
          */
-        private CT_TwoCellAnchor CreateTwoCellAnchor(XSSFClientAnchor anchor)
+        private CT_TwoCellAnchor CreateTwoCellAnchor(IClientAnchor anchor)
         {
             CT_TwoCellAnchor ctAnchor = drawing.AddNewTwoCellAnchor();
-            ctAnchor.from =(anchor.GetFrom());
-            ctAnchor.to = (anchor.GetTo());
+            XSSFClientAnchor xssfanchor = (XSSFClientAnchor)anchor;
+            ctAnchor.from = (xssfanchor.GetFrom());
+            ctAnchor.to = (xssfanchor.GetTo());
             ctAnchor.AddNewClientData();
-            anchor.SetTo(ctAnchor.to);
-            anchor.SetFrom(ctAnchor.from);
+            xssfanchor.SetTo(ctAnchor.to);
+            xssfanchor.SetFrom(ctAnchor.from);
             ST_EditAs aditAs;
             switch (anchor.AnchorType)
             {
-                case AnchorType.DONT_MOVE_AND_RESIZE: 
+                case (int)AnchorType.DONT_MOVE_AND_RESIZE: 
                     aditAs = ST_EditAs.absolute; break;
-                case AnchorType.MOVE_AND_RESIZE: 
+                case (int)AnchorType.MOVE_AND_RESIZE: 
                     aditAs = ST_EditAs.twoCell; break;
-                case AnchorType.MOVE_DONT_RESIZE: 
+                case (int)AnchorType.MOVE_DONT_RESIZE: 
                     aditAs = ST_EditAs.oneCell; break;
                 default: 
                     aditAs = ST_EditAs.oneCell;
@@ -371,6 +372,15 @@ namespace NPOI.XSSF.UserModel
         {
             return drawing.sizeOfTwoCellAnchorArray() + 1;
         }
+
+        #region IDrawing Members
+
+        public bool ContainsChart()
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion
     }
 }
 

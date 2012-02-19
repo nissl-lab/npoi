@@ -23,6 +23,7 @@ using NPOI.OpenXml4Net.OPC;
 using NPOI.OpenXmlFormats.Spreadsheet;
 using System;
 using NPOI.XSSF.UserModel;
+using NPOI.Util;
 namespace NPOI.XSSF.Model
 {
 
@@ -86,9 +87,12 @@ namespace NPOI.XSSF.Model
          *
          * @return the parent XSSFWorkbook
          */
-        public XSSFWorkbook GetWorkbook()
+        public XSSFWorkbook Workbook
         {
-            return (XSSFWorkbook)GetParent();
+            get
+            {
+                return (XSSFWorkbook)GetParent();
+            }
         }
 
         /**
@@ -132,7 +136,8 @@ namespace NPOI.XSSF.Model
 		XSSFMap matchedMap = null;
 		
 		foreach(XSSFMap map in maps.Values){
-			if(map.GetCtMap().GetName()!=null && map.GetCtMap().GetName().Equals(name)){
+            if (map.GetCtMap().Name != null && map.GetCtMap().Name.Equals(name))
+            {
 				matchedMap = map;
 			}
 		}		
@@ -144,7 +149,7 @@ namespace NPOI.XSSF.Model
          * 
          * @return all the mappings configured in this document
          */
-        public ICollection<XSSFMap> GetAllXSSFMaps()
+        public List<XSSFMap> GetAllXSSFMaps()
         {
             return maps.Values;
         }

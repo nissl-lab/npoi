@@ -50,7 +50,7 @@ namespace NPOI.XSSF.UserModel
                 if (_font.sizeOfVertAlignArray() == 0) return FontSuperScript.NONE;
 
                 CT_VerticalAlignFontProperty prop = _font.GetVertAlignArray(0);
-                return (short)(prop.val - 1);
+                return (FontSuperScript)(prop.val - 1);
             }
             set 
             {

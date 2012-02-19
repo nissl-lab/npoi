@@ -13,6 +13,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     using System.Xml.Schema;
     using System.ComponentModel;
     using System.Collections.Generic;
+    using NPOI.OpenXmlFormats.Dml;
     
     public enum ST_SmartTagShow
     {
@@ -230,7 +231,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         private CT_SheetFormatPr sheetFormatPrField;
 
-        private List<CT_Col> colsField;
+        private List<CT_Cols> colsField;
 
         private List<CT_Row> sheetDataField;
 
@@ -317,7 +318,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.rowBreaksField = new CT_PageBreak();
             this.headerFooterField = new CT_HeaderFooter();
             this.pageSetupField = new CT_PageSetup();
-            this.pageMarginsField = new CT_PageMargins();
+            //this.pageMarginsField = new CT_PageMargins();
             this.printOptionsField = new CT_PrintOptions();
             //this.hyperlinksField = new List<CT_Hyperlink>();
             this.dataValidationsField = new CT_DataValidations();
@@ -333,15 +334,45 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             //this.sheetProtectionField = new CT_SheetProtection();
             this.sheetCalcPrField = new CT_SheetCalcPr();
             this.sheetDataField = new List<CT_Row>();
-            this.colsField = new List<CT_Col>();
+            //this.colsField = new List<CT_Col>();
             //this.sheetFormatPrField = new CT_SheetFormatPr();
             this.sheetViewsField = new CT_SheetViews();
             //this.dimensionField = new CT_SheetDimension();
             this.sheetPrField = new CT_SheetPr();
         }
+        public int sizeOfColsArray()
+        {
+        	return this.colsField.Count;
+       	}
+        public void RemoveCols(int index)
+        {
+            this.colsField.RemoveAt(index);
+        }
+        public CT_Cols AddNewCols()
+        {
+            CT_Cols newCols = new CT_Cols();
+            this.colsField.Add(newCols);
+            return newCols;
+        }
+        public void SetColsArray(int index, CT_Cols newCols)
+        {
+            this.colsField.Insert(index, newCols);
+        }
+        public CT_Cols GetColsArray(int index)
+        {
+            return this.colsField[index];
+        }
+        public List<CT_Cols> GetColsArray()
+        {
+            return this.colsField;
+        }
+        public bool IsSetPageMargins()
+        {
+            return this.pageMarginsField != null;
+        }
         public bool IsSetHyperLinks()
         {
-            return this.hyperlinks != null;
+            return this.hyperlinksField != null;
         }
         public int sizeOfConditionalFormattingArray()
         {
@@ -419,7 +450,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         [XmlArrayAttribute(Order = 4)]
         [XmlArrayItemAttribute("col", typeof(CT_Col), IsNullable = false)]
-        public List<CT_Col> cols
+        public List<CT_Cols> cols
         {
             get
             {
@@ -3183,6 +3214,15 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.phField = false;
         }
 
+        public int sizeOfCArray()
+        {
+            return c.Count;
+        }
+        public CT_Cell GetCArray(int index)
+        {
+            return c[index];
+        }
+
         public List<CT_Cell> c
         {
             get
@@ -3400,7 +3440,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         private string rField;
 
-        private uint sField;
+        private uint? sField;
 
         private ST_CellType tField;
 
@@ -3413,20 +3453,50 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         public CT_Cell()
         {
             this.extLstField = new CT_ExtensionList();
-            this.isField = new CT_Rst();
-            this.fField = new CT_CellFormula();
-            this.sField = ((uint)(0));
+            //this.isField = new CT_Rst();
+            //this.fField = new CT_CellFormula();
+            //this.sField = (uint)(0);
             this.tField = ST_CellType.n;
             this.cmField = ((uint)(0));
             this.vmField = ((uint)(0));
             this.phField = false;
         }
-
-        public bool IsSetF()
+        public bool isSetS()
         {
-            return f != null;
+            return sField != null;
+        }
+        public bool isSetF()
+        {
+            return fField != null;
+        }
+        public bool isSetV()
+        {
+            return vField != null;
+        }
+        public bool isSetIs()
+        {
+            return isField != null;
         }
 
+        public void unsetF()
+        {
+            this.fField = null;
+        }
+
+        public void unsetV()
+        {
+            this.vField = null;
+        }
+
+        public void unsetS()
+        {
+            this.sField = null;
+        }
+
+        public void unsetIs()
+        {
+            this.isField = null;
+        }
         public CT_CellFormula f
         {
             get
@@ -3492,7 +3562,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             get
             {
-                return this.sField;
+                return (uint)this.sField;
             }
             set
             {
@@ -3595,7 +3665,10 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.caField = false;
             this.bxField = false;
         }
-
+        public bool isSetRef()
+        {
+            return this.refField != null;
+        }
         [System.ComponentModel.DefaultValueAttribute(ST_CellFormulaType.normal)]
         public ST_CellFormulaType t
         {
@@ -5506,9 +5579,9 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         private uint fitToHeightField;
 
-        private ST_PageOrder pageOrderField;
+        private ST_PageOrder? pageOrderField;
 
-        private ST_Orientation orientationField;
+        private ST_Orientation? orientationField;
 
         private bool usePrinterDefaultsField;
 
@@ -5516,7 +5589,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         private bool draftField;
 
-        private ST_CellComments cellCommentsField;
+        private ST_CellComments? cellCommentsField;
 
         private bool useFirstPageNumberField;
 
@@ -5537,12 +5610,12 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.firstPageNumberField = ((uint)(1));
             this.fitToWidthField = ((uint)(1));
             this.fitToHeightField = ((uint)(1));
-            this.pageOrderField = ST_PageOrder.downThenOver;
-            this.orientationField = ST_Orientation.@default;
+            //this.pageOrderField = ST_PageOrder.downThenOver;
+            //this.orientationField = ST_Orientation.@default;
             this.usePrinterDefaultsField = true;
             this.blackAndWhiteField = false;
             this.draftField = false;
-            this.cellCommentsField = ST_CellComments.none;
+            //this.cellCommentsField = ST_CellComments.none;
             this.useFirstPageNumberField = false;
             this.errorsField = ST_PrintError.displayed;
             this.horizontalDpiField = ((uint)(600));
@@ -5616,7 +5689,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
 
         [System.ComponentModel.DefaultValueAttribute(ST_PageOrder.downThenOver)]
-        public ST_PageOrder pageOrder
+        public ST_PageOrder? pageOrder
         {
             get
             {
@@ -5629,7 +5702,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
 
         [System.ComponentModel.DefaultValueAttribute(ST_Orientation.@default)]
-        public ST_Orientation orientation
+        public ST_Orientation? orientation
         {
             get
             {
@@ -5681,7 +5754,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
 
         [System.ComponentModel.DefaultValueAttribute(ST_CellComments.none)]
-        public ST_CellComments cellComments
+        public ST_CellComments? cellComments
         {
             get
             {
@@ -7888,43 +7961,6 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
     }
 
-    public class CT_Drawing
-    {
-
-        private string idField;
-
-        public string id
-        {
-            get
-            {
-                return this.idField;
-            }
-            set
-            {
-                this.idField = value;
-            }
-        }
-    }
-
-    public class CT_LegacyDrawing
-    {
-
-        private string idField;
-
-        public string id
-        {
-            get
-            {
-                return this.idField;
-            }
-            set
-            {
-                this.idField = value;
-            }
-        }
-    }
-
-
     public class CT_OleObject
     {
 
@@ -9783,13 +9819,26 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.colField = new List<CT_Col>();
         }
 
+        public CT_Col AddNewCol()
+        {
+            CT_Col newCol = new CT_Col();
+            this.colField.Add(newCol);
+            return newCol;
+        }
+
         public int sizeOfColArray()
         {
             return col.Count;
         }
         public CT_Col GetColArray(int index)
         {
-            return col[index];
+            return colField[index];
+        }
+
+
+        public List<CT_Col> GetColArray()
+        {
+            return colField;
         }
 
         public List<CT_Col> col

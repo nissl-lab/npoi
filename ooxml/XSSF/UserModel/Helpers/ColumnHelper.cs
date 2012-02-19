@@ -18,6 +18,7 @@
 using NPOI.OpenXmlFormats.Spreadsheet;
 using NPOI.XSSF.Util;
 using NPOI.SS.UserModel;
+using System.Collections.Generic;
 namespace NPOI.XSSF.UserModel.Helpers
 {
     /**
@@ -36,20 +37,20 @@ namespace NPOI.XSSF.UserModel.Helpers
         {
 
             this.worksheet = worksheet;
-            cleanColumns();
+            CleanColumns();
         }
 
         //YK: GetXYZArray() array accessors are deprecated in xmlbeans with JDK 1.5 support
-        public void cleanColumns()
+        public void CleanColumns()
         {
             this.newCols = new CT_Cols();
-            CT_Cols[] colsArray = worksheet.GetColsArray();
+            List<CT_Cols> colsArray = worksheet.GetColsArray();
             int i = 0;
-            for (i = 0; i < colsArray.Length; i++)
+            for (i = 0; i < colsArray.Count; i++)
             {
                 CT_Cols cols = colsArray[i];
-                CT_Col[] colArray = cols.GetColArray();
-                for (int y = 0; y < colArray.Length; y++)
+                List<CT_Col> colArray = cols.GetColArray();
+                for (int y = 0; y < colArray.Count; y++)
                 {
                     CT_Col col = colArray[y];
                     newCols = AddCleanColIntoCols(newCols, col);
@@ -64,9 +65,9 @@ namespace NPOI.XSSF.UserModel.Helpers
         }
 
         //YK: GetXYZArray() array accessors are deprecated in xmlbeans with JDK 1.5 support
-        public static void sortColumns(CT_Cols newCols)
+        public static void SortColumns(CT_Cols newCols)
         {
-            CT_Col[] colArray = newCols.GetColArray();
+            List<CT_Col> colArray = newCols.GetColArray();
             Arrays.sort(colArray, new CT_ColComparator());
             newCols.SetColArray(colArray);
         }
@@ -196,7 +197,7 @@ namespace NPOI.XSSF.UserModel.Helpers
             {
                 CT_Col newCol = CloneCol(cols, col);
             }
-            sortColumns(cols);
+            SortColumns(cols);
             return cols;
         }
 

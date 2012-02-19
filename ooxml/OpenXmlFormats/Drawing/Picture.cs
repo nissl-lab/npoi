@@ -421,5 +421,21 @@ namespace NPOI.OpenXmlFormats.Dml {
                 this.spPrField = value;
             }
         }
+
+        public CT_PictureNonVisual AddNewNvPicPr()
+        {
+            nvPicPrField = new CT_PictureNonVisual();
+                return this.nvPicPrField;
+        }
+        public CT_BlipFillProperties AddNewBlipFill()
+        {
+            blipFillField = new CT_BlipFillProperties();
+             return this.blipFillField;
+        }
+        public CT_ShapeProperties AddNewSpPr()
+        {
+            spPrField = new CT_ShapeProperties();
+            return this.spPrField;
+        }
     }
 }

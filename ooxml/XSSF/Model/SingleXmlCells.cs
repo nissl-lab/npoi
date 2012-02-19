@@ -80,7 +80,7 @@ namespace NPOI.XSSF.Model
         }
 
 
-        protected void Commit()
+        protected override void Commit()
         {
             PackagePart part = GetPackagePart();
             Stream out1 = part.GetOutputStream();

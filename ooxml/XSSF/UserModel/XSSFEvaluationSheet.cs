@@ -16,6 +16,7 @@
 ==================================================================== */
 
 using NPOI.SS.Formula;
+using NPOI.SS.UserModel;
 namespace NPOI.XSSF.UserModel
 {
 
@@ -29,9 +30,9 @@ namespace NPOI.XSSF.UserModel
 
         private XSSFSheet _xs;
 
-        public XSSFEvaluationSheet(XSSFSheet sheet)
+        public XSSFEvaluationSheet(ISheet sheet)
         {
-            _xs = sheet;
+            _xs = (XSSFSheet)sheet;
         }
 
         public XSSFSheet GetXSSFSheet()
@@ -40,12 +41,12 @@ namespace NPOI.XSSF.UserModel
         }
         public IEvaluationCell GetCell(int rowIndex, int columnIndex)
         {
-            XSSFRow row = _xs.GetRow(rowIndex);
+            IRow row = _xs.GetRow(rowIndex);
             if (row == null)
             {
                 return null;
             }
-            XSSFCell cell = row.GetCell(columnIndex);
+            ICell cell = row.GetCell(columnIndex);
             if (cell == null)
             {
                 return null;

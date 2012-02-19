@@ -26,9 +26,9 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         private CT_WorkbookProtection workbookProtectionField;
 
-        private List<CT_BookView> bookViewsField;
+        private CT_BookViews bookViewsField;
 
-        private List<CT_Sheet> sheetsField;
+        private CT_Sheets sheetsField;
 
         private CT_FunctionGroups functionGroupsField;
 
@@ -68,16 +68,38 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.customWorkbookViewsField = new List<CT_CustomWorkbookView>();
             this.oleSizeField = new CT_OleSize();
             this.calcPrField = new CT_CalcPr();
-            this.definedNamesField = new List<CT_DefinedName>();
+            //this.definedNamesField = new List<CT_DefinedName>();
             this.externalReferencesField = new List<CT_ExternalReference>();
             this.functionGroupsField = new CT_FunctionGroups();
-            this.sheetsField = new List<CT_Sheet>();
-            this.bookViewsField = new List<CT_BookView>();
+            //this.sheetsField = new List<CT_Sheet>();
+            //this.bookViewsField = new List<CT_BookView>();
             this.workbookProtectionField = new CT_WorkbookProtection();
-            this.workbookPrField = new CT_WorkbookPr();
+            //this.workbookPrField = new CT_WorkbookPr();
             this.fileSharingField = new CT_FileSharing();
             this.fileVersionField = new CT_FileVersion();
         }
+
+        
+        public bool IsSetDefinedNames()
+        {
+            return this.definedNamesField!=null;
+        }
+        public CT_WorkbookPr AddNewWorkbookPr()
+        {
+            this.workbookPrField=new CT_WorkbookPr();
+            return this.workbookPrField;
+        }
+        public CT_Sheets AddNewSheets()
+        {
+            this.sheetsField=new CT_Sheets();
+            return this.sheetsField;
+        }
+        public CT_BookViews AddBookViews()
+        {
+            this.bookViewsField=new CT_BookViews();
+            return this.bookViewsField;
+        }
+        //AddNewWorkbookView()
 
         public CT_FileVersion fileVersion
         {
@@ -129,7 +151,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         [System.Xml.Serialization.XmlArrayAttribute(Order = 4)]
         [System.Xml.Serialization.XmlArrayItemAttribute("workbookView", IsNullable = false)]
-        public List<CT_BookView> bookViews
+        public CT_BookViews bookViews
         {
             get
             {
@@ -143,7 +165,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         [System.Xml.Serialization.XmlArrayAttribute(Order = 5)]
         [System.Xml.Serialization.XmlArrayItemAttribute("sheet", IsNullable = false)]
-        public List<CT_Sheet> sheets
+        public CT_Sheets sheets
         {
             get
             {

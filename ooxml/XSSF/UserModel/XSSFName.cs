@@ -122,7 +122,7 @@ namespace NPOI.XSSF.UserModel
         /**
          * Returns the underlying named range object
          */
-        public CT_DefinedName GetCTName()
+        internal CT_DefinedName GetCTName()
         {
             return _ctName;
         }
@@ -132,115 +132,68 @@ namespace NPOI.XSSF.UserModel
          *
          * @return text name of this defined name
          */
-        public String GetNameName()
+        public String NameName
         {
-            return _ctName.name;
-        }
-
-        /**
-         * Sets the name that will appear in the user interface for the defined name.
-         * Names must begin with a letter or underscore, not contain spaces and be unique across the workbook.
-         *
-         * <p>
-         * A name must always be unique within its scope. POI prevents you from defining a name that is not unique
-         * within its scope. However you can use the same name in different scopes. Example:
-         * <pre><blockquote>
-         * //by default names are workbook-global
-         * XSSFName name;
-         * name = workbook.CreateName();
-         * name.SetNameName("sales_08");
-         *
-         * name = workbook.CreateName();
-         * name.SetNameName("sales_08"); //will throw an exception: "The workbook already Contains this name (case-insensitive)"
-         *
-         * //create sheet-level name
-         * name = workbook.CreateName();
-         * name.SetSheetIndex(0); //the scope of the name is the first sheet
-         * name.SetNameName("sales_08");  //ok
-         *
-         * name = workbook.CreateName();
-         * name.SetSheetIndex(0);
-         * name.SetNameName("sales_08");  //will throw an exception: "The sheet already Contains this name (case-insensitive)"
-         *
-         * </blockquote></pre>
-        * </p>
-         * @param name name of this defined name
-         * @throws ArgumentException if the name is invalid or the workbook already Contains this name (case-insensitive)
-         */
-        public void SetNameName(String name)
-        {
-            validateName(name);
-
-            int sheetIndex = GetSheetIndex();
-
-            //Check to ensure no other names have the same case-insensitive name
-            for (int i = 0; i < _workbook.GetNumberOfNames(); i++)
+            get
             {
-                XSSFName nm = _workbook.GetNameAt(i);
-                if (nm != this)
+                return _ctName.name;
+            }
+            set
+            {
+                validateName(value);
+
+                int sheetIndex = SheetIndex;
+
+                //Check to ensure no other names have the same case-insensitive name
+                for (int i = 0; i < _workbook.NumberOfNames; i++)
                 {
-                    if (name.Equals(nm.GetNameName(), StringComparison.InvariantCultureIgnoreCase) && sheetIndex == nm.GetSheetIndex())
+                    XSSFName nm = _workbook.GetNameAt(i);
+                    if (nm != this)
                     {
-                        String msg = "The " + (sheetIndex == -1 ? "workbook" : "sheet") + " already Contains this name: " + name;
-                        throw new ArgumentException(msg);
+                        if (value.Equals(nm.NameName, StringComparison.InvariantCultureIgnoreCase) 
+                            && sheetIndex == nm.SheetIndex)
+                        {
+                            String msg = "The " + (sheetIndex == -1 ? "workbook" : "sheet") + " already Contains this name: " + name;
+                            throw new ArgumentException(msg);
+                        }
                     }
                 }
+                _ctName.name = value;
             }
-            _ctName.name = name;
         }
 
-        public String GetRefersToFormula()
+        public String RefersToFormula
         {
-            String result = _ctName.Value;
-            if (result == null || result.Length < 1)
+            get
             {
-                return null;
+                String result = _ctName.Value;
+                if (result == null || result.Length < 1)
+                {
+                    return null;
+                }
+                return result;
             }
-            return result;
+            set 
+            {
+                XSSFEvaluationWorkbook fpb = XSSFEvaluationWorkbook.Create(_workbook);
+                //validate through the FormulaParser
+                FormulaParser.Parse(value, fpb, FormulaType.NAMEDRANGE, SheetIndex);
+
+                _ctName.Value = value;   
+            }
         }
-
-        public void SetRefersToFormula(String formulaText)
+        public bool IsDeleted
         {
-            XSSFEvaluationWorkbook fpb = XSSFEvaluationWorkbook.Create(_workbook);
-            //validate through the FormulaParser
-            FormulaParser.Parse(formulaText, fpb, FormulaType.NAMEDRANGE, GetSheetIndex());
-
-            _ctName.Value = formulaText;
-        }
-
-        public bool IsDeleted()
-        {
-            String formulaText = GetRefersToFormula();
-            if (formulaText == null)
+            get
             {
-                return false;
-            }
-            XSSFEvaluationWorkbook fpb = XSSFEvaluationWorkbook.Create(_workbook);
-            Ptg[] ptgs = FormulaParser.Parse(formulaText, fpb, FormulaType.NAMEDRANGE, GetSheetIndex());
-            return Ptg.DoesFormulaReferToDeletedCell(ptgs);
-        }
-
-        /**
-         * Tell Excel that this name applies to the worksheet with the specified index instead of the entire workbook.
-         *
-         * @param index the sheet index this name applies to, -1 unSets this property making the name workbook-global
-         */
-        public void SetSheetIndex(int index)
-        {
-            int lastSheetIx = _workbook.GetNumberOfSheets() - 1;
-            if (index < -1 || index > lastSheetIx)
-            {
-                throw new ArgumentException("Sheet index (" + index + ") is out of range" +
-                        (lastSheetIx == -1 ? "" : (" (0.." + lastSheetIx + ")")));
-            }
-
-            if (index == -1)
-            {
-                if (_ctName.IsSetLocalSheetId()) _ctName.UnsetLocalSheetId();
-            }
-            else
-            {
-                _ctName.localSheetId = (uint)index;
+                String formulaText = RefersToFormula;
+                if (formulaText == null)
+                {
+                    return false;
+                }
+                XSSFEvaluationWorkbook fpb = XSSFEvaluationWorkbook.Create(_workbook);
+                Ptg[] ptgs = FormulaParser.Parse(formulaText, fpb, FormulaType.NAMEDRANGE, SheetIndex);
+                return Ptg.DoesFormulaReferToDeletedCell(ptgs);
             }
         }
 
@@ -249,20 +202,30 @@ namespace NPOI.XSSF.UserModel
          *
          * @return the sheet index this name applies to, -1 if this name applies to the entire workbook
          */
-        public int GetSheetIndex()
+        public int SheetIndex
         {
-            return _ctName.IsSetLocalSheetId() ? (int)_ctName.localSheetId : -1;
-        }
+            get
+            {
+                return _ctName.IsSetLocalSheetId() ? (int)_ctName.localSheetId : -1;
+            }
+            set 
+            {
+                int lastSheetIx = _workbook.NumberOfSheets - 1;
+                if (value < -1 || value > lastSheetIx)
+                {
+                    throw new ArgumentException("Sheet index (" + value + ") is out of range" +
+                            (lastSheetIx == -1 ? "" : (" (0.." + lastSheetIx + ")")));
+                }
 
-        /**
-         * Indicates that the defined name refers to a user-defined function.
-         * This attribute is used when there is an Add-in or other code project associated with the file.
-         *
-         * @param value <code>true</code> indicates the name refers to a function.
-         */
-        public void SetFunction(bool value)
-        {
-            _ctName.function = value;
+                if (value == -1)
+                {
+                    if (_ctName.IsSetLocalSheetId()) _ctName.UnsetLocalSheetId();
+                }
+                else
+                {
+                    _ctName.localSheetId = (uint)value;
+                }
+            }
         }
 
         /**
@@ -271,21 +234,21 @@ namespace NPOI.XSSF.UserModel
          *
          * @return <code>true</code> indicates the name refers to a function.
          */
-        public bool GetFunction()
+        public bool Function
         {
-            return _ctName.function;
+            get
+            {
+                return _ctName.function;
+            }
+            set 
+            {
+                _ctName.function = value;
+            }
         }
 
-        /**
-         * Specifies the function group index if the defined name refers to a function. The function
-         * group defines the general category for the function. This attribute is used when there is
-         * an Add-in or other code project associated with the file.
-         *
-         * @param functionGroupId the function group index that defines the general category for the function
-         */
-        public void SetFunctionGroupId(int functionGroupId)
+        public void SetFunction(bool value)
         {
-            _ctName.functionGroupId = (uint)functionGroupId;
+            this.Function = value;
         }
 
         /**
@@ -295,9 +258,16 @@ namespace NPOI.XSSF.UserModel
          *
          * @return the function group index that defines the general category for the function
          */
-        public int GetFunctionGroupId()
+        public int FunctionGroupId
         {
-            return (int)_ctName.functionGroupId;
+            get
+            {
+                return (int)_ctName.functionGroupId;
+            }
+            set 
+            {
+                _ctName.functionGroupId = (uint)value;
+            }
         }
 
         /**
@@ -306,17 +276,20 @@ namespace NPOI.XSSF.UserModel
          * @return sheet name, which this named range referred to.
          * Empty string if the referenced sheet name weas not found.
          */
-        public String GetSheetName()
+        public String SheetName
         {
-            if (_ctName.IsSetLocalSheetId())
+            get
             {
-                // Given as explicit sheet id
-                int sheetId = (int)_ctName.localSheetId;
-                return _workbook.GetSheetName(sheetId);
+                if (_ctName.IsSetLocalSheetId())
+                {
+                    // Given as explicit sheet id
+                    int sheetId = (int)_ctName.localSheetId;
+                    return _workbook.GetSheetName(sheetId);
+                }
+                String ref1 = RefersToFormula;
+                AreaReference areaRef = new AreaReference(ref1);
+                return areaRef.FirstCell.SheetName;
             }
-            String ref1 = GetRefersToFormula();
-            AreaReference areaRef = new AreaReference(ref1);
-            return areaRef.FirstCell.SheetName;
         }
 
         /**
@@ -328,7 +301,7 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
-                return GetFunction();
+                return this.Function;
             }
         }
 

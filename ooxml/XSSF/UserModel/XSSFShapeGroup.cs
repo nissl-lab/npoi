@@ -54,7 +54,7 @@ namespace NPOI.XSSF.UserModel
         {
             if (prototype == null)
             {
-                CT_GroupShape shape = CT_GroupShape.Factory.newInstance();
+                CT_GroupShape shape = new CT_GroupShape();
 
                 CT_GroupShapeNonVisual nv = shape.AddNewNvGrpSpPr();
                 CT_NonVisualDrawingProps nvpr = nv.AddNewCNvPr();
@@ -190,7 +190,7 @@ namespace NPOI.XSSF.UserModel
             chExt.cy = (y2);
         }
 
-        protected CT_ShapeProperties GetShapeProperties()
+        protected override CT_ShapeProperties GetShapeProperties()
         {
             throw new InvalidOperationException("Not supported for shape group");
         }

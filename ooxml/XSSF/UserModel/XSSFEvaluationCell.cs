@@ -33,13 +33,13 @@ namespace NPOI.XSSF.UserModel
         private IEvaluationSheet _evalSheet;
         private XSSFCell _cell;
 
-        public XSSFEvaluationCell(XSSFCell cell, XSSFEvaluationSheet EvaluationSheet)
+        public XSSFEvaluationCell(ICell cell, XSSFEvaluationSheet EvaluationSheet)
         {
-            _cell = cell;
+            _cell = (XSSFCell)cell;
             _evalSheet = EvaluationSheet;
         }
 
-        public XSSFEvaluationCell(XSSFCell cell)
+        public XSSFEvaluationCell(ICell cell)
             : this(cell, new XSSFEvaluationSheet(cell.Sheet))
         {
 
@@ -63,14 +63,14 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
-                return _cell.GetBooleanCellValue();
+                return _cell.BooleanCellValue;
             }
         }
         public CellType CellType
         {
             get
             {
-                return _cell.GetCellType();
+                return _cell.CellType;
             }
         }
         public int ColumnIndex
@@ -84,14 +84,14 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
-                return _cell.GetErrorCellValue();
+                return _cell.ErrorCellValue;
             }
         }
         public double NumericCellValue
         {
             get
             {
-                return _cell.GetNumericCellValue();
+                return _cell.NumericCellValue;
             }
         }
         public int RowIndex
@@ -112,7 +112,7 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
-                return _cell.GetRichStringCellValue().GetString();
+                return _cell.RichStringCellValue.String;
             }
         }
     }

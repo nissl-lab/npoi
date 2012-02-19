@@ -41,18 +41,18 @@ namespace NPOI.XSSF.UserModel
                 throw new ArgumentException("List validation with explicit values must specify at least one value");
             }
             this.validationType = ValidationType.LIST;
-            SetExplicitListValues(explicitListOfValues);
+            ExplicitListValues = (explicitListOfValues);
 
-            validate();
+            Validate();
         }
 
         public XSSFDataValidationConstraint(int validationType, String formula1)
             : base()
         {
 
-            SetFormula1(formula1);
+            Formula1 = (formula1);
             this.validationType = validationType;
-            validate();
+            Validate();
         }
 
 
@@ -61,22 +61,22 @@ namespace NPOI.XSSF.UserModel
             : base()
         {
 
-            SetFormula1(formula1);
+            Formula1 = (formula1);
             this.validationType = validationType;
             this.operator1 = operator1;
-            validate();
+            Validate();
         }
 
         public XSSFDataValidationConstraint(int validationType, int operator1, String formula1, String formula2)
             : base()
         {
 
-            SetFormula1(formula1);
-            SetFormula2(formula2);
+            Formula1 = (formula1);
+            Formula2 = (formula2);
             this.validationType = validationType;
             this.operator1 = operator1;
 
-            validate();
+            Validate();
 
             //FIXME: Need to confirm if this is not a formula.
             if (ValidationType.LIST == validationType)
@@ -85,12 +85,31 @@ namespace NPOI.XSSF.UserModel
             }
         }
 
-        /* (non-Javadoc)
-         * @see NPOI.ss.usermodel.DataValidationConstraint#getExplicitListValues()
-         */
-        public String[] GetExplicitListValues()
+        public String[] ExplicitListValues
         {
-            return explicitListOfValues;
+            get
+            {
+                return explicitListOfValues;
+            }
+            set 
+            {
+                this.explicitListOfValues = value;
+                if (explicitListOfValues != null && explicitListOfValues.Length > 0)
+                {
+                    StringBuilder builder = new StringBuilder("\"");
+                    for (int i = 0; i < value.Length; i++)
+                    {
+                        String string1 = value[i];
+                        if (builder.Length > 1)
+                        {
+                            builder.Append(",");
+                        }
+                        builder.Append(string1);
+                    }
+                    builder.Append("\"");
+                    Formula1 = builder.ToString();
+                }
+            }
         }
 
         /* (non-Javadoc)
@@ -144,29 +163,6 @@ namespace NPOI.XSSF.UserModel
         public int GetValidationType()
         {
             return validationType;
-        }
-
-        /* (non-Javadoc)
-         * @see NPOI.ss.usermodel.DataValidationConstraint#setExplicitListValues(java.lang.String[])
-         */
-        public void SetExplicitListValues(String[] explicitListValues)
-        {
-            this.explicitListOfValues = explicitListValues;
-            if (explicitListOfValues != null && explicitListOfValues.Length > 0)
-            {
-                StringBuilder builder = new StringBuilder("\"");
-                for (int i = 0; i < explicitListValues.Length; i++)
-                {
-                    String string1 = explicitListValues[i];
-                    if (builder.Length > 1)
-                    {
-                        builder.Append(",");
-                    }
-                    builder.Append(string1);
-                }
-                builder.Append("\"");
-                Formula1 = builder.ToString();
-            }
         }
 
         protected String RemoveLeadingEquals(String formula1)

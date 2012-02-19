@@ -231,12 +231,12 @@ namespace NPOI.XSSF.UserModel
             }
         }
 
-        /* (non-Javadoc)
-         * @see NPOI.ss.usermodel.DataValidation#getValidationConstraint()
-         */
-        public IDataValidationConstraint GetValidationConstraint()
+        public IDataValidationConstraint ValidationConstraint
         {
-            return validationConstraint;
+            get
+            {
+                return validationConstraint;
+            }
         }
 
         public CellRangeAddressList Regions

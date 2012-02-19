@@ -51,7 +51,7 @@ namespace NPOI.OpenXml4Net.OPC
             return base[partName] = part;
         }
 
-        public void Remove(PackagePartName key)
+        public new void Remove(PackagePartName key)
         {
             this.registerPartNameStr.Remove(((PackagePartName)key).Name);
             base.Remove(key);

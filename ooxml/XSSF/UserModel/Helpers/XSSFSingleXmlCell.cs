@@ -19,6 +19,7 @@ using NPOI.OpenXmlFormats.Spreadsheet;
 using System;
 using NPOI.SS.Util;
 using NPOI.XSSF.Model;
+using NPOI.SS.UserModel;
 namespace NPOI.XSSF.UserModel.Helpers
 {
 
@@ -49,14 +50,14 @@ namespace NPOI.XSSF.UserModel.Helpers
          * Gets the XSSFCell referenced by the R attribute or Creates a new one if cell doesn't exists
          * @return the referenced XSSFCell, null if the cell reference is invalid
          */
-        public XSSFCell GetReferencedCell()
+        public ICell GetReferencedCell()
         {
-            XSSFCell cell = null;
+            ICell cell = null;
 
 
             CellReference cellReference = new CellReference(SingleXmlCell.r);
 
-            XSSFRow row = parent.GetXSSFSheet().GetRow(cellReference.Row);
+            IRow row = parent.GetXSSFSheet().GetRow(cellReference.Row);
             if (row == null)
             {
                 row = parent.GetXSSFSheet().CreateRow(cellReference.Row);

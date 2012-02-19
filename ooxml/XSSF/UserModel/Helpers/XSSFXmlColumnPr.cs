@@ -71,7 +71,6 @@ namespace NPOI.XSSF.UserModel.Helpers
          */
         public String GetLocalXPath()
         {
-            throw new NotImplementedException();
             String localXPath = "";
             int numberOfCommonXPathAxis = table.GetCommonXpath().Split(new char[] { '/' }).Length - 1;
 

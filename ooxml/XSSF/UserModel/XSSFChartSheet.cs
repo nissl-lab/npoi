@@ -23,6 +23,7 @@ using System;
 using NPOI.OpenXmlFormats;
 using NPOI.Util;
 using NPOI.OpenXml4Net.OPC;
+using NPOI.OpenXmlFormats.Dml;
 namespace NPOI.XSSF.UserModel
 {
 
@@ -47,7 +48,7 @@ namespace NPOI.XSSF.UserModel
 
         }
 
-        protected void Read(Stream is1)
+        internal override void Read(Stream is1)
         {
             //Initialize the supeclass with a blank worksheet
             base.Read(new MemoryStream(BLANK_WORKSHEET));
@@ -73,19 +74,19 @@ namespace NPOI.XSSF.UserModel
         }
 
 
-        protected CT_Drawing GetCTDrawing()
+        protected override CT_Drawing GetCTDrawing()
         {
             return chartsheet.drawing;
         }
 
 
-        protected CT_LegacyDrawing GetCTLegacyDrawing()
+        protected override CT_LegacyDrawing GetCTLegacyDrawing()
         {
             return chartsheet.legacyDrawing;
         }
 
 
-        protected void Write(Stream out1)
+        internal override void Write(Stream out1)
         {
             //XmlOptions xmlOptions = new XmlOptions(DEFAULT_XML_OPTIONS);
             //xmlOptions.SetSaveSyntheticDocumentElement(

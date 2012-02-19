@@ -63,6 +63,13 @@ namespace NPOI.OpenXmlFormats.Dml
         CT_GraphicalObject graphicField;
         private string macroField;
         private bool fPublishedField;
+
+        public CT_GraphicalObjectFrameNonVisual AddNewNvGraphicFramePr()
+        {
+            this.nvGraphicFramePr=new CT_GraphicalObjectFrameNonVisual();
+            return this.nvGraphicFramePr;
+        }
+
         public CT_GraphicalObjectFrameNonVisual nvGraphicFramePr
         {
             get { return nvGraphicFramePrField; }
@@ -103,6 +110,28 @@ namespace NPOI.OpenXmlFormats.Dml
         private string textlinkField;
         private bool fLocksTextField;
         private bool fPublishedField;
+
+        public CT_ShapeNonVisual AddNewNvSpPr()
+        {
+            this.nvSpPrField = new CT_ShapeNonVisual();
+            return this.nvSpPrField;
+        }
+
+        public CT_ShapeProperties AddNewSpPr()
+        {
+            this.spPrField = new CT_ShapeProperties();
+            return this.spPrField;
+        }
+        public CT_ShapeStyle AddNewStyle()
+        {
+            this.styleField = new CT_ShapeStyle();
+            return this.styleField;
+        }
+        public CT_TextBody AddNewTxBody()
+        {
+            this.txBodyField = new CT_TextBody();
+            return this.txBodyField;
+        }
 
         public CT_ShapeNonVisual nvSpPr
         {
@@ -192,6 +221,18 @@ namespace NPOI.OpenXmlFormats.Dml
                 this.cNvCxnSpPrField = value;
             }
         }
+        public CT_NonVisualDrawingProps AddNewCNvPr()
+        {
+            this.cNvPr = new CT_NonVisualDrawingProps();
+            return this.cNvPr;
+        }
+        public CT_NonVisualConnectorProperties AddNewCNvCxnSpPr()
+        {
+            this.cNvCxnSpPr = new CT_NonVisualConnectorProperties();
+            return this.cNvCxnSpPr;
+        }
+
+
         public CT_NonVisualDrawingProps cNvPr
         {
             get
@@ -276,11 +317,57 @@ namespace NPOI.OpenXmlFormats.Dml
             set;
         }
     }
+    public class CT_Drawing
+    {
+
+        private string idField;
+
+        public CT_TwoCellAnchor AddNewTwoCellAnchor()
+        {
+            throw new NotImplementedException();
+        }
+
+        public string id
+        {
+            get
+            {
+                return this.idField;
+            }
+            set
+            {
+                this.idField = value;
+            }
+        }
+    }
+
+    public class CT_LegacyDrawing
+    {
+
+        private string idField;
+
+        public string id
+        {
+            get
+            {
+                return this.idField;
+            }
+            set
+            {
+                this.idField = value;
+            }
+        }
+    }
+
     public class CT_TwoCellAnchor
     {
         private CT_Marker fromField;
         private CT_Marker toField;
         private CT_AnchorClientData clientDataField;
+
+        public CT_GraphicalObjectFrame AddNewGraphicFrame()
+        {
+            throw new NotImplementedException();
+        }
 
         public CT_Marker from
         {
@@ -314,6 +401,21 @@ namespace NPOI.OpenXmlFormats.Dml
         {
             get { return nvCxnSpPrField; }
             set { nvCxnSpPrField = value; }
+        }
+        public CT_ConnectorNonVisual AddNewNvCxnSpPr()
+        {
+            this.nvCxnSpPr = new CT_ConnectorNonVisual();
+            return nvCxnSpPr;
+        }
+        public CT_ShapeProperties AddNewSpPr()
+        {
+            this.spPrField = new CT_ShapeProperties();
+            return spPrField;
+        }
+        public CT_ShapeStyle AddNewStyle()
+        {
+            this.styleField=new CT_ShapeStyle();
+            return this.styleField;
         }
         public CT_ShapeProperties spPr
         {

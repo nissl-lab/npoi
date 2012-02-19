@@ -31,6 +31,13 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.numFmtField = new List<CT_NumFmt>();
         }
 
+        public CT_NumFmt AddNewNumFmt()
+        {
+            CT_NumFmt newNumFmt=new CT_NumFmt();
+            this.numFmtField.Add(newNumFmt);
+            return newNumFmt;
+        }
+
         public List<CT_NumFmt> numFmt
         {
             get
@@ -658,7 +665,18 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             throw new NotImplementedException();
         }
-        
+        public CT_BooleanProperty GetIArray(int index)
+        {
+            throw new NotImplementedException();
+        }
+        public CT_BooleanProperty AddNewI()
+        {
+            throw new NotImplementedException();
+        }
+        public void SetIArray(CT_BooleanProperty[] array)
+        {
+            throw new NotImplementedException();
+        }
     }
 
 
@@ -778,6 +796,10 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.itemField = new CT_PatternFill();
             return GetPatternFill();
         }
+         public bool IsSetPatternFill()
+        {
+           return this.itemField!=null;
+        }
 
     }
     
@@ -807,6 +829,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.bgColorField = new CT_Color();
             this.fgColorField = new CT_Color();
         }
+
 
         public CT_Color AddNewFgColor()
         {
@@ -1283,16 +1306,60 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             this.horizontalField = new CT_BorderPr();
             this.verticalField = new CT_BorderPr();
-            this.diagonalField = new CT_BorderPr();
+            //this.diagonalField = new CT_BorderPr();
             //this.bottomField = new CT_BorderPr();
             //this.topField = new CT_BorderPr();
             //this.rightField = new CT_BorderPr();
             //this.leftField = new CT_BorderPr();
             this.outlineField = true;
         }
+        public CT_BorderPr AddNewDiagonal()
+        {
+            this.diagonalField = new CT_BorderPr();
+            return this.diagonalField;
+        }
+        public bool IsSetDiagonal()
+        {
+            return this.diagonalField != null;
+        }
+
+        public void unsetRight()
+        {
+            this.rightField = null;
+        }
+        public void unsetLeft()
+        {
+            this.leftField = null;
+        }
+        public void unsetTop()
+        {
+            this.topField = null;
+        }
+        public void unsetBottom()
+        {
+            this.bottomField = null;
+        }
+        public bool IsSetBottom() 
+        {
+            return this.bottomField != null;
+        }
+        public bool IsSetLeft()
+        {
+            return this.leftField != null;
+        }
+        public bool IsSetRight()
+        {
+            return this.rightField != null;
+        }
+        public bool IsSetTop()
+        {
+            return this.topField != null;
+        }
+    
         public bool IsSetBorder()
         {
-            return this.left != null || this.right != null || this.top != null || this.bottom != null;
+            return this.leftField != null || this.rightField != null
+                || this.topField != null || this.bottomField != null;
         }
         public CT_BorderPr AddNewTop()
         {
@@ -1467,12 +1534,12 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         private CT_Color colorField;
 
-        private ST_BorderStyle styleField;
+        private ST_BorderStyle? styleField;
 
         public CT_BorderPr()
         {
             //this.colorField = new CT_Color();
-            this.styleField = ST_BorderStyle.none;
+            //this.styleField = ST_BorderStyle.none;
         }
 
         public bool IsSetColor()
@@ -1483,6 +1550,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             colorField = null;
         }
+
 
         public CT_Color color
         {
@@ -1497,7 +1565,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
 
         [System.ComponentModel.DefaultValueAttribute(ST_BorderStyle.none)]
-        public ST_BorderStyle style
+        public ST_BorderStyle? style
         {
             get
             {

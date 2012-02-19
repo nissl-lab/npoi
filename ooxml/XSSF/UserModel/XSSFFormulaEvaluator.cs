@@ -151,16 +151,16 @@ namespace NPOI.XSSF.UserModel
          * @param cell The cell to Evaluate
          * @return The type of the formula result (the cell's type remains as HSSFCell.CELL_TYPE_FORMULA however)
          */
-        public int EvaluateFormulaCell(ICell cell)
+        public CellType EvaluateFormulaCell(ICell cell)
         {
             if (cell == null || cell.CellType != CellType.FORMULA)
             {
-                return -1;
+                return CellType.Unknown;
             }
             CellValue cv = EvaluateFormulaCellValue(cell);
             // cell remains a formula cell, but the cached value is Changed
             SetCellValue(cell, cv);
-            return (int)cv.CellType;
+            return cv.CellType;
         }
 
         /**
@@ -179,7 +179,7 @@ namespace NPOI.XSSF.UserModel
          *  value computed for you, use {@link #EvaluateFormulaCell(NPOI.ss.usermodel.Cell)} }
          * @param cell
          */
-        public XSSFCell EvaluateInCell(ICell cell)
+        public ICell EvaluateInCell(ICell cell)
         {
             if (cell == null)
             {
@@ -209,6 +209,7 @@ namespace NPOI.XSSF.UserModel
                 // never happens - blanks eventually Get translated to zero
                 case CellType.FORMULA:
                 // this will never happen, we have already Evaluated the formula
+                    break;
             }
             throw new InvalidOperationException("Unexpected cell value type (" + cellType + ")");
         }
@@ -250,9 +251,9 @@ namespace NPOI.XSSF.UserModel
          * This is a helpful wrapper around looping over all
          *  cells, and calling EvaluateFormulaCell on each one.
          */
-        public static void EvaluateAllFormulaCells(XSSFWorkbook wb)
+        public static void EvaluateAllFormulaCells(IWorkbook wb)
         {
-            HSSFFormulaEvaluator.EvaluateAllFormulaCells((IWorkbook)wb);
+            HSSFFormulaEvaluator.EvaluateAllFormulaCells(wb);
         }
         /**
          * Loops over all cells in all sheets of the supplied

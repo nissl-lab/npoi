@@ -157,6 +157,7 @@ namespace NPOI.XSSF.UserModel
                     break;
                 default:
                     newDataValidation.type = ST_DataValidationType.none;
+                    break;
             }
 
             if (validationType != ValidationType.ANY && validationType != ValidationType.LIST)

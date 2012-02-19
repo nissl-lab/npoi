@@ -1276,13 +1276,23 @@ namespace NPOI.OpenXmlFormats.Dml
 
         public CT_Transform2D()
         {
-            this.extField = new CT_PositiveSize2D();
-            this.offField = new CT_Point2D();
+            //this.extField = new CT_PositiveSize2D();
+            //this.offField = new CT_Point2D();
             this.rotField = 0;
             this.flipHField = false;
             this.flipVField = false;
         }
 
+        public CT_PositiveSize2D AddNewExt()
+        {
+            this.extField = new CT_PositiveSize2D();
+            return this.extField;
+        }
+        public CT_Point2D AddNewOff()
+        {
+            this.offField = new CT_Point2D();
+            return this.offField;
+        }
         public CT_Point2D off
         {
             get
@@ -1366,15 +1376,37 @@ namespace NPOI.OpenXmlFormats.Dml
 
         public CT_GroupTransform2D()
         {
-            this.chExtField = new CT_PositiveSize2D();
-            this.chOffField = new CT_Point2D();
-            this.extField = new CT_PositiveSize2D();
-            this.offField = new CT_Point2D();
+            //this.chExtField = new CT_PositiveSize2D();
+            //this.chOffField = new CT_Point2D();
+            //this.extField = new CT_PositiveSize2D();
+            //this.offField = new CT_Point2D();
             this.rotField = 0;
             this.flipHField = false;
             this.flipVField = false;
         }
 
+        public CT_PositiveSize2D AddNewExt()
+        {
+            this.extField = new CT_PositiveSize2D();
+            return this.extField;
+        }
+        public CT_Point2D AddNewOff()
+        {
+            this.offField = new CT_Point2D();
+            return this.offField;
+        }
+        public CT_PositiveSize2D AddNewChExt()
+        {
+            this.chExtField = new CT_PositiveSize2D();
+            return this.chExtField;
+        }
+        public CT_Point2D AddNewChOff()
+        {
+            this.chOffField = new CT_Point2D();
+            return this.chOffField;
+        }
+                    
+                    
         public CT_Point2D off
         {
             get

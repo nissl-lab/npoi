@@ -38,7 +38,7 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
-                ST_BorderStyle ptrn = _border.IsSetBottom() ? _border.bottom.style : null;
+                ST_BorderStyle? ptrn = _border.IsSetBottom() ? _border.bottom.style : null;
                 return ptrn == null ? (short)BorderStyle.NONE : (short)(ptrn - 1);
             }
             set
@@ -53,7 +53,7 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
-                ST_BorderStyle ptrn = _border.IsSetDiagonal() ? _border.diagonal.style : null;
+                ST_BorderStyle? ptrn = _border.IsSetDiagonal() ? _border.diagonal.style : null;
                 return ptrn == null ? (short)BorderStyle.NONE : (short)(ptrn - 1);
             }
             set
@@ -68,7 +68,7 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
-                ST_BorderStyle ptrn = _border.IsSetLeft() ? _border.left.style : null;
+                ST_BorderStyle? ptrn = _border.IsSetLeft() ? _border.left.style : null;
                 return ptrn == null ? (short)BorderStyle.NONE : (short)(ptrn - 1);
             }
             set
@@ -83,7 +83,7 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
-                ST_BorderStyle ptrn = _border.IsSetRight() ? _border.right.style : null;
+                ST_BorderStyle? ptrn = _border.IsSetRight() ? _border.right.style : null;
                 return ptrn == null ? (short)BorderStyle.NONE : (short)(ptrn - 1);
             }
             set
@@ -98,7 +98,7 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
-                ST_BorderStyle ptrn = _border.IsSetTop() ? _border.top.style : null;
+                ST_BorderStyle? ptrn = _border.IsSetTop() ? _border.top.style : null;
                 return ptrn == null ? (short)BorderStyle.NONE : (short)(ptrn - 1);
 
             }

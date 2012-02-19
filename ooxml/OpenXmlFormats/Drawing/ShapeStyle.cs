@@ -62,7 +62,11 @@ namespace NPOI.OpenXmlFormats.Dml {
                 this.sysClrField = value;
             }
         }
-        
+        public CT_SchemeColor AddNewSchemeClr()
+        {
+            this.schemeClrField = new CT_SchemeColor();
+            return this.schemeClrField;
+        }
         /// <remarks/>
         public CT_SchemeColor schemeClr {
             get {
@@ -158,7 +162,11 @@ namespace NPOI.OpenXmlFormats.Dml {
                 this.sysClrField = value;
             }
         }
-        
+        public CT_SchemeColor AddNewSchemeClr()
+        {
+            this.schemeClrField=new CT_SchemeColor();
+            return this.schemeClrField;
+        }
         /// <remarks/>
         public CT_SchemeColor schemeClr {
             get {
@@ -221,7 +229,22 @@ namespace NPOI.OpenXmlFormats.Dml {
         private CT_StyleMatrixReference effectRefField;
         
         private CT_FontReference fontRefField;
-        
+
+        public CT_StyleMatrixReference AddNewFillRef()
+        {
+            this.fillRefField = new CT_StyleMatrixReference();
+            return this.fillRefField;
+        }
+        public CT_StyleMatrixReference AddNewLnRef()
+        {
+            this.lnRefField = new CT_StyleMatrixReference();
+            return this.lnRefField;
+        }
+        public CT_FontReference AddNewFontRef()
+        {
+            this.fontRefField=new CT_FontReference();
+            return this.fontRefField;
+        }
         /// <remarks/>
         public CT_StyleMatrixReference lnRef {
             get {

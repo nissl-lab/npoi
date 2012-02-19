@@ -51,7 +51,8 @@ namespace NPOI.XSSF.UserModel
         {
             if (prototype == null)
             {
-                CT_Shape shape = CT_Shape.Factory.newInstance();
+                CT_Shape shape = new CT_Shape();
+
 
                 CT_ShapeNonVisual nv = shape.AddNewNvSpPr();
                 CT_NonVisualDrawingProps nvp = nv.AddNewCNvPr();
@@ -135,7 +136,7 @@ namespace NPOI.XSSF.UserModel
             ctShape.spPr.prstGeom.prst = ((ST_ShapeType)(type));
         }
 
-        protected CT_ShapeProperties GetShapeProperties()
+        protected override CT_ShapeProperties GetShapeProperties()
         {
             return ctShape.spPr;
         }

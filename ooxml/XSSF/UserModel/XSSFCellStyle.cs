@@ -99,7 +99,7 @@ namespace NPOI.XSSF.UserModel
          *  workbook (if they're not, it won't work)
          * @throws ArgumentException if there's a workbook mis-match
          */
-        public void verifyBelongsToStylesSource(StylesTable src)
+        public void VerifyBelongsToStylesSource(StylesTable src)
         {
             if (this._stylesSource != src)
             {
@@ -160,7 +160,7 @@ namespace NPOI.XSSF.UserModel
 
                     // Copy the format
                     String fmt = src.GetDataFormatString();
-                    SetDataFormat(
+                    DataFormat=(
                           (new XSSFDataFormat(_stylesSource)).GetFormat(fmt)
                     );
 
@@ -226,7 +226,7 @@ namespace NPOI.XSSF.UserModel
 
                 int idx = (int)_cellXf.borderId;
                 CT_Border ct = _stylesSource.GetBorderAt(idx).GetCTBorder();
-                ST_BorderStyle ptrn = ct.IsSetBottom() ? ct.bottom.style : null;
+                ST_BorderStyle? ptrn = ct.IsSetBottom() ? ct.bottom.style : null;
                 return ptrn == null ? BorderStyle.NONE : (BorderStyle)(ptrn - 1);
             }
             set 
@@ -323,7 +323,7 @@ namespace NPOI.XSSF.UserModel
 
                 int idx = (int)_cellXf.borderId;
                 CT_Border ct = _stylesSource.GetBorderAt(idx).GetCTBorder();
-                ST_BorderStyle ptrn = ct.IsSetTop() ? ct.top.style : null;
+                ST_BorderStyle? ptrn = ct.IsSetTop() ? ct.top.style : null;
                 return ptrn == null ? BorderStyle.NONE : (BorderStyle)(ptrn - 1);
             }
             set 
@@ -353,6 +353,12 @@ namespace NPOI.XSSF.UserModel
             {
                 XSSFColor clr = GetBottomBorderXSSFColor();
                 return clr == null ? IndexedColors.BLACK.Index : clr.GetIndexed();
+            }
+            set 
+            {
+                XSSFColor clr = new XSSFColor();
+                clr.SetIndexed(value);
+                SetBottomBorderColor(clr);
             }
         }
 
@@ -395,13 +401,10 @@ namespace NPOI.XSSF.UserModel
          *
          * @return the number format string
          */
-        public String DataFormatString
+        public String GetDataFormatString()
         {
-            get
-            {
                 int idx = DataFormat;
                 return new XSSFDataFormat(_stylesSource).GetFormat((short)idx);
-            }
         }
 
         /**
@@ -789,6 +792,10 @@ namespace NPOI.XSSF.UserModel
             {
                 return GetVerticalAlignmentEnum();
             }
+            set 
+            {
+                GetCellAlignment().SetVertical(value);
+            }
         }
 
         /**
@@ -838,19 +845,6 @@ namespace NPOI.XSSF.UserModel
             SetBorderBottom(border);
         }
 
-
-
-        /**
-         * Set the color to use for the bottom border
-         * @param color the index of the color defInition
-         * @see NPOI.ss.usermodel.IndexedColors
-         */
-        public void SetBottomBorderColor(short color)
-        {
-            XSSFColor clr = new XSSFColor();
-            clr.SetIndexed(color);
-            SetBottomBorderColor(clr);
-        }
 
         /**
          * Set the color to use for the bottom border
@@ -1072,13 +1066,13 @@ namespace NPOI.XSSF.UserModel
             CT_Border ct = GetCTBorder();
             if (color == null && !ct.IsSetTop()) return;
 
-            CT_BorderPr pr = ct.IsSetTop() ? ct.GetTop() : ct.AddNewTop();
-            if (color != null) pr.SetColor(color.GetCTColor());
+            CT_BorderPr pr = ct.IsSetTop() ? ct.top : ct.AddNewTop();
+            if (color != null) pr.color = color.GetCTColor();
             else pr.unsetColor();
 
             int idx = _stylesSource.PutBorder(new XSSFCellBorder(ct, _theme));
 
-            _cellXf.borderId = (idx);
+            _cellXf.borderId = (uint)idx;
             _cellXf.applyBorder = (true);
         }
 
@@ -1097,16 +1091,6 @@ namespace NPOI.XSSF.UserModel
             GetCellAlignment().SetVertical(VerticalAlignment.values()[align]);
         }
 
-        /**
-         * Set the type of vertical alignment for the cell
-         *
-         * @param align - the type of alignment
-         */
-        public void SetVerticalAlignment(VerticalAlignment align)
-        {
-            GetCellAlignment().SetVertical(align);
-        }
-
 
         /**
          * Gets border color
@@ -1118,13 +1102,13 @@ namespace NPOI.XSSF.UserModel
         {
             switch (side)
             {
-                case BOTTOM:
+                case BorderSide.BOTTOM:
                     return GetBottomBorderXSSFColor();
-                case RIGHT:
+                case BorderSide.RIGHT:
                     return GetRightBorderXSSFColor();
-                case TOP:
+                case BorderSide.TOP:
                     return GetTopBorderXSSFColor();
-                case LEFT:
+                case BorderSide.LEFT:
                     return GetLeftBorderXSSFColor();
                 default:
                     throw new ArgumentException("Unknown border: " + side);
@@ -1141,16 +1125,16 @@ namespace NPOI.XSSF.UserModel
         {
             switch (side)
             {
-                case BOTTOM:
+                case BorderSide.BOTTOM:
                     SetBottomBorderColor(color);
                     break;
-                case RIGHT:
+                case BorderSide.RIGHT:
                     SetRightBorderColor(color);
                     break;
-                case TOP:
+                case BorderSide.TOP:
                     SetTopBorderColor(color);
                     break;
-                case LEFT:
+                case BorderSide.LEFT:
                     SetLeftBorderColor(color);
                     break;
             }
@@ -1159,9 +1143,9 @@ namespace NPOI.XSSF.UserModel
         {
             if (_cellXf.IsSetFontId())
             {
-                return (int)_cellXf.GetFontId();
+                return (int)_cellXf.fontId;
             }
-            return (int)_cellStyleXf.GetFontId();
+            return (int)_cellStyleXf.fontId;
         }
 
         /**
@@ -1172,7 +1156,7 @@ namespace NPOI.XSSF.UserModel
         {
             if (this._cellAlignment == null)
             {
-                this._cellAlignment = new XSSFCellAlignment(getCT_CellAlignment());
+                this._cellAlignment = new XSSFCellAlignment(GetCTCellAlignment());
             }
             return this._cellAlignment;
         }
@@ -1186,7 +1170,7 @@ namespace NPOI.XSSF.UserModel
         {
             if (_cellXf.alignment == null)
             {
-                _cellXf.SetAlignment(CT_CellAlignment());
+                _cellXf.alignment=new CT_CellAlignment();
             }
             return _cellXf.alignment;
         }
@@ -1198,7 +1182,7 @@ namespace NPOI.XSSF.UserModel
          */
         public override int GetHashCode()
         {
-            return _cellXf.ToString().HashCode();
+            return _cellXf.ToString().GetHashCode();
         }
 
         /**
@@ -1223,12 +1207,34 @@ namespace NPOI.XSSF.UserModel
          */
         public Object Clone()
         {
-            CT_Xf xf = (CT_Xf)_cellXf.copy();
+            CT_Xf xf = (CT_Xf)_cellXf.Copy();
 
-            int xfSize = _stylesSource._getStyleXfsSize();
+            int xfSize = _stylesSource._GetStyleXfsSize();
             int indexXf = _stylesSource.PutCellXf(xf);
             return new XSSFCellStyle(indexXf - 1, xfSize - 1, _stylesSource, _theme);
         }
+
+        #region ICellStyle Members
+
+
+        public IFont GetFont(IWorkbook parentWorkbook)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool ShrinkToFit
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+            set
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        #endregion
     }
 
 }

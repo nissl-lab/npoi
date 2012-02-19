@@ -67,8 +67,8 @@ namespace NPOI.XSSF.UserModel
          * {@link NPOI.ss.usermodel.ComparisonOperator#BETWEEN}) and
          * {@link NPOI.ss.usermodel.ComparisonOperator#NOT_BETWEEN} operations)
          */
-        public XSSFConditionalFormattingRule CreateConditionalFormattingRule(
-                byte comparisonOperation,
+        public IConditionalFormattingRule CreateConditionalFormattingRule(
+                ComparisonOperator comparisonOperation,
                 String formula1,
                 String formula2)
         {
@@ -96,8 +96,8 @@ namespace NPOI.XSSF.UserModel
             return rule;
         }
 
-        public XSSFConditionalFormattingRule CreateConditionalFormattingRule(
-                byte comparisonOperation,
+        public IConditionalFormattingRule CreateConditionalFormattingRule(
+                ComparisonOperator comparisonOperation,
                 String formula)
         {
 
@@ -109,7 +109,7 @@ namespace NPOI.XSSF.UserModel
          *
          * @param formula - formula for the valued, Compared with the cell
          */
-        public XSSFConditionalFormattingRule CreateConditionalFormattingRule(String formula)
+        public IConditionalFormattingRule CreateConditionalFormattingRule(String formula)
         {
             XSSFConditionalFormattingRule rule = new XSSFConditionalFormattingRule(_sheet);
             CT_CfRule cfRule = rule.GetCTCfRule();
@@ -215,7 +215,7 @@ namespace NPOI.XSSF.UserModel
         *			of the Conditional Formatting object to fetch
         * @return Conditional Formatting object
         */
-        public XSSFConditionalFormatting GetConditionalFormattingAt(int index)
+        public IConditionalFormatting GetConditionalFormattingAt(int index)
         {
             CheckIndex(index);
             CT_ConditionalFormatting cf = _sheet.GetCTWorksheet().GetConditionalFormattingArray(index);

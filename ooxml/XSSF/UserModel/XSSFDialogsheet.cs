@@ -25,7 +25,7 @@ namespace NPOI.XSSF.UserModel
     {
         protected CT_Dialogsheet dialogsheet;
 
-        protected XSSFDialogsheet(XSSFSheet sheet)
+        public XSSFDialogsheet(XSSFSheet sheet)
             : base(sheet.GetPackagePart(), sheet.GetPackageRelationship())
         {
 

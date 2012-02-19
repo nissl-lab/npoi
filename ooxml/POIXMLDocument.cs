@@ -22,7 +22,6 @@ namespace NPOI
     using NPOI.OpenXml4Net.Exceptions;
     using System.IO;
     using NPOI.OpenXml4Net.OPC;
-    using NPOI.Util;
     using System.Collections.Generic;
     using NPOI.OpenXml4Net;
 
@@ -55,7 +54,7 @@ namespace NPOI
          *  in the event of a problem.
          * Works around shortcomings in java's this() constructor calls
          */
-        public static OPCPackage openPackage(String path)
+        public static OPCPackage OpenPackage(String path)
         {
             try
             {

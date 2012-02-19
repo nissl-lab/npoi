@@ -20,6 +20,7 @@ using NPOI.XSSF.Model;
 using System;
 using NPOI.SS.Util;
 using NPOI.OpenXmlFormats.Dml;
+using NPOI.Util;
 namespace NPOI.XSSF.UserModel
 {
 
@@ -85,7 +86,7 @@ namespace NPOI.XSSF.UserModel
                 if (_vmlShape != null)
                 {
                     _vmlShape.GetClientDataArray(0).SetColumnArray(
-                          new BigInt[] { new Bigint(String.ValueOf(value)) }
+                          new BigInt[] { new BigInt(value) }
                     );
 
                     // There is a very odd xmlbeans bug when changing the column

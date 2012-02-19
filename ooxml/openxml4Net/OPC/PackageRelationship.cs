@@ -54,7 +54,7 @@ namespace NPOI.OpenXml4Net.OPC
         /**
          * Le mode de ciblage [Internal|External]
          */
-        private TargetMode targetMode;
+        private TargetMode? targetMode;
 
         /**
          * URI de la partie cible.
@@ -190,7 +190,7 @@ namespace NPOI.OpenXml4Net.OPC
          * 
          * @return the targetMode
          */
-        public TargetMode TargetMode
+        public TargetMode? TargetMode
         {
             get
             {
@@ -207,7 +207,7 @@ namespace NPOI.OpenXml4Net.OPC
             {
                 // If it's an external target, we don't
                 //  need to apply our normal validation rules
-                if (targetMode == TargetMode.External)
+                if (targetMode == NPOI.OpenXml4Net.OPC.TargetMode.External)
                 {
                     return targetUri;
                 }

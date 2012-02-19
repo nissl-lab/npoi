@@ -57,7 +57,12 @@ namespace NPOI.OpenXmlFormats.Dml
             this.noFillField = new CT_NoFillProperties();
             this.prstGeomField = new CT_PresetGeometry2D();
             this.custGeomField = new CT_CustomGeometry2D();
+            //this.xfrmField = new CT_Transform2D();
+        }
+        public CT_Transform2D AddNewXfrm()
+        {
             this.xfrmField = new CT_Transform2D();
+            return this.xfrmField;
         }
         public bool IsSetPattFill()
         {

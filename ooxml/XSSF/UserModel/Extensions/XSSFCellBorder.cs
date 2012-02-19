@@ -99,8 +99,8 @@ namespace NPOI.XSSF.UserModel.Extensions
          */
         public BorderStyle GetBorderStyle(BorderSide side)
         {
-            CT_BorderPr CT_Border = GetBorder(side);
-            ST_BorderStyle border = CT_Border == null ? ST_BorderStyle.none : CT_Border.style;
+            CT_BorderPr ctborder = GetBorder(side);
+            ST_BorderStyle? border = ctborder == null ? ST_BorderStyle.none : ctborder.style;
             return (BorderStyle)Enum.GetValues(typeof(BorderStyle)).GetValue((int)border - 1);
         }
 

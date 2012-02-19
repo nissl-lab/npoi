@@ -11,6 +11,11 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         static XmlSerializer serializer = new XmlSerializer(typeof(CT_Stylesheet));
         private CT_Stylesheet stylesheet;
 
+        public StyleSheetDocument()
+        {
+            this.stylesheet = new CT_Stylesheet();
+        }
+
         public StyleSheetDocument(CT_Stylesheet stylesheet)
         {
             this.stylesheet = stylesheet;

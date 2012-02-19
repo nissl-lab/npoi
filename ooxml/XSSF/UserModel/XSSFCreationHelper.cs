@@ -23,7 +23,7 @@ namespace NPOI.XSSF.UserModel
     {
         private XSSFWorkbook workbook;
 
-        XSSFCreationHelper(XSSFWorkbook wb)
+        public XSSFCreationHelper(XSSFWorkbook wb)
         {
             workbook = wb;
         }

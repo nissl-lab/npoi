@@ -24,6 +24,7 @@ using NPOI.SS.UserModel;
 using System.Collections.Generic;
 using NPOI.Util;
 using NPOI.SS;
+using System.Collections;
 namespace NPOI.XSSF.UserModel
 {
 
@@ -108,7 +109,7 @@ namespace NPOI.XSSF.UserModel
          *
          * @return an iterator over cells in this row.
          */
-        public Dictionary<int, ICell>.ValueCollection.Enumerator Iterator()
+        public IEnumerator GetEnumerator()
         {
             return CellIterator();
         }
@@ -198,7 +199,7 @@ namespace NPOI.XSSF.UserModel
          */
         public ICell GetCell(int cellnum)
         {
-            return GetCell(cellnum, _sheet.GetWorkbook().GetMissingCellPolicy());
+            return GetCell(cellnum, _sheet.Workbook.GetMissingCellPolicy());
         }
 
         /**
@@ -469,13 +470,13 @@ namespace NPOI.XSSF.UserModel
             }
 
             XSSFCell xcell = (XSSFCell)cell;
-            if (xcell.IsPartOfArrayFormulaGroup())
+            if (xcell.IsPartOfArrayFormulaGroup)
             {
                 xcell.NotifyArrayFormulaChanging();
             }
             if (cell.CellType == CellType.FORMULA)
             {
-                _sheet.GetWorkbook().OnDeleteFormula(xcell);
+                _sheet.Workbook.OnDeleteFormula(xcell);
             }
             _cells.Remove(cell.ColumnIndex);
         }
@@ -496,7 +497,7 @@ namespace NPOI.XSSF.UserModel
          *
          * @see NPOI.XSSF.usermodel.XSSFSheet#Write(java.io.OutputStream) ()
          */
-        protected void OnDocumentWrite()
+        internal void OnDocumentWrite()
         {
             // check if cells in the CT_Row are ordered
             bool isOrdered = true;
@@ -535,7 +536,7 @@ namespace NPOI.XSSF.UserModel
          * @return formatted xml representation of this row
          */
 
-        public String ToString()
+        public override String ToString()
         {
             return _row.ToString();
         }
@@ -547,15 +548,15 @@ namespace NPOI.XSSF.UserModel
          */
         protected void Shift(int n)
         {
-            int rownum = GetRowNum() + n;
-            CalculationChain calcChain = _sheet.GetWorkbook().getCalculationChain();
-            int sheetId = (int)_sheet.sheet.GetSheetId();
-            String msg = "Row[rownum=" + GetRowNum() + "] Contains cell(s) included in a multi-cell array formula. " +
+            int rownum = RowNum + n;
+            CalculationChain calcChain = ((XSSFWorkbook)_sheet.Workbook).GetCalculationChain();
+            int sheetId = (int)_sheet.sheet.sheetId;
+            String msg = "Row[rownum=" + RowNum + "] Contains cell(s) included in a multi-cell array formula. " +
                     "You cannot change part of an array.";
             foreach (ICell c in this)
             {
                 XSSFCell cell = (XSSFCell)c;
-                if (cell.IsPartOfArrayFormulaGroup())
+                if (cell.IsPartOfArrayFormulaGroup)
                 {
                     cell.NotifyArrayFormulaChanging(msg);
                 }
@@ -567,8 +568,22 @@ namespace NPOI.XSSF.UserModel
                 String r = new CellReference(rownum, cell.ColumnIndex).FormatAsString();
                 CT_Cell.r = r;
             }
-            SetRowNum(rownum);
+            RowNum = rownum;
         }
+
+        #region IRow Members
+
+        public List<ICell> Cells
+        {
+            get { throw new NotImplementedException(); }
+        }
+
+        public void MoveCell(ICell cell, int newColumn)
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion
     }
 
 }

@@ -75,11 +75,11 @@ namespace NPOI.XSSF.UserModel
                 CT_ShapeStyle style = shape.AddNewStyle();
                 CT_SchemeColor scheme = style.AddNewLnRef().AddNewSchemeClr();
                 scheme.val = (ST_SchemeColorVal.accent1);
-                style.GetLnRef().idx = (1);
+                style.lnRef.idx = (1);
 
-                CT_StyleMatrixReference Fillref = style.AddNewFillRef();
-                Fillref.idx = (0);
-                Fillref.AddNewSchemeClr().SetVal(ST_SchemeColorVal.accent1);
+                CT_StyleMatrixReference fillref = style.AddNewFillRef();
+                fillref.idx = (0);
+                fillref.AddNewSchemeClr().SetVal(ST_SchemeColorVal.accent1);
 
                 CT_StyleMatrixReference effectRef = style.AddNewEffectRef();
                 effectRef.idx = (0);

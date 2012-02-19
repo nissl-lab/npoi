@@ -23,6 +23,8 @@ using System;
 using NPOI.SS.Formula.PTG;
 using NPOI.SS.Formula;
 using NPOI.SS;
+using NPOI.Util;
+using NPOI.SS.Formula.Eval;
 namespace NPOI.XSSF.UserModel
 {
 
@@ -87,8 +89,8 @@ namespace NPOI.XSSF.UserModel
             {
                 _cellNum = new CellReference(cell.r).Col;
             }
-            _sharedStringSource = row.Sheet.Workbook.GetSharedStringSource();
-            _stylesSource = row.Sheet.Workbook.GetStylesSource();
+            _sharedStringSource = ((XSSFWorkbook)row.Sheet.Workbook).GetSharedStringSource();
+            _stylesSource = ((XSSFWorkbook)row.Sheet.Workbook).GetStylesSource();
         }
 
         /**
@@ -112,7 +114,7 @@ namespace NPOI.XSSF.UserModel
          *
          * @return the sheet this cell belongs to
          */
-        public XSSFSheet Sheet
+        public ISheet Sheet
         {
             get
             {
@@ -125,7 +127,7 @@ namespace NPOI.XSSF.UserModel
          *
          * @return the row this cell belongs to
          */
-        public XSSFRow Row
+        public IRow Row
         {
             get
             {
@@ -139,23 +141,26 @@ namespace NPOI.XSSF.UserModel
          * For strings, numbers, and errors, we throw an exception. For blank cells we return a false.
          * </p>
          * @return the value of the cell as a bool
-         * @throws InvalidOperationException if the cell type returned by {@link #getCellType()}
+         * @throws InvalidOperationException if the cell type returned by {@link #CellType}
          *   is not CellType.BOOLEAN, CellType.BLANK or CellType.FORMULA
          */
-        public bool GetBooleanCellValue()
+        public bool BooleanCellValue
         {
-            int cellType = GetCellType();
-            switch (cellType)
+            get
             {
-                case CellType.BLANK:
-                    return false;
-                case CellType.BOOLEAN:
-                    return _cell.IsSetV() && TRUE_AS_STRING.Equals(_cell.v);
-                case CellType.FORMULA:
-                    //YK: should throw an exception if requesting bool value from a non-bool formula
-                    return _cell.IsSetV() && TRUE_AS_STRING.Equals(_cell.v);
-                default:
-                    throw TypeMismatch((int)CellType.BOOLEAN, cellType, false);
+                CellType cellType = CellType;
+                switch (cellType)
+                {
+                    case CellType.BLANK:
+                        return false;
+                    case CellType.BOOLEAN:
+                        return _cell.isSetV() && TRUE_AS_STRING.Equals(_cell.v);
+                    case CellType.FORMULA:
+                        //YK: should throw an exception if requesting bool value from a non-bool formula
+                        return _cell.isSetV() && TRUE_AS_STRING.Equals(_cell.v);
+                    default:
+                        throw TypeMismatch(CellType.BOOLEAN, cellType, false);
+                }
             }
         }
 
@@ -168,7 +173,7 @@ namespace NPOI.XSSF.UserModel
          */
         public void SetCellValue(bool value)
         {
-            _cell.t = (ST_CellType.B);
+            _cell.t = (ST_CellType.b);
             _cell.v = (value ? TRUE_AS_STRING : FALSE_AS_STRING);
         }
 
@@ -179,36 +184,39 @@ namespace NPOI.XSSF.UserModel
          * For formulas or error cells we return the precalculated value;
          * </p>
          * @return the value of the cell as a number
-         * @throws InvalidOperationException if the cell type returned by {@link #getCellType()} is CellType.STRING
+         * @throws InvalidOperationException if the cell type returned by {@link #CellType} is CellType.STRING
          * @exception NumberFormatException if the cell value isn't a parsable <code>double</code>.
          * @see DataFormatter for turning this number into a string similar to that which Excel would render this number as.
          */
-        public double GetNumericCellValue()
+        public double NumericCellValue
         {
-            CellType cellType = GetCellType();
-            switch (cellType)
+            get
             {
-                case CellType.BLANK:
-                    return 0.0;
-                case CellType.FORMULA:
-                case CellType.NUMERIC:
-                    if (_cell.IsSetV())
-                    {
-                        try
-                        {
-                            return Double.Parse(_cell.v);
-                        }
-                        catch (FormatException e)
-                        {
-                            throw TypeMismatch(CellType.NUMERIC, CellType.STRING, false);
-                        }
-                    }
-                    else
-                    {
+                CellType cellType = CellType;
+                switch (cellType)
+                {
+                    case CellType.BLANK:
                         return 0.0;
-                    }
-                default:
-                    throw TypeMismatch(CellType.NUMERIC, cellType, false);
+                    case CellType.FORMULA:
+                    case CellType.NUMERIC:
+                        if (_cell.isSetV())
+                        {
+                            try
+                            {
+                                return Double.Parse(_cell.v);
+                            }
+                            catch (FormatException e)
+                            {
+                                throw TypeMismatch(CellType.NUMERIC, CellType.STRING, false);
+                            }
+                        }
+                        else
+                        {
+                            return 0.0;
+                        }
+                    default:
+                        throw TypeMismatch(CellType.NUMERIC, cellType, false);
+                }
             }
         }
 
@@ -222,24 +230,24 @@ namespace NPOI.XSSF.UserModel
          */
         public void SetCellValue(double value)
         {
-            if (Double.IsInfInity(value))
+            if (Double.IsInfinity(value))
             {
                 // Excel does not support positive/negative infInities,
                 // rather, it gives a #DIV/0! error in these cases.
-                _cell.t = (ST_CellType.E);
+                _cell.t = (ST_CellType.e);
                 _cell.v = (FormulaError.DIV0.String);
             }
             else if (Double.IsNaN(value))
             {
                 // Excel does not support Not-a-Number (NaN),
                 // instead it immediately generates an #NUM! error.
-                _cell.t = (ST_CellType.E);
+                _cell.t = (ST_CellType.e);
                 _cell.v = (FormulaError.NUM.String);
             }
             else
             {
-                _cell.t = (ST_CellType.N);
-                _cell.v = (String.ValueOf(value));
+                _cell.t = (ST_CellType.n);
+                _cell.v = (value.ToString());
             }
         }
 
@@ -251,10 +259,13 @@ namespace NPOI.XSSF.UserModel
          * </p>
          * @return the value of the cell as a string
          */
-        public String GetStringCellValue()
+        public String StringCellValue
         {
-            XSSFRichTextString str = GetRichStringCellValue();
-            return str == null ? null : str.String;
+            get
+            {
+                IRichTextString str = this.RichStringCellValue;
+                return str == null ? null : str.String;
+            }
         }
 
         /**
@@ -265,60 +276,63 @@ namespace NPOI.XSSF.UserModel
          * </p>
          * @return the value of the cell as a XSSFRichTextString
          */
-        public XSSFRichTextString GetRichStringCellValue()
+        public IRichTextString RichStringCellValue
         {
-            CellType cellType = GetCellType();
-            XSSFRichTextString rt;
-            switch (cellType)
+            get
             {
-                case CellType.BLANK:
-                    rt = new XSSFRichTextString("");
-                    break;
-                case CellType.STRING:
-                    if (_cell.t == ST_CellType.inlineStr)
-                    {
-                        if (_cell.IsSetIs())
+                CellType cellType = CellType;
+                XSSFRichTextString rt;
+                switch (cellType)
+                {
+                    case CellType.BLANK:
+                        rt = new XSSFRichTextString("");
+                        break;
+                    case CellType.STRING:
+                        if (_cell.t == ST_CellType.inlineStr)
                         {
-                            //string is expressed directly in the cell defInition instead of implementing the shared string table.
-                            rt = new XSSFRichTextString(_cell.GetIs());
+                            if (_cell.isSetIs())
+                            {
+                                //string is expressed directly in the cell defInition instead of implementing the shared string table.
+                                rt = new XSSFRichTextString(_cell.GetIs());
+                            }
+                            else if (_cell.isSetV())
+                            {
+                                //cached result of a formula
+                                rt = new XSSFRichTextString(_cell.v);
+                            }
+                            else
+                            {
+                                rt = new XSSFRichTextString("");
+                            }
                         }
-                        else if (_cell.IsSetV())
+                        else if (_cell.t == ST_CellType.str)
                         {
-                            //cached result of a formula
-                            rt = new XSSFRichTextString(_cell.v);
-                        }
-                        else
-                        {
-                            rt = new XSSFRichTextString("");
-                        }
-                    }
-                    else if (_cell.t == ST_CellType.str)
-                    {
-                        //cached formula value
-                        rt = new XSSFRichTextString(_cell.IsSetV() ? _cell.v : "");
-                    }
-                    else
-                    {
-                        if (_cell.IsSetV())
-                        {
-                            int idx = Int32.Parse(_cell.v);
-                            rt = new XSSFRichTextString(_sharedStringSource.GetEntryAt(idx));
+                            //cached formula value
+                            rt = new XSSFRichTextString(_cell.isSetV() ? _cell.v : "");
                         }
                         else
                         {
-                            rt = new XSSFRichTextString("");
+                            if (_cell.isSetV())
+                            {
+                                int idx = Int32.Parse(_cell.v);
+                                rt = new XSSFRichTextString(_sharedStringSource.GetEntryAt(idx));
+                            }
+                            else
+                            {
+                                rt = new XSSFRichTextString("");
+                            }
                         }
-                    }
-                    break;
-                case CellType.FORMULA:
-                    CheckFormulaCachedValueType(CellType.STRING, GetBaseCellType(false));
-                    rt = new XSSFRichTextString(_cell.IsSetV() ? _cell.v : "");
-                    break;
-                default:
-                    throw TypeMismatch(CellType.STRING, cellType, false);
+                        break;
+                    case CellType.FORMULA:
+                        CheckFormulaCachedValueType(CellType.STRING, GetBaseCellType(false));
+                        rt = new XSSFRichTextString(_cell.isSetV() ? _cell.v : "");
+                        break;
+                    default:
+                        throw TypeMismatch(CellType.STRING, cellType, false);
+                }
+                rt.SetStylesTableReference(_stylesSource);
+                return rt;
             }
-            rt.SetStylesTableReference(_stylesSource);
-            return rt;
         }
 
         private static void CheckFormulaCachedValueType(CellType expectedTypeCode, CellType cachedValueType)
@@ -357,7 +371,7 @@ namespace NPOI.XSSF.UserModel
                 SetCellType(CellType.BLANK);
                 return;
             }
-            CellType cellType = GetCellType();
+            CellType cellType = CellType;
             switch (cellType)
             {
                 case CellType.FORMULA:
@@ -386,24 +400,32 @@ namespace NPOI.XSSF.UserModel
          * Return a formula for the cell, for example, <code>SUM(C4:E4)</code>
          *
          * @return a formula for the cell
-         * @throws InvalidOperationException if the cell type returned by {@link #getCellType()} is not CellType.FORMULA
+         * @throws InvalidOperationException if the cell type returned by {@link #CellType} is not CellType.FORMULA
          */
-        public String GetCellFormula()
+        public String CellFormula
         {
-            CellType cellType = GetCellType();
-            if (cellType != CellType.FORMULA) throw TypeMismatch(CellType.FORMULA, cellType, false);
+            get
+            {
+                CellType cellType = CellType;
+                if (cellType != CellType.FORMULA) 
+                    throw TypeMismatch(CellType.FORMULA, cellType, false);
 
-            CT_CellFormula f = _cell.f;
-            if (IsPartOfArrayFormulaGroup() && f == null)
-            {
-                XSSFCell cell = Sheet.GetFirstCellInArrayFormula(this);
-                return cell.GetCellFormula();
+                CT_CellFormula f = _cell.f;
+                if (IsPartOfArrayFormulaGroup && f == null)
+                {
+                    ICell cell = ((XSSFSheet)Sheet).GetFirstCellInArrayFormula(this);
+                    return cell.CellFormula;
+                }
+                if (f.t == ST_CellFormulaType.shared)
+                {
+                    return ConvertSharedFormula((int)f.si);
+                }
+                return f.Value;
             }
-            if (f.t == ST_CellFormulaType.shared)
+            set 
             {
-                return ConvertSharedFormula((int)f.si);
+                SetCellFormula(value);
             }
-            return f.Value;
         }
 
         /**
@@ -414,7 +436,7 @@ namespace NPOI.XSSF.UserModel
          */
         private String ConvertSharedFormula(int si)
         {
-            XSSFSheet sheet = Sheet;
+            XSSFSheet sheet = (XSSFSheet)Sheet;
 
             CT_CellFormula f = sheet.GetSharedFormula(si);
             if (f == null) throw new InvalidOperationException(
@@ -426,8 +448,8 @@ namespace NPOI.XSSF.UserModel
 
             CellRangeAddress ref1 = CellRangeAddress.ValueOf(sharedFormulaRange);
 
-            int sheetIndex = sheet.GetWorkbook().GetSheetIndex(sheet);
-            XSSFEvaluationWorkbook fpb = XSSFEvaluationWorkbook.Create(sheet.GetWorkbook());
+            int sheetIndex = sheet.Workbook.GetSheetIndex(sheet);
+            XSSFEvaluationWorkbook fpb = XSSFEvaluationWorkbook.Create(sheet.Workbook);
             SharedFormula sf = new SharedFormula(SpreadsheetVersion.EXCEL2007);
 
             Ptg[] ptgs = FormulaParser.Parse(sharedFormula, fpb, FormulaType.CELL, sheetIndex);
@@ -451,11 +473,11 @@ namespace NPOI.XSSF.UserModel
          */
         public void SetCellFormula(String formula)
         {
-            if (IsPartOfArrayFormulaGroup())
+            if (IsPartOfArrayFormulaGroup)
             {
                 NotifyArrayFormulaChanging();
             }
-            SetFormula(formula, FormulaType.CELL);
+            SetFormula(formula, (int)FormulaType.CELL);
         }
 
         /* namespace */
@@ -467,24 +489,24 @@ namespace NPOI.XSSF.UserModel
             cellFormula.@ref = (range.FormatAsString());
         }
 
-        private void SetFormula(String formula, int formulaType)
+        private void SetFormula(String formula, FormulaType formulaType)
         {
-            XSSFWorkbook wb = _row.Sheet.GetWorkbook();
+            IWorkbook wb = _row.Sheet.Workbook;
             if (formula == null)
             {
-                wb.onDeleteFormula(this);
-                if (_cell.IsSetF()) _cell.unsetF();
+                wb.OnDeleteFormula(this);
+                if (_cell.isSetF()) _cell.unsetF();
                 return;
             }
 
-            XSSFEvaluationWorkbook fpb = XSSFEvaluationWorkbook.Create(wb);
+            IFormulaParsingWorkbook fpb = XSSFEvaluationWorkbook.Create(wb);
             //validate through the FormulaParser
-            FormulaParser.Parse(formula, fpb, formulaType, wb.GetSheetIndex(getSheet()));
+            FormulaParser.Parse(formula, fpb, formulaType, wb.GetSheetIndex(GetSheet()));
 
             CT_CellFormula f = new CT_CellFormula();
             f.Value = formula;
             _cell.f= (f);
-            if (_cell.IsSetV()) _cell.unsetV();
+            if (_cell.isSetV()) _cell.unsetV();
         }
 
         /**
@@ -509,7 +531,7 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
-                return _row.GetRowNum();
+                return _row.RowNum;
             }
         }
 
@@ -528,40 +550,34 @@ namespace NPOI.XSSF.UserModel
          *
          * @return the cell's style.</code>
          */
-        public XSSFCellStyle GetCellStyle()
+        public ICellStyle CellStyle
         {
-            XSSFCellStyle style = null;
-            if (_stylesSource.GetNumCellStyles() > 0)
+            get
             {
-                long idx = _cell.IsSetS() ? _cell.s : 0;
-                style = _stylesSource.GetStyleAt((int)idx);
+                XSSFCellStyle style = null;
+                if (_stylesSource.GetNumCellStyles() > 0)
+                {
+                    long idx = _cell.IsSetS() ? _cell.s : 0;
+                    style = _stylesSource.GetStyleAt((int)idx);
+                }
+                return style;
             }
-            return style;
-        }
-
-        /**
-         * Set the style for the cell.  The style should be an XSSFCellStyle Created/retreived from
-         * the XSSFWorkbook.
-         *
-         * @param style  reference Contained in the workbook.
-         * If the value is null then the style information is Removed causing the cell to used the default workbook style.
-         */
-        public void SetCellStyle(ICellStyle style)
-        {
-            if (style == null)
+            set 
             {
-                if (_cell.IsSetS()) _cell.unsetS();
-            }
-            else
-            {
-                XSSFCellStyle xStyle = (XSSFCellStyle)style;
-                xStyle.verifyBelongsToStylesSource(_stylesSource);
+                if (value == null)
+                {
+                    if (_cell.IsSetS()) _cell.unsetS();
+                }
+                else
+                {
+                    XSSFCellStyle xStyle = (XSSFCellStyle)value;
+                    xStyle.VerifyBelongsToStylesSource(_stylesSource);
 
-                long idx = _stylesSource.PutStyle(xStyle);
-                _cell.s= (uint)idx;
+                    long idx = _stylesSource.PutStyle(xStyle);
+                    _cell.s = (uint)idx;
+                }
             }
         }
-
         /**
          * Return the cell type.
          *
@@ -573,15 +589,18 @@ namespace NPOI.XSSF.UserModel
          * @see Cell#CellType.BOOLEAN
          * @see Cell#CellType.ERROR
          */
-        public CellType GetCellType()
+        public CellType CellType
         {
-
-            if (_cell.f != null || Sheet.IsCellInArrayFormulaContext(this))
+            get
             {
-                return CellType.FORMULA;
-            }
 
-            return GetBaseCellType(true);
+                if (_cell.f != null || Sheet.IsCellInArrayFormulaContext(this))
+                {
+                    return CellType.FORMULA;
+                }
+
+                return GetBaseCellType(true);
+            }
         }
 
         /**
@@ -590,14 +609,17 @@ namespace NPOI.XSSF.UserModel
          *     {@link #CellType.BOOLEAN}, {@link #CellType.ERROR}) depending
          * on the cached value of the formula
          */
-        public CellType GetCachedFormulaResultType()
+        public CellType CachedFormulaResultType
         {
-            if (_cell.f == null)
+            get
             {
-                throw new InvalidOperationException("Only formula cells have cached results");
-            }
+                if (_cell.f == null)
+                {
+                    throw new InvalidOperationException("Only formula cells have cached results");
+                }
 
-            return GetBaseCellType(false);
+                return GetBaseCellType(false);
+            }
         }
 
         /**
@@ -610,7 +632,7 @@ namespace NPOI.XSSF.UserModel
                 case ST_CellType.b:
                     return CellType.BOOLEAN;
                 case ST_CellType.n:
-                    if (!_cell.IsSetV() && blankCells)
+                    if (!_cell.isSetV() && blankCells)
                     {
                         // ooxml does have a separate cell type of 'blank'.  A blank cell Gets encoded as
                         // (either not present or) a numeric cell with no value Set.
@@ -637,21 +659,24 @@ namespace NPOI.XSSF.UserModel
          * For strings we throw an exception. For blank cells we return a null.
          * </p>
          * @return the value of the cell as a date
-         * @throws InvalidOperationException if the cell type returned by {@link #getCellType()} is CellType.STRING
+         * @throws InvalidOperationException if the cell type returned by {@link #CellType} is CellType.STRING
          * @exception NumberFormatException if the cell value isn't a parsable <code>double</code>.
          * @see DataFormatter for formatting  this date into a string similar to how excel does.
          */
-        public DateTime GetDateCellValue()
+        public DateTime DateCellValue
         {
-            CellType cellType = GetCellType();
-            if (cellType == CellType.BLANK)
+            get
             {
-                return DateTime.MinValue;
-            }
+                CellType cellType = CellType;
+                if (cellType == CellType.BLANK)
+                {
+                    return DateTime.MinValue;
+                }
 
-            double value = GetNumericCellValue();
-            bool date1904 = Sheet.GetWorkbook().IsDate1904();
-            return DateUtil.GetJavaDate(value, date1904);
+                double value = NumericCellValue;
+                bool date1904 = ((XSSFWorkbook)Sheet.Workbook).IsDate1904();
+                return DateUtil.GetJavaDate(value, date1904);
+            }
         }
 
         /**
@@ -664,7 +689,7 @@ namespace NPOI.XSSF.UserModel
          */
         public void SetCellValue(DateTime value)
         {
-            bool date1904 = Sheet.GetWorkbook().IsDate1904();
+            bool date1904 = ((XSSFWorkbook)Sheet.Workbook).IsDate1904();
             SetCellValue(DateUtil.GetExcelDate(value, date1904));
         }
 
@@ -672,15 +697,18 @@ namespace NPOI.XSSF.UserModel
          * Returns the error message, such as #VALUE!
          *
          * @return the error message such as #VALUE!
-         * @throws InvalidOperationException if the cell type returned by {@link #getCellType()} isn't CellType.ERROR
+         * @throws InvalidOperationException if the cell type returned by {@link #CellType} isn't CellType.ERROR
          * @see FormulaError
          */
-        public String GetErrorCellString()
+        public String ErrorCellString
         {
-            CellType cellType = GetBaseCellType(true);
-            if (cellType != CellType.ERROR) throw TypeMismatch(CellType.ERROR, cellType, false);
+            get
+            {
+                CellType cellType = GetBaseCellType(true);
+                if (cellType != CellType.ERROR) throw TypeMismatch(CellType.ERROR, cellType, false);
 
-            return _cell.v;
+                return _cell.v;
+            }
         }
         /**
          * Get the value of the cell as an error code.
@@ -690,35 +718,27 @@ namespace NPOI.XSSF.UserModel
          * </p>
          *
          * @return the value of the cell as an error code
-         * @throws InvalidOperationException if the cell type returned by {@link #getCellType()} isn't CellType.ERROR
+         * @throws InvalidOperationException if the cell type returned by {@link #CellType} isn't CellType.ERROR
          * @see FormulaError
          */
-        public byte GetErrorCellValue()
+        public byte ErrorCellValue
         {
-            String code = GetErrorCellString();
-            if (code == null)
+            get
             {
-                return 0;
+                String code = this.ErrorCellString;
+                if (code == null)
+                {
+                    return 0;
+                }
+
+                return FormulaError.ForString(code).Code;
             }
-
-            return FormulaError.ForString(code).Code;
         }
-
-        /**
-         * Set a error value for the cell
-         *
-         * @param errorCode the error value to Set this cell to.  For formulas we'll Set the
-         *        precalculated value , for errors we'll Set
-         *        its value. For other types we will change the cell to an error
-         *        cell and Set its value.
-         * @see FormulaError
-         */
         public void SetCellErrorValue(byte errorCode)
         {
             FormulaError error = FormulaError.ForInt(errorCode);
             SetCellErrorValue(error);
         }
-
         /**
          * Set a error value for the cell
          *
@@ -778,15 +798,15 @@ namespace NPOI.XSSF.UserModel
          */
         public void SetCellType(CellType cellType)
         {
-            CellType prevType = GetCellType();
+            CellType prevType = CellType;
 
-            if (IsPartOfArrayFormulaGroup())
+            if (IsPartOfArrayFormulaGroup)
             {
                 NotifyArrayFormulaChanging();
             }
             if (prevType == CellType.FORMULA && cellType != CellType.FORMULA)
             {
-                Sheet.GetWorkbook().onDeleteFormula(this);
+                Sheet.Workbook.OnDeleteFormula(this);
             }
 
             switch (cellType)
@@ -817,10 +837,10 @@ namespace NPOI.XSSF.UserModel
                     _cell.t= (ST_CellType.s);
                     break;
                 case CellType.FORMULA:
-                    if (!_cell.IsSetF())
+                    if (!_cell.isSetF())
                     {
                         CT_CellFormula f = CT_CellFormula.Factory.newInstance();
-                        f.SetStringValue("0");
+                        f.Value = "0";
                         _cell.SetF(f);
                         if (_cell.IsSetT()) _cell.unsetT();
                     }
@@ -828,7 +848,7 @@ namespace NPOI.XSSF.UserModel
                 default:
                     throw new ArgumentException("Illegal cell type: " + cellType);
             }
-            if (cellType != CellType.FORMULA && _cell.IsSetF())
+            if (cellType != CellType.FORMULA && _cell.isSetF())
             {
                 _cell.unsetF();
             }
@@ -844,27 +864,27 @@ namespace NPOI.XSSF.UserModel
          */
         public override String ToString()
         {
-            switch (getCellType())
+            switch (CellType)
             {
                 case CellType.BLANK:
                     return "";
                 case CellType.BOOLEAN:
-                    return GetBooleanCellValue() ? "TRUE" : "FALSE";
+                    return BooleanCellValue ? "TRUE" : "FALSE";
                 case CellType.ERROR:
-                    return ErrorEval.GetText(getErrorCellValue());
+                    return ErrorEval.GetText(ErrorCellValue);
                 case CellType.FORMULA:
                     return GetCellFormula();
                 case CellType.NUMERIC:
                     if (DateUtil.IsCellDateFormatted(this))
                     {
-                        DateFormat sdf = new SimpleDateFormat("dd-MMM-yyyy");
-                        return sdf.format(getDateCellValue());
+                        FormatBase sdf = new SimpleDateFormat("dd-MMM-yyyy");
+                        return sdf.Format(DateCellValue);
                     }
                     return GetNumericCellValue() + "";
                 case CellType.STRING:
-                    return GetRichStringCellValue().ToString();
+                    return RichStringCellValue.ToString();
                 default:
-                    return "Unknown Cell Type: " + GetCellType();
+                    return "Unknown Cell Type: " + CellType;
             }
         }
 
@@ -933,37 +953,34 @@ namespace NPOI.XSSF.UserModel
          *
          * @return the cell comment associated with this cell or <code>null</code>
          */
-        public XSSFComment GetCellComment()
+        public IComment CellComment
         {
-            return Sheet.GetCellComment(_row.GetRowNum(), ColumnIndex);
-        }
-
-        /**
-         * Assign a comment to this cell. If the supplied comment is null,
-         * the comment for this cell will be Removed.
-         *
-         * @param comment the XSSFComment associated with this cell
-         */
-        public void SetCellComment(IComment comment)
-        {
-            if (comment == null)
+            get
             {
-                RemoveCellComment();
-                return;
+                return Sheet.GetCellComment(_row.RowNum, ColumnIndex);
             }
+            set 
+            {
+                if (value == null)
+                {
+                    RemoveCellComment();
+                    return;
+                }
 
-            comment.SetRow(getRowIndex());
-            comment.SetColumn(getColumnIndex());
+                value.Row = (RowIndex);
+                value.Column = (ColumnIndex);
+            }
         }
 
         /**
          * Removes the comment for this cell, if there is one.
         */
         public void RemoveCellComment() {
-        XSSFComment comment = GetCellComment();
-        if(comment != null){
+        IComment comment = this.CellComment;
+        if (comment != null)
+        {
             String ref1 = _cell.r;
-            XSSFSheet sh = Sheet;
+            XSSFSheet sh = (XSSFSheet)Sheet;
             sh.GetCommentsTable(false).RemoveComment(ref1);
             sh.GetVMLDrawing(false).RemoveCommentShape(RowIndex, ColumnIndex);
         }
@@ -974,25 +991,22 @@ namespace NPOI.XSSF.UserModel
          *
          * @return hyperlink associated with this cell or <code>null</code> if not found
          */
-        public XSSFHyperlink GetHyperlink()
+        public IHyperlink Hyperlink
         {
-            return Sheet.GetHyperlink(_row.GetRowNum(), _cellNum);
-        }
+            get
+            {
+                return ((XSSFSheet)Sheet).GetHyperlink(_row.RowNum, _cellNum);
+            }
+            set 
+            {
+                XSSFHyperlink link = (XSSFHyperlink)value;
 
-        /**
-         * Assign a hypelrink to this cell
-         *
-         * @param hyperlink the hypelrink to associate with this cell
-         */
-        public void SetHyperlink(IHyperlink hyperlink)
-        {
-            XSSFHyperlink link = (XSSFHyperlink)hyperlink;
+                // Assign to us
+                link.CellReference = (new CellReference(_row.RowNum, _cellNum).FormatAsString());
 
-            // Assign to us
-            link.SetCellReference(new CellReference(_row.GetRowNum(), _cellNum).formatAsString());
-
-            // Add to the lists
-            Sheet.AddHyperlink(link);
+                // Add to the lists
+                ((XSSFSheet)Sheet).AddHyperlink(link);
+            }
         }
 
         /**
@@ -1017,7 +1031,7 @@ namespace NPOI.XSSF.UserModel
          */
         private bool ConvertCellValueToBoolean()
         {
-            int cellType = GetCellType();
+            CellType cellType = CellType;
 
             if (cellType == CellType.FORMULA)
             {
@@ -1032,7 +1046,7 @@ namespace NPOI.XSSF.UserModel
                     int sstIndex = Int32.Parse(_cell.v);
                     XSSFRichTextString rt = new XSSFRichTextString(_sharedStringSource.GetEntryAt(sstIndex));
                     String text = rt.String;
-                    return Boolean.ParseBoolean(text);
+                    return Boolean.Parse(text);
                 case CellType.NUMERIC:
                     return Double.Parse(_cell.v) != 0;
 
@@ -1045,7 +1059,7 @@ namespace NPOI.XSSF.UserModel
 
         private String ConvertCellValueToString()
         {
-            int cellType = GetCellType();
+            CellType cellType = CellType;
 
             switch (cellType)
             {
@@ -1102,9 +1116,12 @@ namespace NPOI.XSSF.UserModel
             return CellRangeAddress.ValueOf(formulaRef);
         }
 
-        public bool IsPartOfArrayFormulaGroup()
+        public bool IsPartOfArrayFormulaGroup
         {
-            return Sheet.IsCellInArrayFormulaContext(this);
+            get
+            {
+                return Sheet.IsCellInArrayFormulaContext(this);
+            }
         }
 
         /**
@@ -1114,10 +1131,10 @@ namespace NPOI.XSSF.UserModel
          */
         internal void NotifyArrayFormulaChanging(String msg)
         {
-            if (IsPartOfArrayFormulaGroup())
+            if (IsPartOfArrayFormulaGroup)
             {
                 CellRangeAddress cra = GetArrayFormulaRange();
-                if (cra.GetNumberOfCells() > 1)
+                if (cra.NumberOfCells > 1)
                 {
                     throw new InvalidOperationException(msg);
                 }
@@ -1147,6 +1164,16 @@ namespace NPOI.XSSF.UserModel
                     "You cannot change part of an array.";
             NotifyArrayFormulaChanging(msg);
         }
+
+        #region ICell Members
+
+
+        public bool IsMergedCell
+        {
+            get { throw new NotImplementedException(); }
+        }
+
+        #endregion
     }
 
 

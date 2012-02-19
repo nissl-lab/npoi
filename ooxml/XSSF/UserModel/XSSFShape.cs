@@ -16,6 +16,7 @@
 ==================================================================== */
 
 using NPOI.OpenXmlFormats.Dml;
+using NPOI.SS.UserModel;
 namespace NPOI.XSSF.UserModel
 {
 
@@ -60,7 +61,7 @@ namespace NPOI.XSSF.UserModel
         /**
          * Gets the parent shape.
          */
-        public XSSFShapeGroup Parent
+        public IShape Parent
         {
             get
             {
@@ -88,25 +89,23 @@ namespace NPOI.XSSF.UserModel
          *
          * @return true if this shape is not Filled with a color.
          */
-        public bool IsNoFill()
+        public bool IsNoFill
         {
-            return GetShapeProperties().noFill!=null;
+            get
+            {
+                return GetShapeProperties().noFill != null;
+            }
+            set 
+            {
+                CT_ShapeProperties props = GetShapeProperties();
+                //unset solid and pattern Fills if they are Set
+                if (props.IsSetPattFill()) props.unsetPattFill();
+                if (props.IsSetSolidFill()) props.unsetSolidFill();
+
+                props.noFill = new CT_NoFillProperties();
+            }
         }
 
-        /**
-         * Sets whether this shape is Filled or transparent.
-         *
-         * @param noFill if true then no fill will be applied to the shape element.
-         */
-        public void SetNoFill(bool noFill)
-        {
-            CT_ShapeProperties props = GetShapeProperties();
-            //unset solid and pattern Fills if they are Set
-            if (props.IsSetPattFill()) props.unsetPattFill();
-            if (props.IsSetSolidFill()) props.unsetSolidFill();
-
-            props.noFill = new CT_NoFillProperties();
-        }
 
         /**
          * Sets the color used to fill this shape using the solid fill pattern.

@@ -304,30 +304,28 @@ namespace NPOI.XSSF.UserModel
             return -1;
         }
 
+        public String String
+        {
+            get
+            {
+                if (st.sizeOfRArray() == 0)
+                {
+                    return UtfDecode(st.t);
+                }
+                StringBuilder buf = new StringBuilder();
+                foreach (CT_RElt r in st.r)
+                {
+                    buf.Append(r.t);
+                }
+                return UtfDecode(buf.ToString());
+            }
 
-        /**
-         * Removes any formatting and Sets new string value
-         *
-         * @param s new string value
-         */
-        public void SetString(String s)
-        {
-            ClearFormatting();
-            st.t = (s);
-            preserveSpaces(st.xgetT());
-        }
-        public String GetString()
-        {
-            if (st.sizeOfRArray() == 0)
+            set 
             {
-                return UtfDecode(st.t);
+                ClearFormatting();
+                st.t = value;
+                PreserveSpaces(st.xgetT());
             }
-            StringBuilder buf = new StringBuilder();
-            foreach (CT_RElt r in st.r)
-            {
-                buf.Append(r.t);
-            }
-            return UtfDecode(buf.ToString());
         }
 
         /**
@@ -335,7 +333,7 @@ namespace NPOI.XSSF.UserModel
          */
         public override String ToString()
         {
-            return GetString();
+            return this.String;
         }
 
         /**
@@ -345,16 +343,19 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
-                return GetString().Length;
+                return this.String.Length;
             }
         }
 
         /**
          * @return  The number of formatting Runs used.
          */
-        public int numFormattingRuns()
+        public int NumFormattingRuns
         {
-            return st.sizeOfRArray();
+            get
+            {
+                return st.sizeOfRArray();
+            }
         }
 
         /**
@@ -363,7 +364,7 @@ namespace NPOI.XSSF.UserModel
          * @param index     the index of the formatting run
          * @return  A copy of the  font used or null if no formatting is applied to the specified text Run.
          */
-        public XSSFFont GetFontOfFormattingRun(int index)
+        public IFont GetFontOfFormattingRun(int index)
         {
             if (st.sizeOfRArray() == 0) return null;
 
@@ -388,9 +389,9 @@ namespace NPOI.XSSF.UserModel
          *                      index or null if no font is being applied or the
          *                      index is out of range.
          */
-        public XSSFFont GetFontAtIndex(int index)
+        public short GetFontAtIndex(int index)
         {
-            if (st.sizeOfRArray() == 0) return null;
+            if (st.sizeOfRArray() == 0) return -1;
 
             int pos = 0;
             for (int i = 0; i < st.sizeOfRArray(); i++)
@@ -400,12 +401,12 @@ namespace NPOI.XSSF.UserModel
                 {
                     XSSFFont fnt = new XSSFFont(ToCTFont(r.rPr));
                     fnt.SetThemesTable(GetThemesTable());
-                    return fnt;
+                    return fnt.Index;
                 }
 
                 pos += r.t.Length;
             }
-            return null;
+            return -1;
 
         }
 
@@ -463,7 +464,7 @@ namespace NPOI.XSSF.UserModel
         // */
         protected static void PreserveSpaces(string xs)
         {
-            String text = xs.StringValue;
+            String text = xs;
             if (text != null && text.Length > 0)
             {
                 char firstChar = text[0];

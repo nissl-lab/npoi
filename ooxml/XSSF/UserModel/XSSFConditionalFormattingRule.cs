@@ -55,7 +55,7 @@ namespace NPOI.XSSF.UserModel
         /*package*/
         internal CT_Dxf GetDxf(bool create)
         {
-            StylesTable styles = _sh.GetWorkbook().GetStylesSource();
+            StylesTable styles = ((XSSFWorkbook)_sh.Workbook).GetStylesSource();
             CT_Dxf dxf = null;
             if (styles._GetDXfsSize() > 0 && _cfRule.IsSetDxfId())
             {

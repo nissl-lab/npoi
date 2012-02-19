@@ -74,11 +74,13 @@ namespace NPOI.XSSF.UserModel
          *
          * @return a prototype that is used to construct new shapes
          */
+
+
         internal static CT_Picture Prototype()
         {
             if (prototype == null)
             {
-                CT_Picture pic = CT_Picture.Factory.newInstance();
+                CT_Picture pic = new CT_Picture();
                 CT_PictureNonVisual nvpr = pic.AddNewNvPicPr();
                 CT_NonVisualDrawingProps nvProps = nvpr.AddNewCNvPr();
                 nvProps.id = (1);
@@ -309,11 +311,66 @@ namespace NPOI.XSSF.UserModel
             return null;
         }
 
-        protected CT_ShapeProperties GetShapeProperties()
+        protected override CT_ShapeProperties GetShapeProperties()
         {
             return ctPicture.spPr;
         }
 
+
+        #region IShape Members
+
+        public int CountOfAllChildren
+        {
+            get { throw new NotImplementedException(); }
+        }
+
+        public int FillColor
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+            set
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public LineStyle LineStyle
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+            set
+            {
+                base.SetLineStyle((int)value);
+            }
+        }
+
+        public int LineStyleColor
+        {
+            get { throw new NotImplementedException(); }
+        }
+
+        public int LineWidth
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+            set
+            {
+                base.SetLineWidth(value);
+            }
+        }
+
+        public void SetLineStyleColor(int lineStyleColor)
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion
     }
 }
 
