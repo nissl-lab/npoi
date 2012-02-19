@@ -154,7 +154,7 @@ namespace NPOI.HSSF.UserModel
         /// </summary>
         /// <param name="parentWorkbook">The parent workbook that this style belongs to.</param>
         /// <returns></returns>
-        public NPOI.SS.UserModel.IFont GetFont(NPOI.SS.UserModel.IWorkbook parentWorkbook)
+        public IFont GetFont(IWorkbook parentWorkbook)
         {
             return ((HSSFWorkbook)parentWorkbook).GetFontAt(FontIndex);
         }

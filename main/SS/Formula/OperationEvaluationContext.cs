@@ -163,7 +163,7 @@
                 return ErrorEval.REF_INVALID;
             }
             // ugly typecast - TODO - make spReadsheet version more easily accessible
-            SpreadsheetVersion ssVersion = ((FormulaParsingWorkbook)_workbook).GetSpreadsheetVersion();
+            SpreadsheetVersion ssVersion = ((IFormulaParsingWorkbook)_workbook).GetSpreadsheetVersion();
 
             NameType part1refType = ClassifyCellReference(refStrPart1, ssVersion);
             switch (part1refType)
@@ -171,7 +171,7 @@
                 case NameType.BAD_CELL_OR_NAMED_RANGE:
                     return ErrorEval.REF_INVALID;
                 case NameType.NAMED_RANGE:
-                    IEvaluationName nm = ((FormulaParsingWorkbook)_workbook).GetName(refStrPart1, _sheetIndex);
+                    IEvaluationName nm = ((IFormulaParsingWorkbook)_workbook).GetName(refStrPart1, _sheetIndex);
                     if (!nm.IsRange)
                     {
                         throw new Exception("Specified name '" + refStrPart1 + "' is not a range as expected.");

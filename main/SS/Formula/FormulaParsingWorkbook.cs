@@ -29,7 +29,7 @@ namespace NPOI.SS.Formula
      * 
      * @author Josh Micich
      */
-    public interface FormulaParsingWorkbook
+    public interface IFormulaParsingWorkbook
     {
         /// <summary>
         /// named range name matching is case insensitive

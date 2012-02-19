@@ -32,7 +32,7 @@ namespace NPOI.HSSF.UserModel
      * 
      * @author Josh Micich
      */
-    public class HSSFEvaluationWorkbook : IFormulaRenderingWorkbook, IEvaluationWorkbook, FormulaParsingWorkbook
+    public class HSSFEvaluationWorkbook : IFormulaRenderingWorkbook, IEvaluationWorkbook, IFormulaParsingWorkbook
     {
 
         private HSSFWorkbook _uBook;

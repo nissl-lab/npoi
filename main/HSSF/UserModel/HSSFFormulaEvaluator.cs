@@ -137,7 +137,7 @@ namespace NPOI.HSSF.UserModel
                     cell.SetCellValue(cv.BooleanValue);
                     break;
                 case CellType.ERROR:
-                    cell.CellErrorValue = (byte)cv.ErrorValue;
+                    cell.SetCellErrorValue((byte)cv.ErrorValue);
                     break;
                 case CellType.NUMERIC:
                     cell.SetCellValue(cv.NumberValue);

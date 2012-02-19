@@ -43,7 +43,10 @@ namespace NPOI.SS.UserModel
         /// <summary>
         /// referes to the bottom margin
         /// </summary>
-        BottomMargin = 3
+        BottomMargin = 3,
+
+        HeaderMargin = 4,
+        FooterMargin = 5
     }
 
     /// <summary>

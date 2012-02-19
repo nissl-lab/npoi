@@ -29,6 +29,7 @@ namespace NPOI.HSSF.UserModel
     using NPOI.SS.Formula.PTG;
     using NPOI.SS.UserModel;
     using NPOI.SS.Util;
+    using NPOI.SS.Formula;
 
     /// <summary>
     /// High level representation of a cell in a row of a spReadsheet.
@@ -145,64 +146,6 @@ namespace NPOI.HSSF.UserModel
         private HSSFCell()
         {
         }
-
-        /**
- * set a error value for the cell
- *
- * @param errorCode the error value to set this cell to.  For formulas we'll set the
- *        precalculated value , for errors we'll set
- *        its value. For other types we will change the cell to an error
- *        cell and set its value.
- */
-        public byte CellErrorValue
-        {
-            get
-            {
-                switch (cellType)
-                {
-                    case CellType.ERROR:
-                        return ((BoolErrRecord)record).ErrorValue;
-                    default:
-                        throw TypeMismatch(CellType.ERROR, cellType, false);
-                    case CellType.FORMULA:
-                        break;
-                }
-                FormulaRecord fr = ((FormulaRecordAggregate)record).FormulaRecord;
-                CheckFormulaCachedValueType(CellType.ERROR, fr);
-                return (byte)fr.CachedErrorValue;
-
-            }
-            set
-            {
-                int row = record.Row;
-                int col = record.Column;
-                short styleIndex = record.XFIndex;
-                switch (cellType)
-                {
-
-                    case CellType.ERROR:
-                        ((BoolErrRecord)record).SetValue(value);
-                        break;
-                    case CellType.FORMULA:
-                        ((FormulaRecordAggregate)record).SetCachedErrorResult(value);
-                        break;
-                    default:
-                        SetCellType(CellType.ERROR, false, row, col, styleIndex);
-                        break;
-                }
-            }
-        }
-
-        //public override int GetHashCode()
-        //{
-        //    int prime = 31;
-        //    int result = 1;
-        //    result = prime * result + this.RowIndex;
-        //    result = prime * result + this.ColumnIndex;
-        //    result = prime * result + this.CellType;
-        //    result = prime * result + this.formula.GetHashCode();
-        //    return result;
-        //}
 
         /**
          * used internally -- given a cell value record, figure out its type
@@ -679,38 +622,42 @@ namespace NPOI.HSSF.UserModel
             }
             set
             {
-                if (IsPartOfArrayFormulaGroup)
-                {
-                    NotifyArrayFormulaChanging();
-                }
-                int row = record.Row;
-                int col = record.Column;
-                short styleIndex = record.XFIndex;
-
-                if (string.IsNullOrEmpty(value))
-                {
-                    NotifyFormulaChanging();
-                    SetCellType(CellType.BLANK, false, row, col, styleIndex);
-                    return;
-                }
-                int sheetIndex = book.GetSheetIndex(sheet);
-                Ptg[] ptgs = HSSFFormulaParser.Parse(value, book, NPOI.SS.Formula.FormulaType.CELL, sheetIndex);
-
-                SetCellType(CellType.FORMULA, false, row, col, styleIndex);
-                FormulaRecordAggregate agg = (FormulaRecordAggregate)record;
-                FormulaRecord frec = agg.FormulaRecord;
-                frec.Options = ((short)2);
-                frec.Value = (0);
-
-                //only set to default if there is no extended format index already set
-                if (agg.XFIndex == (short)0)
-                {
-                    agg.XFIndex = ((short)0x0f);
-                }
-                agg.SetParsedExpression(ptgs);
+                SetCellFormula(value);
             }
         }
 
+        public void SetCellFormula(String formula)
+        {
+            if (IsPartOfArrayFormulaGroup)
+            {
+                NotifyArrayFormulaChanging();
+            }
+            int row = record.Row;
+            int col = record.Column;
+            short styleIndex = record.XFIndex;
+
+            if (string.IsNullOrEmpty(formula))
+            {
+                NotifyFormulaChanging();
+                SetCellType(CellType.BLANK, false, row, col, styleIndex);
+                return;
+            }
+            int sheetIndex = book.GetSheetIndex(sheet);
+            Ptg[] ptgs = HSSFFormulaParser.Parse(formula, book, FormulaType.CELL, sheetIndex);
+
+            SetCellType(CellType.FORMULA, false, row, col, styleIndex);
+            FormulaRecordAggregate agg = (FormulaRecordAggregate)record;
+            FormulaRecord frec = agg.FormulaRecord;
+            frec.Options = ((short)2);
+            frec.Value = (0);
+
+            //only set to default if there is no extended format index already set
+            if (agg.XFIndex == (short)0)
+            {
+                agg.XFIndex = ((short)0x0f);
+            }
+            agg.SetParsedExpression(ptgs);
+        }
 
         /// <summary>
         /// Get the value of the cell as a number.  For strings we throw an exception.
@@ -1293,7 +1240,15 @@ namespace NPOI.HSSF.UserModel
             {
                 return record.Column & 0xFFFF;
             }
-            set { record.Column = value; }
+        }
+        /**
+         * Updates the cell record's idea of what
+         *  column it belongs in (0 based)
+         * @param num the new cell number
+         */
+        internal void UpdateCellNum(int num)
+        {
+            record.Column = num;
         }
         /// <summary>
         /// Gets the (zero based) index of the row containing this cell
@@ -1380,22 +1335,7 @@ namespace NPOI.HSSF.UserModel
                 return ((FormulaRecordAggregate)record).IsPartOfArrayFormula;
             }
         }
-        /**
- * The purpose of this method is to validate the cell state prior to modification
- *
- * @see #notifyArrayFormulaChanging()
- */
 
-        internal void NotifyArrayFormulaChanging(String msg)
-        {
-            CellRangeAddress cra = GetArrayFormulaRange();
-            if (cra.NumberOfCells > 1)
-            {
-                throw new InvalidOperationException(msg);
-            }
-            //un-register the single-cell array formula from the parent XSSFSheet
-            this.Row.Sheet.RemoveArrayFormula(this);
-        }
         internal void SetCellArrayFormula(CellRangeAddress range)
         {
             int row = record.Row;
@@ -1418,10 +1358,25 @@ namespace NPOI.HSSF.UserModel
             }
             return ((FormulaRecordAggregate)record).GetArrayFormulaRange();
         }
-        /**
- * Called when this cell is modified.
- * The purpose of this method is to validate the cell state prior to modification.
- */
+        /// <summary>
+        /// The purpose of this method is to validate the cell state prior to modification
+        /// </summary>
+        /// <param name="msg"></param>
+        internal void NotifyArrayFormulaChanging(String msg)
+        {
+            CellRangeAddress cra = GetArrayFormulaRange();
+            if (cra.NumberOfCells > 1)
+            {
+                throw new InvalidOperationException(msg);
+            }
+            //un-register the single-cell array formula from the parent XSSFSheet
+            this.Row.Sheet.RemoveArrayFormula(this);
+        }
+
+        /// <summary>
+        /// Called when this cell is modified.
+        /// The purpose of this method is to validate the cell state prior to modification.
+        /// </summary>
         internal void NotifyArrayFormulaChanging()
         {
             CellReference ref1 = new CellReference(this);

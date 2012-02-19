@@ -18,7 +18,7 @@
 namespace NPOI.SS.UserModel
 {
 
-    public interface Textbox : IShape
+    public interface ITextbox : IShape
     {
 
         //public const short OBJECT_TYPE_TEXT = 6;

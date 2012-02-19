@@ -356,16 +356,12 @@ namespace NPOI.HSSF.UserModel
             if (!existflag)
             {
                 throw new ArgumentException("Asked to move a cell, but it didn't belong to our row");
-            }            
-            //if (!cells[cell.CellNum].Equals(cell))
-            //{
-            //    throw new ArgumentException("Asked to move a cell, but it didn't belong to our row");
-            //}
+            }
 
             // Move the cell to the new position
             // (Don't Remove the records though)
             RemoveCell(cell, false);
-            cell.ColumnIndex=(newColumn);
+            ((HSSFCell)cell).UpdateCellNum(newColumn);
             AddCell(cell);
         }
         /**

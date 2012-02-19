@@ -54,7 +54,6 @@ namespace NPOI.SS.UserModel
         int ColumnIndex
         {
             get;
-            set;
         }
 
         /// <summary>
@@ -147,6 +146,12 @@ namespace NPOI.SS.UserModel
         String CellFormula { get; set; }
 
         /// <summary>
+        /// Sets formula for this cell.
+        /// </summary>
+        /// <param name="formula">the formula to Set, e.g. <code>"SUM(C4:E4)"</code>.</param>
+        void SetCellFormula(String formula);        
+
+        /// <summary>
         /// Get the value of the cell as a number.
         /// </summary>
         /// <exception cref="InvalidOperationException">if the cell type returned by GetCellType() is CELL_TYPE_STRING</exception>
@@ -180,11 +185,6 @@ namespace NPOI.SS.UserModel
         /// </summary>
         /// <param name="value"></param>
         void SetCellValue(bool value);
-
-        /// <summary>
-        /// Set a error value for the cell
-        /// </summary>
-        byte CellErrorValue { get; set; }
 
         /// <summary>
         /// Get the value of the cell as a bool.

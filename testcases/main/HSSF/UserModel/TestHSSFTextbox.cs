@@ -42,7 +42,7 @@ namespace TestCases.HSSF.UserModel
             NPOI.SS.UserModel.ISheet sh1 = wb.CreateSheet();
             IDrawing patriarch = sh1.CreateDrawingPatriarch();
 
-            Textbox textbox = patriarch.CreateTextbox(new HSSFClientAnchor(0, 0, 0, 0, 1, 1, 6, 4));
+            ITextbox textbox = patriarch.CreateTextbox(new HSSFClientAnchor(0, 0, 0, 0, 1, 1, 6, 4));
             HSSFRichTextString str = new HSSFRichTextString("Hello, World");
             textbox.String = (str);
             textbox.HorizontalAlignment = (HSSFTextbox.HORIZONTAL_ALIGNMENT_CENTERED);
@@ -63,7 +63,7 @@ namespace TestCases.HSSF.UserModel
             NPOI.SS.UserModel.ISheet sheet = wb.CreateSheet();
             IDrawing patriarch = sheet.CreateDrawingPatriarch();
 
-            Textbox textbox1 = patriarch.CreateTextbox(new HSSFClientAnchor(0, 0, 0, 0, 1, 1, 3, 3));
+            ITextbox textbox1 = patriarch.CreateTextbox(new HSSFClientAnchor(0, 0, 0, 0, 1, 1, 3, 3));
             HSSFRichTextString rt1 = new HSSFRichTextString("Hello, World!");
             Assert.AreEqual(0, rt1.NumFormattingRuns);
             textbox1.String=(rt1);

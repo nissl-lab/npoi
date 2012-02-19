@@ -44,7 +44,7 @@ namespace NPOI.HSSF.UserModel
     /// @author  Glen Stampoultzis (glens at apache.org)
     /// @author  Shawn Laubach (slaubach at apache dot org)
     [Serializable]
-    public class HSSFWorkbook : POIDocument, NPOI.SS.UserModel.IWorkbook
+    public class HSSFWorkbook : POIDocument, IWorkbook
     {
         //private static int DEBUG = POILogger.DEBUG;
         private const int MAX_ROW = 0xFFFF;
@@ -519,17 +519,6 @@ namespace NPOI.HSSF.UserModel
             {
                 return workbook.WindowOne.ActiveSheetIndex;
             }
-            set
-            {
-
-                ValidateSheetIndex(value);
-                int nSheets = _sheets.Count;
-                for (int i = 0; i < nSheets; i++)
-                {
-                    GetSheetAt(i).IsActive = (i == value);
-                }
-                workbook.WindowOne.ActiveSheetIndex = value;
-            }
         }
         public void SetActiveSheet(int index)
         {
@@ -900,7 +889,7 @@ namespace NPOI.HSSF.UserModel
             }
             if (wasActive)
             {
-                ActiveSheetIndex = (newSheetIndex);
+                SetActiveSheet(newSheetIndex);
             }
 
             if (wasSelected)

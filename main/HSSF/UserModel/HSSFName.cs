@@ -225,10 +225,6 @@ namespace NPOI.HSSF.UserModel
             {
                 return _definedNameRec.IsFunctionName;
             }
-            set 
-            {
-                _definedNameRec.IsFunctionName = value;
-            }
         }
         /**
      * Indicates that the defined name refers to a user-defined function.

@@ -283,10 +283,10 @@ namespace TestCases.SS.UserModel
             IRow row = sheet.CreateRow(0);
             ICell cellA1 = row.CreateCell(0);
             ICell cellB1 = row.CreateCell(1);
-            cellB1.CellFormula = (/*setter*/"A1+1");
+            cellB1.SetCellFormula("A1+1");
             IFormulaEvaluator fe = wb.GetCreationHelper().CreateFormulaEvaluator();
 
-            cellA1.CellErrorValue = (/*setter*/(byte)ErrorConstants.ERROR_NAME);
+            cellA1.SetCellErrorValue((byte)ErrorConstants.ERROR_NAME);
             fe.EvaluateFormulaCell(cellB1);
 
             cellA1.SetCellValue(2.5);

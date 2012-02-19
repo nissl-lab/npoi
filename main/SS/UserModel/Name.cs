@@ -54,7 +54,7 @@ namespace NPOI.SS.UserModel
          *
          * @return true if this name is a function name
          */
-        bool IsFunctionName { get; set; }
+        bool IsFunctionName { get; }
 
         /**
          * Checks if this name points to a cell that no longer exists

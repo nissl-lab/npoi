@@ -26,7 +26,7 @@ namespace NPOI.HSSF.UserModel
     /// @author Glen Stampoultzis (glens at apache.org)
     /// </summary>
     [Serializable]
-    public class HSSFTextbox : HSSFSimpleShape,NPOI.SS.UserModel.Textbox
+    public class HSSFTextbox : HSSFSimpleShape,NPOI.SS.UserModel.ITextbox
     {
         public static short OBJECT_TYPE_TEXT = 6;
 

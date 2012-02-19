@@ -32,7 +32,7 @@ namespace NPOI.HSSF.Model
     public class HSSFFormulaParser
     {
 
-        private static FormulaParsingWorkbook CreateParsingWorkbook(HSSFWorkbook book)
+        private static IFormulaParsingWorkbook CreateParsingWorkbook(HSSFWorkbook book)
         {
             return HSSFEvaluationWorkbook.Create(book);
         }

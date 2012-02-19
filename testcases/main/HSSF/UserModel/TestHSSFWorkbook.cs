@@ -144,7 +144,7 @@ namespace TestCases.HSSF.UserModel
             HSSFWorkbook b = new HSSFWorkbook();
             b.CreateSheet("Sheet One");
             b.CreateSheet("Sheet Two");
-            b.ActiveSheetIndex = (1);
+            b.SetActiveSheet(1);
             b.SetSelectedTab(1);
             b.FirstVisibleTab = (1);
             Assert.AreEqual(1, b.ActiveSheetIndex);
@@ -262,7 +262,7 @@ namespace TestCases.HSSF.UserModel
             {
                 throw new AssertFailedException("Identified bug 44523 a");
             }
-            wb.ActiveSheetIndex= (1);
+            wb.SetActiveSheet(1);
             if (sheet1.IsActive)
             {
                 throw new AssertFailedException("Identified bug 44523 b");
@@ -350,7 +350,7 @@ namespace TestCases.HSSF.UserModel
             ConfirmActiveSelected(sheet3, false);
             ConfirmActiveSelected(sheet4, false);
 
-            wb.ActiveSheetIndex = (3);
+            wb.SetActiveSheet(3);
             wb.SetSelectedTab(3);
 
             ConfirmActiveSelected(sheet0, false);
@@ -381,7 +381,7 @@ namespace TestCases.HSSF.UserModel
 
             // Starting with a multiple selection, and different active sheet
             wb.SetSelectedTabs(new int[] { 1, 3, });
-            wb.ActiveSheetIndex = (2);
+            wb.SetActiveSheet(2);
             ConfirmActiveSelected(sheet0, false, false);
             ConfirmActiveSelected(sheet1, false, true);
             ConfirmActiveSelected(sheet2, true, false);

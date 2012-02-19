@@ -176,7 +176,7 @@ namespace NPOI.SS.Formula
          */
         private char look;
 
-        private FormulaParsingWorkbook _book;
+        private IFormulaParsingWorkbook _book;
 
         private int _sheetIndex;
 
@@ -192,7 +192,7 @@ namespace NPOI.SS.Formula
          *  model.Workbook, then use the convenience method on
          *  usermodel.HSSFFormulaEvaluator
          */
-        public FormulaParser(String formula, FormulaParsingWorkbook book, int sheetIndex)
+        public FormulaParser(String formula, IFormulaParsingWorkbook book, int sheetIndex)
         {
             formulaString = formula;
             pointer = 0;
@@ -203,7 +203,7 @@ namespace NPOI.SS.Formula
             _sheetIndex = sheetIndex;
         }
 
-        public static Ptg[] Parse(String formula, FormulaParsingWorkbook book)
+        public static Ptg[] Parse(String formula, IFormulaParsingWorkbook book)
         {
             return Parse(formula, book, FormulaType.CELL);
         }
@@ -222,14 +222,14 @@ namespace NPOI.SS.Formula
          * @return array of parsed tokens
          * @throws FormulaParseException if the formula is unparsable
          */
-        public static Ptg[] Parse(String formula, FormulaParsingWorkbook workbook, FormulaType formulaType, int sheetIndex)
+        public static Ptg[] Parse(String formula, IFormulaParsingWorkbook workbook, FormulaType formulaType, int sheetIndex)
         {
             FormulaParser fp = new FormulaParser(formula, workbook, sheetIndex);
             fp.Parse();
             return fp.GetRPNPtg(formulaType);
         }
 
-        public static Ptg[] Parse(String formula, FormulaParsingWorkbook workbook, FormulaType formulaType)
+        public static Ptg[] Parse(String formula, IFormulaParsingWorkbook workbook, FormulaType formulaType)
         {
             return Parse(formula, workbook, formulaType, -1);
         }

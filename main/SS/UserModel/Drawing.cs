@@ -28,7 +28,7 @@ namespace NPOI.SS.UserModel
 
         bool ContainsChart();
 
-        Textbox CreateTextbox(IClientAnchor anchor);
+        ITextbox CreateTextbox(IClientAnchor anchor);
     }
 
 }

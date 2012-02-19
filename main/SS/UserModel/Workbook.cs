@@ -59,7 +59,7 @@ namespace NPOI.SS.UserModel
         /// get the active sheet.  The active sheet is is the sheet
         /// which is currently displayed when the workbook is viewed in Excel.
         /// </summary>
-        int ActiveSheetIndex { get; set; }
+        int ActiveSheetIndex { get; }
 
         /// <summary>
         /// Gets the first tab that is displayed in the list of tabs in excel.
