@@ -58,7 +58,7 @@ namespace SetActiveCellRangeInXls
             CreateCellArray(sheet3);
             sheet3.SetActiveCellRange(2, 20, 1, 50);
             //set the ISheet C as the active sheet
-            hssfworkbook.ActiveSheetIndex = 2;
+            hssfworkbook.SetActiveSheet(2);
 
             //use ISheet.SetActiveCellRange to select multiple cell ranges
             ISheet sheet4 = hssfworkbook.CreateSheet("ISheet D");
