@@ -5,7 +5,7 @@ using System.Windows.Forms;
 using System.Reflection;
 
 using NPOI.HSSF.Record;
-using NPOI.HSSF.Record.Formula;
+using NPOI.SS.Formula.PTG;
 
 namespace NPOI.Tools.POIFSBrowser
 {

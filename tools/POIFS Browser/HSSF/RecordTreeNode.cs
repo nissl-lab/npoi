@@ -43,7 +43,7 @@ namespace NPOI.Tools.POIFSBrowser
             if (record is ObjRecord)
             {
                 ObjRecord or = (ObjRecord)record;
-                IList subrecs=or.GetSubRecords();
+                IList subrecs=or.SubRecords;
                 foreach (SubRecord sr in subrecs)
                 {
                     this.Nodes.Add(new SubRecordTreeNode(sr));

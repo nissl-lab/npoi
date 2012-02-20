@@ -34,7 +34,6 @@ using NPOI.HPSF;
 using NPOI.POIFS.FileSystem;
 using NPOI.HSSF.UserModel;
 using NPOI.HSSF.Record;
-using NPOI.HWPF;
 
 namespace NPOI.Tools.POIFSBrowser
 {
@@ -51,7 +50,7 @@ namespace NPOI.Tools.POIFSBrowser
         private void OpenDocument(string path)
         {
             HSSFWorkbook hssfworkbook = null;
-            HWPFDocument hwpf = null;
+            //HWPFDocument hwpf = null;
 
             using (var stream = File.OpenRead(path))
             {
@@ -63,10 +62,10 @@ namespace NPOI.Tools.POIFSBrowser
                     {
                         hssfworkbook = new HSSFWorkbook(_currentFileSystem);
                     }
-                    else if (path.ToLower().IndexOf(".doc") > 0)
-                    {
-                        hwpf =new HWPFDocument(_currentFileSystem);
-                    }
+                    //else if (path.ToLower().IndexOf(".doc") > 0)
+                    //{
+                    //    hwpf =new HWPFDocument(_currentFileSystem);
+                    //}
                 }
                 catch (Exception)
                 {
@@ -81,11 +80,11 @@ namespace NPOI.Tools.POIFSBrowser
                 documentTreeView.BeginUpdate();
                 documentTreeView.Nodes.Clear();
 
-                TreeNode[] children;
+                TreeNode[] children=null;
                 if (hssfworkbook !=null)
                     children = DirectoryTreeNode.GetChildren(_currentFileSystem.Root,hssfworkbook);
-                else
-                    children = DirectoryTreeNode.GetChildren(_currentFileSystem.Root, hwpf);
+                //else
+                //    children = DirectoryTreeNode.GetChildren(_currentFileSystem.Root, hwpf);
                 documentTreeView.Nodes.AddRange(children);
                 documentTreeView.EndUpdate();
             }

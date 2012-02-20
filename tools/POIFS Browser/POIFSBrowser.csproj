@@ -40,10 +40,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Ionic.Zip, Version=1.9.1.5, Culture=neutral, PublicKeyToken=edbe51ad942a3f5c, processorArchitecture=MSIL" />
-    <Reference Include="NPOI, Version=1.2.4.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL" />
-    <Reference Include="NPOI.ScratchPad.HWPF, Version=1.3.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="NPOI, Version=1.2.5.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\solution\Lib\NPOI.ScratchPad.HWPF.dll</HintPath>
+      <HintPath>..\..\solution\Lib\NPOI.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
