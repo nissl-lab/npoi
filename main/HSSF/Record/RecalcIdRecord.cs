@@ -117,7 +117,17 @@ namespace NPOI.HSSF.Record
             out1.WriteShort(_reserved0);
             out1.WriteInt(_engineId);
         }
-
+        public int EngineId
+        {
+            set
+            {
+                _engineId = value;
+            }
+            get
+            {
+                return _engineId;
+            }
+        }
         protected override int DataSize
         {
             get

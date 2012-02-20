@@ -40,7 +40,13 @@ namespace TestCases.HSSF.UserModel
         public TestHSSFWorkbook()
             : base(HSSFITestDataProvider.Instance)
         { }
-
+        /**
+     * gives test code access to the {@link InternalWorkbook} within {@link HSSFWorkbook}
+     */
+        public static InternalWorkbook GetInternalWorkbook(HSSFWorkbook wb)
+        {
+            return wb.Workbook;
+        }
         private static HSSFWorkbook OpenSample(String sampleFileName)
         {
             return HSSFTestDataSamples.OpenSampleWorkbook(sampleFileName);

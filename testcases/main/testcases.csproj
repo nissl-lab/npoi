@@ -390,7 +390,10 @@
     <Compile Include="Exceptions\ComparisonFailure.cs" />
     <Compile Include="HSSF\HSSFITestDataProvider.cs" />
     <Compile Include="HSSF\Model\TestLinkTable.cs" />
+    <Compile Include="HSSF\Model\TestOperandClassTransformer.cs" />
     <Compile Include="HSSF\Model\TestRowBlocksReader.cs" />
+    <Compile Include="HSSF\Model\TestShapes.cs" />
+    <Compile Include="HSSF\Model\TestWorkbook.cs" />
     <Compile Include="HSSF\Record\Aggregates\TestPageSettingsBlock.cs" />
     <Compile Include="HSSF\Record\Common\TestUnicodeString.cs" />
     <Compile Include="HSSF\Record\TestArrayRecord.cs" />

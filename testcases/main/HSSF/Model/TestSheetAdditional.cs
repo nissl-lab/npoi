@@ -62,6 +62,20 @@ namespace TestCases.HSSF.Model
             Assert.AreEqual(100, sheet.GetColumnWidth(9));
             Assert.AreEqual(100, sheet.GetColumnWidth(10));
         }
-
+        [TestMethod]
+        public void TestMaxColumnWidth()
+        {
+            InternalSheet sheet = InternalSheet.CreateSheet();
+            sheet.SetColumnWidth(0, 255 * 256); //the limit
+            try
+            {
+                sheet.SetColumnWidth(0, 256 * 256); //the limit
+                Assert.Fail("expected exception");
+            }
+            catch (ArgumentException e)
+            {
+                Assert.AreEqual(e.Message, "The maximum column width for an individual cell is 255 characters.");
+            }
+        }
     }
 }

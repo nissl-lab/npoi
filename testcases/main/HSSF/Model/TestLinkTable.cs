@@ -27,6 +27,7 @@ namespace TestCases.HSSF.Model
     using System.Collections.Generic;
     using System.Collections;
     using NPOI.HSSF.Model;
+    using NPOI.SS.Formula.PTG;
 
     /**
      * Tests for {@link LinkTable}
@@ -146,27 +147,32 @@ namespace TestCases.HSSF.Model
          * when Reading the workbook of attachment 23468 from bugzilla 47001
          */
         [TestMethod]
-        public void TestMissingExternSheetRecord_bug47001b() {
-		
-		Record[] recs = {
+        public void TestMissingExternSheetRecord_bug47001b()
+        {
+
+            Record[] recs = {
 				SupBookRecord.CreateAddInFunctions(),
 				new SSTRecord(),
 		};
-		List<Record> recList =  new List<Record>(recs);
-		WorkbookRecordList wrl = new WorkbookRecordList();
-		
-		LinkTable lt;
-		try {
-			lt = new LinkTable(recList, 0, wrl, new Dictionary<String, NameCommentRecord>());
-		} catch (Exception e) {
-			if (e.Message.Equals("Expected an EXTERNSHEET record but got (NPOI.HSSF.record.SSTRecord)")) {
-				throw new AssertFailedException("Identified bug 47001b");
-			}
-		
-			throw e;
-		}
-		Assert.IsNotNull(lt);
-	}
+            List<Record> recList = new List<Record>(recs);
+            WorkbookRecordList wrl = new WorkbookRecordList();
+
+            LinkTable lt;
+            try
+            {
+                lt = new LinkTable(recList, 0, wrl, new Dictionary<String, NameCommentRecord>());
+            }
+            catch (Exception e)
+            {
+                if (e.Message.Equals("Expected an EXTERNSHEET record but got (NPOI.HSSF.record.SSTRecord)"))
+                {
+                    throw new AssertFailedException("Identified bug 47001b");
+                }
+
+                throw e;
+            }
+            Assert.IsNotNull(lt);
+        }
         [TestMethod]
         public void TestNameCommentRecordBetweenNameRecords()
         {
@@ -190,6 +196,89 @@ namespace TestCases.HSSF.Model
             Assert.IsTrue(recs[3] == commentRecords["name2"]); //== is intentionally not .Equals()!
 
             Assert.AreEqual(2, lt.NumNames);
+        }
+        [TestMethod]
+        public void TestAddNameX()
+        {
+            WorkbookRecordList wrl = new WorkbookRecordList();
+            wrl.Add(0, new BOFRecord());
+            wrl.Add(1, new CountryRecord());
+            wrl.Add(2, EOFRecord.instance);
+
+            int numberOfSheets = 3;
+            LinkTable tbl = new LinkTable(numberOfSheets, wrl);
+            // creation of a new LinkTable insert two new records: SupBookRecord followed by ExternSheetRecord
+            // assure they are in place:
+            //    [BOFRecord]
+            //    [CountryRecord]
+            //    [SUPBOOK Internal References  nSheets= 3]
+            //    [EXTERNSHEET]
+            //    [EOFRecord]
+
+            Assert.AreEqual(5, wrl.Records.Count);
+            Assert.IsTrue(wrl[(2)] is SupBookRecord);
+            SupBookRecord sup1 = (SupBookRecord)wrl[(2)];
+            Assert.AreEqual(numberOfSheets, sup1.NumberOfSheets);
+            Assert.IsTrue(wrl[(3)] is ExternSheetRecord);
+            ExternSheetRecord extSheet = (ExternSheetRecord)wrl[(3)];
+            Assert.AreEqual(0, extSheet.NumOfRefs);
+
+            Assert.IsNull(tbl.GetNameXPtg("ISODD"));
+            Assert.AreEqual(5, wrl.Records.Count); //still have five records
+
+            NameXPtg namex1 = tbl.AddNameXPtg("ISODD");  // Adds two new rercords
+            Assert.AreEqual(0, namex1.SheetRefIndex);
+            Assert.AreEqual(0, namex1.NameIndex);
+            Assert.AreEqual(namex1.ToString(), tbl.GetNameXPtg("ISODD").ToString());
+            // assure they are in place:
+            //    [BOFRecord]
+            //    [CountryRecord]
+            //    [SUPBOOK Internal References  nSheets= 3]
+            //    [SUPBOOK Add-In Functions nSheets= 1]
+            //    [EXTERNALNAME .name    = ISODD]
+            //    [EXTERNSHEET]
+            //    [EOFRecord]
+
+            Assert.AreEqual(7, wrl.Records.Count);
+            Assert.IsTrue(wrl[(3)] is SupBookRecord);
+            SupBookRecord sup2 = (SupBookRecord)wrl[(3)];
+            Assert.IsTrue(sup2.IsAddInFunctions);
+            Assert.IsTrue(wrl[(4)] is ExternalNameRecord);
+            ExternalNameRecord ext1 = (ExternalNameRecord)wrl[(4)];
+            Assert.AreEqual("ISODD", ext1.Text);
+            Assert.IsTrue(wrl[(5)] is ExternSheetRecord);
+            Assert.AreEqual(1, extSheet.NumOfRefs);
+
+            //check that
+            Assert.AreEqual(0, tbl.ResolveNameXIx(namex1.SheetRefIndex, namex1.NameIndex));
+            Assert.AreEqual("ISODD", tbl.ResolveNameXText(namex1.SheetRefIndex, namex1.NameIndex));
+
+            Assert.IsNull(tbl.GetNameXPtg("ISEVEN"));
+            NameXPtg namex2 = tbl.AddNameXPtg("ISEVEN");  // Adds two new rercords
+            Assert.AreEqual(0, namex2.SheetRefIndex);
+            Assert.AreEqual(1, namex2.NameIndex);  // name index increased by one
+            Assert.AreEqual(namex2.ToString(), tbl.GetNameXPtg("ISEVEN").ToString());
+            Assert.AreEqual(8, wrl.Records.Count);
+            // assure they are in place:
+            //    [BOFRecord]
+            //    [CountryRecord]
+            //    [SUPBOOK Internal References  nSheets= 3]
+            //    [SUPBOOK Add-In Functions nSheets= 1]
+            //    [EXTERNALNAME .name    = ISODD]
+            //    [EXTERNALNAME .name    = ISEVEN]
+            //    [EXTERNSHEET]
+            //    [EOFRecord]
+            Assert.IsTrue(wrl[(3)] is SupBookRecord);
+            Assert.IsTrue(wrl[(4)] is ExternalNameRecord);
+            Assert.IsTrue(wrl[(5)] is ExternalNameRecord);
+            Assert.AreEqual("ISODD", ((ExternalNameRecord)wrl[(4)]).Text);
+            Assert.AreEqual("ISEVEN", ((ExternalNameRecord)wrl[(5)]).Text);
+            Assert.IsTrue(wrl[(6)] is ExternSheetRecord);
+            Assert.IsTrue(wrl[(7)] is EOFRecord);
+
+            Assert.AreEqual(0, tbl.ResolveNameXIx(namex2.SheetRefIndex, namex2.NameIndex));
+            Assert.AreEqual("ISEVEN", tbl.ResolveNameXText(namex2.SheetRefIndex, namex2.NameIndex));
+
         }
     }
 

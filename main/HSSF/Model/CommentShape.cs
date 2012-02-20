@@ -134,6 +134,9 @@ namespace NPOI.HSSF.Model
                 return note;
             }
         }
-
+        protected override int GetCmoObjectId(int shapeId)
+        {
+            return shapeId;
+        }
     }
 }

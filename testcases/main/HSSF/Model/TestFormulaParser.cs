@@ -395,7 +395,7 @@ namespace TestCases.HSSF.Model
             Assert.AreEqual("-1/310*4000/30000", formula, "Exponential formula string");
         }
         [TestMethod]
-        public void TestNumbersFormulaParser()
+        public void TestNumbers()
         {
             System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
 
@@ -437,7 +437,7 @@ namespace TestCases.HSSF.Model
             Assert.AreEqual("1", formula);
         }
         [TestMethod]
-        public void TestRangesFormulaParser()
+        public void TestRanges()
         {
             HSSFWorkbook wb = new HSSFWorkbook();
 
@@ -934,20 +934,7 @@ namespace TestCases.HSSF.Model
                 Assert.AreEqual(expectedMessage, e.Message);
             }
         }
-        [TestMethod]
-        public void TestParseErrorExpecteMsg()
-        {
 
-            try
-            {
-                ParseFormula("round(3.14;2)");
-                throw new AssertFailedException("Didn't Get Parse exception as expected");
-            }
-            catch (Exception e)
-            {
-                Assert.AreEqual("Parse error near char 10 ';' in specified formula 'round(3.14;2)'. Expected ',' or ')'", e.Message);
-            }
-        }
         [TestMethod]
         public void TestRange_bug46643()
         {

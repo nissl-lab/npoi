@@ -164,9 +164,9 @@ namespace NPOI.HSSF.Model
          *
          * @see org.apache.poi.hssf.model.LinkTable#LinkTable(int, WorkbookRecordList)
          */
-            public ExternalBookBlock(short numberOfSheets)
+            public ExternalBookBlock(int numberOfSheets)
             {
-                _externalBookRecord = SupBookRecord.CreateInternalReferences(numberOfSheets);
+                _externalBookRecord = SupBookRecord.CreateInternalReferences((short)numberOfSheets);
                 _externalNameRecords = new ExternalNameRecord[0];
                 _crnBlocks = new CRNBlock[0];
             }
@@ -273,7 +273,7 @@ namespace NPOI.HSSF.Model
 
         }
 
-        public LinkTable(short numberOfSheets, WorkbookRecordList workbookRecordList)
+        public LinkTable(int numberOfSheets, WorkbookRecordList workbookRecordList)
         {
             _workbookRecordList = workbookRecordList;
             _definedNames = new List<NameRecord>();

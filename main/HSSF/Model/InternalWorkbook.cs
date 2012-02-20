@@ -2957,5 +2957,25 @@ namespace NPOI.HSSF.Model
                 }
             }
         }
+        /**
+     * Get or create RecalcIdRecord
+     *
+     * @see org.apache.poi.hssf.usermodel.HSSFWorkbook#setForceFormulaRecalculation(boolean)
+     */
+        public RecalcIdRecord RecalcId
+        {
+            get
+            {
+                RecalcIdRecord record = (RecalcIdRecord)FindFirstRecordBySid(RecalcIdRecord.sid);
+                if (record == null)
+                {
+                    record = new RecalcIdRecord();
+                    // typically goes after the Country record
+                    int pos = FindFirstRecordLocBySid(CountryRecord.sid);
+                    records.Add(pos + 1, record);
+                }
+                return record;
+            }
+        }
     }
 }
