@@ -45,7 +45,7 @@ namespace NPOI.HSSF.Model
     /// @author  Jean-Pierre Paris (jean-pierre.paris at m4x dot org) (Just a little)
     /// </remarks>
     [Serializable]
-    public class InternalSheet : Model
+    public class InternalSheet
     {
 
         //private static POILogger log = POILogFactory.GetLogger(typeof(Sheet));

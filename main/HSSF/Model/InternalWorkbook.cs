@@ -55,7 +55,7 @@ namespace NPOI.HSSF.Model
      * @version 1.0-pre
      */
     [Serializable]
-    public class InternalWorkbook : Model
+    public class InternalWorkbook
     {
         /**
          * Excel silently truncates long sheet names to 31 chars.

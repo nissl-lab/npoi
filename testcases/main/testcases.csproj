@@ -372,7 +372,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="HSSF\EventModel\TestEventRecordFactory.cs" />
-    <Compile Include="HSSF\EventModel\TestModelFactory.cs" />
     <Compile Include="HSSF\EventUserModel\TestEventWorkbookBuilder.cs" />
     <Compile Include="HSSF\EventUserModel\TestFormatTrackingHSSFListener.cs" />
     <Compile Include="HSSF\EventUserModel\TestHSSFEventFactory.cs" />

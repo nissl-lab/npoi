@@ -147,8 +147,6 @@
     <Compile Include="HPSF\WritingNotSupportedException.cs" />
     <Compile Include="HSSF\EventModel\ERFListener.cs" />
     <Compile Include="HSSF\EventModel\EventRecordFactory.cs" />
-    <Compile Include="HSSF\EventModel\ModelFactory.cs" />
-    <Compile Include="HSSF\EventModel\ModelFactoryListener.cs" />
     <Compile Include="HSSF\EventUserModel\AbortableHSSFListener.cs" />
     <Compile Include="HSSF\EventUserModel\DummyRecord\LastCellOfRowDummyRecord.cs" />
     <Compile Include="HSSF\EventUserModel\DummyRecord\MissingCellDummyRecord.cs" />
@@ -172,7 +170,6 @@
     <Compile Include="HSSF\Model\HSSFFormulaParser.cs" />
     <Compile Include="HSSF\Model\LineShape.cs" />
     <Compile Include="HSSF\Model\LinkTable.cs" />
-    <Compile Include="HSSF\Model\Model.cs" />
     <Compile Include="HSSF\Model\ParseNode.cs" />
     <Compile Include="HSSF\Model\PictureShape.cs" />
     <Compile Include="HSSF\Model\PolygonShape.cs" />
