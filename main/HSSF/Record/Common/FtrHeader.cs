@@ -25,7 +25,7 @@ namespace NPOI.HSSF.Record.Common
 
     /**
      * Title: FtrHeader (Future Record Header) common record part
-     * <P>
+     * 
      * This record part specifies a header for a Ftr (Future)
      *  style record, which includes extra attributes above and
      *  beyond those of a traditional record. 

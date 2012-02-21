@@ -63,9 +63,9 @@ namespace NPOI.HSSF.Record
             return retval;
         }
 
-        /**
-         * gives the current Serialized size of the record. Should include the sid and recLength (4 bytes).
-         */
+        // /**
+        // * gives the current Serialized size of the record. Should include the sid and recLength (4 bytes).
+        // */
 
         //public abstract int RecordSize { get; }
         //{

@@ -60,26 +60,26 @@ namespace NPOI.HSSF.Record
         {
             _options = useNaturalLanguageFormulasFlag.SetBoolean(_options, b);
         }
-        /**
-         * turn the flag on or off
-         *
-         * @param flag  whether to use natural language formulas or not
-         * @see #TRUE
-         * @see #FALSE
-         */
+        // /**
+        // * turn the flag on or off
+        // *
+        // * @param flag  whether to use natural language formulas or not
+        // * @see #TRUE
+        // * @see #FALSE
+        // */
 
         //public void SetFlag(short flag)
         //{
         //    field_1_flag = flag;
         //}
 
-        /**
-         * returns whether we use natural language formulas or not
-         *
-         * @return whether to use natural language formulas or not
-         * @see #TRUE
-         * @see #FALSE
-         */
+        // /**
+        // * returns whether we use natural language formulas or not
+        // *
+        // * @return whether to use natural language formulas or not
+        // * @see #TRUE
+        // * @see #FALSE
+        // */
 
         //public short GetFlag()
         //{

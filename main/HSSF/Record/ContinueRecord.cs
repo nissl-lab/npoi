@@ -76,7 +76,7 @@ namespace NPOI.HSSF.Record
             out1.Write(field_1_data);
         }
         
-        /**
+        /*
          * USE ONLY within "ProcessContinue"
          */
         //public sealed override byte[] Serialize()
@@ -85,19 +85,20 @@ namespace NPOI.HSSF.Record
         //    Serialize(0, retval);
         //    return retval;
         //}
+
         /**
-     * Writes the full encoding of a Continue record without making an instance
-     */
+         * Writes the full encoding of a Continue record without making an instance
+         */
         [Obsolete]
         public static int Write(byte[] destBuf, int destOffset, byte? initialDataByte, byte[] srcData)
         {
             return Write(destBuf, destOffset, initialDataByte, srcData, 0, srcData.Length);
         }
         /**
-     * @param initialDataByte (optional - often used for unicode flag). 
-     * If supplied, this will be written before srcData
-     * @return the total number of bytes written
-     */
+         * @param initialDataByte (optional - often used for unicode flag). 
+         * If supplied, this will be written before srcData
+         * @return the total number of bytes written
+         */
         [Obsolete]
         public static int Write(byte[] destBuf, int destOffset, byte? initialDataByte, byte[] srcData, int srcOffset, int len)
         {

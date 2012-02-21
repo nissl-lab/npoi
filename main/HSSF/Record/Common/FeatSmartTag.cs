@@ -24,7 +24,7 @@ namespace NPOI.HSSF.Record.Common
 
     /**
      * Title: FeatSmartTag (Smart Tag Shared Feature) common record part
-     * <P>
+     * 
      * This record part specifies Smart Tag data for a sheet, stored as part
      *  of a Shared Feature. It can be found in records such as  {@link FeatRecord}.
      * It is made up of a hash, and a Set of Factoid Data that Makes up

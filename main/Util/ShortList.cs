@@ -27,20 +27,20 @@ namespace NPOI.Util
     /// the mimicry of List is as follows:
     /// <ul>
     /// <li> if possible, operations designated 'optional' in the List
-    ///      interface are attempted
+    ///      interface are attempted</li>
     /// <li> wherever the List interface refers to an Object, substitute
-    ///      short
+    ///      short</li>
     /// <li> wherever the List interface refers to a Collection or List,
-    ///      substitute shortList
+    ///      substitute shortList</li>
     /// </ul>
     /// 
     /// the mimicry is not perfect, however:
     /// <ul>
     /// <li> operations involving Iterators or ListIterators are not
-    ///      supported
+    ///      supported</li>
     /// <li> Remove(Object) becomes RemoveValue to distinguish it from
-    ///      Remove(short index)
-    /// <li> subList is not supported
+    ///      Remove(short index)</li>
+    /// <li> subList is not supported</li>
     /// </ul> 
     /// </summary>
     public class ShortList
@@ -149,28 +149,6 @@ namespace NPOI.Util
             return true;
         }
 
-        /**
-         * Inserts all of the elements in the specified collection into
-         * this list at the specified position.  Shifts the element
-         * currently at that position (if any) and any subsequent elements
-         * to the right (increases their indices).  The new elements will
-         * appear in this list in the order that they are returned by the
-         * specified collection's iterator.  The behavior of this
-         * operation is unspecified if the specified collection is
-         * modified while the operation is in progress.  (Note that this
-         * will occur if the specified collection is this list, and it's
-         * nonempty.)
-         *
-         * @param index 
-         *              
-         * @param c 
-         *
-         * @
-         *
-         * @exception IndexOutOfRangeException if the index is out of
-         *            range (index < 0 || index > size())
-         */
-        //
         /// <summary>
         /// Inserts all of the elements in the specified collection into
         /// this list at the specified position.  Shifts the element
@@ -186,6 +164,7 @@ namespace NPOI.Util
         /// <param name="index">index at which to insert first element from the specified collection.</param>
         /// <param name="c">elements to be inserted into this list.</param>
         /// <returns>return true if this list Changed as a result of the call.</returns>
+        /// <exception cref="IndexOutOfRangeException"> if the index is out of range (index &lt; 0 || index &gt; size())</exception>
         public bool AddAll(int index, ShortList c)
         {
             if (index > _limit)
@@ -311,26 +290,6 @@ namespace NPOI.Util
             return _array[index];
         }
 
-        /**
-         * Returns the hash code value for this list.  The hash code of a
-         * list is defined to be the result of the following calculation:
-         *
-         * <code>
-         * hashCode = 1;
-         * Iterator i = list.Iterator();
-         * while (i.HasNext()) {
-         *      Object obj = i.Next();
-         *      hashCode = 31*hashCode + (obj==null ? 0 : obj.HashCode());
-         * }
-         * </code>
-         *
-         * This ensures that list1.Equals(list2) implies that
-         * list1.HashCode()==list2.HashCode() for any two lists, list1 and
-         * list2, as required by the general contract of Object.HashCode.
-         *
-         * @return the hash code value for this list.
-         */
-        //
         /// <summary>
         /// Returns the hash code value for this list.  The hash code of a
         /// list is defined to be the result of the following calculation:

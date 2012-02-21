@@ -76,17 +76,17 @@ namespace NPOI.HSSF.Record
     	_engineId = in1.ReadInt();
         }
 
-        /**
-         * Set the recalc array.
-         * @param array of recalc id's
-         */
+        // /**
+        // * Set the recalc array.
+        // * @param array of recalc id's
+        // */
 
         //public void SetRecalcIdArray(short[] array)
         //{
         //    field_1_recalcids = array;
         //}
 
-        ///**
+        // /**
         // * Get the recalc array.
         // * @return array of recalc id's
         // */

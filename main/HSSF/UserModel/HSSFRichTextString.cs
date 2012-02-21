@@ -305,11 +305,11 @@ namespace NPOI.HSSF.UserModel
         /// <summary>
         /// Compares one rich text string to another.
         /// </summary>
-        /// <param name="o">The o.</param>
+        /// <param name="other">The other rich text string.</param>
         /// <returns></returns>
-        public int CompareTo(HSSFRichTextString r)
+        public int CompareTo(HSSFRichTextString other)
         {
-            return _string.CompareTo(r._string);
+            return _string.CompareTo(other._string);
         }
 
         /// <summary>

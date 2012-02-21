@@ -62,7 +62,7 @@ namespace NPOI.HSSF.Record
         /** how much data can we stuff into an SST record? That would be _max minus the standard SST record overhead */
         public const int MAX_DATA_SPACE = RecordInputStream.MAX_RECORD_DATA_SIZE - 8;//MAX_RECORD_SIZE - SST_RECORD_OVERHEAD;
 
-        /** overhead for each string includes the string's Char count (a short) and the flag describing its Charistics (a byte) */
+        // /** overhead for each string includes the string's Char count (a short) and the flag describing its Charistics (a byte) */
         //public const int STRING_MINIMAL_OVERHEAD = LittleEndianConsts.SHORT_SIZE + LittleEndianConsts.BYTE_SIZE;
 
         /** Union of strings in the SST and EXTSST */

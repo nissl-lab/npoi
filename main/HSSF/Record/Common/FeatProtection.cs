@@ -25,7 +25,7 @@ namespace NPOI.HSSF.Record.Common
 
     /**
      * Title: FeatProtection (Protection Shared Feature) common record part
-     * <P>
+     * 
      * This record part specifies Protection data for a sheet, stored
      *  as part of a Shared Feature. It can be found in records such
      *  as {@link FeatRecord}

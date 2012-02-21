@@ -25,20 +25,20 @@ namespace NPOI.Util
     /// the mimicry of List is as follows:
     /// <ul>
     /// <li> if possible, operations designated 'optional' in the List
-    ///      interface are attempted
+    ///      interface are attempted</li>
     /// <li> wherever the List interface refers to an Object, substitute
-    ///      int
+    ///      int</li>
     /// <li> wherever the List interface refers to a Collection or List,
-    ///      substitute IntList
+    ///      substitute IntList</li>
     /// </ul>
     ///
     /// the mimicry is not perfect, however:
     /// <ul>
     /// <li> operations involving Iterators or ListIterators are not
-    ///      supported
+    ///      supported</li>
     /// <li> Remove(Object) becomes RemoveValue to distinguish it from
-    ///      Remove(int index)
-    /// <li> subList is not supported
+    ///      Remove(int index)</li>
+    /// <li> subList is not supported</li>
     /// </ul>
     /// @author Marc Johnson
     /// </summary>
@@ -378,19 +378,6 @@ namespace NPOI.Util
             return _limit == 0;
         }
 
-        /**
-         * Returns the index in this list of the last occurrence of the
-         * specified element, or -1 if this list does not contain this
-         * element.  More formally, returns the highest index i such that
-         * (o == Get(i)), or -1 if there is no such index.
-         *
-         * @param o element to search for.
-         *
-         * @return the index in this list of the last occurrence of the
-         *         specified element, or -1 if this list does not contain
-         *         this element.
-         */
-        //
         /// <summary>
         /// Returns the index in this list of the last occurrence of the
         /// specified element, or -1 if this list does not contain this
@@ -398,7 +385,7 @@ namespace NPOI.Util
         /// (o == Get(i)), or -1 if there is no such index.
         /// </summary>
         /// <param name="o">element to search for.</param>
-        /// <returns>return the index in this list of the last occurrence of the
+        /// <returns>the index in this list of the last occurrence of the
         /// specified element, or -1 if this list does not contain
         /// this element.
         /// </returns>

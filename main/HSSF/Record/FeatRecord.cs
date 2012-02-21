@@ -25,7 +25,7 @@ namespace NPOI.HSSF.Record
 
     /**
      * Title: Feat (Feature) Record
-     * <P>
+     * 
      * This record specifies Shared Features data. It is normally paired
      *  up with a {@link FeatHdrRecord}.
      */

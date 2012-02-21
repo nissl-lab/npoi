@@ -58,7 +58,6 @@ namespace TestCases.HSSF.Record.Crypto
             }
         }
 
-        [TestClass]
         private class StreamTester
         {
             private static bool ONLY_LOG_ERRORS = true;

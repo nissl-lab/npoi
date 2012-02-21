@@ -61,24 +61,6 @@ namespace NPOI.Util
                 array[i] = defaultValue;
             }
         }
-        /**
-             * Assigns the specified byte value to each element of the specified
-             * range of the specified array of bytes.  The range to be filled
-             * extends from index <tt>fromIndex</tt>, inclusive, to index
-             * <tt>toIndex</tt>, exclusive.  (If <tt>fromIndex==toIndex</tt>, the
-             * range to be filled is empty.)
-             *
-             * @param a the array to be filled
-             * @param fromIndex 
-             *        
-             * @param toIndex 
-             *        
-             * @param val 
-             * @throws IllegalArgumentException if <tt>fromIndex &gt; toIndex</tt>
-             * @throws ArrayIndexOutOfBoundsException if <tt>fromIndex &lt; 0</tt> or
-             *         <tt>toIndex &gt; a.length</tt>
-             */
-        //
 
         /// <summary>
         /// Assigns the specified byte value to each element of the specified
@@ -86,15 +68,13 @@ namespace NPOI.Util
         /// extends from index <tt>fromIndex</tt>, inclusive, to index
         /// <tt>toIndex</tt>, exclusive.  (If <tt>fromIndex==toIndex</tt>, the
         /// range to be filled is empty.)
-        /// 
-        /// @throws IllegalArgumentException if <tt>fromIndex &gt; toIndex</tt>
-        /// @throws ArrayIndexOutOfBoundsException if <tt>fromIndex &lt; 0</tt> or
-        ///         <tt>toIndex &gt; a.length</tt>
         /// </summary>
         /// <param name="a">the array to be filled</param>
         /// <param name="fromIndex">the index of the first element (inclusive) to be filled with the specified value</param>
         /// <param name="toIndex">the index of the last element (exclusive) to be filled with the specified value</param>
         /// <param name="val">the value to be stored in all elements of the array</param>
+        /// <exception cref="System.ArgumentException">if <c>fromIndex &gt; toIndex</c></exception>
+        /// <exception cref="System.IndexOutOfRangeException"> if <c>fromIndex &lt; 0</c> or <c>toIndex &gt; a.length</c></exception>
         public static void Fill(byte[] a, int fromIndex, int toIndex, byte val)
         {
             RangeCheck(a.Length, fromIndex, toIndex);

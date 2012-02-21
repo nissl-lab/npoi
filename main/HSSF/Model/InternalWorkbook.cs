@@ -1561,14 +1561,14 @@ namespace NPOI.HSSF.Model
             return retval;
         }
 
-        /**
-         * Creates a FormatRecord object
-         * @param id    the number of the format record to Create (meaning its position in
-         *        a file as M$ Excel would Create it.)
-         * @return record containing a FormatRecord
-         * @see org.apache.poi.hssf.record.FormatRecord
-         * @see org.apache.poi.hssf.record.Record
-         */
+        // /**
+        // * Creates a FormatRecord object
+        // * @param id    the number of the format record to Create (meaning its position in
+        // *        a file as M$ Excel would Create it.)
+        // * @return record containing a FormatRecord
+        // * @see org.apache.poi.hssf.record.FormatRecord
+        // * @see org.apache.poi.hssf.record.Record
+        // */
         
         //protected Record CreateFormat(int id)
         //{   // we'll need multiple editions for

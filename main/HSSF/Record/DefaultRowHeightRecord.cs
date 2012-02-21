@@ -70,9 +70,9 @@ namespace NPOI.HSSF.Record
             get { return field_1_option_flags; }
             set { field_1_option_flags = value; }
         }
-        /// <summary>
-        /// A bit that specifies whether the default settings for the row height have been changed.
-        /// </summary>
+        ///// <summary>
+        ///// A bit that specifies whether the default settings for the row height have been changed.
+        ///// </summary>
         //public bool IsDefaultHeightChanged
         //{
         //    get { return isHeightChanged.IsSet(field_1_option_flags); }

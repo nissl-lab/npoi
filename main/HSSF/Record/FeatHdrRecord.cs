@@ -25,7 +25,7 @@ namespace NPOI.HSSF.Record
 
     /**
      * Title: FeatHdr (Feature Header) Record
-     * <P>
+     * 
      * This record specifies common information for Shared Features, and 
      *  specifies the beginning of a collection of records to define them. 
      * The collection of data (Globals Substream ABNF, macro sheet substream 
