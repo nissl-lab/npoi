@@ -395,6 +395,7 @@
     <Compile Include="HSSF\Model\TestShapes.cs" />
     <Compile Include="HSSF\Model\TestWorkbook.cs" />
     <Compile Include="HSSF\Record\Aggregates\TestPageSettingsBlock.cs" />
+    <Compile Include="HSSF\Record\Aggregates\TestSharedValueManager.cs" />
     <Compile Include="HSSF\Record\Common\TestUnicodeString.cs" />
     <Compile Include="HSSF\Record\TestArrayRecord.cs" />
     <Compile Include="HSSF\Record\TestAutoFilterInfoRecord.cs" />

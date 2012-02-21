@@ -1132,7 +1132,6 @@ namespace TestCases.HSSF.Model
             ConfirmTokenClasses(ptgs2, typeof(ArrayPtg), typeof(IntPtg), typeof(FuncVarPtg));
         }
         [TestMethod]
-        [Ignore] // Identified bug - failed to parse negative array element.
         public void TestParseArrayNegativeElement()
         {
             Ptg[] ptgs;
@@ -1289,7 +1288,6 @@ namespace TestCases.HSSF.Model
             HSSFFormulaParser.Parse("SUMPRODUCT(A!C7:A!C67, B8:B68) / B69", wb);
         }
         [TestMethod]
-        [Ignore] // Assert.Fail failed. difference at token[7]: expected (AttrPtg) but got (FuncVarPtg)
         public void TestRangeFuncOperand_bug46951()
         {
             HSSFWorkbook wb = new HSSFWorkbook();
@@ -1378,7 +1376,6 @@ namespace TestCases.HSSF.Model
          * and that the {@link MemFuncPtg} / {@link MemAreaPtg} is added correctly
          */
         [TestMethod]
-        [Ignore] // Assert.Fail failed. difference at token[16]: expected (AttrPtg) but got (FuncVarPtg)
         public void TestComplexExplicitRangeEncodings()
         {
             Ptg[] ptgs;

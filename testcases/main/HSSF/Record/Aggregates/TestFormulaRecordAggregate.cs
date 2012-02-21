@@ -28,6 +28,10 @@ namespace TestCases.HSSF.Record.Aggregates
     using NPOI.HSSF.Record.Aggregates;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using NPOI.Util;
+    using NPOI.SS.Formula.PTG;
+    using NPOI.HSSF.Model;
+    using NPOI.SS.Formula;
+    using NPOI.SS.Util;
 
     /**
      *
@@ -81,6 +85,33 @@ namespace TestCases.HSSF.Record.Aggregates
             Record[] vraRecs = rc.Records;
             Assert.AreEqual(1, vraRecs.Length);
             Assert.AreEqual(fr, vraRecs[0]);
+        }
+        [TestMethod]
+        public void TestArrayFormulas()
+        {
+            int rownum = 4;
+            int colnum = 4;
+
+            FormulaRecord fr = new FormulaRecord();
+            fr.Row=(rownum);
+            fr.Column=((short)colnum);
+
+            FormulaRecordAggregate agg = new FormulaRecordAggregate(fr, null, SharedValueManager.CreateEmpty());
+            Ptg[] ptgsForCell = { new ExpPtg(rownum, colnum) };
+            agg.SetParsedExpression(ptgsForCell);
+
+            String formula = "SUM(A1:A3*B1:B3)";
+            Ptg[] ptgs = HSSFFormulaParser.Parse(formula, null, FormulaType.ARRAY, 0);
+            agg.SetArrayFormula(new CellRangeAddress(rownum, rownum, colnum, colnum), ptgs);
+
+            Assert.IsTrue(agg.IsPartOfArrayFormula);
+            Assert.AreEqual("E5", agg.GetArrayFormulaRange().FormatAsString());
+            Ptg[] ptg = agg.FormulaTokens;
+            String fmlaSer = FormulaRenderer.ToFormulaString(null, ptg);
+            Assert.AreEqual(formula, fmlaSer);
+
+            agg.RemoveArrayFormula(rownum, colnum);
+            Assert.IsFalse(agg.IsPartOfArrayFormula);
         }
     }
 }

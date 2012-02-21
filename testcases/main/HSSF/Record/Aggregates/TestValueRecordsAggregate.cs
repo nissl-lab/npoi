@@ -282,5 +282,132 @@ namespace TestCases.HSSF.Record.Aggregates
             CRC32 crc = new CRC32();
             return crc.StreamCRC(is1);
         }
+        [TestMethod]
+        public void TestRemoveNewRow_bug46312()
+        {
+            // To make bug occur, rowIndex needs to be >= ValueRecordsAggregate.records.length
+            int rowIndex = 30;
+
+            ValueRecordsAggregate vra = new ValueRecordsAggregate();
+            try
+            {
+                vra.RemoveAllCellsValuesForRow(rowIndex);
+            }
+            catch (ArgumentException e)
+            {
+                if (e.Message.Equals("Specified rowIndex 30 is outside the allowable range (0..30)"))
+                {
+                    throw new AssertFailedException("Identified bug 46312");
+                }
+                throw e;
+            }
+
+            //if (false) { // same bug as demonstrated through usermodel API
+
+            //    HSSFWorkbook wb = new HSSFWorkbook();
+            //    HSSFSheet sheet = (HSSFSheet)wb.CreateSheet();
+            //    HSSFRow row = (HSSFRow)sheet.CreateRow(rowIndex);
+            //    if (false) { // must not add any cells to the new row if we want to see the bug
+            //        row.CreateCell(0); // this causes ValueRecordsAggregate.records to auto-extend
+            //    }
+            //    try {
+            //        sheet.CreateRow(rowIndex);
+            //    } catch (ArgumentException e) {
+            //        throw new AssertFailedException("Identified bug 46312");
+            //    }
+            //}
+        }
+
+        /**
+         * Tests various manipulations of blank cells, to make sure that {@link MulBlankRecord}s
+         * are use appropriately
+         */
+        [TestMethod]
+        public void TestMultipleBlanks()
+        {
+            BlankRecord brA2 = NewBlankRecord(0, 1);
+            BlankRecord brB2 = NewBlankRecord(1, 1);
+            BlankRecord brC2 = NewBlankRecord(2, 1);
+            BlankRecord brD2 = NewBlankRecord(3, 1);
+            BlankRecord brE2 = NewBlankRecord(4, 1);
+            BlankRecord brB3 = NewBlankRecord(1, 2);
+            BlankRecord brC3 = NewBlankRecord(2, 2);
+
+            valueRecord.InsertCell(brA2);
+            valueRecord.InsertCell(brB2);
+            valueRecord.InsertCell(brD2);
+            confirmMulBlank(3, 1, 1);
+
+            valueRecord.InsertCell(brC3);
+            confirmMulBlank(4, 1, 2);
+
+            valueRecord.InsertCell(brB3);
+            valueRecord.InsertCell(brE2);
+            confirmMulBlank(6, 3, 0);
+
+            valueRecord.InsertCell(brC2);
+            confirmMulBlank(7, 2, 0);
+
+            valueRecord.RemoveCell(brA2);
+            confirmMulBlank(6, 2, 0);
+
+            valueRecord.RemoveCell(brC2);
+            confirmMulBlank(5, 2, 1);
+
+            valueRecord.RemoveCell(brC3);
+            confirmMulBlank(4, 1, 2);
+        }
+        private class RecordVisitor1 : RecordVisitor
+        {
+            private BlankStats bs;
+            public RecordVisitor1(BlankStats bs)
+            {
+                this.bs = bs;
+            }
+            #region RecordVisitor ≥…‘±
+
+            public void VisitRecord(Record r)
+            {
+                if (r is MulBlankRecord)
+                {
+                    MulBlankRecord mbr = (MulBlankRecord)r;
+                    bs.countMulBlankRecords++;
+                    bs.countBlankCells += mbr.NumColumns;
+                }
+                else if (r is BlankRecord)
+                {
+                    bs.countSingleBlankRecords++;
+                    bs.countBlankCells++;
+                }
+            }
+
+            #endregion
+        }
+        class BlankStats
+        {
+            public int countBlankCells;
+            public int countMulBlankRecords;
+            public int countSingleBlankRecords;
+        }
+        private void confirmMulBlank(int expectedTotalBlankCells,
+                int expectedNumberOfMulBlankRecords, int expectedNumberOfSingleBlankRecords)
+        {
+            // assumed row ranges set-up by caller:
+            int firstRow = 1;
+            int lastRow = 2;
+            BlankStats bs = new BlankStats();
+            RecordVisitor rv = new RecordVisitor1(bs);
+
+            for (int rowIx = firstRow; rowIx <= lastRow; rowIx++)
+            {
+                if (valueRecord.RowHasCells(rowIx))
+                {
+                    valueRecord.VisitCellsForRow(rowIx, rv);
+                }
+            }
+            Assert.AreEqual(expectedTotalBlankCells, bs.countBlankCells);
+            Assert.AreEqual(expectedNumberOfMulBlankRecords, bs.countMulBlankRecords);
+            Assert.AreEqual(expectedNumberOfSingleBlankRecords, bs.countSingleBlankRecords);
+        }
     }
 }
