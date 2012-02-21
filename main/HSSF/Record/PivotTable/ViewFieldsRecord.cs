@@ -33,14 +33,15 @@ namespace NPOI.HSSF.Record.PivotTable
         public static short sid = 0x00B1;
 
         /** the value of the <c>cchName</c> field when the name is not present */
-        private static int STRING_NOT_PRESENT_LEN = -1;
-
+        private static int STRING_NOT_PRESENT_LEN = 0xFFFF;
+        /** 5 shorts */
+	    private static int BASE_SIZE = 10;
         private int sxaxis;
         private int cSub;
         private int grbitSub;
         private int cItm;
 
-        private String name = null;
+        private String _name = null;
 
         /**
          * values for the {@link ViewFieldsRecord#sxaxis} field
@@ -61,10 +62,18 @@ namespace NPOI.HSSF.Record.PivotTable
             grbitSub = in1.ReadShort();
             cItm = in1.ReadShort();
 
-            int cchName = in1.ReadShort();
+            int cchName = in1.ReadUShort();
             if (cchName != STRING_NOT_PRESENT_LEN)
             {
-                name = in1.ReadCompressedUnicode(cchName);
+                int flag = in1.ReadByte();
+                if ((flag & 0x01) != 0)
+                {
+                    _name = in1.ReadUnicodeLEString(cchName);
+                }
+                else
+                {
+                    _name = in1.ReadCompressedUnicode(cchName);
+                }
             }
         }
 
@@ -77,9 +86,9 @@ namespace NPOI.HSSF.Record.PivotTable
             out1.WriteShort(grbitSub);
             out1.WriteShort(cItm);
 
-            if (name != null)
+            if (_name != null)
             {
-                StringUtil.WriteUnicodeString(out1, name);
+                StringUtil.WriteUnicodeString(out1, _name);
             }
             else
             {
@@ -92,13 +101,12 @@ namespace NPOI.HSSF.Record.PivotTable
         {
             get
             {
-
-                int cchName = 0;
-                if (name != null)
+                if (_name == null)
                 {
-                    cchName = name.Length;
+                    return BASE_SIZE;
                 }
-                return 2 + 2 + 2 + 2 + 2 + cchName;
+                return BASE_SIZE + 1 // unicode flag 
+                        + _name.Length * (StringUtil.HasMultibyte(_name) ? 2 : 1);
             }
         }
 
@@ -120,7 +128,7 @@ namespace NPOI.HSSF.Record.PivotTable
             buffer.Append("    .cSub      = ").Append(HexDump.ShortToHex(cSub)).Append('\n');
             buffer.Append("    .grbitSub  = ").Append(HexDump.ShortToHex(grbitSub)).Append('\n');
             buffer.Append("    .cItm      = ").Append(HexDump.ShortToHex(cItm)).Append('\n');
-            buffer.Append("    .name      = ").Append(name).Append('\n');
+            buffer.Append("    .name      = ").Append(_name).Append('\n');
 
             buffer.Append("[/SXVD]\n");
             return buffer.ToString();

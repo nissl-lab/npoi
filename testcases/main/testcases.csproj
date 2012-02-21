@@ -397,6 +397,24 @@
     <Compile Include="HSSF\Record\Aggregates\TestPageSettingsBlock.cs" />
     <Compile Include="HSSF\Record\Aggregates\TestSharedValueManager.cs" />
     <Compile Include="HSSF\Record\Common\TestUnicodeString.cs" />
+    <Compile Include="HSSF\Record\Crypto\TestBiff8DecryptingStream.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="HSSF\Record\Crypto\TestBiff8EncryptionKey.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="HSSF\Record\Crypto\TestRC4.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="HSSF\Record\Pivot\TestExtendedPivotTableViewFieldsRecord.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="HSSF\Record\Pivot\TestPageItemRecord.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="HSSF\Record\Pivot\TestViewFieldsRecord.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="HSSF\Record\TestArrayRecord.cs" />
     <Compile Include="HSSF\Record\TestAutoFilterInfoRecord.cs" />
     <Compile Include="HSSF\Record\TestBoolErrRecord.cs" />
