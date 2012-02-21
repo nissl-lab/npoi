@@ -113,16 +113,19 @@ namespace TestCases.HSSF.Record
             Assert.AreEqual(5249, record.NumUniqueStrings);
             Assert.AreEqual(5249, record.CountStrings);
             ser_output = record.Serialize();
+#if !HIDE_UNREACHABLE_CODE
             if (false)
             { // Set true to observe make sure areSameSSTs() is working
                 ser_output[11000] = (byte)'X';
             }
+#endif
 
             SSTRecord rec2 = CreateSSTFromRawData(ser_output);
             if (!areSameSSTs(record, rec2))
             {
                 throw new AssertFailedException("large SST re-Serialized incorrectly");
             }
+#if !HIDE_UNREACHABLE_CODE
             if (false)
             {
                 // TODO - trivial differences in ContinueRecord break locations
@@ -130,6 +133,7 @@ namespace TestCases.HSSF.Record
                 // maybe tweaks are required in ContinuableRecordOutput
                 Assert.IsTrue(Arrays.Equals(origData, ser_output));
             }
+#endif
         }
 
         private bool areSameSSTs(SSTRecord a, SSTRecord b)

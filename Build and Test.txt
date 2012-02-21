@@ -32,15 +32,13 @@ Copy the content of testcases/test-data to the same folder within NPOI.
 Load the the NPOITest.sln into your IDE, build the project and execute 
 all the unit tests.
 
-Here are some numbers (2012-01-30):
-unit tests: 1469, passed: 1456 (failed 13)
+Here are some numbers (2012-02-21):
+unit tests: 1596, passed: 1593 (failed 3)
 
-There are unit tests flagged with the [Ignore] attribute:
-- testcases\main\HSSF\Model\TestFormulaParser.cs(1148):        [Ignore] // Identified bug - failed to parse negative array element.
-- testcases\main\HSSF\Model\TestFormulaParser.cs(1176):        [Ignore] // "Sheet1!$C1...B$4" Assert.AreEqual failed. Expected:<Sheet1!B1:$C$4>. Actual:<Sheet1!B$4:$C1>.     
-- testcases\main\HSSF\Model\TestFormulaParser.cs(1305):        [Ignore] // Assert.Fail failed. difference at token[7]: expected (AttrPtg) but got (FuncVarPtg)
-- testcases\main\HSSF\Model\TestFormulaParser.cs(1335):        [Ignore] // Test method TestCases.HSSF.Model.TestFormulaParser.TestUnionOfFullCollFullRowRef threw exception: NPOI.SS.Formula.FormulaParseException: The LHS of the range operator ':' at position 2 is not a proper reference.
-- testcases\main\HSSF\Model\TestFormulaParser.cs(1394):        [Ignore] // Assert.Fail failed. difference at token[16]: expected (AttrPtg) but got (FuncVarPtg)
+There are unit tests flagged with the [Ignore] attribute: 
+- testcases\main\HSSF\Model\TestFormulaParser.cs(1162):        [Ignore] // "Sheet1!$C1...B$4" Assert.AreEqual failed. Expected:<Sheet1!B1:$C$4>. Actual:<Sheet1!B$4:$C1>. 	
+- testcases\main\HSSF\Model\TestFormulaParser.cs(1320):        [Ignore] // Test method TestCases.HSSF.Model.TestFormulaParser.TestUnionOfFullCollFullRowRef threw exception: NPOI.SS.Formula.FormulaParseException: The LHS of the range operator ':' at position 2 is not a proper reference.
+- testcases\main\HSSF\Model\TestOperandClassTransformer.cs(63):        [Ignore]
 - testcases\main\HSSF\UserModel\TestBugs.cs(115):        [Ignore]//not found in poi
 - testcases\main\HSSF\UserModel\TestBugs.cs(225):        [Ignore] //this test was not found in poi 3.8beta4
 - testcases\main\HSSF\UserModel\TestBugs.cs(343):        [Ignore] ///not found in poi 3.8beat4
@@ -48,25 +46,15 @@ There are unit tests flagged with the [Ignore] attribute:
 - testcases\main\HSSF\UserModel\TestBugs.cs(504):        [Ignore]// not found in poi
 - testcases\main\HSSF\UserModel\TestBugs.cs(1439):        [Ignore]
 - testcases\main\HSSF\UserModel\TestHSSFFormulaEvaluator.cs(122):        [Ignore] // Identified bug 46479a https://issues.apache.org/bugzilla/show_bug.cgi?id=46479 fixed in POI in two commits https://svn.apache.org/viewvc?view=revision&revision=731715 and https://svn.apache.org/viewvc?view=revision&revision=886951
-- testcases\main\HSSF\UserModel\TestUnfixedBugs.cs(42):        [Ignore] // because of WON'T FIX
+- testcases\main\HSSF\UserModel\TestUnfixedBugs.cs(43):        [Ignore] // because of WON'T FIX
 - testcases\main\SS\Formula\Eval\TestMinusZeroResult.cs(72):        [Ignore] //no representation for -0.0 in c#, this test always failed.
 - testcases\main\SS\Formula\Functions\TestDate.cs(50):        [Ignore]
   
+  
 These are the failing test cases:
-Failed    Test49096                    Test method TestCases.HSSF.UserModel.TestBugs.Test49096 threw exception: ...    
-Failed    Test49219                    Test method TestCases.HSSF.UserModel.TestBugs.Test49219 threw exception: ...    
-Failed    Test50426                    Test method TestCases.HSSF.UserModel.TestBugs.Test50426 threw exception: ...    
-Failed    Test50833                    Test method TestCases.HSSF.UserModel.TestBugs.Test50833 threw exception: ...    
-Failed    Test50939                    Test method TestCases.HSSF.UserModel.TestBugs.Test50939 threw exception: ...    
-Failed    Test51461                    Test method TestCases.HSSF.UserModel.TestBugs.Test51461 threw exception: ...    
-Failed    Test51535                    Test method TestCases.HSSF.UserModel.TestBugs.Test51535 threw exception: ...    
-
-Failed    TestCachedTypeChange                  Assert.AreEqual failed. Expected:<31>. Actual:<29>.     
-Failed    TestExternalNameReferenceEvaluate     Test method TestCases.SS.Formula.PTG.TestExternalNameReference.TestExternalNameReferenceEvaluate threw exception: ...    
-Failed    TestGetDataBackAgain                  Assert.AreEqual failed. Expected:<3>. Actual:<4>.     
-Failed    TestRedundantUpdate                   Test method TestCases.SS.Formula.TestEvaluationCache.TestRedundantUpdate threw exception: ...    
+Failed    Test51461                    Test method TestCases.HSSF.UserModel.TestBugs.Test51461 threw exception: System.NotImplementedException: not find class NPOIFSFileSystem    
+Failed    Test51535                    Test method TestCases.HSSF.UserModel.TestBugs.Test51535 threw exception: System.NotImplementedException: not find class NPOIFSFileSystem   
 Failed    TestSlowEvaluate45376                 Assert.AreEqual failed. Expected:<8>. Actual:<24>.     
-Failed    TestTrackingHSSFListenerFormats       Assert.AreEqual failed. Expected:<_(*#,##0_);_(*(#,##0);_(* "-"_);_(@_)>. Actual:<_("$"* #,##0_);_("$"* (#,##0);_("$"* "-"_);_(@_)>.     
 
 Patches to make the unit tests work as expected are greatly appreciated. 
 This belongs to the failing and to the ignored ones.

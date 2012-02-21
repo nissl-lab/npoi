@@ -49,7 +49,7 @@
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>..\..\solution\Lib\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
+    <DefineConstants>TRACE;HIDE_UNREACHABLE_CODE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
@@ -75,15 +75,23 @@
     <Compile Include="HSSF\EventUserModel\DummyRecord\DummyRecordBase.cs" />
     <Compile Include="HSSF\Record\Aggregates\ChartSubstreamRecordAggregate.cs" />
     <Compile Include="HSSF\Record\Aggregates\WorksheetProtectionBlock.cs" />
+    <Compile Include="HSSF\Record\AutoFilter\AutoFilterRecord.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="HSSF\Record\AutoFilter\FilterModeRecord.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="HSSF\Record\Common\FeatFormulaErr2.cs" />
     <Compile Include="HSSF\Record\Common\FeatProtection.cs" />
     <Compile Include="HSSF\Record\Common\FeatSmartTag.cs" />
     <Compile Include="HSSF\Record\Common\FtrHeader.cs" />
     <Compile Include="HSSF\Record\Common\SharedFeature.cs" />
+    <Compile Include="HSSF\Record\UnicodeString.cs" />
     <Compile Include="HSSF\Record\Cont\ContinuableRecordInput.cs" />
     <Compile Include="HSSF\Record\FeatHdrRecord.cs" />
     <Compile Include="HSSF\Record\FeatRecord.cs" />
     <Compile Include="HSSF\Record\FtCblsSubRecord.cs" />
+    <Compile Include="HSSF\Record\SheetExtRecord.cs" />
     <Compile Include="HSSF\UserModel\DVConstraint.cs" />
     <Compile Include="HSSF\UserModel\HSSFDataFormatter.cs" />
     <Compile Include="HSSF\UserModel\HSSFDataValidation.cs" />
@@ -161,8 +169,6 @@
     <Compile Include="HPSF\WritingNotSupportedException.cs" />
     <Compile Include="HSSF\EventModel\ERFListener.cs" />
     <Compile Include="HSSF\EventModel\EventRecordFactory.cs" />
-    <Compile Include="HSSF\EventModel\ModelFactory.cs" />
-    <Compile Include="HSSF\EventModel\ModelFactoryListener.cs" />
     <Compile Include="HSSF\EventUserModel\AbortableHSSFListener.cs" />
     <Compile Include="HSSF\EventUserModel\DummyRecord\LastCellOfRowDummyRecord.cs" />
     <Compile Include="HSSF\EventUserModel\DummyRecord\MissingCellDummyRecord.cs" />
@@ -186,7 +192,6 @@
     <Compile Include="HSSF\Model\HSSFFormulaParser.cs" />
     <Compile Include="HSSF\Model\LineShape.cs" />
     <Compile Include="HSSF\Model\LinkTable.cs" />
-    <Compile Include="HSSF\Model\Model.cs" />
     <Compile Include="HSSF\Model\ParseNode.cs" />
     <Compile Include="HSSF\Model\PictureShape.cs" />
     <Compile Include="HSSF\Model\PolygonShape.cs" />
@@ -215,9 +220,7 @@
     <Compile Include="HSSF\Record\Aggregates\ValueRecordsAggregate.cs" />
     <Compile Include="HSSF\Record\ArrayRecord.cs" />
     <Compile Include="HSSF\Record\AutoFilter\AutoFilterInfoRecord.cs" />
-    <Compile Include="HSSF\Record\AutoFilter\AutoFilterRecord.cs" />
     <Compile Include="HSSF\Record\AutoFilter\DOPER.cs" />
-    <Compile Include="HSSF\Record\AutoFilter\FilterModeRecord.cs" />
     <Compile Include="HSSF\Record\BackupRecord.cs" />
     <Compile Include="HSSF\Record\BiffHeaderInput.cs" />
     <Compile Include="HSSF\Record\BlankRecord.cs" />
@@ -233,7 +236,6 @@
     <Compile Include="HSSF\Record\CFHeaderRecord.cs" />
     <Compile Include="HSSF\Record\CFRuleRecord.cs" />
     <Compile Include="HSSF\Record\CF\BorderFormatting.cs" />
-    <Compile Include="HSSF\Record\CF\CellRange.cs" />
     <Compile Include="HSSF\Record\CF\CellRangeUtil.cs" />
     <Compile Include="HSSF\Record\CF\FontFormatting.cs" />
     <Compile Include="HSSF\Record\CF\PatternFormatting.cs" />
@@ -288,9 +290,13 @@
     <Compile Include="HSSF\Record\Chart\ValueRangeRecord.cs" />
     <Compile Include="HSSF\Record\CodepageRecord.cs" />
     <Compile Include="HSSF\Record\ColumnInfoRecord.cs" />
+    <Compile Include="POIFS\FileSystem\BlockStore.cs" />
+    <Compile Include="POIFS\FileSystem\POIFSDocument.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="POIFS\NIO\ByteArrayBackedDataSource.cs" />
-    <Compile Include="POIFS\NIO\DataSource.cs" />
     <Compile Include="POIFS\NIO\FileBackedDataSource.cs" />
+    <Compile Include="POIFS\NIO\DataSource.cs" />
     <Compile Include="SS\Formula\Constant\ConstantValueParser.cs" />
     <Compile Include="SS\Formula\Constant\ErrorConstant.cs" />
     <Compile Include="HSSF\Record\ContinueRecord.cs" />
@@ -398,7 +404,6 @@
     <Compile Include="HSSF\Record\SelectionRecord.cs" />
     <Compile Include="HSSF\Record\SharedFormulaRecord.cs" />
     <Compile Include="HSSF\Record\SharedValueRecordBase.cs" />
-    <Compile Include="HSSF\Record\SheetExtRecord.cs" />
     <Compile Include="HSSF\Record\SSTDeserializer.cs" />
     <Compile Include="HSSF\Record\SSTRecord.cs" />
     <Compile Include="HSSF\Record\SSTSerializer.cs" />
@@ -420,7 +425,6 @@
     <Compile Include="HSSF\Record\TextObjectRecord.cs" />
     <Compile Include="HSSF\Record\TopMarginRecord.cs" />
     <Compile Include="HSSF\Record\UncalcedRecord.cs" />
-    <Compile Include="HSSF\Record\UnicodeString.cs" />
     <Compile Include="HSSF\Record\UnknownRecord.cs" />
     <Compile Include="HSSF\Record\UserSViewBegin.cs" />
     <Compile Include="HSSF\Record\UserSViewEnd.cs" />
@@ -460,6 +464,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POIFS\FileSystem\BATManaged.cs" />
+    <Compile Include="SS\Formula\SharedFormula.cs" />
+    <Compile Include="Util\BlockingInputStream.cs" />
+    <Compile Include="Util\CloseIgnoringInputStream.cs" />
     <Compile Include="POIFS\FileSystem\DirectoryEntry.cs" />
     <Compile Include="POIFS\FileSystem\DirectoryNode.cs" />
     <Compile Include="POIFS\FileSystem\DocumentDescriptor.cs" />
@@ -470,7 +477,6 @@
     <Compile Include="POIFS\FileSystem\OfficeXmlFileException.cs" />
     <Compile Include="POIFS\FileSystem\Ole10Native.cs" />
     <Compile Include="POIFS\FileSystem\Ole10NativeException.cs" />
-    <Compile Include="POIFS\FileSystem\POIFSDocument.cs" />
     <Compile Include="POIFS\FileSystem\POIFSDocumentPath.cs" />
     <Compile Include="POIFS\FileSystem\POIFSDocumentReader.cs" />
     <Compile Include="POIFS\FileSystem\POIFSDocumentWriter.cs" />
@@ -850,7 +856,6 @@
     <Compile Include="SS\Formula\PTG\UnionPtg.cs" />
     <Compile Include="SS\Formula\PTG\UnknownPtg.cs" />
     <Compile Include="SS\Formula\PTG\ValueOperatorPtg.cs" />
-    <Compile Include="SS\Formula\SharedFormula.cs" />
     <Compile Include="SS\Formula\SheetNameFormatter.cs" />
     <Compile Include="SS\Formula\SheetRefEvaluator.cs" />
     <Compile Include="SS\Formula\Udf\AggregatingUDFFinder.cs" />
@@ -972,33 +977,31 @@
     <Compile Include="Util\BigInteger.cs" />
     <Compile Include="Util\BitField.cs" />
     <Compile Include="Util\BitFieldFactory.cs" />
-    <Compile Include="Util\BlockingInputStream.cs" />
     <Compile Include="Util\ByteField.cs" />
     <Compile Include="Util\Character.cs" />
     <Compile Include="Util\ClassID.cs" />
-    <Compile Include="Util\CloseIgnoringInputStream.cs" />
     <Compile Include="Util\Collections\EmptyEnumerable.cs" />
     <Compile Include="Util\Collections\HashSet.cs" />
     <Compile Include="Util\Collections\ISet.cs" />
     <Compile Include="Util\Collections\Properties.cs" />
     <Compile Include="Util\Collections\StringTokenizer.cs" />
     <Compile Include="Util\CRC32.cs" />
-    <Compile Include="Util\DelayableLittleEndianOutput.cs" />
     <Compile Include="Util\FixedField.cs" />
     <Compile Include="Util\HexDump.cs" />
     <Compile Include="Util\HexRead.cs" />
     <Compile Include="Util\IntegerField.cs" />
     <Compile Include="Util\IntList.cs" />
     <Compile Include="Util\IntMapper.cs" />
+    <Compile Include="Util\DelayableLittleEndianOutput.cs" />
     <Compile Include="Util\IOUtils.cs" />
-    <Compile Include="Util\LittleEndian.cs" />
     <Compile Include="Util\LittleEndianByteArrayInputStream.cs" />
     <Compile Include="Util\LittleEndianByteArrayOutputStream.cs" />
-    <Compile Include="Util\LittleEndianConsts.cs" />
     <Compile Include="Util\LittleEndianInput.cs" />
     <Compile Include="Util\LittleEndianInputStream.cs" />
     <Compile Include="Util\LittleEndianOutput.cs" />
     <Compile Include="Util\LittleEndianOutputStream.cs" />
+    <Compile Include="Util\LittleEndian.cs" />
+    <Compile Include="Util\LittleEndianConsts.cs" />
     <Compile Include="Util\LongField.cs" />
     <Compile Include="Util\LZWDecompresser.cs" />
     <Compile Include="Util\NullLogger.cs" />
@@ -1025,6 +1028,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Lib\Ionic.Zip.dll" />
     <Content Include="Resources\functionMetadata.txt" />
   </ItemGroup>
   <ItemGroup>
