@@ -39,13 +39,14 @@ namespace TestCases.SS.Formula
         {
             _testDataProvider = TestCases.HSSF.HSSFITestDataProvider.Instance;
         }
-        /**
-         * @param TestDataProvider an object that provides Test data in HSSF / XSSF specific way
-         */
-        protected BaseTestExternalFunctions(ITestDataProvider TestDataProvider)
-        {
-            _testDataProvider = TestDataProvider;
-        }
+        // not used:
+        // /**
+        // * @param TestDataProvider an object that provides Test data in HSSF / XSSF specific way
+        // */
+        //protected BaseTestExternalFunctions(ITestDataProvider TestDataProvider)
+        //{
+        //    _testDataProvider = TestDataProvider;
+        //}
         [TestMethod]
         public void TestExternalFunctions()
         {
@@ -60,8 +61,8 @@ namespace TestCases.SS.Formula
             ICell cell2 = sh.CreateRow(1).CreateCell(0);
             try
             {
-                cell2.CellFormula=("MYFUNC(\"B1\")");
-                Assert.Fail("Should fail because MYFUNC is an unknown function");
+                cell2.CellFormula=("MYBASEEXTFUNC(\"B1\")");
+                Assert.Fail("Should fail because MYBASEEXTFUNC is an unknown function");
             }
             catch (FormulaParseException)
             {
@@ -70,12 +71,12 @@ namespace TestCases.SS.Formula
 
             wb.AddToolPack(customToolpack);
 
-            cell2.CellFormula=("MYFUNC(\"B1\")");
-            Assert.AreEqual("MYFUNC(\"B1\")", cell2.CellFormula);
+            cell2.CellFormula = ("MYBASEEXTFUNC(\"B1\")");
+            Assert.AreEqual("MYBASEEXTFUNC(\"B1\")", cell2.CellFormula);
 
             ICell cell3 = sh.CreateRow(2).CreateCell(0);
-            cell3.CellFormula=("MYFUNC2(\"C1\")&\"-\"&A2");  //where A2 is defined above
-            Assert.AreEqual("MYFUNC2(\"C1\")&\"-\"&A2", cell3.CellFormula);
+            cell3.CellFormula = ("MYBASEEXTFUNC2(\"C1\")&\"-\"&A2");  //where A2 is defined above
+            Assert.AreEqual("MYBASEEXTFUNC2(\"C1\")&\"-\"&A2", cell3.CellFormula);
 
             IFormulaEvaluator Evaluator = wb.GetCreationHelper().CreateFormulaEvaluator();
             Assert.AreEqual(2.0, Evaluator.Evaluate(cell1).NumberValue);
@@ -112,9 +113,9 @@ namespace TestCases.SS.Formula
         }
 
         // define two custom user-defined functions
-        private class MyFunc : FreeRefFunction
+        private class MyBaseExtFunc : FreeRefFunction
         {
-            public MyFunc()
+            public MyBaseExtFunc()
             {
                 //
             }
@@ -130,9 +131,9 @@ namespace TestCases.SS.Formula
             }
         }
 
-        private class MyFunc2 : FreeRefFunction
+        private class MyBaseExtFunc2 : FreeRefFunction
         {
-            public MyFunc2()
+            public MyBaseExtFunc2()
             {
                 //
             }
@@ -149,11 +150,11 @@ namespace TestCases.SS.Formula
         }
 
         /**
-         * register the two Test UDFs in a UDF Finder, to be passed to the workbook
+         * register the two Test UDFs in a UDF Finder, to be passed to the workbook MYBASEEXTFUNC
          */
         private static UDFFinder customToolpack = new DefaultUDFFinder(
-                new String[] { "myFunc", "myFunc2" },
-                new FreeRefFunction[] { new MyFunc(), new MyFunc2() }
+                new String[] { "myBaseExtFunc", "myBaseExtFunc2" },
+                new FreeRefFunction[] { new MyBaseExtFunc(), new MyBaseExtFunc2() }
         );
 
     }
