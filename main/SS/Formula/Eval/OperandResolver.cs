@@ -357,11 +357,11 @@ namespace NPOI.SS.Formula.Eval
                     return null;
                 }
                 String str = ((StringEval)ve).StringValue;
-                if (str.Equals("true", StringComparison.InvariantCultureIgnoreCase))
+                if (str.Equals("true", StringComparison.OrdinalIgnoreCase))
                 {
                     return true;
                 }
-                if (str.Equals("false", StringComparison.InvariantCultureIgnoreCase))
+                if (str.Equals("false", StringComparison.OrdinalIgnoreCase))
                 {
                     return false;
                 }

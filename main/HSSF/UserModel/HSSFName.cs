@@ -107,7 +107,7 @@ namespace NPOI.HSSF.UserModel
                     NameRecord rec = wb.GetNameRecord(i);
                     if (rec != _definedNameRec)
                     {
-                        if (rec.NameText.Equals(NameName, StringComparison.InvariantCultureIgnoreCase) && sheetNumber == rec.SheetNumber)
+                        if (rec.NameText.Equals(NameName, StringComparison.OrdinalIgnoreCase) && sheetNumber == rec.SheetNumber)
                         {
                             String msg = "The " + (sheetNumber == 0 ? "workbook" : "sheet") + " already contains this name: " + value;
                             _definedNameRec.NameText = (value + "(2)");

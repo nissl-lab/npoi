@@ -206,7 +206,7 @@ namespace NPOI.SS.UserModel
          * Get the format index that matches the given format string.
          * 
          * <p>
-         * Automatically Converts "text" to excel's format string to represent text.
+         * Automatically converts "text" to excel's format string to represent text.
          * </p>
          * @param pFmt string matching a built-in format
          * @return index of format or -1 if undefined.
@@ -214,7 +214,7 @@ namespace NPOI.SS.UserModel
         public static int GetBuiltinFormat(String pFmt)
         {
             String fmt;
-            if (string.Compare(pFmt, ("TEXT"), true) == 0)
+            if (string.Compare(pFmt, ("TEXT"), StringComparison.OrdinalIgnoreCase) == 0)
             {
                 fmt = "@";
             }

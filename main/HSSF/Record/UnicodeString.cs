@@ -280,7 +280,8 @@ namespace NPOI.HSSF.Record
                 result = numberOfRuns - o.numberOfRuns;
                 if (result != 0) return result;
 
-                result = phoneticText.CompareTo(o.phoneticText);
+                //result = phoneticText.CompareTo(o.phoneticText);
+                result = string.Compare(phoneticText, o.phoneticText, StringComparison.CurrentCulture);
                 if (result != 0) return result;
 
                 result = phRuns.Length - o.phRuns.Length;
@@ -832,7 +833,8 @@ namespace NPOI.HSSF.Record
         public int CompareTo(UnicodeString str)
         {
 
-            int result = String.CompareTo(str.String);
+            //int result = String.CompareTo(str.String);
+            int result = string.Compare(String, str.String, StringComparison.CurrentCulture);
 
             //As per the Equals method lets do this in stages
             if (result != 0)

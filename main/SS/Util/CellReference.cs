@@ -88,7 +88,7 @@ using NPOI.SS.UserModel;
          */
         public CellReference(String cellRef)
         {
-            if (cellRef.EndsWith("#REF!"))
+            if (cellRef.EndsWith("#REF!", StringComparison.CurrentCulture))
             {
                 throw new ArgumentException("Cell reference invalid: " + cellRef);
             }
@@ -562,7 +562,8 @@ using NPOI.SS.UserModel;
             }
             if (numberOfLetters == lastColLength)
             {
-                if (colStr.ToUpper().CompareTo(lastCol) > 0)
+                //if (colStr.ToUpper().CompareTo(lastCol) > 0)
+                if (string.Compare(colStr.ToUpper(), lastCol, StringComparison.Ordinal) > 0)
                 {
                     return false;
                 }

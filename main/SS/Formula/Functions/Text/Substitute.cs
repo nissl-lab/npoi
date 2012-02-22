@@ -80,7 +80,7 @@ namespace NPOI.SS.Formula.Functions
             int nextMatch = -1;
             while (true)
             {
-                nextMatch = oldStr.IndexOf(searchStr, startIndex);
+                nextMatch = oldStr.IndexOf(searchStr, startIndex, StringComparison.CurrentCulture);
                 if (nextMatch < 0)
                 {
                     // store everything from end of last match to end of string
@@ -105,7 +105,7 @@ namespace NPOI.SS.Formula.Functions
             int count = 0;
             while (true)
             {
-                nextMatch = oldStr.IndexOf(searchStr, startIndex);
+                nextMatch = oldStr.IndexOf(searchStr, startIndex, StringComparison.CurrentCulture);
                 if (nextMatch < 0)
                 {
                     // not enough occurrences found - leave unchanged

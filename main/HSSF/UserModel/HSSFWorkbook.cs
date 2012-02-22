@@ -743,7 +743,7 @@ namespace NPOI.HSSF.UserModel
             int uniqueIndex = 2;
             String baseName = srcName;
             int bracketPos = srcName.LastIndexOf('(');
-            if (bracketPos > 0 && srcName.EndsWith(")"))
+            if (bracketPos > 0 && srcName.EndsWith(")", StringComparison.Ordinal))
             {
                 String suffix = srcName.Substring(bracketPos + 1, srcName.Length - bracketPos - 2);
                 try
@@ -845,7 +845,7 @@ namespace NPOI.HSSF.UserModel
             {
                 String sheetname = workbook.GetSheetName(k);
 
-                if (sheetname.Equals(name, StringComparison.InvariantCultureIgnoreCase))
+                if (sheetname.Equals(name, StringComparison.OrdinalIgnoreCase))
                 {
                     retval = (HSSFSheet)_sheets[k];
                 }
@@ -1549,7 +1549,7 @@ namespace NPOI.HSSF.UserModel
             {
                 String nameName = GetNameName(k);
 
-                if (nameName.Equals(name, StringComparison.InvariantCultureIgnoreCase))
+                if (nameName.Equals(name, StringComparison.OrdinalIgnoreCase))
                 {
                     retval = k;
                     break;

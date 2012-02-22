@@ -21,8 +21,8 @@ using NPOI.Util;
 namespace NPOI.POIFS.NIO
 {
     /**
- * A POIFS {@link DataSource} backed by a File
- */
+     * A POIFS {@link DataSource} backed by a File
+     */
     public class FileBackedDataSource : DataSource
     {
         private FileStream fileStream;

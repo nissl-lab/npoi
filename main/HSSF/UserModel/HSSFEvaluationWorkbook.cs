@@ -77,7 +77,7 @@ namespace NPOI.HSSF.UserModel
             for (int i = 0; i < _iBook.NumNames; i++)
             {
                 NameRecord nr = _iBook.GetNameRecord(i);
-                if (nr.SheetNumber == sheetIndex + 1 && name.Equals(nr.NameText,StringComparison.InvariantCultureIgnoreCase))
+                if (nr.SheetNumber == sheetIndex + 1 && name.Equals(nr.NameText, StringComparison.OrdinalIgnoreCase))
                 {
                     return new Name(nr, i);
                 }

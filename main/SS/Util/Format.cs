@@ -167,14 +167,14 @@ namespace NPOI.SS.Util
 
         public DecimalFormat(string pattern)
         {
-            if (pattern.IndexOf("'") != -1)
+            if (pattern.IndexOf("'", StringComparison.Ordinal) != -1)
                 throw new ArgumentException("invalid pattern");
             this.pattern = pattern;
         }
 
         public override string Format(object obj)
         {
-            if (pattern.IndexOf("'") != -1)
+            if (pattern.IndexOf("'", StringComparison.Ordinal) != -1)
             {
                 //return ((double)obj).ToString();
                 return Convert.ToDouble(obj, CultureInfo.InvariantCulture).ToString(CultureInfo.CurrentCulture);

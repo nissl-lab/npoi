@@ -376,7 +376,7 @@ namespace NPOI.HSSF.Util
             {
                 UnicodeMapping entry = unicodeMappings[i];
                 String key = entry.entityName;
-                if (lowerCaseStr.IndexOf(key) != -1)
+                if (lowerCaseStr.IndexOf(key, StringComparison.Ordinal) != -1)
                 {
                     s = s.Replace(key, entry.resolvedValue);
                     foundUnicode = true;

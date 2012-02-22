@@ -52,11 +52,12 @@ namespace NPOI.SS.Formula.Functions
             int result;
             if (_isCaseSensitive)
             {
-                result = haystack.IndexOf(needle, startIndex);
+                result = haystack.IndexOf(needle, startIndex, StringComparison.CurrentCulture);
             }
             else
             {
-                result = haystack.ToUpper().IndexOf(needle.ToUpper(), startIndex);
+                //result = haystack.ToUpper().IndexOf(needle.ToUpper(), startIndex);
+                result = haystack.IndexOf(needle, startIndex, StringComparison.CurrentCultureIgnoreCase);
             }
             if (result == -1)
             {

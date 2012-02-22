@@ -849,7 +849,7 @@ namespace TestCases.HSSF.Model
             }
             catch (InvalidOperationException e)
             {
-                if (e.Message.Equals("too much stuff left on the stack", StringComparison.InvariantCultureIgnoreCase))
+                if (e.Message.Equals("too much stuff left on the stack", StringComparison.OrdinalIgnoreCase))
                 {
                     throw new AssertFailedException("Identified bug 44609");
                 }

@@ -155,10 +155,10 @@ namespace NPOI.SS.Formula
             {
                 case 'T':
                 case 't':
-                    return "TRUE".Equals(rawSheetName, StringComparison.InvariantCultureIgnoreCase);
+                    return "TRUE".Equals(rawSheetName, StringComparison.OrdinalIgnoreCase);
                 case 'F':
                 case 'f':
-                    return "FALSE".Equals(rawSheetName, StringComparison.InvariantCultureIgnoreCase);
+                    return "FALSE".Equals(rawSheetName, StringComparison.OrdinalIgnoreCase);
             }
             return false;
         }

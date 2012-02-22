@@ -188,7 +188,7 @@ namespace NPOI.HSSF.Model
             {
                 for (int i = 0; i < _externalNameRecords.Length; i++)
                 {
-                    if (_externalNameRecords[i].Text.Equals(name, StringComparison.InvariantCultureIgnoreCase))
+                    if (_externalNameRecords[i].Text.Equals(name, StringComparison.OrdinalIgnoreCase))
                     {
                         return i;
                     }

@@ -143,7 +143,7 @@ namespace NPOI.SS.Formula.Functions
             protected override CompareResult CompareSameType(ValueEval other)
             {
                 StringEval se = (StringEval)other;
-                return CompareResult.ValueOf(String.Compare(_value,se.StringValue,true));
+                return CompareResult.ValueOf(String.Compare(_value, se.StringValue, StringComparison.OrdinalIgnoreCase));
             }
             protected override String GetValueAsString()
             {

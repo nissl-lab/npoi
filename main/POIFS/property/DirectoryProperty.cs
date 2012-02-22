@@ -144,14 +144,14 @@ namespace NPOI.POIFS.Properties
 
             /// <summary>
             /// Compare method. Assumes both parameters are non-null
-            /// instances of Property. One property Is less than another if
-            /// its name Is shorter than the other property's name. If the
+            /// instances of Property. One property is less than another if
+            /// its name is shorter than the other property's name. If the
             /// names are the same length, the property whose name comes
-            /// before the other property's name, alphabetically, Is less
+            /// before the other property's name, alphabetically, is less
             /// than the other property.
             /// </summary>
-            /// <param name="o1">first object to Compare, better be a Property</param>
-            /// <param name="o2">second object to Compare, better be a Property</param>
+            /// <param name="o1">first object to compare, better be a Property</param>
+            /// <param name="o2">second object to compare, better be a Property</param>
             /// <returns>negative value if o1 smaller than o2,
             ///         zero           if o1 equals o2,
             ///        positive value if o1 bigger than  o2.</returns>
@@ -168,27 +168,29 @@ namespace NPOI.POIFS.Properties
 
                 if (num == 0)
                 {
-                    if (name1.CompareTo(VBA_PROJECT) == 0)
+                    //if (name1.CompareTo(VBA_PROJECT) == 0)
+                    if (name1.Equals(VBA_PROJECT, StringComparison.CurrentCulture))
                     {
                         num = 1;
                     }
-                    else if (name2.CompareTo(VBA_PROJECT) == 0)
+                    //else if (name2.CompareTo(VBA_PROJECT) == 0)
+                    else if (name2.Equals(VBA_PROJECT, StringComparison.CurrentCulture))
                     {
                         num = -1;
                     }
                     else
                     {
-                        if (name1.StartsWith("__") && name2.StartsWith("__"))
+                        if (name1.StartsWith("__", StringComparison.Ordinal) && name2.StartsWith("__", StringComparison.Ordinal))
                         {
                             // Betweeen __SRP_0 and __SRP_1 just sort as normal
-                            num = String.Compare(name1, name2, true);
+                            num = String.Compare(name1, name2, StringComparison.OrdinalIgnoreCase);
                         }
-                        else if (name1.StartsWith("__"))
+                        else if (name1.StartsWith("__", StringComparison.Ordinal))
                         {
                             // If only name1 is __XXX then this will be placed after name2
                             num = 1;
                         }
-                        else if (name2.StartsWith("__"))
+                        else if (name2.StartsWith("__", StringComparison.Ordinal))
                         {
                             // If only name2 is __XXX then this will be placed after name1
                             num = -1;
@@ -197,7 +199,7 @@ namespace NPOI.POIFS.Properties
                         {
                             // result = name1.compareTo(name2);
                             // The default case is to sort names ignoring case
-                            num = String.Compare(name1, name2, true);
+                            num = String.Compare(name1, name2, StringComparison.OrdinalIgnoreCase);
                         }
                     }
 

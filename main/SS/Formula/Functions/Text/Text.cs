@@ -37,7 +37,7 @@ namespace NPOI.SS.Formula.Functions
                 FormatBase formatter = new DecimalFormat(s1);
                 return new StringEval(formatter.Format(s0));
             }
-            else if (s1.IndexOf("/") == s1.LastIndexOf("/") && s1.IndexOf("/") >= 0 && !s1.Contains("-"))
+            else if (s1.IndexOf("/", StringComparison.Ordinal) == s1.LastIndexOf("/", StringComparison.Ordinal) && s1.IndexOf("/", StringComparison.Ordinal) >= 0 && !s1.Contains("-"))
             {
                 double wholePart = Math.Floor(s0);
                 double decPart = s0 - wholePart;

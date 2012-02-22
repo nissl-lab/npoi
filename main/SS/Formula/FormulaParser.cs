@@ -733,7 +733,7 @@ namespace NPOI.SS.Formula
             {
                 return Function(name);
             }
-            if (name.Equals("TRUE", StringComparison.InvariantCultureIgnoreCase) || name.Equals("FALSE", StringComparison.InvariantCultureIgnoreCase))
+            if (name.Equals("TRUE", StringComparison.OrdinalIgnoreCase) || name.Equals("FALSE", StringComparison.OrdinalIgnoreCase))
             {
                 return new ParseNode(new BoolPtg(name.ToUpper()));
             }
@@ -1575,11 +1575,11 @@ namespace NPOI.SS.Formula
         private Boolean ParseBooleanLiteral()
         {
             String iden = ParseUnquotedIdentifier();
-            if ("TRUE".Equals(iden, StringComparison.InvariantCultureIgnoreCase))
+            if ("TRUE".Equals(iden, StringComparison.OrdinalIgnoreCase))
             {
                 return true;
             }
-            if ("FALSE".Equals(iden, StringComparison.InvariantCultureIgnoreCase))
+            if ("FALSE".Equals(iden, StringComparison.OrdinalIgnoreCase))
             {
                 return false;
             }

@@ -64,37 +64,37 @@ namespace NPOI.HSSF.UserModel
                 switch (text[1])
                 {
                     case 'L':
-                        if (text.IndexOf("&C") >= 0)
+                        if (text.IndexOf("&C", StringComparison.Ordinal) >= 0)
                         {
-                            pos = Math.Min(pos, text.IndexOf("&C"));
+                            pos = Math.Min(pos, text.IndexOf("&C", StringComparison.Ordinal));
                         }
-                        if (text.IndexOf("&R") >= 0)
+                        if (text.IndexOf("&R", StringComparison.Ordinal) >= 0)
                         {
-                            pos = Math.Min(pos, text.IndexOf("&R"));
+                            pos = Math.Min(pos, text.IndexOf("&R", StringComparison.Ordinal));
                         }
                         _left = text.Substring(2, pos - 2);
                         text = text.Substring(pos);
                         break;
                     case 'C':
-                        if (text.IndexOf("&L") >= 0)
+                        if (text.IndexOf("&L", StringComparison.Ordinal) >= 0)
                         {
-                            pos = Math.Min(pos, text.IndexOf("&L"));
+                            pos = Math.Min(pos, text.IndexOf("&L", StringComparison.Ordinal));
                         }
-                        if (text.IndexOf("&R") >= 0)
+                        if (text.IndexOf("&R", StringComparison.Ordinal) >= 0)
                         {
-                            pos = Math.Min(pos, text.IndexOf("&R"));
+                            pos = Math.Min(pos, text.IndexOf("&R", StringComparison.Ordinal));
                         }
                         _center = text.Substring(2, pos - 2);
                         text = text.Substring(pos);
                         break;
                     case 'R':
-                        if (text.IndexOf("&C") >= 0)
+                        if (text.IndexOf("&C", StringComparison.Ordinal) >= 0)
                         {
-                            pos = Math.Min(pos, text.IndexOf("&C"));
+                            pos = Math.Min(pos, text.IndexOf("&C", StringComparison.Ordinal));
                         }
-                        if (text.IndexOf("&L") >= 0)
+                        if (text.IndexOf("&L", StringComparison.Ordinal) >= 0)
                         {
-                            pos = Math.Min(pos, text.IndexOf("&L"));
+                            pos = Math.Min(pos, text.IndexOf("&L", StringComparison.Ordinal));
                         }
                         _right = text.Substring(2, pos - 2);
                         text = text.Substring(pos);
@@ -386,7 +386,7 @@ namespace NPOI.HSSF.UserModel
             foreach(Field field in Fields.AllFields)
             {
                 String seq = field.sequence;
-                while ((pos = text.IndexOf(seq)) > -1)
+                while ((pos = text.IndexOf(seq, StringComparison.CurrentCulture)) > -1)
                 {
                     text = text.Substring(0, pos) +
                         text.Substring(pos + seq.Length);

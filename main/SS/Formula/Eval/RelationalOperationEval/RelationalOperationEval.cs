@@ -73,7 +73,7 @@ namespace NPOI.SS.Formula.Eval
                 {
                     StringEval sA = (StringEval)va;
                     StringEval sB = (StringEval)vb;
-                    return string.Compare(sA.StringValue,sB.StringValue,true);
+                    return string.Compare(sA.StringValue, sB.StringValue, StringComparison.OrdinalIgnoreCase);
                 }
                 return 1;
             }

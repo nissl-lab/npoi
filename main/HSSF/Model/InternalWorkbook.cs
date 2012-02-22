@@ -683,7 +683,7 @@ namespace NPOI.HSSF.Model
                 {
                     bName = bName.Substring(0, MAX_SENSITIVE_SHEET_NAME_LEN);
                 }
-                if (aName.Equals(bName,StringComparison.InvariantCultureIgnoreCase))
+                if (aName.Equals(bName,StringComparison.OrdinalIgnoreCase))
                 {
                     return true;
                 }
@@ -816,7 +816,7 @@ namespace NPOI.HSSF.Model
             {
                 String sheet = GetSheetName(k);
 
-                if (sheet.Equals(name,StringComparison.InvariantCultureIgnoreCase))
+                if (sheet.Equals(name,StringComparison.OrdinalIgnoreCase))
                 {
                     retval = k;
                     break;

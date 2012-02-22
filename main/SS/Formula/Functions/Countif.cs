@@ -410,7 +410,8 @@ namespace NPOI.SS.Formula.Functions
                 {
                     return Evaluate(_pattern.IsMatch(testedValue));
                 }
-                return Evaluate(testedValue.CompareTo(_value));
+                //return Evaluate(testedValue.CompareTo(_value));
+                return Evaluate(string.Compare(testedValue, _value, StringComparison.CurrentCulture));
             }
 
             /// <summary>
@@ -619,14 +620,14 @@ namespace NPOI.SS.Formula.Functions
             {
                 case 't':
                 case 'T':
-                    if ("TRUE".Equals(strRep, StringComparison.InvariantCultureIgnoreCase))
+                    if ("TRUE".Equals(strRep, StringComparison.OrdinalIgnoreCase))
                     {
                         return true;
                     }
                     break;
                 case 'f':
                 case 'F':
-                    if ("FALSE".Equals(strRep, StringComparison.InvariantCultureIgnoreCase))
+                    if ("FALSE".Equals(strRep, StringComparison.OrdinalIgnoreCase))
                     {
                         return false;
                     }
