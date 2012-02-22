@@ -492,7 +492,7 @@ namespace NPOI.HSSF.UserModel
         {
             if (formula == null)
             {
-                if (value == double.NaN)
+                if (double.IsNaN(value))
                 {
                     return Ptg.EMPTY_PTG_ARRAY;
                 }
