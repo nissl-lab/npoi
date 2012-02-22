@@ -559,15 +559,28 @@ namespace NPOI.SS.Formula
             }
 
             SimpleRangePart part1 = ParseSimpleRangePart();
+
             if (part1 == null)
             {
                 if (sheetIden != null)
                 {
-                    throw new FormulaParseException("Cell reference expected after sheet name at index "
-                            + pointer + ".");
+                    if (look == '#')
+                    {  // error ref like MySheet!#REF!
+                        return new ParseNode(ErrPtg.ValueOf(ParseErrorLiteral()));
+                    }
+                    else
+                    {
+                        throw new FormulaParseException("Cell reference expected after sheet name at index "
+                                + pointer + ".");
+                    }
                 }
                 return ParseNonRange(savePointer);
             }
+
+
+
+
+
             bool whiteAfterPart1 = IsWhite(look);
             if (whiteAfterPart1)
             {
@@ -815,7 +828,7 @@ namespace NPOI.SS.Formula
             }
             return new AreaReference(part1.getCellReference(), part2.getCellReference());
         }
-        private string CELL_REF_PATTERN = "^(\\$?[A-Za-z]+)(\\$?[0-9]+)?";
+        private string CELL_REF_PATTERN = "(\\$?[A-Za-z]+)?(\\$?[0-9]+)?";
 
 
 
@@ -885,7 +898,7 @@ namespace NPOI.SS.Formula
                 {
                     i = Int32.Parse(rep.Replace("$", ""));
                 }
-                catch (FormatException)
+                catch (Exception)
                 {
                     return null;
                 }

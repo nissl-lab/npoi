@@ -119,7 +119,6 @@ namespace TestCases.HSSF.UserModel
  * Test for bug due to attempt to convert a cached formula error result to a boolean
  */
         [TestMethod]
-        [Ignore] // Identified bug 46479a https://issues.apache.org/bugzilla/show_bug.cgi?id=46479 fixed in POI in two commits https://svn.apache.org/viewvc?view=revision&revision=731715 and https://svn.apache.org/viewvc?view=revision&revision=886951
         public void TestUpdateCachedFormulaResultFromErrorToNumber_bug46479()
         {
             HSSFWorkbook wb = new HSSFWorkbook();

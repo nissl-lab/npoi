@@ -60,7 +60,7 @@ namespace TestCases.HSSF.Model
          * This test has been Added but disabled in order to document this issue.
          */
         [TestMethod]
-        [Ignore]
+        [Ignore]//this test is disabled in poi.
         public void DISABLED_TestIndexPi1()
         {
             String formula = "INDEX(PI(),1)";

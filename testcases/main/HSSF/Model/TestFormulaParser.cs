@@ -1159,7 +1159,6 @@ namespace TestCases.HSSF.Model
             Assert.AreEqual(-5.0, (Double)element, 0.0);
         }
         [TestMethod]
-        [Ignore] // "Sheet1!$C1...B$4" Assert.AreEqual failed. Expected:<Sheet1!B1:$C$4>. Actual:<Sheet1!B$4:$C1>. 	
         public void TestRangeOperator()
         {
             HSSFWorkbook wb = new HSSFWorkbook();
@@ -1317,7 +1316,6 @@ namespace TestCases.HSSF.Model
 
         }
         [TestMethod]
-        [Ignore] // Test method TestCases.HSSF.Model.TestFormulaParser.TestUnionOfFullCollFullRowRef threw exception: NPOI.SS.Formula.FormulaParseException: The LHS of the range operator ':' at position 2 is not a proper reference.
         public void TestUnionOfFullCollFullRowRef()
         {
             Ptg[] ptgs;

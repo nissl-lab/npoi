@@ -1436,8 +1436,8 @@ using NPOI.POIFS.FileSystem;
          *  Expected ExpPtg to be converted from Shared to Non-Shared...
          */
         [TestMethod]
-        [Ignore]
-        public void Test43623()
+        [Ignore]//this test is disabled in poi.
+        public void DISABLED_Test43623()
         {
             HSSFWorkbook wb = OpenSample("43623.xls");
             Assert.AreEqual(1, wb.NumberOfSheets);
