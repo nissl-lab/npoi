@@ -24,6 +24,7 @@ namespace NPOI.SS.Util
     using NPOI.HSSF.UserModel;
     using System.Windows.Forms;
     using System.Collections;
+    using System.Globalization;
 
     /**
      * Helper methods for when working with Usermodel sheets
@@ -203,7 +204,7 @@ namespace NPOI.SS.Util
                         }
                         catch (Exception)
                         {
-                            sval = cell.NumericCellValue.ToString("F");
+                            sval = cell.NumericCellValue.ToString("F", CultureInfo.InvariantCulture);
                         }
                     }
                     else if (cellType == CellType.BOOLEAN)

@@ -20,6 +20,7 @@ namespace NPOI.SS.Util
     using System;
     using System.Text;
     using NPOI.Util;
+    using System.Globalization;
 
     /*
      * Represents a transformation of a 64 bit IEEE double quantity having a decimal exponent and a
@@ -221,7 +222,7 @@ namespace NPOI.SS.Util
 
         public String GetSignificantDecimalDigits()
         {
-            return _wholePart.ToString();
+            return _wholePart.ToString(CultureInfo.InvariantCulture);
         }
         /**
          * Rounds the first whole digit position (considers only units digit, not frational part).
@@ -276,7 +277,7 @@ namespace NPOI.SS.Util
             {
                 return "0";
             }
-            return GetFractionalPart().ToString().Substring(2);
+            return GetFractionalPart().ToString(CultureInfo.InvariantCulture).Substring(2);
         }
 
 
@@ -286,7 +287,7 @@ namespace NPOI.SS.Util
             StringBuilder sb = new StringBuilder();
             sb.Append(this.GetType().Name);
             sb.Append(" [");
-            String ws = _wholePart.ToString();
+            String ws = _wholePart.ToString(CultureInfo.InvariantCulture);
             sb.Append(ws[0]);
             sb.Append('.');
             sb.Append(ws.Substring(1));

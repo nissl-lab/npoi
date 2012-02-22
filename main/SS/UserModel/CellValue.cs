@@ -21,6 +21,7 @@ namespace NPOI.SS.UserModel
     using System.Text;
     using NPOI.SS.Formula.Eval;
     using NPOI.SS.UserModel;
+    using System.Globalization;
 
     /**
      * Mimics the 'data view' of a cell. This allows formula Evaluator
@@ -136,7 +137,7 @@ namespace NPOI.SS.UserModel
             switch (_cellType)
             {
                 case CellType.NUMERIC:
-                    return _numberValue.ToString();
+                    return _numberValue.ToString(CultureInfo.InvariantCulture);
                 case CellType.STRING:
                     return '"' + _textValue + '"';
                 case CellType.BOOLEAN:

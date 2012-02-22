@@ -3,6 +3,7 @@ using System.Text;
 using NPOI.Util;
 using NPOI.SS.Formula;
 using NPOI.SS.Formula.PTG;
+using System.Globalization;
 
 namespace NPOI.HSSF.Record
 {
@@ -238,7 +239,7 @@ namespace NPOI.HSSF.Record
                 _linkPtg.Write(out1);
                 if (_unknownPostFormulaByte != null)
                 {
-                    out1.WriteByte(Convert.ToByte(_unknownPostFormulaByte));
+                    out1.WriteByte(Convert.ToByte(_unknownPostFormulaByte, CultureInfo.InvariantCulture));
                 }
             }
             out1.WriteShort(_cLines);

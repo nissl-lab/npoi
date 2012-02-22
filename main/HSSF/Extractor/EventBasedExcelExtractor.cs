@@ -32,6 +32,7 @@ namespace NPOI.HSSF.Extractor
     using NPOI.HSSF.Model;
     //using NPOI.HSSF.Util;
     using NPOI.SS.Util;
+    using System.Globalization;
 
     /// <summary>
     /// A text extractor for Excel files, that is based
@@ -309,7 +310,7 @@ namespace NPOI.HSSF.Extractor
 
                 if (formatString == null)
                 {
-                    return value.ToString();
+                    return value.ToString(CultureInfo.InvariantCulture);
                 }
                 else
                 {
@@ -332,7 +333,7 @@ namespace NPOI.HSSF.Extractor
                         if (formatString == "General")
                         {
                             // Some sort of wierd default
-                            return value.ToString();
+                            return value.ToString(CultureInfo.InvariantCulture);
                         }
 
                         // Format as a number

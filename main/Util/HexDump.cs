@@ -28,6 +28,7 @@
 using System;
 using System.Text;
 using System.IO;
+using System.Globalization;
 
 
 namespace NPOI.Util
@@ -79,7 +80,7 @@ namespace NPOI.Util
 
             if ((index < 0) || (index >= data.Length))
             {
-                string message = string.Format("illegal index: {0} into array of length {1}", index, data.Length);
+                string message = string.Format(CultureInfo.InvariantCulture, "illegal index: {0} into array of length {1}", index, data.Length);
                 throw new IndexOutOfRangeException(message);
             }
             long display_offset = offset + index;
@@ -166,7 +167,7 @@ namespace NPOI.Util
             {
                 if (data.Length == 0)
                 {
-                    byte[] info = System.Text.Encoding.UTF8.GetBytes(string.Format("No Data{0}", Environment.NewLine));
+                    byte[] info = System.Text.Encoding.UTF8.GetBytes(string.Format(CultureInfo.InvariantCulture, "No Data{0}", Environment.NewLine));
                     if (stream != null)
                     {
                         //Console.Write(info);
@@ -177,7 +178,7 @@ namespace NPOI.Util
                 }
                 if ((index < 0) || (index >= data.Length))
                 {
-                    string message = string.Format("illegal index: {0} into array of length {1}", index, data.Length);
+                    string message = string.Format(CultureInfo.InvariantCulture, "illegal index: {0} into array of length {1}", index, data.Length);
                     throw new IndexOutOfRangeException(message);
                 }
                 if (data.Length != 0)
@@ -359,14 +360,14 @@ namespace NPOI.Util
                 formatString.Append('0');
             formatString.Append(": ");
             StringBuilder retVal = new StringBuilder();
-            retVal.Append(((double)0).ToString(formatString.ToString()));
+            retVal.Append(((double)0).ToString(formatString.ToString(), CultureInfo.InvariantCulture));
             int j = -1;
             for (int x = 0; x < value.Length; x++)
             {
                 if (++j == bytesPerLine)
                 {
                     retVal.Append('\n');
-                    retVal.Append(((double)x).ToString(formatString.ToString()));
+                    retVal.Append(((double)x).ToString(formatString.ToString(), CultureInfo.InvariantCulture));
                     j = 0;
                 }
                 retVal.Append(ToHex(value[x]));

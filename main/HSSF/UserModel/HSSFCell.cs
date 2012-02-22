@@ -30,6 +30,7 @@ namespace NPOI.HSSF.UserModel
     using NPOI.SS.UserModel;
     using NPOI.SS.Util;
     using NPOI.SS.Formula;
+    using System.Globalization;
 
     /// <summary>
     /// High level representation of a cell in a row of a spReadsheet.
@@ -848,7 +849,7 @@ namespace NPOI.HSSF.UserModel
         /// Chooses a new bool value for the cell when its type is changing.
         /// Usually the caller is calling SetCellType() with the intention of calling
         /// SetCellValue(bool) straight afterwards.  This method only exists to give
-        /// the cell a somewhat reasonable value Until the SetCellValue() call (if at all).
+        /// the cell a somewhat reasonable value until the SetCellValue() call (if at all).
         /// TODO - perhaps a method like SetCellTypeAndValue(int, Object) should be introduced to avoid this
         /// </summary>
         /// <returns></returns>
@@ -862,7 +863,7 @@ namespace NPOI.HSSF.UserModel
                 case CellType.STRING:
                     int sstIndex = ((LabelSSTRecord)record).SSTIndex;
                     String text = book.Workbook.GetSSTString(sstIndex).String;
-                    return Convert.ToBoolean(text);
+                    return Convert.ToBoolean(text, CultureInfo.CurrentCulture);
 
                 case CellType.NUMERIC:
                     return ((NumberRecord)record).Value != 0;

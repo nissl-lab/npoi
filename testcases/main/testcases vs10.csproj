@@ -418,6 +418,7 @@
     <Compile Include="HSSF\Model\TestWorkbook.cs" />
     <Compile Include="HSSF\Record\Aggregates\TestPageSettingsBlock.cs" />
     <Compile Include="HSSF\Record\Aggregates\TestSharedValueManager.cs" />
+    <Compile Include="HSSF\Record\Chart\TestChartFormatRecord.cs" />
     <Compile Include="HSSF\Record\Common\TestUnicodeString.cs" />
     <Compile Include="HSSF\Record\Crypto\TestBiff8DecryptingStream.cs">
       <SubType>Code</SubType>

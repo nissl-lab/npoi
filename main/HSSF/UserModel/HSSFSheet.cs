@@ -35,6 +35,7 @@ namespace NPOI.HSSF.UserModel
     using System.Drawing;
     using System.Windows.Forms.VisualStyles;
     using System.Drawing.Drawing2D;
+    using System.Globalization;
 
 
 
@@ -1699,7 +1700,7 @@ namespace NPOI.HSSF.UserModel
         protected void ValidateRow(int row)
         {
             int maxrow = SpreadsheetVersion.EXCEL97.LastRowIndex;
-            if (row > maxrow) throw new ArgumentException("Maximum row number is " + maxrow.ToString());
+            if (row > maxrow) throw new ArgumentException("Maximum row number is " + maxrow.ToString(CultureInfo.CurrentCulture));
             if (row < 0) throw new ArgumentException("Minumum row number is 0");
         }
 
@@ -1710,7 +1711,7 @@ namespace NPOI.HSSF.UserModel
         protected void ValidateColumn(int column)
         {
             int maxcol = SpreadsheetVersion.EXCEL97.LastColumnIndex;
-            if (column > maxcol) throw new ArgumentException("Maximum column number is " + maxcol.ToString());
+            if (column > maxcol) throw new ArgumentException("Maximum column number is " + maxcol.ToString(CultureInfo.CurrentCulture));
             if (column < 0) throw new ArgumentException("Minimum column number is 0");
         }
 

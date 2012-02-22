@@ -18,6 +18,7 @@
 
 using System;
 using System.Text;
+using System.Globalization;
 
 namespace NPOI.HSSF.Util
 {
@@ -213,7 +214,7 @@ namespace NPOI.HSSF.Util
             tlX = GetXPosition(m_cellFrom);
             tlY = GetYPosition(m_cellFrom);
             m_cellTo = NumTo26Sys(tlX + _width - 1);
-            m_cellTo += (tlY + _height - 1).ToString();
+            m_cellTo += (tlY + _height - 1).ToString(CultureInfo.InvariantCulture);
         }
 
         public bool HasSheetName
@@ -320,7 +321,7 @@ namespace NPOI.HSSF.Util
                 String digitstr = GetDigitPart(_subrange);
                 try
                 {
-                    result = int.Parse(digitstr);
+                    result = int.Parse(digitstr, CultureInfo.InvariantCulture);
                     if (result > MAX_HEIGHT)
                     {
                         result = WRONG_POS;

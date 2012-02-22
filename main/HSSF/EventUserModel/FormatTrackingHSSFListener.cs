@@ -23,6 +23,7 @@ namespace NPOI.HSSF.EventUserModel
     using NPOI.HSSF.UserModel;
     using System.Collections.Generic;
     using NPOI.SS.UserModel;
+    using System.Globalization;
 
     /**
      * A proxy HSSFListener that keeps track of the document
@@ -117,7 +118,7 @@ namespace NPOI.HSSF.EventUserModel
 
             if (formatString == null)
             {
-                return value.ToString();
+                return value.ToString(CultureInfo.InvariantCulture);
             }
             else
             {

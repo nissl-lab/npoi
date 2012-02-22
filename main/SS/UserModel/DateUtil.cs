@@ -248,7 +248,7 @@ namespace NPOI.SS.UserModel
         {
             if (!IsValidExcelDate(date))
             {
-                throw new ArgumentException(string.Format("invalid Excel date double value: {0}", date));
+                throw new ArgumentException(string.Format(CultureInfo.CurrentCulture, "Invalid Excel date double value: {0}", date));
             }
             int startYear = 1900;
             int dayAdjust = -1; // Excel thinks 2/29/1900 Is a valid date, which it Isn't
@@ -487,7 +487,7 @@ namespace NPOI.SS.UserModel
             int result;
             try
             {
-                result = int.Parse(strVal);
+                result = int.Parse(strVal, CultureInfo.InvariantCulture);
             }
             catch (FormatException)
             {

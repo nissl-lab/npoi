@@ -23,6 +23,7 @@ namespace NPOI.SS.Formula.PTG
     using NPOI.Util;
 
     using NPOI.SS.Util;
+    using System.Globalization;
 
     /**
      * Number
@@ -43,11 +44,12 @@ namespace NPOI.SS.Formula.PTG
             field_1_value = in1.ReadDouble();
         }
         /** Create a NumberPtg from a string representation of  the number
-     *  Number format is not checked, it is expected to be validated in the parser
-     *   that calls this method. 
-     *  @param value : String representation of a floating point number
-     */
-        public NumberPtg(String value):this(Double.Parse(value))
+         *  Number format is not checked, it is expected to be validated in the parser
+         *   that calls this method. 
+         *  @param value : String representation of a floating point number
+         */
+        public NumberPtg(String value)
+            : this(Double.Parse(value, CultureInfo.CurrentCulture))
         {
             
         }

@@ -23,6 +23,7 @@ namespace NPOI.HSSF.UserModel
     using NPOI.Util;
     using System.Text;
     using NPOI.Util.Collections;
+    using System.Globalization;
 
     /// <summary>
     /// Stores width and height details about a font.
@@ -157,7 +158,7 @@ namespace NPOI.HSSF.UserModel
                 throw new ArgumentException("The supplied FontMetrics doesn't know about the font '" + fontName + "', so we can't use it. Please Add it to your font metrics file (see StaticFontMetrics.GetFontDetails");
             }
 
-            int height = int.Parse(heightStr);
+            int height = int.Parse(heightStr, CultureInfo.InvariantCulture);
             FontDetails d = new FontDetails(fontName, height);
             String[] CharsStrArray = Split(CharsStr, ",", -1);
             String[] widthsStrArray = Split(widthsStr, ",", -1);
@@ -166,7 +167,7 @@ namespace NPOI.HSSF.UserModel
             for (int i = 0; i < widthsStrArray.Length; i++)
             {
                 if (CharsStrArray[i].Trim().Length != 0)
-                    d.AddChar(CharsStrArray[i].Trim()[0], int.Parse(widthsStrArray[i]));
+                    d.AddChar(CharsStrArray[i].Trim()[0], int.Parse(widthsStrArray[i], CultureInfo.InvariantCulture));
             }
             return d;
         }

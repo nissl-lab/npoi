@@ -25,6 +25,7 @@ namespace NPOI.HPSF.Extractor
     using NPOI.HPSF;
     using NPOI.POIFS.FileSystem;
     using NPOI.Util;
+    using System.Globalization;
 
     /// <summary>
     /// Extracts all of the HPSF properties, both
@@ -111,7 +112,7 @@ namespace NPOI.HPSF.Extractor
             Property[] props = ps.Properties;
             for (int i = 0; i < props.Length; i++)
             {
-                String type = props[i].ID.ToString();
+                String type = props[i].ID.ToString(CultureInfo.InvariantCulture);
                 Object typeObj = idMap.Get(props[i].ID);
                 if (typeObj != null)
                 {
@@ -144,15 +145,15 @@ namespace NPOI.HPSF.Extractor
                 }
                 if (b.Length == 1)
                 {
-                    return b[0].ToString();
+                    return b[0].ToString(CultureInfo.InvariantCulture);
                 }
                 if (b.Length == 2)
                 {
-                    return LittleEndian.GetUShort(b).ToString();
+                    return LittleEndian.GetUShort(b).ToString(CultureInfo.InvariantCulture);
                 }
                 if (b.Length == 4)
                 {
-                    return LittleEndian.GetUInt(b).ToString();
+                    return LittleEndian.GetUInt(b).ToString(CultureInfo.InvariantCulture);
                 }
                 // Maybe it's a string? who knows!
                 return b.ToString();

@@ -18,6 +18,7 @@ namespace NPOI.SS.UserModel
 {
     using System;
     using System.Collections.Generic;
+    using System.Globalization;
 
 
 
@@ -134,7 +135,7 @@ namespace NPOI.SS.UserModel
             for (int i = 0x17; i <= 0x24; i++)
             {
                 // TODO - one junit relies on these values which seems incorrect
-                PutFormat(m, i, "reserved-0x" + (i).ToString("X"));
+                PutFormat(m, i, "reserved-0x" + (i).ToString("X", CultureInfo.CurrentCulture));
             }
 
             PutFormat(m, 0x25, "#,##0_);(#,##0)");

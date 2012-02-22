@@ -33,22 +33,19 @@ Load the the NPOITest.sln into your IDE, build the project and execute
 all the unit tests.
 
 Here are some numbers (2012-02-21):
-unit tests: 1610, passed: 1607 (failed 3)
+unit tests: 1611, passed: 1608 (failed 3)
 
 There are unit tests flagged with the [Ignore] attribute: 
-- testcases\main\HSSF\Model\TestFormulaParser.cs(1162):           [Ignore] // "Sheet1!$C1...B$4" Assert.AreEqual failed. Expected:<Sheet1!B1:$C$4>. Actual:<Sheet1!B$4:$C1>. 	
-- testcases\main\HSSF\Model\TestFormulaParser.cs(1320):           [Ignore] // Test method TestCases.HSSF.Model.TestFormulaParser.TestUnionOfFullCollFullRowRef threw exception: NPOI.SS.Formula.FormulaParseException: The LHS of the range operator ':' at position 2 is not a proper reference.
-- testcases\main\HSSF\Model\TestOperandClassTransformer.cs(63):   [Ignore]
+- testcases\main\HSSF\Model\TestOperandClassTransformer.cs(63):   [Ignore] //this test is disabled in poi.
 - testcases\main\HSSF\UserModel\TestBugs.cs(115):                 [Ignore] //not found in poi
 - testcases\main\HSSF\UserModel\TestBugs.cs(225):                 [Ignore] //this test was not found in poi 3.8beta4
 - testcases\main\HSSF\UserModel\TestBugs.cs(343):                 [Ignore] //not found in poi 3.8beat4
 - testcases\main\HSSF\UserModel\TestBugs.cs(363):                 [Ignore] //this test was not found in poi 3.8beta4
 - testcases\main\HSSF\UserModel\TestBugs.cs(504):                 [Ignore] // not found in poi
-- testcases\main\HSSF\UserModel\TestBugs.cs(1439):                [Ignore]
-- testcases\main\HSSF\UserModel\TestHSSFFormulaEvaluator.cs(122): [Ignore] // Identified bug 46479a https://issues.apache.org/bugzilla/show_bug.cgi?id=46479 fixed in POI in two commits https://svn.apache.org/viewvc?view=revision&revision=731715 and https://svn.apache.org/viewvc?view=revision&revision=886951
+- testcases\main\HSSF\UserModel\TestBugs.cs(1439):                [Ignore] //this test is disabled in poi.
 - testcases\main\HSSF\UserModel\TestUnfixedBugs.cs(43):           [Ignore] // because of WON'T FIX
 - testcases\main\SS\Formula\Eval\TestMinusZeroResult.cs(72):      [Ignore] //no representation for -0.0 in c#, this test always failed.
-- testcases\main\SS\Formula\Functions\TestDate.cs(50):            [Ignore]
+- testcases\main\SS\Formula\Functions\TestDate.cs(50):            [Ignore] //this test is disabled in poi.
   
   
 These are the failing test cases:

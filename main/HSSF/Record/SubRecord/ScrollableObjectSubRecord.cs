@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Text;
 using NPOI.Util;
+using System.Globalization;
 
 namespace NPOI.HSSF.Record
 {
@@ -31,7 +32,7 @@ namespace NPOI.HSSF.Record
         {
             if (size !=this.DataSize)
             {
-                throw new RecordFormatException(string.Format("Expected size {0} but got ({1})",this.DataSize,size));
+                throw new RecordFormatException(string.Format(CultureInfo.CurrentCulture, "Expected size {0} but got ({1})", this.DataSize, size));
             }
             in1.ReadInt();
             field_1_iVal=in1.ReadShort();

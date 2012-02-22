@@ -19,6 +19,7 @@ namespace NPOI.SS.Formula.Eval
 {
     using System;
     using System.Text.RegularExpressions;
+    using System.Globalization;
 
     /**
      * Provides functionality for evaluating arguments to functions and operators.
@@ -270,7 +271,7 @@ namespace NPOI.SS.Formula.Eval
             //if (Regex.Match(fpRegex, pText).Success)
                 try
                 {
-                    double ret = double.Parse(pText);
+                    double ret = double.Parse(pText, CultureInfo.CurrentCulture);
                     if (double.IsInfinity(ret))
                         return double.NaN;
                     return ret;

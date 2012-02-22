@@ -1,19 +1,20 @@
 ﻿using System;
 using System.Text;
 using System.Diagnostics;
+using System.Globalization;
 
 namespace NPOI.Util
 {
     public class BigInteger : IComparable<BigInteger>
     {
         /**
-     * The signum of this BigInteger: -1 for negative, 0 for zero, or
-     * 1 for positive.  Note that the BigInteger zero <i>must</i> have
-     * a signum of 0.  This is necessary to ensures that there is exactly one
-     * representation for each BigInteger value.
-     *
-     * @serial
-     */
+         * The signum of this BigInteger: -1 for negative, 0 for zero, or
+         * 1 for positive.  Note that the BigInteger zero <i>must</i> have
+         * a signum of 0.  This is necessary to ensures that there is exactly one
+         * representation for each BigInteger value.
+         *
+         * @serial
+         */
         private int _signum;
 
         /**
@@ -106,10 +107,10 @@ namespace NPOI.Util
                 zeros[i] = zeros[63].Substring(0, i);
         }
         /**
-     * This internal constructor differs from its public cousin
-     * with the arguments reversed in two ways: it assumes that its
-     * arguments are correct, and it doesn't copy the magnitude array.
-     */
+         * This internal constructor differs from its public cousin
+         * with the arguments reversed in two ways: it assumes that its
+         * arguments are correct, and it doesn't copy the magnitude array.
+         */
         public BigInteger(int[] magnitude, int signum)
         {
             this._signum = (magnitude.Length == 0 ? 0 : signum);
@@ -142,11 +143,11 @@ namespace NPOI.Util
             }
         }
         /**
-     * This private constructor translates an int array containing the
-     * two's-complement binary representation of a BigInteger into a
-     * BigInteger. The input array is assumed to be in <i>big-endian</i>
-     * int-order: the most significant int is in the zeroth element.
-     */
+         * This private constructor translates an int array containing the
+         * two's-complement binary representation of a BigInteger into a
+         * BigInteger. The input array is assumed to be in <i>big-endian</i>
+         * int-order: the most significant int is in the zeroth element.
+         */
         public BigInteger(int[] val)
         {
             if (val.Length == 0)
@@ -164,8 +165,8 @@ namespace NPOI.Util
             }
         }
         /**
-     * Constructs a BigInteger with the specified value, which may not be zero.
-     */
+         * Constructs a BigInteger with the specified value, which may not be zero.
+         */
         public BigInteger(long val)
         {
             if (val < 0)
@@ -248,7 +249,7 @@ namespace NPOI.Util
                 firstGroupLen = digitsPerInt[radix];
             String group = val.Substring(cursor, cursor += firstGroupLen);
             //magnitude[numWords - 1] = Integer.parseInt(group, radix);
-            magnitude[numWords - 1] = int.Parse(group);
+            magnitude[numWords - 1] = int.Parse(group, CultureInfo.InvariantCulture);
             if (magnitude[numWords - 1] < 0)
                 throw new FormatException("Illegal digit");
 
@@ -259,7 +260,7 @@ namespace NPOI.Util
             {
                 group = val.Substring(cursor, cursor += digitsPerInt[radix]);
                 //groupVal = Integer.parseInt(group, radix);
-                groupVal = int.Parse(group);
+                groupVal = int.Parse(group, CultureInfo.InvariantCulture);
                 if (groupVal < 0)
                     throw new FormatException("Illegal digit");
                 destructiveMulAdd(magnitude, superRadix, groupVal);
@@ -311,22 +312,22 @@ namespace NPOI.Util
             }
         }
         /**
-     * Returns the String representation of this BigInteger in the
-     * given radix.  If the radix is outside the range from {@link
-     * Character#MIN_RADIX} to {@link Character#MAX_RADIX} inclusive,
-     * it will default to 10 (as is the case for
-     * {@code Integer.toString}).  The digit-to-character mapping
-     * provided by {@code Character.forDigit} is used, and a minus
-     * sign is prepended if appropriate.  (This representation is
-     * compatible with the {@link #BigInteger(String, int) (String,
-     * int)} constructor.)
-     *
-     * @param  radix  radix of the String representation.
-     * @return String representation of this BigInteger in the given radix.
-     * @see    Integer#toString
-     * @see    Character#forDigit
-     * @see    #BigInteger(java.lang.String, int)
-     */
+         * Returns the String representation of this BigInteger in the
+         * given radix.  If the radix is outside the range from {@link
+         * Character#MIN_RADIX} to {@link Character#MAX_RADIX} inclusive,
+         * it will default to 10 (as is the case for
+         * {@code Integer.toString}).  The digit-to-character mapping
+         * provided by {@code Character.forDigit} is used, and a minus
+         * sign is prepended if appropriate.  (This representation is
+         * compatible with the {@link #BigInteger(String, int) (String,
+         * int)} constructor.)
+         *
+         * @param  radix  radix of the String representation.
+         * @return String representation of this BigInteger in the given radix.
+         * @see    Integer#toString
+         * @see    Character#forDigit
+         * @see    #BigInteger(java.lang.String, int)
+         */
         public String ToString(int radix)
         {
             if (_signum == 0)
@@ -357,7 +358,7 @@ namespace NPOI.Util
                 BigInteger r2 = r.toBigInteger(tmp._signum * d._signum);
 
                 //digitGroup[numGroups++] = Long.toString(r2.longValue(), radix);
-                digitGroup[numGroups++] = r2.LongValue().ToString();
+                digitGroup[numGroups++] = r2.LongValue().ToString(CultureInfo.InvariantCulture);
                 tmp = q2;
             }
 

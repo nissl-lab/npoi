@@ -29,6 +29,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Globalization;
 
 namespace NPOI.Util
 {
@@ -156,7 +157,7 @@ namespace NPOI.Util
         /// </returns>
         public override String ToString()
         {
-            return Convert.ToString(_value);
+            return Convert.ToString(_value, CultureInfo.CurrentCulture);
         }
     }
 }

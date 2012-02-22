@@ -121,9 +121,9 @@ namespace NPOI.SS.Formula.Atp
             int f2;
             try
             {
-                f0 = int.Parse(parts[0]);
-                f1 = int.Parse(parts[1]);
-                f2 = int.Parse(part2);
+                f0 = int.Parse(parts[0], CultureInfo.InvariantCulture);
+                f1 = int.Parse(parts[1], CultureInfo.InvariantCulture);
+                f2 = int.Parse(part2, CultureInfo.InvariantCulture);
             }
             catch (FormatException)
             {

@@ -44,7 +44,7 @@ namespace NPOI.SS.Util
         /** Format a number as an SSN */
         public override String Format(object obj)
         {
-            String result = ((double)obj).ToString(df);
+            String result = ((double)obj).ToString(df, CultureInfo.InvariantCulture);
             StringBuilder sb = new StringBuilder();
             sb.Append(result.Substring(0, 3)).Append('-');
             sb.Append(result.Substring(3, 2)).Append('-');
@@ -60,7 +60,7 @@ namespace NPOI.SS.Util
         public override Object ParseObject(String source, int pos)
         {
             string tmp = source.Substring(pos);
-            return long.Parse(tmp);
+            return long.Parse(tmp, CultureInfo.InvariantCulture);
         }
     }
 
@@ -81,7 +81,7 @@ namespace NPOI.SS.Util
         /** Format a number as Zip + 4 */
         public override String Format(object obj)
         {
-            String result = ((double)obj).ToString(df);
+            String result = ((double)obj).ToString(df, CultureInfo.InvariantCulture);
             StringBuilder sb = new StringBuilder();
             sb.Append(result.Substring(0, 5)).Append('-');
             sb.Append(result.Substring(5, 4));
@@ -96,7 +96,7 @@ namespace NPOI.SS.Util
         public override Object ParseObject(String source, int pos)
         {
             string tmp = source.Substring(pos);
-            return long.Parse(tmp);
+            return long.Parse(tmp, CultureInfo.InvariantCulture);
         }
     }
 
@@ -117,7 +117,7 @@ namespace NPOI.SS.Util
         /** Format a number as a phone number */
         public override String Format(object obj)
         {
-            String result = ((double)obj).ToString(df);
+            String result = ((double)obj).ToString(df, CultureInfo.InvariantCulture);
             StringBuilder sb = new StringBuilder();
             String seg1, seg2, seg3;
             int len = result.Length;
@@ -152,7 +152,7 @@ namespace NPOI.SS.Util
         public override Object ParseObject(String source, int pos)
         {
             string tmp = source.Substring(pos);
-            return long.Parse(tmp);
+            return long.Parse(tmp, CultureInfo.InvariantCulture);
         }
     }
 
@@ -177,11 +177,11 @@ namespace NPOI.SS.Util
             if (pattern.IndexOf("'") != -1)
             {
                 //return ((double)obj).ToString();
-                return Convert.ToDouble(obj).ToString();
+                return Convert.ToDouble(obj, CultureInfo.InvariantCulture).ToString(CultureInfo.CurrentCulture);
             }
             else
             {
-                return Convert.ToDouble(obj).ToString(pattern);
+                return Convert.ToDouble(obj, CultureInfo.InvariantCulture).ToString(pattern, CultureInfo.CurrentCulture);
                 //return ((double)obj).ToString(pattern) ;
             }
         }
@@ -193,7 +193,7 @@ namespace NPOI.SS.Util
 
         public override object ParseObject(string source, int pos)
         {
-            return System.Decimal.Parse(source.Substring(pos));
+            return System.Decimal.Parse(source.Substring(pos), CultureInfo.CurrentCulture);
         }
         public bool ParseIntegerOnly
         {
@@ -230,7 +230,7 @@ namespace NPOI.SS.Util
 
         public override object ParseObject(string source, int pos)
         {
-            return DateTime.Parse(source.Substring(pos)).ToUniversalTime();
+            return DateTime.Parse(source.Substring(pos), CultureInfo.InvariantCulture).ToUniversalTime();
         }
     }
 

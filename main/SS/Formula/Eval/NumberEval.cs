@@ -23,6 +23,7 @@ namespace NPOI.SS.Formula.Eval
     using System;
     using NPOI.SS.Formula.PTG;
     using NPOI.SS.Util;
+    using System.Globalization;
 
     /**
      * @author Amol S. Deshmukh &lt; amolweb at ya hoo dot com &gt;
@@ -77,11 +78,11 @@ namespace NPOI.SS.Formula.Eval
                 double lvalue = Math.Round(_value);
                 if (lvalue == _value)
                 {
-                    _stringValue = lvalue.ToString();
+                    _stringValue = lvalue.ToString(CultureInfo.CurrentCulture);
                 }
                 else
                 {
-                    _stringValue = _value.ToString();
+                    _stringValue = _value.ToString(CultureInfo.CurrentCulture);
                 }
             }
         }

@@ -6,6 +6,7 @@
     using NPOI.SS.Util;
     using NPOI.SS.Formula;
     using NPOI.SS.Formula.PTG;
+    using System.Globalization;
     /**
      * Contains all the contextual information required to Evaluate an operation
      * within a formula
@@ -244,7 +245,7 @@
 
         private static int ParseColRef(String refStrPart)
         {
-            return Int32.Parse(refStrPart) - 1;
+            return Int32.Parse(refStrPart, CultureInfo.InvariantCulture) - 1;
         }
 
         private static NameType ClassifyCellReference(String str, SpreadsheetVersion ssVersion)

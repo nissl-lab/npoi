@@ -24,6 +24,7 @@ namespace NPOI.HSSF.Record.Aggregates
     using NPOI.Util;
     using NPOI.HSSF.Record;
     using NPOI.HSSF.Model;
+    using System.Globalization;
 
 
     /// <summary>
@@ -406,18 +407,18 @@ namespace NPOI.HSSF.Record.Aggregates
         }
 
         /**
- * Sets all non null fields into the <c>ci</c> parameter.
- */
+         * Sets all non null fields into the <c>ci</c> parameter.
+         */
         private static void SetColumnInfoFields(ColumnInfoRecord ci, short? xfStyle, int? width,
                     int? level, Boolean? hidden, Boolean? collapsed)
         {
             if (xfStyle != null)
             {
-                ci.XFIndex = Convert.ToInt16(xfStyle) ;
+                ci.XFIndex = Convert.ToInt16(xfStyle, CultureInfo.InvariantCulture);
             }
             if (width != null)
             {
-                ci.ColumnWidth = Convert.ToInt32(width);
+                ci.ColumnWidth = Convert.ToInt32(width, CultureInfo.InvariantCulture);
             }
             if (level != null)
             {
@@ -425,11 +426,11 @@ namespace NPOI.HSSF.Record.Aggregates
             }
             if (hidden != null)
             {
-                ci.IsHidden = Convert.ToBoolean(hidden);
+                ci.IsHidden = Convert.ToBoolean(hidden, CultureInfo.InvariantCulture);
             }
             if (collapsed != null)
             {
-                ci.IsCollapsed = Convert.ToBoolean(collapsed);
+                ci.IsCollapsed = Convert.ToBoolean(collapsed, CultureInfo.InvariantCulture);
             }
         }
         /// <summary>

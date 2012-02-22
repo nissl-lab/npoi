@@ -23,6 +23,7 @@ namespace NPOI.SS.Formula.Functions
     using System;
     using System.Text;
     using NPOI.SS.Formula.Eval;
+    using System.Globalization;
 
     public class Value : Fixed1ArgFunction
     {
@@ -53,7 +54,7 @@ namespace NPOI.SS.Formula.Functions
         /**
          * TODO see if the same functionality is needed in {@link OperandResolver#parseDouble(String)}
          *
-         * @return <code>null</code> if there is any problem Converting the text
+         * @return <code>null</code> if there is any problem converting the text
          */
         private static Double ConvertTextToNumber(String strText)
         {
@@ -189,7 +190,7 @@ namespace NPOI.SS.Formula.Functions
             double d;
             try
             {
-                d = Double.Parse(sb.ToString());
+                d = Double.Parse(sb.ToString(), CultureInfo.InvariantCulture);
             }
             catch (FormatException)
             {

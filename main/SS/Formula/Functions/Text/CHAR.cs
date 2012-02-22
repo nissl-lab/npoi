@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using NPOI.SS.Formula.Eval;
+using System.Globalization;
 
 namespace NPOI.SS.Formula.Functions
 {
@@ -23,7 +24,7 @@ namespace NPOI.SS.Formula.Functions
             {
                 return e.GetErrorEval();
             }
-            return new StringEval(Convert.ToString((char)arg));
+            return new StringEval(Convert.ToString((char)arg, CultureInfo.CurrentCulture));
         }
     }
 }

@@ -22,6 +22,7 @@ namespace NPOI.SS.Util
     using NPOI.SS.UserModel;
     using NPOI.Util;
     using System.Collections.Generic;
+    using System.Globalization;
 
     /**
      * For POI internal use only
@@ -109,7 +110,7 @@ namespace NPOI.SS.Util
                 {
                     if (_index >= _array.Length)
                     {
-                        throw new ArgumentNullException(_index.ToString());
+                        throw new ArgumentNullException(_index.ToString(CultureInfo.CurrentCulture));
                     }
                     return _array[_index++];
                 }

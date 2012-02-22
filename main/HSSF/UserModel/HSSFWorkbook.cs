@@ -33,6 +33,7 @@ namespace NPOI.HSSF.UserModel
     using NPOI.SS.UserModel;
     using NPOI.SS.Util;
     using NPOI.Util;
+    using System.Globalization;
 
 
     /// <summary>
@@ -747,7 +748,7 @@ namespace NPOI.HSSF.UserModel
                 String suffix = srcName.Substring(bracketPos + 1, srcName.Length - bracketPos - 2);
                 try
                 {
-                    uniqueIndex = Int32.Parse(suffix.Trim());
+                    uniqueIndex = Int32.Parse(suffix.Trim(), CultureInfo.InvariantCulture);
                     uniqueIndex++;
                     baseName = srcName.Substring(0, bracketPos).Trim();
                 }
@@ -759,7 +760,7 @@ namespace NPOI.HSSF.UserModel
             while (true)
             {
                 // Try and find the next sheet name that is unique
-                String index = (uniqueIndex++).ToString();
+                String index = (uniqueIndex++).ToString(CultureInfo.CurrentCulture);
                 String name;
                 if (baseName.Length + index.Length + 2 < 31)
                 {

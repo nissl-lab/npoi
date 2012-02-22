@@ -32,6 +32,7 @@ namespace NPOI.HPSF
     using System.IO;
     using System.Text;
     using NPOI.Util;
+    using System.Globalization;
 
     /// <summary>
     /// Supports Reading and writing of variant data.
@@ -378,7 +379,7 @@ namespace NPOI.HPSF
                         short x;
                         try
                         {
-                            x=Convert.ToInt16(value);
+                            x = Convert.ToInt16(value, CultureInfo.InvariantCulture);
                         }catch(OverflowException)
                         {
                             x=(short)((int)value);
@@ -401,7 +402,7 @@ namespace NPOI.HPSF
                     }
                 case Variant.VT_I8:
                     {
-                        TypeWriter.WriteToStream(out1, Convert.ToInt64(value));
+                        TypeWriter.WriteToStream(out1, Convert.ToInt64(value, CultureInfo.CurrentCulture));
                         length = LittleEndianConsts.LONG_SIZE;
                         break;
                     }

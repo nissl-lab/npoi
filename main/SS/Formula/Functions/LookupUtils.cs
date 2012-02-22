@@ -21,6 +21,7 @@ namespace NPOI.SS.Formula.Functions
     using System.Text;
     using NPOI.SS.Formula;
     using NPOI.SS.Formula.Eval;
+    using System.Globalization;
 
     /**
      * Common functionality used by VLOOKUP, HLOOKUP, LOOKUP and MATCH
@@ -166,7 +167,7 @@ namespace NPOI.SS.Formula.Functions
             }
             protected override String GetValueAsString()
             {
-                return _value.ToString();
+                return _value.ToString(CultureInfo.InvariantCulture);
             }
         }
 

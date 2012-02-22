@@ -29,6 +29,7 @@ namespace NPOI.HSSF.Record
     using NPOI.SS.UserModel;
     using NPOI.HSSF.Record.Cont;
     using NPOI.SS.Formula.PTG;
+    using System.Globalization;
 
     public class TextObjectRecord : ContinuableRecord
     {
@@ -269,7 +270,7 @@ namespace NPOI.HSSF.Record
 
                 if (_unknownPostFormulaByte != null)
                 {
-                    out1.WriteByte(Convert.ToByte(_unknownPostFormulaByte));
+                    out1.WriteByte(Convert.ToByte(_unknownPostFormulaByte, CultureInfo.InvariantCulture));
                 }
             }
         }

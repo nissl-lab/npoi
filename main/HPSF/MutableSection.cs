@@ -33,6 +33,7 @@ namespace NPOI.HPSF
     using System.Collections;
     using NPOI.Util;
     using NPOI.HPSF.Wellknown;
+    using System.Globalization;
 
     /// <summary>
     /// Adds writing capability To the {@link Section} class.
@@ -458,7 +459,7 @@ namespace NPOI.HPSF
         /// </summary>
         /// <param name="out1">The output stream To Write To.</param>
         /// <param name="dictionary">The dictionary.</param>
-        /// <param name="codepage">The codepage To be used To Write the dictionary items.</param>
+        /// <param name="codepage">The codepage to be used to Write the dictionary items.</param>
         /// <returns>The number of bytes written</returns>
         /// <remarks>
         /// see MSDN KB: http://msdn.microsoft.com/en-us/library/aa380065(VS.85).aspx
@@ -469,7 +470,7 @@ namespace NPOI.HPSF
             int length = TypeWriter.WriteUIntToStream(out1, (uint)dictionary.Count);
             for (IEnumerator i = dictionary.Keys.GetEnumerator(); i.MoveNext(); )
             {
-                long key = Convert.ToInt64(i.Current);
+                long key = Convert.ToInt64(i.Current, CultureInfo.InvariantCulture);
                 String value = (String)dictionary[key];
                 //tony qu added: some key is int32 instead of int64
                 if(value==null)

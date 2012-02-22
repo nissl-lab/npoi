@@ -33,6 +33,7 @@ namespace NPOI.HSSF.Record
     using NPOI.HSSF.Record.PivotTable;
     using NPOI.HSSF.Record.AutoFilter;
     using NPOI.Util;
+    using System.Globalization;
 
     /**
      * Title:  Record Factory
@@ -513,7 +514,7 @@ namespace NPOI.HSSF.Record
                 if (result.ContainsKey(sid))
                 {
                     Type prevClass = result[sid].GetRecordClass();
-                    throw new RuntimeException("duplicate record sid 0x" + sid.ToString("X")
+                    throw new RuntimeException("duplicate record sid 0x" + sid.ToString("X", CultureInfo.CurrentCulture)
                             + " for classes (" + recClass.Name + ") and (" + prevClass.Name + ")");
                 }
                 result[sid] = GetRecordCreator(recClass);

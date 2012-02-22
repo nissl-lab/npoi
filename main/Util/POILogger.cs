@@ -30,6 +30,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Collections;
+using System.Globalization;
 
 namespace NPOI.Util
 {
@@ -599,12 +600,12 @@ namespace NPOI.Util
 
                 if (params1[ params1.Length - 1 ].GetType()==typeof(Exception))
                 {
-                    Log(level, string.Format(message, params1),
+                    Log(level, string.Format(CultureInfo.InvariantCulture, message, params1),
                         ( Exception ) params1[ params1.Length - 1 ]);
                 }
                 else
                 {
-                    Log(level, string.Format(message, params1));
+                    Log(level, string.Format(CultureInfo.InvariantCulture, message, params1));
                 }
             }
         }

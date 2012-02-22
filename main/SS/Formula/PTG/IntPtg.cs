@@ -21,6 +21,7 @@ namespace NPOI.SS.Formula.PTG
     using System.Text;
     using NPOI.Util;
     using NPOI.HSSF.Record;
+    using System.Globalization;
     
 
 
@@ -83,7 +84,7 @@ namespace NPOI.SS.Formula.PTG
 
         public override String ToFormulaString()
         {
-            return Value.ToString();
+            return Value.ToString(CultureInfo.InvariantCulture);
         }
 
         public override String ToString()

@@ -88,7 +88,7 @@ namespace NPOI.HSSF.Model
         //protected ValueRecordsAggregate cells = null;
         /*package*/
         [NonSerialized]
-        public ColumnInfoRecordsAggregate _columnInfos;
+        internal ColumnInfoRecordsAggregate _columnInfos;
         /** the DimensionsRecord is always present */
         [NonSerialized]
         private DimensionsRecord _dimensions;

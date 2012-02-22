@@ -24,6 +24,7 @@ namespace NPOI.SS.Util
     using System.Text.RegularExpressions;
     using NPOI.SS.Formula;
 using NPOI.SS.UserModel;
+    using System.Globalization;
 
     public enum NameType:int
     {
@@ -115,7 +116,7 @@ using NPOI.SS.UserModel;
             {
                 rowRef = rowRef.Substring(1);
             }
-            _rowIndex = int.Parse(rowRef) - 1; // -1 to convert 1-based to zero-based
+            _rowIndex = int.Parse(rowRef, CultureInfo.InvariantCulture) - 1; // -1 to convert 1-based to zero-based
         }
         public CellReference(ICell cell):this(cell.RowIndex, cell.ColumnIndex, false, false)
         {
@@ -462,7 +463,7 @@ using NPOI.SS.UserModel;
             {
                 return new String[] {
 				    _sheetName,
-				    (_rowIndex+1).ToString(),
+				    (_rowIndex+1).ToString(CultureInfo.InvariantCulture),
 				   ConvertNumToColString(_colIndex)
                 };
             }
@@ -533,7 +534,7 @@ using NPOI.SS.UserModel;
         }
         public static bool IsRowWithnRange(String rowStr, SpreadsheetVersion ssVersion)
         {
-            int rowNum = Int32.Parse(rowStr);
+            int rowNum = Int32.Parse(rowStr, CultureInfo.InvariantCulture);
 
             if (rowNum < 0)
             {

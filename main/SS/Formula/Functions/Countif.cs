@@ -23,6 +23,7 @@ namespace NPOI.SS.Formula.Functions
     using System.Text.RegularExpressions;
     using NPOI.SS.Formula.Eval;
     using NPOI.SS.UserModel;
+    using System.Globalization;
 
     /**
      * Implementation for the function COUNTIF<p/>
@@ -288,7 +289,7 @@ namespace NPOI.SS.Formula.Functions
 
             protected override string ValueText
             {
-                get { return _value.ToString(); }
+                get { return _value.ToString(CultureInfo.InvariantCulture); }
             }
         }
         private class BooleanMatcher : MatcherBase

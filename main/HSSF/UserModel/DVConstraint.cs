@@ -24,6 +24,7 @@ namespace NPOI.HSSF.UserModel
     using NPOI.SS.UserModel;
     using System.Text;
     using NPOI.SS.Util;
+    using System.Globalization;
 
     /**
      * 
@@ -253,7 +254,7 @@ namespace NPOI.HSSF.UserModel
             }
             try
             {
-                return double.Parse(numberStr);
+                return double.Parse(numberStr, CultureInfo.CurrentCulture);
             }
             catch (FormatException)
             {
@@ -292,7 +293,7 @@ namespace NPOI.HSSF.UserModel
             {
                 try
                 {
-                    dateVal = DateTime.Parse(dateStr);
+                    dateVal = DateTime.Parse(dateStr, CultureInfo.CurrentCulture);
                 }
                 catch (FormatException e)
                 {

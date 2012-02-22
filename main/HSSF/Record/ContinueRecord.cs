@@ -24,6 +24,7 @@ namespace NPOI.HSSF.Record
     using System.IO;
     using System.Text;
     using NPOI.Util;
+    using System.Globalization;
 
     /**
      * Title:        Continue Record - Helper class used primarily for SST Records 
@@ -108,7 +109,7 @@ namespace NPOI.HSSF.Record
             int pos = destOffset + 4;
             if (initialDataByte != null)
             {
-                LittleEndian.PutByte(destBuf, pos, Convert.ToByte(initialDataByte));
+                LittleEndian.PutByte(destBuf, pos, Convert.ToByte(initialDataByte, CultureInfo.InvariantCulture));
                 pos += 1;
             }
             Array.Copy(srcData, srcOffset, destBuf, pos, len);

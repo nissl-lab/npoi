@@ -32,6 +32,7 @@ namespace NPOI.SS.Formula
     using System.Collections.Generic;
     using NPOI.SS.Formula.PTG;
     using NPOI.SS.Formula.Constant;
+    using System.Globalization;
 
     /// <summary>
     /// Specific exception thrown when a supplied formula does not Parse properly.
@@ -896,7 +897,7 @@ namespace NPOI.SS.Formula
                 int i;
                 try
                 {
-                    i = Int32.Parse(rep.Replace("$", ""));
+                    i = Int32.Parse(rep.Replace("$", ""), CultureInfo.InvariantCulture);
                 }
                 catch (Exception)
                 {
@@ -1737,7 +1738,7 @@ namespace NPOI.SS.Formula
                 int intVal;
                 try
                 {
-                    intVal = int.Parse(numberStr);
+                    intVal = int.Parse(numberStr, CultureInfo.InvariantCulture);
                 }
                 catch (FormatException)
                 {

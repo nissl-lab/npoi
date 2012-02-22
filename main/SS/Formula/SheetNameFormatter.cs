@@ -22,6 +22,7 @@ namespace NPOI.SS.Formula
     using System.Text;
     using System.Text.RegularExpressions;
     using NPOI.Util;
+    using System.Globalization;
 
     /**
      * Formats sheet names for use in formula expressions.
@@ -33,7 +34,7 @@ namespace NPOI.SS.Formula
 
         private static String BIFF8_LAST_COLUMN = "IV";
         private static int BIFF8_LAST_COLUMN_TEXT_LEN = BIFF8_LAST_COLUMN.Length;
-        private static String BIFF8_LAST_ROW = (0x10000).ToString();
+        private static String BIFF8_LAST_ROW = (0x10000).ToString(CultureInfo.InvariantCulture);
         private static int BIFF8_LAST_ROW_TEXT_LEN = BIFF8_LAST_ROW.Length;
 
         private static char DELIMITER = '\'';

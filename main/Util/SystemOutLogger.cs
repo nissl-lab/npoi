@@ -19,6 +19,7 @@ namespace NPOI.Util
 {
     using System;
     using System.Configuration;
+    using System.Globalization;
     /// <summary>
     /// A logger class that strives to make it as easy as possible for
     /// developers to write log calls, while simultaneously making those
@@ -78,8 +79,8 @@ namespace NPOI.Util
             {
                 string temp = ConfigurationManager.AppSettings["poi.log.level"];
                 if (string.IsNullOrEmpty(temp))
-                    temp = WARN.ToString();
-                currentLevel = int.Parse(temp);
+                    temp = WARN.ToString(CultureInfo.InvariantCulture);
+                currentLevel = int.Parse(temp, CultureInfo.InvariantCulture);
             }
             catch (Exception)
             {

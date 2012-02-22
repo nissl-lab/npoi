@@ -23,6 +23,7 @@ namespace NPOI.SS.Formula.Functions
     using System;
     using NPOI.SS.Formula.Eval;
     using NPOI.SS.Formula;
+    using System.Globalization;
 
     /**
      * @author Amol S. Deshmukh &lt; amolweb at ya hoo dot com &gt;
@@ -66,7 +67,7 @@ namespace NPOI.SS.Formula.Functions
                             tempVe = OperandResolver.CoerceValueToBoolean(ve, true);
                             if (tempVe != null)
                             {
-                                result = PartialEvaluate(result, Convert.ToBoolean(tempVe));
+                                result = PartialEvaluate(result, Convert.ToBoolean(tempVe, CultureInfo.InvariantCulture));
                                 atleastOneNonBlank = true;
                             }
                         }
@@ -92,7 +93,7 @@ namespace NPOI.SS.Formula.Functions
 
                 if (tempVe != null)
                 {
-                    result = PartialEvaluate(result, Convert.ToBoolean(tempVe));
+                    result = PartialEvaluate(result, Convert.ToBoolean(tempVe, CultureInfo.InvariantCulture));
                     atleastOneNonBlank = true;
                 }
             }

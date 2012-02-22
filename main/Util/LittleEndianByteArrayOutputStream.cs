@@ -19,6 +19,7 @@ namespace NPOI.Util
 {
     using System;
     using System.IO;
+    using System.Globalization;
 
     /// <summary>
     /// Adapts a plain byte array to <see cref="T:NPOI.Util.ILittleEndianOutput"/>
@@ -56,7 +57,7 @@ namespace NPOI.Util
         {
             if (i > _endIndex - _writeIndex)
             {
-                throw new RuntimeException(string.Format("Buffer overrun i={0};endIndex={1};writeIndex={2}", i, _endIndex, _writeIndex));
+                throw new RuntimeException(string.Format(CultureInfo.InvariantCulture, "Buffer overrun i={0};endIndex={1};writeIndex={2}", i, _endIndex, _writeIndex));
             }
         }
 

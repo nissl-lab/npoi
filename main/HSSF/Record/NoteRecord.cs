@@ -20,6 +20,7 @@ namespace NPOI.HSSF.Record
     using System.Text;
     using System;
     using NPOI.Util;
+    using System.Globalization;
 
 
     /**
@@ -122,7 +123,7 @@ namespace NPOI.HSSF.Record
 			    StringUtil.PutCompressedUnicode(field_6_author, out1);
 		    }
 		    if (field_7_padding != null) {
-			    out1.WriteByte(Convert.ToInt32(field_7_padding));
+			    out1.WriteByte(Convert.ToInt32(field_7_padding, CultureInfo.InvariantCulture));
 		    }
 
         }

@@ -25,6 +25,7 @@ namespace NPOI.SS.Formula.Function
     using NPOI.SS.Formula;
     using NPOI.SS;
     using NPOI.SS.Formula.PTG;
+    using System.Globalization;
 
     /**
      * Converts the text meta-data file into a <c>FunctionMetadataRegistry</c>
@@ -215,7 +216,7 @@ namespace NPOI.SS.Formula.Function
 
         private static int ParseInt(String valStr)
         {
-            return int.Parse(valStr);
+            return int.Parse(valStr, CultureInfo.InvariantCulture);
         }
     }
 }

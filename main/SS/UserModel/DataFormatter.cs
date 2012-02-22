@@ -622,7 +622,7 @@ using System.Globalization;
             double d = cell.NumericCellValue;
             if (numberFormat == null)
             {
-                return d.ToString();
+                return d.ToString(CultureInfo.InvariantCulture);
             }
             return numberFormat.Format(d);
         }
@@ -682,7 +682,7 @@ using System.Globalization;
             FormatBase numberFormat = GetFormat(value, formatIndex, formatString);
             if (numberFormat == null)
             {
-                return value.ToString();
+                return value.ToString(CultureInfo.CurrentCulture);
             }
             // RK: This hack handles scientific notation by adding the missing + back.
             String result = numberFormat.Format(value);

@@ -28,6 +28,7 @@ namespace NPOI.HSSF.Record
     using NPOI.Util;
 
     using NPOI.SS.Formula.PTG;
+    using System.Globalization;
 
     /**
      * A sub-record within the OBJ record which stores a reference to an object
@@ -330,7 +331,7 @@ namespace NPOI.HSSF.Record
             switch (idOffset - (pos - 6 ))
             { // 6 for 3 shorts: sid, dataSize, idOffset
                 case 1:
-                    out1.WriteByte(field_4_unknownByte == null ? 0x00 : (int)Convert.ToByte(field_4_unknownByte));
+                    out1.WriteByte(field_4_unknownByte == null ? 0x00 : (int)Convert.ToByte(field_4_unknownByte, CultureInfo.InvariantCulture));
                     pos++;
                     break;
                 case 0:
@@ -341,7 +342,7 @@ namespace NPOI.HSSF.Record
 
             if (field_5_stream_id != null)
             {
-                out1.WriteInt(Convert.ToInt32(field_5_stream_id));
+                out1.WriteInt(Convert.ToInt32(field_5_stream_id, CultureInfo.InvariantCulture));
                 pos += 4;
             }
             out1.Write(field_6_unknown);
@@ -401,11 +402,11 @@ namespace NPOI.HSSF.Record
             }
             if (field_4_unknownByte != null)
             {
-                sb.Append("    .f4unknown   = ").Append(HexDump.ByteToHex(Convert.ToByte(field_4_unknownByte))).Append("\n");
+                sb.Append("    .f4unknown   = ").Append(HexDump.ByteToHex(Convert.ToByte(field_4_unknownByte, CultureInfo.InvariantCulture))).Append("\n");
             }
             if (field_5_stream_id != null)
             {
-                sb.Append("    .streamId      = ").Append(HexDump.IntToHex(Convert.ToInt32(field_5_stream_id))).Append("\n");
+                sb.Append("    .streamId      = ").Append(HexDump.IntToHex(Convert.ToInt32(field_5_stream_id, CultureInfo.InvariantCulture))).Append("\n");
             }
             if (field_6_unknown.Length > 0)
             {
