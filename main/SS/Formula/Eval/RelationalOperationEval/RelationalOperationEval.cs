@@ -108,7 +108,8 @@ namespace NPOI.SS.Formula.Eval
 		    }
 		    if (v is NumberEval) {
 			    NumberEval ne = (NumberEval) v;
-                return ne.NumberValue.CompareTo(0.0);
+                //return ne.NumberValue.CompareTo(0.0);
+                return NumberComparer.Compare(0.0, ne.NumberValue);
 		    }
 		    if (v is StringEval) {
 			    StringEval se = (StringEval) v;

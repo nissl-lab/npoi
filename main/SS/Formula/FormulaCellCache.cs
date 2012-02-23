@@ -59,17 +59,17 @@ namespace NPOI.SS.Formula
          */
         public FormulaCellCacheEntry Get(IEvaluationCell cell)
         {
-            return (FormulaCellCacheEntry)_formulaEntriesByCell[cell];
+            return (FormulaCellCacheEntry)_formulaEntriesByCell[cell.IdentityKey];
         }
 
         public void Put(IEvaluationCell cell, FormulaCellCacheEntry entry)
         {
-            _formulaEntriesByCell[cell] = entry;
+            _formulaEntriesByCell[cell.IdentityKey] = entry;
         }
 
         public FormulaCellCacheEntry Remove(IEvaluationCell cell)
         {
-            FormulaCellCacheEntry tmp = (FormulaCellCacheEntry)_formulaEntriesByCell[cell];
+            FormulaCellCacheEntry tmp = (FormulaCellCacheEntry)_formulaEntriesByCell[cell.IdentityKey];
             _formulaEntriesByCell.Remove(cell);
             return tmp;
         }

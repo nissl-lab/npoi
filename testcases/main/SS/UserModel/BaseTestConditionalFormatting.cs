@@ -476,9 +476,12 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual("SUM(A10:A21)", cf.GetRule(0).Formula1);
             Assert.AreEqual("1+SUM(#REF!)", cf.GetRule(0).Formula2);
         }
-        protected void TestRead(String filename)
+        //
+        [TestMethod]
+        public void TestRead()
         {
-            IWorkbook wb = _testDataProvider.OpenSampleWorkbook(filename);
+
+            IWorkbook wb = _testDataProvider.OpenSampleWorkbook("WithConditionalFormatting.xls");
             ISheet sh = wb.GetSheet("CF");
             ISheetConditionalFormatting sheetCF = sh.SheetConditionalFormatting;
             Assert.AreEqual(3, sheetCF.NumConditionalFormattings);

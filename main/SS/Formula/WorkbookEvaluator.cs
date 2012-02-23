@@ -27,6 +27,7 @@ namespace NPOI.SS.Formula
     using System.Collections.Generic;
     using NPOI.SS.UserModel;
     using NPOI.SS.Formula.PTG;
+    using NPOI.Util;
 
     /**
      * Evaluates formula cells.<p/>
@@ -51,10 +52,10 @@ namespace NPOI.SS.Formula
         private Dictionary<String, int> _sheetIndexesByName;
         private CollaboratingWorkbooksEnvironment _collaboratingWorkbookEnvironment;
         private IStabilityClassifier _stabilityClassifier;
-	    private UDFFinder _udfFinder;
+        private UDFFinder _udfFinder;
 
         public WorkbookEvaluator(IEvaluationWorkbook workbook, IStabilityClassifier stabilityClassifier, UDFFinder udfFinder)
-            : this (workbook, null, stabilityClassifier, udfFinder)
+            : this(workbook, null, stabilityClassifier, udfFinder)
         {
 
         }
@@ -65,14 +66,15 @@ namespace NPOI.SS.Formula
             _evaluationListener = evaluationListener;
             _cache = new EvaluationCache(evaluationListener);
             _sheetIndexesBySheet = new Hashtable();
-            _sheetIndexesByName = new Dictionary<string,int>();
+            _sheetIndexesByName = new Dictionary<string, int>();
             _collaboratingWorkbookEnvironment = CollaboratingWorkbooksEnvironment.EMPTY;
             _workbookIx = 0;
             _stabilityClassifier = stabilityClassifier;
 
             AggregatingUDFFinder defaultToolkit = // workbook can be null in unit tests
                 workbook == null ? null : (AggregatingUDFFinder)workbook.GetUDFFinder();
-            if(defaultToolkit != null && udfFinder != null) {
+            if (defaultToolkit != null && udfFinder != null)
+            {
                 defaultToolkit.Add(udfFinder);
             }
             _udfFinder = defaultToolkit;
@@ -195,7 +197,7 @@ namespace NPOI.SS.Formula
                     throw new Exception("Specified sheet from a different book");
                 }
                 result = sheetIndex;
-                _sheetIndexesBySheet[sheet]= result;
+                _sheetIndexesBySheet[sheet] = result;
             }
             return (int)result;
         }
@@ -382,69 +384,86 @@ namespace NPOI.SS.Formula
                     {
                         // Excel prefers To encode 'SUM()' as a tAttr Token, but this evaluator
                         // expects the equivalent function Token
-                        byte nArgs = 1;  // tAttrSum always Has 1 parameter
-                        ptg = FuncVarPtg.Create("SUM", nArgs);
+                        //byte nArgs = 1;  // tAttrSum always Has 1 parameter
+                        ptg = FuncVarPtg.SUM;//.Create("SUM", nArgs);
                     }
-                    if (attrPtg.IsOptimizedChoose) {
-					ValueEval arg0 = stack.Pop();
-					int[] jumpTable = attrPtg.JumpTable;
-					int dist;
-					int nChoices = jumpTable.Length;
-					try {
-						int switchIndex = Choose.EvaluateFirstArg(arg0, ec.RowIndex, ec.ColumnIndex);
-						if (switchIndex<1 || switchIndex > nChoices) {
-							stack.Push(ErrorEval.VALUE_INVALID);
-							dist = attrPtg.ChooseFuncOffset + 4; // +4 for tFuncFar(CHOOSE)
-						} else {
-							dist = jumpTable[switchIndex-1];
-						}
-					} catch (EvaluationException e) {
-						stack.Push(e.GetErrorEval());
-						dist = attrPtg.ChooseFuncOffset + 4; // +4 for tFuncFar(CHOOSE)
-					}
-					// Encoded dist for tAttrChoose includes size of jump table, but
-					// countTokensToBeSkipped() does not (it counts whole tokens).
-					dist -= nChoices*2+2; // subtract jump table size
-					i+= CountTokensToBeSkipped(ptgs, i, dist);
-					continue;
-				}
-				if (attrPtg.IsOptimizedIf) {
-					ValueEval arg0 = stack.Pop();
-					bool evaluatedPredicate;
-					try {
-						evaluatedPredicate = If.EvaluateFirstArg(arg0, ec.RowIndex, ec.ColumnIndex);
-					} catch (EvaluationException e) {
-						stack.Push(e.GetErrorEval());
-						int dist = attrPtg.Data;
-						i+= CountTokensToBeSkipped(ptgs, i, dist);
-						attrPtg = (AttrPtg) ptgs[i];
-						dist = attrPtg.Data+1;
-						i+= CountTokensToBeSkipped(ptgs, i, dist);
-						continue;
-					}
-					if (evaluatedPredicate) {
-						// nothing to skip - true param folows
-					} else {
-						int dist = attrPtg.Data;
-						i+= CountTokensToBeSkipped(ptgs, i, dist);
-						Ptg nextPtg = ptgs[i+1];
-						if (ptgs[i] is AttrPtg && nextPtg is FuncVarPtg) {
-							// this is an if statement without a false param (as opposed to MissingArgPtg as the false param)
-							i++;
-							stack.Push(BoolEval.FALSE);
-						}
-					}
-					continue;
-				}
-				if (attrPtg.IsSkip) {
-					int dist = attrPtg.Data+1;
-					i+= CountTokensToBeSkipped(ptgs, i, dist);
-					if (stack.Peek() == MissingArgEval.instance) {
-						stack.Pop();
-						stack.Push(BlankEval.instance);
-					}
-					continue;
-				}
+                    if (attrPtg.IsOptimizedChoose)
+                    {
+                        ValueEval arg0 = stack.Pop();
+                        int[] jumpTable = attrPtg.JumpTable;
+                        int dist;
+                        int nChoices = jumpTable.Length;
+                        try
+                        {
+                            int switchIndex = Choose.EvaluateFirstArg(arg0, ec.RowIndex, ec.ColumnIndex);
+                            if (switchIndex < 1 || switchIndex > nChoices)
+                            {
+                                stack.Push(ErrorEval.VALUE_INVALID);
+                                dist = attrPtg.ChooseFuncOffset + 4; // +4 for tFuncFar(CHOOSE)
+                            }
+                            else
+                            {
+                                dist = jumpTable[switchIndex - 1];
+                            }
+                        }
+                        catch (EvaluationException e)
+                        {
+                            stack.Push(e.GetErrorEval());
+                            dist = attrPtg.ChooseFuncOffset + 4; // +4 for tFuncFar(CHOOSE)
+                        }
+                        // Encoded dist for tAttrChoose includes size of jump table, but
+                        // countTokensToBeSkipped() does not (it counts whole tokens).
+                        dist -= nChoices * 2 + 2; // subtract jump table size
+                        i += CountTokensToBeSkipped(ptgs, i, dist);
+                        continue;
+                    }
+                    if (attrPtg.IsOptimizedIf)
+                    {
+                        ValueEval arg0 = stack.Pop();
+                        bool evaluatedPredicate;
+                        try
+                        {
+                            evaluatedPredicate = If.EvaluateFirstArg(arg0, ec.RowIndex, ec.ColumnIndex);
+                        }
+                        catch (EvaluationException e)
+                        {
+                            stack.Push(e.GetErrorEval());
+                            int dist = attrPtg.Data;
+                            i += CountTokensToBeSkipped(ptgs, i, dist);
+                            attrPtg = (AttrPtg)ptgs[i];
+                            dist = attrPtg.Data + 1;
+                            i += CountTokensToBeSkipped(ptgs, i, dist);
+                            continue;
+                        }
+                        if (evaluatedPredicate)
+                        {
+                            // nothing to skip - true param folows
+                        }
+                        else
+                        {
+                            int dist = attrPtg.Data;
+                            i += CountTokensToBeSkipped(ptgs, i, dist);
+                            Ptg nextPtg = ptgs[i + 1];
+                            if (ptgs[i] is AttrPtg && nextPtg is FuncVarPtg)
+                            {
+                                // this is an if statement without a false param (as opposed to MissingArgPtg as the false param)
+                                i++;
+                                stack.Push(BoolEval.FALSE);
+                            }
+                        }
+                        continue;
+                    }
+                    if (attrPtg.IsSkip)
+                    {
+                        int dist = attrPtg.Data + 1;
+                        i += CountTokensToBeSkipped(ptgs, i, dist);
+                        if (stack.Peek() == MissingArgEval.instance)
+                        {
+                            stack.Pop();
+                            stack.Push(BlankEval.instance);
+                        }
+                        continue;
+                    }
                 }
                 if (ptg is ControlPtg)
                 {
@@ -634,10 +653,15 @@ namespace NPOI.SS.Formula
                 // POI uses UnknownPtg when the encoded Ptg array seems To be corrupted.
                 // This seems To occur in very rare cases (e.g. unused name formulas in bug 44774, attachment 21790)
                 // In any case, formulas are re-parsed before execution, so UnknownPtg should not Get here
-                throw new Exception("UnknownPtg not allowed");
+                throw new RuntimeException("UnknownPtg not allowed");
             }
-
-            throw new Exception("Unexpected ptg class (" + ptg.GetType().Name + ")");
+            if (ptg is ExpPtg)
+            {
+                // ExpPtg is used for array formulas and shared formulas.
+                // it is currently unsupported, and may not even get implemented here
+                throw new RuntimeException("ExpPtg currently not supported");
+            }
+            throw new RuntimeException("Unexpected ptg class (" + ptg.GetType().Name + ")");
         }
         internal ValueEval EvaluateNameFormula(Ptg[] ptgs, OperationEvaluationContext ec)
         {
