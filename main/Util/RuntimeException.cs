@@ -4,6 +4,7 @@ using System.Text;
 
 namespace NPOI.Util
 {
+    [Serializable]
     public class RuntimeException:Exception
     {
         public RuntimeException(string message)

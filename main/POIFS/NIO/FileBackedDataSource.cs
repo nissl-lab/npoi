@@ -23,9 +23,9 @@ namespace NPOI.POIFS.NIO
     /**
      * A POIFS {@link DataSource} backed by a File
      */
-    public class FileBackedDataSource : DataSource
+    public class FileBackedDataSource : DataSource, IDisposable
     {
-        private FileStream fileStream;
+        private FileStream fileStream = null;
 
         public FileBackedDataSource(string file)
         {
@@ -39,6 +39,34 @@ namespace NPOI.POIFS.NIO
         {
             this.fileStream = channel;
         }
+
+        #region IDisposable Members
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        private void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                if (null != fileStream)
+                {
+                    fileStream.Dispose();
+                    fileStream = null;
+                }
+            }
+        }
+
+        ~FileBackedDataSource()
+        {
+            Dispose(false);
+        }
+
+        #endregion
+
         /// <summary>
         /// Reads a sequence of bytes from this FileStream starting at the given file position.
         /// </summary>

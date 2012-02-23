@@ -690,6 +690,7 @@ namespace NPOI.Util
         {
         }
     }
+    [Serializable]
     public class BufferUnderflowException : RuntimeException
     {
         public BufferUnderflowException()

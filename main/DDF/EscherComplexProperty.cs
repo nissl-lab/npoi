@@ -139,28 +139,18 @@ namespace NPOI.DDF
         public override String ToString()
         {
             String dataStr;
-            MemoryStream b = new MemoryStream();
-            try
-            {
-                HexDump.Dump(this.complexData, 0, b, 0);
-                dataStr = b.ToString();
-            }
-            catch (Exception e)
-            {
-                dataStr = e.ToString();
-            }
-            finally
+            using (MemoryStream b = new MemoryStream())
             {
                 try
                 {
-                    b.Close();
+                    HexDump.Dump(this.complexData, 0, b, 0);
+                    dataStr = b.ToString();
                 }
-                catch (IOException)
+                catch (Exception e)
                 {
-                    //e.printStackTrace();
+                    dataStr = e.ToString();
                 }
             }
-
             return "propNum: " + PropertyNumber
                     + ", propName: " + EscherProperties.GetPropertyName(PropertyNumber)
                     + ", complex: " + IsComplex

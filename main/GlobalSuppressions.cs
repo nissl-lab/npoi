@@ -37,6 +37,7 @@
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors", Scope = "member", Target = "NPOI.POIFS.Storage.SmallDocumentBlockList.#.ctor(System.Collections.Generic.List`1<NPOI.POIFS.Storage.SmallDocumentBlock>)")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors", Scope = "member", Target = "NPOI.HPSF.SummaryInformation.#.ctor(NPOI.HPSF.PropertySet)")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors", Scope = "member", Target = "NPOI.HSSF.Model.TextboxShape.#.ctor(NPOI.HSSF.UserModel.HSSFTextbox,System.Int32)")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors", Scope = "member", Target = "NPOI.HSSF.Record.ScrollableObjectSubRecord.#.ctor(NPOI.Util.ILittleEndianInput,System.Int32)")]
 
 // TODO fix warnings:
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2240:ImplementISerializableCorrectly", Scope = "type", Target = "NPOI.HPSF.VariantTypeException")]
@@ -47,8 +48,9 @@
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2237:MarkISerializableTypesWithSerializable", Scope = "type", Target = "NPOI.HPSF.Wellknown.PropertyIDMap")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2237:MarkISerializableTypesWithSerializable", Scope = "type", Target = "NPOI.HPSF.CustomProperties")]
 
-// there is no non breaking fix:
+// there is no non breaking fix - in both cases is a stream returned 8-(
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope", Scope = "member", Target = "NPOI.HPSF.MutablePropertySet.#GetStream()")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope", Scope = "member", Target = "NPOI.POIFS.NIO.FileBackedDataSource.#Read(System.Int32,System.Int64)")]
 
 // The code seems okay to me:
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times", Scope = "member", Target = "NPOI.DDF.EscherBlipWMFRecord.#Compress(System.Byte[])")]
@@ -64,6 +66,13 @@
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Scope = "member", Target = "NPOI.HSSF.Extractor.EventBasedExcelExtractor.#SummaryInformation")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Scope = "member", Target = "NPOI.HSSF.Record.Aggregates.RecordAggregate.#Sid")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Scope = "member", Target = "NPOI.SS.Formula.PTG.ControlPtg.#DefaultOperandClass")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Scope = "member", Target = "NPOI.Util.BlockingInputStream.#CanRead")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Scope = "member", Target = "NPOI.Util.BlockingInputStream.#CanSeek")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Scope = "member", Target = "NPOI.Util.BlockingInputStream.#CanWrite")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Scope = "member", Target = "NPOI.Util.BlockingInputStream.#Length")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Scope = "member", Target = "NPOI.Util.BlockingInputStream.#Position")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Scope = "member", Target = "NPOI.HSSF.Record.MulRKRecord.#DataSize")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Scope = "member", Target = "NPOI.HSSF.EventUserModel.DummyRecord.DummyRecordBase.#RecordSize")]
 // seems like a workaround for malformed input - ignore:
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Scope = "member", Target = "NPOI.HSSF.Record.RecordInputStream.#HasNextRecord")]
 // TODO: apply fix that is proposed in the code:
@@ -93,3 +102,6 @@
 // these are warnings that should be transported in some form to the user
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Console.WriteLine(System.String)", Scope = "member", Target = "NPOI.DDF.EscherContainerRecord.#FillFields(System.Byte[],System.Int32,NPOI.DDF.EscherRecordFactory)")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Console.WriteLine(System.String)", Scope = "member", Target = "NPOI.HSSF.Record.EmbeddedObjectRefSubRecord.#.ctor(NPOI.Util.IO.LittleEndianInput,System.Int32)")]
+
+
+// not classified - please provide a reasoning

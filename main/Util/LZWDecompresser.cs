@@ -78,9 +78,11 @@ namespace NPOI.Util
          */
         public byte[] decompress(Stream src)
         {
-            MemoryStream res = new MemoryStream();
-            decompress(src, res);
-            return res.ToArray();
+            using (MemoryStream res = new MemoryStream())
+            {
+                decompress(src, res);
+                return res.ToArray();
+            }
         }
 
         /**

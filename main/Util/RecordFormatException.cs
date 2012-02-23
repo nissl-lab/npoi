@@ -26,6 +26,7 @@ namespace NPOI.Util
      *  (especially HSSF and DDF), when they hit invalid
      *  format or data when Processing a record.
      */
+    [Serializable]
     public class RecordFormatException
         : RuntimeException
     {

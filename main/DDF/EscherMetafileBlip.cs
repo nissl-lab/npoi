@@ -168,34 +168,29 @@ namespace NPOI.DDF
         /// <returns>the inflated picture data.</returns>
         private static byte[] InflatePictureData(byte[] data)
         {
-            MemoryStream in1=null;
-            MemoryStream out1=null;
-            ZlibStream zIn = null;
-            try
+            using (MemoryStream in1 = new MemoryStream(data))
             {
-                in1 = new MemoryStream(data);
-                out1 = new MemoryStream();
-                zIn = new ZlibStream(in1, CompressionMode.Decompress, true);
-
-                byte[] buf = new byte[4096];
-                int ReadBytes;
-                while ((ReadBytes = zIn.Read(buf, 0, buf.Length)) > 0)
+                using (MemoryStream out1 = new MemoryStream())
                 {
-                    out1.Write(buf, 0, ReadBytes);
+                    ZlibStream zIn = null;
+                    try
+                    {
+                        zIn = new ZlibStream(in1, CompressionMode.Decompress, true);
+
+                        byte[] buf = new byte[4096];
+                        int ReadBytes;
+                        while ((ReadBytes = zIn.Read(buf, 0, buf.Length)) > 0)
+                        {
+                            out1.Write(buf, 0, ReadBytes);
+                        }
+                        return out1.ToArray();
+                    }
+                    catch (IOException e)
+                    {
+                        log.Log(POILogger.WARN, "Possibly corrupt compression or non-compressed data", e);
+                        return data;
+                    }
                 }
-                return out1.ToArray();
-            }
-            catch (IOException e)
-            {
-                log.Log(POILogger.WARN, "Possibly corrupt compression or non-compressed data", e);
-                return data;
-            }
-            finally
-            {
-                if (in1 != null)
-                    in1.Close();
-                if (out1 != null)
-                    out1.Close();
             }
         }
 
