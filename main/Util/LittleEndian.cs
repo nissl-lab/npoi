@@ -449,7 +449,7 @@ namespace NPOI.Util
         {
             return BitConverter.ToUInt64(data, offset);
         }
-        [Obsolete]
+        //[Obsolete] - private method can not be used outside of this class and only obsolete methods are using this method.
         private static long GetNumber(byte[] data, int offset, int size)
         {
             long num = 0L;
@@ -576,7 +576,7 @@ namespace NPOI.Util
         /// <param name="offset">a starting offset into the byte array</param>
         /// <param name="value">The value.</param>
         /// <param name="size">The size.</param>
-        [Obsolete]
+        //[Obsolete] - private method can not be used outside of this class and only obsolete methods are using this method.
         private static void PutNumber(byte[] data, int offset, long value, int size)
         {
             int limit = size + offset;
@@ -595,7 +595,7 @@ namespace NPOI.Util
         /// <param name="offset">a starting offset into the byte array</param>
         /// <param name="value">The value.</param>
         /// <param name="size">The size.</param>
-        [Obsolete]
+        //[Obsolete] - private method can not be used outside of this class and only obsolete methods are using this method.
         private static void PutNumber(byte[] data, int offset, ulong value, int size)
         {
             int limit = size + offset;
@@ -673,7 +673,8 @@ namespace NPOI.Util
         [Obsolete]
         public static ulong ReadULong(Stream stream)
         {
-            return GetULong(ReadFromStream(stream, LittleEndianConsts.LONG_SIZE));
+            //return GetULong(ReadFromStream(stream, LittleEndianConsts.LONG_SIZE));
+            return BitConverter.ToUInt64(ReadFromStream(stream, LittleEndianConsts.LONG_SIZE), 0);
         }
 
         

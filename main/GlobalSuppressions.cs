@@ -98,10 +98,13 @@
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Console.Write(System.String)", Scope = "member", Target = "NPOI.DDF.EscherDump.#DumpOld(System.Int64,System.IO.Stream)")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1806:DoNotIgnoreMethodResults", MessageId = "NPOI.POIFS.Storage.BlockAllocationTableReader", Scope = "member", Target = "NPOI.POIFS.FileSystem.POIFSFileSystem.#.ctor(System.IO.Stream)")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Console.WriteLine(System.String)", Scope = "member", Target = "NPOI.POIFS.Dev.POIFSViewer.#ViewFile(System.String,System.Boolean)")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Console.WriteLine(System.String)", Scope = "member", Target = "NPOI.HSSF.Record.EmbeddedObjectRefSubRecord.#.ctor(NPOI.Util.ILittleEndianInput,System.Int32)")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Console.WriteLine(System.String)", Scope = "member", Target = "NPOI.HSSF.Record.FeatRecord.#.ctor(NPOI.HSSF.Record.RecordInputStream)")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Console.WriteLine(System.String)", Scope = "member", Target = "NPOI.HSSF.Record.SSTDeserializer.#ManufactureStrings(System.Int32,NPOI.HSSF.Record.RecordInputStream)")]
 
 // these are warnings that should be transported in some form to the user
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Console.WriteLine(System.String)", Scope = "member", Target = "NPOI.DDF.EscherContainerRecord.#FillFields(System.Byte[],System.Int32,NPOI.DDF.EscherRecordFactory)")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Console.WriteLine(System.String)", Scope = "member", Target = "NPOI.HSSF.Record.EmbeddedObjectRefSubRecord.#.ctor(NPOI.Util.IO.LittleEndianInput,System.Int32)")]
-
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Console.WriteLine(System.String)", Scope = "member", Target = "NPOI.Util.SystemOutLogger.#Log(System.Int32,System.Object,System.Exception)")]
 
 // not classified - please provide a reasoning
