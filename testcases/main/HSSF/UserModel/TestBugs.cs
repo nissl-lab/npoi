@@ -2251,11 +2251,11 @@ using NPOI.POIFS.FileSystem;
 
             // Try on headers
             s.Header.Center = (s248);
-            Assert.AreEqual(254, ((HSSFHeader)s.Header).RawTextLength);
+            Assert.AreEqual(254, ((HSSFHeader)s.Header).RawText.Length);
             WriteOutAndReadBack(wb);
 
             s.Header.Center = (s251);
-            Assert.AreEqual(257, ((HSSFHeader)s.Header).RawTextLength);
+            Assert.AreEqual(257, ((HSSFHeader)s.Header).RawText.Length);
             WriteOutAndReadBack(wb);
 
             try
@@ -2278,11 +2278,11 @@ using NPOI.POIFS.FileSystem;
 
             // Now try on footers
             s.Footer.Center = (s248);
-            Assert.AreEqual(254, ((HSSFFooter)s.Footer).RawTextLength);
+            Assert.AreEqual(254, ((HSSFFooter)s.Footer).RawText.Length);
             WriteOutAndReadBack(wb);
 
             s.Footer.Center = (s251);
-            Assert.AreEqual(257, ((HSSFFooter)s.Footer).RawTextLength);
+            Assert.AreEqual(257, ((HSSFFooter)s.Footer).RawText.Length);
             WriteOutAndReadBack(wb);
 
             try

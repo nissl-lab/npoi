@@ -15,9 +15,10 @@
    limitations under the License.
 ==================================================================== */
 
-namespace NPOI.HSSF.UserModel
+namespace TestCases.HSSF.UserModel
 {
     using NPOI.HSSF.Model;
+    using NPOI.HSSF.UserModel;
 
     /**
      * Helper class for HSSF Tests that aren't within the

@@ -184,5 +184,39 @@ namespace TestCases.HSSF.Record.CF
 		    Assert.AreEqual<bool>(isFullRow, cr.IsFullRowRange, "isFullRowRange");
 		    Assert.AreEqual<bool>(isFullColumn, cr.IsFullColumnRange, "isFullColumnRange");
 	    }
+
+        [TestMethod]
+        public void TestNumberOfCells()
+        {
+            Assert.AreEqual(1, oneCell.NumberOfCells);
+            Assert.AreEqual(100, box9x9.NumberOfCells);
+            Assert.AreEqual(121, box10to20c.NumberOfCells);
+        }
+
+        [TestMethod]
+        public void TestMergeCellRanges()
+        {
+            CellRangeAddress cr1 = CellRangeAddress.ValueOf("A1:B1");
+            CellRangeAddress cr2 = CellRangeAddress.ValueOf("A2:B2");
+            CellRangeAddress[] cr3 = CellRangeUtil.MergeCellRanges(new CellRangeAddress[] { cr1, cr2 });
+            Assert.AreEqual(1, cr3.Length);
+            Assert.AreEqual("A1:B2", cr3[0].FormatAsString());
+        }
+
+        [TestMethod]
+        public void TestValueOf()
+        {
+            CellRangeAddress cr1 = CellRangeAddress.ValueOf("A1:B1");
+            Assert.AreEqual(0, cr1.FirstColumn);
+            Assert.AreEqual(0, cr1.FirstRow);
+            Assert.AreEqual(1, cr1.LastColumn);
+            Assert.AreEqual(0, cr1.LastRow);
+
+            CellRangeAddress cr2 = CellRangeAddress.ValueOf("B1");
+            Assert.AreEqual(1, cr2.FirstColumn);
+            Assert.AreEqual(0, cr2.FirstRow);
+            Assert.AreEqual(1, cr2.LastColumn);
+            Assert.AreEqual(0, cr2.LastRow);
+        }
     }
 }

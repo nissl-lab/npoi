@@ -19,7 +19,7 @@ using System;
 using NPOI.SS.Formula;
 using NPOI.SS.Formula.Eval;
 using NPOI.SS.UserModel;
-namespace TestCases.SS.Formula.Eval.Forked
+namespace NPOI.SS.Formula.Eval.Forked
 {
 
     /**
@@ -28,19 +28,19 @@ namespace TestCases.SS.Formula.Eval.Forked
      *
      * @author Josh Micich
      */
-    class ForkedEvaluationCell : EvaluationCell
+    class ForkedEvaluationCell : IEvaluationCell
     {
 
-        private EvaluationSheet _sheet;
+        private IEvaluationSheet _sheet;
         /** corresponding cell from master workbook */
-        private EvaluationCell _masterCell;
+        private IEvaluationCell _masterCell;
         private bool _boolValue;
         private CellType _cellType;
         private int _errorValue;
         private double _numberValue;
         private String _stringValue;
 
-        public ForkedEvaluationCell(ForkedEvaluationSheet sheet, EvaluationCell masterCell)
+        public ForkedEvaluationCell(ForkedEvaluationSheet sheet, IEvaluationCell masterCell)
         {
             _sheet = sheet;
             _masterCell = masterCell;
@@ -150,7 +150,7 @@ namespace TestCases.SS.Formula.Eval.Forked
                 return _stringValue;
             }
         }
-        public EvaluationSheet Sheet
+        public IEvaluationSheet Sheet
         {
             get
             {

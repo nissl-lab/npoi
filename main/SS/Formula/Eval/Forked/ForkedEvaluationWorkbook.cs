@@ -16,7 +16,7 @@
 ==================================================================== */
 
 
-namespace TestCases.SS.Formula.Eval.Forked
+namespace NPOI.SS.Formula.Eval.Forked
 {
     using System;
     using System.Collections.Generic;
@@ -51,7 +51,7 @@ namespace TestCases.SS.Formula.Eval.Forked
             return sheet.GetOrCreateUpdatableCell(rowIndex, columnIndex);
         }
 
-        public EvaluationCell GetEvaluationCell(String sheetName, int rowIndex, int columnIndex)
+        public IEvaluationCell GetEvaluationCell(String sheetName, int rowIndex, int columnIndex)
         {
             ForkedEvaluationSheet sheet = GetSharedSheet(sheetName);
             return sheet.GetCell(rowIndex, columnIndex);
@@ -59,7 +59,9 @@ namespace TestCases.SS.Formula.Eval.Forked
 
         private ForkedEvaluationSheet GetSharedSheet(String sheetName)
         {
-            ForkedEvaluationSheet result = _sharedSheetsByName[(sheetName)];
+            ForkedEvaluationSheet result = null;
+            if(_sharedSheetsByName.ContainsKey(sheetName))
+                result = _sharedSheetsByName[(sheetName)];
             if (result == null)
             {
                 result = new ForkedEvaluationSheet(_masterBook.GetSheet(_masterBook
@@ -104,7 +106,7 @@ namespace TestCases.SS.Formula.Eval.Forked
             return _masterBook.GetExternalSheet(externSheetIndex);
         }
 
-        public Ptg[] GetFormulaTokens(EvaluationCell cell)
+        public Ptg[] GetFormulaTokens(IEvaluationCell cell)
         {
             if (cell is ForkedEvaluationCell)
             {
@@ -124,7 +126,7 @@ namespace TestCases.SS.Formula.Eval.Forked
             return _masterBook.GetName(name, sheetIndex);
         }
 
-        public EvaluationSheet GetSheet(int sheetIndex)
+        public IEvaluationSheet GetSheet(int sheetIndex)
         {
             return GetSharedSheet(GetSheetName(sheetIndex));
         }
@@ -134,7 +136,7 @@ namespace TestCases.SS.Formula.Eval.Forked
             return _masterBook.GetExternalName(externSheetIndex, externNameIndex);
         }
 
-        public int GetSheetIndex(EvaluationSheet sheet)
+        public int GetSheetIndex(IEvaluationSheet sheet)
         {
             if (sheet is ForkedEvaluationSheet)
             {

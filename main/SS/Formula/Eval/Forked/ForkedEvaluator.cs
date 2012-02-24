@@ -21,7 +21,7 @@ using NPOI.SS.Formula;
 using NPOI.SS.Formula.Eval;
 using NPOI.SS.Formula.Udf;
 using NPOI.SS.UserModel;
-namespace TestCases.SS.Formula.Eval.Forked
+namespace NPOI.SS.Formula.Eval.Forked
 {
 
 
@@ -79,7 +79,7 @@ namespace TestCases.SS.Formula.Eval.Forked
          * @param rowIndex zero based
          * @param columnIndex zero based
          */
-        public void updateCell(String sheetName, int rowIndex, int columnIndex, ValueEval value)
+        public void UpdateCell(String sheetName, int rowIndex, int columnIndex, ValueEval value)
         {
 
             ForkedEvaluationCell cell = _sewb.GetOrCreateUpdatableCell(sheetName, rowIndex, columnIndex);
@@ -111,7 +111,7 @@ namespace TestCases.SS.Formula.Eval.Forked
          */
         public ValueEval Evaluate(String sheetName, int rowIndex, int columnIndex)
         {
-            EvaluationCell cell = _sewb.GetEvaluationCell(sheetName, rowIndex, columnIndex);
+            IEvaluationCell cell = _sewb.GetEvaluationCell(sheetName, rowIndex, columnIndex);
 
             switch (cell.CellType)
             {

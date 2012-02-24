@@ -464,6 +464,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="SS\Formula\Eval\EvalInstances.cs" />
+    <Compile Include="SS\Formula\Eval\Forked\TestForkedEvaluator.cs" />
     <Compile Include="SS\Formula\Eval\TestAreaEval.cs" />
     <Compile Include="SS\Formula\Eval\TestCircularReferences.cs" />
     <Compile Include="SS\Formula\Eval\TestDivideEval.cs" />
@@ -623,7 +624,6 @@
   <ItemGroup>
     <Folder Include="DDF\data\" />
     <Folder Include="HSSF\data\" />
-    <Folder Include="SS\Formula\Eval\Forked\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -25,6 +25,7 @@ namespace TestCases.HSSF.Record
     using NPOI.SS.UserModel;
     using TestCases.HSSF;
     using NPOI.HSSF.Record;
+    using TestCases.HSSF.UserModel;
     /**
      * Tests for <tt>FeatRecord</tt>
      * 

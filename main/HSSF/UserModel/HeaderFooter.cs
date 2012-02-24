@@ -35,16 +35,8 @@ namespace NPOI.HSSF.UserModel
          * @return the internal text representation (combining center, left and right parts).
          * Possibly empty string if no header or footer is set.  Never <c>null</c>.
          */
-        protected abstract String RawText { get; }
-        //the test case Test45777 in TestCases.HSSF.UserModel.TestBugs.cs need test RawText length.
-        //so this property is added.
-        public int RawTextLength
-        {
-            get
-            {
-                return RawText.Length;
-            }
-        }
+        public abstract String RawText { get; }
+        
         private String[] SplitParts()
         {
             String text = RawText;

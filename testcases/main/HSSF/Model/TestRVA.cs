@@ -129,8 +129,8 @@ namespace TestCases.HSSF.Model
                 {
                     hasMismatch = true;
                     sb.Append("  mismatch token type[" + i + "] " + GetShortClassName(excelPtg) + " "
-                            + GetOperandClassName(excelPtg) + " - " + GetShortClassName(poiPtg) + " "
-                            + GetOperandClassName(poiPtg));
+                            + excelPtg.RVAType + " - " + GetShortClassName(poiPtg) + " "
+                            + poiPtg.RVAType);
                     sb.Append(Environment.NewLine);
                     continue;
                 }
@@ -139,12 +139,12 @@ namespace TestCases.HSSF.Model
                     continue;
                 }
                 sb.Append("  token[" + i + "] " + excelPtg.ToString() + " "
-                        + GetOperandClassName(excelPtg));
+                        + excelPtg.RVAType);
 
                 if (excelPtg.PtgClass != poiPtg.PtgClass)
                 {
                     hasMismatch = true;
-                    sb.Append(" - was " + GetOperandClassName(poiPtg));
+                    sb.Append(" - was " + poiPtg.RVAType);
                 }
                 sb.Append(Environment.NewLine);
             }
@@ -165,17 +165,6 @@ namespace TestCases.HSSF.Model
             int pos = cn.LastIndexOf('.');
             return cn.Substring(pos + 1);
         }
-
-        private static String GetOperandClassName(Ptg ptg)
-        {
-            byte ptgClass = ptg.PtgClass;
-            switch (ptgClass)
-            {
-                case Ptg.CLASS_REF: return "R";
-                case Ptg.CLASS_VALUE: return "V";
-                case Ptg.CLASS_ARRAY: return "A";
-            }
-            throw new Exception("Unknown operand class (" + ptgClass + ")");
-        }
+       
     }
 }

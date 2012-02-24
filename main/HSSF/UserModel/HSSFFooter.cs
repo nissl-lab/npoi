@@ -51,7 +51,7 @@ namespace NPOI.HSSF.UserModel
         /// Gets the raw footer.
         /// </summary>
         /// <value>The raw footer.</value>
-        protected override String RawText
+        public override String RawText
         {
             get
             {

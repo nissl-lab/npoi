@@ -22,6 +22,7 @@ namespace TestCases.HSSF.UserModel
     using TestCases.SS.UserModel;
     using NPOI.SS.UserModel;
     using NPOI.HSSF.UserModel;
+    using System;
 
     /**
      * Test <c>HSSFPicture</c>.
@@ -63,6 +64,30 @@ namespace TestCases.HSSF.UserModel
             Assert.AreEqual(poundFmtIdx, dataFormat.GetFormat(poundFmt));
             Assert.AreEqual(poundFmt, dataFormat.GetFormat(poundFmtIdx));
         }
+        /**
+     * Bug 51378: GetDataFormatString method call crashes when Reading the test file
+     */
+        [TestMethod]
+        public void Test51378()
+        {
+            IWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("12561-1.xls");
+            for (int i = 0; i < wb.NumberOfSheets; i++)
+            {
+                ISheet sheet = wb.GetSheetAt(i);
+                foreach (IRow row in sheet)
+                {
+                    foreach (ICell cell in row)
+                    {
+                        ICellStyle style = cell.CellStyle;
 
+                        String fmt = style.GetDataFormatString();
+                        if (fmt == null)
+                        {
+                            //_logger.Log(POILogger.WARN, cell + ": " + fmt);
+                        }
+                    }
+                }
+            }
+        }
     }
 }

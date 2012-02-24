@@ -442,6 +442,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POIFS\FileSystem\BATManaged.cs" />
+    <Compile Include="SS\Formula\Eval\Forked\ForkedEvaluationCell.cs" />
+    <Compile Include="SS\Formula\Eval\Forked\ForkedEvaluationSheet.cs" />
+    <Compile Include="SS\Formula\Eval\Forked\ForkedEvaluationWorkbook.cs" />
+    <Compile Include="SS\Formula\Eval\Forked\ForkedEvaluator.cs" />
     <Compile Include="SS\Formula\SharedFormula.cs" />
     <Compile Include="Util\BlockingInputStream.cs" />
     <Compile Include="Util\CloseIgnoringInputStream.cs" />

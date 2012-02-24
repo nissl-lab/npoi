@@ -453,5 +453,51 @@ namespace TestCases.HSSF.EventUserModel
             Assert.AreEqual(1, eorCount);
             Assert.AreEqual(1, sfrCount);
         }
+
+        /**
+	     * MulBlank records hold multiple blank cells. Check we
+	     *  can handle them correctly.
+	     */
+        [TestMethod]
+        public void TestMulBlankHandling()
+        {
+            ReadRecords("45672.xls");
+
+            // Check that we don't have any MulBlankRecords, but do
+            //  have lots of BlankRecords
+            Record[] rr = r;
+            int eorCount = 0;
+            int mbrCount = 0;
+            int brCount = 0;
+            for (int i = 0; i < rr.Length; i++)
+            {
+                Record record = rr[i];
+                if (record is MulBlankRecord)
+                {
+                    mbrCount++;
+                }
+                if (record is BlankRecord)
+                {
+                    brCount++;
+                }
+                if (record is LastCellOfRowDummyRecord)
+                {
+                    eorCount++;
+                }
+            }
+            if (mbrCount > 0)
+            {
+                throw new AssertFailedException("Identified bug 45672");
+            }
+            if (brCount < 20)
+            {
+                throw new AssertFailedException("Identified bug 45672");
+            }
+            if (eorCount != 2)
+            {
+                throw new AssertFailedException("Identified bug 45672");
+            }
+            Assert.AreEqual(2, eorCount);
+        }
     }
 }

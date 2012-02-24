@@ -15,7 +15,7 @@
    limitations under the License.
 ==================================================================== */
 
-namespace NPOI.SS.Formula.Eval.Forked
+namespace TestCases.SS.Formula.Eval.Forked
 {
     using System;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -24,6 +24,7 @@ namespace NPOI.SS.Formula.Eval.Forked
     using NPOI.SS.Formula.Eval;
     using NPOI.SS.UserModel;
     using TestCases.SS.Formula.Eval.Forked;
+    using NPOI.SS.Formula.Eval.Forked;
 
     /**
      * @author Josh Micich
@@ -51,7 +52,7 @@ namespace NPOI.SS.Formula.Eval.Forked
             row.CreateCell(1).SetCellValue(3.0); // Inputs!B1
             return wb;
         }
-        private class stabilityClassifier : IStabilityClassifier
+        private class StabilityClassifier : IStabilityClassifier
         {
             public override bool IsCellFinal(int sheetIndex, int rowIndex, int columnIndex)
             {
@@ -67,22 +68,22 @@ namespace NPOI.SS.Formula.Eval.Forked
             HSSFWorkbook wb = CreateWorkbook();
 
             // The stability classifier is useful to reduce memory consumption of caching logic
-            IStabilityClassifier stabilityClassifier = new stabilityClassifier();
+            IStabilityClassifier stabilityClassifier = new StabilityClassifier();
 
             ForkedEvaluator fe1 = ForkedEvaluator.Create(wb, stabilityClassifier, null);
             ForkedEvaluator fe2 = ForkedEvaluator.Create(wb, stabilityClassifier, null);
 
             // fe1 and fe2 can be used concurrently on separate threads
 
-            fe1.updateCell("Inputs", 0, 0, new NumberEval(4.0));
-            fe1.updateCell("Inputs", 0, 1, new NumberEval(1.1));
+            fe1.UpdateCell("Inputs", 0, 0, new NumberEval(4.0));
+            fe1.UpdateCell("Inputs", 0, 1, new NumberEval(1.1));
 
-            fe2.updateCell("Inputs", 0, 0, new NumberEval(1.2));
-            fe2.updateCell("Inputs", 0, 1, new NumberEval(2.0));
+            fe2.UpdateCell("Inputs", 0, 0, new NumberEval(1.2));
+            fe2.UpdateCell("Inputs", 0, 1, new NumberEval(2.0));
 
             Assert.AreEqual(18.9, ((NumberEval)fe1.Evaluate("Calculations", 0, 0)).NumberValue, 0.0);
             Assert.AreEqual(4.0, ((NumberEval)fe2.Evaluate("Calculations", 0, 0)).NumberValue, 0.0);
-            fe1.updateCell("Inputs", 0, 0, new NumberEval(3.0));
+            fe1.UpdateCell("Inputs", 0, 0, new NumberEval(3.0));
             Assert.AreEqual(13.9, ((NumberEval)fe1.Evaluate("Calculations", 0, 0)).NumberValue, 0.0);
         }
 
@@ -106,7 +107,7 @@ namespace NPOI.SS.Formula.Eval.Forked
             // attempt update input at cell A2 (which is missing)
             try
             {
-                fe.updateCell("Inputs", 1, 0, new NumberEval(4.0));
+                fe.UpdateCell("Inputs", 1, 0, new NumberEval(4.0));
                 throw new AssertFailedException(
                         "Expected exception to be thrown due to missing input cell");
             }

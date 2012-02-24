@@ -20,7 +20,7 @@ using System.Collections.Generic;
 using NPOI.SS.Formula;
 using NPOI.SS.UserModel;
 using NPOI.SS.Util;
-namespace TestCases.SS.Formula.Eval.Forked
+namespace NPOI.SS.Formula.Eval.Forked
 {
 
 
@@ -32,26 +32,29 @@ namespace TestCases.SS.Formula.Eval.Forked
      *
      * @author Josh Micich
      */
-    class ForkedEvaluationSheet : EvaluationSheet
+    class ForkedEvaluationSheet : IEvaluationSheet
     {
 
-        private EvaluationSheet _masterSheet;
+        private IEvaluationSheet _masterSheet;
         /**
          * Only cells which have been split are Put in this map.  (This has been done to conserve memory).
          */
         private Dictionary<RowColKey, ForkedEvaluationCell> _sharedCellsByRowCol;
 
-        public ForkedEvaluationSheet(EvaluationSheet masterSheet)
+        public ForkedEvaluationSheet(IEvaluationSheet masterSheet)
         {
             _masterSheet = masterSheet;
             _sharedCellsByRowCol = new Dictionary<RowColKey, ForkedEvaluationCell>();
         }
 
-        public EvaluationCell GetCell(int rowIndex, int columnIndex)
+        public IEvaluationCell GetCell(int rowIndex, int columnIndex)
         {
             RowColKey key = new RowColKey(rowIndex, columnIndex);
 
-            ForkedEvaluationCell result = _sharedCellsByRowCol[(key)];
+            ForkedEvaluationCell result = null;
+            if (_sharedCellsByRowCol.ContainsKey(key))
+                result = _sharedCellsByRowCol[(key)];
+
             if (result == null)
             {
                 return _masterSheet.GetCell(rowIndex, columnIndex);
@@ -63,10 +66,12 @@ namespace TestCases.SS.Formula.Eval.Forked
         {
             RowColKey key = new RowColKey(rowIndex, columnIndex);
 
-            ForkedEvaluationCell result = _sharedCellsByRowCol[(key)];
+            ForkedEvaluationCell result = null;
+            if (_sharedCellsByRowCol.ContainsKey(key))
+                result = _sharedCellsByRowCol[(key)];
             if (result == null)
             {
-                EvaluationCell mcell = _masterSheet.GetCell(rowIndex, columnIndex);
+                IEvaluationCell mcell = _masterSheet.GetCell(rowIndex, columnIndex);
                 if (mcell == null)
                 {
                     CellReference cr = new CellReference(rowIndex, columnIndex);
@@ -122,7 +127,7 @@ namespace TestCases.SS.Formula.Eval.Forked
                 _columnIndex = columnIndex;
             }
 
-            public bool Equals(Object obj)
+            public override bool Equals(Object obj)
             {
                 //assert obj is RowColKey : "these private cache key instances are only Compared to themselves";
                 RowColKey other = (RowColKey)obj;

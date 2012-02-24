@@ -95,7 +95,7 @@ namespace TestCases.HSSF.UserModel
 
             head.Left = ("Top &P&F&D Left");
             Assert.AreEqual("Top &P&F&D Left", head.Left);
-            
+
             Assert.AreEqual("Top  Left", NPOI.HSSF.UserModel.HeaderFooter.StripFields(head.Left));
             // Now even more complex
             head.Center = ("HEADER TEXT &P&N&D&T&Z&F&F&A&G&X END");
@@ -167,7 +167,7 @@ namespace TestCases.HSSF.UserModel
             HSSFWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("DBCSHeader.xls");
             NPOI.SS.UserModel.ISheet s = wb.GetSheetAt(0);
             IHeader h = s.Header;
-            Assert.AreEqual(h.Left, "\u090f\u0915","Header Left ");
+            Assert.AreEqual(h.Left, "\u090f\u0915", "Header Left ");
             Assert.AreEqual(h.Center, "\u0939\u094b\u0917\u093e", "Header Center ");
             Assert.AreEqual(h.Right, "\u091c\u093e", "Header Right ");
 
@@ -175,6 +175,39 @@ namespace TestCases.HSSF.UserModel
             Assert.AreEqual(f.Left, "\u091c\u093e", "Footer Left ");
             Assert.AreEqual(f.Center, "\u091c\u093e", "Footer Center ");
             Assert.AreEqual(f.Right, "\u091c\u093e", "Footer Right ");
+        }
+        /**
+	 * Excel tolerates files with missing HEADER/FOOTER records.  POI should do the same.
+	 */
+        [TestMethod]
+        public void TestMissingHeaderFooterRecord_bug47244()
+        {
+            // noHeaderFooter47244.xls was Created by a slightly modified POI
+            // which omitted the HEADER/FOOTER records
+            IWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("noHeaderFooter47244.xls");
+            ISheet sheet = wb.GetSheetAt(0);
+            HSSFFooter footer;
+
+            try
+            {
+                footer = (HSSFFooter)sheet.Footer;
+            }
+            catch (NullReferenceException)
+            {
+                throw new AssertFailedException("Identified bug 47244a");
+            }
+            Assert.AreEqual("", footer.RawText);
+            HSSFHeader header = (HSSFHeader)sheet.Header;
+            Assert.AreEqual("", header.RawText);
+
+            // make sure header / footer is properly linked to underlying data 
+            HSSFHeader header2 = (HSSFHeader)sheet.Header;
+            header.Center = (/*setter*/"foo");
+            Assert.AreEqual("foo", header2.Center);
+
+            HSSFFooter footer2 = (HSSFFooter)sheet.Footer;
+            footer.Center = (/*setter*/"bar");
+            Assert.AreEqual("bar", footer2.Center);
         }
     }
 
