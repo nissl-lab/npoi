@@ -29,42 +29,42 @@ using System.Collections;
 
 namespace NPOI.Util.Collections
 {
-	public sealed class EmptyEnumerable
-		: IEnumerable
-	{
-		public static readonly IEnumerable Instance = new EmptyEnumerable();
+    //public sealed class EmptyEnumerable
+    //    : IEnumerable
+    //{
+    //    public static readonly IEnumerable Instance = new EmptyEnumerable();
 
-		private EmptyEnumerable()
-		{
-		}
+    //    private EmptyEnumerable()
+    //    {
+    //    }
 
-		public IEnumerator GetEnumerator()
-		{
-			return EmptyEnumerator.Instance;
-		}
-	}
+    //    public IEnumerator GetEnumerator()
+    //    {
+    //        return EmptyEnumerator.Instance;
+    //    }
+    //}
 
-	public sealed class EmptyEnumerator
-		: IEnumerator
-	{
-		public static readonly IEnumerator Instance = new EmptyEnumerator();
+    //public sealed class EmptyEnumerator
+    //    : IEnumerator
+    //{
+    //    public static readonly IEnumerator Instance = new EmptyEnumerator();
 
-		private EmptyEnumerator()
-		{
-		}
+    //    private EmptyEnumerator()
+    //    {
+    //    }
 
-		public bool MoveNext()
-		{
-			return false;
-		}
+    //    public bool MoveNext()
+    //    {
+    //        return false;
+    //    }
 
-		public void Reset()
-		{
-		}
+    //    public void Reset()
+    //    {
+    //    }
 
-		public object Current
-		{
-			get { throw new InvalidOperationException("No elements"); }
-		}
-	}
+    //    public object Current
+    //    {
+    //        get { throw new InvalidOperationException("No elements"); }
+    //    }
+    //}
 }
