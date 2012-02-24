@@ -32,8 +32,8 @@ Copy the content of testcases/test-data to the same folder within NPOI.
 Load the the NPOITest.sln into your IDE, build the project and execute 
 all the unit tests.
 
-Here are some numbers (2012-02-23):
-unit tests: 1612, passed: 1610 (failed 2)
+Here are some numbers (2012-02-24):
+unit tests: 1622, passed: 1620 (failed 2)
 
 There are 10 unit tests flagged with the [Ignore] attribute: 
 - testcases\main\HSSF\Model\TestOperandClassTransformer.cs(63):   [Ignore] //this test is disabled in poi.
