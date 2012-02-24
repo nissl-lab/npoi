@@ -85,7 +85,7 @@ namespace TestCases.SS.Util
 				0x6230100010001000L,
 				0x403CE0FFFFFFFFF0L, // has single digit round trip error
 				0x2B2BFFFF10001079L,
-		};
+		    };
             bool success = true;
             for (int i = 0; i < rawValues.Length; i++)
             {

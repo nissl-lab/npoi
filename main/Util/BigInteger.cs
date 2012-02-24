@@ -1151,10 +1151,11 @@ namespace NPOI.Util
         public override bool Equals(object x)
         {
             // This test is just an optimization, which may or may not help
-            if (x == this)
+            //if (x == this) - avoid CS0252 by making the reference comparison explicit:
+            if (Object.ReferenceEquals(x, this))
                 return true;
 
-            if (!(x is BigInteger))
+            if (!(x is BigInteger) || (null == x))
                 return false;
 
             BigInteger xInt = (BigInteger)x;
@@ -1707,6 +1708,15 @@ namespace NPOI.Util
         public static BigInteger operator /(BigInteger bi1, BigInteger bi2)
         {
             return bi1.Divide(bi2);
+        }
+
+        public static bool operator ==(BigInteger bi1, BigInteger bi2)
+        {
+            return bi1.Equals(bi2);
+        }
+        public static bool operator !=(BigInteger bi1, BigInteger bi2)
+        {
+            return !(bi1 == bi2);
         }
         #endregion
     }
