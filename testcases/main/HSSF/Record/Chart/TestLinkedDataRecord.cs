@@ -18,7 +18,7 @@
 
 
 
-namespace TestCases.HSSF.Record
+namespace TestCases.HSSF.Record.Chart
 {
     using System;
     using System.Collections;

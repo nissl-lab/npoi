@@ -15,7 +15,7 @@
    limitations under the License.
 ==================================================================== */
 
-namespace NPOI.HSSF.Record.Chart
+namespace TestCases.HSSF.Record.Chart.Chart
 {
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using NPOI.HSSF.Record;

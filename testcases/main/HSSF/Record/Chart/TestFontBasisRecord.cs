@@ -16,7 +16,7 @@
    limitations under the License.
 ==================================================================== */
 
-namespace TestCases.HSSF.Record
+namespace TestCases.HSSF.Record.Chart
 {
     using System;
     using NPOI.HSSF.Record;
