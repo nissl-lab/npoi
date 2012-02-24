@@ -28,6 +28,10 @@ using NPOI.SS.UserModel;
 
     public enum NameType:int
     {
+        /// <summary>
+        /// Allow accessing the Initial value.
+        /// </summary>
+        None = 0,
         CELL = 1,
         NAMED_RANGE = 2,
         COLUMN = 3,

@@ -23,6 +23,10 @@ namespace NPOI.SS.UserModel
     using NPOI.HSSF.Record.CF;
     public enum ConditionType : byte
     {
+        /// <summary>
+        /// Allow accessing the Initial value.
+        /// </summary>
+        None = 0,
         /**
          * This conditional formatting rule Compares a cell value
          * to a formula calculated result, using an operator

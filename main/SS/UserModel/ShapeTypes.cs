@@ -24,6 +24,10 @@ namespace NPOI.SS.UserModel
      */
     public enum ShapeTypes:int
     {
+        /// <summary>
+        /// Allow accessing the Initial value.
+        /// </summary>
+        None = 0,
         LINE = 1,
         LINE_INV = 2,
         TRIANGLE = 3,

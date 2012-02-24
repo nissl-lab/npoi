@@ -66,7 +66,12 @@ namespace NPOI.SS.UserModel
     }
     public enum FontColor:short
     {
-            /**
+        /// <summary>
+        /// Allow accessing the Initial value.
+        /// </summary>
+        None = 0,
+
+        /**
          * normal type of black color.
          */
 
@@ -80,7 +85,12 @@ namespace NPOI.SS.UserModel
     }
     public enum FontBoldWeight:short
     {
-            /**
+        /// <summary>
+        /// Allow accessing the Initial value.
+        /// </summary>
+        None = 0,
+
+        /**
          * Normal boldness (not bold)
          */
 

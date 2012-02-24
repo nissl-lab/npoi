@@ -34,6 +34,11 @@ namespace NPOI.HPSF
     /// </summary>
     public enum Constants
     {
+        /// <summary>
+        /// Allow accessing the Initial value.
+        /// </summary>
+        None = 0,
+
         /** Codepage 037, a special case */
          CP_037 = 37,
 

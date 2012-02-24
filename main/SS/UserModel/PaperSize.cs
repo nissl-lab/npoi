@@ -25,6 +25,10 @@ namespace NPOI.SS.UserModel
      */
     public enum PaperSize : short
     {
+        /// <summary>
+        /// Allow accessing the Initial value.
+        /// </summary>
+        None = 0,
         US_Letter = 1,
         US_Letter_Small = 2,
         US_Tabloid = 3,

@@ -18,6 +18,10 @@ namespace NPOI.SS.UserModel
 {
     public enum PictureType : int
     {
+        /// <summary>
+        /// Allow accessing the Initial value.
+        /// </summary>
+        None = 0,
         /** Extended windows meta file */
         EMF = 2,
         /** Windows Meta File */
