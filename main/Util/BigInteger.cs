@@ -269,9 +269,9 @@ namespace NPOI.Util
             mag = trustedStripLeadingZeroInts(magnitude);
         }
         /**
-     * Returns the input array stripped of any leading zero bytes.
-     * Since the source is trusted the copying may be skipped.
-     */
+         * Returns the input array stripped of any leading zero bytes.
+         * Since the source is trusted the copying may be skipped.
+         */
         private static int[] trustedStripLeadingZeroInts(int[] val)
         {
             int vlen = val.Length;
@@ -380,10 +380,10 @@ namespace NPOI.Util
             return buf.ToString();
         }
         /**
-     * The BigInteger constant zero.
-     *
-     * @since   1.2
-     */
+         * The BigInteger constant zero.
+         *
+         * @since   1.2
+         */
         public static BigInteger ZERO = new BigInteger(new int[0], 0);
 
         /**
@@ -405,14 +405,14 @@ namespace NPOI.Util
          */
         public static BigInteger TEN = ValueOf(10);
         /**
-     * Returns a BigInteger whose value is equal to that of the
-     * specified {@code long}.  This "static factory method" is
-     * provided in preference to a ({@code long}) constructor
-     * because it allows for reuse of frequently used BigIntegers.
-     *
-     * @param  val value of the BigInteger to return.
-     * @return a BigInteger with the specified value.
-     */
+         * Returns a BigInteger whose value is equal to that of the
+         * specified {@code long}.  This "static factory method" is
+         * provided in preference to a ({@code long}) constructor
+         * because it allows for reuse of frequently used BigIntegers.
+         *
+         * @param  val value of the BigInteger to return.
+         * @return a BigInteger with the specified value.
+         */
         public static BigInteger ValueOf(long val)
         {
             // If -MAX_CONSTANT < val < MAX_CONSTANT, return stashed constant
@@ -429,17 +429,17 @@ namespace NPOI.Util
         private static BigInteger[] posConst = new BigInteger[MAX_CONSTANT + 1];
         private static BigInteger[] negConst = new BigInteger[MAX_CONSTANT + 1];
         /**
-     * Returns a BigInteger with the given two's complement representation.
-     * Assumes that the input array will not be modified (the returned
-     * BigInteger will reference the input array if feasible).
-     */
+         * Returns a BigInteger with the given two's complement representation.
+         * Assumes that the input array will not be modified (the returned
+         * BigInteger will reference the input array if feasible).
+         */
         private static BigInteger valueOf(int[] val)
         {
             return (val[0] > 0 ? new BigInteger(val, 1) : new BigInteger(val));
         }
         /**
-     * Package private method to return bit length for an integer.
-     */
+         * Package private method to return bit length for an integer.
+         */
         public static int BitLengthForInt(int n)
         {
             return 32 - NumberOfLeadingZeros(n);
@@ -490,13 +490,13 @@ namespace NPOI.Util
             return n;
         }
         /**
-     * Returns the number of bits in the two's complement representation
-     * of this BigInteger that differ from its sign bit.  This method is
-     * useful when implementing bit-vector style sets atop BigIntegers.
-     *
-     * @return number of bits in the two's complement representation
-     *         of this BigInteger that differ from its sign bit.
-     */
+         * Returns the number of bits in the two's complement representation
+         * of this BigInteger that differ from its sign bit.  This method is
+         * useful when implementing bit-vector style sets atop BigIntegers.
+         *
+         * @return number of bits in the two's complement representation
+         *         of this BigInteger that differ from its sign bit.
+         */
         public int BitCount()
         {
             //@SuppressWarnings("deprecation") 
@@ -522,11 +522,11 @@ namespace NPOI.Util
         }
 
         /**
-     * Returns a BigInteger whose value is the absolute value of this
-     * BigInteger.
-     *
-     * @return {@code abs(this)}
-     */
+         * Returns a BigInteger whose value is the absolute value of this
+         * BigInteger.
+         *
+         * @return {@code abs(this)}
+         */
         public BigInteger Abs()
         {
             return (_signum >= 0 ? this : this.Negate());
@@ -542,14 +542,14 @@ namespace NPOI.Util
             return new BigInteger(this.mag, -this._signum);
         }
         /**
-     * Returns a BigInteger whose value is <c>(this<sup>exponent</sup>)</c>.
-     * Note that {@code exponent} is an integer rather than a BigInteger.
-     *
-     * @param  exponent exponent to which this BigInteger is to be raised.
-     * @return <c>this<sup>exponent</sup></c>
-     * @throws ArithmeticException {@code exponent} is negative.  (This would
-     *         cause the operation to yield a non-integer value.)
-     */
+         * Returns a BigInteger whose value is <c>(this<sup>exponent</sup>)</c>.
+         * Note that {@code exponent} is an integer rather than a BigInteger.
+         *
+         * @param  exponent exponent to which this BigInteger is to be raised.
+         * @return <c>this<sup>exponent</sup></c>
+         * @throws ArithmeticException {@code exponent} is negative.  (This would
+         *         cause the operation to yield a non-integer value.)
+         */
         public BigInteger Pow(int exponent)
         {
             if (exponent < 0)
@@ -580,9 +580,9 @@ namespace NPOI.Util
             return new BigInteger(result, newSign);
         }
         /**
-     * Multiplies int arrays x and y to the specified lengths and places
-     * the result into z. There will be no leading zeros in the resultant array.
-     */
+         * Multiplies int arrays x and y to the specified lengths and places
+         * the result into z. There will be no leading zeros in the resultant array.
+         */
         private int[] multiplyToLen(int[] x, int xlen, int[] y, int ylen, int[] z)
         {
             int xstart = xlen - 1;
@@ -617,8 +617,8 @@ namespace NPOI.Util
             return z;
         }
         /**
-     * Multiply an array by one word k and add to result, return the carry
-     */
+         * Multiply an array by one word k and add to result, return the carry
+         */
         static int mulAdd(int[] output, int[] input, int offset, int len, int k)
         {
             long kLong = k & LONG_MASK;
@@ -635,9 +635,9 @@ namespace NPOI.Util
             return (int)carry;
         }
         /**
-     * Squares the contents of the int array x. The result is placed into the
-     * int array z.  The contents of x are not changed.
-     */
+         * Squares the contents of the int array x. The result is placed into the
+         * int array z.  The contents of x are not changed.
+         */
         private static int[] squareToLen(int[] x, int len, int[] z)
         {
             /*
@@ -719,9 +719,9 @@ namespace NPOI.Util
             a[len - 1] <<= n;
         }
         /**
-     * Add one word to the number a mlen words into a. Return the resulting
-     * carry.
-     */
+         * Add one word to the number a mlen words into a. Return the resulting
+         * carry.
+         */
         static int addOne(int[] a, int offset, int mlen, int carry)
         {
             offset = a.Length - 1 - mlen - offset;
@@ -746,11 +746,11 @@ namespace NPOI.Util
             return 1;
         }
         /**
-     * Returns the signum function of this BigInteger.
-     *
-     * @return -1, 0 or 1 as the value of this BigInteger is negative, zero or
-     *         positive.
-     */
+         * Returns the signum function of this BigInteger.
+         *
+         * @return -1, 0 or 1 as the value of this BigInteger is negative, zero or
+         *         positive.
+         */
         public int Signum()
         {
             return this._signum;
@@ -791,9 +791,9 @@ namespace NPOI.Util
             return byteArray;
         }
         /**
-     * Returns the length of the two's complement representation in ints,
-     * including space for at least one sign bit.
-     */
+         * Returns the length of the two's complement representation in ints,
+         * including space for at least one sign bit.
+         */
         private int intLength()
         {
             return Operator.UnsignedRightShift(BitLength(), 5) + 1;
@@ -811,11 +811,11 @@ namespace NPOI.Util
             return _signum < 0 ? -1 : 0;
         }
         /**
-     * Returns the specified int of the little-endian two's complement
-     * representation (int 0 is the least significant).  The int number can
-     * be arbitrarily high (values are logically preceded by infinitely many
-     * sign ints).
-     */
+         * Returns the specified int of the little-endian two's complement
+         * representation (int 0 is the least significant).  The int number can
+         * be arbitrarily high (values are logically preceded by infinitely many
+         * sign ints).
+         */
         private int getInt(int n)
         {
             if (n < 0)
@@ -829,10 +829,10 @@ namespace NPOI.Util
                     (n <= FirstNonzeroIntNum() ? -magInt : ~magInt));
         }
         /**
-     * Returns the index of the int that contains the first nonzero int in the
-     * little-endian binary representation of the magnitude (int 0 is the
-     * least significant). If the magnitude is zero, return value is undefined.
-     */
+         * Returns the index of the int that contains the first nonzero int in the
+         * little-endian binary representation of the magnitude (int 0 is the
+         * least significant). If the magnitude is zero, return value is undefined.
+         */
         private int FirstNonzeroIntNum()
         {
             int fn = firstNonzeroIntNum - 2;
@@ -851,8 +851,8 @@ namespace NPOI.Util
             return fn;
         }
         /**
-     * Returns a copy of the input array stripped of any leading zero bytes.
-     */
+         * Returns a copy of the input array stripped of any leading zero bytes.
+         */
         private static int[] stripLeadingZeroBytes(byte[] a)
         {
             int byteLength = a.Length;
@@ -877,9 +877,9 @@ namespace NPOI.Util
             return result;
         }
         /**
-     * Takes an array a representing a negative 2's-complement number and
-     * returns the minimal (no leading zero bytes) unsigned whose value is -a.
-     */
+         * Takes an array a representing a negative 2's-complement number and
+         * returns the minimal (no leading zero bytes) unsigned whose value is -a.
+         */
         private static int[] makePositive(byte[] a)
         {
             int keep, k;
@@ -927,16 +927,16 @@ namespace NPOI.Util
             return result;
         }
         /*
-     * The following two arrays are used for fast String conversions.  Both
-     * are indexed by radix.  The first is the number of digits of the given
-     * radix that can fit in a Java long without "going negative", i.e., the
-     * highest integer n such that radix**n < 2**63.  The second is the
-     * "long radix" that tears each number into "long digits", each of which
-     * consists of the number of digits in the corresponding element in
-     * digitsPerLong (longRadix[i] = i**digitPerLong[i]).  Both arrays have
-     * nonsense values in their 0 and 1 elements, as radixes 0 and 1 are not
-     * used.
-     */
+         * The following two arrays are used for fast String conversions.  Both
+         * are indexed by radix.  The first is the number of digits of the given
+         * radix that can fit in a Java long without "going negative", i.e., the
+         * highest integer n such that radix**n < 2**63.  The second is the
+         * "long radix" that tears each number into "long digits", each of which
+         * consists of the number of digits in the corresponding element in
+         * digitsPerLong (longRadix[i] = i**digitPerLong[i]).  Both arrays have
+         * nonsense values in their 0 and 1 elements, as radixes 0 and 1 are not
+         * used.
+         */
         private static int[] digitsPerLong = {0, 0,
         62, 39, 31, 27, 24, 22, 20, 19, 18, 18, 17, 17, 16, 16, 15, 15, 15, 14,
         14, 14, 14, 13, 13, 13, 13, 13, 13, 12, 12, 12, 12, 12, 12, 12, 12};
@@ -969,8 +969,8 @@ namespace NPOI.Util
         4696, 4756, 4814, 4870, 4923, 4975, 5025, 5074, 5120, 5166, 5210,
                                            5253, 5295};
         /*
-     * These two arrays are the integer analogue of above.
-     */
+         * These two arrays are the integer analogue of above.
+         */
         private static int[] digitsPerInt = {0, 0, 30, 19, 15, 13, 11,
         11, 10, 9, 9, 8, 8, 8, 8, 7, 7, 7, 7, 7, 7, 7, 6, 6, 6, 6,
         6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 5};
@@ -985,9 +985,9 @@ namespace NPOI.Util
         0x40000000, 0x4cfa3cc1, 0x5c13d840, 0x6d91b519, 0x39aa400
     };
         /**
-     * Takes an array a representing a negative 2's-complement number and
-     * returns the minimal (no leading zero ints) unsigned whose value is -a.
-     */
+         * Takes an array a representing a negative 2's-complement number and
+         * returns the minimal (no leading zero ints) unsigned whose value is -a.
+         */
         private static int[] makePositive(int[] a)
         {
             int keep, j;
@@ -1049,18 +1049,18 @@ namespace NPOI.Util
             return n;
         }
         /**
-     * Returns the number of zero bits following the lowest-order ("rightmost")
-     * one-bit in the two's complement binary representation of the specified
-     * {@code int} value.  Returns 32 if the specified value has no
-     * one-bits in its two's complement representation, in other words if it is
-     * equal to zero.
-     *
-     * @return the number of zero bits following the lowest-order ("rightmost")
-     *     one-bit in the two's complement binary representation of the
-     *     specified {@code int} value, or 32 if the value is equal
-     *     to zero.
-     * @since 1.5
-     */
+         * Returns the number of zero bits following the lowest-order ("rightmost")
+         * one-bit in the two's complement binary representation of the specified
+         * {@code int} value.  Returns 32 if the specified value has no
+         * one-bits in its two's complement representation, in other words if it is
+         * equal to zero.
+         *
+         * @return the number of zero bits following the lowest-order ("rightmost")
+         *     one-bit in the two's complement binary representation of the
+         *     specified {@code int} value, or 32 if the value is equal
+         *     to zero.
+         * @since 1.5
+         */
         public static int NumberOfTrailingZeros(int i)
         {
             // HD, Figure 5-14
@@ -1142,12 +1142,12 @@ namespace NPOI.Util
         #endregion
 
         /**
-     * Compares this BigInteger with the specified Object for equality.
-     *
-     * @param  x Object to which this BigInteger is to be compared.
-     * @return {@code true} if and only if the specified Object is a
-     *         BigInteger whose value is numerically equal to this BigInteger.
-     */
+         * Compares this BigInteger with the specified Object for equality.
+         *
+         * @param  x Object to which this BigInteger is to be compared.
+         * @return {@code true} if and only if the specified Object is a
+         *         BigInteger whose value is numerically equal to this BigInteger.
+         */
         public override bool Equals(object x)
         {
             // This test is just an optimization, which may or may not help
@@ -1174,12 +1174,12 @@ namespace NPOI.Util
             return true;
         }
         /**
-     * Returns the minimum of this BigInteger and {@code val}.
-     *
-     * @param  val value with which the minimum is to be computed.
-     * @return the BigInteger whose value is the lesser of this BigInteger and
-     *         {@code val}.  If they are equal, either may be returned.
-     */
+         * Returns the minimum of this BigInteger and {@code val}.
+         *
+         * @param  val value with which the minimum is to be computed.
+         * @return the BigInteger whose value is the lesser of this BigInteger and
+         *         {@code val}.  If they are equal, either may be returned.
+         */
         public BigInteger Min(BigInteger val)
         {
             return (CompareTo(val) < 0 ? this : val);
@@ -1215,19 +1215,19 @@ namespace NPOI.Util
             return hashCode * _signum;
         }
         /**
-     * Converts this BigInteger to an {@code int}.  This
-     * conversion is analogous to a
-     * <i>narrowing primitive conversion</i> from {@code long} to
-     * {@code int} as defined in section 5.1.3 of
-     * <cite>The Java(TM) Language Specification</cite>:
-     * if this BigInteger is too big to fit in an
-     * {@code int}, only the low-order 32 bits are returned.
-     * Note that this conversion can lose information about the
-     * overall magnitude of the BigInteger value as well as return a
-     * result with the opposite sign.
-     *
-     * @return this BigInteger converted to an {@code int}.
-     */
+         * Converts this BigInteger to an {@code int}.  This
+         * conversion is analogous to a
+         * <i>narrowing primitive conversion</i> from {@code long} to
+         * {@code int} as defined in section 5.1.3 of
+         * <cite>The Java(TM) Language Specification</cite>:
+         * if this BigInteger is too big to fit in an
+         * {@code int}, only the low-order 32 bits are returned.
+         * Note that this conversion can lose information about the
+         * overall magnitude of the BigInteger value as well as return a
+         * result with the opposite sign.
+         *
+         * @return this BigInteger converted to an {@code int}.
+         */
         public int IntValue()
         {
             int result = 0;
@@ -1286,19 +1286,19 @@ namespace NPOI.Util
             return new BigInteger(newMag, _signum);
         }
         /**
-     * Converts this BigInteger to a {@code long}.  This
-     * conversion is analogous to a
-     * <i>narrowing primitive conversion</i> from {@code long} to
-     * {@code int} as defined in section 5.1.3 of
-     * <cite>The Java(TM) Language Specification</cite>:
-     * if this BigInteger is too big to fit in a
-     * {@code long}, only the low-order 64 bits are returned.
-     * Note that this conversion can lose information about the
-     * overall magnitude of the BigInteger value as well as return a
-     * result with the opposite sign.
-     *
-     * @return this BigInteger converted to a {@code long}.
-     */
+         * Converts this BigInteger to a {@code long}.  This
+         * conversion is analogous to a
+         * <i>narrowing primitive conversion</i> from {@code long} to
+         * {@code int} as defined in section 5.1.3 of
+         * <cite>The Java(TM) Language Specification</cite>:
+         * if this BigInteger is too big to fit in a
+         * {@code long}, only the low-order 64 bits are returned.
+         * Note that this conversion can lose information about the
+         * overall magnitude of the BigInteger value as well as return a
+         * result with the opposite sign.
+         *
+         * @return this BigInteger converted to a {@code long}.
+         */
         public long LongValue()
         {
             long result = 0;
@@ -1308,17 +1308,17 @@ namespace NPOI.Util
             return result;
         }
         /**
-     * Returns a BigInteger whose value is {@code (this >> n)}.  Sign
-     * extension is performed.  The shift distance, {@code n}, may be
-     * negative, in which case this method performs a left shift.
-     * (Computes <c>floor(this / 2<sup>n</sup>)</c>.)
-     *
-     * @param  n shift distance, in bits.
-     * @return {@code this >> n}
-     * @throws ArithmeticException if the shift distance is {@code
-     *         Integer.MIN_VALUE}.
-     * @see #shiftLeft
-     */
+         * Returns a BigInteger whose value is {@code (this >> n)}.  Sign
+         * extension is performed.  The shift distance, {@code n}, may be
+         * negative, in which case this method performs a left shift.
+         * (Computes <c>floor(this / 2<sup>n</sup>)</c>.)
+         *
+         * @param  n shift distance, in bits.
+         * @return {@code this >> n}
+         * @throws ArithmeticException if the shift distance is {@code
+         *         Integer.MIN_VALUE}.
+         * @see #shiftLeft
+         */
         public BigInteger ShiftRight(int n)
         {
             if (n == 0)
@@ -1408,12 +1408,12 @@ namespace NPOI.Util
             return valueOf(result);
         }
         /**
-     * Returns a BigInteger whose value is {@code (~this)}.  (This method
-     * returns a negative value if and only if this BigInteger is
-     * non-negative.)
-     *
-     * @return {@code ~this}
-     */
+         * Returns a BigInteger whose value is {@code (~this)}.  (This method
+         * returns a negative value if and only if this BigInteger is
+         * non-negative.)
+         *
+         * @return {@code ~this}
+         */
         public BigInteger Not()
         {
             int[] result = new int[intLength()];
@@ -1423,13 +1423,13 @@ namespace NPOI.Util
             return valueOf(result);
         }
         /**
-     * Returns a BigInteger whose value is {@code (this | val)}.  (This method
-     * returns a negative BigInteger if and only if either this or val is
-     * negative.)
-     *
-     * @param val value to be OR'ed with this BigInteger.
-     * @return {@code this | val}
-     */
+         * Returns a BigInteger whose value is {@code (this | val)}.  (This method
+         * returns a negative BigInteger if and only if either this or val is
+         * negative.)
+         *
+         * @param val value to be OR'ed with this BigInteger.
+         * @return {@code this | val}
+         */
         public BigInteger Or(BigInteger val)
         {
             int[] result = new int[Math.Max(intLength(), val.intLength())];
@@ -1440,9 +1440,9 @@ namespace NPOI.Util
             return valueOf(result);
         }
         /**
-     * Package private methods used by BigDecimal code to multiply a BigInteger
-     * with a long. Assumes v is not equal to INFLATED.
-     */
+         * Package private methods used by BigDecimal code to multiply a BigInteger
+         * with a long. Assumes v is not equal to INFLATED.
+         */
         BigInteger multiply(long v)
         {
             if (v == 0 || _signum == 0)
@@ -1485,11 +1485,11 @@ namespace NPOI.Util
             return new BigInteger(rmag, rsign);
         }
         /**
-     * Returns a BigInteger whose value is {@code (this * val)}.
-     *
-     * @param  val value to be multiplied by this BigInteger.
-     * @return {@code this * val}
-     */
+         * Returns a BigInteger whose value is {@code (this * val)}.
+         *
+         * @param  val value to be multiplied by this BigInteger.
+         * @return {@code this * val}
+         */
         public BigInteger Multiply(BigInteger val)
         {
             if (val._signum == 0 || _signum == 0)
@@ -1501,11 +1501,11 @@ namespace NPOI.Util
             return new BigInteger(result, _signum == val._signum ? 1 : -1);
         }
         /**
-     * Returns a BigInteger whose value is {@code (this + val)}.
-     *
-     * @param  val value to be added to this BigInteger.
-     * @return {@code this + val}
-     */
+         * Returns a BigInteger whose value is {@code (this + val)}.
+         *
+         * @param  val value to be added to this BigInteger.
+         * @return {@code this + val}
+         */
         public BigInteger Add(BigInteger val)
         {
             if (val._signum == 0)
@@ -1525,10 +1525,10 @@ namespace NPOI.Util
             return new BigInteger(resultMag, cmp == _signum ? 1 : -1);
         }
         /**
-     * Adds the contents of the int arrays x and y. This method allocates
-     * a new int array to hold the answer and returns a reference to that
-     * array.
-     */
+         * Adds the contents of the int arrays x and y. This method allocates
+         * a new int array to hold the answer and returns a reference to that
+         * array.
+         */
         private static int[] add(int[] x, int[] y)
         {
             // If x is shorter, swap the two arrays
@@ -1572,11 +1572,11 @@ namespace NPOI.Util
             return result;
         }
         /**
-     * Returns a BigInteger whose value is {@code (this - val)}.
-     *
-     * @param  val value to be subtracted from this BigInteger.
-     * @return {@code this - val}
-     */
+         * Returns a BigInteger whose value is {@code (this - val)}.
+         *
+         * @param  val value to be subtracted from this BigInteger.
+         * @return {@code this - val}
+         */
         public BigInteger Subtract(BigInteger val)
         {
             if (val._signum == 0)
@@ -1629,12 +1629,12 @@ namespace NPOI.Util
             return result;
         }
         /**
-     * Returns a BigInteger whose value is {@code (this / val)}.
-     *
-     * @param  val value by which this BigInteger is to be divided.
-     * @return {@code this / val}
-     * @throws ArithmeticException if {@code val} is zero.
-     */
+         * Returns a BigInteger whose value is {@code (this / val)}.
+         *
+         * @param  val value by which this BigInteger is to be divided.
+         * @return {@code this / val}
+         * @throws ArithmeticException if {@code val} is zero.
+         */
         public BigInteger Divide(BigInteger val)
         {
             MutableBigInteger q = new MutableBigInteger(),
