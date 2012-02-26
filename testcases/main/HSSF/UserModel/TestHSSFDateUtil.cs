@@ -469,5 +469,24 @@ namespace TestCases.HSSF.UserModel
             DateTime expected = new DateTime(1982, 2, 18, 16, 48, 0);
             Assert.AreEqual(expected, actual);
         }
+        /**
+         * User reported a datetime issue in POI-2.5:
+         *  Setting Cell's value to Jan 1, 1900 without a time doesn't return the same value Set to
+         */
+        [TestMethod]
+        public void TestBug19172()
+        {
+            IWorkbook workbook = new HSSFWorkbook();
+            ISheet sheet = workbook.CreateSheet();
+            ICell cell = sheet.CreateRow(0).CreateCell(0);
+
+            DateTime valueToTest = new DateTime(1900, 1, 1);
+
+            cell.SetCellValue(valueToTest);
+
+            DateTime returnedValue = cell.DateCellValue;
+
+            Assert.AreEqual(valueToTest.TimeOfDay, returnedValue.TimeOfDay);
+        }
     }
 }

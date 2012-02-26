@@ -29,7 +29,11 @@ namespace NPOI.SS.Formula
      */
     public class FormulaShifter
     {
-
+        public enum ShiftMode
+        {
+            Row,
+            Sheet
+        }
         /**
          * Extern sheet index of sheet where moving is occurring
          */
@@ -37,7 +41,9 @@ namespace NPOI.SS.Formula
         private int _firstMovedIndex;
         private int _lastMovedIndex;
         private int _amountToMove;
-
+        private int _srcSheetIndex;
+        private int _dstSheetIndex;
+         private ShiftMode _mode;
         private FormulaShifter(int externSheetIndex, int firstMovedIndex, int lastMovedIndex, int amountToMove)
         {
             if (amountToMove == 0)
@@ -52,13 +58,31 @@ namespace NPOI.SS.Formula
             _firstMovedIndex = firstMovedIndex;
             _lastMovedIndex = lastMovedIndex;
             _amountToMove = amountToMove;
-        }
+            _mode = ShiftMode.Row;
 
+            _srcSheetIndex = _dstSheetIndex = -1;
+        }
+        /**
+    * Create an instance for shifting sheets.
+    *
+    * For example, this will be called on {@link org.apache.poi.hssf.usermodel.HSSFWorkbook#setSheetOrder(String, int)}  
+    */
+        private FormulaShifter(int srcSheetIndex, int dstSheetIndex)
+        {
+            _externSheetIndex = _firstMovedIndex = _lastMovedIndex = _amountToMove = -1;
+
+            _srcSheetIndex = srcSheetIndex;
+            _dstSheetIndex = dstSheetIndex;
+            _mode = ShiftMode.Sheet;
+        }
         public static FormulaShifter CreateForRowShift(int externSheetIndex, int firstMovedRowIndex, int lastMovedRowIndex, int numberOfRowsToMove)
         {
             return new FormulaShifter(externSheetIndex, firstMovedRowIndex, lastMovedRowIndex, numberOfRowsToMove);
         }
-
+        public static FormulaShifter CreateForSheetShift(int srcSheetIndex, int dstSheetIndex)
+        {
+            return new FormulaShifter(srcSheetIndex, dstSheetIndex);
+        }
         public override String ToString()
         {
             StringBuilder sb = new StringBuilder();
@@ -93,7 +117,16 @@ namespace NPOI.SS.Formula
 
         private Ptg AdjustPtg(Ptg ptg, int currentExternSheetIx)
         {
-            return AdjustPtgDueToRowMove(ptg, currentExternSheetIx);
+            //return AdjustPtgDueToRowMove(ptg, currentExternSheetIx);
+            switch (_mode)
+            {
+                case ShiftMode.Row:
+                    return AdjustPtgDueToRowMove(ptg, currentExternSheetIx);
+                case ShiftMode.Sheet:
+                    return AdjustPtgDueToShiftMove(ptg);
+                default:
+                    throw new InvalidOperationException("Unsupported shift mode: " + _mode);
+            }
         }
         /**
          * @return <c>true</c> if this Ptg needed to be changed
@@ -143,7 +176,25 @@ namespace NPOI.SS.Formula
             }
             return null;
         }
-
+        private Ptg AdjustPtgDueToShiftMove(Ptg ptg)
+        {
+            Ptg updatedPtg = null;
+            if (ptg is Ref3DPtg)
+            {
+                Ref3DPtg ref1 = (Ref3DPtg)ptg;
+                if (ref1.ExternSheetIndex == _srcSheetIndex)
+                {
+                    ref1.ExternSheetIndex = (_dstSheetIndex);
+                    updatedPtg = ref1;
+                }
+                else if (ref1.ExternSheetIndex == _dstSheetIndex)
+                {
+                    ref1.ExternSheetIndex = (_srcSheetIndex);
+                    updatedPtg = ref1;
+                }
+            }
+            return updatedPtg;
+        }
         private Ptg RowMoveRefPtg(RefPtgBase rptg)
         {
             int refRow = rptg.Row;

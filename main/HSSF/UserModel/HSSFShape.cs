@@ -24,7 +24,7 @@ namespace NPOI.HSSF.UserModel
     /// @author Glen Stampoultzis (glens at apache.org)
     /// </summary>
     [Serializable]
-    public abstract class HSSFShape:IShape
+    public abstract class HSSFShape : IShape
     {
         public static int LINEWIDTH_ONE_PT = 12700; // 12700 = 1pt
         public static int LINEWIDTH_DEFAULT = 9525;
@@ -32,6 +32,7 @@ namespace NPOI.HSSF.UserModel
         IShape parent;
         [NonSerialized]
         HSSFAnchor anchor;
+        protected HSSFPatriarch _patriarch;
         int lineStyleColor = 0x08000040;
         int fillColor = 0x08000009;
         int lineWidth = LINEWIDTH_DEFAULT;    

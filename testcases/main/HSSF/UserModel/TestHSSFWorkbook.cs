@@ -31,6 +31,9 @@ namespace TestCases.HSSF.UserModel
     using NPOI.DDF;
     using TestCases.SS.UserModel;
     using NPOI.SS.Formula.PTG;
+    using NPOI.SS.UserModel;
+    using NPOI.POIFS.FileSystem;
+    using NPOI.SS.Util;
     /**
      *
      */
@@ -618,11 +621,215 @@ namespace TestCases.HSSF.UserModel
             nr = wb.Workbook.GetNameRecord(2);
             Assert.AreEqual("Sheet2!E:F,Sheet2!$A$9:$IV$12", HSSFFormulaParser.ToFormulaString(wb,nr.NameDefinition)); // E:F,9:12
         }
+        /**
+     * Test that the storage clsid property is preserved
+     */
+        [TestMethod]
+        public void Test47920()
+        {
+            POIFSFileSystem fs1 = new POIFSFileSystem(POIDataSamples.GetSpreadSheetInstance().OpenResourceAsStream("47920.xls"));
+            IWorkbook wb = new HSSFWorkbook(fs1);
+            ClassID clsid1 = fs1.Root.StorageClsid;
+
+            MemoryStream out1 = new MemoryStream(4096);
+            wb.Write(out1);
+            byte[] bytes = out1.ToArray();
+            POIFSFileSystem fs2 = new POIFSFileSystem(new MemoryStream(bytes));
+            ClassID clsid2 = fs2.Root.StorageClsid;
+
+            Assert.IsTrue(clsid1.Equals(clsid2));
+        }
+
+        /**
+         * Tests that we can work with both {@link POIFSFileSystem}
+         *  and {@link NPOIFSFileSystem}
+         */
+        [TestMethod]
+        public void TestDifferentPOIFS()
+        {
+            throw new NotImplementedException("class NPOIFSFileSystem is not implemented");
+            // Open the two filesystems
+            //DirectoryNode[] files = new DirectoryNode[2];
+            //files[0] = (new POIFSFileSystem(HSSFTestDataSamples.OpenSampleFileStream("Simple.xls"))).Root;
+            //files[1] = (new NPOIFSFileSystem(HSSFTestDataSamples.GetSampeFile("Simple.xls"))).Root;
+
+            //// Open without preserving nodes 
+            //foreach (DirectoryNode dir in files)
+            //{
+            //    IWorkbook workbook = new HSSFWorkbook(dir, false);
+            //    ISheet sheet = workbook.GetSheetAt(0);
+            //    ICell cell = sheet.GetRow(0).GetCell(0);
+            //    Assert.AreEqual("ReplaceMe", cell.RichStringCellValue.String);
+            //}
+
+            //// Now re-check with preserving
+            //foreach (DirectoryNode dir in files)
+            //{
+            //    IWorkbook workbook = new HSSFWorkbook(dir, true);
+            //    ISheet sheet = workbook.GetSheetAt(0);
+            //    ICell cell = sheet.GetRow(0).GetCell(0);
+            //    Assert.AreEqual("ReplaceMe", cell.RichStringCellValue.String);
+            //}
+        }
+
+        [TestMethod]
+        public void TestWordDocEmbeddedInXls()
+        {
+            throw new NotImplementedException("class NPOIFSFileSystem is not implemented");
+            //// Open the two filesystems
+            //DirectoryNode[] files = new DirectoryNode[2];
+            //files[0] = (new POIFSFileSystem(HSSFTestDataSamples.OpenSampleFileStream("WithEmbeddedObjects.xls"))).Root;
+            //files[1] = (new NPOIFSFileSystem(HSSFTestDataSamples.GetSampeFile("WithEmbeddedObjects.xls"))).Root;
+
+            //// Check the embedded parts
+            //foreach (DirectoryNode root in files)
+            //{
+            //    IWorkbook hw = new HSSFWorkbook(root, true);
+            //    List<HSSFObjectData> objects = hw.AllEmbeddedObjects;
+            //    bool found = false;
+            //    for (int i = 0; i < objects.Size(); i++)
+            //    {
+            //        HSSFObjectData embeddedObject = objects.Get(i);
+            //        if (embeddedObject.HasDirectoryEntry())
+            //        {
+            //            DirectoryEntry dir = embeddedObject.Directory;
+            //            if (dir is DirectoryNode)
+            //            {
+            //                DirectoryNode dNode = (DirectoryNode)dir;
+            //                if (hasEntry(dNode, "WordDocument"))
+            //                {
+            //                    found = true;
+            //                }
+            //            }
+            //        }
+            //    }
+            //    Assert.IsTrue(found);
+            //}
+        }
+
+        /**
+         * Checks that we can open a workbook with NPOIFS, and write it out
+         *  again (via POIFS) and have it be valid
+         * @throws IOException
+         */
+        [TestMethod]
+        public void TestWriteWorkbookFromNPOIFS()
+        {
+            throw new NotImplementedException("class NPOIFSFileSystem is not implemented");
+            //InputStream is1 = HSSFTestDataSamples.OpenSampleFileStream("WithEmbeddedObjects.xls");
+            //NPOIFSFileSystem fs = new NPOIFSFileSystem(is1);
+
+            //// Start as NPOIFS
+            //IWorkbook wb = new HSSFWorkbook(fs.Root, true);
+            //Assert.AreEqual(3, wb.NumberOfSheets);
+            //Assert.AreEqual("Root xls", wb.GetSheetAt(0).GetRow(0).GetCell(0).StringCellValue);
+
+            //// Will switch to POIFS
+            //wb = HSSFTestDataSamples.WriteOutAndReadBack(wb);
+            //Assert.AreEqual(3, wb.NumberOfSheets);
+            //Assert.AreEqual("Root xls", wb.GetSheetAt(0).GetRow(0).GetCell(0).StringCellValue);
+        }
+
+        [TestMethod]
+        public void TestCellStylesLimit()
+        {
+            IWorkbook wb = new HSSFWorkbook();
+            int numBuiltInStyles = wb.NumCellStyles;
+            int MAX_STYLES = 4030;
+            int limit = MAX_STYLES - numBuiltInStyles;
+            for (int i = 0; i < limit; i++)
+            {
+                ICellStyle style = wb.CreateCellStyle();
+            }
+
+            Assert.AreEqual(MAX_STYLES, wb.NumCellStyles);
+            try
+            {
+                ICellStyle style = wb.CreateCellStyle();
+                Assert.Fail("expected exception");
+            }
+            catch (InvalidOperationException e)
+            {
+                Assert.AreEqual("The maximum number of cell styles was exceeded. " +
+                        "You can define up to 4000 styles in a .xls workbook", e.Message);
+            }
+            Assert.AreEqual(MAX_STYLES, wb.NumCellStyles);
+        }
+        [TestMethod]
+        public void TestSetSheetOrderHSSF()
+        {
+            IWorkbook wb = new HSSFWorkbook();
+            ISheet s1 = wb.CreateSheet("first sheet");
+            ISheet s2 = wb.CreateSheet("other sheet");
+
+            IName name1 = wb.CreateName();
+            name1.NameName = (/*setter*/"name1");
+            name1.RefersToFormula = (/*setter*/"'first sheet'!D1");
+
+            IName name2 = wb.CreateName();
+            name2.NameName = (/*setter*/"name2");
+            name2.RefersToFormula = (/*setter*/"'other sheet'!C1");
+
+
+            IRow s1r1 = s1.CreateRow(2);
+            ICell c1 = s1r1.CreateCell(3);
+            c1.SetCellValue(30);
+            ICell c2 = s1r1.CreateCell(2);
+            c2.CellFormula = (/*setter*/"SUM('other sheet'!C1,'first sheet'!C1)");
+
+            IRow s2r1 = s2.CreateRow(0);
+            ICell c3 = s2r1.CreateCell(1);
+            c3.CellFormula = (/*setter*/"'first sheet'!D3");
+            ICell c4 = s2r1.CreateCell(2);
+            c4.CellFormula = (/*setter*/"'other sheet'!D3");
+
+            // conditional formatting
+            ISheetConditionalFormatting sheetCF = s1.SheetConditionalFormatting;
+
+            IConditionalFormattingRule rule1 = sheetCF.CreateConditionalFormattingRule(
+                    ComparisonOperator.BETWEEN, "'first sheet'!D1", "'other sheet'!D1");
+
+            IConditionalFormattingRule[] cfRules = { rule1 };
+
+            CellRangeAddress[] regions = { new CellRangeAddress(2, 4, 0, 0), // A3:A5
+        };
+            sheetCF.AddConditionalFormatting(regions, cfRules);
+
+            wb.SetSheetOrder("other sheet", 0);
+
+            // names
+            Assert.AreEqual("'first sheet'!D1", wb.GetName("name1").RefersToFormula);
+            Assert.AreEqual("'other sheet'!C1", wb.GetName("name2").RefersToFormula);
+
+            // cells
+            Assert.AreEqual("SUM('other sheet'!C1,'first sheet'!C1)", c2.CellFormula);
+            Assert.AreEqual("'first sheet'!D3", c3.CellFormula);
+            Assert.AreEqual("'other sheet'!D3", c4.CellFormula);
+
+            // conditional formatting
+            IConditionalFormatting cf = sheetCF.GetConditionalFormattingAt(0);
+            Assert.AreEqual("'first sheet'!D1", cf.GetRule(0).Formula1);
+            Assert.AreEqual("'other sheet'!D1", cf.GetRule(0).Formula2);
+        }
+
+        private bool HasEntry(DirectoryNode dirNode, String entryName)
+        {
+            try
+            {
+                dirNode.GetEntry(entryName);
+                return true;
+            }
+            catch (FileNotFoundException e)
+            {
+                return false;
+            }
+        }
+
         [TestMethod]
         public void TestClonePictures()
         {
-            HSSFWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("SimpleWithImages.xls");
-            InternalWorkbook iwb = wb.Workbook;
+            IWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("SimpleWithImages.xls");
+            InternalWorkbook iwb = ((HSSFWorkbook)wb).Workbook;
             iwb.FindDrawingGroup();
 
             for (int pictureIndex = 1; pictureIndex <= 4; pictureIndex++)
@@ -644,6 +851,12 @@ namespace TestCases.HSSF.UserModel
                 EscherBSERecord bse = iwb.GetBSERecord(pictureIndex);
                 Assert.AreEqual(3, bse.Ref);
             }
+        }
+
+        [TestMethod]
+        public void TestChangeSheetNameWithSharedFormulas()
+        {
+            ChangeSheetNameWithSharedFormulas("shared_formulas.xls");
         }
     }
 }

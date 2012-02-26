@@ -52,7 +52,7 @@ namespace NPOI.HSSF.Record.Aggregates
         /** Creates a new instance of ValueRecordsAggregate */
 
         public RowRecordsAggregate()
-            : this(SharedValueManager.EMPTY)
+            : this(SharedValueManager.CreateEmpty())
         {
         }
 

@@ -286,7 +286,7 @@ namespace NPOI.SS.Util
             {
                 style |= FontStyle.Underline;
             }
-            Font font = new Font(font1.FontName, font1.FontHeightInPoints, style);
+            Font font = new Font(font1.FontName, font1.FontHeightInPoints, style, GraphicsUnit.Point);
             return font;
             //return new System.Drawing.Font(font1.FontName, font1.FontHeightInPoints);
         }

@@ -25,6 +25,7 @@ namespace NPOI.HSSF.UserModel
     using NPOI.DDF;
     using NPOI.Util;
     using NPOI.SS.UserModel;
+    using NPOI.HSSF.Model;
 
 
     /// <summary>
@@ -32,7 +33,7 @@ namespace NPOI.HSSF.UserModel
     /// @author Glen Stampoultzis
     /// @author Yegor Kozlov (yegor at apache.org)
     /// </summary>
-    public class HSSFPicture : HSSFSimpleShape,IPicture
+    public class HSSFPicture : HSSFSimpleShape, IPicture
     {
         /**
          * width of 1px in columns with default width in Units of 1/256 of a Char width
@@ -49,7 +50,7 @@ namespace NPOI.HSSF.UserModel
         private static int PX_ROW = 15;
 
         int pictureIndex;
-        HSSFPatriarch patriarch;
+        //HSSFPatriarch patriarch;
 
         /// <summary>
         /// Gets or sets the patriarch.
@@ -57,8 +58,8 @@ namespace NPOI.HSSF.UserModel
         /// <value>The patriarch.</value>
         public HSSFPatriarch Patriarch
         {
-            get { return patriarch; }
-            set { patriarch = value; }
+            get { return _patriarch; }
+            set { _patriarch = value; }
         }
 
         private static POILogger log = POILogFactory.GetLogger(typeof(HSSFPicture));
@@ -68,9 +69,10 @@ namespace NPOI.HSSF.UserModel
         /// </summary>
         /// <param name="parent">The parent.</param>
         /// <param name="anchor">The anchor.</param>
-        public HSSFPicture(HSSFShape parent, HSSFAnchor anchor):base(parent, anchor)
+        public HSSFPicture(HSSFShape parent, HSSFAnchor anchor)
+            : base(parent, anchor)
         {
-            
+
             this.ShapeType = (OBJECT_TYPE_PICTURE);
         }
 
@@ -187,7 +189,7 @@ namespace NPOI.HSSF.UserModel
         private float GetColumnWidthInPixels(int column)
         {
 
-            int cw = patriarch.sheet.GetColumnWidth(column);
+            int cw = _patriarch.sheet.GetColumnWidth(column);
             float px = GetPixelWidth(column);
 
             return cw / px;
@@ -201,10 +203,10 @@ namespace NPOI.HSSF.UserModel
         private float GetRowHeightInPixels(int i)
         {
 
-            IRow row = patriarch.sheet.GetRow(i);
+            IRow row = _patriarch.sheet.GetRow(i);
             float height;
             if (row != null) height = row.Height;
-            else height = patriarch.sheet.DefaultRowHeight;
+            else height = _patriarch.sheet.DefaultRowHeight;
 
             return height / PX_ROW;
         }
@@ -217,8 +219,8 @@ namespace NPOI.HSSF.UserModel
         private float GetPixelWidth(int column)
         {
 
-            int def = patriarch.sheet.DefaultColumnWidth * 256;
-            int cw = patriarch.sheet.GetColumnWidth(column);
+            int def = _patriarch.sheet.DefaultColumnWidth * 256;
+            int cw = _patriarch.sheet.GetColumnWidth(column);
 
             return cw == def ? PX_DEFAULT : PX_MODIFIED;
         }
@@ -237,7 +239,7 @@ namespace NPOI.HSSF.UserModel
         {
             //int hdpi = 96, vdpi = 96;
             //double mm2inch = 25.4;
-            
+
             //NodeList lst;
             //Element node = (Element)r.GetImageMetadata(0).GetAsTree("javax_imageio_1.0");
             //lst = node.GetElementsByTagName("HorizontalPixelSize");
@@ -246,7 +248,7 @@ namespace NPOI.HSSF.UserModel
             //lst = node.GetElementsByTagName("VerticalPixelSize");
             //if (lst != null && lst.GetLength == 1) vdpi = (int)(mm2inch / Float.ParseFloat(((Element)lst.item(0)).GetAttribute("value")));
 
-            return new Size( (int)r.HorizontalResolution,(int)r.VerticalResolution );
+            return new Size((int)r.HorizontalResolution, (int)r.VerticalResolution);
         }
 
         /// <summary>
@@ -255,7 +257,7 @@ namespace NPOI.HSSF.UserModel
         /// <returns>image dimension</returns>
         public Size GetImageDimension()
         {
-            EscherBSERecord bse = patriarch.sheet.book.GetBSERecord(pictureIndex);
+            EscherBSERecord bse = _patriarch.sheet.book.GetBSERecord(pictureIndex);
             byte[] data = bse.BlipRecord.PictureData;
             //int type = bse.BlipTypeWin32;
 
@@ -296,6 +298,20 @@ namespace NPOI.HSSF.UserModel
             //        break;
             //}
             //return size;
+        }
+        /**
+         * Return picture data for this shape
+         *
+         * @return picture data for this shape
+         */
+        public HSSFPictureData PictureData
+        {
+            get
+            {
+                InternalWorkbook iwb = ((_patriarch.sheet.Workbook) as HSSFWorkbook).Workbook;
+                EscherBlipRecord blipRecord = iwb.GetBSERecord(pictureIndex).BlipRecord;
+                return new HSSFPictureData(blipRecord);
+            }
         }
     }
 }

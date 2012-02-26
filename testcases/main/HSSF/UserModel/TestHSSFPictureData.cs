@@ -26,6 +26,8 @@ namespace TestCases.HSSF.UserModel
     using TestCases.HSSF;
     using System.Drawing;
     using System.Drawing.Imaging;
+    using NPOI.SS.UserModel;
+    using System.Collections.Generic;
 
 
     /**
@@ -72,6 +74,19 @@ namespace TestCases.HSSF.UserModel
                 {
                     //TODO: Test code for PICT, WMF and EMF
                 }
+            }
+        }
+        [TestMethod]
+        public void TestNotNullPictures()
+        {
+
+            IWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("SheetWithDrawing.xls");
+
+            // TODO - add GetFormat() to interface PictureData and genericise wb.AllPictures
+            List<HSSFPictureData> lst = (List<HSSFPictureData>)wb.GetAllPictures();
+            foreach (HSSFPictureData pict in lst)
+            {
+                Assert.IsNotNull(pict);
             }
         }
     }

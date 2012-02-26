@@ -55,9 +55,9 @@ namespace NPOI.HSSF.Model
         [NonSerialized]
         protected DimensionsRecord dims;
         [NonSerialized]
-        protected DefaultColWidthRecord defaultcolwidth = null;
+        protected DefaultColWidthRecord defaultcolwidth = new DefaultColWidthRecord();
         [NonSerialized]
-        protected DefaultRowHeightRecord defaultrowheight = null;
+        protected DefaultRowHeightRecord defaultrowheight = new DefaultRowHeightRecord();
         [NonSerialized]
         protected GridsetRecord gridset = null;
         [NonSerialized]
@@ -1157,7 +1157,7 @@ namespace NPOI.HSSF.Model
         {
             DefaultColWidthRecord retval = new DefaultColWidthRecord();
 
-            retval.ColWidth = (short)8;
+            retval.ColWidth = (short)DefaultColWidthRecord.DEFAULT_COLUMN_WIDTH;
             return retval;
         }
 

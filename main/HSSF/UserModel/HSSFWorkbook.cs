@@ -417,10 +417,19 @@ namespace NPOI.HSSF.UserModel
         /// <param name="pos">the position that we want to Insert the sheet into (0 based)</param>
         public void SetSheetOrder(String sheetname, int pos)
         {
+            int oldSheetIndex = GetSheetIndex(sheetname);
             HSSFSheet sheet = (HSSFSheet)this.GetSheet(sheetname);
-            _sheets.RemoveAt(GetSheetIndex(sheetname));
+            _sheets.RemoveAt(oldSheetIndex);
             _sheets.Insert(pos, sheet);
             workbook.SetSheetOrder(sheetname, pos);
+
+            FormulaShifter shifter = FormulaShifter.CreateForSheetShift(oldSheetIndex, pos);
+            foreach (HSSFSheet sheet1 in _sheets)
+            {
+                sheet1.Sheet.UpdateFormulasAfterCellShift(shifter, /* not used */ -1);
+            }
+
+            workbook.UpdateNamesAfterCellShift(shifter);
         }
 
         /// <summary>
@@ -1644,7 +1653,21 @@ namespace NPOI.HSSF.UserModel
                     escherRecord.Display(0);
             }
         }
-
+        internal void InitDrawings()
+        {
+            DrawingManager2 mgr = workbook.FindDrawingGroup();
+            if (mgr != null)
+            {
+                for (int i = 0; i < NumberOfSheets; i++)
+                {
+                    IDrawing tmp = GetSheetAt(i).DrawingPatriarch;
+                }
+            }
+            else
+            {
+                workbook.CreateDrawingGroup();
+            }
+        }
         /// <summary>
         /// Adds a picture to the workbook.
         /// </summary>
@@ -1654,6 +1677,8 @@ namespace NPOI.HSSF.UserModel
         /// <returns>the index to this picture (1 based).</returns>
         public int AddPicture(byte[] pictureData, NPOI.SS.UserModel.PictureType format)
         {
+            InitDrawings();
+
             byte[] uid = NewUID;
             EscherBitmapBlip blipRecord = new EscherBitmapBlip();
             blipRecord.RecordId = (short)(EscherBitmapBlip.RECORD_ID_START + format);

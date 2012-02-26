@@ -27,12 +27,13 @@ namespace TestCases.HSSF.UserModel
     using TestCases.SS.Formula;
     using NPOI.SS.Formula.Eval;
     using NPOI.HSSF.Record;
+    using TestCases.SS.UserModel;
     /**
      * 
      * @author Josh Micich
      */
     [TestClass]
-    public class TestHSSFFormulaEvaluator
+    public class TestHSSFFormulaEvaluator : BaseTestFormulaEvaluator
     {
         /// <summary>
         ///  Some of the tests are depending on the american culture.
@@ -42,7 +43,10 @@ namespace TestCases.HSSF.UserModel
         {
             System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
         }
-
+        public TestHSSFFormulaEvaluator()
+            : base(HSSFITestDataProvider.Instance)
+        {
+        }
         /**
          * Test that the HSSFFormulaEvaluator can Evaluate simple named ranges
          *  (single cells and rectangular areas)
@@ -58,38 +62,7 @@ namespace TestCases.HSSF.UserModel
             Assert.AreEqual(NPOI.SS.UserModel.CellType.NUMERIC, cv.CellType);
             Assert.AreEqual(3.72, cv.NumberValue, 0.0);
         }
-        [TestMethod]
-        public void TestFullColumnRefs()
-        {
-            HSSFWorkbook wb = new HSSFWorkbook();
-            NPOI.SS.UserModel.ISheet sheet = wb.CreateSheet("Sheet1");
-            IRow row = sheet.CreateRow(0);
-            ICell cell0 = row.CreateCell(0);
-            cell0.CellFormula = ("sum(D:D)");
-            ICell cell1 = row.CreateCell(1);
-            cell1.CellFormula = ("sum(D:E)");
-
-            // some values in column D
-            setValue(sheet, 1, 3, 5.0);
-            setValue(sheet, 2, 3, 6.0);
-            setValue(sheet, 5, 3, 7.0);
-            setValue(sheet, 50, 3, 8.0);
-
-            // some values in column E
-            setValue(sheet, 1, 4, 9.0);
-            setValue(sheet, 2, 4, 10.0);
-            setValue(sheet, 30000, 4, 11.0);
-
-            // some other values 
-            setValue(sheet, 1, 2, 100.0);
-            setValue(sheet, 2, 5, 100.0);
-            setValue(sheet, 3, 6, 100.0);
-
-
-            HSSFFormulaEvaluator fe = new HSSFFormulaEvaluator(wb);
-            Assert.AreEqual(26.0, fe.Evaluate(cell0).NumberValue, 0.0);
-            Assert.AreEqual(56.0, fe.Evaluate(cell1).NumberValue, 0.0);
-        }
+        
 
         private static void setValue(NPOI.SS.UserModel.ISheet sheet, int rowIndex, int colIndex, double value)
         {
@@ -101,52 +74,7 @@ namespace TestCases.HSSF.UserModel
             row.CreateCell(colIndex).SetCellValue(value);
         }
 
-        /**
-         * {@link HSSFFormulaEvaluator#Evaluate(Cell)} should behave the same whether the cell
-         * is <c>null</c> or blank.
-         */
-        [TestMethod]
-        public void TestEvaluateBlank()
-        {
-            HSSFWorkbook wb = new HSSFWorkbook();
-            HSSFFormulaEvaluator fe = new HSSFFormulaEvaluator(wb);
-            Assert.IsNull(fe.Evaluate(null));
-            NPOI.SS.UserModel.ISheet sheet = wb.CreateSheet("Sheet1");
-            ICell cell = sheet.CreateRow(0).CreateCell(0);
-            Assert.IsNull(fe.Evaluate(cell));
-        }
-        /**
- * Test for bug due to attempt to convert a cached formula error result to a boolean
- */
-        [TestMethod]
-        public void TestUpdateCachedFormulaResultFromErrorToNumber_bug46479()
-        {
-            HSSFWorkbook wb = new HSSFWorkbook();
-            ISheet sheet = wb.CreateSheet("Sheet1");
-            IRow row = sheet.CreateRow(0);
-            ICell cellA1 = row.CreateCell(0);
-            ICell cellB1 = row.CreateCell(1);
-            cellB1.CellFormula = "A1+1";
-            HSSFFormulaEvaluator fe = new HSSFFormulaEvaluator(wb);
-
-            cellA1.SetCellErrorValue((byte)HSSFErrorConstants.ERROR_NAME);
-            fe.EvaluateFormulaCell(cellB1);
-
-            cellA1.SetCellValue(2.5);
-            fe.NotifyUpdateCell(cellA1);
-            try
-            {
-                fe.EvaluateInCell(cellB1);
-            }
-            catch (InvalidOperationException e)
-            {
-                if (e.Message.Equals("Cannot get a numeric value from a error formula cell"))
-                {
-                    throw new AssertFailedException("Identified bug 46479a");
-                }
-            }
-            Assert.AreEqual(3.5, cellB1.NumericCellValue, 0.0);
-        }
+        
 
         /**
          * When evaluating defined names, POI has to decide whether it is capable.  Currently
@@ -249,6 +177,73 @@ namespace TestCases.HSSF.UserModel
             }
             Assert.AreEqual(3, evalCount);
             Assert.AreEqual(2.0, ((NumberEval)ve).NumberValue, 0D);
+        }
+        /**
+	 * Ensures that we can handle NameXPtgs in the formulas
+	 *  we Parse.
+	 */
+        [TestMethod]
+        public void TestXRefs()
+        {
+            IWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("XRefCalc.xls");
+            IWorkbook wbData = HSSFTestDataSamples.OpenSampleWorkbook("XRefCalcData.xls");
+            ICell cell;
+
+            // VLookup on a name in another file
+            cell = wb.GetSheetAt(0).GetRow(1).GetCell(2);
+            Assert.AreEqual(CellType.FORMULA, cell.CellType);
+            Assert.AreEqual(CellType.NUMERIC, cell.CachedFormulaResultType);
+            Assert.AreEqual(12.30, cell.NumericCellValue, 0.0001);
+            // WARNING - this is wrong!
+            // The file name should be Showing, but bug #45970 is fixed
+            //  we seem to loose it
+            Assert.AreEqual("VLOOKUP(PART,COSTS,2,FALSE)", cell.CellFormula);
+
+
+            // Simple reference to a name in another file
+            cell = wb.GetSheetAt(0).GetRow(1).GetCell(4);
+            Assert.AreEqual(CellType.FORMULA, cell.CellType);
+            Assert.AreEqual(CellType.NUMERIC, cell.CachedFormulaResultType);
+            Assert.AreEqual(36.90, cell.NumericCellValue, 0.0001);
+            // WARNING - this is wrong!
+            // The file name should be Showing, but bug #45970 is fixed
+            //  we seem to loose it
+            Assert.AreEqual("Cost*Markup_Cost", cell.CellFormula);
+
+
+            // Evaluate the cells
+            HSSFFormulaEvaluator eval = new HSSFFormulaEvaluator(wb);
+            HSSFFormulaEvaluator.SetupEnvironment(
+                  new String[] { "XRefCalc.xls", "XRefCalcData.xls" },
+                  new HSSFFormulaEvaluator[] {
+                  eval,
+                  new HSSFFormulaEvaluator(wbData)
+            }
+            );
+            eval.EvaluateFormulaCell(
+                  wb.GetSheetAt(0).GetRow(1).GetCell(2)
+            );
+            eval.EvaluateFormulaCell(
+                  wb.GetSheetAt(0).GetRow(1).GetCell(4)
+            );
+
+
+            // Re-check VLOOKUP one
+            cell = wb.GetSheetAt(0).GetRow(1).GetCell(2);
+            Assert.AreEqual(CellType.FORMULA, cell.CellType);
+            Assert.AreEqual(CellType.NUMERIC, cell.CachedFormulaResultType);
+            Assert.AreEqual(12.30, cell.NumericCellValue, 0.0001);
+
+            // Re-check ref one
+            cell = wb.GetSheetAt(0).GetRow(1).GetCell(4);
+            Assert.AreEqual(CellType.FORMULA, cell.CellType);
+            Assert.AreEqual(CellType.NUMERIC, cell.CachedFormulaResultType);
+            Assert.AreEqual(36.90, cell.NumericCellValue, 0.0001);
+        }
+        [TestMethod]
+        public void TestSharedFormulas()
+        {
+            BaseTestSharedFormulas("shared_formulas.xls");
         }
     }
 }

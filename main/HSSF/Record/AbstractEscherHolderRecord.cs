@@ -24,6 +24,8 @@ namespace NPOI.HSSF.Record
     using System.Collections;
     using NPOI.DDF;
     using NPOI.Util;
+    using System.Collections.Generic;
+    using NPOI.HSSF.Util;
 
     /**
      * The escher container record is used to hold escher records.  It is abstract and
@@ -48,13 +50,14 @@ namespace NPOI.HSSF.Record
             //}
         }
 
-        private IList escherRecords;
-        private byte[] rawData;
+        private List<EscherRecord> escherRecords;
+        private LazilyConcatenatedByteArray rawDataContainer = new LazilyConcatenatedByteArray();
+        //private byte[] rawData;
 
 
         public AbstractEscherHolderRecord()
         {
-            escherRecords = new ArrayList();
+            escherRecords = new List<EscherRecord>();
         }
 
         /**
@@ -64,10 +67,10 @@ namespace NPOI.HSSF.Record
          */
         public AbstractEscherHolderRecord(RecordInputStream in1)
         {
-            escherRecords = new ArrayList();
+            escherRecords = new List<EscherRecord>();
             if (!DESERIALISE)
             {
-                rawData = in1.ReadRemainder();
+                rawDataContainer.Concatenate(in1.ReadRemainder());
             }
             else
             {
@@ -79,10 +82,12 @@ namespace NPOI.HSSF.Record
 
         protected void ConvertRawBytesToEscherRecords()
         {
+            byte[] rawData = RawData;
             ConvertToEscherRecords(0, rawData.Length, rawData);
         }
         private void ConvertToEscherRecords(int offset, int size, byte[] data)
         {
+            escherRecords.Clear();
             EscherRecordFactory recordFactory = new DefaultEscherRecordFactory();
             int pos = offset;
             while (pos < offset + size)
@@ -99,12 +104,11 @@ namespace NPOI.HSSF.Record
             StringBuilder buffer = new StringBuilder();
 
             String nl = Environment.NewLine;
-            buffer.Append('[' +RecordName + ']' + nl);
+            buffer.Append('[' + RecordName + ']' + nl);
             if (escherRecords.Count == 0)
                 buffer.Append("No Escher Records Decoded" + nl);
-            for (IEnumerator iterator = escherRecords.GetEnumerator(); iterator.MoveNext(); )
+            foreach (EscherRecord r in escherRecords)
             {
-                EscherRecord r = (EscherRecord)iterator.Current;
                 buffer.Append(r.ToString());
             }
             buffer.Append("[/" + RecordName + ']' + nl);
@@ -114,10 +118,11 @@ namespace NPOI.HSSF.Record
 
         protected abstract String RecordName { get; }
 
-        public override int Serialize(int offset, byte [] data)
+        public override int Serialize(int offset, byte[] data)
         {
             LittleEndian.PutShort(data, 0 + offset, Sid);
             LittleEndian.PutShort(data, 2 + offset, (short)(RecordSize - 4));
+            byte[] rawData = RawData;
             if (escherRecords.Count == 0 && rawData != null)
             {
                 LittleEndian.PutShort(data, 0 + offset, Sid);
@@ -125,45 +130,18 @@ namespace NPOI.HSSF.Record
                 Array.Copy(rawData, 0, data, 4 + offset, rawData.Length);
                 return rawData.Length + 4;
             }
-            else
-            {
-                LittleEndian.PutShort(data, 0 + offset, Sid);
-                LittleEndian.PutShort(data, 2 + offset, (short)(RecordSize - 4));
+            LittleEndian.PutShort(data, 0 + offset, Sid);
+            LittleEndian.PutShort(data, 2 + offset, (short)(RecordSize - 4));
 
-                int pos = offset + 4;
-                for (IEnumerator iterator = escherRecords.GetEnumerator(); iterator.MoveNext(); )
-                {
-                    EscherRecord r = (EscherRecord)iterator.Current;
-                    pos += r.Serialize(pos, data);
-                }
+            int pos = offset + 4;
+            foreach (EscherRecord r in escherRecords)
+            {
+                pos += r.Serialize(pos, data, new NullEscherSerializationListener());
             }
             return RecordSize;
         }
 
-        //    public override int Serialize(int offset, byte [] data)
-        //    {
-        //        if (escherRecords.Count == 0 && rawData != null)
-        //        {
-        //            Array.Copy( rawData, 0, data, offset, rawData.Length);
-        //            return rawData.Length;
-        //        }
-        //        else
-        //        {
-        //            collapseShapeInformation();
-        //
-        //            LittleEndian.PutShort(data, 0 + offset, Sid);
-        //            LittleEndian.PutShort(data, 2 + offset, (short)(RecordSize - 4));
-        //
-        //            int pos = offset + 4;
-        //            for ( IEnumerator iterator = escherRecords.GetEnumerator(); iterator.MoveNext(); )
-        //            {
-        //                EscherRecord r = (EscherRecord) iterator.Current;
-        //                pos += r.Serialize(pos, data );
-        //            }
-        //
-        //            return RecordSize;
-        //        }
-        //    }
+
 
         /**
          * Size of record (including 4 byte header)
@@ -172,6 +150,7 @@ namespace NPOI.HSSF.Record
         {
             get
             {
+                byte[] rawData = RawData;
                 if (escherRecords.Count == 0 && rawData != null)
                 {
                     return rawData.Length + 4;
@@ -179,9 +158,9 @@ namespace NPOI.HSSF.Record
                 else
                 {
                     int size = 4;
-                    for (IEnumerator iterator = escherRecords.GetEnumerator(); iterator.MoveNext(); )
+                    foreach (EscherRecord r in escherRecords)
                     {
-                        EscherRecord r = (EscherRecord)iterator.Current;
+                        //EscherRecord r = (EscherRecord)iterator.Current;
                         size += r.RecordSize;
                     }
                     return size;
@@ -228,14 +207,15 @@ namespace NPOI.HSSF.Record
             escherRecords.Insert(index, element);
         }
 
-        public int AddEscherRecord(EscherRecord element)
+        public bool AddEscherRecord(EscherRecord element)
         {
-            return escherRecords.Add(element);
+            escherRecords.Add(element);
+            return true;
         }
 
-        public IList EscherRecords
+        public List<EscherRecord> EscherRecords
         {
-            get{return escherRecords;}
+            get { return escherRecords; }
         }
 
         public void ClearEscherRecords()
@@ -270,7 +250,7 @@ namespace NPOI.HSSF.Record
         {
             return FindFirstWithId(id, EscherRecords);
         }
-        private EscherRecord FindFirstWithId(short id, IList records)
+        private EscherRecord FindFirstWithId(short id, List<EscherRecord> records)
         {
             // Check at our level
             for (IEnumerator it = records.GetEnumerator(); it.MoveNext(); )
@@ -313,26 +293,22 @@ namespace NPOI.HSSF.Record
          */
         public void Join(AbstractEscherHolderRecord record)
         {
-            int Length = this.rawData.Length + record.RawData.Length;
-            byte[] data = new byte[Length];
-            Array.Copy(rawData, 0, data, 0, rawData.Length);
-            Array.Copy(record.RawData, 0, data, rawData.Length, record.RawData.Length);
-            rawData = data;
+            rawDataContainer.Concatenate(record.RawData);
         }
 
         public void ProcessContinueRecord(byte[] record)
         {
-            int Length = this.rawData.Length + record.Length;
-            byte[] data = new byte[Length];
-            Array.Copy(rawData, 0, data, 0, rawData.Length);
-            Array.Copy(record, 0, data, rawData.Length, record.Length);
-            rawData = data;
+            rawDataContainer.Concatenate(record);
         }
 
         public byte[] RawData
         {
-            get { return rawData; }
-            set { this.rawData = value; }
+            get { return rawDataContainer.ToArray(); }
+            set
+            {
+                rawDataContainer.Clear();
+                rawDataContainer.Concatenate(value);
+            }
         }
 
         /**
@@ -340,10 +316,11 @@ namespace NPOI.HSSF.Record
          */
         public void Decode()
         {
+            byte[] rawData = RawData;
             ConvertToEscherRecords(0, rawData.Length, rawData);
         }
 
-    }  
+    }
 
 }
 

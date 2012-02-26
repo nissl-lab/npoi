@@ -191,12 +191,13 @@ namespace TestCases.HSSF.Record.Aggregates
          * Convenience test method for digging the {@link SharedValueManager} out of a
          * {@link RowRecordsAggregate}.
          */
-        public static SharedValueManager extractFromRRA(RowRecordsAggregate rra)
+        public static SharedValueManager ExtractFromRRA(RowRecordsAggregate rra)
         {
             FieldInfo f;
             try
             {
-                f = typeof(RowRecordsAggregate).GetField("_sharedValueManager");
+                f = typeof(RowRecordsAggregate).GetField("_sharedValueManager", BindingFlags.NonPublic | BindingFlags.Instance);
+                //typeof(RowRecordsAggregate).("_sharedValueManager");
             }
             catch (NotSupportedException e)
             {

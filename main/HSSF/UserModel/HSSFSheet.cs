@@ -1747,15 +1747,19 @@ namespace NPOI.HSSF.UserModel
         /// <returns>The new patriarch.</returns>
         public NPOI.SS.UserModel.IDrawing CreateDrawingPatriarch()
         {
-            // Create the drawing Group if it doesn't already exist.
-            book.CreateDrawingGroup();
+            if (_patriarch == null)
+            {
+                // Create the drawing group if it doesn't already exist.
+                _workbook.InitDrawings();
 
-            _sheet.AggregateDrawingRecords(book.DrawingManager, true);
-            EscherAggregate agg = (EscherAggregate)_sheet.FindFirstRecordBySid(EscherAggregate.sid);
-            _patriarch = new HSSFPatriarch(this, agg);
-            agg.Clear();     // Initially the behaviour will be to clear out any existing shapes in the _sheet when
-            // creating a new patriarch.
-            agg.Patriarch = _patriarch;
+                if (_patriarch == null)
+                {
+                    _sheet.AggregateDrawingRecords(book.DrawingManager, true);
+                    EscherAggregate agg = (EscherAggregate)_sheet.FindFirstRecordBySid(EscherAggregate.sid);
+                    _patriarch = new HSSFPatriarch(this, agg);
+                    agg.Patriarch=(_patriarch);
+                }
+            }
             return _patriarch;
         }
 

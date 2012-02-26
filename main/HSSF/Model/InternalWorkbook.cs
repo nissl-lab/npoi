@@ -292,7 +292,7 @@ namespace NPOI.HSSF.Model
 
             if (retval.windowOne == null)
             {
-                retval.windowOne = (WindowOneRecord)retval.CreateWindowOne();
+                retval.windowOne = (WindowOneRecord)CreateWindowOne();
             }
             //if (log.Check(POILogger.DEBUG))
             //    log.Log(DEBUG, "exit Create workbook from existing file function");
@@ -323,43 +323,42 @@ namespace NPOI.HSSF.Model
             retval.records.Records=records;
             List<FormatRecord> formats = new List<FormatRecord>(8);
 
-            records.Add(retval.CreateBOF());
+            records.Add(CreateBOF());
             records.Add(new InterfaceHdrRecord(CODEPAGE));
-            records.Add(retval.CreateMMS());
+            records.Add(CreateMMS());
             records.Add(InterfaceEndRecord.Instance);
-            records.Add(retval.CreateWriteAccess());
-            records.Add(retval.CreateCodepage());
-            records.Add(retval.CreateDSF());
-            records.Add(retval.CreateTabId());
+            records.Add(CreateWriteAccess());
+            records.Add(CreateCodepage());
+            records.Add(CreateDSF());
+            records.Add(CreateTabId());
             retval.records.Tabpos=records.Count - 1;
-            records.Add(retval.CreateFnGroupCount());
-            records.Add(retval.CreateWindowProtect());
-            records.Add(retval.CreateProtect());
+            records.Add(CreateFnGroupCount());
+            records.Add(CreateWindowProtect());
+            records.Add(CreateProtect());
             retval.records.Protpos=records.Count - 1;
-            records.Add(retval.CreatePassword());
-            records.Add(retval.CreateProtectionRev4());
-            records.Add(retval.CreatePasswordRev4());
-            retval.windowOne = (WindowOneRecord)retval.CreateWindowOne();
+            records.Add(CreatePassword());
+            records.Add(CreateProtectionRev4());
+            records.Add(CreatePasswordRev4());
+            retval.windowOne = (WindowOneRecord)CreateWindowOne();
             records.Add(retval.windowOne);
-            records.Add(retval.CreateBackup());
+            records.Add(CreateBackup());
             retval.records.Backuppos=records.Count - 1;
-            records.Add(retval.CreateHideObj());
-            records.Add(retval.CreateDateWindow1904());
-            records.Add(retval.CreatePrecision());
-            records.Add(retval.CreateRefreshAll());
-            records.Add(retval.CreateBookBool());
-            records.Add(retval.CreateFont());
-            records.Add(retval.CreateFont());
-            records.Add(retval.CreateFont());
-            records.Add(retval.CreateFont());
+            records.Add(CreateHideObj());
+            records.Add(CreateDateWindow1904());
+            records.Add(CreatePrecision());
+            records.Add(CreateRefreshAll());
+            records.Add(CreateBookBool());
+            records.Add(CreateFont());
+            records.Add(CreateFont());
+            records.Add(CreateFont());
+            records.Add(CreateFont());
             retval.records.Fontpos=records.Count - 1;   // last font record postion
             retval.numfonts = 4;
 
             // Set up format records
             for (int i = 0; i <= 7; i++)
             {
-                Record rec;
-                rec = retval.CreateFormat(i);
+                Record rec = CreateFormat(i);
                 retval.maxformatid = retval.maxformatid >= ((FormatRecord)rec).IndexCode ? retval.maxformatid : ((FormatRecord)rec).IndexCode;
                 formats.Add((FormatRecord)rec);
                 records.Add(rec);
@@ -368,21 +367,21 @@ namespace NPOI.HSSF.Model
 
             for (int k = 0; k < 21; k++)
             {
-                records.Add(retval.CreateExtendedFormat(k));
+                records.Add(CreateExtendedFormat(k));
                 retval.numxfs++;
             }
             retval.records.Xfpos=records.Count - 1;
             for (int k = 0; k < 6; k++)
             {
-                records.Add(retval.CreateStyle(k));
+                records.Add(CreateStyle(k));
             }
-            records.Add(retval.CreateUseSelFS());
+            records.Add(CreateUseSelFS());
 
             int nBoundSheets = 1; // now just do 1
             for (int k = 0; k < nBoundSheets; k++)
             {
                 BoundSheetRecord bsr =
-                        (BoundSheetRecord)retval.CreateBoundSheet(k);
+                        (BoundSheetRecord)CreateBoundSheet(k);
 
                 records.Add(bsr);
                 retval.boundsheets.Add(bsr);
@@ -390,16 +389,16 @@ namespace NPOI.HSSF.Model
             }
             //        retval.records.supbookpos = retval.records.bspos + 1;
             //        retval.records.namepos = retval.records.supbookpos + 2;
-            records.Add(retval.CreateCountry());
+            records.Add(CreateCountry());
             for (int k = 0; k < nBoundSheets; k++)
             {
                 retval.OrCreateLinkTable.CheckExternSheet(k);
             }
-            retval.sst = (SSTRecord)retval.CreateSST();
+            retval.sst = new SSTRecord();
             records.Add(retval.sst);
-            records.Add(retval.CreateExtendedSST());
+            records.Add(CreateExtendedSST());
 
-            records.Add(retval.CreateEOF());
+            records.Add(EOFRecord.instance);
             //if (log.Check(POILogger.DEBUG))
             //    log.Log(DEBUG, "exit Create new workbook from scratch");
             return retval;
@@ -1082,7 +1081,7 @@ namespace NPOI.HSSF.Model
         {
             //if (log.Check(POILogger.DEBUG))
             //    log.Log(DEBUG, "creating new SST via InsertSST!");
-            sst = (SSTRecord)CreateSST();
+            sst = new SSTRecord();
             records.Add(records.Count- 1, CreateExtendedSST());
             records.Add(records.Count - 2, sst);
         }
@@ -1209,7 +1208,7 @@ namespace NPOI.HSSF.Model
          * @return record containing a BOFRecord
          */
 
-        protected Record CreateBOF()
+        private static Record CreateBOF()
         {
             BOFRecord retval = new BOFRecord();
 
@@ -1247,7 +1246,7 @@ namespace NPOI.HSSF.Model
          * @return record containing a MMSRecord
          */
 
-        protected Record CreateMMS()
+        private static Record CreateMMS()
         {
             MMSRecord retval = new MMSRecord();
 
@@ -1276,7 +1275,7 @@ namespace NPOI.HSSF.Model
          * @return record containing a WriteAccessRecord
          */
 
-        protected Record CreateWriteAccess()
+        private static Record CreateWriteAccess()
         {
             WriteAccessRecord retval = new WriteAccessRecord();
 
@@ -1300,7 +1299,7 @@ namespace NPOI.HSSF.Model
          * @return record containing a CodepageRecord
          */
 
-        protected Record CreateCodepage()
+        private static Record CreateCodepage()
         {
             CodepageRecord retval = new CodepageRecord();
 
@@ -1315,7 +1314,7 @@ namespace NPOI.HSSF.Model
          * @return record containing a DSFRecord
          */
 
-        protected Record CreateDSF()
+        private static Record CreateDSF()
         {
             return new DSFRecord(false); // we don't even support double stream files
         }
@@ -1328,7 +1327,7 @@ namespace NPOI.HSSF.Model
          * @return record containing a TabIdRecord
          */
 
-        protected Record CreateTabId()
+        private static Record CreateTabId()
         {
             TabIdRecord retval = new TabIdRecord();
             short[] tabidarray = {
@@ -1346,7 +1345,7 @@ namespace NPOI.HSSF.Model
          * @return record containing a FnGroupCountRecord
          */
 
-        protected Record CreateFnGroupCount()
+        private static Record CreateFnGroupCount()
         {
             FnGroupCountRecord retval = new FnGroupCountRecord();
 
@@ -1361,7 +1360,7 @@ namespace NPOI.HSSF.Model
          * @return record containing a WindowProtectRecord
          */
 
-        protected Record CreateWindowProtect()
+        private static Record CreateWindowProtect()
         {
             // by default even when we support it we won't
             // want it to be protected
@@ -1375,7 +1374,7 @@ namespace NPOI.HSSF.Model
          * @return record containing a ProtectRecord
          */
 
-        protected ProtectRecord CreateProtect()
+        private static ProtectRecord CreateProtect()
         {
             return new ProtectRecord(false);
         }
@@ -1387,7 +1386,7 @@ namespace NPOI.HSSF.Model
          * @return record containing a PasswordRecord
          */
 
-        protected Record CreatePassword()
+        private static Record CreatePassword()
         {
             return new PasswordRecord(0x0000); // no password by default!
         }
@@ -1399,7 +1398,7 @@ namespace NPOI.HSSF.Model
          * @return record containing a ProtectionRev4Record
          */
 
-        protected ProtectionRev4Record CreateProtectionRev4()
+        private static ProtectionRev4Record CreateProtectionRev4()
         {
             return new ProtectionRev4Record(false);
         }
@@ -1411,7 +1410,7 @@ namespace NPOI.HSSF.Model
          * @return record containing a PasswordRev4Record
          */
 
-        protected Record CreatePasswordRev4()
+        private static Record CreatePasswordRev4()
         {
             return new PasswordRev4Record(0x0000);
         }
@@ -1432,7 +1431,7 @@ namespace NPOI.HSSF.Model
          * @return record containing a WindowOneRecord
          */
 
-        protected Record CreateWindowOne()
+        private static Record CreateWindowOne()
         {
             WindowOneRecord retval = new WindowOneRecord();
 
@@ -1455,7 +1454,7 @@ namespace NPOI.HSSF.Model
          * @return record containing a BackupRecord
          */
 
-        protected Record CreateBackup()
+        private static Record CreateBackup()
         {
             BackupRecord retval = new BackupRecord();
 
@@ -1470,7 +1469,7 @@ namespace NPOI.HSSF.Model
          * @return record containing a HideObjRecord
          */
 
-        protected Record CreateHideObj()
+        private static Record CreateHideObj()
         {
             HideObjRecord retval = new HideObjRecord();
 
@@ -1485,7 +1484,7 @@ namespace NPOI.HSSF.Model
          * @return record containing a DateWindow1904Record
          */
 
-        protected Record CreateDateWindow1904()
+        private static Record CreateDateWindow1904()
         {
             DateWindow1904Record retval = new DateWindow1904Record();
 
@@ -1500,7 +1499,7 @@ namespace NPOI.HSSF.Model
          * @return record containing a PrecisionRecord
          */
 
-        protected Record CreatePrecision()
+        private static Record CreatePrecision()
         {
             PrecisionRecord retval = new PrecisionRecord();
 
@@ -1515,7 +1514,7 @@ namespace NPOI.HSSF.Model
          * @return record containing a RefreshAllRecord
          */
 
-        protected Record CreateRefreshAll()
+        private static Record CreateRefreshAll()
         {
             return new RefreshAllRecord(false);
         }
@@ -1527,7 +1526,7 @@ namespace NPOI.HSSF.Model
          * @return record containing a BookBoolRecord
          */
 
-        protected Record CreateBookBool()
+        private static Record CreateBookBool()
         {
             BookBoolRecord retval = new BookBoolRecord();
 
@@ -1549,7 +1548,7 @@ namespace NPOI.HSSF.Model
          * @return record containing a FontRecord
          */
 
-        protected Record CreateFont()
+        private static Record CreateFont()
         {
             FontRecord retval = new FontRecord();
 
@@ -1643,7 +1642,7 @@ namespace NPOI.HSSF.Model
          * @see org.apache.poi.hssf.record.Record
          */
 
-        protected Record CreateExtendedFormat(int id)
+        private static Record CreateExtendedFormat(int id)
         {   // we'll need multiple editions
             ExtendedFormatRecord retval = new ExtendedFormatRecord();
 
@@ -1973,7 +1972,7 @@ namespace NPOI.HSSF.Model
          * @return ExtendedFormatRecord with intial defaults (cell-type)
          */
 
-        protected ExtendedFormatRecord CreateExtendedFormat()
+        private static ExtendedFormatRecord CreateExtendedFormat()
         {
             ExtendedFormatRecord retval = new ExtendedFormatRecord();
 
@@ -2032,7 +2031,7 @@ namespace NPOI.HSSF.Model
          * @see org.apache.poi.hssf.record.Record
          */
 
-        protected Record CreateStyle(int id)
+        private static Record CreateStyle(int id)
         {   // we'll need multiple editions
             StyleRecord retval = new StyleRecord();
 
@@ -2083,7 +2082,7 @@ namespace NPOI.HSSF.Model
          * @return a PaletteRecord instance populated with the default colors
          * @see org.apache.poi.hssf.record.PaletteRecord
          */
-        protected PaletteRecord CreatePalette()
+        private static PaletteRecord CreatePalette()
         {
             return new PaletteRecord();
         }
@@ -2095,7 +2094,7 @@ namespace NPOI.HSSF.Model
          * @see org.apache.poi.hssf.record.Record
          */
 
-        private  UseSelFSRecord CreateUseSelFS()
+        private static UseSelFSRecord CreateUseSelFS()
         {
             return new UseSelFSRecord(false);
         }
@@ -2109,7 +2108,7 @@ namespace NPOI.HSSF.Model
          * @see org.apache.poi.hssf.record.Record
          */
 
-        protected Record CreateBoundSheet(int id)
+        private static Record CreateBoundSheet(int id)
         {   
             return new BoundSheetRecord("Sheet" + (id + 1));
         }
@@ -2122,7 +2121,7 @@ namespace NPOI.HSSF.Model
          * @see org.apache.poi.hssf.record.Record
          */
 
-        protected Record CreateCountry()
+        private static Record CreateCountry()
         {   // what a novel idea, Create your own!
             CountryRecord retval = new CountryRecord();
 
@@ -2142,18 +2141,6 @@ namespace NPOI.HSSF.Model
         }
 
         /**
-         * Creates the SST record with no strings and the Unique/num string Set to 0
-         * @return record containing a SSTRecord
-         * @see org.apache.poi.hssf.record.SSTRecord
-         * @see org.apache.poi.hssf.record.Record
-         */
-
-        protected Record CreateSST()
-        {
-            return new SSTRecord();
-        }
-
-        /**
          * Creates the ExtendedSST record with numstrings per bucket Set to 0x8.  HSSF
          * doesn't yet know what to do with this thing, but we Create it with nothing in
          * it hardly just to make Excel happy and our sheets look like Excel's
@@ -2163,24 +2150,12 @@ namespace NPOI.HSSF.Model
          * @see org.apache.poi.hssf.record.Record
          */
 
-        protected Record CreateExtendedSST()
+        private static Record CreateExtendedSST()
         {
             ExtSSTRecord retval = new ExtSSTRecord();
 
             retval.NumStringsPerBucket=((short)0x8);
             return retval;
-        }
-
-        /**
-         * Creates the EOF record
-         * @see org.apache.poi.hssf.record.EOFRecord
-         * @see org.apache.poi.hssf.record.Record
-         * @return record containing a EOFRecord
-         */
-
-        protected Record CreateEOF()
-        {
-            return new EOFRecord();
         }
 
         /**
@@ -2426,7 +2401,7 @@ namespace NPOI.HSSF.Model
      * @param id    the number of the format record to create (meaning its position in
      *        a file as M$ Excel would create it.)
      */
-        private FormatRecord CreateFormat(int id)
+        private static FormatRecord CreateFormat(int id)
         {
             // we'll need multiple editions for
             // the different formats
@@ -2570,6 +2545,12 @@ namespace NPOI.HSSF.Model
          */
         public DrawingManager2 FindDrawingGroup()
         {
+            if (drawingManager != null)
+            {
+                // We already have it!
+                return drawingManager;
+            }
+
             // Need to Find a DrawingGroupRecord that
             //  Contains a EscherDggRecord
             for (IEnumerator rit = records.GetEnumerator(); rit.MoveNext(); )
@@ -2786,7 +2767,12 @@ namespace NPOI.HSSF.Model
             {
                 bstoreContainer = new EscherContainerRecord();
                 bstoreContainer.RecordId=EscherContainerRecord.BSTORE_CONTAINER;
-                dggContainer.ChildRecords.Insert(1, bstoreContainer);
+
+                //dggContainer.ChildRecords.Insert(1, bstoreContainer);
+                List<EscherRecord> childRecords = dggContainer.ChildRecords;
+                childRecords.Insert(1, bstoreContainer);
+                dggContainer.ChildRecords = (childRecords);
+                
             }
             bstoreContainer.Options=(short)((escherBSERecords.Count << 4) | 0xF);
 

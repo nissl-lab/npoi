@@ -47,7 +47,7 @@ namespace TestCases.HSSF.Record.Aggregates
             f.SetCachedResultTypeString();
             StringRecord s = new StringRecord();
             s.String = ("abc");
-            FormulaRecordAggregate fagg = new FormulaRecordAggregate(f, s, SharedValueManager.EMPTY);
+            FormulaRecordAggregate fagg = new FormulaRecordAggregate(f, s, SharedValueManager.CreateEmpty());
             Assert.AreEqual("abc", fagg.StringValue);
         }
         /**
@@ -65,7 +65,7 @@ namespace TestCases.HSSF.Record.Aggregates
             fr.Value = (2.0);
             StringRecord sr = new StringRecord();
             sr.String = ("NA");
-            SharedValueManager svm = SharedValueManager.EMPTY;
+            SharedValueManager svm = SharedValueManager.CreateEmpty();
             FormulaRecordAggregate fra;
 
             try

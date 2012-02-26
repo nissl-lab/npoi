@@ -43,10 +43,10 @@ namespace TestCases.SS.Formula
         // /**
         // * @param TestDataProvider an object that provides Test data in HSSF / XSSF specific way
         // */
-        //protected BaseTestExternalFunctions(ITestDataProvider TestDataProvider)
-        //{
-        //    _testDataProvider = TestDataProvider;
-        //}
+        protected BaseTestExternalFunctions(ITestDataProvider TestDataProvider)
+        {
+            _testDataProvider = TestDataProvider;
+        }
         [TestMethod]
         public void TestExternalFunctions()
         {
@@ -90,7 +90,7 @@ namespace TestCases.SS.Formula
          *
          * @param TestFile  either atp.xls or atp.xlsx
          */
-        public void baseTestInvokeATP(String testFile)
+        public void BaseTestInvokeATP(String testFile)
         {
             IWorkbook wb = _testDataProvider.OpenSampleWorkbook(testFile);
             IFormulaEvaluator Evaluator = wb.GetCreationHelper().CreateFormulaEvaluator();
