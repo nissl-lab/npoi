@@ -302,7 +302,7 @@ namespace NPOI.XSSF.UserModel
             {
                 return CellValue.GetError(((ErrorEval)eval).ErrorCode);
             }
-            throw new Exception("Unexpected eval class (" + eval.GetType().GetName() + ")");
+            throw new Exception("Unexpected eval class (" + eval.GetType().Name + ")");
         }
     }
 

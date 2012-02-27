@@ -19,6 +19,8 @@ using NPOI.OpenXmlFormats.Spreadsheet;
 using NPOI.XSSF.Util;
 using NPOI.SS.UserModel;
 using System.Collections.Generic;
+using NPOI.Util;
+using System;
 namespace NPOI.XSSF.UserModel.Helpers
 {
     /**
@@ -68,7 +70,7 @@ namespace NPOI.XSSF.UserModel.Helpers
         public static void SortColumns(CT_Cols newCols)
         {
             List<CT_Col> colArray = newCols.GetColArray();
-            Arrays.sort(colArray, new CT_ColComparator());
+            colArray.Sort(new CTColComparator());
             newCols.SetColArray(colArray);
         }
 
@@ -245,14 +247,14 @@ namespace NPOI.XSSF.UserModel.Helpers
         public void SetColumnAttributes(CT_Col fromCol, CT_Col toCol)
         {
 
-            if (fromCol.isSetBestFit()) toCol.SetBestFit(fromCol.bestFit);
-            if (fromCol.isSetCustomWidth()) toCol.SetCustomWidth(fromCol.customWidth);
-            if (fromCol.isSetHidden()) toCol.SetHidden(fromCol.hidden);
-            if (fromCol.isSetStyle()) toCol.SetStyle(fromCol.style);
-            if (fromCol.isSetWidth()) toCol.SetWidth(fromCol.width);
-            if (fromCol.isSetCollapsed()) toCol.SetCollapsed(fromCol.collapsed);
-            if (fromCol.isSetPhonetic()) toCol.SetPhonetic(fromCol.phonetic);
-            if (fromCol.isSetOutlineLevel()) toCol.SetOutlineLevel(fromCol.outlineLevel);
+            if (fromCol.isSetBestFit()) toCol.bestFit = (fromCol.bestFit);
+            if (fromCol.isSetCustomWidth()) toCol.customWidth = (fromCol.customWidth);
+            if (fromCol.isSetHidden()) toCol.hidden=(fromCol.hidden);
+            if (fromCol.isSetStyle()) toCol.style=(fromCol.style);
+            if (fromCol.isSetWidth()) toCol.width=(fromCol.width);
+            if (fromCol.isSetCollapsed()) toCol.collapsed=(fromCol.collapsed);
+            if (fromCol.isSetPhonetic()) toCol.phonetic=(fromCol.phonetic);
+            if (fromCol.isSetOutlineLevel()) toCol.outlineLevel = (fromCol.outlineLevel);
             toCol.collapsed = (fromCol.isSetCollapsed());
         }
 

@@ -108,12 +108,12 @@ namespace NPOI.Util
             Uri uri = rel.TargetUri;
 
             if(uri.Fragment != null) {
-                part_tgt.AddRelationship(uri, rel.TargetMode, rel.RelationshipType, rel.Id);
+                part_tgt.AddRelationship(uri, (TargetMode)rel.TargetMode, rel.RelationshipType, rel.Id);
                 continue;
             }
             PackagePartName relName = PackagingUriHelper.CreatePartName(rel.TargetUri);
             p = pkg.GetPart(relName);
-            part_tgt.AddRelationship(p.PartName, rel.TargetMode, rel.RelationshipType, rel.Id);
+            part_tgt.AddRelationship(p.PartName, (TargetMode)rel.TargetMode, rel.RelationshipType, rel.Id);
 
 
 

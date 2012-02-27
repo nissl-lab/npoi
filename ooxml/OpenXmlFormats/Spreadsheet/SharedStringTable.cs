@@ -514,7 +514,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.itemsElementNameField = new List<ItemsChoiceType>();
             this.itemsField = new List<object>();
         }
-
+        //public  GetVertAlignArray();
         [System.Xml.Serialization.XmlChoiceIdentifierAttribute("ItemsElementName")]
         public List<object> Items
         {
@@ -820,7 +820,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         private CT_Color bgColorField;
 
-        private ST_PatternType patternTypeField;
+        private ST_PatternType? patternTypeField;
 
         private bool patternTypeFieldSpecified;
 
@@ -830,7 +830,10 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.fgColorField = new CT_Color();
         }
 
-
+        public bool IsSetPatternType()
+        {
+            return this.patternTypeField != null;
+        }
         public CT_Color AddNewFgColor()
         {
             return fgColorField;
@@ -876,7 +879,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        public ST_PatternType patternType
+        public ST_PatternType? patternType
         {
             get
             {
@@ -1321,6 +1324,10 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         public bool IsSetDiagonal()
         {
             return this.diagonalField != null;
+        }
+        public void unsetDiagonal()
+        {
+            this.diagonalField = null;
         }
 
         public void unsetRight()
@@ -2082,11 +2089,14 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             this.alignmentField=null;
         }
-                  public bool IsSetExtLst()
+        public bool IsSetExtLst()
         {
             return this.extLst==null;
         }
-
+          public void unsetExtLst()
+          {
+              this.extLst = null;
+          }
                         
         public CT_CellAlignment alignment
         {

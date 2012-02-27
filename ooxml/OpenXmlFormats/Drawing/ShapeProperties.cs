@@ -59,6 +59,11 @@ namespace NPOI.OpenXmlFormats.Dml
             this.custGeomField = new CT_CustomGeometry2D();
             //this.xfrmField = new CT_Transform2D();
         }
+        public CT_PresetGeometry2D AddNewPrstGeom()
+        {
+            this.prstGeomField = new CT_PresetGeometry2D();
+            return this.prstGeomField;
+        }
         public CT_Transform2D AddNewXfrm()
         {
             this.xfrmField = new CT_Transform2D();

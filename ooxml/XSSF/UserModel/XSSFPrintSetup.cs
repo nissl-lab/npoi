@@ -268,7 +268,7 @@ namespace NPOI.XSSF.UserModel
             }
             set 
             {
-                pageSetup.usePrinterDefaults = (valid);
+                pageSetup.usePrinterDefaults = value;
             }
         }
 

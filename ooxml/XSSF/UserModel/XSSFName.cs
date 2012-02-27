@@ -147,7 +147,7 @@ namespace NPOI.XSSF.UserModel
                 //Check to ensure no other names have the same case-insensitive name
                 for (int i = 0; i < _workbook.NumberOfNames; i++)
                 {
-                    XSSFName nm = _workbook.GetNameAt(i);
+                    IName nm = _workbook.GetNameAt(i);
                     if (nm != this)
                     {
                         if (value.Equals(nm.NameName, StringComparison.InvariantCultureIgnoreCase) 

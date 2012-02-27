@@ -10,7 +10,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         private bool autoFieldSpecified;
 
-        private long indexedField;
+        private long? indexedField;
 
         private bool indexedFieldSpecified;
 
@@ -26,7 +26,10 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             this.tintField = 0D;
         }
-
+        public bool IsSetIndexed()
+        {
+            return this.indexedField != null;
+        }
         public bool auto
         {
             get
@@ -56,7 +59,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             get
             {
-                return this.indexedField;
+                return (long)this.indexedField;
             }
             set
             {

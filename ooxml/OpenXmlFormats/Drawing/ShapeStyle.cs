@@ -245,6 +245,11 @@ namespace NPOI.OpenXmlFormats.Dml {
             this.fontRefField=new CT_FontReference();
             return this.fontRefField;
         }
+        public CT_StyleMatrixReference AddNewEffectRef()
+        {
+            this.effectRefField = new CT_StyleMatrixReference();
+            return this.effectRefField;
+        }
         /// <remarks/>
         public CT_StyleMatrixReference lnRef {
             get {

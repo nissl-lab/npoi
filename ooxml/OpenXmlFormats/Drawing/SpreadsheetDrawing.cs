@@ -15,6 +15,11 @@ namespace NPOI.OpenXmlFormats.Dml
         private CT_NonVisualDrawingProps cNvPrField;
         private CT_NonVisualDrawingShapeProps cNvSpPrField;
 
+        public CT_NonVisualDrawingProps AddNewCNvPr()
+        {
+            this.cNvPrField = new CT_NonVisualDrawingProps();
+            return this.cNvPrField;
+        }
         public CT_NonVisualDrawingProps cNvPr
         {
             get
@@ -44,6 +49,17 @@ namespace NPOI.OpenXmlFormats.Dml
 
         CT_NonVisualDrawingProps cNvPrField;
         CT_NonVisualGraphicFrameProperties cNvGraphicFramePrField;
+
+        public CT_NonVisualDrawingProps AddNewCNvPr()
+        {
+            this.cNvPrField = new CT_NonVisualDrawingProps();
+            return this.cNvPrField;
+        }
+        public CT_NonVisualGraphicFrameProperties AddNewCNvGraphicFramePr()
+        {
+            this.cNvGraphicFramePrField = new CT_NonVisualGraphicFrameProperties();
+            return this.cNvGraphicFramePrField;
+        }
 
         public CT_NonVisualDrawingProps cNvPr
         {
@@ -249,6 +265,18 @@ namespace NPOI.OpenXmlFormats.Dml
     {
         CT_GroupShapeProperties grpSpPrField;
         CT_GroupShapeNonVisual nvGrpSpPrField;
+
+        public CT_GroupShapeProperties AddNewGrpSpPr()
+        {
+            this.grpSpPrField = new CT_GroupShapeProperties();
+            return this.grpSpPrField;
+        }
+        public CT_GroupShapeNonVisual AddNewNvGrpSpPr()
+        {
+            this.nvGrpSpPrField = new CT_GroupShapeNonVisual();
+            return this.nvGrpSpPrField;
+        }
+
         public CT_GroupShapeNonVisual nvGrpSpPr
         {
             get { return nvGrpSpPrField; }

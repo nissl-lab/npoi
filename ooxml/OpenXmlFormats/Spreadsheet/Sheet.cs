@@ -317,7 +317,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.colBreaksField = new CT_PageBreak();
             this.rowBreaksField = new CT_PageBreak();
             this.headerFooterField = new CT_HeaderFooter();
-            this.pageSetupField = new CT_PageSetup();
+            //this.pageSetupField = new CT_PageSetup();
             //this.pageMarginsField = new CT_PageMargins();
             this.printOptionsField = new CT_PrintOptions();
             //this.hyperlinksField = new List<CT_Hyperlink>();
@@ -339,6 +339,19 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.sheetViewsField = new CT_SheetViews();
             //this.dimensionField = new CT_SheetDimension();
             this.sheetPrField = new CT_SheetPr();
+        }
+        public bool IsSetPageSetup()
+        {
+            return this.pageSetupField != null;
+        }
+        public CT_PageSetup AddNewPageSetup()
+        {
+            this.pageSetupField=new CT_PageSetup();
+            return this.pageSetupField;
+        }
+        public void SetColsArray(Array a)
+        {
+            throw new NotImplementedException();
         }
         public int sizeOfColsArray()
         {
@@ -1211,6 +1224,11 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             this.extLstField = new CT_ExtensionList();
             this.sheetViewField = new List<CT_SheetView>();
+        }
+
+        public CT_SheetView GetSheetViewArray(int index)
+        {
+            return this.sheetViewField[index];
         }
 
         public List<CT_SheetView> sheetView
@@ -2961,7 +2979,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         private uint styleField;
 
-        private bool hiddenField;
+        private bool? hiddenField;
 
         private bool bestFitField;
 
@@ -2976,7 +2994,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         public CT_Col()
         {
             this.styleField = ((uint)(0));
-            this.hiddenField = false;
+            //this.hiddenField = false;
             this.bestFitField = false;
             this.customWidthField = false;
             this.phoneticField = false;
@@ -3051,9 +3069,12 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             return true;
         }
-            
-            
-            
+
+
+                public void unSetHidden()
+                {
+                    this.hiddenField = null;
+                }
             
             
             
@@ -3085,7 +3106,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
 
         [System.ComponentModel.DefaultValueAttribute(false)]
-        public bool hidden
+        public bool? hidden
         {
             get
             {
@@ -3184,7 +3205,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         private bool htFieldSpecified;
 
-        private bool hiddenField;
+        private bool? hiddenField;
 
         private bool customHeightField;
 
@@ -3205,13 +3226,18 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.cField = new List<CT_Cell>();
             this.sField = ((uint)(0));
             this.customFormatField = false;
-            this.hiddenField = false;
+            //this.hiddenField = false;
             this.customHeightField = false;
             this.outlineLevelField = ((byte)(0));
             this.collapsedField = false;
             this.thickTopField = false;
             this.thickBotField = false;
             this.phField = false;
+        }
+
+        public void unsetHidden()
+        {
+            this.hiddenField = null;
         }
 
         public int sizeOfCArray()
@@ -3336,7 +3362,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
 
         [System.ComponentModel.DefaultValueAttribute(false)]
-        public bool hidden
+        public bool? hidden
         {
             get
             {
@@ -5263,6 +5289,11 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.manualBreakCountField = ((uint)(0));
         }
 
+        public int sizeOfBrkArray()
+        {
+            return this.brkField.Count;
+        }
+
         public List<CT_Break> brk
         {
             get
@@ -6269,6 +6300,11 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.equalAverageField = false;
         }
 
+
+        public bool IsSetDxfId()
+        {
+            return this.dxfId != null;
+        }
         public void AddFormula(string formula)
         {
             this.formula.Add(formula);

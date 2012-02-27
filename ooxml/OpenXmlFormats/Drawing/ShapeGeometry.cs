@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 namespace NPOI.OpenXmlFormats.Dml {
     
     
@@ -1519,13 +1520,18 @@ namespace NPOI.OpenXmlFormats.Dml {
     [System.Xml.Serialization.XmlRootAttribute(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_PresetGeometry2D {
         
-        private CT_GeomGuide[] avLstField;
+        private List<CT_GeomGuide> avLstField;
         
         private ST_ShapeType prstField;
+
+        public void AddNewAvLst()
+        {
+            this.avLstField = new List<CT_GeomGuide>();
+        }
         
         /// <remarks/>
         [System.Xml.Serialization.XmlArrayItemAttribute("gd", IsNullable=false)]
-        public CT_GeomGuide[] avLst {
+        public List<CT_GeomGuide> avLst {
             get {
                 return this.avLstField;
             }

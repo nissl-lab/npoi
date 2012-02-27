@@ -117,7 +117,7 @@ namespace NPOI.XSSF.UserModel
 
                 if (_vmlShape != null) 
                     _vmlShape.GetClientDataArray(0)
-                        .SetRowArray(0, new Bigint(String.ValueOf(value)));
+                        .SetRowArray(0, new Bigint(value));
             }
         }
 
@@ -141,9 +141,11 @@ namespace NPOI.XSSF.UserModel
                 if (_vmlShape != null)
                 {
                     String style;
-                    if (value) style = "position:absolute;visibility:visible";
-                    else style = "position:absolute;visibility:hidden";
-                    _vmlShape.SetStyle(style);
+                    if (value) 
+                        style = "position:absolute;visibility:visible";
+                    else 
+                        style = "position:absolute;visibility:hidden";
+                    _vmlShape.style = (style);
                 }   
             }
         }

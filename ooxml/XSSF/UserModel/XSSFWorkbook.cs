@@ -212,7 +212,7 @@ namespace NPOI.XSSF.UserModel
                         logger.Log(POILogger.WARN, "Sheet with name " + ctSheet.name + " and r:id " + ctSheet.id + " was defined, but didn't exist in package, skipping");
                         continue;
                     }
-                    sh.Sheet = ctSheet;
+                    sh.sheet = ctSheet;
                     sh.OnDocumentRead();
                     sheets.Add(sh);
                 }
@@ -1127,7 +1127,7 @@ namespace NPOI.XSSF.UserModel
             if ((startRow == -1 && endRow != -1) || startRow < -1 || endRow < -1 || startRow > endRow)
                 throw new ArgumentException("Invalid row range specification");
 
-            XSSFSheet sheet = GetSheetAt(sheetIndex);
+            XSSFSheet sheet = (XSSFSheet)GetSheetAt(sheetIndex);
             bool removingRange = startColumn == -1 && endColumn == -1 && startRow == -1 && endRow == -1;
 
             XSSFName name = GetBuiltInName(XSSFName.BUILTIN_PRINT_TITLE, sheetIndex);
@@ -1142,7 +1142,7 @@ namespace NPOI.XSSF.UserModel
             }
 
             String reference = GetReferenceBuiltInRecord(name.SheetName, startColumn, endColumn, startRow, endRow);
-            name.SetRefersToFormula(reference);
+            name.RefersToFormula = (reference);
 
             // If the print Setup isn't currently defined, then add it
             //  in but without printer defaults
@@ -1155,8 +1155,8 @@ namespace NPOI.XSSF.UserModel
             else
             {
                 // Have Initial ones Put in place
-                XSSFPrintSetup printSetup = sheet.GetPrintSetup();
-                printSetup.SetValidSettings(false);
+                IPrintSetup printSetup = sheet.PrintSetup;
+                printSetup.ValidSettings=(false);
             }
         }
 
@@ -1414,16 +1414,16 @@ namespace NPOI.XSSF.UserModel
         //@SuppressWarnings("deprecation") //  GetXYZArray() array accessors are deprecated
         private bool ContainsSheet(String name, int excludeSheetIdx)
         {
-            CT_Sheet[] ctSheetArray = workbook.sheets.GetSheetArray();
+            List<CT_Sheet> ctSheetArray = workbook.sheets.sheet;
 
             if (name.Length > MAX_SENSITIVE_SHEET_NAME_LEN)
             {
                 name = name.Substring(0, MAX_SENSITIVE_SHEET_NAME_LEN);
             }
 
-            for (int i = 0; i < ctSheetArray.Length; i++)
+            for (int i = 0; i < ctSheetArray.Count; i++)
             {
-                String ctName = ctSheetArray[i].GetName();
+                String ctName = ctSheetArray[i].name;
                 if (ctName.Length > MAX_SENSITIVE_SHEET_NAME_LEN)
                 {
                     ctName = ctName.Substring(0, MAX_SENSITIVE_SHEET_NAME_LEN);

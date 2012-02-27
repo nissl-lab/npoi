@@ -2734,6 +2734,11 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.workbookViewField = new List<CT_BookView>();
         }
 
+        public CT_BookView GetWorkbookViewArray(int index)
+        {
+            return this.workbookViewField[index];
+        }
+
         public List<CT_BookView> workbookView
         {
             get

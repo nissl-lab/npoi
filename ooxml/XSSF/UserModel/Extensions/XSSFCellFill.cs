@@ -128,7 +128,7 @@ namespace NPOI.XSSF.UserModel.Extensions
         public ST_PatternType GetPatternType()
         {
             CT_PatternFill ptrn = _fill.GetPatternFill();
-            return ptrn == null ? ST_PatternType.none : ptrn.patternType;
+            return ptrn == null ? ST_PatternType.none : (ST_PatternType)ptrn.patternType;
         }
 
         /**

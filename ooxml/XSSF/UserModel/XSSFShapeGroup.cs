@@ -56,6 +56,7 @@ namespace NPOI.XSSF.UserModel
             {
                 CT_GroupShape shape = new CT_GroupShape();
 
+
                 CT_GroupShapeNonVisual nv = shape.AddNewNvGrpSpPr();
                 CT_NonVisualDrawingProps nvpr = nv.AddNewCNvPr();
                 nvpr.id = (0);

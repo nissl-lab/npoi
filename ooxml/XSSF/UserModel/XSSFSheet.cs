@@ -31,6 +31,8 @@ using NPOI.XSSF.UserModel.Helpers;
 using NPOI.HSSF.Record;
 using NPOI.OpenXmlFormats;
 using NPOI.OpenXmlFormats.Dml;
+using System.Collections;
+using NPOI.SS.Formula;
 namespace NPOI.XSSF.UserModel
 {
     /**
@@ -173,7 +175,7 @@ namespace NPOI.XSSF.UserModel
             foreach (CT_Row row in worksheet.sheetData)
             {
                 XSSFRow r = new XSSFRow(row, this);
-                _rows[r.GetRowNum()] =  r;
+                _rows[r.RowNum] =  r;
             }
         }
 
@@ -1836,7 +1838,7 @@ namespace NPOI.XSSF.UserModel
 
         private void collapseColumn(int columnNumber)
         {
-            CTCols cols = worksheet.GetColsArray(0);
+            CT_Cols cols = worksheet.GetColsArray(0);
             CT_Col col = columnHelper.GetColumn(columnNumber, false);
             int colInfoIx = columnHelper.GetIndexOfColumn(cols, col);
             if (colInfoIx == -1)
@@ -1853,12 +1855,12 @@ namespace NPOI.XSSF.UserModel
                     .outlineLevel, true);
 
             // write collapse field
-            SetColumn(lastColMax + 1, null, 0, null, null, Boolean.TRUE);
+            SetColumn(lastColMax + 1, null, 0, null, null, true);
 
         }
 
-        private void SetColumn(int tarGetColumnIx, short xfIndex, int style,
-                int level, Boolean hidden, Boolean collapsed)
+        private void SetColumn(int targetColumnIx, short? xfIndex, int? style,
+                int? level, Boolean? hidden, Boolean? collapsed)
         {
             CT_Cols cols = worksheet.GetColsArray(0);
             CT_Col ci = null;
@@ -1866,13 +1868,13 @@ namespace NPOI.XSSF.UserModel
             for (k = 0; k < cols.sizeOfColArray(); k++)
             {
                 CT_Col tci = cols.GetColArray(k);
-                if (tci.min >= tarGetColumnIx
-                        && tci.max<= tarGetColumnIx)
+                if (tci.min >= targetColumnIx
+                        && tci.max<= targetColumnIx)
                 {
                     ci = tci;
                     break;
                 }
-                if (tci.min > tarGetColumnIx)
+                if (tci.min > targetColumnIx)
                 {
                     // call column infos after k are for later columns
                     break; // exit now so k will be the correct insert pos
@@ -1884,8 +1886,8 @@ namespace NPOI.XSSF.UserModel
                 // okay so there ISN'T a column info record that covers this column
                 // so lets create one!
                 CT_Col nci =  new CT_Col();
-                nci.min=(targetColumnIx);
-                nci.max=(targetColumnIx);
+                nci.min=(uint)targetColumnIx;
+                nci.max=(uint)targetColumnIx;
                 unSetCollapsed(collapsed, nci);
                 this.columnHelper.AddCleanColIntoCols(cols, nci);
                 return;
@@ -1896,9 +1898,9 @@ namespace NPOI.XSSF.UserModel
             bool levelChanged = level != null
             && ci.outlineLevel != level;
             bool hiddenChanged = hidden != null
-            && ci.GetHidden() != hidden;
+            && ci.hidden != hidden;
             bool collapsedChanged = collapsed != null
-            && ci.GetCollapsed() != collapsed;
+            && ci.collapsed != collapsed;
             bool columnChanged = levelChanged || hiddenChanged
             || collapsedChanged || styleChanged;
             if (!columnChanged)
@@ -1907,30 +1909,30 @@ namespace NPOI.XSSF.UserModel
                 return;
             }
 
-            if (ci.GetMin() == tarGetColumnIx && ci.GetMax() == tarGetColumnIx)
+            if (ci.min == targetColumnIx && ci.max == targetColumnIx)
             {
                 // ColumnInfo ci for a single column, the target column
                 unSetCollapsed(collapsed, ci);
                 return;
             }
 
-            if (ci.GetMin() == tarGetColumnIx || ci.GetMax() == tarGetColumnIx)
+            if (ci.min == targetColumnIx || ci.max == targetColumnIx)
             {
                 // The target column is at either end of the multi-column ColumnInfo
                 // ci
                 // we'll just divide the info and create a new one
-                if (ci.GetMin() == tarGetColumnIx)
+                if (ci.min == targetColumnIx)
                 {
-                    ci.SetMin(targetColumnIx + 1);
+                    ci.min = (uint)(targetColumnIx + 1);
                 }
                 else
                 {
-                    ci.SetMax(targetColumnIx - 1);
+                    ci.max = (uint)(targetColumnIx - 1);
                     k++; // adjust insert pos to insert after
                 }
                 CT_Col nci = columnHelper.CloneCol(cols, ci);
-                nci.SetMin(targetColumnIx);
-                unSetCollapsed(collapsed, nci);
+                nci.min = (uint)(targetColumnIx);
+                unSetCollapsed((bool)collapsed, nci);
                 this.columnHelper.AddCleanColIntoCols(cols, nci);
 
             }
@@ -1940,17 +1942,17 @@ namespace NPOI.XSSF.UserModel
                 CT_Col ciStart = ci;
                 CT_Col ciMid = columnHelper.CloneCol(cols, ci);
                 CT_Col ciEnd = columnHelper.CloneCol(cols, ci);
-                int lastcolumn = (int)ci.GetMax();
+                int lastcolumn = (int)ci.max;
 
-                ciStart.SetMax(targetColumnIx - 1);
+                ciStart.max = (uint)(targetColumnIx - 1);
 
-                ciMid.SetMin(targetColumnIx);
-                ciMid.SetMax(targetColumnIx);
-                unSetCollapsed(collapsed, ciMid);
+                ciMid.min = (uint)(targetColumnIx);
+                ciMid.max = (uint)(targetColumnIx);
+                unSetCollapsed((bool)collapsed, ciMid);
                 this.columnHelper.AddCleanColIntoCols(cols, ciMid);
 
-                ciEnd.SetMin(targetColumnIx + 1);
-                ciEnd.SetMax(lastcolumn);
+                ciEnd.min = (uint)(targetColumnIx + 1);
+                ciEnd.max = (uint)(lastcolumn);
                 this.columnHelper.AddCleanColIntoCols(cols, ciEnd);
             }
         }
@@ -1959,7 +1961,7 @@ namespace NPOI.XSSF.UserModel
         {
             if (collapsed)
             {
-                ci.SetCollapsed(collapsed);
+                ci.collapsed = (collapsed);
             }
             else
             {
@@ -1977,7 +1979,7 @@ namespace NPOI.XSSF.UserModel
          */
         private int SetGroupHidden(int pIdx, int level, bool hidden)
         {
-            CTCols cols = worksheet.GetColsArray(0);
+            CT_Cols cols = worksheet.GetColsArray(0);
             int idx = pIdx;
             CT_Col columnInfo = cols.GetColArray(idx);
             while (idx < cols.sizeOfColArray())
@@ -1987,7 +1989,7 @@ namespace NPOI.XSSF.UserModel
                 {
                     CT_Col nextColumnInfo = cols.GetColArray(idx + 1);
 
-                    if (!isAdjacentBefore(columnInfo, nextColumnInfo))
+                    if (!IsAdjacentBefore(columnInfo, nextColumnInfo))
                     {
                         break;
                     }
@@ -2000,25 +2002,25 @@ namespace NPOI.XSSF.UserModel
                 }
                 idx++;
             }
-            return (int)columnInfo.GetMax();
+            return (int)columnInfo.max;
         }
 
         private bool IsAdjacentBefore(CT_Col col, CT_Col other_col)
         {
-            return (col.GetMax() == (other_col.GetMin() - 1));
+            return (col.max == (other_col.min - 1));
         }
 
         private int FindStartOfColumnOutlineGroup(int pIdx)
         {
             // Find the start of the group.
-            CTCols cols = worksheet.GetColsArray(0);
+            CT_Cols cols = worksheet.GetColsArray(0);
             CT_Col columnInfo = cols.GetColArray(pIdx);
             int level = columnInfo.outlineLevel;
             int idx = pIdx;
             while (idx != 0)
             {
                 CT_Col prevColumnInfo = cols.GetColArray(idx - 1);
-                if (!isAdjacentBefore(prevColumnInfo, columnInfo))
+                if (!IsAdjacentBefore(prevColumnInfo, columnInfo))
                 {
                     break;
                 }
@@ -2034,7 +2036,7 @@ namespace NPOI.XSSF.UserModel
 
         private int FindEndOfColumnOutlineGroup(int colInfoIndex)
         {
-            CTCols cols = worksheet.GetColsArray(0);
+            CT_Cols cols = worksheet.GetColsArray(0);
             // Find the end of the group.
             CT_Col columnInfo = cols.GetColArray(colInfoIndex);
             int level = columnInfo.outlineLevel;
@@ -2042,7 +2044,7 @@ namespace NPOI.XSSF.UserModel
             while (idx < cols.sizeOfColArray() - 1)
             {
                 CT_Col nextColumnInfo = cols.GetColArray(idx + 1);
-                if (!isAdjacentBefore(columnInfo, nextColumnInfo))
+                if (!IsAdjacentBefore(columnInfo, nextColumnInfo))
                 {
                     break;
                 }
@@ -2058,18 +2060,18 @@ namespace NPOI.XSSF.UserModel
 
         private void ExpandColumn(int columnIndex)
         {
-            CTCols cols = worksheet.GetColsArray(0);
+            CT_Cols cols = worksheet.GetColsArray(0);
             CT_Col col = columnHelper.GetColumn(columnIndex, false);
             int colInfoIx = columnHelper.GetIndexOfColumn(cols, col);
 
-            int idx = FindColInfoIdx((int)col.GetMax(), colInfoIx);
+            int idx = FindColInfoIdx((int)col.max, colInfoIx);
             if (idx == -1)
             {
                 return;
             }
 
             // If it is already expanded do nothing.
-            if (!isColumnGroupCollapsed(idx))
+            if (!IsColumnGroupCollapsed(idx))
             {
                 return;
             }
@@ -2090,7 +2092,7 @@ namespace NPOI.XSSF.UserModel
             // hidden bit only is altered for this outline level. ie. don't
             // uncollapse Contained groups
             CT_Col columnInfo = cols.GetColArray(endIdx);
-            if (!isColumnGroupHiddenByParent(idx))
+            if (!IsColumnGroupHiddenByParent(idx))
             {
                 int outlineLevel = columnInfo.outlineLevel;
                 bool nestedGroup = false;
@@ -2103,7 +2105,7 @@ namespace NPOI.XSSF.UserModel
                         if (nestedGroup)
                         {
                             nestedGroup = false;
-                            ci.SetCollapsed(true);
+                            ci.collapsed = (true);
                         }
                     }
                     else
@@ -2114,13 +2116,13 @@ namespace NPOI.XSSF.UserModel
             }
             // Write collapse flag (stored in a single col info record after this
             // outline group)
-            SetColumn((int)columnInfo.GetMax() + 1, null, null, null,
-                    Boolean.FALSE, Boolean.FALSE);
+            SetColumn((int)columnInfo.max + 1, null, null, null,
+                    false, false);
         }
 
         private bool IsColumnGroupHiddenByParent(int idx)
         {
-            CTCols cols = worksheet.GetColsArray(0);
+            CT_Cols cols = worksheet.GetColsArray(0);
             // Look out outline details of end
             int endLevel = 0;
             bool endHidden = false;
@@ -2128,11 +2130,11 @@ namespace NPOI.XSSF.UserModel
             if (endOfOutlineGroupIdx < cols.sizeOfColArray())
             {
                 CT_Col nextInfo = cols.GetColArray(endOfOutlineGroupIdx + 1);
-                if (isAdjacentBefore(cols.GetColArray(endOfOutlineGroupIdx),
+                if (IsAdjacentBefore(cols.GetColArray(endOfOutlineGroupIdx),
                         nextInfo))
                 {
                     endLevel = nextInfo.outlineLevel;
-                    endHidden = nextInfo.GetHidden();
+                    endHidden = (bool)nextInfo.hidden;
                 }
             }
             // Look out outline details of start
@@ -2143,11 +2145,11 @@ namespace NPOI.XSSF.UserModel
             {
                 CT_Col prevInfo = cols.GetColArray(startOfOutlineGroupIdx - 1);
 
-                if (isAdjacentBefore(prevInfo, cols
+                if (IsAdjacentBefore(prevInfo, cols
                         .GetColArray(startOfOutlineGroupIdx)))
                 {
                     startLevel = prevInfo.outlineLevel;
-                    startHidden = prevInfo.GetHidden();
+                    startHidden = (bool)prevInfo.hidden;
                 }
 
             }
@@ -2160,7 +2162,7 @@ namespace NPOI.XSSF.UserModel
 
         private int FindColInfoIdx(int columnValue, int fromColInfoIdx)
         {
-            CTCols cols = worksheet.GetColsArray(0);
+            CT_Cols cols = worksheet.GetColsArray(0);
 
             if (columnValue < 0)
             {
@@ -2182,7 +2184,7 @@ namespace NPOI.XSSF.UserModel
                     return k;
                 }
 
-                if (ci.GetMin() > fromColInfoIdx)
+                if (ci.min > fromColInfoIdx)
                 {
                     break;
                 }
@@ -2193,7 +2195,7 @@ namespace NPOI.XSSF.UserModel
 
         private bool ContainsColumn(CT_Col col, int columnIndex)
         {
-            return col.GetMin() <= columnIndex && columnIndex <= col.GetMax();
+            return col.min <= columnIndex && columnIndex <= col.max;
         }
 
         /**
@@ -2205,7 +2207,7 @@ namespace NPOI.XSSF.UserModel
          */
         private bool IsColumnGroupCollapsed(int idx)
         {
-            CTCols cols = worksheet.GetColsArray(0);
+            CT_Cols cols = worksheet.GetColsArray(0);
             int endOfOutlineGroupIdx = FindEndOfColumnOutlineGroup(idx);
             int nextColInfoIx = endOfOutlineGroupIdx + 1;
             if (nextColInfoIx >= cols.sizeOfColArray())
@@ -2215,12 +2217,12 @@ namespace NPOI.XSSF.UserModel
             CT_Col nextColInfo = cols.GetColArray(nextColInfoIx);
 
             CT_Col col = cols.GetColArray(endOfOutlineGroupIdx);
-            if (!isAdjacentBefore(col, nextColInfo))
+            if (!IsAdjacentBefore(col, nextColInfo))
             {
                 return false;
             }
 
-            return nextColInfo.GetCollapsed();
+            return nextColInfo.collapsed;
         }
 
         /**
@@ -2296,7 +2298,7 @@ namespace NPOI.XSSF.UserModel
         {
             if (GetDefaultSheetView() == null)
             {
-                GetSheetTypeSheetViews().setSheetViewArray(0, CT_SheetView.Factory.newInstance());
+                GetSheetTypeSheetViews().SetSheetViewArray(0, new CT_SheetView());
             }
             return GetDefaultSheetView();
         }
@@ -2319,11 +2321,11 @@ namespace NPOI.XSSF.UserModel
         {
             if (collapse)
             {
-                collapseRow(rowIndex);
+                CollapseRow(rowIndex);
             }
             else
             {
-                expandRow(rowIndex);
+                ExpandRow(rowIndex);
             }
         }
 
@@ -2332,7 +2334,7 @@ namespace NPOI.XSSF.UserModel
          */
         private void collapseRow(int rowIndex)
         {
-            XSSFRow row = GetRow(rowIndex);
+            XSSFRow row = (XSSFRow)GetRow(rowIndex);
             if (row != null)
             {
                 int startRow = FindStartOfRowOutlineGroup(rowIndex);
@@ -2341,12 +2343,12 @@ namespace NPOI.XSSF.UserModel
                 int lastRow = WriteHidden(row, startRow, true);
                 if (GetRow(lastRow) != null)
                 {
-                    GetRow(lastRow).getCT_Row().setCollapsed(true);
+                    ((XSSFRow)GetRow(lastRow)).GetCTRow().collapsed = (true);
                 }
                 else
                 {
-                    XSSFRow newRow = CreateRow(lastRow);
-                    newRow.GetCTRow().setCollapsed(true);
+                    XSSFRow newRow = (XSSFRow)CreateRow(lastRow);
+                    newRow.GetCTRow().collapsed = (true);
                 }
             }
         }
@@ -2357,11 +2359,11 @@ namespace NPOI.XSSF.UserModel
         private int FindStartOfRowOutlineGroup(int rowIndex)
         {
             // Find the start of the group.
-            int level = GetRow(rowIndex).getCT_Row().OutlineLevel;
+            int level = ((XSSFRow)GetRow(rowIndex)).GetCTRow().outlineLevel;
             int currentRow = rowIndex;
             while (GetRow(currentRow) != null)
             {
-                if (GetRow(currentRow).getCT_Row().OutlineLevel < level)
+                if (((XSSFRow)GetRow(currentRow)).GetCTRow().outlineLevel < level)
                     return currentRow + 1;
                 currentRow--;
             }
@@ -2370,13 +2372,13 @@ namespace NPOI.XSSF.UserModel
 
         private int WriteHidden(XSSFRow xRow, int rowIndex, bool hidden)
         {
-            int level = xRow.GetCTRow().OutlineLevel;
-            for (Iterator<Row> it = rowIterator(); it.HasNext(); )
+            int level = xRow.GetCTRow().outlineLevel;
+            for (IEnumerator it = this.GetRowEnumerator(); it.MoveNext(); )
             {
-                xRow = (XSSFRow)it.next();
-                if (xRow.GetCTRow().OutlineLevel >= level)
+                xRow = (XSSFRow)it.Current;
+                if (xRow.GetCTRow().outlineLevel >= level)
                 {
-                    xRow.GetCTRow().setHidden(hidden);
+                    xRow.GetCTRow().hidden = (hidden);
                     rowIndex++;
                 }
 
@@ -2391,7 +2393,7 @@ namespace NPOI.XSSF.UserModel
         {
             if (rowNumber == -1)
                 return;
-            XSSFRow row = GetRow(rowNumber);
+            XSSFRow row = (XSSFRow)GetRow(rowNumber);
             // If it is already expanded do nothing.
             if (!row.GetCTRow().IsSetHidden())
                 return;
@@ -2413,23 +2415,23 @@ namespace NPOI.XSSF.UserModel
             // is the enclosing group
             // hidden bit only is altered for this outline level. ie. don't
             // un-collapse Contained groups
-            if (!isRowGroupHiddenByParent(rowNumber))
+            if (!IsRowGroupHiddenByParent(rowNumber))
             {
                 for (int i = startIdx; i < endIdx; i++)
                 {
-                    if (row.GetCTRow().OutlineLevel == GetRow(i).getCT_Row()
+                    if (row.GetCTRow().outlineLevel == ((XSSFRow)GetRow(i)).GetCTRow()
                             .outlineLevel)
                     {
-                        GetRow(i).getCT_Row().unsetHidden();
+                        ((XSSFRow)GetRow(i)).GetCTRow().unsetHidden();
                     }
-                    else if (!isRowGroupCollapsed(i))
+                    else if (!IsRowGroupCollapsed(i))
                     {
-                        GetRow(i).getCT_Row().unsetHidden();
+                        ((XSSFRow)GetRow(i)).GetCTRow().unsetHidden();
                     }
                 }
             }
             // Write collapse field
-            GetRow(endIdx).getCT_Row().unsetCollapsed();
+            ((XSSFRow)GetRow(endIdx)).GetCTRow().unsetCollapsed();
         }
 
         /**
@@ -2437,12 +2439,12 @@ namespace NPOI.XSSF.UserModel
          */
         public int FindEndOfRowOutlineGroup(int row)
         {
-            int level = GetRow(row).getCT_Row().OutlineLevel;
+            int level = ((XSSFRow)GetRow(row)).GetCTRow().outlineLevel;
             int currentRow;
-            for (currentRow = row; currentRow < GetLastRowNum(); currentRow++)
+            for (currentRow = row; currentRow < LastRowNum; currentRow++)
             {
                 if (GetRow(currentRow) == null
-                        || GetRow(currentRow).getCT_Row().OutlineLevel < level)
+                        || ((XSSFRow)GetRow(currentRow)).GetCTRow().outlineLevel < level)
                 {
                     break;
                 }
@@ -2466,8 +2468,8 @@ namespace NPOI.XSSF.UserModel
             }
             else
             {
-                endLevel = GetRow(endOfOutlineGroupIdx).getCT_Row().OutlineLevel;
-                endHidden = GetRow(endOfOutlineGroupIdx).getCT_Row().getHidden();
+                endLevel = ((XSSFRow)GetRow(endOfOutlineGroupIdx)).GetCTRow().outlineLevel;
+                endHidden = (bool)((XSSFRow)GetRow(endOfOutlineGroupIdx)).GetCTRow().hidden;
             }
 
             // Look out outline details of start
@@ -2482,10 +2484,10 @@ namespace NPOI.XSSF.UserModel
             }
             else
             {
-                startLevel = GetRow(startOfOutlineGroupIdx).getCT_Row()
+                startLevel = ((XSSFRow)GetRow(startOfOutlineGroupIdx)).GetCTRow()
                 .outlineLevel;
-                startHidden = GetRow(startOfOutlineGroupIdx).getCT_Row()
-                .GetHidden();
+                startHidden = ((XSSFRow)GetRow(startOfOutlineGroupIdx)).GetCTRow()
+                .hidden;
             }
             if (endLevel > startLevel)
             {
@@ -2504,7 +2506,7 @@ namespace NPOI.XSSF.UserModel
             {
                 return false;
             }
-            return GetRow(collapseRow).getCT_Row().getCollapsed();
+            return ((XSSFRow)GetRow(collapseRow)).GetCTRow().collapsed;
         }
 
         /**
@@ -2543,8 +2545,9 @@ namespace NPOI.XSSF.UserModel
          */
         public void SetZoom(int scale)
         {
-            if (scale < 10 || scale > 400) throw new ArgumentException("Valid scale values range from 10 to 400");
-            GetSheetTypeSheetView().setZoomScale(scale);
+            if (scale < 10 || scale > 400) 
+                throw new ArgumentException("Valid scale values range from 10 to 400");
+            GetSheetTypeSheetView().zoomScale = (uint)scale;
         }
 
         /**
@@ -2584,22 +2587,22 @@ namespace NPOI.XSSF.UserModel
         //YK: GetXYZArray() array accessors are deprecated in xmlbeans with JDK 1.5 support
         public void ShiftRows(int startRow, int endRow, int n, bool copyRowHeight, bool reSetOriginalRowHeight)
         {
-            for (Iterator<Row> it = rowIterator(); it.HasNext(); )
+            for (IEnumerator it = this.GetRowEnumerator(); it.MoveNext(); )
             {
-                XSSFRow row = (XSSFRow)it.next();
-                int rownum = row.GetRowNum();
+                XSSFRow row = (XSSFRow)it.Current;
+                int rownum = row.RowNum;
                 if (rownum < startRow) continue;
 
                 if (!copyRowHeight)
                 {
-                    row.SetHeight((short)-1);
+                    row.Height = (short)-1;
                 }
 
                 if (RemoveRow(startRow, endRow, n, rownum))
                 {
                     // remove row from worksheet.GetSheetData row array
-                    int idx = _rows.headMap(row.GetRowNum()).Count;
-                    worksheet.GetSheetData().removeRow(idx);
+                    int idx = _rows.headMap(row.RowNum).Count;
+                    worksheet.sheetData.RemoveRow(idx);
                     // remove row from _rows
                     it.Remove();
                 }
@@ -2611,33 +2614,33 @@ namespace NPOI.XSSF.UserModel
                 if (sheetComments != null)
                 {
                     //TODO shift Note's anchor in the associated /xl/drawing/vmlDrawings#.vml
-                    CT_CommentList lst = sheetComments.GetCT_Comments().getCommentList();
-                    foreach (CT_Comment comment in lst.GetCommentArray())
+                    CT_CommentList lst = sheetComments.GetCTComments().commentList;
+                    foreach (CT_Comment comment in lst.comment)
                     {
-                        CellReference ref1 = new CellReference(comment.GetRef());
-                        if (ref1.GetRow() == rownum)
+                        CellReference ref1 = new CellReference(comment.@ref);
+                        if (ref1.Row == rownum)
                         {
-                            ref1 = new CellReference(rownum + n, ref1.GetCol());
-                            comment.SetRef(ref1.FormatAsString());
+                            ref1 = new CellReference(rownum + n, ref1.Col);
+                            comment.@ref = ref1.FormatAsString();
                         }
                     }
                 }
             }
             XSSFRowShifter rowShifter = new XSSFRowShifter(this);
 
-            int sheetIndex = Workbook.getSheetIndex(this);
+            int sheetIndex = Workbook.GetSheetIndex(this);
             FormulaShifter Shifter = FormulaShifter.CreateForRowShift(sheetIndex, startRow, endRow, n);
 
-            rowShifter.updateNamedRanges(Shifter);
-            rowShifter.updateFormulas(Shifter);
+            rowShifter.UpdateNamedRanges(Shifter);
+            rowShifter.UpdateFormulas(Shifter);
             rowShifter.ShiftMerged(startRow, endRow, n);
-            rowShifter.updateConditionalFormatting(Shifter);
+            rowShifter.UpdateConditionalFormatting(Shifter);
 
             //rebuild the _rows map
             Dictionary<int, XSSFRow> map = new Dictionary<int, XSSFRow>();
             foreach (XSSFRow r in _rows.Values)
             {
-                map.Put(r.GetRowNum(), r);
+                map.Add(r.RowNum, r);
             }
             _rows = map;
         }
@@ -2653,25 +2656,25 @@ namespace NPOI.XSSF.UserModel
         {
             CellReference cellReference = new CellReference(toprow, leftcol);
             String cellRef = cellReference.FormatAsString();
-            GetPane().setTopLeftCell(cellRef);
+            GetPane().topLeftCell = (cellRef);
         }
 
         public void UngroupColumn(int fromColumn, int toColumn)
         {
-            CTCols cols = worksheet.GetColsArray(0);
+            CT_Cols cols = worksheet.GetColsArray(0);
             for (int index = fromColumn; index <= toColumn; index++)
             {
                 CT_Col col = columnHelper.GetColumn(index, false);
                 if (col != null)
                 {
                     short outlineLevel = col.outlineLevel;
-                    col.SetOutlineLevel((short)(outlineLevel - 1));
-                    index = (int)col.GetMax();
+                    col.outlineLevel = ((short)(outlineLevel - 1));
+                    index = (int)col.max;
 
                     if (col.outlineLevel <= 0)
                     {
                         int colIndex = columnHelper.GetIndexOfColumn(cols, col);
-                        worksheet.GetColsArray(0).removeCol(colIndex);
+                        worksheet.GetColsArray(0).RemoveCol(colIndex);
                     }
                 }
             }
@@ -2689,14 +2692,14 @@ namespace NPOI.XSSF.UserModel
         {
             for (int i = fromRow; i <= toRow; i++)
             {
-                XSSFRow xrow = GetRow(i);
+                XSSFRow xrow = (XSSFRow)GetRow(i);
                 if (xrow != null)
                 {
                     CT_Row ctrow = xrow.GetCTRow();
                     short outlinelevel = ctrow.outlineLevel;
-                    ctrow.SetOutlineLevel((short)(outlinelevel - 1));
+                    ctrow.outlineLevel = ((short)(outlinelevel - 1));
                     //remove a row only if the row has no cell and if the outline level is 0
-                    if (ctrow.outlineLevel == 0 && xrow.GetFirstCellNum() == -1)
+                    if (ctrow.outlineLevel == 0 && xrow.FirstCellNum == -1)
                     {
                         RemoveRow(xrow);
                     }
@@ -2708,23 +2711,23 @@ namespace NPOI.XSSF.UserModel
         private void SetSheetFormatPrOutlineLevelRow()
         {
             short maxLevelRow = GetMaxOutlineLevelRows();
-            GetSheetTypeSheetFormatPr().setOutlineLevelRow(maxLevelRow);
+            GetSheetTypeSheetFormatPr().outlineLevelRow = (maxLevelRow);
         }
 
         private void SetSheetFormatPrOutlineLevelCol()
         {
             short maxLevelCol = GetMaxOutlineLevelCols();
-            GetSheetTypeSheetFormatPr().setOutlineLevelCol(maxLevelCol);
+            GetSheetTypeSheetFormatPr().outlineLevelCol = (maxLevelCol);
         }
 
         private CT_SheetViews GetSheetTypeSheetViews()
         {
-            if (worksheet.GetSheetViews() == null)
+            if (worksheet.sheetViews == null)
             {
-                worksheet.SetSheetViews(CT_SheetViews.Factory.newInstance());
-                worksheet.GetSheetViews().addNewSheetView();
+                worksheet.SetSheetViews(new CT_SheetViews());
+                worksheet.sheetViews.AddNewSheetView();
             }
-            return worksheet.GetSheetViews();
+            return worksheet.sheetViews;
         }
 
         /**
@@ -2742,14 +2745,14 @@ namespace NPOI.XSSF.UserModel
             get
             {
                 CT_SheetView view = GetDefaultSheetView();
-                return view != null && view.GetTabSelected();
+                return view != null && view.tabSelected;
             }
             set 
             {
                 CT_SheetViews views = GetSheetTypeSheetViews();
                 foreach (CT_SheetView view in views.GetSheetViewArray())
                 {
-                    view.SetTabSelected(value);
+                    view.tabSelected = (value);
                 }
             }
         }
@@ -2767,8 +2770,8 @@ namespace NPOI.XSSF.UserModel
         {
             CellReference cellReference = new CellReference(cellRef);
 
-            comment.SetRow(cellReference.getRow());
-            comment.SetColumn(cellReference.getCol());
+            comment.Row = (cellReference.Row);
+            comment.Column = (cellReference.Col);
         }
 
         /**
@@ -2791,13 +2794,13 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
-                return GetSheetTypeSelection().getActiveCell();
+                return GetSheetTypeSelection().activeCell;
             }
             set 
             {
                 CT_Selection ctsel = GetSheetTypeSelection();
-                ctsel.SetActiveCell(cellRef);
-                ctsel.SetSqref(Arrays.asList(cellRef));
+                ctsel.activeCell = (value);
+                ctsel.SetSqref(Arrays.AsList(value));
             }
         }
         /**
@@ -2824,11 +2827,11 @@ namespace NPOI.XSSF.UserModel
 
         private CT_Selection GetSheetTypeSelection()
         {
-            if (GetSheetTypeSheetView().sizeOfSelectionArray() == 0)
+            if (GetSheetTypeSheetView().SizeOfSelectionArray() == 0)
             {
-                GetSheetTypeSheetView().insertNewSelection(0);
+                GetSheetTypeSheetView().InsertNewSelection(0);
             }
-            return GetSheetTypeSheetView().getSelectionArray(0);
+            return GetSheetTypeSheetView().GetSelectionArray(0);
         }
 
         /**
@@ -2890,11 +2893,11 @@ namespace NPOI.XSSF.UserModel
 
         private CT_Pane GetPane()
         {
-            if (GetDefaultSheetView().getPane() == null)
+            if (GetDefaultSheetView().pane == null)
             {
                 GetDefaultSheetView().addNewPane();
             }
-            return GetDefaultSheetView().getPane();
+            return GetDefaultSheetView().pane;
         }
 
         /**
@@ -2949,7 +2952,7 @@ namespace NPOI.XSSF.UserModel
             // Now re-generate our CT_Hyperlinks, if needed
             if (hyperlinks.Count > 0)
             {
-                if (worksheet.GetHyperlinks() == null)
+                if (worksheet.hyperlinks == null)
                 {
                     worksheet.AddNewHyperlinks();
                 }
@@ -2963,7 +2966,7 @@ namespace NPOI.XSSF.UserModel
                     // Now grab their underling object
                     ctHls[i] = hyperlink.GetCTHyperlink();
                 }
-                worksheet.hyperlinks.setHyperlinkArray(ctHls);
+                worksheet.hyperlinks.SetHyperlinkArray(ctHls);
             }
 
             foreach (XSSFRow row in _rows.Values)
@@ -2975,7 +2978,7 @@ namespace NPOI.XSSF.UserModel
             //xmlOptions.SetSaveSyntheticDocumentElement(new QName(CT_Worksheet.type.GetName().getNamespaceURI(), "worksheet"));
             Dictionary<String, String> map = new Dictionary<String, String>();
             map[ST_RelationshipId.NamespaceURI]= "r";
-            xmlOptions.SetSaveSuggestedPrefixes(map);
+            //xmlOptions.SetSaveSuggestedPrefixes(map);
 
             worksheet.Save(out1);
         }
@@ -2986,7 +2989,7 @@ namespace NPOI.XSSF.UserModel
         public bool IsAutoFilterLocked()
         {
             CreateProtectionFieldIfNotPresent();
-            return sheetProtectionEnabled() && worksheet.GetSheetProtection().getAutoFilter();
+            return sheetProtectionEnabled() && worksheet.sheetProtection.autoFilter;
         }
 
         /**
@@ -2995,7 +2998,7 @@ namespace NPOI.XSSF.UserModel
         public bool IsDeleteColumnsLocked()
         {
             CreateProtectionFieldIfNotPresent();
-            return sheetProtectionEnabled() && worksheet.GetSheetProtection().getDeleteColumns();
+            return sheetProtectionEnabled() && worksheet.sheetProtection.deleteColumns;
         }
 
         /**
@@ -3004,7 +3007,7 @@ namespace NPOI.XSSF.UserModel
         public bool IsDeleteRowsLocked()
         {
             CreateProtectionFieldIfNotPresent();
-            return sheetProtectionEnabled() && worksheet.GetSheetProtection().getDeleteRows();
+            return sheetProtectionEnabled() && worksheet.sheetProtection.deleteRows;
         }
 
         /**
@@ -3013,7 +3016,7 @@ namespace NPOI.XSSF.UserModel
         public bool IsFormatCellsLocked()
         {
             CreateProtectionFieldIfNotPresent();
-            return sheetProtectionEnabled() && worksheet.GetSheetProtection().getFormatCells();
+            return sheetProtectionEnabled() && worksheet.sheetProtection.formatCells;
         }
 
         /**
@@ -3022,7 +3025,7 @@ namespace NPOI.XSSF.UserModel
         public bool IsFormatColumnsLocked()
         {
             CreateProtectionFieldIfNotPresent();
-            return sheetProtectionEnabled() && worksheet.GetSheetProtection().getFormatColumns();
+            return sheetProtectionEnabled() && worksheet.sheetProtection.formatColumns;
         }
 
         /**
@@ -3031,7 +3034,7 @@ namespace NPOI.XSSF.UserModel
         public bool IsFormatRowsLocked()
         {
             CreateProtectionFieldIfNotPresent();
-            return sheetProtectionEnabled() && worksheet.GetSheetProtection().getFormatRows();
+            return sheetProtectionEnabled() && worksheet.sheetProtection.formatRows;
         }
 
         /**
@@ -3040,7 +3043,7 @@ namespace NPOI.XSSF.UserModel
         public bool IsInsertColumnsLocked()
         {
             CreateProtectionFieldIfNotPresent();
-            return sheetProtectionEnabled() && worksheet.GetSheetProtection().getInsertColumns();
+            return sheetProtectionEnabled() && worksheet.sheetProtection.insertColumns;
         }
 
         /**
@@ -3049,7 +3052,7 @@ namespace NPOI.XSSF.UserModel
         public bool IsInsertHyperlinksLocked()
         {
             CreateProtectionFieldIfNotPresent();
-            return sheetProtectionEnabled() && worksheet.GetSheetProtection().getInsertHyperlinks();
+            return sheetProtectionEnabled() && worksheet.sheetProtection.insertHyperlinks;
         }
 
         /**
@@ -3058,7 +3061,7 @@ namespace NPOI.XSSF.UserModel
         public bool IsInsertRowsLocked()
         {
             CreateProtectionFieldIfNotPresent();
-            return sheetProtectionEnabled() && worksheet.GetSheetProtection().getInsertRows();
+            return sheetProtectionEnabled() && worksheet.sheetProtection.insertRows;
         }
 
         /**
@@ -3067,7 +3070,7 @@ namespace NPOI.XSSF.UserModel
         public bool IsPivotTablesLocked()
         {
             CreateProtectionFieldIfNotPresent();
-            return sheetProtectionEnabled() && worksheet.GetSheetProtection().getPivotTables();
+            return sheetProtectionEnabled() && worksheet.sheetProtection.pivotTables;
         }
 
         /**
@@ -3076,7 +3079,7 @@ namespace NPOI.XSSF.UserModel
         public bool IsSortLocked()
         {
             CreateProtectionFieldIfNotPresent();
-            return sheetProtectionEnabled() && worksheet.GetSheetProtection().getSort();
+            return sheetProtectionEnabled() && worksheet.sheetProtection.sort;
         }
 
         /**
@@ -3085,7 +3088,7 @@ namespace NPOI.XSSF.UserModel
         public bool IsObjectsLocked()
         {
             CreateProtectionFieldIfNotPresent();
-            return sheetProtectionEnabled() && worksheet.GetSheetProtection().getObjects();
+            return sheetProtectionEnabled() && worksheet.sheetProtection.objects;
         }
 
         /**
@@ -3094,7 +3097,7 @@ namespace NPOI.XSSF.UserModel
         public bool IsScenariosLocked()
         {
             CreateProtectionFieldIfNotPresent();
-            return sheetProtectionEnabled() && worksheet.GetSheetProtection().getScenarios();
+            return sheetProtectionEnabled() && worksheet.sheetProtection.scenarios;
         }
 
         /**
@@ -3103,7 +3106,7 @@ namespace NPOI.XSSF.UserModel
         public bool IsSelectLockedCellsLocked()
         {
             CreateProtectionFieldIfNotPresent();
-            return sheetProtectionEnabled() && worksheet.GetSheetProtection().getSelectLockedCells();
+            return sheetProtectionEnabled() && worksheet.sheetProtection.selectLockedCells;
         }
 
         /**
@@ -3112,7 +3115,7 @@ namespace NPOI.XSSF.UserModel
         public bool IsSelectUnlockedCellsLocked()
         {
             CreateProtectionFieldIfNotPresent();
-            return sheetProtectionEnabled() && worksheet.GetSheetProtection().getSelectUnlockedCells();
+            return sheetProtectionEnabled() && worksheet.sheetProtection.selectUnlockedCells;
         }
 
         /**
@@ -3121,7 +3124,7 @@ namespace NPOI.XSSF.UserModel
         public bool IsSheetLocked()
         {
             CreateProtectionFieldIfNotPresent();
-            return sheetProtectionEnabled() && worksheet.GetSheetProtection().getSheet();
+            return sheetProtectionEnabled() && worksheet.sheetProtection.sheet;
         }
 
         /**
@@ -3130,7 +3133,7 @@ namespace NPOI.XSSF.UserModel
         public void EnableLocking()
         {
             CreateProtectionFieldIfNotPresent();
-            worksheet.GetSheetProtection().setSheet(true);
+            worksheet.sheetProtection.sheet =(true);
         }
 
         /**
@@ -3139,7 +3142,7 @@ namespace NPOI.XSSF.UserModel
         public void DisableLocking()
         {
             CreateProtectionFieldIfNotPresent();
-            worksheet.GetSheetProtection().setSheet(false);
+            worksheet.sheetProtection.sheet = (false);
         }
 
         /**
@@ -3150,7 +3153,7 @@ namespace NPOI.XSSF.UserModel
         public void LockAutoFilter()
         {
             CreateProtectionFieldIfNotPresent();
-            worksheet.GetSheetProtection().setAutoFilter(true);
+            worksheet.sheetProtection.autoFilter = (true);
         }
 
         /**
@@ -3161,7 +3164,7 @@ namespace NPOI.XSSF.UserModel
         public void LockDeleteColumns()
         {
             CreateProtectionFieldIfNotPresent();
-            worksheet.GetSheetProtection().setDeleteColumns(true);
+            worksheet.sheetProtection.deleteColumns = true;
         }
 
         /**
@@ -3172,7 +3175,7 @@ namespace NPOI.XSSF.UserModel
         public void LockDeleteRows()
         {
             CreateProtectionFieldIfNotPresent();
-            worksheet.GetSheetProtection().setDeleteRows(true);
+            worksheet.sheetProtection.deleteRows = true;
         }
 
         /**
@@ -3183,7 +3186,7 @@ namespace NPOI.XSSF.UserModel
         public void LockFormatCells()
         {
             CreateProtectionFieldIfNotPresent();
-            worksheet.GetSheetProtection().setDeleteColumns(true);
+            worksheet.sheetProtection.deleteColumns = (true);
         }
 
         /**
@@ -3194,7 +3197,7 @@ namespace NPOI.XSSF.UserModel
         public void LockFormatColumns()
         {
             CreateProtectionFieldIfNotPresent();
-            worksheet.GetSheetProtection().setFormatColumns(true);
+            worksheet.sheetProtection.formatColumns = (true);
         }
 
         /**
@@ -3205,7 +3208,7 @@ namespace NPOI.XSSF.UserModel
         public void LockFormatRows()
         {
             CreateProtectionFieldIfNotPresent();
-            worksheet.GetSheetProtection().setFormatRows(true);
+            worksheet.sheetProtection.formatRows = (true);
         }
 
         /**
@@ -3216,7 +3219,7 @@ namespace NPOI.XSSF.UserModel
         public void LockInsertColumns()
         {
             CreateProtectionFieldIfNotPresent();
-            worksheet.GetSheetProtection().setInsertColumns(true);
+            worksheet.sheetProtection.insertColumns = (true);
         }
 
         /**
@@ -3227,7 +3230,7 @@ namespace NPOI.XSSF.UserModel
         public void LockInsertHyperlinks()
         {
             CreateProtectionFieldIfNotPresent();
-            worksheet.GetSheetProtection().setInsertHyperlinks(true);
+            worksheet.sheetProtection.insertHyperlinks = (true);
         }
 
         /**
@@ -3238,7 +3241,7 @@ namespace NPOI.XSSF.UserModel
         public void LockInsertRows()
         {
             CreateProtectionFieldIfNotPresent();
-            worksheet.GetSheetProtection().setInsertRows(true);
+            worksheet.sheetProtection.insertRows = (true);
         }
 
         /**
@@ -3249,7 +3252,7 @@ namespace NPOI.XSSF.UserModel
         public void LockPivotTables()
         {
             CreateProtectionFieldIfNotPresent();
-            worksheet.GetSheetProtection().setPivotTables(true);
+            worksheet.sheetProtection.pivotTables = (true);
         }
 
         /**
@@ -3260,7 +3263,7 @@ namespace NPOI.XSSF.UserModel
         public void LockSort()
         {
             CreateProtectionFieldIfNotPresent();
-            worksheet.GetSheetProtection().setSort(true);
+            worksheet.sheetProtection.sort = (true);
         }
 
         /**
@@ -3271,7 +3274,7 @@ namespace NPOI.XSSF.UserModel
         public void LockObjects()
         {
             CreateProtectionFieldIfNotPresent();
-            worksheet.GetSheetProtection().setObjects(true);
+            worksheet.sheetProtection.objects = (true);
         }
 
         /**
@@ -3282,7 +3285,7 @@ namespace NPOI.XSSF.UserModel
         public void LockScenarios()
         {
             CreateProtectionFieldIfNotPresent();
-            worksheet.GetSheetProtection().setScenarios(true);
+            worksheet.sheetProtection.scenarios = (true);
         }
 
         /**
@@ -3293,7 +3296,7 @@ namespace NPOI.XSSF.UserModel
         public void LockSelectLockedCells()
         {
             CreateProtectionFieldIfNotPresent();
-            worksheet.GetSheetProtection().setSelectLockedCells(true);
+            worksheet.sheetProtection.selectLockedCells = (true);
         }
 
         /**
@@ -3304,20 +3307,20 @@ namespace NPOI.XSSF.UserModel
         public void LockSelectUnlockedCells()
         {
             CreateProtectionFieldIfNotPresent();
-            worksheet.GetSheetProtection().setSelectUnlockedCells(true);
+            worksheet.sheetProtection.selectUnlockedCells = (true);
         }
 
         private void CreateProtectionFieldIfNotPresent()
         {
-            if (worksheet.GetSheetProtection() == null)
+            if (worksheet.sheetProtection == null)
             {
-                worksheet.SetSheetProtection(CT_SheetProtection.Factory.newInstance());
+                worksheet.sheetProtection = new CT_SheetProtection();
             }
         }
 
         private bool sheetProtectionEnabled()
         {
-            return worksheet.GetSheetProtection().getSheet();
+            return worksheet.sheetProtection.sheet;
         }
 
         /* namespace */
@@ -3325,7 +3328,7 @@ namespace NPOI.XSSF.UserModel
         {
             foreach (CellRangeAddress range in arrayFormulas)
             {
-                if (range.IsInRange(cell.GetRowIndex(), cell.GetColumnIndex()))
+                if (range.IsInRange(cell.RowIndex, cell.ColumnIndex))
                 {
                     return true;
                 }
@@ -3334,13 +3337,13 @@ namespace NPOI.XSSF.UserModel
         }
 
         /* namespace */
-        internal XSSFCell GetFirstCellInArrayFormula(ICell cell)
+        internal ICell GetFirstCellInArrayFormula(ICell cell)
         {
             foreach (CellRangeAddress range in arrayFormulas)
             {
-                if (range.IsInRange(cell.GetRowIndex(), cell.GetColumnIndex()))
+                if (range.IsInRange(cell.RowIndex, cell.ColumnIndex))
                 {
-                    return GetRow(range.getFirstRow()).getCell(range.getFirstColumn());
+                    return GetRow(range.FirstRow).GetCell(range.FirstColumn);
                 }
             }
             return null;
@@ -3357,17 +3360,17 @@ namespace NPOI.XSSF.UserModel
             int lastColumn = range.LastColumn;
             int height = lastRow - firstRow + 1;
             int width = lastColumn - firstColumn + 1;
-            List<XSSFCell> temp = new List<XSSFCell>(height * width);
+            List<ICell> temp = new List<ICell>(height * width);
             for (int rowIn = firstRow; rowIn <= lastRow; rowIn++)
             {
                 for (int colIn = firstColumn; colIn <= lastColumn; colIn++)
                 {
-                    XSSFRow row = GetRow(rowIn);
+                    IRow row = GetRow(rowIn);
                     if (row == null)
                     {
                         row = CreateRow(rowIn);
                     }
-                    XSSFCell cell = row.GetCell(colIn);
+                    ICell cell = row.GetCell(colIn);
                     if (cell == null)
                     {
                         cell = row.CreateCell(colIn);
@@ -3375,15 +3378,15 @@ namespace NPOI.XSSF.UserModel
                     temp.Add(cell);
                 }
             }
-            return SSCellRange.Create(firstRow, firstColumn, height, width, temp, typeof(XSSFCell));
+            return SSCellRange.Create(firstRow, firstColumn, height, width, temp, typeof(ICell));
         }
 
         public ICellRange<ICell> SetArrayFormula(String formula, CellRangeAddress range)
         {
 
-            CellRange<XSSFCell> cr = GetCellRange(range);
+            ICellRange<ICell> cr = GetCellRange(range);
 
-            XSSFCell mainArrayFormulaCell = cr.GetTopLeftCell();
+            ICell mainArrayFormulaCell = cr.TopLeftCell;
             mainArrayFormulaCell.SetCellArrayFormula(formula, range);
             arrayFormulas.Add(range);
             return cr;
@@ -3391,24 +3394,24 @@ namespace NPOI.XSSF.UserModel
 
         public ICellRange<ICell> RemoveArrayFormula(ICell cell)
         {
-            if (cell.GetSheet() != this)
+            if (cell.Sheet != this)
             {
                 throw new ArgumentException("Specified cell does not belong to this sheet.");
             }
             foreach (CellRangeAddress range in arrayFormulas)
             {
-                if (range.IsInRange(cell.GetRowIndex(), cell.GetColumnIndex()))
+                if (range.IsInRange(cell.RowIndex, cell.ColumnIndex))
                 {
                     arrayFormulas.Remove(range);
-                    CellRange<XSSFCell> cr = GetCellRange(range);
-                    foreach (XSSFCell c in cr)
+                    ICellRange<ICell> cr = GetCellRange(range);
+                    foreach (ICell c in cr)
                     {
-                        c.SetCellType(Cell.CELL_TYPE_BLANK);
+                        c.SetCellType(CellType.BLANK);
                     }
                     return cr;
                 }
             }
-            String ref1 = ((XSSFCell)cell).GetCTCell().getR();
+            String ref1 = ((XSSFCell)cell).GetCTCell().r;
             throw new ArgumentException("Cell " + ref1 + " is not part of an array formula.");
         }
 
@@ -3422,28 +3425,28 @@ namespace NPOI.XSSF.UserModel
         public List<XSSFDataValidation> GetDataValidations()
         {
             List<XSSFDataValidation> xssfValidations = new List<XSSFDataValidation>();
-            CTDataValidations dataValidations = this.worksheet.GetDataValidations();
-            if (dataValidations != null && dataValidations.GetCount() > 0)
+            CT_DataValidations dataValidations = this.worksheet.dataValidations;
+            if (dataValidations != null && dataValidations.count > 0)
             {
-                foreach (CTDataValidation ctDataValidation in dataValidations.GetDataValidationArray())
+                foreach (CT_DataValidation ctDataValidation in dataValidations.GetDataValidationArray())
                 {
-                    CellRangeAddressList AddressList = new CellRangeAddressList();
+                    CellRangeAddressList addressList = new CellRangeAddressList();
 
 
-                    List<String> sqref = ctDataValidation.GetSqref();
+                    List<String> sqref = ctDataValidation.sqref;
                     foreach (String stRef in sqref)
                     {
-                        String[] regions = stRef.split(" ");
+                        String[] regions = stRef.Split(new char[] { ' ' });
                         for (int i = 0; i < regions.Length; i++)
                         {
-                            String[] parts = regions[i].split(":");
+                            String[] parts = regions[i].Split(new char[]{':'});
                             CellReference begin = new CellReference(parts[0]);
                             CellReference end = parts.Length > 1 ? new CellReference(parts[1]) : begin;
-                            CellRangeAddress cellRangeAddress = new CellRangeAddress(begin.GetRow(), end.GetRow(), begin.GetCol(), end.GetCol());
-                            AddressList.addCellRangeAddress(cellRangeAddress);
+                            CellRangeAddress cellRangeAddress = new CellRangeAddress(begin.Row, end.Row, begin.Col, end.Col);
+                            addressList.AddCellRangeAddress(cellRangeAddress);
                         }
                     }
-                    XSSFDataValidation xssfDataValidation = new XSSFDataValidation(AddressList, ctDataValidation);
+                    XSSFDataValidation xssfDataValidation = new XSSFDataValidation(addressList, ctDataValidation);
                     xssfValidations.Add(xssfDataValidation);
                 }
             }
@@ -3502,16 +3505,16 @@ namespace NPOI.XSSF.UserModel
                 worksheet.AddNewTableParts();
             }
 
-            CTTableParts tblParts = worksheet.GetTableParts();
-            CTTablePart tbl = tblParts.AddNewTablePart();
+            CT_TableParts tblParts = worksheet.tableParts;
+            CT_TablePart tbl = tblParts.AddNewTablePart();
 
             // Table numbers need to be unique in the file, not just
             //  unique within the sheet. Find the next one
-            int tableNumber = GetPackagePart().getPackage().getPartsByContentType(XSSFRelation.TABLE.getContentType()).Count + 1;
+            int tableNumber = GetPackagePart().Package.GetPartsByContentType(XSSFRelation.TABLE.ContentType).Count + 1;
             XSSFTable table = (XSSFTable)CreateRelationship(XSSFRelation.TABLE, XSSFFactory.GetInstance(), tableNumber);
-            tbl.Id = table.getPackageRelationship().id;
+            tbl.id = table.GetPackageRelationship().Id;
 
-            tables.Put(tbl.GetId(), table);
+            tables[tbl.id]= table;
 
             return table;
         }
@@ -3522,7 +3525,7 @@ namespace NPOI.XSSF.UserModel
         public List<XSSFTable> GetTables()
         {
             List<XSSFTable> tableList = new List<XSSFTable>(
-                  tables.values()
+                  tables.Values
             );
             return tableList;
         }

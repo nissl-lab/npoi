@@ -79,15 +79,15 @@ namespace NPOI.XSSF.UserModel
 
                 CT_StyleMatrixReference fillref = style.AddNewFillRef();
                 fillref.idx = (0);
-                fillref.AddNewSchemeClr().SetVal(ST_SchemeColorVal.accent1);
+                fillref.AddNewSchemeClr().val=(ST_SchemeColorVal.accent1);
 
                 CT_StyleMatrixReference effectRef = style.AddNewEffectRef();
                 effectRef.idx = (0);
-                effectRef.AddNewSchemeClr().SetVal(ST_SchemeColorVal.accent1);
+                effectRef.AddNewSchemeClr().val = (ST_SchemeColorVal.accent1);
 
                 CT_FontReference fontRef = style.AddNewFontRef();
                 fontRef.idx = (ST_FontCollectionIndex.minor);
-                fontRef.AddNewSchemeClr().SetVal(ST_SchemeColorVal.tx1);
+                fontRef.AddNewSchemeClr().val = (ST_SchemeColorVal.tx1);
 
                 prototype = shape;
             }

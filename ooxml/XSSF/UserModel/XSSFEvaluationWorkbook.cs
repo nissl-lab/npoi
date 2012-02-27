@@ -86,7 +86,7 @@ namespace NPOI.XSSF.UserModel
             {
                 IName nm = _uBook.GetNameAt(i);
                 String nameText = nm.NameName;
-                if (name.Equals(nameText, StringComparison.InvariantCultureIgnoreCase) && nm.GetSheetIndex() == sheetIndex)
+                if (name.Equals(nameText, StringComparison.InvariantCultureIgnoreCase) && nm.SheetIndex == sheetIndex)
                 {
                     return new Name(_uBook.GetNameAt(i), i, this);
                 }
@@ -152,7 +152,7 @@ namespace NPOI.XSSF.UserModel
 
         public String GetNameText(NamePtg namePtg)
         {
-            return _uBook.GetNameAt(namePtg.Index).GetNameName();
+            return _uBook.GetNameAt(namePtg.Index).NameName;
         }
         public IEvaluationName GetName(NamePtg namePtg)
         {
@@ -163,7 +163,7 @@ namespace NPOI.XSSF.UserModel
         {
             XSSFCell cell = ((XSSFEvaluationCell)EvalCell).GetXSSFCell();
             XSSFEvaluationWorkbook frBook = XSSFEvaluationWorkbook.Create(_uBook);
-            String formulaText = CleanXSSFFormulaText(cell.GetCellFormula());
+            String formulaText = CleanXSSFFormulaText(cell.CellFormula);
             return FormulaParser.Parse(formulaText, frBook, FormulaType.CELL, _uBook.GetSheetIndex(cell.Sheet));
         }
 

@@ -81,20 +81,20 @@ namespace NPOI.XSSF.UserModel
 
                 CT_StyleMatrixReference Fillref = style.AddNewFillRef();
                 Fillref.idx = (1);
-                Fillref.AddNewSchemeClr().SetVal(ST_SchemeColorVal.accent1);
+                Fillref.AddNewSchemeClr().val = (ST_SchemeColorVal.accent1);
 
                 CT_StyleMatrixReference effectRef = style.AddNewEffectRef();
                 effectRef.idx = (0);
-                effectRef.AddNewSchemeClr().SetVal(ST_SchemeColorVal.accent1);
+                effectRef.AddNewSchemeClr().val = (ST_SchemeColorVal.accent1);
 
                 CT_FontReference fontRef = style.AddNewFontRef();
-                fontRef.idx = (STFontCollectionIndex.MINOR);
-                fontRef.AddNewSchemeClr().SetVal(ST_SchemeColorVal.lt1);
+                fontRef.idx = (ST_FontCollectionIndex.minor);
+                fontRef.AddNewSchemeClr().val = (ST_SchemeColorVal.lt1);
 
                 CT_TextBody body = shape.AddNewTxBody();
                 CT_TextBodyProperties bodypr = body.AddNewBodyPr();
-                bodypr.SetAnchor(ST_TextAnchoringType.ctr);
-                bodypr.SetRtlCol(false);
+                bodypr.anchor = (ST_TextAnchoringType.ctr);
+                bodypr.rtlCol = (false);
                 CT_TextParagraph p = body.AddNewP();
                 p.AddNewPPr().SetAlgn(ST_TextAlignType.ctr);
                 CT_TextCharacterProperties endPr = p.AddNewEndParaRPr();

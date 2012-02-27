@@ -78,6 +78,7 @@ namespace NPOI.XSSF.UserModel
             return _cellStyleXf;
         }
 
+
         /**
          * Creates an empty Cell Style
          */
@@ -142,7 +143,7 @@ namespace NPOI.XSSF.UserModel
                         // Remove any children off the current style, to
                         //  avoid orphaned nodes
                         if (_cellXf.IsSetAlignment())
-                            _cellXf.unsetAlignment();
+                            _cellXf.UnsetAlignment();
                         if (_cellXf.IsSetExtLst())
                             _cellXf.unsetExtLst();
 
@@ -989,7 +990,7 @@ namespace NPOI.XSSF.UserModel
          */
         public void SetFillPattern(FillPatternType ptrn)
         {
-            SetFillPattern((short)ptrn);
+            SetFillPattern(ptrn);
         }
 
         /**

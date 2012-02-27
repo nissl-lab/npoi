@@ -141,7 +141,7 @@ namespace NPOI.XSSF.UserModel
             if (commonXPath == null)
             {
 
-                Array commonTokens={};
+                Array commonTokens = null;
 
                 foreach (CT_TableColumn column in ctTable.tableColumns.tableColumn)
                 {
@@ -189,10 +189,10 @@ namespace NPOI.XSSF.UserModel
         public List<XSSFXmlColumnPr> GetXmlColumnPrs() {
 		
 		if(xmlColumnPr==null){
-			xmlColumnPr = new Vector<XSSFXmlColumnPr>();
+			xmlColumnPr = new List<XSSFXmlColumnPr>();
 			foreach(CT_TableColumn column in ctTable.tableColumns.tableColumn){
-				if(column.XmlColumnPr!=null){
-					XSSFXmlColumnPr columnPr = new XSSFXmlColumnPr(this,column,column.XmlColumnPr);
+				if(column.xmlColumnPr!=null){
+					XSSFXmlColumnPr columnPr = new XSSFXmlColumnPr(this,column,column.xmlColumnPr);
 					xmlColumnPr.Add(columnPr);
 				}
 			}

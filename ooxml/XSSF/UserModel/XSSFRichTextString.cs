@@ -151,11 +151,11 @@ namespace NPOI.XSSF.UserModel
                 st.unsetT();
             }
 
-            String text = GetString();
+            String text = this.String;
             XSSFFont xssfFont = (XSSFFont)font;
 
             Dictionary<int, CT_RPrElt> formats = GetFormatMap(st);
-            CT_RPrElt fmt = CT_RPrElt.Factory.newInstance();
+            CT_RPrElt fmt = new CT_RPrElt();
             SetRunAttributes(xssfFont.GetCTFont(), fmt);
             ApplyFont(formats, startIndex, endIndex, fmt);
 
@@ -169,7 +169,7 @@ namespace NPOI.XSSF.UserModel
          */
         public void ApplyFont(IFont font)
         {
-            String text = GetString();
+            String text = this.String;
             ApplyFont(0, text.Length, font);
         }
 
@@ -527,18 +527,18 @@ namespace NPOI.XSSF.UserModel
                         " but the last format index was " + formats.lastKey());
             }
             CT_Rst st = new CT_Rst();
-            int RunStartIdx = 0;
-            for (Iterator<int> it = formats.keySet().iterator(); it.HasNext(); )
+            int runStartIdx = 0;
+            for (Dictionary<int,CT_RPrElt>.KeyCollection.Enumerator it = formats.Keys.GetEnumerator(); it.MoveNext(); )
             {
-                int RunEndIdx = it.next();
+                int runEndIdx = it.Current;
                 CT_RElt run = st.AddNewR();
-                String fragment = text.Substring(RunStartIdx, RunEndIdx);
+                String fragment = text.Substring(runStartIdx, runEndIdx);
                 run.t = (fragment);
-                preserveSpaces(run.xgetT());
-                CT_RPrElt fmt = formats.Get(RunEndIdx);
+                PreserveSpaces(run.xgetT());
+                CT_RPrElt fmt = formats[runEndIdx];
                 if (fmt != null)
                     run.rPr = (fmt);
-                RunStartIdx = RunEndIdx;
+                runStartIdx = runEndIdx;
             }
             return st;
         }

@@ -204,7 +204,7 @@ namespace NPOI.XSSF.UserModel
          * @param pictureIndex the index of the picture in the workbook collection of pictures,
          *   {@link NPOI.xssf.usermodel.XSSFWorkbook#getAllPictures()} .
          */
-        protected PackageRelationship AddPictureReference(int pictureIndex)
+        internal PackageRelationship AddPictureReference(int pictureIndex)
         {
             XSSFWorkbook wb = (XSSFWorkbook)GetParent().GetParent();
             XSSFPictureData data = (XSSFPictureData)wb.GetAllPictures()[pictureIndex];

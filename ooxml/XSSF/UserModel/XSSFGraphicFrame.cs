@@ -62,7 +62,7 @@ namespace NPOI.XSSF.UserModel
         {
             if (prototype == null)
             {
-                CT_GraphicalObjectFrame graphicFrame = CT_GraphicalObjectFrame.Factory.newInstance();
+                CT_GraphicalObjectFrame graphicFrame = new CT_GraphicalObjectFrame();
 
                 CT_GraphicalObjectFrameNonVisual nvGraphic = graphicFrame.AddNewNvGraphicFramePr();
                 CT_NonVisualDrawingProps props = nvGraphic.AddNewCNvPr();

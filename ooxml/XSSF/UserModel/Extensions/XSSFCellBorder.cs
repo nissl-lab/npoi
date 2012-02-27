@@ -200,7 +200,7 @@ namespace NPOI.XSSF.UserModel.Extensions
             if (!(o is XSSFCellBorder)) return false;
 
             XSSFCellBorder cf = (XSSFCellBorder)o;
-            return border.ToString().Equals(cf.GetCT_Border().ToString());
+            return border.ToString().Equals(cf.GetCTBorder().ToString());
         }
     }
 }

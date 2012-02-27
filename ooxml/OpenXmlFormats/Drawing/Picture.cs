@@ -13,6 +13,12 @@ namespace NPOI.OpenXmlFormats.Dml {
         
         private CT_NonVisualPictureProperties cNvPicPrField;
         
+        public CT_NonVisualDrawingProps AddNewCNvPr()
+        {
+            this.cNvPrField = new CT_NonVisualDrawingProps();
+            return this.cNvPrField;
+        }
+
         /// <remarks/>
         public CT_NonVisualDrawingProps cNvPr {
             get {

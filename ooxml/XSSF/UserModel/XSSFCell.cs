@@ -293,7 +293,7 @@ namespace NPOI.XSSF.UserModel
                             if (_cell.isSetIs())
                             {
                                 //string is expressed directly in the cell defInition instead of implementing the shared string table.
-                                rt = new XSSFRichTextString(_cell.GetIs());
+                                rt = new XSSFRichTextString(_cell.@is);
                             }
                             else if (_cell.isSetV())
                             {
@@ -501,7 +501,7 @@ namespace NPOI.XSSF.UserModel
 
             IFormulaParsingWorkbook fpb = XSSFEvaluationWorkbook.Create(wb);
             //validate through the FormulaParser
-            FormulaParser.Parse(formula, fpb, formulaType, wb.GetSheetIndex(GetSheet()));
+            FormulaParser.Parse(formula, fpb, formulaType, wb.GetSheetIndex(this.Sheet));
 
             CT_CellFormula f = new CT_CellFormula();
             f.Value = formula;
@@ -557,7 +557,7 @@ namespace NPOI.XSSF.UserModel
                 XSSFCellStyle style = null;
                 if (_stylesSource.GetNumCellStyles() > 0)
                 {
-                    long idx = _cell.IsSetS() ? _cell.s : 0;
+                    long idx = _cell.isSetS() ? _cell.s : 0;
                     style = _stylesSource.GetStyleAt((int)idx);
                 }
                 return style;
@@ -566,7 +566,7 @@ namespace NPOI.XSSF.UserModel
             {
                 if (value == null)
                 {
-                    if (_cell.IsSetS()) _cell.unsetS();
+                    if (_cell.isSetS()) _cell.unsetS();
                 }
                 else
                 {
@@ -769,7 +769,7 @@ namespace NPOI.XSSF.UserModel
         {
             CT_Cell blank = new CT_Cell();
             blank.r = (_cell.r);
-            if (_cell.IsSetS()) blank.SetS(_cell.s);
+            if (_cell.isSetS()) blank.SetS(_cell.s);
             _cell.Set(blank);
         }
 
@@ -908,7 +908,7 @@ namespace NPOI.XSSF.UserModel
         /**
          * Used to help format error messages
          */
-        private static String GetCellTypeName(int cellTypeCode)
+        private static String GetCellTypeName(CellType cellTypeCode)
         {
             switch (cellTypeCode)
             {
@@ -929,7 +929,7 @@ namespace NPOI.XSSF.UserModel
         {
             String msg = "Cannot Get a "
                 + GetCellTypeName(expectedTypeCode) + " value from a "
-                + GetCellTypeName(actualTypeCode) + " " + (isFormulaCell ? "formula " : "") + "cell";
+                + GetCellTypeName(actualTypeCode) + " " + (IsFormulaCell ? "formula " : "") + "cell";
             return new InvalidOperationException(msg);
         }
 
@@ -939,12 +939,12 @@ namespace NPOI.XSSF.UserModel
         private static void CheckBounds(int cellIndex)
         {
             SpreadsheetVersion v = SpreadsheetVersion.EXCEL2007;
-            int maxcol = SpreadsheetVersion.EXCEL2007.GetLastColumnIndex();
+            int maxcol = SpreadsheetVersion.EXCEL2007.LastColumnIndex;
             if (cellIndex < 0 || cellIndex > maxcol)
             {
                 throw new ArgumentException("Invalid column index (" + cellIndex
-                        + ").  Allowable column range for " + v.name() + " is (0.."
-                        + maxcol + ") or ('A'..'" + v.GetLastColumnName() + "')");
+                        + ").  Allowable column range for " + v.name + " is (0.."
+                        + maxcol + ") or ('A'..'" + v.LastColumnName + "')");
             }
         }
 

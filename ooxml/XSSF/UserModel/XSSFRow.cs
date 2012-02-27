@@ -546,7 +546,7 @@ namespace NPOI.XSSF.UserModel
          *
          * @param n the number of rows to move
          */
-        protected void Shift(int n)
+        internal void Shift(int n)
         {
             int rownum = RowNum + n;
             CalculationChain calcChain = ((XSSFWorkbook)_sheet.Workbook).GetCalculationChain();
