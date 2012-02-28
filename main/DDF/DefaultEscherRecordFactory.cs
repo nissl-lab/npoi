@@ -24,6 +24,7 @@ namespace NPOI.DDF
     using System.Text;
     using NPOI.HSSF.Record;
     using NPOI.Util;
+    using System.Collections.Generic;
 
     /// <summary>
     /// Generates escher records when provided the byte array containing those records.
@@ -41,7 +42,7 @@ namespace NPOI.DDF
             typeof(EscherClientDataRecord), typeof(EscherDggRecord),
             typeof(EscherSplitMenuColorsRecord), typeof(EscherChildAnchorRecord), typeof(EscherTextboxRecord)
         };
-        private static Hashtable recordsMap = RecordsToMap(escherRecordClasses);
+        private static Dictionary<short,ConstructorInfo> recordsMap = RecordsToMap(escherRecordClasses);
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DefaultEscherRecordFactory"/> class.
@@ -74,7 +75,7 @@ namespace NPOI.DDF
                 r.Options = header.Options;
                 return r;
             }
-            else if (header.RecordId >= EscherBlipRecord.RECORD_ID_START && header.RecordId <= EscherBlipRecord.RECORD_ID_END)
+            if (header.RecordId >= EscherBlipRecord.RECORD_ID_START && header.RecordId <= EscherBlipRecord.RECORD_ID_END)
             {
                 EscherBlipRecord r;
                 if (header.RecordId == EscherBitmapBlip.RECORD_ID_DIB ||
@@ -97,27 +98,31 @@ namespace NPOI.DDF
                 r.Options = header.Options;
                 return r;
             }
-            else
+
+            //ConstructorInfo recordConstructor = (ConstructorInfo) recordsMap[header.RecordId];
+            ConstructorInfo recordConstructor = null;
+            if (recordsMap.ContainsKey(header.RecordId))
+                recordConstructor = recordsMap[header.RecordId];
+
+            EscherRecord escherRecord = null;
+            if (recordConstructor == null)
             {
-                //ConstructorInfo recordConstructor = (ConstructorInfo) recordsMap[header.RecordId];
-                Type record = (Type)recordsMap[header.RecordId];
-                EscherRecord escherRecord = null;
-                //if ( recordConstructor != null )
-                if (record != null)
-                {
-                    try
-                    {
-                        escherRecord = (EscherRecord)Activator.CreateInstance(record);
-                        escherRecord.RecordId = header.RecordId;
-                        escherRecord.Options = header.Options;
-                    }
-                    catch (Exception)
-                    {
-                        escherRecord = null;
-                    }
-                }
-                return escherRecord == null ? new UnknownEscherRecord() : escherRecord;
+                return new UnknownEscherRecord();
             }
+
+            try
+            {
+                escherRecord = (EscherRecord)recordConstructor.Invoke(new object[] { });
+                //escherRecord = (EscherRecord)Activator.CreateInstance(recordConstructor);
+            }
+            catch (Exception)
+            {
+                return new UnknownEscherRecord();
+            }
+            escherRecord.RecordId = header.RecordId;
+            escherRecord.Options = header.Options;
+            return escherRecord;
+
         }
 
         /// <summary>
@@ -127,30 +132,36 @@ namespace NPOI.DDF
         /// </summary>
         /// <param name="records">The records to convert</param>
         /// <returns>The map containing the id/constructor pairs.</returns>
-        private static Hashtable RecordsToMap(Type[] records)
+        private static Dictionary<short, ConstructorInfo> RecordsToMap(Type[] records)
         {
-            Hashtable result = new Hashtable();
+            Dictionary<short, ConstructorInfo> result = new Dictionary<short, ConstructorInfo>();
             //ConstructorInfo constructor;
-
+            Type[] EMPTY_CLASS_ARRAY = new Type[0];
             for (int i = 0; i < records.Length; i++)
             {
-                Type record = null;
+                Type recordType = records[i];
                 short sid = 0;
 
-                record = records[i];
                 try
                 {
-                    sid = (short)record.GetField("RECORD_ID").GetValue(null);
-                    //constructor = record.GetConstructor(new Type[]
-                    //{
-                    //} );
+                    sid = (short)recordType.GetField("RECORD_ID").GetValue(null);
                 }
                 catch (Exception)
                 {
                     throw new RecordFormatException(
                             "Unable to determine record types");
                 }
-                result[sid] = record;        //constructor;
+                ConstructorInfo ci;
+                try
+                {
+                    ci = recordType.GetConstructor(EMPTY_CLASS_ARRAY);
+                }
+                catch(Exception e)
+                {
+                    throw new RuntimeException(e);
+                }
+                //result[sid] = recordType;        //constructor;
+                result.Add(sid, ci);
             }
             return result;
         }

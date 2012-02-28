@@ -51,6 +51,17 @@ namespace NPOI.DDF
         public override int FillFields(byte[] data, int offset, EscherRecordFactory recordFactory)
         {
             int bytesRemaining = ReadHeader(data, offset);
+            /*
+		     * Modified by Zhang Zhang
+		     * Have a check between avaliable bytes and bytesRemaining, 
+		     * take the avaliable length if the bytesRemaining out of range.
+		     * July 09, 2010
+		     */
+            int avaliable = data.Length - (offset + 8);
+            if (bytesRemaining > avaliable)
+            {
+                bytesRemaining = avaliable;
+            }
             if (IsContainerRecord)
             {
                 int bytesWritten = 0;

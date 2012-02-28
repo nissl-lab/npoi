@@ -76,7 +76,8 @@ namespace NPOI.DDF
             int pos = offset + 8;
             field_1_blipTypeWin32 = data[pos];
             field_2_blipTypeMacOS = data[pos + 1];
-            Array.Copy(data, pos + 2, field_3_uid = new byte[16], 0, 16);
+            field_3_uid = new byte[16];
+            Array.Copy(data, pos + 2, field_3_uid, 0, 16);
             field_4_tag = LittleEndian.GetShort(data, pos + 18);
             field_5_size = LittleEndian.GetInt(data, pos + 20);
             field_6_ref = LittleEndian.GetInt(data, pos + 24);

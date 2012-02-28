@@ -34,6 +34,7 @@ namespace NPOI.HSSF.UserModel
     using NPOI.SS.Util;
     using NPOI.Util;
     using System.Globalization;
+    using System.Security.Cryptography;
 
 
     /// <summary>
@@ -1679,7 +1680,7 @@ namespace NPOI.HSSF.UserModel
         {
             InitDrawings();
 
-            byte[] uid = NewUID;
+            byte[] uid = MD5.Create().ComputeHash(pictureData);
             EscherBitmapBlip blipRecord = new EscherBitmapBlip();
             blipRecord.RecordId = (short)(EscherBitmapBlip.RECORD_ID_START + format);
             
