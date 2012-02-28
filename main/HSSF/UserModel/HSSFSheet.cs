@@ -1812,7 +1812,7 @@ namespace NPOI.HSSF.UserModel
         /// start from scratch!
         /// </summary>
         /// <value>The drawing patriarch.</value>
-        public NPOI.SS.UserModel.IDrawing DrawingPatriarch
+        public IDrawing DrawingPatriarch
         {
             get
             {

@@ -59,7 +59,7 @@ namespace NPOI.DDF
         private byte field_11_unused3;
         private EscherBlipRecord field_12_blipRecord;
 
-        private byte[] remainingData;
+        private byte[] _remainingData;
 
         /// <summary>
         /// This method deSerializes the record from a byte array.
@@ -95,19 +95,9 @@ namespace NPOI.DDF
             }
             pos += 36 + bytesRead;
             bytesRemaining -= bytesRead;
-            //        if (field_1_blipTypeWin32 == BT_PNG)
-            //        {
-            //            byte[] uid = new byte[16];
-            //            Array.Copy( data, pos + 36, uid, 0, 16 );
-            //            byte[] puid = new byte[16];
-            //            Array.Copy( data, pos + 52, puid, 0, 16 );
-            //            byte tag = data[pos+68];
-            //            Console.WriteLine( HexDump.dump( data, 0, 0 ) );
-            //            byte[] pngBytes = EscherBlipRecord.decompress( data, pos+69, bytesRemaining);
-            //        }
 
-            remainingData = new byte[bytesRemaining];
-            Array.Copy(data, pos, remainingData, 0, bytesRemaining);
+            _remainingData = new byte[bytesRemaining];
+            Array.Copy(data, pos, _remainingData, 0, bytesRemaining);
             return bytesRemaining + 8 + 36 + (field_12_blipRecord == null ? 0 : field_12_blipRecord.RecordSize);
 
         }
@@ -124,14 +114,14 @@ namespace NPOI.DDF
         {
             listener.BeforeRecordSerialize(offset, RecordId, this);
 
-            if (remainingData == null)
-                remainingData = new byte[0];
+            if (_remainingData == null)
+                _remainingData = new byte[0];
 
             LittleEndian.PutShort(data, offset, Options);
             LittleEndian.PutShort(data, offset + 2, RecordId);
-            if (remainingData == null) remainingData = new byte[0];
+            if (_remainingData == null) _remainingData = new byte[0];
             int blipSize = field_12_blipRecord == null ? 0 : field_12_blipRecord.RecordSize;
-            int remainingBytes = remainingData.Length + 36 + blipSize;
+            int remainingBytes = _remainingData.Length + 36 + blipSize;
             LittleEndian.PutInt(data, offset + 4, remainingBytes);
 
             data[offset + 8] = field_1_blipTypeWin32;
@@ -151,10 +141,10 @@ namespace NPOI.DDF
             {
                 bytesWritten = field_12_blipRecord.Serialize(offset + 44, data);
             }
-            if (remainingData == null)
-                remainingData = new byte[0];
-            Array.Copy(remainingData, 0, data, offset + 44 + bytesWritten, remainingData.Length);
-            int pos = offset + 8 + 36 + remainingData.Length + bytesWritten;
+            if (_remainingData == null)
+                _remainingData = new byte[0];
+            Array.Copy(_remainingData, 0, data, offset + 44 + bytesWritten, _remainingData.Length);
+            int pos = offset + 8 + 36 + _remainingData.Length + bytesWritten;
 
             listener.AfterRecordSerialize(pos, RecordId, pos - offset, this);
             return pos - offset;
@@ -174,9 +164,9 @@ namespace NPOI.DDF
                     field_12_size = field_12_blipRecord.RecordSize;
                 }
                 int remaining_size = 0;
-                if (remainingData != null)
+                if (_remainingData != null)
                 {
-                    remaining_size = remainingData.Length;
+                    remaining_size = _remainingData.Length;
                 }
                 return 8 + 1 + 1 + 16 + 2 + 4 + 4 + 4 + 1 + 1 +
                     1 + 1 + field_12_size + remaining_size;            
@@ -322,8 +312,8 @@ namespace NPOI.DDF
         /// <value>The remaining data.</value>
         public byte[] RemainingData
         {
-            get { return remainingData; }
-            set { remainingData = value; }
+            get { return _remainingData; }
+            set { _remainingData = value; }
         }
         /// <summary>
         /// Returns a <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
@@ -340,7 +330,7 @@ namespace NPOI.DDF
             {
                 try
                 {
-                    HexDump.Dump(this.remainingData, 0, b, 0);
+                    HexDump.Dump(this._remainingData, 0, b, 0);
                     extraData = b.ToString();
                 }
                 catch (Exception e)

@@ -31,7 +31,7 @@ public interface ChartData {
 	 * @param chart a chart to fill in
 	 * @param axis chart axis to use
 	 */
-	void FillChart(Chart chart, params ChartAxis[] axis);
+	void FillChart(IChart chart, params ChartAxis[] axis);
 }
 
 }

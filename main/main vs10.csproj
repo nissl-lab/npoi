@@ -44,7 +44,8 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <CodeAnalysisRuleSet>BasicCorrectnessRules.ruleset</CodeAnalysisRuleSet>
-    <RunCodeAnalysis>true</RunCodeAnalysis>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
+    <CodeAnalysisIgnoreGeneratedCode>false</CodeAnalysisIgnoreGeneratedCode>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -98,6 +99,7 @@
     <Compile Include="HSSF\UserModel\HSSFDataValidation.cs" />
     <Compile Include="HSSF\UserModel\HSSFDataValidationHelper.cs" />
     <Compile Include="HSSF\UserModel\HSSFDateUtil.cs" />
+    <Compile Include="HSSF\Util\LazilyConcatenatedByteArray.cs" />
     <Compile Include="OldFileFormatException.cs" />
     <Compile Include="DDF\DefaultEscherRecordFactory.cs" />
     <Compile Include="DDF\EscherArrayProperty.cs" />

@@ -24,12 +24,12 @@ namespace NPOI.HSSF.UserModel
     /// @author Glen Stampoultzis (glens at apache.org)
     /// </summary>
     [Serializable]
-    public abstract class HSSFShape : IShape
+    public abstract class HSSFShape //: IShape
     {
         public static int LINEWIDTH_ONE_PT = 12700; // 12700 = 1pt
         public static int LINEWIDTH_DEFAULT = 9525;
 
-        IShape parent;
+        HSSFShape parent;
         [NonSerialized]
         HSSFAnchor anchor;
         protected internal HSSFPatriarch _patriarch;
@@ -44,7 +44,7 @@ namespace NPOI.HSSF.UserModel
         /// </summary>
         /// <param name="parent">The parent.</param>
         /// <param name="anchor">The anchor.</param>
-        protected HSSFShape(IShape parent, HSSFAnchor anchor)
+        protected HSSFShape(HSSFShape parent, HSSFAnchor anchor)
         {
             this.parent = parent;
             this.Anchor = anchor;
@@ -54,7 +54,7 @@ namespace NPOI.HSSF.UserModel
         /// Gets the parent shape.
         /// </summary>
         /// <value>The parent.</value>
-        public IShape Parent
+        public HSSFShape Parent
         {
             get { return parent; }
         }

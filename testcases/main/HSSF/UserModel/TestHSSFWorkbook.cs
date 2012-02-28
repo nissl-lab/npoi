@@ -819,7 +819,7 @@ namespace TestCases.HSSF.UserModel
                 dirNode.GetEntry(entryName);
                 return true;
             }
-            catch (FileNotFoundException e)
+            catch (FileNotFoundException)
             {
                 return false;
             }

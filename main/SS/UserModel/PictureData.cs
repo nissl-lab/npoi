@@ -27,7 +27,7 @@ namespace NPOI.SS.UserModel
          *
          * @return the picture data.
          */
-        byte[] GetData();
+        byte[] Data { get; }
 
         /**
          * Suggests a file extension for this image.
@@ -35,6 +35,9 @@ namespace NPOI.SS.UserModel
          * @return the file extension.
          */
         String SuggestFileExtension();
-
+        /**
+         * Returns the mime type for the image
+         */
+        String MimeType { get; }
     }
 }

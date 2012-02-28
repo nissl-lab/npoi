@@ -250,11 +250,11 @@ namespace TestCases.HSSF.UserModel
 
             // Now Add some text to one group, and some more
             //  to the base, and Check we can get it back again
-            ITextbox tbox1 =
-                patriarch.CreateTextbox(new HSSFClientAnchor(1, 2, 3, 4, (short)0, 0, (short)0, 0));
+            HSSFTextbox tbox1 =
+                patriarch.CreateTextbox(new HSSFClientAnchor(1, 2, 3, 4, (short)0, 0, (short)0, 0)) as HSSFTextbox;
             tbox1.String = (new HSSFRichTextString("I am text box 1"));
-            ITextbox tbox2 =
-                s2.CreateTextbox(new HSSFChildAnchor(41, 42, 43, 44));
+            HSSFTextbox tbox2 =
+                s2.CreateTextbox(new HSSFChildAnchor(41, 42, 43, 44)) as HSSFTextbox;
             tbox2.String = (new HSSFRichTextString("This is text box 2"));
 
             Assert.AreEqual(3, patriarch.Children.Count);

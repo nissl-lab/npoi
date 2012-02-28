@@ -129,7 +129,7 @@ namespace NPOI.HSSF.UserModel
         /// <param name="anchor">the client anchor describes how this Group is attached
         /// to the sheet.</param>
         /// <returns>the newly Created textbox.</returns>
-        public ITextbox CreateTextbox(IClientAnchor anchor)
+        public HSSFSimpleShape CreateTextbox(IClientAnchor anchor)
         {
             HSSFTextbox shape = new HSSFTextbox(null, (HSSFAnchor)anchor);
             shape.Anchor = (HSSFAnchor)anchor;
@@ -325,12 +325,12 @@ namespace NPOI.HSSF.UserModel
          * @param row2 the row (0 based) of the second cell.
          * @return the newly created client anchor
          */
-        public HSSFClientAnchor CreateAnchor(int dx1, int dy1, int dx2, int dy2, int col1, int row1, int col2, int row2)
+        public IClientAnchor CreateAnchor(int dx1, int dy1, int dx2, int dy2, int col1, int row1, int col2, int row2)
         {
             return new HSSFClientAnchor(dx1, dy1, dx2, dy2, (short)col1, row1, (short)col2, row2);
         }
 
-        public Chart CreateChart(IClientAnchor anchor)
+        public IChart CreateChart(IClientAnchor anchor)
         {
             throw new RuntimeException("NotImplemented");
         }

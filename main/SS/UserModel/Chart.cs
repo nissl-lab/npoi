@@ -10,7 +10,7 @@ namespace NPOI.SS.UserModel
      *
      * @author Roman Kashitsyn
      */
-    public interface Chart : ManuallyPositionable
+    public interface IChart : ManuallyPositionable
     {
 
         /**

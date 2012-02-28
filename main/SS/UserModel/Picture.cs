@@ -40,7 +40,7 @@ namespace NPOI.SS.UserModel
      *
      * @author Yegor Kozlov
      */
-    public interface IPicture : IShape
+    public interface IPicture
     {
 
         /**
@@ -58,6 +58,11 @@ namespace NPOI.SS.UserModel
         void Resize(double scale);
 
         IClientAnchor GetPreferredSize();
-
+        /**
+         * Return picture data for this picture
+         *
+         * @return picture data for this picture
+         */
+        IPictureData PictureData { get; }
     }
 }

@@ -33,7 +33,7 @@ namespace NPOI.HSSF.UserModel
     /// @author Glen Stampoultzis
     /// @author Yegor Kozlov (yegor at apache.org)
     /// </summary>
-    public class HSSFPicture : HSSFSimpleShape, IPicture
+    public class HSSFPicture : HSSFSimpleShape , IPicture
     {
         /**
          * width of 1px in columns with default width in Units of 1/256 of a Char width
@@ -59,7 +59,9 @@ namespace NPOI.HSSF.UserModel
         public HSSFPatriarch Patriarch
         {
             get { return _patriarch; }
-            set { _patriarch = value; }
+            set { 
+                _patriarch = value; 
+            }
         }
 
         private static POILogger log = POILogFactory.GetLogger(typeof(HSSFPicture));
@@ -268,43 +270,13 @@ namespace NPOI.HSSF.UserModel
                     return img.Size;
                 }
             }
-            //switch (type)
-            //{
-            //    //we can calculate the preferred size only for JPEG and PNG
-            //    //other formats like WMF, EMF and PICT are not supported in Java
-            //    case HSSFWorkbook.PICTURE_TYPE_JPEG:
-            //    case HSSFWorkbook.PICTURE_TYPE_PNG:
-            //    case HSSFWorkbook.PICTURE_TYPE_DIB:
-            //        try
-            //        {
-            //            //Read the image using javax.imageio.*
-            //            ImageInputStream iis = ImageIO.CreateImageInputStream(new MemoryStream(data));
-            //            IEnumerator i = ImageIO.GetImageReaders(iis);
-            //            ImageReader r = (ImageReader)i.Current;
-            //            r.SetInput(iis);
-            //            BufferedImage img = r.Read(0);
-
-            //            int[] dpi = GetResolution(r);
-            //            size.width = img.Width* 96 / dpi[0];
-            //            size.height = img.Height * 96 / dpi[1];
-
-            //        }
-            //        catch (IOException e)
-            //        {
-            //            //silently return if ImageIO failed to Read the image
-            //            log.Log(POILogger.WARN, e);
-            //        }
-
-            //        break;
-            //}
-            //return size;
         }
         /**
          * Return picture data for this shape
          *
          * @return picture data for this shape
          */
-        public HSSFPictureData PictureData
+        public IPictureData PictureData
         {
             get
             {

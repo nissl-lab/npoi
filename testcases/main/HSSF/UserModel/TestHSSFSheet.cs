@@ -369,16 +369,16 @@ namespace TestCases.HSSF.UserModel
             // 1 chart sheet -> data on 1st, chart on 2nd
             Assert.IsNotNull(((HSSFSheet)wb1c.GetSheetAt(0)).DrawingPatriarch);
             Assert.IsNotNull(((HSSFSheet)wb1c.GetSheetAt(1)).DrawingPatriarch);
-            Assert.IsFalse(((HSSFSheet)wb1c.GetSheetAt(0)).DrawingPatriarch.ContainsChart());
-            Assert.IsTrue(((HSSFSheet)wb1c.GetSheetAt(1)).DrawingPatriarch.ContainsChart());
+            Assert.IsFalse((((HSSFSheet)wb1c.GetSheetAt(0)).DrawingPatriarch as HSSFPatriarch).ContainsChart());
+            Assert.IsTrue((((HSSFSheet)wb1c.GetSheetAt(1)).DrawingPatriarch as HSSFPatriarch).ContainsChart());
 
             // 2 chart sheet -> data on 1st, chart on 2nd+3rd
             Assert.IsNotNull(((HSSFSheet)wb2c.GetSheetAt(0)).DrawingPatriarch);
             Assert.IsNotNull(((HSSFSheet)wb2c.GetSheetAt(1)).DrawingPatriarch);
             Assert.IsNotNull(((HSSFSheet)wb2c.GetSheetAt(2)).DrawingPatriarch);
-            Assert.IsFalse(((HSSFSheet)wb2c.GetSheetAt(0)).DrawingPatriarch.ContainsChart());
-            Assert.IsTrue(((HSSFSheet)wb2c.GetSheetAt(1)).DrawingPatriarch.ContainsChart());
-            Assert.IsTrue(((HSSFSheet)wb2c.GetSheetAt(2)).DrawingPatriarch.ContainsChart());
+            Assert.IsFalse((((HSSFSheet)wb2c.GetSheetAt(0)).DrawingPatriarch as HSSFPatriarch).ContainsChart());
+            Assert.IsTrue((((HSSFSheet)wb2c.GetSheetAt(1)).DrawingPatriarch as HSSFPatriarch).ContainsChart());
+            Assert.IsTrue((((HSSFSheet)wb2c.GetSheetAt(2)).DrawingPatriarch as HSSFPatriarch).ContainsChart());
         }
 
         /**

@@ -19,12 +19,13 @@ namespace NPOI.HSSF.UserModel
 {
     using System;
     using NPOI.DDF;
+    using NPOI.SS.UserModel;
 
     /// <summary>
     /// Represents binary data stored in the file.  Eg. A GIF, JPEG etc...
     /// @author Daniel Noll
     /// </summary>
-    public class HSSFPictureData
+    public class HSSFPictureData : IPictureData
     {
         // MSOBI constants for various formats.
         public const short MSOBI_WMF = 0x2160;
@@ -91,6 +92,32 @@ namespace NPOI.HSSF.UserModel
                     return "dib";
                 default:
                     return "";
+            }
+        }
+        /**
+     * Returns the mime type for the image
+     */
+        public String MimeType
+        {
+            get
+            {
+                switch (blip.RecordId)
+                {
+                    case EscherMetafileBlip.RECORD_ID_WMF:
+                        return "image/x-wmf";
+                    case EscherMetafileBlip.RECORD_ID_EMF:
+                        return "image/x-emf";
+                    case EscherMetafileBlip.RECORD_ID_PICT:
+                        return "image/x-pict";
+                    case EscherBitmapBlip.RECORD_ID_PNG:
+                        return "image/png";
+                    case EscherBitmapBlip.RECORD_ID_JPEG:
+                        return "image/jpeg";
+                    case EscherBitmapBlip.RECORD_ID_DIB:
+                        return "image/bmp";
+                    default:
+                        return "image/unknown";
+                }
             }
         }
     }
