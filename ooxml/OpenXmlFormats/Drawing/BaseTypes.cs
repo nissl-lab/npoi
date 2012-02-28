@@ -593,6 +593,11 @@ namespace NPOI.OpenXmlFormats.Dml
             this.itemsField = new List<object>();
         }
 
+        //public CT_Shade AddNewShade()
+        //{
+        
+        //}
+
         [System.Xml.Serialization.XmlChoiceIdentifierAttribute("ItemsElementName")]
         public List<object> Items
         {

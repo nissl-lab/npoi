@@ -3106,7 +3106,12 @@ namespace NPOI.OpenXmlFormats.Dml
     public partial class CT_StretchInfoProperties {
         
         private CT_RelativeRect fillRectField;
-        
+
+        public CT_RelativeRect AddNewFillRect()
+        {
+            this.fillRectField=new CT_RelativeRect();
+            return this.fillRectField;
+        }
         /// <remarks/>
         public CT_RelativeRect fillRect {
             get {
@@ -3405,6 +3410,16 @@ namespace NPOI.OpenXmlFormats.Dml
         
         private bool rotWithShapeFieldSpecified;
         
+        public CT_Blip AddNewBlip()
+        {
+            this.blipField = new CT_Blip();
+            return blipField;
+        }
+        public CT_StretchInfoProperties AddNewStretch()
+        {
+            this.stretchField = new CT_StretchInfoProperties();
+            return stretchField;
+        }
         /// <remarks/>
         public CT_Blip blip {
             get {

@@ -57,7 +57,7 @@ namespace NPOI.XSSF.UserModel
                 _font.SetVertAlignArray(null);
                 if (value != FontSuperScript.NONE)
                 {
-                    _font.AddNewVertAlign().SetVal((ST_VerticalAlignRun)(value + 1));
+                    _font.AddNewVertAlign().val = (ST_VerticalAlignRun)(value + 1);
                 }
             }
         }
@@ -182,7 +182,7 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
-                return _font.sizeOfIArray() == 1 && _font.GetIArray(0).GetVal();
+                return _font.sizeOfIArray() == 1 && _font.GetIArray(0).val;
             }
         }
 
@@ -196,7 +196,7 @@ namespace NPOI.XSSF.UserModel
         {
             _font.SetIArray(null);
             _font.SetBArray(null);
-            if (italic) _font.AddNewI().SetVal(true);
+            if (italic) _font.AddNewI().val = (true);
             if (bold) _font.AddNewB().SetVal(true);
         }
 
@@ -205,7 +205,7 @@ namespace NPOI.XSSF.UserModel
          */
         public void ResetFontStyle()
         {
-            _font.Set(new CT_Font());
+            _font = new CT_Font();
         }
     }
 

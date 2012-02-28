@@ -151,7 +151,12 @@ namespace NPOI.XSSF.Model
          */
         public List<XSSFMap> GetAllXSSFMaps()
         {
-            return maps.Values;
+            List<XSSFMap> tmaps = new List<XSSFMap>();
+            foreach(XSSFMap map in maps.Values)
+            {
+                tmaps.Add(map);
+            }
+            return tmaps;
         }
 
         protected void WriteTo(Stream out1)
@@ -162,7 +167,7 @@ namespace NPOI.XSSF.Model
         }
 
 
-        protected void Commit()
+        protected override void Commit()
         {
             PackagePart part = GetPackagePart();
             Stream out1 = part.GetOutputStream();

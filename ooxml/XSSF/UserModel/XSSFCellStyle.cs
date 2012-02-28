@@ -130,8 +130,8 @@ namespace NPOI.XSSF.UserModel
                 if (src._stylesSource == _stylesSource)
                 {
                     // Nice and easy
-                    _cellXf.Set(src.GetCoreXf());
-                    _cellStyleXf.Set(src.GetStyleXf());
+                    _cellXf = src.GetCoreXf();
+                    _cellStyleXf = src.GetStyleXf();
                 }
                 else
                 {
@@ -214,7 +214,7 @@ namespace NPOI.XSSF.UserModel
             CT_CellAlignment align = _cellXf.alignment;
             if (align != null && align.IsSetHorizontal())
             {
-                return HorizontalAlignment.values()[align.horizontal - 1];
+                return (HorizontalAlignment)(align.horizontal - 1);
             }
             return HorizontalAlignment.GENERAL;
         }
@@ -253,7 +253,7 @@ namespace NPOI.XSSF.UserModel
 
                 int idx = (int)_cellXf.borderId;
                 CT_Border ct = _stylesSource.GetBorderAt(idx).GetCTBorder();
-                ST_BorderStyle ptrn = ct.IsSetLeft() ? ct.left.style : null;
+                ST_BorderStyle? ptrn = ct.IsSetLeft() ? ct.left.style : null;
                 return ptrn == null ? BorderStyle.NONE : (BorderStyle)(ptrn - 1);
             }
             set 
@@ -299,7 +299,7 @@ namespace NPOI.XSSF.UserModel
 
                 int idx = (int)_cellXf.borderId;
                 CT_Border ct = _stylesSource.GetBorderAt(idx).GetCTBorder();
-                ST_BorderStyle ptrn = ct.IsSetRight() ? ct.right.style : null;
+                ST_BorderStyle? ptrn = ct.IsSetRight() ? ct.right.style : null;
                 return ptrn == null ? BorderStyle.NONE : (BorderStyle)(ptrn - 1);
             }
             set 
@@ -664,6 +664,7 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
+
                 if (!_cellXf.IsSetProtection() || !_cellXf.protection.IsSetLocked())
                 {
                     return true;
@@ -857,13 +858,13 @@ namespace NPOI.XSSF.UserModel
             CT_Border ct = GetCTBorder();
             if (color == null && !ct.IsSetBottom()) return;
 
-            CT_BorderPr pr = ct.IsSetBottom() ? ct.GetBottom() : ct.AddNewBottom();
+            CT_BorderPr pr = ct.IsSetBottom() ? ct.bottom : ct.AddNewBottom();
             if (color != null) pr.SetColor(color.GetCTColor());
             else pr.unsetColor();
 
             int idx = _stylesSource.PutBorder(new XSSFCellBorder(ct, _theme));
 
-            _cellXf.borderId = (idx);
+            _cellXf.borderId = (uint)idx;
             _cellXf.applyBorder = (true);
         }
         /**
@@ -901,6 +902,7 @@ namespace NPOI.XSSF.UserModel
             }
             else
             {
+
                 if (ptrn == null) ptrn = ct.AddNewPatternFill();
                 ptrn.SetBgColor(color.GetCTColor());
             }
@@ -1024,7 +1026,7 @@ namespace NPOI.XSSF.UserModel
             CT_Border ct = GetCTBorder();
             if (color == null && !ct.IsSetLeft()) return;
 
-            CT_BorderPr pr = ct.IsSetLeft() ? ct.GetLeft() : ct.AddNewLeft();
+            CT_BorderPr pr = ct.IsSetLeft() ? ct.left : ct.AddNewLeft();
             if (color != null) pr.color = (color.GetCTColor());
             else pr.unsetColor();
 

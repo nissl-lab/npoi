@@ -6,7 +6,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 {
     public class CT_Color
     {
-        private bool autoField;
+        private bool? autoField;
 
         private bool autoFieldSpecified;
 
@@ -16,11 +16,11 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         private byte[] rgbField;
 
-        private long themeField;
+        private long? themeField;
 
         private bool themeFieldSpecified;
 
-        private double tintField;
+        private double? tintField;
 
         public CT_Color()
         {
@@ -30,11 +30,23 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             return this.indexedField != null;
         }
+        public bool IsSetAuto()
+        {
+            return this.autoField != null;
+        }
+        public bool IsSetTheme()
+        {
+            return this.themeField != null;
+        }
+        public bool IsSetTint()
+        {
+            return this.tintField != null;
+        }
         public bool auto
         {
             get
             {
-                return this.autoField;
+                return (bool)this.autoField;
             }
             set
             {
@@ -96,7 +108,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             get
             {
-                return this.themeField;
+                return (long)this.themeField;
             }
             set
             {
@@ -125,7 +137,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             get
             {
-                return this.tintField;
+                return (double)this.tintField;
             }
             set
             {

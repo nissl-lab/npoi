@@ -76,6 +76,7 @@
     <Compile Include="Spreadsheet\ExternalConnections.cs" />
     <Compile Include="Spreadsheet\QueryTable.cs" />
     <Compile Include="Spreadsheet\CustomXmlMappings.cs" />
+    <Compile Include="Spreadsheet\SingleXmlCellsDocument.cs" />
     <Compile Include="Spreadsheet\SstDocument.cs" />
     <Compile Include="Spreadsheet\StyleSheetDocument.cs" />
     <Compile Include="Spreadsheet\SupplementaryWorkbooks.cs" />

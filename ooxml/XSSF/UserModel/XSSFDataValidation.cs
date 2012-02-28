@@ -76,7 +76,7 @@ namespace NPOI.XSSF.UserModel
         }
 
 
-        XSSFDataValidation(CellRangeAddressList regions, CT_DataValidation ctDataValidation)
+        public XSSFDataValidation(CellRangeAddressList regions, CT_DataValidation ctDataValidation)
             : base()
         {
 
@@ -98,7 +98,7 @@ namespace NPOI.XSSF.UserModel
             this.ctDdataValidation.allowBlank = (true);
         }
 
-        CT_DataValidation GetCTDdataValidation()
+        internal CT_DataValidation GetCTDataValidation()
         {
             return ctDdataValidation;
         }
@@ -264,10 +264,10 @@ namespace NPOI.XSSF.UserModel
             XSSFDataValidationConstraint constraint = null;
             String formula1 = ctDataValidation.formula1;
             String formula2 = ctDataValidation.formula2;
-            Enum operator1 = ctDataValidation.@operator;
+            ST_DataValidationOperator operator1 = ctDataValidation.@operator;
             ST_DataValidationType type = ctDataValidation.type;
             int validationType = XSSFDataValidation.validationTypeReverseMappings[type];
-            int operatorType = XSSFDataValidation.operatorTypeReverseMappings.Get(operator1);
+            int operatorType = XSSFDataValidation.operatorTypeReverseMappings[operator1];
             constraint = new XSSFDataValidationConstraint(validationType, operatorType, formula1, formula2);
             return constraint;
         }

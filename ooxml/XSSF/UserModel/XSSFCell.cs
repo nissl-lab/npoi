@@ -769,7 +769,7 @@ namespace NPOI.XSSF.UserModel
         {
             CT_Cell blank = new CT_Cell();
             blank.r = (_cell.r);
-            if (_cell.isSetS()) blank.SetS(_cell.s);
+            if (_cell.isSetS()) blank.s=(_cell.s);
             _cell.Set(blank);
         }
 
@@ -839,9 +839,9 @@ namespace NPOI.XSSF.UserModel
                 case CellType.FORMULA:
                     if (!_cell.isSetF())
                     {
-                        CT_CellFormula f = CT_CellFormula.Factory.newInstance();
+                        CT_CellFormula f = new CT_CellFormula();
                         f.Value = "0";
-                        _cell.SetF(f);
+                        _cell.f = (f);
                         if (_cell.IsSetT()) _cell.unsetT();
                     }
                     break;
@@ -873,14 +873,14 @@ namespace NPOI.XSSF.UserModel
                 case CellType.ERROR:
                     return ErrorEval.GetText(ErrorCellValue);
                 case CellType.FORMULA:
-                    return GetCellFormula();
+                    return CellFormula;
                 case CellType.NUMERIC:
                     if (DateUtil.IsCellDateFormatted(this))
                     {
                         FormatBase sdf = new SimpleDateFormat("dd-MMM-yyyy");
                         return sdf.Format(DateCellValue);
                     }
-                    return GetNumericCellValue() + "";
+                    return NumericCellValue + "";
                 case CellType.STRING:
                     return RichStringCellValue.ToString();
                 default:

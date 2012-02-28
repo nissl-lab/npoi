@@ -20,6 +20,12 @@ namespace NPOI.OpenXmlFormats.Dml
             this.cNvPrField = new CT_NonVisualDrawingProps();
             return this.cNvPrField;
         }
+        public CT_NonVisualDrawingShapeProps AddNewCNvSpPr()
+        {
+            this.cNvSpPrField = new CT_NonVisualDrawingShapeProps();
+            return this.cNvSpPrField;
+        }
+
         public CT_NonVisualDrawingProps cNvPr
         {
             get
@@ -79,6 +85,17 @@ namespace NPOI.OpenXmlFormats.Dml
         CT_GraphicalObject graphicField;
         private string macroField;
         private bool fPublishedField;
+
+        public CT_Transform2D AddNewXfrm()
+        {
+            this.xfrmField = new CT_Transform2D();
+            return this.xfrmField;
+        }
+        public CT_GraphicalObject AddNewGraphic()
+        {
+            this.graphicField = new CT_GraphicalObject();
+            return this.graphicField;
+        }
 
         public CT_GraphicalObjectFrameNonVisual AddNewNvGraphicFramePr()
         {
@@ -294,6 +311,17 @@ namespace NPOI.OpenXmlFormats.Dml
         CT_NonVisualDrawingProps cNvPrField;
         CT_NonVisualGroupDrawingShapeProps cNvGrpSpPrField;
 
+        public CT_NonVisualGroupDrawingShapeProps AddNewCNvGrpSpPr()
+        {
+            this.cNvGrpSpPrField = new CT_NonVisualGroupDrawingShapeProps();
+            return this.cNvGrpSpPrField;
+        }
+        public CT_NonVisualDrawingProps AddNewCNvPr()
+        {
+            this.cNvPrField = new CT_NonVisualDrawingProps();
+            return this.cNvPrField;
+        }
+
         public CT_NonVisualDrawingProps cNvPr
         {
             get { return cNvPrField; }
@@ -393,6 +421,15 @@ namespace NPOI.OpenXmlFormats.Dml
         private CT_AnchorClientData clientDataField;
 
         public CT_GraphicalObjectFrame AddNewGraphicFrame()
+        {
+            throw new NotImplementedException();
+        }
+
+        public CT_Picture AddNewPic()
+        {
+            throw new NotImplementedException();
+        }
+        public CT_Shape AddNewSp()
         {
             throw new NotImplementedException();
         }

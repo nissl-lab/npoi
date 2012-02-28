@@ -79,7 +79,7 @@ namespace NPOI.XSSF.UserModel
         {
             st = new CT_Rst();
             st.t = str;
-            PreserveSpaces(st.xgetT());
+            PreserveSpaces(st.t);
         }
 
 
@@ -147,7 +147,7 @@ namespace NPOI.XSSF.UserModel
             if (st.sizeOfRArray() == 0 && st.IsSetT())
             {
                 //convert <t>string</t> into a text Run: <r><t>string</t></r>
-                st.AddNewR().SetT(st.t);
+                st.AddNewR().t = (st.t);
                 st.unsetT();
             }
 
@@ -190,7 +190,7 @@ namespace NPOI.XSSF.UserModel
             {
                 font = styles.GetFontAt(fontIndex);
             }
-            String text = GetString();
+            String text = this.String;
             ApplyFont(0, text.Length, font);
         }
 
@@ -205,7 +205,7 @@ namespace NPOI.XSSF.UserModel
             if (st.sizeOfRArray() == 0 && st.IsSetT())
             {
                 //convert <t>string</t> into a text Run: <r><t>string</t></r>
-                st.AddNewR().SetT(st.GetT());
+                st.AddNewR().t = (st.t);
                 st.unsetT();
             }
             CT_RElt lt = st.AddNewR();
@@ -229,30 +229,31 @@ namespace NPOI.XSSF.UserModel
          */
         private void SetRunAttributes(CT_Font ctFont, CT_RPrElt pr)
         {
-            if (ctFont.sizeOfBArray() > 0) pr.AddNewB().SetVal(ctFont.GetBArray(0).GetVal());
-            if (ctFont.sizeOfUArray() > 0) pr.AddNewU().SetVal(ctFont.GetUArray(0).GetVal());
-            if (ctFont.sizeOfIArray() > 0) pr.AddNewI().SetVal(ctFont.GetIArray(0).GetVal());
+            if (ctFont.sizeOfBArray() > 0) pr.AddNewB().SetVal(ctFont.GetBArray(0).val);
+            if (ctFont.sizeOfUArray() > 0) pr.AddNewU().SetVal(ctFont.GetUArray(0).val);
+            if (ctFont.sizeOfIArray() > 0) pr.AddNewI().SetVal(ctFont.GetIArray(0).val);
             if (ctFont.sizeOfColorArray() > 0)
             {
                 CT_Color c1 = ctFont.GetColorArray(0);
                 CT_Color c2 = pr.AddNewColor();
-                if (c1.IsSetAuto()) c2.SetAuto(c1.GetAuto());
-                if (c1.IsSetIndexed()) c2.SetIndexed(c1.GetIndexed());
-                if (c1.IsSetRgb()) c2.SetRgb(c1.GetRgb());
-                if (c1.IsSetTheme()) c2.SetTheme(c1.GetTheme());
-                if (c1.IsSetTint()) c2.SetTint(c1.GetTint());
+                if (c1.IsSetAuto()) c2.auto = (c1.auto);
+                if (c1.IsSetIndexed()) c2.indexed = (c1.indexed);
+                if (c1.IsSetRgb()) c2.SetRgb(c1.rgb);
+                if (c1.IsSetTheme()) c2.theme = (c1.theme);
+                if (c1.IsSetTint()) c2.tint = (c1.tint);
             }
-            if (ctFont.sizeOfSzArray() > 0) pr.AddNewSz().SetVal(ctFont.GetSzArray(0).GetVal());
-            if (ctFont.sizeOfNameArray() > 0) pr.AddNewRFont().SetVal(ctFont.GetNameArray(0).GetVal());
-            if (ctFont.sizeOfFamilyArray() > 0) pr.AddNewFamily().SetVal(ctFont.GetFamilyArray(0).GetVal());
-            if (ctFont.sizeOfSchemeArray() > 0) pr.AddNewScheme().SetVal(ctFont.GetSchemeArray(0).GetVal());
-            if (ctFont.sizeOfCharsetArray() > 0) pr.AddNewCharset().SetVal(ctFont.GetCharsetArray(0).GetVal());
-            if (ctFont.sizeOfCondenseArray() > 0) pr.AddNewCondense().SetVal(ctFont.GetCondenseArray(0).GetVal());
-            if (ctFont.sizeOfExtendArray() > 0) pr.AddNewExtend().SetVal(ctFont.GetExtendArray(0).GetVal());
-            if (ctFont.sizeOfVertAlignArray() > 0) pr.AddNewVertAlign().SetVal(ctFont.GetVertAlignArray(0).GetVal());
-            if (ctFont.sizeOfOutlineArray() > 0) pr.AddNewOutline().SetVal(ctFont.GetOutlineArray(0).GetVal());
-            if (ctFont.sizeOfShadowArray() > 0) pr.AddNewShadow().SetVal(ctFont.GetShadowArray(0).GetVal());
-            if (ctFont.sizeOfStrikeArray() > 0) pr.AddNewStrike().SetVal(ctFont.GetStrikeArray(0).GetVal());
+
+            if (ctFont.sizeOfSzArray() > 0) pr.AddNewSz().SetVal(ctFont.GetSzArray(0).val);
+            if (ctFont.sizeOfNameArray() > 0) pr.AddNewRFont().SetVal(ctFont.GetNameArray(0).val);
+            if (ctFont.sizeOfFamilyArray() > 0) pr.AddNewFamily().SetVal(ctFont.GetFamilyArray(0).val);
+            if (ctFont.sizeOfSchemeArray() > 0) pr.AddNewScheme().SetVal(ctFont.GetSchemeArray(0).val);
+            if (ctFont.sizeOfCharsetArray() > 0) pr.AddNewCharset().SetVal(ctFont.GetCharsetArray(0).val);
+            if (ctFont.sizeOfCondenseArray() > 0) pr.AddNewCondense().SetVal(ctFont.GetCondenseArray(0).val);
+            if (ctFont.sizeOfExtendArray() > 0) pr.AddNewExtend().SetVal(ctFont.GetExtendArray(0).val);
+            if (ctFont.sizeOfVertAlignArray() > 0) pr.AddNewVertAlign().SetVal(ctFont.GetVertAlignArray(0).val);
+            if (ctFont.sizeOfOutlineArray() > 0) pr.AddNewOutline().SetVal(ctFont.GetOutlineArray(0).val);
+            if (ctFont.sizeOfShadowArray() > 0) pr.AddNewShadow().SetVal(ctFont.GetShadowArray(0).val);
+            if (ctFont.sizeOfStrikeArray() > 0) pr.AddNewStrike().SetVal(ctFont.GetStrikeArray(0).val);
         }
 
         /**
@@ -260,7 +261,7 @@ namespace NPOI.XSSF.UserModel
          */
         public void ClearFormatting()
         {
-            String text = GetString();
+            String text = this.String;
             st.r = (null);
             st.t = (text);
         }
@@ -294,7 +295,7 @@ namespace NPOI.XSSF.UserModel
          */
         public int GetLengthOfFormattingRun(int index)
         {
-            if (st.sizeOfRArray() == 0) return Length();
+            if (st.sizeOfRArray() == 0) return this.Length;
 
             for (int i = 0; i < st.sizeOfRArray(); i++)
             {
@@ -324,7 +325,7 @@ namespace NPOI.XSSF.UserModel
             {
                 ClearFormatting();
                 st.t = value;
-                PreserveSpaces(st.xgetT());
+                PreserveSpaces(st.t);
             }
         }
 
@@ -428,9 +429,9 @@ namespace NPOI.XSSF.UserModel
         {
             CT_Font ctFont = new CT_Font();
 
-            if (pr.sizeOfBArray() > 0) ctFont.AddNewB().SetVal(pr.GetBArray(0).GetVal());
-            if (pr.sizeOfUArray() > 0) ctFont.AddNewU().SetVal(pr.GetUArray(0).GetVal());
-            if (pr.sizeOfIArray() > 0) ctFont.AddNewI().SetVal(pr.GetIArray(0).GetVal());
+            if (pr.sizeOfBArray() > 0) ctFont.AddNewB().SetVal(pr.GetBArray(0).val);
+            if (pr.sizeOfUArray() > 0) ctFont.AddNewU().SetVal(pr.GetUArray(0).val);
+            if (pr.sizeOfIArray() > 0) ctFont.AddNewI().SetVal(pr.GetIArray(0).val);
             if (pr.sizeOfColorArray() > 0)
             {
                 CT_Color c1 = pr.GetColorArray(0);
@@ -442,17 +443,17 @@ namespace NPOI.XSSF.UserModel
                 if (c1.IsSetTint()) c2.tint = (c1.tint);
             }
 
-            if (pr.sizeOfSzArray() > 0) ctFont.AddNewSz().SetVal(pr.GetSzArray(0).GetVal());
-            if (pr.sizeOfRFontArray() > 0) ctFont.AddNewName().SetVal(pr.GetRFontArray(0).GetVal());
-            if (pr.sizeOfFamilyArray() > 0) ctFont.AddNewFamily().SetVal(pr.GetFamilyArray(0).GetVal());
-            if (pr.sizeOfSchemeArray() > 0) ctFont.AddNewScheme().SetVal(pr.GetSchemeArray(0).GetVal());
-            if (pr.sizeOfCharsetArray() > 0) ctFont.AddNewCharset().SetVal(pr.GetCharsetArray(0).GetVal());
-            if (pr.sizeOfCondenseArray() > 0) ctFont.AddNewCondense().SetVal(pr.GetCondenseArray(0).GetVal());
-            if (pr.sizeOfExtendArray() > 0) ctFont.AddNewExtend().SetVal(pr.GetExtendArray(0).GetVal());
-            if (pr.sizeOfVertAlignArray() > 0) ctFont.AddNewVertAlign().SetVal(pr.GetVertAlignArray(0).GetVal());
-            if (pr.sizeOfOutlineArray() > 0) ctFont.AddNewOutline().SetVal(pr.GetOutlineArray(0).GetVal());
-            if (pr.sizeOfShadowArray() > 0) ctFont.AddNewShadow().SetVal(pr.GetShadowArray(0).GetVal());
-            if (pr.sizeOfStrikeArray() > 0) ctFont.AddNewStrike().SetVal(pr.GetStrikeArray(0).GetVal());
+            if (pr.sizeOfSzArray() > 0) ctFont.AddNewSz().SetVal(pr.GetSzArray(0).val);
+            if (pr.sizeOfRFontArray() > 0) ctFont.AddNewName().SetVal(pr.GetRFontArray(0).val);
+            if (pr.sizeOfFamilyArray() > 0) ctFont.AddNewFamily().SetVal(pr.GetFamilyArray(0).val);
+            if (pr.sizeOfSchemeArray() > 0) ctFont.AddNewScheme().SetVal(pr.GetSchemeArray(0).val);
+            if (pr.sizeOfCharsetArray() > 0) ctFont.AddNewCharset().SetVal(pr.GetCharsetArray(0).val);
+            if (pr.sizeOfCondenseArray() > 0) ctFont.AddNewCondense().SetVal(pr.GetCondenseArray(0).val);
+            if (pr.sizeOfExtendArray() > 0) ctFont.AddNewExtend().SetVal(pr.GetExtendArray(0).val);
+            if (pr.sizeOfVertAlignArray() > 0) ctFont.AddNewVertAlign().SetVal(pr.GetVertAlignArray(0).val);
+            if (pr.sizeOfOutlineArray() > 0) ctFont.AddNewOutline().SetVal(pr.GetOutlineArray(0).val);
+            if (pr.sizeOfShadowArray() > 0) ctFont.AddNewShadow().SetVal(pr.GetShadowArray(0).val);
+            if (pr.sizeOfStrikeArray() > 0) ctFont.AddNewStrike().SetVal(pr.GetStrikeArray(0).val);
 
             return ctFont;
         }
@@ -534,7 +535,7 @@ namespace NPOI.XSSF.UserModel
                 CT_RElt run = st.AddNewR();
                 String fragment = text.Substring(runStartIdx, runEndIdx);
                 run.t = (fragment);
-                PreserveSpaces(run.xgetT());
+                PreserveSpaces(run.t);
                 CT_RPrElt fmt = formats[runEndIdx];
                 if (fmt != null)
                     run.rPr = (fmt);

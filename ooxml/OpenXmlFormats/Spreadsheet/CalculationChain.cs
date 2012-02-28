@@ -31,6 +31,11 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.cField = new List<CT_CalcCell>();
         }
 
+        public int sizeOfCArray()
+        {
+            return this.c.Count;
+        }
+
         public CT_CalcCell[] GetCArray()
         {
             return this.c.ToArray();

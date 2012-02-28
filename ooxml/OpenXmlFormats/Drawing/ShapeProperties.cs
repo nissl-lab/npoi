@@ -341,9 +341,14 @@ namespace NPOI.OpenXmlFormats.Dml
             this.gradFillField = new CT_GradientFillProperties();
             this.solidFillField = new CT_SolidColorFillProperties();
             this.noFillField = new CT_NoFillProperties();
-            this.xfrmField = new CT_GroupTransform2D();
+            //this.xfrmField = new CT_GroupTransform2D();
         }
 
+        public CT_GroupTransform2D AddNewXfrm()
+        {
+            this.xfrmField = new CT_GroupTransform2D();
+            return this.xfrmField;
+        }
         public CT_GroupTransform2D xfrm
         {
             get

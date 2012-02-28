@@ -196,7 +196,7 @@ namespace NPOI.XSSF.UserModel
                     GetPackagePart().GetRelationshipsByType(XSSFRelation.SHEET_HYPERLINKS.Relation);
 
                 // Turn each one into a XSSFHyperlink
-                foreach (CT_Hyperlink hyperlink in worksheet.hyperlinks)
+                foreach (NPOI.OpenXmlFormats.Spreadsheet.CT_Hyperlink hyperlink in worksheet.hyperlinks)
                 {
                     PackageRelationship hyperRel = null;
                     if (hyperlink.id != null)
@@ -284,6 +284,7 @@ namespace NPOI.XSSF.UserModel
             // throw InvalidOperationException if the argument CellRangeAddress intersects with
             // a multi-cell array formula defined in this sheet
             validateArrayFormulas(region);
+
 
             CT_MergeCells ctMergeCells = worksheet.IsSetMergeCells() ? worksheet.mergeCells : worksheet.AddNewMergeCells();
             CT_MergeCell ctMergeCell = ctMergeCells.AddNewMergeCell();
@@ -503,6 +504,7 @@ namespace NPOI.XSSF.UserModel
             // If both colSplit and rowSplit are zero then the existing freeze pane is Removed
             if (colSplit == 0 && rowSplit == 0)
             {
+
                 if (ctView.IsSetPane()) ctView.unSetPane();
                 ctView.SetSelectionArray(null);
                 return;
@@ -598,7 +600,7 @@ namespace NPOI.XSSF.UserModel
                 }
             }
             XSSFRow r = new XSSFRow(ctRow, this);
-            r.SetRowNum(rownum);
+            r.RowNum = rownum;
             _rows[rownum] = r;
             return r;
         }
@@ -1819,8 +1821,8 @@ namespace NPOI.XSSF.UserModel
                 brk.man=(true);
                 brk.max=(uint)SpreadsheetVersion.EXCEL2007.LastRowIndex; //end row of the break
 
-                pgBreak.count = (pgBreak.sizeOfBrkArray());
-                pgBreak.manualBreakCount = (pgBreak.sizeOfBrkArray());
+                pgBreak.count = (uint)pgBreak.sizeOfBrkArray();
+                pgBreak.manualBreakCount = (uint)(pgBreak.sizeOfBrkArray());
             }
         }
 
@@ -1888,7 +1890,7 @@ namespace NPOI.XSSF.UserModel
                 CT_Col nci =  new CT_Col();
                 nci.min=(uint)targetColumnIx;
                 nci.max=(uint)targetColumnIx;
-                unSetCollapsed(collapsed, nci);
+                unSetCollapsed((bool)collapsed, nci);
                 this.columnHelper.AddCleanColIntoCols(cols, nci);
                 return;
             }
@@ -1912,7 +1914,7 @@ namespace NPOI.XSSF.UserModel
             if (ci.min == targetColumnIx && ci.max == targetColumnIx)
             {
                 // ColumnInfo ci for a single column, the target column
-                unSetCollapsed(collapsed, ci);
+                unSetCollapsed((bool)collapsed, ci);
                 return;
             }
 
@@ -2711,13 +2713,13 @@ namespace NPOI.XSSF.UserModel
         private void SetSheetFormatPrOutlineLevelRow()
         {
             short maxLevelRow = GetMaxOutlineLevelRows();
-            GetSheetTypeSheetFormatPr().outlineLevelRow = (maxLevelRow);
+            GetSheetTypeSheetFormatPr().outlineLevelRow = (byte)maxLevelRow;
         }
 
         private void SetSheetFormatPrOutlineLevelCol()
         {
             short maxLevelCol = GetMaxOutlineLevelCols();
-            GetSheetTypeSheetFormatPr().outlineLevelCol = (maxLevelCol);
+            GetSheetTypeSheetFormatPr().outlineLevelCol = (byte)maxLevelCol;
         }
 
         private CT_SheetViews GetSheetTypeSheetViews()
@@ -2831,6 +2833,7 @@ namespace NPOI.XSSF.UserModel
             {
                 GetSheetTypeSheetView().InsertNewSelection(0);
             }
+
             return GetSheetTypeSheetView().GetSelectionArray(0);
         }
 
@@ -2864,7 +2867,7 @@ namespace NPOI.XSSF.UserModel
         {
             if (sheetComments == null && Create)
             {
-                sheetComments = (CommentsTable)CreateRelationship(XSSFRelation.SHEET_COMMENTS, XSSFFactory.GetInstance(), (int)sheet.GetSheetId());
+                sheetComments = (CommentsTable)CreateRelationship(XSSFRelation.SHEET_COMMENTS, XSSFFactory.GetInstance(), (int)sheet.sheetId);
             }
             return sheetComments;
         }
@@ -2872,7 +2875,7 @@ namespace NPOI.XSSF.UserModel
         private CT_PageSetUpPr GetSheetTypePageSetUpPr()
         {
             CT_SheetPr sheetPr = GetSheetTypeSheetPr();
-            return sheetPr.IsSetPageSetUpPr() ? sheetPr.GetPageSetUpPr() : sheetPr.AddNewPageSetUpPr();
+            return sheetPr.IsSetPageSetUpPr() ? sheetPr.pageSetUpPr : sheetPr.AddNewPageSetUpPr();
         }
 
         private bool RemoveRow(int startRow, int endRow, int n, int rownum)
@@ -2895,7 +2898,7 @@ namespace NPOI.XSSF.UserModel
         {
             if (GetDefaultSheetView().pane == null)
             {
-                GetDefaultSheetView().addNewPane();
+                GetDefaultSheetView().AddNewPane();
             }
             return GetDefaultSheetView().pane;
         }
@@ -2956,7 +2959,8 @@ namespace NPOI.XSSF.UserModel
                 {
                     worksheet.AddNewHyperlinks();
                 }
-                CT_Hyperlink[] ctHls = new CT_Hyperlink[hyperlinks.Count];
+                NPOI.OpenXmlFormats.Spreadsheet.CT_Hyperlink[] ctHls 
+                    = new NPOI.OpenXmlFormats.Spreadsheet.CT_Hyperlink[hyperlinks.Count];
                 for (int i = 0; i < ctHls.Length; i++)
                 {
                     // If our sheet has hyperlinks, have them add
@@ -3428,7 +3432,7 @@ namespace NPOI.XSSF.UserModel
             CT_DataValidations dataValidations = this.worksheet.dataValidations;
             if (dataValidations != null && dataValidations.count > 0)
             {
-                foreach (CT_DataValidation ctDataValidation in dataValidations.GetDataValidationArray())
+                foreach (CT_DataValidation ctDataValidation in dataValidations.dataValidation)
                 {
                     CellRangeAddressList addressList = new CellRangeAddressList();
 
@@ -3456,15 +3460,16 @@ namespace NPOI.XSSF.UserModel
         public void AddValidationData(IDataValidation dataValidation)
         {
             XSSFDataValidation xssfDataValidation = (XSSFDataValidation)dataValidation;
-            CTDataValidations dataValidations = worksheet.GetDataValidations();
+            CT_DataValidations dataValidations = worksheet.dataValidations;
             if (dataValidations == null)
             {
                 dataValidations = worksheet.AddNewDataValidations();
             }
+
             int currentCount = dataValidations.sizeOfDataValidationArray();
-            CTDataValidation newval = dataValidations.AddNewDataValidation();
-            newval.Set(xssfDataValidation.getCtDdataValidation());
-            dataValidations.SetCount(currentCount + 1);
+            CT_DataValidation newval = dataValidations.AddNewDataValidation();
+            newval.Set(xssfDataValidation.GetCTDataValidation());
+            dataValidations.count = (uint)currentCount + 1;
 
         }
 

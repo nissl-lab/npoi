@@ -76,7 +76,7 @@ namespace NPOI.XSSF.UserModel
                 CT_ShapeStyle style = shape.AddNewStyle();
                 CT_SchemeColor scheme = style.AddNewLnRef().AddNewSchemeClr();
                 scheme.val = (ST_SchemeColorVal.accent1);
-                scheme.AddNewShade().SetVal(50000);
+                scheme.AddNewShade().val(50000);
                 style.lnRef.idx = (2);
 
                 CT_StyleMatrixReference Fillref = style.AddNewFillRef();
@@ -96,7 +96,8 @@ namespace NPOI.XSSF.UserModel
                 bodypr.anchor = (ST_TextAnchoringType.ctr);
                 bodypr.rtlCol = (false);
                 CT_TextParagraph p = body.AddNewP();
-                p.AddNewPPr().SetAlgn(ST_TextAlignType.ctr);
+
+                p.AddNewPPr().algn = (ST_TextAlignType.ctr);
                 CT_TextCharacterProperties endPr = p.AddNewEndParaRPr();
                 endPr.lang = ("en-US");
                 endPr.sz = (1100);
@@ -148,13 +149,13 @@ namespace NPOI.XSSF.UserModel
             str.SetStylesTableReference(wb.GetStylesSource());
 
             CT_TextParagraph p = new CT_TextParagraph();
-            if (str.numFormattingRuns() == 0)
+            if (str.NumFormattingRuns == 0)
             {
                 CT_RegularTextRun r = p.AddNewR();
                 CT_TextCharacterProperties rPr = r.AddNewRPr();
                 rPr.lang = ("en-US");
                 rPr.sz = (1100);
-                r.t = str.GetString();
+                r.t = str.String;
 
             }
             else

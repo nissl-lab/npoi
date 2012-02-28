@@ -38,7 +38,7 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
-                ST_BorderStyle? ptrn = _border.IsSetBottom() ? _border.bottom.style : null;
+                ST_BorderStyle? ptrn = _border.IsSetBottom() ? _border.bottom.style : (ST_BorderStyle?)null;
                 return ptrn == null ? (short)BorderStyle.NONE : (short)(ptrn - 1);
             }
             set

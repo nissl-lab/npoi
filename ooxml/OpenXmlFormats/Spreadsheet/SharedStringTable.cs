@@ -552,6 +552,14 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             throw new NotImplementedException();
         }
+        public CT_VerticalAlignFontProperty AddNewVertAlign()
+        {
+            throw new NotImplementedException();
+        }
+        public CT_VerticalAlignFontProperty GetVertAlignArray(int index)
+        {
+            throw new NotImplementedException();
+        }
         public void SetFamilyArray()
         {
             throw new NotImplementedException();
@@ -606,6 +614,26 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             throw new NotImplementedException();
         }
+        public int sizeOfCharsetArray()
+        {
+            throw new NotImplementedException();
+        }
+        public int sizeOfCondenseArray()
+        {
+            throw new NotImplementedException();
+        }
+        public int sizeOfExtendArray()
+        {
+            throw new NotImplementedException();
+        }
+        public int sizeOfOutlineArray()
+        {
+            throw new NotImplementedException();
+        }
+        public int sizeOfShadowArray()
+        {
+            throw new NotImplementedException();
+        }   
         public void SetUArray(CT_UnderlineProperty[] array)
         {
             throw new NotImplementedException();
@@ -648,7 +676,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             throw new NotImplementedException();
         }
 
-        public int SetVertAlignArray(CT_Color[] array)
+        public int SetVertAlignArray(CT_VerticalAlignFontProperty[] array)
         {
             throw new NotImplementedException();
         }
@@ -661,7 +689,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             throw new NotImplementedException();
         }
-        public CT_Color AddNewSz()
+        public CT_FontSize AddNewSz()
         {
             throw new NotImplementedException();
         }
@@ -674,6 +702,10 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             throw new NotImplementedException();
         }
         public void SetIArray(CT_BooleanProperty[] array)
+        {
+            throw new NotImplementedException();
+        }
+        public CT_FontScheme AddNewScheme()
         {
             throw new NotImplementedException();
         }
@@ -826,8 +858,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         public CT_PatternFill()
         {
-            this.bgColorField = new CT_Color();
-            this.fgColorField = new CT_Color();
+            //this.bgColorField = new CT_Color();
+            //this.fgColorField = new CT_Color();
         }
 
         public bool IsSetPatternType()
@@ -836,14 +868,27 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
         public CT_Color AddNewFgColor()
         {
+            this.fgColorField = new CT_Color();
             return fgColorField;
         }
 
         public CT_Color AddNewBgColor()
         {
+            this.bgColorField = new CT_Color();
             return bgColorField;
         }
-
+        public void unsetPatternType()
+        {
+            this.patternTypeField = null;
+        }
+        public void unsetFgColor()
+        {
+            this.fgColorField = null;
+        }
+        public void unsetBgColor()
+        {
+            this.bgColorField=null;
+        }
         public CT_Color fgColor
         {
             get
@@ -969,7 +1014,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     public class CT_CellAlignment
     {
 
-        private ST_HorizontalAlignment horizontalField;
+        private ST_HorizontalAlignment? horizontalField;
 
         private bool horizontalFieldSpecified;
 
@@ -1005,11 +1050,16 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         private bool readingOrderFieldSpecified;
 
+        public bool IsSetHorizontal()
+        {
+            return this.horizontalField != null;
+        }
+
         public ST_HorizontalAlignment horizontal
         {
             get
             {
-                return this.horizontalField;
+                return (ST_HorizontalAlignment)this.horizontalField;
             }
             set
             {
@@ -2097,6 +2147,19 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
           {
               this.extLst = null;
           }
+                        public bool IsSetProtection()
+                        {
+                            return this.protectionField != null;
+                        }
+                    public bool IsSetLocked()
+                    {
+                        throw new NotImplementedException();
+                    }
+                    public CT_CellProtection AddNewProtection()
+                    {
+                        this.protectionField = new CT_CellProtection();
+                        return this.protectionField;
+                    }
                         
         public CT_CellAlignment alignment
         {
@@ -2757,6 +2820,12 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.rPhField = new List<CT_PhoneticRun>();
             this.rField = new List<CT_RElt>();
         }
+        public CT_RElt AddNewR()
+        {
+            CT_RElt r = new CT_RElt();
+            this.rField.Add(r);
+            return r;
+        }
         public int sizeOfRArray()
         {
             return r.Count;
@@ -2764,6 +2833,14 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         public CT_RElt GetRArray(int index)
         {
             return this.rField[index];
+        }
+        public bool IsSetT()
+        {
+            return this.tField != null;
+        }
+        public void unsetT()
+        {
+            this.tField=null;
         }
         public string t
         {
@@ -2830,9 +2907,13 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         public CT_RElt()
         {
-            this.rPrField = new CT_RPrElt();
+            
         }
-
+        public CT_RPrElt AddNewRPr()
+        {
+            this.rPrField = new CT_RPrElt();
+            return rPrField;
+        }
         public CT_RPrElt rPr
         {
             get
@@ -2956,7 +3037,35 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             throw new NotImplementedException();
         }
-        
+        public CT_FontSize AddNewSz()
+        {
+        throw new NotImplementedException();
+        }
+        public CT_FontReference AddNewRFont()
+        {
+        throw new NotImplementedException();
+        }
+
+        public CT_FontScheme AddNewScheme()
+        {
+            throw new NotImplementedException();
+        }
+        /*
+                public  AddNewFamily
+        public  AddNewCharset
+            AddNewCondense
+            AddNewExtend
+                        public  AddNewShadow
+            AddNewStrike*/
+            public CT_VerticalAlignFontProperty AddNewVertAlign()
+            {
+                throw new NotImplementedException();
+            }
+            public CT_OutlinePr AddNewOutline()
+            {
+                throw new NotImplementedException();
+            }
+
             
             
     }

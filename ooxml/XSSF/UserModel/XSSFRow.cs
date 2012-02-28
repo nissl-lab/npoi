@@ -44,7 +44,7 @@ namespace NPOI.XSSF.UserModel
          * Cells of this row keyed by their column indexes.
          * The TreeMap ensures that the cells are ordered by columnIndex in the ascending order.
          */
-        private Dictionary<int, XSSFCell> _cells;
+        private Dictionary<int, ICell> _cells;
 
         /**
          * the parent sheet
@@ -61,7 +61,7 @@ namespace NPOI.XSSF.UserModel
         {
             _row = row;
             _sheet = sheet;
-            _cells = new Dictionary<int, XSSFCell>();
+            _cells = new Dictionary<int, ICell>();
             foreach (CT_Cell c in row.c)
             {
                 XSSFCell cell = new XSSFCell(this, c);
@@ -171,7 +171,7 @@ namespace NPOI.XSSF.UserModel
         public ICell CreateCell(int columnIndex, CellType type)
         {
             CT_Cell CT_Cell;
-            XSSFCell prev = _cells[columnIndex];
+            XSSFCell prev = (XSSFCell)_cells[columnIndex];
             if (prev != null)
             {
                 CT_Cell = prev.GetCTCell();
@@ -199,7 +199,7 @@ namespace NPOI.XSSF.UserModel
          */
         public ICell GetCell(int cellnum)
         {
-            return GetCell(cellnum, _sheet.Workbook.GetMissingCellPolicy());
+            return GetCell(cellnum, _sheet.Workbook.MissingCellPolicy);
         }
 
         /**
@@ -223,7 +223,7 @@ namespace NPOI.XSSF.UserModel
             if (policy == MissingCellPolicy.RETURN_BLANK_AS_NULL)
             {
                 if (cell == null) return cell;
-                if (cell.GetCellType() == CellType.BLANK)
+                if (cell.CellType == CellType.BLANK)
                 {
                     return null;
                 }
@@ -381,7 +381,7 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
-                return this._row.hidden;
+                return (bool)this._row.hidden;
             }
             set 
             {

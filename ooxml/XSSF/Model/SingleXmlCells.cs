@@ -58,7 +58,7 @@ namespace NPOI.XSSF.Model
         {
             try
             {
-                SingleXmlCellsDocument doc = SingleXmlCellsDocument.Factory.Parse(is1);
+                SingleXmlCellsDocument doc = SingleXmlCellsDocument.Parse(is1);
                 SingleXMLCells = doc.GetSingleXmlCells();
             }
             catch (XmlException e)
@@ -74,9 +74,9 @@ namespace NPOI.XSSF.Model
 
         protected void WriteTo(Stream out1)
         {
-            SingleXmlCellsDocument doc = SingleXmlCellsDocument.Factory.newInstance();
+            SingleXmlCellsDocument doc = new SingleXmlCellsDocument();
             doc.SetSingleXmlCells(SingleXMLCells);
-            doc.save(out1);
+            doc.Save(out1);
         }
 
 

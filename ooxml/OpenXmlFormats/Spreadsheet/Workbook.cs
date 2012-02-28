@@ -34,7 +34,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         private List<CT_ExternalReference> externalReferencesField;
 
-        private List<CT_DefinedName> definedNamesField;
+        private CT_DefinedNames definedNamesField;
 
         private CT_CalcPr calcPrField;
 
@@ -67,7 +67,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.pivotCachesField = new List<CT_PivotCache>();
             this.customWorkbookViewsField = new List<CT_CustomWorkbookView>();
             this.oleSizeField = new CT_OleSize();
-            this.calcPrField = new CT_CalcPr();
+            //this.calcPrField = new CT_CalcPr();
             //this.definedNamesField = new List<CT_DefinedName>();
             this.externalReferencesField = new List<CT_ExternalReference>();
             this.functionGroupsField = new CT_FunctionGroups();
@@ -80,14 +80,17 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
 
         
-        public bool IsSetDefinedNames()
-        {
-            return this.definedNamesField!=null;
-        }
+
         public CT_WorkbookPr AddNewWorkbookPr()
         {
             this.workbookPrField=new CT_WorkbookPr();
             return this.workbookPrField;
+        }
+
+        public CT_CalcPr AddNewCalcPr()
+        {
+            this.calcPrField=new CT_CalcPr();
+            return this.calcPrField;
         }
         public CT_Sheets AddNewSheets()
         {
@@ -99,7 +102,40 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.bookViewsField=new CT_BookViews();
             return this.bookViewsField;
         }
+        public bool IsSetWorkbookPr()
+        {
+            return this.workbookPrField != null;
+        }
+        public bool IsSetCalcPr()
+        {
+            return this.calcPrField != null;
+        }
+        public bool IsSetSheets()
+        {
+            return this.sheetsField != null;
+        }
+        public bool IsSetBookViews()
+        {
+            return this.bookViewsField != null;
+        }
+        public bool IsSetDefinedNames()
+        {
+            return this.definedNamesField != null;
+        }
+        public CT_DefinedNames AddNewDefinedNames()
+        {
+            this.definedNamesField = new CT_DefinedNames();
+            return this.definedNamesField;
+        }
         //AddNewWorkbookView()
+        public void SetDefinedNames(CT_DefinedNames definedNames)
+        {
+            this.definedNamesField=definedNames;
+        }
+        public void unsetDefinedNames()
+        {
+            this.definedNamesField=null;
+        }
 
         public CT_FileVersion fileVersion
         {
@@ -205,7 +241,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         [System.Xml.Serialization.XmlArrayAttribute(Order = 8)]
         [System.Xml.Serialization.XmlArrayItemAttribute("definedName", IsNullable = false)]
-        public List<CT_DefinedName> definedNames
+        public CT_DefinedNames definedNames
         {
             get
             {

@@ -204,7 +204,7 @@ namespace NPOI.XSSF.UserModel
 
                 // Load individual sheets. The order of sheets is defined by the order of CT_Sheet elements in the workbook
                 sheets = new List<XSSFSheet>(shIdMap.Count);
-                foreach (CT_Sheet ctSheet in this.workbook.sheets)
+                foreach (CT_Sheet ctSheet in this.workbook.sheets.sheet)
                 {
                     XSSFSheet sh = shIdMap[ctSheet.id];
                     if (sh == null)
@@ -221,7 +221,7 @@ namespace NPOI.XSSF.UserModel
                 namedRanges = new List<XSSFName>();
                 if (workbook.IsSetDefinedNames())
                 {
-                    foreach (CT_DefinedName ctName in workbook.definedNames)
+                    foreach (CT_DefinedName ctName in workbook.definedNames.definedName)
                     {
                         namedRanges.Add(new XSSFName(ctName, this));
                     }
@@ -383,6 +383,7 @@ namespace NPOI.XSSF.UserModel
                 throw new POIXMLException("Failed to clone sheet", e);
             }
             CT_Worksheet ct = ClonedSheet.GetCTWorksheet();
+
             if (ct.IsSetDrawing())
             {
                 logger.Log(POILogger.WARN, "Cloning sheets with Drawings is not yet supported.");
@@ -1206,7 +1207,7 @@ namespace NPOI.XSSF.UserModel
             foreach (XSSFName name in namedRanges)
             {
                 if (name.NameName.Equals(builtInCode, StringComparison.InvariantCultureIgnoreCase)
-                    && name.GetSheetIndex() == sheetNumber)
+                    && name.SheetIndex == sheetNumber)
                 {
                     return name;
                 }
@@ -1225,10 +1226,10 @@ namespace NPOI.XSSF.UserModel
         {
             ValidateSheetIndex(sheetNumber);
 
-            CT_DefinedNames names = workbook.definedNames == null ? workbook.AddNewDefinedNames() : workbook.GetDefinedNames();
+            CT_DefinedNames names = workbook.definedNames == null ? workbook.AddNewDefinedNames() : workbook.definedNames;
             CT_DefinedName nameRecord = names.AddNewDefinedName();
             nameRecord.name = (builtInName);
-            nameRecord.SetLocalSheetId(sheetNumber);
+            nameRecord.localSheetId = (uint)sheetNumber;
 
             XSSFName name = new XSSFName(nameRecord, this);
             foreach (XSSFName nr in namedRanges)
@@ -1250,7 +1251,7 @@ namespace NPOI.XSSF.UserModel
             for (int i = 0; i < sheets.Count; ++i)
             {
                 XSSFSheet sheet = sheets[i];
-                sheet.SetSelected(i == index);
+                sheet.IsSelected = (i == index);
             }
         }
 
@@ -1294,7 +1295,7 @@ namespace NPOI.XSSF.UserModel
             sheets.Add(pos, sheets.Remove(idx));
             // Reorder CT_Sheets
             CT_Sheets ct = workbook.sheets;
-            XmlObject cts = ct.GetSheetArray(idx).copy();
+            //XmlObject cts = ct.GetSheetArray(idx).copy();
             workbook.sheets.RemoveSheet(idx);
             CT_Sheet newcts = ct.InsertNewSheet(pos);
             newcts.Set(cts);
@@ -1459,10 +1460,10 @@ namespace NPOI.XSSF.UserModel
             foreach (XSSFSheet sheet in sheets)
             {
                 // Get the embeddings for the workbook
-                foreach (PackageRelationship rel in sheet.GetPackagePart().GetRelationshipsByType(XSSFRelation.OLEEMBEDDINGS.GetRelation()))
+                foreach (PackageRelationship rel in sheet.GetPackagePart().GetRelationshipsByType(XSSFRelation.OLEEMBEDDINGS.Relation))
                     embedds.Add(GetTargetPart(rel));
 
-                foreach (PackageRelationship rel in sheet.GetPackagePart().GetRelationshipsByType(XSSFRelation.PACKEMBEDDINGS.GetRelation()))
+                foreach (PackageRelationship rel in sheet.GetPackagePart().GetRelationshipsByType(XSSFRelation.PACKEMBEDDINGS.Relation))
                     embedds.Add(GetTargetPart(rel));
 
             }
@@ -1626,7 +1627,7 @@ namespace NPOI.XSSF.UserModel
          */
         public bool IsStructureLocked()
         {
-            return workbookProtectionPresent() && workbook.GetWorkbookProtection().GetLockStructure();
+            return workbookProtectionPresent() && workbook.workbookProtection.lockStructure;
         }
 
         /**
@@ -1639,7 +1640,7 @@ namespace NPOI.XSSF.UserModel
          */
         public bool IsWindowsLocked()
         {
-            return workbookProtectionPresent() && workbook.GetWorkbookProtection().GetLockWindows();
+            return workbookProtectionPresent() && workbook.workbookProtection.lockWindows;
         }
 
         /**
@@ -1649,7 +1650,7 @@ namespace NPOI.XSSF.UserModel
          */
         public bool IsRevisionLocked()
         {
-            return workbookProtectionPresent() && workbook.GetWorkbookProtection().GetLockRevision();
+            return workbookProtectionPresent() && workbook.workbookProtection.lockRevision;
         }
 
         /**
@@ -1658,7 +1659,7 @@ namespace NPOI.XSSF.UserModel
         public void LockStructure()
         {
             CreateProtectionFieldIfNotPresent();
-            workbook.GetWorkbookProtection().SetLockStructure(true);
+            workbook.workbookProtection.lockStructure = (true);
         }
 
         /**
@@ -1667,7 +1668,7 @@ namespace NPOI.XSSF.UserModel
         public void UnlockStructure()
         {
             CreateProtectionFieldIfNotPresent();
-            workbook.GetWorkbookProtection().SetLockStructure(false);
+            workbook.workbookProtection.lockStructure = (false);
         }
 
         /**
@@ -1676,7 +1677,7 @@ namespace NPOI.XSSF.UserModel
         public void LockWindows()
         {
             CreateProtectionFieldIfNotPresent();
-            workbook.GetWorkbookProtection().SetLockWindows(true);
+            workbook.workbookProtection.lockWindows = (true);
         }
 
         /**
@@ -1685,7 +1686,7 @@ namespace NPOI.XSSF.UserModel
         public void UnlockWindows()
         {
             CreateProtectionFieldIfNotPresent();
-            workbook.GetWorkbookProtection().SetLockWindows(false);
+            workbook.workbookProtection.lockWindows = (false);
         }
 
         /**
@@ -1694,7 +1695,7 @@ namespace NPOI.XSSF.UserModel
         public void LockRevision()
         {
             CreateProtectionFieldIfNotPresent();
-            workbook.GetWorkbookProtection().SetLockRevision(true);
+            workbook.workbookProtection.lockRevision = (true);
         }
 
         /**
@@ -1703,19 +1704,19 @@ namespace NPOI.XSSF.UserModel
         public void UnlockRevision()
         {
             CreateProtectionFieldIfNotPresent();
-            workbook.GetWorkbookProtection().SetLockRevision(false);
+            workbook.workbookProtection.lockRevision = (false);
         }
 
         private bool workbookProtectionPresent()
         {
-            return workbook.GetWorkbookProtection() != null;
+            return workbook.workbookProtection != null;
         }
 
         private void CreateProtectionFieldIfNotPresent()
         {
-            if (workbook.GetWorkbookProtection() == null)
+            if (workbook.workbookProtection == null)
             {
-                workbook.SetWorkbookProtection(new CT_WorkbookProtection());
+                workbook.workbookProtection = (new CT_WorkbookProtection());
             }
         }
 
@@ -1767,6 +1768,7 @@ namespace NPOI.XSSF.UserModel
         public void SetForceFormulaRecalculation(bool value)
         {
             CT_Workbook ctWorkbook = GetCTWorkbook();
+
             CT_CalcPr calcPr = ctWorkbook.IsSetCalcPr() ? ctWorkbook.calcPr : ctWorkbook.AddNewCalcPr();
             // when Set to 0, will tell Excel that it needs to recalculate all formulas
             // in the workbook the next time the file is opened.
@@ -1788,7 +1790,7 @@ namespace NPOI.XSSF.UserModel
         {
             ValidateSheetIndex(sheetIndex);
 
-            foreach (CT_BookView arrayBook in workbook.bookViews.GetWorkbookView())
+            foreach (CT_BookView arrayBook in workbook.bookViews.workbookView)
             {
                 arrayBook.activeTab = (uint)(sheetIndex);
             }

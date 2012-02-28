@@ -119,7 +119,7 @@ namespace NPOI.XSSF.UserModel
         /**
          * Generates the relation if required
          */
-        protected void generateRelationIfNeeded(PackagePart sheetPart)
+        internal void GenerateRelationIfNeeded(PackagePart sheetPart)
         {
             if (NeedsRelationToo())
             {

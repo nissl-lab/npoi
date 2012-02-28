@@ -259,7 +259,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         private CT_DataValidations dataValidationsField;
 
-        private List<CT_Hyperlink> hyperlinksField;
+        private CT_Hyperlinks hyperlinksField;
 
         private CT_PrintOptions printOptionsField;
 
@@ -302,14 +302,14 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         public CT_Worksheet()
         {
             this.extLstField = new CT_ExtensionList();
-            this.tablePartsField = new CT_TableParts();
+            //this.tablePartsField = new CT_TableParts();
             this.webPublishItemsField = new CT_WebPublishItems();
             this.controlsField = new List<CT_Control>();
             this.oleObjectsField = new List<CT_OleObject>();
             this.pictureField = new CT_SheetBackgroundPicture();
             this.legacyDrawingHFField = new CT_LegacyDrawing();
-            this.legacyDrawingField = new CT_LegacyDrawing();
-            this.drawingField = new CT_Drawing();
+            //this.legacyDrawingField = new CT_LegacyDrawing();
+            //this.drawingField = new CT_Drawing();
             this.smartTagsField = new List<CT_CellSmartTags>();
             this.ignoredErrorsField = new CT_IgnoredErrors();
             this.cellWatchesField = new List<CT_CellWatch>();
@@ -324,7 +324,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.dataValidationsField = new CT_DataValidations();
             this.conditionalFormattingField = new List<CT_ConditionalFormatting>();
             this.phoneticPrField = new CT_PhoneticPr();
-            this.mergeCellsField = new CT_MergeCells();
+            //this.mergeCellsField = new CT_MergeCells();
             this.customSheetViewsField = new List<CT_CustomSheetView>();
             this.dataConsolidateField = new CT_DataConsolidate();
             this.sortStateField = new CT_SortState();
@@ -340,9 +340,62 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             //this.dimensionField = new CT_SheetDimension();
             this.sheetPrField = new CT_SheetPr();
         }
+        public CT_Hyperlinks AddNewHyperlinks()
+        {
+            this.hyperlinksField=new CT_Hyperlinks();
+            return this.hyperlinksField;
+        }
+        public CT_MergeCells AddNewMergeCells()
+        {
+            this.mergeCellsField = new CT_MergeCells();
+            return this.mergeCellsField;
+        }
+        public bool IsSetMergeCells()
+        {
+            return this.mergeCellsField != null;
+        }
+        public bool IsSetSheetProtection()
+        {
+            return this.sheetProtectionField != null;
+        }
+        public bool IsSetDrawing()
+        {
+            return this.drawingField!=null;
+        }
+        public void unsetDrawing()
+        {
+            this.drawingField = null;
+        }
+        public bool IsSetLegacyDrawing()
+        {
+            return this.legacyDrawingField!=null;
+        }
+        public void unsetLegacyDrawing()
+        {
+            this.legacyDrawingField = null;
+        }
         public bool IsSetPageSetup()
         {
             return this.pageSetupField != null;
+        }
+        public bool IsSetTableParts()
+        {
+            return this.tablePartsField != null;
+        }
+        public CT_SheetProtection AddNewSheetProtection()
+        {
+            this.sheetProtectionField = new CT_SheetProtection();
+            return this.sheetProtectionField;
+        }
+        public CT_TableParts AddNewTableParts()
+        {
+            this.tablePartsField = new CT_TableParts();
+            return this.tablePartsField;
+        }
+        public CT_PageMargins AddNewPageMargins()
+        {
+            this.pageMarginsField = new CT_PageMargins();
+            return this.pageMarginsField;
         }
         public CT_PageSetup AddNewPageSetup()
         {
@@ -639,7 +692,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         [XmlArrayAttribute(Order = 18)]
         [XmlArrayItemAttribute("hyperlink", IsNullable = false)]
-        public List<CT_Hyperlink> hyperlinks
+        public CT_Hyperlinks hyperlinks
         {
             get
             {
@@ -919,7 +972,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         public CT_SheetPr()
         {
-            this.pageSetUpPrField = new CT_PageSetUpPr();
+            //this.pageSetUpPrField = new CT_PageSetUpPr();
             this.outlinePrField = new CT_OutlinePr();
             this.tabColorField = new CT_Color();
             this.syncHorizontalField = false;
@@ -929,6 +982,10 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.publishedField = true;
             this.filterModeField = false;
             this.enableFormatConditionsCalculationField = true;
+        }
+        public bool IsSetPageSetUpPr()
+        {
+            return this.pageSetUpPrField != null;
         }
 
         public CT_Color tabColor
@@ -1329,7 +1386,43 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.zoomScaleSheetLayoutViewField = ((uint)(0));
             this.zoomScalePageLayoutViewField = ((uint)(0));
         }
-
+       public bool IsSetPane()
+       {
+       return this.paneField!=null;
+       }
+        public CT_Pane AddNewPane()
+        {
+            this.paneField = new CT_Pane();
+            return this.paneField;
+        }
+        public CT_Selection AddNewSelection()
+        {
+            CT_Selection newSel = new CT_Selection();
+            selectionField.Add(newSel);
+            return newSel;
+        }
+        public void unSetPane()
+        {
+            this.paneField=null;
+        }
+        public CT_Selection GetSelectionArray(int index)
+        {
+            return this.selectionField[index];
+        }
+        public CT_Selection InsertNewSelection()
+        {
+            CT_Selection sel = new CT_Selection();
+            this.selectionField.Add(sel);
+            return sel;
+        }
+        public int SizeOfSelectionArray()
+        {
+            return this.selectionField.Count;
+        }
+        public void SetSelectionArray(List<CT_Selection> selectionArray)
+        {
+            this.selectionField = selectionArray;
+        }
         public CT_Pane pane
         {
             get
@@ -2989,7 +3082,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         private byte outlineLevelField;
 
-        private bool collapsedField;
+        private bool? collapsedField;
 
         public CT_Col()
         {
@@ -2999,8 +3092,9 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.customWidthField = false;
             this.phoneticField = false;
             this.outlineLevelField = ((byte)(0));
-            this.collapsedField = false;
+            //this.collapsedField = false;
         }
+
 
         public uint min
         {
@@ -3057,28 +3151,31 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             return true;
         }
-                 public bool isSetCollapsed()
+        public bool isSetCollapsed()
         {
             return true;
         }
-                public bool isSetPhonetic()
+        public bool isSetPhonetic()
         {
             return true;
         }
-                public bool isSetOutlineLevel()
+        public bool isSetOutlineLevel()
         {
             return true;
         }
 
 
-                public void unSetHidden()
-                {
-                    this.hiddenField = null;
-                }
-            
-            
-            
-            
+        public void unSetHidden()
+        {
+            this.hiddenField = null;
+        }
+        public void unSetCollapsed()
+        {
+            this.collapsedField = null;
+        }
+
+
+
         [XmlIgnoreAttribute()]
         public bool widthSpecified
         {
@@ -3175,7 +3272,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             get
             {
-                return this.collapsedField;
+                return (bool)this.collapsedField;
             }
             set
             {
@@ -3197,21 +3294,21 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         private List<string> spansField;
 
-        private uint sField;
+        private uint? sField;
 
         private bool customFormatField;
 
-        private double htField;
+        private double? htField;
 
         private bool htFieldSpecified;
 
         private bool? hiddenField;
 
-        private bool customHeightField;
+        private bool? customHeightField;
 
         private byte outlineLevelField;
 
-        private bool collapsedField;
+        private bool? collapsedField;
 
         private bool thickTopField;
 
@@ -3224,17 +3321,44 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.spansField = new List<string>();
             this.extLstField = new CT_ExtensionList();
             this.cField = new List<CT_Cell>();
-            this.sField = ((uint)(0));
+            //this.sField = ((uint)(0));
             this.customFormatField = false;
             //this.hiddenField = false;
-            this.customHeightField = false;
+            //this.customHeightField = false;
             this.outlineLevelField = ((byte)(0));
-            this.collapsedField = false;
+            //this.collapsedField = false;
             this.thickTopField = false;
             this.thickBotField = false;
             this.phField = false;
         }
-
+        public void unsetCollapsed()
+        {
+            this.collapsedField = null;
+        }
+        public bool IsSetCollapsed()
+        {
+            return this.collapsedField != null;
+        }
+        public bool IsSetHt()
+        {
+           return this.htField != null;
+        }
+        public void unSetHt()
+        {
+            this.htField = null;
+        }
+        public bool IsSetCustomHeight()
+        {
+            return this.customHeightField != null;
+        }
+        public void unSetCustomHeight()
+        {
+            this.customHeightField = null;
+        }
+        public bool IsSetS()
+        {
+            return this.sField != null;
+        }
         public void unsetHidden()
         {
             this.hiddenField = null;
@@ -3315,7 +3439,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             get
             {
-                return this.sField;
+                return (uint)this.sField;
             }
             set
             {
@@ -3340,7 +3464,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             get
             {
-                return this.htField;
+                return (double)this.htField;
             }
             set
             {
@@ -3379,7 +3503,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             get
             {
-                return this.customHeightField;
+                return (bool)this.customHeightField;
             }
             set
             {
@@ -3405,7 +3529,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             get
             {
-                return this.collapsedField;
+                return (bool)this.collapsedField;
             }
             set
             {
@@ -7187,6 +7311,16 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.countFieldSpecified = value;
             }
         }
+        public int sizeOfDataValidationArray()
+        {
+            return (int)this.countField;
+        }
+        public CT_DataValidation AddNewDataValidation()
+        {
+            CT_DataValidation dv = new CT_DataValidation();
+            this.dataValidationField.Add(dv);
+            return dv;
+        }
     }
 
     public class CT_DataValidation
@@ -8402,6 +8536,13 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         public CT_TableParts()
         {
             this.tablePartField = new List<CT_TablePart>();
+        }
+
+        public CT_TablePart AddNewTablePart()
+        { 
+            CT_TablePart tp=new CT_TablePart();
+            this.tablePart.Add(tp);
+            return tp;
         }
 
         public List<CT_TablePart> tablePart

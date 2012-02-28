@@ -159,7 +159,7 @@ namespace NPOI.XSSF.UserModel
             XSSFPicture shape = new XSSFPicture(GetDrawing(), ctShape);
             shape.parent = this;
             shape.anchor = anchor;
-            shape.pictureReference = (rel);
+            shape.SetPictureReference(rel);
             return shape;
         }
 

@@ -89,8 +89,10 @@ namespace NPOI.XSSF.UserModel
                 CT_NonVisualPictureProperties nvPicProps = nvpr.AddNewCNvPicPr();
                 nvPicProps.AddNewPicLocks().SetNoChangeAspect(true);
 
+
+
                 CT_BlipFillProperties blip = pic.AddNewBlipFill();
-                blip.AddNewBlip().SetEmbed("");
+                blip.AddNewBlip().embed = "";
                 blip.AddNewStretch().AddNewFillRect();
 
                 CT_ShapeProperties sppr = pic.AddNewSpPr();
@@ -118,7 +120,7 @@ namespace NPOI.XSSF.UserModel
          *
          * @param rel relationship referring the picture data
          */
-        protected void SetPictureReference(PackageRelationship rel)
+        internal void SetPictureReference(PackageRelationship rel)
         {
             ctPicture.blipFill.blip.embed = rel.Id;
         }

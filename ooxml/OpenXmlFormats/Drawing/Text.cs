@@ -1,24 +1,44 @@
-namespace NPOI.OpenXmlFormats.Dml {
-    
+using System.Collections.Generic;
+using System.Xml.Serialization;
+namespace NPOI.OpenXmlFormats.Dml 
+{
     
     /// <remarks/>
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
-    [System.Xml.Serialization.XmlRootAttribute(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
+    [XmlTypeAttribute(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlRootAttribute(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_TextParagraph {
         
         private CT_TextParagraphProperties pPrField;
         
-        private CT_RegularTextRun[] rField;
+        private List<CT_RegularTextRun> rField;
         
-        private CT_TextLineBreak[] brField;
+        private List<CT_TextLineBreak> brField;
         
-        private CT_TextField[] fldField;
+        private List<CT_TextField> fldField;
         
         private CT_TextCharacterProperties endParaRPrField;
-        
+
+        public CT_RegularTextRun AddNewR()
+        {
+            if(this.rField==null)
+            this.rField = new List<CT_RegularTextRun>();
+            CT_RegularTextRun rtr = new CT_RegularTextRun();
+            this.rField.Add(rtr);
+            return rtr;
+        }
+        public CT_TextParagraphProperties AddNewPPr()
+        {
+            this.pPrField = new CT_TextParagraphProperties();
+            return this.pPrField;    
+        }
+        public CT_TextCharacterProperties AddNewEndParaRPr()
+        {
+            this.endParaRPrField=new CT_TextCharacterProperties();
+            return this.endParaRPrField;
+        }
         /// <remarks/>
         public CT_TextParagraphProperties pPr {
             get {
@@ -30,8 +50,9 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("r")]
-        public CT_RegularTextRun[] r {
+        [XmlElementAttribute("r")]
+        public List<CT_RegularTextRun> r
+        {
             get {
                 return this.rField;
             }
@@ -41,8 +62,8 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("br")]
-        public CT_TextLineBreak[] br {
+        [XmlElementAttribute("br")]
+        public List<CT_TextLineBreak> br {
             get {
                 return this.brField;
             }
@@ -52,8 +73,8 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("fld")]
-        public CT_TextField[] fld {
+        [XmlElementAttribute("fld")]
+        public List<CT_TextField> fld {
             get {
                 return this.fldField;
             }
@@ -77,7 +98,7 @@ namespace NPOI.OpenXmlFormats.Dml {
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlTypeAttribute(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
     public partial class CT_TextParagraphProperties {
         
         private CT_TextSpacing lnSpcField;
@@ -299,7 +320,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlArrayItemAttribute("tab", IsNullable=false)]
+        [XmlArrayItemAttribute("tab", IsNullable=false)]
         public CT_TextTabStop[] tabLst {
             get {
                 return this.tabLstField;
@@ -330,7 +351,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [XmlAttributeAttribute()]
         public int marL {
             get {
                 return this.marLField;
@@ -341,7 +362,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnoreAttribute()]
         public bool marLSpecified {
             get {
                 return this.marLFieldSpecified;
@@ -352,7 +373,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [XmlAttributeAttribute()]
         public int marR {
             get {
                 return this.marRField;
@@ -363,7 +384,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnoreAttribute()]
         public bool marRSpecified {
             get {
                 return this.marRFieldSpecified;
@@ -374,7 +395,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [XmlAttributeAttribute()]
         public int lvl {
             get {
                 return this.lvlField;
@@ -385,7 +406,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnoreAttribute()]
         public bool lvlSpecified {
             get {
                 return this.lvlFieldSpecified;
@@ -396,7 +417,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [XmlAttributeAttribute()]
         public int indent {
             get {
                 return this.indentField;
@@ -407,7 +428,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnoreAttribute()]
         public bool indentSpecified {
             get {
                 return this.indentFieldSpecified;
@@ -418,7 +439,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [XmlAttributeAttribute()]
         public ST_TextAlignType algn {
             get {
                 return this.algnField;
@@ -429,7 +450,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnoreAttribute()]
         public bool algnSpecified {
             get {
                 return this.algnFieldSpecified;
@@ -440,7 +461,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [XmlAttributeAttribute()]
         public int defTabSz {
             get {
                 return this.defTabSzField;
@@ -451,7 +472,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnoreAttribute()]
         public bool defTabSzSpecified {
             get {
                 return this.defTabSzFieldSpecified;
@@ -462,7 +483,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [XmlAttributeAttribute()]
         public bool rtl {
             get {
                 return this.rtlField;
@@ -473,7 +494,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnoreAttribute()]
         public bool rtlSpecified {
             get {
                 return this.rtlFieldSpecified;
@@ -484,7 +505,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [XmlAttributeAttribute()]
         public bool eaLnBrk {
             get {
                 return this.eaLnBrkField;
@@ -495,7 +516,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnoreAttribute()]
         public bool eaLnBrkSpecified {
             get {
                 return this.eaLnBrkFieldSpecified;
@@ -506,7 +527,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [XmlAttributeAttribute()]
         public ST_TextFontAlignType fontAlgn {
             get {
                 return this.fontAlgnField;
@@ -517,7 +538,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnoreAttribute()]
         public bool fontAlgnSpecified {
             get {
                 return this.fontAlgnFieldSpecified;
@@ -528,7 +549,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [XmlAttributeAttribute()]
         public bool latinLnBrk {
             get {
                 return this.latinLnBrkField;
@@ -539,7 +560,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnoreAttribute()]
         public bool latinLnBrkSpecified {
             get {
                 return this.latinLnBrkFieldSpecified;
@@ -550,7 +571,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [XmlAttributeAttribute()]
         public bool hangingPunct {
             get {
                 return this.hangingPunctField;
@@ -561,7 +582,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnoreAttribute()]
         public bool hangingPunctSpecified {
             get {
                 return this.hangingPunctFieldSpecified;
@@ -576,14 +597,14 @@ namespace NPOI.OpenXmlFormats.Dml {
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlTypeAttribute(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
     public partial class CT_TextSpacing {
         
         private object itemField;
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("spcPct", typeof(CT_TextSpacingPercent))]
-        [System.Xml.Serialization.XmlElementAttribute("spcPts", typeof(CT_TextSpacingPoint))]
+        [XmlElementAttribute("spcPct", typeof(CT_TextSpacingPercent))]
+        [XmlElementAttribute("spcPts", typeof(CT_TextSpacingPoint))]
         public object Item {
             get {
                 return this.itemField;
@@ -598,13 +619,13 @@ namespace NPOI.OpenXmlFormats.Dml {
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlTypeAttribute(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
     public partial class CT_TextSpacingPercent {
         
         private int valField;
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [XmlAttributeAttribute()]
         public int val {
             get {
                 return this.valField;
@@ -619,7 +640,7 @@ namespace NPOI.OpenXmlFormats.Dml {
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlTypeAttribute(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
     public partial class CT_FlatText {
         
         private long zField;
@@ -629,7 +650,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [XmlAttributeAttribute()]
         [System.ComponentModel.DefaultValueAttribute(typeof(long), "0")]
         public long z {
             get {
@@ -646,7 +667,7 @@ namespace NPOI.OpenXmlFormats.Dml {
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlTypeAttribute(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
     public partial class CT_TextField {
         
         private CT_TextCharacterProperties rPrField;
@@ -690,7 +711,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute(DataType="token")]
+        [XmlAttributeAttribute(DataType="token")]
         public string id {
             get {
                 return this.idField;
@@ -701,7 +722,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [XmlAttributeAttribute()]
         public string type {
             get {
                 return this.typeField;
@@ -716,7 +737,7 @@ namespace NPOI.OpenXmlFormats.Dml {
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlTypeAttribute(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
     public partial class CT_TextCharacterProperties {
         
         private CT_LineProperties lnField;
@@ -1041,7 +1062,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [XmlAttributeAttribute()]
         public bool kumimoji {
             get {
                 return this.kumimojiField;
@@ -1052,7 +1073,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnoreAttribute()]
         public bool kumimojiSpecified {
             get {
                 return this.kumimojiFieldSpecified;
@@ -1063,7 +1084,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [XmlAttributeAttribute()]
         public string lang {
             get {
                 return this.langField;
@@ -1074,7 +1095,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [XmlAttributeAttribute()]
         public string altLang {
             get {
                 return this.altLangField;
@@ -1085,7 +1106,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [XmlAttributeAttribute()]
         public int sz {
             get {
                 return this.szField;
@@ -1096,7 +1117,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnoreAttribute()]
         public bool szSpecified {
             get {
                 return this.szFieldSpecified;
@@ -1107,7 +1128,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [XmlAttributeAttribute()]
         public bool b {
             get {
                 return this.bField;
@@ -1118,7 +1139,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnoreAttribute()]
         public bool bSpecified {
             get {
                 return this.bFieldSpecified;
@@ -1129,7 +1150,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [XmlAttributeAttribute()]
         public bool i {
             get {
                 return this.iField;
@@ -1140,7 +1161,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnoreAttribute()]
         public bool iSpecified {
             get {
                 return this.iFieldSpecified;
@@ -1151,7 +1172,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [XmlAttributeAttribute()]
         public ST_TextUnderlineType u {
             get {
                 return this.uField;
@@ -1162,7 +1183,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnoreAttribute()]
         public bool uSpecified {
             get {
                 return this.uFieldSpecified;
@@ -1173,7 +1194,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [XmlAttributeAttribute()]
         public ST_TextStrikeType strike {
             get {
                 return this.strikeField;
@@ -1184,7 +1205,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnoreAttribute()]
         public bool strikeSpecified {
             get {
                 return this.strikeFieldSpecified;
@@ -1195,7 +1216,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [XmlAttributeAttribute()]
         public int kern {
             get {
                 return this.kernField;
@@ -1206,7 +1227,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnoreAttribute()]
         public bool kernSpecified {
             get {
                 return this.kernFieldSpecified;
@@ -1217,7 +1238,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [XmlAttributeAttribute()]
         public ST_TextCapsType cap {
             get {
                 return this.capField;
@@ -1228,7 +1249,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnoreAttribute()]
         public bool capSpecified {
             get {
                 return this.capFieldSpecified;
@@ -1239,7 +1260,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [XmlAttributeAttribute()]
         public int spc {
             get {
                 return this.spcField;
@@ -1250,7 +1271,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnoreAttribute()]
         public bool spcSpecified {
             get {
                 return this.spcFieldSpecified;
@@ -1261,7 +1282,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [XmlAttributeAttribute()]
         public bool normalizeH {
             get {
                 return this.normalizeHField;
@@ -1272,7 +1293,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnoreAttribute()]
         public bool normalizeHSpecified {
             get {
                 return this.normalizeHFieldSpecified;
@@ -1283,7 +1304,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [XmlAttributeAttribute()]
         public int baseline {
             get {
                 return this.baselineField;
@@ -1294,7 +1315,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnoreAttribute()]
         public bool baselineSpecified {
             get {
                 return this.baselineFieldSpecified;
@@ -1305,7 +1326,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [XmlAttributeAttribute()]
         public bool noProof {
             get {
                 return this.noProofField;
@@ -1316,7 +1337,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnoreAttribute()]
         public bool noProofSpecified {
             get {
                 return this.noProofFieldSpecified;
@@ -1327,7 +1348,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [XmlAttributeAttribute()]
         [System.ComponentModel.DefaultValueAttribute(true)]
         public bool dirty {
             get {
@@ -1339,7 +1360,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [XmlAttributeAttribute()]
         [System.ComponentModel.DefaultValueAttribute(false)]
         public bool err {
             get {
@@ -1351,7 +1372,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [XmlAttributeAttribute()]
         [System.ComponentModel.DefaultValueAttribute(true)]
         public bool smtClean {
             get {
@@ -1363,7 +1384,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [XmlAttributeAttribute()]
         [System.ComponentModel.DefaultValueAttribute(typeof(uint), "0")]
         public uint smtId {
             get {
@@ -1375,7 +1396,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [XmlAttributeAttribute()]
         public string bmk {
             get {
                 return this.bmkField;
@@ -1390,7 +1411,7 @@ namespace NPOI.OpenXmlFormats.Dml {
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlTypeAttribute(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
     public partial class CT_TextUnderlineLineFollowText {
     }
     
@@ -1398,7 +1419,7 @@ namespace NPOI.OpenXmlFormats.Dml {
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlTypeAttribute(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
     public partial class CT_TextUnderlineFillFollowText {
     }
     
@@ -1406,18 +1427,18 @@ namespace NPOI.OpenXmlFormats.Dml {
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlTypeAttribute(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
     public partial class CT_TextUnderlineFillGroupWrapper {
         
         private object itemField;
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("blipFill", typeof(CT_BlipFillProperties))]
-        [System.Xml.Serialization.XmlElementAttribute("gradFill", typeof(CT_GradientFillProperties))]
-        [System.Xml.Serialization.XmlElementAttribute("grpFill", typeof(CT_GroupFillProperties))]
-        [System.Xml.Serialization.XmlElementAttribute("noFill", typeof(CT_NoFillProperties))]
-        [System.Xml.Serialization.XmlElementAttribute("pattFill", typeof(CT_PatternFillProperties))]
-        [System.Xml.Serialization.XmlElementAttribute("solidFill", typeof(CT_SolidColorFillProperties))]
+        [XmlElementAttribute("blipFill", typeof(CT_BlipFillProperties))]
+        [XmlElementAttribute("gradFill", typeof(CT_GradientFillProperties))]
+        [XmlElementAttribute("grpFill", typeof(CT_GroupFillProperties))]
+        [XmlElementAttribute("noFill", typeof(CT_NoFillProperties))]
+        [XmlElementAttribute("pattFill", typeof(CT_PatternFillProperties))]
+        [XmlElementAttribute("solidFill", typeof(CT_SolidColorFillProperties))]
         public object Item {
             get {
                 return this.itemField;
@@ -1430,7 +1451,7 @@ namespace NPOI.OpenXmlFormats.Dml {
     
     /// <remarks/>
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlTypeAttribute(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
     public enum ST_TextUnderlineType {
         
         /// <remarks/>
@@ -1490,7 +1511,7 @@ namespace NPOI.OpenXmlFormats.Dml {
     
     /// <remarks/>
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlTypeAttribute(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
     public enum ST_TextStrikeType {
         
         /// <remarks/>
@@ -1505,7 +1526,7 @@ namespace NPOI.OpenXmlFormats.Dml {
     
     /// <remarks/>
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlTypeAttribute(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
     public enum ST_TextCapsType {
         
         /// <remarks/>
@@ -1522,7 +1543,7 @@ namespace NPOI.OpenXmlFormats.Dml {
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlTypeAttribute(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
     public partial class CT_TextLineBreak {
         
         private CT_TextCharacterProperties rPrField;
@@ -1542,13 +1563,18 @@ namespace NPOI.OpenXmlFormats.Dml {
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlTypeAttribute(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
     public partial class CT_RegularTextRun {
         
         private CT_TextCharacterProperties rPrField;
         
         private string tField;
-        
+
+        public CT_TextCharacterProperties AddNewRPr()
+        {
+            this.rPrField = new CT_TextCharacterProperties();
+            return rPrField;
+        }
         /// <remarks/>
         public CT_TextCharacterProperties rPr {
             get {
@@ -1574,7 +1600,7 @@ namespace NPOI.OpenXmlFormats.Dml {
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlTypeAttribute(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
     public partial class CT_TextTabStop {
         
         private int posField;
@@ -1586,7 +1612,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         private bool algnFieldSpecified;
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [XmlAttributeAttribute()]
         public int pos {
             get {
                 return this.posField;
@@ -1597,7 +1623,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnoreAttribute()]
         public bool posSpecified {
             get {
                 return this.posFieldSpecified;
@@ -1608,7 +1634,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [XmlAttributeAttribute()]
         public ST_TextTabAlignType algn {
             get {
                 return this.algnField;
@@ -1619,7 +1645,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnoreAttribute()]
         public bool algnSpecified {
             get {
                 return this.algnFieldSpecified;
@@ -1632,7 +1658,7 @@ namespace NPOI.OpenXmlFormats.Dml {
     
     /// <remarks/>
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlTypeAttribute(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
     public enum ST_TextTabAlignType {
         
         /// <remarks/>
@@ -1652,7 +1678,7 @@ namespace NPOI.OpenXmlFormats.Dml {
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlTypeAttribute(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
     public partial class CT_TextBlipBullet {
         
         private CT_Blip blipField;
@@ -1672,13 +1698,13 @@ namespace NPOI.OpenXmlFormats.Dml {
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlTypeAttribute(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
     public partial class CT_TextCharBullet {
         
         private string charField;
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [XmlAttributeAttribute()]
         public string @char {
             get {
                 return this.charField;
@@ -1693,7 +1719,7 @@ namespace NPOI.OpenXmlFormats.Dml {
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlTypeAttribute(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
     public partial class CT_TextAutonumberBullet {
         
         private ST_TextAutonumberScheme typeField;
@@ -1705,7 +1731,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [XmlAttributeAttribute()]
         public ST_TextAutonumberScheme type {
             get {
                 return this.typeField;
@@ -1716,7 +1742,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [XmlAttributeAttribute()]
         [System.ComponentModel.DefaultValueAttribute(1)]
         public int startAt {
             get {
@@ -1730,7 +1756,7 @@ namespace NPOI.OpenXmlFormats.Dml {
     
     /// <remarks/>
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlTypeAttribute(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
     public enum ST_TextAutonumberScheme {
         
         /// <remarks/>
@@ -1861,7 +1887,7 @@ namespace NPOI.OpenXmlFormats.Dml {
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlTypeAttribute(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
     public partial class CT_TextNoBullet {
     }
     
@@ -1869,7 +1895,7 @@ namespace NPOI.OpenXmlFormats.Dml {
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlTypeAttribute(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
     public partial class CT_TextBulletTypefaceFollowText {
     }
     
@@ -1877,7 +1903,7 @@ namespace NPOI.OpenXmlFormats.Dml {
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlTypeAttribute(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
     public partial class CT_TextBulletSizePoint {
         
         private int valField;
@@ -1885,7 +1911,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         private bool valFieldSpecified;
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [XmlAttributeAttribute()]
         public int val {
             get {
                 return this.valField;
@@ -1896,7 +1922,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnoreAttribute()]
         public bool valSpecified {
             get {
                 return this.valFieldSpecified;
@@ -1911,7 +1937,7 @@ namespace NPOI.OpenXmlFormats.Dml {
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlTypeAttribute(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
     public partial class CT_TextBulletSizePercent {
         
         private int valField;
@@ -1919,7 +1945,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         private bool valFieldSpecified;
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [XmlAttributeAttribute()]
         public int val {
             get {
                 return this.valField;
@@ -1930,7 +1956,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnoreAttribute()]
         public bool valSpecified {
             get {
                 return this.valFieldSpecified;
@@ -1945,7 +1971,7 @@ namespace NPOI.OpenXmlFormats.Dml {
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlTypeAttribute(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
     public partial class CT_TextBulletSizeFollowText {
     }
     
@@ -1953,7 +1979,7 @@ namespace NPOI.OpenXmlFormats.Dml {
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlTypeAttribute(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
     public partial class CT_TextBulletColorFollowText {
     }
     
@@ -1961,13 +1987,13 @@ namespace NPOI.OpenXmlFormats.Dml {
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlTypeAttribute(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
     public partial class CT_TextSpacingPoint {
         
         private int valField;
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [XmlAttributeAttribute()]
         public int val {
             get {
                 return this.valField;
@@ -1980,7 +2006,7 @@ namespace NPOI.OpenXmlFormats.Dml {
     
     /// <remarks/>
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlTypeAttribute(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
     public enum ST_TextAlignType {
         
         /// <remarks/>
@@ -2007,7 +2033,7 @@ namespace NPOI.OpenXmlFormats.Dml {
     
     /// <remarks/>
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlTypeAttribute(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
     public enum ST_TextFontAlignType {
         
         /// <remarks/>
@@ -2028,8 +2054,8 @@ namespace NPOI.OpenXmlFormats.Dml {
     
     /// <remarks/>
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
-    [System.Xml.Serialization.XmlRootAttribute(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=false)]
+    [XmlTypeAttribute(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlRootAttribute(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=false)]
     public enum ST_TextAnchoringType {
         
         /// <remarks/>
@@ -2050,8 +2076,8 @@ namespace NPOI.OpenXmlFormats.Dml {
     
     /// <remarks/>
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
-    [System.Xml.Serialization.XmlRootAttribute(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=false)]
+    [XmlTypeAttribute(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlRootAttribute(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=false)]
     public enum ST_TextVertOverflowType {
         
         /// <remarks/>
@@ -2066,8 +2092,8 @@ namespace NPOI.OpenXmlFormats.Dml {
     
     /// <remarks/>
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
-    [System.Xml.Serialization.XmlRootAttribute(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=false)]
+    [XmlTypeAttribute(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlRootAttribute(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=false)]
     public enum ST_TextHorzOverflowType {
         
         /// <remarks/>
@@ -2079,8 +2105,8 @@ namespace NPOI.OpenXmlFormats.Dml {
     
     /// <remarks/>
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
-    [System.Xml.Serialization.XmlRootAttribute(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=false)]
+    [XmlTypeAttribute(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlRootAttribute(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=false)]
     public enum ST_TextVerticalType {
         
         /// <remarks/>
@@ -2107,8 +2133,8 @@ namespace NPOI.OpenXmlFormats.Dml {
     
     /// <remarks/>
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
-    [System.Xml.Serialization.XmlRootAttribute(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=false)]
+    [XmlTypeAttribute(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlRootAttribute(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=false)]
     public enum ST_TextWrappingType {
         
         /// <remarks/>
@@ -2122,8 +2148,8 @@ namespace NPOI.OpenXmlFormats.Dml {
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
-    [System.Xml.Serialization.XmlRootAttribute(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
+    [XmlTypeAttribute(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlRootAttribute(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_TextListStyle {
         
         private CT_TextParagraphProperties defPPrField;
@@ -2263,8 +2289,8 @@ namespace NPOI.OpenXmlFormats.Dml {
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
-    [System.Xml.Serialization.XmlRootAttribute(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
+    [XmlTypeAttribute(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlRootAttribute(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_TextNormalAutofit {
         
         private int fontScaleField;
@@ -2277,7 +2303,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [XmlAttributeAttribute()]
         [System.ComponentModel.DefaultValueAttribute(100000)]
         public int fontScale {
             get {
@@ -2289,7 +2315,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [XmlAttributeAttribute()]
         [System.ComponentModel.DefaultValueAttribute(0)]
         public int lnSpcReduction {
             get {
@@ -2305,8 +2331,8 @@ namespace NPOI.OpenXmlFormats.Dml {
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
-    [System.Xml.Serialization.XmlRootAttribute(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
+    [XmlTypeAttribute(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlRootAttribute(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_TextShapeAutofit {
     }
     
@@ -2314,8 +2340,8 @@ namespace NPOI.OpenXmlFormats.Dml {
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
-    [System.Xml.Serialization.XmlRootAttribute(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
+    [XmlTypeAttribute(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlRootAttribute(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_TextNoAutofit {
     }
     
@@ -2323,8 +2349,8 @@ namespace NPOI.OpenXmlFormats.Dml {
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
-    [System.Xml.Serialization.XmlRootAttribute(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
+    [XmlTypeAttribute(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlRootAttribute(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_TextBodyProperties {
         
         private CT_PresetTextShape prstTxWarpField;
@@ -2502,7 +2528,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [XmlAttributeAttribute()]
         public int rot {
             get {
                 return this.rotField;
@@ -2513,7 +2539,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnoreAttribute()]
         public bool rotSpecified {
             get {
                 return this.rotFieldSpecified;
@@ -2524,7 +2550,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [XmlAttributeAttribute()]
         public bool spcFirstLastPara {
             get {
                 return this.spcFirstLastParaField;
@@ -2535,7 +2561,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnoreAttribute()]
         public bool spcFirstLastParaSpecified {
             get {
                 return this.spcFirstLastParaFieldSpecified;
@@ -2546,7 +2572,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [XmlAttributeAttribute()]
         public ST_TextVertOverflowType vertOverflow {
             get {
                 return this.vertOverflowField;
@@ -2557,7 +2583,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnoreAttribute()]
         public bool vertOverflowSpecified {
             get {
                 return this.vertOverflowFieldSpecified;
@@ -2568,7 +2594,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [XmlAttributeAttribute()]
         public ST_TextHorzOverflowType horzOverflow {
             get {
                 return this.horzOverflowField;
@@ -2579,7 +2605,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnoreAttribute()]
         public bool horzOverflowSpecified {
             get {
                 return this.horzOverflowFieldSpecified;
@@ -2590,7 +2616,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [XmlAttributeAttribute()]
         public ST_TextVerticalType vert {
             get {
                 return this.vertField;
@@ -2601,7 +2627,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnoreAttribute()]
         public bool vertSpecified {
             get {
                 return this.vertFieldSpecified;
@@ -2612,7 +2638,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [XmlAttributeAttribute()]
         public ST_TextWrappingType wrap {
             get {
                 return this.wrapField;
@@ -2623,7 +2649,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnoreAttribute()]
         public bool wrapSpecified {
             get {
                 return this.wrapFieldSpecified;
@@ -2634,7 +2660,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [XmlAttributeAttribute()]
         public int lIns {
             get {
                 return this.lInsField;
@@ -2645,7 +2671,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnoreAttribute()]
         public bool lInsSpecified {
             get {
                 return this.lInsFieldSpecified;
@@ -2656,7 +2682,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [XmlAttributeAttribute()]
         public int tIns {
             get {
                 return this.tInsField;
@@ -2667,7 +2693,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnoreAttribute()]
         public bool tInsSpecified {
             get {
                 return this.tInsFieldSpecified;
@@ -2678,7 +2704,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [XmlAttributeAttribute()]
         public int rIns {
             get {
                 return this.rInsField;
@@ -2689,7 +2715,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnoreAttribute()]
         public bool rInsSpecified {
             get {
                 return this.rInsFieldSpecified;
@@ -2700,7 +2726,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [XmlAttributeAttribute()]
         public int bIns {
             get {
                 return this.bInsField;
@@ -2711,7 +2737,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnoreAttribute()]
         public bool bInsSpecified {
             get {
                 return this.bInsFieldSpecified;
@@ -2722,7 +2748,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [XmlAttributeAttribute()]
         public int numCol {
             get {
                 return this.numColField;
@@ -2733,7 +2759,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnoreAttribute()]
         public bool numColSpecified {
             get {
                 return this.numColFieldSpecified;
@@ -2744,7 +2770,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [XmlAttributeAttribute()]
         public int spcCol {
             get {
                 return this.spcColField;
@@ -2755,7 +2781,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnoreAttribute()]
         public bool spcColSpecified {
             get {
                 return this.spcColFieldSpecified;
@@ -2766,7 +2792,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [XmlAttributeAttribute()]
         public bool rtlCol {
             get {
                 return this.rtlColField;
@@ -2777,7 +2803,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnoreAttribute()]
         public bool rtlColSpecified {
             get {
                 return this.rtlColFieldSpecified;
@@ -2788,7 +2814,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [XmlAttributeAttribute()]
         public bool fromWordArt {
             get {
                 return this.fromWordArtField;
@@ -2799,7 +2825,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnoreAttribute()]
         public bool fromWordArtSpecified {
             get {
                 return this.fromWordArtFieldSpecified;
@@ -2810,7 +2836,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [XmlAttributeAttribute()]
         public ST_TextAnchoringType anchor {
             get {
                 return this.anchorField;
@@ -2821,7 +2847,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnoreAttribute()]
         public bool anchorSpecified {
             get {
                 return this.anchorFieldSpecified;
@@ -2832,7 +2858,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [XmlAttributeAttribute()]
         public bool anchorCtr {
             get {
                 return this.anchorCtrField;
@@ -2843,7 +2869,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnoreAttribute()]
         public bool anchorCtrSpecified {
             get {
                 return this.anchorCtrFieldSpecified;
@@ -2854,7 +2880,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [XmlAttributeAttribute()]
         public bool forceAA {
             get {
                 return this.forceAAField;
@@ -2865,7 +2891,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnoreAttribute()]
         public bool forceAASpecified {
             get {
                 return this.forceAAFieldSpecified;
@@ -2876,7 +2902,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [XmlAttributeAttribute()]
         [System.ComponentModel.DefaultValueAttribute(false)]
         public bool upright {
             get {
@@ -2888,7 +2914,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [XmlAttributeAttribute()]
         public bool compatLnSpc {
             get {
                 return this.compatLnSpcField;
@@ -2899,7 +2925,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnoreAttribute()]
         public bool compatLnSpcSpecified {
             get {
                 return this.compatLnSpcFieldSpecified;
@@ -2914,16 +2940,29 @@ namespace NPOI.OpenXmlFormats.Dml {
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
-    [System.Xml.Serialization.XmlRootAttribute(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
+    [XmlTypeAttribute(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlRootAttribute(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_TextBody {
         
         private CT_TextBodyProperties bodyPrField;
         
         private CT_TextListStyle lstStyleField;
         
-        private CT_TextParagraph[] pField;
-        
+        private List<CT_TextParagraph> pField;
+
+        public CT_TextParagraph AddNewP()
+        {
+            if (this.pField == null)
+                pField = new List<CT_TextParagraph>();
+            CT_TextParagraph tp = new CT_TextParagraph();
+            pField.Add(tp);
+            return tp;
+        }
+        public CT_TextBodyProperties AddNewBodyPr()
+        {
+            this.bodyPrField = new CT_TextBodyProperties();
+            return this.bodyPrField;
+        }
         /// <remarks/>
         public CT_TextBodyProperties bodyPr {
             get {
@@ -2945,8 +2984,8 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("p")]
-        public CT_TextParagraph[] p {
+        [XmlElementAttribute("p")]
+        public List<CT_TextParagraph> p {
             get {
                 return this.pField;
             }

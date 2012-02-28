@@ -70,6 +70,8 @@ namespace NPOI.XSSF.UserModel
                 props.name = ("Diagramm 1");
                 nvGraphic.AddNewCNvGraphicFramePr();
 
+
+
                 CT_Transform2D transform = graphicFrame.AddNewXfrm();
                 CT_PositiveSize2D extPoint = transform.AddNewExt();
                 CT_Point2D offPoint = transform.AddNewOff();
@@ -181,12 +183,12 @@ namespace NPOI.XSSF.UserModel
         {
             String r_namespaceUri = ST_RelationshipId.NamespaceURI;
             String c_namespaceUri = XSSFDrawing.NAMESPACE_C;
-            XmlCursor cursor = data.newCursor();
-            cursor.ToNextToken();
-            cursor.beginElement(new QName(c_namespaceUri, "chart", "c"));
-            cursor.insertAttributeWithValue(new QName(r_namespaceUri, "id", "r"), id);
-            cursor.dispose();
-            data.SetUri(c_namespaceUri);
+            //XmlCursor cursor = data.newCursor();
+            //cursor.ToNextToken();
+            //cursor.beginElement(new QName(c_namespaceUri, "chart", "c"));
+            //cursor.insertAttributeWithValue(new QName(r_namespaceUri, "id", "r"), id);
+            //cursor.dispose();
+            //data.SetUri(c_namespaceUri);
         }
 
     }

@@ -41,8 +41,8 @@ namespace NPOI.XSSF.UserModel
         private bool isNew;
         private long numOfGraphicFrames = 0L;
 
-        protected static String NAMESPACE_A = "http://schemas.Openxmlformats.org/drawingml/2006/main";
-        protected static String NAMESPACE_C = "http://schemas.Openxmlformats.org/drawingml/2006/chart";
+        public const String NAMESPACE_A = "http://schemas.openxmlformats.org/drawingml/2006/main";
+        public const String NAMESPACE_C = "http://schemas.openxmlformats.org/drawingml/2006/chart";
 
         /**
          * Create a new SpreadsheetML Drawing
@@ -61,9 +61,9 @@ namespace NPOI.XSSF.UserModel
          * Construct a SpreadsheetML Drawing from a namespace part
          *
          * @param part the namespace part holding the Drawing data,
-         * the content type must be <code>application/vnd.Openxmlformats-officedocument.Drawing+xml</code>
+         * the content type must be <code>application/vnd.openxmlformats-officedocument.Drawing+xml</code>
          * @param rel  the namespace relationship holding this Drawing,
-         * the relationship type must be http://schemas.Openxmlformats.org/officeDocument/2006/relationships/drawing
+         * the relationship type must be http://schemas.openxmlformats.org/officeDocument/2006/relationships/drawing
          */
         protected XSSFDrawing(PackagePart part, PackageRelationship rel)
             : base(part, rel)
@@ -99,8 +99,8 @@ namespace NPOI.XSSF.UserModel
         /*
             Saved Drawings must have the following namespaces Set:
             <xdr:wsDr
-                xmlns:a="http://schemas.Openxmlformats.org/drawingml/2006/main"
-                xmlns:xdr="http://schemas.Openxmlformats.org/drawingml/2006/spreadsheetDrawing">
+                xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main"
+                xmlns:xdr="http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing">
         */
         //if(isNew) xmlOptions.SetSaveSyntheticDocumentElement(new QName(CT_Drawing.type.GetName().GetNamespaceURI(), "wsDr", "xdr"));
         Dictionary<String, String> map = new Dictionary<String, String>();
