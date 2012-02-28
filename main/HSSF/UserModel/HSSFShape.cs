@@ -32,7 +32,7 @@ namespace NPOI.HSSF.UserModel
         IShape parent;
         [NonSerialized]
         HSSFAnchor anchor;
-        protected HSSFPatriarch _patriarch;
+        protected internal HSSFPatriarch _patriarch;
         int lineStyleColor = 0x08000040;
         int fillColor = 0x08000009;
         int lineWidth = LINEWIDTH_DEFAULT;    

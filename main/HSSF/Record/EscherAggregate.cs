@@ -660,7 +660,7 @@ namespace NPOI.HSSF.Record
                                 anchor.Row2 = anchorRecord.Row2;
                                 HSSFPicture picture = new HSSFPicture(null, anchor);
                                 picture.PictureIndex = pictureIndex;
-                                patriarch.Children.Add(picture);
+                                patriarch.AddShape(picture);
 
                             }
                             break;

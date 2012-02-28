@@ -189,7 +189,7 @@ namespace NPOI.HSSF.UserModel
         private float GetColumnWidthInPixels(int column)
         {
 
-            int cw = _patriarch.sheet.GetColumnWidth(column);
+            int cw = _patriarch._sheet.GetColumnWidth(column);
             float px = GetPixelWidth(column);
 
             return cw / px;
@@ -203,10 +203,10 @@ namespace NPOI.HSSF.UserModel
         private float GetRowHeightInPixels(int i)
         {
 
-            IRow row = _patriarch.sheet.GetRow(i);
+            IRow row = _patriarch._sheet.GetRow(i);
             float height;
             if (row != null) height = row.Height;
-            else height = _patriarch.sheet.DefaultRowHeight;
+            else height = _patriarch._sheet.DefaultRowHeight;
 
             return height / PX_ROW;
         }
@@ -219,8 +219,8 @@ namespace NPOI.HSSF.UserModel
         private float GetPixelWidth(int column)
         {
 
-            int def = _patriarch.sheet.DefaultColumnWidth * 256;
-            int cw = _patriarch.sheet.GetColumnWidth(column);
+            int def = _patriarch._sheet.DefaultColumnWidth * 256;
+            int cw = _patriarch._sheet.GetColumnWidth(column);
 
             return cw == def ? PX_DEFAULT : PX_MODIFIED;
         }
@@ -257,7 +257,7 @@ namespace NPOI.HSSF.UserModel
         /// <returns>image dimension</returns>
         public Size GetImageDimension()
         {
-            EscherBSERecord bse = _patriarch.sheet.book.GetBSERecord(pictureIndex);
+            EscherBSERecord bse = _patriarch._sheet.book.GetBSERecord(pictureIndex);
             byte[] data = bse.BlipRecord.PictureData;
             //int type = bse.BlipTypeWin32;
 
@@ -308,7 +308,7 @@ namespace NPOI.HSSF.UserModel
         {
             get
             {
-                InternalWorkbook iwb = ((_patriarch.sheet.Workbook) as HSSFWorkbook).Workbook;
+                InternalWorkbook iwb = ((_patriarch._sheet.Workbook) as HSSFWorkbook).Workbook;
                 EscherBlipRecord blipRecord = iwb.GetBSERecord(pictureIndex).BlipRecord;
                 return new HSSFPictureData(blipRecord);
             }

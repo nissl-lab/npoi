@@ -65,7 +65,7 @@ namespace NPOI.HSSF.Record
                 for (IEnumerator iterator = EscherRecords.GetEnumerator(); iterator.MoveNext(); )
                 {
                     EscherRecord r = (EscherRecord)iterator.Current;
-                    pos += r.Serialize(pos, buffer);
+                    pos += r.Serialize(pos, buffer, new NullEscherSerializationListener());
                 }
 
                 return WriteData(offset, data, buffer);

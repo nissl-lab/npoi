@@ -20,17 +20,20 @@ namespace NPOI.HSSF.Record
     using System;
     using System.Text;
     using NPOI.Util;
-
-
+    /**
+     * DrawingRecord (0x00EC)<p/>
+     *
+     */
     public class DrawingRecord : StandardRecord
     {
         public const short sid = 0xEC;
-
+        private static byte[] EMPTY_BYTE_ARRAY = { };
         private byte[] recordData;
         private byte[] contd;
 
         public DrawingRecord()
         {
+            recordData = EMPTY_BYTE_ARRAY;
         }
 
         public DrawingRecord(RecordInputStream in1)
@@ -73,13 +76,14 @@ namespace NPOI.HSSF.Record
                     Array.Copy(contd, 0, newBuffer, recordData.Length, contd.Length);
                     return newBuffer;
                 }
-                else
-                {
-                    return recordData;
-                }
+                return recordData;
             }
             set 
             {
+                if (value == null)
+                {
+                    throw new ArgumentException("data must not be null");
+                }
                 this.recordData = value;
             }
         }
@@ -88,15 +92,10 @@ namespace NPOI.HSSF.Record
         {
             DrawingRecord rec = new DrawingRecord();
 
-            if (recordData != null)
-            {
-                rec.recordData = new byte[recordData.Length];
-                Array.Copy(recordData, 0, rec.recordData, 0, recordData.Length);
-            }
+            rec.recordData = (byte[])recordData.Clone();// new byte[recordData.Length];
             if (contd != null)
             {
-                Array.Copy(contd, 0, rec.contd, 0, contd.Length);
-                rec.contd = new byte[contd.Length];
+                rec.contd = (byte[])contd.Clone();
             }
 
             return rec;
