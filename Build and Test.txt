@@ -32,8 +32,8 @@ Copy the content of testcases/test-data to the same folder within NPOI.
 Load the the NPOITest.sln into your IDE, build the project and execute 
 all the unit tests.
 
-Here are some numbers (2012-02-24):
-unit tests: 1622, passed: 1620 (failed 2)
+Here are some numbers (2012-02-29):
+unit tests: 1649, passed: 1644 (failed 5)
 
 There are 10 unit tests flagged with the [Ignore] attribute: 
 - testcases\main\HSSF\Model\TestOperandClassTransformer.cs(63):   [Ignore] //this test is disabled in poi.
@@ -51,6 +51,11 @@ There are 10 unit tests flagged with the [Ignore] attribute:
 These are the failing test cases:
 Failed    Test51461                    Test method TestCases.HSSF.UserModel.TestBugs.Test51461 threw exception: System.NotImplementedException: not find class NPOIFSFileSystem    
 Failed    Test51535                    Test method TestCases.HSSF.UserModel.TestBugs.Test51535 threw exception: System.NotImplementedException: not find class NPOIFSFileSystem   
+
+Failed    TestWordDocEmbeddedInXls     Test method TestCases.HSSF.UserModel.TestHSSFWorkbook.TestWordDocEmbeddedInXls threw exception: System.NotImplementedException: class NPOIFSFileSystem is not implemented
+Failed    TestDifferentPOIFS           Test method TestCases.HSSF.UserModel.TestHSSFWorkbook.TestDifferentPOIFS threw exception: System.NotImplementedException: class NPOIFSFileSystem is not implemented
+Failed    TestWriteWorkbookFromNPOIFS  Test method TestCases.HSSF.UserModel.TestHSSFWorkbook.TestWriteWorkbookFromNPOIFS threw exception: System.NotImplementedException: class NPOIFSFileSystem is not implemented
+
 
 Patches to make the unit tests work as expected are greatly appreciated. 
 This belongs to the failing and to the ignored ones.

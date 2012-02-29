@@ -77,8 +77,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="HSSF\UserModel\TestHSSFExternalFunctions.cs" />
-    <Compile Include="HSSF\UserModel\TestHSSFSheetUpdateArrayFormulas.cs" />
     <Compile Include="POIFS\Storage\TestBATBlock.cs" />
     <Compile Include="POIFS\Storage\TestBlockListImpl.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -471,10 +469,12 @@
     <Compile Include="HSSF\UserModel\HSSFTestHelper.cs" />
     <Compile Include="HSSF\UserModel\TestDataValidation.cs" />
     <Compile Include="HSSF\UserModel\TestHSSFDataFormatter.cs" />
+    <Compile Include="HSSF\UserModel\TestHSSFExternalFunctions.cs" />
     <Compile Include="HSSF\UserModel\TestHSSFFont.cs" />
     <Compile Include="HSSF\UserModel\TestHSSFDataFormat.cs" />
     <Compile Include="HSSF\UserModel\TestHSSFSheetShiftRows.cs" />
     <Compile Include="HSSF\UserModel\TestHSSFName.cs" />
+    <Compile Include="HSSF\UserModel\TestHSSFSheetUpdateArrayFormulas.cs" />
     <Compile Include="HSSF\Util\TestCellReference.cs" />
     <Compile Include="HSSF\Util\TestRKUtil.cs" />
     <Compile Include="POIDataSamples.cs" />
