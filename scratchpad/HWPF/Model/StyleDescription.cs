@@ -69,15 +69,15 @@ namespace NPOI.HWPF.Model
             _baseLength = baseLength;
             int nameStart = offset + baseLength;
             _infoshort = LittleEndian.GetShort(std, offset);
-            offset += LittleEndianConstants.SHORT_SIZE;
+            offset += LittleEndianConsts.SHORT_SIZE;
             _infoshort2 = LittleEndian.GetShort(std, offset);
-            offset += LittleEndianConstants.SHORT_SIZE;
+            offset += LittleEndianConsts.SHORT_SIZE;
             _infoshort3 = LittleEndian.GetShort(std, offset);
-            offset += LittleEndianConstants.SHORT_SIZE;
+            offset += LittleEndianConsts.SHORT_SIZE;
             _bchUpe = LittleEndian.GetShort(std, offset);
-            offset += LittleEndianConstants.SHORT_SIZE;
+            offset += LittleEndianConsts.SHORT_SIZE;
             _infoshort4 = LittleEndian.GetShort(std, offset);
-            offset += LittleEndianConstants.SHORT_SIZE;
+            offset += LittleEndianConsts.SHORT_SIZE;
 
             //first byte(s) of variable length section of std is the length of the
             //style name and aliases string
@@ -87,7 +87,7 @@ namespace NPOI.HWPF.Model
             {
                 nameLength = LittleEndian.GetShort(std, nameStart);
                 multiplier = 2;
-                nameStart += LittleEndianConstants.SHORT_SIZE;
+                nameStart += LittleEndianConsts.SHORT_SIZE;
             }
             else
             {
@@ -114,7 +114,7 @@ namespace NPOI.HWPF.Model
             for (int x = 0; x < numUPX; x++)
             {
                 int upxSize = LittleEndian.GetShort(std, varoffset);
-                varoffset += LittleEndianConstants.SHORT_SIZE;
+                varoffset += LittleEndianConsts.SHORT_SIZE;
 
                 byte[] upx = new byte[upxSize];
                 Array.Copy(std, varoffset, upx, 0, upxSize);
@@ -206,32 +206,32 @@ namespace NPOI.HWPF.Model
 
             int offset = 0;
             LittleEndian.PutShort(buf, offset, _infoshort);
-            offset += LittleEndianConstants.SHORT_SIZE;
+            offset += LittleEndianConsts.SHORT_SIZE;
             LittleEndian.PutShort(buf, offset, _infoshort2);
-            offset += LittleEndianConstants.SHORT_SIZE;
+            offset += LittleEndianConsts.SHORT_SIZE;
             LittleEndian.PutShort(buf, offset, _infoshort3);
-            offset += LittleEndianConstants.SHORT_SIZE;
+            offset += LittleEndianConsts.SHORT_SIZE;
             LittleEndian.PutShort(buf, offset, _bchUpe);
-            offset += LittleEndianConstants.SHORT_SIZE;
+            offset += LittleEndianConsts.SHORT_SIZE;
             LittleEndian.PutShort(buf, offset, _infoshort4);
             offset = _baseLength;
 
             char[] letters = _name.ToCharArray();
             LittleEndian.PutShort(buf, _baseLength, (short)letters.Length);
-            offset += LittleEndianConstants.SHORT_SIZE;
+            offset += LittleEndianConsts.SHORT_SIZE;
             for (int x = 0; x < letters.Length; x++)
             {
                 LittleEndian.PutShort(buf, offset, (short)letters[x]);
-                offset += LittleEndianConstants.SHORT_SIZE;
+                offset += LittleEndianConsts.SHORT_SIZE;
             }
             // get past the null delimiter for the name.
-            offset += LittleEndianConstants.SHORT_SIZE;
+            offset += LittleEndianConsts.SHORT_SIZE;
 
             for (int x = 0; x < _upxs.Length; x++)
             {
                 short upxSize = (short)_upxs[x].Size;
                 LittleEndian.PutShort(buf, offset, upxSize);
-                offset += LittleEndianConstants.SHORT_SIZE;
+                offset += LittleEndianConsts.SHORT_SIZE;
                 Array.Copy(_upxs[x].GetUPX(), 0, buf, offset, upxSize);
                 offset += upxSize + (upxSize % 2);
             }

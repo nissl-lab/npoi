@@ -48,9 +48,9 @@ namespace NPOI.HWPF.Model
             this.fcSttbfffn = offset;
 
             _stringCount = LittleEndian.GetShort(buf, offset);
-            offset += LittleEndianConstants.SHORT_SIZE;
+            offset += LittleEndianConsts.SHORT_SIZE;
             _extraDataSz = LittleEndian.GetShort(buf, offset);
-            offset += LittleEndianConstants.SHORT_SIZE;
+            offset += LittleEndianConsts.SHORT_SIZE;
 
             _fontNames = new Ffn[_stringCount]; //Ffn corresponds to a Pascal style String in STTBF.
 
@@ -112,7 +112,7 @@ namespace NPOI.HWPF.Model
         {
             HWPFStream tableStream = sys.GetStream("1Table");
 
-            byte[] buf = new byte[LittleEndianConstants.SHORT_SIZE];
+            byte[] buf = new byte[LittleEndianConsts.SHORT_SIZE];
             LittleEndian.PutShort(buf, _stringCount);
             tableStream.Write(buf);
             LittleEndian.PutShort(buf, _extraDataSz);

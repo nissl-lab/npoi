@@ -399,7 +399,7 @@ namespace NPOI.HWPF.SPRM
             for (int x = 0; x < delSize; x++)
             {
                 tabMap.Remove(LittleEndian.GetShort(grpprl, offset));
-                offset += LittleEndianConstants.SHORT_SIZE;
+                offset += LittleEndianConsts.SHORT_SIZE;
             }
 
             int addSize = grpprl[offset++];
@@ -407,9 +407,9 @@ namespace NPOI.HWPF.SPRM
             for (int x = 0; x < addSize; x++)
             {
                 int key = LittleEndian.GetShort(grpprl, offset);
-                Byte val = grpprl[start + ((LittleEndianConstants.SHORT_SIZE * addSize) + x)];
+                Byte val = grpprl[start + ((LittleEndianConsts.SHORT_SIZE * addSize) + x)];
                 tabMap.Add(key, val);
-                offset += LittleEndianConstants.SHORT_SIZE;
+                offset += LittleEndianConsts.SHORT_SIZE;
             }
 
             tabPositions = new int[tabMap.Count];

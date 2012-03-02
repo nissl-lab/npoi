@@ -25,7 +25,7 @@ namespace NPOI.HSSF.Converter
     using NPOI.SS.UserModel;
     using NPOI.HSSF.Util;
     using NPOI.HSSF.Record.CF;
-    using NPOI.Util.IO;
+    using NPOI.Util;
     using NPOI.SS.Util;
 
     public class ExcelToHtmlUtils
@@ -112,28 +112,28 @@ namespace NPOI.HSSF.Converter
         }
         return mergedRanges;
     }
-        public static string GetBorderStyle(CellBorderType xlsBorder)
+        public static string GetBorderStyle(BorderStyle xlsBorder)
         {
             string borderStyle;
             switch (xlsBorder)
             {
-                case CellBorderType.NONE:
+                case BorderStyle.NONE:
                     borderStyle = "none";
                     break;
-                case CellBorderType.DASH_DOT:
-                case CellBorderType.DASH_DOT_DOT:
-                case CellBorderType.DOTTED:
-                case CellBorderType.HAIR:
-                case CellBorderType.MEDIUM_DASH_DOT:
-                case CellBorderType.MEDIUM_DASH_DOT_DOT:
-                case CellBorderType.SLANTED_DASH_DOT:
+                case BorderStyle.DASH_DOT:
+                case BorderStyle.DASH_DOT_DOT:
+                case BorderStyle.DOTTED:
+                case BorderStyle.HAIR:
+                case BorderStyle.MEDIUM_DASH_DOT:
+                case BorderStyle.MEDIUM_DASH_DOT_DOT:
+                case BorderStyle.SLANTED_DASH_DOT:
                     borderStyle = "dotted";
                     break;
-                case CellBorderType.DASHED:
-                case CellBorderType.MEDIUM_DASHED:
+                case BorderStyle.DASHED:
+                case BorderStyle.MEDIUM_DASHED:
                     borderStyle = "dashed";
                     break;
-                case CellBorderType.DOUBLE:
+                case BorderStyle.DOUBLE:
                     borderStyle = "double";
                     break;
                 default:
@@ -143,17 +143,17 @@ namespace NPOI.HSSF.Converter
             return borderStyle;
         }
 
-        public static string GetBorderWidth(CellBorderType xlsBorder)
+        public static string GetBorderWidth(BorderStyle xlsBorder)
         {
             string borderWidth;
             switch (xlsBorder)
             {
-                case CellBorderType.MEDIUM_DASH_DOT:
-                case CellBorderType.MEDIUM_DASH_DOT_DOT:
-                case CellBorderType.MEDIUM_DASHED:
+                case BorderStyle.MEDIUM_DASH_DOT:
+                case BorderStyle.MEDIUM_DASH_DOT_DOT:
+                case BorderStyle.MEDIUM_DASHED:
                     borderWidth = "2pt";
                     break;
-                case CellBorderType.THICK:
+                case BorderStyle.THICK:
                     borderWidth = "thick";
                     break;
                 default:

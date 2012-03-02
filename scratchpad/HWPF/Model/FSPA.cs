@@ -53,17 +53,17 @@ namespace NPOI.HWPF.Model
         public FSPA(byte[] bytes, int offset)
         {
             spid = LittleEndian.GetInt(bytes, offset);
-            offset += LittleEndianConstants.INT_SIZE;
+            offset += LittleEndianConsts.INT_SIZE;
             xaLeft = LittleEndian.GetInt(bytes, offset);
-            offset += LittleEndianConstants.INT_SIZE;
+            offset += LittleEndianConsts.INT_SIZE;
             yaTop = LittleEndian.GetInt(bytes, offset);
-            offset += LittleEndianConstants.INT_SIZE;
+            offset += LittleEndianConsts.INT_SIZE;
             xaRight = LittleEndian.GetInt(bytes, offset);
-            offset += LittleEndianConstants.INT_SIZE;
+            offset += LittleEndianConsts.INT_SIZE;
             yaBottom = LittleEndian.GetInt(bytes, offset);
-            offset += LittleEndianConstants.INT_SIZE;
+            offset += LittleEndianConsts.INT_SIZE;
             options = LittleEndian.GetShort(bytes, offset);
-            offset += LittleEndianConstants.SHORT_SIZE;
+            offset += LittleEndianConsts.SHORT_SIZE;
             cTxbx = LittleEndian.GetInt(bytes, offset);
         }
 
@@ -143,19 +143,19 @@ namespace NPOI.HWPF.Model
             byte[] buf = new byte[FSPA_SIZE];
 
             LittleEndian.PutInt(buf, offset, spid);
-            offset += LittleEndianConstants.INT_SIZE;
+            offset += LittleEndianConsts.INT_SIZE;
             LittleEndian.PutInt(buf, offset, xaLeft);
-            offset += LittleEndianConstants.INT_SIZE;
+            offset += LittleEndianConsts.INT_SIZE;
             LittleEndian.PutInt(buf, offset, yaTop);
-            offset += LittleEndianConstants.INT_SIZE;
+            offset += LittleEndianConsts.INT_SIZE;
             LittleEndian.PutInt(buf, offset, xaRight);
-            offset += LittleEndianConstants.INT_SIZE;
+            offset += LittleEndianConsts.INT_SIZE;
             LittleEndian.PutInt(buf, offset, yaBottom);
-            offset += LittleEndianConstants.INT_SIZE;
+            offset += LittleEndianConsts.INT_SIZE;
             LittleEndian.PutShort(buf, offset, options);
-            offset += LittleEndianConstants.SHORT_SIZE;
+            offset += LittleEndianConsts.SHORT_SIZE;
             LittleEndian.PutInt(buf, offset, cTxbx);
-            offset += LittleEndianConstants.INT_SIZE;
+            offset += LittleEndianConsts.INT_SIZE;
 
             return buf;
         }

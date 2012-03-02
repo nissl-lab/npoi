@@ -38,7 +38,7 @@ namespace NPOI.HWPF.UserModel
         public LineSpacingDescriptor(byte[] buf, int offset)
         {
             _dyaLine = LittleEndian.GetShort(buf, offset);
-            _fMultiLinespace = LittleEndian.GetShort(buf, offset + LittleEndianConstants.SHORT_SIZE);
+            _fMultiLinespace = LittleEndian.GetShort(buf, offset + LittleEndianConsts.SHORT_SIZE);
         }
 
         public void SetMultiLinespace(short fMultiLinespace)
@@ -56,7 +56,7 @@ namespace NPOI.HWPF.UserModel
         public void Serialize(byte[] buf, int offset)
         {
             LittleEndian.PutShort(buf, offset, _dyaLine);
-            LittleEndian.PutShort(buf, offset + LittleEndianConstants.SHORT_SIZE, _fMultiLinespace);
+            LittleEndian.PutShort(buf, offset + LittleEndianConsts.SHORT_SIZE, _fMultiLinespace);
         }
 
         public void SetDyaLine(short dyaLine)

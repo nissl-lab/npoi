@@ -66,29 +66,29 @@ namespace NPOI.HWPF.Model
         {
             int startoffset = offset;
             _stshiLength = LittleEndian.GetShort(tableStream, offset);
-            offset += LittleEndianConstants.SHORT_SIZE;
+            offset += LittleEndianConsts.SHORT_SIZE;
             int stdCount = LittleEndian.GetShort(tableStream, offset);
-            offset += LittleEndianConstants.SHORT_SIZE;
+            offset += LittleEndianConsts.SHORT_SIZE;
             _baseLength = LittleEndian.GetShort(tableStream, offset);
-            offset += LittleEndianConstants.SHORT_SIZE;
+            offset += LittleEndianConsts.SHORT_SIZE;
             _flags = LittleEndian.GetShort(tableStream, offset);
-            offset += LittleEndianConstants.SHORT_SIZE;
+            offset += LittleEndianConsts.SHORT_SIZE;
             _maxIndex = LittleEndian.GetShort(tableStream, offset);
-            offset += LittleEndianConstants.SHORT_SIZE;
+            offset += LittleEndianConsts.SHORT_SIZE;
             _maxFixedIndex = LittleEndian.GetShort(tableStream, offset);
-            offset += LittleEndianConstants.SHORT_SIZE;
+            offset += LittleEndianConsts.SHORT_SIZE;
             _stylenameVersion = LittleEndian.GetShort(tableStream, offset);
-            offset += LittleEndianConstants.SHORT_SIZE;
+            offset += LittleEndianConsts.SHORT_SIZE;
 
             _rgftc = new int[3];
             _rgftc[0] = LittleEndian.GetShort(tableStream, offset);
-            offset += LittleEndianConstants.SHORT_SIZE;
+            offset += LittleEndianConsts.SHORT_SIZE;
             _rgftc[1] = LittleEndian.GetShort(tableStream, offset);
-            offset += LittleEndianConstants.SHORT_SIZE;
+            offset += LittleEndianConsts.SHORT_SIZE;
             _rgftc[2] = LittleEndian.GetShort(tableStream, offset);
-            offset += LittleEndianConstants.SHORT_SIZE;
+            offset += LittleEndianConsts.SHORT_SIZE;
 
-            offset = startoffset + LittleEndianConstants.SHORT_SIZE + _stshiLength;
+            offset = startoffset + LittleEndianConsts.SHORT_SIZE + _stshiLength;
             _styleDescriptions = new StyleDescription[stdCount];
             for (int x = 0; x < stdCount; x++)
             {
@@ -124,24 +124,24 @@ namespace NPOI.HWPF.Model
             // add two bytes so we can prepend the stylesheet w/ its size
             byte[] buf = new byte[_stshiLength + 2];
             LittleEndian.PutShort(buf, offset, (short)_stshiLength);
-            offset += LittleEndianConstants.SHORT_SIZE;
+            offset += LittleEndianConsts.SHORT_SIZE;
             LittleEndian.PutShort(buf, offset, (short)_styleDescriptions.Length);
-            offset += LittleEndianConstants.SHORT_SIZE;
+            offset += LittleEndianConsts.SHORT_SIZE;
             LittleEndian.PutShort(buf, offset, (short)_baseLength);
-            offset += LittleEndianConstants.SHORT_SIZE;
+            offset += LittleEndianConsts.SHORT_SIZE;
             LittleEndian.PutShort(buf, offset, (short)_flags);
-            offset += LittleEndianConstants.SHORT_SIZE;
+            offset += LittleEndianConsts.SHORT_SIZE;
             LittleEndian.PutShort(buf, offset, (short)_maxIndex);
-            offset += LittleEndianConstants.SHORT_SIZE;
+            offset += LittleEndianConsts.SHORT_SIZE;
             LittleEndian.PutShort(buf, offset, (short)_maxFixedIndex);
-            offset += LittleEndianConstants.SHORT_SIZE;
+            offset += LittleEndianConsts.SHORT_SIZE;
             LittleEndian.PutShort(buf, offset, (short)_stylenameVersion);
-            offset += LittleEndianConstants.SHORT_SIZE;
+            offset += LittleEndianConsts.SHORT_SIZE;
 
             LittleEndian.PutShort(buf, offset, (short)_rgftc[0]);
-            offset += LittleEndianConstants.SHORT_SIZE;
+            offset += LittleEndianConsts.SHORT_SIZE;
             LittleEndian.PutShort(buf, offset, (short)_rgftc[1]);
-            offset += LittleEndianConstants.SHORT_SIZE;
+            offset += LittleEndianConsts.SHORT_SIZE;
             LittleEndian.PutShort(buf, offset, (short)_rgftc[2]);
 
             out1.Write(buf);

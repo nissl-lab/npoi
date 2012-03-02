@@ -78,7 +78,7 @@ namespace NPOI.HWPF.Model
         public byte[] ToByteArray()
         {
             int size = _props.Count;
-            int cpBufSize = ((size + 1) * LittleEndianConstants.INT_SIZE);
+            int cpBufSize = ((size + 1) * LittleEndianConsts.INT_SIZE);
             int structBufSize = +(_sizeOfStruct * size);
             int bufSize = cpBufSize + structBufSize;
 
@@ -90,14 +90,14 @@ namespace NPOI.HWPF.Model
                 node = (GenericPropertyNode)_props[x];
 
                 // put the starting offset of the property into the plcf.
-                LittleEndian.PutInt(buf, (LittleEndianConstants.INT_SIZE * x), node.Start);
+                LittleEndian.PutInt(buf, (LittleEndianConsts.INT_SIZE * x), node.Start);
 
                 // put the struct into the plcf
                 System.Array.Copy(node.Bytes, 0, buf, cpBufSize + (x * _sizeOfStruct),
                                  _sizeOfStruct);
             }
             // put the ending offset of the last property into the plcf.
-            LittleEndian.PutInt(buf, LittleEndianConstants.INT_SIZE * size, node.End);
+            LittleEndian.PutInt(buf, LittleEndianConsts.INT_SIZE * size, node.End);
 
             return buf;
 

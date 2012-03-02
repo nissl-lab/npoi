@@ -20,7 +20,7 @@ namespace NPOI.HWPF
     using NPOI.POIFS.FileSystem;
     using System;
     using System.IO;
-    using NPOI.Util.IO;
+    using NPOI.Util;
     using NPOI.HWPF.Model;
     using NPOI.HWPF.UserModel;
     using System.Text;

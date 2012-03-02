@@ -35,11 +35,11 @@ namespace NPOI.HWPF.Model
         public ParagraphHeight(byte[] buf, int offset)
         {
             infoField = LittleEndian.GetShort(buf, offset);
-            offset += LittleEndianConstants.SHORT_SIZE;
+            offset += LittleEndianConsts.SHORT_SIZE;
             reserved = LittleEndian.GetShort(buf, offset);
-            offset += LittleEndianConstants.SHORT_SIZE;
+            offset += LittleEndianConsts.SHORT_SIZE;
             dxaCol = LittleEndian.GetInt(buf, offset);
-            offset += LittleEndianConstants.INT_SIZE;
+            offset += LittleEndianConsts.INT_SIZE;
             dymLineOrHeight = LittleEndian.GetInt(buf, offset);
         }
 
@@ -59,11 +59,11 @@ namespace NPOI.HWPF.Model
             byte[] buf = new byte[12];
             int offset = 0;
             LittleEndian.PutShort(buf, offset, infoField);
-            offset += LittleEndianConstants.SHORT_SIZE;
+            offset += LittleEndianConsts.SHORT_SIZE;
             LittleEndian.PutShort(buf, offset, reserved);
-            offset += LittleEndianConstants.SHORT_SIZE;
+            offset += LittleEndianConsts.SHORT_SIZE;
             LittleEndian.PutInt(buf, offset, dxaCol);
-            offset += LittleEndianConstants.INT_SIZE;
+            offset += LittleEndianConsts.INT_SIZE;
             LittleEndian.PutInt(buf, offset, dymLineOrHeight);
 
             return buf;

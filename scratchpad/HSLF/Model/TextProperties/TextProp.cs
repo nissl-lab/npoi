@@ -67,7 +67,7 @@ namespace NPOI.HSLF.Model.TextProperties
          * Get the mask that's used at write time. Only differs from
          *  the result of GetMask() for the mask based properties 
          */
-        public int GetWriteMask() { return GetMask(); }
+        public virtual int GetWriteMask() { return GetMask(); }
 
         /**
          * Fetch the value of the text property (meaning is specific to
@@ -78,12 +78,12 @@ namespace NPOI.HSLF.Model.TextProperties
         /**
          * Set the value of the text property.
          */
-        public void SetValue(int val) { dataValue = val; }
+        public virtual void SetValue(int val) { dataValue = val; }
 
         /**
          * Clone, eg when you want to actually make use of one of these.
          */
-        public Object Clone()
+        public virtual Object Clone()
         {
             TextProp tp = new TextProp(this.sizeOfDataBlock, this.maskInHeader, this.propName);
             return tp;

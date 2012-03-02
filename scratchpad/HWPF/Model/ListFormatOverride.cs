@@ -38,11 +38,11 @@ namespace NPOI.HWPF.Model
         public ListFormatOverride(byte[] buf, int offset)
         {
             _lsid = LittleEndian.GetInt(buf, offset);
-            offset += LittleEndianConstants.INT_SIZE;
+            offset += LittleEndianConsts.INT_SIZE;
             _reserved1 = LittleEndian.GetInt(buf, offset);
-            offset += LittleEndianConstants.INT_SIZE;
+            offset += LittleEndianConsts.INT_SIZE;
             _reserved2 = LittleEndian.GetInt(buf, offset);
-            offset += LittleEndianConstants.INT_SIZE;
+            offset += LittleEndianConsts.INT_SIZE;
             _clfolvl = buf[offset++];
             Array.Copy(buf, offset, _reserved3, 0, _reserved3.Length);
             _levelOverrides = new ListFormatOverrideLevel[_clfolvl];
@@ -107,11 +107,11 @@ namespace NPOI.HWPF.Model
             byte[] buf = new byte[16];
             int offset = 0;
             LittleEndian.PutInt(buf, offset, _lsid);
-            offset += LittleEndianConstants.INT_SIZE;
+            offset += LittleEndianConsts.INT_SIZE;
             LittleEndian.PutInt(buf, offset, _reserved1);
-            offset += LittleEndianConstants.INT_SIZE;
+            offset += LittleEndianConsts.INT_SIZE;
             LittleEndian.PutInt(buf, offset, _reserved2);
-            offset += LittleEndianConstants.INT_SIZE;
+            offset += LittleEndianConsts.INT_SIZE;
             buf[offset++] = _clfolvl;
             Array.Copy(_reserved3, 0, buf, offset, 3);
 

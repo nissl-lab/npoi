@@ -130,7 +130,7 @@ namespace NPOI.HWPF.SPRM
                     case 6:
                         byte operandLength = _grpprl[_gOffset + 1];   //surely shorter than an int...
 
-                        byte[] codeBytes = new byte[LittleEndianConstants.INT_SIZE]; //initialized to zeros by JVM
+                        byte[] codeBytes = new byte[LittleEndianConsts.INT_SIZE]; //initialized to zeros by JVM
                         for (int i = 0; i < operandLength; i++)
                             if (_gOffset + i < _grpprl.Length)
                                 codeBytes[i] = _grpprl[_gOffset + 1 + i];

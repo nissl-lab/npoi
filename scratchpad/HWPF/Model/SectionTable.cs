@@ -71,7 +71,7 @@ namespace NPOI.HWPF.Model
                     // The first short at the offset is the size of the grpprl.
                     int sepxSize = LittleEndian.GetShort(documentStream, fileOffset);
                     byte[] buf = new byte[sepxSize];
-                    fileOffset += LittleEndianConstants.SHORT_SIZE;
+                    fileOffset += LittleEndianConsts.SHORT_SIZE;
                     Array.Copy(documentStream, fileOffset, buf, 0, buf.Length);
                     _sections.Add(new SEPX(sed, startAt, endAt, buf));
                 }

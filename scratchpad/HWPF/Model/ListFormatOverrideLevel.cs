@@ -35,7 +35,7 @@ namespace NPOI.HWPF.Model
         public ListFormatOverrideLevel(byte[] buf, int offset)
         {
             _iStartAt = LittleEndian.GetInt(buf, offset);
-            offset += LittleEndianConstants.INT_SIZE;
+            offset += LittleEndianConsts.INT_SIZE;
             _info = buf[offset++];
             Array.Copy(buf, offset, _reserved, 0, _reserved.Length);
             offset += _reserved.Length;
@@ -98,7 +98,7 @@ namespace NPOI.HWPF.Model
 
             int offset = 0;
             LittleEndian.PutInt(buf, _iStartAt);
-            offset += LittleEndianConstants.INT_SIZE;
+            offset += LittleEndianConsts.INT_SIZE;
             buf[offset++] = _info;
             Array.Copy(_reserved, 0, buf, offset, 3);
             offset += 3;

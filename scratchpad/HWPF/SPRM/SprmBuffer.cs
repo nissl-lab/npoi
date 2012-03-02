@@ -132,36 +132,36 @@ namespace NPOI.HWPF.SPRM
 
         public void AddSprm(short opcode, byte operand)
         {
-            int addition = LittleEndianConstants.SHORT_SIZE + LittleEndianConstants.BYTE_SIZE;
+            int addition = LittleEndianConsts.SHORT_SIZE + LittleEndianConsts.BYTE_SIZE;
             EnsureCapacity(addition);
             LittleEndian.PutShort(_buf, _offset, opcode);
-            _offset += LittleEndianConstants.SHORT_SIZE;
+            _offset += LittleEndianConsts.SHORT_SIZE;
             _buf[_offset++] = operand;
         }
         public void AddSprm(short opcode, short operand)
         {
-            int addition = LittleEndianConstants.SHORT_SIZE + LittleEndianConstants.SHORT_SIZE;
+            int addition = LittleEndianConsts.SHORT_SIZE + LittleEndianConsts.SHORT_SIZE;
             EnsureCapacity(addition);
             LittleEndian.PutShort(_buf, _offset, opcode);
-            _offset += LittleEndianConstants.SHORT_SIZE;
+            _offset += LittleEndianConsts.SHORT_SIZE;
             LittleEndian.PutShort(_buf, _offset, operand);
-            _offset += LittleEndianConstants.SHORT_SIZE;
+            _offset += LittleEndianConsts.SHORT_SIZE;
         }
         public void AddSprm(short opcode, int operand)
         {
-            int addition = LittleEndianConstants.SHORT_SIZE + LittleEndianConstants.INT_SIZE;
+            int addition = LittleEndianConsts.SHORT_SIZE + LittleEndianConsts.INT_SIZE;
             EnsureCapacity(addition);
             LittleEndian.PutShort(_buf, _offset, opcode);
-            _offset += LittleEndianConstants.SHORT_SIZE;
+            _offset += LittleEndianConsts.SHORT_SIZE;
             LittleEndian.PutInt(_buf, _offset, operand);
-            _offset += LittleEndianConstants.INT_SIZE;
+            _offset += LittleEndianConsts.INT_SIZE;
         }
         public void AddSprm(short opcode, byte[] operand)
         {
-            int addition = LittleEndianConstants.SHORT_SIZE + LittleEndianConstants.BYTE_SIZE + operand.Length;
+            int addition = LittleEndianConsts.SHORT_SIZE + LittleEndianConsts.BYTE_SIZE + operand.Length;
             EnsureCapacity(addition);
             LittleEndian.PutShort(_buf, _offset, opcode);
-            _offset += LittleEndianConstants.SHORT_SIZE;
+            _offset += LittleEndianConsts.SHORT_SIZE;
             _buf[_offset++] = (byte)operand.Length;
             Array.Copy(operand, 0, _buf, _offset, operand.Length);
         }

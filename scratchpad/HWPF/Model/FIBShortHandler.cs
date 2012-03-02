@@ -40,13 +40,13 @@ namespace NPOI.HWPF.Model
         {
             int offset = START;
             int shortCount = LittleEndian.GetShort(mainStream, offset);
-            offset += LittleEndianConstants.SHORT_SIZE;
+            offset += LittleEndianConsts.SHORT_SIZE;
             _shorts = new short[shortCount];
 
             for (int x = 0; x < shortCount; x++)
             {
                 _shorts[x] = LittleEndian.GetShort(mainStream, offset);
-                offset += LittleEndianConstants.SHORT_SIZE;
+                offset += LittleEndianConsts.SHORT_SIZE;
             }
         }
 
@@ -57,20 +57,20 @@ namespace NPOI.HWPF.Model
 
         internal int SizeInBytes()
         {
-            return (_shorts.Length * LittleEndianConstants.SHORT_SIZE) + LittleEndianConstants.SHORT_SIZE;
+            return (_shorts.Length * LittleEndianConsts.SHORT_SIZE) + LittleEndianConsts.SHORT_SIZE;
         }
 
         internal void Serialize(byte[] mainStream)
         {
             int offset = START;
             LittleEndian.PutShort(mainStream, offset, (short)_shorts.Length);
-            offset += LittleEndianConstants.SHORT_SIZE;
+            offset += LittleEndianConsts.SHORT_SIZE;
             //mainStream.Write(holder);
 
             for (int x = 0; x < _shorts.Length; x++)
             {
                 LittleEndian.PutShort(mainStream, offset, _shorts[x]);
-                offset += LittleEndianConstants.SHORT_SIZE;
+                offset += LittleEndianConsts.SHORT_SIZE;
             }
         }
 

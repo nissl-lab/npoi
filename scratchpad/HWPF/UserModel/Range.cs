@@ -459,9 +459,9 @@ namespace NPOI.HWPF.UserModel
             CharacterProperties baseChp = ss.GetCharacterStyle(styleIndex);
 
             byte[] grpprl = ParagraphSprmCompressor.CompressParagraphProperty(props, baseStyle);
-            byte[] withIndex = new byte[grpprl.Length + LittleEndianConstants.SHORT_SIZE];
+            byte[] withIndex = new byte[grpprl.Length + LittleEndianConsts.SHORT_SIZE];
             LittleEndian.PutShort(withIndex, (short)styleIndex);
-            Array.Copy(grpprl, 0, withIndex, LittleEndianConstants.SHORT_SIZE, grpprl.Length);
+            Array.Copy(grpprl, 0, withIndex, LittleEndianConsts.SHORT_SIZE, grpprl.Length);
             SprmBuffer buf = new SprmBuffer(withIndex);
 
             _doc.ParagraphTable.Insert(_parStart, _start, buf);
@@ -510,9 +510,9 @@ namespace NPOI.HWPF.UserModel
             CharacterProperties baseChp = ss.GetCharacterStyle(styleIndex);
 
             byte[] grpprl = ParagraphSprmCompressor.CompressParagraphProperty(props, baseStyle);
-            byte[] withIndex = new byte[grpprl.Length + LittleEndianConstants.SHORT_SIZE];
+            byte[] withIndex = new byte[grpprl.Length + LittleEndianConsts.SHORT_SIZE];
             LittleEndian.PutShort(withIndex, (short)styleIndex);
-            Array.Copy(grpprl, 0, withIndex, LittleEndianConstants.SHORT_SIZE, grpprl.Length);
+            Array.Copy(grpprl, 0, withIndex, LittleEndianConsts.SHORT_SIZE, grpprl.Length);
             SprmBuffer buf = new SprmBuffer(withIndex);
 
             _doc.ParagraphTable.Insert(_parEnd, _end, buf);

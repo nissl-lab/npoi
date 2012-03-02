@@ -31,7 +31,7 @@ namespace NPOI.HSLF.Record
     public class CString : RecordAtom
     {
         private byte[] _header;
-        private static long _type = 4026l;
+        private static long _type = 4026L;
 
         /** The bytes that make up the text */
         private byte[] _text;

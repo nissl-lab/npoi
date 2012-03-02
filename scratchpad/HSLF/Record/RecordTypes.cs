@@ -269,7 +269,7 @@ namespace NPOI.HSLF.Record
                     }
                 }
             }
-            catch (InvalidOperationException e)
+            catch (InvalidOperationException)
             {
                 throw new Exception("Failed to Initialize records types");
             }

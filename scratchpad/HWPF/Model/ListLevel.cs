@@ -81,7 +81,7 @@ namespace NPOI.HWPF.Model
         public ListLevel(byte[] buf, int offset)
         {
             _iStartAt = LittleEndian.GetInt(buf, offset);
-            offset += LittleEndianConstants.INT_SIZE;
+            offset += LittleEndianConsts.INT_SIZE;
             _nfc = buf[offset++];
             _info = buf[offset++];
 
@@ -91,13 +91,13 @@ namespace NPOI.HWPF.Model
 
             _ixchFollow = buf[offset++];
             _dxaSpace = LittleEndian.GetInt(buf, offset);
-            offset += LittleEndianConstants.INT_SIZE;
+            offset += LittleEndianConsts.INT_SIZE;
             _dxaIndent = LittleEndian.GetInt(buf, offset);
-            offset += LittleEndianConstants.INT_SIZE;
+            offset += LittleEndianConsts.INT_SIZE;
             _cbGrpprlChpx = LittleEndian.GetUByte(buf, offset++);
             _cbGrpprlPapx = LittleEndian.GetUByte(buf, offset++);
             _reserved = LittleEndian.GetShort(buf, offset);
-            offset += LittleEndianConstants.SHORT_SIZE;
+            offset += LittleEndianConsts.SHORT_SIZE;
 
             _grpprlPapx = new byte[_cbGrpprlPapx];
             _grpprlChpx = new byte[_cbGrpprlChpx];
@@ -112,11 +112,11 @@ namespace NPOI.HWPF.Model
             if (numberTextLength > 0)
             {
                 _numberText = new char[numberTextLength];
-                offset += LittleEndianConstants.SHORT_SIZE;
+                offset += LittleEndianConsts.SHORT_SIZE;
                 for (int x = 0; x < numberTextLength; x++)
                 {
                     _numberText[x] = (char)LittleEndian.GetShort(buf, offset);
-                    offset += LittleEndianConstants.SHORT_SIZE;
+                    offset += LittleEndianConsts.SHORT_SIZE;
                 }
             }
 
@@ -207,21 +207,21 @@ namespace NPOI.HWPF.Model
             byte[] buf = new byte[GetSizeInBytes()];
             int offset = 0;
             LittleEndian.PutInt(buf, offset, _iStartAt);
-            offset += LittleEndianConstants.INT_SIZE;
+            offset += LittleEndianConsts.INT_SIZE;
             buf[offset++] = _nfc;
             buf[offset++] = _info;
             Array.Copy(_rgbxchNums, 0, buf, offset, RGBXCH_NUMS_SIZE);
             offset += RGBXCH_NUMS_SIZE;
             buf[offset++] = _ixchFollow;
             LittleEndian.PutInt(buf, offset, _dxaSpace);
-            offset += LittleEndianConstants.INT_SIZE;
+            offset += LittleEndianConsts.INT_SIZE;
             LittleEndian.PutInt(buf, offset, _dxaIndent);
-            offset += LittleEndianConstants.INT_SIZE;
+            offset += LittleEndianConsts.INT_SIZE;
 
             buf[offset++] = (byte)_cbGrpprlChpx;
             buf[offset++] = (byte)_cbGrpprlPapx;
             LittleEndian.PutShort(buf, offset, _reserved);
-            offset += LittleEndianConstants.SHORT_SIZE;
+            offset += LittleEndianConsts.SHORT_SIZE;
 
             Array.Copy(_grpprlPapx, 0, buf, offset, _cbGrpprlPapx);
             offset += _cbGrpprlPapx;
@@ -236,11 +236,11 @@ namespace NPOI.HWPF.Model
             else
             {
                 LittleEndian.PutUShort(buf, offset, _numberText.Length);
-                offset += LittleEndianConstants.SHORT_SIZE;
+                offset += LittleEndianConsts.SHORT_SIZE;
                 for (int x = 0; x < _numberText.Length; x++)
                 {
                     LittleEndian.PutUShort(buf, offset, _numberText[x]);
-                    offset += LittleEndianConstants.SHORT_SIZE;
+                    offset += LittleEndianConsts.SHORT_SIZE;
                 }
             }
             return buf;
@@ -256,7 +256,7 @@ namespace NPOI.HWPF.Model
                 + 2; // numberText length
             if (_numberText != null)
             {
-                result += _numberText.Length * LittleEndianConstants.SHORT_SIZE;
+                result += _numberText.Length * LittleEndianConsts.SHORT_SIZE;
             }
             return result;
         }

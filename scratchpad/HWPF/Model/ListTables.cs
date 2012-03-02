@@ -45,7 +45,7 @@ namespace NPOI.HWPF.Model
         {
             // get the list data
             int length = LittleEndian.GetShort(tableStream, lstOffset);
-            lstOffset += LittleEndianConstants.SHORT_SIZE;
+            lstOffset += LittleEndianConsts.SHORT_SIZE;
             int levelOffset = lstOffset + (length * LIST_DATA_SIZE);
 
             for (int x = 0; x < length; x++)
@@ -65,7 +65,7 @@ namespace NPOI.HWPF.Model
 
             // now get the list format overrides. The size is an int unlike the LST size
             length = LittleEndian.GetInt(tableStream, lfoOffset);
-            lfoOffset += LittleEndianConstants.INT_SIZE;
+            lfoOffset += LittleEndianConsts.INT_SIZE;
             int lfolvlOffset = lfoOffset + (LIST_FORMAT_OVERRIDE_SIZE * length);
             for (int x = 0; x < length; x++)
             {

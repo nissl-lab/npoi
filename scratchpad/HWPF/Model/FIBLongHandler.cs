@@ -53,12 +53,12 @@ namespace NPOI.HWPF.Model
         public FIBLongHandler(byte[] mainStream, int offset)
         {
             int longCount = LittleEndian.GetShort(mainStream, offset);
-            offset += LittleEndianConstants.SHORT_SIZE;
+            offset += LittleEndianConsts.SHORT_SIZE;
             _longs = new int[longCount];
 
             for (int x = 0; x < longCount; x++)
             {
-                _longs[x] = LittleEndian.GetInt(mainStream, offset + (x * LittleEndianConstants.INT_SIZE));
+                _longs[x] = LittleEndian.GetInt(mainStream, offset + (x * LittleEndianConsts.INT_SIZE));
             }
         }
 
@@ -80,18 +80,18 @@ namespace NPOI.HWPF.Model
         internal void Serialize(byte[] mainStream, int offset)
         {
             LittleEndian.PutShort(mainStream, offset, (short)_longs.Length);
-            offset += LittleEndianConstants.SHORT_SIZE;
+            offset += LittleEndianConsts.SHORT_SIZE;
 
             for (int x = 0; x < _longs.Length; x++)
             {
                 LittleEndian.PutInt(mainStream, offset, _longs[x]);
-                offset += LittleEndianConstants.INT_SIZE;
+                offset += LittleEndianConsts.INT_SIZE;
             }
         }
 
         internal int SizeInBytes()
         {
-            return (_longs.Length * LittleEndianConstants.INT_SIZE) + LittleEndianConstants.SHORT_SIZE;
+            return (_longs.Length * LittleEndianConsts.INT_SIZE) + LittleEndianConsts.SHORT_SIZE;
         }
 
 

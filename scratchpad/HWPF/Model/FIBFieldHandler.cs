@@ -121,7 +121,7 @@ namespace NPOI.HWPF.Model
 
         //private static POILogger log = POILogFactory.GetLogger(FIBFieldHandler.class);
 
-        private static int FIELD_SIZE = LittleEndianConstants.INT_SIZE * 2;
+        private static int FIELD_SIZE = LittleEndianConsts.INT_SIZE * 2;
 
         private Hashtable _unknownMap = new Hashtable();
         private int[] _fields;
@@ -131,14 +131,14 @@ namespace NPOI.HWPF.Model
                                List<int> offsetList, bool areKnown)
         {
             int numFields = LittleEndian.GetShort(mainStream, offset);
-            offset += LittleEndianConstants.SHORT_SIZE;
+            offset += LittleEndianConsts.SHORT_SIZE;
             _fields = new int[numFields * 2];
 
             for (int x = 0; x < numFields; x++)
             {
                 int fieldOffset = (x * FIELD_SIZE) + offset;
                 int dsOffset = LittleEndian.GetInt(mainStream, fieldOffset);
-                fieldOffset += LittleEndianConstants.INT_SIZE;
+                fieldOffset += LittleEndianConsts.INT_SIZE;
                 int dsSize = LittleEndian.GetInt(mainStream, fieldOffset);
 
                 if (offsetList.Contains(x) ^ areKnown)
@@ -191,14 +191,14 @@ namespace NPOI.HWPF.Model
 
         public int SizeInBytes()
         {
-            return (_fields.Length * LittleEndianConstants.INT_SIZE) + LittleEndianConstants.SHORT_SIZE;
+            return (_fields.Length * LittleEndianConsts.INT_SIZE) + LittleEndianConsts.SHORT_SIZE;
         }
 
         internal void WriteTo(byte[] mainStream, int offset, HWPFStream tableStream)
         {
             int length = _fields.Length / 2;
             LittleEndian.PutShort(mainStream, offset, (short)length);
-            offset += LittleEndianConstants.SHORT_SIZE;
+            offset += LittleEndianConsts.SHORT_SIZE;
 
             for (int x = 0; x < length; x++)
             {
@@ -206,18 +206,18 @@ namespace NPOI.HWPF.Model
                 if (ds != null)
                 {
                     LittleEndian.PutInt(mainStream, offset, tableStream.Offset);
-                    offset += LittleEndianConstants.INT_SIZE;
+                    offset += LittleEndianConsts.INT_SIZE;
                     byte[] buf = ds.GetBuf();
                     tableStream.Write(buf);
                     LittleEndian.PutInt(mainStream, offset, buf.Length);
-                    offset += LittleEndianConstants.INT_SIZE;
+                    offset += LittleEndianConsts.INT_SIZE;
                 }
                 else
                 {
                     LittleEndian.PutInt(mainStream, offset, _fields[x * 2]);
-                    offset += LittleEndianConstants.INT_SIZE;
+                    offset += LittleEndianConsts.INT_SIZE;
                     LittleEndian.PutInt(mainStream, offset, _fields[(x * 2) + 1]);
-                    offset += LittleEndianConstants.INT_SIZE;
+                    offset += LittleEndianConsts.INT_SIZE;
                 }
             }
         }

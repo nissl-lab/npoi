@@ -57,7 +57,7 @@ namespace NPOI.HSLF.Model.TextProperties
          * As we're purely mask based, just Set flags for stuff
          *  that is Set
          */
-        public int GetWriteMask()
+        public override int GetWriteMask()
         {
             return dataValue;
         }
@@ -66,7 +66,7 @@ namespace NPOI.HSLF.Model.TextProperties
          * Set the value of the text property, and recompute the sub
          *  properties based on it
          */
-        public void SetValue(int val)
+        public override void SetValue(int val)
         {
             dataValue = val;
 
@@ -106,7 +106,7 @@ namespace NPOI.HSLF.Model.TextProperties
             subPropMatches[idx] = value;
         }
 
-        public Object Clone()
+        public override Object Clone()
         {
             BitMaskTextProp newObj = (BitMaskTextProp)base.Clone();
 

@@ -49,11 +49,11 @@ namespace NPOI.HWPF.Model
         public SectionDescriptor(byte[] buf, int offset)
         {
             fn = LittleEndian.GetShort(buf, offset);
-            offset += LittleEndianConstants.SHORT_SIZE;
+            offset += LittleEndianConsts.SHORT_SIZE;
             fcSepx = LittleEndian.GetInt(buf, offset);
-            offset += LittleEndianConstants.INT_SIZE;
+            offset += LittleEndianConsts.INT_SIZE;
             fnMpr = LittleEndian.GetShort(buf, offset);
-            offset += LittleEndianConstants.SHORT_SIZE;
+            offset += LittleEndianConsts.SHORT_SIZE;
             fcMpr = LittleEndian.GetInt(buf, offset);
         }
 
@@ -79,11 +79,11 @@ namespace NPOI.HWPF.Model
             byte[] buf = new byte[12];
 
             LittleEndian.PutShort(buf, offset, fn);
-            offset += LittleEndianConstants.SHORT_SIZE;
+            offset += LittleEndianConsts.SHORT_SIZE;
             LittleEndian.PutInt(buf, offset, fcSepx);
-            offset += LittleEndianConstants.INT_SIZE;
+            offset += LittleEndianConsts.INT_SIZE;
             LittleEndian.PutShort(buf, offset, fnMpr);
-            offset += LittleEndianConstants.SHORT_SIZE;
+            offset += LittleEndianConsts.SHORT_SIZE;
             LittleEndian.PutInt(buf, offset, fcMpr);
 
             return buf;

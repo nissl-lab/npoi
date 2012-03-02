@@ -42,13 +42,13 @@ namespace NPOI.HWPF.UserModel
         public BorderCode(byte[] buf, int offset)
         {
             _info = LittleEndian.GetShort(buf, offset);
-            _info2 = LittleEndian.GetShort(buf, offset + LittleEndianConstants.SHORT_SIZE);
+            _info2 = LittleEndian.GetShort(buf, offset + LittleEndianConsts.SHORT_SIZE);
         }
 
         public void Serialize(byte[] buf, int offset)
         {
             LittleEndian.PutShort(buf, offset, _info);
-            LittleEndian.PutShort(buf, offset + LittleEndianConstants.SHORT_SIZE, _info2);
+            LittleEndian.PutShort(buf, offset + LittleEndianConsts.SHORT_SIZE, _info2);
         }
 
         public int ToInt()

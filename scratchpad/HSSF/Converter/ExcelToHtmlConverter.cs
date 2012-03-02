@@ -30,7 +30,6 @@ namespace NPOI.HSSF.Converter
     using NPOI.HSSF.Util;
     using System.Diagnostics;
     using NPOI.HWPF.Converter;
-
     public class ExcelToHtmlConverter
     {
         POILogger logger = POILogFactory.GetLogger(typeof(ExcelToHtmlConverter));
@@ -657,9 +656,9 @@ namespace NPOI.HSSF.Converter
         }
 
         private void BuildStyle_Border(HSSFWorkbook workbook, StringBuilder style,
-                String type, CellBorderType xlsBorder, short borderColor)
+                String type, BorderStyle xlsBorder, short borderColor)
         {
-            if (xlsBorder == CellBorderType.NONE)
+            if (xlsBorder == BorderStyle.NONE)
                 return;
 
             StringBuilder borderStyle = new StringBuilder();

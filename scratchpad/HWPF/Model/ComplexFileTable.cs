@@ -49,7 +49,7 @@ namespace NPOI.HWPF.Model
             {
                 offset++;
                 int size = LittleEndian.GetShort(tableStream, offset);
-                offset += LittleEndianConstants.SHORT_SIZE;
+                offset += LittleEndianConsts.SHORT_SIZE;
                 byte[] bs = LittleEndian.GetByteArray(tableStream, offset, size);
                 offset += size;
 
@@ -63,7 +63,7 @@ namespace NPOI.HWPF.Model
                 throw new IOException("The text piece table is corrupted");
             }
             int pieceTableSize = LittleEndian.GetInt(tableStream, ++offset);
-            offset += LittleEndianConstants.INT_SIZE;
+            offset += LittleEndianConsts.INT_SIZE;
             _tpt = new TextPieceTable(documentStream, tableStream, offset, pieceTableSize, fcMin);
         }
 
@@ -91,7 +91,7 @@ namespace NPOI.HWPF.Model
 
             byte[] table = _tpt.WriteTo(wordDocumentStream);
 
-            byte[] numHolder = new byte[LittleEndianConstants.INT_SIZE];
+            byte[] numHolder = new byte[LittleEndianConsts.INT_SIZE];
             LittleEndian.PutInt(numHolder, table.Length);
             tableStream.Write(numHolder);
             tableStream.Write(table);

@@ -53,15 +53,15 @@ namespace NPOI.HWPF.Model
             int offsetTmp = offset;
 
             _cbFfnM1 = LittleEndian.GetUByte(buf, offset);
-            offset += LittleEndianConstants.BYTE_SIZE;
+            offset += LittleEndianConsts.BYTE_SIZE;
             _info = buf[offset];
-            offset += LittleEndianConstants.BYTE_SIZE;
+            offset += LittleEndianConsts.BYTE_SIZE;
             _wWeight = LittleEndian.GetShort(buf, offset);
-            offset += LittleEndianConstants.SHORT_SIZE;
+            offset += LittleEndianConsts.SHORT_SIZE;
             _chs = buf[offset];
-            offset += LittleEndianConstants.BYTE_SIZE;
+            offset += LittleEndianConsts.BYTE_SIZE;
             _ixchSzAlt = buf[offset];
-            offset += LittleEndianConstants.BYTE_SIZE;
+            offset += LittleEndianConsts.BYTE_SIZE;
 
             // read panose and fs so we can write them back out.
             Array.Copy(buf, offset, _panose, 0, _panose.Length);
@@ -76,7 +76,7 @@ namespace NPOI.HWPF.Model
             for (int i = 0; i < _xszFfnLength; i++)
             {
                 _xszFfn[i] = (char)LittleEndian.GetShort(buf, offset);
-                offset += LittleEndianConstants.SHORT_SIZE;
+                offset += LittleEndianConsts.SHORT_SIZE;
             }
 
 
@@ -151,15 +151,15 @@ namespace NPOI.HWPF.Model
             byte[] buf = new byte[this.GetSize()];
 
             buf[offset] = (byte)_cbFfnM1;
-            offset += LittleEndianConstants.BYTE_SIZE;
+            offset += LittleEndianConsts.BYTE_SIZE;
             buf[offset] = _info;
-            offset += LittleEndianConstants.BYTE_SIZE;
+            offset += LittleEndianConsts.BYTE_SIZE;
             LittleEndian.PutShort(buf, offset, _wWeight);
-            offset += LittleEndianConstants.SHORT_SIZE;
+            offset += LittleEndianConsts.SHORT_SIZE;
             buf[offset] = _chs;
-            offset += LittleEndianConstants.BYTE_SIZE;
+            offset += LittleEndianConsts.BYTE_SIZE;
             buf[offset] = _ixchSzAlt;
-            offset += LittleEndianConstants.BYTE_SIZE;
+            offset += LittleEndianConsts.BYTE_SIZE;
 
             Array.Copy(_panose, 0, buf, offset, _panose.Length);
             offset += _panose.Length;
@@ -169,7 +169,7 @@ namespace NPOI.HWPF.Model
             for (int i = 0; i < _xszFfn.Length; i++)
             {
                 LittleEndian.PutShort(buf, offset, (short)_xszFfn[i]);
-                offset += LittleEndianConstants.SHORT_SIZE;
+                offset += LittleEndianConsts.SHORT_SIZE;
             }
 
             return buf;

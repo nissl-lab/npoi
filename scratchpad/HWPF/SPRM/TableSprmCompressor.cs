@@ -70,13 +70,13 @@ namespace NPOI.HWPF.SPRM
             if (newTAP.GetItcMac() > 0)
             {
                 int itcMac = newTAP.GetItcMac();
-                byte[] buf = new byte[1 + (LittleEndianConstants.SHORT_SIZE * (itcMac + 1)) + (TableCellDescriptor.SIZE * itcMac)];
+                byte[] buf = new byte[1 + (LittleEndianConsts.SHORT_SIZE * (itcMac + 1)) + (TableCellDescriptor.SIZE * itcMac)];
                 buf[0] = (byte)itcMac;
 
                 short[] dxaCenters = newTAP.GetRgdxaCenter();
                 for (int x = 0; x < dxaCenters.Length; x++)
                 {
-                    LittleEndian.PutShort(buf, 1 + (x * LittleEndianConstants.SHORT_SIZE),
+                    LittleEndian.PutShort(buf, 1 + (x * LittleEndianConsts.SHORT_SIZE),
                                           dxaCenters[x]);
                 }
 
@@ -84,7 +84,7 @@ namespace NPOI.HWPF.SPRM
                 for (int x = 0; x < cellDescriptors.Length; x++)
                 {
                     cellDescriptors[x].Serialize(buf,
-                      1 + ((itcMac + 1) * LittleEndianConstants.SHORT_SIZE) + (x * TableCellDescriptor.SIZE));
+                      1 + ((itcMac + 1) * LittleEndianConsts.SHORT_SIZE) + (x * TableCellDescriptor.SIZE));
                 }
                 size += SprmUtils.AddSpecialSprm(unchecked((short)0xD608), buf, sprmList);
 

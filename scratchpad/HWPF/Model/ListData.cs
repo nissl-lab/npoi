@@ -54,14 +54,14 @@ namespace NPOI.HWPF.Model
         public ListData(byte[] buf, int offset)
         {
             _lsid = LittleEndian.GetInt(buf, offset);
-            offset += LittleEndianConstants.INT_SIZE;
+            offset += LittleEndianConsts.INT_SIZE;
             _tplc = LittleEndian.GetInt(buf, offset);
-            offset += LittleEndianConstants.INT_SIZE;
+            offset += LittleEndianConsts.INT_SIZE;
             _rgistd = new short[9];
             for (int x = 0; x < 9; x++)
             {
                 _rgistd[x] = LittleEndian.GetShort(buf, offset);
-                offset += LittleEndianConstants.SHORT_SIZE;
+                offset += LittleEndianConsts.SHORT_SIZE;
             }
             _info = buf[offset++];
             _reserved = buf[offset];
@@ -141,13 +141,13 @@ namespace NPOI.HWPF.Model
             byte[] buf = new byte[28];
             int offset = 0;
             LittleEndian.PutInt(buf, _lsid);
-            offset += LittleEndianConstants.INT_SIZE;
+            offset += LittleEndianConsts.INT_SIZE;
             LittleEndian.PutInt(buf, offset, _tplc);
-            offset += LittleEndianConstants.INT_SIZE;
+            offset += LittleEndianConsts.INT_SIZE;
             for (int x = 0; x < 9; x++)
             {
                 LittleEndian.PutShort(buf, offset, _rgistd[x]);
-                offset += LittleEndianConstants.SHORT_SIZE;
+                offset += LittleEndianConsts.SHORT_SIZE;
             }
             buf[offset++] = _info;
             buf[offset] = _reserved;

@@ -38,9 +38,9 @@ namespace NPOI.HWPF.Model
         public PieceDescriptor(byte[] buf, int offset)
         {
             descriptor = LittleEndian.GetShort(buf, offset);
-            offset += LittleEndianConstants.SHORT_SIZE;
+            offset += LittleEndianConsts.SHORT_SIZE;
             fc = LittleEndian.GetInt(buf, offset);
-            offset += LittleEndianConstants.INT_SIZE;
+            offset += LittleEndianConsts.INT_SIZE;
             prm = new PropertyModifier(LittleEndian.GetShort(buf, offset));
 
             // see if this piece uses unicode.
@@ -90,9 +90,9 @@ namespace NPOI.HWPF.Model
             int offset = 0;
             byte[] buf = new byte[8];
             LittleEndian.PutShort(buf, offset, descriptor);
-            offset += LittleEndianConstants.SHORT_SIZE;
+            offset += LittleEndianConsts.SHORT_SIZE;
             LittleEndian.PutInt(buf, offset, tempFc);
-            offset += LittleEndianConstants.INT_SIZE;
+            offset += LittleEndianConsts.INT_SIZE;
             LittleEndian.PutShort(buf, offset, prm.GetValue());
 
             return buf;

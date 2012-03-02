@@ -31,11 +31,11 @@ namespace NPOI.HWPF.SPRM
 
         public static byte[] shortArrayToByteArray(short[] convert)
         {
-            byte[] buf = new byte[convert.Length * LittleEndianConstants.SHORT_SIZE];
+            byte[] buf = new byte[convert.Length * LittleEndianConsts.SHORT_SIZE];
 
             for (int x = 0; x < convert.Length; x++)
             {
-                LittleEndian.PutShort(buf, x * LittleEndianConstants.SHORT_SIZE, convert[x]);
+                LittleEndian.PutShort(buf, x * LittleEndianConsts.SHORT_SIZE, convert[x]);
             }
 
             return buf;
@@ -134,7 +134,7 @@ namespace NPOI.HWPF.SPRM
         {
             byte[] buf = new byte[4];
             LittleEndian.PutShort(buf, brc[0]);
-            LittleEndian.PutShort(buf, LittleEndianConstants.SHORT_SIZE, brc[1]);
+            LittleEndian.PutShort(buf, LittleEndianConsts.SHORT_SIZE, brc[1]);
             return LittleEndian.GetInt(buf);
         }
     }

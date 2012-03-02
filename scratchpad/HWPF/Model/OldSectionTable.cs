@@ -68,7 +68,7 @@ namespace NPOI.HWPF.Model
                     //  were the new ones, we sometimes "need" more data than we have.
                     // As a workaround, have a few extra 0 bytes on the end!
                     byte[] buf = new byte[sepxSize+2];
-                    fileOffset += LittleEndianConstants.SHORT_SIZE;
+                    fileOffset += LittleEndianConsts.SHORT_SIZE;
                     Array.Copy(documentStream, fileOffset, buf, 0, buf.Length);
                     sepx = new SEPX(sed, startAt, endAt,buf);
                 }
