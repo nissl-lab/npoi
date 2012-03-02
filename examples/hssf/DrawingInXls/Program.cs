@@ -129,17 +129,17 @@ namespace DrawingInXls
             HSSFPatriarch patriarch = (HSSFPatriarch)sheet4.CreateDrawingPatriarch();
 
             // Create a couple of textboxes
-            ITextbox textbox1 = patriarch.CreateTextbox(
+            HSSFTextbox textbox1 = (HSSFTextbox)patriarch.CreateTextbox(
                     new HSSFClientAnchor(0, 0, 0, 0, (short)1, 1, (short)2, 2));
             textbox1.String = new HSSFRichTextString("This is a test");
-            ITextbox textbox2 = patriarch.CreateTextbox(
+            HSSFTextbox textbox2 = (HSSFTextbox)patriarch.CreateTextbox(
                     new HSSFClientAnchor(0, 0, 900, 100, (short)3, 3, (short)3, 4));
             textbox2.String = new HSSFRichTextString("Woo");
             textbox2.SetFillColor(200, 0, 0);
             textbox2.LineStyle = LineStyle.DotGel;
              
             // Create third one with some fancy font styling.
-            ITextbox textbox3 = patriarch.CreateTextbox(
+            HSSFTextbox textbox3 = (HSSFTextbox)patriarch.CreateTextbox(
                     new HSSFClientAnchor(0, 0, 900, 100, (short)4, 4, (short)5, 4 + 1));
             IFont font = wb.CreateFont();
             font.IsItalic = true;
