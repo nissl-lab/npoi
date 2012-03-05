@@ -52,6 +52,7 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
@@ -456,6 +457,9 @@
     <Compile Include="HSSF\Util\TestCellReference.cs" />
     <Compile Include="HSSF\Util\TestRKUtil.cs" />
     <Compile Include="POIDataSamples.cs" />
+    <Compile Include="SS\Format\CellFormatTestBase.cs" />
+    <Compile Include="SS\Format\TestCellFormat.cs" />
+    <Compile Include="SS\Format\TestCellFormatCondition.cs" />
     <Compile Include="SS\Formula\Atp\TestMRound.cs" />
     <Compile Include="SS\Formula\Atp\TestRandBetween.cs" />
     <Compile Include="SS\Formula\Atp\TestYearFracCalculator.cs" />

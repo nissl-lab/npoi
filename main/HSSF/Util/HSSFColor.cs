@@ -37,6 +37,7 @@ namespace NPOI.HSSF.Util
      */
     public class HSSFColor
     {
+        private static Hashtable indexHash; 
         public static short COLOR_NORMAL = 0x7fff;
 
         // TODO make subclass instances immutable
@@ -56,10 +57,22 @@ namespace NPOI.HSSF.Util
          */
         public static Hashtable GetIndexHash()
         {
-
+            if (indexHash == null)
+            {
+                indexHash = CreateColorsByIndexMap();
+            }
+            return indexHash;
+        }
+        /**
+         * This function returns all the Colours, stored in a Hashtable that
+         *  can be edited. No caching is performed. If you don't need to edit
+         *  the table, then call {@link #getIndexHash()} which returns a
+         *  statically cached imuatable map of colours.
+         */
+        public static Hashtable GetMutableIndexHash()
+        {
             return CreateColorsByIndexMap();
         }
-
         private static Hashtable CreateColorsByIndexMap()
         {
             HSSFColor[] colors = GetAllColors();
