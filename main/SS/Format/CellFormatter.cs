@@ -49,7 +49,7 @@ namespace NPOI.SS.Format
             this.format = format;
         }
 
-        /** The logger to use in the formatting code. */
+        // /** The logger to use in the formatting code. */
         //static Logger logger = Logger.GetLogger(typeof(CellFormatter).Name);
 
         /**

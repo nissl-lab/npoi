@@ -22,7 +22,7 @@ namespace TestCases.SS.format
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using System.Windows.Forms;
 
-    //[TestClass]
+    [TestClass]
     public class TestCellFormat
     {
         [TestMethod]

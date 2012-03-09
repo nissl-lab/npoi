@@ -32,10 +32,10 @@ Copy the content of testcases/test-data to the same folder within NPOI.
 Load the the NPOITest.sln into your IDE, build the project and execute 
 all the unit tests.
 
-Here are some numbers (2012-02-29):
-unit tests: 1649, passed: 1644 (failed 5)
+Here are some numbers (2012-03-09):
+unit tests: 1651, passed: 1645 (failed 6)
 
-There are 10 unit tests flagged with the [Ignore] attribute: 
+There are 11 unit tests flagged with the [Ignore] attribute: 
 - testcases\main\HSSF\Model\TestOperandClassTransformer.cs(63):   [Ignore] //this test is disabled in poi.
 - testcases\main\HSSF\UserModel\TestBugs.cs(115):                 [Ignore] //not found in poi
 - testcases\main\HSSF\UserModel\TestBugs.cs(225):                 [Ignore] //this test was not found in poi 3.8beta4
@@ -44,6 +44,7 @@ There are 10 unit tests flagged with the [Ignore] attribute:
 - testcases\main\HSSF\UserModel\TestBugs.cs(504):                 [Ignore] // not found in poi
 - testcases\main\HSSF\UserModel\TestBugs.cs(1439):                [Ignore] //this test is disabled in poi.
 - testcases\main\HSSF\UserModel\TestUnfixedBugs.cs(43):           [Ignore] // because of WON'T FIX
+- testcases\main\HSSF\UserModel\TestUnfixedBugs.cs(64):           [Ignore] //TestUnfixedBugs
 - testcases\main\SS\Formula\Eval\TestMinusZeroResult.cs(72):      [Ignore] //no representation for -0.0 in c#, this test always failed.
 - testcases\main\SS\Formula\Functions\TestDate.cs(50):            [Ignore] //this test is disabled in poi.
   
@@ -55,6 +56,8 @@ Failed    Test51535                    Test method TestCases.HSSF.UserModel.Test
 Failed    TestWordDocEmbeddedInXls     Test method TestCases.HSSF.UserModel.TestHSSFWorkbook.TestWordDocEmbeddedInXls threw exception: System.NotImplementedException: class NPOIFSFileSystem is not implemented
 Failed    TestDifferentPOIFS           Test method TestCases.HSSF.UserModel.TestHSSFWorkbook.TestDifferentPOIFS threw exception: System.NotImplementedException: class NPOIFSFileSystem is not implemented
 Failed    TestWriteWorkbookFromNPOIFS  Test method TestCases.HSSF.UserModel.TestHSSFWorkbook.TestWriteWorkbookFromNPOIFS threw exception: System.NotImplementedException: class NPOIFSFileSystem is not implemented
+
+Failed    TestSome                     Test method TestCases.SS.format.TestCellFormat.TestSome threw exception: ... System.NotImplementedException: The method or operation is not implemented.
 
 
 Patches to make the unit tests work as expected are greatly appreciated. 

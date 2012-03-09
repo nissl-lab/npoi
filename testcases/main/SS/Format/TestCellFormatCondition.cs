@@ -27,6 +27,8 @@ namespace TestCases.SS.format
         [TestMethod]
         public void TestSVConditions()
         {
+            System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
+
             CellFormatCondition lt = CellFormatCondition.GetInstance("<", "1.5");
             Assert.IsTrue(lt.Pass(1.4));
             Assert.IsFalse(lt.Pass(1.5));

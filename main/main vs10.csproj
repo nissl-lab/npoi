@@ -302,6 +302,22 @@
     <Compile Include="POIFS\NIO\ByteArrayBackedDataSource.cs" />
     <Compile Include="POIFS\NIO\FileBackedDataSource.cs" />
     <Compile Include="POIFS\NIO\DataSource.cs" />
+    <Compile Include="SS\Extractor\ExcelExtractor.cs" />
+    <Compile Include="SS\Format\CellDateFormatter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="SS\Format\CellElapsedFormatter.cs" />
+    <Compile Include="SS\Format\CellFormat.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="SS\Format\CellFormatCondition.cs" />
+    <Compile Include="SS\Format\CellFormatPart.cs" />
+    <Compile Include="SS\Format\CellFormatResult.cs" />
+    <Compile Include="SS\Format\CellFormatter.cs" />
+    <Compile Include="SS\Format\CellFormatType.cs" />
+    <Compile Include="SS\Format\CellGeneralFormatter.cs" />
+    <Compile Include="SS\Format\CellNumberFormatter.cs" />
+    <Compile Include="SS\Format\CellTextFormatter.cs" />
     <Compile Include="SS\Formula\Constant\ConstantValueParser.cs" />
     <Compile Include="SS\Formula\Constant\ErrorConstant.cs" />
     <Compile Include="HSSF\Record\ContinueRecord.cs" />

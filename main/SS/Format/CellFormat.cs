@@ -36,32 +36,37 @@ namespace NPOI.SS.Format
      * Format a value according to the standard Excel behavior.  This "standard" is
      * not explicitly documented by Microsoft, so the behavior is determined by
      * experimentation; see the tests.
-     * <p/>
+     * 
      * An Excel format has up to four parts, Separated by semicolons.  Each part
      * specifies what to do with particular kinds of values, depending on the number
-     * of parts given: <dl> <dt>One part (example: <tt>[Green]#.##</tt>) <dd>If the
-     * value is a number, display according to this one part (example: green text,
+     * of parts given: 
+     * 
+     * - One part (example: <c>[Green]#.##</c>) 
+     * If the value is a number, display according to this one part (example: green text,
      * with up to two decimal points). If the value is text, display it as is1.
-     * <dt>Two parts (example: <tt>[Green]#.##;[Red]#.##</tt>) <dd>If the value is a
-     * positive number or zero, display according to the first part (example: green
+     * 
+     * - Two parts (example: <c>[Green]#.##;[Red]#.##</c>) 
+     * If the value is a positive number or zero, display according to the first part (example: green
      * text, with up to two decimal points); if it is a negative number, display
      * according to the second part (example: red text, with up to two decimal
-     * points). If the value is text, display it as is1. <dt>Three parts (example:
-     * <tt>[Green]#.##;[Black]#.##;[Red]#.##</tt>) <dd>If the value is a positive
-     * number, display according to the first part (example: green text, with up to
+     * points). If the value is text, display it as is1. 
+     * 
+     * - Three parts (example: <c>[Green]#.##;[Black]#.##;[Red]#.##</c>) 
+     * If the value is a positive number, display according to the first part (example: green text, with up to
      * two decimal points); if it is zero, display according to the second part
      * (example: black text, with up to two decimal points); if it is a negative
      * number, display according to the third part (example: red text, with up to
-     * two decimal points). If the value is text, display it as is1. <dt>Four parts
-     * (example: <tt>[Green]#.##;[Black]#.##;[Red]#.##;[@]</tt>) <dd>If the value is
-     * a positive number, display according to the first part (example: green text,
+     * two decimal points). If the value is text, display it as is1.
+     * 
+     * - Four parts (example: <c>[Green]#.##;[Black]#.##;[Red]#.##;[@]</c>)
+     * If the value is a positive number, display according to the first part (example: green text,
      * with up to two decimal points); if it is zero, display according to the
      * second part (example: black text, with up to two decimal points); if it is a
      * negative number, display according to the third part (example: red text, with
      * up to two decimal points). If the value is text, display according to the
      * fourth part (example: text in the cell's usual color, with the text value
-     * surround by brackets). </dl>
-     * <p/>
+     * surround by brackets).
+     * 
      * In Addition to these, there is a general format that is used when no format
      * is specified.  This formatting is presented by the {@link #GENERAL_FORMAT}
      * object.
