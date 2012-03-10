@@ -19,26 +19,28 @@
 
 using System;
 using NPOI.POIFS.EventFileSystem;
-
-/**
- * Class Listener
- *
- * @author Marc Johnson (mjohnson at apache dot org)
- * @version %I%, %G%
- */
-
-internal class Listener:POIFSReaderListener
+namespace TestCases.POIFS.EventFileSystem
 {
-
     /**
-     * Process a POIFSReaderEvent that this listener had registered
-     * for
+     * Class Listener
      *
-     * @param evt the POIFSReaderEvent
+     * @author Marc Johnson (mjohnson at apache dot org)
+     * @version %I%, %G%
      */
 
-    public void ProcessPOIFSReaderEvent(POIFSReaderEvent evt)
+    internal class Listener : POIFSReaderListener
     {
-    }
-}   // end class Listener
 
+        /**
+         * Process a POIFSReaderEvent that this listener had registered
+         * for
+         *
+         * @param evt the POIFSReaderEvent
+         */
+
+        public void ProcessPOIFSReaderEvent(POIFSReaderEvent evt)
+        {
+        }
+    }   // end class Listener
+
+}

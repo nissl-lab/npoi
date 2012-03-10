@@ -457,6 +457,8 @@
     <Compile Include="HSSF\Util\TestCellReference.cs" />
     <Compile Include="HSSF\Util\TestRKUtil.cs" />
     <Compile Include="POIDataSamples.cs" />
+    <Compile Include="POIFS\EventFileSystem\Listener.cs" />
+    <Compile Include="POIFS\EventFileSystem\TestPOIFSReaderRegistry.cs" />
     <Compile Include="SS\Format\CellFormatTestBase.cs" />
     <Compile Include="SS\Format\TestCellFormat.cs" />
     <Compile Include="SS\Format\TestCellFormatCondition.cs" />
