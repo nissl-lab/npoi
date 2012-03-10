@@ -296,12 +296,30 @@
     <Compile Include="HSSF\Record\CodepageRecord.cs" />
     <Compile Include="HSSF\Record\ColumnInfoRecord.cs" />
     <Compile Include="POIFS\FileSystem\BlockStore.cs" />
+    <Compile Include="POIFS\FileSystem\CloseIgnoringInputStream.cs" />
+    <Compile Include="POIFS\FileSystem\DocumentInputStream.cs" />
+    <Compile Include="POIFS\FileSystem\DocumentOutputStream.cs" />
+    <Compile Include="POIFS\FileSystem\NDocumentInputStream.cs" />
+    <Compile Include="POIFS\FileSystem\NPOIFSDocument.cs" />
+    <Compile Include="POIFS\FileSystem\NPOIFSFileSystem.cs" />
+    <Compile Include="POIFS\FileSystem\NPOIFSMiniStore.cs" />
+    <Compile Include="POIFS\FileSystem\NPOIFSStream.cs" />
+    <Compile Include="POIFS\FileSystem\ODocumentInputStream.cs" />
     <Compile Include="POIFS\FileSystem\POIFSDocument.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POIFS\FileSystem\POIFSWriterEventArgs.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POIFS\FileSystem\POIFSWriterListener.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POIFS\NIO\ByteArrayBackedDataSource.cs" />
     <Compile Include="POIFS\NIO\FileBackedDataSource.cs" />
     <Compile Include="POIFS\NIO\DataSource.cs" />
+    <Compile Include="POIFS\property\NPropertyTable.cs" />
+    <Compile Include="POIFS\property\PropertyTableBase.cs" />
+    <Compile Include="POIFS\Storage\HeaderBlock.cs" />
     <Compile Include="SS\Extractor\ExcelExtractor.cs" />
     <Compile Include="SS\Format\CellDateFormatter.cs">
       <SubType>Code</SubType>
@@ -479,11 +497,6 @@
     <Compile Include="POIFS\EventFileSystem\POIFSReaderRegistry.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="POIFS\EventFileSystem\POIFSWriterEvent.cs" />
-    <Compile Include="POIFS\EventFileSystem\POIFSWriterEventArgs.cs" />
-    <Compile Include="POIFS\EventFileSystem\POIFSWriterListener.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="POIFS\FileSystem\BATManaged.cs" />
     <Compile Include="SS\Formula\Eval\Forked\ForkedEvaluationCell.cs" />
     <Compile Include="SS\Formula\Eval\Forked\ForkedEvaluationSheet.cs" />
@@ -491,6 +504,8 @@
     <Compile Include="SS\Formula\Eval\Forked\ForkedEvaluator.cs" />
     <Compile Include="SS\Formula\SharedFormula.cs" />
     <Compile Include="Util\BlockingInputStream.cs" />
+    <Compile Include="Util\ByteArrayInputStream.cs" />
+    <Compile Include="Util\ByteBuffer.cs" />
     <Compile Include="Util\CloseIgnoringInputStream.cs" />
     <Compile Include="POIFS\FileSystem\DirectoryEntry.cs" />
     <Compile Include="POIFS\FileSystem\DirectoryNode.cs" />
@@ -507,7 +522,6 @@
     <Compile Include="POIFS\FileSystem\POIFSDocumentWriter.cs" />
     <Compile Include="POIFS\FileSystem\POIFSFileSystem.cs" />
     <Compile Include="POIFS\FileSystem\POIFSWriterEvent.cs" />
-    <Compile Include="POIFS\FileSystem\POIFSWriterListener.cs" />
     <Compile Include="POIFS\property\Child.cs" />
     <Compile Include="POIFS\property\DirectoryProperty.cs" />
     <Compile Include="POIFS\property\DocumentProperty.cs" />
@@ -1041,6 +1055,7 @@
     <Compile Include="Util\StringUtil.cs" />
     <Compile Include="Util\SystemOutLogger.cs" />
     <Compile Include="Util\TempFile.cs" />
+    <Compile Include="Util\ULongField.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="npoi.snk" />
