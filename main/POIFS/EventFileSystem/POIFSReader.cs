@@ -49,6 +49,9 @@ namespace NPOI.POIFS.EventFileSystem
     {
         public event POIFSReaderEventHandler StreamReaded;
 
+        private POIFSReaderRegistry registry;
+        private bool registryClosed;
+
         protected virtual void OnStreamReaded(POIFSReaderEventArgs e)
         {
             if (StreamReaded != null)
@@ -61,7 +64,8 @@ namespace NPOI.POIFS.EventFileSystem
         /// </summary>
         public POIFSReader()
         {
-
+            registry = new POIFSReaderRegistry();
+            registryClosed = false;
         }
 
         /// <summary>
@@ -72,34 +76,107 @@ namespace NPOI.POIFS.EventFileSystem
         public List<DocumentDescriptor> Read(Stream stream)
         {
 
+            registryClosed = true;
+
             // Read the header block from the stream
-            HeaderBlockReader header_block_reader = new HeaderBlockReader(stream);
+            HeaderBlock header_block = new HeaderBlock(stream);
 
             // Read the rest of the stream into blocks
-            RawDataBlockList data_blocks = new RawDataBlockList(stream, header_block_reader.BigBlockSize);
+            RawDataBlockList data_blocks = new RawDataBlockList(stream, header_block.BigBlockSize);
 
             // Set up the block allocation table (necessary for the
             // data_blocks to be manageable
-            new BlockAllocationTableReader(header_block_reader.BATCount,
-                                           header_block_reader.BATArray,
-                                           header_block_reader.XBATCount,
-                                           header_block_reader.XBATIndex,
+            new BlockAllocationTableReader(header_block.BigBlockSize,
+                                           header_block.BATCount,
+                                           header_block.BATArray,
+                                           header_block.XBATCount,
+                                           header_block.XBATIndex,
                                            data_blocks);
 
             // Get property table from the document
-            PropertyTable properties =
-                new PropertyTable(header_block_reader.PropertyStart,
-                                  data_blocks);
-
+            PropertyTable properties = new PropertyTable(header_block, data_blocks);
             // Process documents
-            return ProcessProperties(SmallBlockTableReader
-                .GetSmallDocumentBlocks(data_blocks, properties
-                    .Root, header_block_reader
-                        .SBATStart), data_blocks, properties.Root
-                            .Children, new POIFSDocumentPath());
+            return ProcessProperties(SmallBlockTableReader.GetSmallDocumentBlocks
+                            (header_block.BigBlockSize, data_blocks,
+                            properties.Root,
+                            header_block.SBATStart),
+                            data_blocks, properties.Root.Children, new POIFSDocumentPath()
+                );
         }
 
+        /**
+         * Register a POIFSReaderListener for all documents
+         *
+         * @param listener the listener to be registered
+         *
+         * @exception NullPointerException if listener is null
+         * @exception IllegalStateException if read() has already been
+         *                                  called
+         */
 
+        public void RegisterListener(POIFSReaderListener listener)
+        {
+            if (listener == null)
+            {
+                throw new NullReferenceException();
+            }
+            if (registryClosed)
+            {
+                throw new InvalidOperationException();
+            }
+            registry.RegisterListener(listener);
+        }
+
+        /**
+         * Register a POIFSReaderListener for a document in the root
+         * directory
+         *
+         * @param listener the listener to be registered
+         * @param name the document name
+         *
+         * @exception NullPointerException if listener is null or name is
+         *                                 null or empty
+         * @exception IllegalStateException if read() has already been
+         *                                  called
+         */
+
+        public void RegisterListener(POIFSReaderListener listener,
+                                     String name)
+        {
+            RegisterListener(listener, null, name);
+        }
+
+        /**
+         * Register a POIFSReaderListener for a document in the specified
+         * directory
+         *
+         * @param listener the listener to be registered
+         * @param path the document path; if null, the root directory is
+         *             assumed
+         * @param name the document name
+         *
+         * @exception NullPointerException if listener is null or name is
+         *                                 null or empty
+         * @exception IllegalStateException if read() has already been
+         *                                  called
+         */
+
+        public void RegisterListener(POIFSReaderListener listener,
+                                     POIFSDocumentPath path,
+                                     String name)
+        {
+            if ((listener == null) || (name == null) || (name.Length == 0))
+            {
+                throw new NullReferenceException();
+            }
+            if (registryClosed)
+            {
+                throw new InvalidOperationException();
+            }
+            registry.RegisterListener(listener,
+                                      (path == null) ? new POIFSDocumentPath()
+                                                     : path, name);
+        }
         /// <summary>
         /// Processes the properties.
         /// </summary>
@@ -136,28 +213,57 @@ namespace NPOI.POIFS.EventFileSystem
                 else
                 {
                     int startBlock = property.StartBlock;
-
-
-                    int size = property.Size;
+                    IEnumerator listeners = registry.GetListeners(path, name);
                     POIFSDocument document = null;
-
-                    if (property.ShouldUseSmallBlocks)
+                    if (listeners.MoveNext())
                     {
-                        document =
-                            new POIFSDocument(name, small_blocks
-                                .FetchBlocks(startBlock,-1), size);
+                        int size = property.Size;
+                        
+
+                        if (property.ShouldUseSmallBlocks)
+                        {
+                            document =
+                                new POIFSDocument(name, small_blocks
+                                    .FetchBlocks(startBlock, -1), size);
+                        }
+                        else
+                        {
+                            document =
+                                new POIFSDocument(name, big_blocks
+                                    .FetchBlocks(startBlock, -1), size);
+                        }
+                        POIFSReaderListener listener =
+                                (POIFSReaderListener)listeners.Current;
+                        listener.ProcessPOIFSReaderEvent(
+                                new POIFSReaderEvent(
+                                    new DocumentInputStream(document), path,
+                                    name));
+                        while (listeners.MoveNext())
+                        {
+                            listener =
+                                (POIFSReaderListener)listeners.Current;
+                            listener.ProcessPOIFSReaderEvent(
+                                new POIFSReaderEvent(
+                                    new DocumentInputStream(document), path,
+                                    name));
+                        }
                     }
                     else
                     {
-                        document =
-                            new POIFSDocument(name, big_blocks
-                                .FetchBlocks(startBlock,-1), size);
+                        // consume the document's data and discard it
+                        if (property.ShouldUseSmallBlocks)
+                        {
+                            small_blocks.FetchBlocks(startBlock, -1);
+                        }
+                        else
+                        {
+                            big_blocks.FetchBlocks(startBlock, -1);
+                        }
+                        documents.Add(
+                                new DocumentDescriptor(path, name));
+                        //fire event
+                        //OnStreamReaded(new POIFSReaderEventArgs(name, path, document));
                     }
-
-                    documents.Add(
-                            new DocumentDescriptor(path, name));
-                    //fire event
-                    OnStreamReaded(new POIFSReaderEventArgs(name, path, document));
                 }
             }
             return documents;

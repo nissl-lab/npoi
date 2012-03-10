@@ -61,7 +61,8 @@ namespace TestCases.POIFS.FileSystem
             catch (OfficeXmlFileException e)
             {
                 // expected during successful Test
-                Assert.IsTrue(e.Message.IndexOf("POI only supports OLE2 Office documents") > 0);
+                Assert.IsTrue(e.Message.IndexOf("The supplied data appears to be in the Office 2007+ XML") > -1);
+                Assert.IsTrue(e.Message.IndexOf("You are calling the part of POI that deals with OLE2 Office Documents") > -1);
             }
         }
         [TestMethod]

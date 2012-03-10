@@ -52,7 +52,7 @@ namespace NPOI.POIFS.Storage
         /// </summary>
         /// <param name="stream">the Stream from which the data will be read</param>
         public RawDataBlock(Stream stream)
-            : this(stream, POIFSConstants.BIG_BLOCK_SIZE)
+            : this(stream, POIFSConstants.SMALLER_BIG_BLOCK_SIZE)
         {
 
         }
@@ -130,6 +130,16 @@ namespace NPOI.POIFS.Storage
                 }
                 return _data;
             }
+        }
+
+        public override string ToString()
+        {
+            return "RawDataBlock of size " + _data.Length;
+        }
+
+        public int BigBlockSize
+        {
+            get { return _data.Length; }
         }
     }
 }

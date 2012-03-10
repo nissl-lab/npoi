@@ -31,6 +31,7 @@ using System.Collections.Generic;
 using System.Text;
 
 using NPOI.POIFS.Properties;
+using NPOI.POIFS.Common;
 
 namespace NPOI.POIFS.Storage
 {
@@ -48,16 +49,15 @@ namespace NPOI.POIFS.Storage
         /// <param name="root">the root property (which contains the start block and small block table size)</param>
         /// <param name="sbatStart">the start block of the SBAT</param>
         /// <returns>the small document block list</returns>
-        public static BlockList GetSmallDocumentBlocks(
+        public static BlockList GetSmallDocumentBlocks(POIFSBigBlockSize bigBlockSize,
                 RawDataBlockList blockList, RootProperty root,
                 int sbatStart)
         {
             BlockList list =
-                new SmallDocumentBlockList(SmallDocumentBlock
-                    .Extract(blockList.FetchBlocks(root.StartBlock, -1)));
+                new SmallDocumentBlockList(
+                    SmallDocumentBlock.Extract(bigBlockSize, blockList.FetchBlocks(root.StartBlock, -1)));
 
-            new BlockAllocationTableReader(blockList.FetchBlocks(sbatStart, -1),
-                                           list);
+            new BlockAllocationTableReader(bigBlockSize, blockList.FetchBlocks(sbatStart, -1), list);
             return list;
         }
     }

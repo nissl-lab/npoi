@@ -27,6 +27,7 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Text;
 using System.IO;
 
@@ -53,7 +54,7 @@ namespace NPOI.POIFS.FileSystem
         /// immediately (i.e., this DirectoryEntry is empty). All
         /// objects retrieved by next() are guaranteed to be
         /// implementations of Entry.</value>
-        IEnumerator Entries { get; }
+        IEnumerator<Entry> Entries { get; }
 
         /// <summary>
         ///is this DirectoryEntry empty?
@@ -91,17 +92,16 @@ namespace NPOI.POIFS.FileSystem
         /// <param name="name">the name of the new DocumentEntry</param>
         /// <param name="size">the size of the new DocumentEntry</param>
         /// <returns>the new DocumentEntry</returns>
-        DocumentEntry CreateDocument(String name, int size);
+        //DocumentEntry CreateDocument(String name, int size);
 
         /// <summary>
         /// Create a new DocumentEntry; the data will be provided later
         /// </summary>
         /// <param name="name">the name of the new DocumentEntry</param>
         /// <param name="size">the size of the new DocumentEntry</param>
-        /// <param name="beforewriting">BeforeWriting event handler</param>
+        /// <param name="writer">BeforeWriting event handler</param>
         /// <returns>the new DocumentEntry</returns>
-        DocumentEntry CreateDocument(String name, int size,
-                                            POIFSWriterEventHandler beforewriting);
+        DocumentEntry CreateDocument(string name, int size, POIFSWriterListener writer);
 
         /// <summary>
         /// Create a new DirectoryEntry

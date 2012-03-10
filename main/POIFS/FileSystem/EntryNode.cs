@@ -45,12 +45,16 @@ namespace NPOI.POIFS.FileSystem
     {
 
         // the DocumentProperty backing this object
-        [NonSerialized]
-        private Property _property;
+        protected Property _property;
 
         // this object's parent Entry
-        private DirectoryNode _parent;
+        protected DirectoryNode _parent;
 
+
+        protected EntryNode()
+            : this(null, null)
+        {
+        }
 
         /// <summary>
         /// Create a DocumentNode. ThIs method Is not public by design; it
@@ -192,6 +196,11 @@ namespace NPOI.POIFS.FileSystem
                 rval = _parent.ChangeName(Name, newName);
             }
             return rval;
+        }
+
+        public override string ToString()
+        {
+            return this.Name;
         }
     }
 }

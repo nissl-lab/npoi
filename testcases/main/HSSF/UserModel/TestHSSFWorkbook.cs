@@ -34,6 +34,7 @@ namespace TestCases.HSSF.UserModel
     using NPOI.SS.UserModel;
     using NPOI.POIFS.FileSystem;
     using NPOI.SS.Util;
+    using System.Collections.Generic;
     /**
      *
      */
@@ -647,64 +648,64 @@ namespace TestCases.HSSF.UserModel
         [TestMethod]
         public void TestDifferentPOIFS()
         {
-            throw new NotImplementedException("class NPOIFSFileSystem is not implemented");
+            //throw new NotImplementedException("class NPOIFSFileSystem is not implemented");
             // Open the two filesystems
-            //DirectoryNode[] files = new DirectoryNode[2];
-            //files[0] = (new POIFSFileSystem(HSSFTestDataSamples.OpenSampleFileStream("Simple.xls"))).Root;
-            //files[1] = (new NPOIFSFileSystem(HSSFTestDataSamples.GetSampeFile("Simple.xls"))).Root;
+            DirectoryNode[] files = new DirectoryNode[2];
+            files[0] = (new POIFSFileSystem(HSSFTestDataSamples.OpenSampleFileStream("Simple.xls"))).Root;
+            files[1] = (new NPOIFSFileSystem(HSSFTestDataSamples.OpenSampleFileStream("Simple.xls"))).Root;
 
-            //// Open without preserving nodes 
-            //foreach (DirectoryNode dir in files)
-            //{
-            //    IWorkbook workbook = new HSSFWorkbook(dir, false);
-            //    ISheet sheet = workbook.GetSheetAt(0);
-            //    ICell cell = sheet.GetRow(0).GetCell(0);
-            //    Assert.AreEqual("ReplaceMe", cell.RichStringCellValue.String);
-            //}
+            // Open without preserving nodes 
+            foreach (DirectoryNode dir in files)
+            {
+                IWorkbook workbook = new HSSFWorkbook(dir, false);
+                ISheet sheet = workbook.GetSheetAt(0);
+                ICell cell = sheet.GetRow(0).GetCell(0);
+                Assert.AreEqual("replaceMe", cell.RichStringCellValue.String);
+            }
 
-            //// Now re-check with preserving
-            //foreach (DirectoryNode dir in files)
-            //{
-            //    IWorkbook workbook = new HSSFWorkbook(dir, true);
-            //    ISheet sheet = workbook.GetSheetAt(0);
-            //    ICell cell = sheet.GetRow(0).GetCell(0);
-            //    Assert.AreEqual("ReplaceMe", cell.RichStringCellValue.String);
-            //}
+            // Now re-check with preserving
+            foreach (DirectoryNode dir in files)
+            {
+                IWorkbook workbook = new HSSFWorkbook(dir, true);
+                ISheet sheet = workbook.GetSheetAt(0);
+                ICell cell = sheet.GetRow(0).GetCell(0);
+                Assert.AreEqual("replaceMe", cell.RichStringCellValue.String);
+            }
         }
 
         [TestMethod]
         public void TestWordDocEmbeddedInXls()
         {
-            throw new NotImplementedException("class NPOIFSFileSystem is not implemented");
-            //// Open the two filesystems
-            //DirectoryNode[] files = new DirectoryNode[2];
-            //files[0] = (new POIFSFileSystem(HSSFTestDataSamples.OpenSampleFileStream("WithEmbeddedObjects.xls"))).Root;
-            //files[1] = (new NPOIFSFileSystem(HSSFTestDataSamples.GetSampeFile("WithEmbeddedObjects.xls"))).Root;
+            //throw new NotImplementedException("class NPOIFSFileSystem is not implemented");
+            // Open the two filesystems
+            DirectoryNode[] files = new DirectoryNode[2];
+            files[0] = (new POIFSFileSystem(HSSFTestDataSamples.OpenSampleFileStream("WithEmbeddedObjects.xls"))).Root;
+            files[1] = (new NPOIFSFileSystem(HSSFTestDataSamples.OpenSampleFileStream("WithEmbeddedObjects.xls"))).Root;
 
-            //// Check the embedded parts
-            //foreach (DirectoryNode root in files)
-            //{
-            //    IWorkbook hw = new HSSFWorkbook(root, true);
-            //    List<HSSFObjectData> objects = hw.AllEmbeddedObjects;
-            //    bool found = false;
-            //    for (int i = 0; i < objects.Size(); i++)
-            //    {
-            //        HSSFObjectData embeddedObject = objects.Get(i);
-            //        if (embeddedObject.HasDirectoryEntry())
-            //        {
-            //            DirectoryEntry dir = embeddedObject.Directory;
-            //            if (dir is DirectoryNode)
-            //            {
-            //                DirectoryNode dNode = (DirectoryNode)dir;
-            //                if (hasEntry(dNode, "WordDocument"))
-            //                {
-            //                    found = true;
-            //                }
-            //            }
-            //        }
-            //    }
-            //    Assert.IsTrue(found);
-            //}
+            // Check the embedded parts
+            foreach (DirectoryNode root in files)
+            {
+                HSSFWorkbook hw = new HSSFWorkbook(root, true);
+                IList<HSSFObjectData> objects = hw.GetAllEmbeddedObjects();
+                bool found = false;
+                for (int i = 0; i < objects.Count; i++)
+                {
+                    HSSFObjectData embeddedObject = objects[i];
+                    if (embeddedObject.HasDirectoryEntry())
+                    {
+                        DirectoryEntry dir = embeddedObject.GetDirectory();
+                        if (dir is DirectoryNode)
+                        {
+                            DirectoryNode dNode = (DirectoryNode)dir;
+                            if (HasEntry(dNode, "WordDocument"))
+                            {
+                                found = true;
+                            }
+                        }
+                    }
+                }
+                Assert.IsTrue(found);
+            }
         }
 
         /**
@@ -715,19 +716,19 @@ namespace TestCases.HSSF.UserModel
         [TestMethod]
         public void TestWriteWorkbookFromNPOIFS()
         {
-            throw new NotImplementedException("class NPOIFSFileSystem is not implemented");
-            //InputStream is1 = HSSFTestDataSamples.OpenSampleFileStream("WithEmbeddedObjects.xls");
-            //NPOIFSFileSystem fs = new NPOIFSFileSystem(is1);
+            //throw new NotImplementedException("class NPOIFSFileSystem is not implemented");
+            Stream is1 = HSSFTestDataSamples.OpenSampleFileStream("WithEmbeddedObjects.xls");
+            NPOIFSFileSystem fs = new NPOIFSFileSystem(is1);
 
-            //// Start as NPOIFS
-            //IWorkbook wb = new HSSFWorkbook(fs.Root, true);
-            //Assert.AreEqual(3, wb.NumberOfSheets);
-            //Assert.AreEqual("Root xls", wb.GetSheetAt(0).GetRow(0).GetCell(0).StringCellValue);
+            // Start as NPOIFS
+            HSSFWorkbook wb = new HSSFWorkbook(fs.Root, true);
+            Assert.AreEqual(3, wb.NumberOfSheets);
+            Assert.AreEqual("Root xls", wb.GetSheetAt(0).GetRow(0).GetCell(0).StringCellValue);
 
-            //// Will switch to POIFS
-            //wb = HSSFTestDataSamples.WriteOutAndReadBack(wb);
-            //Assert.AreEqual(3, wb.NumberOfSheets);
-            //Assert.AreEqual("Root xls", wb.GetSheetAt(0).GetRow(0).GetCell(0).StringCellValue);
+            // Will switch to POIFS
+            wb = HSSFTestDataSamples.WriteOutAndReadBack(wb);
+            Assert.AreEqual(3, wb.NumberOfSheets);
+            Assert.AreEqual("Root xls", wb.GetSheetAt(0).GetRow(0).GetCell(0).StringCellValue);
         }
 
         [TestMethod]

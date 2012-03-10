@@ -32,6 +32,7 @@ using System.IO;
 
 using NPOI.POIFS.Common;
 using NPOI.Util;
+using NPOI.POIFS.NIO;
 
 namespace NPOI.POIFS.Storage
 {
@@ -39,64 +40,19 @@ namespace NPOI.POIFS.Storage
     /// The block containing the archive header
     /// @author Marc Johnson (mjohnson at apache dot org)
     /// </summary>
-    public class HeaderBlockWriter : BigBlock
+
+    public class HeaderBlockWriter : HeaderBlockConstants, BlockWritable
     {
-        private static byte _default_value = (byte)0xFF;
+        private HeaderBlock _header_block;
 
-        // number of big block allocation table blocks (int)
-        private IntegerField      _bat_count;
-
-        // start of the property  block (int index of the property 
-        // chain's first big block)
-        private IntegerField      _property_start;
-
-        // start of the small block allocation table (int index of small
-        // block allocation table's first big block)
-        private IntegerField      _sbat_start;
-
-        // number of big blocks holding the small block allocation table
-        private IntegerField      _sbat_block_count;
-
-        // big block index for extension to the big block allocation table
-        private IntegerField      _xbat_start;
-        private IntegerField      _xbat_count;
-        private byte[]            _data;
-
-        /// <summary>
-        /// Create a single instance initialized with default values
-        /// </summary>
-        public HeaderBlockWriter()
+        public HeaderBlockWriter(POIFSBigBlockSize bigBlockSize)
         {
-            _data = new byte[ POIFSConstants.BIG_BLOCK_SIZE ];
-            for (int i = 0; i < this._data.Length; i++)
-            {
-                this._data[i] = _default_value;
-            }
-            LongField.Write(HeaderBlockConstants._signature_offset, HeaderBlockConstants._signature, _data);
-            IntegerField.Write(0x08, 0, _data);
-            IntegerField.Write(0x0c, 0, _data);
-            IntegerField.Write(0x10, 0, _data);
-            IntegerField.Write(0x14, 0, _data);
-            ShortField.Write(0x18, (short)0x3b, ref _data);
-            ShortField.Write(0x1a, (short)0x3, ref _data);
-            ShortField.Write(0x1c, (short)-2, ref _data);
-            ShortField.Write(0x1e, (short)0x9, ref _data);
-            IntegerField.Write(0x20, 0x6, _data);
-            IntegerField.Write(0x24, 0, _data);
-            IntegerField.Write(0x28, 0, _data);
-            _bat_count = new IntegerField(HeaderBlockConstants._bat_count_offset, 0, _data);
-            _property_start = new IntegerField(HeaderBlockConstants._property_start_offset,
-                                               POIFSConstants.END_OF_CHAIN,
-                                               _data);
-            IntegerField.Write(0x34, 0, _data);
-            IntegerField.Write(0x38, 0x1000, _data);
-            _sbat_start = new IntegerField(HeaderBlockConstants._sbat_start_offset,
-                                           POIFSConstants.END_OF_CHAIN, _data);
-            _sbat_block_count = new IntegerField(HeaderBlockConstants._sbat_block_count_offset, 0,
-					         _data);
-            _xbat_start = new IntegerField(HeaderBlockConstants._xbat_start_offset,
-                                           POIFSConstants.END_OF_CHAIN, _data);
-            _xbat_count = new IntegerField(HeaderBlockConstants._xbat_count_offset, 0, _data);
+            _header_block = new HeaderBlock(bigBlockSize);
+        }
+
+        public HeaderBlockWriter(HeaderBlock headerBlock)
+        {
+            _header_block = headerBlock;
         }
 
         /// <summary>
@@ -108,40 +64,41 @@ namespace NPOI.POIFS.Storage
         /// <param name="startBlock">index of first BAT block</param>
         /// <returns>array of XBAT blocks; may be zero Length, will not be
         /// null</returns>
-        public BATBlock [] SetBATBlocks(int blockCount,
-                                        int startBlock)
+        public BATBlock[] SetBATBlocks(int blockCount, int startBlock)
         {
             BATBlock[] rvalue;
 
-            _bat_count.Set(blockCount, _data);
-            int limit = Math.Min(blockCount, HeaderBlockConstants._max_bats_in_header);
-            int offset = HeaderBlockConstants._bat_array_offset;
+            POIFSBigBlockSize bigBlockSize = _header_block.BigBlockSize;
 
+            _header_block.BATCount = blockCount;
+
+            int limit = Math.Min(blockCount, _max_bats_in_header);
+            int[] bat_blocks = new int[limit];
             for (int j = 0; j < limit; j++)
+                bat_blocks[j] = startBlock + j;
+
+            _header_block.BATArray = bat_blocks;
+
+            if (blockCount > _max_bats_in_header)
             {
-                IntegerField.Write(offset, startBlock + j, _data);
-                offset += LittleEndianConsts.INT_SIZE;
-            }
-            if (blockCount > HeaderBlockConstants._max_bats_in_header)
-            {
-                int excess_blocks = blockCount - HeaderBlockConstants._max_bats_in_header;
-                int[] excess_block_array = new int[ excess_blocks ];
+                int excess_blocks = blockCount - _max_bats_in_header;
+                int[] excess_block_array = new int[excess_blocks];
 
                 for (int j = 0; j < excess_blocks; j++)
-                {
-                    excess_block_array[ j ] = startBlock + j
-                                              + HeaderBlockConstants._max_bats_in_header;
-                }
-                rvalue = BATBlock.CreateXBATBlocks(excess_block_array,
+                    excess_block_array[j] = startBlock + j + _max_bats_in_header;
+
+                rvalue = BATBlock.CreateXBATBlocks(bigBlockSize, excess_block_array,
                                                    startBlock + blockCount);
-                _xbat_start.Set(startBlock + blockCount, _data);
+
+                _header_block.XBATStart = startBlock + blockCount;
             }
             else
             {
-                rvalue = BATBlock.CreateXBATBlocks(new int[ 0 ], 0);
-                _xbat_start.Set(POIFSConstants.END_OF_CHAIN, _data);
+                rvalue = BATBlock.CreateXBATBlocks(bigBlockSize, new int[0], 0);
+                _header_block.XBATStart = POIFSConstants.END_OF_CHAIN;
             }
-            _xbat_count.Set(rvalue.Length, _data);
+
+            _header_block.XBATCount = rvalue.Length;
             return rvalue;
         }
 
@@ -152,7 +109,8 @@ namespace NPOI.POIFS.Storage
         /// Table</value>
         public int PropertyStart
         {
-            set { _property_start.Set(value, _data); }
+            get { return _header_block.PropertyStart; }
+            set { _header_block.PropertyStart = value; }
         }
 
         /// <summary>
@@ -160,10 +118,16 @@ namespace NPOI.POIFS.Storage
         /// </summary>
         /// <value>the index of the first big block of the small
         /// block allocation table</value>
+        public int SBAStart
+        {
+            get { return _header_block.SBATStart; }
+            set { _header_block.SBATStart = value; }
+        }
+
         public int SBATStart
         {
-            set { _sbat_start.Set(value, _data); }
-
+            get { return _header_block.SBATStart; }
+            set { _header_block.SBATStart = value; }
         }
 
         /// <summary>
@@ -172,8 +136,8 @@ namespace NPOI.POIFS.Storage
         /// <value>the number of SBAT blocks</value>
         public int SBATBlockCount
         {
-            get{return _sbat_block_count.Value;}
-	        set{_sbat_block_count.Set(value, _data);}
+            get { return _header_block.SBATBlockCount; }
+            set { _header_block.SBATBlockCount = value; }
         }
 
         /// <summary>
@@ -182,12 +146,10 @@ namespace NPOI.POIFS.Storage
         /// </summary>
         /// <param name="blockCount">number of BAT blocks</param>
         /// <returns>number of XBAT blocks needed</returns>
-        public static int CalculateXBATStorageRequirements(int blockCount)
+        public static int CalculateXBATStorageRequirements(POIFSBigBlockSize bigBlockSize, int blockCount)
         {
-            return (blockCount > HeaderBlockConstants._max_bats_in_header)
-                   ? BATBlock.CalculateXBATStorageRequirements(blockCount
-                       - HeaderBlockConstants._max_bats_in_header)
-                   : 0;
+            return (blockCount > _max_bats_in_header)
+                ? BATBlock.CalculateXBATStorageRequirements(bigBlockSize, blockCount - _max_bats_in_header) : 0;
         }
 
 
@@ -197,9 +159,37 @@ namespace NPOI.POIFS.Storage
         /// <param name="stream">the Stream to which the stored data should
         /// be written
         /// </param>
-        internal override void WriteData(Stream stream)
+        public void WriteBlocks(Stream stream)
         {
-            WriteData(stream, _data);
+            try
+            {
+                _header_block.WriteData(stream);
+            }
+            catch (IOException ex)
+            {
+                throw ex;
+            }
+        }
+
+        public void WriteBlock(ByteBuffer block)
+        {
+            MemoryStream ms = new MemoryStream(_header_block.BigBlockSize.GetBigBlockSize());
+
+            _header_block.WriteData(ms);
+
+            block.Write(ms.ToArray());
+        }
+
+
+        public void WriteBlock(byte[] block)
+        {
+            MemoryStream ms = new MemoryStream(_header_block.BigBlockSize.GetBigBlockSize());
+
+            _header_block.WriteData(ms);
+
+            //block = ms.ToArray();
+            byte[] temp = ms.ToArray();
+            Array.Copy(temp, 0, block, 0, temp.Length);
         }
     }
 }

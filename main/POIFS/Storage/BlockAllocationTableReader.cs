@@ -26,7 +26,6 @@
  * ==============================================================*/
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 
@@ -50,8 +49,14 @@ namespace NPOI.POIFS.Storage
     /// </summary>
     public class BlockAllocationTableReader
     {
+
+        private static POILogger _logger = POILogFactory.GetLogger(typeof(BlockAllocationTableReader));
+
+        private static int MAX_BLOCK_COUNT = 65535;
+       
         private List<int> _entries;
 
+        private POIFSBigBlockSize bigBlockSize;
         /// <summary>
         /// create a BlockAllocationTableReader for an existing filesystem. Side
         /// effect: when this method finishes, the BAT blocks will have
@@ -64,31 +69,32 @@ namespace NPOI.POIFS.Storage
         /// <param name="xbat_count">the number of XBAT blocks</param>
         /// <param name="xbat_index">the index of the first XBAT block</param>
         /// <param name="raw_block_list">the list of RawDataBlocks</param>
-        public BlockAllocationTableReader(int block_count,
+        public BlockAllocationTableReader(POIFSBigBlockSize bigBlockSizse,
+                                          int block_count,
                                           int[] block_array,
                                           int xbat_count,
                                           int xbat_index,
                                           BlockList raw_block_list)
-            : this()
+            : this(bigBlockSizse)
         {
+            SanityCheckBlockCount(block_count);
 
-            if (block_count <= 0)
-            {
-                throw new IOException(
-                    "Illegal block count; minimum count is 1, got " + block_count
-                    + " instead");
-            }
-
-            // acquire raw data blocks containing the BAT block data
             RawDataBlock[] blocks = new RawDataBlock[block_count];
             int limit = Math.Min(block_count, block_array.Length);
             int block_index;
 
             for (block_index = 0; block_index < limit; block_index++)
             {
-                blocks[block_index] =
-                    (RawDataBlock)raw_block_list
-                        .Remove(block_array[block_index]);
+                int nextOffset = block_array[block_index];
+                if (nextOffset > raw_block_list.BlockCount())
+                {
+                    throw new IOException("Your file contains " + raw_block_list.BlockCount() +
+                                           " sectors, but the initial DIFAT array at index " + block_index +
+                                           " referenced block # " + nextOffset + ". This isn't allowed and " +
+                                           " your file is corrupt");
+                }
+
+                blocks[block_index] = (RawDataBlock)raw_block_list.Remove(nextOffset);
             }
             if (block_index < block_count)
             {
@@ -103,6 +109,9 @@ namespace NPOI.POIFS.Storage
                 int max_entries_per_block = BATBlock.EntriesPerXBATBlock;
                 int chain_index_offset = BATBlock.XBATChainOffset;
 
+                // Each XBAT block contains either:
+                //  (maximum number of sector indexes) + index of next XBAT
+                //  some sector indexes + FREE sectors to max # + EndOfChain
                 for (int j = 0; j < xbat_count; j++)
                 {
                     limit = Math.Min(block_count - block_index,
@@ -113,8 +122,7 @@ namespace NPOI.POIFS.Storage
                     for (int k = 0; k < limit; k++)
                     {
                         blocks[block_index++] =
-                            (RawDataBlock)raw_block_list
-                                .Remove(LittleEndian.GetInt(data, offset));
+                            (RawDataBlock)raw_block_list.Remove(LittleEndian.GetInt(data, offset));
                         offset += LittleEndianConsts.INT_SIZE;
                     }
                     chain_index = LittleEndian.GetInt(data, chain_index_offset);
@@ -139,9 +147,9 @@ namespace NPOI.POIFS.Storage
         /// </summary>
         /// <param name="blocks">the raw data</param>
         /// <param name="raw_block_list">the list holding the managed blocks</param>
-        public BlockAllocationTableReader(ListManagedBlock[] blocks,  
+        public BlockAllocationTableReader(POIFSBigBlockSize bigBlockSize, ListManagedBlock[] blocks,  
                                    BlockList raw_block_list)
-            : this()
+            : this(bigBlockSize)
         {
             SetEntries(blocks, raw_block_list);
         }
@@ -149,8 +157,9 @@ namespace NPOI.POIFS.Storage
         /// <summary>
         /// Initializes a new instance of the <see cref="BlockAllocationTableReader"/> class.
         /// </summary>
-        public BlockAllocationTableReader()
+        public BlockAllocationTableReader(POIFSBigBlockSize bigBlockSize)
         {
+            this.bigBlockSize = bigBlockSize;
             _entries = new List<int>();
         }
 
@@ -165,15 +174,17 @@ namespace NPOI.POIFS.Storage
         public ListManagedBlock[] FetchBlocks(int startBlock, int headerPropertiesStartBlock,
                                         BlockList blockList)
         {
-            IList blocks = new ArrayList();
+            List<ListManagedBlock> blocks = new List<ListManagedBlock>();
             int currentBlock = startBlock;
             bool firstPass = true;
+            ListManagedBlock dataBlock = null;
 
             while (currentBlock != POIFSConstants.END_OF_CHAIN)
             {
                 try
                 {
-                    blocks.Add(blockList.Remove(currentBlock));
+                    dataBlock = blockList.Remove(currentBlock);
+                    blocks.Add(dataBlock);
                     currentBlock = _entries[currentBlock];
                     firstPass = false;
                 }
@@ -182,14 +193,14 @@ namespace NPOI.POIFS.Storage
                     if (currentBlock == headerPropertiesStartBlock)
                     {
                         // Special case where things are in the wrong order
-                        Console.Error.WriteLine("Warning, header block comes after data blocks in POIFS block listing");
+                        _logger.Log(POILogger.WARN, "Warning, header block comes after data blocks in POIFS block listing");
                         currentBlock = POIFSConstants.END_OF_CHAIN;
                     }
                     else if (currentBlock == 0 && firstPass)
                     {
                         // Special case where the termination isn't done right
                         //  on an empty set
-                        Console.Error.WriteLine("Warning, incorrectly terminated empty data blocks in POIFS block listing (should end at -2, ended at 0)");
+                        _logger.Log(POILogger.WARN, "Warning, incorrectly terminated empty data blocks in POIFS block listing (should end at -2, ended at 0)");
                         currentBlock = POIFSConstants.END_OF_CHAIN;
                     }
                     else
@@ -199,9 +210,7 @@ namespace NPOI.POIFS.Storage
                     }
                 }
             }
-            ListManagedBlock[] array = new ListManagedBlock[blocks.Count];
-            blocks.CopyTo(array, 0);
-
+            ListManagedBlock[] array = blocks.ToArray();
             return (array);
         }
 
@@ -254,7 +263,8 @@ namespace NPOI.POIFS.Storage
         private void SetEntries(ListManagedBlock[] blocks,
                                 BlockList raw_blocks)
         {
-            int limit = BATBlock.EntriesPerBlock;
+
+            int limit = bigBlockSize.GetBATEntriesPerBlock();
 
             for (int block_index = 0; block_index < blocks.Length; block_index++)
             {
@@ -277,6 +287,23 @@ namespace NPOI.POIFS.Storage
                 blocks[block_index] = null;
             }
             raw_blocks.BAT = this;
+        }
+
+        public static void SanityCheckBlockCount(int block_count)
+        {
+                if (block_count <= 0)
+                {
+                    throw new IOException("Illegal block count; minimum count is 1, got " 
+                                            + block_count + " instead");
+                }
+
+                if (block_count > MAX_BLOCK_COUNT)
+                {
+                    throw new IOException(
+                               "Block count " + block_count +
+                                " is too high. POI maximum is " + MAX_BLOCK_COUNT + ".");
+                }
+
         }
     }
 }

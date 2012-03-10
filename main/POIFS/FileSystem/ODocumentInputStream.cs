@@ -15,6 +15,11 @@
    limitations under the License.
 ==================================================================== */
 
+
+using System;
+using NPOI.POIFS.Storage;
+using System.IO;
+
 namespace NPOI.POIFS.FileSystem
 {
     /**
@@ -23,13 +28,13 @@ namespace NPOI.POIFS.FileSystem
      *
      * @author Marc Johnson (mjohnson at apache dot org)
      */
-    public class ODocumentInputStream : DocumentReader
+    public class ODocumentInputStream : DocumentInputStream//DocumentReader
     {
         /** current offset into the Document */
-        private int _current_offset;
+        private long _current_offset;
 
         /** current marked offset into the Document (used by mark and Reset) */
-        private int _marked_offset;
+        private long _marked_offset;
 
         /** the Document's size */
         private int _document_size;
@@ -58,16 +63,16 @@ namespace NPOI.POIFS.FileSystem
                 throw new IOException("Cannot open internal document storage");
             }
             DocumentNode documentNode = (DocumentNode)document;
-            if (documentNode.GetDocument() == null)
+            if (documentNode.Document == null)
             {
                 throw new IOException("Cannot open internal document storage");
             }
 
             _current_offset = 0;
             _marked_offset = 0;
-            _document_size = document.GetSize();
+            _document_size = document.Size;
             _closed = false;
-            _document = documentNode.GetDocument();
+            _document = documentNode.Document;
             _currentBlock = GetDataInputBlock(0);
         }
 
@@ -80,41 +85,41 @@ namespace NPOI.POIFS.FileSystem
         {
             _current_offset = 0;
             _marked_offset = 0;
-            _document_size = document.GetSize();
+            _document_size = document.Size;
             _closed = false;
             _document = document;
             _currentBlock = GetDataInputBlock(0);
         }
 
 
-        public int available()
+        public override int Available()
         {
             if (_closed)
             {
                 throw new InvalidOperationException("cannot perform requested operation on a closed stream");
             }
-            return _document_size - _current_offset;
+            return _document_size - (int)_current_offset;
         }
 
 
-        public void Close()
+        public override void Close()
         {
             _closed = true;
         }
 
 
-        public void Mark(int ignoredReadlimit)
+        public override void Mark(int ignoredReadlimit)
         {
             _marked_offset = _current_offset;
         }
 
-        private DataInputBlock GetDataInputBlock(int offset)
+        private DataInputBlock GetDataInputBlock(long offset)
         {
-            return _document.GetDataInputBlock(offset);
+            return _document.GetDataInputBlock((int)offset);
         }
 
 
-        public int Read()
+        public override int Read()
         {
             dieIfClosed();
             if (atEOD())
@@ -123,7 +128,7 @@ namespace NPOI.POIFS.FileSystem
             }
             int result = _currentBlock.ReadUByte();
             _current_offset++;
-            if (_currentBlock.available() < 1)
+            if (_currentBlock.Available() < 1)
             {
                 _currentBlock = GetDataInputBlock(_current_offset);
             }
@@ -131,7 +136,7 @@ namespace NPOI.POIFS.FileSystem
         }
 
 
-        public int Read(byte[] b, int off, int len)
+        public override int Read(byte[] b, int off, int len)
         {
             dieIfClosed();
             if (b == null)
@@ -140,7 +145,7 @@ namespace NPOI.POIFS.FileSystem
             }
             if (off < 0 || len < 0 || b.Length < off + len)
             {
-                throw new IndexOutOfBoundsException("can't read past buffer boundaries");
+                throw new IndexOutOfRangeException("can't read past buffer boundaries");
             }
             if (len == 0)
             {
@@ -150,7 +155,7 @@ namespace NPOI.POIFS.FileSystem
             {
                 return EOF;
             }
-            int limit = Math.min(available(), len);
+            int limit = Math.Min(Available(), len);
             ReadFully(b, off, limit);
             return limit;
         }
@@ -161,21 +166,21 @@ namespace NPOI.POIFS.FileSystem
          * method repositions the stream to its beginning.
          */
 
-        public void Reset()
+        public override void Reset()
         {
             _current_offset = _marked_offset;
             _currentBlock = GetDataInputBlock(_current_offset);
         }
 
 
-        public long Skip(long n)
+        public override long Skip(long n)
         {
             dieIfClosed();
             if (n < 0)
             {
                 return 0;
             }
-            int new_offset = _current_offset + (int)n;
+            long new_offset = _current_offset + (int)n;
 
             if (new_offset < _current_offset)
             {
@@ -215,34 +220,34 @@ namespace NPOI.POIFS.FileSystem
             }
             if (requestedSize > _document_size - _current_offset)
             {
-                throw new RuntimeException("Buffer underrun - requested " + requestedSize
+                throw new Exception("Buffer underrun - requested " + requestedSize
                         + " bytes but " + (_document_size - _current_offset) + " was available");
             }
         }
 
 
-        public byte ReadByte()
+        public override int ReadByte()
         {
-            return (byte)ReadUByte();
+            return ReadUByte();
         }
 
 
-        public double ReadDouble()
+        public override double ReadDouble()
         {
-            return BitConverter.Int64BitsToDouble(readLong());
+            return BitConverter.Int64BitsToDouble(ReadLong());
         }
 
 
-        public short ReadShort()
+        public override short ReadShort()
         {
-            return (short)ReadUshort();
+            return (short)ReadUShort();
         }
 
 
-        public void ReadFully(byte[] buf, int off, int len)
+        public override void ReadFully(byte[] buf, int off, int len)
         {
             CheckAvaliable(len);
-            int blockAvailable = _currentBlock.available();
+            int blockAvailable = _currentBlock.Available();
             if (blockAvailable > len)
             {
                 _currentBlock.ReadFully(buf, off, len);
@@ -281,16 +286,16 @@ namespace NPOI.POIFS.FileSystem
                         break;
                     }
                     _currentBlock = GetDataInputBlock(_current_offset);
-                    blockAvailable = _currentBlock.available();
+                    blockAvailable = _currentBlock.Available();
                 }
             }
         }
 
 
-        public long ReadLong()
+        public override long ReadLong()
         {
             CheckAvaliable(SIZE_LONG);
-            int blockAvailable = _currentBlock.available();
+            int blockAvailable = _currentBlock.Available();
             long result;
             if (blockAvailable > SIZE_LONG)
             {
@@ -314,10 +319,10 @@ namespace NPOI.POIFS.FileSystem
         }
 
 
-        public int ReadInt()
+        public override int ReadInt()
         {
             CheckAvaliable(SIZE_INT);
-            int blockAvailable = _currentBlock.available();
+            int blockAvailable = _currentBlock.Available();
             int result;
             if (blockAvailable > SIZE_INT)
             {
@@ -341,10 +346,10 @@ namespace NPOI.POIFS.FileSystem
         }
 
 
-        public int ReadUshort()
+        public override int ReadUShort()
         {
             CheckAvaliable(SIZE_SHORT);
-            int blockAvailable = _currentBlock.available();
+            int blockAvailable = _currentBlock.Available();
             int result;
             if (blockAvailable > SIZE_SHORT)
             {
@@ -368,16 +373,57 @@ namespace NPOI.POIFS.FileSystem
         }
 
 
-        public int ReadUByte()
+        public override int ReadUByte()
         {
             CheckAvaliable(1);
             int result = _currentBlock.ReadUByte();
             _current_offset++;
-            if (_currentBlock.available() < 1)
+            if (_currentBlock.Available() < 1)
             {
                 _currentBlock = GetDataInputBlock(_current_offset);
             }
             return result;
+        }
+
+        public override long Seek(long offset, SeekOrigin origin)
+        {
+            if (origin == SeekOrigin.Current)
+            {
+                if (_current_offset + offset >= this.Length || _current_offset + offset < 0)
+                    throw new ArgumentException("invalid offset");
+                _current_offset += (int)offset;
+            }
+            else if (origin == SeekOrigin.Begin)
+            {
+                if (offset >= this.Length || offset < 0)
+                    throw new ArgumentException("invalid offset");
+
+                _current_offset = offset;
+            }
+            else if (origin == SeekOrigin.End)
+            {
+                if (this.Length + offset >= this.Length || this.Length + offset < 0)
+                    throw new ArgumentException("invalid offset");
+
+                _current_offset = this.Length + offset;
+            }
+            return _current_offset;
+        }
+
+        public override long Position
+        {
+            get
+            {
+                if (_closed)
+                {
+                    throw new InvalidOperationException("cannot perform requested operation on a closed stream");
+                }
+                return _current_offset;
+            }
+            set
+            {
+                _current_offset = (int)value;
+            }
         }
     }
 

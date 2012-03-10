@@ -50,7 +50,7 @@ namespace NPOI.HSSF.EventUserModel
         /// <param name="fs">a POIFS filesystem containing your workbook</param>
         public void ProcessWorkbookEvents(HSSFRequest req, POIFSFileSystem fs)
         {
-            Stream in1 = fs.CreatePOIFSDocumentReader("Workbook");
+            Stream in1 = fs.CreateDocumentInputStream("Workbook");
 
             ProcessEvents(req, in1);
         }
@@ -63,7 +63,7 @@ namespace NPOI.HSSF.EventUserModel
         /// <returns>numeric user-specified result code.</returns>
         public short AbortableProcessWorkbookEvents(HSSFRequest req, POIFSFileSystem fs)
         {
-            Stream in1 = fs.CreatePOIFSDocumentReader("Workbook");
+            Stream in1 = fs.CreateDocumentInputStream("Workbook");
             return AbortableProcessEvents(req, in1);
         }
 

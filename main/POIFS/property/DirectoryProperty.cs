@@ -29,6 +29,7 @@ using System;
 using System.Text;
 using System.Collections;
 using System.IO;
+using System.Collections.Generic;
 
 namespace NPOI.POIFS.Properties
 {
@@ -39,10 +40,10 @@ namespace NPOI.POIFS.Properties
     public class DirectoryProperty:Property,Parent
     {
         // List of Property instances
-        private IList _children;
+        private List<Property> _children;
 
         // Set of children's names
-        private IList  _children_names;
+        private List<string>  _children_names;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DirectoryProperty"/> class.
@@ -50,8 +51,8 @@ namespace NPOI.POIFS.Properties
         /// <param name="name">the name of the directory</param>
         public DirectoryProperty(String name):base()
         {
-            _children       = new ArrayList();
-            _children_names = new ArrayList();
+            _children = new List<Property>();
+            _children_names = new List<string>();
             Name=name;
             Size=0;
             PropertyType=PropertyConstants.DIRECTORY_TYPE;
@@ -67,8 +68,8 @@ namespace NPOI.POIFS.Properties
         /// <param name="offset">offset into byte data</param>
         public DirectoryProperty(int index, byte [] array,int offset):base(index, array, offset)
         {
-            _children       = new ArrayList();
-            _children_names = new ArrayList();
+            _children = new List<Property>();
+            _children_names = new List<string>();
         }
 
 
@@ -110,21 +111,20 @@ namespace NPOI.POIFS.Properties
         public bool DeleteChild(Property property)
         {
 
-            bool flag = this._children.Contains(property);
-            this._children.Remove(property);
-            bool flag2 = flag;
-            if (flag2)
+            bool result = _children.Remove(property);
+            if (result)
             {
-                this._children_names.Remove(property.Name);
+                _children_names.Remove(property.Name);
             }
-            return flag2;
+
+            return result;
 
         }
 
         /// <summary>
         /// Directory Property Comparer
         /// </summary>
-        public class PropertyComparator : IComparer
+        public class PropertyComparator : IComparer<Property>
         {
 
             /// <summary>
@@ -155,7 +155,7 @@ namespace NPOI.POIFS.Properties
             /// <returns>negative value if o1 smaller than o2,
             ///         zero           if o1 equals o2,
             ///        positive value if o1 bigger than  o2.</returns>
-            public int Compare(Object o1, Object o2)
+            public int Compare(Property o1, Property o2)
             {
                 //solution from http://mail-archives.apache.org/mod_mbox/poi-dev/200604.mbox/%3Cbug-39234-7501@http.issues.apache.org/bugzilla/%3E
 
@@ -269,7 +269,7 @@ namespace NPOI.POIFS.Properties
         /// are instances of Property.
         /// </summary>
         /// <value>Iterator of children; may refer to an empty collection</value>
-        public IEnumerator Children
+        public IEnumerator<Property> Children
         {
             get{return _children.GetEnumerator();}
         }

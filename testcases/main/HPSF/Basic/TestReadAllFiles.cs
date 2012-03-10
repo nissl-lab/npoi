@@ -25,6 +25,7 @@ namespace TestCases.HPSF.Basic
     using System.Collections;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using NPOI.HPSF;
+    using NPOI.Util;
 
 
     /**
@@ -78,7 +79,7 @@ namespace TestCases.HPSF.Basic
                         for (int j = 0; j < psf1.Length; j++)
                         {
                             Stream in1 =
-                                new MemoryStream(psf1[j].GetBytes());
+                                new ByteArrayInputStream(psf1[j].GetBytes());
                             PropertySet a = PropertySetFactory.Create(in1);
                         }
                         f.Close();

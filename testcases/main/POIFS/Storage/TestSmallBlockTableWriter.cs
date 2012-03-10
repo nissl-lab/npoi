@@ -103,9 +103,9 @@ namespace TestCases.POIFS.Storage
             documents
                 .Add(new POIFSDocument("doc9",
                                        new MemoryStream(new byte[9])));
-            RootProperty root = new PropertyTable().Root;
-            SmallBlockTableWriter sbtw = new SmallBlockTableWriter(documents,
-                                                  root);
+            HeaderBlock header = new HeaderBlock(POIFSConstants.SMALLER_BIG_BLOCK_SIZE_DETAILS);
+            RootProperty root = new PropertyTable(header).Root;
+            SmallBlockTableWriter sbtw = new SmallBlockTableWriter(POIFSConstants.SMALLER_BIG_BLOCK_SIZE_DETAILS, documents, root);
             BlockAllocationTableWriter bat = sbtw.SBAT;
 
             // 15 small blocks: 6 for doc340, 0 for doc5000 (too big), 0

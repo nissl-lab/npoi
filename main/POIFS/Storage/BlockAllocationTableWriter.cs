@@ -31,6 +31,8 @@ using System.IO;
 
 using NPOI.POIFS.Common;
 using NPOI.POIFS.FileSystem;
+using NPOI.POIFS.NIO;
+using NPOI.Util;
 
 namespace NPOI.POIFS.Storage
 {
@@ -53,15 +55,19 @@ namespace NPOI.POIFS.Storage
         private List<int>    _entries;
         private BATBlock[] _blocks;
         private int        _start_block;
+        private POIFSBigBlockSize _bigBlockSize;
+
+        private static int _default_size = 128;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BlockAllocationTableWriter"/> class.
         /// </summary>
-        public BlockAllocationTableWriter()
+        public BlockAllocationTableWriter(POIFSBigBlockSize bigBlockSize)
         {
             _start_block = POIFSConstants.END_OF_CHAIN;
-            _entries     = new List<int>();
+            _entries = new List<int>(_default_size);
             _blocks      = new BATBlock[ 0 ];
+            _bigBlockSize = bigBlockSize;
         }
 
         /// <summary>
@@ -76,12 +82,12 @@ namespace NPOI.POIFS.Storage
             while (true)
             {
                 int calculated_bat_blocks  =
-                    BATBlock.CalculateStorageRequirements(bat_blocks
+                    BATBlock.CalculateStorageRequirements(_bigBlockSize,
+                                                          bat_blocks
                                                           + xbat_blocks
                                                           + _entries.Count);
                 int calculated_xbat_blocks =
-                    HeaderBlockWriter
-                        .CalculateXBATStorageRequirements(calculated_bat_blocks);
+                    HeaderBlockWriter.CalculateXBATStorageRequirements(_bigBlockSize,calculated_bat_blocks);
 
                 if ((bat_blocks == calculated_bat_blocks)
                         && (xbat_blocks == calculated_xbat_blocks))
@@ -143,7 +149,7 @@ namespace NPOI.POIFS.Storage
         /// </summary>
         internal void SimpleCreateBlocks()
         {
-            _blocks = BATBlock.CreateBATBlocks(_entries.ToArray());
+            _blocks = BATBlock.CreateBATBlocks(_bigBlockSize, _entries.ToArray());
         }
 
         /// <summary>
@@ -156,6 +162,12 @@ namespace NPOI.POIFS.Storage
             {
                 _blocks[ j ].WriteBlocks(stream);
             }
+        }
+
+        //public static void WriteBlock(BATBlock bat, byte[] block)
+        public static void WriteBlock(BATBlock bat, ByteBuffer block)
+        {
+            bat.WriteData(block);
         }
 
         /// <summary>

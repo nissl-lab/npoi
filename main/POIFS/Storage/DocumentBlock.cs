@@ -47,7 +47,9 @@ namespace NPOI.POIFS.Storage
         /// create a document block from a raw data block
         /// </summary>
         /// <param name="block">The block.</param>
-        public DocumentBlock(RawDataBlock block)
+        public DocumentBlock(RawDataBlock block) : 
+			base(block.BigBlockSize == POIFSConstants.SMALLER_BIG_BLOCK_SIZE ? 
+                    POIFSConstants.SMALLER_BIG_BLOCK_SIZE_DETAILS : POIFSConstants.LARGER_BIG_BLOCK_SIZE_DETAILS)
         {
             _data = block.Data;
             _bytes_Read = _data.Length;
@@ -57,17 +59,15 @@ namespace NPOI.POIFS.Storage
         /// Create a single instance initialized with data.
         /// </summary>
         /// <param name="stream">the InputStream delivering the data.</param>
-        public DocumentBlock(Stream stream)
-            : this()
+        public DocumentBlock(Stream stream, POIFSBigBlockSize bigBlockSize)
+            : this(bigBlockSize)
         {
             int count = IOUtils.ReadFully(stream, _data);
             _bytes_Read = (count == -1) ? 0: count;
         }
 
-        /// <summary>
-        /// Create a single instance initialized with default values
-        /// </summary>
-        private DocumentBlock()
+        public DocumentBlock(POIFSBigBlockSize bigBlockSize)
+            :base(bigBlockSize)
         {
             _data = new byte[POIFSConstants.BIG_BLOCK_SIZE];
             Arrays.Fill(_data, _default_value);
@@ -108,7 +108,8 @@ namespace NPOI.POIFS.Storage
         /// <param name="size">the intended size of the array (which may be smaller)</param>
         /// <returns>an array of DocumentBlock instances, filled from the
         /// input array</returns>
-        public static DocumentBlock[] Convert(byte[] array,
+        public static DocumentBlock[] Convert(POIFSBigBlockSize bigBlockSize,
+                                                byte[] array,
                                                int size)
         {
             DocumentBlock[] rval =
@@ -117,7 +118,7 @@ namespace NPOI.POIFS.Storage
 
             for (int k = 0; k < rval.Length; k++)
             {
-                rval[k] = new DocumentBlock();
+                rval[k] = new DocumentBlock(bigBlockSize);
                 if (offset < array.Length)
                 {
                     int length = Math.Min(POIFSConstants.BIG_BLOCK_SIZE,
@@ -182,12 +183,27 @@ namespace NPOI.POIFS.Storage
                                  buffer_offset, buffer.Length - buffer_offset);
             }
         }
+
+        public static DataInputBlock GetDataInputBlock(DocumentBlock[] blocks, int offset)
+        {
+            if (blocks == null || blocks.Length == 0)
+                return null;
+
+            POIFSBigBlockSize bigBlockSize = blocks[0].bigBlockSize;
+            int BLOCK_SHIFT = bigBlockSize.GetHeaderValue();
+            int BLOCK_SIZE = bigBlockSize.GetBigBlockSize();
+            int BLOCK_MASK = BLOCK_SIZE - 1;
+
+            int firstBlockIndex = offset >> BLOCK_SHIFT;
+            int firstBlockOffset = offset & BLOCK_MASK;
+            return new DataInputBlock(blocks[firstBlockIndex]._data, firstBlockOffset);
+        }
         /// <summary>
         /// Write the storage to an OutputStream
         /// </summary>
         /// <param name="stream">the OutputStream to which the stored data should
         /// be written</param>
-        internal override void WriteData(Stream stream)
+        public override void WriteData(Stream stream)
         {
             WriteData(stream, _data);
         }

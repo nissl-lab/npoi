@@ -52,12 +52,12 @@ namespace TestCases.POIFS.FileSystem
     [TestClass]
     public class TestPropertySorter
     {
+        private static IComparer OldCaseSensitivePropertyComparator = new PropertyComparer();
+
+
 
         //the correct order of entries in the Test file
-        private static String[] _entries = {
-        "dir", "JML", "UTIL", "Loader", "Sheet1", "Sheet2", "Sheet3",
-        "__SRP_0", "__SRP_1", "__SRP_2", "__SRP_3", "__SRP_4", "__SRP_5",
-        "ThisWorkbook","_VBA_PROJECT"       //Tony Qu: changed the last two order which become more reasonable
+        private static String[] _entries = { "dir", "JML", "UTIL", "Loader", "Sheet1", "Sheet2", "Sheet3", "__SRP_0", "__SRP_1", "__SRP_2", "__SRP_3", "__SRP_4", "__SRP_5", "ThisWorkbook","_VBA_PROJECT"       //Changed the last two order which become more reasonable
     };
 
         private static POIFSFileSystem OpenSampleFS()
@@ -170,11 +170,6 @@ namespace TestCases.POIFS.FileSystem
                 return result;
             }
         }
-
-        /**
-         * Old version of case-sensitive PropertyComparator to demonstrate the problem
-         */
-        private static IComparer OldCaseSensitivePropertyComparator = new PropertyComparer();
     }
 
 }

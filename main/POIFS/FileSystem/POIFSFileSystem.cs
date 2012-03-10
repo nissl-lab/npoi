@@ -67,7 +67,6 @@ namespace NPOI.POIFS.FileSystem
             return new CloseIgnoringInputStream(stream);
         }
 
-        [NonSerialized]
         private PropertyTable _property_table;
         private IList          _documents;
         private DirectoryNode _root;
@@ -75,7 +74,6 @@ namespace NPOI.POIFS.FileSystem
  * What big block size the file uses. Most files
  *  use 512 bytes, but a few use 4096
  */
-        [NonSerialized]
         private POIFSBigBlockSize bigBlockSize =
            POIFSConstants.SMALLER_BIG_BLOCK_SIZE_DETAILS;
 
@@ -98,7 +96,8 @@ namespace NPOI.POIFS.FileSystem
         /// </summary>
         public POIFSFileSystem()
         {
-            _property_table = new PropertyTable();
+            HeaderBlock headerBlock = new HeaderBlock(bigBlockSize);
+            _property_table = new PropertyTable(headerBlock);
             _documents      = new ArrayList();
             _root           = null;
         }
@@ -114,11 +113,11 @@ namespace NPOI.POIFS.FileSystem
         {
             bool success = false;
 
-            HeaderBlockReader header_block_reader;
+            HeaderBlock header_block_reader;
             RawDataBlockList data_blocks;
             try {
                 // Read the header block from the stream
-                header_block_reader = new HeaderBlockReader(stream);
+                header_block_reader = new HeaderBlock(stream);
                 bigBlockSize = header_block_reader.BigBlockSize;
                 
                 // Read the rest of the stream into blocks
@@ -131,20 +130,19 @@ namespace NPOI.POIFS.FileSystem
 
             // Set up the block allocation table (necessary for the
             // data_blocks to be manageable
-            new BlockAllocationTableReader(header_block_reader.BATCount,
+            new BlockAllocationTableReader(header_block_reader.BigBlockSize,
+                                           header_block_reader.BATCount,
                                            header_block_reader.BATArray,
                                            header_block_reader.XBATCount,
                                            header_block_reader.XBATIndex,
                                            data_blocks);
 
             // Get property table from the document
-            PropertyTable properties =
-                new PropertyTable(header_block_reader.PropertyStart, data_blocks);
+            PropertyTable properties = new PropertyTable(header_block_reader, data_blocks);
 
             // init documents
-            ProcessProperties(SmallBlockTableReader.GetSmallDocumentBlocks(data_blocks, properties
-                    .Root, header_block_reader.SBATStart), data_blocks, properties.Root
-                            .Children, null, header_block_reader.PropertyStart);
+            ProcessProperties(SmallBlockTableReader.GetSmallDocumentBlocks(bigBlockSize, data_blocks,properties.Root, header_block_reader.SBATStart),
+                                data_blocks, properties.Root.Children, null, header_block_reader.PropertyStart);
         }
         /**
          * @param stream the stream to be Closed
@@ -214,7 +212,7 @@ namespace NPOI.POIFS.FileSystem
         /// <param name="writer">the Writer of the new DocumentEntry</param>
         /// <returns>the new DocumentEntry</returns>
         public DocumentEntry CreateDocument(String name, int size,
-                                            POIFSWriterEventHandler writer)
+            /*POIFSWriterEventHandler*/ POIFSWriterListener writer) //Leon
         {
             return this.Root.CreateDocument(name, size, writer);
         }
@@ -228,7 +226,23 @@ namespace NPOI.POIFS.FileSystem
         {
             return this.Root.CreateDirectory(name);
         }
-        
+        /**
+     * open a document in the root entry's list of entries
+     *
+     * @param documentName the name of the document to be opened
+     *
+     * @return a newly opened DocumentInputStream
+     *
+     * @exception IOException if the document does not exist or the
+     *            name is that of a DirectoryEntry
+     */
+
+        public DocumentInputStream CreateDocumentInputStream(
+                String documentName)
+        {
+            return Root.CreateDocumentInputStream(documentName);
+        }
+
         /// <summary>
         /// Writes the file system.
         /// </summary>
@@ -242,11 +256,11 @@ namespace NPOI.POIFS.FileSystem
 
             // Create the small block store, and the SBAT
             SmallBlockTableWriter      sbtw       =
-                new SmallBlockTableWriter(_documents, _property_table.Root);
+                new SmallBlockTableWriter(bigBlockSize,_documents, _property_table.Root);
 
             // Create the block allocation table
             BlockAllocationTableWriter bat        =
-                new BlockAllocationTableWriter();
+                new BlockAllocationTableWriter(bigBlockSize);
 
             // Create a list of BATManaged objects: the documents plus the
             // property table and the small block table
@@ -284,20 +298,19 @@ namespace NPOI.POIFS.FileSystem
             int               batStartBlock       = bat.CreateBlocks();
 
             // Get the extended block allocation table blocks
-            HeaderBlockWriter header_block_Writer = new HeaderBlockWriter();
-            
+            HeaderBlockWriter header_block_Writer = new HeaderBlockWriter(bigBlockSize);
             BATBlock[] xbat_blocks =
                 header_block_Writer.SetBATBlocks(bat.CountBlocks,
                                                     batStartBlock);
 
             // Set the property table start block
-            header_block_Writer.PropertyStart = _property_table.StartBlock;
+            header_block_Writer.PropertyStart=_property_table.StartBlock;
 
             // Set the small block allocation table start block
-            header_block_Writer.SBATStart = sbtw.SBAT.StartBlock;
+            header_block_Writer.SBATStart=sbtw.SBAT.StartBlock;
 
             // Set the small block allocation table block count
-            header_block_Writer.SBATBlockCount = sbtw.SBATBlockCount;
+            header_block_Writer.SBATBlockCount=sbtw.SBATBlockCount;
 
             // the header is now properly initialized. Make a list of
             // Writers (the header block, followed by the documents, the
@@ -321,12 +334,12 @@ namespace NPOI.POIFS.FileSystem
             iter = Writers.GetEnumerator();
             while (iter.MoveNext())
             {
-                BlockWritable Writer = (BlockWritable)iter.Current;
+                BlockWritable Writer = ( BlockWritable ) iter.Current;
 
                 Writer.WriteBlocks(stream);
             }
 
-            Writers = null;
+            Writers=null;
             iter = null;
         }
 
@@ -350,11 +363,11 @@ namespace NPOI.POIFS.FileSystem
         /// </summary>
         /// <param name="documentName">the name of the document to be opened</param>
         /// <returns>a newly opened POIFSDocumentReader</returns>
-        public POIFSDocumentReader CreatePOIFSDocumentReader(
-                String documentName)
-        {
-    	    return this.Root.CreatePOIFSDocumentReader(documentName);
-        }
+        //public DocumentReader CreatePOIFSDocumentReader(
+        //        String documentName)
+        //{
+        //    return this.Root.CreatePOIFSDocumentReader(documentName);
+        //}
 
         /// <summary>
         /// Add a new POIFSDocument
@@ -447,11 +460,11 @@ namespace NPOI.POIFS.FileSystem
             get{
             if (PreferArray)
             {
-                return (( POIFSViewable ) this.Root).ViewableArray;
+                    return ((POIFSViewable)this.Root).ViewableArray;
             }
             else
             {
-                return new Object[ 0 ];
+                    return new Object[0];
             }
             }
         }

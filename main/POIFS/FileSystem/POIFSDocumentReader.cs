@@ -29,7 +29,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.IO;
-
+using NPOI.Util;
 
 namespace NPOI.POIFS.FileSystem
 {
@@ -38,6 +38,7 @@ namespace NPOI.POIFS.FileSystem
     /// Filesystem instance.
     /// @author Marc Johnson (mjohnson at apache dot org)
     /// </summary>
+    [Obsolete]
     public class POIFSDocumentReader:Stream
     {
         private bool _closed;

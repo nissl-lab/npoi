@@ -23,6 +23,7 @@ namespace TestCases.HSSF.UserModel
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     using TestCases.HSSF;
+    using System.Collections.Generic;
 
     /**
      * 
@@ -44,7 +45,7 @@ namespace TestCases.HSSF.UserModel
         {
             HSSFWorkbook workbook = HSSFTestDataSamples.OpenSampleWorkbook("ole2-embedding.xls");
 
-            IList objects = workbook.GetAllEmbeddedObjects();
+            IList<HSSFObjectData> objects = workbook.GetAllEmbeddedObjects();
             Assert.AreEqual(2, objects.Count, "Wrong number of objects");
             Assert.AreEqual("MBD06CAB431",
                 ((HSSFObjectData)objects[0]).GetDirectory().Name,

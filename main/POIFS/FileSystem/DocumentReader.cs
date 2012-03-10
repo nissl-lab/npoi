@@ -16,7 +16,7 @@
 ==================================================================== */
 
 using System.IO;
-using NPOI.Util.IO;
+using NPOI.Util;
 namespace NPOI.POIFS.FileSystem
 {
 
@@ -26,7 +26,7 @@ namespace NPOI.POIFS.FileSystem
      * It Creates the appropriate one, and delegates, allowing us to
      *  work transparently with the two.
      */
-    public class DocumentReader : Stream, LittleEndianInput
+    public class DocumentReader : Stream, ILittleEndianInput
     {
         /** returned by read operations if we're at end of document */
         protected const int EOF = -1;
@@ -55,7 +55,7 @@ namespace NPOI.POIFS.FileSystem
                 throw new IOException("Cannot open internal document storage");
             }
             DocumentNode documentNode = (DocumentNode)document;
-            DirectoryNode parentNode = (DirectoryNode)document.Parent;
+            DirectoryNode parentNode = (DirectoryNode)(document.Parent);
 
             if (documentNode.Document != null)
             {
@@ -95,12 +95,12 @@ namespace NPOI.POIFS.FileSystem
             delegate1 = new NDocumentInputStream(document);
         }
 
-        public int available()
+        public virtual int Available()
         {
-            return delegate1.available();
+            return delegate1.Available();
         }
 
-        public void Close()
+        public virtual void Close()
         {
             delegate1.Close();
         }
@@ -120,7 +120,7 @@ namespace NPOI.POIFS.FileSystem
             return true;
         }
 
-        public int Read()
+        public virtual int Read()
         {
             return delegate1.Read();
         }
@@ -130,7 +130,7 @@ namespace NPOI.POIFS.FileSystem
             return Read(b, 0, b.Length);
         }
 
-        public int Read(byte[] b, int off, int len)
+        public override int  Read(byte[] b, int off, int len)
         {
             return delegate1.Read(b, off, len);
         }
@@ -150,49 +150,109 @@ namespace NPOI.POIFS.FileSystem
             return delegate1.Skip(n);
         }
 
-        public byte ReadByte()
+        public override int ReadByte()
         {
             return delegate1.ReadByte();
         }
 
-        public double ReadDouble()
+        public virtual double ReadDouble()
         {
             return delegate1.ReadDouble();
         }
 
-        public short ReadShort()
+        public virtual short ReadShort()
         {
             return (short)ReadUshort();
         }
 
-        public void ReadFully(byte[] buf)
+        public virtual void ReadFully(byte[] buf)
         {
             ReadFully(buf, 0, buf.Length);
         }
 
-        public void ReadFully(byte[] buf, int off, int len)
+        public virtual void ReadFully(byte[] buf, int off, int len)
         {
             delegate1.ReadFully(buf, off, len);
         }
 
-        public long ReadLong()
+        public virtual long ReadLong()
         {
             return delegate1.ReadLong();
         }
 
-        public int ReadInt()
+        public virtual int ReadInt()
         {
             return delegate1.ReadInt();
         }
 
-        public int ReadUshort()
+        public virtual int ReadUshort()
         {
             return delegate1.ReadUshort();
         }
 
-        public int ReadUByte()
+        public virtual int ReadUByte()
         {
             return delegate1.ReadUByte();
+        }
+
+        public virtual int ReadUShort()
+        {
+            return delegate1.ReadUshort();
+        }
+
+        public override bool CanRead
+        {
+            get { return true; }
+        }
+
+        public override bool CanSeek
+        {
+            get { return true; }
+        }
+
+        public override bool CanWrite
+        {
+            get { return true; }
+        }
+
+        public override void Flush()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public override long Length
+        {
+            get { return Available(); }
+        }
+
+        public override long Position
+        {
+            get
+            {
+                return delegate1.Position;
+            }
+            set
+            {
+                delegate1.Position = value;
+            }
+        }
+
+        public override long Seek(long offset, SeekOrigin origin)
+        {
+           // Reset();
+           // return 0;
+           return delegate1.Seek(offset, origin);
+
+        }
+
+        public override void SetLength(long value)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public override void Write(byte[] buffer, int offset, int count)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

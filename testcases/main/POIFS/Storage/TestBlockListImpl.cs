@@ -32,6 +32,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NPOI.POIFS.Storage;
 using NPOI.Util;
 using NPOI.POIFS.FileSystem;
+using NPOI.POIFS.Common;
 
 namespace TestCases.POIFS.Storage
 {
@@ -66,7 +67,8 @@ namespace TestCases.POIFS.Storage
                 blocks[j] =
                     new RawDataBlock(new MemoryStream(new byte[512]));
             }
-            ListManagedBlock[] tmp=(ListManagedBlock[])blocks;
+            ListManagedBlock[] tmp = (ListManagedBlock[])blocks;
+
             list.SetBlocks(tmp);
             for (int j = -2; j < 10; j++)
             {
@@ -167,10 +169,10 @@ namespace TestCases.POIFS.Storage
             BlockListImpl list = new BlockListImpl();
 
             list.BAT = null;
-            list.BAT = new BlockAllocationTableReader();
+            list.BAT = new BlockAllocationTableReader(POIFSConstants.SMALLER_BIG_BLOCK_SIZE_DETAILS);
             try
             {
-                list.BAT = new BlockAllocationTableReader();
+                list.BAT = new BlockAllocationTableReader(POIFSConstants.SMALLER_BIG_BLOCK_SIZE_DETAILS);
                 Assert.Fail("second attempt should have Assert.Failed");
             }
             catch (IOException )
@@ -265,7 +267,7 @@ namespace TestCases.POIFS.Storage
             0
         };
             BlockAllocationTableReader table =
-                new BlockAllocationTableReader(1, blocks, 0, -2, list);
+                new BlockAllocationTableReader(POIFSConstants.SMALLER_BIG_BLOCK_SIZE_DETAILS, 1, blocks, 0, -2, list);
             int[] start_blocks =
         {
             -2, 1, 2, 3, 5, 7, 9, 11, 12

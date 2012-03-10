@@ -64,18 +64,16 @@ namespace TestCases.POIFS.Storage
         [TestMethod]
         public void TestAllocateSpace()
         {
-            BlockAllocationTableWriter table =
-                new BlockAllocationTableWriter();
-            int[] blockSizes =
-        {
-            0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9
-        };
+            BlockAllocationTableWriter table = new BlockAllocationTableWriter(POIFSConstants.SMALLER_BIG_BLOCK_SIZE_DETAILS);
+
+            int[] blockSizes = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+
             int expectedIndex = 0;
 
-            for (int j = 0; j < blockSizes.Length; j++)
+            for (int i = 0; i < blockSizes.Length; i++)
             {
-                Assert.AreEqual(expectedIndex, table.AllocateSpace(blockSizes[j]));
-                expectedIndex += blockSizes[j];
+                Assert.AreEqual(expectedIndex, table.AllocateSpace(blockSizes[i]));
+                expectedIndex += blockSizes[i];
             }
         }
 
@@ -87,39 +85,46 @@ namespace TestCases.POIFS.Storage
         [TestMethod]
         public void TestCreateBlocks()
         {
-            BlockAllocationTableWriter table = new BlockAllocationTableWriter();
+            BlockAllocationTableWriter table = new BlockAllocationTableWriter(POIFSConstants.SMALLER_BIG_BLOCK_SIZE_DETAILS);
 
             table.AllocateSpace(127);
             table.CreateBlocks();
-            verifyBlocksCreated(table, 1);
-            table = new BlockAllocationTableWriter();
+            VerifyBlocksCreated(table, 1);
+
+            table = new BlockAllocationTableWriter(POIFSConstants.SMALLER_BIG_BLOCK_SIZE_DETAILS);
             table.AllocateSpace(128);
             table.CreateBlocks();
-            verifyBlocksCreated(table, 2);
-            table = new BlockAllocationTableWriter();
+            VerifyBlocksCreated(table, 2);
+
+            table = new BlockAllocationTableWriter(POIFSConstants.SMALLER_BIG_BLOCK_SIZE_DETAILS);
             table.AllocateSpace(254);
             table.CreateBlocks();
-            verifyBlocksCreated(table, 2);
-            table = new BlockAllocationTableWriter();
+            VerifyBlocksCreated(table, 2);
+
+            table = new BlockAllocationTableWriter(POIFSConstants.SMALLER_BIG_BLOCK_SIZE_DETAILS);
             table.AllocateSpace(255);
             table.CreateBlocks();
-            verifyBlocksCreated(table, 3);
-            table = new BlockAllocationTableWriter();
+            VerifyBlocksCreated(table, 3);
+
+            table = new BlockAllocationTableWriter(POIFSConstants.SMALLER_BIG_BLOCK_SIZE_DETAILS);
             table.AllocateSpace(13843);
             table.CreateBlocks();
-            verifyBlocksCreated(table, 109);
-            table = new BlockAllocationTableWriter();
+            VerifyBlocksCreated(table, 109);
+
+            table = new BlockAllocationTableWriter(POIFSConstants.SMALLER_BIG_BLOCK_SIZE_DETAILS);
             table.AllocateSpace(13844);
             table.CreateBlocks();
-            verifyBlocksCreated(table, 110);
-            table = new BlockAllocationTableWriter();
+            VerifyBlocksCreated(table, 110);
+
+            table = new BlockAllocationTableWriter(POIFSConstants.SMALLER_BIG_BLOCK_SIZE_DETAILS);
             table.AllocateSpace(13969);
             table.CreateBlocks();
-            verifyBlocksCreated(table, 110);
-            table = new BlockAllocationTableWriter();
+            VerifyBlocksCreated(table, 110);
+
+            table = new BlockAllocationTableWriter(POIFSConstants.SMALLER_BIG_BLOCK_SIZE_DETAILS);
             table.AllocateSpace(13970);
             table.CreateBlocks();
-            verifyBlocksCreated(table, 111);
+            VerifyBlocksCreated(table, 111);
         }
 
         /**
@@ -130,12 +135,11 @@ namespace TestCases.POIFS.Storage
         [TestMethod]
         public void TestProduct()
         {
-            BlockAllocationTableWriter table = new BlockAllocationTableWriter();
+            BlockAllocationTableWriter table = new BlockAllocationTableWriter(POIFSConstants.SMALLER_BIG_BLOCK_SIZE_DETAILS);
 
-            for (int k = 1; k <= 22; k++)
-            {
-                table.AllocateSpace(k);
-            }
+            for (int i = 1; i <= 22; i++)
+                table.AllocateSpace(i);
+
             table.CreateBlocks();
             MemoryStream stream = new MemoryStream();
 
@@ -150,35 +154,33 @@ namespace TestCases.POIFS.Storage
                 expected[i] = (byte)0xFF;
             }
             int offset = 0;
-            int block_index = 1;
+            int blockIndex = 1;
 
-            for (int k = 1; k <= 22; k++)
+            for (int i = 1; i <= 22; i++)
             {
-                int limit = k - 1;
+                int limit = i - 1;
 
                 for (int j = 0; j < limit; j++)
                 {
-                    LittleEndian.PutInt(expected, offset, block_index++);
+                    LittleEndian.PutInt(expected, offset, blockIndex++);
                     offset += LittleEndianConsts.INT_SIZE;
                 }
-                LittleEndian.PutInt(expected, offset,
-                                    POIFSConstants.END_OF_CHAIN);
+
+                LittleEndian.PutInt(expected, offset, POIFSConstants.END_OF_CHAIN);
+
                 offset += 4;
-                block_index++;
+                blockIndex++;
             }
 
-            // Add BAT block indices
-            LittleEndian.PutInt(expected, offset, block_index++);
+            LittleEndian.PutInt(expected, offset, blockIndex++);
             offset += LittleEndianConsts.INT_SIZE;
             LittleEndian.PutInt(expected, offset, POIFSConstants.END_OF_CHAIN);
-            for (int k = 0; k < expected.Length; k++)
-            {
-                Assert.AreEqual(expected[k], output[k], "At offset " + k);
-            }
+
+            for (int i = 0; i < expected.Length; i++)
+                Assert.AreEqual(expected[i], output[i], "At offset " + i);
         }
 
-        private void verifyBlocksCreated(BlockAllocationTableWriter table,
-                                         int count)
+        public static void VerifyBlocksCreated(BlockAllocationTableWriter table, int count)
         {
             MemoryStream stream = new MemoryStream();
 

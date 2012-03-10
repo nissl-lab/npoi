@@ -30,7 +30,7 @@ namespace NPOI.POIFS.FileSystem
 
     public class POIFSWriterEvent
     {
-        private POIFSDocumentWriter stream;
+        private DocumentOutputStream stream;
         private POIFSDocumentPath path;
         private String documentName;
         private int limit;
@@ -45,7 +45,7 @@ namespace NPOI.POIFS.FileSystem
          *              stream
          */
 
-        POIFSWriterEvent(POIFSDocumentWriter stream,
+        public POIFSWriterEvent(DocumentOutputStream stream,
                          POIFSDocumentPath path, String documentName,
                          int limit)
         {
@@ -59,7 +59,7 @@ namespace NPOI.POIFS.FileSystem
          * @return the DocumentOutputStream, freshly opened
          */
 
-        public POIFSDocumentWriter Stream
+        public DocumentOutputStream Stream
         {
             get
             {

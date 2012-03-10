@@ -77,20 +77,18 @@ namespace TestCases.POIFS.FileSystem
         [TestMethod]
         public void TestFullPathConstructor()
         {
-            String[] components =
-        {
-            "foo", "bar", "foobar", "fubar"
-        };
+            string[] components = { "foo", "bar", "foobar", "fubar" };
 
             for (int j = 0; j < components.Length; j++)
             {
-                String[] params1 = new String[j];
+                string[] pms = new string[j];
 
                 for (int k = 0; k < j; k++)
                 {
-                    params1[k] = components[k];
+                    pms[k] = components[k];
                 }
-                POIFSDocumentPath path = new POIFSDocumentPath(params1);
+
+                POIFSDocumentPath path = new POIFSDocumentPath(pms);
 
                 Assert.AreEqual(j, path.Length);
                 for (int k = 0; k < j; k++)
@@ -98,9 +96,7 @@ namespace TestCases.POIFS.FileSystem
                     Assert.AreEqual(components[k], path.GetComponent(k));
                 }
                 if (j == 0)
-                {
                     Assert.IsNull(path.Parent);
-                }
                 else
                 {
                     POIFSDocumentPath parent = path.Parent;
@@ -108,9 +104,7 @@ namespace TestCases.POIFS.FileSystem
                     Assert.IsNotNull(parent);
                     Assert.AreEqual(j - 1, parent.Length);
                     for (int k = 0; k < j - 1; k++)
-                    {
                         Assert.AreEqual(components[k], parent.GetComponent(k));
-                    }
                 }
             }
 
@@ -118,24 +112,18 @@ namespace TestCases.POIFS.FileSystem
             Assert.AreEqual(0, new POIFSDocumentPath(null).Length);
             try
             {
-                new POIFSDocumentPath(new String[]
-            {
-                "fu", ""
-            });
+                new POIFSDocumentPath(new string[] { "fu", "" });
                 Assert.Fail("Should have caught IllegalArgumentException");
             }
-            catch (ArgumentException )
+            catch (ArgumentException)
             {
             }
             try
             {
-                new POIFSDocumentPath(new String[]
-            {
-                "fu", null
-            });
+                new POIFSDocumentPath(new string[] { "fu", null });
                 Assert.Fail("Should have caught IllegalArgumentException");
             }
-            catch (ArgumentException )
+            catch (ArgumentException)
             {
             }
         }
@@ -146,25 +134,17 @@ namespace TestCases.POIFS.FileSystem
         [TestMethod]
         public void TestRelativePathConstructor()
         {
-            String[] initialComponents =
-        {
-            "a", "b", "c"
-        };
+            string[] initialComponents = { "a", "b", "c" };
 
             for (int n = 0; n < initialComponents.Length; n++)
             {
                 String[] initialParams = new String[n];
 
                 for (int k = 0; k < n; k++)
-                {
                     initialParams[k] = initialComponents[k];
-                }
-                POIFSDocumentPath base1 =
-                    new POIFSDocumentPath(initialParams);
-                String[] components =
-            {
-                "foo", "bar", "foobar", "fubar"
-            };
+
+                POIFSDocumentPath b = new POIFSDocumentPath(initialParams);
+                string[] components = { "foo", "bar", "foobar", "fubar" };
 
                 for (int j = 0; j < components.Length; j++)
                 {
@@ -174,7 +154,7 @@ namespace TestCases.POIFS.FileSystem
                     {
                         params1[k] = components[k];
                     }
-                    POIFSDocumentPath path = new POIFSDocumentPath(base1, params1);
+                    POIFSDocumentPath path = new POIFSDocumentPath(b, params1);
 
                     Assert.AreEqual(j + n, path.Length);
                     for (int k = 0; k < n; k++)
@@ -198,34 +178,33 @@ namespace TestCases.POIFS.FileSystem
                         Assert.AreEqual(j + n - 1, parent.Length);
                         for (int k = 0; k < (j + n - 1); k++)
                         {
-                            Assert.AreEqual(path.GetComponent(k),
-                                         parent.GetComponent(k));
+                            Assert.AreEqual(path.GetComponent(k), parent.GetComponent(k));
                         }
                     }
                 }
 
-                // Test weird variants
-                Assert.AreEqual(n, new POIFSDocumentPath(base1, null).Length);
+                Assert.AreEqual(n, new POIFSDocumentPath(b, null).Length);
+                //this one is allowed.
+                new POIFSDocumentPath(b, new string[] { "fu", "" });
+
+                //this one is allowed too
+                new POIFSDocumentPath(b, new string[] { "", "fu" });
+
+                //this one is not allowed.
                 try
                 {
-                    new POIFSDocumentPath(base1, new String[]
-                {
-                    "fu", ""
-                });
-                    Assert.Fail("Should have caught IllegalArgumentException");
+                    new POIFSDocumentPath(b, new string[] { "fu", null });
+                    Assert.Fail("should have caught ArgumentException");
                 }
-                catch (ArgumentException )
+                catch (ArgumentException)
                 {
                 }
                 try
                 {
-                    new POIFSDocumentPath(base1, new String[]
-                {
-                    "fu", null
-                });
-                    Assert.Fail("Should have caught IllegalArgumentException");
+                    new POIFSDocumentPath(b, new string[] { "fu", null });
+                    Assert.Fail("should have caught ArgumentException");
                 }
-                catch (ArgumentException )
+                catch (ArgumentException)
                 {
                 }
             }
@@ -241,103 +220,56 @@ namespace TestCases.POIFS.FileSystem
             POIFSDocumentPath a2 = new POIFSDocumentPath(null);
             POIFSDocumentPath a3 = new POIFSDocumentPath(new String[0]);
             POIFSDocumentPath a4 = new POIFSDocumentPath(a1, null);
-            POIFSDocumentPath a5 = new POIFSDocumentPath(a1,
-                                            new String[0]);
-            POIFSDocumentPath[] paths =
-        {
-            a1, a2, a3, a4, a5
-        };
+            POIFSDocumentPath a5 = new POIFSDocumentPath(a1, new string[0]);
+
+            POIFSDocumentPath[] paths = { a1, a2, a3, a4, a5 };
 
             for (int j = 0; j < paths.Length; j++)
             {
                 for (int k = 0; k < paths.Length; k++)
-                {
-                    Assert.AreEqual(
-                                 paths[j], paths[k], j.ToString() + "<>" + k.ToString());
-                }
+                    Assert.AreEqual(paths[j], paths[k], j + "<>" + k);
             }
-            a2 = new POIFSDocumentPath(a1, new String[]
-        {
-            "foo"
-        });
-            a3 = new POIFSDocumentPath(a2, new String[]
-        {
-            "bar"
-        });
-            a4 = new POIFSDocumentPath(a3, new String[]
-        {
-            "fubar"
-        });
-            a5 = new POIFSDocumentPath(a4, new String[]
-        {
-            "foobar"
-        });
-            POIFSDocumentPath[] builtUpPaths =
-        {
-            a1, a2, a3, a4, a5
-        };
+
+            a2 = new POIFSDocumentPath(a1, new string[] { "foo" });
+            a3 = new POIFSDocumentPath(a2, new string[] { "bar" });
+            a4 = new POIFSDocumentPath(a3, new string[] { "fubar" });
+            a5 = new POIFSDocumentPath(a4, new string[] { "foobar" });
+
+            POIFSDocumentPath[] builtUpPaths = { a1, a2, a3, a4, a5 };
+
             POIFSDocumentPath[] fullPaths =
-        {
-            new POIFSDocumentPath(), new POIFSDocumentPath(new String[]
             {
-                "foo"
-            }), new POIFSDocumentPath(new String[]
-            {
-                "foo", "bar"
-            }), new POIFSDocumentPath(new String[]
-            {
-                "foo", "bar", "fubar"
-            }), new POIFSDocumentPath(new String[]
-            {
-                "foo", "bar", "fubar", "foobar"
-            })
-        };
+                    new POIFSDocumentPath(),
+                    new POIFSDocumentPath(new string[]{"foo"}),
+                    new POIFSDocumentPath(new string[]{"foo", "bar"}),
+                    new POIFSDocumentPath(new string[]{"foo", "bar", "fubar"}),
+                    new POIFSDocumentPath(new string[]{"foo", "bar", "fubar", "foobar"})
+            };
 
             for (int k = 0; k < builtUpPaths.Length; k++)
             {
                 for (int j = 0; j < fullPaths.Length; j++)
                 {
                     if (k == j)
-                    {
-                        Assert.AreEqual(fullPaths[j],
-                                                          builtUpPaths[k],
-                                                          j.ToString() + "<>"
-                                     + k.ToString());
-                    }
+                        Assert.AreEqual(fullPaths[j], builtUpPaths[k], j + "<>" + k);
                     else
-                    {
-                        Assert.IsTrue(
-                                   !(fullPaths[j].
-                                   Equals(builtUpPaths[k])),
-                                   j.ToString() + "<>" + k.ToString());
-                    }
+                        Assert.IsTrue(!(fullPaths[j].Equals(builtUpPaths[k])), j + "<>" + k);
                 }
             }
             POIFSDocumentPath[] badPaths =
-        {
-            new POIFSDocumentPath(new String[]
             {
-                "_foo"
-            }), new POIFSDocumentPath(new String[]
-            {
-                "foo", "_bar"
-            }), new POIFSDocumentPath(new String[]
-            {
-                "foo", "bar", "_fubar"
-            }), new POIFSDocumentPath(new String[]
-            {
-                "foo", "bar", "fubar", "_foobar"
-            })
-        };
+                    new POIFSDocumentPath(new string[]{"_foo"}),
+                    new POIFSDocumentPath(new string[]{"foo", "_bar"}),
+                    new POIFSDocumentPath(new string[]{"foo", "bar", "_fubar"}),
+                    new POIFSDocumentPath(new string[]{"foo", "bar", "fubar", "_foobar"})
+
+            };
 
             for (int k = 0; k < builtUpPaths.Length; k++)
             {
                 for (int j = 0; j < badPaths.Length; j++)
-                {
-                    Assert.IsTrue(!(fullPaths[k].Equals(badPaths[j])), j.ToString() + "<>" + k.ToString());
-                }
+                    Assert.IsTrue(!(fullPaths[k].Equals(badPaths[j])), j + "<>" + k);
             }
         }
-
     }
 }

@@ -37,7 +37,9 @@ namespace NPOI.POIFS.Properties
 {
     public class RootProperty:DirectoryProperty
     {
-        public RootProperty():base("Root Entry")
+        private const string NAME = "Root Entry";
+
+        public RootProperty():base(NAME)
         {
             this.NodeColor=_NODE_BLACK;
             this.PropertyType=PropertyConstants.ROOT_TYPE;

@@ -242,7 +242,9 @@ namespace TestCases.HPSF.Basic
             file.Position = 0;
 
             POIFSReader reader1 = new POIFSReader();
-            reader1.StreamReaded += new POIFSReaderEventHandler(reader1_StreamReaded);
+            //reader1.StreamReaded += new POIFSReaderEventHandler(reader1_StreamReaded);
+            POIFSReaderListener1 psl = new POIFSReaderListener1();
+            reader1.RegisterListener(psl);
             reader1.Read(file);
             Assert.IsNotNull(psa[0]);
             Assert.IsTrue(psa[0].IsSummaryInformation);
@@ -254,16 +256,18 @@ namespace TestCases.HPSF.Basic
             Assert.AreEqual(TITLE, p2);
             file.Close();
         }
-
-        void reader1_StreamReaded(object sender, POIFSReaderEventArgs e)
+        private class POIFSReaderListener1 : POIFSReaderListener
         {
-            try
+            public void ProcessPOIFSReaderEvent(POIFSReaderEvent e)
             {
-                psa[0] = PropertySetFactory.Create(e.Stream);
-            }
-            catch (Exception ex)
-            {
-                Assert.Fail(ex.Message);
+                try
+                {
+                    psa[0] = PropertySetFactory.Create(e.Stream);
+                }
+                catch (Exception ex)
+                {
+                    Assert.Fail(ex.Message);
+                }
             }
         }
 
@@ -310,7 +314,9 @@ namespace TestCases.HPSF.Basic
             /* Read the POIFS: */
             psa = new PropertySet[1];
             POIFSReader reader2 = new POIFSReader();
-            reader2.StreamReaded += new POIFSReaderEventHandler(reader2_StreamReaded);
+            //reader2.StreamReaded += new POIFSReaderEventHandler(reader2_StreamReaded);
+            POIFSReaderListener2 prl = new POIFSReaderListener2();
+            reader2.RegisterListener(prl);
             reader2.Read(file);
             Assert.IsNotNull(psa[0]);
             Section s = (Section)(psa[0].Sections[0]);
@@ -324,21 +330,28 @@ namespace TestCases.HPSF.Basic
             file.Close();
             //File.Delete(dataDir + POI_FS);
         }
-
-        void reader2_StreamReaded(object sender, POIFSReaderEventArgs e)
+        private class POIFSReaderListener2 : POIFSReaderListener
         {
-            try
+            #region POIFSReaderListener ≥…‘±
+
+            public void ProcessPOIFSReaderEvent(POIFSReaderEvent evt)
             {
-                psa[0] = PropertySetFactory.Create(e.Stream);
+                try
+                    {
+                        psa[0] = PropertySetFactory.Create(evt.Stream);
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new RuntimeException(ex.Message);
+                        /* FIXME (2): Replace the previous line by the following
+                         * one once we no longer need JDK 1.3 compatibility. */
+                        // throw new RuntimeException(ex);
+                    }
             }
-            catch
-            {
-                throw;
-                /* FIXME (2): Replace the previous line by the following
-                 * one once we no longer need JDK 1.3 compatibility. */
-                // throw new RuntimeException(ex);
-            }
+
+            #endregion
         }
+        
 
 
 
@@ -640,7 +653,8 @@ namespace TestCases.HPSF.Basic
             for (int i = 0; i < files.Length; i++)
             {
                 if (files[i].EndsWith("1")
-                    || files[i].EndsWith("TestHPSFWritingFunctionality.doc"))
+                    || files[i].EndsWith("TestHPSFWritingFunctionality.doc")
+                    || files[i].EndsWith("excel_with_embeded.xls"))
                     continue;
 
                 TestRecreate(_samples.GetFile(new FileInfo(files[i]).Name));
@@ -672,7 +686,7 @@ namespace TestCases.HPSF.Basic
             for (int i = 0; i < psf1.Length; i++)
             {
                 Stream in1 =
-                    new MemoryStream(psf1[i].GetBytes());
+                    new ByteArrayInputStream(psf1[i].GetBytes());
                 PropertySet psIn = PropertySetFactory.Create(in1);
                 MutablePropertySet psOut = new MutablePropertySet(psIn);
                 MemoryStream psStream =
@@ -680,7 +694,7 @@ namespace TestCases.HPSF.Basic
                 psOut.Write(psStream);
                 psStream.Close();
                 byte[] streamData = psStream.ToArray();
-                poiFs.CreateDocument(new MemoryStream(streamData),
+                poiFs.CreateDocument(new ByteArrayInputStream(streamData),
                                      psf1[i].GetName());
                 poiFs.WriteFileSystem(out1);
             }
@@ -692,8 +706,8 @@ namespace TestCases.HPSF.Basic
             {
                 byte[] bytes1 = psf1[i].GetBytes();
                 byte[] bytes2 = psf2[i].GetBytes();
-                Stream in1 = new MemoryStream(bytes1);
-                Stream in2 = new MemoryStream(bytes2);
+                Stream in1 = new ByteArrayInputStream(bytes1);
+                Stream in2 = new ByteArrayInputStream(bytes2);
                 PropertySet ps1 = PropertySetFactory.Create(in1);
                 PropertySet ps2 = PropertySetFactory.Create(in2);
 
@@ -736,7 +750,7 @@ namespace TestCases.HPSF.Basic
             POIFile[] psf = Util.ReadPropertySets(copy);
             Assert.AreEqual(1, psf.Length);
             byte[] bytes = psf[0].GetBytes();
-            Stream in1 = new MemoryStream(bytes);
+            Stream in1 = new ByteArrayInputStream(bytes);
             PropertySet ps2 = PropertySetFactory.Create(in1);
 
             /* Check if the result is a DocumentSummaryInformation stream, as

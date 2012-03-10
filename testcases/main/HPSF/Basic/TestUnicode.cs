@@ -22,6 +22,7 @@ namespace TestCases.HPSF.Basic
     using System.IO;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using NPOI.HPSF;
+    using NPOI.Util;
 
 
 
@@ -45,16 +46,6 @@ namespace TestCases.HPSF.Basic
 //        FileStream data;
         //POIFile[] poiFiles;
 
-
-
-        /**
-         * Constructor
-         * 
-         * @param name the Test case's name
-         */
-        public TestUnicode()
-        { 
-        }
 
         //[TestInitialize]
         //public void Setup()
@@ -80,10 +71,10 @@ namespace TestCases.HPSF.Basic
             using (FileStream data = samples.GetFile(POI_FS))
             {
 
-                POIFile poiFile = Util.ReadPOIFiles(data, POI_FILES)[1];
+                POIFile poiFile = Util.ReadPOIFiles(data, POI_FILES)[0];
                 byte[] b = poiFile.GetBytes();
                 PropertySet ps =
-                    PropertySetFactory.Create(new MemoryStream(b));
+                    PropertySetFactory.Create(new ByteArrayInputStream(b));
                 Assert.IsTrue(ps.IsDocumentSummaryInformation, "IsDocumentSummaryInformation");
                 Assert.AreEqual(ps.SectionCount, 2);
                 Section s = (Section)ps.Sections[1];

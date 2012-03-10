@@ -270,16 +270,26 @@
     <Compile Include="HSSF\Record\CodepageRecord.cs" />
     <Compile Include="HSSF\Record\ColumnInfoRecord.cs" />
     <Compile Include="POIFS\FileSystem\BlockStore.cs" />
-    <Compile Include="POIFS\FileSystem\POIFSDocument.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="POIFS\FileSystem\CloseIgnoringInputStream.cs" />
+    <Compile Include="POIFS\FileSystem\DocumentInputStream.cs" />
+    <Compile Include="POIFS\FileSystem\DocumentOutputStream.cs" />
+    <Compile Include="POIFS\FileSystem\NDocumentInputStream.cs" />
+    <Compile Include="POIFS\FileSystem\NPOIFSDocument.cs" />
+    <Compile Include="POIFS\FileSystem\NPOIFSFileSystem.cs" />
+    <Compile Include="POIFS\FileSystem\NPOIFSMiniStore.cs" />
+    <Compile Include="POIFS\FileSystem\NPOIFSStream.cs" />
+    <Compile Include="POIFS\FileSystem\ODocumentInputStream.cs" />
+    <Compile Include="POIFS\FileSystem\POIFSWriterEventArgs.cs" />
     <Compile Include="POIFS\NIO\ByteArrayBackedDataSource.cs" />
+    <Compile Include="Util\ByteArrayInputStream.cs" />
+    <Compile Include="Util\ByteBuffer.cs" />
     <Compile Include="POIFS\NIO\FileBackedDataSource.cs" />
     <Compile Include="POIFS\NIO\DataSource.cs" />
+    <Compile Include="POIFS\property\NPropertyTable.cs" />
+    <Compile Include="POIFS\property\PropertyTableBase.cs" />
     <Compile Include="SS\Extractor\ExcelExtractor.cs" />
-    <Compile Include="SS\Format\CellDateFormatter.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="SS\Format\CellDateFormatter.cs" />
+    <Compile Include="POIFS\Storage\HeaderBlock.cs" />
     <Compile Include="SS\Format\CellElapsedFormatter.cs" />
     <Compile Include="SS\Format\CellFormat.cs">
       <SubType>Code</SubType>
@@ -453,11 +463,6 @@
     <Compile Include="POIFS\EventFileSystem\POIFSReaderRegistry.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="POIFS\EventFileSystem\POIFSWriterEvent.cs" />
-    <Compile Include="POIFS\EventFileSystem\POIFSWriterEventArgs.cs" />
-    <Compile Include="POIFS\EventFileSystem\POIFSWriterListener.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="POIFS\FileSystem\BATManaged.cs" />
     <Compile Include="SS\Formula\Eval\Forked\ForkedEvaluationCell.cs" />
     <Compile Include="SS\Formula\Eval\Forked\ForkedEvaluationSheet.cs" />
@@ -476,6 +481,7 @@
     <Compile Include="POIFS\FileSystem\OfficeXmlFileException.cs" />
     <Compile Include="POIFS\FileSystem\Ole10Native.cs" />
     <Compile Include="POIFS\FileSystem\Ole10NativeException.cs" />
+    <Compile Include="POIFS\FileSystem\POIFSDocument.cs" />
     <Compile Include="POIFS\FileSystem\POIFSDocumentPath.cs" />
     <Compile Include="POIFS\FileSystem\POIFSDocumentReader.cs" />
     <Compile Include="POIFS\FileSystem\POIFSDocumentWriter.cs" />

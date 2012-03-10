@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 10.00
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8FDCF703-E2BD-4EBC-820D-77AAB214E9DC}"
 	ProjectSection(SolutionItems) = preProject
 		LocalTestRun.testrunconfig = LocalTestRun.testrunconfig
-		NPOI.vsmdi = NPOI.vsmdi
+		NPOITest.vsmdi = NPOITest.vsmdi
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "testcases", "..\..\testcases\main\testcases.csproj", "{A920C2BA-8BFD-4F54-8401-7D1C0730F1F0}"
@@ -12,7 +12,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "main", "..\..\main\main.csp
 EndProject
 Global
 	GlobalSection(TestCaseManagementSettings) = postSolution
-		CategoryFile = NPOI.vsmdi
+		CategoryFile = NPOITest.vsmdi
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

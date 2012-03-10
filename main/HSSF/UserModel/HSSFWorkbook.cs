@@ -1825,7 +1825,7 @@ namespace NPOI.HSSF.UserModel
         /// Gets all embedded OLE2 objects from the Workbook.
         /// </summary>
         /// <returns>the list of embedded objects (a list of HSSFObjectData objects.)</returns>
-        public IList GetAllEmbeddedObjects()
+        public IList<HSSFObjectData> GetAllEmbeddedObjects()
         {
             List<HSSFObjectData> objects = new List<HSSFObjectData>();
             for (int i = 0; i < NumberOfSheets; i++)

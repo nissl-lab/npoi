@@ -66,5 +66,7 @@ namespace NPOI.POIFS.Storage
         /// </summary>
         /// <value>the associated BlockAllocationTable</value>
         BlockAllocationTableReader BAT { set; }
+
+        int BlockCount();
     }
 }

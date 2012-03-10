@@ -25,6 +25,7 @@ namespace TestCases.HPSF.Basic
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using NPOI.HPSF;
     using NPOI.POIFS.EventFileSystem;
+    using NPOI.Util;
 
 
 
@@ -119,7 +120,16 @@ namespace TestCases.HPSF.Basic
         {
             files = new ArrayList();
             POIFSReader reader1 = new POIFSReader();
-            reader1.StreamReaded += new POIFSReaderEventHandler(reader1_StreamReaded);
+            //reader1.StreamReaded += new POIFSReaderEventHandler(reader1_StreamReaded);
+            POIFSReaderListener pfl = new POIFSReaderListener0();
+            if (poiFiles == null)
+                /* Register the listener for all POI files. */
+                reader1.RegisterListener(pfl);
+            else
+                /* Register the listener for the specified POI files
+                 * only. */
+                for (int i = 0; i < poiFiles.Length; i++)
+                    reader1.RegisterListener(pfl, poiFiles[i]);
 
             /* Read the POI filesystem. */
             reader1.Read(poiFs);
@@ -128,27 +138,34 @@ namespace TestCases.HPSF.Basic
                 result[i] = (POIFile)files[i];
             return result;
         }
-
-        static void reader1_StreamReaded(object sender, POIFSReaderEventArgs e)
+        private class POIFSReaderListener0 : POIFSReaderListener
         {
-            try
+            #region POIFSReaderListener 成员
+
+            public void ProcessPOIFSReaderEvent(POIFSReaderEvent evt)
             {
-                POIFile f = new POIFile();
-                f.SetName(e.Name);
-                f.SetPath(e.Path);
-                Stream in1 = e.Stream;
-                MemoryStream out1 =
-                    new MemoryStream();
-                Util.Copy(in1, out1);
-                out1.Close();
-                f.SetBytes(out1.ToArray());
-                files.Add(f);
+                try
+                {
+                    POIFile f = new POIFile();
+                    f.SetName(evt.Name);
+                    f.SetPath(evt.Path);
+                    MemoryStream out1 =
+                        new MemoryStream();
+                    Util.Copy(evt.Stream, out1);
+                    out1.Close();
+                    f.SetBytes(out1.ToArray());
+                    files.Add(f);
+                }
+                catch (IOException ex)
+                {
+                    throw new RuntimeException(ex.Message);
+                }
             }
-            catch (IOException)
-            {
-                throw;
-            }
+
+            #endregion
         }
+
+        
         static IList files;
         /**
          * Read all files from a POI filesystem which are property Set streams
@@ -170,8 +187,9 @@ namespace TestCases.HPSF.Basic
         {
             files = new ArrayList(7);
             POIFSReader reader2 = new POIFSReader();
-            reader2.StreamReaded += new POIFSReaderEventHandler(reader2_StreamReaded);
-
+            //reader2.StreamReaded += new POIFSReaderEventHandler(reader2_StreamReaded);
+            POIFSReaderListener pfl = new POIFSReaderListener1();
+            reader2.RegisterListener(pfl);
             /* Read the POI filesystem. */
             reader2.Read(poiFs);
             POIFile[] result = new POIFile[files.Count];
@@ -179,23 +197,37 @@ namespace TestCases.HPSF.Basic
                 result[i] = (POIFile)files[i];
             return result;
         }
-
-        static void reader2_StreamReaded(object sender, POIFSReaderEventArgs e)
+        private class POIFSReaderListener1:POIFSReaderListener
         {
-            POIFile f = new POIFile();
-            f.SetName(e.Name);
-            f.SetPath(e.Path);
-            Stream in1 = e.Stream;
-            if (PropertySet.IsPropertySetStream(in1))
+            #region POIFSReaderListener 成员
+
+            public void ProcessPOIFSReaderEvent(POIFSReaderEvent e)
             {
-                MemoryStream out1 =
-                    new MemoryStream();
-                Util.Copy(in1, out1);
-                out1.Close();
-                f.SetBytes(out1.ToArray());
-                files.Add(f);
+                try
+                {
+                    POIFile f = new POIFile();
+                    f.SetName(e.Name);
+                    f.SetPath(e.Path);
+                    Stream in1 = e.Stream;
+                    if (PropertySet.IsPropertySetStream(in1))
+                    {
+                        MemoryStream out1 =
+                            new MemoryStream();
+                        Util.Copy(in1, out1);
+                        out1.Close();
+                        f.SetBytes(out1.ToArray());
+                        files.Add(f);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    throw new RuntimeException(ex.Message);
+                }
             }
+
+            #endregion
         }
+
 
 
 

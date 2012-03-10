@@ -46,7 +46,7 @@ namespace TestCases.HSSF.UserModel
 
             //set POIFS properties after constructing HSSFWorkbook
             //(a piece of code that used to work up to POI 3.0.2)
-            SummaryInformation summary1 = (SummaryInformation)PropertySetFactory.Create(fs.CreatePOIFSDocumentReader(SummaryInformation.DEFAULT_STREAM_NAME));
+            SummaryInformation summary1 = (SummaryInformation)PropertySetFactory.Create(fs.CreateDocumentInputStream(SummaryInformation.DEFAULT_STREAM_NAME));
             summary1.Title=(title);
             //Write the modified property back to POIFS
             fs.Root.GetEntry(SummaryInformation.DEFAULT_STREAM_NAME).Delete();
@@ -58,7 +58,7 @@ namespace TestCases.HSSF.UserModel
             out1.Close();
 
             POIFSFileSystem fs2 = new POIFSFileSystem(new MemoryStream(out1.ToArray()));
-            SummaryInformation summary2 = (SummaryInformation)PropertySetFactory.Create(fs2.CreatePOIFSDocumentReader(SummaryInformation.DEFAULT_STREAM_NAME));
+            SummaryInformation summary2 = (SummaryInformation)PropertySetFactory.Create(fs2.CreateDocumentInputStream(SummaryInformation.DEFAULT_STREAM_NAME));
 
             //Assert.Failing assertion
             Assert.AreEqual(title, summary2.Title);
@@ -71,7 +71,7 @@ namespace TestCases.HSSF.UserModel
             POIFSFileSystem fs = new POIFSFileSystem(is1);
 
             //set POIFS properties before constructing HSSFWorkbook
-            SummaryInformation summary1 = (SummaryInformation)PropertySetFactory.Create(fs.CreatePOIFSDocumentReader(SummaryInformation.DEFAULT_STREAM_NAME));
+            SummaryInformation summary1 = (SummaryInformation)PropertySetFactory.Create(fs.CreateDocumentInputStream(SummaryInformation.DEFAULT_STREAM_NAME));
             summary1.Title = (title);
 
             fs.Root.GetEntry(SummaryInformation.DEFAULT_STREAM_NAME).Delete();
@@ -85,7 +85,7 @@ namespace TestCases.HSSF.UserModel
 
             //read the property
             POIFSFileSystem fs2 = new POIFSFileSystem(new MemoryStream(out1.ToArray()));
-            SummaryInformation summary2 = (SummaryInformation)PropertySetFactory.Create(fs2.CreatePOIFSDocumentReader(SummaryInformation.DEFAULT_STREAM_NAME));
+            SummaryInformation summary2 = (SummaryInformation)PropertySetFactory.Create(fs2.CreateDocumentInputStream(SummaryInformation.DEFAULT_STREAM_NAME));
             Assert.AreEqual(title, summary2.Title);
 
         }

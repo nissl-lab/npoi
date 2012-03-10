@@ -20,24 +20,25 @@ using System;
 using NPOI.Util;
 namespace NPOI.POIFS.NIO
 {
-    /**
-     * A POIFS {@link DataSource} backed by a File
-     */
-    public class FileBackedDataSource : DataSource, IDisposable
+    /// <summary>
+    /// A POIFS DataSource backed by a File
+    /// </summary>
+    public class FileBackedDataSource : DataSource
     {
-        private FileStream fileStream = null;
-
-        public FileBackedDataSource(string file)
-        {
-            if (!File.Exists(file))
+        private Stream fileStream;
+        public FileBackedDataSource(FileInfo file)
             {
-                throw new FileNotFoundException(file);
+            if (file.Exists)
+                throw new FileNotFoundException(file.FullName);
             }
-            this.fileStream = new FileStream(file, FileMode.Open);
-        }
-        public FileBackedDataSource(FileStream channel)
+
+        public FileBackedDataSource(FileStream stream)
         {
-            this.fileStream = channel;
+            stream.Position = 0;
+            byte[] temp = new byte[stream.Length];
+            stream.Read(temp, 0, (int)stream.Length);
+            MemoryStream ms = new MemoryStream(temp, 0, temp.Length);
+            fileStream = ms;
         }
 
         #region IDisposable Members
@@ -73,25 +74,20 @@ namespace NPOI.POIFS.NIO
         /// <param name="length"></param>
         /// <param name="position">The file position at which the transfer is to begin;</param>
         /// <returns></returns>
-        public override MemoryStream Read(int length, long position)
+        public override ByteBuffer Read(int length, long position)
         {
             if (position >= Size)
-            {
                 throw new ArgumentException("Position " + position + " past the end of the file");
-            }
 
             // Read
             fileStream.Position = position;
-            byte[] buffer = new byte[length];
-            int worked = IOUtils.ReadFully(fileStream, buffer);
+            ByteBuffer dst = ByteBuffer.CreateBuffer(length);
 
+            int worked = IOUtils.ReadFully(fileStream, dst.Buffer);
             // Check
-            if (worked == -1)
-            {
+            if(worked == -1)
                 throw new ArgumentException("Position " + position + " past the end of the file");
-            }
-            MemoryStream dst = new MemoryStream(buffer);
-            // Ready it for reading
+
             dst.Position = 0;
 
             // All done
@@ -104,32 +100,22 @@ namespace NPOI.POIFS.NIO
         /// <param name="src">The Stream from which bytes are to be transferred</param>
         /// <param name="position">The file position at which the transfer is to begin;
         /// must be non-negative</param>
-        public override void Write(MemoryStream src, long position)
+        public override void  Write(ByteBuffer src, long position)
         {
-            src.Seek(0, SeekOrigin.Begin);
-            byte[] buffer = src.GetBuffer();
-            fileStream.Position = position;
-            fileStream.Write(buffer, 0, buffer.Length);
+            fileStream.Write(src.Buffer, (int)position, src.Length);
         }
 
         public override void CopyTo(Stream stream)
         {
-            // Wrap the OutputSteam as a channel
-            //WritableByteChannel out = Channels.newChannel(stream);
-            // Now do the transfer
-            //channel.transferTo(0, channel.size(), out);
-            fileStream.Position = 0;
-            byte[] buffer = new byte[fileStream.Length];
-            fileStream.Read(buffer, 0, buffer.Length);
-            stream.Write(buffer, 0, buffer.Length);
+            byte[] tempBuffer = new byte[stream.Length];
+            stream.Write(tempBuffer, 0, tempBuffer.Length);
+
+            fileStream.Write(tempBuffer, 0, tempBuffer.Length);
         }
 
         public override long Size
         {
-            get
-            {
-                return fileStream.Length;
-            }
+            get { return fileStream.Length; }
         }
 
         public override void Close()

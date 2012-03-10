@@ -17,6 +17,7 @@
 ==================================================================== */
    
 using System;
+using System.Text;
 using System.Collections;
 using NPOI.POIFS.FileSystem;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -36,28 +37,14 @@ public class TestPOIFSReaderRegistry
     };
     private POIFSDocumentPath[]   paths     =
     {
-        new POIFSDocumentPath(), new POIFSDocumentPath(new String[]
-        {
-            "a"
-        }), new POIFSDocumentPath(new String[]
-        {
-            "b"
-        }), new POIFSDocumentPath(new String[]
-        {
-            "c"
-        })
-    };
-    private String[]              names     =
-    {
-        "a0", "a1", "a2", "a3"
+            new POIFSDocumentPath(),
+            new POIFSDocumentPath(new string[] {"a"}),
+            new POIFSDocumentPath(new string[] {"b"}),
+            new POIFSDocumentPath(new string[]{"c"})
+
     };
 
-    /**
-     * Constructor TestPOIFSReaderRegistry
-     *
-     * @param name
-     */
-
+        private string[] names = { "a0","a1", "a2", "a3" };
     public TestPOIFSReaderRegistry()
     {
         
@@ -70,14 +57,11 @@ public class TestPOIFSReaderRegistry
     public void TestEmptyRegistry()
     {
         POIFSReaderRegistry registry = new POIFSReaderRegistry();
-
-        for (int j = 0; j < paths.Length; j++)
+            for (int i = 0; i < paths.Length; i++)
         {
-            for (int k = 0; k < names.Length; k++)
+                for (int j = 0; j < names.Length; j++)
             {
-                IEnumerator listeners = registry.GetListeners(paths[ j ],
-                                                           names[ k ]);
-
+                    IEnumerator listeners = registry.GetListeners(paths[i], names[j]);
                 Assert.IsTrue(!listeners.MoveNext());
             }
         }
@@ -91,16 +75,15 @@ public class TestPOIFSReaderRegistry
     {
         POIFSReaderRegistry registry = new POIFSReaderRegistry();
 
-        for (int j = 0; j < listeners.Length; j++)
+            for (int i = 0; i < listeners.Length; i++)
         {
-            for (int k = 0; k < paths.Length; k++)
+                for (int j = 0; j < paths.Length; j++)
             {
-                for (int n = 0; n < names.Length; n++)
+                    for (int k = 0; k < names.Length; k++)
                 {
-                    if ((j != k) && (k != n))
+                        if ((i != j) && (j != k))
                     {
-                        registry.RegisterListener(listeners[ j ], paths[ k ],
-                                                  names[ n ]);
+                            registry.RegisterListener(listeners[i], paths[j], names[k]);
                     }
                 }
             }
@@ -109,13 +92,10 @@ public class TestPOIFSReaderRegistry
         {
             for (int n = 0; n < names.Length; n++)
             {
-                IEnumerator listeners = registry.GetListeners(paths[ k ],
-                                                           names[ n ]);
+                    IEnumerator listeners = registry.GetListeners(paths[k], names[n]);
 
                 if (k == n)
-                {
                     Assert.IsTrue(!listeners.MoveNext());
-                }
                 else
                 {
                     ArrayList registeredListeners = new ArrayList();
@@ -124,48 +104,43 @@ public class TestPOIFSReaderRegistry
                     {
                         registeredListeners.Add(listeners.Current);
                     }
-                    Assert.AreEqual(this.listeners.Length - 1,
-                                 registeredListeners.Count);
+                        Assert.AreEqual(this.listeners.Length - 1, registeredListeners.Count);
                     for (int j = 0; j < this.listeners.Length; j++)
                     {
                         if (j == k)
-                        {
-                            Assert.IsTrue(!registeredListeners
-                                .Contains(this.listeners[ j ]));
-                        }
+                                Assert.IsTrue(!registeredListeners.Contains(this.listeners[j]));
                         else
-                        {
-                            Assert.IsTrue(registeredListeners
-                                .Contains(this.listeners[ j ]));
-                        }
+                                Assert.IsTrue(registeredListeners.Contains(this.listeners[j]));
                     }
+            
                 }
             }
         }
         for (int j = 0; j < listeners.Length; j++)
-        {
-            registry.RegisterListener(listeners[ j ]);
-        }
+                registry.RegisterListener(listeners[j]);
+
         for (int k = 0; k < paths.Length; k++)
         {
             for (int n = 0; n < names.Length; n++)
             {
-                IEnumerator listeners           =
-                    registry.GetListeners(paths[ k ], names[ n ]);
+                    IEnumerator listeners = registry.GetListeners(paths[k], names[n]);
+
                 ArrayList registeredListeners = new ArrayList();
 
                 while (listeners.MoveNext())
                 {
                     registeredListeners.Add(listeners.Current);
                 }
-                Assert.AreEqual(this.listeners.Length,
-                             registeredListeners.Count);
+
+                    Assert.AreEqual(this.listeners.Length, registeredListeners.Count);
+
                 for (int j = 0; j < this.listeners.Length; j++)
                 {
-                    Assert.IsTrue(registeredListeners
-                        .Contains(this.listeners[ j ]));
+                        Assert.IsTrue(registeredListeners.Contains(this.listeners[j]));
                 }
             }
         }
+        }
+
     }
 }

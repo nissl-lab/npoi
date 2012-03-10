@@ -57,6 +57,11 @@ namespace NPOI.POIFS.Storage
             }
         }
 
+        protected ListManagedBlock Get(int index)
+        {
+            return _blocks[index];
+        }
+
         /// <summary>
         /// Remove and return the specified block from the list
         /// </summary>
@@ -109,16 +114,34 @@ namespace NPOI.POIFS.Storage
         /// set the associated BlockAllocationTable
         /// </summary>
         /// <value>the associated BlockAllocationTable</value>
-        public BlockAllocationTableReader BAT
+        public virtual BlockAllocationTableReader BAT
         {
-            set{
+            set
+        {
                 if (_bat != null)
                 {
                     throw new IOException(
                         "Attempt to replace existing BlockAllocationTable");
                 }
-                _bat =value;
+                _bat = value;
             }
+        }
+
+        public virtual int BlockCount()
+        {
+            return _blocks.Length;
+        }
+
+        protected int RemainingBlocks()
+        {
+            int c = 0;
+            for (int i = 0; i < _blocks.Length; i++)
+            {
+                if (_blocks[i] != null)
+                    c++;
+            }
+
+            return c;
         }
     }
 }

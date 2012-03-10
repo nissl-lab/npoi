@@ -71,15 +71,15 @@ namespace TestCases.POIFS.FileSystem
         public void TestWrite1()
         {
             MemoryStream stream = new MemoryStream();
-            POIFSDocumentWriter dstream = new POIFSDocumentWriter(stream, 25);
+            DocumentOutputStream dstream = new DocumentOutputStream(stream, 25);
 
             for (int j = 0; j < 25; j++)
             {
-                dstream.WriteByte((byte)j);
+                dstream.Write(j);
             }
             try
             {
-                dstream.WriteByte(0);
+                dstream.Write(0);
                 Assert.Fail("Should have caught IOException");
             }
             catch (IOException)
@@ -104,7 +104,7 @@ namespace TestCases.POIFS.FileSystem
         public void TestWrite2()
         {
             MemoryStream stream = new MemoryStream();
-            POIFSDocumentWriter dstream = new POIFSDocumentWriter(stream, 25);
+            DocumentOutputStream dstream = new DocumentOutputStream(stream, 25);
 
             for (int j = 0; j < 6; j++)
             {
@@ -152,7 +152,7 @@ namespace TestCases.POIFS.FileSystem
         public void TestWrite3()
         {
             MemoryStream stream = new MemoryStream();
-            POIFSDocumentWriter dstream = new POIFSDocumentWriter(stream, 25);
+            DocumentOutputStream dstream = new DocumentOutputStream(stream, 25);
             byte[] array = new byte[50];
 
             for (int j = 0; j < 50; j++)
@@ -187,15 +187,15 @@ namespace TestCases.POIFS.FileSystem
         public void TestWriteFiller()
         {
             MemoryStream stream = new MemoryStream();
-            POIFSDocumentWriter dstream = new POIFSDocumentWriter(stream, 25);
+            DocumentOutputStream dstream = new DocumentOutputStream(stream, 25);
 
             for (int j = 0; j < 25; j++)
             {
-                dstream.WriteByte((byte)j);
+                dstream.Write(j);
             }
             try
             {
-                dstream.WriteByte(0);
+                dstream.Write(0);
                 Assert.Fail("Should have caught IOException");
             }
             catch (IOException )

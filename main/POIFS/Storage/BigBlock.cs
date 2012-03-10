@@ -27,7 +27,7 @@
 
 using System;
 using System.IO;
-
+using NPOI.POIFS.Common;
 namespace NPOI.POIFS.Storage
 {
     /// <summary>
@@ -40,6 +40,17 @@ namespace NPOI.POIFS.Storage
     /// </summary>
     public abstract class BigBlock : BlockWritable
     {
+
+        protected POIFSBigBlockSize bigBlockSize;
+
+        protected BigBlock()
+        {
+        }
+
+        protected BigBlock(POIFSBigBlockSize bigBlockSize)
+        {
+            this.bigBlockSize = bigBlockSize;
+        }
         /// <summary>
         /// Default implementation of write for extending classes that
         /// contain their data in a simple array of bytes.
@@ -63,7 +74,7 @@ namespace NPOI.POIFS.Storage
         /// Write the storage to an OutputStream
         /// </summary>
         /// <param name="stream">the OutputStream to which the stored data should be written </param>
-        internal abstract void WriteData(Stream stream);
+        public abstract void WriteData(Stream stream);
 
     }
 

@@ -40,17 +40,9 @@ namespace TestCases.POIFS.FileSystem
         // keys are DocumentDescriptors, values are byte[]s
         private Hashtable dataMap;
 
-        /**
-         * Constructor ReaderWriter
-         *
-         *
-         * @param filesystem
-         *
-         */
-
-        ReaderWriter(POIFSFileSystem filesystem)
+        public ReaderWriter(POIFSFileSystem fileSystem)
         {
-            this.filesystem = filesystem;
+            this.filesystem = fileSystem;
             root = this.filesystem.Root;
             dataMap = new Hashtable();
         }
@@ -94,13 +86,13 @@ namespace TestCases.POIFS.FileSystem
                     {
                         nextEntry = entry.GetEntry(componentName);
                     }
-                    catch (FileNotFoundException ignored)
+                    catch (FileNotFoundException)
                     {
                         try
                         {
                             nextEntry = entry.CreateDirectory(componentName);
                         }
-                        catch (IOException e)
+                        catch (IOException)
                         {
                             Console.WriteLine("Unable to Create directory");
                             //e.printStackTrace();
@@ -111,7 +103,7 @@ namespace TestCases.POIFS.FileSystem
                 }
                 entry.CreateDocument(name, size, this);
             }
-            catch (IOException ignored)
+            catch (IOException)
             {
             }
         }
@@ -137,7 +129,7 @@ namespace TestCases.POIFS.FileSystem
                                    + evt.Limit + " bytes)");
                 evt.Stream.Write((byte[])dataMap[descriptor]);
             }
-            catch (IOException e)
+            catch (IOException)
             {
                 Console.WriteLine("Unable to Write document");
                 //e.printStackTrace();

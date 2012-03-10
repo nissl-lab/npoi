@@ -22,7 +22,7 @@
  * Author's Blog: tonyqus.wordpress.com.cn (wp.tonyqus.cn)
  * HomePage: http://www.codeplex.com/npoi
  * Contributors:
- * 
+ * Leon Wang
  * ==============================================================*/
 
 
@@ -44,6 +44,9 @@ using NPOI.POIFS.Storage;
 
 namespace TestCases.POIFS.FileSystem
 {
+    /// <summary>
+    /// Summary description for TestDirectoryNode
+    /// </summary>
     [TestClass]
     public class TestDirectoryNode
     {
@@ -71,8 +74,7 @@ namespace TestCases.POIFS.FileSystem
             DirectoryProperty property1 = new DirectoryProperty("parent");
             DirectoryProperty property2 = new DirectoryProperty("child");
             DirectoryNode parent = new DirectoryNode(property1, fs, null);
-            DirectoryNode node = new DirectoryNode(property2, fs,
-                                              parent);
+            DirectoryNode node = new DirectoryNode(property2, fs, parent);
 
             Assert.AreEqual(0, parent.Path.Length);
             Assert.AreEqual(1, node.Path.Length);
@@ -85,7 +87,6 @@ namespace TestCases.POIFS.FileSystem
             while (iter.MoveNext())
             {
                 count++;
-                //iter.Current;
             }
             Assert.AreEqual(0, count);
 
@@ -134,8 +135,7 @@ namespace TestCases.POIFS.FileSystem
             property1.AddChild(property2);
             property1.AddChild(new DocumentProperty("child2", 2000));
             property2.AddChild(new DocumentProperty("child3", 30000));
-            DirectoryNode node = new DirectoryNode(property1,
-                                                    new POIFSFileSystem(), null);
+            DirectoryNode node = new DirectoryNode(property1, new POIFSFileSystem(), null);
 
             // Verify that GetEntries behaves correctly
             int count = 0;
@@ -164,7 +164,7 @@ namespace TestCases.POIFS.FileSystem
                 node.GetEntry("child3");
                 Assert.Fail("Should have caught FileNotFoundException");
             }
-            catch (FileNotFoundException )
+            catch (FileNotFoundException)
             {
 
                 // as expected
@@ -194,25 +194,29 @@ namespace TestCases.POIFS.FileSystem
             POIFSFileSystem fs = new POIFSFileSystem();
             DirectoryEntry root = fs.Root;
 
-            // Verify cannot Delete the root directory
-            Assert.IsTrue(!root.Delete());
+            Assert.IsFalse(root.Delete());
+            Assert.IsTrue(root.IsEmpty);
+
             DirectoryEntry dir = fs.CreateDirectory("myDir");
 
-            Assert.IsTrue(!root.IsEmpty);
+            Assert.IsFalse(root.IsEmpty);
+            Assert.IsTrue(dir.IsEmpty);
 
+            Assert.IsFalse(root.Delete());
             // Verify can Delete empty directory
             Assert.IsTrue(dir.Delete());
             dir = fs.CreateDirectory("NextDir");
-            DocumentEntry doc =
-                dir.CreateDocument("foo",
-                                   new MemoryStream(new byte[1]));
+            DocumentEntry doc = dir.CreateDocument("foo", new MemoryStream(new byte[1]));
 
-            Assert.IsTrue(!dir.IsEmpty);
+            Assert.IsFalse(root.IsEmpty);
+            Assert.IsFalse(dir.IsEmpty);
+
+            Assert.IsFalse(dir.Delete());
 
             // Verify cannot Delete empty directory
             Assert.IsTrue(!dir.Delete());
             Assert.IsTrue(doc.Delete());
-
+            Assert.IsTrue(dir.IsEmpty);
             // Verify now we can Delete it
             Assert.IsTrue(dir.Delete());
             Assert.IsTrue(root.IsEmpty);

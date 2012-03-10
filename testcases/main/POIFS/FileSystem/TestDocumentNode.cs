@@ -79,7 +79,7 @@ namespace TestCases.POIFS.FileSystem
             POIFSDocument document = new POIFSDocument("document", rawBlocks,
                                              2000);
             DocumentProperty property2 = document.DocumentProperty;
-            DirectoryNode parent = new DirectoryNode(property1, null, null);
+            DirectoryNode parent = new DirectoryNode(property1, (POIFSFileSystem)null, null);
             DocumentNode node = new DocumentNode(property2, parent);
 
             // Verify we can retrieve the document

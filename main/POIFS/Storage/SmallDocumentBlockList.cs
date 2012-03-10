@@ -45,7 +45,7 @@ namespace NPOI.POIFS.Storage
         /// <param name="blocks">a list of SmallDocumentBlock instances</param>
         public SmallDocumentBlockList(List<SmallDocumentBlock> blocks)
         {
-            this.SetBlocks((ListManagedBlock[])blocks.ToArray());
+            SetBlocks((ListManagedBlock[])blocks.ToArray());
         }
     }
 }

@@ -17,6 +17,9 @@
 
 using System.IO;
 using System;
+using System.Collections;
+using NPOI.Util;
+
 namespace NPOI.POIFS.NIO
 {
     /// <summary>
@@ -36,8 +39,7 @@ namespace NPOI.POIFS.NIO
             : this(data, data.Length)
         {
         }
-
-        public override MemoryStream Read(int length, long position)
+        public override ByteBuffer Read(int length, long position)
         {
             if (position >= size)
             {
@@ -48,20 +50,22 @@ namespace NPOI.POIFS.NIO
             }
 
             int toRead = (int)Math.Min(length, size - position);
-            return new MemoryStream(buffer, (int)position, toRead);
+            return ByteBuffer.CreateBuffer(buffer, (int)position, toRead);
+
         }
 
-        public override void Write(MemoryStream src, long position)
+
+        public override void Write(ByteBuffer src, long position)
         {
-            // Extend if needed
             long endPosition = position + src.Length;
+
             if (endPosition > buffer.Length)
             {
                 Extend(endPosition);
             }
 
             // Now copy
-            src.Read(buffer, (int)position, (int)src.Length);
+            src.Read(buffer, (int)position, src.Length);
 
             // Update size if needed
             if (endPosition > size)
@@ -82,7 +86,6 @@ namespace NPOI.POIFS.NIO
             {
                 difference = 4096;
             }
-
             byte[] nb = new byte[(int)(difference + buffer.Length)];
             Array.Copy(buffer, 0, nb, 0, (int)size);
             buffer = nb;

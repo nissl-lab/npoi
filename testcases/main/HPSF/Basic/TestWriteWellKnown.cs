@@ -48,18 +48,6 @@ namespace TestCases.HPSF.Basic
         private static String POI_FS = "TestWriteWellKnown.doc";
 
         /**
-         * Constructor
-         * 
-         * @param name the Test case's name
-         */
-        public TestWriteWellKnown()
-        {
-
-        }
-
-
-
-        /**
          * @see TestCase#SetUp()
          */
         public void SetUp()
@@ -121,7 +109,7 @@ namespace TestCases.HPSF.Basic
                      */
                     if (dsiEntry != null)
                     {
-                        POIFSDocumentReader dis = new POIFSDocumentReader(dsiEntry);
+                        DocumentInputStream dis = new DocumentInputStream(dsiEntry);
                         PropertySet ps = new PropertySet(dis);
                         DocumentSummaryInformation dsi = new DocumentSummaryInformation(ps);
 
@@ -236,10 +224,10 @@ namespace TestCases.HPSF.Basic
              * explicitly (overwriting the former contents). Then the POI filesystem
              * should be saved to a file.
              */
-            POIFSDocumentReader dis = new POIFSDocumentReader(siEntry);
+            DocumentInputStream dis = new DocumentInputStream(siEntry);
             PropertySet ps = new PropertySet(dis);
             SummaryInformation si = new SummaryInformation(ps);
-            dis = new POIFSDocumentReader(dsiEntry);
+            dis = new DocumentInputStream(dsiEntry);
             ps = new PropertySet(dis);
             DocumentSummaryInformation dsi = new DocumentSummaryInformation(ps);
 
@@ -389,10 +377,10 @@ namespace TestCases.HPSF.Basic
                 siEntry = (DocumentEntry)dir.GetEntry(SummaryInformation.DEFAULT_STREAM_NAME);
                 dsiEntry = (DocumentEntry)dir.GetEntry(DocumentSummaryInformation.DEFAULT_STREAM_NAME);
 
-                dis = new POIFSDocumentReader(siEntry);
+                dis = new DocumentInputStream(siEntry);
                 ps = new PropertySet(dis);
                 si = new SummaryInformation(ps);
-                dis = new POIFSDocumentReader(dsiEntry);
+                dis = new DocumentInputStream(dsiEntry);
                 ps = new PropertySet(dis);
                 dsi = new DocumentSummaryInformation(ps);
 
@@ -519,10 +507,10 @@ namespace TestCases.HPSF.Basic
                     siEntry = (DocumentEntry)dir.GetEntry(SummaryInformation.DEFAULT_STREAM_NAME);
                     dsiEntry = (DocumentEntry)dir.GetEntry(DocumentSummaryInformation.DEFAULT_STREAM_NAME);
 
-                    dis = new POIFSDocumentReader(siEntry);
+                    dis = new DocumentInputStream(siEntry);
                     ps = new PropertySet(dis);
                     si = new SummaryInformation(ps);
-                    dis = new POIFSDocumentReader(dsiEntry);
+                    dis = new DocumentInputStream(dsiEntry);
                     ps = new PropertySet(dis);
                     dsi = new DocumentSummaryInformation(ps);
 
@@ -606,7 +594,7 @@ namespace TestCases.HPSF.Basic
             DocumentSummaryInformation dsi;
             if (dsiEntry != null)
             {
-                POIFSDocumentReader dis = new POIFSDocumentReader(dsiEntry);
+                DocumentInputStream dis = new DocumentInputStream(dsiEntry);
                 PropertySet ps = new PropertySet(dis);
                 dsi = new DocumentSummaryInformation(ps);
             }

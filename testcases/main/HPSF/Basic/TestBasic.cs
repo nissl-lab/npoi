@@ -123,7 +123,7 @@ namespace TestCases.HPSF.Basic
             };
             for (int i = 0; i < expected.Length; i++)
             {
-                Stream in1 = new MemoryStream(poiFiles[i].GetBytes());
+                Stream in1 = new ByteArrayInputStream(poiFiles[i].GetBytes());
                 Object o;
                 try
                 {
@@ -160,7 +160,7 @@ namespace TestCases.HPSF.Basic
             {
                 byte[] b = poiFiles[i].GetBytes();
                 PropertySet ps =
-                    PropertySetFactory.Create(new MemoryStream(b));
+                    PropertySetFactory.Create(new ByteArrayInputStream(b));
                 Assert.AreEqual(ps.ByteOrder, BYTE_ORDER);
                 Assert.AreEqual(ps.Format, FORMAT);
                 Assert.AreEqual(ps.OSVersion, OS_VERSION);
@@ -189,7 +189,7 @@ namespace TestCases.HPSF.Basic
         public void TestSectionMethods()
         {
             SummaryInformation si = (SummaryInformation)
-                PropertySetFactory.Create(new MemoryStream
+                PropertySetFactory.Create(new ByteArrayInputStream
                     (poiFiles[0].GetBytes()));
             IList sections = si.Sections;
             Section s = (Section)sections[0];

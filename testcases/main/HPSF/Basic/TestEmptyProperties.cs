@@ -21,6 +21,7 @@ namespace TestCases.HPSF.Basic
     using System.IO;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using NPOI.HPSF;
+    using NPOI.Util;
 
     /**
      * Test case for OLE2 files with empty properties. An empty property's type
@@ -102,7 +103,7 @@ namespace TestCases.HPSF.Basic
             };
             for (int i = 0; i < expected.Length; i++)
             {
-                Stream in1 = new MemoryStream(poiFiles[i].GetBytes());
+                Stream in1 = new ByteArrayInputStream(poiFiles[i].GetBytes());
                 Object o;
                 try
                 {
@@ -136,7 +137,7 @@ namespace TestCases.HPSF.Basic
         {
             byte[] b = poiFiles[1].GetBytes();
             PropertySet ps =
-                PropertySetFactory.Create(new MemoryStream(b));
+                PropertySetFactory.Create(new ByteArrayInputStream(b));
             SummaryInformation s = (SummaryInformation)ps;
             Assert.IsNull(s.Title);
             Assert.IsNull(s.Subject);

@@ -45,8 +45,7 @@ namespace NPOI.POIFS.Properties
     {
         private const byte   _default_fill             = ( byte ) 0x00;
         private const int    _name_size_offset         = 0x40;
-        private const int    _max_name_length          =
-                (_name_size_offset / LittleEndianConsts.SHORT_SIZE) - 1;
+        private const int _max_name_length = (_name_size_offset / LittleEndianConsts.SHORT_SIZE) - 1;
 
         protected const int  _NO_INDEX                 = -1;
 
@@ -69,7 +68,7 @@ namespace NPOI.POIFS.Properties
         protected const byte _NODE_RED                 = 0;
 
         // documents must be at least this size to be stored in big blocks
-        private const int    _big_block_minimum_bytes  = 4096;
+        private const int _big_block_minimum_bytes = POIFSConstants.BIG_BLOCK_MINIMUM_DOCUMENT_SIZE;   //4096;
         private String              _name;
         private ShortField          _name_size;
         private ByteField           _property_type;
@@ -136,8 +135,7 @@ namespace NPOI.POIFS.Properties
         protected Property(int index, byte [] array, int offset)
         {
             _raw_data = new byte[ POIFSConstants.PROPERTY_SIZE ];
-            System.Array.Copy(array, offset, _raw_data, 0,
-                             POIFSConstants.PROPERTY_SIZE);
+            System.Array.Copy(array, offset, _raw_data, 0, POIFSConstants.PROPERTY_SIZE);
             _name_size         = new ShortField(_name_size_offset, _raw_data);
             _property_type     =
                 new ByteField(PropertyConstants.PROPERTY_TYPE_OFFSET, _raw_data);
@@ -291,15 +289,14 @@ namespace NPOI.POIFS.Properties
                 _storage_clsid = value;
                 if (value == null)
                 {
-                    for (int i = 0x4f; i < 0x60; i++)
-                    {
-                        this._raw_data[i] = 0;
-                    }
+                    for (int i = _storage_clsid_offset; i < _storage_clsid_offset + ClassID.LENGTH; i++)
+                        _raw_data[i] = (byte)0;
                 }
                 else
                 {
-                    value.Write(this._raw_data, 80);
+                    value.Write(_raw_data, _storage_clsid_offset);
                 }
+               
             }
         }
         /// <summary>
@@ -320,7 +317,8 @@ namespace NPOI.POIFS.Properties
         /// <value>the node color (red or black)</value>
         public byte NodeColor
         {
-            set{
+            set
+            {
                 _node_color.Set(value, _raw_data);
             }
         }

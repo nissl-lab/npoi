@@ -18,13 +18,8 @@
 namespace NPOI.POIFS.FileSystem
 {
     using System;
-    using NPOI.Util;
     using System.IO;
-
-
-
-
-
+    using NPOI.Util;
 
     /**
      * Represents an Ole10Native record which is wrapped around certain binary
@@ -47,7 +42,7 @@ namespace NPOI.POIFS.FileSystem
         private int dataSize;                // 4 bytes (if space), size of following buffer
         private byte[] dataBuffer;        // varying size, the actual native data
         private short flags3;                // some flags? or zero terminators?, sometimes not there
-        public static String OLE10_NATIVE = "\u0001Ole10Native";
+        public static String OLE10_NATIVE = "\x0001Ole10Native";
 
         /**
          * Creates an instance of this class from an embedded OLE Object. The OLE Object is expected
@@ -65,7 +60,7 @@ namespace NPOI.POIFS.FileSystem
 
             try
             {
-                poifs.Root.GetEntry("\u0001Ole10ItemName");
+                poifs.Root.GetEntry("\x0001Ole10ItemName");             
                 plain = true;
             }
             catch (FileNotFoundException)
@@ -73,7 +68,7 @@ namespace NPOI.POIFS.FileSystem
                 plain = false;
             }
 
-            POIFSDocumentReader dis = poifs.CreatePOIFSDocumentReader(OLE10_NATIVE);
+            DocumentInputStream dis = poifs.CreateDocumentInputStream(OLE10_NATIVE);
             using (MemoryStream bos = new MemoryStream())
             {
                 IOUtils.Copy(dis, bos);

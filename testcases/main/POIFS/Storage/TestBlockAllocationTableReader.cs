@@ -1111,9 +1111,9 @@ namespace TestCases.POIFS.Storage
                 sbts[j] = new RawDataBlock(sbt_input);
             }
             SmallDocumentBlockList small_blocks =
-                new SmallDocumentBlockList(SmallDocumentBlock.Extract((ListManagedBlock[])sbts));
+                new SmallDocumentBlockList(SmallDocumentBlock.Extract(POIFSConstants.SMALLER_BIG_BLOCK_SIZE_DETAILS, (ListManagedBlock[])sbts));
             BlockAllocationTableReader sbat =
-                new BlockAllocationTableReader((ListManagedBlock[])sbats, small_blocks);
+                new BlockAllocationTableReader(POIFSConstants.SMALLER_BIG_BLOCK_SIZE_DETAILS, (ListManagedBlock[])sbats, small_blocks);
             bool[] IsUsed =
         {
             false, false, false, false, false, false, false, false, false,
@@ -1207,13 +1207,9 @@ namespace TestCases.POIFS.Storage
                 list.CreateNewBATBlock(j * 128);
             }
             list.Fill(132);
-            int[] blocks =
-        {
-            2, 3
-        };
-            BlockAllocationTableReader table =
-                new BlockAllocationTableReader(130, blocks, 2, 0, list);
-
+            int[] blocks = { 2,3 };
+            BlockAllocationTableReader table = new BlockAllocationTableReader(
+                                    POIFSConstants.SMALLER_BIG_BLOCK_SIZE_DETAILS, 130, blocks, 2, 0, list);
             for (int i = 0; i < (130 * 128); i++)
             {
                 if (i % 256 == 0)
@@ -1310,20 +1306,12 @@ namespace TestCases.POIFS.Storage
             LittleEndian.PutInt(data, offset, -2);
             list.Add(new RawDataBlock(new MemoryStream(data)));
             list.Fill(1);
-            int[] blocks =
-        {
-            0
-        };
+            int[] blocks = { 0 };
+
             BlockAllocationTableReader table =
-                new BlockAllocationTableReader(1, blocks, 0, -2, list);
-            int[] start_blocks =
-        {
-            -2, 1, 2, 3, 5, 7, 9, 11, 12
-        };
-            int[] expected_Length =
-        {
-            0, 1, -1, -1, -1, -1, -1, -1, 116
-        };
+                new BlockAllocationTableReader(POIFSConstants.SMALLER_BIG_BLOCK_SIZE_DETAILS,  1, blocks, 0, -2, list);
+            int[] start_blocks = { -2, 1, 2, 3, 5, 7, 9, 11, 12};
+            int[] expected_Length = { 0, 1, -1, -1, -1, -1, -1, -1, 116 };
 
             for (int j = 0; j < start_blocks.Length; j++)
             {

@@ -30,6 +30,7 @@ using System;
 using System.Text;
 using System.IO;
 using System.Collections;
+using System.Collections.Generic;
 
 using NPOI.POIFS.Common;
 using NPOI.POIFS.Storage;
@@ -46,47 +47,152 @@ namespace NPOI.POIFS.FileSystem
     /// </summary>
     public class POIFSDocument : BATManaged, BlockWritable, POIFSViewable
     {
-        private BigBlockStore _big_store;
+        private static DocumentBlock[] EMPTY_BIG_BLOCK_ARRAY = { };
+        private static SmallDocumentBlock[] EMPTY_SMALL_BLOCK_ARRAY = { };
+
         private DocumentProperty _property;
         private int _size;
+
+        private POIFSBigBlockSize _bigBigBlockSize;
         private SmallBlockStore _small_store;
 
+        private BigBlockStore _big_store;
+
+        public POIFSDocument(string name, RawDataBlock[] blocks, int length)
+        {
+            _size = length;
+            if (blocks.Length == 0)
+                _bigBigBlockSize = POIFSConstants.SMALLER_BIG_BLOCK_SIZE_DETAILS;
+            else
+            {
+                _bigBigBlockSize = (blocks[0].BigBlockSize == POIFSConstants.SMALLER_BIG_BLOCK_SIZE ?
+                    POIFSConstants.SMALLER_BIG_BLOCK_SIZE_DETAILS : POIFSConstants.LARGER_BIG_BLOCK_SIZE_DETAILS);
+            }
+
+            _big_store = new BigBlockStore(_bigBigBlockSize, ConvertRawBlocksToBigBlocks(blocks));
+            _property = new DocumentProperty(name, _size);
+            _small_store = new SmallBlockStore(_bigBigBlockSize, EMPTY_SMALL_BLOCK_ARRAY);
+            _property.Document = this;
+        }
+
+        private static DocumentBlock[] ConvertRawBlocksToBigBlocks(ListManagedBlock[] blocks)
+        {
+            DocumentBlock[] result = new DocumentBlock[blocks.Length];
+            for (int i = 0; i < result.Length; i++)
+                result[i] = new DocumentBlock((RawDataBlock)blocks[i]);
+            return result;
+        }
+
+        private static SmallDocumentBlock[] ConvertRawBlocksToSmallBlocks(ListManagedBlock[] blocks)
+        {
+            if (blocks is SmallDocumentBlock[])
+                return (SmallDocumentBlock[])blocks;
+            SmallDocumentBlock[] result = new SmallDocumentBlock[blocks.Length];
+            System.Array.Copy(blocks, 0, result, 0, blocks.Length);
+            return result;
+        }
+
+        public POIFSDocument(string name, SmallDocumentBlock[] blocks, int length)
+        {
+            _size = length;
+            if(blocks.Length == 0)
+                _bigBigBlockSize = POIFSConstants.SMALLER_BIG_BLOCK_SIZE_DETAILS;
+            else
+                _bigBigBlockSize = blocks[0].BigBlockSize;
+
+            _big_store = new BigBlockStore(_bigBigBlockSize, EMPTY_BIG_BLOCK_ARRAY);
+            _property = new DocumentProperty(name, _size);
+            _small_store = new SmallBlockStore(_bigBigBlockSize, blocks);
+            _property.Document = this;
+        }
+
+        public POIFSDocument(string name, POIFSBigBlockSize bigBlockSize, ListManagedBlock[] blocks, int length)
+        {
+            _size = length;
+            _bigBigBlockSize = bigBlockSize;
+            _property = new DocumentProperty(name, _size);
+            _property.Document = this;
+
+            if (Property.IsSmall(_size))
+            {
+                _big_store = new BigBlockStore(bigBlockSize, EMPTY_BIG_BLOCK_ARRAY);
+                _small_store = new SmallBlockStore(bigBlockSize, ConvertRawBlocksToSmallBlocks(blocks));
+            }
+            else
+            {
+                _big_store = new BigBlockStore(bigBlockSize, ConvertRawBlocksToBigBlocks(blocks));
+                _small_store = new SmallBlockStore(bigBlockSize, EMPTY_SMALL_BLOCK_ARRAY);
+            }
+        }
+
+        public POIFSDocument(string name, POIFSBigBlockSize bigBlockSize, Stream stream)
+        {
+            List<DocumentBlock> blocks = new List<DocumentBlock>();
+
+            _size = 0;
+            _bigBigBlockSize = bigBlockSize;
+            while (true)
+            {
+                DocumentBlock block = new DocumentBlock(stream, bigBlockSize);
+                int blockSize = block.Size;
+
+                if (blockSize > 0)
+                {
+                    blocks.Add(block);
+                    _size += blockSize;
+                }
+                if (block.PartiallyRead)
+                    break;
+            }
+
+            DocumentBlock[] bigBlocks = blocks.ToArray();
+            _big_store = new BigBlockStore(bigBlockSize, bigBlocks);
+            _property = new DocumentProperty(name, _size);
+            _property.Document = this;
+
+            if (_property.ShouldUseSmallBlocks)
+            {
+                _small_store = new SmallBlockStore(bigBlockSize, SmallDocumentBlock.Convert(bigBlockSize, bigBlocks, _size));
+                _big_store = new BigBlockStore(bigBlockSize, new DocumentBlock[0]);
+            }
+            else
+            {
+                _small_store = new SmallBlockStore(bigBlockSize, EMPTY_SMALL_BLOCK_ARRAY);
+        }
+
+        }
         /// <summary>
         /// Initializes a new instance of the <see cref="POIFSDocument"/> class.
         /// </summary>
         /// <param name="name">the name of the POIFSDocument</param>
         /// <param name="stream">the InputStream we read data from</param>
         public POIFSDocument(string name, Stream stream)
+            : this(name, POIFSConstants.SMALLER_BIG_BLOCK_SIZE_DETAILS, stream)
         {
-            DocumentBlock block;
-            IList list = new ArrayList();
-            this._size = 0;
-            do
+        }
+
+        public POIFSDocument(string name, int size, POIFSBigBlockSize bigBlockSize, POIFSDocumentPath path, POIFSWriterListener writer)
             {
-                block = new DocumentBlock(stream);
-                int size = block.Size;
-                if (size > 0)
-                {
-                    list.Add(block);
-                    this._size += size;
-                }
-            }
-            while (!block.PartiallyRead);
-            DocumentBlock[] blocks = (DocumentBlock[])((ArrayList)list).ToArray(typeof(DocumentBlock));
-            this._big_store = new BigBlockStore(this, blocks);
-            this._property = new DocumentProperty(name, this._size);
-            this._property.Document = this;
-            if (this._property.ShouldUseSmallBlocks)
+            _size = size;
+            _bigBigBlockSize = bigBlockSize;
+            _property = new DocumentProperty(name, _size);
+            _property.Document = this;
+            if (_property.ShouldUseSmallBlocks)
             {
-                this._small_store = new SmallBlockStore(this, SmallDocumentBlock.Convert(blocks, this._size));
-                this._big_store = new BigBlockStore(this, new DocumentBlock[0]);
+                _small_store = new SmallBlockStore(_bigBigBlockSize, path, name, size, writer);
+                _big_store = new BigBlockStore(_bigBigBlockSize, EMPTY_BIG_BLOCK_ARRAY);
             }
             else
             {
-                this._small_store = new SmallBlockStore(this, new BlockWritable[0]);
+                _small_store = new SmallBlockStore(_bigBigBlockSize, EMPTY_SMALL_BLOCK_ARRAY);
+                _big_store = new BigBlockStore(_bigBigBlockSize, path, name, size, writer);
             }
         }
 
+        public POIFSDocument(string name, int size, POIFSDocumentPath path, POIFSWriterListener writer)
+            :this(name, size, POIFSConstants.SMALLER_BIG_BLOCK_SIZE_DETAILS, path, writer)
+        {
+        }
         /// <summary>
         /// Constructor from small blocks
         /// </summary>
@@ -94,104 +200,8 @@ namespace NPOI.POIFS.FileSystem
         /// <param name="blocks">the small blocks making up the POIFSDocument</param>
         /// <param name="length">the actual length of the POIFSDocument</param>
         public POIFSDocument(string name, ListManagedBlock[] blocks, int length)
-        {
-            this._size = length;
-            this._property = new DocumentProperty(name, this._size);
-            this._property.Document = this;
-            if (Property.IsSmall(this._size))
+            :this(name, POIFSConstants.SMALLER_BIG_BLOCK_SIZE_DETAILS, blocks, length)
             {
-                this._big_store = new BigBlockStore(this, new RawDataBlock[0]);
-                this._small_store = new SmallBlockStore(this, blocks);
-            }
-            else
-            {
-                this._big_store = new BigBlockStore(this, blocks);
-                this._small_store = new SmallBlockStore(this, new BlockWritable[0]);
-            }
-        }
-        /// <summary>
-        /// Constructor from large blocks
-        /// </summary>
-        /// <param name="name">the name of the POIFSDocument</param>
-        /// <param name="blocks">the big blocks making up the POIFSDocument</param>
-        /// <param name="length">the actual length of the POIFSDocument</param>
-        public POIFSDocument(string name, RawDataBlock[] blocks, int length)
-        {
-            this._size = length;
-            this._big_store = new BigBlockStore(this, blocks);
-            this._property = new DocumentProperty(name, this._size);
-            this._small_store = new SmallBlockStore(this, new BlockWritable[0]);
-            this._property.Document = this;
-        }
-        /// <summary>
-        /// Constructor from small blocks
-        /// </summary>
-        /// <param name="name">the name of the POIFSDocument</param>
-        /// <param name="blocks">Tthe small blocks making up the POIFSDocument</param>
-        /// <param name="length">the actual length of the POIFSDocument</param>
-        public POIFSDocument(string name, SmallDocumentBlock[] blocks, int length)
-        {
-            this._size = length;
-            try
-            {
-                this._big_store = new BigBlockStore(this, new RawDataBlock[0]);
-            }
-            catch (IOException)
-            {
-            }
-            this._property = new DocumentProperty(name, this._size);
-            this._small_store = new SmallBlockStore(this, blocks);
-            this._property.Document = this;
-        }
-
-        /// <summary>
-        /// Occurs when [before writing].
-        /// </summary>
-        public event POIFSWriterEventHandler BeforeWriting
-        {
-            add {
-                if (_property.ShouldUseSmallBlocks)
-                {
-                    _small_store.BeforeWriting += value;
-                }
-                else
-                {
-                    _big_store.BeforeWriting += value;
-                }
-            }
-            remove
-            {
-                if (_property.ShouldUseSmallBlocks)
-                {
-                    _small_store.BeforeWriting -= value;
-                }
-                else
-                {
-                    _big_store.BeforeWriting -= value;
-                }
-            }
-        }
-        /// <summary>
-        /// Initializes a new instance of the <see cref="POIFSDocument"/> class.
-        /// </summary>
-        /// <param name="name">the name of the POIFSDocument</param>
-        /// <param name="size">the length of the POIFSDocument</param>
-        /// <param name="path">the path of the POIFSDocument</param>
-        public POIFSDocument(string name, int size, POIFSDocumentPath path)
-        {
-            this._size = size;
-            this._property = new DocumentProperty(name, this._size);
-            this._property.Document = this;
-            if (this._property.ShouldUseSmallBlocks)
-            {
-                this._small_store = new SmallBlockStore(this, path, name, size);
-                this._big_store = new BigBlockStore(this, new object[0]);
-            }
-            else
-            {
-                this._small_store = new SmallBlockStore(this, new BlockWritable[0]);
-                this._big_store = new BigBlockStore(this, path, name, size);
-            }
         }
 
         /// <summary>
@@ -221,6 +231,25 @@ namespace NPOI.POIFS.FileSystem
         }
 
 
+        public DataInputBlock GetDataInputBlock(int offset)
+        {
+            if (offset >= _size)
+            {
+                if (offset > _size)
+                {
+                    throw new Exception("Request for Offset " + offset + " doc size is " + _size);
+                }
+
+                return null;
+            }
+
+            if (_property.ShouldUseSmallBlocks)
+            {
+                return SmallDocumentBlock.GetDataInputBlock(_small_store.Blocks, offset);
+            }
+
+            return DocumentBlock.GetDataInputBlock(_big_store.Blocks, offset);
+        }
         /// <summary>
         /// Gets the number of BigBlock's this instance uses
         /// </summary>
@@ -386,57 +415,122 @@ namespace NPOI.POIFS.FileSystem
                 return ArrayList.ReadOnly(new ArrayList()).GetEnumerator();
             }
         }
+        public event POIFSWriterEventHandler BeforeWriting;
 
-        // Nested Types
-        internal class BigBlockStore
+        protected virtual void OnBeforeWriting(POIFSWriterEventArgs e)
         {
-            private DocumentBlock[] bigBlocks;
-            private POIFSDocument enclosingInstance;
-            private string name;
-            private POIFSDocumentPath path;
-            private int size;
-
-            internal BigBlockStore(POIFSDocument enclosingInstance, object[] blocks)
+            if (BeforeWriting != null)
             {
-                this.InitBlock(enclosingInstance);
-                this.bigBlocks = new DocumentBlock[blocks.Length];
-                for (int i = 0; i < blocks.Length; i++)
-                {
-                    if (blocks[i] is DocumentBlock)
-                    {
-                        this.bigBlocks[i] = (DocumentBlock)blocks[i];
-                    }
-                    else
-                    {
-                        this.bigBlocks[i] = new DocumentBlock((RawDataBlock)blocks[i]);
-                    }
-                }
+                BeforeWriting(this, e);
+            }
+        }
+        internal class SmallBlockStore
+        {
+            private SmallDocumentBlock[] smallBlocks;
+            private POIFSDocumentPath path;
+            private string name;
+            private int size;
+            private POIFSWriterListener writer;
+            private POIFSBigBlockSize bigBlockSize;
+
+            internal SmallBlockStore(POIFSBigBlockSize bigBlockSize, SmallDocumentBlock[] blocks)
+            {
+                this.bigBlockSize = bigBlockSize;
+                smallBlocks = (SmallDocumentBlock[])blocks.Clone();
                 this.path = null;
                 this.name = null;
                 this.size = -1;
+                this.writer = null;
             }
 
-            internal BigBlockStore(POIFSDocument enclosingInstance, POIFSDocumentPath path, string name, int size)
+            internal SmallBlockStore(POIFSBigBlockSize bigBlockSize, POIFSDocumentPath path, string name, int size, POIFSWriterListener writer)
             {
-                this.InitBlock(enclosingInstance);
+                this.bigBlockSize = bigBlockSize;
+                this.smallBlocks = new SmallDocumentBlock[0];
+                this.path = path;
+                this.name = name;
+                this.size = size;
+                this.writer = writer;
+            }
+
+            // internal virtual BlockWritable[] Blocks
+            internal virtual SmallDocumentBlock[] Blocks
+            {
+                get
+            {
+                    if (this.Valid && (this.writer != null))
+                    {
+                        MemoryStream stream = new MemoryStream(this.size);
+                        DocumentOutputStream dstream = new DocumentOutputStream(stream, this.size);
+                        //OnBeforeWriting(new POIFSWriterEventArgs(dstream, this.path, this.name, this.size));
+                        writer.ProcessPOIFSWriterEvent(new POIFSWriterEvent(dstream, this.path, this.name, this.size));
+                        this.smallBlocks = SmallDocumentBlock.Convert(bigBlockSize, stream.ToArray(), this.size);
+
+                        }
+                    return this.smallBlocks;
+                    }
+                }
+            internal virtual bool Valid
+            {
+                get
+                {
+                    return ((this.smallBlocks.Length > 0) || (this.writer != null));
+                }
+            }
+
+
+        }
+
+        internal class BigBlockStore
+        {
+            private DocumentBlock[] bigBlocks;
+            private POIFSDocumentPath path;
+            private string name;
+            private int size;
+            private POIFSWriterListener writer;
+            private POIFSBigBlockSize bigBlockSize;
+
+            internal BigBlockStore(POIFSBigBlockSize bigBlockSize, DocumentBlock[] blocks)
+            {
+                this.bigBlockSize = bigBlockSize;
+                bigBlocks = (DocumentBlock[])blocks.Clone();
+                path = null;
+                name = null;
+                size = -1;
+                writer = null;
+            }
+
+            internal BigBlockStore(POIFSBigBlockSize bigBlockSize, POIFSDocumentPath path, string name, int size, POIFSWriterListener writer)
+            {
+                this.bigBlockSize = bigBlockSize;
                 this.bigBlocks = new DocumentBlock[0];
                 this.path = path;
                 this.name = name;
                 this.size = size;
+                this.writer = writer;
             }
 
-            private void InitBlock(POIFSDocument enclosingInstance)
+            internal virtual bool Valid
             {
-                this.enclosingInstance = enclosingInstance;
+                get
+            {
+                    return ((this.bigBlocks.Length > 0) || (this.writer != null));
+                }
             }
 
-            public event POIFSWriterEventHandler BeforeWriting;
-
-            protected virtual void OnBeforeWriting(POIFSWriterEventArgs e)
+            internal virtual DocumentBlock[] Blocks
             {
-                if (BeforeWriting != null)
+                get
+            {
+                    if (this.Valid && (this.writer != null))
                 {
-                    BeforeWriting(this, e);
+                        MemoryStream stream = new MemoryStream(this.size);
+                        DocumentOutputStream stream2 = new DocumentOutputStream(stream, this.size);
+                        //OnBeforeWriting(new POIFSWriterEventArgs(stream2, this.path, this.name, this.size));
+                        writer.ProcessPOIFSWriterEvent(new POIFSWriterEvent(stream2, path, name, size));
+                        this.bigBlocks = DocumentBlock.Convert(bigBlockSize, stream.ToArray(), this.size);
+                    }
+                    return this.bigBlocks;
                 }
             }
 
@@ -444,10 +538,11 @@ namespace NPOI.POIFS.FileSystem
             {
                 if (this.Valid)
                 {
-                    if (this.BeforeWriting != null)
-                    {
-                        POIFSDocumentWriter stream2 = new POIFSDocumentWriter(stream, this.size);
-                        OnBeforeWriting(new POIFSWriterEventArgs(stream2, this.path, this.name, this.size));
+                    if (this.writer != null)
+                        {
+                            DocumentOutputStream stream2 = new DocumentOutputStream(stream, this.size);
+                            //OnBeforeWriting(new POIFSWriterEventArgs(stream2, this.path, this.name, this.size));
+                        writer.ProcessPOIFSWriterEvent(new POIFSWriterEvent(stream2, path, name, size));
                         stream2.WriteFiller(this.CountBlocks * POIFSConstants.BIG_BLOCK_SIZE, DocumentBlock.FillByte);
                     }
                     else
@@ -460,23 +555,6 @@ namespace NPOI.POIFS.FileSystem
                 }
             }
 
-            internal virtual DocumentBlock[] Blocks
-            {
-                get
-                {
-                    if (this.Valid && (this.BeforeWriting != null))
-                    {
-                        using (MemoryStream stream = new MemoryStream(this.size))
-                        {
-                            POIFSDocumentWriter stream2 = new POIFSDocumentWriter(stream, this.size);
-                            //OnBeforeWriting(new POIFSWriterEventArgs(stream2, this.path, this.name, this.size));
-                            this.bigBlocks = DocumentBlock.Convert(stream.ToArray(), this.size);
-                        }
-                    }
-                    return this.bigBlocks;
-                }
-            }
-
             internal virtual int CountBlocks
             {
                 get
@@ -485,109 +563,16 @@ namespace NPOI.POIFS.FileSystem
                     if (!this.Valid)
                     {
                         return num;
-                    }
-                    if (this.BeforeWriting != null)
+                }
+                    if (this.writer != null)
                     {
                         return (((this.size + POIFSConstants.BIG_BLOCK_SIZE) - 1) / POIFSConstants.BIG_BLOCK_SIZE);
-                    }
+            }
                     return this.bigBlocks.Length;
                 }
             }
-
-            public POIFSDocument Enclosing_Instance
-            {
-                get
-                {
-                    return this.enclosingInstance;
-                }
-            }
-
-            internal virtual bool Valid
-            {
-                get
-                {
-                    return ((this.bigBlocks.Length > 0) || (this.BeforeWriting != null));
-                }
-            }
         }
 
-        internal class SmallBlockStore
-        {
-            private POIFSDocument enclosingInstance;
-            private string name;
-            private POIFSDocumentPath path;
-            private int size;
-            private SmallDocumentBlock[] smallBlocks;
-
-            internal SmallBlockStore(POIFSDocument enclosingInstance, object[] blocks)
-            {
-                this.InitBlock(enclosingInstance);
-                this.smallBlocks = new SmallDocumentBlock[blocks.Length];
-                for (int i = 0; i < blocks.Length; i++)
-                {
-                    this.smallBlocks[i] = (SmallDocumentBlock)blocks[i];
-                }
-                this.path = null;
-                this.name = null;
-                this.size = -1;
-            }
-
-            internal SmallBlockStore(POIFSDocument enclosingInstance, POIFSDocumentPath path, string name, int size)
-            {
-                this.InitBlock(enclosingInstance);
-                this.smallBlocks = new SmallDocumentBlock[0];
-                this.path = path;
-                this.name = name;
-                this.size = size;
-            }
-
-            private void InitBlock(POIFSDocument enclosingInstance)
-            {
-                this.enclosingInstance = enclosingInstance;
-            }
-
-            public event POIFSWriterEventHandler BeforeWriting;
-
-            protected virtual void OnBeforeWriting(POIFSWriterEventArgs e)
-            {
-                if (BeforeWriting != null)
-                {
-                    BeforeWriting(this, e);
-                }
-            }
-
-            internal virtual BlockWritable[] Blocks
-            {
-                get
-                {
-                    if (this.Valid && (this.BeforeWriting != null))
-                    {
-                        using (MemoryStream stream = new MemoryStream(this.size))
-                        {
-                            POIFSDocumentWriter stream2 = new POIFSDocumentWriter(stream, this.size);
-                            OnBeforeWriting(new POIFSWriterEventArgs(stream2, this.path, this.name, this.size));
-                            this.smallBlocks = SmallDocumentBlock.Convert(stream.ToArray(), this.size);
-                        }
-                    }
-                    return this.smallBlocks;
-                }
-            }
-
-            public POIFSDocument Enclosing_Instance
-            {
-                get
-                {
-                    return this.enclosingInstance;
-                }
-            }
-
-            internal virtual bool Valid
-            {
-                get
-                {
-                    return ((this.smallBlocks.Length > 0) || (this.BeforeWriting != null));
-                }
-            }
-        }
+      
     }
 }

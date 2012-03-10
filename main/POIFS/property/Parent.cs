@@ -27,6 +27,7 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 
 namespace NPOI.POIFS.Properties
 {
@@ -41,7 +42,7 @@ namespace NPOI.POIFS.Properties
         /// all elements are instances of Property.
         /// </summary>
         /// <returns></returns>
-        IEnumerator Children { get; }
+        IEnumerator<Property> Children { get; }
         /// <summary>
         /// Add a new child to the collection of children
         /// </summary>

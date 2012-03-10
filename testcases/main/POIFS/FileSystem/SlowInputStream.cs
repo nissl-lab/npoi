@@ -37,7 +37,7 @@ namespace TestCases.POIFS.FileSystem
      */
     internal class SlowInputStream : Stream
     {
-        private Random rnd = new Random();
+        private Random r = new Random(0);
         private byte[] data;
         private int chunkSize;
         private long pos = 0;
@@ -60,8 +60,8 @@ namespace TestCases.POIFS.FileSystem
          */
         private bool ClaimNoData()
         {
-            double tmp=rnd.NextDouble();
-            if ( tmp< 0.75f)   //change 0.25f to 0.40f
+            double tmp = r.NextDouble();
+            if (tmp < 0.75f)   //change 0.25f to 0.40f
             {
                 return false;
             }
@@ -77,7 +77,9 @@ namespace TestCases.POIFS.FileSystem
             int ret = data[pos];
             pos++;
 
-            if (ret < 0) ret += 256;
+            if (ret < 0)
+                ret += 256;
+
             return ret;
         }
 

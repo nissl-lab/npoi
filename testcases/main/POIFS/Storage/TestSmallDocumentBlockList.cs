@@ -34,6 +34,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NPOI.POIFS.Storage;
 using NPOI.Util;
 using NPOI.POIFS.FileSystem;
+using NPOI.POIFS.Common;
 
 namespace TestCases.POIFS.Storage
 {
@@ -67,7 +68,7 @@ namespace TestCases.POIFS.Storage
                 blocks[j] = new RawDataBlock(stream);
             }
             SmallDocumentBlockList sdbl =
-                new SmallDocumentBlockList(SmallDocumentBlock.Extract((ListManagedBlock[])blocks));
+                new SmallDocumentBlockList(SmallDocumentBlock.Extract(POIFSConstants.SMALLER_BIG_BLOCK_SIZE_DETAILS, blocks));
 
             // proof we added the blocks
             for (int j = 0; j < 40; j++)

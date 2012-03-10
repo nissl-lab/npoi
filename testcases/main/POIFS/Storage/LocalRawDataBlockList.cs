@@ -28,6 +28,7 @@
 using System;
 using System.Text;
 using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -46,7 +47,7 @@ namespace TestCases.POIFS.Storage
 
     public class LocalRawDataBlockList : RawDataBlockList
     {
-        private ArrayList _list;
+        private List<RawDataBlock> _list;
         private RawDataBlock[] _array;
 
         /**
@@ -58,7 +59,7 @@ namespace TestCases.POIFS.Storage
         public LocalRawDataBlockList()
             : base(new MemoryStream(new byte[0]), POIFSConstants.SMALLER_BIG_BLOCK_SIZE_DETAILS)
         {
-            _list = new ArrayList();
+            _list = new List<RawDataBlock>();
             _array = null;
         }
 
@@ -207,8 +208,13 @@ namespace TestCases.POIFS.Storage
         {
             if (_array == null)
             {
-                _array = (RawDataBlock[])_list.ToArray(typeof(RawDataBlock));
+                _array = _list.ToArray();
             }
+        }
+
+        public override int BlockCount()
+        {
+            return _list.Count;
         }
     }
 }

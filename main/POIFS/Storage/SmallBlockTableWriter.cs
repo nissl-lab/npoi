@@ -55,10 +55,10 @@ namespace NPOI.POIFS.Storage
         /// </summary>
         /// <param name="documents">a IList of POIFSDocument instances</param>
         /// <param name="root">the Filesystem's root property</param>
-        public SmallBlockTableWriter(IList documents,
+        public SmallBlockTableWriter(POIFSBigBlockSize bigBlockSize, IList documents,
                                      RootProperty root)
         {
-            _sbat         = new BlockAllocationTableWriter();
+            _sbat = new BlockAllocationTableWriter(bigBlockSize);
             _small_blocks = new ArrayList();
             _root         = root;
             IEnumerator iter = documents.GetEnumerator();
@@ -81,7 +81,7 @@ namespace NPOI.POIFS.Storage
             }
             _sbat.SimpleCreateBlocks();
             _root.Size=_small_blocks.Count;
-            _big_block_count = SmallDocumentBlock.Fill(_small_blocks);
+            _big_block_count = SmallDocumentBlock.Fill(bigBlockSize, _small_blocks);
         }
 
         /// <summary>

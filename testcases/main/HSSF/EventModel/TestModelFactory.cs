@@ -68,7 +68,7 @@ namespace TestCases.HSSF.EventModel
             POIFSFileSystem fs = new POIFSFileSystem(
                                        new MemoryStream(stream.ToArray())
                                        );
-            in1 = fs.CreatePOIFSDocumentReader("Workbook");
+            in1 = fs.CreateDocumentInputStream("Workbook");
         }
         [TestCleanup]
         public void TearDown()

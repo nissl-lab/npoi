@@ -34,6 +34,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NPOI.POIFS.Storage;
 using NPOI.Util;
 using NPOI.POIFS.FileSystem;
+using NPOI.POIFS.Common;
 
 namespace TestCases.POIFS.Storage
 {
@@ -73,7 +74,7 @@ namespace TestCases.POIFS.Storage
                 byte[] data = new byte[Math.Min(_testdata.Length - index, 512)];
 
                 Array.Copy(_testdata, index, data, 0, data.Length);
-                DocumentBlock block = new DocumentBlock(input);
+                DocumentBlock block = new DocumentBlock(input, POIFSConstants.SMALLER_BIG_BLOCK_SIZE_DETAILS);
 
                 verifyOutput(block, data);
                 size += block.Size;
@@ -99,7 +100,7 @@ namespace TestCases.POIFS.Storage
 
             for (int j = 0; j < 4; j++)
             {
-                blocks[j] = new DocumentBlock(input);
+                blocks[j] = new DocumentBlock(input, POIFSConstants.SMALLER_BIG_BLOCK_SIZE_DETAILS);
             }
             for (int j = 1; j <= 2000; j += 17)
             {

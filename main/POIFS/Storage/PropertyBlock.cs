@@ -29,6 +29,7 @@
 using System;
 using System.Collections;
 using System.IO;
+using System.Collections.Generic;
 
 using NPOI.POIFS.Properties;
 using NPOI.POIFS.Common;
@@ -39,7 +40,7 @@ namespace NPOI.POIFS.Storage
     /// A block of Property instances
     /// @author Marc Johnson (mjohnson at apache dot org)
     /// </summary>
-    public class PropertyBlock:BigBlock
+    public class PropertyBlock : BigBlock
     {
         private class AnonymousProperty : Property
         {
@@ -56,8 +57,8 @@ namespace NPOI.POIFS.Storage
             }
         }
 
-        private static int _properties_per_block =
-            POIFSConstants.BIG_BLOCK_SIZE / POIFSConstants.PROPERTY_SIZE;
+
+
         private Property[]       _properties;
 
         /// <summary>
@@ -65,10 +66,10 @@ namespace NPOI.POIFS.Storage
         /// </summary>
         /// <param name="properties">the properties to be inserted</param>
         /// <param name="offset">the offset into the properties array</param>
-        private PropertyBlock(Property [] properties, int offset)
+        protected PropertyBlock(POIFSBigBlockSize bigBlockSize, Property[] properties, int offset) : base(bigBlockSize)
         {
-            _properties = new Property[ _properties_per_block ];
-            for (int j = 0; j < _properties_per_block; j++)
+            _properties = new Property[ bigBlockSize.GetPropertiesPerBlock() ];
+            for (int j = 0; j < _properties.Length; j++)
             {
                 _properties[ j ] = properties[ j + offset ];
             }
@@ -81,34 +82,27 @@ namespace NPOI.POIFS.Storage
         /// </summary>
         /// <param name="properties">the Property instances to be converted into PropertyBlocks, in a java List</param>
         /// <returns>the array of newly created PropertyBlock instances</returns>
-        public static BlockWritable [] CreatePropertyBlockArray(
-                IList properties)
-        {
-            int        block_count   =
-                (properties.Count + _properties_per_block - 1)
-                / _properties_per_block;
-            Property[] to_be_written =
-                new Property[ block_count * _properties_per_block ];
-
-            Property[] array = new Property[properties.Count];
-            properties.CopyTo(array, 0);
-
-            System.Array.Copy(array, 0,
-                             to_be_written, 0, properties.Count);
-            for (int j = properties.Count; j < to_be_written.Length; j++)
+        public static BlockWritable [] CreatePropertyBlockArray( POIFSBigBlockSize bigBlockSize,
+                                        List<Property> properties)
             {
+            int _properties_per_block = bigBlockSize.GetPropertiesPerBlock();
 
-                // create an instance of an anonymous inner class that
-                // extends Property
-                to_be_written[j] = new AnonymousProperty();
-            }
-            BlockWritable[] rvalue = new BlockWritable[ block_count ];
+            int blockCount = (properties.Count + _properties_per_block - 1) / _properties_per_block;
 
-            for (int j = 0; j < block_count; j++)
+            Property[] toBeWritten = new Property[blockCount * _properties_per_block];
+
+            System.Array.Copy(properties.ToArray(), 0, toBeWritten, 0, properties.Count);
+
+            for (int i = properties.Count; i < toBeWritten.Length; i++)
             {
-                rvalue[ j ] = new PropertyBlock(to_be_written,
-                                                j * _properties_per_block);
+                toBeWritten[i] = new AnonymousProperty();
             }
+
+            BlockWritable[] rvalue = new BlockWritable[blockCount];
+
+            for (int i = 0; i < blockCount; i++)
+                rvalue[i] = new PropertyBlock(bigBlockSize, toBeWritten, i * _properties_per_block);
+
             return rvalue;
         }
 
@@ -116,12 +110,12 @@ namespace NPOI.POIFS.Storage
         /// Write the block's data to an OutputStream
         /// </summary>
         /// <param name="stream">the OutputStream to which the stored data should be written</param>
-        internal override void WriteData(Stream stream)
+        public override void WriteData(Stream stream)
         {
-            for (int j = 0; j < _properties_per_block; j++)
-            {
-                _properties[ j ].WriteData(stream);
-            }
+            int _properties_per_block = bigBlockSize.GetPropertiesPerBlock();
+
+            for (int i = 0; i < _properties_per_block; i++)
+                _properties[i].WriteData(stream);
         }
     }
 }

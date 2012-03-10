@@ -26,13 +26,14 @@
  * ==============================================================*/
 using System;
 using System.IO;
-using System.Collections;
+using System.Collections.Generic;
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NPOI.POIFS.Storage;
 using NPOI.Util;
 using NPOI.POIFS.FileSystem;
-using TestCases.POIFS.Properties;
+using NPOI.POIFS.Common;
+using NPOI.POIFS.Properties;
 
 namespace TestCases.POIFS.Storage
 {
@@ -65,15 +66,15 @@ namespace TestCases.POIFS.Storage
         {
 
             // Test with 0 properties
-            ArrayList properties = new ArrayList();
+            List<NPOI.POIFS.Properties.Property> properties = new List<NPOI.POIFS.Properties.Property>();
             BlockWritable[] blocks =
-                PropertyBlock.CreatePropertyBlockArray(properties);
+                PropertyBlock.CreatePropertyBlockArray(POIFSConstants.SMALLER_BIG_BLOCK_SIZE_DETAILS, properties);
 
             Assert.AreEqual(0, blocks.Length);
 
             // Test with 1 property
             properties.Add(new LocalProperty("Root Entry"));
-            blocks = PropertyBlock.CreatePropertyBlockArray(properties);
+            blocks = PropertyBlock.CreatePropertyBlockArray(POIFSConstants.SMALLER_BIG_BLOCK_SIZE_DETAILS, properties);
             Assert.AreEqual(1, blocks.Length);
             byte[] testblock = new byte[512];
 
@@ -97,7 +98,7 @@ namespace TestCases.POIFS.Storage
             // Test with 3 properties
             properties.Add(new LocalProperty("workbook"));
             properties.Add(new LocalProperty("summary"));
-            blocks = PropertyBlock.CreatePropertyBlockArray(properties);
+            blocks = PropertyBlock.CreatePropertyBlockArray(POIFSConstants.SMALLER_BIG_BLOCK_SIZE_DETAILS, properties);
             Assert.AreEqual(1, blocks.Length);
             testblock[0x0080] = (byte)'w';
             testblock[0x0082] = (byte)'o';
@@ -120,7 +121,7 @@ namespace TestCases.POIFS.Storage
 
             // Test with 4 properties
             properties.Add(new LocalProperty("wintery"));
-            blocks = PropertyBlock.CreatePropertyBlockArray(properties);
+            blocks = PropertyBlock.CreatePropertyBlockArray(POIFSConstants.SMALLER_BIG_BLOCK_SIZE_DETAILS, properties);
             Assert.AreEqual(1, blocks.Length);
             testblock[0x0180] = (byte)'w';
             testblock[0x0182] = (byte)'i';
@@ -134,7 +135,7 @@ namespace TestCases.POIFS.Storage
 
             // Test with 5 properties
             properties.Add(new LocalProperty("foo"));
-            blocks = PropertyBlock.CreatePropertyBlockArray(properties);
+            blocks = PropertyBlock.CreatePropertyBlockArray(POIFSConstants.SMALLER_BIG_BLOCK_SIZE_DETAILS, properties);
             Assert.AreEqual(2, blocks.Length);
             testblock = new byte[1024];
             for (int j = 0; j < 8; j++)

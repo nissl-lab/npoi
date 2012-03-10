@@ -33,6 +33,7 @@ namespace NPOI.HPSF
     using System.Text;
     using NPOI.Util;
     using NPOI.HPSF.Wellknown;
+    using NPOI.POIFS.FileSystem;
 
     /// <summary>
     /// Represents a property Set in the Horrible Property Set Format
@@ -232,7 +233,7 @@ namespace NPOI.HPSF
         {
             if (IsPropertySetStream(stream))
             {
-                int avail = (int)(stream.Length - stream.Position);
+                int avail = (stream as ByteArrayInputStream).Available(); ;
                 byte[] buffer = new byte[avail];
                 stream.Read(buffer, 0, buffer.Length);
                 init(buffer, 0, buffer.Length);
@@ -292,6 +293,7 @@ namespace NPOI.HPSF
         /// </returns>
         public static bool IsPropertySetStream(Stream stream)
         {
+            ByteArrayInputStream dis = stream as ByteArrayInputStream;
             /*
              * Read at most this many bytes.
              */
@@ -302,9 +304,9 @@ namespace NPOI.HPSF
              * Reset To this position if the stream does not contain a
              * property Set.
              */
-            //if (!stream.markSupported())
-            //    throw new MarkUnsupportedException(stream.GetType().Name);
-            //stream.Seek(BUFFER_SIZE,SeekOrigin.Begin);
+            if (dis == null || !dis.MarkSupported())
+                throw new MarkUnsupportedException(stream.GetType().Name);
+            dis.Mark(BUFFER_SIZE);
 
             /*
              * Read a couple of bytes from the stream.
@@ -312,10 +314,11 @@ namespace NPOI.HPSF
             byte[] buffer = new byte[BUFFER_SIZE];
             int bytes =
                 stream.Read(buffer, 0,
-                            (int)Math.Min(buffer.Length, stream.Length-stream.Position));
+                            (int)Math.Min(buffer.Length, dis.Available()));
             bool isPropertySetStream =
                 IsPropertySetStream(buffer, 0, bytes);
             stream.Seek(0, SeekOrigin.Begin);
+            dis.Reset();
             return isPropertySetStream;
         }
 

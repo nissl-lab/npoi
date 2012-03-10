@@ -58,9 +58,11 @@ namespace NPOI.POIFS.EventFileSystem
         {
             get { return document; }
         }
-        public virtual POIFSDocumentReader Stream
+        public virtual DocumentInputStream Stream
         {
-            get { return new POIFSDocumentReader(this.document); }
+            get { 
+                return new DocumentInputStream(this.document); 
+            }
         }
         public virtual string Name
         {

@@ -27,6 +27,7 @@
 using System;
 using System.Collections;
 using System.IO;
+using System.Collections.Generic;
 
 using NPOI.POIFS.Storage;
 using NPOI.POIFS.FileSystem;
@@ -34,21 +35,18 @@ using NPOI.POIFS.Common;
 
 namespace NPOI.POIFS.Properties
 {
-    public class PropertyTable:BATManaged, BlockWritable
+    public class PropertyTable : PropertyTableBase, BlockWritable
     {
-        private int             _start_block;
-        private IList            _properties;
-        private BlockWritable[] _blocks=null;
 
+        private POIFSBigBlockSize _bigBigBlockSize;
+        private BlockWritable[] _blocks;
         /**
          * Default constructor
          */
-
-        public PropertyTable()
+        public PropertyTable(HeaderBlock headerBlock) : base(headerBlock)
         {
-            _start_block = POIFSConstants.END_OF_CHAIN;
-            _properties  = new ArrayList();
-            AddProperty(new RootProperty());
+            _bigBigBlockSize = headerBlock.BigBlockSize;
+            _blocks = null;
         }
 
         /**
@@ -62,130 +60,46 @@ namespace NPOI.POIFS.Properties
          * @exception IOException if anything goes wrong (which should be
          *            a result of the input being NFG)
          */
-
-        public PropertyTable(int startBlock,
+        public PropertyTable(HeaderBlock headerBlock, 
                              RawDataBlockList blockList)
+            : base(headerBlock, 
+                    PropertyFactory.ConvertToProperties( blockList.FetchBlocks(headerBlock.PropertyStart, -1) ) )
         {
-            _start_block = POIFSConstants.END_OF_CHAIN;
+            _bigBigBlockSize = headerBlock.BigBlockSize;
             _blocks      = null;
-            _properties  =
-                PropertyFactory
-                    .ConvertToProperties(blockList.FetchBlocks(startBlock,-1));
-            PopulatePropertyTree(( DirectoryProperty ) _properties[0]);
+
         }
 
         /**
-         * Add a property to the list of properties we manage
-         *
-         * @param property the new Property to manage
-         */
-
-        public void AddProperty(Property property)
-        {
-            _properties.Add(property);
-        }
-
-        /**
-         * Remove a property from the list of properties we manage
-         *
-         * @param property the Property to be Removed
-         */
-
-        public void RemoveProperty(Property property)
-        {
-            _properties.Remove(property);
-        }
-
-        /**
-         * Get the root property
-         *
-         * @return the root property
-         */
-
-        public RootProperty Root
-        {
-
-            // it's always the first element in the List
-            get{return ( RootProperty ) _properties[0];}
-        }
-
-        /**
-         * Prepare to be written
+         * Prepare to be written Leon
          */
 
         public void PreWrite()
         {
-            Property[] array = new Property[this._properties.Count];
-            this._properties.CopyTo(array, 0);
 
-            Property[] properties = array;
+            List<Property> properties = new List<Property>(_properties.Count);
+
+            for (int i = 0; i < _properties.Count; i++)
+                properties.Add(_properties[i]);
+
 
             // give each property its index
-            for (int k = 0; k < properties.Length; k++)
+            for (int k = 0; k < properties.Count; k++)
             {
-                properties[ k ].Index=k;
+                properties[ k ].Index = k;
             }
 
             // allocate the blocks for the property table
-            _blocks = PropertyBlock.CreatePropertyBlockArray(_properties);
+            _blocks = PropertyBlock.CreatePropertyBlockArray(_bigBigBlockSize, properties);
 
             // prepare each property for writing
-            for (int k = 0; k < properties.Length; k++)
+            for (int k = 0; k < properties.Count; k++)
             {
                 properties[ k ].PreWrite();
             }
         }
 
-        /**
-         * Get the start block for the property table
-         *
-         * @return start block index
-         */
 
-        public int StartBlock
-        {
-            get { return _start_block; }
-            set { _start_block = value; }
-        }
-
-        private void PopulatePropertyTree(DirectoryProperty root)
-        {
-            int index = root.ChildIndex;
-
-            if (!Property.IsValidIndex(index))
-            {
-
-                // property has no children
-                return;
-            }
-            Stack children = new Stack();
-
-            children.Push(_properties[index]);
-            while (!(children.Count==0))
-            {
-                Property property = ( Property ) children.Pop();
-                if (property == null)
-                {
-                    continue;
-                }
-                root.AddChild(property);
-                
-                if (property.IsDirectory)
-                {
-                    PopulatePropertyTree(( DirectoryProperty ) property);
-                }
-                index = property.PreviousChildIndex;
-                if (Property.IsValidIndex(index))
-                {
-                    children.Push(_properties[index]);
-                }
-                index = property.NextChildIndex;
-                if (Property.IsValidIndex(index))
-                {
-                    children.Push(_properties[index]);
-                }
-            }
-        }
 
         /* ********** START implementation of BATManaged ********** */
 
@@ -195,11 +109,9 @@ namespace NPOI.POIFS.Properties
          * @return count of BigBlock instances
          */
 
-        public int CountBlocks
+        public override int CountBlocks
         {
-            get{return (_blocks == null) ? 0
-                                     : _blocks.Length;
-            }
+            get { return (_blocks == null) ? 0 : _blocks.Length; }
         }
 
         /**

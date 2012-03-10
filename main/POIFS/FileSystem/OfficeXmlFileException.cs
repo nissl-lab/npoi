@@ -36,7 +36,6 @@ namespace NPOI.POIFS.FileSystem
     /// POI works with)
     /// @author Nick Burch
     /// </summary>
-    [Serializable]
     public class OfficeXmlFileException:ArgumentException
     {
         public OfficeXmlFileException(String s):base(s)

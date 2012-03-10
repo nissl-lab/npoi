@@ -111,9 +111,13 @@ namespace NPOI.POIFS.FileSystem
             {
                 for (int j = 0; j < components.Length; j++)
                 {
-                    if ((components[j] == null) || (components[j].Length == 0))
+                    if (components[j] == null)
                     {
                         throw new ArgumentException("components cannot contain null or empty strings");
+                    }
+                    if (components[j].Length == 0)
+                    {
+                       // throw new ArgumentException("components cannot contain null or empty strings");
                     }
                     this.components[j + path.components.Length] = components[j];
                 }

@@ -15,10 +15,12 @@
    limitations under the License.
 ==================================================================== */
 
-namespace NPOI.POIFS.FileSystem;
+namespace NPOI.POIFS.FileSystem
+{
 
 
-
+    using System.IO;
+    using NPOI.Util;
 
 
 /**
@@ -26,10 +28,11 @@ namespace NPOI.POIFS.FileSystem;
  * Writers can't accidently go over their size limits
  *
  * @author Marc Johnson (mjohnson at apache dot org)
- */
+ *///Leon
 
-public class DocumentOutputStream : OutputStream {
-    private OutputStream _stream;
+public class DocumentOutputStream : Stream 
+{
+    private Stream _stream;
     private int          _limit;
     private int          _written;
 
@@ -40,7 +43,8 @@ public class DocumentOutputStream : OutputStream {
      *               read
      * @param limit the maximum number of bytes that can be written
      */
-    DocumentOutputStream(OutputStream stream, int limit) {
+    DocumentOutputStream(Stream stream, int limit)
+    {
         _stream  = stream;
         _limit   = limit;
         _written = 0;
@@ -62,7 +66,7 @@ public class DocumentOutputStream : OutputStream {
         
     {
         limitCheck(1);
-        _stream.Write(b);
+        _stream.WriteByte((byte)b);
     }
 
     /**
@@ -72,7 +76,7 @@ public class DocumentOutputStream : OutputStream {
      * @param b the data.
      * @exception IOException if an I/O error occurs.
      */
-    public void Write(byte b[])
+    public void Write(byte[] b)
         
     {
         Write(b, 0, b.Length);
@@ -98,7 +102,7 @@ public class DocumentOutputStream : OutputStream {
      *                        output stream is closed or if the Writer
      *                        tries to write too many bytes.
      */
-    public void Write(byte b[], int off, int len)
+    public override void Write(byte[] b, int off, int len)
         
     {
         limitCheck(len);
@@ -114,7 +118,7 @@ public class DocumentOutputStream : OutputStream {
     public void flush()
         
     {
-        _stream.flush();
+        _stream.Flush();
     }
 
     /**
@@ -139,15 +143,16 @@ public class DocumentOutputStream : OutputStream {
      *
      * @exception IOException on I/O error
      */
-    void WriteFiller(int totalLimit, byte Fill)
+    void WriteFiller(int totalLimit, byte fill)
         
     {
         if (totalLimit > _written)
         {
-            byte[] Filler = new byte[ totalLimit - _written ];
+            byte[] filler = new byte[ totalLimit - _written ];
 
-            Arrays.Fill(Filler, Fill);
-            _stream.Write(Filler);
+            Arrays.Fill(filler, fill);
+            
+            _stream.Write(filler, 0, filler.Length);
         }
     }
 
@@ -160,6 +165,59 @@ public class DocumentOutputStream : OutputStream {
         }
         _written += toBeWritten;
     }
+
+    public override bool CanRead
+    {
+        get { throw new System.NotImplementedException(); }
+    }
+
+    public override bool CanSeek
+    {
+        get { throw new System.NotImplementedException(); }
+    }
+
+    public override bool CanWrite
+    {
+        get { throw new System.NotImplementedException(); }
+    }
+
+    public override void Flush()
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public override long Length
+    {
+        get { throw new System.NotImplementedException(); }
+    }
+
+    public override long Position
+    {
+        get
+        {
+            throw new System.NotImplementedException();
+        }
+        set
+        {
+            throw new System.NotImplementedException();
+        }
+    }
+
+    public override int Read(byte[] buffer, int offset, int count)
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public override long Seek(long offset, SeekOrigin origin)
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public override void SetLength(long value)
+    {
+        throw new System.NotImplementedException();
+    }
+}
 }
 
 

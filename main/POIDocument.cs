@@ -155,11 +155,11 @@ namespace NPOI
         /// <returns></returns>
         protected PropertySet GetPropertySet(String SetName)
         {
-            POIFSDocumentReader dis;
+            DocumentInputStream dis;
             try
             {
                 // Find the entry, and Get an input stream for it
-                dis = directory.CreatePOIFSDocumentReader(SetName);
+                dis = directory.CreateDocumentInputStream(SetName);
             }
             catch (IOException)
             {
@@ -305,30 +305,12 @@ namespace NPOI
         /// </summary>
         /// <param name="entry">The entry.</param>
         /// <param name="target">The target.</param>
+        [Obsolete]
         private void CopyNodeRecursively(Entry entry, DirectoryEntry target)
         {
             //System.err.println("copyNodeRecursively called with "+entry.Name+
             //                   ","+target.Name);
-            DirectoryEntry newtarget = null;
-            if (entry.IsDirectoryEntry)
-            {
-                newtarget = target.CreateDirectory(entry.Name);
-                IEnumerator entries = ((DirectoryEntry)entry).Entries;
-
-                while (entries.MoveNext())
-                {
-                    CopyNodeRecursively((Entry)entries.Current, newtarget);
-                }
-            }
-            else
-            {
-                DocumentEntry dentry = (DocumentEntry)entry;
-                using (POIFSDocumentReader dstream = new POIFSDocumentReader(dentry))
-                {
-                    target.CreateDocument(dentry.Name, dstream);
-                    // call by using: dstream.Close();
-                }
-            }
+            POIUtils.CopyNodeRecursively(entry, target);
         }
     }
 }

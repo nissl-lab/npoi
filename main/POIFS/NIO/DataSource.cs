@@ -16,6 +16,7 @@
 ==================================================================== */
 
 using System.IO;
+using NPOI.Util;
 namespace NPOI.POIFS.NIO
 {
     /// <summary>
@@ -23,8 +24,9 @@ namespace NPOI.POIFS.NIO
     /// </summary>
     public abstract class DataSource
     {
-        public abstract MemoryStream Read(int length, long position);
-        public abstract void Write(MemoryStream src, long position);
+        public abstract ByteBuffer Read(int length, long position);
+
+        public abstract void Write(ByteBuffer src, long position);
         public abstract long Size { get; }
         /// <summary>
         /// Close the underlying stream

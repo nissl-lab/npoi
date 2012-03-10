@@ -37,6 +37,7 @@ namespace TestCases.HSSF.UserModel
     using System.Collections.Generic;
     using NPOI.SS.Formula.PTG;
 using NPOI.POIFS.FileSystem;
+    using NPOI.HSSF.Extractor;
 
     /**
      * Testcases for bugs entered in bugzilla
@@ -1131,7 +1132,7 @@ using NPOI.POIFS.FileSystem;
             HSSFWorkbook wb = OpenSample("WithCheckBoxes.xls");
 
             // Take a look at the embedded objects
-            IList objects = wb.GetAllEmbeddedObjects();
+            IList<HSSFObjectData> objects = wb.GetAllEmbeddedObjects();
             Assert.AreEqual(1, objects.Count);
 
             HSSFObjectData obj = (HSSFObjectData)objects[0];
@@ -2764,16 +2765,15 @@ using NPOI.POIFS.FileSystem;
         [TestMethod]
         public void Test51461()
         {
-            throw new NotImplementedException("not find class NPOIFSFileSystem");
-            //byte[] data = HSSFITestDataProvider.Instance.GetTestDataFileContent("51461.xls");
+            byte[] data = HSSFITestDataProvider.Instance.GetTestDataFileContent("51461.xls");
 
-            //HSSFWorkbook wbPOIFS = new HSSFWorkbook(new POIFSFileSystem(
-            //      new MemoryStream(data)).Root, false);
-            //HSSFWorkbook wbNPOIFS = new HSSFWorkbook(new NPOIFSFileSystem(
-            //      new MemoryStream(data)).Root, false);
+            HSSFWorkbook wbPOIFS = new HSSFWorkbook(new POIFSFileSystem(
+                  new MemoryStream(data)).Root, false);
+            HSSFWorkbook wbNPOIFS = new HSSFWorkbook(new NPOIFSFileSystem(
+                  new MemoryStream(data)).Root, false);
 
-            //Assert.AreEqual(2, wbPOIFS.NumberOfSheets);
-            //Assert.AreEqual(2, wbNPOIFS.NumberOfSheets);
+            Assert.AreEqual(2, wbPOIFS.NumberOfSheets);
+            Assert.AreEqual(2, wbNPOIFS.NumberOfSheets);
         }
         /**
         * Large row numbers and NPOIFS vs POIFS
@@ -2781,33 +2781,32 @@ using NPOI.POIFS.FileSystem;
         [TestMethod]
         public void Test51535()
         {
-            throw new NotImplementedException("not find class NPOIFSFileSystem");
-            //byte[] data = HSSFITestDataProvider.Instance.GetTestDataFileContent("51535.xls");
+            byte[] data = HSSFITestDataProvider.Instance.GetTestDataFileContent("51535.xls");
 
-            //HSSFWorkbook wbPOIFS = new HSSFWorkbook(new POIFSFileSystem(
-            //      new MemoryStream(data)).Root, false);
-            //HSSFWorkbook wbNPOIFS = new HSSFWorkbook(new NPOIFSFileSystem(
-            //      new MemoryStream(data)).Root, false);
+            HSSFWorkbook wbPOIFS = new HSSFWorkbook(new POIFSFileSystem(
+                  new MemoryStream(data)).Root, false);
+            HSSFWorkbook wbNPOIFS = new HSSFWorkbook(new NPOIFSFileSystem(
+                  new MemoryStream(data)).Root, false);
 
-            //foreach (HSSFWorkbook wb in new HSSFWorkbook[] { wbPOIFS, wbNPOIFS })
-            //{
-            //    Assert.AreEqual(3, wb.NumberOfSheets);
+            foreach (HSSFWorkbook wb in new HSSFWorkbook[] { wbPOIFS, wbNPOIFS })
+            {
+                Assert.AreEqual(3, wb.NumberOfSheets);
 
-            //    // Check directly
-            //    ISheet s = wb.GetSheetAt(0);
-            //    Assert.AreEqual("Top Left Cell", s.GetRow(0).GetCell(0).StringCellValue);
-            //    Assert.AreEqual("Top Right Cell", s.GetRow(0).GetCell(255).StringCellValue);
-            //    Assert.AreEqual("Bottom Left Cell", s.GetRow(65535).GetCell(0).StringCellValue);
-            //    Assert.AreEqual("Bottom Right Cell", s.GetRow(65535).GetCell(255).StringCellValue);
+                // Check directly
+                ISheet s = wb.GetSheetAt(0);
+                Assert.AreEqual("Top Left Cell", s.GetRow(0).GetCell(0).StringCellValue);
+                Assert.AreEqual("Top Right Cell", s.GetRow(0).GetCell(255).StringCellValue);
+                Assert.AreEqual("Bottom Left Cell", s.GetRow(65535).GetCell(0).StringCellValue);
+                Assert.AreEqual("Bottom Right Cell", s.GetRow(65535).GetCell(255).StringCellValue);
 
-            //    // Extract and check
-            //    ExcelExtractor ex = new ExcelExtractor(wb);
-            //    String text = ex.getText();
-            //    Assert.IsTrue(text.Contains("Top Left Cell"));
-            //    Assert.IsTrue(text.Contains("Top Right Cell"));
-            //    Assert.IsTrue(text.Contains("Bottom Left Cell"));
-            //    Assert.IsTrue(text.Contains("Bottom Right Cell"));
-            //}
+                // Extract and check
+                ExcelExtractor ex = new ExcelExtractor(wb);
+                String text = ex.Text;
+                Assert.IsTrue(text.Contains("Top Left Cell"));
+                Assert.IsTrue(text.Contains("Top Right Cell"));
+                Assert.IsTrue(text.Contains("Bottom Left Cell"));
+                Assert.IsTrue(text.Contains("Bottom Right Cell"));
+            }
         }
     }
 }

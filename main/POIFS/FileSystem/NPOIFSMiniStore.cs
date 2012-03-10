@@ -19,6 +19,12 @@
 
 using NPOI.POIFS.Common;
 using NPOI.POIFS.Storage;
+using NPOI.POIFS.Properties;
+using NPOI.POIFS.NIO;
+using System.Collections.Generic;
+using System;
+using NPOI.Util;
+
 namespace NPOI.POIFS.FileSystem
 {
 
@@ -34,7 +40,7 @@ namespace NPOI.POIFS.FileSystem
         private HeaderBlock _header;
         private RootProperty _root;
 
-        protected NPOIFSMiniStore(NPOIFSFileSystem filesystem, RootProperty root,
+        public NPOIFSMiniStore(NPOIFSFileSystem filesystem, RootProperty root,
              List<BATBlock> sbats, HeaderBlock header)
         {
             this._filesystem = filesystem;
@@ -42,13 +48,13 @@ namespace NPOI.POIFS.FileSystem
             this._header = header;
             this._root = root;
 
-            this._mini_stream = new NPOIFSStream(filesystem, root.GetStartBlock());
+            this._mini_stream = new NPOIFSStream(filesystem, root.StartBlock);
         }
 
         /**
          * Load the block at the given offset.
          */
-        protected ByteBuffer GetBlockAt(int offset)
+        public override ByteBuffer GetBlockAt(int offset)
         {
             // Which big block is this?
             int byteOffset = offset * POIFSConstants.SMALL_BLOCK_SIZE;
@@ -56,37 +62,36 @@ namespace NPOI.POIFS.FileSystem
             int bigBlockOffset = byteOffset % _filesystem.GetBigBlockSize();
 
             // Now locate the data block for it
-            Iterator<ByteBuffer> it = _mini_stream.GetBlockIterator();
+            StreamBlockByteBufferIterator it = _mini_stream.GetBlockIterator() as StreamBlockByteBufferIterator;
+
             for (int i = 0; i < bigBlockNumber; i++)
             {
-                it.next();
+                it.Next();
             }
-            ByteBuffer dataBlock = it.next();
+            ByteBuffer dataBlock = it.Next();
             if (dataBlock == null)
             {
-                throw new IndexOutOfBoundsException("Big block " + bigBlockNumber + " outside stream");
+                throw new IndexOutOfRangeException("Big block " + bigBlockNumber + " outside stream");
             }
 
             // Position ourselves, and take a slice 
-            dataBlock.position(
-                  dataBlock.position() + bigBlockOffset
-            );
-            ByteBuffer miniBuffer = dataBlock.slice();
-            miniBuffer.limit(POIFSConstants.SMALL_BLOCK_SIZE);
+            dataBlock.Position = dataBlock.Position + bigBlockOffset;
+            ByteBuffer miniBuffer = dataBlock.Slice();
+            miniBuffer.Limit = POIFSConstants.SMALL_BLOCK_SIZE;
             return miniBuffer;
         }
 
         /**
          * Load the block, extending the underlying stream if needed
          */
-        protected ByteBuffer CreateBlockIfNeeded(int offset)
+        public override ByteBuffer CreateBlockIfNeeded(int offset)
         {
             // Try to Get it without extending the stream
             try
             {
                 return GetBlockAt(offset);
             }
-            catch (IndexOutOfBoundsException e)
+            catch (IndexOutOfRangeException)
             {
                 // Need to extend the stream
                 // TODO Replace this with proper append support
@@ -101,7 +106,7 @@ namespace NPOI.POIFS.FileSystem
                 int block = _mini_stream.GetStartBlock();
                 while (true)
                 {
-                    loopDetector.claim(block);
+                    loopDetector.Claim(block);
                     int next = _filesystem.GetNextBlock(block);
                     if (next == POIFSConstants.END_OF_CHAIN)
                     {
@@ -121,31 +126,28 @@ namespace NPOI.POIFS.FileSystem
          * Returns the BATBlock that handles the specified offset,
          *  and the relative index within it
          */
-        protected BATBlockAndIndex GetBATBlockAndIndex(int offset)
+        public override BATBlockAndIndex GetBATBlockAndIndex(int offset)
         {
             return BATBlock.GetSBATBlockAndIndex(
-                  offset, _header, _sbat_blocks
-            );
+                  offset, _header, _sbat_blocks);
         }
 
         /**
          * Works out what block follows the specified one.
          */
-        protected int GetNextBlock(int offset)
+        public override int GetNextBlock(int offset)
         {
             BATBlockAndIndex bai = GetBATBlockAndIndex(offset);
-            return bai.GetBlock().GetValueAt(bai.GetIndex());
+            return bai.Block.GetValueAt(bai.Index);
         }
 
         /**
          * Changes the record of what block follows the specified one.
          */
-        protected void SetNextBlock(int offset, int nextBlock)
+        public override void SetNextBlock(int offset, int nextBlock)
         {
             BATBlockAndIndex bai = GetBATBlockAndIndex(offset);
-            bai.GetBlock().SetValueAt(
-                  bai.GetIndex(), nextBlock
-            );
+            bai.Block.SetValueAt(bai.Index, nextBlock);
         }
 
         /**
@@ -153,7 +155,7 @@ namespace NPOI.POIFS.FileSystem
          * This method will extend the file if needed, and if doing
          *  so, allocate new FAT blocks to Address the extra space.
          */
-        protected int GetFreeBlock()
+        public override int GetFreeBlock()
         {
             int sectorsPerSBAT = _filesystem.GetBigBlockSizeDetails().GetBATEntriesPerBlock();
 
@@ -162,8 +164,8 @@ namespace NPOI.POIFS.FileSystem
             for (int i = 0; i < _sbat_blocks.Count; i++)
             {
                 // Check this one
-                BATBlock sbat = _sbat_blocks.Get(i);
-                if (sbat.HasFreeSectors())
+                BATBlock sbat = _sbat_blocks[i];
+                if (sbat.HasFreeSectors)
                 {
                     // Claim one of them and return it
                     for (int j = 0; j < sectorsPerSBAT; j++)
@@ -188,22 +190,22 @@ namespace NPOI.POIFS.FileSystem
             // Create a new BATBlock
             BATBlock newSBAT = BATBlock.CreateEmptyBATBlock(_filesystem.GetBigBlockSizeDetails(), false);
             int batForSBAT = _filesystem.GetFreeBlock();
-            newSBAT.SetOurBlockIndex(batForSBAT);
+            newSBAT.OurBlockIndex = batForSBAT;
 
             // Are we the first SBAT?
-            if (_header.GetSBATCount() == 0)
+            if (_header.SBATCount == 0)
             {
-                _header.SetSBATStart(batForSBAT);
-                _header.SetSBATBlockCount(1);
+                _header.SBATStart = batForSBAT;
+                _header.SBATBlockCount = 1;
             }
             else
             {
                 // Find the end of the SBAT stream, and add the sbat in there
                 ChainLoopDetector loopDetector = _filesystem.GetChainLoopDetector();
-                int batOffset = _header.GetSBATStart();
+                int batOffset = _header.SBATStart;
                 while (true)
                 {
-                    loopDetector.claim(batOffset);
+                    loopDetector.Claim(batOffset);
                     int nextBat = _filesystem.GetNextBlock(batOffset);
                     if (nextBat == POIFSConstants.END_OF_CHAIN)
                     {
@@ -216,9 +218,7 @@ namespace NPOI.POIFS.FileSystem
                 _filesystem.SetNextBlock(batOffset, batForSBAT);
 
                 // And update the count
-                _header.SetSBATBlockCount(
-                      _header.GetSBATCount() + 1
-                );
+                _header.SBATBlockCount = _header.SBATCount + 1;
             }
 
             // Finish allocating
@@ -230,12 +230,12 @@ namespace NPOI.POIFS.FileSystem
         }
 
 
-        protected ChainLoopDetector GetChainLoopDetector()
+        public override ChainLoopDetector GetChainLoopDetector()
         {
-            return new ChainLoopDetector(_root.GetSize());
+            return new ChainLoopDetector(_root.Size, this);
         }
 
-        protected int GetBlockStoreBlockSize()
+        public override int GetBlockStoreBlockSize()
         {
             return POIFSConstants.SMALL_BLOCK_SIZE;
         }
@@ -243,19 +243,13 @@ namespace NPOI.POIFS.FileSystem
         /**
          * Writes the SBATs to their backing blocks
          */
-        protected void syncWithDataSource()
+        public void SyncWithDataSource()
         {
             foreach (BATBlock sbat in _sbat_blocks)
             {
-                ByteBuffer block = _filesystem.GetBlockAt(sbat.GetOurBlockIndex());
+                ByteBuffer block = _filesystem.GetBlockAt(sbat.OurBlockIndex);
                 BlockAllocationTableWriter.WriteBlock(sbat, block);
             }
         }
     }
 }
-
-
-
-
-
-

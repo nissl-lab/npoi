@@ -46,7 +46,7 @@ namespace TestCases.HSSF.Record.Chart
             // Now process it through eventusermodel, and
             //  look out for the title records
             ChartTitleFormatRecordGrabber grabber = new ChartTitleFormatRecordGrabber();
-            Stream din = fs.CreatePOIFSDocumentReader("Workbook");
+            Stream din = fs.CreateDocumentInputStream("Workbook");
             HSSFRequest req = new HSSFRequest();
             req.AddListenerForAllRecords(grabber);
             HSSFEventFactory factory = new HSSFEventFactory();

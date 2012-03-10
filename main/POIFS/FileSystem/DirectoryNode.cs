@@ -45,70 +45,87 @@ namespace NPOI.POIFS.FileSystem
     /// @author Marc Johnson (mjohnson at apache dot org)
     /// </summary>
     [Serializable]
-    public class DirectoryNode:EntryNode,DirectoryEntry, POIFSViewable
+    public class DirectoryNode : EntryNode, DirectoryEntry, POIFSViewable, IEnumerable<Entry>
     {
         // Map of Entry instances, keyed by their names
-        private Hashtable               _entries;
+        private Dictionary<string, Entry> _byname;
+
+        private List<Entry> _entries;
 
         // the POIFSFileSystem we belong to
-        private POIFSFileSystem   _filesystem;
+        private POIFSFileSystem _oFilesSystem;
+
+        private NPOIFSFileSystem _nFilesSystem;
 
         // the path described by this document
-        [NonSerialized]
         private POIFSDocumentPath _path;
+
+
+        public DirectoryNode(DirectoryProperty property,
+                        POIFSFileSystem fileSystem,
+                        DirectoryNode parent)
+            : this(property, parent, fileSystem, (NPOIFSFileSystem)null)
+        {
+        }
 
         /// <summary>
         /// Create a DirectoryNode. This method Is not public by design; it
         /// Is intended strictly for the internal use of this package
         /// </summary>
         /// <param name="property">the DirectoryProperty for this DirectoryEntry</param>
-        /// <param name="filesystem">the POIFSFileSystem we belong to</param>
+        /// <param name="nFileSystem">the POIFSFileSystem we belong to</param>
         /// <param name="parent">the parent of this entry</param>
         public DirectoryNode(DirectoryProperty property,
-                      POIFSFileSystem filesystem,
-                      DirectoryNode parent):base(property, parent)
+                NPOIFSFileSystem nFileSystem,
+                DirectoryNode parent)
+            : this(property, parent, (POIFSFileSystem)null, nFileSystem)
         {
+        }
+
+        private DirectoryNode(DirectoryProperty property,
+                        DirectoryNode parent,
+                        POIFSFileSystem oFileSystem,
+                        NPOIFSFileSystem nFileSystem)
+            : base(property, parent)
+        {
+            this._oFilesSystem = oFileSystem;
+            this._nFilesSystem = nFileSystem;
+
             if (parent == null)
-            {
                 _path = new POIFSDocumentPath();
-            }
             else
             {
-                _path = new POIFSDocumentPath(parent._path, new String[]
-                {
-                    property.Name
-                });
+                _path = new POIFSDocumentPath(parent._path, new string[] { property.Name });
             }
-            _filesystem = filesystem;
-            _entries    = new Hashtable();
-            IEnumerator iter = property.Children;
+
+            _byname = new Dictionary<string, Entry>();
+            _entries = new List<Entry>();
+            IEnumerator<Property> iter = property.Children;
 
             while (iter.MoveNext())
             {
-                Property child     = ( Property ) iter.Current;
+                Property child = iter.Current;
                 Entry    childNode = null;
 
                 if (child.IsDirectory)
                 {
-                    childNode = new DirectoryNode(( DirectoryProperty ) child,
-                                                  _filesystem, this);
+                    DirectoryProperty childDir = (DirectoryProperty)child;
+                    if (_oFilesSystem != null)
+                    {
+                        childNode = new DirectoryNode(childDir,_oFilesSystem, this);
                 }
                 else
                 {
-                    childNode = new DocumentNode(( DocumentProperty ) child,
-                                                 this);
+                        childNode = new DirectoryNode(childDir, _nFilesSystem, this);
+                    }
                 }
-                _entries[childNode.Name]=childNode;
+                else
+                {
+                    childNode = new DocumentNode((DocumentProperty)child, this);
             }
+                _entries.Add(childNode);
+                _byname.Add(childNode.Name, childNode);
         }
-
-        /// <summary>
-        /// Gets the path.
-        /// </summary>
-        /// <value>this directory's path representation</value>
-        public POIFSDocumentPath Path
-        {
-            get { return _path; }
         }
         
         /// <summary>
@@ -116,7 +133,7 @@ namespace NPOI.POIFS.FileSystem
         /// </summary>
         /// <param name="documentName">the name of the document to be opened</param>
         /// <returns>a newly opened DocumentStream</returns>
-        public POIFSDocumentReader CreatePOIFSDocumentReader(
+        public DocumentInputStream CreatePOIFSDocumentReader(
                 String documentName)
         {
             Entry document = GetEntry(documentName);
@@ -126,22 +143,26 @@ namespace NPOI.POIFS.FileSystem
                 throw new IOException("Entry '" + documentName
                                       + "' Is not a DocumentEntry");
             }
-            return new POIFSDocumentReader(( DocumentEntry ) document);
+            return new DocumentInputStream((DocumentEntry)document);
         }
 
         /// <summary>
-        /// Create a new DocumentEntry
+        /// Create a new DocumentEntry; the data will be provided later
         /// </summary>
-        /// <param name="document">the new document</param>
+        /// <param name="name">the name of the new DocumentEntry</param>
+        /// <param name="size">the size of the new DocumentEntry</param>
         /// <returns>the new DocumentEntry</returns>
-        internal DocumentEntry CreateDocument(POIFSDocument document)
+        public DocumentEntry CreateDocument(POIFSDocument document)
         {
             DocumentProperty property = document.DocumentProperty;
             DocumentNode     rval     = new DocumentNode(property, this);
 
-            (( DirectoryProperty ) Property).AddChild(property);
-            _filesystem.AddDocument(document);
-            _entries[property.Name]=rval;
+            ((DirectoryProperty)Property).AddChild(property);
+            _oFilesSystem.AddDocument(document);
+
+            _entries.Add(rval);
+            _byname.Add(property.Name, rval);
+
             return rval;
         }
 
@@ -154,16 +175,16 @@ namespace NPOI.POIFS.FileSystem
         public bool ChangeName(String oldName, String newName)
         {
             bool   rval  = false;
-            EntryNode child = ( EntryNode ) _entries[oldName];
+            EntryNode child = (EntryNode)_byname[oldName];
 
             if (child != null)
             {
-                rval = (( DirectoryProperty ) Property)
+                rval = ((DirectoryProperty)Property)
                     .ChangeName(child.Property, newName);
                 if (rval)
                 {
-                    _entries.Remove(oldName);
-                    _entries[child.Property.Name]=child;
+                    _byname.Remove(oldName);
+                    _byname[child.Property.Name] = child;
                 }
             }
             return rval;
@@ -177,18 +198,46 @@ namespace NPOI.POIFS.FileSystem
         public bool DeleteEntry(EntryNode entry)
         {
             bool rval =
-                (( DirectoryProperty ) Property)
+                ((DirectoryProperty)Property)
                     .DeleteChild(entry.Property);
 
             if (rval)
             {
-                _entries.Remove(entry.Name);
-                _filesystem.Remove(entry);
+                _entries.Remove(entry);
+                _byname.Remove(entry.Name);
+
+                if (_oFilesSystem != null)
+                {
+                    _oFilesSystem.Remove(entry);
+                }
+                else
+                {
+                    _nFilesSystem.Remove(entry);
+                }
             }
             return rval;
         }
 
         /// <summary>
+        /// Gets the path.
+        /// </summary>
+        /// <value>this directory's path representation</value>
+        public POIFSDocumentPath Path
+        {
+            get { return _path; }
+        }
+
+        public POIFSFileSystem FileSystem
+        {
+            get { return _oFilesSystem; }
+        }
+
+        public NPOIFSFileSystem NFileSystem
+        {
+            get { return _nFilesSystem; }
+        }
+
+       /// <summary>
         /// get an iterator of the Entry instances contained directly in
         /// this instance (in other words, children only; no grandchildren
         /// etc.)
@@ -199,9 +248,9 @@ namespace NPOI.POIFS.FileSystem
         /// objects retrieved by next() are guaranteed to be
         /// implementations of Entry.
         /// </value>
-        public IEnumerator Entries
+        public IEnumerator<Entry> Entries
         {
-            get { return _entries.Values.GetEnumerator(); }
+            get { return _entries.GetEnumerator(); }
         }
 
         /// <summary>
@@ -212,7 +261,7 @@ namespace NPOI.POIFS.FileSystem
         /// </value>
         public bool IsEmpty
         {
-            get { return _entries.Count==0; }
+            get { return _entries.Count == 0; }
         }
 
         /// <summary>
@@ -231,7 +280,7 @@ namespace NPOI.POIFS.FileSystem
 
         public bool HasEntry(String name)
         {
-            return name != null && _entries.ContainsKey(name);
+            return name != null && _byname.ContainsKey(name);
         }
 
         /// <summary>
@@ -248,55 +297,89 @@ namespace NPOI.POIFS.FileSystem
 
             if (name != null)
             {
-                rval = ( Entry ) _entries[name];
+                try
+                {
+                    rval = (Entry)_byname[name];
+                }
+                catch (KeyNotFoundException)
+                {
+                    throw new FileNotFoundException("no such entry: \"" + name + "\"");
+                }
             }
             if (rval == null)
             {
 
                 // either a null name was given, or there Is no such name
-                throw new FileNotFoundException("no such entry: \"" + name
-                                                + "\"");
+                throw new FileNotFoundException("no such entry: \"" + name + "\"");
             }
             return rval;
         }
 
-        /// <summary>
-        /// Create a new DocumentEntry
-        /// </summary>
-        /// <param name="name">the name of the new DocumentEntry</param>
-        /// <param name="stream">the Stream from which to Create the new DocumentEntry</param>
-        /// <returns>the new DocumentEntry</returns>
-        public DocumentEntry CreateDocument(String name,
-                                            Stream stream)
+
+        //public DocumentReader CreateDocumentReader(string documentName)
+        //{
+        //    try
+        //    {
+        //        return CreateDocumentReader(GetEntry(documentName));
+        //    }
+        //    catch(IOException ex)
+        //    {
+        //        throw ex;
+        //    }
+        //}
+
+        //public DocumentReader CreateDocumentReader(Entry document)
+        //{
+        //    if (!document.IsDirectoryEntry)
+        //    {
+        //        throw new IOException("Entry '" + document.Name + "' is not a DocumentEntry");
+        //    }
+
+        //    DocumentEntry entry = (DocumentEntry)document;
+        //    return new DocumentReader(entry);
+        //}
+
+        public DocumentInputStream CreateDocumentInputStream(Entry document)
         {
-            return CreateDocument(new POIFSDocument(name, stream));
+            if (!document.IsDocumentEntry)
+            {
+                throw new IOException("Entry '" + document.Name
+                                    + "' is not a DocumentEntry");
+            }
+
+            DocumentEntry entry = (DocumentEntry)document;
+            return new DocumentInputStream(entry);
         }
 
-        /// <summary>
-        /// Create a new DocumentEntry; the data will be provided later
-        /// </summary>
-        /// <param name="name">the name of the new DocumentEntry</param>
-        /// <param name="size">the size of the new DocumentEntry</param>
-        /// <returns>the new DocumentEntry</returns>
-        public DocumentEntry CreateDocument(String name, int size)
+        public DocumentInputStream CreateDocumentInputStream(string documentName)
         {
-            return CreateDocument(new POIFSDocument(name, size, _path));
+            return CreateDocumentInputStream(GetEntry(documentName));
         }
 
-        /// <summary>
-        /// Create a new DocumentEntry; the data will be provided later
-        /// </summary>
-        /// <param name="name">the name of the new DocumentEntry</param>
-        /// <param name="size">the size of the new DocumentEntry</param>
-        /// <param name="beforewriting"></param>
-        /// <returns>the new DocumentEntry</returns>
-        public DocumentEntry CreateDocument(String name, int size,
-                                            POIFSWriterEventHandler beforewriting)
+
+        public DocumentEntry CreateDocument(NPOIFSDocument document)
         {
-            POIFSDocument document = new POIFSDocument(name, size, _path);
-            document.BeforeWriting += beforewriting;
-            return CreateDocument(document);
+            try
+            {
+                DocumentProperty property = document.DocumentProperty;
+                DocumentNode rval = new DocumentNode(property, this);
+
+                ((DirectoryProperty)Property).AddChild(property);
+
+                _nFilesSystem.AddDocument(document);
+
+                _entries.Add(rval);
+                _byname[property.Name] = rval;
+
+                return rval;
+
+            }
+            catch (IOException ex)
+        {
+                throw ex;
+            }
         }
+
 
         /// <summary>
         /// Create a new DirectoryEntry
@@ -306,12 +389,23 @@ namespace NPOI.POIFS.FileSystem
         public DirectoryEntry CreateDirectory(String name)
         {
             DirectoryProperty property = new DirectoryProperty(name);
-            DirectoryNode     rval     = new DirectoryNode(property, _filesystem,
-                                             this);
+            DirectoryNode rval;
 
-            (( DirectoryProperty ) Property).AddChild(property);
-            _filesystem.AddDirectory(property);
-            _entries[name]=rval;
+            if (_oFilesSystem != null)
+            {
+                rval = new DirectoryNode(property, _oFilesSystem, this);
+                _oFilesSystem.AddDirectory(property);
+            }
+            else
+            {
+                rval = new DirectoryNode(property, _nFilesSystem, this);
+                _nFilesSystem.AddDirectory(property);
+            }
+
+            ((DirectoryProperty)Property).AddChild(property);
+            _entries.Add(rval);
+            _byname[name] = rval;
+
             return rval;
         }
 
@@ -337,7 +431,7 @@ namespace NPOI.POIFS.FileSystem
         /// <value>true if the Entry Is a DirectoryEntry, else false</value>
         public override bool IsDirectoryEntry
         {
-            get{return true;}
+            get { return true; }
         }
 
         /// <summary>
@@ -349,19 +443,48 @@ namespace NPOI.POIFS.FileSystem
         protected override bool IsDeleteOK
         {
             // if this directory Is empty, we can Delete it
-            get{
+            get
+            {
                 return IsEmpty;
             }
         }
 
+        public DocumentEntry CreateDocument(string name, Stream stream)
+        {
+            try
+            {
+                if (_nFilesSystem != null)
+                {
+                    return CreateDocument(new NPOIFSDocument(name, _nFilesSystem, stream));
+                }
+                else
+                {
+                    return CreateDocument(new POIFSDocument(name, stream));
+                }
+            }
+            catch (IOException ex)
+            {
+                throw ex;
+            }
+        }
 
+
+        public DocumentEntry CreateDocument(string name, int size, POIFSWriterListener writer)
+        {
+           // return CreateDocument(name, size, write);
+            return CreateDocument(new POIFSDocument(name, size, _path, writer));
+        }
+
+
+        #region ViewableItertor interface
         /// <summary>
         /// Get an array of objects, some of which may implement POIFSViewable
         /// </summary>
         /// <value>an array of Object; may not be null, but may be empty</value>
         public Array ViewableArray
         {
-            get{
+            get
+			{
                 return new Object[0];
             }
         }
@@ -393,7 +516,7 @@ namespace NPOI.POIFS.FileSystem
         /// a viewer should call GetViewableIterator</value>
         public bool PreferArray
         {
-            get{return false;}
+            get { return false; }
         }
 
         /// <summary>
@@ -403,7 +526,90 @@ namespace NPOI.POIFS.FileSystem
         /// <value>The short description.</value>
         public String ShortDescription
         {
-            get{return Name;}
+            get { return Name; }
         }
+        
+        #endregion
+
+
+
+        #region IEnumerable<Entry> Members
+
+        public IEnumerator<Entry> GetEnumerator()
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion
+
+        #region IEnumerable Members
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion
+
+
+
+
+        public  bool CanRead
+        {
+            get { throw new System.NotImplementedException(); }
+        }
+
+        public  bool CanSeek
+        {
+            get { throw new System.NotImplementedException(); }
+        }
+
+        public  bool CanWrite
+        {
+            get { throw new System.NotImplementedException(); }
+        }
+
+        public  void Flush()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public  long Length
+        {
+            get { throw new System.NotImplementedException(); }
+        }
+
+        public  long Position
+        {
+            get
+            {
+                throw new System.NotImplementedException();
     }
+            set
+            {
+                throw new System.NotImplementedException();
+            }
+        }
+
+        public  int Read(byte[] buffer, int offset, int count)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public  long Seek(long offset, SeekOrigin origin)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public  void SetLength(long value)
+        {
+            throw new System.NotImplementedException();
+        }
+
+
+
+
+    }
+
+
 }

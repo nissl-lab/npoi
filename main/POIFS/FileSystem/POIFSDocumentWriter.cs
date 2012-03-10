@@ -36,6 +36,7 @@ namespace NPOI.POIFS.FileSystem
     /// writers can't accidently go over their size limits
     /// @author Marc Johnson (mjohnson at apache dot org)
     /// </summary>
+    [Obsolete]
     public class POIFSDocumentWriter:Stream
     {
         private int limit;
@@ -95,6 +96,14 @@ namespace NPOI.POIFS.FileSystem
         {
             throw new NotImplementedException();
         }
+
+
+        public void Write(int b)
+        {
+            LimitCheck(1);
+            stream.WriteByte((byte)b);
+        }
+
         /// <summary>
         /// Writes b.length bytes from the specified byte array
         /// to this output stream.

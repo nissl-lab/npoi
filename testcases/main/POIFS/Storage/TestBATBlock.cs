@@ -32,6 +32,7 @@ using System.IO;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 using NPOI.POIFS.Storage;
+using NPOI.POIFS.Common;
 
 namespace TestCases.POIFS.Storage
 {
@@ -46,27 +47,27 @@ namespace TestCases.POIFS.Storage
         {
 
             // Test 0 Length array (basic sanity)
-            BATBlock[] rvalue = BATBlock.CreateBATBlocks(CreateTestArray(0));
+            BATBlock[] rvalue = BATBlock.CreateBATBlocks(POIFSConstants.SMALLER_BIG_BLOCK_SIZE_DETAILS, CreateTestArray(0));
 
             Assert.AreEqual(0, rvalue.Length);
 
             // Test array of Length 1
-            rvalue = BATBlock.CreateBATBlocks(CreateTestArray(1));
+            rvalue = BATBlock.CreateBATBlocks(POIFSConstants.SMALLER_BIG_BLOCK_SIZE_DETAILS, CreateTestArray(1));
             Assert.AreEqual(1, rvalue.Length);
             VerifyContents(rvalue, 1);
 
             // Test array of Length 127
-            rvalue = BATBlock.CreateBATBlocks(CreateTestArray(127));
+            rvalue = BATBlock.CreateBATBlocks(POIFSConstants.SMALLER_BIG_BLOCK_SIZE_DETAILS, CreateTestArray(127));
             Assert.AreEqual(1, rvalue.Length);
             VerifyContents(rvalue, 127);
 
             // Test array of Length 128
-            rvalue = BATBlock.CreateBATBlocks(CreateTestArray(128));
+            rvalue = BATBlock.CreateBATBlocks(POIFSConstants.SMALLER_BIG_BLOCK_SIZE_DETAILS, CreateTestArray(128));
             Assert.AreEqual(1, rvalue.Length);
             VerifyContents(rvalue, 128);
 
             // Test array of Length 129
-            rvalue = BATBlock.CreateBATBlocks(CreateTestArray(129));
+            rvalue = BATBlock.CreateBATBlocks(POIFSConstants.SMALLER_BIG_BLOCK_SIZE_DETAILS, CreateTestArray(129));
             Assert.AreEqual(2, rvalue.Length);
             VerifyContents(rvalue, 129);
         }
@@ -124,32 +125,32 @@ namespace TestCases.POIFS.Storage
         {
 
             // Test 0 Length array (basic sanity)
-            BATBlock[] rvalue = BATBlock.CreateXBATBlocks(CreateTestArray(0), 1);
+            BATBlock[] rvalue = BATBlock.CreateXBATBlocks(POIFSConstants.SMALLER_BIG_BLOCK_SIZE_DETAILS, CreateTestArray(0), 1);
 
             Assert.AreEqual(0, rvalue.Length);
 
             // Test array of Length 1
-            rvalue = BATBlock.CreateXBATBlocks(CreateTestArray(1), 1);
+            rvalue = BATBlock.CreateXBATBlocks(POIFSConstants.SMALLER_BIG_BLOCK_SIZE_DETAILS, CreateTestArray(1), 1);
             Assert.AreEqual(1, rvalue.Length);
             verifyXBATContents(rvalue, 1, 1);
 
             // Test array of Length 127
-            rvalue = BATBlock.CreateXBATBlocks(CreateTestArray(127), 1);
+            rvalue = BATBlock.CreateXBATBlocks(POIFSConstants.SMALLER_BIG_BLOCK_SIZE_DETAILS, CreateTestArray(127), 1);
             Assert.AreEqual(1, rvalue.Length);
             verifyXBATContents(rvalue, 127, 1);
 
             // Test array of Length 128
-            rvalue = BATBlock.CreateXBATBlocks(CreateTestArray(128), 1);
+            rvalue = BATBlock.CreateXBATBlocks(POIFSConstants.SMALLER_BIG_BLOCK_SIZE_DETAILS, CreateTestArray(128), 1);
             Assert.AreEqual(2, rvalue.Length);
             verifyXBATContents(rvalue, 128, 1);
 
             // Test array of Length 254
-            rvalue = BATBlock.CreateXBATBlocks(CreateTestArray(254), 1);
+            rvalue = BATBlock.CreateXBATBlocks(POIFSConstants.SMALLER_BIG_BLOCK_SIZE_DETAILS, CreateTestArray(254), 1);
             Assert.AreEqual(2, rvalue.Length);
             verifyXBATContents(rvalue, 254, 1);
 
             // Test array of Length 255
-            rvalue = BATBlock.CreateXBATBlocks(CreateTestArray(255), 1);
+            rvalue = BATBlock.CreateXBATBlocks(POIFSConstants.SMALLER_BIG_BLOCK_SIZE_DETAILS, CreateTestArray(255), 1);
             Assert.AreEqual(3, rvalue.Length);
             verifyXBATContents(rvalue, 255, 1);
         }

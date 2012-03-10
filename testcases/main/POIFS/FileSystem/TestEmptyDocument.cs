@@ -44,73 +44,49 @@ namespace TestCases.POIFS.FileSystem
     [TestClass]
     public class TestEmptyDocument
     {
+        private static POILogger _logger = POILogFactory.GetLogger(typeof(TestEmptyDocument));
 
-        public static void main(String[] args)
+        private class AnonymousClass : NPOI.POIFS.FileSystem.POIFSWriterListener
         {
-            TestEmptyDocument driver = new TestEmptyDocument();
-
-            Console.WriteLine();
-            Console.WriteLine("As only file...");
-            Console.WriteLine();
-
-            Console.Write("Trying using CreateDocument(String,InputStream): ");
-            try
+            public void ProcessPOIFSWriterEvent(NPOI.POIFS.FileSystem.POIFSWriterEvent ev)
             {
-                driver.TestSingleEmptyDocument();
-                Console.WriteLine("Worked!");
+                TestEmptyDocument._logger.Log(POILogger.WARN, "Written");
+                Console.WriteLine("Written");
             }
-            catch (IOException exception)
-            {
-                Console.WriteLine("Assert.Failed! ");
-                Console.WriteLine(exception.ToString());
-            }
-            Console.WriteLine();
-
-            Console.Write
-              ("Trying using CreateDocument(String,int,POIFSWriterListener): ");
-            try
-            {
-                driver.TestSingleEmptyDocumentEvent();
-                Console.WriteLine("Worked!");
-            }
-            catch (IOException exception)
-            {
-                Console.WriteLine("Assert.Failed!");
-                Console.WriteLine(exception.ToString());
-            }
-            Console.WriteLine();
-
-            Console.WriteLine();
-            Console.WriteLine("After another file...");
-            Console.WriteLine();
-
-            Console.Write("Trying using CreateDocument(String,InputStream): ");
-            try
-            {
-                driver.TestEmptyDocumentWithFriend();
-                Console.WriteLine("Worked!");
-            }
-            catch (IOException exception)
-            {
-                Console.WriteLine("Assert.Failed! ");
-                Console.WriteLine(exception.ToString());
-            }
-            Console.WriteLine();
-
-            Console.Write
-              ("Trying using CreateDocument(String,int,POIFSWriterListener): ");
-            try
-            {
-                driver.TestEmptyDocumentWithFriend();
-                Console.WriteLine("Worked!");
-            }
-            catch (IOException exception)
-            {
-                Console.WriteLine("Assert.Failed!");
-                Console.WriteLine(exception.ToString());
-            }
-            Console.WriteLine();
         }
+
+        private class AnonymousClass1 : NPOI.POIFS.FileSystem.POIFSWriterListener
+        {
+            public void ProcessPOIFSWriterEvent(NPOI.POIFS.FileSystem.POIFSWriterEvent ev)
+            {
+                try
+                {
+                    ev.Stream.Write(0);
+                    Console.WriteLine("Send an event");
+                }
+                catch (IOException exception)
+                {
+                    throw new Exception("Exception on write: " + exception.Message);
+                }
+            }
+        }
+
+        private class EmptyClass : NPOI.POIFS.FileSystem.POIFSWriterListener
+        {
+            public void ProcessPOIFSWriterEvent(NPOI.POIFS.FileSystem.POIFSWriterEvent ev)
+            {
+                try
+                {
+                    ;
+                }
+                catch (IOException exception)
+                {
+                    throw new Exception("Exception on write: " + exception.Message);
+                }
+            }
+        }
+       
+
         [TestMethod]
         public void TestSingleEmptyDocument()
         {
@@ -118,69 +94,48 @@ namespace TestCases.POIFS.FileSystem
             DirectoryEntry dir = fs.Root;
             dir.CreateDocument("Foo", new MemoryStream(new byte[] { }));
 
-            MemoryStream out1 = new MemoryStream();
-            fs.WriteFileSystem(out1);
-            new POIFSFileSystem(new MemoryStream(out1.ToArray()));
+            MemoryStream output = new MemoryStream();
+            fs.WriteFileSystem(output);
+            byte[] temp = output.ToArray();
+            Assert.IsNotNull(new POIFSFileSystem(new MemoryStream(temp)));
         }
 
-        void OnWrite1(object sender,POIFSWriterEventArgs evt)
-        {
-            Console.WriteLine("written");
-        }
         [TestMethod]
         public void TestSingleEmptyDocumentEvent()
         {
             POIFSFileSystem fs = new POIFSFileSystem();
             DirectoryEntry dir = fs.Root;
-            dir.CreateDocument("Foo", 0,new POIFSWriterEventHandler(OnWrite1));
+            dir.CreateDocument("Foo", 0, new AnonymousClass());
 
-            MemoryStream out1 = new MemoryStream();
-            fs.WriteFileSystem(out1);
-            new POIFSFileSystem(new MemoryStream(out1.ToArray()));
+            MemoryStream output = new MemoryStream();
+            fs.WriteFileSystem(output);
+            Assert.IsNotNull(new POIFSFileSystem(new MemoryStream(output.ToArray())));
         }
         [TestMethod]
         public void TestEmptyDocumentWithFriend()
         {
             POIFSFileSystem fs = new POIFSFileSystem();
             DirectoryEntry dir = fs.Root;
-            dir.CreateDocument("Bar", new MemoryStream(new byte[] { 0 }));
-            dir.CreateDocument("Foo", new MemoryStream(new byte[] { }));
+            dir.CreateDocument("Bar", new MemoryStream(new byte[]{0}));
+            dir.CreateDocument("Foo", new MemoryStream(new byte[]{}));
 
-            MemoryStream out1 = new MemoryStream();
-            fs.WriteFileSystem(out1);
-            new POIFSFileSystem(new MemoryStream(out1.ToArray()));
+            MemoryStream output = new MemoryStream();
+            fs.WriteFileSystem(output);
+            Assert.IsNotNull(new POIFSFileSystem(new MemoryStream(output.ToArray())));
         }
-
-            void OnWrite2(object sender,POIFSWriterEventArgs evt)
-            {
-                try
-                {
-                    evt.Stream.WriteByte(0);
-                }
-                catch (IOException exception)
-                {
-                    throw new InvalidOperationException("exception on Write: " + exception);
-                }
-            }
-
-
-            void OnWrite3(object sender, POIFSWriterEventArgs evt)
-            {
-
-            }
 
         [TestMethod]
         public void TestEmptyDocumentEventWithFriend()
         {
             POIFSFileSystem fs = new POIFSFileSystem();
             DirectoryEntry dir = fs.Root;
+            dir.CreateDocument("Bar", 1, new AnonymousClass1());
+            dir.CreateDocument("Foo", 0, new EmptyClass());
 
-            dir.CreateDocument("Bar", 1,new POIFSWriterEventHandler(OnWrite2));
-            dir.CreateDocument("Foo", 0, new POIFSWriterEventHandler(OnWrite3));
+            MemoryStream output = new MemoryStream();
+            fs.WriteFileSystem(output);
+            Assert.IsNotNull(new POIFSFileSystem(new MemoryStream(output.ToArray())));
 
-            MemoryStream out1 = new MemoryStream();
-            fs.WriteFileSystem(out1);
-            new POIFSFileSystem(new MemoryStream(out1.ToArray()));
         }
         [TestMethod]
         public void TestEmptyDocumentBug11744()
@@ -190,21 +145,20 @@ namespace TestCases.POIFS.FileSystem
             POIFSFileSystem fs = new POIFSFileSystem();
             fs.CreateDocument(new MemoryStream(new byte[0]), "Empty");
             fs.CreateDocument(new MemoryStream(TestData), "NotEmpty");
-            MemoryStream out1 = new MemoryStream();
-            fs.WriteFileSystem(out1);
-            out1.ToArray();
+            MemoryStream output = new MemoryStream();
+            fs.WriteFileSystem(output);
 
             // This line caused the error.
-            fs = new POIFSFileSystem(new MemoryStream(out1.ToArray()));
+            fs = new POIFSFileSystem(new MemoryStream(output.ToArray()));
 
             DocumentEntry entry = (DocumentEntry)fs.Root.GetEntry("Empty");
             Assert.AreEqual(0, entry.Size, "Expected zero size");
-            byte[] actualReadbackData = IOUtils.ToByteArray(new POIFSDocumentReader(entry));
-            Assert.AreEqual(0,
-                         actualReadbackData.Length, "Expected zero Read from stream");
+            byte[] actualReadbackData;
+            actualReadbackData = NPOI.Util.IOUtils.ToByteArray(new DocumentInputStream(entry));
+            Assert.AreEqual(0, actualReadbackData.Length, "Expected zero read from stream");
 
             entry = (DocumentEntry)fs.Root.GetEntry("NotEmpty");
-            actualReadbackData = IOUtils.ToByteArray(new POIFSDocumentReader(entry));
+            actualReadbackData = NPOI.Util.IOUtils.ToByteArray(new DocumentInputStream(entry));
             Assert.AreEqual(TestData.Length, entry.Size, "Expected size was wrong");
             Assert.IsTrue(
                     Arrays.Equals(TestData,actualReadbackData), "Expected different data Read from stream");

@@ -45,7 +45,7 @@ namespace NPOI.Util
             else
             {
                 DocumentEntry dentry = (DocumentEntry)entry;
-                using (POIFSDocumentReader dstream = new POIFSDocumentReader(dentry))
+                using (DocumentInputStream dstream = new DocumentInputStream(dentry))
                 {
                     target.CreateDocument(dentry.Name, dstream);
                     //now part of usings call to Dispose: dstream.Close();

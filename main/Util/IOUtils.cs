@@ -29,6 +29,7 @@ namespace NPOI.Util
 {
     using System;
     using System.IO;
+    using NPOI.POIFS.NIO;
 
     public class IOUtils
     {
@@ -57,19 +58,19 @@ namespace NPOI.Util
                 return baos.ToArray();
             }
         }
+		   public static byte[] ToByteArray(ByteBuffer buffer, int length)
+        {
+            if (buffer.HasBuffer && buffer.Offset == 0)
+            {
+                // The backing array should work out fine for us
+                return buffer.Buffer;
+            }
 
-        //public static byte[] ToByteArray(ByteBuffer buffer, int length)
-        //{
-        //    if (buffer.HasBuffer && buffer.Offset == 0)
-        //    {
-        //        // The backing array should work out fine for us
-        //        return buffer.Buffer;
-        //    }
+            byte[] data = new byte[length];
+            buffer.Read(data);
+            return data;
+        }
 
-        //    byte[] data = new byte[length];
-        //    buffer.Read(data);
-        //    return data;
-        //}
 
         /// <summary>
         /// Reads the fully.
@@ -100,15 +101,10 @@ namespace NPOI.Util
 
         public static int ReadFully(Stream stream, byte[] b, int off, int len)
         {
-            if (stream.Position == stream.Length)
-            {
-                return -1;
-            }
-
             int total = 0;
             while (true)
             {
-                int got = stream.Read(b, off + total, len - total);
+                int got = stream.Read(b, off + total, len - total - off);
                 total += got;
                 if (stream.Position == stream.Length)
                 {
@@ -133,7 +129,7 @@ namespace NPOI.Util
             byte[] buff = new byte[4096];
             inp.Position = 0;
             int count;
-            while ((count = inp.Read(buff, 0, buff.Length)) != 0)
+            while ((count = inp.Read(buff, 0, buff.Length)) != -1)
             {
                 if (count > 0)
                 {
