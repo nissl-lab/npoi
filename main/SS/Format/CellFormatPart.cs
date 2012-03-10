@@ -271,7 +271,7 @@ namespace NPOI.SS.Format
          */
         private static Color GetColor(Match m)
         {
-            String cdesc = m.Groups[(COLOR_GROUP)].Value;
+            String cdesc = m.Groups[(COLOR_GROUP)].Value.ToUpper();
             if (cdesc == null || cdesc.Length == 0)
                 return Color.Empty;
             Color c = Color.Empty;
@@ -327,10 +327,11 @@ namespace NPOI.SS.Format
             if (fdesc.Equals("") || fdesc.Equals("General", StringComparison.InvariantCultureIgnoreCase))
                 return CellFormatType.GENERAL;
 
-            Match m = SPECIFICATION_PAT.Match(fdesc);
+            MatchCollection mc = SPECIFICATION_PAT.Matches(fdesc);
             bool couldBeDate = false;
             bool seenZero = false;
-            while (m.Success)
+            foreach(Match m in mc)
+            //while (m.Success)
             {
                 String repl = m.Groups[(0)].Value;
                 if (repl.Length > 0)
@@ -474,63 +475,92 @@ namespace NPOI.SS.Format
             // \u0000 with '' to mean a quote char.  Oy.
             //
             // For formats that don't use "'" we don't do any of this
-            throw new NotImplementedException(); 
-            //Match m = SPECIFICATION_PAT.Matcher(fdesc);
-            //StringBuilder fmt = new StringBuilder();
+
+            MatchCollection mc = SPECIFICATION_PAT.Matches(fdesc);
+            StringBuilder fmt = new StringBuilder();
+            Match lastMatch = null;
             //while (m.Find())
-            //{
-            //    String part = Group(m, 0);
-            //    if (part.Length() > 0)
-            //    {
-            //        String repl = partHandler.HandlePart(m, part, type, fmt);
-            //        if (repl == null)
-            //        {
-            //            switch (part[0])
-            //            {
-            //                case '\"':
-            //                    repl = quoteSpecial(part.Substring(1,
-            //                            part.Length() - 1), type);
-            //                    break;
-            //                case '\\':
-            //                    repl = quoteSpecial(part.Substring(1), type);
-            //                    break;
-            //                case '_':
-            //                    repl = " ";
-            //                    break;
-            //                case '*': //!! We don't do this for real, we just Put in 3 of them
-            //                    repl = ExpandChar(part);
-            //                    break;
-            //                default:
-            //                    repl = part;
-            //                    break;
-            //            }
-            //        }
-            //        m.AppendReplacement(fmt, Match.QuoteReplacement(repl));
-            //    }
-            //}
+            foreach(Match m in mc)
+            {
+                String part = Group(m, 0);
+                if (part.Length > 0)
+                {
+                    String repl = partHandler.HandlePart(m, part, type, fmt);
+                    if (repl == null)
+                    {
+                        switch (part[0])
+                        {
+                            case '\"':
+                                repl = QuoteSpecial(part.Substring(1,
+                                        part.Length - 2), type);
+                                break;
+                            case '\\':
+                                repl = QuoteSpecial(part.Substring(1), type);
+                                break;
+                            case '_':
+                                repl = " ";
+                                break;
+                            case '*': //!! We don't do this for real, we just Put in 3 of them
+                                repl = ExpandChar(part);
+                                break;
+                            default:
+                                repl = part;
+                                break;
+                        }
+                    }
+                    //m.AppendReplacement(fmt, Match.QuoteReplacement(repl));
+                    fmt.Append(part.Replace(m.Captures[0].Value, repl));
+                    if (m.NextMatch().Index - (m.Index + part.Length) > 0)
+                    {
+                        fmt.Append(fdesc.Substring(m.Index + part.Length, m.NextMatch().Index - (m.Index + part.Length)));
+                    }
+                    lastMatch = m;
+                }
+            }
+            if (lastMatch != null)
+            {
+                fmt.Append(fdesc.Substring(lastMatch.Index + lastMatch.Groups[0].Value.Length));
+            }
             //m.AppendTail(fmt);
 
-            //if (type.IsSpecial('\''))
-            //{
-            //    // Now the next pass for quoted characters: Remove '' chars, making "'a''b'" into "'ab'"
-            //    int pos = 0;
-            //    while ((pos = fmt.IndexOf("''", pos)) >= 0)
-            //    {
-            //        //fmt.Delete(pos, pos + 2);
-            //        fmt.Remove(pos, 2);
-            //    }
+            if (type.IsSpecial('\''))
+            {
+                // Now the next pass for quoted characters: Remove '' chars, making "'a''b'" into "'ab'"
+                int pos = 0;
+                while ((pos = fmt.ToString().IndexOf("''", pos)) >= 0)
+                {
+                    //fmt.Delete(pos, pos + 2);
+                    fmt.Remove(pos, 2);
+                }
 
-            //    // Now the pass for quoted chars: Replace any \u0000 with ''
-            //    pos = 0;
-            //    while ((pos = fmt.IndexOf("\u0000", pos)) >= 0)
-            //    {
-            //        fmt.Replace(pos, pos + 1, "''");
-            //    }
-            //}
+                // Now the pass for quoted chars: Replace any \u0000 with ''
+                pos = 0;
+                while ((pos = fmt.ToString().IndexOf("\u0000", pos)) >= 0)
+                {
+                    //fmt.Replace(pos, pos + 1, "''");
+                    fmt.Remove(pos, 1);
+                    fmt.Insert(pos, "''");
+                }
+            }
 
-            //return fmt;
+            return fmt;
         }
-
+        public static String QuoteReplacement(String s)
+        {
+            if ((s.IndexOf('\\') == -1) && (s.IndexOf('$') == -1))
+                return s;
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < s.Length; i++)
+            {
+                char c = s[(i)];
+                if (c == '\\' || c == '$')
+                {
+                    sb.Append('\\');
+                }
+                sb.Append(c);
+            }
+            return sb.ToString();
+        }
         /**
          * Expands a character. This is only partly done, because we don't have the
          * correct info.  In Excel, this would be expanded to fill the rest of the

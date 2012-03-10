@@ -60,11 +60,11 @@ namespace NPOI.SS.Format
             ;
 
             int[] numPlaces = new int[1];
-            CellFormatPart.IPartHandler handler = new PartHandler(numPlaces[0]);
+            PartHandler handler = new PartHandler(numPlaces[0]);
             desc = CellFormatPart.ParseFormat(format, CellFormatType.TEXT, handler).ToString();
 
             // Remember the "@" positions in last-to-first order (to make insertion easier)
-            textPos = new int[numPlaces[0]];
+            textPos = new int[handler.NumPlace];
             int pos = desc.Length - 1;
             for (int i = 0; i < textPos.Length; i++)
             {

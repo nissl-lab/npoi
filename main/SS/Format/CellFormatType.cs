@@ -33,8 +33,7 @@ namespace NPOI.SS.Format
     {
         public override CellFormatter Formatter(String pattern)
         {
-            //return new CellNumberFormatter(pattern);
-            throw new NotImplementedException();
+            return new CellNumberFormatter(pattern);
         }
         public override bool IsSpecial(char ch)
         {

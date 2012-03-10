@@ -280,7 +280,7 @@ namespace NPOI.SS.Format
             NumPartHandler partHandler = new NumPartHandler(this);
             StringBuilder descBuf = CellFormatPart.ParseFormat(format,
                     CellFormatType.NUMBER, partHandler);
-
+            string fmt = descBuf.ToString();
             // These are inconsistent Settings, so ditch 'em
             if ((decimalPoint != null || exponent != null) && slash != null)
             {
@@ -312,8 +312,10 @@ namespace NPOI.SS.Format
             if (precision == 0)
                 fractionalSpecials = EmptySpecialList;
             else
-                fractionalSpecials = specials.GetRange(specials.IndexOf(
-                        decimalPoint) + 1, fractionalEnd());
+            {
+                int pos = specials.IndexOf(decimalPoint) + 1;
+                fractionalSpecials = specials.GetRange(pos, fractionalEnd() - pos);
+            }
             if (exponent == null)
                 exponentSpecials = EmptySpecialList;
             else
@@ -362,6 +364,9 @@ namespace NPOI.SS.Format
 
                 fmtBuf.Append("f");
                 printfFmt = fmtBuf.ToString();
+
+                //this number format is legal in C#;
+                printfFmt = fmt;
             }
             else
             {
@@ -541,7 +546,7 @@ namespace NPOI.SS.Format
             {
                 int precision = 0;
                 int pos = specials.IndexOf(decimalPoint);
-                IEnumerator<Special> it = specials.GetRange(0, pos).GetEnumerator();//.ListIterator(specials.IndexOf(decimalPoint));
+                IEnumerator<Special> it = specials.GetRange(pos, specials.Count - pos).GetEnumerator();//.ListIterator(specials.IndexOf(decimalPoint));
                 //if (it.HasNext())
                //     it.Next();  // skip over the decimal point itself
                 it.MoveNext();
@@ -561,12 +566,12 @@ namespace NPOI.SS.Format
         {
             // In the integer part, commas at the end are scaling commas; other commas mean to show thousand-grouping commas
             int pos = integerEnd();
-            List<Special> list = specials.GetRange(0,pos);//.ListIterator();
+            List<Special> list = specials.GetRange(0, pos);//.ListIterator();
 
             bool stillScaling = true;
             integerCommas = false;
             //while (it.HasPrevious())
-            for (int i = list.Count; i >= 0; i--)
+            for (int i = list.Count - 1; i >= 0; i--)
             {
                 Special s = list[i];
                 if (s.ch != ',')
@@ -591,7 +596,7 @@ namespace NPOI.SS.Format
                 pos = fractionalEnd();
                 list = specials.GetRange(0, pos);//.ListIterator(fractionalEnd());
                 //while (it.HasPrevious())
-                for (int i = list.Count; i >= 0; i--)
+                for (int i = list.Count - 1; i >= 0; i--)
                 {
                     Special s = list[i];
                     if (s.ch != ',')
@@ -617,7 +622,7 @@ namespace NPOI.SS.Format
                 {
                     Removed++;
                     //it.Remove();
-                    //toRemove.Add(s);
+                    toRemove.Add(s);
                     sb.Remove(s.pos, 1);
                 }
             }
@@ -696,7 +701,7 @@ namespace NPOI.SS.Format
                 StringBuilder result = new StringBuilder();
                 //Formatter f = new Formatter(result);
                 //f.Format(LOCALE, printfFmt, value);
-
+                result.Append(value.ToString(printfFmt));
                 if (numerator == null)
                 {
                     WriteFractional(result, output);
@@ -711,8 +716,8 @@ namespace NPOI.SS.Format
 
             // Now strip out any remaining '#'s and add any pending text ...
             IEnumerator<Special> it = specials.GetEnumerator();//.ListIterator();
-            IEnumerator<StringMod> Changes = mods.GetEnumerator() as IEnumerator<StringMod>;
-            StringMod nextChange = (Changes.MoveNext() ? Changes.Current : null);
+            IEnumerator Changes = mods.Keys.GetEnumerator();
+            StringMod nextChange = (Changes.MoveNext() ? (StringMod)Changes.Current : null);
             int adjust = 0;
             BitArray deletedChars = new BitArray(1024); // records chars already deleted
             while (it.MoveNext())
@@ -791,7 +796,7 @@ namespace NPOI.SS.Format
                     adjust += output.Length - lenBefore;
 
                     if (Changes.MoveNext())
-                        nextChange = Changes.Current;
+                        nextChange = (StringMod)Changes.Current;
                     else
                         nextChange = null;
                 }
@@ -1022,6 +1027,7 @@ namespace NPOI.SS.Format
             StringBuilder sb = new StringBuilder();
             //Formatter formatter = new Formatter(sb);
             //formatter.Format(LOCALE, fmt, num);
+            sb.Append(num.ToString(fmt));
             Writeint(sb, output, numSpecials, mods, false);
         }
 
@@ -1091,32 +1097,36 @@ namespace NPOI.SS.Format
         }
     }
 
-        private void WriteFractional(StringBuilder result, StringBuilder output) {
-        int digit;
-        int strip;
-        IEnumerator<Special> it;
-        if (fractionalSpecials.Count > 0) {
-            digit = result.ToString().IndexOf(".") + 1;
-            if (exponent != null)
-                strip = result.ToString().IndexOf("e") - 1;
-            else
-                strip = result.Length - 1;
-            while (strip > digit && result[strip] == '0')
-                strip--;
-            it = fractionalSpecials.GetEnumerator();
-            while (it.MoveNext()) {
-                Special s = it.Current;
-                char resultCh = result[digit];
-                if (resultCh != '0' || s.ch == '0' || digit < strip)
-                    output[s.pos] = resultCh;
-                else if (s.ch == '?') {
-                    // This is when we're in trailing zeros, and the format is '?'.  We still strip out remaining '#'s later
-                    output[s.pos]= ' ';
+        private void WriteFractional(StringBuilder result, StringBuilder output)
+        {
+            int digit;
+            int strip;
+            IEnumerator<Special> it;
+            if (fractionalSpecials.Count > 0)
+            {
+                digit = result.ToString().IndexOf(".") + 1;
+                if (exponent != null)
+                    strip = result.ToString().IndexOf("e") - 1;
+                else
+                    strip = result.Length - 1;
+                while (strip > digit && result[strip] == '0')
+                    strip--;
+                it = fractionalSpecials.GetEnumerator();
+                while (it.MoveNext())
+                {
+                    Special s = it.Current;
+                    char resultCh = result[digit];
+                    if (resultCh != '0' || s.ch == '0' || digit < strip)
+                        output[s.pos] = resultCh;
+                    else if (s.ch == '?')
+                    {
+                        // This is when we're in trailing zeros, and the format is '?'.  We still strip out remaining '#'s later
+                        output[s.pos] = ' ';
+                    }
+                    digit++;
                 }
-                digit++;
             }
         }
-    }
 
         /**
          * {@inheritDoc}

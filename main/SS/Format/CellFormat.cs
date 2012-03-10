@@ -43,20 +43,20 @@ namespace NPOI.SS.Format
      * 
      * - One part (example: <c>[Green]#.##</c>) 
      * If the value is a number, display according to this one part (example: green text,
-     * with up to two decimal points). If the value is text, display it as is1.
+     * with up to two decimal points). If the value is text, display it as is.
      * 
      * - Two parts (example: <c>[Green]#.##;[Red]#.##</c>) 
      * If the value is a positive number or zero, display according to the first part (example: green
      * text, with up to two decimal points); if it is a negative number, display
      * according to the second part (example: red text, with up to two decimal
-     * points). If the value is text, display it as is1. 
+     * points). If the value is text, display it as is. 
      * 
      * - Three parts (example: <c>[Green]#.##;[Black]#.##;[Red]#.##</c>) 
      * If the value is a positive number, display according to the first part (example: green text, with up to
      * two decimal points); if it is zero, display according to the second part
      * (example: black text, with up to two decimal points); if it is a negative
      * number, display according to the third part (example: red text, with up to
-     * two decimal points). If the value is text, display it as is1.
+     * two decimal points). If the value is text, display it as is.
      * 
      * - Four parts (example: <c>[Green]#.##;[Black]#.##;[Red]#.##;[@]</c>)
      * If the value is a positive number, display according to the first part (example: green text,
@@ -153,10 +153,11 @@ namespace NPOI.SS.Format
         private CellFormat(String format)
         {
             this.format = format;
-            Match m = ONE_PART.Match(format);
+            MatchCollection mc = ONE_PART.Matches(format);
             List<CellFormatPart> parts = new List<CellFormatPart>();
 
-            while (m.Success)
+            //while (m.Success)
+            foreach(Match m in mc)
             {
                 try
                 {
