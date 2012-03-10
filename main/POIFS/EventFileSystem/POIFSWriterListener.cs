@@ -1,8 +1,8 @@
-﻿
+
 /* ====================================================================
    Licensed to the Apache Software Foundation (ASF) under one or more
    contributor license agreements.  See the NOTICE file distributed with
-   this work for additional information regarding copyright ownership.
+   this work for Additional information regarding copyright ownership.
    The ASF licenses this file to You under the Apache License, Version 2.0
    (the "License"); you may not use this file except in compliance with
    the License.  You may obtain a copy of the License at
@@ -15,21 +15,35 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 ==================================================================== */
-        
-using System;
 
+
+using NPOI.POIFS.FileSystem;
 namespace NPOI.POIFS.EventFileSystem
 {
-    /// <summary>
-    /// Interface POIFSWriterListener
-    /// @author Marc Johnson (mjohnson at apache dot org)
-    /// </summary>
+
+    /**
+     * Interface POIFSWriterListener
+     *
+     * @author Marc Johnson (mjohnson at apache dot org)
+     * @version %I%, %G%
+     */
+
     public interface POIFSWriterListener
     {
-        /// <summary>
-        ///  Process a POIFSWriterEvent that this listener had registered for
-        /// </summary>
-        /// <param name="evt">the POIFSWriterEvent</param>
-        void ProcessPOIFSWriterEvent(POIFSWriterEvent evt);
-    }
+
+        /**
+         * Process a POIFSWriterEvent that this listener had registered
+         * for
+         *
+         * @param event the POIFSWriterEvent
+         */
+
+        void ProcessPOIFSWriterEvent(POIFSWriterEvent event1);
+    }   // end public interface POIFSWriterListener
+
+
 }
+
+
+
+

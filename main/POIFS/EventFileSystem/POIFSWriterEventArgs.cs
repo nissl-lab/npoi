@@ -28,10 +28,11 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using NPOI.POIFS.FileSystem;
 
 namespace NPOI.POIFS.EventFileSystem
 {
-    using NPOI.POIFS.FileSystem;
+
 
     /// <summary>
     /// EventArgs for POIFSWriter
@@ -43,7 +44,7 @@ namespace NPOI.POIFS.EventFileSystem
         private string documentName;
         private int limit;
         private POIFSDocumentPath path;
-        private POIFSDocumentWriter stream;
+        private DocumentOutputStream stream;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="POIFSWriterEvent"/> class.
@@ -52,7 +53,7 @@ namespace NPOI.POIFS.EventFileSystem
         /// <param name="path">the path of the document</param>
         /// <param name="documentName">the name of the document</param>
         /// <param name="limit">the limit, in bytes, that can be written to the stream</param>
-        public POIFSWriterEventArgs(POIFSDocumentWriter stream, POIFSDocumentPath path, string documentName, int limit)
+        public POIFSWriterEventArgs(DocumentOutputStream stream, POIFSDocumentPath path, string documentName, int limit)
         {
             this.stream = stream;
             this.path = path;
@@ -99,7 +100,7 @@ namespace NPOI.POIFS.EventFileSystem
         /// the POIFSDocumentWriter, freshly opened
         /// </summary>
         /// <value>The stream.</value>
-        public virtual POIFSDocumentWriter Stream
+        public virtual DocumentOutputStream Stream
         {
             get
             {

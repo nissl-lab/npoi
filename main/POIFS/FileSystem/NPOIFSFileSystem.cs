@@ -27,6 +27,7 @@ using NPOI.POIFS.NIO;
 using NPOI.POIFS.Properties;
 using NPOI.POIFS.Storage;
 using NPOI.Util;
+using NPOI.POIFS.EventFileSystem;
 
 namespace NPOI.POIFS.FileSystem
 {
@@ -577,9 +578,9 @@ namespace NPOI.POIFS.FileSystem
          * @exception IOException
          */
 
-        public DocumentEntry CreateDocument(String name, int size, POIFSWriterListener Writer)
+        public DocumentEntry CreateDocument(String name, int size, POIFSWriterListener writer)
         {
-            return Root.CreateDocument(name, size, Writer);
+            return Root.CreateDocument(name, size, writer);
         }
 
         /**
