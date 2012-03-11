@@ -251,7 +251,7 @@ namespace NPOI.XSSF.UserModel.Helpers
             if (fromCol.isSetCustomWidth()) toCol.customWidth = (fromCol.customWidth);
             if (fromCol.isSetHidden()) toCol.hidden=(fromCol.hidden);
             if (fromCol.isSetStyle()) toCol.style=(fromCol.style);
-            if (fromCol.isSetWidth()) toCol.width=(fromCol.width);
+            if (fromCol.IsSetWidth()) toCol.width=(fromCol.width);
             if (fromCol.isSetCollapsed()) toCol.collapsed=(fromCol.collapsed);
             if (fromCol.isSetPhonetic()) toCol.phonetic=(fromCol.phonetic);
             if (fromCol.isSetOutlineLevel()) toCol.outlineLevel = (fromCol.outlineLevel);

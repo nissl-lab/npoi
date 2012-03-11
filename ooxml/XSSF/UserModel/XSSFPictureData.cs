@@ -70,30 +70,6 @@ namespace NPOI.XSSF.UserModel
 
         }
 
-        /**
-         * Gets the picture data as a byte array.
-         * <p>
-         * Note, that this call might be expensive since all the picture data is copied into a temporary byte array.
-         * You can grab the picture data directly from the underlying namespace part as follows:
-         * <br/>
-         * <code>
-         * InputStream is = GetPackagePart().GetInputStream();
-         * </code>
-         * </p>
-         *
-         * @return the picture data.
-         */
-        public byte[] GetData()
-        {
-                try
-                {
-                    return IOUtils.ToByteArray(GetPackagePart().GetInputStream());
-                }
-                catch (IOException e)
-                {
-                    throw new POIXMLException(e);
-                }
-        }
 
         /**
          * Suggests a file extension for this image.
@@ -131,9 +107,28 @@ namespace NPOI.XSSF.UserModel
             return 0;
         }
 
-        public String GetMimeType()
+
+        /// <summary>
+        /// Gets the picture data as a byte array.
+        /// </summary>
+        public byte[] Data
         {
-            return GetPackagePart().ContentType;
+            get
+            {
+                try
+                {
+                    return IOUtils.ToByteArray(GetPackagePart().GetInputStream());
+                }
+                catch (IOException e)
+                {
+                    throw new POIXMLException(e);
+                }
+            }
+        }
+
+        public string MimeType
+        {
+            get { return GetPackagePart().ContentType; }
         }
     }
 }

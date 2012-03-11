@@ -114,7 +114,7 @@ namespace NPOI.XSSF.UserModel
         out1.Close();
     }
 
-        public XSSFClientAnchor CreateAnchor(int dx1, int dy1, int dx2, int dy2,
+        public IClientAnchor CreateAnchor(int dx1, int dy1, int dx2, int dy2,
                 int col1, int row1, int col2, int row2)
         {
             return new XSSFClientAnchor(dx1, dy1, dx2, dy2, col1, row1, col2, row2);
@@ -178,11 +178,12 @@ namespace NPOI.XSSF.UserModel
          * @return the newly Created chart
          * @see NPOI.xssf.usermodel.XSSFDrawing#CreateChart(ClientAnchor)
          */
-        //public XSSFChart CreateChart(XSSFClientAnchor anchor)
-        //{
-        //    int chartNumber = GetPackagePart().Package.
-        //        GetPartsByContentType(XSSFRelation.CHART.ContentType).Count + 1;
+        public IChart CreateChart(IClientAnchor anchor)
+        {
+            int chartNumber = GetPackagePart().Package.
+                GetPartsByContentType(XSSFRelation.CHART.ContentType).Count + 1;
 
+            throw new NotImplementedException();
         //    XSSFChart chart = (XSSFChart)CreateRelationship(
         //            XSSFRelation.CHART, XSSFFactory.GetInstance(), chartNumber);
         //    String chartRelId = chart.GetPackageRelationship().GetId();
@@ -191,7 +192,7 @@ namespace NPOI.XSSF.UserModel
         //    frame.SetChart(chart, chartRelId);
 
         //    return chart;
-        //}
+        }
 
         //public XSSFChart CreateChart(IClientAnchor anchor)
         //{

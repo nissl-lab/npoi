@@ -289,16 +289,16 @@ namespace TestCases.POIFS.FileSystem
                 ministore.GetBlockAt(184);
                 Assert.Fail("No block at 184");
             }
-            catch (IndexOutOfRangeException) { }
+            catch (IndexOutOfRangeException e) { }
 
             // The ministore itself is made up of 23 big blocks
-            StreamBlockByteBufferIterator it = new NPOIFSStream(fs, fs.Root.Property.StartBlock).GetBlockIterator() as StreamBlockByteBufferIterator;
+            IEnumerator<ByteBuffer> it = new NPOIFSStream(fs, fs.Root.Property.StartBlock).GetBlockIterator();
             int count = 0;
 
-            while (it.HasNext())
+            while (it.MoveNext())
             {
                 count++;
-                it.Next();
+                it.MoveNext();
             }
             Assert.AreEqual(23, count);
 
@@ -306,12 +306,12 @@ namespace TestCases.POIFS.FileSystem
             ministore.CreateBlockIfNeeded(184);
 
             // The ministore should be one big block bigger now
-            it = new NPOIFSStream(fs, fs.Root.Property.StartBlock).GetBlockIterator() as StreamBlockByteBufferIterator;
+            it = new NPOIFSStream(fs, fs.Root.Property.StartBlock).GetBlockIterator();
             count = 0;
-            while (it.HasNext())
+            while (it.MoveNext())
             {
                 count++;
-                it.Next();
+                it.MoveNext();
             }
             Assert.AreEqual(24, count);
 

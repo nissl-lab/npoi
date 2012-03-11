@@ -16,6 +16,7 @@
 ==================================================================== */
 
 using NPOI.OpenXmlFormats.Dml;
+using NPOI.SS.UserModel;
 namespace NPOI.XSSF.UserModel
 {
 
@@ -24,13 +25,148 @@ namespace NPOI.XSSF.UserModel
      *
      * @author Yegor Kozlov
      */
-    public class XSSFTextBox : XSSFSimpleShape
+    public class XSSFTextBox : XSSFSimpleShape, ITextbox
     {
 
         internal XSSFTextBox(XSSFDrawing drawing, CT_Shape ctShape)
             : base(drawing, ctShape)
         {
 
+        }
+
+        public short HorizontalAlignment
+        {
+            get
+            {
+                throw new System.NotImplementedException();
+            }
+            set
+            {
+                throw new System.NotImplementedException();
+            }
+        }
+
+        public int MarginBottom
+        {
+            get
+            {
+                throw new System.NotImplementedException();
+            }
+            set
+            {
+                throw new System.NotImplementedException();
+            }
+        }
+
+        public int MarginLeft
+        {
+            get
+            {
+                throw new System.NotImplementedException();
+            }
+            set
+            {
+                throw new System.NotImplementedException();
+            }
+        }
+
+        public int MarginRight
+        {
+            get
+            {
+                throw new System.NotImplementedException();
+            }
+            set
+            {
+                throw new System.NotImplementedException();
+            }
+        }
+
+        public int MarginTop
+        {
+            get
+            {
+                throw new System.NotImplementedException();
+            }
+            set
+            {
+                throw new System.NotImplementedException();
+            }
+        }
+
+        public IRichTextString String
+        {
+            get
+            {
+                throw new System.NotImplementedException();
+            }
+            set
+            {
+                throw new System.NotImplementedException();
+            }
+        }
+
+        public short VerticalAlignment
+        {
+            get
+            {
+                throw new System.NotImplementedException();
+            }
+            set
+            {
+                throw new System.NotImplementedException();
+            }
+        }
+
+        public int CountOfAllChildren
+        {
+            get { throw new System.NotImplementedException(); }
+        }
+
+        public int FillColor
+        {
+            get
+            {
+                throw new System.NotImplementedException();
+            }
+            set
+            {
+                throw new System.NotImplementedException();
+            }
+        }
+
+        public LineStyle LineStyle
+        {
+            get
+            {
+                throw new System.NotImplementedException();
+            }
+            set
+            {
+                throw new System.NotImplementedException();
+            }
+        }
+
+        public int LineStyleColor
+        {
+            get { throw new System.NotImplementedException(); }
+        }
+
+        public int LineWidth
+        {
+            get
+            {
+                throw new System.NotImplementedException();
+            }
+            set
+            {
+                throw new System.NotImplementedException();
+            }
+        }
+
+        public void SetLineStyleColor(int lineStyleColor)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

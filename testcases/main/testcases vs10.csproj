@@ -78,6 +78,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="POIFS\EventFileSystem\Listener.cs" />
+    <Compile Include="POIFS\EventFileSystem\TestPOIFSReaderRegistry.cs" />
+    <Compile Include="POIFS\FileSystem\ReaderWriter.cs" />
+    <Compile Include="POIFS\FileSystem\TestNPOIFSFileSystem.cs" />
+    <Compile Include="POIFS\FileSystem\TestNPOIFSMiniStore.cs" />
+    <Compile Include="POIFS\FileSystem\TestNPOIFSStream.cs" />
+    <Compile Include="POIFS\FileSystem\TestOle10Native.cs" />
+    <Compile Include="POIFS\NIO\TestDataSource.cs" />
+    <Compile Include="POIFS\Storage\LocalProperty.cs" />
+    <Compile Include="POIFS\Storage\RawDataUtil.cs" />
     <Compile Include="POIFS\Storage\TestBATBlock.cs" />
     <Compile Include="POIFS\Storage\TestBlockListImpl.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -94,6 +104,7 @@
     <Compile Include="Util\TestPOILogger.cs" />
     <Compile Include="Util\TestPOILogFactory.cs" />
     <Compile Include="Util\TestShortField.cs" />
+    <Compile Include="Util\TestULongField.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="POIFS\Storage\TestSmallDocumentBlock.cs" />

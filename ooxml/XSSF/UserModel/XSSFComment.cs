@@ -86,7 +86,7 @@ namespace NPOI.XSSF.UserModel
                 if (_vmlShape != null)
                 {
                     _vmlShape.GetClientDataArray(0).SetColumnArray(
-                          new BigInt[] { new BigInt(value) }
+                          new BigInteger[] { new BigInteger(value) }
                     );
 
                     // There is a very odd xmlbeans bug when changing the column
@@ -117,7 +117,7 @@ namespace NPOI.XSSF.UserModel
 
                 if (_vmlShape != null) 
                     _vmlShape.GetClientDataArray(0)
-                        .SetRowArray(0, new Bigint(value));
+                        .SetRowArray(0, new BigInteger(value));
             }
         }
 

@@ -34,6 +34,12 @@ namespace TestCases.POIFS.FileSystem
     public class TestOle10Native
     {
         private static POIDataSamples dataSamples = POIDataSamples.GetPOIFSInstance();
+        public TestOle10Native()
+        {
+            //
+            // TODO: Add constructor logic here
+            //
+        }
 
         [TestMethod]
         public void TestOleNative()

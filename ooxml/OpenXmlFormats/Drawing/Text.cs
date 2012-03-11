@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Xml.Serialization;
+using System;
 namespace NPOI.OpenXmlFormats.Dml 
 {
     
@@ -850,7 +851,10 @@ namespace NPOI.OpenXmlFormats.Dml
             this.smtCleanField = true;
             this.smtIdField = ((uint)(0));
         }
-        
+        public CT_TextFont AddNewLatin()
+        {
+            throw new NotImplementedException();
+        }
         /// <remarks/>
         public CT_LineProperties ln {
             get {

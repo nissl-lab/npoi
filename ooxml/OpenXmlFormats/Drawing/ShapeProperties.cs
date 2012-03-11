@@ -53,7 +53,7 @@ namespace NPOI.OpenXmlFormats.Dml
             this.pattFillField = new CT_PatternFillProperties();
             this.blipFillField = new CT_BlipFillProperties();
             this.gradFillField = new CT_GradientFillProperties();
-            this.solidFillField = new CT_SolidColorFillProperties();
+            
             this.noFillField = new CT_NoFillProperties();
             this.prstGeomField = new CT_PresetGeometry2D();
             this.custGeomField = new CT_CustomGeometry2D();
@@ -68,6 +68,11 @@ namespace NPOI.OpenXmlFormats.Dml
         {
             this.xfrmField = new CT_Transform2D();
             return this.xfrmField;
+        }
+        public CT_SolidColorFillProperties AddNewSolidFill()
+        {
+            this.solidFillField = new CT_SolidColorFillProperties();
+            return this.solidFillField;
         }
         public bool IsSetPattFill()
         {

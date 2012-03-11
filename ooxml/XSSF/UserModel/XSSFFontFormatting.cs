@@ -196,8 +196,8 @@ namespace NPOI.XSSF.UserModel
         {
             _font.SetIArray(null);
             _font.SetBArray(null);
-            if (italic) _font.AddNewI().val = (true);
-            if (bold) _font.AddNewB().SetVal(true);
+            if (italic) _font.AddNewI().val = true;
+            if (bold) _font.AddNewB().val = true;
         }
 
         /**

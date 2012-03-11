@@ -47,7 +47,7 @@ namespace TestCases.POIFS.FileSystem
         public void TestReadTinyStream()
         {
             NPOIFSFileSystem fs = new NPOIFSFileSystem(_inst.GetFile("BlockSize512.zvi"));
-
+            
             // 98 is actually the last block in a two block stream...
             NPOIFSStream stream = new NPOIFSStream(fs, 98);
             IEnumerator<ByteBuffer> i = stream.GetBlockIterator();
@@ -77,7 +77,7 @@ namespace TestCases.POIFS.FileSystem
 
             Assert.AreEqual(true, i.MoveNext());
 
-            // i.MoveNext();
+           // i.MoveNext();
             ByteBuffer b97 = i.Current;
             Assert.AreEqual(true, i.MoveNext());
 
@@ -175,15 +175,15 @@ namespace TestCases.POIFS.FileSystem
 
             Assert.AreEqual(true, i.MoveNext());
 
-            // i.MoveNext();
+           // i.MoveNext();
             ByteBuffer b0 = i.Current;
             Assert.AreEqual(true, i.MoveNext());
 
-            // i.MoveNext();
+           // i.MoveNext();
             ByteBuffer b1 = i.Current;
             Assert.AreEqual(true, i.MoveNext());
 
-            // i.MoveNext();
+           // i.MoveNext();
             ByteBuffer b2 = i.Current;
             Assert.AreEqual(false, i.MoveNext());
 
@@ -235,13 +235,13 @@ namespace TestCases.POIFS.FileSystem
             Assert.AreEqual(true, i.MoveNext());
 
             // 1st read works
-            //  i.MoveNext();
+          //  i.MoveNext();
             // 2nd read works
             Assert.AreEqual(true, i.MoveNext());
 
-
-            // i.MoveNext();
-            //  Assert.AreEqual(true, i.MoveNext());
+            
+          // i.MoveNext();
+          //  Assert.AreEqual(true, i.MoveNext());
 
             // 3rd read works
             //i.MoveNext();
@@ -254,7 +254,7 @@ namespace TestCases.POIFS.FileSystem
                 Assert.AreEqual(true, i.MoveNext());
                 Assert.Fail("Loop should have been detected but wasn't!");
             }
-            catch (Exception )
+            catch (Exception e)
             {
                 // Good, it was detected
             }
@@ -269,25 +269,25 @@ namespace TestCases.POIFS.FileSystem
 
             // 178 -> 179 -> 180 -> end
             NPOIFSStream stream = new NPOIFSStream(ministore, 178);
-            StreamBlockByteBufferIterator i = stream.GetBlockIterator() as StreamBlockByteBufferIterator;
-            Assert.AreEqual(true, i.HasNext());
-            Assert.AreEqual(true, i.HasNext());
-            Assert.AreEqual(true, i.HasNext());
+            IEnumerator<ByteBuffer> i = stream.GetBlockIterator();
+            Assert.AreEqual(true, i.MoveNext());
+          //  Assert.AreEqual(true, i.MoveNext());
+          //  Assert.AreEqual(true, i.MoveNext());
 
-            // i.MoveNext();
-            ByteBuffer b178 = i.Next();
-            Assert.AreEqual(true, i.HasNext());
-            Assert.AreEqual(true, i.HasNext());
+           // i.MoveNext();
+            ByteBuffer b178 = i.Current;
+            Assert.AreEqual(true, i.MoveNext());
+           // Assert.AreEqual(true, i.MoveNext());
 
-            // i.MoveNext();
-            ByteBuffer b179 = i.Next();
-            Assert.AreEqual(true, i.HasNext());
+           // i.MoveNext();
+            ByteBuffer b179 = i.Current;
+            Assert.AreEqual(true, i.MoveNext());
 
-            // i.MoveNext();
-            ByteBuffer b180 = i.Next();
-            Assert.AreEqual(false, i.HasNext());
-            Assert.AreEqual(false, i.HasNext());
-            Assert.AreEqual(false, i.HasNext());
+           // i.MoveNext();
+            ByteBuffer b180 = i.Current;
+            Assert.AreEqual(false, i.MoveNext());
+           // Assert.AreEqual(false, i.MoveNext());
+           // Assert.AreEqual(false, i.MoveNext());
 
             // Check the contents of the 1st block
             Assert.AreEqual((byte)0xfe, b178[0]);
@@ -340,7 +340,7 @@ namespace TestCases.POIFS.FileSystem
 
             Assert.AreEqual(true, it.MoveNext());
 
-            //  it.MoveNext();
+          //  it.MoveNext();
             ByteBuffer b = it.Current;
             Assert.AreEqual(false, it.MoveNext());
 
@@ -387,7 +387,7 @@ namespace TestCases.POIFS.FileSystem
 
             // Now check the contents
             data = new byte[512];
-            // b.get(data);
+           // b.get(data);
             //for (int i = 0; i < b.Length; i++)
             //    data[i] = b[i];
             //Array.Copy(b, 0, data, 0, b.Length);
@@ -527,7 +527,7 @@ namespace TestCases.POIFS.FileSystem
                 ByteBuffer b = it.Current;
                 data = new byte[512];
                 //b.get(data);
-                // Array.Copy(b, 0, data, 0, b.Length);
+               // Array.Copy(b, 0, data, 0, b.Length);
                 b.Read(data);
                 for (int i = 0; i < data.Length; i++)
                 {
@@ -630,8 +630,8 @@ namespace TestCases.POIFS.FileSystem
             {
                 ByteBuffer b = it.Current;
                 data = new byte[512];
-                // b.get(data);
-                //  Array.Copy(b, 0, data, 0, b.Length);
+               // b.get(data);
+              //  Array.Copy(b, 0, data, 0, b.Length);
                 b.Read(data);
                 for (int i = 0; i < data.Length; i++)
                 {
@@ -798,8 +798,8 @@ namespace TestCases.POIFS.FileSystem
                 ministore.GetBlockAt(184);
                 Assert.Fail("Block 184 should be off the end of the list");
             }
-            // catch (ArgumentOutOfRangeException e)
-            catch (Exception)
+           // catch (ArgumentOutOfRangeException e)
+            catch(Exception e)
             {
             }
 
@@ -879,7 +879,7 @@ namespace TestCases.POIFS.FileSystem
                 stream.UpdateContents(data);
                 Assert.Fail("Loop should have been detected but wasn't!");
             }
-            catch (Exception ) { }
+            catch (Exception e) { }
 
             // Now reset, and try on a small bit
             // Should fail during the freeing set
@@ -894,7 +894,7 @@ namespace TestCases.POIFS.FileSystem
                 stream.UpdateContents(data);
                 Assert.Fail("Loop should have been detected but wasn't!");
             }
-            catch (Exception) { }
+            catch (Exception e) { }
         }
 
         [TestMethod]
@@ -917,7 +917,7 @@ namespace TestCases.POIFS.FileSystem
                 stream.GetBlockIterator();
                 Assert.Fail("Shouldn't be able to get an iterator before writing");
             }
-            catch (Exception) { }
+            catch (Exception e) { }
 
             // Write in two blocks
             byte[] data = new byte[512 + 20];
@@ -948,7 +948,7 @@ namespace TestCases.POIFS.FileSystem
 
             byte[] read = new byte[512];
             //b.get(read);
-            // Array.Copy(b, 0, read, 0, b.Length);
+           // Array.Copy(b, 0, read, 0, b.Length);
             b.Read(read);
             for (int i = 0; i < read.Length; i++)
             {
@@ -974,6 +974,6 @@ namespace TestCases.POIFS.FileSystem
 
             Assert.AreEqual(false, it.MoveNext());
         }
-
+        
     }
 }

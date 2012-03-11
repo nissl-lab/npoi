@@ -170,18 +170,18 @@ namespace NPOI.XSSF.UserModel
          */
         public ICell CreateCell(int columnIndex, CellType type)
         {
-            CT_Cell CT_Cell;
+            CT_Cell ctCell;
             XSSFCell prev = (XSSFCell)_cells[columnIndex];
             if (prev != null)
             {
-                CT_Cell = prev.GetCTCell();
-                CT_Cell.Set(new CT_Cell());
+                ctCell = prev.GetCTCell();
+                ctCell.Set(new CT_Cell());
             }
             else
             {
-                CT_Cell = _row.AddNewC();
+                ctCell = _row.AddNewC();
             }
-            XSSFCell xcell = new XSSFCell(this, CT_Cell);
+            XSSFCell xcell = new XSSFCell(this, ctCell);
             xcell.SetCellNum(columnIndex);
             if (type != CellType.BLANK)
             {
@@ -413,7 +413,7 @@ namespace NPOI.XSSF.UserModel
             {
                 if (!IsFormatted) return null;
 
-                StylesTable stylesSource = Sheet.Workbook.StylesSource;
+                StylesTable stylesSource = ((XSSFWorkbook)Sheet.Workbook).GetStylesSource();
                 if (stylesSource.GetNumCellStyles() > 0)
                 {
                     return stylesSource.GetStyleAt((int)_row.s);
@@ -435,10 +435,10 @@ namespace NPOI.XSSF.UserModel
                 }
                 else
                 {
-                    StylesTable styleSource = Sheet.Workbook.getStylesSource();
+                    StylesTable styleSource = ((XSSFWorkbook)Sheet.Workbook).GetStylesSource();
 
                     XSSFCellStyle xStyle = (XSSFCellStyle)value;
-                    xStyle.verifyBelongsToStylesSource(styleSource);
+                    xStyle.VerifyBelongsToStylesSource(styleSource);
 
                     long idx = styleSource.PutStyle(xStyle);
                     _row.s = (uint)idx;
@@ -476,7 +476,7 @@ namespace NPOI.XSSF.UserModel
             }
             if (cell.CellType == CellType.FORMULA)
             {
-                _sheet.Workbook.OnDeleteFormula(xcell);
+                ((XSSFWorkbook)_sheet.Workbook).OnDeleteFormula(xcell);
             }
             _cells.Remove(cell.ColumnIndex);
         }

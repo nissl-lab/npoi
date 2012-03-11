@@ -46,18 +46,18 @@ namespace TestCases.POIFS.FileSystem
     {
         private static POILogger _logger = POILogFactory.GetLogger(typeof(TestEmptyDocument));
 
-        private class AnonymousClass : NPOI.POIFS.FileSystem.POIFSWriterListener
+        private class AnonymousClass : POIFSWriterListener
         {
-            public void ProcessPOIFSWriterEvent(NPOI.POIFS.FileSystem.POIFSWriterEvent ev)
+            public void ProcessPOIFSWriterEvent(POIFSWriterEvent ev)
             {
                 TestEmptyDocument._logger.Log(POILogger.WARN, "Written");
                 Console.WriteLine("Written");
             }
         }
 
-        private class AnonymousClass1 : NPOI.POIFS.FileSystem.POIFSWriterListener
+        private class AnonymousClass1 :POIFSWriterListener
         {
-            public void ProcessPOIFSWriterEvent(NPOI.POIFS.FileSystem.POIFSWriterEvent ev)
+            public void ProcessPOIFSWriterEvent(POIFSWriterEvent ev)
             {
                 try
                 {
@@ -71,9 +71,9 @@ namespace TestCases.POIFS.FileSystem
             }
         }
 
-        private class EmptyClass : NPOI.POIFS.FileSystem.POIFSWriterListener
+        private class EmptyClass : POIFSWriterListener
         {
-            public void ProcessPOIFSWriterEvent(NPOI.POIFS.FileSystem.POIFSWriterEvent ev)
+            public void ProcessPOIFSWriterEvent(POIFSWriterEvent ev)
             {
                 try
                 {

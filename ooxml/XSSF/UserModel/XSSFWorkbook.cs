@@ -1077,7 +1077,7 @@ namespace NPOI.XSSF.UserModel
                 sb.Append("!");
                 sb.Append(parts[i]);
             }
-            name.SetRefersToFormula(sb.ToString());
+            name.RefersToFormula = (sb.ToString());
         }
 
         /**

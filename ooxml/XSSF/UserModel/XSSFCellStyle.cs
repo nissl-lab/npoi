@@ -669,7 +669,7 @@ namespace NPOI.XSSF.UserModel
                 {
                     return true;
                 }
-                return _cellXf.protection.locked;
+                return (bool)_cellXf.protection.locked;
             }
             set 
             {
@@ -811,7 +811,7 @@ namespace NPOI.XSSF.UserModel
             CT_CellAlignment align = _cellXf.alignment;
             if (align != null && align.IsSetVertical())
             {
-                return Enum.GetValues(typeof(VerticalAlignment)).GetValue(align.vertical - 1);
+                return (VerticalAlignment)(align.vertical - 1);
             }
             return VerticalAlignment.BOTTOM;
         }
@@ -860,7 +860,7 @@ namespace NPOI.XSSF.UserModel
 
             CT_BorderPr pr = ct.IsSetBottom() ? ct.bottom : ct.AddNewBottom();
             if (color != null) pr.SetColor(color.GetCTColor());
-            else pr.unsetColor();
+            else pr.UnsetColor();
 
             int idx = _stylesSource.PutBorder(new XSSFCellBorder(ct, _theme));
 
@@ -904,13 +904,13 @@ namespace NPOI.XSSF.UserModel
             {
 
                 if (ptrn == null) ptrn = ct.AddNewPatternFill();
-                ptrn.SetBgColor(color.GetCTColor());
+                ptrn.bgColor = (color.GetCTColor());
             }
 
             int idx = _stylesSource.PutFill(new XSSFCellFill(ct));
 
-            _cellXf.SetFillId(idx);
-            _cellXf.SetApplyFill(true);
+            _cellXf.fillId = (uint)idx;
+            _cellXf.applyFill= (true);
         }
 
         /**
@@ -932,13 +932,13 @@ namespace NPOI.XSSF.UserModel
             else
             {
                 if (ptrn == null) ptrn = ct.AddNewPatternFill();
-                ptrn.SetFgColor(color.GetCTColor());
+                ptrn.fgColor =(color.GetCTColor());
             }
 
             int idx = _stylesSource.PutFill(new XSSFCellFill(ct));
 
-            _cellXf.SetFillId(idx);
-            _cellXf.SetApplyFill(true);
+            _cellXf.fillId = (uint)idx;
+            _cellXf.applyFill = (true);
         }
 
         /**
@@ -952,7 +952,7 @@ namespace NPOI.XSSF.UserModel
                 int FillIndex = (int)_cellXf.fillId;
                 XSSFCellFill cf = _stylesSource.GetFillAt(FillIndex);
 
-                ct = (CT_Fill)cf.GetCTFill().copy();
+                ct = (CT_Fill)cf.GetCTFill().Copy();
             }
             else
             {
@@ -1028,7 +1028,7 @@ namespace NPOI.XSSF.UserModel
 
             CT_BorderPr pr = ct.IsSetLeft() ? ct.left : ct.AddNewLeft();
             if (color != null) pr.color = (color.GetCTColor());
-            else pr.unsetColor();
+            else pr.UnsetColor();
 
             int idx = _stylesSource.PutBorder(new XSSFCellBorder(ct, _theme));
 
@@ -1048,11 +1048,11 @@ namespace NPOI.XSSF.UserModel
 
             CT_BorderPr pr = ct.IsSetRight() ? ct.right : ct.AddNewRight();
             if (color != null) pr.color = (color.GetCTColor());
-            else pr.unsetColor();
+            else pr.UnsetColor();
 
             int idx = _stylesSource.PutBorder(new XSSFCellBorder(ct, _theme));
 
-            _cellXf.borderId = (idx);
+            _cellXf.borderId = (uint)(idx);
             _cellXf.applyBorder = (true);
         }
 
@@ -1071,7 +1071,7 @@ namespace NPOI.XSSF.UserModel
 
             CT_BorderPr pr = ct.IsSetTop() ? ct.top : ct.AddNewTop();
             if (color != null) pr.color = color.GetCTColor();
-            else pr.unsetColor();
+            else pr.UnsetColor();
 
             int idx = _stylesSource.PutBorder(new XSSFCellBorder(ct, _theme));
 
@@ -1091,7 +1091,7 @@ namespace NPOI.XSSF.UserModel
          */
         public void SetVerticalAlignment(short align)
         {
-            GetCellAlignment().SetVertical(VerticalAlignment.values()[align]);
+            GetCellAlignment().SetVertical((VerticalAlignment)align);
         }
 
 

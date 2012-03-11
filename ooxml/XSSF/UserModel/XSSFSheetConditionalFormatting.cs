@@ -204,7 +204,7 @@ namespace NPOI.XSSF.UserModel
         {
             XSSFConditionalFormatting xcf = (XSSFConditionalFormatting)cf;
             CT_Worksheet sh = _sheet.GetCTWorksheet();
-            sh.AddNewConditionalFormatting().Set(xcf.GetCTConditionalFormatting().copy());
+            sh.AddNewConditionalFormatting().Set(xcf.GetCTConditionalFormatting().Copy());
             return sh.sizeOfConditionalFormattingArray() - 1;
         }
 

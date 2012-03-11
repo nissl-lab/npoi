@@ -144,6 +144,11 @@ namespace NPOI.OpenXmlFormats.Dml
         private bool fLocksTextField;
         private bool fPublishedField;
 
+        public void Set(CT_Shape obj)
+        {
+            
+        }
+
         public CT_ShapeNonVisual AddNewNvSpPr()
         {
             this.nvSpPrField = new CT_ShapeNonVisual();
@@ -293,6 +298,18 @@ namespace NPOI.OpenXmlFormats.Dml
             this.nvGrpSpPrField = new CT_GroupShapeNonVisual();
             return this.nvGrpSpPrField;
         }
+        public CT_Connector AddNewCxnSp()
+        {
+            throw new NotImplementedException();
+        }
+        public CT_Shape AddNewSp()
+        {
+            throw new NotImplementedException();
+        }
+        public CT_Picture AddNewPic()
+        {
+            throw new NotImplementedException();
+        }
 
         public CT_GroupShapeNonVisual nvGrpSpPr
         {
@@ -373,12 +390,20 @@ namespace NPOI.OpenXmlFormats.Dml
             set;
         }
     }
+    public interface EG_Anchor
+    { 
+    
+    }
     public class CT_Drawing
     {
 
         private string idField;
 
         public CT_TwoCellAnchor AddNewTwoCellAnchor()
+        {
+            throw new NotImplementedException();
+        }
+        public int sizeOfTwoCellAnchorArray()
         {
             throw new NotImplementedException();
         }
@@ -414,7 +439,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
     }
 
-    public class CT_TwoCellAnchor
+    public class CT_TwoCellAnchor : EG_Anchor
     {
         private CT_Marker fromField;
         private CT_Marker toField;
@@ -430,6 +455,14 @@ namespace NPOI.OpenXmlFormats.Dml
             throw new NotImplementedException();
         }
         public CT_Shape AddNewSp()
+        {
+            throw new NotImplementedException();
+        }
+        public CT_GroupShape AddNewGrpSp()
+        {
+            throw new NotImplementedException();
+        }
+        public CT_Connector AddNewCxnSp()
         {
             throw new NotImplementedException();
         }

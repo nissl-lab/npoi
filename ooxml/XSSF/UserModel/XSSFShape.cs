@@ -25,7 +25,7 @@ namespace NPOI.XSSF.UserModel
      *
      * @author Yegor Kozlov
      */
-    public abstract class XSSFShape
+    public abstract class XSSFShape:IShape
     {
         public static int EMU_PER_PIXEL = 9525;
         public static int EMU_PER_POINT = 12700;
@@ -132,32 +132,64 @@ namespace NPOI.XSSF.UserModel
             fill.srgbClr = (rgb);
         }
 
-        /**
-         * Specifies the width to be used for the underline stroke.
-         *
-         * @param lineWidth width in points
-         */
-        public void SetLineWidth(double lineWidth)
+
+
+        public int CountOfAllChildren
         {
-            CT_ShapeProperties props = GetShapeProperties();
-            CT_LineProperties ln = props.IsSetLn() ? props.ln : props.AddNewLn();
-            ln.w =(int)(lineWidth * EMU_PER_POINT);
+            get { throw new System.NotImplementedException(); }
         }
 
-        /**
-         * Sets the line style.
-         *
-         * @param lineStyle
-         */
-        public void SetLineStyle(int lineStyle)
+        public int FillColor
         {
-            CT_ShapeProperties props = GetShapeProperties();
-            CT_LineProperties ln = props.IsSetLn() ? props.ln : props.AddNewLn();
-            CT_PresetLineDashProperties dashStyle = CT_PresetLineDashProperties.Factory.newInstance();
-            dashStyle.val = (ST_PresetLineDashVal)(lineStyle + 1);
-            ln.prstDash = dashStyle;
+            get
+            {
+                throw new System.NotImplementedException();
+            }
+            set
+            {
+                throw new System.NotImplementedException();
+            }
         }
 
+        public LineStyle LineStyle
+        {
+            get
+            {
+                throw new System.NotImplementedException();
+            }
+            set
+            {
+                CT_ShapeProperties props = GetShapeProperties();
+                CT_LineProperties ln = props.IsSetLn() ? props.ln : props.AddNewLn();
+                CT_PresetLineDashProperties dashStyle = new CT_PresetLineDashProperties();
+                dashStyle.val = (ST_PresetLineDashVal)(value + 1);
+                ln.prstDash = dashStyle;
+            }
+        }
+
+        public int LineStyleColor
+        {
+            get { throw new System.NotImplementedException(); }
+        }
+
+        public int LineWidth
+        {
+            get
+            {
+                throw new System.NotImplementedException();
+            }
+            set
+            {
+                CT_ShapeProperties props = GetShapeProperties();
+                CT_LineProperties ln = props.IsSetLn() ? props.ln : props.AddNewLn();
+                ln.w = (int)(value * EMU_PER_POINT);
+            }
+        }
+
+        public void SetLineStyleColor(int lineStyleColor)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }
 

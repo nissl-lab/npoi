@@ -186,12 +186,12 @@ namespace NPOI.XSSF.UserModel
         private static void ApplyAttributes(CT_RPrElt pr, CT_TextCharacterProperties rPr)
         {
 
-            if (pr.sizeOfBArray() > 0) rPr.b = (pr.GetBArray(0).GetVal());
+            if (pr.sizeOfBArray() > 0) rPr.b = (pr.GetBArray(0).val);
             //if(pr.sizeOfUArray() > 0) rPr.SetU(pr.GetUArray(0).GetVal());
-            if (pr.sizeOfIArray() > 0) rPr.i = (pr.GetIArray(0).GetVal());
+            if (pr.sizeOfIArray() > 0) rPr.i = (pr.GetIArray(0).val);
 
             CT_TextFont rFont = rPr.AddNewLatin();
-            rFont.typeface = (pr.sizeOfRFontArray() > 0 ? pr.GetRFontArray(0).GetVal() : "Arial");
+            rFont.typeface = (pr.sizeOfRFontArray() > 0 ? pr.GetRFontArray(0).val : "Arial");
         }
     }
 

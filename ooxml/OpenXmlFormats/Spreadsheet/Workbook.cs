@@ -2821,6 +2821,11 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.sheetField = new List<CT_Sheet>();
         }
 
+        public void RemoveSheet(int index)
+        {
+            sheetField.RemoveAt(index);
+        }
+
         public List<CT_Sheet> sheet
         {
             get

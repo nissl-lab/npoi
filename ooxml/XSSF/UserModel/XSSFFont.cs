@@ -574,8 +574,8 @@ namespace NPOI.XSSF.UserModel
          */
         public FontScheme GetScheme()
         {
-            CT_FontScheme scheme = _ctFont.sizeOfSchemeArray() == 0 ? null : _ctFont.GetSchemeArray(0);
-            return scheme == null ? FontScheme.NONE : FontScheme.ValueOf(scheme.val.intValue());
+            NPOI.OpenXmlFormats.Spreadsheet.CT_FontScheme scheme = _ctFont.sizeOfSchemeArray() == 0 ? null : _ctFont.GetSchemeArray(0);
+            return scheme == null ? FontScheme.NONE : FontScheme.ValueOf(scheme.val);
         }
 
         /**
@@ -586,7 +586,7 @@ namespace NPOI.XSSF.UserModel
          */
         public void SetScheme(FontScheme scheme)
         {
-            CT_FontScheme ctFontScheme = _ctFont.sizeOfSchemeArray() == 0 ? _ctFont.AddNewScheme() : _ctFont.GetSchemeArray(0);
+            NPOI.OpenXmlFormats.Spreadsheet.CT_FontScheme ctFontScheme = _ctFont.sizeOfSchemeArray() == 0 ? _ctFont.AddNewScheme() : _ctFont.GetSchemeArray(0);
             ST_FontScheme val = (ST_FontScheme)scheme.Value;
             ctFontScheme.val = val;
         }

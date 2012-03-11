@@ -18,6 +18,12 @@ namespace NPOI.OpenXmlFormats.Dml {
             this.cNvPrField = new CT_NonVisualDrawingProps();
             return this.cNvPrField;
         }
+        public CT_NonVisualPictureProperties AddNewCNvPicPr()
+        {
+            this.cNvPicPrField = new CT_NonVisualPictureProperties();
+            return this.cNvPicPrField;
+        }
+
 
         /// <remarks/>
         public CT_NonVisualDrawingProps cNvPr {
@@ -350,7 +356,13 @@ namespace NPOI.OpenXmlFormats.Dml {
         public CT_NonVisualPictureProperties() {
             this.preferRelativeResizeField = true;
         }
-        
+
+        public CT_PictureLocking AddNewPicLocks()
+        {
+            this.picLocksField = new CT_PictureLocking();
+            return picLocksField;
+        }
+
         /// <remarks/>
         public CT_PictureLocking picLocks {
             get {

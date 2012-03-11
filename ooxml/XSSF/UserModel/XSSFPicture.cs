@@ -87,7 +87,7 @@ namespace NPOI.XSSF.UserModel
                 nvProps.name = ("Picture 1");
                 nvProps.descr = ("Picture");
                 CT_NonVisualPictureProperties nvPicProps = nvpr.AddNewCNvPicPr();
-                nvPicProps.AddNewPicLocks().SetNoChangeAspect(true);
+                nvPicProps.AddNewPicLocks().noChangeAspect = true;
 
 
 
@@ -200,7 +200,7 @@ namespace NPOI.XSSF.UserModel
         {
             XSSFClientAnchor anchor = (XSSFClientAnchor)GetAnchor();
 
-            XSSFPictureData data = GetPictureData();
+            XSSFPictureData data = (XSSFPictureData)this.PictureData;
             Size size = GetImageDimension(data.GetPackagePart(), data.GetPictureType());
             double scaledWidth = size.Width * scale;
             double scaledHeight = size.Height * scale;
@@ -294,24 +294,6 @@ namespace NPOI.XSSF.UserModel
             }
         }
 
-        /**
-         * Return picture data for this shape
-         *
-         * @return picture data for this shape
-         */
-        public XSSFPictureData GetPictureData()
-        {
-            String blipId = ctPicture.blipFill.blip.embed;
-            foreach (POIXMLDocumentPart part in GetDrawing().GetRelations())
-            {
-                if (part.GetPackageRelationship().Id.Equals(blipId))
-                {
-                    return (XSSFPictureData)part;
-                }
-            }
-            logger.Log(POILogger.WARN, "Picture data was not found for blipId=" + blipId);
-            return null;
-        }
 
         protected override CT_ShapeProperties GetShapeProperties()
         {
@@ -346,7 +328,7 @@ namespace NPOI.XSSF.UserModel
             }
             set
             {
-                base.SetLineStyle((int)value);
+                base.LineStyle = value;
             }
         }
 
@@ -363,7 +345,7 @@ namespace NPOI.XSSF.UserModel
             }
             set
             {
-                base.SetLineWidth(value);
+                base.LineWidth = (value);
             }
         }
 
@@ -373,6 +355,24 @@ namespace NPOI.XSSF.UserModel
         }
 
         #endregion
+
+
+        public IPictureData PictureData
+        {
+            get
+            {
+                String blipId = ctPicture.blipFill.blip.embed;
+                foreach (POIXMLDocumentPart part in GetDrawing().GetRelations())
+                {
+                    if (part.GetPackageRelationship().Id.Equals(blipId))
+                    {
+                        return (XSSFPictureData)part;
+                    }
+                }
+                logger.Log(POILogger.WARN, "Picture data was not found for blipId=" + blipId);
+                return null;
+            }
+        }
     }
 }
 

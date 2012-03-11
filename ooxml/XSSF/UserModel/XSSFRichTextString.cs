@@ -229,9 +229,9 @@ namespace NPOI.XSSF.UserModel
          */
         private void SetRunAttributes(CT_Font ctFont, CT_RPrElt pr)
         {
-            if (ctFont.sizeOfBArray() > 0) pr.AddNewB().SetVal(ctFont.GetBArray(0).val);
-            if (ctFont.sizeOfUArray() > 0) pr.AddNewU().SetVal(ctFont.GetUArray(0).val);
-            if (ctFont.sizeOfIArray() > 0) pr.AddNewI().SetVal(ctFont.GetIArray(0).val);
+            if (ctFont.sizeOfBArray() > 0) pr.AddNewB().val = (ctFont.GetBArray(0).val);
+            if (ctFont.sizeOfUArray() > 0) pr.AddNewU().val =(ctFont.GetUArray(0).val);
+            if (ctFont.sizeOfIArray() > 0) pr.AddNewI().val =(ctFont.GetIArray(0).val);
             if (ctFont.sizeOfColorArray() > 0)
             {
                 CT_Color c1 = ctFont.GetColorArray(0);
@@ -243,17 +243,17 @@ namespace NPOI.XSSF.UserModel
                 if (c1.IsSetTint()) c2.tint = (c1.tint);
             }
 
-            if (ctFont.sizeOfSzArray() > 0) pr.AddNewSz().SetVal(ctFont.GetSzArray(0).val);
-            if (ctFont.sizeOfNameArray() > 0) pr.AddNewRFont().SetVal(ctFont.GetNameArray(0).val);
-            if (ctFont.sizeOfFamilyArray() > 0) pr.AddNewFamily().SetVal(ctFont.GetFamilyArray(0).val);
-            if (ctFont.sizeOfSchemeArray() > 0) pr.AddNewScheme().SetVal(ctFont.GetSchemeArray(0).val);
-            if (ctFont.sizeOfCharsetArray() > 0) pr.AddNewCharset().SetVal(ctFont.GetCharsetArray(0).val);
-            if (ctFont.sizeOfCondenseArray() > 0) pr.AddNewCondense().SetVal(ctFont.GetCondenseArray(0).val);
-            if (ctFont.sizeOfExtendArray() > 0) pr.AddNewExtend().SetVal(ctFont.GetExtendArray(0).val);
-            if (ctFont.sizeOfVertAlignArray() > 0) pr.AddNewVertAlign().SetVal(ctFont.GetVertAlignArray(0).val);
-            if (ctFont.sizeOfOutlineArray() > 0) pr.AddNewOutline().SetVal(ctFont.GetOutlineArray(0).val);
-            if (ctFont.sizeOfShadowArray() > 0) pr.AddNewShadow().SetVal(ctFont.GetShadowArray(0).val);
-            if (ctFont.sizeOfStrikeArray() > 0) pr.AddNewStrike().SetVal(ctFont.GetStrikeArray(0).val);
+            if (ctFont.sizeOfSzArray() > 0) pr.AddNewSz().val = (ctFont.GetSzArray(0).val);
+            if (ctFont.sizeOfNameArray() > 0) pr.AddNewRFont().val = (ctFont.GetNameArray(0).val);
+            if (ctFont.sizeOfFamilyArray() > 0) pr.AddNewFamily().val =(ctFont.GetFamilyArray(0).val);
+            if (ctFont.sizeOfSchemeArray() > 0) pr.AddNewScheme().val = (ctFont.GetSchemeArray(0).val);
+            if (ctFont.sizeOfCharsetArray() > 0) pr.AddNewCharset().val = (ctFont.GetCharsetArray(0).val);
+            if (ctFont.sizeOfCondenseArray() > 0) pr.AddNewCondense().val = (ctFont.GetCondenseArray(0).val);
+            if (ctFont.sizeOfExtendArray() > 0) pr.AddNewExtend().val = (ctFont.GetExtendArray(0).val);
+            if (ctFont.sizeOfVertAlignArray() > 0) pr.AddNewVertAlign().val = (ctFont.GetVertAlignArray(0).val);
+            if (ctFont.sizeOfOutlineArray() > 0) pr.AddNewOutline().val =(ctFont.GetOutlineArray(0).val);
+            if (ctFont.sizeOfShadowArray() > 0) pr.AddNewShadow().val =(ctFont.GetShadowArray(0).val);
+            if (ctFont.sizeOfStrikeArray() > 0) pr.AddNewStrike().val = (ctFont.GetStrikeArray(0).val);
         }
 
         /**
@@ -429,9 +429,9 @@ namespace NPOI.XSSF.UserModel
         {
             CT_Font ctFont = new CT_Font();
 
-            if (pr.sizeOfBArray() > 0) ctFont.AddNewB().SetVal(pr.GetBArray(0).val);
-            if (pr.sizeOfUArray() > 0) ctFont.AddNewU().SetVal(pr.GetUArray(0).val);
-            if (pr.sizeOfIArray() > 0) ctFont.AddNewI().SetVal(pr.GetIArray(0).val);
+            if (pr.sizeOfBArray() > 0) ctFont.AddNewB().val = (pr.GetBArray(0).val);
+            if (pr.sizeOfUArray() > 0) ctFont.AddNewU().val = (pr.GetUArray(0).val);
+            if (pr.sizeOfIArray() > 0) ctFont.AddNewI().val = (pr.GetIArray(0).val);
             if (pr.sizeOfColorArray() > 0)
             {
                 CT_Color c1 = pr.GetColorArray(0);
@@ -442,18 +442,18 @@ namespace NPOI.XSSF.UserModel
                 if (c1.IsSetTheme()) c2.theme = (c1.theme);
                 if (c1.IsSetTint()) c2.tint = (c1.tint);
             }
-
-            if (pr.sizeOfSzArray() > 0) ctFont.AddNewSz().SetVal(pr.GetSzArray(0).val);
-            if (pr.sizeOfRFontArray() > 0) ctFont.AddNewName().SetVal(pr.GetRFontArray(0).val);
-            if (pr.sizeOfFamilyArray() > 0) ctFont.AddNewFamily().SetVal(pr.GetFamilyArray(0).val);
-            if (pr.sizeOfSchemeArray() > 0) ctFont.AddNewScheme().SetVal(pr.GetSchemeArray(0).val);
-            if (pr.sizeOfCharsetArray() > 0) ctFont.AddNewCharset().SetVal(pr.GetCharsetArray(0).val);
-            if (pr.sizeOfCondenseArray() > 0) ctFont.AddNewCondense().SetVal(pr.GetCondenseArray(0).val);
-            if (pr.sizeOfExtendArray() > 0) ctFont.AddNewExtend().SetVal(pr.GetExtendArray(0).val);
-            if (pr.sizeOfVertAlignArray() > 0) ctFont.AddNewVertAlign().SetVal(pr.GetVertAlignArray(0).val);
-            if (pr.sizeOfOutlineArray() > 0) ctFont.AddNewOutline().SetVal(pr.GetOutlineArray(0).val);
-            if (pr.sizeOfShadowArray() > 0) ctFont.AddNewShadow().SetVal(pr.GetShadowArray(0).val);
-            if (pr.sizeOfStrikeArray() > 0) ctFont.AddNewStrike().SetVal(pr.GetStrikeArray(0).val);
+ 
+            if (pr.sizeOfSzArray() > 0) ctFont.AddNewSz().val = (pr.GetSzArray(0).val);
+            if (pr.sizeOfRFontArray() > 0) ctFont.AddNewName().val = (pr.GetRFontArray(0).val);
+            if (pr.sizeOfFamilyArray() > 0) ctFont.AddNewFamily().val = (pr.GetFamilyArray(0).val);
+            if (pr.sizeOfSchemeArray() > 0) ctFont.AddNewScheme().val = (pr.GetSchemeArray(0).val);
+            if (pr.sizeOfCharsetArray() > 0) ctFont.AddNewCharset().val = (pr.GetCharsetArray(0).val);
+            if (pr.sizeOfCondenseArray() > 0) ctFont.AddNewCondense().val = (pr.GetCondenseArray(0).val);
+            if (pr.sizeOfExtendArray() > 0) ctFont.AddNewExtend().val = (pr.GetExtendArray(0).val);
+            if (pr.sizeOfVertAlignArray() > 0) ctFont.AddNewVertAlign().val = (pr.GetVertAlignArray(0).val);
+            if (pr.sizeOfOutlineArray() > 0) ctFont.AddNewOutline().val = (pr.GetOutlineArray(0).val);
+            if (pr.sizeOfShadowArray() > 0) ctFont.AddNewShadow().val = (pr.GetShadowArray(0).val);
+            if (pr.sizeOfStrikeArray() > 0) ctFont.AddNewStrike().val = (pr.GetStrikeArray(0).val);
 
             return ctFont;
         }

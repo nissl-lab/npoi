@@ -481,7 +481,7 @@ namespace NPOI.XSSF.UserModel
         }
 
         /* namespace */
-        void SetCellArrayFormula(String formula, CellRangeAddress range)
+        internal void SetCellArrayFormula(String formula, CellRangeAddress range)
         {
             SetFormula(formula, FormulaType.ARRAY);
             CT_CellFormula cellFormula = _cell.f;
@@ -494,7 +494,7 @@ namespace NPOI.XSSF.UserModel
             IWorkbook wb = _row.Sheet.Workbook;
             if (formula == null)
             {
-                wb.OnDeleteFormula(this);
+                ((XSSFWorkbook)wb).OnDeleteFormula(this);
                 if (_cell.isSetF()) _cell.unsetF();
                 return;
             }
@@ -594,7 +594,7 @@ namespace NPOI.XSSF.UserModel
             get
             {
 
-                if (_cell.f != null || Sheet.IsCellInArrayFormulaContext(this))
+                if (_cell.f != null || ((XSSFSheet)Sheet).IsCellInArrayFormulaContext(this))
                 {
                     return CellType.FORMULA;
                 }
@@ -758,7 +758,7 @@ namespace NPOI.XSSF.UserModel
          */
         public void SetAsActiveCell()
         {
-            Sheet.SetActiveCell(_cell.r);
+            ((XSSFSheet)Sheet).SetActiveCell(_cell.r);
         }
 
         /**
@@ -806,7 +806,7 @@ namespace NPOI.XSSF.UserModel
             }
             if (prevType == CellType.FORMULA && cellType != CellType.FORMULA)
             {
-                Sheet.Workbook.OnDeleteFormula(this);
+                ((XSSFWorkbook)Sheet.Workbook).OnDeleteFormula(this);
             }
 
             switch (cellType)
@@ -1106,7 +1106,7 @@ namespace NPOI.XSSF.UserModel
 
         public CellRangeAddress GetArrayFormulaRange()
         {
-            XSSFCell cell = Sheet.GetFirstCellInArrayFormula(this);
+            XSSFCell cell = ((XSSFSheet)Sheet).GetFirstCellInArrayFormula(this);
             if (cell == null)
             {
                 throw new InvalidOperationException("Cell " + _cell.r
@@ -1120,7 +1120,7 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
-                return Sheet.IsCellInArrayFormulaContext(this);
+                return ((XSSFSheet)Sheet).IsCellInArrayFormulaContext(this);
             }
         }
 
@@ -1157,7 +1157,7 @@ namespace NPOI.XSSF.UserModel
          * @see NPOI.xssf.usermodel.XSSFSheet#AddMergedRegion(NPOI.ss.util.CellRangeAddress)
          * @throws InvalidOperationException if modification is not allowed
          */
-        void NotifyArrayFormulaChanging()
+        internal void NotifyArrayFormulaChanging()
         {
             CellReference ref1 = new CellReference(this);
             String msg = "Cell " + ref1.FormatAsString() + " is part of a multi-cell array formula. " +
