@@ -575,7 +575,7 @@ namespace NPOI.XSSF.UserModel
         public FontScheme GetScheme()
         {
             NPOI.OpenXmlFormats.Spreadsheet.CT_FontScheme scheme = _ctFont.sizeOfSchemeArray() == 0 ? null : _ctFont.GetSchemeArray(0);
-            return scheme == null ? FontScheme.NONE : FontScheme.ValueOf(scheme.val);
+            return scheme == null ? FontScheme.NONE : FontScheme.ValueOf((int)scheme.val);
         }
 
         /**

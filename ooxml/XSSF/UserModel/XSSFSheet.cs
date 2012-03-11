@@ -172,7 +172,7 @@ namespace NPOI.XSSF.UserModel
             tables = new Dictionary<String, XSSFTable>();
             sharedFormulas = new Dictionary<int, CT_CellFormula>();
             arrayFormulas = new List<CellRangeAddress>();
-            foreach (CT_Row row in worksheet.sheetData)
+            foreach (CT_Row row in worksheet.sheetData.row)
             {
                 XSSFRow r = new XSSFRow(row, this);
                 _rows[r.RowNum] =  r;
@@ -568,7 +568,17 @@ namespace NPOI.XSSF.UserModel
         {
             return CreateDrawingPatriarch().CreateCellComment(new XSSFClientAnchor());
         }
-
+        int GetLastKey(Dictionary<int, XSSFRow>.KeyCollection keys)
+        {
+            int i = 0;
+            foreach (int key in keys)
+            {
+                if (i == keys.Count - 1)
+                    return key;
+                i++;
+            }
+            throw new ArgumentOutOfRangeException();
+        }
         /**
          * Create a new row within the sheet and return the high level representation
          *
@@ -587,7 +597,7 @@ namespace NPOI.XSSF.UserModel
             }
             else
             {
-                if (_rows.Count==0 || rownum > _rows.lastKey())
+                if (_rows.Count == 0 || rownum > GetLastKey(_rows.Keys))
                 {
                     // we can append the new row at the end
                     ctRow = worksheet.sheetData.AddNewRow();
@@ -849,7 +859,16 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
-                return _rows.Count == 0 ? 0 : _rows.firstKey();
+                if (_rows.Count == 0)
+                    return 0;
+                else
+                {
+                    foreach(int key in _rows.Keys)
+                    {
+                        return key;
+                    }
+                    throw new ArgumentOutOfRangeException();
+                }
             }
         }
 
@@ -1021,7 +1040,7 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
-                return _rows.Count == 0 ? 0 : _rows.lastKey();
+                return _rows.Count == 0 ? 0 : GetLastKey(_rows.Keys);
             }
         }
 
@@ -1459,7 +1478,7 @@ namespace NPOI.XSSF.UserModel
             short outlineLevel = 0;
             foreach (XSSFRow xrow in _rows.Values)
             {
-                outlineLevel = xrow.GetCTRow().outlineLevel > outlineLevel ? xrow.GetCTRow().OutlineLevel : outlineLevel;
+                outlineLevel = xrow.GetCTRow().outlineLevel > outlineLevel ? xrow.GetCTRow().outlineLevel : outlineLevel;
             }
             return outlineLevel;
         }
@@ -1618,6 +1637,7 @@ namespace NPOI.XSSF.UserModel
          */
         public void SetRowBreak(int row)
         {
+
             CT_PageBreak pgBreak = worksheet.IsSetRowBreaks() ? worksheet.rowBreaks : worksheet.AddNewRowBreaks();
             if (!IsRowBroken(row))
             {
@@ -1988,7 +2008,7 @@ namespace NPOI.XSSF.UserModel
             CT_Col columnInfo = cols.GetColArray(idx);
             while (idx < cols.sizeOfColArray())
             {
-                columnInfo.SetHidden(hidden);
+                columnInfo.hidden =(hidden);
                 if (idx + 1 < cols.sizeOfColArray())
                 {
                     CT_Col nextColumnInfo = cols.GetColArray(idx + 1);
@@ -2510,7 +2530,7 @@ namespace NPOI.XSSF.UserModel
             {
                 return false;
             }
-            return ((XSSFRow)GetRow(collapseRow)).GetCTRow().collapsed;
+            return (bool)((XSSFRow)GetRow(collapseRow)).GetCTRow().collapsed;
         }
 
         /**
@@ -2605,7 +2625,7 @@ namespace NPOI.XSSF.UserModel
                 if (RemoveRow(startRow, endRow, n, rownum))
                 {
                     // remove row from worksheet.GetSheetData row array
-                    int idx = _rows.headMap(row.RowNum).Count;
+                    int idx = _rows.HeadMap(row.RowNum).Count;
                     worksheet.sheetData.RemoveRow(idx);
                     // remove row from _rows
                     it.Remove();
@@ -2672,7 +2692,7 @@ namespace NPOI.XSSF.UserModel
                 if (col != null)
                 {
                     short outlineLevel = col.outlineLevel;
-                    col.outlineLevel = ((short)(outlineLevel - 1));
+                    col.outlineLevel = (byte)(outlineLevel - 1);
                     index = (int)col.max;
 
                     if (col.outlineLevel <= 0)
@@ -2701,7 +2721,7 @@ namespace NPOI.XSSF.UserModel
                 {
                     CT_Row ctrow = xrow.GetCTRow();
                     short outlinelevel = ctrow.outlineLevel;
-                    ctrow.outlineLevel = ((short)(outlinelevel - 1));
+                    ctrow.outlineLevel = (byte)(outlinelevel - 1);
                     //remove a row only if the row has no cell and if the outline level is 0
                     if (ctrow.outlineLevel == 0 && xrow.FirstCellNum == -1)
                     {
@@ -2804,7 +2824,7 @@ namespace NPOI.XSSF.UserModel
             {
                 CT_Selection ctsel = GetSheetTypeSelection();
                 ctsel.activeCell = (value);
-                ctsel.SetSqref(Arrays.AsList(value));
+                ctsel.SetSqref(new string[]{value});
             }
         }
         /**

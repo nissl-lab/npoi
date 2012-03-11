@@ -34,10 +34,10 @@ namespace NPOI.XSSF.UserModel
         private CellRangeAddressList regions;
 
         internal static Dictionary<int, ST_DataValidationOperator> operatorTypeMappings = new Dictionary<int, ST_DataValidationOperator>();
-        static Dictionary<ST_DataValidationOperator, int> operatorTypeReverseMappings = new Dictionary<ST_DataValidationOperator, int>();
-        static Dictionary<int, ST_DataValidationType> validationTypeMappings = new Dictionary<int, ST_DataValidationType>();
-        static Dictionary<ST_DataValidationType, int> validationTypeReverseMappings = new Dictionary<ST_DataValidationType, int>();
-        static Dictionary<int, ST_DataValidationErrorStyle> errorStyleMappings = new Dictionary<int, ST_DataValidationErrorStyle>();
+        internal static Dictionary<ST_DataValidationOperator, int> operatorTypeReverseMappings = new Dictionary<ST_DataValidationOperator, int>();
+        internal static Dictionary<int, ST_DataValidationType> validationTypeMappings = new Dictionary<int, ST_DataValidationType>();
+        internal static Dictionary<ST_DataValidationType, int> validationTypeReverseMappings = new Dictionary<ST_DataValidationType, int>();
+        internal static Dictionary<int, ST_DataValidationErrorStyle> errorStyleMappings = new Dictionary<int, ST_DataValidationErrorStyle>();
         static XSSFDataValidation()
         {
 

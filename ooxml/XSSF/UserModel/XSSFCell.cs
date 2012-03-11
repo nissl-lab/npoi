@@ -758,7 +758,7 @@ namespace NPOI.XSSF.UserModel
          */
         public void SetAsActiveCell()
         {
-            ((XSSFSheet)Sheet).SetActiveCell(_cell.r);
+            ((XSSFSheet)Sheet).ActiveCell = (_cell.r);
         }
 
         /**
@@ -943,7 +943,7 @@ namespace NPOI.XSSF.UserModel
             if (cellIndex < 0 || cellIndex > maxcol)
             {
                 throw new ArgumentException("Invalid column index (" + cellIndex
-                        + ").  Allowable column range for " + v.name + " is (0.."
+                        + ").  Allowable column range for " + v.ToString() + " is (0.."
                         + maxcol + ") or ('A'..'" + v.LastColumnName + "')");
             }
         }
@@ -1002,7 +1002,7 @@ namespace NPOI.XSSF.UserModel
                 XSSFHyperlink link = (XSSFHyperlink)value;
 
                 // Assign to us
-                link.CellReference = (new CellReference(_row.RowNum, _cellNum).FormatAsString());
+                link.SetCellReference(new CellReference(_row.RowNum, _cellNum).FormatAsString());
 
                 // Add to the lists
                 ((XSSFSheet)Sheet).AddHyperlink(link);

@@ -168,7 +168,7 @@ namespace NPOI.XSSF.UserModel
                     // Copy the font
                     try
                     {
-                        CT_Font ctFont = new CT_Font(
+                        CT_Font ctFont = CT_Font.Parse(
                               src.GetFont().GetCTFont().ToString()
                         );
                         XSSFFont font = new XSSFFont(ctFont);

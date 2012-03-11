@@ -518,14 +518,24 @@ namespace NPOI.XSSF.UserModel
             return buf.ToString();
         }
 
-
+        public int GetLastKey(Dictionary<int, CT_RPrElt>.KeyCollection keys)
+        {
+            int i=0;
+            foreach (int key in keys)
+            {
+                if (i == keys.Count - 1)
+                    return key;
+                i++;
+            }
+            throw new ArgumentOutOfRangeException("GetLastKey failed");
+        }
 
         CT_Rst buildCTRst(String text, Dictionary<int, CT_RPrElt> formats)
         {
-            if (text.Length != formats.lastKey())
+            if (text.Length != GetLastKey(formats.Keys))
             {
                 throw new ArgumentException("Text length was " + text.Length +
-                        " but the last format index was " + formats.lastKey());
+                        " but the last format index was " + GetLastKey(formats.Keys));
             }
             CT_Rst st = new CT_Rst();
             int runStartIdx = 0;

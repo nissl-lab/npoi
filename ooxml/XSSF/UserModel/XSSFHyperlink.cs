@@ -216,7 +216,7 @@ namespace NPOI.XSSF.UserModel
         /**
          * Assigns this hyperlink to the given cell reference
          */
-        protected void SetCellReference(String ref1)
+        internal void SetCellReference(String ref1)
         {
             _ctHyperlink.@ref = ref1;
         }

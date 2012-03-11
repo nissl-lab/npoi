@@ -519,7 +519,10 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.itemsElementNameField = new List<ItemsChoiceType>();
             this.itemsField = new List<object>();
         }
-        //public  GetVertAlignArray();
+        public static CT_Font Parse(string xml)
+        {
+            throw new NotImplementedException();
+        }
 
         [System.Xml.Serialization.XmlElementAttribute("b", typeof(CT_BooleanProperty))]
         [System.Xml.Serialization.XmlElementAttribute("charset", typeof(CT_IntProperty))]

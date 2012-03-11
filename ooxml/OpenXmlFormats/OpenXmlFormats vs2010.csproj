@@ -105,6 +105,7 @@
     <Compile Include="Spreadsheet\TableDocument.cs" />
     <Compile Include="Spreadsheet\ThemeDocument.cs" />
     <Compile Include="Spreadsheet\Workbook.cs" />
+    <Compile Include="Spreadsheet\WorkbookDocument.cs" />
     <Compile Include="Vml\SpreadsheetDrawing.cs" />
   </ItemGroup>
   <ItemGroup>

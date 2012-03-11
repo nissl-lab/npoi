@@ -814,6 +814,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.bottomField = new CT_BorderPr();
             return this.bottomField;
         }
+
         public CT_BorderPr left
         {
             get
@@ -1417,7 +1418,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         private bool numFmtIdFieldSpecified;
 
-        private uint fontIdField;
+        private uint? fontIdField;
 
         private bool fontIdFieldSpecified;
 
@@ -1469,36 +1470,44 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.quotePrefixField = false;
             this.pivotButtonField = false;
         }
-       public bool IsSetAlignment()
-       {
-        return this.alignmentField==null;
-       }
+        public static CT_Xf Parse(string xml)
+        {
+            throw new NotImplementedException();
+        }
+        public bool IsSetAlignment()
+        {
+            return this.alignmentField != null;
+        }
+        public bool IsSetFontId()
+        {
+            return this.fontIdField != null;
+        }
         public void UnsetAlignment()
         {
-            this.alignmentField=null;
+            this.alignmentField = null;
         }
         public bool IsSetExtLst()
         {
-            return this.extLst==null;
+            return this.extLst == null;
         }
-          public void unsetExtLst()
-          {
-              this.extLst = null;
-          }
-                        public bool IsSetProtection()
-                        {
-                            return this.protectionField != null;
-                        }
-                    public bool IsSetLocked()
-                    {
-                        throw new NotImplementedException();
-                    }
-                    public CT_CellProtection AddNewProtection()
-                    {
-                        this.protectionField = new CT_CellProtection();
-                        return this.protectionField;
-                    }
-                        
+        public void unsetExtLst()
+        {
+            this.extLst = null;
+        }
+        public bool IsSetProtection()
+        {
+            return this.protectionField != null;
+        }
+        public bool IsSetLocked()
+        {
+            throw new NotImplementedException();
+        }
+        public CT_CellProtection AddNewProtection()
+        {
+            this.protectionField = new CT_CellProtection();
+            return this.protectionField;
+        }
+
         public CT_CellAlignment alignment
         {
             get
@@ -1560,7 +1569,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        public uint fontId
+        public uint? fontId
         {
             get
             {

@@ -79,8 +79,6 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.fileVersionField = new CT_FileVersion();
         }
 
-        
-
         public CT_WorkbookPr AddNewWorkbookPr()
         {
             this.workbookPrField=new CT_WorkbookPr();
@@ -97,7 +95,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.sheetsField=new CT_Sheets();
             return this.sheetsField;
         }
-        public CT_BookViews AddBookViews()
+        public CT_BookViews AddNewBookViews()
         {
             this.bookViewsField=new CT_BookViews();
             return this.bookViewsField;
@@ -2820,12 +2818,26 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             this.sheetField = new List<CT_Sheet>();
         }
-
+        public CT_Sheet AddNewSheet()
+        {
+            CT_Sheet newsheet = new CT_Sheet();
+            this.sheetField.Add(newsheet);
+            return newsheet;
+        }
         public void RemoveSheet(int index)
         {
             sheetField.RemoveAt(index);
         }
-
+        public CT_Sheet InsertNewSheet(int index)
+        {
+            CT_Sheet newsheet = new CT_Sheet();
+            this.sheetField.Insert(index,newsheet);
+            return newsheet;
+        }
+        public CT_Sheet GetSheetArray(int index)
+        {
+            return this.sheetField[index];
+        }
         public List<CT_Sheet> sheet
         {
             get
@@ -2870,6 +2882,13 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         public CT_DefinedNames()
         {
             this.definedNameField = new List<CT_DefinedName>();
+        }
+
+        public CT_DefinedName AddNewDefinedName()
+        {
+            CT_DefinedName dn = new CT_DefinedName();
+            this.definedNameField.Add(dn);
+                return dn;
         }
 
         public List<CT_DefinedName> definedName

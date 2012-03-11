@@ -173,11 +173,11 @@ namespace NPOI.XSSF.UserModel
 
 
         //  GetXYZArray() array accessors are deprecated
-        protected void OnDocumentRead()
+        internal override void OnDocumentRead()
         {
             try
             {
-                WorkbookDocument doc = WorkbookDocument.Factory.Parse(
+                WorkbookDocument doc = WorkbookDocument.Parse(
                     GetPackagePart().GetInputStream());
                 this.workbook = doc.Workbook;
 
@@ -1292,7 +1292,9 @@ namespace NPOI.XSSF.UserModel
         public void SetSheetOrder(String sheetname, int pos)
         {
             int idx = GetSheetIndex(sheetname);
-            sheets.Add(pos, sheets.Remove(idx));
+            XSSFSheet sheet = sheets[idx];
+            sheets.RemoveAt(idx);
+            sheets.Insert(pos,sheet);
             // Reorder CT_Sheets
             CT_Sheets ct = workbook.sheets;
             //XmlObject cts = ct.GetSheetArray(idx).copy();

@@ -2967,6 +2967,11 @@ namespace NPOI.OpenXmlFormats.Dml
             this.bodyPrField = new CT_TextBodyProperties();
             return this.bodyPrField;
         }
+        public CT_TextListStyle AddNewLstStyle()
+        {
+                this.lstStyleField=new CT_TextListStyle();
+            return this.lstStyleField;   
+        }
         /// <remarks/>
         public CT_TextBodyProperties bodyPr {
             get {

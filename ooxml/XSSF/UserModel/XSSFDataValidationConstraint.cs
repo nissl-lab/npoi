@@ -213,7 +213,7 @@ namespace NPOI.XSSF.UserModel
         public String PrettyPrint()
         {
             StringBuilder builder = new StringBuilder();
-            ST_DataValidationType vt = XSSFDataValidation.ValidationTypeMappings.Get(validationType);
+            ST_DataValidationType vt = XSSFDataValidation.validationTypeMappings[validationType];
             Enum ot = XSSFDataValidation.operatorTypeMappings[operator1];
             builder.Append(vt);
             builder.Append(' ');
