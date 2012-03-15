@@ -298,7 +298,7 @@ namespace TestCases.POIFS.FileSystem
             while (it.MoveNext())
             {
                 count++;
-                it.MoveNext();
+                //it.MoveNext();
             }
             Assert.AreEqual(23, count);
 
@@ -311,7 +311,7 @@ namespace TestCases.POIFS.FileSystem
             while (it.MoveNext())
             {
                 count++;
-                it.MoveNext();
+                //it.MoveNext();
             }
             Assert.AreEqual(24, count);
 
