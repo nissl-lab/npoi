@@ -65,7 +65,7 @@ namespace NPOI.POIFS.Crypt
 
         public override bool VerifyPassword(string password)
         {
-            EncryptionVerifier verifier = _info.GetVerifier();
+            EncryptionVerifier verifier = _info.Verifier;
 
             int algorithm = verifier.Algorithm;
             int mode = verifier.CipherMode;
@@ -77,28 +77,39 @@ namespace NPOI.POIFS.Crypt
             skey = GenerateKey(pwHash, kVerifierInputBlock);
             SymmetricAlgorithm cipher = GetCipher(algorithm, mode, skey, iv);
 
-            byte[] verifierHashInput = cipher.Key;
+            byte[] verifierHashInput;
 
+            //using (MemoryStream fStream = new MemoryStream(verifier.Verifier))
+            //{
+            //    using (CryptoStream cStream = new CryptoStream(fStream, cipher.CreateDecryptor(cipher.Key, cipher.IV),
+            //        CryptoStreamMode.Read))
+            //    {
+            //        verifierHashInput = new byte[cStream.Length];
+            //        cStream.Read(verifierHashInput, 0, verifierHashInput.Length);
+            //    }
+            //}
 
+            verifierHashInput = this.Decrypt(cipher, verifier.Verifier);
             HashAlgorithm sha1 = HashAlgorithm.Create("SHA1");
             byte[] trimmed = new byte[verifier.Salt.Length];
             System.Array.Copy(verifierHashInput, 0, trimmed, 0, trimmed.Length);
+
             byte[] hashedVerifier = sha1.ComputeHash(trimmed);
 
             skey = GenerateKey(pwHash, kHashedVerifierBlock);
             iv = GenerateIv(algorithm, verifier.Salt, null);
             cipher = GetCipher(algorithm, mode, skey, iv);
-            byte[] verifierHash = cipher.Key;
+            byte[] verifierHash = Decrypt(cipher, verifier.VerifierHash);
             trimmed = new byte[hashedVerifier.Length];
             System.Array.Copy(verifierHash, 0, trimmed, 0, trimmed.Length);
 
-            if (Array.Equals(trimmed, hashedVerifier))
+            if (Arrays.Equals(trimmed, hashedVerifier))
             {
                 skey = GenerateKey(pwHash, kCryptoKeyBlock);
                 iv = GenerateIv(algorithm, verifier.Salt, null);
                 cipher = GetCipher(algorithm, mode, skey, iv);
-                byte[] inter = cipher.IV;
-                byte[] keySpec = new byte[_info.GetHeader().KeySize / 8];
+                byte[] inter = Decrypt(cipher, verifier.EncryptedKey);
+                byte[] keySpec = new byte[_info.Header.KeySize / 8];
                 Array.Copy(inter, 0, keySpec, 0, keySpec.Length);
                 _secretKey = keySpec;
                 return true;
@@ -114,7 +125,7 @@ namespace NPOI.POIFS.Crypt
 
         public override Stream GetDataStream(DirectoryNode dir)
         {
-            DocumentReader dr = dir.CreateDocumentInputStream("EncryptedPackage");
+            DocumentInputStream dr = dir.CreateDocumentInputStream("EncryptedPackage");
             long size = dr.ReadLong();
             return new ChunkedCipherInputStream(dr, size, this);
         }
@@ -136,8 +147,12 @@ namespace NPOI.POIFS.Crypt
                 else if (mode == EncryptionHeader.MODE_CFB)
                     chain = "CFB";
 
-                SymmetricAlgorithm cipher = SymmetricAlgorithm.Create(name + "/" + chain + "/Nopadding");
-
+                //SymmetricAlgorithm cipher = SymmetricAlgorithm.Create(name + "/" + chain + "/Nopadding");
+                SymmetricAlgorithm cipher = SymmetricAlgorithm.Create();
+                cipher.Key = key;
+                cipher.IV = vec;
+                cipher.Padding = PaddingMode.None;
+                cipher.Mode = chain == "CBC" ? CipherMode.CBC : CipherMode.CFB;
                // cipher.Key = ;
                 //cipher.IV = 
                 return cipher;
@@ -163,8 +178,11 @@ namespace NPOI.POIFS.Crypt
             SHA1 sha = new SHA1CryptoServiceProvider();
             //sha1.update(hash); Leon
             //return getBlock(_info.getVerifier().getAlgorithm(), sha1.digest(blockKey));
-            sha.ComputeHash(hash);
-            return GetBlock(_info.GetVerifier().Algorithm, sha.ComputeHash(blockKey));
+            byte[] temp = new byte[hash.Length + blockKey.Length];
+            Array.Copy(hash, temp, hash.Length);
+            Array.Copy(blockKey, 0, temp, hash.Length, blockKey.Length);
+
+            return GetBlock(_info.Verifier.Algorithm, sha.ComputeHash(temp));
         }
 
         public byte[] GenerateIv(int algorithm, byte[] salt, byte[] blockKey)
@@ -197,22 +215,22 @@ namespace NPOI.POIFS.Crypt
         private int _lastIndex = 0;
         private long _pos = 0;
         private long _size;
-        private DocumentReader _stream;
+        private DocumentInputStream _stream;
         private byte[] _chunk;
         private SymmetricAlgorithm _cipher;
         private AgileDecryptor _ag;
 
 
-        public ChunkedCipherInputStream(DocumentReader dr, long size, AgileDecryptor ag)
+        public ChunkedCipherInputStream(DocumentInputStream dis, long size, AgileDecryptor ag)
         {
             try
             {
                 _size = size;
-                _stream = dr;
+                _stream = dis;
                 _ag = ag;
-                _cipher = _ag.GetCipher(_ag.Info.GetHeader().Algorithm,
-                                        _ag.Info.GetHeader().CipherMode,
-                                        _ag.SecretKey, _ag.Info.GetHeader().KeySalt);
+                _cipher = _ag.GetCipher(_ag.Info.Header.Algorithm,
+                                        _ag.Info.Header.CipherMode,
+                                        _ag.SecretKey, _ag.Info.Header.KeySalt);
             }
             catch (System.Security.Cryptography.CryptographicException ex)
             {
@@ -282,7 +300,7 @@ namespace NPOI.POIFS.Crypt
         {
             return (int)(_size - _pos);
         }
-        public void Close()
+        public override void Close()
         {
             _stream.Close();
         }
@@ -298,8 +316,8 @@ namespace NPOI.POIFS.Crypt
             byte[] blockKey = new byte[4];
             LittleEndian.PutInt(blockKey, index);
 
-            byte[] iv = _ag.GenerateIv(_ag.Info.GetHeader().Algorithm,
-                                        _ag.Info.GetHeader().KeySalt, blockKey);
+            byte[] iv = _ag.GenerateIv(_ag.Info.Header.Algorithm,
+                                        _ag.Info.Header.KeySalt, blockKey);
             //_cipher.Mode = CipherMode.
             _cipher.Key = _ag.SecretKey;
             _cipher.IV = iv;
@@ -316,7 +334,7 @@ namespace NPOI.POIFS.Crypt
 
         public override bool CanRead
         {
-            get { throw new NotImplementedException(); }
+            get { return _stream.CanRead; }
         }
 
         public override bool CanSeek
@@ -353,7 +371,7 @@ namespace NPOI.POIFS.Crypt
 
         public override long Seek(long offset, SeekOrigin origin)
         {
-            throw new NotImplementedException();
+            return _stream.Seek(offset, origin);
         }
 
         public override void SetLength(long value)

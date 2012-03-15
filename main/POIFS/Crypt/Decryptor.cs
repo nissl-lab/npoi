@@ -37,8 +37,8 @@ namespace NPOI.POIFS.Crypt
 
         public static Decryptor GetInstance(EncryptionInfo info)
         {
-            int major = info.GetVersionMajor();
-            int minor = info.GetVersionMinor();
+            int major = info.VersionMajor;
+            int minor = info.VersionMinor;
 
             if (major == 4 && minor == 4)
                 return new AgileDecryptor(info);
@@ -50,10 +50,13 @@ namespace NPOI.POIFS.Crypt
 
         public Stream GetDataStream(NPOIFSFileSystem fs)
         {
-            return GetDataStream(fs.GetRoot());
+            return GetDataStream(fs.Root);
         }
 
-
+        public Stream GetDataStream(POIFSFileSystem fs)
+        {
+            return GetDataStream(fs.Root);
+        }
 
         protected static int GetBlockSize(int algorithm)
         {
@@ -76,26 +79,56 @@ namespace NPOI.POIFS.Crypt
             byte[] bytes;
             try
             {
-                bytes = Encoding.UTF7.GetBytes(password); //bytes = password.getBytes("UTF-16LE");
+                bytes = Encoding.Unicode.GetBytes(password); //bytes = password.getBytes("UTF-16LE");
             }
-            catch (CryptographicUnexpectedOperationException ex)
+            catch (CryptographicUnexpectedOperationException)
             {
                 throw new EncryptedDocumentException("UTF16 not supported");
             }
 
             //sha1.ComputeHash(info.GetVerifier().Salt);
-            byte[] hash = sha1.ComputeHash(bytes);
+            byte[] salt = info.Verifier.Salt;
+            byte[] temp = new byte[salt.Length + bytes.Length];
+            Array.Copy(salt, temp, salt.Length);
+            Array.Copy(bytes, 0, temp, salt.Length, bytes.Length);
+            byte[] hash = sha1.ComputeHash(temp);
             byte[] iterator = new byte[4];
-
-            for (int i = 0; i < info.GetVerifier().SpinCount; i++)
+            temp = new byte[24];
+            for (int i = 0; i < info.Verifier.SpinCount; i++)
             {
-                sha1.Clear();
+                //sha1.Clear();
                 LittleEndian.PutInt(iterator, i);
                 //sha1.iterator; //sha1.update(iterator);
-                hash = sha1.ComputeHash(hash);
+                Array.Copy(iterator, temp, iterator.Length);
+                Array.Copy(hash, 0, temp, iterator.Length, hash.Length);
+                hash = sha1.ComputeHash(temp);
             }
 
             return hash;
+        }
+
+        protected byte[] Decrypt(SymmetricAlgorithm cipher,byte[] encryptBytes)
+        {
+            byte[] decryptBytes = new byte[0];
+            using (MemoryStream fStream = new MemoryStream(encryptBytes))
+            {
+                using (CryptoStream cStream = new CryptoStream(fStream, cipher.CreateDecryptor(cipher.Key, cipher.IV),
+                    CryptoStreamMode.Read))
+                {
+                    
+                    using (MemoryStream destMs = new MemoryStream())
+                    {
+                        byte[] buffer = new byte[100];
+                        int readLen;
+
+                        while ((readLen = cStream.Read(buffer, 0, 100)) > 0)
+                            destMs.Write(buffer, 0, readLen);
+
+                        decryptBytes = destMs.ToArray();
+                    }
+                }
+            }
+            return decryptBytes;
         }
     }
 }

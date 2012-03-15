@@ -61,16 +61,16 @@ namespace NPOI.POIFS.Crypt
                     throw new EncryptedDocumentException("");
 
                 spinCount = Int32.Parse(keyData.GetNamedItem("spinCount").Value);
-                verifier = Base64.DecodeBase64(keyData.GetNamedItem("encryptedVerifierHashInput").Value);
-                salt = Base64.DecodeBase64(keyData.GetNamedItem("saltValue").Value);
-                encryptedKey = Base64.DecodeBase64(keyData.GetNamedItem("encryptedKeyValue").Value);
+                verifier = Convert.FromBase64String(keyData.GetNamedItem("encryptedVerifierHashInput").Value);
+                salt = Convert.FromBase64String(keyData.GetNamedItem("saltValue").Value);
+                encryptedKey = Convert.FromBase64String(keyData.GetNamedItem("encryptedKeyValue").Value);
 
                 int saltSize = Int32.Parse(keyData.GetNamedItem("saltSize").Value);
 
                 if (saltSize != salt.Length)
                     throw new EncryptedDocumentException("Invalid salt size");
 
-                verifierHash = Base64.DecodeBase64(keyData.GetNamedItem("encryptedVerifierHashValue").Value);
+                verifierHash = Convert.FromBase64String(keyData.GetNamedItem("encryptedVerifierHashValue").Value);
 
                 int blockSize = Int32.Parse(keyData.GetNamedItem("blockSize").Value);
 
@@ -108,22 +108,22 @@ namespace NPOI.POIFS.Crypt
             }
         }
 
-        public EncryptionVerifier(DocumentReader dr, int encryptedLength)
+        public EncryptionVerifier(DocumentInputStream dis, int encryptedLength)
         {
-            int saltSize = dr.ReadInt();
+            int saltSize = dis.ReadInt();
 
             if (saltSize != 16)
                 throw new Exception("Salt size != 16 !?");
 
             salt = new byte[16];
-            dr.ReadFully(salt);
+            dis.ReadFully(salt);
             verifier = new byte[16];
-            dr.ReadFully(verifier);
+            dis.ReadFully(verifier);
 
-            verifierHashSize = dr.ReadInt();
+            verifierHashSize = dis.ReadInt();
 
             verifierHash = new byte[encryptedLength];
-            dr.ReadFully(verifierHash);
+            dis.ReadFully(verifierHash);
 
             spinCount = 50000;
             algorithm = EncryptionHeader.ALGORITHM_AES_128;
@@ -140,7 +140,13 @@ namespace NPOI.POIFS.Crypt
         {
             get { return verifier; }
         }
-
+        public byte[] VerifierHash
+        {
+            get
+            {
+                return verifierHash;
+            }
+        }
         public int SpinCount
         {
             get { return spinCount; }

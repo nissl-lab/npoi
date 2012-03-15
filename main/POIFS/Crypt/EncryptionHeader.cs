@@ -53,7 +53,7 @@ namespace NPOI.POIFS.Crypt
         private byte[] keySalt;
         private String cspName;
 
-        public EncryptionHeader(DocumentReader dr)
+        public EncryptionHeader(DocumentInputStream dr)
         {
             flags = dr.ReadInt();
             sizeExtra = dr.ReadInt();
@@ -93,7 +93,7 @@ namespace NPOI.POIFS.Crypt
                     XmlNodeList node = xml.GetElementsByTagName("keyData");
                     keyData = node[0].Attributes;
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     throw new EncryptedDocumentException("Unable to parse keyData");
                 }
@@ -107,7 +107,7 @@ namespace NPOI.POIFS.Crypt
                 int blockSize = Int32.Parse(keyData.GetNamedItem("blockSize").Value);
                 string cipher = keyData.GetNamedItem("cipherAlgorithm").Value;
 
-                if ("ASE".Equals(cipher))
+                if ("AES".Equals(cipher))
                 {
                     providerType = PROVIDER_AES;
                     if (blockSize == 16)
@@ -145,7 +145,8 @@ namespace NPOI.POIFS.Crypt
                 int saltLength = Int32.Parse(keyData.GetNamedItem("saltSize").Value);
 
                 //keySalt = Base64.DecodeBase64(Encoding.Default.GetBytes(salt));
-                keySalt = Base64.DecodeBase64(salt);
+                //keySalt = Base64.DecodeBase64(salt);
+                keySalt = Convert.FromBase64String(salt);
                 if(keySalt.Length != saltLength)
                     throw new EncryptedDocumentException("Invalid salt length");
 

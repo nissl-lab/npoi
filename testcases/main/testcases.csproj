@@ -46,6 +46,10 @@
     <OutputPath>bin\NPOI.Tools\</OutputPath>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Ionic.Zip, Version=1.9.1.5, Culture=neutral, PublicKeyToken=edbe51ad942a3f5c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\solution\Lib\Ionic.Zip.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=9.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.VisualStudio.TeamSystem.Data.UnitTesting, Version=9.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
     <Reference Include="System" />
@@ -457,6 +461,8 @@
     <Compile Include="HSSF\Util\TestCellReference.cs" />
     <Compile Include="HSSF\Util\TestRKUtil.cs" />
     <Compile Include="POIDataSamples.cs" />
+    <Compile Include="POIFS\Crypt\TestDecryptor.cs" />
+    <Compile Include="POIFS\Crypt\TestEncryptionInfo.cs" />
     <Compile Include="POIFS\EventFileSystem\Listener.cs" />
     <Compile Include="POIFS\EventFileSystem\TestPOIFSReaderRegistry.cs" />
     <Compile Include="SS\Format\CellFormatTestBase.cs" />

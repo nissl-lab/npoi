@@ -269,6 +269,15 @@
     <Compile Include="HSSF\Record\Chart\ValueRangeRecord.cs" />
     <Compile Include="HSSF\Record\CodepageRecord.cs" />
     <Compile Include="HSSF\Record\ColumnInfoRecord.cs" />
+    <Compile Include="POIFS\Crypt\AgileDecryptor.cs" />
+    <Compile Include="POIFS\Crypt\Decryptor.cs" />
+    <Compile Include="POIFS\Crypt\EcmaDecryptor.cs" />
+    <Compile Include="POIFS\Crypt\EncryptionHeader.cs" />
+    <Compile Include="POIFS\Crypt\EncryptionInfo.cs" />
+    <Compile Include="POIFS\Crypt\EncryptionVerifier.cs" />
+    <Compile Include="POIFS\EventFileSystem\POIFSWriterEvent.cs" />
+    <Compile Include="POIFS\EventFileSystem\POIFSWriterEventArgs.cs" />
+    <Compile Include="POIFS\EventFileSystem\POIFSWriterListener.cs" />
     <Compile Include="POIFS\FileSystem\BlockStore.cs" />
     <Compile Include="POIFS\FileSystem\CloseIgnoringInputStream.cs" />
     <Compile Include="POIFS\FileSystem\DocumentInputStream.cs" />
@@ -279,7 +288,6 @@
     <Compile Include="POIFS\FileSystem\NPOIFSMiniStore.cs" />
     <Compile Include="POIFS\FileSystem\NPOIFSStream.cs" />
     <Compile Include="POIFS\FileSystem\ODocumentInputStream.cs" />
-    <Compile Include="POIFS\FileSystem\POIFSWriterEventArgs.cs" />
     <Compile Include="POIFS\NIO\ByteArrayBackedDataSource.cs" />
     <Compile Include="Util\ByteArrayInputStream.cs" />
     <Compile Include="Util\ByteBuffer.cs" />
@@ -486,8 +494,6 @@
     <Compile Include="POIFS\FileSystem\POIFSDocumentReader.cs" />
     <Compile Include="POIFS\FileSystem\POIFSDocumentWriter.cs" />
     <Compile Include="POIFS\FileSystem\POIFSFileSystem.cs" />
-    <Compile Include="POIFS\FileSystem\POIFSWriterEvent.cs" />
-    <Compile Include="POIFS\FileSystem\POIFSWriterListener.cs" />
     <Compile Include="POIFS\property\Child.cs" />
     <Compile Include="POIFS\property\DirectoryProperty.cs" />
     <Compile Include="POIFS\property\DocumentProperty.cs" />
@@ -1033,7 +1039,6 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Lib\Ionic.Zip.dll" />
     <Content Include="Resources\functionMetadata.txt" />
   </ItemGroup>
   <ItemGroup>

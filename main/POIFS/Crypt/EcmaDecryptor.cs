@@ -47,26 +47,30 @@ namespace NPOI.POIFS.Crypt
 
                 byte[] blockValue = new byte[4];
                 LittleEndian.PutInt(blockValue, block);
-                byte[] finalHash = sha1.ComputeHash(blockValue); //sha1.digest(blockValue);
+                byte[] temp = new byte[blockValue.Length + passwordHash.Length];
+                Array.Copy(passwordHash, temp, passwordHash.Length);
+                Array.Copy(blockValue, 0, temp, passwordHash.Length, blockValue.Length);
+                byte[] finalHash = sha1.ComputeHash(temp); //sha1.digest(blockValue);
 
-                int reqiredKeyLength = (info.GetHeader().KeySize) / 8;
+                int reqiredKeyLength = (info.Header.KeySize) / 8;
 
                 byte[] buff = new byte[64];
 
-            //    for (int i = 0; i < buff.Length; i++)
-                  //  buff[i] = (byte)0x36;
+                for (int i = 0; i < buff.Length; i++)
+                    buff[i] = (byte)0x36;
 
                 for (int i = 0; i < finalHash.Length; i++)
-                    buff[i] = (byte)(0x36^ finalHash[i]);
+                    buff[i] = (byte)(buff[i] ^ finalHash[i]);
 
-                sha1.Clear();
+                //sha1.Clear();
 
                 byte[] x1 = sha1.ComputeHash(buff);
-
                 for (int i = 0; i < buff.Length; i++)
-                    buff[i] = (byte)(0x5c ^ (finalHash[i]));
+                    buff[i] = (byte)0x5c;
+                for (int i = 0; i < finalHash.Length; i++)
+                    buff[i] = (byte)(buff[i] ^ finalHash[i]);
 
-                sha1.Clear();
+                //sha1.Clear();
 
                 byte[] x2 = sha1.ComputeHash(buff);
                 byte[] x3 = new byte[x1.Length + x2.Length];
@@ -89,15 +93,33 @@ namespace NPOI.POIFS.Crypt
             passwordHash = HashPassword(info, password);
 
             SymmetricAlgorithm cipher = GetCipher();
-
-            byte[] verifier = cipher.Key; // byte[] verifier = cipher.doFinal(info.getVerifier().getVerifier());
-
+            byte[] verifier; // byte[] verifier = cipher.doFinal(info.getVerifier().getVerifier());
+            //using (MemoryStream fStream = new MemoryStream(info.Verifier.Verifier))
+            //{
+            //    using (CryptoStream cStream = new CryptoStream(fStream, cipher.CreateDecryptor(cipher.Key, cipher.IV),
+            //        CryptoStreamMode.Read))
+            //    {
+            //        verifier = new byte[cStream.Length];//??
+            //        cStream.Read(verifier, 0, verifier.Length);
+            //    }
+            //}
+            verifier = Decrypt(cipher, info.Verifier.Verifier);
             HashAlgorithm sha1 = HashAlgorithm.Create("SHA1");
             byte[] calcVerifierHash = sha1.ComputeHash(verifier);
+            byte[] temp;
+            //using (MemoryStream fStream = new MemoryStream(info.Verifier.VerifierHash))
+            //{
+            //    using (CryptoStream cStream = new CryptoStream(fStream, cipher.CreateDecryptor(cipher.Key, cipher.IV),
+            //        CryptoStreamMode.Read))
+            //    {
+            //        temp = new byte[cStream.Length];
+            //        cStream.Read(temp, 0, verifier.Length);
+            //    }
+            //}
+            temp = Decrypt(cipher, info.Verifier.VerifierHash);
+            byte[] verifierHash = TruncateOrPad(calcVerifierHash, calcVerifierHash.Length);
 
-            byte[] verifierHash = TruncateOrPad(cipher.Key, calcVerifierHash.Length);
-
-            return Array.Equals(calcVerifierHash, verifierHash);
+            return Arrays.Equals(calcVerifierHash, verifierHash);
 
         }
 
@@ -119,19 +141,23 @@ namespace NPOI.POIFS.Crypt
         private SymmetricAlgorithm GetCipher()
         {
             byte[] key = GenerateKey(0);
-            SymmetricAlgorithm cipher = SymmetricAlgorithm.Create("AES/ECB/NoPadding");
+            //System.Security.Cryptography
+
+            SymmetricAlgorithm cipher = SymmetricAlgorithm.Create();  //  AES/ECB/NoPadding
             cipher.Mode = CipherMode.ECB;
+            cipher.Padding = PaddingMode.None;
             cipher.Key = key;
+            
             //cipher.init(Cipher.DECRYPT_MODE, skey); Leon
             return cipher;
         }
 
         public override Stream GetDataStream(DirectoryNode dir)
         {
-            DocumentReader dr = dir.CreateDocumentInputStream("EncryptedPackage");
+            DocumentInputStream dr = dir.CreateDocumentInputStream("EncryptedPackage");
             long size = dr.ReadLong();
-
-            return new CryptoStream(dr, /*GetCipher()*/ null, CryptoStreamMode.Write);
+            SymmetricAlgorithm cipher=GetCipher();
+            return new CryptoStream(dr, cipher.CreateDecryptor(cipher.Key, cipher.IV), CryptoStreamMode.Read);
         }
     }
 }

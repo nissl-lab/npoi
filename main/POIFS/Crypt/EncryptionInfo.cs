@@ -25,68 +25,94 @@ namespace NPOI.POIFS.Crypt
 {
     public class EncryptionInfo
     {
-         private  int versionMajor;
-    private  int versionMinor;
-    private  int encryptionFlags;
+        private int versionMajor;
+        private int versionMinor;
+        private int encryptionFlags;
 
-    private  EncryptionHeader header;
-    private  EncryptionVerifier verifier;
+        private EncryptionHeader header;
+        private EncryptionVerifier verifier;
 
-    public EncryptionInfo(POIFSFileSystem fs)
-        : this(fs.Root)
-    {
-    }
-    public EncryptionInfo(NPOIFSFileSystem fs)
-        : this(fs.GetRoot())
-    {
-    }
-    public EncryptionInfo(DirectoryNode dir)  {
-        DocumentReader dis = dir.CreateDocumentInputStream("EncryptionInfo");
-        versionMajor = dis.ReadShort();
-        versionMinor = dis.ReadShort();
+        public EncryptionInfo(POIFSFileSystem fs)
+            : this(fs.Root)
+        {
+        }
+        public EncryptionInfo(NPOIFSFileSystem fs)
+            : this(fs.Root)
+        {
+        }
+        public EncryptionInfo(DirectoryNode dir)
+        {
+            DocumentInputStream dis = dir.CreateDocumentInputStream("EncryptionInfo");
+            versionMajor = dis.ReadShort();
+            versionMinor = dis.ReadShort();
 
-        encryptionFlags = dis.ReadInt();
+            encryptionFlags = dis.ReadInt();
 
-        if (versionMajor == 4 && versionMinor == 4 && encryptionFlags == 0x40) {
-            StringBuilder builder = new StringBuilder();
-            byte[] xmlDescriptor = new byte[dis.Available()];
-            dis.Read(xmlDescriptor);
-            foreach (byte b in xmlDescriptor)
-                builder.Append((char)b);
-            string descriptor = builder.ToString();
-            header = new EncryptionHeader(descriptor);
-            verifier = new EncryptionVerifier(descriptor);
-        } 
-        else {
-            int hSize = dis.ReadInt();
-            header = new EncryptionHeader(dis);
-            if (header.Algorithm ==EncryptionHeader.ALGORITHM_RC4) {
-                verifier = new EncryptionVerifier(dis, 20);
-            } else {
-                verifier = new EncryptionVerifier(dis, 32);
+            if (versionMajor == 4 && versionMinor == 4 && encryptionFlags == 0x40)
+            {
+                StringBuilder builder = new StringBuilder();
+                byte[] xmlDescriptor = new byte[dis.Available()];
+                dis.Read(xmlDescriptor);
+                foreach (byte b in xmlDescriptor)
+                    builder.Append((char)b);
+                string descriptor = builder.ToString();
+                header = new EncryptionHeader(descriptor);
+                verifier = new EncryptionVerifier(descriptor);
+            }
+            else
+            {
+                int hSize = dis.ReadInt();
+                header = new EncryptionHeader(dis);
+                if (header.Algorithm == EncryptionHeader.ALGORITHM_RC4)
+                {
+                    verifier = new EncryptionVerifier(dis, 20);
+                }
+                else
+                {
+                    verifier = new EncryptionVerifier(dis, 32);
+                }
             }
         }
-    }
 
-    public int GetVersionMajor() {
-        return versionMajor;
-    }
+        public int VersionMajor
+        {
+            get
+            {
+                return versionMajor;
+            }
+        }
 
-    public int GetVersionMinor() {
-        return versionMinor;
-    }
+        public int VersionMinor
+        {
+            get
+            {
+                return versionMinor;
+            }
+        }
 
-    public int GetEncryptionFlags() {
-        return encryptionFlags;
-    }
+        public int EncryptionFlags
+        {
+            get
+            {
+                return encryptionFlags;
+            }
+        }
 
-    public EncryptionHeader GetHeader() {
-        return header;
-    }
+        public EncryptionHeader Header
+        {
+            get
+            {
+                return header;
+            }
+        }
 
-    public EncryptionVerifier GetVerifier() {
-        return verifier;
-    }
+        public EncryptionVerifier Verifier
+        {
+            get
+            {
+                return verifier;
+            }
+        }
 
     }
 }
