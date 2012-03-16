@@ -37,6 +37,7 @@ using NPOI.HSSF.Util;
 using NPOI.HSSF.UserModel;
 using NPOI.HSSF.Record.Aggregates;
 using NPOI.SS.Util;
+using NPOI.DDF;
 
 namespace NPOI.Tools.POIFSBrowser
 {
@@ -176,99 +177,36 @@ namespace NPOI.Tools.POIFSBrowser
                         TreeNode sheetnode =
                             treeNode.Nodes.Add(sheettext, sheettext, "Folder", "Folder");
 
-                        IEnumerator iterator1 = ((HSSFSheet)hssfworkbook.GetSheetAt(i)).Sheet.Records.GetEnumerator();
+                        HSSFSheet hssfsheet=((HSSFSheet)hssfworkbook.GetSheetAt(i));
+                        EscherAggregate ea = hssfsheet.DrawingEscherAggregate;
+                        IEnumerator iterator1 = hssfsheet.Sheet.Records.GetEnumerator();
                         while (iterator1.MoveNext())
                         {
                             if (iterator1.Current is Record)
                             {
                                 Record record = (Record)iterator1.Current;
-                                sheetnode.Nodes.Add(new RecordTreeNode(record));
+                                if (record is DrawingRecord)
+                                {
+                                    RecordTreeNode rtn = new RecordTreeNode(record);
+                                    sheetnode.Nodes.Add(rtn);
+                                    
+
+                                }
+                                else
+                                {
+                                    sheetnode.Nodes.Add(new RecordTreeNode(record));
+                                }
                             }
                             else if (iterator1.Current is RecordAggregate)
                             {
                                 RecordAggregate record = (RecordAggregate)iterator1.Current;
-
-                                TreeNode newnode = new TreeNode(record.GetType().Name);
-                                newnode.ImageKey = "Folder";
-                                newnode.SelectedImageKey = "Folder";
-
-                                if (record is RowRecordsAggregate)
-                                {
-
-                                    IEnumerator recordenum = ((RowRecordsAggregate)record).GetEnumerator();
-                                    while (recordenum.MoveNext())
-                                    {
-                                        if (recordenum.Current is RowRecord)
-                                        {
-                                            newnode.Nodes.Add(new RecordTreeNode((RowRecord)recordenum.Current));
-                                        }
-                                    }
-                                    CellValueRecordInterface[] valrecs = ((RowRecordsAggregate)record).GetValueRecords();
-                                    for (int j = 0; j < valrecs.Length; j++)
-                                    {
-                                        CellValueRecordTreeNode cvrtn=new CellValueRecordTreeNode(valrecs[j]);
-                                         if (valrecs[j] is FormulaRecordAggregate)
-                                        {
-                                            FormulaRecordAggregate fra = ((FormulaRecordAggregate)valrecs[j]);
-                                            cvrtn.ImageKey = "Folder";
-                                             if(fra.FormulaRecord!=null)
-                                                cvrtn.Nodes.Add(new RecordTreeNode(fra.FormulaRecord));
-                                             if(fra.StringRecord!=null)
-                                                cvrtn.Nodes.Add(new RecordTreeNode(fra.StringRecord));
-                                        }
-                                        newnode.Nodes.Add(cvrtn);
-                                    }
-                                }
-                                else if (record is ColumnInfoRecordsAggregate)
-                                {
-                                    IEnumerator recordenum = ((ColumnInfoRecordsAggregate)record).GetEnumerator();
-                                    while (recordenum.MoveNext())
-                                    {
-                                        if (recordenum.Current is ColumnInfoRecord)
-                                        {
-                                            newnode.Nodes.Add(new RecordTreeNode((ColumnInfoRecord)recordenum.Current));
-                                        }
-                                    }
-                                }
-                                else if (record is PageSettingsBlock)
-                                {
-                                    IEnumerator recordenum = ((PageSettingsBlock)record).GetEnumerator();
-                                    while (recordenum.MoveNext())
-                                    {
-                                        if (recordenum.Current is Record)
-                                        {
-                                            newnode.Nodes.Add(new RecordTreeNode((Record)recordenum.Current));
-                                        }
-                                    }
-                                }
-                                else if (record is MergedCellsTable)
-                                {
-                                    foreach(CellRangeAddress subRecord in ((MergedCellsTable)record).MergedRegions)
-                                    {
-                                        newnode.Nodes.Add(new CellRangeAddressTreeNode(subRecord));
-                                    }
-                                }
-                                else if (record is ConditionalFormattingTable)
-                                {
-                                    ConditionalFormattingTable cft = (ConditionalFormattingTable)record;
-                                    for (int j = 0; j < cft.Count; j++)
-                                    {
-                                        CFRecordsAggregate cfra = cft.Get(i);
-
-                                        TreeNode headernode = new RecordTreeNode(cfra.Header);
-                                        for (int k = 0; k < cfra.NumberOfRules; k++)
-                                        {
-                                            newnode.Nodes.Add(new RecordTreeNode(cfra.GetRule(k)));
-                                        }
-                                        newnode.Nodes.Add(headernode);
-                                    }
-                                }
-                                else
-                                {
-                                    newnode = new TreeNode(record.GetType().Name);
-                                }
-                                sheetnode.Nodes.Add(newnode);
+                                sheetnode.Nodes.Add(new RecordAggregateTreeNode(record));
                             }
+                        }
+                        //RecordTreeNode rtn = new DirectoryTreeNode();
+                        foreach (EscherRecord er in ea.EscherRecords)
+                        {
+                            sheetnode.Nodes.Add(new EscherRecordTreeNode(er));
                         }
                     }
 

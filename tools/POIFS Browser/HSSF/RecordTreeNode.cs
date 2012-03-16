@@ -32,12 +32,14 @@ using System.Windows.Forms;
 using System.Reflection;
 using System.Collections;
 using NPOI.HSSF.Record;
+using NPOI.HSSF.Record.Aggregates;
+using NPOI.DDF;
+using NPOI.HSSF.Model;
 
 namespace NPOI.Tools.POIFSBrowser
 {
     internal class RecordTreeNode : AbstractRecordTreeNode
     {
-
         public RecordTreeNode(Record record)
         {
             if (record is ObjRecord)

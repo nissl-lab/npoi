@@ -57,6 +57,7 @@
     <Compile Include="AboutDialog.Designer.cs">
       <DependentUpon>AboutDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="EscherPropertyTreeNode.cs" />
     <Compile Include="HSSF\AbstractRecordTreeNode.cs" />
     <Compile Include="AbstractTreeNode.cs" />
     <Compile Include="HSSF\CellValueRecordTreeNode.cs" />
@@ -64,12 +65,16 @@
     <Compile Include="DirectoryTreeNode.cs" />
     <Compile Include="DocumentTreeNode.cs" />
     <Compile Include="EscherRecordTreeNode.cs" />
+    <Compile Include="HSSF\RecordAggregateTreeNode.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="MockRecordVisitor.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="AboutDialog.resx">

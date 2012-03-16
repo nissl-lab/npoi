@@ -18,7 +18,19 @@ namespace NPOI.Tools.POIFSBrowser
             else
                 this.ImageKey = "Binary";
 
-            GetChildren(this);
+            if (record is AbstractEscherOptRecord)
+            {
+                AbstractEscherOptRecord rec = ((AbstractEscherOptRecord)record);
+                foreach (EscherProperty ep in rec.EscherProperties )
+                {
+                    EscherPropertyTreeNode cnode = new EscherPropertyTreeNode(ep);
+                    this.Nodes.Add(cnode);
+                }
+            }
+            else
+            {
+                GetChildren(this);
+            }
         }
         
         private void GetChildren(EscherRecordTreeNode node)
