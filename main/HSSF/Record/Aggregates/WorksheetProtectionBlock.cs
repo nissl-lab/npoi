@@ -46,7 +46,7 @@ namespace NPOI.HSSF.Record.Aggregates
          */
         public WorksheetProtectionBlock()
         {
-            // all fields empty
+            // all fields emptyv
         }
 
         /**
@@ -68,36 +68,24 @@ namespace NPOI.HSSF.Record.Aggregates
 
         private bool ReadARecord(RecordStream rs)
         {
+            
             switch (rs.PeekNextSid())
             {
                 case ProtectRecord.sid:
-                    
-                    //CheckNotPresent(_protectRecord);
-                    //if (_protectRecord == null)
-                        _protectRecord = (ProtectRecord)rs.GetNext();
-                    //else
-                    //    rs.GetNext();
+                    CheckNotPresent(_protectRecord);
+                    _protectRecord = rs.GetNext() as ProtectRecord;
                     break;
                 case ObjectProtectRecord.sid:
-                    //CheckNotPresent(_objectProtectRecord);
-                    //if (_objectProtectRecord == null)
-                        _objectProtectRecord = (ObjectProtectRecord)rs.GetNext();
-                    //else
-                    //    rs.GetNext();
+                    CheckNotPresent(_objectProtectRecord);
+                    _objectProtectRecord = rs.GetNext() as ObjectProtectRecord;
                     break;
                 case ScenarioProtectRecord.sid:
                     CheckNotPresent(_scenarioProtectRecord);
-                    //if (_scenarioProtectRecord == null)
-                        _scenarioProtectRecord = (ScenarioProtectRecord)rs.GetNext();
-                    //else
-                    //    rs.GetNext();
+                    _scenarioProtectRecord = rs.GetNext() as ScenarioProtectRecord;
                     break;
                 case PasswordRecord.sid:
                     CheckNotPresent(_passwordRecord);
-                    //if (_passwordRecord == null)
-                        _passwordRecord = (PasswordRecord)rs.GetNext();
-                    //else
-                    //    rs.GetNext();
+                    _passwordRecord = rs.GetNext() as PasswordRecord;
                     break;
                 default:
                     // all other record types are not part of the PageSettingsBlock
@@ -170,10 +158,9 @@ namespace NPOI.HSSF.Record.Aggregates
             }
         }
 
-        /**
-         * @return the ProtectRecord. If one is not Contained in the sheet, then one
-         *         is Created.
-         */
+        /// <summary>
+        /// the ProtectRecord. If one is not contained in the sheet, then one is created.
+        /// </summary>
         private ProtectRecord Protect
         {
             get
@@ -185,11 +172,9 @@ namespace NPOI.HSSF.Record.Aggregates
                 return _protectRecord;
             }
         }
-
-        /**
-         * @return the PasswordRecord. If one is not Contained in the sheet, then
-         *         one is Created.
-         */
+        /// <summary>
+        /// the PasswordRecord. If one is not Contained in the sheet, then one is Created.
+        /// </summary>
         public PasswordRecord Password
         {
             get
@@ -202,14 +187,12 @@ namespace NPOI.HSSF.Record.Aggregates
             }
         }
 
-        /**
-         * protect a spreadsheet with a password (not encrypted, just Sets protect
-         * flags and the password.
-         *
-         * @param password to Set. Pass <code>null</code> to remove all protection
-         * @param shouldProtectObjects are protected
-         * @param shouldProtectScenarios are protected
-         */
+        /// <summary>
+        /// protect a spreadsheet with a password (not encrypted, just sets protect flags and the password.)
+        /// </summary>
+        /// <param name="password">password to set;Pass <code>null</code> to remove all protection</param>
+        /// <param name="shouldProtectObjects">shouldProtectObjects are protected</param>
+        /// <param name="shouldProtectScenarios">shouldProtectScenarios are protected</param>
         public void ProtectSheet(String password, bool shouldProtectObjects,
                 bool shouldProtectScenarios)
         {
@@ -263,27 +246,29 @@ namespace NPOI.HSSF.Record.Aggregates
             }
         }
 
-        /**
-         * Creates an ObjectProtect record with protect set to false.
-         */
+        /// <summary>
+        /// Creates an ObjectProtect record with protect set to false.
+        /// </summary>
+        /// <returns></returns>
         private static ObjectProtectRecord CreateObjectProtect() {
 		ObjectProtectRecord retval = new ObjectProtectRecord();
 		retval.Protect = (false);
 		return retval;
 	}
-
-        /**
-         * Creates a ScenarioProtect record with protect set to false.
-         */
+        /// <summary>
+        /// Creates a ScenarioProtect record with protect set to false.
+        /// </summary>
+        /// <returns></returns>
         private static ScenarioProtectRecord CreateScenarioProtect() {
 		ScenarioProtectRecord retval = new ScenarioProtectRecord();
 		retval.Protect = (false);
 		return retval;
 	}
 
-        /**
-         * Creates a Password record with password set to 0x0000.
-         */
+        /// <summary>
+        ///Creates a Password record with password set to 0x0000.
+        /// </summary>
+        /// <returns></returns>
         private static PasswordRecord CreatePassword()
         {
             return new PasswordRecord(0x0000);

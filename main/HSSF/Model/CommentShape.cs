@@ -14,6 +14,7 @@
    See the License for the specific language governing permissions and
    limitations Under the License.
 ==================================================================== */
+using System.Collections;
 namespace NPOI.HSSF.Model
 {
     using System;
@@ -111,6 +112,7 @@ namespace NPOI.HSSF.Model
                     case EscherProperties.Fill__FillBACKCOLOR:
                     case EscherProperties.LINESTYLE__COLOR:
                         opt.EscherProperties.Remove(prop);
+                        i--;
                         break;
                 }
             }
