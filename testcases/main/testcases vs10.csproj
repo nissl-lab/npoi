@@ -78,6 +78,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="HPSF\Basic\TestClassID.cs" />
+    <Compile Include="HPSF\Basic\TestHPSFBugs.cs" />
+    <Compile Include="HPSF\Extractor\TestHPSFPropertiesExtractor.cs" />
+    <Compile Include="HSSF\EventModel\TestAbortableListener.cs" />
+    <Compile Include="HSSF\Record\TestUnicodeString.cs" />
+    <Compile Include="HSSF\Util\TestRangeAddress.cs" />
     <Compile Include="POIFS\EventFileSystem\Listener.cs" />
     <Compile Include="POIFS\EventFileSystem\TestPOIFSReaderRegistry.cs" />
     <Compile Include="POIFS\FileSystem\ReaderWriter.cs" />
@@ -219,18 +225,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="HPSF\data\Test0313rur.adm" />
-    <None Include="HPSF\data\TestBug44375.xls" />
-    <None Include="HPSF\data\TestChineseProperties.doc" />
-    <None Include="HPSF\data\TestCorel.shw" />
-    <None Include="HPSF\data\TestEditTime.doc" />
-    <None Include="HPSF\data\TestGermanWord90.doc" />
-    <None Include="HPSF\data\TestMickey.doc" />
-    <None Include="HPSF\data\TestRobert_Flaherty.doc" />
-    <None Include="HPSF\data\TestSectionDictionary.doc" />
-    <None Include="HPSF\data\TestShiftJIS.doc" />
-    <None Include="HPSF\data\TestSolidWorks.sldprt" />
-    <None Include="HPSF\data\TestUnicode.xls" />
     <None Include="npoi.snk" />
     <None Include="POIFS\Data\excel_with_embeded.xls" />
     <None Include="POIFS\Data\ppt_with_embeded.ppt" />
@@ -662,7 +656,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="DDF\data\" />
-    <Folder Include="HSSF\data\" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0">
