@@ -69,7 +69,7 @@ namespace NPOI.HPSF.Extractor
                 IEnumerator keys = cps.Keys.GetEnumerator();
                 while (keys.MoveNext())
                 {
-                    String key = (String)keys.Current;
+                    String key = keys.Current.ToString();
                     String val = GetPropertyValueText(cps[key]);
                     text.Append(key + " = " + val + "\n");
                 }
