@@ -18,6 +18,7 @@
 using System.IO;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Text;
+using NPOI.Util;
 namespace NPOI.XSSF.Util
 {
     [TestClass]
@@ -49,7 +50,7 @@ namespace NPOI.XSSF.Util
             }
 
             byte[] result = bout.ToArray();
-            Assert.AreEqual(ok, result);
+            Assert.IsTrue(Arrays.Equals(ok, result));
         }
         [TestMethod]
         public void TestProblem()
@@ -78,7 +79,7 @@ namespace NPOI.XSSF.Util
             }
 
             byte[] result = bout.ToArray();
-            Assert.AreEqual(fixed1, result);
+            Assert.IsTrue(Arrays.Equals(fixed1, result));
         }
 
         /**
@@ -115,7 +116,7 @@ namespace NPOI.XSSF.Util
                 }
 
                 byte[] result = bout.ToArray();
-                Assert.AreEqual(fixed1, result);
+                Assert.IsTrue(Arrays.Equals(fixed1, result));
             }
         }
     }

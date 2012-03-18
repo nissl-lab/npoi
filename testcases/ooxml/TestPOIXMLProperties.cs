@@ -18,37 +18,36 @@
 namespace NPOI
 {
 
-    using NPOI.XSSF.XSSFTestDataSamples;
-    using NPOI.XSSF.usermodel.XSSFWorkbook;
-    using NPOI.XWPF.XWPFTestDataSamples;
-    using NPOI.XWPF.usermodel.XWPFDocument;
     using System;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
-    using OpenXmlFormats;
+    using NPOI.XSSF.UserModel;
+    using NPOI.OpenXmlFormats;
+    using NPOI.XSSF;
 
     /**
      * Test Setting extended and custom OOXML properties
      */
+    [TestClass]
     public class TestPOIXMLProperties
     {
         private POIXMLProperties _props;
-        private CoreProperties _coreProperties;
+        private NPOI.POIXMLProperties.CoreProperties _coreProperties;
 
         public void SetUp()
         {
-            XWPFDocument sampleDoc = XWPFTestDataSamples.OpenSampleDocument("documentProperties.docx");
-            _props = sampleDoc.GetProperties();
-            _coreProperties = _props.GetCoreProperties();
-            assertNotNull(_props);
+            //XWPFDocument sampleDoc = XWPFTestDataSamples.OpenSampleDocument("documentProperties.docx");
+            //_props = sampleDoc.GetProperties();
+            //_coreProperties = _props.GetCoreProperties();
+            //AssertNotNull(_props);
         }
-
-        public void testWorkbookExtendedProperties()
+        [TestMethod]
+        public void TestWorkbookExtendedProperties()
         {
             XSSFWorkbook workbook = new XSSFWorkbook();
             POIXMLProperties props = workbook.GetProperties();
             Assert.IsNotNull(props);
 
-            NPOI.POIXMLPROPERTIES.ExtendedProperties properties =
+            NPOI.POIXMLProperties.ExtendedProperties properties =
                     props.GetExtendedProperties();
 
             CT_Properties
@@ -58,22 +57,22 @@ namespace NPOI
             String appVersion = "3.5 beta";
             String application = "POI";
 
-            ctProps.Application=(application);
-            ctProps.AppVersion=(appVersion);
+            ctProps.Application = (application);
+            ctProps.AppVersion = (appVersion);
 
             ctProps = null;
             properties = null;
             props = null;
 
             XSSFWorkbook newWorkbook =
-                    XSSFTestDataSamples.WriteOutAndReadBack(workbook);
+                    (XSSFWorkbook)XSSFTestDataSamples.WriteOutAndReadBack(workbook);
 
             Assert.IsTrue(workbook != newWorkbook);
 
 
             POIXMLProperties newProps = newWorkbook.GetProperties();
             Assert.IsNotNull(newProps);
-            NPOI.POIXMLPROPERTIES.ExtendedProperties newProperties =
+            NPOI.POIXMLProperties.ExtendedProperties newProperties =
                     newProps.GetExtendedProperties();
 
             CT_Properties
@@ -89,6 +88,7 @@ namespace NPOI
         /**
          * Test usermodel API for Setting custom properties
          */
+        [TestMethod]
         public void TestCustomProperties()
         {
             POIXMLDocument wb = new XSSFWorkbook();
@@ -105,11 +105,11 @@ namespace NPOI
             }
             catch (ArgumentException e)
             {
-                Assert.AreEqual("A property with this name already exists in the custom properties", e.GetMessage());
+                Assert.AreEqual("A property with this name already exists in the custom properties", e.Message);
             }
             customProps.AddProperty("test-4", true);
 
-            wb = XSSFTestDataSamples.WriteOutAndReadBack((XSSFWorkbook)wb);
+            wb = (XSSFWorkbook)XSSFTestDataSamples.WriteOutAndReadBack((XSSFWorkbook)wb);
             CT_Properties ctProps =
                     wb.GetProperties().GetCustomProperties().GetUnderlyingProperties();
             Assert.AreEqual(4, ctProps.sizeOfPropertyArray());
@@ -139,7 +139,7 @@ namespace NPOI
             Assert.AreEqual(true, p.Item);
             Assert.AreEqual(5, p.pid);
         }
-
+        [Ignore]
         public void TestDocumentProperties()
         {
             String category = _coreProperties.GetCategory();
@@ -147,7 +147,7 @@ namespace NPOI
             String contentStatus = "Draft";
             _coreProperties.SetContentStatus(contentStatus);
             Assert.AreEqual("Draft", contentStatus);
-            DateTime Created = _coreProperties.GetCreated();
+            DateTime? Created = _coreProperties.GetCreated();
             // the original file Contains a following value: 2009-07-20T13:12:00Z
             Assert.IsTrue(DateTimeEqualToUTCString(Created, "2009-07-20T13:12:00Z"));
             String creator = _coreProperties.GetCreator();
@@ -158,22 +158,22 @@ namespace NPOI
             Assert.AreEqual("Hello World", title);
         }
 
-        public void TestTransitiveSetters()
-        {
-            XWPFDocument doc = new XWPFDocument();
-            NPOI.POIXMLProperties.CoreProperties cp = doc.GetProperties().GetCoreProperties();
+        //public void TestTransitiveSetters()
+        //{
+        //    XWPFDocument doc = new XWPFDocument();
+        //    NPOI.POIXMLProperties.CoreProperties cp = doc.GetProperties().GetCoreProperties();
 
-            DateTime dateCreated = new GregorianCalendar(2010, 6, 15, 10, 0, 0).GetTime();
-            cp.SetCreated(new Nullable<Date>(dateCreated));
-            Assert.AreEqual(dateCreated.ToString(), cp.GetCreated().ToString());
+        //    DateTime dateCreated = new GregorianCalendar(2010, 6, 15, 10, 0, 0).GetTime();
+        //    cp.SetCreated(new Nullable<Date>(dateCreated));
+        //    Assert.AreEqual(dateCreated.ToString(), cp.GetCreated().ToString());
 
-            doc = XWPFTestDataSamples.WriteOutAndReadBack(doc);
-            cp = doc.GetProperties().GetCoreProperties();
-            DateTime dt3 = cp.GetCreated();
-            Assert.AreEqual(dateCreated.ToString(), dt3.ToString());
+        //    doc = XWPFTestDataSamples.WriteOutAndReadBack(doc);
+        //    cp = doc.GetProperties().GetCoreProperties();
+        //    DateTime dt3 = cp.GetCreated();
+        //    Assert.AreEqual(dateCreated.ToString(), dt3.ToString());
 
-        }
-
+        //}
+        [Ignore]
         public void TestGetSetRevision()
         {
             String revision = _coreProperties.GetRevision();
@@ -184,18 +184,10 @@ namespace NPOI
             Assert.AreEqual("20", _coreProperties.GetRevision());
         }
 
-        public static bool DateTimeEqualToUTCString(DateTime dateTime, String utcString)
+        public static bool DateTimeEqualToUTCString(DateTime? dateTime, String utcString)
         {
-            Calendar utcCalendar = Calendar.GetInstance(TimeZone.GetTimeZone("UTC"), Locale.UK);
-            utcCalendar.SetTimeInMillis(dateTime.GetTime());
-            String dateTimeUtcString = utcCalendar.Get(Calendar.YEAR) + "-" +
-                   ZeroPad((utcCalendar.Get(Calendar.MONTH) + 1)) + "-" +
-                   ZeroPad(utcCalendar.Get(Calendar.DAY_OF_MONTH)) + "T" +
-                   ZeroPad(utcCalendar.Get(Calendar.HOUR_OF_DAY)) + ":" +
-                   ZeroPad(utcCalendar.Get(Calendar.MINUTE)) + ":" +
-                   ZeroPad(utcCalendar.Get(Calendar.SECOND)) + "Z";
-
-
+            DateTime utcDt = DateTime.SpecifyKind((DateTime)dateTime, DateTimeKind.Utc);
+            string dateTimeUtcString = utcDt.ToString("yyyy-MM-ddThh:mm:ssZ");
             return utcString.Equals(dateTimeUtcString);
         }
 
@@ -211,7 +203,6 @@ namespace NPOI
             }
         }
     }
-}
 }
 
 
