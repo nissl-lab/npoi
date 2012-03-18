@@ -47,12 +47,12 @@ namespace InsertPicturesInXls
             HSSFPatriarch patriarch = (HSSFPatriarch)sheet1.CreateDrawingPatriarch();
             //create the anchor
             HSSFClientAnchor anchor;
-            anchor = new HSSFClientAnchor(0, 0, 0, 255, 2, 2, 4, 7);
+            anchor = new HSSFClientAnchor(500, 200, 0, 0, 2, 2, 4, 7);
             anchor.AnchorType = 2;
             //load the picture and get the picture index in the workbook
             HSSFPicture picture = (HSSFPicture)patriarch.CreatePicture(anchor, LoadImage("../../image/HumpbackWhale.jpg", hssfworkbook));
             //Reset the image to the original size.
-            picture.Resize();
+            //picture.Resize();   //Note: Resize will reset client anchor you set.
             picture.LineStyle = LineStyle.DashDotGel;
 
             WriteToFile();
