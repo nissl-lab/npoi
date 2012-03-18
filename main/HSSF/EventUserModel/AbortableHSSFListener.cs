@@ -40,7 +40,7 @@ namespace NPOI.HSSF.EventUserModel
          *
          */
 
-        public void ProcessRecord(Record record)
+        public virtual void ProcessRecord(Record record)
         {
         }
 
@@ -63,6 +63,6 @@ namespace NPOI.HSSF.EventUserModel
           * @throws HSSFUserException User code can throw this to abort 
           * file Processing by HSSFEventFactory and return diagnostic information.
           */
-        public abstract short abortableProcessRecord(Record record);
+        public abstract short AbortableProcessRecord(Record record);
     }
 }
