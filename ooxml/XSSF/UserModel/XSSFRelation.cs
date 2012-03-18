@@ -38,151 +38,151 @@ namespace NPOI.XSSF.UserModel
 
 
         public static XSSFRelation WORKBOOK = new XSSFRelation(
-                "application/vnd.Openxmlformats-officedocument.spreadsheetml.sheet.main+xml",
-                "http://schemas.Openxmlformats.org/officeDocument/2006/relationships/workbook",
+                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml",
+                "http://schemas.openxmlformats.org/officeDocument/2006/relationships/workbook",
                 "/xl/workbook.xml",
                 null
         );
         public static XSSFRelation MACROS_WORKBOOK = new XSSFRelation(
                 "application/vnd.ms-excel.sheet.macroEnabled.main+xml",
-                "http://schemas.Openxmlformats.org/officeDocument/2006/relationships/officeDocument",
+                "http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument",
                 "/xl/workbook.xml",
                 null
         );
         public static XSSFRelation TEMPLATE_WORKBOOK = new XSSFRelation(
-                  "application/vnd.Openxmlformats-officedocument.spreadsheetml.template.main+xml",
-                  "http://schemas.Openxmlformats.org/officeDocument/2006/relationships/officeDocument",
+                  "application/vnd.openxmlformats-officedocument.spreadsheetml.template.main+xml",
+                  "http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument",
                   "/xl/workbook.xml",
                   null
         );
         public static XSSFRelation MACRO_TEMPLATE_WORKBOOK = new XSSFRelation(
                   "application/vnd.ms-excel.template.macroEnabled.main+xml",
-                  "http://schemas.Openxmlformats.org/officeDocument/2006/relationships/officeDocument",
+                  "http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument",
                   "/xl/workbook.xml",
                   null
         );
         public static XSSFRelation MACRO_ADDIN_WORKBOOK = new XSSFRelation(
                   "application/vnd.ms-excel.Addin.macroEnabled.main+xml",
-                  "http://schemas.Openxmlformats.org/officeDocument/2006/relationships/officeDocument",
+                  "http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument",
                   "/xl/workbook.xml",
                   null
         );
         public static XSSFRelation WORKSHEET = new XSSFRelation(
-                "application/vnd.Openxmlformats-officedocument.spreadsheetml.worksheet+xml",
-                "http://schemas.Openxmlformats.org/officeDocument/2006/relationships/worksheet",
+                "application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml",
+                "http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet",
                 "/xl/worksheets/sheet#.xml",
                 typeof(XSSFSheet)
         );
         public static XSSFRelation CHARTSHEET = new XSSFRelation(
-                "application/vnd.Openxmlformats-officedocument.spreadsheetml.chartsheet+xml",
-                "http://schemas.Openxmlformats.org/officeDocument/2006/relationships/chartsheet",
+                "application/vnd.openxmlformats-officedocument.spreadsheetml.chartsheet+xml",
+                "http://schemas.openxmlformats.org/officeDocument/2006/relationships/chartsheet",
                 "/xl/chartsheets/sheet#.xml",
                 typeof(XSSFChartSheet)
         );
         public static XSSFRelation SHARED_STRINGS = new XSSFRelation(
-                "application/vnd.Openxmlformats-officedocument.spreadsheetml.sharedStrings+xml",
-                "http://schemas.Openxmlformats.org/officeDocument/2006/relationships/sharedStrings",
+                "application/vnd.openxmlformats-officedocument.spreadsheetml.sharedStrings+xml",
+                "http://schemas.openxmlformats.org/officeDocument/2006/relationships/sharedStrings",
                 "/xl/sharedStrings.xml",
                 typeof(SharedStringsTable)
         );
         public static XSSFRelation STYLES = new XSSFRelation(
-                "application/vnd.Openxmlformats-officedocument.spreadsheetml.styles+xml",
-                "http://schemas.Openxmlformats.org/officeDocument/2006/relationships/styles",
+                "application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml",
+                "http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles",
                 "/xl/styles.xml",
                 typeof(StylesTable)
         );
         public static XSSFRelation DRAWINGS = new XSSFRelation(
-                "application/vnd.Openxmlformats-officedocument.Drawing+xml",
-                "http://schemas.Openxmlformats.org/officeDocument/2006/relationships/drawing",
+                "application/vnd.openxmlformats-officedocument.Drawing+xml",
+                "http://schemas.openxmlformats.org/officeDocument/2006/relationships/drawing",
                 "/xl/drawings/drawing#.xml",
                 typeof(XSSFDrawing)
         );
-        public static XSSFRelation VML_DRAWINGS = new XSSFRelation(
-                "application/vnd.Openxmlformats-officedocument.vmlDrawing",
-                "http://schemas.Openxmlformats.org/officeDocument/2006/relationships/vmlDrawing",
-                "/xl/drawings/vmlDrawing#.vml",
-                typeof(XSSFVMLDrawing)
-        );
-        public static XSSFRelation CHART = new XSSFRelation(
-              "application/vnd.Openxmlformats-officedocument.Drawingml.chart+xml",
-              "http://schemas.Openxmlformats.org/officeDocument/2006/relationships/chart",
-              "/xl/charts/chart#.xml",
-              typeof(XSSFChart)
-        );
+        //public static XSSFRelation VML_DRAWINGS = new XSSFRelation(
+        //        "application/vnd.openxmlformats-officedocument.vmlDrawing",
+        //        "http://schemas.openxmlformats.org/officeDocument/2006/relationships/vmlDrawing",
+        //        "/xl/drawings/vmlDrawing#.vml",
+        //        typeof(XSSFVMLDrawing)
+        //);
+        //public static XSSFRelation CHART = new XSSFRelation(
+        //      "application/vnd.openxmlformats-officedocument.Drawingml.chart+xml",
+        //      "http://schemas.openxmlformats.org/officeDocument/2006/relationships/chart",
+        //      "/xl/charts/chart#.xml",
+        //      typeof(XSSFChart)
+        //);
 
         public static XSSFRelation CUSTOM_XML_MAPPINGS = new XSSFRelation(
                 "application/xml",
-                "http://schemas.Openxmlformats.org/officeDocument/2006/relationships/xmlMaps",
+                "http://schemas.openxmlformats.org/officeDocument/2006/relationships/xmlMaps",
                 "/xl/xmlMaps.xml",
                 typeof(MapInfo)
         );
 
         public static XSSFRelation SINGLE_XML_CELLS = new XSSFRelation(
-                "application/vnd.Openxmlformats-officedocument.spreadsheetml.tableSingleCells+xml",
-                "http://schemas.Openxmlformats.org/officeDocument/2006/relationships/tableSingleCells",
+                "application/vnd.openxmlformats-officedocument.spreadsheetml.tableSingleCells+xml",
+                "http://schemas.openxmlformats.org/officeDocument/2006/relationships/tableSingleCells",
                 "/xl/tables/tableSingleCells#.xml",
                 typeof(SingleXmlCells)
         );
 
         public static XSSFRelation TABLE = new XSSFRelation(
-                "application/vnd.Openxmlformats-officedocument.spreadsheetml.table+xml",
-                "http://schemas.Openxmlformats.org/officeDocument/2006/relationships/table",
+                "application/vnd.openxmlformats-officedocument.spreadsheetml.table+xml",
+                "http://schemas.openxmlformats.org/officeDocument/2006/relationships/table",
                 "/xl/tables/table#.xml",
                 typeof(XSSFTable)
         );
 
         public static XSSFRelation IMAGES = new XSSFRelation(
                 null,
-                "http://schemas.Openxmlformats.org/officeDocument/2006/relationships/image",
+                "http://schemas.openxmlformats.org/officeDocument/2006/relationships/image",
                 null,
                 typeof(XSSFPictureData)
         );
         public static XSSFRelation IMAGE_EMF = new XSSFRelation(
                 "image/x-emf",
-                "http://schemas.Openxmlformats.org/officeDocument/2006/relationships/image",
+                "http://schemas.openxmlformats.org/officeDocument/2006/relationships/image",
                 "/xl/media/image#.emf",
                 typeof(XSSFPictureData)
         );
         public static XSSFRelation IMAGE_WMF = new XSSFRelation(
                 "image/x-wmf",
-                "http://schemas.Openxmlformats.org/officeDocument/2006/relationships/image",
+                "http://schemas.openxmlformats.org/officeDocument/2006/relationships/image",
                 "/xl/media/image#.wmf",
                 typeof(XSSFPictureData)
         );
         public static XSSFRelation IMAGE_PICT = new XSSFRelation(
                 "image/pict",
-                "http://schemas.Openxmlformats.org/officeDocument/2006/relationships/image",
+                "http://schemas.openxmlformats.org/officeDocument/2006/relationships/image",
                 "/xl/media/image#.pict",
                 typeof(XSSFPictureData)
         );
         public static XSSFRelation IMAGE_JPEG = new XSSFRelation(
                 "image/jpeg",
-                "http://schemas.Openxmlformats.org/officeDocument/2006/relationships/image",
+                "http://schemas.openxmlformats.org/officeDocument/2006/relationships/image",
                 "/xl/media/image#.jpeg",
                 typeof(XSSFPictureData)
         );
         public static XSSFRelation IMAGE_PNG = new XSSFRelation(
                 "image/png",
-                "http://schemas.Openxmlformats.org/officeDocument/2006/relationships/image",
+                "http://schemas.openxmlformats.org/officeDocument/2006/relationships/image",
                 "/xl/media/image#.png",
                 typeof(XSSFPictureData)
         );
         public static XSSFRelation IMAGE_DIB = new XSSFRelation(
                 "image/dib",
-                "http://schemas.Openxmlformats.org/officeDocument/2006/relationships/image",
+                "http://schemas.openxmlformats.org/officeDocument/2006/relationships/image",
                 "/xl/media/image#.dib",
                 typeof(XSSFPictureData)
         );
 
         public static XSSFRelation SHEET_COMMENTS = new XSSFRelation(
-                  "application/vnd.Openxmlformats-officedocument.spreadsheetml.comments+xml",
-                  "http://schemas.Openxmlformats.org/officeDocument/2006/relationships/comments",
+                  "application/vnd.openxmlformats-officedocument.spreadsheetml.comments+xml",
+                  "http://schemas.openxmlformats.org/officeDocument/2006/relationships/comments",
                   "/xl/comments#.xml",
                   typeof(CommentsTable)
           );
         public static XSSFRelation SHEET_HYPERLINKS = new XSSFRelation(
                 null,
-                "http://schemas.Openxmlformats.org/officeDocument/2006/relationships/hyperlink",
+                "http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink",
                 null,
                 null
         );
@@ -207,7 +207,7 @@ namespace NPOI.XSSF.UserModel
         );
         public static XSSFRelation ACTIVEX_CONTROLS = new XSSFRelation(
                 "application/vnd.ms-office.activeX+xml",
-                "http://schemas.Openxmlformats.org/officeDocument/2006/relationships/control",
+                "http://schemas.openxmlformats.org/officeDocument/2006/relationships/control",
                 "/xl/activeX/activeX#.xml",
                 null
         );
@@ -218,20 +218,20 @@ namespace NPOI.XSSF.UserModel
                 null
         );
         public static XSSFRelation THEME = new XSSFRelation(
-                "application/vnd.Openxmlformats-officedocument.theme+xml",
-                "http://schemas.Openxmlformats.org/officeDocument/2006/relationships/theme",
+                "application/vnd.openxmlformats-officedocument.theme+xml",
+                "http://schemas.openxmlformats.org/officeDocument/2006/relationships/theme",
                 "/xl/theme/theme#.xml",
                 typeof(ThemesTable)
         );
         public static XSSFRelation CALC_CHAIN = new XSSFRelation(
-                "application/vnd.Openxmlformats-officedocument.spreadsheetml.calcChain+xml",
-                "http://schemas.Openxmlformats.org/officeDocument/2006/relationships/calcChain",
+                "application/vnd.openxmlformats-officedocument.spreadsheetml.calcChain+xml",
+                "http://schemas.openxmlformats.org/officeDocument/2006/relationships/calcChain",
                 "/xl/calcChain.xml",
                 typeof(CalculationChain)
         );
         public static XSSFRelation PRINTER_SETTINGS = new XSSFRelation(
-              "application/vnd.Openxmlformats-officedocument.spreadsheetml.printerSettings",
-              "http://schemas.Openxmlformats.org/officeDocument/2006/relationships/printerSettings",
+              "application/vnd.openxmlformats-officedocument.spreadsheetml.printerSettings",
+              "http://schemas.openxmlformats.org/officeDocument/2006/relationships/printerSettings",
               "/xl/printerSettings/printerSettings#.bin",
               null
        );
@@ -243,7 +243,7 @@ namespace NPOI.XSSF.UserModel
 
 
             if (cls != null && !_table.ContainsKey(rel)) 
-                _table[rel]= this;
+                _table.Add(rel, this);
         }
 
         /**
@@ -272,12 +272,15 @@ namespace NPOI.XSSF.UserModel
          * Get POIXMLRelation by relation type
          *
          * @param rel relation type, for example,
-         *    <code>http://schemas.Openxmlformats.org/officeDocument/2006/relationships/image</code>
+         *    <code>http://schemas.openxmlformats.org/officeDocument/2006/relationships/image</code>
          * @return registered POIXMLRelation or null if not found
          */
         public static XSSFRelation GetInstance(String rel)
         {
-            return _table[rel];
+            if (_table.ContainsKey(rel))
+                return _table[rel];
+            else
+                return null;
         }
     }
 }

@@ -4,7 +4,62 @@ using System.Text;
 
 namespace NPOI.OpenXmlFormats.Spreadsheet
 {
+    public class CT_Fonts
+    {
 
+        private List<CT_Font> fontField;
+
+        private uint countField;
+
+        private bool countFieldSpecified;
+
+        public CT_Fonts()
+        {
+            this.fontField = new List<CT_Font>();
+        }
+
+        public void SetFontArray(CT_Font[] array)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<CT_Font> font
+        {
+            get
+            {
+                return this.fontField;
+            }
+            set
+            {
+                this.fontField = value;
+            }
+        }
+
+        public uint count
+        {
+            get
+            {
+                return this.countField;
+            }
+            set
+            {
+                this.countField = value;
+            }
+        }
+
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool countSpecified
+        {
+            get
+            {
+                return this.countFieldSpecified;
+            }
+            set
+            {
+                this.countFieldSpecified = value;
+            }
+        }
+    }
     public class CT_Stylesheet
     {
 

@@ -67,7 +67,7 @@ namespace NPOI.XSSF.Model
             Initialize();
         }
 
-        public StylesTable(PackagePart part, PackageRelationship rel)
+        internal StylesTable(PackagePart part, PackageRelationship rel)
             : base(part, rel)
         {
 

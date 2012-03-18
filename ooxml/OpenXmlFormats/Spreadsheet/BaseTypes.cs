@@ -219,6 +219,12 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             this.extField = new List<CT_Extension>();
         }
+        public CT_ExtensionList Copy()
+        {
+            CT_ExtensionList obj = new CT_ExtensionList();
+            obj.ext = new List<CT_Extension>(this.ext);
+            return obj;
+        }
         [System.Xml.Serialization.XmlElementAttribute("ext")]
         public List<CT_Extension> ext
         {

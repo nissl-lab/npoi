@@ -976,15 +976,15 @@ namespace NPOI.XSSF.UserModel
          * Removes the comment for this cell, if there is one.
         */
         public void RemoveCellComment() {
-        IComment comment = this.CellComment;
-        if (comment != null)
-        {
-            String ref1 = _cell.r;
-            XSSFSheet sh = (XSSFSheet)Sheet;
-            sh.GetCommentsTable(false).RemoveComment(ref1);
-            sh.GetVMLDrawing(false).RemoveCommentShape(RowIndex, ColumnIndex);
+            IComment comment = this.CellComment;
+            if (comment != null)
+            {
+                String ref1 = _cell.r;
+                XSSFSheet sh = (XSSFSheet)Sheet;
+                sh.GetCommentsTable(false).RemoveComment(ref1);
+                //sh.GetVMLDrawing(false).RemoveCommentShape(RowIndex, ColumnIndex);
+            }
         }
-    }
 
         /**
          * Returns hyperlink associated with this cell

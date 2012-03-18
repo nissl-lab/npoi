@@ -43,7 +43,7 @@ namespace NPOI.XSSF.Model
             comments.AddNewAuthors().AddAuthor("");
         }
 
-        public CommentsTable(PackagePart part, PackageRelationship rel)
+        internal CommentsTable(PackagePart part, PackageRelationship rel)
             : base(part, rel)
         {
 

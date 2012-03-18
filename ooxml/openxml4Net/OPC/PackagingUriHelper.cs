@@ -454,12 +454,35 @@ namespace NPOI.OpenXml4Net.OPC
                         + targetUri);
             }
             string path;
-            if(sourcePartUri.OriginalString=="/")
-                path="/";
+            if (sourcePartUri.OriginalString == "/")
+                path = "/";
             else
                 path = Path.GetDirectoryName(sourcePartUri.OriginalString).Replace("\\", "/");
 
-            path = Path.Combine(path, targetUri.OriginalString).Replace("\\", "/");
+            string targetPath = targetUri.OriginalString;
+            if (targetPath.StartsWith("../"))
+            {
+                string[] segments = path.Split(new char[] { '/' });
+
+                int segmentEnd = segments.Length - 1;
+                while (targetPath.StartsWith("../"))
+                {
+                    targetPath = targetPath.Substring(3);
+                    segmentEnd -= 1;
+                }
+                path = "/";
+
+                for (int i = 0; i <= segmentEnd;i++ )
+                {
+                    if(segments[i]!=string.Empty)
+                    path += segments[i]+"/";
+                }
+                path += targetPath;
+            }
+            else
+            {
+                path = Path.Combine(path, targetUri.OriginalString).Replace("\\", "/");
+            }
             return new Uri(path, UriKind.RelativeOrAbsolute);
         }
 

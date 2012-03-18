@@ -7,6 +7,7 @@
 namespace NPOI.OpenXmlFormats.Dml
 {
     using System.Collections.Generic;
+    using System;
 
 
     public class CT_OfficeArtExtension
@@ -593,10 +594,10 @@ namespace NPOI.OpenXmlFormats.Dml
             this.itemsField = new List<object>();
         }
 
-        //public CT_Shade AddNewShade()
-        //{
-        
-        //}
+        public CT_PositiveFixedPercentage AddNewShade()
+        {
+            throw new NotImplementedException();
+        }
 
         [System.Xml.Serialization.XmlChoiceIdentifierAttribute("ItemsElementName")]
         public List<object> Items

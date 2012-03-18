@@ -384,7 +384,7 @@ public class POIXMLDocumentPart {
 
                 PackagePart p;
                 string[] fragments= uri.OriginalString.Split(new char[]{'/'});
-                if( fragments[fragments.Length-1]!= null) {
+                if( fragments[fragments.Length-1]== null) {
                     /*
                      * For internal references (e.g. '#Sheet1!A1') the namespace part is null
                      */

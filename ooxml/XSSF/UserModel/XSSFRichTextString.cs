@@ -127,7 +127,36 @@ namespace NPOI.XSSF.UserModel
             }
             ApplyFont(startIndex, endIndex, font);
         }
+        void ApplyFont(Dictionary<int, CT_RPrElt> formats, int startIndex, int endIndex, CT_RPrElt fmt) {
+            throw new NotImplementedException();
+            // delete format runs that fit between startIndex and endIndex
+            // runs intersecting startIndex and endIndex remain
+            //int runStartIdx = 0;
+            //for (Iterator<Integer> it = formats.Keys.GetEnumerator(); it.hasNext();) {
+            //    int runEndIdx = it.next();
+            //    if (runStartIdx >= startIndex && runEndIdx < endIndex) {
+            //       it.remove();
+            //    }
+            //    runStartIdx = runEndIdx;
+            //}
 
+            //if(startIndex > 0 && !formats.ContainsKey(startIndex)) {
+            //    // If there's a format that starts later in the string, make it start now
+            //    foreach(KeyValuePair<int, CT_RPrElt> entry in formats) {
+            //       if(entry.Key > startIndex) {
+            //          formats[startIndex]= entry.Value;
+            //          break;
+            //       }
+            //    }
+            //}
+            //formats[endIndex]= fmt;
+
+            // assure that the range [startIndex, endIndex] consists if a single run
+            // there can be two or three runs depending whether startIndex or endIndex
+            // intersected existing format runs
+            //SortedMap<int, CT_RPrElt> sub = formats.subMap(startIndex, endIndex);
+            //while(sub.size() > 1) sub.remove(sub.lastKey());
+        }
         /**
          * Applies a font to the specified characters of a string.
          *
@@ -161,8 +190,24 @@ namespace NPOI.XSSF.UserModel
 
             CT_Rst newSt = buildCTRst(text, formats);
             st.Set(newSt);
-        }
 
+
+
+        }
+        Dictionary<int, CT_RPrElt> GetFormatMap(CT_Rst entry)
+        {
+            int length = 0;
+            Dictionary<int, CT_RPrElt> formats = new Dictionary<int, CT_RPrElt>();
+            foreach (CT_RElt r in entry.r)
+            {
+                String txt = r.t;
+                CT_RPrElt fmt = r.rPr;
+
+                length += txt.Length;
+                formats[length] = fmt;
+            }
+            return formats;
+        }
         /**
          * Sets the font of the entire string.
          * @param font          The font to use.

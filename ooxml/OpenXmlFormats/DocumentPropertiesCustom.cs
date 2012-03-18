@@ -34,11 +34,19 @@ namespace NPOI.OpenXmlFormats
                 this.propertyField = value;
             }
         }
+        public int sizeOfPropertyArray()
+        {
+            return this.propertyField.Count;
+        }
         public CT_Property AddNewProperty()
         {
             CT_Property p = new CT_Property();
             propertyField.Add(p);
             return p;
+        }
+        public CT_Property GetPropertyArray(int index)
+        {
+            return this.propertyField[index];
         }
         public List<CT_Property> GetPropertyList()
         {

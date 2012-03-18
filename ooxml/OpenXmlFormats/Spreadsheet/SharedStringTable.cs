@@ -204,7 +204,12 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
            return this.itemField!=null;
         }
-
+         public CT_Fill Copy()
+         {
+             CT_Fill obj = new CT_Fill();
+             obj.itemField = this.itemField;
+             return obj;
+         }
     }
     
     public enum ST_GradientType
@@ -741,6 +746,18 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             //this.rightField = new CT_BorderPr();
             //this.leftField = new CT_BorderPr();
             this.outlineField = true;
+        }
+        public CT_Border Copy()
+        {
+            CT_Border obj = new CT_Border();
+            obj.bottomField = this.bottomField;
+            obj.topField = this.topField;
+            obj.rightField = this.rightField;
+            obj.leftField = this.leftField;
+            obj.horizontalField = this.horizontalField;
+            obj.verticalField = this.verticalField;
+            obj.outlineField = this.outlineField;
+            return obj;
         }
         public CT_BorderPr AddNewDiagonal()
         {
@@ -1470,6 +1487,38 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.quotePrefixField = false;
             this.pivotButtonField = false;
         }
+        public CT_Xf Copy()
+        {
+            CT_Xf obj = new CT_Xf();
+            obj.alignmentField = this.alignmentField;
+            obj.applyAlignmentField = this.applyAlignmentField;
+            obj.applyAlignmentFieldSpecified = this.applyAlignmentFieldSpecified;
+            obj.applyBorderField = this.applyBorderField;
+            obj.applyBorderFieldSpecified = this.applyBorderFieldSpecified;
+            obj.applyFillField = this.applyFillField;
+            obj.applyFillFieldSpecified = this.applyFillFieldSpecified;
+            obj.applyFontField = this.applyFontField;
+            obj.applyFontFieldSpecified = this.applyFontFieldSpecified;
+            obj.applyNumberFormatField = this.applyNumberFormatField;
+            obj.applyNumberFormatFieldSpecified = this.applyNumberFormatFieldSpecified;
+            obj.applyProtectionField = this.applyProtectionField;
+            obj.applyProtectionFieldSpecified = this.applyProtectionFieldSpecified;
+            obj.borderIdField = this.borderIdField;
+            obj.borderIdFieldSpecified = this.borderIdFieldSpecified;
+            obj.fillIdField = this.fillIdField;
+            obj.fillIdFieldSpecified = this.fillIdFieldSpecified;
+            obj.fontIdField = this.fontIdField;
+            obj.fontIdFieldSpecified = this.fontIdFieldSpecified;
+            obj.numFmtIdField = this.numFmtIdField;
+            obj.numFmtIdFieldSpecified = this.numFmtIdFieldSpecified;
+            obj.pivotButtonField = this.pivotButtonField;
+            obj.protectionField = this.protectionField;
+            obj.quotePrefixField = this.quotePrefixField;
+            obj.xfIdField = this.xfIdField;
+            obj.xfIdFieldSpecified = this.xfIdFieldSpecified;
+            obj.extLstField = this.extLstField.Copy();
+            return obj;
+        }
         public static CT_Xf Parse(string xml)
         {
             throw new NotImplementedException();
@@ -1923,6 +1972,10 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.borderField = value;
             }
         }
+        public void SetBorderArray(CT_Border[] array)
+        {
+            throw new NotImplementedException();
+        }
 
         public uint count
         {
@@ -1975,64 +2028,11 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.fillField = value;
             }
         }
-
-        public uint count
-        {
-            get
-            {
-                return this.countField;
-            }
-            set
-            {
-                this.countField = value;
-            }
-        }
-
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool countSpecified
-        {
-            get
-            {
-                return this.countFieldSpecified;
-            }
-            set
-            {
-                this.countFieldSpecified = value;
-            }
-        }
-    }
-
-    public class CT_Fonts
-    {
-
-        private List<CT_Font> fontField;
-
-        private uint countField;
-
-        private bool countFieldSpecified;
-
-        public CT_Fonts()
-        {
-            this.fontField = new List<CT_Font>();
-        }
-
-        public void SetFontArray(CT_Font[] array)
+        public void SetFillArray(CT_Fill[] array)
         {
             throw new NotImplementedException();
         }
 
-        public List<CT_Font> font
-        {
-            get
-            {
-                return this.fontField;
-            }
-            set
-            {
-                this.fontField = value;
-            }
-        }
-
         public uint count
         {
             get
@@ -2058,6 +2058,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
     }
+
+
 
     public class CT_Sst
     {

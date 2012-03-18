@@ -55,7 +55,7 @@ namespace NPOI.XSSF.Model
 
         }
 
-        public MapInfo(PackagePart part, PackageRelationship rel)
+        internal MapInfo(PackagePart part, PackageRelationship rel)
             : base(part, rel)
         {
 
@@ -66,7 +66,7 @@ namespace NPOI.XSSF.Model
         {
             try
             {
-                MapInfoDocument doc = MapInfoDocument.Factory.Parse(is1);
+                MapInfoDocument doc = MapInfoDocument.Parse(is1);
                 mapInfo = doc.GetMapInfo();
 
                 maps = new Dictionary<int, XSSFMap>();
@@ -161,7 +161,7 @@ namespace NPOI.XSSF.Model
 
         protected void WriteTo(Stream out1)
         {
-            MapInfoDocument doc = MapInfoDocument.Factory.newInstance();
+            MapInfoDocument doc = new MapInfoDocument();
             doc.SetMapInfo(mapInfo);
             doc.Save(out1);
         }

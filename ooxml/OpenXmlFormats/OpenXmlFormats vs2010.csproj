@@ -87,6 +87,9 @@
     <Compile Include="Spreadsheet\CalcChainDocument.cs" />
     <Compile Include="Spreadsheet\Comments.cs" />
     <Compile Include="Spreadsheet\CommentsDocument.cs" />
+    <Compile Include="Spreadsheet\ChartsheetDocument.cs" />
+    <Compile Include="Spreadsheet\WorksheetDocument.cs" />
+    <Compile Include="Spreadsheet\MapInfoDocument.cs" />
     <Compile Include="Spreadsheet\SharedStringTable.cs" />
     <Compile Include="Spreadsheet\SharedWorkbookRevisions.cs" />
     <Compile Include="Spreadsheet\SharedWorkbookUserNames.cs" />

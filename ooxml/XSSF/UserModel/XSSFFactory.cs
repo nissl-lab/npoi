@@ -57,7 +57,7 @@ namespace NPOI.XSSF.UserModel
             try
             {
                 Type cls = descriptor.RelationClass;
-                ConstructorInfo constructor = cls.GetConstructor(new Type[] { typeof(PackagePart), typeof(PackageRelationship) });
+                ConstructorInfo constructor = cls.GetConstructor(BindingFlags.NonPublic | BindingFlags.Instance,null, new Type[] { typeof(PackagePart), typeof(PackageRelationship) },null);
                 return (POIXMLDocumentPart)constructor.Invoke(new object[] { part, rel });
             }
             catch (Exception e)

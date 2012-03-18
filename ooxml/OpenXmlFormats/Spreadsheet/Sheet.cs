@@ -14,6 +14,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     using System.ComponentModel;
     using System.Collections.Generic;
     using NPOI.OpenXmlFormats.Dml;
+    using System.IO;
     
     public enum ST_SmartTagShow
     {
@@ -113,7 +114,18 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             this.stateField = ST_SheetState.visible;
         }
-
+        public void Set(CT_Sheet sheet)
+        {
+            throw new NotImplementedException();
+        }
+        public CT_Sheet Copy()
+        {
+            CT_Sheet obj = new CT_Sheet();
+            obj.idField = this.idField;
+            obj.nameField = this.nameField;
+            obj.stateField = this.stateField;
+            return obj;
+        }
         public string name
         {
             get
@@ -300,9 +312,18 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             //this.dimensionField = new CT_SheetDimension();
             this.sheetPrField = new CT_SheetPr();
         }
+        public void Save(Stream stream)
+        {
+            throw new NotImplementedException();
+        }
         public bool IsSetRowBreaks()
         {
             return this.rowBreaksField!=null;
+        }
+        public CT_Drawing AddNewDrawing()
+        {
+            this.drawingField = new CT_Drawing();
+            return drawingField;
         }
         public CT_PageBreak AddNewRowBreaks()
         {
@@ -1344,6 +1365,10 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         public CT_SheetView GetSheetViewArray(int index)
         {
             return this.sheetViewField[index];
+        }
+        public void SetSheetViewArray(int index, CT_SheetView array)
+        {
+            throw new NotImplementedException();
         }
         public int sizeOfSheetViewArray()
         {
@@ -3422,6 +3447,10 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.thickBotField = false;
             this.phField = false;
         }
+        public void Set(CT_Row row)
+        {
+            throw new NotImplementedException();
+        }
         public CT_Cell AddNewC()
         {
             CT_Cell cell = new CT_Cell();
@@ -3725,6 +3754,10 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.vmField = ((uint)(0));
             this.phField = false;
         }
+        public void Set(CT_Cell cell)
+        {
+            throw new NotImplementedException();
+        }
         public bool IsSetT()
         {
             return tField != null;
@@ -3940,6 +3973,25 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         public bool isSetRef()
         {
             return this.refField != null;
+        }
+        public CT_CellFormula Copy()
+        {
+            CT_CellFormula obj = new CT_CellFormula();
+            obj.acaField = this.acaField;
+            obj.bxField = this.bxField;
+            obj.caField = this.caField;
+            obj.del1Field = this.del1Field;
+            obj.del2Field = this.del2Field;
+            obj.dt2DField = this.dt2DField;
+            obj.dtrField = this.dtrField;
+            obj.r1Field = this.r1Field;
+            obj.r2Field = this.r2Field;
+            obj.refField = this.refField;
+            obj.siField = this.siField;
+            obj.siFieldSpecified = this.siFieldSpecified;
+            obj.tField = this.tField;
+            obj.valueField = this.valueField;
+            return obj;
         }
         [System.ComponentModel.DefaultValueAttribute(ST_CellFormulaType.normal)]
         public ST_CellFormulaType t
@@ -6451,6 +6503,14 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             return cfRule.Count;
         }
+        public CT_ConditionalFormatting Copy()
+        {
+            throw new NotImplementedException();
+        }
+        public void Set(CT_ConditionalFormatting obj)
+        {
+            throw new NotImplementedException();
+        }
         public CT_CfRule GetCfRuleArray(int index)
         {
             return cfRule[index];
@@ -7519,6 +7579,10 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.showDropDownField = false;
             this.showInputMessageField = false;
             this.showErrorMessageField = false;
+        }
+        public void Set(CT_DataValidation obj)
+        {
+            throw new NotImplementedException();
         }
 
         public string formula1
@@ -8797,6 +8861,10 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.sheetProtectionField = new CT_ChartsheetProtection();
             this.sheetViewsField = new CT_ChartsheetViews();
             this.sheetPrField = new CT_ChartsheetPr();
+        }
+        public void Save(Stream stream)
+        {
+            throw new NotImplementedException();
         }
 
         public CT_ChartsheetPr sheetPr
@@ -10163,7 +10231,10 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             this.colField = new List<CT_Col>();
         }
-
+        public void SetColArray(List<CT_Col> array)
+        {
+            throw new NotImplementedException();
+        }
         public CT_Col AddNewCol()
         {
             CT_Col newCol = new CT_Col();
@@ -10264,7 +10335,10 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             this.hyperlinkField = new List<CT_Hyperlink>();
         }
-
+        public void SetHyperlinkArray(CT_Hyperlink[] array)
+        {
+            throw new NotImplementedException();
+        }
         public List<CT_Hyperlink> hyperlink
         {
             get

@@ -1297,7 +1297,7 @@ namespace NPOI.XSSF.UserModel
             sheets.Insert(pos,sheet);
             // Reorder CT_Sheets
             CT_Sheets ct = workbook.sheets;
-            //XmlObject cts = ct.GetSheetArray(idx).copy();
+            CT_Sheet cts = ct.GetSheetArray(idx).Copy();
             workbook.sheets.RemoveSheet(idx);
             CT_Sheet newcts = ct.InsertNewSheet(pos);
             newcts.Set(cts);

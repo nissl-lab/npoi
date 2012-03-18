@@ -18,7 +18,6 @@
 using NPOI.SS.UserModel;
 using NPOI.Util;
 using System.IO;
-//using System.Xml;
 using NPOI.XSSF.Model;
 using System.Collections.Generic;
 using NPOI.OpenXmlFormats.Spreadsheet;
@@ -52,7 +51,7 @@ namespace NPOI.XSSF.UserModel
         internal CT_Sheet sheet;
         internal CT_Worksheet worksheet;
 
-        private Dictionary<int, XSSFRow> _rows;
+        private SortedDictionary<int, XSSFRow> _rows;
         private List<XSSFHyperlink> hyperlinks;
         private ColumnHelper columnHelper;
         private CommentsTable sheetComments;
@@ -85,7 +84,7 @@ namespace NPOI.XSSF.UserModel
          * @param part - The namespace part that holds xml data represenring this sheet.
          * @param rel - the relationship of the given namespace part in the underlying OPC namespace
          */
-        protected XSSFSheet(PackagePart part, PackageRelationship rel)
+        internal XSSFSheet(PackagePart part, PackageRelationship rel)
             : base(part, rel)
         {
 
@@ -126,7 +125,7 @@ namespace NPOI.XSSF.UserModel
         {
             //try
             //{
-                worksheet = WorksheetDocument.Factory.Parse(is1).getWorksheet();
+                worksheet = WorksheetDocument.Parse(is1).GetWorksheet();
             //}
             //catch (XmlException e)
             //{
@@ -168,7 +167,7 @@ namespace NPOI.XSSF.UserModel
 
         private void InitRows(CT_Worksheet worksheet)
         {
-            _rows = new Dictionary<int, XSSFRow>();
+            _rows = new SortedDictionary<int, XSSFRow>();
             tables = new Dictionary<String, XSSFTable>();
             sharedFormulas = new Dictionary<int, CT_CellFormula>();
             arrayFormulas = new List<CellRangeAddress>();
@@ -568,7 +567,7 @@ namespace NPOI.XSSF.UserModel
         {
             return CreateDrawingPatriarch().CreateCellComment(new XSSFClientAnchor());
         }
-        int GetLastKey(Dictionary<int, XSSFRow>.KeyCollection keys)
+        int GetLastKey(SortedDictionary<int, XSSFRow>.KeyCollection keys)
         {
             int i = 0;
             foreach (int key in keys)
@@ -578,6 +577,18 @@ namespace NPOI.XSSF.UserModel
                 i++;
             }
             throw new ArgumentOutOfRangeException();
+        }
+        SortedDictionary<int, XSSFRow> HeadMap(SortedDictionary<int, XSSFRow> rows, int rownum)
+        {
+            SortedDictionary<int, XSSFRow> headmap = new SortedDictionary<int, XSSFRow>();
+            foreach (int key in rows.Keys)
+            {
+                if (key < rownum)
+                {
+                    headmap.Add(key, rows[key]);
+                }
+            }
+            return headmap;
         }
         /**
          * Create a new row within the sheet and return the high level representation
@@ -606,7 +617,7 @@ namespace NPOI.XSSF.UserModel
                 {
                     // get number of rows where row index < rownum
                     // --> this tells us where our row should go
-                    int idx = _rows.HeadMap(rownum).Count;
+                    int idx = HeadMap(_rows, rownum).Count;
                     ctRow = worksheet.sheetData.InsertNewRow(idx);
                 }
             }
@@ -647,9 +658,10 @@ namespace NPOI.XSSF.UserModel
             CT_Comment ctComment = sheetComments.GetCTComment(ref1);
             if (ctComment == null) return null;
 
-            XSSFVMLDrawing vml = GetVMLDrawing(false);
-            return new XSSFComment(sheetComments, ctComment,
-                    vml == null ? null : vml.FindCommentShape(row, column));
+            //XSSFVMLDrawing vml = GetVMLDrawing(false);
+            //return new XSSFComment(sheetComments, ctComment,
+            //        vml == null ? null : vml.FindCommentShape(row, column));
+            throw new NotImplementedException();
         }
 
         public XSSFHyperlink GetHyperlink(int row, int column)
@@ -1722,7 +1734,7 @@ namespace NPOI.XSSF.UserModel
 
             foreach (XSSFCell cell in cellsToDelete) row.RemoveCell(cell);
 
-            int idx = _rows.headMap(row.RowNum).Count;
+            int idx = HeadMap(_rows, row.RowNum).Count;
             _rows.Remove(row.RowNum);
             worksheet.sheetData.RemoveRow(idx);
         }
@@ -1852,15 +1864,15 @@ namespace NPOI.XSSF.UserModel
         {
             if (collapsed)
             {
-                collapseColumn(columnNumber);
+                CollapseColumn(columnNumber);
             }
             else
             {
-                expandColumn(columnNumber);
+                ExpandColumn(columnNumber);
             }
         }
 
-        private void collapseColumn(int columnNumber)
+        private void CollapseColumn(int columnNumber)
         {
             CT_Cols cols = worksheet.GetColsArray(0);
             CT_Col col = columnHelper.GetColumn(columnNumber, false);
@@ -2611,7 +2623,7 @@ namespace NPOI.XSSF.UserModel
         //YK: GetXYZArray() array accessors are deprecated in xmlbeans with JDK 1.5 support
         public void ShiftRows(int startRow, int endRow, int n, bool copyRowHeight, bool reSetOriginalRowHeight)
         {
-            for (IEnumerator it = this.GetRowEnumerator(); it.MoveNext(); )
+            for (IEnumerator it = this._rows.GetEnumerator(); it.MoveNext(); )
             {
                 XSSFRow row = (XSSFRow)it.Current;
                 int rownum = row.RowNum;
@@ -2625,10 +2637,11 @@ namespace NPOI.XSSF.UserModel
                 if (RemoveRow(startRow, endRow, n, rownum))
                 {
                     // remove row from worksheet.GetSheetData row array
-                    int idx = _rows.HeadMap(row.RowNum).Count;
+                    int idx = HeadMap(_rows,row.RowNum).Count;
                     worksheet.sheetData.RemoveRow(idx);
                     // remove row from _rows
-                    it.Remove();
+                    throw new NotImplementedException();
+                    //it.Remove();
                 }
                 else if (rownum >= startRow && rownum <= endRow)
                 {
@@ -2661,7 +2674,7 @@ namespace NPOI.XSSF.UserModel
             rowShifter.UpdateConditionalFormatting(Shifter);
 
             //rebuild the _rows map
-            Dictionary<int, XSSFRow> map = new Dictionary<int, XSSFRow>();
+            SortedDictionary<int, XSSFRow> map = new SortedDictionary<int, XSSFRow>();
             foreach (XSSFRow r in _rows.Values)
             {
                 map.Add(r.RowNum, r);
@@ -2748,7 +2761,7 @@ namespace NPOI.XSSF.UserModel
         {
             if (worksheet.sheetViews == null)
             {
-                worksheet.SetSheetViews(new CT_SheetViews());
+                worksheet.sheetViews=new CT_SheetViews();
                 worksheet.sheetViews.AddNewSheetView();
             }
             return worksheet.sheetViews;
@@ -3404,7 +3417,7 @@ namespace NPOI.XSSF.UserModel
                     temp.Add(cell);
                 }
             }
-            return SSCellRange.Create(firstRow, firstColumn, height, width, temp, typeof(ICell));
+            return SSCellRange<ICell>.Create(firstRow, firstColumn, height, width, temp, typeof(ICell));
         }
 
         public ICellRange<ICell> SetArrayFormula(String formula, CellRangeAddress range)

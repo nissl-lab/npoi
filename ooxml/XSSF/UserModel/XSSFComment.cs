@@ -83,17 +83,17 @@ namespace NPOI.XSSF.UserModel
                 _comment.@ref = (ref1.FormatAsString());
                 _comments.ReferenceUpdated(oldRef, _comment);
 
-                if (_vmlShape != null)
-                {
-                    _vmlShape.GetClientDataArray(0).SetColumnArray(
-                          new BigInteger[] { new BigInteger(value) }
-                    );
+                //if (_vmlShape != null)
+                //{
+                //    _vmlShape.GetClientDataArray(0).SetColumnArray(
+                //          new BigInteger[] { new BigInteger(value) }
+                //    );
 
-                    // There is a very odd xmlbeans bug when changing the column
-                    //  arrays which can lead to corrupt pointer
-                    // This call seems to fix them again... See bug #50795
-                    _vmlShape.GetClientDataList().ToString();
-                }
+                //    // There is a very odd xmlbeans bug when changing the column
+                //    //  arrays which can lead to corrupt pointer
+                //    // This call seems to fix them again... See bug #50795
+                //    _vmlShape.GetClientDataList().ToString();
+                //}
             }
         }
 
@@ -115,9 +115,9 @@ namespace NPOI.XSSF.UserModel
                 _comment.@ref = (newRef);
                 _comments.ReferenceUpdated(oldRef, _comment);
 
-                if (_vmlShape != null) 
-                    _vmlShape.GetClientDataArray(0)
-                        .SetRowArray(0, new BigInteger(value));
+                //if (_vmlShape != null) 
+                //    _vmlShape.GetClientDataArray(0)
+                //        .SetRowArray(0, new BigInteger(value));
             }
         }
 
@@ -129,24 +129,25 @@ namespace NPOI.XSSF.UserModel
             get
             {
                 bool visible = false;
-                if (_vmlShape != null)
-                {
-                    String style = _vmlShape.GetStyle();
-                    visible = style != null && style.IndexOf("visibility:visible") != -1;
-                }
+                //if (_vmlShape != null)
+                //{
+                //    String style = _vmlShape.GetStyle();
+                //    visible = style != null && style.IndexOf("visibility:visible") != -1;
+                //}
                 return visible;
             }
             set 
             {
-                if (_vmlShape != null)
-                {
-                    String style;
-                    if (value) 
-                        style = "position:absolute;visibility:visible";
-                    else 
-                        style = "position:absolute;visibility:hidden";
-                    _vmlShape.style = (style);
-                }   
+                //if (_vmlShape != null)
+                //{
+                //    String style;
+                //    if (value) 
+                //        style = "position:absolute;visibility:visible";
+                //    else 
+                //        style = "position:absolute;visibility:hidden";
+                //    _vmlShape.style = (style);
+                //}   
+                throw new NotImplementedException();
             }
         }
 

@@ -1,3 +1,4 @@
+using System;
 namespace NPOI.OpenXmlFormats.Dml {
     
     
@@ -455,5 +456,10 @@ namespace NPOI.OpenXmlFormats.Dml {
             spPrField = new CT_ShapeProperties();
             return this.spPrField;
         }
+        public void Set(CT_Picture obj)
+        {
+            throw new NotImplementedException();
+        }
+
     }
 }

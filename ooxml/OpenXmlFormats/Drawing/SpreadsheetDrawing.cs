@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Xml.Serialization;
+using System.IO;
 
 namespace NPOI.OpenXmlFormats.Dml
 {
@@ -85,6 +86,11 @@ namespace NPOI.OpenXmlFormats.Dml
         CT_GraphicalObject graphicField;
         private string macroField;
         private bool fPublishedField;
+
+        public void Set(CT_GraphicalObjectFrame obj)
+        {
+            throw new NotImplementedException();
+        }
 
         public CT_Transform2D AddNewXfrm()
         {
@@ -288,6 +294,11 @@ namespace NPOI.OpenXmlFormats.Dml
         CT_GroupShapeProperties grpSpPrField;
         CT_GroupShapeNonVisual nvGrpSpPrField;
 
+        public void Set(CT_GroupShape groupShape)
+        {
+            throw new NotImplementedException();
+        }
+
         public CT_GroupShapeProperties AddNewGrpSpPr()
         {
             this.grpSpPrField = new CT_GroupShapeProperties();
@@ -407,6 +418,10 @@ namespace NPOI.OpenXmlFormats.Dml
         {
             throw new NotImplementedException();
         }
+        public static CT_Drawing Parse(Stream stream)
+        {
+            throw new NotImplementedException();
+        }
 
         public string id
         {
@@ -418,6 +433,10 @@ namespace NPOI.OpenXmlFormats.Dml
             {
                 this.idField = value;
             }
+        }
+        public void Save(Stream stream)
+        {
+            throw new NotImplementedException();
         }
     }
 
@@ -450,6 +469,11 @@ namespace NPOI.OpenXmlFormats.Dml
             throw new NotImplementedException();
         }
 
+        public CT_AnchorClientData AddNewClientData()
+        {
+            this.clientDataField = new CT_AnchorClientData();
+            return this.clientDataField;
+        }
         public CT_Picture AddNewPic()
         {
             throw new NotImplementedException();
@@ -499,6 +523,10 @@ namespace NPOI.OpenXmlFormats.Dml
         {
             get { return nvCxnSpPrField; }
             set { nvCxnSpPrField = value; }
+        }
+        public void Set(CT_Connector obj)
+        {
+            throw new NotImplementedException();
         }
         public CT_ConnectorNonVisual AddNewNvCxnSpPr()
         {

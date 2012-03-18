@@ -47,7 +47,7 @@ namespace NPOI.XSSF.Model
             SingleXMLCells = new CT_SingleXmlCells();
         }
 
-        public SingleXmlCells(PackagePart part, PackageRelationship rel)
+        internal SingleXmlCells(PackagePart part, PackageRelationship rel)
             : base(part, rel)
         {
 

@@ -40,7 +40,7 @@ namespace NPOI.XSSF.Model
             theme = ThemeDocument.Parse(part.GetInputStream());
         }
 
-        public ThemesTable(ThemeDocument theme)
+        internal ThemesTable(ThemeDocument theme)
         {
             this.theme = theme;
         }

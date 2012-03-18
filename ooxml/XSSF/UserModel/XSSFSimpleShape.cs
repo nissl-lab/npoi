@@ -76,7 +76,7 @@ namespace NPOI.XSSF.UserModel
                 CT_ShapeStyle style = shape.AddNewStyle();
                 CT_SchemeColor scheme = style.AddNewLnRef().AddNewSchemeClr();
                 scheme.val = (ST_SchemeColorVal.accent1);
-                scheme.AddNewShade().val(50000);
+                scheme.AddNewShade().val = 50000;
                 style.lnRef.idx = (2);
 
                 CT_StyleMatrixReference Fillref = style.AddNewFillRef();

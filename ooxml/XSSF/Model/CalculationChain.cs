@@ -19,6 +19,7 @@ using System.IO;
 using NPOI.OpenXml4Net.OPC;
 using NPOI.OpenXmlFormats.Spreadsheet;
 using System;
+using System.Collections.Generic;
 namespace NPOI.XSSF.Model
 {
 
@@ -39,7 +40,7 @@ namespace NPOI.XSSF.Model
             chain = new CT_CalcChain();
         }
 
-        public CalculationChain(PackagePart part, PackageRelationship rel)
+        internal CalculationChain(PackagePart part, PackageRelationship rel)
             : base(part, rel)
         {
 
@@ -85,9 +86,9 @@ namespace NPOI.XSSF.Model
         {
             //sheet Id of a sheet the cell belongs to
             int id = -1;
-            CT_CalcCell[] c = chain.GetCArray();
+            List<CT_CalcCell> c = chain.c;
 
-            for (int i = 0; i < c.Length; i++)
+            for (int i = 0; i < c.Count; i++)
             {
                 //If sheet Id  is omitted, it is assumed to be the same as the value of the previous cell.
                 id = c[i].i;
@@ -95,7 +96,7 @@ namespace NPOI.XSSF.Model
                 if (id == sheetId && c[i].r.Equals(ref1))
                 {
                     //if (c[i].IsSetI() && i < c.Length - 1 && !c[i + 1].IsSetI())
-                    if (i < c.Length - 1)
+                    if (i < c.Count - 1)
                     {
                         c[i + 1].i=id;
                     }

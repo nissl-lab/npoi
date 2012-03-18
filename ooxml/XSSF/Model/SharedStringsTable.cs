@@ -93,7 +93,7 @@ namespace NPOI.XSSF.Model
             _sstDoc.AddNewSst();
         }
 
-        public SharedStringsTable(PackagePart part, PackageRelationship rel)
+        internal SharedStringsTable(PackagePart part, PackageRelationship rel)
             : base(part, rel)
         {
 

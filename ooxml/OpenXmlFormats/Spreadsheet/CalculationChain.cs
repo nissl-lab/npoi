@@ -36,9 +36,9 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             return this.c.Count;
         }
 
-        public CT_CalcCell[] GetCArray()
+        public CT_CalcCell GetCArray(int index)
         {
-            return this.c.ToArray();
+            return c[index];
         }
         public void RemoveC(int index)
         {

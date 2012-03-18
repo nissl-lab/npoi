@@ -180,8 +180,8 @@ namespace NPOI.XSSF.UserModel
          */
         public IChart CreateChart(IClientAnchor anchor)
         {
-            int chartNumber = GetPackagePart().Package.
-                GetPartsByContentType(XSSFRelation.CHART.ContentType).Count + 1;
+            //int chartNumber = GetPackagePart().Package.
+            //    GetPartsByContentType(XSSFRelation.CHART.ContentType).Count + 1;
 
             throw new NotImplementedException();
         //    XSSFChart chart = (XSSFChart)CreateRelationship(
@@ -288,17 +288,18 @@ namespace NPOI.XSSF.UserModel
             CommentsTable comments = sheet.GetCommentsTable(true);
             //XSSFVMLDrawing vml = sheet.GetVMLDrawing(true);
             //schemasMicrosoftComVml.CT_Shape vmlShape = vml.newCommentShape();
-            if (ca.IsSet())
-            {
-                String position =
-                        ca.Col1 + ", 0, " + ca.Row1 + ", 0, " +
-                        ca.Col2 + ", 0, " + ca.Row2 + ", 0";
-                vmlShape.GetClientDataArray(0).SetAnchorArray(0, position);
-            }
-            XSSFComment shape = new XSSFComment(comments, comments.CreateComment(), vmlShape);
-            shape.Column = (ca.Col1);
-            shape.Row = (ca.Row1);
-            return shape;
+            //if (ca.IsSet())
+            //{
+            //    String position =
+            //            ca.Col1 + ", 0, " + ca.Row1 + ", 0, " +
+            //            ca.Col2 + ", 0, " + ca.Row2 + ", 0";
+            //    vmlShape.GetClientDataArray(0).SetAnchorArray(0, position);
+            //}
+            throw new NotImplementedException();
+            //XSSFComment shape = new XSSFComment(comments, comments.CreateComment(), vmlShape);
+            //shape.Column = (ca.Col1);
+            //shape.Row = (ca.Row1);
+            //return shape;
         }
 
         /**

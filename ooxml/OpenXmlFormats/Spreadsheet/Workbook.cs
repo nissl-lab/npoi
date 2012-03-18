@@ -13,6 +13,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     using System.Xml.Schema;
     using System.ComponentModel;
     using System.Collections.Generic;
+    using System.IO;
 
 
     public class CT_Workbook
@@ -77,6 +78,10 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             //this.workbookPrField = new CT_WorkbookPr();
             this.fileSharingField = new CT_FileSharing();
             this.fileVersionField = new CT_FileVersion();
+        }
+        public void Save(Stream stream)
+        {
+            throw new NotImplementedException();
         }
 
         public CT_WorkbookPr AddNewWorkbookPr()
@@ -2767,7 +2772,12 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             this.workbookViewField = new List<CT_BookView>();
         }
-
+        public CT_BookView AddNewWorkbookView()
+        {
+            CT_BookView bv = new CT_BookView();
+            this.workbookViewField.Add(bv);
+            return bv;
+        }
         public CT_BookView GetWorkbookViewArray(int index)
         {
             return this.workbookViewField[index];
@@ -2889,6 +2899,11 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             CT_DefinedName dn = new CT_DefinedName();
             this.definedNameField.Add(dn);
                 return dn;
+        }
+
+        public void SetDefinedNameArray(CT_DefinedName[] array)
+        {
+            throw new NotImplementedException();
         }
 
         public List<CT_DefinedName> definedName

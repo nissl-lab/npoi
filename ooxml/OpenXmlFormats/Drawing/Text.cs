@@ -2954,6 +2954,11 @@ namespace NPOI.OpenXmlFormats.Dml
         
         private List<CT_TextParagraph> pField;
 
+
+        public void SetPArray(CT_TextParagraph[] array)
+        {
+            throw new NotImplementedException();
+        }
         public CT_TextParagraph AddNewP()
         {
             if (this.pField == null)
