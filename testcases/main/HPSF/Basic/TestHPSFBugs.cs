@@ -21,6 +21,7 @@ namespace TestCases.HPSF.basic
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using NPOI.HSSF.UserModel;
     using System;
+    using NPOI.SS.UserModel;
 
     /**
      * Tests various bugs have been fixed
@@ -51,7 +52,7 @@ namespace TestCases.HPSF.basic
             // Set Initial values
             wb.SummaryInformation.Author = (/*setter*/"Apache POI");
             wb.SummaryInformation.Keywords = (/*setter*/"Testing POI");
-            wb.SummaryInformation.CreateDateTime = (Convert.ToDateTime(12345));
+            wb.SummaryInformation.CreateDateTime = DateUtil.GetJavaDate(12345);
 
             wb.DocumentSummaryInformation.Company = (/*setter*/"Apache");
 
@@ -70,7 +71,7 @@ namespace TestCases.HPSF.basic
 
             Assert.AreEqual("Apache POI", wb.SummaryInformation.Author);
             Assert.AreEqual("Testing POI", wb.SummaryInformation.Keywords);
-            Assert.AreEqual(12345, Convert.ToInt32(wb.SummaryInformation.CreateDateTime.Value));
+            Assert.AreEqual(12345, DateUtil.GetExcelDate(wb.SummaryInformation.CreateDateTime.Value));
             Assert.AreEqual("Apache", wb.DocumentSummaryInformation.Company);
 
 
@@ -89,7 +90,7 @@ namespace TestCases.HPSF.basic
             Assert.AreEqual("Apache POI", wb.SummaryInformation.Author);
             Assert.AreEqual("Testing POI", wb.SummaryInformation.Keywords);
             Assert.AreEqual("Resaved", wb.SummaryInformation.Comments);
-            Assert.AreEqual(12345, Convert.ToInt32(wb.SummaryInformation.CreateDateTime.Value));
+            Assert.AreEqual(12345, DateUtil.GetExcelDate(wb.SummaryInformation.CreateDateTime.Value));
             Assert.AreEqual("Apache", wb.DocumentSummaryInformation.Company);
         }
     }

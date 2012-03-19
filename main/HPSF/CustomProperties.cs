@@ -85,9 +85,8 @@ namespace NPOI.HPSF
         /// <param name="name">The name.</param>
         /// <param name="customProperty">The custom property.</param>
         /// <returns></returns>
-        public Object Put(Object name, Object customProperty)
+        public CustomProperty Put(string name, CustomProperty cp)
         {
-            CustomProperty cp = (CustomProperty)customProperty;
             if (string.IsNullOrEmpty((string)name))     //tony qu changed the code
             {
                 /* Ignoring a property without a name. */
@@ -119,7 +118,33 @@ namespace NPOI.HPSF
             return cp;
         }
 
+        /**
+     * Returns a set of all the names of our
+     *  custom properties. Equivalent to 
+     *  {@link #nameSet()}
+     */
+        public ICollection KeySet()
+        {
+            return dictionaryNameToID.Keys;
+        }
 
+        /**
+         * Returns a set of all the names of our
+         *  custom properties
+         */
+        public ICollection NameSet()
+        {
+            return dictionaryNameToID.Keys;
+        }
+
+        /**
+         * Returns a set of all the IDs of our
+         *  custom properties
+         */
+        public ICollection IdSet()
+        {
+            return dictionaryNameToID.Keys;
+        }
 
         /// <summary>
         /// Puts a {@link CustomProperty} that has not yet a valid ID into this
@@ -137,11 +162,10 @@ namespace NPOI.HPSF
             String name = customProperty.Name;
             
             /* Check whether a property with this name is in the map alReady. */
-            if(dictionaryNameToID.Contains(name))
+            object oldId = dictionaryNameToID[(name)];
+            if (oldId!=null)
             {
-
-                long oldId = (long)dictionaryNameToID[name];
-                customProperty.ID = oldId;
+                customProperty.ID = (long)oldId;
             }
             else
             {
@@ -166,10 +190,10 @@ namespace NPOI.HPSF
         /// <returns>The Removed property or 
         /// <c>null</c>
         ///  if the specified property was not found.</returns>
-        public CustomProperty Remove(String name)
+        public object Remove(String name)
         {
             if (dictionaryNameToID[name] == null)
-                throw new ArgumentException();
+                return null;
             long id = (long)dictionaryNameToID[name];
             dictionaryIDToName.Remove(id);
             dictionaryNameToID.Remove(name);
@@ -321,7 +345,43 @@ namespace NPOI.HPSF
                 return cp != null ? cp.Value : null;
             }
         }
+        /**
+     * Checks against both String Name and Long ID
+     */
+        public override bool ContainsKey(Object key)
+        {
+            if (key is long)
+            {
+                return base.ContainsKey((long)key);
+            }
+            if (key is String)
+            {
+                return base.ContainsKey((long)dictionaryNameToID[(key)]);
+            }
+            return false;
+        }
 
+        /**
+         * Checks against both the property, and its values. 
+         */
+        public override bool ContainsValue(Object value)
+        {
+            if (value is CustomProperty)
+            {
+                return base.ContainsValue(value);
+            }
+            else
+            {
+                foreach (object cp in base.Values)
+                {
+                    if ((cp as CustomProperty).Value == value)
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
 
         /// <summary>
         /// Gets the dictionary which Contains IDs and names of the named custom

@@ -226,16 +226,16 @@ namespace NPOI.HPSF
             {
                 ple = (PropertyListEntry)propertyList[propertyCount - 1];
                 ple.Length = size - ple.offset;
-                if (ple.Length <= 0)
-                {
-                    StringBuilder b = new StringBuilder();
-                    b.Append("The property Set claims To have a size of ");
-                    b.Append(size);
-                    b.Append(" bytes. However, it exceeds ");
-                    b.Append(ple.offset);
-                    b.Append(" bytes.");
-                    throw new IllegalPropertySetDataException(b.ToString());
-                }
+                //if (ple.Length <= 0)
+                //{
+                //    StringBuilder b = new StringBuilder();
+                //    b.Append("The property Set claims To have a size of ");
+                //    b.Append(size);
+                //    b.Append(" bytes. However, it exceeds ");
+                //    b.Append(ple.offset);
+                //    b.Append(" bytes.");
+                //    throw new IllegalPropertySetDataException(b.ToString());
+                //}
             }
 
             /* Look for the codepage. */

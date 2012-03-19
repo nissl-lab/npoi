@@ -41,7 +41,7 @@ namespace TestCases.HPSF.Extractor
         {
             POIFSFileSystem fs = new POIFSFileSystem(_samples.OpenResourceAsStream("TestMickey.doc"));
             HPSFPropertiesExtractor ext = new HPSFPropertiesExtractor(fs);
-            //Assert.AreSame(ext.Text, ext.Text);
+            String text = ext.Text;
 
             // Check each bit in turn
             String sinfText = ext.SummaryInformationText;
@@ -53,7 +53,7 @@ namespace TestCases.HPSF.Extractor
             Assert.IsTrue(dinfText.IndexOf("COMPANY = sample company") > -1);
 
             // Now overall
-            String text = ext.Text;
+             text = ext.Text;
             Assert.IsTrue(text.IndexOf("TEMPLATE = Normal") > -1);
             Assert.IsTrue(text.IndexOf("SUBJECT = sample subject") > -1);
             Assert.IsTrue(text.IndexOf("MANAGER = sample manager") > -1);
@@ -65,7 +65,7 @@ namespace TestCases.HPSF.Extractor
         {
             POIFSFileSystem fs = new POIFSFileSystem(_samples.OpenResourceAsStream("TestUnicode.xls"));
             HPSFPropertiesExtractor ext = new HPSFPropertiesExtractor(fs);
-            //Assert.AreSame(ext.Text, ext.Text);
+            string text = ext.Text;
 
             // Check each bit in turn
             String sinfText = ext.SummaryInformationText;
@@ -74,14 +74,14 @@ namespace TestCases.HPSF.Extractor
             Assert.IsTrue(sinfText.IndexOf("AUTHOR = marshall") > -1);
             Assert.IsTrue(sinfText.IndexOf("TITLE = Titel: \u00c4h") > -1);
             Assert.IsTrue(dinfText.IndexOf("COMPANY = Schreiner") > -1);
-            Assert.IsTrue(dinfText.IndexOf("SCALE = false") > -1);
+            Assert.IsTrue(dinfText.IndexOf("SCALE = False") > -1);
 
             // Now overall
-            String text = ext.Text;
+            text = ext.Text;
             Assert.IsTrue(text.IndexOf("AUTHOR = marshall") > -1);
             Assert.IsTrue(text.IndexOf("TITLE = Titel: \u00c4h") > -1);
             Assert.IsTrue(text.IndexOf("COMPANY = Schreiner") > -1);
-            Assert.IsTrue(text.IndexOf("SCALE = false") > -1);
+            Assert.IsTrue(text.IndexOf("SCALE = False") > -1);
         }
 
         [TestMethod]

@@ -65,15 +65,18 @@ namespace NPOI.HPSF.Extractor
                 text.Append(GetPropertiesText(dsi));
 
                 // Now custom ones
-                CustomProperties cps = dsi.CustomProperties;
-                IEnumerator keys = cps.Keys.GetEnumerator();
-                while (keys.MoveNext())
+                CustomProperties cps = dsi == null ? null : dsi.CustomProperties;
+                
+                if (cps != null)
                 {
-                    String key = keys.Current.ToString();
-                    String val = GetPropertyValueText(cps[key]);
-                    text.Append(key + " = " + val + "\n");
+                    IEnumerator keys = cps.NameSet().GetEnumerator();
+                    while (keys.MoveNext())
+                    {
+                        String key = keys.Current.ToString();
+                        String val = GetPropertyValueText(cps[key]);
+                        text.Append(key + " = " + val + "\n");
+                    }
                 }
-
                 // All done
                 return text.ToString();
             }
@@ -158,6 +161,7 @@ namespace NPOI.HPSF.Extractor
                 // Maybe it's a string? who knows!
                 return b.ToString();
             }
+
             return val.ToString();
         }
 

@@ -176,6 +176,8 @@ namespace NPOI
         /// <returns></returns>
         protected PropertySet GetPropertySet(String SetName)
         {
+            //directory can be null when creating new documents
+            if (directory == null) return null;
             DocumentInputStream dis;
             try
             {

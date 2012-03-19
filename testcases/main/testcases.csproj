@@ -394,6 +394,8 @@
     <Compile Include="DDF\TestEscherProperty.cs" />
     <Compile Include="Exceptions\ComparisonFailure.cs" />
     <Compile Include="HPSF\Basic\TestClassID.cs" />
+    <Compile Include="HPSF\Basic\TestHPSFBugs.cs" />
+    <Compile Include="HPSF\Extractor\TestHPSFPropertiesExtractor.cs" />
     <Compile Include="HSSF\HSSFITestDataProvider.cs" />
     <Compile Include="HSSF\Model\TestLinkTable.cs" />
     <Compile Include="HSSF\Model\TestOperandClassTransformer.cs" />
@@ -646,7 +648,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="DDF\data\" />
-    <Folder Include="HPSF\Extractor\" />
     <Folder Include="HSSF\data\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
