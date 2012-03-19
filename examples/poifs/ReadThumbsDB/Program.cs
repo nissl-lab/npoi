@@ -54,7 +54,7 @@ namespace NPOI.Examples.ReadThumbsDB
             while (entries.MoveNext())
             {
                 DocumentNode entry = entries.Current as DocumentNode;
-                POIFSDocumentReader dr = poifs.CreatePOIFSDocumentReader(entry.Name);
+                DocumentInputStream dr = poifs.CreateDocumentInputStream(entry.Name);
 
                 if (entry.Name.ToLower() == "catalog")
                     continue;
