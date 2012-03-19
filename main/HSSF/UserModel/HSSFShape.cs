@@ -48,7 +48,7 @@ namespace NPOI.HSSF.UserModel
         protected HSSFShape(HSSFShape parent, HSSFAnchor anchor)
         {
             this.parent = parent;
-            this.Anchor = anchor;
+            this.anchor = anchor;
         }
 
         /// <summary>
