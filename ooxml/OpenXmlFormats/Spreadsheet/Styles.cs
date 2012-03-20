@@ -562,16 +562,34 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
     }
+    public enum FontElementNameType
+    {
+        b,
+        charset,
+        color,
+        condense,
+        extend,
+        family,
+        i,
+        name,
+        outline,
+        scheme,
+        shadow,
+        strike,
+        sz,
+        u,
+        vertAlign
+    }
     public class CT_Font
     {
 
         private List<object> itemsField;
 
-        private List<ItemsChoiceType> itemsElementNameField;
+        private List<FontElementNameType> itemsElementNameField;
 
         public CT_Font()
         {
-            this.itemsElementNameField = new List<ItemsChoiceType>();
+            this.itemsElementNameField = new List<FontElementNameType>();
             this.itemsField = new List<object>();
         }
         public static CT_Font Parse(string xml)
@@ -595,29 +613,29 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         [System.Xml.Serialization.XmlElementAttribute("u", typeof(CT_UnderlineProperty))]
         [System.Xml.Serialization.XmlElementAttribute("vertAlign", typeof(CT_VerticalAlignFontProperty))]
         [System.Xml.Serialization.XmlChoiceIdentifierAttribute("ItemsElementName")]
-        public List<object> Items
+        public object[] Items
         {
             get
             {
-                return this.itemsField;
+                return this.itemsField.ToArray();
             }
             set
             {
-                this.itemsField = value;
+                this.itemsField = new List<object>(value);
             }
         }
 
         [System.Xml.Serialization.XmlElementAttribute("ItemsElementName")]
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public List<ItemsChoiceType> ItemsElementName
+        public FontElementNameType[] ItemsElementName
         {
             get
             {
-                return this.itemsElementNameField;
+                return this.itemsElementNameField.ToArray();
             }
             set
             {
-                this.itemsElementNameField = value;
+                this.itemsElementNameField = new List<FontElementNameType>(value);
             }
         }
         public int sizeOfFamilyArray()

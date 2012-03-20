@@ -613,15 +613,15 @@ namespace NPOI.OpenXmlFormats.Dml
         }
 
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public List<ItemsChoiceType4> ItemsElementName
+        public ItemsChoiceType4[] ItemsElementName
         {
             get
             {
-                return this.itemsElementNameField;
+                return this.itemsElementNameField.ToArray();
             }
             set
             {
-                this.itemsElementNameField = value;
+                this.itemsElementNameField = new List<ItemsChoiceType4>(value);
             }
         }
 
