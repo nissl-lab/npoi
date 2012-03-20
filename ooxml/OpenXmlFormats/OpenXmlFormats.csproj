@@ -64,8 +64,10 @@
     <Compile Include="Spreadsheet\AutoFilter.cs" />
     <Compile Include="Spreadsheet\BaseTypes.cs" />
     <Compile Include="Spreadsheet\CalcChainDocument.cs" />
+    <Compile Include="Spreadsheet\ChartsheetDocument.cs" />
     <Compile Include="Spreadsheet\Comments.cs" />
     <Compile Include="Spreadsheet\CommentsDocument.cs" />
+    <Compile Include="Spreadsheet\MapInfoDocument.cs" />
     <Compile Include="Spreadsheet\SharedStringTable.cs" />
     <Compile Include="Spreadsheet\SharedWorkbookRevisions.cs" />
     <Compile Include="Spreadsheet\SharedWorkbookUserNames.cs" />
@@ -84,9 +86,11 @@
     <Compile Include="Spreadsheet\TableDocument.cs" />
     <Compile Include="Spreadsheet\ThemeDocument.cs" />
     <Compile Include="Spreadsheet\Workbook.cs" />
-    <Compile Include="Vml\SpreadsheetDrawing.cs" />
+    <Compile Include="Spreadsheet\WorkbookDocument.cs" />
+    <Compile Include="Spreadsheet\WorksheetDocument.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Vml\" />
     <Folder Include="Word\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

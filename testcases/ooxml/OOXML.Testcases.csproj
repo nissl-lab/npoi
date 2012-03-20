@@ -37,10 +37,13 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=9.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
-    <Reference Include="NPOI, Version=1.2.4.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+    <Reference Include="NPOI, Version=1.2.5.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\solution\Lib\NPOI.dll</HintPath>
-      <Private>True</Private>
+    </Reference>
+    <Reference Include="NPOI.TestCases, Version=1.2.5.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\solution\Lib\NPOI.TestCases.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
@@ -48,15 +51,17 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="HSSFTestDataSamples.cs" />
-    <Compile Include="POIDataSamples.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestDetectAsOOXML.cs" />
     <Compile Include="TestPOIXMLDocument.cs" />
+    <Compile Include="TestPOIXMLProperties.cs" />
     <Compile Include="Util\TestIdentifierManager.cs" />
+    <Compile Include="XSSF\Model\TestCalculationChain.cs" />
     <Compile Include="XSSF\Util\TestCTColComparator.cs" />
     <Compile Include="XSSF\Util\TestEvilUnclosedBRFixingInputStream.cs" />
     <Compile Include="XSSF\Util\TestNumericRanges.cs" />
+    <Compile Include="XSSF\XSSFITestDataProvider.cs" />
+    <Compile Include="XSSF\XSSFTestDataSamples.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\ooxml\OOXML.csproj">

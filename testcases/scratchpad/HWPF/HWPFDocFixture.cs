@@ -41,7 +41,7 @@ namespace TestCases.HWPF
             DocumentEntry documentProps =
               (DocumentEntry)filesystem.Root.GetEntry("WordDocument");
             _mainStream = new byte[documentProps.Size];
-            filesystem.CreatePOIFSDocumentReader("WordDocument").Read(_mainStream);
+            filesystem.CreateDocumentInputStream("WordDocument").Read(_mainStream);
 
             // use the fib to determine the name of the table stream.
             _fib = new FileInformationBlock(_mainStream);
@@ -56,7 +56,7 @@ namespace TestCases.HWPF
             DocumentEntry tableProps =
               (DocumentEntry)filesystem.Root.GetEntry(name);
             _tableStream = new byte[tableProps.Size];
-            filesystem.CreatePOIFSDocumentReader(name).Read(_tableStream);
+            filesystem.CreateDocumentInputStream(name).Read(_tableStream);
 
             _fib.FillVariableFields(_mainStream, _tableStream);
 
