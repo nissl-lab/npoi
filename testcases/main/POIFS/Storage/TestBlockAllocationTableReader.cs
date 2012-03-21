@@ -1343,5 +1343,61 @@ namespace TestCases.POIFS.Storage
                 }
             }
         }
+
+        /**
+	 * Bugzilla 48085 describes an error where a corrupted Excel file causes POI to throw an
+	 * {@link OutOfMemoryError}.
+	 */
+        [TestMethod]
+        public void TestBadSectorAllocationTableSize_bug48085()
+        {
+            int BLOCK_SIZE = 512;
+            POIFSBigBlockSize bigBlockSize = POIFSConstants.SMALLER_BIG_BLOCK_SIZE_DETAILS;
+            Assert.AreEqual(BLOCK_SIZE, bigBlockSize.GetBigBlockSize());
+
+            // 512 bytes take from the start of bugzilla attachment 24444
+            byte[] initData = HexRead.ReadFromString(
+
+            "D0 CF 11 E0 A1 B1 1A E1 20 20 20 20 20 20 20 20  20 20 20 20 20 20 20 20 3E 20 03 20 FE FF 09 20" +
+            "06 20 20 20 20 20 20 20 20 20 20 20 01 20 20 20  01 20 20 20 20 20 20 20 20 10 20 20 02 20 20 20" +
+            "02 20 20 20 FE FF FF FF 20 20 20 20 20 20 20 20  "
+            );
+            // the rest of the block is 'FF'
+            byte[] data = new byte[BLOCK_SIZE];
+            Arrays.Fill(data, (byte)0xFF);
+            Array.Copy(initData, 0, data, 0, initData.Length);
+
+            // similar code to POIFSFileSystem.<init>:
+            Stream stream = new ByteArrayInputStream(data);
+            HeaderBlock hb;
+            RawDataBlockList dataBlocks;
+            try
+            {
+                hb = new HeaderBlock(stream);
+                dataBlocks = new RawDataBlockList(stream, bigBlockSize);
+            }
+            catch (IOException e)
+            {
+                throw new RuntimeException(e);
+            }
+            try
+            {
+                new BlockAllocationTableReader(POIFSConstants.SMALLER_BIG_BLOCK_SIZE_DETAILS,
+                      hb.BATCount, hb.BATArray, hb.XBATCount,
+                        hb.XBATIndex, dataBlocks);
+            }
+            catch (IOException e)
+            {
+                // expected during successful test
+                Assert.AreEqual("Block count 538976257 is too high. POI maximum is 65535.", e.Message);
+            }
+            catch (OutOfMemoryException e)
+            {
+                if (e.StackTrace.Contains("testBadSectorAllocationTableSize"))
+                {
+                    throw new AssertFailedException("Identified bug 48085");
+                }
+            }
+        }
     }
 }

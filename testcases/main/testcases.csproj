@@ -107,10 +107,10 @@
     <Compile Include="POIFS\Storage\TestRawDataBlockList.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="POIFS\Storage\TestHeaderBlockReader.cs" />
+    <Compile Include="POIFS\Storage\TestHeaderBlockReading.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="POIFS\Storage\TestHeaderBlockWriter.cs" />
+    <Compile Include="POIFS\Storage\TestHeaderBlockWriting.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="POIFS\Storage\TestSmallBlockTableReader.cs" />
@@ -396,6 +396,7 @@
     <Compile Include="HPSF\Basic\TestClassID.cs" />
     <Compile Include="HPSF\Basic\TestHPSFBugs.cs" />
     <Compile Include="HPSF\Extractor\TestHPSFPropertiesExtractor.cs" />
+    <Compile Include="HSSF\EventModel\TestAbortableListener.cs" />
     <Compile Include="HSSF\HSSFITestDataProvider.cs" />
     <Compile Include="HSSF\Model\TestLinkTable.cs" />
     <Compile Include="HSSF\Model\TestOperandClassTransformer.cs" />

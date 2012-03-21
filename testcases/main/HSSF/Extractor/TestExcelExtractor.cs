@@ -27,6 +27,7 @@ namespace TestCases.HSSF.Extractor
 
 
     using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NPOI.HSSF.Record.Crypto;
 
 
     [TestClass]
@@ -221,7 +222,53 @@ namespace TestCases.HSSF.Extractor
                 "11\t\t\t23\n"
             ));
         }
+        [TestMethod]
+        public void TestFormatting()
+        {
+            ExcelExtractor extractor = CreateExtractor("Formatting.xls");
+            extractor.IncludeBlankCells = (false);
+            extractor.IncludeSheetNames = false;
+            String text = extractor.Text;
 
+            // Note - not all the formats in the file
+            //  actually quite match what they claim to
+            //  be, as some are auto-local builtins...
+
+            Assert.IsTrue(text.StartsWith(
+                  "Dates, all 24th November 2006\n"
+            ));
+            Assert.IsTrue(
+                  text.IndexOf(
+                     "yyyy/mm/dd\t2006/11/24\n"
+                  ) > -1
+            );
+            Assert.IsTrue(
+                  text.IndexOf(
+                     "yyyy-mm-dd\t2006-11-24\n"
+                  ) > -1
+            );
+            Assert.IsTrue(
+                  text.IndexOf(
+                     "dd-mm-yy\t24-11-06\n"
+                  ) > -1
+            );
+
+            Assert.IsTrue(
+                  text.IndexOf(
+                     "nn.nn\t10.52\n"
+                  ) > -1
+            );
+            Assert.IsTrue(
+                  text.IndexOf(
+                     "nn.nnn\t10.520\n"
+                  ) > -1
+            );
+            Assert.IsTrue(
+                  text.IndexOf(
+                     "\u00a3nn.nn\t\u00a310.52\n"
+                  ) > -1
+            );
+        }
 
         /**
          * Embded in a non-excel file
@@ -303,6 +350,16 @@ namespace TestCases.HSSF.Extractor
                 Assert.IsTrue(text.IndexOf("testdoc") >= 0, "Unable to find expected word in text\n" + text);
                 Assert.IsTrue(text.IndexOf("test phrase") >= 0, "Unable to find expected word in text\n" + text);
             }
+        }
+        [TestMethod]
+        public void TestPassword()
+        {
+            Biff8EncryptionKey.CurrentUserPassword = ("password");
+            ExcelExtractor extractor = CreateExtractor("password.xls");
+            String text = extractor.Text;
+            Biff8EncryptionKey.CurrentUserPassword = (null);
+
+            Assert.IsTrue(text.Contains("ZIP"));
         }
     }
 }

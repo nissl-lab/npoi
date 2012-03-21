@@ -37,6 +37,7 @@ namespace NPOI.HSSF.Extractor
     public class ExcelExtractor : POIOLE2TextExtractor
     {
         private HSSFWorkbook wb;
+        private HSSFDataFormatter _formatter;
         private bool includeSheetNames = true;
         private bool formulasNotResults = false;
         private bool includeCellComments = false;
@@ -50,6 +51,7 @@ namespace NPOI.HSSF.Extractor
             : base(wb)
         {
             this.wb = wb;
+            _formatter = new HSSFDataFormatter();
         }
         /// <summary>
         /// Initializes a new instance of the <see cref="ExcelExtractor"/> class.
@@ -207,7 +209,8 @@ namespace NPOI.HSSF.Extractor
                                         break;
                                     case CellType.NUMERIC:
                                         // Note - we don't apply any formatting!
-                                        text.Append(cell.NumericCellValue);
+                                        //text.Append(cell.NumericCellValue);
+                                        text.Append(_formatter.FormatCellValue(cell));
                                         break;
                                     case CellType.BOOLEAN:
                                         text.Append(cell.BooleanCellValue);
@@ -232,7 +235,22 @@ namespace NPOI.HSSF.Extractor
                                                     }
                                                     break;
                                                 case CellType.NUMERIC:
-                                                    text.Append(cell.NumericCellValue);
+                                                    //text.Append(cell.NumericCellValue);
+                                                    HSSFCellStyle style = (HSSFCellStyle)cell.CellStyle;
+                                                    if (style == null)
+                                                    {
+                                                        text.Append(cell.NumericCellValue);
+                                                    }
+                                                    else
+                                                    {
+                                                        text.Append(
+                                                              _formatter.FormatRawCellContents(
+                                                                    cell.NumericCellValue,
+                                                                    style.DataFormat,
+                                                                    style.GetDataFormatString()
+                                                              )
+                                                        );
+                                                    }
                                                     break;
                                                 case CellType.BOOLEAN:
                                                     text.Append(cell.BooleanCellValue);

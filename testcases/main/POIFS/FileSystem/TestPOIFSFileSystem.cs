@@ -381,7 +381,49 @@ namespace TestCases.POIFS.FileSystem
                 }
             }
 	   }
-        
+        /**
+	 * Test that we can open files that come via Lotus notes.
+	 * These have a top level directory without a name....
+	 */
+        [TestMethod]
+        public void TestNotesOLE2Files()
+        {
+            POIDataSamples _samples = POIDataSamples.GetPOIFSInstance();
+
+            // Open the file up
+            POIFSFileSystem fs = new POIFSFileSystem(
+                _samples.OpenResourceAsStream("Notes.ole2")
+            );
+
+            // Check the contents
+            Assert.AreEqual(1, fs.Root.EntryCount);
+            fs.Root.Entries.MoveNext();
+
+            //fs.Root.Entries.Current is always null. WHY???
+            //Entry entry = fs.Root.Entries.Current;
+            Entry entry = fs.Root.GetEntry(0);
+            Assert.IsTrue(entry.IsDirectoryEntry);
+            Assert.IsTrue(entry is DirectoryEntry);
+
+            // The directory lacks a name!
+            DirectoryEntry dir = (DirectoryEntry)entry;
+            Assert.AreEqual("", dir.Name);
+
+            // Has two children
+            Assert.AreEqual(2, dir.EntryCount);
+
+            // Check them
+            IEnumerator<Entry> it = dir.Entries;
+            it.MoveNext();
+            entry = it.Current;
+            Assert.AreEqual(true, entry.IsDocumentEntry);
+            Assert.AreEqual("\u0001Ole10Native", entry.Name);
+            it.MoveNext();
+            entry = it.Current;
+            Assert.AreEqual(true, entry.IsDocumentEntry);
+            Assert.AreEqual("\u0001CompObj", entry.Name);
+        }
+
         private static Stream OpenSampleStream(String sampleFileName)
         {
             return HSSFTestDataSamples.OpenSampleFileStream(sampleFileName);

@@ -105,27 +105,27 @@ namespace NPOI.POIFS.FileSystem
             while (iter.MoveNext())
             {
                 Property child = iter.Current;
-                Entry    childNode = null;
+                Entry childNode = null;
 
                 if (child.IsDirectory)
                 {
                     DirectoryProperty childDir = (DirectoryProperty)child;
                     if (_oFilesSystem != null)
                     {
-                        childNode = new DirectoryNode(childDir,_oFilesSystem, this);
-                }
-                else
-                {
+                        childNode = new DirectoryNode(childDir, _oFilesSystem, this);
+                    }
+                    else
+                    {
                         childNode = new DirectoryNode(childDir, _nFilesSystem, this);
                     }
                 }
                 else
                 {
                     childNode = new DocumentNode((DocumentProperty)child, this);
-            }
+                }
                 _entries.Add(childNode);
                 _byname.Add(childNode.Name, childNode);
-        }
+            }
         }
         
         /// <summary>
@@ -252,7 +252,10 @@ namespace NPOI.POIFS.FileSystem
         {
             get { return _entries.GetEnumerator(); }
         }
-
+        internal Entry GetEntry(int index)
+        {
+            return _entries[index];
+        }
         /// <summary>
         /// is this DirectoryEntry empty?
         /// </summary>

@@ -42,7 +42,7 @@ namespace TestCases.POIFS.Storage
      * @author Marc Johnson
      */
     [TestClass]
-    public class TestHeaderBlockReader
+    public class TestHeaderBlockReading
     {
 
         /**
@@ -51,7 +51,7 @@ namespace TestCases.POIFS.Storage
          * @param name
          */
 
-        public TestHeaderBlockReader()
+        public TestHeaderBlockReading()
         {
         }
 

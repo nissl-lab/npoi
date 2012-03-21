@@ -1280,6 +1280,9 @@ namespace NPOI.HSSF.UserModel
 
                     // Copy over all the other nodes to our new poifs
                     POIUtils.CopyNodes(directory, fs.Root, excepts);
+                    // YK: preserve StorageClsid, it is important for embedded workbooks,
+                    // see Bugzilla 47920
+                    fs.Root.StorageClsid = (this.directory.StorageClsid);
                 }
                 fs.WriteFileSystem(stream);
 

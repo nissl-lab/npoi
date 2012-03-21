@@ -15,7 +15,7 @@
    limitations under the License.
 ==================================================================== */
 
-namespace NPOI.HSSF.EventModel
+namespace TestCases.HSSF.EventModel
 {
     using System.IO;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -63,7 +63,8 @@ namespace NPOI.HSSF.EventModel
             short res = f.AbortableProcessWorkbookEvents(req, fs);
 
             Assert.AreEqual(0, res);
-            Assert.AreEqual(175, l.countSeen);
+            //Assert.AreEqual(175, l.countSeen);
+            Assert.AreEqual(176, l.countSeen); //Tony Qu add a sheetext record, so this value should be 176
             Assert.AreEqual(EOFRecord.sid, l.lastRecordSeen.Sid);
         }
 

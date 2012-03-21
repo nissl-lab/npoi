@@ -109,24 +109,28 @@ namespace NPOI.POIFS.FileSystem
         /// stream in order to trap the Close() call.  
         /// </summary>
         /// <param name="stream">the Streamfrom which to Read the data</param>
-        public POIFSFileSystem(Stream stream):this()
+        public POIFSFileSystem(Stream stream)
+            : this()
         {
             bool success = false;
 
             HeaderBlock header_block_reader;
             RawDataBlockList data_blocks;
-            try {
+            try
+            {
                 // Read the header block from the stream
                 header_block_reader = new HeaderBlock(stream);
                 bigBlockSize = header_block_reader.BigBlockSize;
-                
+
                 // Read the rest of the stream into blocks
                 data_blocks = new RawDataBlockList(stream, bigBlockSize);
                 success = true;
-            } finally {
+            }
+            finally
+            {
                 CloseInputStream(stream, success);
             }
-            
+
 
             // Set up the block allocation table (necessary for the
             // data_blocks to be manageable
@@ -141,8 +145,11 @@ namespace NPOI.POIFS.FileSystem
             PropertyTable properties = new PropertyTable(header_block_reader, data_blocks);
 
             // init documents
-            ProcessProperties(SmallBlockTableReader.GetSmallDocumentBlocks(bigBlockSize, data_blocks,properties.Root, header_block_reader.SBATStart),
+            ProcessProperties(SmallBlockTableReader.GetSmallDocumentBlocks(bigBlockSize, data_blocks, properties.Root, header_block_reader.SBATStart),
                                 data_blocks, properties.Root.Children, null, header_block_reader.PropertyStart);
+
+            // For whatever reason CLSID of root is always 0.
+            Root.StorageClsid = (properties.Root.StorageClsid);
         }
         /**
          * @param stream the stream to be Closed

@@ -42,7 +42,7 @@ namespace TestCases.POIFS.Storage
      * @author Marc Johnson
      */
     [TestClass]
-    public class TestHeaderBlockWriter
+    public class TestHeaderBlockWriting
     {
 
         private static void ConfirmEqual(string[] expectedDataHexDumpLines, byte[] actual)
