@@ -98,9 +98,11 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
     }
-
-    [Serializable]
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
+    [System.Xml.Serialization.XmlRootAttribute("sheet",Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main", IsNullable = true)]
     public class CT_Sheet
     {
 
@@ -164,7 +166,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.stateField = value;
             }
         }
-
+        [System.Xml.Serialization.XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/relationships")]
         public string id
         {
             get
@@ -531,7 +533,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.sheetDataField = new CT_SheetData();
             return sheetDataField;
         }
-
+        [XmlElement("sheetPr")]
         public CT_SheetPr sheetPr
         {
             get
@@ -580,8 +582,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [XmlArrayAttribute(Order = 4)]
-        [XmlArrayItemAttribute("col", typeof(CT_Col), IsNullable = false)]
+        //[XmlArrayAttribute(Order = 4)]
+        [XmlArrayItemAttribute("cols", typeof(CT_Cols), IsNullable = false)]
         public List<CT_Cols> cols
         {
             get
@@ -594,8 +596,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [XmlArrayAttribute(Order = 5)]
-        //[XmlArrayItemAttribute("row", IsNullable = false)]
+        [XmlElement("sheetData", IsNullable = false)]
         public CT_SheetData sheetData
         {
             get
@@ -632,7 +633,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [XmlArrayAttribute(Order = 8)]
+//[XmlArrayAttribute(Order = 8)]
         [XmlArrayItemAttribute("protectedRange", IsNullable = false)]
         public List<CT_ProtectedRange> protectedRanges
         {
@@ -694,7 +695,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [XmlArrayAttribute(Order = 13)]
+        //[XmlArrayAttribute(Order = 13)]
         [XmlArrayItemAttribute("customSheetView", IsNullable = false)]
         public List<CT_CustomSheetView> customSheetViews
         {
@@ -756,8 +757,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [XmlArrayAttribute(Order = 18)]
-        [XmlArrayItemAttribute("hyperlink", IsNullable = false)]
+        //[XmlArrayAttribute(Order = 18)]
+        [XmlElement("hyperlinks", IsNullable = false)]
         public CT_Hyperlinks hyperlinks
         {
             get
@@ -842,7 +843,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [XmlArrayAttribute(Order = 25)]
+        //[XmlArrayAttribute(Order = 25)]
         [XmlArrayItemAttribute("customPr", IsNullable = false)]
         public List<CT_CustomProperty> customProperties
         {
@@ -856,7 +857,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [XmlArrayAttribute(Order = 26)]
+        //[XmlArrayAttribute(Order = 26)]
         [XmlArrayItemAttribute("cellWatch", IsNullable = false)]
         public List<CT_CellWatch> cellWatches
         {
@@ -882,7 +883,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [XmlArrayAttribute(Order = 28)]
+        //[XmlArrayAttribute(Order = 28)]
         [XmlArrayItemAttribute("cellSmartTags", IsNullable = false)]
         public List<CT_CellSmartTags> smartTags
         {
@@ -944,7 +945,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [XmlArrayAttribute(Order = 33)]
+        //[XmlArrayAttribute(Order = 33)]
         [XmlArrayItemAttribute("oleObject", IsNullable = false)]
         public List<CT_OleObject> oleObjects
         {
@@ -958,7 +959,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [XmlArrayAttribute(Order = 34)]
+        //[XmlArrayAttribute(Order = 34)]
         [XmlArrayItemAttribute("control", IsNullable = false)]
         public List<CT_Control> controls
         {

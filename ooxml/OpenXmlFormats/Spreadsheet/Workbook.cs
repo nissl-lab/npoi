@@ -194,8 +194,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        //[System.Xml.Serialization.XmlArrayAttribute(Order = 4)]
-        //[System.Xml.Serialization.XmlArrayItemAttribute("workbookView", IsNullable = false)] - this throws an Exception: {"There was an error reflecting property 'bookViews'."} from the static XmlSerializer serializer = new XmlSerializer(typeof(CT_Workbook)); in WorkbookDocument
+        [System.Xml.Serialization.XmlElement("bookViews", IsNullable = false)]
         public CT_BookViews bookViews
         {
             get
@@ -208,8 +207,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        //[System.Xml.Serialization.XmlArrayAttribute(Order = 5)]
-        //[System.Xml.Serialization.XmlArrayItemAttribute("sheet", IsNullable = false)]
+
+        [System.Xml.Serialization.XmlElement("sheets", IsNullable = false)]
         public CT_Sheets sheets
         {
             get
@@ -2768,7 +2767,11 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
     }
-
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
+    [System.Xml.Serialization.XmlRootAttribute("bookViews", Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main", IsNullable = true)]
     public class CT_BookViews
     {
 
@@ -2824,7 +2827,11 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
     }
-
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
+    [System.Xml.Serialization.XmlRootAttribute("sheets",Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main", IsNullable = true)]
     public class CT_Sheets
     {
 
@@ -2854,6 +2861,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             return this.sheetField[index];
         }
+        [System.Xml.Serialization.XmlElement("sheet")]
         public List<CT_Sheet> sheet
         {
             get
