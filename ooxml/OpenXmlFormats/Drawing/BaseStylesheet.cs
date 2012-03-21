@@ -7,8 +7,12 @@
 namespace NPOI.OpenXmlFormats.Dml
 {
     using System.Collections.Generic;
+    using System;
+    using System.Xml.Serialization;
 
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     public class CT_Blip
     {
 
@@ -242,6 +246,8 @@ namespace NPOI.OpenXmlFormats.Dml
         none,
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     public class CT_ColorScheme
     {
 
@@ -459,6 +465,8 @@ namespace NPOI.OpenXmlFormats.Dml
         }
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     public class CT_CustomColor
     {
 
@@ -573,6 +581,8 @@ namespace NPOI.OpenXmlFormats.Dml
         }
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     public class CT_SupplementalFont
     {
 
@@ -605,6 +615,8 @@ namespace NPOI.OpenXmlFormats.Dml
         }
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     public class CT_CustomColorList
     {
 
@@ -628,6 +640,8 @@ namespace NPOI.OpenXmlFormats.Dml
         }
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     public class CT_FontCollection
     {
 
@@ -711,6 +725,8 @@ namespace NPOI.OpenXmlFormats.Dml
         }
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     public class CT_TextFont
     {
 
@@ -779,6 +795,8 @@ namespace NPOI.OpenXmlFormats.Dml
         }
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     public class CT_EffectStyleItem
     {
 
@@ -847,6 +865,8 @@ namespace NPOI.OpenXmlFormats.Dml
         }
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     public class CT_Scene3D
     {
 
@@ -915,6 +935,8 @@ namespace NPOI.OpenXmlFormats.Dml
         }
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     public class CT_Camera
     {
 
@@ -1187,6 +1209,8 @@ namespace NPOI.OpenXmlFormats.Dml
         perspectiveRelaxedModerately,
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     public class CT_LightRig
     {
 
@@ -1351,6 +1375,8 @@ namespace NPOI.OpenXmlFormats.Dml
         br,
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     public class CT_Backdrop
     {
 
@@ -1419,6 +1445,8 @@ namespace NPOI.OpenXmlFormats.Dml
         }
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     public class CT_Shape3D
     {
 
@@ -1566,6 +1594,8 @@ namespace NPOI.OpenXmlFormats.Dml
         }
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     public class CT_Bevel
     {
 
@@ -1711,6 +1741,8 @@ namespace NPOI.OpenXmlFormats.Dml
         softmetal,
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     public class CT_FontScheme
     {
 
@@ -1778,6 +1810,8 @@ namespace NPOI.OpenXmlFormats.Dml
         }
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     public class CT_FillStyleList
     {
 
@@ -1801,6 +1835,8 @@ namespace NPOI.OpenXmlFormats.Dml
         }
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     public class CT_LineStyleList
     {
 
@@ -1824,6 +1860,8 @@ namespace NPOI.OpenXmlFormats.Dml
         }
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     public class CT_LineProperties
     {
 
@@ -2139,6 +2177,8 @@ namespace NPOI.OpenXmlFormats.Dml
         }
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     public class CT_PresetLineDashProperties
     {
 
@@ -2209,6 +2249,8 @@ namespace NPOI.OpenXmlFormats.Dml
         sysDashDotDot,
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     public class CT_DashStop
     {
 
@@ -2242,6 +2284,8 @@ namespace NPOI.OpenXmlFormats.Dml
     }
 
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     public class CT_LineJoinMiterProperties
     {
 
@@ -2275,6 +2319,8 @@ namespace NPOI.OpenXmlFormats.Dml
         }
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     public class CT_LineEndProperties
     {
 
@@ -2427,7 +2473,7 @@ namespace NPOI.OpenXmlFormats.Dml
         flat,
     }
 
- 
+
     public enum ST_PenAlignment
     {
 
@@ -2438,6 +2484,8 @@ namespace NPOI.OpenXmlFormats.Dml
         @in,
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     public class CT_EffectStyleList
     {
 
@@ -2461,6 +2509,8 @@ namespace NPOI.OpenXmlFormats.Dml
         }
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     public class CT_BackgroundFillStyleList
     {
 
@@ -2484,6 +2534,8 @@ namespace NPOI.OpenXmlFormats.Dml
         }
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     public class CT_StyleMatrix
     {
 
@@ -2572,6 +2624,11 @@ namespace NPOI.OpenXmlFormats.Dml
         }
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main",
+        ElementName = "themeElements",
+        IsNullable = false)]
     public class CT_BaseStyles
     {
 
@@ -2639,13 +2696,19 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
     }
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     public class CT_LineJoinRound
     {
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     public class CT_LineJoinBevel
     {
     }
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     public class CT_PresetColor
     {
 

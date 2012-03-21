@@ -7,15 +7,11 @@
 namespace NPOI.OpenXmlFormats.Spreadsheet
 {
     using System;
-    using System.Diagnostics;
-    using System.Xml.Serialization;
-    using System.Collections;
-    using System.Xml.Schema;
-    using System.ComponentModel;
     using System.Collections.Generic;
-    using NPOI.OpenXmlFormats.Dml;
     using System.IO;
-    
+    using System.Xml.Serialization;
+    using NPOI.OpenXmlFormats.Dml;
+
     public enum ST_SmartTagShow
     {
 
@@ -28,7 +24,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         /// <remarks/>
         noIndicator,
     }
-    
+
     public enum ST_CalcMode
     {
 
@@ -41,7 +37,9 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         /// <remarks/>
         autoNoTable,
     }
-    
+
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public class CT_FunctionGroup
     {
 
@@ -60,6 +58,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public class CT_FunctionGroups
     {
 
@@ -99,6 +99,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public class CT_Sheet
     {
 
@@ -189,9 +191,15 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         veryHidden,
     }
 
-            
 
 
+
+    [Serializable]
+    //[System.Diagnostics.DebuggerStepThrough]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main",
+        ElementName = "worksheet",
+        IsNullable = false)]
     public class CT_Worksheet
     {
 
@@ -318,7 +326,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
         public bool IsSetRowBreaks()
         {
-            return this.rowBreaksField!=null;
+            return this.rowBreaksField != null;
         }
         public CT_Drawing AddNewDrawing()
         {
@@ -339,22 +347,22 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             return this.sheetFormatPrField != null;
         }
-         public bool IsSetPrintOptions()
-         {
-             return this.printOptionsField!=null;
-         }
-         public void unSetMergeCells()
-         {
-             this.mergeCellsField = null;
-         }
-         public CT_PrintOptions AddNewPrintOptions()
-         {
-             this.printOptionsField = new CT_PrintOptions();
-             return this.printOptionsField;
-         }
+        public bool IsSetPrintOptions()
+        {
+            return this.printOptionsField != null;
+        }
+        public void unSetMergeCells()
+        {
+            this.mergeCellsField = null;
+        }
+        public CT_PrintOptions AddNewPrintOptions()
+        {
+            this.printOptionsField = new CT_PrintOptions();
+            return this.printOptionsField;
+        }
         public CT_DataValidations AddNewDataValidations()
         {
-            this.dataValidationsField=new CT_DataValidations();
+            this.dataValidationsField = new CT_DataValidations();
             return this.dataValidationsField;
         }
         public CT_SheetViews AddNewSheetViews()
@@ -364,7 +372,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
         public CT_Hyperlinks AddNewHyperlinks()
         {
-            this.hyperlinksField=new CT_Hyperlinks();
+            this.hyperlinksField = new CT_Hyperlinks();
             return this.hyperlinksField;
         }
         public CT_ConditionalFormatting AddNewConditionalFormatting()
@@ -400,7 +408,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
         public bool IsSetDrawing()
         {
-            return this.drawingField!=null;
+            return this.drawingField != null;
         }
         public void unsetDrawing()
         {
@@ -408,7 +416,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
         public bool IsSetLegacyDrawing()
         {
-            return this.legacyDrawingField!=null;
+            return this.legacyDrawingField != null;
         }
         public void unsetLegacyDrawing()
         {
@@ -443,7 +451,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
         public CT_PageSetup AddNewPageSetup()
         {
-            this.pageSetupField=new CT_PageSetup();
+            this.pageSetupField = new CT_PageSetup();
             return this.pageSetupField;
         }
         public void SetColsArray(Array a)
@@ -452,8 +460,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
         public int sizeOfColsArray()
         {
-        	return this.colsField.Count;
-       	}
+            return this.colsField.Count;
+        }
         public void RemoveCols(int index)
         {
             this.colsField.RemoveAt(index);
@@ -1001,6 +1009,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public class CT_SheetPr
     {
 
@@ -1213,6 +1223,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public class CT_OutlinePr
     {
 
@@ -1285,6 +1297,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public class CT_PageSetUpPr
     {
 
@@ -1325,6 +1339,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public class CT_SheetDimension
     {
 
@@ -1343,6 +1359,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public class CT_SheetViews
     {
 
@@ -1400,6 +1418,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public class CT_SheetView
     {
 
@@ -1473,10 +1493,10 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.zoomScaleSheetLayoutViewField = ((uint)(0));
             this.zoomScalePageLayoutViewField = ((uint)(0));
         }
-       public bool IsSetPane()
-       {
-       return this.paneField!=null;
-       }
+        public bool IsSetPane()
+        {
+            return this.paneField != null;
+        }
         public CT_Pane AddNewPane()
         {
             this.paneField = new CT_Pane();
@@ -1490,7 +1510,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
         public void unSetPane()
         {
-            this.paneField=null;
+            this.paneField = null;
         }
         public CT_Selection GetSelectionArray(int index)
         {
@@ -1499,7 +1519,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         public CT_Selection InsertNewSelection(int index)
         {
             CT_Selection sel = new CT_Selection();
-            this.selectionField.Insert(index,sel);
+            this.selectionField.Insert(index, sel);
             return sel;
         }
         public int SizeOfSelectionArray()
@@ -1804,6 +1824,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public class CT_Pane
     {
 
@@ -1943,6 +1965,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         frozenSplit,
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public class CT_Selection
     {
 
@@ -1960,7 +1984,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.paneField = ST_Pane.topLeft;
             this.activeCellIdField = ((uint)(0));
             this.sqrefField = new List<string>();
-            sqrefField.Add( "A1");
+            sqrefField.Add("A1");
         }
 
         public void SetSqref(string[] array)
@@ -2019,6 +2043,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public class CT_PivotSelection
     {
 
@@ -2325,6 +2351,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public class CT_PivotArea
     {
 
@@ -2592,6 +2620,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public class CT_PivotAreaReferences
     {
 
@@ -2644,6 +2674,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public class CT_PivotAreaReference
     {
 
@@ -2980,6 +3012,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public class CT_Index
     {
 
@@ -2997,7 +3031,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
     }
-    
+
     public enum ST_SheetViewType
     {
 
@@ -3011,6 +3045,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         pageLayout,
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public class CT_SheetFormatPr
     {
 
@@ -3175,6 +3211,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public class CT_Col
     {
 
@@ -3397,6 +3435,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public class CT_Row
     {
 
@@ -3473,7 +3513,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             return this.hiddenField != null;
         }
-        
+
         public bool IsSetCollapsed()
         {
             return this.collapsedField != null;
@@ -3511,7 +3551,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             return c[index];
         }
-        public void SetCArray( CT_Cell[] array)
+        public void SetCArray(CT_Cell[] array)
         {
             throw new NotImplementedException();
         }
@@ -3720,6 +3760,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public class CT_Cell
     {
 
@@ -3928,6 +3970,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public class CT_CellFormula
     {
 
@@ -4212,6 +4256,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         inlineStr,
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public class CT_SheetCalcPr
     {
 
@@ -4236,6 +4282,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public class CT_SheetProtection
     {
 
@@ -4514,6 +4562,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public class CT_ProtectedRange
     {
 
@@ -4579,6 +4629,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public class CT_Scenarios
     {
 
@@ -4675,6 +4727,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public class CT_Scenario
     {
 
@@ -4801,6 +4855,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public class CT_InputCells
     {
 
@@ -4897,7 +4953,9 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
     }
-    
+
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public class CT_DataConsolidate
     {
 
@@ -4985,6 +5043,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public class CT_DataRefs
     {
 
@@ -5037,6 +5097,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public class CT_DataRef
     {
 
@@ -5097,6 +5159,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public class CT_CustomSheetView
     {
 
@@ -5571,6 +5635,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public class CT_PageBreak
     {
 
@@ -5641,6 +5707,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public class CT_Break
     {
 
@@ -5729,6 +5797,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public class CT_PageMargins
     {
 
@@ -5817,6 +5887,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public class CT_PrintOptions
     {
 
@@ -5905,6 +5977,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public class CT_PageSetup
     {
 
@@ -6235,6 +6309,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         NA,
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public class CT_HeaderFooter
     {
 
@@ -6391,6 +6467,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public class CT_MergeCells
     {
 
@@ -6410,7 +6488,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             return this.mergeCellField[index];
         }
-        public void SetMergeCellArray( CT_MergeCell[] array)
+        public void SetMergeCellArray(CT_MergeCell[] array)
         {
             throw new NotImplementedException();
         }
@@ -6463,6 +6541,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public class CT_MergeCell
     {
 
@@ -6481,6 +6561,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public class CT_ConditionalFormatting
     {
 
@@ -6571,6 +6653,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public class CT_CfRule
     {
 
@@ -6967,6 +7051,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public class CT_ColorScale
     {
 
@@ -7005,6 +7091,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public class CT_Cfvo
     {
 
@@ -7094,6 +7182,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         percentile,
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public class CT_DataBar
     {
 
@@ -7180,6 +7270,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public class CT_IconSet
     {
 
@@ -7399,6 +7491,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         nextWeek,
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public class CT_DataValidations
     {
 
@@ -7535,6 +7629,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public class CT_DataValidation
     {
 
@@ -7880,6 +7976,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         greaterThanOrEqual,
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public class CT_Hyperlink
     {
 
@@ -7954,6 +8052,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public class CT_CustomProperty
     {
 
@@ -7986,6 +8086,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public class CT_CellWatch
     {
 
@@ -8004,6 +8106,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public class CT_IgnoredErrors
     {
 
@@ -8042,6 +8146,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public class CT_IgnoredError
     {
 
@@ -8209,6 +8315,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public class CT_CellSmartTags
     {
 
@@ -8246,6 +8354,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public class CT_CellSmartTag
     {
 
@@ -8315,6 +8425,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public class CT_CellSmartTagPr
     {
 
@@ -8347,6 +8459,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public class CT_OleObject
     {
 
@@ -8492,6 +8606,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         OLEUPDATE_ONCALL,
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public class CT_Control
     {
 
@@ -8538,6 +8654,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public class CT_WebPublishItems
     {
 
@@ -8590,6 +8708,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public class CT_WebPublishItem
     {
 
@@ -8740,6 +8860,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         label,
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public class CT_TableParts
     {
 
@@ -8755,8 +8877,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
 
         public CT_TablePart AddNewTablePart()
-        { 
-            CT_TablePart tp=new CT_TablePart();
+        {
+            CT_TablePart tp = new CT_TablePart();
             this.tablePart.Add(tp);
             return tp;
         }
@@ -8799,6 +8921,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public class CT_TablePart
     {
 
@@ -8817,6 +8941,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public class CT_Chartsheet
     {
 
@@ -9026,6 +9152,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public class CT_ChartsheetPr
     {
 
@@ -9079,6 +9207,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public class CT_ChartsheetViews
     {
 
@@ -9117,6 +9247,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public class CT_ChartsheetView
     {
 
@@ -9202,6 +9334,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public class CT_ChartsheetProtection
     {
 
@@ -9256,6 +9390,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public class CT_CustomChartsheetView
     {
 
@@ -9371,6 +9507,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public class CT_CsPageSetup
     {
 
@@ -9553,6 +9691,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public class CT_Dialogsheet
     {
 
@@ -9775,6 +9915,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public class CT_Macrosheet
     {
 
@@ -10183,6 +10325,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public class CT_SheetData
     {
 
@@ -10201,7 +10345,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         public CT_Row InsertNewRow(int index)
         {
             CT_Row newrow = new CT_Row();
-            rowField.Insert(index,newrow);
+            rowField.Insert(index, newrow);
             return newrow;
         }
         public void RemoveRow(int index)
@@ -10222,6 +10366,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public class CT_Cols
     {
 
@@ -10244,8 +10390,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         public CT_Col InsertNewCol(int index)
         {
             CT_Col newCol = new CT_Col();
-            this.colField.Insert(index,newCol);
-            return newCol;            
+            this.colField.Insert(index, newCol);
+            return newCol;
         }
         public void RemoveCol(int index)
         {
@@ -10280,6 +10426,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public class CT_SmartTags
     {
 
@@ -10303,6 +10451,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public class CT_CustomSheetViews
     {
 
@@ -10326,6 +10476,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public class CT_Hyperlinks
     {
 
@@ -10352,6 +10504,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public class CT_ProtectedRanges
     {
 
@@ -10375,6 +10529,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public class CT_CellWatches
     {
 
@@ -10398,6 +10554,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public class CT_CustomChartsheetViews
     {
 
@@ -10421,6 +10579,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public class CT_CustomProperties
     {
 
@@ -10444,6 +10604,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public class CT_OleObjects
     {
 
@@ -10467,6 +10629,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public class CT_Controls
     {
 

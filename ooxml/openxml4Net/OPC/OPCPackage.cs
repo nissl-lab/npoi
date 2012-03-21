@@ -565,8 +565,8 @@ public abstract class OPCPackage:RelationshipSource {
 	}
 
 	/**
-	 * Load the parts of the archive if it has not been done yet The
-	 * relationships of each part are not loaded
+	 * Load the parts of the archive if it has not been done yet. The
+	 * relationships of each part are not loaded.
 	 * 
 	 * @return All this package's parts.
 	 */

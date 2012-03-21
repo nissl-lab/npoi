@@ -5,6 +5,8 @@ using System.Xml.Serialization;
 
 namespace NPOI.OpenXmlFormats.Dml
 {
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     public class CT_BaseStylesOverride
     {
 
@@ -58,10 +60,14 @@ namespace NPOI.OpenXmlFormats.Dml
         }
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     public class CT_EmptyElement
     {
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     public class CT_ColorMappingOverride
     {
 
@@ -79,6 +85,8 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
     }
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     public class CT_ColorSchemeAndMapping
     {
 
@@ -116,6 +124,8 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
     }
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     public class CT_ColorSchemeList
     {
 
@@ -177,6 +187,8 @@ namespace NPOI.OpenXmlFormats.Dml
         /// <remarks/>
         folHlink,
     }
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     public class CT_ColorMapping
     {
 
@@ -404,6 +416,9 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
     }
+
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     public partial class CT_DefaultShapeDefinition
     {
 
@@ -486,6 +501,9 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
     }
+
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     public partial class CT_ObjectStyleDefaults
     {
 
@@ -553,10 +571,14 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
     }
-    [XmlRoot(ElementName="theme")]
+
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main",
+        ElementName = "theme",
+        IsNullable = false)]
     public partial class CT_OfficeStyleSheet
     {
-
         private CT_BaseStyles themeElementsField;
 
         private CT_ObjectStyleDefaults objectDefaultsField;
@@ -579,6 +601,8 @@ namespace NPOI.OpenXmlFormats.Dml
             this.nameField = "";
         }
 
+       // [XmlElement("themeElements", Order = 0, IsNullable = false)]
+    [XmlIgnore] // TODO
         public CT_BaseStyles themeElements
         {
             get
@@ -591,7 +615,9 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        public CT_ObjectStyleDefaults objectDefaults
+//        [XmlElement("objectDefaults", Order = 1, IsNullable = true)]
+    [XmlIgnore] // TODO
+    public CT_ObjectStyleDefaults objectDefaults
         {
             get
             {
@@ -603,9 +629,9 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 2)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("extraClrScheme", IsNullable = false)]
-        public List<CT_ColorSchemeAndMapping> extraClrSchemeLst
+    //    [XmlElement("extraClrSchemeLst", Order = 2, IsNullable = true)]
+    [XmlIgnore] // TODO
+    public List<CT_ColorSchemeAndMapping> extraClrSchemeLst
         {
             get
             {
@@ -617,9 +643,9 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 3)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("custClr", IsNullable = false)]
-        public List<CT_CustomColor> custClrLst
+    //    [XmlElement("custClrLst", Order = 3, IsNullable = true)]
+    [XmlIgnore] // TODO
+    public List<CT_CustomColor> custClrLst
         {
             get
             {
@@ -631,7 +657,9 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        public CT_OfficeArtExtensionList extLst
+    //    [XmlElement("extLst", Order = 4, IsNullable = true)]
+    [XmlIgnore] // TODO
+    public CT_OfficeArtExtensionList extLst
         {
             get
             {
@@ -644,6 +672,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
 
         [System.ComponentModel.DefaultValueAttribute("")]
+        [XmlAttribute]
         public string name
         {
             get

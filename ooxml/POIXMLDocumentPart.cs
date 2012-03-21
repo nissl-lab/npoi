@@ -377,40 +377,61 @@ public class POIXMLDocumentPart {
      */
     protected void Read(POIXMLFactory factory, Dictionary<PackagePart, POIXMLDocumentPart> context)
     {
-        PackageRelationshipCollection rels = packagePart.Relationships;
-        foreach (PackageRelationship rel in rels) {
-            if(rel.TargetMode == TargetMode.Internal){
-                Uri uri = rel.TargetUri;
+        try
+        {
+            PackageRelationshipCollection rels = packagePart.Relationships;
+            foreach (PackageRelationship rel in rels)
+            {
+                if (rel.TargetMode == TargetMode.Internal)
+                {
+                    Uri uri = rel.TargetUri;
 
-                PackagePart p;
-                string[] fragments= uri.OriginalString.Split(new char[]{'/'});
-                if( fragments[fragments.Length-1]== null) {
-                    /*
-                     * For internal references (e.g. '#Sheet1!A1') the namespace part is null
-                     */
-                    p = null;
-                } else {
-                    PackagePartName relName = PackagingUriHelper.CreatePartName(uri);
-                    p = packagePart.Package.GetPart(relName);
-                    if(p == null) {
-                        logger.Log(POILogger.ERROR, "Skipped invalid entry " + rel.TargetUri);
-                        continue;
+                    PackagePart p;
+                    string[] fragments = uri.OriginalString.Split(new char[] { '/' });
+                    if (fragments[fragments.Length - 1] == null)
+                    {
+                        /*
+                         * For internal references (e.g. '#Sheet1!A1') the namespace part is null
+                         */
+                        p = null;
                     }
-                }
+                    else
+                    {
+                        PackagePartName relName = PackagingUriHelper.CreatePartName(uri);
+                        p = packagePart.Package.GetPart(relName);
+                        if (p == null)
+                        {
+                            logger.Log(POILogger.ERROR, "Skipped invalid entry " + rel.TargetUri);
+                            continue;
+                        }
+                    }
 
-                if (p==null||!context.ContainsKey(p)) {
-                    POIXMLDocumentPart childPart = factory.CreateDocumentPart(this, rel, p);
-                    childPart.parent = this;
-                    AddRelation(rel.Id,childPart);
-                    if(p != null){
-                        context[p]=  childPart;
-                        if(p.HasRelationships) childPart.Read(factory, context);
+                    if (p == null || !context.ContainsKey(p))
+                    {
+                        POIXMLDocumentPart childPart = factory.CreateDocumentPart(this, rel, p);
+                        childPart.parent = this;
+                        AddRelation(rel.Id, childPart);
+                        if (p != null)
+                        {
+                            context[p] = childPart;
+                            if (p.HasRelationships) childPart.Read(factory, context);
+                        }
                     }
-                }
-                else {
-                    AddRelation(rel.Id,context[p]);
+                    else
+                    {
+                        AddRelation(rel.Id, context[p]);
+                    }
                 }
             }
+        }
+        catch (Exception ex)
+        {
+            if ((null != ex.InnerException) && (null != ex.InnerException.InnerException))
+            {
+                // this type of exception is thrown when the XML Serialization does not match the input.
+                logger.Log(1, ex.InnerException.InnerException);
+            }
+            throw;
         }
     }
 

@@ -8,8 +8,11 @@ namespace NPOI.OpenXmlFormats.Dml
 {
     using System.Collections.Generic;
     using System;
+    using System.Xml.Serialization;
 
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     public class CT_OfficeArtExtension
     {
 
@@ -43,6 +46,8 @@ namespace NPOI.OpenXmlFormats.Dml
         }
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     public class CT_Angle
     {
 
@@ -61,6 +66,8 @@ namespace NPOI.OpenXmlFormats.Dml
         }
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     public class CT_PositiveFixedAngle
     {
 
@@ -79,6 +86,8 @@ namespace NPOI.OpenXmlFormats.Dml
         }
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     public class CT_Percentage
     {
 
@@ -97,6 +106,8 @@ namespace NPOI.OpenXmlFormats.Dml
         }
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     public class CT_PositivePercentage
     {
 
@@ -115,6 +126,8 @@ namespace NPOI.OpenXmlFormats.Dml
         }
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     public class CT_FixedPercentage
     {
 
@@ -133,6 +146,8 @@ namespace NPOI.OpenXmlFormats.Dml
         }
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     public class CT_PositiveFixedPercentage
     {
 
@@ -151,6 +166,8 @@ namespace NPOI.OpenXmlFormats.Dml
         }
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     public class CT_Ratio
     {
 
@@ -183,6 +200,8 @@ namespace NPOI.OpenXmlFormats.Dml
         }
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     public class CT_Point2D
     {
 
@@ -215,6 +234,8 @@ namespace NPOI.OpenXmlFormats.Dml
         }
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     public class CT_PositiveSize2D
     {
 
@@ -247,22 +268,32 @@ namespace NPOI.OpenXmlFormats.Dml
         }
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     public class CT_ComplementTransform
     {
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     public class CT_InverseTransform
     {
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     public class CT_GrayscaleTransform
     {
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     public class CT_GammaTransform
     {
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     public class CT_InverseGammaTransform
     {
     }
@@ -361,8 +392,8 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute("ItemsElementName")]
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [System.Xml.Serialization.XmlElement("ItemsElementName")]
+        //[System.Xml.Serialization.XmlIgnore()]
         public ScRgbColorType[] ItemsElementName
         {
             get
@@ -412,6 +443,8 @@ namespace NPOI.OpenXmlFormats.Dml
         }
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     public class CT_SRgbColor
     {
 
@@ -642,6 +675,8 @@ namespace NPOI.OpenXmlFormats.Dml
         tint,
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     public class CT_SchemeColor
     {
 
@@ -1269,6 +1304,8 @@ namespace NPOI.OpenXmlFormats.Dml
         yellowGreen,
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     public class CT_OfficeArtExtensionList
     {
 
@@ -1292,6 +1329,8 @@ namespace NPOI.OpenXmlFormats.Dml
         }
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     public class CT_Scale2D
     {
 
@@ -1330,6 +1369,8 @@ namespace NPOI.OpenXmlFormats.Dml
         }
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     public class CT_Transform2D
     {
 
@@ -1426,6 +1467,8 @@ namespace NPOI.OpenXmlFormats.Dml
         }
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     public class CT_GroupTransform2D
     {
 
@@ -1474,8 +1517,8 @@ namespace NPOI.OpenXmlFormats.Dml
             this.chOffField = new CT_Point2D();
             return this.chOffField;
         }
-                    
-                    
+
+
         public CT_Point2D off
         {
             get
@@ -1564,6 +1607,8 @@ namespace NPOI.OpenXmlFormats.Dml
         }
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     public class CT_Point3D
     {
 
@@ -1610,6 +1655,8 @@ namespace NPOI.OpenXmlFormats.Dml
         }
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     public class CT_Vector3D
     {
 
@@ -1656,6 +1703,8 @@ namespace NPOI.OpenXmlFormats.Dml
         }
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     public class CT_SphereCoords
     {
 
@@ -1702,6 +1751,8 @@ namespace NPOI.OpenXmlFormats.Dml
         }
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     public class CT_RelativeRect
     {
 
@@ -1774,6 +1825,8 @@ namespace NPOI.OpenXmlFormats.Dml
         }
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     public class CT_Color
     {
 
@@ -1872,6 +1925,8 @@ namespace NPOI.OpenXmlFormats.Dml
         }
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     public class CT_ColorMRU
     {
 
@@ -1895,6 +1950,8 @@ namespace NPOI.OpenXmlFormats.Dml
         }
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     public class CT_EmbeddedWAVAudioFile
     {
 
@@ -1949,6 +2006,8 @@ namespace NPOI.OpenXmlFormats.Dml
         }
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     public class CT_Hyperlink
     {
 

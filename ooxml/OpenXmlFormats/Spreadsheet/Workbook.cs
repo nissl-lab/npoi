@@ -16,6 +16,12 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     using System.IO;
 
 
+    [Serializable]
+    //[System.Diagnostics.DebuggerStepThrough]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main",
+        ElementName = "workbook",
+        IsNullable = false)]
     public class CT_Workbook
     {
 
@@ -188,8 +194,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 4)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("workbookView", IsNullable = false)]
+        //[System.Xml.Serialization.XmlArrayAttribute(Order = 4)]
+        //[System.Xml.Serialization.XmlArrayItemAttribute("workbookView", IsNullable = false)] - this throws an Exception: {"There was an error reflecting property 'bookViews'."} from the static XmlSerializer serializer = new XmlSerializer(typeof(CT_Workbook)); in WorkbookDocument
         public CT_BookViews bookViews
         {
             get
@@ -202,8 +208,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 5)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("sheet", IsNullable = false)]
+        //[System.Xml.Serialization.XmlArrayAttribute(Order = 5)]
+        //[System.Xml.Serialization.XmlArrayItemAttribute("sheet", IsNullable = false)]
         public CT_Sheets sheets
         {
             get
@@ -228,8 +234,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 7)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("externalReference", IsNullable = false)]
+        //[System.Xml.Serialization.XmlArrayAttribute(Order = 7)]
+        //[System.Xml.Serialization.XmlArrayItemAttribute("externalReference", IsNullable = false)]
         public List<CT_ExternalReference> externalReferences
         {
             get
@@ -242,8 +248,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 8)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("definedName", IsNullable = false)]
+        //[System.Xml.Serialization.XmlArrayAttribute(Order = 8)]
+        //[System.Xml.Serialization.XmlArrayItemAttribute("definedName", IsNullable = false)]
         public CT_DefinedNames definedNames
         {
             get
@@ -280,8 +286,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 11)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("customWorkbookView", IsNullable = false)]
+        //[System.Xml.Serialization.XmlArrayAttribute(Order = 11)]
+        //[System.Xml.Serialization.XmlArrayItemAttribute("customWorkbookView", IsNullable = false)]
         public List<CT_CustomWorkbookView> customWorkbookViews
         {
             get
@@ -294,8 +300,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 12)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("pivotCache", IsNullable = false)]
+        //[System.Xml.Serialization.XmlArrayAttribute(Order = 12)]
+        //[System.Xml.Serialization.XmlArrayItemAttribute("pivotCache", IsNullable = false)]
         public List<CT_PivotCache> pivotCaches
         {
             get
@@ -320,8 +326,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 14)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("smartTagType", IsNullable = false)]
+        //[System.Xml.Serialization.XmlArrayAttribute(Order = 14)]
+        //[System.Xml.Serialization.XmlArrayItemAttribute("smartTagType", IsNullable = false)]
         public List<CT_SmartTagType> smartTagTypes
         {
             get

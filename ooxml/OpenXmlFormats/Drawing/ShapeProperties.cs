@@ -1,9 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
+using System.Xml.Serialization;
 
 namespace NPOI.OpenXmlFormats.Dml
 {
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     public partial class CT_ShapeProperties
     {
 
@@ -305,6 +306,8 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
     }
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     public partial class CT_GroupShapeProperties
     {
 

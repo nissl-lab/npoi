@@ -14,6 +14,12 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     using System.ComponentModel;
     using System.Collections.Generic;
 
+    [Serializable]
+    //[System.Diagnostics.DebuggerStepThrough]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main",
+        ElementName = "comments",
+        IsNullable = true)]
     public class CT_Comments
     {
 
@@ -26,8 +32,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         public CT_Comments()
         {
             this.extLstField = new CT_ExtensionList();
-            //this.commentListField = new CT_CommentList();
-            //this.authorsField = new CT_Authors();
+            this.commentListField = new CT_CommentList(); 
+            this.authorsField = new CT_Authors();
         }
         public CT_Authors AddNewAuthors()
         {
@@ -39,8 +45,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.commentListField = new CT_CommentList();
         }
 
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 0)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("author", IsNullable = false)]
+        [XmlElement("authors", Order = 0, IsNullable = false)]
         public CT_Authors authors
         {
             get
@@ -52,8 +57,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.authorsField = value;
             }
         }
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 1)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("comment", IsNullable = false)]
+        [XmlElement("commentList", Order = 1, IsNullable = false)]
         public CT_CommentList commentList
         {
             get
@@ -66,6 +70,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
+        [XmlElement("extLst", Order = 2, IsNullable = true)]
         public CT_ExtensionList extLst
         {
             get
@@ -79,6 +84,11 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main",
+        ElementName = "comment",
+        IsNullable = false)]
     public class CT_Comment
     {
 
@@ -95,6 +105,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.textField = new CT_Rst();
         }
 
+        [XmlElement("text")]
         public CT_Rst text
         {
             get
@@ -107,6 +118,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
+        [XmlAttribute("ref")]
         public string @ref
         {
             get
@@ -131,6 +143,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
+        //[XmlAttribute("guid")] 0..1 TODO: Type is ST_Guid
         public string guid
         {
             get
@@ -144,6 +157,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public class CT_Authors
     {
 
@@ -169,6 +184,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             author.Add(name);
         }
+        [XmlArray(Order = 0)]
+        [XmlArrayItem("author", IsNullable = false)]
         public List<string> author
         {
             get
@@ -182,6 +199,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public class CT_CommentList
     {
 
@@ -211,8 +230,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             return com;
         }
 
-
-
+        [XmlArray(Order = 0)]
+        [XmlArrayItem("comment", IsNullable = true)]
         public List<CT_Comment> comment
         {
             get

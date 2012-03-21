@@ -2161,6 +2161,11 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main",
+        ElementName = "text",
+        IsNullable = false)]
     public class CT_Rst
     {
 
@@ -2256,6 +2261,14 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
     }
 
+    /// <summary>
+    /// Rich Text Run container.
+    /// </summary>
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main",
+        ElementName = "r",
+        IsNullable = true)]
     public class CT_RElt
     {
 
@@ -2297,6 +2310,14 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
     }
 
+    /// <summary>
+    /// Properties of Rich Text Run.
+    /// </summary>
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main",
+        ElementName = "rPr",
+        IsNullable = true)]
     public class CT_RPrElt
     {
 
@@ -2534,7 +2555,14 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
     }
 
-
+    /// <summary>
+    /// Rich Text Phonetic Run
+    /// </summary>
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main",
+        ElementName = "rPh",
+        IsNullable = false)]
     public class CT_PhoneticRun
     {
 
@@ -2581,9 +2609,16 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
     }
 
+    /// <summary>
+    /// Properties of the Rich Text Phonetic Run
+    /// </summary>
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main",
+        ElementName = "phoneticPr",
+        IsNullable = false)]
     public class CT_PhoneticPr
     {
-
         private uint fontIdField;
 
         private ST_PhoneticType typeField;

@@ -205,27 +205,29 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
     }
+
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
-
     public class CT_ExtensionList
     {
-
         private List<CT_Extension> extField;
 
         public CT_ExtensionList()
         {
             this.extField = new List<CT_Extension>();
         }
+
         public CT_ExtensionList Copy()
         {
             CT_ExtensionList obj = new CT_ExtensionList();
             obj.ext = new List<CT_Extension>(this.ext);
             return obj;
         }
-        [System.Xml.Serialization.XmlElementAttribute("ext")]
+
+        [XmlArray(Order = 0)]
+        [XmlArrayItem("ext", IsNullable = true)]
         public List<CT_Extension> ext
         {
             get
