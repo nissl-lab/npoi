@@ -227,8 +227,8 @@ namespace NPOI.XSSF.UserModel
             }
             set 
             {
-
-                FontHeight = (short)(value/ 20.0);
+                CT_FontSize fontSize = _ctFont.sizeOfSzArray() == 0 ? _ctFont.AddNewSz() : _ctFont.GetSzArray(0);
+                fontSize.val = value;
             }
         }
 
@@ -243,7 +243,8 @@ namespace NPOI.XSSF.UserModel
             }
             set 
             {
-                FontHeight = (short)value;
+                CT_FontSize fontSize = _ctFont.sizeOfSzArray() == 0 ? _ctFont.AddNewSz() : _ctFont.GetSzArray(0);
+                fontSize.val = value;
             }
         }
 

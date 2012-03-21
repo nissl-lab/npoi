@@ -2060,7 +2060,11 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     }
 
 
-
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
+    [System.Xml.Serialization.XmlRootAttribute(ElementName="sst",Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main", IsNullable = true)]
     public class CT_Sst
     {
 
@@ -2298,11 +2302,11 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         private List<object> itemsField;
 
-        private List<OpenXmlFormats.Dml.ItemsChoiceType1> itemsElementNameField;
+        private List<FontElementNameType> itemsElementNameField;
 
         public CT_RPrElt()
         {
-            this.itemsElementNameField = new List<OpenXmlFormats.Dml.ItemsChoiceType1>();
+            this.itemsElementNameField = new List<FontElementNameType>();
             this.itemsField = new List<object>();
         }
         [System.Xml.Serialization.XmlElementAttribute("b", typeof(CT_BooleanProperty))]
@@ -2321,29 +2325,29 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         [System.Xml.Serialization.XmlElementAttribute("u", typeof(CT_UnderlineProperty))]
         [System.Xml.Serialization.XmlElementAttribute("vertAlign", typeof(CT_VerticalAlignFontProperty))]
         [System.Xml.Serialization.XmlChoiceIdentifierAttribute("ItemsElementName")]
-        public List<object> Items
+        public object[] Items
         {
             get
             {
-                return this.itemsField;
+                return this.itemsField.ToArray();
             }
             set
             {
-                this.itemsField = value;
+                this.itemsField = new List<object>(value);
             }
         }
 
         [System.Xml.Serialization.XmlElementAttribute("ItemsElementName")]
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public List<OpenXmlFormats.Dml.ItemsChoiceType1> ItemsElementName
+        public FontElementNameType[] ItemsElementName
         {
             get
             {
-                return this.itemsElementNameField;
+                return this.itemsElementNameField.ToArray();
             }
             set
             {
-                this.itemsElementNameField = value;
+                this.itemsElementNameField = new List<FontElementNameType>(value);
             }
         }
         public int sizeOfBArray()

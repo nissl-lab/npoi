@@ -266,13 +266,48 @@ namespace NPOI.OpenXmlFormats.Dml
     public class CT_InverseGammaTransform
     {
     }
-
+    public enum ScRgbColorType
+    {
+        tint,
+        shade,
+        comp,
+        inv,
+        gray,
+        alpha,
+        alphaOff,
+        alphaMod,
+        hue,
+        hueOff,
+        hueMod,
+        sat,
+        satOff,
+        satMod,
+        lum,
+        lumOff,
+        lumMod,
+        red,
+        redOff,
+        redMod,
+        green,
+        greenOff,
+        greenMod,
+        blue,
+        blueOff,
+        blueMod,
+        gamma,
+        invGamma
+    }
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [System.Xml.Serialization.XmlRootAttribute(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
     public class CT_ScRgbColor
     {
 
         private List<object> itemsField;
 
-        private List<ItemsChoiceType1> itemsElementNameField;
+        private List<ScRgbColorType> itemsElementNameField;
 
         private int rField;
 
@@ -282,33 +317,61 @@ namespace NPOI.OpenXmlFormats.Dml
 
         public CT_ScRgbColor()
         {
-            this.itemsElementNameField = new List<ItemsChoiceType1>();
+            this.itemsElementNameField = new List<ScRgbColorType>();
             this.itemsField = new List<object>();
         }
-
+        [System.Xml.Serialization.XmlElementAttribute("tint", typeof(CT_PositiveFixedPercentage))]
+        [System.Xml.Serialization.XmlElementAttribute("shade", typeof(CT_PositiveFixedPercentage))]
+        [System.Xml.Serialization.XmlElementAttribute("comp", typeof(CT_ComplementTransform))]
+        [System.Xml.Serialization.XmlElementAttribute("inv", typeof(CT_InverseTransform))]
+        [System.Xml.Serialization.XmlElementAttribute("gray", typeof(CT_GrayscaleTransform))]
+        [System.Xml.Serialization.XmlElementAttribute("alpha", typeof(CT_PositiveFixedPercentage))]
+        [System.Xml.Serialization.XmlElementAttribute("alphaOff", typeof(CT_FixedPercentage))]
+        [System.Xml.Serialization.XmlElementAttribute("alphaMod", typeof(CT_PositivePercentage))]
+        [System.Xml.Serialization.XmlElementAttribute("hue", typeof(CT_PositiveFixedAngle))]
+        [System.Xml.Serialization.XmlElementAttribute("hueOff", typeof(CT_Angle))]
+        [System.Xml.Serialization.XmlElementAttribute("hueMod", typeof(CT_PositivePercentage))]
+        [System.Xml.Serialization.XmlElementAttribute("sat", typeof(CT_Percentage))]
+        [System.Xml.Serialization.XmlElementAttribute("satOff", typeof(CT_Percentage))]
+        [System.Xml.Serialization.XmlElementAttribute("satMod", typeof(CT_Percentage))]
+        [System.Xml.Serialization.XmlElementAttribute("lum", typeof(CT_Percentage))]
+        [System.Xml.Serialization.XmlElementAttribute("lumOff", typeof(CT_Percentage))]
+        [System.Xml.Serialization.XmlElementAttribute("lumMod", typeof(CT_Percentage))]
+        [System.Xml.Serialization.XmlElementAttribute("red", typeof(CT_Percentage))]
+        [System.Xml.Serialization.XmlElementAttribute("redOff", typeof(CT_Percentage))]
+        [System.Xml.Serialization.XmlElementAttribute("redMod", typeof(CT_Percentage))]
+        [System.Xml.Serialization.XmlElementAttribute("green", typeof(CT_Percentage))]
+        [System.Xml.Serialization.XmlElementAttribute("greenOff", typeof(CT_Percentage))]
+        [System.Xml.Serialization.XmlElementAttribute("greenMod", typeof(CT_Percentage))]
+        [System.Xml.Serialization.XmlElementAttribute("blue", typeof(CT_Percentage))]
+        [System.Xml.Serialization.XmlElementAttribute("blueOff", typeof(CT_Percentage))]
+        [System.Xml.Serialization.XmlElementAttribute("blueMod", typeof(CT_Percentage))]
+        [System.Xml.Serialization.XmlElementAttribute("gamma", typeof(CT_GammaTransform))]
+        [System.Xml.Serialization.XmlElementAttribute("invGamma", typeof(CT_InverseGammaTransform))]
         [System.Xml.Serialization.XmlChoiceIdentifierAttribute("ItemsElementName")]
-        public List<object> Items
+        public object[] Items
         {
             get
             {
-                return this.itemsField;
+                return this.itemsField.ToArray();
             }
             set
             {
-                this.itemsField = value;
+                this.itemsField = new List<object>(value);
             }
         }
 
+        [System.Xml.Serialization.XmlElementAttribute("ItemsElementName")]
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public List<ItemsChoiceType1> ItemsElementName
+        public ScRgbColorType[] ItemsElementName
         {
             get
             {
-                return this.itemsElementNameField;
+                return this.itemsElementNameField.ToArray();
             }
             set
             {
-                this.itemsElementNameField = value;
+                this.itemsElementNameField = new List<ScRgbColorType>(value);
             }
         }
 

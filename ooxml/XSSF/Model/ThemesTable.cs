@@ -33,7 +33,7 @@ namespace NPOI.XSSF.Model
     {
         private ThemeDocument theme;
 
-        public ThemesTable(PackagePart part, PackageRelationship rel)
+        internal ThemesTable(PackagePart part, PackageRelationship rel)
             : base(part, rel)
         {
 

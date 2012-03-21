@@ -60,6 +60,11 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
     }
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
+    [System.Xml.Serialization.XmlRootAttribute(ElementName="styleSheet",Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main", IsNullable = true)]
     public class CT_Stylesheet
     {
 
@@ -573,6 +578,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         i,
         name,
         outline,
+        rFont,
         scheme,
         shadow,
         strike,
@@ -678,10 +684,10 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             throw new NotImplementedException();
         }
-                public CT_BooleanProperty AddNewShadow()
-                {
-                    throw new NotImplementedException();
-                }           
+        public CT_BooleanProperty AddNewShadow()
+        {
+            throw new NotImplementedException();
+        }
         public CT_VerticalAlignFontProperty AddNewVertAlign()
         {
             throw new NotImplementedException();
@@ -793,7 +799,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             throw new NotImplementedException();
         }
-        
+
         public void SetStrikeArray(CT_BooleanProperty property)
         {
             throw new NotImplementedException();

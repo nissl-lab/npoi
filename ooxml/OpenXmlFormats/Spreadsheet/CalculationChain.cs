@@ -18,8 +18,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     [DebuggerStepThroughAttribute()]
     [DesignerCategoryAttribute("code")]
     [XmlTypeAttribute(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
-    [XmlRootAttribute(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main", IsNullable = true)]
-
+    [XmlRootAttribute("calcChain",Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main", IsNullable = true)]
     public class CT_CalcChain {
         
         private List<CT_CalcCell> cField;

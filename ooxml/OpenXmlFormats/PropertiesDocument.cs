@@ -21,7 +21,7 @@ namespace NPOI.OpenXmlFormats
 
         public PropertiesDocument()
         {
-            //_props = new CT_Properties();
+            _props = new CT_Properties();
             _xmldoc = new XmlDocument();
         }
 
