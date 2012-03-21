@@ -136,7 +136,7 @@ namespace NPOI.XSSF.Model
 		XSSFMap matchedMap = null;
 		
 		foreach(XSSFMap map in maps.Values){
-            if (map.GetCtMap().Name != null && map.GetCtMap().Name.Equals(name))
+            if (map.GetCTMap().Name != null && map.GetCTMap().Name.Equals(name))
             {
 				matchedMap = map;
 			}

@@ -223,6 +223,12 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             return comment.Count;
         }
+        public CT_Comment InsertNewComment(int index)
+        {
+            CT_Comment com = new CT_Comment();
+            commentField.Insert(index,com);
+            return com;            
+        }
         public CT_Comment AddNewComment()
         {
             CT_Comment com= new CT_Comment();

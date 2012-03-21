@@ -118,11 +118,11 @@ namespace NPOI.XSSF.Model
             return AddNewAuthor(author);
         }
 
-        //public XSSFComment FindCellComment(String cellRef)
-        //{
-        //    CT_Comment ct = GetCTComment(cellRef);
-        //    return ct == null ? null : new XSSFComment(this, ct, null);
-        //}
+        public XSSFComment FindCellComment(String cellRef)
+        {
+            CT_Comment ct = GetCTComment(cellRef);
+            return ct == null ? null : new XSSFComment(this, ct, null);
+        }
 
         public CT_Comment GetCTComment(String cellRef)
         {
@@ -137,6 +137,8 @@ namespace NPOI.XSSF.Model
             }
 
             // Return the comment, or null if not known
+            if (!commentRefs.ContainsKey(cellRef))
+                return null;
             return commentRefs[cellRef];
         }
 

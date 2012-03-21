@@ -81,6 +81,10 @@
     <Compile Include="TestPOIXMLDocument.cs" />
     <Compile Include="Util\TestIdentifierManager.cs" />
     <Compile Include="XSSF\Model\TestCalculationChain.cs" />
+    <Compile Include="XSSF\Model\TestCommentsTable.cs" />
+    <Compile Include="XSSF\Model\TestMapInfo.cs" />
+    <Compile Include="XSSF\Model\TestSharedStringsTable.cs" />
+    <Compile Include="XSSF\Model\TestStylesTable.cs" />
     <Compile Include="XSSF\Util\TestCTColComparator.cs" />
     <Compile Include="XSSF\Util\TestEvilUnclosedBRFixingInputStream.cs" />
     <Compile Include="XSSF\Util\TestNumericRanges.cs" />

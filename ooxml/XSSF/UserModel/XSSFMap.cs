@@ -21,6 +21,7 @@ using NPOI.XSSF.UserModel.Helpers;
 using System.Collections.Generic;
 using NPOI.XSSF.Model;
 using NPOI.SS.UserModel;
+using System.Xml;
 namespace NPOI.XSSF.UserModel
 {
     /**
@@ -50,7 +51,7 @@ namespace NPOI.XSSF.UserModel
 
 
 
-        public CT_Map GetCtMap()
+        public CT_Map GetCTMap()
         {
             return ctMap;
         }
@@ -63,15 +64,16 @@ namespace NPOI.XSSF.UserModel
             return mapInfo.GetCTSchemaById(schemaId);
         }
 
-        //public Node GetSchema()
-        //{
+        public XmlNode GetSchema()
+        {
+            throw new NotImplementedException();
         //    Node xmlSchema = null;
 
         //    CT_Schema schema = GetCTSchema();
         //    xmlSchema = schema.GetDomNode().GetFirstChild();
 
         //    return xmlSchema;
-        //}
+        }
 
         /**
          * @return the list of Single Xml Cells that provide a map rule to this mapping.

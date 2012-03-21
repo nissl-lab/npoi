@@ -6,8 +6,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet {
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
-    [System.Xml.Serialization.XmlRootAttribute(Namespace="http://schemas.openxmlformats.org/spreadsheetml/2006/main", IsNullable=true)]
-    public partial class CT_MapInfo {
+    [System.Xml.Serialization.XmlRootAttribute("MapInfo",Namespace="http://schemas.openxmlformats.org/spreadsheetml/2006/main", IsNullable=true)]
+    public class CT_MapInfo {
         
         private CT_Schema[] schemaField;
         

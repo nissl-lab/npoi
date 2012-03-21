@@ -362,7 +362,7 @@ namespace NPOI.XSSF.Model
         /**
          * For unit testing only!
          */
-        public CT_Stylesheet GetCT_Stylesheet()
+        public CT_Stylesheet GetCTStylesheet()
         {
             return doc.GetStyleSheet();
         }
