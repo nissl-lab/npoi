@@ -184,8 +184,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             author.Add(name);
         }
-        [XmlArray(Order = 0)]
-        [XmlArrayItem("author", IsNullable = false)]
+        //[XmlArray(Order = 0)]
+        //[XmlArrayItem("author", IsNullable = false)]
         public List<string> author
         {
             get
