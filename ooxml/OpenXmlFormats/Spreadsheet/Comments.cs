@@ -7,12 +7,8 @@
 namespace NPOI.OpenXmlFormats.Spreadsheet
 {
     using System;
-    using System.Diagnostics;
-    using System.Xml.Serialization;
-    using System.Collections;
-    using System.Xml.Schema;
-    using System.ComponentModel;
     using System.Collections.Generic;
+    using System.Xml.Serialization;
 
     [Serializable]
     //[System.Diagnostics.DebuggerStepThrough]
@@ -25,9 +21,9 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         private CT_Authors authorsField;
 
-        private CT_CommentList commentListField;
+        private CT_CommentList commentListField = null;
 
-        private CT_ExtensionList extLstField;
+        private CT_ExtensionList extLstField; // TODO make Nullable
 
         public CT_Comments()
         {
@@ -131,6 +127,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
+        [XmlAttribute("authorId")]
         public uint authorId
         {
             get
@@ -143,7 +140,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        //[XmlAttribute("guid")] 0..1 TODO: Type is ST_Guid
+        [XmlAttribute("guid")] // 0..1 TODO: Type is ST_Guid
         public string guid
         {
             get
@@ -158,7 +155,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     }
 
     [Serializable]
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
+   // [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
+    // not needed because it not used as a root [XmlRoot(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main", ElementName = "authors", IsNullable = false)]
     public class CT_Authors
     {
 
@@ -184,8 +182,9 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             author.Add(name);
         }
-        //[XmlArray(Order = 0)]
+        //[XmlArray("authors", Order = 0)] // - encapsulates the following items, but the outer element already provides the container.
         //[XmlArrayItem("author", IsNullable = false)]
+        [XmlElement("author", IsNullable = false)] // this is serialized into multiple author entries
         public List<string> author
         {
             get
@@ -236,8 +235,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             return com;
         }
 
-        [XmlArray(Order = 0)]
-        [XmlArrayItem("comment", IsNullable = true)]
+        [XmlElement("comment", IsNullable = true)]
         public List<CT_Comment> comment
         {
             get
