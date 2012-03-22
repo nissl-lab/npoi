@@ -782,8 +782,8 @@ namespace NPOI.XSSF.UserModel
             //a span of columns [1,5]
             Assert.AreEqual(1, cols.sizeOfColArray());
             CT_Col col = cols.GetColArray(0);
-            Assert.AreEqual(1, col.min);
-            Assert.AreEqual(5, col.max);
+            Assert.AreEqual((uint)1, col.min);
+            Assert.AreEqual((uint)5, col.max);
             double swidth = 15.77734375; //width of columns in the span
             Assert.AreEqual(swidth, col.width, 0.0);
 
@@ -846,12 +846,12 @@ namespace NPOI.XSSF.UserModel
 
             //a span of columns [2,4]
             col = cols.GetColArray(0);
-            Assert.AreEqual(2, col.min);
-            Assert.AreEqual(4, col.max);
+            Assert.AreEqual((uint)2, col.min);
+            Assert.AreEqual((uint)4, col.max);
             //individual column
             col = cols.GetColArray(1);
-            Assert.AreEqual(7, col.min);
-            Assert.AreEqual(7, col.max);
+            Assert.AreEqual((uint)7, col.min);
+            Assert.AreEqual((uint)7, col.max);
 
             sheet.SetColumnHidden(2, true); // Column C
             sheet.SetColumnHidden(6, true); // Column G
@@ -877,17 +877,17 @@ namespace NPOI.XSSF.UserModel
 
             Assert.AreEqual(4, cols.sizeOfColArray());
             col = cols.GetColArray(0);
-            Assert.AreEqual(2, col.min);
-            Assert.AreEqual(2, col.max);
+            Assert.AreEqual((uint)2, col.min);
+            Assert.AreEqual((uint)2, col.max);
             col = cols.GetColArray(1);
-            Assert.AreEqual(3, col.min);
-            Assert.AreEqual(3, col.max);
+            Assert.AreEqual((uint)3, col.min);
+            Assert.AreEqual((uint)3, col.max);
             col = cols.GetColArray(2);
-            Assert.AreEqual(4, col.min);
-            Assert.AreEqual(4, col.max);
+            Assert.AreEqual((uint)4, col.min);
+            Assert.AreEqual((uint)4, col.max);
             col = cols.GetColArray(3);
-            Assert.AreEqual(7, col.min);
-            Assert.AreEqual(7, col.max);
+            Assert.AreEqual((uint)7, col.min);
+            Assert.AreEqual((uint)7, col.max);
 
             //serialize and check again
             wb = (XSSFWorkbook)XSSFTestDataSamples.WriteOutAndReadBack(wb);

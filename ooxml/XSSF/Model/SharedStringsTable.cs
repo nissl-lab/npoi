@@ -112,7 +112,9 @@ namespace NPOI.XSSF.Model
                 uniqueCount = (int)sst.uniqueCount;
                 foreach (CT_Rst st in sst.si)
                 {
-                    stmap[GetKey(st)] = cnt;
+                    string key=GetKey(st);
+                    if(key!=null)
+                        stmap.Add(key, cnt);
                     strings.Add(st);
                     cnt++;
                 }

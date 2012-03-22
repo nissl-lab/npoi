@@ -635,7 +635,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         [System.Xml.Serialization.XmlElementAttribute("extend", typeof(CT_BooleanProperty))]
 
         [System.Xml.Serialization.XmlElementAttribute("color", typeof(CT_Color))]
-     //   [System.Xml.Serialization.XmlElementAttribute("sz", typeof(CT_FontSize))]
+        //[System.Xml.Serialization.XmlElementAttribute("sz", typeof(CT_FontSize))]
         [System.Xml.Serialization.XmlElementAttribute("u", typeof(CT_UnderlineProperty))]
         [System.Xml.Serialization.XmlElementAttribute("vertAlign", typeof(CT_VerticalAlignFontProperty))]
         [System.Xml.Serialization.XmlElementAttribute("scheme", typeof(CT_FontScheme))]
@@ -750,7 +750,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
 
 
-        [XmlAttribute]
+        [XmlElement]
         public CT_FontSize sz
         {
             get { return this.szField; }

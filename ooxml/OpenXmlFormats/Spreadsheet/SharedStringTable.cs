@@ -2162,7 +2162,6 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
     }
-
     [Serializable]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public class CT_Rst
@@ -2204,7 +2203,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             this.tField=null;
         }
-        [XmlElement]
+        [XmlElement("t",DataType="string")]
         public string t
         {
             get

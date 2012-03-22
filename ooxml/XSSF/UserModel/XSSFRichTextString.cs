@@ -250,7 +250,7 @@ namespace NPOI.XSSF.UserModel
             if (st.sizeOfRArray() == 0 && st.IsSetT())
             {
                 //convert <t>string</t> into a text Run: <r><t>string</t></r>
-                st.AddNewR().t = (st.t);
+                st.AddNewR().t = st.t;
                 st.unsetT();
             }
             CT_RElt lt = st.AddNewR();
@@ -308,7 +308,7 @@ namespace NPOI.XSSF.UserModel
         {
             String text = this.String;
             st.r = (null);
-            st.t = (text);
+            st.t= (text);
         }
 
         /**
