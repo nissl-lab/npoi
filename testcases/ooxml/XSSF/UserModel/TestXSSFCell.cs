@@ -77,17 +77,17 @@ namespace NPOI.XSSF.UserModel
             XSSFRow row = (XSSFRow)sheet.GetRow(1);
 
             XSSFCell cell_0 = (XSSFCell)row.GetCell(0);
-            Assert.AreEqual(ST_CellType.str, cell_0.GetCTCell().t);
+            Assert.AreEqual(ST_CellType.inlineStr, cell_0.GetCTCell().t);
             Assert.IsTrue(cell_0.GetCTCell().isSetIs());
             Assert.AreEqual("A Very large string in column 1 AAAAAAAAAAAAAAAAAAAAA", cell_0.StringCellValue);
 
             XSSFCell cell_1 = (XSSFCell)row.GetCell(1);
-            Assert.AreEqual(ST_CellType.str, cell_1.GetCTCell().t);
+            Assert.AreEqual(ST_CellType.inlineStr, cell_1.GetCTCell().t);
             Assert.IsTrue(cell_1.GetCTCell().isSetIs());
             Assert.AreEqual("foo", cell_1.StringCellValue);
 
             XSSFCell cell_2 = (XSSFCell)row.GetCell(2);
-            Assert.AreEqual(ST_CellType.str, cell_2.GetCTCell().t);
+            Assert.AreEqual(ST_CellType.inlineStr, cell_2.GetCTCell().t);
             Assert.IsTrue(cell_2.GetCTCell().isSetIs());
             Assert.AreEqual("bar", row.GetCell(2).StringCellValue);
         }

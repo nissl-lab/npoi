@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Xml.Serialization;
 
 namespace NPOI.OpenXmlFormats.Spreadsheet
 {
@@ -22,7 +23,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             throw new NotImplementedException();
         }
-
+        [XmlElement]
         public List<CT_Font> font
         {
             get
@@ -34,7 +35,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.fontField = value;
             }
         }
-
+        [XmlAttribute]
         public uint count
         {
             get
@@ -104,7 +105,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.fontsField = new CT_Fonts();
             this.numFmtsField = new CT_NumFmts();
         }
-
+        [XmlElement]
         public CT_NumFmts numFmts
         {
             get
@@ -116,7 +117,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.numFmtsField = value;
             }
         }
-
+        [XmlElement]
         public CT_Fonts fonts
         {
             get
@@ -128,7 +129,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.fontsField = value;
             }
         }
-
+        [XmlElement]
         public CT_Fills fills
         {
             get
@@ -140,7 +141,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.fillsField = value;
             }
         }
-
+        [XmlElement]
         public CT_Borders borders
         {
             get
@@ -152,7 +153,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.bordersField = value;
             }
         }
-
+        [XmlElement]
         public CT_CellStyleXfs cellStyleXfs
         {
             get
@@ -164,7 +165,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.cellStyleXfsField = value;
             }
         }
-
+        [XmlElement]
         public CT_CellXfs cellXfs
         {
             get
@@ -176,7 +177,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.cellXfsField = value;
             }
         }
-
+        [XmlElement]
         public CT_CellStyles cellStyles
         {
             get
@@ -188,7 +189,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.cellStylesField = value;
             }
         }
-
+        [XmlElement]
         public CT_Dxfs dxfs
         {
             get
@@ -200,7 +201,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.dxfsField = value;
             }
         }
-
+        [XmlElement]
         public CT_TableStyles tableStyles
         {
             get
@@ -212,7 +213,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.tableStylesField = value;
             }
         }
-
+        [XmlElement]
         public CT_Colors colors
         {
             get
@@ -224,7 +225,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.colorsField = value;
             }
         }
-
+        [XmlElement]
         public CT_ExtensionList extLst
         {
             get
@@ -1245,7 +1246,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             this.tableStyleField = new List<CT_TableStyle>();
         }
-
+        [XmlElement]
         public List<CT_TableStyle> tableStyle
         {
             get
@@ -1257,7 +1258,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.tableStyleField = value;
             }
         }
-
+        [XmlAttribute]
         public uint count
         {
             get
@@ -1386,7 +1387,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             this.dxfField = new List<CT_Dxf>();
         }
-
+        [XmlElement]
         public List<CT_Dxf> dxf
         {
             get
@@ -1398,7 +1399,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.dxfField = value;
             }
         }
-
+        [XmlAttribute]
         public uint count
         {
             get

@@ -174,7 +174,7 @@ namespace NPOI.XSSF.UserModel
             foreach (CT_Row row in worksheet.sheetData.row)
             {
                 XSSFRow r = new XSSFRow(row, this);
-                _rows[r.RowNum] =  r;
+                _rows.Add(r.RowNum,  r);
             }
         }
 

@@ -130,6 +130,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             obj.stateField = this.stateField;
             return obj;
         }
+        [XmlAttribute("name")]
         public string name
         {
             get
@@ -141,7 +142,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.nameField = value;
             }
         }
-
+        [XmlAttribute("sheetId")]
         public uint sheetId
         {
             get
@@ -153,7 +154,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.sheetIdField = value;
             }
         }
-
+        [XmlAttribute("state")]
         [System.ComponentModel.DefaultValueAttribute(ST_SheetState.visible)]
         public ST_SheetState state
         {
@@ -166,7 +167,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.stateField = value;
             }
         }
-        [System.Xml.Serialization.XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/relationships")]
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/relationships")]
         public string id
         {
             get
@@ -3556,7 +3557,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             throw new NotImplementedException();
         }
-
+        [XmlElement("c")]
         public List<CT_Cell> c
         {
             get
@@ -3568,7 +3569,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.cField = value;
             }
         }
-
+        [XmlElement("extLst")]
         public CT_ExtensionList extLst
         {
             get
@@ -3580,7 +3581,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.extLstField = value;
             }
         }
-
+        [XmlAttribute]
         public uint r
         {
             get
@@ -3605,7 +3606,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.rFieldSpecified = value;
             }
         }
-
+        [XmlAttribute]
         public List<string> spans
         {
             get
@@ -3776,9 +3777,9 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         private string rField;
 
-        private uint? sField;
+        private uint sField;
 
-        private ST_CellType? tField;
+        private ST_CellType tField;
 
         private uint cmField;
 
@@ -3791,8 +3792,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.extLstField = new CT_ExtensionList();
             //this.isField = new CT_Rst();
             //this.fField = new CT_CellFormula();
-            //this.sField = (uint)(0);
-            //this.tField = ST_CellType.n;
+            this.sField = (uint)(0);
+            this.tField = ST_CellType.n;
             this.cmField = ((uint)(0));
             this.vmField = ((uint)(0));
             this.phField = false;
@@ -3803,11 +3804,11 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
         public bool IsSetT()
         {
-            return tField != null;
+            return tField != ST_CellType.n;
         }
         public bool isSetS()
         {
-            return sField != null;
+            return sField != 0;
         }
         public bool isSetF()
         {
@@ -3834,11 +3835,11 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         public void unsetS()
         {
-            this.sField = null;
+            this.sField = 0;
         }
         public void unsetT()
         {
-            this.tField = null;
+            this.tField = ST_CellType.n;
         }
 
         public void unsetIs()
@@ -3856,7 +3857,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.fField = value;
             }
         }
-
+        [XmlElement]
         public string v
         {
             get
@@ -3892,7 +3893,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.extLstField = value;
             }
         }
-
+        [XmlAttribute]
         public string r
         {
             get
@@ -3904,7 +3905,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.rField = value;
             }
         }
-
+        [XmlAttribute()]
         [System.ComponentModel.DefaultValueAttribute(typeof(uint), "0")]
         public uint s
         {
@@ -3917,20 +3918,20 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.sField = value;
             }
         }
-
+        [XmlAttribute()]
         [System.ComponentModel.DefaultValueAttribute(ST_CellType.n)]
         public ST_CellType t
         {
             get
             {
-                return (ST_CellType)this.tField;
+                return this.tField;
             }
             set
             {
                 this.tField = value;
             }
         }
-
+        [XmlAttribute]
         [System.ComponentModel.DefaultValueAttribute(typeof(uint), "0")]
         public uint cm
         {
@@ -3943,7 +3944,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.cmField = value;
             }
         }
-
+        [XmlAttribute]
         [System.ComponentModel.DefaultValueAttribute(typeof(uint), "0")]
         public uint vm
         {
@@ -3956,7 +3957,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.vmField = value;
             }
         }
-
+        [XmlAttribute]
         [System.ComponentModel.DefaultValueAttribute(false)]
         public bool ph
         {
@@ -10375,7 +10376,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             return row[index];
         }
-
+        [XmlElement("row")]
         public List<CT_Row> row
         {
             get
@@ -10435,7 +10436,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             return colField;
         }
-
+        [XmlElement]
         public List<CT_Col> col
         {
             get

@@ -112,7 +112,7 @@ namespace NPOI.XSSF.Model
 			CT_NumFmts ctfmts = styleSheet.numFmts;
             if( ctfmts != null){
                 foreach (CT_NumFmt nfmt in ctfmts.numFmt) {
-                    numberFormats[(int)nfmt.numFmtId]= nfmt.formatCode;
+                    numberFormats.Add((int)nfmt.numFmtId,nfmt.formatCode);
                 }
             }
 

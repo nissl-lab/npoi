@@ -58,7 +58,7 @@ namespace NPOI.XSSF.UserModel
 
         }
 
-        public XSSFTable(PackagePart part, PackageRelationship rel)
+        internal XSSFTable(PackagePart part, PackageRelationship rel)
             : base(part, rel)
         {
 

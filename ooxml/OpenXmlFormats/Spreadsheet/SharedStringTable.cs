@@ -37,7 +37,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.numFmtField.Add(newNumFmt);
             return newNumFmt;
         }
-
+        [XmlElement]
         public List<CT_NumFmt> numFmt
         {
             get
@@ -49,7 +49,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.numFmtField = value;
             }
         }
-
+        [XmlAttribute]
         public uint count
         {
             get
@@ -83,6 +83,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         private string formatCodeField;
 
+        [XmlAttribute]
         public uint numFmtId
         {
             get
@@ -94,7 +95,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.numFmtIdField = value;
             }
         }
-
+        [XmlAttribute]
         public string formatCode
         {
             get
@@ -1383,7 +1384,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             this.xfField = new List<CT_Xf>();
         }
-
+        [XmlElement]
         public List<CT_Xf> xf
         {
             get
@@ -1395,7 +1396,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.xfField = value;
             }
         }
-
+        [XmlAttribute]
         public uint count
         {
             get
@@ -1435,7 +1436,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         private bool numFmtIdFieldSpecified;
 
-        private uint? fontIdField;
+        private uint fontIdField;
 
         private bool fontIdFieldSpecified;
 
@@ -1529,7 +1530,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
         public bool IsSetFontId()
         {
-            return this.fontIdField != null;
+            return this.fontIdField != 0;
         }
         public void UnsetAlignment()
         {
@@ -1592,7 +1593,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.extLstField = value;
             }
         }
-
+        [XmlAttribute]
         public uint numFmtId
         {
             get
@@ -1617,8 +1618,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.numFmtIdFieldSpecified = value;
             }
         }
-
-        public uint? fontId
+        [XmlAttribute]
+        public uint fontId
         {
             get
             {
@@ -1642,7 +1643,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.fontIdFieldSpecified = value;
             }
         }
-
+        [XmlAttribute]
         public uint fillId
         {
             get
@@ -1667,7 +1668,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.fillIdFieldSpecified = value;
             }
         }
-
+        [XmlAttribute]
         public uint borderId
         {
             get
@@ -1692,7 +1693,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.borderIdFieldSpecified = value;
             }
         }
-
+        [XmlAttribute]
         public uint xfId
         {
             get
@@ -1717,7 +1718,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.xfIdFieldSpecified = value;
             }
         }
-
+        [XmlAttribute]
         [System.ComponentModel.DefaultValueAttribute(false)]
         public bool quotePrefix
         {
@@ -1730,7 +1731,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.quotePrefixField = value;
             }
         }
-
+        [XmlAttribute]
         [System.ComponentModel.DefaultValueAttribute(false)]
         public bool pivotButton
         {
@@ -1743,7 +1744,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.pivotButtonField = value;
             }
         }
-
+        [XmlAttribute]
         public bool applyNumberFormat
         {
             get
@@ -1768,7 +1769,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.applyNumberFormatFieldSpecified = value;
             }
         }
-
+        [XmlAttribute]
         public bool applyFont
         {
             get
@@ -1793,7 +1794,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.applyFontFieldSpecified = value;
             }
         }
-
+        [XmlAttribute]
         public bool applyFill
         {
             get
@@ -1818,7 +1819,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.applyFillFieldSpecified = value;
             }
         }
-
+        [XmlAttribute]
         public bool applyBorder
         {
             get
@@ -1843,7 +1844,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.applyBorderFieldSpecified = value;
             }
         }
-
+        [XmlAttribute]
         public bool applyAlignment
         {
             get
@@ -1868,7 +1869,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.applyAlignmentFieldSpecified = value;
             }
         }
-
+        [XmlAttribute]
         public bool applyProtection
         {
             get
@@ -1908,7 +1909,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             this.xfField = new List<CT_Xf>();
         }
-
+        [XmlElement]
         public List<CT_Xf> xf
         {
             get
@@ -1920,7 +1921,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.xfField = value;
             }
         }
-
+        [XmlAttribute]
         public uint count
         {
             get
@@ -1960,7 +1961,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             this.borderField = new List<CT_Border>();
         }
-
+        [XmlElement]
         public List<CT_Border> border
         {
             get
@@ -1976,7 +1977,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             throw new NotImplementedException();
         }
-
+        [XmlAttribute]
         public uint count
         {
             get
@@ -2016,7 +2017,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             this.fillField = new List<CT_Fill>();
         }
-
+        [XmlElement]
         public List<CT_Fill> fill
         {
             get
@@ -2032,7 +2033,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             throw new NotImplementedException();
         }
-
+        [XmlAttribute]
         public uint count
         {
             get
@@ -2086,6 +2087,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.siField = new List<CT_Rst>();
         }
 
+        [XmlElement]
         public List<CT_Rst> si
         {
             get
@@ -2097,7 +2099,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.siField = value;
             }
         }
-
+        [XmlElement]
         public CT_ExtensionList extLst
         {
             get
@@ -2162,10 +2164,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     }
 
     [Serializable]
-    //[XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
-    //[XmlRoot(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main",
-    //    ElementName = "text",
-    //    IsNullable = false)]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public class CT_Rst
     {
 
@@ -2205,11 +2204,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             this.tField=null;
         }
-
-        /// <summary>
-        /// Text
-        /// </summary>
-        [XmlElement("t")]
+        [XmlElement]
         public string t
         {
             get
@@ -2221,7 +2216,6 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.tField = value;
             }
         }
-
         /// <summary>
         /// Rich Text Run
         /// </summary>
@@ -2237,7 +2231,6 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.rField = value;
             }
         }
-
         /// <summary>
         /// Phonetic Run
         /// </summary>
@@ -2253,7 +2246,6 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.rPhField = value;
             }
         }
-
         /// <summary>
         /// Phonetic Properties
         /// </summary>

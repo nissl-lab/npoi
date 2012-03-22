@@ -13,8 +13,12 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     using System.Xml.Schema;
     using System.ComponentModel;
     using System.Collections.Generic;
-    
 
+    [System.Serializable()]
+    [System.Diagnostics.DebuggerStepThrough()]
+    [System.ComponentModel.DesignerCategory("code")]
+    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
+    [System.Xml.Serialization.XmlRoot("table",Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main", IsNullable = true)]
     public class CT_Table
     {
 
@@ -161,7 +165,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.extLstField = value;
             }
         }
-
+        [XmlAttribute]
         public uint id
         {
             get
@@ -173,7 +177,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.idField = value;
             }
         }
-
+        [XmlAttribute]
         public string name
         {
             get
@@ -185,7 +189,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.nameField = value;
             }
         }
-
+        [XmlAttribute]
         public string displayName
         {
             get
@@ -197,7 +201,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.displayNameField = value;
             }
         }
-
+        [XmlAttribute]
         public string comment
         {
             get
@@ -209,7 +213,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.commentField = value;
             }
         }
-
+        [XmlAttribute]
         public string @ref
         {
             get
@@ -221,7 +225,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.refField = value;
             }
         }
-
+        [XmlAttribute]
         [System.ComponentModel.DefaultValueAttribute(ST_TableType.worksheet)]
         public ST_TableType tableType
         {
@@ -234,7 +238,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.tableTypeField = value;
             }
         }
-
+        [XmlAttribute]
         [System.ComponentModel.DefaultValueAttribute(typeof(uint), "1")]
         public uint headerRowCount
         {
@@ -247,7 +251,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.headerRowCountField = value;
             }
         }
-
+        [XmlAttribute]
         [System.ComponentModel.DefaultValueAttribute(false)]
         public bool insertRow
         {
@@ -260,7 +264,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.insertRowField = value;
             }
         }
-
+        [XmlAttribute]
         [System.ComponentModel.DefaultValueAttribute(false)]
         public bool insertRowShift
         {
@@ -273,7 +277,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.insertRowShiftField = value;
             }
         }
-
+        [XmlAttribute]
         [System.ComponentModel.DefaultValueAttribute(typeof(uint), "0")]
         public uint totalsRowCount
         {
@@ -286,7 +290,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.totalsRowCountField = value;
             }
         }
-
+        [XmlAttribute]
         [System.ComponentModel.DefaultValueAttribute(true)]
         public bool totalsRowShown
         {
@@ -299,7 +303,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.totalsRowShownField = value;
             }
         }
-
+        [XmlAttribute]
         [System.ComponentModel.DefaultValueAttribute(false)]
         public bool published
         {
@@ -312,7 +316,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.publishedField = value;
             }
         }
-
+        [XmlAttribute]
         public uint headerRowDxfId
         {
             get
@@ -324,7 +328,6 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.headerRowDxfIdField = value;
             }
         }
-
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool headerRowDxfIdSpecified
         {
@@ -337,7 +340,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.headerRowDxfIdFieldSpecified = value;
             }
         }
-
+        [XmlAttribute]
         public uint dataDxfId
         {
             get
@@ -362,7 +365,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.dataDxfIdFieldSpecified = value;
             }
         }
-
+        [XmlAttribute]
         public uint totalsRowDxfId
         {
             get
@@ -387,7 +390,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.totalsRowDxfIdFieldSpecified = value;
             }
         }
-
+        [XmlAttribute]
         public uint headerRowBorderDxfId
         {
             get
@@ -412,7 +415,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.headerRowBorderDxfIdFieldSpecified = value;
             }
         }
-
+        [XmlAttribute]
         public uint tableBorderDxfId
         {
             get
@@ -437,7 +440,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.tableBorderDxfIdFieldSpecified = value;
             }
         }
-
+        [XmlAttribute]
         public uint totalsRowBorderDxfId
         {
             get
@@ -462,7 +465,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.totalsRowBorderDxfIdFieldSpecified = value;
             }
         }
-
+        [XmlAttribute]
         public string headerRowCellStyle
         {
             get
@@ -474,7 +477,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.headerRowCellStyleField = value;
             }
         }
-
+        [XmlAttribute]
         public string dataCellStyle
         {
             get
@@ -486,7 +489,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.dataCellStyleField = value;
             }
         }
-
+        [XmlAttribute]
         public string totalsRowCellStyle
         {
             get
@@ -498,7 +501,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.totalsRowCellStyleField = value;
             }
         }
-
+        [XmlAttribute]
         public uint connectionId
         {
             get
