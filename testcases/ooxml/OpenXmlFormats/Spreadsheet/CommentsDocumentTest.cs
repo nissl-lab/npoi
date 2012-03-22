@@ -80,8 +80,8 @@ namespace ooxml.Testcases
             commentText.t = "First Comment";
             text.r.Add(commentText);
             singleComment.text = text;           
-            StringWriter stream = new StringWriter();
 
+            StringWriter stream = new StringWriter();
             CommentsDocument_Accessor.serializer.Serialize(stream, comments);
             string expected = @"<?xml version=""1.0"" encoding=""utf-16""?>
 <comments xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"" xmlns=""http://schemas.openxmlformats.org/spreadsheetml/2006/main"">
@@ -106,7 +106,6 @@ namespace ooxml.Testcases
         /// <summary>
         ///A test for Deserialize
         ///</summary>
-//        [Ignore] // TODO fix
         [TestMethod()]
         public void DeserializeCommentsDocumentTest()
         {

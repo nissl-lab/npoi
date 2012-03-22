@@ -152,7 +152,7 @@ namespace NPOI.XSSF.Model
             {
                 w = XSSFTestDataSamples.WriteOutAndReadBack(w);
             }
-            catch (POIXMLException e)
+            catch (POIXMLException)
             {
                 Assert.Fail("Detected Bug #48936");
             }

@@ -392,7 +392,7 @@ namespace NPOI.XSSF.UserModel
                 wb.GetCellStyleAt((short)1);
                 Assert.Fail("Shouldn't be able to Get style at 1 that doesn't exist");
             }
-            catch (IndexOutOfRangeException e) { }
+            catch (IndexOutOfRangeException) { }
 
             // Add another one
             ICellStyle cs = wb.CreateCellStyle();
@@ -407,7 +407,7 @@ namespace NPOI.XSSF.UserModel
                 wb.GetCellStyleAt((short)2);
                 Assert.Fail("Shouldn't be able to Get style at 2 that doesn't exist");
             }
-            catch (IndexOutOfRangeException e) { }
+            catch (IndexOutOfRangeException) { }
 
             // Save and reload
             XSSFWorkbook nwb = (XSSFWorkbook)XSSFTestDataSamples.WriteOutAndReadBack(wb);
@@ -419,7 +419,7 @@ namespace NPOI.XSSF.UserModel
                 nwb.GetCellStyleAt((short)2);
                 Assert.Fail("Shouldn't be able to Get style at 2 that doesn't exist");
             }
-            catch (IndexOutOfRangeException e) { }
+            catch (IndexOutOfRangeException) { }
 
             // Now with an existing file
             wb = XSSFTestDataSamples.OpenSampleWorkbook("sample.xlsx");
@@ -432,7 +432,7 @@ namespace NPOI.XSSF.UserModel
                 wb.GetCellStyleAt((short)3);
                 Assert.Fail("Shouldn't be able to Get style at 3 that doesn't exist");
             }
-            catch (IndexOutOfRangeException e) { }
+            catch (IndexOutOfRangeException) { }
         }
         [TestMethod]
         public void TestRecalcId()
