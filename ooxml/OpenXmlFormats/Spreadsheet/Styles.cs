@@ -65,7 +65,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
-    [System.Xml.Serialization.XmlRootAttribute(ElementName="styleSheet",Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main", IsNullable = true)]
+    [System.Xml.Serialization.XmlRootAttribute(ElementName = "styleSheet", Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main", IsNullable = true)]
     public class CT_Stylesheet
     {
 
@@ -395,7 +395,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         private bool indexedFieldSpecified;
 
-        private byte[] rgbField;
+        private byte[] rgbField = null;
 
         private long? themeField;
 
@@ -528,7 +528,10 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         public void SetRgb(byte R, byte G, byte B)
         {
-            
+            this.rgbField = new byte[3];
+            this.rgbField[0] = R;
+            this.rgbField[1] = G;
+            this.rgbField[2] = B;
         }
         public bool IsSetRgb()
         {
@@ -551,7 +554,6 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     [System.Xml.Serialization.XmlRootAttribute(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main", IsNullable = true)]
     public class CT_FontScheme
     {
-
         private ST_FontScheme valField;
 
         /// <remarks/>
@@ -589,36 +591,54 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     }
     public class CT_Font
     {
+        //// all elements are optional
+        //private CT_FontName nameFieldField = null; // name of the font
+        //private CT_IntProperty charsetField = null;
+        //private CT_IntProperty familyField = null; // family of the font
+        //private CT_BooleanProperty bField = null; // typeface bold
+        //private CT_BooleanProperty iField = null;   // italic
+        //private CT_BooleanProperty strikeField = null; //   strike through
+        //private CT_BooleanProperty outlineField = null;
+        //private CT_BooleanProperty shadowField = null;
+        //private CT_BooleanProperty condenseField = null;
+        //private CT_BooleanProperty extendField = null;
+        //private CT_Color colorField = null;
+        private CT_FontSize szField = null; // size of the font
+        //private CT_UnderlineProperty uField = null; // underline
+        //private CT_VerticalAlignFontProperty vertAlignField = null;  // vertical alignment of the text
+        //private CT_FontScheme schemeField = null;
 
-        private List<object> itemsField;
+        private List<object> itemsField = new List<object>();
 
-        private List<FontElementNameType> itemsElementNameField;
+        private List<FontElementNameType> itemsElementNameField = new List<FontElementNameType>();
 
-        public CT_Font()
-        {
-            this.itemsElementNameField = new List<FontElementNameType>();
-            this.itemsField = new List<object>();
-        }
+        //public CT_Font()
+        //{
+        //    this.itemsElementNameField = new List<FontElementNameType>();
+        //    this.itemsField = new List<object>();
+        //}
         public static CT_Font Parse(string xml)
         {
             throw new NotImplementedException();
         }
 
-        [System.Xml.Serialization.XmlElementAttribute("b", typeof(CT_BooleanProperty))]
+        [System.Xml.Serialization.XmlElementAttribute("name", typeof(CT_FontName))]
         [System.Xml.Serialization.XmlElementAttribute("charset", typeof(CT_IntProperty))]
-        [System.Xml.Serialization.XmlElementAttribute("color", typeof(CT_Color))]
+        [System.Xml.Serialization.XmlElementAttribute("family", typeof(CT_IntProperty))]
+
+        [System.Xml.Serialization.XmlElementAttribute("b", typeof(CT_BooleanProperty))]
+        [System.Xml.Serialization.XmlElementAttribute("i", typeof(CT_BooleanProperty))]
+        [System.Xml.Serialization.XmlElementAttribute("strike", typeof(CT_BooleanProperty))]
+        [System.Xml.Serialization.XmlElementAttribute("outline", typeof(CT_BooleanProperty))]
+        [System.Xml.Serialization.XmlElementAttribute("shadow", typeof(CT_BooleanProperty))]
         [System.Xml.Serialization.XmlElementAttribute("condense", typeof(CT_BooleanProperty))]
         [System.Xml.Serialization.XmlElementAttribute("extend", typeof(CT_BooleanProperty))]
-        [System.Xml.Serialization.XmlElementAttribute("family", typeof(CT_IntProperty))]
-        [System.Xml.Serialization.XmlElementAttribute("i", typeof(CT_BooleanProperty))]
-        [System.Xml.Serialization.XmlElementAttribute("name", typeof(CT_FontName))]
-        [System.Xml.Serialization.XmlElementAttribute("outline", typeof(CT_BooleanProperty))]
-        [System.Xml.Serialization.XmlElementAttribute("scheme", typeof(CT_FontScheme))]
-        [System.Xml.Serialization.XmlElementAttribute("shadow", typeof(CT_BooleanProperty))]
-        [System.Xml.Serialization.XmlElementAttribute("strike", typeof(CT_BooleanProperty))]
-        [System.Xml.Serialization.XmlElementAttribute("sz", typeof(CT_FontSize))]
+
+        [System.Xml.Serialization.XmlElementAttribute("color", typeof(CT_Color))]
+     //   [System.Xml.Serialization.XmlElementAttribute("sz", typeof(CT_FontSize))]
         [System.Xml.Serialization.XmlElementAttribute("u", typeof(CT_UnderlineProperty))]
         [System.Xml.Serialization.XmlElementAttribute("vertAlign", typeof(CT_VerticalAlignFontProperty))]
+        [System.Xml.Serialization.XmlElementAttribute("scheme", typeof(CT_FontScheme))]
         [System.Xml.Serialization.XmlChoiceIdentifierAttribute("ItemsElementName")]
         public object[] Items
         {
@@ -632,8 +652,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute("ItemsElementName")]
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        //[System.Xml.Serialization.XmlElementAttribute("ItemsElementName")]
+        [XmlIgnore]
         public FontElementNameType[] ItemsElementName
         {
             get
@@ -653,10 +673,15 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             throw new NotImplementedException();
         }
+        //public void SetFamilyArray()
+        //{
+        //    throw new NotImplementedException();
+        //}
         public CT_IntProperty AddNewFamily()
         {
             throw new NotImplementedException();
         }
+
         public CT_FontName AddNewName()
         {
             throw new NotImplementedException();
@@ -697,10 +722,6 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             throw new NotImplementedException();
         }
-        public void SetFamilyArray()
-        {
-            throw new NotImplementedException();
-        }
         public int sizeOfBArray()
         {
             throw new NotImplementedException();
@@ -727,10 +748,33 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             throw new NotImplementedException();
         }
+
+
+        [XmlAttribute]
+        public CT_FontSize sz
+        {
+            get { return this.szField; }
+            set { this.szField = value; }
+        }
+        [XmlIgnore]
+        public bool szSpecified
+        {
+            get { return (null != szField); }            
+        }
         public int sizeOfSzArray()
         {
-            throw new NotImplementedException();
+            return this.szField == null ? 0 : 1;
         }
+        public void SetSzArray(CT_FontSize[] array)
+        {
+            this.szField = array.Length > 0 ? array[0] : null;
+        }
+        public CT_FontSize GetSzArray(int index)
+        {
+            if (0 != index) { throw new IndexOutOfRangeException("Only an index of 0 is supported"); }
+            return this.szField;
+        }
+
 
         public int sizeOfIArray()
         {
@@ -814,14 +858,6 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             throw new NotImplementedException();
         }
-        public void SetSzArray(CT_FontSize[] array)
-        {
-            throw new NotImplementedException();
-        }
-        public CT_FontSize GetSzArray(int index)
-        {
-            throw new NotImplementedException();
-        }
         public int SetColorArray(CT_Color[] array)
         {
             throw new NotImplementedException();
@@ -893,12 +929,13 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
     }
 
-
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public class CT_FontSize
     {
-
         private double valField;
 
+        [XmlAttribute]
         public double val
         {
             get
