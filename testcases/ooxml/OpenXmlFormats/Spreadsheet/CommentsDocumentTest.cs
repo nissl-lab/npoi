@@ -1,12 +1,9 @@
-﻿using NPOI.OpenXmlFormats.Spreadsheet;
+﻿using System.IO;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.IO;
+using NPOI.OpenXmlFormats.Spreadsheet;
 
 namespace ooxml.Testcases
 {
-
-
     /// <summary>
     ///This is a test class for CommentsDocumentTest and is intended
     ///to contain all CommentsDocumentTest Unit Tests
@@ -14,8 +11,6 @@ namespace ooxml.Testcases
     [TestClass()]
     public class CommentsDocumentTest
     {
-
-
         private TestContext testContextInstance;
 
         /// <summary>
@@ -66,7 +61,7 @@ namespace ooxml.Testcases
 
 
         /// <summary>
-        ///A test for Serialize
+        ///A test for the Serialization of CT_Comments.
         ///</summary>
         [TestMethod()]
         public void SerializeCommentsDocumentTest()
@@ -75,25 +70,34 @@ namespace ooxml.Testcases
             comments.AddNewAuthors().AddAuthor("Christian");
             comments.authors.AddAuthor("Tony");
             comments.AddNewCommentList();
+
+            CT_Comment singleComment = comments.commentList.AddNewComment();
+            singleComment.authorId = 1;
+            singleComment.@ref = "A7";
             var text = new CT_Rst();
-            text.t = "First Comment";
-            comments.commentList.AddNewComment().text = text;           
+            text.r = new System.Collections.Generic.List<CT_RElt>();
+            var commentText = new CT_RElt();
+            commentText.t = "First Comment";
+            text.r.Add(commentText);
+            singleComment.text = text;           
             StringWriter stream = new StringWriter();
+
             CommentsDocument_Accessor.serializer.Serialize(stream, comments);
             string expected = @"<?xml version=""1.0"" encoding=""utf-16""?>
 <comments xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"" xmlns=""http://schemas.openxmlformats.org/spreadsheetml/2006/main"">
   <authors>
-    <author>
-      <author>Christian</author>
-      <author>Tony</author>
-    </author>
+    <author>Christian</author>
+    <author>Tony</author>
   </authors>
   <commentList>
-    <comment />
+    <comment ref=""A7"" authorId=""1"">
+      <text>
+        <r>
+          <t>First Comment</t>
+        </r>
+      </text>
+    </comment>
   </commentList>
-  <extLst>
-    <ext />
-  </extLst>
 </comments>";
             Assert.AreEqual(expected, stream.ToString());
         }
@@ -102,7 +106,7 @@ namespace ooxml.Testcases
         /// <summary>
         ///A test for Deserialize
         ///</summary>
-        [Ignore] // TODO fix
+//        [Ignore] // TODO fix
         [TestMethod()]
         public void DeserializeCommentsDocumentTest()
         {
@@ -111,7 +115,7 @@ namespace ooxml.Testcases
 @"<?xml version=""1.0"" encoding=""UTF-8"" standalone=""yes""?>
 <comments xmlns=""http://schemas.openxmlformats.org/spreadsheetml/2006/main"">
    <authors>
-      <author>Autor</author>
+      <author>First Author</author>
    </authors>
    <commentList>
       <comment ref=""A3"" authorId=""0"">
@@ -189,17 +193,74 @@ This column adds the first and second one.</t>
    </commentList>
 </comments>";
             CT_Comments result;
-            {
-                StringReader stream = new StringReader(input);
-                result = (CT_Comments)CommentsDocument_Accessor.serializer.Deserialize(stream); // instiate of debugging
-            }
+            //{
+            //    StringReader stream = new StringReader(input);
+            //    result = (CT_Comments)CommentsDocument_Accessor.serializer.Deserialize(stream); // instantiate source code to enable debugging the serialization code
+            //}
             {
                 StringReader stream = new StringReader(input);
                 result = (CT_Comments)CommentsDocument_Accessor.serializer.Deserialize(stream);
             }
             Assert.AreEqual(3, result.commentList.SizeOfCommentArray());
             Assert.AreEqual(1, result.authors.SizeOfAuthorArray());
-            Assert.AreEqual("First Column on the first sheet; This is just an increasing column", result.commentList.GetCommentArray(0).text.t);
+            Assert.AreEqual("First Author", result.authors.author[0]);
+
+            // First Comment
+            //<comment ref=""A3"" authorId=""0"">
+            //  <text>
+            //    <r>
+            //        <rPr>
+            //            <b/>
+            //            <sz val=""9""/>
+            //            <color indexed=""81""/>
+            //            <rFont val=""Tahoma""/>
+            //            <charset val=""1""/>
+            //        </rPr>
+            //        <t>Autor:</t>
+            //    </r>
+            //    <r>
+            //        <rPr>
+            //            <sz val=""9""/>
+            //            <color indexed=""81""/>
+            //            <rFont val=""Tahoma""/>
+            //            <charset val=""1""/>
+            //        </rPr>
+            //        <t xml:space=""preserve"">
+            //First Column on the first sheet; This is just an increasing column</t>
+            //    </r>
+            //  </text>
+            //</comment>
+            {
+                var comment = result.commentList.GetCommentArray(0);
+                Assert.AreEqual("A3", comment.@ref);
+                Assert.AreEqual(0u, comment.authorId);
+                Assert.AreEqual("Autor:", comment.text.r[0].t);
+                Assert.AreEqual("\nFirst Column on the first sheet; This is just an increasing column", comment.text.r[1].t);
+
+                // TODO fix Font extraction Assert.AreEqual("Tahoma", comment.text.r[0].rPr.GetRFontArray(0).val);
+            }
+
+            // Second Comment
+            {
+                var comment = result.commentList.GetCommentArray(1);
+                Assert.AreEqual("B3", comment.@ref);
+                Assert.AreEqual(0u, comment.authorId);
+                Assert.AreEqual("Autor:", comment.text.r[0].t);
+                Assert.AreEqual("This column multiplies the first column value with 2.", comment.text.r[1].t.Trim());
+
+                // TODO Assert.AreEqual("Tahoma", comment.text.r[0].rPr.GetRFontArray(0).val);
+            }
+
+            // Third Comment
+            {
+                var comment = result.commentList.GetCommentArray(2);
+                Assert.AreEqual("C3", comment.@ref);
+                Assert.AreEqual(0u, comment.authorId);
+                Assert.AreEqual("Autor:", comment.text.r[0].t);
+                Assert.AreEqual("\nThis column adds the first and second one.", comment.text.r[1].t);
+
+               // TODO Assert.AreEqual("Tahoma", comment.text.r[0].rPr.GetRFontArray(0).val);
+            }
         }
 
 

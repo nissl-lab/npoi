@@ -16,13 +16,13 @@
 ==================================================================== */
 namespace NPOI.XSSF.Model
 {
-    using NPOI.XSSF.UserModel;
+    using System;
+    using System.Collections.Generic;
     using System.IO;
     using System.Xml;
     using NPOI.OpenXml4Net.OPC;
+    using NPOI.XSSF.UserModel;
     using OpenXmlFormats.Spreadsheet;
-    using System.Collections.Generic;
-    using System;
 
     public class CommentsTable : POIXMLDocumentPart
     {

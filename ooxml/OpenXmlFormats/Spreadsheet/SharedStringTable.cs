@@ -2162,26 +2162,26 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     }
 
     [Serializable]
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
-    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main",
-        ElementName = "text",
-        IsNullable = false)]
+    //[XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
+    //[XmlRoot(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main",
+    //    ElementName = "text",
+    //    IsNullable = false)]
     public class CT_Rst
     {
 
-        private string tField;
+        private string tField = null; // optional field -> initialize as null so that it is not serialized by default.
 
-        private List<CT_RElt> rField;
+        private List<CT_RElt> rField = null; // optional field 
 
-        private List<CT_PhoneticRun> rPhField;
+        private List<CT_PhoneticRun> rPhField = null; // optional field 
 
-        private CT_PhoneticPr phoneticPrField;
+        private CT_PhoneticPr phoneticPrField = null; // optional field 
 
         public CT_Rst()
         {
-            this.phoneticPrField = new CT_PhoneticPr();
-            this.rPhField = new List<CT_PhoneticRun>();
-            this.rField = new List<CT_RElt>();
+            //this.phoneticPrField = new CT_PhoneticPr();
+            //this.rPhField = new List<CT_PhoneticRun>();
+            //this.rField = new List<CT_RElt>();
         }
         public CT_RElt AddNewR()
         {
@@ -2205,6 +2205,11 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             this.tField=null;
         }
+
+        /// <summary>
+        /// Text
+        /// </summary>
+        [XmlElement("t")]
         public string t
         {
             get
@@ -2217,6 +2222,10 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
+        /// <summary>
+        /// Rich Text Run
+        /// </summary>
+        [XmlElement("r")]
         public List<CT_RElt> r
         {
             get
@@ -2229,6 +2238,10 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
+        /// <summary>
+        /// Phonetic Run
+        /// </summary>
+        [XmlElement("rPh")]
         public List<CT_PhoneticRun> rPh
         {
             get
@@ -2241,6 +2254,10 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
+        /// <summary>
+        /// Phonetic Properties
+        /// </summary>
+        [XmlElement("phoneticPr")]
         public CT_PhoneticPr phoneticPr
         {
             get
@@ -2252,6 +2269,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.phoneticPrField = value;
             }
         }
+
         public void Set(CT_Rst o)
         {
             this.r = o.r;
@@ -2265,16 +2283,16 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     /// Rich Text Run container.
     /// </summary>
     [Serializable]
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
-    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main",
-        ElementName = "r",
-        IsNullable = true)]
+    //[XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
+    //[XmlRoot(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main",
+    //    ElementName = "r",
+    //    IsNullable = true)]
     public class CT_RElt
     {
 
-        private CT_RPrElt rPrField;
+        private CT_RPrElt rPrField = null; // optional field 
 
-        private string tField;
+        private string tField = string.Empty; // required field 
 
         public CT_RElt()
         {
@@ -2285,6 +2303,11 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.rPrField = new CT_RPrElt();
             return rPrField;
         }
+
+        /// <summary>
+        /// Run Properties
+        /// </summary>
+        [XmlElement("rPr")]
         public CT_RPrElt rPr
         {
             get
@@ -2297,6 +2320,10 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
+        /// <summary>
+        /// Text
+        /// </summary>
+        [XmlElement("t")]
         public string t
         {
             get
@@ -2314,10 +2341,10 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     /// Properties of Rich Text Run.
     /// </summary>
     [Serializable]
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
-    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main",
-        ElementName = "rPr",
-        IsNullable = true)]
+    //[XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
+    //[XmlRoot(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main",
+    //    ElementName = "rPr",
+    //    IsNullable = true)]
     public class CT_RPrElt
     {
 

@@ -10,27 +10,29 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     using System.Collections.Generic;
     using System.Xml.Serialization;
 
+    /// <summary>
+    /// The Comments part of the Spreadsheets.
+    /// </summary>
     [Serializable]
     //[System.Diagnostics.DebuggerStepThrough]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main",
-        ElementName = "comments",
-        IsNullable = true)]
+        ElementName = "comments")]
     public class CT_Comments
     {
 
-        private CT_Authors authorsField;
+        private CT_Authors authorsField = new CT_Authors(); // required field
 
-        private CT_CommentList commentListField = null;
+        private CT_CommentList commentListField = new CT_CommentList(); // required field
 
-        private CT_ExtensionList extLstField; // TODO make Nullable
+        private CT_ExtensionList extLstField = null; // optional field
 
-        public CT_Comments()
-        {
-            this.extLstField = new CT_ExtensionList();
-            this.commentListField = new CT_CommentList(); 
-            this.authorsField = new CT_Authors();
-        }
+        //public CT_Comments()
+        //{
+        //    this.extLstField = new CT_ExtensionList();
+        //    this.commentListField = new CT_CommentList();
+        //    this.authorsField = new CT_Authors();
+        //}
         public CT_Authors AddNewAuthors()
         {
             this.authorsField = new CT_Authors();
@@ -41,7 +43,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.commentListField = new CT_CommentList();
         }
 
-        [XmlElement("authors", Order = 0, IsNullable = false)]
+        [XmlElement("authors", Order = 0)]
         public CT_Authors authors
         {
             get
@@ -53,7 +55,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.authorsField = value;
             }
         }
-        [XmlElement("commentList", Order = 1, IsNullable = false)]
+        [XmlElement("commentList", Order = 1)]
         public CT_CommentList commentList
         {
             get
@@ -66,7 +68,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [XmlElement("extLst", Order = 2, IsNullable = true)]
+        [XmlElement("extLst", Order = 2)]
         public CT_ExtensionList extLst
         {
             get
@@ -83,23 +85,22 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     [Serializable]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main",
-        ElementName = "comment",
-        IsNullable = false)]
+        ElementName = "comment")]
     public class CT_Comment
     {
 
-        private CT_Rst textField;
+        private CT_Rst textField = new CT_Rst(); // required element 
 
-        private string refField;
+        private string refField = string.Empty; // required attribute
 
-        private uint authorIdField;
+        private uint authorIdField = 0; // required attribute
 
-        private string guidField;
+        private string guidField = null; // optional attribute
 
-        public CT_Comment()
-        {
-            this.textField = new CT_Rst();
-        }
+        //public CT_Comment()
+        //{
+        //    this.textField = new CT_Rst();
+        //}
 
         [XmlElement("text")]
         public CT_Rst text
@@ -156,35 +157,37 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
     [Serializable]
    // [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
-    // not needed because it not used as a root [XmlRoot(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main", ElementName = "authors", IsNullable = false)]
+    // not needed because it not used as a root [XmlRoot(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main", ElementName = "authors")]
     public class CT_Authors
     {
 
-        private List<string> authorField;
+        private List<string> authorField = null; // optional field [0..*]
 
-        public CT_Authors()
-        {
-            this.authorField = new List<string>();
-        }
+        //public CT_Authors()
+        //{
+        //    this.authorField = new List<string>();
+        //}
         public int SizeOfAuthorArray()
         {
-            return authorField.Count;
+            return (null == authorField) ? 0 : authorField.Count;
         }
         public string GetAuthorArray(int index)
         {
-            return authorField[index];
+            return (null == authorField) ? null : authorField[index];
         }
         public void Insert(int index, string author)
         {
-            author.Insert(index, author);
+            if (null == authorField) { authorField = new List<string>(); }
+            authorField.Insert(index, author);
         }
         public void AddAuthor(string name)
         {
-            author.Add(name);
+            if (null == authorField) { authorField = new List<string>(); }
+            authorField.Add(name);
         }
         //[XmlArray("authors", Order = 0)] // - encapsulates the following items, but the outer element already provides the container.
-        //[XmlArrayItem("author", IsNullable = false)]
-        [XmlElement("author", IsNullable = false)] // this is serialized into multiple author entries
+        //[XmlArrayItem("author")]
+        [XmlElement("author")] // this is serialized into multiple author entries
         public List<string> author
         {
             get
@@ -199,16 +202,16 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     }
 
     [Serializable]
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
+    //[XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public class CT_CommentList
     {
 
-        private List<CT_Comment> commentField;
+        private List<CT_Comment> commentField = null; // optional field [0..*]
 
-        public CT_CommentList()
-        {
-            this.commentField = new List<CT_Comment>();
-        }
+        //public CT_CommentList()
+        //{
+        //    this.commentField = new List<CT_Comment>();
+        //}
 
         public CT_Comment GetCommentArray(int index)
         {
@@ -224,18 +227,20 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
         public CT_Comment InsertNewComment(int index)
         {
+            if (null == commentField) { commentField = new List<CT_Comment>(); }
             CT_Comment com = new CT_Comment();
             commentField.Insert(index,com);
             return com;            
         }
         public CT_Comment AddNewComment()
         {
+            if (null == commentField) { commentField = new List<CT_Comment>(); }
             CT_Comment com= new CT_Comment();
             commentField.Add(com);
             return com;
         }
 
-        [XmlElement("comment", IsNullable = true)]
+        [XmlElement("comment")]
         public List<CT_Comment> comment
         {
             get
