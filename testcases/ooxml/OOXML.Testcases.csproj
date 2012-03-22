@@ -56,7 +56,24 @@
     <Compile Include="TestPOIXMLDocument.cs" />
     <Compile Include="TestPOIXMLProperties.cs" />
     <Compile Include="Util\TestIdentifierManager.cs" />
+    <Compile Include="XSSF\IO\TestLoadSaveXSSF.cs" />
     <Compile Include="XSSF\Model\TestCalculationChain.cs" />
+    <Compile Include="XSSF\UserModel\TestSheetHiding.cs" />
+    <Compile Include="XSSF\UserModel\TestXSSFCell.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="XSSF\UserModel\TestXSSFName.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="XSSF\UserModel\TestXSSFRow.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="XSSF\UserModel\TestXSSFSheet.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="XSSF\UserModel\TestXSSFWorkbook.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="XSSF\Util\TestCTColComparator.cs" />
     <Compile Include="XSSF\Util\TestEvilUnclosedBRFixingInputStream.cs" />
     <Compile Include="XSSF\Util\TestNumericRanges.cs" />

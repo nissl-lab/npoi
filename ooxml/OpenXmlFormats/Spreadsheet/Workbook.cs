@@ -2399,7 +2399,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     public class CT_WorkbookPr
     {
 
-        private bool date1904Field;
+        private bool? date1904Field;
 
         private ST_Objects showObjectsField;
 
@@ -2437,9 +2437,13 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         private bool defaultThemeVersionFieldSpecified;
 
+        public bool IsSetDate1904()
+        {
+            return this.date1904Field != null;
+        }
         public CT_WorkbookPr()
         {
-            this.date1904Field = false;
+            //this.date1904Field = false;
             this.showObjectsField = ST_Objects.all;
             this.showBorderUnselectedTablesField = true;
             this.filterPrivacyField = false;
@@ -2458,7 +2462,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
 
         [System.ComponentModel.DefaultValueAttribute(false)]
-        public bool date1904
+        public bool? date1904
         {
             get
             {

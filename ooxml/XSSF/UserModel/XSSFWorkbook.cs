@@ -1202,7 +1202,7 @@ namespace NPOI.XSSF.UserModel
             return "$" + colRef.CellRefParts[2] + "$" + colRef.CellRefParts[1] + ":$" + colRef2.CellRefParts[2] + "$" + colRef2.CellRefParts[1];
         }
 
-        XSSFName GetBuiltInName(String builtInCode, int sheetNumber)
+        public XSSFName GetBuiltInName(String builtInCode, int sheetNumber)
         {
             foreach (XSSFName name in namedRanges)
             {
@@ -1449,7 +1449,7 @@ namespace NPOI.XSSF.UserModel
         internal bool IsDate1904()
         {
             CT_WorkbookPr workbookPr = workbook.workbookPr;
-            return workbookPr != null && workbookPr.date1904;
+            return workbookPr != null && (bool)workbookPr.date1904;
         }
 
         /**

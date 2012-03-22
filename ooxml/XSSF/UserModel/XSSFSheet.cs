@@ -1396,7 +1396,7 @@ namespace NPOI.XSSF.UserModel
             get
             {
                 return worksheet.IsSetSheetProtection() 
-                    && worksheet.sheetProtection.scenarios;
+                    && (bool)worksheet.sheetProtection.scenarios;
             }
         }
 
@@ -2827,18 +2827,18 @@ namespace NPOI.XSSF.UserModel
          *
          * @return the location of the active cell.
          */
-        public String ActiveCell
+        public String GetActiveCell()
         {
-            get
-            {
                 return GetSheetTypeSelection().activeCell;
-            }
-            set 
-            {
-                CT_Selection ctsel = GetSheetTypeSelection();
-                ctsel.activeCell = (value);
-                ctsel.SetSqref(new string[]{value});
-            }
+         }
+
+
+        public void SetActiveCell(string value)
+        {
+            CT_Selection ctsel = GetSheetTypeSelection();
+            ctsel.activeCell = (value);
+            ctsel.SetSqref(new string[] { value });
+
         }
         /**
          * Does this sheet have any comments on it? We need to know,
@@ -3127,7 +3127,7 @@ namespace NPOI.XSSF.UserModel
         public bool IsObjectsLocked()
         {
             CreateProtectionFieldIfNotPresent();
-            return sheetProtectionEnabled() && worksheet.sheetProtection.objects;
+            return sheetProtectionEnabled() && (bool)worksheet.sheetProtection.objects;
         }
 
         /**
@@ -3136,7 +3136,7 @@ namespace NPOI.XSSF.UserModel
         public bool IsScenariosLocked()
         {
             CreateProtectionFieldIfNotPresent();
-            return sheetProtectionEnabled() && worksheet.sheetProtection.scenarios;
+            return sheetProtectionEnabled() && (bool)worksheet.sheetProtection.scenarios;
         }
 
         /**
@@ -3163,7 +3163,7 @@ namespace NPOI.XSSF.UserModel
         public bool IsSheetLocked()
         {
             CreateProtectionFieldIfNotPresent();
-            return sheetProtectionEnabled() && worksheet.sheetProtection.sheet;
+            return sheetProtectionEnabled() && (bool)worksheet.sheetProtection.sheet;
         }
 
         /**
@@ -3359,7 +3359,7 @@ namespace NPOI.XSSF.UserModel
 
         private bool sheetProtectionEnabled()
         {
-            return worksheet.sheetProtection.sheet;
+            return (bool)worksheet.sheetProtection.sheet;
         }
 
         /* namespace */

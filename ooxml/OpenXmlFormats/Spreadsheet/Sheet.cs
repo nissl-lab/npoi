@@ -4290,11 +4290,11 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         private byte[] passwordField;
 
-        private bool sheetField;
+        private bool? sheetField;
 
-        private bool objectsField;
+        private bool? objectsField;
 
-        private bool scenariosField;
+        private bool? scenariosField;
 
         private bool formatCellsField;
 
@@ -4324,9 +4324,9 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         public CT_SheetProtection()
         {
-            this.sheetField = false;
-            this.objectsField = false;
-            this.scenariosField = false;
+            //this.sheetField = false;
+            //this.objectsField = false;
+            //this.scenariosField = false;
             this.formatCellsField = true;
             this.formatColumnsField = true;
             this.formatRowsField = true;
@@ -4342,6 +4342,19 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.selectUnlockedCellsField = false;
         }
 
+        public bool isSetSheet()
+        {
+            return this.sheetField != null;
+        }
+
+        public bool isSetObjects()
+        {
+            return this.objectsField != null;
+        }
+        public bool isSetScenarios()
+        {
+            return this.scenariosField != null;
+        }
         public byte[] password
         {
             get
@@ -4355,7 +4368,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
 
         [System.ComponentModel.DefaultValueAttribute(false)]
-        public bool sheet
+        public bool? sheet
         {
             get
             {
@@ -4368,7 +4381,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
 
         [System.ComponentModel.DefaultValueAttribute(false)]
-        public bool objects
+        public bool? objects
         {
             get
             {
@@ -4381,7 +4394,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
 
         [System.ComponentModel.DefaultValueAttribute(false)]
-        public bool scenarios
+        public bool? scenarios
         {
             get
             {
@@ -10352,6 +10365,15 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         public void RemoveRow(int index)
         {
             this.rowField.RemoveAt(index);
+        }
+        public int SizeOfRowArray()
+        {
+            return row.Count;
+        }
+
+        public CT_Row GetRowArray(int index)
+        {
+            return row[index];
         }
 
         public List<CT_Row> row

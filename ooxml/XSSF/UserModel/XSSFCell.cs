@@ -758,7 +758,7 @@ namespace NPOI.XSSF.UserModel
          */
         public void SetAsActiveCell()
         {
-            ((XSSFSheet)Sheet).ActiveCell = (_cell.r);
+            ((XSSFSheet)Sheet).SetActiveCell(_cell.r);
         }
 
         /**
