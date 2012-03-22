@@ -80,11 +80,18 @@
     <Compile Include="TestDetectAsOOXML.cs" />
     <Compile Include="TestPOIXMLDocument.cs" />
     <Compile Include="Util\TestIdentifierManager.cs" />
+    <Compile Include="XSSF\IO\TestLoadSaveXSSF.cs" />
     <Compile Include="XSSF\Model\TestCalculationChain.cs" />
     <Compile Include="XSSF\Model\TestCommentsTable.cs" />
     <Compile Include="XSSF\Model\TestMapInfo.cs" />
     <Compile Include="XSSF\Model\TestSharedStringsTable.cs" />
     <Compile Include="XSSF\Model\TestStylesTable.cs" />
+    <Compile Include="XSSF\UserModel\TestSheetHiding.cs" />
+    <Compile Include="XSSF\UserModel\TestXSSFCell.cs" />
+    <Compile Include="XSSF\UserModel\TestXSSFName.cs" />
+    <Compile Include="XSSF\UserModel\TestXSSFRow.cs" />
+    <Compile Include="XSSF\UserModel\TestXSSFSheet.cs" />
+    <Compile Include="XSSF\UserModel\TestXSSFWorkbook.cs" />
     <Compile Include="XSSF\Util\TestCTColComparator.cs" />
     <Compile Include="XSSF\Util\TestEvilUnclosedBRFixingInputStream.cs" />
     <Compile Include="XSSF\Util\TestNumericRanges.cs" />
@@ -132,6 +139,7 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

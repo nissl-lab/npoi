@@ -1,0 +1,188 @@
+/* ====================================================================
+   Licensed to the Apache Software Foundation (ASF) under one or more
+   contributor license agreements.  See the NOTICE file distributed with
+   this work for Additional information regarding copyright ownership.
+   The ASF licenses this file to You under the Apache License, Version 2.0
+   (the "License"); you may not use this file except in compliance with
+   the License.  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+==================================================================== */
+
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NPOI.OpenXmlFormats.Spreadsheet;
+using NPOI.XSSF.UserModel;
+using System.Collections.Generic;
+using System;
+using NPOI.SS.UserModel;
+using TestCases;
+using System.IO;
+namespace NPOI.XSSF.Model
+{
+
+    /**
+     * Test {@link SharedStringsTable}, the cache of strings in a workbook
+     *
+     * @author Yegor Kozlov
+     */
+    [TestClass]
+    public class TestSharedStringsTable
+    {
+        [TestMethod]
+        public void TestCreateNew()
+        {
+            SharedStringsTable sst = new SharedStringsTable();
+
+            CT_Rst st;
+            int idx;
+
+            // Check defaults
+            Assert.IsNotNull(sst.GetItems());
+            Assert.AreEqual(0, sst.GetItems().Count);
+            Assert.AreEqual(0, sst.GetCount());
+            Assert.AreEqual(0, sst.GetUniqueCount());
+
+            st = new CT_Rst();
+            st.t = ("Hello, World!");
+
+            idx = sst.AddEntry(st);
+            Assert.AreEqual(0, idx);
+            Assert.AreEqual(1, sst.GetCount());
+            Assert.AreEqual(1, sst.GetUniqueCount());
+
+            //add the same entry again
+            idx = sst.AddEntry(st);
+            Assert.AreEqual(0, idx);
+            Assert.AreEqual(2, sst.GetCount());
+            Assert.AreEqual(1, sst.GetUniqueCount());
+
+            //and again
+            idx = sst.AddEntry(st);
+            Assert.AreEqual(0, idx);
+            Assert.AreEqual(3, sst.GetCount());
+            Assert.AreEqual(1, sst.GetUniqueCount());
+
+            st = new CT_Rst();
+            st.t = ("Second string");
+
+            idx = sst.AddEntry(st);
+            Assert.AreEqual(1, idx);
+            Assert.AreEqual(4, sst.GetCount());
+            Assert.AreEqual(2, sst.GetUniqueCount());
+
+            //add the same entry again
+            idx = sst.AddEntry(st);
+            Assert.AreEqual(1, idx);
+            Assert.AreEqual(5, sst.GetCount());
+            Assert.AreEqual(2, sst.GetUniqueCount());
+
+            st = new CT_Rst();
+            CT_RElt r = st.AddNewR();
+            CT_RPrElt pr = r.AddNewRPr();
+            pr.AddNewColor().SetRgb(new byte[] { (byte)0xFF, 0, 0 }); //red
+            pr.AddNewI().val = (true);  //bold
+            pr.AddNewB().val = (true);  //italic
+            r.t = ("Second string");
+
+            idx = sst.AddEntry(st);
+            Assert.AreEqual(2, idx);
+            Assert.AreEqual(6, sst.GetCount());
+            Assert.AreEqual(3, sst.GetUniqueCount());
+
+            idx = sst.AddEntry(st);
+            Assert.AreEqual(2, idx);
+            Assert.AreEqual(7, sst.GetCount());
+            Assert.AreEqual(3, sst.GetUniqueCount());
+
+            //OK. the sst table is Filled, check the contents
+            Assert.AreEqual(3, sst.GetItems().Count);
+            Assert.AreEqual("Hello, World!", new XSSFRichTextString(sst.GetEntryAt(0)).ToString());
+            Assert.AreEqual("Second string", new XSSFRichTextString(sst.GetEntryAt(1)).ToString());
+            Assert.AreEqual("Second string", new XSSFRichTextString(sst.GetEntryAt(2)).ToString());
+        }
+        [TestMethod]
+        public void TestReadWrite()
+        {
+            XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("sample.xlsx");
+            SharedStringsTable sst1 = wb.GetSharedStringSource();
+
+            //Serialize, read back and compare with the original
+            SharedStringsTable sst2 = ((XSSFWorkbook)XSSFTestDataSamples.WriteOutAndReadBack(wb)).GetSharedStringSource();
+
+            Assert.AreEqual(sst1.GetCount(), sst2.GetCount());
+            Assert.AreEqual(sst1.GetUniqueCount(), sst2.GetUniqueCount());
+
+            List<CT_Rst> items1 = sst1.GetItems();
+            List<CT_Rst> items2 = sst2.GetItems();
+            Assert.AreEqual(items1.Count, items2.Count);
+            for (int i = 0; i < items1.Count; i++)
+            {
+                CT_Rst st1 = items1[i];
+                CT_Rst st2 = items2[i];
+                Assert.AreEqual(st1.ToString(), st2.ToString());
+            }
+        }
+
+        /**
+         * Test for Bugzilla 48936
+         *
+         * A specific sequence of strings can result in broken CDATA section in sharedStrings.xml file.
+         *
+         * @author Philippe Laflamme
+         */
+        [TestMethod]
+        public void TestBug48936()
+        {
+            IWorkbook w = new XSSFWorkbook();
+            ISheet s = w.CreateSheet();
+            int i = 0;
+            List<String> lst = ReadStrings("48936-strings.txt");
+            foreach (String str in lst)
+            {
+                s.CreateRow(i++).CreateCell(0).SetCellValue(str);
+            }
+
+            try
+            {
+                w = XSSFTestDataSamples.WriteOutAndReadBack(w);
+            }
+            catch (POIXMLException e)
+            {
+                Assert.Fail("Detected Bug #48936");
+            }
+            s = w.GetSheetAt(0);
+            i = 0;
+            foreach (String str in lst)
+            {
+                String val = s.GetRow(i++).GetCell(0).StringCellValue;
+                Assert.AreEqual(str, val);
+            }
+        }
+
+        private List<String> ReadStrings(String filename)
+        {
+            List<String> strs = new List<String>();
+            POIDataSamples samples = POIDataSamples.GetSpreadSheetInstance();
+            StreamReader br =
+                    new StreamReader(samples.OpenResourceAsStream(filename));
+            String s;
+            while ((s = br.ReadLine()) != null)
+            {
+                if (s.Trim().Length > 0)
+                {
+                    strs.Add(s.Trim());
+                }
+            }
+            br.Close();
+            return strs;
+        }
+
+    }
+}
+
