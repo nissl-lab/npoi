@@ -1,0 +1,126 @@
+1.2.4 (Nov,2011)
+In this release, we fixed most of the bugs found in POI 3.6 and POI 3.7. 
+
+NPOI Bug Fixes
+5157 - HSSFSheet.FitToPage property is added. It doesn't work previously.
+7271 - Cell formula that has been "dragged" down cannot be read. Patch is applied
+xxx - Bad padding calculation 
+3804 - NPOI doesn't work with a Excel template with macro 
+
+POI Bug Fixes
+46547 - ClassCastException in HSSFSheet.shiftRows(...)
+47363 - Fixed HSSFSheet to allow addition of data validations after sheet protection
+45066 - sheet encoding size mismatch problems
+49026 - added implementation for text() (poi-developers)
+46654 - HSSFRow/RowRecord to properly update cell boundary indexes(POI-DEVELOPERS)
+46385 - (also patch 46362) fix serialization of StyleRecord with unicode name(POI-DEVELOPERS)
+47069 - Fixed HSSFSheet#getFirstRowNum and HSSFSheet#getLastRowNum to return correct values after removal of all rows(POI-DEVELOPERS)
+48325 - bad text 'Page &P of &N' and similar errors when reading in spreadsheets
+48485 - add extra paper size constans to printsetup, such as a3, b4 and b5(poi-developers)
+48425 - improved performance of dateutil.iscelldateformatted() (poi-developers)
+49524 - add vertical text orientation method
+47001 - Fixed WriteAccessRecord and LinkTable to handle unusual format written by Google Docs(POI-DEVELOPERS)
+46368 - Fix HSSFRichTextRun and strings longer than 32768 characters(POI-DEVELOPERS)
+48292 - Support of array formulas
+49820 - ParagraphProperties.getLvl() returns 0 for both Level 1 and Body text
+      - fixed HSSFWorkbook.createCellStyle to throw exception if the maximum number of cell styles was exceeded(poi-developers)
+47405 - Improved performance of RowRecordsAggregate.getStartRowNumberForBlock / getEndRowNumberForBlock(poi-developers)
+46250 - Workbook cloneSheet() - clone images
+48026 - duplicate footer and header
+46664 - Print Area does not save in HSSF worksheets
+49761 - Double.NaN can be written but not read with POI
+47309 - Number of Cell Comments in a sheet limited to 65536 with HSSF 
+46776 - POI does not work when run the method "cloneSheet()" 
+47250 - Fixed FontRecord to expect unicode flags even when name length is zero(POI-DEVELOPERS)
+47198 - Fixed formula evaluator comparison of -0.0 and 0.0(POI-DEVELOPERS)
+46287 - Control of header and footer extraction in ExcelExtractor / XSSFExcelExtractor(POI-DEVELOPERS)
+47154 - Handle the cell format @ as the same as General(POI-DEVELOPERS)
+40520 - Fixed HSSFFont.applyFont() to properly apply font to overlapping regions(POI-DEVELOPERS)
+45720 - cloneSheet breaks autofilters 
+46643 - Formula parser should encode explicit range operator with tMemFunc 
+51481 - Office 2007 warning if using autofilter 
+50681 - autoSizeColumn sets column width beyond 255 character limit for XSSF sheets and HSSF Sheets
+50912 - Applying an HSSFCellStyle on an HSSFCell has no effect
+51143 - NameCommentRecord correction for writing non ASCII strings(poi-developers)
+
+New Features
+a. Add NameCommentRecord, HeaderFooterRecord
+b. AutoFilter Phrase II - it's able to create autofilter with any cell range
+c. Add the method to determine if the cell is merged or not
+d. Support compilation with MonoDeveloper
+e. Change all interface name starting with 'I'
+
+1.2.3 (Nov. 2010)
+NPOI Bug fixes
+5010 - Unable to read xls file with pivot table 
+5139 - SheetExtRecord DataSize is 40 
+6177 - LeftoverDataException: Intermitend Bug 
+6341 - System.NullReferenceException on Workbook.Dispose (+Bugfix) 
+Change NPOI.HSSF.Model.Sheet to NPOI.HSSF.Model.InternalSheet
+Change NPOI.HSSF.Model.Workbook to NPOI.HSSF.Model.InternalWorkbook
+6984 - Cannot manually edit/add dates in the xls created by NPOI
+
+Sync POI bug fixes
+46776 - Added clone() method to MulBlankRecord to fix crash in Sheet.cloneSheet()(POI-DEVELOPERS)
+46547 - Allow addition of conditional formatting after data validation(POI-DEVELOPERS)
+45290 - Support odd files where the POIFS header block comes after the data blocks, and is on the data blocks list(POI-DEVELOPERS)
+46904 - Fix POIFS issue with duplicate block 0 references on very old BIFF5/BIFF7 files(POI-DEVELOPERS)
+45376
+47970 - added a method to set arabic mode in HSSFSheet(POI-DEVELOPERS)
+47048 - Fixed evaluation of defined names with the 'complex' flag set(POI-DEVELOPERS)
+44916 - Allow access to the HSSFPatriarch from HSSFSheet once created(POI-DEVELOPERS)
+45672 - improve handling by MissingRecordAwareHSSFListener of records that cover multiple cells (MulBlankRecord and MulRKRecord)(POI-DEVELOPERS)
+45698 - Fix LinkTable to tolerate multiple EXTERNSHEET records(POI-DEVELOPERS)
+45784 - More fixes to SeriesTextRecord(POI-DEVELOPERS) 
+46065 - added implementation for VALUE function(POI-DEVELOPERS) 
+45966 - added implementation for FIND function(POI-DEVELOPERS) 
+45784 - More fixes to SeriesTextRecord(POI-DEVELOPERS) 
+46065 - added implementation for VALUE function(POI-DEVELOPERS) 
+45966 - added implementation for FIND function(POI-DEVELOPERS) 
+47721 - Added implementation for INDIRECT()
+	Added implementation for ISNA()(
+48332 - fixed ColumnInfoRecord to tolerate missing reserved field
+45778 - fixed ObjRecord to read ftLbsData properly(POI-DEVELOPERS) 
+46206 - Fixed Sheet to tolerate missing DIMENSION records(POI-DEVELOPERS) 
+47384 - Fixed ExternalNameRecord to handle unicode names(POI-DEVELOPERS) 
+47479 - Fix BoolErrRecord to tolerate incorrect format written by OOO
+46199 - More tweaks to EmbeddedObjectRefSubRecord(POI-DEVELOPERS) 
+47751 - Do not allow HSSF's cell text longer than 32,767 characters
+46213 - Fixed FormulaRecordAggregate to gracefully ignore extra StringRecords(POI-DEVELOPERS) 
+46301 - added pivot table records: SXDI, SXVDEX, SXPI, SXIDSTM, SXVIEW, SXVD, SXVS, et al(POI-DEVELOPERS) 
+48180 - be more forgiving of short chart records, which skip some unused fields(POI-DEVELOPERS) 
+46280 - Fixed RowRecordsAggregate etc to properly skip PivotTable records(POI-DEVELOPERS) 
+46174 - Fixed HSSFName to handle general formulas (not just area references)(POI-DEVELOPERS) 
+47768 - Implementation of Excel "Npv" functions
+47771 - Added method setFunction(boolean) for defined names
+47770 - built-in positive formats don't need starting '
+47737 - adjust sheet indices of named ranges when deleting sheets
+47448 - Allow HSSFEventFactory to handle non-zero padding at the end of the workbook stream
+47143 - Fixed OOM in HSSFWorkbook#getAllPictures when reading .xls files containing metafiles
+47415 - Fixed PageSettingsBlock to allow multiple PLS records
+46269 - Improved error message when attempting to read BIFF2 file(POI-DEVELOPERS) 
+46189 - added chart records: CHARTFRTINFO, STARTBLOCK, ENDBLOCK, STARTOBJECT, ENDOBJECT, and CATLAB(POI-DEVELOPERS) 
+45290 - Support odd files where the POIFS header block comes after the data blocks, and is on the data blocks list(POI-DEVELOPERS) 
+46137 - Handle odd files with a ContinueRecord after EOFRecord(POI-DEVELOPERS) 
+
+NPOI 1.2.2 (2009-12-5)
+a. ability to identify more Chart record
+b. ColumnAutoSize bug is fixed (bug 3754 )
+c. DefaultRowHeight bug is fixed (bug 3880)
+e. Sheet Tab Formatting (bug 3772)
+f. ShrinkToFit property is exposed to user (bug 4103)
+g. Active selection area (bug 4527)
+h. HSSFSheet.RemoveRow will remove CellRecord as well as RowRecord (bug 3493)
+i. Auto filter feature (alpha)
+j. read xls template with macro (bug 3804)
+
+NPOI 1.2.1 (2009-6-1)
+a. Conditional Formating doesn't work as expected
+b. HSSFDataFormat.GetFormat return different index for the same format string
+c. Incorrect namespace spelling of NPOI.SS.Formula
+d. HSSFCell.ToString() method supports DataFormat now
+e. add strong name for all the assembiles
+f. HSSFColor.index static variable isn't accessible in VB.NET due to the HSSFColor Index property
+
+NPOI 1.2 (2009-5)
+implement features in POI 3.2 final
