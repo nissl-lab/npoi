@@ -103,12 +103,12 @@ namespace NPOI.SS.UserModel
         {
             this.type = (byte)type;
             this.repr = repr;
-            if(imap==null)
-                imap = new Dictionary<Byte, FormulaError>();
-            imap.Add(this.Code, this);
-            if (smap == null)
-                smap = new Dictionary<string, FormulaError>();
-            smap.Add(this.String, this);
+            //if(imap==null)
+            //    imap = new Dictionary<Byte, FormulaError>();
+            //imap.Add(this.Code, this);
+            //if (smap == null)
+            //    smap = new Dictionary<string, FormulaError>();
+            //smap.Add(this.String, this);
         }
 
         /**
@@ -133,22 +133,45 @@ namespace NPOI.SS.UserModel
             }
         }
 
-        private static Dictionary<String, FormulaError> smap = null;
-        private static Dictionary<Byte, FormulaError> imap = null;
+        //private static Dictionary<String, FormulaError> smap = null;
+        //private static Dictionary<Byte, FormulaError> imap = null;
 
         public static FormulaError ForInt(byte type)
         {
-            FormulaError err = imap[type];
-            if (err == null) throw new ArgumentException("Unknown error type: " + type);
-            return err;
+            //FormulaError err = imap[type];
+            //if (err == null) throw new ArgumentException("Unknown error type: " + type);
+            //return err;
+            switch (type)
+            {
+                case 0x00: return FormulaError.NULL;
+                case 0x07: return FormulaError.DIV0;
+                case 0x0F: return FormulaError.VALUE;
+                case 0x17: return FormulaError.REF;
+                case 0x1D: return FormulaError.NAME;
+                case 0x24: return FormulaError.NUM;
+                case 0x2A: return FormulaError.NA;
+            }
+            throw new ArgumentException("Unknown error type: " + type);
         }
 
         public static FormulaError ForString(String code)
         {
-            FormulaError err = smap[code];
-            if (err == null) throw new ArgumentException("Unknown error code: " + code);
-            return err;
+            //FormulaError err = smap[code];
+            //if (err == null) throw new ArgumentException("Unknown error code: " + code);
+            //return err;
+            switch (code)
+            {
+                case "#NULL!": return FormulaError.NULL;
+                case "#DIV/0!": return FormulaError.DIV0;
+                case "#VALUE!": return FormulaError.VALUE;
+                case "#REF!": return FormulaError.REF;
+                case "#NAME?": return FormulaError.NAME;
+                case "#NUM!": return FormulaError.NUM;
+                case "#N/A": return FormulaError.NA;
+            }
+            throw new ArgumentException("Unknown error code: " + code);
         }
     }
 
 }
+

@@ -166,7 +166,7 @@ namespace NPOI.XSSF.UserModel
                 xRule.GetCTCfRule().priority = (priority++);
                 cf.AddNewCfRule().Set(xRule.GetCTCfRule());
             }
-            return _sheet.GetCTWorksheet().sizeOfConditionalFormattingArray() - 1;
+            return _sheet.GetCTWorksheet().SizeOfConditionalFormattingArray() - 1;
         }
 
         public int AddConditionalFormatting(CellRangeAddress[] regions,
@@ -205,7 +205,7 @@ namespace NPOI.XSSF.UserModel
             XSSFConditionalFormatting xcf = (XSSFConditionalFormatting)cf;
             CT_Worksheet sh = _sheet.GetCTWorksheet();
             sh.AddNewConditionalFormatting().Set(xcf.GetCTConditionalFormatting());//this is already copied in Set -> .Copy()); ommitted
-            return sh.sizeOfConditionalFormattingArray() - 1;
+            return sh.SizeOfConditionalFormattingArray() - 1;
         }
 
         /**
@@ -229,7 +229,7 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
-                return _sheet.GetCTWorksheet().sizeOfConditionalFormattingArray();
+                return _sheet.GetCTWorksheet().SizeOfConditionalFormattingArray();
             }
         }
 

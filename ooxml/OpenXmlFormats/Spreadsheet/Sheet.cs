@@ -285,51 +285,51 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         private CT_ExtensionList extLstField = null;
 
-        public CT_Worksheet()
-        {
-            // unneccessary initialization leads to unwanted empty elements in serialized output.
-            //this.extLstField = new CT_ExtensionList();
-            ////this.tablePartsField = new CT_TableParts();
-            //this.webPublishItemsField = new CT_WebPublishItems();
-            //this.controlsField = new List<CT_Control>();
-            //this.oleObjectsField = new List<CT_OleObject>();
-            //this.pictureField = new CT_SheetBackgroundPicture();
-            //this.legacyDrawingHFField = new CT_LegacyDrawing();
-            ////this.legacyDrawingField = new CT_LegacyDrawing();
-            ////this.drawingField = new CT_Drawing();
-            //this.smartTagsField = new List<CT_CellSmartTags>();
-            //this.ignoredErrorsField = new CT_IgnoredErrors();
-            //this.cellWatchesField = new List<CT_CellWatch>();
-            //this.customPropertiesField = new List<CT_CustomProperty>();
-            ////this.colBreaksField = new CT_PageBreak();
-            ////this.rowBreaksField = new CT_PageBreak();
-            //this.headerFooterField = new CT_HeaderFooter();
-            ////this.pageSetupField = new CT_PageSetup();
-            ////this.pageMarginsField = new CT_PageMargins();
-            //this.printOptionsField = new CT_PrintOptions();
-            ////this.hyperlinksField = new List<CT_Hyperlink>();
-            ////this.dataValidationsField = new CT_DataValidations();
-            //this.conditionalFormattingField = new List<CT_ConditionalFormatting>();
-            //this.phoneticPrField = new CT_PhoneticPr();
-            ////this.mergeCellsField = new CT_MergeCells();
-            //this.customSheetViewsField = new List<CT_CustomSheetView>();
-            //this.dataConsolidateField = new CT_DataConsolidate();
-            //this.sortStateField = new CT_SortState();
-            //this.autoFilterField = new CT_AutoFilter();
-            //this.scenariosField = new CT_Scenarios();
-            //this.protectedRangesField = new List<CT_ProtectedRange>();
-            ////this.sheetProtectionField = new CT_SheetProtection();
-            ////this.sheetCalcPrField = new CT_SheetCalcPr();
-            ////this.sheetDataField = new List<CT_Row>();
-            ////this.colsField = new List<CT_Col>();
-            ////this.sheetFormatPrField = new CT_SheetFormatPr();
-            ////this.sheetViewsField = new CT_SheetViews();
-            ////this.dimensionField = new CT_SheetDimension();
-            //this.sheetPrField = new CT_SheetPr();
-        }
+        // unneccessary initialization leads to unwanted empty elements in serialized output.
+        //public CT_Worksheet()
+        //{
+        //    this.extLstField = new CT_ExtensionList();
+        //    //this.tablePartsField = new CT_TableParts();
+        //    this.webPublishItemsField = new CT_WebPublishItems();
+        //    this.controlsField = new List<CT_Control>();
+        //    this.oleObjectsField = new List<CT_OleObject>();
+        //    this.pictureField = new CT_SheetBackgroundPicture();
+        //    this.legacyDrawingHFField = new CT_LegacyDrawing();
+        //    //this.legacyDrawingField = new CT_LegacyDrawing();
+        //    //this.drawingField = new CT_Drawing();
+        //    this.smartTagsField = new List<CT_CellSmartTags>();
+        //    this.ignoredErrorsField = new CT_IgnoredErrors();
+        //    this.cellWatchesField = new List<CT_CellWatch>();
+        //    this.customPropertiesField = new List<CT_CustomProperty>();
+        //    //this.colBreaksField = new CT_PageBreak();
+        //    //this.rowBreaksField = new CT_PageBreak();
+        //    this.headerFooterField = new CT_HeaderFooter();
+        //    //this.pageSetupField = new CT_PageSetup();
+        //    //this.pageMarginsField = new CT_PageMargins();
+        //    this.printOptionsField = new CT_PrintOptions();
+        //    //this.hyperlinksField = new List<CT_Hyperlink>();
+        //    //this.dataValidationsField = new CT_DataValidations();
+        //    this.conditionalFormattingField = new List<CT_ConditionalFormatting>();
+        //    this.phoneticPrField = new CT_PhoneticPr();
+        //    //this.mergeCellsField = new CT_MergeCells();
+        //    this.customSheetViewsField = new List<CT_CustomSheetView>();
+        //    this.dataConsolidateField = new CT_DataConsolidate();
+        //    this.sortStateField = new CT_SortState();
+        //    this.autoFilterField = new CT_AutoFilter();
+        //    this.scenariosField = new CT_Scenarios();
+        //    this.protectedRangesField = new List<CT_ProtectedRange>();
+        //    //this.sheetProtectionField = new CT_SheetProtection();
+        //    //this.sheetCalcPrField = new CT_SheetCalcPr();
+        //    //this.sheetDataField = new List<CT_Row>();
+        //    //this.colsField = new List<CT_Col>();
+        //    //this.sheetFormatPrField = new CT_SheetFormatPr();
+        //    //this.sheetViewsField = new CT_SheetViews();
+        //    //this.dimensionField = new CT_SheetDimension();
+        //    this.sheetPrField = new CT_SheetPr();
+        //}
         public void Save(Stream stream)
         {
-            WorksheetDocument.serializer.Serialize(stream, this);
+            WorksheetDocument.serializer.Serialize(stream, this, WorksheetDocument.namespaces);
         }
         public bool IsSetRowBreaks()
         {
@@ -384,13 +384,14 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
         public CT_ConditionalFormatting AddNewConditionalFormatting()
         {
+            if (null == conditionalFormattingField) { conditionalFormattingField = new List<CT_ConditionalFormatting>(); }
             CT_ConditionalFormatting cf = new CT_ConditionalFormatting();
             this.conditionalFormattingField.Add(cf);
             return cf;
         }
         public CT_ConditionalFormatting GetConditionalFormattingArray(int index)
         {
-            return this.conditionalFormattingField[index];
+            return  (null == conditionalFormattingField) ? null : this.conditionalFormattingField[index];
         }
         public CT_MergeCells AddNewMergeCells()
         {
@@ -467,7 +468,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
         public int sizeOfColsArray()
         {
-            return this.colsField.Count;
+            return (null == colsField) ? 0 : this.colsField.Count;
         }
         public void RemoveCols(int index)
         {
@@ -475,16 +476,19 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
         public CT_Cols AddNewCols()
         {
+            if (null == colsField) { colsField = new List<CT_Cols>(); }
             CT_Cols newCols = new CT_Cols();
             this.colsField.Add(newCols);
             return newCols;
         }
         public void SetColsArray(int index, CT_Cols newCols)
         {
+            if (null == colsField) { colsField = new List<CT_Cols>(); }
             this.colsField.Insert(index, newCols);
         }
         public CT_Cols GetColsArray(int index)
         {
+            if (null == colsField) { colsField = new List<CT_Cols>(); }
             return this.colsField[index];
         }
         public List<CT_Cols> GetColsArray()
@@ -503,9 +507,9 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             return this.sheetPrField != null;
         }
-        public int sizeOfConditionalFormattingArray()
+        public int SizeOfConditionalFormattingArray()
         {
-            return this.conditionalFormatting.Count;
+            return (null == conditionalFormattingField) ? 0 : this.conditionalFormatting.Count;
         }
 
         public void UnsetSheetProtection()
@@ -3636,7 +3640,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.hiddenField = null;
         }
 
-        public int sizeOfCArray()
+        public int SizeOfCArray()
         {
             return (null == cField) ? 0 : cField.Count;
         }

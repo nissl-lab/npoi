@@ -969,15 +969,15 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual(3, xrow.Count);
 
             //rows are sorted: {0, 1, 2}
-            Assert.AreEqual(4, xrow[0].sizeOfCArray());
+            Assert.AreEqual(4, xrow[0].SizeOfCArray());
             Assert.AreEqual(1, xrow[0].r);
             Assert.IsTrue(xrow[0].Equals(row3.GetCTRow()));
 
-            Assert.AreEqual(3, xrow[1].sizeOfCArray());
+            Assert.AreEqual(3, xrow[1].SizeOfCArray());
             Assert.AreEqual(2, xrow[1].r);
             Assert.IsTrue(xrow[1].Equals(row2.GetCTRow()));
 
-            Assert.AreEqual(2, xrow[2].sizeOfCArray());
+            Assert.AreEqual(2, xrow[2].SizeOfCArray());
             Assert.AreEqual(3, xrow[2].r);
             Assert.IsTrue(xrow[2].Equals(row1.GetCTRow()));
 
@@ -991,7 +991,7 @@ namespace NPOI.XSSF.UserModel
             row2 = (XSSFRow)sheet.CreateRow(1);
             Assert.AreEqual(3, sheetData.SizeOfRowArray());
             //existing cells are invalidated
-            Assert.AreEqual(0, sheetData.GetRowArray(1).sizeOfCArray());
+            Assert.AreEqual(0, sheetData.GetRowArray(1).SizeOfCArray());
             Assert.AreEqual(0, row2.PhysicalNumberOfCells);
 
             workbook = (XSSFWorkbook)XSSFTestDataSamples.WriteOutAndReadBack(workbook);
@@ -1001,7 +1001,7 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual(3, xrow.Count);
 
             //rows are sorted: {0, 1, 2}
-            Assert.AreEqual(4, xrow[0].sizeOfCArray());
+            Assert.AreEqual(4, xrow[0].SizeOfCArray());
             Assert.AreEqual(1, xrow[0].r);
             //cells are now sorted
             xcell = xrow[0].c;
@@ -1011,10 +1011,10 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual("F1", xcell[3].r);
 
 
-            Assert.AreEqual(0, xrow[1].sizeOfCArray());
+            Assert.AreEqual(0, xrow[1].SizeOfCArray());
             Assert.AreEqual(2, xrow[1].r);
 
-            Assert.AreEqual(2, xrow[2].sizeOfCArray());
+            Assert.AreEqual(2, xrow[2].SizeOfCArray());
             Assert.AreEqual(3, xrow[2].r);
 
         }

@@ -15,12 +15,10 @@
    limitations under the License.
 ==================================================================== */
 
-using NPOI.OpenXmlFormats.Spreadsheet;
-using NPOI.XSSF.Util;
-using NPOI.SS.UserModel;
 using System.Collections.Generic;
-using NPOI.Util;
-using System;
+using NPOI.OpenXmlFormats.Spreadsheet;
+using NPOI.SS.UserModel;
+using NPOI.XSSF.Util;
 namespace NPOI.XSSF.UserModel.Helpers
 {
     /**
@@ -47,20 +45,23 @@ namespace NPOI.XSSF.UserModel.Helpers
         {
             this.newCols = new CT_Cols();
             List<CT_Cols> colsArray = worksheet.GetColsArray();
-            int i = 0;
-            for (i = 0; i < colsArray.Count; i++)
+            if (null != colsArray)
             {
-                CT_Cols cols = colsArray[i];
-                List<CT_Col> colArray = cols.GetColArray();
-                for (int y = 0; y < colArray.Count; y++)
+                int i = 0;
+                for (i = 0; i < colsArray.Count; i++)
                 {
-                    CT_Col col = colArray[y];
-                    newCols = AddCleanColIntoCols(newCols, col);
+                    CT_Cols cols = colsArray[i];
+                    List<CT_Col> colArray = cols.GetColArray();
+                    for (int y = 0; y < colArray.Count; y++)
+                    {
+                        CT_Col col = colArray[y];
+                        newCols = AddCleanColIntoCols(newCols, col);
+                    }
                 }
-            }
-            for (int y = i - 1; y >= 0; y--)
-            {
-                worksheet.RemoveCols(y);
+                for (int y = i - 1; y >= 0; y--)
+                {
+                    worksheet.RemoveCols(y);
+                }
             }
             worksheet.AddNewCols();
             worksheet.SetColsArray(0, newCols);

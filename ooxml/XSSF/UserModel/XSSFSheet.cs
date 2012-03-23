@@ -171,10 +171,13 @@ namespace NPOI.XSSF.UserModel
             tables = new Dictionary<String, XSSFTable>();
             sharedFormulas = new Dictionary<int, CT_CellFormula>();
             arrayFormulas = new List<CellRangeAddress>();
-            foreach (CT_Row row in worksheet.sheetData.row)
+            if (0 < worksheet.sheetData.SizeOfRowArray())
             {
-                XSSFRow r = new XSSFRow(row, this);
-                _rows.Add(r.RowNum,  r);
+                foreach (CT_Row row in worksheet.sheetData.row)
+                {
+                    XSSFRow r = new XSSFRow(row, this);
+                    _rows.Add(r.RowNum, r);
+                }
             }
         }
 
@@ -600,7 +603,7 @@ namespace NPOI.XSSF.UserModel
         public virtual IRow CreateRow(int rownum)
         {
             CT_Row ctRow;
-            XSSFRow prev = _rows[rownum];
+            XSSFRow prev = _rows.ContainsKey(rownum) ? _rows[rownum] : null;
             if (prev != null)
             {
                 ctRow = prev.GetCTRow();

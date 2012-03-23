@@ -62,11 +62,14 @@ namespace NPOI.XSSF.UserModel
             _row = row;
             _sheet = sheet;
             _cells = new SortedDictionary<int, ICell>();
-            foreach (CT_Cell c in row.c)
+            if (0 < row.SizeOfCArray())
             {
-                XSSFCell cell = new XSSFCell(this, c);
-                _cells[cell.ColumnIndex] = cell;
-                sheet.OnReadCell(cell);
+                foreach (CT_Cell c in row.c)
+                {
+                    XSSFCell cell = new XSSFCell(this, c);
+                    _cells[cell.ColumnIndex] = cell;
+                    sheet.OnReadCell(cell);
+                }
             }
         }
 
@@ -171,7 +174,7 @@ namespace NPOI.XSSF.UserModel
         public ICell CreateCell(int columnIndex, CellType type)
         {
             CT_Cell ctCell;
-            XSSFCell prev = (XSSFCell)_cells[columnIndex];
+            XSSFCell prev = _cells.ContainsKey(columnIndex) ? (XSSFCell)_cells[columnIndex] : null;
             if (prev != null)
             {
                 ctCell = prev.GetCTCell();
@@ -521,7 +524,7 @@ namespace NPOI.XSSF.UserModel
         {
             // check if cells in the CT_Row are ordered
             bool isOrdered = true;
-            if (_row.sizeOfCArray() != _cells.Count) isOrdered = false;
+            if (_row.SizeOfCArray() != _cells.Count) isOrdered = false;
             else
             {
                 int i = 0;
