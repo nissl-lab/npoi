@@ -38,14 +38,14 @@ namespace NPOI.XSSF.UserModel
             {
                 if (!_fill.IsSetPatternFill()) return 0;
 
-                return (short)_fill.GetPatternFill().bgColor.indexed;
+                return _fill.GetPatternFill().bgColor.indexedSpecified ? (short)_fill.GetPatternFill().bgColor.indexed : (short)0;
             }
             set 
             {
                 CT_PatternFill ptrn =
                 _fill.IsSetPatternFill() ? _fill.GetPatternFill() : _fill.AddNewPatternFill();
                 CT_Color bgColor = new CT_Color();
-                bgColor.indexed = value;
+                bgColor.indexed = (uint)value;
                 ptrn.bgColor = (bgColor);
             }
         }
@@ -57,13 +57,13 @@ namespace NPOI.XSSF.UserModel
                 if (!_fill.IsSetPatternFill() || !_fill.GetPatternFill().IsSetFgColor())
                     return 0;
 
-                return (short)_fill.GetPatternFill().fgColor.indexed;
+                return _fill.GetPatternFill().fgColor.indexedSpecified?  (short)_fill.GetPatternFill().fgColor.indexed : (short)0;
             }
             set 
             {
                 CT_PatternFill ptrn = _fill.IsSetPatternFill() ? _fill.GetPatternFill() : _fill.AddNewPatternFill();
                 CT_Color fgColor = new CT_Color();
-                fgColor.indexed = (value);
+                fgColor.indexed = (uint)(value);
                 ptrn.fgColor = (fgColor);
             }
         }

@@ -2328,14 +2328,30 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
     }
 
+    public enum FontElementNameType
+    {
+        b,
+        charset,
+        color,
+        condense,
+        extend,
+        family,
+        i,
+        name,
+        outline,
+        rFont,
+        scheme,
+        shadow,
+        strike,
+        sz,
+        u,
+        vertAlign
+    }
     /// <summary>
     /// Properties of Rich Text Run.
     /// </summary>
     [Serializable]
-    //[XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
-    //[XmlRoot(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main",
-    //    ElementName = "rPr",
-    //    IsNullable = true)]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public class CT_RPrElt
     {
 

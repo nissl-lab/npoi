@@ -83,7 +83,7 @@ namespace NPOI.XSSF.UserModel
          */
         public short GetIndexed()
         {
-            return (short)ctColor.indexed;
+            return ctColor.indexedSpecified ? (short)ctColor.indexed : (short)0;
         }
 
         /**
@@ -91,7 +91,7 @@ namespace NPOI.XSSF.UserModel
          */
         public void SetIndexed(long indexed)
         {
-            ctColor.indexed = indexed;
+            ctColor.indexed = (uint)indexed;
         }
 
         /**
@@ -169,7 +169,7 @@ namespace NPOI.XSSF.UserModel
         {
             byte[] rgb = null;
 
-            if (ctColor.indexed > 0)
+            if (ctColor.indexedSpecified && ctColor.indexed > 0)
             {
                 HSSFColor indexed = (HSSFColor)HSSFColor.GetIndexHash()[(int)ctColor.indexed];
                 if (indexed != null)
@@ -278,7 +278,7 @@ namespace NPOI.XSSF.UserModel
          */
         public int GetTheme()
         {
-            return (int)ctColor.theme;
+            return ctColor.themeSpecified ? (int)ctColor.theme : (int)0;
         }
 
         /**
@@ -287,7 +287,7 @@ namespace NPOI.XSSF.UserModel
          */
         public void SetTheme(int theme)
         {
-            ctColor.theme = theme;
+            ctColor.theme = (uint)theme;
         }
 
         /**

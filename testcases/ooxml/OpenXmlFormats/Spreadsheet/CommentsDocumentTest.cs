@@ -79,11 +79,12 @@ namespace ooxml.Testcases
             var commentText = new CT_RElt();
             commentText.t = "First Comment";
             text.r.Add(commentText);
-            singleComment.text = text;           
+            singleComment.text = text;
 
-            StringWriter stream = new StringWriter();
-            CommentsDocument_Accessor.serializer.Serialize(stream, comments);
-            string expected = @"<?xml version=""1.0"" encoding=""utf-16""?>
+            using (StringWriter stream = new StringWriter())
+            {
+                CommentsDocument_Accessor.serializer.Serialize(stream, comments);
+                string expected = @"<?xml version=""1.0"" encoding=""utf-16""?>
 <comments xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"" xmlns=""http://schemas.openxmlformats.org/spreadsheetml/2006/main"">
   <authors>
     <author>Christian</author>
@@ -99,7 +100,8 @@ namespace ooxml.Testcases
     </comment>
   </commentList>
 </comments>";
-            Assert.AreEqual(expected, stream.ToString());
+                Assert.AreEqual(expected, stream.ToString());
+            }
         }
 
 
@@ -197,8 +199,10 @@ This column adds the first and second one.</t>
             //    result = (CT_Comments)CommentsDocument_Accessor.serializer.Deserialize(stream); // instantiate source code to enable debugging the serialization code
             //}
             {
-                StringReader stream = new StringReader(input);
-                result = (CT_Comments)CommentsDocument_Accessor.serializer.Deserialize(stream);
+                using (StringReader stream = new StringReader(input))
+                {
+                    result = (CT_Comments)CommentsDocument_Accessor.serializer.Deserialize(stream);
+                }
             }
             Assert.AreEqual(3, result.commentList.SizeOfCommentArray());
             Assert.AreEqual(1, result.authors.SizeOfAuthorArray());

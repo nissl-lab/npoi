@@ -108,7 +108,7 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
-                CT_IntProperty charset = _ctFont.sizeOfCharSetArray() == 0 ? null : _ctFont.GetCharsetArray(0);
+                CT_IntProperty charset = _ctFont.sizeOfCharsetArray() == 0 ? null : _ctFont.GetCharsetArray(0);
                 int val = charset == null ? FontCharset.ANSI.Value : FontCharset.ValueOf(charset.val).Value;
                 return (short)val;
             }
@@ -133,6 +133,7 @@ namespace NPOI.XSSF.UserModel
                 Spreadsheet.CT_Color color = _ctFont.sizeOfColorArray() == 0 ? null : _ctFont.GetColorArray(0);
                 if (color == null) return IndexedColors.BLACK.Index;
 
+                if (!color.indexedSpecified) return IndexedColors.BLACK.Index;
                 long index = color.indexed;
                 if (index == XSSFFont.DEFAULT_FONT_COLOR)
                 {
@@ -154,16 +155,16 @@ namespace NPOI.XSSF.UserModel
                 {
                     case (short)FontColor.NORMAL:
                         
-                            ctColor.indexed = (XSSFFont.DEFAULT_FONT_COLOR);
+                            ctColor.indexed = (uint)(XSSFFont.DEFAULT_FONT_COLOR);
                             break;
                         
                     case (short)FontColor.RED:
-                        
-                            ctColor.indexed = (IndexedColors.RED.Index);
+
+                            ctColor.indexed = (uint)(IndexedColors.RED.Index);
                             break;
                         
                     default:
-                        ctColor.indexed = (value);
+                            ctColor.indexed = (uint)(value);
                         break;
                 }
             }
@@ -204,7 +205,7 @@ namespace NPOI.XSSF.UserModel
         public short GetThemeColor()
         {
             Spreadsheet.CT_Color color = _ctFont.sizeOfColorArray() == 0 ? null : _ctFont.GetColorArray(0);
-            long index = color == null ? 0 : color.theme;
+            long index = ((color == null) || !color.themeSpecified) ? 0 : color.theme;
             return (short)index;
         }
 
@@ -474,7 +475,7 @@ namespace NPOI.XSSF.UserModel
         public void SetCharSet(FontCharset charset)
         {
             CT_IntProperty charSetProperty;
-            if (_ctFont.sizeOfCharSetArray() == 0)
+            if (_ctFont.sizeOfCharsetArray() == 0)
             {
                 charSetProperty = _ctFont.AddNewCharset();
             }
@@ -511,7 +512,7 @@ namespace NPOI.XSSF.UserModel
         public void SetThemeColor(short theme)
         {
             Spreadsheet.CT_Color ctColor = _ctFont.sizeOfColorArray() == 0 ? _ctFont.AddNewColor() : _ctFont.GetColorArray(0);
-            ctColor.theme = theme;
+            ctColor.theme = (uint)theme;
         }
 
 

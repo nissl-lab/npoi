@@ -69,7 +69,7 @@ namespace NPOI.XSSF.UserModel.Extensions
         {
             CT_PatternFill ptrn = EnsureCTPatternFill();
             CT_Color CT_Color = ptrn.IsSetBgColor() ? ptrn.bgColor : ptrn.AddNewBgColor();
-            CT_Color.indexed = index;
+            CT_Color.indexed = (uint)index;
         }
 
         /**
@@ -106,7 +106,7 @@ namespace NPOI.XSSF.UserModel.Extensions
         {
             CT_PatternFill ptrn = EnsureCTPatternFill();
             CT_Color CT_Color = ptrn.IsSetFgColor() ? ptrn.fgColor : ptrn.AddNewFgColor();
-            CT_Color.indexed = index;
+            CT_Color.indexed = (uint)index;
         }
 
         /**

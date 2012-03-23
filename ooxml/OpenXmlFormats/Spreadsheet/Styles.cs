@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Xml.Serialization;
+using System.Xml;
+using System.IO;
 
 namespace NPOI.OpenXmlFormats.Spreadsheet
 {
@@ -385,44 +387,24 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
     }
+
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public class CT_Color
     {
-        private bool? autoField;
+        // all attributes are optional
+        private bool? autoField = null;
 
-        private bool autoFieldSpecified;
+        private uint? indexedField = null; // type of xsd:unsignedInt // TODO change all the uses theme to use uint instead of signed integer variants
 
-        private long? indexedField;
+        private byte[] rgbField = null; // TODO type of	ST_UnsignedIntHex
 
-        private bool indexedFieldSpecified;
+        private uint? themeField = null; // TODO change all the uses theme to use uint instead of signed integer variants
 
-        private byte[] rgbField = null;
+        private double? tintField = null;
 
-        private long? themeField;
-
-        private bool themeFieldSpecified;
-
-        private double? tintField;
-
-        public CT_Color()
-        {
-            this.tintField = 0D;
-        }
-        public bool IsSetIndexed()
-        {
-            return this.indexedField != null;
-        }
-        public bool IsSetAuto()
-        {
-            return this.autoField != null;
-        }
-        public bool IsSetTheme()
-        {
-            return this.themeField != null;
-        }
-        public bool IsSetTint()
-        {
-            return this.tintField != null;
-        }
+        #region auto
+        [XmlAttribute]
         public bool auto
         {
             get
@@ -434,25 +416,26 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.autoField = value;
             }
         }
-
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnore]
+        // do not remove this field or change the name, because it is automatically used by the XmlSerializer to decide if the auto attribute should be printed or not.
         public bool autoSpecified
         {
-            get
-            {
-                return this.autoFieldSpecified;
-            }
-            set
-            {
-                this.autoFieldSpecified = value;
-            }
+            get { return (null != autoField); }
+        }
+        public bool IsSetAuto()
+        {
+            return autoSpecified;
         }
 
-        public long indexed
+        #endregion auto
+
+        #region indexed
+        [XmlAttribute]
+        public uint indexed
         {
             get
             {
-                return (long)this.indexedField;
+                return (uint)this.indexedField;
             }
             set
             {
@@ -460,19 +443,20 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnore]
         public bool indexedSpecified
         {
-            get
-            {
-                return this.indexedFieldSpecified;
-            }
-            set
-            {
-                this.indexedFieldSpecified = value;
-            }
+            get { return (null != indexedField); }
         }
+        public bool IsSetIndexed()
+        {
+            return indexedSpecified;
+        }
+        #endregion indexed
 
+        #region rgb
+        [XmlAttribute]
+        // TODO this is Type ST_UnsignedIntHex 
         public byte[] rgb
         {
             get
@@ -484,48 +468,11 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.rgbField = value;
             }
         }
-
-        public long theme
+        [XmlIgnore]
+        public bool rgbSpecified
         {
-            get
-            {
-                return (long)this.themeField;
-            }
-            set
-            {
-                this.themeField = value;
-            }
+            get { return (null != rgbField); }
         }
-        public void SetVal(long val)
-        {
-            throw new NotImplementedException();
-        }
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool themeSpecified
-        {
-            get
-            {
-                return this.themeFieldSpecified;
-            }
-            set
-            {
-                this.themeFieldSpecified = value;
-            }
-        }
-
-        [System.ComponentModel.DefaultValueAttribute(0D)]
-        public double tint
-        {
-            get
-            {
-                return (double)this.tintField;
-            }
-            set
-            {
-                this.tintField = value;
-            }
-        }
-
         public void SetRgb(byte R, byte G, byte B)
         {
             this.rgbField = new byte[3];
@@ -535,7 +482,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
         public bool IsSetRgb()
         {
-            return rgb != null;
+            return rgbSpecified;
         }
         public void SetRgb(byte[] rgb)
         {
@@ -545,19 +492,69 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             return rgb;
         }
+        #endregion rgb
 
+        #region theme
+        [XmlAttribute]
+        public uint theme
+        {
+            get
+            {
+                return (uint)this.themeField;
+            }
+            set
+            {
+                this.themeField = value;
+            }
+        }        
+        [XmlIgnore]
+        public bool themeSpecified
+        {
+            get { return (null != themeField); }
+
+        }
+        public bool IsSetTheme()
+        {
+            return themeSpecified;
+        }
+        #endregion theme
+
+        #region tint
+        [System.ComponentModel.DefaultValueAttribute(0.0D)]
+        [XmlAttribute]
+        public double tint
+        {
+            get
+            {
+                return (null == tintField) ? 0.0D : (double)this.tintField;
+            }
+            set
+            {
+                this.tintField = value;
+            }
+        }
+        [XmlIgnore]
+        public bool tintSpecified
+        {
+            get { return (null != tintField); }
+
+        }
+        public bool IsSetTint()
+        {
+            return tintSpecified;
+        }
+
+        #endregion tint
     }
-    [System.SerializableAttribute()]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
-    [System.Xml.Serialization.XmlRootAttribute(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main", IsNullable = true)]
+
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public class CT_FontScheme
     {
         private ST_FontScheme valField;
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [XmlAttribute]
         public ST_FontScheme val
         {
             get
@@ -570,186 +567,392 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
     }
-    public enum FontElementNameType
-    {
-        b,
-        charset,
-        color,
-        condense,
-        extend,
-        family,
-        i,
-        name,
-        outline,
-        rFont,
-        scheme,
-        shadow,
-        strike,
-        sz,
-        u,
-        vertAlign
-    }
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main",
+        ElementName = "font")]
     public class CT_Font
     {
-        //// all elements are optional
-        //private CT_FontName nameFieldField = null; // name of the font
-        //private CT_IntProperty charsetField = null;
-        //private CT_IntProperty familyField = null; // family of the font
-        //private CT_BooleanProperty bField = null; // typeface bold
-        //private CT_BooleanProperty iField = null;   // italic
-        //private CT_BooleanProperty strikeField = null; //   strike through
-        //private CT_BooleanProperty outlineField = null;
-        //private CT_BooleanProperty shadowField = null;
-        //private CT_BooleanProperty condenseField = null;
-        //private CT_BooleanProperty extendField = null;
-        //private CT_Color colorField = null;
+        internal static XmlSerializer serializer = new XmlSerializer(typeof(CT_Font));
+        internal static XmlSerializerNamespaces namespaces = new XmlSerializerNamespaces(new[] {
+            new XmlQualifiedName("", "http://schemas.openxmlformats.org/spreadsheetml/2006/main") });
+
+        // all elements are optional
+        private CT_FontName nameField = null; // name of the font
+        private CT_IntProperty charsetField = null;
+        private CT_IntProperty familyField = null; // family of the font
+        private CT_BooleanProperty bField = null; // typeface bold
+        private CT_BooleanProperty iField = null;   // italic
+        private CT_BooleanProperty strikeField = null; //   strike through
+        private CT_BooleanProperty outlineField = null;
+        private CT_BooleanProperty shadowField = null;
+        private CT_BooleanProperty condenseField = null;
+        private CT_BooleanProperty extendField = null;
+        private CT_Color colorField = null;
         private CT_FontSize szField = null; // size of the font
-        //private CT_UnderlineProperty uField = null; // underline
-        //private CT_VerticalAlignFontProperty vertAlignField = null;  // vertical alignment of the text
-        //private CT_FontScheme schemeField = null;
+        private CT_UnderlineProperty uField = null; // underline
+        private CT_VerticalAlignFontProperty vertAlignField = null;  // vertical alignment of the text
+        private CT_FontScheme schemeField = null;
 
-        private List<object> itemsField = new List<object>();
 
-        private List<FontElementNameType> itemsElementNameField = new List<FontElementNameType>();
-
-        //public CT_Font()
-        //{
-        //    this.itemsElementNameField = new List<FontElementNameType>();
-        //    this.itemsField = new List<object>();
-        //}
         public static CT_Font Parse(string xml)
         {
-            throw new NotImplementedException();
+            CT_Font result;
+            using (StringReader stream = new StringReader(xml))
+            {
+                result = (CT_Font)serializer.Deserialize(stream);
+            }
+            return result;
         }
 
-        [System.Xml.Serialization.XmlElementAttribute("name", typeof(CT_FontName))]
-        [System.Xml.Serialization.XmlElementAttribute("charset", typeof(CT_IntProperty))]
-        [System.Xml.Serialization.XmlElementAttribute("family", typeof(CT_IntProperty))]
-
-        [System.Xml.Serialization.XmlElementAttribute("b", typeof(CT_BooleanProperty))]
-        [System.Xml.Serialization.XmlElementAttribute("i", typeof(CT_BooleanProperty))]
-        [System.Xml.Serialization.XmlElementAttribute("strike", typeof(CT_BooleanProperty))]
-        [System.Xml.Serialization.XmlElementAttribute("outline", typeof(CT_BooleanProperty))]
-        [System.Xml.Serialization.XmlElementAttribute("shadow", typeof(CT_BooleanProperty))]
-        [System.Xml.Serialization.XmlElementAttribute("condense", typeof(CT_BooleanProperty))]
-        [System.Xml.Serialization.XmlElementAttribute("extend", typeof(CT_BooleanProperty))]
-
-        [System.Xml.Serialization.XmlElementAttribute("color", typeof(CT_Color))]
-        //[System.Xml.Serialization.XmlElementAttribute("sz", typeof(CT_FontSize))]
-        [System.Xml.Serialization.XmlElementAttribute("u", typeof(CT_UnderlineProperty))]
-        [System.Xml.Serialization.XmlElementAttribute("vertAlign", typeof(CT_VerticalAlignFontProperty))]
-        [System.Xml.Serialization.XmlElementAttribute("scheme", typeof(CT_FontScheme))]
-        [System.Xml.Serialization.XmlChoiceIdentifierAttribute("ItemsElementName")]
-        public object[] Items
+        public static void Save(Stream stream, CT_Font font)
         {
-            get
+            serializer.Serialize(stream, font, namespaces);
+        }
+
+        public static string GetString(CT_Font font)
+        {
+            using (StringWriter writer = new StringWriter())
             {
-                return this.itemsField.ToArray();
-            }
-            set
-            {
-                this.itemsField = new List<object>(value);
+                serializer.Serialize(writer, font, namespaces);
+                return writer.ToString();
             }
         }
 
-        //[System.Xml.Serialization.XmlElementAttribute("ItemsElementName")]
+        #region name
+        [XmlElement]
+        public CT_FontName name
+        {
+            get { return this.nameField; }
+            set { this.nameField = value; }
+        }
         [XmlIgnore]
-        public FontElementNameType[] ItemsElementName
+        // do not remove this field or change the name, because it is automatically used by the XmlSerializer to decide if the name attribute should be printed or not.
+        public bool nameSpecified
         {
-            get
-            {
-                return this.itemsElementNameField.ToArray();
-            }
-            set
-            {
-                this.itemsElementNameField = new List<FontElementNameType>(value);
-            }
+            get { return (null != nameField); }
         }
-        public int sizeOfFamilyArray()
+        public int sizeOfNameArray()
         {
-            throw new NotImplementedException();
+            return this.nameField == null ? 0 : 1;
         }
-        public CT_IntProperty GetFamilyArray(int index)
-        {
-            throw new NotImplementedException();
-        }
-        //public void SetFamilyArray()
-        //{
-        //    throw new NotImplementedException();
-        //}
-        public CT_IntProperty AddNewFamily()
-        {
-            throw new NotImplementedException();
-        }
-
         public CT_FontName AddNewName()
         {
-            throw new NotImplementedException();
+            this.nameField = new CT_FontName();
+            return this.nameField;
+        }
+        public CT_FontName GetNameArray(int index)
+        {
+            if (0 != index) { throw new IndexOutOfRangeException("Only an index of 0 is supported"); }
+            return this.nameField;
+        }
+        #endregion name
+
+        #region charset
+        [XmlElement]
+        public CT_IntProperty charset
+        {
+            get { return this.charsetField; }
+            set { this.charsetField = value; }
+        }
+        [XmlIgnore]
+        public bool charsetSpecified
+        {
+            get { return (null != charsetField); }
+        }
+        public int sizeOfCharsetArray()
+        {
+            return this.charsetField == null ? 0 : 1;
         }
         public CT_IntProperty AddNewCharset()
         {
-            throw new NotImplementedException();
-        }
-        public CT_BooleanProperty AddNewB()
-        {
-            throw new NotImplementedException();
-        }
-        public CT_UnderlineProperty AddNewU()
-        {
-            throw new NotImplementedException();
-        }
-        public CT_BooleanProperty AddNewCondense()
-        {
-            throw new NotImplementedException();
-        }
-        public CT_BooleanProperty AddNewExtend()
-        {
-            throw new NotImplementedException();
-        }
-        public CT_BooleanProperty AddNewOutline()
-        {
-            throw new NotImplementedException();
-        }
-        public CT_BooleanProperty AddNewShadow()
-        {
-            throw new NotImplementedException();
-        }
-        public CT_VerticalAlignFontProperty AddNewVertAlign()
-        {
-            throw new NotImplementedException();
-        }
-        public CT_VerticalAlignFontProperty GetVertAlignArray(int index)
-        {
-            throw new NotImplementedException();
-        }
-        public int sizeOfBArray()
-        {
-            throw new NotImplementedException();
-        }
-
-        public int sizeOfCharSetArray()
-        {
-            throw new NotImplementedException();
-        }
-
-        public int sizeOfColorArray()
-        {
-            throw new NotImplementedException();
-        }
-        public CT_Color GetColorArray(int index)
-        {
-            throw new NotImplementedException();
+            this.charsetField = new CT_IntProperty();
+            return this.charsetField;
         }
         public CT_IntProperty GetCharsetArray(int index)
         {
-            throw new NotImplementedException();
+            if (0 != index) { throw new IndexOutOfRangeException("Only an index of 0 is supported"); }
+            return this.charsetField;
         }
-        public CT_FontScheme GetSchemeArray(int index)
+        #endregion charset
+
+        #region family
+        [XmlElement]
+        public CT_IntProperty family
         {
-            throw new NotImplementedException();
+            get { return this.familyField; }
+            set { this.familyField = value; }
         }
+        [XmlIgnore]
+        public bool familySpecified
+        {
+            get { return (null != familyField); }
+        }
+        public int sizeOfFamilyArray()
+        {
+            return this.familyField == null ? 0 : 1;
+        }
+        public CT_IntProperty AddNewFamily()
+        {
+            this.familyField = new CT_IntProperty();
+            return this.familyField;
+        }
+        //public void SetFamilyArray()
+        //{
+        //    this.familyField = null;
+        //}
+        public CT_IntProperty GetFamilyArray(int index)
+        {
+            if (0 != index) { throw new IndexOutOfRangeException("Only an index of 0 is supported"); }
+            return this.familyField;
+        }
+        #endregion family
 
+        #region b
+        [XmlElement]
+        public CT_BooleanProperty b
+        {
+            get { return this.bField; }
+            set { this.bField = value; }
+        }
+        [XmlIgnore]
+        public bool bSpecified
+        {
+            get { return (null != bField); }
+        }
+        public int sizeOfBArray()
+        {
+            return this.bField == null ? 0 : 1;
+        }
+        public CT_BooleanProperty AddNewB()
+        {
+            this.bField = new CT_BooleanProperty();
+            return this.bField;
+        }
+        public void SetBArray(CT_BooleanProperty[] array)
+        {
+            this.bField = array.Length > 0 ? array[0] : null;
+        }
+        public CT_BooleanProperty GetBArray(int index)
+        {
+            if (0 != index) { throw new IndexOutOfRangeException("Only an index of 0 is supported"); }
+            return this.bField;
+        }
+        #endregion b
 
+        #region i
+        [XmlElement]
+        public CT_BooleanProperty i
+        {
+            get { return this.iField; }
+            set { this.iField = value; }
+        }
+        [XmlIgnore]
+        public bool iSpecified
+        {
+            get { return (null != iField); }
+        }
+        public int sizeOfIArray()
+        {
+            return this.iField == null ? 0 : 1;
+        }
+        public CT_BooleanProperty AddNewI()
+        {
+            this.iField = new CT_BooleanProperty();
+            return this.iField;
+        }
+        public void SetIArray(CT_BooleanProperty[] array)
+        {
+            this.iField = array.Length > 0 ? array[0] : null;
+        }
+        public CT_BooleanProperty GetIArray(int index)
+        {
+            if (0 != index) { throw new IndexOutOfRangeException("Only an index of 0 is supported"); }
+            return this.iField;
+        }
+        #endregion i
+
+        #region strike
+        [XmlElement]
+        public CT_BooleanProperty strike
+        {
+            get { return this.strikeField; }
+            set { this.strikeField = value; }
+        }
+        [XmlIgnore]
+        public bool strikeSpecified
+        {
+            get { return (null != strikeField); }
+        }
+        public int sizeOfStrikeArray()
+        {
+            return this.strikeField == null ? 0 : 1;
+        }
+        public CT_BooleanProperty AddNewStrike()
+        {
+            this.strikeField = new CT_BooleanProperty();
+            return this.strikeField;
+        }
+        public void SetStrikeArray(CT_BooleanProperty[] array)
+        {
+            this.strikeField = array.Length > 0 ? array[0] : null;
+        }
+        public CT_BooleanProperty GetStrikeArray(int index)
+        {
+            if (0 != index) { throw new IndexOutOfRangeException("Only an index of 0 is supported"); }
+            return this.strikeField;
+        }
+        #endregion strike
+
+        #region outline
+        [XmlElement]
+        public CT_BooleanProperty outline
+        {
+            get { return this.outlineField; }
+            set { this.outlineField = value; }
+        }
+        [XmlIgnore]
+        public bool outlineSpecified
+        {
+            get { return (null != outlineField); }
+        }
+        public int sizeOfOutlineArray()
+        {
+            return this.outlineField == null ? 0 : 1;
+        }
+        public CT_BooleanProperty AddNewOutline()
+        {
+            this.outlineField = new CT_BooleanProperty();
+            return this.outlineField;
+        }
+        public void SetOutlineArray(CT_BooleanProperty[] array)
+        {
+            this.outlineField = array.Length > 0 ? array[0] : null;
+        }
+        public CT_BooleanProperty GetOutlineArray(int index)
+        {
+            if (0 != index) { throw new IndexOutOfRangeException("Only an index of 0 is supported"); }
+            return this.outlineField;
+        }
+        #endregion outline
+
+        #region shadow
+        [XmlElement]
+        public CT_BooleanProperty shadow
+        {
+            get { return this.shadowField; }
+            set { this.shadowField = value; }
+        }
+        [XmlIgnore]
+        public bool shadowSpecified
+        {
+            get { return (null != shadowField); }
+        }
+        public int sizeOfShadowArray()
+        {
+            return this.shadowField == null ? 0 : 1;
+        }
+        public CT_BooleanProperty AddNewShadow()
+        {
+            this.shadowField = new CT_BooleanProperty();
+            return this.shadowField;
+        }
+        public CT_BooleanProperty GetShadowArray(int index)
+        {
+            if (0 != index) { throw new IndexOutOfRangeException("Only an index of 0 is supported"); }
+            return this.shadowField;
+        }
+        #endregion shadow
+
+        #region condense
+        [XmlElement]
+        public CT_BooleanProperty condense
+        {
+            get { return this.condenseField; }
+            set { this.condenseField = value; }
+        }
+        [XmlIgnore]
+        public bool condenseSpecified
+        {
+            get { return (null != condenseField); }
+        }
+        public int sizeOfCondenseArray()
+        {
+            return this.condenseField == null ? 0 : 1;
+        }
+        public CT_BooleanProperty AddNewCondense()
+        {
+            this.condenseField = new CT_BooleanProperty();
+            return this.condenseField;
+        }
+        public CT_BooleanProperty GetCondenseArray(int index)
+        {
+            if (0 != index) { throw new IndexOutOfRangeException("Only an index of 0 is supported"); }
+            return this.condenseField;
+        }
+        #endregion condense
+
+        #region extend
+        [XmlElement]
+        public CT_BooleanProperty extend
+        {
+            get { return this.extendField; }
+            set { this.extendField = value; }
+        }
+        [XmlIgnore]
+        public bool extendSpecified
+        {
+            get { return (null != extendField); }
+        }
+        public int sizeOfExtendArray()
+        {
+            return this.extendField == null ? 0 : 1;
+        }
+        public CT_BooleanProperty AddNewExtend()
+        {
+            this.extendField = new CT_BooleanProperty();
+            return this.extendField;
+        }
+        public CT_BooleanProperty GetExtendArray(int index)
+        {
+            if (0 != index) { throw new IndexOutOfRangeException("Only an index of 0 is supported"); }
+            return this.extendField;
+        }
+        #endregion extend
+
+        #region color
+        [XmlElement]
+        public CT_Color color
+        {
+            get { return this.colorField; }
+            set { this.colorField = value; }
+        }
+        [XmlIgnore]
+        public bool colorSpecified
+        {
+            get { return (null != colorField); }
+        }
+        public int sizeOfColorArray()
+        {
+            return this.colorField == null ? 0 : 1;
+        }
+        public CT_Color GetColorArray(int index)
+        {
+            if (0 != index) { throw new IndexOutOfRangeException("Only an index of 0 is supported"); }
+            return this.colorField;
+        }
+        public void SetColorArray(CT_Color[] array)
+        {
+            this.colorField = array.Length > 0 ? array[0] : null;
+        }
+        public CT_Color AddNewColor()
+        {
+            this.colorField = new CT_Color();
+            return this.colorField;
+        }
+        #endregion color
+
+        #region sz
         [XmlElement]
         public CT_FontSize sz
         {
@@ -765,6 +968,11 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             return this.szField == null ? 0 : 1;
         }
+        public CT_FontSize AddNewSz()
+        {
+            this.szField = new CT_FontSize();
+            return this.szField;
+        }
         public void SetSzArray(CT_FontSize[] array)
         {
             this.szField = array.Length > 0 ? array[0] : null;
@@ -774,148 +982,110 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             if (0 != index) { throw new IndexOutOfRangeException("Only an index of 0 is supported"); }
             return this.szField;
         }
+        #endregion sz
 
-
-        public int sizeOfIArray()
+        #region u
+        [XmlElement]
+        public CT_UnderlineProperty u
         {
-            throw new NotImplementedException();
+            get { return this.uField; }
+            set { this.uField = value; }
         }
-        public int sizeOfStrikeArray()
+        [XmlIgnore]
+        public bool uSpecified
         {
-            throw new NotImplementedException();
-        }
-        public int sizeOfNameArray()
-        {
-            throw new NotImplementedException();
-        }
-        public int sizeOfSchemeArray()
-        {
-            throw new NotImplementedException();
+            get { return (null != uField); }
         }
         public int sizeOfUArray()
         {
-            throw new NotImplementedException();
+            return this.uField == null ? 0 : 1;
         }
-        public int sizeOfCharsetArray()
+        public CT_UnderlineProperty AddNewU()
         {
-            throw new NotImplementedException();
-        }
-        public int sizeOfCondenseArray()
-        {
-            throw new NotImplementedException();
-        }
-        public int sizeOfExtendArray()
-        {
-            throw new NotImplementedException();
-        }
-        public int sizeOfOutlineArray()
-        {
-            throw new NotImplementedException();
-        }
-        public int sizeOfShadowArray()
-        {
-            throw new NotImplementedException();
+            this.uField = new CT_UnderlineProperty();
+            return this.uField;
         }
         public void SetUArray(CT_UnderlineProperty[] array)
         {
-            throw new NotImplementedException();
+            this.uField = array.Length > 0 ? array[0] : null;
         }
         public CT_UnderlineProperty GetUArray(int index)
         {
-            throw new NotImplementedException();
+            if (0 != index) { throw new IndexOutOfRangeException("Only an index of 0 is supported"); }
+            return this.uField;
         }
-        public CT_BooleanProperty GetStrikeArray(int index)
-        {
-            throw new NotImplementedException();
-        }
-        public CT_BooleanProperty GetCondenseArray(int index)
-        {
-            throw new NotImplementedException();
-        }
-        public CT_BooleanProperty GetExtendArray(int index)
-        {
-            throw new NotImplementedException();
-        }
-        public CT_BooleanProperty GetShadowArray(int index)
-        {
-            throw new NotImplementedException();
-        }
-        public CT_BooleanProperty GetOutlineArray(int index)
-        {
-            throw new NotImplementedException();
-        }
+        #endregion u
 
-        public void SetStrikeArray(CT_BooleanProperty property)
+        #region vertAlign
+        [XmlElement]
+        public CT_VerticalAlignFontProperty vertAlign
         {
-            throw new NotImplementedException();
+            get { return this.vertAlignField; }
+            set { this.vertAlignField = value; }
         }
-        public CT_BooleanProperty AddNewStrike()
+        [XmlIgnore]
+        public bool vertAlignSpecified
         {
-            throw new NotImplementedException();
-        }
-
-        public CT_FontName GetNameArray(int index)
-        {
-            throw new NotImplementedException();
-        }
-        public int SetColorArray(CT_Color[] array)
-        {
-            throw new NotImplementedException();
-        }
-        public CT_BooleanProperty GetBArray(int index)
-        {
-            throw new NotImplementedException();
-        }
-        public int SetFontArray(CT_Font[] font)
-        {
-            throw new NotImplementedException();
-        }
-
-        public int SetVertAlignArray(CT_VerticalAlignFontProperty[] array)
-        {
-            throw new NotImplementedException();
+            get { return (null != vertAlignField); }
         }
         public int sizeOfVertAlignArray()
         {
-            throw new NotImplementedException();
+            return this.vertAlignField == null ? 0 : 1;
         }
+        public CT_VerticalAlignFontProperty AddNewVertAlign()
+        {
+            this.vertAlignField = new CT_VerticalAlignFontProperty();
+            return this.vertAlignField;
+        }
+        public void SetVertAlignArray(CT_VerticalAlignFontProperty[] array)
+        {
+            this.vertAlignField = array.Length > 0 ? array[0] : null;
+        }
+        public CT_VerticalAlignFontProperty GetVertAlignArray(int index)
+        {
+            if (0 != index) { throw new IndexOutOfRangeException("Only an index of 0 is supported"); }
+            return this.vertAlignField;
+        }
+        #endregion vertAlign
 
-        public CT_Color AddNewColor()
+        #region scheme
+        [XmlElement]
+        public CT_FontScheme scheme
         {
-            throw new NotImplementedException();
+            get { return this.schemeField; }
+            set { this.schemeField = value; }
         }
-        public CT_FontSize AddNewSz()
+        [XmlIgnore]
+        public bool schemeSpecified
         {
-            throw new NotImplementedException();
+            get { return (null != schemeField); }
         }
-        public CT_BooleanProperty GetIArray(int index)
+        public int sizeOfSchemeArray()
         {
-            throw new NotImplementedException();
-        }
-        public CT_BooleanProperty AddNewI()
-        {
-            throw new NotImplementedException();
-        }
-        public void SetIArray(CT_BooleanProperty[] array)
-        {
-            throw new NotImplementedException();
-        }
-        public void SetBArray(object[] array)
-        {
-            throw new NotImplementedException();
+            return this.schemeField == null ? 0 : 1;
         }
         public CT_FontScheme AddNewScheme()
         {
-            throw new NotImplementedException();
+            this.schemeField = new CT_FontScheme();
+            return this.schemeField;
         }
+        public CT_FontScheme GetSchemeArray(int index)
+        {
+            if (0 != index) { throw new IndexOutOfRangeException("Only an index of 0 is supported"); }
+            return this.schemeField;
+        }
+        #endregion scheme
     }
 
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public class CT_FontName
     {
 
         private string valField;
 
+        [XmlAttribute]
         public string val
         {
             get
@@ -950,9 +1120,10 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     }
 
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public enum ST_FontScheme
     {
-
         /// <remarks/>
         none,
 
@@ -964,10 +1135,12 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     }
 
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public class CT_UnderlineProperty
     {
 
-        private ST_UnderlineValues valField;
+        private ST_UnderlineValues? valField = null;
 
         public CT_UnderlineProperty()
         {
@@ -975,26 +1148,37 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
 
         [System.ComponentModel.DefaultValueAttribute(ST_UnderlineValues.single)]
+        [XmlAttribute]
         public ST_UnderlineValues val
         {
             get
             {
-                return this.valField;
+                return  (null == valField) ? ST_UnderlineValues.single : (ST_UnderlineValues)this.valField;
             }
             set
             {
                 this.valField = value;
             }
         }
+        [XmlIgnore]
+        public bool valbSpecified
+        {
+            get { return (null != valField); }
+        }
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public enum ST_UnderlineValues
     {
+        /// <remarks/>
+        none,
 
         /// <remarks/>
         single,
 
         /// <remarks/>
+        [XmlEnum("double")]
         @double,
 
         /// <remarks/>
@@ -1003,15 +1187,15 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         /// <remarks/>
         doubleAccounting,
 
-        /// <remarks/>
-        none,
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public class CT_VerticalAlignFontProperty
     {
-
         private ST_VerticalAlignRun valField;
 
+        [XmlAttribute]
         public ST_VerticalAlignRun val
         {
             get
@@ -1025,9 +1209,10 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public enum ST_VerticalAlignRun
     {
-
         /// <remarks/>
         baseline,
 
@@ -1037,10 +1222,13 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         /// <remarks/>
         subscript,
     }
+
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public class CT_BooleanProperty
     {
 
-        private bool valField;
+        private bool? valField = null;
 
         public CT_BooleanProperty()
         {
@@ -1048,24 +1236,34 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
 
         [System.ComponentModel.DefaultValueAttribute(true)]
+        [XmlAttribute]
         public bool val
         {
             get
             {
-                return this.valField;
+                return null == this.valField ? true : (bool)this.valField;
             }
             set
             {
                 this.valField = value;
             }
         }
+        [XmlIgnore]
+        public bool valSpecified
+        {
+            get { return (null != valField); }
+        }
+
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public class CT_IntProperty
     {
 
         private int valField;
 
+        [XmlAttribute]
         public int val
         {
             get

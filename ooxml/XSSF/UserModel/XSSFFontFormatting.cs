@@ -82,7 +82,7 @@ namespace NPOI.XSSF.UserModel
                 _font.SetColorArray(null);
                 if (value != -1)
                 {
-                    _font.AddNewColor().indexed = (value);
+                    _font.AddNewColor().indexed = (uint)(value);
                 }
             }
         }

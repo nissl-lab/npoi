@@ -117,14 +117,14 @@ namespace NPOI.XSSF.UserModel
                 if (!_border.IsSetBottom()) return 0;
 
                 CT_BorderPr pr = _border.bottom;
-                return (short)pr.color.indexed;
+                return pr.color.indexedSpecified ? (short)pr.color.indexed : (short)0;
             }
             set
             {
                 CT_BorderPr pr = _border.IsSetBottom() ? _border.bottom : _border.AddNewBottom();
 
                 CT_Color ctColor = new CT_Color();
-                ctColor.indexed = (value);
+                ctColor.indexed = (uint)value;
                 pr.color = (ctColor);
             }
         }
@@ -136,14 +136,14 @@ namespace NPOI.XSSF.UserModel
                 if (!_border.IsSetDiagonal()) return 0;
 
                 CT_BorderPr pr = _border.diagonal;
-                return (short)pr.color.indexed;
+                return pr.color.indexedSpecified ? (short)pr.color.indexed : (short)0;
             }
             set
             {
                 CT_BorderPr pr = _border.IsSetDiagonal() ? _border.diagonal : _border.AddNewDiagonal();
 
                 CT_Color ctColor = new CT_Color();
-                ctColor.indexed = (value);
+                ctColor.indexed = (uint)value;
                 pr.color = (ctColor);
             }
         }
@@ -155,14 +155,14 @@ namespace NPOI.XSSF.UserModel
                 if (!_border.IsSetLeft()) return 0;
 
                 CT_BorderPr pr = _border.left;
-                return (short)pr.color.indexed;
+                return pr.color.indexedSpecified ? (short)pr.color.indexed : (short)0;
             }
             set
             {
                 CT_BorderPr pr = _border.IsSetLeft() ? _border.left : _border.AddNewLeft();
 
                 CT_Color ctColor = new CT_Color();
-                ctColor.indexed = (value);
+                ctColor.indexed = (uint)value;
                 pr.color = (ctColor);
             }
         }
@@ -174,14 +174,14 @@ namespace NPOI.XSSF.UserModel
                 if (!_border.IsSetRight()) return 0;
 
                 CT_BorderPr pr = _border.right;
-                return (short)pr.color.indexed;
+                return pr.color.indexedSpecified ? (short)pr.color.indexed : (short)0;
             }
             set
             {
                 CT_BorderPr pr = _border.IsSetRight() ? _border.right : _border.AddNewRight();
 
                 CT_Color ctColor = new CT_Color();
-                ctColor.indexed = (value);
+                ctColor.indexed = (uint)(value);
                 pr.color = (ctColor);
             }
         }
@@ -193,14 +193,14 @@ namespace NPOI.XSSF.UserModel
                 if (!_border.IsSetTop()) return 0;
 
                 CT_BorderPr pr = _border.top;
-                return (short)pr.color.indexed;
+                return pr.color.indexedSpecified ? (short)pr.color.indexed : (short)0;
             }
             set
             {
                 CT_BorderPr pr = _border.IsSetTop() ? _border.top : _border.AddNewTop();
 
                 CT_Color ctColor = new CT_Color();
-                ctColor.indexed = (value);
+                ctColor.indexed = (uint)(value);
                 pr.color = (ctColor);
             }
         }
