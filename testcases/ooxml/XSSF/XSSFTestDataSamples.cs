@@ -52,21 +52,25 @@ namespace NPOI.XSSF
             IWorkbook result;
             try
             {
-                MemoryStream baos = new MemoryStream(8192);
-                wb.Write(baos);
-                Stream is1 = new MemoryStream(baos.ToArray());
-                if (wb is HSSFWorkbook)
+                using (MemoryStream baos = new MemoryStream(8192))
                 {
-                    result = new HSSFWorkbook(is1);
-                }
-                else if (wb is XSSFWorkbook)
-                {
-                    result = new XSSFWorkbook(is1);
-                }
-                else
-                {
-                    throw new RuntimeException("Unexpected workbook type ("
-                            + wb.GetType().Name + ")");
+                    wb.Write(baos);
+                    using (Stream is1 = new MemoryStream(baos.ToArray()))
+                    {
+                        if (wb is HSSFWorkbook)
+                        {
+                            result = new HSSFWorkbook(is1);
+                        }
+                        else if (wb is XSSFWorkbook)
+                        {
+                            result = new XSSFWorkbook(is1);
+                        }
+                        else
+                        {
+                            throw new RuntimeException("Unexpected workbook type ("
+                                    + wb.GetType().Name + ")");
+                        }
+                    }
                 }
             }
             catch (IOException e)

@@ -6,9 +6,13 @@
 // ------------------------------------------------------------------------------
 namespace NPOI.OpenXmlFormats
 {
+    using System;
     using System.Collections.Generic;
+    using System.Xml.Serialization;
 
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/characteristics")]
     public class CT_AdditionalCharacteristics
     {
 
@@ -32,6 +36,8 @@ namespace NPOI.OpenXmlFormats
         }
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/characteristics")]
     public class CT_Characteristic
     {
 

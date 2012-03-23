@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.IO;
+﻿using System.IO;
 using System.Xml.Serialization;
 
 namespace NPOI.OpenXmlFormats.Spreadsheet
@@ -37,7 +34,10 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
         public void Save(Stream stream)
         {
-            serializer.Serialize(stream, sst);
+            if (null != sst)
+            {
+                serializer.Serialize(stream, sst);
+            }
         }
 
     }

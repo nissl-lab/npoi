@@ -229,7 +229,8 @@ namespace NPOI.XSSF.Model
         protected override void Commit()
         {
             PackagePart part = GetPackagePart();
-            Stream out1 = part.GetInputStream();
+            //Stream out1 = part.GetInputStream();
+            Stream out1 = part.GetOutputStream();
             WriteTo(out1);
             out1.Close();
         }

@@ -33,7 +33,7 @@ namespace NPOI.XSSF.UserModel.Helpers
         {
             _fpwb = fpwb;
             _sheetIndex = sheetIndex;
-            string _name = name;
+            _name = name;
         }
         #region IFormulaRenderingWorkbook Members
 

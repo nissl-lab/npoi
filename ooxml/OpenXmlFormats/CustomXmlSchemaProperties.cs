@@ -6,10 +6,14 @@
 // ------------------------------------------------------------------------------
 namespace NPOI.OpenXmlFormats
 {
-    using System.ComponentModel;
+    using System;
     using System.Collections.Generic;
+    using System.ComponentModel;
+    using System.Xml.Serialization;
 
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/schemaLibrary/2006/main")]
     public class CT_SchemaLibrary
     {
 
@@ -20,6 +24,7 @@ namespace NPOI.OpenXmlFormats
             this.schemaField = new List<CT_Schema>();
         }
 
+        [XmlElement("schema")]
         public List<CT_Schema> schema
         {
             get
@@ -33,6 +38,8 @@ namespace NPOI.OpenXmlFormats
         }
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/schemaLibrary/2006/main")]
     public partial class CT_Schema
     {
 
@@ -48,6 +55,7 @@ namespace NPOI.OpenXmlFormats
         }
 
         [DefaultValueAttribute("")]
+        [XmlAttribute]
         public string uri
         {
             get
@@ -60,6 +68,7 @@ namespace NPOI.OpenXmlFormats
             }
         }
 
+        [XmlAttribute]
         public string manifestLocation
         {
             get
@@ -72,6 +81,7 @@ namespace NPOI.OpenXmlFormats
             }
         }
 
+        [XmlAttribute]
         public string schemaLocation
         {
             get

@@ -38,7 +38,7 @@ namespace NPOI.XSSF.UserModel
          * Root element of the SpreadsheetML Drawing part
          */
         private CT_Drawing drawing;
-        private bool isNew;
+       // private bool isNew = true; not used so far
         private long numOfGraphicFrames = 0L;
 
         public const String NAMESPACE_A = "http://schemas.openxmlformats.org/drawingml/2006/main";
@@ -52,9 +52,7 @@ namespace NPOI.XSSF.UserModel
         protected XSSFDrawing()
             : base()
         {
-
             drawing = newDrawing();
-            isNew = true;
         }
 
         /**

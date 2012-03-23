@@ -429,7 +429,7 @@ namespace NPOI.XSSF.UserModel
                     uniqueIndex++;
                     baseName = srcName.Substring(0, bracketPos).Trim();
                 }
-                catch (FormatException e)
+                catch (FormatException)
                 {
                     // contents of brackets not numeric
                 }
@@ -1341,7 +1341,7 @@ namespace NPOI.XSSF.UserModel
         {
             if (calcChain != null)
             {
-                int count = calcChain.GetCTCalcChain().sizeOfCArray();
+                int count = calcChain.GetCTCalcChain().SizeOfCArray();
                 if (count == 0)
                 {
                     RemoveRelation(calcChain);
@@ -1358,14 +1358,15 @@ namespace NPOI.XSSF.UserModel
 
             //XmlOptions xmlOptions = new XmlOptions(DEFAULT_XML_OPTIONS);
             //xmlOptions.SetSaveSyntheticDocumentElement(new QName(CT_Workbook.type.GetName().GetNamespaceURI(), "workbook"));
-            Dictionary<String, String> map = new Dictionary<String, String>();
-            map[ST_RelationshipId.NamespaceURI] = "r";
+            //Dictionary<String, String> map = new Dictionary<String, String>();
+            //map[ST_RelationshipId.NamespaceURI] = "r";
             //xmlOptions.SetSaveSuggestedPrefixes(map);
 
             PackagePart part = GetPackagePart();
-            Stream out1 = part.GetOutputStream();
-            workbook.Save(out1);
-            out1.Close();
+            using (Stream out1 = part.GetOutputStream())
+            {
+                workbook.Save(out1);
+            }
         }
 
         /**
@@ -1629,7 +1630,7 @@ namespace NPOI.XSSF.UserModel
          */
         public bool IsStructureLocked()
         {
-            return workbookProtectionPresent() && workbook.workbookProtection.lockStructure;
+            return WorkbookProtectionPresent() && workbook.workbookProtection.lockStructure;
         }
 
         /**
@@ -1642,7 +1643,7 @@ namespace NPOI.XSSF.UserModel
          */
         public bool IsWindowsLocked()
         {
-            return workbookProtectionPresent() && workbook.workbookProtection.lockWindows;
+            return WorkbookProtectionPresent() && workbook.workbookProtection.lockWindows;
         }
 
         /**
@@ -1652,7 +1653,7 @@ namespace NPOI.XSSF.UserModel
          */
         public bool IsRevisionLocked()
         {
-            return workbookProtectionPresent() && workbook.workbookProtection.lockRevision;
+            return WorkbookProtectionPresent() && workbook.workbookProtection.lockRevision;
         }
 
         /**
@@ -1709,7 +1710,7 @@ namespace NPOI.XSSF.UserModel
             workbook.workbookProtection.lockRevision = (false);
         }
 
-        private bool workbookProtectionPresent()
+        private bool WorkbookProtectionPresent()
         {
             return workbook.workbookProtection != null;
         }

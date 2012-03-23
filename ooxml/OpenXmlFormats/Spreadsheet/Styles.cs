@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Xml.Serialization;
-using System.Xml;
 using System.IO;
+using System.Xml;
+using System.Xml.Serialization;
 
 namespace NPOI.OpenXmlFormats.Spreadsheet
 {
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public class CT_Fonts
     {
 
@@ -23,7 +24,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         public void SetFontArray(CT_Font[] array)
         {
-            throw new NotImplementedException();
+            fontField = new List<CT_Font>(array);
         }
         [XmlElement]
         public List<CT_Font> font
@@ -67,7 +68,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
-    [System.Xml.Serialization.XmlRootAttribute(ElementName = "styleSheet", Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main", IsNullable = true)]
+    [System.Xml.Serialization.XmlRootAttribute(ElementName = "styleSheet", Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main", IsNullable = false)]
     public class CT_Stylesheet
     {
 
@@ -1125,13 +1126,13 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     public enum ST_FontScheme
     {
         /// <remarks/>
-        none,
+        none = 1,
 
         /// <remarks/>
-        major,
+        major = 2,
 
         /// <remarks/>
-        minor,
+        minor = 3,
     }
 
 

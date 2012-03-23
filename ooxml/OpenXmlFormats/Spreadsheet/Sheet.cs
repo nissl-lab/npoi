@@ -6896,7 +6896,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         private bool typeFieldSpecified;
 
-        private uint dxfIdField;
+        private uint? dxfIdField;
 
         private bool dxfIdFieldSpecified;
 
@@ -7064,7 +7064,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             get
             {
-                return this.dxfIdField;
+                return (uint)this.dxfIdField;
             }
             set
             {

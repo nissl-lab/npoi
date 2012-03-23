@@ -205,7 +205,7 @@ namespace NPOI.XSSF.UserModel
                             {
                                 return Double.Parse(_cell.v);
                             }
-                            catch (FormatException e)
+                            catch (FormatException)
                             {
                                 throw TypeMismatch(CellType.NUMERIC, CellType.STRING, false);
                             }

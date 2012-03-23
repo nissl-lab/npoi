@@ -42,6 +42,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisIgnoreGeneratedCode>false</CodeAnalysisIgnoreGeneratedCode>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -82,6 +83,7 @@
     <Compile Include="TestPOIXMLDocument.cs" />
     <Compile Include="Util\TestIdentifierManager.cs" />
     <Compile Include="OpenXmlFormats\Spreadsheet\WorksheetDocumentTest.cs" />
+    <Compile Include="OpenXmlFormats\Spreadsheet\WorkbookDocumentTest.cs" />
     <Compile Include="XSSF\IO\TestLoadSaveXSSF.cs" />
     <Compile Include="XSSF\Model\TestCalculationChain.cs" />
     <Compile Include="XSSF\Model\TestCommentsTable.cs" />

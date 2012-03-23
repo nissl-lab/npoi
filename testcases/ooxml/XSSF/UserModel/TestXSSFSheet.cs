@@ -42,7 +42,7 @@ namespace NPOI.XSSF.UserModel
 
         [Ignore]
         //TODO column styles are not yet supported by XSSF
-        public void TestDefaultColumnStyle()
+        public new void TestDefaultColumnStyle()
         {
             //super.testDefaultColumnStyle();
         }
@@ -970,15 +970,15 @@ namespace NPOI.XSSF.UserModel
 
             //rows are sorted: {0, 1, 2}
             Assert.AreEqual(4, xrow[0].SizeOfCArray());
-            Assert.AreEqual(1, xrow[0].r);
+            Assert.AreEqual(1u, xrow[0].r);
             Assert.IsTrue(xrow[0].Equals(row3.GetCTRow()));
 
             Assert.AreEqual(3, xrow[1].SizeOfCArray());
-            Assert.AreEqual(2, xrow[1].r);
+            Assert.AreEqual(2u, xrow[1].r);
             Assert.IsTrue(xrow[1].Equals(row2.GetCTRow()));
 
             Assert.AreEqual(2, xrow[2].SizeOfCArray());
-            Assert.AreEqual(3, xrow[2].r);
+            Assert.AreEqual(3u, xrow[2].r);
             Assert.IsTrue(xrow[2].Equals(row1.GetCTRow()));
 
             List<CT_Cell> xcell = xrow[0].c;
@@ -1002,7 +1002,7 @@ namespace NPOI.XSSF.UserModel
 
             //rows are sorted: {0, 1, 2}
             Assert.AreEqual(4, xrow[0].SizeOfCArray());
-            Assert.AreEqual(1, xrow[0].r);
+            Assert.AreEqual(1u, xrow[0].r);
             //cells are now sorted
             xcell = xrow[0].c;
             Assert.AreEqual("A1", xcell[0].r);
@@ -1012,10 +1012,10 @@ namespace NPOI.XSSF.UserModel
 
 
             Assert.AreEqual(0, xrow[1].SizeOfCArray());
-            Assert.AreEqual(2, xrow[1].r);
+            Assert.AreEqual(2u, xrow[1].r);
 
             Assert.AreEqual(2, xrow[2].SizeOfCArray());
-            Assert.AreEqual(3, xrow[2].r);
+            Assert.AreEqual(3u, xrow[2].r);
 
         }
         [TestMethod]
@@ -1064,13 +1064,13 @@ namespace NPOI.XSSF.UserModel
             XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("49966.xlsx");
             CalculationChain calcChain = wb.GetCalculationChain();
             Assert.IsNotNull(wb.GetCalculationChain());
-            Assert.AreEqual(3, calcChain.GetCTCalcChain().sizeOfCArray());
+            Assert.AreEqual(3, calcChain.GetCTCalcChain().SizeOfCArray());
 
             ISheet sheet = wb.GetSheetAt(0);
             IRow row = sheet.GetRow(0);
 
             sheet.RemoveRow(row);
-            Assert.AreEqual(0, calcChain.GetCTCalcChain().sizeOfCArray(), "XSSFSheet#RemoveRow did not clear calcChain entries");
+            Assert.AreEqual(0, calcChain.GetCTCalcChain().SizeOfCArray(), "XSSFSheet#RemoveRow did not clear calcChain entries");
 
             //calcChain should be gone 
             wb = (XSSFWorkbook)XSSFTestDataSamples.WriteOutAndReadBack(wb);
