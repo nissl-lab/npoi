@@ -59,11 +59,6 @@
       <HintPath>..\solution\Lib\ICSharpCode.SharpZipLib.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="NPOI, Version=1.2.4.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\solution\Lib\NPOI.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -172,6 +167,10 @@
     <Compile Include="XSSF\Util\NumericRange.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\main\main vs10.csproj">
+      <Project>{4704E545-CEFF-46B6-ACEF-C8927830FA1C}</Project>
+      <Name>main vs10</Name>
+    </ProjectReference>
     <ProjectReference Include="openxml4Net\OpenXml4Net.csproj">
       <Project>{D907A7AD-A67A-4492-A117-594D2168B7B8}</Project>
       <Name>OpenXml4Net</Name>

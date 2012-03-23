@@ -623,7 +623,7 @@ namespace NPOI.XSSF.UserModel
          */
         public void SetFamily(FontFamily family)
         {
-            SetFamily(family);
+            Family = family.Value;
         }
 
         /**

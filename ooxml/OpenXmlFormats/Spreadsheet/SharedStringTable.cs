@@ -2175,26 +2175,15 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         private CT_PhoneticPr phoneticPrField = null; // optional field 
 
-        public CT_Rst()
+        public void Set(CT_Rst o)
         {
-            //this.phoneticPrField = new CT_PhoneticPr();
-            //this.rPhField = new List<CT_PhoneticRun>();
-            //this.rField = new List<CT_RElt>();
+            this.tField = o.tField;
+            this.rField = o.rField;
+            this.rPhField = o.rPhField;
+            this.phoneticPrField = o.phoneticPrField;
         }
-        public CT_RElt AddNewR()
-        {
-            CT_RElt r = new CT_RElt();
-            this.rField.Add(r);
-            return r;
-        }
-        public int sizeOfRArray()
-        {
-            return r.Count;
-        }
-        public CT_RElt GetRArray(int index)
-        {
-            return this.rField[index];
-        }
+
+        #region t
         public bool IsSetT()
         {
             return this.tField != null;
@@ -2215,6 +2204,9 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.tField = value;
             }
         }
+        #endregion t
+
+        #region r
         /// <summary>
         /// Rich Text Run
         /// </summary>
@@ -2230,6 +2222,23 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.rField = value;
             }
         }
+        public CT_RElt AddNewR()
+        {
+            if (null == rField) { rField = new List<CT_RElt>(); }
+            CT_RElt r = new CT_RElt();
+            this.rField.Add(r);
+            return r;
+        }
+        public int sizeOfRArray()
+        {
+            return (null == rField) ? 0 : r.Count;
+        }
+        public CT_RElt GetRArray(int index)
+        {
+            return (null == rField) ? null : this.rField[index];
+        }
+        #endregion r
+
         /// <summary>
         /// Phonetic Run
         /// </summary>
@@ -2261,23 +2270,13 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        public void Set(CT_Rst o)
-        {
-            this.r = o.r;
-            this.rPh = o.rPh;
-            this.t = o.t;
-            this.phoneticPr = o.phoneticPr;
-        }
     }
 
     /// <summary>
     /// Rich Text Run container.
     /// </summary>
     [Serializable]
-    //[XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
-    //[XmlRoot(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main",
-    //    ElementName = "r",
-    //    IsNullable = true)]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public class CT_RElt
     {
 
@@ -2285,10 +2284,6 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         private string tField = string.Empty; // required field 
 
-        public CT_RElt()
-        {
-            
-        }
         public CT_RPrElt AddNewRPr()
         {
             this.rPrField = new CT_RPrElt();
