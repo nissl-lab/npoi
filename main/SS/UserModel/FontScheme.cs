@@ -39,7 +39,6 @@ namespace NPOI.SS.UserModel
         private FontScheme(int val)
         {
             value = val;
-            _table[val] = this;
         }
 
         public int Value
@@ -50,11 +49,15 @@ namespace NPOI.SS.UserModel
             }
         }
 
-        private static FontScheme[] _table = new FontScheme[4];
-
         public static FontScheme ValueOf(int value)
         {
-            return _table[value];
+            switch (value)
+            {
+                case 1: return NONE;
+                case 2: return MAJOR;
+                case 3: return MINOR;
+            }
+            return NONE;
         }
     }
 

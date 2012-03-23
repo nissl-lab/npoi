@@ -26,7 +26,6 @@ namespace NPOI.SS.UserModel
      */
     public class FontFamily
     {
-
         public static FontFamily NOT_APPLICABLE = new FontFamily(0);
         public static FontFamily ROMAN = new FontFamily(1);
         public static FontFamily SWISS = new FontFamily(2);
@@ -39,7 +38,6 @@ namespace NPOI.SS.UserModel
         private FontFamily(int value)
         {
             family = value;
-            _table[family] = this;
         }
 
         /**
@@ -55,11 +53,18 @@ namespace NPOI.SS.UserModel
             }
         }
 
-        private static FontFamily[] _table = new FontFamily[6];
-
         public static FontFamily ValueOf(int family)
         {
-            return _table[family];
+            switch(family)
+            {
+                case 0: return NOT_APPLICABLE;
+                case 1: return ROMAN;
+                case 2: return SWISS;
+                case 3: return MODERN;
+                case 4: return SCRIPT;
+                case 5: return DECORATIVE;
+            }
+            return NOT_APPLICABLE;
         }
     }
 }
