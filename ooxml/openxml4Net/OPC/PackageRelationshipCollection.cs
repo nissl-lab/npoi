@@ -230,7 +230,11 @@ namespace NPOI.OpenXml4Net.OPC
             PackageRelationship rel = relationshipsByID[id];
 			if (rel != null) {
 				relationshipsByID.Remove(rel.Id);
-				relationshipsByType.Values.Remove(rel);
+                for (int i = 0; i < relationshipsByType.Count; i++)
+                {
+                    if(relationshipsByType.Values[i]==rel)
+                        relationshipsByType.RemoveAt(i);
+                }
 			}
 		}
 	}

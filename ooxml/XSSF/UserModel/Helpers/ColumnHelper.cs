@@ -248,15 +248,15 @@ namespace NPOI.XSSF.UserModel.Helpers
         public void SetColumnAttributes(CT_Col fromCol, CT_Col toCol)
         {
 
-            if (fromCol.isSetBestFit()) toCol.bestFit = (fromCol.bestFit);
-            if (fromCol.isSetCustomWidth()) toCol.customWidth = (fromCol.customWidth);
-            if (fromCol.isSetHidden()) toCol.hidden=(fromCol.hidden);
+            if (fromCol.IsSetBestFit()) toCol.bestFit = (fromCol.bestFit);
+            if (fromCol.IsSetCustomWidth()) toCol.customWidth = (fromCol.customWidth);
+            if (fromCol.IsSetHidden()) toCol.hidden=(fromCol.hidden);
             if (fromCol.isSetStyle()) toCol.style=(fromCol.style);
             if (fromCol.IsSetWidth()) toCol.width=(fromCol.width);
-            if (fromCol.isSetCollapsed()) toCol.collapsed=(fromCol.collapsed);
-            if (fromCol.isSetPhonetic()) toCol.phonetic=(fromCol.phonetic);
-            if (fromCol.isSetOutlineLevel()) toCol.outlineLevel = (fromCol.outlineLevel);
-            toCol.collapsed = (fromCol.isSetCollapsed());
+            if (fromCol.IsSetCollapsed()) toCol.collapsed=(fromCol.collapsed);
+            if (fromCol.IsSetPhonetic()) toCol.phonetic=(fromCol.phonetic);
+            if (fromCol.IsSetOutlineLevel()) toCol.outlineLevel = (fromCol.outlineLevel);
+            toCol.collapsed = (fromCol.IsSetCollapsed());
         }
 
         public void SetColBestFit(long index, bool bestFit)

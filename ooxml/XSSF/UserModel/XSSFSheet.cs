@@ -2004,7 +2004,7 @@ namespace NPOI.XSSF.UserModel
             }
             else
             {
-                ci.unSetCollapsed();
+                ci.UnsetCollapsed();
             }
         }
 
@@ -2140,7 +2140,7 @@ namespace NPOI.XSSF.UserModel
                     CT_Col ci = cols.GetColArray(i);
                     if (outlineLevel == ci.outlineLevel)
                     {
-                        ci.unSetHidden();
+                        ci.UnsetHidden();
                         if (nestedGroup)
                         {
                             nestedGroup = false;
@@ -3513,29 +3513,28 @@ namespace NPOI.XSSF.UserModel
 
         public IAutoFilter SetAutoFilter(CellRangeAddress range)
         {
-            throw new NotImplementedException();
-        //    CTAutoFilter af = worksheet.GetAutoFilter();
-        //    if (af == null) af = worksheet.AddNewAutoFilter();
+            CT_AutoFilter af = worksheet.autoFilter;
+            if (af == null) af = worksheet.AddNewAutoFilter();
 
-        //    CellRangeAddress norm = new CellRangeAddress(range.FirstRow, range.LastRow,
-        //            range.FirstColumn, range.LastColumn);
-        //    String ref1 = norm.FormatAsString();
-        //    af.@ref = (ref1);
+            CellRangeAddress norm = new CellRangeAddress(range.FirstRow, range.LastRow,
+                    range.FirstColumn, range.LastColumn);
+            String ref1 = norm.FormatAsString();
+            af.@ref = (ref1);
 
-        //    XSSFWorkbook wb = Workbook;
-        //    int sheetIndex = Workbook.getSheetIndex(this);
-        //    XSSFName name = wb.GetBuiltInName(XSSFName.BUILTIN_FILTER_DB, sheetIndex);
-        //    if (name == null)
-        //    {
-        //        name = wb.CreateBuiltInName(XSSFName.BUILTIN_FILTER_DB, sheetIndex);
-        //        name.GetCTName().setHidden(true);
-        //        CellReference r1 = new CellReference(SheetName, range.FirstRow, range.FirstColumn, true, true);
-        //        CellReference r2 = new CellReference(null, range.LastRow, range.LastColumn, true, true);
-        //        String fmla = r1.FormatAsString() + ":" + r2.FormatAsString();
-        //        name.SetRefersToFormula(fmla);
-        //    }
+            XSSFWorkbook wb = (XSSFWorkbook)Workbook;
+            int sheetIndex = Workbook.GetSheetIndex(this);
+            XSSFName name = wb.GetBuiltInName(XSSFName.BUILTIN_FILTER_DB, sheetIndex);
+            if (name == null)
+            {
+                name = wb.CreateBuiltInName(XSSFName.BUILTIN_FILTER_DB, sheetIndex);
+                name.GetCTName().hidden=true;
+                CellReference r1 = new CellReference(SheetName, range.FirstRow, range.FirstColumn, true, true);
+                CellReference r2 = new CellReference(null, range.LastRow, range.LastColumn, true, true);
+                String fmla = r1.FormatAsString() + ":" + r2.FormatAsString();
+                name.RefersToFormula = fmla;
+            }
 
-        //    return new XSSFAutoFilter(this);
+            return new XSSFAutoFilter(this);
         }
 
         /**

@@ -327,6 +327,11 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         //    //this.dimensionField = new CT_SheetDimension();
         //    this.sheetPrField = new CT_SheetPr();
         //}
+        public CT_AutoFilter AddNewAutoFilter()
+        {
+            this.autoFilterField = new CT_AutoFilter();
+            return this.autoFilterField;
+        }
         public void Save(Stream stream)
         {
             WorksheetDocument.serializer.Serialize(stream, this, WorksheetDocument.namespaces);
@@ -3324,45 +3329,45 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
 
 
-        public bool isSetBestFit()
+        public bool IsSetBestFit()
         {
-            return true;
+            return this.bestFitField!=null;
         }
-        public bool isSetCustomWidth()
+        public bool IsSetCustomWidth()
         {
-            return true;
+            return this.customWidthField!=null;
         }
-        public bool isSetHidden()
+        public bool IsSetHidden()
         {
-            return true;
+            return hiddenField != null;
         }
         public bool isSetStyle()
         {
-            return true;
+            return this.styleField!=null;
         }
         public bool IsSetWidth()
         {
-            return true;
+            return this.widthField!=0;
         }
-        public bool isSetCollapsed()
+        public bool IsSetCollapsed()
         {
-            return true;
+            return this.collapsedField != null;
         }
-        public bool isSetPhonetic()
+        public bool IsSetPhonetic()
         {
-            return true;
+            return this.phoneticField!=null;
         }
-        public bool isSetOutlineLevel()
+        public bool IsSetOutlineLevel()
         {
-            return true;
+            return this.outlineLevelField!=null;
         }
 
 
-        public void unSetHidden()
+        public void UnsetHidden()
         {
             this.hiddenField = null;
         }
-        public void unSetCollapsed()
+        public void UnsetCollapsed()
         {
             this.collapsedField = null;
         }
@@ -4549,16 +4554,16 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.selectUnlockedCellsField = false;
         }
 
-        public bool isSetSheet()
+        public bool IsSetSheet()
         {
             return this.sheetField != null;
         }
 
-        public bool isSetObjects()
+        public bool IsSetObjects()
         {
             return this.objectsField != null;
         }
-        public bool isSetScenarios()
+        public bool IsSetScenarios()
         {
             return this.scenariosField != null;
         }

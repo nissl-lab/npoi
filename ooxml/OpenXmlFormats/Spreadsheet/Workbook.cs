@@ -1895,7 +1895,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.workbookParameterField = false;
         }
 
-
+        [XmlAttribute]
         public string name
         {
             get
@@ -1969,17 +1969,18 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
         public bool IsSetLocalSheetId()
         {
-            return localSheetId == null;
+            return localSheetIdField != null;
         }
         public void UnsetLocalSheetId()
         {
-            localSheetId = null;
+            localSheetIdField = null;
         }
-        public uint? localSheetId
+        [XmlAttribute]
+        public uint localSheetId
         {
             get
             {
-                return this.localSheetIdField;
+                return localSheetIdField==null? 0u : (uint)this.localSheetIdField;
             }
             set
             {
@@ -1999,7 +2000,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.localSheetIdFieldSpecified = value;
             }
         }
-
+        [XmlAttribute]
         [System.ComponentModel.DefaultValueAttribute(false)]
         public bool hidden
         {
@@ -2012,7 +2013,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.hiddenField = value;
             }
         }
-
+        [XmlAttribute]
         [System.ComponentModel.DefaultValueAttribute(false)]
         public bool function
         {
@@ -2025,7 +2026,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.functionField = value;
             }
         }
-
+        [XmlAttribute]
         [System.ComponentModel.DefaultValueAttribute(false)]
         public bool vbProcedure
         {
@@ -2038,7 +2039,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.vbProcedureField = value;
             }
         }
-
+        [XmlAttribute]
         [System.ComponentModel.DefaultValueAttribute(false)]
         public bool xlm
         {
@@ -3093,7 +3094,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             throw new NotImplementedException();
         }
-
+        [XmlElement]
         public List<CT_DefinedName> definedName
         {
             get

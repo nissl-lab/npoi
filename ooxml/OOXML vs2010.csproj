@@ -106,6 +106,7 @@
     <Compile Include="XSSF\UserModel\Helpers\XSSFSingleXmlCell.cs" />
     <Compile Include="XSSF\UserModel\Helpers\XSSFXmlColumnPr.cs" />
     <Compile Include="XSSF\UserModel\XSSFAnchor.cs" />
+    <Compile Include="XSSF\UserModel\XSSFAutoFilter.cs" />
     <Compile Include="XSSF\UserModel\XSSFBorderFormatting.cs" />
     <Compile Include="XSSF\UserModel\XSSFCell.cs" />
     <Compile Include="XSSF\UserModel\XSSFCellStyle.cs" />

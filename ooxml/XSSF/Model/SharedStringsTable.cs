@@ -113,7 +113,7 @@ namespace NPOI.XSSF.Model
                 foreach (CT_Rst st in sst.si)
                 {
                     string key=GetKey(st);
-                    if(key!=null)
+                    if(key!=null && !stmap.ContainsKey(key))
                         stmap.Add(key, cnt);
                     strings.Add(st);
                     cnt++;

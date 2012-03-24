@@ -975,6 +975,7 @@ namespace NPOI.XSSF.UserModel
                 calcChain = null;
             }
 
+            List<XSSFName> toRemoveNamedRanges=new List<XSSFName>();
             //adjust indices of names ranges
             foreach (XSSFName nm in namedRanges)
             {
@@ -983,13 +984,17 @@ namespace NPOI.XSSF.UserModel
                 if (!ct.IsSetLocalSheetId()) continue;
                 if (ct.localSheetId == index)
                 {
-                    namedRanges.Remove(nm);
+                    toRemoveNamedRanges.Add(nm);
                 }
                 else if (ct.localSheetId > index)
                 {
                     // Bump down by one, so still points at the same sheet
                     ct.localSheetId = (ct.localSheetId - 1);
                 }
+            }
+            foreach (XSSFName nm in toRemoveNamedRanges)
+            {
+                namedRanges.Remove(nm);
             }
         }
 
@@ -1222,7 +1227,7 @@ namespace NPOI.XSSF.UserModel
          * @throws ArgumentException if sheetNumber is invalid
          * @throws POIXMLException if such a name already exists in the workbook
          */
-        XSSFName CreateBuiltInName(String builtInName, int sheetNumber)
+        internal XSSFName CreateBuiltInName(String builtInName, int sheetNumber)
         {
             ValidateSheetIndex(sheetNumber);
 

@@ -20,6 +20,8 @@ using System;
 using NPOI.XSSF.Util;
 using System.IO;
 using NPOI.OpenXml4Net.OPC;
+using System.Text.RegularExpressions;
+using NPOI.OpenXmlFormats.Dml;
 namespace NPOI.XSSF.UserModel
 {
 
@@ -57,7 +59,7 @@ namespace NPOI.XSSF.UserModel
         /**
          * regexp to parse shape ids, in VML they have weird form of id="_x0000_s1026"
          */
-        private static Pattern ptrn_shapeId = Pattern.compile("_x0000_s(\\d+)");
+        private static Regex ptrn_shapeId = new Regex("_x0000_s(\\d+)");
 
         private List<QName> _qnames = new List<QName>();
         private List<XmlObject> _items = new List<XmlObject>();
@@ -88,7 +90,7 @@ namespace NPOI.XSSF.UserModel
             : base(part, rel)
         {
 
-            Read(getPackagePart().GetInputStream());
+            Read(GetPackagePart().GetInputStream());
         }
 
 
@@ -138,7 +140,7 @@ namespace NPOI.XSSF.UserModel
             return _items;
         }
 
-        protected void Write(OutputStream out1)
+        protected void Write(Stream out1)
         {
             XmlObject rootObject = XmlObject.Factory.newInstance();
             XmlCursor rootCursor = rootObject.newCursor();
@@ -147,8 +149,8 @@ namespace NPOI.XSSF.UserModel
 
             for (int i = 0; i < _items.Count; i++)
             {
-                XmlCursor xc = _items.Get(i).newCursor();
-                rootCursor.beginElement(_qnames.Get(i));
+                XmlCursor xc = _items[i].newCursor();
+                rootCursor.beginElement(_qnames[i]);
                 while (xc.ToNextToken() == XmlCursor.TokenType.ATTR)
                 {
                     Node anode = xc.GetDomNode();
@@ -188,7 +190,7 @@ namespace NPOI.XSSF.UserModel
         {
             CT_ShapeLayout layout = CT_ShapeLayout.Factory.newInstance();
             layout.SetExt(STExt.EDIT);
-            CTIdMap idmap = layout.AddNewIdmap();
+            CT_IdMap idmap = layout.AddNewIdmap();
             idmap.SetExt(STExt.EDIT);
             idmap.SetData("1");
             _items.Add(layout);
@@ -201,7 +203,7 @@ namespace NPOI.XSSF.UserModel
             shapetype.SetSpt(202);
             shapetype.SetPath2("m,l,21600r21600,l21600,xe");
             shapetype.AddNewStroke().SetJoinstyle(ST_StrokeJoinStyle.MITER);
-            CTPath path = shapetype.AddNewPath();
+            CT_Path path = shapetype.AddNewPath();
             path.SetGradientshapeok(ST_TrueFalse.T);
             path.SetConnecttype(ST_ConnectType.RECT);
             _items.Add(shapetype);

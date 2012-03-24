@@ -330,17 +330,17 @@ namespace NPOI.XSSF.UserModel
 
             XSSFName nm0 = (XSSFName)wb.GetNameAt(0);
             Assert.IsTrue(nm0.GetCTName().IsSetLocalSheetId());
-            Assert.AreEqual(0, nm0.GetCTName().localSheetId);
+            Assert.AreEqual(0u, nm0.GetCTName().localSheetId);
 
             XSSFName nm1 = (XSSFName)wb.GetNameAt(1);
             Assert.IsTrue(nm1.GetCTName().IsSetLocalSheetId());
-            Assert.AreEqual(1, nm1.GetCTName().localSheetId);
+            Assert.AreEqual(1u, nm1.GetCTName().localSheetId);
 
             wb.RemoveSheetAt(0);
             Assert.AreEqual(1, wb.NumberOfNames);
             XSSFName nm2 = (XSSFName)wb.GetNameAt(0);
             Assert.IsTrue(nm2.GetCTName().IsSetLocalSheetId());
-            Assert.AreEqual(0, nm2.GetCTName().localSheetId);
+            Assert.AreEqual(0u, nm2.GetCTName().localSheetId);
             //calculation chain is Removed as well
             Assert.IsNull(wb.GetCalculationChain());
 
