@@ -44,61 +44,61 @@ namespace NPOI.HSSF.Record
         public const short sid = 0xE0;
 
         // null constant
-        public static short NULL = unchecked((short)0xfff0);
+        public const short NULL = unchecked((short)0xfff0);
 
         // xf type
-        public static short XF_STYLE = 1;
-        public static short XF_CELL = 0;
+        public const short XF_STYLE = 1;
+        public const short XF_CELL = 0;
 
         // borders
-        public static short NONE = 0x0;
-        public static short THIN = 0x1;
-        public static short MEDIUM = 0x2;
-        public static short DASHED = 0x3;
-        public static short DOTTED = 0x4;
-        public static short THICK = 0x5;
-        public static short DOUBLE = 0x6;
-        public static short HAIR = 0x7;
-        public static short MEDIUM_DASHED = 0x8;
-        public static short DASH_DOT = 0x9;
-        public static short MEDIUM_DASH_DOT = 0xA;
-        public static short DASH_DOT_DOT = 0xB;
-        public static short MEDIUM_DASH_DOT_DOT = 0xC;
-        public static short SLANTED_DASH_DOT = 0xD;
+        public const short NONE = 0x0;
+        public const short THIN = 0x1;
+        public const short MEDIUM = 0x2;
+        public const short DASHED = 0x3;
+        public const short DOTTED = 0x4;
+        public const short THICK = 0x5;
+        public const short DOUBLE = 0x6;
+        public const short HAIR = 0x7;
+        public const short MEDIUM_DASHED = 0x8;
+        public const short DASH_DOT = 0x9;
+        public const short MEDIUM_DASH_DOT = 0xA;
+        public const short DASH_DOT_DOT = 0xB;
+        public const short MEDIUM_DASH_DOT_DOT = 0xC;
+        public const short SLANTED_DASH_DOT = 0xD;
 
         // alignment
-        public static short GENERAL = 0x0;
-        public static short LEFT = 0x1;
-        public static short CENTER = 0x2;
-        public static short RIGHT = 0x3;
-        public static short Fill = 0x4;
-        public static short JUSTIFY = 0x5;
-        public static short CENTER_SELECTION = 0x6;
+        public const short GENERAL = 0x0;
+        public const short LEFT = 0x1;
+        public const short CENTER = 0x2;
+        public const short RIGHT = 0x3;
+        public const short FILL = 0x4;
+        public const short JUSTIFY = 0x5;
+        public const short CENTER_SELECTION = 0x6;
 
         // vertical alignment
-        public static short VERTICAL_TOP = 0x0;
-        public static short VERTICAL_CENTER = 0x1;
-        public static short VERTICAL_BOTTOM = 0x2;
-        public static short VERTICAL_JUSTIFY = 0x3;
+        public const short VERTICAL_TOP = 0x0;
+        public const short VERTICAL_CENTER = 0x1;
+        public const short VERTICAL_BOTTOM = 0x2;
+        public const short VERTICAL_JUSTIFY = 0x3;
 
-        // Fill
-        public static short NO_Fill = 0;
-        public static short SOLID_Fill = 1;
-        public static short FINE_DOTS = 2;
-        public static short ALT_BARS = 3;
-        public static short SPARSE_DOTS = 4;
-        public static short THICK_HORZ_BANDS = 5;
-        public static short THICK_VERT_BANDS = 6;
-        public static short THICK_BACKWARD_DIAG = 7;
-        public static short THICK_FORWARD_DIAG = 8;
-        public static short BIG_SPOTS = 9;
-        public static short BRICKS = 10;
-        public static short THIN_HORZ_BANDS = 11;
-        public static short THIN_VERT_BANDS = 12;
-        public static short THIN_BACKWARD_DIAG = 13;
-        public static short THIN_FORWARD_DIAG = 14;
-        public static short SQUARES = 15;
-        public static short DIAMONDS = 16;
+        // fill
+        public const short NO_FILL = 0;
+        public const short SOLID_FILL = 1;
+        public const short FINE_DOTS = 2;
+        public const short ALT_BARS = 3;
+        public const short SPARSE_DOTS = 4;
+        public const short THICK_HORZ_BANDS = 5;
+        public const short THICK_VERT_BANDS = 6;
+        public const short THICK_BACKWARD_DIAG = 7;
+        public const short THICK_FORWARD_DIAG = 8;
+        public const short BIG_SPOTS = 9;
+        public const short BRICKS = 10;
+        public const short THIN_HORZ_BANDS = 11;
+        public const short THIN_VERT_BANDS = 12;
+        public const short THIN_BACKWARD_DIAG = 13;
+        public const short THIN_FORWARD_DIAG = 14;
+        public const short SQUARES = 15;
+        public const short DIAMONDS = 16;
 
         // fields in BOTH style and Cell XF records
         private short field_1_font_index;             // not bit-mapped
@@ -234,28 +234,18 @@ namespace NPOI.HSSF.Record
             field_9_fill_palette_options = source.field_9_fill_palette_options;
         }
 
-        /**
-         * Get the index to the FONT record (which font to use 0 based)
-         *
-         *
-         * @return index to the font
-         * @see org.apache.poi.hssf.record.FontRecord
-         */
 
+        /// <summary>
+        /// Get the index to the FONT record (which font to use 0 based)
+        /// </summary>
         public short FontIndex
         {
             get { return field_1_font_index; }
             set { field_1_font_index = value; }
         }
-
-        /**
-         *  Get the index to the Format record (which FORMAT to use 0-based)
-         *
-         *
-         * @return index to the format record
-         * @see org.apache.poi.hssf.record.FormatRecord
-         */
-
+        /// <summary>
+        /// Get the index to the Format record (which FORMAT to use 0-based)
+        /// </summary>
         public short FormatIndex
         {
             get
@@ -265,15 +255,10 @@ namespace NPOI.HSSF.Record
             set { field_2_format_index = value; }
         }
 
-        /**
-         * Gets the options bitmask - you can also use corresponding option bit Getters
-         * (see other methods that reference this one)
-         *
-         *
-         * @return options bitmask
-         *
-         */
-
+        /// <summary>
+        /// Gets the options bitmask - you can also use corresponding option bit Getters
+        /// (see other methods that reference this one)
+        /// </summary>
         public short CellOptions
         {
             get
@@ -283,16 +268,9 @@ namespace NPOI.HSSF.Record
             set { field_3_cell_options = value; }
         }
 
-        // These are the bit fields in cell options
-
-        /**
-         * Get whether the cell Is locked or not
-         *
-         *
-         * @return locked - if the cell Is locked
-         * @see #GetCellOptions()
-         */
-
+        /// <summary>
+        /// Get whether the cell Is locked or not
+        /// </summary>
         public bool IsLocked
         {
             get
@@ -306,14 +284,9 @@ namespace NPOI.HSSF.Record
             }
         }
 
-        /**
-         * Get whether the cell Is hidden or not
-         *
-         *
-         * @return hidden - if the cell Is hidden
-         * @see #GetCellOptions()
-         */
-
+        /// <summary>
+        /// Get whether the cell Is hidden or not
+        /// </summary>
         public bool IsHidden
         {
             get
@@ -327,16 +300,9 @@ namespace NPOI.HSSF.Record
             }
         }
 
-        /**
-         * Get whether the cell Is a cell or style XFRecord
-         *
-         *
-         * @return type - cell or style (0/1)
-         * @see #XF_STYLE
-         * @see #XF_CELL
-         * @see #GetCellOptions()
-         */
-
+        /// <summary>
+        /// Get whether the cell Is a cell or style XFRecord
+        /// </summary>
         public short XFType
         {
             get
@@ -350,14 +316,11 @@ namespace NPOI.HSSF.Record
             }
         }
 
-        /**
-         * Get some old holdover from lotus 123.  Who cares, its all over for Lotus.
-         * RIP Lotus.
-         *
-         * @return prefix - the lotus thing
-         * @see #GetCellOptions()
-         */
 
+        /// <summary>
+        /// Get some old holdover from lotus 123.  Who cares, its all over for Lotus.
+        /// RIP Lotus.
+        /// </summary>
         public bool _123Prefix
         {
             get{
@@ -369,16 +332,10 @@ namespace NPOI.HSSF.Record
                     _123_prefix.SetShortBoolean(field_3_cell_options, value);
             }
         }
-
-        /**
-         * for cell XF types this Is the parent style (usually 0/normal).  For
-         * style this should be NULL.
-         *
-         * @return index of parent XF
-         * @see #NULL
-         * @see #GetCellOptions()
-         */
-
+        /// <summary>
+        /// for cell XF types this Is the parent style (usually 0/normal).  For
+        /// style this should be NULL.
+        /// </summary>
         public short ParentIndex
         {
             get
@@ -392,16 +349,10 @@ namespace NPOI.HSSF.Record
             }
         }
 
-        // end bitfields in cell options
-
-        /**
-         * Get the alignment options bitmask.  See corresponding bitGetter methods
-         * that reference this one.
-         *
-         *
-         * @return options     - the bitmask
-         */
-
+        /// <summary>
+        /// Get the alignment options bitmask.  See corresponding bitGetter methods
+        /// that reference this one.
+        /// </summary>
         public short AlignmentOptions
         {
             get
@@ -411,23 +362,10 @@ namespace NPOI.HSSF.Record
             set { field_4_alignment_options = value; }
         }
 
-        // bitfields in alignment options
 
-        /**
-         * Get the horizontal alignment of the cell.
-         *
-         *
-         * @return align - how to align the cell (see constants)
-         * @see #GENERAL
-         * @see #LEFT
-         * @see #CENTER
-         * @see #RIGHT
-         * @see #Fill
-         * @see #JUSTIFY
-         * @see #CENTER_SELECTION
-         * @see #GetAlignmentOptions()
-         */
-
+        /// <summary>
+        /// Get the horizontal alignment of the cell.
+        /// </summary>
         public short Alignment
         {
             get
@@ -441,14 +379,9 @@ namespace NPOI.HSSF.Record
             }
         }
 
-        /**
-         * Get whether to wrap the text in the cell
-         *
-         *
-         * @return wrapped - whether or not to wrap the cell text
-         * @see #GetAlignmentOptions()
-         */
-
+        /// <summary>
+        /// Get whether to wrap the text in the cell
+        /// </summary>
         public bool WrapText
         {
             get
@@ -462,19 +395,9 @@ namespace NPOI.HSSF.Record
             }
         }
 
-        /**
-         * Get the vertical alignment of text in the cell
-         *
-         *
-         * @return where to align the text
-         * @see #VERTICAL_TOP
-         * @see #VERTICAL_CENTER
-         * @see #VERTICAL_BOTTOM
-         * @see #VERTICAL_JUSTIFY
-         *
-         * @see #GetAlignmentOptions()
-         */
-
+        /// <summary>
+        /// Get the vertical alignment of text in the cell
+        /// </summary>
         public short VerticalAlignment
         {
             get
@@ -489,15 +412,11 @@ namespace NPOI.HSSF.Record
             }
         }
 
-        /**
-         * Dunno.  Docs just say this Is for far east versions..  (I'm guessing it
-         * justifies for right-to-left Read languages)
-         *
-         *
-         * @return justify
-         * @see #GetAlignmentOptions()
-         */
 
+        /// <summary>
+        /// Docs just say this Is for far east versions..  (I'm guessing it
+        /// justifies for right-to-left Read languages)
+        /// </summary>
         public short JustifyLast
         {
             get
@@ -511,14 +430,9 @@ namespace NPOI.HSSF.Record
             }
         }
 
-        /**
-         * Get the degree of rotation.  (I've not actually seen this used anywhere)
-         *
-         *
-         * @return rotation - the degree of rotation
-         * @see #GetAlignmentOptions()
-         */
-
+        /// <summary>
+        /// Get the degree of rotation.  (I've not actually seen this used anywhere)
+        /// </summary>
         public short Rotation
         {
             get
@@ -532,17 +446,10 @@ namespace NPOI.HSSF.Record
             }
         }
 
-        // end alignment options bitfields
-
-        /**
-         * Get the indent options bitmask  (see corresponding bit Getters that reference
-         * this field)
-         *
-         *
-         * @return options bitmask
-         *
-         */
-
+        /// <summary>
+        /// Get the indent options bitmask  (see corresponding bit Getters that reference
+        /// this field)
+        /// </summary>
         public short IndentionOptions
         {
             get
@@ -552,15 +459,9 @@ namespace NPOI.HSSF.Record
             set { field_5_indention_options = value; }
         }
 
-        // bitfields for indention options
-
-        /**
-         * Get indention (not sure of the Units, think its spaces)
-         *
-         * @return indent - how far to indent the cell
-         * @see #GetIndentionOptions()
-         */
-
+        /// <summary>
+        ///  Get indention (not sure of the Units, think its spaces)
+        /// </summary>
         public short Indent
         {
             get
@@ -574,14 +475,10 @@ namespace NPOI.HSSF.Record
             }
         }
 
-        /**
-         * Get whether to shrink the text to fit
-         *
-         *
-         * @return shrink - shrink to fit or not
-         * @see #GetIndentionOptions()
-         */
 
+        /// <summary>
+        /// Get whether to shrink the text to fit
+        /// </summary>
         public bool ShrinkToFit
         {
             get
@@ -595,14 +492,9 @@ namespace NPOI.HSSF.Record
             }
         }
 
-        /**
-         * Get whether to merge cells
-         *
-         *
-         * @return merge - merge cells or not
-         * @see #GetIndentionOptions()
-         */
-
+        /// <summary>
+        /// Get whether to merge cells
+        /// </summary>
         public bool MergeCells
         {
             get
@@ -616,14 +508,10 @@ namespace NPOI.HSSF.Record
             }
         }
 
-        /**
-         * Get the Reading order for far east versions (0 - Context, 1 - Left to right,
-         * 2 - right to left) - We could use some help with support for the far east.
-         *
-         * @return order - the Reading order (0,1,2)
-         * @see #GetIndentionOptions()
-         */
-
+        /// <summary>
+        ///  Get the Reading order for far east versions (0 - Context, 1 - Left to right,
+        /// 2 - right to left) - We could use some help with support for the far east.
+        /// </summary>
         public short ReadingOrder
         {
             get
@@ -637,15 +525,10 @@ namespace NPOI.HSSF.Record
             }
         }
 
-        /**
-         * Get whether or not to use the format in this XF instead of the parent XF.
-         *
-         *
-         * @return parent - true if this XF has a different format value than its parent,
-         *                 false otherwise.
-         * @see #GetIndentionOptions()
-         */
 
+        /// <summary>
+        /// Get whether or not to use the format in this XF instead of the parent XF.
+        /// </summary>
         public bool IsIndentNotParentFormat
         {
             get
@@ -661,15 +544,9 @@ namespace NPOI.HSSF.Record
 
         }
 
-        /**
-         * Get whether or not to use the font in this XF instead of the parent XF.
-         *
-         *
-         * @return font   - true if this XF has a different font value than its parent,
-         *                 false otherwise.
-         * @see #GetIndentionOptions()
-         */
-
+        /// <summary>
+        /// Get whether or not to use the font in this XF instead of the parent XF.
+        /// </summary>
         public bool IsIndentNotParentFont
         {
             get
@@ -684,15 +561,9 @@ namespace NPOI.HSSF.Record
             }
         }
 
-        /**
-         * Get whether or not to use the alignment in this XF instead of the parent XF.
-         *
-         *
-         * @return alignment true if this XF has a different alignment value than its parent,
-         *                  false otherwise.
-         * @see #GetIndentionOptions()
-         */
-
+        /// <summary>
+        /// Get whether or not to use the alignment in this XF instead of the parent XF.
+        /// </summary>
         public bool IsIndentNotParentAlignment
         {
             get{return _indent_not_parent_alignment.IsSet(field_5_indention_options);}
@@ -704,15 +575,9 @@ namespace NPOI.HSSF.Record
             }
         }
 
-        /**
-         * Get whether or not to use the border in this XF instead of the parent XF.
-         *
-         *
-         * @return border - true if this XF has a different border value than its parent,
-         *                 false otherwise.
-         * @see #GetIndentionOptions()
-         */
-
+        /// <summary>
+        /// Get whether or not to use the border in this XF instead of the parent XF.
+        /// </summary>
         public bool IsIndentNotParentBorder
         {
             get { return _indent_not_parent_border.IsSet(field_5_indention_options); }
@@ -724,15 +589,11 @@ namespace NPOI.HSSF.Record
             }
         }
 
-        /**
-         * Get whether or not to use the pattern in this XF instead of the parent XF.
-         * (foregrount/background)
-         *
-         * @return pattern- true if this XF has a different pattern value than its parent,
-         *                 false otherwise.
-         * @see #GetIndentionOptions()
-         */
-
+        
+        /// <summary>
+        /// Get whether or not to use the pattern in this XF instead of the parent XF.
+        /// (foregrount/background)
+        /// </summary>
         public bool IsIndentNotParentPattern
         {
             get { return _indent_not_parent_pattern.IsSet(field_5_indention_options); }
@@ -744,15 +605,9 @@ namespace NPOI.HSSF.Record
             }
         }
 
-        /**
-         * Get whether or not to use the locking/hidden in this XF instead of the parent XF.
-         *
-         *
-         * @return options- true if this XF has a different locking or hidden value than its parent,
-         *                 false otherwise.
-         * @see #GetIndentionOptions()
-         */
-
+        /// <summary>
+        /// Get whether or not to use the locking/hidden in this XF instead of the parent XF.
+        /// </summary>
         public bool IsIndentNotParentCellOptions
         {
             get
@@ -768,47 +623,20 @@ namespace NPOI.HSSF.Record
             }
         }
 
-        // end of bitfields for indention options
-        // border options
-
-        /**
-         * Get the border options bitmask (see the corresponding bit Getter methods
-         * that reference back to this one)
-         *
-         * @return options - the bit mask to Set
-         *
-         */
-
+        /// <summary>
+        /// Get the border options bitmask (see the corresponding bit Getter methods
+        /// that reference back to this one)
+        /// </summary>
         public short BorderOptions
         {
             get { return field_6_border_options; }
             set { field_6_border_options = value; }
         }
 
-        // bitfields for border options
 
-        /**
-         * Get the borderline style for the left border
-         *
-         *
-         * @return border - type of border for the left side of the cell
-         * @see     #NONE
-         * @see     #THIN
-         * @see     #MEDIUM
-         * @see     #DASHED
-         * @see     #DOTTED
-         * @see     #THICK
-         * @see     #double
-         * @see     #HAIR
-         * @see     #MEDIUM_DASHED
-         * @see     #DASH_DOT
-         * @see     #MEDIUM_DASH_DOT
-         * @see     #DASH_DOT_DOT
-         * @see     #MEDIUM_DASH_DOT_DOT
-         * @see     #SLANTED_DASH_DOT
-         * @see #BorderOptions
-         */
-
+        /// <summary>
+        /// Get the borderline style for the left border
+        /// </summary>
         public short BorderLeft
         {
            get{return _border_left.GetShortValue(field_6_border_options);}
@@ -819,28 +647,10 @@ namespace NPOI.HSSF.Record
             }
         }
 
-        /**
-         * Get the borderline style for the right border
-         *
-         *
-         * @return  border - type of border for the right side of the cell
-         * @see     #NONE
-         * @see     #THIN
-         * @see     #MEDIUM
-         * @see     #DASHED
-         * @see     #DOTTED
-         * @see     #THICK
-         * @see     #double
-         * @see     #HAIR
-         * @see     #MEDIUM_DASHED
-         * @see     #DASH_DOT
-         * @see     #MEDIUM_DASH_DOT
-         * @see     #DASH_DOT_DOT
-         * @see     #MEDIUM_DASH_DOT_DOT
-         * @see     #SLANTED_DASH_DOT
-         * @see #BorderOptions
-         */
 
+        /// <summary>
+        /// Get the borderline style for the right border
+        /// </summary>
         public short BorderRight
         {
             get{return _border_right.GetShortValue(field_6_border_options);}
@@ -851,28 +661,10 @@ namespace NPOI.HSSF.Record
             }
         }
 
-        /**
-         * Get the borderline style for the top border
-         *
-         *
-         * @return border - type of border for the top of the cell
-         * @see     #NONE
-         * @see     #THIN
-         * @see     #MEDIUM
-         * @see     #DASHED
-         * @see     #DOTTED
-         * @see     #THICK
-         * @see     #double
-         * @see     #HAIR
-         * @see     #MEDIUM_DASHED
-         * @see     #DASH_DOT
-         * @see     #MEDIUM_DASH_DOT
-         * @see     #DASH_DOT_DOT
-         * @see     #MEDIUM_DASH_DOT_DOT
-         * @see     #SLANTED_DASH_DOT
-         * @see #BorderOptions
-         */
 
+        /// <summary>
+        /// Get the borderline style for the top border
+        /// </summary>
         public short BorderTop
         {
             get{return _border_top.GetShortValue(field_6_border_options);}
@@ -882,28 +674,9 @@ namespace NPOI.HSSF.Record
             }
         }
 
-        /**
-         * Get the borderline style for the bottom border
-         *
-         *
-         * @return border - type of border for the bottom of the cell
-         * @see     #NONE
-         * @see     #THIN
-         * @see     #MEDIUM
-         * @see     #DASHED
-         * @see     #DOTTED
-         * @see     #THICK
-         * @see     #double
-         * @see     #HAIR
-         * @see     #MEDIUM_DASHED
-         * @see     #DASH_DOT
-         * @see     #MEDIUM_DASH_DOT
-         * @see     #DASH_DOT_DOT
-         * @see     #MEDIUM_DASH_DOT_DOT
-         * @see     #SLANTED_DASH_DOT
-         * @see #BorderOptions
-         */
-
+        /// <summary>
+        /// Get the borderline style for the bottom border
+        /// </summary>
         public short BorderBottom
         {
             get{return _border_bottom.GetShortValue(field_6_border_options);}
@@ -911,34 +684,19 @@ namespace NPOI.HSSF.Record
                 field_6_border_options =_border_bottom.SetShortValue(field_6_border_options, value);
             }
         }
-
-        // record types -- palette options
-
-        /**
-         * Get the palette options bitmask (see the individual bit Getter methods that
-         * reference this one)
-         *
-         *
-         * @return options - the bitmask
-         *
-         */
-
+        /// <summary>
+        /// Get the palette options bitmask (see the individual bit Getter methods that
+        /// reference this one) 
+        /// </summary>
         public short PaletteOptions
         {
             get{return field_7_palette_options;}
             set { field_7_palette_options = value; }
         }
 
-        // bitfields for palette options
-
-        /**
-         * Get the palette index for the left border color
-         *
-         *
-         * @return border - palette index
-         * @see #PaletteOptions
-         */
-
+        /// <summary>
+        ///  Get the palette index for the left border color
+        /// </summary>
         public short LeftBorderPaletteIdx
         {
             get{return _left_border_palette_idx
@@ -951,14 +709,10 @@ namespace NPOI.HSSF.Record
             }
         }
 
-        /**
-         * Get the palette index for the right border color
-         *
-         *
-         * @return border - palette index
-         * @see #PaletteOptions
-         */
-
+        
+        /// <summary>
+        /// Get the palette index for the right border color
+        /// </summary>
         public short RightBorderPaletteIdx
         {
             get{return _right_border_palette_idx
@@ -972,17 +726,10 @@ namespace NPOI.HSSF.Record
             }
         }
 
-        // i've no idea.. possible values are 1 for down, 2 for up and 3 for both...0 for none..
-        // maybe a diagnal line?
 
-        /**
-         * Not sure what this Is for (maybe Fill lines?) 1 = down, 2 = up, 3 = both, 0 for none..
-         *
-         *
-         * @return diag - whatever it Is that this Is.
-         * @see #PaletteOptions
-         */
-
+        /// <summary>
+        /// Not sure what this Is for (maybe Fill lines?) 1 = down, 2 = up, 3 = both, 0 for none..
+        /// </summary>
         public short Diag
         {
             get{return _diag.GetShortValue(field_7_palette_options);}
@@ -993,34 +740,19 @@ namespace NPOI.HSSF.Record
             }
         }
 
-        // end of style palette options
-        // Additional palette options
-
-        /**
-         * Get the Additional palette options bitmask (see individual bit Getter methods
-         * that reference this method)
-         *
-         *
-         * @return options - bitmask to Set
-         *
-         */
-
+        /// <summary>
+        /// Get the Additional palette options bitmask (see individual bit Getter methods
+        /// that reference this method)
+        /// </summary>
         public int AdtlPaletteOptions
         {
             get{return field_8_adtl_palette_options;}
             set { field_8_adtl_palette_options = value; }
         }
 
-        // bitfields for Additional palette options
-
-        /**
-         * Get the palette index for the top border
-         *
-         *
-         * @return border - palette index
-         * @see #AdtlPaletteOptions
-         */
-
+        /// <summary>
+        /// Get the palette index for the top border
+        /// </summary>
         public short TopBorderPaletteIdx
         {
             get{return (short)_top_border_palette_idx
@@ -1033,14 +765,9 @@ namespace NPOI.HSSF.Record
             }
         }
 
-        /**
-         * Get the palette index for the bottom border
-         *
-         *
-         * @return border - palette index
-         * @see #AdtlPaletteOptions
-         */
-
+        /// <summary>
+        /// Get the palette index for the bottom border
+        /// </summary>
         public short BottomBorderPaletteIdx
         {
             get{return (short)_bottom_border_palette_idx
@@ -1054,15 +781,9 @@ namespace NPOI.HSSF.Record
             }
         }
 
-        /**
-         * Get for diagonal borders?  No idea (its a palette color for the other function
-         * we didn't know what was?)
-         *
-         *
-         * @return diag - the palette index?
-         * @see #AdtlPaletteOptions
-         */
-
+        /// <summary>
+        /// Get for diagonal borders
+        /// </summary>
         public short AdtlDiag
         {
             get{return (short)_adtl_diag.GetValue(field_8_adtl_palette_options);}
@@ -1073,28 +794,10 @@ namespace NPOI.HSSF.Record
             }
         }
 
-        /**
-         * Get the diagonal border line style?  Who the heck ever heard of a diagonal border?
-         *
-         *
-         * @return diag - the line style
-         * @see     #NONE
-         * @see     #THIN
-         * @see     #MEDIUM
-         * @see     #DASHED
-         * @see     #DOTTED
-         * @see     #THICK
-         * @see     #double
-         * @see     #HAIR
-         * @see     #MEDIUM_DASHED
-         * @see     #DASH_DOT
-         * @see     #MEDIUM_DASH_DOT
-         * @see     #DASH_DOT_DOT
-         * @see     #MEDIUM_DASH_DOT_DOT
-         * @see     #SLANTED_DASH_DOT
-         * @see #AdtlPaletteOptions
-         */
-
+         
+        /// <summary>
+        /// Get the diagonal border line style
+        /// </summary>
         public short AdtlDiagLineStyle
         {
             get{return (short)_adtl_diag_line_style
@@ -1107,31 +810,9 @@ namespace NPOI.HSSF.Record
             }
         }
 
-        /**
-         * Get the Additional Fill pattern
-         *
-         * @see #NO_Fill
-         * @see #SOLID_Fill
-         * @see #FINE_DOTS
-         * @see #ALT_BARS
-         * @see #SParse_DOTS
-         * @see #THICK_HORZ_BANDS
-         * @see #THICK_VERT_BANDS
-         * @see #THICK_BACKWARD_DIAG
-         * @see #THICK_FORWARD_DIAG
-         * @see #BIG_SPOTS
-         * @see #BRICKS
-         * @see #THIN_HORZ_BANDS
-         * @see #THIN_VERT_BANDS
-         * @see #THIN_BACKWARD_DIAG
-         * @see #THIN_FORWARD_DIAG
-         * @see #SQUARES
-         * @see #DIAMONDS
-         *
-         * @return Fill - Fill pattern??
-         * @see #AdtlPaletteOptions
-         */
-
+        /// <summary>
+        /// Get the Additional Fill pattern
+        /// </summary>
         public short AdtlFillPattern
         {
             get{return (short)_adtl_Fill_pattern
@@ -1143,33 +824,19 @@ namespace NPOI.HSSF.Record
             }
         }
 
-        // end bitfields for Additional palette options
-        // Fill palette options
-
-        /**
-         * Get the Fill palette options bitmask (see indivdual bit Getters that
-         * reference this method)
-         *
-         * @return options
-         *
-         */
-
+        /// <summary>
+        /// Get the Fill palette options bitmask (see indivdual bit Getters that
+        /// reference this method)
+        /// </summary>
         public short FillPaletteOptions
         {
             get{return field_9_fill_palette_options;}
             set { field_9_fill_palette_options = value; }
         }
 
-        // bitfields for Fill palette options
-
-        /**
-         * Get the foreground palette color index
-         *
-         *
-         * @return color - palette index
-         * @see #FillPaletteOptions
-         */
-
+        /// <summary>
+        /// Get the foreground palette color index
+        /// </summary>
         public short FillForeground
         {
             get{return _fill_foreground.GetShortValue(field_9_fill_palette_options);}
@@ -1181,13 +848,9 @@ namespace NPOI.HSSF.Record
             }
         }
 
-        /**
-         * Get the background palette color index
-         *
-         * @return color palette index
-         * @see #FillPaletteOptions
-         */
-
+        /// <summary>
+        /// Get the background palette color index
+        /// </summary>
         public short FillBackground
         {
             get{return _fill_background.GetShortValue(field_9_fill_palette_options);}

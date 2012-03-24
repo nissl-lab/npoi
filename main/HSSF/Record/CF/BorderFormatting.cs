@@ -47,85 +47,85 @@ namespace NPOI.HSSF.Record.CF
          * No border
          */
 
-        public static short BORDER_NONE = 0x0;
+        public const short BORDER_NONE = 0x0;
 
         /**
          * Thin border
          */
 
-        public static short BORDER_THIN = 0x1;
+        public const short BORDER_THIN = 0x1;
 
         /**
          * Medium border
          */
 
-        public static short BORDER_MEDIUM = 0x2;
+        public const short BORDER_MEDIUM = 0x2;
 
         /**
          * dash border
          */
 
-        public static short BORDER_DASHED = 0x3;
+        public const short BORDER_DASHED = 0x3;
 
         /**
          * dot border
          */
 
-        public static short BORDER_HAIR = 0x4;
+        public const short BORDER_HAIR = 0x4;
 
         /**
          * Thick border
          */
 
-        public static short BORDER_THICK = 0x5;
+        public const short BORDER_THICK = 0x5;
 
         /**
          * double-line border
          */
 
-        public static short BORDER_DOUBLE = 0x6;
+        public const short BORDER_DOUBLE = 0x6;
 
         /**
          * hair-line border
          */
 
-        public static short BORDER_DOTTED = 0x7;
+        public const short BORDER_DOTTED = 0x7;
 
         /**
          * Medium dashed border
          */
 
-        public static short BORDER_MEDIUM_DASHED = 0x8;
+        public const short BORDER_MEDIUM_DASHED = 0x8;
 
         /**
          * dash-dot border
          */
 
-        public static short BORDER_DASH_DOT = 0x9;
+        public const short BORDER_DASH_DOT = 0x9;
 
         /**
          * medium dash-dot border
          */
 
-        public static short BORDER_MEDIUM_DASH_DOT = 0xA;
+        public const short BORDER_MEDIUM_DASH_DOT = 0xA;
 
         /**
          * dash-dot-dot border
          */
 
-        public static short BORDER_DASH_DOT_DOT = 0xB;
+        public const short BORDER_DASH_DOT_DOT = 0xB;
 
         /**
          * medium dash-dot-dot border
          */
 
-        public static short BORDER_MEDIUM_DASH_DOT_DOT = 0xC;
+        public const short BORDER_MEDIUM_DASH_DOT_DOT = 0xC;
 
         /**
          * slanted dash-dot border
          */
 
-        public static short BORDER_SLANTED_DASH_DOT = 0xD;
+        public const short BORDER_SLANTED_DASH_DOT = 0xD;
 
         public BorderFormatting()
         {
@@ -158,25 +158,9 @@ namespace NPOI.HSSF.Record.CF
         private static BitField bordDiagLineColor = BitFieldFactory.GetInstance(0x001FC000);
         private static BitField bordDiagLineStyle = BitFieldFactory.GetInstance(0x01E00000);
 
-        /**
-         * Get the type of border to use for the left border of the cell
-         * @return border type
-         * @see #BORDER_NONE
-         * @see #BORDER_THIN
-         * @see #BORDER_MEDIUM
-         * @see #BORDER_DASHED
-         * @see #BORDER_DOTTED
-         * @see #BORDER_THICK
-         * @see #BORDER_DOUBLE
-         * @see #BORDER_HAIR
-         * @see #BORDER_MEDIUM_DASHED
-         * @see #BORDER_DASH_DOT
-         * @see #BORDER_MEDIUM_DASH_DOT
-         * @see #BORDER_DASH_DOT_DOT
-         * @see #BORDER_MEDIUM_DASH_DOT_DOT
-         * @see #BORDER_SLANTED_DASH_DOT
-         */
-
+        /// <summary>
+        /// Get the type of border to use for the left border of the cell
+        /// </summary>
         public short BorderLeft
         {
             get
@@ -189,25 +173,10 @@ namespace NPOI.HSSF.Record.CF
             }
         }
 
-        /**
-         * Get the type of border to use for the right border of the cell
-         * @return border type
-         * @see #BORDER_NONE
-         * @see #BORDER_THIN
-         * @see #BORDER_MEDIUM
-         * @see #BORDER_DASHED
-         * @see #BORDER_DOTTED
-         * @see #BORDER_THICK
-         * @see #BORDER_DOUBLE
-         * @see #BORDER_HAIR
-         * @see #BORDER_MEDIUM_DASHED
-         * @see #BORDER_DASH_DOT
-         * @see #BORDER_MEDIUM_DASH_DOT
-         * @see #BORDER_DASH_DOT_DOT
-         * @see #BORDER_MEDIUM_DASH_DOT_DOT
-         * @see #BORDER_SLANTED_DASH_DOT
-         */
-
+          
+        /// <summary>
+        /// Get the type of border to use for the right border of the cell
+        /// </summary>
         public short BorderRight
         {
             get
@@ -221,25 +190,9 @@ namespace NPOI.HSSF.Record.CF
             }
         }
 
-        /**
-         * Get the type of border to use for the top border of the cell
-         * @return border type
-         * @see #BORDER_NONE
-         * @see #BORDER_THIN
-         * @see #BORDER_MEDIUM
-         * @see #BORDER_DASHED
-         * @see #BORDER_DOTTED
-         * @see #BORDER_THICK
-         * @see #BORDER_DOUBLE
-         * @see #BORDER_HAIR
-         * @see #BORDER_MEDIUM_DASHED
-         * @see #BORDER_DASH_DOT
-         * @see #BORDER_MEDIUM_DASH_DOT
-         * @see #BORDER_DASH_DOT_DOT
-         * @see #BORDER_MEDIUM_DASH_DOT_DOT
-         * @see #BORDER_SLANTED_DASH_DOT
-         */
-
+        /// <summary>
+        /// Get the type of border to use for the top border of the cell
+        /// </summary>
         public short BorderTop
         {
             get
@@ -252,24 +205,10 @@ namespace NPOI.HSSF.Record.CF
             }
         }
 
-        /**
-         * Get the type of border to use for the bottom border of the cell
-         * @return border type
-         * @see #BORDER_NONE
-         * @see #BORDER_THIN
-         * @see #BORDER_MEDIUM
-         * @see #BORDER_DASHED
-         * @see #BORDER_DOTTED
-         * @see #BORDER_THICK
-         * @see #BORDER_DOUBLE
-         * @see #BORDER_HAIR
-         * @see #BORDER_MEDIUM_DASHED
-         * @see #BORDER_DASH_DOT
-         * @see #BORDER_MEDIUM_DASH_DOT
-         * @see #BORDER_DASH_DOT_DOT
-         * @see #BORDER_MEDIUM_DASH_DOT_DOT
-         * @see #BORDER_SLANTED_DASH_DOT
-         */
+         
+        /// <summary>
+        /// Get the type of border to use for the bottom border of the cell
+        /// </summary>
         public short BorderBottom
         {
             get
@@ -282,24 +221,9 @@ namespace NPOI.HSSF.Record.CF
             }
         }
 
-        /**
-         * Get the type of border to use for the diagonal border of the cell
-         * @return border type
-         * @see #BORDER_NONE
-         * @see #BORDER_THIN
-         * @see #BORDER_MEDIUM
-         * @see #BORDER_DASHED
-         * @see #BORDER_DOTTED
-         * @see #BORDER_THICK
-         * @see #BORDER_DOUBLE
-         * @see #BORDER_HAIR
-         * @see #BORDER_MEDIUM_DASHED
-         * @see #BORDER_DASH_DOT
-         * @see #BORDER_MEDIUM_DASH_DOT
-         * @see #BORDER_DASH_DOT_DOT
-         * @see #BORDER_MEDIUM_DASH_DOT_DOT
-         * @see #BORDER_SLANTED_DASH_DOT
-         */
+        /// <summary>
+        ///  Get the type of border to use for the diagonal border of the cell
+        /// </summary>
         public short BorderDiagonal
         {
             get
@@ -312,11 +236,10 @@ namespace NPOI.HSSF.Record.CF
             }
         }
 
-        /**
-         * Get the color to use for the left border
-         * @see org.apache.poi.hssf.usermodel.HSSFPalette#GetColor(short)
-         * @param color The index of the color definition
-         */
+
+        /// <summary>
+        /// Get the color to use for the left border
+        /// </summary>
         public short LeftBorderColor
         {
             get
@@ -329,11 +252,9 @@ namespace NPOI.HSSF.Record.CF
             }
         }
 
-        /**
-         * Get the color to use for the right border
-         * @see org.apache.poi.hssf.usermodel.HSSFPalette#GetColor(short)
-         * @param color The index of the color definition
-         */
+        /// <summary>
+        /// Get the color to use for the right border
+        /// </summary>
         public short RightBorderColor
         {
             get
@@ -346,11 +267,9 @@ namespace NPOI.HSSF.Record.CF
             }
         }
 
-        /**
-         * Get the color to use for the top border
-         * @see org.apache.poi.hssf.usermodel.HSSFPalette#GetColor(short)
-         * @param color The index of the color definition
-         */
+        /// <summary>
+        /// Get the color to use for the top border
+        /// </summary>
         public short TopBorderColor
         {
             get
@@ -363,11 +282,10 @@ namespace NPOI.HSSF.Record.CF
             }
         }
 
-        /**
-         * Get the color to use for the bottom border
-         * @see org.apache.poi.hssf.usermodel.HSSFPalette#GetColor(short)
-         * @param color The index of the color definition
-         */
+         
+        /// <summary>
+        /// Get the color to use for the bottom border
+        /// </summary>
         public short BottomBorderColor
         {
             get
@@ -380,11 +298,10 @@ namespace NPOI.HSSF.Record.CF
             }
         }
 
-        /**
-         * Get the color to use for the diagonal border
-         * @see org.apache.poi.hssf.usermodel.HSSFPalette#GetColor(short)
-         * @param color The index of the color definition
-         */
+         
+        /// <summary>
+        /// Get the color to use for the diagonal border
+        /// </summary>
         public short DiagonalBorderColor
         {
             get
@@ -396,10 +313,9 @@ namespace NPOI.HSSF.Record.CF
                 field_14_border_styles2 = bordDiagLineColor.SetValue(field_14_border_styles2, value);
             }
         }
-
-        /**
-         * @return true if forward diagonal Is on
-         */
+        /// <summary>
+        /// true if forward diagonal is on 
+        /// </summary>
         public bool IsForwardDiagonalOn
         {
             get
@@ -411,10 +327,10 @@ namespace NPOI.HSSF.Record.CF
                 field_13_border_styles1 = bordBlTrtLineOnOff.SetBoolean(field_13_border_styles1, value);
             }
         }
-
-        /**
-         * @return true if backward diagonal Is on
-         */
+        
+        /// <summary>
+        /// true if backward diagonal Is on
+        /// </summary>
         public bool IsBackwardDiagonalOn
         {
             get
