@@ -185,17 +185,7 @@ namespace NPOI.Tools.POIFSBrowser
                             if (iterator1.Current is Record)
                             {
                                 Record record = (Record)iterator1.Current;
-                                if (record is DrawingRecord)
-                                {
-                                    RecordTreeNode rtn = new RecordTreeNode(record);
-                                    sheetnode.Nodes.Add(rtn);
-                                    
-
-                                }
-                                else
-                                {
-                                    sheetnode.Nodes.Add(new RecordTreeNode(record));
-                                }
+                                sheetnode.Nodes.Add(new RecordTreeNode(record));
                             }
                             else if (iterator1.Current is RecordAggregate)
                             {
@@ -204,9 +194,12 @@ namespace NPOI.Tools.POIFSBrowser
                             }
                         }
                         //RecordTreeNode rtn = new DirectoryTreeNode();
-                        foreach (EscherRecord er in ea.EscherRecords)
+                        if (ea != null)
                         {
-                            sheetnode.Nodes.Add(new EscherRecordTreeNode(er));
+                            foreach (EscherRecord er in ea.EscherRecords)
+                            {
+                                sheetnode.Nodes.Add(new EscherRecordTreeNode(er));
+                            }
                         }
                     }
 
