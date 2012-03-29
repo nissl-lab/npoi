@@ -1,0 +1,89 @@
+================
+* Introduction *
+================
+This project is the .NET port of POI project at http://poi.apache.org/. POI is an open source java project 
+which can help you read/write xls, doc, ppt files. It has a wide application. 
+For example, you can use it a to generate a Excel report without Microsoft Office suite installed on your 
+server and more efficient than call Microsoft Excel ActiveX at background; you can also use it to extract 
+text from Office documents to help you implement full-text indexing feature (most of time this feature is 
+used to create search engines).
+
+==================
+*  NPOI Website *
+==================
+http://npoi.googlecode.com (Latest source code available)
+http://npoi.codeplex.com (No latest source code available)
+http://tonyqus.sinaapp.com (Official Tutorial in Chinese)
+
+======================
+* System Requirement *
+======================
+VS2010 with .NET 2.0 or .NET 4.0
+VS2005 or VS2008 with .NET 2.0 Runtime (SP1) 
+vs2003 with .NET 1.1 
+medium trust environment in ASP.NET
+
+=================
+*  NPOI on SNS  *
+=================
+QQÈº: 124527967, 116053476, 78142590
+Twitter: http://twitter.com/tonyqus 
+ÐÂÀËÎ¢²©: http://t.sina.com.cn/npoi 
+
+================
+* Team Members *
+================
+Tony Qu - coodinator, developer
+-------------------------------
+From: Shanghai, China
+Participated since Sep, 2008
+Time Zone: GMT+8
+
+--------------------------------------------------------------------------------
+NPOI 1.2.1
+--------------------------------------------------------------------------------
+H¨¹seyin T¨¹fekcilerli - developer
+--------------------
+From: Istanbul, Turkey
+Participated since Nov, 2008
+Time Zone: GMT+2
+Main Contribution: POIFS Browser 1.0
+
+aTao Xiang - Technical writer
+-----------
+From: China
+Participated since Aug, 2009
+Time Zone: GMT+8
+Main Contribution: NPOI 1.2 Chinese Tutorial
+
+--------------------------------------------------------------------------------
+NPOI 1.2.3 above
+--------------------------------------------------------------------------------
+Antony - developer
+------------------------------
+From: Guangzhou, China
+Time Zone: GMT+8
+Main Contribution: main code,bug fixing ,Excel2Html, Word2Html
+
+Christian Leutloff - developer
+------------------------------
+From: Germany
+Time Zone: GMT+1
+Main Contribution: fix FXCop warnings, OOXML
+
+Jeff Stedfast - developer
+------------------------------
+From: Cambridge, MA, USA
+Time Zone: GMT
+Main contribution: Mono version of NPOI, naming conversion
+
+Leon Wang - developer
+-----------------------------
+From: Xi'an, China
+Time Zone: GMT+8
+Main contribution: NPOIFS/POIFS
+
+==================
+* How to join us *
+==================
+If you are interested in this project and want to join me, please write mail to tonyqus (at) gmail.com
