@@ -92,10 +92,25 @@ namespace NPOI.XSSF.UserModel
          *
          * @return bool - bold
          */
-        public bool GetBold()
+        public bool IsBold
         {
-            CT_BooleanProperty bold = _ctFont.sizeOfBArray() == 0 ? null : _ctFont.GetBArray(0);
-            return (bold != null && bold.val);
+            get
+            {
+                CT_BooleanProperty bold = _ctFont.sizeOfBArray() == 0 ? null : _ctFont.GetBArray(0);
+                return (bold != null && bold.val);
+            }
+            set 
+            {
+                if (value)
+                {
+                    CT_BooleanProperty ctBold = _ctFont.sizeOfBArray() == 0 ? _ctFont.AddNewB() : _ctFont.GetBArray(0);
+                    ctBold.val = value;
+                }
+                else
+                {
+                    _ctFont.SetBArray(null);
+                }
+            }
         }
 
         /**
@@ -397,24 +412,6 @@ namespace NPOI.XSSF.UserModel
         }
 
         /**
-         * set a bool value for the boldness to use. If omitted, the default value is true.
-         *
-         * @param bold - boldness to use
-         */
-        public void SetBold(bool bold)
-        {
-            if (bold)
-            {
-                CT_BooleanProperty ctBold = _ctFont.sizeOfBArray() == 0 ? _ctFont.AddNewB() : _ctFont.GetBArray(0);
-                ctBold.val = bold;
-            }
-            else
-            {
-                _ctFont.SetBArray(null);
-            }
-        }
-
-        /**
          * get the boldness to use
          * @return boldweight
          * @see #BOLDWEIGHT_NORMAL
@@ -425,11 +422,11 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
-                return (short)(GetBold() ? FontBoldWeight.BOLD : FontBoldWeight.NORMAL);
+                return (short)(IsBold ? FontBoldWeight.BOLD : FontBoldWeight.NORMAL);
             }
             set 
             {
-                SetBold(value == (short)FontBoldWeight.BOLD);
+                this.IsBold = (value == (short)FontBoldWeight.BOLD);
             }
         }
 

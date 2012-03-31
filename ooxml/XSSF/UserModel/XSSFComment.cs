@@ -189,12 +189,12 @@ namespace NPOI.XSSF.UserModel
         /**
          * @return the xml bean holding this comment's properties
          */
-        protected CT_Comment GetCTComment()
+        internal CT_Comment GetCTComment()
         {
             return _comment;
         }
 
-        protected CT_Shape GetCTShape()
+        internal CT_Shape GetCTShape()
         {
             return _vmlShape;
         }

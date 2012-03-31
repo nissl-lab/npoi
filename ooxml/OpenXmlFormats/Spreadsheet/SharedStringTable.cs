@@ -184,38 +184,39 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     public class CT_Fill
     {
 
-        private object itemField;
+        private CT_PatternFill patternFillField;
 
-        public object Item
+
+        public CT_PatternFill patternFill
         {
             get
             {
-                return this.itemField;
+                return this.patternFillField;
             }
             set
             {
-                this.itemField = value;
+                this.patternFillField = value;
             }
         }
 
         public CT_PatternFill GetPatternFill()
         {
-            return (CT_PatternFill)this.itemField;
+            return (CT_PatternFill)this.patternFillField;
         }
 
         public CT_PatternFill AddNewPatternFill()
         {
-            this.itemField = new CT_PatternFill();
+            this.patternFillField = new CT_PatternFill();
             return GetPatternFill();
         }
         public bool IsSetPatternFill()
         {
-            return this.itemField != null;
+            return this.patternFillField != null;
         }
         public CT_Fill Copy()
         {
             CT_Fill obj = new CT_Fill();
-            obj.itemField = this.itemField;
+            obj.patternFillField = this.patternFillField;
             return obj;
         }
     }
@@ -839,6 +840,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             return this.bottomField;
         }
 
+        [XmlElement]
         public CT_BorderPr left
         {
             get
@@ -850,7 +852,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.leftField = value;
             }
         }
-
+        [XmlElement]
         public CT_BorderPr right
         {
             get
@@ -862,7 +864,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.rightField = value;
             }
         }
-
+        [XmlElement]
         public CT_BorderPr top
         {
             get
@@ -874,7 +876,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.topField = value;
             }
         }
-
+        [XmlElement]
         public CT_BorderPr bottom
         {
             get
@@ -886,7 +888,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.bottomField = value;
             }
         }
-
+        [XmlElement]
         public CT_BorderPr diagonal
         {
             get
@@ -898,7 +900,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.diagonalField = value;
             }
         }
-
+        [XmlElement]
         public CT_BorderPr vertical
         {
             get
@@ -910,7 +912,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.verticalField = value;
             }
         }
-
+        [XmlElement]
         public CT_BorderPr horizontal
         {
             get

@@ -127,7 +127,7 @@ namespace NPOI.XSSF.UserModel
             }
             ApplyFont(startIndex, endIndex, font);
         }
-        void ApplyFont(Dictionary<int, CT_RPrElt> formats, int startIndex, int endIndex, CT_RPrElt fmt) {
+        internal void ApplyFont(Dictionary<int, CT_RPrElt> formats, int startIndex, int endIndex, CT_RPrElt fmt) {
             throw new NotImplementedException();
             // delete format runs that fit between startIndex and endIndex
             // runs intersecting startIndex and endIndex remain
@@ -194,7 +194,7 @@ namespace NPOI.XSSF.UserModel
 
 
         }
-        Dictionary<int, CT_RPrElt> GetFormatMap(CT_Rst entry)
+        internal Dictionary<int, CT_RPrElt> GetFormatMap(CT_Rst entry)
         {
             int length = 0;
             Dictionary<int, CT_RPrElt> formats = new Dictionary<int, CT_RPrElt>();
