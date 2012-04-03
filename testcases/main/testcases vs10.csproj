@@ -96,6 +96,8 @@
     <Compile Include="POIFS\Storage\RawDataUtil.cs" />
     <Compile Include="POIFS\Storage\TestBATBlock.cs" />
     <Compile Include="POIFS\Storage\TestBlockListImpl.cs" />
+    <Compile Include="POIFS\Storage\TestHeaderBlockReading.cs" />
+    <Compile Include="POIFS\Storage\TestHeaderBlockWriting.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Util\TestBitField.cs" />
     <Compile Include="Util\TestByteField.cs" />
@@ -140,12 +142,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="POIFS\Storage\TestRawDataBlockList.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="POIFS\Storage\TestHeaderBlockReader.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="POIFS\Storage\TestHeaderBlockWriter.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="POIFS\Storage\TestSmallBlockTableReader.cs" />
