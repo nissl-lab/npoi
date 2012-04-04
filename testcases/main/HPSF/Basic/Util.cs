@@ -140,7 +140,7 @@ namespace TestCases.HPSF.Basic
         }
         private class POIFSReaderListener0 : POIFSReaderListener
         {
-            #region POIFSReaderListener 成员
+            #region POIFSReaderListener members
 
             public void ProcessPOIFSReaderEvent(POIFSReaderEvent evt)
             {
@@ -199,7 +199,7 @@ namespace TestCases.HPSF.Basic
         }
         private class POIFSReaderListener1:POIFSReaderListener
         {
-            #region POIFSReaderListener 成员
+            #region POIFSReaderListener members
 
             public void ProcessPOIFSReaderEvent(POIFSReaderEvent e)
             {

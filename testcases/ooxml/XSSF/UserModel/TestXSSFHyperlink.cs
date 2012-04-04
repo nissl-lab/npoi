@@ -31,7 +31,7 @@ namespace NPOI.XSSF.UserModel
         }
 
         [TestInitialize]
-        protected void SetUp()
+        public void SetUp()
         {
             // Use system out logger
             Environment.SetEnvironmentVariable(
@@ -94,7 +94,7 @@ namespace NPOI.XSSF.UserModel
             doTestHyperlinkContents(sheet);
 
             Assert.AreEqual(HyperlinkType.URL,
-                    sheet.GetRow(17).GetCell(2).Hyperlink.GetType());
+                    sheet.GetRow(17).GetCell(2).Hyperlink.Type);
             Assert.AreEqual("POI SS Link",
                     sheet.GetRow(17).GetCell(2).Hyperlink.Label);
             Assert.AreEqual("http://poi.apache.org/spreadsheet/",
@@ -115,7 +115,7 @@ namespace NPOI.XSSF.UserModel
             doTestHyperlinkContents(sheet);
 
             Assert.AreEqual(HyperlinkType.URL,
-                    sheet.GetRow(17).GetCell(2).Hyperlink.GetType());
+                    sheet.GetRow(17).GetCell(2).Hyperlink.Type);
             Assert.AreEqual("POI SS Link",
                     sheet.GetRow(17).GetCell(2).Hyperlink.Label);
             Assert.AreEqual("http://poi.apache.org/spreadsheet/",
@@ -134,7 +134,7 @@ namespace NPOI.XSSF.UserModel
 
             // First is a link to poi
             Assert.AreEqual(HyperlinkType.URL,
-                    sheet.GetRow(3).GetCell(2).Hyperlink.GetType());
+                    sheet.GetRow(3).GetCell(2).Hyperlink.Type);
             Assert.AreEqual(null,
                     sheet.GetRow(3).GetCell(2).Hyperlink.Label);
             Assert.AreEqual("http://poi.apache.org/",
@@ -142,7 +142,7 @@ namespace NPOI.XSSF.UserModel
 
             // Next is an internal doc link
             Assert.AreEqual(HyperlinkType.DOCUMENT,
-                    sheet.GetRow(14).GetCell(2).Hyperlink.GetType());
+                    sheet.GetRow(14).GetCell(2).Hyperlink.Type);
             Assert.AreEqual("Internal hyperlink to A2",
                     sheet.GetRow(14).GetCell(2).Hyperlink.Label);
             Assert.AreEqual("Sheet1!A2",
@@ -150,7 +150,7 @@ namespace NPOI.XSSF.UserModel
 
             // Next is a file
             Assert.AreEqual(HyperlinkType.FILE,
-                    sheet.GetRow(15).GetCell(2).Hyperlink.GetType());
+                    sheet.GetRow(15).GetCell(2).Hyperlink.Type);
             Assert.AreEqual(null,
                     sheet.GetRow(15).GetCell(2).Hyperlink.Label);
             Assert.AreEqual("WithVariousData.xlsx",
@@ -158,7 +158,7 @@ namespace NPOI.XSSF.UserModel
 
             // Last is a mailto
             Assert.AreEqual(HyperlinkType.EMAIL,
-                    sheet.GetRow(16).GetCell(2).Hyperlink.GetType());
+                    sheet.GetRow(16).GetCell(2).Hyperlink.Type);
             Assert.AreEqual(null,
                     sheet.GetRow(16).GetCell(2).Hyperlink.Label);
             Assert.AreEqual("mailto:dev@poi.apache.org?subject=XSSF%20Hyperlinks",
