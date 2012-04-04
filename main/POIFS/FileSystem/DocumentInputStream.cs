@@ -75,7 +75,29 @@ namespace NPOI.POIFS.FileSystem
                 throw new IOException("No FileSystem bound on the parent, can't read contents");
             }
         }
+        public override long Seek(long offset, SeekOrigin origin)
+        {
+            return delegate1.Seek(offset, origin);
+        }
 
+        public override long Length
+        {
+            get
+            {
+                return delegate1.Length;
+            }
+        }
+        public override long Position
+        {
+            get
+            {
+                return delegate1.Position;
+            }
+            set
+            {
+                delegate1.Position = value;
+            }
+        }
         /**
          * Create an InputStream from the specified Document
          * 

@@ -5,8 +5,9 @@ using System.IO;
 
 namespace NPOI.Util
 {
-    public class ByteArrayInputStream : MemoryStream
+    public class ByteArrayInputStream : Stream
     {
+
         public ByteArrayInputStream()
         {
         }
@@ -87,5 +88,93 @@ namespace NPOI.Util
         public override void Close()
         {
         }
+
+
+        public override bool CanRead
+        {
+            get
+            {
+                return true;
+            }
+        }
+        public override bool CanWrite
+        {
+            get
+            {
+                return false;
+            }
+        }
+        public override bool CanSeek
+        {
+            get
+            {
+                return true;
+            }
+        }
+
+        public override void Flush()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override long Length
+        {
+            get
+            {
+                return this.count;
+            }
+        }
+
+        public override long Position
+        {
+            get
+            {
+                return this.pos;
+            }
+            set
+            {
+                this.pos = (int)value;
+            }
+        }
+
+        public override long Seek(long offset, SeekOrigin origin)
+        {
+            if (!this.CanSeek)
+                throw new NotSupportedException();
+
+            switch (origin)
+            {
+                case SeekOrigin.Begin:
+                    if (0L > offset)
+                    {
+                        throw new ArgumentOutOfRangeException("offset", "offset must be positive");
+                    }
+                    this.Position = offset < this.Length ? offset : this.Length;
+                    break;
+
+                case SeekOrigin.Current:
+                    this.Position = (this.Position + offset) < this.Length ? (this.Position + offset) : this.Length;
+                    break;
+
+                case SeekOrigin.End:
+                    this.Position = this.Length;
+                    break;
+
+                default:
+                    throw new ArgumentException("incorrect SeekOrigin", "origin");
+            }
+            return Position;
+        }
+
+        public override void SetLength(long value)
+        {
+        }
+
+        public override void Write(byte[] buffer, int offset, int count)
+        {
+            throw new NotImplementedException();
+        }
+
+
     }
 }

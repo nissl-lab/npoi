@@ -58,6 +58,8 @@ namespace NPOI.POIFS.FileSystem
         private IEnumerator<ByteBuffer> _data;
         private ByteBuffer _buffer;
 
+        
+
         /**
          * Create an InputStream from the specified DocumentEntry
          * 
@@ -375,7 +377,7 @@ namespace NPOI.POIFS.FileSystem
                 {
                     throw new InvalidOperationException("cannot perform requested operation on a closed stream");
                 }
-                return _document_size - _current_offset;
+                return _document_size;   //- _current_offset;
             }
         }
 
