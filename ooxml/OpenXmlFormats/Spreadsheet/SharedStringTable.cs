@@ -65,7 +65,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [System.Xml.Serialization.XmlIgnore]
         public bool countSpecified
         {
             get
@@ -319,7 +319,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [System.Xml.Serialization.XmlIgnore]
         public bool patternTypeSpecified
         {
             get
@@ -454,7 +454,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [System.Xml.Serialization.XmlIgnore]
         public bool horizontalSpecified
         {
             get
@@ -479,7 +479,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [System.Xml.Serialization.XmlIgnore]
         public bool verticalSpecified
         {
             get
@@ -504,7 +504,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [System.Xml.Serialization.XmlIgnore]
         public bool textRotationSpecified
         {
             get
@@ -529,7 +529,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [System.Xml.Serialization.XmlIgnore]
         public bool wrapTextSpecified
         {
             get
@@ -554,7 +554,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [System.Xml.Serialization.XmlIgnore]
         public bool indentSpecified
         {
             get
@@ -579,7 +579,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [System.Xml.Serialization.XmlIgnore]
         public bool relativeIndentSpecified
         {
             get
@@ -604,7 +604,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [System.Xml.Serialization.XmlIgnore]
         public bool justifyLastLineSpecified
         {
             get
@@ -629,7 +629,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [System.Xml.Serialization.XmlIgnore]
         public bool shrinkToFitSpecified
         {
             get
@@ -654,7 +654,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [System.Xml.Serialization.XmlIgnore]
         public bool readingOrderSpecified
         {
             get
@@ -937,7 +937,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [System.Xml.Serialization.XmlIgnore]
         public bool diagonalUpSpecified
         {
             get
@@ -962,7 +962,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [System.Xml.Serialization.XmlIgnore]
         public bool diagonalDownSpecified
         {
             get
@@ -1124,7 +1124,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [System.Xml.Serialization.XmlIgnore]
         public bool lockedSpecified
         {
             get
@@ -1149,7 +1149,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [System.Xml.Serialization.XmlIgnore]
         public bool hiddenSpecified
         {
             get
@@ -1243,7 +1243,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [System.Xml.Serialization.XmlIgnore]
         public bool builtinIdSpecified
         {
             get
@@ -1268,7 +1268,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [System.Xml.Serialization.XmlIgnore]
         public bool iLevelSpecified
         {
             get
@@ -1293,7 +1293,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [System.Xml.Serialization.XmlIgnore]
         public bool hiddenSpecified
         {
             get
@@ -1318,7 +1318,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [System.Xml.Serialization.XmlIgnore]
         public bool customBuiltinSpecified
         {
             get
@@ -1372,7 +1372,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [System.Xml.Serialization.XmlIgnore]
         public bool countSpecified
         {
             get
@@ -1426,7 +1426,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [System.Xml.Serialization.XmlIgnore]
         public bool countSpecified
         {
             get
@@ -1640,7 +1640,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [System.Xml.Serialization.XmlIgnore]
         public bool numFmtIdSpecified
         {
             get
@@ -1665,7 +1665,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [System.Xml.Serialization.XmlIgnore]
         public bool fontIdSpecified
         {
             get
@@ -1690,7 +1690,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [System.Xml.Serialization.XmlIgnore]
         public bool fillIdSpecified
         {
             get
@@ -1715,7 +1715,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [System.Xml.Serialization.XmlIgnore]
         public bool borderIdSpecified
         {
             get
@@ -1740,7 +1740,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [System.Xml.Serialization.XmlIgnore]
         public bool xfIdSpecified
         {
             get
@@ -1791,7 +1791,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [System.Xml.Serialization.XmlIgnore]
         public bool applyNumberFormatSpecified
         {
             get
@@ -1816,7 +1816,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [System.Xml.Serialization.XmlIgnore]
         public bool applyFontSpecified
         {
             get
@@ -1841,7 +1841,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [System.Xml.Serialization.XmlIgnore]
         public bool applyFillSpecified
         {
             get
@@ -1866,7 +1866,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [System.Xml.Serialization.XmlIgnore]
         public bool applyBorderSpecified
         {
             get
@@ -1891,7 +1891,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [System.Xml.Serialization.XmlIgnore]
         public bool applyAlignmentSpecified
         {
             get
@@ -1916,7 +1916,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [System.Xml.Serialization.XmlIgnore]
         public bool applyProtectionSpecified
         {
             get
@@ -1970,7 +1970,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [System.Xml.Serialization.XmlIgnore]
         public bool countSpecified
         {
             get
@@ -2028,7 +2028,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [System.Xml.Serialization.XmlIgnore]
         public bool countSpecified
         {
             get
@@ -2086,7 +2086,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [System.Xml.Serialization.XmlIgnore]
         public bool countSpecified
         {
             get
@@ -2101,11 +2101,11 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     }
 
 
-    [System.SerializableAttribute()]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
-    [System.Xml.Serialization.XmlRootAttribute(ElementName = "sst", Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main", IsNullable = true)]
+    [System.Serializable]
+    [System.Diagnostics.DebuggerStepThrough]
+    [System.ComponentModel.DesignerCategory("code")]
+    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
+    [System.Xml.Serialization.XmlRoot(ElementName = "sst", Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main", IsNullable = true)]
     public class CT_Sst
     {
 
@@ -2164,7 +2164,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [System.Xml.Serialization.XmlIgnore]
         public bool countSpecified
         {
             get
@@ -2189,7 +2189,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [System.Xml.Serialization.XmlIgnore]
         public bool uniqueCountSpecified
         {
             get

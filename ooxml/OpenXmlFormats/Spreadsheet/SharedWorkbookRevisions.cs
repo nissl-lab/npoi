@@ -489,7 +489,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [System.Xml.Serialization.XmlIgnore]
         public bool minRIdSpecified
         {
             get
@@ -514,7 +514,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [System.Xml.Serialization.XmlIgnore]
         public bool maxRIdSpecified
         {
             get
@@ -566,7 +566,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [System.Xml.Serialization.XmlIgnore]
         public bool countSpecified
         {
             get
@@ -636,7 +636,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [System.Xml.Serialization.XmlIgnore]
         public bool countSpecified
         {
             get
@@ -750,7 +750,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [System.Xml.Serialization.XmlIgnore]
         public bool autoFormatIdSpecified
         {
             get
@@ -775,7 +775,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [System.Xml.Serialization.XmlIgnore]
         public bool applyNumberFormatsSpecified
         {
             get
@@ -800,7 +800,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [System.Xml.Serialization.XmlIgnore]
         public bool applyBorderFormatsSpecified
         {
             get
@@ -825,7 +825,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [System.Xml.Serialization.XmlIgnore]
         public bool applyFontFormatsSpecified
         {
             get
@@ -850,7 +850,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [System.Xml.Serialization.XmlIgnore]
         public bool applyPatternFormatsSpecified
         {
             get
@@ -875,7 +875,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [System.Xml.Serialization.XmlIgnore]
         public bool applyAlignmentFormatsSpecified
         {
             get
@@ -900,7 +900,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [System.Xml.Serialization.XmlIgnore]
         public bool applyWidthHeightFormatsSpecified
         {
             get
@@ -1163,7 +1163,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [System.Xml.Serialization.XmlIgnore]
         public bool numFmtIdSpecified
         {
             get
@@ -1311,7 +1311,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [System.Xml.Serialization.XmlIgnore]
         public bool sheetIdSpecified
         {
             get
@@ -1708,7 +1708,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [System.Xml.Serialization.XmlIgnore]
         public bool localSheetIdSpecified
         {
             get
@@ -1784,7 +1784,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [System.Xml.Serialization.XmlIgnore]
         public bool functionGroupIdSpecified
         {
             get
@@ -1809,7 +1809,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [System.Xml.Serialization.XmlIgnore]
         public bool oldFunctionGroupIdSpecified
         {
             get
@@ -1834,7 +1834,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [System.Xml.Serialization.XmlIgnore]
         public bool shortcutKeySpecified
         {
             get
@@ -1859,7 +1859,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [System.Xml.Serialization.XmlIgnore]
         public bool oldShortcutKeySpecified
         {
             get
@@ -2137,7 +2137,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [System.Xml.Serialization.XmlIgnore]
         public bool startSpecified
         {
             get
@@ -2162,7 +2162,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [System.Xml.Serialization.XmlIgnore]
         public bool lengthSpecified
         {
             get
@@ -2572,7 +2572,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [System.Xml.Serialization.XmlIgnore]
         public bool sIdSpecified
         {
             get

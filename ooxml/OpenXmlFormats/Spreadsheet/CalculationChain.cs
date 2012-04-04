@@ -14,11 +14,11 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     using System.ComponentModel;
     using System.Collections.Generic;
 
-    [System.SerializableAttribute()]
-    [DebuggerStepThroughAttribute()]
-    [DesignerCategoryAttribute("code")]
-    [XmlTypeAttribute(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
-    [XmlRootAttribute("calcChain",Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main", IsNullable = true)]
+    [System.Serializable]
+    [DebuggerStepThrough]
+    [DesignerCategory("code")]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
+    [XmlRoot("calcChain",Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main", IsNullable = true)]
     public class CT_CalcChain {
         
         private List<CT_CalcCell> cField;
@@ -43,7 +43,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             this.c.RemoveAt(index);
         }
-        [XmlElementAttribute("c")]
+        [XmlElement("c")]
         public List<CT_CalcCell> c {
             get {
                 return this.cField;
@@ -62,11 +62,11 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
     }
-    [System.SerializableAttribute()]
-    [DebuggerStepThroughAttribute()]
-    [DesignerCategoryAttribute("code")]
-    [XmlTypeAttribute(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
-    [XmlRootAttribute(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main", IsNullable = true)]
+    [System.Serializable]
+    [DebuggerStepThrough]
+    [DesignerCategory("code")]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main", IsNullable = true)]
 
     public class CT_CalcCell {
         
@@ -89,7 +89,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.tField = false;
             this.aField = false;
         }
-        [XmlAttributeAttribute()]
+        [XmlAttribute]
         public string r {
             get {
                 return this.rField;
@@ -98,7 +98,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.rField = value;
             }
         }
-        [XmlAttributeAttribute()]
+        [XmlAttribute]
         [DefaultValueAttribute(0)]
         public int i {
             get {
@@ -108,7 +108,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.iField = value;
             }
         }
-        [XmlAttributeAttribute()]
+        [XmlAttribute]
         [DefaultValueAttribute(false)]
         public bool s {
             get {
@@ -118,7 +118,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.sField = value;
             }
         }
-        [XmlAttributeAttribute()]
+        [XmlAttribute]
         [DefaultValueAttribute(false)]
         public bool l {
             get {
@@ -128,7 +128,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.lField = value;
             }
         }
-        [XmlAttributeAttribute()]
+        [XmlAttribute]
         [DefaultValueAttribute(false)]
         public bool t {
             get {
@@ -138,7 +138,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.tField = value;
             }
         }
-        [XmlAttributeAttribute()]
+        [XmlAttribute]
         [DefaultValueAttribute(false)]
         public bool a {
             get {

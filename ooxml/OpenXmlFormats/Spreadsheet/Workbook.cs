@@ -707,7 +707,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [System.Xml.Serialization.XmlIgnore]
         public bool countSpecified
         {
             get
@@ -932,7 +932,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [System.Xml.Serialization.XmlIgnore]
         public bool codePageSpecified
         {
             get
@@ -950,47 +950,47 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     {
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlEnumAttribute("544x376")]
+        [XmlEnum("544x376")]
         Item544x376,
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlEnumAttribute("640x480")]
+        [XmlEnum("640x480")]
         Item640x480,
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlEnumAttribute("720x512")]
+        [XmlEnum("720x512")]
         Item720x512,
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlEnumAttribute("800x600")]
+        [XmlEnum("800x600")]
         Item800x600,
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlEnumAttribute("1024x768")]
+        [XmlEnum("1024x768")]
         Item1024x768,
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlEnumAttribute("1152x882")]
+        [XmlEnum("1152x882")]
         Item1152x882,
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlEnumAttribute("1152x900")]
+        [XmlEnum("1152x900")]
         Item1152x900,
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlEnumAttribute("1280x1024")]
+        [XmlEnum("1280x1024")]
         Item1280x1024,
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlEnumAttribute("1600x1200")]
+        [XmlEnum("1600x1200")]
         Item1600x1200,
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlEnumAttribute("1800x1440")]
+        [XmlEnum("1800x1440")]
         Item1800x1440,
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlEnumAttribute("1920x1200")]
+        [XmlEnum("1920x1200")]
         Item1920x1200,
     }
 
@@ -1259,7 +1259,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [System.Xml.Serialization.XmlIgnore]
         public bool mergeIntervalSpecified
         {
             get
@@ -1639,7 +1639,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [System.Xml.Serialization.XmlIgnore]
         public bool calcIdSpecified
         {
             get
@@ -1794,7 +1794,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [System.Xml.Serialization.XmlIgnore]
         public bool concurrentManualCountSpecified
         {
             get
@@ -1819,7 +1819,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [System.Xml.Serialization.XmlIgnore]
         public bool forceFullCalcSpecified
         {
             get
@@ -1988,7 +1988,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [System.Xml.Serialization.XmlIgnore]
         public bool localSheetIdSpecified
         {
             get
@@ -2065,7 +2065,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [System.Xml.Serialization.XmlIgnore]
         public bool functionGroupIdSpecified
         {
             get
@@ -2308,7 +2308,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [System.Xml.Serialization.XmlIgnore]
         public bool xWindowSpecified
         {
             get
@@ -2335,7 +2335,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [System.Xml.Serialization.XmlIgnore]
         public bool yWindowSpecified
         {
             get
@@ -2362,7 +2362,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [System.Xml.Serialization.XmlIgnore]
         public bool windowWidthSpecified
         {
             get
@@ -2389,7 +2389,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [System.Xml.Serialization.XmlIgnore]
         public bool windowHeightSpecified
         {
             get
@@ -2857,7 +2857,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [System.Xml.Serialization.XmlIgnore]
         public bool defaultThemeVersionSpecified
         {
             get
@@ -2937,10 +2937,10 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
     }
-    [System.SerializableAttribute()]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
+    [System.Serializable]
+    [System.Diagnostics.DebuggerStepThrough]
+    [System.ComponentModel.DesignerCategory("code")]
+    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public class CT_BookViews
     {
 
@@ -2999,9 +2999,9 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
     }
-    [System.SerializableAttribute()]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Serializable]
+    [System.Diagnostics.DebuggerStepThrough]
+    [System.ComponentModel.DesignerCategory("code")]
     [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     [System.Xml.Serialization.XmlRoot("sheets", Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main", IsNullable = false)]
     public class CT_Sheets

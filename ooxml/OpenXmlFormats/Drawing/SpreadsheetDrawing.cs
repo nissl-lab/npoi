@@ -119,13 +119,13 @@ namespace NPOI.OpenXmlFormats.Dml
             get { return xfrmField; }
             set { xfrmField = value; }
         }
-        [XmlAttributeAttribute()]
+        [XmlAttribute]
         public string macro
         {
             get { return macroField; }
             set { macroField = value; }
         }
-        [XmlAttributeAttribute()]
+        [XmlAttribute]
         public bool fPublished
         {
             get { return fPublishedField; }
@@ -222,27 +222,27 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [XmlAttributeAttribute()]
+        [XmlAttribute]
         public string macro
         {
             get { return macroField; }
             set { macroField = value; }
         }
 
-        [XmlAttributeAttribute()]
+        [XmlAttribute]
         public string textlink
         {
             get { return textlinkField; }
             set { textlinkField = value; }
         }
-        [XmlAttributeAttribute()]
+        [XmlAttribute]
         public bool fLocksText
         {
             get { return fLocksTextField; }
             set { fLocksTextField = value; }
         }
 
-        [XmlAttributeAttribute()]
+        [XmlAttribute]
         public bool fPublished
         {
             get { return fPublishedField; }
@@ -565,13 +565,13 @@ namespace NPOI.OpenXmlFormats.Dml
                  this.styleField = value;
              }
          }
-         [XmlAttributeAttribute()]
+         [XmlAttribute]
         public string macro
         {
             get{return this.macroField;}
             set{this.macroField=value;}
         }
-        [XmlAttributeAttribute()]
+        [XmlAttribute]
         public bool fPublished
         {
             get{return this.fPublishField;}
@@ -584,14 +584,14 @@ namespace NPOI.OpenXmlFormats.Dml
         private string macroField;
         private bool fPublishedField;
 
-        [XmlAttributeAttribute()]
+        [XmlAttribute]
         public string macro
         {
             get { return macroField; }
             set { macroField = value; }
         }
 
-        [XmlAttributeAttribute()]
+        [XmlAttribute]
         public bool fPublished
         {
             get { return fPublishedField; }

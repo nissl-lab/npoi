@@ -2,11 +2,11 @@ namespace NPOI.OpenXmlFormats.Spreadsheet {
     
     
     /// <remarks/>
-    [System.SerializableAttribute()]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
-    [System.Xml.Serialization.XmlRootAttribute("MapInfo",Namespace="http://schemas.openxmlformats.org/spreadsheetml/2006/main", IsNullable=true)]
+    [System.Serializable]
+    [System.Diagnostics.DebuggerStepThrough]
+    [System.ComponentModel.DesignerCategory("code")]
+    [System.Xml.Serialization.XmlType(Namespace="http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
+    [System.Xml.Serialization.XmlRoot("MapInfo",Namespace="http://schemas.openxmlformats.org/spreadsheetml/2006/main", IsNullable=true)]
     public class CT_MapInfo {
         
         private CT_Schema[] schemaField;
@@ -16,7 +16,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet {
         private string selectionNamespacesField;
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("Schema")]
+        [System.Xml.Serialization.XmlElement("Schema")]
         public CT_Schema[] Schema {
             get {
                 return this.schemaField;
@@ -27,7 +27,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("Map")]
+        [System.Xml.Serialization.XmlElement("Map")]
         public CT_Map[] Map {
             get {
                 return this.mapField;
@@ -38,7 +38,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [System.Xml.Serialization.XmlAttribute]
         public string SelectionNamespaces {
             get {
                 return this.selectionNamespacesField;
@@ -50,11 +50,11 @@ namespace NPOI.OpenXmlFormats.Spreadsheet {
     }
     
     /// <remarks/>
-    [System.SerializableAttribute()]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
-    [System.Xml.Serialization.XmlRootAttribute(Namespace="http://schemas.openxmlformats.org/spreadsheetml/2006/main", IsNullable=true)]
+    [System.Serializable]
+    [System.Diagnostics.DebuggerStepThrough]
+    [System.ComponentModel.DesignerCategory("code")]
+    [System.Xml.Serialization.XmlType(Namespace="http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
+    [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/spreadsheetml/2006/main", IsNullable=true)]
     public partial class CT_Schema {
         
         private System.Xml.XmlElement anyField;
@@ -77,7 +77,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [System.Xml.Serialization.XmlAttribute]
         public string ID {
             get {
                 return this.idField;
@@ -88,7 +88,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [System.Xml.Serialization.XmlAttribute]
         public string SchemaRef {
             get {
                 return this.schemaRefField;
@@ -99,7 +99,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [System.Xml.Serialization.XmlAttribute]
         public string Namespace {
             get {
                 return this.namespaceField;
@@ -111,11 +111,11 @@ namespace NPOI.OpenXmlFormats.Spreadsheet {
     }
     
     /// <remarks/>
-    [System.SerializableAttribute()]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
-    [System.Xml.Serialization.XmlRootAttribute(Namespace="http://schemas.openxmlformats.org/spreadsheetml/2006/main", IsNullable=true)]
+    [System.Serializable]
+    [System.Diagnostics.DebuggerStepThrough]
+    [System.ComponentModel.DesignerCategory("code")]
+    [System.Xml.Serialization.XmlType(Namespace="http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
+    [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/spreadsheetml/2006/main", IsNullable=true)]
     public partial class CT_Map {
         
         private CT_DataBinding dataBindingField;
@@ -149,7 +149,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [System.Xml.Serialization.XmlAttribute]
         public uint ID {
             get {
                 return this.idField;
@@ -160,7 +160,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [System.Xml.Serialization.XmlAttribute]
         public string Name {
             get {
                 return this.nameField;
@@ -171,7 +171,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [System.Xml.Serialization.XmlAttribute]
         public string RootElement {
             get {
                 return this.rootElementField;
@@ -182,7 +182,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [System.Xml.Serialization.XmlAttribute]
         public string SchemaID {
             get {
                 return this.schemaIDField;
@@ -193,7 +193,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [System.Xml.Serialization.XmlAttribute]
         public bool ShowImportExportValidationErrors {
             get {
                 return this.showImportExportValidationErrorsField;
@@ -204,7 +204,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [System.Xml.Serialization.XmlAttribute]
         public bool AutoFit {
             get {
                 return this.autoFitField;
@@ -215,7 +215,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [System.Xml.Serialization.XmlAttribute]
         public bool Append {
             get {
                 return this.appendField;
@@ -226,7 +226,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [System.Xml.Serialization.XmlAttribute]
         public bool PreserveSortAFLayout {
             get {
                 return this.preserveSortAFLayoutField;
@@ -237,7 +237,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [System.Xml.Serialization.XmlAttribute]
         public bool PreserveFormat {
             get {
                 return this.preserveFormatField;
@@ -249,11 +249,11 @@ namespace NPOI.OpenXmlFormats.Spreadsheet {
     }
     
     /// <remarks/>
-    [System.SerializableAttribute()]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
-    [System.Xml.Serialization.XmlRootAttribute(Namespace="http://schemas.openxmlformats.org/spreadsheetml/2006/main", IsNullable=true)]
+    [System.Serializable]
+    [System.Diagnostics.DebuggerStepThrough]
+    [System.ComponentModel.DesignerCategory("code")]
+    [System.Xml.Serialization.XmlType(Namespace="http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
+    [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/spreadsheetml/2006/main", IsNullable=true)]
     public partial class CT_DataBinding {
         
         private System.Xml.XmlElement anyField;
@@ -284,7 +284,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [System.Xml.Serialization.XmlAttribute]
         public string DataBindingName {
             get {
                 return this.dataBindingNameField;
@@ -295,7 +295,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [System.Xml.Serialization.XmlAttribute]
         public bool FileBinding {
             get {
                 return this.fileBindingField;
@@ -306,7 +306,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [System.Xml.Serialization.XmlIgnore]
         public bool FileBindingSpecified {
             get {
                 return this.fileBindingFieldSpecified;
@@ -317,7 +317,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [System.Xml.Serialization.XmlAttribute]
         public uint ConnectionID {
             get {
                 return this.connectionIDField;
@@ -328,7 +328,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [System.Xml.Serialization.XmlIgnore]
         public bool ConnectionIDSpecified {
             get {
                 return this.connectionIDFieldSpecified;
@@ -339,7 +339,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [System.Xml.Serialization.XmlAttribute]
         public string FileBindingName {
             get {
                 return this.fileBindingNameField;
@@ -350,7 +350,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [System.Xml.Serialization.XmlAttribute]
         public uint DataBindingLoadMode {
             get {
                 return this.dataBindingLoadModeField;

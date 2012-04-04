@@ -2,21 +2,21 @@ namespace NPOI.OpenXmlFormats.Dml {
     
     
     /// <remarks/>
-    [System.SerializableAttribute()]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
-    [System.Xml.Serialization.XmlRootAttribute(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
+    [System.Serializable]
+    [System.Diagnostics.DebuggerStepThrough]
+    [System.ComponentModel.DesignerCategory("code")]
+    [System.Xml.Serialization.XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_GvmlUseShapeRectangle {
     }
     
     
     
     /// <remarks/>
-    [System.SerializableAttribute()]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [System.Serializable]
+    [System.Diagnostics.DebuggerStepThrough]
+    [System.ComponentModel.DesignerCategory("code")]
+    [System.Xml.Serialization.XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
     public partial class CT_GroupLocking {
         
         private CT_OfficeArtExtensionList extLstField;
@@ -56,7 +56,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [System.Xml.Serialization.XmlAttribute]
         [System.ComponentModel.DefaultValueAttribute(false)]
         public bool noGrp {
             get {
@@ -68,7 +68,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [System.Xml.Serialization.XmlAttribute]
         [System.ComponentModel.DefaultValueAttribute(false)]
         public bool noUngrp {
             get {
@@ -80,7 +80,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [System.Xml.Serialization.XmlAttribute]
         [System.ComponentModel.DefaultValueAttribute(false)]
         public bool noSelect {
             get {
@@ -92,7 +92,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [System.Xml.Serialization.XmlAttribute]
         [System.ComponentModel.DefaultValueAttribute(false)]
         public bool noRot {
             get {
@@ -104,7 +104,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [System.Xml.Serialization.XmlAttribute]
         [System.ComponentModel.DefaultValueAttribute(false)]
         public bool noChangeAspect {
             get {
@@ -116,7 +116,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [System.Xml.Serialization.XmlAttribute]
         [System.ComponentModel.DefaultValueAttribute(false)]
         public bool noMove {
             get {
@@ -128,7 +128,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [System.Xml.Serialization.XmlAttribute]
         [System.ComponentModel.DefaultValueAttribute(false)]
         public bool noResize {
             get {
@@ -141,10 +141,10 @@ namespace NPOI.OpenXmlFormats.Dml {
     }
     
     /// <remarks/>
-    [System.SerializableAttribute()]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [System.Serializable]
+    [System.Diagnostics.DebuggerStepThrough]
+    [System.ComponentModel.DesignerCategory("code")]
+    [System.Xml.Serialization.XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
     public partial class CT_NonVisualGroupDrawingShapeProps {
         
         private CT_GroupLocking grpSpLocksField;
@@ -174,10 +174,10 @@ namespace NPOI.OpenXmlFormats.Dml {
    
     
     /// <remarks/>
-    [System.SerializableAttribute()]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [System.Serializable]
+    [System.Diagnostics.DebuggerStepThrough]
+    [System.ComponentModel.DesignerCategory("code")]
+    [System.Xml.Serialization.XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
     public partial class CT_GraphicalObjectFrameLocking {
         
         private CT_OfficeArtExtensionList extLstField;
@@ -214,7 +214,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [System.Xml.Serialization.XmlAttribute]
         [System.ComponentModel.DefaultValueAttribute(false)]
         public bool noGrp {
             get {
@@ -226,7 +226,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [System.Xml.Serialization.XmlAttribute]
         [System.ComponentModel.DefaultValueAttribute(false)]
         public bool noDrilldown {
             get {
@@ -238,7 +238,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [System.Xml.Serialization.XmlAttribute]
         [System.ComponentModel.DefaultValueAttribute(false)]
         public bool noSelect {
             get {
@@ -250,7 +250,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [System.Xml.Serialization.XmlAttribute]
         [System.ComponentModel.DefaultValueAttribute(false)]
         public bool noChangeAspect {
             get {
@@ -262,7 +262,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [System.Xml.Serialization.XmlAttribute]
         [System.ComponentModel.DefaultValueAttribute(false)]
         public bool noMove {
             get {
@@ -274,7 +274,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [System.Xml.Serialization.XmlAttribute]
         [System.ComponentModel.DefaultValueAttribute(false)]
         public bool noResize {
             get {
@@ -287,10 +287,10 @@ namespace NPOI.OpenXmlFormats.Dml {
     }
     
     /// <remarks/>
-    [System.SerializableAttribute()]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [System.Serializable]
+    [System.Diagnostics.DebuggerStepThrough]
+    [System.ComponentModel.DesignerCategory("code")]
+    [System.Xml.Serialization.XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
     public partial class CT_NonVisualGraphicFrameProperties {
         
         private CT_GraphicalObjectFrameLocking graphicFrameLocksField;
@@ -318,10 +318,10 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
     }
     /// <remarks/>
-    [System.SerializableAttribute()]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [System.Serializable]
+    [System.Diagnostics.DebuggerStepThrough]
+    [System.ComponentModel.DesignerCategory("code")]
+    [System.Xml.Serialization.XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
     public partial class CT_ConnectorLocking {
         
         private CT_OfficeArtExtensionList extLstField;
@@ -370,7 +370,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [System.Xml.Serialization.XmlAttribute]
         [System.ComponentModel.DefaultValueAttribute(false)]
         public bool noGrp {
             get {
@@ -382,7 +382,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [System.Xml.Serialization.XmlAttribute]
         [System.ComponentModel.DefaultValueAttribute(false)]
         public bool noSelect {
             get {
@@ -394,7 +394,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [System.Xml.Serialization.XmlAttribute]
         [System.ComponentModel.DefaultValueAttribute(false)]
         public bool noRot {
             get {
@@ -406,7 +406,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [System.Xml.Serialization.XmlAttribute]
         [System.ComponentModel.DefaultValueAttribute(false)]
         public bool noChangeAspect {
             get {
@@ -418,7 +418,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [System.Xml.Serialization.XmlAttribute]
         [System.ComponentModel.DefaultValueAttribute(false)]
         public bool noMove {
             get {
@@ -430,7 +430,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [System.Xml.Serialization.XmlAttribute]
         [System.ComponentModel.DefaultValueAttribute(false)]
         public bool noResize {
             get {
@@ -442,7 +442,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [System.Xml.Serialization.XmlAttribute]
         [System.ComponentModel.DefaultValueAttribute(false)]
         public bool noEditPoints {
             get {
@@ -454,7 +454,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [System.Xml.Serialization.XmlAttribute]
         [System.ComponentModel.DefaultValueAttribute(false)]
         public bool noAdjustHandles {
             get {
@@ -466,7 +466,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [System.Xml.Serialization.XmlAttribute]
         [System.ComponentModel.DefaultValueAttribute(false)]
         public bool noChangeArrowheads {
             get {
@@ -478,7 +478,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [System.Xml.Serialization.XmlAttribute]
         [System.ComponentModel.DefaultValueAttribute(false)]
         public bool noChangeShapeType {
             get {
@@ -491,10 +491,10 @@ namespace NPOI.OpenXmlFormats.Dml {
     }
     
     /// <remarks/>
-    [System.SerializableAttribute()]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [System.Serializable]
+    [System.Diagnostics.DebuggerStepThrough]
+    [System.ComponentModel.DesignerCategory("code")]
+    [System.Xml.Serialization.XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
     public partial class CT_NonVisualConnectorProperties {
         
         private CT_ConnectorLocking cxnSpLocksField;
@@ -546,8 +546,8 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
     }
     /// <remarks/>
-    [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IncludeInSchema=false)]
+    [System.Serializable]
+    [System.Xml.Serialization.XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IncludeInSchema=false)]
     public enum ItemsChoiceType2 {
         
         /// <remarks/>
@@ -571,10 +571,10 @@ namespace NPOI.OpenXmlFormats.Dml {
     
     
     /// <remarks/>
-    [System.SerializableAttribute()]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [System.Serializable]
+    [System.Diagnostics.DebuggerStepThrough]
+    [System.ComponentModel.DesignerCategory("code")]
+    [System.Xml.Serialization.XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
     public partial class CT_ShapeLocking {
         
         private CT_OfficeArtExtensionList extLstField;
@@ -626,7 +626,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [System.Xml.Serialization.XmlAttribute]
         [System.ComponentModel.DefaultValueAttribute(false)]
         public bool noGrp {
             get {
@@ -638,7 +638,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [System.Xml.Serialization.XmlAttribute]
         [System.ComponentModel.DefaultValueAttribute(false)]
         public bool noSelect {
             get {
@@ -650,7 +650,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [System.Xml.Serialization.XmlAttribute]
         [System.ComponentModel.DefaultValueAttribute(false)]
         public bool noRot {
             get {
@@ -662,7 +662,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [System.Xml.Serialization.XmlAttribute]
         [System.ComponentModel.DefaultValueAttribute(false)]
         public bool noChangeAspect {
             get {
@@ -674,7 +674,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [System.Xml.Serialization.XmlAttribute]
         [System.ComponentModel.DefaultValueAttribute(false)]
         public bool noMove {
             get {
@@ -686,7 +686,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [System.Xml.Serialization.XmlAttribute]
         [System.ComponentModel.DefaultValueAttribute(false)]
         public bool noResize {
             get {
@@ -698,7 +698,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [System.Xml.Serialization.XmlAttribute]
         [System.ComponentModel.DefaultValueAttribute(false)]
         public bool noEditPoints {
             get {
@@ -710,7 +710,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [System.Xml.Serialization.XmlAttribute]
         [System.ComponentModel.DefaultValueAttribute(false)]
         public bool noAdjustHandles {
             get {
@@ -722,7 +722,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [System.Xml.Serialization.XmlAttribute]
         [System.ComponentModel.DefaultValueAttribute(false)]
         public bool noChangeArrowheads {
             get {
@@ -734,7 +734,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [System.Xml.Serialization.XmlAttribute]
         [System.ComponentModel.DefaultValueAttribute(false)]
         public bool noChangeShapeType {
             get {
@@ -746,7 +746,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [System.Xml.Serialization.XmlAttribute]
         [System.ComponentModel.DefaultValueAttribute(false)]
         public bool noTextEdit {
             get {
@@ -759,10 +759,10 @@ namespace NPOI.OpenXmlFormats.Dml {
     }
     
     /// <remarks/>
-    [System.SerializableAttribute()]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [System.Serializable]
+    [System.Diagnostics.DebuggerStepThrough]
+    [System.ComponentModel.DesignerCategory("code")]
+    [System.Xml.Serialization.XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
     public partial class CT_NonVisualDrawingShapeProps {
         
         private CT_ShapeLocking spLocksField;
@@ -796,7 +796,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [System.Xml.Serialization.XmlAttribute]
         [System.ComponentModel.DefaultValueAttribute(false)]
         public bool txBox {
             get {
@@ -811,11 +811,11 @@ namespace NPOI.OpenXmlFormats.Dml {
       
     
     /// <remarks/>
-    [System.SerializableAttribute()]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
-    [System.Xml.Serialization.XmlRootAttribute(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
+    [System.Serializable]
+    [System.Diagnostics.DebuggerStepThrough]
+    [System.ComponentModel.DesignerCategory("code")]
+    [System.Xml.Serialization.XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_GvmlTextShape {
         
         private CT_TextBody txBodyField;
@@ -835,8 +835,8 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("useSpRect", typeof(CT_GvmlUseShapeRectangle))]
-        [System.Xml.Serialization.XmlElementAttribute("xfrm", typeof(CT_Transform2D))]
+        [System.Xml.Serialization.XmlElement("useSpRect", typeof(CT_GvmlUseShapeRectangle))]
+        [System.Xml.Serialization.XmlElement("xfrm", typeof(CT_Transform2D))]
         public object Item {
             get {
                 return this.itemField;
@@ -858,11 +858,11 @@ namespace NPOI.OpenXmlFormats.Dml {
     }
     
     /// <remarks/>
-    [System.SerializableAttribute()]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
-    [System.Xml.Serialization.XmlRootAttribute(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
+    [System.Serializable]
+    [System.Diagnostics.DebuggerStepThrough]
+    [System.ComponentModel.DesignerCategory("code")]
+    [System.Xml.Serialization.XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_GvmlShapeNonVisual {
         
         private CT_NonVisualDrawingProps cNvPrField;
@@ -891,11 +891,11 @@ namespace NPOI.OpenXmlFormats.Dml {
     }
     
     /// <remarks/>
-    [System.SerializableAttribute()]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
-    [System.Xml.Serialization.XmlRootAttribute(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
+    [System.Serializable]
+    [System.Diagnostics.DebuggerStepThrough]
+    [System.ComponentModel.DesignerCategory("code")]
+    [System.Xml.Serialization.XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_GvmlShape {
         
         private CT_GvmlShapeNonVisual nvSpPrField;
@@ -960,11 +960,11 @@ namespace NPOI.OpenXmlFormats.Dml {
     }
     
     /// <remarks/>
-    [System.SerializableAttribute()]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
-    [System.Xml.Serialization.XmlRootAttribute(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
+    [System.Serializable]
+    [System.Diagnostics.DebuggerStepThrough]
+    [System.ComponentModel.DesignerCategory("code")]
+    [System.Xml.Serialization.XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_GvmlConnectorNonVisual {
         
         private CT_NonVisualDrawingProps cNvPrField;
@@ -993,11 +993,11 @@ namespace NPOI.OpenXmlFormats.Dml {
     }
     
     /// <remarks/>
-    [System.SerializableAttribute()]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
-    [System.Xml.Serialization.XmlRootAttribute(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
+    [System.Serializable]
+    [System.Diagnostics.DebuggerStepThrough]
+    [System.ComponentModel.DesignerCategory("code")]
+    [System.Xml.Serialization.XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_GvmlConnector {
         
         private CT_GvmlConnectorNonVisual nvCxnSpPrField;
@@ -1050,11 +1050,11 @@ namespace NPOI.OpenXmlFormats.Dml {
     }
     
     /// <remarks/>
-    [System.SerializableAttribute()]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
-    [System.Xml.Serialization.XmlRootAttribute(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
+    [System.Serializable]
+    [System.Diagnostics.DebuggerStepThrough]
+    [System.ComponentModel.DesignerCategory("code")]
+    [System.Xml.Serialization.XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_GvmlPictureNonVisual {
         
         private CT_NonVisualDrawingProps cNvPrField;
@@ -1083,11 +1083,11 @@ namespace NPOI.OpenXmlFormats.Dml {
     }
     
     /// <remarks/>
-    [System.SerializableAttribute()]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
-    [System.Xml.Serialization.XmlRootAttribute(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
+    [System.Serializable]
+    [System.Diagnostics.DebuggerStepThrough]
+    [System.ComponentModel.DesignerCategory("code")]
+    [System.Xml.Serialization.XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_GvmlPicture {
         
         private CT_GvmlPictureNonVisual nvPicPrField;
@@ -1152,11 +1152,11 @@ namespace NPOI.OpenXmlFormats.Dml {
     }
     
     /// <remarks/>
-    [System.SerializableAttribute()]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
-    [System.Xml.Serialization.XmlRootAttribute(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
+    [System.Serializable]
+    [System.Diagnostics.DebuggerStepThrough]
+    [System.ComponentModel.DesignerCategory("code")]
+    [System.Xml.Serialization.XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_GvmlGraphicFrameNonVisual {
         
         private CT_NonVisualDrawingProps cNvPrField;
@@ -1185,11 +1185,11 @@ namespace NPOI.OpenXmlFormats.Dml {
     }
     
     /// <remarks/>
-    [System.SerializableAttribute()]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
-    [System.Xml.Serialization.XmlRootAttribute(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
+    [System.Serializable]
+    [System.Diagnostics.DebuggerStepThrough]
+    [System.ComponentModel.DesignerCategory("code")]
+    [System.Xml.Serialization.XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_GvmlGraphicalObjectFrame {
         
         private CT_GvmlGraphicFrameNonVisual nvGraphicFramePrField;
@@ -1242,11 +1242,11 @@ namespace NPOI.OpenXmlFormats.Dml {
     }
     
     /// <remarks/>
-    [System.SerializableAttribute()]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
-    [System.Xml.Serialization.XmlRootAttribute(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
+    [System.Serializable]
+    [System.Diagnostics.DebuggerStepThrough]
+    [System.ComponentModel.DesignerCategory("code")]
+    [System.Xml.Serialization.XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_GvmlGroupShapeNonVisual {
         
         private CT_NonVisualDrawingProps cNvPrField;
@@ -1275,11 +1275,11 @@ namespace NPOI.OpenXmlFormats.Dml {
     }
     
     /// <remarks/>
-    [System.SerializableAttribute()]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
-    [System.Xml.Serialization.XmlRootAttribute(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
+    [System.Serializable]
+    [System.Diagnostics.DebuggerStepThrough]
+    [System.ComponentModel.DesignerCategory("code")]
+    [System.Xml.Serialization.XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_GvmlGroupShape {
         
         private CT_GvmlGroupShapeNonVisual nvGrpSpPrField;
@@ -1311,12 +1311,12 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("cxnSp", typeof(CT_GvmlConnector))]
-        [System.Xml.Serialization.XmlElementAttribute("graphicFrame", typeof(CT_GvmlGraphicalObjectFrame))]
-        [System.Xml.Serialization.XmlElementAttribute("grpSp", typeof(CT_GvmlGroupShape))]
-        [System.Xml.Serialization.XmlElementAttribute("pic", typeof(CT_GvmlPicture))]
-        [System.Xml.Serialization.XmlElementAttribute("sp", typeof(CT_GvmlShape))]
-        [System.Xml.Serialization.XmlElementAttribute("txSp", typeof(CT_GvmlTextShape))]
+        [System.Xml.Serialization.XmlElement("cxnSp", typeof(CT_GvmlConnector))]
+        [System.Xml.Serialization.XmlElement("graphicFrame", typeof(CT_GvmlGraphicalObjectFrame))]
+        [System.Xml.Serialization.XmlElement("grpSp", typeof(CT_GvmlGroupShape))]
+        [System.Xml.Serialization.XmlElement("pic", typeof(CT_GvmlPicture))]
+        [System.Xml.Serialization.XmlElement("sp", typeof(CT_GvmlShape))]
+        [System.Xml.Serialization.XmlElement("txSp", typeof(CT_GvmlTextShape))]
         public object[] Items {
             get {
                 return this.itemsField;

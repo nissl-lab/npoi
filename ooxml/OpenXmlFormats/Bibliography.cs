@@ -9,11 +9,11 @@ namespace NPOI.OpenXmlFormats
     using System.Xml.Serialization;
     using System.Collections.Generic;
 
-    [System.SerializableAttribute()]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [XmlTypeAttribute(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/bibliography")]
-    [XmlRootAttribute(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/bibliography", IsNullable = true)]
+    [System.Serializable]
+    [System.Diagnostics.DebuggerStepThrough]
+    [System.ComponentModel.DesignerCategory("code")]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/bibliography")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/bibliography", IsNullable = true)]
     public class CT_Sources
     {
 
@@ -29,7 +29,7 @@ namespace NPOI.OpenXmlFormats
         {
             this.sourceField = new List<CT_SourceType>();
         }
-        [XmlElementAttribute("Source")]
+        [XmlElement("Source")]
         public List<CT_SourceType> Source
         {
             get
@@ -41,7 +41,7 @@ namespace NPOI.OpenXmlFormats
                 this.sourceField = value;
             }
         }
-        [XmlAttributeAttribute()]
+        [XmlAttribute]
         public string SelectedStyle
         {
             get
@@ -53,7 +53,7 @@ namespace NPOI.OpenXmlFormats
                 this.selectedStyleField = value;
             }
         }
-        [XmlAttributeAttribute()]
+        [XmlAttribute]
         public string StyleName
         {
             get
@@ -65,7 +65,7 @@ namespace NPOI.OpenXmlFormats
                 this.styleNameField = value;
             }
         }
-        [XmlAttributeAttribute()]
+        [XmlAttribute]
         public string URI
         {
             get
@@ -79,11 +79,11 @@ namespace NPOI.OpenXmlFormats
         }
     }
 
-    [System.SerializableAttribute()]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [XmlTypeAttribute(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/bibliography")]
-    [XmlRootAttribute(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/bibliography", IsNullable = true)]
+    [System.Serializable]
+    [System.Diagnostics.DebuggerStepThrough]
+    [System.ComponentModel.DesignerCategory("code")]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/bibliography")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/bibliography", IsNullable = true)]
     public class CT_SourceType
     {
 
@@ -96,58 +96,58 @@ namespace NPOI.OpenXmlFormats
             this.itemsElementNameField = new List<ItemsChoiceType1>();
             this.itemsField = new List<object>();
         }
-        [XmlElementAttribute("AbbreviatedCaseNumber", typeof(string))]
-        [XmlElementAttribute("AlbumTitle", typeof(string))]
-        [XmlElementAttribute("Author", typeof(CT_AuthorType))]
-        [XmlElementAttribute("BookTitle", typeof(string))]
-        [XmlElementAttribute("BroadcastTitle", typeof(string))]
-        [XmlElementAttribute("Broadcaster", typeof(string))]
-        [XmlElementAttribute("CaseNumber", typeof(string))]
-        [XmlElementAttribute("ChapterNumber", typeof(string))]
-        [XmlElementAttribute("City", typeof(string))]
-        [XmlElementAttribute("Comments", typeof(string))]
-        [XmlElementAttribute("ConferenceName", typeof(string))]
-        [XmlElementAttribute("CountryRegion", typeof(string))]
-        [XmlElementAttribute("Court", typeof(string))]
-        [XmlElementAttribute("Day", typeof(string))]
-        [XmlElementAttribute("DayAccessed", typeof(string))]
-        [XmlElementAttribute("Department", typeof(string))]
-        [XmlElementAttribute("Distributor", typeof(string))]
-        [XmlElementAttribute("Edition", typeof(string))]
-        [XmlElementAttribute("Guid", typeof(string))]
-        [XmlElementAttribute("Institution", typeof(string))]
-        [XmlElementAttribute("InternetSiteTitle", typeof(string))]
-        [XmlElementAttribute("Issue", typeof(string))]
-        [XmlElementAttribute("JournalName", typeof(string))]
-        [XmlElementAttribute("LCID", typeof(string))]
-        [XmlElementAttribute("Medium", typeof(string))]
-        [XmlElementAttribute("Month", typeof(string))]
-        [XmlElementAttribute("MonthAccessed", typeof(string))]
-        [XmlElementAttribute("NumberVolumes", typeof(string))]
-        [XmlElementAttribute("Pages", typeof(string))]
-        [XmlElementAttribute("PatentNumber", typeof(string))]
-        [XmlElementAttribute("PeriodicalTitle", typeof(string))]
-        [XmlElementAttribute("ProductionCompany", typeof(string))]
-        [XmlElementAttribute("PublicationTitle", typeof(string))]
-        [XmlElementAttribute("Publisher", typeof(string))]
-        [XmlElementAttribute("RecordingNumber", typeof(string))]
-        [XmlElementAttribute("RefOrder", typeof(string))]
-        [XmlElementAttribute("Reporter", typeof(string))]
-        [XmlElementAttribute("ShortTitle", typeof(string))]
-        [XmlElementAttribute("SourceType", typeof(ST_SourceType))]
-        [XmlElementAttribute("StandardNumber", typeof(string))]
-        [XmlElementAttribute("StateProvince", typeof(string))]
-        [XmlElementAttribute("Station", typeof(string))]
-        [XmlElementAttribute("Tag", typeof(string))]
-        [XmlElementAttribute("Theater", typeof(string))]
-        [XmlElementAttribute("ThesisType", typeof(string))]
-        [XmlElementAttribute("Title", typeof(string))]
-        [XmlElementAttribute("Type", typeof(string))]
-        [XmlElementAttribute("URL", typeof(string))]
-        [XmlElementAttribute("Version", typeof(string))]
-        [XmlElementAttribute("Volume", typeof(string))]
-        [XmlElementAttribute("Year", typeof(string))]
-        [XmlElementAttribute("YearAccessed", typeof(string))]
+        [XmlElement("AbbreviatedCaseNumber", typeof(string))]
+        [XmlElement("AlbumTitle", typeof(string))]
+        [XmlElement("Author", typeof(CT_AuthorType))]
+        [XmlElement("BookTitle", typeof(string))]
+        [XmlElement("BroadcastTitle", typeof(string))]
+        [XmlElement("Broadcaster", typeof(string))]
+        [XmlElement("CaseNumber", typeof(string))]
+        [XmlElement("ChapterNumber", typeof(string))]
+        [XmlElement("City", typeof(string))]
+        [XmlElement("Comments", typeof(string))]
+        [XmlElement("ConferenceName", typeof(string))]
+        [XmlElement("CountryRegion", typeof(string))]
+        [XmlElement("Court", typeof(string))]
+        [XmlElement("Day", typeof(string))]
+        [XmlElement("DayAccessed", typeof(string))]
+        [XmlElement("Department", typeof(string))]
+        [XmlElement("Distributor", typeof(string))]
+        [XmlElement("Edition", typeof(string))]
+        [XmlElement("Guid", typeof(string))]
+        [XmlElement("Institution", typeof(string))]
+        [XmlElement("InternetSiteTitle", typeof(string))]
+        [XmlElement("Issue", typeof(string))]
+        [XmlElement("JournalName", typeof(string))]
+        [XmlElement("LCID", typeof(string))]
+        [XmlElement("Medium", typeof(string))]
+        [XmlElement("Month", typeof(string))]
+        [XmlElement("MonthAccessed", typeof(string))]
+        [XmlElement("NumberVolumes", typeof(string))]
+        [XmlElement("Pages", typeof(string))]
+        [XmlElement("PatentNumber", typeof(string))]
+        [XmlElement("PeriodicalTitle", typeof(string))]
+        [XmlElement("ProductionCompany", typeof(string))]
+        [XmlElement("PublicationTitle", typeof(string))]
+        [XmlElement("Publisher", typeof(string))]
+        [XmlElement("RecordingNumber", typeof(string))]
+        [XmlElement("RefOrder", typeof(string))]
+        [XmlElement("Reporter", typeof(string))]
+        [XmlElement("ShortTitle", typeof(string))]
+        [XmlElement("SourceType", typeof(ST_SourceType))]
+        [XmlElement("StandardNumber", typeof(string))]
+        [XmlElement("StateProvince", typeof(string))]
+        [XmlElement("Station", typeof(string))]
+        [XmlElement("Tag", typeof(string))]
+        [XmlElement("Theater", typeof(string))]
+        [XmlElement("ThesisType", typeof(string))]
+        [XmlElement("Title", typeof(string))]
+        [XmlElement("Type", typeof(string))]
+        [XmlElement("URL", typeof(string))]
+        [XmlElement("Version", typeof(string))]
+        [XmlElement("Volume", typeof(string))]
+        [XmlElement("Year", typeof(string))]
+        [XmlElement("YearAccessed", typeof(string))]
         [XmlChoiceIdentifierAttribute("ItemsElementName")]
         public List<object> Items
         {
@@ -161,7 +161,7 @@ namespace NPOI.OpenXmlFormats
             }
         }
 
-        [XmlIgnoreAttribute()]
+        [XmlIgnore]
         public List<ItemsChoiceType1> ItemsElementName
         {
             get
@@ -175,8 +175,8 @@ namespace NPOI.OpenXmlFormats
         }
     }
     /// <remarks/>
-    [System.SerializableAttribute()]
-    [XmlTypeAttribute(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/bibliography", IncludeInSchema = false)]
+    [System.Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/bibliography", IncludeInSchema = false)]
     public enum ItemsChoiceType1
     {
 
@@ -337,11 +337,11 @@ namespace NPOI.OpenXmlFormats
         YearAccessed,
     }
 
-    [System.SerializableAttribute()]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [XmlTypeAttribute(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/bibliography")]
-    [XmlRootAttribute(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/bibliography", IsNullable = true)]
+    [System.Serializable]
+    [System.Diagnostics.DebuggerStepThrough]
+    [System.ComponentModel.DesignerCategory("code")]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/bibliography")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/bibliography", IsNullable = true)]
 
     public class CT_AuthorType
     {
@@ -355,22 +355,22 @@ namespace NPOI.OpenXmlFormats
             this.itemsElementNameField = new List<ItemsChoiceType>();
             this.itemsField = new List<object>();
         }
-        [XmlElementAttribute("Artist", typeof(CT_NameType))]
-        [XmlElementAttribute("Author", typeof(CT_NameOrCorporateType))]
-        [XmlElementAttribute("BookAuthor", typeof(CT_NameType))]
-        [XmlElementAttribute("Compiler", typeof(CT_NameType))]
-        [XmlElementAttribute("Composer", typeof(CT_NameType))]
-        [XmlElementAttribute("Conductor", typeof(CT_NameType))]
-        [XmlElementAttribute("Counsel", typeof(CT_NameType))]
-        [XmlElementAttribute("Director", typeof(CT_NameType))]
-        [XmlElementAttribute("Editor", typeof(CT_NameType))]
-        [XmlElementAttribute("Interviewee", typeof(CT_NameType))]
-        [XmlElementAttribute("Interviewer", typeof(CT_NameType))]
-        [XmlElementAttribute("Inventor", typeof(CT_NameType))]
-        [XmlElementAttribute("Performer", typeof(CT_NameOrCorporateType))]
-        [XmlElementAttribute("ProducerName", typeof(CT_NameType))]
-        [XmlElementAttribute("Translator", typeof(CT_NameType))]
-        [XmlElementAttribute("Writer", typeof(CT_NameType))]
+        [XmlElement("Artist", typeof(CT_NameType))]
+        [XmlElement("Author", typeof(CT_NameOrCorporateType))]
+        [XmlElement("BookAuthor", typeof(CT_NameType))]
+        [XmlElement("Compiler", typeof(CT_NameType))]
+        [XmlElement("Composer", typeof(CT_NameType))]
+        [XmlElement("Conductor", typeof(CT_NameType))]
+        [XmlElement("Counsel", typeof(CT_NameType))]
+        [XmlElement("Director", typeof(CT_NameType))]
+        [XmlElement("Editor", typeof(CT_NameType))]
+        [XmlElement("Interviewee", typeof(CT_NameType))]
+        [XmlElement("Interviewer", typeof(CT_NameType))]
+        [XmlElement("Inventor", typeof(CT_NameType))]
+        [XmlElement("Performer", typeof(CT_NameOrCorporateType))]
+        [XmlElement("ProducerName", typeof(CT_NameType))]
+        [XmlElement("Translator", typeof(CT_NameType))]
+        [XmlElement("Writer", typeof(CT_NameType))]
         [XmlChoiceIdentifierAttribute("ItemsElementName")]
         public List<object> Items
         {
@@ -384,7 +384,7 @@ namespace NPOI.OpenXmlFormats
             }
         }
 
-        [XmlIgnoreAttribute()]
+        [XmlIgnore]
         public List<ItemsChoiceType> ItemsElementName
         {
             get
@@ -397,11 +397,11 @@ namespace NPOI.OpenXmlFormats
             }
         }
     }
-    [System.SerializableAttribute()]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [XmlTypeAttribute(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/bibliography")]
-    [XmlRootAttribute(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/bibliography", IsNullable = true)]
+    [System.Serializable]
+    [System.Diagnostics.DebuggerStepThrough]
+    [System.ComponentModel.DesignerCategory("code")]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/bibliography")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/bibliography", IsNullable = true)]
 
     public class CT_NameType
     {
@@ -427,11 +427,11 @@ namespace NPOI.OpenXmlFormats
             }
         }
     }
-    [System.SerializableAttribute()]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [XmlTypeAttribute(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/bibliography")]
-    [XmlRootAttribute(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/bibliography", IsNullable = true)]
+    [System.Serializable]
+    [System.Diagnostics.DebuggerStepThrough]
+    [System.ComponentModel.DesignerCategory("code")]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/bibliography")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/bibliography", IsNullable = true)]
     public class CT_PersonType
     {
 
@@ -447,7 +447,7 @@ namespace NPOI.OpenXmlFormats
             this.firstField = new List<string>();
             this.lastField = new List<string>();
         }
-        [XmlElementAttribute("Last")]
+        [XmlElement("Last")]
         public List<string> Last
         {
             get
@@ -459,7 +459,7 @@ namespace NPOI.OpenXmlFormats
                 this.lastField = value;
             }
         }
-        [XmlElementAttribute("First")]
+        [XmlElement("First")]
         public List<string> First
         {
             get
@@ -471,7 +471,7 @@ namespace NPOI.OpenXmlFormats
                 this.firstField = value;
             }
         }
-        [XmlElementAttribute("Middle")]
+        [XmlElement("Middle")]
         public List<string> Middle
         {
             get
@@ -484,17 +484,17 @@ namespace NPOI.OpenXmlFormats
             }
         }
     }
-    [System.SerializableAttribute()]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [XmlTypeAttribute(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/bibliography")]
-    [XmlRootAttribute(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/bibliography", IsNullable = true)]
+    [System.Serializable]
+    [System.Diagnostics.DebuggerStepThrough]
+    [System.ComponentModel.DesignerCategory("code")]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/bibliography")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/bibliography", IsNullable = true)]
     public class CT_NameOrCorporateType
     {
 
         private object itemField;
-        [XmlElementAttribute("Corporate", typeof(string))]
-        [XmlElementAttribute("NameList", typeof(CT_NameListType))]
+        [XmlElement("Corporate", typeof(string))]
+        [XmlElement("NameList", typeof(CT_NameListType))]
         public object Item
         {
             get
@@ -507,11 +507,11 @@ namespace NPOI.OpenXmlFormats
             }
         }
     }
-    [System.SerializableAttribute()]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [XmlTypeAttribute(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/bibliography")]
-    [XmlRootAttribute(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/bibliography", IsNullable = true)]
+    [System.Serializable]
+    [System.Diagnostics.DebuggerStepThrough]
+    [System.ComponentModel.DesignerCategory("code")]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/bibliography")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/bibliography", IsNullable = true)]
 
     public class CT_NameListType
     {
@@ -522,7 +522,7 @@ namespace NPOI.OpenXmlFormats
         {
             this.personField = new List<CT_PersonType>();
         }
-        [XmlElementAttribute("Person")]
+        [XmlElement("Person")]
         public List<CT_PersonType> Person
         {
             get

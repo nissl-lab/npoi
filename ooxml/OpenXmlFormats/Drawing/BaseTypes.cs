@@ -328,11 +328,11 @@ namespace NPOI.OpenXmlFormats.Dml
         gamma,
         invGamma
     }
-    [System.SerializableAttribute()]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
-    [System.Xml.Serialization.XmlRootAttribute(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
+    [System.Serializable]
+    [System.Diagnostics.DebuggerStepThrough]
+    [System.ComponentModel.DesignerCategory("code")]
+    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
     public class CT_ScRgbColor
     {
 
@@ -351,34 +351,34 @@ namespace NPOI.OpenXmlFormats.Dml
             this.itemsElementNameField = new List<ScRgbColorType>();
             this.itemsField = new List<object>();
         }
-        [System.Xml.Serialization.XmlElementAttribute("tint", typeof(CT_PositiveFixedPercentage))]
-        [System.Xml.Serialization.XmlElementAttribute("shade", typeof(CT_PositiveFixedPercentage))]
-        [System.Xml.Serialization.XmlElementAttribute("comp", typeof(CT_ComplementTransform))]
-        [System.Xml.Serialization.XmlElementAttribute("inv", typeof(CT_InverseTransform))]
-        [System.Xml.Serialization.XmlElementAttribute("gray", typeof(CT_GrayscaleTransform))]
-        [System.Xml.Serialization.XmlElementAttribute("alpha", typeof(CT_PositiveFixedPercentage))]
-        [System.Xml.Serialization.XmlElementAttribute("alphaOff", typeof(CT_FixedPercentage))]
-        [System.Xml.Serialization.XmlElementAttribute("alphaMod", typeof(CT_PositivePercentage))]
-        [System.Xml.Serialization.XmlElementAttribute("hue", typeof(CT_PositiveFixedAngle))]
-        [System.Xml.Serialization.XmlElementAttribute("hueOff", typeof(CT_Angle))]
-        [System.Xml.Serialization.XmlElementAttribute("hueMod", typeof(CT_PositivePercentage))]
-        [System.Xml.Serialization.XmlElementAttribute("sat", typeof(CT_Percentage))]
-        [System.Xml.Serialization.XmlElementAttribute("satOff", typeof(CT_Percentage))]
-        [System.Xml.Serialization.XmlElementAttribute("satMod", typeof(CT_Percentage))]
-        [System.Xml.Serialization.XmlElementAttribute("lum", typeof(CT_Percentage))]
-        [System.Xml.Serialization.XmlElementAttribute("lumOff", typeof(CT_Percentage))]
-        [System.Xml.Serialization.XmlElementAttribute("lumMod", typeof(CT_Percentage))]
-        [System.Xml.Serialization.XmlElementAttribute("red", typeof(CT_Percentage))]
-        [System.Xml.Serialization.XmlElementAttribute("redOff", typeof(CT_Percentage))]
-        [System.Xml.Serialization.XmlElementAttribute("redMod", typeof(CT_Percentage))]
-        [System.Xml.Serialization.XmlElementAttribute("green", typeof(CT_Percentage))]
-        [System.Xml.Serialization.XmlElementAttribute("greenOff", typeof(CT_Percentage))]
-        [System.Xml.Serialization.XmlElementAttribute("greenMod", typeof(CT_Percentage))]
-        [System.Xml.Serialization.XmlElementAttribute("blue", typeof(CT_Percentage))]
-        [System.Xml.Serialization.XmlElementAttribute("blueOff", typeof(CT_Percentage))]
-        [System.Xml.Serialization.XmlElementAttribute("blueMod", typeof(CT_Percentage))]
-        [System.Xml.Serialization.XmlElementAttribute("gamma", typeof(CT_GammaTransform))]
-        [System.Xml.Serialization.XmlElementAttribute("invGamma", typeof(CT_InverseGammaTransform))]
+        [System.Xml.Serialization.XmlElement("tint", typeof(CT_PositiveFixedPercentage))]
+        [System.Xml.Serialization.XmlElement("shade", typeof(CT_PositiveFixedPercentage))]
+        [System.Xml.Serialization.XmlElement("comp", typeof(CT_ComplementTransform))]
+        [System.Xml.Serialization.XmlElement("inv", typeof(CT_InverseTransform))]
+        [System.Xml.Serialization.XmlElement("gray", typeof(CT_GrayscaleTransform))]
+        [System.Xml.Serialization.XmlElement("alpha", typeof(CT_PositiveFixedPercentage))]
+        [System.Xml.Serialization.XmlElement("alphaOff", typeof(CT_FixedPercentage))]
+        [System.Xml.Serialization.XmlElement("alphaMod", typeof(CT_PositivePercentage))]
+        [System.Xml.Serialization.XmlElement("hue", typeof(CT_PositiveFixedAngle))]
+        [System.Xml.Serialization.XmlElement("hueOff", typeof(CT_Angle))]
+        [System.Xml.Serialization.XmlElement("hueMod", typeof(CT_PositivePercentage))]
+        [System.Xml.Serialization.XmlElement("sat", typeof(CT_Percentage))]
+        [System.Xml.Serialization.XmlElement("satOff", typeof(CT_Percentage))]
+        [System.Xml.Serialization.XmlElement("satMod", typeof(CT_Percentage))]
+        [System.Xml.Serialization.XmlElement("lum", typeof(CT_Percentage))]
+        [System.Xml.Serialization.XmlElement("lumOff", typeof(CT_Percentage))]
+        [System.Xml.Serialization.XmlElement("lumMod", typeof(CT_Percentage))]
+        [System.Xml.Serialization.XmlElement("red", typeof(CT_Percentage))]
+        [System.Xml.Serialization.XmlElement("redOff", typeof(CT_Percentage))]
+        [System.Xml.Serialization.XmlElement("redMod", typeof(CT_Percentage))]
+        [System.Xml.Serialization.XmlElement("green", typeof(CT_Percentage))]
+        [System.Xml.Serialization.XmlElement("greenOff", typeof(CT_Percentage))]
+        [System.Xml.Serialization.XmlElement("greenMod", typeof(CT_Percentage))]
+        [System.Xml.Serialization.XmlElement("blue", typeof(CT_Percentage))]
+        [System.Xml.Serialization.XmlElement("blueOff", typeof(CT_Percentage))]
+        [System.Xml.Serialization.XmlElement("blueMod", typeof(CT_Percentage))]
+        [System.Xml.Serialization.XmlElement("gamma", typeof(CT_GammaTransform))]
+        [System.Xml.Serialization.XmlElement("invGamma", typeof(CT_InverseGammaTransform))]
         [System.Xml.Serialization.XmlChoiceIdentifierAttribute("ItemsElementName")]
         public object[] Items
         {
@@ -473,7 +473,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [System.Xml.Serialization.XmlIgnore]
         public List<ItemsChoiceType1> ItemsElementName
         {
             get
@@ -710,7 +710,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [System.Xml.Serialization.XmlIgnore]
         public ItemsChoiceType4[] ItemsElementName
         {
             get

@@ -111,6 +111,11 @@
     <Compile Include="Spreadsheet\ThemeDocument.cs" />
     <Compile Include="Spreadsheet\Workbook.cs" />
     <Compile Include="Spreadsheet\WorkbookDocument.cs" />
+    <Compile Include="Vml\Main.cs" />
+    <Compile Include="Vml\OfficeDrawing.cs" />
+    <Compile Include="Vml\PresentationDrawing.cs" />
+    <Compile Include="Vml\SpreadsheetDrawing.cs" />
+    <Compile Include="Vml\WordprocessingDrawing.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Word\" />

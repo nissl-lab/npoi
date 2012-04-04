@@ -30,7 +30,7 @@ namespace NPOI.OpenXmlFormats
             }
         }
 
-        [XmlIgnoreAttribute()]
+        [XmlIgnore]
         public ItemChoiceType ItemElementName
         {
             get
@@ -45,10 +45,10 @@ namespace NPOI.OpenXmlFormats
     }
 
     /// <remarks/>
-    [System.SerializableAttribute()]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [XmlTypeAttribute(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes")]
+    [System.Serializable]
+    [System.Diagnostics.DebuggerStepThrough]
+    [System.ComponentModel.DesignerCategory("code")]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes")]
     public partial class CT_Array
     {
 
@@ -63,23 +63,23 @@ namespace NPOI.OpenXmlFormats
         private ST_ArrayBaseType baseTypeField;
 
         /// <remarks/>
-        [XmlElementAttribute("bool", typeof(bool))]
-        [XmlElementAttribute("bstr", typeof(string))]
-        [XmlElementAttribute("cy", typeof(string))]
-        [XmlElementAttribute("date", typeof(System.DateTime))]
-        [XmlElementAttribute("decimal", typeof(decimal))]
-        [XmlElementAttribute("error", typeof(string))]
-        [XmlElementAttribute("i1", typeof(sbyte))]
-        [XmlElementAttribute("i2", typeof(short))]
-        [XmlElementAttribute("i4", typeof(int))]
-        [XmlElementAttribute("int", typeof(int))]
-        [XmlElementAttribute("r4", typeof(float))]
-        [XmlElementAttribute("r8", typeof(double))]
-        [XmlElementAttribute("ui1", typeof(byte))]
-        [XmlElementAttribute("ui2", typeof(ushort))]
-        [XmlElementAttribute("ui4", typeof(uint))]
-        [XmlElementAttribute("uint", typeof(uint))]
-        [XmlElementAttribute("variant", typeof(CT_Variant))]
+        [XmlElement("bool", typeof(bool))]
+        [XmlElement("bstr", typeof(string))]
+        [XmlElement("cy", typeof(string))]
+        [XmlElement("date", typeof(System.DateTime))]
+        [XmlElement("decimal", typeof(decimal))]
+        [XmlElement("error", typeof(string))]
+        [XmlElement("i1", typeof(sbyte))]
+        [XmlElement("i2", typeof(short))]
+        [XmlElement("i4", typeof(int))]
+        [XmlElement("int", typeof(int))]
+        [XmlElement("r4", typeof(float))]
+        [XmlElement("r8", typeof(double))]
+        [XmlElement("ui1", typeof(byte))]
+        [XmlElement("ui2", typeof(ushort))]
+        [XmlElement("ui4", typeof(uint))]
+        [XmlElement("uint", typeof(uint))]
+        [XmlElement("variant", typeof(CT_Variant))]
         [XmlChoiceIdentifierAttribute("ItemsElementName")]
         public object[] Items
         {
@@ -94,8 +94,8 @@ namespace NPOI.OpenXmlFormats
         }
 
         /// <remarks/>
-        [XmlElementAttribute("ItemsElementName")]
-        [XmlIgnoreAttribute()]
+        [XmlElement("ItemsElementName")]
+        [XmlIgnore]
         public ItemsChoiceType[] ItemsElementName
         {
             get
@@ -109,7 +109,7 @@ namespace NPOI.OpenXmlFormats
         }
 
         /// <remarks/>
-        [XmlAttributeAttribute()]
+        [XmlAttribute]
         public int lBounds
         {
             get
@@ -123,7 +123,7 @@ namespace NPOI.OpenXmlFormats
         }
 
         /// <remarks/>
-        [XmlAttributeAttribute()]
+        [XmlAttribute]
         public int uBounds
         {
             get
@@ -137,7 +137,7 @@ namespace NPOI.OpenXmlFormats
         }
 
         /// <remarks/>
-        [XmlAttributeAttribute()]
+        [XmlAttribute]
         public ST_ArrayBaseType baseType
         {
             get
@@ -150,8 +150,8 @@ namespace NPOI.OpenXmlFormats
             }
         }
     }
-    [System.SerializableAttribute()]
-    [XmlTypeAttribute(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes", IncludeInSchema = false)]
+    [System.Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes", IncludeInSchema = false)]
     public enum ItemsChoiceType
     {
 
@@ -207,10 +207,10 @@ namespace NPOI.OpenXmlFormats
         variant,
     }
 
-    [System.SerializableAttribute()]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [XmlTypeAttribute(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes")]
+    [System.Serializable]
+    [System.Diagnostics.DebuggerStepThrough]
+    [System.ComponentModel.DesignerCategory("code")]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes")]
 
     public class CT_Vstream
     {
@@ -218,7 +218,7 @@ namespace NPOI.OpenXmlFormats
         private string versionField;
 
         private byte[] valueField;
-        [XmlAttributeAttribute()]
+        [XmlAttribute]
         public string version
         {
             get
@@ -252,10 +252,10 @@ namespace NPOI.OpenXmlFormats
     public class CT_Empty
     {
     }
-    [System.SerializableAttribute()]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [XmlTypeAttribute(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes")]
+    [System.Serializable]
+    [System.Diagnostics.DebuggerStepThrough]
+    [System.ComponentModel.DesignerCategory("code")]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes")]
     public class CT_Cf
     {
 
@@ -263,7 +263,7 @@ namespace NPOI.OpenXmlFormats
 
         private byte[] valueField;
 
-        [XmlAttributeAttribute()]
+        [XmlAttribute]
         public string format
         {
             get
@@ -289,10 +289,10 @@ namespace NPOI.OpenXmlFormats
             }
         }
     }
-    [System.SerializableAttribute()]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [XmlTypeAttribute(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes")]
+    [System.Serializable]
+    [System.Diagnostics.DebuggerStepThrough]
+    [System.ComponentModel.DesignerCategory("code")]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes")]
     public class CT_Vector
     {
 
@@ -323,7 +323,7 @@ namespace NPOI.OpenXmlFormats
             }
         }
 
-        [XmlIgnoreAttribute()]
+        [XmlIgnore]
         public List<ItemsChoiceType> ItemsElementName
         {
             get
@@ -361,8 +361,8 @@ namespace NPOI.OpenXmlFormats
         }
     }
 
-    [System.SerializableAttribute()]
-    [XmlTypeAttribute(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes")]
+    [System.Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes")]
     public enum ST_VectorBaseType
     {
 

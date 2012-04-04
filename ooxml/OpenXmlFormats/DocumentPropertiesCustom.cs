@@ -8,11 +8,11 @@ namespace NPOI.OpenXmlFormats
     using System.ComponentModel;
 
     /// <remarks/>
-    [SerializableAttribute()]
-    [DebuggerStepThroughAttribute()]
-    [DesignerCategoryAttribute("code")]
-    [XmlTypeAttribute(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/custom-properties")]
-    [XmlRootAttribute(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/custom-properties", IsNullable = true)]
+    [Serializable]
+    [DebuggerStepThrough]
+    [DesignerCategory("code")]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/custom-properties")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/custom-properties", IsNullable = true)]
     public partial class CT_Properties
     {
         public CT_Properties()
@@ -22,7 +22,7 @@ namespace NPOI.OpenXmlFormats
         private List<CT_Property> propertyField;
 
         /// <remarks/>
-        [XmlElementAttribute("property")]
+        [XmlElement("property")]
         public List<CT_Property> property
         {
             get
@@ -66,11 +66,11 @@ namespace NPOI.OpenXmlFormats
      }
 
     /// <remarks/>
-    [SerializableAttribute()]
-    [DebuggerStepThroughAttribute()]
-    [DesignerCategoryAttribute("code")]
-    [XmlTypeAttribute(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/custom-properties")]
-    [XmlRootAttribute(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/custom-properties", IsNullable = true)]
+    [Serializable]
+    [DebuggerStepThrough]
+    [DesignerCategory("code")]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/custom-properties")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/custom-properties", IsNullable = true)]
     public partial class CT_Property
     {
 
@@ -87,40 +87,40 @@ namespace NPOI.OpenXmlFormats
         private string linkTargetField;
 
         /// <remarks/>
-        [XmlElementAttribute("array", typeof(CT_Array), Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes")]
-        [XmlElementAttribute("blob", typeof(byte[]), Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes", DataType = "base64Binary")]
-        [XmlElementAttribute("bool", typeof(bool), Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes")]
-        [XmlElementAttribute("bstr", typeof(string), Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes")]
-        [XmlElementAttribute("cf", typeof(CT_Cf), Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes")]
-        [XmlElementAttribute("clsid", typeof(string), Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes")]
-        [XmlElementAttribute("cy", typeof(string), Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes")]
-        [XmlElementAttribute("date", typeof(DateTime), Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes")]
-        [XmlElementAttribute("decimal", typeof(decimal), Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes")]
-        [XmlElementAttribute("empty", typeof(CT_Empty), Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes")]
-        [XmlElementAttribute("error", typeof(string), Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes")]
-        [XmlElementAttribute("filetime", typeof(System.DateTime), Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes")]
-        [XmlElementAttribute("i1", typeof(sbyte), Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes")]
-        [XmlElementAttribute("i2", typeof(short), Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes")]
-        [XmlElementAttribute("i4", typeof(int), Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes")]
-        [XmlElementAttribute("i8", typeof(long), Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes")]
-        [XmlElementAttribute("int", typeof(int), Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes")]
-        [XmlElementAttribute("lpstr", typeof(string), Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes")]
-        [XmlElementAttribute("lpwstr", typeof(string), Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes")]
-        [XmlElementAttribute("null", typeof(CT_Null), Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes")]
-        [XmlElementAttribute("oblob", typeof(byte[]), Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes", DataType = "base64Binary")]
-        [XmlElementAttribute("ostorage", typeof(byte[]), Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes", DataType = "base64Binary")]
-        [XmlElementAttribute("ostream", typeof(byte[]), Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes", DataType = "base64Binary")]
-        [XmlElementAttribute("r4", typeof(float), Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes")]
-        [XmlElementAttribute("r8", typeof(double), Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes")]
-        [XmlElementAttribute("storage", typeof(byte[]), Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes", DataType = "base64Binary")]
-        [XmlElementAttribute("stream", typeof(byte[]), Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes", DataType = "base64Binary")]
-        [XmlElementAttribute("ui1", typeof(byte), Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes")]
-        [XmlElementAttribute("ui2", typeof(ushort), Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes")]
-        [XmlElementAttribute("ui4", typeof(uint), Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes")]
-        [XmlElementAttribute("ui8", typeof(ulong), Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes")]
-        [XmlElementAttribute("uint", typeof(uint), Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes")]
-        [XmlElementAttribute("vector", typeof(CT_Vector), Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes")]
-        [XmlElementAttribute("vstream", typeof(CT_Vstream), Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes")]
+        [XmlElement("array", typeof(CT_Array), Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes")]
+        [XmlElement("blob", typeof(byte[]), Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes", DataType = "base64Binary")]
+        [XmlElement("bool", typeof(bool), Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes")]
+        [XmlElement("bstr", typeof(string), Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes")]
+        [XmlElement("cf", typeof(CT_Cf), Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes")]
+        [XmlElement("clsid", typeof(string), Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes")]
+        [XmlElement("cy", typeof(string), Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes")]
+        [XmlElement("date", typeof(DateTime), Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes")]
+        [XmlElement("decimal", typeof(decimal), Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes")]
+        [XmlElement("empty", typeof(CT_Empty), Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes")]
+        [XmlElement("error", typeof(string), Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes")]
+        [XmlElement("filetime", typeof(System.DateTime), Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes")]
+        [XmlElement("i1", typeof(sbyte), Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes")]
+        [XmlElement("i2", typeof(short), Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes")]
+        [XmlElement("i4", typeof(int), Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes")]
+        [XmlElement("i8", typeof(long), Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes")]
+        [XmlElement("int", typeof(int), Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes")]
+        [XmlElement("lpstr", typeof(string), Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes")]
+        [XmlElement("lpwstr", typeof(string), Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes")]
+        [XmlElement("null", typeof(CT_Null), Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes")]
+        [XmlElement("oblob", typeof(byte[]), Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes", DataType = "base64Binary")]
+        [XmlElement("ostorage", typeof(byte[]), Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes", DataType = "base64Binary")]
+        [XmlElement("ostream", typeof(byte[]), Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes", DataType = "base64Binary")]
+        [XmlElement("r4", typeof(float), Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes")]
+        [XmlElement("r8", typeof(double), Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes")]
+        [XmlElement("storage", typeof(byte[]), Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes", DataType = "base64Binary")]
+        [XmlElement("stream", typeof(byte[]), Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes", DataType = "base64Binary")]
+        [XmlElement("ui1", typeof(byte), Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes")]
+        [XmlElement("ui2", typeof(ushort), Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes")]
+        [XmlElement("ui4", typeof(uint), Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes")]
+        [XmlElement("ui8", typeof(ulong), Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes")]
+        [XmlElement("uint", typeof(uint), Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes")]
+        [XmlElement("vector", typeof(CT_Vector), Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes")]
+        [XmlElement("vstream", typeof(CT_Vstream), Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes")]
         [XmlChoiceIdentifierAttribute("ItemElementName")]
         public object Item
         {
@@ -135,7 +135,7 @@ namespace NPOI.OpenXmlFormats
         }
 
         /// <remarks/>
-        [XmlIgnoreAttribute()]
+        [XmlIgnore]
         public ItemChoiceType ItemElementName
         {
             get
@@ -149,7 +149,7 @@ namespace NPOI.OpenXmlFormats
         }
 
         /// <remarks/>
-        [XmlAttributeAttribute()]
+        [XmlAttribute]
         public string fmtid
         {
             get
@@ -163,7 +163,7 @@ namespace NPOI.OpenXmlFormats
         }
 
         /// <remarks/>
-        [XmlAttributeAttribute()]
+        [XmlAttribute]
         public int pid
         {
             get
@@ -177,7 +177,7 @@ namespace NPOI.OpenXmlFormats
         }
 
         /// <remarks/>
-        [XmlAttributeAttribute()]
+        [XmlAttribute]
         public string name
         {
             get
@@ -191,7 +191,7 @@ namespace NPOI.OpenXmlFormats
         }
 
         /// <remarks/>
-        [XmlAttributeAttribute()]
+        [XmlAttribute]
         public string linkTarget
         {
             get
@@ -207,8 +207,8 @@ namespace NPOI.OpenXmlFormats
 
 
 
-    [System.SerializableAttribute()]
-    [XmlTypeAttribute(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes")]
+    [System.Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes")]
     public enum ST_ArrayBaseType
     {
 
@@ -264,8 +264,8 @@ namespace NPOI.OpenXmlFormats
         error,
     }
 
-    [System.SerializableAttribute()]
-    [XmlTypeAttribute(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes", IncludeInSchema = false)]
+    [System.Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes", IncludeInSchema = false)]
     public enum ItemChoiceType
     {
 

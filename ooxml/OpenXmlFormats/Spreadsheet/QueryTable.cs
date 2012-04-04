@@ -7,11 +7,11 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     
     
     /// <remarks/>
-    [System.SerializableAttribute()]
-    [DebuggerStepThroughAttribute()]
-    [DesignerCategoryAttribute("code")]
-    [XmlTypeAttribute(Namespace="http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
-    [XmlRootAttribute(Namespace="http://schemas.openxmlformats.org/spreadsheetml/2006/main", IsNullable=true)]
+    [System.Serializable]
+    [DebuggerStepThrough]
+    [DesignerCategory("code")]
+    [XmlType(Namespace="http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
+    [XmlRoot(Namespace="http://schemas.openxmlformats.org/spreadsheetml/2006/main", IsNullable=true)]
     public partial class CT_QueryTable {
         
         private CT_QueryTableRefresh queryTableRefreshField;
@@ -113,7 +113,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
         
         /// <remarks/>
-        [XmlAttributeAttribute()]
+        [XmlAttribute]
         public string name {
             get {
                 return this.nameField;
@@ -124,7 +124,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
         
         /// <remarks/>
-        [XmlAttributeAttribute()]
+        [XmlAttribute]
         [DefaultValueAttribute(true)]
         public bool headers {
             get {
@@ -136,7 +136,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
         
         /// <remarks/>
-        [XmlAttributeAttribute()]
+        [XmlAttribute]
         [DefaultValueAttribute(false)]
         public bool rowNumbers {
             get {
@@ -148,7 +148,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
         
         /// <remarks/>
-        [XmlAttributeAttribute()]
+        [XmlAttribute]
         [DefaultValueAttribute(false)]
         public bool disableRefresh {
             get {
@@ -160,7 +160,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
         
         /// <remarks/>
-        [XmlAttributeAttribute()]
+        [XmlAttribute]
         [DefaultValueAttribute(true)]
         public bool backgroundRefresh {
             get {
@@ -172,7 +172,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
         
         /// <remarks/>
-        [XmlAttributeAttribute()]
+        [XmlAttribute]
         [DefaultValueAttribute(false)]
         public bool firstBackgroundRefresh {
             get {
@@ -184,7 +184,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
         
         /// <remarks/>
-        [XmlAttributeAttribute()]
+        [XmlAttribute]
         [DefaultValueAttribute(false)]
         public bool refreshOnLoad {
             get {
@@ -196,7 +196,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
         
         /// <remarks/>
-        [XmlAttributeAttribute()]
+        [XmlAttribute]
         [DefaultValueAttribute(ST_GrowShrinkType.insertDelete)]
         public ST_GrowShrinkType growShrinkType {
             get {
@@ -208,7 +208,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
         
         /// <remarks/>
-        [XmlAttributeAttribute()]
+        [XmlAttribute]
         [DefaultValueAttribute(false)]
         public bool fillFormulas {
             get {
@@ -220,7 +220,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
         
         /// <remarks/>
-        [XmlAttributeAttribute()]
+        [XmlAttribute]
         [DefaultValueAttribute(false)]
         public bool removeDataOnSave {
             get {
@@ -232,7 +232,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
         
         /// <remarks/>
-        [XmlAttributeAttribute()]
+        [XmlAttribute]
         [DefaultValueAttribute(false)]
         public bool disableEdit {
             get {
@@ -244,7 +244,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
         
         /// <remarks/>
-        [XmlAttributeAttribute()]
+        [XmlAttribute]
         [DefaultValueAttribute(true)]
         public bool preserveFormatting {
             get {
@@ -256,7 +256,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
         
         /// <remarks/>
-        [XmlAttributeAttribute()]
+        [XmlAttribute]
         [DefaultValueAttribute(true)]
         public bool adjustColumnWidth {
             get {
@@ -268,7 +268,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
         
         /// <remarks/>
-        [XmlAttributeAttribute()]
+        [XmlAttribute]
         [DefaultValueAttribute(false)]
         public bool intermediate {
             get {
@@ -280,7 +280,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
         
         /// <remarks/>
-        [XmlAttributeAttribute()]
+        [XmlAttribute]
         public uint connectionId {
             get {
                 return this.connectionIdField;
@@ -291,7 +291,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
         
         /// <remarks/>
-        [XmlAttributeAttribute()]
+        [XmlAttribute]
         public uint autoFormatId {
             get {
                 return this.autoFormatIdField;
@@ -302,7 +302,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
         
         /// <remarks/>
-        [XmlIgnoreAttribute()]
+        [XmlIgnore]
         public bool autoFormatIdSpecified {
             get {
                 return this.autoFormatIdFieldSpecified;
@@ -313,7 +313,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
         
         /// <remarks/>
-        [XmlAttributeAttribute()]
+        [XmlAttribute]
         public bool applyNumberFormats {
             get {
                 return this.applyNumberFormatsField;
@@ -324,7 +324,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
         
         /// <remarks/>
-        [XmlIgnoreAttribute()]
+        [XmlIgnore]
         public bool applyNumberFormatsSpecified {
             get {
                 return this.applyNumberFormatsFieldSpecified;
@@ -335,7 +335,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
         
         /// <remarks/>
-        [XmlAttributeAttribute()]
+        [XmlAttribute]
         public bool applyBorderFormats {
             get {
                 return this.applyBorderFormatsField;
@@ -346,7 +346,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
         
         /// <remarks/>
-        [XmlIgnoreAttribute()]
+        [XmlIgnore]
         public bool applyBorderFormatsSpecified {
             get {
                 return this.applyBorderFormatsFieldSpecified;
@@ -357,7 +357,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
         
         /// <remarks/>
-        [XmlAttributeAttribute()]
+        [XmlAttribute]
         public bool applyFontFormats {
             get {
                 return this.applyFontFormatsField;
@@ -368,7 +368,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
         
         /// <remarks/>
-        [XmlIgnoreAttribute()]
+        [XmlIgnore]
         public bool applyFontFormatsSpecified {
             get {
                 return this.applyFontFormatsFieldSpecified;
@@ -379,7 +379,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
         
         /// <remarks/>
-        [XmlAttributeAttribute()]
+        [XmlAttribute]
         public bool applyPatternFormats {
             get {
                 return this.applyPatternFormatsField;
@@ -390,7 +390,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
         
         /// <remarks/>
-        [XmlIgnoreAttribute()]
+        [XmlIgnore]
         public bool applyPatternFormatsSpecified {
             get {
                 return this.applyPatternFormatsFieldSpecified;
@@ -401,7 +401,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
         
         /// <remarks/>
-        [XmlAttributeAttribute()]
+        [XmlAttribute]
         public bool applyAlignmentFormats {
             get {
                 return this.applyAlignmentFormatsField;
@@ -412,7 +412,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
         
         /// <remarks/>
-        [XmlIgnoreAttribute()]
+        [XmlIgnore]
         public bool applyAlignmentFormatsSpecified {
             get {
                 return this.applyAlignmentFormatsFieldSpecified;
@@ -423,7 +423,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
         
         /// <remarks/>
-        [XmlAttributeAttribute()]
+        [XmlAttribute]
         public bool applyWidthHeightFormats {
             get {
                 return this.applyWidthHeightFormatsField;
@@ -434,7 +434,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
         
         /// <remarks/>
-        [XmlIgnoreAttribute()]
+        [XmlIgnore]
         public bool applyWidthHeightFormatsSpecified {
             get {
                 return this.applyWidthHeightFormatsFieldSpecified;
@@ -446,11 +446,11 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     }
     
     /// <remarks/>
-    [System.SerializableAttribute()]
-    [DebuggerStepThroughAttribute()]
-    [DesignerCategoryAttribute("code")]
-    [XmlTypeAttribute(Namespace="http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
-    [XmlRootAttribute(Namespace="http://schemas.openxmlformats.org/spreadsheetml/2006/main", IsNullable=true)]
+    [System.Serializable]
+    [DebuggerStepThrough]
+    [DesignerCategory("code")]
+    [XmlType(Namespace="http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
+    [XmlRoot(Namespace="http://schemas.openxmlformats.org/spreadsheetml/2006/main", IsNullable=true)]
     public partial class CT_QueryTableRefresh {
         
         private CT_QueryTableFields queryTableFieldsField;
@@ -526,7 +526,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
         
         /// <remarks/>
-        [XmlAttributeAttribute()]
+        [XmlAttribute]
         [DefaultValueAttribute(true)]
         public bool preserveSortFilterLayout {
             get {
@@ -538,7 +538,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
         
         /// <remarks/>
-        [XmlAttributeAttribute()]
+        [XmlAttribute]
         [DefaultValueAttribute(false)]
         public bool fieldIdWrapped {
             get {
@@ -550,7 +550,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
         
         /// <remarks/>
-        [XmlAttributeAttribute()]
+        [XmlAttribute]
         [DefaultValueAttribute(true)]
         public bool headersInLastRefresh {
             get {
@@ -562,7 +562,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
         
         /// <remarks/>
-        [XmlAttributeAttribute()]
+        [XmlAttribute]
         [DefaultValueAttribute(typeof(byte), "0")]
         public byte minimumVersion {
             get {
@@ -574,7 +574,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
         
         /// <remarks/>
-        [XmlAttributeAttribute()]
+        [XmlAttribute]
         [DefaultValueAttribute(typeof(uint), "1")]
         public uint nextId {
             get {
@@ -586,7 +586,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
         
         /// <remarks/>
-        [XmlAttributeAttribute()]
+        [XmlAttribute]
         [DefaultValueAttribute(typeof(uint), "0")]
         public uint unboundColumnsLeft {
             get {
@@ -598,7 +598,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
         
         /// <remarks/>
-        [XmlAttributeAttribute()]
+        [XmlAttribute]
         [DefaultValueAttribute(typeof(uint), "0")]
         public uint unboundColumnsRight {
             get {
@@ -611,11 +611,11 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     }
     
     /// <remarks/>
-    [System.SerializableAttribute()]
-    [DebuggerStepThroughAttribute()]
-    [DesignerCategoryAttribute("code")]
-    [XmlTypeAttribute(Namespace="http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
-    [XmlRootAttribute(Namespace="http://schemas.openxmlformats.org/spreadsheetml/2006/main", IsNullable=true)]
+    [System.Serializable]
+    [DebuggerStepThrough]
+    [DesignerCategory("code")]
+    [XmlType(Namespace="http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
+    [XmlRoot(Namespace="http://schemas.openxmlformats.org/spreadsheetml/2006/main", IsNullable=true)]
     public partial class CT_QueryTableFields {
         
         private List<CT_QueryTableField> queryTableFieldField;
@@ -628,7 +628,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
         
         /// <remarks/>
-        [XmlElementAttribute("queryTableField")]
+        [XmlElement("queryTableField")]
         public List<CT_QueryTableField> queryTableField
         {
             get {
@@ -640,7 +640,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
         
         /// <remarks/>
-        [XmlAttributeAttribute()]
+        [XmlAttribute]
         [DefaultValueAttribute(typeof(uint), "0")]
         public uint count {
             get {
@@ -653,11 +653,11 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     }
     
     /// <remarks/>
-    [System.SerializableAttribute()]
-    [DebuggerStepThroughAttribute()]
-    [DesignerCategoryAttribute("code")]
-    [XmlTypeAttribute(Namespace="http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
-    [XmlRootAttribute(Namespace="http://schemas.openxmlformats.org/spreadsheetml/2006/main", IsNullable=true)]
+    [System.Serializable]
+    [DebuggerStepThrough]
+    [DesignerCategory("code")]
+    [XmlType(Namespace="http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
+    [XmlRoot(Namespace="http://schemas.openxmlformats.org/spreadsheetml/2006/main", IsNullable=true)]
     public partial class CT_QueryTableField {
         
         private CT_ExtensionList extLstField;
@@ -695,7 +695,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
         
         /// <remarks/>
-        [XmlAttributeAttribute()]
+        [XmlAttribute]
         public uint id {
             get {
                 return this.idField;
@@ -706,7 +706,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
         
         /// <remarks/>
-        [XmlAttributeAttribute()]
+        [XmlAttribute]
         public string name {
             get {
                 return this.nameField;
@@ -717,7 +717,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
         
         /// <remarks/>
-        [XmlAttributeAttribute()]
+        [XmlAttribute]
         [DefaultValueAttribute(true)]
         public bool dataBound {
             get {
@@ -729,7 +729,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
         
         /// <remarks/>
-        [XmlAttributeAttribute()]
+        [XmlAttribute]
         [DefaultValueAttribute(false)]
         public bool rowNumbers {
             get {
@@ -741,7 +741,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
         
         /// <remarks/>
-        [XmlAttributeAttribute()]
+        [XmlAttribute]
         [DefaultValueAttribute(false)]
         public bool fillFormulas {
             get {
@@ -753,7 +753,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
         
         /// <remarks/>
-        [XmlAttributeAttribute()]
+        [XmlAttribute]
         [DefaultValueAttribute(false)]
         public bool clipped {
             get {
@@ -765,7 +765,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
         
         /// <remarks/>
-        [XmlAttributeAttribute()]
+        [XmlAttribute]
         [DefaultValueAttribute(typeof(uint), "0")]
         public uint tableColumnId {
             get {
@@ -778,11 +778,11 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     }
 
     /// <remarks/>
-    [System.SerializableAttribute()]
-    [DebuggerStepThroughAttribute()]
-    [DesignerCategoryAttribute("code")]
-    [XmlTypeAttribute(Namespace="http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
-    [XmlRootAttribute(Namespace="http://schemas.openxmlformats.org/spreadsheetml/2006/main", IsNullable=true)]
+    [System.Serializable]
+    [DebuggerStepThrough]
+    [DesignerCategory("code")]
+    [XmlType(Namespace="http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
+    [XmlRoot(Namespace="http://schemas.openxmlformats.org/spreadsheetml/2006/main", IsNullable=true)]
     public partial class CT_QueryTableDeletedFields {
         
         private CT_DeletedField[] deletedFieldField;
@@ -792,7 +792,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         private bool countFieldSpecified;
         
         /// <remarks/>
-        [XmlElementAttribute("deletedField")]
+        [XmlElement("deletedField")]
         public CT_DeletedField[] deletedField {
             get {
                 return this.deletedFieldField;
@@ -803,7 +803,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
         
         /// <remarks/>
-        [XmlAttributeAttribute()]
+        [XmlAttribute]
         public uint count {
             get {
                 return this.countField;
@@ -814,7 +814,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
         
         /// <remarks/>
-        [XmlIgnoreAttribute()]
+        [XmlIgnore]
         public bool countSpecified {
             get {
                 return this.countFieldSpecified;
@@ -826,17 +826,17 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     }
     
     /// <remarks/>
-    [System.SerializableAttribute()]
-    [DebuggerStepThroughAttribute()]
-    [DesignerCategoryAttribute("code")]
-    [XmlTypeAttribute(Namespace="http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
-    [XmlRootAttribute(Namespace="http://schemas.openxmlformats.org/spreadsheetml/2006/main", IsNullable=true)]
+    [System.Serializable]
+    [DebuggerStepThrough]
+    [DesignerCategory("code")]
+    [XmlType(Namespace="http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
+    [XmlRoot(Namespace="http://schemas.openxmlformats.org/spreadsheetml/2006/main", IsNullable=true)]
     public partial class CT_DeletedField {
         
         private string nameField;
         
         /// <remarks/>
-        [XmlAttributeAttribute()]
+        [XmlAttribute]
         public string name {
             get {
                 return this.nameField;
@@ -848,9 +848,9 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     }
     
     /// <remarks/>
-    [System.SerializableAttribute()]
-    [XmlTypeAttribute(Namespace="http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
-    [XmlRootAttribute(Namespace="http://schemas.openxmlformats.org/spreadsheetml/2006/main", IsNullable=false)]
+    [System.Serializable]
+    [XmlType(Namespace="http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
+    [XmlRoot(Namespace="http://schemas.openxmlformats.org/spreadsheetml/2006/main", IsNullable=false)]
     public enum ST_GrowShrinkType {
         
         /// <remarks/>

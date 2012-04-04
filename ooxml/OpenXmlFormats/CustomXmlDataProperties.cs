@@ -11,11 +11,11 @@ namespace NPOI.OpenXmlFormats
     using System.Xml.Schema;
 
     /// <remarks/>
-    [System.SerializableAttribute()]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/customXml")]
-    [System.Xml.Serialization.XmlRootAttribute(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/customXml", IsNullable = true)]
+    [System.Serializable]
+    [System.Diagnostics.DebuggerStepThrough]
+    [System.ComponentModel.DesignerCategory("code")]
+    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/customXml")]
+    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/customXml", IsNullable = true)]
     public class CT_DatastoreItem
     {
 
@@ -55,11 +55,11 @@ namespace NPOI.OpenXmlFormats
             }
         }
     }
-    [System.SerializableAttribute()]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/customXml")]
-    [System.Xml.Serialization.XmlRootAttribute(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/customXml", IsNullable = true)]
+    [System.Serializable]
+    [System.Diagnostics.DebuggerStepThrough]
+    [System.ComponentModel.DesignerCategory("code")]
+    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/customXml")]
+    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/customXml", IsNullable = true)]
     public class CT_DatastoreSchemaRef
     {
 
@@ -77,11 +77,11 @@ namespace NPOI.OpenXmlFormats
             }
         }
     }
-    [System.SerializableAttribute()]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/customXml")]
-    [System.Xml.Serialization.XmlRootAttribute(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/customXml", IsNullable = true)]
+    [System.Serializable]
+    [System.Diagnostics.DebuggerStepThrough]
+    [System.ComponentModel.DesignerCategory("code")]
+    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/customXml")]
+    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/customXml", IsNullable = true)]
 
     public class CT_DatastoreSchemaRefs
     {
@@ -92,7 +92,7 @@ namespace NPOI.OpenXmlFormats
         {
             this.schemaRefField = new List<CT_DatastoreSchemaRef>();
         }
-        [XmlElementAttribute("schemaRef")]
+        [XmlElement("schemaRef")]
         public List<CT_DatastoreSchemaRef> schemaRef
         {
             get

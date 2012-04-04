@@ -14,11 +14,11 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     using System.ComponentModel;
     using System.Collections.Generic;
 
-    [System.SerializableAttribute()]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [DesignerCategoryAttribute("code")]
-    [XmlTypeAttribute(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
-    [XmlRootAttribute(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main", IsNullable = true)]
+    [System.Serializable]
+    [System.Diagnostics.DebuggerStepThrough]
+    [DesignerCategory("code")]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main", IsNullable = true)]
 
     public class CT_Metadata
     {
@@ -133,11 +133,11 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
     }
 
-    [System.SerializableAttribute()]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [DesignerCategoryAttribute("code")]
-    [XmlTypeAttribute(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
-    [XmlRootAttribute(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main", IsNullable = true)]
+    [System.Serializable]
+    [System.Diagnostics.DebuggerStepThrough]
+    [DesignerCategory("code")]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main", IsNullable = true)]
 
     public class CT_MetadataTypes
     {
@@ -151,7 +151,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.metadataTypeField = new List<CT_MetadataType>();
             this.countField = ((uint)(0));
         }
-        [XmlElementAttribute("metadataType")]
+        [XmlElement("metadataType")]
         public List<CT_MetadataType> metadataType
         {
             get
@@ -163,7 +163,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.metadataTypeField = value;
             }
         }
-        [XmlAttributeAttribute()]
+        [XmlAttribute]
         [DefaultValueAttribute(typeof(uint), "0")]
         public uint count
         {
@@ -177,11 +177,11 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
     }
-    [System.SerializableAttribute()]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [DesignerCategoryAttribute("code")]
-    [XmlTypeAttribute(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
-    [XmlRootAttribute(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main", IsNullable = true)]
+    [System.Serializable]
+    [System.Diagnostics.DebuggerStepThrough]
+    [DesignerCategory("code")]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main", IsNullable = true)]
     public class CT_MetadataType
     {
 
@@ -634,18 +634,18 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
     }
 
-    [System.SerializableAttribute()]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [DesignerCategoryAttribute("code")]
-    [XmlTypeAttribute(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
-    [XmlRootAttribute(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main", IsNullable = true)]
+    [System.Serializable]
+    [System.Diagnostics.DebuggerStepThrough]
+    [DesignerCategory("code")]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main", IsNullable = true)]
     public class CT_MetadataRecord
     {
 
         private uint tField;
 
         private uint vField;
-        [XmlAttributeAttribute()]
+        [XmlAttribute]
         public uint t
         {
             get
@@ -657,7 +657,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.tField = value;
             }
         }
-        [XmlAttributeAttribute()]
+        [XmlAttribute]
         public uint v
         {
             get
@@ -670,11 +670,11 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
     }
-    [System.SerializableAttribute()]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [DesignerCategoryAttribute("code")]
-    [XmlTypeAttribute(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
-    [XmlRootAttribute(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main", IsNullable = true)]
+    [System.Serializable]
+    [System.Diagnostics.DebuggerStepThrough]
+    [DesignerCategory("code")]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main", IsNullable = true)]
 
     public class CT_MetadataBlocks
     {
@@ -702,7 +702,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.bkField = value;
             }
         }
-        [XmlAttributeAttribute()]
+        [XmlAttribute]
         [DefaultValueAttribute(typeof(uint), "0")]
         public uint count
         {
@@ -716,11 +716,11 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
     }
-    [System.SerializableAttribute()]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [DesignerCategoryAttribute("code")]
-    [XmlTypeAttribute(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
-    [XmlRootAttribute(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main", IsNullable = true)]
+    [System.Serializable]
+    [System.Diagnostics.DebuggerStepThrough]
+    [DesignerCategory("code")]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main", IsNullable = true)]
 
     public class CT_FutureMetadataBlock
     {
@@ -762,7 +762,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.bkField = new List<CT_FutureMetadataBlock>();
             this.countField = ((uint)(0));
         }
-        [System.Xml.Serialization.XmlElementAttribute("bk")]
+        [System.Xml.Serialization.XmlElement("bk")]
         public List<CT_FutureMetadataBlock> bk
         {
             get
@@ -786,7 +786,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.extLstField = value;
             }
         }
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [System.Xml.Serialization.XmlAttribute]
         public string name
         {
             get
@@ -798,7 +798,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.nameField = value;
             }
         }
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [System.Xml.Serialization.XmlAttribute]
         [DefaultValueAttribute(typeof(uint), "0")]
         public uint count
         {
@@ -981,11 +981,11 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
     }
-    [System.SerializableAttribute()]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [DesignerCategoryAttribute("code")]
-    [XmlTypeAttribute(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
-    [XmlRootAttribute(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main", IsNullable = true)]
+    [System.Serializable]
+    [System.Diagnostics.DebuggerStepThrough]
+    [DesignerCategory("code")]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main", IsNullable = true)]
 
     public class CT_MetadataStringIndex
     {
@@ -1138,7 +1138,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [XmlIgnoreAttribute()]
+        [XmlIgnore]
         public bool siSpecified
         {
             get
@@ -1163,7 +1163,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [XmlIgnoreAttribute()]
+        [XmlIgnore]
         public bool fiSpecified
         {
             get
@@ -1362,11 +1362,11 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
     }
-    [System.SerializableAttribute()]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [DesignerCategoryAttribute("code")]
-    [XmlTypeAttribute(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
-    [XmlRootAttribute(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main", IsNullable = true)]
+    [System.Serializable]
+    [System.Diagnostics.DebuggerStepThrough]
+    [DesignerCategory("code")]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main", IsNullable = true)]
 
     public class CT_MetadataStrings
     {
@@ -1406,11 +1406,11 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
     }
-    [System.SerializableAttribute()]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [DesignerCategoryAttribute("code")]
-    [XmlTypeAttribute(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
-    [XmlRootAttribute(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main", IsNullable = true)]
+    [System.Serializable]
+    [System.Diagnostics.DebuggerStepThrough]
+    [DesignerCategory("code")]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main", IsNullable = true)]
 
     public class CT_MetadataBlock
     {

@@ -98,11 +98,11 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
     }
-    [System.SerializableAttribute()]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
-    [System.Xml.Serialization.XmlRootAttribute("sheet", Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main", IsNullable = true)]
+    [System.Serializable]
+    [System.Diagnostics.DebuggerStepThrough]
+    [System.ComponentModel.DesignerCategory("code")]
+    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
+    [System.Xml.Serialization.XmlRoot("sheet", Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main", IsNullable = true)]
     public class CT_Sheet
     {
 
@@ -2233,7 +2233,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [XmlIgnoreAttribute()]
+        [XmlIgnore]
         public bool axisSpecified
         {
             get
@@ -2465,7 +2465,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [XmlIgnoreAttribute()]
+        [XmlIgnore]
         public bool fieldSpecified
         {
             get
@@ -2606,7 +2606,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [XmlIgnoreAttribute()]
+        [XmlIgnore]
         public bool axisSpecified
         {
             get
@@ -2631,7 +2631,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [XmlIgnoreAttribute()]
+        [XmlIgnore]
         public bool fieldPositionSpecified
         {
             get
@@ -2685,7 +2685,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [XmlIgnoreAttribute()]
+        [XmlIgnore]
         public bool countSpecified
         {
             get
@@ -2803,7 +2803,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [XmlIgnoreAttribute()]
+        [XmlIgnore]
         public bool fieldSpecified
         {
             get
@@ -2828,7 +2828,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [XmlIgnoreAttribute()]
+        [XmlIgnore]
         public bool countSpecified
         {
             get
@@ -3131,7 +3131,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [XmlIgnoreAttribute()]
+        [XmlIgnore]
         public bool defaultColWidthSpecified
         {
             get
@@ -4389,7 +4389,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [XmlIgnoreAttribute()]
+        [XmlIgnore]
         public bool siSpecified
         {
             get
@@ -4444,8 +4444,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         /// <remarks/>
         shared,
     }
-    [System.SerializableAttribute()]
-    [XmlTypeAttribute(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
+    [System.Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
 
     public enum ST_CellType
     {
@@ -4902,7 +4902,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [XmlIgnoreAttribute()]
+        [XmlIgnore]
         public bool currentSpecified
         {
             get
@@ -4927,7 +4927,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [XmlIgnoreAttribute()]
+        [XmlIgnore]
         public bool showSpecified
         {
             get
@@ -5043,7 +5043,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [XmlIgnoreAttribute()]
+        [XmlIgnore]
         public bool countSpecified
         {
             get
@@ -5166,7 +5166,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [XmlIgnoreAttribute()]
+        [XmlIgnore]
         public bool numFmtIdSpecified
         {
             get
@@ -5309,7 +5309,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [XmlIgnoreAttribute()]
+        [XmlIgnore]
         public bool countSpecified
         {
             get
@@ -6753,7 +6753,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [XmlIgnoreAttribute()]
+        [XmlIgnore]
         public bool countSpecified
         {
             get
@@ -7052,7 +7052,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [XmlIgnoreAttribute()]
+        [XmlIgnore]
         public bool typeSpecified
         {
             get
@@ -7077,7 +7077,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [XmlIgnoreAttribute()]
+        [XmlIgnore]
         public bool dxfIdSpecified
         {
             get
@@ -7166,7 +7166,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [XmlIgnoreAttribute()]
+        [XmlIgnore]
         public bool operatorSpecified
         {
             get
@@ -7203,7 +7203,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [XmlIgnoreAttribute()]
+        [XmlIgnore]
         public bool timePeriodSpecified
         {
             get
@@ -7228,7 +7228,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [XmlIgnoreAttribute()]
+        [XmlIgnore]
         public bool rankSpecified
         {
             get
@@ -7253,7 +7253,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [XmlIgnoreAttribute()]
+        [XmlIgnore]
         public bool stdDevSpecified
         {
             get
@@ -7784,7 +7784,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [XmlIgnoreAttribute()]
+        [XmlIgnore]
         public bool xWindowSpecified
         {
             get
@@ -7809,7 +7809,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [XmlIgnoreAttribute()]
+        [XmlIgnore]
         public bool yWindowSpecified
         {
             get
@@ -7834,7 +7834,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [XmlIgnoreAttribute()]
+        [XmlIgnore]
         public bool countSpecified
         {
             get
@@ -8783,7 +8783,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [XmlIgnoreAttribute()]
+        [XmlIgnore]
         public bool oleUpdateSpecified
         {
             get
@@ -8942,7 +8942,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [XmlIgnoreAttribute()]
+        [XmlIgnore]
         public bool countSpecified
         {
             get
@@ -9155,7 +9155,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [XmlIgnoreAttribute()]
+        [XmlIgnore]
         public bool countSpecified
         {
             get

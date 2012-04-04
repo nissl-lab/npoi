@@ -155,7 +155,7 @@ namespace NPOI.OpenXmlFormats
         }
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [System.Xml.Serialization.XmlIgnore]
         public bool PagesSpecified
         {
             get
@@ -182,7 +182,7 @@ namespace NPOI.OpenXmlFormats
         }
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [System.Xml.Serialization.XmlIgnore]
         public bool WordsSpecified
         {
             get
@@ -209,7 +209,7 @@ namespace NPOI.OpenXmlFormats
         }
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [System.Xml.Serialization.XmlIgnore]
         public bool CharactersSpecified
         {
             get
@@ -249,7 +249,7 @@ namespace NPOI.OpenXmlFormats
         }
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [System.Xml.Serialization.XmlIgnore]
         public bool LinesSpecified
         {
             get
@@ -276,7 +276,7 @@ namespace NPOI.OpenXmlFormats
         }
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [System.Xml.Serialization.XmlIgnore]
         public bool ParagraphsSpecified
         {
             get
@@ -303,7 +303,7 @@ namespace NPOI.OpenXmlFormats
         }
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [System.Xml.Serialization.XmlIgnore]
         public bool SlidesSpecified
         {
             get
@@ -330,7 +330,7 @@ namespace NPOI.OpenXmlFormats
         }
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [System.Xml.Serialization.XmlIgnore]
         public bool NotesSpecified
         {
             get
@@ -357,7 +357,7 @@ namespace NPOI.OpenXmlFormats
         }
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [System.Xml.Serialization.XmlIgnore]
         public bool TotalTimeSpecified
         {
             get
@@ -384,7 +384,7 @@ namespace NPOI.OpenXmlFormats
         }
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [System.Xml.Serialization.XmlIgnore]
         public bool HiddenSlidesSpecified
         {
             get
@@ -411,7 +411,7 @@ namespace NPOI.OpenXmlFormats
         }
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [System.Xml.Serialization.XmlIgnore]
         public bool MMClipsSpecified
         {
             get
@@ -438,7 +438,7 @@ namespace NPOI.OpenXmlFormats
         }
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [System.Xml.Serialization.XmlIgnore]
         public bool ScaleCropSpecified
         {
             get
@@ -491,7 +491,7 @@ namespace NPOI.OpenXmlFormats
         }
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [System.Xml.Serialization.XmlIgnore]
         public bool LinksUpToDateSpecified
         {
             get
@@ -518,7 +518,7 @@ namespace NPOI.OpenXmlFormats
         }
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [System.Xml.Serialization.XmlIgnore]
         public bool CharactersWithSpacesSpecified
         {
             get
@@ -545,7 +545,7 @@ namespace NPOI.OpenXmlFormats
         }
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [System.Xml.Serialization.XmlIgnore]
         public bool SharedDocSpecified
         {
             get
@@ -598,7 +598,7 @@ namespace NPOI.OpenXmlFormats
         }
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [System.Xml.Serialization.XmlIgnore]
         public bool HyperlinksChangedSpecified
         {
             get
@@ -664,7 +664,7 @@ namespace NPOI.OpenXmlFormats
         }
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [System.Xml.Serialization.XmlIgnore]
         public bool DocSecuritySpecified
         {
             get
@@ -678,11 +678,11 @@ namespace NPOI.OpenXmlFormats
         }
     }
 
-    [System.SerializableAttribute()]
-    [DebuggerStepThroughAttribute()]
-    [DesignerCategoryAttribute("code")]
-    [XmlTypeAttribute(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/extended-properties")]
-    [XmlRootAttribute(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/extended-properties", IsNullable = true)]
+    [System.Serializable]
+    [DebuggerStepThrough]
+    [DesignerCategory("code")]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/extended-properties")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/extended-properties", IsNullable = true)]
     public class CT_VectorVariant
     {
 
@@ -706,17 +706,17 @@ namespace NPOI.OpenXmlFormats
         }
     }
 
-    [System.SerializableAttribute()]
-    [DebuggerStepThroughAttribute()]
-    [DesignerCategoryAttribute("code")]
-    [XmlTypeAttribute(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/extended-properties")]
-    [XmlRootAttribute(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/extended-properties", IsNullable = true)]
+    [System.Serializable]
+    [DebuggerStepThrough]
+    [DesignerCategory("code")]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/extended-properties")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/extended-properties", IsNullable = true)]
 
     public class CT_DigSigBlob
     {
 
         private byte[] blobField;
-        [XmlElementAttribute(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes", DataType = "base64Binary")]
+        [XmlElement(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes", DataType = "base64Binary")]
         public byte[] blob
         {
             get
@@ -730,11 +730,11 @@ namespace NPOI.OpenXmlFormats
         }
     }
 
-    [System.SerializableAttribute()]
-    [DebuggerStepThroughAttribute()]
-    [DesignerCategoryAttribute("code")]
-    [XmlTypeAttribute(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/extended-properties")]
-    [XmlRootAttribute(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/extended-properties", IsNullable = true)]
+    [System.Serializable]
+    [DebuggerStepThrough]
+    [DesignerCategory("code")]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/extended-properties")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/extended-properties", IsNullable = true)]
     public class CT_VectorLpstr
     {
 
@@ -744,7 +744,7 @@ namespace NPOI.OpenXmlFormats
         {
             this.vectorField = new CT_Vector();
         }
-        [XmlElementAttribute(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes")]
+        [XmlElement(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes")]
         public CT_Vector vector
         {
             get

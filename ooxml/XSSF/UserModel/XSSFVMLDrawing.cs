@@ -21,7 +21,7 @@ using NPOI.XSSF.Util;
 using System.IO;
 using NPOI.OpenXml4Net.OPC;
 using System.Text.RegularExpressions;
-using NPOI.OpenXmlFormats.Dml;
+using NPOI.OpenXmlFormats.Vml;
 namespace NPOI.XSSF.UserModel
 {
 
@@ -189,10 +189,10 @@ namespace NPOI.XSSF.UserModel
         private void newDrawing()
         {
             CT_ShapeLayout layout = CT_ShapeLayout.Factory.newInstance();
-            layout.SetExt(STExt.EDIT);
+            layout.ext = (ST_Ext.edit);
             CT_IdMap idmap = layout.AddNewIdmap();
-            idmap.SetExt(STExt.EDIT);
-            idmap.SetData("1");
+            idmap.ext = (ST_Ext.edit);
+            idmap.data = ("1");
             _items.Add(layout);
             _qnames.Add(QNAME_SHAPE_LAYOUT);
 
@@ -202,10 +202,10 @@ namespace NPOI.XSSF.UserModel
             shapetype.SetCoordsize("21600,21600");
             shapetype.SetSpt(202);
             shapetype.SetPath2("m,l,21600r21600,l21600,xe");
-            shapetype.AddNewStroke().SetJoinstyle(ST_StrokeJoinStyle.MITER);
+            shapetype.AddNewStroke().SetJoinstyle(ST_StrokeJoinStyle.miter);
             CT_Path path = shapetype.AddNewPath();
-            path.SetGradientshapeok(ST_TrueFalse.T);
-            path.SetConnecttype(ST_ConnectType.RECT);
+            path.SetGradientshapeok(ST_TrueFalse.t);
+            path.SetConnecttype(ST_ConnectType.rect);
             _items.Add(shapetype);
             _qnames.Add(QNAME_SHAPE_TYPE);
         }
@@ -220,13 +220,13 @@ namespace NPOI.XSSF.UserModel
             shape.SetInsetmode(ST_InsetMode.AUTO);
             shape.AddNewFill().SetColor("#ffffe1");
             CT_Shadow shadow = shape.AddNewShadow();
-            shadow.SetOn(ST_TrueFalse.T);
-            shadow.SetColor("black");
-            shadow.SetObscured(ST_TrueFalse.T);
-            shape.AddNewPath().SetConnecttype(ST_ConnectType.NONE);
+            shadow.on= ST_TrueFalse.t;
+            shadow.color = "black";
+            shadow.obscured = ST_TrueFalse.t;
+            shape.AddNewPath().SetConnecttype(ST_ConnectType.none);
             shape.AddNewTextbox().SetStyle("mso-direction-alt:auto");
             CT_ClientData cldata = shape.AddNewClientData();
-            cldata.SetObjectType(ST_ObjectType.NOTE);
+            cldata.SetObjectType(ST_ObjectType.Note);
             cldata.AddNewMoveWithCells();
             cldata.AddNewSizeWithCells();
             cldata.AddNewAnchor().SetStringValue("1, 15, 0, 2, 3, 15, 3, 16");

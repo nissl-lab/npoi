@@ -197,11 +197,11 @@ namespace NPOI.OpenXmlFormats.Dml
         btnHighlight,
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlEnumAttribute("3dDkShadow")]
+        [XmlEnum("3dDkShadow")]
         Item3dDkShadow,
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlEnumAttribute("3dLight")]
+        [XmlEnum("3dLight")]
         Item3dLight,
 
         /// <remarks/>
@@ -992,7 +992,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [System.Xml.Serialization.XmlIgnore]
         public bool fovSpecified
         {
             get
@@ -2088,7 +2088,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [System.Xml.Serialization.XmlIgnore]
         public bool wSpecified
         {
             get
@@ -2113,7 +2113,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [System.Xml.Serialization.XmlIgnore]
         public bool capSpecified
         {
             get
@@ -2138,7 +2138,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [System.Xml.Serialization.XmlIgnore]
         public bool cmpdSpecified
         {
             get
@@ -2163,7 +2163,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [System.Xml.Serialization.XmlIgnore]
         public bool algnSpecified
         {
             get
@@ -2198,7 +2198,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [System.Xml.Serialization.XmlIgnore]
         public bool valSpecified
         {
             get
@@ -2305,7 +2305,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [System.Xml.Serialization.XmlIgnore]
         public bool limSpecified
         {
             get
@@ -2348,7 +2348,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [System.Xml.Serialization.XmlIgnore]
         public bool typeSpecified
         {
             get
@@ -2373,7 +2373,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [System.Xml.Serialization.XmlIgnore]
         public bool wSpecified
         {
             get
@@ -2398,7 +2398,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [System.Xml.Serialization.XmlIgnore]
         public bool lenSpecified
         {
             get
@@ -2739,7 +2739,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [System.Xml.Serialization.XmlIgnore]
         public List<ItemsChoiceType1> ItemsElementName
         {
             get
@@ -2764,7 +2764,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [System.Xml.Serialization.XmlIgnore]
         public bool valSpecified
         {
             get

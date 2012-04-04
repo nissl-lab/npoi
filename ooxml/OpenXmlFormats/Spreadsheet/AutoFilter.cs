@@ -177,7 +177,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [System.Xml.Serialization.XmlIgnore]
         public bool dxfIdSpecified
         {
             get
@@ -340,7 +340,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [System.Xml.Serialization.XmlIgnore]
         public bool valSpecified
         {
             get
@@ -365,7 +365,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [System.Xml.Serialization.XmlIgnore]
         public bool maxValSpecified
         {
             get
@@ -627,7 +627,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [System.Xml.Serialization.XmlIgnore]
         public bool monthSpecified
         {
             get
@@ -652,7 +652,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [System.Xml.Serialization.XmlIgnore]
         public bool daySpecified
         {
             get
@@ -677,7 +677,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [System.Xml.Serialization.XmlIgnore]
         public bool hourSpecified
         {
             get
@@ -702,7 +702,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [System.Xml.Serialization.XmlIgnore]
         public bool minuteSpecified
         {
             get
@@ -727,7 +727,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [System.Xml.Serialization.XmlIgnore]
         public bool secondSpecified
         {
             get
@@ -808,7 +808,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [System.Xml.Serialization.XmlIgnore]
         public bool iconIdSpecified
         {
             get
@@ -826,71 +826,71 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     {
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlEnumAttribute("3Arrows")]
+        [XmlEnum("3Arrows")]
         Item3Arrows,
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlEnumAttribute("3ArrowsGray")]
+        [XmlEnum("3ArrowsGray")]
         Item3ArrowsGray,
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlEnumAttribute("3Flags")]
+        [XmlEnum("3Flags")]
         Item3Flags,
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlEnumAttribute("3TrafficLights1")]
+        [XmlEnum("3TrafficLights1")]
         Item3TrafficLights1,
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlEnumAttribute("3TrafficLights2")]
+        [XmlEnum("3TrafficLights2")]
         Item3TrafficLights2,
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlEnumAttribute("3Signs")]
+        [XmlEnum("3Signs")]
         Item3Signs,
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlEnumAttribute("3Symbols")]
+        [XmlEnum("3Symbols")]
         Item3Symbols,
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlEnumAttribute("3Symbols2")]
+        [XmlEnum("3Symbols2")]
         Item3Symbols2,
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlEnumAttribute("4Arrows")]
+        [XmlEnum("4Arrows")]
         Item4Arrows,
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlEnumAttribute("4ArrowsGray")]
+        [XmlEnum("4ArrowsGray")]
         Item4ArrowsGray,
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlEnumAttribute("4RedToBlack")]
+        [XmlEnum("4RedToBlack")]
         Item4RedToBlack,
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlEnumAttribute("4Rating")]
+        [XmlEnum("4Rating")]
         Item4Rating,
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlEnumAttribute("4TrafficLights")]
+        [XmlEnum("4TrafficLights")]
         Item4TrafficLights,
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlEnumAttribute("5Arrows")]
+        [XmlEnum("5Arrows")]
         Item5Arrows,
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlEnumAttribute("5ArrowsGray")]
+        [XmlEnum("5ArrowsGray")]
         Item5ArrowsGray,
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlEnumAttribute("5Rating")]
+        [XmlEnum("5Rating")]
         Item5Rating,
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlEnumAttribute("5Quarters")]
+        [XmlEnum("5Quarters")]
         Item5Quarters,
     }
 
@@ -963,7 +963,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [System.Xml.Serialization.XmlIgnore]
         public bool filterValSpecified
         {
             get
@@ -1167,7 +1167,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [System.Xml.Serialization.XmlIgnore]
         public bool dxfIdSpecified
         {
             get
@@ -1205,7 +1205,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [System.Xml.Serialization.XmlIgnore]
         public bool iconIdSpecified
         {
             get
