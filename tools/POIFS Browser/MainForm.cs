@@ -81,12 +81,17 @@ namespace NPOI.Tools.POIFSBrowser
                 documentTreeView.Nodes.Clear();
 
                 TreeNode[] children=null;
-                if (hssfworkbook !=null)
-                    children = DirectoryTreeNode.GetChildren(_currentFileSystem.Root,hssfworkbook);
-                //else
-                //    children = DirectoryTreeNode.GetChildren(_currentFileSystem.Root, hwpf);
+                if (hssfworkbook != null)
+                {
+                    children = DirectoryTreeNode.GetChildren(_currentFileSystem.Root, hssfworkbook);
+                }
+                else
+                {
+                    children = DirectoryTreeNode.GetChildren(_currentFileSystem.Root, null);
+                }
                 documentTreeView.Nodes.AddRange(children);
                 documentTreeView.EndUpdate();
+
             }
         }
 

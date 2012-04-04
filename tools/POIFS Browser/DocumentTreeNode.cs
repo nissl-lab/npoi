@@ -27,6 +27,7 @@
 
 using NPOI.POIFS.FileSystem;
 using System.IO;
+using NPOI.Util;
 
 namespace NPOI.Tools.POIFSBrowser
 {
@@ -54,7 +55,7 @@ namespace NPOI.Tools.POIFSBrowser
                 document.Read(dst, 0);
             }
 
-            return new MemoryStream(dst);
+            return new ByteArrayInputStream(dst);
         }
     }
 }
