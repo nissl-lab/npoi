@@ -14,13 +14,13 @@ namespace SetBordersOfRegion
         {
             InitializeWorkbook();
 
-            Sheet sheet1 = hssfworkbook.CreateSheet("Sheet1");
+            ISheet sheet1 = hssfworkbook.CreateSheet("Sheet1");
             //create a common style
-            CellStyle blackBorder=hssfworkbook.CreateCellStyle();
-            blackBorder.BorderBottom = CellBorderType.THIN;
-            blackBorder.BorderLeft = CellBorderType.THIN;
-            blackBorder.BorderRight = CellBorderType.THIN;
-            blackBorder.BorderTop = CellBorderType.THIN;
+            ICellStyle blackBorder=hssfworkbook.CreateCellStyle();
+            blackBorder.BorderBottom = BorderStyle.THIN;
+            blackBorder.BorderLeft = BorderStyle.THIN;
+            blackBorder.BorderRight = BorderStyle.THIN;
+            blackBorder.BorderTop = BorderStyle.THIN;
             blackBorder.BottomBorderColor = HSSFColor.BLACK.index;
             blackBorder.LeftBorderColor = HSSFColor.BLACK.index;
             blackBorder.RightBorderColor = HSSFColor.BLACK.index;
@@ -39,12 +39,12 @@ namespace SetBordersOfRegion
             //create the cell formula
             for (int iRow = 1; iRow <= 9; iRow++)
             {
-                Row row = sheet1.GetRow(iRow);
+                IRow row = sheet1.GetRow(iRow);
                 for (int iCol = 1; iCol <= 9; iCol++)
                 {
                     //the first cell of each row * the first cell of each column
                     string formula = GetCellPosition(iRow, 0) + "*" + GetCellPosition(0, iCol);
-                    Cell cell=row.CreateCell(iCol);
+                    ICell cell=row.CreateCell(iCol);
                     cell.CellFormula = formula;
                     //set the cellstyle to the cell
                     cell.CellStyle = blackBorder;
