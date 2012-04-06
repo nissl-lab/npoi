@@ -12,7 +12,7 @@ namespace NPOI.OpenXmlFormats
     [DebuggerStepThrough]
     [DesignerCategory("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/custom-properties")]
-    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/custom-properties", IsNullable = true)]
+    [XmlRoot("Properties",Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/custom-properties", IsNullable = true)]
     public partial class CT_Properties
     {
         public CT_Properties()
@@ -62,6 +62,43 @@ namespace NPOI.OpenXmlFormats
                 }
             }
             return null;
+        }
+        public CT_Properties Copy()
+        {
+            CT_Properties prop = new CT_Properties();
+            prop.propertyField = new List<CT_Property>();
+            foreach (CT_Property p in this.propertyField)
+            {
+                prop.propertyField.Add(p);
+            }
+            prop.applicationField = this.applicationField;
+            prop.appVersionField = this.appVersionField;
+            prop.charactersField = this.charactersField;
+            prop.charactersWithSpacesField = this.charactersWithSpacesField;
+            prop.companyField = this.companyField;
+            prop.digSigField = this.digSigField;
+            prop.docSecurityField = this.docSecurityField;
+            prop.headingPairsField = this.headingPairsField;
+            prop.hiddenSlidesField = this.hiddenSlidesField;
+            prop.hLinksField = this.hLinksField;
+            prop.hyperlinkBaseField = this.hyperlinkBaseField;
+            prop.hyperlinksChangedField = this.hyperlinksChangedField;
+            prop.linesField = this.linesField;
+            prop.linksUpToDateField = this.linksUpToDateField;
+            prop.managerField = this.managerField;
+            prop.mMClipsField = this.mMClipsField;
+            prop.notesField = this.notesField;
+            prop.pagesField = this.pagesField;
+            prop.paragraphsField = this.paragraphsField;
+            prop.presentationFormatField = this.presentationFormatField;
+            prop.scaleCropField = this.scaleCropField;
+            prop.sharedDocField = this.sharedDocField;
+            prop.slidesField = this.slidesField;
+            prop.templateField = this.templateField;
+            prop.titlesOfPartsField = this.titlesOfPartsField;
+            prop.totalTimeField = this.totalTimeField;
+            prop.wordsField = this.wordsField;
+            return prop;
         }
      }
 
@@ -202,6 +239,22 @@ namespace NPOI.OpenXmlFormats
             {
                 this.linkTargetField = value;
             }
+        }
+        public override bool Equals(object obj)
+        {
+            if (!(obj is CT_Property))
+                return false;
+
+            CT_Property a = (CT_Property)obj;
+            if (a.fmtidField != this.fmtidField
+                ||a.itemElementNameField!=this.itemElementNameField
+                ||a.itemField!=this.itemField
+                ||a.linkTargetField!=this.linkTargetField
+                ||a.nameField!=this.nameField
+                ||a.pidField!=this.pidField)
+                return false;
+
+            return true;
         }
     }
 

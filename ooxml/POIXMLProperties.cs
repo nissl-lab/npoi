@@ -119,7 +119,7 @@ namespace NPOI
         /**
          * Commit Changes to the underlying OPC namespace
          */
-        public void Commit()
+        public virtual void Commit()
         {
 
             if (extPart == null && !NEW_EXT_INSTANCE.ToString().Equals(ext.props.ToString()))

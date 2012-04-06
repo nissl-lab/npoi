@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Xml;
 using System.Xml.Serialization;
+using System.ComponentModel;
 
 namespace NPOI.OpenXmlFormats.Spreadsheet
 {
@@ -96,17 +97,25 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         public CT_Stylesheet()
         {
-            this.extLstField = new CT_ExtensionList();
-            this.colorsField = new CT_Colors();
-            this.tableStylesField = new CT_TableStyles();
-            this.dxfsField = new CT_Dxfs();
-            this.cellStylesField = new CT_CellStyles();
-            this.cellXfsField = new CT_CellXfs();
+            //this.extLstField = new CT_ExtensionList();
+            //this.colorsField = new CT_Colors();
+            //this.tableStylesField = new CT_TableStyles();
+            //this.dxfsField = new CT_Dxfs();
+            //this.cellStylesField = new CT_CellStyles();
+            //this.bordersField = new CT_Borders();
+            //this.fillsField = new CT_Fills();
+            //this.fontsField = new CT_Fonts();
+            //this.numFmtsField = new CT_NumFmts();
+        }
+        public CT_CellStyleXfs AddNewCellStyleXfs()
+        {
             this.cellStyleXfsField = new CT_CellStyleXfs();
-            this.bordersField = new CT_Borders();
-            this.fillsField = new CT_Fills();
-            this.fontsField = new CT_Fonts();
-            this.numFmtsField = new CT_NumFmts();
+            return this.cellStyleXfsField;
+        }
+        public CT_CellXfs AddNewCellXfs()
+        {
+            this.cellXfsField = new CT_CellXfs();
+            return this.cellXfsField;
         }
         [XmlElement]
         public CT_NumFmts numFmts
@@ -487,11 +496,12 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
         public void SetRgb(byte[] rgb)
         {
-            Array.Copy(rgb, this.rgb, 3);
+            rgbField = new byte[3];
+            Array.Copy(rgbField, this.rgb, 3);
         }
         public byte[] GetRgb()
         {
-            return rgb;
+            return rgbField;
         }
         #endregion rgb
 
@@ -521,7 +531,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         #endregion theme
 
         #region tint
-        [System.ComponentModel.DefaultValueAttribute(0.0D)]
+        [DefaultValue(0.0D)]
         [XmlAttribute]
         public double tint
         {
@@ -1148,7 +1158,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.valField = ST_UnderlineValues.single;
         }
 
-        [System.ComponentModel.DefaultValueAttribute(ST_UnderlineValues.single)]
+        [DefaultValue(ST_UnderlineValues.single)]
         [XmlAttribute]
         public ST_UnderlineValues val
         {
@@ -1236,7 +1246,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.valField = true;
         }
 
-        [System.ComponentModel.DefaultValueAttribute(true)]
+        [DefaultValue(true)]
         [XmlAttribute]
         public bool val
         {
@@ -1413,7 +1423,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(true)]
+        [DefaultValue(true)]
         public bool pivot
         {
             get
@@ -1426,7 +1436,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(true)]
+        [DefaultValue(true)]
         public bool table
         {
             get
@@ -1572,7 +1582,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(typeof(uint), "1")]
+        [DefaultValue(typeof(uint), "1")]
         public uint size
         {
             get

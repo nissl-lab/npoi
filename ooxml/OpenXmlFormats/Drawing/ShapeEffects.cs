@@ -1,3 +1,4 @@
+using System.ComponentModel;
 namespace NPOI.OpenXmlFormats.Dml
 {
     
@@ -951,7 +952,7 @@ namespace NPOI.OpenXmlFormats.Dml
         
         /// <remarks/>
         [System.Xml.Serialization.XmlAttribute]
-        [System.ComponentModel.DefaultValueAttribute(100000)]
+        [DefaultValue(100000)]
         public int amt {
             get {
                 return this.amtField;
@@ -978,7 +979,7 @@ namespace NPOI.OpenXmlFormats.Dml
         
         /// <remarks/>
         [System.Xml.Serialization.XmlAttribute]
-        [System.ComponentModel.DefaultValueAttribute(typeof(long), "0")]
+        [DefaultValue(typeof(long), "0")]
         public long rad {
             get {
                 return this.radField;
@@ -1052,7 +1053,7 @@ namespace NPOI.OpenXmlFormats.Dml
         
         /// <remarks/>
         [System.Xml.Serialization.XmlAttribute]
-        [System.ComponentModel.DefaultValueAttribute(typeof(long), "0")]
+        [DefaultValue(typeof(long), "0")]
         public long rad {
             get {
                 return this.radField;
@@ -1064,7 +1065,7 @@ namespace NPOI.OpenXmlFormats.Dml
         
         /// <remarks/>
         [System.Xml.Serialization.XmlAttribute]
-        [System.ComponentModel.DefaultValueAttribute(true)]
+        [DefaultValue(true)]
         public bool grow {
             get {
                 return this.growField;
@@ -1115,7 +1116,7 @@ namespace NPOI.OpenXmlFormats.Dml
         
         /// <remarks/>
         [System.Xml.Serialization.XmlAttribute]
-        [System.ComponentModel.DefaultValueAttribute(true)]
+        [DefaultValue(true)]
         public bool useA {
             get {
                 return this.useAField;
@@ -1382,7 +1383,7 @@ namespace NPOI.OpenXmlFormats.Dml
         
         /// <remarks/>
         [System.Xml.Serialization.XmlAttribute]
-        [System.ComponentModel.DefaultValueAttribute(typeof(long), "0")]
+        [DefaultValue(typeof(long), "0")]
         public long rad {
             get {
                 return this.radField;
@@ -1424,7 +1425,7 @@ namespace NPOI.OpenXmlFormats.Dml
         
         /// <remarks/>
         [System.Xml.Serialization.XmlAttribute]
-        [System.ComponentModel.DefaultValueAttribute(0)]
+        [DefaultValue(0)]
         public int hue {
             get {
                 return this.hueField;
@@ -1436,7 +1437,7 @@ namespace NPOI.OpenXmlFormats.Dml
         
         /// <remarks/>
         [System.Xml.Serialization.XmlAttribute]
-        [System.ComponentModel.DefaultValueAttribute(0)]
+        [DefaultValue(0)]
         public int sat {
             get {
                 return this.satField;
@@ -1448,7 +1449,7 @@ namespace NPOI.OpenXmlFormats.Dml
         
         /// <remarks/>
         [System.Xml.Serialization.XmlAttribute]
-        [System.ComponentModel.DefaultValueAttribute(0)]
+        [DefaultValue(0)]
         public int lum {
             get {
                 return this.lumField;
@@ -1553,7 +1554,7 @@ namespace NPOI.OpenXmlFormats.Dml
         
         /// <remarks/>
         [System.Xml.Serialization.XmlAttribute]
-        [System.ComponentModel.DefaultValueAttribute(typeof(long), "0")]
+        [DefaultValue(typeof(long), "0")]
         public long blurRad {
             get {
                 return this.blurRadField;
@@ -1565,7 +1566,7 @@ namespace NPOI.OpenXmlFormats.Dml
         
         /// <remarks/>
         [System.Xml.Serialization.XmlAttribute]
-        [System.ComponentModel.DefaultValueAttribute(typeof(long), "0")]
+        [DefaultValue(typeof(long), "0")]
         public long dist {
             get {
                 return this.distField;
@@ -1577,7 +1578,7 @@ namespace NPOI.OpenXmlFormats.Dml
         
         /// <remarks/>
         [System.Xml.Serialization.XmlAttribute]
-        [System.ComponentModel.DefaultValueAttribute(0)]
+        [DefaultValue(0)]
         public int dir {
             get {
                 return this.dirField;
@@ -1607,7 +1608,7 @@ namespace NPOI.OpenXmlFormats.Dml
         
         /// <remarks/>
         [System.Xml.Serialization.XmlAttribute]
-        [System.ComponentModel.DefaultValueAttribute(0)]
+        [DefaultValue(0)]
         public int bright {
             get {
                 return this.brightField;
@@ -1619,7 +1620,7 @@ namespace NPOI.OpenXmlFormats.Dml
         
         /// <remarks/>
         [System.Xml.Serialization.XmlAttribute]
-        [System.ComponentModel.DefaultValueAttribute(0)]
+        [DefaultValue(0)]
         public int contrast {
             get {
                 return this.contrastField;
@@ -1742,7 +1743,7 @@ namespace NPOI.OpenXmlFormats.Dml
         
         /// <remarks/>
         [System.Xml.Serialization.XmlAttribute]
-        [System.ComponentModel.DefaultValueAttribute(typeof(long), "0")]
+        [DefaultValue(typeof(long), "0")]
         public long blurRad {
             get {
                 return this.blurRadField;
@@ -1754,7 +1755,7 @@ namespace NPOI.OpenXmlFormats.Dml
         
         /// <remarks/>
         [System.Xml.Serialization.XmlAttribute]
-        [System.ComponentModel.DefaultValueAttribute(typeof(long), "0")]
+        [DefaultValue(typeof(long), "0")]
         public long dist {
             get {
                 return this.distField;
@@ -1766,7 +1767,7 @@ namespace NPOI.OpenXmlFormats.Dml
         
         /// <remarks/>
         [System.Xml.Serialization.XmlAttribute]
-        [System.ComponentModel.DefaultValueAttribute(0)]
+        [DefaultValue(0)]
         public int dir {
             get {
                 return this.dirField;
@@ -1778,7 +1779,7 @@ namespace NPOI.OpenXmlFormats.Dml
         
         /// <remarks/>
         [System.Xml.Serialization.XmlAttribute]
-        [System.ComponentModel.DefaultValueAttribute(100000)]
+        [DefaultValue(100000)]
         public int sx {
             get {
                 return this.sxField;
@@ -1790,7 +1791,7 @@ namespace NPOI.OpenXmlFormats.Dml
         
         /// <remarks/>
         [System.Xml.Serialization.XmlAttribute]
-        [System.ComponentModel.DefaultValueAttribute(100000)]
+        [DefaultValue(100000)]
         public int sy {
             get {
                 return this.syField;
@@ -1802,7 +1803,7 @@ namespace NPOI.OpenXmlFormats.Dml
         
         /// <remarks/>
         [System.Xml.Serialization.XmlAttribute]
-        [System.ComponentModel.DefaultValueAttribute(0)]
+        [DefaultValue(0)]
         public int kx {
             get {
                 return this.kxField;
@@ -1814,7 +1815,7 @@ namespace NPOI.OpenXmlFormats.Dml
         
         /// <remarks/>
         [System.Xml.Serialization.XmlAttribute]
-        [System.ComponentModel.DefaultValueAttribute(0)]
+        [DefaultValue(0)]
         public int ky {
             get {
                 return this.kyField;
@@ -1826,7 +1827,7 @@ namespace NPOI.OpenXmlFormats.Dml
         
         /// <remarks/>
         [System.Xml.Serialization.XmlAttribute]
-        [System.ComponentModel.DefaultValueAttribute(ST_RectAlignment.b)]
+        [DefaultValue(ST_RectAlignment.b)]
         public ST_RectAlignment algn {
             get {
                 return this.algnField;
@@ -1838,7 +1839,7 @@ namespace NPOI.OpenXmlFormats.Dml
         
         /// <remarks/>
         [System.Xml.Serialization.XmlAttribute]
-        [System.ComponentModel.DefaultValueAttribute(true)]
+        [DefaultValue(true)]
         public bool rotWithShape {
             get {
                 return this.rotWithShapeField;
@@ -2020,7 +2021,7 @@ namespace NPOI.OpenXmlFormats.Dml
         
         /// <remarks/>
         [System.Xml.Serialization.XmlAttribute]
-        [System.ComponentModel.DefaultValueAttribute(typeof(long), "0")]
+        [DefaultValue(typeof(long), "0")]
         public long dist {
             get {
                 return this.distField;
@@ -2032,7 +2033,7 @@ namespace NPOI.OpenXmlFormats.Dml
         
         /// <remarks/>
         [System.Xml.Serialization.XmlAttribute]
-        [System.ComponentModel.DefaultValueAttribute(0)]
+        [DefaultValue(0)]
         public int dir {
             get {
                 return this.dirField;
@@ -2098,7 +2099,7 @@ namespace NPOI.OpenXmlFormats.Dml
         
         /// <remarks/>
         [System.Xml.Serialization.XmlAttribute]
-        [System.ComponentModel.DefaultValueAttribute(typeof(long), "0")]
+        [DefaultValue(typeof(long), "0")]
         public long blurRad {
             get {
                 return this.blurRadField;
@@ -2110,7 +2111,7 @@ namespace NPOI.OpenXmlFormats.Dml
         
         /// <remarks/>
         [System.Xml.Serialization.XmlAttribute]
-        [System.ComponentModel.DefaultValueAttribute(100000)]
+        [DefaultValue(100000)]
         public int stA {
             get {
                 return this.stAField;
@@ -2122,7 +2123,7 @@ namespace NPOI.OpenXmlFormats.Dml
         
         /// <remarks/>
         [System.Xml.Serialization.XmlAttribute]
-        [System.ComponentModel.DefaultValueAttribute(0)]
+        [DefaultValue(0)]
         public int stPos {
             get {
                 return this.stPosField;
@@ -2134,7 +2135,7 @@ namespace NPOI.OpenXmlFormats.Dml
         
         /// <remarks/>
         [System.Xml.Serialization.XmlAttribute]
-        [System.ComponentModel.DefaultValueAttribute(0)]
+        [DefaultValue(0)]
         public int endA {
             get {
                 return this.endAField;
@@ -2146,7 +2147,7 @@ namespace NPOI.OpenXmlFormats.Dml
         
         /// <remarks/>
         [System.Xml.Serialization.XmlAttribute]
-        [System.ComponentModel.DefaultValueAttribute(100000)]
+        [DefaultValue(100000)]
         public int endPos {
             get {
                 return this.endPosField;
@@ -2158,7 +2159,7 @@ namespace NPOI.OpenXmlFormats.Dml
         
         /// <remarks/>
         [System.Xml.Serialization.XmlAttribute]
-        [System.ComponentModel.DefaultValueAttribute(typeof(long), "0")]
+        [DefaultValue(typeof(long), "0")]
         public long dist {
             get {
                 return this.distField;
@@ -2170,7 +2171,7 @@ namespace NPOI.OpenXmlFormats.Dml
         
         /// <remarks/>
         [System.Xml.Serialization.XmlAttribute]
-        [System.ComponentModel.DefaultValueAttribute(0)]
+        [DefaultValue(0)]
         public int dir {
             get {
                 return this.dirField;
@@ -2182,7 +2183,7 @@ namespace NPOI.OpenXmlFormats.Dml
         
         /// <remarks/>
         [System.Xml.Serialization.XmlAttribute]
-        [System.ComponentModel.DefaultValueAttribute(5400000)]
+        [DefaultValue(5400000)]
         public int fadeDir {
             get {
                 return this.fadeDirField;
@@ -2194,7 +2195,7 @@ namespace NPOI.OpenXmlFormats.Dml
         
         /// <remarks/>
         [System.Xml.Serialization.XmlAttribute]
-        [System.ComponentModel.DefaultValueAttribute(100000)]
+        [DefaultValue(100000)]
         public int sx {
             get {
                 return this.sxField;
@@ -2206,7 +2207,7 @@ namespace NPOI.OpenXmlFormats.Dml
         
         /// <remarks/>
         [System.Xml.Serialization.XmlAttribute]
-        [System.ComponentModel.DefaultValueAttribute(100000)]
+        [DefaultValue(100000)]
         public int sy {
             get {
                 return this.syField;
@@ -2218,7 +2219,7 @@ namespace NPOI.OpenXmlFormats.Dml
         
         /// <remarks/>
         [System.Xml.Serialization.XmlAttribute]
-        [System.ComponentModel.DefaultValueAttribute(0)]
+        [DefaultValue(0)]
         public int kx {
             get {
                 return this.kxField;
@@ -2230,7 +2231,7 @@ namespace NPOI.OpenXmlFormats.Dml
         
         /// <remarks/>
         [System.Xml.Serialization.XmlAttribute]
-        [System.ComponentModel.DefaultValueAttribute(0)]
+        [DefaultValue(0)]
         public int ky {
             get {
                 return this.kyField;
@@ -2242,7 +2243,7 @@ namespace NPOI.OpenXmlFormats.Dml
         
         /// <remarks/>
         [System.Xml.Serialization.XmlAttribute]
-        [System.ComponentModel.DefaultValueAttribute(ST_RectAlignment.b)]
+        [DefaultValue(ST_RectAlignment.b)]
         public ST_RectAlignment algn {
             get {
                 return this.algnField;
@@ -2254,7 +2255,7 @@ namespace NPOI.OpenXmlFormats.Dml
         
         /// <remarks/>
         [System.Xml.Serialization.XmlAttribute]
-        [System.ComponentModel.DefaultValueAttribute(true)]
+        [DefaultValue(true)]
         public bool rotWithShape {
             get {
                 return this.rotWithShapeField;
@@ -2284,7 +2285,7 @@ namespace NPOI.OpenXmlFormats.Dml
         
         /// <remarks/>
         [System.Xml.Serialization.XmlAttribute]
-        [System.ComponentModel.DefaultValueAttribute(0)]
+        [DefaultValue(0)]
         public int tx {
             get {
                 return this.txField;
@@ -2296,7 +2297,7 @@ namespace NPOI.OpenXmlFormats.Dml
         
         /// <remarks/>
         [System.Xml.Serialization.XmlAttribute]
-        [System.ComponentModel.DefaultValueAttribute(0)]
+        [DefaultValue(0)]
         public int ty {
             get {
                 return this.tyField;
@@ -2348,7 +2349,7 @@ namespace NPOI.OpenXmlFormats.Dml
         
         /// <remarks/>
         [System.Xml.Serialization.XmlAttribute]
-        [System.ComponentModel.DefaultValueAttribute(0)]
+        [DefaultValue(0)]
         public int hue {
             get {
                 return this.hueField;
@@ -2360,7 +2361,7 @@ namespace NPOI.OpenXmlFormats.Dml
         
         /// <remarks/>
         [System.Xml.Serialization.XmlAttribute]
-        [System.ComponentModel.DefaultValueAttribute(0)]
+        [DefaultValue(0)]
         public int amt {
             get {
                 return this.amtField;
@@ -2402,7 +2403,7 @@ namespace NPOI.OpenXmlFormats.Dml
         
         /// <remarks/>
         [System.Xml.Serialization.XmlAttribute]
-        [System.ComponentModel.DefaultValueAttribute(100000)]
+        [DefaultValue(100000)]
         public int sx {
             get {
                 return this.sxField;
@@ -2414,7 +2415,7 @@ namespace NPOI.OpenXmlFormats.Dml
         
         /// <remarks/>
         [System.Xml.Serialization.XmlAttribute]
-        [System.ComponentModel.DefaultValueAttribute(100000)]
+        [DefaultValue(100000)]
         public int sy {
             get {
                 return this.syField;
@@ -2426,7 +2427,7 @@ namespace NPOI.OpenXmlFormats.Dml
         
         /// <remarks/>
         [System.Xml.Serialization.XmlAttribute]
-        [System.ComponentModel.DefaultValueAttribute(0)]
+        [DefaultValue(0)]
         public int kx {
             get {
                 return this.kxField;
@@ -2438,7 +2439,7 @@ namespace NPOI.OpenXmlFormats.Dml
         
         /// <remarks/>
         [System.Xml.Serialization.XmlAttribute]
-        [System.ComponentModel.DefaultValueAttribute(0)]
+        [DefaultValue(0)]
         public int ky {
             get {
                 return this.kyField;
@@ -2450,7 +2451,7 @@ namespace NPOI.OpenXmlFormats.Dml
         
         /// <remarks/>
         [System.Xml.Serialization.XmlAttribute]
-        [System.ComponentModel.DefaultValueAttribute(typeof(long), "0")]
+        [DefaultValue(typeof(long), "0")]
         public long tx {
             get {
                 return this.txField;
@@ -2462,7 +2463,7 @@ namespace NPOI.OpenXmlFormats.Dml
         
         /// <remarks/>
         [System.Xml.Serialization.XmlAttribute]
-        [System.ComponentModel.DefaultValueAttribute(typeof(long), "0")]
+        [DefaultValue(typeof(long), "0")]
         public long ty {
             get {
                 return this.tyField;
@@ -3205,7 +3206,7 @@ namespace NPOI.OpenXmlFormats.Dml
         
         /// <remarks/>
         [System.Xml.Serialization.XmlAttribute]
-        [System.ComponentModel.DefaultValueAttribute(ST_EffectContainerType.sib)]
+        [DefaultValue(ST_EffectContainerType.sib)]
         public ST_EffectContainerType type {
             get {
                 return this.typeField;

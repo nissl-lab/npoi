@@ -226,7 +226,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
         [XmlAttribute]
-        [System.ComponentModel.DefaultValueAttribute(ST_TableType.worksheet)]
+        [DefaultValue(ST_TableType.worksheet)]
         public ST_TableType tableType
         {
             get
@@ -239,7 +239,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
         [XmlAttribute]
-        [System.ComponentModel.DefaultValueAttribute(typeof(uint), "1")]
+        [DefaultValue(typeof(uint), "1")]
         public uint headerRowCount
         {
             get
@@ -252,7 +252,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
         [XmlAttribute]
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool insertRow
         {
             get
@@ -265,7 +265,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
         [XmlAttribute]
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool insertRowShift
         {
             get
@@ -278,7 +278,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
         [XmlAttribute]
-        [System.ComponentModel.DefaultValueAttribute(typeof(uint), "0")]
+        [DefaultValue(typeof(uint), "0")]
         public uint totalsRowCount
         {
             get
@@ -291,7 +291,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
         [XmlAttribute]
-        [System.ComponentModel.DefaultValueAttribute(true)]
+        [DefaultValue(true)]
         public bool totalsRowShown
         {
             get
@@ -304,7 +304,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
         [XmlAttribute]
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool published
         {
             get
@@ -716,7 +716,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(ST_TotalsRowFunction.none)]
+        [DefaultValue(ST_TotalsRowFunction.none)]
         public ST_TotalsRowFunction totalsRowFunction
         {
             get
@@ -890,7 +890,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.arrayField = false;
         }
 
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool array
         {
             get
@@ -972,7 +972,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool denormalized
         {
             get

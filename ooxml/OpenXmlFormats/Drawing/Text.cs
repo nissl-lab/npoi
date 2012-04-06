@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Xml.Serialization;
 using System;
+using System.ComponentModel;
 namespace NPOI.OpenXmlFormats.Dml 
 {
     
@@ -652,7 +653,7 @@ namespace NPOI.OpenXmlFormats.Dml
         
         /// <remarks/>
         [XmlAttribute]
-        [System.ComponentModel.DefaultValueAttribute(typeof(long), "0")]
+        [DefaultValue(typeof(long), "0")]
         public long z {
             get {
                 return this.zField;
@@ -1353,7 +1354,7 @@ namespace NPOI.OpenXmlFormats.Dml
         
         /// <remarks/>
         [XmlAttribute]
-        [System.ComponentModel.DefaultValueAttribute(true)]
+        [DefaultValue(true)]
         public bool dirty {
             get {
                 return this.dirtyField;
@@ -1365,7 +1366,7 @@ namespace NPOI.OpenXmlFormats.Dml
         
         /// <remarks/>
         [XmlAttribute]
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool err {
             get {
                 return this.errField;
@@ -1377,7 +1378,7 @@ namespace NPOI.OpenXmlFormats.Dml
         
         /// <remarks/>
         [XmlAttribute]
-        [System.ComponentModel.DefaultValueAttribute(true)]
+        [DefaultValue(true)]
         public bool smtClean {
             get {
                 return this.smtCleanField;
@@ -1389,7 +1390,7 @@ namespace NPOI.OpenXmlFormats.Dml
         
         /// <remarks/>
         [XmlAttribute]
-        [System.ComponentModel.DefaultValueAttribute(typeof(uint), "0")]
+        [DefaultValue(typeof(uint), "0")]
         public uint smtId {
             get {
                 return this.smtIdField;
@@ -1747,7 +1748,7 @@ namespace NPOI.OpenXmlFormats.Dml
         
         /// <remarks/>
         [XmlAttribute]
-        [System.ComponentModel.DefaultValueAttribute(1)]
+        [DefaultValue(1)]
         public int startAt {
             get {
                 return this.startAtField;
@@ -2308,7 +2309,7 @@ namespace NPOI.OpenXmlFormats.Dml
         
         /// <remarks/>
         [XmlAttribute]
-        [System.ComponentModel.DefaultValueAttribute(100000)]
+        [DefaultValue(100000)]
         public int fontScale {
             get {
                 return this.fontScaleField;
@@ -2320,7 +2321,7 @@ namespace NPOI.OpenXmlFormats.Dml
         
         /// <remarks/>
         [XmlAttribute]
-        [System.ComponentModel.DefaultValueAttribute(0)]
+        [DefaultValue(0)]
         public int lnSpcReduction {
             get {
                 return this.lnSpcReductionField;
@@ -2907,7 +2908,7 @@ namespace NPOI.OpenXmlFormats.Dml
         
         /// <remarks/>
         [XmlAttribute]
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool upright {
             get {
                 return this.uprightField;

@@ -9,6 +9,7 @@ namespace NPOI.OpenXmlFormats.Dml
     using System.Collections.Generic;
     using System;
     using System.Xml.Serialization;
+    using System.ComponentModel;
 
 
     [Serializable]
@@ -59,7 +60,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute("")]
+        [DefaultValue("")]
         public string embed
         {
             get
@@ -72,7 +73,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute("")]
+        [DefaultValue("")]
         public string link
         {
             get
@@ -85,7 +86,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(ST_BlipCompression.none)]
+        [DefaultValue(ST_BlipCompression.none)]
         public ST_BlipCompression cstate
         {
             get
@@ -567,7 +568,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute("")]
+        [DefaultValue("")]
         public string name
         {
             get
@@ -768,7 +769,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(typeof(sbyte), "0")]
+        [DefaultValue(typeof(sbyte), "0")]
         public sbyte pitchFamily
         {
             get
@@ -781,7 +782,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(typeof(sbyte), "1")]
+        [DefaultValue(typeof(sbyte), "1")]
         public sbyte charset
         {
             get
@@ -1005,7 +1006,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(100000)]
+        [DefaultValue(100000)]
         public int zoom
         {
             get
@@ -1541,7 +1542,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(typeof(long), "0")]
+        [DefaultValue(typeof(long), "0")]
         public long z
         {
             get
@@ -1554,7 +1555,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(typeof(long), "0")]
+        [DefaultValue(typeof(long), "0")]
         public long extrusionH
         {
             get
@@ -1567,7 +1568,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(typeof(long), "0")]
+        [DefaultValue(typeof(long), "0")]
         public long contourW
         {
             get
@@ -1580,7 +1581,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(ST_PresetMaterialType.warmMatte)]
+        [DefaultValue(ST_PresetMaterialType.warmMatte)]
         public ST_PresetMaterialType prstMaterial
         {
             get
@@ -1612,7 +1613,7 @@ namespace NPOI.OpenXmlFormats.Dml
             this.prstField = ST_BevelPresetType.circle;
         }
 
-        [System.ComponentModel.DefaultValueAttribute(typeof(long), "76200")]
+        [DefaultValue(typeof(long), "76200")]
         public long w
         {
             get
@@ -1625,7 +1626,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(typeof(long), "76200")]
+        [DefaultValue(typeof(long), "76200")]
         public long h
         {
             get
@@ -1638,7 +1639,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(ST_BevelPresetType.circle)]
+        [DefaultValue(ST_BevelPresetType.circle)]
         public ST_BevelPresetType prst
         {
             get
@@ -2610,7 +2611,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute("")]
+        [DefaultValue("")]
         public string name
         {
             get

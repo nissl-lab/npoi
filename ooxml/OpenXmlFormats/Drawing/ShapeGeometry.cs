@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.ComponentModel;
 namespace NPOI.OpenXmlFormats.Dml {
     
     
@@ -1407,7 +1408,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         
         /// <remarks/>
         [System.Xml.Serialization.XmlAttribute]
-        [System.ComponentModel.DefaultValueAttribute(typeof(long), "0")]
+        [DefaultValue(typeof(long), "0")]
         public long w {
             get {
                 return this.wField;
@@ -1419,7 +1420,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         
         /// <remarks/>
         [System.Xml.Serialization.XmlAttribute]
-        [System.ComponentModel.DefaultValueAttribute(typeof(long), "0")]
+        [DefaultValue(typeof(long), "0")]
         public long h {
             get {
                 return this.hField;
@@ -1431,7 +1432,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         
         /// <remarks/>
         [System.Xml.Serialization.XmlAttribute]
-        [System.ComponentModel.DefaultValueAttribute(ST_PathFillMode.norm)]
+        [DefaultValue(ST_PathFillMode.norm)]
         public ST_PathFillMode fill {
             get {
                 return this.fillField;
@@ -1443,7 +1444,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         
         /// <remarks/>
         [System.Xml.Serialization.XmlAttribute]
-        [System.ComponentModel.DefaultValueAttribute(true)]
+        [DefaultValue(true)]
         public bool stroke {
             get {
                 return this.strokeField;
@@ -1455,7 +1456,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         
         /// <remarks/>
         [System.Xml.Serialization.XmlAttribute]
-        [System.ComponentModel.DefaultValueAttribute(true)]
+        [DefaultValue(true)]
         public bool extrusionOk {
             get {
                 return this.extrusionOkField;

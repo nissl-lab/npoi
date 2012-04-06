@@ -176,7 +176,8 @@ namespace NPOI.XSSF.UserModel
                 foreach (CT_Row row in worksheet.sheetData.row)
                 {
                     XSSFRow r = new XSSFRow(row, this);
-                    _rows.Add(r.RowNum, r);
+                    if(!_rows.ContainsKey(r.RowNum))
+                        _rows.Add(r.RowNum, r);
                 }
             }
         }
@@ -507,7 +508,7 @@ namespace NPOI.XSSF.UserModel
             if (colSplit == 0 && rowSplit == 0)
             {
 
-                if (ctView.IsSetPane()) ctView.unSetPane();
+                if (ctView.IsSetPane()) ctView.UnsetPane();
                 ctView.SetSelectionArray(null);
                 return;
             }
@@ -525,7 +526,7 @@ namespace NPOI.XSSF.UserModel
             else
             {
 
-                if (pane.IsSetXSplit()) pane.unSetXSplit();
+                if (pane.IsSetXSplit()) pane.UnsetXSplit();
             }
             if (rowSplit > 0)
             {
@@ -533,7 +534,7 @@ namespace NPOI.XSSF.UserModel
             }
             else
             {
-                if (pane.IsSetYSplit()) pane.unSetYSplit();
+                if (pane.IsSetYSplit()) pane.UnsetYSplit();
             }
 
             pane.state = (ST_PaneState.frozen);
@@ -1293,7 +1294,9 @@ namespace NPOI.XSSF.UserModel
          */
         public IRow GetRow(int rownum)
         {
-            return _rows[rownum];
+            if(_rows.ContainsKey(rownum))
+                return _rows[rownum];
+            return null;
         }
 
         /**
@@ -1716,7 +1719,7 @@ namespace NPOI.XSSF.UserModel
             }
             else
             {
-                worksheet.unSetMergeCells();
+                worksheet.UnsetMergeCells();
             }
         }
 

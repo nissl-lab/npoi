@@ -263,7 +263,7 @@ namespace NPOI.XSSF.UserModel
             XSSFWorkbook workbook = new XSSFWorkbook();
             POIXMLProperties props = workbook.GetProperties();
             Assert.IsNotNull(props);
-            //the Application property must be Set for new workbooks, see Bugzilla #47559
+            //the Application property must be set for new workbooks, see Bugzilla #47559
             Assert.AreEqual("Apache POI", props.GetExtendedProperties().GetUnderlyingProperties().Application);
 
             PackagePropertiesPart opcProps = props.GetCoreProperties().GetUnderlyingProperties();

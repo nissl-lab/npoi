@@ -11,6 +11,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     using System.IO;
     using System.Xml.Serialization;
     using NPOI.OpenXmlFormats.Dml;
+    using System.ComponentModel;
 
     public enum ST_SmartTagShow
     {
@@ -85,7 +86,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(typeof(uint), "16")]
+        [DefaultValue(typeof(uint), "16")]
         public uint builtInGroupCount
         {
             get
@@ -158,7 +159,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
         [XmlAttribute("state")]
-        [System.ComponentModel.DefaultValueAttribute(ST_SheetState.visible)]
+        [DefaultValue(ST_SheetState.visible)]
         public ST_SheetState state
         {
             get
@@ -363,7 +364,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             return this.printOptionsField != null;
         }
-        public void unSetMergeCells()
+        public void UnsetMergeCells()
         {
             this.mergeCellsField = null;
         }
@@ -423,7 +424,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             return this.drawingField != null;
         }
-        public void unsetDrawing()
+        public void UnsetDrawing()
         {
             this.drawingField = null;
         }
@@ -431,7 +432,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             return this.legacyDrawingField != null;
         }
-        public void unsetLegacyDrawing()
+        public void UnsetLegacyDrawing()
         {
             this.legacyDrawingField = null;
         }
@@ -1131,7 +1132,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool syncHorizontal
         {
             get
@@ -1144,7 +1145,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool syncVertical
         {
             get
@@ -1169,7 +1170,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool transitionEvaluation
         {
             get
@@ -1182,7 +1183,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool transitionEntry
         {
             get
@@ -1195,7 +1196,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(true)]
+        [DefaultValue(true)]
         public bool published
         {
             get
@@ -1220,7 +1221,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool filterMode
         {
             get
@@ -1233,7 +1234,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(true)]
+        [DefaultValue(true)]
         public bool enableFormatConditionsCalculation
         {
             get
@@ -1268,7 +1269,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.showOutlineSymbolsField = true;
         }
 
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool applyStyles
         {
             get
@@ -1281,7 +1282,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(true)]
+        [DefaultValue(true)]
         public bool summaryBelow
         {
             get
@@ -1294,7 +1295,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(true)]
+        [DefaultValue(true)]
         public bool summaryRight
         {
             get
@@ -1307,7 +1308,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(true)]
+        [DefaultValue(true)]
         public bool showOutlineSymbols
         {
             get
@@ -1336,7 +1337,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.fitToPageField = false;
         }
 
-        [System.ComponentModel.DefaultValueAttribute(true)]
+        [DefaultValue(true)]
         public bool autoPageBreaks
         {
             get
@@ -1349,7 +1350,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool fitToPage
         {
             get
@@ -1417,7 +1418,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             return this.sheetViewField.Count;
         }
-
+        [XmlElement]
         public List<CT_SheetView> sheetView
         {
             get
@@ -1429,7 +1430,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.sheetViewField = value;
             }
         }
-
+        [XmlElement]
         public CT_ExtensionList extLst
         {
             get
@@ -1496,9 +1497,9 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         public CT_SheetView()
         {
-            this.extLstField = new CT_ExtensionList();
-            this.pivotSelectionField = new List<CT_PivotSelection>();
-            this.selectionField = new List<CT_Selection>();
+            //this.extLstField = new CT_ExtensionList();
+            //this.pivotSelectionField = new List<CT_PivotSelection>();
+            //this.selectionField = new List<CT_Selection>();
             this.paneField = new CT_Pane();
             this.windowProtectionField = false;
             this.showFormulasField = false;
@@ -1529,11 +1530,13 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
         public CT_Selection AddNewSelection()
         {
+            if (selectionField == null)
+                selectionField = new List<CT_Selection>();
             CT_Selection newSel = new CT_Selection();
             selectionField.Add(newSel);
             return newSel;
         }
-        public void unSetPane()
+        public void UnsetPane()
         {
             this.paneField = null;
         }
@@ -1543,6 +1546,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
         public CT_Selection InsertNewSelection(int index)
         {
+            if (selectionField == null)
+                selectionField = new List<CT_Selection>();
             CT_Selection sel = new CT_Selection();
             this.selectionField.Insert(index, sel);
             return sel;
@@ -1602,8 +1607,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.extLstField = value;
             }
         }
-
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [XmlAttribute]
+        [DefaultValue(false)]
         public bool windowProtection
         {
             get
@@ -1615,8 +1620,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.windowProtectionField = value;
             }
         }
-
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [XmlAttribute]
+        [DefaultValue(false)]
         public bool showFormulas
         {
             get
@@ -1628,8 +1633,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.showFormulasField = value;
             }
         }
-
-        [System.ComponentModel.DefaultValueAttribute(true)]
+        [XmlAttribute]
+        [DefaultValue(true)]
         public bool showGridLines
         {
             get
@@ -1641,8 +1646,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.showGridLinesField = value;
             }
         }
-
-        [System.ComponentModel.DefaultValueAttribute(true)]
+        [XmlAttribute]
+        [DefaultValue(true)]
         public bool showRowColHeaders
         {
             get
@@ -1654,8 +1659,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.showRowColHeadersField = value;
             }
         }
-
-        [System.ComponentModel.DefaultValueAttribute(true)]
+        [XmlAttribute]
+        [DefaultValue(true)]
         public bool showZeros
         {
             get
@@ -1667,8 +1672,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.showZerosField = value;
             }
         }
-
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [XmlAttribute]
+        [DefaultValue(false)]
         public bool rightToLeft
         {
             get
@@ -1681,7 +1686,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [XmlAttribute]
+        [DefaultValue(false)]
         public bool tabSelected
         {
             get
@@ -1693,8 +1699,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.tabSelectedField = value;
             }
         }
-
-        [System.ComponentModel.DefaultValueAttribute(true)]
+        [XmlAttribute]
+        [DefaultValue(true)]
         public bool showRuler
         {
             get
@@ -1706,8 +1712,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.showRulerField = value;
             }
         }
-
-        [System.ComponentModel.DefaultValueAttribute(true)]
+        [XmlAttribute]
+        [DefaultValue(true)]
         public bool showOutlineSymbols
         {
             get
@@ -1719,8 +1725,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.showOutlineSymbolsField = value;
             }
         }
-
-        [System.ComponentModel.DefaultValueAttribute(true)]
+        [XmlAttribute]
+        [DefaultValue(true)]
         public bool defaultGridColor
         {
             get
@@ -1732,8 +1738,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.defaultGridColorField = value;
             }
         }
-
-        [System.ComponentModel.DefaultValueAttribute(true)]
+        [XmlAttribute]
+        [DefaultValue(true)]
         public bool showWhiteSpace
         {
             get
@@ -1745,8 +1751,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.showWhiteSpaceField = value;
             }
         }
-
-        [System.ComponentModel.DefaultValueAttribute(ST_SheetViewType.normal)]
+        [XmlAttribute]
+        [DefaultValue(ST_SheetViewType.normal)]
         public ST_SheetViewType view
         {
             get
@@ -1758,7 +1764,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.viewField = value;
             }
         }
-
+        [XmlAttribute]
         public string topLeftCell
         {
             get
@@ -1770,8 +1776,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.topLeftCellField = value;
             }
         }
-
-        [System.ComponentModel.DefaultValueAttribute(typeof(uint), "64")]
+        [XmlAttribute]
+        [DefaultValue(typeof(uint), "64")]
         public uint colorId
         {
             get
@@ -1783,8 +1789,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.colorIdField = value;
             }
         }
-
-        [System.ComponentModel.DefaultValueAttribute(typeof(uint), "100")]
+        [XmlAttribute]
+        [DefaultValue(typeof(uint), "100")]
         public uint zoomScale
         {
             get
@@ -1796,8 +1802,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.zoomScaleField = value;
             }
         }
-
-        [System.ComponentModel.DefaultValueAttribute(typeof(uint), "0")]
+        [XmlAttribute]
+        [DefaultValue(typeof(uint), "0")]
         public uint zoomScaleNormal
         {
             get
@@ -1809,8 +1815,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.zoomScaleNormalField = value;
             }
         }
-
-        [System.ComponentModel.DefaultValueAttribute(typeof(uint), "0")]
+        [XmlAttribute]
+        [DefaultValue(typeof(uint), "0")]
         public uint zoomScaleSheetLayoutView
         {
             get
@@ -1822,8 +1828,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.zoomScaleSheetLayoutViewField = value;
             }
         }
-
-        [System.ComponentModel.DefaultValueAttribute(typeof(uint), "0")]
+        [XmlAttribute]
+        [DefaultValue(typeof(uint), "0")]
         public uint zoomScalePageLayoutView
         {
             get
@@ -1835,7 +1841,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.zoomScalePageLayoutViewField = value;
             }
         }
-
+        [XmlAttribute]
         public uint workbookViewId
         {
             get
@@ -1854,9 +1860,9 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     public class CT_Pane
     {
 
-        private double? xSplitField;
+        private double xSplitField;
 
-        private double? ySplitField;
+        private double ySplitField;
 
         private string topLeftCellField;
 
@@ -1866,8 +1872,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         public CT_Pane()
         {
-            //this.xSplitField = 0D;
-            //this.ySplitField = 0D;
+            this.xSplitField = 0D;
+            this.ySplitField = 0D;
             this.activePaneField = ST_Pane.topLeft;
             this.stateField = ST_PaneState.split;
         }
@@ -1875,17 +1881,17 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             return this.topLeftCellField != null;
         }
-        public void unSetTopLeftCell()
+        public void UnsetTopLeftCell()
         {
             this.topLeftCellField = null;
         }
-        public void unSetYSplit()
+        public void UnsetYSplit()
         {
-            this.ySplitField = null;
+            this.ySplitField = 0D;
         }
-        public void unSetXSplit()
+        public void UnsetXSplit()
         {
-            this.xSplitField = null;
+            this.xSplitField = 0D;
         }
         public bool IsSetXSplit()
         {
@@ -1896,8 +1902,10 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             return this.ySplitField != null;
         }
 
-        //[System.ComponentModel.DefaultValueAttribute(0D)]
-        public double? xSplit
+        
+        [XmlAttribute]
+        [DefaultValue(0D)]
+        public double xSplit
         {
             get
             {
@@ -1908,9 +1916,9 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.xSplitField = value;
             }
         }
-
-        //[System.ComponentModel.DefaultValueAttribute(0D)]
-        public double? ySplit
+        [XmlAttribute]
+        [DefaultValue(0D)]
+        public double ySplit
         {
             get
             {
@@ -1921,7 +1929,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.ySplitField = value;
             }
         }
-
+        [XmlAttribute]
         public string topLeftCell
         {
             get
@@ -1933,8 +1941,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.topLeftCellField = value;
             }
         }
-
-        [System.ComponentModel.DefaultValueAttribute(ST_Pane.topLeft)]
+        [XmlAttribute]
+        [DefaultValue(ST_Pane.topLeft)]
         public ST_Pane activePane
         {
             get
@@ -1946,8 +1954,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.activePaneField = value;
             }
         }
-
-        [System.ComponentModel.DefaultValueAttribute(ST_PaneState.split)]
+        [XmlAttribute]
+        [DefaultValue(ST_PaneState.split)]
         public ST_PaneState state
         {
             get
@@ -2016,8 +2024,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             sqrefField = new List<string>(array);
         }
-
-        [System.ComponentModel.DefaultValueAttribute(ST_Pane.topLeft)]
+        [XmlAttribute]
+        [DefaultValue(ST_Pane.topLeft)]
         public ST_Pane pane
         {
             get
@@ -2029,7 +2037,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.paneField = value;
             }
         }
-
+        [XmlAttribute]
         public string activeCell
         {
             get
@@ -2041,8 +2049,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.activeCellField = value;
             }
         }
-
-        [System.ComponentModel.DefaultValueAttribute(typeof(uint), "0")]
+        [XmlAttribute]
+        [DefaultValue(typeof(uint), "0")]
         public uint activeCellId
         {
             get
@@ -2142,8 +2150,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.pivotAreaField = value;
             }
         }
-
-        [System.ComponentModel.DefaultValueAttribute(ST_Pane.topLeft)]
+        [XmlAttribute]
+        [DefaultValue(ST_Pane.topLeft)]
         public ST_Pane pane
         {
             get
@@ -2155,8 +2163,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.paneField = value;
             }
         }
-
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [XmlAttribute]
+        [DefaultValue(false)]
         public bool showHeader
         {
             get
@@ -2168,8 +2176,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.showHeaderField = value;
             }
         }
-
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [XmlAttribute]
+        [DefaultValue(false)]
         public bool label
         {
             get
@@ -2181,8 +2189,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.labelField = value;
             }
         }
-
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [XmlAttribute]
+        [DefaultValue(false)]
         public bool data
         {
             get
@@ -2194,8 +2202,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.dataField = value;
             }
         }
-
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [XmlAttribute]
+        [DefaultValue(false)]
         public bool extendable
         {
             get
@@ -2207,8 +2215,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.extendableField = value;
             }
         }
-
-        [System.ComponentModel.DefaultValueAttribute(typeof(uint), "0")]
+        [XmlAttribute]
+        [DefaultValue(typeof(uint), "0")]
         public uint count
         {
             get
@@ -2220,7 +2228,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.countField = value;
             }
         }
-
+        [XmlAttribute]
         public ST_Axis axis
         {
             get
@@ -2245,8 +2253,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.axisFieldSpecified = value;
             }
         }
-
-        [System.ComponentModel.DefaultValueAttribute(typeof(uint), "0")]
+        [XmlAttribute]
+        [DefaultValue(typeof(uint), "0")]
         public uint dimension
         {
             get
@@ -2258,8 +2266,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.dimensionField = value;
             }
         }
-
-        [System.ComponentModel.DefaultValueAttribute(typeof(uint), "0")]
+        [XmlAttribute]
+        [DefaultValue(typeof(uint), "0")]
         public uint start
         {
             get
@@ -2271,8 +2279,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.startField = value;
             }
         }
-
-        [System.ComponentModel.DefaultValueAttribute(typeof(uint), "0")]
+        [XmlAttribute]
+        [DefaultValue(typeof(uint), "0")]
         public uint min
         {
             get
@@ -2284,8 +2292,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.minField = value;
             }
         }
-
-        [System.ComponentModel.DefaultValueAttribute(typeof(uint), "0")]
+        [XmlAttribute]
+        [DefaultValue(typeof(uint), "0")]
         public uint max
         {
             get
@@ -2297,8 +2305,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.maxField = value;
             }
         }
-
-        [System.ComponentModel.DefaultValueAttribute(typeof(uint), "0")]
+        [XmlAttribute]
+        [DefaultValue(typeof(uint), "0")]
         public uint activeRow
         {
             get
@@ -2310,8 +2318,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.activeRowField = value;
             }
         }
-
-        [System.ComponentModel.DefaultValueAttribute(typeof(uint), "0")]
+        [XmlAttribute]
+        [DefaultValue(typeof(uint), "0")]
         public uint activeCol
         {
             get
@@ -2323,8 +2331,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.activeColField = value;
             }
         }
-
-        [System.ComponentModel.DefaultValueAttribute(typeof(uint), "0")]
+        [XmlAttribute]
+        [DefaultValue(typeof(uint), "0")]
         public uint previousRow
         {
             get
@@ -2336,8 +2344,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.previousRowField = value;
             }
         }
-
-        [System.ComponentModel.DefaultValueAttribute(typeof(uint), "0")]
+        [XmlAttribute]
+        [DefaultValue(typeof(uint), "0")]
         public uint previousCol
         {
             get
@@ -2349,8 +2357,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.previousColField = value;
             }
         }
-
-        [System.ComponentModel.DefaultValueAttribute(typeof(uint), "0")]
+        [XmlAttribute]
+        [DefaultValue(typeof(uint), "0")]
         public uint click
         {
             get
@@ -2362,7 +2370,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.clickField = value;
             }
         }
-
+        [XmlAttribute]
         public string id
         {
             get
@@ -2417,8 +2425,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         public CT_PivotArea()
         {
-            this.extLstField = new CT_ExtensionList();
-            this.referencesField = new CT_PivotAreaReferences();
+            //this.extLstField = new CT_ExtensionList();
+            //this.referencesField = new CT_PivotAreaReferences();
             this.typeField = ST_PivotAreaType.normal;
             this.dataOnlyField = true;
             this.labelOnlyField = false;
@@ -2452,7 +2460,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.extLstField = value;
             }
         }
-
+        [XmlAttribute]
         public int field
         {
             get
@@ -2477,8 +2485,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.fieldFieldSpecified = value;
             }
         }
-
-        [System.ComponentModel.DefaultValueAttribute(ST_PivotAreaType.normal)]
+        [XmlAttribute]
+        [DefaultValue(ST_PivotAreaType.normal)]
         public ST_PivotAreaType type
         {
             get
@@ -2490,8 +2498,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.typeField = value;
             }
         }
-
-        [System.ComponentModel.DefaultValueAttribute(true)]
+        [XmlAttribute]
+        [DefaultValue(true)]
         public bool dataOnly
         {
             get
@@ -2503,8 +2511,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.dataOnlyField = value;
             }
         }
-
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [XmlAttribute]
+        [DefaultValue(false)]
         public bool labelOnly
         {
             get
@@ -2516,8 +2524,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.labelOnlyField = value;
             }
         }
-
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [XmlAttribute]
+        [DefaultValue(false)]
         public bool grandRow
         {
             get
@@ -2529,8 +2537,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.grandRowField = value;
             }
         }
-
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [XmlAttribute]
+        [DefaultValue(false)]
         public bool grandCol
         {
             get
@@ -2542,8 +2550,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.grandColField = value;
             }
         }
-
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [XmlAttribute]
+        [DefaultValue(false)]
         public bool cacheIndex
         {
             get
@@ -2555,8 +2563,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.cacheIndexField = value;
             }
         }
-
-        [System.ComponentModel.DefaultValueAttribute(true)]
+        [XmlAttribute]
+        [DefaultValue(true)]
         public bool outline
         {
             get
@@ -2568,7 +2576,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.outlineField = value;
             }
         }
-
+        [XmlAttribute]
         public string offset
         {
             get
@@ -2580,8 +2588,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.offsetField = value;
             }
         }
-
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [XmlAttribute]
+        [DefaultValue(false)]
         public bool collapsedLevelsAreSubtotals
         {
             get
@@ -2593,7 +2601,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.collapsedLevelsAreSubtotalsField = value;
             }
         }
-
+        [XmlAttribute]
         public ST_Axis axis
         {
             get
@@ -2618,7 +2626,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.axisFieldSpecified = value;
             }
         }
-
+        [XmlAttribute]
         public uint fieldPosition
         {
             get
@@ -2672,7 +2680,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.referenceField = value;
             }
         }
-
+        [XmlAttribute]
         public uint count
         {
             get
@@ -2841,7 +2849,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(true)]
+        [DefaultValue(true)]
         public bool selected
         {
             get
@@ -2854,7 +2862,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool byPosition
         {
             get
@@ -2867,7 +2875,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool relative
         {
             get
@@ -2880,7 +2888,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool defaultSubtotal
         {
             get
@@ -2893,7 +2901,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool sumSubtotal
         {
             get
@@ -2906,7 +2914,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool countASubtotal
         {
             get
@@ -2919,7 +2927,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool avgSubtotal
         {
             get
@@ -2932,7 +2940,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool maxSubtotal
         {
             get
@@ -2945,7 +2953,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool minSubtotal
         {
             get
@@ -2958,7 +2966,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool productSubtotal
         {
             get
@@ -2971,7 +2979,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool countSubtotal
         {
             get
@@ -2984,7 +2992,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool stdDevSubtotal
         {
             get
@@ -2997,7 +3005,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool stdDevPSubtotal
         {
             get
@@ -3010,7 +3018,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool varSubtotal
         {
             get
@@ -3023,7 +3031,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool varPSubtotal
         {
             get
@@ -3105,8 +3113,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.outlineLevelRowField = ((byte)(0));
             this.outlineLevelColField = ((byte)(0));
         }
-
-        [System.ComponentModel.DefaultValueAttribute(typeof(uint), "8")]
+        [XmlAttribute]
+        [DefaultValue(typeof(uint), "8")]
         public uint baseColWidth
         {
             get
@@ -3118,7 +3126,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.baseColWidthField = value;
             }
         }
-
+        [XmlAttribute]
         public double defaultColWidth
         {
             get
@@ -3143,7 +3151,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.defaultColWidthFieldSpecified = value;
             }
         }
-
+        [XmlAttribute]
         public double defaultRowHeight
         {
             get
@@ -3155,8 +3163,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.defaultRowHeightField = value;
             }
         }
-
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [XmlAttribute]
+        [DefaultValue(false)]
         public bool customHeight
         {
             get
@@ -3168,8 +3176,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.customHeightField = value;
             }
         }
-
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [XmlAttribute]
+        [DefaultValue(false)]
         public bool zeroHeight
         {
             get
@@ -3181,8 +3189,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.zeroHeightField = value;
             }
         }
-
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [XmlAttribute]
+        [DefaultValue(false)]
         public bool thickTop
         {
             get
@@ -3194,8 +3202,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.thickTopField = value;
             }
         }
-
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [XmlAttribute]
+        [DefaultValue(false)]
         public bool thickBottom
         {
             get
@@ -3207,8 +3215,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.thickBottomField = value;
             }
         }
-
-        [System.ComponentModel.DefaultValueAttribute(typeof(byte), "0")]
+        [XmlAttribute]
+        [DefaultValue(typeof(byte), "0")]
         public byte outlineLevelRow
         {
             get
@@ -3220,8 +3228,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.outlineLevelRowField = value;
             }
         }
-
-        [System.ComponentModel.DefaultValueAttribute(typeof(byte), "0")]
+        [XmlAttribute]
+        [DefaultValue(typeof(byte), "0")]
         public byte outlineLevelCol
         {
             get
@@ -3374,7 +3382,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
 
 
-        [System.ComponentModel.DefaultValueAttribute(typeof(uint), "0")]
+        [DefaultValue(typeof(uint), "0")]
         [XmlAttribute]
         public uint style
         {
@@ -3394,7 +3402,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             set { CT_Row.SetSpecifiedWithDefaultValue(styleField, value); }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         [XmlAttribute]
         public bool hidden
         {
@@ -3414,7 +3422,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             set { CT_Row.SetSpecifiedWithDefaultFalse(hiddenField, value); }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         [XmlAttribute]
         public bool bestFit
         {
@@ -3435,7 +3443,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
 
 
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         [XmlAttribute]
         public bool customWidth
         {
@@ -3455,7 +3463,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             set { CT_Row.SetSpecifiedWithDefaultFalse(customWidthField, value); }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         [XmlAttribute]
         public bool phonetic
         {
@@ -3476,7 +3484,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
 
 
-        [System.ComponentModel.DefaultValueAttribute(typeof(byte), "0")]
+        [DefaultValue(typeof(byte), "0")]
         [XmlAttribute]
         public byte outlineLevel
         {
@@ -3497,7 +3505,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
 
 
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         [XmlAttribute]
         public bool collapsed
         {
@@ -3719,7 +3727,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        //[System.ComponentModel.DefaultValueAttribute(typeof(uint), "0")]
+        //[DefaultValue(typeof(uint), "0")]
         [XmlAttribute]
         public uint s
         {
@@ -3739,7 +3747,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             set { CT_Row.SetSpecifiedWithDefaultValue(sField, value); }
         }
 
-        //[System.ComponentModel.DefaultValueAttribute(false)]
+        //[DefaultValue(false)]
         [XmlAttribute]
         public bool customFormat
         {
@@ -3785,7 +3793,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        //[System.ComponentModel.DefaultValueAttribute(false)]
+        //[DefaultValue(false)]
         [XmlAttribute]
         public bool hidden
         {
@@ -3805,7 +3813,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             set { CT_Row.SetSpecifiedWithDefaultFalse(hiddenField, value); }
         }
 
-        //[System.ComponentModel.DefaultValueAttribute(false)]
+        //[DefaultValue(false)]
         [XmlAttribute]
         public bool customHeight
         {
@@ -3825,7 +3833,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             set { CT_Row.SetSpecifiedWithDefaultFalse(customHeightField, value); }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(typeof(byte), "0")]
+        [DefaultValue(typeof(byte), "0")]
         [XmlAttribute]
         public byte outlineLevel
         {
@@ -3845,7 +3853,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             set { CT_Row.SetSpecifiedWithDefaultValue(outlineLevelField, value); }
         }
 
-        //[System.ComponentModel.DefaultValueAttribute(false)]
+        //[DefaultValue(false)]
         [XmlAttribute]
         public bool collapsed
         {
@@ -3865,7 +3873,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             set { CT_Row.SetSpecifiedWithDefaultFalse(collapsedField, value); }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         [XmlAttribute]
         public bool thickTop
         {
@@ -3885,7 +3893,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             set { CT_Row.SetSpecifiedWithDefaultFalse(thickTopField, value); }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         [XmlAttribute]
         public bool thickBot
         {
@@ -3905,7 +3913,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             set { CT_Row.SetSpecifiedWithDefaultFalse(thickBotField, value); }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         [XmlAttribute]
         public bool ph
         {
@@ -4117,7 +4125,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
         [XmlAttribute()]
-        [System.ComponentModel.DefaultValueAttribute(typeof(uint), "0")]
+        [DefaultValue(typeof(uint), "0")]
         public uint s
         {
             get
@@ -4130,7 +4138,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
         [XmlAttribute()]
-        [System.ComponentModel.DefaultValueAttribute(ST_CellType.n)]
+        [DefaultValue(ST_CellType.n)]
         public ST_CellType t
         {
             get
@@ -4143,7 +4151,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
         [XmlAttribute]
-        [System.ComponentModel.DefaultValueAttribute(typeof(uint), "0")]
+        [DefaultValue(typeof(uint), "0")]
         public uint cm
         {
             get
@@ -4156,7 +4164,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
         [XmlAttribute]
-        [System.ComponentModel.DefaultValueAttribute(typeof(uint), "0")]
+        [DefaultValue(typeof(uint), "0")]
         public uint vm
         {
             get
@@ -4169,7 +4177,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
         [XmlAttribute]
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool ph
         {
             get
@@ -4250,7 +4258,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             obj.valueField = this.valueField;
             return obj;
         }
-        [System.ComponentModel.DefaultValueAttribute(ST_CellFormulaType.normal)]
+        [DefaultValue(ST_CellFormulaType.normal)]
         public ST_CellFormulaType t
         {
             get
@@ -4263,7 +4271,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool aca
         {
             get
@@ -4288,7 +4296,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool dt2D
         {
             get
@@ -4301,7 +4309,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool dtr
         {
             get
@@ -4314,7 +4322,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool del1
         {
             get
@@ -4327,7 +4335,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool del2
         {
             get
@@ -4364,7 +4372,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool ca
         {
             get
@@ -4402,7 +4410,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool bx
         {
             get
@@ -4481,7 +4489,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.fullCalcOnLoadField = false;
         }
 
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool fullCalcOnLoad
         {
             get
@@ -4579,7 +4587,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool? sheet
         {
             get
@@ -4592,7 +4600,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool? objects
         {
             get
@@ -4605,7 +4613,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool? scenarios
         {
             get
@@ -4618,7 +4626,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(true)]
+        [DefaultValue(true)]
         public bool formatCells
         {
             get
@@ -4631,7 +4639,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(true)]
+        [DefaultValue(true)]
         public bool formatColumns
         {
             get
@@ -4644,7 +4652,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(true)]
+        [DefaultValue(true)]
         public bool formatRows
         {
             get
@@ -4657,7 +4665,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(true)]
+        [DefaultValue(true)]
         public bool insertColumns
         {
             get
@@ -4670,7 +4678,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(true)]
+        [DefaultValue(true)]
         public bool insertRows
         {
             get
@@ -4683,7 +4691,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(true)]
+        [DefaultValue(true)]
         public bool insertHyperlinks
         {
             get
@@ -4696,7 +4704,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(true)]
+        [DefaultValue(true)]
         public bool deleteColumns
         {
             get
@@ -4709,7 +4717,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(true)]
+        [DefaultValue(true)]
         public bool deleteRows
         {
             get
@@ -4722,7 +4730,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool selectLockedCells
         {
             get
@@ -4735,7 +4743,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(true)]
+        [DefaultValue(true)]
         public bool sort
         {
             get
@@ -4748,7 +4756,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(true)]
+        [DefaultValue(true)]
         public bool autoFilter
         {
             get
@@ -4761,7 +4769,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(true)]
+        [DefaultValue(true)]
         public bool pivotTables
         {
             get
@@ -4774,7 +4782,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool selectUnlockedCells
         {
             get
@@ -5005,7 +5013,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool locked
         {
             get
@@ -5018,7 +5026,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool hidden
         {
             get
@@ -5116,7 +5124,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool deleted
         {
             get
@@ -5129,7 +5137,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool undone
         {
             get
@@ -5216,7 +5224,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(ST_DataConsolidateFunction.sum)]
+        [DefaultValue(ST_DataConsolidateFunction.sum)]
         public ST_DataConsolidateFunction function
         {
             get
@@ -5229,7 +5237,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool leftLabels
         {
             get
@@ -5242,7 +5250,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool topLabels
         {
             get
@@ -5255,7 +5263,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool link
         {
             get
@@ -5614,7 +5622,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(typeof(uint), "100")]
+        [DefaultValue(typeof(uint), "100")]
         public uint scale
         {
             get
@@ -5627,7 +5635,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(typeof(uint), "64")]
+        [DefaultValue(typeof(uint), "64")]
         public uint colorId
         {
             get
@@ -5640,7 +5648,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool showPageBreaks
         {
             get
@@ -5653,7 +5661,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool showFormulas
         {
             get
@@ -5666,7 +5674,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(true)]
+        [DefaultValue(true)]
         public bool showGridLines
         {
             get
@@ -5679,7 +5687,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(true)]
+        [DefaultValue(true)]
         public bool showRowCol
         {
             get
@@ -5692,7 +5700,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(true)]
+        [DefaultValue(true)]
         public bool outlineSymbols
         {
             get
@@ -5705,7 +5713,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(true)]
+        [DefaultValue(true)]
         public bool zeroValues
         {
             get
@@ -5718,7 +5726,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool fitToPage
         {
             get
@@ -5731,7 +5739,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool printArea
         {
             get
@@ -5744,7 +5752,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool filter
         {
             get
@@ -5757,7 +5765,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool showAutoFilter
         {
             get
@@ -5770,7 +5778,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool hiddenRows
         {
             get
@@ -5783,7 +5791,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool hiddenColumns
         {
             get
@@ -5796,7 +5804,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(ST_SheetState.visible)]
+        [DefaultValue(ST_SheetState.visible)]
         public ST_SheetState state
         {
             get
@@ -5809,7 +5817,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool filterUnique
         {
             get
@@ -5822,7 +5830,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(ST_SheetViewType.normal)]
+        [DefaultValue(ST_SheetViewType.normal)]
         public ST_SheetViewType view
         {
             get
@@ -5835,7 +5843,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(true)]
+        [DefaultValue(true)]
         public bool showRuler
         {
             get
@@ -5906,7 +5914,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(typeof(uint), "0")]
+        [DefaultValue(typeof(uint), "0")]
         public uint count
         {
             get
@@ -5919,7 +5927,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(typeof(uint), "0")]
+        [DefaultValue(typeof(uint), "0")]
         public uint manualBreakCount
         {
             get
@@ -5957,7 +5965,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.ptField = false;
         }
 
-        [System.ComponentModel.DefaultValueAttribute(typeof(uint), "0")]
+        [DefaultValue(typeof(uint), "0")]
         public uint id
         {
             get
@@ -5970,7 +5978,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(typeof(uint), "0")]
+        [DefaultValue(typeof(uint), "0")]
         public uint min
         {
             get
@@ -5983,7 +5991,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(typeof(uint), "0")]
+        [DefaultValue(typeof(uint), "0")]
         public uint max
         {
             get
@@ -5996,7 +6004,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool man
         {
             get
@@ -6009,7 +6017,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool pt
         {
             get
@@ -6137,7 +6145,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.gridLinesSetField = true;
         }
 
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool horizontalCentered
         {
             get
@@ -6150,7 +6158,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool verticalCentered
         {
             get
@@ -6163,7 +6171,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool headings
         {
             get
@@ -6176,7 +6184,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool gridLines
         {
             get
@@ -6189,7 +6197,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(true)]
+        [DefaultValue(true)]
         public bool gridLinesSet
         {
             get
@@ -6262,7 +6270,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.copiesField = ((uint)(1));
         }
 
-        [System.ComponentModel.DefaultValueAttribute(typeof(uint), "1")]
+        [DefaultValue(typeof(uint), "1")]
         public uint paperSize
         {
             get
@@ -6275,7 +6283,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(typeof(uint), "100")]
+        [DefaultValue(typeof(uint), "100")]
         public uint scale
         {
             get
@@ -6288,7 +6296,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(typeof(uint), "1")]
+        [DefaultValue(typeof(uint), "1")]
         public uint firstPageNumber
         {
             get
@@ -6301,7 +6309,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(typeof(uint), "1")]
+        [DefaultValue(typeof(uint), "1")]
         public uint fitToWidth
         {
             get
@@ -6314,7 +6322,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(typeof(uint), "1")]
+        [DefaultValue(typeof(uint), "1")]
         public uint fitToHeight
         {
             get
@@ -6327,7 +6335,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(ST_PageOrder.downThenOver)]
+        [DefaultValue(ST_PageOrder.downThenOver)]
         public ST_PageOrder? pageOrder
         {
             get
@@ -6340,7 +6348,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(ST_Orientation.@default)]
+        [DefaultValue(ST_Orientation.@default)]
         public ST_Orientation? orientation
         {
             get
@@ -6353,7 +6361,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(true)]
+        [DefaultValue(true)]
         public bool usePrinterDefaults
         {
             get
@@ -6366,7 +6374,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool blackAndWhite
         {
             get
@@ -6379,7 +6387,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool draft
         {
             get
@@ -6392,7 +6400,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(ST_CellComments.none)]
+        [DefaultValue(ST_CellComments.none)]
         public ST_CellComments? cellComments
         {
             get
@@ -6405,7 +6413,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool useFirstPageNumber
         {
             get
@@ -6418,7 +6426,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(ST_PrintError.displayed)]
+        [DefaultValue(ST_PrintError.displayed)]
         public ST_PrintError errors
         {
             get
@@ -6431,7 +6439,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(typeof(uint), "600")]
+        [DefaultValue(typeof(uint), "600")]
         public uint horizontalDpi
         {
             get
@@ -6444,7 +6452,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(typeof(uint), "600")]
+        [DefaultValue(typeof(uint), "600")]
         public uint verticalDpi
         {
             get
@@ -6457,7 +6465,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(typeof(uint), "1")]
+        [DefaultValue(typeof(uint), "1")]
         public uint copies
         {
             get
@@ -6640,7 +6648,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool differentOddEven
         {
             get
@@ -6653,7 +6661,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool differentFirst
         {
             get
@@ -6666,7 +6674,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(true)]
+        [DefaultValue(true)]
         public bool scaleWithDoc
         {
             get
@@ -6679,7 +6687,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(true)]
+        [DefaultValue(true)]
         public bool alignWithMargins
         {
             get
@@ -6856,7 +6864,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool pivot
         {
             get
@@ -7102,7 +7110,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool stopIfTrue
         {
             get
@@ -7115,7 +7123,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(true)]
+        [DefaultValue(true)]
         public bool aboveAverage
         {
             get
@@ -7128,7 +7136,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool percent
         {
             get
@@ -7141,7 +7149,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool bottom
         {
             get
@@ -7266,7 +7274,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool equalAverage
         {
             get
@@ -7375,7 +7383,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(true)]
+        [DefaultValue(true)]
         public bool gte
         {
             get
@@ -7459,7 +7467,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(typeof(uint), "10")]
+        [DefaultValue(typeof(uint), "10")]
         public uint minLength
         {
             get
@@ -7472,7 +7480,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(typeof(uint), "90")]
+        [DefaultValue(typeof(uint), "90")]
         public uint maxLength
         {
             get
@@ -7485,7 +7493,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(true)]
+        [DefaultValue(true)]
         public bool showValue
         {
             get
@@ -7535,7 +7543,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(ST_IconSetType.Item3TrafficLights1)]
+        [DefaultValue(ST_IconSetType.Item3TrafficLights1)]
         public ST_IconSetType iconSet
         {
             get
@@ -7548,7 +7556,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(true)]
+        [DefaultValue(true)]
         public bool showValue
         {
             get
@@ -7561,7 +7569,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(true)]
+        [DefaultValue(true)]
         public bool percent
         {
             get
@@ -7574,7 +7582,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool reverse
         {
             get
@@ -7759,7 +7767,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool disablePrompts
         {
             get
@@ -7948,7 +7956,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(ST_DataValidationType.none)]
+        [DefaultValue(ST_DataValidationType.none)]
         public ST_DataValidationType type
         {
             get
@@ -7961,7 +7969,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(ST_DataValidationErrorStyle.stop)]
+        [DefaultValue(ST_DataValidationErrorStyle.stop)]
         public ST_DataValidationErrorStyle errorStyle
         {
             get
@@ -7974,7 +7982,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(ST_DataValidationImeMode.noControl)]
+        [DefaultValue(ST_DataValidationImeMode.noControl)]
         public ST_DataValidationImeMode imeMode
         {
             get
@@ -7987,7 +7995,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(ST_DataValidationOperator.between)]
+        [DefaultValue(ST_DataValidationOperator.between)]
         public ST_DataValidationOperator @operator
         {
             get
@@ -8000,7 +8008,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool allowBlank
         {
             get
@@ -8013,7 +8021,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool showDropDown
         {
             get
@@ -8026,7 +8034,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool showInputMessage
         {
             get
@@ -8039,7 +8047,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool showErrorMessage
         {
             get
@@ -8445,7 +8453,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool evalError
         {
             get
@@ -8458,7 +8466,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool twoDigitTextYear
         {
             get
@@ -8471,7 +8479,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool numberStoredAsText
         {
             get
@@ -8484,7 +8492,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool formula
         {
             get
@@ -8497,7 +8505,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool formulaRange
         {
             get
@@ -8510,7 +8518,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool unlockedFormula
         {
             get
@@ -8523,7 +8531,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool emptyCellReference
         {
             get
@@ -8536,7 +8544,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool listDataValidation
         {
             get
@@ -8549,7 +8557,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool calculatedColumn
         {
             get
@@ -8646,7 +8654,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool deleted
         {
             get
@@ -8659,7 +8667,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool xmlBased
         {
             get
@@ -8746,7 +8754,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(ST_DvAspect.DVASPECT_CONTENT)]
+        [DefaultValue(ST_DvAspect.DVASPECT_CONTENT)]
         public ST_DvAspect dvAspect
         {
             get
@@ -8796,7 +8804,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool autoLoad
         {
             get
@@ -9066,7 +9074,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool autoRepublish
         {
             get
@@ -9429,7 +9437,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(true)]
+        [DefaultValue(true)]
         public bool published
         {
             get
@@ -9530,7 +9538,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool tabSelected
         {
             get
@@ -9543,7 +9551,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(typeof(uint), "100")]
+        [DefaultValue(typeof(uint), "100")]
         public uint zoomScale
         {
             get
@@ -9568,7 +9576,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool zoomToFit
         {
             get
@@ -9611,7 +9619,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool content
         {
             get
@@ -9624,7 +9632,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool objects
         {
             get
@@ -9715,7 +9723,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(typeof(uint), "100")]
+        [DefaultValue(typeof(uint), "100")]
         public uint scale
         {
             get
@@ -9728,7 +9736,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(ST_SheetState.visible)]
+        [DefaultValue(ST_SheetState.visible)]
         public ST_SheetState state
         {
             get
@@ -9741,7 +9749,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool zoomToFit
         {
             get
@@ -9796,7 +9804,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.copiesField = ((uint)(1));
         }
 
-        [System.ComponentModel.DefaultValueAttribute(typeof(uint), "1")]
+        [DefaultValue(typeof(uint), "1")]
         public uint paperSize
         {
             get
@@ -9809,7 +9817,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(typeof(uint), "1")]
+        [DefaultValue(typeof(uint), "1")]
         public uint firstPageNumber
         {
             get
@@ -9822,7 +9830,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(ST_Orientation.@default)]
+        [DefaultValue(ST_Orientation.@default)]
         public ST_Orientation orientation
         {
             get
@@ -9835,7 +9843,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(true)]
+        [DefaultValue(true)]
         public bool usePrinterDefaults
         {
             get
@@ -9848,7 +9856,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool blackAndWhite
         {
             get
@@ -9861,7 +9869,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool draft
         {
             get
@@ -9874,7 +9882,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool useFirstPageNumber
         {
             get
@@ -9887,7 +9895,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(typeof(uint), "600")]
+        [DefaultValue(typeof(uint), "600")]
         public uint horizontalDpi
         {
             get
@@ -9900,7 +9908,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(typeof(uint), "600")]
+        [DefaultValue(typeof(uint), "600")]
         public uint verticalDpi
         {
             get
@@ -9913,7 +9921,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(typeof(uint), "1")]
+        [DefaultValue(typeof(uint), "1")]
         public uint copies
         {
             get

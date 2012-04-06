@@ -975,7 +975,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(true)]
+        [DefaultValue(true)]
         public bool outline
         {
             get
@@ -986,6 +986,12 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             {
                 this.outlineField = value;
             }
+        }
+
+        public override string ToString()
+        {
+
+            return base.ToString();
         }
     }
 
@@ -1029,7 +1035,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(ST_BorderStyle.none)]
+        [DefaultValue(ST_BorderStyle.none)]
         public ST_BorderStyle? style
         {
             get
@@ -1194,7 +1200,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             this.extLstField = new CT_ExtensionList();
         }
-
+        [XmlElement]
         public CT_ExtensionList extLst
         {
             get
@@ -1206,7 +1212,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.extLstField = value;
             }
         }
-
+        [XmlAttribute]
         public string name
         {
             get
@@ -1218,7 +1224,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.nameField = value;
             }
         }
-
+        [XmlAttribute]
         public uint xfId
         {
             get
@@ -1230,7 +1236,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.xfIdField = value;
             }
         }
-
+        [XmlAttribute]
         public uint builtinId
         {
             get
@@ -1255,7 +1261,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.builtinIdFieldSpecified = value;
             }
         }
-
+        [XmlAttribute]
         public uint iLevel
         {
             get
@@ -1280,7 +1286,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.iLevelFieldSpecified = value;
             }
         }
-
+        [XmlAttribute]
         public bool hidden
         {
             get
@@ -1305,7 +1311,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.hiddenFieldSpecified = value;
             }
         }
-
+        [XmlAttribute]
         public bool customBuiltin
         {
             get
@@ -1345,9 +1351,9 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         public CT_CellStyles()
         {
-            this.cellStyleField = new List<CT_CellStyle>();
+            //this.cellStyleField = new List<CT_CellStyle>();
         }
-
+        [XmlElement]
         public List<CT_CellStyle> cellStyle
         {
             get
@@ -1360,6 +1366,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
+        [XmlAttribute]
         public uint count
         {
             get
@@ -1400,6 +1407,14 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         public CT_CellXfs()
         {
             this.xfField = new List<CT_Xf>();
+        }
+        public CT_Xf AddNewXf()
+        {
+            if (this.xfField == null)
+                this.xfField = new List<CT_Xf>();
+            CT_Xf xf = new CT_Xf();
+            this.xfField.Add(xf);
+            return xf;
         }
         [XmlElement]
         public List<CT_Xf> xf
@@ -1504,9 +1519,9 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         public CT_Xf()
         {
-            this.extLstField = new CT_ExtensionList();
-            this.protectionField = new CT_CellProtection();
-            this.alignmentField = new CT_CellAlignment();
+            //this.extLstField = new CT_ExtensionList();
+            //this.protectionField = new CT_CellProtection();
+            //this.alignmentField = new CT_CellAlignment();
             this.quotePrefixField = false;
             this.pivotButtonField = false;
         }
@@ -1753,7 +1768,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
         [XmlAttribute]
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool quotePrefix
         {
             get
@@ -1766,7 +1781,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
         [XmlAttribute]
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool pivotButton
         {
             get
@@ -1943,7 +1958,15 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         public CT_CellStyleXfs()
         {
-            this.xfField = new List<CT_Xf>();
+            //this.xfField = new List<CT_Xf>();
+        }
+        public CT_Xf AddNewXf()
+        {
+            if(this.xfField==null)
+                this.xfField = new List<CT_Xf>();
+            CT_Xf xf=new CT_Xf();
+            this.xfField.Add(xf);
+            return xf;
         }
         [XmlElement]
         public List<CT_Xf> xf
@@ -2151,7 +2174,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.extLstField = value;
             }
         }
-
+        [XmlAttribute]
         public int count
         {
             get
@@ -2176,7 +2199,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.countFieldSpecified = value;
             }
         }
-
+        [XmlAttribute]
         public int uniqueCount
         {
             get
@@ -2980,7 +3003,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(ST_PhoneticType.fullwidthKatakana)]
+        [DefaultValue(ST_PhoneticType.fullwidthKatakana)]
         public ST_PhoneticType type
         {
             get
@@ -2993,7 +3016,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(ST_PhoneticAlignment.left)]
+        [DefaultValue(ST_PhoneticAlignment.left)]
         public ST_PhoneticAlignment alignment
         {
             get

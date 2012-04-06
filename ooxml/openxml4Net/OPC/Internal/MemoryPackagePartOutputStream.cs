@@ -37,7 +37,7 @@ namespace NPOI.OpenXml4Net.OPC.Internal
 
         public override long Length
         {
-            get { throw new NotImplementedException(); }
+            get { return _buff.Length; }
         }
         
         public void Write(int b)
@@ -46,21 +46,21 @@ namespace NPOI.OpenXml4Net.OPC.Internal
         }
         public override void SetLength(long value)
         {
-            throw new NotImplementedException();
+            _buff.SetLength(value);
         }
         public override long Seek(long offset, SeekOrigin origin)
         {
-            throw new NotImplementedException();
+            return _buff.Seek(offset, origin);
         }
         public override long Position
         {
             get
             {
-                throw new NotImplementedException();
+                return _buff.Position;
             }
             set
             {
-                throw new NotImplementedException();
+                _buff.Position = value;
             }
         }
 
@@ -83,13 +83,18 @@ namespace NPOI.OpenXml4Net.OPC.Internal
             _buff.Flush();
             if (_part.data != null)
             {
-                byte[] newArray = new byte[_part.data.Length + _buff.Length];
-                // copy the previous contents of part.data in newArray
-                Array.Copy(_part.data, 0, newArray, 0, _part.data.Length);
+                //byte[] newArray = new byte[_part.data.Length + _buff.Length];
+                //// copy the previous contents of part.data in newArray
+                //Array.Copy(_part.data, 0, newArray, 0, _part.data.Length);
 
-                // append the newly added data
+                //// append the newly added data
+                //byte[] buffArr = _buff.ToArray();
+                //Array.Copy(buffArr, 0, newArray, _part.data.Length,
+                //        buffArr.Length);
+
+                byte[] newArray = new byte[_buff.Length];
                 byte[] buffArr = _buff.ToArray();
-                Array.Copy(buffArr, 0, newArray, _part.data.Length,
+                Array.Copy(buffArr, 0, newArray, 0,
                         buffArr.Length);
 
                 // save the result as new data

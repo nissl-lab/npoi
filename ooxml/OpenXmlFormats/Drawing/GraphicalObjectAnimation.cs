@@ -1,3 +1,4 @@
+using System.ComponentModel;
 namespace NPOI.OpenXmlFormats.Dml {
     
     
@@ -58,7 +59,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute(DataType="token")]
-        [System.ComponentModel.DefaultValueAttribute("{00000000-0000-0000-0000-000000000000}")]
+        [DefaultValue("{00000000-0000-0000-0000-000000000000}")]
         public string id {
             get {
                 return this.idField;
@@ -70,7 +71,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         
         /// <remarks/>
         [System.Xml.Serialization.XmlAttribute]
-        [System.ComponentModel.DefaultValueAttribute(ST_DgmBuildStep.sp)]
+        [DefaultValue(ST_DgmBuildStep.sp)]
         public ST_DgmBuildStep bldStep {
             get {
                 return this.bldStepField;
@@ -102,7 +103,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         
         /// <remarks/>
         [System.Xml.Serialization.XmlAttribute]
-        [System.ComponentModel.DefaultValueAttribute(-1)]
+        [DefaultValue(-1)]
         public int seriesIdx {
             get {
                 return this.seriesIdxField;
@@ -114,7 +115,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         
         /// <remarks/>
         [System.Xml.Serialization.XmlAttribute]
-        [System.ComponentModel.DefaultValueAttribute(-1)]
+        [DefaultValue(-1)]
         public int categoryIdx {
             get {
                 return this.categoryIdxField;
@@ -204,7 +205,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         
         /// <remarks/>
         [System.Xml.Serialization.XmlAttribute]
-        [System.ComponentModel.DefaultValueAttribute("allAtOnce")]
+        [DefaultValue("allAtOnce")]
         public string bld {
             get {
                 return this.bldField;
@@ -216,7 +217,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         
         /// <remarks/>
         [System.Xml.Serialization.XmlAttribute]
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool rev {
             get {
                 return this.revField;
@@ -265,7 +266,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         
         /// <remarks/>
         [System.Xml.Serialization.XmlAttribute]
-        [System.ComponentModel.DefaultValueAttribute("allAtOnce")]
+        [DefaultValue("allAtOnce")]
         public string bld {
             get {
                 return this.bldField;
@@ -277,7 +278,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         
         /// <remarks/>
         [System.Xml.Serialization.XmlAttribute]
-        [System.ComponentModel.DefaultValueAttribute(true)]
+        [DefaultValue(true)]
         public bool animBg {
             get {
                 return this.animBgField;

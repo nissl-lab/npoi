@@ -3,26 +3,28 @@ using System.Collections.Generic;
 using System.Text;
 using System.IO;
 using System.Xml;
+using System.Xml.Serialization;
 
 namespace NPOI.OpenXmlFormats
 {
     public class PropertiesDocument
     {
-        XmlDocument _xmldoc;
+        internal static XmlSerializer serializer = new XmlSerializer(typeof(CT_Properties));
 
         public static PropertiesDocument Parse(Stream stream)
         {
-            //stream.Close();
-            PropertiesDocument pd = new PropertiesDocument();
-            pd._xmldoc=new XmlDocument();
-            pd._xmldoc.Load(stream);
-            return pd;
+            CT_Properties obj = (CT_Properties)serializer.Deserialize(stream);
+
+            return new PropertiesDocument(obj);
         }
 
+        public PropertiesDocument(CT_Properties prop)
+        {
+            this._props = prop;
+        }
         public PropertiesDocument()
         {
-            _props = new CT_Properties();
-            _xmldoc = new XmlDocument();
+            //_props = new CT_Properties();
         }
 
         CT_Properties _props;
@@ -31,28 +33,28 @@ namespace NPOI.OpenXmlFormats
             return _props;
         }
 
-        public void AddNewProperties()
+        public CT_Properties AddNewProperties()
         {
             _props = new CT_Properties();
-
+            return _props;
         }
 
         public PropertiesDocument Copy()
         {
             PropertiesDocument pd = new PropertiesDocument();
-            XmlDocument doc2 = (XmlDocument)_xmldoc.Clone();
-            pd._xmldoc = doc2;
+            pd._props = this._props.Copy();
             return pd;
         }
 
         public void Save(Stream stream,Dictionary<String, String> map)
         {
-            XmlNamespaceManager nsmgr = new XmlNamespaceManager(_xmldoc.NameTable);
-            foreach (KeyValuePair<string, string> entry in map)
-            {
-                nsmgr.AddNamespace(entry.Value, entry.Key);
-            }
-            _xmldoc.Save(stream);
+            serializer.Serialize(stream, _props);
+        }
+        public override string ToString()
+        {
+            StringWriter stringWriter = new StringWriter();
+            serializer.Serialize(stringWriter, _props);
+            return stringWriter.ToString();
         }
     }
 }

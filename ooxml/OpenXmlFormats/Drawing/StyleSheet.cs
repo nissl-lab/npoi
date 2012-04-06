@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Xml.Serialization;
+using System.ComponentModel;
 
 namespace NPOI.OpenXmlFormats.Dml
 {
@@ -671,7 +672,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute("")]
+        [DefaultValue("")]
         [XmlAttribute]
         public string name
         {

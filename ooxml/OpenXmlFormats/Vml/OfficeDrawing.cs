@@ -1,4 +1,5 @@
 using System.Xml.Serialization;
+using System.ComponentModel;
 namespace NPOI.OpenXmlFormats.Vml
 {
     
@@ -1038,7 +1039,7 @@ namespace NPOI.OpenXmlFormats.Vml
         
         /// <remarks/>
         [System.Xml.Serialization.XmlAttribute]
-        [System.ComponentModel.DefaultValueAttribute(ST_ExtrusionType.parallel)]
+        [DefaultValue(ST_ExtrusionType.parallel)]
         public ST_ExtrusionType type {
             get {
                 return this.typeField;
@@ -1050,7 +1051,7 @@ namespace NPOI.OpenXmlFormats.Vml
         
         /// <remarks/>
         [System.Xml.Serialization.XmlAttribute]
-        [System.ComponentModel.DefaultValueAttribute(ST_ExtrusionRender.solid)]
+        [DefaultValue(ST_ExtrusionRender.solid)]
         public ST_ExtrusionRender render {
             get {
                 return this.renderField;
@@ -1084,7 +1085,7 @@ namespace NPOI.OpenXmlFormats.Vml
         
         /// <remarks/>
         [System.Xml.Serialization.XmlAttribute]
-        [System.ComponentModel.DefaultValueAttribute(ST_ExtrusionPlane.XY)]
+        [DefaultValue(ST_ExtrusionPlane.XY)]
         public ST_ExtrusionPlane plane {
             get {
                 return this.planeField;
@@ -1739,7 +1740,7 @@ namespace NPOI.OpenXmlFormats.Vml
         
         /// <remarks/>
         [System.Xml.Serialization.XmlAttribute]
-        [System.ComponentModel.DefaultValueAttribute(ST_TrueFalse1.f)]
+        [DefaultValue(ST_TrueFalse1.f)]
         public ST_TrueFalse1 lengthspecified {
             get {
                 return this.lengthspecifiedField;
@@ -3026,7 +3027,7 @@ namespace NPOI.OpenXmlFormats.Vml
         
         /// <remarks/>
         [System.Xml.Serialization.XmlAttribute]
-        [System.ComponentModel.DefaultValueAttribute(ST_TrueFalseBlank.@false)]
+        [DefaultValue(ST_TrueFalseBlank.@false)]
         public ST_TrueFalseBlank start {
             get {
                 return this.startField;
@@ -3038,7 +3039,7 @@ namespace NPOI.OpenXmlFormats.Vml
         
         /// <remarks/>
         [System.Xml.Serialization.XmlAttribute]
-        [System.ComponentModel.DefaultValueAttribute(ST_TrueFalseBlank.@false)]
+        [DefaultValue(ST_TrueFalseBlank.@false)]
         public ST_TrueFalseBlank end {
             get {
                 return this.endField;

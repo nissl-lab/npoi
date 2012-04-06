@@ -16,7 +16,41 @@ namespace NPOI.OpenXmlFormats
         private object itemField;
 
         private ItemChoiceType itemElementNameField;
-
+        [System.Xml.Serialization.XmlElementAttribute("array", typeof(CT_Array))]
+        [System.Xml.Serialization.XmlElementAttribute("blob", typeof(byte[]), DataType = "base64Binary")]
+        [System.Xml.Serialization.XmlElementAttribute("bool", typeof(bool))]
+        [System.Xml.Serialization.XmlElementAttribute("bstr", typeof(string))]
+        [System.Xml.Serialization.XmlElementAttribute("cf", typeof(CT_Cf))]
+        [System.Xml.Serialization.XmlElementAttribute("clsid", typeof(string))]
+        [System.Xml.Serialization.XmlElementAttribute("cy", typeof(string))]
+        [System.Xml.Serialization.XmlElementAttribute("date", typeof(System.DateTime))]
+        [System.Xml.Serialization.XmlElementAttribute("decimal", typeof(decimal))]
+        [System.Xml.Serialization.XmlElementAttribute("empty", typeof(CT_Empty))]
+        [System.Xml.Serialization.XmlElementAttribute("error", typeof(string))]
+        [System.Xml.Serialization.XmlElementAttribute("filetime", typeof(System.DateTime))]
+        [System.Xml.Serialization.XmlElementAttribute("i1", typeof(sbyte))]
+        [System.Xml.Serialization.XmlElementAttribute("i2", typeof(short))]
+        [System.Xml.Serialization.XmlElementAttribute("i4", typeof(int))]
+        [System.Xml.Serialization.XmlElementAttribute("i8", typeof(long))]
+        [System.Xml.Serialization.XmlElementAttribute("int", typeof(int))]
+        [System.Xml.Serialization.XmlElementAttribute("lpstr", typeof(string))]
+        [System.Xml.Serialization.XmlElementAttribute("lpwstr", typeof(string))]
+        [System.Xml.Serialization.XmlElementAttribute("null", typeof(CT_Null))]
+        [System.Xml.Serialization.XmlElementAttribute("oblob", typeof(byte[]), DataType = "base64Binary")]
+        [System.Xml.Serialization.XmlElementAttribute("ostorage", typeof(byte[]), DataType = "base64Binary")]
+        [System.Xml.Serialization.XmlElementAttribute("ostream", typeof(byte[]), DataType = "base64Binary")]
+        [System.Xml.Serialization.XmlElementAttribute("r4", typeof(float))]
+        [System.Xml.Serialization.XmlElementAttribute("r8", typeof(double))]
+        [System.Xml.Serialization.XmlElementAttribute("storage", typeof(byte[]), DataType = "base64Binary")]
+        [System.Xml.Serialization.XmlElementAttribute("stream", typeof(byte[]), DataType = "base64Binary")]
+        [System.Xml.Serialization.XmlElementAttribute("ui1", typeof(byte))]
+        [System.Xml.Serialization.XmlElementAttribute("ui2", typeof(ushort))]
+        [System.Xml.Serialization.XmlElementAttribute("ui4", typeof(uint))]
+        [System.Xml.Serialization.XmlElementAttribute("ui8", typeof(ulong))]
+        [System.Xml.Serialization.XmlElementAttribute("uint", typeof(uint))]
+        //[System.Xml.Serialization.XmlElementAttribute("variant", typeof(CT_Variant))]
+        [System.Xml.Serialization.XmlElementAttribute("vector", typeof(CT_Vector))]
+        [System.Xml.Serialization.XmlElementAttribute("vstream", typeof(CT_Vstream))]
         [XmlChoiceIdentifierAttribute("ItemElementName")]
         public object Item
         {
@@ -94,7 +128,7 @@ namespace NPOI.OpenXmlFormats
         }
 
         /// <remarks/>
-        [XmlElement("ItemsElementName")]
+        //[XmlElement("ItemsElementName")]
         [XmlIgnore]
         public ItemsChoiceType[] ItemsElementName
         {
@@ -155,55 +189,55 @@ namespace NPOI.OpenXmlFormats
     public enum ItemsChoiceType
     {
 
-        /// <remarks/>
+        [XmlEnum("http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes:bool")]
         @bool,
 
-        /// <remarks/>
+        [XmlEnum("http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes:bstr")]
         bstr,
 
-        /// <remarks/>
+        [XmlEnum("http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes:cy")]
         cy,
 
-        /// <remarks/>
+        [XmlEnum("http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes:date")]
         date,
 
-        /// <remarks/>
+        [XmlEnum("http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes:decimal")]
         @decimal,
 
-        /// <remarks/>
+        [XmlEnum("http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes:error")]
         error,
 
-        /// <remarks/>
+        [XmlEnum("http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes:i1")]
         i1,
 
-        /// <remarks/>
+        [XmlEnum("http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes:i2")]
         i2,
 
-        /// <remarks/>
+        [XmlEnum("http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes:i4")]
         i4,
 
-        /// <remarks/>
+        [XmlEnum("http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes:int")]
         @int,
 
-        /// <remarks/>
+        [XmlEnum("http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes:r4")]
         r4,
 
-        /// <remarks/>
+        [XmlEnum("http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes:r8")]
         r8,
 
-        /// <remarks/>
+        [XmlEnum("http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes:ui1")]
         ui1,
 
-        /// <remarks/>
+        [XmlEnum("http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes:ui2")]
         ui2,
 
-        /// <remarks/>
+        [XmlEnum("http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes:ui4")]
         ui4,
 
-        /// <remarks/>
+        [XmlEnum("http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes:uint")]
         @uint,
 
-        /// <remarks/>
+        [XmlEnum("http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes:variant")]
         variant,
     }
 
@@ -298,7 +332,7 @@ namespace NPOI.OpenXmlFormats
 
         private List<object> itemsField;
 
-        private List<ItemsChoiceType> itemsElementNameField;
+        private List<ST_VectorBaseType> itemsElementNameField;
 
         private ST_VectorBaseType baseTypeField;
 
@@ -306,36 +340,55 @@ namespace NPOI.OpenXmlFormats
 
         public CT_Vector()
         {
-            this.itemsElementNameField = new List<ItemsChoiceType>();
+            this.itemsElementNameField = new List<ST_VectorBaseType>();
             this.itemsField = new List<object>();
         }
-
+        [System.Xml.Serialization.XmlElementAttribute("bool", typeof(bool))]
+        [System.Xml.Serialization.XmlElementAttribute("bstr", typeof(string))]
+        [System.Xml.Serialization.XmlElementAttribute("cf", typeof(CT_Cf))]
+        [System.Xml.Serialization.XmlElementAttribute("clsid", typeof(string))]
+        [System.Xml.Serialization.XmlElementAttribute("cy", typeof(string))]
+        [System.Xml.Serialization.XmlElementAttribute("date", typeof(System.DateTime))]
+        [System.Xml.Serialization.XmlElementAttribute("error", typeof(string))]
+        [System.Xml.Serialization.XmlElementAttribute("filetime", typeof(System.DateTime))]
+        [System.Xml.Serialization.XmlElementAttribute("i1", typeof(sbyte))]
+        [System.Xml.Serialization.XmlElementAttribute("i2", typeof(short))]
+        [System.Xml.Serialization.XmlElementAttribute("i4", typeof(int))]
+        [System.Xml.Serialization.XmlElementAttribute("i8", typeof(long))]
+        [System.Xml.Serialization.XmlElementAttribute("lpstr", typeof(string))]
+        [System.Xml.Serialization.XmlElementAttribute("lpwstr", typeof(string))]
+        [System.Xml.Serialization.XmlElementAttribute("r4", typeof(float))]
+        [System.Xml.Serialization.XmlElementAttribute("r8", typeof(double))]
+        [System.Xml.Serialization.XmlElementAttribute("ui1", typeof(byte))]
+        [System.Xml.Serialization.XmlElementAttribute("ui2", typeof(ushort))]
+        [System.Xml.Serialization.XmlElementAttribute("ui4", typeof(uint))]
+        [System.Xml.Serialization.XmlElementAttribute("ui8", typeof(ulong))]
+        [System.Xml.Serialization.XmlElementAttribute("variant", typeof(CT_Variant))]
         [XmlChoiceIdentifierAttribute("ItemsElementName")]
-        public List<object> Items
+        public object[] Items
         {
             get
             {
-                return this.itemsField;
+                return this.itemsField.ToArray();
             }
             set
             {
-                this.itemsField = value;
+                this.itemsField = new List<object>(value);
             }
         }
-
         [XmlIgnore]
-        public List<ItemsChoiceType> ItemsElementName
+        public ST_VectorBaseType[] ItemsElementName
         {
             get
             {
-                return this.itemsElementNameField;
+                return this.itemsElementNameField.ToArray();
             }
             set
             {
-                this.itemsElementNameField = value;
+                this.itemsElementNameField = new List<ST_VectorBaseType>(value);
             }
         }
-
+        [XmlAttribute]
         public ST_VectorBaseType baseType
         {
             get
@@ -347,7 +400,7 @@ namespace NPOI.OpenXmlFormats
                 this.baseTypeField = value;
             }
         }
-
+        [XmlAttribute]
         public uint size
         {
             get

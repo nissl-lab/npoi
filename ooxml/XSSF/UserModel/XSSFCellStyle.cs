@@ -1155,7 +1155,7 @@ namespace NPOI.XSSF.UserModel
          * Get the cellAlignment object to use for manage alignment
          * @return XSSFCellAlignment - cell alignment
          */
-        protected XSSFCellAlignment GetCellAlignment()
+        internal XSSFCellAlignment GetCellAlignment()
         {
             if (this._cellAlignment == null)
             {
@@ -1169,7 +1169,7 @@ namespace NPOI.XSSF.UserModel
          *
          * @return CT_CellAlignment
          */
-        private CT_CellAlignment GetCTCellAlignment()
+        internal CT_CellAlignment GetCTCellAlignment()
         {
             if (_cellXf.alignment == null)
             {

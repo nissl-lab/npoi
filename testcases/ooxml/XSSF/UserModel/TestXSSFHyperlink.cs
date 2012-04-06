@@ -161,7 +161,7 @@ namespace NPOI.XSSF.UserModel
                     sheet.GetRow(16).GetCell(2).Hyperlink.Type);
             Assert.AreEqual(null,
                     sheet.GetRow(16).GetCell(2).Hyperlink.Label);
-            Assert.AreEqual("mailto:dev@poi.apache.org?subject=XSSF%20Hyperlinks",
+            Assert.AreEqual("mailto:dev@poi.apache.org?subject=XSSF Hyperlinks",
                     sheet.GetRow(16).GetCell(2).Hyperlink.Address);
         }
     }

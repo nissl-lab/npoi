@@ -1,3 +1,4 @@
+using System.ComponentModel;
 namespace NPOI.OpenXmlFormats.Dml {
     
     
@@ -57,7 +58,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         
         /// <remarks/>
         [System.Xml.Serialization.XmlAttribute]
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool noGrp {
             get {
                 return this.noGrpField;
@@ -69,7 +70,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         
         /// <remarks/>
         [System.Xml.Serialization.XmlAttribute]
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool noUngrp {
             get {
                 return this.noUngrpField;
@@ -81,7 +82,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         
         /// <remarks/>
         [System.Xml.Serialization.XmlAttribute]
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool noSelect {
             get {
                 return this.noSelectField;
@@ -93,7 +94,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         
         /// <remarks/>
         [System.Xml.Serialization.XmlAttribute]
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool noRot {
             get {
                 return this.noRotField;
@@ -105,7 +106,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         
         /// <remarks/>
         [System.Xml.Serialization.XmlAttribute]
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool noChangeAspect {
             get {
                 return this.noChangeAspectField;
@@ -117,7 +118,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         
         /// <remarks/>
         [System.Xml.Serialization.XmlAttribute]
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool noMove {
             get {
                 return this.noMoveField;
@@ -129,7 +130,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         
         /// <remarks/>
         [System.Xml.Serialization.XmlAttribute]
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool noResize {
             get {
                 return this.noResizeField;
@@ -215,7 +216,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         
         /// <remarks/>
         [System.Xml.Serialization.XmlAttribute]
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool noGrp {
             get {
                 return this.noGrpField;
@@ -227,7 +228,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         
         /// <remarks/>
         [System.Xml.Serialization.XmlAttribute]
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool noDrilldown {
             get {
                 return this.noDrilldownField;
@@ -239,7 +240,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         
         /// <remarks/>
         [System.Xml.Serialization.XmlAttribute]
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool noSelect {
             get {
                 return this.noSelectField;
@@ -251,7 +252,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         
         /// <remarks/>
         [System.Xml.Serialization.XmlAttribute]
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool noChangeAspect {
             get {
                 return this.noChangeAspectField;
@@ -263,7 +264,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         
         /// <remarks/>
         [System.Xml.Serialization.XmlAttribute]
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool noMove {
             get {
                 return this.noMoveField;
@@ -275,7 +276,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         
         /// <remarks/>
         [System.Xml.Serialization.XmlAttribute]
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool noResize {
             get {
                 return this.noResizeField;
@@ -371,7 +372,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         
         /// <remarks/>
         [System.Xml.Serialization.XmlAttribute]
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool noGrp {
             get {
                 return this.noGrpField;
@@ -383,7 +384,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         
         /// <remarks/>
         [System.Xml.Serialization.XmlAttribute]
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool noSelect {
             get {
                 return this.noSelectField;
@@ -395,7 +396,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         
         /// <remarks/>
         [System.Xml.Serialization.XmlAttribute]
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool noRot {
             get {
                 return this.noRotField;
@@ -407,7 +408,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         
         /// <remarks/>
         [System.Xml.Serialization.XmlAttribute]
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool noChangeAspect {
             get {
                 return this.noChangeAspectField;
@@ -419,7 +420,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         
         /// <remarks/>
         [System.Xml.Serialization.XmlAttribute]
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool noMove {
             get {
                 return this.noMoveField;
@@ -431,7 +432,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         
         /// <remarks/>
         [System.Xml.Serialization.XmlAttribute]
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool noResize {
             get {
                 return this.noResizeField;
@@ -443,7 +444,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         
         /// <remarks/>
         [System.Xml.Serialization.XmlAttribute]
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool noEditPoints {
             get {
                 return this.noEditPointsField;
@@ -455,7 +456,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         
         /// <remarks/>
         [System.Xml.Serialization.XmlAttribute]
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool noAdjustHandles {
             get {
                 return this.noAdjustHandlesField;
@@ -467,7 +468,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         
         /// <remarks/>
         [System.Xml.Serialization.XmlAttribute]
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool noChangeArrowheads {
             get {
                 return this.noChangeArrowheadsField;
@@ -479,7 +480,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         
         /// <remarks/>
         [System.Xml.Serialization.XmlAttribute]
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool noChangeShapeType {
             get {
                 return this.noChangeShapeTypeField;
@@ -627,7 +628,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         
         /// <remarks/>
         [System.Xml.Serialization.XmlAttribute]
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool noGrp {
             get {
                 return this.noGrpField;
@@ -639,7 +640,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         
         /// <remarks/>
         [System.Xml.Serialization.XmlAttribute]
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool noSelect {
             get {
                 return this.noSelectField;
@@ -651,7 +652,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         
         /// <remarks/>
         [System.Xml.Serialization.XmlAttribute]
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool noRot {
             get {
                 return this.noRotField;
@@ -663,7 +664,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         
         /// <remarks/>
         [System.Xml.Serialization.XmlAttribute]
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool noChangeAspect {
             get {
                 return this.noChangeAspectField;
@@ -675,7 +676,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         
         /// <remarks/>
         [System.Xml.Serialization.XmlAttribute]
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool noMove {
             get {
                 return this.noMoveField;
@@ -687,7 +688,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         
         /// <remarks/>
         [System.Xml.Serialization.XmlAttribute]
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool noResize {
             get {
                 return this.noResizeField;
@@ -699,7 +700,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         
         /// <remarks/>
         [System.Xml.Serialization.XmlAttribute]
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool noEditPoints {
             get {
                 return this.noEditPointsField;
@@ -711,7 +712,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         
         /// <remarks/>
         [System.Xml.Serialization.XmlAttribute]
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool noAdjustHandles {
             get {
                 return this.noAdjustHandlesField;
@@ -723,7 +724,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         
         /// <remarks/>
         [System.Xml.Serialization.XmlAttribute]
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool noChangeArrowheads {
             get {
                 return this.noChangeArrowheadsField;
@@ -735,7 +736,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         
         /// <remarks/>
         [System.Xml.Serialization.XmlAttribute]
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool noChangeShapeType {
             get {
                 return this.noChangeShapeTypeField;
@@ -747,7 +748,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         
         /// <remarks/>
         [System.Xml.Serialization.XmlAttribute]
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool noTextEdit {
             get {
                 return this.noTextEditField;
@@ -797,7 +798,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         
         /// <remarks/>
         [System.Xml.Serialization.XmlAttribute]
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool txBox {
             get {
                 return this.txBoxField;

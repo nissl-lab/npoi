@@ -124,7 +124,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool hiddenButton
         {
             get
@@ -137,7 +137,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(true)]
+        [DefaultValue(true)]
         public bool showButton
         {
             get
@@ -190,7 +190,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(true)]
+        [DefaultValue(true)]
         public bool cellColor
         {
             get
@@ -229,7 +229,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool and
         {
             get
@@ -255,7 +255,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.operatorField = ST_FilterOperator.equal;
         }
 
-        [System.ComponentModel.DefaultValueAttribute(ST_FilterOperator.equal)]
+        [DefaultValue(ST_FilterOperator.equal)]
         public ST_FilterOperator @operator
         {
             get
@@ -531,7 +531,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool blank
         {
             get
@@ -544,7 +544,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(ST_CalendarType.none)]
+        [DefaultValue(ST_CalendarType.none)]
         public ST_CalendarType calendarType
         {
             get
@@ -913,7 +913,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.percentField = false;
         }
 
-        [System.ComponentModel.DefaultValueAttribute(true)]
+        [DefaultValue(true)]
         public bool top
         {
             get
@@ -926,7 +926,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool percent
         {
             get
@@ -1025,7 +1025,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool columnSort
         {
             get
@@ -1038,7 +1038,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool caseSensitive
         {
             get
@@ -1051,7 +1051,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(ST_SortMethod.none)]
+        [DefaultValue(ST_SortMethod.none)]
         public ST_SortMethod sortMethod
         {
             get
@@ -1105,7 +1105,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.iconSetField = ST_IconSetType.Item3Arrows;
         }
 
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool descending
         {
             get
@@ -1118,7 +1118,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(ST_SortBy.value)]
+        [DefaultValue(ST_SortBy.value)]
         public ST_SortBy sortBy
         {
             get
@@ -1180,7 +1180,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(ST_IconSetType.Item3Arrows)]
+        [DefaultValue(ST_IconSetType.Item3Arrows)]
         public ST_IconSetType iconSet
         {
             get

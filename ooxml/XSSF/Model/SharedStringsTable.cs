@@ -77,14 +77,6 @@ namespace NPOI.XSSF.Model
 
         private SstDocument _sstDoc;
 
-        //private static XmlOptions options = new XmlOptions();
-        //static {
-        //    options.Put( XmlOptions.SAVE_INNER );
-        //    options.Put( XmlOptions.SAVE_AGGRESSIVE_NAMESPACES );
-        //    options.Put( XmlOptions.SAVE_USE_DEFAULT_NAMESPACE );
-        //    options.SetSaveImplicitNamespaces(Collections.SingletonMap("", "http://schemas.Openxmlformats.org/spreadsheetml/2006/main"));
-        //}
-
         public SharedStringsTable()
             : base()
         {

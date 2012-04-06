@@ -357,7 +357,7 @@ namespace NPOI.XSSF.UserModel
             CT_Row ctrow = ((XSSFRow)sheet.GetRow(9)).GetCTRow();
 
             Assert.IsNotNull(ctrow);
-            Assert.AreEqual(10, ctrow.r);
+            Assert.AreEqual(10u, ctrow.r);
             Assert.AreEqual(1, ctrow.outlineLevel);
             Assert.AreEqual(1, sheet.GetCTWorksheet().sheetFormatPr.outlineLevelRow);
 
@@ -366,7 +366,7 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual(5, sheet.PhysicalNumberOfRows);
             ctrow = ((XSSFRow)sheet.GetRow(10)).GetCTRow();
             Assert.IsNotNull(ctrow);
-            Assert.AreEqual(11, ctrow.r);
+            Assert.AreEqual(11u, ctrow.r);
             Assert.AreEqual(2, ctrow.outlineLevel);
             Assert.AreEqual(2, sheet.GetCTWorksheet().sheetFormatPr.outlineLevelRow);
 

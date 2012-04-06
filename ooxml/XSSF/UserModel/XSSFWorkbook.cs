@@ -387,12 +387,12 @@ namespace NPOI.XSSF.UserModel
             if (ct.IsSetDrawing())
             {
                 logger.Log(POILogger.WARN, "Cloning sheets with Drawings is not yet supported.");
-                ct.unsetDrawing();
+                ct.UnsetDrawing();
             }
             if (ct.IsSetLegacyDrawing())
             {
                 logger.Log(POILogger.WARN, "Cloning sheets with comments is not yet supported.");
-                ct.unsetLegacyDrawing();
+                ct.UnsetLegacyDrawing();
             }
 
             ClonedSheet.IsSelected = false;
@@ -1323,12 +1323,10 @@ namespace NPOI.XSSF.UserModel
             if (namedRanges.Count > 0)
             {
                 CT_DefinedNames names = new CT_DefinedNames();
-                CT_DefinedName[] nr = new CT_DefinedName[namedRanges.Count];
-                int i = 0;
+                List<CT_DefinedName> nr = new List<CT_DefinedName>(namedRanges.Count);
                 foreach (XSSFName name in namedRanges)
                 {
-                    nr[i] = name.GetCTName();
-                    i++;
+                    nr.Add(name.GetCTName());
                 }
                 names.SetDefinedNameArray(nr);
                 workbook.SetDefinedNames(names);

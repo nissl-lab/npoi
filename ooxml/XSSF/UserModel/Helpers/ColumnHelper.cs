@@ -286,7 +286,7 @@ namespace NPOI.XSSF.UserModel.Helpers
          * Return the CT_Col at the given (0 based) column index,
          *  creating it if required.
          */
-        protected CT_Col GetOrCreateColumn1Based(long index1, bool splitColumns)
+        internal CT_Col GetOrCreateColumn1Based(long index1, bool splitColumns)
         {
             CT_Col col = GetColumn1Based(index1, splitColumns);
             if (col == null)

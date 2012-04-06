@@ -9,6 +9,7 @@ namespace NPOI.OpenXmlFormats.Dml
     using System.Collections.Generic;
     using System;
     using System.Xml.Serialization;
+    using System.ComponentModel;
 
 
     [Serializable]
@@ -1427,7 +1428,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(0)]
+        [DefaultValue(0)]
         public int rot
         {
             get
@@ -1440,7 +1441,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool flipH
         {
             get
@@ -1453,7 +1454,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool flipV
         {
             get
@@ -1567,7 +1568,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(0)]
+        [DefaultValue(0)]
         public int rot
         {
             get
@@ -1580,7 +1581,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool flipH
         {
             get
@@ -1593,7 +1594,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool flipV
         {
             get
@@ -1772,7 +1773,7 @@ namespace NPOI.OpenXmlFormats.Dml
             this.bField = 0;
         }
 
-        [System.ComponentModel.DefaultValueAttribute(0)]
+        [DefaultValue(0)]
         public int l
         {
             get
@@ -1785,7 +1786,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(0)]
+        [DefaultValue(0)]
         public int t
         {
             get
@@ -1798,7 +1799,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(0)]
+        [DefaultValue(0)]
         public int r
         {
             get
@@ -1811,7 +1812,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(0)]
+        [DefaultValue(0)]
         public int b
         {
             get
@@ -1979,7 +1980,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute("")]
+        [DefaultValue("")]
         public string name
         {
             get
@@ -1992,7 +1993,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool builtIn
         {
             get
@@ -2080,7 +2081,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute("")]
+        [DefaultValue("")]
         public string invalidUrl
         {
             get
@@ -2093,7 +2094,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute("")]
+        [DefaultValue("")]
         public string action
         {
             get
@@ -2106,7 +2107,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute("")]
+        [DefaultValue("")]
         public string tgtFrame
         {
             get
@@ -2119,7 +2120,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute("")]
+        [DefaultValue("")]
         public string tooltip
         {
             get
@@ -2132,7 +2133,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(true)]
+        [DefaultValue(true)]
         public bool history
         {
             get
@@ -2145,7 +2146,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool highlightClick
         {
             get
@@ -2158,7 +2159,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [DefaultValue(false)]
         public bool endSnd
         {
             get

@@ -73,7 +73,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(ST_GradientType.linear)]
+        [DefaultValue(ST_GradientType.linear)]
         public ST_GradientType type
         {
             get
@@ -86,7 +86,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(0D)]
+        [DefaultValue(0D)]
         public double degree
         {
             get
@@ -99,7 +99,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(0D)]
+        [DefaultValue(0D)]
         public double left
         {
             get
@@ -112,7 +112,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(0D)]
+        [DefaultValue(0D)]
         public double right
         {
             get
@@ -125,7 +125,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(0D)]
+        [DefaultValue(0D)]
         public double top
         {
             get
@@ -138,7 +138,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(0D)]
+        [DefaultValue(0D)]
         public double bottom
         {
             get
