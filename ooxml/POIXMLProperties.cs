@@ -40,13 +40,13 @@ namespace NPOI
         private PackagePart custPart;
 
 
-        private static PropertiesDocument NEW_EXT_INSTANCE;
-        private static PropertiesDocument NEW_CUST_INSTANCE;
+        private static ExtendedPropertiesDocument NEW_EXT_INSTANCE;
+        private static CustomPropertiesDocument NEW_CUST_INSTANCE;
         static POIXMLProperties(){
-            NEW_EXT_INSTANCE = new PropertiesDocument();
+            NEW_EXT_INSTANCE = new ExtendedPropertiesDocument();
             NEW_EXT_INSTANCE.AddNewProperties();
 
-            NEW_CUST_INSTANCE = new PropertiesDocument();
+            NEW_CUST_INSTANCE = new CustomPropertiesDocument();
             NEW_CUST_INSTANCE.AddNewProperties();
         }
 
@@ -63,7 +63,7 @@ namespace NPOI
             if (extRel.Size == 1)
             {
                 extPart = pkg.GetPart(extRel.GetRelationship(0));
-                PropertiesDocument props = PropertiesDocument.Parse(
+                ExtendedPropertiesDocument props = ExtendedPropertiesDocument.Parse(
                      extPart.GetInputStream()
                 );
                 ext = new ExtendedProperties(props);
@@ -71,7 +71,7 @@ namespace NPOI
             else
             {
                 extPart = null;
-                ext = new ExtendedProperties((PropertiesDocument)NEW_EXT_INSTANCE.Copy());
+                ext = new ExtendedProperties((ExtendedPropertiesDocument)NEW_EXT_INSTANCE.Copy());
             }
 
             // Custom properties
@@ -80,7 +80,7 @@ namespace NPOI
             if (custRel.Size == 1)
             {
                 custPart = pkg.GetPart(custRel.GetRelationship(0));
-                PropertiesDocument props = PropertiesDocument.Parse(
+                CustomPropertiesDocument props = CustomPropertiesDocument.Parse(
                         custPart.GetInputStream()
                 );
                 cust = new CustomProperties(props);
@@ -88,7 +88,7 @@ namespace NPOI
             else
             {
                 custPart = null;
-                cust = new CustomProperties((PropertiesDocument)NEW_CUST_INSTANCE.Copy());
+                cust = new CustomProperties((CustomPropertiesDocument)NEW_CUST_INSTANCE.Copy());
             }
         }
 
@@ -314,13 +314,13 @@ namespace NPOI
          */
         public class ExtendedProperties
         {
-            public PropertiesDocument props;
-            internal ExtendedProperties(PropertiesDocument props)
+            public ExtendedPropertiesDocument props;
+            internal ExtendedProperties(ExtendedPropertiesDocument props)
             {
                 this.props = props;
             }
 
-            public CT_Properties GetUnderlyingProperties()
+            public CT_ExtendedProperties GetUnderlyingProperties()
             {
                 return props.GetProperties();
             }
@@ -337,13 +337,13 @@ namespace NPOI
              */
             public static String FORMAT_ID = "{D5CDD505-2E9C-101B-9397-08002B2CF9AE}";
 
-            public PropertiesDocument props;
-            internal CustomProperties(PropertiesDocument props)
+            public CustomPropertiesDocument props;
+            internal CustomProperties(CustomPropertiesDocument props)
             {
                 this.props = props;
             }
 
-            public CT_Properties GetUnderlyingProperties()
+            public CT_CustomProperties GetUnderlyingProperties()
             {
                 return props.GetProperties();
             }

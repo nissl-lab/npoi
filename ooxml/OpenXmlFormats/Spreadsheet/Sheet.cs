@@ -489,7 +489,14 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
         public void SetColsArray(int index, CT_Cols newCols)
         {
-            if (null == colsField) { colsField = new List<CT_Cols>(); }
+            if (null == colsField)
+            {
+                colsField = new List<CT_Cols>();
+            }
+            else
+            {
+                colsField.Clear();
+            }
             this.colsField.Insert(index, newCols);
         }
         public CT_Cols GetColsArray(int index)

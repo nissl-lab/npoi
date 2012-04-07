@@ -59,6 +59,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ExtendedPropertiesDocument.cs" />
     <Compile Include="Drawing\BaseTypes.cs" />
     <Compile Include="Drawing\BaseStylesheet.cs" />
     <Compile Include="DocumentPropertiesCustom.cs" />
@@ -75,7 +76,7 @@
     <Compile Include="Drawing\ShapeEffects.cs" />
     <Compile Include="Drawing\StyleSheet.cs" />
     <Compile Include="OOXMLFactory.cs" />
-    <Compile Include="PropertiesDocument.cs" />
+    <Compile Include="CustomPropertiesDocument.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="CustomXmlDataProperties.cs" />
     <Compile Include="DocumentPropertiesExtended.cs" />

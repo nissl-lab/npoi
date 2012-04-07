@@ -114,294 +114,17 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
     }
 
-    [Serializable]
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
-    public class CT_RgbColor
-    {
-
-        private byte[] rgbField;
-
-        public byte[] rgb
-        {
-            get
-            {
-                return this.rgbField;
-            }
-            set
-            {
-                this.rgbField = value;
-            }
-        }
-    }
-
-    [Serializable]
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
-    public class CT_Colors
-    {
-        private List<CT_RgbColor> indexedColorsField;
-
-        private List<CT_Color> mruColorsField;
-
-        public CT_Colors()
-        {
-            this.mruColorsField = new List<CT_Color>();
-            this.indexedColorsField = new List<CT_RgbColor>();
-        }
-
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 0)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("rgbColor", IsNullable = false)]
-        public List<CT_RgbColor> indexedColors
-        {
-            get
-            {
-                return this.indexedColorsField;
-            }
-            set
-            {
-                this.indexedColorsField = value;
-            }
-        }
-
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 1)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("color", IsNullable = false)]
-        public List<CT_Color> mruColors
-        {
-            get
-            {
-                return this.mruColorsField;
-            }
-            set
-            {
-                this.mruColorsField = value;
-            }
-        }
-    }
-
-
-
-    [Serializable]
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
-    public class CT_Fill
-    {
-
-        private CT_PatternFill patternFillField;
-
-
-        public CT_PatternFill patternFill
-        {
-            get
-            {
-                return this.patternFillField;
-            }
-            set
-            {
-                this.patternFillField = value;
-            }
-        }
-
-        public CT_PatternFill GetPatternFill()
-        {
-            return (CT_PatternFill)this.patternFillField;
-        }
-
-        public CT_PatternFill AddNewPatternFill()
-        {
-            this.patternFillField = new CT_PatternFill();
-            return GetPatternFill();
-        }
-        public bool IsSetPatternFill()
-        {
-            return this.patternFillField != null;
-        }
-        public CT_Fill Copy()
-        {
-            CT_Fill obj = new CT_Fill();
-            obj.patternFillField = this.patternFillField;
-            return obj;
-        }
-    }
-
-    [Serializable]
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
-    public enum ST_GradientType
-    {
-
-        /// <remarks/>
-        linear,
-
-        /// <remarks/>
-        path,
-    }
-
-    [Serializable]
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
-    public class CT_PatternFill
-    {
-        private CT_Color fgColorField = null;
-
-        private CT_Color bgColorField = null;
-
-        private ST_PatternType? patternTypeField = null;
-
-         public bool IsSetPatternType()
-        {
-            return this.patternTypeField != null;
-        }
-        public CT_Color AddNewFgColor()
-        {
-            this.fgColorField = new CT_Color();
-            return fgColorField;
-        }
-
-        public CT_Color AddNewBgColor()
-        {
-            this.bgColorField = new CT_Color();
-            return bgColorField;
-        }
-        public void unsetPatternType()
-        {
-            this.patternTypeField = null;
-        }
-        public void unsetFgColor()
-        {
-            this.fgColorField = null;
-        }
-        public void unsetBgColor()
-        {
-            this.bgColorField = null;
-        }
-        [XmlElement]
-        public CT_Color fgColor
-        {
-            get
-            {
-                return this.fgColorField;
-            }
-            set
-            {
-                this.fgColorField = value;
-            }
-        }
-
-        public bool IsSetBgColor()
-        {
-            return bgColorField != null;
-        }
-
-        public bool IsSetFgColor()
-        {
-            return fgColorField != null;
-        }
-
-        [XmlElement]
-        public CT_Color bgColor
-        {
-            get
-            {
-                return this.bgColorField;
-            }
-            set
-            {
-                this.bgColorField = value;
-            }
-        }
-
-        [XmlAttribute]
-        public ST_PatternType patternType
-        {
-            get
-            {
-                return null != this.patternTypeField ? (ST_PatternType)this.patternTypeField : ST_PatternType.none;
-            }
-            set
-            {
-                this.patternTypeField = value;
-            }
-        }
-
-        [System.Xml.Serialization.XmlIgnore]
-        public bool patternTypeSpecified
-        {
-            get
-            {
-                return null != this.patternTypeField;
-            }
-        }
-    }
-
-    [Serializable]
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
-    public enum ST_PatternType
-    {
-
-        /// <remarks/>
-        none,
-
-        /// <remarks/>
-        solid,
-
-        /// <remarks/>
-        mediumGray,
-
-        /// <remarks/>
-        darkGray,
-
-        /// <remarks/>
-        lightGray,
-
-        /// <remarks/>
-        darkHorizontal,
-
-        /// <remarks/>
-        darkVertical,
-
-        /// <remarks/>
-        darkDown,
-
-        /// <remarks/>
-        darkUp,
-
-        /// <remarks/>
-        darkGrid,
-
-        /// <remarks/>
-        darkTrellis,
-
-        /// <remarks/>
-        lightHorizontal,
-
-        /// <remarks/>
-        lightVertical,
-
-        /// <remarks/>
-        lightDown,
-
-        /// <remarks/>
-        lightUp,
-
-        /// <remarks/>
-        lightGrid,
-
-        /// <remarks/>
-        lightTrellis,
-
-        /// <remarks/>
-        gray125,
-
-        /// <remarks/>
-        gray0625,
-    }
 
     [Serializable]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public class CT_CellAlignment
     {
 
-        private ST_HorizontalAlignment? horizontalField;
+        private ST_HorizontalAlignment horizontalField;
 
         private bool horizontalFieldSpecified;
 
-        private ST_VerticalAlignment? verticalField;
+        private ST_VerticalAlignment verticalField;
 
         private bool verticalFieldSpecified;
 
@@ -435,18 +158,20 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         public bool IsSetHorizontal()
         {
-            return this.horizontalField != null;
+            return this.horizontalField != ST_HorizontalAlignment.general;
         }
         public bool IsSetVertical()
         {
-            return this.verticalField != null;
+            return this.verticalField != ST_VerticalAlignment.top;
         }
 
+        [XmlAttribute]
+        [DefaultValue(ST_HorizontalAlignment.general)]
         public ST_HorizontalAlignment horizontal
         {
             get
             {
-                return (ST_HorizontalAlignment)this.horizontalField;
+                return this.horizontalField;
             }
             set
             {
@@ -466,12 +191,13 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.horizontalFieldSpecified = value;
             }
         }
-
+        [XmlAttribute]
+        [DefaultValue(ST_VerticalAlignment.top)]
         public ST_VerticalAlignment vertical
         {
             get
             {
-                return (ST_VerticalAlignment)this.verticalField;
+                return this.verticalField;
             }
             set
             {
@@ -491,7 +217,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.verticalFieldSpecified = value;
             }
         }
-
+        [XmlAttribute]
         public long textRotation
         {
             get
@@ -516,7 +242,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.textRotationFieldSpecified = value;
             }
         }
-
+        [XmlAttribute]
         public bool wrapText
         {
             get
@@ -541,7 +267,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.wrapTextFieldSpecified = value;
             }
         }
-
+        [XmlAttribute]
         public long indent
         {
             get
@@ -566,7 +292,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.indentFieldSpecified = value;
             }
         }
-
+        [XmlAttribute]
         public int relativeIndent
         {
             get
@@ -591,7 +317,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.relativeIndentFieldSpecified = value;
             }
         }
-
+        [XmlAttribute]
         public bool justifyLastLine
         {
             get
@@ -616,7 +342,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.justifyLastLineFieldSpecified = value;
             }
         }
-
+        [XmlAttribute]
         public bool shrinkToFit
         {
             get
@@ -641,7 +367,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.shrinkToFitFieldSpecified = value;
             }
         }
-
+        [XmlAttribute]
         public long readingOrder
         {
             get
@@ -987,11 +713,12 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.outlineField = value;
             }
         }
-
+        internal static XmlSerializer serializer = new XmlSerializer(typeof(CT_Border));
         public override string ToString()
         {
-
-            return base.ToString();
+            StringWriter stringWriter = new StringWriter();
+            serializer.Serialize(stringWriter, this);
+            return stringWriter.ToString();
         }
     }
 
@@ -1002,7 +729,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         private CT_Color colorField;
 
-        private ST_BorderStyle? styleField;
+        private ST_BorderStyle styleField;
 
         public CT_BorderPr()
         {
@@ -1015,13 +742,16 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
         public bool IsSetColor()
         {
-            return colorField == null;
+            return colorField != null;
         }
         public void UnsetColor()
         {
             colorField = null;
         }
-
+        public bool IsSetStyle()
+        {
+            return styleField != ST_BorderStyle.none;
+        }
 
         public CT_Color color
         {
@@ -1036,7 +766,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
 
         [DefaultValue(ST_BorderStyle.none)]
-        public ST_BorderStyle? style
+        public ST_BorderStyle style
         {
             get
             {
@@ -1588,7 +1318,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             return this.extLst == null;
         }
-        public void unsetExtLst()
+        public void UnsetExtLst()
         {
             this.extLst = null;
         }
@@ -1606,7 +1336,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.protectionField = new CT_CellProtection();
             return this.protectionField;
         }
-
+        
         public CT_CellAlignment alignment
         {
             get

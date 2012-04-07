@@ -58,7 +58,7 @@ namespace NPOI.XSSF.UserModel
             }
             set
             {
-                GetHeaderFooter().evenHeader = null;
+                GetHeaderFooter().evenHeader = value;
             }
         }
 

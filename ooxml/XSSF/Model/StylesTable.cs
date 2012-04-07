@@ -39,7 +39,7 @@ namespace NPOI.XSSF.Model
     {
         private Dictionary<int, String> numberFormats = new Dictionary<int, String>();
         private List<XSSFFont> fonts = new List<XSSFFont>();
-        private List<XSSFCellFill> Fills = new List<XSSFCellFill>();
+        private List<XSSFCellFill> fills = new List<XSSFCellFill>();
         private List<XSSFCellBorder> borders = new List<XSSFCellBorder>();
         private List<CT_Xf> styleXfs = new List<CT_Xf>();
         private List<CT_Xf> xfs = new List<CT_Xf>();
@@ -129,7 +129,7 @@ namespace NPOI.XSSF.Model
             CT_Fills ctFills = styleSheet.fills;
             if(ctFills != null){
                 foreach (CT_Fill fill in ctFills.fill) {
-                    Fills.Add(new XSSFCellFill(fill));
+                    fills.Add(new XSSFCellFill(fill));
                 }
             }
 
@@ -265,7 +265,7 @@ namespace NPOI.XSSF.Model
 
         public XSSFCellFill GetFillAt(int idx)
         {
-            return Fills[idx];
+            return fills[idx];
         }
 
         public List<XSSFCellBorder> GetBorders()
@@ -275,7 +275,7 @@ namespace NPOI.XSSF.Model
 
         public List<XSSFCellFill> GetFills()
         {
-            return Fills;
+            return fills;
         }
 
         public List<XSSFFont> GetFonts()
@@ -288,15 +288,15 @@ namespace NPOI.XSSF.Model
             return numberFormats;
         }
 
-        public int PutFill(XSSFCellFill Fill)
+        public int PutFill(XSSFCellFill fill)
         {
-            int idx = Fills.IndexOf(Fill);
+            int idx = fills.IndexOf(fill);
             if (idx != -1)
             {
                 return idx;
             }
-            Fills.Add(Fill);
-            return Fills.Count - 1;
+            fills.Add(fill);
+            return fills.Count - 1;
         }
 
         public CT_Xf GetCellXfAt(int idx)
@@ -408,10 +408,10 @@ namespace NPOI.XSSF.Model
 
 		// Fills
 		CT_Fills ctFills = new CT_Fills();
-		ctFills.count = (uint)Fills.Count;
-		CT_Fill[] ctf = new CT_Fill[Fills.Count];
+		ctFills.count = (uint)fills.Count;
+		CT_Fill[] ctf = new CT_Fill[fills.Count];
 		idx = 0;
-		foreach(XSSFCellFill f in Fills) 
+		foreach(XSSFCellFill f in fills) 
             ctf[idx++] = f.GetCTFill();
 		ctFills.SetFillArray(ctf);
 		styleSheet.fills = (ctFills);
@@ -472,8 +472,8 @@ namespace NPOI.XSSF.Model
             fonts.Add(xssfFont);
 
             CT_Fill[] ctFill = CreateDefaultFills();
-            Fills.Add(new XSSFCellFill(ctFill[0]));
-            Fills.Add(new XSSFCellFill(ctFill[1]));
+            fills.Add(new XSSFCellFill(ctFill[0]));
+            fills.Add(new XSSFCellFill(ctFill[1]));
 
             CT_Border ctBorder = CreateDefaultBorder();
             borders.Add(new XSSFCellBorder(ctBorder));

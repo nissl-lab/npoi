@@ -12,8 +12,14 @@ namespace NPOI.OpenXmlFormats
     using System.IO;
     using System.Diagnostics;
     using System.ComponentModel;
+    using System;
 
-    public partial class CT_Properties
+    [Serializable]
+    [DebuggerStepThrough]
+    [DesignerCategory("code")]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/extended-properties")]
+    [XmlRoot("Properties", Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/extended-properties", IsNullable = true)]
+    public class CT_ExtendedProperties
     {
 
         private string templateField;
@@ -155,7 +161,7 @@ namespace NPOI.OpenXmlFormats
         }
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlIgnore]
+        [XmlIgnore]
         public bool PagesSpecified
         {
             get
@@ -182,7 +188,7 @@ namespace NPOI.OpenXmlFormats
         }
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlIgnore]
+        [XmlIgnore]
         public bool WordsSpecified
         {
             get
@@ -209,7 +215,7 @@ namespace NPOI.OpenXmlFormats
         }
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlIgnore]
+        [XmlIgnore]
         public bool CharactersSpecified
         {
             get
@@ -249,7 +255,7 @@ namespace NPOI.OpenXmlFormats
         }
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlIgnore]
+        [XmlIgnore]
         public bool LinesSpecified
         {
             get
@@ -276,7 +282,7 @@ namespace NPOI.OpenXmlFormats
         }
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlIgnore]
+        [XmlIgnore]
         public bool ParagraphsSpecified
         {
             get
@@ -303,7 +309,7 @@ namespace NPOI.OpenXmlFormats
         }
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlIgnore]
+        [XmlIgnore]
         public bool SlidesSpecified
         {
             get
@@ -330,7 +336,7 @@ namespace NPOI.OpenXmlFormats
         }
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlIgnore]
+        [XmlIgnore]
         public bool NotesSpecified
         {
             get
@@ -357,7 +363,7 @@ namespace NPOI.OpenXmlFormats
         }
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlIgnore]
+        [XmlIgnore]
         public bool TotalTimeSpecified
         {
             get
@@ -384,7 +390,7 @@ namespace NPOI.OpenXmlFormats
         }
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlIgnore]
+        [XmlIgnore]
         public bool HiddenSlidesSpecified
         {
             get
@@ -411,7 +417,7 @@ namespace NPOI.OpenXmlFormats
         }
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlIgnore]
+        [XmlIgnore]
         public bool MMClipsSpecified
         {
             get
@@ -438,7 +444,7 @@ namespace NPOI.OpenXmlFormats
         }
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlIgnore]
+        [XmlIgnore]
         public bool ScaleCropSpecified
         {
             get
@@ -491,7 +497,7 @@ namespace NPOI.OpenXmlFormats
         }
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlIgnore]
+        [XmlIgnore]
         public bool LinksUpToDateSpecified
         {
             get
@@ -518,7 +524,7 @@ namespace NPOI.OpenXmlFormats
         }
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlIgnore]
+        [XmlIgnore]
         public bool CharactersWithSpacesSpecified
         {
             get
@@ -545,7 +551,7 @@ namespace NPOI.OpenXmlFormats
         }
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlIgnore]
+        [XmlIgnore]
         public bool SharedDocSpecified
         {
             get
@@ -598,7 +604,7 @@ namespace NPOI.OpenXmlFormats
         }
         [XmlAttribute]
         /// <remarks/>
-        [System.Xml.Serialization.XmlIgnore]
+        [XmlIgnore]
         public bool HyperlinksChangedSpecified
         {
             get
@@ -665,7 +671,7 @@ namespace NPOI.OpenXmlFormats
         }
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlIgnore]
+        [XmlIgnore]
         public bool DocSecuritySpecified
         {
             get
@@ -676,6 +682,47 @@ namespace NPOI.OpenXmlFormats
             {
                 this.docSecurityFieldSpecified = value;
             }
+        }
+        public CT_ExtendedProperties Copy()
+        {
+            CT_ExtendedProperties prop = new CT_ExtendedProperties();
+            prop.applicationField = this.applicationField;
+            prop.appVersionField = this.appVersionField;
+            prop.charactersField = this.charactersField;
+            prop.charactersWithSpacesField = this.charactersWithSpacesField;
+            prop.companyField = this.companyField;
+            prop.digSigField = this.digSigField;
+            prop.docSecurityField = this.docSecurityField;
+            prop.headingPairsField = this.headingPairsField;
+            prop.hiddenSlidesField = this.hiddenSlidesField;
+            prop.hLinksField = this.hLinksField;
+            prop.hyperlinkBaseField = this.hyperlinkBaseField;
+            prop.hyperlinksChangedField = this.hyperlinksChangedField;
+            prop.hyperlinksChangedFieldSpecified = this.hyperlinksChangedFieldSpecified;
+            prop.linesField = this.linesField;
+            prop.linksUpToDateFieldSpecified = this.linksUpToDateFieldSpecified;
+            prop.linksUpToDateField = this.linksUpToDateField;
+            prop.managerField = this.managerField;
+            prop.mMClipsField = this.mMClipsField;
+            prop.mMClipsFieldSpecified = this.mMClipsFieldSpecified;
+            prop.notesField = this.notesField;
+            prop.notesFieldSpecified = this.notesFieldSpecified;
+            prop.pagesField = this.pagesField;
+            prop.pagesFieldSpecified = this.pagesFieldSpecified;
+            prop.paragraphsField = this.paragraphsField;
+            prop.paragraphsFieldSpecified = this.paragraphsFieldSpecified;
+            prop.presentationFormatField = this.presentationFormatField;
+            prop.scaleCropField = this.scaleCropField;
+            prop.scaleCropFieldSpecified = this.scaleCropFieldSpecified;
+            prop.sharedDocField = this.sharedDocField;
+            prop.sharedDocFieldSpecified = this.sharedDocFieldSpecified;
+            prop.slidesField = this.slidesField;
+            prop.templateField = this.templateField;
+            prop.titlesOfPartsField = this.titlesOfPartsField;
+            prop.totalTimeField = this.totalTimeField;
+            prop.totalTimeFieldSpecified = this.totalTimeFieldSpecified;
+            prop.wordsField = this.wordsField;
+            return prop;
         }
     }
 

@@ -112,7 +112,7 @@ namespace NPOI
         public String GetExtendedPropertiesText()
         {
             StringBuilder text = new StringBuilder();
-            CT_Properties
+            CT_ExtendedProperties
                 props = Document.GetProperties().GetExtendedProperties().GetUnderlyingProperties();
 
             AppendIfPresent(text, "Application", props.Application);
@@ -140,7 +140,7 @@ namespace NPOI
         public String GetCustomPropertiesText()
         {
             StringBuilder text = new StringBuilder();
-            CT_Properties
+            CT_CustomProperties
                 props = Document.GetProperties().GetCustomProperties().GetUnderlyingProperties();
 
             List<CT_Property> properties = props.GetPropertyList();

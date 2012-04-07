@@ -400,6 +400,294 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
     [Serializable]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
+    public class CT_RgbColor
+    {
+
+        private byte[] rgbField;
+
+        public byte[] rgb
+        {
+            get
+            {
+                return this.rgbField;
+            }
+            set
+            {
+                this.rgbField = value;
+            }
+        }
+    }
+
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
+    public class CT_Colors
+    {
+        private List<CT_RgbColor> indexedColorsField;
+
+        private List<CT_Color> mruColorsField;
+
+        public CT_Colors()
+        {
+            this.mruColorsField = new List<CT_Color>();
+            this.indexedColorsField = new List<CT_RgbColor>();
+        }
+
+        [System.Xml.Serialization.XmlArrayAttribute(Order = 0)]
+        [System.Xml.Serialization.XmlArrayItemAttribute("rgbColor", IsNullable = false)]
+        public List<CT_RgbColor> indexedColors
+        {
+            get
+            {
+                return this.indexedColorsField;
+            }
+            set
+            {
+                this.indexedColorsField = value;
+            }
+        }
+
+        [System.Xml.Serialization.XmlArrayAttribute(Order = 1)]
+        [System.Xml.Serialization.XmlArrayItemAttribute("color", IsNullable = false)]
+        public List<CT_Color> mruColors
+        {
+            get
+            {
+                return this.mruColorsField;
+            }
+            set
+            {
+                this.mruColorsField = value;
+            }
+        }
+    }
+
+
+
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
+    public class CT_Fill
+    {
+
+        private CT_PatternFill patternFillField;
+
+
+        public CT_PatternFill patternFill
+        {
+            get
+            {
+                return this.patternFillField;
+            }
+            set
+            {
+                this.patternFillField = value;
+            }
+        }
+
+        public CT_PatternFill GetPatternFill()
+        {
+            return (CT_PatternFill)this.patternFillField;
+        }
+
+        public CT_PatternFill AddNewPatternFill()
+        {
+            this.patternFillField = new CT_PatternFill();
+            return GetPatternFill();
+        }
+        public bool IsSetPatternFill()
+        {
+            return this.patternFillField != null;
+        }
+        public CT_Fill Copy()
+        {
+            CT_Fill obj = new CT_Fill();
+            obj.patternFillField = this.patternFillField;
+            return obj;
+        }
+        internal static XmlSerializer serializer = new XmlSerializer(typeof(CT_Fill));
+        internal static XmlSerializerNamespaces namespaces = new XmlSerializerNamespaces(new[] {
+            new XmlQualifiedName("", "http://schemas.openxmlformats.org/spreadsheetml/2006/main") });
+
+        public override string ToString()
+        {
+            StringWriter stringWriter = new StringWriter();
+            serializer.Serialize(stringWriter, this, namespaces);
+            return stringWriter.ToString();
+        }
+    }
+
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
+    public enum ST_GradientType
+    {
+
+        /// <remarks/>
+        linear,
+
+        /// <remarks/>
+        path,
+    }
+
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
+    public class CT_PatternFill
+    {
+        private CT_Color fgColorField = null;
+
+        private CT_Color bgColorField = null;
+
+        private ST_PatternType? patternTypeField = null;
+
+        public bool IsSetPatternType()
+        {
+            return this.patternTypeField != null;
+        }
+        public CT_Color AddNewFgColor()
+        {
+            this.fgColorField = new CT_Color();
+            return fgColorField;
+        }
+
+        public CT_Color AddNewBgColor()
+        {
+            this.bgColorField = new CT_Color();
+            return bgColorField;
+        }
+        public void unsetPatternType()
+        {
+            this.patternTypeField = null;
+        }
+        public void unsetFgColor()
+        {
+            this.fgColorField = null;
+        }
+        public void unsetBgColor()
+        {
+            this.bgColorField = null;
+        }
+        [XmlElement]
+        public CT_Color fgColor
+        {
+            get
+            {
+                return this.fgColorField;
+            }
+            set
+            {
+                this.fgColorField = value;
+            }
+        }
+
+        public bool IsSetBgColor()
+        {
+            return bgColorField != null;
+        }
+
+        public bool IsSetFgColor()
+        {
+            return fgColorField != null;
+        }
+
+        [XmlElement]
+        public CT_Color bgColor
+        {
+            get
+            {
+                return this.bgColorField;
+            }
+            set
+            {
+                this.bgColorField = value;
+            }
+        }
+
+        [XmlAttribute]
+        public ST_PatternType patternType
+        {
+            get
+            {
+                return null != this.patternTypeField ? (ST_PatternType)this.patternTypeField : ST_PatternType.none;
+            }
+            set
+            {
+                this.patternTypeField = value;
+            }
+        }
+
+        [System.Xml.Serialization.XmlIgnore]
+        public bool patternTypeSpecified
+        {
+            get
+            {
+                return null != this.patternTypeField;
+            }
+        }
+    }
+
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
+    public enum ST_PatternType
+    {
+
+        /// <remarks/>
+        none,
+
+        /// <remarks/>
+        solid,
+
+        /// <remarks/>
+        mediumGray,
+
+        /// <remarks/>
+        darkGray,
+
+        /// <remarks/>
+        lightGray,
+
+        /// <remarks/>
+        darkHorizontal,
+
+        /// <remarks/>
+        darkVertical,
+
+        /// <remarks/>
+        darkDown,
+
+        /// <remarks/>
+        darkUp,
+
+        /// <remarks/>
+        darkGrid,
+
+        /// <remarks/>
+        darkTrellis,
+
+        /// <remarks/>
+        lightHorizontal,
+
+        /// <remarks/>
+        lightVertical,
+
+        /// <remarks/>
+        lightDown,
+
+        /// <remarks/>
+        lightUp,
+
+        /// <remarks/>
+        lightGrid,
+
+        /// <remarks/>
+        lightTrellis,
+
+        /// <remarks/>
+        gray125,
+
+        /// <remarks/>
+        gray0625,
+    }
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
+    [XmlRoot("color",Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public class CT_Color
     {
         // all attributes are optional
@@ -553,6 +841,17 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         public bool IsSetTint()
         {
             return tintSpecified;
+        }
+        internal static XmlSerializer serializer = new XmlSerializer(typeof(CT_Color));
+        internal static XmlSerializerNamespaces namespaces = new XmlSerializerNamespaces(new[] {
+            new XmlQualifiedName("", "http://schemas.openxmlformats.org/spreadsheetml/2006/main") });
+        public override string ToString()
+        {
+            using (StringWriter stringWriter = new StringWriter())
+            {
+                serializer.Serialize(stringWriter, this, namespaces);
+                return stringWriter.ToString();
+            }
         }
 
         #endregion tint
@@ -1086,6 +1385,11 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             return this.schemeField;
         }
         #endregion scheme
+
+        public override string ToString()
+        {
+            return CT_Font.GetString(this);
+        }
     }
 
 

@@ -145,7 +145,7 @@ namespace NPOI.XSSF.UserModel
                         if (_cellXf.IsSetAlignment())
                             _cellXf.UnsetAlignment();
                         if (_cellXf.IsSetExtLst())
-                            _cellXf.unsetExtLst();
+                            _cellXf.UnsetExtLst();
 
                         // Create a new Xf with the same contents
                         _cellXf = CT_Xf.Parse(
@@ -214,7 +214,7 @@ namespace NPOI.XSSF.UserModel
             CT_CellAlignment align = _cellXf.alignment;
             if (align != null && align.IsSetHorizontal())
             {
-                return (HorizontalAlignment)(align.horizontal - 1);
+                return (HorizontalAlignment)align.horizontal;
             }
             return HorizontalAlignment.GENERAL;
         }
@@ -227,15 +227,21 @@ namespace NPOI.XSSF.UserModel
 
                 int idx = (int)_cellXf.borderId;
                 CT_Border ct = _stylesSource.GetBorderAt(idx).GetCTBorder();
-                ST_BorderStyle? ptrn = ct.IsSetBottom() ? ct.bottom.style : null;
-                return ptrn == null ? BorderStyle.NONE : (BorderStyle)(ptrn - 1);
+                if (!ct.IsSetBottom())
+                {
+                    return BorderStyle.NONE;
+                }
+                else
+                {
+                    return (BorderStyle)ct.bottom.style;
+                }
             }
             set 
             {
                 CT_Border ct = GetCTBorder();
                 CT_BorderPr pr = ct.IsSetBottom() ? ct.bottom : ct.AddNewBottom();
                 if (value == BorderStyle.NONE) ct.unsetBottom();
-                else pr.style=(ST_BorderStyle)(value + 1);
+                else pr.style = (ST_BorderStyle)value;
 
                 int idx = _stylesSource.PutBorder(new XSSFCellBorder(ct, _theme));
 
@@ -253,15 +259,21 @@ namespace NPOI.XSSF.UserModel
 
                 int idx = (int)_cellXf.borderId;
                 CT_Border ct = _stylesSource.GetBorderAt(idx).GetCTBorder();
-                ST_BorderStyle? ptrn = ct.IsSetLeft() ? ct.left.style : null;
-                return ptrn == null ? BorderStyle.NONE : (BorderStyle)(ptrn - 1);
+                if (!ct.IsSetLeft())
+                {
+                    return BorderStyle.NONE;
+                }
+                else
+                {
+                    return (BorderStyle)ct.left.style;
+                }
             }
             set 
             {
                 CT_Border ct = GetCTBorder();
                 CT_BorderPr pr = ct.IsSetLeft() ? ct.left : ct.AddNewLeft();
                 if (value == BorderStyle.NONE) ct.unsetLeft();
-                else pr.style=(ST_BorderStyle)(value + 1);
+                else pr.style=(ST_BorderStyle)value;
 
                 int idx = _stylesSource.PutBorder(new XSSFCellBorder(ct, _theme));
 
@@ -276,20 +288,6 @@ namespace NPOI.XSSF.UserModel
          * Get the type of border to use for the right border of the cell
          *
          * @return short - border type, default value is {@link NPOI.ss.usermodel.CellStyle#BorderStyle.NONE}
-         * @see NPOI.ss.usermodel.CellStyle#BorderStyle.NONE
-         * @see NPOI.ss.usermodel.CellStyle#BORDER_THIN
-         * @see NPOI.ss.usermodel.CellStyle#BORDER_MEDIUM
-         * @see NPOI.ss.usermodel.CellStyle#BORDER_DASHED
-         * @see NPOI.ss.usermodel.CellStyle#BORDER_DOTTED
-         * @see NPOI.ss.usermodel.CellStyle#BORDER_THICK
-         * @see NPOI.ss.usermodel.CellStyle#BORDER_DOUBLE
-         * @see NPOI.ss.usermodel.CellStyle#BORDER_HAIR
-         * @see NPOI.ss.usermodel.CellStyle#BORDER_MEDIUM_DASHED
-         * @see NPOI.ss.usermodel.CellStyle#BORDER_DASH_DOT
-         * @see NPOI.ss.usermodel.CellStyle#BORDER_MEDIUM_DASH_DOT
-         * @see NPOI.ss.usermodel.CellStyle#BORDER_DASH_DOT_DOT
-         * @see NPOI.ss.usermodel.CellStyle#BORDER_MEDIUM_DASH_DOT_DOT
-         * @see NPOI.ss.usermodel.CellStyle#BORDER_SLANTED_DASH_DOT
          */
         public BorderStyle BorderRight
         {
@@ -299,15 +297,21 @@ namespace NPOI.XSSF.UserModel
 
                 int idx = (int)_cellXf.borderId;
                 CT_Border ct = _stylesSource.GetBorderAt(idx).GetCTBorder();
-                ST_BorderStyle? ptrn = ct.IsSetRight() ? ct.right.style : null;
-                return ptrn == null ? BorderStyle.NONE : (BorderStyle)(ptrn - 1);
+                if (!ct.IsSetRight())
+                {
+                    return BorderStyle.NONE;
+                }
+                else
+                {
+                    return (BorderStyle)ct.right.style;
+                }
             }
             set 
             {
                 CT_Border ct = GetCTBorder();
                 CT_BorderPr pr = ct.IsSetRight() ? ct.right : ct.AddNewRight();
                 if (value == BorderStyle.NONE) ct.unsetRight();
-                else pr.style = (ST_BorderStyle)((int)value + 1);
+                else pr.style = (ST_BorderStyle)value;
 
                 int idx = _stylesSource.PutBorder(new XSSFCellBorder(ct, _theme));
 
@@ -324,15 +328,21 @@ namespace NPOI.XSSF.UserModel
 
                 int idx = (int)_cellXf.borderId;
                 CT_Border ct = _stylesSource.GetBorderAt(idx).GetCTBorder();
-                ST_BorderStyle? ptrn = ct.IsSetTop() ? ct.top.style : null;
-                return ptrn == null ? BorderStyle.NONE : (BorderStyle)(ptrn - 1);
+                if (!ct.IsSetTop())
+                {
+                    return BorderStyle.NONE;
+                }
+                else
+                {
+                    return (BorderStyle)ct.top.style;
+                }
             }
             set 
             {
                 CT_Border ct = GetCTBorder();
                 CT_BorderPr pr = ct.IsSetTop() ? ct.top : ct.AddNewTop();
                 if (value == BorderStyle.NONE) ct.unsetTop();
-                else pr.style = (ST_BorderStyle)(value + 1);
+                else pr.style = (ST_BorderStyle)value;
 
                 int idx = _stylesSource.PutBorder(new XSSFCellBorder(ct, _theme));
 
@@ -811,7 +821,7 @@ namespace NPOI.XSSF.UserModel
             CT_CellAlignment align = _cellXf.alignment;
             if (align != null && align.IsSetVertical())
             {
-                return (VerticalAlignment)(align.vertical - 1);
+                return (VerticalAlignment)align.vertical;
             }
             return VerticalAlignment.BOTTOM;
         }

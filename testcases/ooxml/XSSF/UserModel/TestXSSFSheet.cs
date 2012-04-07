@@ -740,8 +740,8 @@ namespace NPOI.XSSF.UserModel
             CT_Col col = cols.GetColArray(0);
 
             // XML is 1 based, POI is 0 based
-            Assert.AreEqual(2, col.min);
-            Assert.AreEqual(2, col.max);
+            Assert.AreEqual(2u, col.min);
+            Assert.AreEqual(2u, col.max);
             Assert.AreEqual(22.0, col.width, 0.0);
             Assert.IsTrue(col.customWidth);
 
@@ -754,14 +754,14 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual(2, cols.sizeOfColArray());
 
             col = cols.GetColArray(0);
-            Assert.AreEqual(2, col.min); // POI 1
-            Assert.AreEqual(2, col.max);
+            Assert.AreEqual(2u, col.min); // POI 1
+            Assert.AreEqual(2u, col.max);
             Assert.AreEqual(22.0, col.width, 0.0);
             Assert.IsTrue(col.customWidth);
 
             col = cols.GetColArray(1);
-            Assert.AreEqual(4, col.min); // POI 3
-            Assert.AreEqual(4, col.max);
+            Assert.AreEqual(4u, col.min); // POI 3
+            Assert.AreEqual(4u, col.max);
             Assert.AreEqual(33.0, col.width, 0.0);
             Assert.IsTrue(col.customWidth);
         }

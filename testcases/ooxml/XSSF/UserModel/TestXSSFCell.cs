@@ -178,7 +178,7 @@ namespace NPOI.XSSF.UserModel
             cell = sh.GetRow(1).GetCell(0);
             Assert.AreEqual(CellType.NUMERIC, cell.CellType);
             Assert.AreEqual(1.0, cell.NumericCellValue);
-            Assert.AreEqual("1.0", cell.ToString());
+            Assert.AreEqual("1", cell.ToString());
             //Gnumeric produces spreadsheets without styles
             //make sure we return null for that instead of throwing OutOfBounds
             Assert.AreEqual(null, cell.CellStyle);
