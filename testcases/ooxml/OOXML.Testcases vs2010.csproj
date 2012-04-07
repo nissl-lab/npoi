@@ -94,6 +94,8 @@
     <Compile Include="XSSF\Model\TestMapInfo.cs" />
     <Compile Include="XSSF\Model\TestSharedStringsTable.cs" />
     <Compile Include="XSSF\Model\TestStylesTable.cs" />
+    <Compile Include="XSSF\UserModel\Extensions\TestXSSFBorder.cs" />
+    <Compile Include="XSSF\UserModel\Extensions\TestXSSFCellFill.cs" />
     <Compile Include="XSSF\UserModel\Helpers\TestColumnHelper.cs" />
     <Compile Include="XSSF\UserModel\Helpers\TestHeaderFooterHelper.cs" />
     <Compile Include="XSSF\UserModel\TestSheetHiding.cs" />
