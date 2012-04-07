@@ -96,7 +96,7 @@ namespace NPOI.SS.Format
                         part = part.ToLower();
                         int specLen = part.Length - 2;
                         _formatter.topmost = _formatter.AssignSpec(part[1], pos, specLen);
-                        return part.Substring(1, 1 + specLen);
+                        return part.Substring(1, specLen);
 
                     case 'h':
                     case 'm':
@@ -110,7 +110,7 @@ namespace NPOI.SS.Format
                         return "%n";
 
                     case '\"':
-                        part = part.Substring(1, part.Length - 1);
+                        part = part.Substring(1, part.Length - 2);
                         break;
 
                     case '\\':
@@ -128,7 +128,8 @@ namespace NPOI.SS.Format
                 }
                 // Replace ever "%" with a "%%" so we can use printf
                 //return PERCENTS.Matcher(part).ReplaceAll("%%");
-                return PERCENTS.Replace(part, "%%");
+                //return PERCENTS.Replace(part, "%%");
+                return part;
             }
 
         }
@@ -154,7 +155,7 @@ namespace NPOI.SS.Format
                 TimeSpec spec = specs[i];
                 //desc.Replace(spec.pos, spec.pos + spec.len, "%0" + spec.len + "d");
                 desc.Remove(spec.pos, spec.len);
-                desc.Insert(spec.pos, "%0" + spec.len + "d");
+                desc.Insert(spec.pos, "D" + spec.len);
                 if (spec.type != topmost.type)
                 {
                     spec.modBy = modFor(spec.type, spec.len);
@@ -219,6 +220,7 @@ namespace NPOI.SS.Format
             }
 
             long[] parts = new long[specs.Count];
+            
             for (int i = 0; i < specs.Count; i++)
             {
                 parts[i] = specs[(i)].ValueFor(elapsed);
@@ -226,7 +228,33 @@ namespace NPOI.SS.Format
 
             //Formatter formatter = new Formatter(toAppendTo);
             //formatter.Format(printfFmt, parts);
-            throw new NotImplementedException();
+            string[] fmtPart = printfFmt.Split(":. []".ToCharArray());
+            string split = string.Empty;
+            int pos = 0;
+            int index = 0;
+            Regex regFmt = new Regex("D\\d+");
+            foreach (string fmt in fmtPart)
+            {
+                pos += fmt.Length;
+                if (pos < printfFmt.Length)
+                {
+                    split = printfFmt[pos].ToString();
+                    pos++;
+                }
+                else
+                    split = string.Empty;
+                if (regFmt.IsMatch(fmt))
+                {
+                    toAppendTo.Append(parts[index].ToString(fmt)).Append(split);
+                    index++;
+                }
+                else
+                {
+                    toAppendTo.Append(fmt).Append(split);
+                }
+            }
+
+            //throw new NotImplementedException();
         }
 
         /**

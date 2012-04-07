@@ -171,7 +171,13 @@ namespace NPOI.SS.Util
                 throw new ArgumentException("invalid pattern");
             this.pattern = pattern;
         }
-
+        public string Pattern
+        {
+            get
+            {
+                return pattern;
+            }
+        }
         public override string Format(object obj)
         {
             if (pattern.IndexOf("'", StringComparison.Ordinal) != -1)

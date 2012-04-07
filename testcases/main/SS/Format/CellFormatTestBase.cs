@@ -47,7 +47,7 @@ namespace TestCases.SS.Format
 
         private ITestDataProvider _testDataProvider;
 
-        protected HSSFWorkbook workbook;
+        protected IWorkbook workbook;
 
         private String testFile;
         private Dictionary<String, String> testFlags;
@@ -68,17 +68,17 @@ namespace TestCases.SS.Format
 
         public abstract class CellValue
         {
-            internal abstract Object GetValue(ICell cell);
+            public abstract Object GetValue(ICell cell);
 
-            internal Color GetColor(ICell cell)
+            public Color GetColor(ICell cell)
             {
                 return TEST_COLOR;
             }
 
-            internal void Equivalent(String expected, String actual, CellFormatPart format)
+            public virtual void Equivalent(String expected, String actual, CellFormatPart format)
             {
-                Assert.AreEqual("format \"" + format + "\"", '"' + expected + '"',
-                        '"' + actual + '"');
+                Assert.AreEqual('"' + expected + '"',
+                        '"' + actual + '"', "format \"" + format.ToString() + "\"");
             }
         }
 
@@ -132,7 +132,7 @@ namespace TestCases.SS.Format
          */
         protected void OpenWorkbook(String workbookName)
         {
-            workbook =(HSSFWorkbook) _testDataProvider.OpenSampleWorkbook(workbookName);
+            workbook = _testDataProvider.OpenSampleWorkbook(workbookName);
             workbook.MissingCellPolicy = MissingCellPolicy.CREATE_NULL_AS_BLANK;//Row.CREATE_NULL_AS_BLANK);
             testFile = workbookName;
         }
@@ -144,7 +144,7 @@ namespace TestCases.SS.Format
          *
          * @param wb The workbook to look in1.
          */
-        private void ReadFlags(HSSFWorkbook wb)
+        private void ReadFlags(IWorkbook wb)
         {
             ISheet flagSheet = wb.GetSheet("Flags");
             testFlags = new Dictionary<String, String>();

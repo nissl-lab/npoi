@@ -354,5 +354,10 @@ namespace NPOI.SS.Format
         {
             return format.GetHashCode();
         }
+
+        public override string ToString()
+        {
+            return format;
+        }
     }
 }

@@ -65,7 +65,8 @@
       <HintPath>..\..\solution\Lib\NPOI.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="NPOI.TestCases">
+    <Reference Include="NPOI.TestCases, Version=1.2.5.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\main\bin\Debug\NPOI.TestCases.dll</HintPath>
     </Reference>
     <Reference Include="System" />
@@ -80,6 +81,8 @@
     <Compile Include="OpenXmlFormats\Spreadsheet\CT_FontTest.cs" />
     <Compile Include="OpenXmlFormats\Spreadsheet\CommentsDocumentTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SS\Format\TestCellFormatPart.cs" />
+    <Compile Include="SS\TestWorkbookFactory.cs" />
     <Compile Include="TestDetectAsOOXML.cs" />
     <Compile Include="TestPOIXMLDocument.cs" />
     <Compile Include="Util\TestIdentifierManager.cs" />

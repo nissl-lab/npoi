@@ -204,7 +204,21 @@ namespace NPOI.XSSF.UserModel
         {
             return GetCell(cellnum, _sheet.Workbook.MissingCellPolicy);
         }
-
+        /// <summary>
+        /// Get the hssfcell representing a given column (logical cell)
+        /// 0-based. If you ask for a cell that is not defined, then
+        /// you Get a null.
+        /// This is the basic call, with no policies applied
+        /// </summary>
+        /// <param name="cellnum">0 based column number</param>
+        /// <returns>Cell representing that column or null if Undefined.</returns>
+        private ICell RetrieveCell(int cellnum)
+        {
+            if (!_cells.ContainsKey(cellnum))
+                return null;
+            //if (cellnum < 0 || cellnum >= cells.Count) return null;
+            return _cells[cellnum];
+        }
         /**
          * Returns the cell at the given (0 based) index, with the specified {@link NPOI.SS.usermodel.Row.MissingCellPolicy}
          *
@@ -218,7 +232,7 @@ namespace NPOI.XSSF.UserModel
         {
             if (cellnum < 0) throw new ArgumentException("Cell index must be >= 0");
 
-            XSSFCell cell = (XSSFCell)_cells[cellnum];
+            XSSFCell cell = (XSSFCell)RetrieveCell(cellnum);
             if (policy == MissingCellPolicy.RETURN_NULL_AND_BLANK)
             {
                 return cell;

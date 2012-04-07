@@ -58,36 +58,52 @@ namespace NPOI.SS.Format
                 double exp = Math.Log10(Math.Abs(val));
                 bool stripZeros = true;
                 if (exp > 10 || exp < -9)
-                    fmt = "%1.5E";
+                    fmt = "E5";
                 else if ((long)val != val)
-                    fmt = "%1.9f";
+                    fmt = "F9";
                 else
                 {
-                    fmt = "%1.0f";
+                    fmt = "F0";
                     stripZeros = false;
                 }
                 toAppendTo.Append(val.ToString(fmt));
-                //Todo: Remove trailing zeros         commented by Antony.liu
-
 
                 //Formatter formatter = new Formatter(toAppendTo);
                 //formatter.Format(LOCALE, fmt, value);
                 if (stripZeros)
                 {
-                //    // strip off trailing zeros
-                //    int RemoveFrom;
-                //    if (fmt.EndsWith("E"))
-                //        RemoveFrom = toAppendTo.LastIndexOf("E") - 1;
-                //    else
-                //        RemoveFrom = toAppendTo.Length - 1;
-                //    while (toAppendTo[RemoveFrom] == '0')
-                //    {
-                //        toAppendTo.DeleteCharAt(RemoveFrom--);
-                //    }
-                //    if (toAppendTo[RemoveFrom] == '.')
-                //    {
-                //        toAppendTo.DeleteCharAt(RemoveFrom--);
-                //    }
+                    // strip off trailing zeros
+                    int RemoveFrom;
+                    if (fmt.StartsWith("E"))
+                        RemoveFrom = toAppendTo.ToString().LastIndexOf("E") - 1;
+                    else
+                        RemoveFrom = toAppendTo.Length - 1;
+                    while (toAppendTo[RemoveFrom] == '0')
+                    {
+                        toAppendTo.Remove(RemoveFrom--, 1);
+                    }
+                    if (toAppendTo[RemoveFrom] == '.')
+                    {
+                        toAppendTo.Remove(RemoveFrom--, 1);
+                    }
+                    // remove zeros after E   by antony.liu
+                    string text = toAppendTo.ToString();
+                    RemoveFrom = toAppendTo.ToString().LastIndexOf("E");
+                    if (RemoveFrom > 0)
+                    {
+                        RemoveFrom++;
+                        if (text[RemoveFrom] == '+' || text[RemoveFrom] == '-')
+                            RemoveFrom++;
+                        int count = 0;
+                        while (RemoveFrom + count< text.Length)
+                        {
+                            if (text[RemoveFrom + count] == '0')
+                                count++;
+                            else
+                                break;
+                        }
+                        toAppendTo.Remove(RemoveFrom, count);
+                    }
                 }
             }
             else

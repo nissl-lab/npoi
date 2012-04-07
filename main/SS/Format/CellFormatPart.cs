@@ -593,5 +593,9 @@ namespace NPOI.SS.Format
             String str = m.Groups[(g)].Value;
             return (str == null ? "" : str);
         }
+        public override string ToString()
+        {
+            return format.ToString();
+        }
     }
 }

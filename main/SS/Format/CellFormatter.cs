@@ -107,5 +107,10 @@ namespace NPOI.SS.Format
         {
             return '"' + str + '"';
         }
+
+        public override string ToString()
+        {
+            return format;
+        }
     }
 }

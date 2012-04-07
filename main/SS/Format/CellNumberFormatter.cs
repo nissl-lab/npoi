@@ -262,7 +262,6 @@ namespace NPOI.SS.Format
                 return part;
             }
         }
-
         /**
          * Creates a new cell number formatter.
          *
@@ -355,18 +354,18 @@ namespace NPOI.SS.Format
 
             if (exponent == null)
             {
-                StringBuilder fmtBuf = new StringBuilder("%");
+                StringBuilder fmtBuf = new StringBuilder();
 
                 int integerPartWidth = calculateintPartWidth();
-                int totalWidth = integerPartWidth + fractionPartWidth;
+                //int totalWidth = integerPartWidth + fractionPartWidth;
 
-                fmtBuf.Append('0').Append(totalWidth).Append('.').Append(precision);
+                fmtBuf.Append('0', integerPartWidth).Append('.').Append('0', precision);
 
-                fmtBuf.Append("f");
+                //fmtBuf.Append("f");
                 printfFmt = fmtBuf.ToString();
 
                 //this number format is legal in C#;
-                printfFmt = fmt;
+                //printfFmt = fmt;
             }
             else
             {
@@ -403,7 +402,7 @@ namespace NPOI.SS.Format
                 }
                 fmtBuf.Append('E');
                 placeZeros(fmtBuf, exponentSpecials.GetRange(2,
-                        exponentSpecials.Count));
+                        exponentSpecials.Count - 2));
                 decimalFmt = new DecimalFormat(fmtBuf.ToString());
             }
 
@@ -455,7 +454,8 @@ namespace NPOI.SS.Format
 
         private static String SingleNumberFormat(List<Special> numSpecials)
         {
-            return "%0" + numSpecials.Count + "d";
+            //return "%0" + numSpecials.Count + "d";
+            return "D" + numSpecials.Count;
         }
 
         private static int maxValue(List<Special> s)
@@ -467,7 +467,9 @@ namespace NPOI.SS.Format
         {
             if (pos >= specials.Count)
                 return EmptySpecialList;
-            IEnumerator<Special> it = specials.GetRange(pos + takeFirst,specials.Count-pos-takeFirst).GetEnumerator();//.ListIterator(pos + takeFirst);
+            IEnumerator<Special> it = specials.GetRange(pos + takeFirst, specials.Count - pos - takeFirst).GetEnumerator();
+            //.ListIterator(pos + takeFirst);
+            it.MoveNext();
             Special last = it.Current;
             int end = pos + takeFirst;
             while (it.MoveNext())
@@ -478,7 +480,7 @@ namespace NPOI.SS.Format
                 end++;
                 last = s;
             }
-            return specials.GetRange(pos, end + 1);
+            return specials.GetRange(pos, end + 1 - pos);
         }
 
         private List<Special> specialsFor(int pos)
@@ -495,14 +497,14 @@ namespace NPOI.SS.Format
         {
             //ListIterator<Special> it = specials.ListIterator(specials.Count);
             //while (it.HasPrevious())
-            for(int i=specials.Count;i>=0;i--)
+            for (int i = specials.Count - 1; i >= 0; i--)
             {
                 Special s = specials[i];
                 if (IsDigitFmt(s))
                 {
                     Special numStart = s;
                     Special last = s;
-                    while (i>0)
+                    while (i > 0)
                     {
                         i--;
                         s = specials[i];
@@ -548,7 +550,7 @@ namespace NPOI.SS.Format
                 int pos = specials.IndexOf(decimalPoint);
                 IEnumerator<Special> it = specials.GetRange(pos, specials.Count - pos).GetEnumerator();//.ListIterator(specials.IndexOf(decimalPoint));
                 //if (it.HasNext())
-               //     it.Next();  // skip over the decimal point itself
+                //     it.Next();  // skip over the decimal point itself
                 it.MoveNext();
                 while (it.MoveNext())
                 {
@@ -685,7 +687,7 @@ namespace NPOI.SS.Format
                 }
             }
 
-            Hashtable mods = new Hashtable();
+            SortedList<StringMod, object> mods = new SortedList<StringMod, object>();
             StringBuilder output = new StringBuilder(desc);
 
             if (exponent != null)
@@ -783,7 +785,7 @@ namespace NPOI.SS.Format
                                     for (int i = modPos; i < modEndPos; i++)
                                         output[i] = FillCh;
                                 }
-                                for (int k = delPos; k <= delEndPos; k++)
+                                for (int k = delPos; k < delEndPos; k++)
                                     deletedChars.Set(k, true);
                                 //deletedChars.Set(delPos, delEndPos);
                             }
@@ -805,16 +807,43 @@ namespace NPOI.SS.Format
             // Finally, add it to the string
             if (negative)
                 toAppendTo.Append('-');
+            //toAppendTo.Append(value.ToString(format));
             toAppendTo.Append(output);
         }
 
         private void WriteScientific(double value, StringBuilder output,
-                Hashtable mods)
+                SortedList<StringMod, object> mods)
         {
 
             StringBuilder result = new StringBuilder();
             //FieldPosition fractionPos = new FieldPosition(DecimalFormat.FRACTION_FIELD;
             //decimalFmt.Format(value, result, fractionPos);
+            
+            //
+            string pattern = decimalFmt.Pattern;
+            int pos = 0;
+            while (true)
+            {
+                if (pattern[pos] == '#' || pattern[pos] == '0')
+                {
+                    pos++;
+                }
+                else
+                    break;
+            }
+            int integerNum = pos;
+            if (pattern[0] == '#')
+                integerNum--;
+            if (integerNum >= 6&& value>1)
+            {
+                pattern = pattern.Substring(1);
+                result.Append(value.ToString(pattern));
+            }
+            else
+            {
+                result.Append(value.ToString("E"));
+            }
+
             Writeint(result, output, integerSpecials, mods, integerCommas);
             WriteFractional(result, output);
 
@@ -855,16 +884,19 @@ namespace NPOI.SS.Format
             */
 
             // (2) Determine the result's sign.
-            int ePos = 2;// fractionPos.EndIndex;
+            string tmp = result.ToString();
+            int ePos =tmp.IndexOf("E");// fractionPos.EndIndex;
             int signPos = ePos + 1;
             char expSignRes = result[signPos];
+
             if (expSignRes != '-')
             {
                 // not a sign, so it's a digit, and therefore a positive exponent
                 expSignRes = '+';
                 // (3) If it's missing, Put the sign into the output to keep the result
                 // lined up with the output.
-                result.Insert(signPos, '+');
+                if (tmp.IndexOf(expSignRes, ePos) < 0)
+                    result.Insert(signPos, '+');
             }
 
             // Now the result lines up like it is supposed to with the specials' indexes
@@ -883,11 +915,13 @@ namespace NPOI.SS.Format
 
             StringBuilder exponentNum = new StringBuilder(result.ToString().Substring(
                     signPos + 1));
+            if (exponentNum.Length > 2 && exponentNum[0] == '0')
+                exponentNum.Remove(0, 1);
             Writeint(exponentNum, output, exponentDigitSpecials, mods, false);
         }
 
         private void WriteFraction(double value, StringBuilder result,
-                double fractional, StringBuilder output,Hashtable mods)
+                double fractional, StringBuilder output, SortedList<StringMod, object> mods)
         {
 
             // Figure out if we are to suppress either the integer or fractional part.
@@ -924,7 +958,7 @@ namespace NPOI.SS.Format
                     bool allZero = (value == 0 && fractional == 0);
                     bool willShowFraction = fractional != 0 || HasChar('0',
                             numeratorSpecials);
-                    bool RemoveBecauseZero = allZero && (HasChar('#',
+                    bool RemoveBecauseZero = allZero && (HasOnly('#',
                             integerSpecials) || !HasChar('0', numeratorSpecials));
                     bool RemoveBecauseFraction =
                             !allZero && value == 0 && willShowFraction && !HasChar(
@@ -982,30 +1016,30 @@ namespace NPOI.SS.Format
                 System.Console.WriteLine(ignored.StackTrace);
             }
         }
-        private static bool HasChar(char ch, List<Special> s1, List<Special> s2, List<Special> s3)
+        //private static bool HasChar(char ch, List<Special> s1, List<Special> s2, List<Special> s3)
+        //{
+        //    return HasChar(ch, s1) || HasChar(ch, s2) || HasChar(ch, s3);
+        //}
+        //private static bool HasChar(char ch, List<Special> s1, List<Special> s2)
+        //{
+        //    return HasChar(ch, s1) || HasChar(ch, s2);
+        //}
+        private static bool HasChar(char ch, params List<Special>[] numSpecials)
         {
-            return HasChar(ch, s1) && HasChar(ch, s2) && HasChar(ch, s3);
-        }
-        private static bool HasChar(char ch, List<Special> s1, List<Special> s2)
-        {
-            return HasChar(ch, s1) && HasChar(ch, s2);
-        }
-        private static bool HasChar(char ch, List<Special> numSpecials)
-        {
-            //foreach (List<Special> specials in numSpecials)
-            //{
-                foreach (Special s in numSpecials)
+            foreach (List<Special> specials in numSpecials)
+            {
+                foreach (Special s in specials)
                 {
                     if (s.ch == ch)
                     {
                         return true;
                     }
                 }
-            //}
+            }
             return false;
         }
 
-        private static bool HasOnly(char ch, List<Special>[] numSpecials)
+        private static bool HasOnly(char ch, params List<Special>[] numSpecials)
         {
             foreach (List<Special> specials in numSpecials)
             {
@@ -1021,7 +1055,7 @@ namespace NPOI.SS.Format
         }
 
         private void WriteSingleint(String fmt, int num, StringBuilder output,
-                List<Special> numSpecials, Hashtable mods)
+                List<Special> numSpecials, SortedList<StringMod, object> mods)
         {
 
             StringBuilder sb = new StringBuilder();
@@ -1032,70 +1066,79 @@ namespace NPOI.SS.Format
         }
 
         private void Writeint(StringBuilder result, StringBuilder output,
-                List<Special> numSpecials, Hashtable mods,
-                bool ShowCommas) {
-
-        int pos = result.ToString().IndexOf(".") - 1;
-        if (pos < 0) {
-            if (exponent != null && numSpecials == integerSpecials)
-                pos = result.ToString().IndexOf("E") - 1;
-            else
-                pos = result.Length - 1;
-        }
-
-        int strip;
-        for (strip = 0; strip < pos; strip++) {
-            char resultCh = result[strip];
-            if (resultCh != '0' && resultCh != ',')
-                break;
-        }
-
-        //ListIterator<Special> it = numSpecials.ListIterator(numSpecials.Count);
-        bool followWithComma = false;
-        Special lastOutputintDigit = null;
-        int digit = 0;
-        //while (it.HasPrevious()) {
-        for(int i=numSpecials.Count-1;i>=0;i--)
+                List<Special> numSpecials, SortedList<StringMod, object> mods,
+                bool ShowCommas)
         {
-            char resultCh;
-            if (pos >= 0)
-                resultCh = result[pos];
-            else {
-                // If result is shorter than field, pretend there are leading zeros
-                resultCh = '0';
+
+            int pos = result.ToString().IndexOf(".") - 1;
+            if (pos < 0)
+            {
+                if (exponent != null && numSpecials == integerSpecials)
+                    pos = result.ToString().IndexOf("E") - 1;
+                else
+                    pos = result.Length - 1;
             }
-            Special s = numSpecials[i];
-            followWithComma = ShowCommas && digit > 0 && digit % 3 == 0;
-            bool zeroStrip = false;
-            if (resultCh != '0' || s.ch == '0' || s.ch == '?' || pos >= strip) {
-                zeroStrip = s.ch == '?' && pos < strip;
-                output[s.pos] =(zeroStrip ? ' ' : resultCh);
-                lastOutputintDigit = s;
+
+            int strip;
+            for (strip = 0; strip < pos; strip++)
+            {
+                char resultCh = result[strip];
+                if (resultCh != '0' && resultCh != ',')
+                    break;
             }
-            if (followWithComma) {
-                mods.Add(insertMod(s, zeroStrip ? " " : ",", StringMod.AFTER), null);
-                followWithComma = false;
-            }
-            digit++;
-            --pos;
-        }
-        StringBuilder extraLeadingDigits = new StringBuilder();
-        if (pos >= 0) {
-            // We ran out of places to Put digits before we ran out of digits; Put this aside so we can add it later
-            ++pos;  // pos was decremented at the end of the loop above when the iterator was at its end
-            extraLeadingDigits = new StringBuilder(result.ToString().Substring(0, pos));
-            if (ShowCommas) {
-                while (pos > 0) {
-                    if (digit > 0 && digit % 3 == 0)
-                        extraLeadingDigits.Insert(pos, ',');
-                    digit++;
-                    --pos;
+
+            //ListIterator<Special> it = numSpecials.ListIterator(numSpecials.Count);
+            bool followWithComma = false;
+            Special lastOutputintDigit = null;
+            int digit = 0;
+            //while (it.HasPrevious()) {
+            for (int i = numSpecials.Count - 1; i >= 0; i--)
+            {
+                char resultCh;
+                if (pos >= 0)
+                    resultCh = result[pos];
+                else
+                {
+                    // If result is shorter than field, pretend there are leading zeros
+                    resultCh = '0';
                 }
+                Special s = numSpecials[i];
+                followWithComma = ShowCommas && digit > 0 && digit % 3 == 0;
+                bool zeroStrip = false;
+                if (resultCh != '0' || s.ch == '0' || s.ch == '?' || pos >= strip)
+                {
+                    zeroStrip = (s.ch == '?' && pos < strip);
+                    output[s.pos] = (zeroStrip ? ' ' : resultCh);
+                    lastOutputintDigit = s;
+                }
+                if (followWithComma)
+                {
+                    mods.Add(insertMod(s, zeroStrip ? " " : ",", StringMod.AFTER), null);
+                    followWithComma = false;
+                }
+                digit++;
+                --pos;
             }
-            mods.Add(insertMod(lastOutputintDigit, extraLeadingDigits.ToString(),
-                    StringMod.BEFORE), null);
+            StringBuilder extraLeadingDigits = new StringBuilder();
+            if (pos >= 0)
+            {
+                // We ran out of places to Put digits before we ran out of digits; Put this aside so we can add it later
+                ++pos;  // pos was decremented at the end of the loop above when the iterator was at its end
+                extraLeadingDigits = new StringBuilder(result.ToString().Substring(0, pos));
+                if (ShowCommas)
+                {
+                    while (pos > 0)
+                    {
+                        if (digit > 0 && digit % 3 == 0)
+                            extraLeadingDigits.Insert(pos, ',');
+                        digit++;
+                        --pos;
+                    }
+                }
+                mods.Add(insertMod(lastOutputintDigit, extraLeadingDigits.ToString(),
+                        StringMod.BEFORE), null);
+            }
         }
-    }
 
         private void WriteFractional(StringBuilder result, StringBuilder output)
         {
@@ -1106,7 +1149,7 @@ namespace NPOI.SS.Format
             {
                 digit = result.ToString().IndexOf(".") + 1;
                 if (exponent != null)
-                    strip = result.ToString().IndexOf("e") - 1;
+                    strip = result.ToString().IndexOf("E") - 1;
                 else
                     strip = result.Length - 1;
                 while (strip > digit && result[strip] == '0')
@@ -1115,6 +1158,8 @@ namespace NPOI.SS.Format
                 while (it.MoveNext())
                 {
                     Special s = it.Current;
+                    if (digit >= result.Length)
+                        break;
                     char resultCh = result[digit];
                     if (resultCh != '0' || s.ch == '0' || digit < strip)
                         output[s.pos] = resultCh;
