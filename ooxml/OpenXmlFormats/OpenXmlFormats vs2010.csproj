@@ -59,7 +59,26 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ExtendedPropertiesDocument.cs" />
+    <Compile Include="Drawing\WordprocessingDrawing.cs" />
+    <Compile Include="Shared\Math.cs" />
+    <Compile Include="Wordprocessing\BaseTypes.cs" />
+    <Compile Include="Wordprocessing\Markup.cs" />
+    <Compile Include="Wordprocessing\CustomXml.cs" />
+    <Compile Include="Wordprocessing\Document.cs" />
+    <Compile Include="Wordprocessing\Font.cs" />
+    <Compile Include="Wordprocessing\FormField.cs" />
+    <Compile Include="Wordprocessing\Frame.cs" />
+    <Compile Include="Wordprocessing\RangePermission.cs" />
+    <Compile Include="Wordprocessing\Symbol.cs" />
+    <Compile Include="Wordprocessing\PageSetup.cs" />
+    <Compile Include="Wordprocessing\Sdt.cs" />
+    <Compile Include="Wordprocessing\Tab.cs" />
+    <Compile Include="Wordprocessing\wml.cs" />
+    <Compile Include="Wordprocessing\HdrFtr.cs" />
+    <Compile Include="Wordprocessing\Picture.cs" />
+    <Compile Include="Wordprocessing\Run.cs" />
+    <Compile Include="Wordprocessing\Styles.cs" />
+    <Compile Include="CustomXmlSchemaProperties.cs" />
     <Compile Include="Drawing\BaseTypes.cs" />
     <Compile Include="Drawing\BaseStylesheet.cs" />
     <Compile Include="DocumentPropertiesCustom.cs" />
@@ -76,12 +95,10 @@
     <Compile Include="Drawing\ShapeEffects.cs" />
     <Compile Include="Drawing\StyleSheet.cs" />
     <Compile Include="OOXMLFactory.cs" />
-    <Compile Include="CustomPropertiesDocument.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="CustomXmlDataProperties.cs" />
     <Compile Include="DocumentPropertiesExtended.cs" />
     <Compile Include="DocumentPropertiesVariantTypes.cs" />
-    <Compile Include="CustomXmlSchemaProperties.cs" />
     <Compile Include="AdditionalCharacteristics.cs" />
     <Compile Include="Bibliography.cs" />
     <Compile Include="RelationshipReference.cs" />
@@ -117,10 +134,11 @@
     <Compile Include="Vml\PresentationDrawing.cs" />
     <Compile Include="Vml\SpreadsheetDrawing.cs" />
     <Compile Include="Vml\WordprocessingDrawing.cs" />
+    <Compile Include="Wordprocessing\Paragraph.cs" />
+    <Compile Include="Wordprocessing\Settings.cs" />
+    <Compile Include="Wordprocessing\Table.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Word\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
       <Visible>False</Visible>
