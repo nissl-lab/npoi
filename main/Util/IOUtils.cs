@@ -137,5 +137,11 @@ namespace NPOI.Util
                 }
             }
         }
+
+        public static long CalculateChecksum(byte[] data)
+        {
+            CRC32 sum = new CRC32();
+            return (long)sum.ByteCRC(ref data);
+        }
     }
 }

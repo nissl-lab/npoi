@@ -167,6 +167,77 @@
     </Compile>
     <Compile Include="XSSF\Util\EvilUnclosedBRFixingInputStream.cs" />
     <Compile Include="XSSF\Util\NumericRange.cs" />
+    <Compile Include="XWPF\Model\XMLParagraph.cs" />
+    <Compile Include="XWPF\Model\XWPFHeaderFooterPolicy.cs" />
+    <Compile Include="XWPF\Usermodel\BodyElementType.cs" />
+    <Compile Include="XWPF\Usermodel\BodyType.cs" />
+    <Compile Include="XWPF\Usermodel\Borders.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="XWPF\Usermodel\BreakClear.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="XWPF\Usermodel\BreakType.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="XWPF\Usermodel\Document.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="XWPF\Usermodel\IBody.cs" />
+    <Compile Include="XWPF\Usermodel\IBodyElement.cs" />
+    <Compile Include="XWPF\Usermodel\LineSpacingRule.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="XWPF\Usermodel\ParagraphAlignment.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="XWPF\Usermodel\PositionInParagraph.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="XWPF\Usermodel\TextAlignment.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="XWPF\Usermodel\TextSegement.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="XWPF\Usermodel\TOC.cs" />
+    <Compile Include="XWPF\Usermodel\UnderlinePatterns.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="XWPF\Usermodel\VerticalAlign.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="XWPF\Usermodel\XWPFAbstractNum.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="XWPF\Usermodel\XWPFComment.cs" />
+    <Compile Include="XWPF\Usermodel\XWPFDocument.cs" />
+    <Compile Include="XWPF\Usermodel\XWPFFactory.cs" />
+    <Compile Include="XWPF\Usermodel\XWPFFooter.cs" />
+    <Compile Include="XWPF\Usermodel\XWPFFootnote.cs" />
+    <Compile Include="XWPF\Usermodel\XWPFFootnotes.cs" />
+    <Compile Include="XWPF\Usermodel\XWPFHeader.cs" />
+    <Compile Include="XWPF\Usermodel\XWPFHeaderFooter.cs" />
+    <Compile Include="XWPF\Usermodel\XWPFHyperlink.cs" />
+    <Compile Include="XWPF\Usermodel\XWPFHyperlinkRun.cs" />
+    <Compile Include="XWPF\Usermodel\XWPFLatentStyles.cs" />
+    <Compile Include="XWPF\Usermodel\XWPFNum.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="XWPF\Usermodel\XWPFNumbering.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="XWPF\Usermodel\XWPFParagraph.cs" />
+    <Compile Include="XWPF\Usermodel\XWPFPicture.cs" />
+    <Compile Include="XWPF\Usermodel\XWPFPictureData.cs" />
+    <Compile Include="XWPF\Usermodel\XWPFRelation.cs" />
+    <Compile Include="XWPF\Usermodel\XWPFRun.cs" />
+    <Compile Include="XWPF\Usermodel\XWPFSettings.cs" />
+    <Compile Include="XWPF\Usermodel\XWPFStyle.cs" />
+    <Compile Include="XWPF\Usermodel\XWPFStyles.cs" />
+    <Compile Include="XWPF\Usermodel\XWPFTable.cs" />
+    <Compile Include="XWPF\Usermodel\XWPFTableCell.cs" />
+    <Compile Include="XWPF\Usermodel\XWPFTableRow.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\main\main vs10.csproj">

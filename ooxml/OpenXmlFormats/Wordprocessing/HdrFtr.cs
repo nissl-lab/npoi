@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Xml;
 using NPOI.OpenXmlFormats.Shared;
+using System.Xml.Serialization;
 
 namespace NPOI.OpenXmlFormats.Wordprocessing
 {
@@ -212,13 +213,14 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     {
 
         /// <remarks/>
-        even,
+        [XmlEnum("even")]
+        EVEN,
 
-        /// <remarks/>
-        @default,
+        [XmlEnum("default")]
+        DEFAULT,
 
-        /// <remarks/>
-        first,
+       [XmlEnum("first")]
+        FIRST,
     }
 
 
