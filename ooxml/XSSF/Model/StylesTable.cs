@@ -102,60 +102,72 @@ namespace NPOI.XSSF.Model
          * @throws IOException if an error occurs while Reading.
          */
 
-        protected void ReadFrom(Stream is1)  {
-		try {
-			doc = StyleSheetDocument.Parse(is1);
+        protected void ReadFrom(Stream is1)
+        {
+            try
+            {
+                doc = StyleSheetDocument.Parse(is1);
 
-            CT_Stylesheet styleSheet = doc.GetStyleSheet();
+                CT_Stylesheet styleSheet = doc.GetStyleSheet();
 
-            // Grab all the different bits we care about
-			CT_NumFmts ctfmts = styleSheet.numFmts;
-            if( ctfmts != null){
-                foreach (CT_NumFmt nfmt in ctfmts.numFmt) {
-                    numberFormats.Add((int)nfmt.numFmtId,nfmt.formatCode);
+                // Grab all the different bits we care about
+                CT_NumFmts ctfmts = styleSheet.numFmts;
+                if (ctfmts != null)
+                {
+                    foreach (CT_NumFmt nfmt in ctfmts.numFmt)
+                    {
+                        numberFormats.Add((int)nfmt.numFmtId, nfmt.formatCode);
+                    }
                 }
-            }
 
-            CT_Fonts ctfonts = styleSheet.fonts;
-            if(ctfonts != null){
-				int idx = 0;
-				foreach (CT_Font font in ctfonts.font) {
-				   // Create the font and save it. Themes Table supplied later
-					XSSFFont f = new XSSFFont(font, idx);
-					fonts.Add(f);
-					idx++;
-				}
-			}
-            CT_Fills ctFills = styleSheet.fills;
-            if(ctFills != null){
-                foreach (CT_Fill fill in ctFills.fill) {
-                    fills.Add(new XSSFCellFill(fill));
+                CT_Fonts ctfonts = styleSheet.fonts;
+                if (ctfonts != null)
+                {
+                    int idx = 0;
+                    foreach (CT_Font font in ctfonts.font)
+                    {
+                        // Create the font and save it. Themes Table supplied later
+                        XSSFFont f = new XSSFFont(font, idx);
+                        fonts.Add(f);
+                        idx++;
+                    }
                 }
-            }
-
-            CT_Borders ctborders = styleSheet.borders;
-            if(ctborders != null) {
-                foreach (CT_Border border in ctborders.border) {
-                    borders.Add(new XSSFCellBorder(border));
+                CT_Fills ctFills = styleSheet.fills;
+                if (ctFills != null)
+                {
+                    foreach (CT_Fill fill in ctFills.fill)
+                    {
+                        fills.Add(new XSSFCellFill(fill));
+                    }
                 }
+
+                CT_Borders ctborders = styleSheet.borders;
+                if (ctborders != null)
+                {
+                    foreach (CT_Border border in ctborders.border)
+                    {
+                        borders.Add(new XSSFCellBorder(border));
+                    }
+                }
+
+                CT_CellXfs cellXfs = styleSheet.cellXfs;
+                if (cellXfs != null)
+                    xfs.AddRange(cellXfs.xf);
+
+                CT_CellStyleXfs cellStyleXfs = styleSheet.cellStyleXfs;
+                if (cellStyleXfs != null)
+                    styleXfs.AddRange(cellStyleXfs.xf);
+
+                CT_Dxfs styleDxfs = styleSheet.dxfs;
+                if (styleDxfs != null)
+                    dxfs.AddRange(styleDxfs.dxf);
+
             }
-
-            CT_CellXfs cellXfs = styleSheet.cellXfs;
-            if(cellXfs != null) 
-                xfs.AddRange(cellXfs.xf);
-
-            CT_CellStyleXfs cellStyleXfs = styleSheet.cellStyleXfs;
-            if(cellStyleXfs != null) 
-                styleXfs.AddRange(cellStyleXfs.xf);
-
-            CT_Dxfs styleDxfs = styleSheet.dxfs;
-            if (styleDxfs != null) 
-                dxfs.AddRange(styleDxfs.dxf);
-
-		} catch (XmlException e) {
-			throw new IOException(e.Message);
-		}
-	}
+            catch (XmlException e)
+            {
+                throw new IOException(e.Message);
+            }
+        }
 
         // ===========================================================
         //  Start of style related Getters and Setters
@@ -166,25 +178,30 @@ namespace NPOI.XSSF.Model
             return numberFormats[idx];
         }
 
-        public int PutNumberFormat(String fmt) {
-		if (numberFormats.ContainsValue(fmt)) {
-			// Find the key, and return that
-			foreach(int key in numberFormats.Keys ) {
-				if(numberFormats[key].Equals(fmt)) {
-					return key;
-				}
-			}
-			throw new InvalidOperationException("Found the format, but couldn't figure out where - should never happen!");
-		}
+        public int PutNumberFormat(String fmt)
+        {
+            if (numberFormats.ContainsValue(fmt))
+            {
+                // Find the key, and return that
+                foreach (int key in numberFormats.Keys)
+                {
+                    if (numberFormats[key].Equals(fmt))
+                    {
+                        return key;
+                    }
+                }
+                throw new InvalidOperationException("Found the format, but couldn't figure out where - should never happen!");
+            }
 
-		// Find a spare key, and add that
-		int newKey = FIRST_CUSTOM_STYLE_ID;
-		while(numberFormats.ContainsKey(newKey)) {
-			newKey++;
-		}
-		numberFormats[newKey]= fmt;
-		return newKey;
-	}
+            // Find a spare key, and add that
+            int newKey = FIRST_CUSTOM_STYLE_ID;
+            while (numberFormats.ContainsKey(newKey))
+            {
+                newKey++;
+            }
+            numberFormats[newKey] = fmt;
+            return newKey;
+        }
 
         public XSSFFont GetFontAt(int idx)
         {
@@ -378,83 +395,102 @@ namespace NPOI.XSSF.Model
          * @param out The stream to write to.
          * @throws IOException if an error occurs while writing.
          */
-        public void WriteTo(Stream out1)  {
+        public void WriteTo(Stream out1)
+        {
 
-		// Work on the current one
-		// Need to do this, as we don't handle
-		//  all the possible entries yet
-        CT_Stylesheet styleSheet = doc.GetStyleSheet();
+            // Work on the current one
+            // Need to do this, as we don't handle
+            //  all the possible entries yet
+            CT_Stylesheet styleSheet = doc.GetStyleSheet();
 
-		// Formats
-		CT_NumFmts formats = new CT_NumFmts();
-		formats.count = (uint)numberFormats.Count;
-		foreach (KeyValuePair<int, String> fmt in numberFormats) {
-			CT_NumFmt ctFmt = formats.AddNewNumFmt();
-			ctFmt.numFmtId = (uint)fmt.Key;
-			ctFmt.formatCode = fmt.Value;
-		}
-		styleSheet.numFmts = (formats);
+            // Formats
+            CT_NumFmts ctFormats = new CT_NumFmts();
+            ctFormats.count = (uint)numberFormats.Count;
+            if (ctFormats.count > 0)
+                ctFormats.countSpecified = true;
+            foreach (KeyValuePair<int, String> fmt in numberFormats)
+            {
+                CT_NumFmt ctFmt = ctFormats.AddNewNumFmt();
+                ctFmt.numFmtId = (uint)fmt.Key;
+                ctFmt.formatCode = fmt.Value;
+            }
+            styleSheet.numFmts = (ctFormats);
 
-		int idx;
-		// Fonts
-		CT_Fonts ctFonts = new CT_Fonts();
-		ctFonts.count = (uint)fonts.Count;
-		CT_Font[] ctfnt = new CT_Font[fonts.Count];
-		idx = 0;
-		foreach(XSSFFont f in fonts) 
-            ctfnt[idx++] = f.GetCTFont();
-		ctFonts.SetFontArray(ctfnt);
-		styleSheet.fonts = (ctFonts);
+            int idx;
+            // Fonts
+            CT_Fonts ctFonts = new CT_Fonts();
+            ctFonts.count = (uint)fonts.Count;
+            if (ctFonts.count > 0)
+                ctFonts.countSpecified = true;
+            CT_Font[] ctfnt = new CT_Font[fonts.Count];
+            idx = 0;
+            foreach (XSSFFont f in fonts)
+                ctfnt[idx++] = f.GetCTFont();
+            ctFonts.SetFontArray(ctfnt);
+            styleSheet.fonts = (ctFonts);
 
-		// Fills
-		CT_Fills ctFills = new CT_Fills();
-		ctFills.count = (uint)fills.Count;
-		CT_Fill[] ctf = new CT_Fill[fills.Count];
-		idx = 0;
-		foreach(XSSFCellFill f in fills) 
-            ctf[idx++] = f.GetCTFill();
-		ctFills.SetFillArray(ctf);
-		styleSheet.fills = (ctFills);
+            // Fills
+            CT_Fills ctFills = new CT_Fills();
+            ctFills.count = (uint)fills.Count;
+            if (ctFills.count > 0)
+                ctFills.countSpecified = true;
+            CT_Fill[] ctf = new CT_Fill[fills.Count];
+            idx = 0;
+            foreach (XSSFCellFill f in fills)
+                ctf[idx++] = f.GetCTFill();
+            ctFills.SetFillArray(ctf);
+            styleSheet.fills = (ctFills);
 
-		// Borders
-		CT_Borders ctBorders = new CT_Borders();
-		ctBorders.count = (uint)borders.Count;
-		CT_Border[] ctb = new CT_Border[borders.Count];
-		idx = 0;
-		foreach(XSSFCellBorder b in borders) ctb[idx++] = b.GetCTBorder();
-		ctBorders.SetBorderArray(ctb);
-		styleSheet.borders = (ctBorders);
+            // Borders
+            CT_Borders ctBorders = new CT_Borders();
+            ctBorders.count = (uint)borders.Count;
+            if (ctBorders.count > 0)
+                ctBorders.countSpecified = true;
+            CT_Border[] ctb = new CT_Border[borders.Count];
+            idx = 0;
+            foreach (XSSFCellBorder b in borders) ctb[idx++] = b.GetCTBorder();
+            ctBorders.SetBorderArray(ctb);
+            styleSheet.borders = (ctBorders);
 
-		// Xfs
-		if(xfs.Count > 0) {
-			CT_CellXfs ctXfs = new CT_CellXfs();
-			ctXfs.count = (uint)xfs.Count;
-			ctXfs.xf = xfs;
-			
-			styleSheet.cellXfs = (ctXfs);
-		}
+            // Xfs
+            if (xfs.Count > 0)
+            {
+                CT_CellXfs ctXfs = new CT_CellXfs();
+                ctXfs.count = (uint)xfs.Count;
+                if (ctXfs.count > 0)
+                    ctXfs.countSpecified = true;
+                ctXfs.xf = xfs;
 
-		// Style xfs
-		if(styleXfs.Count > 0) {
-			CT_CellStyleXfs ctSXfs = new CT_CellStyleXfs();
-			ctSXfs.count = (uint)(styleXfs.Count);
-			ctSXfs.xf= styleXfs;
-			
-			styleSheet.cellStyleXfs = (ctSXfs);
-		}
+                styleSheet.cellXfs = (ctXfs);
+            }
 
-		// Style dxfs
-		if(dxfs.Count > 0) {
-			CT_Dxfs ctDxfs = new CT_Dxfs();
-			ctDxfs.count = (uint)dxfs.Count;
-			ctDxfs.dxf = dxfs;
-			
-			styleSheet.dxfs = (ctDxfs);
-		}
+            // Style xfs
+            if (styleXfs.Count > 0)
+            {
+                CT_CellStyleXfs ctSXfs = new CT_CellStyleXfs();
+                ctSXfs.count = (uint)(styleXfs.Count);
+                if (ctSXfs.count > 0)
+                    ctSXfs.countSpecified = true;
+                ctSXfs.xf = styleXfs;
 
-		// Save
-		doc.Save(out1);
-	}
+                styleSheet.cellStyleXfs = (ctSXfs);
+            }
+
+            // Style dxfs
+            if (dxfs.Count > 0)
+            {
+                CT_Dxfs ctDxfs = new CT_Dxfs();
+                ctDxfs.count = (uint)dxfs.Count;
+                if (ctDxfs.count > 0)
+                    ctDxfs.countSpecified = true;
+                ctDxfs.dxf = dxfs;
+
+                styleSheet.dxfs = (ctDxfs);
+            }
+
+            // Save
+            doc.Save(out1);
+        }
 
 
         protected override void Commit()
@@ -489,9 +525,13 @@ namespace NPOI.XSSF.Model
         {
             CT_Xf ctXf = new CT_Xf();
             ctXf.numFmtId = (0);
+            ctXf.numFmtIdSpecified = true;
             ctXf.fontId = (0);
+            ctXf.fontIdSpecified = true;
             ctXf.fillId = (0);
+            ctXf.fillIdSpecified = true;
             ctXf.borderId = (0);
+            ctXf.borderIdSpecified = true;
             return ctXf;
         }
         private static CT_Border CreateDefaultBorder()
@@ -518,7 +558,7 @@ namespace NPOI.XSSF.Model
         {
             CT_Font ctFont = new CT_Font();
             XSSFFont xssfFont = new XSSFFont(ctFont, 0);
-            xssfFont.FontHeightInPoints =(XSSFFont.DEFAULT_FONT_SIZE);
+            xssfFont.FontHeightInPoints = (XSSFFont.DEFAULT_FONT_SIZE);
             xssfFont.Color = (XSSFFont.DEFAULT_FONT_COLOR);//SetTheme
             xssfFont.FontName = (XSSFFont.DEFAULT_FONT_NAME);
             xssfFont.SetFamily(FontFamily.SWISS);
@@ -539,14 +579,19 @@ namespace NPOI.XSSF.Model
 
         public XSSFCellStyle CreateCellStyle()
         {
-            CT_Xf xf = new CT_Xf();
-            xf.numFmtId = (0);
-            xf.fontId = (0);
-            xf.fillId = (0);
-            xf.borderId = (0);
-            xf.xfId = (0);
+            CT_Xf ctXf = new CT_Xf();
+            ctXf.numFmtId = (0);
+            ctXf.numFmtIdSpecified = true;
+            ctXf.fontId = (0);
+            ctXf.fontIdSpecified = true;
+            ctXf.fillId = (0);
+            ctXf.fillIdSpecified = true;
+            ctXf.borderId = (0);
+            ctXf.borderIdSpecified = true;
+            ctXf.xfId = (0);
+            ctXf.xfIdSpecified = true;
             int xfSize = styleXfs.Count;
-            int indexXf = PutCellXf(xf);
+            int indexXf = PutCellXf(ctXf);
             return new XSSFCellStyle(indexXf - 1, xfSize - 1, this, theme);
         }
 

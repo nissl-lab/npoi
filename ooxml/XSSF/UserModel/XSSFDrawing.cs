@@ -49,7 +49,7 @@ namespace NPOI.XSSF.UserModel
          *
          * @see NPOI.xssf.usermodel.XSSFSheet#CreateDrawingPatriarch()
          */
-        protected XSSFDrawing()
+        public XSSFDrawing()
             : base()
         {
             drawing = newDrawing();
@@ -63,7 +63,7 @@ namespace NPOI.XSSF.UserModel
          * @param rel  the namespace relationship holding this Drawing,
          * the relationship type must be http://schemas.openxmlformats.org/officeDocument/2006/relationships/drawing
          */
-        protected XSSFDrawing(PackagePart part, PackageRelationship rel)
+        internal XSSFDrawing(PackagePart part, PackageRelationship rel)
             : base(part, rel)
         {
 

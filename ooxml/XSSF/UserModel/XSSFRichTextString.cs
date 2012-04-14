@@ -550,11 +550,11 @@ namespace NPOI.XSSF.UserModel
                     int pos = mc[i].Index;
                     if (pos > idx)
                     {
-                        buf.Append(value.Substring(idx, pos));
+                        buf.Append(value.Substring(idx, pos-idx));
                     }
 
                     String code = mc[i].Groups[1].Value;
-                    int icode = Int32.Parse("0x" + code);
+                    int icode = Int32.Parse(code, System.Globalization.NumberStyles.AllowHexSpecifier);
                     buf.Append((char)icode);
 
                     idx = mc[i].Index+mc[i].Length;

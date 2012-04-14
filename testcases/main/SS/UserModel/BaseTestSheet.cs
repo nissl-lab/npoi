@@ -605,7 +605,7 @@ namespace TestCases.SS.UserModel
                 sheet.SetMargin((MarginType)65, 15);
                 Assert.Fail("Expected exception");
             }
-            catch (InvalidOperationException e)
+            catch (ArgumentException e)
             {
                 Assert.AreEqual("Unknown margin constant:  65", e.Message);
             }

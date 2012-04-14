@@ -86,7 +86,7 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual(BorderStyle.NONE, cellStyle.BorderBottom);
 
             int num = stylesTable.GetBorders().Count;
-            cellStyle.SetBorderBottom(BorderStyle.MEDIUM);
+            cellStyle.BorderBottom = (BorderStyle.MEDIUM);
             Assert.AreEqual(BorderStyle.MEDIUM, cellStyle.BorderBottom);
             //a new border has been Added
             Assert.AreEqual(num + 1, stylesTable.GetBorders().Count);
@@ -101,15 +101,15 @@ namespace NPOI.XSSF.UserModel
             //setting the same border multiple times should not change borderId
             for (int i = 0; i < 3; i++)
             {
-                cellStyle.SetBorderBottom(BorderStyle.MEDIUM);
+                cellStyle.BorderBottom = (BorderStyle.MEDIUM);
                 Assert.AreEqual(BorderStyle.MEDIUM, cellStyle.BorderBottom);
             }
-            Assert.AreEqual(borderId, cellStyle.GetCoreXf().borderId);
+            Assert.AreEqual((uint)borderId, cellStyle.GetCoreXf().borderId);
             Assert.AreEqual(num, stylesTable.GetBorders().Count);
             Assert.AreSame(ctBorder, stylesTable.GetBorderAt(borderId).GetCTBorder());
 
             //setting border to none Removes the <bottom> element
-            cellStyle.SetBorderBottom(BorderStyle.NONE);
+            cellStyle.BorderBottom = (BorderStyle.NONE);
             Assert.AreEqual(num, stylesTable.GetBorders().Count);
             borderId = (int)cellStyle.GetCoreXf().borderId;
             ctBorder = stylesTable.GetBorderAt(borderId).GetCTBorder();
@@ -473,7 +473,7 @@ namespace NPOI.XSSF.UserModel
 
             XSSFCellStyle customStyle = (XSSFCellStyle)wb.CreateCellStyle();
 
-            customStyle.SetFillPattern(FillPatternType.SOLID_FOREGROUND);
+            customStyle.FillPattern = (FillPatternType.SOLID_FOREGROUND);
             Assert.AreEqual(FillPatternType.SOLID_FOREGROUND, customStyle.FillPattern);
             Assert.AreEqual(3, styles.GetFills().Count);
 
@@ -485,7 +485,7 @@ namespace NPOI.XSSF.UserModel
             {
                 XSSFCellStyle style = (XSSFCellStyle)wb.CreateCellStyle();
 
-                style.SetFillPattern(FillPatternType.SOLID_FOREGROUND);
+                style.FillPattern = (FillPatternType.SOLID_FOREGROUND);
                 Assert.AreEqual(FillPatternType.SOLID_FOREGROUND, style.FillPattern);
                 Assert.AreEqual(4, styles.GetFills().Count);
 
@@ -501,7 +501,7 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual(FillPatternType.NO_FILL, cellStyle.FillPattern);
 
             int num = stylesTable.GetFills().Count;
-            cellStyle.SetFillPattern(FillPatternType.SOLID_FOREGROUND);
+            cellStyle.FillPattern = (FillPatternType.SOLID_FOREGROUND);
             Assert.AreEqual(FillPatternType.SOLID_FOREGROUND, cellStyle.FillPattern);
             Assert.AreEqual(num + 1, stylesTable.GetFills().Count);
             int FillId = (int)cellStyle.GetCoreXf().fillId;
@@ -513,11 +513,11 @@ namespace NPOI.XSSF.UserModel
             //setting the same fill multiple time does not update the styles table
             for (int i = 0; i < 3; i++)
             {
-                cellStyle.SetFillPattern(FillPatternType.SOLID_FOREGROUND);
+                cellStyle.FillPattern = (FillPatternType.SOLID_FOREGROUND);
             }
             Assert.AreEqual(num + 1, stylesTable.GetFills().Count);
 
-            cellStyle.SetFillPattern(FillPatternType.NO_FILL);
+            cellStyle.FillPattern = (FillPatternType.NO_FILL);
             Assert.AreEqual(FillPatternType.NO_FILL, cellStyle.FillPattern);
             FillId = (int)cellStyle.GetCoreXf().fillId;
             ctFill = stylesTable.GetFillAt(FillId).GetCTFill();

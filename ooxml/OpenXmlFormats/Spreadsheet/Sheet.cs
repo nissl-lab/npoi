@@ -1403,7 +1403,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         public CT_SheetViews()
         {
-            this.extLstField = new CT_ExtensionList();
+            //this.extLstField = new CT_ExtensionList();
             this.sheetViewField = new List<CT_SheetView>();
         }
 
@@ -1504,9 +1504,9 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         public CT_SheetView()
         {
-            //this.extLstField = new CT_ExtensionList();
-            //this.pivotSelectionField = new List<CT_PivotSelection>();
-            //this.selectionField = new List<CT_Selection>();
+            this.extLstField = new CT_ExtensionList();
+            this.pivotSelectionField = new List<CT_PivotSelection>();
+            this.selectionField = new List<CT_Selection>();
             this.paneField = new CT_Pane();
             this.windowProtectionField = false;
             this.showFormulasField = false;
@@ -1537,8 +1537,6 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
         public CT_Selection AddNewSelection()
         {
-            if (selectionField == null)
-                selectionField = new List<CT_Selection>();
             CT_Selection newSel = new CT_Selection();
             selectionField.Add(newSel);
             return newSel;
@@ -1552,9 +1550,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             return this.selectionField[index];
         }
         public CT_Selection InsertNewSelection(int index)
-        {
-            if (selectionField == null)
-                selectionField = new List<CT_Selection>();
+        {       
             CT_Selection sel = new CT_Selection();
             this.selectionField.Insert(index, sel);
             return sel;
@@ -1567,6 +1563,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             this.selectionField = selectionArray;
         }
+        [XmlElement]
         public CT_Pane pane
         {
             get
@@ -1578,7 +1575,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.paneField = value;
             }
         }
-
+        [XmlElement]
         public List<CT_Selection> selection
         {
             get
@@ -1590,7 +1587,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.selectionField = value;
             }
         }
-
+        [XmlElement]
         public List<CT_PivotSelection> pivotSelection
         {
             get
@@ -1602,7 +1599,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.pivotSelectionField = value;
             }
         }
-
+        [XmlElement]
         public CT_ExtensionList extLst
         {
             get
@@ -6055,6 +6052,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         private double footerField;
 
+        [XmlAttribute]
         public double left
         {
             get
@@ -6066,7 +6064,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.leftField = value;
             }
         }
-
+        [XmlAttribute]
         public double right
         {
             get
@@ -6078,7 +6076,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.rightField = value;
             }
         }
-
+        [XmlAttribute]
         public double top
         {
             get
@@ -6090,7 +6088,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.topField = value;
             }
         }
-
+        [XmlAttribute]
         public double bottom
         {
             get
@@ -6102,7 +6100,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.bottomField = value;
             }
         }
-
+        [XmlAttribute]
         public double header
         {
             get
@@ -6114,7 +6112,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.headerField = value;
             }
         }
-
+        [XmlAttribute]
         public double footer
         {
             get
@@ -6233,9 +6231,9 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         private uint fitToHeightField;
 
-        private ST_PageOrder? pageOrderField;
+        private ST_PageOrder pageOrderField;
 
-        private ST_Orientation? orientationField;
+        private ST_Orientation orientationField;
 
         private bool usePrinterDefaultsField;
 
@@ -6243,7 +6241,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         private bool draftField;
 
-        private ST_CellComments? cellCommentsField;
+        private ST_CellComments cellCommentsField;
 
         private bool useFirstPageNumberField;
 
@@ -6264,19 +6262,19 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.firstPageNumberField = ((uint)(1));
             this.fitToWidthField = ((uint)(1));
             this.fitToHeightField = ((uint)(1));
-            //this.pageOrderField = ST_PageOrder.downThenOver;
-            //this.orientationField = ST_Orientation.@default;
+            this.pageOrderField = ST_PageOrder.downThenOver;
+            this.orientationField = ST_Orientation.@default;
             this.usePrinterDefaultsField = true;
             this.blackAndWhiteField = false;
             this.draftField = false;
-            //this.cellCommentsField = ST_CellComments.none;
+            this.cellCommentsField = ST_CellComments.none;
             this.useFirstPageNumberField = false;
             this.errorsField = ST_PrintError.displayed;
             this.horizontalDpiField = ((uint)(600));
             this.verticalDpiField = ((uint)(600));
             this.copiesField = ((uint)(1));
         }
-
+        [XmlAttribute]
         [DefaultValue(typeof(uint), "1")]
         public uint paperSize
         {
@@ -6289,7 +6287,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.paperSizeField = value;
             }
         }
-
+        [XmlAttribute]
         [DefaultValue(typeof(uint), "100")]
         public uint scale
         {
@@ -6302,7 +6300,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.scaleField = value;
             }
         }
-
+        [XmlAttribute]
         [DefaultValue(typeof(uint), "1")]
         public uint firstPageNumber
         {
@@ -6315,7 +6313,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.firstPageNumberField = value;
             }
         }
-
+        [XmlAttribute]
         [DefaultValue(typeof(uint), "1")]
         public uint fitToWidth
         {
@@ -6328,7 +6326,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.fitToWidthField = value;
             }
         }
-
+        [XmlAttribute]
         [DefaultValue(typeof(uint), "1")]
         public uint fitToHeight
         {
@@ -6341,9 +6339,9 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.fitToHeightField = value;
             }
         }
-
+        [XmlAttribute]
         [DefaultValue(ST_PageOrder.downThenOver)]
-        public ST_PageOrder? pageOrder
+        public ST_PageOrder pageOrder
         {
             get
             {
@@ -6354,9 +6352,9 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.pageOrderField = value;
             }
         }
-
+        [XmlAttribute]
         [DefaultValue(ST_Orientation.@default)]
-        public ST_Orientation? orientation
+        public ST_Orientation orientation
         {
             get
             {
@@ -6367,7 +6365,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.orientationField = value;
             }
         }
-
+        [XmlAttribute]
         [DefaultValue(true)]
         public bool usePrinterDefaults
         {
@@ -6380,7 +6378,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.usePrinterDefaultsField = value;
             }
         }
-
+        [XmlAttribute]
         [DefaultValue(false)]
         public bool blackAndWhite
         {
@@ -6393,7 +6391,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.blackAndWhiteField = value;
             }
         }
-
+        [XmlAttribute]
         [DefaultValue(false)]
         public bool draft
         {
@@ -6406,9 +6404,9 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.draftField = value;
             }
         }
-
+        [XmlAttribute]
         [DefaultValue(ST_CellComments.none)]
-        public ST_CellComments? cellComments
+        public ST_CellComments cellComments
         {
             get
             {
@@ -6419,7 +6417,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.cellCommentsField = value;
             }
         }
-
+        [XmlAttribute]
         [DefaultValue(false)]
         public bool useFirstPageNumber
         {
@@ -6432,7 +6430,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.useFirstPageNumberField = value;
             }
         }
-
+        [XmlAttribute]
         [DefaultValue(ST_PrintError.displayed)]
         public ST_PrintError errors
         {
@@ -6445,7 +6443,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.errorsField = value;
             }
         }
-
+        [XmlAttribute]
         [DefaultValue(typeof(uint), "600")]
         public uint horizontalDpi
         {
@@ -6458,7 +6456,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.horizontalDpiField = value;
             }
         }
-
+        [XmlAttribute]
         [DefaultValue(typeof(uint), "600")]
         public uint verticalDpi
         {
@@ -6471,7 +6469,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.verticalDpiField = value;
             }
         }
-
+        [XmlAttribute]
         [DefaultValue(typeof(uint), "1")]
         public uint copies
         {
@@ -6484,7 +6482,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.copiesField = value;
             }
         }
-
+        [XmlAttribute]
         public string id
         {
             get

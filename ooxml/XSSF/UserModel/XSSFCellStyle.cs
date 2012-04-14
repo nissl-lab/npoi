@@ -403,6 +403,8 @@ namespace NPOI.XSSF.UserModel
             {
                 _cellXf.applyNumberFormat = (true);
                 _cellXf.numFmtId = (uint)value;
+                if(value>=0)
+                    _cellXf.numFmtIdSpecified=true;
             }
         }
 
@@ -526,8 +528,7 @@ namespace NPOI.XSSF.UserModel
                 XSSFCellFill fill = _stylesSource.GetFillAt(FillIndex);
 
                 ST_PatternType ptrn = fill.GetPatternType();
-                if (ptrn == null) return FillPatternType.NO_FILL;
-                return (FillPatternType)(ptrn - 1);
+                return (FillPatternType)ptrn;
             }
             set 
             {
@@ -535,7 +536,7 @@ namespace NPOI.XSSF.UserModel
                 CT_PatternFill ptrn = ct.IsSetPatternFill() ? ct.GetPatternFill() : ct.AddNewPatternFill();
                 if (value == FillPatternType.NO_FILL && ptrn.IsSetPatternType()) 
                     ptrn.unsetPatternType();
-                else ptrn.patternType = (ST_PatternType)(value + 1);
+                else ptrn.patternType = (ST_PatternType)value;
 
                 int idx = _stylesSource.PutFill(new XSSFCellFill(ct));
 
@@ -844,20 +845,7 @@ namespace NPOI.XSSF.UserModel
             }
         }
 
-
-
-        /**
-         * Set the type of border to use for the bottom border of the cell
-         *
-         * @param border - type of border to use
-         * @see NPOI.ss.usermodel.BorderStyle
-         */
-        public void SetBorderBottom(BorderStyle border)
-        {
-            SetBorderBottom(border);
-        }
-
-
+        
         /**
          * Set the color to use for the bottom border
          *
@@ -991,19 +979,6 @@ namespace NPOI.XSSF.UserModel
             return ct;
         }
 
-        /**
-         * This element is used to specify cell fill information for pattern and solid color cell Fills. For solid cell Fills (no pattern),
-         * foreground color is used is used. For cell Fills with patterns specified, then the cell fill color is specified by the background color element.
-         *
-         * @param ptrn the fill pattern to use
-         * @see #setFillBackgroundColor(short)
-         * @see #setFillForegroundColor(short)
-         * @see NPOI.ss.usermodel.FillPatternType
-         */
-        public void SetFillPattern(FillPatternType ptrn)
-        {
-            SetFillPattern(ptrn);
-        }
 
         /**
          * Set the font for this style

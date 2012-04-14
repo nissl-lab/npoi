@@ -19,9 +19,20 @@ namespace NPOI.OpenXmlFormats.Vml
         
         private string adjField;
         
-        private string pathField;
+        private CT_Path pathField;
         
         private string equationxmlField;
+
+        private CT_Wrap wrapField;
+        private CT_Fill fillField;
+        private CT_Formulas formulasField;
+        private CT_Handles handlesField;
+        private CT_ImageData imagedataField;
+        private CT_Stroke strokeField;
+        private CT_Shadow shadowField;
+        private CT_Textbox textboxField;
+        private CT_TextPath textpathField;
+
         
         /// <remarks/>
         [XmlElement("ClientData", typeof(CT_ClientData), Namespace="urn:schemas-microsoft-com:office:excel")]
@@ -32,16 +43,6 @@ namespace NPOI.OpenXmlFormats.Vml
         [XmlElement("borderleft", typeof(CT_Border), Namespace="urn:schemas-microsoft-com:office:word")]
         [XmlElement("borderright", typeof(CT_Border), Namespace="urn:schemas-microsoft-com:office:word")]
         [XmlElement("bordertop", typeof(CT_Border), Namespace="urn:schemas-microsoft-com:office:word")]
-        [XmlElement("wrap", typeof(CT_Wrap), Namespace="urn:schemas-microsoft-com:office:word")]
-        [XmlElement("fill", typeof(CT_Fill))]
-        [XmlElement("formulas", typeof(CT_Formulas))]
-        [XmlElement("handles", typeof(CT_Handles))]
-        [XmlElement("imagedata", typeof(CT_ImageData))]
-        [XmlElement("path", typeof(CT_Path))]
-        [XmlElement("shadow", typeof(CT_Shadow))]
-        [XmlElement("stroke", typeof(CT_Stroke))]
-        [XmlElement("textbox", typeof(CT_Textbox))]
-        [XmlElement("textpath", typeof(CT_TextPath))]
         [System.Xml.Serialization.XmlChoiceIdentifierAttribute("ItemsElementName")]
         public object[] Items {
             get {
@@ -51,18 +52,75 @@ namespace NPOI.OpenXmlFormats.Vml
                 this.itemsField = value;
             }
         }
-        
         /// <remarks/>
         [XmlElement("ItemsElementName")]
         [System.Xml.Serialization.XmlIgnore]
-        public ItemsChoiceType1[] ItemsElementName {
-            get {
+        public ItemsChoiceType1[] ItemsElementName
+        {
+            get
+            {
                 return this.itemsElementNameField;
             }
-            set {
+            set
+            {
                 this.itemsElementNameField = value;
             }
         }
+
+        [XmlElement(Namespace="urn:schemas-microsoft-com:office:word")]
+        public CT_Wrap wrap
+        {
+            get { return this.wrapField; }
+            set { this.wrapField = value; }
+        }
+        [XmlElement]
+        public CT_Fill fill
+        {
+            get { return this.fillField; }
+            set { this.fillField = value; }
+        }
+        [XmlElement]
+        public CT_Formulas formulas
+        {
+            get { return this.formulasField; }
+            set { this.formulasField = value; }
+        }
+        [XmlElement]
+        public CT_Handles handles
+        {
+            get { return this.handlesField; }
+            set { this.handlesField = value; }
+        }
+        [XmlElement]
+        public CT_ImageData imagedata
+        {
+            get { return this.imagedataField; }
+            set { this.imagedataField = value; }
+        }
+        [XmlElement]
+        public CT_Stroke stroke
+        {
+            get { return this.strokeField; }
+            set { this.strokeField = value; }
+        }
+        [XmlElement]
+        public CT_Shadow shadow
+        {
+            get { return this.shadowField; }
+            set { this.shadowField = value; }
+        }
+
+        public CT_Fill AddNewFill()
+        {
+            this.fillField=new CT_Fill();
+            return this.fillField;
+        }
+        public CT_Shadow AddNewShadow()
+        {
+            this.shadowField = new CT_Shadow();
+            return this.shadowField;
+        }
+ 
         
         /// <remarks/>
         [System.Xml.Serialization.XmlAttribute]
@@ -87,8 +145,8 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttribute]
-        public string path {
+        [XmlElement]
+        public CT_Path path {
             get {
                 return this.pathField;
             }

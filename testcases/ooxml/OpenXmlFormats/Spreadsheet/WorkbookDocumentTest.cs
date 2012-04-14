@@ -99,9 +99,13 @@ namespace ooxml.Testcases
             var bks = worksheet.AddNewBookViews();
             var bk = bks.AddNewWorkbookView();
             bk.xWindow = 360;
+            bk.xWindowSpecified = true;
             bk.yWindow = 60;
+            bk.yWindowSpecified = true;
             bk.windowWidth = 11295;
+            bk.windowWidthSpecified = true;
             bk.windowHeight = 5580;
+            bk.windowHeightSpecified = true;
 
 
 

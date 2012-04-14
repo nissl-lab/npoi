@@ -1626,7 +1626,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.calcOnSaveField = true;
             this.concurrentCalcField = true;
         }
-
+        [XmlAttribute]
         public uint calcId
         {
             get
@@ -1651,7 +1651,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.calcIdFieldSpecified = value;
             }
         }
-
+        [XmlAttribute]
         [DefaultValue(ST_CalcMode.auto)]
         public ST_CalcMode calcMode
         {
@@ -1664,7 +1664,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.calcModeField = value;
             }
         }
-
+        [XmlAttribute]
         [DefaultValue(false)]
         public bool fullCalcOnLoad
         {
@@ -1677,7 +1677,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.fullCalcOnLoadField = value;
             }
         }
-
+        [XmlAttribute]
         [DefaultValue(ST_RefMode.A1)]
         public ST_RefMode refMode
         {
@@ -1690,7 +1690,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.refModeField = value;
             }
         }
-
+        [XmlAttribute]
         [DefaultValue(false)]
         public bool iterate
         {
@@ -1703,7 +1703,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.iterateField = value;
             }
         }
-
+        [XmlAttribute]
         [DefaultValue(typeof(uint), "100")]
         public uint iterateCount
         {
@@ -1716,7 +1716,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.iterateCountField = value;
             }
         }
-
+        [XmlAttribute]
         [DefaultValue(0.001D)]
         public double iterateDelta
         {
@@ -1729,7 +1729,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.iterateDeltaField = value;
             }
         }
-
+        [XmlAttribute]
         [DefaultValue(true)]
         public bool fullPrecision
         {
@@ -1742,7 +1742,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.fullPrecisionField = value;
             }
         }
-
+        [XmlAttribute]
         [DefaultValue(true)]
         public bool calcCompleted
         {
@@ -1755,7 +1755,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.calcCompletedField = value;
             }
         }
-
+        [XmlAttribute]
         [DefaultValue(true)]
         public bool calcOnSave
         {
@@ -1768,7 +1768,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.calcOnSaveField = value;
             }
         }
-
+        [XmlAttribute]
         [DefaultValue(true)]
         public bool concurrentCalc
         {
@@ -1781,7 +1781,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.concurrentCalcField = value;
             }
         }
-
+        [XmlAttribute]
         public uint concurrentManualCount
         {
             get
@@ -1806,7 +1806,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.concurrentManualCountFieldSpecified = value;
             }
         }
-
+        [XmlAttribute]
         public bool forceFullCalc
         {
             get

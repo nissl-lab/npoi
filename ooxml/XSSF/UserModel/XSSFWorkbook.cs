@@ -251,7 +251,18 @@ namespace NPOI.XSSF.UserModel
             workbook.AddNewSheets();
 
             POIXMLProperties.ExtendedProperties expProps = GetProperties().GetExtendedProperties();
-            expProps.GetUnderlyingProperties().Application = (DOCUMENT_CREATOR);
+            CT_ExtendedProperties ctExtendedProp= expProps.GetUnderlyingProperties();
+            ctExtendedProp.Application = DOCUMENT_CREATOR;
+            ctExtendedProp.DocSecurity = 0;
+            ctExtendedProp.DocSecuritySpecified = true;
+            ctExtendedProp.ScaleCrop = false;
+            ctExtendedProp.ScaleCropSpecified = true;
+            ctExtendedProp.LinksUpToDate = false;
+            ctExtendedProp.LinksUpToDateSpecified = true;
+            ctExtendedProp.HyperlinksChanged = false;
+            ctExtendedProp.HyperlinksChangedSpecified = true;
+            ctExtendedProp.SharedDoc = false;
+            ctExtendedProp.SharedDocSpecified = true;
 
             sharedStringSource = (SharedStringsTable)CreateRelationship(XSSFRelation.SHARED_STRINGS, XSSFFactory.GetInstance());
             stylesSource = (StylesTable)CreateRelationship(XSSFRelation.STYLES, XSSFFactory.GetInstance());

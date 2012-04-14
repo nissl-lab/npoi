@@ -61,7 +61,7 @@ namespace NPOI.XSSF.UserModel.Extensions
             XSSFCellFill cellFill = new XSSFCellFill(ctFill);
             CT_PatternFill ctPatternFill = ctFill.AddNewPatternFill();
             ctPatternFill.patternType = (ST_PatternType.darkDown);
-            Assert.AreEqual(8, cellFill.GetPatternType());
+            Assert.AreEqual(ST_PatternType.darkDown, cellFill.GetPatternType());
         }
         [TestMethod]
         public void TestColorFromTheme()

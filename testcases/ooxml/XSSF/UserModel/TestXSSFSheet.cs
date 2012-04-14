@@ -287,9 +287,13 @@ namespace NPOI.XSSF.UserModel
             stylesTable.PutFont(font);
             CT_Xf cellStyleXf = new CT_Xf();
             cellStyleXf.fontId = (1);
+            cellStyleXf.fontIdSpecified = true;
             cellStyleXf.fillId=(0);
+            cellStyleXf.fillIdSpecified = true;
             cellStyleXf.borderId=(0);
+            cellStyleXf.borderIdSpecified = true;
             cellStyleXf.numFmtId=(0);
+            cellStyleXf.numFmtIdSpecified = true;
             stylesTable.PutCellStyleXf(cellStyleXf);
             CT_Xf cellXf = new CT_Xf();
             cellXf.xfId = (1);

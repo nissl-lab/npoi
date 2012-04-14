@@ -212,7 +212,9 @@ namespace NPOI.XSSF.Model
             //re-create the sst table every time saving a workbook
             CT_Sst sst = _sstDoc.GetSst();
             sst.count = count;
+            sst.countSpecified = true;
             sst.uniqueCount = uniqueCount;
+            sst.uniqueCountSpecified = true;
 
             _sstDoc.Save(out1);
         }

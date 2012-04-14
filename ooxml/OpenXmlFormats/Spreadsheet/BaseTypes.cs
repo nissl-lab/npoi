@@ -180,7 +180,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         private string uriField;
 
-        [System.Xml.Serialization.XmlAnyElementAttribute(Order = 0)]
+        [XmlAnyElement(Order = 0)]
         public System.Xml.XmlElement Any
         {
             get
@@ -192,7 +192,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.anyField = value;
             }
         }
-        [System.Xml.Serialization.XmlAttributeAttribute(DataType = "token")]
+        [XmlAttribute(DataType = "token")]
         public string uri
         {
             get

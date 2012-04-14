@@ -22,6 +22,8 @@ using System.IO;
 using NPOI.OpenXml4Net.OPC;
 using System.Text.RegularExpressions;
 using NPOI.OpenXmlFormats.Vml;
+using System.Xml.Serialization;
+using System.Xml;
 namespace NPOI.XSSF.UserModel
 {
 
@@ -52,9 +54,13 @@ namespace NPOI.XSSF.UserModel
      */
     public class XSSFVMLDrawing : POIXMLDocumentPart
     {
-        private static QName QNAME_SHAPE_LAYOUT = new QName("urn:schemas-microsoft-com:office:office", "shapelayout");
-        private static QName QNAME_SHAPE_TYPE = new QName("urn:schemas-microsoft-com:vml", "shapetype");
-        private static QName QNAME_SHAPE = new QName("urn:schemas-microsoft-com:vml", "shape");
+
+        internal static XmlSerializerNamespaces namespaces = new XmlSerializerNamespaces(new[] 
+        {
+            new XmlQualifiedName("shapelayout", "urn:schemas-microsoft-com:office:office"),
+            new XmlQualifiedName("shapetype", "urn:schemas-microsoft-com:vml"),
+            new XmlQualifiedName("shape", "urn:schemas-microsoft-com:vml"),
+        });
 
         /**
          * regexp to parse shape ids, in VML they have weird form of id="_x0000_s1026"
@@ -142,7 +148,7 @@ namespace NPOI.XSSF.UserModel
 
         protected void Write(Stream out1)
         {
-            XmlObject rootObject = XmlObject.Factory.newInstance();
+            XmlObject rootObject = XmlObject();
             XmlCursor rootCursor = rootObject.newCursor();
             rootCursor.ToNextToken();
             rootCursor.beginElement("xml");
@@ -188,7 +194,7 @@ namespace NPOI.XSSF.UserModel
          */
         private void newDrawing()
         {
-            CT_ShapeLayout layout = CT_ShapeLayout.Factory.newInstance();
+            CT_ShapeLayout layout = new CT_ShapeLayout();
             layout.ext = (ST_Ext.edit);
             CT_IdMap idmap = layout.AddNewIdmap();
             idmap.ext = (ST_Ext.edit);
@@ -196,7 +202,7 @@ namespace NPOI.XSSF.UserModel
             _items.Add(layout);
             _qnames.Add(QNAME_SHAPE_LAYOUT);
 
-            CT_Shapetype shapetype = CT_Shapetype.Factory.newInstance();
+            CT_Shapetype shapetype = new CT_Shapetype();
             _shapeTypeId = "_xssf_cell_comment";
             shapetype.SetId(_shapeTypeId);
             shapetype.SetCoordsize("21600,21600");
@@ -212,13 +218,14 @@ namespace NPOI.XSSF.UserModel
 
         protected CT_Shape newCommentShape()
         {
-            CT_Shape shape = CT_Shape.Factory.newInstance();
+            CT_Shape shape = new CT_Shape();
+
             shape.SetId("_x0000_s" + (++_shapeId));
             shape.SetType("#" + _shapeTypeId);
             shape.SetStyle("position:absolute; visibility:hidden");
             shape.SetFillcolor("#ffffe1");
-            shape.SetInsetmode(ST_InsetMode.AUTO);
-            shape.AddNewFill().SetColor("#ffffe1");
+            shape.SetInsetmode(ST_InsetMode.auto);
+            shape.AddNewFill().color=("#ffffe1");
             CT_Shadow shadow = shape.AddNewShadow();
             shadow.on= ST_TrueFalse.t;
             shadow.color = "black";
@@ -234,7 +241,7 @@ namespace NPOI.XSSF.UserModel
             cldata.AddNewRow().SetBigintValue(new Bigint("0"));
             cldata.AddNewColumn().SetBigintValue(new Bigint("0"));
             _items.Add(shape);
-            _qnames.Add(QNAME_SHAPE);
+
             return shape;
         }
 

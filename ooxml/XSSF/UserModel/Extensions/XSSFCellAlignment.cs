@@ -60,6 +60,7 @@ namespace NPOI.XSSF.UserModel.Extensions
         public void SetVertical(VerticalAlignment align)
         {
             cellAlignement.vertical = (ST_VerticalAlignment)align;
+            cellAlignement.verticalSpecified = true;
         }
 
         /**
@@ -85,6 +86,7 @@ namespace NPOI.XSSF.UserModel.Extensions
         public void SetHorizontal(HorizontalAlignment align)
         {
             cellAlignement.horizontal = ((ST_HorizontalAlignment)align);
+            cellAlignement.horizontalSpecified = true;
         }
 
         /**
@@ -105,6 +107,7 @@ namespace NPOI.XSSF.UserModel.Extensions
         public void SetIndent(long indent)
         {
             cellAlignement.indent = (indent);
+            cellAlignement.indentSpecified = true;
         }
 
         /**
@@ -143,6 +146,7 @@ namespace NPOI.XSSF.UserModel.Extensions
         public void SetTextRotation(long rotation)
         {
             cellAlignement.textRotation = (rotation);
+            cellAlignement.textRotationSpecified = true;
         }
 
         /**
@@ -163,6 +167,7 @@ namespace NPOI.XSSF.UserModel.Extensions
         public void SetWrapText(bool wrapped)
         {
             cellAlignement.wrapText = (wrapped);
+            cellAlignement.wrapTextSpecified = true;
         }
 
         /**

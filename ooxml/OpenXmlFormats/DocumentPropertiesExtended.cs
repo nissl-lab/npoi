@@ -107,7 +107,7 @@ namespace NPOI.OpenXmlFormats
         private int docSecurityField;
 
         private bool docSecurityFieldSpecified;
-        [XmlAttribute]
+        [XmlElement]
         /// <remarks/>
         public string Template
         {
@@ -120,7 +120,7 @@ namespace NPOI.OpenXmlFormats
                 this.templateField = value;
             }
         }
-        [XmlAttribute]
+        [XmlElement]
         /// <remarks/>
         public string Manager
         {
@@ -133,7 +133,7 @@ namespace NPOI.OpenXmlFormats
                 this.managerField = value;
             }
         }
-        [XmlAttribute]
+        [XmlElement]
         /// <remarks/>
         public string Company
         {
@@ -146,7 +146,7 @@ namespace NPOI.OpenXmlFormats
                 this.companyField = value;
             }
         }
-        [XmlAttribute]
+        [XmlElement]
         /// <remarks/>
         public int Pages
         {
@@ -173,7 +173,7 @@ namespace NPOI.OpenXmlFormats
                 this.pagesFieldSpecified = value;
             }
         }
-        [XmlAttribute]
+        [XmlElement]
         /// <remarks/>
         public int Words
         {
@@ -200,7 +200,7 @@ namespace NPOI.OpenXmlFormats
                 this.wordsFieldSpecified = value;
             }
         }
-        [XmlAttribute]
+        [XmlElement]
         /// <remarks/>
         public int Characters
         {
@@ -227,7 +227,7 @@ namespace NPOI.OpenXmlFormats
                 this.charactersFieldSpecified = value;
             }
         }
-        [XmlAttribute]
+        [XmlElement]
         /// <remarks/>
         public string PresentationFormat
         {
@@ -240,7 +240,7 @@ namespace NPOI.OpenXmlFormats
                 this.presentationFormatField = value;
             }
         }
-        [XmlAttribute]
+        [XmlElement]
         /// <remarks/>
         public int Lines
         {
@@ -267,7 +267,7 @@ namespace NPOI.OpenXmlFormats
                 this.linesFieldSpecified = value;
             }
         }
-        [XmlAttribute]
+        [XmlElement]
         /// <remarks/>
         public int Paragraphs
         {
@@ -294,7 +294,7 @@ namespace NPOI.OpenXmlFormats
                 this.paragraphsFieldSpecified = value;
             }
         }
-        [XmlAttribute]
+        [XmlElement]
         /// <remarks/>
         public int Slides
         {
@@ -321,7 +321,7 @@ namespace NPOI.OpenXmlFormats
                 this.slidesFieldSpecified = value;
             }
         }
-        [XmlAttribute]
+        [XmlElement]
         /// <remarks/>
         public int Notes
         {
@@ -348,7 +348,7 @@ namespace NPOI.OpenXmlFormats
                 this.notesFieldSpecified = value;
             }
         }
-        [XmlAttribute]
+        [XmlElement]
         /// <remarks/>
         public int TotalTime
         {
@@ -375,7 +375,7 @@ namespace NPOI.OpenXmlFormats
                 this.totalTimeFieldSpecified = value;
             }
         }
-        [XmlAttribute]
+        [XmlElement]
         /// <remarks/>
         public int HiddenSlides
         {
@@ -402,7 +402,7 @@ namespace NPOI.OpenXmlFormats
                 this.hiddenSlidesFieldSpecified = value;
             }
         }
-        [XmlAttribute]
+        [XmlElement]
         /// <remarks/>
         public int MMClips
         {
@@ -429,8 +429,7 @@ namespace NPOI.OpenXmlFormats
                 this.mMClipsFieldSpecified = value;
             }
         }
-        [XmlAttribute]
-        /// <remarks/>
+        [XmlElement]
         public bool ScaleCrop
         {
             get
@@ -457,7 +456,7 @@ namespace NPOI.OpenXmlFormats
             }
         }
 
-        /// <remarks/>
+        [XmlElement]
         public CT_VectorVariant HeadingPairs
         {
             get
@@ -470,7 +469,7 @@ namespace NPOI.OpenXmlFormats
             }
         }
 
-        /// <remarks/>
+        [XmlElement]
         public CT_VectorLpstr TitlesOfParts
         {
             get
@@ -482,7 +481,7 @@ namespace NPOI.OpenXmlFormats
                 this.titlesOfPartsField = value;
             }
         }
-        [XmlAttribute]
+        [XmlElement]
         /// <remarks/>
         public bool LinksUpToDate
         {
@@ -509,7 +508,7 @@ namespace NPOI.OpenXmlFormats
                 this.linksUpToDateFieldSpecified = value;
             }
         }
-        [XmlAttribute]
+        [XmlElement]
         /// <remarks/>
         public int CharactersWithSpaces
         {
@@ -536,7 +535,7 @@ namespace NPOI.OpenXmlFormats
                 this.charactersWithSpacesFieldSpecified = value;
             }
         }
-        [XmlAttribute]
+        [XmlElement]
         /// <remarks/>
         public bool SharedDoc
         {
@@ -563,7 +562,7 @@ namespace NPOI.OpenXmlFormats
                 this.sharedDocFieldSpecified = value;
             }
         }
-        [XmlAttribute]
+        [XmlElement]
         /// <remarks/>
         public string HyperlinkBase
         {
@@ -589,7 +588,7 @@ namespace NPOI.OpenXmlFormats
                 this.hLinksField = value;
             }
         }
-        [XmlAttribute]
+        [XmlElement]
         /// <remarks/>
         public bool HyperlinksChanged
         {
@@ -602,7 +601,6 @@ namespace NPOI.OpenXmlFormats
                 this.hyperlinksChangedField = value;
             }
         }
-        [XmlAttribute]
         /// <remarks/>
         [XmlIgnore]
         public bool HyperlinksChangedSpecified
@@ -617,7 +615,7 @@ namespace NPOI.OpenXmlFormats
             }
         }
 
-        /// <remarks/>
+        [XmlElement]
         public CT_DigSigBlob DigSig
         {
             get
@@ -630,7 +628,7 @@ namespace NPOI.OpenXmlFormats
             }
         }
 
-        [XmlAttribute]
+        [XmlElement]
         /// <remarks/>
         public string Application
         {
@@ -643,7 +641,7 @@ namespace NPOI.OpenXmlFormats
                 this.applicationField = value;
             }
         }
-        [XmlAttribute]
+        [XmlElement]
         /// <remarks/>
         public string AppVersion
         {
@@ -656,7 +654,7 @@ namespace NPOI.OpenXmlFormats
                 this.appVersionField = value;
             }
         }
-        [XmlAttribute]
+        [XmlElement]
         /// <remarks/>
         public int DocSecurity
         {

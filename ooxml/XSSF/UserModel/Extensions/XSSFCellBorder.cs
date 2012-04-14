@@ -101,7 +101,7 @@ namespace NPOI.XSSF.UserModel.Extensions
         {
             CT_BorderPr ctborder = GetBorder(side);
             ST_BorderStyle? border = ctborder == null ? ST_BorderStyle.none : ctborder.style;
-            return (BorderStyle)Enum.GetValues(typeof(BorderStyle)).GetValue((int)border - 1);
+            return (BorderStyle)border;
         }
 
         /**
