@@ -22,6 +22,7 @@ namespace NPOI.XSSF.Model
     using NPOI.XSSF.UserModel;
     using NPOI.OpenXmlFormats.Spreadsheet;
     using NPOI.OpenXmlFormats.Dml;
+    using System;
 
     /**
      * Class that represents theme of XLSX document. The theme includes specific
@@ -49,6 +50,7 @@ namespace NPOI.XSSF.Model
         {
             CT_ColorScheme colorScheme = theme.GetTheme().themeElements.clrScheme;
             NPOI.OpenXmlFormats.Dml.CT_Color ctColor = null;
+            throw new NotImplementedException();
             //int cnt = 0;
             //TODO:: iterate ctcolors in colorschema
             //foreach (XmlElement obj in colorScheme.SelectPath("./*"))

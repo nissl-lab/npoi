@@ -1147,7 +1147,7 @@ namespace NPOI.XSSF.UserModel
                     pageMargins.footer = (size);
                     break;
                 default:
-                    throw new ArgumentException("Unknown margin constant:  " + margin);
+                    throw new InvalidOperationException("Unknown margin constant:  " + margin);
             }
         }
 

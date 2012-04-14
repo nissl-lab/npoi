@@ -1784,7 +1784,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
         public int sizeOfStrikeArray()
         {
-            return this.strikeField == null ? 0 : 1;
+            return this.strikeField.Count;
         }
         public CT_BooleanProperty AddNewStrike()
         {
