@@ -92,7 +92,6 @@ namespace NPOI.XWPF.UserModel
             //        pictures.Add(picture);
             //    }
             //}
-            throw new NotImplementedException();
         }
 
         private List<CT_Picture> GetCT_Pictures(/*XmlObject*/XmlElement o)
@@ -240,7 +239,7 @@ namespace NPOI.XWPF.UserModel
         public void SetText(String value)
         {
             //SetText(value,run.TList.Size());
-            throw new NotImplementedException();
+            SetText(value, run.Items.Length);
         }
 
         /**
@@ -251,11 +250,11 @@ namespace NPOI.XWPF.UserModel
          */
         public void SetText(String value, int pos)
         {
-            //if(pos > run.SizeOfTArray()) throw new ArrayIndexOutOfBoundsException("Value too large for the parameter position in XWPFrun.Text=(String value,int pos)");
-            //CTText t = (pos < run.SizeOfTArray() && pos >= 0) ? run.GetTArray(pos) : run.AddNewT();
-            //t.StringValue=(value);
-            //preserveSpaces(t);
-            throw new NotImplementedException();
+            int length = run.Items.Length;
+            if (pos > length) throw new IndexOutOfRangeException("Value too large for the parameter position in XWPFrun.Text=(String value,int pos)");
+            CT_Text t = (pos < length && pos >= 0) ? run.Items[(pos)] as CT_Text : run.AddNewT();
+            t.Value =(value);
+            preserveSpaces(t);
         }
 
         /**
@@ -747,16 +746,15 @@ namespace NPOI.XWPF.UserModel
          *
          * @param xs    the string to check
          */
-        static void preserveSpaces(/*XmlString*/XmlText xs)
+        static void preserveSpaces(CT_Text xs)
         {
-            //String text = xs.StringValue;
-            //if (text != null && (text.StartsWith(" ") || text.EndsWith(" "))) {
+            String text = xs.Value;
+            if (text != null && (text.StartsWith(" ") || text.EndsWith(" "))) {
             //    XmlCursor c = xs.NewCursor();
             //    c.ToNextToken();
             //    c.InsertAttributeWithValue(new QName("http://www.w3.org/XML/1998/namespace", "space"), "preserve");
             //    c.Dispose();
-            //}
-            throw new NotImplementedException();
+            }
         }
 
         /**

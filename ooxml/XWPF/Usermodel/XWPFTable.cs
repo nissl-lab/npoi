@@ -316,14 +316,20 @@ namespace NPOI.XWPF.UserModel
          * returns the type of the BodyElement Table
          * @see NPOI.XWPF.UserModel.IBodyElement#getElementType()
          */
-        public BodyElementType GetElementType()
+        public BodyElementType ElementType
         {
-            return BodyElementType.TABLE;
+            get
+            {
+                return BodyElementType.TABLE;
+            }
         }
 
-        public IBody GetBody()
+        public IBody Body
         {
-            return part;
+            get
+            {
+                return part;
+            }
         }
 
         /**

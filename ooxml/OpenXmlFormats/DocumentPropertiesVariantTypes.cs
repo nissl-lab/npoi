@@ -373,7 +373,10 @@ namespace NPOI.OpenXmlFormats
             }
             set
             {
-                this.itemsField = new List<object>(value);
+                if (value != null && value.Length > 0)
+                    this.itemsField = new List<object>(value);
+                else
+                    this.itemsField = new List<object>();
             }
         }
         [XmlIgnore]
@@ -385,7 +388,10 @@ namespace NPOI.OpenXmlFormats
             }
             set
             {
-                this.itemsElementNameField = new List<ST_VectorBaseType>(value);
+                if (value != null && value.Length > 0)
+                    this.itemsElementNameField = new List<ST_VectorBaseType>(value);
+                else
+                    this.itemsElementNameField = new List<ST_VectorBaseType>();
             }
         }
         [XmlAttribute]

@@ -1055,7 +1055,7 @@ namespace NPOI.OpenXmlFormats.Shared
 
         private CT_OnOff litField;
 
-        private List<object> itemsField;
+        private object[] itemsField;
 
         private CT_ManualBreak brkField;
 
@@ -1068,7 +1068,7 @@ namespace NPOI.OpenXmlFormats.Shared
         {
             this.alnField = new CT_OnOff();
             this.brkField = new CT_ManualBreak();
-            this.itemsField = new List<object>();
+            this.itemsField = new object[0];
             this.litField = new CT_OnOff();
         }
 
@@ -1088,7 +1088,7 @@ namespace NPOI.OpenXmlFormats.Shared
         [System.Xml.Serialization.XmlElementAttribute("nor", typeof(CT_OnOff), Order = 1)]
         [System.Xml.Serialization.XmlElementAttribute("scr", typeof(CT_Script), Order = 1)]
         [System.Xml.Serialization.XmlElementAttribute("sty", typeof(CT_Style), Order = 1)]
-        public List<object> Items
+        public object[] Items
         {
             get
             {
@@ -1178,17 +1178,17 @@ namespace NPOI.OpenXmlFormats.Shared
 
         private CT_RPr rPr1Field;
 
-        private List<object> itemsField;
+        private object[] itemsField;
 
-        private List<ItemsChoiceType6> itemsElementNameField;
+        private ItemsChoiceType6[] itemsElementNameField;
 
         /// <summary>
         /// CT_R class constructor
         /// </summary>
         public CT_R()
         {
-            this.itemsElementNameField = new List<ItemsChoiceType6>();
-            this.itemsField = new List<object>();
+            this.itemsElementNameField = new ItemsChoiceType6[0];
+            this.itemsField = new object[0];
             this.rPr1Field = new CT_RPr();
             this.rPrField = new CT_RPR();
         }
@@ -1253,7 +1253,7 @@ namespace NPOI.OpenXmlFormats.Shared
         [System.Xml.Serialization.XmlElementAttribute("yearLong", typeof(CT_Empty), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 2)]
         [System.Xml.Serialization.XmlElementAttribute("yearShort", typeof(CT_Empty), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 2)]
         [System.Xml.Serialization.XmlChoiceIdentifierAttribute("ItemsElementName")]
-        public List<object> Items
+        public object[] Items
         {
             get
             {
@@ -1267,7 +1267,7 @@ namespace NPOI.OpenXmlFormats.Shared
 
         [System.Xml.Serialization.XmlElementAttribute("ItemsElementName", Order = 3)]
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public List<ItemsChoiceType6> ItemsElementName
+        public ItemsChoiceType6[] ItemsElementName
         {
             get
             {
@@ -1280,26 +1280,146 @@ namespace NPOI.OpenXmlFormats.Shared
         }
     }
 
-    
 
-    //
-    //[System.SerializableAttribute()]
-    //
-    //[System.Xml.Serialization.XmlTypeAttribute(TypeName = "CT_R_", Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    //[System.Xml.Serialization.XmlRootAttribute("CT_R_", Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
-    //public class CT_R_1
-    //{
-    //}
 
-    
+    [System.SerializableAttribute()]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IncludeInSchema = false)]
+    public enum ItemsChoiceType6
+    {
 
-    //
-    //[System.SerializableAttribute()]
-    //
-    //[System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
-    //public class CT_R_
-    //{
-    //}
+        /// <remarks/>
+        t,
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlEnumAttribute("http://schemas.openxmlformats.org/wordprocessingml/2006/main:annotationRef")]
+        annotationRef,
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlEnumAttribute("http://schemas.openxmlformats.org/wordprocessingml/2006/main:br")]
+        br,
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlEnumAttribute("http://schemas.openxmlformats.org/wordprocessingml/2006/main:commentReference")]
+        commentReference,
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlEnumAttribute("http://schemas.openxmlformats.org/wordprocessingml/2006/main:continuationSeparato" +
+            "r")]
+        continuationSeparator,
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlEnumAttribute("http://schemas.openxmlformats.org/wordprocessingml/2006/main:cr")]
+        cr,
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlEnumAttribute("http://schemas.openxmlformats.org/wordprocessingml/2006/main:dayLong")]
+        dayLong,
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlEnumAttribute("http://schemas.openxmlformats.org/wordprocessingml/2006/main:dayShort")]
+        dayShort,
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlEnumAttribute("http://schemas.openxmlformats.org/wordprocessingml/2006/main:delInstrText")]
+        delInstrText,
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlEnumAttribute("http://schemas.openxmlformats.org/wordprocessingml/2006/main:delText")]
+        delText,
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlEnumAttribute("http://schemas.openxmlformats.org/wordprocessingml/2006/main:drawing")]
+        drawing,
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlEnumAttribute("http://schemas.openxmlformats.org/wordprocessingml/2006/main:endnoteRef")]
+        endnoteRef,
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlEnumAttribute("http://schemas.openxmlformats.org/wordprocessingml/2006/main:endnoteReference")]
+        endnoteReference,
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlEnumAttribute("http://schemas.openxmlformats.org/wordprocessingml/2006/main:fldChar")]
+        fldChar,
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlEnumAttribute("http://schemas.openxmlformats.org/wordprocessingml/2006/main:footnoteRef")]
+        footnoteRef,
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlEnumAttribute("http://schemas.openxmlformats.org/wordprocessingml/2006/main:footnoteReference")]
+        footnoteReference,
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlEnumAttribute("http://schemas.openxmlformats.org/wordprocessingml/2006/main:instrText")]
+        instrText,
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlEnumAttribute("http://schemas.openxmlformats.org/wordprocessingml/2006/main:lastRenderedPageBrea" +
+            "k")]
+        lastRenderedPageBreak,
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlEnumAttribute("http://schemas.openxmlformats.org/wordprocessingml/2006/main:monthLong")]
+        monthLong,
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlEnumAttribute("http://schemas.openxmlformats.org/wordprocessingml/2006/main:monthShort")]
+        monthShort,
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlEnumAttribute("http://schemas.openxmlformats.org/wordprocessingml/2006/main:noBreakHyphen")]
+        noBreakHyphen,
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlEnumAttribute("http://schemas.openxmlformats.org/wordprocessingml/2006/main:object")]
+        @object,
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlEnumAttribute("http://schemas.openxmlformats.org/wordprocessingml/2006/main:pgNum")]
+        pgNum,
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlEnumAttribute("http://schemas.openxmlformats.org/wordprocessingml/2006/main:pict")]
+        pict,
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlEnumAttribute("http://schemas.openxmlformats.org/wordprocessingml/2006/main:ptab")]
+        ptab,
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlEnumAttribute("http://schemas.openxmlformats.org/wordprocessingml/2006/main:ruby")]
+        ruby,
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlEnumAttribute("http://schemas.openxmlformats.org/wordprocessingml/2006/main:separator")]
+        separator,
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlEnumAttribute("http://schemas.openxmlformats.org/wordprocessingml/2006/main:softHyphen")]
+        softHyphen,
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlEnumAttribute("http://schemas.openxmlformats.org/wordprocessingml/2006/main:sym")]
+        sym,
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlEnumAttribute("http://schemas.openxmlformats.org/wordprocessingml/2006/main:t")]
+        t1,
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlEnumAttribute("http://schemas.openxmlformats.org/wordprocessingml/2006/main:tab")]
+        tab,
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlEnumAttribute("http://schemas.openxmlformats.org/wordprocessingml/2006/main:yearLong")]
+        yearLong,
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlEnumAttribute("http://schemas.openxmlformats.org/wordprocessingml/2006/main:yearShort")]
+        yearShort,
+    }
 
     
     [System.SerializableAttribute()]
@@ -1328,31 +1448,31 @@ namespace NPOI.OpenXmlFormats.Shared
             }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 1)]
-        public CT_RPrChange ins
-        {
-            get
-            {
-                return this.insField;
-            }
-            set
-            {
-                this.insField = value;
-            }
-        }
+        //[System.Xml.Serialization.XmlElementAttribute(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Type = typeof(CT_RPrChange), Order = 1)]
+        //public CT_RPrChange ins
+        //{
+        //    get
+        //    {
+        //        return this.insField;
+        //    }
+        //    set
+        //    {
+        //        this.insField = value;
+        //    }
+        //}
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 2)]
-        public CT_RPrChange del
-        {
-            get
-            {
-                return this.delField;
-            }
-            set
-            {
-                this.delField = value;
-            }
-        }
+        //[System.Xml.Serialization.XmlElementAttribute(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Type = typeof(CT_RPrChange), Order = 2)]
+        //public CT_RPrChange del
+        //{
+        //    get
+        //    {
+        //        return this.delField;
+        //    }
+        //    set
+        //    {
+        //        this.delField = value;
+        //    }
+        //}
     }
 
     
@@ -1461,9 +1581,9 @@ namespace NPOI.OpenXmlFormats.Shared
 
         private CT_OMathArgPr argPrField;
 
-        private List<object> itemsField;
+        private object[] itemsField;
 
-        private List<ItemsChoiceType7> itemsElementNameField;
+        private ItemsChoiceType7[] itemsElementNameField;
 
         private CT_CtrlPr ctrlPrField;
 
@@ -1473,8 +1593,8 @@ namespace NPOI.OpenXmlFormats.Shared
         public CT_OMathArg()
         {
             this.ctrlPrField = new CT_CtrlPr();
-            this.itemsElementNameField = new List<ItemsChoiceType7>();
-            this.itemsField = new List<object>();
+            this.itemsElementNameField = new ItemsChoiceType7[0];
+            this.itemsField = new object[0];
             this.argPrField = new CT_OMathArgPr();
         }
 
@@ -1537,7 +1657,7 @@ namespace NPOI.OpenXmlFormats.Shared
         [System.Xml.Serialization.XmlElementAttribute("permStart", typeof(CT_PermStart), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 1)]
         [System.Xml.Serialization.XmlElementAttribute("proofErr", typeof(CT_ProofErr), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 1)]
         [System.Xml.Serialization.XmlChoiceIdentifierAttribute("ItemsElementName")]
-        public List<object> Items
+        public object[] Items
         {
             get
             {
@@ -1551,7 +1671,7 @@ namespace NPOI.OpenXmlFormats.Shared
 
         [System.Xml.Serialization.XmlElementAttribute("ItemsElementName", Order = 2)]
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public List<ItemsChoiceType7> ItemsElementName
+        public ItemsChoiceType7[] ItemsElementName
         {
             get
             {
@@ -4432,17 +4552,17 @@ namespace NPOI.OpenXmlFormats.Shared
     public class CT_OMath
     {
 
-        private List<object> itemsField;
+        private object[] itemsField;
 
-        private List<ItemsChoiceType8> itemsElementNameField;
+        private ItemsChoiceType8[] itemsElementNameField;
 
         /// <summary>
         /// CT_OMath class constructor
         /// </summary>
         public CT_OMath()
         {
-            this.itemsElementNameField = new List<ItemsChoiceType8>();
-            this.itemsField = new List<object>();
+            this.itemsElementNameField = new ItemsChoiceType8[0];
+            this.itemsField = new object[0];
         }
 
         [System.Xml.Serialization.XmlElementAttribute("acc", typeof(CT_Acc), Order = 0)]
@@ -4491,7 +4611,7 @@ namespace NPOI.OpenXmlFormats.Shared
         [System.Xml.Serialization.XmlElementAttribute("permStart", typeof(CT_PermStart), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 0)]
         [System.Xml.Serialization.XmlElementAttribute("proofErr", typeof(CT_ProofErr), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 0)]
         [System.Xml.Serialization.XmlChoiceIdentifierAttribute("ItemsElementName")]
-        public List<object> Items
+        public object[] Items
         {
             get
             {
@@ -4505,7 +4625,7 @@ namespace NPOI.OpenXmlFormats.Shared
 
         [System.Xml.Serialization.XmlElementAttribute("ItemsElementName", Order = 1)]
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public List<ItemsChoiceType8> ItemsElementName
+        public ItemsChoiceType8[] ItemsElementName
         {
             get
             {

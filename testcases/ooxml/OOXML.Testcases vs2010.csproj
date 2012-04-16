@@ -115,6 +115,11 @@
     <Compile Include="XSSF\Util\TestNumericRanges.cs" />
     <Compile Include="XSSF\XSSFITestDataProvider.cs" />
     <Compile Include="XSSF\XSSFTestDataSamples.cs" />
+    <Compile Include="XWPF\TestDocumentProtection.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="XWPF\TestPackageCorePropertiesGetKeywords.cs" />
+    <Compile Include="XWPF\XWPFTestDataSamples.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\ooxml\OOXML.csproj">
@@ -159,7 +164,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="SS\Format\" />
-    <Folder Include="XWPF\" />
+    <Folder Include="XWPF\UserModel\" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

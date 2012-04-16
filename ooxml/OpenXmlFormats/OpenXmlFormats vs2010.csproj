@@ -139,6 +139,7 @@
     <Compile Include="Wordprocessing\Paragraph.cs" />
     <Compile Include="Wordprocessing\Settings.cs" />
     <Compile Include="Wordprocessing\Table.cs" />
+    <Compile Include="Wordprocessing\WordPartDocument.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

@@ -19,7 +19,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         private List<object> itemsField;
 
-        private List<ItemsChoiceType15> itemsElementNameField;
+        private List<RunItemsChoiceType> itemsElementNameField;
 
         private byte[] rsidRPrField;
 
@@ -29,7 +29,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         public CT_R()
         {
-            this.itemsElementNameField = new List<ItemsChoiceType15>();
+            this.itemsElementNameField = new List<RunItemsChoiceType>();
             this.itemsField = new List<object>();
             this.rPrField = new CT_RPr();
         }
@@ -80,29 +80,35 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         [System.Xml.Serialization.XmlElementAttribute("yearLong", typeof(CT_Empty), Order = 1)]
         [System.Xml.Serialization.XmlElementAttribute("yearShort", typeof(CT_Empty), Order = 1)]
         [System.Xml.Serialization.XmlChoiceIdentifierAttribute("ItemsElementName")]
-        public List<object> Items
+        public object[] Items
         {
             get
             {
-                return this.itemsField;
+                return this.itemsField.ToArray();
             }
             set
             {
-                this.itemsField = value;
+                if (value != null && value.Length != 0)
+                    this.itemsField = new List<object>(value);
+                else
+                    this.itemsField = new List<object>();
             }
         }
 
         [System.Xml.Serialization.XmlElementAttribute("ItemsElementName", Order = 2)]
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public List<ItemsChoiceType15> ItemsElementName
+        public RunItemsChoiceType[] ItemsElementName
         {
             get
             {
-                return this.itemsElementNameField;
+                return this.itemsElementNameField.ToArray();
             }
             set
             {
-                this.itemsElementNameField = value;
+                if (value != null && value.Length != 0)
+                    this.itemsElementNameField = new List<RunItemsChoiceType>(value);
+                else
+                    this.itemsElementNameField = new List<RunItemsChoiceType>();
             }
         }
 
@@ -144,12 +150,20 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 this.rsidRField = value;
             }
         }
+
+        public CT_Text AddNewT()
+        {
+            CT_Text t = new CT_Text();
+            this.itemsField.Add(t);
+            this.itemsElementNameField.Add(RunItemsChoiceType.t);
+            return t;
+        }
     }
 
 
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IncludeInSchema = false)]
-    public enum ItemsChoiceType15
+    public enum RunItemsChoiceType
     {
 
         /// <remarks/>
@@ -415,14 +429,14 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     public class CT_RubyContent
     {
 
-        private List<object> itemsField;
+        private object[] itemsField;
 
-        private List<ItemsChoiceType16> itemsElementNameField;
+        private ItemsChoiceType16[] itemsElementNameField;
 
         public CT_RubyContent()
         {
-            this.itemsElementNameField = new List<ItemsChoiceType16>();
-            this.itemsField = new List<object>();
+            this.itemsElementNameField = new ItemsChoiceType16[0];
+            this.itemsField = new object[0];
         }
 
         [System.Xml.Serialization.XmlElementAttribute("oMath", typeof(CT_OMath), Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", Order = 0)]
@@ -452,7 +466,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         [System.Xml.Serialization.XmlElementAttribute("proofErr", typeof(CT_ProofErr), Order = 0)]
         [System.Xml.Serialization.XmlElementAttribute("r", typeof(CT_R), Order = 0)]
         [System.Xml.Serialization.XmlChoiceIdentifierAttribute("ItemsElementName")]
-        public List<object> Items
+        public object[] Items
         {
             get
             {
@@ -466,7 +480,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         [System.Xml.Serialization.XmlElementAttribute("ItemsElementName", Order = 1)]
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public List<ItemsChoiceType16> ItemsElementName
+        public ItemsChoiceType16[] ItemsElementName
         {
             get
             {
@@ -1001,14 +1015,14 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     public class CT_RunTrackChange : CT_TrackChange
     {
 
-        private List<object> itemsField;
+        private object[] itemsField;
 
-        private List<ItemsChoiceType6> itemsElementNameField;
+        private ItemsChoiceType6[] itemsElementNameField;
 
         public CT_RunTrackChange()
         {
-            this.itemsElementNameField = new List<ItemsChoiceType6>();
-            this.itemsField = new List<object>();
+            this.itemsElementNameField = new ItemsChoiceType6[0];
+            this.itemsField = new object[0];
         }
 
         [System.Xml.Serialization.XmlElementAttribute("acc", typeof(CT_Acc), Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", Order = 0)]
@@ -1061,7 +1075,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         [System.Xml.Serialization.XmlElementAttribute("sdt", typeof(CT_SdtRun), Order = 0)]
         [System.Xml.Serialization.XmlElementAttribute("smartTag", typeof(CT_SmartTagRun), Order = 0)]
         [System.Xml.Serialization.XmlChoiceIdentifierAttribute("ItemsElementName")]
-        public List<object> Items
+        public object[] Items
         {
             get
             {
@@ -1075,7 +1089,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         [System.Xml.Serialization.XmlElementAttribute("ItemsElementName", Order = 1)]
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public List<ItemsChoiceType6> ItemsElementName
+        public ItemsChoiceType6[] ItemsElementName
         {
             get
             {

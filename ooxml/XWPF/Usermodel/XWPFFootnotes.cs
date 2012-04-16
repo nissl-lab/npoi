@@ -21,6 +21,8 @@ namespace NPOI.XWPF.UserModel
     using System.Collections.Generic;
     using NPOI.OpenXmlFormats.Wordprocessing;
     using NPOI.OpenXml4Net.OPC;
+    using System.IO;
+    using System.Xml;
 
 
     /**
@@ -58,22 +60,21 @@ namespace NPOI.XWPF.UserModel
          * Read document
          */
 
-        protected void onDocumentRead()
+        internal override void OnDocumentRead()
         {
-            /*FootnotesDocument notesDoc;
+            FootnotesDocument notesDoc;
             try {
-               InputStream is1 = GetPackagePart().InputStream;
-               notesDoc = FootnotesDocument.Factory.Parse(is1);
+               Stream is1 = GetPackagePart().GetInputStream();
+               notesDoc = FootnotesDocument.Parse(is1);
                ctFootnotes = notesDoc.Footnotes;
             } catch (XmlException e) {
                throw new POIXMLException();
             }
 	   
             //get any Footnote
-            foreach(CTFtnEdn note in ctFootnotes.FootnoteList) {
+            foreach(CT_FtnEdn note in ctFootnotes.FootnoteList) {
                listFootnote.Add(new XWPFFootnote(note, this));
-            }*/
-            throw new NotImplementedException();
+            }
         }
 
 
@@ -135,11 +136,11 @@ namespace NPOI.XWPF.UserModel
          */
         public XWPFFootnote AddFootnote(CT_FtnEdn note)
         {
-            /*CT_FtnEdn newNote = ctFootnotes.AddNewFootnote();
+            CT_FtnEdn newNote = ctFootnotes.AddNewFootnote();
             newNote.Set(note);
             XWPFFootnote xNote = new XWPFFootnote(newNote, this);
             listFootnote.Add(xNote);
-            return xNote;*/
+            return xNote;
             throw new NotImplementedException();
         }
 

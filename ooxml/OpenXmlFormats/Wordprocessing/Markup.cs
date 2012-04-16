@@ -148,16 +148,16 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     public class CT_Comment : CT_TrackChange
     {
 
-        private List<object> itemsField;
+        private object[] itemsField;
 
-        private List<ItemsChoiceType1> itemsElementNameField;
+        private ItemsChoiceType1[] itemsElementNameField;
 
         private string initialsField;
 
         public CT_Comment()
         {
-            this.itemsElementNameField = new List<ItemsChoiceType1>();
-            this.itemsField = new List<object>();
+            this.itemsElementNameField = new ItemsChoiceType1[0];
+            this.itemsField = new object[0];
         }
 
         [System.Xml.Serialization.XmlElementAttribute("oMath", typeof(CT_OMath), Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", Order = 0)]
@@ -191,7 +191,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         [System.Xml.Serialization.XmlElementAttribute("sdt", typeof(CT_SdtBlock), Order = 0)]
         [System.Xml.Serialization.XmlElementAttribute("tbl", typeof(CT_Tbl), Order = 0)]
         [System.Xml.Serialization.XmlChoiceIdentifierAttribute("ItemsElementName")]
-        public List<object> Items
+        public object[] Items
         {
             get
             {
@@ -205,7 +205,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         [System.Xml.Serialization.XmlElementAttribute("ItemsElementName", Order = 1)]
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public List<ItemsChoiceType1> ItemsElementName
+        public ItemsChoiceType1[] ItemsElementName
         {
             get
             {

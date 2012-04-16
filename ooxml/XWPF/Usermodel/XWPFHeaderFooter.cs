@@ -90,10 +90,12 @@ namespace NPOI.XWPF.UserModel
             return headerFooter;
         }
 
-        public List<IBodyElement> GetBodyElements()
+        public IList<IBodyElement> BodyElements
         {
-            //return Collections.UnmodifiableList(bodyElements);
-            throw new NotImplementedException();
+            get
+            {
+                return bodyElements.AsReadOnly();
+            }
         }
 
         /**
@@ -103,10 +105,12 @@ namespace NPOI.XWPF.UserModel
          *  there could be more in certain cases, or 
          *  a table.
          */
-        public List<XWPFParagraph> GetParagraphs()
+        public IList<XWPFParagraph> Paragraphs
         {
-            //return Collections.UnmodifiableList(paragraphs);
-            throw new NotImplementedException();
+            get
+            {
+                return paragraphs.AsReadOnly();
+            }
         }
 
 
@@ -118,7 +122,7 @@ namespace NPOI.XWPF.UserModel
          *  complex headers/footers have a table or two
          *  in Addition. 
          */
-        public List<XWPFTable> GetTables()
+        public IList<XWPFTable> GetTables()
         {
             //return Collections.UnmodifiableList(tables);
             throw new NotImplementedException();
@@ -147,7 +151,7 @@ namespace NPOI.XWPF.UserModel
                 }
             }
 
-            List<XWPFTable> tables = GetTables();
+            IList<XWPFTable> tables = GetTables();
             for (int i = 0; i < tables.Count; i++)
             {
                 String text = tables[(i)].GetText();
@@ -228,20 +232,24 @@ namespace NPOI.XWPF.UserModel
             return paragraphs;
         }
 
-        public List<XWPFPictureData> GetAllPictures()
+        public IList<XWPFPictureData> AllPictures
         {
-            //return Collections.UnmodifiableList(pictures);
-            throw new NotImplementedException();
+            get
+            {
+                return pictures.AsReadOnly();
+            }
         }
 
         /**
          * Get all Pictures in this package
          * @return all Pictures in this package
          */
-        public List<XWPFPictureData> GetAllPackagePictures()
+        public IList<XWPFPictureData> AllPackagePictures
         {
-            //return document.AllPackagePictures;
-            throw new NotImplementedException();
+            get
+            {
+                return document.AllPackagePictures;
+            }
         }
 
         /**

@@ -116,14 +116,14 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     public class CT_TxbxContent
     {
 
-        private List<object> itemsField;
+        private object[] itemsField;
 
-        private List<ItemsChoiceType> itemsElementNameField;
+        private ItemsChoiceType[] itemsElementNameField;
 
         public CT_TxbxContent()
         {
-            this.itemsElementNameField = new List<ItemsChoiceType>();
-            this.itemsField = new List<object>();
+            this.itemsElementNameField = new ItemsChoiceType[0];
+            this.itemsField = new object[0];
         }
 
         [System.Xml.Serialization.XmlElementAttribute("oMath", typeof(CT_OMath), Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", Order = 0)]
@@ -157,7 +157,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         [System.Xml.Serialization.XmlElementAttribute("sdt", typeof(CT_SdtBlock), Order = 0)]
         [System.Xml.Serialization.XmlElementAttribute("tbl", typeof(CT_Tbl), Order = 0)]
         [System.Xml.Serialization.XmlChoiceIdentifierAttribute("ItemsElementName")]
-        public List<object> Items
+        public object[] Items
         {
             get
             {
@@ -171,7 +171,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         [System.Xml.Serialization.XmlElementAttribute("ItemsElementName", Order = 1)]
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public List<ItemsChoiceType> ItemsElementName
+        public ItemsChoiceType[] ItemsElementName
         {
             get
             {
@@ -2237,16 +2237,16 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     public class CT_Drawing
     {
 
-        private List<object> itemsField;
+        private object[] itemsField;
 
         public CT_Drawing()
         {
-            this.itemsField = new List<object>();
+            this.itemsField = new object[0];
         }
 
         [System.Xml.Serialization.XmlElementAttribute("anchor", typeof(CT_Anchor), Namespace = "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing", Order = 0)]
         [System.Xml.Serialization.XmlElementAttribute("inline", typeof(CT_Inline), Namespace = "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing", Order = 0)]
-        public List<object> Items
+        public object[] Items
         {
             get
             {
@@ -2447,9 +2447,9 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         private CT_Text fldDataField;
 
-        private List<object> itemsField;
+        private object[] itemsField;
 
-        private List<ItemsChoiceType13> itemsElementNameField;
+        private ItemsChoiceType13[] itemsElementNameField;
 
         private string instrField;
 
@@ -2463,8 +2463,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         public CT_SimpleField()
         {
-            this.itemsElementNameField = new List<ItemsChoiceType13>();
-            this.itemsField = new List<object>();
+            this.itemsElementNameField = new ItemsChoiceType13[0];
+            this.itemsField = new object[0];
             this.fldDataField = new CT_Text();
         }
 
@@ -2514,7 +2514,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         [System.Xml.Serialization.XmlElementAttribute("smartTag", typeof(CT_SmartTagRun), Order = 1)]
         [System.Xml.Serialization.XmlElementAttribute("subDoc", typeof(CT_Rel), Order = 1)]
         [System.Xml.Serialization.XmlChoiceIdentifierAttribute("ItemsElementName")]
-        public List<object> Items
+        public object[] Items
         {
             get
             {
@@ -2528,7 +2528,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         [System.Xml.Serialization.XmlElementAttribute("ItemsElementName", Order = 2)]
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public List<ItemsChoiceType13> ItemsElementName
+        public ItemsChoiceType13[] ItemsElementName
         {
             get
             {
@@ -2653,9 +2653,9 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     public class CT_Hyperlink1
     {
 
-        private List<object> itemsField;
+        private object[] itemsField;
 
-        private List<ItemsChoiceType12> itemsElementNameField;
+        private ItemsChoiceType12[] itemsElementNameField;
 
         private string tgtFrameField;
 
@@ -2673,8 +2673,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         public CT_Hyperlink1()
         {
-            this.itemsElementNameField = new List<ItemsChoiceType12>();
-            this.itemsField = new List<object>();
+            this.itemsElementNameField = new ItemsChoiceType12[0];
+            this.itemsField = new object[0];
         }
 
         [System.Xml.Serialization.XmlElementAttribute("oMath", typeof(CT_OMath), Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", Order = 0)]
@@ -2710,7 +2710,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         [System.Xml.Serialization.XmlElementAttribute("smartTag", typeof(CT_SmartTagRun), Order = 0)]
         [System.Xml.Serialization.XmlElementAttribute("subDoc", typeof(CT_Rel), Order = 0)]
         [System.Xml.Serialization.XmlChoiceIdentifierAttribute("ItemsElementName")]
-        public List<object> Items
+        public object[] Items
         {
             get
             {
@@ -2724,7 +2724,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         [System.Xml.Serialization.XmlElementAttribute("ItemsElementName", Order = 1)]
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public List<ItemsChoiceType12> ItemsElementName
+        public ItemsChoiceType12[] ItemsElementName
         {
             get
             {
@@ -3062,14 +3062,6 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
     }
-
-    
-
-    
-
-
-
-    
     
     [System.SerializableAttribute()]
     

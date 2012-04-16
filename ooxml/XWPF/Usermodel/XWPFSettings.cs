@@ -35,11 +35,11 @@ namespace NPOI.XWPF.UserModel
         public XWPFSettings()
             : base()
         {
-            //ctSettings = CT_Settings.Factory.NewInstance();
+            ctSettings = new CT_Settings();
         }
 
 
-        protected void OnDocumentRead()
+        internal override void OnDocumentRead()
         {
             base.OnDocumentRead();
             ReadFrom(GetPackagePart().GetInputStream());
@@ -56,16 +56,20 @@ namespace NPOI.XWPF.UserModel
          * <pre>
          * @return percentage as an integer of zoom level
          */
-        //public long GetZoomPercent() {
-        //   CTZoom zoom;
-        //   if (!ctSettings.IsSetZoom()) {
-        //      zoom = ctSettings.AddNewZoom();
-        //   } else {
-        //      zoom = ctSettings.Zoom;
-        //   }
+        public long GetZoomPercent()
+        {
+            CT_Zoom zoom = ctSettings.zoom;
+            //if (!ctSettings.IsSetZoom())
+            //{
+            //    zoom = ctSettings.AddNewZoom();
+            //}
+            //else
+            //{
+            //    zoom = ctSettings.zoom;
+            //}
 
-        //   return zoom.Percent.LongValue();
-        //}
+            return long.Parse(zoom.percent);
+        }
 
         /**
          * Set zoom.<br/>
@@ -77,13 +81,16 @@ namespace NPOI.XWPF.UserModel
          *    &lt;w:zoom w:percent="50" /&gt; 
          * <pre>
          */
-        //public void SetZoomPercent(long zoomPercent) {
-        //   if (! ctSettings.IsSetZoom()) {
-        //      ctSettings.AddNewZoom();
-        //   }
-        //   CTZoom zoom = ctSettings.Zoom;
-        //   zoom.Percent=(BigInt32.ValueOf(zoomPercent));
-        //}
+        public void SetZoomPercent(long zoomPercent)
+        {
+            //if (!ctSettings.IsSetZoom())
+            //{
+            //    ctSettings.AddNewZoom();
+            //}
+            //CTZoom zoom = ctSettings.Zoom;
+            //zoom.Percent = (BigInt32.ValueOf(zoomPercent));
+            ctSettings.zoom.percent = zoomPercent.ToString();
+        }
 
         /**
          * Verifies the documentProtection tag inside Settings.xml file <br/>
@@ -99,15 +106,15 @@ namespace NPOI.XWPF.UserModel
          * 
          * @return true if documentProtection is enforced with option ReadOnly
          */
-        //public bool IsEnforcedWith(STDocProtect.Enum editValue) {
-        //    CTDocProtect ctDocProtect = ctSettings.DocumentProtection;
+        public bool IsEnforcedWith(ST_DocProtect editValue) {
+            CT_DocProtect ctDocProtect = ctSettings.documentProtection;
 
         //    if (ctDocProtect == null) {
         //        return false;
         //    }
 
-        //    return ctDocProtect.Enforcement.Equals(STOnOff.X_1) && ctDocProtect.Edit.Equals(editValue);
-        //}
+            return ctDocProtect.enforcement.Equals(ST_OnOff.Value1) && ctDocProtect.edit.Equals(editValue);
+        }
 
         /**
          * Enforces the protection with the option specified by passed editValue.<br/>
@@ -122,10 +129,10 @@ namespace NPOI.XWPF.UserModel
          *         &lt;w:documentProtection w:edit=&quot;[passed editValue]&quot; w:enforcement=&quot;1&quot;/&gt;
          * </pre>
          */
-        //public void SetEnforcementEditValue(ST_DocProtect.Enum editValue) {
-        //    safeGetDocumentProtection().enforcement=(ST_OnOff.Item1/*.X_1*/);
-        //    safeGetDocumentProtection().edit=(editValue);
-        //}
+        public void SetEnforcementEditValue(ST_DocProtect editValue) {
+            safeGetDocumentProtection().enforcement=(ST_OnOff.Value1);
+            safeGetDocumentProtection().edit=(editValue);
+        }
 
         /**
          * Removes protection enforcement.<br/>
@@ -138,7 +145,7 @@ namespace NPOI.XWPF.UserModel
         }
 
 
-        protected void Commit()
+        protected override void Commit()
         {
 
             /*XmlOptions xmlOptions = new XmlOptions(DEFAULT_XML_OPTIONS);
@@ -149,6 +156,8 @@ namespace NPOI.XWPF.UserModel
 
             PackagePart part = GetPackagePart();
             Stream out1 = part.GetOutputStream();
+            SettingsDocument sd = new SettingsDocument(ctSettings);
+            sd.Save(out1);
             //ctSettings.Save(out1, xmlOptions);
             out1.Close();
         }
@@ -158,7 +167,7 @@ namespace NPOI.XWPF.UserModel
             CT_DocProtect documentProtection = ctSettings.documentProtection;
             if (documentProtection == null)
             {
-                //documentProtection = CT_DocProtect.Factory.NewInstance();
+                documentProtection = new CT_DocProtect();
                 ctSettings.documentProtection = (documentProtection);
             }
             return ctSettings.documentProtection;
@@ -168,7 +177,7 @@ namespace NPOI.XWPF.UserModel
         {
             try
             {
-                //ctSettings = SettingsDocument.Factory.Parse(inputStream).Settings;
+                ctSettings = SettingsDocument.Parse(inputStream).Settings;
             }
             catch (Exception e)
             {

@@ -61,7 +61,7 @@ namespace NPOI.XWPF.UserModel
                     ConstructorInfo constructor = cls.GetConstructor(new Type[] { typeof(POIXMLDocumentPart), typeof(PackagePart), typeof(PackageRelationship) });
                     return constructor.Invoke(new object[] { parent, part, rel }) as POIXMLDocumentPart;
                 }
-                catch (NotSupportedException e)
+                catch (Exception)
                 {
                     ConstructorInfo constructor = cls.GetConstructor(new Type[] { typeof(PackagePart), typeof(PackageRelationship) });
                     return constructor.Invoke(new object[] { part, rel }) as POIXMLDocumentPart;

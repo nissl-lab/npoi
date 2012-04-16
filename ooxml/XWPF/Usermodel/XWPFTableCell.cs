@@ -74,10 +74,12 @@ namespace NPOI.XWPF.UserModel
          * returns an Iterator with paragraphs and tables
          * @see NPOI.XWPF.UserModel.IBody#getBodyElements()
          */
-        public List<IBodyElement> GetBodyElements()
+        public IList<IBodyElement> BodyElements
         {
-            //return Collections.UnmodifiableList(bodyElements);
-            throw new NotImplementedException();
+            get
+            {
+                return bodyElements.AsReadOnly();
+            }
         }
 
         public void SetParagraph(XWPFParagraph p)
@@ -92,9 +94,12 @@ namespace NPOI.XWPF.UserModel
         /**
          * returns a list of paragraphs
          */
-        public List<XWPFParagraph> GetParagraphs()
+        public IList<XWPFParagraph> Paragraphs
         {
-            return paragraphs;
+            get
+            {
+                return paragraphs;
+            }
         }
 
         /**
@@ -318,7 +323,7 @@ namespace NPOI.XWPF.UserModel
         /** 
          * @see NPOI.XWPF.UserModel.IBody#getTables()
          */
-        public List<XWPFTable> GetTables()
+        public IList<XWPFTable> GetTables()
         {
             //return Collections.UnmodifiableList(tables);
             throw new NotImplementedException();

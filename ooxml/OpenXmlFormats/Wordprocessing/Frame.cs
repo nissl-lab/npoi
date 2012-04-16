@@ -19,11 +19,11 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         private CT_FrameLayout frameLayoutField;
 
-        private List<object> itemsField;
+        private object[] itemsField;
 
         public CT_Frameset()
         {
-            this.itemsField = new List<object>();
+            this.itemsField = new object[0];
             this.frameLayoutField = new CT_FrameLayout();
             this.framesetSplitbarField = new CT_FramesetSplitbar();
             this.szField = new CT_String();
@@ -70,7 +70,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         [System.Xml.Serialization.XmlElementAttribute("frame", typeof(CT_Frame), Order = 3)]
         [System.Xml.Serialization.XmlElementAttribute("frameset", typeof(CT_Frameset), Order = 3)]
-        public List<object> Items
+        public object[] Items
         {
             get
             {

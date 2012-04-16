@@ -169,7 +169,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         private CT_OnOff updateFieldsField;
 
-        private List<System.Xml.XmlElement> hdrShapeDefaultsField;
+        private System.Xml.XmlElement[] hdrShapeDefaultsField;
 
         private CT_FtnDocProps footnotePrField;
 
@@ -205,7 +205,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         private List<CT_Schema> schemaLibraryField;
 
-        private List<System.Xml.XmlElement> shapeDefaultsField;
+        private System.Xml.XmlElement[] shapeDefaultsField;
 
         private CT_OnOff doNotEmbedSmartTagsField;
 
@@ -218,7 +218,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             this.listSeparatorField = new CT_String();
             this.decimalSymbolField = new CT_String();
             this.doNotEmbedSmartTagsField = new CT_OnOff();
-            this.shapeDefaultsField = new List<System.Xml.XmlElement>();
+            this.shapeDefaultsField = new System.Xml.XmlElement[0];
             this.schemaLibraryField = new List<CT_Schema>();
             this.smartTagTypeField = new List<CT_SmartTagType>();
             this.readModeInkLockDownField = new CT_ReadingModeInkLockDown();
@@ -236,7 +236,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             this.compatField = new CT_Compat();
             this.endnotePrField = new CT_EdnDocProps();
             this.footnotePrField = new CT_FtnDocProps();
-            this.hdrShapeDefaultsField = new List<System.Xml.XmlElement>();
+            this.hdrShapeDefaultsField = new System.Xml.XmlElement[0];
             this.updateFieldsField = new CT_OnOff();
             this.alwaysMergeEmptyNamespaceField = new CT_OnOff();
             this.showXMLTagsField = new CT_OnOff();
@@ -1319,7 +1319,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         [System.Xml.Serialization.XmlArrayAttribute(Order = 77)]
         [System.Xml.Serialization.XmlArrayItemAttribute("", Namespace = "urn:schemas-microsoft-com:office:office", IsNullable = false)]
-        public List<System.Xml.XmlElement> hdrShapeDefaults
+        public System.Xml.XmlElement[] hdrShapeDefaults
         {
             get
             {
@@ -1556,7 +1556,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         [System.Xml.Serialization.XmlArrayAttribute(Order = 95)]
         [System.Xml.Serialization.XmlArrayItemAttribute("", Namespace = "urn:schemas-microsoft-com:office:office", IsNullable = false)]
-        public List<System.Xml.XmlElement> shapeDefaults
+        public System.Xml.XmlElement[] shapeDefaults
         {
             get
             {
@@ -1961,7 +1961,11 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     [System.Xml.Serialization.XmlRootAttribute(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
     public class CT_Zoom
     {
-
+        public CT_Zoom()
+        {
+            valField = ST_Zoom.none;
+            percent = "100";
+        }
         private ST_Zoom valField;
 
         private bool valFieldSpecified;
@@ -3248,7 +3252,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         {
             get
             {
-                return this.editFieldSpecified;
+                return this.editField != ST_DocProtect.none;
+                //return this.editFieldSpecified;
             }
             set
             {
@@ -3300,7 +3305,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         {
             get
             {
-                return this.enforcementFieldSpecified;
+                return this.editField != ST_DocProtect.none;
+                //return this.enforcementFieldSpecified;
             }
             set
             {
@@ -5844,15 +5850,15 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     public class CT_ShapeDefaults
     {
 
-        private List<System.Xml.XmlElement> itemsField;
+        private System.Xml.XmlElement[] itemsField;
 
         public CT_ShapeDefaults()
         {
-            this.itemsField = new List<System.Xml.XmlElement>();
+            this.itemsField = new System.Xml.XmlElement[0];
         }
 
         [System.Xml.Serialization.XmlAnyElementAttribute(Namespace = "urn:schemas-microsoft-com:office:office", Order = 0)]
-        public List<System.Xml.XmlElement> Items
+        public System.Xml.XmlElement[] Items
         {
             get
             {

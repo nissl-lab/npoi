@@ -17,20 +17,20 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     public class CT_PictureBase
     {
 
-        private List<System.Xml.XmlElement> itemsField;
+        private System.Xml.XmlElement[] itemsField;
 
-        private List<ItemsChoiceType9> itemsElementNameField;
+        private ItemsChoiceType9[] itemsElementNameField;
 
         public CT_PictureBase()
         {
-            this.itemsElementNameField = new List<ItemsChoiceType9>();
-            this.itemsField = new List<System.Xml.XmlElement>();
+            this.itemsElementNameField = new ItemsChoiceType9[0];
+            this.itemsField = new System.Xml.XmlElement[0];
         }
 
         [System.Xml.Serialization.XmlAnyElementAttribute(Namespace = "urn:schemas-microsoft-com:office:office", Order = 0)]
         [System.Xml.Serialization.XmlAnyElementAttribute(Namespace = "urn:schemas-microsoft-com:vml", Order = 0)]
         [System.Xml.Serialization.XmlChoiceIdentifierAttribute("ItemsElementName")]
-        public List<System.Xml.XmlElement> Items
+        public System.Xml.XmlElement[] Items
         {
             get
             {
@@ -44,7 +44,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         [System.Xml.Serialization.XmlElementAttribute("ItemsElementName", Order = 1)]
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public List<ItemsChoiceType9> ItemsElementName
+        public ItemsChoiceType9[] ItemsElementName
         {
             get
             {

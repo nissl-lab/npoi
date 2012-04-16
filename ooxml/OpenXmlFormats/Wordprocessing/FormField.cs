@@ -186,14 +186,14 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     public class CT_FFData
     {
 
-        private List<object> itemsField;
+        private object[] itemsField;
 
-        private List<ItemsChoiceType14> itemsElementNameField;
+        private ItemsChoiceType14[] itemsElementNameField;
 
         public CT_FFData()
         {
-            this.itemsElementNameField = new List<ItemsChoiceType14>();
-            this.itemsField = new List<object>();
+            this.itemsElementNameField = new ItemsChoiceType14[0];
+            this.itemsField = new object[0];
         }
 
         [System.Xml.Serialization.XmlElementAttribute("calcOnExit", typeof(CT_OnOff), Order = 0)]
@@ -207,7 +207,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         [System.Xml.Serialization.XmlElementAttribute("statusText", typeof(CT_FFStatusText), Order = 0)]
         [System.Xml.Serialization.XmlElementAttribute("textInput", typeof(CT_FFTextInput), Order = 0)]
         [System.Xml.Serialization.XmlChoiceIdentifierAttribute("ItemsElementName")]
-        public List<object> Items
+        public object[] Items
         {
             get
             {
@@ -221,7 +221,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         [System.Xml.Serialization.XmlElementAttribute("ItemsElementName", Order = 1)]
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public List<ItemsChoiceType14> ItemsElementName
+        public ItemsChoiceType14[] ItemsElementName
         {
             get
             {

@@ -26,10 +26,16 @@ namespace NPOI.XWPF.UserModel
      */
     public interface IBodyElement
     {
-        IBody GetBody();
+        IBody Body
+        {
+            get;
+        }
         POIXMLDocumentPart GetPart();
         BodyType GetPartType();
-        BodyElementType GetElementType();
+        BodyElementType ElementType
+        {
+            get;
+        }
     }
 
 }

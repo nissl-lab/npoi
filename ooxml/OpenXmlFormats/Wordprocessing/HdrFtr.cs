@@ -16,14 +16,14 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     public class CT_HdrFtr
     {
 
-        private List<object> itemsField;
+        private object[] itemsField;
 
-        private List<ItemsChoiceType8> itemsElementNameField;
+        private ItemsChoiceType8[] itemsElementNameField;
 
         public CT_HdrFtr()
         {
-            this.itemsElementNameField = new List<ItemsChoiceType8>();
-            this.itemsField = new List<object>();
+            this.itemsElementNameField = new ItemsChoiceType8[0];
+            this.itemsField = new object[0];
         }
 
         [System.Xml.Serialization.XmlElementAttribute("oMath", typeof(CT_OMath), Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", Order = 0)]
@@ -57,7 +57,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         [System.Xml.Serialization.XmlElementAttribute("sdt", typeof(CT_SdtBlock), Order = 0)]
         [System.Xml.Serialization.XmlElementAttribute("tbl", typeof(CT_Tbl), Order = 0)]
         [System.Xml.Serialization.XmlChoiceIdentifierAttribute("ItemsElementName")]
-        public List<object> Items
+        public object[] Items
         {
             get
             {
@@ -71,7 +71,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         [System.Xml.Serialization.XmlElementAttribute("ItemsElementName", Order = 1)]
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public List<ItemsChoiceType8> ItemsElementName
+        public ItemsChoiceType8[] ItemsElementName
         {
             get
             {
@@ -371,6 +371,14 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 this.footnoteField = value;
             }
         }
+        public CT_FtnEdn AddNewFootnote()
+        {
+            CT_FtnEdn f = new CT_FtnEdn();
+            footnoteField.Add(f);
+            return f;
+        }
+
+        public IEnumerable<CT_FtnEdn> FootnoteList { get { return footnoteField.AsReadOnly(); } private set{} }
     }
 
 
@@ -381,9 +389,9 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     public class CT_FtnEdn
     {
 
-        private List<object> itemsField;
+        private object[] itemsField;
 
-        private List<ItemsChoiceType7> itemsElementNameField;
+        private ItemsChoiceType7[] itemsElementNameField;
 
         private ST_FtnEdn typeField;
 
@@ -393,8 +401,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         public CT_FtnEdn()
         {
-            this.itemsElementNameField = new List<ItemsChoiceType7>();
-            this.itemsField = new List<object>();
+            this.itemsElementNameField = new ItemsChoiceType7[0];
+            this.itemsField = new object[0];
         }
 
         [System.Xml.Serialization.XmlElementAttribute("oMath", typeof(CT_OMath), Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", Order = 0)]
@@ -428,7 +436,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         [System.Xml.Serialization.XmlElementAttribute("sdt", typeof(CT_SdtBlock), Order = 0)]
         [System.Xml.Serialization.XmlElementAttribute("tbl", typeof(CT_Tbl), Order = 0)]
         [System.Xml.Serialization.XmlChoiceIdentifierAttribute("ItemsElementName")]
-        public List<object> Items
+        public object[] Items
         {
             get
             {
@@ -442,7 +450,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         [System.Xml.Serialization.XmlElementAttribute("ItemsElementName", Order = 1)]
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public List<ItemsChoiceType7> ItemsElementName
+        public ItemsChoiceType7[] ItemsElementName
         {
             get
             {
@@ -491,6 +499,13 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             {
                 this.idField = value;
             }
+        }
+        public void Set(CT_FtnEdn note)
+        {
+            this.idField = note.idField;
+            this.itemsElementNameField = note.itemsElementNameField;
+            this.itemsField = note.itemsField;
+            this.typeField = note.typeField;
         }
     }
 

@@ -54,20 +54,20 @@ namespace NPOI.XWPF.UserModel
          * Returns an Iterator with paragraphs and tables, 
          *  in the order that they occur in the text.
          */
-        List<IBodyElement> GetBodyElements();
+        IList<IBodyElement> BodyElements { get; }
 
         /**
          * Returns the paragraph(s) that holds
          *  the text of the header or footer.
          */
-        List<XWPFParagraph> GetParagraphs();
+        IList<XWPFParagraph> Paragraphs { get; }
 
         /**
          * Return the table(s) that holds the text
          *  of the IBodyPart, for complex cases
          *  where a paragraph isn't used.
          */
-        List<XWPFTable> GetTables();
+        IList<XWPFTable> GetTables();
 
         /**
          * if there is a corresponding {@link XWPFParagraph} of the parameter ctTable in the paragraphList of this header or footer

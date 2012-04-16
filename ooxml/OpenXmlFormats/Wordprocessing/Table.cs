@@ -15,26 +15,26 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     public class CT_Tbl
     {
 
-        private List<object> itemsField;
+        private object[] itemsField;
 
-        private List<ItemsChoiceType30> itemsElementNameField;
+        private ItemsChoiceType30[] itemsElementNameField;
 
         private CT_TblPr tblPrField;
 
         private CT_TblGrid tblGridField;
 
-        private List<object> items1Field;
+        private object[] items1Field;
 
-        private List<Items1ChoiceType> items1ElementNameField;
+        private Items1ChoiceType[] items1ElementNameField;
 
         public CT_Tbl()
         {
-            this.items1ElementNameField = new List<Items1ChoiceType>();
-            this.items1Field = new List<object>();
+            this.items1ElementNameField = new Items1ChoiceType[0];
+            this.items1Field = new object[0];
             this.tblGridField = new CT_TblGrid();
             this.tblPrField = new CT_TblPr();
-            this.itemsElementNameField = new List<ItemsChoiceType30>();
-            this.itemsField = new List<object>();
+            this.itemsElementNameField = new ItemsChoiceType30[0];
+            this.itemsField = new object[0];
         }
 
         [System.Xml.Serialization.XmlElementAttribute("bookmarkEnd", typeof(CT_MarkupRange), Order = 0)]
@@ -54,7 +54,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         [System.Xml.Serialization.XmlElementAttribute("moveToRangeEnd", typeof(CT_MarkupRange), Order = 0)]
         [System.Xml.Serialization.XmlElementAttribute("moveToRangeStart", typeof(CT_MoveBookmark), Order = 0)]
         [System.Xml.Serialization.XmlChoiceIdentifierAttribute("ItemsElementName")]
-        public List<object> Items
+        public object[] Items
         {
             get
             {
@@ -68,7 +68,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         [System.Xml.Serialization.XmlElementAttribute("ItemsElementName", Order = 1)]
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public List<ItemsChoiceType30> ItemsElementName
+        public ItemsChoiceType30[] ItemsElementName
         {
             get
             {
@@ -135,7 +135,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         [System.Xml.Serialization.XmlElementAttribute("sdt", typeof(CT_SdtRow), Order = 4)]
         [System.Xml.Serialization.XmlElementAttribute("tr", typeof(CT_Row), Order = 4)]
         [System.Xml.Serialization.XmlChoiceIdentifierAttribute("Items1ElementName")]
-        public List<object> Items1
+        public object[] Items1
         {
             get
             {
@@ -149,7 +149,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         [System.Xml.Serialization.XmlElementAttribute("Items1ElementName", Order = 5)]
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public List<Items1ChoiceType> Items1ElementName
+        public Items1ChoiceType[] Items1ElementName
         {
             get
             {
@@ -1646,14 +1646,14 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     public class CT_TrPrBase
     {
 
-        private List<object> itemsField;
+        private object[] itemsField;
 
-        private List<ItemsChoiceType2> itemsElementNameField;
+        private ItemsChoiceType2[] itemsElementNameField;
 
         public CT_TrPrBase()
         {
-            this.itemsElementNameField = new List<ItemsChoiceType2>();
-            this.itemsField = new List<object>();
+            this.itemsElementNameField = new ItemsChoiceType2[0];
+            this.itemsField = new object[0];
         }
 
         [System.Xml.Serialization.XmlElementAttribute("cantSplit", typeof(CT_OnOff), Order = 0)]
@@ -1669,7 +1669,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         [System.Xml.Serialization.XmlElementAttribute("wAfter", typeof(CT_TblWidth), Order = 0)]
         [System.Xml.Serialization.XmlElementAttribute("wBefore", typeof(CT_TblWidth), Order = 0)]
         [System.Xml.Serialization.XmlChoiceIdentifierAttribute("ItemsElementName")]
-        public List<object> Items
+        public object[] Items
         {
             get
             {
@@ -1683,7 +1683,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         [System.Xml.Serialization.XmlElementAttribute("ItemsElementName", Order = 1)]
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public List<ItemsChoiceType2> ItemsElementName
+        public ItemsChoiceType2[] ItemsElementName
         {
             get
             {
@@ -1707,14 +1707,14 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         private CT_TcPr tcPrField;
 
-        private List<object> itemsField;
+        private object[] itemsField;
 
-        private List<ItemsChoiceType29> itemsElementNameField;
+        private ItemsChoiceType29[] itemsElementNameField;
 
         public CT_Tc()
         {
-            this.itemsElementNameField = new List<ItemsChoiceType29>();
-            this.itemsField = new List<object>();
+            this.itemsElementNameField = new ItemsChoiceType29[0];
+            this.itemsField = new object[0];
             this.tcPrField = new CT_TcPr();
         }
 
@@ -1762,7 +1762,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         [System.Xml.Serialization.XmlElementAttribute("sdt", typeof(CT_SdtBlock), Order = 1)]
         [System.Xml.Serialization.XmlElementAttribute("tbl", typeof(CT_Tbl), Order = 1)]
         [System.Xml.Serialization.XmlChoiceIdentifierAttribute("ItemsElementName")]
-        public List<object> Items
+        public object[] Items
         {
             get
             {
@@ -1776,7 +1776,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         [System.Xml.Serialization.XmlElementAttribute("ItemsElementName", Order = 2)]
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public List<ItemsChoiceType29> ItemsElementName
+        public ItemsChoiceType29[] ItemsElementName
         {
             get
             {
@@ -2695,9 +2695,9 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         private CT_TrPr trPrField;
 
-        private List<object> itemsField;
+        private object[] itemsField;
 
-        private List<ItemsChoiceType20> itemsElementNameField;
+        private ItemsChoiceType20[] itemsElementNameField;
 
         private byte[] rsidRPrField;
 
@@ -2709,8 +2709,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         public CT_Row()
         {
-            this.itemsElementNameField = new List<ItemsChoiceType20>();
-            this.itemsField = new List<object>();
+            this.itemsElementNameField = new ItemsChoiceType20[0];
+            this.itemsField = new object[0];
             this.trPrField = new CT_TrPr();
             this.tblPrExField = new CT_TblPrEx();
         }
@@ -2770,7 +2770,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         [System.Xml.Serialization.XmlElementAttribute("sdt", typeof(CT_SdtCell), Order = 2)]
         [System.Xml.Serialization.XmlElementAttribute("tc", typeof(CT_Tc), Order = 2)]
         [System.Xml.Serialization.XmlChoiceIdentifierAttribute("ItemsElementName")]
-        public List<object> Items
+        public object[] Items
         {
             get
             {
@@ -2784,7 +2784,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         [System.Xml.Serialization.XmlElementAttribute("ItemsElementName", Order = 3)]
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public List<ItemsChoiceType20> ItemsElementName
+        public ItemsChoiceType20[] ItemsElementName
         {
             get
             {

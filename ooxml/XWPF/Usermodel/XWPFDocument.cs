@@ -39,7 +39,7 @@ namespace NPOI.XWPF.UserModel
     public class XWPFDocument : POIXMLDocument, Document, IBody
     {
 
-        //private CTDocument1 ctDocument;
+        private CT_Document ctDocument;
         private XWPFSettings Settings;
         /**
          * Keeps track on all id-values used in this document and included parts, like headers, footers, etc.
@@ -86,15 +86,23 @@ namespace NPOI.XWPF.UserModel
         }
 
 
-        protected void onDocumentRead()
+        internal override void OnDocumentRead()
         {
-            //try {
-            //    DocumentDocument doc = DocumentDocument.Factory.Parse(getPackagePart().InputStream);
-            //    ctDocument = doc.Document;
+            try {
+                DocumentDocument doc = DocumentDocument.Parse(GetPackagePart().GetInputStream());
+                ctDocument = doc.Document;
 
-            //    InitFootnotes();
-
-            //    // parse the document with cursor and add
+                //InitFootnotes();
+                foreach (object o in ctDocument.body.Items)
+                {
+                    if (o is CT_P)
+                    {
+                    }
+                    else if (o is CT_Tbl)
+                    {
+                    }
+                }
+                // parse the document with cursor and add
             //    // the XmlObject to its lists
             //    XmlCursor cursor = ctDocument.Body.NewCursor();
             //    cursor.SelectPath("./*");
@@ -112,88 +120,106 @@ namespace NPOI.XWPF.UserModel
             //    }
             //    cursor.Dispose();
 
-            //    // Sort out headers and footers
-            //    if (doc.Document.Body.SectPr != null)
-            //        headerFooterPolicy = new XWPFHeaderFooterPolicy(this);
+                // Sort out headers and footers
+                if (doc.Document.body.sectPr != null)
+                    headerFooterPolicy = new XWPFHeaderFooterPolicy(this);
 
-            //    // Create for each XML-part in the Package a PartClass
-            //    foreach (POIXMLDocumentPart p in GetRelations()) {
-            //        String relation = p.PackageRelationship.RelationshipType;
-            //        if (relation.Equals(XWPFRelation.STYLES.Relation)) {
-            //            this.styles = (XWPFStyles) p;
-            //            this.styles.OnDocumentRead();
-            //        } else if (relation.Equals(XWPFRelation.NUMBERING.Relation)) {
-            //            this.numbering = (XWPFNumbering) p;
-            //            this.numbering.OnDocumentRead();
-            //        } else if (relation.Equals(XWPFRelation.FOOTER.Relation)) {
-            //            XWPFFooter footer = (XWPFFooter) p;
-            //            footers.Add(footer);
-            //            footer.OnDocumentRead();
-            //        } else if (relation.Equals(XWPFRelation.HEADER.Relation)) {
-            //            XWPFHeader header = (XWPFHeader) p;
-            //            headers.Add(header);
-            //            header.OnDocumentRead();
-            //        } else if (relation.Equals(XWPFRelation.COMMENT.Relation)) {
-            //            // TODO Create according XWPFComment class, extending POIXMLDocumentPart
-            //            CommentsDocument cmntdoc = CommentsDocument.Factory.Parse(p.PackagePart.InputStream);
-            //            foreach (CTComment ctcomment in cmntdoc.Comments.CommentList) {
-            //                comments.Add(new XWPFComment(ctcomment, this));
-            //            }
-            //        } else if (relation.Equals(XWPFRelation.SETTINGS.Relation)) {
-            //            Settings = (XWPFSettings) p;
-            //            Settings.OnDocumentRead();
-            //        } else if (relation.Equals(XWPFRelation.IMAGES.Relation)) {
-            //            XWPFPictureData picData = (XWPFPictureData) p;
-            //            picData.OnDocumentRead();
-            //            registerPackagePictureData(picData);
-            //            pictures.Add(picData);
-            //        }
-            //    }
-            //    InitHyperlinks();
-            //} catch (XmlException e) {
-            //    throw new POIXMLException(e);
-            //}
-            throw new NotImplementedException();
+                // Create for each XML-part in the Package a PartClass
+                foreach (POIXMLDocumentPart p in GetRelations()) {
+                    String relation = p.GetPackageRelationship().RelationshipType;
+                    if (relation.Equals(XWPFRelation.STYLES.Relation))
+                    {
+                        this.styles = (XWPFStyles)p;
+                        this.styles.OnDocumentRead();
+                    }
+                    else if (relation.Equals(XWPFRelation.NUMBERING.Relation))
+                    {
+                        this.numbering = (XWPFNumbering)p;
+                        this.numbering.OnDocumentRead();
+                    }
+                    else if (relation.Equals(XWPFRelation.FOOTER.Relation))
+                    {
+                        XWPFFooter footer = (XWPFFooter)p;
+                        footers.Add(footer);
+                        footer.OnDocumentRead();
+                    }
+                    else if (relation.Equals(XWPFRelation.HEADER.Relation))
+                    {
+                        XWPFHeader header = (XWPFHeader)p;
+                        headers.Add(header);
+                        header.OnDocumentRead();
+                    }
+                    else if (relation.Equals(XWPFRelation.COMMENT.Relation))
+                    {
+                        // TODO Create according XWPFComment class, extending POIXMLDocumentPart
+                        //CommentsDocument cmntdoc = CommentsDocument.Factory.Parse(p.PackagePart.InputStream);
+                        //foreach (CTComment ctcomment in cmntdoc.Comments.CommentList)
+                        //{
+                        //    comments.Add(new XWPFComment(ctcomment, this));
+                        //}
+                        throw new NotImplementedException();
+                    }
+                    else if (relation.Equals(XWPFRelation.SETTINGS.Relation))
+                    {
+                        Settings = (XWPFSettings)p;
+                        Settings.OnDocumentRead();
+                    }
+                    else if (relation.Equals(XWPFRelation.IMAGES.Relation))
+                    {
+                        XWPFPictureData picData = (XWPFPictureData)p;
+                        picData.OnDocumentRead();
+                        RegisterPackagePictureData(picData);
+                        pictures.Add(picData);
+                    }
+                }
+                InitHyperlinks();
+            } catch (XmlException e) {
+                throw new POIXMLException(e);
+            }
+            
         }
 
         private void InitHyperlinks()
         {
             // Get the hyperlinks
             // TODO: make me optional/Separated in private function
-            //try {
-            //    Iterator<PackageRelationship> relIter =
-            //        GetPackagePart().GetRelationshipsByType(XWPFRelation.HYPERLINK.Relation).iterator();
-            //    while(relIter.HasNext()) {
-            //        PackageRelationship rel = relIter.Next();
-            //        hyperlinks.Add(new XWPFHyperlink(rel.Id, rel.TargetURI.ToString()));
-            //    }
-            //} catch (InvalidFormatException e){
-            //    throw new POIXMLException(e);
-            //}
-            throw new NotImplementedException();
+            try
+            {
+                IEnumerator<PackageRelationship> relIter =
+                    GetPackagePart().GetRelationshipsByType(XWPFRelation.HYPERLINK.Relation).GetEnumerator();
+                while (relIter.MoveNext())
+                {
+                    PackageRelationship rel = relIter.Current;
+                    hyperlinks.Add(new XWPFHyperlink(rel.Id, rel.TargetUri.ToString()));
+                }
+            }
+            catch (InvalidDataException e)
+            {
+                throw new POIXMLException(e);
+            }
         }
 
         private void InitFootnotes()
         {
-            //foreach(POIXMLDocumentPart p in GetRelations()){
-            //   String relation = p.PackageRelationship.RelationshipType;
-            //   if (relation.Equals(XWPFRelation.FOOTNOTE.Relation)) {
-            //      FootnotesDocument footnotesDocument = FootnotesDocument.Factory.Parse(p.PackagePart.InputStream);
-            //      this.footnotes = (XWPFFootnotes)p;
-            //      this.footnotes.OnDocumentRead();
+            foreach(POIXMLDocumentPart p in GetRelations()){
+               String relation = p.GetPackageRelationship().RelationshipType;
+               if (relation.Equals(XWPFRelation.FOOTNOTE.Relation)) {
+                  FootnotesDocument footnotesDocument = FootnotesDocument.Parse(p.GetPackagePart().GetInputStream());
+                  this.footnotes = (XWPFFootnotes)p;
+                  this.footnotes.OnDocumentRead();
 
-            //      foreach(CTFtnEdn ctFtnEdn in footnotesDocument.Footnotes.FootnoteList) {
-            //         footnotes.AddFootnote(ctFtnEdn);
-            //      }
-            //   } else if (relation.Equals(XWPFRelation.ENDNOTE.Relation)){
-            //      EndnotesDocument endnotesDocument = EndnotesDocument.Factory.Parse(p.PackagePart.InputStream);
+                  foreach (CT_FtnEdn ctFtnEdn in footnotesDocument.Footnotes.footnote)
+                  {
+                     footnotes.AddFootnote(ctFtnEdn);
+                  }
+               } else if (relation.Equals(XWPFRelation.ENDNOTE.Relation)){
+                   EndnotesDocument endnotesDocument = EndnotesDocument.Parse(p.GetPackagePart().GetInputStream());
 
-            //      foreach(CTFtnEdn ctFtnEdn in endnotesDocument.Endnotes.EndnoteList) {
-            //         endnotes.Put(ctFtnEdn.Id.IntValue(), new XWPFFootnote(this, ctFtnEdn));
-            //      }
-            //   }
-            //}
-            throw new NotImplementedException();
+                  foreach(CT_FtnEdn ctFtnEdn in endnotesDocument.Endnotes.endnote) {
+                     endnotes.Add(int.Parse(ctFtnEdn.id), new XWPFFootnote(this, ctFtnEdn));
+                  }
+               }
+            }
         }
 
         /**
@@ -201,22 +227,23 @@ namespace NPOI.XWPF.UserModel
          */
         protected static OPCPackage newPackage()
         {
-            // try {
-            //    OPCPackage pkg = OPCPackage.Create(new MemoryStream());
-            //    // Main part
-            //    PackagePartName corePartName = PackagingURIHelper.CreatePartName(XWPFRelation.DOCUMENT.DefaultFileName);
-            //    // Create main part relationship
-            //    pkg.AddRelationship(corePartName, TargetMode.INTERNAL, PackageRelationshipTypes.CORE_DOCUMENT);
-            //    // Create main document part
-            //    pkg.CreatePart(corePartName, XWPFRelation.DOCUMENT.ContentType);
+             try {
+                OPCPackage pkg = OPCPackage.Create(new MemoryStream());
+                // Main part
+                PackagePartName corePartName = PackagingUriHelper.CreatePartName(XWPFRelation.DOCUMENT.DefaultFileName);
+                // Create main part relationship
+                pkg.AddRelationship(corePartName, TargetMode.Internal, PackageRelationshipTypes.CORE_DOCUMENT);
+                // Create main document part
+                pkg.CreatePart(corePartName, XWPFRelation.DOCUMENT.ContentType);
 
-            //    pkg.PackageProperties.CreatorProperty=(DOCUMENT_CREATOR);
+                pkg.GetPackageProperties().SetCreatorProperty(DOCUMENT_CREATOR);
 
-            //    return pkg;
-            //} catch (Exception e){
-            //    throw new POIXMLException(e);
-            //}
-            throw new NotImplementedException();
+                return pkg;
+             }
+             catch (Exception e)
+             {
+                 throw new POIXMLException(e);
+             }
         }
 
         /**
@@ -225,24 +252,25 @@ namespace NPOI.XWPF.UserModel
 
         protected void onDocumentCreate()
         {
-            //ctDocument = CTDocument1.Factory.NewInstance();
+            ctDocument = new CT_Document();
             //ctDocument.AddNewBody();
 
-            //Settings = (XWPFSettings) CreateRelationship(XWPFRelation.SETTINGS,XWPFFactory.Instance);
+            Settings = (XWPFSettings) CreateRelationship(XWPFRelation.SETTINGS,XWPFFactory.GetInstance());
 
-            //POIXMLProperties.ExtendedProperties expProps = GetProperties().ExtendedProperties;
-            //expProps.UnderlyingProperties.Application=(DOCUMENT_CREATOR);
-            throw new NotImplementedException();
+            POIXMLProperties.ExtendedProperties expProps = GetProperties().GetExtendedProperties();
+            expProps.GetUnderlyingProperties().Application = (DOCUMENT_CREATOR);
         }
 
         /**
          * Returns the low level document base object
          */
         //CTDocument1
-        public CT_Document GetDocument()
+        public CT_Document Document
         {
-            //return ctDocument;
-            throw new NotImplementedException();
+            get
+            {
+                return ctDocument;
+            }
         }
 
         IdentifierManager GetDrawingIdManager()
@@ -254,28 +282,31 @@ namespace NPOI.XWPF.UserModel
          * returns an Iterator with paragraphs and tables
          * @see NPOI.XWPF.UserModel.IBody#getBodyElements()
          */
-        public List<IBodyElement> GetBodyElements()
+        public IList<IBodyElement> BodyElements
         {
-            //return Collections.UnmodifiableList(bodyElements);
-            throw new NotImplementedException();
+            get
+            {
+                return bodyElements.AsReadOnly();
+            }
         }
 
         /**
          * @see NPOI.XWPF.UserModel.IBody#getParagraphs()
          */
-        public List<XWPFParagraph> GetParagraphs()
+        public IList<XWPFParagraph> Paragraphs
         {
-            //return Collections.UnmodifiableList(paragraphs);
-            throw new NotImplementedException();
+            get
+            {
+                return paragraphs.AsReadOnly();
+            }
         }
 
         /**
          * @see NPOI.XWPF.UserModel.IBody#getTables()
          */
-        public List<XWPFTable> GetTables()
+        public IList<XWPFTable> GetTables()
         {
-            //return Collections.UnmodifiableList(tables);
-            throw new NotImplementedException();
+            return tables.AsReadOnly();
         }
 
         /**
@@ -294,10 +325,9 @@ namespace NPOI.XWPF.UserModel
          * 
          * @return  the list of footers
          */
-        public List<XWPFFooter> GetFooterList()
+        public IList<XWPFFooter> GetFooterList()
         {
-            //return Collections.UnmodifiableList(footers);
-            throw new NotImplementedException();
+            return footers.AsReadOnly();
         }
 
         public XWPFFooter GetFooterArray(int pos)
@@ -309,10 +339,12 @@ namespace NPOI.XWPF.UserModel
          * 
          * @return  the list of headers
          */
-        public List<XWPFHeader> GetHeaderList()
+        public IList<XWPFHeader> HeaderList
         {
-            //return Collections.UnmodifiableList(headers);
-            throw new NotImplementedException();
+            get
+            {
+                return headers.AsReadOnly();
+            }
         }
 
         public XWPFHeader GetHeaderArray(int pos)
@@ -322,21 +354,20 @@ namespace NPOI.XWPF.UserModel
 
         public String GetTblStyle(XWPFTable table)
         {
-            //return table.StyleID;
-            throw new NotImplementedException();
+            return table.GetStyleID();
         }
 
         public XWPFHyperlink GetHyperlinkByID(String id)
         {
-            //Iterator<XWPFHyperlink> iter = hyperlinks.Iterator();
-            //while (iter.HasNext()) {
-            //    XWPFHyperlink link = iter.Next();
-            //    if(link.Id.Equals(id))
-            //        return link;
-            //}
+            IEnumerator<XWPFHyperlink> iter = hyperlinks.GetEnumerator();
+            while (iter.MoveNext())
+            {
+                XWPFHyperlink link = iter.Current;
+                if (link.Id.Equals(id))
+                    return link;
+            }
 
-            //return null;
-            throw new NotImplementedException();
+            return null;
         }
 
         public XWPFFootnote GetFootnoteByID(int id)
@@ -351,14 +382,12 @@ namespace NPOI.XWPF.UserModel
 
         public List<XWPFFootnote> GetFootnotes()
         {
-            //return footnotes.FootnotesList;
-            throw new NotImplementedException();
+            return footnotes.GetFootnotesList();
         }
 
         public XWPFHyperlink[] GetHyperlinks()
         {
-            //return hyperlinks.ToArray(new XWPFHyperlink[hyperlinks.Size()]);
-            throw new NotImplementedException();
+            return hyperlinks.ToArray();
         }
 
         public XWPFComment GetCommentByID(String id)
@@ -376,8 +405,7 @@ namespace NPOI.XWPF.UserModel
 
         public XWPFComment[] GetComments()
         {
-            //return comments.ToArray(new XWPFComment[comments.Size()]);
-            throw new NotImplementedException();
+            return comments.ToArray();
         }
 
         /**
@@ -386,12 +414,14 @@ namespace NPOI.XWPF.UserModel
          */
         public PackagePart GetPartById(String id)
         {
-            //try {
-            //    return GetTargetPart(getCorePart().GetRelationship(id));
-            //} catch (InvalidFormatException e) {
-            //    throw new ArgumentException(e);
-            //}
-            throw new NotImplementedException();
+            try
+            {
+                return GetTargetPart(CorePart.GetRelationship(id));
+            }
+            catch (Exception e)
+            {
+                throw new ArgumentException("GetTargetPart exception", e);
+            }
         }
 
         /**
@@ -400,8 +430,7 @@ namespace NPOI.XWPF.UserModel
          */
         public XWPFHeaderFooterPolicy GetHeaderFooterPolicy()
         {
-            //return headerFooterPolicy;
-            throw new NotImplementedException();
+            return headerFooterPolicy;
         }
 
         /**
@@ -410,19 +439,18 @@ namespace NPOI.XWPF.UserModel
 
         public CT_Styles GetStyle()
         {
-            //PackagePart[] parts;
-            //try {
-            //    parts = GetRelatedByType(XWPFRelation.STYLES.Relation);
-            //} catch(InvalidFormatException e) {
-            //    throw new InvalidOperationException(e);
-            //}
-            //if(parts.Length != 1) {
-            //    throw new InvalidOperationException("Expecting one Styles document part, but found " + parts.Length);
-            //}
+            PackagePart[] parts;
+            try {
+                parts = GetRelatedByType(XWPFRelation.STYLES.Relation);
+            } catch(Exception e) {
+                throw new InvalidOperationException("get Style document part exception", e);
+            }
+            if(parts.Length != 1) {
+                throw new InvalidOperationException("Expecting one Styles document part, but found " + parts.Length);
+            }
 
-            //StylesDocument sd = StylesDocument.Factory.Parse(parts[0].InputStream);
-            //return sd.Styles;
-            throw new NotImplementedException();
+            StylesDocument sd = StylesDocument.Parse(parts[0].GetInputStream());
+            return sd.Styles;
         }
 
         /**
@@ -431,19 +459,21 @@ namespace NPOI.XWPF.UserModel
 
         public override List<PackagePart> GetAllEmbedds()
         {
-            //List<PackagePart> embedds = new LinkedList<PackagePart>();
+            List<PackagePart> embedds = new List<PackagePart>();
 
-            //// Get the embeddings for the workbook
-            //foreach (PackageRelationship rel in GetPackagePart().GetRelationshipsByType(OLE_OBJECT_REL_TYPE)) {
-            //    embedds.Add(getTargetPart(rel));
-            //}
+            // Get the embeddings for the workbook
+            foreach (PackageRelationship rel in GetPackagePart().GetRelationshipsByType(OLE_OBJECT_REL_TYPE))
+            {
+                embedds.Add(GetTargetPart(rel));
+            }
 
-            //foreach (PackageRelationship rel in GetPackagePart().GetRelationshipsByType(PACK_OBJECT_REL_TYPE)) {
-            //    embedds.Add(getTargetPart(rel));
-            //}
+            foreach (PackageRelationship rel in GetPackagePart().GetRelationshipsByType(PACK_OBJECT_REL_TYPE))
+            {
+                embedds.Add(GetTargetPart(rel));
+            }
 
-            //return embedds;
-            throw new NotImplementedException();
+            return embedds;
+            
         }
 
         /**
@@ -452,29 +482,33 @@ namespace NPOI.XWPF.UserModel
         private int GetBodyElementSpecificPos(int pos, List<IBodyElement> list)
         {
             // If there's nothing to Find, skip it
-            //if(list.Size() == 0) {
-            //   return -1;
-            //}
+            if (list.Count == 0)
+            {
+                return -1;
+            }
 
-            //if(pos >= 0 && pos < bodyElements.Size()) {
-            //   // Ensure the type is correct
-            //   IBodyElement needle = bodyElements.Get(pos);
-            //   if(needle.ElementType != list.Get(0).ElementType) {
-            //      // Wrong type
-            //      return -1;
-            //   }
+            if(pos >= 0 && pos < bodyElements.Count) {
+               // Ensure the type is correct
+               IBodyElement needle = bodyElements[(pos)];
+               if (needle.ElementType != list[(0)].ElementType)
+               {
+                   // Wrong type
+                   return -1;
+               }
 
-            //   // Work back until we find it
-            //   int startPos = Math.Min(pos, list.Size()-1);
-            //   for(int i=startPos; i>=0; i--) {
-            //      if(list.Get(i) == needle) {
-            //         return i;
-            //      }
-            //   }
-            //}
+               // Work back until we find it
+               int startPos = Math.Min(pos, list.Count - 1);
+               for (int i = startPos; i >= 0; i--)
+               {
+                   if (list[(i)] == needle)
+                   {
+                       return i;
+                   }
+               }
+            }
 
-            //// Couldn't be found
-            //return -1;
+            // Couldn't be found
+            return -1;
             throw new NotImplementedException();
         }
 
@@ -492,8 +526,12 @@ namespace NPOI.XWPF.UserModel
          */
         public int GetParagraphPos(int pos)
         {
-            //return GetBodyElementSpecificPos(pos, paragraphs);
-            throw new NotImplementedException();
+            List<IBodyElement> list = new List<IBodyElement>();
+            foreach (var p in paragraphs)
+            {
+                list.Add(p);
+            }
+            return GetBodyElementSpecificPos(pos, list);
         }
 
         /**
@@ -505,8 +543,12 @@ namespace NPOI.XWPF.UserModel
          */
         public int GetTablePos(int pos)
         {
-            //return GetBodyElementSpecificPos(pos, tables);
-            throw new NotImplementedException();
+            List<IBodyElement> list = new List<IBodyElement>();
+            foreach (var p in tables)
+            {
+                list.Add(p);
+            }
+            return GetBodyElementSpecificPos(pos, list);
         }
 
         /**
@@ -642,18 +684,20 @@ namespace NPOI.XWPF.UserModel
 
         private int GetPosOfBodyElement(IBodyElement needle)
         {
-            /* BodyElementType type = needle.ElementType;
-            IBodyElement current; 
-             for(int i=0; i<bodyElements.Size(); i++) {
-                current = bodyElements.Get(i);
-                if(current.ElementType == type) {
-                   if(current.Equals(needle)) {
-                      return i;
-                   }
+            BodyElementType type = needle.ElementType;
+            IBodyElement current;
+            for (int i = 0; i < bodyElements.Count; i++)
+            {
+                current = bodyElements[(i)];
+                if (current.ElementType == type)
+                {
+                    if (current.Equals(needle))
+                    {
+                        return i;
+                    }
                 }
-             }
-             return -1;*/
-            throw new NotImplementedException();
+            }
+            return -1;
         }
 
         /**
@@ -682,7 +726,7 @@ namespace NPOI.XWPF.UserModel
          * Commit and saves the document
          */
 
-        protected void Commit()
+        protected override void Commit()
         {
 
             //XmlOptions xmlOptions = new XmlOptions(DEFAULT_XML_OPTIONS);
@@ -699,11 +743,11 @@ namespace NPOI.XWPF.UserModel
             //map.Put("http://schemas.Openxmlformats.org/drawingml/2006/wordProcessingDrawing", "wp");
             //xmlOptions.SaveSuggestedPrefixes=(map);
 
-            //PackagePart part = GetPackagePart();
-            //OutputStream out1 = part.OutputStream;
-            //ctDocument.Save(out, xmlOptions);
-            //out1.Close();
-            throw new NotImplementedException();
+            PackagePart part = GetPackagePart();
+            Stream out1 = part.GetOutputStream();
+            DocumentDocument doc = new DocumentDocument(ctDocument);
+            doc.Save(out1);
+            out1.Close();
         }
 
         /**
@@ -713,16 +757,17 @@ namespace NPOI.XWPF.UserModel
          */
         private int GetRelationIndex(XWPFRelation relation)
         {
-            //List<POIXMLDocumentPart> relations = GetRelations();
-            //int i = 1;
-            //for (Iterator<POIXMLDocumentPart> it = relations.Iterator(); it.HasNext() ; ) {
-            //   POIXMLDocumentPart item = it.Next();
-            //   if (item.PackageRelationship.RelationshipType.Equals(relation.Relation)) {
-            //      i++;
-            //   }
-            //}
-            //return i;
-            throw new NotImplementedException();
+            List<POIXMLDocumentPart> relations = GetRelations();
+            int i = 1;
+            for (IEnumerator<POIXMLDocumentPart> it = relations.GetEnumerator(); it.MoveNext(); )
+            {
+                POIXMLDocumentPart item = it.Current;
+                if (item.GetPackageRelationship().RelationshipType.Equals(relation.Relation))
+                {
+                    i++;
+                }
+            }
+            return i;
         }
 
         /**
@@ -731,11 +776,10 @@ namespace NPOI.XWPF.UserModel
          */
         public XWPFParagraph CreateParagraph()
         {
-            //XWPFParagraph p = new XWPFParagraph(ctDocument.Body.AddNewP(), this);
-            //bodyElements.Add(p);
-            //paragraphs.Add(p);
-            //return p;
-            throw new NotImplementedException();
+            XWPFParagraph p = new XWPFParagraph(ctDocument.body.AddNewP(), this);
+            bodyElements.Add(p);
+            paragraphs.Add(p);
+            return p;
         }
 
         /**
@@ -744,19 +788,18 @@ namespace NPOI.XWPF.UserModel
          */
         public XWPFNumbering CreateNumbering()
         {
-            //if(numbering == null) {
-            //    NumberingDocument numberingDoc = NumberingDocument.Factory.NewInstance();
+            if(numbering == null) {
+                NumberingDocument numberingDoc = new NumberingDocument();
 
-            //    XWPFRelation relation = XWPFRelation.NUMBERING;
-            //    int i = GetRelationIndex(relation);
+                XWPFRelation relation = XWPFRelation.NUMBERING;
+                int i = GetRelationIndex(relation);
 
-            //    XWPFNumbering wrapper = (XWPFNumbering)CreateRelationship(relation, XWPFFactory.Instance, i);
-            //    wrapper.Numbering=(numberingDoc.AddNewNumbering());
-            //    numbering = wrapper;
-            //}
+                XWPFNumbering wrapper = (XWPFNumbering)CreateRelationship(relation, XWPFFactory.GetInstance(), i);
+                wrapper.SetNumbering(numberingDoc.Numbering);
+                numbering = wrapper;
+            }
 
-            //return numbering;
-            throw new NotImplementedException();
+            return numbering;
         }
 
         /**
@@ -765,19 +808,19 @@ namespace NPOI.XWPF.UserModel
          */
         public XWPFStyles CreateStyles()
         {
-            //if(styles == null) {
-            //   StylesDocument stylesDoc = StylesDocument.Factory.NewInstance();
+            if (styles == null)
+            {
+                StylesDocument stylesDoc = new StylesDocument();
 
-            //   XWPFRelation relation = XWPFRelation.STYLES;
-            //   int i = GetRelationIndex(relation);
+                XWPFRelation relation = XWPFRelation.STYLES;
+                int i = GetRelationIndex(relation);
 
-            //   XWPFStyles wrapper = (XWPFStyles)CreateRelationship(relation, XWPFFactory.Instance, i);
-            //   wrapper.Styles=(stylesDoc.AddNewStyles());
-            //   styles = wrapper;
-            //}
+                XWPFStyles wrapper = (XWPFStyles)CreateRelationship(relation, XWPFFactory.GetInstance(), i);
+                wrapper.SetStyles(stylesDoc.Styles);
+                styles = wrapper;
+            }
 
-            //return styles;
-            throw new NotImplementedException();
+            return styles;
         }
 
         /**
@@ -786,19 +829,19 @@ namespace NPOI.XWPF.UserModel
          */
         public XWPFFootnotes CreateFootnotes()
         {
-            //if(footnotes == null) {
-            //   FootnotesDocument footnotesDoc = FootnotesDocument.Factory.NewInstance();
+            if (footnotes == null)
+            {
+                FootnotesDocument footnotesDoc = new FootnotesDocument();
 
-            //   XWPFRelation relation = XWPFRelation.FOOTNOTE;
-            //   int i = GetRelationIndex(relation);
+                XWPFRelation relation = XWPFRelation.FOOTNOTE;
+                int i = GetRelationIndex(relation);
 
-            //   XWPFFootnotes wrapper = (XWPFFootnotes)CreateRelationship(relation, XWPFFactory.Instance, i);
-            //   wrapper.Footnotes=(footnotesDoc.AddNewFootnotes());
-            //   footnotes = wrapper;
-            //}
+                XWPFFootnotes wrapper = (XWPFFootnotes)CreateRelationship(relation, XWPFFactory.GetInstance(), i);
+                wrapper.SetFootnotes(footnotesDoc.Footnotes);
+                footnotes = wrapper;
+            }
 
-            //return footnotes;
-            throw new NotImplementedException();
+            return footnotes;
         }
 
         public XWPFFootnote AddFootnote(CT_FtnEdn note)
@@ -808,10 +851,9 @@ namespace NPOI.XWPF.UserModel
 
         public XWPFFootnote AddEndnote(CT_FtnEdn note)
         {
-            //XWPFFootnote endnote = new XWPFFootnote(this, note); 
-            //endnotes.Put(note.Id.IntValue(), endnote);
-            //return endnote;
-            throw new NotImplementedException();
+            XWPFFootnote endnote = new XWPFFootnote(this, note);
+            endnotes.Add(int.Parse(note.id), endnote);
+            return endnote;
         }
 
         /**
@@ -821,23 +863,27 @@ namespace NPOI.XWPF.UserModel
          */
         public bool RemoveBodyElement(int pos)
         {
-            //if(pos >= 0 && pos < bodyElements.Size()) {
-            //   BodyElementType type = bodyElements.Get(pos).ElementType; 
-            //    if(type == BodyElementType.TABLE){
-            //        int tablePos = GetTablePos(pos);
-            //        tables.Remove(tablePos);
-            //        ctDocument.Body.RemoveTbl(tablePos);
-            //    }
-            //    if(type == BodyElementType.PARAGRAPH){
-            //        int paraPos = GetParagraphPos(pos);
-            //        paragraphs.Remove(paraPos);
-            //        ctDocument.Body.RemoveP(paraPos);
-            //    }
-            // bodyElements.Remove(pos);
-            // return true;            
-            //}
-            //return false;
-            throw new NotImplementedException();
+            if (pos >= 0 && pos < bodyElements.Count)
+            {
+                BodyElementType type = bodyElements[(pos)].ElementType;
+                if (type == BodyElementType.TABLE)
+                {
+                    int tablePos = GetTablePos(pos);
+                    tables.RemoveAt(tablePos);
+                    //ctDocument.Body.RemoveTbl(tablePos);
+                    throw new NotImplementedException();
+                }
+                if (type == BodyElementType.PARAGRAPH)
+                {
+                    int paraPos = GetParagraphPos(pos);
+                    paragraphs.RemoveAt(paraPos);
+                    //ctDocument.body.Items.RemoveAt(paraPos);
+                    throw new NotImplementedException();
+                }
+                bodyElements.RemoveAt(pos);
+                return true;
+            }
+            return false;
         }
 
         /**
@@ -940,8 +986,7 @@ namespace NPOI.XWPF.UserModel
          */
         public bool IsEnforcedReadonlyProtection()
         {
-            //return Settings.IsEnforcedWith(STDocProtect.READ_ONLY);
-            throw new NotImplementedException();
+            return Settings.IsEnforcedWith(ST_DocProtect.readOnly);
         }
 
         /**
@@ -959,8 +1004,7 @@ namespace NPOI.XWPF.UserModel
          */
         public bool IsEnforcedFillingFormsProtection()
         {
-            //return Settings.IsEnforcedWith(STDocProtect.FORMS);
-            throw new NotImplementedException();
+            return Settings.IsEnforcedWith(ST_DocProtect.forms);
         }
 
         /**
@@ -978,8 +1022,7 @@ namespace NPOI.XWPF.UserModel
          */
         public bool IsEnforcedCommentsProtection()
         {
-            //return Settings.IsEnforcedWith(STDocProtect.COMMENTS);
-            throw new NotImplementedException();
+            return Settings.IsEnforcedWith(ST_DocProtect.comments);
         }
 
         /**
@@ -997,8 +1040,7 @@ namespace NPOI.XWPF.UserModel
          */
         public bool IsEnforcedTrackedChangesProtection()
         {
-            //return Settings.IsEnforcedWith(STDocProtect.TRACKED_CHANGES);
-            throw new NotImplementedException();
+            return Settings.IsEnforcedWith(ST_DocProtect.trackedChanges);
         }
 
         /**
@@ -1013,10 +1055,9 @@ namespace NPOI.XWPF.UserModel
          *         &lt;w:documentProtection w:edit=&quot;readOnly&quot; w:enforcement=&quot;1&quot;/&gt;
          * </pre>
          */
-        public void enforceReadonlyProtection()
+        public void EnforceReadonlyProtection()
         {
-            //Settings.EnforcementEditValue=(STDocProtect.READ_ONLY);
-            throw new NotImplementedException();
+            Settings.SetEnforcementEditValue(ST_DocProtect.readOnly);
         }
 
         /**
@@ -1031,10 +1072,9 @@ namespace NPOI.XWPF.UserModel
          *         &lt;w:documentProtection w:edit=&quot;forms&quot; w:enforcement=&quot;1&quot;/&gt;
          * </pre>
          */
-        public void enforceFillingFormsProtection()
+        public void EnforceFillingFormsProtection()
         {
-            //Settings.EnforcementEditValue=(STDocProtect.FORMS);
-            throw new NotImplementedException();
+            Settings.SetEnforcementEditValue(ST_DocProtect.forms);
         }
 
         /**
@@ -1049,10 +1089,9 @@ namespace NPOI.XWPF.UserModel
          *         &lt;w:documentProtection w:edit=&quot;comments&quot; w:enforcement=&quot;1&quot;/&gt;
          * </pre>
          */
-        public void enforceCommentsProtection()
+        public void EnforceCommentsProtection()
         {
-            //Settings.EnforcementEditValue=(STDocProtect.COMMENTS);
-            throw new NotImplementedException();
+            Settings.SetEnforcementEditValue(ST_DocProtect.comments);
         }
 
         /**
@@ -1067,10 +1106,9 @@ namespace NPOI.XWPF.UserModel
          *         &lt;w:documentProtection w:edit=&quot;trackedChanges&quot; w:enforcement=&quot;1&quot;/&gt;
          * </pre>
          */
-        public void enforceTrackedChangesProtection()
+        public void EnforceTrackedChangesProtection()
         {
-            //Settings.EnforcementEditValue=(STDocProtect.TRACKED_CHANGES);
-            throw new NotImplementedException();
+            Settings.SetEnforcementEditValue(ST_DocProtect.trackedChanges);
         }
 
         /**
@@ -1106,60 +1144,68 @@ namespace NPOI.XWPF.UserModel
          * Returns all Pictures, which are referenced from the document itself.
          * @return a {@link List} of {@link XWPFPictureData}. The returned {@link List} is unmodifiable. Use #a
          */
-        public List<XWPFPictureData> GetAllPictures()
+        public IList<XWPFPictureData> AllPictures
         {
-            //return Collections.UnmodifiableList(pictures);
-            throw new NotImplementedException();
+            get
+            {
+                return pictures.AsReadOnly();
+            }
         }
 
         /**
          * @return all Pictures in this package
          */
-        public List<XWPFPictureData> GetAllPackagePictures()
+        public IList<XWPFPictureData> AllPackagePictures
         {
-            //List<XWPFPictureData> result = new List<XWPFPictureData>();
-            //Collection<List<XWPFPictureData>> values = packagePictures.Values();
-            //foreach (List<XWPFPictureData> list in values) {
-            //    result.AddAll(list);
-            //}
-            //return Collections.UnmodifiableList(result);
-            throw new NotImplementedException();
+            get
+            {
+                List<XWPFPictureData> result = new List<XWPFPictureData>();
+                //List<XWPFPictureData> values = packagePictures.Values(;
+                foreach (List<XWPFPictureData> list in packagePictures.Values)
+                {
+                    result.AddRange(list);
+                }
+                return result.AsReadOnly();
+            }
         }
 
-        void registerPackagePictureData(XWPFPictureData picData)
+        public void RegisterPackagePictureData(XWPFPictureData picData)
         {
-            //List<XWPFPictureData> list = packagePictures.Get(picData.Checksum);
-            //if (list == null) {
-            //    list = new List<XWPFPictureData>(1);
-            //    packagePictures.Put(picData.Checksum, list);
-            //}
-            //if (!list.Contains(picData))
-            //{
-            //    list.Add(picData);
-            //}
-            throw new NotImplementedException();
+            List<XWPFPictureData> list = packagePictures[(picData.Checksum)];
+            if (list == null)
+            {
+                list = new List<XWPFPictureData>(1);
+                packagePictures.Add(picData.Checksum, list);
+            }
+            if (!list.Contains(picData))
+            {
+                list.Add(picData);
+            }
         }
 
-        XWPFPictureData FindPackagePictureData(byte[] pictureData, int format)
+        public XWPFPictureData FindPackagePictureData(byte[] pictureData, int format)
         {
-            //long Checksum = IOUtils.CalculateChecksum(pictureData);
-            //XWPFPictureData xwpfPicData = null;
-            ///*
-            // * Try to find PictureData with this Checksum. Create new, if none
-            // * exists.
-            // */
-            //List<XWPFPictureData> xwpfPicDataList = packagePictures.Get(Checksum);
-            //if (xwpfPicDataList != null) {
-            //    Iterator<XWPFPictureData> iter = xwpfPicDataList.Iterator();
-            //    while (iter.HasNext() && xwpfPicData == null) {
-            //        XWPFPictureData curElem = iter.Next();
-            //        if (Arrays.Equals(pictureData, curElem.Data)) {
-            //            xwpfPicData = curElem;
-            //        }
-            //    }
-            //} 
-            //return xwpfPicData;
-            throw new NotImplementedException();
+            long Checksum = IOUtils.CalculateChecksum(pictureData);
+            XWPFPictureData xwpfPicData = null;
+            /*
+             * Try to find PictureData with this Checksum. Create new, if none
+             * exists.
+             */
+            List<XWPFPictureData> xwpfPicDataList = packagePictures[(Checksum)];
+            if (xwpfPicDataList != null)
+            {
+                IEnumerator<XWPFPictureData> iter = xwpfPicDataList.GetEnumerator();
+                while (iter.MoveNext() && xwpfPicData == null)
+                {
+                    XWPFPictureData curElem = iter.Current;
+                    if (Arrays.Equals(pictureData, curElem.GetData()))
+                    {
+                        xwpfPicData = curElem;
+                    }
+                }
+            }
+            return xwpfPicData;
+
         }
 
         public String AddPictureData(byte[] pictureData, int format)

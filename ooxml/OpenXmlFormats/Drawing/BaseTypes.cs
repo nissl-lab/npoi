@@ -33,7 +33,7 @@ namespace NPOI.OpenXmlFormats.Dml
                 this.anyField = value;
             }
         }
-
+        [System.Xml.Serialization.XmlAttributeAttribute(DataType = "token")]
         public string uri
         {
             get

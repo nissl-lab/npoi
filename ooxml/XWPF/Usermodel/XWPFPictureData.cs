@@ -49,7 +49,7 @@ namespace NPOI.XWPF.UserModel
             RELATIONS[(int)PictureType.GIF] = XWPFRelation.IMAGE_GIF;
         }
 
-        private long? Checksum = null;
+        private long? checksum = null;
 
         /**
          * Create a new XWPFGraphicData node
@@ -153,35 +153,38 @@ namespace NPOI.XWPF.UserModel
             return 0;
         }
 
-        public long GetChecksum()
+        public long Checksum
         {
-            if (this.Checksum == null)
+            get
             {
-                Stream is1 = null;
-                byte[] data;
-                try
+                if (this.checksum == null)
                 {
-                    is1 = GetPackagePart().GetInputStream();
-                    data = IOUtils.ToByteArray(is1);
-                }
-                catch (IOException e)
-                {
-                    throw new POIXMLException(e);
-                }
-                finally
-                {
+                    Stream is1 = null;
+                    byte[] data;
                     try
                     {
-                        is1.Close();
+                        is1 = GetPackagePart().GetInputStream();
+                        data = IOUtils.ToByteArray(is1);
                     }
                     catch (IOException e)
                     {
                         throw new POIXMLException(e);
                     }
+                    finally
+                    {
+                        try
+                        {
+                            is1.Close();
+                        }
+                        catch (IOException e)
+                        {
+                            throw new POIXMLException(e);
+                        }
+                    }
+                    this.checksum = IOUtils.CalculateChecksum(data);
                 }
-                this.Checksum = IOUtils.CalculateChecksum(data);
+                return this.checksum.Value;
             }
-            return this.Checksum.Value;
         }
 
 
@@ -244,8 +247,8 @@ namespace NPOI.XWPF.UserModel
                 }
             }
 
-            long foreignChecksum = picData.Checksum.Value;
-            long localChecksum = GetChecksum();
+            long foreignChecksum = picData.checksum.Value;
+            long localChecksum = Checksum;
 
             if (!(localChecksum.Equals(foreignChecksum)))
             {
@@ -257,7 +260,7 @@ namespace NPOI.XWPF.UserModel
 
         public override int GetHashCode()
         {
-            return GetChecksum().GetHashCode();
+            return Checksum.GetHashCode();
         }
     }
 

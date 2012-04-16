@@ -14,14 +14,14 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     public class CT_SdtContentCell
     {
 
-        private List<object> itemsField;
+        private object[] itemsField;
 
-        private List<ItemsChoiceType23> itemsElementNameField;
+        private ItemsChoiceType23[] itemsElementNameField;
 
         public CT_SdtContentCell()
         {
-            this.itemsElementNameField = new List<ItemsChoiceType23>();
-            this.itemsField = new List<object>();
+            this.itemsElementNameField = new ItemsChoiceType23[0];
+            this.itemsField = new object[0];
         }
 
         [System.Xml.Serialization.XmlElementAttribute("oMath", typeof(CT_OMath), Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", Order = 0)]
@@ -53,7 +53,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         [System.Xml.Serialization.XmlElementAttribute("sdt", typeof(CT_SdtCell), Order = 0)]
         [System.Xml.Serialization.XmlElementAttribute("tc", typeof(CT_Tc), Order = 0)]
         [System.Xml.Serialization.XmlChoiceIdentifierAttribute("ItemsElementName")]
-        public List<object> Items
+        public object[] Items
         {
             get
             {
@@ -67,7 +67,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         [System.Xml.Serialization.XmlElementAttribute("ItemsElementName", Order = 1)]
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public List<ItemsChoiceType23> ItemsElementName
+        public ItemsChoiceType23[] ItemsElementName
         {
             get
             {
@@ -513,14 +513,14 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     public class CT_SdtContentBlock
     {
 
-        private List<object> itemsField;
+        private object[] itemsField;
 
-        private List<ItemsChoiceType19> itemsElementNameField;
+        private ItemsChoiceType19[] itemsElementNameField;
 
         public CT_SdtContentBlock()
         {
-            this.itemsElementNameField = new List<ItemsChoiceType19>();
-            this.itemsField = new List<object>();
+            this.itemsElementNameField = new ItemsChoiceType19[0];
+            this.itemsField = new object[0];
         }
 
         [System.Xml.Serialization.XmlElementAttribute("oMath", typeof(CT_OMath), Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", Order = 0)]
@@ -553,7 +553,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         [System.Xml.Serialization.XmlElementAttribute("sdt", typeof(CT_SdtBlock), Order = 0)]
         [System.Xml.Serialization.XmlElementAttribute("tbl", typeof(CT_Tbl), Order = 0)]
         [System.Xml.Serialization.XmlChoiceIdentifierAttribute("ItemsElementName")]
-        public List<object> Items
+        public object[] Items
         {
             get
             {
@@ -567,7 +567,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         [System.Xml.Serialization.XmlElementAttribute("ItemsElementName", Order = 1)]
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public List<ItemsChoiceType19> ItemsElementName
+        public ItemsChoiceType19[] ItemsElementName
         {
             get
             {
@@ -682,14 +682,14 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     public class CT_SdtContentRow
     {
 
-        private List<object> itemsField;
+        private object[] itemsField;
 
-        private List<ItemsChoiceType22> itemsElementNameField;
+        private ItemsChoiceType22[] itemsElementNameField;
 
         public CT_SdtContentRow()
         {
-            this.itemsElementNameField = new List<ItemsChoiceType22>();
-            this.itemsField = new List<object>();
+            this.itemsElementNameField = new ItemsChoiceType22[0];
+            this.itemsField = new object[0];
         }
 
         [System.Xml.Serialization.XmlElementAttribute("oMath", typeof(CT_OMath), Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", Order = 0)]
@@ -721,7 +721,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         [System.Xml.Serialization.XmlElementAttribute("sdt", typeof(CT_SdtRow), Order = 0)]
         [System.Xml.Serialization.XmlElementAttribute("tr", typeof(CT_Row), Order = 0)]
         [System.Xml.Serialization.XmlChoiceIdentifierAttribute("ItemsElementName")]
-        public List<object> Items
+        public object[] Items
         {
             get
             {
@@ -735,7 +735,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         [System.Xml.Serialization.XmlElementAttribute("ItemsElementName", Order = 1)]
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public List<ItemsChoiceType22> ItemsElementName
+        public ItemsChoiceType22[] ItemsElementName
         {
             get
             {
@@ -756,14 +756,14 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     public class CT_SdtPr
     {
 
-        private List<object> itemsField;
+        private object[] itemsField;
 
-        private List<ItemsChoiceType17> itemsElementNameField;
+        private ItemsChoiceType17[] itemsElementNameField;
 
         public CT_SdtPr()
         {
-            this.itemsElementNameField = new List<ItemsChoiceType17>();
-            this.itemsField = new List<object>();
+            this.itemsElementNameField = new ItemsChoiceType17[0];
+            this.itemsField = new object[0];
         }
 
         [System.Xml.Serialization.XmlElementAttribute("alias", typeof(CT_String), Order = 0)]
@@ -788,7 +788,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         [System.Xml.Serialization.XmlElementAttribute("temporary", typeof(CT_OnOff), Order = 0)]
         [System.Xml.Serialization.XmlElementAttribute("text", typeof(CT_SdtText), Order = 0)]
         [System.Xml.Serialization.XmlChoiceIdentifierAttribute("ItemsElementName")]
-        public List<object> Items
+        public object[] Items
         {
             get
             {
@@ -802,7 +802,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         [System.Xml.Serialization.XmlElementAttribute("ItemsElementName", Order = 1)]
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public List<ItemsChoiceType17> ItemsElementName
+        public ItemsChoiceType17[] ItemsElementName
         {
             get
             {
@@ -920,14 +920,14 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     public class CT_SdtContentRun
     {
 
-        private List<object> itemsField;
+        private object[] itemsField;
 
-        private List<ItemsChoiceType18> itemsElementNameField;
+        private ItemsChoiceType18[] itemsElementNameField;
 
         public CT_SdtContentRun()
         {
-            this.itemsElementNameField = new List<ItemsChoiceType18>();
-            this.itemsField = new List<object>();
+            this.itemsElementNameField = new ItemsChoiceType18[0];
+            this.itemsField = new object[0];
         }
 
         [System.Xml.Serialization.XmlElementAttribute("oMath", typeof(CT_OMath), Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", Order = 0)]
@@ -963,7 +963,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         [System.Xml.Serialization.XmlElementAttribute("smartTag", typeof(CT_SmartTagRun), Order = 0)]
         [System.Xml.Serialization.XmlElementAttribute("subDoc", typeof(CT_Rel), Order = 0)]
         [System.Xml.Serialization.XmlChoiceIdentifierAttribute("ItemsElementName")]
-        public List<object> Items
+        public object[] Items
         {
             get
             {
@@ -977,7 +977,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         [System.Xml.Serialization.XmlElementAttribute("ItemsElementName", Order = 1)]
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public List<ItemsChoiceType18> ItemsElementName
+        public ItemsChoiceType18[] ItemsElementName
         {
             get
             {

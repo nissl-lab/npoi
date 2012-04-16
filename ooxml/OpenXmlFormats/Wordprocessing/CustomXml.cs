@@ -15,9 +15,9 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         private CT_CustomXmlPr customXmlPrField;
 
-        private List<object> itemsField;
+        private object[] itemsField;
 
-        private List<ItemsChoiceType21> itemsElementNameField;
+        private ItemsChoiceType21[] itemsElementNameField;
 
         private string uriField;
 
@@ -25,8 +25,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         public CT_CustomXmlRow()
         {
-            this.itemsElementNameField = new List<ItemsChoiceType21>();
-            this.itemsField = new List<object>();
+            this.itemsElementNameField = new ItemsChoiceType21[0];
+            this.itemsField = new object[0];
             this.customXmlPrField = new CT_CustomXmlPr();
         }
 
@@ -72,7 +72,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         [System.Xml.Serialization.XmlElementAttribute("sdt", typeof(CT_SdtRow), Order = 1)]
         [System.Xml.Serialization.XmlElementAttribute("tr", typeof(CT_Row), Order = 1)]
         [System.Xml.Serialization.XmlChoiceIdentifierAttribute("ItemsElementName")]
-        public List<object> Items
+        public object[] Items
         {
             get
             {
@@ -86,7 +86,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         [System.Xml.Serialization.XmlElementAttribute("ItemsElementName", Order = 2)]
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public List<ItemsChoiceType21> ItemsElementName
+        public ItemsChoiceType21[] ItemsElementName
         {
             get
             {
@@ -421,9 +421,9 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         private CT_CustomXmlPr customXmlPrField;
 
-        private List<object> itemsField;
+        private object[] itemsField;
 
-        private List<ItemsChoiceType24> itemsElementNameField;
+        private ItemsChoiceType24[] itemsElementNameField;
 
         private string uriField;
 
@@ -431,8 +431,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         public CT_CustomXmlRun()
         {
-            this.itemsElementNameField = new List<ItemsChoiceType24>();
-            this.itemsField = new List<object>();
+            this.itemsElementNameField = new ItemsChoiceType24[0];
+            this.itemsField = new object[0];
             this.customXmlPrField = new CT_CustomXmlPr();
         }
 
@@ -482,7 +482,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         [System.Xml.Serialization.XmlElementAttribute("smartTag", typeof(CT_SmartTagRun), Order = 1)]
         [System.Xml.Serialization.XmlElementAttribute("subDoc", typeof(CT_Rel), Order = 1)]
         [System.Xml.Serialization.XmlChoiceIdentifierAttribute("ItemsElementName")]
-        public List<object> Items
+        public object[] Items
         {
             get
             {
@@ -496,7 +496,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         [System.Xml.Serialization.XmlElementAttribute("ItemsElementName", Order = 2)]
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public List<ItemsChoiceType24> ItemsElementName
+        public ItemsChoiceType24[] ItemsElementName
         {
             get
             {
@@ -650,9 +650,9 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         private List<CT_Attr> smartTagPrField;
 
-        private List<object> itemsField;
+        private object[] itemsField;
 
-        private List<ItemsChoiceType25> itemsElementNameField;
+        private ItemsChoiceType25[] itemsElementNameField;
 
         private string uriField;
 
@@ -660,8 +660,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         public CT_SmartTagRun()
         {
-            this.itemsElementNameField = new List<ItemsChoiceType25>();
-            this.itemsField = new List<object>();
+            this.itemsElementNameField = new ItemsChoiceType25[0];
+            this.itemsField = new object[0];
             this.smartTagPrField = new List<CT_Attr>();
         }
 
@@ -712,7 +712,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         [System.Xml.Serialization.XmlElementAttribute("smartTag", typeof(CT_SmartTagRun), Order = 1)]
         [System.Xml.Serialization.XmlElementAttribute("subDoc", typeof(CT_Rel), Order = 1)]
         [System.Xml.Serialization.XmlChoiceIdentifierAttribute("ItemsElementName")]
-        public List<object> Items
+        public object[] Items
         {
             get
             {
@@ -726,7 +726,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         [System.Xml.Serialization.XmlElementAttribute("ItemsElementName", Order = 2)]
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public List<ItemsChoiceType25> ItemsElementName
+        public ItemsChoiceType25[] ItemsElementName
         {
             get
             {
@@ -880,9 +880,9 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         private CT_CustomXmlPr customXmlPrField;
 
-        private List<object> itemsField;
+        private object[] itemsField;
 
-        private List<ItemsChoiceType26> itemsElementNameField;
+        private ItemsChoiceType26[] itemsElementNameField;
 
         private string uriField;
 
@@ -890,8 +890,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         public CT_CustomXmlBlock()
         {
-            this.itemsElementNameField = new List<ItemsChoiceType26>();
-            this.itemsField = new List<object>();
+            this.itemsElementNameField = new ItemsChoiceType26[0];
+            this.itemsField = new object[0];
             this.customXmlPrField = new CT_CustomXmlPr();
         }
 
@@ -938,7 +938,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         [System.Xml.Serialization.XmlElementAttribute("sdt", typeof(CT_SdtBlock), Order = 1)]
         [System.Xml.Serialization.XmlElementAttribute("tbl", typeof(CT_Tbl), Order = 1)]
         [System.Xml.Serialization.XmlChoiceIdentifierAttribute("ItemsElementName")]
-        public List<object> Items
+        public object[] Items
         {
             get
             {
@@ -952,7 +952,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         [System.Xml.Serialization.XmlElementAttribute("ItemsElementName", Order = 2)]
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public List<ItemsChoiceType26> ItemsElementName
+        public ItemsChoiceType26[] ItemsElementName
         {
             get
             {
@@ -1097,9 +1097,9 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         private CT_CustomXmlPr customXmlPrField;
 
-        private List<object> itemsField;
+        private object[] itemsField;
 
-        private List<ItemsChoiceType27> itemsElementNameField;
+        private ItemsChoiceType27[] itemsElementNameField;
 
         private string uriField;
 
@@ -1107,8 +1107,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         public CT_CustomXmlCell()
         {
-            this.itemsElementNameField = new List<ItemsChoiceType27>();
-            this.itemsField = new List<object>();
+            this.itemsElementNameField = new ItemsChoiceType27[0];
+            this.itemsField = new object[0];
             this.customXmlPrField = new CT_CustomXmlPr();
         }
 
@@ -1154,7 +1154,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         [System.Xml.Serialization.XmlElementAttribute("sdt", typeof(CT_SdtCell), Order = 1)]
         [System.Xml.Serialization.XmlElementAttribute("tc", typeof(CT_Tc), Order = 1)]
         [System.Xml.Serialization.XmlChoiceIdentifierAttribute("ItemsElementName")]
-        public List<object> Items
+        public object[] Items
         {
             get
             {
@@ -1168,7 +1168,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         [System.Xml.Serialization.XmlElementAttribute("ItemsElementName", Order = 2)]
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public List<ItemsChoiceType27> ItemsElementName
+        public ItemsChoiceType27[] ItemsElementName
         {
             get
             {
@@ -1328,116 +1328,6 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
     }
-
-
-
-
-
-    [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IncludeInSchema = false)]
-    public enum ItemsChoiceType28
-    {
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlEnumAttribute("http://schemas.openxmlformats.org/officeDocument/2006/math:oMath")]
-        oMath,
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlEnumAttribute("http://schemas.openxmlformats.org/officeDocument/2006/math:oMathPara")]
-        oMathPara,
-
-        /// <remarks/>
-        bookmarkEnd,
-
-        /// <remarks/>
-        bookmarkStart,
-
-        /// <remarks/>
-        commentRangeEnd,
-
-        /// <remarks/>
-        commentRangeStart,
-
-        /// <remarks/>
-        customXml,
-
-        /// <remarks/>
-        customXmlDelRangeEnd,
-
-        /// <remarks/>
-        customXmlDelRangeStart,
-
-        /// <remarks/>
-        customXmlInsRangeEnd,
-
-        /// <remarks/>
-        customXmlInsRangeStart,
-
-        /// <remarks/>
-        customXmlMoveFromRangeEnd,
-
-        /// <remarks/>
-        customXmlMoveFromRangeStart,
-
-        /// <remarks/>
-        customXmlMoveToRangeEnd,
-
-        /// <remarks/>
-        customXmlMoveToRangeStart,
-
-        /// <remarks/>
-        del,
-
-        /// <remarks/>
-        fldSimple,
-
-        /// <remarks/>
-        hyperlink,
-
-        /// <remarks/>
-        ins,
-
-        /// <remarks/>
-        moveFrom,
-
-        /// <remarks/>
-        moveFromRangeEnd,
-
-        /// <remarks/>
-        moveFromRangeStart,
-
-        /// <remarks/>
-        moveTo,
-
-        /// <remarks/>
-        moveToRangeEnd,
-
-        /// <remarks/>
-        moveToRangeStart,
-
-        /// <remarks/>
-        permEnd,
-
-        /// <remarks/>
-        permStart,
-
-        /// <remarks/>
-        proofErr,
-
-        /// <remarks/>
-        r,
-
-        /// <remarks/>
-        sdt,
-
-        /// <remarks/>
-        smartTag,
-
-        /// <remarks/>
-        subDoc,
-    }
-
-
 
 
     [System.SerializableAttribute()]

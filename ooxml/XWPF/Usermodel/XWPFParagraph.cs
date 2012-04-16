@@ -47,6 +47,14 @@ namespace NPOI.XWPF.UserModel
 
             Runs = new List<XWPFRun>();
 
+            foreach (object o in paragraph.Items)
+            {
+                if (o is CT_R)
+                {
+                    Runs.Add(new XWPFRun((CT_R)o, this));
+                }
+            }
+
             // Get all our child nodes in order, and process them
             //  into XWPFRuns where we can
             /*XmlCursor c = paragraph.NewCursor();
@@ -117,7 +125,6 @@ namespace NPOI.XWPF.UserModel
                   c.Dispose();
                }
            }*/
-            throw new NotImplementedException();
         }
 
 
@@ -249,10 +256,9 @@ namespace NPOI.XWPF.UserModel
          */
         public XWPFRun CreateRun()
         {
-            //XWPFRun xwpfRun = new XWPFRun(paragraph.AddNewR(), this);
-            //Runs.Add(xwpfRun);
-            //return xwpfRun;
-            throw new NotImplementedException();
+            XWPFRun xwpfRun = new XWPFRun(paragraph.AddNewR(), this);
+            Runs.Add(xwpfRun);
+            return xwpfRun;
         }
 
         /**
@@ -1334,14 +1340,20 @@ namespace NPOI.XWPF.UserModel
          * returns the type of the BodyElement Paragraph
          * @see NPOI.XWPF.UserModel.IBodyElement#getElementType()
          */
-        public BodyElementType GetElementType()
+        public BodyElementType ElementType
         {
-            return BodyElementType.PARAGRAPH;
+            get
+            {
+                return BodyElementType.PARAGRAPH;
+            }
         }
 
-        public IBody GetBody()
+        public IBody Body
         {
-            return part;
+            get
+            {
+                return part;
+            }
         }
 
         /**

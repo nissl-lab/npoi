@@ -14,39 +14,40 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 ==================================================================== */
-namespace NPOI.XWPF.UserModel
+namespace NPOI.XWPF
 {
     using System;
+    using NPOI.XWPF.UserModel;
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using System.IO;
+    using TestCases;
+    using NPOI.Util;
 
     /**
-     * Sketch of XWPF hyperlink class
-     * 
-    * @author Yury Batrakov (batrakov at gmail.com)
-     * 
+     * @author Yegor Kozlov
      */
-    public class XWPFHyperlink
+    public class XWPFTestDataSamples
     {
-        String id, url;
-        public XWPFHyperlink(String id, String url)
+
+        public static XWPFDocument OpenSampleDocument(String sampleName)
         {
-            this.id = id;
-            this.url = url;
+            Stream is1 = POIDataSamples.GetDocumentInstance().OpenResourceAsStream(sampleName);
+            return new XWPFDocument(is1);
         }
 
-        public String Id
+        public static XWPFDocument WriteOutAndReadBack(XWPFDocument doc)
         {
-            get
-            {
-                return id;
-            }
+            MemoryStream baos = new MemoryStream(4096);
+            doc.Write(baos);
+            MemoryStream bais = new MemoryStream(baos.ToArray());
+            return new XWPFDocument(bais);
         }
 
-        public String URL
+        public static byte[] GetImage(String filename)
         {
-            get
-            {
-                return url;
-            }
+            Stream is1 = POIDataSamples.GetDocumentInstance().OpenResourceAsStream(filename);
+            byte[] result = IOUtils.ToByteArray(is1);
+            return result;
         }
     }
 

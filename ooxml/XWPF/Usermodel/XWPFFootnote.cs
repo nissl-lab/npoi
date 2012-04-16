@@ -49,28 +49,37 @@ namespace NPOI.XWPF.UserModel
             throw new NotImplementedException();
         }
 
-        public List<XWPFParagraph> GetParagraphs()
+        public IList<XWPFParagraph> Paragraphs
         {
-            return paragraphs;
+            get
+            {
+                return paragraphs;
+            }
         }
         public IEnumerator<XWPFParagraph> GetEnumerator()
         {
             return paragraphs.GetEnumerator();
         }
 
-        public List<XWPFTable> GetTables()
+        public IList<XWPFTable> GetTables()
         {
             return tables;
         }
 
-        public List<XWPFPictureData> GetPictures()
+        public IList<XWPFPictureData> Pictures
         {
-            return pictures;
+            get
+            {
+                return pictures;
+            }
         }
 
-        public List<IBodyElement> GetBodyElements()
+        public IList<IBodyElement> BodyElements
         {
-            return bodyElements;
+            get
+            {
+                return bodyElements;
+            }
         }
 
         public CT_FtnEdn GetCTFtnEdn()
