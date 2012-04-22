@@ -195,7 +195,7 @@
     <Compile Include="XWPF\UserModel\XWPFTable.cs" />
     <Compile Include="XWPF\UserModel\XWPFTableCell.cs" />
     <Compile Include="XWPF\UserModel\XWPFTableRow.cs" />
-    <Compile Include="XWPF\Util\XWPFEnum.cs" />
+    <Compile Include="XWPF\Util\EnumConverter.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="openxml4Net\OpenXml4Net.csproj">

@@ -241,7 +241,7 @@
     <Compile Include="XWPF\Usermodel\XWPFTable.cs" />
     <Compile Include="XWPF\Usermodel\XWPFTableCell.cs" />
     <Compile Include="XWPF\Usermodel\XWPFTableRow.cs" />
-    <Compile Include="XWPF\Util\XWPFEnum.cs" />
+    <Compile Include="XWPF\Util\EnumConverter.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\main\main vs10.csproj">
