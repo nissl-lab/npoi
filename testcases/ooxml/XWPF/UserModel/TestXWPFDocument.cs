@@ -25,6 +25,7 @@ namespace NPOI.XWPF.UserModel
     using NPOI.Util;
     using System.Xml.Serialization;
     using NPOI.OpenXmlFormats.Wordprocessing;
+    using NPOI.XWPF.Util;
 
     [TestClass]
     public class TestXWPFDocument
@@ -272,7 +273,7 @@ namespace NPOI.XWPF.UserModel
                 allPictures.Add(allPictures[(0)]);
                 Assert.Fail("This list must be unmodifiable!");
             }
-            catch (InvalidOperationException e)
+            catch (NotSupportedException)
             {
                 // all ok
             }
@@ -294,7 +295,7 @@ namespace NPOI.XWPF.UserModel
                 allPackagePictures.Add(allPackagePictures[(0)]);
                 Assert.Fail("This list must be unmodifiable!");
             }
-            catch (InvalidOperationException e)
+            catch (NotSupportedException)
             {
                 // all ok
             }

@@ -18,6 +18,7 @@ namespace NPOI.XWPF.UserModel
 {
     using System;
     using NPOI.OpenXmlFormats.Wordprocessing;
+    using System.Text;
 
 
     public class TOC
@@ -32,31 +33,31 @@ namespace NPOI.XWPF.UserModel
 
         public TOC(CT_SdtBlock block)
         {
-            /*this.block = block;
+            this.block = block;
             CT_SdtPr sdtPr = block.AddNewSdtPr();
             CT_DecimalNumber id = sdtPr.AddNewId();
-            id.Val=(new Bigint("4844945"));
-            sdtPr.AddNewDocPartObj().AddNewDocPartGallery().Val=("Table of contents");
-            CTSdtEndPr sdtEndPr = block.AddNewSdtEndPr();
-            CTRPr rPr = sdtEndPr.AddNewRPr();
-            CTFonts fonts = rPr.AddNewRFonts();
-            fonts.AsciiTheme=(STTheme.MINOR_H_ANSI);
-            fonts.EastAsiaTheme=(STTheme.MINOR_H_ANSI);
-            fonts.HAnsiTheme=(STTheme.MINOR_H_ANSI);
-            fonts.Cstheme=(STTheme.MINOR_BIDI);
-            rPr.AddNewB().Val=(STOnOff.OFF);
-            rPr.AddNewBCs().Val=(STOnOff.OFF);
-            rPr.AddNewColor().Val=("auto");
-            rPr.AddNewSz().Val=(new Bigint("24"));
-            rPr.AddNewSzCs().Val=(new Bigint("24"));
-            CTSdtContentBlock content = block.AddNewSdtContent();
-            CTP p = content.AddNewP();
-            p.RsidR=("00EF7E24".Bytes);
-            p.RsidRDefault=("00EF7E24".Bytes);
-            p.AddNewPPr().AddNewPStyle().Val=("TOCHeading");
-            p.AddNewR().AddNewT().StringValue=("Table of Contents");
-             */
-            throw new NotImplementedException();
+            id.val=("4844945");
+            sdtPr.AddNewDocPartObj().AddNewDocPartGallery().val=("Table of contents");
+            CT_SdtEndPr sdtEndPr = block.AddNewSdtEndPr();
+            CT_RPr rPr = sdtEndPr.AddNewRPr();
+            CT_Fonts fonts = rPr.AddNewRFonts();
+            fonts.asciiTheme=(ST_Theme.minorHAnsi);
+            fonts.eastAsiaTheme = (ST_Theme.minorHAnsi);
+            fonts.hAnsiTheme = (ST_Theme.minorHAnsi);
+            fonts.cstheme=(ST_Theme.minorBidi);
+            rPr.AddNewB().val=(ST_OnOff.off);
+            rPr.AddNewBCs().val = (ST_OnOff.off);
+            rPr.AddNewColor().val=("auto");
+            rPr.AddNewSz().val=24;
+            rPr.AddNewSzCs().val = 24;
+            CT_SdtContentBlock content = block.AddNewSdtContent();
+            CT_P p = content.AddNewP();
+            byte[] b = Encoding.Unicode.GetBytes("00EF7E24");
+            p.rsidR = b;
+            p.rsidRDefault = b;
+            p.AddNewPPr().AddNewPStyle().val=("TOCHeading");
+            p.AddNewR().AddNewT().Value=("Table of Contents");
+
         }
 
 
@@ -67,46 +68,46 @@ namespace NPOI.XWPF.UserModel
 
         public void AddRow(int level, String title, int page, String bookmarkRef)
         {
-            throw new NotImplementedException();
-            /*CTSdtContentBlock contentBlock = this.block.SdtContent;
-            CTP p = contentBlock.AddNewP();
-            p.RsidR=("00EF7E24".Bytes);
-            p.RsidRDefault=("00EF7E24".Bytes);
-            CTPPr pPr = p.AddNewPPr();
-            pPr.AddNewPStyle().Val=("TOC" + level);
-            CTTabs tabs = pPr.AddNewTabs();
-            CTTabStop tab = tabs.AddNewTab();
-            tab.Val=(STTabJc.RIGHT);
-            tab.Leader=(STTabTlc.DOT);
-            tab.Pos=(new Bigint("8290"));
+            CT_SdtContentBlock contentBlock = this.block.sdtContent;
+            CT_P p = contentBlock.AddNewP();
+            byte[] b = Encoding.Unicode.GetBytes("00EF7E24");
+            p.rsidR = b;
+            p.rsidRDefault = b;
+            CT_PPr pPr = p.AddNewPPr();
+            pPr.AddNewPStyle().val=("TOC" + level);
+            CT_Tabs tabs = pPr.AddNewTabs();
+            CT_TabStop tab = tabs.AddNewTab();
+            tab.val=(ST_TabJc.right);
+            tab.leader=(ST_TabTlc.dot);
+            tab.pos = "8290"; //(new BigInteger("8290"));
             pPr.AddNewRPr().AddNewNoProof();
-            CTR run = p.AddNewR();
-            Run.AddNewRPr().addNewNoProof();
-            Run.AddNewT().StringValue=(title);
-            run = p.AddNewR();
-            Run.AddNewRPr().addNewNoProof();
+            CT_R Run = p.AddNewR();
+            Run.AddNewRPr().AddNewNoProof();
+            Run.AddNewT().Value=(title);
+            Run = p.AddNewR();
+            Run.AddNewRPr().AddNewNoProof();
             Run.AddNewTab();
-            run = p.AddNewR();
-            Run.AddNewRPr().addNewNoProof();
-            Run.AddNewFldChar().FldCharType=(STFldCharType.BEGIN);
+            Run = p.AddNewR();
+            Run.AddNewRPr().AddNewNoProof();
+            Run.AddNewFldChar().fldCharType=(ST_FldCharType.begin);
             // pageref run
-            run = p.AddNewR();
-            Run.AddNewRPr().addNewNoProof();
-            CTText text = Run.AddNewInstrText();
-            text.Space=(Space.PRESERVE);
+            Run = p.AddNewR();
+            Run.AddNewRPr().AddNewNoProof();
+            CT_Text text = Run.AddNewInstrText();
+            text.space = "preserve";// (Space.PRESERVE);
             // bookmark reference
-            text.StringValue=(" PAGEREF _Toc" + bookmarkRef + " \\h ");
-            p.AddNewR().AddNewRPr().addNewNoProof();
-            run = p.AddNewR();
-            Run.AddNewRPr().addNewNoProof();
-            Run.AddNewFldChar().FldCharType=(STFldCharType.SEPARATE);
+            text.Value=(" PAGEREF _Toc" + bookmarkRef + " \\h ");
+            p.AddNewR().AddNewRPr().AddNewNoProof();
+            Run = p.AddNewR();
+            Run.AddNewRPr().AddNewNoProof();
+            Run.AddNewFldChar().fldCharType=(ST_FldCharType.separate);
             // page number run
-            run = p.AddNewR();
-            Run.AddNewRPr().addNewNoProof();
-            Run.AddNewT().StringValue=(Int32.ValueOf(page).ToString());
-            run = p.AddNewR();
-            Run.AddNewRPr().addNewNoProof();
-            Run.AddNewFldChar().FldCharType=(STFldCharType.END);*/
+            Run = p.AddNewR();
+            Run.AddNewRPr().AddNewNoProof();
+            Run.AddNewT().Value = page.ToString();
+            Run = p.AddNewR();
+            Run.AddNewRPr().AddNewNoProof();
+            Run.AddNewFldChar().fldCharType=(ST_FldCharType.end);
         }
     }
 

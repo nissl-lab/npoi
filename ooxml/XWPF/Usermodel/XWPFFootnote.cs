@@ -33,20 +33,19 @@ namespace NPOI.XWPF.UserModel
 
         public XWPFFootnote(CT_FtnEdn note, XWPFFootnotes xFootnotes)
         {
-            //footnotes = xFootnotes;
-            //ctFtnEdn = note;
-            //foreach (CTP p in ctFtnEdn.PList)	{
-            //   paragraphs.Add(new XWPFParagraph(p, this));
-            //}
-            throw new NotImplementedException();
+            footnotes = xFootnotes;
+            ctFtnEdn = note;
+            foreach (CT_P p in ctFtnEdn.GetPList())	{
+               paragraphs.Add(new XWPFParagraph(p, this));
+            }
         }
 
         public XWPFFootnote(XWPFDocument document, CT_FtnEdn body)
         {
-            //foreach (CTP p in body.PList)	{
-            //    paragraphs.Add(new XWPFParagraph(p, document));
-            //}
-            throw new NotImplementedException();
+            foreach (CT_P p in body.GetPList())
+            {
+                paragraphs.Add(new XWPFParagraph(p, document));
+            }
         }
 
         public IList<XWPFParagraph> Paragraphs
@@ -114,17 +113,15 @@ namespace NPOI.XWPF.UserModel
          */
         public void insertTable(int pos, XWPFTable table)
         {
-            /*bodyElements.Add(pos, table);
+            bodyElements.Insert(pos, table);
             int i;
-            for (i = 0; i < ctFtnEdn.TblList.Size(); i++) {
-                CTTbl tbl = ctFtnEdn.GetTblArray(i);
-                if(tbl == table.CTTbl){
+            for (i = 0; i < ctFtnEdn.GetTblList().Count; i++) {
+                CT_Tbl tbl = ctFtnEdn.GetTblArray(i);
+                if(tbl == table.GetCTTbl()){
                     break;
                 }
             }
-            tables.Add(i, table);*/
-            throw new NotImplementedException();
-
+            tables.Insert(i, table);
         }
 
         /**
@@ -136,15 +133,13 @@ namespace NPOI.XWPF.UserModel
          */
         public XWPFTable GetTable(CT_Tbl ctTable)
         {
-            /*foreach (XWPFTable table in tables) {
+            foreach (XWPFTable table in tables) {
                 if(table==null)
                     return null;
-                if(table.CTTbl.Equals(ctTable))
+                if(table.GetCTTbl().Equals(ctTable))
                     return table;	
             }
-            return null;*/
-            throw new NotImplementedException();
-
+            return null;
         }
 
         /**
@@ -158,12 +153,11 @@ namespace NPOI.XWPF.UserModel
          */
         public XWPFParagraph GetParagraph(CT_P p)
         {
-            /*foreach (XWPFParagraph paragraph in paragraphs) {
-                if(paragraph.CTP.Equals(p))
+            foreach (XWPFParagraph paragraph in paragraphs) {
+                if(paragraph.GetCTP().Equals(p))
                     return paragraph;
             }
-            return null;*/
-            throw new NotImplementedException();
+            return null;
         }
 
         /**
@@ -322,12 +316,11 @@ namespace NPOI.XWPF.UserModel
          */
         public XWPFTable AddNewTbl(CT_Tbl table)
         {
-            /*CTTbl newTable = ctFtnEdn.AddNewTbl();
+            CT_Tbl newTable = ctFtnEdn.AddNewTbl();
             newTable.Set(table);
             XWPFTable xTable = new XWPFTable(newTable, this);
             tables.Add(xTable);
-            return xTable;*/
-            throw new NotImplementedException();
+            return xTable;
         }
 
         /**
@@ -337,12 +330,11 @@ namespace NPOI.XWPF.UserModel
          */
         public XWPFParagraph AddNewParagraph(CT_P paragraph)
         {
-            /*CTP newPara = ctFtnEdn.AddNewP();
+            CT_P newPara = ctFtnEdn.AddNewP();
             newPara.Set(paragraph);
             XWPFParagraph xPara = new XWPFParagraph(newPara, this);
             paragraphs.Add(xPara);
-            return xPara;*/
-            throw new NotImplementedException();
+            return xPara;
         }
 
         /**

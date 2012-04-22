@@ -160,6 +160,51 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 this.items1ElementNameField = value;
             }
         }
+
+        public void Set(CT_Tbl table)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void RemoveTr(int pos)
+        {
+            throw new NotImplementedException();
+        }
+
+        public CT_Row InsertNewTr(int pos)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SetTrArray(int pos, CT_Row cT_Row)
+        {
+            throw new NotImplementedException();
+        }
+
+        public CT_Row AddNewTr()
+        {
+            throw new NotImplementedException();
+        }
+
+        public CT_TblPr AddNewTblPr()
+        {
+            throw new NotImplementedException();
+        }
+
+        public int SizeOfTrArray()
+        {
+            throw new NotImplementedException();
+        }
+
+        public CT_Row GetTrArray(int p)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<CT_Row> GetTrList()
+        {
+            throw new NotImplementedException();
+        }
     }
 
 
@@ -1446,6 +1491,36 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 this.insideVField = value;
             }
         }
+
+        public CT_Border AddNewBottom()
+        {
+            throw new NotImplementedException();
+        }
+
+        public CT_Border AddNewLeft()
+        {
+            throw new NotImplementedException();
+        }
+
+        public CT_Border AddNewRight()
+        {
+            throw new NotImplementedException();
+        }
+
+        public CT_Border AddNewTop()
+        {
+            throw new NotImplementedException();
+        }
+
+        public CT_Border AddNewInsideH()
+        {
+            throw new NotImplementedException();
+        }
+
+        public CT_Border AddNewInsideV()
+        {
+            throw new NotImplementedException();
+        }
     }
 
 
@@ -1605,6 +1680,21 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             {
                 this.tblPrChangeField = value;
             }
+        }
+
+        public bool IsSetTblW()
+        {
+            throw new NotImplementedException();
+        }
+
+        public CT_TblWidth AddNewTblW()
+        {
+            throw new NotImplementedException();
+        }
+
+        public CT_TblBorders AddNewTblBorders()
+        {
+            throw new NotImplementedException();
         }
     }
 
@@ -1787,6 +1877,46 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 this.itemsElementNameField = value;
             }
         }
+
+        public CT_P AddNewP()
+        {
+            throw new NotImplementedException();
+        }
+
+        public IList<CT_P> GetPList()
+        {
+            throw new NotImplementedException();
+        }
+
+        public int SizeOfPArray()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SetPArray(int p, CT_P cT_P)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void RemoveP(int pos)
+        {
+            throw new NotImplementedException();
+        }
+
+        public CT_P GetPArray(int p)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IList<CT_Tbl> GetTblList()
+        {
+            throw new NotImplementedException();
+        }
+
+        public CT_Tbl GetTblArray(int i)
+        {
+            throw new NotImplementedException();
+        }
     }
 
 
@@ -1946,6 +2076,21 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             {
                 this.trPrChangeField = value;
             }
+        }
+
+        public int SizeOfTrHeightArray()
+        {
+            throw new NotImplementedException();
+        }
+
+        public CT_Height GetTrHeightArray(int p)
+        {
+            throw new NotImplementedException();
+        }
+
+        public CT_Height AddNewTrHeight()
+        {
+            throw new NotImplementedException();
         }
     }
 
@@ -2846,6 +2991,31 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             {
                 this.rsidTrField = value;
             }
+        }
+
+        public IEnumerable<CT_Tc> GetTcList()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsSetTrPr()
+        {
+            throw new NotImplementedException();
+        }
+
+        public CT_TrPr AddNewTrPr()
+        {
+            throw new NotImplementedException();
+        }
+
+        public CT_Tc AddNewTc()
+        {
+            throw new NotImplementedException();
+        }
+
+        public int SizeOfTcArray()
+        {
+            throw new NotImplementedException();
         }
     }
 

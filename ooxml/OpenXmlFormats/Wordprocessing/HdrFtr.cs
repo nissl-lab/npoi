@@ -82,6 +82,26 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 this.itemsElementNameField = value;
             }
         }
+
+        public CT_Tbl GetTblArray(int i)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IList<CT_Tbl> GetTblList()
+        {
+            throw new NotImplementedException();
+        }
+
+        public CT_P AddNewP()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SetPArray(int i, CT_P cT_P)
+        {
+            throw new NotImplementedException();
+        }
     }
 
 
@@ -506,6 +526,31 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             this.itemsElementNameField = note.itemsElementNameField;
             this.itemsField = note.itemsField;
             this.typeField = note.typeField;
+        }
+
+        public IEnumerable<CT_P> GetPList()
+        {
+            throw new NotImplementedException();
+        }
+
+        public IList<CT_Tbl> GetTblList()
+        {
+            throw new NotImplementedException();
+        }
+
+        public CT_Tbl GetTblArray(int i)
+        {
+            throw new NotImplementedException();
+        }
+
+        public CT_Tbl AddNewTbl()
+        {
+            throw new NotImplementedException();
+        }
+
+        public CT_P AddNewP()
+        {
+            throw new NotImplementedException();
         }
     }
 

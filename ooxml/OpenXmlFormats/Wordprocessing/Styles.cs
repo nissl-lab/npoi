@@ -65,6 +65,31 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 this.styleField = value;
             }
         }
+
+        public IList<CT_Style> GetStyleList()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void AddNewStyle()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SetStyleArray(int pos, CT_Style cT_Style)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsSetDocDefaults()
+        {
+            throw new NotImplementedException();
+        }
+
+        public CT_DocDefaults AddNewDocDefaults()
+        {
+            throw new NotImplementedException();
+        }
     }
 
 
@@ -110,6 +135,16 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 this.pPrDefaultField = value;
             }
         }
+
+        public bool IsSetRPrDefault()
+        {
+            throw new NotImplementedException();
+        }
+
+        public CT_RPrDefault AddNewRPrDefault()
+        {
+            throw new NotImplementedException();
+        }
     }
 
 
@@ -138,6 +173,16 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             {
                 this.rPrField = value;
             }
+        }
+
+        public bool IsSetRPr()
+        {
+            throw new NotImplementedException();
+        }
+
+        public CT_RPr AddNewRPr()
+        {
+            throw new NotImplementedException();
         }
     }
 
@@ -815,6 +860,11 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             {
                 this.customStyleFieldSpecified = value;
             }
+        }
+
+        public bool IsSetName()
+        {
+            throw new NotImplementedException();
         }
     }
 

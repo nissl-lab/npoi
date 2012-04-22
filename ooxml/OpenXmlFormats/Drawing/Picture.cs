@@ -340,6 +340,11 @@ namespace NPOI.OpenXmlFormats.Dml {
                 this.noCropField = value;
             }
         }
+
+        public void SetNoChangeAspect(bool p)
+        {
+            throw new NotImplementedException();
+        }
     }
     
     /// <remarks/>

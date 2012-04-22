@@ -23,6 +23,7 @@ namespace NPOI.XWPF.UserModel
     using NPOI.OpenXml4Net.OPC;
     using System.IO;
     using System.Xml;
+    using System.Xml.Serialization;
 
 
     /**
@@ -67,7 +68,7 @@ namespace NPOI.XWPF.UserModel
                Stream is1 = GetPackagePart().GetInputStream();
                notesDoc = FootnotesDocument.Parse(is1);
                ctFootnotes = notesDoc.Footnotes;
-            } catch (XmlException e) {
+            } catch (XmlException) {
                throw new POIXMLException();
             }
 	   
@@ -78,19 +79,23 @@ namespace NPOI.XWPF.UserModel
         }
 
 
-        protected void Commit()
+        protected override void Commit()
         {
             /*XmlOptions xmlOptions = new XmlOptions(DEFAULT_XML_OPTIONS);
             xmlOptions.SaveSyntheticDocumentElement=(new QName(CTFootnotes.type.Name.NamespaceURI, "footnotes"));
             Dictionary<String,String> map = new Dictionary<String,String>();
             map.Put("http://schemas.Openxmlformats.org/officeDocument/2006/relationships", "r");
             map.Put("http://schemas.Openxmlformats.org/wordProcessingml/2006/main", "w");
-            xmlOptions.SaveSuggestedPrefixes=(map);
+            xmlOptions.SaveSuggestedPrefixes=(map);*/
             PackagePart part = GetPackagePart();
-            OutputStream out1 = part.OutputStream;
-            ctFootnotes.Save(out, xmlOptions);
-            out1.Close();*/
-            throw new NotImplementedException();
+            Stream out1 = part.GetOutputStream();
+            XmlSerializerNamespaces namespaces = new XmlSerializerNamespaces(new[] {
+                new XmlQualifiedName("w", "http://schemas.Openxmlformats.org/wordProcessingml/2006/main"),
+                new XmlQualifiedName("r", "http://schemas.Openxmlformats.org/officeDocument/2006/relationships")
+            });
+            FootnotesDocument notesDoc = new FootnotesDocument(ctFootnotes);
+            notesDoc.Save(out1, null);
+            out1.Close();
         }
 
         public List<XWPFFootnote> GetFootnotesList()
@@ -100,12 +105,11 @@ namespace NPOI.XWPF.UserModel
 
         public XWPFFootnote GetFootnoteById(int id)
         {
-            /*foreach(XWPFFootnote note in listFootnote) {
-                if(note.CTFtnEdn.Id.IntValue() == id)
+            foreach(XWPFFootnote note in listFootnote) {
+                if(note.GetCTFtnEdn().id == id.ToString())
                     return note;
             }
-            return null;*/
-            throw new NotImplementedException();
+            return null;
         }
 
         /**
@@ -125,8 +129,7 @@ namespace NPOI.XWPF.UserModel
         public void AddFootnote(XWPFFootnote footnote)
         {
             listFootnote.Add(footnote);
-            //ctFootnotes.AddNewFootnote().Set(footnote.CTFtnEdn);
-            throw new NotImplementedException();
+            ctFootnotes.AddNewFootnote().Set(footnote.GetCTFtnEdn());
         }
 
         /**
@@ -141,7 +144,6 @@ namespace NPOI.XWPF.UserModel
             XWPFFootnote xNote = new XWPFFootnote(newNote, this);
             listFootnote.Add(xNote);
             return xNote;
-            throw new NotImplementedException();
         }
 
         public void SetXWPFDocument(XWPFDocument doc)

@@ -38,12 +38,11 @@ namespace NPOI.XWPF.UserModel
             id = comment.id.ToString();
             author = comment.author;
 
-            /*foreach(CT_P ctp in comment.PList)
+            foreach(CT_P ctp in comment.GetPList())
             {
                 XWPFParagraph p = new XWPFParagraph(ctp, document);
-                text.Append(p.Text);
-            }*/
-            throw new NotImplementedException();
+                text.Append(p.GetText());
+            }
         }
 
         public String GetId()

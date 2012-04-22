@@ -29,6 +29,11 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 this.tabField = value;
             }
         }
+
+        public CT_TabStop AddNewTab()
+        {
+            throw new NotImplementedException();
+        }
     }
 
     [System.SerializableAttribute()]

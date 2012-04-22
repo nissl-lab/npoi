@@ -229,6 +229,11 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 this.initialsField = value;
             }
         }
+
+        public IEnumerable<CT_P> GetPList()
+        {
+            throw new NotImplementedException();
+        }
     }
 
 

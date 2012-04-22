@@ -20,6 +20,8 @@ namespace NPOI.XWPF.UserModel
     using System.Collections.Generic;
     using NPOI.OpenXmlFormats.Wordprocessing;
     using System.Text;
+    using NPOI.XWPF.Util;
+    using NPOI.Util;
     /**
      * Sketch of XWPF paragraph class
      */
@@ -277,10 +279,8 @@ namespace NPOI.XWPF.UserModel
          */
         public ParagraphAlignment GetAlignment()
         {
-            //CTPPr pr = GetCTPPr();
-            //return pr == null || !pr.IsSetJc() ? ParagraphAlignment.LEFT
-            //        : ParagraphAlignment.ValueOf(pr.Jc.Val.IntValue());
-            throw new NotImplementedException();
+            CT_PPr pr = GetCTPPr();
+            return pr == null || !pr.IsSetJc() ? ParagraphAlignment.LEFT : (ParagraphAlignment)(pr.jc.val);
         }
 
         /**
@@ -299,11 +299,9 @@ namespace NPOI.XWPF.UserModel
          */
         public void SetAlignment(ParagraphAlignment align)
         {
-            //CTPPr pr = GetCTPPr();
-            //CTJc jc = pr.IsSetJc() ? pr.Jc : pr.AddNewJc();
-            //STJc.Enum en = STJc.Enum.ForInt(align.Value);
-            //jc.Val=(en);
-            throw new NotImplementedException();
+            CT_PPr pr = GetCTPPr();
+            CT_Jc jc = pr.IsSetJc() ? pr.jc : pr.AddNewJc();
+            jc.val = EnumConverter.ValueOf<ST_Jc, ParagraphAlignment>(align);
         }
 
         /**
@@ -326,11 +324,9 @@ namespace NPOI.XWPF.UserModel
          */
         public TextAlignment GetVerticalAlignment()
         {
-            //CTPPr pr = GetCTPPr();
-            //return (pr == null || !pr.IsSetTextAlignment()) ? TextAlignment.AUTO
-            //        : TextAlignment.ValueOf(pr.TextAlignment.Val
-            //        .intValue());
-            throw new NotImplementedException();
+            CT_PPr pr = GetCTPPr();
+            return (pr == null || !pr.IsSetTextAlignment()) ? TextAlignment.AUTO
+                    : EnumConverter.ValueOf<TextAlignment, ST_TextAlignment>(pr.textAlignment.val);
         }
 
         /**
@@ -354,13 +350,12 @@ namespace NPOI.XWPF.UserModel
          */
         public void SetVerticalAlignment(TextAlignment valign)
         {
-            //CTPPr pr = GetCTPPr();
-            //CTTextAlignment textAlignment = pr.IsSetTextAlignment() ? pr
-            //        .TextAlignment : pr.AddNewTextAlignment();
+            CT_PPr pr = GetCTPPr();
+            CT_TextAlignment textAlignment = pr.IsSetTextAlignment() ? pr
+                    .textAlignment : pr.AddNewTextAlignment();
             //STTextAlignment.Enum en = STTextAlignment.Enum
             //        .forInt(valign.Value);
-            //textAlignment.Val=(en);
-            throw new NotImplementedException();
+            textAlignment.val = EnumConverter.ValueOf<ST_TextAlignment, TextAlignment>(valign);
         }
 
         /**
@@ -392,14 +387,13 @@ namespace NPOI.XWPF.UserModel
          */
         public void SetBorderTop(Borders border)
         {
-            //CTPBdr ct = GetCTPBrd(true);
+            CT_PBdr ct = GetCTPBrd(true);
 
-            //CTBorder pr = (ct != null && ct.IsSetTop()) ? ct.Top : ct.AddNewTop();
-            //if (border.Value == Borders.NONE.Value)
-            //    ct.UnsetTop();
-            //else
-            //    pr.Val=(STBorder.Enum.ForInt(border.Value));
-            throw new NotImplementedException();
+            CT_Border pr = (ct != null && ct.IsSetTop()) ? ct.top : ct.AddNewTop();
+            if (border == Borders.NONE)
+                ct.UnsetTop();
+            else
+                pr.val = EnumConverter.ValueOf<ST_Border, Borders>(border);
         }
 
         /**
@@ -412,14 +406,14 @@ namespace NPOI.XWPF.UserModel
          */
         public Borders GetBorderTop()
         {
-            //CTPBdr border = GetCTPBrd(false);
-            //CTBorder ct = null;
-            //if (border != null) {
-            //    ct = border.Top;
-            //}
-            //STBorder.Enum ptrn = (ct != null) ? ct.Val : STBorder.NONE;
-            //return Borders.ValueOf(ptrn.IntValue());
-            throw new NotImplementedException();
+            CT_PBdr border = GetCTPBrd(false);
+            CT_Border ct = null;
+            if (border != null)
+            {
+                ct = border.top;
+            }
+            ST_Border ptrn = (ct != null) ? ct.val : ST_Border.none;
+            return EnumConverter.ValueOf<Borders, ST_Border>(ptrn);
         }
 
         /**
@@ -451,13 +445,12 @@ namespace NPOI.XWPF.UserModel
          */
         public void SetBorderBottom(Borders border)
         {
-            //CTPBdr ct = GetCTPBrd(true);
-            //CTBorder pr = ct.IsSetBottom() ? ct.Bottom : ct.AddNewBottom();
-            //if (border.Value == Borders.NONE.Value)
-            //    ct.UnsetBottom();
-            //else
-            //    pr.Val=(STBorder.Enum.ForInt(border.Value));
-            throw new NotImplementedException();
+            CT_PBdr ct = GetCTPBrd(true);
+            CT_Border pr = ct.IsSetBottom() ? ct.bottom : ct.AddNewBottom();
+            if (border == Borders.NONE)
+                ct.UnsetBottom();
+            else
+                pr.val = EnumConverter.ValueOf<ST_Border, Borders>(border);
         }
 
         /**
@@ -470,14 +463,15 @@ namespace NPOI.XWPF.UserModel
          */
         public Borders GetBorderBottom()
         {
-            //CTPBdr border = GetCTPBrd(false);
-            //CTBorder ct = null;
-            //if (border != null) {
-            //    ct = border.Bottom;
-            //}
-            //STBorder.Enum ptrn = ct != null ? ct.Val : STBorder.NONE;
-            //return Borders.ValueOf(ptrn.IntValue());
-            throw new NotImplementedException();
+            CT_PBdr border = GetCTPBrd(false);
+            CT_Border ct = null;
+            if (border != null)
+            {
+                ct = border.bottom;
+            }
+            ST_Border ptrn = ct != null ? ct.val : ST_Border.none;
+            return EnumConverter.ValueOf<Borders, ST_Border>(ptrn);
+
         }
 
         /**
@@ -504,13 +498,13 @@ namespace NPOI.XWPF.UserModel
          */
         public void SetBorderLeft(Borders border)
         {
-            //CTPBdr ct = GetCTPBrd(true);
-            //CTBorder pr = ct.IsSetLeft() ? ct.Left : ct.AddNewLeft();
-            //if (border.Value == Borders.NONE.Value)
-            //    ct.UnsetLeft();
-            //else
-            //    pr.Val=(STBorder.Enum.ForInt(border.Value));
-            throw new NotImplementedException();
+            CT_PBdr ct = GetCTPBrd(true);
+            CT_Border pr = ct.IsSetLeft() ? ct.left : ct.AddNewLeft();
+            if (border == Borders.NONE)
+                ct.UnsetLeft();
+            else
+                pr.val = EnumConverter.ValueOf<ST_Border, Borders>(border);
+
         }
 
         /**
@@ -523,14 +517,14 @@ namespace NPOI.XWPF.UserModel
          */
         public Borders GetBorderLeft()
         {
-            //CTPBdr border = GetCTPBrd(false);
-            //CTBorder ct = null;
-            //if (border != null) {
-            //    ct = border.Left;
-            //}
-            //STBorder.Enum ptrn = ct != null ? ct.Val : STBorder.NONE;
-            //return Borders.ValueOf(ptrn.IntValue());
-            throw new NotImplementedException();
+            CT_PBdr border = GetCTPBrd(false);
+            CT_Border ct = null;
+            if (border != null)
+            {
+                ct = border.left;
+            }
+            ST_Border ptrn = ct != null ? ct.val : ST_Border.none;
+            return EnumConverter.ValueOf<Borders, ST_Border>(ptrn);
         }
 
         /**
@@ -557,13 +551,12 @@ namespace NPOI.XWPF.UserModel
          */
         public void SetBorderRight(Borders border)
         {
-            //CTPBdr ct = GetCTPBrd(true);
-            //CTBorder pr = ct.IsSetRight() ? ct.Right : ct.AddNewRight();
-            //if (border.Value == Borders.NONE.Value)
-            //    ct.UnsetRight();
-            //else
-            //    pr.Val=(STBorder.Enum.ForInt(border.Value));
-            throw new NotImplementedException();
+            CT_PBdr ct = GetCTPBrd(true);
+            CT_Border pr = ct.IsSetRight() ? ct.right : ct.AddNewRight();
+            if (border == Borders.NONE)
+                ct.UnsetRight();
+            else
+                pr.val = EnumConverter.ValueOf<ST_Border, Borders>(border);
         }
 
         /**
@@ -576,14 +569,14 @@ namespace NPOI.XWPF.UserModel
          */
         public Borders GetBorderRight()
         {
-            //CTPBdr border = GetCTPBrd(false);
-            //CTBorder ct = null;
-            //if (border != null) {
-            //    ct = border.Right;
-            //}
-            //STBorder.Enum ptrn = ct != null ? ct.Val : STBorder.NONE;
-            //return Borders.ValueOf(ptrn.IntValue());
-            throw new NotImplementedException();
+            CT_PBdr border = GetCTPBrd(false);
+            CT_Border ct = null;
+            if (border != null)
+            {
+                ct = border.right;
+            }
+            ST_Border ptrn = ct != null ? ct.val : ST_Border.none;
+            return EnumConverter.ValueOf<Borders, ST_Border>(ptrn);
         }
 
         /**
@@ -614,13 +607,12 @@ namespace NPOI.XWPF.UserModel
          */
         public void SetBorderBetween(Borders border)
         {
-            //CTPBdr ct = GetCTPBrd(true);
-            //CTBorder pr = ct.IsSetBetween() ? ct.Between : ct.AddNewBetween();
-            //if (border.Value == Borders.NONE.Value)
-            //    ct.UnsetBetween();
-            //else
-            //    pr.Val=(STBorder.Enum.ForInt(border.Value));
-            throw new NotImplementedException();
+            CT_PBdr ct = GetCTPBrd(true);
+            CT_Border pr = ct.IsSetBetween() ? ct.between : ct.AddNewBetween();
+            if (border == Borders.NONE)
+                ct.UnsetBetween();
+            else
+                pr.val = EnumConverter.ValueOf<ST_Border, Borders>(border);
         }
 
         /**
@@ -633,14 +625,14 @@ namespace NPOI.XWPF.UserModel
          */
         public Borders GetBorderBetween()
         {
-            //CTPBdr border = GetCTPBrd(false);
-            //CTBorder ct = null;
-            //if (border != null) {
-            //    ct = border.Between;
-            //}
-            //STBorder.Enum ptrn = ct != null ? ct.Val : STBorder.NONE;
-            //return Borders.ValueOf(ptrn.IntValue());
-            throw new NotImplementedException();
+            CT_PBdr border = GetCTPBrd(false);
+            CT_Border ct = null;
+            if (border != null)
+            {
+                ct = border.between;
+            }
+            ST_Border ptrn = ct != null ? ct.val : ST_Border.none;
+            return EnumConverter.ValueOf<Borders, ST_Border>(ptrn);
         }
 
         /**
@@ -661,14 +653,13 @@ namespace NPOI.XWPF.UserModel
          */
         public void SetPageBreak(bool pageBreak)
         {
-            //CTPPr ppr = GetCTPPr();
-            //CTOnOff ct_pageBreak = ppr.IsSetPageBreakBefore() ? ppr
-            //        .PageBreakBefore : ppr.AddNewPageBreakBefore();
-            //if (pageBreak)
-            //    ct_pageBreak.Val=(STOnOff.TRUE);
-            //else
-            //    ct_pageBreak.Val=(STOnOff.FALSE);
-            throw new NotImplementedException();
+            CT_PPr ppr = GetCTPPr();
+            CT_OnOff ct_pageBreak = ppr.IsSetPageBreakBefore() ? ppr
+                    .pageBreakBefore : ppr.AddNewPageBreakBefore();
+            if (pageBreak)
+                ct_pageBreak.val = (ST_OnOff.True);
+            else
+                ct_pageBreak.val = (ST_OnOff.False);
         }
 
         /**
@@ -688,15 +679,15 @@ namespace NPOI.XWPF.UserModel
          */
         public bool IsPageBreak()
         {
-            //CTPPr ppr = GetCTPPr();
-            //CTOnOff ct_pageBreak = ppr.IsSetPageBreakBefore() ? ppr
-            //        .PageBreakBefore : null;
-            //if (ct_pageBreak != null
-            //        && ct_pageBreak.Val.IntValue() == STOnOff.INT_TRUE) {
-            //    return true;
-            //}
-            //return false;
-            throw new NotImplementedException();
+            CT_PPr ppr = GetCTPPr();
+            CT_OnOff ct_pageBreak = ppr.IsSetPageBreakBefore() ? ppr
+                    .pageBreakBefore : null;
+            if (ct_pageBreak != null
+                    && ct_pageBreak.val == ST_OnOff.True)
+            {
+                return true;
+            }
+            return false;
         }
 
         /**
@@ -713,12 +704,12 @@ namespace NPOI.XWPF.UserModel
          */
         public void SetSpacingAfter(int spaces)
         {
-            //CTSpacing spacing = GetCTSpacing(true);
-            //if (spacing != null) {
-            //    Bigint bi = new Bigint("" + spaces);
-            //    spacing.After=(bi);
-            //}
-            throw new NotImplementedException();
+            CT_Spacing spacing = GetCTSpacing(true);
+            if (spacing != null)
+            {
+                BigInteger bi = new BigInteger(spaces);
+                spacing.after = (ulong)spaces;
+            }
         }
 
         /**
@@ -729,9 +720,8 @@ namespace NPOI.XWPF.UserModel
          */
         public int GetSpacingAfter()
         {
-            //CTSpacing spacing = GetCTSpacing(false);
-            //return (spacing != null && spacing.IsSetAfter()) ? spacing.After.IntValue() : -1;
-            throw new NotImplementedException();
+            CT_Spacing spacing = GetCTSpacing(false);
+            return (spacing != null && spacing.IsSetAfter()) ? (int)spacing.after : -1;
         }
 
         /**
@@ -753,10 +743,9 @@ namespace NPOI.XWPF.UserModel
          */
         public void SetSpacingAfterLines(int spaces)
         {
-            //CTSpacing spacing = GetCTSpacing(true);
-            //Bigint bi = new Bigint("" + spaces);
-            //spacing.AfterLines=(bi);
-            throw new NotImplementedException();
+            CT_Spacing spacing = GetCTSpacing(true);
+            //BigInteger bi = new BigInteger("" + spaces);
+            spacing.afterLines = (spaces.ToString());
         }
 
 
@@ -769,9 +758,8 @@ namespace NPOI.XWPF.UserModel
          */
         public int GetSpacingAfterLines()
         {
-            //CTSpacing spacing = GetCTSpacing(false);
-            //return (spacing != null && spacing.IsSetAfterLines()) ? spacing.AfterLines.IntValue() : -1;
-            throw new NotImplementedException();
+            CT_Spacing spacing = GetCTSpacing(false);
+            return (spacing != null && spacing.IsSetAfterLines()) ? int.Parse(spacing.afterLines) : -1;
         }
 
 
@@ -787,10 +775,9 @@ namespace NPOI.XWPF.UserModel
          */
         public void SetSpacingBefore(int spaces)
         {
-            //CTSpacing spacing = GetCTSpacing(true);
-            //Bigint bi = new Bigint("" + spaces);
-            //spacing.Before=(bi);
-            throw new NotImplementedException();
+            CT_Spacing spacing = GetCTSpacing(true);
+            //BigInteger bi = new BigInteger("" + spaces);
+            spacing.before = (ulong)spaces;
         }
 
         /**
@@ -802,9 +789,8 @@ namespace NPOI.XWPF.UserModel
          */
         public int GetSpacingBefore()
         {
-            //CTSpacing spacing = GetCTSpacing(false);
-            //return (spacing != null && spacing.IsSetBefore()) ? spacing.Before.IntValue() : -1;
-            throw new NotImplementedException();
+            CT_Spacing spacing = GetCTSpacing(false);
+            return (spacing != null && spacing.IsSetBefore()) ? (int)spacing.before : -1;
         }
 
         /**
@@ -821,10 +807,9 @@ namespace NPOI.XWPF.UserModel
          */
         public void SetSpacingBeforeLines(int spaces)
         {
-            //CTSpacing spacing = GetCTSpacing(true);
-            //Bigint bi = new Bigint("" + spaces);
-            //spacing.BeforeLines=(bi);
-            throw new NotImplementedException();
+            CT_Spacing spacing = GetCTSpacing(true);
+            //BigInteger bi = new BigInteger("" + spaces);
+            spacing.beforeLines = spaces.ToString();
         }
 
         /**
@@ -837,9 +822,8 @@ namespace NPOI.XWPF.UserModel
          */
         public int GetSpacingBeforeLines()
         {
-            //CTSpacing spacing = GetCTSpacing(false);
-            //return (spacing != null && spacing.IsSetBeforeLines()) ? spacing.BeforeLines.IntValue() : -1;
-            throw new NotImplementedException();
+            CT_Spacing spacing = GetCTSpacing(false);
+            return (spacing != null && spacing.IsSetBeforeLines()) ? int.Parse(spacing.beforeLines) : -1;
         }
 
 
@@ -853,9 +837,8 @@ namespace NPOI.XWPF.UserModel
          */
         public void SetSpacingLineRule(LineSpacingRule rule)
         {
-            //CTSpacing spacing = GetCTSpacing(true);
-            //spacing.LineRule=(STLineSpacingRule.Enum.ForInt(rule.Value));
-            throw new NotImplementedException();
+            CT_Spacing spacing = GetCTSpacing(true);
+            spacing.lineRule = EnumConverter.ValueOf<ST_LineSpacingRule, LineSpacingRule>(rule);
         }
 
         /**
@@ -869,10 +852,9 @@ namespace NPOI.XWPF.UserModel
          */
         public LineSpacingRule GetSpacingLineRule()
         {
-            //CTSpacing spacing = GetCTSpacing(false);
-            //return (spacing != null && spacing.IsSetLineRule()) ? LineSpacingRule.ValueOf(spacing
-            //        .LineRule.IntValue()) : LineSpacingRule.AUTO;
-            throw new NotImplementedException();
+            CT_Spacing spacing = GetCTSpacing(false);
+            return (spacing != null && spacing.IsSetLineRule()) ? 
+                EnumConverter.ValueOf<LineSpacingRule,ST_LineSpacingRule>(spacing.lineRule) : LineSpacingRule.AUTO;
         }
 
 
@@ -891,10 +873,9 @@ namespace NPOI.XWPF.UserModel
          */
         public void SetIndentationLeft(int indentation)
         {
-            //CTInd indent = GetCTInd(true);
-            //Bigint bi = new Bigint("" + indentation);
-            //indent.Left=(bi);
-            throw new NotImplementedException();
+            CT_Ind indent = GetCTInd(true);
+            //BigInteger bi = new BigInteger("" + indentation);
+            indent.left = indentation.ToString();
         }
 
         /**
@@ -912,10 +893,9 @@ namespace NPOI.XWPF.UserModel
          */
         public int GetIndentationLeft()
         {
-            //CTInd indentation = GetCTInd(false);
-            //return (indentation != null && indentation.IsSetLeft()) ? indentation.Left.IntValue()
-            //        : -1;
-            throw new NotImplementedException();
+            CT_Ind indentation = GetCTInd(false);
+            return (indentation != null && indentation.IsSetLeft()) ? int.Parse(indentation.left)
+                    : -1;
         }
 
         /**
@@ -933,10 +913,9 @@ namespace NPOI.XWPF.UserModel
          */
         public void SetIndentationRight(int indentation)
         {
-            //CTInd indent = GetCTInd(true);
-            //Bigint bi = new Bigint("" + indentation);
-            //indent.Right = (bi);
-            throw new NotImplementedException();
+            CT_Ind indent = GetCTInd(true);
+            //BigInteger bi = new BigInteger("" + indentation);
+            indent.right = (indentation.ToString());
         }
 
         /**
@@ -955,10 +934,9 @@ namespace NPOI.XWPF.UserModel
 
         public int GetIndentationRight()
         {
-            //CTInd indentation = GetCTInd(false);
-            //return (indentation != null && indentation.IsSetRight()) ? indentation.Right.IntValue()
-            //        : -1;
-            throw new NotImplementedException();
+            CT_Ind indentation = GetCTInd(false);
+            return (indentation != null && indentation.IsSetRight()) ? int.Parse(indentation.right)
+                    : -1;
         }
 
         /**
@@ -977,10 +955,9 @@ namespace NPOI.XWPF.UserModel
 
         public void SetIndentationHanging(int indentation)
         {
-            //CTInd indent = GetCTInd(true);
-            //Bigint bi = new Bigint("" + indentation);
-            //indent.Hanging = (bi);
-            throw new NotImplementedException();
+            CT_Ind indent = GetCTInd(true);
+            //BigInteger bi = new BigInteger("" + indentation);
+            indent.hanging = (ulong)indentation;
         }
 
         /**
@@ -998,9 +975,8 @@ namespace NPOI.XWPF.UserModel
          */
         public int GetIndentationHanging()
         {
-            //CTInd indentation = GetCTInd(false);
-            //return (indentation != null && indentation.IsSetHanging()) ? indentation.Hanging.IntValue() : -1;
-            throw new NotImplementedException();
+            CT_Ind indentation = GetCTInd(false);
+            return (indentation != null && indentation.IsSetHanging()) ? (int)indentation.hanging : -1;
         }
 
         /**
@@ -1019,10 +995,9 @@ namespace NPOI.XWPF.UserModel
          */
         public void SetIndentationFirstLine(int indentation)
         {
-            //CTInd indent = GetCTInd(true);
-            //Bigint bi = new Bigint("" + indentation);
-            //indent.FirstLine = (bi);
-            throw new NotImplementedException();
+            CT_Ind indent = GetCTInd(true);
+            //BigInteger bi = new BigInteger("" + indentation);
+            indent.firstLine = (ulong)indentation;
         }
 
         /**
@@ -1042,10 +1017,9 @@ namespace NPOI.XWPF.UserModel
          */
         public int GetIndentationFirstLine()
         {
-            //CTInd indentation = GetCTInd(false);
-            //return (indentation != null && indentation.IsSetFirstLine()) ? indentation.FirstLine.IntValue()
-            //        : -1;
-            throw new NotImplementedException();
+            CT_Ind indentation = GetCTInd(false);
+            return (indentation != null && indentation.IsSetFirstLine()) ? (int)indentation.firstLine
+                    : -1;
         }
 
         /**
@@ -1058,13 +1032,12 @@ namespace NPOI.XWPF.UserModel
          */
         public void SetWordWrap(bool wrap)
         {
-            //CTOnOff wordWrap = GetCTPPr().IsSetWordWrap() ? GetCTPPr()
-            //        .WordWrap : GetCTPPr().AddNewWordWrap();
-            //if (wrap)
-            //    wordWrap.Val = (STOnOff.TRUE);
-            //else
-            //    wordWrap.UnsetVal();
-            throw new NotImplementedException();
+            CT_OnOff wordWrap = GetCTPPr().IsSetWordWrap() ? GetCTPPr()
+                    .wordWrap : GetCTPPr().AddNewWordWrap();
+            if (wrap)
+                wordWrap.val = (ST_OnOff.True);
+            else
+                wordWrap.UnsetVal();
         }
 
         /**
@@ -1077,16 +1050,15 @@ namespace NPOI.XWPF.UserModel
          */
         public bool IsWordWrap()
         {
-            //CTOnOff wordWrap = GetCTPPr().IsSetWordWrap() ? GetCTPPr()
-            //        .WordWrap : null;
-            //if (wordWrap != null)
-            //{
-            //    return (wordWrap.Val == STOnOff.ON
-            //            || wordWrap.Val == STOnOff.TRUE || wordWrap.Val == STOnOff.X_1) ? true
-            //            : false;
-            //}
-            //return false;
-            throw new NotImplementedException();
+            CT_OnOff wordWrap = GetCTPPr().IsSetWordWrap() ? GetCTPPr()
+                    .wordWrap : null;
+            if (wordWrap != null)
+            {
+                return (wordWrap.val == ST_OnOff.on
+                        || wordWrap.val == ST_OnOff.True || wordWrap.val == ST_OnOff.Value1) ? true
+                        : false;
+            }
+            return false;
         }
 
         /**
@@ -1096,10 +1068,9 @@ namespace NPOI.XWPF.UserModel
          */
         public void SetStyle(String newStyle)
         {
-            //CTPPr pr = GetCTPPr();
-            //CTString style = pr.PStyle != null ? pr.PStyle : pr.AddNewPStyle();
-            //style.Val = (newStyle);
-            throw new NotImplementedException();
+            CT_PPr pr = GetCTPPr();
+            CT_String style = pr.pStyle != null ? pr.pStyle : pr.AddNewPStyle();
+            style.val = (newStyle);
         }
 
         /**
@@ -1107,52 +1078,49 @@ namespace NPOI.XWPF.UserModel
          */
         public String GetStyle()
         {
-            //CTPPr pr = GetCTPPr();
-            //CTString style = pr.IsSetPStyle() ? pr.PStyle : null;
-            //return style != null ? style.Val : null;
-            throw new NotImplementedException();
+            CT_PPr pr = GetCTPPr();
+            CT_String style = pr.IsSetPStyle() ? pr.pStyle : null;
+            return style != null ? style.val : null;
         }
 
         /**
          * Get a <b>copy</b> of the currently used CTPBrd, if none is used, return
          * a new instance.
          */
-        private CT_PBdr GetCTPBrd(bool Create)
+        private CT_PBdr GetCTPBrd(bool create)
         {
-            //CTPPr pr = GetCTPPr();
-            //CTPBdr ct = pr.IsSetPBdr() ? pr.PBdr : null;
-            //if (create && ct == null)
-            //    ct = pr.AddNewPBdr();
-            //return ct;
-            throw new NotImplementedException();
+            CT_PPr pr = GetCTPPr();
+            CT_PBdr ct = pr.IsSetPBdr() ? pr.pBdr : null;
+            if (create && ct == null)
+                ct = pr.AddNewPBdr();
+            return ct;
+
         }
 
         /**
          * Get a <b>copy</b> of the currently used CTSpacing, if none is used,
          * return a new instance.
          */
-        private CT_Spacing GetCTSpacing(bool Create)
+        private CT_Spacing GetCTSpacing(bool create)
         {
-            //CTPPr pr = GetCTPPr();
-            //CTSpacing ct = pr.Spacing == null ? null : pr.Spacing;
-            //if (create && ct == null)
-            //    ct = pr.AddNewSpacing();
-            //return ct;
-            throw new NotImplementedException();
+            CT_PPr pr = GetCTPPr();
+            CT_Spacing ct = pr.spacing == null ? null : pr.spacing;
+            if (create && ct == null)
+                ct = pr.AddNewSpacing();
+            return ct;
         }
 
         /**
          * Get a <b>copy</b> of the currently used CTPInd, if none is used, return
          * a new instance.
          */
-        private CT_Ind GetCTInd(bool Create)
+        private CT_Ind GetCTInd(bool create)
         {
-            //CTPPr pr = GetCTPPr();
-            //CTInd ct = pr.Ind == null ? null : pr.Ind;
-            //if (create && ct == null)
-            //    ct = pr.AddNewInd();
-            //return ct;
-            throw new NotImplementedException();
+            CT_PPr pr = GetCTPPr();
+            CT_Ind ct = pr.ind == null ? null : pr.ind;
+            if (create && ct == null)
+                ct = pr.AddNewInd();
+            return ct;
         }
 
         /**
@@ -1161,10 +1129,9 @@ namespace NPOI.XWPF.UserModel
          */
         private CT_PPr GetCTPPr()
         {
-            //CTPPr pr = paragraph.PPr == null ? paragraph.AddNewPPr()
-            //        : paragraph.PPr;
-            //return pr;
-            throw new NotImplementedException();
+            CT_PPr pr = paragraph.pPr == null ? paragraph.AddNewPPr()
+                    : paragraph.pPr;
+            return pr;
         }
 
 
@@ -1173,13 +1140,13 @@ namespace NPOI.XWPF.UserModel
          * the content of parameter run
          * @param run
          */
-        protected void AddRun(CT_R Run){
-        //int pos;
-        //pos = paragraph.RList.Size();
-        //paragraph.AddNewR();
-        //paragraph.RArray=(pos, Run);
-            throw new NotImplementedException();
-    }
+        protected void AddRun(CT_R Run)
+        {
+            //int pos;
+            //pos = paragraph.RList.Size();
+            //paragraph.AddNewR();
+            //paragraph.SetRArray(pos, Run);
+        }
 
         /**
          * this methods parse the paragraph and search for the string searched.
@@ -1268,15 +1235,14 @@ namespace NPOI.XWPF.UserModel
          */
         public XWPFRun insertNewRun(int pos)
         {
-            //if (pos >= 0 && pos <= paragraph.SizeOfRArray())
-            //{
-            //    CTR ctRun = paragraph.InsertNewR(pos);
-            //    XWPFRun newRun = new XWPFRun(ctRun, this);
-            //    Runs.Add(pos, newRun);
-            //    return newRun;
-            //}
-            //return null;
-            throw new NotImplementedException();
+            if (pos >= 0 && pos <= paragraph.SizeOfRArray())
+            {
+                CT_R ctRun = paragraph.InsertNewR(pos);
+                XWPFRun newRun = new XWPFRun(ctRun, this);
+                Runs.Insert(pos, newRun);
+                return newRun;
+            }
+            return null;
         }
 
 
@@ -1326,14 +1292,13 @@ namespace NPOI.XWPF.UserModel
          */
         public bool RemoveRun(int pos)
         {
-            //if (pos >= 0 && pos < paragraph.SizeOfRArray())
-            //{
-            //    GetCTP().RemoveR(pos);
-            //    Runs.Remove(pos);
-            //    return true;
-            //}
-            //return false;
-            throw new NotImplementedException();
+            if (pos >= 0 && pos < paragraph.SizeOfRArray())
+            {
+                GetCTP().RemoveR(pos);
+                Runs.RemoveAt(pos);
+                return true;
+            }
+            return false;
         }
 
         /**
@@ -1399,13 +1364,14 @@ namespace NPOI.XWPF.UserModel
          */
         public XWPFRun GetRun(CT_R r)
         {
-            //for (int i = 0; i < GetRuns().Count; i++) {
-            //    if (getRuns().Get(i).CTR == r) {
-            //        return GetRuns().Get(i);
-            //    }
-            //}
-            //return null;
-            throw new NotImplementedException();
+            for (int i = 0; i < GetRuns().Count; i++)
+            {
+                if (GetRuns()[(i)].GetCT_R() == r)
+                {
+                    return GetRuns()[(i)];
+                }
+            }
+            return null;
         }
 
     }//end class

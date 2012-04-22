@@ -185,6 +185,46 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 this.rsidRDefaultField = value;
             }
         }
+
+        public CT_PPr AddNewPPr()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SetRArray(int pos, CT_R Run)
+        {
+            throw new NotImplementedException();
+        }
+
+        public CT_R InsertNewR(int pos)
+        {
+            throw new NotImplementedException();
+        }
+
+        public int SizeOfRArray()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void RemoveR(int pos)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Set(CT_P paragraph)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<CT_MarkupRange> GetCommentRangeStartList()
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<CT_Hyperlink> GetHyperlinkList()
+        {
+            throw new NotImplementedException();
+        }
     }
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IncludeInSchema = false)]
@@ -347,6 +387,96 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             {
                 this.pPrChangeField = value;
             }
+        }
+
+        public bool IsSetJc()
+        {
+            throw new NotImplementedException();
+        }
+
+        public CT_Jc AddNewJc()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsSetTextAlignment()
+        {
+            throw new NotImplementedException();
+        }
+
+        public CT_TextAlignment AddNewTextAlignment()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsSetPStyle()
+        {
+            throw new NotImplementedException();
+        }
+
+        public CT_String AddNewPStyle()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsSetPBdr()
+        {
+            throw new NotImplementedException();
+        }
+
+        public CT_Spacing AddNewSpacing()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsSetPageBreakBefore()
+        {
+            throw new NotImplementedException();
+        }
+
+        public CT_OnOff AddNewPageBreakBefore()
+        {
+            throw new NotImplementedException();
+        }
+
+        public CT_PBdr AddNewPBdr()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsSetWordWrap()
+        {
+            throw new NotImplementedException();
+        }
+
+        public CT_OnOff AddNewWordWrap()
+        {
+            throw new NotImplementedException();
+        }
+
+        public CT_Ind AddNewInd()
+        {
+            throw new NotImplementedException();
+        }
+
+        public CT_PPr AddNewRPr()
+        {
+            throw new NotImplementedException();
+        }
+
+        public CT_OnOff addNewNoProof()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void AddNewNoProof()
+        {
+            throw new NotImplementedException();
+        }
+
+        public CT_Tabs AddNewTabs()
+        {
+            throw new NotImplementedException();
         }
     }
 
@@ -1493,6 +1623,36 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 this.rsidSectField = value;
             }
         }
+
+        public CT_HdrFtrRef AddNewHeaderReference()
+        {
+            throw new NotImplementedException();
+        }
+
+        public CT_HdrFtrRef AddNewFooterReference()
+        {
+            throw new NotImplementedException();
+        }
+
+        public int SizeOfHeaderReferenceArray()
+        {
+            throw new NotImplementedException();
+        }
+
+        public CT_HdrFtrRef GetHeaderReferenceArray(int i)
+        {
+            throw new NotImplementedException();
+        }
+
+        public int SizeOfFooterReferenceArray()
+        {
+            throw new NotImplementedException();
+        }
+
+        public CT_HdrFtrRef GetFooterReferenceArray(int i)
+        {
+            throw new NotImplementedException();
+        }
     }
     [System.SerializableAttribute()]
 
@@ -1599,6 +1759,81 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             {
                 this.barField = value;
             }
+        }
+
+        public bool IsSetTop()
+        {
+            throw new NotImplementedException();
+        }
+
+        public CT_Border AddNewTop()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void UnsetTop()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsSetBottom()
+        {
+            throw new NotImplementedException();
+        }
+
+        public CT_Border AddNewBottom()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void UnsetBottom()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsSetRight()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void UnsetRight()
+        {
+            throw new NotImplementedException();
+        }
+
+        public CT_Border AddNewRight()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsSetBetween()
+        {
+            throw new NotImplementedException();
+        }
+
+        public CT_Border AddNewBetween()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void UnsetBetween()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsSetLeft()
+        {
+            throw new NotImplementedException();
+        }
+
+        public CT_Border AddNewLeft()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void UnsetLeft()
+        {
+            throw new NotImplementedException();
         }
     }
 
@@ -1803,6 +2038,31 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 this.lineRuleFieldSpecified = value;
             }
         }
+
+        public bool IsSetBefore()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsSetBeforeLines()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsSetLineRule()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsSetAfter()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsSetAfterLines()
+        {
+            throw new NotImplementedException();
+        }
     }
 
 
@@ -1977,6 +2237,26 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             {
                 this.firstLineCharsField = value;
             }
+        }
+
+        public bool IsSetLeft()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsSetRight()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsSetHanging()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsSetFirstLine()
+        {
+            throw new NotImplementedException();
         }
     }
 
@@ -2629,6 +2909,116 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             {
                 this.rPrChangeField = value;
             }
+        }
+
+        public bool IsSetLang()
+        {
+            throw new NotImplementedException();
+        }
+
+        public CT_Language AddNewLang()
+        {
+            throw new NotImplementedException();
+        }
+
+        public CT_Fonts AddNewRFonts()
+        {
+            throw new NotImplementedException();
+        }
+
+        public CT_OnOff AddNewB()
+        {
+            throw new NotImplementedException();
+        }
+
+        public CT_OnOff AddNewBCs()
+        {
+            throw new NotImplementedException();
+        }
+
+        public CT_Color AddNewColor()
+        {
+            throw new NotImplementedException();
+        }
+
+        public CT_HpsMeasure AddNewSz()
+        {
+            throw new NotImplementedException();
+        }
+
+        public CT_HpsMeasure AddNewSzCs()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsSetPosition()
+        {
+            throw new NotImplementedException();
+        }
+
+        public CT_SignedHpsMeasure AddNewPosition()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsSetB()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsSetI()
+        {
+            throw new NotImplementedException();
+        }
+
+        public CT_OnOff AddNewI()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void AddNewNoProof()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsSetU()
+        {
+            throw new NotImplementedException();
+        }
+
+        public CT_Underline AddNewU()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsSetStrike()
+        {
+            throw new NotImplementedException();
+        }
+
+        public CT_OnOff AddNewStrike()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsSetVertAlign()
+        {
+            throw new NotImplementedException();
+        }
+
+        public CT_VerticalAlignRun AddNewVertAlign()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsSetRFonts()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsSetSz()
+        {
+            throw new NotImplementedException();
         }
     }
 

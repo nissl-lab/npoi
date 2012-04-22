@@ -56,18 +56,16 @@ namespace NPOI.XWPF.UserModel
          */
         public String GetStyleId()
         {
-            //return ctStyle.StyleId;
-            throw new NotImplementedException();
+            return ctStyle.styleId;
         }
 
         /**
          * Get Type of the Style
          * @return	ctType 
          */
-        public ST_StyleType GetType()
+        public ST_StyleType GetStyleType()
         {
-            //return ctStyle.Type;
-            throw new NotImplementedException();
+            return ctStyle.type;
         }
 
         /**
@@ -92,8 +90,7 @@ namespace NPOI.XWPF.UserModel
          */
         public void SetStyleId(String styleId)
         {
-            //ctStyle.StyleId=(styleId);
-            throw new NotImplementedException();
+            ctStyle.styleId=(styleId);
         }
 
         /**
@@ -102,8 +99,7 @@ namespace NPOI.XWPF.UserModel
          */
         public void SetType(ST_StyleType type)
         {
-            //ctStyle.Type=(type);
-            throw new NotImplementedException();
+            ctStyle.type=(type);
         }
         /**
          * Get styles
@@ -116,11 +112,10 @@ namespace NPOI.XWPF.UserModel
 
         public String GetBasisStyleID()
         {
-            /*if(ctStyle.BasedOn!=null)
-                return ctStyle.BasedOn.Val;
+            if (ctStyle.basedOn != null)
+                return ctStyle.basedOn.val;
             else
-                return null;*/
-            throw new NotImplementedException();
+                return null;
         }
 
 
@@ -129,12 +124,10 @@ namespace NPOI.XWPF.UserModel
          */
         public String GetLinkStyleID()
         {
-            /*if (ctStyle.Link!=null)
-                return ctStyle.Link.Val;
+            if (ctStyle.link!=null)
+                return ctStyle.link.val;
             else
                 return null;
-             * */
-            throw new NotImplementedException();
         }
 
         /**
@@ -142,20 +135,18 @@ namespace NPOI.XWPF.UserModel
          */
         public String GetNextStyleID()
         {
-            /*if(ctStyle.Next!=null)
-                return ctStyle.Next.Val;
+            if(ctStyle.next!=null)
+                return ctStyle.next.val;
             else
                 return null;
-             * */
             throw new NotImplementedException();
         }
 
         public String GetName()
         {
-            //if(ctStyle.IsSetName()) 
-            //   return ctStyle.Name.Val;
-            //return null;
-            throw new NotImplementedException();
+            if (ctStyle.IsSetName())
+                return ctStyle.name.val;
+            return null;
         }
 
         /**
@@ -164,10 +155,9 @@ namespace NPOI.XWPF.UserModel
          */
         public bool HasSameName(XWPFStyle compStyle)
         {
-            //CTStyle ctCompStyle = compStyle.CTStyle;
-            //String name = ctCompStyle.Name.Val;
-            //return name.Equals(ctStyle.Name.Val);
-            throw new NotImplementedException();
+            CT_Style ctCompStyle = compStyle.GetCTStyle();
+            String name = ctCompStyle.name.val;
+            return name.Equals(ctStyle.name.val);
         }
 
     }//end class

@@ -50,20 +50,18 @@ namespace NPOI.XWPF.UserModel
          */
         public XWPFTableCell CreateCell()
         {
-            /*XWPFTableCell tableCell = new XWPFTableCell(ctRow.AddNewTc(), this, table.Body);
+            XWPFTableCell tableCell = new XWPFTableCell(ctRow.AddNewTc(), this, table.Body);
             tableCells.Add(tableCell);
-            return tableCell;*/
-            throw new NotImplementedException();
+            return tableCell;
         }
 
         public XWPFTableCell GetCell(int pos)
         {
-            /*if (pos >= 0 && pos < ctRow.SizeOfTcArray())
+            if (pos >= 0 && pos < ctRow.SizeOfTcArray())
             {
-                return GetTableCells().Get(pos);
+                return GetTableCells()[(pos)];
             }
-            return null;*/
-            throw new NotImplementedException();
+            return null;
         }
 
         /**
@@ -71,11 +69,10 @@ namespace NPOI.XWPF.UserModel
          */
         public XWPFTableCell AddNewTableCell()
         {
-            /*CTTc cell = ctRow.AddNewTc();
+            CT_Tc cell = ctRow.AddNewTc();
             XWPFTableCell tableCell = new XWPFTableCell(cell, this, table.Body);
             tableCells.Add(tableCell);
-            return tableCell;*/
-            throw new NotImplementedException();
+            return tableCell;
         }
 
         /**
@@ -90,10 +87,9 @@ namespace NPOI.XWPF.UserModel
          */
         public void SetHeight(int height)
         {
-            /*CTTrPr properties = GetTrPr();
-            CTHeight h = properties.SizeOfTrHeightArray() == 0 ? properties.AddNewTrHeight() : properties.GetTrHeightArray(0);
-            h.Val = (new Bigint("" + height));*/
-            throw new NotImplementedException();
+            CT_TrPr properties = GetTrPr();
+            CT_Height h = properties.SizeOfTrHeightArray() == 0 ? properties.AddNewTrHeight() : properties.GetTrHeightArray(0);
+            h.val = (ulong)height;
         }
 
         /**
@@ -109,15 +105,13 @@ namespace NPOI.XWPF.UserModel
         public int GetHeight()
         {
             CT_TrPr properties = GetTrPr();
-            //return properties.SizeOfTrHeightArray() == 0 ? 0 : properties.GetTrHeightArray(0).Val.IntValue();
-            throw new NotImplementedException();
+            return properties.SizeOfTrHeightArray() == 0 ? 0 : (int)properties.GetTrHeightArray(0).val;
         }
 
 
         private CT_TrPr GetTrPr()
         {
-            //return (ctRow.IsSetTrPr()) ? ctRow.TrPr : ctRow.AddNewTrPr();
-            throw new NotImplementedException();
+            return (ctRow.IsSetTrPr()) ? ctRow.trPr : ctRow.AddNewTrPr();
         }
 
         public XWPFTable GetTable()
@@ -132,17 +126,16 @@ namespace NPOI.XWPF.UserModel
          */
         public List<XWPFTableCell> GetTableCells()
         {
-            /*if (tableCells == null)
+            if (tableCells == null)
             {
                 List<XWPFTableCell> cells = new List<XWPFTableCell>();
-                foreach (CT_Tc tableCell in ctRow.TcList)
+                foreach (CT_Tc tableCell in ctRow.GetTcList())
                 {
                     cells.Add(new XWPFTableCell(tableCell, this, table.Body));
                 }
                 this.tableCells = cells;
             }
-            return tableCells;*/
-            throw new NotImplementedException();
+            return tableCells;
         }
 
         /**
@@ -153,8 +146,8 @@ namespace NPOI.XWPF.UserModel
         {
             for (int i = 0; i < tableCells.Count; i++)
             {
-                //if (tableCells[(i)].CTTc == cell) return tableCells[(i)];
-                throw new NotImplementedException();
+                if (tableCells[(i)].GetCTTc() == cell) 
+                    return tableCells[(i)];
             }
             return null;
         }

@@ -23,6 +23,7 @@ namespace NPOI.XWPF.UserModel
     using NPOI.OpenXmlFormats.Wordprocessing;
     using System.IO;
     using System.Xml;
+    using System.Xml.Serialization;
 
     /**
      * @author Philipp Epp
@@ -58,43 +59,53 @@ namespace NPOI.XWPF.UserModel
          * Read document
          */
 
-        protected void onDocumentRead()
+        internal override void OnDocumentRead()
         {
-            /*StylesDocument stylesDoc;
+            StylesDocument stylesDoc;
             try
             {
                 Stream is1 = GetPackagePart().GetInputStream();
-                stylesDoc = StylesDocument.Factory.Parse(is1);
+                stylesDoc = StylesDocument.Parse(is1);
                 ctStyles = stylesDoc.Styles;
-                latentStyles = new XWPFLatentStyles(ctStyles.LatentStyles, this);
+                latentStyles = new XWPFLatentStyles(ctStyles.latentStyles, this);
 
             }
-            catch (XmlException e)
+            catch (XmlException)
             {
                 throw new POIXMLException();
             }
             //get any Style
-            foreach (CTStyle style in ctStyles.StyleList)
+            foreach (CT_Style style in ctStyles.GetStyleList())
             {
                 listStyle.Add(new XWPFStyle(style, this));
-            }*/
+            }
             throw new NotImplementedException();
         }
 
 
-        protected void Commit()
+        protected override void Commit()
         {
             /*XmlOptions xmlOptions = new XmlOptions(DEFAULT_XML_OPTIONS);
             xmlOptions.SaveSyntheticDocumentElement=(new QName(CTStyles.type.Name.NamespaceURI, "styles"));
             Dictionary<String,String> map = new Dictionary<String,String>();
             map.Put("http://schemas.Openxmlformats.org/officeDocument/2006/relationships", "r");
             map.Put("http://schemas.Openxmlformats.org/wordProcessingml/2006/main", "w");
-            xmlOptions.SaveSuggestedPrefixes=(map);
+            xmlOptions.SaveSuggestedPrefixes=(map);*/
             PackagePart part = GetPackagePart();
-            OutputStream out1 = part.OutputStream;
-            ctStyles.Save(out, xmlOptions);
-            out1.Close();*/
-            throw new NotImplementedException();
+            Stream out1 = part.GetOutputStream();
+            StylesDocument doc = new StylesDocument(ctStyles);
+            XmlSerializerNamespaces namespaces = new XmlSerializerNamespaces(new[] {
+                new XmlQualifiedName("ve", "http://schemas.openxmlformats.org/markup-compatibility/2006"),
+                new XmlQualifiedName("r", "http://schemas.openxmlformats.org/officeDocument/2006/relationships"),
+                new XmlQualifiedName("m", "http://schemas.openxmlformats.org/officeDocument/2006/math"),
+                new XmlQualifiedName("v", "urn:schemas-microsoft-com:vml"),
+                new XmlQualifiedName("wp", "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing"),
+                new XmlQualifiedName("w10", "urn:schemas-microsoft-com:office:word"),
+                new XmlQualifiedName("wne", "http://schemas.microsoft.com/office/word/2006/wordml"),
+                 new XmlQualifiedName("w", "http://schemas.openxmlformats.org/wordprocessingml/2006/main")
+             });
+            doc.Save(out1, namespaces);
+            out1.Close();
         }
 
 
@@ -114,14 +125,12 @@ namespace NPOI.XWPF.UserModel
          */
         public bool styleExist(String styleID)
         {
-            /*
             foreach (XWPFStyle style in listStyle)
             {
-                if (style.StyleId.Equals(styleID))
+                if (style.GetStyleId().Equals(styleID))
                     return true;
             }
-            return false;*/
-            throw new NotImplementedException();
+            return false;
         }
         /**
          * add a style to the document
@@ -130,12 +139,10 @@ namespace NPOI.XWPF.UserModel
          */
         public void AddStyle(XWPFStyle style)
         {
-            /*listStyle.Add(style);
+            listStyle.Add(style);
             ctStyles.AddNewStyle();
-            int pos = (ctStyles.StyleList.Size()) - 1;
-            ctStyles.StyleArray=(pos, style.CTStyle);
-                */
-            throw new NotImplementedException();
+            int pos = (ctStyles.GetStyleList().Count) - 1;
+            ctStyles.SetStyleArray(pos, style.GetCTStyle());
         }
         /**
          *get style by a styleID 
@@ -144,13 +151,12 @@ namespace NPOI.XWPF.UserModel
          */
         public XWPFStyle GetStyle(String styleID)
         {
-            /*foreach (XWPFStyle style in listStyle)
+            foreach (XWPFStyle style in listStyle)
             {
-                if (style.StyleId.Equals(styleID))
+                if (style.GetStyleId().Equals(styleID))
                     return style;
             }
-            return null;*/
-            throw new NotImplementedException();
+            return null;
         }
 
         /**
@@ -173,14 +179,14 @@ namespace NPOI.XWPF.UserModel
          */
         private List<XWPFStyle> GetUsedStyleList(XWPFStyle style, List<XWPFStyle> usedStyleList)
         {
-            /*String basisStyleID = style.BasisStyleID;
+            String basisStyleID = style.GetBasisStyleID();
             XWPFStyle basisStyle = GetStyle(basisStyleID);
             if ((basisStyle != null) && (!usedStyleList.Contains(basisStyle)))
             {
                 usedStyleList.Add(basisStyle);
                 GetUsedStyleList(basisStyle, usedStyleList);
             }
-            String linkStyleID = style.LinkStyleID;
+            String linkStyleID = style.GetLinkStyleID();
             XWPFStyle linkStyle = GetStyle(linkStyleID);
             if ((linkStyle != null) && (!usedStyleList.Contains(linkStyle)))
             {
@@ -188,15 +194,14 @@ namespace NPOI.XWPF.UserModel
                 GetUsedStyleList(linkStyle, usedStyleList);
             }
 
-            String nextStyleID = style.NextStyleID;
+            String nextStyleID = style.GetNextStyleID();
             XWPFStyle nextStyle = GetStyle(nextStyleID);
             if ((nextStyle != null) && (!usedStyleList.Contains(nextStyle)))
             {
                 usedStyleList.Add(linkStyle);
                 GetUsedStyleList(linkStyle, usedStyleList);
             }
-            return usedStyleList;*/
-            throw new NotImplementedException();
+            return usedStyleList;
         }
 
         /**
@@ -205,22 +210,22 @@ namespace NPOI.XWPF.UserModel
          */
         public void SetSpellingLanguage(String strSpellingLanguage)
         {
-            /*CTDocDefaults docDefaults = null;
-            CTRPr RunProps = null;
-            CTLanguage lang = null;
+            CT_DocDefaults docDefaults = null;
+            CT_RPr RunProps = null;
+            CT_Language lang = null;
 
             // Just making sure we use the members that have already been defined
             if (ctStyles.IsSetDocDefaults())
             {
-                docDefaults = ctStyles.DocDefaults;
+                docDefaults = ctStyles.docDefaults;
                 if (docDefaults.IsSetRPrDefault())
                 {
-                    CTRPrDefault RPrDefault = docDefaults.RPrDefault;
+                    CT_RPrDefault RPrDefault = docDefaults.rPrDefault;
                     if (RPrDefault.IsSetRPr())
                     {
-                        RunProps = RPrDefault.RPr;
+                        RunProps = RPrDefault.rPr;
                         if (RunProps.IsSetLang())
-                            lang = RunProps.Lang;
+                            lang = RunProps.lang;
                     }
                 }
             }
@@ -232,9 +237,8 @@ namespace NPOI.XWPF.UserModel
             if (lang == null)
                 lang = RunProps.AddNewLang();
 
-            lang.Val = (strSpellingLanguage);
-            lang.Bidi = (strSpellingLanguage);*/
-            throw new NotImplementedException();
+            lang.val = (strSpellingLanguage);
+            lang.bidi = (strSpellingLanguage);
         }
 
         /**
@@ -243,22 +247,22 @@ namespace NPOI.XWPF.UserModel
          */
         public void SetEastAsia(String strEastAsia)
         {
-            /*CTDocDefaults docDefaults = null;
-            CTRPr RunProps = null;
-            CTLanguage lang = null;
+            CT_DocDefaults docDefaults = null;
+            CT_RPr RunProps = null;
+            CT_Language lang = null;
 
             // Just making sure we use the members that have already been defined
             if (ctStyles.IsSetDocDefaults())
             {
-                docDefaults = ctStyles.DocDefaults;
+                docDefaults = ctStyles.docDefaults;
                 if (docDefaults.IsSetRPrDefault())
                 {
-                    CTRPrDefault RPrDefault = docDefaults.RPrDefault;
+                    CT_RPrDefault RPrDefault = docDefaults.rPrDefault;
                     if (RPrDefault.IsSetRPr())
                     {
-                        RunProps = RPrDefault.RPr;
+                        RunProps = RPrDefault.rPr;
                         if (RunProps.IsSetLang())
-                            lang = RunProps.Lang;
+                            lang = RunProps.lang;
                     }
                 }
             }
@@ -270,9 +274,7 @@ namespace NPOI.XWPF.UserModel
             if (lang == null)
                 lang = RunProps.AddNewLang();
 
-            lang.EastAsia = (strEastAsia);
-             * */
-            throw new NotImplementedException();
+            lang.eastAsia = (strEastAsia);
         }
 
         /**
@@ -281,19 +283,19 @@ namespace NPOI.XWPF.UserModel
          */
         public void SetDefaultFonts(CT_Fonts fonts)
         {
-            /*CT_DocDefaults docDefaults = null;
+            CT_DocDefaults docDefaults = null;
             CT_RPr RunProps = null;
 
             // Just making sure we use the members that have already been defined
             if (ctStyles.IsSetDocDefaults())
             {
-                docDefaults = ctStyles.DocDefaults;
+                docDefaults = ctStyles.docDefaults;
                 if (docDefaults.IsSetRPrDefault())
                 {
-                    CTRPrDefault RPrDefault = docDefaults.RPrDefault;
+                    CT_RPrDefault RPrDefault = docDefaults.rPrDefault;
                     if (RPrDefault.IsSetRPr())
                     {
-                        RunProps = RPrDefault.RPr;
+                        RunProps = RPrDefault.rPr;
                     }
                 }
             }
@@ -303,8 +305,7 @@ namespace NPOI.XWPF.UserModel
             if (RunProps == null)
                 RunProps = docDefaults.AddNewRPrDefault().AddNewRPr();
 
-            RunProps.RFonts = (fonts);*/
-            throw new NotImplementedException();
+            RunProps.rFonts = (fonts);
         }
 
 

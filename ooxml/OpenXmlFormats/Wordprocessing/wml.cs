@@ -2257,6 +2257,21 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 this.itemsField = value;
             }
         }
+
+        public CT_Inline AddNewInline()
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<CT_Anchor> GetAnchorList()
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<CT_Inline> GetInlineList()
+        {
+            throw new NotImplementedException();
+        }
     }
 
     
@@ -2434,6 +2449,11 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             {
                 this.endSndField = value;
             }
+        }
+
+        public IEnumerable<CT_R> GetRList()
+        {
+            throw new NotImplementedException();
         }
     }
 

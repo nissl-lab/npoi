@@ -24,6 +24,7 @@ namespace NPOI.XWPF.UserModel
     using NPOI.OpenXmlFormats.Wordprocessing;
     using System.Xml;
     using NPOI.XWPF.Model;
+    using System.Xml.Serialization;
 
     /**
      * Experimental class to do low level Processing
@@ -82,7 +83,7 @@ namespace NPOI.XWPF.UserModel
         public XWPFDocument()
             : base(newPackage())
         {
-            onDocumentCreate();
+            OnDocumentCreate();
         }
 
 
@@ -97,9 +98,15 @@ namespace NPOI.XWPF.UserModel
                 {
                     if (o is CT_P)
                     {
+                        XWPFParagraph p = new XWPFParagraph((CT_P)o, this);
+                        bodyElements.Add(p);
+                        paragraphs.Add(p);
                     }
                     else if (o is CT_Tbl)
                     {
+                        XWPFTable t = new XWPFTable((CT_Tbl)o, this);
+                        bodyElements.Add(t);
+                        tables.Add(t);
                     }
                 }
                 // parse the document with cursor and add
@@ -152,12 +159,11 @@ namespace NPOI.XWPF.UserModel
                     else if (relation.Equals(XWPFRelation.COMMENT.Relation))
                     {
                         // TODO Create according XWPFComment class, extending POIXMLDocumentPart
-                        //CommentsDocument cmntdoc = CommentsDocument.Factory.Parse(p.PackagePart.InputStream);
-                        //foreach (CTComment ctcomment in cmntdoc.Comments.CommentList)
-                        //{
-                        //    comments.Add(new XWPFComment(ctcomment, this));
-                        //}
-                        throw new NotImplementedException();
+                        CommentsDocument cmntdoc = CommentsDocument.Parse(p.GetPackagePart().GetInputStream());
+                        foreach (CT_Comment ctcomment in cmntdoc.Comments.comment)
+                        {
+                            comments.Add(new XWPFComment(ctcomment, this));
+                        }
                     }
                     else if (relation.Equals(XWPFRelation.SETTINGS.Relation))
                     {
@@ -247,10 +253,10 @@ namespace NPOI.XWPF.UserModel
         }
 
         /**
-         * Create a new CTWorkbook with all values Set to default
+         * Create a new CT_Document with all values Set to default
          */
 
-        protected void onDocumentCreate()
+        internal override void OnDocumentCreate()
         {
             ctDocument = new CT_Document();
             //ctDocument.AddNewBody();
@@ -273,7 +279,7 @@ namespace NPOI.XWPF.UserModel
             }
         }
 
-        IdentifierManager GetDrawingIdManager()
+        internal IdentifierManager GetDrawingIdManager()
         {
             return DrawingIdManager;
         }
@@ -392,15 +398,15 @@ namespace NPOI.XWPF.UserModel
 
         public XWPFComment GetCommentByID(String id)
         {
-            //Iterator<XWPFComment> iter = comments.Iterator();
-            //while (iter.HasNext()) {
-            //    XWPFComment comment = iter.Next();
-            //    if(comment.Id.Equals(id))
-            //        return comment;
-            //}
+            IEnumerator<XWPFComment> iter = comments.GetEnumerator();
+            while (iter.MoveNext())
+            {
+                XWPFComment comment = iter.Current;
+                if (comment.GetId().Equals(id))
+                    return comment;
+            }
 
-            //return null;
-            throw new NotImplementedException();
+            return null;
         }
 
         public XWPFComment[] GetComments()
@@ -742,11 +748,21 @@ namespace NPOI.XWPF.UserModel
             //map.Put("http://schemas.microsoft.com/office/word/2006/wordml", "wne");
             //map.Put("http://schemas.Openxmlformats.org/drawingml/2006/wordProcessingDrawing", "wp");
             //xmlOptions.SaveSuggestedPrefixes=(map);
-
+            XmlSerializerNamespaces namespaces = new XmlSerializerNamespaces(new[] {
+                new XmlQualifiedName("w", "http://schemas.openxmlformats.org/wordprocessingml/2006/main"), 
+                new XmlQualifiedName("m", "http://schemas.openxmlformats.org/officeDocument/2006/math"),
+                new XmlQualifiedName("o", "urn:schemas-microsoft-com:office:office"),
+                new XmlQualifiedName("r", "http://schemas.openxmlformats.org/officeDocument/2006/relationships"),
+                new XmlQualifiedName("v", "urn:schemas-microsoft-com:vml"),
+                new XmlQualifiedName("ve", "http://schemas.openxmlformats.org/markup-compatibility/2006"),
+                new XmlQualifiedName("w10", "urn:schemas-microsoft-com:office:word"),
+                new XmlQualifiedName("wne", "http://schemas.microsoft.com/office/word/2006/wordml"),
+                new XmlQualifiedName("wp", "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing")
+            });
             PackagePart part = GetPackagePart();
             Stream out1 = part.GetOutputStream();
             DocumentDocument doc = new DocumentDocument(ctDocument);
-            doc.Save(out1);
+            doc.Save(out1, namespaces);
             out1.Close();
         }
 
@@ -966,9 +982,8 @@ namespace NPOI.XWPF.UserModel
          */
         public void SetTable(int pos, XWPFTable table)
         {
-            //tables.Set(pos, table);
-            //ctDocument.Body.TblArray=(pos, table.CTTbl);
-            throw new NotImplementedException();
+            tables[pos] = table;
+            ctDocument.body.SetTblArray(pos, table.GetCTTbl());
         }
 
         /**
@@ -1128,16 +1143,18 @@ namespace NPOI.XWPF.UserModel
          */
         public void insertTable(int pos, XWPFTable table)
         {
-            //bodyElements.Add(pos, table);
-            //int i;
-            //for (i = 0; i < ctDocument.Body.TblList.Size(); i++) {
-            //    CTTbl tbl = ctDocument.Body.GetTblArray(i);
-            //    if (tbl == table.CTTbl) {
-            //        break;
-            //    }
-            //}
-            //tables.Add(i, table);
-            throw new NotImplementedException();
+            bodyElements.Insert(pos, table);
+            int i;
+            CT_Tbl[] barray = ctDocument.body.GetTblArray();
+            for (i = 0; i < barray.Length; i++)
+            {
+                //CT_Tbl tbl = ctDocument.body.GetTblArray(i);
+                if (barray[i] == table.GetCTTbl())
+                {
+                    break;
+                }
+            }
+            tables.Insert(i, table);
         }
 
         /**
@@ -1171,7 +1188,9 @@ namespace NPOI.XWPF.UserModel
 
         public void RegisterPackagePictureData(XWPFPictureData picData)
         {
-            List<XWPFPictureData> list = packagePictures[(picData.Checksum)];
+            List<XWPFPictureData> list = null;
+            if(packagePictures.ContainsKey(picData.Checksum))
+              list = packagePictures[(picData.Checksum)];
             if (list == null)
             {
                 list = new List<XWPFPictureData>(1);
@@ -1191,7 +1210,9 @@ namespace NPOI.XWPF.UserModel
              * Try to find PictureData with this Checksum. Create new, if none
              * exists.
              */
-            List<XWPFPictureData> xwpfPicDataList = packagePictures[(Checksum)];
+            List<XWPFPictureData> xwpfPicDataList = null;
+            if(packagePictures.ContainsKey(Checksum))
+               xwpfPicDataList = packagePictures[(Checksum)];
             if (xwpfPicDataList != null)
             {
                 IEnumerator<XWPFPictureData> iter = xwpfPicDataList.GetEnumerator();
@@ -1213,56 +1234,63 @@ namespace NPOI.XWPF.UserModel
             XWPFPictureData xwpfPicData = FindPackagePictureData(pictureData, format);
             POIXMLRelation relDesc = XWPFPictureData.RELATIONS[format];
 
-            //if (xwpfPicData == null)
-            //{
-            //    /* Part doesn't exist, create a new one */
-            //    int idx = GetNextPicNameNumber(format);
-            //    xwpfPicData = (XWPFPictureData) CreateRelationship(relDesc, XWPFFactory.Instance,idx);
-            //    /* write bytes to new part */
-            //    PackagePart picDataPart = xwpfPicData.PackagePart;
-            //    OutputStream out1 = null;
-            //    try {
-            //        out1 = picDataPart.OutputStream;
-            //        out1.Write(pictureData);
-            //    } catch (IOException e) {
-            //        throw new POIXMLException(e);
-            //    } finally {
-            //        try {
-            //            out1.Close();
-            //        } catch (IOException e) {
-            //            // ignore
-            //        }
-            //    }
+            if (xwpfPicData == null)
+            {
+                /* Part doesn't exist, create a new one */
+                int idx = GetNextPicNameNumber(format);
+                xwpfPicData = (XWPFPictureData)CreateRelationship(relDesc, XWPFFactory.GetInstance(), idx);
+                /* write bytes to new part */
+                PackagePart picDataPart = xwpfPicData.GetPackagePart();
+                Stream out1 = null;
+                try
+                {
+                    out1 = picDataPart.GetOutputStream();
+                    out1.Write(pictureData, 0, pictureData.Length);
+                }
+                catch (IOException e)
+                {
+                    throw new POIXMLException(e);
+                }
+                finally
+                {
+                    try
+                    {
+                        out1.Close();
+                    }
+                    catch (IOException)
+                    {
+                        // ignore
+                    }
+                }
 
-            //    registerPackagePictureData(xwpfPicData);
-            //    pictures.Add(xwpfPicData);
+                RegisterPackagePictureData(xwpfPicData);
+                pictures.Add(xwpfPicData);
 
-            //    return GetRelationId(xwpfPicData);
-            //}
-            //else if (!getRelations().Contains(xwpfPicData))
-            //{
-            //    /*
-            //     * Part already existed, but was not related so far. Create
-            //     * relationship to the already existing part and update
-            //     * POIXMLDocumentPart data.
-            //     */
-            //    PackagePart picDataPart = xwpfPicData.PackagePart;
-            //    // TODO add support for TargetMode.EXTERNAL relations.
-            //    TargetMode targetMode = TargetMode.INTERNAL;
-            //    PackagePartName partName = picDataPart.PartName;
-            //    String relation = relDesc.Relation;
-            //    PackageRelationship relShip = GetPackagePart().AddRelationship(partName,targetMode,relation);
-            //    String id = relShip.Id;
-            //    AddRelation(id,xwpfPicData);
-            //    pictures.Add(xwpfPicData);
-            //    return id;
-            //}
-            //else 
-            //{
-            //    /* Part already existed, Get relation id and return it */
-            //    return GetRelationId(xwpfPicData);
-            //}
-            throw new NotImplementedException();
+                return GetRelationId(xwpfPicData);
+            }
+            else if (!GetRelations().Contains(xwpfPicData))
+            {
+                /*
+                 * Part already existed, but was not related so far. Create
+                 * relationship to the already existing part and update
+                 * POIXMLDocumentPart data.
+                 */
+                PackagePart picDataPart = xwpfPicData.GetPackagePart();
+                // TODO add support for TargetMode.EXTERNAL relations.
+                TargetMode targetMode = TargetMode.Internal;
+                PackagePartName partName = picDataPart.PartName;
+                String relation = relDesc.Relation;
+                PackageRelationship relShip = GetPackagePart().AddRelationship(partName, targetMode, relation);
+                String id = relShip.Id;
+                AddRelation(id, xwpfPicData);
+                pictures.Add(xwpfPicData);
+                return id;
+            }
+            else
+            {
+                /* Part already existed, Get relation id and return it */
+                return GetRelationId(xwpfPicData);
+            }
         }
 
         public String AddPictureData(Stream is1, int format)
@@ -1286,16 +1314,15 @@ namespace NPOI.XWPF.UserModel
          */
         public int GetNextPicNameNumber(int format)
         {
-            /*int img = GetAllPackagePictures().Count + 1;
+            int img = AllPackagePictures.Count + 1;
             String proposal = XWPFPictureData.RELATIONS[format].GetFileName(img);
-            PackagePartName CreatePartName = PackagingURIHelper.CreatePartName(proposal);
+            PackagePartName CreatePartName = PackagingUriHelper.CreatePartName(proposal);
             while (this.Package.GetPart(CreatePartName) != null) {
                 img++;
                 proposal = XWPFPictureData.RELATIONS[format].GetFileName(img);
-                CreatePartName = PackagingURIHelper.CreatePartName(proposal);
+                CreatePartName = PackagingUriHelper.CreatePartName(proposal);
             }
-            return img;*/
-            throw new NotImplementedException();
+            return img;
         }
 
         /**
@@ -1340,13 +1367,14 @@ namespace NPOI.XWPF.UserModel
          */
         public XWPFParagraph GetParagraph(CT_P p)
         {
-            //for (int i = 0; i < GetParagraphs().Count; i++) {
-            //    if (getParagraphs().Get(i).CTP == p) {
-            //        return GetParagraphs().Get(i);
-            //    }
-            //}
-            //return null;
-            throw new NotImplementedException();
+            for (int i = 0; i < Paragraphs.Count; i++)
+            {
+                if (Paragraphs[(i)].GetCTP() == p)
+                {
+                    return Paragraphs[(i)];
+                }
+            }
+            return null;
         }
 
         /**
@@ -1357,13 +1385,14 @@ namespace NPOI.XWPF.UserModel
          */
         public XWPFTable GetTable(CT_Tbl ctTbl)
         {
-            //for (int i = 0; i < tables.Size(); i++) {
-            //    if (getTables().Get(i).CTTbl == ctTbl) {
-            //        return GetTables().Get(i);
-            //    }
-            //}
-            //return null;
-            throw new NotImplementedException();
+            for (int i = 0; i < tables.Count; i++)
+            {
+                if (tables[i].GetCTTbl() == ctTbl)
+                {
+                    return tables[i];
+                }
+            }
+            return null;
         }
 
 

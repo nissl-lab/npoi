@@ -59,58 +59,55 @@ namespace NPOI.XWPF.UserModel
             this.ctTbl = table;
 
             tableRows = new List<XWPFTableRow>();
-            /*
             // is an empty table: I add one row and one column as default
             if (table.SizeOfTrArray() == 0)
                 CreateEmptyTable(table);
 
-            foreach (CTRow row in table.TrList) {
+            foreach (CT_Row row in table.GetTrList()) {
                 StringBuilder rowText = new StringBuilder();
                 XWPFTableRow tabRow = new XWPFTableRow(row, this);
                 tableRows.Add(tabRow);
-                foreach (CTTc cell in row.TcList) {
-                    foreach (CTP ctp in cell.PList) {
+                foreach (CT_Tc cell in row.GetTcList()) {
+                    foreach (CT_P ctp in cell.GetPList()) {
                         XWPFParagraph p = new XWPFParagraph(ctp, part);
-                        if (rowText.Length() > 0) {
+                        if (rowText.Length > 0) {
                             rowText.Append('\t');
                         }
-                        rowText.Append(p.Text);
+                        rowText.Append(p.GetText());
                     }
                 }
-                if (rowText.Length() > 0) {
+                if (rowText.Length > 0) {
                     this.text.Append(rowText);
                     this.text.Append('\n');
                 }
-            }*/
-            throw new NotImplementedException();
+            }
         }
 
         private void CreateEmptyTable(CT_Tbl table)
         {
             // MINIMUM ELEMENTS FOR A TABLE
-            /*table.AddNewTr().AddNewTc().addNewP();
+            table.AddNewTr().AddNewTc().AddNewP();
 
-            CTTblPr tblpro = table.AddNewTblPr();
-            tblpro.AddNewTblW().W=(new Bigint("0"));
-            tblpro.TblW.Type=(STTblWidth.AUTO);
+            CT_TblPr tblpro = table.AddNewTblPr();
+            tblpro.AddNewTblW().w = "0";
+            tblpro.tblW.type=(ST_TblWidth.auto);
 
             // layout
             // tblpro.AddNewTblLayout().Type=(STTblLayoutType.AUTOFIT);
 
             // borders
-            CTTblBorders borders = tblpro.AddNewTblBorders();
-            borders.AddNewBottom().Val=(STBorder.SINGLE);
-            borders.AddNewInsideH().Val=(STBorder.SINGLE);
-            borders.AddNewInsideV().Val=(STBorder.SINGLE);
-            borders.AddNewLeft().Val=(STBorder.SINGLE);
-            borders.AddNewRight().Val=(STBorder.SINGLE);
-            borders.AddNewTop().Val=(STBorder.SINGLE);
-            */
+            CT_TblBorders borders = tblpro.AddNewTblBorders();
+            borders.AddNewBottom().val=(ST_Border.single);
+            borders.AddNewInsideH().val = (ST_Border.single);
+            borders.AddNewInsideV().val = (ST_Border.single);
+            borders.AddNewLeft().val = (ST_Border.single);
+            borders.AddNewRight().val = (ST_Border.single);
+            borders.AddNewTop().val = (ST_Border.single);
+
             /*
            * CTTblGrid tblgrid=table.AddNewTblGrid();
            * tblgrid.AddNewGridCol().W=(new Bigint("2000"));
            */
-            throw new NotImplementedException();
             GetRows();
         }
 
@@ -141,14 +138,13 @@ namespace NPOI.XWPF.UserModel
          */
         public void AddNewCol()
         {
-            /*if (ctTbl.SizeOfTrArray() == 0) {
+            if (ctTbl.SizeOfTrArray() == 0) {
                 CreateRow();
             }
             for (int i = 0; i < ctTbl.SizeOfTrArray(); i++) {
                 XWPFTableRow tabRow = new XWPFTableRow(ctTbl.GetTrArray(i), this);
                 tabRow.CreateCell();
-            }*/
-            throw new NotImplementedException();
+            }
         }
 
         /**
@@ -158,13 +154,12 @@ namespace NPOI.XWPF.UserModel
          */
         public XWPFTableRow CreateRow()
         {
-            /*int sizeCol = ctTbl.SizeOfTrArray() > 0 ? ctTbl.GetTrArray(0)
-                    .sizeOfTcArray() : 0;
+            int sizeCol = ctTbl.SizeOfTrArray() > 0 ? ctTbl.GetTrArray(0)
+                    .SizeOfTcArray() : 0;
             XWPFTableRow tabRow = new XWPFTableRow(ctTbl.AddNewTr(), this);
             AddColumn(tabRow, sizeCol);
             tableRows.Add(tabRow);
-            return tabRow;*/
-            throw new NotImplementedException();
+            return tabRow;
         }
 
         /**
@@ -173,12 +168,11 @@ namespace NPOI.XWPF.UserModel
          */
         public XWPFTableRow GetRow(int pos)
         {
-            /*if (pos >= 0 && pos < ctTbl.SizeOfTrArray()) {
+            if (pos >= 0 && pos < ctTbl.SizeOfTrArray()) {
                 //return new XWPFTableRow(ctTbl.GetTrArray(pos));
-                return GetRows().Get(pos);
+                return GetRows()[(pos)];
             }
-            return null;*/
-            throw new NotImplementedException();
+            return null;
         }
 
 
@@ -187,12 +181,10 @@ namespace NPOI.XWPF.UserModel
          */
         public void SetWidth(int width)
         {
-            /*CTTblPr tblPr = GetTrPr();
-            CTTblWidth tblWidth = tblPr.IsSetTblW() ? tblPr.TblW : tblPr
+            CT_TblPr tblPr = GetTrPr();
+            CT_TblWidth tblWidth = tblPr.IsSetTblW() ? tblPr.tblW : tblPr
                     .AddNewTblW();
-            tblWidth.W=(new Bigint("" + width));
-             * */
-            throw new NotImplementedException();
+            tblWidth.w = width.ToString();
         }
 
         /**
@@ -200,10 +192,8 @@ namespace NPOI.XWPF.UserModel
          */
         public int GetWidth()
         {
-            /*CTTblPr tblPr = GetTrPr();
-            return tblPr.IsSetTblW() ? tblPr.TblW.W.IntValue() : -1;
-             */
-            throw new NotImplementedException();
+            CT_TblPr tblPr = GetTrPr();
+            return tblPr.IsSetTblW() ? int.Parse(tblPr.tblW.w) : -1;
         }
 
         /**
@@ -211,16 +201,13 @@ namespace NPOI.XWPF.UserModel
          */
         public int GetNumberOfRows()
         {
-            //return ctTbl.SizeOfTrArray();
-            throw new NotImplementedException();
+            return ctTbl.SizeOfTrArray();
         }
 
         private CT_TblPr GetTrPr()
         {
-            /*return (ctTbl.TblPr != null) ? ctTbl.TblPr : ctTbl
+            return (ctTbl.tblPr != null) ? ctTbl.tblPr : ctTbl
                     .AddNewTblPr();
-             */
-            throw new NotImplementedException();
         }
 
         private void AddColumn(XWPFTableRow tabRow, int sizeCol)
@@ -240,8 +227,7 @@ namespace NPOI.XWPF.UserModel
          */
         public String GetStyleID()
         {
-            //return ctTbl.TblPr.TblStyle.Val;
-            throw new NotImplementedException();
+            return ctTbl.tblPr.tblStyle.val;
         }
 
         /**
@@ -251,10 +237,9 @@ namespace NPOI.XWPF.UserModel
          */
         public void AddRow(XWPFTableRow row)
         {
-            /*ctTbl.AddNewTr();
-            ctTbl.TrArray=(getNumberOfRows()-1, row.CtRow);
-            tableRows.Add(row);*/
-            throw new NotImplementedException();
+            ctTbl.AddNewTr();
+            ctTbl.SetTrArray(GetNumberOfRows()-1, row.GetCtRow());
+            tableRows.Add(row);
         }
 
         /**
@@ -262,16 +247,17 @@ namespace NPOI.XWPF.UserModel
          * at position pos
          * @param row	the row which should be Added
          */
-        public bool AddRow(XWPFTableRow row, int pos){
-        //if(pos >= 0 && pos <= tableRows.Size()){
-        //    ctTbl.InsertNewTr(pos);
-        //    ctTbl.TrArray=(pos,row.CtRow);
-        //    tableRows.Add(pos, row);
-        //    return true;
-        //}
-            throw new NotImplementedException();
-    	//return false;
-    }
+        public bool AddRow(XWPFTableRow row, int pos)
+        {
+            if (pos >= 0 && pos <= tableRows.Count)
+            {
+                ctTbl.InsertNewTr(pos);
+                ctTbl.SetTrArray(pos, row.GetCtRow());
+                tableRows.Insert(pos, row);
+                return true;
+            }
+            return false;
+        }
 
         /**
          * inserts a new tablerow 
@@ -280,14 +266,13 @@ namespace NPOI.XWPF.UserModel
          */
         public XWPFTableRow insertNewTableRow(int pos)
         {
-            /*if(pos >= 0 && pos <= tableRows.Size()){
-                CTRow row = ctTbl.InsertNewTr(pos);
+            if(pos >= 0 && pos <= tableRows.Count){
+                CT_Row row = ctTbl.InsertNewTr(pos);
                 XWPFTableRow tableRow = new XWPFTableRow(row, this);
-                tableRows.Add(pos, tableRow);
+                tableRows.Insert(pos, tableRow);
                 return tableRow;
             }
-            return null;*/
-            throw new NotImplementedException();
+            return null;
         }
 
 
@@ -297,13 +282,12 @@ namespace NPOI.XWPF.UserModel
          */
         public bool RemoveRow(int pos)
         {
-            /*if (pos >= 0 && pos < tableRows.Size()) {
+            if (pos >= 0 && pos < tableRows.Count) {
                 ctTbl.RemoveTr(pos);
-                tableRows.Remove(pos);
+                tableRows.RemoveAt(pos);
                 return true;
             }
-            return false;*/
-            throw new NotImplementedException();
+            return false;
         }
 
         public List<XWPFTableRow> GetRows()
@@ -360,11 +344,10 @@ namespace NPOI.XWPF.UserModel
          */
         public XWPFTableRow GetRow(CT_Row row)
         {
-            /*for(int i=0; i<getRows().Count; i++){
-                if(getRows().Get(i).CtRow== row) return GetRow(i); 
+            for(int i=0; i<GetRows().Count; i++){
+                if(GetRows()[(i)].GetCtRow() == row) return GetRow(i); 
             }
-            return null;*/
-            throw new NotImplementedException();
+            return null;
         }
     }// end class
 

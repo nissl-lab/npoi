@@ -38,12 +38,27 @@ namespace NPOI.XWPF.UserModel
             this.part = part;
             this.tableRow = tableRow;
             // NB: If a table cell does not include at least one block-level element, then this document shall be considered corrupt.
-            /*if(cell.PList.Size()<1)
+            if(cell.GetPList().Count<1)
                 cell.AddNewP();
             bodyElements = new List<IBodyElement>();
             paragraphs = new List<XWPFParagraph>();
             tables = new List<XWPFTable>();
-        
+            foreach (object o in ctTc.Items)
+            {
+                if (o is CT_P)
+                {
+                    XWPFParagraph p = new XWPFParagraph((CT_P)o, this);
+                    paragraphs.Add(p);
+                    bodyElements.Add(p);
+                }
+                if (o is CT_Tbl)
+                {
+                    XWPFTable t = new XWPFTable((CT_Tbl)o, this);
+                    tables.Add(t);
+                    bodyElements.Add(t);
+                }
+            }
+        /*
             XmlCursor cursor = ctTc.NewCursor();
             cursor.SelectPath("./*");
             while (cursor.ToNextSelection()) {
@@ -60,7 +75,6 @@ namespace NPOI.XWPF.UserModel
                 }
             }
             cursor.Dispose();*/
-            throw new NotImplementedException();
         }
 
 
@@ -84,11 +98,10 @@ namespace NPOI.XWPF.UserModel
 
         public void SetParagraph(XWPFParagraph p)
         {
-            /*if (ctTc.SizeOfPArray() == 0) {
+            if (ctTc.SizeOfPArray() == 0) {
                 ctTc.AddNewP();
             }
-            ctTc.PArray=(0, p.CTP);*/
-            throw new NotImplementedException();
+            ctTc.SetPArray(0, p.GetCTP());
         }
 
         /**
@@ -108,10 +121,9 @@ namespace NPOI.XWPF.UserModel
          */
         public XWPFParagraph AddParagraph()
         {
-            //XWPFParagraph p = new XWPFParagraph(ctTc.AddNewP(), this);
-            //AddParagraph(p);
-            //return p;
-            throw new NotImplementedException();
+            XWPFParagraph p = new XWPFParagraph(ctTc.AddNewP(), this);
+            AddParagraph(p);
+            return p;
         }
 
         /**
@@ -129,9 +141,8 @@ namespace NPOI.XWPF.UserModel
          */
         public void RemoveParagraph(int pos)
         {
-            //paragraphs.Remove(pos);
-            //ctTc.RemoveP(pos);
-            throw new NotImplementedException();
+            paragraphs.RemoveAt(pos);
+            ctTc.RemoveP(pos);
         }
 
         /**
@@ -144,21 +155,19 @@ namespace NPOI.XWPF.UserModel
          */
         public XWPFParagraph GetParagraph(CT_P p)
         {
-            /*foreach (XWPFParagraph paragraph in paragraphs) {
-                if(p.Equals(paragraph.CTP)){
+            foreach (XWPFParagraph paragraph in paragraphs) {
+                if(p.Equals(paragraph.GetCTP())){
                     return paragraph;
                 }
             }
-            return null;*/
-            throw new NotImplementedException();
+            return null;
         }
 
         public void SetText(String text)
         {
-            /*CTP ctP = (ctTc.SizeOfPArray() == 0) ? ctTc.AddNewP() : ctTc.GetPArray(0);
+            CT_P ctP = (ctTc.SizeOfPArray() == 0) ? ctTc.AddNewP() : ctTc.GetPArray(0);
             XWPFParagraph par = new XWPFParagraph(ctP, this);
-            par.CreateRun().Text=(text);*/
-            throw new NotImplementedException();
+            par.CreateRun().SetText(text);
         }
 
         public XWPFTableRow GetTableRow()
@@ -279,8 +288,7 @@ namespace NPOI.XWPF.UserModel
          */
         public POIXMLDocumentPart GetPart()
         {
-            //return tableRow.Table.Part;
-            throw new NotImplementedException();
+            return tableRow.GetTable().GetPart();
         }
 
 
@@ -299,11 +307,10 @@ namespace NPOI.XWPF.UserModel
          */
         public XWPFTable GetTable(CT_Tbl ctTable)
         {
-            /*for(int i=0; i<tables.Size(); i++){
-                if(GetTables().Get(i).CTTbl == ctTable) return GetTables().Get(i); 
+            for(int i=0; i<tables.Count; i++){
+                if(GetTables()[(i)].GetCTTbl() == ctTable) return GetTables()[(i)]; 
             }
-            return null;*/
-            throw new NotImplementedException();
+            return null;
         }
 
 
@@ -325,8 +332,7 @@ namespace NPOI.XWPF.UserModel
          */
         public IList<XWPFTable> GetTables()
         {
-            //return Collections.UnmodifiableList(tables);
-            throw new NotImplementedException();
+            return tables.AsReadOnly();
         }
 
 
@@ -336,17 +342,15 @@ namespace NPOI.XWPF.UserModel
          */
         public void insertTable(int pos, XWPFTable table)
         {
-            /*bodyElements.Add(pos, table);
+            bodyElements.Insert(pos, table);
             int i;
-            for (i = 0; i < ctTc.TblList.Size(); i++) {
-                CTTbl tbl = ctTc.GetTblArray(i);
-                if(tbl == table.CTTbl){
+            for (i = 0; i < ctTc.GetTblList().Count; i++) {
+                CT_Tbl tbl = ctTc.GetTblArray(i);
+                if(tbl == table.GetCTTbl()){
                     break;
                 }
             }
-            tables.Add(i, table);
-             * */
-            throw new NotImplementedException();
+            tables.Insert(i, table);
         }
 
         public String GetText()

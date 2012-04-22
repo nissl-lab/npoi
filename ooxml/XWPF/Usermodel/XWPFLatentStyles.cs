@@ -34,7 +34,7 @@ namespace NPOI.XWPF.UserModel
             ;
         }
 
-        protected XWPFLatentStyles(CT_LatentStyles latentStyles, XWPFStyles styles)
+        public XWPFLatentStyles(CT_LatentStyles latentStyles, XWPFStyles styles)
         {
             this.latentStyles = latentStyles;
             this.styles = styles;

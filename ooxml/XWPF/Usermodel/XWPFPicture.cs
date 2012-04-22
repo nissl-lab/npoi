@@ -17,7 +17,7 @@
 namespace NPOI.XWPF.UserModel
 {
     using System;
-    using NPOI.OpenXmlFormats.Wordprocessing;
+    using NPOI.OpenXmlFormats.Dml;
     using NPOI.OpenXml4Net.OPC;
 
 
@@ -35,7 +35,7 @@ namespace NPOI.XWPF.UserModel
         {
             this.run = Run;
             this.ctPic = ctPic;
-            //description = ctPic.NvPicPr.CNvPr.Descr;
+            description = ctPic.nvPicPr.cNvPr.descr;
         }
 
         /**
@@ -44,7 +44,7 @@ namespace NPOI.XWPF.UserModel
          */
         public void SetPictureReference(PackageRelationship rel)
         {
-            //ctPic.BlipFill.Blip.Embed = (rel.Id);
+            ctPic.blipFill.blip.embed = (rel.Id);
         }
 
         /**
@@ -63,18 +63,17 @@ namespace NPOI.XWPF.UserModel
          */
         public XWPFPictureData GetPictureData()
         {
-            //String blipId = ctPic.BlipFill.Blip.Embed;
-            //POIXMLDocumentPart part = run.Paragraph.Part;
-            //if (part != null)
-            //{
-            //    POIXMLDocumentPart relatedPart = part.GetRelationById(blipId);
-            //    if (relatedPart is XWPFPictureData)
-            //    {
-            //        return (XWPFPictureData)relatedPart;
-            //    }
-            //}
-            //return null;
-            throw new NotImplementedException();
+            String blipId = ctPic.blipFill.blip.embed;
+            POIXMLDocumentPart part = run.GetParagraph().GetPart();
+            if (part != null)
+            {
+                POIXMLDocumentPart relatedPart = part.GetRelationById(blipId);
+                if (relatedPart is XWPFPictureData)
+                {
+                    return (XWPFPictureData)relatedPart;
+                }
+            }
+            return null;
         }
 
         public String GetDescription()

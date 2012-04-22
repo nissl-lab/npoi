@@ -18,42 +18,48 @@ namespace NPOI.XWPF.Model
 {
     using System;
 
-using NPOI.XWPF.UserModel;
-using NPOI.XWPF.UserModel;
-using org.Openxmlformats.schemas.wordProcessingml.x2006.main;
+    using NPOI.XWPF.UserModel;
+    using System.Text;
+    using NPOI.OpenXmlFormats.Wordprocessing;
 
-/**
- * Decorator class for XWPFParagraph allowing to add comments 
- * found in paragraph to its text
- *
- * @author Yury Batrakov (batrakov at gmail.com)
- * 
- */
-public class XWPFCommentsDecorator : XWPFParagraphDecorator {
-	private StringBuilder commentText;
-	
-	public XWPFCommentsDecorator(XWPFParagraphDecorator nextDecorator) {
-		this(nextDecorator.paragraph, nextDecorator);
-	}
-	public XWPFCommentsDecorator(XWPFParagraph paragraph, XWPFParagraphDecorator nextDecorator) {
-		base(paragraph, nextDecorator);
+    /**
+     * Decorator class for XWPFParagraph allowing to add comments 
+     * found in paragraph to its text
+     *
+     * @author Yury Batrakov (batrakov at gmail.com)
+     * 
+     */
+    public class XWPFCommentsDecorator : XWPFParagraphDecorator
+    {
+        private StringBuilder commentText;
 
-		XWPFComment comment;
-		commentText = new StringBuilder();
+        public XWPFCommentsDecorator(XWPFParagraphDecorator nextDecorator):
+            this(nextDecorator.paragraph, nextDecorator)
+        {
+        }
+        public XWPFCommentsDecorator(XWPFParagraph paragraph, XWPFParagraphDecorator nextDecorator)
+            : base(paragraph, nextDecorator)
+        {
+            ;
 
-		foreach(CTMarkupRange anchor in paragraph.CTP.CommentRangeStartList)
-		{
-			if((comment = paragraph.Document.GetCommentByID(anchor.Id.ToString())) != null)
-				commentText.Append("\tComment by " + comment.Author+": "+comment.Text);
-		}
-	}
+            XWPFComment comment;
+            commentText = new StringBuilder();
 
-	public String GetCommentText() {
-	   return commentText.ToString();
-	}
-	
-	public String GetText() {
-		return super.Text + commentText;
-	}
+            foreach (CT_MarkupRange anchor in paragraph.GetCTP().GetCommentRangeStartList())
+            {
+                if ((comment = paragraph.GetDocument().GetCommentByID(anchor.id)) != null)
+                    commentText.Append("\tComment by " + comment.GetAuthor() + ": " + comment.GetText());
+            }
+        }
+
+        public String GetCommentText()
+        {
+            return commentText.ToString();
+        }
+
+        public override String GetText()
+        {
+            return base.GetText() + commentText;
+        }
+    }
 }
-

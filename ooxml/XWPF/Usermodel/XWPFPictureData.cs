@@ -73,7 +73,7 @@ namespace NPOI.XWPF.UserModel
         }
 
 
-        protected void OnDocumentRead()
+        internal override void OnDocumentRead()
         {
             base.OnDocumentRead();
         }
@@ -247,7 +247,7 @@ namespace NPOI.XWPF.UserModel
                 }
             }
 
-            long foreignChecksum = picData.checksum.Value;
+            long foreignChecksum = picData.Checksum;
             long localChecksum = Checksum;
 
             if (!(localChecksum.Equals(foreignChecksum)))

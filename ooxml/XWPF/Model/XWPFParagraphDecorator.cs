@@ -25,12 +25,12 @@ namespace NPOI.XWPF.Model
      */
     public abstract class XWPFParagraphDecorator
     {
-        protected XWPFParagraph paragraph;
-        protected XWPFParagraphDecorator nextDecorator;
+        internal XWPFParagraph paragraph;
+        internal XWPFParagraphDecorator nextDecorator;
 
         public XWPFParagraphDecorator(XWPFParagraph paragraph)
+            : this(paragraph, null)
         {
-            this(paragraph, null);
         }
 
         public XWPFParagraphDecorator(XWPFParagraph paragraph, XWPFParagraphDecorator nextDecorator)
@@ -39,13 +39,13 @@ namespace NPOI.XWPF.Model
             this.nextDecorator = nextDecorator;
         }
 
-        public String GetText()
+        public virtual String GetText()
         {
             if (nextDecorator != null)
             {
-                return nextDecorator.Text;
+                return nextDecorator.GetText();
             }
-            return paragraph.Text;
+            return paragraph.GetText();
         }
     }
 

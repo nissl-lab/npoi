@@ -10,12 +10,12 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     public class DocumentDocument
     {
         internal static XmlSerializer serializer = new XmlSerializer(typeof(CT_Document));
-        internal static XmlSerializerNamespaces namespaces = new XmlSerializerNamespaces(new[] {
-            new XmlQualifiedName("w", "http://schemas.openxmlformats.org/wordprocessingml/2006/main"), 
-            new XmlQualifiedName("wp", "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing"),
-            new XmlQualifiedName("m", "http://schemas.openxmlformats.org/officeDocument/2006/math"),
-            new XmlQualifiedName("mc", "http://schemas.openxmlformats.org/markup-compatibility/2006"),
-            new XmlQualifiedName("r", "http://schemas.openxmlformats.org/officeDocument/2006/relationships") });
+        //internal static XmlSerializerNamespaces namespaces = new XmlSerializerNamespaces(new[] {
+        //    new XmlQualifiedName("w", "http://schemas.openxmlformats.org/wordprocessingml/2006/main"), 
+        //    new XmlQualifiedName("wp", "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing"),
+        //    new XmlQualifiedName("m", "http://schemas.openxmlformats.org/officeDocument/2006/math"),
+        //    new XmlQualifiedName("mc", "http://schemas.openxmlformats.org/markup-compatibility/2006"),
+        //    new XmlQualifiedName("r", "http://schemas.openxmlformats.org/officeDocument/2006/relationships") });
 
         CT_Document document = null;
         public DocumentDocument()
@@ -39,7 +39,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 return this.document;
             }
         }
-        public void Save(Stream stream)
+        public void Save(Stream stream, XmlSerializerNamespaces namespaces)
         {
             serializer.Serialize(stream, document, namespaces);
         }
@@ -47,12 +47,12 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     public class FootnotesDocument
     {
         internal static XmlSerializer serializer = new XmlSerializer(typeof(CT_Footnotes));
-        internal static XmlSerializerNamespaces namespaces = new XmlSerializerNamespaces(new[] {
-            new XmlQualifiedName("w", "http://schemas.openxmlformats.org/wordprocessingml/2006/main"), 
-            new XmlQualifiedName("wp", "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing"),
-            new XmlQualifiedName("m", "http://schemas.openxmlformats.org/officeDocument/2006/math"),
-            new XmlQualifiedName("mc", "http://schemas.openxmlformats.org/markup-compatibility/2006"),
-            new XmlQualifiedName("r", "http://schemas.openxmlformats.org/officeDocument/2006/relationships") });
+        //internal static XmlSerializerNamespaces namespaces = new XmlSerializerNamespaces(new[] {
+        //    new XmlQualifiedName("w", "http://schemas.openxmlformats.org/wordprocessingml/2006/main"), 
+        //    new XmlQualifiedName("wp", "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing"),
+        //    new XmlQualifiedName("m", "http://schemas.openxmlformats.org/officeDocument/2006/math"),
+        //    new XmlQualifiedName("mc", "http://schemas.openxmlformats.org/markup-compatibility/2006"),
+        //    new XmlQualifiedName("r", "http://schemas.openxmlformats.org/officeDocument/2006/relationships") });
 
         CT_Footnotes footnotes = null;
         public FootnotesDocument()
@@ -76,7 +76,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 return this.footnotes;
             }
         }
-        public void Save(Stream stream)
+        public void Save(Stream stream, XmlSerializerNamespaces namespaces)
         {
             serializer.Serialize(stream, footnotes, namespaces);
         }
@@ -85,12 +85,12 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     public class EndnotesDocument
     {
         internal static XmlSerializer serializer = new XmlSerializer(typeof(CT_Endnotes));
-        internal static XmlSerializerNamespaces namespaces = new XmlSerializerNamespaces(new[] {
-            new XmlQualifiedName("w", "http://schemas.openxmlformats.org/wordprocessingml/2006/main"), 
-            new XmlQualifiedName("wp", "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing"),
-            new XmlQualifiedName("m", "http://schemas.openxmlformats.org/officeDocument/2006/math"),
-            new XmlQualifiedName("mc", "http://schemas.openxmlformats.org/markup-compatibility/2006"),
-            new XmlQualifiedName("r", "http://schemas.openxmlformats.org/officeDocument/2006/relationships") });
+        //internal static XmlSerializerNamespaces namespaces = new XmlSerializerNamespaces(new[] {
+        //    new XmlQualifiedName("w", "http://schemas.openxmlformats.org/wordprocessingml/2006/main"), 
+        //    new XmlQualifiedName("wp", "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing"),
+        //    new XmlQualifiedName("m", "http://schemas.openxmlformats.org/officeDocument/2006/math"),
+        //    new XmlQualifiedName("mc", "http://schemas.openxmlformats.org/markup-compatibility/2006"),
+        //    new XmlQualifiedName("r", "http://schemas.openxmlformats.org/officeDocument/2006/relationships") });
 
         CT_Endnotes endnotes = null;
         public EndnotesDocument()
@@ -114,7 +114,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 return this.endnotes;
             }
         }
-        public void Save(Stream stream)
+        public void Save(Stream stream, XmlSerializerNamespaces namespaces)
         {
             serializer.Serialize(stream, endnotes, namespaces);
         }
@@ -124,12 +124,12 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     {
         //TODO: add namespace according the documnet file.
         internal static XmlSerializer serializer = new XmlSerializer(typeof(CT_Styles));
-        internal static XmlSerializerNamespaces namespaces = new XmlSerializerNamespaces(new[] {
-            new XmlQualifiedName("w", "http://schemas.openxmlformats.org/wordprocessingml/2006/main"), 
-            new XmlQualifiedName("wp", "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing"),
-            new XmlQualifiedName("m", "http://schemas.openxmlformats.org/officeDocument/2006/math"),
-            new XmlQualifiedName("mc", "http://schemas.openxmlformats.org/markup-compatibility/2006"),
-            new XmlQualifiedName("r", "http://schemas.openxmlformats.org/officeDocument/2006/relationships") });
+        //internal static XmlSerializerNamespaces namespaces = new XmlSerializerNamespaces(new[] {
+        //    new XmlQualifiedName("w", "http://schemas.openxmlformats.org/wordprocessingml/2006/main"), 
+        //    new XmlQualifiedName("wp", "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing"),
+        //    new XmlQualifiedName("m", "http://schemas.openxmlformats.org/officeDocument/2006/math"),
+        //    new XmlQualifiedName("mc", "http://schemas.openxmlformats.org/markup-compatibility/2006"),
+        //    new XmlQualifiedName("r", "http://schemas.openxmlformats.org/officeDocument/2006/relationships") });
 
         CT_Styles styles = null;
         public StylesDocument()
@@ -153,7 +153,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 return this.styles;
             }
         }
-        public void Save(Stream stream)
+        public void Save(Stream stream, XmlSerializerNamespaces namespaces)
         {
             serializer.Serialize(stream, styles, namespaces);
         }
@@ -163,12 +163,12 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     {
         //TODO: add namespace according the documnet file.
         internal static XmlSerializer serializer = new XmlSerializer(typeof(CT_Numbering));
-        internal static XmlSerializerNamespaces namespaces = new XmlSerializerNamespaces(new[] {
-            new XmlQualifiedName("w", "http://schemas.openxmlformats.org/wordprocessingml/2006/main"), 
-            new XmlQualifiedName("wp", "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing"),
-            new XmlQualifiedName("m", "http://schemas.openxmlformats.org/officeDocument/2006/math"),
-            new XmlQualifiedName("mc", "http://schemas.openxmlformats.org/markup-compatibility/2006"),
-            new XmlQualifiedName("r", "http://schemas.openxmlformats.org/officeDocument/2006/relationships") });
+        //internal static XmlSerializerNamespaces namespaces = new XmlSerializerNamespaces(new[] {
+        //    new XmlQualifiedName("w", "http://schemas.openxmlformats.org/wordprocessingml/2006/main"), 
+        //    new XmlQualifiedName("wp", "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing"),
+        //    new XmlQualifiedName("m", "http://schemas.openxmlformats.org/officeDocument/2006/math"),
+        //    new XmlQualifiedName("mc", "http://schemas.openxmlformats.org/markup-compatibility/2006"),
+        //    new XmlQualifiedName("r", "http://schemas.openxmlformats.org/officeDocument/2006/relationships") });
 
         CT_Numbering numbering = null;
         public NumberingDocument()
@@ -192,21 +192,14 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 return this.numbering;
             }
         }
-        public void Save(Stream stream)
+        public void Save(Stream stream, XmlSerializerNamespaces namespaces)
         {
             serializer.Serialize(stream, numbering, namespaces);
         }
     }
     public class SettingsDocument
     {
-        //TODO: change namespace according the settings file.
         internal static XmlSerializer serializer = new XmlSerializer(typeof(CT_Settings));
-        internal static XmlSerializerNamespaces namespaces = new XmlSerializerNamespaces(new[] {
-            new XmlQualifiedName("w", "http://schemas.openxmlformats.org/wordprocessingml/2006/main"),
-            new XmlQualifiedName("wp", "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing"),
-            new XmlQualifiedName("m", "http://schemas.openxmlformats.org/officeDocument/2006/math"),
-            new XmlQualifiedName("mc", "http://schemas.openxmlformats.org/markup-compatibility/2006"),
-            new XmlQualifiedName("r", "http://schemas.openxmlformats.org/officeDocument/2006/relationships")});
 
         CT_Settings settings = null;
         public SettingsDocument()
@@ -230,9 +223,115 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 return this.settings;
             }
         }
-        public void Save(Stream stream)
+        public void Save(Stream stream, XmlSerializerNamespaces namespaces)
         {
             serializer.Serialize(stream, settings, namespaces);
         }
+
     }
+
+    public class CommentsDocument
+    {
+        internal static XmlSerializer serializer = new XmlSerializer(typeof(CT_Comments));
+
+        CT_Comments comments = null;
+        public CommentsDocument()
+        {
+            comments = new CT_Comments();
+        }
+        public static CommentsDocument Parse(Stream stream)
+        {
+            CT_Comments obj = (CT_Comments)serializer.Deserialize(stream);
+
+            return new CommentsDocument(obj);
+        }
+        public CommentsDocument(CT_Comments comments)
+        {
+            this.comments = comments;
+        }
+        public CT_Comments Comments
+        {
+            get
+            {
+                return this.comments;
+            }
+        }
+        public void Save(Stream stream, XmlSerializerNamespaces namespaces)
+        {
+            serializer.Serialize(stream, comments, namespaces);
+        }
+    }
+    public class HdrDocument
+    {
+        internal static XmlSerializer serializer = new XmlSerializer(typeof(CT_HdrFtr));
+
+        CT_HdrFtr hdr = null;
+        public HdrDocument()
+        {
+            hdr = new CT_HdrFtr();
+        }
+        public static HdrDocument Parse(Stream stream)
+        {
+            CT_HdrFtr obj = (CT_HdrFtr)serializer.Deserialize(stream);
+
+            return new HdrDocument(obj);
+        }
+        public HdrDocument(CT_HdrFtr hdr)
+        {
+            this.hdr = hdr;
+        }
+        public CT_HdrFtr Hdr
+        {
+            get
+            {
+                return this.hdr;
+            }
+        }
+        public void Save(Stream stream, XmlSerializerNamespaces namespaces)
+        {
+            serializer.Serialize(stream, hdr, namespaces);
+        }
+
+        public void SetHdr(CT_HdrFtr hdr)
+        {
+            throw new NotImplementedException();
+        }
+    }
+    public class FtrDocument
+    {
+        internal static XmlSerializer serializer = new XmlSerializer(typeof(CT_HdrFtr));
+
+        CT_HdrFtr ftr = null;
+        public FtrDocument()
+        {
+            ftr = new CT_HdrFtr();
+        }
+        public static FtrDocument Parse(Stream stream)
+        {
+            CT_HdrFtr obj = (CT_HdrFtr)serializer.Deserialize(stream);
+
+            return new FtrDocument(obj);
+        }
+        public FtrDocument(CT_HdrFtr ftr)
+        {
+            this.ftr = ftr;
+        }
+        public CT_HdrFtr Ftr
+        {
+            get
+            {
+                return this.ftr;
+            }
+        }
+        public void Save(Stream stream, XmlSerializerNamespaces namespaces)
+        {
+            serializer.Serialize(stream, ftr, namespaces);
+        }
+
+        public void SetFtr(CT_HdrFtr ftr)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
 }

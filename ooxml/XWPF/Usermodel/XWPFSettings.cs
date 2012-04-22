@@ -20,6 +20,8 @@ namespace NPOI.XWPF.UserModel
     using NPOI.OpenXmlFormats.Wordprocessing;
     using NPOI.OpenXml4Net.OPC;
     using System.IO;
+using System.Xml.Serialization;
+    using System.Xml;
 
     public class XWPFSettings : POIXMLDocumentPart
     {
@@ -151,14 +153,14 @@ namespace NPOI.XWPF.UserModel
             /*XmlOptions xmlOptions = new XmlOptions(DEFAULT_XML_OPTIONS);
             xmlOptions.SaveSyntheticDocumentElement=(new QName(CTSettings.type.Name.NamespaceURI, "settings"));
             Dictionary<String, String> map = new Dictionary<String, String>();
-            map.Put("http://schemas.Openxmlformats.org/wordProcessingml/2006/main", "w");
+            map.Put("http://schemas.openxmlformats.org/wordprocessingml/2006/main", "w");
             xmlOptions.SaveSuggestedPrefixes=(map);*/
-
+            XmlSerializerNamespaces namespaces = new XmlSerializerNamespaces(new[] {
+                new XmlQualifiedName("w", "http://schemas.openxmlformats.org/wordprocessingml/2006/main")});
             PackagePart part = GetPackagePart();
             Stream out1 = part.GetOutputStream();
             SettingsDocument sd = new SettingsDocument(ctSettings);
-            sd.Save(out1);
-            //ctSettings.Save(out1, xmlOptions);
+            sd.Save(out1, namespaces);
             out1.Close();
         }
 

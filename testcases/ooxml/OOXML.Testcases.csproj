@@ -52,6 +52,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SS\Format\TestCellFormatPart.cs" />
+    <Compile Include="SS\TestWorkbookFactory.cs" />
     <Compile Include="TestDetectAsOOXML.cs" />
     <Compile Include="TestPOIXMLDocument.cs" />
     <Compile Include="TestPOIXMLProperties.cs" />
@@ -79,6 +81,10 @@
     <Compile Include="XSSF\Util\TestNumericRanges.cs" />
     <Compile Include="XSSF\XSSFITestDataProvider.cs" />
     <Compile Include="XSSF\XSSFTestDataSamples.cs" />
+    <Compile Include="XWPF\TestDocumentProtection.cs" />
+    <Compile Include="XWPF\TestPackageCorePropertiesGetKeywords.cs" />
+    <Compile Include="XWPF\UserModel\TestXWPFDocument.cs" />
+    <Compile Include="XWPF\XWPFTestDataSamples.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\ooxml\OOXML.csproj">

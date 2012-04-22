@@ -21,6 +21,8 @@ namespace NPOI.XWPF.Model
     using NPOI.OpenXmlFormats.Wordprocessing;
     using System.Collections.Generic;
     using System.IO;
+    using System.Xml.Serialization;
+    using System.Xml;
 
     /**
      * A .docx file can have no headers/footers, the same header/footer
@@ -52,8 +54,8 @@ namespace NPOI.XWPF.Model
          *  as required.
          */
         public XWPFHeaderFooterPolicy(XWPFDocument doc)
+            : this(doc, doc.Document.body.sectPr)
         {
-            //this(doc, doc.GetDocument().GetBody().SectPr);
         }
 
         /**
@@ -68,32 +70,34 @@ namespace NPOI.XWPF.Model
             //  doesn't seem that .docx properly supports that
             //  feature of the file format yet
             this.doc = doc;
-            //for(int i=0; i<sectPr.SizeOfHeaderReferenceArray(); i++) {
-            //    // Get the header
-            //    CTHdrFtrRef ref1 = sectPr.GetHeaderReferenceArray(i);
-            //    POIXMLDocumentPart relatedPart = doc.GetRelationById(ref1.Id);
-            //    XWPFHeader hdr = null;
-            //    if (relatedPart != null && relatedPart is XWPFHeader) {
-            //        hdr = (XWPFHeader) relatedPart;
-            //    }
-            //    // Assign it
-            //    Enum type = ref1.Type;
-            //    assignHeader(hdr, type);
-            //}
-            //for(int i=0; i<sectPr.SizeOfFooterReferenceArray(); i++) {
-            //    // Get the footer
-            //    CTHdrFtrRef ref1 = sectPr.GetFooterReferenceArray(i);
-            //    POIXMLDocumentPart relatedPart = doc.GetRelationById(ref1.Id);
-            //    XWPFFooter ftr = null;
-            //    if (relatedPart != null && relatedPart is XWPFFooter)
-            //    {
-            //        ftr = (XWPFFooter) relatedPart;
-            //    }
-            //    // Assign it
-            //    Enum type = ref1.Type;
-            //    assignFooter(ftr, type);
-            //}
-            throw new NotImplementedException();
+            for (int i = 0; i < sectPr.SizeOfHeaderReferenceArray(); i++)
+            {
+                // Get the header
+                CT_HdrFtrRef ref1 = sectPr.GetHeaderReferenceArray(i);
+                POIXMLDocumentPart relatedPart = doc.GetRelationById(ref1.id);
+                XWPFHeader hdr = null;
+                if (relatedPart != null && relatedPart is XWPFHeader)
+                {
+                    hdr = (XWPFHeader)relatedPart;
+                }
+                // Assign it
+                ST_HdrFtr type = ref1.type;
+                assignHeader(hdr, type);
+            }
+            for (int i = 0; i < sectPr.SizeOfFooterReferenceArray(); i++)
+            {
+                // Get the footer
+                CT_HdrFtrRef ref1 = sectPr.GetFooterReferenceArray(i);
+                POIXMLDocumentPart relatedPart = doc.GetRelationById(ref1.id);
+                XWPFFooter ftr = null;
+                if (relatedPart != null && relatedPart is XWPFFooter)
+                {
+                    ftr = (XWPFFooter)relatedPart;
+                }
+                // Assign it
+                ST_HdrFtr type = ref1.type;
+                assignFooter(ftr, type);
+            }
         }
 
         private void assignFooter(XWPFFooter ftr, ST_HdrFtr type)
@@ -128,77 +132,76 @@ namespace NPOI.XWPF.Model
             }
         }
 
-        public XWPFHeader CreateHeader(Enum type)
+        public XWPFHeader CreateHeader(ST_HdrFtr type)
         {
             return CreateHeader(type, null);
         }
 
-        public XWPFHeader CreateHeader(Enum type, XWPFParagraph[] pars)
+        public XWPFHeader CreateHeader(ST_HdrFtr type, XWPFParagraph[] pars)
         {
             XWPFRelation relation = XWPFRelation.HEADER;
             String pStyle = "Header";
             int i = GetRelationIndex(relation);
-            //HdrDocument hdrDoc = HdrDocument.Factory.NewInstance();
-            //XWPFHeader wrapper = (XWPFHeader)doc.CreateRelationship(relation, XWPFFactory.Instance, i);
+            HdrDocument hdrDoc = new HdrDocument();
+            XWPFHeader wrapper = (XWPFHeader)doc.CreateRelationship(relation, XWPFFactory.GetInstance(), i);
 
-            //CTHdrFtr hdr = buildHdr(type, pStyle, wrapper, pars);
-            //wrapper.HeaderFooter=(hdr);
+            CT_HdrFtr hdr = buildHdr(type, pStyle, wrapper, pars);
+            wrapper.SetHeaderFooter(hdr);
 
-            //OutputStream outputStream = wrapper.PackagePart.OutputStream;
-            //hdrDoc.Hdr=(hdr);
+            Stream outputStream = wrapper.GetPackagePart().GetOutputStream();
+            hdrDoc.SetHdr(hdr);
 
             //XmlOptions xmlOptions = Commit(wrapper);
 
-            //assignHeader(wrapper, type);
-            //hdrDoc.Save(outputStream, xmlOptions);
-            //outputStream.Close();
-            //return wrapper;
-            throw new NotImplementedException();
+            assignHeader(wrapper, type);
+            hdrDoc.Save(outputStream, Commit(wrapper));
+            outputStream.Close();
+            return wrapper;
         }
 
-        public XWPFFooter CreateFooter(Enum type)
+        public XWPFFooter CreateFooter(ST_HdrFtr type)
         {
             return CreateFooter(type, null);
         }
 
-        public XWPFFooter CreateFooter(Enum type, XWPFParagraph[] pars)
+        public XWPFFooter CreateFooter(ST_HdrFtr type, XWPFParagraph[] pars)
         {
             XWPFRelation relation = XWPFRelation.FOOTER;
             String pStyle = "Footer";
             int i = GetRelationIndex(relation);
-            //FtrDocument ftrDoc = FtrDocument.Factory.NewInstance();
-            //XWPFFooter wrapper = (XWPFFooter)doc.CreateRelationship(relation, XWPFFactory.Instance, i);
+            FtrDocument ftrDoc = new FtrDocument();
+            XWPFFooter wrapper = (XWPFFooter)doc.CreateRelationship(relation, XWPFFactory.GetInstance(), i);
 
-            //CTHdrFtr ftr = buildFtr(type, pStyle, wrapper, pars);
-            //wrapper.HeaderFooter=(ftr);
+            CT_HdrFtr ftr = buildFtr(type, pStyle, wrapper, pars);
+            wrapper.SetHeaderFooter(ftr);
 
-            //OutputStream outputStream = wrapper.PackagePart.OutputStream;
-            //ftrDoc.Ftr=(ftr);
+            Stream outputStream = wrapper.GetPackagePart().GetOutputStream();
+            ftrDoc.SetFtr(ftr);
 
             //XmlOptions xmlOptions = Commit(wrapper);
 
-            //assignFooter(wrapper, type);
-            //ftrDoc.Save(outputStream, xmlOptions);
-            //outputStream.Close();
-            //return wrapper;
-            throw new NotImplementedException();
+            assignFooter(wrapper, type);
+            ftrDoc.Save(outputStream, Commit(wrapper));
+            outputStream.Close();
+            return wrapper;
         }
 
         private int GetRelationIndex(XWPFRelation relation)
         {
-            //List<POIXMLDocumentPart> relations = doc.Relations;
-            //int i = 1;
-            //for (Iterator<POIXMLDocumentPart> it = relations.Iterator(); it.HasNext() ; ) {
-            //    POIXMLDocumentPart item = it.Next();
-            //    if (item.PackageRelationship.RelationshipType.Equals(relation.Relation)) {
-            //        i++;	
-            //    }
-            //}
-            //return i;
-            throw new NotImplementedException();
+            List<POIXMLDocumentPart> relations = doc.GetRelations();
+            int i = 1;
+            for (IEnumerator<POIXMLDocumentPart> it = relations.GetEnumerator(); it.MoveNext(); )
+            {
+                POIXMLDocumentPart item = it.Current;
+                if (item.GetPackageRelationship().RelationshipType.Equals(relation.Relation))
+                {
+                    i++;
+                }
+            }
+            return i;
         }
 
-        private CT_HdrFtr buildFtr(Enum type, String pStyle, XWPFHeaderFooter wrapper, XWPFParagraph[] pars)
+        private CT_HdrFtr buildFtr(ST_HdrFtr type, String pStyle, XWPFHeaderFooter wrapper, XWPFParagraph[] pars)
         {
             //CTHdrFtr ftr = buildHdrFtr(pStyle, pars);				// MB 24 May 2010
             CT_HdrFtr ftr = buildHdrFtr(pStyle, pars, wrapper);		// MB 24 May 2010
@@ -206,7 +209,7 @@ namespace NPOI.XWPF.Model
             return ftr;
         }
 
-        private CT_HdrFtr buildHdr(Enum type, String pStyle, XWPFHeaderFooter wrapper, XWPFParagraph[] pars)
+        private CT_HdrFtr buildHdr(ST_HdrFtr type, String pStyle, XWPFHeaderFooter wrapper, XWPFParagraph[] pars)
         {
             //CTHdrFtr hdr = buildHdrFtr(pStyle, pars);				// MB 24 May 2010
             CT_HdrFtr hdr = buildHdrFtr(pStyle, pars, wrapper);		// MB 24 May 2010
@@ -216,25 +219,24 @@ namespace NPOI.XWPF.Model
 
         private CT_HdrFtr buildHdrFtr(String pStyle, XWPFParagraph[] paragraphs)
         {
-            //CTHdrFtr ftr = CTHdrFtr.Factory.NewInstance();
-            //if (paragraphs != null) {
-            //    for (int i = 0 ; i < paragraphs.Length ; i++) {
-            //        CTP p = ftr.AddNewP();
-            //        //ftr.PArray=(0, paragraphs[i].CTP);		// MB 23 May 2010
-            //        ftr.PArray=(i, paragraphs[i].CTP);   	// MB 23 May 2010
-            //    }
-            //}
-            //else {
-            //    CTP p = ftr.AddNewP();
-            //    byte[] rsidr = doc.Document.Body.GetPArray(0).RsidR;
-            //    byte[] rsidrdefault = doc.Document.Body.GetPArray(0).RsidRDefault;
-            //    p.RsidP=(rsidr);
-            //    p.RsidRDefault=(rsidrdefault);
-            //    CTPPr pPr = p.AddNewPPr();
-            //    pPr.AddNewPStyle().Val=(pStyle);
-            //}
-            //return ftr;
-            throw new NotImplementedException();
+            CT_HdrFtr ftr = new CT_HdrFtr();
+            if (paragraphs != null) {
+                for (int i = 0 ; i < paragraphs.Length ; i++) {
+                    CT_P p = ftr.AddNewP();
+                    //ftr.PArray=(0, paragraphs[i].CTP);		// MB 23 May 2010
+                    ftr.SetPArray(i, paragraphs[i].GetCTP());   	// MB 23 May 2010
+                }
+            }
+            else {
+                CT_P p = ftr.AddNewP();
+                byte[] rsidr = doc.Document.body.GetPArray(0).rsidR;
+                byte[] rsidrdefault = doc.Document.body.GetPArray(0).rsidRDefault;
+                p.rsidR = (rsidr);
+                p.rsidRDefault = (rsidrdefault);
+                CT_PPr pPr = p.AddNewPPr();
+                pPr.AddNewPStyle().val = (pStyle);
+            }
+            return ftr;
         }
 
         /**
@@ -252,45 +254,44 @@ namespace NPOI.XWPF.Model
         private CT_HdrFtr buildHdrFtr(String pStyle, XWPFParagraph[] paragraphs, XWPFHeaderFooter wrapper)
         {
             CT_HdrFtr ftr = wrapper._getHdrFtr();
-            //if (paragraphs != null) {
-            //    for (int i = 0 ; i < paragraphs.Length ; i++) {
-            //        CT_P p = ftr.AddNewP();
-            //        ftr.PArray=(i, paragraphs[i].CTP);
-            //    }
-            //}
-            //else {
-            //    CTP p = ftr.AddNewP();
-            //    byte[] rsidr = doc.Document.Body.GetPArray(0).RsidR;
-            //    byte[] rsidrdefault = doc.Document.Body.GetPArray(0).RsidRDefault;
-            //    p.RsidP=(rsidr);
-            //    p.RsidRDefault=(rsidrdefault);
-            //    CTPPr pPr = p.AddNewPPr();
-            //    pPr.AddNewPStyle().Val=(pStyle);
-            //}
-            //return ftr;
+            if (paragraphs != null) {
+                for (int i = 0 ; i < paragraphs.Length ; i++) {
+                    CT_P p = ftr.AddNewP();
+                    ftr.SetPArray(i, paragraphs[i].GetCTP());
+                }
+            }
+            else {
+                CT_P p = ftr.AddNewP();
+                byte[] rsidr = doc.Document.body.GetPArray(0).rsidR;
+                byte[] rsidrdefault = doc.Document.body.GetPArray(0).rsidRDefault;
+                p.rsidP=(rsidr);
+                p.rsidRDefault=(rsidrdefault);
+                CT_PPr pPr = p.AddNewPPr();
+                pPr.AddNewPStyle().val=(pStyle);
+            }
+            return ftr;
             throw new NotImplementedException();
         }
 
 
-        private void SetFooterReference(Enum type, XWPFHeaderFooter wrapper)
+        private void SetFooterReference(ST_HdrFtr type, XWPFHeaderFooter wrapper)
         {
-            //CTHdrFtrRef ref1 = doc.Document.Body.SectPr.AddNewFooterReference();
-            //ref1.Type=(type);
-            //ref1.Id=(wrapper.PackageRelationship.Id);
-            throw new NotImplementedException();
+            CT_HdrFtrRef ref1 = doc.Document.body.sectPr.AddNewFooterReference();
+            ref1.type = (type);
+            ref1.id = (wrapper.GetPackageRelationship().Id);
         }
 
 
-        private void SetHeaderReference(Enum type, XWPFHeaderFooter wrapper)
+        private void SetHeaderReference(ST_HdrFtr type, XWPFHeaderFooter wrapper)
         {
-            //CTHdrFtrRef ref1 = doc.Document.Body.SectPr.AddNewHeaderReference();
-            //ref1.Type=(type);
-            //ref1.Id=(wrapper.PackageRelationship.Id);
-            throw new NotImplementedException();
+            CT_HdrFtrRef ref1 = doc.Document.body.sectPr.AddNewHeaderReference();
+            ref1.type = (type);
+            ref1.id = (wrapper.GetPackageRelationship().Id);
         }
 
 
-        //private XmlOptions Commit(XWPFHeaderFooter wrapper) {
+        private XmlSerializerNamespaces Commit(XWPFHeaderFooter wrapper)
+        {
         //    XmlOptions xmlOptions = new XmlOptions(wrapper.DEFAULT_XML_OPTIONS);
         //    Dictionary<String, String> map = new Dictionary<String, String>();
         //    map.Put("http://schemas.Openxmlformats.org/officeDocument/2006/math", "m");
@@ -304,7 +305,18 @@ namespace NPOI.XWPF.Model
         //    map.Put("http://schemas.Openxmlformats.org/drawingml/2006/wordProcessingDrawing", "wp");
         //    xmlOptions.SaveSuggestedPrefixes=(map);
         //    return xmlOptions;
-        //}
+            XmlSerializerNamespaces namespaces = new XmlSerializerNamespaces(new[] {
+                new XmlQualifiedName("ve", "http://schemas.openxmlformats.org/markup-compatibility/2006"),
+                new XmlQualifiedName("r", "http://schemas.openxmlformats.org/officeDocument/2006/relationships"),
+                new XmlQualifiedName("m", "http://schemas.openxmlformats.org/officeDocument/2006/math"),
+                new XmlQualifiedName("v", "urn:schemas-microsoft-com:vml"),
+                new XmlQualifiedName("wp", "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing"),
+                new XmlQualifiedName("w10", "urn:schemas-microsoft-com:office:word"),
+                new XmlQualifiedName("wne", "http://schemas.microsoft.com/office/word/2006/wordml"),
+                 new XmlQualifiedName("w", "http://schemas.openxmlformats.org/wordprocessingml/2006/main")
+             });
+            return namespaces;
+        }
 
         public XWPFHeader GetFirstPageHeader()
         {
@@ -408,25 +420,26 @@ namespace NPOI.XWPF.Model
          */
         private XWPFParagraph GetWatermarkParagraph(String text, int idx)
         {
-            //CTP p = CTP.Factory.NewInstance();
-            //byte[] rsidr = doc.Document.Body.GetPArray(0).RsidR;
-            //byte[] rsidrdefault = doc.Document.Body.GetPArray(0).RsidRDefault;
-            //p.RsidP=(rsidr);
-            //p.RsidRDefault=(rsidrdefault);
-            //CTPPr pPr = p.AddNewPPr();
-            //pPr.AddNewPStyle().Val=("Header");
-            //// start watermark paragraph
-            //CTR r = p.AddNewR();
-            //CTRPr rPr = r.AddNewRPr();
-            //rPr.AddNewNoProof();
-            //CTPicture pict = r.AddNewPict();
+            CT_P p = new CT_P();
+            byte[] rsidr = doc.Document.body.GetPArray(0).rsidR;
+            byte[] rsidrdefault = doc.Document.body.GetPArray(0).rsidRDefault;
+            p.rsidP = (rsidr);
+            p.rsidRDefault = (rsidrdefault);
+            CT_PPr pPr = p.AddNewPPr();
+            pPr.AddNewPStyle().val = ("Header");
+            // start watermark paragraph
+            CT_R r = p.AddNewR();
+            CT_RPr rPr = r.AddNewRPr();
+            rPr.AddNewNoProof();
+            CT_Picture pict = r.AddNewPict();
+            //// CTGroup is in package schemasMicrosoftComVml
             //CTGroup group = CTGroup.Factory.NewInstance();
-            //CTShapetype shapetype = group.AddNewShapetype();
-            //shapetype.Id=("_x0000_t136");
-            //shapetype.Coordsize=("1600,21600");
-            //shapetype.Spt=(136);
-            //shapetype.Adj=("10800");
-            //shapetype.Path2=("m@7,0l@8,0m@5,21600l@6,21600e");
+            //CT_Shapetype shapetype = group.AddNewShapetype();
+            //shapetype.Id = ("_x0000_t136");
+            //shapetype.Coordsize = ("1600,21600");
+            //shapetype.Spt = (136);
+            //shapetype.Adj = ("10800");
+            //shapetype.Path2 = ("m@7,0l@8,0m@5,21600l@6,21600e");
             //CTFormulas formulas = shapetype.AddNewFormulas();
             //formulas.AddNewF().Eqn=("sum #0 0 10800");
             //formulas.AddNewF().Eqn=("prod #0 2 1");

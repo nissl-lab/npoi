@@ -62,6 +62,11 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 this.numIdField = value;
             }
         }
+
+        public void AddNewAbstractNumId()
+        {
+            throw new NotImplementedException();
+        }
     }
 
 
@@ -198,6 +203,41 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             {
                 this.numIdMacAtCleanupField = value;
             }
+        }
+
+        public IList<CT_Num> GetNumList()
+        {
+            throw new NotImplementedException();
+        }
+
+        public IList<CT_AbstractNum> GetAbstractNumList()
+        {
+            throw new NotImplementedException();
+        }
+
+        public CT_Num AddNewNum()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SetNumArray(int pos, CT_Num cT_Num)
+        {
+            throw new NotImplementedException();
+        }
+
+        public CT_AbstractNum AddNewAbstractNum()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SetAbstractNumArray(int pos, CT_AbstractNum cT_AbstractNum)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void RemoveAbstractNum(int p)
+        {
+            throw new NotImplementedException();
         }
     }
 
@@ -747,6 +787,21 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             {
                 this.abstractNumIdField = value;
             }
+        }
+
+        public CT_AbstractNum Copy()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool ValueEquals(CT_AbstractNum cT_AbstractNum)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Set(CT_AbstractNum cT_AbstractNum)
+        {
+            throw new NotImplementedException();
         }
     }
 

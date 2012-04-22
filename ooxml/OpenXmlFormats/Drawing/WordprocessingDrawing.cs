@@ -229,6 +229,21 @@ namespace NPOI.OpenXmlFormats.Dml
                 this.distRFieldSpecified = value;
             }
         }
+
+        public CT_PositiveSize2D AddNewExtent()
+        {
+            throw new NotImplementedException();
+        }
+
+        public CT_NonVisualDrawingProps AddNewDocPr()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Set(string p)
+        {
+            throw new NotImplementedException();
+        }
     }
 
     

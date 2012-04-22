@@ -232,6 +232,21 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 this.sdtContentField = value;
             }
         }
+
+        public CT_SdtPr AddNewSdtPr()
+        {
+            throw new NotImplementedException();
+        }
+
+        public CT_SdtEndPr AddNewSdtEndPr()
+        {
+            throw new NotImplementedException();
+        }
+
+        public CT_SdtContentBlock AddNewSdtContent()
+        {
+            throw new NotImplementedException();
+        }
     }
 
 
@@ -460,6 +475,11 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 this.docPartUniqueField = value;
             }
         }
+
+        public CT_String AddNewDocPartGallery()
+        {
+            throw new NotImplementedException();
+        }
     }
 
 
@@ -577,6 +597,11 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             {
                 this.itemsElementNameField = value;
             }
+        }
+
+        public CT_P AddNewP()
+        {
+            throw new NotImplementedException();
         }
     }
 
@@ -813,6 +838,16 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 this.itemsElementNameField = value;
             }
         }
+
+        public CT_DecimalNumber AddNewId()
+        {
+            throw new NotImplementedException();
+        }
+
+        public CT_SdtDocPart AddNewDocPartObj()
+        {
+            throw new NotImplementedException();
+        }
     }
 
     [System.SerializableAttribute()]
@@ -909,6 +944,11 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             {
                 this.itemsField = value;
             }
+        }
+
+        public CT_RPr AddNewRPr()
+        {
+            throw new NotImplementedException();
         }
     }
 

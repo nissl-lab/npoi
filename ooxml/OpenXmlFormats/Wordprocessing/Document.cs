@@ -165,7 +165,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             this.itemsElementNameField.Add(DocumentBodyItemChoiceType.p);
             return p;
         }
-
+        
         [System.Xml.Serialization.XmlElementAttribute("ItemsElementName", Order = 1)]
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public DocumentBodyItemChoiceType[] ItemsElementName
@@ -194,6 +194,48 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             {
                 this.sectPrField = value;
             }
+        }
+        public CT_Tbl AddNewTbl()
+        {
+            CT_Tbl tbl = new CT_Tbl();
+            this.itemsField.Add(tbl);
+            this.itemsElementNameField.Add(DocumentBodyItemChoiceType.tbl);
+            return tbl;
+        }
+        public int sizeOfTblArray()
+        {
+            throw new NotImplementedException();
+        }
+        public CT_Tbl[] getTblArray()
+        {
+            throw new NotImplementedException();
+        }
+        public CT_Tbl insertNewTbl(int paramInt)
+        {
+            throw new NotImplementedException();
+        }
+        public void removeTbl(int paramInt)
+        {
+            throw new NotImplementedException();
+        }
+        public CT_Tbl GetTblArray(int i)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SetTblArray(int pos, CT_Tbl cT_Tbl)
+        {
+            throw new NotImplementedException();
+        }
+
+        public CT_Tbl[] GetTblArray()
+        {
+            throw new NotImplementedException();
+        }
+
+        public CT_P GetPArray(int p)
+        {
+            throw new NotImplementedException();
         }
     }
 

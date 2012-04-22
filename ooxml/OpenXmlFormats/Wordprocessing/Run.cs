@@ -158,6 +158,76 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             this.itemsElementNameField.Add(RunItemsChoiceType.t);
             return t;
         }
+
+        public CT_RPr AddNewRPr()
+        {
+            throw new NotImplementedException();
+        }
+
+        public CT_Empty AddNewTab()
+        {
+            throw new NotImplementedException();
+        }
+
+        public CT_FldChar AddNewFldChar()
+        {
+            throw new NotImplementedException();
+        }
+
+        public CT_Text AddNewInstrText()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void AddNewCr()
+        {
+            throw new NotImplementedException();
+        }
+
+        public CT_Br AddNewBr()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsSetRPr()
+        {
+            throw new NotImplementedException();
+        }
+
+        public int SizeOfTArray()
+        {
+            throw new NotImplementedException();
+        }
+
+        public CT_Text GetTArray(int pos)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<CT_Text> GetTList()
+        {
+            throw new NotImplementedException();
+        }
+
+        public CT_Drawing AddNewDrawing()
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<CT_Drawing> GetDrawingList()
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<CT_Drawing> GetPictList()
+        {
+            throw new NotImplementedException();
+        }
+
+        public CT_Picture AddNewPict()
+        {
+            throw new NotImplementedException();
+        }
     }
 
 

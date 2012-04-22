@@ -51,6 +51,16 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 this.valFieldSpecified = value;
             }
         }
+
+        public void UnsetVal()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsSetVal()
+        {
+            throw new NotImplementedException();
+        }
     }
     /// <summary>
     /// On/Off Value

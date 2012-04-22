@@ -23,116 +23,118 @@ namespace NPOI.XWPF.UserModel
 
 
 
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-using NPOI.Openxml4j.exceptions;
-using NPOI.Openxml4j.opc;
-using NPOI.XSSF.UserModel;
-using NPOI.XWPF;
-using NPOI.XWPF.Model;
+    using NPOI.Openxml4j.exceptions;
+    using NPOI.Openxml4j.opc;
+    using NPOI.XSSF.UserModel;
+    using NPOI.XWPF;
+    using NPOI.XWPF.Model;
 
     [TestClass]
-    public class TestXWPFPictureData 
-{
-    
-    public void testRead() throws InvalidFormatException, IOException
+    public class TestXWPFPictureData
     {
-        XWPFDocument sampleDoc = XWPFTestDataSamples.OpenSampleDocument("VariousPictures.docx");
-        List<XWPFPictureData> pictures = sampleDoc.AllPictures;
 
-        Assert.AreEqual(5,pictures.Size());
-        String[] ext = {"wmf","png","emf","emf","jpeg"};
-        for (int i = 0 ; i < pictures.Size() ; i++)
+        public void testRead()
         {
-            Assert.AreEqual(ext[i],pictures.Get(i).suggestFileExtension());
-        }
+            XWPFDocument sampleDoc = XWPFTestDataSamples.OpenSampleDocument("VariousPictures.docx");
+            List<XWPFPictureData> pictures = sampleDoc.AllPictures;
 
-        int num = pictures.Size();
-
-        byte[] pictureData = XWPFTestDataSamples.GetImage("nature1.jpg");
-
-        String relationId = sampleDoc.AddPictureData(pictureData,XWPFDocument.PICTURE_TYPE_JPEG);
-        // picture list was updated
-        Assert.AreEqual(num + 1,pictures.Size());
-        XWPFPictureData pict = (XWPFPictureData) sampleDoc.GetRelationById(relationId);
-        Assert.AreEqual("jpeg",pict.SuggestFileExtension());
-        Assert.IsTrue(Arrays.Equals(pictureData,pict.Data));
-    }
-
-    public void testPictureInHeader() throws IOException
-    {
-        XWPFDocument sampleDoc = XWPFTestDataSamples.OpenSampleDocument("headerPic.docx");
-        XWPFHeaderFooterPolicy policy = sampleDoc.HeaderFooterPolicy;
-
-        XWPFHeader header = policy.DefaultHeader;
-
-        List<XWPFPictureData> pictures = header.AllPictures;
-        Assert.AreEqual(1,pictures.Size());
-    }
-
-    public void testNew() throws InvalidFormatException, IOException 
-    {
-        XWPFDocument doc = XWPFTestDataSamples.OpenSampleDocument("EmptyDocumentWithHeaderFooter.docx");
-        byte[] jpegData = XWPFTestDataSamples.GetImage("nature1.jpg");
-        byte[] gifData = XWPFTestDataSamples.GetImage("nature1.gif");
-        byte[] pngData = XWPFTestDataSamples.GetImage("nature1.png");
-
-        List<XWPFPictureData> pictures = doc.AllPictures;
-        Assert.AreEqual(0,pictures.Size());
-
-        // Document shouldn't have any image relationships
-        Assert.AreEqual(13,doc.PackagePart.Relationships.Size());
-        foreach (PackageRelationship rel in doc.PackagePart.Relationships)
-        {
-            if (rel.RelationshipType.Equals(XSSFRelation.IMAGE_JPEG.Relation))
+            Assert.AreEqual(5, pictures.Size());
+            String[] ext = { "wmf", "png", "emf", "emf", "jpeg" };
+            for (int i = 0; i < pictures.Size(); i++)
             {
-                Assert.Fail("Shouldn't have JPEG yet");
+                Assert.AreEqual(ext[i], pictures.Get(i).suggestFileExtension());
             }
+
+            int num = pictures.Size();
+
+            byte[] pictureData = XWPFTestDataSamples.GetImage("nature1.jpg");
+
+            String relationId = sampleDoc.AddPictureData(pictureData, XWPFDocument.PICTURE_TYPE_JPEG);
+            // picture list was updated
+            Assert.AreEqual(num + 1, pictures.Size());
+            XWPFPictureData pict = (XWPFPictureData)sampleDoc.GetRelationById(relationId);
+            Assert.AreEqual("jpeg", pict.SuggestFileExtension());
+            Assert.IsTrue(Arrays.Equals(pictureData, pict.Data));
         }
 
-        // Add the image
-        String relationId = doc.AddPictureData(jpegData,XWPFDocument.PICTURE_TYPE_JPEG);
-        Assert.AreEqual(1,pictures.Size());
-        XWPFPictureData jpgPicData = (XWPFPictureData) doc.GetRelationById(relationId);
-        Assert.AreEqual("jpeg",jpgPicData.SuggestFileExtension());
-        Assert.IsTrue(Arrays.Equals(jpegData,jpgPicData.Data));
-
-        // Ensure it now has one
-        Assert.AreEqual(14,doc.PackagePart.Relationships.Size());
-        PackageRelationship jpegRel = null;
-        foreach (PackageRelationship rel in doc.PackagePart.Relationships)
+        public void testPictureInHeader()
         {
-            if (rel.RelationshipType.Equals(XWPFRelation.IMAGE_JPEG.Relation))
+            XWPFDocument sampleDoc = XWPFTestDataSamples.OpenSampleDocument("headerPic.docx");
+            XWPFHeaderFooterPolicy policy = sampleDoc.HeaderFooterPolicy;
+
+            XWPFHeader header = policy.DefaultHeader;
+
+            List<XWPFPictureData> pictures = header.AllPictures;
+            Assert.AreEqual(1, pictures.Size());
+        }
+
+        public void testNew()
+        {
+            XWPFDocument doc = XWPFTestDataSamples.OpenSampleDocument("EmptyDocumentWithHeaderFooter.docx");
+            byte[] jpegData = XWPFTestDataSamples.GetImage("nature1.jpg");
+            byte[] gifData = XWPFTestDataSamples.GetImage("nature1.gif");
+            byte[] pngData = XWPFTestDataSamples.GetImage("nature1.png");
+
+            List<XWPFPictureData> pictures = doc.AllPictures;
+            Assert.AreEqual(0, pictures.Size());
+
+            // Document shouldn't have any image relationships
+            Assert.AreEqual(13, doc.PackagePart.Relationships.Size());
+            foreach (PackageRelationship rel in doc.PackagePart.Relationships)
             {
-                if (jpegRel != null)
-                    Assert.Fail("Found 2 jpegs!");
-                jpegRel = rel;
+                if (rel.RelationshipType.Equals(XSSFRelation.IMAGE_JPEG.Relation))
+                {
+                    Assert.Fail("Shouldn't have JPEG yet");
+                }
             }
+
+            // Add the image
+            String relationId = doc.AddPictureData(jpegData, XWPFDocument.PICTURE_TYPE_JPEG);
+            Assert.AreEqual(1, pictures.Size());
+            XWPFPictureData jpgPicData = (XWPFPictureData)doc.GetRelationById(relationId);
+            Assert.AreEqual("jpeg", jpgPicData.SuggestFileExtension());
+            Assert.IsTrue(Arrays.Equals(jpegData, jpgPicData.Data));
+
+            // Ensure it now has one
+            Assert.AreEqual(14, doc.PackagePart.Relationships.Size());
+            PackageRelationship jpegRel = null;
+            foreach (PackageRelationship rel in doc.PackagePart.Relationships)
+            {
+                if (rel.RelationshipType.Equals(XWPFRelation.IMAGE_JPEG.Relation))
+                {
+                    if (jpegRel != null)
+                        Assert.Fail("Found 2 jpegs!");
+                    jpegRel = rel;
+                }
+            }
+            Assert.IsNotNull("JPEG Relationship not found", jpegRel);
+
+            // Check the details
+            Assert.AreEqual(XWPFRelation.IMAGE_JPEG.Relation, jpegRel.RelationshipType);
+            Assert.AreEqual("/word/document.xml", jpegRel.Source.PartName.ToString());
+            Assert.AreEqual("/word/media/image1.jpeg", jpegRel.TargetURI.Path);
+
+            XWPFPictureData pictureDataByID = doc.GetPictureDataByID(jpegRel.Id);
+            byte[] newJPEGData = pictureDataByID.Data;
+            Assert.AreEqual(newJPEGData.Length, jpegData.Length);
+            for (int i = 0; i < newJPEGData.Length; i++)
+            {
+                Assert.AreEqual(newJPEGData[i], jpegData[i]);
+            }
+
+            // Save an re-load, check it appears
+            doc = XWPFTestDataSamples.WriteOutAndReadBack(doc);
+            Assert.AreEqual(1, doc.AllPictures.Size());
+            Assert.AreEqual(1, doc.AllPackagePictures.Size());
         }
-        Assert.IsNotNull("JPEG Relationship not found",jpegRel);
 
-        // Check the details
-        Assert.AreEqual(XWPFRelation.IMAGE_JPEG.Relation,jpegRel.RelationshipType);
-        Assert.AreEqual("/word/document.xml",jpegRel.Source.PartName.ToString());
-        Assert.AreEqual("/word/media/image1.jpeg",jpegRel.TargetURI.Path);
-
-        XWPFPictureData pictureDataByID = doc.GetPictureDataByID(jpegRel.Id);
-        byte[] newJPEGData = pictureDataByID.Data;
-        Assert.AreEqual(newJPEGData.Length,jpegData.Length);
-        for (int i = 0 ; i < newJPEGData.Length ; i++)
-        {
-            Assert.AreEqual(newJPEGData[i],jpegData[i]);
-        }
-
-        // Save an re-load, check it appears
-        doc = XWPFTestDataSamples.WriteOutAndReadBack(doc);
-        Assert.AreEqual(1,doc.AllPictures.Size());
-        Assert.AreEqual(1,doc.AllPackagePictures.Size());
-    }
-    
         [TestMethod]
-    public void TestGetChecksum(){
-        
-    }
-}
+        public void TestGetChecksum()
+        {
 
+        }
+    }
+
+}

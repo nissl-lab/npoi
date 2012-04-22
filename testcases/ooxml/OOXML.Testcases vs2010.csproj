@@ -120,6 +120,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="XWPF\TestPackageCorePropertiesGetKeywords.cs" />
+    <Compile Include="XWPF\UserModel\TestXWPFDocument.cs" />
     <Compile Include="XWPF\XWPFTestDataSamples.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -164,7 +165,6 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="XWPF\UserModel\" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
