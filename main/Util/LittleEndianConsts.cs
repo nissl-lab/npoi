@@ -38,10 +38,10 @@ namespace NPOI.Util
         public const int INT_SIZE = 4;
         public const int DOUBLE_SIZE = 8;
         public const int LONG_SIZE = 8;
-        //[Obsolete]
+        [Obsolete]
         public const int UINT_SIZE = 4;
         
-        //[Obsolete]
+        [Obsolete]
         public const int ULONG_SIZE=8;
         
     }

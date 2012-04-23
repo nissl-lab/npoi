@@ -50,7 +50,7 @@ namespace NPOI
             NPOI.POIXMLProperties.ExtendedProperties properties =
                     props.GetExtendedProperties();
 
-            CT_Properties
+            CT_ExtendedProperties
                     ctProps = properties.GetUnderlyingProperties();
 
 
@@ -75,7 +75,7 @@ namespace NPOI
             NPOI.POIXMLProperties.ExtendedProperties newProperties =
                     newProps.GetExtendedProperties();
 
-            CT_Properties
+            CT_ExtendedProperties
                     newCtProps = newProperties.GetUnderlyingProperties();
 
             Assert.AreEqual(application, newCtProps.Application);
@@ -110,7 +110,7 @@ namespace NPOI
             customProps.AddProperty("test-4", true);
 
             wb = (XSSFWorkbook)XSSFTestDataSamples.WriteOutAndReadBack((XSSFWorkbook)wb);
-            CT_Properties ctProps =
+            CT_CustomProperties ctProps =
                     wb.GetProperties().GetCustomProperties().GetUnderlyingProperties();
             Assert.AreEqual(4, ctProps.sizeOfPropertyArray());
             CT_Property p;
