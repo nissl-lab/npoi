@@ -79,7 +79,7 @@ namespace NPOI.XWPF.UserModel
             try
             {
                 Type cls = descriptor.RelationClass;
-                ConstructorInfo constructor = cls.GetConstructor(BindingFlags.NonPublic | BindingFlags.Instance, 
+                ConstructorInfo constructor = cls.GetConstructor(BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Public, 
                     null, Type.EmptyTypes, null);
                 return constructor.Invoke(new object[] { }) as POIXMLDocumentPart;
             }

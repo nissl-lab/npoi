@@ -330,8 +330,8 @@ namespace NPOI.XWPF.UserModel
          */
         public XWPFParagraph AddNewParagraph(CT_P paragraph)
         {
-            CT_P newPara = ctFtnEdn.AddNewP();
-            newPara.Set(paragraph);
+            CT_P newPara = ctFtnEdn.AddNewP(paragraph);
+            //newPara.Set(paragraph);
             XWPFParagraph xPara = new XWPFParagraph(newPara, this);
             paragraphs.Add(xPara);
             return xPara;

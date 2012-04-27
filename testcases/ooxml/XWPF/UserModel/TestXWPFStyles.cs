@@ -24,59 +24,66 @@ namespace NPOI.XWPF.UserModel
 
 
 
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-using NPOI.XWPF;
-
-using org.Openxmlformats.schemas.wordProcessingml.x2006.main;
+    using NPOI.XWPF;
+    using System.Collections.Generic;
+    using NPOI.OpenXmlFormats.Wordprocessing;
 
     [TestClass]
-    public class TestXWPFStyles 
-{
+    public class TestXWPFStyles
+    {
 
-//	protected void SetUp()  {
-//		super.Up=();
-//	}
-	
-	    [TestMethod]
-    public void TestGetUsedStyles(){
-		XWPFDocument sampleDoc = XWPFTestDataSamples.OpenSampleDocument("Styles.docx");
-		List<XWPFStyle> testUsedStyleList = new List<XWPFStyle>();
-		XWPFStyles styles = sampleDoc.Styles;
-		XWPFStyle style = styles.GetStyle("berschrift1");
-		testUsedStyleList.Add(style);
-		testUsedStyleList.Add(styles.GetStyle("Standard"));
-		testUsedStyleList.Add(styles.GetStyle("berschrift1Zchn"));
-		testUsedStyleList.Add(styles.GetStyle("Absatz-Standardschriftart"));
-		style.HasSameName(style);
-		
-		List<XWPFStyle> usedStyleList = styles.GetUsedStyleList(style);
-		Assert.AreEqual(usedStyleList, testUsedStyleList);
-		
-		
-	}
+        //	protected void SetUp()  {
+        //		super.Up=();
+        //	}
 
-	    [TestMethod]
-    public void TestAddStylesToDocument(){
-		XWPFDocument docOut = new XWPFDocument();
-		XWPFStyles styles = docOut.CreateStyles();
+        [TestMethod]
+        public void TestGetUsedStyles()
+        {
+            XWPFDocument sampleDoc = XWPFTestDataSamples.OpenSampleDocument("Styles.docx");
+            List<XWPFStyle> testUsedStyleList = new List<XWPFStyle>();
+            XWPFStyles styles = sampleDoc.GetStyles();
+            XWPFStyle style = styles.GetStyle("berschrift1");
+            testUsedStyleList.Add(style);
+            testUsedStyleList.Add(styles.GetStyle("Standard"));
+            testUsedStyleList.Add(styles.GetStyle("berschrift1Zchn"));
+            testUsedStyleList.Add(styles.GetStyle("Absatz-Standardschriftart"));
+            style.HasSameName(style);
 
-		String strStyleName = "headline1";
-		CTStyle ctStyle = CTStyle.Factory.NewInstance();
+            List<XWPFStyle> usedStyleList = styles.GetUsedStyleList(style);
+            
+            //Assert.AreEqual(usedStyleList, testUsedStyleList);
+            Assert.AreEqual(usedStyleList.Count, testUsedStyleList.Count);
+            for (int i = 0; i < usedStyleList.Count; i++)
+            {
+                Assert.AreEqual(usedStyleList[i], testUsedStyleList[i]);
+            }
+        }
 
-		ctStyle.StyleId=(strStyleName);
-		XWPFStyle s = new XWPFStyle(ctStyle);
-		styles.AddStyle(s);
+        [TestMethod]
+        public void TestAddStylesToDocument()
+        {
+            XWPFDocument docOut = new XWPFDocument();
+            XWPFStyles styles = docOut.CreateStyles();
 
-    	XWPFDocument docIn = XWPFTestDataSamples.WriteOutAndReadBack(docOut);
+            String strStyleName = "headline1";
+            CT_Style ctStyle = new CT_Style();
 
-		styles = docIn.Styles;
-		Assert.IsTrue(styles.StyleExist(strStyleName));
-	}
+            ctStyle.styleId = (strStyleName);
+            XWPFStyle s = new XWPFStyle(ctStyle);
+            styles.AddStyle(s);
 
-//	protected void tearDown()  {
-//		super.TearDown();
-//	}
+            XWPFDocument docIn = XWPFTestDataSamples.WriteOutAndReadBack(docOut);
+
+            styles = docIn.GetStyles();
+            Assert.IsTrue(styles.StyleExist(strStyleName));
+        }
+
+        //	protected void tearDown()  {
+        //		super.TearDown();
+        //	}
+
+    }
 
 }
-

@@ -17,54 +17,62 @@
 namespace NPOI.XWPF.UserModel
 {
     using System;
-using NPOI.OpenXml4Net.OPC;
-using NPOI.OpenXmlFormats.Wordprocessing;
+    using NPOI.OpenXml4Net.OPC;
+    using NPOI.OpenXmlFormats.Wordprocessing;
     using System.IO;
-using System.Xml.Serialization;
-using System.Xml;
+    using System.Xml.Serialization;
+    using System.Xml;
 
     /**
      * Sketch of XWPF header class
      */
     public class XWPFHeader : XWPFHeaderFooter
-    { 
-    public XWPFHeader():  base(){
-    }
-
-    public XWPFHeader(POIXMLDocumentPart parent, PackagePart part, PackageRelationship rel) : base(parent, part, rel) {
-        ;
-    }
-
-    public XWPFHeader(XWPFDocument doc, CT_HdrFtr hdrFtr) : base(doc, hdrFtr){
-        /*
-        XmlCursor cursor = headerFooter.NewCursor();
-        cursor.SelectPath("./*");
-        while (cursor.ToNextSelection()) {
-            XmlObject o = cursor.Object;
-            if (o is CTP) {
-                XWPFParagraph p = new XWPFParagraph((CTP) o, this);
-                paragraphs.Add(p);
-            }
-            if (o is CTTbl) {
-                XWPFTable t = new XWPFTable((CTTbl) o, this);
-                tables.Add(t);
-            }
-        }
-        cursor.Dispose();*/
-        foreach (object o in hdrFtr.Items)
+    {
+        public XWPFHeader()
+            //: base()
         {
-            if (o is CT_P)
-            {
-                XWPFParagraph p = new XWPFParagraph((CT_P)o, this);
-                paragraphs.Add(p);
+            headerFooter = new CT_Hdr();
+            ReadHdrFtr();
+        }
+
+        public XWPFHeader(POIXMLDocumentPart parent, PackagePart part, PackageRelationship rel)
+            : base(parent, part, rel)
+        {
+            ;
+        }
+
+        public XWPFHeader(XWPFDocument doc, CT_HdrFtr hdrFtr)
+            : base(doc, hdrFtr)
+        {
+            /*
+            XmlCursor cursor = headerFooter.NewCursor();
+            cursor.SelectPath("./*");
+            while (cursor.ToNextSelection()) {
+                XmlObject o = cursor.Object;
+                if (o is CTP) {
+                    XWPFParagraph p = new XWPFParagraph((CTP) o, this);
+                    paragraphs.Add(p);
+                }
+                if (o is CTTbl) {
+                    XWPFTable t = new XWPFTable((CTTbl) o, this);
+                    tables.Add(t);
+                }
             }
-            if (o is CT_Tbl)
+            cursor.Dispose();*/
+            foreach (object o in hdrFtr.Items)
             {
-                XWPFTable t = new XWPFTable((CT_Tbl)o, this);
-                tables.Add(t);
+                if (o is CT_P)
+                {
+                    XWPFParagraph p = new XWPFParagraph((CT_P)o, this);
+                    paragraphs.Add(p);
+                }
+                if (o is CT_Tbl)
+                {
+                    XWPFTable t = new XWPFTable((CT_Tbl)o, this);
+                    tables.Add(t);
+                }
             }
         }
-    }
 
         /**
          * save and Commit footer
@@ -87,7 +95,7 @@ using System.Xml;
             xmlOptions.SaveSuggestedPrefixes=(/map);*/
             PackagePart part = GetPackagePart();
             Stream out1 = part.GetOutputStream();
-            HdrDocument doc = new HdrDocument(headerFooter);
+            HdrDocument doc = new HdrDocument((CT_Hdr)headerFooter);
             XmlSerializerNamespaces namespaces = new XmlSerializerNamespaces(new[] {
                 new XmlQualifiedName("ve", "http://schemas.openxmlformats.org/markup-compatibility/2006"),
                 new XmlQualifiedName("r", "http://schemas.openxmlformats.org/officeDocument/2006/relationships"),
@@ -109,10 +117,11 @@ using System.Xml;
 
         internal override void OnDocumentRead()
         {
-            base.OnDocumentRead();	          
+            base.OnDocumentRead();
             HdrDocument hdrDocument = null;
             Stream is1;
-            try {
+            try
+            {
                 is1 = GetPackagePart().GetInputStream();
                 hdrDocument = HdrDocument.Parse(is1);
                 headerFooter = hdrDocument.Hdr;
@@ -149,7 +158,9 @@ using System.Xml;
                     }
                 }
                 cursor.Dispose();*/
-            } catch (Exception e) {
+            }
+            catch (Exception e)
+            {
                 throw new POIXMLException(e);
             }
         }

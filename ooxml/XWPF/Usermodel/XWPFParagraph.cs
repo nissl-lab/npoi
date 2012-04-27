@@ -158,13 +158,12 @@ namespace NPOI.XWPF.UserModel
          */
         public String GetText()
         {
-            //StringBuilder out1 = new StringBuilder();
-            //foreach(XWPFRun run in Runs) {
-            //   out1.Append(Run.ToString());
-            //}
-            //out1.Append(footnoteText);
-            //return out1.ToString();
-            throw new NotImplementedException();
+            StringBuilder out1 = new StringBuilder();
+            foreach(XWPFRun run in Runs) {
+                out1.Append(run.ToString());
+            }
+            out1.Append(footnoteText);
+            return out1.ToString();
         }
 
         /**

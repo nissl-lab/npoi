@@ -1093,7 +1093,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IncludeInSchema = false)]
-    public enum ItemsChoiceType4
+    public enum ItemsChoiceHdrFtrRefType
     {
 
         /// <remarks/>
@@ -2237,11 +2237,11 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     public class CT_Drawing
     {
 
-        private object[] itemsField;
+        private List<object> itemsField;
 
         public CT_Drawing()
         {
-            this.itemsField = new object[0];
+            this.itemsField = new List<object>();
         }
 
         [System.Xml.Serialization.XmlElementAttribute("anchor", typeof(CT_Anchor), Namespace = "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing", Order = 0)]
@@ -2250,27 +2250,48 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         {
             get
             {
-                return this.itemsField;
+                return this.itemsField.ToArray();
             }
             set
             {
-                this.itemsField = value;
+                if (value == null || value.Length == 0)
+                {
+                    this.itemsField = new List<object>();
+                }
+                else
+                {
+                    this.itemsField = new List<object>(value);
+                }
             }
         }
 
         public CT_Inline AddNewInline()
         {
-            throw new NotImplementedException();
+            CT_Inline inline = new CT_Inline();
+            itemsField.Add(inline);
+            return inline;
         }
 
         public List<CT_Anchor> GetAnchorList()
         {
-            throw new NotImplementedException();
+            List<CT_Anchor> list = new List<CT_Anchor>();
+            foreach (object o in itemsField)
+            {
+                if (o is CT_Anchor)
+                    list.Add(o as CT_Anchor);
+            }
+            return list;
         }
 
         public List<CT_Inline> GetInlineList()
         {
-            throw new NotImplementedException();
+            List<CT_Inline> list = new List<CT_Inline>();
+            foreach (object o in itemsField)
+            {
+                if (o is CT_Inline)
+                    list.Add(o as CT_Inline);
+            }
+            return list;
         }
     }
 

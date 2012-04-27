@@ -263,24 +263,24 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     }
     public class HdrDocument
     {
-        internal static XmlSerializer serializer = new XmlSerializer(typeof(CT_HdrFtr));
+        internal static XmlSerializer serializer = new XmlSerializer(typeof(CT_Hdr));
 
-        CT_HdrFtr hdr = null;
+        CT_Hdr hdr = null;
         public HdrDocument()
         {
-            hdr = new CT_HdrFtr();
+            hdr = new CT_Hdr();
         }
         public static HdrDocument Parse(Stream stream)
         {
-            CT_HdrFtr obj = (CT_HdrFtr)serializer.Deserialize(stream);
+            CT_Hdr obj = (CT_Hdr)serializer.Deserialize(stream);
 
             return new HdrDocument(obj);
         }
-        public HdrDocument(CT_HdrFtr hdr)
+        public HdrDocument(CT_Hdr hdr)
         {
             this.hdr = hdr;
         }
-        public CT_HdrFtr Hdr
+        public CT_Hdr Hdr
         {
             get
             {
@@ -292,31 +292,31 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             serializer.Serialize(stream, hdr, namespaces);
         }
 
-        public void SetHdr(CT_HdrFtr hdr)
+        public void SetHdr(CT_Hdr hdr)
         {
-            throw new NotImplementedException();
+            this.hdr = hdr;
         }
     }
     public class FtrDocument
     {
-        internal static XmlSerializer serializer = new XmlSerializer(typeof(CT_HdrFtr));
+        internal static XmlSerializer serializer = new XmlSerializer(typeof(CT_Ftr));
 
-        CT_HdrFtr ftr = null;
+        CT_Ftr ftr = null;
         public FtrDocument()
         {
-            ftr = new CT_HdrFtr();
+            ftr = new CT_Ftr();
         }
         public static FtrDocument Parse(Stream stream)
         {
-            CT_HdrFtr obj = (CT_HdrFtr)serializer.Deserialize(stream);
+            CT_Ftr obj = (CT_Ftr)serializer.Deserialize(stream);
 
             return new FtrDocument(obj);
         }
-        public FtrDocument(CT_HdrFtr ftr)
+        public FtrDocument(CT_Ftr ftr)
         {
             this.ftr = ftr;
         }
-        public CT_HdrFtr Ftr
+        public CT_Ftr Ftr
         {
             get
             {
@@ -328,9 +328,9 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             serializer.Serialize(stream, ftr, namespaces);
         }
 
-        public void SetFtr(CT_HdrFtr ftr)
+        public void SetFtr(CT_Ftr ftr)
         {
-            throw new NotImplementedException();
+            this.ftr = ftr;
         }
     }
 

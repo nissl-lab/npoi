@@ -79,7 +79,6 @@ namespace NPOI.XWPF.UserModel
             {
                 listStyle.Add(new XWPFStyle(style, this));
             }
-            throw new NotImplementedException();
         }
 
 
@@ -123,7 +122,7 @@ namespace NPOI.XWPF.UserModel
          * @param styleID		styleID of the Style in the style-Document
          * @return				true if style exist, false if style not exist
          */
-        public bool styleExist(String styleID)
+        public bool StyleExist(String styleID)
         {
             foreach (XWPFStyle style in listStyle)
             {

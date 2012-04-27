@@ -91,10 +91,10 @@ public class PackagePropertiesUnmarshaller : PartUnmarshaller {
 				throw new IOException(
 						"Error while trying to get the part input stream.");
 		}
-
-		//SAXReader xmlReader = new SAXReader();
-        XmlTextReader reader=new XmlTextReader(in1);
+        
         XmlDocument xmlDoc = new XmlDocument();
+        xmlDoc.PreserveWhitespace = true;
+        XmlTextReader reader=new XmlTextReader(in1);
         xmlDoc.Load(reader);
         nsmgr = new XmlNamespaceManager(xmlDoc.NameTable);
         nsmgr.AddNamespace("cp",namespaceCP);

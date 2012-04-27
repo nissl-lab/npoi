@@ -12,18 +12,18 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     [System.SerializableAttribute()]
 
     [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
-    [System.Xml.Serialization.XmlRootAttribute("hdr", Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = false)]
+    //[System.Xml.Serialization.XmlRootAttribute("hdr", Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = false)]
     public class CT_HdrFtr
     {
 
-        private object[] itemsField;
+        private List<object> itemsField;
 
-        private ItemsChoiceType8[] itemsElementNameField;
+        private List<ItemsChoiceType8> itemsElementNameField;
 
         public CT_HdrFtr()
         {
-            this.itemsElementNameField = new ItemsChoiceType8[0];
-            this.itemsField = new object[0];
+            this.itemsElementNameField = new List<ItemsChoiceType8>();
+            this.itemsField = new List<object>();
         }
 
         [System.Xml.Serialization.XmlElementAttribute("oMath", typeof(CT_OMath), Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", Order = 0)]
@@ -61,11 +61,14 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         {
             get
             {
-                return this.itemsField;
+                return this.itemsField.ToArray();
             }
             set
             {
-                this.itemsField = value;
+                if (value == null || value.Length == 0)
+                    this.itemsField = new List<object>();
+                else
+                    this.itemsField = new List<object>(value);
             }
         }
 
@@ -75,36 +78,142 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         {
             get
             {
-                return this.itemsElementNameField;
+                return this.itemsElementNameField.ToArray();
             }
             set
             {
-                this.itemsElementNameField = value;
+                if (value == null || value.Length == 0)
+                    this.itemsElementNameField = new List<ItemsChoiceType8>();
+                else
+                    this.itemsElementNameField = new List<ItemsChoiceType8>(value);
             }
         }
 
         public CT_Tbl GetTblArray(int i)
         {
-            throw new NotImplementedException();
+            return GetObjectArray<CT_Tbl>(i, ItemsChoiceType8.tbl);
         }
 
         public IList<CT_Tbl> GetTblList()
         {
-            throw new NotImplementedException();
+            return GetObjectList<CT_Tbl>(ItemsChoiceType8.tbl);
         }
 
         public CT_P AddNewP()
         {
-            throw new NotImplementedException();
+            return AddNewObject<CT_P>(ItemsChoiceType8.p);
         }
 
         public void SetPArray(int i, CT_P cT_P)
         {
-            throw new NotImplementedException();
+            SetObject<CT_P>(ItemsChoiceType8.p, i, cT_P);
         }
+        #region Generic methods for object operation
+
+        private List<T> GetObjectList<T>(ItemsChoiceType8 type) where T : class
+        {
+            lock (this)
+            {
+                List<T> list = new List<T>();
+                for (int i = 0; i < itemsElementNameField.Count; i++)
+                {
+                    if (itemsElementNameField[i] == type)
+                        list.Add(itemsField[i] as T);
+                }
+                return list;
+            }
+        }
+        private int SizeOfArray(ItemsChoiceType8 type)
+        {
+            lock (this)
+            {
+                int size = 0;
+                for (int i = 0; i < itemsElementNameField.Count; i++)
+                {
+                    if (itemsElementNameField[i] == type)
+                        size++;
+                }
+                return size;
+            }
+        }
+        private T GetObjectArray<T>(int p, ItemsChoiceType8 type) where T : class
+        {
+            lock (this)
+            {
+                int pos = GetObjectIndex(type, p);
+                if (pos < 0 || pos >= this.itemsField.Count)
+                    return null;
+                return itemsField[pos] as T;
+            }
+        }
+        private T AddNewObject<T>(ItemsChoiceType8 type) where T : class, new()
+        {
+            T t = new T();
+            lock (this)
+            {
+                this.itemsElementNameField.Add(type);
+                this.itemsField.Add(t);
+            }
+            return t;
+        }
+        private void SetObject<T>(ItemsChoiceType8 type, int p, T obj) where T : class
+        {
+            lock (this)
+            {
+                int pos = GetObjectIndex(type, p);
+                if (pos < 0 || pos >= this.itemsField.Count)
+                    return;
+                if (this.itemsField[pos] is T)
+                    this.itemsField[pos] = obj;
+                else
+                    throw new Exception(string.Format(@"object types are difference, itemsField[{0}] is {1}, and parameter obj is {2}",
+                        pos, this.itemsField[pos].GetType().Name, typeof(T).Name));
+            }
+        }
+        private int GetObjectIndex(ItemsChoiceType8 type, int p)
+        {
+            int index = -1;
+            int pos = 0;
+            for (int i = 0; i < itemsElementNameField.Count; i++)
+            {
+                if (itemsElementNameField[i] == type)
+                {
+                    if (pos == p)
+                    {
+                        //return itemsField[p] as T;
+                        index = i;
+                        break;
+                    }
+                    else
+                        pos++;
+                }
+            }
+            return index;
+        }
+        private void RemoveObject(ItemsChoiceType8 type, int p)
+        {
+            lock (this)
+            {
+                int pos = GetObjectIndex(type, p);
+                if (pos < 0 || pos >= this.itemsField.Count)
+                    return;
+                itemsElementNameField.RemoveAt(pos);
+                itemsField.RemoveAt(pos);
+            }
+        }
+        #endregion
+
     }
+    [System.Xml.Serialization.XmlRootAttribute("ftr", Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = false)]
+    public class CT_Ftr : CT_HdrFtr
+    {
 
+    }
+    [System.Xml.Serialization.XmlRootAttribute("hdr", Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = false)]
+    public class CT_Hdr : CT_HdrFtr
+    {
 
+    }
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IncludeInSchema = false)]
     public enum ItemsChoiceType8
@@ -397,7 +506,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             footnoteField.Add(f);
             return f;
         }
-
+        [XmlIgnore]
         public IEnumerable<CT_FtnEdn> FootnoteList { get { return footnoteField.AsReadOnly(); } private set{} }
     }
 
@@ -409,9 +518,9 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     public class CT_FtnEdn
     {
 
-        private object[] itemsField;
+        private List<object> itemsField;
 
-        private ItemsChoiceType7[] itemsElementNameField;
+        private List<ItemsChoiceType7> itemsElementNameField;
 
         private ST_FtnEdn typeField;
 
@@ -421,8 +530,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         public CT_FtnEdn()
         {
-            this.itemsElementNameField = new ItemsChoiceType7[0];
-            this.itemsField = new object[0];
+            this.itemsElementNameField = new List<ItemsChoiceType7>();
+            this.itemsField = new List<object>();
         }
 
         [System.Xml.Serialization.XmlElementAttribute("oMath", typeof(CT_OMath), Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", Order = 0)]
@@ -460,11 +569,14 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         {
             get
             {
-                return this.itemsField;
+                return this.itemsField.ToArray();
             }
             set
             {
-                this.itemsField = value;
+                if (value == null || value.Length == 0)
+                    this.itemsField = new List<object>();
+                else
+                    this.itemsField = new List<object>(value);
             }
         }
 
@@ -474,11 +586,14 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         {
             get
             {
-                return this.itemsElementNameField;
+                return this.itemsElementNameField.ToArray();
             }
             set
             {
-                this.itemsElementNameField = value;
+                if (value == null || value.Length == 0)
+                    this.itemsElementNameField = new List<ItemsChoiceType7>();
+                else
+                    this.itemsElementNameField = new List<ItemsChoiceType7>(value);
             }
         }
 
@@ -527,30 +642,97 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             this.itemsField = note.itemsField;
             this.typeField = note.typeField;
         }
-
-        public IEnumerable<CT_P> GetPList()
+        private List<T> GetObjectList<T>(ItemsChoiceType7 type) where T : class
         {
-            throw new NotImplementedException();
+            lock (this)
+            {
+                List<T> list = new List<T>();
+                for (int i = 0; i < itemsElementNameField.Count; i++)
+                {
+                    if (itemsElementNameField[i] == type)
+                        list.Add(itemsField[i] as T);
+                }
+                return list;
+            }
+        }
+        private int SizeOfArray(ItemsChoiceType7 type)
+        {
+            lock (this)
+            {
+                int size = 0;
+                for (int i = 0; i < itemsElementNameField.Count; i++)
+                {
+                    if (itemsElementNameField[i] == type)
+                        size++;
+                }
+                return size;
+            }
+        }
+        private T GetObjectArray<T>(int p, ItemsChoiceType7 type) where T : class
+        {
+            lock (this)
+            {
+                int pos = 0;
+                for (int i = 0; i < itemsElementNameField.Count; i++)
+                {
+                    if (itemsElementNameField[i] == type)
+                    {
+                        if (pos == p)
+                            return itemsField[i] as T;
+                        else
+                            pos++;
+                    }
+                }
+                return null;
+            }
+        }
+        private T AddNewObject<T>(ItemsChoiceType7 type) where T : class, new()
+        {
+            T t = new T();
+            lock (this)
+            {
+                this.itemsElementNameField.Add(type);
+                this.itemsField.Add(t);
+            }
+            return t;
+        }
+        private T AddNewObject<T>(ItemsChoiceType7 type, T t) where T : class, new()
+        {
+            lock (this)
+            {
+                this.itemsElementNameField.Add(type);
+                this.itemsField.Add(t);
+            }
+            return t;
+        }
+        public IList<CT_P> GetPList()
+        {
+            return GetObjectList<CT_P>(ItemsChoiceType7.p);
         }
 
         public IList<CT_Tbl> GetTblList()
         {
-            throw new NotImplementedException();
+            return GetObjectList<CT_Tbl>(ItemsChoiceType7.tbl);
         }
 
         public CT_Tbl GetTblArray(int i)
         {
-            throw new NotImplementedException();
+            return GetObjectArray<CT_Tbl>(i, ItemsChoiceType7.tbl);
         }
-
+        
         public CT_Tbl AddNewTbl()
         {
-            throw new NotImplementedException();
+            return AddNewObject<CT_Tbl>(ItemsChoiceType7.tbl);
         }
 
         public CT_P AddNewP()
         {
-            throw new NotImplementedException();
+            return AddNewObject<CT_P>(ItemsChoiceType7.p);
+        }
+
+        public CT_P AddNewP(CT_P paragraph)
+        {
+            return AddNewObject<CT_P>(ItemsChoiceType7.p, paragraph);
         }
     }
 

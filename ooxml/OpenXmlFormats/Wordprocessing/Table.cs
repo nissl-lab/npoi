@@ -23,14 +23,14 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         private CT_TblGrid tblGridField;
 
-        private object[] items1Field;
+        private List<object> items1Field;
 
-        private Items1ChoiceType[] items1ElementNameField;
+        private List<Items1ChoiceType> items1ElementNameField;
 
         public CT_Tbl()
         {
-            this.items1ElementNameField = new Items1ChoiceType[0];
-            this.items1Field = new object[0];
+            this.items1ElementNameField = new List<Items1ChoiceType>();
+            this.items1Field = new List<object>();
             this.tblGridField = new CT_TblGrid();
             this.tblPrField = new CT_TblPr();
             this.itemsElementNameField = new ItemsChoiceType30[0];
@@ -139,11 +139,14 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         {
             get
             {
-                return this.items1Field;
+                return this.items1Field.ToArray();
             }
             set
             {
-                this.items1Field = value;
+                if (value != null && value.Length != 0)
+                    this.items1Field = new List<object>(value);
+                else
+                    this.items1Field = new List<object>();
             }
         }
 
@@ -153,11 +156,14 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         {
             get
             {
-                return this.items1ElementNameField;
+                return this.items1ElementNameField.ToArray();
             }
             set
             {
-                this.items1ElementNameField = value;
+                if (value != null && value.Length != 0)
+                    this.items1ElementNameField = new List<Items1ChoiceType>(value);
+                else
+                    this.items1ElementNameField = new List<Items1ChoiceType>();
             }
         }
 
@@ -190,20 +196,51 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         {
             throw new NotImplementedException();
         }
-
+        private int SizeOfItem1Array(Items1ChoiceType type)
+        {
+            int size = 0;
+            for (int i = 0; i < items1ElementNameField.Count; i++)
+            {
+                if (items1ElementNameField[i] == type)
+                    size++;
+            }
+            return size;
+        }
         public int SizeOfTrArray()
         {
-            throw new NotImplementedException();
+            return SizeOfItem1Array(Items1ChoiceType.tr);
         }
 
         public CT_Row GetTrArray(int p)
         {
-            throw new NotImplementedException();
+            int pos = 0;
+            for (int i = 0; i < items1ElementNameField.Count; i++)
+            {
+                if (items1ElementNameField[i] == Items1ChoiceType.tr)
+                {
+                    if (pos == p)
+                        return items1Field[i] as CT_Row;
+                    else
+                        pos++;
+                }
+            }
+            return null;
         }
-
-        public IEnumerable<CT_Row> GetTrList()
+        private IList<T> GetObjectList<T>(Items1ChoiceType type) where T : class
         {
-            throw new NotImplementedException();
+            IList<T> list = new List<T>();
+            for (int i = 0; i < items1ElementNameField.Count; i++)
+            {
+                if (items1ElementNameField[i] == type)
+                {
+                    list.Add(items1Field[i] as T);
+                }
+            }
+            return list;
+        }
+        public IList<CT_Row> GetTrList()
+        {
+            return GetObjectList<CT_Row>(Items1ChoiceType.tr);
         }
     }
 
@@ -1797,14 +1834,14 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         private CT_TcPr tcPrField;
 
-        private object[] itemsField;
+        private List<object> itemsField;
 
-        private ItemsChoiceType29[] itemsElementNameField;
+        private List<ItemsChoiceTableCellType> itemsElementNameField;
 
         public CT_Tc()
         {
-            this.itemsElementNameField = new ItemsChoiceType29[0];
-            this.itemsField = new object[0];
+            this.itemsElementNameField = new List<ItemsChoiceTableCellType>();
+            this.itemsField = new List<object>();
             this.tcPrField = new CT_TcPr();
         }
 
@@ -1856,41 +1893,96 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         {
             get
             {
-                return this.itemsField;
+                return this.itemsField.ToArray();
             }
             set
             {
-                this.itemsField = value;
+                if (value == null || value.Length == 0)
+                    this.itemsField = new List<object>();
+                else
+                    this.itemsField = new List<object>(value);
             }
         }
 
         [System.Xml.Serialization.XmlElementAttribute("ItemsElementName", Order = 2)]
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public ItemsChoiceType29[] ItemsElementName
+        public ItemsChoiceTableCellType[] ItemsElementName
         {
             get
             {
-                return this.itemsElementNameField;
+                return this.itemsElementNameField.ToArray();
             }
             set
             {
-                this.itemsElementNameField = value;
+                if (value == null || value.Length == 0)
+                    this.itemsElementNameField = new List<ItemsChoiceTableCellType>();
+                else
+                    this.itemsElementNameField = new List<ItemsChoiceTableCellType>(value);
             }
         }
-
+        private List<T> GetObjectList<T>(ItemsChoiceTableCellType type) where T : class
+        {
+            lock (this)
+            {
+                List<T> list = new List<T>();
+                for (int i = 0; i < itemsElementNameField.Count; i++)
+                {
+                    if (itemsElementNameField[i] == type)
+                        list.Add(itemsField[i] as T);
+                }
+                return list;
+            }
+        }
+        private int SizeOfArray(ItemsChoiceTableCellType type)
+        {
+            lock (this)
+            {
+                int size = 0;
+                for (int i = 0; i < itemsElementNameField.Count; i++)
+                {
+                    if (itemsElementNameField[i] == type)
+                        size++;
+                }
+                return size;
+            }
+        }
+        private T GetObjectArray<T>(int p, ItemsChoiceTableCellType type) where T: class
+        {
+            lock (this)
+            {
+                int pos = 0;
+                for (int i = 0; i < itemsElementNameField.Count; i++)
+                {
+                    if (itemsElementNameField[i] == type)
+                    {
+                        if (pos == p)
+                            return itemsField[i] as T;
+                        else
+                            pos++;
+                    }
+                }
+                return null;
+            }
+        }
         public CT_P AddNewP()
         {
-            throw new NotImplementedException();
+            CT_P p = new CT_P();
+            lock (this)
+            {
+                this.itemsElementNameField.Add(ItemsChoiceTableCellType.p);
+                this.itemsField.Add(p);
+            }
+            return p;
         }
 
         public IList<CT_P> GetPList()
         {
-            throw new NotImplementedException();
+            return GetObjectList<CT_P>(ItemsChoiceTableCellType.p);
         }
 
         public int SizeOfPArray()
         {
-            throw new NotImplementedException();
+            return SizeOfArray(ItemsChoiceTableCellType.p);
         }
 
         public void SetPArray(int p, CT_P cT_P)
@@ -1905,24 +1997,24 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         public CT_P GetPArray(int p)
         {
-            throw new NotImplementedException();
+            return GetObjectArray<CT_P>(p, ItemsChoiceTableCellType.p);
         }
 
         public IList<CT_Tbl> GetTblList()
         {
-            throw new NotImplementedException();
+            return GetObjectList<CT_Tbl>(ItemsChoiceTableCellType.tbl);
         }
 
-        public CT_Tbl GetTblArray(int i)
+        public CT_Tbl GetTblArray(int p)
         {
-            throw new NotImplementedException();
+            return GetObjectArray<CT_Tbl>(p, ItemsChoiceTableCellType.tbl);
         }
     }
 
 
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IncludeInSchema = false)]
-    public enum ItemsChoiceType29
+    public enum ItemsChoiceTableCellType
     {
 
         /// <remarks/>
@@ -2840,9 +2932,9 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         private CT_TrPr trPrField;
 
-        private object[] itemsField;
+        private List<object> itemsField;
 
-        private ItemsChoiceType20[] itemsElementNameField;
+        private List<ItemsChoiceTableRowType> itemsElementNameField;
 
         private byte[] rsidRPrField;
 
@@ -2854,8 +2946,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         public CT_Row()
         {
-            this.itemsElementNameField = new ItemsChoiceType20[0];
-            this.itemsField = new object[0];
+            this.itemsElementNameField = new List<ItemsChoiceTableRowType>();
+            this.itemsField = new List<object>();
             this.trPrField = new CT_TrPr();
             this.tblPrExField = new CT_TblPrEx();
         }
@@ -2919,25 +3011,31 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         {
             get
             {
-                return this.itemsField;
+                return this.itemsField.ToArray();
             }
             set
             {
-                this.itemsField = value;
+                if (value != null && value.Length != 0)
+                    this.itemsField = new List<object>(value);
+                else
+                    this.itemsField = new List<object>();
             }
         }
 
         [System.Xml.Serialization.XmlElementAttribute("ItemsElementName", Order = 3)]
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public ItemsChoiceType20[] ItemsElementName
+        public ItemsChoiceTableRowType[] ItemsElementName
         {
             get
             {
-                return this.itemsElementNameField;
+                return this.itemsElementNameField.ToArray();
             }
             set
             {
-                this.itemsElementNameField = value;
+                if (value != null && value.Length != 0)
+                    this.itemsElementNameField = new List<ItemsChoiceTableRowType>(value);
+                else
+                    this.itemsElementNameField = new List<ItemsChoiceTableRowType>();
             }
         }
 
@@ -2993,9 +3091,15 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        public IEnumerable<CT_Tc> GetTcList()
+        public IList<CT_Tc> GetTcList()
         {
-            throw new NotImplementedException();
+            List<CT_Tc> list = new List<CT_Tc>();
+            for (int i = 0; i < itemsElementNameField.Count; i++)
+            {
+                if (itemsElementNameField[i] == ItemsChoiceTableRowType.tc)
+                    list.Add(itemsField[i] as CT_Tc);
+            }
+            return list;
         }
 
         public bool IsSetTrPr()
@@ -3015,6 +3119,17 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         public int SizeOfTcArray()
         {
+            int size = 0;
+            for (int i = 0; i < itemsElementNameField.Count; i++)
+            {
+                if (itemsElementNameField[i] == ItemsChoiceTableRowType.tc)
+                    size++;
+            }
+            return size;
+        }
+
+        public CT_Tc GetTcArray(int p)
+        {
             throw new NotImplementedException();
         }
     }
@@ -3022,7 +3137,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IncludeInSchema = false)]
-    public enum ItemsChoiceType20
+    public enum ItemsChoiceTableRowType
     {
 
         /// <remarks/>

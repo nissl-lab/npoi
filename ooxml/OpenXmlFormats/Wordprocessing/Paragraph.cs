@@ -99,8 +99,11 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         public CT_R AddNewR()
         {
             CT_R r = new CT_R();
-            itemsField.Add(r);
-            itemsElementNameField.Add(ParagraphItemsChoiceType.r);
+            lock (this)
+            {
+                itemsField.Add(r);
+                itemsElementNameField.Add(ParagraphItemsChoiceType.r);
+            }
             return r;
         }
 
@@ -188,43 +191,146 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         public CT_PPr AddNewPPr()
         {
-            throw new NotImplementedException();
+            //return AddNewObject<CT_PPr>(ParagraphItemsChoiceType.
+            this.pPrField = new CT_PPr();
+            return this.pPrField;
         }
 
         public void SetRArray(int pos, CT_R Run)
         {
-            throw new NotImplementedException();
+            SetObject<CT_R>(ParagraphItemsChoiceType.r, pos, Run);
         }
 
         public CT_R InsertNewR(int pos)
         {
-            throw new NotImplementedException();
+            return InsertNewObject<CT_R>(ParagraphItemsChoiceType.r, pos);
         }
 
         public int SizeOfRArray()
         {
-            throw new NotImplementedException();
+            return SizeOfArray(ParagraphItemsChoiceType.r);
         }
 
         public void RemoveR(int pos)
         {
-            throw new NotImplementedException();
-        }
-
-        public void Set(CT_P paragraph)
-        {
-            throw new NotImplementedException();
+            RemoveObject(ParagraphItemsChoiceType.r, pos);
         }
 
         public IEnumerable<CT_MarkupRange> GetCommentRangeStartList()
         {
-            throw new NotImplementedException();
+            return GetObjectList<CT_MarkupRange>(ParagraphItemsChoiceType.commentRangeStart);
         }
 
         public IEnumerable<CT_Hyperlink> GetHyperlinkList()
         {
-            throw new NotImplementedException();
+            return GetObjectList<CT_Hyperlink>(ParagraphItemsChoiceType.hyperlink);
         }
+        #region Generic methods for object operation
+
+        private List<T> GetObjectList<T>(ParagraphItemsChoiceType type) where T : class
+        {
+            lock (this)
+            {
+                List<T> list = new List<T>();
+                for (int i = 0; i < itemsElementNameField.Count; i++)
+                {
+                    if (itemsElementNameField[i] == type)
+                        list.Add(itemsField[i] as T);
+                }
+                return list;
+            }
+        }
+        private int SizeOfArray(ParagraphItemsChoiceType type)
+        {
+            lock (this)
+            {
+                int size = 0;
+                for (int i = 0; i < itemsElementNameField.Count; i++)
+                {
+                    if (itemsElementNameField[i] == type)
+                        size++;
+                }
+                return size;
+            }
+        }
+        private T GetObjectArray<T>(int p, ParagraphItemsChoiceType type) where T : class
+        {
+            lock (this)
+            {
+                int pos = GetObjectIndex(type, p);
+                if (pos < 0 || pos >= this.itemsField.Count)
+                    return null;
+                return itemsField[pos] as T;
+            }
+        }
+        private T InsertNewObject<T>(ParagraphItemsChoiceType type, int p) where T : class, new()
+        {
+            T t = new T();
+            lock (this)
+            {
+                int pos = GetObjectIndex(type, p);
+                this.itemsElementNameField.Insert(pos, type);
+                this.itemsField.Insert(pos, t);
+            }
+            return t;
+        }
+        private T AddNewObject<T>(ParagraphItemsChoiceType type) where T : class, new()
+        {
+            T t = new T();
+            lock (this)
+            {
+                this.itemsElementNameField.Add(type);
+                this.itemsField.Add(t);
+            }
+            return t;
+        }
+        private void SetObject<T>(ParagraphItemsChoiceType type, int p, T obj) where T : class
+        {
+            lock (this)
+            {
+                int pos = GetObjectIndex(type, p);
+                if (pos < 0 || pos >= this.itemsField.Count)
+                    return;
+                if (this.itemsField[pos] is T)
+                    this.itemsField[pos] = obj;
+                else
+                    throw new Exception(string.Format(@"object types are difference, itemsField[{0}] is {1}, and parameter obj is {2}",
+                        pos, this.itemsField[pos].GetType().Name, typeof(T).Name));
+            }
+        }
+        private int GetObjectIndex(ParagraphItemsChoiceType type, int p)
+        {
+            int index = -1;
+            int pos = 0;
+            for (int i = 0; i < itemsElementNameField.Count; i++)
+            {
+                if (itemsElementNameField[i] == type)
+                {
+                    if (pos == p)
+                    {
+                        //return itemsField[p] as T;
+                        index = i;
+                        break;
+                    }
+                    else
+                        pos++;
+                }
+            }
+            return index;
+        }
+        private void RemoveObject(ParagraphItemsChoiceType type, int p)
+        {
+            lock (this)
+            {
+                int pos = GetObjectIndex(type, p);
+                if (pos < 0 || pos >= this.itemsField.Count)
+                    return;
+                itemsElementNameField.RemoveAt(pos);
+                itemsField.RemoveAt(pos);
+            }
+        }
+        #endregion
+
     }
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IncludeInSchema = false)]
@@ -399,25 +505,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             throw new NotImplementedException();
         }
 
-        public bool IsSetTextAlignment()
-        {
-            throw new NotImplementedException();
-        }
-
-        public CT_TextAlignment AddNewTextAlignment()
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool IsSetPStyle()
-        {
-            throw new NotImplementedException();
-        }
-
-        public CT_String AddNewPStyle()
-        {
-            throw new NotImplementedException();
-        }
+        
 
         public bool IsSetPBdr()
         {
@@ -1205,9 +1293,9 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     public class CT_SectPr
     {
 
-        private CT_HdrFtrRef[] itemsField;
+        private List<CT_HdrFtrRef> itemsField;
 
-        private ItemsChoiceType4[] itemsElementNameField;
+        private List<ItemsChoiceHdrFtrRefType> itemsElementNameField;
 
         private CT_FtnProps footnotePrField;
 
@@ -1279,8 +1367,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             this.typeField = new CT_SectType();
             this.endnotePrField = new CT_EdnProps();
             this.footnotePrField = new CT_FtnProps();
-            this.itemsElementNameField = new ItemsChoiceType4[0];
-            this.itemsField = new CT_HdrFtrRef[0];
+            this.itemsElementNameField = new List<ItemsChoiceHdrFtrRefType>();
+            this.itemsField = new List<CT_HdrFtrRef>();
         }
 
         [System.Xml.Serialization.XmlElementAttribute("footerReference", typeof(CT_HdrFtrRef), Order = 0)]
@@ -1290,25 +1378,39 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         {
             get
             {
-                return this.itemsField;
+                return this.itemsField.ToArray();
             }
             set
             {
-                this.itemsField = value;
+                if (value != null && value.Length > 0)
+                {
+                    this.itemsField = new List<CT_HdrFtrRef>(value);
+                }
+                else
+                {
+                    this.itemsField = new List<CT_HdrFtrRef>();
+                }
             }
         }
 
         [System.Xml.Serialization.XmlElementAttribute("ItemsElementName", Order = 1)]
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public ItemsChoiceType4[] ItemsElementName
+        public ItemsChoiceHdrFtrRefType[] ItemsElementName
         {
             get
             {
-                return this.itemsElementNameField;
+                return this.itemsElementNameField.ToArray();
             }
             set
             {
-                this.itemsElementNameField = value;
+                if (value != null && value.Length > 0)
+                {
+                    this.itemsElementNameField = new List<ItemsChoiceHdrFtrRefType>(value);
+                }
+                else
+                {
+                    this.itemsElementNameField = new List<ItemsChoiceHdrFtrRefType>();
+                }
             }
         }
 
@@ -1623,35 +1725,67 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 this.rsidSectField = value;
             }
         }
-
+        private CT_HdrFtrRef AddNewReference(ItemsChoiceHdrFtrRefType type)
+        {
+            CT_HdrFtrRef ref1 = new CT_HdrFtrRef();
+            lock (this)
+            {
+                itemsField.Add(ref1);
+                itemsElementNameField.Add(type);
+            }
+            return ref1;
+        }
         public CT_HdrFtrRef AddNewHeaderReference()
         {
-            throw new NotImplementedException();
+            return AddNewReference(ItemsChoiceHdrFtrRefType.headerReference);
         }
 
         public CT_HdrFtrRef AddNewFooterReference()
         {
-            throw new NotImplementedException();
+            return AddNewReference(ItemsChoiceHdrFtrRefType.footerReference);
         }
-
+        private int SizeOfObjectArray(ItemsChoiceHdrFtrRefType type)
+        {
+            int size = 0;
+            for (int i = 0; i < itemsElementNameField.Count; i++)
+            {
+                if (itemsElementNameField[i] == type)
+                    size++;
+            }
+            return size;
+        }
         public int SizeOfHeaderReferenceArray()
         {
-            throw new NotImplementedException();
+            return SizeOfObjectArray(ItemsChoiceHdrFtrRefType.headerReference);
         }
-
+        private CT_HdrFtrRef GetObjectArray(int i, ItemsChoiceHdrFtrRefType type)
+        {
+            int pos = 0;
+            for (int p = 0; p < itemsElementNameField.Count; p++)
+            {
+                if (itemsElementNameField[p] == type)
+                {
+                    if (pos == i)
+                        return itemsField[p] as CT_HdrFtrRef;
+                    else
+                        pos++;
+                }
+            }
+            return null;
+        }
         public CT_HdrFtrRef GetHeaderReferenceArray(int i)
         {
-            throw new NotImplementedException();
+            return GetObjectArray(i, ItemsChoiceHdrFtrRefType.headerReference);
         }
 
         public int SizeOfFooterReferenceArray()
         {
-            throw new NotImplementedException();
+            return SizeOfObjectArray(ItemsChoiceHdrFtrRefType.footerReference);
         }
 
         public CT_HdrFtrRef GetFooterReferenceArray(int i)
         {
-            throw new NotImplementedException();
+            return GetObjectArray(i, ItemsChoiceHdrFtrRefType.footerReference);
         }
     }
     [System.SerializableAttribute()]
@@ -2978,7 +3112,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         public void AddNewNoProof()
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
+            this.noProofField = new CT_OnOff();
         }
 
         public bool IsSetU()
@@ -3893,6 +4028,26 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             {
                 this.cnfStyleField = value;
             }
+        }
+        public bool IsSetTextAlignment()
+        {
+            throw new NotImplementedException();
+        }
+
+        public CT_TextAlignment AddNewTextAlignment()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsSetPStyle()
+        {
+            throw new NotImplementedException();
+        }
+
+        public CT_String AddNewPStyle()
+        {
+            //this.pStyleField = new CT_String();
+            return pStyleField;
         }
     }
     [System.SerializableAttribute()]

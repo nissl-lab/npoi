@@ -17,44 +17,35 @@
 
 namespace NPOI.XWPF.UserModel
 {
-    using System;
 
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
 
+    using NPOI.XWPF;
+    using NPOI.OpenXmlFormats.Wordprocessing;
 
-
-
-
-
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-
-using NPOI.XWPF;
-
-using org.Openxmlformats.schemas.wordProcessingml.x2006.main;
-using org.Openxmlformats.schemas.wordProcessingml.x2006.main;
-using org.Openxmlformats.schemas.wordProcessingml.x2006.main;
-using org.Openxmlformats.schemas.wordProcessingml.x2006.main;
 
     [TestClass]
-    public class TestXWPFFootnotes 
-{
+    public class TestXWPFFootnotes
+    {
 
-	    [TestMethod]
-    public void TestAddFootnotesToDocument(){
-		XWPFDocument docOut = new XWPFDocument();
+        [TestMethod]
+        public void TestAddFootnotesToDocument()
+        {
+            XWPFDocument docOut = new XWPFDocument();
 
-		Bigint noteId = BigInt32.ValueOf(1);
+            int noteId = 1;
 
-		XWPFFootnotes footnotes = docOut.CreateFootnotes();
-		CTFtnEdn ctNote = CTFtnEdn.Factory.NewInstance();
-		ctNote.Id=(noteId);
-		ctNote.Type=(STFtnEdn.NORMAL);
-		footnotes.AddFootnote(ctNote);
+            XWPFFootnotes footnotes = docOut.CreateFootnotes();
+            CT_FtnEdn ctNote = new CT_FtnEdn();
+            ctNote.id = (noteId.ToString());
+            ctNote.type = (ST_FtnEdn.normal);
+            footnotes.AddFootnote(ctNote);
 
-		XWPFDocument docIn = XWPFTestDataSamples.WriteOutAndReadBack(docOut);
+            XWPFDocument docIn = XWPFTestDataSamples.WriteOutAndReadBack(docOut);
 
-		XWPFFootnote note = docIn.GetFootnoteByID(noteId.IntValue());
-		Assert.AreEqual(note.CTFtnEdn.Type, STFtnEdn.NORMAL);
-	}
+            XWPFFootnote note = docIn.GetFootnoteByID(noteId);
+            Assert.AreEqual(note.GetCTFtnEdn().type, ST_FtnEdn.normal);
+        }
+    }
+
 }
-
-

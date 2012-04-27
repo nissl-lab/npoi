@@ -52,9 +52,9 @@ namespace NPOI.XWPF.UserModel
 
         protected XWPFHeaderFooter()
         {
-            
-            //headerFooter = CTHdrFtr.Factory.NewInstance();
-            ReadHdrFtr();throw new NotImplementedException();
+
+            //headerFooter = new CT_HdrFtr();
+            //ReadHdrFtr();
         }
 
         public XWPFHeaderFooter(POIXMLDocumentPart parent, PackagePart part, PackageRelationship rel) :

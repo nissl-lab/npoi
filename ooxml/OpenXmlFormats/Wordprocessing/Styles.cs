@@ -68,17 +68,22 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         public IList<CT_Style> GetStyleList()
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
+            return style;
         }
 
         public void AddNewStyle()
         {
-            throw new NotImplementedException();
+            CT_Style s = new CT_Style();
+            styleField.Add(s);
         }
 
         public void SetStyleArray(int pos, CT_Style cT_Style)
         {
-            throw new NotImplementedException();
+            lock (this)
+            {
+                this.styleField[pos] = cT_Style;
+            }
         }
 
         public bool IsSetDocDefaults()

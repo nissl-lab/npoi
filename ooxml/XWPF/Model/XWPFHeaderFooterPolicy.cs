@@ -149,7 +149,7 @@ namespace NPOI.XWPF.Model
             wrapper.SetHeaderFooter(hdr);
 
             Stream outputStream = wrapper.GetPackagePart().GetOutputStream();
-            hdrDoc.SetHdr(hdr);
+            hdrDoc.SetHdr((CT_Hdr)hdr);
 
             //XmlOptions xmlOptions = Commit(wrapper);
 
@@ -176,7 +176,7 @@ namespace NPOI.XWPF.Model
             wrapper.SetHeaderFooter(ftr);
 
             Stream outputStream = wrapper.GetPackagePart().GetOutputStream();
-            ftrDoc.SetFtr(ftr);
+            ftrDoc.SetFtr((CT_Ftr)ftr);
 
             //XmlOptions xmlOptions = Commit(wrapper);
 
@@ -267,10 +267,9 @@ namespace NPOI.XWPF.Model
                 p.rsidP=(rsidr);
                 p.rsidRDefault=(rsidrdefault);
                 CT_PPr pPr = p.AddNewPPr();
-                pPr.AddNewPStyle().val=(pStyle);
+                pPr.AddNewPStyle().val = (pStyle);
             }
             return ftr;
-            throw new NotImplementedException();
         }
 
 
@@ -432,7 +431,9 @@ namespace NPOI.XWPF.Model
             CT_RPr rPr = r.AddNewRPr();
             rPr.AddNewNoProof();
             CT_Picture pict = r.AddNewPict();
-            //// CTGroup is in package schemasMicrosoftComVml
+
+            //TODO: convert vml-xxxxx.xsd to c# code;
+
             //CTGroup group = CTGroup.Factory.NewInstance();
             //CT_Shapetype shapetype = group.AddNewShapetype();
             //shapetype.Id = ("_x0000_t136");

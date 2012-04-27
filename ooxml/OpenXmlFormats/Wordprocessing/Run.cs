@@ -161,7 +161,9 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         public CT_RPr AddNewRPr()
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
+            this.rPrField = new CT_RPr();
+            return this.rPrField;
         }
 
         public CT_Empty AddNewTab()
@@ -213,15 +215,26 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         {
             throw new NotImplementedException();
         }
-
-        public List<CT_Drawing> GetDrawingList()
+        private IList<T> GetObjectList<T>(RunItemsChoiceType type) where T: class
         {
-            throw new NotImplementedException();
+            IList<T> list = new List<T>();
+            for (int i = 0; i < itemsElementNameField.Count; i++)
+            {
+                if (itemsElementNameField[i] == type)
+                {
+                    list.Add(itemsField[i] as T);
+                }
+            }
+            return list;
+        }
+        public IList<CT_Drawing> GetDrawingList()
+        {
+            return GetObjectList<CT_Drawing>(RunItemsChoiceType.drawing);
         }
 
-        public IEnumerable<CT_Drawing> GetPictList()
+        public IEnumerable<CT_Picture> GetPictList()
         {
-            throw new NotImplementedException();
+            return GetObjectList<CT_Picture>(RunItemsChoiceType.pict);
         }
 
         public CT_Picture AddNewPict()

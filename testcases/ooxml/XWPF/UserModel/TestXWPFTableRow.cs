@@ -19,34 +19,37 @@ namespace NPOI.XWPF.UserModel
 {
     using System;
 
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-
-using org.Openxmlformats.schemas.wordProcessingml.x2006.main;
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NPOI.OpenXmlFormats.Wordprocessing;
 
     [TestClass]
-    public class TestXWPFTableRow 
-{
+    public class TestXWPFTableRow
+    {
 
-	
-	
-	
-	protected void SetUp()  {
-		// TODO Auto-generated method stub
-		super.Up=();
-	}
 
-	    [TestMethod]
-    public void TestSomething(){
-		
-		CTRow ctRow = CTRow.Factory.NewInstance();
 
-	}
-	
-	
-	protected void tearDown()  {
-		// TODO Auto-generated method stub
-		super.TearDown();
-	}
+
+        protected void SetUp()
+        {
+            // TODO Auto-generated method stub
+            //super.Up=();
+        }
+
+        [TestMethod]
+        public void TestSomething()
+        {
+
+            CT_Row ctRow = new CT_Row();
+
+        }
+
+
+        protected void tearDown()
+        {
+            // TODO Auto-generated method stub
+            //super.TearDown();
+        }
+
+    }
 
 }
-

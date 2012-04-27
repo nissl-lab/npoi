@@ -161,8 +161,11 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         public CT_P AddNewP()
         {
             CT_P p = new CT_P();
+            lock(this)
+            {
             this.itemsField.Add(p);
             this.itemsElementNameField.Add(DocumentBodyItemChoiceType.p);
+            }
             return p;
         }
         
@@ -198,8 +201,11 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         public CT_Tbl AddNewTbl()
         {
             CT_Tbl tbl = new CT_Tbl();
-            this.itemsField.Add(tbl);
-            this.itemsElementNameField.Add(DocumentBodyItemChoiceType.tbl);
+            lock (this)
+            {
+                this.itemsField.Add(tbl);
+                this.itemsElementNameField.Add(DocumentBodyItemChoiceType.tbl);
+            }
             return tbl;
         }
         public int sizeOfTblArray()
@@ -220,23 +226,138 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         }
         public CT_Tbl GetTblArray(int i)
         {
-            throw new NotImplementedException();
+            return GetObjectArray<CT_Tbl>(i, DocumentBodyItemChoiceType.tbl);
         }
 
         public void SetTblArray(int pos, CT_Tbl cT_Tbl)
         {
-            throw new NotImplementedException();
+            SetObject<CT_Tbl>(DocumentBodyItemChoiceType.tbl, pos, cT_Tbl);
         }
 
         public CT_Tbl[] GetTblArray()
         {
-            throw new NotImplementedException();
+            return GetObjectList<CT_Tbl>(DocumentBodyItemChoiceType.tbl).ToArray();
         }
 
         public CT_P GetPArray(int p)
         {
-            throw new NotImplementedException();
+            return GetObjectArray<CT_P>(p, DocumentBodyItemChoiceType.p);
         }
+        public void RemoveP(int paraPos)
+        {
+            RemoveObject(DocumentBodyItemChoiceType.p, paraPos);
+        }
+
+        public CT_SdtBlock AddNewSdt()
+        {
+            return AddNewObject<CT_SdtBlock>(DocumentBodyItemChoiceType.sdt);
+        }
+        #region Generic methods for object operation
+  
+        private List<T> GetObjectList<T>(DocumentBodyItemChoiceType type) where T : class
+        {
+            lock (this)
+            {
+                List<T> list = new List<T>();
+                for (int i = 0; i < itemsElementNameField.Count; i++)
+                {
+                    if (itemsElementNameField[i] == type)
+                        list.Add(itemsField[i] as T);
+                }
+                return list;
+            }
+        }
+        private int SizeOfArray(DocumentBodyItemChoiceType type)
+        {
+            lock (this)
+            {
+                int size = 0;
+                for (int i = 0; i < itemsElementNameField.Count; i++)
+                {
+                    if (itemsElementNameField[i] == type)
+                        size++;
+                }
+                return size;
+            }
+        }
+        private T GetObjectArray<T>(int p, DocumentBodyItemChoiceType type) where T : class
+        {
+            lock (this)
+            {
+                int pos = GetObjectIndex(type, p);
+                if (pos < 0 || pos >= this.itemsField.Count)
+                    return null;
+                return itemsField[pos] as T;
+                //for (int i = 0; i < itemsElementNameField.Count; i++)
+                //{
+                //    if (itemsElementNameField[i] == type)
+                //    {
+                //        if (pos == p)
+                //            return itemsField[i] as T;
+                //        else
+                //            pos++;
+                //    }
+                //}
+                //return null;
+            }
+        }
+        private T AddNewObject<T>(DocumentBodyItemChoiceType type) where T : class, new()
+        {
+            T t = new T();
+            lock (this)
+            {
+                this.itemsElementNameField.Add(type);
+                this.itemsField.Add(t);
+            }
+            return t;
+        }
+        private void SetObject<T> (DocumentBodyItemChoiceType type, int p, T obj) where T : class
+        {
+            lock (this)
+            {
+                int pos = GetObjectIndex(type, p);
+                if (pos < 0 || pos >= this.itemsField.Count)
+                    return;
+                if (this.itemsField[pos] is T)
+                    this.itemsField[pos] = obj;
+                else
+                    throw new Exception(string.Format(@"object types are difference, itemsField[{0}] is {1}, and parameter obj is {2}", 
+                        pos, this.itemsField[pos].GetType().Name, typeof(T).Name));
+            }
+        }
+        private int GetObjectIndex(DocumentBodyItemChoiceType type, int p)
+        {
+            int index = -1;
+            int pos = 0;
+            for (int i = 0; i < itemsElementNameField.Count; i++)
+            {
+                if (itemsElementNameField[i] == type)
+                {
+                    if (pos == p)
+                    {
+                        //return itemsField[p] as T;
+                        index = i;
+                        break;
+                    }
+                    else
+                        pos++;
+                }
+            }
+            return index;
+        }
+        private void RemoveObject(DocumentBodyItemChoiceType type, int p)
+        {
+            lock (this)
+            {
+                int pos = GetObjectIndex(type, p);
+                if (pos < 0 || pos >= this.itemsField.Count)
+                    return;
+                itemsElementNameField.RemoveAt(pos);
+                itemsField.RemoveAt(pos);
+            }
+        }
+        #endregion
+        
     }
 
 

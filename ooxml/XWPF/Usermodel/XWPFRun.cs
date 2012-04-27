@@ -49,7 +49,7 @@ namespace NPOI.XWPF.UserModel
              * reserve already occupied Drawing ids, so reserving new ids later will
              * not corrupt the document
              */
-            List<NPOI.OpenXmlFormats.Wordprocessing.CT_Drawing> drawingList = r.GetDrawingList();
+            IList<NPOI.OpenXmlFormats.Wordprocessing.CT_Drawing> drawingList = r.GetDrawingList();
             foreach (NPOI.OpenXmlFormats.Wordprocessing.CT_Drawing ctDrawing in drawingList)
             {
                 List<CT_Anchor> anchorList = ctDrawing.GetAnchorList();
@@ -72,9 +72,9 @@ namespace NPOI.XWPF.UserModel
 
             //// Look for any text in any of our pictures or Drawings
             StringBuilder text = new StringBuilder();
-            List<NPOI.OpenXmlFormats.Wordprocessing.CT_Drawing> pictTextObjs = new List<NPOI.OpenXmlFormats.Wordprocessing.CT_Drawing>();
-            pictTextObjs.AddRange(r.GetPictList());
-            pictTextObjs.AddRange(drawingList);
+            List<object> pictTextObjs = new List<object>();
+            //pictTextObjs.AddRange(r.GetPictList());
+            //pictTextObjs.AddRange(drawingList);
             foreach (NPOI.OpenXmlFormats.Wordprocessing.CT_Drawing o in pictTextObjs)
             {
                 //XmlObject[] t = o.SelectPath("declare namespace w='http://schemas.openxmlformats.org/wordprocessingml/2006/main' .//w:t");

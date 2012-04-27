@@ -20,49 +20,53 @@ namespace NPOI.XWPF.UserModel
 
 
 
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-using NPOI.XWPF;
-using org.apache.xmlbeans;
-using org.Openxmlformats.schemas.wordProcessingml.x2006.main;
+    using NPOI.XWPF;
+    using NPOI.OpenXmlFormats.Wordprocessing;
 
-/**
- * @author Paolo Mottadelli
- */
-public class TestXWPFHeadings {
-	private static String HEADING1 = "Heading1";
 
-	    [TestMethod]
-    public void TestSetParagraphStyle(){
-		//new clean instance of paragraph
-		XWPFDocument doc = XWPFTestDataSamples.OpenSampleDocument("heading123.docx");
-		XWPFParagraph p = doc.CreateParagraph();
-		XWPFRun run = p.CreateRun();
-		Run.Text=("Heading 1");
+    /**
+     * @author Paolo Mottadelli
+     */
+    [TestClass]
+    public class TestXWPFHeadings
+    {
+        private static String HEADING1 = "Heading1";
 
-		CTSdtBlock block = doc.Document.Body.AddNewSdt();
+        [TestMethod]
+        public void TestSetParagraphStyle()
+        {
+            //new clean instance of paragraph
+            XWPFDocument doc = XWPFTestDataSamples.OpenSampleDocument("heading123.docx");
+            XWPFParagraph p = doc.CreateParagraph();
+            XWPFRun run = p.CreateRun();
+            run.SetText("Heading 1");
 
-		Assert.IsNull(p.Style);
-		p.Style=(HEADING1);
-		Assert.AreEqual(HEADING1, p.CTP.PPr.PStyle.Val);
+            CT_SdtBlock block = doc.Document.body.AddNewSdt();
 
-		doc.CreateTOC();
-        /*
-		// TODO - finish this test
-		if (false) {
-			CTStyles styles = doc.Style;
-			CTStyle style = styles.AddNewStyle();
-			style.Type=(STStyleType.PARAGRAPH);
-			style.StyleId=("Heading1");
-		}
+            Assert.IsNull(p.GetStyle());
+            p.SetStyle(HEADING1);
+            Assert.AreEqual(HEADING1, p.GetCTP().pPr.pStyle.val);
 
-		if (false) {
-			File file = TempFile.CreateTempFile("testHeaders", ".docx");
-			OutputStream out1 = new FileOutputStream(file);
-			doc.Write(out1);
-			out1.Close();
-		}
-        */
+            doc.CreateTOC();
+            /*
+            // TODO - finish this test
+            if (false) {
+                CTStyles styles = doc.Style;
+                CTStyle style = styles.AddNewStyle();
+                style.Type=(STStyleType.PARAGRAPH);
+                style.StyleId=("Heading1");
+            }
+
+            if (false) {
+                File file = TempFile.CreateTempFile("testHeaders", ".docx");
+                OutputStream out1 = new FileOutputStream(file);
+                doc.Write(out1);
+                out1.Close();
+            }
+            */
+        }
     }
-}
 
+}

@@ -93,7 +93,7 @@ namespace NPOI.XWPF.UserModel
                 DocumentDocument doc = DocumentDocument.Parse(GetPackagePart().GetInputStream());
                 ctDocument = doc.Document;
 
-                //InitFootnotes();
+                InitFootnotes();
                 foreach (object o in ctDocument.body.Items)
                 {
                     if (o is CT_P)
@@ -893,9 +893,8 @@ namespace NPOI.XWPF.UserModel
                 {
                     int paraPos = GetParagraphPos(pos);
                     paragraphs.RemoveAt(paraPos);
-                    //ctDocument.body.Items.RemoveAt(paraPos);
-                    throw new NotImplementedException();
-                }
+                    ctDocument.body.RemoveP(paraPos);
+                 }
                 bodyElements.RemoveAt(pos);
                 return true;
             }

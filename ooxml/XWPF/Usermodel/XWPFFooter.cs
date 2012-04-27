@@ -29,8 +29,10 @@ namespace NPOI.XWPF.UserModel
     public class XWPFFooter : XWPFHeaderFooter
     {
         public XWPFFooter()
-            : base()
+            //: base()
         {
+            headerFooter = new CT_Ftr();
+            ReadHdrFtr();
         }
 
         public XWPFFooter(XWPFDocument doc, CT_HdrFtr hdrFtr)
@@ -53,7 +55,19 @@ namespace NPOI.XWPF.UserModel
                 }
             }
             cursor.Dispose();*/
-            throw new NotImplementedException();
+            foreach (object o in hdrFtr.Items)
+            {
+                if (o is CT_P)
+                {
+                    XWPFParagraph p = new XWPFParagraph((CT_P)o, this);
+                    paragraphs.Add(p);
+                }
+                if (o is CT_Tbl)
+                {
+                    XWPFTable t = new XWPFTable((CT_Tbl)o, this);
+                    tables.Add(t);
+                }
+            }
         }
 
         public XWPFFooter(POIXMLDocumentPart parent, PackagePart part, PackageRelationship rel)
@@ -82,7 +96,7 @@ namespace NPOI.XWPF.UserModel
             xmlOptions.SaveSuggestedPrefixes=(map);*/
             PackagePart part = GetPackagePart();
             Stream out1 = part.GetOutputStream();
-            HdrDocument doc = new HdrDocument(headerFooter);
+            FtrDocument doc = new FtrDocument((CT_Ftr)headerFooter);
             XmlSerializerNamespaces namespaces = new XmlSerializerNamespaces(new[] {
                 new XmlQualifiedName("ve", "http://schemas.openxmlformats.org/markup-compatibility/2006"),
                 new XmlQualifiedName("r", "http://schemas.openxmlformats.org/officeDocument/2006/relationships"),
