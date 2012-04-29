@@ -191,8 +191,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         public CT_PPr AddNewPPr()
         {
-            //return AddNewObject<CT_PPr>(ParagraphItemsChoiceType.
-            this.pPrField = new CT_PPr();
+            if (this.pPrField == null)
+                this.pPrField = new CT_PPr();
             return this.pPrField;
         }
 
@@ -495,76 +495,11 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        public bool IsSetJc()
+        public CT_ParaRPr AddNewRPr()
         {
-            throw new NotImplementedException();
-        }
-
-        public CT_Jc AddNewJc()
-        {
-            throw new NotImplementedException();
-        }
-
-        
-
-        public bool IsSetPBdr()
-        {
-            throw new NotImplementedException();
-        }
-
-        public CT_Spacing AddNewSpacing()
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool IsSetPageBreakBefore()
-        {
-            throw new NotImplementedException();
-        }
-
-        public CT_OnOff AddNewPageBreakBefore()
-        {
-            throw new NotImplementedException();
-        }
-
-        public CT_PBdr AddNewPBdr()
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool IsSetWordWrap()
-        {
-            throw new NotImplementedException();
-        }
-
-        public CT_OnOff AddNewWordWrap()
-        {
-            throw new NotImplementedException();
-        }
-
-        public CT_Ind AddNewInd()
-        {
-            throw new NotImplementedException();
-        }
-
-        public CT_PPr AddNewRPr()
-        {
-            throw new NotImplementedException();
-        }
-
-        public CT_OnOff addNewNoProof()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void AddNewNoProof()
-        {
-            throw new NotImplementedException();
-        }
-
-        public CT_Tabs AddNewTabs()
-        {
-            throw new NotImplementedException();
+            if (this.rPrField == null)
+                this.rPrField = new CT_ParaRPr();
+            return this.rPrField;
         }
     }
 
@@ -1282,6 +1217,13 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             {
                 this.rPrChangeField = value;
             }
+        }
+
+        public CT_OnOff AddNewNoProof()
+        {
+            if (this.noProofField == null)
+                this.noProofField = new CT_OnOff();
+            return this.noProofField;
         }
     }
 
@@ -3047,113 +2989,138 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         public bool IsSetLang()
         {
-            throw new NotImplementedException();
+            return !string.IsNullOrEmpty(this.langField.val);
         }
 
         public CT_Language AddNewLang()
         {
-            throw new NotImplementedException();
+            if (this.langField == null)
+                this.langField = new CT_Language();
+            return this.langField;
         }
 
         public CT_Fonts AddNewRFonts()
         {
-            throw new NotImplementedException();
+            if (this.rFontsField == null)
+                this.rFontsField = new CT_Fonts();
+            return this.rFontsField;
         }
 
         public CT_OnOff AddNewB()
         {
-            throw new NotImplementedException();
+            if (this.bField == null)
+                this.bField = new CT_OnOff();
+            return this.bField;
         }
 
         public CT_OnOff AddNewBCs()
         {
-            throw new NotImplementedException();
+            if (this.bCsField == null)
+                this.bCsField = new CT_OnOff();
+            return this.bCsField;
         }
 
         public CT_Color AddNewColor()
         {
-            throw new NotImplementedException();
+            if (this.colorField == null)
+                this.colorField = new CT_Color();
+            return this.colorField;
         }
 
         public CT_HpsMeasure AddNewSz()
         {
-            throw new NotImplementedException();
+            if (this.szField == null)
+                this.szField = new CT_HpsMeasure();
+            return this.szField;
         }
 
         public CT_HpsMeasure AddNewSzCs()
         {
-            throw new NotImplementedException();
+            if (this.szCsField == null)
+                this.szCsField = new CT_HpsMeasure();
+            return this.szCsField;
         }
 
         public bool IsSetPosition()
         {
-            throw new NotImplementedException();
+            return !string.IsNullOrEmpty(this.positionField.val);
         }
 
         public CT_SignedHpsMeasure AddNewPosition()
         {
-            throw new NotImplementedException();
+            if (this.positionField == null)
+                this.positionField = new CT_SignedHpsMeasure();
+            return this.positionField;
         }
 
         public bool IsSetB()
         {
-            throw new NotImplementedException();
+            return this.bField.val == ST_OnOff.on || this.bField.val == ST_OnOff.True || this.bField.val == ST_OnOff.Value1;
         }
 
         public bool IsSetI()
         {
-            throw new NotImplementedException();
+            return this.iField.val == ST_OnOff.on || this.iField.val == ST_OnOff.True || this.iField.val == ST_OnOff.Value1;
         }
 
         public CT_OnOff AddNewI()
         {
-            throw new NotImplementedException();
+            if (this.iField == null)
+                this.iField = new CT_OnOff();
+            return this.iField;
         }
 
         public void AddNewNoProof()
         {
             //throw new NotImplementedException();
-            this.noProofField = new CT_OnOff();
+            if (this.noProofField == null)
+                this.noProofField = new CT_OnOff();
         }
 
         public bool IsSetU()
         {
-            throw new NotImplementedException();
+            return !(this.uField.val == ST_Underline.none);
         }
 
         public CT_Underline AddNewU()
         {
-            throw new NotImplementedException();
+            if (this.uField == null)
+                this.uField = new CT_Underline();
+            return this.uField;
         }
 
         public bool IsSetStrike()
         {
-            throw new NotImplementedException();
+            return this.strikeField.val == ST_OnOff.on || this.strikeField.val == ST_OnOff.True || this.strikeField.val == ST_OnOff.Value1;
         }
 
         public CT_OnOff AddNewStrike()
         {
-            throw new NotImplementedException();
+            if (this.strikeField == null)
+                this.strikeField = new CT_OnOff();
+            return this.strikeField;
         }
 
         public bool IsSetVertAlign()
         {
-            throw new NotImplementedException();
+            return !(this.vertAlignField == null);
         }
 
         public CT_VerticalAlignRun AddNewVertAlign()
         {
-            throw new NotImplementedException();
+            if (this.vertAlignField == null)
+                this.vertAlignField = new CT_VerticalAlignRun();
+            return this.vertAlignField;
         }
 
         public bool IsSetRFonts()
         {
-            throw new NotImplementedException();
+            return !(this.rFontsField == null);
         }
 
         public bool IsSetSz()
         {
-            throw new NotImplementedException();
+            return !(this.szField.val == 0);
         }
     }
 
@@ -4031,23 +3998,101 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         }
         public bool IsSetTextAlignment()
         {
-            throw new NotImplementedException();
+            return this.textAlignmentField != null;
         }
 
         public CT_TextAlignment AddNewTextAlignment()
         {
-            throw new NotImplementedException();
+            if (this.textAlignmentField == null)
+                this.textAlignmentField = new CT_TextAlignment();
+            return this.textAlignmentField;
         }
 
         public bool IsSetPStyle()
         {
-            throw new NotImplementedException();
+            return !string.IsNullOrEmpty(this.pStyleField.val);
         }
 
         public CT_String AddNewPStyle()
         {
-            //this.pStyleField = new CT_String();
+            if (this.pStyleField == null)
+                this.pStyleField = new CT_String();
             return pStyleField;
+        }
+        public bool IsSetJc()
+        {
+            return this.jcField != null;
+        }
+
+        public CT_Jc AddNewJc()
+        {
+            if (this.jcField == null)
+            {
+                this.jcField = new CT_Jc();
+            }
+            return this.jcField;
+        }
+
+
+
+        public bool IsSetPBdr()
+        {
+            return this.pBdrField != null;
+        }
+
+        public CT_Spacing AddNewSpacing()
+        {
+            if (this.spacingField == null)
+                this.spacingField = new CT_Spacing();
+            return this.spacingField;
+        }
+
+        public bool IsSetPageBreakBefore()
+        {
+            return this.pageBreakBeforeField.val == ST_OnOff.on || this.pageBreakBeforeField.val == ST_OnOff.True ||
+                this.pageBreakBeforeField.val == ST_OnOff.Value1;
+        }
+
+        public CT_OnOff AddNewPageBreakBefore()
+        {
+            if (this.pageBreakBeforeField == null)
+                this.pageBreakBeforeField = new CT_OnOff();
+            return this.pageBreakBeforeField;
+        }
+
+        public CT_PBdr AddNewPBdr()
+        {
+            if (this.pBdrField == null)
+                this.pBdrField = new CT_PBdr();
+            return this.pBdrField;
+        }
+
+        public bool IsSetWordWrap()
+        {
+            return this.wordWrapField.val == ST_OnOff.Value1 || this.wordWrapField.val == ST_OnOff.True ||
+                this.wordWrapField.val == ST_OnOff.on;
+        }
+
+        public CT_OnOff AddNewWordWrap()
+        {
+            if (this.wordWrapField == null)
+                this.wordWrapField = new CT_OnOff();
+            return this.wordWrapField;
+        }
+
+        public CT_Ind AddNewInd()
+        {
+            if (this.indField == null)
+                this.indField = new CT_Ind();
+            return this.indField;
+        }
+
+        public CT_Tabs AddNewTabs()
+        {
+            CT_Tabs tab = new CT_Tabs();
+            this.tabsField = tab.tab;
+
+            return tab;
         }
     }
     [System.SerializableAttribute()]

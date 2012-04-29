@@ -135,16 +135,16 @@ namespace NPOI.XWPF.UserModel
             return paragraph;
         }
 
-        public List<XWPFRun> GetRuns()
+        public IList<XWPFRun> GetRuns()
         {
             //return Collections.UnmodifiableList(Runs);
-            throw new NotImplementedException();
+            return Runs.AsReadOnly();
         }
 
         public bool IsEmpty()
         {
             //return !paragraph.DomNode.HasChildNodes();
-            throw new NotImplementedException();
+            return paragraph.Items.Length == 0;
         }
 
         public XWPFDocument GetDocument()
@@ -219,12 +219,11 @@ namespace NPOI.XWPF.UserModel
          */
         public String GetParagraphText()
         {
-            //StringBuilder out1 = new StringBuilder();
-            //foreach(XWPFRun run in Runs) {
-            //   out1.Append(Run.ToString());
-            //}
-            //return out1.ToString();
-            throw new NotImplementedException();
+            StringBuilder out1 = new StringBuilder();
+            foreach(XWPFRun run in Runs) {
+                out1.Append(run.ToString());
+            }
+            return out1.ToString();
         }
 
         /**
@@ -232,12 +231,11 @@ namespace NPOI.XWPF.UserModel
          */
         public String GetPictureText()
         {
-            //StringBuilder out1 = new StringBuilder();
-            //foreach(XWPFRun run in Runs) {
-            //   out1.Append(Run.PictureText);
-            //}
-            //return out1.ToString();
-            throw new NotImplementedException();
+            StringBuilder out1 = new StringBuilder();
+            foreach(XWPFRun run in Runs) {
+                out1.Append(run.GetPictureText());
+            }
+            return out1.ToString();
         }
 
         /**

@@ -247,6 +247,10 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         {
             RemoveObject(DocumentBodyItemChoiceType.p, paraPos);
         }
+        public void RemoveTbl(int tablePos)
+        {
+            RemoveObject(DocumentBodyItemChoiceType.tbl, tablePos);
+        }
 
         public CT_SdtBlock AddNewSdt()
         {
@@ -288,17 +292,6 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 if (pos < 0 || pos >= this.itemsField.Count)
                     return null;
                 return itemsField[pos] as T;
-                //for (int i = 0; i < itemsElementNameField.Count; i++)
-                //{
-                //    if (itemsElementNameField[i] == type)
-                //    {
-                //        if (pos == p)
-                //            return itemsField[i] as T;
-                //        else
-                //            pos++;
-                //    }
-                //}
-                //return null;
             }
         }
         private T AddNewObject<T>(DocumentBodyItemChoiceType type) where T : class, new()
@@ -335,7 +328,6 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 {
                     if (pos == p)
                     {
-                        //return itemsField[p] as T;
                         index = i;
                         break;
                     }
@@ -357,7 +349,14 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
         #endregion
-        
+
+
+
+
+        public void SetPArray(int pos, CT_P cT_P)
+        {
+            SetObject<CT_P>(DocumentBodyItemChoiceType.p, pos, cT_P);
+        }
     }
 
 

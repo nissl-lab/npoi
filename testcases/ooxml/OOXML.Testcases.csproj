@@ -82,6 +82,8 @@
     <Compile Include="XSSF\Util\TestNumericRanges.cs" />
     <Compile Include="XSSF\XSSFITestDataProvider.cs" />
     <Compile Include="XSSF\XSSFTestDataSamples.cs" />
+    <Compile Include="XWPF\Model\TestXWPFDecorators.cs" />
+    <Compile Include="XWPF\Model\TestXWPFHeaderFooterPolicy.cs" />
     <Compile Include="XWPF\TestDocumentProtection.cs" />
     <Compile Include="XWPF\TestPackageCorePropertiesGetKeywords.cs" />
     <Compile Include="XWPF\UserModel\TestXWPFDocument.cs" />
@@ -90,6 +92,8 @@
     <Compile Include="XWPF\UserModel\TestXWPFHeadings.cs" />
     <Compile Include="XWPF\UserModel\TestXWPFPictureData.cs" />
     <Compile Include="XWPF\UserModel\TestXWPFStyles.cs" />
+    <Compile Include="XWPF\UserModel\TestXWPFTable.cs" />
+    <Compile Include="XWPF\UserModel\TestXWPFTableRow.cs" />
     <Compile Include="XWPF\XWPFTestDataSamples.cs" />
   </ItemGroup>
   <ItemGroup>

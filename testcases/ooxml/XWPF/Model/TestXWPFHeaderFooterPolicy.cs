@@ -21,144 +21,148 @@ namespace NPOI.XWPF.Model
 
 
 
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-using NPOI.XWPF;
-using NPOI.XWPF.UserModel;
+    using NPOI.XWPF;
+    using NPOI.XWPF.UserModel;
 
-/**
- * Tests for XWPF Header Footer Stuff
- */
+    /**
+     * Tests for XWPF Header Footer Stuff
+     */
     [TestClass]
-    public class TestXWPFHeaderFooterPolicy 
-{
-	private XWPFDocument noHeader;
-	private XWPFDocument header;
-	private XWPFDocument headerFooter;
-	private XWPFDocument footer;
-	private XWPFDocument oddEven;
-	private XWPFDocument diffFirst;
+    public class TestXWPFHeaderFooterPolicy
+    {
+        private XWPFDocument noHeader;
+        private XWPFDocument header;
+        private XWPFDocument headerFooter;
+        private XWPFDocument footer;
+        private XWPFDocument oddEven;
+        private XWPFDocument diffFirst;
+        [TestInitialize]
+        public void SetUp()
+        {
 
-	protected void SetUp() throws IOException {
+            noHeader = XWPFTestDataSamples.OpenSampleDocument("NoHeadFoot.docx");
+            header = XWPFTestDataSamples.OpenSampleDocument("ThreeColHead.docx");
+            headerFooter = XWPFTestDataSamples.OpenSampleDocument("SimpleHeadThreeColFoot.docx");
+            footer = XWPFTestDataSamples.OpenSampleDocument("FancyFoot.docx");
+            oddEven = XWPFTestDataSamples.OpenSampleDocument("PageSpecificHeadFoot.docx");
+            diffFirst = XWPFTestDataSamples.OpenSampleDocument("DiffFirstPageHeadFoot.docx");
+        }
 
-	    noHeader = XWPFTestDataSamples.OpenSampleDocument("NoHeadFoot.docx");
-		header = XWPFTestDataSamples.OpenSampleDocument("ThreeColHead.docx");
-		headerFooter = XWPFTestDataSamples.OpenSampleDocument("SimpleHeadThreeColFoot.docx");
-		footer = XWPFTestDataSamples.OpenSampleDocument("FancyFoot.docx");
-		oddEven = XWPFTestDataSamples.OpenSampleDocument("PageSpecificHeadFoot.docx");
-		diffFirst = XWPFTestDataSamples.OpenSampleDocument("DiffFirstPageHeadFoot.docx");
-	}
+        [TestMethod]
+        public void TestPolicy()
+        {
+            XWPFHeaderFooterPolicy policy;
 
-	    [TestMethod]
-    public void TestPolicy(){
-		XWPFHeaderFooterPolicy policy;
+            policy = noHeader.GetHeaderFooterPolicy();
+            Assert.IsNull(policy.GetDefaultHeader());
+            Assert.IsNull(policy.GetDefaultFooter());
 
-		policy = noHeader.HeaderFooterPolicy;
-		Assert.IsNull(policy.DefaultHeader);
-		Assert.IsNull(policy.DefaultFooter);
-
-		Assert.IsNull(policy.GetHeader(1));
-		Assert.IsNull(policy.GetHeader(2));
-		Assert.IsNull(policy.GetHeader(3));
-		Assert.IsNull(policy.GetFooter(1));
-		Assert.IsNull(policy.GetFooter(2));
-		Assert.IsNull(policy.GetFooter(3));
-
-
-		policy = header.HeaderFooterPolicy;
-		Assert.IsNotNull(policy.DefaultHeader);
-		Assert.IsNull(policy.DefaultFooter);
-
-		Assert.AreEqual(policy.DefaultHeader, policy.GetHeader(1));
-		Assert.AreEqual(policy.DefaultHeader, policy.GetHeader(2));
-		Assert.AreEqual(policy.DefaultHeader, policy.GetHeader(3));
-		Assert.IsNull(policy.GetFooter(1));
-		Assert.IsNull(policy.GetFooter(2));
-		Assert.IsNull(policy.GetFooter(3));
+            Assert.IsNull(policy.GetHeader(1));
+            Assert.IsNull(policy.GetHeader(2));
+            Assert.IsNull(policy.GetHeader(3));
+            Assert.IsNull(policy.GetFooter(1));
+            Assert.IsNull(policy.GetFooter(2));
+            Assert.IsNull(policy.GetFooter(3));
 
 
-		policy = footer.HeaderFooterPolicy;
-		Assert.IsNull(policy.DefaultHeader);
-		Assert.IsNotNull(policy.DefaultFooter);
+            policy = header.GetHeaderFooterPolicy();
+            Assert.IsNotNull(policy.GetDefaultHeader());
+            Assert.IsNull(policy.GetDefaultFooter());
 
-		Assert.IsNull(policy.GetHeader(1));
-		Assert.IsNull(policy.GetHeader(2));
-		Assert.IsNull(policy.GetHeader(3));
-		Assert.AreEqual(policy.DefaultFooter, policy.GetFooter(1));
-		Assert.AreEqual(policy.DefaultFooter, policy.GetFooter(2));
-		Assert.AreEqual(policy.DefaultFooter, policy.GetFooter(3));
-
-
-		policy = headerFooter.HeaderFooterPolicy;
-		Assert.IsNotNull(policy.DefaultHeader);
-		Assert.IsNotNull(policy.DefaultFooter);
-
-		Assert.AreEqual(policy.DefaultHeader, policy.GetHeader(1));
-		Assert.AreEqual(policy.DefaultHeader, policy.GetHeader(2));
-		Assert.AreEqual(policy.DefaultHeader, policy.GetHeader(3));
-		Assert.AreEqual(policy.DefaultFooter, policy.GetFooter(1));
-		Assert.AreEqual(policy.DefaultFooter, policy.GetFooter(2));
-		Assert.AreEqual(policy.DefaultFooter, policy.GetFooter(3));
+            Assert.AreEqual(policy.GetDefaultHeader(), policy.GetHeader(1));
+            Assert.AreEqual(policy.GetDefaultHeader(), policy.GetHeader(2));
+            Assert.AreEqual(policy.GetDefaultHeader(), policy.GetHeader(3));
+            Assert.IsNull(policy.GetFooter(1));
+            Assert.IsNull(policy.GetFooter(2));
+            Assert.IsNull(policy.GetFooter(3));
 
 
-		policy = oddEven.HeaderFooterPolicy;
-		Assert.IsNotNull(policy.DefaultHeader);
-		Assert.IsNotNull(policy.DefaultFooter);
-		Assert.IsNotNull(policy.EvenPageHeader);
-		Assert.IsNotNull(policy.EvenPageFooter);
+            policy = footer.GetHeaderFooterPolicy();
+            Assert.IsNull(policy.GetDefaultHeader());
+            Assert.IsNotNull(policy.GetDefaultFooter());
 
-		Assert.AreEqual(policy.DefaultHeader, policy.GetHeader(1));
-		Assert.AreEqual(policy.EvenPageHeader, policy.GetHeader(2));
-		Assert.AreEqual(policy.DefaultHeader, policy.GetHeader(3));
-		Assert.AreEqual(policy.DefaultFooter, policy.GetFooter(1));
-		Assert.AreEqual(policy.EvenPageFooter, policy.GetFooter(2));
-		Assert.AreEqual(policy.DefaultFooter, policy.GetFooter(3));
+            Assert.IsNull(policy.GetHeader(1));
+            Assert.IsNull(policy.GetHeader(2));
+            Assert.IsNull(policy.GetHeader(3));
+            Assert.AreEqual(policy.GetDefaultFooter(), policy.GetFooter(1));
+            Assert.AreEqual(policy.GetDefaultFooter(), policy.GetFooter(2));
+            Assert.AreEqual(policy.GetDefaultFooter(), policy.GetFooter(3));
 
 
-		policy = diffFirst.HeaderFooterPolicy;
-		Assert.IsNotNull(policy.DefaultHeader);
-		Assert.IsNotNull(policy.DefaultFooter);
-		Assert.IsNotNull(policy.FirstPageHeader);
-		Assert.IsNotNull(policy.FirstPageFooter);
-		Assert.IsNull(policy.EvenPageHeader);
-		Assert.IsNull(policy.EvenPageFooter);
+            policy = headerFooter.GetHeaderFooterPolicy();
+            Assert.IsNotNull(policy.GetDefaultHeader());
+            Assert.IsNotNull(policy.GetDefaultFooter());
 
-		Assert.AreEqual(policy.FirstPageHeader, policy.GetHeader(1));
-		Assert.AreEqual(policy.DefaultHeader, policy.GetHeader(2));
-		Assert.AreEqual(policy.DefaultHeader, policy.GetHeader(3));
-		Assert.AreEqual(policy.FirstPageFooter, policy.GetFooter(1));
-		Assert.AreEqual(policy.DefaultFooter, policy.GetFooter(2));
-		Assert.AreEqual(policy.DefaultFooter, policy.GetFooter(3));
-	}
-
-	    [TestMethod]
-    public void TestContents(){
-		XWPFHeaderFooterPolicy policy;
-
-		// Test a few simple bits off a simple header
-		policy = diffFirst.HeaderFooterPolicy;
-
-		Assert.AreEqual(
-			"I am the header on the first page, and I" + '\u2019' + "m nice and simple\n",
-			policy.FirstPageHeader.Text
-		);
-		Assert.AreEqual(
-				"First header column!\tMid header\tRight header!\n",
-				policy.DefaultHeader.Text
-		);
+            Assert.AreEqual(policy.GetDefaultHeader(), policy.GetHeader(1));
+            Assert.AreEqual(policy.GetDefaultHeader(), policy.GetHeader(2));
+            Assert.AreEqual(policy.GetDefaultHeader(), policy.GetHeader(3));
+            Assert.AreEqual(policy.GetDefaultFooter(), policy.GetFooter(1));
+            Assert.AreEqual(policy.GetDefaultFooter(), policy.GetFooter(2));
+            Assert.AreEqual(policy.GetDefaultFooter(), policy.GetFooter(3));
 
 
-		// And a few bits off a more complex header
-		policy = oddEven.HeaderFooterPolicy;
+            policy = oddEven.GetHeaderFooterPolicy();
+            Assert.IsNotNull(policy.GetDefaultHeader());
+            Assert.IsNotNull(policy.GetDefaultFooter());
+            Assert.IsNotNull(policy.GetEvenPageHeader());
+            Assert.IsNotNull(policy.GetEvenPageFooter());
 
-		Assert.AreEqual(
-			"[ODD Page Header text]\n\n",
-			policy.DefaultHeader.Text
-		);
-		Assert.AreEqual(
-			"[This is an Even Page, with a Header]\n\n",
-			policy.EvenPageHeader.Text
-		);
-	}
+            Assert.AreEqual(policy.GetDefaultHeader(), policy.GetHeader(1));
+            Assert.AreEqual(policy.GetEvenPageHeader(), policy.GetHeader(2));
+            Assert.AreEqual(policy.GetDefaultHeader(), policy.GetHeader(3));
+            Assert.AreEqual(policy.GetDefaultFooter(), policy.GetFooter(1));
+            Assert.AreEqual(policy.GetEvenPageFooter(), policy.GetFooter(2));
+            Assert.AreEqual(policy.GetDefaultFooter(), policy.GetFooter(3));
+
+
+            policy = diffFirst.GetHeaderFooterPolicy();
+            Assert.IsNotNull(policy.GetDefaultHeader());
+            Assert.IsNotNull(policy.GetDefaultFooter());
+            Assert.IsNotNull(policy.GetFirstPageHeader());
+            Assert.IsNotNull(policy.GetFirstPageFooter());
+            Assert.IsNull(policy.GetEvenPageHeader());
+            Assert.IsNull(policy.GetEvenPageFooter());
+
+            Assert.AreEqual(policy.GetFirstPageHeader(), policy.GetHeader(1));
+            Assert.AreEqual(policy.GetDefaultHeader(), policy.GetHeader(2));
+            Assert.AreEqual(policy.GetDefaultHeader(), policy.GetHeader(3));
+            Assert.AreEqual(policy.GetFirstPageFooter(), policy.GetFooter(1));
+            Assert.AreEqual(policy.GetDefaultFooter(), policy.GetFooter(2));
+            Assert.AreEqual(policy.GetDefaultFooter(), policy.GetFooter(3));
+        }
+
+        [TestMethod]
+        public void TestContents()
+        {
+            XWPFHeaderFooterPolicy policy;
+
+            // Test a few simple bits off a simple header
+            policy = diffFirst.GetHeaderFooterPolicy();
+
+            Assert.AreEqual(
+                "I am the header on the first page, and I" + '\u2019' + "m nice and simple\n",
+                policy.GetFirstPageHeader().GetText()
+            );
+            Assert.AreEqual(
+                    "First header column!\tMid header\tRight header!\n",
+                    policy.GetDefaultHeader().GetText()
+            );
+
+
+            // And a few bits off a more complex header
+            policy = oddEven.GetHeaderFooterPolicy();
+
+            Assert.AreEqual(
+                "[ODD Page Header text]\n\n",
+                policy.GetDefaultHeader().GetText()
+            );
+            Assert.AreEqual(
+                "[This is an Even Page, with a Header]\n\n",
+                policy.GetEvenPageHeader().GetText()
+            );
+        }
+    }
+
 }
-

@@ -89,7 +89,8 @@ namespace NPOI.XWPF.UserModel
             table.AddNewTr().AddNewTc().AddNewP();
 
             CT_TblPr tblpro = table.AddNewTblPr();
-            tblpro.AddNewTblW().w = "0";
+            if (!tblpro.IsSetTblW())
+                tblpro.AddNewTblW().w = "0";
             tblpro.tblW.type=(ST_TblWidth.auto);
 
             // layout

@@ -32,7 +32,9 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         public CT_TabStop AddNewTab()
         {
-            throw new NotImplementedException();
+            CT_TabStop s = new CT_TabStop();
+            this.tabField.Add(s);
+            return s;
         }
     }
 

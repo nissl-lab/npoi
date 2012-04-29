@@ -23,6 +23,7 @@ namespace NPOI.XWPF.Model
     using System.IO;
     using System.Xml.Serialization;
     using System.Xml;
+    using NPOI.OpenXmlFormats.Vml;
 
     /**
      * A .docx file can have no headers/footers, the same header/footer
@@ -427,15 +428,13 @@ namespace NPOI.XWPF.Model
             CT_PPr pPr = p.AddNewPPr();
             pPr.AddNewPStyle().val = ("Header");
             // start watermark paragraph
-            CT_R r = p.AddNewR();
+            NPOI.OpenXmlFormats.Wordprocessing.CT_R r = p.AddNewR();
             CT_RPr rPr = r.AddNewRPr();
             rPr.AddNewNoProof();
             CT_Picture pict = r.AddNewPict();
 
-            //TODO: convert vml-xxxxx.xsd to c# code;
-
-            //CTGroup group = CTGroup.Factory.NewInstance();
-            //CT_Shapetype shapetype = group.AddNewShapetype();
+            CT_Group group = new CT_Group();
+            CT_Shapetype shapetype = group.AddNewShapetype();
             //shapetype.Id = ("_x0000_t136");
             //shapetype.Coordsize = ("1600,21600");
             //shapetype.Spt = (136);

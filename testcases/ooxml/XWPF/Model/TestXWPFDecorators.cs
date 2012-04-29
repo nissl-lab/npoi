@@ -21,88 +21,92 @@ namespace NPOI.XWPF.Model
 
 
 
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-using NPOI.XWPF;
-using NPOI.XWPF.UserModel;
-using NPOI.XWPF.UserModel;
-using NPOI.XWPF.UserModel;
+    using NPOI.XWPF;
+    using NPOI.XWPF.UserModel;
 
-/**
- * Tests for the various XWPF decorators
- */
+    /**
+     * Tests for the various XWPF decorators
+     */
     [TestClass]
-    public class TestXWPFDecorators 
-{
-   private XWPFDocument simple;
-   private XWPFDocument hyperlink;
-   private XWPFDocument comments;
+    public class TestXWPFDecorators
+    {
+        private XWPFDocument simple;
+        private XWPFDocument hyperlink;
+        private XWPFDocument comments;
+        [TestInitialize]
+        public void SetUp()
+        {
+            simple = XWPFTestDataSamples.OpenSampleDocument("SampleDoc.docx");
+            hyperlink = XWPFTestDataSamples.OpenSampleDocument("TestDocument.docx");
+            comments = XWPFTestDataSamples.OpenSampleDocument("WordWithAttachments.docx");
+        }
 
-   protected void SetUp() throws IOException {
-        simple = XWPFTestDataSamples.OpenSampleDocument("SampleDoc.docx");
-        hyperlink = XWPFTestDataSamples.OpenSampleDocument("TestDocument.docx");
-        comments = XWPFTestDataSamples.OpenSampleDocument("WordWithAttachments.docx");
-   }
+        [TestMethod]
+        public void TestHyperlink()
+        {
+            XWPFParagraph ps;
+            XWPFParagraph ph;
+            Assert.AreEqual(7, simple.Paragraphs.Count);
+            Assert.AreEqual(5, hyperlink.Paragraphs.Count);
 
-       [TestMethod]
-    public void TestHyperlink(){
-      XWPFParagraph ps;
-      XWPFParagraph ph;
-      Assert.AreEqual(7, simple.Paragraphs.Size());
-      Assert.AreEqual(5, hyperlink.Paragraphs.Size());
+            // Simple text
+            ps = simple.Paragraphs[(0)];
+            Assert.AreEqual("I am a test document", ps.GetParagraphText());
+            Assert.AreEqual(1, ps.GetRuns().Count);
 
-      // Simple text
-      ps = simple.Paragraphs.Get(0);
-      Assert.AreEqual("I am a test document", ps.ParagraphText);
-      Assert.AreEqual(1, ps.Runs.Size());
-
-      ph = hyperlink.Paragraphs.Get(4);
-      Assert.AreEqual("We have a hyperlink here, and another.", ph.ParagraphText);
-      Assert.AreEqual(3, ph.Runs.Size());
-
-
-      // The proper way to do hyperlinks(!)
-      Assert.IsFalse(ps.Runs.Get(0) is XWPFHyperlinkRun);
-      Assert.IsFalse(ph.Runs.Get(0) is XWPFHyperlinkRun);
-      Assert.IsTrue(ph.Runs.Get(1) is XWPFHyperlinkRun);
-      Assert.IsFalse(ph.Runs.Get(2) is XWPFHyperlinkRun);
-
-      XWPFHyperlinkRun link = (XWPFHyperlinkRun)ph.Runs.Get(1);
-      Assert.AreEqual("http://poi.apache.org/", link.GetHyperlink(hyperlink).URL);
+            ph = hyperlink.Paragraphs[(4)];
+            Assert.AreEqual("We have a hyperlink here, and another.", ph.GetParagraphText());
+            Assert.AreEqual(3, ph.GetRuns().Count);
 
 
-      // Test the old style decorator
-      // You probably don't want to still be using it...
-      Assert.AreEqual(
-            "I am a test document",
-            (new XWPFHyperlinkDecorator(ps, null, false)).Text
-      );
-      Assert.AreEqual(
-            "I am a test document",
-            (new XWPFHyperlinkDecorator(ps, null, true)).Text
-      );
+            // The proper way to do hyperlinks(!)
+            Assert.IsFalse(ps.GetRuns()[(0)] is XWPFHyperlinkRun);
+            Assert.IsFalse(ph.GetRuns()[(0)] is XWPFHyperlinkRun);
+            Assert.IsTrue(ph.GetRuns()[(1)] is XWPFHyperlinkRun);
+            Assert.IsFalse(ph.GetRuns()[(2)] is XWPFHyperlinkRun);
 
-      Assert.AreEqual(
-            "We have a hyperlink here, and another.hyperlink",
-            (new XWPFHyperlinkDecorator(ph, null, false)).Text
-      );
-      Assert.AreEqual(
-            "We have a hyperlink here, and another.hyperlink <http://poi.apache.org/>",
-            (new XWPFHyperlinkDecorator(ph, null, true)).Text
-      );
-   }
+            XWPFHyperlinkRun link = (XWPFHyperlinkRun)ph.GetRuns()[(1)];
+            Assert.AreEqual("http://poi.apache.org/", link.GetHyperlink(hyperlink).URL);
 
-       [TestMethod]
-    public void TestComments(){
-      int numComments = 0;
-      foreach(XWPFParagraph p in comments.Paragraphs) {
-         XWPFCommentsDecorator d = new XWPFCommentsDecorator(p, null);
-         if(d.CommentText.Length() > 0) {
-            numComments++;
-            Assert.AreEqual("\tComment by", d.CommentText.Substring(0, 11));
-         }
-      }
-      Assert.AreEqual(3, numComments);
-   }
+
+            // Test the old style decorator
+            // You probably don't want to still be using it...
+            Assert.AreEqual(
+                  "I am a test document",
+                  (new XWPFHyperlinkDecorator(ps, null, false)).GetText()
+            );
+            Assert.AreEqual(
+                  "I am a test document",
+                  (new XWPFHyperlinkDecorator(ps, null, true)).GetText()
+            );
+
+            Assert.AreEqual(
+                  "We have a hyperlink here, and another.hyperlink",
+                  (new XWPFHyperlinkDecorator(ph, null, false)).GetText()
+            );
+            Assert.AreEqual(
+                  "We have a hyperlink here, and another.hyperlink <http://poi.apache.org/>",
+                  (new XWPFHyperlinkDecorator(ph, null, true)).GetText()
+            );
+        }
+
+        [TestMethod]
+        public void TestComments()
+        {
+            int numComments = 0;
+            foreach (XWPFParagraph p in comments.Paragraphs)
+            {
+                XWPFCommentsDecorator d = new XWPFCommentsDecorator(p, null);
+                if (d.GetCommentText().Length > 0)
+                {
+                    numComments++;
+                    Assert.AreEqual("\tComment by", d.GetCommentText().Substring(0, 11));
+                }
+            }
+            Assert.AreEqual(3, numComments);
+        }
+    }
+
 }
-

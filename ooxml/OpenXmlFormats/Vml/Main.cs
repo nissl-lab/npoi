@@ -2425,6 +2425,11 @@ namespace NPOI.OpenXmlFormats.Vml
                 this.editasFieldSpecified = value;
             }
         }
+
+        public CT_Shapetype AddNewShapetype()
+        {
+            throw new System.NotImplementedException();
+        }
     }
     
     /// <remarks/>

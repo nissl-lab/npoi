@@ -153,80 +153,66 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         public CT_Text AddNewT()
         {
-            CT_Text t = new CT_Text();
-            this.itemsField.Add(t);
-            this.itemsElementNameField.Add(RunItemsChoiceType.t);
-            return t;
+            return AddNewObject<CT_Text>(RunItemsChoiceType.t);
         }
 
         public CT_RPr AddNewRPr()
         {
-            //throw new NotImplementedException();
-            this.rPrField = new CT_RPr();
+            if (this.rPrField == null)
+                this.rPrField = new CT_RPr();
             return this.rPrField;
         }
 
         public CT_Empty AddNewTab()
         {
-            throw new NotImplementedException();
+            return AddNewObject<CT_Empty>(RunItemsChoiceType.tab);
         }
 
         public CT_FldChar AddNewFldChar()
         {
-            throw new NotImplementedException();
+            return AddNewObject<CT_FldChar>(RunItemsChoiceType.fldChar);
         }
 
         public CT_Text AddNewInstrText()
         {
-            throw new NotImplementedException();
+            return AddNewObject<CT_Text>(RunItemsChoiceType.instrText);
         }
 
-        public void AddNewCr()
+        public CT_Empty AddNewCr()
         {
-            throw new NotImplementedException();
+            return AddNewObject<CT_Empty>(RunItemsChoiceType.cr);
         }
 
         public CT_Br AddNewBr()
         {
-            throw new NotImplementedException();
+            return AddNewObject<CT_Br>(RunItemsChoiceType.br);
         }
 
         public bool IsSetRPr()
         {
-            throw new NotImplementedException();
+            return this.rPrField != null;
         }
 
         public int SizeOfTArray()
         {
-            throw new NotImplementedException();
+            return SizeOfArray(RunItemsChoiceType.t);
         }
 
         public CT_Text GetTArray(int pos)
         {
-            throw new NotImplementedException();
+            return GetObjectArray<CT_Text>(pos, RunItemsChoiceType.t);
         }
 
         public List<CT_Text> GetTList()
         {
-            throw new NotImplementedException();
+            return GetObjectList<CT_Text>(RunItemsChoiceType.t);
         }
 
         public CT_Drawing AddNewDrawing()
         {
-            throw new NotImplementedException();
+            return AddNewObject<CT_Drawing>(RunItemsChoiceType.drawing);
         }
-        private IList<T> GetObjectList<T>(RunItemsChoiceType type) where T: class
-        {
-            IList<T> list = new List<T>();
-            for (int i = 0; i < itemsElementNameField.Count; i++)
-            {
-                if (itemsElementNameField[i] == type)
-                {
-                    list.Add(itemsField[i] as T);
-                }
-            }
-            return list;
-        }
+
         public IList<CT_Drawing> GetDrawingList()
         {
             return GetObjectList<CT_Drawing>(RunItemsChoiceType.drawing);
@@ -239,8 +225,112 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         public CT_Picture AddNewPict()
         {
-            throw new NotImplementedException();
+            return AddNewObject<CT_Picture>(RunItemsChoiceType.pict);
         }
+        #region Generic methods for object operation
+
+        private List<T> GetObjectList<T>(RunItemsChoiceType type) where T : class
+        {
+            lock (this)
+            {
+                List<T> list = new List<T>();
+                for (int i = 0; i < itemsElementNameField.Count; i++)
+                {
+                    if (itemsElementNameField[i] == type)
+                        list.Add(itemsField[i] as T);
+                }
+                return list;
+            }
+        }
+        private int SizeOfArray(RunItemsChoiceType type)
+        {
+            lock (this)
+            {
+                int size = 0;
+                for (int i = 0; i < itemsElementNameField.Count; i++)
+                {
+                    if (itemsElementNameField[i] == type)
+                        size++;
+                }
+                return size;
+            }
+        }
+        private T GetObjectArray<T>(int p, RunItemsChoiceType type) where T : class
+        {
+            lock (this)
+            {
+                int pos = GetObjectIndex(type, p);
+                if (pos < 0 || pos >= this.itemsField.Count)
+                    return null;
+                return itemsField[pos] as T;
+            }
+        }
+        private T InsertNewObject<T>(RunItemsChoiceType type, int p) where T : class, new()
+        {
+            T t = new T();
+            lock (this)
+            {
+                int pos = GetObjectIndex(type, p);
+                this.itemsElementNameField.Insert(pos, type);
+                this.itemsField.Insert(pos, t);
+            }
+            return t;
+        }
+        private T AddNewObject<T>(RunItemsChoiceType type) where T : class, new()
+        {
+            T t = new T();
+            lock (this)
+            {
+                this.itemsElementNameField.Add(type);
+                this.itemsField.Add(t);
+            }
+            return t;
+        }
+        private void SetObject<T>(RunItemsChoiceType type, int p, T obj) where T : class
+        {
+            lock (this)
+            {
+                int pos = GetObjectIndex(type, p);
+                if (pos < 0 || pos >= this.itemsField.Count)
+                    return;
+                if (this.itemsField[pos] is T)
+                    this.itemsField[pos] = obj;
+                else
+                    throw new Exception(string.Format(@"object types are difference, itemsField[{0}] is {1}, and parameter obj is {2}",
+                        pos, this.itemsField[pos].GetType().Name, typeof(T).Name));
+            }
+        }
+        private int GetObjectIndex(RunItemsChoiceType type, int p)
+        {
+            int index = -1;
+            int pos = 0;
+            for (int i = 0; i < itemsElementNameField.Count; i++)
+            {
+                if (itemsElementNameField[i] == type)
+                {
+                    if (pos == p)
+                    {
+                        index = i;
+                        break;
+                    }
+                    else
+                        pos++;
+                }
+            }
+            return index;
+        }
+        private void RemoveObject(RunItemsChoiceType type, int p)
+        {
+            lock (this)
+            {
+                int pos = GetObjectIndex(type, p);
+                if (pos < 0 || pos >= this.itemsField.Count)
+                    return;
+                itemsElementNameField.RemoveAt(pos);
+                itemsField.RemoveAt(pos);
+            }
+        }
+        #endregion
     }
 
 

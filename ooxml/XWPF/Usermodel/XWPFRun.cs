@@ -765,8 +765,10 @@ namespace NPOI.XWPF.UserModel
             //XmlCursor c = run.NewCursor();
             //c.SelectPath("./*");
             //while (c.ToNextSelection())
-            foreach(object o in run.Items)
+            int index=0;
+            foreach (object o in run.Items)
             {
+
                 //XmlObject o = c.Object;
                 if (o is CT_Text)
                 {
@@ -775,6 +777,7 @@ namespace NPOI.XWPF.UserModel
                     //  come up as instances of CTText, but we don't want them
                     //  in the normal text output
                     //if (!"w:instrText".Equals(tagName))
+                    if (!(run.ItemsElementName[index] == RunItemsChoiceType.instrText))
                     {
                         text.Append(((CT_Text)o).Value);
                     }
@@ -796,19 +799,23 @@ namespace NPOI.XWPF.UserModel
                     // This bit works around it, and replicates the above
                     //  rules for that case
                     //String tagName = o.DomNode.NodeName;
+                    if (run.ItemsElementName[index] == RunItemsChoiceType.tab)
                     //if ("w:tab".Equals(tagName))
-                    //{
-                    //    text.Append("\t");
-                    //}
+                    {
+                        text.Append("\t");
+                    }
+                    if (run.ItemsElementName[index] == RunItemsChoiceType.br)
                     //if ("w:br".Equals(tagName))
-                    //{
-                    //    text.Append("\n");
-                    //}
+                    {
+                        text.Append("\n");
+                    }
+                    if (run.ItemsElementName[index] == RunItemsChoiceType.cr)
                     //if ("w:cr".Equals(tagName))
-                    //{
-                    //    text.Append("\n");
-                    //}
+                    {
+                        text.Append("\n");
+                    }
                 }
+                index++;
             }
 
             //c.Dispose();

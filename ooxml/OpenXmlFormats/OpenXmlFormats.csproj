@@ -91,6 +91,11 @@
     <Compile Include="Spreadsheet\Workbook.cs" />
     <Compile Include="Spreadsheet\WorkbookDocument.cs" />
     <Compile Include="Spreadsheet\WorksheetDocument.cs" />
+    <Compile Include="Vml\Main.cs" />
+    <Compile Include="Vml\OfficeDrawing.cs" />
+    <Compile Include="Vml\PresentationDrawing.cs" />
+    <Compile Include="Vml\SpreadsheetDrawing.cs" />
+    <Compile Include="Vml\WordprocessingDrawing.cs" />
     <Compile Include="Wordprocessing\BaseTypes.cs" />
     <Compile Include="Wordprocessing\CustomXml.cs" />
     <Compile Include="Wordprocessing\Document.cs" />
@@ -112,9 +117,6 @@
     <Compile Include="Wordprocessing\Table.cs" />
     <Compile Include="Wordprocessing\wml.cs" />
     <Compile Include="Wordprocessing\WordPartDocument.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Vml\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -886,8 +886,7 @@ namespace NPOI.XWPF.UserModel
                 {
                     int tablePos = GetTablePos(pos);
                     tables.RemoveAt(tablePos);
-                    //ctDocument.Body.RemoveTbl(tablePos);
-                    throw new NotImplementedException();
+                    ctDocument.body.RemoveTbl(tablePos);
                 }
                 if (type == BodyElementType.PARAGRAPH)
                 {
@@ -908,13 +907,12 @@ namespace NPOI.XWPF.UserModel
          */
         public void SetParagraph(XWPFParagraph paragraph, int pos)
         {
-            //paragraphs.Set(pos, paragraph);
-            //ctDocument.Body.PArray=(pos, paragraph.CTP);
+            paragraphs[pos]= paragraph;
+            ctDocument.body.SetPArray(pos, paragraph.GetCTP());
             /* TODO update body element, update xwpf element, verify that
              * incoming paragraph belongs to this document or if not, XML was
              * copied properly (namespace-abbreviations, etc.)
              */
-            throw new NotImplementedException();
         }
 
         /**
@@ -932,11 +930,10 @@ namespace NPOI.XWPF.UserModel
          */
         public XWPFTable CreateTable()
         {
-            //XWPFTable table = new XWPFTable(ctDocument.Body.AddNewTbl(), this);
-            //bodyElements.Add(table);
-            //tables.Add(table);
-            //return table;
-            throw new NotImplementedException();
+            XWPFTable table = new XWPFTable(ctDocument.body.AddNewTbl(), this);
+            bodyElements.Add(table);
+            tables.Add(table);
+            return table;
         }
 
         /**
@@ -947,11 +944,10 @@ namespace NPOI.XWPF.UserModel
          */
         public XWPFTable CreateTable(int rows, int cols)
         {
-            //XWPFTable table = new XWPFTable(ctDocument.Body.AddNewTbl(), this, rows, cols);
-            //bodyElements.Add(table);
-            //tables.Add(table);
-            //return table;
-            throw new NotImplementedException();
+            XWPFTable table = new XWPFTable(ctDocument.body.AddNewTbl(), this, rows, cols);
+            bodyElements.Add(table);
+            tables.Add(table);
+            return table;
         }
 
         /**
@@ -959,20 +955,25 @@ namespace NPOI.XWPF.UserModel
          */
         public void CreateTOC()
         {
-            //CTSdtBlock block = this.Document.Body.AddNewSdt();
-            //TOC toc = new TOC(block);
-            //foreach (XWPFParagraph par in paragraphs) {
-            //    String parStyle = par.Style;
-            //    if (parStyle != null && parStyle.Substring(0, 7).Equals("Heading")) {
-            //        try {
-            //            int level = Int32.ValueOf(parStyle.Substring("Heading".Length)).intValue();
-            //            toc.AddRow(level, par.Text, 1, "112723803");
-            //        } catch (FormatException e) {
-            //            e.PrintStackTrace();
-            //        }
-            //    }
-            //}
-            throw new NotImplementedException();
+            CT_SdtBlock block = this.Document.body.AddNewSdt();
+            TOC toc = new TOC(block);
+            foreach (XWPFParagraph par in paragraphs)
+            {
+                String parStyle = par.GetStyle();
+                if (parStyle != null && parStyle.Substring(0, 7).Equals("Heading"))
+                {
+                    try
+                    {
+                        int level = Int32.Parse(parStyle.Substring("Heading".Length));
+                        toc.AddRow(level, par.GetText(), 1, "112723803");
+                    }
+                    catch (FormatException e)
+                    {
+                        //e.PrintStackTrace();
+                        System.Console.Write(e.StackTrace);
+                    }
+                }
+            }
         }
 
         /**Replace content of table in array tables at position pos with a

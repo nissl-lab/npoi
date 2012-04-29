@@ -183,7 +183,6 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         private CT_SdtPr sdtPrField;
 
         private List<CT_RPr> sdtEndPrField;
-
         private CT_SdtContentBlock sdtContentField;
 
         public CT_SdtBlock()
@@ -235,17 +234,23 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         public CT_SdtPr AddNewSdtPr()
         {
-            throw new NotImplementedException();
+            if (this.sdtPrField == null)
+                this.sdtPrField = new CT_SdtPr();
+            return this.sdtPrField;
         }
 
         public CT_SdtEndPr AddNewSdtEndPr()
         {
-            throw new NotImplementedException();
+            CT_SdtEndPr endPr = new CT_SdtEndPr();
+            this.sdtEndPrField = endPr.Items;
+            return endPr;
         }
 
         public CT_SdtContentBlock AddNewSdtContent()
         {
-            throw new NotImplementedException();
+            if (this.sdtContentField == null)
+                this.sdtContentField = new CT_SdtContentBlock();
+            return this.sdtContentField;
         }
     }
 
@@ -478,7 +483,9 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         public CT_String AddNewDocPartGallery()
         {
-            throw new NotImplementedException();
+            if (this.docPartGalleryField == null)
+                this.docPartGalleryField = new CT_String();
+            return this.docPartGalleryField;
         }
     }
 
@@ -533,14 +540,14 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     public class CT_SdtContentBlock
     {
 
-        private object[] itemsField;
+        private List<object> itemsField;
 
-        private ItemsChoiceType19[] itemsElementNameField;
+        private List<ItemsChoiceType19> itemsElementNameField;
 
         public CT_SdtContentBlock()
         {
-            this.itemsElementNameField = new ItemsChoiceType19[0];
-            this.itemsField = new object[0];
+            this.itemsElementNameField = new List<ItemsChoiceType19>();
+            this.itemsField = new List<object>();
         }
 
         [System.Xml.Serialization.XmlElementAttribute("oMath", typeof(CT_OMath), Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", Order = 0)]
@@ -577,11 +584,14 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         {
             get
             {
-                return this.itemsField;
+                return this.itemsField.ToArray();
             }
             set
             {
-                this.itemsField = value;
+                if (value == null || value.Length == 0)
+                    this.itemsField = new List<object>();
+                else
+                    this.itemsField = new List<object>(value);
             }
         }
 
@@ -591,18 +601,125 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         {
             get
             {
-                return this.itemsElementNameField;
+                return this.itemsElementNameField.ToArray(); ;
             }
             set
             {
-                this.itemsElementNameField = value;
+                if (value == null || value.Length == 0)
+                    this.itemsElementNameField = new List<ItemsChoiceType19>();
+                else
+                    this.itemsElementNameField = new List<ItemsChoiceType19>(value);
             }
         }
 
         public CT_P AddNewP()
         {
-            throw new NotImplementedException();
+            return AddNewObject<CT_P>(ItemsChoiceType19.p);
         }
+        #region Generic methods for object operation
+
+        private List<T> GetObjectList<T>(ItemsChoiceType19 type) where T : class
+        {
+            lock (this)
+            {
+                List<T> list = new List<T>();
+                for (int i = 0; i < itemsElementNameField.Count; i++)
+                {
+                    if (itemsElementNameField[i] == type)
+                        list.Add(itemsField[i] as T);
+                }
+                return list;
+            }
+        }
+        private int SizeOfArray(ItemsChoiceType19 type)
+        {
+            lock (this)
+            {
+                int size = 0;
+                for (int i = 0; i < itemsElementNameField.Count; i++)
+                {
+                    if (itemsElementNameField[i] == type)
+                        size++;
+                }
+                return size;
+            }
+        }
+        private T GetObjectArray<T>(int p, ItemsChoiceType19 type) where T : class
+        {
+            lock (this)
+            {
+                int pos = GetObjectIndex(type, p);
+                if (pos < 0 || pos >= this.itemsField.Count)
+                    return null;
+                return itemsField[pos] as T;
+            }
+        }
+        private T InsertNewObject<T>(ItemsChoiceType19 type, int p) where T : class, new()
+        {
+            T t = new T();
+            lock (this)
+            {
+                int pos = GetObjectIndex(type, p);
+                this.itemsElementNameField.Insert(pos, type);
+                this.itemsField.Insert(pos, t);
+            }
+            return t;
+        }
+        private T AddNewObject<T>(ItemsChoiceType19 type) where T : class, new()
+        {
+            T t = new T();
+            lock (this)
+            {
+                this.itemsElementNameField.Add(type);
+                this.itemsField.Add(t);
+            }
+            return t;
+        }
+        private void SetObject<T>(ItemsChoiceType19 type, int p, T obj) where T : class
+        {
+            lock (this)
+            {
+                int pos = GetObjectIndex(type, p);
+                if (pos < 0 || pos >= this.itemsField.Count)
+                    return;
+                if (this.itemsField[pos] is T)
+                    this.itemsField[pos] = obj;
+                else
+                    throw new Exception(string.Format(@"object types are difference, itemsField[{0}] is {1}, and parameter obj is {2}",
+                        pos, this.itemsField[pos].GetType().Name, typeof(T).Name));
+            }
+        }
+        private int GetObjectIndex(ItemsChoiceType19 type, int p)
+        {
+            int index = -1;
+            int pos = 0;
+            for (int i = 0; i < itemsElementNameField.Count; i++)
+            {
+                if (itemsElementNameField[i] == type)
+                {
+                    if (pos == p)
+                    {
+                        index = i;
+                        break;
+                    }
+                    else
+                        pos++;
+                }
+            }
+            return index;
+        }
+        private void RemoveObject(ItemsChoiceType19 type, int p)
+        {
+            lock (this)
+            {
+                int pos = GetObjectIndex(type, p);
+                if (pos < 0 || pos >= this.itemsField.Count)
+                    return;
+                itemsElementNameField.RemoveAt(pos);
+                itemsField.RemoveAt(pos);
+            }
+        }
+        #endregion
     }
 
     [System.SerializableAttribute()]
@@ -781,14 +898,14 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     public class CT_SdtPr
     {
 
-        private object[] itemsField;
+        private List<object> itemsField;
 
-        private ItemsChoiceType17[] itemsElementNameField;
+        private List<ItemsChoiceType17> itemsElementNameField;
 
         public CT_SdtPr()
         {
-            this.itemsElementNameField = new ItemsChoiceType17[0];
-            this.itemsField = new object[0];
+            this.itemsElementNameField = new List<ItemsChoiceType17>();
+            this.itemsField = new List<object>();
         }
 
         [System.Xml.Serialization.XmlElementAttribute("alias", typeof(CT_String), Order = 0)]
@@ -817,11 +934,14 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         {
             get
             {
-                return this.itemsField;
+                return this.itemsField.ToArray();
             }
             set
             {
-                this.itemsField = value;
+                if (value == null || value.Length == 0)
+                    this.itemsField = new List<object>();
+                else
+                    this.itemsField = new List<object>(value);
             }
         }
 
@@ -831,23 +951,130 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         {
             get
             {
-                return this.itemsElementNameField;
+                return this.itemsElementNameField.ToArray();
             }
             set
             {
-                this.itemsElementNameField = value;
+                if (value == null || value.Length == 0)
+                    this.itemsElementNameField = new List<ItemsChoiceType17>();
+                else
+                    this.itemsElementNameField = new List<ItemsChoiceType17>(value);
             }
         }
 
         public CT_DecimalNumber AddNewId()
         {
-            throw new NotImplementedException();
+            return AddNewObject<CT_DecimalNumber>(ItemsChoiceType17.id);
         }
 
         public CT_SdtDocPart AddNewDocPartObj()
         {
-            throw new NotImplementedException();
+            return AddNewObject<CT_SdtDocPart>(ItemsChoiceType17.docPartObj);
         }
+        #region Generic methods for object operation
+
+        private List<T> GetObjectList<T>(ItemsChoiceType17 type) where T : class
+        {
+            lock (this)
+            {
+                List<T> list = new List<T>();
+                for (int i = 0; i < itemsElementNameField.Count; i++)
+                {
+                    if (itemsElementNameField[i] == type)
+                        list.Add(itemsField[i] as T);
+                }
+                return list;
+            }
+        }
+        private int SizeOfArray(ItemsChoiceType17 type)
+        {
+            lock (this)
+            {
+                int size = 0;
+                for (int i = 0; i < itemsElementNameField.Count; i++)
+                {
+                    if (itemsElementNameField[i] == type)
+                        size++;
+                }
+                return size;
+            }
+        }
+        private T GetObjectArray<T>(int p, ItemsChoiceType17 type) where T : class
+        {
+            lock (this)
+            {
+                int pos = GetObjectIndex(type, p);
+                if (pos < 0 || pos >= this.itemsField.Count)
+                    return null;
+                return itemsField[pos] as T;
+            }
+        }
+        private T InsertNewObject<T>(ItemsChoiceType17 type, int p) where T : class, new()
+        {
+            T t = new T();
+            lock (this)
+            {
+                int pos = GetObjectIndex(type, p);
+                this.itemsElementNameField.Insert(pos, type);
+                this.itemsField.Insert(pos, t);
+            }
+            return t;
+        }
+        private T AddNewObject<T>(ItemsChoiceType17 type) where T : class, new()
+        {
+            T t = new T();
+            lock (this)
+            {
+                this.itemsElementNameField.Add(type);
+                this.itemsField.Add(t);
+            }
+            return t;
+        }
+        private void SetObject<T>(ItemsChoiceType17 type, int p, T obj) where T : class
+        {
+            lock (this)
+            {
+                int pos = GetObjectIndex(type, p);
+                if (pos < 0 || pos >= this.itemsField.Count)
+                    return;
+                if (this.itemsField[pos] is T)
+                    this.itemsField[pos] = obj;
+                else
+                    throw new Exception(string.Format(@"object types are difference, itemsField[{0}] is {1}, and parameter obj is {2}",
+                        pos, this.itemsField[pos].GetType().Name, typeof(T).Name));
+            }
+        }
+        private int GetObjectIndex(ItemsChoiceType17 type, int p)
+        {
+            int index = -1;
+            int pos = 0;
+            for (int i = 0; i < itemsElementNameField.Count; i++)
+            {
+                if (itemsElementNameField[i] == type)
+                {
+                    if (pos == p)
+                    {
+                        index = i;
+                        break;
+                    }
+                    else
+                        pos++;
+                }
+            }
+            return index;
+        }
+        private void RemoveObject(ItemsChoiceType17 type, int p)
+        {
+            lock (this)
+            {
+                int pos = GetObjectIndex(type, p);
+                if (pos < 0 || pos >= this.itemsField.Count)
+                    return;
+                itemsElementNameField.RemoveAt(pos);
+                itemsField.RemoveAt(pos);
+            }
+        }
+        #endregion
     }
 
     [System.SerializableAttribute()]
@@ -948,7 +1175,9 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         public CT_RPr AddNewRPr()
         {
-            throw new NotImplementedException();
+            CT_RPr r = new CT_RPr();
+            this.itemsField.Add(r);
+            return r;
         }
     }
 
