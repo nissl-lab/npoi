@@ -53,7 +53,7 @@ namespace NPOI.XWPF.Model
             hyperlinkText = new StringBuilder();
 
             // loop over hyperlink anchors
-            foreach (CT_Hyperlink link in paragraph.GetCTP().GetHyperlinkList())
+            foreach (CT_Hyperlink1 link in paragraph.GetCTP().GetHyperlinkList())
             {
                 foreach (CT_R r in link.GetRList())
                 {

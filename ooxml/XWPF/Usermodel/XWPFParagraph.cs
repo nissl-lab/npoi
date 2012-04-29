@@ -55,6 +55,36 @@ namespace NPOI.XWPF.UserModel
                 {
                     Runs.Add(new XWPFRun((CT_R)o, this));
                 }
+                if (o is CT_Hyperlink1)
+                {
+                    CT_Hyperlink1 link = (CT_Hyperlink1)o;
+                    foreach (CT_R r in link.GetRList())
+                    {
+                        Runs.Add(new XWPFHyperlinkRun(link, r, this));
+                    }
+                }
+                if (o is CT_SdtRun)
+                {
+                    CT_SdtContentRun run = ((CT_SdtRun)o).sdtContent;
+                    foreach (CT_R r in run.GetRList())
+                    {
+                        Runs.Add(new XWPFRun(r, this));
+                    }
+                }
+                if (o is CT_RunTrackChange)
+                {
+                    foreach (CT_R r in ((CT_RunTrackChange)o).GetRList())
+                    {
+                        Runs.Add(new XWPFRun(r, this));
+                    }
+                }
+                if (o is CT_SimpleField)
+                {
+                    foreach (CT_R r in ((CT_SimpleField)o).GetRList())
+                    {
+                        Runs.Add(new XWPFRun(r, this));
+                    }
+                }
             }
 
             // Get all our child nodes in order, and process them

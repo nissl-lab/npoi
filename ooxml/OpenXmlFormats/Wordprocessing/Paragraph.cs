@@ -221,9 +221,9 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             return GetObjectList<CT_MarkupRange>(ParagraphItemsChoiceType.commentRangeStart);
         }
 
-        public IEnumerable<CT_Hyperlink> GetHyperlinkList()
+        public IEnumerable<CT_Hyperlink1> GetHyperlinkList()
         {
-            return GetObjectList<CT_Hyperlink>(ParagraphItemsChoiceType.hyperlink);
+            return GetObjectList<CT_Hyperlink1>(ParagraphItemsChoiceType.hyperlink);
         }
         #region Generic methods for object operation
 
