@@ -31,7 +31,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         {
             this.itemsElementNameField = new List<RunItemsChoiceType>();
             this.itemsField = new List<object>();
-            this.rPrField = new CT_RPr();
+            //this.rPrField = new CT_RPr();
         }
 
         [System.Xml.Serialization.XmlElementAttribute(Order = 0)]
@@ -218,7 +218,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             return GetObjectList<CT_Drawing>(RunItemsChoiceType.drawing);
         }
 
-        public IEnumerable<CT_Picture> GetPictList()
+        public IList<CT_Picture> GetPictList()
         {
             return GetObjectList<CT_Picture>(RunItemsChoiceType.pict);
         }
@@ -331,6 +331,26 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
         #endregion
+
+        public CT_Drawing GetDrawingArray(int p)
+        {
+            return GetObjectArray<CT_Drawing>(p, RunItemsChoiceType.drawing);
+        }
+
+        public int SizeOfCrArray()
+        {
+            return SizeOfArray(RunItemsChoiceType.cr);
+        }
+
+        public IList<CT_Empty> GetCrList()
+        {
+            return GetObjectList<CT_Empty>(RunItemsChoiceType.cr);
+        }
+
+        public int SizeOfBrArray()
+        {
+            return SizeOfArray(RunItemsChoiceType.br);
+        }
     }
 
 
@@ -841,7 +861,6 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
     public enum ST_Jc
     {
-
         /// <remarks/>
         left,
 

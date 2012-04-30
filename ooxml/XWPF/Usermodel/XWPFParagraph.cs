@@ -218,30 +218,35 @@ namespace NPOI.XWPF.UserModel
          * If style not exist null will be returned     
          * @return	NumID as Bigint
          */
-        //public Bigint GetNumID(){
-        //    if(paragraph.PPr!=null){
-        //        if(paragraph.PPr.NumPr!=null){
-        //            if(paragraph.PPr.NumPr.NumId!=null)
-        //                return paragraph.PPr.NumPr.NumId.Val;
-        //        }
-        //    }
-        //    return null;
-        //}
+        public string GetNumID()
+        {
+            if (paragraph.pPr != null)
+            {
+                if (paragraph.pPr.numPr != null)
+                {
+                    if (paragraph.pPr.numPr.numId != null)
+                        return paragraph.pPr.numPr.numId.val;
+                }
+            }
+            return null;
+        }
 
         /**
          * SetNumID of Paragraph
          * @param numPos
          */
-        //public void SetNumID(Bigint numPos) {
-        //    if(paragraph.PPr==null)
-        //        paragraph.AddNewPPr();
-        //    if(paragraph.PPr.NumPr==null)
-        //        paragraph.PPr.AddNewNumPr();
-        //    if(paragraph.PPr.NumPr.NumId==null){
-        //        paragraph.PPr.NumPr.AddNewNumId();
-        //    }
-        //    paragraph.PPr.NumPr.NumId.Val=(numPos);
-        //}
+        public void SetNumID(string numPos)
+        {
+            if (paragraph.pPr == null)
+                paragraph.AddNewPPr();
+            if (paragraph.pPr.numPr == null)
+                paragraph.pPr.AddNewNumPr();
+            if (paragraph.pPr.numPr.numId == null)
+            {
+                paragraph.pPr.numPr.AddNewNumId();
+            }
+            paragraph.pPr.numPr.numId.val = (numPos);
+        }
 
         /**
          * Returns the text of the paragraph, but not of any objects in the
@@ -307,7 +312,7 @@ namespace NPOI.XWPF.UserModel
         public ParagraphAlignment GetAlignment()
         {
             CT_PPr pr = GetCTPPr();
-            return pr == null || !pr.IsSetJc() ? ParagraphAlignment.LEFT : (ParagraphAlignment)(pr.jc.val);
+            return pr == null || !pr.IsSetJc() ? ParagraphAlignment.LEFT : EnumConverter.ValueOf<ParagraphAlignment, ST_Jc>(pr.jc.val);
         }
 
         /**
@@ -734,7 +739,7 @@ namespace NPOI.XWPF.UserModel
             CT_Spacing spacing = GetCTSpacing(true);
             if (spacing != null)
             {
-                BigInteger bi = new BigInteger(spaces);
+                //BigInteger bi = new BigInteger(spaces);
                 spacing.after = (ulong)spaces;
             }
         }
@@ -1064,7 +1069,7 @@ namespace NPOI.XWPF.UserModel
             if (wrap)
                 wordWrap.val = (ST_OnOff.True);
             else
-                wordWrap.UnsetVal();
+                wordWrap.UnSetVal();
         }
 
         /**
@@ -1173,6 +1178,7 @@ namespace NPOI.XWPF.UserModel
             //pos = paragraph.RList.Size();
             //paragraph.AddNewR();
             //paragraph.SetRArray(pos, Run);
+            throw new NotImplementedException();
         }
 
         /**
@@ -1260,7 +1266,7 @@ namespace NPOI.XWPF.UserModel
          * @param pos
          * @return  the inserted run
          */
-        public XWPFRun insertNewRun(int pos)
+        public XWPFRun InsertNewRun(int pos)
         {
             if (pos >= 0 && pos <= paragraph.SizeOfRArray())
             {
@@ -1393,7 +1399,7 @@ namespace NPOI.XWPF.UserModel
         {
             for (int i = 0; i < GetRuns().Count; i++)
             {
-                if (GetRuns()[(i)].GetCT_R() == r)
+                if (GetRuns()[(i)].GetCTR() == r)
                 {
                     return GetRuns()[(i)];
                 }

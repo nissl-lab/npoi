@@ -49,7 +49,7 @@ namespace NPOI.XWPF.UserModel
          * Specifies that the height of the line shall be at least the value
          * specified, but may be expanded to fit its content as needed.
          */
-        AT_LEAST = (3)
+        ATLEAST = (3)
 
 
         //private int value;

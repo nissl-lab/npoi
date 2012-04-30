@@ -134,7 +134,7 @@ namespace NPOI.XWPF.UserModel
          * @param numID
          * @return bool		true if num exist, false if num not exist
          */
-        public bool numExist(string numID)
+        public bool NumExist(string numID)
         {
             foreach (XWPFNum num in nums)
             {

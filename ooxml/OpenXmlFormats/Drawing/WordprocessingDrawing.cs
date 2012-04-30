@@ -232,17 +232,16 @@ namespace NPOI.OpenXmlFormats.Dml
 
         public CT_PositiveSize2D AddNewExtent()
         {
-            throw new NotImplementedException();
+            if (this.extentField == null)
+                this.extentField = new CT_PositiveSize2D();
+            return this.extentField;
         }
 
         public CT_NonVisualDrawingProps AddNewDocPr()
         {
-            throw new NotImplementedException();
-        }
-
-        public void Set(string p)
-        {
-            throw new NotImplementedException();
+            if (this.docPrField == null)
+                this.docPrField = new CT_NonVisualDrawingProps();
+            return this.docPrField;
         }
     }
 

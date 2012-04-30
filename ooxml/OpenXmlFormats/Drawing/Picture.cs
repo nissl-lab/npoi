@@ -28,6 +28,7 @@ namespace NPOI.OpenXmlFormats.Dml {
 
 
         /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Order = 0)]
         public CT_NonVisualDrawingProps cNvPr {
             get {
                 return this.cNvPrField;
@@ -38,6 +39,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Order = 1)]
         public CT_NonVisualPictureProperties cNvPicPr {
             get {
                 return this.cNvPicPrField;
@@ -75,6 +77,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Order = 0)]
         public CT_Hyperlink hlinkClick {
             get {
                 return this.hlinkClickField;
@@ -85,6 +88,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Order = 1)]
         public CT_Hyperlink hlinkHover {
             get {
                 return this.hlinkHoverField;
@@ -95,6 +99,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Order = 2)]
         public CT_OfficeArtExtensionList extLst {
             get {
                 return this.extLstField;
@@ -406,43 +411,59 @@ namespace NPOI.OpenXmlFormats.Dml {
     /// <remarks/>
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
-    [System.ComponentModel.DesignerCategory("code")]
-    [System.Xml.Serialization.XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/picture")]
-    [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/picture", IsNullable=true)]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/picture")]
+    [System.Xml.Serialization.XmlRootAttribute("pic", Namespace = "http://schemas.openxmlformats.org/drawingml/2006/picture", IsNullable = false)]
     public partial class CT_Picture {
         
         private CT_PictureNonVisual nvPicPrField;
-        
+
         private CT_BlipFillProperties blipFillField;
-        
+
         private CT_ShapeProperties spPrField;
-        
-        /// <remarks/>
-        public CT_PictureNonVisual nvPicPr {
-            get {
+
+        public CT_Picture()
+        {
+            //this.spPrField = new CT_ShapeProperties();
+            //this.blipFillField = new CT_BlipFillProperties();
+            //this.nvPicPrField = new CT_PictureNonVisual();
+        }
+
+        [System.Xml.Serialization.XmlElementAttribute(Order = 0)]
+        public CT_PictureNonVisual nvPicPr
+        {
+            get
+            {
                 return this.nvPicPrField;
             }
-            set {
+            set
+            {
                 this.nvPicPrField = value;
             }
         }
-        
-        /// <remarks/>
-        public CT_BlipFillProperties blipFill {
-            get {
+
+        [System.Xml.Serialization.XmlElementAttribute(Order = 1)]
+        public CT_BlipFillProperties blipFill
+        {
+            get
+            {
                 return this.blipFillField;
             }
-            set {
+            set
+            {
                 this.blipFillField = value;
             }
         }
-        
-        /// <remarks/>
-        public CT_ShapeProperties spPr {
-            get {
+
+        [System.Xml.Serialization.XmlElementAttribute(Order = 2)]
+        public CT_ShapeProperties spPr
+        {
+            get
+            {
                 return this.spPrField;
             }
-            set {
+            set
+            {
                 this.spPrField = value;
             }
         }
@@ -462,7 +483,7 @@ namespace NPOI.OpenXmlFormats.Dml {
             spPrField = new CT_ShapeProperties();
             return this.spPrField;
         }
-        public void Set(CT_Picture obj)
+        public void Set(CT_Picture pict)
         {
             throw new NotImplementedException();
         }

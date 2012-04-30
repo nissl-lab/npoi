@@ -24,6 +24,7 @@ namespace NPOI.XWPF.UserModel
     using System.IO;
     using NPOI.XWPF.Util;
     using NPOI.OpenXmlFormats.Dml;
+    using System.Xml.Serialization;
     /**
      * XWPFrun.object defines a region of text with a common Set of properties
      *
@@ -73,9 +74,11 @@ namespace NPOI.XWPF.UserModel
             //// Look for any text in any of our pictures or Drawings
             StringBuilder text = new StringBuilder();
             List<object> pictTextObjs = new List<object>();
-            //pictTextObjs.AddRange(r.GetPictList());
-            //pictTextObjs.AddRange(drawingList);
-            foreach (NPOI.OpenXmlFormats.Wordprocessing.CT_Drawing o in pictTextObjs)
+            foreach (NPOI.OpenXmlFormats.Wordprocessing.CT_Picture pic in r.GetPictList())
+                pictTextObjs.Add(pic);
+            foreach (NPOI.OpenXmlFormats.Wordprocessing.CT_Drawing draw in drawingList)
+                pictTextObjs.Add(draw);
+            foreach (object o in pictTextObjs)
             {
                 //XmlObject[] t = o.SelectPath("declare namespace w='http://schemas.openxmlformats.org/wordprocessingml/2006/main' .//w:t");
                 //for (int m = 0; m < t.Length; m++)
@@ -97,23 +100,23 @@ namespace NPOI.XWPF.UserModel
             // Do we have any embedded pictures?
             // (They're a different CT_Picture, under the Drawingml namespace)
             pictures = new List<XWPFPicture>();
-            foreach (NPOI.OpenXmlFormats.Wordprocessing.CT_Drawing o in pictTextObjs)
+            foreach (object o in pictTextObjs)
             {
-                //foreach (CT_Picture pict in GetCTPictures(o))
-                //{
-                //    XWPFPicture picture = new XWPFPicture(pict, this);
-                //    pictures.Add(picture);
-                //}
+                foreach (NPOI.OpenXmlFormats.Dml.CT_Picture pict in GetCTPictures(o))
+                {
+                    XWPFPicture picture = new XWPFPicture(pict, this);
+                   pictures.Add(picture);
+                }
             }
         }
 
-        private List<NPOI.OpenXmlFormats.Dml.CT_Picture> GetCTPictures(CT_GraphicalObjectData o)
+        private List<NPOI.OpenXmlFormats.Dml.CT_Picture> GetCTPictures(object o)
         {
             List<NPOI.OpenXmlFormats.Dml.CT_Picture> pictures = new List<NPOI.OpenXmlFormats.Dml.CT_Picture>(); 
             //XmlObject[] picts = o.SelectPath("declare namespace pic='"+CT_Picture.type.Name.NamespaceURI+"' .//pic:pic");
-            XmlElement[] picts = o.Any;
-            foreach (XmlElement pict in picts)
-            {
+            //XmlElement[] picts = o.Any;
+            //foreach (XmlElement pict in picts)
+            //{
                 //if(pict is XmlAnyTypeImpl) {
                 //    // Pesky XmlBeans bug - see Bugzilla #49934
                 //    try {
@@ -126,6 +129,28 @@ namespace NPOI.XWPF.UserModel
                 //{
                 //    pictures.Add((NPOI.OpenXmlFormats.Dml.CT_Picture)pict);
                 //}
+            //}
+            if (o is NPOI.OpenXmlFormats.Wordprocessing.CT_Drawing)
+            {
+                NPOI.OpenXmlFormats.Wordprocessing.CT_Drawing drawing = o as NPOI.OpenXmlFormats.Wordprocessing.CT_Drawing;
+                foreach (object obj in drawing.Items)
+                {
+                    if (obj is CT_Inline)
+                    {
+                        //CT_Inline inline = obj as CT_Inline;
+                        //XmlSerializer xmlse = new XmlSerializer(typeof(NPOI.OpenXmlFormats.Dml.CT_Picture));
+                        //using (MemoryStream ms = new MemoryStream())
+                        //{
+                        //    using (StreamWriter sw = new StreamWriter(ms))
+                        //    {
+                        //        sw.Write(inline.graphic.graphicData.Any[0].OuterXml);
+                        //        ms.Position = 0;
+                        //        NPOI.OpenXmlFormats.Dml.CT_Picture pict = xmlse.Deserialize(ms) as NPOI.OpenXmlFormats.Dml.CT_Picture;
+                        //        pictures.Add(pict);
+                        //    }
+                        //}
+                    }
+                }
             }
             return pictures;
         }
@@ -135,10 +160,9 @@ namespace NPOI.XWPF.UserModel
          * @return CT_R object
          */
 
-        public CT_R GetCT_R()
+        public CT_R GetCTR()
         {
-            //return run.
-            throw new NotImplementedException();
+            return run;
         }
 
         /**
@@ -261,9 +285,9 @@ namespace NPOI.XWPF.UserModel
          */
         public void SetText(String value, int pos)
         {
-            int length = run.Items.Length;
+            int length = run.SizeOfTArray();
             if (pos > length) throw new IndexOutOfRangeException("Value too large for the parameter position in XWPFrun.Text=(String value,int pos)");
-            CT_Text t = (pos < length && pos >= 0) ? run.Items[(pos)] as CT_Text : run.AddNewT();
+            CT_Text t = (pos < length && pos >= 0) ? run.GetTArray(pos) as CT_Text : run.AddNewT();
             t.Value =(value);
             preserveSpaces(t);
         }
@@ -591,7 +615,7 @@ namespace NPOI.XWPF.UserModel
         public void AddBreak(BreakClear Clear)
         {
             CT_Br br=run.AddNewBr();
-            br.type= EnumConverter.ValueOf<ST_BrType, BreakType>(BreakType.TEXT_WRAPPING);
+            br.type= EnumConverter.ValueOf<ST_BrType, BreakType>(BreakType.TEXTWRAPPING);
             br.clear = EnumConverter.ValueOf<ST_BrClear, BreakClear>(Clear);
         }
 
@@ -650,14 +674,14 @@ namespace NPOI.XWPF.UserModel
 
                 // Do the fiddly namespace bits on the inline
                 // (We need full control of what goes where and as what)
-                CT_GraphicalObject tmp = new CT_GraphicalObject();
-                String xml =
-                    "<a:graphic xmlns:a=\"" + "http://schemas.openxmlformats.org/drawingml/2006/main" + "\">" +
-                    "<a:graphicData uri=\"" + "http://schemas.openxmlformats.org/drawingml/2006/main" + "\">" +
-                    "<pic:pic xmlns:pic=\"" + "http://schemas.openxmlformats.org/drawingml/2006/main" + "\" />" +
-                    "</a:graphicData>" +
-                    "</a:graphic>";
-                inline.Set((xml));
+                //CT_GraphicalObject tmp = new CT_GraphicalObject();
+                //String xml =
+                //    "<a:graphic xmlns:a=\"" + "http://schemas.openxmlformats.org/drawingml/2006/main" + "\">" +
+                //    "<a:graphicData uri=\"" + "http://schemas.openxmlformats.org/drawingml/2006/main" + "\">" +
+                //    "<pic:pic xmlns:pic=\"" + "http://schemas.openxmlformats.org/drawingml/2006/picture" + "\" />" +
+                //    "</a:graphicData>" +
+                //    "</a:graphic>";
+                //inline.Set((xml));
 
                 // Setup the inline
                 inline.distT = (0);

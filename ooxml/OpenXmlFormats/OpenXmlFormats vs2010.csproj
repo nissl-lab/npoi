@@ -70,8 +70,8 @@
     <Compile Include="Wordprocessing\Font.cs" />
     <Compile Include="Wordprocessing\FormField.cs" />
     <Compile Include="Wordprocessing\Frame.cs" />
+    <Compile Include="Wordprocessing\Numbering.cs" />
     <Compile Include="Wordprocessing\RangePermission.cs" />
-    <Compile Include="Wordprocessing\Symbol.cs" />
     <Compile Include="Wordprocessing\PageSetup.cs" />
     <Compile Include="Wordprocessing\Sdt.cs" />
     <Compile Include="Wordprocessing\Tab.cs" />

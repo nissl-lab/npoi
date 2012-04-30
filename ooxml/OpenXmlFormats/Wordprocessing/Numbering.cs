@@ -65,7 +65,9 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         public void AddNewAbstractNumId()
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
+            if (this.abstractNumIdField == null)
+                abstractNumIdField = new CT_DecimalNumber();
         }
     }
 
@@ -207,37 +209,41 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         public IList<CT_Num> GetNumList()
         {
-            throw new NotImplementedException();
+            return numField;
         }
 
         public IList<CT_AbstractNum> GetAbstractNumList()
         {
-            throw new NotImplementedException();
+            return abstractNumField;
         }
 
         public CT_Num AddNewNum()
         {
-            throw new NotImplementedException();
+            CT_Num num = new CT_Num();
+            numField.Add(num);
+            return num;
         }
 
         public void SetNumArray(int pos, CT_Num cT_Num)
         {
-            throw new NotImplementedException();
+            numField[pos] = cT_Num;
         }
 
         public CT_AbstractNum AddNewAbstractNum()
         {
-            throw new NotImplementedException();
+            CT_AbstractNum num = new CT_AbstractNum();
+            this.abstractNumField.Add(num);
+            return num;
         }
 
         public void SetAbstractNumArray(int pos, CT_AbstractNum cT_AbstractNum)
         {
-            throw new NotImplementedException();
+            abstractNumField[pos] = cT_AbstractNum;
         }
 
         public void RemoveAbstractNum(int p)
         {
-            throw new NotImplementedException();
+            abstractNumField.RemoveAt(p);
         }
     }
 
@@ -610,6 +616,11 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 this.insField = value;
             }
         }
+
+        public void AddNewNumId()
+        {
+            throw new NotImplementedException();
+        }
     }
 
 
@@ -791,17 +802,34 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         public CT_AbstractNum Copy()
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
+            CT_AbstractNum anum = new CT_AbstractNum();
+            anum.abstractNumIdField = this.abstractNumIdField;
+            anum.lvlField = new List<CT_Lvl>(this.lvlField);
+            anum.multiLevelTypeField = this.multiLevelTypeField;
+            anum.nameField = this.nameField;
+            anum.nsidField = this.nsidField;
+            anum.numStyleLinkField = this.numStyleLinkField;
+            anum.styleLinkField = this.styleLinkField;
+            anum.tmplField = this.tmplField;
+            return anum;
         }
 
         public bool ValueEquals(CT_AbstractNum cT_AbstractNum)
         {
-            throw new NotImplementedException();
+            return this.abstractNumIdField == cT_AbstractNum.abstractNumIdField;
         }
 
         public void Set(CT_AbstractNum cT_AbstractNum)
         {
-            throw new NotImplementedException();
+            this.abstractNumIdField = cT_AbstractNum.abstractNumIdField;
+            this.lvlField = new List<CT_Lvl>(cT_AbstractNum.lvlField);
+            this.multiLevelTypeField = cT_AbstractNum.multiLevelTypeField;
+            this.nameField = cT_AbstractNum.nameField;
+            this.nsidField = cT_AbstractNum.nsidField;
+            this.numStyleLinkField = cT_AbstractNum.numStyleLinkField;
+            this.styleLinkField = cT_AbstractNum.styleLinkField;
+            this.tmplField = cT_AbstractNum.tmplField;
         }
     }
 

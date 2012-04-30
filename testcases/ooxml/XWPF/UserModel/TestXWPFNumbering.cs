@@ -19,48 +19,47 @@ namespace NPOI.XWPF.UserModel
 {
     using System;
 
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-
-
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-
-using NPOI.XWPF;
+    using NPOI.XWPF;
 
     [TestClass]
-    public class TestXWPFNumbering 
-{
-	
-	    [TestMethod]
-    public void TestCompareAbstractNum(){
-		XWPFDocument doc = XWPFTestDataSamples.OpenSampleDocument("Numbering.docx");
-		XWPFNumbering numbering = doc.Numbering;
-		Bigint numId = BigInt32.ValueOf(1);
-		Assert.IsTrue(numbering.NumExist(numId));
-		XWPFNum num = numbering.GetNum(numId);
-		Bigint abstrNumId = num.CTNum.AbstractNumId.Val;
-		XWPFAbstractNum abstractNum = numbering.GetAbstractNum(abstrNumId);
-		Bigint CompareAbstractNum = numbering.GetIdOfAbstractNum(abstractNum);
-		Assert.AreEqual(abstrNumId, CompareAbstractNum);
-	}
+    public class TestXWPFNumbering
+    {
 
-	    [TestMethod]
-    public void TestAddNumberingToDoc(){
-		Bigint abstractNumId = BigInt32.ValueOf(1);
-		Bigint numId = BigInt32.ValueOf(1);
+        [TestMethod]
+        public void TestCompareAbstractNum()
+        {
+            XWPFDocument doc = XWPFTestDataSamples.OpenSampleDocument("Numbering.docx");
+            XWPFNumbering numbering = doc.GetNumbering();
+            int numId = 1;
+            Assert.IsTrue(numbering.NumExist(numId.ToString()));
+            XWPFNum num = numbering.GetNum(numId.ToString());
+            string abstrNumId = num.GetCTNum().abstractNumId.val;
+            XWPFAbstractNum abstractNum = numbering.GetAbstractNum(abstrNumId);
+            string CompareAbstractNum = numbering.GetIdOfAbstractNum(abstractNum);
+            Assert.AreEqual(abstrNumId, CompareAbstractNum);
+        }
 
-		XWPFDocument docOut = new XWPFDocument();
-		XWPFNumbering numbering = docOut.CreateNumbering();
-		numId = numbering.AddNum(abstractNumId);
-		
-		XWPFDocument docIn = XWPFTestDataSamples.WriteOutAndReadBack(docOut);
+        [TestMethod]
+        public void TestAddNumberingToDoc()
+        {
+            string abstractNumId = "1";
+            string numId = "1";
 
-		numbering = docIn.Numbering;
-		Assert.IsTrue(numbering.NumExist(numId));
-		XWPFNum num = numbering.GetNum(numId);
+            XWPFDocument docOut = new XWPFDocument();
+            XWPFNumbering numbering = docOut.CreateNumbering();
+            numId = numbering.AddNum(abstractNumId);
 
-		Bigint CompareAbstractNum = num.CTNum.AbstractNumId.Val;
-		Assert.AreEqual(abstractNumId, CompareAbstractNum);
-	}
+            XWPFDocument docIn = XWPFTestDataSamples.WriteOutAndReadBack(docOut);
 
+            numbering = docIn.GetNumbering();
+            Assert.IsTrue(numbering.NumExist(numId));
+            XWPFNum num = numbering.GetNum(numId);
+
+            string CompareAbstractNum = num.GetCTNum().abstractNumId.val;
+            Assert.AreEqual(abstractNumId, CompareAbstractNum);
+        }
+
+    }
 }
-

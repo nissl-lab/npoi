@@ -331,6 +331,31 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         }
         #endregion
 
+
+        public IList<CT_R> GetRList()
+        {
+            return GetObjectList<CT_R>(ParagraphItemsChoiceType.r);
+        }
+
+        public int SizeOfBookmarkStartArray()
+        {
+            return SizeOfArray(ParagraphItemsChoiceType.bookmarkStart);
+        }
+
+        public int SizeOfBookmarkEndArray()
+        {
+            return SizeOfArray(ParagraphItemsChoiceType.bookmarkEnd);
+        }
+
+        public CT_Bookmark GetBookmarkStartArray(int p)
+        {
+            return GetObjectArray<CT_Bookmark>(p, ParagraphItemsChoiceType.bookmarkStart);
+        }
+
+        public IEnumerable<CT_Bookmark> GetBookmarkStartList()
+        {
+            return GetObjectList<CT_Bookmark>(ParagraphItemsChoiceType.bookmarkStart);
+        }
     }
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IncludeInSchema = false)]
@@ -500,6 +525,11 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             if (this.rPrField == null)
                 this.rPrField = new CT_ParaRPr();
             return this.rPrField;
+        }
+
+        public void AddNewNumPr()
+        {
+            throw new NotImplementedException();
         }
     }
 
@@ -1839,77 +1869,87 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         public bool IsSetTop()
         {
-            throw new NotImplementedException();
+            return this.topField != null && this.topField.val != ST_Border.none && this.topField.val != ST_Border.nil;
         }
 
         public CT_Border AddNewTop()
         {
-            throw new NotImplementedException();
+            if (this.topField == null)
+                this.topField = new CT_Border();
+            return this.topField;
         }
 
         public void UnsetTop()
         {
-            throw new NotImplementedException();
+            this.topField = new CT_Border();//?? set a new border or set null;
         }
 
         public bool IsSetBottom()
         {
-            throw new NotImplementedException();
+            return this.bottomField != null && this.bottomField.val != ST_Border.none && this.bottomField.val != ST_Border.nil;
         }
 
         public CT_Border AddNewBottom()
         {
-            throw new NotImplementedException();
+            if (this.bottomField == null)
+                this.bottomField = new CT_Border();
+            return this.bottomField;
         }
 
         public void UnsetBottom()
         {
-            throw new NotImplementedException();
+            this.bottomField = new CT_Border();
         }
 
         public bool IsSetRight()
         {
-            throw new NotImplementedException();
+            return this.rightField != null && this.rightField.val != ST_Border.none && this.rightField.val != ST_Border.nil;
         }
 
         public void UnsetRight()
         {
-            throw new NotImplementedException();
+            this.rightField = new CT_Border();
         }
 
         public CT_Border AddNewRight()
         {
-            throw new NotImplementedException();
+            if (this.rightField == null)
+                this.rightField = new CT_Border();
+            return this.rightField;
         }
 
         public bool IsSetBetween()
         {
-            throw new NotImplementedException();
+            return this.betweenField != null && this.betweenField.val != ST_Border.none && this.betweenField.val != ST_Border.nil;
         }
 
         public CT_Border AddNewBetween()
         {
-            throw new NotImplementedException();
+            if (this.betweenField == null)
+                this.betweenField = new CT_Border();
+            return this.betweenField;
         }
 
         public void UnsetBetween()
         {
-            throw new NotImplementedException();
+            this.betweenField = new CT_Border();
         }
 
         public bool IsSetLeft()
         {
-            throw new NotImplementedException();
+            return this.leftField != null && this.leftField.val != ST_Border.none && this.leftField.val != ST_Border.nil;
         }
 
         public CT_Border AddNewLeft()
         {
-            throw new NotImplementedException();
+            if (this.leftField == null)
+                this.leftField = new CT_Border();
+            return this.leftField;
         }
 
         public void UnsetLeft()
         {
-            throw new NotImplementedException();
+            this.leftField = new CT_Border();
         }
     }
 
@@ -2117,27 +2157,27 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         public bool IsSetBefore()
         {
-            throw new NotImplementedException();
+            return !(this.beforeField == 0);
         }
 
         public bool IsSetBeforeLines()
         {
-            throw new NotImplementedException();
+            return !string.IsNullOrEmpty(this.beforeLinesField);
         }
 
         public bool IsSetLineRule()
         {
-            throw new NotImplementedException();
+            return !(this.lineRuleField == ST_LineSpacingRule.nil);
         }
 
         public bool IsSetAfter()
         {
-            throw new NotImplementedException();
+            return !(this.afterField == 0);
         }
 
         public bool IsSetAfterLines()
         {
-            throw new NotImplementedException();
+            return !string.IsNullOrEmpty(this.afterLinesField);
         }
     }
 
@@ -2146,7 +2186,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
     public enum ST_LineSpacingRule
     {
-
+        nil,
         /// <remarks/>
         auto,
 
@@ -2317,22 +2357,22 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         public bool IsSetLeft()
         {
-            throw new NotImplementedException();
+            return !string.IsNullOrEmpty(this.leftField);
         }
 
         public bool IsSetRight()
         {
-            throw new NotImplementedException();
+            return !string.IsNullOrEmpty(this.rightField);
         }
 
         public bool IsSetHanging()
         {
-            throw new NotImplementedException();
+            return !(this.hangingField == 0);
         }
 
         public bool IsSetFirstLine()
         {
-            throw new NotImplementedException();
+            return !(this.firstLineField==0);
         }
     }
 
@@ -2425,46 +2465,46 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         public CT_RPr()
         {
-            this.rPrChangeField = new CT_RPrChange();
-            this.oMathField = new CT_OnOff();
-            this.specVanishField = new CT_OnOff();
-            this.eastAsianLayoutField = new CT_EastAsianLayout();
-            this.langField = new CT_Language();
-            this.emField = new CT_Em();
-            this.csField = new CT_OnOff();
-            this.rtlField = new CT_OnOff();
-            this.vertAlignField = new CT_VerticalAlignRun();
-            this.fitTextField = new CT_FitText();
-            this.shdField = new CT_Shd();
-            this.bdrField = new CT_Border();
-            this.effectField = new CT_TextEffect();
-            this.uField = new CT_Underline();
-            this.highlightField = new CT_Highlight();
-            this.szCsField = new CT_HpsMeasure();
-            this.szField = new CT_HpsMeasure();
-            this.positionField = new CT_SignedHpsMeasure();
-            this.kernField = new CT_HpsMeasure();
-            this.wField = new CT_TextScale();
-            this.spacingField = new CT_SignedTwipsMeasure();
-            this.colorField = new CT_Color();
-            this.webHiddenField = new CT_OnOff();
-            this.vanishField = new CT_OnOff();
-            this.snapToGridField = new CT_OnOff();
-            this.noProofField = new CT_OnOff();
-            this.imprintField = new CT_OnOff();
-            this.embossField = new CT_OnOff();
-            this.shadowField = new CT_OnOff();
-            this.outlineField = new CT_OnOff();
-            this.dstrikeField = new CT_OnOff();
-            this.strikeField = new CT_OnOff();
-            this.smallCapsField = new CT_OnOff();
-            this.capsField = new CT_OnOff();
-            this.iCsField = new CT_OnOff();
-            this.iField = new CT_OnOff();
-            this.bCsField = new CT_OnOff();
-            this.bField = new CT_OnOff();
-            this.rFontsField = new CT_Fonts();
-            this.rStyleField = new CT_String();
+            //this.rPrChangeField = new CT_RPrChange();
+            //this.oMathField = new CT_OnOff();
+            //this.specVanishField = new CT_OnOff();
+            //this.eastAsianLayoutField = new CT_EastAsianLayout();
+            //this.langField = new CT_Language();
+            //this.emField = new CT_Em();
+            //this.csField = new CT_OnOff();
+            //this.rtlField = new CT_OnOff();
+            //this.vertAlignField = new CT_VerticalAlignRun();
+            //this.fitTextField = new CT_FitText();
+            //this.shdField = new CT_Shd();
+            //this.bdrField = new CT_Border();
+            //this.effectField = new CT_TextEffect();
+            //this.uField = new CT_Underline();
+            //this.highlightField = new CT_Highlight();
+            //this.szCsField = new CT_HpsMeasure();
+            //this.szField = new CT_HpsMeasure();
+            //this.positionField = new CT_SignedHpsMeasure();
+            //this.kernField = new CT_HpsMeasure();
+            //this.wField = new CT_TextScale();
+            //this.spacingField = new CT_SignedTwipsMeasure();
+            //this.colorField = new CT_Color();
+            //this.webHiddenField = new CT_OnOff();
+            //this.vanishField = new CT_OnOff();
+            //this.snapToGridField = new CT_OnOff();
+            //this.noProofField = new CT_OnOff();
+            //this.imprintField = new CT_OnOff();
+            //this.embossField = new CT_OnOff();
+            //this.shadowField = new CT_OnOff();
+            //this.outlineField = new CT_OnOff();
+            //this.dstrikeField = new CT_OnOff();
+            //this.strikeField = new CT_OnOff();
+            //this.smallCapsField = new CT_OnOff();
+            //this.capsField = new CT_OnOff();
+            //this.iCsField = new CT_OnOff();
+            //this.iField = new CT_OnOff();
+            //this.bCsField = new CT_OnOff();
+            //this.bField = new CT_OnOff();
+            //this.rFontsField = new CT_Fonts();
+            //this.rStyleField = new CT_String();
         }
 
         [System.Xml.Serialization.XmlElementAttribute(Order = 0)]
@@ -2503,6 +2543,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             set
             {
                 this.bField = value;
+                this.bField.valSpecified = this.bField.val == ST_OnOff.on || 
+                    this.bField.val == ST_OnOff.True || this.bField.val == ST_OnOff.Value1;
             }
         }
 
@@ -2529,6 +2571,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             set
             {
                 this.iField = value;
+                this.iField.valSpecified = this.iField.val == ST_OnOff.on ||
+                    this.iField.val == ST_OnOff.True || this.iField.val == ST_OnOff.Value1;
             }
         }
 
@@ -3055,12 +3099,16 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         public bool IsSetB()
         {
-            return this.bField.val == ST_OnOff.on || this.bField.val == ST_OnOff.True || this.bField.val == ST_OnOff.Value1;
+            //return this.b.valSpecified;
+            return this.bField != null && (this.bField.val == ST_OnOff.on ||
+                this.bField.val == ST_OnOff.True || this.bField.val == ST_OnOff.Value1);
         }
 
         public bool IsSetI()
         {
-            return this.iField.val == ST_OnOff.on || this.iField.val == ST_OnOff.True || this.iField.val == ST_OnOff.Value1;
+            return this.iField != null && (this.iField.val == ST_OnOff.on ||
+                this.iField.val == ST_OnOff.True || this.iField.val == ST_OnOff.Value1);
+            //return this.i.valSpecified;
         }
 
         public CT_OnOff AddNewI()
@@ -3091,7 +3139,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         public bool IsSetStrike()
         {
-            return this.strikeField.val == ST_OnOff.on || this.strikeField.val == ST_OnOff.True || this.strikeField.val == ST_OnOff.Value1;
+            return this.strike != null && (this.strikeField.val == ST_OnOff.on || 
+                this.strikeField.val == ST_OnOff.True || this.strikeField.val == ST_OnOff.Value1);
         }
 
         public CT_OnOff AddNewStrike()
@@ -3115,12 +3164,12 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         public bool IsSetRFonts()
         {
-            return !(this.rFontsField == null);
+            return this.rFontsField != null;
         }
 
         public bool IsSetSz()
         {
-            return !(this.szField.val == 0);
+            return (this.szField!=null && this.szField.val != 0);
         }
     }
 

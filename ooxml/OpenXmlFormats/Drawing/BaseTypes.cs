@@ -460,33 +460,66 @@ namespace NPOI.OpenXmlFormats.Dml
             this.itemsElementNameField = new List<ItemsChoiceType1>();
             this.itemsField = new List<object>();
         }
-
+        [System.Xml.Serialization.XmlElementAttribute("alpha", typeof(CT_PositiveFixedPercentage), Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute("alphaMod", typeof(CT_PositivePercentage), Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute("alphaOff", typeof(CT_FixedPercentage), Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute("blue", typeof(CT_Percentage), Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute("blueMod", typeof(CT_Percentage), Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute("blueOff", typeof(CT_Percentage), Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute("comp", typeof(CT_ComplementTransform), Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute("gamma", typeof(CT_GammaTransform), Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute("gray", typeof(CT_GrayscaleTransform), Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute("green", typeof(CT_Percentage), Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute("greenMod", typeof(CT_Percentage), Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute("greenOff", typeof(CT_Percentage), Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute("hue", typeof(CT_PositiveFixedAngle), Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute("hueMod", typeof(CT_PositivePercentage), Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute("hueOff", typeof(CT_Angle), Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute("inv", typeof(CT_InverseTransform), Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute("invGamma", typeof(CT_InverseGammaTransform), Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute("lum", typeof(CT_Percentage), Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute("lumMod", typeof(CT_Percentage), Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute("lumOff", typeof(CT_Percentage), Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute("red", typeof(CT_Percentage), Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute("redMod", typeof(CT_Percentage), Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute("redOff", typeof(CT_Percentage), Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute("sat", typeof(CT_Percentage), Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute("satMod", typeof(CT_Percentage), Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute("satOff", typeof(CT_Percentage), Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute("shade", typeof(CT_PositiveFixedPercentage), Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute("tint", typeof(CT_PositiveFixedPercentage), Order = 0)]
         [System.Xml.Serialization.XmlChoiceIdentifierAttribute("ItemsElementName")]
-        public List<object> Items
+        public object[] Items
         {
             get
             {
-                return this.itemsField;
+                return this.itemsField.ToArray();
             }
             set
             {
-                this.itemsField = value;
+                if (value == null || value.Length == 0)
+                    this.itemsField = new List<object>();
+                else
+                    this.itemsField = new List<object>(value);
             }
         }
-
+        [System.Xml.Serialization.XmlElementAttribute("ItemsElementName", Order = 1)]
         [System.Xml.Serialization.XmlIgnore]
-        public List<ItemsChoiceType1> ItemsElementName
+        public ItemsChoiceType1[] ItemsElementName
         {
             get
             {
-                return this.itemsElementNameField;
+                return this.itemsElementNameField.ToArray();
             }
             set
             {
-                this.itemsElementNameField = value;
+                if (value == null || value.Length == 0)
+                    this.itemsElementNameField = new List<ItemsChoiceType1>();
+                else
+                    this.itemsElementNameField = new List<ItemsChoiceType1>(value);
             }
         }
-
+        [System.Xml.Serialization.XmlAttributeAttribute(DataType = "hexBinary")]
         public byte[] val
         {
             get
@@ -697,20 +730,50 @@ namespace NPOI.OpenXmlFormats.Dml
         {
             throw new NotImplementedException();
         }
-
+        [System.Xml.Serialization.XmlElementAttribute("alpha", typeof(CT_PositiveFixedPercentage), Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute("alphaMod", typeof(CT_PositivePercentage), Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute("alphaOff", typeof(CT_FixedPercentage), Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute("blue", typeof(CT_Percentage), Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute("blueMod", typeof(CT_Percentage), Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute("blueOff", typeof(CT_Percentage), Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute("comp", typeof(CT_ComplementTransform), Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute("gamma", typeof(CT_GammaTransform), Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute("gray", typeof(CT_GrayscaleTransform), Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute("green", typeof(CT_Percentage), Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute("greenMod", typeof(CT_Percentage), Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute("greenOff", typeof(CT_Percentage), Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute("hue", typeof(CT_PositiveFixedAngle), Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute("hueMod", typeof(CT_PositivePercentage), Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute("hueOff", typeof(CT_Angle), Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute("inv", typeof(CT_InverseTransform), Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute("invGamma", typeof(CT_InverseGammaTransform), Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute("lum", typeof(CT_Percentage), Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute("lumMod", typeof(CT_Percentage), Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute("lumOff", typeof(CT_Percentage), Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute("red", typeof(CT_Percentage), Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute("redMod", typeof(CT_Percentage), Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute("redOff", typeof(CT_Percentage), Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute("sat", typeof(CT_Percentage), Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute("satMod", typeof(CT_Percentage), Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute("satOff", typeof(CT_Percentage), Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute("shade", typeof(CT_PositiveFixedPercentage), Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute("tint", typeof(CT_PositiveFixedPercentage), Order = 0)]
         [System.Xml.Serialization.XmlChoiceIdentifierAttribute("ItemsElementName")]
-        public List<object> Items
+        public object[] Items
         {
             get
             {
-                return this.itemsField;
+                return this.itemsField.ToArray();
             }
             set
             {
-                this.itemsField = value;
+                if (value == null || value.Length == 0)
+                    this.itemsField = new List<object>();
+                else
+                    this.itemsField = new List<object>(value);
             }
         }
-
+        [System.Xml.Serialization.XmlElementAttribute("ItemsElementName", Order = 1)]
         [System.Xml.Serialization.XmlIgnore]
         public ItemsChoiceType4[] ItemsElementName
         {
@@ -720,10 +783,13 @@ namespace NPOI.OpenXmlFormats.Dml
             }
             set
             {
-                this.itemsElementNameField = new List<ItemsChoiceType4>(value);
+                if (value == null || value.Length == 0)
+                    this.itemsElementNameField = new List<ItemsChoiceType4>();
+                else
+                    this.itemsElementNameField = new List<ItemsChoiceType4>(value);
             }
         }
-
+        [System.Xml.Serialization.XmlAttributeAttribute()]
         public ST_SchemeColorVal val
         {
             get

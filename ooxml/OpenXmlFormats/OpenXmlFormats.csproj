@@ -112,11 +112,14 @@
     <Compile Include="Wordprocessing\Sdt.cs" />
     <Compile Include="Wordprocessing\Settings.cs" />
     <Compile Include="Wordprocessing\Styles.cs" />
-    <Compile Include="Wordprocessing\Symbol.cs" />
+    <Compile Include="Wordprocessing\Numbering.cs" />
     <Compile Include="Wordprocessing\Tab.cs" />
     <Compile Include="Wordprocessing\Table.cs" />
     <Compile Include="Wordprocessing\wml.cs" />
     <Compile Include="Wordprocessing\WordPartDocument.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="XMLFile1.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

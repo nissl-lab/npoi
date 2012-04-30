@@ -2100,24 +2100,53 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         public List<CT_Anchor> GetAnchorList()
         {
-            List<CT_Anchor> list = new List<CT_Anchor>();
-            foreach (object o in itemsField)
+            lock (this)
             {
-                if (o is CT_Anchor)
-                    list.Add(o as CT_Anchor);
+                List<CT_Anchor> list = new List<CT_Anchor>();
+                foreach (object o in itemsField)
+                {
+                    if (o is CT_Anchor)
+                        list.Add(o as CT_Anchor);
+                }
+                return list;
             }
-            return list;
         }
 
         public List<CT_Inline> GetInlineList()
         {
-            List<CT_Inline> list = new List<CT_Inline>();
-            foreach (object o in itemsField)
+            lock (this)
             {
-                if (o is CT_Inline)
-                    list.Add(o as CT_Inline);
+                List<CT_Inline> list = new List<CT_Inline>();
+                foreach (object o in itemsField)
+                {
+                    if (o is CT_Inline)
+                        list.Add(o as CT_Inline);
+                }
+                return list;
             }
-            return list;
+        }
+
+        public CT_Inline GetInlineArray(int p)
+        {
+            lock (this)
+            {
+                int index = 0;
+                CT_Inline ret = null;
+                for (int i = 0; i < itemsField.Count; i++)
+                {
+                    if (itemsField[i] is CT_Inline)
+                    {
+                        if (index == p)
+                        {
+                            ret = itemsField[i] as CT_Inline;
+                            break;
+                        }
+                        else
+                            index++;
+                    }
+                }
+                return ret;
+            }
         }
     }
 

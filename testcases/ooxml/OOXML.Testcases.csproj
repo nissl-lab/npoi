@@ -90,7 +90,10 @@
     <Compile Include="XWPF\UserModel\TestXWPFFootnotes.cs" />
     <Compile Include="XWPF\UserModel\TestXWPFHeader.cs" />
     <Compile Include="XWPF\UserModel\TestXWPFHeadings.cs" />
+    <Compile Include="XWPF\UserModel\TestXWPFNumbering.cs" />
+    <Compile Include="XWPF\UserModel\TestXWPFParagraph.cs" />
     <Compile Include="XWPF\UserModel\TestXWPFPictureData.cs" />
+    <Compile Include="XWPF\UserModel\TestXWPFRun.cs" />
     <Compile Include="XWPF\UserModel\TestXWPFStyles.cs" />
     <Compile Include="XWPF\UserModel\TestXWPFTable.cs" />
     <Compile Include="XWPF\UserModel\TestXWPFTableRow.cs" />

@@ -52,14 +52,15 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        public void UnsetVal()
+        public void UnSetVal()
         {
-            throw new NotImplementedException();
+            this.val = ST_OnOff.False;
+            this.valFieldSpecified = false;
         }
 
         public bool IsSetVal()
         {
-            throw new NotImplementedException();
+            return this.valFieldSpecified && this.valField != ST_OnOff.True;
         }
     }
     /// <summary>
@@ -74,6 +75,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         /// </summary>
         [XmlEnum("true")]
         True,
+
         /// <summary>
         /// False
         /// </summary>

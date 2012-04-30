@@ -57,7 +57,7 @@ namespace NPOI.XWPF.UserModel
          * The determine of the next line shall be done subject to the value of the clear
          * attribute on the specified break character.
          */
-        TEXT_WRAPPING = (3)
+        TEXTWRAPPING = (3)
 
         //private int value;
 
