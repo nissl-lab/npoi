@@ -66,7 +66,7 @@ namespace NPOI.XSSF.UserModel
 
             ctFont.SetCharsetArray(0, prop);
             XSSFFont xssfFont = new XSSFFont(ctFont);
-            Assert.AreEqual(FontCharset.ANSI, xssfFont.Charset);
+            Assert.AreEqual(FontCharset.ANSI.Value, xssfFont.Charset);
 
             xssfFont.SetCharSet(FontCharset.DEFAULT);
             Assert.AreEqual(FontCharset.DEFAULT.Value, ctFont.GetCharsetArray(0).val);
@@ -186,7 +186,7 @@ namespace NPOI.XSSF.UserModel
             ctFont.SetUArray(0, underlinePropr);
 
             XSSFFont xssfFont = new XSSFFont(ctFont);
-            Assert.AreEqual(FontUnderline.SINGLE, xssfFont.Underline);
+            Assert.AreEqual(FontUnderline.SINGLE.ByteValue, xssfFont.Underline);
 
             xssfFont.SetUnderline(FontUnderline.DOUBLE);
             Assert.AreEqual(ctFont.u.Count, 1);

@@ -17,7 +17,7 @@
 ==================================================================== */
 
 
-namespace TestCases.OOXML
+namespace NPOI.OOXML
 {
 
     using NPOI.OpenXml4Net.OPC;

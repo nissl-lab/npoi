@@ -23,11 +23,13 @@ using TestCases.SS.UserModel;
 using NPOI.OpenXmlFormats.Spreadsheet;
 using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
+using NPOI.OpenXmlFormats.Vml;
 namespace NPOI.XSSF.UserModel
 {
     /**
      * @author Yegor Kozlov
      */
+    [TestClass]
     public class TestXSSFComment : BaseTestCellComment
     {
 
@@ -42,6 +44,7 @@ namespace NPOI.XSSF.UserModel
         /**
          * Test properties of a newly constructed comment
          */
+        [TestMethod]
         public void TestConstructor()
         {
             CommentsTable sheetComments = new CommentsTable();
@@ -51,7 +54,7 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual(1, sheetComments.GetNumberOfAuthors());
 
             CT_Comment ctComment = sheetComments.CreateComment();
-            CTShape vmlShape = CTShape.Factory.newInstance();
+            CT_Shape vmlShape = new CT_Shape();
 
             XSSFComment comment = new XSSFComment(sheetComments, ctComment, vmlShape);
             Assert.AreEqual(null, comment.String);
@@ -60,26 +63,26 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual("", comment.Author);
             Assert.AreEqual(false, comment.Visible);
         }
-
+        [TestMethod]
         public void TestGetSetCol()
         {
             CommentsTable sheetComments = new CommentsTable();
             XSSFVMLDrawing vml = new XSSFVMLDrawing();
             CT_Comment ctComment = sheetComments.CreateComment();
-            CTShape vmlShape = vml.newCommentShape();
+            CT_Shape vmlShape = vml.newCommentShape();
 
             XSSFComment comment = new XSSFComment(sheetComments, ctComment, vmlShape);
             comment.Column = (1);
             Assert.AreEqual(1, comment.Column);
             Assert.AreEqual(1, new CellReference(ctComment.@ref).Col);
-            Assert.AreEqual(1, vmlShape.GetClientDataArray(0).GetColumnArray(0).intValue());
+            Assert.AreEqual(1, vmlShape.GetClientDataArray(0).GetColumnArray(0));
 
             comment.Column = (5);
             Assert.AreEqual(5, comment.Column);
             Assert.AreEqual(5, new CellReference(ctComment.@ref).Col);
-            Assert.AreEqual(5, vmlShape.GetClientDataArray(0).GetColumnArray(0).intValue());
+            Assert.AreEqual(5, vmlShape.GetClientDataArray(0).GetColumnArray(0));
         }
-
+        [TestMethod]
         public void TestGetSetRow()
         {
             CommentsTable sheetComments = new CommentsTable();
@@ -91,14 +94,14 @@ namespace NPOI.XSSF.UserModel
             comment.Row = (1);
             Assert.AreEqual(1, comment.Row);
             Assert.AreEqual(1, new CellReference(ctComment.@ref).Row);
-            Assert.AreEqual(1, vmlShape.GetClientDataArray(0).GetRowArray(0).intValue());
+            Assert.AreEqual(1, vmlShape.GetClientDataArray(0).GetRowArray(0));
 
             comment.Row = (5);
             Assert.AreEqual(5, comment.Row);
             Assert.AreEqual(5, new CellReference(ctComment.@ref).Row);
-            Assert.AreEqual(5, vmlShape.GetClientDataArray(0).GetRowArray(0).intValue());
+            Assert.AreEqual(5, vmlShape.GetClientDataArray(0).GetRowArray(0));
         }
-
+        [TestMethod]
         public void TestSetString()
         {
             XSSFWorkbook wb = new XSSFWorkbook();
@@ -124,36 +127,37 @@ namespace NPOI.XSSF.UserModel
             comment.SetString(TEST_RICHTEXTSTRING);
 
             CT_Comment ctComment = comment.GetCTComment();
-            XmlObject[] obj = ctComment.selectPath(
-                    "declare namespace w='http://schemas.Openxmlformats.org/spreadsheetml/2006/main' .//w:text");
-            Assert.AreEqual(1, obj.Length);
-            Assert.AreEqual(TEST_RICHTEXTSTRING, comment.String.String);
+            Assert.Fail();
+        //    XmlObject[] obj = ctComment.selectPath(
+        //            "declare namespace w='http://schemas.Openxmlformats.org/spreadsheetml/2006/main' .//w:text");
+        //    Assert.AreEqual(1, obj.Length);
+        //    Assert.AreEqual(TEST_RICHTEXTSTRING, comment.String.String);
 
-            //sequential call of comment.String should return the same XSSFRichTextString object
-            Assert.AreSame(comment.String, comment.String);
+        //    //sequential call of comment.String should return the same XSSFRichTextString object
+        //    Assert.AreSame(comment.String, comment.String);
 
-            XSSFRichTextString richText = new XSSFRichTextString(TEST_RICHTEXTSTRING);
-            XSSFFont font1 = (XSSFFont)wb.CreateFont();
-            font1.FontName = ("Tahoma");
-            font1.FontHeight = (8.5);
-            font1.IsItalic = true;
-            font1.Color = IndexedColors.BLUE_GREY.Index;
-            richText.ApplyFont(0, 5, font1);
+        //    XSSFRichTextString richText = new XSSFRichTextString(TEST_RICHTEXTSTRING);
+        //    XSSFFont font1 = (XSSFFont)wb.CreateFont();
+        //    font1.FontName = ("Tahoma");
+        //    font1.FontHeight = (short)8.5;
+        //    font1.IsItalic = true;
+        //    font1.Color = IndexedColors.BLUE_GREY.Index;
+        //    richText.ApplyFont(0, 5, font1);
 
-            //check the low-level stuff
-            comment.String = richText;
-            obj = ctComment.selectPath(
-                    "declare namespace w='http://schemas.Openxmlformats.org/spreadsheetml/2006/main' .//w:text");
-            Assert.AreEqual(1, obj.Length);
-            Assert.AreSame(comment.String, richText);
-            //check that the rich text is Set in the comment
-            CT_RPrElt rPr = richText.GetCTRst().GetRArray(0).rPr;
-            Assert.AreEqual(true, rPr.GetIArray(0).val);
-            Assert.AreEqual(8.5, rPr.GetSzArray(0).val);
-            Assert.AreEqual(IndexedColors.BLUE_GREY.Index, rPr.GetColorArray(0).indexed);
-            Assert.AreEqual("Tahoma", rPr.GetRFontArray(0).val);
+        //    //check the low-level stuff
+        //    comment.String = richText;
+        //    obj = ctComment.selectPath(
+        //            "declare namespace w='http://schemas.Openxmlformats.org/spreadsheetml/2006/main' .//w:text");
+        //    Assert.AreEqual(1, obj.Length);
+        //    Assert.AreSame(comment.String, richText);
+        //    //check that the rich text is Set in the comment
+        //    CT_RPrElt rPr = richText.GetCTRst().GetRArray(0).rPr;
+        //    Assert.AreEqual(true, rPr.GetIArray(0).val);
+        //    Assert.AreEqual(8.5, rPr.GetSzArray(0).val);
+        //    Assert.AreEqual(IndexedColors.BLUE_GREY.Index, rPr.GetColorArray(0).indexed);
+        //    Assert.AreEqual("Tahoma", rPr.GetRFontArray(0).val);
         }
-
+        [TestMethod]
         public void TestAuthor()
         {
             CommentsTable sheetComments = new CommentsTable();

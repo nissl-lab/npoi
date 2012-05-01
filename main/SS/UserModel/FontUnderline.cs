@@ -65,9 +65,6 @@ namespace NPOI.SS.UserModel
         private FontUnderline(int val)
         {
             value = val;
-            if (_table == null)
-                _table = new FontUnderline[6];
-            _table[val] = this;
         }
 
         public int Value
@@ -109,8 +106,20 @@ namespace NPOI.SS.UserModel
             }
         }
 
-        private static FontUnderline[] _table = new FontUnderline[6];
+        private static FontUnderline[] _table = null;
 
+        static FontUnderline()
+        {
+            if (_table == null)
+            {
+                _table = new FontUnderline[6];
+                _table[1] = FontUnderline.SINGLE;
+                _table[2] = FontUnderline.DOUBLE;
+                _table[3] = FontUnderline.SINGLE_ACCOUNTING;
+                _table[4] = FontUnderline.DOUBLE_ACCOUNTING;
+                _table[5] = FontUnderline.NONE;
+            }
+        }
         public static FontUnderline ValueOf(int value)
         {
             return _table[value];

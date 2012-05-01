@@ -127,35 +127,44 @@ namespace NPOI.XSSF.UserModel
             }
             ApplyFont(startIndex, endIndex, font);
         }
-        internal void ApplyFont(Dictionary<int, CT_RPrElt> formats, int startIndex, int endIndex, CT_RPrElt fmt) {
-            throw new NotImplementedException();
+        internal void ApplyFont(SortedDictionary<int, CT_RPrElt> formats, int startIndex, int endIndex, CT_RPrElt fmt) 
+        {
+            
             // delete format runs that fit between startIndex and endIndex
             // runs intersecting startIndex and endIndex remain
-            //int runStartIdx = 0;
-            //for (Iterator<Integer> it = formats.Keys.GetEnumerator(); it.hasNext();) {
-            //    int runEndIdx = it.next();
-            //    if (runStartIdx >= startIndex && runEndIdx < endIndex) {
-            //       it.remove();
-            //    }
-            //    runStartIdx = runEndIdx;
-            //}
-
-            //if(startIndex > 0 && !formats.ContainsKey(startIndex)) {
-            //    // If there's a format that starts later in the string, make it start now
-            //    foreach(KeyValuePair<int, CT_RPrElt> entry in formats) {
-            //       if(entry.Key > startIndex) {
-            //          formats[startIndex]= entry.Value;
-            //          break;
-            //       }
-            //    }
-            //}
-            //formats[endIndex]= fmt;
+            int runStartIdx = 0;
+            List<int> toRemoveKeys=new List<int>();
+            for (SortedDictionary<int, CT_RPrElt>.KeyCollection.Enumerator it = formats.Keys.GetEnumerator(); it.MoveNext(); )
+            {
+                int runIdx = it.Current;
+                if (runIdx >= startIndex && runIdx < endIndex)
+                {
+                    toRemoveKeys.Add(runIdx);
+                }
+            }
+            foreach (int key in toRemoveKeys)
+            {
+                formats.Remove(key);
+            }
+            if (startIndex > 0 && !formats.ContainsKey(startIndex))
+            {
+                // If there's a format that starts later in the string, make it start now
+                foreach (KeyValuePair<int, CT_RPrElt> entry in formats)
+                {
+                    if (entry.Key > startIndex)
+                    {
+                        formats[startIndex] = entry.Value;
+                        break;
+                    }
+                }
+            }
+            formats[endIndex] = fmt;
 
             // assure that the range [startIndex, endIndex] consists if a single run
             // there can be two or three runs depending whether startIndex or endIndex
             // intersected existing format runs
             //SortedMap<int, CT_RPrElt> sub = formats.subMap(startIndex, endIndex);
-            //while(sub.size() > 1) sub.remove(sub.lastKey());
+            //while(sub.size() > 1) sub.remove(sub.lastKey());       
         }
         /**
          * Applies a font to the specified characters of a string.
@@ -183,7 +192,7 @@ namespace NPOI.XSSF.UserModel
             String text = this.String;
             XSSFFont xssfFont = (XSSFFont)font;
 
-            Dictionary<int, CT_RPrElt> formats = GetFormatMap(st);
+            SortedDictionary<int, CT_RPrElt> formats = GetFormatMap(st);
             CT_RPrElt fmt = new CT_RPrElt();
             SetRunAttributes(xssfFont.GetCTFont(), fmt);
             ApplyFont(formats, startIndex, endIndex, fmt);
@@ -194,10 +203,10 @@ namespace NPOI.XSSF.UserModel
 
 
         }
-        internal Dictionary<int, CT_RPrElt> GetFormatMap(CT_Rst entry)
+        internal SortedDictionary<int, CT_RPrElt> GetFormatMap(CT_Rst entry)
         {
             int length = 0;
-            Dictionary<int, CT_RPrElt> formats = new Dictionary<int, CT_RPrElt>();
+            SortedDictionary<int, CT_RPrElt> formats = new SortedDictionary<int, CT_RPrElt>();
             foreach (CT_RElt r in entry.r)
             {
                 String txt = r.t;
@@ -563,7 +572,7 @@ namespace NPOI.XSSF.UserModel
             return buf.ToString();
         }
 
-        public int GetLastKey(Dictionary<int, CT_RPrElt>.KeyCollection keys)
+        public int GetLastKey(SortedDictionary<int, CT_RPrElt>.KeyCollection keys)
         {
             int i=0;
             foreach (int key in keys)
@@ -575,7 +584,7 @@ namespace NPOI.XSSF.UserModel
             throw new ArgumentOutOfRangeException("GetLastKey failed");
         }
 
-        CT_Rst buildCTRst(String text, Dictionary<int, CT_RPrElt> formats)
+        CT_Rst buildCTRst(String text, SortedDictionary<int, CT_RPrElt> formats)
         {
             if (text.Length != GetLastKey(formats.Keys))
             {
@@ -584,11 +593,11 @@ namespace NPOI.XSSF.UserModel
             }
             CT_Rst st = new CT_Rst();
             int runStartIdx = 0;
-            for (Dictionary<int,CT_RPrElt>.KeyCollection.Enumerator it = formats.Keys.GetEnumerator(); it.MoveNext(); )
+            for (SortedDictionary<int, CT_RPrElt>.KeyCollection.Enumerator it = formats.Keys.GetEnumerator(); it.MoveNext(); )
             {
                 int runEndIdx = it.Current;
                 CT_RElt run = st.AddNewR();
-                String fragment = text.Substring(runStartIdx, runEndIdx);
+                String fragment = text.Substring(runStartIdx, runEndIdx - runStartIdx);
                 run.t = (fragment);
                 PreserveSpaces(run.t);
                 CT_RPrElt fmt = formats[runEndIdx];

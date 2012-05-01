@@ -161,6 +161,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="XSSF\UserModel\XSSFTextBox.cs" />
+    <Compile Include="XSSF\UserModel\XSSFVMLDrawing.cs" />
     <Compile Include="XSSF\UserModel\XSSFWorkbook.cs" />
     <Compile Include="XSSF\Util\CTColComparator.cs">
       <SubType>Code</SubType>

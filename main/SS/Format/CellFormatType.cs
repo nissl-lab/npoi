@@ -48,8 +48,7 @@ namespace NPOI.SS.Format
         }
         public override CellFormatter Formatter(String pattern)
         {
-            //return new CellDateFormatter(pattern);
-            throw new NotImplementedException();
+            return new CellDateFormatter(pattern);
         }
     }
     internal class ElapsedCellFormatType : CellFormatType

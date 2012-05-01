@@ -178,7 +178,6 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         public void Set(CT_Tbl table)
         {
-            //throw new NotImplementedException();
             this.items1ElementNameField = new List<Items1ChoiceType>(table.Items1ElementName);
             this.items1Field = new List<object>(table.items1Field);
             this.itemsElementNameField = new List<ItemsChoiceType30>(table.itemsElementNameField);

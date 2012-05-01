@@ -93,12 +93,12 @@ namespace NPOI.XSSF.Model
             IComment cc7 = r7.GetCell(2).CellComment;
 
             Assert.AreEqual("Nick Burch", cc5.Author);
-            Assert.AreEqual("Nick Burch:\nThis is a comment", cc5.String);
+            Assert.AreEqual("Nick Burch:\nThis is a comment", cc5.String.String);
             Assert.AreEqual(4, cc5.Row);
             Assert.AreEqual(2, cc5.Column);
 
             Assert.AreEqual("Nick Burch", cc7.Author);
-            Assert.AreEqual("Nick Burch:\nComment #1\n", cc7.String);
+            Assert.AreEqual("Nick Burch:\nComment #1\n", cc7.String.String);
             Assert.AreEqual(6, cc7.Row);
             Assert.AreEqual(2, cc7.Column);
         }

@@ -1,4 +1,5 @@
 using System.Xml.Serialization;
+using System.Collections.Generic;
 namespace NPOI.OpenXmlFormats.Vml
 {
     
@@ -18,7 +19,7 @@ namespace NPOI.OpenXmlFormats.Vml
         private string typeField;
         
         private string adjField;
-        
+        private string styleField;
         private CT_Path pathField;
         
         private string equationxmlField;
@@ -120,10 +121,22 @@ namespace NPOI.OpenXmlFormats.Vml
             this.shadowField = new CT_Shadow();
             return this.shadowField;
         }
- 
+        List<CT_ClientData> clientDataField;
+
+        [XmlElement]
+        public List<CT_ClientData> clientData
+        {
+            get { return clientDataField; }
+            set { clientDataField = value; }
+        }
+
+        public CT_ClientData GetClientDataArray(int index)
+        {
+            return this.clientDataField[0];
+        }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public string type {
             get {
                 return this.typeField;
@@ -134,7 +147,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public string adj {
             get {
                 return this.adjField;
@@ -156,13 +169,25 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public string equationxml {
             get {
                 return this.equationxmlField;
             }
             set {
                 this.equationxmlField = value;
+            }
+        }
+        [XmlAttribute]
+        public string style
+        {
+            get 
+            {
+                return this.styleField;
+            }
+            set 
+            {
+                this.styleField = value;
             }
         }
     }
@@ -200,7 +225,7 @@ namespace NPOI.OpenXmlFormats.Vml
         private string eqnField;
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public string eqn {
             get {
                 return this.eqnField;
@@ -266,7 +291,7 @@ namespace NPOI.OpenXmlFormats.Vml
         private string radiusrangeField;
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public string position {
             get {
                 return this.positionField;
@@ -277,7 +302,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public string polar {
             get {
                 return this.polarField;
@@ -288,7 +313,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public string map {
             get {
                 return this.mapField;
@@ -299,7 +324,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public ST_TrueFalse invx {
             get {
                 return this.invxField;
@@ -321,7 +346,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public ST_TrueFalse invy {
             get {
                 return this.invyField;
@@ -343,7 +368,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public ST_TrueFalseBlank @switch {
             get {
                 return this.switchField;
@@ -365,7 +390,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public string xrange {
             get {
                 return this.xrangeField;
@@ -376,7 +401,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public string yrange {
             get {
                 return this.yrangeField;
@@ -387,7 +412,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public string radiusrange {
             get {
                 return this.radiusrangeField;
@@ -445,7 +470,7 @@ namespace NPOI.OpenXmlFormats.Vml
         private string hrefField;
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public string id {
             get {
                 return this.idField;
@@ -456,7 +481,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public string src {
             get {
                 return this.srcField;
@@ -467,7 +492,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public string cropleft {
             get {
                 return this.cropleftField;
@@ -478,7 +503,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public string croptop {
             get {
                 return this.croptopField;
@@ -489,7 +514,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public string cropright {
             get {
                 return this.croprightField;
@@ -500,7 +525,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public string cropbottom {
             get {
                 return this.cropbottomField;
@@ -511,7 +536,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public string gain {
             get {
                 return this.gainField;
@@ -522,7 +547,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public string blacklevel {
             get {
                 return this.blacklevelField;
@@ -533,7 +558,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public string gamma {
             get {
                 return this.gammaField;
@@ -544,7 +569,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public ST_TrueFalse grayscale {
             get {
                 return this.grayscaleField;
@@ -566,7 +591,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public ST_TrueFalse bilevel {
             get {
                 return this.bilevelField;
@@ -588,7 +613,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public string chromakey {
             get {
                 return this.chromakeyField;
@@ -599,7 +624,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public string embosscolor {
             get {
                 return this.embosscolorField;
@@ -610,7 +635,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public string recolortarget {
             get {
                 return this.recolortargetField;
@@ -621,7 +646,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute("id", Form=System.Xml.Schema.XmlSchemaForm.Qualified, Namespace="http://schemas.openxmlformats.org/officeDocument/2006/relationships")]
+        [XmlAttributeAttribute("id", Form=System.Xml.Schema.XmlSchemaForm.Qualified, Namespace="http://schemas.openxmlformats.org/officeDocument/2006/relationships")]
         public string id1 {
             get {
                 return this.id1Field;
@@ -632,7 +657,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute(Form=System.Xml.Schema.XmlSchemaForm.Qualified, Namespace="http://schemas.openxmlformats.org/officeDocument/2006/relationships")]
+        [XmlAttributeAttribute(Form=System.Xml.Schema.XmlSchemaForm.Qualified, Namespace="http://schemas.openxmlformats.org/officeDocument/2006/relationships")]
         public string pict {
             get {
                 return this.pictField;
@@ -643,7 +668,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute(Form=System.Xml.Schema.XmlSchemaForm.Qualified, Namespace="http://schemas.openxmlformats.org/officeDocument/2006/relationships")]
+        [XmlAttributeAttribute(Form=System.Xml.Schema.XmlSchemaForm.Qualified, Namespace="http://schemas.openxmlformats.org/officeDocument/2006/relationships")]
         public string href {
             get {
                 return this.hrefField;
@@ -699,7 +724,7 @@ namespace NPOI.OpenXmlFormats.Vml
         private bool insetpenokFieldSpecified;
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public string id {
             get {
                 return this.idField;
@@ -710,7 +735,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public string v {
             get {
                 return this.vField;
@@ -721,7 +746,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public string limo {
             get {
                 return this.limoField;
@@ -732,7 +757,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public string textboxrect {
             get {
                 return this.textboxrectField;
@@ -743,7 +768,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public ST_TrueFalse fillok {
             get {
                 return this.fillokField;
@@ -765,7 +790,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public ST_TrueFalse strokeok {
             get {
                 return this.strokeokField;
@@ -787,7 +812,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public ST_TrueFalse shadowok {
             get {
                 return this.shadowokField;
@@ -809,7 +834,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public ST_TrueFalse arrowok {
             get {
                 return this.arrowokField;
@@ -831,7 +856,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public ST_TrueFalse gradientshapeok {
             get {
                 return this.gradientshapeokField;
@@ -853,7 +878,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public ST_TrueFalse textpathok {
             get {
                 return this.textpathokField;
@@ -875,7 +900,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public ST_TrueFalse insetpenok {
             get {
                 return this.insetpenokField;
@@ -934,7 +959,7 @@ namespace NPOI.OpenXmlFormats.Vml
         private string matrixField;
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public string id {
             get {
                 return this.idField;
@@ -945,7 +970,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public ST_TrueFalse on {
             get {
                 return this.onField;
@@ -967,7 +992,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public ST_ShadowType type {
             get {
                 return this.typeField;
@@ -989,7 +1014,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public ST_TrueFalse obscured {
             get {
                 return this.obscuredField;
@@ -1011,7 +1036,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public string color {
             get {
                 return this.colorField;
@@ -1022,7 +1047,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public string opacity {
             get {
                 return this.opacityField;
@@ -1033,7 +1058,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public string offset {
             get {
                 return this.offsetField;
@@ -1044,7 +1069,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public string color2 {
             get {
                 return this.color2Field;
@@ -1055,7 +1080,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public string offset2 {
             get {
                 return this.offset2Field;
@@ -1066,7 +1091,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public string origin {
             get {
                 return this.originField;
@@ -1077,7 +1102,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public string matrix {
             get {
                 return this.matrixField;
@@ -1194,7 +1219,7 @@ namespace NPOI.OpenXmlFormats.Vml
         private bool insetpenFieldSpecified;
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public string id {
             get {
                 return this.idField;
@@ -1205,7 +1230,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public ST_TrueFalse on {
             get {
                 return this.onField;
@@ -1227,7 +1252,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public string weight {
             get {
                 return this.weightField;
@@ -1238,7 +1263,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public string color {
             get {
                 return this.colorField;
@@ -1249,7 +1274,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public string opacity {
             get {
                 return this.opacityField;
@@ -1260,7 +1285,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public ST_StrokeLineStyle linestyle {
             get {
                 return this.linestyleField;
@@ -1282,7 +1307,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public decimal miterlimit {
             get {
                 return this.miterlimitField;
@@ -1304,7 +1329,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public ST_StrokeJoinStyle joinstyle {
             get {
                 return this.joinstyleField;
@@ -1326,7 +1351,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public ST_StrokeEndCap endcap {
             get {
                 return this.endcapField;
@@ -1348,7 +1373,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public string dashstyle {
             get {
                 return this.dashstyleField;
@@ -1359,7 +1384,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public ST_FillType filltype {
             get {
                 return this.filltypeField;
@@ -1381,7 +1406,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public string src {
             get {
                 return this.srcField;
@@ -1392,7 +1417,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public ST_ImageAspect imageaspect {
             get {
                 return this.imageaspectField;
@@ -1414,7 +1439,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public string imagesize {
             get {
                 return this.imagesizeField;
@@ -1425,7 +1450,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public ST_TrueFalse imagealignshape {
             get {
                 return this.imagealignshapeField;
@@ -1447,7 +1472,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public string color2 {
             get {
                 return this.color2Field;
@@ -1458,7 +1483,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public ST_StrokeArrowType startarrow {
             get {
                 return this.startarrowField;
@@ -1480,7 +1505,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public ST_StrokeArrowWidth startarrowwidth {
             get {
                 return this.startarrowwidthField;
@@ -1502,7 +1527,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public ST_StrokeArrowLength startarrowlength {
             get {
                 return this.startarrowlengthField;
@@ -1524,7 +1549,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public ST_StrokeArrowType endarrow {
             get {
                 return this.endarrowField;
@@ -1546,7 +1571,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public ST_StrokeArrowWidth endarrowwidth {
             get {
                 return this.endarrowwidthField;
@@ -1568,7 +1593,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public ST_StrokeArrowLength endarrowlength {
             get {
                 return this.endarrowlengthField;
@@ -1590,7 +1615,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute("id", Form=System.Xml.Schema.XmlSchemaForm.Qualified, Namespace="http://schemas.openxmlformats.org/officeDocument/2006/relationships")]
+        [XmlAttributeAttribute("id", Form=System.Xml.Schema.XmlSchemaForm.Qualified, Namespace="http://schemas.openxmlformats.org/officeDocument/2006/relationships")]
         public string id1 {
             get {
                 return this.id1Field;
@@ -1601,7 +1626,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public ST_TrueFalse insetpen {
             get {
                 return this.insetpenField;
@@ -1762,7 +1787,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public string id {
             get {
                 return this.idField;
@@ -1773,7 +1798,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public string style {
             get {
                 return this.styleField;
@@ -1784,7 +1809,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public string inset {
             get {
                 return this.insetField;
@@ -1830,7 +1855,7 @@ namespace NPOI.OpenXmlFormats.Vml
         private string stringField;
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public string id {
             get {
                 return this.idField;
@@ -1841,7 +1866,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public string style {
             get {
                 return this.styleField;
@@ -1852,7 +1877,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public ST_TrueFalse on {
             get {
                 return this.onField;
@@ -1874,7 +1899,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public ST_TrueFalse fitshape {
             get {
                 return this.fitshapeField;
@@ -1896,7 +1921,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public ST_TrueFalse fitpath {
             get {
                 return this.fitpathField;
@@ -1918,7 +1943,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public ST_TrueFalse trim {
             get {
                 return this.trimField;
@@ -1940,7 +1965,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public ST_TrueFalse xscale {
             get {
                 return this.xscaleField;
@@ -1962,7 +1987,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public string @string {
             get {
                 return this.stringField;
@@ -2050,7 +2075,7 @@ namespace NPOI.OpenXmlFormats.Vml
     [XmlRoot(Namespace="urn:schemas-microsoft-com:vml", IsNullable=true)]
     public partial class CT_Shapetype {
         
-        private CT_Path[] pathField;
+        private List<CT_Path> pathField;
         
         private CT_Formulas[] formulasField;
         
@@ -2058,7 +2083,7 @@ namespace NPOI.OpenXmlFormats.Vml
         
         private CT_Fill[] fillField;
         
-        private CT_Stroke[] strokeField;
+        private List<CT_Stroke> strokeField;
         
         private CT_Shadow[] shadowField;
         
@@ -2085,12 +2110,27 @@ namespace NPOI.OpenXmlFormats.Vml
         private CT_Rel[] textdataField;
         
         private string adjField;
+        private string idField;
+        private string styleField;
+
         
         private string path1Field;
-        
+
+        [XmlAttribute]
+        public string id
+        {
+            get {
+                return this.idField;
+            }
+            set 
+            {
+                this.idField = value;
+            }
+        }
+
         /// <remarks/>
         [XmlElement("path")]
-        public CT_Path[] path {
+        public List<CT_Path> path {
             get {
                 return this.pathField;
             }
@@ -2134,7 +2174,7 @@ namespace NPOI.OpenXmlFormats.Vml
         
         /// <remarks/>
         [XmlElement("stroke")]
-        public CT_Stroke[] stroke {
+        public List<CT_Stroke> stroke {
             get {
                 return this.strokeField;
             }
@@ -2276,7 +2316,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public string adj {
             get {
                 return this.adjField;
@@ -2287,7 +2327,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute("path")]
+        [XmlAttributeAttribute("path")]
         public string path1 {
             get {
                 return this.path1Field;
@@ -2296,6 +2336,20 @@ namespace NPOI.OpenXmlFormats.Vml
                 this.path1Field = value;
             }
         }
+
+        public CT_Stroke AddNewStroke()
+        {
+            CT_Stroke stk = new CT_Stroke();
+            this.strokeField.Add(stk);
+            return stk;
+        }
+        public CT_Path AddNewPath()
+        {
+            CT_Path p = new CT_Path();
+            this.pathField.Add(p);
+            return p;
+        }
+
     }
     
     /// <remarks/>
@@ -2372,7 +2426,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public ST_TrueFalse filled {
             get {
                 return this.filledField;
@@ -2394,7 +2448,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public string fillcolor {
             get {
                 return this.fillcolorField;
@@ -2405,7 +2459,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public ST_EditAs editas {
             get {
                 return this.editasField;
@@ -2670,7 +2724,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public decimal startAngle {
             get {
                 return this.startAngleField;
@@ -2692,7 +2746,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public decimal endAngle {
             get {
                 return this.endAngleField;
@@ -2952,7 +3006,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public string from {
             get {
                 return this.fromField;
@@ -2963,7 +3017,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public string control1 {
             get {
                 return this.control1Field;
@@ -2974,7 +3028,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public string control2 {
             get {
                 return this.control2Field;
@@ -2985,7 +3039,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public string to {
             get {
                 return this.toField;
@@ -3250,7 +3304,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public string src {
             get {
                 return this.srcField;
@@ -3261,7 +3315,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public string cropleft {
             get {
                 return this.cropleftField;
@@ -3272,7 +3326,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public string croptop {
             get {
                 return this.croptopField;
@@ -3283,7 +3337,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public string cropright {
             get {
                 return this.croprightField;
@@ -3294,7 +3348,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public string cropbottom {
             get {
                 return this.cropbottomField;
@@ -3305,7 +3359,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public string gain {
             get {
                 return this.gainField;
@@ -3316,7 +3370,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public string blacklevel {
             get {
                 return this.blacklevelField;
@@ -3327,7 +3381,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public string gamma {
             get {
                 return this.gammaField;
@@ -3338,7 +3392,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public ST_TrueFalse grayscale {
             get {
                 return this.grayscaleField;
@@ -3360,7 +3414,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public ST_TrueFalse bilevel {
             get {
                 return this.bilevelField;
@@ -3616,7 +3670,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public string from {
             get {
                 return this.fromField;
@@ -3627,7 +3681,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public string to {
             get {
                 return this.toField;
@@ -3811,7 +3865,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public string points {
             get {
                 return this.pointsField;
@@ -4060,7 +4114,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public string arcsize {
             get {
                 return this.arcsizeField;
@@ -4291,7 +4345,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public string id {
             get {
                 return this.idField;
@@ -4302,7 +4356,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public ST_TrueFalse filled {
             get {
                 return this.filledField;
@@ -4324,7 +4378,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public string fillcolor {
             get {
                 return this.fillcolorField;

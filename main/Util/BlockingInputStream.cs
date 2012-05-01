@@ -57,14 +57,14 @@ namespace NPOI.Util
             stream.Close();
         }
 
-        public void mark(int readLimit)
+        public void Mark(int readLimit)
         {
-            //stream.Mark(readLimit);
+            throw new NotImplementedException();
+
         }
 
-        public bool markSupported()
+        public bool MarkSupported()
         {
-            //return stream.MarkSupported();
             return false;
         }
 
@@ -106,60 +106,57 @@ namespace NPOI.Util
         public void Reset()
         {
             stream.Seek(0, SeekOrigin.Begin);
-            //stream.Reset();
         }
 
         public long Skip(long n)
         {
             return stream.Seek(n, SeekOrigin.Begin);
-            //return stream.Skip(n);
         }
 
         public override bool CanRead
         {
-            get { throw new NotImplementedException(); }
+            get { return true; }
         }
 
         public override bool CanSeek
         {
-            get { throw new NotImplementedException(); }
+            get { return true; }
         }
 
         public override bool CanWrite
         {
-            get { throw new NotImplementedException(); }
+            get { return false; }
         }
 
         public override void Flush()
         {
-            throw new NotImplementedException();
         }
 
         public override long Length
         {
-            get { throw new NotImplementedException(); }
+            get { return stream.Length; }
         }
 
         public override long Position
         {
             get
             {
-                throw new NotImplementedException();
+                return stream.Position;
             }
             set
             {
-                throw new NotImplementedException();
+                stream.Position = value;
             }
         }
 
         public override long Seek(long offset, SeekOrigin origin)
         {
-            throw new NotImplementedException();
+            return stream.Seek(offset, origin);
         }
 
         public override void SetLength(long value)
         {
-            throw new NotImplementedException();
+            stream.SetLength(value);
         }
 
         public override void Write(byte[] buffer, int offset, int count)

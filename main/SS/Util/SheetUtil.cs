@@ -99,7 +99,7 @@ namespace NPOI.SS.Util
             //copyAttributes(defaultFont, str, 0, 1);
             //layout = new TextLayout(str.Iterator, fontRenderContext);
             //int defaultCharWidth = (int)layout.Advance;
-            Font font = HSSFFont2Font((HSSFFont)defaultFont);
+            Font font = IFont2Font(defaultFont);
             int defaultCharWidth = TextRenderer.MeasureText("" + new String(defaultChar, 1), font).Width;
             DummyEvaluator dummyEvaluator = new DummyEvaluator();
 
@@ -111,7 +111,7 @@ namespace NPOI.SS.Util
                 bool skipthisrow = false;
                 for (IEnumerator it = sheet.GetRowEnumerator(); it.MoveNext(); )
                 {
-                    HSSFRow row = (HSSFRow)it.Current;
+                    IRow row = (IRow)it.Current;
                     ICell cell = row.GetCell(column);
 
                     if (cell == null)
@@ -157,7 +157,7 @@ namespace NPOI.SS.Util
 
                             //str = new AttributedString(txt);
                             //copyAttributes(font, str, 0, txt.Length);
-                            font = HSSFFont2Font((HSSFFont)font1);
+                            font = IFont2Font(font1);
                             if (rt.NumFormattingRuns > 0)
                             {
                                 // TODO: support rich text fragments
@@ -253,7 +253,6 @@ namespace NPOI.SS.Util
                 }
             }
             return width;
-            //throw new NotImplementedException();
         }
 
         // /**
@@ -273,7 +272,7 @@ namespace NPOI.SS.Util
         /// </summary>
         /// <param name="font1">The font.</param>
         /// <returns></returns>
-        public static Font HSSFFont2Font(HSSFFont font1)
+        public static Font IFont2Font(IFont font1)
         {
             FontStyle style = FontStyle.Regular;
             if (font1.Boldweight == (short)FontBoldWeight.BOLD)

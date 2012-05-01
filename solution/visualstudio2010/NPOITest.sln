@@ -6,9 +6,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		NPOI.vsmdi = NPOI.vsmdi
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "testcases", "..\..\testcases\main\testcases vs10.csproj", "{A920C2BA-8BFD-4F54-8401-7D1C0730F1F0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "testcases vs10", "..\..\testcases\main\testcases vs10.csproj", "{A920C2BA-8BFD-4F54-8401-7D1C0730F1F0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "main", "..\..\main\main vs10.csproj", "{4704E545-CEFF-46B6-ACEF-C8927830FA1C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "main vs10", "..\..\main\main vs10.csproj", "{4704E545-CEFF-46B6-ACEF-C8927830FA1C}"
 EndProject
 Global
 	GlobalSection(TestCaseManagementSettings) = postSolution

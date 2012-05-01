@@ -119,7 +119,7 @@ namespace NPOI.XSSF.Model
 
         private String GetKey(CT_Rst st)
         {
-            return st.t; //.xmlText;
+            return st.t==null?string.Empty:st.t; //.xmltext
         }
 
         /**

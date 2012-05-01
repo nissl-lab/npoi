@@ -1464,7 +1464,7 @@ namespace NPOI.XSSF.UserModel
         internal bool IsDate1904()
         {
             CT_WorkbookPr workbookPr = workbook.workbookPr;
-            return workbookPr != null && (bool)workbookPr.date1904;
+            return workbookPr.date1904Specified && workbookPr.date1904;
         }
 
         /**

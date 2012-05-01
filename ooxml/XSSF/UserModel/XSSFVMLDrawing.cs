@@ -24,6 +24,7 @@ using System.Text.RegularExpressions;
 using NPOI.OpenXmlFormats.Vml;
 using System.Xml.Serialization;
 using System.Xml;
+using System.Collections;
 namespace NPOI.XSSF.UserModel
 {
 
@@ -67,8 +68,7 @@ namespace NPOI.XSSF.UserModel
          */
         private static Regex ptrn_shapeId = new Regex("_x0000_s(\\d+)");
 
-        private List<QName> _qnames = new List<QName>();
-        private List<XmlObject> _items = new List<XmlObject>();
+        private ArrayList _items = new ArrayList();
         private String _shapeTypeId;
         private int _shapeId = 1024;
 
@@ -77,7 +77,7 @@ namespace NPOI.XSSF.UserModel
          *
          * @see XSSFSheet#CreateDrawingPatriarch()
          */
-        protected XSSFVMLDrawing()
+        public XSSFVMLDrawing()
             : base()
         {
 
@@ -102,86 +102,62 @@ namespace NPOI.XSSF.UserModel
 
         protected void Read(Stream is1)
         {
-            XmlObject root = XmlObject.Factory.Parse(
+            XmlDocument doc = new XmlDocument();
+             doc.Load(
                   new EvilUnclosedBRFixingInputStream(is1)
             );
 
-            _qnames = new List<QName>();
-            _items = new List<XmlObject>();
-            foreach (XmlObject obj in root.selectPath("$this/xml/*"))
+             XmlNamespaceManager nsmgr = new XmlNamespaceManager(doc.NameTable);
+             nsmgr.AddNamespace("shapelayout", "urn:schemas-microsoft-com:office:office");
+             nsmgr.AddNamespace("shapetype", "urn:schemas-microsoft-com:vml");
+             nsmgr.AddNamespace("shape", "urn:schemas-microsoft-com:vml");
+             _items = new ArrayList();
+            XmlNodeList nodes=doc.SelectNodes("*",nsmgr);
+            foreach (XmlNode nd in nodes)
             {
-                Node nd = obj.GetDomNode();
-                QName qname = new QName(nd.GetNamespaceURI(), nd.GetLocalName());
-                if (qname.Equals(QNAME_SHAPE_LAYOUT))
-                {
-                    _items.Add(CT_ShapeLayout.Factory.Parse(obj.xmlText()));
-                }
-                else if (qname.Equals(QNAME_SHAPE_TYPE))
-                {
-                    CT_Shapetype st = CT_Shapetype.Factory.Parse(obj.xmlText());
-                    _items.Add(st);
-                    _shapeTypeId = st.GetId();
-                }
-                else if (qname.Equals(QNAME_SHAPE))
-                {
-                    CT_Shape shape = CT_Shape.Factory.Parse(obj.xmlText());
-                    String id = shape.GetId();
-                    if (id != null)
-                    {
-                        Matcher m = ptrn_shapeId.matcher(id);
-                        if (m.Find()) _shapeId = Math.Max(_shapeId, Int32.ParseInt(m.group(1)));
-                    }
-                    _items.Add(shape);
-                }
-                else
-                {
-                    _items.Add(XmlObject.Factory.Parse(obj.xmlText()));
-                }
-                _qnames.Add(qname);
             }
         }
 
-        protected List<XmlObject> GetItems()
+        protected ArrayList GetItems()
         {
             return _items;
         }
 
         protected void Write(Stream out1)
         {
-            XmlObject rootObject = XmlObject();
-            XmlCursor rootCursor = rootObject.newCursor();
-            rootCursor.ToNextToken();
-            rootCursor.beginElement("xml");
+            throw new NotImplementedException();
+            //XmlObject rootObject = XmlObject();
+            //XmlCursor rootCursor = rootObject.newCursor();
+            //rootCursor.ToNextToken();
+            //rootCursor.beginElement("xml");
 
-            for (int i = 0; i < _items.Count; i++)
-            {
-                XmlCursor xc = _items[i].newCursor();
-                rootCursor.beginElement(_qnames[i]);
-                while (xc.ToNextToken() == XmlCursor.TokenType.ATTR)
-                {
-                    Node anode = xc.GetDomNode();
-                    rootCursor.insertAttributeWithValue(anode.GetLocalName(), anode.GetNamespaceURI(), anode.GetNodeValue());
-                }
-                xc.ToStartDoc();
-                xc.copyXmlContents(rootCursor);
-                rootCursor.ToNextToken();
-                xc.dispose();
-            }
-            rootCursor.dispose();
+            //for (int i = 0; i < _items.Count; i++)
+            //{
+            //    XmlCursor xc = _items[i].newCursor();
+            //    rootCursor.beginElement(_qnames[i]);
+            //    while (xc.ToNextToken() == XmlCursor.TokenType.ATTR)
+            //    {
+            //        Node anode = xc.GetDomNode();
+            //        rootCursor.insertAttributeWithValue(anode.GetLocalName(), anode.GetNamespaceURI(), anode.GetNodeValue());
+            //    }
+            //    xc.ToStartDoc();
+            //    xc.copyXmlContents(rootCursor);
+            //    rootCursor.ToNextToken();
+            //    xc.dispose();
+            //}
+            //rootCursor.dispose();
 
-            //XmlOptions xmlOptions = new XmlOptions(DEFAULT_XML_OPTIONS);
-            //xmlOptions.SetSavePrettyPrint();
-            Dictionary<String, String> map = new Dictionary<String, String>();
-            map["urn:schemas-microsoft-com:vml"] = "v";
-            map["urn:schemas-microsoft-com:office:office"] = "o";
-            map["urn:schemas-microsoft-com:office:excel"] = "x";
-            //xmlOptions.SetSaveSuggestedPrefixes(map);
 
-            rootObject.save(out1);
+            //Dictionary<String, String> map = new Dictionary<String, String>();
+            //map["urn:schemas-microsoft-com:vml"] = "v";
+            //map["urn:schemas-microsoft-com:office:office"] = "o";
+            //map["urn:schemas-microsoft-com:office:excel"] = "x";
+
+            //rootObject.save(out1);
         }
 
 
-        protected void Commit()
+        protected override void Commit()
         {
             PackagePart part = GetPackagePart();
             Stream out1 = part.GetOutputStream();
@@ -200,47 +176,45 @@ namespace NPOI.XSSF.UserModel
             idmap.ext = (ST_Ext.edit);
             idmap.data = ("1");
             _items.Add(layout);
-            _qnames.Add(QNAME_SHAPE_LAYOUT);
 
-            CT_Shapetype shapetype = new CT_Shapetype();
-            _shapeTypeId = "_xssf_cell_comment";
-            shapetype.SetId(_shapeTypeId);
-            shapetype.SetCoordsize("21600,21600");
-            shapetype.SetSpt(202);
-            shapetype.SetPath2("m,l,21600r21600,l21600,xe");
-            shapetype.AddNewStroke().SetJoinstyle(ST_StrokeJoinStyle.miter);
-            CT_Path path = shapetype.AddNewPath();
-            path.SetGradientshapeok(ST_TrueFalse.t);
-            path.SetConnecttype(ST_ConnectType.rect);
-            _items.Add(shapetype);
-            _qnames.Add(QNAME_SHAPE_TYPE);
+            //CT_Shapetype shapetype = new CT_Shapetype();
+            //_shapeTypeId = "_xssf_cell_comment";
+            //shapetype.id= _shapeTypeId; 
+            //shapetype.SetCoordsize("21600,21600");
+            //shapetype.SetSpt(202);
+            //shapetype.path1 = ("m,l,21600r21600,l21600,xe");
+            //shapetype.AddNewStroke().SetJoinstyle(ST_StrokeJoinStyle.miter);
+            //CT_Path path = shapetype.AddNewPath();
+            //path.gradientshapeok = ST_TrueFalse.t;
+            //path.SetConnecttype(ST_ConnectType.rect);
+            //_items.Add(shapetype);
         }
 
-        protected CT_Shape newCommentShape()
+        internal CT_Shape newCommentShape()
         {
             CT_Shape shape = new CT_Shape();
 
-            shape.SetId("_x0000_s" + (++_shapeId));
-            shape.SetType("#" + _shapeTypeId);
-            shape.SetStyle("position:absolute; visibility:hidden");
-            shape.SetFillcolor("#ffffe1");
-            shape.SetInsetmode(ST_InsetMode.auto);
-            shape.AddNewFill().color=("#ffffe1");
-            CT_Shadow shadow = shape.AddNewShadow();
-            shadow.on= ST_TrueFalse.t;
-            shadow.color = "black";
-            shadow.obscured = ST_TrueFalse.t;
-            shape.AddNewPath().SetConnecttype(ST_ConnectType.none);
-            shape.AddNewTextbox().SetStyle("mso-direction-alt:auto");
-            CT_ClientData cldata = shape.AddNewClientData();
-            cldata.SetObjectType(ST_ObjectType.Note);
-            cldata.AddNewMoveWithCells();
-            cldata.AddNewSizeWithCells();
-            cldata.AddNewAnchor().SetStringValue("1, 15, 0, 2, 3, 15, 3, 16");
-            cldata.AddNewAutoFill().SetStringValue("False");
-            cldata.AddNewRow().SetBigintValue(new Bigint("0"));
-            cldata.AddNewColumn().SetBigintValue(new Bigint("0"));
-            _items.Add(shape);
+            //shape.SetId("_x0000_s" + (++_shapeId));
+            //shape.SetType("#" + _shapeTypeId);
+            //shape.SetStyle("position:absolute; visibility:hidden");
+            //shape.SetFillcolor("#ffffe1");
+            //shape.SetInsetmode(ST_InsetMode.auto);
+            //shape.AddNewFill().color=("#ffffe1");
+            //CT_Shadow shadow = shape.AddNewShadow();
+            //shadow.on= ST_TrueFalse.t;
+            //shadow.color = "black";
+            //shadow.obscured = ST_TrueFalse.t;
+            //shape.AddNewPath().SetConnecttype(ST_ConnectType.none);
+            //shape.AddNewTextbox().SetStyle("mso-direction-alt:auto");
+            //CT_ClientData cldata = shape.AddNewClientData();
+            //cldata.ObjectType=ST_ObjectType.Note;
+            //cldata.AddNewMoveWithCells();
+            //cldata.AddNewSizeWithCells();
+            //cldata.AddNewAnchor().SetStringValue("1, 15, 0, 2, 3, 15, 3, 16");
+            //cldata.AddNewAutoFill().SetStringValue("False");
+            //cldata.AddNewRow().SetBigintValue(new Bigint("0"));
+            //cldata.AddNewColumn().SetBigintValue(new Bigint("0"));
+            //_items.Add(shape);
 
             return shape;
         }
@@ -250,35 +224,35 @@ namespace NPOI.XSSF.UserModel
          *
          * @return the comment shape or <code>null</code>
          */
-        protected CT_Shape FindCommentShape(int row, int col)
+        internal CT_Shape FindCommentShape(int row, int col)
         {
-            foreach (XmlObject itm in _items)
-            {
-                if (itm is CT_Shape)
-                {
-                    CT_Shape sh = (CT_Shape)itm;
-                    if (sh.sizeOfClientDataArray() > 0)
-                    {
-                        CT_ClientData cldata = sh.GetClientDataArray(0);
-                        if (cldata.GetObjectType() == ST_ObjectType.NOTE)
-                        {
-                            int crow = cldata.GetRowArray(0).intValue();
-                            int ccol = cldata.GetColumnArray(0).intValue();
-                            if (crow == row && ccol == col)
-                            {
-                                return sh;
-                            }
-                        }
-                    }
-                }
-            }
+            //foreach (XmlObject itm in _items)
+            //{
+            //    if (itm is CT_Shape)
+            //    {
+            //        CT_Shape sh = (CT_Shape)itm;
+            //        if (sh.sizeOfClientDataArray() > 0)
+            //        {
+            //            CT_ClientData cldata = sh.GetClientDataArray(0);
+            //            if (cldata.GetObjectType() == ST_ObjectType.NOTE)
+            //            {
+            //                int crow = cldata.GetRowArray(0).intValue();
+            //                int ccol = cldata.GetColumnArray(0).intValue();
+            //                if (crow == row && ccol == col)
+            //                {
+            //                    return sh;
+            //                }
+            //            }
+            //        }
+            //    }
+            //}
             return null;
         }
 
-        protected bool RemoveCommentShape(int row, int col)
+        internal bool RemoveCommentShape(int row, int col)
         {
             CT_Shape shape = FindCommentShape(row, col);
-            return shape != null && _items.Remove(shape);
+            return shape != null; //&& _items.Remove(shape);
         }
     }
 }

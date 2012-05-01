@@ -68,7 +68,6 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         public IList<CT_Style> GetStyleList()
         {
-            //throw new NotImplementedException();
             return style;
         }
 

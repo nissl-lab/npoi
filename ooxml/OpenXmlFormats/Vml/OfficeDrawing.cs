@@ -2643,7 +2643,13 @@ namespace NPOI.OpenXmlFormats.Vml
         private ST_Ext extField;
         
         private bool extFieldSpecified;
-        
+
+        public CT_IdMap AddNewIdmap()
+        {
+            idmapField = new CT_IdMap();
+            return idmapField;
+        }
+
         /// <remarks/>
         public CT_IdMap idmap {
             get {

@@ -67,7 +67,7 @@ namespace NPOI.XSSF.UserModel
                 foreach (CT_Cell c in row.c)
                 {
                     XSSFCell cell = new XSSFCell(this, c);
-                    _cells[cell.ColumnIndex] = cell;
+                    _cells.Add(cell.ColumnIndex,cell);
                     sheet.OnReadCell(cell);
                 }
             }
@@ -394,7 +394,7 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
-                return (int)(_row.r - 1);
+                return (int)_row.r-1;
             }
             set 
             {
@@ -404,7 +404,7 @@ namespace NPOI.XSSF.UserModel
                     throw new ArgumentException("Invalid row number (" + value
                             + ") outside allowable range (0.." + maxrow + ")");
                 }
-                _row.r = (uint)(value + 1);
+                _row.r = (uint)(value+1);
             }
         }
 

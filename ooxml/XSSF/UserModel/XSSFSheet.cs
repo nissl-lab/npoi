@@ -425,49 +425,49 @@ namespace NPOI.XSSF.UserModel
          *
          * @return the VML drawing of <code>null</code> if the drawing was not found and autoCreate=false
          */
-        //protected XSSFVMLDrawing GetVMLDrawing(bool autoCreate)
-        //{
-        //    XSSFVMLDrawing drawing = null;
-        //    CT_LegacyDrawing ctDrawing = GetCT_LegacyDrawing();
-        //    if (ctDrawing == null)
-        //    {
-        //        if (autoCreate)
-        //        {
-        //            //drawingNumber = #drawings.Count + 1
-        //            int drawingNumber = GetPackagePart().getPackage().getPartsByContentType(XSSFRelation.VML_DRAWINGS.getContentType()).Count + 1;
-        //            drawing = (XSSFVMLDrawing)CreateRelationship(XSSFRelation.VML_DRAWINGS, XSSFFactory.GetInstance(), drawingNumber);
-        //            String relId = drawing.GetPackageRelationship().id;
+        internal XSSFVMLDrawing GetVMLDrawing(bool autoCreate)
+        {
+            XSSFVMLDrawing drawing = null;
+            CT_LegacyDrawing ctDrawing = GetCTLegacyDrawing();
+            if (ctDrawing == null)
+            {
+                if (autoCreate)
+                {
+                    //drawingNumber = #drawings.Count + 1
+                    int drawingNumber = GetPackagePart().Package.GetPartsByContentType(XSSFRelation.VML_DRAWINGS.ContentType).Count + 1;
+                    drawing = (XSSFVMLDrawing)CreateRelationship(XSSFRelation.VML_DRAWINGS, XSSFFactory.GetInstance(), drawingNumber);
+                    String relId = drawing.GetPackageRelationship().Id;
 
-        //            //add CT_LegacyDrawing element which indicates that this sheet Contains drawing components built on the drawingML platform.
-        //            //The relationship Id references the part Containing the drawing defInitions.
-        //            ctDrawing = worksheet.AddNewLegacyDrawing();
-        //            ctDrawing.id = relId;
-        //        }
-        //    }
-        //    else
-        //    {
-        //        //search the referenced drawing in the list of the sheet's relations
-        //        foreach (POIXMLDocumentPart p in GetRelations())
-        //        {
-        //            if (p is XSSFVMLDrawing)
-        //            {
-        //                XSSFVMLDrawing dr = (XSSFVMLDrawing)p;
-        //                String drId = dr.GetPackageRelationship().id;
-        //                if (drId.Equals(ctDrawing.id))
-        //                {
-        //                    drawing = dr;
-        //                    break;
-        //                }
-        //                break;
-        //            }
-        //        }
-        //        if (drawing == null)
-        //        {
-        //            logger.Log(POILogger.ERROR, "Can't find VML drawing with id=" + ctDrawing.id + " in the list of the sheet's relationships");
-        //        }
-        //    }
-        //    return drawing;
-        //}
+                    //add CT_LegacyDrawing element which indicates that this sheet Contains drawing components built on the drawingML platform.
+                    //The relationship Id references the part Containing the drawing defInitions.
+                    ctDrawing = worksheet.AddNewLegacyDrawing();
+                    ctDrawing.id = relId;
+                }
+            }
+            else
+            {
+                //search the referenced drawing in the list of the sheet's relations
+                foreach (POIXMLDocumentPart p in GetRelations())
+                {
+                    if (p is XSSFVMLDrawing)
+                    {
+                        XSSFVMLDrawing dr = (XSSFVMLDrawing)p;
+                        String drId = dr.GetPackageRelationship().Id;
+                        if (drId.Equals(ctDrawing.id))
+                        {
+                            drawing = dr;
+                            break;
+                        }
+                        break;
+                    }
+                }
+                if (drawing == null)
+                {
+                    logger.Log(POILogger.ERROR, "Can't find VML drawing with id=" + ctDrawing.id + " in the list of the sheet's relationships");
+                }
+            }
+            return drawing;
+        }
 
         protected virtual CT_Drawing GetCTDrawing()
         {
@@ -662,10 +662,9 @@ namespace NPOI.XSSF.UserModel
             CT_Comment ctComment = sheetComments.GetCTComment(ref1);
             if (ctComment == null) return null;
 
-            //XSSFVMLDrawing vml = GetVMLDrawing(false);
-            //return new XSSFComment(sheetComments, ctComment,
-            //        vml == null ? null : vml.FindCommentShape(row, column));
-            throw new NotImplementedException();
+            XSSFVMLDrawing vml = GetVMLDrawing(false);
+            return new XSSFComment(sheetComments, ctComment,
+                    vml == null ? null : vml.FindCommentShape(row, column));
         }
 
         public XSSFHyperlink GetHyperlink(int row, int column)
@@ -3593,12 +3592,12 @@ namespace NPOI.XSSF.UserModel
 
         public System.Collections.IEnumerator GetEnumerator()
         {
-            throw new NotImplementedException();
+            return GetRowEnumerator();
         }
 
         public System.Collections.IEnumerator GetRowEnumerator()
         {
-            throw new NotImplementedException();
+            return _rows.Values.GetEnumerator();
         }
 
         public bool IsActive

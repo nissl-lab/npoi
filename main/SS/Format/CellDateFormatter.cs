@@ -173,6 +173,7 @@ namespace NPOI.SS.Format
                 else
                     value = new DateTime((long)(EXCEL_EPOCH_TIME.Ticks + v));
             }
+            
             throw new NotImplementedException();
             //AttributedCharacterIterator it = dateFmt.FormatToCharacterIterator(
             //        value);

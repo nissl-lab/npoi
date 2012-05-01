@@ -115,7 +115,30 @@ namespace NPOI.OpenXmlFormats.Vml
                 this.itemsElementNameField = value;
             }
         }
+        private List<int> columnField;
+        [XmlElement]
+        public List<int> column
+        {
+            get { return this.columnField; }
+            set { this.columnField = value; }
+        }
+        public int GetColumnArray(int index)
+        {
+            return this.columnField[index];
+        }
+        private List<int> rowField;
 
+        [XmlElement]
+        public List<int> row
+        {
+            get { return this.rowField; }
+            set { this.rowField = value; }
+        }
+
+        public int GetRowArray(int index)
+        {
+            return this.rowField[index];
+        }
         /// <remarks/>
         [XmlAttribute]
         public ST_ObjectType ObjectType

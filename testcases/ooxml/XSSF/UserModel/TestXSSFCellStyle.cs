@@ -258,7 +258,7 @@ namespace NPOI.XSSF.UserModel
             byte[] rgb = cellStyle.GetBottomBorderXSSFColor().GetRgb();
             Assert.AreEqual(Color.Cyan.ToArgb(), Color.FromArgb(rgb[0] & 0xFF, rgb[1] & 0xFF, rgb[2] & 0xFF).ToArgb());
             //another border was Added to the styles table
-            Assert.AreEqual(num + 1, stylesTable.GetBorders().Count);
+            Assert.AreEqual(num, stylesTable.GetBorders().Count);
 
             //passing null unsets the color
             cellStyle.SetBottomBorderColor(null);
@@ -281,7 +281,7 @@ namespace NPOI.XSSF.UserModel
             clr = cellStyle.GetTopBorderXSSFColor();
             Assert.IsTrue(clr.GetCTColor().IsSetIndexed());
             Assert.AreEqual(IndexedColors.BLUE_GREY.Index, clr.GetIndexed());
-            //a new border was Added to the styles table
+            //a new border was added to the styles table
             Assert.AreEqual(num + 1, stylesTable.GetBorders().Count);
 
             //id of the Created border
@@ -299,7 +299,7 @@ namespace NPOI.XSSF.UserModel
             byte[] rgb = cellStyle.GetTopBorderXSSFColor().GetRgb();
             Assert.AreEqual(Color.Cyan.ToArgb(),Color.FromArgb(rgb[0], rgb[1], rgb[2]).ToArgb());
             //another border was added to the styles table
-            Assert.AreEqual(num + 1, stylesTable.GetBorders().Count);
+            Assert.AreEqual(num, stylesTable.GetBorders().Count);
 
             //passing null unsets the color
             cellStyle.SetTopBorderColor(null);
@@ -340,7 +340,7 @@ namespace NPOI.XSSF.UserModel
             byte[] rgb = cellStyle.GetLeftBorderXSSFColor().GetRgb();
             Assert.AreEqual(Color.Cyan.ToArgb(), Color.FromArgb(rgb[0] & 0xFF, rgb[1] & 0xFF, rgb[2] & 0xFF).ToArgb());
             //another border was Added to the styles table
-            Assert.AreEqual(num + 1, stylesTable.GetBorders().Count);
+            Assert.AreEqual(num, stylesTable.GetBorders().Count);
 
             //passing null unsets the color
             cellStyle.SetLeftBorderColor(null);
@@ -381,7 +381,7 @@ namespace NPOI.XSSF.UserModel
             byte[] rgb = cellStyle.GetRightBorderXSSFColor().GetRgb();
             Assert.AreEqual(Color.Cyan.ToArgb(), Color.FromArgb(rgb[0] & 0xFF, rgb[1] & 0xFF, rgb[2] & 0xFF).ToArgb());
             //another border was Added to the styles table
-            Assert.AreEqual(num + 1, stylesTable.GetBorders().Count);
+            Assert.AreEqual(num, stylesTable.GetBorders().Count);
 
             //passing null unsets the color
             cellStyle.SetRightBorderColor(null);

@@ -284,20 +284,19 @@ namespace NPOI.XSSF.UserModel
 
             //create comments and vmlDrawing parts if they don't exist
             CommentsTable comments = sheet.GetCommentsTable(true);
-            //XSSFVMLDrawing vml = sheet.GetVMLDrawing(true);
-            //schemasMicrosoftComVml.CT_Shape vmlShape = vml.newCommentShape();
-            //if (ca.IsSet())
-            //{
-            //    String position =
-            //            ca.Col1 + ", 0, " + ca.Row1 + ", 0, " +
-            //            ca.Col2 + ", 0, " + ca.Row2 + ", 0";
-            //    vmlShape.GetClientDataArray(0).SetAnchorArray(0, position);
-            //}
-            throw new NotImplementedException();
-            //XSSFComment shape = new XSSFComment(comments, comments.CreateComment(), vmlShape);
-            //shape.Column = (ca.Col1);
-            //shape.Row = (ca.Row1);
-            //return shape;
+            XSSFVMLDrawing vml = sheet.GetVMLDrawing(true);
+            NPOI.OpenXmlFormats.Vml.CT_Shape vmlShape = vml.newCommentShape();
+            if (ca.IsSet())
+            {
+                String position =
+                        ca.Col1 + ", 0, " + ca.Row1 + ", 0, " +
+                        ca.Col2 + ", 0, " + ca.Row2 + ", 0";
+                //vmlShape.GetClientDataArray(0).SetAnchorArray(0, position);
+            }
+            XSSFComment shape = new XSSFComment(comments, comments.CreateComment(), vmlShape);
+            shape.Column = (ca.Col1);
+            shape.Row = (ca.Row1);
+            return shape;
         }
 
         /**

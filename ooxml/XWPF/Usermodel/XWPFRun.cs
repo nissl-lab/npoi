@@ -716,7 +716,7 @@ namespace NPOI.XWPF.UserModel
                 cNvPr.descr = (filename);
 
                 CT_NonVisualPictureProperties cNvPicPr = nvPicPr.AddNewCNvPicPr();
-                cNvPicPr.AddNewPicLocks().SetNoChangeAspect(true);
+                cNvPicPr.AddNewPicLocks().noChangeAspect = true;
 
                 CT_BlipFillProperties blipFill = pic.AddNewBlipFill();
                 CT_Blip blip = blipFill.AddNewBlip();

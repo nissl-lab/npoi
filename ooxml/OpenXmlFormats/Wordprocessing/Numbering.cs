@@ -65,7 +65,6 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         public void AddNewAbstractNumId()
         {
-            //throw new NotImplementedException();
             if (this.abstractNumIdField == null)
                 abstractNumIdField = new CT_DecimalNumber();
         }
@@ -802,7 +801,6 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         public CT_AbstractNum Copy()
         {
-            //throw new NotImplementedException();
             CT_AbstractNum anum = new CT_AbstractNum();
             anum.abstractNumIdField = this.abstractNumIdField;
             anum.lvlField = new List<CT_Lvl>(this.lvlField);

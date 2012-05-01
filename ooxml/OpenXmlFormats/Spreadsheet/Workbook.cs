@@ -2563,7 +2563,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     public class CT_WorkbookPr
     {
 
-        private bool? date1904Field;
+        private bool date1904Field;
+        private bool date1904FieldSpecifiedField;
 
         private ST_Objects showObjectsField;
 
@@ -2603,7 +2604,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         public bool IsSetDate1904()
         {
-            return this.date1904Field != null;
+            return this.date1904FieldSpecifiedField;
         }
         public CT_WorkbookPr()
         {
@@ -2626,7 +2627,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
 
         [DefaultValue(false)]
-        public bool? date1904
+        public bool date1904
         {
             get
             {
@@ -2635,6 +2636,17 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             set
             {
                 this.date1904Field = value;
+            }
+        }
+        public bool date1904Specified
+        {
+            get
+            {
+                return date1904FieldSpecifiedField;
+            }
+            set 
+            {
+                date1904FieldSpecifiedField = value;
             }
         }
 

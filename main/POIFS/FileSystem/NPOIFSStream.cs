@@ -97,7 +97,6 @@ namespace NPOI.POIFS.FileSystem
 
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
         {
-            //throw new NotImplementedException();
             return GetBlockIterator();
         }
 

@@ -97,12 +97,12 @@ namespace NPOI.XSSF.UserModel
                 "/xl/drawings/drawing#.xml",
                 typeof(XSSFDrawing)
         );
-        //public static XSSFRelation VML_DRAWINGS = new XSSFRelation(
-        //        "application/vnd.openxmlformats-officedocument.vmlDrawing",
-        //        "http://schemas.openxmlformats.org/officeDocument/2006/relationships/vmlDrawing",
-        //        "/xl/drawings/vmlDrawing#.vml",
-        //        typeof(XSSFVMLDrawing)
-        //);
+        public static XSSFRelation VML_DRAWINGS = new XSSFRelation(
+                "application/vnd.openxmlformats-officedocument.vmlDrawing",
+                "http://schemas.openxmlformats.org/officeDocument/2006/relationships/vmlDrawing",
+                "/xl/drawings/vmlDrawing#.vml",
+                typeof(XSSFVMLDrawing)
+        );
         //public static XSSFRelation CHART = new XSSFRelation(
         //      "application/vnd.openxmlformats-officedocument.Drawingml.chart+xml",
         //      "http://schemas.openxmlformats.org/officeDocument/2006/relationships/chart",

@@ -352,8 +352,7 @@ namespace NPOI.HPSF
         {
             get
             {
-                throw new NotImplementedException("reading byte arrays ");
-                //return (byte[])GetProperty(PropertyIDMap.PID_HEADINGPAIR);
+                return (byte[])GetProperty(PropertyIDMap.PID_HEADINGPAIR);
             }
             set {
                 throw new NotImplementedException("Writing byte arrays ");
@@ -379,8 +378,7 @@ namespace NPOI.HPSF
         {
             get
             {
-                throw new NotImplementedException("reading byte arrays ");
-                //return (byte[])GetProperty(PropertyIDMap.PID_DOCPARTS);
+                return (byte[])GetProperty(PropertyIDMap.PID_DOCPARTS);
             }
             set 
             {

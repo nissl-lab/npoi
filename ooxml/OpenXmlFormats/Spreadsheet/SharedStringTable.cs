@@ -566,7 +566,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             return this.bottomField;
         }
 
-        [XmlElement]
+        [XmlElement(Namespace="http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
         public CT_BorderPr left
         {
             get
@@ -578,7 +578,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.leftField = value;
             }
         }
-        [XmlElement]
+        [XmlElement(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
         public CT_BorderPr right
         {
             get
@@ -590,7 +590,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.rightField = value;
             }
         }
-        [XmlElement]
+        [XmlElement(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
         public CT_BorderPr top
         {
             get
@@ -602,7 +602,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.topField = value;
             }
         }
-        [XmlElement]
+        [XmlElement(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
         public CT_BorderPr bottom
         {
             get
@@ -614,7 +614,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.bottomField = value;
             }
         }
-        [XmlElement]
+        [XmlElement(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
         public CT_BorderPr diagonal
         {
             get
@@ -626,7 +626,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.diagonalField = value;
             }
         }
-        [XmlElement]
+        [XmlElement(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
         public CT_BorderPr vertical
         {
             get
@@ -638,7 +638,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.verticalField = value;
             }
         }
-        [XmlElement]
+        [XmlElement(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
         public CT_BorderPr horizontal
         {
             get
@@ -714,6 +714,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
         internal static XmlSerializer serializer = new XmlSerializer(typeof(CT_Border));
+        internal static XmlSerializerNamespaces namespaces = new XmlSerializerNamespaces(new[] {
+            new XmlQualifiedName("", "http://schemas.openxmlformats.org/spreadsheetml/2006/main") });
         public override string ToString()
         {
             StringWriter stringWriter = new StringWriter();
@@ -1345,6 +1347,13 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             {
                 this.rField = value;
             }
+        }
+        private string xmltext;
+        [XmlText]
+        public string XmlText
+        {
+            get { return xmltext; }
+            set { xmltext = value; }
         }
         public CT_RElt AddNewR()
         {

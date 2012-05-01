@@ -19,7 +19,7 @@ using NPOI.OpenXmlFormats.Spreadsheet;
 using NPOI.XSSF.Model;
 using System;
 using NPOI.SS.Util;
-using NPOI.OpenXmlFormats.Dml;
+using NPOI.OpenXmlFormats.Vml;
 using NPOI.Util;
 namespace NPOI.XSSF.UserModel
 {
@@ -129,24 +129,24 @@ namespace NPOI.XSSF.UserModel
             get
             {
                 bool visible = false;
-                //if (_vmlShape != null)
-                //{
-                //    String style = _vmlShape.GetStyle();
-                //    visible = style != null && style.IndexOf("visibility:visible") != -1;
-                //}
+                if (_vmlShape != null)
+                {
+                    String style = _vmlShape.style;
+                    visible = style != null && style.IndexOf("visibility:visible") != -1;
+                }
                 return visible;
             }
             set 
             {
-                //if (_vmlShape != null)
-                //{
-                //    String style;
-                //    if (value) 
-                //        style = "position:absolute;visibility:visible";
-                //    else 
-                //        style = "position:absolute;visibility:hidden";
-                //    _vmlShape.style = (style);
-                //}   
+                if (_vmlShape != null)
+                {
+                    String style;
+                    if (value)
+                        style = "position:absolute;visibility:visible";
+                    else
+                        style = "position:absolute;visibility:hidden";
+                    _vmlShape.style = (style);
+                }   
                 throw new NotImplementedException();
             }
         }

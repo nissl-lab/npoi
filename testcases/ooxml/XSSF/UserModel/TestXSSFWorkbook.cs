@@ -54,7 +54,7 @@ namespace NPOI.XSSF.UserModel
             CT_WorkbookPr pr = workbook.GetCTWorkbook().workbookPr;
             Assert.IsNotNull(pr);
             Assert.IsTrue(pr.IsSetDate1904());
-            Assert.IsFalse((bool)pr.date1904, "XSSF must use the 1900 date system");
+            Assert.IsFalse(pr.date1904, "XSSF must use the 1900 date system");
 
             ISheet sheet1 = workbook.CreateSheet("sheet1");
             ISheet sheet2 = workbook.CreateSheet("sheet2");

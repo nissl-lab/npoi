@@ -346,6 +346,11 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.drawingField = new CT_Drawing();
             return drawingField;
         }
+        public CT_LegacyDrawing AddNewLegacyDrawing()
+        {
+            this.legacyDrawing = new CT_LegacyDrawing();
+            return legacyDrawing;
+        }
         public CT_PageBreak AddNewRowBreaks()
         {
             this.rowBreaksField = new CT_PageBreak();
@@ -1537,6 +1542,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
         public CT_Selection AddNewSelection()
         {
+            if (this.selectionField == null)
+                selectionField = new List<CT_Selection>();
             CT_Selection newSel = new CT_Selection();
             selectionField.Add(newSel);
             return newSel;

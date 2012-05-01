@@ -982,7 +982,7 @@ namespace NPOI.XSSF.UserModel
                 String ref1 = _cell.r;
                 XSSFSheet sh = (XSSFSheet)Sheet;
                 sh.GetCommentsTable(false).RemoveComment(ref1);
-                //sh.GetVMLDrawing(false).RemoveCommentShape(RowIndex, ColumnIndex);
+                sh.GetVMLDrawing(false).RemoveCommentShape(RowIndex, ColumnIndex);
             }
         }
 
