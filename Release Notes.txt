@@ -1,4 +1,4 @@
-1.2.5 (Mar,2012)
+1.2.5 (April,2012)
 In this release, we fixed most of the bugs found in POI 3.8 beta 4. 
 
 POI Bug Fixes
@@ -57,6 +57,12 @@ fixed HSSFWorkbook.createCellStyle to throw exception if the maximum number of c
 50118 - OLE2 does allow a directory with an empty name, so support this in POIFS(poi-developers)
 Support for appending images to existing drawings in HSSF(poi-developers)
 
+NPOI Bug fixes
+a. CloneSheet with images throws exception
+b. Comments are still visible even set Visible property to false
+c. AutoSizeColumn doesn't work as expected
+d. Reading sheet protected workbook throws exception
+
 New Features
 a. Added NPOIFS constructors to most POIDocument classes and their extractors, and more widely deprecated the Document(DirectoryNode, POIFSFileSystem) constructor in      favour of the more general Document(DirectoryNode) one
 b. Added implementation for CLEAN(), CHAR(), ADDRESS(),MROUND(), VAR(), VARP(), IRR()
@@ -64,8 +70,7 @@ c. Added Support for HOUR, MINUTE and SECOND date formulas
 d. Support for continued NameRecords, continued ExtSSTRecords
 e. Support using RecalcIdRecord to trigger a full formula recalculation on load (poi-developers)
 f. ExternalNameRecord support for DDE Link entries without an operation(poi-developers)
-
-
+g. POIFS Browser: add ability to parse EscherContainer and sub nodes
 
 1.2.4 (Nov,2011)
 In this release, we fixed most of the bugs found in POI 3.6 and POI 3.7. 
