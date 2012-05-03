@@ -628,7 +628,10 @@ namespace NPOI.SS.Format
                     sb.Remove(s.pos, 1);
                 }
             }
-            specials.RemoveAll(e => toRemove.Contains(e));
+            foreach (Special e in toRemove)
+            {
+                specials.Remove(e);
+            }
         }
 
         private int integerEnd()

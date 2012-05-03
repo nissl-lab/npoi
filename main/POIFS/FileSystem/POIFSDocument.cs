@@ -380,7 +380,7 @@ namespace NPOI.POIFS.FileSystem
                                 Array.Copy(sourceArray, 0, buffer2, 0, buffer2.Length);
                                 sourceArray = buffer2;
                             }
-                            using (var ms = new MemoryStream())
+                            using (MemoryStream ms = new MemoryStream())
                             {
                                 HexDump.Dump(sourceArray, 0L, ms, 0);
                                 byte[] buffer = ms.GetBuffer();

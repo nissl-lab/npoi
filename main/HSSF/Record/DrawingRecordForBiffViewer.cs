@@ -48,7 +48,7 @@ namespace NPOI.HSSF.Record
         private static RecordInputStream ConvertToInputStream(DrawingRecord r)
         {
             byte[] data = r.Serialize();
-            using (var ms = new MemoryStream(data))
+            using (MemoryStream ms = new MemoryStream(data))
             {
                 RecordInputStream rinp = new RecordInputStream(ms);
                 rinp.NextRecord();

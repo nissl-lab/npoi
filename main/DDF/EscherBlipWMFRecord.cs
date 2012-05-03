@@ -354,7 +354,7 @@ namespace NPOI.DDF
         {
             byte[] compressedData = new byte[Length];
             Array.Copy(data, pos + 50, compressedData, 0, Length);
-            using (var ms = new MemoryStream(compressedData))
+            using (MemoryStream ms = new MemoryStream(compressedData))
             {
                 using (ZlibStream inflaterInputStream = new ZlibStream(ms, CompressionMode.Decompress))
                 {

@@ -34,21 +34,21 @@ namespace NPOI.SS.Format
         internal static CellFormatter SIMPLE_TEXT = new CellTextFormatter("@");
         private class PartHandler : CellFormatPart.IPartHandler
         {
+            private int numplace;
             public int NumPlace
             {
-                get;
-                private set;
+                get{return numplace;}
             }
             public PartHandler(int numPlace)
             {
-                NumPlace = numPlace;
+                this.numplace = numPlace;
             }
             public String HandlePart(Match m, String part,
                                 CellFormatType type, StringBuilder desc)
             {
                 if (part.Equals("@"))
                 {
-                    NumPlace++;
+                    numplace++;
                     return "\u0000";
                 }
                 return null;

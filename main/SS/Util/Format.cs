@@ -201,10 +201,11 @@ namespace NPOI.SS.Util
         {
             return System.Decimal.Parse(source.Substring(pos), CultureInfo.CurrentCulture);
         }
+        private bool _parseIntegerOnly =false;
         public bool ParseIntegerOnly
         {
-            get;
-            set;
+            get{return _parseIntegerOnly;}
+            set{_parseIntegerOnly =value;}
         }
         
     }

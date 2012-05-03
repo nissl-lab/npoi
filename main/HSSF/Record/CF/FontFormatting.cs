@@ -105,8 +105,8 @@ namespace NPOI.HSSF.Record.CF
             IsOutlineOn=false;
             IsShadowOn=false;
             IsStruckout=false;
-            EscapementType=(short)0;
-            UnderlineType=(byte)0;
+            EscapementType=(FontSuperScript)0;
+            UnderlineType=(FontUnderlineType)0;
             FontColorIndex=(short)-1;
 
             IsFontStyleModified=false;

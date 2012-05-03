@@ -63,7 +63,7 @@ namespace NPOI.SS.Formula
             {
                 throw new ArgumentException("Must provide at least one collaborating worbook");
             }
-            var env = new CollaboratingWorkbooksEnvironment(workbookNames, evaluators, nItems);
+            CollaboratingWorkbooksEnvironment env = new CollaboratingWorkbooksEnvironment(workbookNames, evaluators, nItems);
             HookNewEnvironment(evaluators, env);
         }
 

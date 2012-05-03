@@ -14,7 +14,7 @@
     <FileAlignment>512</FileAlignment>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>npoi.snk</AssemblyOriginatorKeyFile>
-    <ReleaseVersion>1.2.4</ReleaseVersion>
+    <ReleaseVersion>1.2.5</ReleaseVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -42,8 +42,7 @@
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Configuration" />
-    <Reference Include="Ionic.Zip, Version=1.9.1.5, Culture=neutral, PublicKeyToken=edbe51ad942a3f5c">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="Ionic.Zip">
       <HintPath>Lib\Ionic.Zip.dll</HintPath>
     </Reference>
   </ItemGroup>
@@ -296,20 +295,7 @@
     <Compile Include="POIFS\property\NPropertyTable.cs" />
     <Compile Include="POIFS\property\PropertyTableBase.cs" />
     <Compile Include="SS\Extractor\ExcelExtractor.cs" />
-    <Compile Include="SS\Format\CellDateFormatter.cs" />
     <Compile Include="POIFS\Storage\HeaderBlock.cs" />
-    <Compile Include="SS\Format\CellElapsedFormatter.cs" />
-    <Compile Include="SS\Format\CellFormat.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="SS\Format\CellFormatCondition.cs" />
-    <Compile Include="SS\Format\CellFormatPart.cs" />
-    <Compile Include="SS\Format\CellFormatResult.cs" />
-    <Compile Include="SS\Format\CellFormatter.cs" />
-    <Compile Include="SS\Format\CellFormatType.cs" />
-    <Compile Include="SS\Format\CellGeneralFormatter.cs" />
-    <Compile Include="SS\Format\CellNumberFormatter.cs" />
-    <Compile Include="SS\Format\CellTextFormatter.cs" />
     <Compile Include="SS\Formula\Constant\ConstantValueParser.cs" />
     <Compile Include="SS\Formula\Constant\ErrorConstant.cs" />
     <Compile Include="HSSF\Record\ContinueRecord.cs" />
@@ -1027,6 +1013,17 @@
     <Compile Include="Util\StringUtil.cs" />
     <Compile Include="Util\SystemOutLogger.cs" />
     <Compile Include="Util\TempFile.cs" />
+    <Compile Include="SS\Format\CellDateFormatter.cs" />
+    <Compile Include="SS\Format\CellElapsedFormatter.cs" />
+    <Compile Include="SS\Format\CellFormat.cs" />
+    <Compile Include="SS\Format\CellFormatCondition.cs" />
+    <Compile Include="SS\Format\CellFormatPart.cs" />
+    <Compile Include="SS\Format\CellFormatResult.cs" />
+    <Compile Include="SS\Format\CellFormatter.cs" />
+    <Compile Include="SS\Format\CellFormatType.cs" />
+    <Compile Include="SS\Format\CellGeneralFormatter.cs" />
+    <Compile Include="SS\Format\CellNumberFormatter.cs" />
+    <Compile Include="SS\Format\CellTextFormatter.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="npoi.snk" />
@@ -1043,6 +1040,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="HSSF\Dev\" />
+    <Folder Include="SS\Format\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

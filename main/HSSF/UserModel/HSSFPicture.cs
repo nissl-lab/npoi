@@ -263,7 +263,7 @@ namespace NPOI.HSSF.UserModel
             byte[] data = bse.BlipRecord.PictureData;
             //int type = bse.BlipTypeWin32;
 
-            using (var ms = new MemoryStream(data))
+            using (MemoryStream ms = new MemoryStream(data))
             {
                 using (Image img = Image.FromStream(ms))
                 {

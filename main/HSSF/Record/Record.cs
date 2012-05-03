@@ -110,7 +110,7 @@ namespace NPOI.HSSF.Record
             // Do it via a re-serialization
             // It's a cheat, but it works...
             byte[] b = Serialize();
-            using (var ms = new MemoryStream(b))
+            using (MemoryStream ms = new MemoryStream(b))
             {
                 RecordInputStream rinp = new RecordInputStream(ms);
                 rinp.NextRecord();

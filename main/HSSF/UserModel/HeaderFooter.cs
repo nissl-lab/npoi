@@ -471,24 +471,85 @@ namespace NPOI.HSSF.UserModel
         {
             private List<Field> allFields = new List<Field>();
             public static ReadOnlyCollection<Field> AllFields { get { return Instance.allFields.AsReadOnly(); } }
+            private Field _sheetnamefield;
+            private Field _filefield;
+            private Field _fullfilefield;
+            private Field _pagefield;
+            private Field _datefield;
+            private Field _timefield;
+            private Field _numpagesfield;
+            private Field _picturefield;
+            private PairField _boldfield;
+            private PairField _italicfield;
+            private PairField _strikethroughfield;
+            private PairField _subscriptfield;
+            private PairField _superscriptfield;
+            private PairField _underlinefield;
+            private PairField _doubleunderlinefield;
+            public Field SHEET_NAME_FIELD
+            {
+                get{return _sheetnamefield;}
+            }
+            public Field DATE_FIELD
+            {
+                get{return _datefield;}
+            }
 
-            public Field SHEET_NAME_FIELD { get; private set; }
-            public Field DATE_FIELD { get; private set; }
-            public Field FILE_FIELD { get; private set; }
-            public Field FULL_FILE_FIELD { get; private set; }
-            public Field PAGE_FIELD { get; private set; }
-            public Field TIME_FIELD { get; private set; }
-            public Field NUM_PAGES_FIELD { get; private set; }
+            public Field FILE_FIELD
+            {
+                get{return _filefield;}
+            }
+            public Field FULL_FILE_FIELD
+            {
+                get{return _fullfilefield;}
+            }
 
-            public Field PICTURE_FIELD { get; private set; }
+            public Field PAGE_FIELD
+            {
+                get{return _pagefield;}
+            }
+            public Field TIME_FIELD
+            {
+                get{return _timefield;}
+            }
+            public Field NUM_PAGES_FIELD
+            {
+                get{return _numpagesfield;}
+            }
 
-            public PairField BOLD_FIELD { get; private set; }
-            public PairField ITALIC_FIELD { get; private set; }
-            public PairField STRIKETHROUGH_FIELD { get; private set; }
-            public PairField SUBSCRIPT_FIELD { get; private set; }
-            public PairField SUPERSCRIPT_FIELD { get; private set; }
-            public PairField UNDERLINE_FIELD { get; private set; }
-            public PairField DOUBLE_UNDERLINE_FIELD { get; private set; }
+            public Field PICTURE_FIELD
+            {
+                get{return _picturefield;}
+            }
+
+            public PairField BOLD_FIELD
+            {
+                get{return _boldfield;}
+            }
+            public PairField ITALIC_FIELD
+            {
+                get{return _italicfield;}
+            }
+            public PairField STRIKETHROUGH_FIELD
+            {
+                get{return _strikethroughfield;}
+            }
+            public PairField SUBSCRIPT_FIELD
+            {
+                get{return _subscriptfield;}
+            }
+            public PairField SUPERSCRIPT_FIELD
+            {
+                get{return _superscriptfield;}
+            }
+            public PairField UNDERLINE_FIELD
+            {
+                get{return _underlinefield;}
+            }
+            public PairField DOUBLE_UNDERLINE_FIELD
+            {
+                get{return _doubleunderlinefield;}
+            }
 
 
             #region Singleton Implementation
@@ -508,23 +569,23 @@ namespace NPOI.HSSF.UserModel
             /// </summary>
             private Fields()
             {
-                SHEET_NAME_FIELD = new Field(this, "&A");
-                DATE_FIELD = new Field(this, "&D");
-                FILE_FIELD = new Field(this, "&F");
-                FULL_FILE_FIELD = new Field(this, "&Z");
-                PAGE_FIELD = new Field(this, "&P");
-                TIME_FIELD = new Field(this, "&T");
-                NUM_PAGES_FIELD = new Field(this, "&N");
+                _sheetnamefield = new Field(this, "&A");
+                _datefield = new Field(this, "&D");
+                _filefield  = new Field(this, "&F");
+                _fullfilefield  = new Field(this, "&Z");
+                _pagefield = new Field(this, "&P");
+                _timefield = new Field(this, "&T");
+                _numpagesfield = new Field(this, "&N");
 
-                PICTURE_FIELD = new Field(this, "&G");
+                _picturefield = new Field(this, "&G");
 
-                BOLD_FIELD = new PairField(this, "&B");
-                ITALIC_FIELD = new PairField(this, "&I");
-                STRIKETHROUGH_FIELD = new PairField(this, "&S");
-                SUBSCRIPT_FIELD = new PairField(this, "&Y");
-                SUPERSCRIPT_FIELD = new PairField(this, "&X");
-                UNDERLINE_FIELD = new PairField(this, "&U");
-                DOUBLE_UNDERLINE_FIELD = new PairField(this, "&E");
+                _boldfield = new PairField(this, "&B");
+                _italicfield = new PairField(this, "&I");
+                _strikethroughfield = new PairField(this, "&S");
+                _subscriptfield = new PairField(this, "&Y");
+                _superscriptfield = new PairField(this, "&X");
+                _underlinefield = new PairField(this, "&U");
+                _doubleunderlinefield = new PairField(this, "&E");
             }
 
             /// <summary>

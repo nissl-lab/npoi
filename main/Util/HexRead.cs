@@ -207,7 +207,7 @@ namespace NPOI.Util
         /// <returns></returns>
         public static byte[] ReadFromString(String data)
         {
-            using (var ms = new MemoryStream(Encoding.UTF8.GetBytes(data)))
+            using (MemoryStream ms = new MemoryStream(Encoding.UTF8.GetBytes(data)))
             {
                 return ReadData(ms, -1);
             }

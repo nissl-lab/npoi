@@ -31,6 +31,9 @@ namespace NPOI.SS.Format
      */
     public class CellFormatResult
     {
+        private bool _applies;
+        private string _text;
+        private Color _textcolor;
         /**
          * This is <tt>true</tt> if no condition was given that applied to the
          * value, or if the condition is satisfied.  If a condition is relevant, and
@@ -38,15 +41,16 @@ namespace NPOI.SS.Format
          */
         public bool Applies
         {
-            get;
-            set;
+            get { return _applies; }
+            set { _applies = value; }
         }
+
 
         /** The resulting text.  This will never be <tt>null</tt>. */
         public String Text
         {
-            get;
-            set;
+            get{return _text;}
+            set{_text=value;}
         }
 
         /**
@@ -55,8 +59,8 @@ namespace NPOI.SS.Format
          */
         public Color TextColor
         {
-            get;
-            set;
+            get{return _textcolor;}
+            set{_textcolor=value;}
         }
 
         /**

@@ -37,7 +37,7 @@ namespace NPOI.POIFS.Dev
     {
         public static void ViewFile(String filename)
         {
-            using (var stream = new FileStream(filename, FileMode.Open))
+            using (Stream stream = new FileStream(filename, FileMode.Open))
             {
                 POIFSFileSystem fs = new POIFSFileSystem(stream);
                 DisplayDirectory(fs.Root, "");

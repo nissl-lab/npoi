@@ -55,7 +55,7 @@ namespace NPOI.POIFS.Dev
             }
             try
             {
-                using (var fileStream = File.OpenRead(filename))
+                using (Stream fileStream = File.OpenRead(filename))
                 {
                     POIFSViewable fs = (POIFSViewable)new POIFSFileSystem(fileStream);
                 

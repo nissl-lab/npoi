@@ -140,7 +140,7 @@ namespace NPOI.DDF
             {
                 try
                 {
-                    using (var ms = new MemoryStream(data))
+                    using (MemoryStream ms = new MemoryStream(data))
                     {
                         using (ZlibStream in1 = new ZlibStream(ms, CompressionMode.Decompress))
                         {
