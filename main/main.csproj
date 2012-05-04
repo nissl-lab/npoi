@@ -30,9 +30,10 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\..\solution\Lib\</OutputPath>
+    <OutputPath>..\solution\Lib\</OutputPath>
     <DefineConstants>TRACE;HIDE_UNREACHABLE_CODE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
+	<DocumentationFile>..\solution\Lib\NPOI.XML</DocumentationFile>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
