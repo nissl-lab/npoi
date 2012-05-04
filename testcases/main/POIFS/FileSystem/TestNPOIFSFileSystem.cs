@@ -483,23 +483,26 @@ namespace TestCases.POIFS.FileSystem
                 }
             }
             Assert.AreEqual(237, numBATs);
+#if !HIDE_UNREACHABLE_CODE
             if (1 == 2)
             {
                 // TODO Fix this - actual is 128
                 Assert.AreEqual(2, numXBATs);
             }
-
+#endif
             MemoryStream stream = new MemoryStream();
             fs.WriteFilesystem(stream);
 
             HeaderBlock header = new HeaderBlock(new MemoryStream(stream.ToArray()));
             Assert.AreEqual(237, header.BATCount);
+#if !HIDE_UNREACHABLE_CODE
             if (1 == 2) // TODO Fix this - actual is 128
             {                
                 Assert.AreEqual(2, header.XBATCount);
 
                 fs = new NPOIFSFileSystem(new MemoryStream(stream.ToArray()));
             }
+#endif
 
         }
 

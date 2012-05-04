@@ -211,12 +211,13 @@ namespace TestCases.HPSF.Basic
                     Stream in1 = e.Stream;
                     if (PropertySet.IsPropertySetStream(in1))
                     {
-                        MemoryStream out1 =
-                            new MemoryStream();
-                        Util.Copy(in1, out1);
-                        out1.Close();
-                        f.SetBytes(out1.ToArray());
-                        files.Add(f);
+                        using (MemoryStream out1 = new MemoryStream())
+                        {
+                            Util.Copy(in1, out1);
+                            //out1.Close();
+                            f.SetBytes(out1.ToArray());
+                            files.Add(f);
+                        }
                     }
                 }
                 catch (Exception ex)
