@@ -254,7 +254,7 @@ namespace TestCases.POIFS.FileSystem
                 Assert.AreEqual(true, i.MoveNext());
                 Assert.Fail("Loop should have been detected but wasn't!");
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 // Good, it was detected
             }
@@ -799,7 +799,7 @@ namespace TestCases.POIFS.FileSystem
                 Assert.Fail("Block 184 should be off the end of the list");
             }
            // catch (ArgumentOutOfRangeException e)
-            catch(Exception e)
+            catch(Exception)
             {
             }
 
@@ -879,7 +879,7 @@ namespace TestCases.POIFS.FileSystem
                 stream.UpdateContents(data);
                 Assert.Fail("Loop should have been detected but wasn't!");
             }
-            catch (Exception e) { }
+            catch (Exception) { }
 
             // Now reset, and try on a small bit
             // Should fail during the freeing set
@@ -894,7 +894,7 @@ namespace TestCases.POIFS.FileSystem
                 stream.UpdateContents(data);
                 Assert.Fail("Loop should have been detected but wasn't!");
             }
-            catch (Exception e) { }
+            catch (Exception) { }
         }
 
         [TestMethod]
@@ -917,7 +917,7 @@ namespace TestCases.POIFS.FileSystem
                 stream.GetBlockIterator();
                 Assert.Fail("Shouldn't be able to get an iterator before writing");
             }
-            catch (Exception e) { }
+            catch (Exception) { }
 
             // Write in two blocks
             byte[] data = new byte[512 + 20];

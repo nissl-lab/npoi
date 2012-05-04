@@ -75,7 +75,7 @@ namespace TestCases.HPSF.basic
             {
                 clsidTest.Write(new byte[15], 0);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 bExceptionOccurred = true;
             }
@@ -86,7 +86,7 @@ namespace TestCases.HPSF.basic
             {
                 clsidTest.Write(new byte[16], 1);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 bExceptionOccurred = true;
             }
@@ -99,7 +99,7 @@ namespace TestCases.HPSF.basic
                 clsidTest.Write(new byte[16], 0);
                 clsidTest.Write(new byte[17], 1);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 bExceptionOccurred = true;
             }

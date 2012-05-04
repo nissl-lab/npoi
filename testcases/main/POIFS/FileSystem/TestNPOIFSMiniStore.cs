@@ -289,7 +289,7 @@ namespace TestCases.POIFS.FileSystem
                 ministore.GetBlockAt(184);
                 Assert.Fail("No block at 184");
             }
-            catch (IndexOutOfRangeException e) { }
+            catch (IndexOutOfRangeException) { }
 
             // The ministore itself is made up of 23 big blocks
             IEnumerator<ByteBuffer> it = new NPOIFSStream(fs, fs.Root.Property.StartBlock).GetBlockIterator();

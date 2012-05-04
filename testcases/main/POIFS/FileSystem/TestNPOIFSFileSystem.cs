@@ -482,10 +482,10 @@ namespace TestCases.POIFS.FileSystem
                     numXBATs++;
                 }
             }
+            Assert.AreEqual(237, numBATs);
             if (1 == 2)
             {
-                // TODO Fix this
-                Assert.AreEqual(237, numBATs);
+                // TODO Fix this - actual is 128
                 Assert.AreEqual(2, numXBATs);
             }
 
@@ -493,9 +493,9 @@ namespace TestCases.POIFS.FileSystem
             fs.WriteFilesystem(stream);
 
             HeaderBlock header = new HeaderBlock(new MemoryStream(stream.ToArray()));
-            if (1 == 2) // TODO Fix this
-            {
-                Assert.AreEqual(237, header.BATCount);
+            Assert.AreEqual(237, header.BATCount);
+            if (1 == 2) // TODO Fix this - actual is 128
+            {                
                 Assert.AreEqual(2, header.XBATCount);
 
                 fs = new NPOIFSFileSystem(new MemoryStream(stream.ToArray()));

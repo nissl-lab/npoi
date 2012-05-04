@@ -78,7 +78,7 @@ namespace TestCases.POIFS.NIO
                 bs = ds.Read(4, 8192);
                 Assert.Fail("Shouldn't be able to read off the end of the file");
             }
-            catch (System.ArgumentException ex)
+            catch (System.ArgumentException)
             {
             }
 
@@ -89,10 +89,9 @@ namespace TestCases.POIFS.NIO
         public void TestByteArray()
         {
             byte[] data = new byte[256];
-            byte b;
-            for (int i = 0; i < data.Length; i++)
+            for (byte i = 0; i < data.Length; i++)
             {
-                data[i] = (byte)i;
+                data[i] = i;
             }
 
             ByteArrayBackedDataSource ds = new ByteArrayBackedDataSource(data);
@@ -128,7 +127,7 @@ namespace TestCases.POIFS.NIO
                 //bs.get();
                 //fail("Shouldn't be able to read off the end");
             }
-            catch ( System.Exception e) { }
+            catch (System.Exception) { }
 
             // Past the end
             try
@@ -136,7 +135,7 @@ namespace TestCases.POIFS.NIO
                 bs = ds.Read(4, 256);
                 Assert.Fail("Shouldn't be able to read off the end");
             }
-            catch (System.IndexOutOfRangeException e) { }
+            catch (System.IndexOutOfRangeException) { }
 
 
             // Overwrite
