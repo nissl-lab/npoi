@@ -23,7 +23,7 @@ namespace TestCases.HSSF
     using NPOI.HSSF.UserModel;
 
     /**
-     * Centralises logic for finding/Opening sample files in the src/testcases/org/apache/poi/hssf/hssf/data folder. 
+     * Centralises logic for finding/opening sample files in the src/testcases/org/apache/poi/hssf/hssf/data folder. 
      * 
      * @author Josh Micich
      */

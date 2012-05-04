@@ -125,7 +125,6 @@
     <Compile Include="OPC\OPCPackage.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="OPC\Package.cs" />
     <Compile Include="OPC\PackageAccess.cs" />
     <Compile Include="OPC\PackageNamespaces.cs" />
     <Compile Include="OPC\PackagePart.cs" />

@@ -160,8 +160,7 @@ namespace NPOI.XSSF.UserModel
             {
                 if (_str == null)
                 {
-                    CT_Rst rst = _comment.text;
-                    if (rst != null) _str = new XSSFRichTextString(_comment.text);
+                    if (_comment.text != null) _str = new XSSFRichTextString(_comment.text);
                 }
                 return _str;
             }

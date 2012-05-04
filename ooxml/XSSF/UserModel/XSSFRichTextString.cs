@@ -132,7 +132,7 @@ namespace NPOI.XSSF.UserModel
             
             // delete format runs that fit between startIndex and endIndex
             // runs intersecting startIndex and endIndex remain
-            int runStartIdx = 0;
+            //int runStartIdx = 0;
             List<int> toRemoveKeys=new List<int>();
             for (SortedDictionary<int, CT_RPrElt>.KeyCollection.Enumerator it = formats.Keys.GetEnumerator(); it.MoveNext(); )
             {

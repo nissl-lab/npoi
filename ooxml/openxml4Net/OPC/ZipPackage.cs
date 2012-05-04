@@ -18,7 +18,7 @@ namespace NPOI.OpenXml4Net.OPC
      *
      * @author Julien Chable
      */
-    public class ZipPackage : Package
+    public class ZipPackage : OPCPackage
     {
 
         private static POILogger logger = POILogFactory.GetLogger(typeof(ZipPackage));

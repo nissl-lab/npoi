@@ -25,7 +25,6 @@ namespace TestCases.SS.UserModel
     using NPOI.SS;
     using NPOI.SS.Util;
     using System.Text;
-    using TestCases.Exceptions;
     using NPOI.SS.UserModel;
 
     /**
