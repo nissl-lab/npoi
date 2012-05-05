@@ -109,7 +109,7 @@ namespace NPOI.HSSF.Model
                     case EscherProperties.TEXT__TEXTTOP:
                     case EscherProperties.TEXT__TEXTBOTTOM:
                     case EscherProperties.GROUPSHAPE__PRINT:
-                    case EscherProperties.Fill__FillBACKCOLOR:
+                    case EscherProperties.FILL__FILLBACKCOLOR:
                     case EscherProperties.LINESTYLE__COLOR:
                         opt.EscherProperties.Remove(prop);
                         i--;

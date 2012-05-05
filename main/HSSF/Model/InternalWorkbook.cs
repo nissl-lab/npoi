@@ -2677,7 +2677,7 @@ namespace NPOI.HSSF.Model
                 opt.RecordId=unchecked((short)0xF00B);
                 opt.Options=(short)0x0033;
                 opt.AddEscherProperty(new EscherBoolProperty(EscherProperties.TEXT__SIZE_TEXT_TO_FIT_SHAPE, 524296));
-                opt.AddEscherProperty(new EscherRGBProperty(EscherProperties.Fill__FillCOLOR, 0x08000041));
+                opt.AddEscherProperty(new EscherRGBProperty(EscherProperties.FILL__FILLCOLOR, 0x08000041));
                 opt.AddEscherProperty(new EscherRGBProperty(EscherProperties.LINESTYLE__COLOR, 134217792));
                 splitMenuColors.RecordId=unchecked((short)0xF11E);
                 splitMenuColors.Options=(short)0x0040;

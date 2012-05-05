@@ -124,13 +124,13 @@ namespace NPOI.HSSF.Model
             if (shape.IsNoFill)
             {
                 // Wonderful... none of the spec's give any clue as to what these constants mean.
-                opt.AddEscherProperty(new EscherBoolProperty(EscherProperties.Fill__NOFillHITTEST, 0x00110000));
+                opt.AddEscherProperty(new EscherBoolProperty(EscherProperties.FILL__NOFILLHITTEST, 0x00110000));
             }
             else
             {
-                opt.AddEscherProperty(new EscherBoolProperty(EscherProperties.Fill__NOFillHITTEST, 0x00010000));
+                opt.AddEscherProperty(new EscherBoolProperty(EscherProperties.FILL__NOFILLHITTEST, 0x00010000));
             }
-            opt.AddEscherProperty(new EscherRGBProperty(EscherProperties.Fill__FillCOLOR, shape.FillColor));
+            opt.AddEscherProperty(new EscherRGBProperty(EscherProperties.FILL__FILLCOLOR, shape.FillColor));
             opt.AddEscherProperty(new EscherBoolProperty(EscherProperties.GROUPSHAPE__PRINT, 0x080000));
             opt.AddEscherProperty(new EscherRGBProperty(EscherProperties.LINESTYLE__COLOR, shape.LineStyleColor));
             int options = 5;

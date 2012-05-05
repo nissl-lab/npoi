@@ -104,7 +104,7 @@ namespace NPOI.HSSF.Model
             segmentsProp.SetElement(segmentsProp.NumberOfElementsInArray - 2, new byte[] { (byte)0x01, (byte)0x60 });
             segmentsProp.SetElement(segmentsProp.NumberOfElementsInArray - 1, new byte[] { (byte)0x00, (byte)0x80 });
             opt.AddEscherProperty(segmentsProp);
-            opt.AddEscherProperty(new EscherSimpleProperty(EscherProperties.GEOMETRY__FillOK, false, false, 0x00010001));
+            opt.AddEscherProperty(new EscherSimpleProperty(EscherProperties.GEOMETRY__FILLOK, false, false, 0x00010001));
             opt.AddEscherProperty(new EscherSimpleProperty(EscherProperties.LINESTYLE__LINESTARTARROWHEAD, false, false, 0x0));
             opt.AddEscherProperty(new EscherSimpleProperty(EscherProperties.LINESTYLE__LINEENDARROWHEAD, false, false, 0x0));
             opt.AddEscherProperty(new EscherSimpleProperty(EscherProperties.LINESTYLE__LINEENDCAPSTYLE, false, false, 0x0));

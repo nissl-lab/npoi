@@ -41,7 +41,7 @@ namespace NPOI.SS.UserModel
     /// <summary>
     /// Represents an Excel hyperlink.
     /// </summary>
-    public interface IHyperlink  //NPOI.COMMON.UserModel.Hyperlink
+    public interface IHyperlink
     {
         /// <summary>
         /// Hypelink address. Depending on the hyperlink type it can be URL, e-mail, patrh to a file, etc.
