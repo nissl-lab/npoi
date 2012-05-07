@@ -14,12 +14,13 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 ==================================================================== */
-using System.Xml;
+
+using System;
+using System.Collections.Generic;
 using System.IO;
 using NPOI.OpenXml4Net.OPC;
 using NPOI.OpenXmlFormats.Spreadsheet;
-using System;
-using System.Collections.Generic;
+
 namespace NPOI.XSSF.Model
 {
 
@@ -91,14 +92,18 @@ namespace NPOI.XSSF.Model
             for (int i = 0; i < c.Count; i++)
             {
                 //If sheet Id  is omitted, it is assumed to be the same as the value of the previous cell.
-                id = c[i].i;
+                if (c[i].iSpecified)
+                {
+                    id = c[i].i;
+                }
 
                 if (id == sheetId && c[i].r.Equals(ref1))
                 {
                     //if (c[i].IsSetI() && i < c.Length - 1 && !c[i + 1].IsSetI())
-                    if (i < c.Count - 1)
+                    //if (i < c.Count - 1)
+                    if (c[i].iSpecified && i < c.Count - 1 && !c[i + 1].iSpecified)
                     {
-                        c[i + 1].i=id;
+                        c[i + 1].i = id;
                     }
                     chain.RemoveC(i);
                     break;

@@ -212,12 +212,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public class CT_ExtensionList
     {
-        private List<CT_Extension> extField;
-
-        public CT_ExtensionList()
-        {
-            this.extField = new List<CT_Extension>();
-        }
+        private List<CT_Extension> extField = new List<CT_Extension>();
 
         public CT_ExtensionList Copy()
         {

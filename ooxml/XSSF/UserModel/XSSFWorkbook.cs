@@ -1328,7 +1328,7 @@ namespace NPOI.XSSF.UserModel
         /**
          * marshal named ranges from the {@link #namedRanges} collection to the underlying CT_Workbook bean
          */
-        private void saveNamedRanges()
+        private void SaveNamedRanges()
         {
             // Named ranges
             if (namedRanges.Count > 0)
@@ -1351,7 +1351,7 @@ namespace NPOI.XSSF.UserModel
             }
         }
 
-        private void saveCalculationChain()
+        private void SaveCalculationChain()
         {
             if (calcChain != null)
             {
@@ -1367,8 +1367,8 @@ namespace NPOI.XSSF.UserModel
 
         protected override void Commit()
         {
-            saveNamedRanges();
-            saveCalculationChain();
+            SaveNamedRanges();
+            SaveCalculationChain();
 
             //XmlOptions xmlOptions = new XmlOptions(DEFAULT_XML_OPTIONS);
             //xmlOptions.SetSaveSyntheticDocumentElement(new QName(CT_Workbook.type.GetName().GetNamespaceURI(), "workbook"));

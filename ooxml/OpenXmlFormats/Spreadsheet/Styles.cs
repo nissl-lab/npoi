@@ -728,7 +728,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlIgnore]
+        [XmlIgnore]
         public bool countSpecified
         {
             get

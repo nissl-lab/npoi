@@ -4,31 +4,25 @@
 //    <NameSpace>schemas</NameSpace><Collection>List</Collection><codeType>CSharp</codeType><EnableDataBinding>False</EnableDataBinding><EnableLazyLoading>False</EnableLazyLoading><TrackingChangesEnable>False</TrackingChangesEnable><GenTrackingClasses>False</GenTrackingClasses><HidePrivateFieldInIDE>False</HidePrivateFieldInIDE><EnableSummaryComment>False</EnableSummaryComment><VirtualProp>False</VirtualProp><IncludeSerializeMethod>False</IncludeSerializeMethod><UseBaseClass>False</UseBaseClass><GenBaseClass>False</GenBaseClass><GenerateCloneMethod>False</GenerateCloneMethod><GenerateDataContracts>False</GenerateDataContracts><CodeBaseTag>Net20</CodeBaseTag><SerializeMethodName>Serialize</SerializeMethodName><DeserializeMethodName>Deserialize</DeserializeMethodName><SaveToFileMethodName>SaveToFile</SaveToFileMethodName><LoadFromFileMethodName>LoadFromFile</LoadFromFileMethodName><GenerateXMLAttributes>False</GenerateXMLAttributes><EnableEncoding>False</EnableEncoding><AutomaticProperties>False</AutomaticProperties><GenerateShouldSerialize>False</GenerateShouldSerialize><DisableDebug>False</DisableDebug><PropNameSpecified>Default</PropNameSpecified><Encoder>UTF8</Encoder><CustomUsings></CustomUsings><ExcludeIncludedTypes>False</ExcludeIncludedTypes><EnableInitializeFields>True</EnableInitializeFields>
 //  </auto-generated>
 // ------------------------------------------------------------------------------
+
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.IO;
+using System.Xml;
+using System.Xml.Serialization;
+
 namespace NPOI.OpenXmlFormats.Spreadsheet
 {
-    using System;
-    using System.Diagnostics;
-    using System.Xml.Serialization;
-    using System.Collections;
-    using System.Xml.Schema;
-    using System.ComponentModel;
-    using System.Collections.Generic;
-
-    [System.Serializable]
-    [DebuggerStepThrough]
-    [DesignerCategory("code")]
+    [Serializable]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
-    [XmlRoot("calcChain",Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main", IsNullable = true)]
-    public class CT_CalcChain {
-        
-        private List<CT_CalcCell> cField;
-        
-        private CT_ExtensionList extLstField;
-        
-        public CT_CalcChain() {
-            this.extLstField = new CT_ExtensionList();
-            this.cField = new List<CT_CalcCell>();
-        }
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main",
+        ElementName = "calcChain")]
+    public class CT_CalcChain
+    {
+
+        private List<CT_CalcCell> cField = new List<CT_CalcCell>(); // [1..*]    Cell
+        private CT_ExtensionList extLstField = null; //  [0..1]  
 
         public int SizeOfCArray()
         {
@@ -39,115 +33,179 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             return c[index];
         }
+        public void AddC(CT_CalcCell cell)
+        {
+            this.c.Add(cell);
+        }
         public void RemoveC(int index)
         {
             this.c.RemoveAt(index);
         }
         [XmlElement("c")]
-        public List<CT_CalcCell> c {
-            get {
+        public List<CT_CalcCell> c
+        {
+            get
+            {
                 return this.cField;
             }
-            set {
+            set
+            {
                 this.cField = value;
             }
         }
-        
-        public CT_ExtensionList extLst {
-            get {
+
+        [XmlElement("extLst")]
+        public CT_ExtensionList extLst
+        {
+            get
+            {
                 return this.extLstField;
             }
-            set {
+            set
+            {
                 this.extLstField = value;
             }
         }
-    }
-    [System.Serializable]
-    [DebuggerStepThrough]
-    [DesignerCategory("code")]
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
-    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main", IsNullable = true)]
-
-    public class CT_CalcCell {
-        
-        private string rField;
-        
-        private int iField;
-        
-        private bool sField;
-        
-        private bool lField;
-        
-        private bool tField;
-        
-        private bool aField;
-        
-        public CT_CalcCell() {
-            this.iField = 0;
-            this.sField = false;
-            this.lField = false;
-            this.tField = false;
-            this.aField = false;
+        [XmlIgnore]
+        public bool extLstSpecified
+        {
+            get { return null != this.extLst; }
         }
+        internal static XmlSerializer serializer = new XmlSerializer(typeof(CT_CalcChain));
+        internal static XmlSerializerNamespaces namespaces = new XmlSerializerNamespaces(new[] {
+            new XmlQualifiedName("", "http://schemas.openxmlformats.org/spreadsheetml/2006/main") });
+        public override string ToString()
+        {
+            StringWriter stringWriter = new StringWriter();
+            serializer.Serialize(stringWriter, this, namespaces);
+            return stringWriter.ToString();
+        }
+
+    }
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
+    public class CT_CalcCell
+    {
+
+        private string rField = ""; // [1..1] the cell reference, type: ST_CellRef
+
+        private int? iField = null; // [0..1], Sheet Id, default 0
+
+        private bool? sField = null; // [0..1], child chain, default false
+
+        private bool? lField = null; // [0..1], new dependency level, default false
+
+        private bool? tField = null; // [0..1], new thread, default false
+
+        private bool? aField = null; // [0..1], array, default false
+
         [XmlAttribute]
-        public string r {
-            get {
+        public string r
+        {
+            get
+            {
                 return this.rField;
             }
-            set {
+            set
+            {
                 this.rField = value;
             }
         }
+
         [XmlAttribute]
         [DefaultValueAttribute(0)]
-        public int i {
-            get {
-                return this.iField;
+        public int i
+        {
+            get
+            {
+                return null == this.iField ? 0 : (int)this.iField;
             }
-            set {
+            set
+            {
                 this.iField = value;
             }
         }
+        [XmlIgnore]
+        public bool iSpecified
+        {
+            get { return null != this.iField; }
+        }
+
         [XmlAttribute]
         [DefaultValueAttribute(false)]
-        public bool s {
-            get {
-                return this.sField;
+        public bool s
+        {
+            get
+            {
+                return null == this.sField ? false : (bool)this.sField;
             }
-            set {
+            set
+            {
                 this.sField = value;
             }
         }
+        [XmlIgnore]
+        public bool sSpecified
+        {
+            get { return null != this.sField; }
+        }
+
         [XmlAttribute]
         [DefaultValueAttribute(false)]
-        public bool l {
-            get {
-                return this.lField;
+        public bool l
+        {
+            get
+            {
+                return null == this.lField ? false : (bool)this.lField;
             }
-            set {
+            set
+            {
                 this.lField = value;
             }
         }
+        [XmlIgnore]
+        public bool lSpecified
+        {
+            get { return null != this.lField; }
+        }
+
         [XmlAttribute]
         [DefaultValueAttribute(false)]
-        public bool t {
-            get {
-                return this.tField;
+        public bool t
+        {
+            get
+            {
+                return null == this.tField ? false : (bool)this.tField;
             }
-            set {
+            set
+            {
                 this.tField = value;
             }
         }
+        [XmlIgnore]
+        public bool tSpecified
+        {
+            get { return null != this.tField; }
+        }
+
         [XmlAttribute]
         [DefaultValueAttribute(false)]
-        public bool a {
-            get {
-                return this.aField;
+        public bool a
+        {
+            get
+            {
+                return null == this.aField ? false : (bool)this.aField;
             }
-            set {
+            set
+            {
                 this.aField = value;
             }
         }
+        [XmlIgnore]
+        public bool aSpecified
+        {
+            get { return null != this.aField; }
+        }
     }
-    
+
 }
