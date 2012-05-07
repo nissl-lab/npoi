@@ -101,7 +101,7 @@ namespace NPOI.OpenXml4Net.OPC
             {
                 partURI = new Uri(partName,UriKind.RelativeOrAbsolute);
             }
-            catch (UriFormatException e)
+            catch (UriFormatException)
             {
                 throw new ArgumentException(
                         "partName argmument is not a valid OPC part name !");

@@ -127,7 +127,7 @@ namespace NPOI.OpenXml4Net.OPC.Internal
                 contentTypeASCII = Encoding.GetEncoding("US-ASCII").GetString(Encoding.Default.GetBytes(contentType));
 
             }
-            catch (DecoderFallbackException e)
+            catch (DecoderFallbackException)
             {
                 throw new InvalidFormatException(
                         "The specified content type is not an ASCII value.");

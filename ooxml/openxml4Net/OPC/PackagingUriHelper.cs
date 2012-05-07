@@ -119,7 +119,7 @@ namespace NPOI.OpenXml4Net.OPC
                 tmpPACKAGE_ROOT_PART_NAME = new PackagePartName(PACKAGE_ROOT_URI,
                         false);
             }
-            catch (InvalidFormatException e)
+            catch (InvalidFormatException)
             {
                 // Should never happen in production as all data are fixed
             }
@@ -209,7 +209,7 @@ namespace NPOI.OpenXml4Net.OPC
                         {
                             return new Uri(path.Substring(0, num2));
                         }
-                        catch (UriFormatException e)
+                        catch (UriFormatException)
                         {
                             return null;
                         }
@@ -301,7 +301,7 @@ namespace NPOI.OpenXml4Net.OPC
                     {
                         targetURI = new Uri(path.Substring(1), UriKind.RelativeOrAbsolute);
                     }
-                    catch (Exception e)
+                    catch (Exception)
                     {
                         //_logger.log(POILogger.WARN, e);
                         return null;
@@ -348,7 +348,7 @@ namespace NPOI.OpenXml4Net.OPC
                 {
                     return new Uri(retVal.ToString(),UriKind.RelativeOrAbsolute);
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     //System.err.println(e);
                     return null;
@@ -407,7 +407,7 @@ namespace NPOI.OpenXml4Net.OPC
             {
                 return new Uri(retVal.ToString(), UriKind.RelativeOrAbsolute);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 //System.err.println(e);
                 return null;
@@ -496,7 +496,7 @@ namespace NPOI.OpenXml4Net.OPC
             {
                 retUri = new Uri(path,UriKind.RelativeOrAbsolute);
             }
-            catch (UriFormatException e)
+            catch (UriFormatException)
             {
                 throw new ArgumentException("path");
             }
@@ -824,7 +824,7 @@ namespace NPOI.OpenXml4Net.OPC
             {
                 retPartName = CreatePartName(fullPath);
             }
-            catch (InvalidFormatException e)
+            catch (InvalidFormatException)
             {
                 // Should never happen in production as all data are fixed but in
                 // case of return null:

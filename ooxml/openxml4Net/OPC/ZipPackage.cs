@@ -229,7 +229,7 @@ namespace NPOI.OpenXml4Net.OPC
                 return new MemoryPackagePart(this, partName, contentType,
                         loadRelationships);
             }
-            catch (InvalidFormatException e)
+            catch (InvalidFormatException)
             {
                 // TODO - don't use system.err.  Is it valid to return null when this exception occurs?
                 //System.err.println(e);

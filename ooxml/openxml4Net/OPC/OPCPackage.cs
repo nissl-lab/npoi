@@ -341,7 +341,7 @@ public abstract class OPCPackage:RelationshipSource {
 
 	/**
 	 * Add a thumbnail to the package. This method is provided to make easier
-	 * the Addition of a thumbnail in a package. You can do the same work by
+	 * the addition of a thumbnail in a package. You can do the same work by
 	 * using the traditionnal relationship and part mechanism.
 	 * 
 	 * @param path
@@ -363,21 +363,21 @@ public abstract class OPCPackage:RelationshipSource {
 		try {
 			thumbnailPartName = PackagingUriHelper.CreatePartName("/docProps/"
 					+ filename);
-		} catch (InvalidFormatException e) {
+		} catch (InvalidFormatException) {
 			try {
 				thumbnailPartName = PackagingUriHelper
 						.CreatePartName("/docProps/thumbnail"
 								+ path.Substring(path.LastIndexOf(".") + 1));
-			} catch (InvalidFormatException e2) {
+			} catch (InvalidFormatException) {
 				throw new InvalidOperationException(
-						"Can't Add a thumbnail file named '" + filename + "'");
+						"Can't add a thumbnail file named '" + filename + "'");
 			}
 		}
 
 		// Check if part already exist
 		if (this.GetPart(thumbnailPartName) != null)
 			throw new InvalidOperationException(
-					"You already Add a thumbnail named '" + filename + "'");
+					"You already add a thumbnail named '" + filename + "'");
 
 		// Add the thumbnail part to this package.
 		PackagePart thumbnailPart = this.CreatePart(thumbnailPartName,
@@ -484,7 +484,7 @@ public abstract class OPCPackage:RelationshipSource {
 		if (partList == null) {
 			try {
 				GetParts();
-			} catch (InvalidFormatException e) {
+			} catch (InvalidFormatException) {
 				return null;
 			}
 		}
@@ -870,7 +870,7 @@ public abstract class OPCPackage:RelationshipSource {
 			PackagePartName sourcePartName;
 			try {
 				sourcePartName = PackagingUriHelper.CreatePartName(sourceURI);
-			} catch (InvalidFormatException e) {
+			} catch (InvalidFormatException) {
                 logger
                         .Log(POILogger.ERROR, "Part name URI '"
                                 + sourceURI
