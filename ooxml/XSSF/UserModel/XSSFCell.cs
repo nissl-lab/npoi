@@ -1010,12 +1010,11 @@ namespace NPOI.XSSF.UserModel
         }
 
         /**
-         * Returns the xml bean Containing information about the cell's location (reference), value,
+         * Returns the xml bean containing information about the cell's location (reference), value,
          * data type, formatting, and formula
          *
-         * @return the xml bean Containing information about this cell
+         * @return the xml bean containing information about this cell
          */
-
         public CT_Cell GetCTCell()
         {
             return _cell;
@@ -1025,7 +1024,7 @@ namespace NPOI.XSSF.UserModel
          * Chooses a new bool value for the cell when its type is changing.<p/>
          *
          * Usually the caller is calling SetCellType() with the intention of calling
-         * SetCellValue(bool) straight Afterwards.  This method only exists to give
+         * SetCellValue(bool) straight afterwards.  This method only exists to give
          * the cell a somewhat reasonable value until the SetCellValue() call (if at all).
          * TODO - perhaps a method like SetCellTypeAndValue(int, Object) should be introduced to avoid this
          */

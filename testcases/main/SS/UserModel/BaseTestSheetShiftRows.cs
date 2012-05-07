@@ -64,12 +64,20 @@ namespace TestCases.SS.UserModel
 
             // Shift the second row down 1 and write to temp file
             s.ShiftRows(1, 1, 1);
+            {
+                Console.WriteLine("Shift the second row down 1");
+                var msg = string.Format("1a {0}-{1}-{2}-{3}-{4}-{5}", GetRowValue(s, 0), GetRowValue(s, 1), GetRowValue(s, 2), GetRowValue(s, 3), GetRowValue(s, 4), GetRowValue(s, 5));
+                Console.WriteLine(msg);
+            }
 
             wb = _testDataProvider.WriteOutAndReadBack(wb);
-
             // Read from temp file and check the number of cells in each
             // row (in original file each row was unique)
             s = wb.GetSheetAt(0);
+            {
+                var msg = string.Format("1b {0}-{1}-{2}-{3}-{4}-{5}", GetRowValue(s, 0), GetRowValue(s, 1), GetRowValue(s, 2), GetRowValue(s, 3), GetRowValue(s, 4), GetRowValue(s, 5));
+                Console.WriteLine(msg);
+            }
 
             Assert.AreEqual(s.GetRow(0).PhysicalNumberOfCells, 1);
             ConfirmEmptyRow(s, 1);
@@ -80,10 +88,19 @@ namespace TestCases.SS.UserModel
             // Shift rows 1-3 down 3 in the current one.  This Tests when
             // 1 row is blank.  Write to a another temp file
             s.ShiftRows(0, 2, 3);
+            {
+                Console.WriteLine("Shift rows 1-3 down 3 in the current one");
+                var msg = string.Format("2a {0}-{1}-{2}-{3}-{4}-{5}", GetRowValue(s, 0), GetRowValue(s, 1), GetRowValue(s, 2), GetRowValue(s, 3), GetRowValue(s, 4), GetRowValue(s, 5));
+                Console.WriteLine(msg);
+            }
             wb = _testDataProvider.WriteOutAndReadBack(wb);
 
             // Read and ensure things are where they should be
             s = wb.GetSheetAt(0);
+            {
+                var msg = string.Format("2b {0}-{1}-{2}-{3}-{4}-{5}", GetRowValue(s, 0), GetRowValue(s, 1), GetRowValue(s, 2), GetRowValue(s, 3), GetRowValue(s, 4), GetRowValue(s, 5));
+                Console.WriteLine(msg);
+            }
             ConfirmEmptyRow(s, 0);
             ConfirmEmptyRow(s, 1);
             ConfirmEmptyRow(s, 2);
@@ -97,13 +114,34 @@ namespace TestCases.SS.UserModel
 
             // Shift rows 3 and 4 up and write to temp file
             s.ShiftRows(2, 3, -2);
+            {
+                Console.WriteLine("Shift rows 3 and 4 up");
+                var msg = string.Format("3a {0}-{1}-{2}-{3}-{4}-{5}", GetRowValue(s, 0), GetRowValue(s, 1), GetRowValue(s, 2), GetRowValue(s, 3), GetRowValue(s, 4), GetRowValue(s, 5));
+                Console.WriteLine(msg);
+            }
             wb = _testDataProvider.WriteOutAndReadBack(wb);
             s = wb.GetSheetAt(0);
+            {
+                var msg = string.Format("3b {0}-{1}-{2}-{3}-{4}-{5}", GetRowValue(s, 0), GetRowValue(s, 1), GetRowValue(s, 2), GetRowValue(s, 3), GetRowValue(s, 4), GetRowValue(s, 5));
+                Console.WriteLine(msg);
+            }
             Assert.AreEqual(s.GetRow(0).PhysicalNumberOfCells, 3);
             Assert.AreEqual(s.GetRow(1).PhysicalNumberOfCells, 4);
             ConfirmEmptyRow(s, 2);
             ConfirmEmptyRow(s, 3);
             Assert.AreEqual(s.GetRow(4).PhysicalNumberOfCells, 5);
+        }       
+        private static string GetRowValue(ISheet s, int rowIx)
+        {
+            IRow row = s.GetRow(rowIx);
+            if (row == null) { return "null"; } 
+            return row.PhysicalNumberOfCells .ToString();
+        }
+        private static string GetRowNum(ISheet s, int rowIx)
+        {
+            IRow row = s.GetRow(rowIx);
+            if (row == null) { return "null"; } 
+            return row.RowNum.ToString();
         }
         private static void ConfirmEmptyRow(ISheet s, int rowIx)
         {

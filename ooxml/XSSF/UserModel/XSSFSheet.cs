@@ -125,7 +125,7 @@ namespace NPOI.XSSF.UserModel
         {
             //try
             //{
-                worksheet = WorksheetDocument.Parse(is1).GetWorksheet();
+            worksheet = WorksheetDocument.Parse(is1).GetWorksheet();
             //}
             //catch (XmlException e)
             //{
@@ -145,7 +145,7 @@ namespace NPOI.XSSF.UserModel
                 }
                 if (p is XSSFTable)
                 {
-                    tables[p.GetPackageRelationship().Id]=(XSSFTable)p;
+                    tables[p.GetPackageRelationship().Id] = (XSSFTable)p;
                 }
             }
 
@@ -176,7 +176,7 @@ namespace NPOI.XSSF.UserModel
                 foreach (CT_Row row in worksheet.sheetData.row)
                 {
                     XSSFRow r = new XSSFRow(row, this);
-                    if(!_rows.ContainsKey(r.RowNum))
+                    if (!_rows.ContainsKey(r.RowNum))
                         _rows.Add(r.RowNum, r);
                 }
             }
@@ -301,7 +301,7 @@ namespace NPOI.XSSF.UserModel
             int firstColumn = region.FirstColumn;
             int lastRow = region.LastRow;
             int lastColumn = region.LastColumn;
-            for (int rowIn = firstRow; rowIn <= lastRow; rowIn++)   
+            for (int rowIn = firstRow; rowIn <= lastRow; rowIn++)
             {
                 for (int colIn = firstColumn; colIn <= lastColumn; colIn++)
                 {
@@ -541,7 +541,7 @@ namespace NPOI.XSSF.UserModel
             if (rowSplit == 0)
             {
                 pane.topLeftCell = (new CellReference(0, leftmostColumn).FormatAsString());
-                pane.activePane =(ST_Pane.topRight);
+                pane.activePane = (ST_Pane.topRight);
             }
             else if (colSplit == 0)
             {
@@ -762,9 +762,9 @@ namespace NPOI.XSSF.UserModel
             {
                 return (int)DefaultRowHeightInPoints * 20;
             }
-            set 
+            set
             {
-                GetSheetTypeSheetFormatPr().defaultRowHeight=((double)value / 20);
+                GetSheetTypeSheetFormatPr().defaultRowHeight = ((double)value / 20);
             }
         }
 
@@ -780,7 +780,7 @@ namespace NPOI.XSSF.UserModel
                 CT_SheetFormatPr pr = worksheet.sheetFormatPr;
                 return (float)(pr == null ? 0 : pr.defaultRowHeight);
             }
-            set 
+            set
             {
                 GetSheetTypeSheetFormatPr().defaultRowHeight = value;
             }
@@ -816,7 +816,7 @@ namespace NPOI.XSSF.UserModel
                 CT_SheetView view = GetDefaultSheetView();
                 return view == null ? false : view.rightToLeft;
             }
-            set 
+            set
             {
                 CT_SheetView view = GetDefaultSheetView();
                 view.rightToLeft = (value);
@@ -837,7 +837,7 @@ namespace NPOI.XSSF.UserModel
                 CT_OutlinePr outlinePr = sheetPr.outlinePr == null ? new CT_OutlinePr() : sheetPr.outlinePr;
                 return outlinePr.showOutlineSymbols;
             }
-            set 
+            set
             {
                 CT_SheetPr sheetPr = GetSheetTypeSheetPr();
                 CT_OutlinePr outlinePr = sheetPr.outlinePr == null ? sheetPr.AddNewOutlinePr() : sheetPr.outlinePr;
@@ -858,10 +858,10 @@ namespace NPOI.XSSF.UserModel
                 CT_SheetView view = GetDefaultSheetView();
                 return view == null ? true : view.showZeros;
             }
-            set 
+            set
             {
                 CT_SheetView view = GetSheetTypeSheetView();
-                view.showZeros = (value); 
+                view.showZeros = (value);
             }
         }
 
@@ -878,7 +878,7 @@ namespace NPOI.XSSF.UserModel
                     return 0;
                 else
                 {
-                    foreach(int key in _rows.Keys)
+                    foreach (int key in _rows.Keys)
                     {
                         return key;
                     }
@@ -1046,7 +1046,7 @@ namespace NPOI.XSSF.UserModel
             {
                 CT_PrintOptions opts = worksheet.IsSetPrintOptions() ?
                     worksheet.printOptions : worksheet.AddNewPrintOptions();
-                        opts.horizontalCentered = (value);
+                opts.horizontalCentered = (value);
 
             }
         }
@@ -1293,7 +1293,7 @@ namespace NPOI.XSSF.UserModel
          */
         public IRow GetRow(int rownum)
         {
-            if(_rows.ContainsKey(rownum))
+            if (_rows.ContainsKey(rownum))
                 return _rows[rownum];
             return null;
         }
@@ -1347,7 +1347,7 @@ namespace NPOI.XSSF.UserModel
                         ? sheetPr.outlinePr : null;
                 return outlinePr == null || outlinePr.summaryBelow;
             }
-            set 
+            set
             {
                 ensureOutlinePr().summaryBelow = (value);
             }
@@ -1374,7 +1374,7 @@ namespace NPOI.XSSF.UserModel
                         ? sheetPr.outlinePr : new CT_OutlinePr();
                 return outlinePr.summaryRight;
             }
-            set 
+            set
             {
                 ensureOutlinePr().summaryRight = (value);
             }
@@ -1386,7 +1386,7 @@ namespace NPOI.XSSF.UserModel
         private CT_OutlinePr ensureOutlinePr()
         {
             CT_SheetPr sheetPr = worksheet.IsSetSheetPr() ? worksheet.sheetPr : worksheet.AddNewSheetPr();
-            return sheetPr.IsSetOutlinePr() ? 
+            return sheetPr.IsSetOutlinePr() ?
                 sheetPr.outlinePr : sheetPr.AddNewOutlinePr();
 
         }
@@ -1400,7 +1400,7 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
-                return worksheet.IsSetSheetProtection() 
+                return worksheet.IsSetSheetProtection()
                     && (bool)worksheet.sheetProtection.scenarios;
             }
         }
@@ -1433,7 +1433,7 @@ namespace NPOI.XSSF.UserModel
                 CT_PrintOptions opts = worksheet.printOptions;
                 return opts != null && opts.verticalCentered;
             }
-            set 
+            set
             {
                 CT_PrintOptions opts = worksheet.IsSetPrintOptions() ?
             worksheet.printOptions : worksheet.AddNewPrintOptions();
@@ -1453,8 +1453,8 @@ namespace NPOI.XSSF.UserModel
         {
             CT_Cols ctCols = worksheet.GetColsArray(0);
             CT_Col ctCol = new CT_Col();
-            ctCol.min=(uint)fromColumn;
-            ctCol.max=(uint)toColumn;
+            ctCol.min = (uint)fromColumn;
+            ctCol.max = (uint)toColumn;
             this.columnHelper.AddCleanColIntoCols(ctCols, ctCol);
             for (int index = fromColumn; index <= toColumn; index++)
             {
@@ -1552,9 +1552,9 @@ namespace NPOI.XSSF.UserModel
             {
                 return GetSheetTypeSheetView().showFormulas;
             }
-            set 
+            set
             {
-                GetSheetTypeSheetView().showFormulas=value;
+                GetSheetTypeSheetView().showFormulas = value;
             }
         }
 
@@ -1571,7 +1571,7 @@ namespace NPOI.XSSF.UserModel
             {
                 return GetSheetTypeSheetView().showGridLines;
             }
-            set 
+            set
             {
                 GetSheetTypeSheetView().showGridLines = value;
             }
@@ -1595,7 +1595,7 @@ namespace NPOI.XSSF.UserModel
             {
                 return GetSheetTypeSheetView().showRowColHeaders;
             }
-            set 
+            set
             {
                 GetSheetTypeSheetView().showRowColHeaders = value;
             }
@@ -1614,11 +1614,11 @@ namespace NPOI.XSSF.UserModel
                 CT_PrintOptions opts = worksheet.printOptions;
                 return opts != null && opts.gridLines;
             }
-            set 
+            set
             {
                 CT_PrintOptions opts = worksheet.IsSetPrintOptions() ?
             worksheet.printOptions : worksheet.AddNewPrintOptions();
-                opts.gridLines =(value);
+                opts.gridLines = (value);
             }
         }
 
@@ -1780,7 +1780,7 @@ namespace NPOI.XSSF.UserModel
                 }
                 return false;
             }
-            set 
+            set
             {
                 if (worksheet.IsSetSheetCalcPr())
                 {
@@ -1829,12 +1829,12 @@ namespace NPOI.XSSF.UserModel
                         new CT_PageSetUpPr() : sheetPr.pageSetUpPr;
                 return psSetup.autoPageBreaks;
             }
-            set 
+            set
             {
-            CT_SheetPr sheetPr = GetSheetTypeSheetPr();
-            CT_PageSetUpPr psSetup = sheetPr.IsSetPageSetUpPr() ?
-                sheetPr.pageSetUpPr : sheetPr.AddNewPageSetUpPr();
-            psSetup.autoPageBreaks = (value);
+                CT_SheetPr sheetPr = GetSheetTypeSheetPr();
+                CT_PageSetUpPr psSetup = sheetPr.IsSetPageSetUpPr() ?
+                    sheetPr.pageSetUpPr : sheetPr.AddNewPageSetUpPr();
+                psSetup.autoPageBreaks = (value);
             }
         }
 
@@ -1853,12 +1853,12 @@ namespace NPOI.XSSF.UserModel
         {
             if (!IsColumnBroken(column))
             {
-                CT_PageBreak pgBreak = worksheet.IsSetColBreaks() ? 
+                CT_PageBreak pgBreak = worksheet.IsSetColBreaks() ?
                     worksheet.colBreaks : worksheet.AddNewColBreaks();
                 CT_Break brk = pgBreak.AddNewBrk();
                 brk.id = (uint)column + 1;  // this is id of the row element which is 1-based: <row r="1" ... >
-                brk.man=(true);
-                brk.max=(uint)SpreadsheetVersion.EXCEL2007.LastRowIndex; //end row of the break
+                brk.man = (true);
+                brk.max = (uint)SpreadsheetVersion.EXCEL2007.LastRowIndex; //end row of the break
 
                 pgBreak.count = (uint)pgBreak.sizeOfBrkArray();
                 pgBreak.manualBreakCount = (uint)(pgBreak.sizeOfBrkArray());
@@ -1910,7 +1910,7 @@ namespace NPOI.XSSF.UserModel
             {
                 CT_Col tci = cols.GetColArray(k);
                 if (tci.min >= targetColumnIx
-                        && tci.max<= targetColumnIx)
+                        && tci.max <= targetColumnIx)
                 {
                     ci = tci;
                     break;
@@ -1926,9 +1926,9 @@ namespace NPOI.XSSF.UserModel
             {
                 // okay so there ISN'T a column info record that covers this column
                 // so lets create one!
-                CT_Col nci =  new CT_Col();
-                nci.min=(uint)targetColumnIx;
-                nci.max=(uint)targetColumnIx;
+                CT_Col nci = new CT_Col();
+                nci.min = (uint)targetColumnIx;
+                nci.max = (uint)targetColumnIx;
                 unSetCollapsed((bool)collapsed, nci);
                 this.columnHelper.AddCleanColIntoCols(cols, nci);
                 return;
@@ -2025,7 +2025,7 @@ namespace NPOI.XSSF.UserModel
             CT_Col columnInfo = cols.GetColArray(idx);
             while (idx < cols.sizeOfColArray())
             {
-                columnInfo.hidden =(hidden);
+                columnInfo.hidden = (hidden);
                 if (idx + 1 < cols.sizeOfColArray())
                 {
                     CT_Col nextColumnInfo = cols.GetColArray(idx + 1);
@@ -2586,7 +2586,7 @@ namespace NPOI.XSSF.UserModel
          */
         public void SetZoom(int scale)
         {
-            if (scale < 10 || scale > 400) 
+            if (scale < 10 || scale > 400)
                 throw new ArgumentException("Valid scale values range from 10 to 400");
             GetSheetTypeSheetView().zoomScale = (uint)scale;
         }
@@ -2628,9 +2628,69 @@ namespace NPOI.XSSF.UserModel
         //YK: GetXYZArray() array accessors are deprecated in xmlbeans with JDK 1.5 support
         public void ShiftRows(int startRow, int endRow, int n, bool copyRowHeight, bool reSetOriginalRowHeight)
         {
-            for (IEnumerator it = this._rows.GetEnumerator(); it.MoveNext(); )
+            //for (IEnumerator it = this._rows.GetEnumerator(); it.MoveNext(); )
+            //{
+            //    XSSFRow row = (XSSFRow)it.Current;
+            //    int rownum = row.RowNum;
+            //    if (rownum < startRow) continue;
+
+            //    if (!copyRowHeight)
+            //    {
+            //        row.Height = (short)-1;
+            //    }
+
+            //    if (RemoveRow(startRow, endRow, n, rownum))
+            //    {
+            //        // remove row from worksheet.GetSheetData row array
+            //        int idx = HeadMap(_rows, row.RowNum).Count;
+            //        worksheet.sheetData.RemoveRow(idx);
+            //        // remove row from _rows
+            //        throw new NotImplementedException();
+            //        //it.Remove();
+            //    }
+            //    else if (rownum >= startRow && rownum <= endRow)
+            //    {
+            //        row.Shift(n);
+            //    }
+
+            //    if (sheetComments != null)
+            //    {
+            //        //TODO shift Note's anchor in the associated /xl/drawing/vmlDrawings#.vml
+            //        CT_CommentList lst = sheetComments.GetCTComments().commentList;
+            //        foreach (CT_Comment comment in lst.comment)
+            //        {
+            //            CellReference ref1 = new CellReference(comment.@ref);
+            //            if (ref1.Row == rownum)
+            //            {
+            //                ref1 = new CellReference(rownum + n, ref1.Col);
+            //                comment.@ref = ref1.FormatAsString();
+            //            }
+            //        }
+            //    }
+            //}
+            //XSSFRowShifter rowShifter = new XSSFRowShifter(this);
+
+            //int sheetIndex = Workbook.GetSheetIndex(this);
+            //FormulaShifter Shifter = FormulaShifter.CreateForRowShift(sheetIndex, startRow, endRow, n);
+
+            //rowShifter.UpdateNamedRanges(Shifter);
+            //rowShifter.UpdateFormulas(Shifter);
+            //rowShifter.ShiftMerged(startRow, endRow, n);
+            //rowShifter.UpdateConditionalFormatting(Shifter);
+
+            ////rebuild the _rows map
+            //SortedDictionary<int, XSSFRow> map = new SortedDictionary<int, XSSFRow>();
+            //foreach (XSSFRow r in _rows.Values)
+            //{
+            //    map.Add(r.RowNum, r);
+            //}
+            //_rows = map;
+
+            // works for positive shift, but not the negative way 8-( - above is the original code
+            var rowsToRemove = new List<int>();
+            foreach (var rowDict in _rows)
             {
-                XSSFRow row = (XSSFRow)it.Current;
+                var row = rowDict.Value;
                 int rownum = row.RowNum;
                 if (rownum < startRow) continue;
 
@@ -2642,11 +2702,13 @@ namespace NPOI.XSSF.UserModel
                 if (RemoveRow(startRow, endRow, n, rownum))
                 {
                     // remove row from worksheet.GetSheetData row array
-                    int idx = HeadMap(_rows,row.RowNum).Count;
+                    int idx = HeadMap(_rows, row.RowNum).Count;
+                    if (n > 0) { idx -= rowsToRemove.Count; } else { idx += rowsToRemove.Count; } // compensate removed rows
                     worksheet.sheetData.RemoveRow(idx);
                     // remove row from _rows
-                    throw new NotImplementedException();
+                    //throw new NotImplementedException();
                     //it.Remove();
+                    rowsToRemove.Add(rowDict.Key);
                 }
                 else if (rownum >= startRow && rownum <= endRow)
                 {
@@ -2668,6 +2730,10 @@ namespace NPOI.XSSF.UserModel
                     }
                 }
             }
+            foreach(var rowKey in rowsToRemove)
+            {
+                _rows.Remove(rowKey);
+            }
             XSSFRowShifter rowShifter = new XSSFRowShifter(this);
 
             int sheetIndex = Workbook.GetSheetIndex(this);
@@ -2678,13 +2744,14 @@ namespace NPOI.XSSF.UserModel
             rowShifter.ShiftMerged(startRow, endRow, n);
             rowShifter.UpdateConditionalFormatting(Shifter);
 
-            //rebuild the _rows map
-            SortedDictionary<int, XSSFRow> map = new SortedDictionary<int, XSSFRow>();
-            foreach (XSSFRow r in _rows.Values)
-            {
-                map.Add(r.RowNum, r);
-            }
-            _rows = map;
+            // no need to sort because it is already sorted.
+            ////rebuild the _rows map 
+            //SortedDictionary<int, XSSFRow> map = new SortedDictionary<int, XSSFRow>();
+            //foreach (XSSFRow r in _rows.Values)
+            //{
+            //    map.Add(r.RowNum, r);
+            //}
+            //_rows = map;
         }
 
         /**
@@ -2766,7 +2833,7 @@ namespace NPOI.XSSF.UserModel
         {
             if (worksheet.sheetViews == null)
             {
-                worksheet.sheetViews=new CT_SheetViews();
+                worksheet.sheetViews = new CT_SheetViews();
                 worksheet.sheetViews.AddNewSheetView();
             }
             return worksheet.sheetViews;
@@ -2789,7 +2856,7 @@ namespace NPOI.XSSF.UserModel
                 CT_SheetView view = GetDefaultSheetView();
                 return view != null && view.tabSelected;
             }
-            set 
+            set
             {
                 CT_SheetViews views = GetSheetTypeSheetViews();
                 foreach (CT_SheetView view in views.sheetView)
@@ -2834,8 +2901,8 @@ namespace NPOI.XSSF.UserModel
          */
         public String GetActiveCell()
         {
-                return GetSheetTypeSelection().activeCell;
-         }
+            return GetSheetTypeSelection().activeCell;
+        }
 
 
         public void SetActiveCell(string value)
@@ -2963,7 +3030,7 @@ namespace NPOI.XSSF.UserModel
             {
                 // save a detached  copy to avoid XmlValueDisconnectedException,
                 // this may happen when the master cell of a shared formula is Changed
-                sharedFormulas[(int)f.si] =(CT_CellFormula)f.Copy();
+                sharedFormulas[(int)f.si] = (CT_CellFormula)f.Copy();
             }
             if (f != null && f.t == ST_CellFormulaType.array && f.@ref != null)
             {
@@ -2999,7 +3066,7 @@ namespace NPOI.XSSF.UserModel
                 {
                     worksheet.AddNewHyperlinks();
                 }
-                NPOI.OpenXmlFormats.Spreadsheet.CT_Hyperlink[] ctHls 
+                NPOI.OpenXmlFormats.Spreadsheet.CT_Hyperlink[] ctHls
                     = new NPOI.OpenXmlFormats.Spreadsheet.CT_Hyperlink[hyperlinks.Count];
                 for (int i = 0; i < ctHls.Length; i++)
                 {
@@ -3021,7 +3088,7 @@ namespace NPOI.XSSF.UserModel
             //XmlOptions xmlOptions = new XmlOptions(DEFAULT_XML_OPTIONS);
             //xmlOptions.SetSaveSyntheticDocumentElement(new QName(CT_Worksheet.type.GetName().getNamespaceURI(), "worksheet"));
             Dictionary<String, String> map = new Dictionary<String, String>();
-            map[ST_RelationshipId.NamespaceURI]= "r";
+            map[ST_RelationshipId.NamespaceURI] = "r";
             //xmlOptions.SetSaveSuggestedPrefixes(map);
 
             worksheet.Save(out1);
@@ -3177,7 +3244,7 @@ namespace NPOI.XSSF.UserModel
         public void EnableLocking()
         {
             CreateProtectionFieldIfNotPresent();
-            worksheet.sheetProtection.sheet =(true);
+            worksheet.sheetProtection.sheet = (true);
         }
 
         /**
@@ -3483,7 +3550,7 @@ namespace NPOI.XSSF.UserModel
                         String[] regions = stRef.Split(new char[] { ' ' });
                         for (int i = 0; i < regions.Length; i++)
                         {
-                            String[] parts = regions[i].Split(new char[]{':'});
+                            String[] parts = regions[i].Split(new char[] { ':' });
                             CellReference begin = new CellReference(parts[0]);
                             CellReference end = parts.Length > 1 ? new CellReference(parts[1]) : begin;
                             CellRangeAddress cellRangeAddress = new CellRangeAddress(begin.Row, end.Row, begin.Col, end.Col);
@@ -3529,7 +3596,7 @@ namespace NPOI.XSSF.UserModel
             if (name == null)
             {
                 name = wb.CreateBuiltInName(XSSFName.BUILTIN_FILTER_DB, sheetIndex);
-                name.GetCTName().hidden=true;
+                name.GetCTName().hidden = true;
                 CellReference r1 = new CellReference(SheetName, range.FirstRow, range.FirstColumn, true, true);
                 CellReference r2 = new CellReference(null, range.LastRow, range.LastColumn, true, true);
                 String fmla = r1.FormatAsString() + ":" + r2.FormatAsString();
@@ -3558,7 +3625,7 @@ namespace NPOI.XSSF.UserModel
             XSSFTable table = (XSSFTable)CreateRelationship(XSSFRelation.TABLE, XSSFFactory.GetInstance(), tableNumber);
             tbl.id = table.GetPackageRelationship().Id;
 
-            tables[tbl.id]= table;
+            tables[tbl.id] = table;
 
             return table;
         }

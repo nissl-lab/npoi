@@ -127,9 +127,9 @@ namespace NPOI.XSSF.UserModel
                 int val = charset == null ? FontCharset.ANSI.Value : FontCharset.ValueOf(charset.val).Value;
                 return (short)val;
             }
-            set 
+            set
             {
-                
+
             }
         }
 

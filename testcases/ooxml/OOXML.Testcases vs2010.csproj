@@ -71,6 +71,11 @@
   <ItemGroup>
     <Compile Include="OpenXmlFormats\Spreadsheet\CommentsDocumentTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
     <Compile Include="SS\Format\TestCellFormatPart.cs" />
     <Compile Include="SS\TestWorkbookFactory.cs" />
     <Compile Include="TestDetectAsOOXML.cs" />
@@ -84,6 +89,7 @@
     <Compile Include="XSSF\Model\TestMapInfo.cs" />
     <Compile Include="XSSF\Model\TestSharedStringsTable.cs" />
     <Compile Include="XSSF\Model\TestStylesTable.cs" />
+    <Compile Include="XSSF\UserModel\TestSheetShiftRows.cs" />
     <Compile Include="XSSF\UserModel\Extensions\TestXSSFBorder.cs" />
     <Compile Include="XSSF\UserModel\Extensions\TestXSSFCellFill.cs" />
     <Compile Include="XSSF\UserModel\Helpers\TestColumnHelper.cs" />
@@ -151,6 +157,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
     <Shadow Include="Test References\NPOI.OpenXmlFormats.accessor" />
   </ItemGroup>
   <ItemGroup>

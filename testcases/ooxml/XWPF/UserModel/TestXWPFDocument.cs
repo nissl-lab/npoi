@@ -44,7 +44,7 @@ namespace NPOI.XWPF.UserModel
                 {
                     found = true;
                 }
-                if (false)
+                if (false == found)
                 {
                     // successful tests should be silent
                     System.Console.WriteLine(part);
@@ -270,7 +270,7 @@ namespace NPOI.XWPF.UserModel
 
             try
             {
-                allPictures.Add(allPictures[(0)]);
+                allPictures.Add(allPictures[0]);
                 Assert.Fail("This list must be unmodifiable!");
             }
             catch (NotSupportedException)
@@ -292,7 +292,7 @@ namespace NPOI.XWPF.UserModel
 
             try
             {
-                allPackagePictures.Add(allPackagePictures[(0)]);
+                allPackagePictures.Add(allPackagePictures[0]);
                 Assert.Fail("This list must be unmodifiable!");
             }
             catch (NotSupportedException)

@@ -86,7 +86,7 @@ namespace NPOI.XSSF.UserModel
                 xssfFont.SetCharSet(9999);
                 Assert.Fail("Shouldn't be able to Set an invalid charset");
             }
-            catch (POIXMLException e) { }
+            catch (POIXMLException) { }
 
 
             // Now try with a few sample files

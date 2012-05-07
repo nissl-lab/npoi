@@ -81,6 +81,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="POIDataSamples.cs" />
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
     <Compile Include="SS\ITestDataProvider.cs" />
     <Compile Include="SS\Format\CellFormatTestBase.cs" />
     <Compile Include="SS\UserModel\TestDataFormatter.cs" />
@@ -134,6 +139,13 @@
       <Project>{4704E545-CEFF-46B6-ACEF-C8927830FA1C}</Project>
       <Name>main vs10</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
