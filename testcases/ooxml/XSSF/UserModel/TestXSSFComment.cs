@@ -57,7 +57,7 @@ namespace NPOI.XSSF.UserModel
             CT_Shape vmlShape = new CT_Shape();
 
             XSSFComment comment = new XSSFComment(sheetComments, ctComment, vmlShape);
-            Assert.AreEqual(null, comment.String);
+            Assert.AreEqual(null, comment.String.String);
             Assert.AreEqual(0, comment.Row);
             Assert.AreEqual(0, comment.Column);
             Assert.AreEqual("", comment.Author);
@@ -127,35 +127,36 @@ namespace NPOI.XSSF.UserModel
             comment.SetString(TEST_RICHTEXTSTRING);
 
             CT_Comment ctComment = comment.GetCTComment();
-            Assert.Fail();
-        //    XmlObject[] obj = ctComment.selectPath(
-        //            "declare namespace w='http://schemas.Openxmlformats.org/spreadsheetml/2006/main' .//w:text");
-        //    Assert.AreEqual(1, obj.Length);
-        //    Assert.AreEqual(TEST_RICHTEXTSTRING, comment.String.String);
+          //  Assert.Fail("TODO test case incomplete!?");
+            //XmlObject[] obj = ctComment.selectPath(
+            //        "declare namespace w='http://schemas.Openxmlformats.org/spreadsheetml/2006/main' .//w:text");
+            //Assert.AreEqual(1, obj.Length);
+            Assert.AreEqual(TEST_RICHTEXTSTRING, comment.String.String);
 
-        //    //sequential call of comment.String should return the same XSSFRichTextString object
-        //    Assert.AreSame(comment.String, comment.String);
+            //sequential call of comment.String should return the same XSSFRichTextString object
+            Assert.AreSame(comment.String, comment.String);
 
-        //    XSSFRichTextString richText = new XSSFRichTextString(TEST_RICHTEXTSTRING);
-        //    XSSFFont font1 = (XSSFFont)wb.CreateFont();
-        //    font1.FontName = ("Tahoma");
-        //    font1.FontHeight = (short)8.5;
-        //    font1.IsItalic = true;
-        //    font1.Color = IndexedColors.BLUE_GREY.Index;
-        //    richText.ApplyFont(0, 5, font1);
+            XSSFRichTextString richText = new XSSFRichTextString(TEST_RICHTEXTSTRING);
+            XSSFFont font1 = (XSSFFont)wb.CreateFont();
+            font1.FontName = ("Tahoma");
+            //font1.FontHeight = (short)8.5;
+            font1.SetFontHeight(8.5);
+            font1.IsItalic = true;
+            font1.Color = IndexedColors.BLUE_GREY.Index;
+            richText.ApplyFont(0, 5, font1);
 
-        //    //check the low-level stuff
-        //    comment.String = richText;
-        //    obj = ctComment.selectPath(
-        //            "declare namespace w='http://schemas.Openxmlformats.org/spreadsheetml/2006/main' .//w:text");
-        //    Assert.AreEqual(1, obj.Length);
-        //    Assert.AreSame(comment.String, richText);
-        //    //check that the rich text is Set in the comment
-        //    CT_RPrElt rPr = richText.GetCTRst().GetRArray(0).rPr;
-        //    Assert.AreEqual(true, rPr.GetIArray(0).val);
-        //    Assert.AreEqual(8.5, rPr.GetSzArray(0).val);
-        //    Assert.AreEqual(IndexedColors.BLUE_GREY.Index, rPr.GetColorArray(0).indexed);
-        //    Assert.AreEqual("Tahoma", rPr.GetRFontArray(0).val);
+            //check the low-level stuff
+            comment.String = richText;
+            //obj = ctComment.selectPath(
+            //        "declare namespace w='http://schemas.Openxmlformats.org/spreadsheetml/2006/main' .//w:text");
+            //Assert.AreEqual(1, obj.Length);
+            Assert.AreSame(comment.String, richText);
+            //check that the rich text is Set in the comment
+            CT_RPrElt rPr = richText.GetCTRst().GetRArray(0).rPr;
+            Assert.AreEqual(true, rPr.GetIArray(0).val);
+            Assert.AreEqual(8.5, rPr.GetSzArray(0).val);
+            Assert.AreEqual(IndexedColors.BLUE_GREY.Index, (short)rPr.GetColorArray(0).indexed);
+            Assert.AreEqual("Tahoma", rPr.GetRFontArray(0).val);
         }
         [TestMethod]
         public void TestAuthor()

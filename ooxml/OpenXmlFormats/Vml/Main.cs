@@ -121,7 +121,7 @@ namespace NPOI.OpenXmlFormats.Vml
             this.shadowField = new CT_Shadow();
             return this.shadowField;
         }
-        List<CT_ClientData> clientDataField;
+        List<CT_ClientData> clientDataField = null;
 
         [XmlElement]
         public List<CT_ClientData> clientData
@@ -132,7 +132,7 @@ namespace NPOI.OpenXmlFormats.Vml
 
         public CT_ClientData GetClientDataArray(int index)
         {
-            return this.clientDataField[0];
+            return clientDataField != null ? this.clientDataField[index] : null;
         }
         
         /// <remarks/>

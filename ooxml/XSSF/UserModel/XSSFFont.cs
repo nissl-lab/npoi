@@ -243,9 +243,14 @@ namespace NPOI.XSSF.UserModel
             }
             set 
             {
-                CT_FontSize fontSize = _ctFont.sizeOfSzArray() == 0 ? _ctFont.AddNewSz() : _ctFont.GetSzArray(0);
-                fontSize.val = value;
+                 SetFontHeight(value);
             }
+        }
+
+        public void SetFontHeight(double value)
+        {
+            CT_FontSize fontSize = _ctFont.sizeOfSzArray() == 0 ? _ctFont.AddNewSz() : _ctFont.GetSzArray(0);
+            fontSize.val = value;
         }
 
         /**
