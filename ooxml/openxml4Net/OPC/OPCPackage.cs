@@ -117,7 +117,7 @@ public abstract class OPCPackage:RelationshipSource {
 			this.partMarshallers.Add(new ContentType(
 					ContentTypes.CORE_PROPERTIES_PART),
 					new ZipPackagePropertiesMarshaller());
-		} catch (InvalidFormatException e) {
+		} catch (InvalidFormatException) {
 			// Should never happen
 			throw new OpenXml4NetException(
 					"Package.init() : this exception should never happen, if you read this message please send a mail to the developers team.");
@@ -460,7 +460,7 @@ public abstract class OPCPackage:RelationshipSource {
             {
                 GetParts();
             }
-            catch (InvalidFormatException e)
+            catch (InvalidFormatException)
             {
                 return null;
             }
@@ -555,7 +555,7 @@ public abstract class OPCPackage:RelationshipSource {
 				try {
 					retPart = GetPart(PackagingUriHelper.CreatePartName(rel
 							.TargetUri));
-				} catch (InvalidFormatException e) {
+				} catch (InvalidFormatException) {
 					continue;
 				}
 				break;

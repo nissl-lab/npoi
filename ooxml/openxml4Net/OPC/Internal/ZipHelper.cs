@@ -124,7 +124,7 @@ namespace NPOI.OpenXml4Net.OPC.Internal
             {
                 return new Uri(retVal,UriKind.RelativeOrAbsolute);
             }
-            catch (UriFormatException e)
+            catch (UriFormatException)
             {
                 return null;
             }

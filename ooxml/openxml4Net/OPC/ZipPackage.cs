@@ -194,7 +194,7 @@ namespace NPOI.OpenXml4Net.OPC
                 return PackagingUriHelper.CreatePartName(ZipHelper
                         .GetOPCNameFromZipItemName(entry.Name));
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 // We assume we can continue, even in degraded mode ...
                 //logger.log(POILogger.WARN,"Entry "
@@ -348,7 +348,7 @@ namespace NPOI.OpenXml4Net.OPC
                 if (this.zipArchive != null)
                     this.zipArchive.Close();
             }
-            catch (IOException e)
+            catch (IOException)
             {
                 // Do nothing, user dont have to know
             }

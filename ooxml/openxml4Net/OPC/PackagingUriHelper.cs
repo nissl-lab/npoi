@@ -234,7 +234,7 @@ namespace NPOI.OpenXml4Net.OPC
             {
                 retUri = new Uri(Combine(prefix.OriginalString, suffix.OriginalString));
             }
-            catch (UriFormatException e)
+            catch (UriFormatException)
             {
                 throw new ArgumentException(
                         "Prefix and suffix can't be Combine !");
@@ -659,7 +659,7 @@ namespace NPOI.OpenXml4Net.OPC
                 CreatePartName(partUri);
                 return true;
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return false;
             }

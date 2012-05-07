@@ -81,7 +81,7 @@ public class PackagePropertiesUnmarshaller : PartUnmarshaller {
 					zipEntry = ZipHelper
 							.GetCorePropertiesZipEntry((ZipPackage) context
 									.Package);
-				} catch (OpenXml4NetException e) {
+				} catch (OpenXml4NetException) {
 					throw new IOException(
 							"Error while trying to get the part input stream.");
 				}
