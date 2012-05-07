@@ -106,6 +106,11 @@ namespace NPOI.XSSF.Model
             return comments.authors.GetAuthorArray((int)authorId);
         }
 
+        /// <summary>
+        /// Searches the author. If not found he is added to the list of authors.
+        /// </summary>
+        /// <param name="author">author to search</param>
+        /// <returns>index of the author</returns>
         public int FindAuthor(String author)
         {
             for (int i = 0; i < comments.authors.SizeOfAuthorArray(); i++)

@@ -39,11 +39,11 @@ namespace NPOI.XSSF.Model
             Assert.AreEqual(0, sheetComments.FindAuthor(""));
             Assert.AreEqual("", sheetComments.GetAuthor(0));
 
-            //Assert.AreEqual(1, sheetComments.FindAuthor(TEST_AUTHOR));
-            //Assert.AreEqual(2, sheetComments.FindAuthor("another author"));
-            //Assert.AreEqual(1, sheetComments.FindAuthor(TEST_AUTHOR));
-            //Assert.AreEqual(3, sheetComments.FindAuthor("YAA"));
-            //Assert.AreEqual(2, sheetComments.FindAuthor("another author"));
+            Assert.AreEqual(1, sheetComments.FindAuthor(TEST_AUTHOR));
+            Assert.AreEqual(2, sheetComments.FindAuthor("another author"));
+            Assert.AreEqual(1, sheetComments.FindAuthor(TEST_AUTHOR));
+            Assert.AreEqual(3, sheetComments.FindAuthor("YAA"));
+            Assert.AreEqual(2, sheetComments.FindAuthor("another author"));
         }
         [TestMethod]
         public void TestGetCellComment()
