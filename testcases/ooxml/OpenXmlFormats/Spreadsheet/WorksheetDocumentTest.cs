@@ -1,6 +1,8 @@
 ﻿using System.IO;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NPOI.OpenXmlFormats.Spreadsheet;
+using NPOI.XSSF.UserModel;
+using NPOI.SS.UserModel;
 
 namespace ooxml.Testcases
 {
@@ -90,9 +92,7 @@ namespace ooxml.Testcases
             var sheetData = worksheet.AddNewSheetData();
             var row = sheetData.AddNewRow();
             row.r = 1u;
-            row.rSpecified = true;
-            row.spans = new System.Collections.Generic.List<string>(1);
-            row.spans.Add("1:3");
+            row.spans = "1:3";
             {
                 var c = row.AddNewC();
                 c.r = "A1";
@@ -285,6 +285,8 @@ namespace ooxml.Testcases
       //</row>
             {
                 var row = result.sheetData.row[0];
+                Assert.AreEqual(1u, row.r);
+                Assert.AreEqual("1:3", row.spans);
                 Assert.AreEqual("A1", row.c[0].r);
                 Assert.AreEqual("0", row.c[0].v);
                 Assert.AreEqual("B1", row.c[1].r);
@@ -294,6 +296,8 @@ namespace ooxml.Testcases
             }
             {
                 var row = result.sheetData.row[1];
+                Assert.AreEqual(2u, row.r);
+                Assert.AreEqual("1:3", row.spans);
                 Assert.AreEqual("A2", row.c[0].r);
                 Assert.AreEqual("22.3", row.c[0].v);
                 Assert.AreEqual("B2", row.c[1].r);
@@ -301,6 +305,62 @@ namespace ooxml.Testcases
                 Assert.AreEqual("C2", row.c[2].r);
                 Assert.AreEqual("9", row.c[2].v);
             }
+        }
+
+
+        /// <summary>
+        ///A test for Deserialization of CT_Worksheet.
+        ///</summary>
+        [TestMethod()]
+        public void DeserializeWorksheetDocumentWithPageMarginsTest()
+        {
+            // The following is the excerpt of an Excel file.
+            string input =
+@"<?xml version=""1.0"" encoding=""UTF-8"" standalone=""yes""?>
+<worksheet xmlns=""http://schemas.openxmlformats.org/spreadsheetml/2006/main"" xmlns:r=""http://schemas.openxmlformats.org/officeDocument/2006/relationships"">
+   <dimension ref=""A1""/>
+   <sheetViews>
+      <sheetView tabSelected=""1"" workbookViewId=""0"">
+         <selection activeCell=""A2"" sqref=""A2""/>
+      </sheetView>
+   </sheetViews>
+   <sheetFormatPr defaultRowHeight=""15""/>
+   <sheetData>
+      <row r=""1"" spans=""1:1"">
+         <c r=""A1"" s=""1"">
+            <v>1</v>
+         </c>
+      </row>
+   </sheetData>
+   <pageMargins left=""0.7"" right=""0.7"" top=""0.75"" bottom=""0.75"" header=""0.3"" footer=""0.3""/>
+</worksheet>";
+            CT_Worksheet result;
+            StringReader stream = new StringReader(input);
+            result = (CT_Worksheet)WorksheetDocument_Accessor.serializer.Deserialize(stream);
+
+            Assert.AreEqual("A1", result.dimension.@ref);
+
+            Assert.AreEqual(1, result.sheetData.SizeOfRowArray());
+
+            Assert.IsNotNull(result.sheetFormatPr);
+            Assert.AreEqual(15, result.sheetFormatPr.defaultRowHeight);
+
+            {
+                var row = result.sheetData.row[0];
+                Assert.AreEqual(1u, row.r);
+                Assert.AreEqual("1:1", row.spans);
+
+                Assert.AreEqual("A1", row.c[0].r);
+                Assert.AreEqual("1", row.c[0].v);
+            }
+
+            Assert.IsNotNull(result.pageMargins);
+            Assert.AreEqual(0.7, result.pageMargins.left);
+            Assert.AreEqual(0.7, result.pageMargins.right);
+            Assert.AreEqual(0.75, result.pageMargins.top);
+            Assert.AreEqual(0.75, result.pageMargins.bottom);
+            Assert.AreEqual(0.3, result.pageMargins.header);
+            Assert.AreEqual(0.3, result.pageMargins.footer);
         }
 
     }

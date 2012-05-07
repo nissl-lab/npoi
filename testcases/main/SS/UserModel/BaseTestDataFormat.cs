@@ -74,10 +74,12 @@ namespace TestCases.SS.UserModel
         }
 
         /**
-     * [Bug 49928] formatCellValue returns incorrect value for \u00a3 formatted cells
-     */
+         * [Bug 49928] formatCellValue returns incorrect value for \u00a3 formatted cells
+         */
         public virtual void Test49928()
         {
+            IWorkbook wb = _testDataProvider.OpenSampleWorkbook("49928.xls");
+            doTest49928Core(wb);
         }
         protected String poundFmt = "\"\u00a3\"#,##0;[Red]\\-\"\u00a3\"#,##0";
         public void doTest49928Core(IWorkbook wb)

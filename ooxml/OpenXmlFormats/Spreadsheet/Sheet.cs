@@ -814,6 +814,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
+        [XmlElement]
         public CT_PageMargins pageMargins
         {
             get
@@ -3093,75 +3094,62 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public class CT_SheetFormatPr
     {
+        // all attributes are optional, except defaultRowHeight
+        private uint? baseColWidthField;
 
-        private uint baseColWidthField;
+        private double? defaultColWidthField;
 
-        private double defaultColWidthField;
+        private double defaultRowHeightField; // required
 
-        private bool defaultColWidthFieldSpecified;
+        private bool? customHeightField;
 
-        private double defaultRowHeightField;
+        private bool? zeroHeightField;
 
-        private bool customHeightField;
+        private bool? thickTopField;
 
-        private bool zeroHeightField;
+        private bool? thickBottomField;
 
-        private bool thickTopField;
+        private byte? outlineLevelRowField;
 
-        private bool thickBottomField;
+        private byte? outlineLevelColField;
 
-        private byte outlineLevelRowField;
-
-        private byte outlineLevelColField;
-
-        public CT_SheetFormatPr()
-        {
-            this.baseColWidthField = ((uint)(8));
-            this.customHeightField = false;
-            this.zeroHeightField = false;
-            this.thickTopField = false;
-            this.thickBottomField = false;
-            this.outlineLevelRowField = ((byte)(0));
-            this.outlineLevelColField = ((byte)(0));
-        }
         [XmlAttribute]
         [DefaultValue(typeof(uint), "8")]
         public uint baseColWidth
         {
             get
             {
-                return this.baseColWidthField;
+                return null == this.baseColWidthField ? 8 : (uint)this.baseColWidthField;
             }
             set
             {
                 this.baseColWidthField = value;
             }
         }
+        [XmlIgnore]
+        public bool baseColWidthSpecified
+        {
+            get { return null != this.baseColWidthField; }
+        }
+
         [XmlAttribute]
         public double defaultColWidth
         {
             get
             {
-                return this.defaultColWidthField;
+                return null == this.defaultColWidthField ? double.NaN : (double)this.defaultColWidthField;
             }
             set
             {
                 this.defaultColWidthField = value;
             }
         }
-
         [XmlIgnore]
         public bool defaultColWidthSpecified
         {
-            get
-            {
-                return this.defaultColWidthFieldSpecified;
-            }
-            set
-            {
-                this.defaultColWidthFieldSpecified = value;
-            }
+            get { return null != this.defaultColWidthField; }
         }
+
         [XmlAttribute]
         public double defaultRowHeight
         {
@@ -3174,83 +3162,119 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.defaultRowHeightField = value;
             }
         }
+
         [XmlAttribute]
         [DefaultValue(false)]
         public bool customHeight
         {
             get
             {
-                return this.customHeightField;
+                return null == this.customHeightField ? false : (bool)this.customHeightField;
             }
             set
             {
                 this.customHeightField = value;
             }
         }
+        [XmlIgnore]
+        public bool customHeightSpecified
+        {
+            get { return null != this.customHeightField; }
+        }
+
         [XmlAttribute]
         [DefaultValue(false)]
         public bool zeroHeight
         {
             get
             {
-                return this.zeroHeightField;
+                return null == this.zeroHeightField ? false : (bool)this.zeroHeightField;
             }
             set
             {
                 this.zeroHeightField = value;
             }
         }
+        [XmlIgnore]
+        public bool zeroHeightSpecified
+        {
+            get { return null != this.zeroHeightField; }
+        }
+
         [XmlAttribute]
         [DefaultValue(false)]
         public bool thickTop
         {
             get
             {
-                return this.thickTopField;
+                return null == this.thickTopField ? false : (bool)this.thickTopField;
             }
             set
             {
                 this.thickTopField = value;
             }
         }
+        [XmlIgnore]
+        public bool thickTopSpecified
+        {
+            get { return null != this.thickTopField; }
+        }
+
         [XmlAttribute]
         [DefaultValue(false)]
         public bool thickBottom
         {
             get
             {
-                return this.thickBottomField;
+                return null == this.thickBottomField ? false : (bool)this.thickBottomField;
             }
             set
             {
                 this.thickBottomField = value;
             }
         }
+        [XmlIgnore]
+        public bool thickBottomSpecified
+        {
+            get { return null != this.thickBottomField; }
+        }
+
         [XmlAttribute]
         [DefaultValue(typeof(byte), "0")]
         public byte outlineLevelRow
         {
             get
             {
-                return this.outlineLevelRowField;
+                return null == this.outlineLevelRowField ? (byte)0 : (byte)this.outlineLevelRowField;
             }
             set
             {
                 this.outlineLevelRowField = value;
             }
         }
+        [XmlIgnore]
+        public bool outlineLevelRowSpecified
+        {
+            get { return null != this.outlineLevelRowField; }
+        }
+
         [XmlAttribute]
         [DefaultValue(typeof(byte), "0")]
         public byte outlineLevelCol
         {
             get
             {
-                return this.outlineLevelColField;
+                return null == this.outlineLevelColField ? (byte)0 : (byte)this.outlineLevelColField;
             }
             set
             {
                 this.outlineLevelColField = value;
             }
+        }
+        [XmlIgnore]
+        public bool outlineLevelColSpecified
+        {
+            get { return null != this.outlineLevelColField; }
         }
 
     }
@@ -3284,17 +3308,6 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         private byte? outlineLevelField = null;
 
         private bool? collapsedField = null;
-
-        //public CT_Col()
-        //{
-        //    this.styleField = ((uint)(0));
-        //    //this.hiddenField = false;
-        //    this.bestFitField = false;
-        //    this.customWidthField = false;
-        //    this.phoneticField = false;
-        //    this.outlineLevelField = ((byte)(0));
-        //    //this.collapsedField = false;
-        //}
 
         [XmlAttribute]
         public uint min
@@ -3549,19 +3562,15 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         private CT_ExtensionList extLstField = null; // optional element
 
         // the following are all optional attributes
-        private uint rField;
+        private uint? rField = null;
 
-        private bool rFieldSpecified = false;
-
-        private List<string> spansField = null;
+        private string spansField = null; // a region is contained in this field, e.g. "1:3"
 
         private uint? sField = null;
 
         private bool? customFormatField = null;
 
         private double? htField = null;
-
-        private bool htFieldSpecified = false;
 
         private bool? hiddenField = null;
 
@@ -3577,32 +3586,15 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         private bool? phField = null;
 
-        //public CT_Row()
-        //{
-        //    this.spansField = new List<string>();
-        //    this.extLstField = new CT_ExtensionList();
-        //    this.cField = new List<CT_Cell>();
-        //    //this.sField = ((uint)(0));
-        //    //this.customFormatField = false;
-        //    //this.hiddenField = false;
-        //    //this.customHeightField = false;
-        //    this.outlineLevelField = ((byte)(0));
-        //    //this.collapsedField = false;
-        //    this.thickTopField = false;
-        //    this.thickBotField = false;
-        //    this.phField = false;
-        //}
         public void Set(CT_Row row)
         {
             cField = row.cField;
             extLstField = row.extLstField;
             rField = row.rField;
-            rFieldSpecified = row.rFieldSpecified;
             spansField = row.spansField;
             sField = row.sField;
             customFormatField = row.customFormatField;
             htField = row.htField;
-            htFieldSpecified = row.htFieldSpecified;
             hiddenField = row.hiddenField;
             customHeightField = row.customHeightField;
             outlineLevelField = row.outlineLevelField;
@@ -3688,6 +3680,12 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.cField = value;
             }
         }
+        [XmlIgnore]
+        public bool cSpecified
+        {
+            get { return null != this.cField; }
+        }
+
         [XmlElement("extLst")]
         public CT_ExtensionList extLst
         {
@@ -3700,33 +3698,32 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.extLstField = value;
             }
         }
-        [XmlAttribute]
+        [XmlIgnore]
+        public bool extLstSpecified
+        {
+            get { return null != this.extLstField; }
+        }
+
+        [XmlAttribute("r")]
         public uint r
         {
             get
             {
-                return this.rField;
+                return null == this.rField ? 0 : (uint)this.rField;
             }
             set
             {
                 this.rField = value;
             }
         }
-
         [XmlIgnore]
         public bool rSpecified
         {
-            get
-            {
-                return this.rFieldSpecified;
-            }
-            set
-            {
-                this.rFieldSpecified = value;
-            }
+            get { return null != this.rField; }
         }
+
         [XmlAttribute]
-        public List<string> spans
+        public string spans
         {
             get
             {
@@ -3736,6 +3733,11 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             {
                 this.spansField = value;
             }
+        }
+        [XmlIgnore]
+        public bool spansSpecified
+        {
+            get { return (null != spansField); }
         }
 
         //[DefaultValue(typeof(uint), "0")]
@@ -3794,14 +3796,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         [XmlIgnore]
         public bool htSpecified
         {
-            get
-            {
-                return this.htFieldSpecified;
-            }
-            set
-            {
-                this.htFieldSpecified = value;
-            }
+            get { return null != this.htField; }
         }
 
         //[DefaultValue(false)]
@@ -6046,18 +6041,17 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public class CT_PageMargins
     {
+        private double leftField = 0.0;
 
-        private double leftField;
+        private double rightField = 0.0;
 
-        private double rightField;
+        private double topField = 0.0;
 
-        private double topField;
+        private double bottomField = 0.0;
 
-        private double bottomField;
+        private double headerField = 0.0;
 
-        private double headerField;
-
-        private double footerField;
+        private double footerField = 0.0;
 
         [XmlAttribute]
         public double left
@@ -10645,6 +10639,11 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             {
                 this.rowField = value;
             }
+        }
+        [XmlIgnore]
+        public bool rowSpecified
+        {
+            get { return null != rowField; }
         }
     }
 

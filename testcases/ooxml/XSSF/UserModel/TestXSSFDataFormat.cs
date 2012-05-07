@@ -38,7 +38,7 @@ namespace NPOI.XSSF.UserModel
          * [Bug 49928] formatCellValue returns incorrect value for \u00a3 formatted cells
          */
         [TestMethod]
-        public void Test49928()
+        public override void Test49928()
         {
             XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("49928.xlsx");
             doTest49928Core(wb);

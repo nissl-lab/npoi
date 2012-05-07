@@ -1079,7 +1079,6 @@ namespace NPOI.XSSF.UserModel
             //calcChain should be gone 
             wb = (XSSFWorkbook)XSSFTestDataSamples.WriteOutAndReadBack(wb);
             Assert.IsNull(wb.GetCalculationChain());
-
         }
 
         /**
