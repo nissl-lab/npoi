@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Xml;
+using System.Xml.Serialization;
 using NPOI.OpenXmlFormats.Shared;
 
 namespace NPOI.OpenXmlFormats.Wordprocessing
 {
-    [System.SerializableAttribute()]
-
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
     public class CT_P
     {
 
@@ -36,7 +35,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             this.pPrField = new CT_PPr();
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 0)]
+        [XmlElement(Order = 0)]
         public CT_PPr pPr
         {
             get
@@ -49,38 +48,38 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement("oMath", typeof(CT_OMath), Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", Order = 1)]
-        [System.Xml.Serialization.XmlElement("oMathPara", typeof(CT_OMathPara), Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", Order = 1)]
-        [System.Xml.Serialization.XmlElement("bookmarkEnd", typeof(CT_MarkupRange), Order = 1)]
-        [System.Xml.Serialization.XmlElement("bookmarkStart", typeof(CT_Bookmark), Order = 1)]
-        [System.Xml.Serialization.XmlElement("commentRangeEnd", typeof(CT_MarkupRange), Order = 1)]
-        [System.Xml.Serialization.XmlElement("commentRangeStart", typeof(CT_MarkupRange), Order = 1)]
-        [System.Xml.Serialization.XmlElement("customXml", typeof(CT_CustomXmlRun), Order = 1)]
-        [System.Xml.Serialization.XmlElement("customXmlDelRangeEnd", typeof(CT_Markup), Order = 1)]
-        [System.Xml.Serialization.XmlElement("customXmlDelRangeStart", typeof(CT_TrackChange), Order = 1)]
-        [System.Xml.Serialization.XmlElement("customXmlInsRangeEnd", typeof(CT_Markup), Order = 1)]
-        [System.Xml.Serialization.XmlElement("customXmlInsRangeStart", typeof(CT_TrackChange), Order = 1)]
-        [System.Xml.Serialization.XmlElement("customXmlMoveFromRangeEnd", typeof(CT_Markup), Order = 1)]
-        [System.Xml.Serialization.XmlElement("customXmlMoveFromRangeStart", typeof(CT_TrackChange), Order = 1)]
-        [System.Xml.Serialization.XmlElement("customXmlMoveToRangeEnd", typeof(CT_Markup), Order = 1)]
-        [System.Xml.Serialization.XmlElement("customXmlMoveToRangeStart", typeof(CT_TrackChange), Order = 1)]
-        [System.Xml.Serialization.XmlElement("del", typeof(CT_RunTrackChange), Order = 1)]
-        [System.Xml.Serialization.XmlElement("fldSimple", typeof(CT_SimpleField), Order = 1)]
-        [System.Xml.Serialization.XmlElement("hyperlink", typeof(CT_Hyperlink1), Order = 1)]
-        [System.Xml.Serialization.XmlElement("ins", typeof(CT_RunTrackChange), Order = 1)]
-        [System.Xml.Serialization.XmlElement("moveFrom", typeof(CT_RunTrackChange), Order = 1)]
-        [System.Xml.Serialization.XmlElement("moveFromRangeEnd", typeof(CT_MarkupRange), Order = 1)]
-        [System.Xml.Serialization.XmlElement("moveFromRangeStart", typeof(CT_MoveBookmark), Order = 1)]
-        [System.Xml.Serialization.XmlElement("moveTo", typeof(CT_RunTrackChange), Order = 1)]
-        [System.Xml.Serialization.XmlElement("moveToRangeEnd", typeof(CT_MarkupRange), Order = 1)]
-        [System.Xml.Serialization.XmlElement("moveToRangeStart", typeof(CT_MoveBookmark), Order = 1)]
-        [System.Xml.Serialization.XmlElement("permEnd", typeof(CT_Perm), Order = 1)]
-        [System.Xml.Serialization.XmlElement("permStart", typeof(CT_PermStart), Order = 1)]
-        [System.Xml.Serialization.XmlElement("proofErr", typeof(CT_ProofErr), Order = 1)]
-        [System.Xml.Serialization.XmlElement("r", typeof(CT_R), Order = 1)]
-        [System.Xml.Serialization.XmlElement("sdt", typeof(CT_SdtRun), Order = 1)]
-        [System.Xml.Serialization.XmlElement("smartTag", typeof(CT_SmartTagRun), Order = 1)]
-        [System.Xml.Serialization.XmlElement("subDoc", typeof(CT_Rel), Order = 1)]
+        [XmlElement("oMath", typeof(CT_OMath), Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", Order = 1)]
+        [XmlElement("oMathPara", typeof(CT_OMathPara), Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", Order = 1)]
+        [XmlElement("bookmarkEnd", typeof(CT_MarkupRange), Order = 1)]
+        [XmlElement("bookmarkStart", typeof(CT_Bookmark), Order = 1)]
+        [XmlElement("commentRangeEnd", typeof(CT_MarkupRange), Order = 1)]
+        [XmlElement("commentRangeStart", typeof(CT_MarkupRange), Order = 1)]
+        [XmlElement("customXml", typeof(CT_CustomXmlRun), Order = 1)]
+        [XmlElement("customXmlDelRangeEnd", typeof(CT_Markup), Order = 1)]
+        [XmlElement("customXmlDelRangeStart", typeof(CT_TrackChange), Order = 1)]
+        [XmlElement("customXmlInsRangeEnd", typeof(CT_Markup), Order = 1)]
+        [XmlElement("customXmlInsRangeStart", typeof(CT_TrackChange), Order = 1)]
+        [XmlElement("customXmlMoveFromRangeEnd", typeof(CT_Markup), Order = 1)]
+        [XmlElement("customXmlMoveFromRangeStart", typeof(CT_TrackChange), Order = 1)]
+        [XmlElement("customXmlMoveToRangeEnd", typeof(CT_Markup), Order = 1)]
+        [XmlElement("customXmlMoveToRangeStart", typeof(CT_TrackChange), Order = 1)]
+        [XmlElement("del", typeof(CT_RunTrackChange), Order = 1)]
+        [XmlElement("fldSimple", typeof(CT_SimpleField), Order = 1)]
+        [XmlElement("hyperlink", typeof(CT_Hyperlink1), Order = 1)]
+        [XmlElement("ins", typeof(CT_RunTrackChange), Order = 1)]
+        [XmlElement("moveFrom", typeof(CT_RunTrackChange), Order = 1)]
+        [XmlElement("moveFromRangeEnd", typeof(CT_MarkupRange), Order = 1)]
+        [XmlElement("moveFromRangeStart", typeof(CT_MoveBookmark), Order = 1)]
+        [XmlElement("moveTo", typeof(CT_RunTrackChange), Order = 1)]
+        [XmlElement("moveToRangeEnd", typeof(CT_MarkupRange), Order = 1)]
+        [XmlElement("moveToRangeStart", typeof(CT_MoveBookmark), Order = 1)]
+        [XmlElement("permEnd", typeof(CT_Perm), Order = 1)]
+        [XmlElement("permStart", typeof(CT_PermStart), Order = 1)]
+        [XmlElement("proofErr", typeof(CT_ProofErr), Order = 1)]
+        [XmlElement("r", typeof(CT_R), Order = 1)]
+        [XmlElement("sdt", typeof(CT_SdtRun), Order = 1)]
+        [XmlElement("smartTag", typeof(CT_SmartTagRun), Order = 1)]
+        [XmlElement("subDoc", typeof(CT_Rel), Order = 1)]
         [System.Xml.Serialization.XmlChoiceIdentifierAttribute("ItemsElementName")]
         public object[] Items
         {
@@ -107,8 +106,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             return r;
         }
 
-        [System.Xml.Serialization.XmlElement("ItemsElementName", Order = 2)]
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlElement("ItemsElementName", Order = 2)]
+        [XmlIgnore]
         public ParagraphItemsChoiceType[] ItemsElementName
         {
             get
@@ -124,7 +123,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, DataType = "hexBinary")]
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, DataType = "hexBinary")]
         public byte[] rsidRPr
         {
             get
@@ -137,7 +136,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, DataType = "hexBinary")]
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, DataType = "hexBinary")]
         public byte[] rsidR
         {
             get
@@ -150,7 +149,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, DataType = "hexBinary")]
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, DataType = "hexBinary")]
         public byte[] rsidDel
         {
             get
@@ -163,7 +162,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, DataType = "hexBinary")]
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, DataType = "hexBinary")]
         public byte[] rsidP
         {
             get
@@ -176,7 +175,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, DataType = "hexBinary")]
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, DataType = "hexBinary")]
         public byte[] rsidRDefault
         {
             get
@@ -357,8 +356,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             return GetObjectList<CT_Bookmark>(ParagraphItemsChoiceType.bookmarkStart);
         }
     }
-    [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IncludeInSchema = false)]
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IncludeInSchema = false)]
     public enum ParagraphItemsChoiceType
     {
 
@@ -461,10 +460,10 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         subDoc,
     }
 
-    [System.SerializableAttribute()]
+    [Serializable]
 
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
     public class CT_PPr : CT_PPrBase
     {
 
@@ -481,7 +480,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             this.rPrField = new CT_ParaRPr();
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 0)]
+        [XmlElement(Order = 0)]
         public CT_ParaRPr rPr
         {
             get
@@ -494,7 +493,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 1)]
+        [XmlElement(Order = 1)]
         public CT_SectPr sectPr
         {
             get
@@ -507,7 +506,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 2)]
+        [XmlElement(Order = 2)]
         public CT_PPrChange pPrChange
         {
             get
@@ -534,10 +533,10 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     }
 
 
-    [System.SerializableAttribute()]
+    [Serializable]
 
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
     public class CT_ParaRPr
     {
 
@@ -677,7 +676,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             this.insField = new CT_TrackChange();
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 0)]
+        [XmlElement(Order = 0)]
         public CT_TrackChange ins
         {
             get
@@ -690,7 +689,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 1)]
+        [XmlElement(Order = 1)]
         public CT_TrackChange del
         {
             get
@@ -703,7 +702,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 2)]
+        [XmlElement(Order = 2)]
         public CT_TrackChange moveFrom
         {
             get
@@ -716,7 +715,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 3)]
+        [XmlElement(Order = 3)]
         public CT_TrackChange moveTo
         {
             get
@@ -729,7 +728,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 4)]
+        [XmlElement(Order = 4)]
         public CT_String rStyle
         {
             get
@@ -742,7 +741,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 5)]
+        [XmlElement(Order = 5)]
         public CT_Fonts rFonts
         {
             get
@@ -755,7 +754,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 6)]
+        [XmlElement(Order = 6)]
         public CT_OnOff b
         {
             get
@@ -768,7 +767,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 7)]
+        [XmlElement(Order = 7)]
         public CT_OnOff bCs
         {
             get
@@ -781,7 +780,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 8)]
+        [XmlElement(Order = 8)]
         public CT_OnOff i
         {
             get
@@ -794,7 +793,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 9)]
+        [XmlElement(Order = 9)]
         public CT_OnOff iCs
         {
             get
@@ -807,7 +806,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 10)]
+        [XmlElement(Order = 10)]
         public CT_OnOff caps
         {
             get
@@ -820,7 +819,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 11)]
+        [XmlElement(Order = 11)]
         public CT_OnOff smallCaps
         {
             get
@@ -833,7 +832,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 12)]
+        [XmlElement(Order = 12)]
         public CT_OnOff strike
         {
             get
@@ -846,7 +845,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 13)]
+        [XmlElement(Order = 13)]
         public CT_OnOff dstrike
         {
             get
@@ -859,7 +858,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 14)]
+        [XmlElement(Order = 14)]
         public CT_OnOff outline
         {
             get
@@ -872,7 +871,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 15)]
+        [XmlElement(Order = 15)]
         public CT_OnOff shadow
         {
             get
@@ -885,7 +884,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 16)]
+        [XmlElement(Order = 16)]
         public CT_OnOff emboss
         {
             get
@@ -898,7 +897,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 17)]
+        [XmlElement(Order = 17)]
         public CT_OnOff imprint
         {
             get
@@ -911,7 +910,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 18)]
+        [XmlElement(Order = 18)]
         public CT_OnOff noProof
         {
             get
@@ -924,7 +923,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 19)]
+        [XmlElement(Order = 19)]
         public CT_OnOff snapToGrid
         {
             get
@@ -937,7 +936,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 20)]
+        [XmlElement(Order = 20)]
         public CT_OnOff vanish
         {
             get
@@ -950,7 +949,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 21)]
+        [XmlElement(Order = 21)]
         public CT_OnOff webHidden
         {
             get
@@ -963,7 +962,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 22)]
+        [XmlElement(Order = 22)]
         public CT_Color color
         {
             get
@@ -976,7 +975,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 23)]
+        [XmlElement(Order = 23)]
         public CT_SignedTwipsMeasure spacing
         {
             get
@@ -989,7 +988,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 24)]
+        [XmlElement(Order = 24)]
         public CT_TextScale w
         {
             get
@@ -1002,7 +1001,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 25)]
+        [XmlElement(Order = 25)]
         public CT_HpsMeasure kern
         {
             get
@@ -1015,7 +1014,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 26)]
+        [XmlElement(Order = 26)]
         public CT_SignedHpsMeasure position
         {
             get
@@ -1028,7 +1027,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 27)]
+        [XmlElement(Order = 27)]
         public CT_HpsMeasure sz
         {
             get
@@ -1041,7 +1040,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 28)]
+        [XmlElement(Order = 28)]
         public CT_HpsMeasure szCs
         {
             get
@@ -1054,7 +1053,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 29)]
+        [XmlElement(Order = 29)]
         public CT_Highlight highlight
         {
             get
@@ -1067,7 +1066,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 30)]
+        [XmlElement(Order = 30)]
         public CT_Underline u
         {
             get
@@ -1080,7 +1079,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 31)]
+        [XmlElement(Order = 31)]
         public CT_TextEffect effect
         {
             get
@@ -1093,7 +1092,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 32)]
+        [XmlElement(Order = 32)]
         public CT_Border bdr
         {
             get
@@ -1106,7 +1105,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 33)]
+        [XmlElement(Order = 33)]
         public CT_Shd shd
         {
             get
@@ -1119,7 +1118,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 34)]
+        [XmlElement(Order = 34)]
         public CT_FitText fitText
         {
             get
@@ -1132,7 +1131,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 35)]
+        [XmlElement(Order = 35)]
         public CT_VerticalAlignRun vertAlign
         {
             get
@@ -1145,7 +1144,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 36)]
+        [XmlElement(Order = 36)]
         public CT_OnOff rtl
         {
             get
@@ -1158,7 +1157,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 37)]
+        [XmlElement(Order = 37)]
         public CT_OnOff cs
         {
             get
@@ -1171,7 +1170,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 38)]
+        [XmlElement(Order = 38)]
         public CT_Em em
         {
             get
@@ -1184,7 +1183,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 39)]
+        [XmlElement(Order = 39)]
         public CT_Language lang
         {
             get
@@ -1197,7 +1196,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 40)]
+        [XmlElement(Order = 40)]
         public CT_EastAsianLayout eastAsianLayout
         {
             get
@@ -1210,7 +1209,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 41)]
+        [XmlElement(Order = 41)]
         public CT_OnOff specVanish
         {
             get
@@ -1223,7 +1222,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 42)]
+        [XmlElement(Order = 42)]
         public CT_OnOff oMath
         {
             get
@@ -1236,7 +1235,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 43)]
+        [XmlElement(Order = 43)]
         public CT_ParaRPrChange rPrChange
         {
             get
@@ -1258,10 +1257,10 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     }
 
 
-    [System.SerializableAttribute()]
+    [Serializable]
 
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
     public class CT_SectPr
     {
 
@@ -1343,8 +1342,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             this.itemsField = new List<CT_HdrFtrRef>();
         }
 
-        [System.Xml.Serialization.XmlElement("footerReference", typeof(CT_HdrFtrRef), Order = 0)]
-        [System.Xml.Serialization.XmlElement("headerReference", typeof(CT_HdrFtrRef), Order = 0)]
+        [XmlElement("footerReference", typeof(CT_HdrFtrRef), Order = 0)]
+        [XmlElement("headerReference", typeof(CT_HdrFtrRef), Order = 0)]
         [System.Xml.Serialization.XmlChoiceIdentifierAttribute("ItemsElementName")]
         public CT_HdrFtrRef[] Items
         {
@@ -1365,8 +1364,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement("ItemsElementName", Order = 1)]
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlElement("ItemsElementName", Order = 1)]
+        [XmlIgnore]
         public ItemsChoiceHdrFtrRefType[] ItemsElementName
         {
             get
@@ -1386,7 +1385,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 2)]
+        [XmlElement(Order = 2)]
         public CT_FtnProps footnotePr
         {
             get
@@ -1399,7 +1398,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 3)]
+        [XmlElement(Order = 3)]
         public CT_EdnProps endnotePr
         {
             get
@@ -1412,7 +1411,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 4)]
+        [XmlElement(Order = 4)]
         public CT_SectType type
         {
             get
@@ -1425,7 +1424,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 5)]
+        [XmlElement(Order = 5)]
         public CT_PageSz pgSz
         {
             get
@@ -1438,7 +1437,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 6)]
+        [XmlElement(Order = 6)]
         public CT_PageMar pgMar
         {
             get
@@ -1451,7 +1450,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 7)]
+        [XmlElement(Order = 7)]
         public CT_PaperSource paperSrc
         {
             get
@@ -1464,7 +1463,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 8)]
+        [XmlElement(Order = 8)]
         public CT_PageBorders pgBorders
         {
             get
@@ -1477,7 +1476,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 9)]
+        [XmlElement(Order = 9)]
         public CT_LineNumber lnNumType
         {
             get
@@ -1490,7 +1489,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 10)]
+        [XmlElement(Order = 10)]
         public CT_PageNumber pgNumType
         {
             get
@@ -1503,7 +1502,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 11)]
+        [XmlElement(Order = 11)]
         public CT_Columns cols
         {
             get
@@ -1516,7 +1515,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 12)]
+        [XmlElement(Order = 12)]
         public CT_OnOff formProt
         {
             get
@@ -1529,7 +1528,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 13)]
+        [XmlElement(Order = 13)]
         public CT_VerticalJc vAlign
         {
             get
@@ -1542,7 +1541,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 14)]
+        [XmlElement(Order = 14)]
         public CT_OnOff noEndnote
         {
             get
@@ -1555,7 +1554,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 15)]
+        [XmlElement(Order = 15)]
         public CT_OnOff titlePg
         {
             get
@@ -1568,7 +1567,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 16)]
+        [XmlElement(Order = 16)]
         public CT_TextDirection textDirection
         {
             get
@@ -1581,7 +1580,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 17)]
+        [XmlElement(Order = 17)]
         public CT_OnOff bidi
         {
             get
@@ -1594,7 +1593,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 18)]
+        [XmlElement(Order = 18)]
         public CT_OnOff rtlGutter
         {
             get
@@ -1607,7 +1606,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 19)]
+        [XmlElement(Order = 19)]
         public CT_DocGrid docGrid
         {
             get
@@ -1620,7 +1619,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 20)]
+        [XmlElement(Order = 20)]
         public CT_Rel printerSettings
         {
             get
@@ -1633,7 +1632,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 21)]
+        [XmlElement(Order = 21)]
         public CT_SectPrChange sectPrChange
         {
             get
@@ -1646,7 +1645,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, DataType = "hexBinary")]
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, DataType = "hexBinary")]
         public byte[] rsidRPr
         {
             get
@@ -1659,7 +1658,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, DataType = "hexBinary")]
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, DataType = "hexBinary")]
         public byte[] rsidDel
         {
             get
@@ -1672,7 +1671,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, DataType = "hexBinary")]
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, DataType = "hexBinary")]
         public byte[] rsidR
         {
             get
@@ -1685,7 +1684,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, DataType = "hexBinary")]
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, DataType = "hexBinary")]
         public byte[] rsidSect
         {
             get
@@ -1760,10 +1759,10 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             return GetObjectArray(i, ItemsChoiceHdrFtrRefType.footerReference);
         }
     }
-    [System.SerializableAttribute()]
+    [Serializable]
 
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
     public class CT_PBdr
     {
 
@@ -1789,7 +1788,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             this.topField = new CT_Border();
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 0)]
+        [XmlElement(Order = 0)]
         public CT_Border top
         {
             get
@@ -1802,7 +1801,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 1)]
+        [XmlElement(Order = 1)]
         public CT_Border left
         {
             get
@@ -1815,7 +1814,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 2)]
+        [XmlElement(Order = 2)]
         public CT_Border bottom
         {
             get
@@ -1828,7 +1827,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 3)]
+        [XmlElement(Order = 3)]
         public CT_Border right
         {
             get
@@ -1841,7 +1840,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 4)]
+        [XmlElement(Order = 4)]
         public CT_Border between
         {
             get
@@ -1854,7 +1853,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 5)]
+        [XmlElement(Order = 5)]
         public CT_Border bar
         {
             get
@@ -1953,10 +1952,10 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         }
     }
 
-    [System.SerializableAttribute()]
+    [Serializable]
 
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
     public class CT_Spacing
     {
 
@@ -1986,7 +1985,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         private bool lineRuleFieldSpecified;
 
-        [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
         public ulong before
         {
             get
@@ -1999,7 +1998,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnore]
         public bool beforeSpecified
         {
             get
@@ -2012,7 +2011,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, DataType = "integer")]
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, DataType = "integer")]
         public string beforeLines
         {
             get
@@ -2025,7 +2024,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
         public ST_OnOff beforeAutospacing
         {
             get
@@ -2038,7 +2037,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnore]
         public bool beforeAutospacingSpecified
         {
             get
@@ -2051,7 +2050,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
         public ulong after
         {
             get
@@ -2064,7 +2063,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnore]
         public bool afterSpecified
         {
             get
@@ -2077,7 +2076,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, DataType = "integer")]
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, DataType = "integer")]
         public string afterLines
         {
             get
@@ -2090,7 +2089,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
         public ST_OnOff afterAutospacing
         {
             get
@@ -2103,7 +2102,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnore]
         public bool afterAutospacingSpecified
         {
             get
@@ -2116,7 +2115,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, DataType = "integer")]
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, DataType = "integer")]
         public string line
         {
             get
@@ -2129,7 +2128,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
         public ST_LineSpacingRule lineRule
         {
             get
@@ -2142,7 +2141,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnore]
         public bool lineRuleSpecified
         {
             get
@@ -2182,8 +2181,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     }
 
 
-    [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
     public enum ST_LineSpacingRule
     {
         nil,
@@ -2198,10 +2197,10 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     }
 
 
-    [System.SerializableAttribute()]
+    [Serializable]
 
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
     public class CT_Ind
     {
 
@@ -2225,7 +2224,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         private string firstLineCharsField;
 
-        [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, DataType = "integer")]
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, DataType = "integer")]
         public string left
         {
             get
@@ -2238,7 +2237,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, DataType = "integer")]
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, DataType = "integer")]
         public string leftChars
         {
             get
@@ -2251,7 +2250,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, DataType = "integer")]
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, DataType = "integer")]
         public string right
         {
             get
@@ -2264,7 +2263,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, DataType = "integer")]
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, DataType = "integer")]
         public string rightChars
         {
             get
@@ -2277,7 +2276,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
         public ulong hanging
         {
             get
@@ -2290,7 +2289,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnore]
         public bool hangingSpecified
         {
             get
@@ -2303,7 +2302,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, DataType = "integer")]
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, DataType = "integer")]
         public string hangingChars
         {
             get
@@ -2316,7 +2315,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
         public ulong firstLine
         {
             get
@@ -2329,7 +2328,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnore]
         public bool firstLineSpecified
         {
             get
@@ -2342,7 +2341,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, DataType = "integer")]
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, DataType = "integer")]
         public string firstLineChars
         {
             get
@@ -2376,10 +2375,10 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         }
     }
 
-    [System.SerializableAttribute()]
+    [Serializable]
 
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
     public class CT_RPr
     {
 
@@ -2507,7 +2506,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             //this.rStyleField = new CT_String();
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 0)]
+        [XmlElement(Order = 0)]
         public CT_String rStyle
         {
             get
@@ -2520,7 +2519,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 1)]
+        [XmlElement(Order = 1)]
         public CT_Fonts rFonts
         {
             get
@@ -2533,7 +2532,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 2)]
+        [XmlElement(Order = 2)]
         public CT_OnOff b
         {
             get
@@ -2548,7 +2547,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 3)]
+        [XmlElement(Order = 3)]
         public CT_OnOff bCs
         {
             get
@@ -2561,7 +2560,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 4)]
+        [XmlElement(Order = 4)]
         public CT_OnOff i
         {
             get
@@ -2576,7 +2575,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 5)]
+        [XmlElement(Order = 5)]
         public CT_OnOff iCs
         {
             get
@@ -2589,7 +2588,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 6)]
+        [XmlElement(Order = 6)]
         public CT_OnOff caps
         {
             get
@@ -2602,7 +2601,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 7)]
+        [XmlElement(Order = 7)]
         public CT_OnOff smallCaps
         {
             get
@@ -2615,7 +2614,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 8)]
+        [XmlElement(Order = 8)]
         public CT_OnOff strike
         {
             get
@@ -2628,7 +2627,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 9)]
+        [XmlElement(Order = 9)]
         public CT_OnOff dstrike
         {
             get
@@ -2641,7 +2640,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 10)]
+        [XmlElement(Order = 10)]
         public CT_OnOff outline
         {
             get
@@ -2654,7 +2653,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 11)]
+        [XmlElement(Order = 11)]
         public CT_OnOff shadow
         {
             get
@@ -2667,7 +2666,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 12)]
+        [XmlElement(Order = 12)]
         public CT_OnOff emboss
         {
             get
@@ -2680,7 +2679,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 13)]
+        [XmlElement(Order = 13)]
         public CT_OnOff imprint
         {
             get
@@ -2693,7 +2692,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 14)]
+        [XmlElement(Order = 14)]
         public CT_OnOff noProof
         {
             get
@@ -2706,7 +2705,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 15)]
+        [XmlElement(Order = 15)]
         public CT_OnOff snapToGrid
         {
             get
@@ -2719,7 +2718,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 16)]
+        [XmlElement(Order = 16)]
         public CT_OnOff vanish
         {
             get
@@ -2732,7 +2731,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 17)]
+        [XmlElement(Order = 17)]
         public CT_OnOff webHidden
         {
             get
@@ -2745,7 +2744,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 18)]
+        [XmlElement(Order = 18)]
         public CT_Color color
         {
             get
@@ -2758,7 +2757,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 19)]
+        [XmlElement(Order = 19)]
         public CT_SignedTwipsMeasure spacing
         {
             get
@@ -2771,7 +2770,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 20)]
+        [XmlElement(Order = 20)]
         public CT_TextScale w
         {
             get
@@ -2784,7 +2783,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 21)]
+        [XmlElement(Order = 21)]
         public CT_HpsMeasure kern
         {
             get
@@ -2797,7 +2796,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 22)]
+        [XmlElement(Order = 22)]
         public CT_SignedHpsMeasure position
         {
             get
@@ -2810,7 +2809,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 23)]
+        [XmlElement(Order = 23)]
         public CT_HpsMeasure sz
         {
             get
@@ -2823,7 +2822,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 24)]
+        [XmlElement(Order = 24)]
         public CT_HpsMeasure szCs
         {
             get
@@ -2836,7 +2835,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 25)]
+        [XmlElement(Order = 25)]
         public CT_Highlight highlight
         {
             get
@@ -2849,7 +2848,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 26)]
+        [XmlElement(Order = 26)]
         public CT_Underline u
         {
             get
@@ -2862,7 +2861,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 27)]
+        [XmlElement(Order = 27)]
         public CT_TextEffect effect
         {
             get
@@ -2875,7 +2874,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 28)]
+        [XmlElement(Order = 28)]
         public CT_Border bdr
         {
             get
@@ -2888,7 +2887,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 29)]
+        [XmlElement(Order = 29)]
         public CT_Shd shd
         {
             get
@@ -2901,7 +2900,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 30)]
+        [XmlElement(Order = 30)]
         public CT_FitText fitText
         {
             get
@@ -2914,7 +2913,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 31)]
+        [XmlElement(Order = 31)]
         public CT_VerticalAlignRun vertAlign
         {
             get
@@ -2927,7 +2926,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 32)]
+        [XmlElement(Order = 32)]
         public CT_OnOff rtl
         {
             get
@@ -2940,7 +2939,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 33)]
+        [XmlElement(Order = 33)]
         public CT_OnOff cs
         {
             get
@@ -2953,7 +2952,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 34)]
+        [XmlElement(Order = 34)]
         public CT_Em em
         {
             get
@@ -2966,7 +2965,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 35)]
+        [XmlElement(Order = 35)]
         public CT_Language lang
         {
             get
@@ -2979,7 +2978,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 36)]
+        [XmlElement(Order = 36)]
         public CT_EastAsianLayout eastAsianLayout
         {
             get
@@ -2992,7 +2991,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 37)]
+        [XmlElement(Order = 37)]
         public CT_OnOff specVanish
         {
             get
@@ -3005,7 +3004,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 38)]
+        [XmlElement(Order = 38)]
         public CT_OnOff oMath
         {
             get
@@ -3018,7 +3017,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 39)]
+        [XmlElement(Order = 39)]
         public CT_RPrChange rPrChange
         {
             get
@@ -3174,10 +3173,10 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     }
 
 
-    [System.SerializableAttribute()]
+    [Serializable]
 
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
     public class CT_ParaRPrChange : CT_TrackChange
     {
 
@@ -3188,7 +3187,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             this.rPrField = new CT_ParaRPrOriginal();
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 0)]
+        [XmlElement(Order = 0)]
         public CT_ParaRPrOriginal rPr
         {
             get
@@ -3203,10 +3202,10 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     }
 
 
-    [System.SerializableAttribute()]
+    [Serializable]
 
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
     public class CT_ParaRPrOriginal
     {
 
@@ -3232,7 +3231,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             this.insField = new CT_TrackChange();
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 0)]
+        [XmlElement(Order = 0)]
         public CT_TrackChange ins
         {
             get
@@ -3245,7 +3244,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 1)]
+        [XmlElement(Order = 1)]
         public CT_TrackChange del
         {
             get
@@ -3258,7 +3257,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 2)]
+        [XmlElement(Order = 2)]
         public CT_TrackChange moveFrom
         {
             get
@@ -3271,7 +3270,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 3)]
+        [XmlElement(Order = 3)]
         public CT_TrackChange moveTo
         {
             get
@@ -3284,45 +3283,45 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement("b", typeof(CT_OnOff), Order = 4)]
-        [System.Xml.Serialization.XmlElement("bCs", typeof(CT_OnOff), Order = 4)]
-        [System.Xml.Serialization.XmlElement("bdr", typeof(CT_Border), Order = 4)]
-        [System.Xml.Serialization.XmlElement("caps", typeof(CT_OnOff), Order = 4)]
-        [System.Xml.Serialization.XmlElement("color", typeof(CT_Color), Order = 4)]
-        [System.Xml.Serialization.XmlElement("cs", typeof(CT_OnOff), Order = 4)]
-        [System.Xml.Serialization.XmlElement("dstrike", typeof(CT_OnOff), Order = 4)]
-        [System.Xml.Serialization.XmlElement("eastAsianLayout", typeof(CT_EastAsianLayout), Order = 4)]
-        [System.Xml.Serialization.XmlElement("effect", typeof(CT_TextEffect), Order = 4)]
-        [System.Xml.Serialization.XmlElement("em", typeof(CT_Em), Order = 4)]
-        [System.Xml.Serialization.XmlElement("emboss", typeof(CT_OnOff), Order = 4)]
-        [System.Xml.Serialization.XmlElement("fitText", typeof(CT_FitText), Order = 4)]
-        [System.Xml.Serialization.XmlElement("highlight", typeof(CT_Highlight), Order = 4)]
-        [System.Xml.Serialization.XmlElement("i", typeof(CT_OnOff), Order = 4)]
-        [System.Xml.Serialization.XmlElement("iCs", typeof(CT_OnOff), Order = 4)]
-        [System.Xml.Serialization.XmlElement("imprint", typeof(CT_OnOff), Order = 4)]
-        [System.Xml.Serialization.XmlElement("kern", typeof(CT_HpsMeasure), Order = 4)]
-        [System.Xml.Serialization.XmlElement("lang", typeof(CT_Language), Order = 4)]
-        [System.Xml.Serialization.XmlElement("noProof", typeof(CT_OnOff), Order = 4)]
-        [System.Xml.Serialization.XmlElement("oMath", typeof(CT_OnOff), Order = 4)]
-        [System.Xml.Serialization.XmlElement("outline", typeof(CT_OnOff), Order = 4)]
-        [System.Xml.Serialization.XmlElement("position", typeof(CT_SignedHpsMeasure), Order = 4)]
-        [System.Xml.Serialization.XmlElement("rFonts", typeof(CT_Fonts), Order = 4)]
-        [System.Xml.Serialization.XmlElement("rStyle", typeof(CT_String), Order = 4)]
-        [System.Xml.Serialization.XmlElement("rtl", typeof(CT_OnOff), Order = 4)]
-        [System.Xml.Serialization.XmlElement("shadow", typeof(CT_OnOff), Order = 4)]
-        [System.Xml.Serialization.XmlElement("shd", typeof(CT_Shd), Order = 4)]
-        [System.Xml.Serialization.XmlElement("smallCaps", typeof(CT_OnOff), Order = 4)]
-        [System.Xml.Serialization.XmlElement("snapToGrid", typeof(CT_OnOff), Order = 4)]
-        [System.Xml.Serialization.XmlElement("spacing", typeof(CT_SignedTwipsMeasure), Order = 4)]
-        [System.Xml.Serialization.XmlElement("specVanish", typeof(CT_OnOff), Order = 4)]
-        [System.Xml.Serialization.XmlElement("strike", typeof(CT_OnOff), Order = 4)]
-        [System.Xml.Serialization.XmlElement("sz", typeof(CT_HpsMeasure), Order = 4)]
-        [System.Xml.Serialization.XmlElement("szCs", typeof(CT_HpsMeasure), Order = 4)]
-        [System.Xml.Serialization.XmlElement("u", typeof(CT_Underline), Order = 4)]
-        [System.Xml.Serialization.XmlElement("vanish", typeof(CT_OnOff), Order = 4)]
-        [System.Xml.Serialization.XmlElement("vertAlign", typeof(CT_VerticalAlignRun), Order = 4)]
-        [System.Xml.Serialization.XmlElement("w", typeof(CT_TextScale), Order = 4)]
-        [System.Xml.Serialization.XmlElement("webHidden", typeof(CT_OnOff), Order = 4)]
+        [XmlElement("b", typeof(CT_OnOff), Order = 4)]
+        [XmlElement("bCs", typeof(CT_OnOff), Order = 4)]
+        [XmlElement("bdr", typeof(CT_Border), Order = 4)]
+        [XmlElement("caps", typeof(CT_OnOff), Order = 4)]
+        [XmlElement("color", typeof(CT_Color), Order = 4)]
+        [XmlElement("cs", typeof(CT_OnOff), Order = 4)]
+        [XmlElement("dstrike", typeof(CT_OnOff), Order = 4)]
+        [XmlElement("eastAsianLayout", typeof(CT_EastAsianLayout), Order = 4)]
+        [XmlElement("effect", typeof(CT_TextEffect), Order = 4)]
+        [XmlElement("em", typeof(CT_Em), Order = 4)]
+        [XmlElement("emboss", typeof(CT_OnOff), Order = 4)]
+        [XmlElement("fitText", typeof(CT_FitText), Order = 4)]
+        [XmlElement("highlight", typeof(CT_Highlight), Order = 4)]
+        [XmlElement("i", typeof(CT_OnOff), Order = 4)]
+        [XmlElement("iCs", typeof(CT_OnOff), Order = 4)]
+        [XmlElement("imprint", typeof(CT_OnOff), Order = 4)]
+        [XmlElement("kern", typeof(CT_HpsMeasure), Order = 4)]
+        [XmlElement("lang", typeof(CT_Language), Order = 4)]
+        [XmlElement("noProof", typeof(CT_OnOff), Order = 4)]
+        [XmlElement("oMath", typeof(CT_OnOff), Order = 4)]
+        [XmlElement("outline", typeof(CT_OnOff), Order = 4)]
+        [XmlElement("position", typeof(CT_SignedHpsMeasure), Order = 4)]
+        [XmlElement("rFonts", typeof(CT_Fonts), Order = 4)]
+        [XmlElement("rStyle", typeof(CT_String), Order = 4)]
+        [XmlElement("rtl", typeof(CT_OnOff), Order = 4)]
+        [XmlElement("shadow", typeof(CT_OnOff), Order = 4)]
+        [XmlElement("shd", typeof(CT_Shd), Order = 4)]
+        [XmlElement("smallCaps", typeof(CT_OnOff), Order = 4)]
+        [XmlElement("snapToGrid", typeof(CT_OnOff), Order = 4)]
+        [XmlElement("spacing", typeof(CT_SignedTwipsMeasure), Order = 4)]
+        [XmlElement("specVanish", typeof(CT_OnOff), Order = 4)]
+        [XmlElement("strike", typeof(CT_OnOff), Order = 4)]
+        [XmlElement("sz", typeof(CT_HpsMeasure), Order = 4)]
+        [XmlElement("szCs", typeof(CT_HpsMeasure), Order = 4)]
+        [XmlElement("u", typeof(CT_Underline), Order = 4)]
+        [XmlElement("vanish", typeof(CT_OnOff), Order = 4)]
+        [XmlElement("vertAlign", typeof(CT_VerticalAlignRun), Order = 4)]
+        [XmlElement("w", typeof(CT_TextScale), Order = 4)]
+        [XmlElement("webHidden", typeof(CT_OnOff), Order = 4)]
         [System.Xml.Serialization.XmlChoiceIdentifierAttribute("ItemsElementName")]
         public object[] Items
         {
@@ -3336,8 +3335,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement("ItemsElementName", Order = 5)]
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlElement("ItemsElementName", Order = 5)]
+        [XmlIgnore]
         public ItemsChoiceType3[] ItemsElementName
         {
             get
@@ -3352,8 +3351,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     }
 
 
-    [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IncludeInSchema = false)]
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IncludeInSchema = false)]
     public enum ItemsChoiceType3
     {
 
@@ -3476,10 +3475,10 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     }
 
 
-    [System.SerializableAttribute()]
+    [Serializable]
 
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
     public class CT_PPrChange : CT_TrackChange
     {
 
@@ -3490,7 +3489,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             this.pPrField = new CT_PPrBase();
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 0)]
+        [XmlElement(Order = 0)]
         public CT_PPrBase pPr
         {
             get
@@ -3506,10 +3505,10 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(CT_PPr))]
 
-    [System.SerializableAttribute()]
+    [Serializable]
 
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
     public class CT_PPrBase
     {
 
@@ -3616,7 +3615,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             this.pStyleField = new CT_String();
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 0)]
+        [XmlElement(Order = 0)]
         public CT_String pStyle
         {
             get
@@ -3629,7 +3628,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 1)]
+        [XmlElement(Order = 1)]
         public CT_OnOff keepNext
         {
             get
@@ -3642,7 +3641,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 2)]
+        [XmlElement(Order = 2)]
         public CT_OnOff keepLines
         {
             get
@@ -3655,7 +3654,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 3)]
+        [XmlElement(Order = 3)]
         public CT_OnOff pageBreakBefore
         {
             get
@@ -3668,7 +3667,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 4)]
+        [XmlElement(Order = 4)]
         public CT_FramePr framePr
         {
             get
@@ -3681,7 +3680,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 5)]
+        [XmlElement(Order = 5)]
         public CT_OnOff widowControl
         {
             get
@@ -3694,7 +3693,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 6)]
+        [XmlElement(Order = 6)]
         public CT_NumPr numPr
         {
             get
@@ -3707,7 +3706,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 7)]
+        [XmlElement(Order = 7)]
         public CT_OnOff suppressLineNumbers
         {
             get
@@ -3720,7 +3719,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 8)]
+        [XmlElement(Order = 8)]
         public CT_PBdr pBdr
         {
             get
@@ -3733,7 +3732,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 9)]
+        [XmlElement(Order = 9)]
         public CT_Shd shd
         {
             get
@@ -3746,8 +3745,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 10)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("tab", IsNullable = false)]
+        [XmlArray(Order = 10)]
+        [XmlArrayItem("tab", IsNullable = false)]
         public List<CT_TabStop> tabs
         {
             get
@@ -3760,7 +3759,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 11)]
+        [XmlElement(Order = 11)]
         public CT_OnOff suppressAutoHyphens
         {
             get
@@ -3773,7 +3772,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 12)]
+        [XmlElement(Order = 12)]
         public CT_OnOff kinsoku
         {
             get
@@ -3786,7 +3785,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 13)]
+        [XmlElement(Order = 13)]
         public CT_OnOff wordWrap
         {
             get
@@ -3799,7 +3798,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 14)]
+        [XmlElement(Order = 14)]
         public CT_OnOff overflowPunct
         {
             get
@@ -3812,7 +3811,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 15)]
+        [XmlElement(Order = 15)]
         public CT_OnOff topLinePunct
         {
             get
@@ -3825,7 +3824,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 16)]
+        [XmlElement(Order = 16)]
         public CT_OnOff autoSpaceDE
         {
             get
@@ -3838,7 +3837,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 17)]
+        [XmlElement(Order = 17)]
         public CT_OnOff autoSpaceDN
         {
             get
@@ -3851,7 +3850,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 18)]
+        [XmlElement(Order = 18)]
         public CT_OnOff bidi
         {
             get
@@ -3864,7 +3863,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 19)]
+        [XmlElement(Order = 19)]
         public CT_OnOff adjustRightInd
         {
             get
@@ -3877,7 +3876,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 20)]
+        [XmlElement(Order = 20)]
         public CT_OnOff snapToGrid
         {
             get
@@ -3890,7 +3889,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 21)]
+        [XmlElement(Order = 21)]
         public CT_Spacing spacing
         {
             get
@@ -3903,7 +3902,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 22)]
+        [XmlElement(Order = 22)]
         public CT_Ind ind
         {
             get
@@ -3916,7 +3915,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 23)]
+        [XmlElement(Order = 23)]
         public CT_OnOff contextualSpacing
         {
             get
@@ -3929,7 +3928,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 24)]
+        [XmlElement(Order = 24)]
         public CT_OnOff mirrorIndents
         {
             get
@@ -3942,7 +3941,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 25)]
+        [XmlElement(Order = 25)]
         public CT_OnOff suppressOverlap
         {
             get
@@ -3955,7 +3954,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 26)]
+        [XmlElement(Order = 26)]
         public CT_Jc jc
         {
             get
@@ -3968,7 +3967,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 27)]
+        [XmlElement(Order = 27)]
         public CT_TextDirection textDirection
         {
             get
@@ -3981,7 +3980,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 28)]
+        [XmlElement(Order = 28)]
         public CT_TextAlignment textAlignment
         {
             get
@@ -3994,7 +3993,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 29)]
+        [XmlElement(Order = 29)]
         public CT_TextboxTightWrap textboxTightWrap
         {
             get
@@ -4007,7 +4006,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 30)]
+        [XmlElement(Order = 30)]
         public CT_DecimalNumber outlineLvl
         {
             get
@@ -4020,7 +4019,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 31)]
+        [XmlElement(Order = 31)]
         public CT_DecimalNumber divId
         {
             get
@@ -4033,7 +4032,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 32)]
+        [XmlElement(Order = 32)]
         public CT_Cnf cnfStyle
         {
             get
@@ -4144,10 +4143,10 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             return tab;
         }
     }
-    [System.SerializableAttribute()]
+    [Serializable]
 
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
     public class CT_RPrChange : CT_TrackChange
     {
 
@@ -4158,7 +4157,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             this.rPrField = new CT_RPrOriginal();
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 0)]
+        [XmlElement(Order = 0)]
         public CT_RPrOriginal rPr
         {
             get
@@ -4173,10 +4172,10 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     }
 
 
-    [System.SerializableAttribute()]
+    [Serializable]
 
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
     public class CT_RPrOriginal
     {
 
@@ -4190,45 +4189,45 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             this.itemsField = new object[0];
         }
 
-        [System.Xml.Serialization.XmlElement("b", typeof(CT_OnOff), Order = 0)]
-        [System.Xml.Serialization.XmlElement("bCs", typeof(CT_OnOff), Order = 0)]
-        [System.Xml.Serialization.XmlElement("bdr", typeof(CT_Border), Order = 0)]
-        [System.Xml.Serialization.XmlElement("caps", typeof(CT_OnOff), Order = 0)]
-        [System.Xml.Serialization.XmlElement("color", typeof(CT_Color), Order = 0)]
-        [System.Xml.Serialization.XmlElement("cs", typeof(CT_OnOff), Order = 0)]
-        [System.Xml.Serialization.XmlElement("dstrike", typeof(CT_OnOff), Order = 0)]
-        [System.Xml.Serialization.XmlElement("eastAsianLayout", typeof(CT_EastAsianLayout), Order = 0)]
-        [System.Xml.Serialization.XmlElement("effect", typeof(CT_TextEffect), Order = 0)]
-        [System.Xml.Serialization.XmlElement("em", typeof(CT_Em), Order = 0)]
-        [System.Xml.Serialization.XmlElement("emboss", typeof(CT_OnOff), Order = 0)]
-        [System.Xml.Serialization.XmlElement("fitText", typeof(CT_FitText), Order = 0)]
-        [System.Xml.Serialization.XmlElement("highlight", typeof(CT_Highlight), Order = 0)]
-        [System.Xml.Serialization.XmlElement("i", typeof(CT_OnOff), Order = 0)]
-        [System.Xml.Serialization.XmlElement("iCs", typeof(CT_OnOff), Order = 0)]
-        [System.Xml.Serialization.XmlElement("imprint", typeof(CT_OnOff), Order = 0)]
-        [System.Xml.Serialization.XmlElement("kern", typeof(CT_HpsMeasure), Order = 0)]
-        [System.Xml.Serialization.XmlElement("lang", typeof(CT_Language), Order = 0)]
-        [System.Xml.Serialization.XmlElement("noProof", typeof(CT_OnOff), Order = 0)]
-        [System.Xml.Serialization.XmlElement("oMath", typeof(CT_OnOff), Order = 0)]
-        [System.Xml.Serialization.XmlElement("outline", typeof(CT_OnOff), Order = 0)]
-        [System.Xml.Serialization.XmlElement("position", typeof(CT_SignedHpsMeasure), Order = 0)]
-        [System.Xml.Serialization.XmlElement("rFonts", typeof(CT_Fonts), Order = 0)]
-        [System.Xml.Serialization.XmlElement("rStyle", typeof(CT_String), Order = 0)]
-        [System.Xml.Serialization.XmlElement("rtl", typeof(CT_OnOff), Order = 0)]
-        [System.Xml.Serialization.XmlElement("shadow", typeof(CT_OnOff), Order = 0)]
-        [System.Xml.Serialization.XmlElement("shd", typeof(CT_Shd), Order = 0)]
-        [System.Xml.Serialization.XmlElement("smallCaps", typeof(CT_OnOff), Order = 0)]
-        [System.Xml.Serialization.XmlElement("snapToGrid", typeof(CT_OnOff), Order = 0)]
-        [System.Xml.Serialization.XmlElement("spacing", typeof(CT_SignedTwipsMeasure), Order = 0)]
-        [System.Xml.Serialization.XmlElement("specVanish", typeof(CT_OnOff), Order = 0)]
-        [System.Xml.Serialization.XmlElement("strike", typeof(CT_OnOff), Order = 0)]
-        [System.Xml.Serialization.XmlElement("sz", typeof(CT_HpsMeasure), Order = 0)]
-        [System.Xml.Serialization.XmlElement("szCs", typeof(CT_HpsMeasure), Order = 0)]
-        [System.Xml.Serialization.XmlElement("u", typeof(CT_Underline), Order = 0)]
-        [System.Xml.Serialization.XmlElement("vanish", typeof(CT_OnOff), Order = 0)]
-        [System.Xml.Serialization.XmlElement("vertAlign", typeof(CT_VerticalAlignRun), Order = 0)]
-        [System.Xml.Serialization.XmlElement("w", typeof(CT_TextScale), Order = 0)]
-        [System.Xml.Serialization.XmlElement("webHidden", typeof(CT_OnOff), Order = 0)]
+        [XmlElement("b", typeof(CT_OnOff), Order = 0)]
+        [XmlElement("bCs", typeof(CT_OnOff), Order = 0)]
+        [XmlElement("bdr", typeof(CT_Border), Order = 0)]
+        [XmlElement("caps", typeof(CT_OnOff), Order = 0)]
+        [XmlElement("color", typeof(CT_Color), Order = 0)]
+        [XmlElement("cs", typeof(CT_OnOff), Order = 0)]
+        [XmlElement("dstrike", typeof(CT_OnOff), Order = 0)]
+        [XmlElement("eastAsianLayout", typeof(CT_EastAsianLayout), Order = 0)]
+        [XmlElement("effect", typeof(CT_TextEffect), Order = 0)]
+        [XmlElement("em", typeof(CT_Em), Order = 0)]
+        [XmlElement("emboss", typeof(CT_OnOff), Order = 0)]
+        [XmlElement("fitText", typeof(CT_FitText), Order = 0)]
+        [XmlElement("highlight", typeof(CT_Highlight), Order = 0)]
+        [XmlElement("i", typeof(CT_OnOff), Order = 0)]
+        [XmlElement("iCs", typeof(CT_OnOff), Order = 0)]
+        [XmlElement("imprint", typeof(CT_OnOff), Order = 0)]
+        [XmlElement("kern", typeof(CT_HpsMeasure), Order = 0)]
+        [XmlElement("lang", typeof(CT_Language), Order = 0)]
+        [XmlElement("noProof", typeof(CT_OnOff), Order = 0)]
+        [XmlElement("oMath", typeof(CT_OnOff), Order = 0)]
+        [XmlElement("outline", typeof(CT_OnOff), Order = 0)]
+        [XmlElement("position", typeof(CT_SignedHpsMeasure), Order = 0)]
+        [XmlElement("rFonts", typeof(CT_Fonts), Order = 0)]
+        [XmlElement("rStyle", typeof(CT_String), Order = 0)]
+        [XmlElement("rtl", typeof(CT_OnOff), Order = 0)]
+        [XmlElement("shadow", typeof(CT_OnOff), Order = 0)]
+        [XmlElement("shd", typeof(CT_Shd), Order = 0)]
+        [XmlElement("smallCaps", typeof(CT_OnOff), Order = 0)]
+        [XmlElement("snapToGrid", typeof(CT_OnOff), Order = 0)]
+        [XmlElement("spacing", typeof(CT_SignedTwipsMeasure), Order = 0)]
+        [XmlElement("specVanish", typeof(CT_OnOff), Order = 0)]
+        [XmlElement("strike", typeof(CT_OnOff), Order = 0)]
+        [XmlElement("sz", typeof(CT_HpsMeasure), Order = 0)]
+        [XmlElement("szCs", typeof(CT_HpsMeasure), Order = 0)]
+        [XmlElement("u", typeof(CT_Underline), Order = 0)]
+        [XmlElement("vanish", typeof(CT_OnOff), Order = 0)]
+        [XmlElement("vertAlign", typeof(CT_VerticalAlignRun), Order = 0)]
+        [XmlElement("w", typeof(CT_TextScale), Order = 0)]
+        [XmlElement("webHidden", typeof(CT_OnOff), Order = 0)]
         [System.Xml.Serialization.XmlChoiceIdentifierAttribute("ItemsElementName")]
         public object[] Items
         {
@@ -4242,8 +4241,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement("ItemsElementName", Order = 1)]
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlElement("ItemsElementName", Order = 1)]
+        [XmlIgnore]
         public ItemsChoiceType5[] ItemsElementName
         {
             get
@@ -4260,10 +4259,10 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     
 
 
-    [System.SerializableAttribute()]
+    [Serializable]
 
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
     public class CT_Br
     {
 
@@ -4275,7 +4274,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         private bool clearFieldSpecified;
 
-        [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
         public ST_BrType type
         {
             get
@@ -4288,7 +4287,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnore]
         public bool typeSpecified
         {
             get
@@ -4301,7 +4300,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
         public ST_BrClear clear
         {
             get
@@ -4314,7 +4313,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnore]
         public bool clearSpecified
         {
             get
@@ -4329,8 +4328,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     }
 
 
-    [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
     public enum ST_BrType
     {
 
@@ -4345,8 +4344,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     }
 
 
-    [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
     public enum ST_BrClear
     {
 
@@ -4364,10 +4363,10 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     }
 
 
-    [System.SerializableAttribute()]
+    [Serializable]
 
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
     public class CT_TblStylePr
     {
 
@@ -4392,7 +4391,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             this.pPrField = new CT_PPr();
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 0)]
+        [XmlElement(Order = 0)]
         public CT_PPr pPr
         {
             get
@@ -4405,7 +4404,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 1)]
+        [XmlElement(Order = 1)]
         public CT_RPr rPr
         {
             get
@@ -4418,7 +4417,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 2)]
+        [XmlElement(Order = 2)]
         public CT_TblPrBase tblPr
         {
             get
@@ -4431,7 +4430,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 3)]
+        [XmlElement(Order = 3)]
         public CT_TrPr trPr
         {
             get
@@ -4444,7 +4443,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 4)]
+        [XmlElement(Order = 4)]
         public CT_TcPr tcPr
         {
             get
@@ -4457,7 +4456,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
         public ST_TblStyleOverrideType type
         {
             get
@@ -4472,8 +4471,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     }
 
 
-    [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
     public enum ST_TblStyleOverrideType
     {
 

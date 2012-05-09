@@ -1932,7 +1932,7 @@ namespace NPOI.OpenXmlFormats.Dml
         {
             return this.solidFillField != null;
         }
-        [System.Xml.Serialization.XmlElement(Order = 0)]
+        [XmlElement(Order = 0)]
         public CT_NoFillProperties noFill
         {
             get
@@ -1944,7 +1944,7 @@ namespace NPOI.OpenXmlFormats.Dml
                 this.noFillField = value;
             }
         }
-        [System.Xml.Serialization.XmlElement(Order = 1)]
+        [XmlElement(Order = 1)]
         public CT_SolidColorFillProperties solidFill
         {
             get
@@ -1956,7 +1956,7 @@ namespace NPOI.OpenXmlFormats.Dml
                 this.solidFillField = value;
             }
         }
-        [System.Xml.Serialization.XmlElement(Order = 2)]
+        [XmlElement(Order = 2)]
         public CT_GradientFillProperties gradFill
         {
             get
@@ -1968,7 +1968,7 @@ namespace NPOI.OpenXmlFormats.Dml
                 this.gradFillField = value;
             }
         }
-        [System.Xml.Serialization.XmlElement(Order = 3)]
+        [XmlElement(Order = 3)]
         public CT_PatternFillProperties pattFill
         {
             get
@@ -1980,7 +1980,7 @@ namespace NPOI.OpenXmlFormats.Dml
                 this.pattFillField = value;
             }
         }
-        [System.Xml.Serialization.XmlElement(Order = 4)]
+        [XmlElement(Order = 4)]
         public CT_PresetLineDashProperties prstDash
         {
             get
@@ -1993,8 +1993,8 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 5)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("ds", IsNullable = false)]
+        [XmlArray(Order = 5)]
+        [XmlArrayItem("ds", IsNullable = false)]
         public List<CT_DashStop> custDash
         {
             get
@@ -2006,7 +2006,7 @@ namespace NPOI.OpenXmlFormats.Dml
                 this.custDashField = value;
             }
         }
-        [System.Xml.Serialization.XmlElement(Order = 6)]
+        [XmlElement(Order = 6)]
         public CT_LineJoinRound round
         {
             get
@@ -2018,7 +2018,7 @@ namespace NPOI.OpenXmlFormats.Dml
                 this.roundField = value;
             }
         }
-        [System.Xml.Serialization.XmlElement(Order = 7)]
+        [XmlElement(Order = 7)]
         public CT_LineJoinBevel bevel
         {
             get
@@ -2030,7 +2030,7 @@ namespace NPOI.OpenXmlFormats.Dml
                 this.bevelField = value;
             }
         }
-        [System.Xml.Serialization.XmlElement(Order = 8)]
+        [XmlElement(Order = 8)]
         public CT_LineJoinMiterProperties miter
         {
             get
@@ -2042,7 +2042,7 @@ namespace NPOI.OpenXmlFormats.Dml
                 this.miterField = value;
             }
         }
-        [System.Xml.Serialization.XmlElement(Order = 9)]
+        [XmlElement(Order = 9)]
         public CT_LineEndProperties headEnd
         {
             get
@@ -2054,7 +2054,7 @@ namespace NPOI.OpenXmlFormats.Dml
                 this.headEndField = value;
             }
         }
-        [System.Xml.Serialization.XmlElement(Order = 10)]
+        [XmlElement(Order = 10)]
         public CT_LineEndProperties tailEnd
         {
             get
@@ -2066,7 +2066,7 @@ namespace NPOI.OpenXmlFormats.Dml
                 this.tailEndField = value;
             }
         }
-        [System.Xml.Serialization.XmlElement(Order = 11)]
+        [XmlElement(Order = 11)]
         public CT_OfficeArtExtensionList extLst
         {
             get
@@ -2078,7 +2078,7 @@ namespace NPOI.OpenXmlFormats.Dml
                 this.extLstField = value;
             }
         }
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [XmlAttribute()]
         public int w
         {
             get
@@ -2103,7 +2103,7 @@ namespace NPOI.OpenXmlFormats.Dml
                 this.wFieldSpecified = value;
             }
         }
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [XmlAttribute()]
         public ST_LineCap cap
         {
             get
@@ -2128,7 +2128,7 @@ namespace NPOI.OpenXmlFormats.Dml
                 this.capFieldSpecified = value;
             }
         }
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [XmlAttribute()]
         public ST_CompoundLine cmpd
         {
             get
@@ -2153,7 +2153,7 @@ namespace NPOI.OpenXmlFormats.Dml
                 this.cmpdFieldSpecified = value;
             }
         }
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [XmlAttribute()]
         public ST_PenAlignment algn
         {
             get
@@ -2573,8 +2573,8 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 1)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("ln", IsNullable = false)]
+        [XmlArray(Order = 1)]
+        [XmlArrayItem("ln", IsNullable = false)]
         public List<CT_LineProperties> lnStyleLst
         {
             get
@@ -2587,8 +2587,8 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 2)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("effectStyle", IsNullable = false)]
+        [XmlArray(Order = 2)]
+        [XmlArrayItem("effectStyle", IsNullable = false)]
         public List<CT_EffectStyleItem> effectStyleLst
         {
             get
@@ -2728,34 +2728,34 @@ namespace NPOI.OpenXmlFormats.Dml
             this.itemsElementNameField = new List<ItemsChoiceType1>();
             this.itemsField = new List<object>();
         }
-        [System.Xml.Serialization.XmlElement("alpha", typeof(CT_PositiveFixedPercentage), Order = 0)]
-        [System.Xml.Serialization.XmlElement("alphaMod", typeof(CT_PositivePercentage), Order = 0)]
-        [System.Xml.Serialization.XmlElement("alphaOff", typeof(CT_FixedPercentage), Order = 0)]
-        [System.Xml.Serialization.XmlElement("blue", typeof(CT_Percentage), Order = 0)]
-        [System.Xml.Serialization.XmlElement("blueMod", typeof(CT_Percentage), Order = 0)]
-        [System.Xml.Serialization.XmlElement("blueOff", typeof(CT_Percentage), Order = 0)]
-        [System.Xml.Serialization.XmlElement("comp", typeof(CT_ComplementTransform), Order = 0)]
-        [System.Xml.Serialization.XmlElement("gamma", typeof(CT_GammaTransform), Order = 0)]
-        [System.Xml.Serialization.XmlElement("gray", typeof(CT_GrayscaleTransform), Order = 0)]
-        [System.Xml.Serialization.XmlElement("green", typeof(CT_Percentage), Order = 0)]
-        [System.Xml.Serialization.XmlElement("greenMod", typeof(CT_Percentage), Order = 0)]
-        [System.Xml.Serialization.XmlElement("greenOff", typeof(CT_Percentage), Order = 0)]
-        [System.Xml.Serialization.XmlElement("hue", typeof(CT_PositiveFixedAngle), Order = 0)]
-        [System.Xml.Serialization.XmlElement("hueMod", typeof(CT_PositivePercentage), Order = 0)]
-        [System.Xml.Serialization.XmlElement("hueOff", typeof(CT_Angle), Order = 0)]
-        [System.Xml.Serialization.XmlElement("inv", typeof(CT_InverseTransform), Order = 0)]
-        [System.Xml.Serialization.XmlElement("invGamma", typeof(CT_InverseGammaTransform), Order = 0)]
-        [System.Xml.Serialization.XmlElement("lum", typeof(CT_Percentage), Order = 0)]
-        [System.Xml.Serialization.XmlElement("lumMod", typeof(CT_Percentage), Order = 0)]
-        [System.Xml.Serialization.XmlElement("lumOff", typeof(CT_Percentage), Order = 0)]
-        [System.Xml.Serialization.XmlElement("red", typeof(CT_Percentage), Order = 0)]
-        [System.Xml.Serialization.XmlElement("redMod", typeof(CT_Percentage), Order = 0)]
-        [System.Xml.Serialization.XmlElement("redOff", typeof(CT_Percentage), Order = 0)]
-        [System.Xml.Serialization.XmlElement("sat", typeof(CT_Percentage), Order = 0)]
-        [System.Xml.Serialization.XmlElement("satMod", typeof(CT_Percentage), Order = 0)]
-        [System.Xml.Serialization.XmlElement("satOff", typeof(CT_Percentage), Order = 0)]
-        [System.Xml.Serialization.XmlElement("shade", typeof(CT_PositiveFixedPercentage), Order = 0)]
-        [System.Xml.Serialization.XmlElement("tint", typeof(CT_PositiveFixedPercentage), Order = 0)]
+        [XmlElement("alpha", typeof(CT_PositiveFixedPercentage), Order = 0)]
+        [XmlElement("alphaMod", typeof(CT_PositivePercentage), Order = 0)]
+        [XmlElement("alphaOff", typeof(CT_FixedPercentage), Order = 0)]
+        [XmlElement("blue", typeof(CT_Percentage), Order = 0)]
+        [XmlElement("blueMod", typeof(CT_Percentage), Order = 0)]
+        [XmlElement("blueOff", typeof(CT_Percentage), Order = 0)]
+        [XmlElement("comp", typeof(CT_ComplementTransform), Order = 0)]
+        [XmlElement("gamma", typeof(CT_GammaTransform), Order = 0)]
+        [XmlElement("gray", typeof(CT_GrayscaleTransform), Order = 0)]
+        [XmlElement("green", typeof(CT_Percentage), Order = 0)]
+        [XmlElement("greenMod", typeof(CT_Percentage), Order = 0)]
+        [XmlElement("greenOff", typeof(CT_Percentage), Order = 0)]
+        [XmlElement("hue", typeof(CT_PositiveFixedAngle), Order = 0)]
+        [XmlElement("hueMod", typeof(CT_PositivePercentage), Order = 0)]
+        [XmlElement("hueOff", typeof(CT_Angle), Order = 0)]
+        [XmlElement("inv", typeof(CT_InverseTransform), Order = 0)]
+        [XmlElement("invGamma", typeof(CT_InverseGammaTransform), Order = 0)]
+        [XmlElement("lum", typeof(CT_Percentage), Order = 0)]
+        [XmlElement("lumMod", typeof(CT_Percentage), Order = 0)]
+        [XmlElement("lumOff", typeof(CT_Percentage), Order = 0)]
+        [XmlElement("red", typeof(CT_Percentage), Order = 0)]
+        [XmlElement("redMod", typeof(CT_Percentage), Order = 0)]
+        [XmlElement("redOff", typeof(CT_Percentage), Order = 0)]
+        [XmlElement("sat", typeof(CT_Percentage), Order = 0)]
+        [XmlElement("satMod", typeof(CT_Percentage), Order = 0)]
+        [XmlElement("satOff", typeof(CT_Percentage), Order = 0)]
+        [XmlElement("shade", typeof(CT_PositiveFixedPercentage), Order = 0)]
+        [XmlElement("tint", typeof(CT_PositiveFixedPercentage), Order = 0)]
         [System.Xml.Serialization.XmlChoiceIdentifierAttribute("ItemsElementName")]
         public object[] Items
         {
@@ -2771,7 +2771,7 @@ namespace NPOI.OpenXmlFormats.Dml
                     this.itemsField = new List<object>(value);
             }
         }
-        [System.Xml.Serialization.XmlElement("ItemsElementName", Order = 1)]
+        [XmlElement("ItemsElementName", Order = 1)]
         [System.Xml.Serialization.XmlIgnore]
         public ItemsChoiceType1[] ItemsElementName
         {
@@ -2787,7 +2787,7 @@ namespace NPOI.OpenXmlFormats.Dml
                     this.itemsElementNameField = new List<ItemsChoiceType1>(value);
             }
         }
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [XmlAttribute()]
         public ST_PresetColorVal val
         {
             get

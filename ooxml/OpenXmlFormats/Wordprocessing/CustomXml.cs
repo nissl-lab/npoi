@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Xml.Serialization;
 using NPOI.OpenXmlFormats.Shared;
 
 namespace NPOI.OpenXmlFormats.Wordprocessing
 {
 
-    [System.SerializableAttribute()]
-
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
     public class CT_CustomXmlRow
     {
 
@@ -30,7 +29,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             this.customXmlPrField = new CT_CustomXmlPr();
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 0)]
+        [XmlElement(Order = 0)]
         public CT_CustomXmlPr customXmlPr
         {
             get
@@ -43,34 +42,34 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement("oMath", typeof(CT_OMath), Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", Order = 1)]
-        [System.Xml.Serialization.XmlElement("oMathPara", typeof(CT_OMathPara), Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", Order = 1)]
-        [System.Xml.Serialization.XmlElement("bookmarkEnd", typeof(CT_MarkupRange), Order = 1)]
-        [System.Xml.Serialization.XmlElement("bookmarkStart", typeof(CT_Bookmark), Order = 1)]
-        [System.Xml.Serialization.XmlElement("commentRangeEnd", typeof(CT_MarkupRange), Order = 1)]
-        [System.Xml.Serialization.XmlElement("commentRangeStart", typeof(CT_MarkupRange), Order = 1)]
-        [System.Xml.Serialization.XmlElement("customXml", typeof(CT_CustomXmlRow), Order = 1)]
-        [System.Xml.Serialization.XmlElement("customXmlDelRangeEnd", typeof(CT_Markup), Order = 1)]
-        [System.Xml.Serialization.XmlElement("customXmlDelRangeStart", typeof(CT_TrackChange), Order = 1)]
-        [System.Xml.Serialization.XmlElement("customXmlInsRangeEnd", typeof(CT_Markup), Order = 1)]
-        [System.Xml.Serialization.XmlElement("customXmlInsRangeStart", typeof(CT_TrackChange), Order = 1)]
-        [System.Xml.Serialization.XmlElement("customXmlMoveFromRangeEnd", typeof(CT_Markup), Order = 1)]
-        [System.Xml.Serialization.XmlElement("customXmlMoveFromRangeStart", typeof(CT_TrackChange), Order = 1)]
-        [System.Xml.Serialization.XmlElement("customXmlMoveToRangeEnd", typeof(CT_Markup), Order = 1)]
-        [System.Xml.Serialization.XmlElement("customXmlMoveToRangeStart", typeof(CT_TrackChange), Order = 1)]
-        [System.Xml.Serialization.XmlElement("del", typeof(CT_RunTrackChange), Order = 1)]
-        [System.Xml.Serialization.XmlElement("ins", typeof(CT_RunTrackChange), Order = 1)]
-        [System.Xml.Serialization.XmlElement("moveFrom", typeof(CT_RunTrackChange), Order = 1)]
-        [System.Xml.Serialization.XmlElement("moveFromRangeEnd", typeof(CT_MarkupRange), Order = 1)]
-        [System.Xml.Serialization.XmlElement("moveFromRangeStart", typeof(CT_MoveBookmark), Order = 1)]
-        [System.Xml.Serialization.XmlElement("moveTo", typeof(CT_RunTrackChange), Order = 1)]
-        [System.Xml.Serialization.XmlElement("moveToRangeEnd", typeof(CT_MarkupRange), Order = 1)]
-        [System.Xml.Serialization.XmlElement("moveToRangeStart", typeof(CT_MoveBookmark), Order = 1)]
-        [System.Xml.Serialization.XmlElement("permEnd", typeof(CT_Perm), Order = 1)]
-        [System.Xml.Serialization.XmlElement("permStart", typeof(CT_PermStart), Order = 1)]
-        [System.Xml.Serialization.XmlElement("proofErr", typeof(CT_ProofErr), Order = 1)]
-        [System.Xml.Serialization.XmlElement("sdt", typeof(CT_SdtRow), Order = 1)]
-        [System.Xml.Serialization.XmlElement("tr", typeof(CT_Row), Order = 1)]
+        [XmlElement("oMath", typeof(CT_OMath), Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", Order = 1)]
+        [XmlElement("oMathPara", typeof(CT_OMathPara), Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", Order = 1)]
+        [XmlElement("bookmarkEnd", typeof(CT_MarkupRange), Order = 1)]
+        [XmlElement("bookmarkStart", typeof(CT_Bookmark), Order = 1)]
+        [XmlElement("commentRangeEnd", typeof(CT_MarkupRange), Order = 1)]
+        [XmlElement("commentRangeStart", typeof(CT_MarkupRange), Order = 1)]
+        [XmlElement("customXml", typeof(CT_CustomXmlRow), Order = 1)]
+        [XmlElement("customXmlDelRangeEnd", typeof(CT_Markup), Order = 1)]
+        [XmlElement("customXmlDelRangeStart", typeof(CT_TrackChange), Order = 1)]
+        [XmlElement("customXmlInsRangeEnd", typeof(CT_Markup), Order = 1)]
+        [XmlElement("customXmlInsRangeStart", typeof(CT_TrackChange), Order = 1)]
+        [XmlElement("customXmlMoveFromRangeEnd", typeof(CT_Markup), Order = 1)]
+        [XmlElement("customXmlMoveFromRangeStart", typeof(CT_TrackChange), Order = 1)]
+        [XmlElement("customXmlMoveToRangeEnd", typeof(CT_Markup), Order = 1)]
+        [XmlElement("customXmlMoveToRangeStart", typeof(CT_TrackChange), Order = 1)]
+        [XmlElement("del", typeof(CT_RunTrackChange), Order = 1)]
+        [XmlElement("ins", typeof(CT_RunTrackChange), Order = 1)]
+        [XmlElement("moveFrom", typeof(CT_RunTrackChange), Order = 1)]
+        [XmlElement("moveFromRangeEnd", typeof(CT_MarkupRange), Order = 1)]
+        [XmlElement("moveFromRangeStart", typeof(CT_MoveBookmark), Order = 1)]
+        [XmlElement("moveTo", typeof(CT_RunTrackChange), Order = 1)]
+        [XmlElement("moveToRangeEnd", typeof(CT_MarkupRange), Order = 1)]
+        [XmlElement("moveToRangeStart", typeof(CT_MoveBookmark), Order = 1)]
+        [XmlElement("permEnd", typeof(CT_Perm), Order = 1)]
+        [XmlElement("permStart", typeof(CT_PermStart), Order = 1)]
+        [XmlElement("proofErr", typeof(CT_ProofErr), Order = 1)]
+        [XmlElement("sdt", typeof(CT_SdtRow), Order = 1)]
+        [XmlElement("tr", typeof(CT_Row), Order = 1)]
         [System.Xml.Serialization.XmlChoiceIdentifierAttribute("ItemsElementName")]
         public object[] Items
         {
@@ -84,8 +83,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement("ItemsElementName", Order = 2)]
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlElement("ItemsElementName", Order = 2)]
+        [XmlIgnore]
         public ItemsChoiceType21[] ItemsElementName
         {
             get
@@ -98,7 +97,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
         public string uri
         {
             get
@@ -111,7 +110,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
         public string element
         {
             get
@@ -126,10 +125,10 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     }
 
 
-    [System.SerializableAttribute()]
+    [Serializable]
 
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
     public class CT_CustomXmlPr
     {
 
@@ -143,7 +142,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             this.placeholderField = new CT_String();
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 0)]
+        [XmlElement(Order = 0)]
         public CT_String placeholder
         {
             get
@@ -156,7 +155,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement("attr", Order = 1)]
+        [XmlElement("attr", Order = 1)]
         public List<CT_Attr> attr
         {
             get
@@ -171,10 +170,10 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     }
 
 
-    [System.SerializableAttribute()]
+    [Serializable]
 
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
     public class CT_Attr
     {
 
@@ -184,7 +183,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         private string valField;
 
-        [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
         public string uri
         {
             get
@@ -197,7 +196,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
         public string name
         {
             get
@@ -210,7 +209,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
         public string val
         {
             get
@@ -226,8 +225,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
 
 
-    [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IncludeInSchema = false)]
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IncludeInSchema = false)]
     public enum ItemsChoiceType21
     {
 
@@ -318,8 +317,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         tr,
     }
 
-    [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IncludeInSchema = false)]
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IncludeInSchema = false)]
     public enum ItemsChoiceType22
     {
 
@@ -412,10 +411,10 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
 
 
-    [System.SerializableAttribute()]
+    [Serializable]
 
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
     public class CT_CustomXmlRun
     {
 
@@ -436,7 +435,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             this.customXmlPrField = new CT_CustomXmlPr();
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 0)]
+        [XmlElement(Order = 0)]
         public CT_CustomXmlPr customXmlPr
         {
             get
@@ -449,38 +448,38 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement("oMath", typeof(CT_OMath), Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", Order = 1)]
-        [System.Xml.Serialization.XmlElement("oMathPara", typeof(CT_OMathPara), Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", Order = 1)]
-        [System.Xml.Serialization.XmlElement("bookmarkEnd", typeof(CT_MarkupRange), Order = 1)]
-        [System.Xml.Serialization.XmlElement("bookmarkStart", typeof(CT_Bookmark), Order = 1)]
-        [System.Xml.Serialization.XmlElement("commentRangeEnd", typeof(CT_MarkupRange), Order = 1)]
-        [System.Xml.Serialization.XmlElement("commentRangeStart", typeof(CT_MarkupRange), Order = 1)]
-        [System.Xml.Serialization.XmlElement("customXml", typeof(CT_CustomXmlRun), Order = 1)]
-        [System.Xml.Serialization.XmlElement("customXmlDelRangeEnd", typeof(CT_Markup), Order = 1)]
-        [System.Xml.Serialization.XmlElement("customXmlDelRangeStart", typeof(CT_TrackChange), Order = 1)]
-        [System.Xml.Serialization.XmlElement("customXmlInsRangeEnd", typeof(CT_Markup), Order = 1)]
-        [System.Xml.Serialization.XmlElement("customXmlInsRangeStart", typeof(CT_TrackChange), Order = 1)]
-        [System.Xml.Serialization.XmlElement("customXmlMoveFromRangeEnd", typeof(CT_Markup), Order = 1)]
-        [System.Xml.Serialization.XmlElement("customXmlMoveFromRangeStart", typeof(CT_TrackChange), Order = 1)]
-        [System.Xml.Serialization.XmlElement("customXmlMoveToRangeEnd", typeof(CT_Markup), Order = 1)]
-        [System.Xml.Serialization.XmlElement("customXmlMoveToRangeStart", typeof(CT_TrackChange), Order = 1)]
-        [System.Xml.Serialization.XmlElement("del", typeof(CT_RunTrackChange), Order = 1)]
-        [System.Xml.Serialization.XmlElement("fldSimple", typeof(CT_SimpleField), Order = 1)]
-        [System.Xml.Serialization.XmlElement("hyperlink", typeof(CT_Hyperlink1), Order = 1)]
-        [System.Xml.Serialization.XmlElement("ins", typeof(CT_RunTrackChange), Order = 1)]
-        [System.Xml.Serialization.XmlElement("moveFrom", typeof(CT_RunTrackChange), Order = 1)]
-        [System.Xml.Serialization.XmlElement("moveFromRangeEnd", typeof(CT_MarkupRange), Order = 1)]
-        [System.Xml.Serialization.XmlElement("moveFromRangeStart", typeof(CT_MoveBookmark), Order = 1)]
-        [System.Xml.Serialization.XmlElement("moveTo", typeof(CT_RunTrackChange), Order = 1)]
-        [System.Xml.Serialization.XmlElement("moveToRangeEnd", typeof(CT_MarkupRange), Order = 1)]
-        [System.Xml.Serialization.XmlElement("moveToRangeStart", typeof(CT_MoveBookmark), Order = 1)]
-        [System.Xml.Serialization.XmlElement("permEnd", typeof(CT_Perm), Order = 1)]
-        [System.Xml.Serialization.XmlElement("permStart", typeof(CT_PermStart), Order = 1)]
-        [System.Xml.Serialization.XmlElement("proofErr", typeof(CT_ProofErr), Order = 1)]
-        [System.Xml.Serialization.XmlElement("r", typeof(CT_R), Order = 1)]
-        [System.Xml.Serialization.XmlElement("sdt", typeof(CT_SdtRun), Order = 1)]
-        [System.Xml.Serialization.XmlElement("smartTag", typeof(CT_SmartTagRun), Order = 1)]
-        [System.Xml.Serialization.XmlElement("subDoc", typeof(CT_Rel), Order = 1)]
+        [XmlElement("oMath", typeof(CT_OMath), Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", Order = 1)]
+        [XmlElement("oMathPara", typeof(CT_OMathPara), Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", Order = 1)]
+        [XmlElement("bookmarkEnd", typeof(CT_MarkupRange), Order = 1)]
+        [XmlElement("bookmarkStart", typeof(CT_Bookmark), Order = 1)]
+        [XmlElement("commentRangeEnd", typeof(CT_MarkupRange), Order = 1)]
+        [XmlElement("commentRangeStart", typeof(CT_MarkupRange), Order = 1)]
+        [XmlElement("customXml", typeof(CT_CustomXmlRun), Order = 1)]
+        [XmlElement("customXmlDelRangeEnd", typeof(CT_Markup), Order = 1)]
+        [XmlElement("customXmlDelRangeStart", typeof(CT_TrackChange), Order = 1)]
+        [XmlElement("customXmlInsRangeEnd", typeof(CT_Markup), Order = 1)]
+        [XmlElement("customXmlInsRangeStart", typeof(CT_TrackChange), Order = 1)]
+        [XmlElement("customXmlMoveFromRangeEnd", typeof(CT_Markup), Order = 1)]
+        [XmlElement("customXmlMoveFromRangeStart", typeof(CT_TrackChange), Order = 1)]
+        [XmlElement("customXmlMoveToRangeEnd", typeof(CT_Markup), Order = 1)]
+        [XmlElement("customXmlMoveToRangeStart", typeof(CT_TrackChange), Order = 1)]
+        [XmlElement("del", typeof(CT_RunTrackChange), Order = 1)]
+        [XmlElement("fldSimple", typeof(CT_SimpleField), Order = 1)]
+        [XmlElement("hyperlink", typeof(CT_Hyperlink1), Order = 1)]
+        [XmlElement("ins", typeof(CT_RunTrackChange), Order = 1)]
+        [XmlElement("moveFrom", typeof(CT_RunTrackChange), Order = 1)]
+        [XmlElement("moveFromRangeEnd", typeof(CT_MarkupRange), Order = 1)]
+        [XmlElement("moveFromRangeStart", typeof(CT_MoveBookmark), Order = 1)]
+        [XmlElement("moveTo", typeof(CT_RunTrackChange), Order = 1)]
+        [XmlElement("moveToRangeEnd", typeof(CT_MarkupRange), Order = 1)]
+        [XmlElement("moveToRangeStart", typeof(CT_MoveBookmark), Order = 1)]
+        [XmlElement("permEnd", typeof(CT_Perm), Order = 1)]
+        [XmlElement("permStart", typeof(CT_PermStart), Order = 1)]
+        [XmlElement("proofErr", typeof(CT_ProofErr), Order = 1)]
+        [XmlElement("r", typeof(CT_R), Order = 1)]
+        [XmlElement("sdt", typeof(CT_SdtRun), Order = 1)]
+        [XmlElement("smartTag", typeof(CT_SmartTagRun), Order = 1)]
+        [XmlElement("subDoc", typeof(CT_Rel), Order = 1)]
         [System.Xml.Serialization.XmlChoiceIdentifierAttribute("ItemsElementName")]
         public object[] Items
         {
@@ -494,8 +493,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement("ItemsElementName", Order = 2)]
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlElement("ItemsElementName", Order = 2)]
+        [XmlIgnore]
         public ItemsChoiceType24[] ItemsElementName
         {
             get
@@ -508,7 +507,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
         public string uri
         {
             get
@@ -521,7 +520,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
         public string element
         {
             get
@@ -536,8 +535,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     }
 
 
-    [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IncludeInSchema = false)]
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IncludeInSchema = false)]
     public enum ItemsChoiceType24
     {
 
@@ -641,10 +640,10 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     }
 
 
-    [System.SerializableAttribute()]
+    [Serializable]
 
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
     public class CT_SmartTagRun
     {
 
@@ -665,8 +664,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             this.smartTagPrField = new List<CT_Attr>();
         }
 
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 0)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("attr", IsNullable = false)]
+        [XmlArray(Order = 0)]
+        [XmlArrayItem("attr", IsNullable = false)]
         public List<CT_Attr> smartTagPr
         {
             get
@@ -679,38 +678,38 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement("oMath", typeof(CT_OMath), Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", Order = 1)]
-        [System.Xml.Serialization.XmlElement("oMathPara", typeof(CT_OMathPara), Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", Order = 1)]
-        [System.Xml.Serialization.XmlElement("bookmarkEnd", typeof(CT_MarkupRange), Order = 1)]
-        [System.Xml.Serialization.XmlElement("bookmarkStart", typeof(CT_Bookmark), Order = 1)]
-        [System.Xml.Serialization.XmlElement("commentRangeEnd", typeof(CT_MarkupRange), Order = 1)]
-        [System.Xml.Serialization.XmlElement("commentRangeStart", typeof(CT_MarkupRange), Order = 1)]
-        [System.Xml.Serialization.XmlElement("customXml", typeof(CT_CustomXmlRun), Order = 1)]
-        [System.Xml.Serialization.XmlElement("customXmlDelRangeEnd", typeof(CT_Markup), Order = 1)]
-        [System.Xml.Serialization.XmlElement("customXmlDelRangeStart", typeof(CT_TrackChange), Order = 1)]
-        [System.Xml.Serialization.XmlElement("customXmlInsRangeEnd", typeof(CT_Markup), Order = 1)]
-        [System.Xml.Serialization.XmlElement("customXmlInsRangeStart", typeof(CT_TrackChange), Order = 1)]
-        [System.Xml.Serialization.XmlElement("customXmlMoveFromRangeEnd", typeof(CT_Markup), Order = 1)]
-        [System.Xml.Serialization.XmlElement("customXmlMoveFromRangeStart", typeof(CT_TrackChange), Order = 1)]
-        [System.Xml.Serialization.XmlElement("customXmlMoveToRangeEnd", typeof(CT_Markup), Order = 1)]
-        [System.Xml.Serialization.XmlElement("customXmlMoveToRangeStart", typeof(CT_TrackChange), Order = 1)]
-        [System.Xml.Serialization.XmlElement("del", typeof(CT_RunTrackChange), Order = 1)]
-        [System.Xml.Serialization.XmlElement("fldSimple", typeof(CT_SimpleField), Order = 1)]
-        [System.Xml.Serialization.XmlElement("hyperlink", typeof(CT_Hyperlink1), Order = 1)]
-        [System.Xml.Serialization.XmlElement("ins", typeof(CT_RunTrackChange), Order = 1)]
-        [System.Xml.Serialization.XmlElement("moveFrom", typeof(CT_RunTrackChange), Order = 1)]
-        [System.Xml.Serialization.XmlElement("moveFromRangeEnd", typeof(CT_MarkupRange), Order = 1)]
-        [System.Xml.Serialization.XmlElement("moveFromRangeStart", typeof(CT_MoveBookmark), Order = 1)]
-        [System.Xml.Serialization.XmlElement("moveTo", typeof(CT_RunTrackChange), Order = 1)]
-        [System.Xml.Serialization.XmlElement("moveToRangeEnd", typeof(CT_MarkupRange), Order = 1)]
-        [System.Xml.Serialization.XmlElement("moveToRangeStart", typeof(CT_MoveBookmark), Order = 1)]
-        [System.Xml.Serialization.XmlElement("permEnd", typeof(CT_Perm), Order = 1)]
-        [System.Xml.Serialization.XmlElement("permStart", typeof(CT_PermStart), Order = 1)]
-        [System.Xml.Serialization.XmlElement("proofErr", typeof(CT_ProofErr), Order = 1)]
-        [System.Xml.Serialization.XmlElement("r", typeof(CT_R), Order = 1)]
-        [System.Xml.Serialization.XmlElement("sdt", typeof(CT_SdtRun), Order = 1)]
-        [System.Xml.Serialization.XmlElement("smartTag", typeof(CT_SmartTagRun), Order = 1)]
-        [System.Xml.Serialization.XmlElement("subDoc", typeof(CT_Rel), Order = 1)]
+        [XmlElement("oMath", typeof(CT_OMath), Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", Order = 1)]
+        [XmlElement("oMathPara", typeof(CT_OMathPara), Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", Order = 1)]
+        [XmlElement("bookmarkEnd", typeof(CT_MarkupRange), Order = 1)]
+        [XmlElement("bookmarkStart", typeof(CT_Bookmark), Order = 1)]
+        [XmlElement("commentRangeEnd", typeof(CT_MarkupRange), Order = 1)]
+        [XmlElement("commentRangeStart", typeof(CT_MarkupRange), Order = 1)]
+        [XmlElement("customXml", typeof(CT_CustomXmlRun), Order = 1)]
+        [XmlElement("customXmlDelRangeEnd", typeof(CT_Markup), Order = 1)]
+        [XmlElement("customXmlDelRangeStart", typeof(CT_TrackChange), Order = 1)]
+        [XmlElement("customXmlInsRangeEnd", typeof(CT_Markup), Order = 1)]
+        [XmlElement("customXmlInsRangeStart", typeof(CT_TrackChange), Order = 1)]
+        [XmlElement("customXmlMoveFromRangeEnd", typeof(CT_Markup), Order = 1)]
+        [XmlElement("customXmlMoveFromRangeStart", typeof(CT_TrackChange), Order = 1)]
+        [XmlElement("customXmlMoveToRangeEnd", typeof(CT_Markup), Order = 1)]
+        [XmlElement("customXmlMoveToRangeStart", typeof(CT_TrackChange), Order = 1)]
+        [XmlElement("del", typeof(CT_RunTrackChange), Order = 1)]
+        [XmlElement("fldSimple", typeof(CT_SimpleField), Order = 1)]
+        [XmlElement("hyperlink", typeof(CT_Hyperlink1), Order = 1)]
+        [XmlElement("ins", typeof(CT_RunTrackChange), Order = 1)]
+        [XmlElement("moveFrom", typeof(CT_RunTrackChange), Order = 1)]
+        [XmlElement("moveFromRangeEnd", typeof(CT_MarkupRange), Order = 1)]
+        [XmlElement("moveFromRangeStart", typeof(CT_MoveBookmark), Order = 1)]
+        [XmlElement("moveTo", typeof(CT_RunTrackChange), Order = 1)]
+        [XmlElement("moveToRangeEnd", typeof(CT_MarkupRange), Order = 1)]
+        [XmlElement("moveToRangeStart", typeof(CT_MoveBookmark), Order = 1)]
+        [XmlElement("permEnd", typeof(CT_Perm), Order = 1)]
+        [XmlElement("permStart", typeof(CT_PermStart), Order = 1)]
+        [XmlElement("proofErr", typeof(CT_ProofErr), Order = 1)]
+        [XmlElement("r", typeof(CT_R), Order = 1)]
+        [XmlElement("sdt", typeof(CT_SdtRun), Order = 1)]
+        [XmlElement("smartTag", typeof(CT_SmartTagRun), Order = 1)]
+        [XmlElement("subDoc", typeof(CT_Rel), Order = 1)]
         [System.Xml.Serialization.XmlChoiceIdentifierAttribute("ItemsElementName")]
         public object[] Items
         {
@@ -724,8 +723,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement("ItemsElementName", Order = 2)]
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlElement("ItemsElementName", Order = 2)]
+        [XmlIgnore]
         public ItemsChoiceType25[] ItemsElementName
         {
             get
@@ -738,7 +737,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
         public string uri
         {
             get
@@ -751,7 +750,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
         public string element
         {
             get
@@ -766,8 +765,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     }
 
 
-    [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IncludeInSchema = false)]
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IncludeInSchema = false)]
     public enum ItemsChoiceType25
     {
 
@@ -871,10 +870,10 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     }
 
 
-    [System.SerializableAttribute()]
+    [Serializable]
 
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
     public class CT_CustomXmlBlock
     {
 
@@ -895,7 +894,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             this.customXmlPrField = new CT_CustomXmlPr();
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 0)]
+        [XmlElement(Order = 0)]
         public CT_CustomXmlPr customXmlPr
         {
             get
@@ -908,35 +907,35 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement("oMath", typeof(CT_OMath), Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", Order = 1)]
-        [System.Xml.Serialization.XmlElement("oMathPara", typeof(CT_OMathPara), Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", Order = 1)]
-        [System.Xml.Serialization.XmlElement("bookmarkEnd", typeof(CT_MarkupRange), Order = 1)]
-        [System.Xml.Serialization.XmlElement("bookmarkStart", typeof(CT_Bookmark), Order = 1)]
-        [System.Xml.Serialization.XmlElement("commentRangeEnd", typeof(CT_MarkupRange), Order = 1)]
-        [System.Xml.Serialization.XmlElement("commentRangeStart", typeof(CT_MarkupRange), Order = 1)]
-        [System.Xml.Serialization.XmlElement("customXml", typeof(CT_CustomXmlBlock), Order = 1)]
-        [System.Xml.Serialization.XmlElement("customXmlDelRangeEnd", typeof(CT_Markup), Order = 1)]
-        [System.Xml.Serialization.XmlElement("customXmlDelRangeStart", typeof(CT_TrackChange), Order = 1)]
-        [System.Xml.Serialization.XmlElement("customXmlInsRangeEnd", typeof(CT_Markup), Order = 1)]
-        [System.Xml.Serialization.XmlElement("customXmlInsRangeStart", typeof(CT_TrackChange), Order = 1)]
-        [System.Xml.Serialization.XmlElement("customXmlMoveFromRangeEnd", typeof(CT_Markup), Order = 1)]
-        [System.Xml.Serialization.XmlElement("customXmlMoveFromRangeStart", typeof(CT_TrackChange), Order = 1)]
-        [System.Xml.Serialization.XmlElement("customXmlMoveToRangeEnd", typeof(CT_Markup), Order = 1)]
-        [System.Xml.Serialization.XmlElement("customXmlMoveToRangeStart", typeof(CT_TrackChange), Order = 1)]
-        [System.Xml.Serialization.XmlElement("del", typeof(CT_RunTrackChange), Order = 1)]
-        [System.Xml.Serialization.XmlElement("ins", typeof(CT_RunTrackChange), Order = 1)]
-        [System.Xml.Serialization.XmlElement("moveFrom", typeof(CT_RunTrackChange), Order = 1)]
-        [System.Xml.Serialization.XmlElement("moveFromRangeEnd", typeof(CT_MarkupRange), Order = 1)]
-        [System.Xml.Serialization.XmlElement("moveFromRangeStart", typeof(CT_MoveBookmark), Order = 1)]
-        [System.Xml.Serialization.XmlElement("moveTo", typeof(CT_RunTrackChange), Order = 1)]
-        [System.Xml.Serialization.XmlElement("moveToRangeEnd", typeof(CT_MarkupRange), Order = 1)]
-        [System.Xml.Serialization.XmlElement("moveToRangeStart", typeof(CT_MoveBookmark), Order = 1)]
-        [System.Xml.Serialization.XmlElement("p", typeof(CT_P), Order = 1)]
-        [System.Xml.Serialization.XmlElement("permEnd", typeof(CT_Perm), Order = 1)]
-        [System.Xml.Serialization.XmlElement("permStart", typeof(CT_PermStart), Order = 1)]
-        [System.Xml.Serialization.XmlElement("proofErr", typeof(CT_ProofErr), Order = 1)]
-        [System.Xml.Serialization.XmlElement("sdt", typeof(CT_SdtBlock), Order = 1)]
-        [System.Xml.Serialization.XmlElement("tbl", typeof(CT_Tbl), Order = 1)]
+        [XmlElement("oMath", typeof(CT_OMath), Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", Order = 1)]
+        [XmlElement("oMathPara", typeof(CT_OMathPara), Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", Order = 1)]
+        [XmlElement("bookmarkEnd", typeof(CT_MarkupRange), Order = 1)]
+        [XmlElement("bookmarkStart", typeof(CT_Bookmark), Order = 1)]
+        [XmlElement("commentRangeEnd", typeof(CT_MarkupRange), Order = 1)]
+        [XmlElement("commentRangeStart", typeof(CT_MarkupRange), Order = 1)]
+        [XmlElement("customXml", typeof(CT_CustomXmlBlock), Order = 1)]
+        [XmlElement("customXmlDelRangeEnd", typeof(CT_Markup), Order = 1)]
+        [XmlElement("customXmlDelRangeStart", typeof(CT_TrackChange), Order = 1)]
+        [XmlElement("customXmlInsRangeEnd", typeof(CT_Markup), Order = 1)]
+        [XmlElement("customXmlInsRangeStart", typeof(CT_TrackChange), Order = 1)]
+        [XmlElement("customXmlMoveFromRangeEnd", typeof(CT_Markup), Order = 1)]
+        [XmlElement("customXmlMoveFromRangeStart", typeof(CT_TrackChange), Order = 1)]
+        [XmlElement("customXmlMoveToRangeEnd", typeof(CT_Markup), Order = 1)]
+        [XmlElement("customXmlMoveToRangeStart", typeof(CT_TrackChange), Order = 1)]
+        [XmlElement("del", typeof(CT_RunTrackChange), Order = 1)]
+        [XmlElement("ins", typeof(CT_RunTrackChange), Order = 1)]
+        [XmlElement("moveFrom", typeof(CT_RunTrackChange), Order = 1)]
+        [XmlElement("moveFromRangeEnd", typeof(CT_MarkupRange), Order = 1)]
+        [XmlElement("moveFromRangeStart", typeof(CT_MoveBookmark), Order = 1)]
+        [XmlElement("moveTo", typeof(CT_RunTrackChange), Order = 1)]
+        [XmlElement("moveToRangeEnd", typeof(CT_MarkupRange), Order = 1)]
+        [XmlElement("moveToRangeStart", typeof(CT_MoveBookmark), Order = 1)]
+        [XmlElement("p", typeof(CT_P), Order = 1)]
+        [XmlElement("permEnd", typeof(CT_Perm), Order = 1)]
+        [XmlElement("permStart", typeof(CT_PermStart), Order = 1)]
+        [XmlElement("proofErr", typeof(CT_ProofErr), Order = 1)]
+        [XmlElement("sdt", typeof(CT_SdtBlock), Order = 1)]
+        [XmlElement("tbl", typeof(CT_Tbl), Order = 1)]
         [System.Xml.Serialization.XmlChoiceIdentifierAttribute("ItemsElementName")]
         public object[] Items
         {
@@ -950,8 +949,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement("ItemsElementName", Order = 2)]
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlElement("ItemsElementName", Order = 2)]
+        [XmlIgnore]
         public ItemsChoiceType26[] ItemsElementName
         {
             get
@@ -964,7 +963,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
         public string uri
         {
             get
@@ -977,7 +976,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
         public string element
         {
             get
@@ -992,8 +991,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     }
 
 
-    [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IncludeInSchema = false)]
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IncludeInSchema = false)]
     public enum ItemsChoiceType26
     {
 
@@ -1088,10 +1087,10 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     }
 
 
-    [System.SerializableAttribute()]
+    [Serializable]
 
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
     public class CT_CustomXmlCell
     {
 
@@ -1112,7 +1111,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             this.customXmlPrField = new CT_CustomXmlPr();
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 0)]
+        [XmlElement(Order = 0)]
         public CT_CustomXmlPr customXmlPr
         {
             get
@@ -1125,34 +1124,34 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement("oMath", typeof(CT_OMath), Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", Order = 1)]
-        [System.Xml.Serialization.XmlElement("oMathPara", typeof(CT_OMathPara), Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", Order = 1)]
-        [System.Xml.Serialization.XmlElement("bookmarkEnd", typeof(CT_MarkupRange), Order = 1)]
-        [System.Xml.Serialization.XmlElement("bookmarkStart", typeof(CT_Bookmark), Order = 1)]
-        [System.Xml.Serialization.XmlElement("commentRangeEnd", typeof(CT_MarkupRange), Order = 1)]
-        [System.Xml.Serialization.XmlElement("commentRangeStart", typeof(CT_MarkupRange), Order = 1)]
-        [System.Xml.Serialization.XmlElement("customXml", typeof(CT_CustomXmlCell), Order = 1)]
-        [System.Xml.Serialization.XmlElement("customXmlDelRangeEnd", typeof(CT_Markup), Order = 1)]
-        [System.Xml.Serialization.XmlElement("customXmlDelRangeStart", typeof(CT_TrackChange), Order = 1)]
-        [System.Xml.Serialization.XmlElement("customXmlInsRangeEnd", typeof(CT_Markup), Order = 1)]
-        [System.Xml.Serialization.XmlElement("customXmlInsRangeStart", typeof(CT_TrackChange), Order = 1)]
-        [System.Xml.Serialization.XmlElement("customXmlMoveFromRangeEnd", typeof(CT_Markup), Order = 1)]
-        [System.Xml.Serialization.XmlElement("customXmlMoveFromRangeStart", typeof(CT_TrackChange), Order = 1)]
-        [System.Xml.Serialization.XmlElement("customXmlMoveToRangeEnd", typeof(CT_Markup), Order = 1)]
-        [System.Xml.Serialization.XmlElement("customXmlMoveToRangeStart", typeof(CT_TrackChange), Order = 1)]
-        [System.Xml.Serialization.XmlElement("del", typeof(CT_RunTrackChange), Order = 1)]
-        [System.Xml.Serialization.XmlElement("ins", typeof(CT_RunTrackChange), Order = 1)]
-        [System.Xml.Serialization.XmlElement("moveFrom", typeof(CT_RunTrackChange), Order = 1)]
-        [System.Xml.Serialization.XmlElement("moveFromRangeEnd", typeof(CT_MarkupRange), Order = 1)]
-        [System.Xml.Serialization.XmlElement("moveFromRangeStart", typeof(CT_MoveBookmark), Order = 1)]
-        [System.Xml.Serialization.XmlElement("moveTo", typeof(CT_RunTrackChange), Order = 1)]
-        [System.Xml.Serialization.XmlElement("moveToRangeEnd", typeof(CT_MarkupRange), Order = 1)]
-        [System.Xml.Serialization.XmlElement("moveToRangeStart", typeof(CT_MoveBookmark), Order = 1)]
-        [System.Xml.Serialization.XmlElement("permEnd", typeof(CT_Perm), Order = 1)]
-        [System.Xml.Serialization.XmlElement("permStart", typeof(CT_PermStart), Order = 1)]
-        [System.Xml.Serialization.XmlElement("proofErr", typeof(CT_ProofErr), Order = 1)]
-        [System.Xml.Serialization.XmlElement("sdt", typeof(CT_SdtCell), Order = 1)]
-        [System.Xml.Serialization.XmlElement("tc", typeof(CT_Tc), Order = 1)]
+        [XmlElement("oMath", typeof(CT_OMath), Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", Order = 1)]
+        [XmlElement("oMathPara", typeof(CT_OMathPara), Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", Order = 1)]
+        [XmlElement("bookmarkEnd", typeof(CT_MarkupRange), Order = 1)]
+        [XmlElement("bookmarkStart", typeof(CT_Bookmark), Order = 1)]
+        [XmlElement("commentRangeEnd", typeof(CT_MarkupRange), Order = 1)]
+        [XmlElement("commentRangeStart", typeof(CT_MarkupRange), Order = 1)]
+        [XmlElement("customXml", typeof(CT_CustomXmlCell), Order = 1)]
+        [XmlElement("customXmlDelRangeEnd", typeof(CT_Markup), Order = 1)]
+        [XmlElement("customXmlDelRangeStart", typeof(CT_TrackChange), Order = 1)]
+        [XmlElement("customXmlInsRangeEnd", typeof(CT_Markup), Order = 1)]
+        [XmlElement("customXmlInsRangeStart", typeof(CT_TrackChange), Order = 1)]
+        [XmlElement("customXmlMoveFromRangeEnd", typeof(CT_Markup), Order = 1)]
+        [XmlElement("customXmlMoveFromRangeStart", typeof(CT_TrackChange), Order = 1)]
+        [XmlElement("customXmlMoveToRangeEnd", typeof(CT_Markup), Order = 1)]
+        [XmlElement("customXmlMoveToRangeStart", typeof(CT_TrackChange), Order = 1)]
+        [XmlElement("del", typeof(CT_RunTrackChange), Order = 1)]
+        [XmlElement("ins", typeof(CT_RunTrackChange), Order = 1)]
+        [XmlElement("moveFrom", typeof(CT_RunTrackChange), Order = 1)]
+        [XmlElement("moveFromRangeEnd", typeof(CT_MarkupRange), Order = 1)]
+        [XmlElement("moveFromRangeStart", typeof(CT_MoveBookmark), Order = 1)]
+        [XmlElement("moveTo", typeof(CT_RunTrackChange), Order = 1)]
+        [XmlElement("moveToRangeEnd", typeof(CT_MarkupRange), Order = 1)]
+        [XmlElement("moveToRangeStart", typeof(CT_MoveBookmark), Order = 1)]
+        [XmlElement("permEnd", typeof(CT_Perm), Order = 1)]
+        [XmlElement("permStart", typeof(CT_PermStart), Order = 1)]
+        [XmlElement("proofErr", typeof(CT_ProofErr), Order = 1)]
+        [XmlElement("sdt", typeof(CT_SdtCell), Order = 1)]
+        [XmlElement("tc", typeof(CT_Tc), Order = 1)]
         [System.Xml.Serialization.XmlChoiceIdentifierAttribute("ItemsElementName")]
         public object[] Items
         {
@@ -1166,8 +1165,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement("ItemsElementName", Order = 2)]
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlElement("ItemsElementName", Order = 2)]
+        [XmlIgnore]
         public ItemsChoiceType27[] ItemsElementName
         {
             get
@@ -1180,7 +1179,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
         public string uri
         {
             get
@@ -1193,7 +1192,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
         public string element
         {
             get
@@ -1208,8 +1207,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     }
 
 
-    [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IncludeInSchema = false)]
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IncludeInSchema = false)]
     public enum ItemsChoiceType27
     {
 
@@ -1301,10 +1300,10 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     }
 
 
-    [System.SerializableAttribute()]
+    [Serializable]
 
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
     public class CT_SmartTagPr
     {
 
@@ -1315,7 +1314,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             this.attrField = new List<CT_Attr>();
         }
 
-        [System.Xml.Serialization.XmlElement("attr", Order = 0)]
+        [XmlElement("attr", Order = 0)]
         public List<CT_Attr> attr
         {
             get
@@ -1330,8 +1329,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     }
 
 
-    [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IncludeInSchema = false)]
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IncludeInSchema = false)]
     public enum Items1ChoiceType
     {
 

@@ -4,17 +4,15 @@
 //    <NameSpace>schemas</NameSpace><Collection>List</Collection><codeType>CSharp</codeType><EnableDataBinding>False</EnableDataBinding><EnableLazyLoading>False</EnableLazyLoading><TrackingChangesEnable>False</TrackingChangesEnable><GenTrackingClasses>False</GenTrackingClasses><HidePrivateFieldInIDE>False</HidePrivateFieldInIDE><EnableSummaryComment>False</EnableSummaryComment><VirtualProp>False</VirtualProp><IncludeSerializeMethod>False</IncludeSerializeMethod><UseBaseClass>False</UseBaseClass><GenBaseClass>False</GenBaseClass><GenerateCloneMethod>False</GenerateCloneMethod><GenerateDataContracts>False</GenerateDataContracts><CodeBaseTag>Net20</CodeBaseTag><SerializeMethodName>Serialize</SerializeMethodName><DeserializeMethodName>Deserialize</DeserializeMethodName><SaveToFileMethodName>SaveToFile</SaveToFileMethodName><LoadFromFileMethodName>LoadFromFile</LoadFromFileMethodName><GenerateXMLAttributes>False</GenerateXMLAttributes><EnableEncoding>False</EnableEncoding><AutomaticProperties>False</AutomaticProperties><GenerateShouldSerialize>False</GenerateShouldSerialize><DisableDebug>False</DisableDebug><PropNameSpecified>Default</PropNameSpecified><Encoder>UTF8</Encoder><CustomUsings></CustomUsings><ExcludeIncludedTypes>False</ExcludeIncludedTypes><EnableInitializeFields>True</EnableInitializeFields>
 //  </auto-generated>
 // ------------------------------------------------------------------------------
+
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.IO;
+using System.Xml.Serialization;
+
 namespace NPOI.OpenXmlFormats.Spreadsheet
 {
-    using System;
-    using System.Diagnostics;
-    using System.Xml.Serialization;
-    using System.Collections;
-    using System.Xml.Schema;
-    using System.ComponentModel;
-    using System.Collections.Generic;
-    using System.IO;
-
 
     [Serializable]
     //[System.Diagnostics.DebuggerStepThrough]
@@ -217,7 +215,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             get { return false; } // TODO
         }
 
-        [System.Xml.Serialization.XmlElement("bookViews", IsNullable = false)]
+        [XmlElement("bookViews", IsNullable = false)]
         public CT_BookViews bookViews
         {
             get
@@ -236,7 +234,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
 
 
-        [System.Xml.Serialization.XmlElement("sheets", IsNullable = false)]
+        [XmlElement("sheets", IsNullable = false)]
         public CT_Sheets sheets
         {
             get
@@ -267,8 +265,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             get { return false; } // TODO
         }
 
-        //[System.Xml.Serialization.XmlArrayAttribute(Order = 7)]
-        //[System.Xml.Serialization.XmlArrayItemAttribute("externalReference", IsNullable = false)]
+        //[XmlArray(Order = 7)]
+        //[XmlArrayItem("externalReference", IsNullable = false)]
         [XmlElement("externalReference")]
         public List<CT_ExternalReference> externalReferences
         {
@@ -287,8 +285,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             get { return false; } // TODO
         }
 
-        //[System.Xml.Serialization.XmlArrayAttribute(Order = 8)]
-        //[System.Xml.Serialization.XmlArrayItemAttribute("definedName", IsNullable = false)]
+        //[XmlArray(Order = 8)]
+        //[XmlArrayItem("definedName", IsNullable = false)]
         [XmlElement]
         public CT_DefinedNames definedNames
         {
@@ -343,8 +341,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             get { return false; } // TODO
         }
 
-        //[System.Xml.Serialization.XmlArrayAttribute(Order = 11)]
-        //[System.Xml.Serialization.XmlArrayItemAttribute("customWorkbookView", IsNullable = false)]
+        //[XmlArray(Order = 11)]
+        //[XmlArrayItem("customWorkbookView", IsNullable = false)]
         [XmlElement]
         public List<CT_CustomWorkbookView> customWorkbookViews
         {
@@ -363,8 +361,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             get { return false; } // TODO
         }
 
-        //[System.Xml.Serialization.XmlArrayAttribute(Order = 12)]
-        //[System.Xml.Serialization.XmlArrayItemAttribute("pivotCache", IsNullable = false)]
+        //[XmlArray(Order = 12)]
+        //[XmlArrayItem("pivotCache", IsNullable = false)]
         [XmlElement]
         public List<CT_PivotCache> pivotCaches
         {
@@ -401,8 +399,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             get { return false; } // TODO
         }
 
-        //[System.Xml.Serialization.XmlArrayAttribute(Order = 14)]
-        //[System.Xml.Serialization.XmlArrayItemAttribute("smartTagType", IsNullable = false)]
+        //[XmlArray(Order = 14)]
+        //[XmlArrayItem("smartTagType", IsNullable = false)]
         [XmlElement]
         public List<CT_SmartTagType> smartTagTypes
         {
@@ -2952,10 +2950,10 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
     }
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public class CT_BookViews
     {
 
@@ -3014,11 +3012,11 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
     }
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
-    [System.Xml.Serialization.XmlRoot("sheets", Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main", IsNullable = false)]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
+    [XmlRoot("sheets", Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main", IsNullable = false)]
     public class CT_Sheets
     {
         private List<CT_Sheet> sheetField; // required field
@@ -3047,7 +3045,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             return this.sheetField[index];
         }
-        [System.Xml.Serialization.XmlElement("sheet")]
+        [XmlElement("sheet")]
         public List<CT_Sheet> sheet
         {
             get

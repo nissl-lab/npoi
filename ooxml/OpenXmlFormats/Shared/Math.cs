@@ -4,23 +4,18 @@
 //    <NameSpace>NPOI.OpenXmlFormats.Shared</NameSpace><Collection>List</Collection><codeType>CSharp</codeType><EnableDataBinding>False</EnableDataBinding><EnableLazyLoading>False</EnableLazyLoading><TrackingChangesEnable>False</TrackingChangesEnable><GenTrackingClasses>False</GenTrackingClasses><HidePrivateFieldInIDE>False</HidePrivateFieldInIDE><EnableSummaryComment>True</EnableSummaryComment><VirtualProp>False</VirtualProp><IncludeSerializeMethod>False</IncludeSerializeMethod><UseBaseClass>False</UseBaseClass><GenBaseClass>False</GenBaseClass><GenerateCloneMethod>False</GenerateCloneMethod><GenerateDataContracts>False</GenerateDataContracts><CodeBaseTag>Net20</CodeBaseTag><SerializeMethodName>Serialize</SerializeMethodName><DeserializeMethodName>Deserialize</DeserializeMethodName><SaveToFileMethodName>SaveToFile</SaveToFileMethodName><LoadFromFileMethodName>LoadFromFile</LoadFromFileMethodName><GenerateXMLAttributes>True</GenerateXMLAttributes><EnableEncoding>False</EnableEncoding><AutomaticProperties>False</AutomaticProperties><GenerateShouldSerialize>False</GenerateShouldSerialize><DisableDebug>False</DisableDebug><PropNameSpecified>Default</PropNameSpecified><Encoder>UTF8</Encoder><CustomUsings></CustomUsings><ExcludeIncludedTypes>True</ExcludeIncludedTypes><EnableInitializeFields>True</EnableInitializeFields>
 //  </auto-generated>
 // ------------------------------------------------------------------------------
+
+using System;
+using System.Collections.Generic;
+using System.Xml.Serialization;
+using NPOI.OpenXmlFormats.Wordprocessing;
+
 namespace NPOI.OpenXmlFormats.Shared
 {
-    using System;
-    using System.Diagnostics;
-    using System.Xml.Serialization;
-    using System.Collections;
-    using System.Xml.Schema;
-    using System.ComponentModel;
-    using System.Collections.Generic;
-    using NPOI.OpenXmlFormats.Wordprocessing;
-
-
-    
-    [System.SerializableAttribute()]
-    
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [System.Xml.Serialization.XmlRoot("mathPr", Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = false)]
+   
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+    [XmlRoot("mathPr", Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = false)]
     public class CT_MathPr
     {
 
@@ -75,7 +70,7 @@ namespace NPOI.OpenXmlFormats.Shared
             this.mathFontField = new CT_String();
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 0)]
+        [XmlElement(Order = 0)]
         public CT_String mathFont
         {
             get
@@ -88,7 +83,7 @@ namespace NPOI.OpenXmlFormats.Shared
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 1)]
+        [XmlElement(Order = 1)]
         public CT_BreakBin brkBin
         {
             get
@@ -101,7 +96,7 @@ namespace NPOI.OpenXmlFormats.Shared
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 2)]
+        [XmlElement(Order = 2)]
         public CT_BreakBinSub brkBinSub
         {
             get
@@ -114,7 +109,7 @@ namespace NPOI.OpenXmlFormats.Shared
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 3)]
+        [XmlElement(Order = 3)]
         public CT_OnOff smallFrac
         {
             get
@@ -127,7 +122,7 @@ namespace NPOI.OpenXmlFormats.Shared
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 4)]
+        [XmlElement(Order = 4)]
         public CT_OnOff dispDef
         {
             get
@@ -140,7 +135,7 @@ namespace NPOI.OpenXmlFormats.Shared
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 5)]
+        [XmlElement(Order = 5)]
         public CT_TwipsMeasure lMargin
         {
             get
@@ -153,7 +148,7 @@ namespace NPOI.OpenXmlFormats.Shared
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 6)]
+        [XmlElement(Order = 6)]
         public CT_TwipsMeasure rMargin
         {
             get
@@ -166,7 +161,7 @@ namespace NPOI.OpenXmlFormats.Shared
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 7)]
+        [XmlElement(Order = 7)]
         public CT_OMathJc defJc
         {
             get
@@ -179,7 +174,7 @@ namespace NPOI.OpenXmlFormats.Shared
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 8)]
+        [XmlElement(Order = 8)]
         public CT_TwipsMeasure preSp
         {
             get
@@ -192,7 +187,7 @@ namespace NPOI.OpenXmlFormats.Shared
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 9)]
+        [XmlElement(Order = 9)]
         public CT_TwipsMeasure postSp
         {
             get
@@ -205,7 +200,7 @@ namespace NPOI.OpenXmlFormats.Shared
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 10)]
+        [XmlElement(Order = 10)]
         public CT_TwipsMeasure interSp
         {
             get
@@ -218,7 +213,7 @@ namespace NPOI.OpenXmlFormats.Shared
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 11)]
+        [XmlElement(Order = 11)]
         public CT_TwipsMeasure intraSp
         {
             get
@@ -231,8 +226,8 @@ namespace NPOI.OpenXmlFormats.Shared
             }
         }
 
-        [System.Xml.Serialization.XmlElement("wrapIndent", typeof(CT_TwipsMeasure), Order = 12)]
-        [System.Xml.Serialization.XmlElement("wrapRight", typeof(CT_OnOff), Order = 12)]
+        [XmlElement("wrapIndent", typeof(CT_TwipsMeasure), Order = 12)]
+        [XmlElement("wrapRight", typeof(CT_OnOff), Order = 12)]
         public object Item
         {
             get
@@ -245,7 +240,7 @@ namespace NPOI.OpenXmlFormats.Shared
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 13)]
+        [XmlElement(Order = 13)]
         public CT_LimLoc intLim
         {
             get
@@ -258,7 +253,7 @@ namespace NPOI.OpenXmlFormats.Shared
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 14)]
+        [XmlElement(Order = 14)]
         public CT_LimLoc naryLim
         {
             get
@@ -273,16 +268,16 @@ namespace NPOI.OpenXmlFormats.Shared
     }
 
     
-    [System.SerializableAttribute()]
+    [Serializable]
     
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
     public class CT_String
     {
 
         private string valField;
 
-        [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
         public string val
         {
             get
@@ -297,16 +292,16 @@ namespace NPOI.OpenXmlFormats.Shared
     }
 
     
-    [System.SerializableAttribute()]
+    [Serializable]
     
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
     public class CT_LimLoc
     {
 
         private ST_LimLoc valField;
 
-        [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
         public ST_LimLoc val
         {
             get
@@ -321,8 +316,8 @@ namespace NPOI.OpenXmlFormats.Shared
     }
 
     
-    [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
     public enum ST_LimLoc
     {
 
@@ -334,10 +329,10 @@ namespace NPOI.OpenXmlFormats.Shared
     }
 
     
-    [System.SerializableAttribute()]
+    [Serializable]
     
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
     public class CT_OMathJc
     {
 
@@ -345,7 +340,7 @@ namespace NPOI.OpenXmlFormats.Shared
 
         private bool valFieldSpecified;
 
-        [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
         public ST_Jc val
         {
             get
@@ -358,7 +353,7 @@ namespace NPOI.OpenXmlFormats.Shared
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnore]
         public bool valSpecified
         {
             get
@@ -373,8 +368,8 @@ namespace NPOI.OpenXmlFormats.Shared
     }
 
     
-    [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
     public enum ST_Jc
     {
 
@@ -392,16 +387,16 @@ namespace NPOI.OpenXmlFormats.Shared
     }
 
     
-    [System.SerializableAttribute()]
+    [Serializable]
     
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
     public class CT_TwipsMeasure
     {
 
         private uint valField;
 
-        [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
         public uint val
         {
             get
@@ -416,10 +411,10 @@ namespace NPOI.OpenXmlFormats.Shared
     }
 
     
-    [System.SerializableAttribute()]
+    [Serializable]
     
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
     public class CT_OnOff
     {
 
@@ -427,7 +422,7 @@ namespace NPOI.OpenXmlFormats.Shared
 
         private bool valFieldSpecified;
 
-        [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
         public ST_OnOff val
         {
             get
@@ -440,7 +435,7 @@ namespace NPOI.OpenXmlFormats.Shared
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnore]
         public bool valSpecified
         {
             get
@@ -455,8 +450,8 @@ namespace NPOI.OpenXmlFormats.Shared
     }
 
     
-    [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
     public enum ST_OnOff
     {
 
@@ -468,10 +463,10 @@ namespace NPOI.OpenXmlFormats.Shared
     }
 
     
-    [System.SerializableAttribute()]
+    [Serializable]
     
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
     public class CT_BreakBinSub
     {
 
@@ -479,7 +474,7 @@ namespace NPOI.OpenXmlFormats.Shared
 
         private bool valFieldSpecified;
 
-        [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
         public ST_BreakBinSub val
         {
             get
@@ -492,7 +487,7 @@ namespace NPOI.OpenXmlFormats.Shared
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnore]
         public bool valSpecified
         {
             get
@@ -507,8 +502,8 @@ namespace NPOI.OpenXmlFormats.Shared
     }
 
     
-    [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
     public enum ST_BreakBinSub
     {
 
@@ -526,10 +521,10 @@ namespace NPOI.OpenXmlFormats.Shared
     }
 
     
-    [System.SerializableAttribute()]
+    [Serializable]
     
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
     public class CT_BreakBin
     {
 
@@ -537,7 +532,7 @@ namespace NPOI.OpenXmlFormats.Shared
 
         private bool valFieldSpecified;
 
-        [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
         public ST_BreakBin val
         {
             get
@@ -550,7 +545,7 @@ namespace NPOI.OpenXmlFormats.Shared
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnore]
         public bool valSpecified
         {
             get
@@ -565,8 +560,8 @@ namespace NPOI.OpenXmlFormats.Shared
     }
 
     
-    [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
     public enum ST_BreakBin
     {
 
@@ -581,16 +576,16 @@ namespace NPOI.OpenXmlFormats.Shared
     }
 
     
-    [System.SerializableAttribute()]
+    [Serializable]
     
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
     public class CT_Integer255
     {
 
         private string valField;
 
-        [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, DataType = "integer")]
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, DataType = "integer")]
         public string val
         {
             get
@@ -605,16 +600,16 @@ namespace NPOI.OpenXmlFormats.Shared
     }
 
     
-    [System.SerializableAttribute()]
+    [Serializable]
     
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
     public class CT_Integer2
     {
 
         private string valField;
 
-        [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, DataType = "integer")]
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, DataType = "integer")]
         public string val
         {
             get
@@ -629,16 +624,16 @@ namespace NPOI.OpenXmlFormats.Shared
     }
 
     
-    [System.SerializableAttribute()]
+    [Serializable]
     
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
     public class CT_SpacingRule
     {
 
         private string valField;
 
-        [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, DataType = "integer")]
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, DataType = "integer")]
         public string val
         {
             get
@@ -653,16 +648,16 @@ namespace NPOI.OpenXmlFormats.Shared
     }
 
     
-    [System.SerializableAttribute()]
+    [Serializable]
     
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
     public class CT_UnSignedInteger
     {
 
         private uint valField;
 
-        [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
         public uint val
         {
             get
@@ -677,16 +672,16 @@ namespace NPOI.OpenXmlFormats.Shared
     }
 
     
-    [System.SerializableAttribute()]
+    [Serializable]
     
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
     public class CT_Char
     {
 
         private string valField;
 
-        [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
         public string val
         {
             get
@@ -701,16 +696,16 @@ namespace NPOI.OpenXmlFormats.Shared
     }
 
     
-    [System.SerializableAttribute()]
+    [Serializable]
     
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
     public class CT_XAlign
     {
 
         private ST_XAlign valField;
 
-        [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
         public ST_XAlign val
         {
             get
@@ -725,8 +720,8 @@ namespace NPOI.OpenXmlFormats.Shared
     }
 
     
-    [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
     public enum ST_XAlign
     {
 
@@ -741,16 +736,16 @@ namespace NPOI.OpenXmlFormats.Shared
     }
 
     
-    [System.SerializableAttribute()]
+    [Serializable]
     
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
     public class CT_YAlign
     {
 
         private ST_YAlign valField;
 
-        [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
         public ST_YAlign val
         {
             get
@@ -765,8 +760,8 @@ namespace NPOI.OpenXmlFormats.Shared
     }
 
     
-    [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
     public enum ST_YAlign
     {
 
@@ -781,16 +776,16 @@ namespace NPOI.OpenXmlFormats.Shared
     }
 
     
-    [System.SerializableAttribute()]
+    [Serializable]
     
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
     public class CT_Shp
     {
 
         private ST_Shp valField;
 
-        [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
         public ST_Shp val
         {
             get
@@ -805,8 +800,8 @@ namespace NPOI.OpenXmlFormats.Shared
     }
 
     
-    [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
     public enum ST_Shp
     {
 
@@ -818,16 +813,16 @@ namespace NPOI.OpenXmlFormats.Shared
     }
 
     
-    [System.SerializableAttribute()]
+    [Serializable]
     
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
     public class CT_FType
     {
 
         private ST_FType valField;
 
-        [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
         public ST_FType val
         {
             get
@@ -842,8 +837,8 @@ namespace NPOI.OpenXmlFormats.Shared
     }
 
     
-    [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
     public enum ST_FType
     {
 
@@ -861,16 +856,16 @@ namespace NPOI.OpenXmlFormats.Shared
     }
 
     
-    [System.SerializableAttribute()]
+    [Serializable]
     
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
     public class CT_TopBot
     {
 
         private ST_TopBot valField;
 
-        [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
         public ST_TopBot val
         {
             get
@@ -885,8 +880,8 @@ namespace NPOI.OpenXmlFormats.Shared
     }
 
     
-    [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
     public enum ST_TopBot
     {
 
@@ -898,10 +893,10 @@ namespace NPOI.OpenXmlFormats.Shared
     }
 
     
-    [System.SerializableAttribute()]
+    [Serializable]
     
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
     public class CT_Script
     {
 
@@ -909,7 +904,7 @@ namespace NPOI.OpenXmlFormats.Shared
 
         private bool valFieldSpecified;
 
-        [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
         public ST_Script val
         {
             get
@@ -922,7 +917,7 @@ namespace NPOI.OpenXmlFormats.Shared
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnore]
         public bool valSpecified
         {
             get
@@ -937,8 +932,8 @@ namespace NPOI.OpenXmlFormats.Shared
     }
 
     
-    [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
     public enum ST_Script
     {
 
@@ -964,10 +959,10 @@ namespace NPOI.OpenXmlFormats.Shared
     }
 
     
-    [System.SerializableAttribute()]
+    [Serializable]
     
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
     public class CT_Style
     {
 
@@ -975,7 +970,7 @@ namespace NPOI.OpenXmlFormats.Shared
 
         private bool valFieldSpecified;
 
-        [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
         public ST_Style val
         {
             get
@@ -988,7 +983,7 @@ namespace NPOI.OpenXmlFormats.Shared
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnore]
         public bool valSpecified
         {
             get
@@ -1003,8 +998,8 @@ namespace NPOI.OpenXmlFormats.Shared
     }
 
     
-    [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
     public enum ST_Style
     {
 
@@ -1022,16 +1017,16 @@ namespace NPOI.OpenXmlFormats.Shared
     }
 
     
-    [System.SerializableAttribute()]
+    [Serializable]
     
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
     public class CT_ManualBreak
     {
 
         private string alnAtField;
 
-        [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, DataType = "integer")]
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, DataType = "integer")]
         public string alnAt
         {
             get
@@ -1046,10 +1041,10 @@ namespace NPOI.OpenXmlFormats.Shared
     }
 
     
-    [System.SerializableAttribute()]
+    [Serializable]
     
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
     public class CT_RPR
     {
 
@@ -1072,7 +1067,7 @@ namespace NPOI.OpenXmlFormats.Shared
             this.litField = new CT_OnOff();
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 0)]
+        [XmlElement(Order = 0)]
         public CT_OnOff lit
         {
             get
@@ -1085,9 +1080,9 @@ namespace NPOI.OpenXmlFormats.Shared
             }
         }
 
-        [System.Xml.Serialization.XmlElement("nor", typeof(CT_OnOff), Order = 1)]
-        [System.Xml.Serialization.XmlElement("scr", typeof(CT_Script), Order = 1)]
-        [System.Xml.Serialization.XmlElement("sty", typeof(CT_Style), Order = 1)]
+        [XmlElement("nor", typeof(CT_OnOff), Order = 1)]
+        [XmlElement("scr", typeof(CT_Script), Order = 1)]
+        [XmlElement("sty", typeof(CT_Style), Order = 1)]
         public object[] Items
         {
             get
@@ -1100,7 +1095,7 @@ namespace NPOI.OpenXmlFormats.Shared
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 2)]
+        [XmlElement(Order = 2)]
         public CT_ManualBreak brk
         {
             get
@@ -1113,7 +1108,7 @@ namespace NPOI.OpenXmlFormats.Shared
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 3)]
+        [XmlElement(Order = 3)]
         public CT_OnOff aln
         {
             get
@@ -1128,10 +1123,10 @@ namespace NPOI.OpenXmlFormats.Shared
     }
 
     
-    [System.SerializableAttribute()]
+    [Serializable]
     
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
     public class CT_Text1
     {
 
@@ -1139,7 +1134,7 @@ namespace NPOI.OpenXmlFormats.Shared
 
         private string valueField;
 
-        [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, Namespace = "http://www.w3.org/XML/1998/namespace")]
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, Namespace = "http://www.w3.org/XML/1998/namespace")]
         public string space
         {
             get
@@ -1167,10 +1162,10 @@ namespace NPOI.OpenXmlFormats.Shared
     }
 
     
-    [System.SerializableAttribute()]
+    [Serializable]
     
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
     public class CT_R
     {
 
@@ -1193,7 +1188,7 @@ namespace NPOI.OpenXmlFormats.Shared
             this.rPrField = new CT_RPR();
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 0)]
+        [XmlElement(Order = 0)]
         public CT_RPR rPr
         {
             get
@@ -1206,7 +1201,7 @@ namespace NPOI.OpenXmlFormats.Shared
             }
         }
 
-        [System.Xml.Serialization.XmlElement("rPr", Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 1)]
+        [XmlElement("rPr", Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 1)]
         public CT_RPr rPr1
         {
             get
@@ -1219,39 +1214,39 @@ namespace NPOI.OpenXmlFormats.Shared
             }
         }
 
-        [System.Xml.Serialization.XmlElement("t", typeof(CT_Text1), Order = 2)]
-        [System.Xml.Serialization.XmlElement("annotationRef", typeof(CT_Empty), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 2)]
-        [System.Xml.Serialization.XmlElement("br", typeof(CT_Br), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 2)]
-        [System.Xml.Serialization.XmlElement("commentReference", typeof(CT_Markup), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 2)]
-        [System.Xml.Serialization.XmlElement("continuationSeparator", typeof(CT_Empty), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 2)]
-        [System.Xml.Serialization.XmlElement("cr", typeof(CT_Empty), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 2)]
-        [System.Xml.Serialization.XmlElement("dayLong", typeof(CT_Empty), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 2)]
-        [System.Xml.Serialization.XmlElement("dayShort", typeof(CT_Empty), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 2)]
-        [System.Xml.Serialization.XmlElement("delInstrText", typeof(CT_Text), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 2)]
-        [System.Xml.Serialization.XmlElement("delText", typeof(CT_Text), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 2)]
-        [System.Xml.Serialization.XmlElement("drawing", typeof(CT_Drawing), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 2)]
-        [System.Xml.Serialization.XmlElement("endnoteRef", typeof(CT_Empty), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 2)]
-        [System.Xml.Serialization.XmlElement("endnoteReference", typeof(CT_FtnEdnRef), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 2)]
-        [System.Xml.Serialization.XmlElement("fldChar", typeof(CT_FldChar), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 2)]
-        [System.Xml.Serialization.XmlElement("footnoteRef", typeof(CT_Empty), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 2)]
-        [System.Xml.Serialization.XmlElement("footnoteReference", typeof(CT_FtnEdnRef), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 2)]
-        [System.Xml.Serialization.XmlElement("instrText", typeof(CT_Text), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 2)]
-        [System.Xml.Serialization.XmlElement("lastRenderedPageBreak", typeof(CT_Empty), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 2)]
-        [System.Xml.Serialization.XmlElement("monthLong", typeof(CT_Empty), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 2)]
-        [System.Xml.Serialization.XmlElement("monthShort", typeof(CT_Empty), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 2)]
-        [System.Xml.Serialization.XmlElement("noBreakHyphen", typeof(CT_Empty), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 2)]
-        [System.Xml.Serialization.XmlElement("object", typeof(CT_Object), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 2)]
-        [System.Xml.Serialization.XmlElement("pgNum", typeof(CT_Empty), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 2)]
-        [System.Xml.Serialization.XmlElement("pict", typeof(CT_Picture), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 2)]
-        [System.Xml.Serialization.XmlElement("ptab", typeof(CT_PTab), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 2)]
-        [System.Xml.Serialization.XmlElement("ruby", typeof(CT_Ruby), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 2)]
-        [System.Xml.Serialization.XmlElement("separator", typeof(CT_Empty), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 2)]
-        [System.Xml.Serialization.XmlElement("softHyphen", typeof(CT_Empty), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 2)]
-        [System.Xml.Serialization.XmlElement("sym", typeof(CT_Sym), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 2)]
-        [System.Xml.Serialization.XmlElement("t", typeof(CT_Text), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 2)]
-        [System.Xml.Serialization.XmlElement("tab", typeof(CT_Empty), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 2)]
-        [System.Xml.Serialization.XmlElement("yearLong", typeof(CT_Empty), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 2)]
-        [System.Xml.Serialization.XmlElement("yearShort", typeof(CT_Empty), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 2)]
+        [XmlElement("t", typeof(CT_Text1), Order = 2)]
+        [XmlElement("annotationRef", typeof(CT_Empty), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 2)]
+        [XmlElement("br", typeof(CT_Br), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 2)]
+        [XmlElement("commentReference", typeof(CT_Markup), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 2)]
+        [XmlElement("continuationSeparator", typeof(CT_Empty), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 2)]
+        [XmlElement("cr", typeof(CT_Empty), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 2)]
+        [XmlElement("dayLong", typeof(CT_Empty), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 2)]
+        [XmlElement("dayShort", typeof(CT_Empty), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 2)]
+        [XmlElement("delInstrText", typeof(CT_Text), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 2)]
+        [XmlElement("delText", typeof(CT_Text), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 2)]
+        [XmlElement("drawing", typeof(CT_Drawing), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 2)]
+        [XmlElement("endnoteRef", typeof(CT_Empty), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 2)]
+        [XmlElement("endnoteReference", typeof(CT_FtnEdnRef), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 2)]
+        [XmlElement("fldChar", typeof(CT_FldChar), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 2)]
+        [XmlElement("footnoteRef", typeof(CT_Empty), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 2)]
+        [XmlElement("footnoteReference", typeof(CT_FtnEdnRef), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 2)]
+        [XmlElement("instrText", typeof(CT_Text), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 2)]
+        [XmlElement("lastRenderedPageBreak", typeof(CT_Empty), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 2)]
+        [XmlElement("monthLong", typeof(CT_Empty), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 2)]
+        [XmlElement("monthShort", typeof(CT_Empty), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 2)]
+        [XmlElement("noBreakHyphen", typeof(CT_Empty), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 2)]
+        [XmlElement("object", typeof(CT_Object), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 2)]
+        [XmlElement("pgNum", typeof(CT_Empty), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 2)]
+        [XmlElement("pict", typeof(CT_Picture), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 2)]
+        [XmlElement("ptab", typeof(CT_PTab), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 2)]
+        [XmlElement("ruby", typeof(CT_Ruby), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 2)]
+        [XmlElement("separator", typeof(CT_Empty), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 2)]
+        [XmlElement("softHyphen", typeof(CT_Empty), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 2)]
+        [XmlElement("sym", typeof(CT_Sym), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 2)]
+        [XmlElement("t", typeof(CT_Text), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 2)]
+        [XmlElement("tab", typeof(CT_Empty), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 2)]
+        [XmlElement("yearLong", typeof(CT_Empty), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 2)]
+        [XmlElement("yearShort", typeof(CT_Empty), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 2)]
         [System.Xml.Serialization.XmlChoiceIdentifierAttribute("ItemsElementName")]
         public object[] Items
         {
@@ -1265,8 +1260,8 @@ namespace NPOI.OpenXmlFormats.Shared
             }
         }
 
-        [System.Xml.Serialization.XmlElement("ItemsElementName", Order = 3)]
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlElement("ItemsElementName", Order = 3)]
+        [XmlIgnore]
         public ItemsChoiceType6[] ItemsElementName
         {
             get
@@ -1282,8 +1277,8 @@ namespace NPOI.OpenXmlFormats.Shared
 
 
 
-    [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IncludeInSchema = false)]
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IncludeInSchema = false)]
     public enum ItemsChoiceType6
     {
 
@@ -1422,10 +1417,10 @@ namespace NPOI.OpenXmlFormats.Shared
     }
 
     
-    [System.SerializableAttribute()]
+    [Serializable]
     
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
     public class CT_CtrlPr
     {
 
@@ -1435,7 +1430,7 @@ namespace NPOI.OpenXmlFormats.Shared
 
         private CT_RPrChange delField;
 
-        [System.Xml.Serialization.XmlElement(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 0)]
+        [XmlElement(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 0)]
         public CT_RPr rPr
         {
             get
@@ -1448,7 +1443,7 @@ namespace NPOI.OpenXmlFormats.Shared
             }
         }
 
-        //[System.Xml.Serialization.XmlElement(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Type = typeof(CT_RPrChange), Order = 1)]
+        //[XmlElement(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Type = typeof(CT_RPrChange), Order = 1)]
         //public CT_RPrChange ins
         //{
         //    get
@@ -1461,7 +1456,7 @@ namespace NPOI.OpenXmlFormats.Shared
         //    }
         //}
 
-        //[System.Xml.Serialization.XmlElement(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Type = typeof(CT_RPrChange), Order = 2)]
+        //[XmlElement(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Type = typeof(CT_RPrChange), Order = 2)]
         //public CT_RPrChange del
         //{
         //    get
@@ -1476,10 +1471,10 @@ namespace NPOI.OpenXmlFormats.Shared
     }
 
     
-    [System.SerializableAttribute()]
+    [Serializable]
     
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
     public class CT_AccPr
     {
 
@@ -1496,7 +1491,7 @@ namespace NPOI.OpenXmlFormats.Shared
             this.chrField = new CT_Char();
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 0)]
+        [XmlElement(Order = 0)]
         public CT_Char chr
         {
             get
@@ -1509,7 +1504,7 @@ namespace NPOI.OpenXmlFormats.Shared
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 1)]
+        [XmlElement(Order = 1)]
         public CT_CtrlPr ctrlPr
         {
             get
@@ -1524,10 +1519,10 @@ namespace NPOI.OpenXmlFormats.Shared
     }
 
     
-    [System.SerializableAttribute()]
+    [Serializable]
     
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
     public class CT_Acc
     {
 
@@ -1544,7 +1539,7 @@ namespace NPOI.OpenXmlFormats.Shared
             this.accPrField = new CT_AccPr();
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 0)]
+        [XmlElement(Order = 0)]
         public CT_AccPr accPr
         {
             get
@@ -1557,7 +1552,7 @@ namespace NPOI.OpenXmlFormats.Shared
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 1)]
+        [XmlElement(Order = 1)]
         public CT_OMathArg e
         {
             get
@@ -1572,10 +1567,10 @@ namespace NPOI.OpenXmlFormats.Shared
     }
 
     
-    [System.SerializableAttribute()]
+    [Serializable]
     
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
     public class CT_OMathArg
     {
 
@@ -1598,7 +1593,7 @@ namespace NPOI.OpenXmlFormats.Shared
             this.argPrField = new CT_OMathArgPr();
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 0)]
+        [XmlElement(Order = 0)]
         public CT_OMathArgPr argPr
         {
             get
@@ -1611,51 +1606,51 @@ namespace NPOI.OpenXmlFormats.Shared
             }
         }
 
-        [System.Xml.Serialization.XmlElement("acc", typeof(CT_Acc), Order = 1)]
-        [System.Xml.Serialization.XmlElement("bar", typeof(CT_Bar), Order = 1)]
-        [System.Xml.Serialization.XmlElement("borderBox", typeof(CT_BorderBox), Order = 1)]
-        [System.Xml.Serialization.XmlElement("box", typeof(CT_Box), Order = 1)]
-        [System.Xml.Serialization.XmlElement("d", typeof(CT_D), Order = 1)]
-        [System.Xml.Serialization.XmlElement("eqArr", typeof(CT_EqArr), Order = 1)]
-        [System.Xml.Serialization.XmlElement("f", typeof(CT_F), Order = 1)]
-        [System.Xml.Serialization.XmlElement("func", typeof(CT_Func), Order = 1)]
-        [System.Xml.Serialization.XmlElement("groupChr", typeof(CT_GroupChr), Order = 1)]
-        [System.Xml.Serialization.XmlElement("limLow", typeof(CT_LimLow), Order = 1)]
-        [System.Xml.Serialization.XmlElement("limUpp", typeof(CT_LimUpp), Order = 1)]
-        [System.Xml.Serialization.XmlElement("m", typeof(CT_M), Order = 1)]
-        [System.Xml.Serialization.XmlElement("nary", typeof(CT_Nary), Order = 1)]
-        [System.Xml.Serialization.XmlElement("oMath", typeof(CT_OMath), Order = 1)]
-        [System.Xml.Serialization.XmlElement("oMathPara", typeof(CT_OMathPara), Order = 1)]
-        [System.Xml.Serialization.XmlElement("phant", typeof(CT_Phant), Order = 1)]
-        [System.Xml.Serialization.XmlElement("r", typeof(CT_R), Order = 1)]
-        [System.Xml.Serialization.XmlElement("rad", typeof(CT_Rad), Order = 1)]
-        [System.Xml.Serialization.XmlElement("sPre", typeof(CT_SPre), Order = 1)]
-        [System.Xml.Serialization.XmlElement("sSub", typeof(CT_SSub), Order = 1)]
-        [System.Xml.Serialization.XmlElement("sSubSup", typeof(CT_SSubSup), Order = 1)]
-        [System.Xml.Serialization.XmlElement("sSup", typeof(CT_SSup), Order = 1)]
-        [System.Xml.Serialization.XmlElement("bookmarkEnd", typeof(CT_MarkupRange), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 1)]
-        [System.Xml.Serialization.XmlElement("bookmarkStart", typeof(CT_Bookmark), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 1)]
-        [System.Xml.Serialization.XmlElement("commentRangeEnd", typeof(CT_MarkupRange), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 1)]
-        [System.Xml.Serialization.XmlElement("commentRangeStart", typeof(CT_MarkupRange), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 1)]
-        [System.Xml.Serialization.XmlElement("customXmlDelRangeEnd", typeof(CT_Markup), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 1)]
-        [System.Xml.Serialization.XmlElement("customXmlDelRangeStart", typeof(CT_TrackChange), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 1)]
-        [System.Xml.Serialization.XmlElement("customXmlInsRangeEnd", typeof(CT_Markup), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 1)]
-        [System.Xml.Serialization.XmlElement("customXmlInsRangeStart", typeof(CT_TrackChange), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 1)]
-        [System.Xml.Serialization.XmlElement("customXmlMoveFromRangeEnd", typeof(CT_Markup), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 1)]
-        [System.Xml.Serialization.XmlElement("customXmlMoveFromRangeStart", typeof(CT_TrackChange), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 1)]
-        [System.Xml.Serialization.XmlElement("customXmlMoveToRangeEnd", typeof(CT_Markup), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 1)]
-        [System.Xml.Serialization.XmlElement("customXmlMoveToRangeStart", typeof(CT_TrackChange), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 1)]
-        [System.Xml.Serialization.XmlElement("del", typeof(CT_RunTrackChange), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 1)]
-        [System.Xml.Serialization.XmlElement("ins", typeof(CT_RunTrackChange), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 1)]
-        [System.Xml.Serialization.XmlElement("moveFrom", typeof(CT_RunTrackChange), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 1)]
-        [System.Xml.Serialization.XmlElement("moveFromRangeEnd", typeof(CT_MarkupRange), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 1)]
-        [System.Xml.Serialization.XmlElement("moveFromRangeStart", typeof(CT_MoveBookmark), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 1)]
-        [System.Xml.Serialization.XmlElement("moveTo", typeof(CT_RunTrackChange), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 1)]
-        [System.Xml.Serialization.XmlElement("moveToRangeEnd", typeof(CT_MarkupRange), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 1)]
-        [System.Xml.Serialization.XmlElement("moveToRangeStart", typeof(CT_MoveBookmark), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 1)]
-        [System.Xml.Serialization.XmlElement("permEnd", typeof(CT_Perm), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 1)]
-        [System.Xml.Serialization.XmlElement("permStart", typeof(CT_PermStart), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 1)]
-        [System.Xml.Serialization.XmlElement("proofErr", typeof(CT_ProofErr), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 1)]
+        [XmlElement("acc", typeof(CT_Acc), Order = 1)]
+        [XmlElement("bar", typeof(CT_Bar), Order = 1)]
+        [XmlElement("borderBox", typeof(CT_BorderBox), Order = 1)]
+        [XmlElement("box", typeof(CT_Box), Order = 1)]
+        [XmlElement("d", typeof(CT_D), Order = 1)]
+        [XmlElement("eqArr", typeof(CT_EqArr), Order = 1)]
+        [XmlElement("f", typeof(CT_F), Order = 1)]
+        [XmlElement("func", typeof(CT_Func), Order = 1)]
+        [XmlElement("groupChr", typeof(CT_GroupChr), Order = 1)]
+        [XmlElement("limLow", typeof(CT_LimLow), Order = 1)]
+        [XmlElement("limUpp", typeof(CT_LimUpp), Order = 1)]
+        [XmlElement("m", typeof(CT_M), Order = 1)]
+        [XmlElement("nary", typeof(CT_Nary), Order = 1)]
+        [XmlElement("oMath", typeof(CT_OMath), Order = 1)]
+        [XmlElement("oMathPara", typeof(CT_OMathPara), Order = 1)]
+        [XmlElement("phant", typeof(CT_Phant), Order = 1)]
+        [XmlElement("r", typeof(CT_R), Order = 1)]
+        [XmlElement("rad", typeof(CT_Rad), Order = 1)]
+        [XmlElement("sPre", typeof(CT_SPre), Order = 1)]
+        [XmlElement("sSub", typeof(CT_SSub), Order = 1)]
+        [XmlElement("sSubSup", typeof(CT_SSubSup), Order = 1)]
+        [XmlElement("sSup", typeof(CT_SSup), Order = 1)]
+        [XmlElement("bookmarkEnd", typeof(CT_MarkupRange), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 1)]
+        [XmlElement("bookmarkStart", typeof(CT_Bookmark), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 1)]
+        [XmlElement("commentRangeEnd", typeof(CT_MarkupRange), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 1)]
+        [XmlElement("commentRangeStart", typeof(CT_MarkupRange), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 1)]
+        [XmlElement("customXmlDelRangeEnd", typeof(CT_Markup), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 1)]
+        [XmlElement("customXmlDelRangeStart", typeof(CT_TrackChange), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 1)]
+        [XmlElement("customXmlInsRangeEnd", typeof(CT_Markup), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 1)]
+        [XmlElement("customXmlInsRangeStart", typeof(CT_TrackChange), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 1)]
+        [XmlElement("customXmlMoveFromRangeEnd", typeof(CT_Markup), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 1)]
+        [XmlElement("customXmlMoveFromRangeStart", typeof(CT_TrackChange), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 1)]
+        [XmlElement("customXmlMoveToRangeEnd", typeof(CT_Markup), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 1)]
+        [XmlElement("customXmlMoveToRangeStart", typeof(CT_TrackChange), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 1)]
+        [XmlElement("del", typeof(CT_RunTrackChange), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 1)]
+        [XmlElement("ins", typeof(CT_RunTrackChange), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 1)]
+        [XmlElement("moveFrom", typeof(CT_RunTrackChange), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 1)]
+        [XmlElement("moveFromRangeEnd", typeof(CT_MarkupRange), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 1)]
+        [XmlElement("moveFromRangeStart", typeof(CT_MoveBookmark), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 1)]
+        [XmlElement("moveTo", typeof(CT_RunTrackChange), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 1)]
+        [XmlElement("moveToRangeEnd", typeof(CT_MarkupRange), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 1)]
+        [XmlElement("moveToRangeStart", typeof(CT_MoveBookmark), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 1)]
+        [XmlElement("permEnd", typeof(CT_Perm), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 1)]
+        [XmlElement("permStart", typeof(CT_PermStart), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 1)]
+        [XmlElement("proofErr", typeof(CT_ProofErr), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 1)]
         [System.Xml.Serialization.XmlChoiceIdentifierAttribute("ItemsElementName")]
         public object[] Items
         {
@@ -1669,8 +1664,8 @@ namespace NPOI.OpenXmlFormats.Shared
             }
         }
 
-        [System.Xml.Serialization.XmlElement("ItemsElementName", Order = 2)]
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlElement("ItemsElementName", Order = 2)]
+        [XmlIgnore]
         public ItemsChoiceType7[] ItemsElementName
         {
             get
@@ -1683,7 +1678,7 @@ namespace NPOI.OpenXmlFormats.Shared
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 3)]
+        [XmlElement(Order = 3)]
         public CT_CtrlPr ctrlPr
         {
             get
@@ -1698,10 +1693,10 @@ namespace NPOI.OpenXmlFormats.Shared
     }
 
     
-    [System.SerializableAttribute()]
+    [Serializable]
     
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
     public class CT_OMathArgPr
     {
 
@@ -1715,7 +1710,7 @@ namespace NPOI.OpenXmlFormats.Shared
             this.argSzField = new CT_Integer2();
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 0)]
+        [XmlElement(Order = 0)]
         public CT_Integer2 argSz
         {
             get
@@ -1730,8 +1725,8 @@ namespace NPOI.OpenXmlFormats.Shared
     }
 
     
-    [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IncludeInSchema = false)]
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IncludeInSchema = false)]
     public enum ItemsChoiceType7
     {
 
@@ -1903,10 +1898,10 @@ namespace NPOI.OpenXmlFormats.Shared
     }
 
     
-    [System.SerializableAttribute()]
+    [Serializable]
     
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
     public class CT_BarPr
     {
 
@@ -1923,7 +1918,7 @@ namespace NPOI.OpenXmlFormats.Shared
             this.posField = new CT_TopBot();
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 0)]
+        [XmlElement(Order = 0)]
         public CT_TopBot pos
         {
             get
@@ -1936,7 +1931,7 @@ namespace NPOI.OpenXmlFormats.Shared
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 1)]
+        [XmlElement(Order = 1)]
         public CT_CtrlPr ctrlPr
         {
             get
@@ -1951,10 +1946,10 @@ namespace NPOI.OpenXmlFormats.Shared
     }
 
     
-    [System.SerializableAttribute()]
+    [Serializable]
     
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
     public class CT_Bar
     {
 
@@ -1971,7 +1966,7 @@ namespace NPOI.OpenXmlFormats.Shared
             this.barPrField = new CT_BarPr();
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 0)]
+        [XmlElement(Order = 0)]
         public CT_BarPr barPr
         {
             get
@@ -1984,7 +1979,7 @@ namespace NPOI.OpenXmlFormats.Shared
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 1)]
+        [XmlElement(Order = 1)]
         public CT_OMathArg e
         {
             get
@@ -1999,10 +1994,10 @@ namespace NPOI.OpenXmlFormats.Shared
     }
 
     
-    [System.SerializableAttribute()]
+    [Serializable]
     
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
     public class CT_BoxPr
     {
 
@@ -2031,7 +2026,7 @@ namespace NPOI.OpenXmlFormats.Shared
             this.opEmuField = new CT_OnOff();
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 0)]
+        [XmlElement(Order = 0)]
         public CT_OnOff opEmu
         {
             get
@@ -2044,7 +2039,7 @@ namespace NPOI.OpenXmlFormats.Shared
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 1)]
+        [XmlElement(Order = 1)]
         public CT_OnOff noBreak
         {
             get
@@ -2057,7 +2052,7 @@ namespace NPOI.OpenXmlFormats.Shared
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 2)]
+        [XmlElement(Order = 2)]
         public CT_OnOff diff
         {
             get
@@ -2070,7 +2065,7 @@ namespace NPOI.OpenXmlFormats.Shared
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 3)]
+        [XmlElement(Order = 3)]
         public CT_ManualBreak brk
         {
             get
@@ -2083,7 +2078,7 @@ namespace NPOI.OpenXmlFormats.Shared
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 4)]
+        [XmlElement(Order = 4)]
         public CT_OnOff aln
         {
             get
@@ -2096,7 +2091,7 @@ namespace NPOI.OpenXmlFormats.Shared
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 5)]
+        [XmlElement(Order = 5)]
         public CT_CtrlPr ctrlPr
         {
             get
@@ -2111,10 +2106,10 @@ namespace NPOI.OpenXmlFormats.Shared
     }
 
     
-    [System.SerializableAttribute()]
+    [Serializable]
     
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
     public class CT_Box
     {
 
@@ -2131,7 +2126,7 @@ namespace NPOI.OpenXmlFormats.Shared
             this.boxPrField = new CT_BoxPr();
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 0)]
+        [XmlElement(Order = 0)]
         public CT_BoxPr boxPr
         {
             get
@@ -2144,7 +2139,7 @@ namespace NPOI.OpenXmlFormats.Shared
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 1)]
+        [XmlElement(Order = 1)]
         public CT_OMathArg e
         {
             get
@@ -2159,10 +2154,10 @@ namespace NPOI.OpenXmlFormats.Shared
     }
 
     
-    [System.SerializableAttribute()]
+    [Serializable]
     
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
     public class CT_BorderBoxPr
     {
 
@@ -2200,7 +2195,7 @@ namespace NPOI.OpenXmlFormats.Shared
             this.hideTopField = new CT_OnOff();
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 0)]
+        [XmlElement(Order = 0)]
         public CT_OnOff hideTop
         {
             get
@@ -2213,7 +2208,7 @@ namespace NPOI.OpenXmlFormats.Shared
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 1)]
+        [XmlElement(Order = 1)]
         public CT_OnOff hideBot
         {
             get
@@ -2226,7 +2221,7 @@ namespace NPOI.OpenXmlFormats.Shared
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 2)]
+        [XmlElement(Order = 2)]
         public CT_OnOff hideLeft
         {
             get
@@ -2239,7 +2234,7 @@ namespace NPOI.OpenXmlFormats.Shared
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 3)]
+        [XmlElement(Order = 3)]
         public CT_OnOff hideRight
         {
             get
@@ -2252,7 +2247,7 @@ namespace NPOI.OpenXmlFormats.Shared
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 4)]
+        [XmlElement(Order = 4)]
         public CT_OnOff strikeH
         {
             get
@@ -2265,7 +2260,7 @@ namespace NPOI.OpenXmlFormats.Shared
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 5)]
+        [XmlElement(Order = 5)]
         public CT_OnOff strikeV
         {
             get
@@ -2278,7 +2273,7 @@ namespace NPOI.OpenXmlFormats.Shared
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 6)]
+        [XmlElement(Order = 6)]
         public CT_OnOff strikeBLTR
         {
             get
@@ -2291,7 +2286,7 @@ namespace NPOI.OpenXmlFormats.Shared
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 7)]
+        [XmlElement(Order = 7)]
         public CT_OnOff strikeTLBR
         {
             get
@@ -2304,7 +2299,7 @@ namespace NPOI.OpenXmlFormats.Shared
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 8)]
+        [XmlElement(Order = 8)]
         public CT_CtrlPr ctrlPr
         {
             get
@@ -2319,10 +2314,10 @@ namespace NPOI.OpenXmlFormats.Shared
     }
 
     
-    [System.SerializableAttribute()]
+    [Serializable]
     
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
     public class CT_BorderBox
     {
 
@@ -2339,7 +2334,7 @@ namespace NPOI.OpenXmlFormats.Shared
             this.borderBoxPrField = new CT_BorderBoxPr();
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 0)]
+        [XmlElement(Order = 0)]
         public CT_BorderBoxPr borderBoxPr
         {
             get
@@ -2352,7 +2347,7 @@ namespace NPOI.OpenXmlFormats.Shared
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 1)]
+        [XmlElement(Order = 1)]
         public CT_OMathArg e
         {
             get
@@ -2367,10 +2362,10 @@ namespace NPOI.OpenXmlFormats.Shared
     }
 
     
-    [System.SerializableAttribute()]
+    [Serializable]
     
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
     public class CT_DPr
     {
 
@@ -2399,7 +2394,7 @@ namespace NPOI.OpenXmlFormats.Shared
             this.begChrField = new CT_Char();
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 0)]
+        [XmlElement(Order = 0)]
         public CT_Char begChr
         {
             get
@@ -2412,7 +2407,7 @@ namespace NPOI.OpenXmlFormats.Shared
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 1)]
+        [XmlElement(Order = 1)]
         public CT_Char sepChr
         {
             get
@@ -2425,7 +2420,7 @@ namespace NPOI.OpenXmlFormats.Shared
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 2)]
+        [XmlElement(Order = 2)]
         public CT_Char endChr
         {
             get
@@ -2438,7 +2433,7 @@ namespace NPOI.OpenXmlFormats.Shared
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 3)]
+        [XmlElement(Order = 3)]
         public CT_OnOff grow
         {
             get
@@ -2451,7 +2446,7 @@ namespace NPOI.OpenXmlFormats.Shared
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 4)]
+        [XmlElement(Order = 4)]
         public CT_Shp shp
         {
             get
@@ -2464,7 +2459,7 @@ namespace NPOI.OpenXmlFormats.Shared
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 5)]
+        [XmlElement(Order = 5)]
         public CT_CtrlPr ctrlPr
         {
             get
@@ -2479,10 +2474,10 @@ namespace NPOI.OpenXmlFormats.Shared
     }
 
     
-    [System.SerializableAttribute()]
+    [Serializable]
     
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
     public class CT_D
     {
 
@@ -2499,7 +2494,7 @@ namespace NPOI.OpenXmlFormats.Shared
             this.dPrField = new CT_DPr();
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 0)]
+        [XmlElement(Order = 0)]
         public CT_DPr dPr
         {
             get
@@ -2512,7 +2507,7 @@ namespace NPOI.OpenXmlFormats.Shared
             }
         }
 
-        [System.Xml.Serialization.XmlElement("e", Order = 1)]
+        [XmlElement("e", Order = 1)]
         public List<CT_OMathArg> e
         {
             get
@@ -2527,10 +2522,10 @@ namespace NPOI.OpenXmlFormats.Shared
     }
 
     
-    [System.SerializableAttribute()]
+    [Serializable]
     
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
     public class CT_EqArrPr
     {
 
@@ -2559,7 +2554,7 @@ namespace NPOI.OpenXmlFormats.Shared
             this.baseJcField = new CT_YAlign();
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 0)]
+        [XmlElement(Order = 0)]
         public CT_YAlign baseJc
         {
             get
@@ -2572,7 +2567,7 @@ namespace NPOI.OpenXmlFormats.Shared
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 1)]
+        [XmlElement(Order = 1)]
         public CT_OnOff maxDist
         {
             get
@@ -2585,7 +2580,7 @@ namespace NPOI.OpenXmlFormats.Shared
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 2)]
+        [XmlElement(Order = 2)]
         public CT_OnOff objDist
         {
             get
@@ -2598,7 +2593,7 @@ namespace NPOI.OpenXmlFormats.Shared
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 3)]
+        [XmlElement(Order = 3)]
         public CT_SpacingRule rSpRule
         {
             get
@@ -2611,7 +2606,7 @@ namespace NPOI.OpenXmlFormats.Shared
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 4)]
+        [XmlElement(Order = 4)]
         public CT_UnSignedInteger rSp
         {
             get
@@ -2624,7 +2619,7 @@ namespace NPOI.OpenXmlFormats.Shared
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 5)]
+        [XmlElement(Order = 5)]
         public CT_CtrlPr ctrlPr
         {
             get
@@ -2639,10 +2634,10 @@ namespace NPOI.OpenXmlFormats.Shared
     }
 
     
-    [System.SerializableAttribute()]
+    [Serializable]
     
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
     public class CT_EqArr
     {
 
@@ -2659,7 +2654,7 @@ namespace NPOI.OpenXmlFormats.Shared
             this.eqArrPrField = new CT_EqArrPr();
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 0)]
+        [XmlElement(Order = 0)]
         public CT_EqArrPr eqArrPr
         {
             get
@@ -2672,7 +2667,7 @@ namespace NPOI.OpenXmlFormats.Shared
             }
         }
 
-        [System.Xml.Serialization.XmlElement("e", Order = 1)]
+        [XmlElement("e", Order = 1)]
         public List<CT_OMathArg> e
         {
             get
@@ -2687,10 +2682,10 @@ namespace NPOI.OpenXmlFormats.Shared
     }
 
     
-    [System.SerializableAttribute()]
+    [Serializable]
     
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
     public class CT_FPr
     {
 
@@ -2707,7 +2702,7 @@ namespace NPOI.OpenXmlFormats.Shared
             this.typeField = new CT_FType();
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 0)]
+        [XmlElement(Order = 0)]
         public CT_FType type
         {
             get
@@ -2720,7 +2715,7 @@ namespace NPOI.OpenXmlFormats.Shared
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 1)]
+        [XmlElement(Order = 1)]
         public CT_CtrlPr ctrlPr
         {
             get
@@ -2735,10 +2730,10 @@ namespace NPOI.OpenXmlFormats.Shared
     }
 
     
-    [System.SerializableAttribute()]
+    [Serializable]
     
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
     public class CT_F
     {
 
@@ -2758,7 +2753,7 @@ namespace NPOI.OpenXmlFormats.Shared
             this.fPrField = new CT_FPr();
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 0)]
+        [XmlElement(Order = 0)]
         public CT_FPr fPr
         {
             get
@@ -2771,7 +2766,7 @@ namespace NPOI.OpenXmlFormats.Shared
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 1)]
+        [XmlElement(Order = 1)]
         public CT_OMathArg num
         {
             get
@@ -2784,7 +2779,7 @@ namespace NPOI.OpenXmlFormats.Shared
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 2)]
+        [XmlElement(Order = 2)]
         public CT_OMathArg den
         {
             get
@@ -2799,10 +2794,10 @@ namespace NPOI.OpenXmlFormats.Shared
     }
 
     
-    [System.SerializableAttribute()]
+    [Serializable]
     
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
     public class CT_FuncPr
     {
 
@@ -2816,7 +2811,7 @@ namespace NPOI.OpenXmlFormats.Shared
             this.ctrlPrField = new CT_CtrlPr();
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 0)]
+        [XmlElement(Order = 0)]
         public CT_CtrlPr ctrlPr
         {
             get
@@ -2831,10 +2826,10 @@ namespace NPOI.OpenXmlFormats.Shared
     }
 
     
-    [System.SerializableAttribute()]
+    [Serializable]
     
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
     public class CT_Func
     {
 
@@ -2854,7 +2849,7 @@ namespace NPOI.OpenXmlFormats.Shared
             this.funcPrField = new CT_FuncPr();
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 0)]
+        [XmlElement(Order = 0)]
         public CT_FuncPr funcPr
         {
             get
@@ -2867,7 +2862,7 @@ namespace NPOI.OpenXmlFormats.Shared
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 1)]
+        [XmlElement(Order = 1)]
         public CT_OMathArg fName
         {
             get
@@ -2880,7 +2875,7 @@ namespace NPOI.OpenXmlFormats.Shared
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 2)]
+        [XmlElement(Order = 2)]
         public CT_OMathArg e
         {
             get
@@ -2895,10 +2890,10 @@ namespace NPOI.OpenXmlFormats.Shared
     }
 
     
-    [System.SerializableAttribute()]
+    [Serializable]
     
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
     public class CT_GroupChrPr
     {
 
@@ -2921,7 +2916,7 @@ namespace NPOI.OpenXmlFormats.Shared
             this.chrField = new CT_Char();
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 0)]
+        [XmlElement(Order = 0)]
         public CT_Char chr
         {
             get
@@ -2934,7 +2929,7 @@ namespace NPOI.OpenXmlFormats.Shared
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 1)]
+        [XmlElement(Order = 1)]
         public CT_TopBot pos
         {
             get
@@ -2947,7 +2942,7 @@ namespace NPOI.OpenXmlFormats.Shared
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 2)]
+        [XmlElement(Order = 2)]
         public CT_TopBot vertJc
         {
             get
@@ -2960,7 +2955,7 @@ namespace NPOI.OpenXmlFormats.Shared
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 3)]
+        [XmlElement(Order = 3)]
         public CT_CtrlPr ctrlPr
         {
             get
@@ -2975,10 +2970,10 @@ namespace NPOI.OpenXmlFormats.Shared
     }
 
     
-    [System.SerializableAttribute()]
+    [Serializable]
     
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
     public class CT_GroupChr
     {
 
@@ -2995,7 +2990,7 @@ namespace NPOI.OpenXmlFormats.Shared
             this.groupChrPrField = new CT_GroupChrPr();
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 0)]
+        [XmlElement(Order = 0)]
         public CT_GroupChrPr groupChrPr
         {
             get
@@ -3008,7 +3003,7 @@ namespace NPOI.OpenXmlFormats.Shared
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 1)]
+        [XmlElement(Order = 1)]
         public CT_OMathArg e
         {
             get
@@ -3023,10 +3018,10 @@ namespace NPOI.OpenXmlFormats.Shared
     }
 
     
-    [System.SerializableAttribute()]
+    [Serializable]
     
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
     public class CT_LimLowPr
     {
 
@@ -3040,7 +3035,7 @@ namespace NPOI.OpenXmlFormats.Shared
             this.ctrlPrField = new CT_CtrlPr();
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 0)]
+        [XmlElement(Order = 0)]
         public CT_CtrlPr ctrlPr
         {
             get
@@ -3055,10 +3050,10 @@ namespace NPOI.OpenXmlFormats.Shared
     }
 
     
-    [System.SerializableAttribute()]
+    [Serializable]
     
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
     public class CT_LimLow
     {
 
@@ -3078,7 +3073,7 @@ namespace NPOI.OpenXmlFormats.Shared
             this.limLowPrField = new CT_LimLowPr();
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 0)]
+        [XmlElement(Order = 0)]
         public CT_LimLowPr limLowPr
         {
             get
@@ -3091,7 +3086,7 @@ namespace NPOI.OpenXmlFormats.Shared
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 1)]
+        [XmlElement(Order = 1)]
         public CT_OMathArg e
         {
             get
@@ -3104,7 +3099,7 @@ namespace NPOI.OpenXmlFormats.Shared
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 2)]
+        [XmlElement(Order = 2)]
         public CT_OMathArg lim
         {
             get
@@ -3119,10 +3114,10 @@ namespace NPOI.OpenXmlFormats.Shared
     }
 
     
-    [System.SerializableAttribute()]
+    [Serializable]
     
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
     public class CT_LimUppPr
     {
 
@@ -3136,7 +3131,7 @@ namespace NPOI.OpenXmlFormats.Shared
             this.ctrlPrField = new CT_CtrlPr();
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 0)]
+        [XmlElement(Order = 0)]
         public CT_CtrlPr ctrlPr
         {
             get
@@ -3151,10 +3146,10 @@ namespace NPOI.OpenXmlFormats.Shared
     }
 
     
-    [System.SerializableAttribute()]
+    [Serializable]
     
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
     public class CT_LimUpp
     {
 
@@ -3174,7 +3169,7 @@ namespace NPOI.OpenXmlFormats.Shared
             this.limUppPrField = new CT_LimUppPr();
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 0)]
+        [XmlElement(Order = 0)]
         public CT_LimUppPr limUppPr
         {
             get
@@ -3187,7 +3182,7 @@ namespace NPOI.OpenXmlFormats.Shared
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 1)]
+        [XmlElement(Order = 1)]
         public CT_OMathArg e
         {
             get
@@ -3200,7 +3195,7 @@ namespace NPOI.OpenXmlFormats.Shared
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 2)]
+        [XmlElement(Order = 2)]
         public CT_OMathArg lim
         {
             get
@@ -3215,10 +3210,10 @@ namespace NPOI.OpenXmlFormats.Shared
     }
 
     
-    [System.SerializableAttribute()]
+    [Serializable]
     
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
     public class CT_MCPr
     {
 
@@ -3235,7 +3230,7 @@ namespace NPOI.OpenXmlFormats.Shared
             this.countField = new CT_Integer255();
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 0)]
+        [XmlElement(Order = 0)]
         public CT_Integer255 count
         {
             get
@@ -3248,7 +3243,7 @@ namespace NPOI.OpenXmlFormats.Shared
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 1)]
+        [XmlElement(Order = 1)]
         public CT_XAlign mcJc
         {
             get
@@ -3263,10 +3258,10 @@ namespace NPOI.OpenXmlFormats.Shared
     }
 
     
-    [System.SerializableAttribute()]
+    [Serializable]
     
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
     public class CT_MC
     {
 
@@ -3280,7 +3275,7 @@ namespace NPOI.OpenXmlFormats.Shared
             this.mcPrField = new CT_MCPr();
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 0)]
+        [XmlElement(Order = 0)]
         public CT_MCPr mcPr
         {
             get
@@ -3295,10 +3290,10 @@ namespace NPOI.OpenXmlFormats.Shared
     }
 
     
-    [System.SerializableAttribute()]
+    [Serializable]
     
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
     public class CT_MCS
     {
 
@@ -3312,7 +3307,7 @@ namespace NPOI.OpenXmlFormats.Shared
             this.mcField = new List<CT_MC>();
         }
 
-        [System.Xml.Serialization.XmlElement("mc", Order = 0)]
+        [XmlElement("mc", Order = 0)]
         public List<CT_MC> mc
         {
             get
@@ -3327,10 +3322,10 @@ namespace NPOI.OpenXmlFormats.Shared
     }
 
     
-    [System.SerializableAttribute()]
+    [Serializable]
     
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
     public class CT_MPr
     {
 
@@ -3368,7 +3363,7 @@ namespace NPOI.OpenXmlFormats.Shared
             this.baseJcField = new CT_YAlign();
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 0)]
+        [XmlElement(Order = 0)]
         public CT_YAlign baseJc
         {
             get
@@ -3381,7 +3376,7 @@ namespace NPOI.OpenXmlFormats.Shared
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 1)]
+        [XmlElement(Order = 1)]
         public CT_OnOff plcHide
         {
             get
@@ -3394,7 +3389,7 @@ namespace NPOI.OpenXmlFormats.Shared
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 2)]
+        [XmlElement(Order = 2)]
         public CT_SpacingRule rSpRule
         {
             get
@@ -3407,7 +3402,7 @@ namespace NPOI.OpenXmlFormats.Shared
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 3)]
+        [XmlElement(Order = 3)]
         public CT_SpacingRule cGpRule
         {
             get
@@ -3420,7 +3415,7 @@ namespace NPOI.OpenXmlFormats.Shared
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 4)]
+        [XmlElement(Order = 4)]
         public CT_UnSignedInteger rSp
         {
             get
@@ -3433,7 +3428,7 @@ namespace NPOI.OpenXmlFormats.Shared
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 5)]
+        [XmlElement(Order = 5)]
         public CT_UnSignedInteger cSp
         {
             get
@@ -3446,7 +3441,7 @@ namespace NPOI.OpenXmlFormats.Shared
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 6)]
+        [XmlElement(Order = 6)]
         public CT_UnSignedInteger cGp
         {
             get
@@ -3459,8 +3454,8 @@ namespace NPOI.OpenXmlFormats.Shared
             }
         }
 
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 7)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("mc", IsNullable = false)]
+        [XmlArray(Order = 7)]
+        [XmlArrayItem("mc", IsNullable = false)]
         public List<CT_MC> mcs
         {
             get
@@ -3473,7 +3468,7 @@ namespace NPOI.OpenXmlFormats.Shared
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 8)]
+        [XmlElement(Order = 8)]
         public CT_CtrlPr ctrlPr
         {
             get
@@ -3488,10 +3483,10 @@ namespace NPOI.OpenXmlFormats.Shared
     }
 
     
-    [System.SerializableAttribute()]
+    [Serializable]
     
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
     public class CT_MR
     {
 
@@ -3505,7 +3500,7 @@ namespace NPOI.OpenXmlFormats.Shared
             this.eField = new List<CT_OMathArg>();
         }
 
-        [System.Xml.Serialization.XmlElement("e", Order = 0)]
+        [XmlElement("e", Order = 0)]
         public List<CT_OMathArg> e
         {
             get
@@ -3520,10 +3515,10 @@ namespace NPOI.OpenXmlFormats.Shared
     }
 
     
-    [System.SerializableAttribute()]
+    [Serializable]
     
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
     public class CT_M
     {
 
@@ -3540,7 +3535,7 @@ namespace NPOI.OpenXmlFormats.Shared
             this.mPrField = new CT_MPr();
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 0)]
+        [XmlElement(Order = 0)]
         public CT_MPr mPr
         {
             get
@@ -3553,8 +3548,8 @@ namespace NPOI.OpenXmlFormats.Shared
             }
         }
 
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 1)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("e", typeof(CT_OMathArg), IsNullable = false)]
+        [XmlArray(Order = 1)]
+        [XmlArrayItem("e", typeof(CT_OMathArg), IsNullable = false)]
         public List<CT_OMathArg> mr
         {
             get
@@ -3569,10 +3564,10 @@ namespace NPOI.OpenXmlFormats.Shared
     }
 
     
-    [System.SerializableAttribute()]
+    [Serializable]
     
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
     public class CT_NaryPr
     {
 
@@ -3601,7 +3596,7 @@ namespace NPOI.OpenXmlFormats.Shared
             this.chrField = new CT_Char();
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 0)]
+        [XmlElement(Order = 0)]
         public CT_Char chr
         {
             get
@@ -3614,7 +3609,7 @@ namespace NPOI.OpenXmlFormats.Shared
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 1)]
+        [XmlElement(Order = 1)]
         public CT_LimLoc limLoc
         {
             get
@@ -3627,7 +3622,7 @@ namespace NPOI.OpenXmlFormats.Shared
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 2)]
+        [XmlElement(Order = 2)]
         public CT_OnOff grow
         {
             get
@@ -3640,7 +3635,7 @@ namespace NPOI.OpenXmlFormats.Shared
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 3)]
+        [XmlElement(Order = 3)]
         public CT_OnOff subHide
         {
             get
@@ -3653,7 +3648,7 @@ namespace NPOI.OpenXmlFormats.Shared
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 4)]
+        [XmlElement(Order = 4)]
         public CT_OnOff supHide
         {
             get
@@ -3666,7 +3661,7 @@ namespace NPOI.OpenXmlFormats.Shared
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 5)]
+        [XmlElement(Order = 5)]
         public CT_CtrlPr ctrlPr
         {
             get
@@ -3681,10 +3676,10 @@ namespace NPOI.OpenXmlFormats.Shared
     }
 
     
-    [System.SerializableAttribute()]
+    [Serializable]
     
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
     public class CT_Nary
     {
 
@@ -3707,7 +3702,7 @@ namespace NPOI.OpenXmlFormats.Shared
             this.naryPrField = new CT_NaryPr();
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 0)]
+        [XmlElement(Order = 0)]
         public CT_NaryPr naryPr
         {
             get
@@ -3720,7 +3715,7 @@ namespace NPOI.OpenXmlFormats.Shared
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 1)]
+        [XmlElement(Order = 1)]
         public CT_OMathArg sub
         {
             get
@@ -3733,7 +3728,7 @@ namespace NPOI.OpenXmlFormats.Shared
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 2)]
+        [XmlElement(Order = 2)]
         public CT_OMathArg sup
         {
             get
@@ -3746,7 +3741,7 @@ namespace NPOI.OpenXmlFormats.Shared
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 3)]
+        [XmlElement(Order = 3)]
         public CT_OMathArg e
         {
             get
@@ -3761,10 +3756,10 @@ namespace NPOI.OpenXmlFormats.Shared
     }
 
     
-    [System.SerializableAttribute()]
+    [Serializable]
     
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
     public class CT_PhantPr
     {
 
@@ -3793,7 +3788,7 @@ namespace NPOI.OpenXmlFormats.Shared
             this.showField = new CT_OnOff();
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 0)]
+        [XmlElement(Order = 0)]
         public CT_OnOff show
         {
             get
@@ -3806,7 +3801,7 @@ namespace NPOI.OpenXmlFormats.Shared
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 1)]
+        [XmlElement(Order = 1)]
         public CT_OnOff zeroWid
         {
             get
@@ -3819,7 +3814,7 @@ namespace NPOI.OpenXmlFormats.Shared
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 2)]
+        [XmlElement(Order = 2)]
         public CT_OnOff zeroAsc
         {
             get
@@ -3832,7 +3827,7 @@ namespace NPOI.OpenXmlFormats.Shared
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 3)]
+        [XmlElement(Order = 3)]
         public CT_OnOff zeroDesc
         {
             get
@@ -3845,7 +3840,7 @@ namespace NPOI.OpenXmlFormats.Shared
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 4)]
+        [XmlElement(Order = 4)]
         public CT_OnOff transp
         {
             get
@@ -3858,7 +3853,7 @@ namespace NPOI.OpenXmlFormats.Shared
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 5)]
+        [XmlElement(Order = 5)]
         public CT_CtrlPr ctrlPr
         {
             get
@@ -3873,10 +3868,10 @@ namespace NPOI.OpenXmlFormats.Shared
     }
 
     
-    [System.SerializableAttribute()]
+    [Serializable]
     
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
     public class CT_Phant
     {
 
@@ -3893,7 +3888,7 @@ namespace NPOI.OpenXmlFormats.Shared
             this.phantPrField = new CT_PhantPr();
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 0)]
+        [XmlElement(Order = 0)]
         public CT_PhantPr phantPr
         {
             get
@@ -3906,7 +3901,7 @@ namespace NPOI.OpenXmlFormats.Shared
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 1)]
+        [XmlElement(Order = 1)]
         public CT_OMathArg e
         {
             get
@@ -3921,10 +3916,10 @@ namespace NPOI.OpenXmlFormats.Shared
     }
 
     
-    [System.SerializableAttribute()]
+    [Serializable]
     
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
     public class CT_RadPr
     {
 
@@ -3941,7 +3936,7 @@ namespace NPOI.OpenXmlFormats.Shared
             this.degHideField = new CT_OnOff();
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 0)]
+        [XmlElement(Order = 0)]
         public CT_OnOff degHide
         {
             get
@@ -3954,7 +3949,7 @@ namespace NPOI.OpenXmlFormats.Shared
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 1)]
+        [XmlElement(Order = 1)]
         public CT_CtrlPr ctrlPr
         {
             get
@@ -3969,10 +3964,10 @@ namespace NPOI.OpenXmlFormats.Shared
     }
 
     
-    [System.SerializableAttribute()]
+    [Serializable]
     
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
     public class CT_Rad
     {
 
@@ -3992,7 +3987,7 @@ namespace NPOI.OpenXmlFormats.Shared
             this.radPrField = new CT_RadPr();
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 0)]
+        [XmlElement(Order = 0)]
         public CT_RadPr radPr
         {
             get
@@ -4005,7 +4000,7 @@ namespace NPOI.OpenXmlFormats.Shared
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 1)]
+        [XmlElement(Order = 1)]
         public CT_OMathArg deg
         {
             get
@@ -4018,7 +4013,7 @@ namespace NPOI.OpenXmlFormats.Shared
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 2)]
+        [XmlElement(Order = 2)]
         public CT_OMathArg e
         {
             get
@@ -4033,10 +4028,10 @@ namespace NPOI.OpenXmlFormats.Shared
     }
 
     
-    [System.SerializableAttribute()]
+    [Serializable]
     
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
     public class CT_SPrePr
     {
 
@@ -4050,7 +4045,7 @@ namespace NPOI.OpenXmlFormats.Shared
             this.ctrlPrField = new CT_CtrlPr();
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 0)]
+        [XmlElement(Order = 0)]
         public CT_CtrlPr ctrlPr
         {
             get
@@ -4065,10 +4060,10 @@ namespace NPOI.OpenXmlFormats.Shared
     }
 
     
-    [System.SerializableAttribute()]
+    [Serializable]
     
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
     public class CT_SPre
     {
 
@@ -4091,7 +4086,7 @@ namespace NPOI.OpenXmlFormats.Shared
             this.sPrePrField = new CT_SPrePr();
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 0)]
+        [XmlElement(Order = 0)]
         public CT_SPrePr sPrePr
         {
             get
@@ -4104,7 +4099,7 @@ namespace NPOI.OpenXmlFormats.Shared
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 1)]
+        [XmlElement(Order = 1)]
         public CT_OMathArg sub
         {
             get
@@ -4117,7 +4112,7 @@ namespace NPOI.OpenXmlFormats.Shared
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 2)]
+        [XmlElement(Order = 2)]
         public CT_OMathArg sup
         {
             get
@@ -4130,7 +4125,7 @@ namespace NPOI.OpenXmlFormats.Shared
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 3)]
+        [XmlElement(Order = 3)]
         public CT_OMathArg e
         {
             get
@@ -4145,10 +4140,10 @@ namespace NPOI.OpenXmlFormats.Shared
     }
 
     
-    [System.SerializableAttribute()]
+    [Serializable]
     
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
     public class CT_SSubPr
     {
 
@@ -4162,7 +4157,7 @@ namespace NPOI.OpenXmlFormats.Shared
             this.ctrlPrField = new CT_CtrlPr();
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 0)]
+        [XmlElement(Order = 0)]
         public CT_CtrlPr ctrlPr
         {
             get
@@ -4177,10 +4172,10 @@ namespace NPOI.OpenXmlFormats.Shared
     }
 
     
-    [System.SerializableAttribute()]
+    [Serializable]
     
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
     public class CT_SSub
     {
 
@@ -4200,7 +4195,7 @@ namespace NPOI.OpenXmlFormats.Shared
             this.sSubPrField = new CT_SSubPr();
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 0)]
+        [XmlElement(Order = 0)]
         public CT_SSubPr sSubPr
         {
             get
@@ -4213,7 +4208,7 @@ namespace NPOI.OpenXmlFormats.Shared
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 1)]
+        [XmlElement(Order = 1)]
         public CT_OMathArg e
         {
             get
@@ -4226,7 +4221,7 @@ namespace NPOI.OpenXmlFormats.Shared
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 2)]
+        [XmlElement(Order = 2)]
         public CT_OMathArg sub
         {
             get
@@ -4241,10 +4236,10 @@ namespace NPOI.OpenXmlFormats.Shared
     }
 
     
-    [System.SerializableAttribute()]
+    [Serializable]
     
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
     public class CT_SSubSupPr
     {
 
@@ -4261,7 +4256,7 @@ namespace NPOI.OpenXmlFormats.Shared
             this.alnScrField = new CT_OnOff();
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 0)]
+        [XmlElement(Order = 0)]
         public CT_OnOff alnScr
         {
             get
@@ -4274,7 +4269,7 @@ namespace NPOI.OpenXmlFormats.Shared
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 1)]
+        [XmlElement(Order = 1)]
         public CT_CtrlPr ctrlPr
         {
             get
@@ -4289,10 +4284,10 @@ namespace NPOI.OpenXmlFormats.Shared
     }
 
     
-    [System.SerializableAttribute()]
+    [Serializable]
     
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
     public class CT_SSubSup
     {
 
@@ -4315,7 +4310,7 @@ namespace NPOI.OpenXmlFormats.Shared
             this.sSubSupPrField = new CT_SSubSupPr();
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 0)]
+        [XmlElement(Order = 0)]
         public CT_SSubSupPr sSubSupPr
         {
             get
@@ -4328,7 +4323,7 @@ namespace NPOI.OpenXmlFormats.Shared
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 1)]
+        [XmlElement(Order = 1)]
         public CT_OMathArg e
         {
             get
@@ -4341,7 +4336,7 @@ namespace NPOI.OpenXmlFormats.Shared
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 2)]
+        [XmlElement(Order = 2)]
         public CT_OMathArg sub
         {
             get
@@ -4354,7 +4349,7 @@ namespace NPOI.OpenXmlFormats.Shared
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 3)]
+        [XmlElement(Order = 3)]
         public CT_OMathArg sup
         {
             get
@@ -4369,10 +4364,10 @@ namespace NPOI.OpenXmlFormats.Shared
     }
 
     
-    [System.SerializableAttribute()]
+    [Serializable]
     
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
     public class CT_SSupPr
     {
 
@@ -4386,7 +4381,7 @@ namespace NPOI.OpenXmlFormats.Shared
             this.ctrlPrField = new CT_CtrlPr();
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 0)]
+        [XmlElement(Order = 0)]
         public CT_CtrlPr ctrlPr
         {
             get
@@ -4401,10 +4396,10 @@ namespace NPOI.OpenXmlFormats.Shared
     }
 
     
-    [System.SerializableAttribute()]
+    [Serializable]
     
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
     public class CT_SSup
     {
 
@@ -4424,7 +4419,7 @@ namespace NPOI.OpenXmlFormats.Shared
             this.sSupPrField = new CT_SSupPr();
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 0)]
+        [XmlElement(Order = 0)]
         public CT_SSupPr sSupPr
         {
             get
@@ -4437,7 +4432,7 @@ namespace NPOI.OpenXmlFormats.Shared
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 1)]
+        [XmlElement(Order = 1)]
         public CT_OMathArg e
         {
             get
@@ -4450,7 +4445,7 @@ namespace NPOI.OpenXmlFormats.Shared
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 2)]
+        [XmlElement(Order = 2)]
         public CT_OMathArg sup
         {
             get
@@ -4465,10 +4460,10 @@ namespace NPOI.OpenXmlFormats.Shared
     }
 
     
-    [System.SerializableAttribute()]
+    [Serializable]
     
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
     public class CT_OMathParaPr
     {
 
@@ -4482,7 +4477,7 @@ namespace NPOI.OpenXmlFormats.Shared
             this.jcField = new CT_OMathJc();
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 0)]
+        [XmlElement(Order = 0)]
         public CT_OMathJc jc
         {
             get
@@ -4497,10 +4492,10 @@ namespace NPOI.OpenXmlFormats.Shared
     }
 
     
-    [System.SerializableAttribute()]
+    [Serializable]
     
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
     public class CT_OMathPara
     {
 
@@ -4517,7 +4512,7 @@ namespace NPOI.OpenXmlFormats.Shared
             this.oMathParaPrField = new CT_OMathParaPr();
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 0)]
+        [XmlElement(Order = 0)]
         public CT_OMathParaPr oMathParaPr
         {
             get
@@ -4530,7 +4525,7 @@ namespace NPOI.OpenXmlFormats.Shared
             }
         }
 
-        [System.Xml.Serialization.XmlElement("oMath", Order = 1)]
+        [XmlElement("oMath", Order = 1)]
         public List<CT_OMath> oMath
         {
             get
@@ -4545,10 +4540,10 @@ namespace NPOI.OpenXmlFormats.Shared
     }
 
     
-    [System.SerializableAttribute()]
+    [Serializable]
     
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
     public class CT_OMath
     {
 
@@ -4565,51 +4560,51 @@ namespace NPOI.OpenXmlFormats.Shared
             this.itemsField = new object[0];
         }
 
-        [System.Xml.Serialization.XmlElement("acc", typeof(CT_Acc), Order = 0)]
-        [System.Xml.Serialization.XmlElement("bar", typeof(CT_Bar), Order = 0)]
-        [System.Xml.Serialization.XmlElement("borderBox", typeof(CT_BorderBox), Order = 0)]
-        [System.Xml.Serialization.XmlElement("box", typeof(CT_Box), Order = 0)]
-        [System.Xml.Serialization.XmlElement("d", typeof(CT_D), Order = 0)]
-        [System.Xml.Serialization.XmlElement("eqArr", typeof(CT_EqArr), Order = 0)]
-        [System.Xml.Serialization.XmlElement("f", typeof(CT_F), Order = 0)]
-        [System.Xml.Serialization.XmlElement("func", typeof(CT_Func), Order = 0)]
-        [System.Xml.Serialization.XmlElement("groupChr", typeof(CT_GroupChr), Order = 0)]
-        [System.Xml.Serialization.XmlElement("limLow", typeof(CT_LimLow), Order = 0)]
-        [System.Xml.Serialization.XmlElement("limUpp", typeof(CT_LimUpp), Order = 0)]
-        [System.Xml.Serialization.XmlElement("m", typeof(CT_M), Order = 0)]
-        [System.Xml.Serialization.XmlElement("nary", typeof(CT_Nary), Order = 0)]
-        [System.Xml.Serialization.XmlElement("oMath", typeof(CT_OMath), Order = 0)]
-        [System.Xml.Serialization.XmlElement("oMathPara", typeof(CT_OMathPara), Order = 0)]
-        [System.Xml.Serialization.XmlElement("phant", typeof(CT_Phant), Order = 0)]
-        [System.Xml.Serialization.XmlElement("r", typeof(CT_R), Order = 0)]
-        [System.Xml.Serialization.XmlElement("rad", typeof(CT_Rad), Order = 0)]
-        [System.Xml.Serialization.XmlElement("sPre", typeof(CT_SPre), Order = 0)]
-        [System.Xml.Serialization.XmlElement("sSub", typeof(CT_SSub), Order = 0)]
-        [System.Xml.Serialization.XmlElement("sSubSup", typeof(CT_SSubSup), Order = 0)]
-        [System.Xml.Serialization.XmlElement("sSup", typeof(CT_SSup), Order = 0)]
-        [System.Xml.Serialization.XmlElement("bookmarkEnd", typeof(CT_MarkupRange), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 0)]
-        [System.Xml.Serialization.XmlElement("bookmarkStart", typeof(CT_Bookmark), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 0)]
-        [System.Xml.Serialization.XmlElement("commentRangeEnd", typeof(CT_MarkupRange), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 0)]
-        [System.Xml.Serialization.XmlElement("commentRangeStart", typeof(CT_MarkupRange), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 0)]
-        [System.Xml.Serialization.XmlElement("customXmlDelRangeEnd", typeof(CT_Markup), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 0)]
-        [System.Xml.Serialization.XmlElement("customXmlDelRangeStart", typeof(CT_TrackChange), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 0)]
-        [System.Xml.Serialization.XmlElement("customXmlInsRangeEnd", typeof(CT_Markup), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 0)]
-        [System.Xml.Serialization.XmlElement("customXmlInsRangeStart", typeof(CT_TrackChange), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 0)]
-        [System.Xml.Serialization.XmlElement("customXmlMoveFromRangeEnd", typeof(CT_Markup), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 0)]
-        [System.Xml.Serialization.XmlElement("customXmlMoveFromRangeStart", typeof(CT_TrackChange), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 0)]
-        [System.Xml.Serialization.XmlElement("customXmlMoveToRangeEnd", typeof(CT_Markup), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 0)]
-        [System.Xml.Serialization.XmlElement("customXmlMoveToRangeStart", typeof(CT_TrackChange), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 0)]
-        [System.Xml.Serialization.XmlElement("del", typeof(CT_RunTrackChange), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 0)]
-        [System.Xml.Serialization.XmlElement("ins", typeof(CT_RunTrackChange), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 0)]
-        [System.Xml.Serialization.XmlElement("moveFrom", typeof(CT_RunTrackChange), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 0)]
-        [System.Xml.Serialization.XmlElement("moveFromRangeEnd", typeof(CT_MarkupRange), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 0)]
-        [System.Xml.Serialization.XmlElement("moveFromRangeStart", typeof(CT_MoveBookmark), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 0)]
-        [System.Xml.Serialization.XmlElement("moveTo", typeof(CT_RunTrackChange), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 0)]
-        [System.Xml.Serialization.XmlElement("moveToRangeEnd", typeof(CT_MarkupRange), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 0)]
-        [System.Xml.Serialization.XmlElement("moveToRangeStart", typeof(CT_MoveBookmark), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 0)]
-        [System.Xml.Serialization.XmlElement("permEnd", typeof(CT_Perm), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 0)]
-        [System.Xml.Serialization.XmlElement("permStart", typeof(CT_PermStart), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 0)]
-        [System.Xml.Serialization.XmlElement("proofErr", typeof(CT_ProofErr), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 0)]
+        [XmlElement("acc", typeof(CT_Acc), Order = 0)]
+        [XmlElement("bar", typeof(CT_Bar), Order = 0)]
+        [XmlElement("borderBox", typeof(CT_BorderBox), Order = 0)]
+        [XmlElement("box", typeof(CT_Box), Order = 0)]
+        [XmlElement("d", typeof(CT_D), Order = 0)]
+        [XmlElement("eqArr", typeof(CT_EqArr), Order = 0)]
+        [XmlElement("f", typeof(CT_F), Order = 0)]
+        [XmlElement("func", typeof(CT_Func), Order = 0)]
+        [XmlElement("groupChr", typeof(CT_GroupChr), Order = 0)]
+        [XmlElement("limLow", typeof(CT_LimLow), Order = 0)]
+        [XmlElement("limUpp", typeof(CT_LimUpp), Order = 0)]
+        [XmlElement("m", typeof(CT_M), Order = 0)]
+        [XmlElement("nary", typeof(CT_Nary), Order = 0)]
+        [XmlElement("oMath", typeof(CT_OMath), Order = 0)]
+        [XmlElement("oMathPara", typeof(CT_OMathPara), Order = 0)]
+        [XmlElement("phant", typeof(CT_Phant), Order = 0)]
+        [XmlElement("r", typeof(CT_R), Order = 0)]
+        [XmlElement("rad", typeof(CT_Rad), Order = 0)]
+        [XmlElement("sPre", typeof(CT_SPre), Order = 0)]
+        [XmlElement("sSub", typeof(CT_SSub), Order = 0)]
+        [XmlElement("sSubSup", typeof(CT_SSubSup), Order = 0)]
+        [XmlElement("sSup", typeof(CT_SSup), Order = 0)]
+        [XmlElement("bookmarkEnd", typeof(CT_MarkupRange), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 0)]
+        [XmlElement("bookmarkStart", typeof(CT_Bookmark), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 0)]
+        [XmlElement("commentRangeEnd", typeof(CT_MarkupRange), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 0)]
+        [XmlElement("commentRangeStart", typeof(CT_MarkupRange), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 0)]
+        [XmlElement("customXmlDelRangeEnd", typeof(CT_Markup), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 0)]
+        [XmlElement("customXmlDelRangeStart", typeof(CT_TrackChange), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 0)]
+        [XmlElement("customXmlInsRangeEnd", typeof(CT_Markup), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 0)]
+        [XmlElement("customXmlInsRangeStart", typeof(CT_TrackChange), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 0)]
+        [XmlElement("customXmlMoveFromRangeEnd", typeof(CT_Markup), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 0)]
+        [XmlElement("customXmlMoveFromRangeStart", typeof(CT_TrackChange), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 0)]
+        [XmlElement("customXmlMoveToRangeEnd", typeof(CT_Markup), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 0)]
+        [XmlElement("customXmlMoveToRangeStart", typeof(CT_TrackChange), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 0)]
+        [XmlElement("del", typeof(CT_RunTrackChange), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 0)]
+        [XmlElement("ins", typeof(CT_RunTrackChange), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 0)]
+        [XmlElement("moveFrom", typeof(CT_RunTrackChange), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 0)]
+        [XmlElement("moveFromRangeEnd", typeof(CT_MarkupRange), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 0)]
+        [XmlElement("moveFromRangeStart", typeof(CT_MoveBookmark), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 0)]
+        [XmlElement("moveTo", typeof(CT_RunTrackChange), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 0)]
+        [XmlElement("moveToRangeEnd", typeof(CT_MarkupRange), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 0)]
+        [XmlElement("moveToRangeStart", typeof(CT_MoveBookmark), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 0)]
+        [XmlElement("permEnd", typeof(CT_Perm), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 0)]
+        [XmlElement("permStart", typeof(CT_PermStart), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 0)]
+        [XmlElement("proofErr", typeof(CT_ProofErr), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 0)]
         [System.Xml.Serialization.XmlChoiceIdentifierAttribute("ItemsElementName")]
         public object[] Items
         {
@@ -4623,8 +4618,8 @@ namespace NPOI.OpenXmlFormats.Shared
             }
         }
 
-        [System.Xml.Serialization.XmlElement("ItemsElementName", Order = 1)]
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlElement("ItemsElementName", Order = 1)]
+        [XmlIgnore]
         public ItemsChoiceType8[] ItemsElementName
         {
             get
@@ -4639,8 +4634,8 @@ namespace NPOI.OpenXmlFormats.Shared
     }
 
     
-    [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IncludeInSchema = false)]
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IncludeInSchema = false)]
     public enum ItemsChoiceType8
     {
 

@@ -1,12 +1,14 @@
-using System.Collections.Generic;
-using System.Xml.Serialization;
+
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Xml.Serialization;
+
 namespace NPOI.OpenXmlFormats.Dml 
 {
     
 
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
@@ -97,7 +99,7 @@ namespace NPOI.OpenXmlFormats.Dml
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
@@ -322,7 +324,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [XmlArrayItemAttribute("tab", IsNullable=false)]
+        [XmlArrayItem("tab", IsNullable=false)]
         public CT_TextTabStop[] tabLst {
             get {
                 return this.tabLstField;
@@ -596,7 +598,7 @@ namespace NPOI.OpenXmlFormats.Dml
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
@@ -618,7 +620,7 @@ namespace NPOI.OpenXmlFormats.Dml
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
@@ -639,7 +641,7 @@ namespace NPOI.OpenXmlFormats.Dml
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
@@ -666,7 +668,7 @@ namespace NPOI.OpenXmlFormats.Dml
     
     
 
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
@@ -714,7 +716,7 @@ namespace NPOI.OpenXmlFormats.Dml
         
     
         [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/relationships")]
-        //        [XmlAttributeAttribute(DataType="token")]
+        //        [XmlAttribute(DataType="token")]
         public string id {
             get {
                 return this.idField;
@@ -737,7 +739,7 @@ namespace NPOI.OpenXmlFormats.Dml
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
@@ -1414,7 +1416,7 @@ namespace NPOI.OpenXmlFormats.Dml
     }
     
     
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
@@ -1422,7 +1424,7 @@ namespace NPOI.OpenXmlFormats.Dml
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
@@ -1430,7 +1432,7 @@ namespace NPOI.OpenXmlFormats.Dml
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
@@ -1456,7 +1458,7 @@ namespace NPOI.OpenXmlFormats.Dml
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
     public enum ST_TextUnderlineType {
         
@@ -1516,7 +1518,7 @@ namespace NPOI.OpenXmlFormats.Dml
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
     public enum ST_TextStrikeType {
         
@@ -1531,7 +1533,7 @@ namespace NPOI.OpenXmlFormats.Dml
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
     public enum ST_TextCapsType {
         
@@ -1546,7 +1548,7 @@ namespace NPOI.OpenXmlFormats.Dml
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
@@ -1566,7 +1568,7 @@ namespace NPOI.OpenXmlFormats.Dml
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
@@ -1603,7 +1605,7 @@ namespace NPOI.OpenXmlFormats.Dml
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
@@ -1663,7 +1665,7 @@ namespace NPOI.OpenXmlFormats.Dml
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
     public enum ST_TextTabAlignType {
         
@@ -1681,7 +1683,7 @@ namespace NPOI.OpenXmlFormats.Dml
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
@@ -1701,7 +1703,7 @@ namespace NPOI.OpenXmlFormats.Dml
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
@@ -1722,7 +1724,7 @@ namespace NPOI.OpenXmlFormats.Dml
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
@@ -1761,7 +1763,7 @@ namespace NPOI.OpenXmlFormats.Dml
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
     public enum ST_TextAutonumberScheme {
         
@@ -1890,7 +1892,7 @@ namespace NPOI.OpenXmlFormats.Dml
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
@@ -1898,7 +1900,7 @@ namespace NPOI.OpenXmlFormats.Dml
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
@@ -1906,7 +1908,7 @@ namespace NPOI.OpenXmlFormats.Dml
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
@@ -1940,7 +1942,7 @@ namespace NPOI.OpenXmlFormats.Dml
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
@@ -1974,7 +1976,7 @@ namespace NPOI.OpenXmlFormats.Dml
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
@@ -1982,7 +1984,7 @@ namespace NPOI.OpenXmlFormats.Dml
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
@@ -1990,7 +1992,7 @@ namespace NPOI.OpenXmlFormats.Dml
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
@@ -2011,7 +2013,7 @@ namespace NPOI.OpenXmlFormats.Dml
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
     public enum ST_TextAlignType {
         
@@ -2038,7 +2040,7 @@ namespace NPOI.OpenXmlFormats.Dml
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
     public enum ST_TextFontAlignType {
         
@@ -2059,7 +2061,7 @@ namespace NPOI.OpenXmlFormats.Dml
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
     [XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=false)]
     public enum ST_TextAnchoringType {
@@ -2081,7 +2083,7 @@ namespace NPOI.OpenXmlFormats.Dml
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
     [XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=false)]
     public enum ST_TextVertOverflowType {
@@ -2097,7 +2099,7 @@ namespace NPOI.OpenXmlFormats.Dml
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
     [XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=false)]
     public enum ST_TextHorzOverflowType {
@@ -2110,7 +2112,7 @@ namespace NPOI.OpenXmlFormats.Dml
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
     [XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=false)]
     public enum ST_TextVerticalType {
@@ -2138,7 +2140,7 @@ namespace NPOI.OpenXmlFormats.Dml
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
     [XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=false)]
     public enum ST_TextWrappingType {
@@ -2151,7 +2153,7 @@ namespace NPOI.OpenXmlFormats.Dml
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
@@ -2292,7 +2294,7 @@ namespace NPOI.OpenXmlFormats.Dml
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
@@ -2334,7 +2336,7 @@ namespace NPOI.OpenXmlFormats.Dml
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
@@ -2343,7 +2345,7 @@ namespace NPOI.OpenXmlFormats.Dml
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
@@ -2352,7 +2354,7 @@ namespace NPOI.OpenXmlFormats.Dml
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
@@ -2943,7 +2945,7 @@ namespace NPOI.OpenXmlFormats.Dml
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]

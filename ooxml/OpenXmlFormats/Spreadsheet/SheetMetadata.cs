@@ -4,17 +4,15 @@
 //    <NameSpace>schemas</NameSpace><Collection>List</Collection><codeType>CSharp</codeType><EnableDataBinding>False</EnableDataBinding><EnableLazyLoading>False</EnableLazyLoading><TrackingChangesEnable>False</TrackingChangesEnable><GenTrackingClasses>False</GenTrackingClasses><HidePrivateFieldInIDE>False</HidePrivateFieldInIDE><EnableSummaryComment>False</EnableSummaryComment><VirtualProp>False</VirtualProp><IncludeSerializeMethod>False</IncludeSerializeMethod><UseBaseClass>False</UseBaseClass><GenBaseClass>False</GenBaseClass><GenerateCloneMethod>False</GenerateCloneMethod><GenerateDataContracts>False</GenerateDataContracts><CodeBaseTag>Net20</CodeBaseTag><SerializeMethodName>Serialize</SerializeMethodName><DeserializeMethodName>Deserialize</DeserializeMethodName><SaveToFileMethodName>SaveToFile</SaveToFileMethodName><LoadFromFileMethodName>LoadFromFile</LoadFromFileMethodName><GenerateXMLAttributes>False</GenerateXMLAttributes><EnableEncoding>False</EnableEncoding><AutomaticProperties>False</AutomaticProperties><GenerateShouldSerialize>False</GenerateShouldSerialize><DisableDebug>False</DisableDebug><PropNameSpecified>Default</PropNameSpecified><Encoder>UTF8</Encoder><CustomUsings></CustomUsings><ExcludeIncludedTypes>False</ExcludeIncludedTypes><EnableInitializeFields>True</EnableInitializeFields>
 //  </auto-generated>
 // ------------------------------------------------------------------------------
+
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Xml.Serialization;
+
 namespace NPOI.OpenXmlFormats.Spreadsheet
 {
-    using System;
-    using System.Diagnostics;
-    using System.Xml.Serialization;
-    using System.Collections;
-    using System.Xml.Schema;
-    using System.ComponentModel;
-    using System.Collections.Generic;
-
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [DesignerCategory("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
@@ -133,7 +131,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
     }
 
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [DesignerCategory("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
@@ -177,7 +175,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
     }
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [DesignerCategory("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
@@ -634,7 +632,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
     }
 
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [DesignerCategory("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
@@ -670,7 +668,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
     }
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [DesignerCategory("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
@@ -689,8 +687,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.countField = ((uint)(0));
         }
 
-        [XmlArrayAttribute(Order = 0)]
-        [XmlArrayItemAttribute("rc", typeof(CT_MetadataRecord), IsNullable = false)]
+        [XmlArray(Order = 0)]
+        [XmlArrayItem("rc", typeof(CT_MetadataRecord), IsNullable = false)]
         public List<CT_MetadataRecord> bk
         {
             get
@@ -716,7 +714,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
     }
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [DesignerCategory("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
@@ -762,7 +760,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.bkField = new List<CT_FutureMetadataBlock>();
             this.countField = ((uint)(0));
         }
-        [System.Xml.Serialization.XmlElement("bk")]
+        [XmlElement("bk")]
         public List<CT_FutureMetadataBlock> bk
         {
             get
@@ -786,7 +784,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.extLstField = value;
             }
         }
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public string name
         {
             get
@@ -798,7 +796,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.nameField = value;
             }
         }
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         [DefaultValueAttribute(typeof(uint), "0")]
         public uint count
         {
@@ -981,7 +979,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
     }
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [DesignerCategory("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
@@ -1362,7 +1360,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
     }
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [DesignerCategory("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
@@ -1406,7 +1404,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
     }
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [DesignerCategory("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]

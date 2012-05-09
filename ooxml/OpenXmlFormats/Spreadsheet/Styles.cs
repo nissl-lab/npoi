@@ -1,9 +1,10 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Xml;
 using System.Xml.Serialization;
-using System.ComponentModel;
 
 namespace NPOI.OpenXmlFormats.Spreadsheet
 {
@@ -719,11 +720,11 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             return stringWriter.ToString();
         }
     }
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(ElementName = "styleSheet", Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main", IsNullable = false)]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
+    [XmlRoot(ElementName = "styleSheet", Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main", IsNullable = false)]
     public class CT_Stylesheet
     {
 
@@ -1091,8 +1092,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.indexedColorsField = new List<CT_RgbColor>();
         }
 
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 0)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("rgbColor", IsNullable = false)]
+        [XmlArray(Order = 0)]
+        [XmlArrayItem("rgbColor", IsNullable = false)]
         public List<CT_RgbColor> indexedColors
         {
             get
@@ -1105,8 +1106,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 1)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("color", IsNullable = false)]
+        [XmlArray(Order = 1)]
+        [XmlArrayItem("color", IsNullable = false)]
         public List<CT_Color> mruColors
         {
             get

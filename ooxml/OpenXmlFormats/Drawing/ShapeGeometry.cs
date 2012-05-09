@@ -1,12 +1,15 @@
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Xml.Serialization;
+
 namespace NPOI.OpenXmlFormats.Dml {
     
     
 
-    [System.Serializable]
-    [System.Xml.Serialization.XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=false)]
+    [Serializable]
+    [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=false)]
     public enum ST_ShapeType {
         
     
@@ -572,9 +575,9 @@ namespace NPOI.OpenXmlFormats.Dml {
     }
     
 
-    [System.Serializable]
-    [System.Xml.Serialization.XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=false)]
+    [Serializable]
+    [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=false)]
     public enum ST_TextShapeType {
         
     
@@ -702,11 +705,11 @@ namespace NPOI.OpenXmlFormats.Dml {
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
-    [System.Xml.Serialization.XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
+    [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_GeomGuide {
         
         private string nameField;
@@ -714,7 +717,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         private string fmlaField;
         
     
-        [System.Xml.Serialization.XmlAttributeAttribute(DataType="token")]
+        [XmlAttribute(DataType="token")]
         public string name {
             get {
                 return this.nameField;
@@ -725,7 +728,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
     
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public string fmla {
             get {
                 return this.fmlaField;
@@ -737,17 +740,17 @@ namespace NPOI.OpenXmlFormats.Dml {
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
-    [System.Xml.Serialization.XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
+    [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_Path2DCubicBezierTo {
         
         private CT_AdjPoint2D[] ptField;
         
     
-        [System.Xml.Serialization.XmlElement("pt")]
+        [XmlElement("pt")]
         public CT_AdjPoint2D[] pt {
             get {
                 return this.ptField;
@@ -759,11 +762,11 @@ namespace NPOI.OpenXmlFormats.Dml {
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
-    [System.Xml.Serialization.XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
+    [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_AdjPoint2D {
         
         private string xField;
@@ -771,7 +774,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         private string yField;
         
     
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public string x {
             get {
                 return this.xField;
@@ -782,7 +785,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
     
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public string y {
             get {
                 return this.yField;
@@ -794,17 +797,17 @@ namespace NPOI.OpenXmlFormats.Dml {
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
-    [System.Xml.Serialization.XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
+    [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_Path2DQuadBezierTo {
         
         private CT_AdjPoint2D[] ptField;
         
     
-        [System.Xml.Serialization.XmlElement("pt")]
+        [XmlElement("pt")]
         public CT_AdjPoint2D[] pt {
             get {
                 return this.ptField;
@@ -816,17 +819,17 @@ namespace NPOI.OpenXmlFormats.Dml {
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
-    [System.Xml.Serialization.XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
+    [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_GeomGuideList {
         
         private CT_GeomGuide[] gdField;
         
     
-        [System.Xml.Serialization.XmlElement("gd")]
+        [XmlElement("gd")]
         public CT_GeomGuide[] gd {
             get {
                 return this.gdField;
@@ -838,11 +841,11 @@ namespace NPOI.OpenXmlFormats.Dml {
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
-    [System.Xml.Serialization.XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
+    [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_GeomRect {
         
         private string lField;
@@ -854,7 +857,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         private string bField;
         
     
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public string l {
             get {
                 return this.lField;
@@ -865,7 +868,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
     
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public string t {
             get {
                 return this.tField;
@@ -876,7 +879,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
     
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public string r {
             get {
                 return this.rField;
@@ -887,7 +890,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
     
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public string b {
             get {
                 return this.bField;
@@ -899,11 +902,11 @@ namespace NPOI.OpenXmlFormats.Dml {
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
-    [System.Xml.Serialization.XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
+    [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_XYAdjustHandle {
         
         private CT_AdjPoint2D posField;
@@ -931,7 +934,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
     
-        [System.Xml.Serialization.XmlAttributeAttribute(DataType="token")]
+        [XmlAttribute(DataType="token")]
         public string gdRefX {
             get {
                 return this.gdRefXField;
@@ -942,7 +945,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
     
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public string minX {
             get {
                 return this.minXField;
@@ -953,7 +956,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
     
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public string maxX {
             get {
                 return this.maxXField;
@@ -964,7 +967,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
     
-        [System.Xml.Serialization.XmlAttributeAttribute(DataType="token")]
+        [XmlAttribute(DataType="token")]
         public string gdRefY {
             get {
                 return this.gdRefYField;
@@ -975,7 +978,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
     
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public string minY {
             get {
                 return this.minYField;
@@ -986,7 +989,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
     
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public string maxY {
             get {
                 return this.maxYField;
@@ -998,11 +1001,11 @@ namespace NPOI.OpenXmlFormats.Dml {
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
-    [System.Xml.Serialization.XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
+    [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_PolarAdjustHandle {
         
         private CT_AdjPoint2D posField;
@@ -1030,7 +1033,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
     
-        [System.Xml.Serialization.XmlAttributeAttribute(DataType="token")]
+        [XmlAttribute(DataType="token")]
         public string gdRefR {
             get {
                 return this.gdRefRField;
@@ -1041,7 +1044,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
     
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public string minR {
             get {
                 return this.minRField;
@@ -1052,7 +1055,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
     
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public string maxR {
             get {
                 return this.maxRField;
@@ -1063,7 +1066,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
     
-        [System.Xml.Serialization.XmlAttributeAttribute(DataType="token")]
+        [XmlAttribute(DataType="token")]
         public string gdRefAng {
             get {
                 return this.gdRefAngField;
@@ -1074,7 +1077,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
     
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public string minAng {
             get {
                 return this.minAngField;
@@ -1085,7 +1088,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
     
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public string maxAng {
             get {
                 return this.maxAngField;
@@ -1097,11 +1100,11 @@ namespace NPOI.OpenXmlFormats.Dml {
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
-    [System.Xml.Serialization.XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
+    [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_ConnectionSite {
         
         private CT_AdjPoint2D posField;
@@ -1119,7 +1122,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
     
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public string ang {
             get {
                 return this.angField;
@@ -1131,18 +1134,18 @@ namespace NPOI.OpenXmlFormats.Dml {
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
-    [System.Xml.Serialization.XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
+    [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_AdjustHandleList {
         
         private object[] itemsField;
         
     
-        [System.Xml.Serialization.XmlElement("ahPolar", typeof(CT_PolarAdjustHandle))]
-        [System.Xml.Serialization.XmlElement("ahXY", typeof(CT_XYAdjustHandle))]
+        [XmlElement("ahPolar", typeof(CT_PolarAdjustHandle))]
+        [XmlElement("ahXY", typeof(CT_XYAdjustHandle))]
         public object[] Items {
             get {
                 return this.itemsField;
@@ -1154,17 +1157,17 @@ namespace NPOI.OpenXmlFormats.Dml {
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
-    [System.Xml.Serialization.XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
+    [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_ConnectionSiteList {
         
         private CT_ConnectionSite[] cxnField;
         
     
-        [System.Xml.Serialization.XmlElement("cxn")]
+        [XmlElement("cxn")]
         public CT_ConnectionSite[] cxn {
             get {
                 return this.cxnField;
@@ -1176,11 +1179,11 @@ namespace NPOI.OpenXmlFormats.Dml {
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
-    [System.Xml.Serialization.XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
+    [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_Connection {
         
         private uint idField;
@@ -1188,7 +1191,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         private uint idxField;
         
     
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public uint id {
             get {
                 return this.idField;
@@ -1199,7 +1202,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
     
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public uint idx {
             get {
                 return this.idxField;
@@ -1211,11 +1214,11 @@ namespace NPOI.OpenXmlFormats.Dml {
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
-    [System.Xml.Serialization.XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
+    [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_Path2DMoveTo {
         
         private CT_AdjPoint2D ptField;
@@ -1232,11 +1235,11 @@ namespace NPOI.OpenXmlFormats.Dml {
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
-    [System.Xml.Serialization.XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
+    [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_Path2DLineTo {
         
         private CT_AdjPoint2D ptField;
@@ -1253,11 +1256,11 @@ namespace NPOI.OpenXmlFormats.Dml {
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
-    [System.Xml.Serialization.XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
+    [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_Path2DArcTo {
         
         private string wrField;
@@ -1269,7 +1272,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         private string swAngField;
         
     
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public string wR {
             get {
                 return this.wrField;
@@ -1280,7 +1283,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
     
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public string hR {
             get {
                 return this.hrField;
@@ -1291,7 +1294,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
     
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public string stAng {
             get {
                 return this.stAngField;
@@ -1302,7 +1305,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
     
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public string swAng {
             get {
                 return this.swAngField;
@@ -1314,18 +1317,18 @@ namespace NPOI.OpenXmlFormats.Dml {
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
-    [System.Xml.Serialization.XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
+    [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_Path2DClose {
     }
     
 
-    [System.Serializable]
-    [System.Xml.Serialization.XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=false)]
+    [Serializable]
+    [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=false)]
     public enum ST_PathFillMode {
         
     
@@ -1348,11 +1351,11 @@ namespace NPOI.OpenXmlFormats.Dml {
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
-    [System.Xml.Serialization.XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
+    [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_Path2D {
         
         private object[] itemsField;
@@ -1378,12 +1381,12 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
     
-        [System.Xml.Serialization.XmlElement("arcTo", typeof(CT_Path2DArcTo))]
-        [System.Xml.Serialization.XmlElement("close", typeof(CT_Path2DClose))]
-        [System.Xml.Serialization.XmlElement("cubicBezTo", typeof(CT_Path2DCubicBezierTo))]
-        [System.Xml.Serialization.XmlElement("lnTo", typeof(CT_Path2DLineTo))]
-        [System.Xml.Serialization.XmlElement("moveTo", typeof(CT_Path2DMoveTo))]
-        [System.Xml.Serialization.XmlElement("quadBezTo", typeof(CT_Path2DQuadBezierTo))]
+        [XmlElement("arcTo", typeof(CT_Path2DArcTo))]
+        [XmlElement("close", typeof(CT_Path2DClose))]
+        [XmlElement("cubicBezTo", typeof(CT_Path2DCubicBezierTo))]
+        [XmlElement("lnTo", typeof(CT_Path2DLineTo))]
+        [XmlElement("moveTo", typeof(CT_Path2DMoveTo))]
+        [XmlElement("quadBezTo", typeof(CT_Path2DQuadBezierTo))]
         [System.Xml.Serialization.XmlChoiceIdentifierAttribute("ItemsElementName")]
         public object[] Items {
             get {
@@ -1395,7 +1398,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
     
-        [System.Xml.Serialization.XmlElement("ItemsElementName")]
+        [XmlElement("ItemsElementName")]
         [System.Xml.Serialization.XmlIgnore]
         public ItemsChoiceType[] ItemsElementName {
             get {
@@ -1407,7 +1410,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
     
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         [DefaultValue(typeof(long), "0")]
         public long w {
             get {
@@ -1419,7 +1422,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
     
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         [DefaultValue(typeof(long), "0")]
         public long h {
             get {
@@ -1431,7 +1434,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
     
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         [DefaultValue(ST_PathFillMode.norm)]
         public ST_PathFillMode fill {
             get {
@@ -1443,7 +1446,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
     
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         [DefaultValue(true)]
         public bool stroke {
             get {
@@ -1455,7 +1458,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
     
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         [DefaultValue(true)]
         public bool extrusionOk {
             get {
@@ -1468,8 +1471,8 @@ namespace NPOI.OpenXmlFormats.Dml {
     }
     
 
-    [System.Serializable]
-    [System.Xml.Serialization.XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IncludeInSchema=false)]
+    [Serializable]
+    [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IncludeInSchema=false)]
     public enum ItemsChoiceType {
         
     
@@ -1492,17 +1495,17 @@ namespace NPOI.OpenXmlFormats.Dml {
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
-    [System.Xml.Serialization.XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
+    [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_Path2DList {
         
         private CT_Path2D[] pathField;
         
     
-        [System.Xml.Serialization.XmlElement("path")]
+        [XmlElement("path")]
         public CT_Path2D[] path {
             get {
                 return this.pathField;
@@ -1514,11 +1517,11 @@ namespace NPOI.OpenXmlFormats.Dml {
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
-    [System.Xml.Serialization.XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
+    [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_PresetGeometry2D {
         
         private List<CT_GeomGuide> avLstField;
@@ -1531,7 +1534,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
     
-        [System.Xml.Serialization.XmlArrayItemAttribute("gd", IsNullable=false)]
+        [XmlArrayItem("gd", IsNullable=false)]
         public List<CT_GeomGuide> avLst {
             get {
                 return this.avLstField;
@@ -1542,7 +1545,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
     
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public ST_ShapeType prst {
             get {
                 return this.prstField;
@@ -1554,11 +1557,11 @@ namespace NPOI.OpenXmlFormats.Dml {
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
-    [System.Xml.Serialization.XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
+    [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_PresetTextShape {
         
         private CT_GeomGuide[] avLstField;
@@ -1566,7 +1569,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         private ST_TextShapeType prstField;
         
     
-        [System.Xml.Serialization.XmlArrayItemAttribute("gd", IsNullable=false)]
+        [XmlArrayItem("gd", IsNullable=false)]
         public CT_GeomGuide[] avLst {
             get {
                 return this.avLstField;
@@ -1577,7 +1580,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
     
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public ST_TextShapeType prst {
             get {
                 return this.prstField;
@@ -1589,11 +1592,11 @@ namespace NPOI.OpenXmlFormats.Dml {
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
-    [System.Xml.Serialization.XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
+    [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_CustomGeometry2D {
         
         private CT_GeomGuide[] avLstField;
@@ -1609,7 +1612,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         private CT_Path2D[] pathLstField;
         
     
-        [System.Xml.Serialization.XmlArrayItemAttribute("gd", IsNullable=false)]
+        [XmlArrayItem("gd", IsNullable=false)]
         public CT_GeomGuide[] avLst {
             get {
                 return this.avLstField;
@@ -1620,7 +1623,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
     
-        [System.Xml.Serialization.XmlArrayItemAttribute("gd", IsNullable=false)]
+        [XmlArrayItem("gd", IsNullable=false)]
         public CT_GeomGuide[] gdLst {
             get {
                 return this.gdLstField;
@@ -1631,8 +1634,8 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
     
-        [System.Xml.Serialization.XmlArrayItemAttribute("ahPolar", typeof(CT_PolarAdjustHandle), IsNullable=false)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("ahXY", typeof(CT_XYAdjustHandle), IsNullable=false)]
+        [XmlArrayItem("ahPolar", typeof(CT_PolarAdjustHandle), IsNullable=false)]
+        [XmlArrayItem("ahXY", typeof(CT_XYAdjustHandle), IsNullable=false)]
         public object[] ahLst {
             get {
                 return this.ahLstField;
@@ -1643,7 +1646,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
     
-        [System.Xml.Serialization.XmlArrayItemAttribute("cxn", IsNullable=false)]
+        [XmlArrayItem("cxn", IsNullable=false)]
         public CT_ConnectionSite[] cxnLst {
             get {
                 return this.cxnLstField;
@@ -1664,7 +1667,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
     
-        [System.Xml.Serialization.XmlArrayItemAttribute("path", IsNullable=false)]
+        [XmlArrayItem("path", IsNullable=false)]
         public CT_Path2D[] pathLst {
             get {
                 return this.pathLstField;

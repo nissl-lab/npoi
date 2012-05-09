@@ -4,12 +4,14 @@
 //    <NameSpace>schemas</NameSpace><Collection>List</Collection><codeType>CSharp</codeType><EnableDataBinding>False</EnableDataBinding><EnableLazyLoading>False</EnableLazyLoading><TrackingChangesEnable>False</TrackingChangesEnable><GenTrackingClasses>False</GenTrackingClasses><HidePrivateFieldInIDE>False</HidePrivateFieldInIDE><EnableSummaryComment>False</EnableSummaryComment><VirtualProp>False</VirtualProp><IncludeSerializeMethod>False</IncludeSerializeMethod><UseBaseClass>False</UseBaseClass><GenBaseClass>False</GenBaseClass><GenerateCloneMethod>False</GenerateCloneMethod><GenerateDataContracts>False</GenerateDataContracts><CodeBaseTag>Net35</CodeBaseTag><SerializeMethodName>Serialize</SerializeMethodName><DeserializeMethodName>Deserialize</DeserializeMethodName><SaveToFileMethodName>SaveToFile</SaveToFileMethodName><LoadFromFileMethodName>LoadFromFile</LoadFromFileMethodName><GenerateXMLAttributes>False</GenerateXMLAttributes><EnableEncoding>False</EnableEncoding><AutomaticProperties>False</AutomaticProperties><GenerateShouldSerialize>False</GenerateShouldSerialize><DisableDebug>False</DisableDebug><PropNameSpecified>Default</PropNameSpecified><Encoder>UTF8</Encoder><CustomUsings></CustomUsings><ExcludeIncludedTypes>False</ExcludeIncludedTypes><EnableInitializeFields>True</EnableInitializeFields>
 //  </auto-generated>
 // ------------------------------------------------------------------------------
+
+using System;
+using System.Collections.Generic;
+using System.Xml.Serialization;
+
 namespace NPOI.OpenXmlFormats
 {
-    using System.Xml.Serialization;
-    using System.Collections.Generic;
-
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/bibliography")]
@@ -79,7 +81,7 @@ namespace NPOI.OpenXmlFormats
         }
     }
 
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/bibliography")]
@@ -175,7 +177,7 @@ namespace NPOI.OpenXmlFormats
         }
     }
 
-    [System.Serializable]
+    [Serializable]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/bibliography", IncludeInSchema = false)]
     public enum ItemsChoiceType1
     {
@@ -337,7 +339,7 @@ namespace NPOI.OpenXmlFormats
         YearAccessed,
     }
 
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/bibliography")]
@@ -397,7 +399,7 @@ namespace NPOI.OpenXmlFormats
             }
         }
     }
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/bibliography")]
@@ -413,8 +415,8 @@ namespace NPOI.OpenXmlFormats
             this.nameListField = new List<CT_PersonType>();
         }
 
-        [XmlArrayAttribute(Order = 0)]
-        [XmlArrayItemAttribute("Person", IsNullable = false)]
+        [XmlArray(Order = 0)]
+        [XmlArrayItem("Person", IsNullable = false)]
         public List<CT_PersonType> NameList
         {
             get
@@ -427,7 +429,7 @@ namespace NPOI.OpenXmlFormats
             }
         }
     }
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/bibliography")]
@@ -484,7 +486,7 @@ namespace NPOI.OpenXmlFormats
             }
         }
     }
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/bibliography")]
@@ -507,7 +509,7 @@ namespace NPOI.OpenXmlFormats
             }
         }
     }
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/bibliography")]

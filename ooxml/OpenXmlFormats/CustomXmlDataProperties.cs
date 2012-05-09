@@ -4,18 +4,19 @@
 //    <NameSpace>schemas</NameSpace><Collection>List</Collection><codeType>CSharp</codeType><EnableDataBinding>False</EnableDataBinding><EnableLazyLoading>False</EnableLazyLoading><TrackingChangesEnable>False</TrackingChangesEnable><GenTrackingClasses>False</GenTrackingClasses><HidePrivateFieldInIDE>False</HidePrivateFieldInIDE><EnableSummaryComment>False</EnableSummaryComment><VirtualProp>False</VirtualProp><IncludeSerializeMethod>False</IncludeSerializeMethod><UseBaseClass>False</UseBaseClass><GenBaseClass>False</GenBaseClass><GenerateCloneMethod>False</GenerateCloneMethod><GenerateDataContracts>False</GenerateDataContracts><CodeBaseTag>Net20</CodeBaseTag><SerializeMethodName>Serialize</SerializeMethodName><DeserializeMethodName>Deserialize</DeserializeMethodName><SaveToFileMethodName>SaveToFile</SaveToFileMethodName><LoadFromFileMethodName>LoadFromFile</LoadFromFileMethodName><GenerateXMLAttributes>False</GenerateXMLAttributes><EnableEncoding>False</EnableEncoding><AutomaticProperties>False</AutomaticProperties><GenerateShouldSerialize>False</GenerateShouldSerialize><DisableDebug>False</DisableDebug><PropNameSpecified>Default</PropNameSpecified><Encoder>UTF8</Encoder><CustomUsings></CustomUsings><ExcludeIncludedTypes>False</ExcludeIncludedTypes><EnableInitializeFields>True</EnableInitializeFields>
 //  </auto-generated>
 // ------------------------------------------------------------------------------
+
+using System;
+using System.Collections.Generic;
+using System.Xml.Schema;
+using System.Xml.Serialization;
+
 namespace NPOI.OpenXmlFormats
 {
-    using System.Xml.Serialization;
-    using System.Collections.Generic;
-    using System.Xml.Schema;
-
-
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/customXml")]
-    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/customXml", IsNullable = true)]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/customXml")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/customXml", IsNullable = true)]
     public class CT_DatastoreItem
     {
 
@@ -28,8 +29,8 @@ namespace NPOI.OpenXmlFormats
             this.schemaRefsField = new List<CT_DatastoreSchemaRef>();
         }
 
-        [XmlArrayAttribute(Order = 0)]
-        [XmlArrayItemAttribute("schemaRef", IsNullable = false)]
+        [XmlArray(Order = 0)]
+        [XmlArrayItem("schemaRef", IsNullable = false)]
         public List<CT_DatastoreSchemaRef> schemaRefs
         {
             get
@@ -42,7 +43,7 @@ namespace NPOI.OpenXmlFormats
             }
         }
 
-        [XmlAttributeAttribute(Form = XmlSchemaForm.Qualified, DataType = "token")]
+        [XmlAttribute(Form = XmlSchemaForm.Qualified, DataType = "token")]
         public string itemID
         {
             get
@@ -55,16 +56,16 @@ namespace NPOI.OpenXmlFormats
             }
         }
     }
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/customXml")]
-    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/customXml", IsNullable = true)]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/customXml")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/customXml", IsNullable = true)]
     public class CT_DatastoreSchemaRef
     {
 
         private string uriField;
-        [XmlAttributeAttribute(Form = XmlSchemaForm.Qualified)]
+        [XmlAttribute(Form = XmlSchemaForm.Qualified)]
         public string uri
         {
             get
@@ -77,11 +78,11 @@ namespace NPOI.OpenXmlFormats
             }
         }
     }
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/customXml")]
-    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/customXml", IsNullable = true)]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/customXml")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/customXml", IsNullable = true)]
 
     public class CT_DatastoreSchemaRefs
     {

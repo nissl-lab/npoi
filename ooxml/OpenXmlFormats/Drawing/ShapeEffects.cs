@@ -1,21 +1,23 @@
+using System;
 using System.ComponentModel;
 using System.Xml.Serialization;
+
 namespace NPOI.OpenXmlFormats.Dml
 {
     
     
 
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
+    [XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_AlphaBiLevelEffect {
         
         private int threshField;
         
     
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public int thresh {
             get {
                 return this.threshField;
@@ -28,7 +30,7 @@ namespace NPOI.OpenXmlFormats.Dml
     
     
 
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
@@ -97,7 +99,7 @@ namespace NPOI.OpenXmlFormats.Dml
         private int lum1Field;
         
     
-        [System.Xml.Serialization.XmlElement("tint")]
+        [XmlElement("tint")]
         public CT_PositiveFixedPercentage[] tint {
             get {
                 return this.tintField;
@@ -108,7 +110,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlElement("shade")]
+        [XmlElement("shade")]
         public CT_PositiveFixedPercentage[] shade {
             get {
                 return this.shadeField;
@@ -119,7 +121,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlElement("comp")]
+        [XmlElement("comp")]
         public CT_ComplementTransform[] comp {
             get {
                 return this.compField;
@@ -130,7 +132,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlElement("inv")]
+        [XmlElement("inv")]
         public CT_InverseTransform[] inv {
             get {
                 return this.invField;
@@ -141,7 +143,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlElement("gray")]
+        [XmlElement("gray")]
         public CT_GrayscaleTransform[] gray {
             get {
                 return this.grayField;
@@ -152,7 +154,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlElement("alpha")]
+        [XmlElement("alpha")]
         public CT_PositiveFixedPercentage[] alpha {
             get {
                 return this.alphaField;
@@ -163,7 +165,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlElement("alphaOff")]
+        [XmlElement("alphaOff")]
         public CT_FixedPercentage[] alphaOff {
             get {
                 return this.alphaOffField;
@@ -174,7 +176,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlElement("alphaMod")]
+        [XmlElement("alphaMod")]
         public CT_PositivePercentage[] alphaMod {
             get {
                 return this.alphaModField;
@@ -185,7 +187,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlElement("hue")]
+        [XmlElement("hue")]
         public CT_PositiveFixedAngle[] hue {
             get {
                 return this.hueField;
@@ -196,7 +198,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlElement("hueOff")]
+        [XmlElement("hueOff")]
         public CT_Angle[] hueOff {
             get {
                 return this.hueOffField;
@@ -207,7 +209,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlElement("hueMod")]
+        [XmlElement("hueMod")]
         public CT_PositivePercentage[] hueMod {
             get {
                 return this.hueModField;
@@ -218,7 +220,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlElement("sat")]
+        [XmlElement("sat")]
         public CT_Percentage[] sat {
             get {
                 return this.satField;
@@ -229,7 +231,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlElement("satOff")]
+        [XmlElement("satOff")]
         public CT_Percentage[] satOff {
             get {
                 return this.satOffField;
@@ -240,7 +242,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlElement("satMod")]
+        [XmlElement("satMod")]
         public CT_Percentage[] satMod {
             get {
                 return this.satModField;
@@ -251,7 +253,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlElement("lum")]
+        [XmlElement("lum")]
         public CT_Percentage[] lum {
             get {
                 return this.lumField;
@@ -262,7 +264,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlElement("lumOff")]
+        [XmlElement("lumOff")]
         public CT_Percentage[] lumOff {
             get {
                 return this.lumOffField;
@@ -273,7 +275,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlElement("lumMod")]
+        [XmlElement("lumMod")]
         public CT_Percentage[] lumMod {
             get {
                 return this.lumModField;
@@ -284,7 +286,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlElement("red")]
+        [XmlElement("red")]
         public CT_Percentage[] red {
             get {
                 return this.redField;
@@ -295,7 +297,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlElement("redOff")]
+        [XmlElement("redOff")]
         public CT_Percentage[] redOff {
             get {
                 return this.redOffField;
@@ -306,7 +308,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlElement("redMod")]
+        [XmlElement("redMod")]
         public CT_Percentage[] redMod {
             get {
                 return this.redModField;
@@ -317,7 +319,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlElement("green")]
+        [XmlElement("green")]
         public CT_Percentage[] green {
             get {
                 return this.greenField;
@@ -328,7 +330,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlElement("greenOff")]
+        [XmlElement("greenOff")]
         public CT_Percentage[] greenOff {
             get {
                 return this.greenOffField;
@@ -339,7 +341,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlElement("greenMod")]
+        [XmlElement("greenMod")]
         public CT_Percentage[] greenMod {
             get {
                 return this.greenModField;
@@ -350,7 +352,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlElement("blue")]
+        [XmlElement("blue")]
         public CT_Percentage[] blue {
             get {
                 return this.blueField;
@@ -361,7 +363,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlElement("blueOff")]
+        [XmlElement("blueOff")]
         public CT_Percentage[] blueOff {
             get {
                 return this.blueOffField;
@@ -372,7 +374,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlElement("blueMod")]
+        [XmlElement("blueMod")]
         public CT_Percentage[] blueMod {
             get {
                 return this.blueModField;
@@ -383,7 +385,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlElement("gamma")]
+        [XmlElement("gamma")]
         public CT_GammaTransform[] gamma {
             get {
                 return this.gammaField;
@@ -394,7 +396,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlElement("invGamma")]
+        [XmlElement("invGamma")]
         public CT_InverseGammaTransform[] invGamma {
             get {
                 return this.invGammaField;
@@ -405,7 +407,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlAttributeAttribute("hue")]
+        [XmlAttribute("hue")]
         public int hue1 {
             get {
                 return this.hue1Field;
@@ -416,7 +418,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlAttributeAttribute("sat")]
+        [XmlAttribute("sat")]
         public int sat1 {
             get {
                 return this.sat1Field;
@@ -427,7 +429,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlAttributeAttribute("lum")]
+        [XmlAttribute("lum")]
         public int lum1 {
             get {
                 return this.lum1Field;
@@ -439,7 +441,7 @@ namespace NPOI.OpenXmlFormats.Dml
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
@@ -506,7 +508,7 @@ namespace NPOI.OpenXmlFormats.Dml
         private byte[] lastClrField;
         
     
-        [System.Xml.Serialization.XmlElement("tint")]
+        [XmlElement("tint")]
         public CT_PositiveFixedPercentage[] tint {
             get {
                 return this.tintField;
@@ -517,7 +519,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlElement("shade")]
+        [XmlElement("shade")]
         public CT_PositiveFixedPercentage[] shade {
             get {
                 return this.shadeField;
@@ -528,7 +530,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlElement("comp")]
+        [XmlElement("comp")]
         public CT_ComplementTransform[] comp {
             get {
                 return this.compField;
@@ -539,7 +541,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlElement("inv")]
+        [XmlElement("inv")]
         public CT_InverseTransform[] inv {
             get {
                 return this.invField;
@@ -550,7 +552,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlElement("gray")]
+        [XmlElement("gray")]
         public CT_GrayscaleTransform[] gray {
             get {
                 return this.grayField;
@@ -561,7 +563,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlElement("alpha")]
+        [XmlElement("alpha")]
         public CT_PositiveFixedPercentage[] alpha {
             get {
                 return this.alphaField;
@@ -572,7 +574,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlElement("alphaOff")]
+        [XmlElement("alphaOff")]
         public CT_FixedPercentage[] alphaOff {
             get {
                 return this.alphaOffField;
@@ -583,7 +585,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlElement("alphaMod")]
+        [XmlElement("alphaMod")]
         public CT_PositivePercentage[] alphaMod {
             get {
                 return this.alphaModField;
@@ -594,7 +596,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlElement("hue")]
+        [XmlElement("hue")]
         public CT_PositiveFixedAngle[] hue {
             get {
                 return this.hueField;
@@ -605,7 +607,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlElement("hueOff")]
+        [XmlElement("hueOff")]
         public CT_Angle[] hueOff {
             get {
                 return this.hueOffField;
@@ -616,7 +618,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlElement("hueMod")]
+        [XmlElement("hueMod")]
         public CT_PositivePercentage[] hueMod {
             get {
                 return this.hueModField;
@@ -627,7 +629,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlElement("sat")]
+        [XmlElement("sat")]
         public CT_Percentage[] sat {
             get {
                 return this.satField;
@@ -638,7 +640,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlElement("satOff")]
+        [XmlElement("satOff")]
         public CT_Percentage[] satOff {
             get {
                 return this.satOffField;
@@ -649,7 +651,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlElement("satMod")]
+        [XmlElement("satMod")]
         public CT_Percentage[] satMod {
             get {
                 return this.satModField;
@@ -660,7 +662,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlElement("lum")]
+        [XmlElement("lum")]
         public CT_Percentage[] lum {
             get {
                 return this.lumField;
@@ -671,7 +673,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlElement("lumOff")]
+        [XmlElement("lumOff")]
         public CT_Percentage[] lumOff {
             get {
                 return this.lumOffField;
@@ -682,7 +684,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlElement("lumMod")]
+        [XmlElement("lumMod")]
         public CT_Percentage[] lumMod {
             get {
                 return this.lumModField;
@@ -693,7 +695,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlElement("red")]
+        [XmlElement("red")]
         public CT_Percentage[] red {
             get {
                 return this.redField;
@@ -704,7 +706,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlElement("redOff")]
+        [XmlElement("redOff")]
         public CT_Percentage[] redOff {
             get {
                 return this.redOffField;
@@ -715,7 +717,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlElement("redMod")]
+        [XmlElement("redMod")]
         public CT_Percentage[] redMod {
             get {
                 return this.redModField;
@@ -726,7 +728,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlElement("green")]
+        [XmlElement("green")]
         public CT_Percentage[] green {
             get {
                 return this.greenField;
@@ -737,7 +739,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlElement("greenOff")]
+        [XmlElement("greenOff")]
         public CT_Percentage[] greenOff {
             get {
                 return this.greenOffField;
@@ -748,7 +750,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlElement("greenMod")]
+        [XmlElement("greenMod")]
         public CT_Percentage[] greenMod {
             get {
                 return this.greenModField;
@@ -759,7 +761,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlElement("blue")]
+        [XmlElement("blue")]
         public CT_Percentage[] blue {
             get {
                 return this.blueField;
@@ -770,7 +772,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlElement("blueOff")]
+        [XmlElement("blueOff")]
         public CT_Percentage[] blueOff {
             get {
                 return this.blueOffField;
@@ -781,7 +783,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlElement("blueMod")]
+        [XmlElement("blueMod")]
         public CT_Percentage[] blueMod {
             get {
                 return this.blueModField;
@@ -792,7 +794,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlElement("gamma")]
+        [XmlElement("gamma")]
         public CT_GammaTransform[] gamma {
             get {
                 return this.gammaField;
@@ -803,7 +805,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlElement("invGamma")]
+        [XmlElement("invGamma")]
         public CT_InverseGammaTransform[] invGamma {
             get {
                 return this.invGammaField;
@@ -814,7 +816,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public ST_SystemColorVal val {
             get {
                 return this.valField;
@@ -825,7 +827,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlAttributeAttribute(DataType="hexBinary")]
+        [XmlAttribute(DataType="hexBinary")]
         public byte[] lastClr {
             get {
                 return this.lastClrField;
@@ -839,29 +841,29 @@ namespace NPOI.OpenXmlFormats.Dml
     
     
 
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
+    [XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_AlphaCeilingEffect {
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
+    [XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_AlphaFloorEffect {
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
+    [XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_AlphaInverseEffect {
         
         private CT_ScRgbColor scrgbClrField;
@@ -938,11 +940,11 @@ namespace NPOI.OpenXmlFormats.Dml
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
+    [XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_AlphaModulateFixedEffect {
         
         private int amtField;
@@ -952,7 +954,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         [DefaultValue(100000)]
         public int amt {
             get {
@@ -965,11 +967,11 @@ namespace NPOI.OpenXmlFormats.Dml
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
+    [XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_AlphaOutsetEffect {
         
         private long radField;
@@ -979,7 +981,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         [DefaultValue(typeof(long), "0")]
         public long rad {
             get {
@@ -992,17 +994,17 @@ namespace NPOI.OpenXmlFormats.Dml
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
+    [XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_AlphaReplaceEffect {
         
         private int aField;
         
     
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public int a {
             get {
                 return this.aField;
@@ -1014,17 +1016,17 @@ namespace NPOI.OpenXmlFormats.Dml
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
+    [XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_BiLevelEffect {
         
         private int threshField;
         
     
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public int thresh {
             get {
                 return this.threshField;
@@ -1036,11 +1038,11 @@ namespace NPOI.OpenXmlFormats.Dml
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
+    [XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_BlurEffect {
         
         private long radField;
@@ -1053,7 +1055,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         [DefaultValue(typeof(long), "0")]
         public long rad {
             get {
@@ -1065,7 +1067,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         [DefaultValue(true)]
         public bool grow {
             get {
@@ -1078,11 +1080,11 @@ namespace NPOI.OpenXmlFormats.Dml
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
+    [XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_ColorChangeEffect {
         
         private CT_Color clrFromField;
@@ -1116,7 +1118,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         [DefaultValue(true)]
         public bool useA {
             get {
@@ -1129,11 +1131,11 @@ namespace NPOI.OpenXmlFormats.Dml
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
+    [XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_ColorReplaceEffect {
         
         private CT_ScRgbColor scrgbClrField;
@@ -1210,11 +1212,11 @@ namespace NPOI.OpenXmlFormats.Dml
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
+    [XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_DuotoneEffect {
         
         private CT_ScRgbColor[] scrgbClrField;
@@ -1230,7 +1232,7 @@ namespace NPOI.OpenXmlFormats.Dml
         private CT_PresetColor[] prstClrField;
         
     
-        [System.Xml.Serialization.XmlElement("scrgbClr")]
+        [XmlElement("scrgbClr")]
         public CT_ScRgbColor[] scrgbClr {
             get {
                 return this.scrgbClrField;
@@ -1241,7 +1243,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlElement("srgbClr")]
+        [XmlElement("srgbClr")]
         public CT_SRgbColor[] srgbClr {
             get {
                 return this.srgbClrField;
@@ -1252,7 +1254,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlElement("hslClr")]
+        [XmlElement("hslClr")]
         public CT_HslColor[] hslClr {
             get {
                 return this.hslClrField;
@@ -1263,7 +1265,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlElement("sysClr")]
+        [XmlElement("sysClr")]
         public CT_SystemColor[] sysClr {
             get {
                 return this.sysClrField;
@@ -1274,7 +1276,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlElement("schemeClr")]
+        [XmlElement("schemeClr")]
         public CT_SchemeColor[] schemeClr {
             get {
                 return this.schemeClrField;
@@ -1285,7 +1287,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlElement("prstClr")]
+        [XmlElement("prstClr")]
         public CT_PresetColor[] prstClr {
             get {
                 return this.prstClrField;
@@ -1297,11 +1299,11 @@ namespace NPOI.OpenXmlFormats.Dml
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
+    [XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_GlowEffect {
         
         private CT_ScRgbColor scrgbClrField;
@@ -1383,7 +1385,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         [DefaultValue(typeof(long), "0")]
         public long rad {
             get {
@@ -1396,20 +1398,20 @@ namespace NPOI.OpenXmlFormats.Dml
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
+    [XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_GrayscaleEffect {
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
+    [XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_HSLEffect {
         
         private int hueField;
@@ -1425,7 +1427,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         [DefaultValue(0)]
         public int hue {
             get {
@@ -1437,7 +1439,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         [DefaultValue(0)]
         public int sat {
             get {
@@ -1449,7 +1451,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         [DefaultValue(0)]
         public int lum {
             get {
@@ -1462,11 +1464,11 @@ namespace NPOI.OpenXmlFormats.Dml
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
+    [XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_InnerShadowEffect {
         
         private CT_ScRgbColor scrgbClrField;
@@ -1554,7 +1556,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         [DefaultValue(typeof(long), "0")]
         public long blurRad {
             get {
@@ -1566,7 +1568,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         [DefaultValue(typeof(long), "0")]
         public long dist {
             get {
@@ -1578,7 +1580,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         [DefaultValue(0)]
         public int dir {
             get {
@@ -1591,11 +1593,11 @@ namespace NPOI.OpenXmlFormats.Dml
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
+    [XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_LuminanceEffect {
         
         private int brightField;
@@ -1608,7 +1610,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         [DefaultValue(0)]
         public int bright {
             get {
@@ -1620,7 +1622,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         [DefaultValue(0)]
         public int contrast {
             get {
@@ -1633,11 +1635,11 @@ namespace NPOI.OpenXmlFormats.Dml
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
+    [XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_OuterShadowEffect {
         
         private CT_ScRgbColor scrgbClrField;
@@ -1743,7 +1745,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         [DefaultValue(typeof(long), "0")]
         public long blurRad {
             get {
@@ -1755,7 +1757,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         [DefaultValue(typeof(long), "0")]
         public long dist {
             get {
@@ -1767,7 +1769,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         [DefaultValue(0)]
         public int dir {
             get {
@@ -1779,7 +1781,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         [DefaultValue(100000)]
         public int sx {
             get {
@@ -1791,7 +1793,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         [DefaultValue(100000)]
         public int sy {
             get {
@@ -1803,7 +1805,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         [DefaultValue(0)]
         public int kx {
             get {
@@ -1815,7 +1817,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         [DefaultValue(0)]
         public int ky {
             get {
@@ -1827,7 +1829,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         [DefaultValue(ST_RectAlignment.b)]
         public ST_RectAlignment algn {
             get {
@@ -1839,7 +1841,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         [DefaultValue(true)]
         public bool rotWithShape {
             get {
@@ -1852,9 +1854,9 @@ namespace NPOI.OpenXmlFormats.Dml
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=false)]
+    [XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=false)]
     public enum ST_PresetShadowVal {
         
     
@@ -1919,11 +1921,11 @@ namespace NPOI.OpenXmlFormats.Dml
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
+    [XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_PresetShadowEffect {
         
         private CT_ScRgbColor scrgbClrField;
@@ -2010,7 +2012,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public ST_PresetShadowVal prst {
             get {
                 return this.prstField;
@@ -2021,7 +2023,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         [DefaultValue(typeof(long), "0")]
         public long dist {
             get {
@@ -2033,7 +2035,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         [DefaultValue(0)]
         public int dir {
             get {
@@ -2046,11 +2048,11 @@ namespace NPOI.OpenXmlFormats.Dml
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
+    [XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_ReflectionEffect {
         
         private long blurRadField;
@@ -2099,7 +2101,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         [DefaultValue(typeof(long), "0")]
         public long blurRad {
             get {
@@ -2111,7 +2113,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         [DefaultValue(100000)]
         public int stA {
             get {
@@ -2123,7 +2125,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         [DefaultValue(0)]
         public int stPos {
             get {
@@ -2135,7 +2137,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         [DefaultValue(0)]
         public int endA {
             get {
@@ -2147,7 +2149,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         [DefaultValue(100000)]
         public int endPos {
             get {
@@ -2159,7 +2161,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         [DefaultValue(typeof(long), "0")]
         public long dist {
             get {
@@ -2171,7 +2173,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         [DefaultValue(0)]
         public int dir {
             get {
@@ -2183,7 +2185,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         [DefaultValue(5400000)]
         public int fadeDir {
             get {
@@ -2195,7 +2197,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         [DefaultValue(100000)]
         public int sx {
             get {
@@ -2207,7 +2209,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         [DefaultValue(100000)]
         public int sy {
             get {
@@ -2219,7 +2221,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         [DefaultValue(0)]
         public int kx {
             get {
@@ -2231,7 +2233,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         [DefaultValue(0)]
         public int ky {
             get {
@@ -2243,7 +2245,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         [DefaultValue(ST_RectAlignment.b)]
         public ST_RectAlignment algn {
             get {
@@ -2255,7 +2257,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         [DefaultValue(true)]
         public bool rotWithShape {
             get {
@@ -2268,11 +2270,11 @@ namespace NPOI.OpenXmlFormats.Dml
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
+    [XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_RelativeOffsetEffect {
         
         private int txField;
@@ -2285,7 +2287,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         [DefaultValue(0)]
         public int tx {
             get {
@@ -2297,7 +2299,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         [DefaultValue(0)]
         public int ty {
             get {
@@ -2310,17 +2312,17 @@ namespace NPOI.OpenXmlFormats.Dml
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
+    [XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_SoftEdgesEffect {
         
         private long radField;
         
     
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public long rad {
             get {
                 return this.radField;
@@ -2332,11 +2334,11 @@ namespace NPOI.OpenXmlFormats.Dml
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
+    [XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_TintEffect {
         
         private int hueField;
@@ -2349,7 +2351,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         [DefaultValue(0)]
         public int hue {
             get {
@@ -2361,7 +2363,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         [DefaultValue(0)]
         public int amt {
             get {
@@ -2374,11 +2376,11 @@ namespace NPOI.OpenXmlFormats.Dml
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
+    [XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_TransformEffect {
         
         private int sxField;
@@ -2403,7 +2405,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         [DefaultValue(100000)]
         public int sx {
             get {
@@ -2415,7 +2417,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         [DefaultValue(100000)]
         public int sy {
             get {
@@ -2427,7 +2429,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         [DefaultValue(0)]
         public int kx {
             get {
@@ -2439,7 +2441,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         [DefaultValue(0)]
         public int ky {
             get {
@@ -2451,7 +2453,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         [DefaultValue(typeof(long), "0")]
         public long tx {
             get {
@@ -2463,7 +2465,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         [DefaultValue(typeof(long), "0")]
         public long ty {
             get {
@@ -2476,20 +2478,20 @@ namespace NPOI.OpenXmlFormats.Dml
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
+    [XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_NoFillProperties {
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
+    [XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_SolidColorFillProperties {
         
         private CT_ScRgbColor scrgbClrField;
@@ -2566,11 +2568,11 @@ namespace NPOI.OpenXmlFormats.Dml
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
+    [XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_LinearShadeProperties {
         
         private int angField;
@@ -2582,7 +2584,7 @@ namespace NPOI.OpenXmlFormats.Dml
         private bool scaledFieldSpecified;
         
     
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public int ang {
             get {
                 return this.angField;
@@ -2604,7 +2606,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public bool scaled {
             get {
                 return this.scaledField;
@@ -2627,9 +2629,9 @@ namespace NPOI.OpenXmlFormats.Dml
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=false)]
+    [XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=false)]
     public enum ST_PathShadeType {
         
     
@@ -2643,11 +2645,11 @@ namespace NPOI.OpenXmlFormats.Dml
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
+    [XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_PathShadeProperties {
         
         private CT_RelativeRect fillToRectField;
@@ -2667,7 +2669,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public ST_PathShadeType path {
             get {
                 return this.pathField;
@@ -2690,9 +2692,9 @@ namespace NPOI.OpenXmlFormats.Dml
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=false)]
+    [XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=false)]
     public enum ST_TileFlipMode {
         
     
@@ -2709,7 +2711,7 @@ namespace NPOI.OpenXmlFormats.Dml
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
@@ -2790,7 +2792,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public int pos {
             get {
                 return this.posField;
@@ -2802,17 +2804,17 @@ namespace NPOI.OpenXmlFormats.Dml
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
+    [XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_GradientStopList {
         
         private CT_GradientStop[] gsField;
         
     
-        [System.Xml.Serialization.XmlElement("gs")]
+        [XmlElement("gs")]
         public CT_GradientStop[] gs {
             get {
                 return this.gsField;
@@ -2824,11 +2826,11 @@ namespace NPOI.OpenXmlFormats.Dml
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
+    [XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_GradientFillProperties {
         
         private CT_GradientStop[] gsLstField;
@@ -2848,7 +2850,7 @@ namespace NPOI.OpenXmlFormats.Dml
         private bool rotWithShapeFieldSpecified;
         
     
-        [System.Xml.Serialization.XmlArrayItemAttribute("gs", IsNullable=false)]
+        [XmlArrayItem("gs", IsNullable=false)]
         public CT_GradientStop[] gsLst {
             get {
                 return this.gsLstField;
@@ -2889,7 +2891,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public ST_TileFlipMode flip {
             get {
                 return this.flipField;
@@ -2911,7 +2913,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public bool rotWithShape {
             get {
                 return this.rotWithShapeField;
@@ -2934,11 +2936,11 @@ namespace NPOI.OpenXmlFormats.Dml
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
+    [XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_TileInfoProperties {
         
         private long txField;
@@ -2966,7 +2968,7 @@ namespace NPOI.OpenXmlFormats.Dml
         private bool algnFieldSpecified;
         
     
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public long tx {
             get {
                 return this.txField;
@@ -2988,7 +2990,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public long ty {
             get {
                 return this.tyField;
@@ -3010,7 +3012,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public int sx {
             get {
                 return this.sxField;
@@ -3032,7 +3034,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public int sy {
             get {
                 return this.syField;
@@ -3054,7 +3056,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public ST_TileFlipMode flip {
             get {
                 return this.flipField;
@@ -3076,7 +3078,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public ST_RectAlignment algn {
             get {
                 return this.algnField;
@@ -3099,11 +3101,11 @@ namespace NPOI.OpenXmlFormats.Dml
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
+    [XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_StretchInfoProperties {
         
         private CT_RelativeRect fillRectField;
@@ -3126,11 +3128,11 @@ namespace NPOI.OpenXmlFormats.Dml
     
     
 
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
+    [XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_AlphaModulateEffect {
         
         private CT_EffectContainer contField;
@@ -3147,11 +3149,11 @@ namespace NPOI.OpenXmlFormats.Dml
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
+    [XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_EffectContainer {
         
         private object[] itemsField;
@@ -3165,36 +3167,36 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlElement("alphaBiLevel", typeof(CT_AlphaBiLevelEffect))]
-        [System.Xml.Serialization.XmlElement("alphaCeiling", typeof(CT_AlphaCeilingEffect))]
-        [System.Xml.Serialization.XmlElement("alphaFloor", typeof(CT_AlphaFloorEffect))]
-        [System.Xml.Serialization.XmlElement("alphaInv", typeof(CT_AlphaInverseEffect))]
-        [System.Xml.Serialization.XmlElement("alphaMod", typeof(CT_AlphaModulateEffect))]
-        [System.Xml.Serialization.XmlElement("alphaModFix", typeof(CT_AlphaModulateFixedEffect))]
-        [System.Xml.Serialization.XmlElement("alphaOutset", typeof(CT_AlphaOutsetEffect))]
-        [System.Xml.Serialization.XmlElement("alphaRepl", typeof(CT_AlphaReplaceEffect))]
-        [System.Xml.Serialization.XmlElement("biLevel", typeof(CT_BiLevelEffect))]
-        [System.Xml.Serialization.XmlElement("blend", typeof(CT_BlendEffect))]
-        [System.Xml.Serialization.XmlElement("blur", typeof(CT_BlurEffect))]
-        [System.Xml.Serialization.XmlElement("clrChange", typeof(CT_ColorChangeEffect))]
-        [System.Xml.Serialization.XmlElement("clrRepl", typeof(CT_ColorReplaceEffect))]
-        [System.Xml.Serialization.XmlElement("cont", typeof(CT_EffectContainer))]
-        [System.Xml.Serialization.XmlElement("duotone", typeof(CT_DuotoneEffect))]
-        [System.Xml.Serialization.XmlElement("effect", typeof(CT_EffectReference))]
-        [System.Xml.Serialization.XmlElement("fill", typeof(CT_FillEffect))]
-        [System.Xml.Serialization.XmlElement("fillOverlay", typeof(CT_FillOverlayEffect))]
-        [System.Xml.Serialization.XmlElement("glow", typeof(CT_GlowEffect))]
-        [System.Xml.Serialization.XmlElement("grayscl", typeof(CT_GrayscaleEffect))]
-        [System.Xml.Serialization.XmlElement("hsl", typeof(CT_HSLEffect))]
-        [System.Xml.Serialization.XmlElement("innerShdw", typeof(CT_InnerShadowEffect))]
-        [System.Xml.Serialization.XmlElement("lum", typeof(CT_LuminanceEffect))]
-        [System.Xml.Serialization.XmlElement("outerShdw", typeof(CT_OuterShadowEffect))]
-        [System.Xml.Serialization.XmlElement("prstShdw", typeof(CT_PresetShadowEffect))]
-        [System.Xml.Serialization.XmlElement("reflection", typeof(CT_ReflectionEffect))]
-        [System.Xml.Serialization.XmlElement("relOff", typeof(CT_RelativeOffsetEffect))]
-        [System.Xml.Serialization.XmlElement("softEdge", typeof(CT_SoftEdgesEffect))]
-        [System.Xml.Serialization.XmlElement("tint", typeof(CT_TintEffect))]
-        [System.Xml.Serialization.XmlElement("xfrm", typeof(CT_TransformEffect))]
+        [XmlElement("alphaBiLevel", typeof(CT_AlphaBiLevelEffect))]
+        [XmlElement("alphaCeiling", typeof(CT_AlphaCeilingEffect))]
+        [XmlElement("alphaFloor", typeof(CT_AlphaFloorEffect))]
+        [XmlElement("alphaInv", typeof(CT_AlphaInverseEffect))]
+        [XmlElement("alphaMod", typeof(CT_AlphaModulateEffect))]
+        [XmlElement("alphaModFix", typeof(CT_AlphaModulateFixedEffect))]
+        [XmlElement("alphaOutset", typeof(CT_AlphaOutsetEffect))]
+        [XmlElement("alphaRepl", typeof(CT_AlphaReplaceEffect))]
+        [XmlElement("biLevel", typeof(CT_BiLevelEffect))]
+        [XmlElement("blend", typeof(CT_BlendEffect))]
+        [XmlElement("blur", typeof(CT_BlurEffect))]
+        [XmlElement("clrChange", typeof(CT_ColorChangeEffect))]
+        [XmlElement("clrRepl", typeof(CT_ColorReplaceEffect))]
+        [XmlElement("cont", typeof(CT_EffectContainer))]
+        [XmlElement("duotone", typeof(CT_DuotoneEffect))]
+        [XmlElement("effect", typeof(CT_EffectReference))]
+        [XmlElement("fill", typeof(CT_FillEffect))]
+        [XmlElement("fillOverlay", typeof(CT_FillOverlayEffect))]
+        [XmlElement("glow", typeof(CT_GlowEffect))]
+        [XmlElement("grayscl", typeof(CT_GrayscaleEffect))]
+        [XmlElement("hsl", typeof(CT_HSLEffect))]
+        [XmlElement("innerShdw", typeof(CT_InnerShadowEffect))]
+        [XmlElement("lum", typeof(CT_LuminanceEffect))]
+        [XmlElement("outerShdw", typeof(CT_OuterShadowEffect))]
+        [XmlElement("prstShdw", typeof(CT_PresetShadowEffect))]
+        [XmlElement("reflection", typeof(CT_ReflectionEffect))]
+        [XmlElement("relOff", typeof(CT_RelativeOffsetEffect))]
+        [XmlElement("softEdge", typeof(CT_SoftEdgesEffect))]
+        [XmlElement("tint", typeof(CT_TintEffect))]
+        [XmlElement("xfrm", typeof(CT_TransformEffect))]
         public object[] Items {
             get {
                 return this.itemsField;
@@ -3205,7 +3207,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         [DefaultValue(ST_EffectContainerType.sib)]
         public ST_EffectContainerType type {
             get {
@@ -3217,7 +3219,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlAttributeAttribute(DataType="token")]
+        [XmlAttribute(DataType="token")]
         public string name {
             get {
                 return this.nameField;
@@ -3229,11 +3231,11 @@ namespace NPOI.OpenXmlFormats.Dml
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
+    [XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_BlendEffect {
         
         private CT_EffectContainer contField;
@@ -3251,7 +3253,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public ST_BlendMode blend {
             get {
                 return this.blendField;
@@ -3263,9 +3265,9 @@ namespace NPOI.OpenXmlFormats.Dml
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=false)]
+    [XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=false)]
     public enum ST_BlendMode {
         
     
@@ -3285,17 +3287,17 @@ namespace NPOI.OpenXmlFormats.Dml
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
+    [XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_EffectReference {
         
         private string refField;
         
     
-        [System.Xml.Serialization.XmlAttributeAttribute(DataType="token")]
+        [XmlAttribute(DataType="token")]
         public string @ref {
             get {
                 return this.refField;
@@ -3307,11 +3309,11 @@ namespace NPOI.OpenXmlFormats.Dml
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
+    [XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_FillEffect {
         
         private CT_NoFillProperties noFillField;
@@ -3388,11 +3390,11 @@ namespace NPOI.OpenXmlFormats.Dml
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
+    [XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_BlipFillProperties {
         
         private CT_Blip blipField;
@@ -3462,7 +3464,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public uint dpi {
             get {
                 return this.dpiField;
@@ -3484,7 +3486,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public bool rotWithShape {
             get {
                 return this.rotWithShapeField;
@@ -3507,11 +3509,11 @@ namespace NPOI.OpenXmlFormats.Dml
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
+    [XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_PatternFillProperties {
         
         private CT_Color fgClrField;
@@ -3543,7 +3545,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public ST_PresetPatternVal prst {
             get {
                 return this.prstField;
@@ -3566,9 +3568,9 @@ namespace NPOI.OpenXmlFormats.Dml
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=false)]
+    [XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=false)]
     public enum ST_PresetPatternVal {
         
     
@@ -3735,20 +3737,20 @@ namespace NPOI.OpenXmlFormats.Dml
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
+    [XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_GroupFillProperties {
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
+    [XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_FillOverlayEffect {
         
         private CT_NoFillProperties noFillField;
@@ -3826,7 +3828,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public ST_BlendMode blend {
             get {
                 return this.blendField;
@@ -3838,9 +3840,9 @@ namespace NPOI.OpenXmlFormats.Dml
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=false)]
+    [XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=false)]
     public enum ST_EffectContainerType {
         
     
@@ -3851,11 +3853,11 @@ namespace NPOI.OpenXmlFormats.Dml
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
+    [XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_FillProperties {
         
         private CT_NoFillProperties noFillField;
@@ -3932,11 +3934,11 @@ namespace NPOI.OpenXmlFormats.Dml
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
+    [XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_EffectList {
         
         private CT_BlurEffect blurField;
@@ -4037,11 +4039,11 @@ namespace NPOI.OpenXmlFormats.Dml
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
+    [XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_EffectProperties {
         
         private CT_EffectList effectLstField;
