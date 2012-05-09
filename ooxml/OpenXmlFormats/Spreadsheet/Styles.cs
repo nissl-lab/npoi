@@ -10,104 +10,53 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 {
     [Serializable]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
+    [XmlRoot(ElementName = "xf", Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main", IsNullable = false)]
     public class CT_Xf
     {
         internal static XmlSerializer serializer = new XmlSerializer(typeof(CT_Xf));
         internal static XmlSerializerNamespaces namespaces = new XmlSerializerNamespaces(new[] {
             new XmlQualifiedName("", "http://schemas.openxmlformats.org/spreadsheetml/2006/main") });
 
-        private CT_CellAlignment alignmentField;
+        private CT_CellAlignment alignmentField = null;
 
-        private CT_CellProtection protectionField;
+        private CT_CellProtection protectionField = null;
 
-        private CT_ExtensionList extLstField;
+        private CT_ExtensionList extLstField = null;
 
-        private uint numFmtIdField;
+        private uint? numFmtIdField = null;
+        private uint? fontIdField = null;
+        private uint? fillIdField = null;
+        private uint? borderIdField = null;
+        private uint? xfIdField = null;
+        private bool? quotePrefixField = null;
+        private bool? pivotButtonField = null;
+        private bool? applyNumberFormatField = null;
+        private bool? applyFontField = null;
+        private bool? applyFillField = null;
+        private bool? applyBorderField = null;
+        private bool? applyAlignmentField = null;
+        private bool? applyProtectionField = null;
 
-        private bool numFmtIdFieldSpecified;
-
-        private uint fontIdField;
-
-        private bool fontIdFieldSpecified;
-
-        private uint fillIdField;
-
-        private bool fillIdFieldSpecified;
-
-        private uint borderIdField;
-
-        private bool borderIdFieldSpecified;
-
-        private uint xfIdField;
-
-        private bool xfIdFieldSpecified;
-
-        private bool quotePrefixField;
-
-        private bool pivotButtonField;
-
-        private bool applyNumberFormatField;
-
-        private bool applyNumberFormatFieldSpecified;
-
-        private bool applyFontField;
-
-        private bool applyFontFieldSpecified;
-
-        private bool applyFillField;
-
-        private bool applyFillFieldSpecified;
-
-        private bool applyBorderField;
-
-        private bool applyBorderFieldSpecified;
-
-        private bool applyAlignmentField;
-
-        private bool applyAlignmentFieldSpecified;
-
-        private bool applyProtectionField;
-
-        private bool applyProtectionFieldSpecified;
-
-        public CT_Xf()
-        {
-            //this.extLstField = new CT_ExtensionList();
-            //this.protectionField = new CT_CellProtection();
-            //this.alignmentField = new CT_CellAlignment();
-            this.quotePrefixField = false;
-            this.pivotButtonField = false;
-        }
         public CT_Xf Copy()
         {
             CT_Xf obj = new CT_Xf();
             obj.alignmentField = this.alignmentField;
-            obj.applyAlignmentField = this.applyAlignmentField;
-            obj.applyAlignmentFieldSpecified = this.applyAlignmentFieldSpecified;
-            obj.applyBorderField = this.applyBorderField;
-            obj.applyBorderFieldSpecified = this.applyBorderFieldSpecified;
-            obj.applyFillField = this.applyFillField;
-            obj.applyFillFieldSpecified = this.applyFillFieldSpecified;
-            obj.applyFontField = this.applyFontField;
-            obj.applyFontFieldSpecified = this.applyFontFieldSpecified;
-            obj.applyNumberFormatField = this.applyNumberFormatField;
-            obj.applyNumberFormatFieldSpecified = this.applyNumberFormatFieldSpecified;
-            obj.applyProtectionField = this.applyProtectionField;
-            obj.applyProtectionFieldSpecified = this.applyProtectionFieldSpecified;
-            obj.borderIdField = this.borderIdField;
-            obj.borderIdFieldSpecified = this.borderIdFieldSpecified;
-            obj.fillIdField = this.fillIdField;
-            obj.fillIdFieldSpecified = this.fillIdFieldSpecified;
-            obj.fontIdField = this.fontIdField;
-            obj.fontIdFieldSpecified = this.fontIdFieldSpecified;
-            obj.numFmtIdField = this.numFmtIdField;
-            obj.numFmtIdFieldSpecified = this.numFmtIdFieldSpecified;
-            obj.pivotButtonField = this.pivotButtonField;
             obj.protectionField = this.protectionField;
+            obj.extLstField = null == extLstField ? null : this.extLstField.Copy();
+
+            obj.applyAlignmentField = this.applyAlignmentField;
+            obj.applyBorderField = this.applyBorderField;
+            obj.applyFillField = this.applyFillField;
+            obj.applyFontField = this.applyFontField;
+            obj.applyNumberFormatField = this.applyNumberFormatField;
+            obj.applyProtectionField = this.applyProtectionField;
+            obj.borderIdField = this.borderIdField;
+            obj.fillIdField = this.fillIdField;
+            obj.fontIdField = this.fontIdField;
+            obj.numFmtIdField = this.numFmtIdField;
+            obj.pivotButtonField = this.pivotButtonField;
             obj.quotePrefixField = this.quotePrefixField;
             obj.xfIdField = this.xfIdField;
-            obj.xfIdFieldSpecified = this.xfIdFieldSpecified;
-            obj.extLstField = this.extLstField.Copy();
             return obj;
         }
 
@@ -137,6 +86,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             this.alignmentField = null;
         }
+
         public bool IsSetExtLst()
         {
             return this.extLst == null;
@@ -145,6 +95,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             this.extLst = null;
         }
+
         public bool IsSetProtection()
         {
             return this.protectionField != null;
@@ -159,342 +110,201 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.protectionField = new CT_CellProtection();
             return this.protectionField;
         }
+
         [XmlElement]
         public CT_CellAlignment alignment
         {
-            get
-            {
-                return this.alignmentField;
-            }
-            set
-            {
-                this.alignmentField = value;
-            }
+            get { return this.alignmentField; }
+            set { this.alignmentField = value; }
         }
+        [XmlIgnore]
+        public bool alignmentSpecified
+        {
+            get { return (null != alignmentField); }
+        }
+
         [XmlElement]
         public CT_CellProtection protection
         {
-            get
-            {
-                return this.protectionField;
-            }
-            set
-            {
-                this.protectionField = value;
-            }
+            get { return this.protectionField; }
+            set { this.protectionField = value; }
         }
+        [XmlIgnore]
+        public bool protectionSpecified
+        {
+            get { return (null != protectionField); }
+        }
+
         [XmlElement]
         public CT_ExtensionList extLst
         {
-            get
-            {
-                return this.extLstField;
-            }
-            set
-            {
-                this.extLstField = value;
-            }
+            get { return this.extLstField; }
+            set { this.extLstField = value; }
         }
+        [XmlIgnore]
+        public bool extLstSpecified
+        {
+            get { return (null != extLstField); }
+        }
+
         [XmlAttribute]
         public uint numFmtId
         {
-            get
-            {
-                return this.numFmtIdField;
-            }
-            set
-            {
-                this.numFmtIdField = value;
-            }
+            get { return (uint)this.numFmtIdField; }
+            set { this.numFmtIdField = value; }
         }
-
         [XmlIgnore]
         public bool numFmtIdSpecified
         {
-            get
-            {
-                return this.numFmtIdFieldSpecified;
-            }
-            set
-            {
-                this.numFmtIdFieldSpecified = value;
-            }
+            get { return null != this.numFmtIdField; }
         }
+
         [XmlAttribute]
         public uint fontId
         {
-            get
-            {
-                return this.fontIdField;
-            }
-            set
-            {
-                this.fontIdField = value;
-            }
+            get { return (uint)this.fontIdField; }
+            set { this.fontIdField = value; }
         }
-
         [XmlIgnore]
         public bool fontIdSpecified
         {
-            get
-            {
-                return this.fontIdFieldSpecified;
-            }
-            set
-            {
-                this.fontIdFieldSpecified = value;
-            }
+            get { return null != this.fontIdField; }
         }
+
         [XmlAttribute]
         public uint fillId
         {
-            get
-            {
-                return this.fillIdField;
-            }
-            set
-            {
-                this.fillIdField = value;
-            }
+            get { return (uint)this.fillIdField; }
+            set { this.fillIdField = value; }
         }
-
         [XmlIgnore]
         public bool fillIdSpecified
         {
-            get
-            {
-                return this.fillIdFieldSpecified;
-            }
-            set
-            {
-                this.fillIdFieldSpecified = value;
-            }
+            get { return null != this.fillIdField; }
         }
+
         [XmlAttribute]
         public uint borderId
         {
-            get
-            {
-                return this.borderIdField;
-            }
-            set
-            {
-                this.borderIdField = value;
-            }
+            get { return (uint)this.borderIdField; }
+            set { this.borderIdField = value; }
         }
-
         [XmlIgnore]
         public bool borderIdSpecified
         {
-            get
-            {
-                return this.borderIdFieldSpecified;
-            }
-            set
-            {
-                this.borderIdFieldSpecified = value;
-            }
+            get { return null != this.borderIdField; }
         }
+
         [XmlAttribute]
         public uint xfId
         {
-            get
-            {
-                return this.xfIdField;
-            }
-            set
-            {
-                this.xfIdField = value;
-            }
+            get { return (uint)this.xfIdField; }
+            set { this.xfIdField = value; }
         }
-
         [XmlIgnore]
         public bool xfIdSpecified
         {
-            get
-            {
-                return this.xfIdFieldSpecified;
-            }
-            set
-            {
-                this.xfIdFieldSpecified = value;
-            }
+            get { return null != this.xfIdField; }
         }
+
         [XmlAttribute]
         [DefaultValue(false)]
         public bool quotePrefix
         {
-            get
-            {
-                return this.quotePrefixField;
-            }
-            set
-            {
-                this.quotePrefixField = value;
-            }
+            get { return null == this.quotePrefixField ? false : (bool)quotePrefixField; }
+            set { this.quotePrefixField = value; }
         }
+        [XmlIgnore]
+        public bool quotePrefixSpecified
+        {
+            get { return (null != quotePrefixField); }
+        }
+
         [XmlAttribute]
         [DefaultValue(false)]
         public bool pivotButton
         {
-            get
-            {
-                return this.pivotButtonField;
-            }
-            set
-            {
-                this.pivotButtonField = value;
-            }
+            get { return null == this.pivotButtonField ? false : (bool)pivotButtonField; }
+            set { this.pivotButtonField = value; }
         }
+        [XmlIgnore]
+        public bool pivotButtonSpecified
+        {
+            get { return (null != pivotButtonField); }
+        }
+
         [XmlAttribute]
         public bool applyNumberFormat
         {
-            get
-            {
-                return this.applyNumberFormatField;
-            }
+            get { return (bool)this.applyNumberFormatField; }
             set
             {
                 this.applyNumberFormatField = value;
             }
         }
-
         [XmlIgnore]
         public bool applyNumberFormatSpecified
         {
-            get
-            {
-                return this.applyNumberFormatFieldSpecified;
-            }
-            set
-            {
-                this.applyNumberFormatFieldSpecified = value;
-            }
+            get { return null != this.applyNumberFormatField; }
         }
+
         [XmlAttribute]
         public bool applyFont
         {
-            get
-            {
-                return this.applyFontField;
-            }
-            set
-            {
-                this.applyFontField = value;
-            }
+            get { return (bool)this.applyFontField; }
+            set { this.applyFontField = value; }
         }
-
         [XmlIgnore]
         public bool applyFontSpecified
         {
-            get
-            {
-                return this.applyFontFieldSpecified;
-            }
-            set
-            {
-                this.applyFontFieldSpecified = value;
-            }
+            get { return null != this.applyFontField; }
         }
+
         [XmlAttribute]
         public bool applyFill
         {
-            get
-            {
-                return this.applyFillField;
-            }
-            set
-            {
-                this.applyFillField = value;
-            }
+            get { return (bool)this.applyFillField; }
+            set { this.applyFillField = value; }
         }
-
         [XmlIgnore]
         public bool applyFillSpecified
         {
-            get
-            {
-                return this.applyFillFieldSpecified;
-            }
-            set
-            {
-                this.applyFillFieldSpecified = value;
-            }
+            get { return null != this.applyFillField; }
         }
+
         [XmlAttribute]
         public bool applyBorder
         {
-            get
-            {
-                return this.applyBorderField;
-            }
-            set
-            {
-                this.applyBorderField = value;
-            }
+            get { return (bool)this.applyBorderField; }
+            set { this.applyBorderField = value; }
         }
-
         [XmlIgnore]
         public bool applyBorderSpecified
         {
-            get
-            {
-                return this.applyBorderFieldSpecified;
-            }
-            set
-            {
-                this.applyBorderFieldSpecified = value;
-            }
+            get { return null != this.applyBorderField; }
         }
         [XmlAttribute]
         public bool applyAlignment
         {
-            get
-            {
-                return this.applyAlignmentField;
-            }
-            set
-            {
-                this.applyAlignmentField = value;
-            }
+            get { return (bool)this.applyAlignmentField; }
+            set { this.applyAlignmentField = value; }
         }
-
         [XmlIgnore]
         public bool applyAlignmentSpecified
         {
-            get
-            {
-                return this.applyAlignmentFieldSpecified;
-            }
-            set
-            {
-                this.applyAlignmentFieldSpecified = value;
-            }
+            get { return null != this.applyAlignmentField; }
         }
+
         [XmlAttribute]
         public bool applyProtection
         {
-            get
-            {
-                return this.applyProtectionField;
-            }
-            set
-            {
-                this.applyProtectionField = value;
-            }
+            get { return (bool)this.applyProtectionField; }
+            set { this.applyProtectionField = value; }
         }
-
         [XmlIgnore]
         public bool applyProtectionSpecified
         {
-            get
-            {
-                return this.applyProtectionFieldSpecified;
-            }
-            set
-            {
-                this.applyProtectionFieldSpecified = value;
-            }
+            get { return null != this.applyProtectionField; }
         }
     }
 
@@ -1063,8 +873,10 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     public class CT_RgbColor
     {
 
-        private byte[] rgbField;
+        private byte[] rgbField = null; // ARGB
 
+        [XmlAttribute(DataType = "hexBinary")]
+        // Type ST_UnsignedIntHex is base on xsd:hexBinary, Length 4 (octets!?)
         public byte[] rgb
         {
             get
@@ -1434,10 +1246,14 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
         public void SetRgb(byte R, byte G, byte B)
         {
-            this.rgbField = new byte[3];
-            this.rgbField[0] = R;
-            this.rgbField[1] = G;
-            this.rgbField[2] = B;
+            this.rgbField = new byte[4];
+            this.rgbField[0] = 0;
+            this.rgbField[1] = R;
+            this.rgbField[2] = G;
+            this.rgbField[3] = B;
+            //this.rgbField[0] = R;
+            //this.rgbField[1] = G;
+            //this.rgbField[2] = B;
         }
         public bool IsSetRgb()
         {
@@ -1445,8 +1261,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
         public void SetRgb(byte[] rgb)
         {
-            rgbField = new byte[3];
-            Array.Copy(rgbField, this.rgb, 3);
+            rgbField = new byte[rgb.Length];
+            Array.Copy(rgbField, this.rgb, rgb.Length);
         }
         public byte[] GetRgb()
         {

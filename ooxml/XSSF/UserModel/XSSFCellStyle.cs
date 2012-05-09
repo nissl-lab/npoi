@@ -403,8 +403,6 @@ namespace NPOI.XSSF.UserModel
             {
                 _cellXf.applyNumberFormat = (true);
                 _cellXf.numFmtId = (uint)value;
-                if(value>=0)
-                    _cellXf.numFmtIdSpecified=true;
             }
         }
 

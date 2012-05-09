@@ -1065,9 +1065,9 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         private bool fiFieldSpecified;
 
-        private byte[] bcField;
+        private byte[] bcField = null;
 
-        private byte[] fcField;
+        private byte[] fcField = null;
 
         private bool iField;
 
@@ -1174,6 +1174,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
+        [XmlAttribute(DataType = "hexBinary")]
+        // Type ST_UnsignedIntHex is base on xsd:hexBinary, Length 4 (octets!?)
         public byte[] bc
         {
             get
@@ -1186,6 +1188,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
+        [XmlAttribute(DataType = "hexBinary")]
+        // Type ST_UnsignedIntHex is base on xsd:hexBinary, Length 4 (octets!?)
         public byte[] fc
         {
             get

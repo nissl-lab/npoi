@@ -510,21 +510,17 @@ namespace NPOI.XSSF.Model
             CT_Xf styleXf = CreateDefaultXf();
             styleXfs.Add(styleXf);
             CT_Xf xf = CreateDefaultXf();
-            xf.xfId = (0);
+            xf.xfId = 0;
             xfs.Add(xf);
         }
 
         private static CT_Xf CreateDefaultXf()
         {
             CT_Xf ctXf = new CT_Xf();
-            ctXf.numFmtId = (0);
-            ctXf.numFmtIdSpecified = true;
-            ctXf.fontId = (0);
-            ctXf.fontIdSpecified = true;
-            ctXf.fillId = (0);
-            ctXf.fillIdSpecified = true;
-            ctXf.borderId = (0);
-            ctXf.borderIdSpecified = true;
+            ctXf.numFmtId = 0;
+            ctXf.fontId = 0;
+            ctXf.fillId = 0;
+            ctXf.borderId = 0;
             return ctXf;
         }
         private static CT_Border CreateDefaultBorder()
@@ -573,16 +569,11 @@ namespace NPOI.XSSF.Model
         public XSSFCellStyle CreateCellStyle()
         {
             CT_Xf ctXf = new CT_Xf();
-            ctXf.numFmtId = (0);
-            ctXf.numFmtIdSpecified = true;
-            ctXf.fontId = (0);
-            ctXf.fontIdSpecified = true;
-            ctXf.fillId = (0);
-            ctXf.fillIdSpecified = true;
-            ctXf.borderId = (0);
-            ctXf.borderIdSpecified = true;
-            ctXf.xfId = (0);
-            ctXf.xfIdSpecified = true;
+            ctXf.numFmtId = 0;
+            ctXf.fontId = 0;
+            ctXf.fillId = 0;
+            ctXf.borderId = 0;
+            ctXf.xfId = 0;
             int xfSize = styleXfs.Count;
             int indexXf = PutCellXf(ctXf);
             return new XSSFCellStyle(indexXf - 1, xfSize - 1, this, theme);

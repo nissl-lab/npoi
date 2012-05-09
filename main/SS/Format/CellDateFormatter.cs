@@ -14,13 +14,14 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 ==================================================================== */
+
+using System;
+using System.Text.RegularExpressions;
+using System.Text;
+using NPOI.SS.Util;
+
 namespace NPOI.SS.Format
 {
-    using System;
-    using System.Text.RegularExpressions;
-    using System.Text;
-    using NPOI.SS.Util;
-
     /**
      * Formats a date value.
      *
@@ -151,7 +152,6 @@ namespace NPOI.SS.Format
         public CellDateFormatter(String format)
             : base(format)
         {
-            ;
             DatePartHandler partHandler = new DatePartHandler(this);
             StringBuilder descBuf = CellFormatPart.ParseFormat(format,
                     CellFormatType.DATE, partHandler);

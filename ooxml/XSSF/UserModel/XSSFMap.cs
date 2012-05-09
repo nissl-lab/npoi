@@ -67,12 +67,12 @@ namespace NPOI.XSSF.UserModel
         public XmlNode GetSchema()
         {
             throw new NotImplementedException();
-        //    Node xmlSchema = null;
+            //XmlNode xmlSchema = null;
 
-        //    CT_Schema schema = GetCTSchema();
-        //    xmlSchema = schema.GetDomNode().GetFirstChild();
+            //CT_Schema schema = GetCTSchema();
+            //xmlSchema = schema.GetDomNode().GetFirstChild();
 
-        //    return xmlSchema;
+            //return xmlSchema;
         }
 
         /**

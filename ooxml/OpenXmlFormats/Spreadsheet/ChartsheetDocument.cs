@@ -1,11 +1,14 @@
 ﻿using System.IO;
 using System.Xml.Serialization;
+using System.Xml;
 
 namespace NPOI.OpenXmlFormats.Spreadsheet
 {
     public class ChartsheetDocument
     {
-        static XmlSerializer serializer = new XmlSerializer(typeof(CT_Chartsheet));
+        internal static XmlSerializer serializer = new XmlSerializer(typeof(CT_Chartsheet));
+        internal static XmlSerializerNamespaces namespaces = new XmlSerializerNamespaces(new[] {
+            new XmlQualifiedName("", "http://schemas.openxmlformats.org/spreadsheetml/2006/main") });
         CT_Chartsheet sheet = null;
 
         public ChartsheetDocument()
@@ -30,7 +33,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
         public void Save(Stream stream)
         {
-            serializer.Serialize(stream, sheet);
+            serializer.Serialize(stream, sheet, namespaces);
         }
     }
 }
