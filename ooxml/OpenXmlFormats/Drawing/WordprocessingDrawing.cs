@@ -4,22 +4,18 @@
 //    <NameSpace>NPOI.OpenXmlFormats</NameSpace><Collection>List</Collection><codeType>CSharp</codeType><EnableDataBinding>False</EnableDataBinding><EnableLazyLoading>False</EnableLazyLoading><TrackingChangesEnable>False</TrackingChangesEnable><GenTrackingClasses>False</GenTrackingClasses><HidePrivateFieldInIDE>False</HidePrivateFieldInIDE><EnableSummaryComment>True</EnableSummaryComment><VirtualProp>False</VirtualProp><IncludeSerializeMethod>False</IncludeSerializeMethod><UseBaseClass>False</UseBaseClass><GenBaseClass>False</GenBaseClass><GenerateCloneMethod>False</GenerateCloneMethod><GenerateDataContracts>False</GenerateDataContracts><CodeBaseTag>Net20</CodeBaseTag><SerializeMethodName>Serialize</SerializeMethodName><DeserializeMethodName>Deserialize</DeserializeMethodName><SaveToFileMethodName>SaveToFile</SaveToFileMethodName><LoadFromFileMethodName>LoadFromFile</LoadFromFileMethodName><GenerateXMLAttributes>True</GenerateXMLAttributes><EnableEncoding>False</EnableEncoding><AutomaticProperties>False</AutomaticProperties><GenerateShouldSerialize>False</GenerateShouldSerialize><DisableDebug>False</DisableDebug><PropNameSpecified>Default</PropNameSpecified><Encoder>UTF8</Encoder><CustomUsings></CustomUsings><ExcludeIncludedTypes>True</ExcludeIncludedTypes><EnableInitializeFields>True</EnableInitializeFields>
 //  </auto-generated>
 // ------------------------------------------------------------------------------
+
+using System;
+using System.Collections.Generic;
+using System.Xml.Serialization;
+
 namespace NPOI.OpenXmlFormats.Dml
 {
-    using System;
-    using System.Diagnostics;
-    using System.Xml.Serialization;
-    using System.Collections;
-    using System.Xml.Schema;
-    using System.ComponentModel;
-    using System.Collections.Generic;
-
-
+   
+    [Serializable]
     
-    [System.SerializableAttribute()]
-    
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing")]
-    [System.Xml.Serialization.XmlRoot("inline", Namespace = "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing", IsNullable = false)]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing")]
+    [XmlRoot("inline", Namespace = "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing", IsNullable = false)]
     public partial class CT_Inline
     {
 
@@ -61,7 +57,7 @@ namespace NPOI.OpenXmlFormats.Dml
             this.extentField = new CT_PositiveSize2D();
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 0)]
+        [XmlElement(Order = 0)]
         public CT_PositiveSize2D extent
         {
             get
@@ -74,7 +70,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 1)]
+        [XmlElement(Order = 1)]
         public CT_EffectExtent effectExtent
         {
             get
@@ -87,7 +83,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 2)]
+        [XmlElement(Order = 2)]
         public CT_NonVisualDrawingProps docPr
         {
             get
@@ -100,7 +96,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 3)]
+        [XmlElement(Order = 3)]
         public CT_NonVisualGraphicFrameProperties cNvGraphicFramePr
         {
             get
@@ -113,7 +109,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", Order = 4)]
+        [XmlElement(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", Order = 4)]
         public CT_GraphicalObject graphic
         {
             get
@@ -126,7 +122,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [XmlAttribute()]
         public uint distT
         {
             get
@@ -139,7 +135,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnore]
         public bool distTSpecified
         {
             get
@@ -152,7 +148,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [XmlAttribute()]
         public uint distB
         {
             get
@@ -165,7 +161,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnore]
         public bool distBSpecified
         {
             get
@@ -178,7 +174,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [XmlAttribute()]
         public uint distL
         {
             get
@@ -191,7 +187,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnore]
         public bool distLSpecified
         {
             get
@@ -204,7 +200,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [XmlAttribute()]
         public uint distR
         {
             get
@@ -217,7 +213,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnore]
         public bool distRSpecified
         {
             get
@@ -246,10 +242,10 @@ namespace NPOI.OpenXmlFormats.Dml
     }
 
     
-    [System.SerializableAttribute()]
+    [Serializable]
     
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing")]
-    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing", IsNullable = true)]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing", IsNullable = true)]
     public partial class CT_EffectExtent
     {
 
@@ -261,7 +257,7 @@ namespace NPOI.OpenXmlFormats.Dml
 
         private long bField;
 
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [XmlAttribute()]
         public long l
         {
             get
@@ -274,7 +270,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [XmlAttribute()]
         public long t
         {
             get
@@ -287,7 +283,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [XmlAttribute()]
         public long r
         {
             get
@@ -300,7 +296,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [XmlAttribute()]
         public long b
         {
             get
@@ -315,10 +311,10 @@ namespace NPOI.OpenXmlFormats.Dml
     }
 
     
-    [System.SerializableAttribute()]
+    [Serializable]
     
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing")]
-    [System.Xml.Serialization.XmlRoot("anchor", Namespace = "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing", IsNullable = false)]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing")]
+    [XmlRoot("anchor", Namespace = "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing", IsNullable = false)]
     public partial class CT_Anchor
     {
 
@@ -385,7 +381,7 @@ namespace NPOI.OpenXmlFormats.Dml
             this.simplePosField = new CT_Point2D();
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 0)]
+        [XmlElement(Order = 0)]
         public CT_Point2D simplePos
         {
             get
@@ -398,7 +394,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 1)]
+        [XmlElement(Order = 1)]
         public CT_PosH positionH
         {
             get
@@ -411,7 +407,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 2)]
+        [XmlElement(Order = 2)]
         public CT_PosV positionV
         {
             get
@@ -424,7 +420,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 3)]
+        [XmlElement(Order = 3)]
         public CT_PositiveSize2D extent
         {
             get
@@ -437,7 +433,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 4)]
+        [XmlElement(Order = 4)]
         public CT_EffectExtent effectExtent
         {
             get
@@ -450,11 +446,11 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [System.Xml.Serialization.XmlElement("wrapNone", typeof(CT_WrapNone), Order = 5)]
-        [System.Xml.Serialization.XmlElement("wrapSquare", typeof(CT_WrapSquare), Order = 5)]
-        [System.Xml.Serialization.XmlElement("wrapThrough", typeof(CT_WrapThrough), Order = 5)]
-        [System.Xml.Serialization.XmlElement("wrapTight", typeof(CT_WrapTight), Order = 5)]
-        [System.Xml.Serialization.XmlElement("wrapTopAndBottom", typeof(CT_WrapTopBottom), Order = 5)]
+        [XmlElement("wrapNone", typeof(CT_WrapNone), Order = 5)]
+        [XmlElement("wrapSquare", typeof(CT_WrapSquare), Order = 5)]
+        [XmlElement("wrapThrough", typeof(CT_WrapThrough), Order = 5)]
+        [XmlElement("wrapTight", typeof(CT_WrapTight), Order = 5)]
+        [XmlElement("wrapTopAndBottom", typeof(CT_WrapTopBottom), Order = 5)]
         public object Item
         {
             get
@@ -467,7 +463,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 6)]
+        [XmlElement(Order = 6)]
         public CT_NonVisualDrawingProps docPr
         {
             get
@@ -480,7 +476,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 7)]
+        [XmlElement(Order = 7)]
         public CT_NonVisualGraphicFrameProperties cNvGraphicFramePr
         {
             get
@@ -493,7 +489,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", Order = 8)]
+        [XmlElement(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", Order = 8)]
         public CT_GraphicalObject graphic
         {
             get
@@ -506,7 +502,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [XmlAttribute()]
         public uint distT
         {
             get
@@ -519,7 +515,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnore]
         public bool distTSpecified
         {
             get
@@ -532,7 +528,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [XmlAttribute()]
         public uint distB
         {
             get
@@ -545,7 +541,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnore]
         public bool distBSpecified
         {
             get
@@ -558,7 +554,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [XmlAttribute()]
         public uint distL
         {
             get
@@ -571,7 +567,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnore]
         public bool distLSpecified
         {
             get
@@ -584,7 +580,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [XmlAttribute()]
         public uint distR
         {
             get
@@ -597,7 +593,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnore]
         public bool distRSpecified
         {
             get
@@ -610,7 +606,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [System.Xml.Serialization.XmlAttributeAttribute("simplePos")]
+        [XmlAttribute("simplePos")]
         public bool simplePos1
         {
             get
@@ -623,7 +619,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnore]
         public bool simplePos1Specified
         {
             get
@@ -636,7 +632,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [XmlAttribute()]
         public uint relativeHeight
         {
             get
@@ -649,7 +645,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [XmlAttribute()]
         public bool behindDoc
         {
             get
@@ -662,7 +658,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [XmlAttribute()]
         public bool locked
         {
             get
@@ -675,7 +671,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [XmlAttribute()]
         public bool layoutInCell
         {
             get
@@ -688,7 +684,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [XmlAttribute()]
         public bool hidden
         {
             get
@@ -701,7 +697,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnore]
         public bool hiddenSpecified
         {
             get
@@ -714,7 +710,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [XmlAttribute()]
         public bool allowOverlap
         {
             get
@@ -729,10 +725,10 @@ namespace NPOI.OpenXmlFormats.Dml
     }
 
     
-    [System.SerializableAttribute()]
+    [Serializable]
     
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing")]
-    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing", IsNullable = true)]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing", IsNullable = true)]
     public partial class CT_PosH
     {
 
@@ -740,8 +736,8 @@ namespace NPOI.OpenXmlFormats.Dml
 
         private ST_RelFromH relativeFromField;
 
-        [System.Xml.Serialization.XmlElement("align", typeof(ST_AlignH), Order = 0)]
-        [System.Xml.Serialization.XmlElement("posOffset", typeof(int), Order = 0)]
+        [XmlElement("align", typeof(ST_AlignH), Order = 0)]
+        [XmlElement("posOffset", typeof(int), Order = 0)]
         public object Item
         {
             get
@@ -754,7 +750,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [XmlAttribute()]
         public ST_RelFromH relativeFrom
         {
             get
@@ -769,8 +765,8 @@ namespace NPOI.OpenXmlFormats.Dml
     }
 
     
-    [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing")]
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing")]
     public enum ST_AlignH
     {
 
@@ -791,8 +787,8 @@ namespace NPOI.OpenXmlFormats.Dml
     }
 
     
-    [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing")]
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing")]
     public enum ST_RelFromH
     {
 
@@ -822,10 +818,10 @@ namespace NPOI.OpenXmlFormats.Dml
     }
 
     
-    [System.SerializableAttribute()]
+    [Serializable]
     
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing")]
-    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing", IsNullable = true)]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing", IsNullable = true)]
     public partial class CT_PosV
     {
 
@@ -833,8 +829,8 @@ namespace NPOI.OpenXmlFormats.Dml
 
         private ST_RelFromV relativeFromField;
 
-        [System.Xml.Serialization.XmlElement("align", typeof(ST_AlignV), Order = 0)]
-        [System.Xml.Serialization.XmlElement("posOffset", typeof(int), Order = 0)]
+        [XmlElement("align", typeof(ST_AlignV), Order = 0)]
+        [XmlElement("posOffset", typeof(int), Order = 0)]
         public object Item
         {
             get
@@ -847,7 +843,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [XmlAttribute()]
         public ST_RelFromV relativeFrom
         {
             get
@@ -862,8 +858,8 @@ namespace NPOI.OpenXmlFormats.Dml
     }
 
     
-    [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing")]
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing")]
     public enum ST_AlignV
     {
 
@@ -884,8 +880,8 @@ namespace NPOI.OpenXmlFormats.Dml
     }
 
     
-    [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing")]
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing")]
     public enum ST_RelFromV
     {
 
@@ -915,19 +911,19 @@ namespace NPOI.OpenXmlFormats.Dml
     }
 
     
-    [System.SerializableAttribute()]
+    [Serializable]
     
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing")]
-    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing", IsNullable = true)]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing", IsNullable = true)]
     public partial class CT_WrapNone
     {
     }
 
     
-    [System.SerializableAttribute()]
+    [Serializable]
     
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing")]
-    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing", IsNullable = true)]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing", IsNullable = true)]
     public partial class CT_WrapSquare
     {
 
@@ -959,7 +955,7 @@ namespace NPOI.OpenXmlFormats.Dml
             this.effectExtentField = new CT_EffectExtent();
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 0)]
+        [XmlElement(Order = 0)]
         public CT_EffectExtent effectExtent
         {
             get
@@ -972,7 +968,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [XmlAttribute()]
         public ST_WrapText wrapText
         {
             get
@@ -985,7 +981,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [XmlAttribute()]
         public uint distT
         {
             get
@@ -998,7 +994,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnore]
         public bool distTSpecified
         {
             get
@@ -1011,7 +1007,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [XmlAttribute()]
         public uint distB
         {
             get
@@ -1024,7 +1020,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnore]
         public bool distBSpecified
         {
             get
@@ -1037,7 +1033,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [XmlAttribute()]
         public uint distL
         {
             get
@@ -1050,7 +1046,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnore]
         public bool distLSpecified
         {
             get
@@ -1063,7 +1059,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [XmlAttribute()]
         public uint distR
         {
             get
@@ -1076,7 +1072,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnore]
         public bool distRSpecified
         {
             get
@@ -1091,8 +1087,8 @@ namespace NPOI.OpenXmlFormats.Dml
     }
 
     
-    [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing")]
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing")]
     public enum ST_WrapText
     {
 
@@ -1110,10 +1106,10 @@ namespace NPOI.OpenXmlFormats.Dml
     }
 
     
-    [System.SerializableAttribute()]
+    [Serializable]
     
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing")]
-    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing", IsNullable = true)]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing", IsNullable = true)]
     public partial class CT_WrapThrough
     {
 
@@ -1137,7 +1133,7 @@ namespace NPOI.OpenXmlFormats.Dml
             this.wrapPolygonField = new CT_WrapPath();
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 0)]
+        [XmlElement(Order = 0)]
         public CT_WrapPath wrapPolygon
         {
             get
@@ -1150,7 +1146,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [XmlAttribute()]
         public ST_WrapText wrapText
         {
             get
@@ -1163,7 +1159,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [XmlAttribute()]
         public uint distL
         {
             get
@@ -1176,7 +1172,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnore]
         public bool distLSpecified
         {
             get
@@ -1189,7 +1185,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [XmlAttribute()]
         public uint distR
         {
             get
@@ -1202,7 +1198,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnore]
         public bool distRSpecified
         {
             get
@@ -1217,10 +1213,10 @@ namespace NPOI.OpenXmlFormats.Dml
     }
 
     
-    [System.SerializableAttribute()]
+    [Serializable]
     
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing")]
-    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing", IsNullable = true)]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing", IsNullable = true)]
     public partial class CT_WrapPath
     {
 
@@ -1240,7 +1236,7 @@ namespace NPOI.OpenXmlFormats.Dml
             this.lineToField = new List<CT_Point2D>();
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 0)]
+        [XmlElement(Order = 0)]
         public CT_Point2D start
         {
             get
@@ -1253,7 +1249,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [System.Xml.Serialization.XmlElement("lineTo", Order = 1)]
+        [XmlElement("lineTo", Order = 1)]
         public List<CT_Point2D> lineTo
         {
             get
@@ -1266,7 +1262,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [XmlAttribute()]
         public bool edited
         {
             get
@@ -1279,7 +1275,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnore]
         public bool editedSpecified
         {
             get
@@ -1294,10 +1290,10 @@ namespace NPOI.OpenXmlFormats.Dml
     }
 
     
-    [System.SerializableAttribute()]
+    [Serializable]
     
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing")]
-    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing", IsNullable = true)]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing", IsNullable = true)]
     public partial class CT_WrapTight
     {
 
@@ -1321,7 +1317,7 @@ namespace NPOI.OpenXmlFormats.Dml
             this.wrapPolygonField = new CT_WrapPath();
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 0)]
+        [XmlElement(Order = 0)]
         public CT_WrapPath wrapPolygon
         {
             get
@@ -1334,7 +1330,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [XmlAttribute()]
         public ST_WrapText wrapText
         {
             get
@@ -1347,7 +1343,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [XmlAttribute()]
         public uint distL
         {
             get
@@ -1360,7 +1356,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnore]
         public bool distLSpecified
         {
             get
@@ -1373,7 +1369,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [XmlAttribute()]
         public uint distR
         {
             get
@@ -1386,7 +1382,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnore]
         public bool distRSpecified
         {
             get
@@ -1401,10 +1397,10 @@ namespace NPOI.OpenXmlFormats.Dml
     }
 
     
-    [System.SerializableAttribute()]
+    [Serializable]
     
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing")]
-    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing", IsNullable = true)]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing", IsNullable = true)]
     public partial class CT_WrapTopBottom
     {
 
@@ -1426,7 +1422,7 @@ namespace NPOI.OpenXmlFormats.Dml
             this.effectExtentField = new CT_EffectExtent();
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 0)]
+        [XmlElement(Order = 0)]
         public CT_EffectExtent effectExtent
         {
             get
@@ -1439,7 +1435,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [XmlAttribute()]
         public uint distT
         {
             get
@@ -1452,7 +1448,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnore]
         public bool distTSpecified
         {
             get
@@ -1465,7 +1461,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [XmlAttribute()]
         public uint distB
         {
             get
@@ -1478,7 +1474,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnore]
         public bool distBSpecified
         {
             get

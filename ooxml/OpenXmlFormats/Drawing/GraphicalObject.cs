@@ -1,12 +1,16 @@
+
+using System;
+using System.Xml.Serialization;
+
 namespace NPOI.OpenXmlFormats.Dml {
     
     
 
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
-    [System.Xml.Serialization.XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
+    [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_GraphicalObjectData {
         
         private System.Xml.XmlElement[] anyField;
@@ -25,7 +29,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
     
-        [System.Xml.Serialization.XmlAttributeAttribute(DataType="token")]
+        [XmlAttribute(DataType="token")]
         public string uri {
             get {
                 return this.uriField;
@@ -37,11 +41,11 @@ namespace NPOI.OpenXmlFormats.Dml {
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
-    [System.Xml.Serialization.XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
+    [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_GraphicalObject {
         
         private CT_GraphicalObjectData graphicDataField;

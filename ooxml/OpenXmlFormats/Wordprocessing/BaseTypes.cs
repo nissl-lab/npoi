@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
+
 namespace NPOI.OpenXmlFormats.Wordprocessing
 {
 
-    [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
     public class CT_Empty
     {
     }
@@ -16,9 +17,9 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     /// <summary>
     /// On/Off Value
     /// </summary>
-    [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
     public class CT_OnOff
     {
 
@@ -26,7 +27,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         private bool valFieldSpecified;
 
-        [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
         public ST_OnOff val
         {
             get
@@ -39,7 +40,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnore]
         public bool valSpecified
         {
             get
@@ -66,8 +67,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     /// <summary>
     /// On/Off Value
     /// </summary>
-    [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
     public enum ST_OnOff
     {
         /// <summary>
@@ -95,28 +96,28 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         /// <summary>
         /// False
         /// </summary>
-        [System.Xml.Serialization.XmlEnumAttribute("0")]
+        [XmlEnum("0")]
         Value0,
 
         /// <summary>
         /// True
         /// </summary>
-        [System.Xml.Serialization.XmlEnumAttribute("1")]
+        [XmlEnum("1")]
         Value1,
     }
     /// <summary>
     /// Long Hexadecimal Number
     /// </summary>
-    [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
     public class CT_LongHexNumber
     {
         private byte[] valField;
         /// <summary>
         /// Four Digit Hexadecimal Number Value
         /// </summary>
-        [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, DataType = "hexBinary")]
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, DataType = "hexBinary")]
         public byte[] val
         {
             get
@@ -133,9 +134,9 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     /// <summary>
     /// Two Digit Hexadecimal Number
     /// </summary>
-    [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
     public class CT_ShortHexNumber
     {
         private byte[] valField;
@@ -143,7 +144,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         /// <summary>
         /// Two Digit Hexadecimal Number Value
         /// </summary>
-        [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, DataType = "hexBinary")]
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, DataType = "hexBinary")]
         public byte[] val
         {
             get
@@ -160,9 +161,9 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     /// <summary>
     /// Two Digit Hexadecimal Number
     /// </summary>
-    [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
     public class CT_UcharHexNumber
     {
         private byte[] valField;
@@ -170,7 +171,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         /// <summary>
         /// Two Digit Hexadecimal Number Value
         /// </summary>
-        [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, DataType = "hexBinary")]
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, DataType = "hexBinary")]
         public byte[] val
         {
             get
@@ -187,9 +188,9 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     /// <summary>
     /// Decimal Number Value
     /// </summary>
-    [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
     public class CT_DecimalNumber
     {
 
@@ -198,7 +199,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         /// <summary>
         /// Decimal Number
         /// </summary>
-        [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, DataType = "integer")]
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, DataType = "integer")]
         public string val
         {
             get
@@ -215,9 +216,9 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     /// <summary>
     /// Measurement in Twentieths of a Point
     /// </summary>
-    [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
     public class CT_TwipsMeasure
     {
 
@@ -226,7 +227,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         /// <summary>
         /// Measurement in Twentieths of a Point
         /// </summary>
-        [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
         public ulong val
         {
             get
@@ -243,9 +244,9 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     /// <summary>
     /// Signed Measurement in Twentieths of a Point
     /// </summary>
-    [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
     public class CT_SignedTwipsMeasure
     {
 
@@ -253,7 +254,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         /// <summary>
         /// Signed Measurement in Twentieths of a Point
         /// </summary>
-        [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, DataType = "integer")]
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, DataType = "integer")]
         public string val
         {
             get
@@ -270,9 +271,9 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     /// <summary>
     /// Measurement in Pixels
     /// </summary>
-    [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
     public class CT_PixelsMeasure
     {
 
@@ -281,7 +282,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         /// <summary>
         /// Measurement in Pixels
         /// </summary>
-        [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
         public ulong val
         {
             get
@@ -298,9 +299,9 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     /// <summary>
     /// Half Point Measurement
     /// </summary>
-    [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
     public class CT_HpsMeasure
     {
 
@@ -309,7 +310,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         /// <summary>
         /// Half Point Measurement
         /// </summary>
-        [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
         public ulong val
         {
             get
@@ -325,9 +326,9 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     /// <summary>
     /// Signed Measurement in Half-Points
     /// </summary>
-    [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
     public class CT_SignedHpsMeasure
     {
 
@@ -335,7 +336,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         /// <summary>
         /// Signed Measurement in Half-Points
         /// </summary>
-        [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, DataType = "integer")]
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, DataType = "integer")]
         public string val
         {
             get
@@ -360,9 +361,9 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     /// <summary>
     /// Name of Script Function
     /// </summary>
-    [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
     public class CT_MacroName
     {
 
@@ -370,7 +371,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         /// <summary>
         /// Script Subroutine Name Value
         /// </summary>
-        [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
         public string val
         {
             get
@@ -387,9 +388,9 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     /// <summary>
     /// String
     /// </summary>
-    [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
     public class CT_String
     {
 
@@ -397,7 +398,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         /// <summary>
         /// String Value
         /// </summary>
-        [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
         public string val
         {
             get
@@ -414,9 +415,9 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     /// <summary>
     /// Language Reference
     /// </summary>
-    [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
     public class CT_Lang
     {
 
@@ -424,7 +425,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         /// <summary>
         /// Language Code
         /// </summary>
-        [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
         public string val
         {
             get
@@ -443,9 +444,9 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     /// <summary>
     /// 128-Bit GUID
     /// </summary>
-    [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
     public class CT_Guid
     {
 
@@ -453,7 +454,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         /// <summary>
         /// GUID Value
         /// </summary>
-        [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, DataType = "token")]
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, DataType = "token")]
         public string val
         {
             get

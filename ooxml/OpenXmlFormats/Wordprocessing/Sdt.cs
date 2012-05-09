@@ -52,7 +52,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         [XmlElement("proofErr", typeof(CT_ProofErr), Order = 0)]
         [XmlElement("sdt", typeof(CT_SdtCell), Order = 0)]
         [XmlElement("tc", typeof(CT_Tc), Order = 0)]
-        [System.Xml.Serialization.XmlChoiceIdentifierAttribute("ItemsElementName")]
+        [XmlChoiceIdentifier("ItemsElementName")]
         public object[] Items
         {
             get
@@ -86,11 +86,11 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     {
 
     
-        [System.Xml.Serialization.XmlEnumAttribute("http://schemas.openxmlformats.org/officeDocument/2006/math:oMath")]
+        [XmlEnum("http://schemas.openxmlformats.org/officeDocument/2006/math:oMath")]
         oMath,
 
     
-        [System.Xml.Serialization.XmlEnumAttribute("http://schemas.openxmlformats.org/officeDocument/2006/math:oMathPara")]
+        [XmlEnum("http://schemas.openxmlformats.org/officeDocument/2006/math:oMathPara")]
         oMathPara,
 
     
@@ -579,7 +579,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         [XmlElement("proofErr", typeof(CT_ProofErr), Order = 0)]
         [XmlElement("sdt", typeof(CT_SdtBlock), Order = 0)]
         [XmlElement("tbl", typeof(CT_Tbl), Order = 0)]
-        [System.Xml.Serialization.XmlChoiceIdentifierAttribute("ItemsElementName")]
+        [XmlChoiceIdentifier("ItemsElementName")]
         public object[] Items
         {
             get
@@ -728,11 +728,11 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     {
 
     
-        [System.Xml.Serialization.XmlEnumAttribute("http://schemas.openxmlformats.org/officeDocument/2006/math:oMath")]
+        [XmlEnum("http://schemas.openxmlformats.org/officeDocument/2006/math:oMath")]
         oMath,
 
     
-        [System.Xml.Serialization.XmlEnumAttribute("http://schemas.openxmlformats.org/officeDocument/2006/math:oMathPara")]
+        [XmlEnum("http://schemas.openxmlformats.org/officeDocument/2006/math:oMathPara")]
         oMathPara,
 
     
@@ -862,7 +862,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         [XmlElement("proofErr", typeof(CT_ProofErr), Order = 0)]
         [XmlElement("sdt", typeof(CT_SdtRow), Order = 0)]
         [XmlElement("tr", typeof(CT_Row), Order = 0)]
-        [System.Xml.Serialization.XmlChoiceIdentifierAttribute("ItemsElementName")]
+        [XmlChoiceIdentifier("ItemsElementName")]
         public object[] Items
         {
             get
@@ -929,7 +929,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         [XmlElement("tag", typeof(CT_String), Order = 0)]
         [XmlElement("temporary", typeof(CT_OnOff), Order = 0)]
         [XmlElement("text", typeof(CT_SdtText), Order = 0)]
-        [System.Xml.Serialization.XmlChoiceIdentifierAttribute("ItemsElementName")]
+        [XmlChoiceIdentifier("ItemsElementName")]
         public object[] Items
         {
             get
@@ -1231,7 +1231,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         [XmlElement("sdt", typeof(CT_SdtRun), Order = 0)]
         [XmlElement("smartTag", typeof(CT_SmartTagRun), Order = 0)]
         [XmlElement("subDoc", typeof(CT_Rel), Order = 0)]
-        [System.Xml.Serialization.XmlChoiceIdentifierAttribute("ItemsElementName")]
+        [XmlChoiceIdentifier("ItemsElementName")]
         public object[] Items
         {
             get
@@ -1380,11 +1380,11 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     {
 
     
-        [System.Xml.Serialization.XmlEnumAttribute("http://schemas.openxmlformats.org/officeDocument/2006/math:oMath")]
+        [XmlEnum("http://schemas.openxmlformats.org/officeDocument/2006/math:oMath")]
         oMath,
 
     
-        [System.Xml.Serialization.XmlEnumAttribute("http://schemas.openxmlformats.org/officeDocument/2006/math:oMathPara")]
+        [XmlEnum("http://schemas.openxmlformats.org/officeDocument/2006/math:oMathPara")]
         oMathPara,
 
     

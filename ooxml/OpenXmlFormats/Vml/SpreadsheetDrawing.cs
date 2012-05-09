@@ -88,7 +88,7 @@ namespace NPOI.OpenXmlFormats.Vml
         [XmlElement("ValidIds", typeof(ST_TrueFalseBlank))]
         [XmlElement("Visible", typeof(ST_TrueFalseBlank))]
         [XmlElement("WidthMin", typeof(string), DataType = "integer")]
-        [System.Xml.Serialization.XmlChoiceIdentifierAttribute("ItemsElementName")]
+        [XmlChoiceIdentifier("ItemsElementName")]
         public List<object> Items
         {
             get

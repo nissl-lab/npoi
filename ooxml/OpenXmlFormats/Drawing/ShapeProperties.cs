@@ -293,7 +293,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [System.Xml.Serialization.XmlIgnore]
+        [XmlIgnore]
         public bool bwModeSpecified
         {
             get
@@ -501,7 +501,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [System.Xml.Serialization.XmlIgnore]
+        [XmlIgnore]
         public bool bwModeSpecified
         {
             get

@@ -1387,7 +1387,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         [XmlElement("lnTo", typeof(CT_Path2DLineTo))]
         [XmlElement("moveTo", typeof(CT_Path2DMoveTo))]
         [XmlElement("quadBezTo", typeof(CT_Path2DQuadBezierTo))]
-        [System.Xml.Serialization.XmlChoiceIdentifierAttribute("ItemsElementName")]
+        [XmlChoiceIdentifier("ItemsElementName")]
         public object[] Items {
             get {
                 return this.itemsField;
@@ -1399,7 +1399,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         
     
         [XmlElement("ItemsElementName")]
-        [System.Xml.Serialization.XmlIgnore]
+        [XmlIgnore]
         public ItemsChoiceType[] ItemsElementName {
             get {
                 return this.itemsElementNameField;

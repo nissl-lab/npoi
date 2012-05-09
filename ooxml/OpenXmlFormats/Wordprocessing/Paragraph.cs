@@ -80,7 +80,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         [XmlElement("sdt", typeof(CT_SdtRun), Order = 1)]
         [XmlElement("smartTag", typeof(CT_SmartTagRun), Order = 1)]
         [XmlElement("subDoc", typeof(CT_Rel), Order = 1)]
-        [System.Xml.Serialization.XmlChoiceIdentifierAttribute("ItemsElementName")]
+        [XmlChoiceIdentifier("ItemsElementName")]
         public object[] Items
         {
             get
@@ -362,11 +362,11 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     {
 
     
-        [System.Xml.Serialization.XmlEnumAttribute("http://schemas.openxmlformats.org/officeDocument/2006/math:oMath")]
+        [XmlEnum("http://schemas.openxmlformats.org/officeDocument/2006/math:oMath")]
         oMath,
 
     
-        [System.Xml.Serialization.XmlEnumAttribute("http://schemas.openxmlformats.org/officeDocument/2006/math:oMathPara")]
+        [XmlEnum("http://schemas.openxmlformats.org/officeDocument/2006/math:oMathPara")]
         oMathPara,
 
     
@@ -1344,7 +1344,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         [XmlElement("footerReference", typeof(CT_HdrFtrRef), Order = 0)]
         [XmlElement("headerReference", typeof(CT_HdrFtrRef), Order = 0)]
-        [System.Xml.Serialization.XmlChoiceIdentifierAttribute("ItemsElementName")]
+        [XmlChoiceIdentifier("ItemsElementName")]
         public CT_HdrFtrRef[] Items
         {
             get
@@ -3322,7 +3322,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         [XmlElement("vertAlign", typeof(CT_VerticalAlignRun), Order = 4)]
         [XmlElement("w", typeof(CT_TextScale), Order = 4)]
         [XmlElement("webHidden", typeof(CT_OnOff), Order = 4)]
-        [System.Xml.Serialization.XmlChoiceIdentifierAttribute("ItemsElementName")]
+        [XmlChoiceIdentifier("ItemsElementName")]
         public object[] Items
         {
             get
@@ -3503,7 +3503,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         }
     }
 
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(CT_PPr))]
+    [XmlInclude(typeof(CT_PPr))]
 
     [Serializable]
 
@@ -4228,7 +4228,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         [XmlElement("vertAlign", typeof(CT_VerticalAlignRun), Order = 0)]
         [XmlElement("w", typeof(CT_TextScale), Order = 0)]
         [XmlElement("webHidden", typeof(CT_OnOff), Order = 0)]
-        [System.Xml.Serialization.XmlChoiceIdentifierAttribute("ItemsElementName")]
+        [XmlChoiceIdentifier("ItemsElementName")]
         public object[] Items
         {
             get

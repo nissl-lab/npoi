@@ -508,15 +508,15 @@ namespace NPOI.OpenXmlFormats.Shared
     {
 
     
-        [System.Xml.Serialization.XmlEnumAttribute("--")]
+        [XmlEnum("--")]
         Item,
 
     
-        [System.Xml.Serialization.XmlEnumAttribute("-+")]
+        [XmlEnum("-+")]
         Item1,
 
     
-        [System.Xml.Serialization.XmlEnumAttribute("+-")]
+        [XmlEnum("+-")]
         Item2,
     }
 
@@ -947,11 +947,11 @@ namespace NPOI.OpenXmlFormats.Shared
         fraktur,
 
     
-        [System.Xml.Serialization.XmlEnumAttribute("double-struck")]
+        [XmlEnum("double-struck")]
         doublestruck,
 
     
-        [System.Xml.Serialization.XmlEnumAttribute("sans-serif")]
+        [XmlEnum("sans-serif")]
         sansserif,
 
     
@@ -1247,7 +1247,7 @@ namespace NPOI.OpenXmlFormats.Shared
         [XmlElement("tab", typeof(CT_Empty), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 2)]
         [XmlElement("yearLong", typeof(CT_Empty), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 2)]
         [XmlElement("yearShort", typeof(CT_Empty), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 2)]
-        [System.Xml.Serialization.XmlChoiceIdentifierAttribute("ItemsElementName")]
+        [XmlChoiceIdentifier("ItemsElementName")]
         public object[] Items
         {
             get
@@ -1286,133 +1286,133 @@ namespace NPOI.OpenXmlFormats.Shared
         t,
 
     
-        [System.Xml.Serialization.XmlEnumAttribute("http://schemas.openxmlformats.org/wordprocessingml/2006/main:annotationRef")]
+        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:annotationRef")]
         annotationRef,
 
     
-        [System.Xml.Serialization.XmlEnumAttribute("http://schemas.openxmlformats.org/wordprocessingml/2006/main:br")]
+        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:br")]
         br,
 
     
-        [System.Xml.Serialization.XmlEnumAttribute("http://schemas.openxmlformats.org/wordprocessingml/2006/main:commentReference")]
+        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:commentReference")]
         commentReference,
 
     
-        [System.Xml.Serialization.XmlEnumAttribute("http://schemas.openxmlformats.org/wordprocessingml/2006/main:continuationSeparato" +
+        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:continuationSeparato" +
             "r")]
         continuationSeparator,
 
     
-        [System.Xml.Serialization.XmlEnumAttribute("http://schemas.openxmlformats.org/wordprocessingml/2006/main:cr")]
+        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:cr")]
         cr,
 
     
-        [System.Xml.Serialization.XmlEnumAttribute("http://schemas.openxmlformats.org/wordprocessingml/2006/main:dayLong")]
+        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:dayLong")]
         dayLong,
 
     
-        [System.Xml.Serialization.XmlEnumAttribute("http://schemas.openxmlformats.org/wordprocessingml/2006/main:dayShort")]
+        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:dayShort")]
         dayShort,
 
     
-        [System.Xml.Serialization.XmlEnumAttribute("http://schemas.openxmlformats.org/wordprocessingml/2006/main:delInstrText")]
+        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:delInstrText")]
         delInstrText,
 
     
-        [System.Xml.Serialization.XmlEnumAttribute("http://schemas.openxmlformats.org/wordprocessingml/2006/main:delText")]
+        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:delText")]
         delText,
 
     
-        [System.Xml.Serialization.XmlEnumAttribute("http://schemas.openxmlformats.org/wordprocessingml/2006/main:drawing")]
+        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:drawing")]
         drawing,
 
     
-        [System.Xml.Serialization.XmlEnumAttribute("http://schemas.openxmlformats.org/wordprocessingml/2006/main:endnoteRef")]
+        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:endnoteRef")]
         endnoteRef,
 
     
-        [System.Xml.Serialization.XmlEnumAttribute("http://schemas.openxmlformats.org/wordprocessingml/2006/main:endnoteReference")]
+        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:endnoteReference")]
         endnoteReference,
 
     
-        [System.Xml.Serialization.XmlEnumAttribute("http://schemas.openxmlformats.org/wordprocessingml/2006/main:fldChar")]
+        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:fldChar")]
         fldChar,
 
     
-        [System.Xml.Serialization.XmlEnumAttribute("http://schemas.openxmlformats.org/wordprocessingml/2006/main:footnoteRef")]
+        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:footnoteRef")]
         footnoteRef,
 
     
-        [System.Xml.Serialization.XmlEnumAttribute("http://schemas.openxmlformats.org/wordprocessingml/2006/main:footnoteReference")]
+        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:footnoteReference")]
         footnoteReference,
 
     
-        [System.Xml.Serialization.XmlEnumAttribute("http://schemas.openxmlformats.org/wordprocessingml/2006/main:instrText")]
+        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:instrText")]
         instrText,
 
     
-        [System.Xml.Serialization.XmlEnumAttribute("http://schemas.openxmlformats.org/wordprocessingml/2006/main:lastRenderedPageBrea" +
+        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:lastRenderedPageBrea" +
             "k")]
         lastRenderedPageBreak,
 
     
-        [System.Xml.Serialization.XmlEnumAttribute("http://schemas.openxmlformats.org/wordprocessingml/2006/main:monthLong")]
+        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:monthLong")]
         monthLong,
 
     
-        [System.Xml.Serialization.XmlEnumAttribute("http://schemas.openxmlformats.org/wordprocessingml/2006/main:monthShort")]
+        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:monthShort")]
         monthShort,
 
     
-        [System.Xml.Serialization.XmlEnumAttribute("http://schemas.openxmlformats.org/wordprocessingml/2006/main:noBreakHyphen")]
+        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:noBreakHyphen")]
         noBreakHyphen,
 
     
-        [System.Xml.Serialization.XmlEnumAttribute("http://schemas.openxmlformats.org/wordprocessingml/2006/main:object")]
+        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:object")]
         @object,
 
     
-        [System.Xml.Serialization.XmlEnumAttribute("http://schemas.openxmlformats.org/wordprocessingml/2006/main:pgNum")]
+        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:pgNum")]
         pgNum,
 
     
-        [System.Xml.Serialization.XmlEnumAttribute("http://schemas.openxmlformats.org/wordprocessingml/2006/main:pict")]
+        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:pict")]
         pict,
 
     
-        [System.Xml.Serialization.XmlEnumAttribute("http://schemas.openxmlformats.org/wordprocessingml/2006/main:ptab")]
+        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:ptab")]
         ptab,
 
     
-        [System.Xml.Serialization.XmlEnumAttribute("http://schemas.openxmlformats.org/wordprocessingml/2006/main:ruby")]
+        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:ruby")]
         ruby,
 
     
-        [System.Xml.Serialization.XmlEnumAttribute("http://schemas.openxmlformats.org/wordprocessingml/2006/main:separator")]
+        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:separator")]
         separator,
 
     
-        [System.Xml.Serialization.XmlEnumAttribute("http://schemas.openxmlformats.org/wordprocessingml/2006/main:softHyphen")]
+        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:softHyphen")]
         softHyphen,
 
     
-        [System.Xml.Serialization.XmlEnumAttribute("http://schemas.openxmlformats.org/wordprocessingml/2006/main:sym")]
+        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:sym")]
         sym,
 
     
-        [System.Xml.Serialization.XmlEnumAttribute("http://schemas.openxmlformats.org/wordprocessingml/2006/main:t")]
+        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:t")]
         t1,
 
     
-        [System.Xml.Serialization.XmlEnumAttribute("http://schemas.openxmlformats.org/wordprocessingml/2006/main:tab")]
+        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:tab")]
         tab,
 
     
-        [System.Xml.Serialization.XmlEnumAttribute("http://schemas.openxmlformats.org/wordprocessingml/2006/main:yearLong")]
+        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:yearLong")]
         yearLong,
 
     
-        [System.Xml.Serialization.XmlEnumAttribute("http://schemas.openxmlformats.org/wordprocessingml/2006/main:yearShort")]
+        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:yearShort")]
         yearShort,
     }
 
@@ -1651,7 +1651,7 @@ namespace NPOI.OpenXmlFormats.Shared
         [XmlElement("permEnd", typeof(CT_Perm), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 1)]
         [XmlElement("permStart", typeof(CT_PermStart), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 1)]
         [XmlElement("proofErr", typeof(CT_ProofErr), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 1)]
-        [System.Xml.Serialization.XmlChoiceIdentifierAttribute("ItemsElementName")]
+        [XmlChoiceIdentifier("ItemsElementName")]
         public object[] Items
         {
             get
@@ -1797,103 +1797,103 @@ namespace NPOI.OpenXmlFormats.Shared
         sSup,
 
     
-        [System.Xml.Serialization.XmlEnumAttribute("http://schemas.openxmlformats.org/wordprocessingml/2006/main:bookmarkEnd")]
+        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:bookmarkEnd")]
         bookmarkEnd,
 
     
-        [System.Xml.Serialization.XmlEnumAttribute("http://schemas.openxmlformats.org/wordprocessingml/2006/main:bookmarkStart")]
+        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:bookmarkStart")]
         bookmarkStart,
 
     
-        [System.Xml.Serialization.XmlEnumAttribute("http://schemas.openxmlformats.org/wordprocessingml/2006/main:commentRangeEnd")]
+        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:commentRangeEnd")]
         commentRangeEnd,
 
     
-        [System.Xml.Serialization.XmlEnumAttribute("http://schemas.openxmlformats.org/wordprocessingml/2006/main:commentRangeStart")]
+        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:commentRangeStart")]
         commentRangeStart,
 
     
-        [System.Xml.Serialization.XmlEnumAttribute("http://schemas.openxmlformats.org/wordprocessingml/2006/main:customXmlDelRangeEnd" +
+        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:customXmlDelRangeEnd" +
             "")]
         customXmlDelRangeEnd,
 
     
-        [System.Xml.Serialization.XmlEnumAttribute("http://schemas.openxmlformats.org/wordprocessingml/2006/main:customXmlDelRangeSta" +
+        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:customXmlDelRangeSta" +
             "rt")]
         customXmlDelRangeStart,
 
     
-        [System.Xml.Serialization.XmlEnumAttribute("http://schemas.openxmlformats.org/wordprocessingml/2006/main:customXmlInsRangeEnd" +
+        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:customXmlInsRangeEnd" +
             "")]
         customXmlInsRangeEnd,
 
     
-        [System.Xml.Serialization.XmlEnumAttribute("http://schemas.openxmlformats.org/wordprocessingml/2006/main:customXmlInsRangeSta" +
+        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:customXmlInsRangeSta" +
             "rt")]
         customXmlInsRangeStart,
 
     
-        [System.Xml.Serialization.XmlEnumAttribute("http://schemas.openxmlformats.org/wordprocessingml/2006/main:customXmlMoveFromRan" +
+        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:customXmlMoveFromRan" +
             "geEnd")]
         customXmlMoveFromRangeEnd,
 
     
-        [System.Xml.Serialization.XmlEnumAttribute("http://schemas.openxmlformats.org/wordprocessingml/2006/main:customXmlMoveFromRan" +
+        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:customXmlMoveFromRan" +
             "geStart")]
         customXmlMoveFromRangeStart,
 
     
-        [System.Xml.Serialization.XmlEnumAttribute("http://schemas.openxmlformats.org/wordprocessingml/2006/main:customXmlMoveToRange" +
+        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:customXmlMoveToRange" +
             "End")]
         customXmlMoveToRangeEnd,
 
     
-        [System.Xml.Serialization.XmlEnumAttribute("http://schemas.openxmlformats.org/wordprocessingml/2006/main:customXmlMoveToRange" +
+        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:customXmlMoveToRange" +
             "Start")]
         customXmlMoveToRangeStart,
 
     
-        [System.Xml.Serialization.XmlEnumAttribute("http://schemas.openxmlformats.org/wordprocessingml/2006/main:del")]
+        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:del")]
         del,
 
     
-        [System.Xml.Serialization.XmlEnumAttribute("http://schemas.openxmlformats.org/wordprocessingml/2006/main:ins")]
+        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:ins")]
         ins,
 
     
-        [System.Xml.Serialization.XmlEnumAttribute("http://schemas.openxmlformats.org/wordprocessingml/2006/main:moveFrom")]
+        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:moveFrom")]
         moveFrom,
 
     
-        [System.Xml.Serialization.XmlEnumAttribute("http://schemas.openxmlformats.org/wordprocessingml/2006/main:moveFromRangeEnd")]
+        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:moveFromRangeEnd")]
         moveFromRangeEnd,
 
     
-        [System.Xml.Serialization.XmlEnumAttribute("http://schemas.openxmlformats.org/wordprocessingml/2006/main:moveFromRangeStart")]
+        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:moveFromRangeStart")]
         moveFromRangeStart,
 
     
-        [System.Xml.Serialization.XmlEnumAttribute("http://schemas.openxmlformats.org/wordprocessingml/2006/main:moveTo")]
+        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:moveTo")]
         moveTo,
 
     
-        [System.Xml.Serialization.XmlEnumAttribute("http://schemas.openxmlformats.org/wordprocessingml/2006/main:moveToRangeEnd")]
+        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:moveToRangeEnd")]
         moveToRangeEnd,
 
     
-        [System.Xml.Serialization.XmlEnumAttribute("http://schemas.openxmlformats.org/wordprocessingml/2006/main:moveToRangeStart")]
+        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:moveToRangeStart")]
         moveToRangeStart,
 
     
-        [System.Xml.Serialization.XmlEnumAttribute("http://schemas.openxmlformats.org/wordprocessingml/2006/main:permEnd")]
+        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:permEnd")]
         permEnd,
 
     
-        [System.Xml.Serialization.XmlEnumAttribute("http://schemas.openxmlformats.org/wordprocessingml/2006/main:permStart")]
+        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:permStart")]
         permStart,
 
     
-        [System.Xml.Serialization.XmlEnumAttribute("http://schemas.openxmlformats.org/wordprocessingml/2006/main:proofErr")]
+        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:proofErr")]
         proofErr,
     }
 
@@ -4605,7 +4605,7 @@ namespace NPOI.OpenXmlFormats.Shared
         [XmlElement("permEnd", typeof(CT_Perm), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 0)]
         [XmlElement("permStart", typeof(CT_PermStart), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 0)]
         [XmlElement("proofErr", typeof(CT_ProofErr), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 0)]
-        [System.Xml.Serialization.XmlChoiceIdentifierAttribute("ItemsElementName")]
+        [XmlChoiceIdentifier("ItemsElementName")]
         public object[] Items
         {
             get
@@ -4706,103 +4706,103 @@ namespace NPOI.OpenXmlFormats.Shared
         sSup,
 
     
-        [System.Xml.Serialization.XmlEnumAttribute("http://schemas.openxmlformats.org/wordprocessingml/2006/main:bookmarkEnd")]
+        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:bookmarkEnd")]
         bookmarkEnd,
 
     
-        [System.Xml.Serialization.XmlEnumAttribute("http://schemas.openxmlformats.org/wordprocessingml/2006/main:bookmarkStart")]
+        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:bookmarkStart")]
         bookmarkStart,
 
     
-        [System.Xml.Serialization.XmlEnumAttribute("http://schemas.openxmlformats.org/wordprocessingml/2006/main:commentRangeEnd")]
+        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:commentRangeEnd")]
         commentRangeEnd,
 
     
-        [System.Xml.Serialization.XmlEnumAttribute("http://schemas.openxmlformats.org/wordprocessingml/2006/main:commentRangeStart")]
+        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:commentRangeStart")]
         commentRangeStart,
 
     
-        [System.Xml.Serialization.XmlEnumAttribute("http://schemas.openxmlformats.org/wordprocessingml/2006/main:customXmlDelRangeEnd" +
+        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:customXmlDelRangeEnd" +
             "")]
         customXmlDelRangeEnd,
 
     
-        [System.Xml.Serialization.XmlEnumAttribute("http://schemas.openxmlformats.org/wordprocessingml/2006/main:customXmlDelRangeSta" +
+        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:customXmlDelRangeSta" +
             "rt")]
         customXmlDelRangeStart,
 
     
-        [System.Xml.Serialization.XmlEnumAttribute("http://schemas.openxmlformats.org/wordprocessingml/2006/main:customXmlInsRangeEnd" +
+        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:customXmlInsRangeEnd" +
             "")]
         customXmlInsRangeEnd,
 
     
-        [System.Xml.Serialization.XmlEnumAttribute("http://schemas.openxmlformats.org/wordprocessingml/2006/main:customXmlInsRangeSta" +
+        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:customXmlInsRangeSta" +
             "rt")]
         customXmlInsRangeStart,
 
     
-        [System.Xml.Serialization.XmlEnumAttribute("http://schemas.openxmlformats.org/wordprocessingml/2006/main:customXmlMoveFromRan" +
+        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:customXmlMoveFromRan" +
             "geEnd")]
         customXmlMoveFromRangeEnd,
 
     
-        [System.Xml.Serialization.XmlEnumAttribute("http://schemas.openxmlformats.org/wordprocessingml/2006/main:customXmlMoveFromRan" +
+        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:customXmlMoveFromRan" +
             "geStart")]
         customXmlMoveFromRangeStart,
 
     
-        [System.Xml.Serialization.XmlEnumAttribute("http://schemas.openxmlformats.org/wordprocessingml/2006/main:customXmlMoveToRange" +
+        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:customXmlMoveToRange" +
             "End")]
         customXmlMoveToRangeEnd,
 
     
-        [System.Xml.Serialization.XmlEnumAttribute("http://schemas.openxmlformats.org/wordprocessingml/2006/main:customXmlMoveToRange" +
+        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:customXmlMoveToRange" +
             "Start")]
         customXmlMoveToRangeStart,
 
     
-        [System.Xml.Serialization.XmlEnumAttribute("http://schemas.openxmlformats.org/wordprocessingml/2006/main:del")]
+        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:del")]
         del,
 
     
-        [System.Xml.Serialization.XmlEnumAttribute("http://schemas.openxmlformats.org/wordprocessingml/2006/main:ins")]
+        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:ins")]
         ins,
 
     
-        [System.Xml.Serialization.XmlEnumAttribute("http://schemas.openxmlformats.org/wordprocessingml/2006/main:moveFrom")]
+        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:moveFrom")]
         moveFrom,
 
     
-        [System.Xml.Serialization.XmlEnumAttribute("http://schemas.openxmlformats.org/wordprocessingml/2006/main:moveFromRangeEnd")]
+        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:moveFromRangeEnd")]
         moveFromRangeEnd,
 
     
-        [System.Xml.Serialization.XmlEnumAttribute("http://schemas.openxmlformats.org/wordprocessingml/2006/main:moveFromRangeStart")]
+        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:moveFromRangeStart")]
         moveFromRangeStart,
 
     
-        [System.Xml.Serialization.XmlEnumAttribute("http://schemas.openxmlformats.org/wordprocessingml/2006/main:moveTo")]
+        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:moveTo")]
         moveTo,
 
     
-        [System.Xml.Serialization.XmlEnumAttribute("http://schemas.openxmlformats.org/wordprocessingml/2006/main:moveToRangeEnd")]
+        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:moveToRangeEnd")]
         moveToRangeEnd,
 
     
-        [System.Xml.Serialization.XmlEnumAttribute("http://schemas.openxmlformats.org/wordprocessingml/2006/main:moveToRangeStart")]
+        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:moveToRangeStart")]
         moveToRangeStart,
 
     
-        [System.Xml.Serialization.XmlEnumAttribute("http://schemas.openxmlformats.org/wordprocessingml/2006/main:permEnd")]
+        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:permEnd")]
         permEnd,
 
     
-        [System.Xml.Serialization.XmlEnumAttribute("http://schemas.openxmlformats.org/wordprocessingml/2006/main:permStart")]
+        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:permStart")]
         permStart,
 
     
-        [System.Xml.Serialization.XmlEnumAttribute("http://schemas.openxmlformats.org/wordprocessingml/2006/main:proofErr")]
+        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:proofErr")]
         proofErr,
     }
 }

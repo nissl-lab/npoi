@@ -1,16 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Xml;
-using NPOI.OpenXmlFormats.Shared;
+using System.Xml.Serialization;
 
 namespace NPOI.OpenXmlFormats.Wordprocessing
 {
 
-    [System.SerializableAttribute()]
+    [Serializable]
 
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot("styles", Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = false)]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
+    [XmlRoot("styles", Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = false)]
     public class CT_Styles
     {
 
@@ -27,7 +26,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             this.docDefaultsField = new CT_DocDefaults();
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 0)]
+        [XmlElement(Order = 0)]
         public CT_DocDefaults docDefaults
         {
             get
@@ -40,7 +39,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 1)]
+        [XmlElement(Order = 1)]
         public CT_LatentStyles latentStyles
         {
             get
@@ -53,7 +52,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement("style", Order = 2)]
+        [XmlElement("style", Order = 2)]
         public List<CT_Style> style
         {
             get
@@ -97,10 +96,10 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     }
 
 
-    [System.SerializableAttribute()]
+    [Serializable]
 
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
     public class CT_DocDefaults
     {
 
@@ -114,7 +113,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             this.rPrDefaultField = new CT_RPrDefault();
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 0)]
+        [XmlElement(Order = 0)]
         public CT_RPrDefault rPrDefault
         {
             get
@@ -127,7 +126,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 1)]
+        [XmlElement(Order = 1)]
         public CT_PPrDefault pPrDefault
         {
             get
@@ -152,10 +151,10 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     }
 
 
-    [System.SerializableAttribute()]
+    [Serializable]
 
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
     public class CT_RPrDefault
     {
 
@@ -166,7 +165,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             this.rPrField = new CT_RPr();
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 0)]
+        [XmlElement(Order = 0)]
         public CT_RPr rPr
         {
             get
@@ -191,10 +190,10 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     }
 
 
-    [System.SerializableAttribute()]
+    [Serializable]
 
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
     public class CT_PPrDefault
     {
 
@@ -205,7 +204,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             this.pPrField = new CT_PPr();
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 0)]
+        [XmlElement(Order = 0)]
         public CT_PPr pPr
         {
             get
@@ -220,10 +219,10 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     }
 
 
-    [System.SerializableAttribute()]
+    [Serializable]
 
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
     public class CT_LatentStyles
     {
 
@@ -254,7 +253,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             this.lsdExceptionField = new List<CT_LsdException>();
         }
 
-        [System.Xml.Serialization.XmlElement("lsdException", Order = 0)]
+        [XmlElement("lsdException", Order = 0)]
         public List<CT_LsdException> lsdException
         {
             get
@@ -267,7 +266,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
         public ST_OnOff defLockedState
         {
             get
@@ -280,7 +279,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnore]
         public bool defLockedStateSpecified
         {
             get
@@ -293,7 +292,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, DataType = "integer")]
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, DataType = "integer")]
         public string defUIPriority
         {
             get
@@ -306,7 +305,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
         public ST_OnOff defSemiHidden
         {
             get
@@ -319,7 +318,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnore]
         public bool defSemiHiddenSpecified
         {
             get
@@ -332,7 +331,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
         public ST_OnOff defUnhideWhenUsed
         {
             get
@@ -345,7 +344,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnore]
         public bool defUnhideWhenUsedSpecified
         {
             get
@@ -358,7 +357,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
         public ST_OnOff defQFormat
         {
             get
@@ -371,7 +370,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnore]
         public bool defQFormatSpecified
         {
             get
@@ -384,7 +383,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, DataType = "integer")]
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, DataType = "integer")]
         public string count
         {
             get
@@ -398,10 +397,10 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         }
     }
 
-    [System.SerializableAttribute()]
+    [Serializable]
 
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
     public class CT_Style
     {
 
@@ -489,7 +488,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             this.nameField = new CT_String();
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 0)]
+        [XmlElement(Order = 0)]
         public CT_String name
         {
             get
@@ -502,7 +501,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 1)]
+        [XmlElement(Order = 1)]
         public CT_String aliases
         {
             get
@@ -515,7 +514,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 2)]
+        [XmlElement(Order = 2)]
         public CT_String basedOn
         {
             get
@@ -528,7 +527,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 3)]
+        [XmlElement(Order = 3)]
         public CT_String next
         {
             get
@@ -541,7 +540,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 4)]
+        [XmlElement(Order = 4)]
         public CT_String link
         {
             get
@@ -554,7 +553,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 5)]
+        [XmlElement(Order = 5)]
         public CT_OnOff autoRedefine
         {
             get
@@ -567,7 +566,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 6)]
+        [XmlElement(Order = 6)]
         public CT_OnOff hidden
         {
             get
@@ -580,7 +579,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 7)]
+        [XmlElement(Order = 7)]
         public CT_DecimalNumber uiPriority
         {
             get
@@ -593,7 +592,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 8)]
+        [XmlElement(Order = 8)]
         public CT_OnOff semiHidden
         {
             get
@@ -606,7 +605,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 9)]
+        [XmlElement(Order = 9)]
         public CT_OnOff unhideWhenUsed
         {
             get
@@ -619,7 +618,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 10)]
+        [XmlElement(Order = 10)]
         public CT_OnOff qFormat
         {
             get
@@ -632,7 +631,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 11)]
+        [XmlElement(Order = 11)]
         public CT_OnOff locked
         {
             get
@@ -645,7 +644,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 12)]
+        [XmlElement(Order = 12)]
         public CT_OnOff personal
         {
             get
@@ -658,7 +657,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 13)]
+        [XmlElement(Order = 13)]
         public CT_OnOff personalCompose
         {
             get
@@ -671,7 +670,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 14)]
+        [XmlElement(Order = 14)]
         public CT_OnOff personalReply
         {
             get
@@ -684,7 +683,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 15)]
+        [XmlElement(Order = 15)]
         public CT_LongHexNumber rsid
         {
             get
@@ -697,7 +696,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 16)]
+        [XmlElement(Order = 16)]
         public CT_PPr pPr
         {
             get
@@ -710,7 +709,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 17)]
+        [XmlElement(Order = 17)]
         public CT_RPr rPr
         {
             get
@@ -723,7 +722,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 18)]
+        [XmlElement(Order = 18)]
         public CT_TblPrBase tblPr
         {
             get
@@ -736,7 +735,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 19)]
+        [XmlElement(Order = 19)]
         public CT_TrPr trPr
         {
             get
@@ -749,7 +748,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement(Order = 20)]
+        [XmlElement(Order = 20)]
         public CT_TcPr tcPr
         {
             get
@@ -762,7 +761,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElement("tblStylePr", Order = 21)]
+        [XmlElement("tblStylePr", Order = 21)]
         public List<CT_TblStylePr> tblStylePr
         {
             get
@@ -775,7 +774,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
         public ST_StyleType type
         {
             get
@@ -788,7 +787,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnore]
         public bool typeSpecified
         {
             get
@@ -801,7 +800,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
         public string styleId
         {
             get
@@ -814,7 +813,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
         public ST_OnOff @default
         {
             get
@@ -827,7 +826,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnore]
         public bool defaultSpecified
         {
             get
@@ -840,7 +839,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
         public ST_OnOff customStyle
         {
             get
@@ -853,7 +852,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnore]
         public bool customStyleSpecified
         {
             get
@@ -872,10 +871,10 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         }
     }
 
-    [System.SerializableAttribute()]
+    [Serializable]
 
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
     public class CT_Shd
     {
 
@@ -901,7 +900,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         private byte[] themeFillShadeField;
 
-        [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
         public ST_Shd val
         {
             get
@@ -914,7 +913,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
         public string color
         {
             get
@@ -927,7 +926,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
         public ST_ThemeColor themeColor
         {
             get
@@ -940,7 +939,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnore]
         public bool themeColorSpecified
         {
             get
@@ -953,7 +952,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, DataType = "hexBinary")]
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, DataType = "hexBinary")]
         public byte[] themeTint
         {
             get
@@ -966,7 +965,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, DataType = "hexBinary")]
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, DataType = "hexBinary")]
         public byte[] themeShade
         {
             get
@@ -979,7 +978,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
         public string fill
         {
             get
@@ -992,7 +991,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
         public ST_ThemeColor themeFill
         {
             get
@@ -1005,7 +1004,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnore]
         public bool themeFillSpecified
         {
             get
@@ -1018,7 +1017,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, DataType = "hexBinary")]
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, DataType = "hexBinary")]
         public byte[] themeFillTint
         {
             get
@@ -1031,7 +1030,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, DataType = "hexBinary")]
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, DataType = "hexBinary")]
         public byte[] themeFillShade
         {
             get
@@ -1046,8 +1045,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     }
 
 
-    [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
     public enum ST_Shd
     {
 
@@ -1181,9 +1180,9 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     /// <summary>
     /// Text Expansion/Compression Percentage
     /// </summary>
-    [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
     public class CT_TextScale
     {
 
@@ -1191,7 +1190,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         /// <summary>
         /// Text Expansion/Compression Value
         /// </summary>
-        [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, DataType = "integer")]
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, DataType = "integer")]
         public string val
         {
             get
@@ -1208,9 +1207,9 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     /// <summary>
     /// Text Highlight Colors
     /// </summary>
-    [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
     public class CT_Highlight
     {
 
@@ -1218,7 +1217,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         /// <summary>
         /// Highlighting Color
         /// </summary>
-        [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
         public ST_HighlightColor val
         {
             get
@@ -1234,9 +1233,9 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     /// <summary>
     /// Color Value
     /// </summary>
-    [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
     public class CT_Color
     {
 
@@ -1252,7 +1251,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         /// <summary>
         /// Run Content Color
         /// </summary>
-        [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
         public string val
         {
             get
@@ -1267,7 +1266,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         /// <summary>
         /// Run Content Theme Color
         /// </summary>
-        [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
         public ST_ThemeColor themeColor
         {
             get
@@ -1280,7 +1279,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnore]
         public bool themeColorSpecified
         {
             get
@@ -1295,7 +1294,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         /// <summary>
         /// Run Content Theme Color Tint
         /// </summary>
-        [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, DataType = "hexBinary")]
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, DataType = "hexBinary")]
         public byte[] themeTint
         {
             get
@@ -1310,7 +1309,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         /// <summary>
         /// Run Content Theme Color Shade
         /// </summary>
-        [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, DataType = "hexBinary")]
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, DataType = "hexBinary")]
         public byte[] themeShade
         {
             get
@@ -1327,9 +1326,9 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     /// <summary>
     /// Underline Style
     /// </summary>
-    [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
     public class CT_Underline
     {
 
@@ -1349,7 +1348,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         /// <summary>
         /// Underline Style value
         /// </summary>
-        [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
         public ST_Underline val
         {
             get
@@ -1362,7 +1361,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnore]
         public bool valSpecified
         {
             get
@@ -1377,7 +1376,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         /// <summary>
         /// Underline Color
         /// </summary>
-        [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
         public string color
         {
             get
@@ -1392,7 +1391,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         /// <summary>
         /// Underline Theme Color
         /// </summary>
-        [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
         public ST_ThemeColor themeColor
         {
             get
@@ -1405,7 +1404,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnore]
         public bool themeColorSpecified
         {
             get
@@ -1420,7 +1419,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         /// <summary>
         /// Underline Theme Color Tint
         /// </summary>
-        [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, DataType = "hexBinary")]
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, DataType = "hexBinary")]
         public byte[] themeTint
         {
             get
@@ -1435,7 +1434,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         /// <summary>
         /// Underline Theme Color Shade
         /// </summary>
-        [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, DataType = "hexBinary")]
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, DataType = "hexBinary")]
         public byte[] themeShade
         {
             get
@@ -1452,8 +1451,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     /// <summary>
     /// Underline Patterns
     /// </summary>
-    [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
     public enum ST_Underline
     {
 
@@ -1551,9 +1550,9 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     /// <summary>
     /// Animated Text Effects
     /// </summary>
-    [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
     public class CT_TextEffect
     {
 
@@ -1561,7 +1560,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         /// <summary>
         /// Animated Text Effect Type
         /// </summary>
-        [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
         public ST_TextEffect val
         {
             get
@@ -1575,8 +1574,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         }
     }
 
-    [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
     public enum ST_TextEffect
     {
 
@@ -1619,9 +1618,9 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     /// <summary>
     /// Border Style
     /// </summary>
-    [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
     public class CT_Border
     {
 
@@ -1655,7 +1654,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         /// <summary>
         /// Border Style
         /// </summary>
-        [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
         public ST_Border val
         {
             get
@@ -1670,7 +1669,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         /// <summary>
         /// Border Color
         /// </summary>
-        [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
         public string color
         {
             get
@@ -1685,7 +1684,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         /// <summary>
         /// Border Theme Color
         /// </summary>
-        [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
         public ST_ThemeColor themeColor
         {
             get
@@ -1698,7 +1697,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnore]
         public bool themeColorSpecified
         {
             get
@@ -1713,7 +1712,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         /// <summary>
         /// Border Theme Color Tint
         /// </summary>
-        [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, DataType = "hexBinary")]
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, DataType = "hexBinary")]
         public byte[] themeTint
         {
             get
@@ -1728,7 +1727,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         /// <summary>
         /// Border Theme Color Shade
         /// </summary>
-        [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, DataType = "hexBinary")]
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, DataType = "hexBinary")]
         public byte[] themeShade
         {
             get
@@ -1744,7 +1743,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         /// Border Width
         /// </summary>
         /// ST_EighthPointMeasure
-        [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
         public ulong sz
         {
             get
@@ -1757,7 +1756,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnore]
         public bool szSpecified
         {
             get
@@ -1772,7 +1771,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         /// <summary>
         /// Border Spacing Measurement
         /// </summary>
-        [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
         public ulong space
         {
             get
@@ -1785,7 +1784,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnore]
         public bool spaceSpecified
         {
             get
@@ -1800,7 +1799,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         /// <summary>
         /// Border Shadow
         /// </summary>
-        [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
         public ST_OnOff shadow
         {
             get
@@ -1813,7 +1812,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnore]
         public bool shadowSpecified
         {
             get
@@ -1828,7 +1827,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         /// <summary>
         /// Create Frame Effect
         /// </summary>
-        [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
         public ST_OnOff frame
         {
             get
@@ -1841,7 +1840,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnore]
         public bool frameSpecified
         {
             get
@@ -1858,8 +1857,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     /// <summary>
     /// Border Styles
     /// </summary>
-    [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
     public enum ST_Border
     {
 

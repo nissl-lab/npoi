@@ -1,13 +1,15 @@
-using System.ComponentModel;
-using System.Xml.Serialization;
-using System.Diagnostics;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Xml.Serialization;
+
 namespace NPOI.OpenXmlFormats.Spreadsheet
 {
     
     
 
-    [System.Serializable]
+    [Serializable]
     [DebuggerStepThrough]
     [DesignerCategory("code")]
     [XmlType(Namespace="http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
@@ -446,7 +448,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [DebuggerStepThrough]
     [DesignerCategory("code")]
     [XmlType(Namespace="http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
@@ -611,7 +613,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [DebuggerStepThrough]
     [DesignerCategory("code")]
     [XmlType(Namespace="http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
@@ -653,7 +655,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [DebuggerStepThrough]
     [DesignerCategory("code")]
     [XmlType(Namespace="http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
@@ -778,7 +780,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     }
 
 
-    [System.Serializable]
+    [Serializable]
     [DebuggerStepThrough]
     [DesignerCategory("code")]
     [XmlType(Namespace="http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
@@ -826,7 +828,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [DebuggerStepThrough]
     [DesignerCategory("code")]
     [XmlType(Namespace="http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
@@ -848,7 +850,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [XmlType(Namespace="http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     [XmlRoot(Namespace="http://schemas.openxmlformats.org/spreadsheetml/2006/main", IsNullable=false)]
     public enum ST_GrowShrinkType {

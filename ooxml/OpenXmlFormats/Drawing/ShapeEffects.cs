@@ -2595,7 +2595,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlIgnore]
+        [XmlIgnore]
         public bool angSpecified {
             get {
                 return this.angFieldSpecified;
@@ -2617,7 +2617,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlIgnore]
+        [XmlIgnore]
         public bool scaledSpecified {
             get {
                 return this.scaledFieldSpecified;
@@ -2680,7 +2680,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlIgnore]
+        [XmlIgnore]
         public bool pathSpecified {
             get {
                 return this.pathFieldSpecified;
@@ -2902,7 +2902,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlIgnore]
+        [XmlIgnore]
         public bool flipSpecified {
             get {
                 return this.flipFieldSpecified;
@@ -2924,7 +2924,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlIgnore]
+        [XmlIgnore]
         public bool rotWithShapeSpecified {
             get {
                 return this.rotWithShapeFieldSpecified;
@@ -2979,7 +2979,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlIgnore]
+        [XmlIgnore]
         public bool txSpecified {
             get {
                 return this.txFieldSpecified;
@@ -3001,7 +3001,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlIgnore]
+        [XmlIgnore]
         public bool tySpecified {
             get {
                 return this.tyFieldSpecified;
@@ -3023,7 +3023,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlIgnore]
+        [XmlIgnore]
         public bool sxSpecified {
             get {
                 return this.sxFieldSpecified;
@@ -3045,7 +3045,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlIgnore]
+        [XmlIgnore]
         public bool sySpecified {
             get {
                 return this.syFieldSpecified;
@@ -3067,7 +3067,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlIgnore]
+        [XmlIgnore]
         public bool flipSpecified {
             get {
                 return this.flipFieldSpecified;
@@ -3089,7 +3089,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlIgnore]
+        [XmlIgnore]
         public bool algnSpecified {
             get {
                 return this.algnFieldSpecified;
@@ -3475,7 +3475,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlIgnore]
+        [XmlIgnore]
         public bool dpiSpecified {
             get {
                 return this.dpiFieldSpecified;
@@ -3497,7 +3497,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlIgnore]
+        [XmlIgnore]
         public bool rotWithShapeSpecified {
             get {
                 return this.rotWithShapeFieldSpecified;
@@ -3556,7 +3556,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         
     
-        [System.Xml.Serialization.XmlIgnore]
+        [XmlIgnore]
         public bool prstSpecified {
             get {
                 return this.prstFieldSpecified;

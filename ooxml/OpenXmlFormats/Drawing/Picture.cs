@@ -4,7 +4,7 @@ using System.Xml.Serialization;
 
 namespace NPOI.OpenXmlFormats.Dml.Picture
 {
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/picture")]
@@ -106,7 +106,7 @@ namespace NPOI.OpenXmlFormats.Dml.Picture
 namespace NPOI.OpenXmlFormats.Dml
 {
 
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
@@ -172,7 +172,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
     }
 
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
@@ -301,7 +301,7 @@ namespace NPOI.OpenXmlFormats.Dml
     }
 
 
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]

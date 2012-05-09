@@ -1,11 +1,13 @@
-using System.Xml.Serialization;
-using System.ComponentModel;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Xml.Serialization;
+
 namespace NPOI.OpenXmlFormats {
     
     
 
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [DesignerCategory("code")]
     [XmlType(Namespace="http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
@@ -27,7 +29,7 @@ namespace NPOI.OpenXmlFormats {
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [DesignerCategory("code")]
     [XmlType(Namespace="http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
@@ -408,7 +410,7 @@ namespace NPOI.OpenXmlFormats {
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [DesignerCategory("code")]
     [XmlType(Namespace="http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
@@ -474,7 +476,7 @@ namespace NPOI.OpenXmlFormats {
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [DesignerCategory("code")]
     [XmlType(Namespace="http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
@@ -496,7 +498,7 @@ namespace NPOI.OpenXmlFormats {
         }
         
     
-        [XmlAttributeAttribute(DataType="token")]
+        [XmlAttribute(DataType="token")]
         public string uri {
             get {
                 return this.uriField;
@@ -508,7 +510,7 @@ namespace NPOI.OpenXmlFormats {
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [DesignerCategory("code")]
     [XmlType(Namespace="http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
@@ -529,7 +531,7 @@ namespace NPOI.OpenXmlFormats {
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [DesignerCategory("code")]
     [XmlType(Namespace="http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
@@ -550,7 +552,7 @@ namespace NPOI.OpenXmlFormats {
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [DesignerCategory("code")]
     [XmlType(Namespace="http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
@@ -571,7 +573,7 @@ namespace NPOI.OpenXmlFormats {
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [DesignerCategory("code")]
     [XmlType(Namespace="http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
@@ -727,7 +729,7 @@ namespace NPOI.OpenXmlFormats {
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [DesignerCategory("code")]
     [XmlType(Namespace="http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
@@ -940,7 +942,7 @@ namespace NPOI.OpenXmlFormats {
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [DesignerCategory("code")]
     [XmlType(Namespace="http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
@@ -990,7 +992,7 @@ namespace NPOI.OpenXmlFormats {
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [DesignerCategory("code")]
     [XmlType(Namespace="http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
@@ -999,7 +1001,7 @@ namespace NPOI.OpenXmlFormats {
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [XmlType(Namespace="http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     [XmlRoot(Namespace="http://schemas.openxmlformats.org/spreadsheetml/2006/main", IsNullable=false)]
     public enum ST_HtmlFmt {
@@ -1015,7 +1017,7 @@ namespace NPOI.OpenXmlFormats {
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [DesignerCategory("code")]
     [XmlType(Namespace="http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
@@ -1262,7 +1264,7 @@ namespace NPOI.OpenXmlFormats {
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [DesignerCategory("code")]
     [XmlType(Namespace="http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
@@ -1302,7 +1304,7 @@ namespace NPOI.OpenXmlFormats {
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [DesignerCategory("code")]
     [XmlType(Namespace="http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
@@ -1344,7 +1346,7 @@ namespace NPOI.OpenXmlFormats {
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [XmlType(Namespace="http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     [XmlRoot(Namespace="http://schemas.openxmlformats.org/spreadsheetml/2006/main", IsNullable=false)]
     public enum ST_ExternalConnectionType {
@@ -1381,7 +1383,7 @@ namespace NPOI.OpenXmlFormats {
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [XmlType(Namespace="http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     [XmlRoot(Namespace="http://schemas.openxmlformats.org/spreadsheetml/2006/main", IsNullable=false)]
     public enum ST_FileType {
@@ -1397,7 +1399,7 @@ namespace NPOI.OpenXmlFormats {
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [XmlType(Namespace="http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     [XmlRoot(Namespace="http://schemas.openxmlformats.org/spreadsheetml/2006/main", IsNullable=false)]
     public enum ST_Qualifier {
@@ -1413,7 +1415,7 @@ namespace NPOI.OpenXmlFormats {
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [DesignerCategory("code")]
     [XmlType(Namespace="http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
@@ -1461,7 +1463,7 @@ namespace NPOI.OpenXmlFormats {
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [DesignerCategory("code")]
     [XmlType(Namespace="http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
@@ -1648,7 +1650,7 @@ namespace NPOI.OpenXmlFormats {
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [XmlType(Namespace="http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     [XmlRoot(Namespace="http://schemas.openxmlformats.org/spreadsheetml/2006/main", IsNullable=false)]
     public enum ST_ParameterType {
@@ -1664,7 +1666,7 @@ namespace NPOI.OpenXmlFormats {
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [XmlType(Namespace="http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     [XmlRoot(Namespace="http://schemas.openxmlformats.org/spreadsheetml/2006/main", IsNullable=false)]
     public enum ST_CredMethod {

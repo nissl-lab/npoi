@@ -1,12 +1,14 @@
+using System;
 using System.ComponentModel;
 using System.Xml.Serialization;
-namespace NPOI.OpenXmlFormats.Dml {
+namespace NPOI.OpenXmlFormats.Dml
+{
     
     
 
-    [System.Serializable]
-    [System.Xml.Serialization.XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=false)]
+    [Serializable]
+    [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=false)]
     public enum ST_ChartBuildStep {
         
     
@@ -29,9 +31,9 @@ namespace NPOI.OpenXmlFormats.Dml {
     }
     
 
-    [System.Serializable]
-    [System.Xml.Serialization.XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=false)]
+    [Serializable]
+    [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=false)]
     public enum ST_DgmBuildStep {
         
     
@@ -42,11 +44,11 @@ namespace NPOI.OpenXmlFormats.Dml {
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
-    [System.Xml.Serialization.XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
+    [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_AnimationDgmElement {
         
         private string idField;
@@ -59,7 +61,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
         [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/relationships")]
-//        [System.Xml.Serialization.XmlAttributeAttribute(DataType = "token")]
+//        [XmlAttribute(DataType = "token")]
         [DefaultValue("{00000000-0000-0000-0000-000000000000}")]
         public string id {
             get {
@@ -71,7 +73,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
     
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         [DefaultValue(ST_DgmBuildStep.sp)]
         public ST_DgmBuildStep bldStep {
             get {
@@ -84,11 +86,11 @@ namespace NPOI.OpenXmlFormats.Dml {
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
-    [System.Xml.Serialization.XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
+    [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_AnimationChartElement {
         
         private int seriesIdxField;
@@ -103,7 +105,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
     
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         [DefaultValue(-1)]
         public int seriesIdx {
             get {
@@ -115,7 +117,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
     
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         [DefaultValue(-1)]
         public int categoryIdx {
             get {
@@ -127,7 +129,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
     
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public ST_ChartBuildStep bldStep {
             get {
                 return this.bldStepField;
@@ -139,18 +141,18 @@ namespace NPOI.OpenXmlFormats.Dml {
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
-    [System.Xml.Serialization.XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
+    [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_AnimationElementChoice {
         
         private object itemField;
         
     
-        [System.Xml.Serialization.XmlElement("chart", typeof(CT_AnimationChartElement))]
-        [System.Xml.Serialization.XmlElement("dgm", typeof(CT_AnimationDgmElement))]
+        [XmlElement("chart", typeof(CT_AnimationChartElement))]
+        [XmlElement("dgm", typeof(CT_AnimationDgmElement))]
         public object Item {
             get {
                 return this.itemField;
@@ -162,9 +164,9 @@ namespace NPOI.OpenXmlFormats.Dml {
     }
     
 
-    [System.Serializable]
-    [System.Xml.Serialization.XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=false)]
+    [Serializable]
+    [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=false)]
     public enum ST_AnimationBuildType {
         
     
@@ -172,9 +174,9 @@ namespace NPOI.OpenXmlFormats.Dml {
     }
     
 
-    [System.Serializable]
-    [System.Xml.Serialization.XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=false)]
+    [Serializable]
+    [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=false)]
     public enum ST_AnimationDgmOnlyBuildType {
         
     
@@ -188,11 +190,11 @@ namespace NPOI.OpenXmlFormats.Dml {
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
-    [System.Xml.Serialization.XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
+    [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_AnimationDgmBuildProperties {
         
         private string bldField;
@@ -205,7 +207,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
     
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         [DefaultValue("allAtOnce")]
         public string bld {
             get {
@@ -217,7 +219,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
     
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         [DefaultValue(false)]
         public bool rev {
             get {
@@ -230,9 +232,9 @@ namespace NPOI.OpenXmlFormats.Dml {
     }
     
 
-    [System.Serializable]
-    [System.Xml.Serialization.XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=false)]
+    [Serializable]
+    [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=false)]
     public enum ST_AnimationChartOnlyBuildType {
         
     
@@ -249,11 +251,11 @@ namespace NPOI.OpenXmlFormats.Dml {
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
-    [System.Xml.Serialization.XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
+    [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_AnimationChartBuildProperties {
         
         private string bldField;
@@ -266,7 +268,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
     
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         [DefaultValue("allAtOnce")]
         public string bld {
             get {
@@ -278,7 +280,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
     
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         [DefaultValue(true)]
         public bool animBg {
             get {
@@ -291,18 +293,18 @@ namespace NPOI.OpenXmlFormats.Dml {
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
-    [System.Xml.Serialization.XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
+    [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_AnimationGraphicalObjectBuildProperties {
         
         private object itemField;
         
     
-        [System.Xml.Serialization.XmlElement("bldChart", typeof(CT_AnimationChartBuildProperties))]
-        [System.Xml.Serialization.XmlElement("bldDgm", typeof(CT_AnimationDgmBuildProperties))]
+        [XmlElement("bldChart", typeof(CT_AnimationChartBuildProperties))]
+        [XmlElement("bldDgm", typeof(CT_AnimationDgmBuildProperties))]
         public object Item {
             get {
                 return this.itemField;

@@ -1,12 +1,17 @@
+
+using System;
+using System.Xml.Serialization;
+
+
 namespace NPOI.OpenXmlFormats.Dml {
     
     
 
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
-    [System.Xml.Serialization.XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
+    [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_StyleMatrixReference {
         
         private CT_ScRgbColor scrgbClrField;
@@ -88,7 +93,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
     
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public uint idx {
             get {
                 return this.idxField;
@@ -102,11 +107,11 @@ namespace NPOI.OpenXmlFormats.Dml {
     
     
 
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
-    [System.Xml.Serialization.XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
+    [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_FontReference {
         
         private CT_ScRgbColor scrgbClrField;
@@ -188,7 +193,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
         
     
-        [System.Xml.Serialization.XmlAttribute]
+        [XmlAttribute]
         public ST_FontCollectionIndex idx {
             get {
                 return this.idxField;
@@ -200,8 +205,8 @@ namespace NPOI.OpenXmlFormats.Dml {
     }
     
 
-    [System.Serializable]
-    [System.Xml.Serialization.XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [Serializable]
+    [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
     public enum ST_FontCollectionIndex {
         
     
@@ -215,11 +220,11 @@ namespace NPOI.OpenXmlFormats.Dml {
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
-    [System.Xml.Serialization.XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
+    [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_ShapeStyle {
         
         private CT_StyleMatrixReference lnRefField;

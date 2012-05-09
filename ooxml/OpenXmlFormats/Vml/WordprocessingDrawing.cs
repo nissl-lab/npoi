@@ -1,10 +1,8 @@
-using System.Xml.Serialization;
 using System;
+using System.Xml.Serialization;
+
 namespace NPOI.OpenXmlFormats.Vml
 {
-    
-    
-
     [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
@@ -79,7 +77,7 @@ namespace NPOI.OpenXmlFormats.Vml
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [XmlType(Namespace="urn:schemas-microsoft-com:office:word")]
     [XmlRoot(Namespace="urn:schemas-microsoft-com:office:word", IsNullable=false)]
     public enum ST_BorderType {
@@ -167,7 +165,7 @@ namespace NPOI.OpenXmlFormats.Vml
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [XmlType(Namespace="urn:schemas-microsoft-com:office:word")]
     [XmlRoot(Namespace="urn:schemas-microsoft-com:office:word", IsNullable=false)]
     public enum ST_BorderShadow {
@@ -186,7 +184,7 @@ namespace NPOI.OpenXmlFormats.Vml
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace="urn:schemas-microsoft-com:office:word")]
@@ -299,7 +297,7 @@ namespace NPOI.OpenXmlFormats.Vml
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [XmlType(Namespace="urn:schemas-microsoft-com:office:word")]
     [XmlRoot(Namespace="urn:schemas-microsoft-com:office:word", IsNullable=false)]
     public enum ST_WrapType {
@@ -321,7 +319,7 @@ namespace NPOI.OpenXmlFormats.Vml
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [XmlType(Namespace="urn:schemas-microsoft-com:office:word")]
     [XmlRoot(Namespace="urn:schemas-microsoft-com:office:word", IsNullable=false)]
     public enum ST_WrapSide {
@@ -340,7 +338,7 @@ namespace NPOI.OpenXmlFormats.Vml
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [XmlType(Namespace="urn:schemas-microsoft-com:office:word")]
     [XmlRoot(Namespace="urn:schemas-microsoft-com:office:word", IsNullable=false)]
     public enum ST_HorizontalAnchor {
@@ -359,7 +357,7 @@ namespace NPOI.OpenXmlFormats.Vml
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [XmlType(Namespace="urn:schemas-microsoft-com:office:word")]
     [XmlRoot(Namespace="urn:schemas-microsoft-com:office:word", IsNullable=false)]
     public enum ST_VerticalAnchor {
@@ -378,7 +376,7 @@ namespace NPOI.OpenXmlFormats.Vml
     }
     
 
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace="urn:schemas-microsoft-com:office:word")]

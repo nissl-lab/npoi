@@ -150,7 +150,7 @@ namespace NPOI.OpenXmlFormats
         [XmlElement("Volume", typeof(string))]
         [XmlElement("Year", typeof(string))]
         [XmlElement("YearAccessed", typeof(string))]
-        [XmlChoiceIdentifierAttribute("ItemsElementName")]
+        [XmlChoiceIdentifier("ItemsElementName")]
         public List<object> Items
         {
             get
@@ -373,7 +373,7 @@ namespace NPOI.OpenXmlFormats
         [XmlElement("ProducerName", typeof(CT_NameType))]
         [XmlElement("Translator", typeof(CT_NameType))]
         [XmlElement("Writer", typeof(CT_NameType))]
-        [XmlChoiceIdentifierAttribute("ItemsElementName")]
+        [XmlChoiceIdentifier("ItemsElementName")]
         public List<object> Items
         {
             get

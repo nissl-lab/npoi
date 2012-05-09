@@ -5,15 +5,13 @@
 //  </auto-generated>
 // ------------------------------------------------------------------------------
 
+using System;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Xml.Serialization;
+
 namespace NPOI.OpenXmlFormats
 {
-    using System.Collections.Generic;
-    using System.Xml.Serialization;
-    using System.IO;
-    using System.Diagnostics;
-    using System.ComponentModel;
-    using System;
-
     [Serializable]
     [DebuggerStepThrough]
     [DesignerCategory("code")]
@@ -724,7 +722,7 @@ namespace NPOI.OpenXmlFormats
         }
     }
 
-    [System.Serializable]
+    [Serializable]
     [DebuggerStepThrough]
     [DesignerCategory("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/extended-properties")]
@@ -752,7 +750,7 @@ namespace NPOI.OpenXmlFormats
         }
     }
 
-    [System.Serializable]
+    [Serializable]
     [DebuggerStepThrough]
     [DesignerCategory("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/extended-properties")]
@@ -776,7 +774,7 @@ namespace NPOI.OpenXmlFormats
         }
     }
 
-    [System.Serializable]
+    [Serializable]
     [DebuggerStepThrough]
     [DesignerCategory("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/extended-properties")]

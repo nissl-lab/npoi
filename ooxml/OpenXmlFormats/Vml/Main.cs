@@ -1,11 +1,12 @@
-using System.Xml.Serialization;
+using System;
 using System.Collections.Generic;
 using System.Xml.Schema;
+using System.Xml.Serialization;
 
 namespace NPOI.OpenXmlFormats.Vml
 {
     
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace="urn:schemas-microsoft-com:vml")]
@@ -44,7 +45,7 @@ namespace NPOI.OpenXmlFormats.Vml
         [XmlElement("borderleft", typeof(CT_Border), Namespace="urn:schemas-microsoft-com:office:word")]
         [XmlElement("borderright", typeof(CT_Border), Namespace="urn:schemas-microsoft-com:office:word")]
         [XmlElement("bordertop", typeof(CT_Border), Namespace="urn:schemas-microsoft-com:office:word")]
-        [System.Xml.Serialization.XmlChoiceIdentifierAttribute("ItemsElementName")]
+        [XmlChoiceIdentifier("ItemsElementName")]
         public List<object> Items {
             get {
                 return this.itemsField;
@@ -55,7 +56,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         [XmlElement("ItemsElementName")]
-        [System.Xml.Serialization.XmlIgnore]
+        [XmlIgnore]
         public ItemsChoiceType1[] ItemsElementName
         {
             get
@@ -193,7 +194,7 @@ namespace NPOI.OpenXmlFormats.Vml
     }
     
     
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace = "urn:schemas-microsoft-com:vml")]
@@ -216,7 +217,7 @@ namespace NPOI.OpenXmlFormats.Vml
     }
 
 
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace = "urn:schemas-microsoft-com:vml")]
@@ -238,7 +239,7 @@ namespace NPOI.OpenXmlFormats.Vml
     }
 
 
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace = "urn:schemas-microsoft-com:vml")]
@@ -261,7 +262,7 @@ namespace NPOI.OpenXmlFormats.Vml
     }
     
     
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace="urn:schemas-microsoft-com:vml")]
@@ -336,7 +337,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         
-        [System.Xml.Serialization.XmlIgnore]
+        [XmlIgnore]
         public bool invxSpecified {
             get {
                 return this.invxFieldSpecified;
@@ -358,7 +359,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         
-        [System.Xml.Serialization.XmlIgnore]
+        [XmlIgnore]
         public bool invySpecified {
             get {
                 return this.invyFieldSpecified;
@@ -380,7 +381,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         
-        [System.Xml.Serialization.XmlIgnore]
+        [XmlIgnore]
         public bool switchSpecified {
             get {
                 return this.switchFieldSpecified;
@@ -425,7 +426,7 @@ namespace NPOI.OpenXmlFormats.Vml
     }
     
     
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace="urn:schemas-microsoft-com:vml")]
@@ -583,7 +584,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         
-        [System.Xml.Serialization.XmlIgnore]
+        [XmlIgnore]
         public bool grayscaleSpecified {
             get {
                 return this.grayscaleFieldSpecified;
@@ -605,7 +606,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         
-        [System.Xml.Serialization.XmlIgnore]
+        [XmlIgnore]
         public bool bilevelSpecified {
             get {
                 return this.bilevelFieldSpecified;
@@ -649,7 +650,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         
-        [XmlAttributeAttribute("id", Form=System.Xml.Schema.XmlSchemaForm.Qualified, Namespace="http://schemas.openxmlformats.org/officeDocument/2006/relationships")]
+        [XmlAttribute("id", Form=System.Xml.Schema.XmlSchemaForm.Qualified, Namespace="http://schemas.openxmlformats.org/officeDocument/2006/relationships")]
         public string id1 {
             get {
                 return this.id1Field;
@@ -660,7 +661,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         
-        [XmlAttributeAttribute(Form=System.Xml.Schema.XmlSchemaForm.Qualified, Namespace="http://schemas.openxmlformats.org/officeDocument/2006/relationships")]
+        [XmlAttribute(Form=System.Xml.Schema.XmlSchemaForm.Qualified, Namespace="http://schemas.openxmlformats.org/officeDocument/2006/relationships")]
         public string pict {
             get {
                 return this.pictField;
@@ -671,7 +672,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         
-        [XmlAttributeAttribute(Form=System.Xml.Schema.XmlSchemaForm.Qualified, Namespace="http://schemas.openxmlformats.org/officeDocument/2006/relationships")]
+        [XmlAttribute(Form=System.Xml.Schema.XmlSchemaForm.Qualified, Namespace="http://schemas.openxmlformats.org/officeDocument/2006/relationships")]
         public string href {
             get {
                 return this.hrefField;
@@ -683,7 +684,7 @@ namespace NPOI.OpenXmlFormats.Vml
     }
     
     
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace="urn:schemas-microsoft-com:vml")]
@@ -784,7 +785,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         
-        [System.Xml.Serialization.XmlIgnore]
+        [XmlIgnore]
         public bool fillokSpecified {
             get {
                 return this.fillokFieldSpecified;
@@ -806,7 +807,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         
-        [System.Xml.Serialization.XmlIgnore]
+        [XmlIgnore]
         public bool strokeokSpecified {
             get {
                 return this.strokeokFieldSpecified;
@@ -828,7 +829,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         
-        [System.Xml.Serialization.XmlIgnore]
+        [XmlIgnore]
         public bool shadowokSpecified {
             get {
                 return this.shadowokFieldSpecified;
@@ -850,7 +851,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         
-        [System.Xml.Serialization.XmlIgnore]
+        [XmlIgnore]
         public bool arrowokSpecified {
             get {
                 return this.arrowokFieldSpecified;
@@ -872,7 +873,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         
-        [System.Xml.Serialization.XmlIgnore]
+        [XmlIgnore]
         public bool gradientshapeokSpecified {
             get {
                 return this.gradientshapeokFieldSpecified;
@@ -894,7 +895,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         
-        [System.Xml.Serialization.XmlIgnore]
+        [XmlIgnore]
         public bool textpathokSpecified {
             get {
                 return this.textpathokFieldSpecified;
@@ -916,7 +917,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         
-        [System.Xml.Serialization.XmlIgnore]
+        [XmlIgnore]
         public bool insetpenokSpecified {
             get {
                 return this.insetpenokFieldSpecified;
@@ -928,7 +929,7 @@ namespace NPOI.OpenXmlFormats.Vml
     }
     
     
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace="urn:schemas-microsoft-com:vml")]
@@ -988,7 +989,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         
-        [System.Xml.Serialization.XmlIgnore]
+        [XmlIgnore]
         public bool onSpecified {
             get {
                 return this.onFieldSpecified;
@@ -1010,7 +1011,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         
-        [System.Xml.Serialization.XmlIgnore]
+        [XmlIgnore]
         public bool typeSpecified {
             get {
                 return this.typeFieldSpecified;
@@ -1032,7 +1033,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         
-        [System.Xml.Serialization.XmlIgnore]
+        [XmlIgnore]
         public bool obscuredSpecified {
             get {
                 return this.obscuredFieldSpecified;
@@ -1121,7 +1122,7 @@ namespace NPOI.OpenXmlFormats.Vml
     }
     
     
-    [System.Serializable]
+    [Serializable]
     [XmlType(Namespace="urn:schemas-microsoft-com:vml")]
     [XmlRoot(Namespace="urn:schemas-microsoft-com:vml", IsNullable=false)]
     public enum ST_ShadowType {
@@ -1140,7 +1141,7 @@ namespace NPOI.OpenXmlFormats.Vml
     }
     
     
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace="urn:schemas-microsoft-com:vml")]
@@ -1250,7 +1251,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         
-        [System.Xml.Serialization.XmlIgnore]
+        [XmlIgnore]
         public bool onSpecified {
             get {
                 return this.onFieldSpecified;
@@ -1305,7 +1306,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         
-        [System.Xml.Serialization.XmlIgnore]
+        [XmlIgnore]
         public bool linestyleSpecified {
             get {
                 return this.linestyleFieldSpecified;
@@ -1327,7 +1328,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         
-        [System.Xml.Serialization.XmlIgnore]
+        [XmlIgnore]
         public bool miterlimitSpecified {
             get {
                 return this.miterlimitFieldSpecified;
@@ -1349,7 +1350,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         
-        [System.Xml.Serialization.XmlIgnore]
+        [XmlIgnore]
         public bool joinstyleSpecified {
             get {
                 return this.joinstyleFieldSpecified;
@@ -1371,7 +1372,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         
-        [System.Xml.Serialization.XmlIgnore]
+        [XmlIgnore]
         public bool endcapSpecified {
             get {
                 return this.endcapFieldSpecified;
@@ -1404,7 +1405,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         
-        [System.Xml.Serialization.XmlIgnore]
+        [XmlIgnore]
         public bool filltypeSpecified {
             get {
                 return this.filltypeFieldSpecified;
@@ -1437,7 +1438,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         
-        [System.Xml.Serialization.XmlIgnore]
+        [XmlIgnore]
         public bool imageaspectSpecified {
             get {
                 return this.imageaspectFieldSpecified;
@@ -1470,7 +1471,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         
-        [System.Xml.Serialization.XmlIgnore]
+        [XmlIgnore]
         public bool imagealignshapeSpecified {
             get {
                 return this.imagealignshapeFieldSpecified;
@@ -1503,7 +1504,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         
-        [System.Xml.Serialization.XmlIgnore]
+        [XmlIgnore]
         public bool startarrowSpecified {
             get {
                 return this.startarrowFieldSpecified;
@@ -1525,7 +1526,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         
-        [System.Xml.Serialization.XmlIgnore]
+        [XmlIgnore]
         public bool startarrowwidthSpecified {
             get {
                 return this.startarrowwidthFieldSpecified;
@@ -1547,7 +1548,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         
-        [System.Xml.Serialization.XmlIgnore]
+        [XmlIgnore]
         public bool startarrowlengthSpecified {
             get {
                 return this.startarrowlengthFieldSpecified;
@@ -1569,7 +1570,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         
-        [System.Xml.Serialization.XmlIgnore]
+        [XmlIgnore]
         public bool endarrowSpecified {
             get {
                 return this.endarrowFieldSpecified;
@@ -1591,7 +1592,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         
-        [System.Xml.Serialization.XmlIgnore]
+        [XmlIgnore]
         public bool endarrowwidthSpecified {
             get {
                 return this.endarrowwidthFieldSpecified;
@@ -1613,7 +1614,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         
-        [System.Xml.Serialization.XmlIgnore]
+        [XmlIgnore]
         public bool endarrowlengthSpecified {
             get {
                 return this.endarrowlengthFieldSpecified;
@@ -1624,7 +1625,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         
-        [XmlAttributeAttribute("id", Form=System.Xml.Schema.XmlSchemaForm.Qualified, Namespace="http://schemas.openxmlformats.org/officeDocument/2006/relationships")]
+        [XmlAttribute("id", Form=System.Xml.Schema.XmlSchemaForm.Qualified, Namespace="http://schemas.openxmlformats.org/officeDocument/2006/relationships")]
         public string id1 {
             get {
                 return this.id1Field;
@@ -1646,7 +1647,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         
-        [System.Xml.Serialization.XmlIgnore]
+        [XmlIgnore]
         public bool insetpenSpecified {
             get {
                 return this.insetpenFieldSpecified;
@@ -1658,7 +1659,7 @@ namespace NPOI.OpenXmlFormats.Vml
     }
     
     
-    [System.Serializable]
+    [Serializable]
     [XmlType(Namespace="urn:schemas-microsoft-com:vml")]
     [XmlRoot(Namespace="urn:schemas-microsoft-com:vml", IsNullable=false)]
     public enum ST_StrokeLineStyle {
@@ -1680,7 +1681,7 @@ namespace NPOI.OpenXmlFormats.Vml
     }
     
     
-    [System.Serializable]
+    [Serializable]
     [XmlType(Namespace="urn:schemas-microsoft-com:vml")]
     [XmlRoot(Namespace="urn:schemas-microsoft-com:vml", IsNullable=false)]
     public enum ST_StrokeJoinStyle {
@@ -1696,7 +1697,7 @@ namespace NPOI.OpenXmlFormats.Vml
     }
     
     
-    [System.Serializable]
+    [Serializable]
     [XmlType(Namespace="urn:schemas-microsoft-com:vml")]
     [XmlRoot(Namespace="urn:schemas-microsoft-com:vml", IsNullable=false)]
     public enum ST_StrokeEndCap {
@@ -1712,7 +1713,7 @@ namespace NPOI.OpenXmlFormats.Vml
     }
     
     
-    [System.Serializable]
+    [Serializable]
     [XmlType(Namespace="urn:schemas-microsoft-com:vml")]
     [XmlRoot(Namespace="urn:schemas-microsoft-com:vml", IsNullable=false)]
     public enum ST_StrokeArrowType {
@@ -1737,7 +1738,7 @@ namespace NPOI.OpenXmlFormats.Vml
     }
     
     
-    [System.Serializable]
+    [Serializable]
     [XmlType(Namespace="urn:schemas-microsoft-com:vml")]
     [XmlRoot(Namespace="urn:schemas-microsoft-com:vml", IsNullable=false)]
     public enum ST_StrokeArrowWidth {
@@ -1753,7 +1754,7 @@ namespace NPOI.OpenXmlFormats.Vml
     }
     
     
-    [System.Serializable]
+    [Serializable]
     [XmlType(Namespace="urn:schemas-microsoft-com:vml")]
     [XmlRoot(Namespace="urn:schemas-microsoft-com:vml", IsNullable=false)]
     public enum ST_StrokeArrowLength {
@@ -1769,7 +1770,7 @@ namespace NPOI.OpenXmlFormats.Vml
     }
     
     
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace="urn:schemas-microsoft-com:vml")]
@@ -1832,7 +1833,7 @@ namespace NPOI.OpenXmlFormats.Vml
     }
     
     
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace="urn:schemas-microsoft-com:vml")]
@@ -1901,7 +1902,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         
-        [System.Xml.Serialization.XmlIgnore]
+        [XmlIgnore]
         public bool onSpecified {
             get {
                 return this.onFieldSpecified;
@@ -1923,7 +1924,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         
-        [System.Xml.Serialization.XmlIgnore]
+        [XmlIgnore]
         public bool fitshapeSpecified {
             get {
                 return this.fitshapeFieldSpecified;
@@ -1945,7 +1946,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         
-        [System.Xml.Serialization.XmlIgnore]
+        [XmlIgnore]
         public bool fitpathSpecified {
             get {
                 return this.fitpathFieldSpecified;
@@ -1967,7 +1968,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         
-        [System.Xml.Serialization.XmlIgnore]
+        [XmlIgnore]
         public bool trimSpecified {
             get {
                 return this.trimFieldSpecified;
@@ -1989,7 +1990,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         
-        [System.Xml.Serialization.XmlIgnore]
+        [XmlIgnore]
         public bool xscaleSpecified {
             get {
                 return this.xscaleFieldSpecified;
@@ -2012,7 +2013,7 @@ namespace NPOI.OpenXmlFormats.Vml
     }
     
     
-    [System.Serializable]
+    [Serializable]
     [XmlType(Namespace="urn:schemas-microsoft-com:vml", IncludeInSchema=false)]
     public enum ItemsChoiceType1 {
         
@@ -2081,7 +2082,7 @@ namespace NPOI.OpenXmlFormats.Vml
     }
     
     
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace="urn:schemas-microsoft-com:vml")]
@@ -2341,7 +2342,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         
-        [XmlAttributeAttribute("path")]
+        [XmlAttribute("path")]
         public string path1 {
             get {
                 return this.path1Field;
@@ -2367,7 +2368,7 @@ namespace NPOI.OpenXmlFormats.Vml
     }
     
     
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace="urn:schemas-microsoft-com:vml")]
@@ -2417,7 +2418,7 @@ namespace NPOI.OpenXmlFormats.Vml
         [XmlElement("stroke", typeof(CT_Stroke))]
         [XmlElement("textbox", typeof(CT_Textbox))]
         [XmlElement("textpath", typeof(CT_TextPath))]
-        [System.Xml.Serialization.XmlChoiceIdentifierAttribute("ItemsElementName")]
+        [XmlChoiceIdentifier("ItemsElementName")]
         public List<object> Items {
             get {
                 return this.itemsField;
@@ -2429,7 +2430,7 @@ namespace NPOI.OpenXmlFormats.Vml
         
         
         [XmlElement("ItemsElementName")]
-        [System.Xml.Serialization.XmlIgnore]
+        [XmlIgnore]
         public ItemsChoiceType6[] ItemsElementName {
             get {
                 return this.itemsElementNameField;
@@ -2451,7 +2452,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         
-        [System.Xml.Serialization.XmlIgnore]
+        [XmlIgnore]
         public bool filledSpecified {
             get {
                 return this.filledFieldSpecified;
@@ -2484,7 +2485,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         
-        [System.Xml.Serialization.XmlIgnore]
+        [XmlIgnore]
         public bool editasSpecified {
             get {
                 return this.editasFieldSpecified;
@@ -2501,7 +2502,7 @@ namespace NPOI.OpenXmlFormats.Vml
     }
     
     
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace="urn:schemas-microsoft-com:vml")]
@@ -2749,7 +2750,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         
-        [System.Xml.Serialization.XmlIgnore]
+        [XmlIgnore]
         public bool startAngleSpecified {
             get {
                 return this.startAngleFieldSpecified;
@@ -2771,7 +2772,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         
-        [System.Xml.Serialization.XmlIgnore]
+        [XmlIgnore]
         public bool endAngleSpecified {
             get {
                 return this.endAngleFieldSpecified;
@@ -2783,7 +2784,7 @@ namespace NPOI.OpenXmlFormats.Vml
     }
     
     
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace="urn:schemas-microsoft-com:vml")]
@@ -3065,7 +3066,7 @@ namespace NPOI.OpenXmlFormats.Vml
     }
     
     
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace="urn:schemas-microsoft-com:vml")]
@@ -3417,7 +3418,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         
-        [System.Xml.Serialization.XmlIgnore]
+        [XmlIgnore]
         public bool grayscaleSpecified {
             get {
                 return this.grayscaleFieldSpecified;
@@ -3439,7 +3440,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         
-        [System.Xml.Serialization.XmlIgnore]
+        [XmlIgnore]
         public bool bilevelSpecified {
             get {
                 return this.bilevelFieldSpecified;
@@ -3451,7 +3452,7 @@ namespace NPOI.OpenXmlFormats.Vml
     }
     
     
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace="urn:schemas-microsoft-com:vml")]
@@ -3707,7 +3708,7 @@ namespace NPOI.OpenXmlFormats.Vml
     }
     
     
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace="urn:schemas-microsoft-com:vml")]
@@ -3736,7 +3737,7 @@ namespace NPOI.OpenXmlFormats.Vml
         [XmlElement("stroke", typeof(CT_Stroke))]
         [XmlElement("textbox", typeof(CT_Textbox))]
         [XmlElement("textpath", typeof(CT_TextPath))]
-        [System.Xml.Serialization.XmlChoiceIdentifierAttribute("ItemsElementName")]
+        [XmlChoiceIdentifier("ItemsElementName")]
         public List<object> Items {
             get {
                 return this.itemsField;
@@ -3748,7 +3749,7 @@ namespace NPOI.OpenXmlFormats.Vml
         
         
         [XmlElement("ItemsElementName")]
-        [System.Xml.Serialization.XmlIgnore]
+        [XmlIgnore]
         public ItemsChoiceType2[] ItemsElementName {
             get {
                 return this.itemsElementNameField;
@@ -3760,7 +3761,7 @@ namespace NPOI.OpenXmlFormats.Vml
     }
     
     
-    [System.Serializable]
+    [Serializable]
     [XmlType(Namespace="urn:schemas-microsoft-com:vml", IncludeInSchema=false)]
     public enum ItemsChoiceType2 {
         
@@ -3825,7 +3826,7 @@ namespace NPOI.OpenXmlFormats.Vml
     }
     
     
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace="urn:schemas-microsoft-com:vml")]
@@ -3856,7 +3857,7 @@ namespace NPOI.OpenXmlFormats.Vml
         [XmlElement("stroke", typeof(CT_Stroke))]
         [XmlElement("textbox", typeof(CT_Textbox))]
         [XmlElement("textpath", typeof(CT_TextPath))]
-        [System.Xml.Serialization.XmlChoiceIdentifierAttribute("ItemsElementName")]
+        [XmlChoiceIdentifier("ItemsElementName")]
         public List<object> Items {
             get {
                 return this.itemsField;
@@ -3868,7 +3869,7 @@ namespace NPOI.OpenXmlFormats.Vml
         
         
         [XmlElement("ItemsElementName")]
-        [System.Xml.Serialization.XmlIgnore]
+        [XmlIgnore]
         public ItemsChoiceType3[] ItemsElementName {
             get {
                 return this.itemsElementNameField;
@@ -3891,7 +3892,7 @@ namespace NPOI.OpenXmlFormats.Vml
     }
     
     
-    [System.Serializable]
+    [Serializable]
     [XmlType(Namespace="urn:schemas-microsoft-com:vml", IncludeInSchema=false)]
     public enum ItemsChoiceType3 {
         
@@ -3956,7 +3957,7 @@ namespace NPOI.OpenXmlFormats.Vml
     }
     
     
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace="urn:schemas-microsoft-com:vml")]
@@ -3985,7 +3986,7 @@ namespace NPOI.OpenXmlFormats.Vml
         [XmlElement("stroke", typeof(CT_Stroke))]
         [XmlElement("textbox", typeof(CT_Textbox))]
         [XmlElement("textpath", typeof(CT_TextPath))]
-        [System.Xml.Serialization.XmlChoiceIdentifierAttribute("ItemsElementName")]
+        [XmlChoiceIdentifier("ItemsElementName")]
         public List<object> Items {
             get {
                 return this.itemsField;
@@ -3997,7 +3998,7 @@ namespace NPOI.OpenXmlFormats.Vml
         
         
         [XmlElement("ItemsElementName")]
-        [System.Xml.Serialization.XmlIgnore]
+        [XmlIgnore]
         public ItemsChoiceType4[] ItemsElementName {
             get {
                 return this.itemsElementNameField;
@@ -4009,7 +4010,7 @@ namespace NPOI.OpenXmlFormats.Vml
     }
     
     
-    [System.Serializable]
+    [Serializable]
     [XmlType(Namespace="urn:schemas-microsoft-com:vml", IncludeInSchema=false)]
     public enum ItemsChoiceType4 {
         
@@ -4074,7 +4075,7 @@ namespace NPOI.OpenXmlFormats.Vml
     }
     
     
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace="urn:schemas-microsoft-com:vml")]
@@ -4105,7 +4106,7 @@ namespace NPOI.OpenXmlFormats.Vml
         [XmlElement("stroke", typeof(CT_Stroke))]
         [XmlElement("textbox", typeof(CT_Textbox))]
         [XmlElement("textpath", typeof(CT_TextPath))]
-        [System.Xml.Serialization.XmlChoiceIdentifierAttribute("ItemsElementName")]
+        [XmlChoiceIdentifier("ItemsElementName")]
         public List<object> Items {
             get {
                 return this.itemsField;
@@ -4117,7 +4118,7 @@ namespace NPOI.OpenXmlFormats.Vml
         
         
         [XmlElement("ItemsElementName")]
-        [System.Xml.Serialization.XmlIgnore]
+        [XmlIgnore]
         public ItemsChoiceType5[] ItemsElementName {
             get {
                 return this.itemsElementNameField;
@@ -4140,7 +4141,7 @@ namespace NPOI.OpenXmlFormats.Vml
     }
     
     
-    [System.Serializable]
+    [Serializable]
     [XmlType(Namespace="urn:schemas-microsoft-com:vml", IncludeInSchema=false)]
     public enum ItemsChoiceType5 {
         
@@ -4205,7 +4206,7 @@ namespace NPOI.OpenXmlFormats.Vml
     }
     
     
-    [System.Serializable]
+    [Serializable]
     [XmlType(Namespace="urn:schemas-microsoft-com:vml", IncludeInSchema=false)]
     public enum ItemsChoiceType6 {
         
@@ -4303,7 +4304,7 @@ namespace NPOI.OpenXmlFormats.Vml
     }
     
     
-    [System.Serializable]
+    [Serializable]
     [XmlType(Namespace="urn:schemas-microsoft-com:vml")]
     [XmlRoot(Namespace="urn:schemas-microsoft-com:vml", IsNullable=false)]
     public enum ST_EditAs {
@@ -4331,7 +4332,7 @@ namespace NPOI.OpenXmlFormats.Vml
     }
     
     
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace="urn:schemas-microsoft-com:vml")]
@@ -4383,7 +4384,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         
-        [System.Xml.Serialization.XmlIgnore]
+        [XmlIgnore]
         public bool filledSpecified {
             get {
                 return this.filledFieldSpecified;
@@ -4406,7 +4407,7 @@ namespace NPOI.OpenXmlFormats.Vml
     }
     
     
-    [System.Serializable]
+    [Serializable]
     [XmlType(Namespace="urn:schemas-microsoft-com:vml")]
     [XmlRoot(Namespace="urn:schemas-microsoft-com:vml", IsNullable=false)]
     public enum ST_Ext {

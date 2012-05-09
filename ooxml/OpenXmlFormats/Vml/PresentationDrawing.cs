@@ -7,8 +7,8 @@ namespace NPOI.OpenXmlFormats.Vml
     [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
-    [System.Xml.Serialization.XmlType(Namespace="urn:schemas-microsoft-com:office:powerpoint")]
-    [System.Xml.Serialization.XmlRoot(Namespace="urn:schemas-microsoft-com:office:powerpoint", IsNullable=true)]
+    [XmlType(Namespace="urn:schemas-microsoft-com:office:powerpoint")]
+    [XmlRoot(Namespace="urn:schemas-microsoft-com:office:powerpoint", IsNullable=true)]
     public partial class CT_Empty {
     }
     
@@ -16,8 +16,8 @@ namespace NPOI.OpenXmlFormats.Vml
     [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
-    [System.Xml.Serialization.XmlType(Namespace="urn:schemas-microsoft-com:office:powerpoint")]
-    [System.Xml.Serialization.XmlRoot(Namespace="urn:schemas-microsoft-com:office:powerpoint", IsNullable=true)]
+    [XmlType(Namespace="urn:schemas-microsoft-com:office:powerpoint")]
+    [XmlRoot(Namespace="urn:schemas-microsoft-com:office:powerpoint", IsNullable=true)]
     public partial class CT_Rel {
         
         private string idField;

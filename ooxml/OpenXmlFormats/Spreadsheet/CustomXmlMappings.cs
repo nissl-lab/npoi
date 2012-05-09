@@ -8,7 +8,7 @@ using System.Xml.Serialization;
 namespace NPOI.OpenXmlFormats.Spreadsheet
 {
 
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
@@ -146,7 +146,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     }
 
 
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
@@ -320,7 +320,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     }
 
 
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]

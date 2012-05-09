@@ -4,54 +4,60 @@
 //    <NameSpace>schemas</NameSpace><Collection>List</Collection><codeType>CSharp</codeType><EnableDataBinding>False</EnableDataBinding><EnableLazyLoading>False</EnableLazyLoading><TrackingChangesEnable>False</TrackingChangesEnable><GenTrackingClasses>False</GenTrackingClasses><HidePrivateFieldInIDE>False</HidePrivateFieldInIDE><EnableSummaryComment>False</EnableSummaryComment><VirtualProp>False</VirtualProp><IncludeSerializeMethod>False</IncludeSerializeMethod><UseBaseClass>False</UseBaseClass><GenBaseClass>False</GenBaseClass><GenerateCloneMethod>False</GenerateCloneMethod><GenerateDataContracts>False</GenerateDataContracts><CodeBaseTag>Net20</CodeBaseTag><SerializeMethodName>Serialize</SerializeMethodName><DeserializeMethodName>Deserialize</DeserializeMethodName><SaveToFileMethodName>SaveToFile</SaveToFileMethodName><LoadFromFileMethodName>LoadFromFile</LoadFromFileMethodName><GenerateXMLAttributes>False</GenerateXMLAttributes><EnableEncoding>False</EnableEncoding><AutomaticProperties>False</AutomaticProperties><GenerateShouldSerialize>False</GenerateShouldSerialize><DisableDebug>False</DisableDebug><PropNameSpecified>Default</PropNameSpecified><Encoder>UTF8</Encoder><CustomUsings></CustomUsings><ExcludeIncludedTypes>False</ExcludeIncludedTypes><EnableInitializeFields>True</EnableInitializeFields>
 //  </auto-generated>
 // ------------------------------------------------------------------------------
+
+using System.Xml.Serialization;
+using System.Collections.Generic;
+using System;
+
 namespace NPOI.OpenXmlFormats
 {
-    using System.Xml.Serialization;
-    using System.Collections.Generic;
 
-
+    [Serializable]
+    [System.Diagnostics.DebuggerStepThrough]
+    [System.ComponentModel.DesignerCategory("code")]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes")]
     public class CT_Variant
     {
 
         private object itemField;
 
         private ItemChoiceType itemElementNameField;
-        [System.Xml.Serialization.XmlElement("array", typeof(CT_Array))]
-        [System.Xml.Serialization.XmlElement("blob", typeof(byte[]), DataType = "base64Binary")]
-        [System.Xml.Serialization.XmlElement("bool", typeof(bool))]
-        [System.Xml.Serialization.XmlElement("bstr", typeof(string))]
-        [System.Xml.Serialization.XmlElement("cf", typeof(CT_Cf))]
-        [System.Xml.Serialization.XmlElement("clsid", typeof(string))]
-        [System.Xml.Serialization.XmlElement("cy", typeof(string))]
-        [System.Xml.Serialization.XmlElement("date", typeof(System.DateTime))]
-        [System.Xml.Serialization.XmlElement("decimal", typeof(decimal))]
-        [System.Xml.Serialization.XmlElement("empty", typeof(CT_Empty))]
-        [System.Xml.Serialization.XmlElement("error", typeof(string))]
-        [System.Xml.Serialization.XmlElement("filetime", typeof(System.DateTime))]
-        [System.Xml.Serialization.XmlElement("i1", typeof(sbyte))]
-        [System.Xml.Serialization.XmlElement("i2", typeof(short))]
-        [System.Xml.Serialization.XmlElement("i4", typeof(int))]
-        [System.Xml.Serialization.XmlElement("i8", typeof(long))]
-        [System.Xml.Serialization.XmlElement("int", typeof(int))]
-        [System.Xml.Serialization.XmlElement("lpstr", typeof(string))]
-        [System.Xml.Serialization.XmlElement("lpwstr", typeof(string))]
-        [System.Xml.Serialization.XmlElement("null", typeof(CT_Null))]
-        [System.Xml.Serialization.XmlElement("oblob", typeof(byte[]), DataType = "base64Binary")]
-        [System.Xml.Serialization.XmlElement("ostorage", typeof(byte[]), DataType = "base64Binary")]
-        [System.Xml.Serialization.XmlElement("ostream", typeof(byte[]), DataType = "base64Binary")]
-        [System.Xml.Serialization.XmlElement("r4", typeof(float))]
-        [System.Xml.Serialization.XmlElement("r8", typeof(double))]
-        [System.Xml.Serialization.XmlElement("storage", typeof(byte[]), DataType = "base64Binary")]
-        [System.Xml.Serialization.XmlElement("stream", typeof(byte[]), DataType = "base64Binary")]
-        [System.Xml.Serialization.XmlElement("ui1", typeof(byte))]
-        [System.Xml.Serialization.XmlElement("ui2", typeof(ushort))]
-        [System.Xml.Serialization.XmlElement("ui4", typeof(uint))]
-        [System.Xml.Serialization.XmlElement("ui8", typeof(ulong))]
-        [System.Xml.Serialization.XmlElement("uint", typeof(uint))]
-        //[System.Xml.Serialization.XmlElement("variant", typeof(CT_Variant))]
-        [System.Xml.Serialization.XmlElement("vector", typeof(CT_Vector))]
-        [System.Xml.Serialization.XmlElement("vstream", typeof(CT_Vstream))]
-        [XmlChoiceIdentifierAttribute("ItemElementName")]
+        [XmlElement("array", typeof(CT_Array))]
+        [XmlElement("blob", typeof(byte[]), DataType = "base64Binary")]
+        [XmlElement("bool", typeof(bool))]
+        [XmlElement("bstr", typeof(string))]
+        [XmlElement("cf", typeof(CT_Cf))]
+        [XmlElement("clsid", typeof(string))]
+        [XmlElement("cy", typeof(string))]
+        [XmlElement("date", typeof(System.DateTime))]
+        [XmlElement("decimal", typeof(decimal))]
+        [XmlElement("empty", typeof(CT_Empty))]
+        [XmlElement("error", typeof(string))]
+        [XmlElement("filetime", typeof(System.DateTime))]
+        [XmlElement("i1", typeof(sbyte))]
+        [XmlElement("i2", typeof(short))]
+        [XmlElement("i4", typeof(int))]
+        [XmlElement("i8", typeof(long))]
+        [XmlElement("int", typeof(int))]
+        [XmlElement("lpstr", typeof(string))]
+        [XmlElement("lpwstr", typeof(string))]
+        [XmlElement("null", typeof(CT_Null))]
+        [XmlElement("oblob", typeof(byte[]), DataType = "base64Binary")]
+        [XmlElement("ostorage", typeof(byte[]), DataType = "base64Binary")]
+        [XmlElement("ostream", typeof(byte[]), DataType = "base64Binary")]
+        [XmlElement("r4", typeof(float))]
+        [XmlElement("r8", typeof(double))]
+        [XmlElement("storage", typeof(byte[]), DataType = "base64Binary")]
+        [XmlElement("stream", typeof(byte[]), DataType = "base64Binary")]
+        [XmlElement("ui1", typeof(byte))]
+        [XmlElement("ui2", typeof(ushort))]
+        [XmlElement("ui4", typeof(uint))]
+        [XmlElement("ui8", typeof(ulong))]
+        [XmlElement("uint", typeof(uint))]
+        //[XmlElement("variant", typeof(CT_Variant))]
+        [XmlElement("vector", typeof(CT_Vector))]
+        [XmlElement("vstream", typeof(CT_Vstream))]
+        [XmlChoiceIdentifier("ItemElementName")]
         public object Item
         {
             get
@@ -79,7 +85,7 @@ namespace NPOI.OpenXmlFormats
     }
 
 
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes")]
@@ -114,7 +120,7 @@ namespace NPOI.OpenXmlFormats
         [XmlElement("ui4", typeof(uint))]
         [XmlElement("uint", typeof(uint))]
         [XmlElement("variant", typeof(CT_Variant))]
-        [XmlChoiceIdentifierAttribute("ItemsElementName")]
+        [XmlChoiceIdentifier("ItemsElementName")]
         public object[] Items
         {
             get
@@ -184,7 +190,7 @@ namespace NPOI.OpenXmlFormats
             }
         }
     }
-    [System.Serializable]
+    [Serializable]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes", IncludeInSchema = false)]
     public enum ItemsChoiceType
     {
@@ -241,7 +247,7 @@ namespace NPOI.OpenXmlFormats
         variant,
     }
 
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes")]
@@ -286,7 +292,7 @@ namespace NPOI.OpenXmlFormats
     public class CT_Empty
     {
     }
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes")]
@@ -323,7 +329,7 @@ namespace NPOI.OpenXmlFormats
             }
         }
     }
-    [System.Serializable]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes")]
@@ -343,28 +349,28 @@ namespace NPOI.OpenXmlFormats
             this.itemsElementNameField = new List<ST_VectorBaseType>();
             this.itemsField = new List<object>();
         }
-        [System.Xml.Serialization.XmlElement("bool", typeof(bool))]
-        [System.Xml.Serialization.XmlElement("bstr", typeof(string))]
-        [System.Xml.Serialization.XmlElement("cf", typeof(CT_Cf))]
-        [System.Xml.Serialization.XmlElement("clsid", typeof(string))]
-        [System.Xml.Serialization.XmlElement("cy", typeof(string))]
-        [System.Xml.Serialization.XmlElement("date", typeof(System.DateTime))]
-        [System.Xml.Serialization.XmlElement("error", typeof(string))]
-        [System.Xml.Serialization.XmlElement("filetime", typeof(System.DateTime))]
-        [System.Xml.Serialization.XmlElement("i1", typeof(sbyte))]
-        [System.Xml.Serialization.XmlElement("i2", typeof(short))]
-        [System.Xml.Serialization.XmlElement("i4", typeof(int))]
-        [System.Xml.Serialization.XmlElement("i8", typeof(long))]
-        [System.Xml.Serialization.XmlElement("lpstr", typeof(string))]
-        [System.Xml.Serialization.XmlElement("lpwstr", typeof(string))]
-        [System.Xml.Serialization.XmlElement("r4", typeof(float))]
-        [System.Xml.Serialization.XmlElement("r8", typeof(double))]
-        [System.Xml.Serialization.XmlElement("ui1", typeof(byte))]
-        [System.Xml.Serialization.XmlElement("ui2", typeof(ushort))]
-        [System.Xml.Serialization.XmlElement("ui4", typeof(uint))]
-        [System.Xml.Serialization.XmlElement("ui8", typeof(ulong))]
-        [System.Xml.Serialization.XmlElement("variant", typeof(CT_Variant))]
-        [XmlChoiceIdentifierAttribute("ItemsElementName")]
+        [XmlElement("bool", typeof(bool))]
+        [XmlElement("bstr", typeof(string))]
+        [XmlElement("cf", typeof(CT_Cf))]
+        [XmlElement("clsid", typeof(string))]
+        [XmlElement("cy", typeof(string))]
+        [XmlElement("date", typeof(System.DateTime))]
+        [XmlElement("error", typeof(string))]
+        [XmlElement("filetime", typeof(System.DateTime))]
+        [XmlElement("i1", typeof(sbyte))]
+        [XmlElement("i2", typeof(short))]
+        [XmlElement("i4", typeof(int))]
+        [XmlElement("i8", typeof(long))]
+        [XmlElement("lpstr", typeof(string))]
+        [XmlElement("lpwstr", typeof(string))]
+        [XmlElement("r4", typeof(float))]
+        [XmlElement("r8", typeof(double))]
+        [XmlElement("ui1", typeof(byte))]
+        [XmlElement("ui2", typeof(ushort))]
+        [XmlElement("ui4", typeof(uint))]
+        [XmlElement("ui8", typeof(ulong))]
+        [XmlElement("variant", typeof(CT_Variant))]
+        [XmlChoiceIdentifier("ItemsElementName")]
         public object[] Items
         {
             get
@@ -420,7 +426,7 @@ namespace NPOI.OpenXmlFormats
         }
     }
 
-    [System.Serializable]
+    [Serializable]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes")]
     public enum ST_VectorBaseType
     {
