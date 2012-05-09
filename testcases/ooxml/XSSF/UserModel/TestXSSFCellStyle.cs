@@ -387,10 +387,11 @@ namespace NPOI.XSSF.UserModel
             cellStyle.SetRightBorderColor(null);
             Assert.IsNull(cellStyle.GetRightBorderXSSFColor());
         }
-       [TestMethod]
-        public void TestGetSetFillBackgroundColor()
-        {
 
+
+       [TestMethod]
+       public void TestGetSetFillBackgroundColor()
+       {
             Assert.AreEqual(IndexedColors.AUTOMATIC.Index, cellStyle.FillBackgroundColor);
             Assert.IsNull(cellStyle.FillBackgroundXSSFColor);
 
@@ -417,7 +418,7 @@ namespace NPOI.XSSF.UserModel
             //setting XSSFColor
             num = stylesTable.GetFills().Count;
             clr = new XSSFColor(Color.Cyan);
-            cellStyle.SetFillBackgroundColor(clr);
+            cellStyle.SetFillBackgroundColor(clr); // TODO this testcase assumes that cellStyle creates a new CT_Fill, but the implementation changes the existing style. - do not know whats right 8-(
             Assert.AreEqual(clr.GetCTColor().ToString(), cellStyle.FillBackgroundXSSFColor.GetCTColor().ToString());
             byte[] rgb = cellStyle.FillBackgroundXSSFColor.GetRgb();
             Assert.AreEqual(Color.Cyan.ToArgb(), Color.FromArgb(rgb[0] & 0xFF, rgb[1] & 0xFF, rgb[2] & 0xFF).ToArgb());

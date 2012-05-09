@@ -29,128 +29,111 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
     }
 
-
-
-
-
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public class CT_GradientFill
     {
 
-        private List<CT_GradientStop> stopField;
+        private List<CT_GradientStop> stopField = null; // 0..*
 
-        private ST_GradientType typeField;
+        private ST_GradientType typeField = ST_GradientType.NONE;
 
-        private double degreeField;
+        private double? degreeField = null;
 
-        private double leftField;
+        private double? leftField = null;
 
-        private double rightField;
+        private double? rightField = null;
 
-        private double topField;
+        private double? topField = null;
 
-        private double bottomField;
+        private double? bottomField = null;
 
-        public CT_GradientFill()
-        {
-            this.stopField = new List<CT_GradientStop>();
-            this.typeField = ST_GradientType.linear;
-            this.degreeField = 0D;
-            this.leftField = 0D;
-            this.rightField = 0D;
-            this.topField = 0D;
-            this.bottomField = 0D;
-        }
-
+        [XmlElement]
         public List<CT_GradientStop> stop
         {
-            get
-            {
-                return this.stopField;
-            }
-            set
-            {
-                this.stopField = value;
-            }
+            get { return this.stopField; }
+            set { this.stopField = value; }
         }
 
+        [XmlAttribute]
         [DefaultValue(ST_GradientType.linear)]
         public ST_GradientType type
         {
-            get
-            {
-                return this.typeField;
-            }
-            set
-            {
-                this.typeField = value;
-            }
+            get { return ST_GradientType.NONE == this.typeField ? ST_GradientType.linear : this.typeField; }
+            set { this.typeField = value; }
+        }
+        [XmlIgnore]
+        public bool typeSpecified
+        {
+            get { return (null != typeField); }
         }
 
+        [XmlAttribute]
         [DefaultValue(0D)]
         public double degree
         {
-            get
-            {
-                return this.degreeField;
-            }
-            set
-            {
-                this.degreeField = value;
-            }
+            get { return null == this.degreeField ? 0.0 : (double)degreeField; }
+            set { this.degreeField = value; }
+        }
+        [XmlIgnore]
+        public bool degreeSpecified
+        {
+            get { return (null != degreeField); }
         }
 
+        [XmlAttribute]
         [DefaultValue(0D)]
         public double left
         {
-            get
-            {
-                return this.leftField;
-            }
-            set
-            {
-                this.leftField = value;
-            }
+            get { return null == this.leftField ? 0.0 : (double)this.leftField; }
+            set { this.leftField = value; }
+        }
+        [XmlIgnore]
+        public bool Specified
+        {
+            get { return (null != leftField); }
         }
 
+        [XmlAttribute]
         [DefaultValue(0D)]
         public double right
         {
-            get
-            {
-                return this.rightField;
-            }
-            set
-            {
-                this.rightField = value;
-            }
+            get { return null == this.rightField ? 0.0 : (double)this.rightField; }
+            set { this.rightField = value; }
+        }
+        [XmlIgnore]
+        public bool rightSpecified
+        {
+            get { return (null != rightField); }
         }
 
+        [XmlAttribute]
         [DefaultValue(0D)]
         public double top
         {
-            get
-            {
-                return this.topField;
-            }
-            set
-            {
-                this.topField = value;
-            }
+            get { return null == this.topField ? 0.0 : (double)this.topField; }
+            set { this.topField = value; }
+        }
+        [XmlIgnore]
+        public bool topSpecified
+        {
+            get { return (null != topField); }
         }
 
+        [XmlAttribute]
         [DefaultValue(0D)]
         public double bottom
         {
-            get
-            {
-                return this.bottomField;
-            }
-            set
-            {
-                this.bottomField = value;
-            }
+            get { return null == this.bottomField ? 0.0 : (double)this.bottomField; }
+            set { this.bottomField = value; }
+        }
+        [XmlIgnore]
+        public bool bottomSpecified
+        {
+            get { return (null != bottomField); }
         }
     }
+
     public class CT_XStringElement
     {
 

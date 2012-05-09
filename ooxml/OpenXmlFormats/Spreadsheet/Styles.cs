@@ -1126,25 +1126,25 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public class CT_Fill
     {
+        private CT_PatternFill patternFillField = null;
+        private CT_GradientFill gradientFillField = null;
 
-        private CT_PatternFill patternFillField;
-
-
+        [XmlElement]
         public CT_PatternFill patternFill
         {
-            get
-            {
-                return this.patternFillField;
-            }
-            set
-            {
-                this.patternFillField = value;
-            }
+            get            {                return this.patternFillField;            }
+            set            {                this.patternFillField = value;            }
+        }
+        [XmlElement]
+        public CT_GradientFill gradientFill
+        {
+            get { return this.gradientFillField; }
+            set { this.gradientFillField = value; }
         }
 
         public CT_PatternFill GetPatternFill()
         {
-            return (CT_PatternFill)this.patternFillField;
+            return this.patternFillField;
         }
 
         public CT_PatternFill AddNewPatternFill()
@@ -1178,7 +1178,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public enum ST_GradientType
     {
-
+        NONE,
     
         linear,
 
@@ -1344,6 +1344,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     
         gray0625,
     }
+
     [Serializable]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     [XmlRoot("color",Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
@@ -1354,7 +1355,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         private uint? indexedField = null; // type of xsd:unsignedInt // TODO change all the uses theme to use uint instead of signed integer variants
 
-        private byte[] rgbField = null; // TODO type of	ST_UnsignedIntHex
+        private byte[] rgbField = null; // type ST_UnsignedIntHex is xsd:hexBinary restricted to length 4 (octets!? - see http://www.grokdoc.net/index.php/EOOXML_Objections_Clearinghouse)
 
         private uint? themeField = null; // TODO change all the uses theme to use uint instead of signed integer variants
 
@@ -1412,8 +1413,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         #endregion indexed
 
         #region rgb
-        [XmlAttribute]
-        // TODO this is Type ST_UnsignedIntHex 
+        [XmlAttribute(DataType = "hexBinary")]
+        // Type ST_UnsignedIntHex is base on xsd:hexBinary
         public byte[] rgb
         {
             get
@@ -1501,6 +1502,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             return tintSpecified;
         }
+        #endregion tint
+
         internal static XmlSerializer serializer = new XmlSerializer(typeof(CT_Color));
         internal static XmlSerializerNamespaces namespaces = new XmlSerializerNamespaces(new[] {
             new XmlQualifiedName("", "http://schemas.openxmlformats.org/spreadsheetml/2006/main") });
@@ -1513,7 +1516,6 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        #endregion tint
     }
 
     [Serializable]

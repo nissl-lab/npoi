@@ -5,6 +5,7 @@ using System.Text;
 using System.Xml;
 using NPOI.OpenXmlFormats.Shared;
 using System.Xml.Serialization;
+using System.Xml.Schema;
 
 namespace NPOI.OpenXmlFormats.Wordprocessing
 {
@@ -512,27 +513,20 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
 
     [System.SerializableAttribute()]
-
     [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
+    [System.Xml.Serialization.XmlRoot("endnote", Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
     public class CT_FtnEdn
     {
 
-        private List<object> itemsField;
+        private List<object> itemsField = new List<object>();
 
-        private List<ItemsChoiceType7> itemsElementNameField;
+        private List<ItemsChoiceType7> itemsElementNameField = new List<ItemsChoiceType7>();
 
         private ST_FtnEdn typeField;
 
         private bool typeFieldSpecified;
 
-        private string idField;
-
-        public CT_FtnEdn()
-        {
-            this.itemsElementNameField = new List<ItemsChoiceType7>();
-            this.itemsField = new List<object>();
-        }
+        private string idField = string.Empty;
 
         [System.Xml.Serialization.XmlElement("oMath", typeof(CT_OMath), Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", Order = 0)]
         [System.Xml.Serialization.XmlElement("oMathPara", typeof(CT_OMathPara), Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", Order = 0)]
@@ -623,8 +617,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        // TODO is the following correct?
-        [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, DataType = "integer", Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/relationships")]
+       // correct namespace, but no need for ns prefix: [XmlAttribute(Form = XmlSchemaForm.Qualified, DataType = "integer", Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
+        [XmlAttribute(DataType = "integer")]
         public string id
         {
             get
@@ -863,12 +857,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     public class CT_Endnotes
     {
 
-        private List<CT_FtnEdn> endnoteField;
-
-        public CT_Endnotes()
-        {
-            this.endnoteField = new List<CT_FtnEdn>();
-        }
+        private List<CT_FtnEdn> endnoteField = new List<CT_FtnEdn>();
 
         [System.Xml.Serialization.XmlElement("endnote", Order = 0)]
         public List<CT_FtnEdn> endnote
@@ -914,17 +903,13 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
 
     [System.SerializableAttribute()]
-
     [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
     public class CT_FtnEdnSepRef
     {
-
         private string idField;
 
-        // TODO is the following correct?
-        //[XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/relationships")]
-        [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, DataType = "integer")]
+        //[System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, DataType = "integer")]
+        [XmlAttribute(DataType = "integer")]
         public string id
         {
             get
@@ -943,7 +928,6 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     [System.SerializableAttribute()]
 
     [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
     public class CT_EdnProps
     {
 

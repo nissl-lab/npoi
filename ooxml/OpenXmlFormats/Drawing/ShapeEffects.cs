@@ -1,4 +1,5 @@
 using System.ComponentModel;
+using System.Xml.Serialization;
 namespace NPOI.OpenXmlFormats.Dml
 {
     
@@ -7,7 +8,7 @@ namespace NPOI.OpenXmlFormats.Dml
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
-    [System.Xml.Serialization.XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
     [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_AlphaBiLevelEffect {
         
@@ -30,7 +31,7 @@ namespace NPOI.OpenXmlFormats.Dml
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
-    [System.Xml.Serialization.XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
     public partial class CT_HslColor {
         
         private CT_PositiveFixedPercentage[] tintField;
@@ -441,7 +442,7 @@ namespace NPOI.OpenXmlFormats.Dml
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
-    [System.Xml.Serialization.XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
     public partial class CT_SystemColor {
         
         private CT_PositiveFixedPercentage[] tintField;
@@ -841,7 +842,7 @@ namespace NPOI.OpenXmlFormats.Dml
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
-    [System.Xml.Serialization.XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
     [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_AlphaCeilingEffect {
     }
@@ -850,7 +851,7 @@ namespace NPOI.OpenXmlFormats.Dml
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
-    [System.Xml.Serialization.XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
     [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_AlphaFloorEffect {
     }
@@ -859,7 +860,7 @@ namespace NPOI.OpenXmlFormats.Dml
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
-    [System.Xml.Serialization.XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
     [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_AlphaInverseEffect {
         
@@ -940,7 +941,7 @@ namespace NPOI.OpenXmlFormats.Dml
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
-    [System.Xml.Serialization.XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
     [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_AlphaModulateFixedEffect {
         
@@ -967,7 +968,7 @@ namespace NPOI.OpenXmlFormats.Dml
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
-    [System.Xml.Serialization.XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
     [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_AlphaOutsetEffect {
         
@@ -994,7 +995,7 @@ namespace NPOI.OpenXmlFormats.Dml
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
-    [System.Xml.Serialization.XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
     [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_AlphaReplaceEffect {
         
@@ -1016,7 +1017,7 @@ namespace NPOI.OpenXmlFormats.Dml
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
-    [System.Xml.Serialization.XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
     [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_BiLevelEffect {
         
@@ -1038,7 +1039,7 @@ namespace NPOI.OpenXmlFormats.Dml
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
-    [System.Xml.Serialization.XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
     [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_BlurEffect {
         
@@ -1080,7 +1081,7 @@ namespace NPOI.OpenXmlFormats.Dml
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
-    [System.Xml.Serialization.XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
     [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_ColorChangeEffect {
         
@@ -1131,7 +1132,7 @@ namespace NPOI.OpenXmlFormats.Dml
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
-    [System.Xml.Serialization.XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
     [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_ColorReplaceEffect {
         
@@ -1212,7 +1213,7 @@ namespace NPOI.OpenXmlFormats.Dml
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
-    [System.Xml.Serialization.XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
     [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_DuotoneEffect {
         
@@ -1299,7 +1300,7 @@ namespace NPOI.OpenXmlFormats.Dml
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
-    [System.Xml.Serialization.XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
     [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_GlowEffect {
         
@@ -1398,7 +1399,7 @@ namespace NPOI.OpenXmlFormats.Dml
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
-    [System.Xml.Serialization.XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
     [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_GrayscaleEffect {
     }
@@ -1407,7 +1408,7 @@ namespace NPOI.OpenXmlFormats.Dml
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
-    [System.Xml.Serialization.XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
     [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_HSLEffect {
         
@@ -1464,7 +1465,7 @@ namespace NPOI.OpenXmlFormats.Dml
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
-    [System.Xml.Serialization.XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
     [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_InnerShadowEffect {
         
@@ -1593,7 +1594,7 @@ namespace NPOI.OpenXmlFormats.Dml
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
-    [System.Xml.Serialization.XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
     [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_LuminanceEffect {
         
@@ -1635,7 +1636,7 @@ namespace NPOI.OpenXmlFormats.Dml
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
-    [System.Xml.Serialization.XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
     [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_OuterShadowEffect {
         
@@ -1852,7 +1853,7 @@ namespace NPOI.OpenXmlFormats.Dml
     
 
     [System.Serializable]
-    [System.Xml.Serialization.XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
     [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=false)]
     public enum ST_PresetShadowVal {
         
@@ -1921,7 +1922,7 @@ namespace NPOI.OpenXmlFormats.Dml
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
-    [System.Xml.Serialization.XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
     [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_PresetShadowEffect {
         
@@ -2048,7 +2049,7 @@ namespace NPOI.OpenXmlFormats.Dml
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
-    [System.Xml.Serialization.XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
     [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_ReflectionEffect {
         
@@ -2270,7 +2271,7 @@ namespace NPOI.OpenXmlFormats.Dml
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
-    [System.Xml.Serialization.XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
     [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_RelativeOffsetEffect {
         
@@ -2312,7 +2313,7 @@ namespace NPOI.OpenXmlFormats.Dml
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
-    [System.Xml.Serialization.XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
     [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_SoftEdgesEffect {
         
@@ -2334,7 +2335,7 @@ namespace NPOI.OpenXmlFormats.Dml
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
-    [System.Xml.Serialization.XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
     [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_TintEffect {
         
@@ -2376,7 +2377,7 @@ namespace NPOI.OpenXmlFormats.Dml
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
-    [System.Xml.Serialization.XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
     [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_TransformEffect {
         
@@ -2478,7 +2479,7 @@ namespace NPOI.OpenXmlFormats.Dml
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
-    [System.Xml.Serialization.XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
     [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_NoFillProperties {
     }
@@ -2487,7 +2488,7 @@ namespace NPOI.OpenXmlFormats.Dml
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
-    [System.Xml.Serialization.XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
     [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_SolidColorFillProperties {
         
@@ -2568,7 +2569,7 @@ namespace NPOI.OpenXmlFormats.Dml
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
-    [System.Xml.Serialization.XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
     [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_LinearShadeProperties {
         
@@ -2627,7 +2628,7 @@ namespace NPOI.OpenXmlFormats.Dml
     
 
     [System.Serializable]
-    [System.Xml.Serialization.XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
     [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=false)]
     public enum ST_PathShadeType {
         
@@ -2645,7 +2646,7 @@ namespace NPOI.OpenXmlFormats.Dml
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
-    [System.Xml.Serialization.XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
     [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_PathShadeProperties {
         
@@ -2690,7 +2691,7 @@ namespace NPOI.OpenXmlFormats.Dml
     
 
     [System.Serializable]
-    [System.Xml.Serialization.XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
     [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=false)]
     public enum ST_TileFlipMode {
         
@@ -2711,8 +2712,7 @@ namespace NPOI.OpenXmlFormats.Dml
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
-    [System.Xml.Serialization.XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
+    [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
     public partial class CT_GradientStop {
         
         private CT_ScRgbColor scrgbClrField;
@@ -2805,7 +2805,7 @@ namespace NPOI.OpenXmlFormats.Dml
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
-    [System.Xml.Serialization.XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
     [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_GradientStopList {
         
@@ -2827,7 +2827,7 @@ namespace NPOI.OpenXmlFormats.Dml
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
-    [System.Xml.Serialization.XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
     [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_GradientFillProperties {
         
@@ -2937,7 +2937,7 @@ namespace NPOI.OpenXmlFormats.Dml
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
-    [System.Xml.Serialization.XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
     [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_TileInfoProperties {
         
@@ -3102,7 +3102,7 @@ namespace NPOI.OpenXmlFormats.Dml
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
-    [System.Xml.Serialization.XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
     [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_StretchInfoProperties {
         
@@ -3129,7 +3129,7 @@ namespace NPOI.OpenXmlFormats.Dml
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
-    [System.Xml.Serialization.XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
     [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_AlphaModulateEffect {
         
@@ -3150,7 +3150,7 @@ namespace NPOI.OpenXmlFormats.Dml
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
-    [System.Xml.Serialization.XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
     [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_EffectContainer {
         
@@ -3232,7 +3232,7 @@ namespace NPOI.OpenXmlFormats.Dml
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
-    [System.Xml.Serialization.XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
     [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_BlendEffect {
         
@@ -3264,7 +3264,7 @@ namespace NPOI.OpenXmlFormats.Dml
     
 
     [System.Serializable]
-    [System.Xml.Serialization.XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
     [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=false)]
     public enum ST_BlendMode {
         
@@ -3288,7 +3288,7 @@ namespace NPOI.OpenXmlFormats.Dml
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
-    [System.Xml.Serialization.XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
     [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_EffectReference {
         
@@ -3310,7 +3310,7 @@ namespace NPOI.OpenXmlFormats.Dml
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
-    [System.Xml.Serialization.XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
     [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_FillEffect {
         
@@ -3391,7 +3391,7 @@ namespace NPOI.OpenXmlFormats.Dml
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
-    [System.Xml.Serialization.XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
     [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_BlipFillProperties {
         
@@ -3510,7 +3510,7 @@ namespace NPOI.OpenXmlFormats.Dml
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
-    [System.Xml.Serialization.XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
     [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_PatternFillProperties {
         
@@ -3567,7 +3567,7 @@ namespace NPOI.OpenXmlFormats.Dml
     
 
     [System.Serializable]
-    [System.Xml.Serialization.XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
     [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=false)]
     public enum ST_PresetPatternVal {
         
@@ -3738,7 +3738,7 @@ namespace NPOI.OpenXmlFormats.Dml
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
-    [System.Xml.Serialization.XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
     [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_GroupFillProperties {
     }
@@ -3747,7 +3747,7 @@ namespace NPOI.OpenXmlFormats.Dml
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
-    [System.Xml.Serialization.XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
     [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_FillOverlayEffect {
         
@@ -3839,7 +3839,7 @@ namespace NPOI.OpenXmlFormats.Dml
     
 
     [System.Serializable]
-    [System.Xml.Serialization.XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
     [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=false)]
     public enum ST_EffectContainerType {
         
@@ -3854,7 +3854,7 @@ namespace NPOI.OpenXmlFormats.Dml
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
-    [System.Xml.Serialization.XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
     [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_FillProperties {
         
@@ -3935,7 +3935,7 @@ namespace NPOI.OpenXmlFormats.Dml
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
-    [System.Xml.Serialization.XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
     [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_EffectList {
         
@@ -4040,7 +4040,7 @@ namespace NPOI.OpenXmlFormats.Dml
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
-    [System.Xml.Serialization.XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
     [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_EffectProperties {
         

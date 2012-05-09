@@ -24,6 +24,7 @@ using NPOI.OpenXmlFormats.Spreadsheet;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
 using NPOI.XSSF.UserModel.Extensions;
+using System.Collections.ObjectModel;
 
 namespace NPOI.XSSF.Model
 {
@@ -289,9 +290,9 @@ namespace NPOI.XSSF.Model
             return borders;
         }
 
-        public List<XSSFCellFill> GetFills()
+        public ReadOnlyCollection<XSSFCellFill> GetFills()
         {
-            return fills;
+            return fills.AsReadOnly();
         }
 
         public List<XSSFFont> GetFonts()

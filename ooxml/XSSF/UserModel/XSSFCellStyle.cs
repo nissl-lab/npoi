@@ -874,7 +874,7 @@ namespace NPOI.XSSF.UserModel
          * cs.SetFillBackgroundXSSFColor(new XSSFColor(java.awt.Color.RED));
          * </pre>
          * optionally a Foreground and background fill can be applied:
-         * <i>Note: Ensure Foreground color is Set prior to background</i>
+         * <i>Note: Ensure Foreground color is set prior to background</i>
          * <pre>
          * cs.SetFillPattern(XSSFCellStyle.FINE_DOTS );
          * cs.SetFillForegroundColor(new XSSFColor(java.awt.Color.BLUE));
@@ -885,8 +885,8 @@ namespace NPOI.XSSF.UserModel
          * cs.SetFillPattern(XSSFCellStyle.SOLID_FOREGROUND );
          * cs.SetFillForegroundColor(new XSSFColor(java.awt.Color.GREEN));
          * </pre>
-         * It is necessary to Set the fill style in order
-         * for the color to be Shown in the cell.
+         * It is necessary to set the fill style in order
+         * for the color to be shown in the cell.
          *
          * @param color - the color to use
          */
@@ -902,7 +902,7 @@ namespace NPOI.XSSF.UserModel
             {
 
                 if (ptrn == null) ptrn = ct.AddNewPatternFill();
-                ptrn.bgColor = (color.GetCTColor());
+                ptrn.bgColor = color.GetCTColor();
             }
 
             int idx = _stylesSource.PutFill(new XSSFCellFill(ct));

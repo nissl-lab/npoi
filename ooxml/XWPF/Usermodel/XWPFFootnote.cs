@@ -42,9 +42,12 @@ namespace NPOI.XWPF.UserModel
 
         public XWPFFootnote(XWPFDocument document, CT_FtnEdn body)
         {
-            foreach (CT_P p in body.GetPList())
+            if (null != body)
             {
-                paragraphs.Add(new XWPFParagraph(p, document));
+                foreach (CT_P p in body.GetPList())
+                {
+                    paragraphs.Add(new XWPFParagraph(p, document));
+                }
             }
         }
 
