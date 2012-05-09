@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.IO;
 using System.Xml.Serialization;
-using System.IO;
 
 namespace NPOI.OpenXmlFormats.Spreadsheet
 {
@@ -12,8 +9,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         CT_SingleXmlCells cells = null;
 
         public SingleXmlCellsDocument()
-        { 
-            
+        {           
         }
         public SingleXmlCellsDocument(CT_SingleXmlCells cells)
         {
@@ -22,7 +18,6 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         public static SingleXmlCellsDocument Parse(Stream stream)
         {
             CT_SingleXmlCells obj = (CT_SingleXmlCells)serializer.Deserialize(stream);
-
             return new SingleXmlCellsDocument(obj);
         }
         public CT_SingleXmlCells GetSingleXmlCells()

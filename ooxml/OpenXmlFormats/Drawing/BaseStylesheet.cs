@@ -103,127 +103,127 @@ namespace NPOI.OpenXmlFormats.Dml
     public enum ST_RectAlignment
     {
 
-        /// <remarks/>
+    
         tl,
 
-        /// <remarks/>
+    
         t,
 
-        /// <remarks/>
+    
         tr,
 
-        /// <remarks/>
+    
         l,
 
-        /// <remarks/>
+    
         ctr,
 
-        /// <remarks/>
+    
         r,
 
-        /// <remarks/>
+    
         bl,
 
-        /// <remarks/>
+    
         b,
 
-        /// <remarks/>
+    
         br,
     }
 
     public enum ST_SystemColorVal
     {
 
-        /// <remarks/>
+    
         scrollBar,
 
-        /// <remarks/>
+    
         background,
 
-        /// <remarks/>
+    
         activeCaption,
 
-        /// <remarks/>
+    
         inactiveCaption,
 
-        /// <remarks/>
+    
         menu,
 
-        /// <remarks/>
+    
         window,
 
-        /// <remarks/>
+    
         windowFrame,
 
-        /// <remarks/>
+    
         menuText,
 
-        /// <remarks/>
+    
         windowText,
 
-        /// <remarks/>
+    
         captionText,
 
-        /// <remarks/>
+    
         activeBorder,
 
-        /// <remarks/>
+    
         inactiveBorder,
 
-        /// <remarks/>
+    
         appWorkspace,
 
-        /// <remarks/>
+    
         highlight,
 
-        /// <remarks/>
+    
         highlightText,
 
-        /// <remarks/>
+    
         btnFace,
 
-        /// <remarks/>
+    
         btnShadow,
 
-        /// <remarks/>
+    
         grayText,
 
-        /// <remarks/>
+    
         btnText,
 
-        /// <remarks/>
+    
         inactiveCaptionText,
 
-        /// <remarks/>
+    
         btnHighlight,
 
-        /// <remarks/>
+    
         [XmlEnum("3dDkShadow")]
         Item3dDkShadow,
 
-        /// <remarks/>
+    
         [XmlEnum("3dLight")]
         Item3dLight,
 
-        /// <remarks/>
+    
         infoText,
 
-        /// <remarks/>
+    
         infoBk,
 
-        /// <remarks/>
+    
         hotLight,
 
-        /// <remarks/>
+    
         gradientActiveCaption,
 
-        /// <remarks/>
+    
         gradientInactiveCaption,
 
-        /// <remarks/>
+    
         menuHighlight,
 
-        /// <remarks/>
+    
         menuBar,
     }
 
@@ -231,19 +231,19 @@ namespace NPOI.OpenXmlFormats.Dml
     public enum ST_BlipCompression
     {
 
-        /// <remarks/>
+    
         email,
 
-        /// <remarks/>
+    
         screen,
 
-        /// <remarks/>
+    
         print,
 
-        /// <remarks/>
+    
         hqprint,
 
-        /// <remarks/>
+    
         none,
     }
 
@@ -1023,190 +1023,190 @@ namespace NPOI.OpenXmlFormats.Dml
     public enum ST_PresetCameraType
     {
 
-        /// <remarks/>
+    
         legacyObliqueTopLeft,
 
-        /// <remarks/>
+    
         legacyObliqueTop,
 
-        /// <remarks/>
+    
         legacyObliqueTopRight,
 
-        /// <remarks/>
+    
         legacyObliqueLeft,
 
-        /// <remarks/>
+    
         legacyObliqueFront,
 
-        /// <remarks/>
+    
         legacyObliqueRight,
 
-        /// <remarks/>
+    
         legacyObliqueBottomLeft,
 
-        /// <remarks/>
+    
         legacyObliqueBottom,
 
-        /// <remarks/>
+    
         legacyObliqueBottomRight,
 
-        /// <remarks/>
+    
         legacyPerspectiveTopLeft,
 
-        /// <remarks/>
+    
         legacyPerspectiveTop,
 
-        /// <remarks/>
+    
         legacyPerspectiveTopRight,
 
-        /// <remarks/>
+    
         legacyPerspectiveLeft,
 
-        /// <remarks/>
+    
         legacyPerspectiveFront,
 
-        /// <remarks/>
+    
         legacyPerspectiveRight,
 
-        /// <remarks/>
+    
         legacyPerspectiveBottomLeft,
 
-        /// <remarks/>
+    
         legacyPerspectiveBottom,
 
-        /// <remarks/>
+    
         legacyPerspectiveBottomRight,
 
-        /// <remarks/>
+    
         orthographicFront,
 
-        /// <remarks/>
+    
         isometricTopUp,
 
-        /// <remarks/>
+    
         isometricTopDown,
 
-        /// <remarks/>
+    
         isometricBottomUp,
 
-        /// <remarks/>
+    
         isometricBottomDown,
 
-        /// <remarks/>
+    
         isometricLeftUp,
 
-        /// <remarks/>
+    
         isometricLeftDown,
 
-        /// <remarks/>
+    
         isometricRightUp,
 
-        /// <remarks/>
+    
         isometricRightDown,
 
-        /// <remarks/>
+    
         isometricOffAxis1Left,
 
-        /// <remarks/>
+    
         isometricOffAxis1Right,
 
-        /// <remarks/>
+    
         isometricOffAxis1Top,
 
-        /// <remarks/>
+    
         isometricOffAxis2Left,
 
-        /// <remarks/>
+    
         isometricOffAxis2Right,
 
-        /// <remarks/>
+    
         isometricOffAxis2Top,
 
-        /// <remarks/>
+    
         isometricOffAxis3Left,
 
-        /// <remarks/>
+    
         isometricOffAxis3Right,
 
-        /// <remarks/>
+    
         isometricOffAxis3Bottom,
 
-        /// <remarks/>
+    
         isometricOffAxis4Left,
 
-        /// <remarks/>
+    
         isometricOffAxis4Right,
 
-        /// <remarks/>
+    
         isometricOffAxis4Bottom,
 
-        /// <remarks/>
+    
         obliqueTopLeft,
 
-        /// <remarks/>
+    
         obliqueTop,
 
-        /// <remarks/>
+    
         obliqueTopRight,
 
-        /// <remarks/>
+    
         obliqueLeft,
 
-        /// <remarks/>
+    
         obliqueRight,
 
-        /// <remarks/>
+    
         obliqueBottomLeft,
 
-        /// <remarks/>
+    
         obliqueBottom,
 
-        /// <remarks/>
+    
         obliqueBottomRight,
 
-        /// <remarks/>
+    
         perspectiveFront,
 
-        /// <remarks/>
+    
         perspectiveLeft,
 
-        /// <remarks/>
+    
         perspectiveRight,
 
-        /// <remarks/>
+    
         perspectiveAbove,
 
-        /// <remarks/>
+    
         perspectiveBelow,
 
-        /// <remarks/>
+    
         perspectiveAboveLeftFacing,
 
-        /// <remarks/>
+    
         perspectiveAboveRightFacing,
 
-        /// <remarks/>
+    
         perspectiveContrastingLeftFacing,
 
-        /// <remarks/>
+    
         perspectiveContrastingRightFacing,
 
-        /// <remarks/>
+    
         perspectiveHeroicLeftFacing,
 
-        /// <remarks/>
+    
         perspectiveHeroicRightFacing,
 
-        /// <remarks/>
+    
         perspectiveHeroicExtremeLeftFacing,
 
-        /// <remarks/>
+    
         perspectiveHeroicExtremeRightFacing,
 
-        /// <remarks/>
+    
         perspectiveRelaxed,
 
-        /// <remarks/>
+    
         perspectiveRelaxedModerately,
     }
 
@@ -1266,113 +1266,113 @@ namespace NPOI.OpenXmlFormats.Dml
     public enum ST_LightRigType
     {
 
-        /// <remarks/>
+    
         legacyFlat1,
 
-        /// <remarks/>
+    
         legacyFlat2,
 
-        /// <remarks/>
+    
         legacyFlat3,
 
-        /// <remarks/>
+    
         legacyFlat4,
 
-        /// <remarks/>
+    
         legacyNormal1,
 
-        /// <remarks/>
+    
         legacyNormal2,
 
-        /// <remarks/>
+    
         legacyNormal3,
 
-        /// <remarks/>
+    
         legacyNormal4,
 
-        /// <remarks/>
+    
         legacyHarsh1,
 
-        /// <remarks/>
+    
         legacyHarsh2,
 
-        /// <remarks/>
+    
         legacyHarsh3,
 
-        /// <remarks/>
+    
         legacyHarsh4,
 
-        /// <remarks/>
+    
         threePt,
 
-        /// <remarks/>
+    
         balanced,
 
-        /// <remarks/>
+    
         soft,
 
-        /// <remarks/>
+    
         harsh,
 
-        /// <remarks/>
+    
         flood,
 
-        /// <remarks/>
+    
         contrasting,
 
-        /// <remarks/>
+    
         morning,
 
-        /// <remarks/>
+    
         sunrise,
 
-        /// <remarks/>
+    
         sunset,
 
-        /// <remarks/>
+    
         chilly,
 
-        /// <remarks/>
+    
         freezing,
 
-        /// <remarks/>
+    
         flat,
 
-        /// <remarks/>
+    
         twoPt,
 
-        /// <remarks/>
+    
         glow,
 
-        /// <remarks/>
+    
         brightRoom,
     }
 
     public enum ST_LightRigDirection
     {
 
-        /// <remarks/>
+    
         tl,
 
-        /// <remarks/>
+    
         t,
 
-        /// <remarks/>
+    
         tr,
 
-        /// <remarks/>
+    
         l,
 
-        /// <remarks/>
+    
         r,
 
-        /// <remarks/>
+    
         bl,
 
-        /// <remarks/>
+    
         b,
 
-        /// <remarks/>
+    
         br,
     }
 
@@ -1656,89 +1656,89 @@ namespace NPOI.OpenXmlFormats.Dml
     public enum ST_BevelPresetType
     {
 
-        /// <remarks/>
+    
         relaxedInset,
 
-        /// <remarks/>
+    
         circle,
 
-        /// <remarks/>
+    
         slope,
 
-        /// <remarks/>
+    
         cross,
 
-        /// <remarks/>
+    
         angle,
 
-        /// <remarks/>
+    
         softRound,
 
-        /// <remarks/>
+    
         convex,
 
-        /// <remarks/>
+    
         coolSlant,
 
-        /// <remarks/>
+    
         divot,
 
-        /// <remarks/>
+    
         riblet,
 
-        /// <remarks/>
+    
         hardEdge,
 
-        /// <remarks/>
+    
         artDeco,
     }
 
     public enum ST_PresetMaterialType
     {
 
-        /// <remarks/>
+    
         legacyMatte,
 
-        /// <remarks/>
+    
         legacyPlastic,
 
-        /// <remarks/>
+    
         legacyMetal,
 
-        /// <remarks/>
+    
         legacyWireframe,
 
-        /// <remarks/>
+    
         matte,
 
-        /// <remarks/>
+    
         plastic,
 
-        /// <remarks/>
+    
         metal,
 
-        /// <remarks/>
+    
         warmMatte,
 
-        /// <remarks/>
+    
         translucentPowder,
 
-        /// <remarks/>
+    
         powder,
 
-        /// <remarks/>
+    
         dkEdge,
 
-        /// <remarks/>
+    
         softEdge,
 
-        /// <remarks/>
+    
         clear,
 
-        /// <remarks/>
+    
         flat,
 
-        /// <remarks/>
+    
         softmetal,
     }
 
@@ -1931,7 +1931,7 @@ namespace NPOI.OpenXmlFormats.Dml
         {
             return this.solidFillField != null;
         }
-        [System.Xml.Serialization.XmlElementAttribute(Order = 0)]
+        [System.Xml.Serialization.XmlElement(Order = 0)]
         public CT_NoFillProperties noFill
         {
             get
@@ -1943,7 +1943,7 @@ namespace NPOI.OpenXmlFormats.Dml
                 this.noFillField = value;
             }
         }
-        [System.Xml.Serialization.XmlElementAttribute(Order = 1)]
+        [System.Xml.Serialization.XmlElement(Order = 1)]
         public CT_SolidColorFillProperties solidFill
         {
             get
@@ -1955,7 +1955,7 @@ namespace NPOI.OpenXmlFormats.Dml
                 this.solidFillField = value;
             }
         }
-        [System.Xml.Serialization.XmlElementAttribute(Order = 2)]
+        [System.Xml.Serialization.XmlElement(Order = 2)]
         public CT_GradientFillProperties gradFill
         {
             get
@@ -1967,7 +1967,7 @@ namespace NPOI.OpenXmlFormats.Dml
                 this.gradFillField = value;
             }
         }
-        [System.Xml.Serialization.XmlElementAttribute(Order = 3)]
+        [System.Xml.Serialization.XmlElement(Order = 3)]
         public CT_PatternFillProperties pattFill
         {
             get
@@ -1979,7 +1979,7 @@ namespace NPOI.OpenXmlFormats.Dml
                 this.pattFillField = value;
             }
         }
-        [System.Xml.Serialization.XmlElementAttribute(Order = 4)]
+        [System.Xml.Serialization.XmlElement(Order = 4)]
         public CT_PresetLineDashProperties prstDash
         {
             get
@@ -2005,7 +2005,7 @@ namespace NPOI.OpenXmlFormats.Dml
                 this.custDashField = value;
             }
         }
-        [System.Xml.Serialization.XmlElementAttribute(Order = 6)]
+        [System.Xml.Serialization.XmlElement(Order = 6)]
         public CT_LineJoinRound round
         {
             get
@@ -2017,7 +2017,7 @@ namespace NPOI.OpenXmlFormats.Dml
                 this.roundField = value;
             }
         }
-        [System.Xml.Serialization.XmlElementAttribute(Order = 7)]
+        [System.Xml.Serialization.XmlElement(Order = 7)]
         public CT_LineJoinBevel bevel
         {
             get
@@ -2029,7 +2029,7 @@ namespace NPOI.OpenXmlFormats.Dml
                 this.bevelField = value;
             }
         }
-        [System.Xml.Serialization.XmlElementAttribute(Order = 8)]
+        [System.Xml.Serialization.XmlElement(Order = 8)]
         public CT_LineJoinMiterProperties miter
         {
             get
@@ -2041,7 +2041,7 @@ namespace NPOI.OpenXmlFormats.Dml
                 this.miterField = value;
             }
         }
-        [System.Xml.Serialization.XmlElementAttribute(Order = 9)]
+        [System.Xml.Serialization.XmlElement(Order = 9)]
         public CT_LineEndProperties headEnd
         {
             get
@@ -2053,7 +2053,7 @@ namespace NPOI.OpenXmlFormats.Dml
                 this.headEndField = value;
             }
         }
-        [System.Xml.Serialization.XmlElementAttribute(Order = 10)]
+        [System.Xml.Serialization.XmlElement(Order = 10)]
         public CT_LineEndProperties tailEnd
         {
             get
@@ -2065,7 +2065,7 @@ namespace NPOI.OpenXmlFormats.Dml
                 this.tailEndField = value;
             }
         }
-        [System.Xml.Serialization.XmlElementAttribute(Order = 11)]
+        [System.Xml.Serialization.XmlElement(Order = 11)]
         public CT_OfficeArtExtensionList extLst
         {
             get
@@ -2217,37 +2217,37 @@ namespace NPOI.OpenXmlFormats.Dml
     public enum ST_PresetLineDashVal
     {
 
-        /// <remarks/>
+    
         solid,
 
-        /// <remarks/>
+    
         dot,
 
-        /// <remarks/>
+    
         dash,
 
-        /// <remarks/>
+    
         lgDash,
 
-        /// <remarks/>
+    
         dashDot,
 
-        /// <remarks/>
+    
         lgDashDot,
 
-        /// <remarks/>
+    
         lgDashDotDot,
 
-        /// <remarks/>
+    
         sysDash,
 
-        /// <remarks/>
+    
         sysDot,
 
-        /// <remarks/>
+    
         sysDashDot,
 
-        /// <remarks/>
+    
         sysDashDotDot,
     }
 
@@ -2417,61 +2417,61 @@ namespace NPOI.OpenXmlFormats.Dml
     public enum ST_LineEndType
     {
 
-        /// <remarks/>
+    
         none,
 
-        /// <remarks/>
+    
         triangle,
 
-        /// <remarks/>
+    
         stealth,
 
-        /// <remarks/>
+    
         diamond,
 
-        /// <remarks/>
+    
         oval,
 
-        /// <remarks/>
+    
         arrow,
     }
 
     public enum ST_LineEndWidth
     {
 
-        /// <remarks/>
+    
         sm,
 
-        /// <remarks/>
+    
         med,
 
-        /// <remarks/>
+    
         lg,
     }
 
     public enum ST_LineEndLength
     {
 
-        /// <remarks/>
+    
         sm,
 
-        /// <remarks/>
+    
         med,
 
-        /// <remarks/>
+    
         lg,
     }
 
     public enum ST_LineCap
     {
 
-        /// <remarks/>
+    
         rnd,
 
-        /// <remarks/>
+    
         sq,
 
-        /// <remarks/>
+    
         flat,
     }
 
@@ -2479,10 +2479,10 @@ namespace NPOI.OpenXmlFormats.Dml
     public enum ST_PenAlignment
     {
 
-        /// <remarks/>
+    
         ctr,
 
-        /// <remarks/>
+    
         @in,
     }
 
@@ -2710,8 +2710,8 @@ namespace NPOI.OpenXmlFormats.Dml
     {
     }
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
-    [System.Xml.Serialization.XmlRootAttribute(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
+    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
     public class CT_PresetColor
     {
 
@@ -2728,34 +2728,34 @@ namespace NPOI.OpenXmlFormats.Dml
             this.itemsElementNameField = new List<ItemsChoiceType1>();
             this.itemsField = new List<object>();
         }
-        [System.Xml.Serialization.XmlElementAttribute("alpha", typeof(CT_PositiveFixedPercentage), Order = 0)]
-        [System.Xml.Serialization.XmlElementAttribute("alphaMod", typeof(CT_PositivePercentage), Order = 0)]
-        [System.Xml.Serialization.XmlElementAttribute("alphaOff", typeof(CT_FixedPercentage), Order = 0)]
-        [System.Xml.Serialization.XmlElementAttribute("blue", typeof(CT_Percentage), Order = 0)]
-        [System.Xml.Serialization.XmlElementAttribute("blueMod", typeof(CT_Percentage), Order = 0)]
-        [System.Xml.Serialization.XmlElementAttribute("blueOff", typeof(CT_Percentage), Order = 0)]
-        [System.Xml.Serialization.XmlElementAttribute("comp", typeof(CT_ComplementTransform), Order = 0)]
-        [System.Xml.Serialization.XmlElementAttribute("gamma", typeof(CT_GammaTransform), Order = 0)]
-        [System.Xml.Serialization.XmlElementAttribute("gray", typeof(CT_GrayscaleTransform), Order = 0)]
-        [System.Xml.Serialization.XmlElementAttribute("green", typeof(CT_Percentage), Order = 0)]
-        [System.Xml.Serialization.XmlElementAttribute("greenMod", typeof(CT_Percentage), Order = 0)]
-        [System.Xml.Serialization.XmlElementAttribute("greenOff", typeof(CT_Percentage), Order = 0)]
-        [System.Xml.Serialization.XmlElementAttribute("hue", typeof(CT_PositiveFixedAngle), Order = 0)]
-        [System.Xml.Serialization.XmlElementAttribute("hueMod", typeof(CT_PositivePercentage), Order = 0)]
-        [System.Xml.Serialization.XmlElementAttribute("hueOff", typeof(CT_Angle), Order = 0)]
-        [System.Xml.Serialization.XmlElementAttribute("inv", typeof(CT_InverseTransform), Order = 0)]
-        [System.Xml.Serialization.XmlElementAttribute("invGamma", typeof(CT_InverseGammaTransform), Order = 0)]
-        [System.Xml.Serialization.XmlElementAttribute("lum", typeof(CT_Percentage), Order = 0)]
-        [System.Xml.Serialization.XmlElementAttribute("lumMod", typeof(CT_Percentage), Order = 0)]
-        [System.Xml.Serialization.XmlElementAttribute("lumOff", typeof(CT_Percentage), Order = 0)]
-        [System.Xml.Serialization.XmlElementAttribute("red", typeof(CT_Percentage), Order = 0)]
-        [System.Xml.Serialization.XmlElementAttribute("redMod", typeof(CT_Percentage), Order = 0)]
-        [System.Xml.Serialization.XmlElementAttribute("redOff", typeof(CT_Percentage), Order = 0)]
-        [System.Xml.Serialization.XmlElementAttribute("sat", typeof(CT_Percentage), Order = 0)]
-        [System.Xml.Serialization.XmlElementAttribute("satMod", typeof(CT_Percentage), Order = 0)]
-        [System.Xml.Serialization.XmlElementAttribute("satOff", typeof(CT_Percentage), Order = 0)]
-        [System.Xml.Serialization.XmlElementAttribute("shade", typeof(CT_PositiveFixedPercentage), Order = 0)]
-        [System.Xml.Serialization.XmlElementAttribute("tint", typeof(CT_PositiveFixedPercentage), Order = 0)]
+        [System.Xml.Serialization.XmlElement("alpha", typeof(CT_PositiveFixedPercentage), Order = 0)]
+        [System.Xml.Serialization.XmlElement("alphaMod", typeof(CT_PositivePercentage), Order = 0)]
+        [System.Xml.Serialization.XmlElement("alphaOff", typeof(CT_FixedPercentage), Order = 0)]
+        [System.Xml.Serialization.XmlElement("blue", typeof(CT_Percentage), Order = 0)]
+        [System.Xml.Serialization.XmlElement("blueMod", typeof(CT_Percentage), Order = 0)]
+        [System.Xml.Serialization.XmlElement("blueOff", typeof(CT_Percentage), Order = 0)]
+        [System.Xml.Serialization.XmlElement("comp", typeof(CT_ComplementTransform), Order = 0)]
+        [System.Xml.Serialization.XmlElement("gamma", typeof(CT_GammaTransform), Order = 0)]
+        [System.Xml.Serialization.XmlElement("gray", typeof(CT_GrayscaleTransform), Order = 0)]
+        [System.Xml.Serialization.XmlElement("green", typeof(CT_Percentage), Order = 0)]
+        [System.Xml.Serialization.XmlElement("greenMod", typeof(CT_Percentage), Order = 0)]
+        [System.Xml.Serialization.XmlElement("greenOff", typeof(CT_Percentage), Order = 0)]
+        [System.Xml.Serialization.XmlElement("hue", typeof(CT_PositiveFixedAngle), Order = 0)]
+        [System.Xml.Serialization.XmlElement("hueMod", typeof(CT_PositivePercentage), Order = 0)]
+        [System.Xml.Serialization.XmlElement("hueOff", typeof(CT_Angle), Order = 0)]
+        [System.Xml.Serialization.XmlElement("inv", typeof(CT_InverseTransform), Order = 0)]
+        [System.Xml.Serialization.XmlElement("invGamma", typeof(CT_InverseGammaTransform), Order = 0)]
+        [System.Xml.Serialization.XmlElement("lum", typeof(CT_Percentage), Order = 0)]
+        [System.Xml.Serialization.XmlElement("lumMod", typeof(CT_Percentage), Order = 0)]
+        [System.Xml.Serialization.XmlElement("lumOff", typeof(CT_Percentage), Order = 0)]
+        [System.Xml.Serialization.XmlElement("red", typeof(CT_Percentage), Order = 0)]
+        [System.Xml.Serialization.XmlElement("redMod", typeof(CT_Percentage), Order = 0)]
+        [System.Xml.Serialization.XmlElement("redOff", typeof(CT_Percentage), Order = 0)]
+        [System.Xml.Serialization.XmlElement("sat", typeof(CT_Percentage), Order = 0)]
+        [System.Xml.Serialization.XmlElement("satMod", typeof(CT_Percentage), Order = 0)]
+        [System.Xml.Serialization.XmlElement("satOff", typeof(CT_Percentage), Order = 0)]
+        [System.Xml.Serialization.XmlElement("shade", typeof(CT_PositiveFixedPercentage), Order = 0)]
+        [System.Xml.Serialization.XmlElement("tint", typeof(CT_PositiveFixedPercentage), Order = 0)]
         [System.Xml.Serialization.XmlChoiceIdentifierAttribute("ItemsElementName")]
         public object[] Items
         {
@@ -2771,7 +2771,7 @@ namespace NPOI.OpenXmlFormats.Dml
                     this.itemsField = new List<object>(value);
             }
         }
-        [System.Xml.Serialization.XmlElementAttribute("ItemsElementName", Order = 1)]
+        [System.Xml.Serialization.XmlElement("ItemsElementName", Order = 1)]
         [System.Xml.Serialization.XmlIgnore]
         public ItemsChoiceType1[] ItemsElementName
         {
@@ -2816,19 +2816,19 @@ namespace NPOI.OpenXmlFormats.Dml
     public enum ST_CompoundLine
     {
 
-        /// <remarks/>
+    
         sng,
 
-        /// <remarks/>
+    
         dbl,
 
-        /// <remarks/>
+    
         thickThin,
 
-        /// <remarks/>
+    
         thinThick,
 
-        /// <remarks/>
+    
         tri,
     }
 }

@@ -152,40 +152,40 @@ namespace NPOI.OpenXmlFormats.Dml
     public enum ST_ColorSchemeIndex
     {
 
-        /// <remarks/>
+    
         dk1,
 
-        /// <remarks/>
+    
         lt1,
 
-        /// <remarks/>
+    
         dk2,
 
-        /// <remarks/>
+    
         lt2,
 
-        /// <remarks/>
+    
         accent1,
 
-        /// <remarks/>
+    
         accent2,
 
-        /// <remarks/>
+    
         accent3,
 
-        /// <remarks/>
+    
         accent4,
 
-        /// <remarks/>
+    
         accent5,
 
-        /// <remarks/>
+    
         accent6,
 
-        /// <remarks/>
+    
         hlink,
 
-        /// <remarks/>
+    
         folHlink,
     }
     [Serializable]

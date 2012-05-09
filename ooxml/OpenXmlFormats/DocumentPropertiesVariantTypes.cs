@@ -16,41 +16,41 @@ namespace NPOI.OpenXmlFormats
         private object itemField;
 
         private ItemChoiceType itemElementNameField;
-        [System.Xml.Serialization.XmlElementAttribute("array", typeof(CT_Array))]
-        [System.Xml.Serialization.XmlElementAttribute("blob", typeof(byte[]), DataType = "base64Binary")]
-        [System.Xml.Serialization.XmlElementAttribute("bool", typeof(bool))]
-        [System.Xml.Serialization.XmlElementAttribute("bstr", typeof(string))]
-        [System.Xml.Serialization.XmlElementAttribute("cf", typeof(CT_Cf))]
-        [System.Xml.Serialization.XmlElementAttribute("clsid", typeof(string))]
-        [System.Xml.Serialization.XmlElementAttribute("cy", typeof(string))]
-        [System.Xml.Serialization.XmlElementAttribute("date", typeof(System.DateTime))]
-        [System.Xml.Serialization.XmlElementAttribute("decimal", typeof(decimal))]
-        [System.Xml.Serialization.XmlElementAttribute("empty", typeof(CT_Empty))]
-        [System.Xml.Serialization.XmlElementAttribute("error", typeof(string))]
-        [System.Xml.Serialization.XmlElementAttribute("filetime", typeof(System.DateTime))]
-        [System.Xml.Serialization.XmlElementAttribute("i1", typeof(sbyte))]
-        [System.Xml.Serialization.XmlElementAttribute("i2", typeof(short))]
-        [System.Xml.Serialization.XmlElementAttribute("i4", typeof(int))]
-        [System.Xml.Serialization.XmlElementAttribute("i8", typeof(long))]
-        [System.Xml.Serialization.XmlElementAttribute("int", typeof(int))]
-        [System.Xml.Serialization.XmlElementAttribute("lpstr", typeof(string))]
-        [System.Xml.Serialization.XmlElementAttribute("lpwstr", typeof(string))]
-        [System.Xml.Serialization.XmlElementAttribute("null", typeof(CT_Null))]
-        [System.Xml.Serialization.XmlElementAttribute("oblob", typeof(byte[]), DataType = "base64Binary")]
-        [System.Xml.Serialization.XmlElementAttribute("ostorage", typeof(byte[]), DataType = "base64Binary")]
-        [System.Xml.Serialization.XmlElementAttribute("ostream", typeof(byte[]), DataType = "base64Binary")]
-        [System.Xml.Serialization.XmlElementAttribute("r4", typeof(float))]
-        [System.Xml.Serialization.XmlElementAttribute("r8", typeof(double))]
-        [System.Xml.Serialization.XmlElementAttribute("storage", typeof(byte[]), DataType = "base64Binary")]
-        [System.Xml.Serialization.XmlElementAttribute("stream", typeof(byte[]), DataType = "base64Binary")]
-        [System.Xml.Serialization.XmlElementAttribute("ui1", typeof(byte))]
-        [System.Xml.Serialization.XmlElementAttribute("ui2", typeof(ushort))]
-        [System.Xml.Serialization.XmlElementAttribute("ui4", typeof(uint))]
-        [System.Xml.Serialization.XmlElementAttribute("ui8", typeof(ulong))]
-        [System.Xml.Serialization.XmlElementAttribute("uint", typeof(uint))]
-        //[System.Xml.Serialization.XmlElementAttribute("variant", typeof(CT_Variant))]
-        [System.Xml.Serialization.XmlElementAttribute("vector", typeof(CT_Vector))]
-        [System.Xml.Serialization.XmlElementAttribute("vstream", typeof(CT_Vstream))]
+        [System.Xml.Serialization.XmlElement("array", typeof(CT_Array))]
+        [System.Xml.Serialization.XmlElement("blob", typeof(byte[]), DataType = "base64Binary")]
+        [System.Xml.Serialization.XmlElement("bool", typeof(bool))]
+        [System.Xml.Serialization.XmlElement("bstr", typeof(string))]
+        [System.Xml.Serialization.XmlElement("cf", typeof(CT_Cf))]
+        [System.Xml.Serialization.XmlElement("clsid", typeof(string))]
+        [System.Xml.Serialization.XmlElement("cy", typeof(string))]
+        [System.Xml.Serialization.XmlElement("date", typeof(System.DateTime))]
+        [System.Xml.Serialization.XmlElement("decimal", typeof(decimal))]
+        [System.Xml.Serialization.XmlElement("empty", typeof(CT_Empty))]
+        [System.Xml.Serialization.XmlElement("error", typeof(string))]
+        [System.Xml.Serialization.XmlElement("filetime", typeof(System.DateTime))]
+        [System.Xml.Serialization.XmlElement("i1", typeof(sbyte))]
+        [System.Xml.Serialization.XmlElement("i2", typeof(short))]
+        [System.Xml.Serialization.XmlElement("i4", typeof(int))]
+        [System.Xml.Serialization.XmlElement("i8", typeof(long))]
+        [System.Xml.Serialization.XmlElement("int", typeof(int))]
+        [System.Xml.Serialization.XmlElement("lpstr", typeof(string))]
+        [System.Xml.Serialization.XmlElement("lpwstr", typeof(string))]
+        [System.Xml.Serialization.XmlElement("null", typeof(CT_Null))]
+        [System.Xml.Serialization.XmlElement("oblob", typeof(byte[]), DataType = "base64Binary")]
+        [System.Xml.Serialization.XmlElement("ostorage", typeof(byte[]), DataType = "base64Binary")]
+        [System.Xml.Serialization.XmlElement("ostream", typeof(byte[]), DataType = "base64Binary")]
+        [System.Xml.Serialization.XmlElement("r4", typeof(float))]
+        [System.Xml.Serialization.XmlElement("r8", typeof(double))]
+        [System.Xml.Serialization.XmlElement("storage", typeof(byte[]), DataType = "base64Binary")]
+        [System.Xml.Serialization.XmlElement("stream", typeof(byte[]), DataType = "base64Binary")]
+        [System.Xml.Serialization.XmlElement("ui1", typeof(byte))]
+        [System.Xml.Serialization.XmlElement("ui2", typeof(ushort))]
+        [System.Xml.Serialization.XmlElement("ui4", typeof(uint))]
+        [System.Xml.Serialization.XmlElement("ui8", typeof(ulong))]
+        [System.Xml.Serialization.XmlElement("uint", typeof(uint))]
+        //[System.Xml.Serialization.XmlElement("variant", typeof(CT_Variant))]
+        [System.Xml.Serialization.XmlElement("vector", typeof(CT_Vector))]
+        [System.Xml.Serialization.XmlElement("vstream", typeof(CT_Vstream))]
         [XmlChoiceIdentifierAttribute("ItemElementName")]
         public object Item
         {
@@ -78,7 +78,7 @@ namespace NPOI.OpenXmlFormats
         }
     }
 
-    /// <remarks/>
+
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
@@ -96,7 +96,7 @@ namespace NPOI.OpenXmlFormats
 
         private ST_ArrayBaseType baseTypeField;
 
-        /// <remarks/>
+    
         [XmlElement("bool", typeof(bool))]
         [XmlElement("bstr", typeof(string))]
         [XmlElement("cy", typeof(string))]
@@ -127,7 +127,7 @@ namespace NPOI.OpenXmlFormats
             }
         }
 
-        /// <remarks/>
+    
         //[XmlElement("ItemsElementName")]
         [XmlIgnore]
         public ItemsChoiceType[] ItemsElementName
@@ -142,7 +142,7 @@ namespace NPOI.OpenXmlFormats
             }
         }
 
-        /// <remarks/>
+    
         [XmlAttribute]
         public int lBounds
         {
@@ -156,7 +156,7 @@ namespace NPOI.OpenXmlFormats
             }
         }
 
-        /// <remarks/>
+    
         [XmlAttribute]
         public int uBounds
         {
@@ -170,7 +170,7 @@ namespace NPOI.OpenXmlFormats
             }
         }
 
-        /// <remarks/>
+    
         [XmlAttribute]
         public ST_ArrayBaseType baseType
         {
@@ -343,27 +343,27 @@ namespace NPOI.OpenXmlFormats
             this.itemsElementNameField = new List<ST_VectorBaseType>();
             this.itemsField = new List<object>();
         }
-        [System.Xml.Serialization.XmlElementAttribute("bool", typeof(bool))]
-        [System.Xml.Serialization.XmlElementAttribute("bstr", typeof(string))]
-        [System.Xml.Serialization.XmlElementAttribute("cf", typeof(CT_Cf))]
-        [System.Xml.Serialization.XmlElementAttribute("clsid", typeof(string))]
-        [System.Xml.Serialization.XmlElementAttribute("cy", typeof(string))]
-        [System.Xml.Serialization.XmlElementAttribute("date", typeof(System.DateTime))]
-        [System.Xml.Serialization.XmlElementAttribute("error", typeof(string))]
-        [System.Xml.Serialization.XmlElementAttribute("filetime", typeof(System.DateTime))]
-        [System.Xml.Serialization.XmlElementAttribute("i1", typeof(sbyte))]
-        [System.Xml.Serialization.XmlElementAttribute("i2", typeof(short))]
-        [System.Xml.Serialization.XmlElementAttribute("i4", typeof(int))]
-        [System.Xml.Serialization.XmlElementAttribute("i8", typeof(long))]
-        [System.Xml.Serialization.XmlElementAttribute("lpstr", typeof(string))]
-        [System.Xml.Serialization.XmlElementAttribute("lpwstr", typeof(string))]
-        [System.Xml.Serialization.XmlElementAttribute("r4", typeof(float))]
-        [System.Xml.Serialization.XmlElementAttribute("r8", typeof(double))]
-        [System.Xml.Serialization.XmlElementAttribute("ui1", typeof(byte))]
-        [System.Xml.Serialization.XmlElementAttribute("ui2", typeof(ushort))]
-        [System.Xml.Serialization.XmlElementAttribute("ui4", typeof(uint))]
-        [System.Xml.Serialization.XmlElementAttribute("ui8", typeof(ulong))]
-        [System.Xml.Serialization.XmlElementAttribute("variant", typeof(CT_Variant))]
+        [System.Xml.Serialization.XmlElement("bool", typeof(bool))]
+        [System.Xml.Serialization.XmlElement("bstr", typeof(string))]
+        [System.Xml.Serialization.XmlElement("cf", typeof(CT_Cf))]
+        [System.Xml.Serialization.XmlElement("clsid", typeof(string))]
+        [System.Xml.Serialization.XmlElement("cy", typeof(string))]
+        [System.Xml.Serialization.XmlElement("date", typeof(System.DateTime))]
+        [System.Xml.Serialization.XmlElement("error", typeof(string))]
+        [System.Xml.Serialization.XmlElement("filetime", typeof(System.DateTime))]
+        [System.Xml.Serialization.XmlElement("i1", typeof(sbyte))]
+        [System.Xml.Serialization.XmlElement("i2", typeof(short))]
+        [System.Xml.Serialization.XmlElement("i4", typeof(int))]
+        [System.Xml.Serialization.XmlElement("i8", typeof(long))]
+        [System.Xml.Serialization.XmlElement("lpstr", typeof(string))]
+        [System.Xml.Serialization.XmlElement("lpwstr", typeof(string))]
+        [System.Xml.Serialization.XmlElement("r4", typeof(float))]
+        [System.Xml.Serialization.XmlElement("r8", typeof(double))]
+        [System.Xml.Serialization.XmlElement("ui1", typeof(byte))]
+        [System.Xml.Serialization.XmlElement("ui2", typeof(ushort))]
+        [System.Xml.Serialization.XmlElement("ui4", typeof(uint))]
+        [System.Xml.Serialization.XmlElement("ui8", typeof(ulong))]
+        [System.Xml.Serialization.XmlElement("variant", typeof(CT_Variant))]
         [XmlChoiceIdentifierAttribute("ItemsElementName")]
         public object[] Items
         {
@@ -425,67 +425,67 @@ namespace NPOI.OpenXmlFormats
     public enum ST_VectorBaseType
     {
 
-        /// <remarks/>
+    
         variant,
 
-        /// <remarks/>
+    
         i1,
 
-        /// <remarks/>
+    
         i2,
 
-        /// <remarks/>
+    
         i4,
 
-        /// <remarks/>
+    
         i8,
 
-        /// <remarks/>
+    
         ui1,
 
-        /// <remarks/>
+    
         ui2,
 
-        /// <remarks/>
+    
         ui4,
 
-        /// <remarks/>
+    
         ui8,
 
-        /// <remarks/>
+    
         r4,
 
-        /// <remarks/>
+    
         r8,
 
-        /// <remarks/>
+    
         lpstr,
 
-        /// <remarks/>
+    
         lpwstr,
 
-        /// <remarks/>
+    
         bstr,
 
-        /// <remarks/>
+    
         date,
 
-        /// <remarks/>
+    
         filetime,
 
-        /// <remarks/>
+    
         @bool,
 
-        /// <remarks/>
+    
         cy,
 
-        /// <remarks/>
+    
         error,
 
-        /// <remarks/>
+    
         clsid,
 
-        /// <remarks/>
+    
         cf,
     }
 

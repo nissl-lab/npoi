@@ -12,30 +12,31 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     using System.Xml.Serialization;
     using NPOI.OpenXmlFormats.Dml;
     using System.ComponentModel;
+    using System.Xml.Schema;
 
     public enum ST_SmartTagShow
     {
 
-        /// <remarks/>
+    
         all,
 
-        /// <remarks/>
+    
         none,
 
-        /// <remarks/>
+    
         noIndicator,
     }
 
     public enum ST_CalcMode
     {
 
-        /// <remarks/>
+    
         manual,
 
-        /// <remarks/>
+    
         auto,
 
-        /// <remarks/>
+    
         autoNoTable,
     }
 
@@ -188,13 +189,13 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     public enum ST_SheetState
     {
 
-        /// <remarks/>
+    
         visible,
 
-        /// <remarks/>
+    
         hidden,
 
-        /// <remarks/>
+    
         veryHidden,
     }
 
@@ -1984,29 +1985,29 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     public enum ST_Pane
     {
 
-        /// <remarks/>
+    
         bottomRight,
 
-        /// <remarks/>
+    
         topRight,
 
-        /// <remarks/>
+    
         bottomLeft,
 
-        /// <remarks/>
+    
         topLeft,
     }
 
     public enum ST_PaneState
     {
 
-        /// <remarks/>
+    
         split,
 
-        /// <remarks/>
+    
         frozen,
 
-        /// <remarks/>
+    
         frozenSplit,
     }
 
@@ -2382,7 +2383,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.clickField = value;
             }
         }
-        [XmlAttribute]
+        // TODO is the following correct?
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/relationships")]
         public string id
         {
             get
@@ -3080,13 +3082,13 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     public enum ST_SheetViewType
     {
 
-        /// <remarks/>
+    
         normal,
 
-        /// <remarks/>
+    
         pageBreakPreview,
 
-        /// <remarks/>
+    
         pageLayout,
     }
 
@@ -4446,16 +4448,16 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     public enum ST_CellFormulaType
     {
 
-        /// <remarks/>
+    
         normal,
 
-        /// <remarks/>
+    
         array,
 
-        /// <remarks/>
+    
         dataTable,
 
-        /// <remarks/>
+    
         shared,
     }
     [System.Serializable]
@@ -4464,22 +4466,22 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     public enum ST_CellType
     {
 
-        /// <remarks/>
+    
         b,
 
-        /// <remarks/>
+    
         n,
 
-        /// <remarks/>
+    
         e,
 
-        /// <remarks/>
+    
         s,
 
-        /// <remarks/>
+    
         str,
 
-        /// <remarks/>
+    
         inlineStr,
     }
 
@@ -5386,6 +5388,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
+        // TODO is the following correct?
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/relationships")]
         public string id
         {
             get
@@ -5400,31 +5404,34 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     }
 
     [Serializable]
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
+    [XmlType("customSheetView", Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public class CT_CustomSheetView
     {
+        // all elementes are optional
 
-        private CT_Pane paneField;
+        private CT_Pane paneField = null;
 
-        private CT_Selection selectionField;
+        private CT_Selection selectionField = null;
 
-        private CT_PageBreak rowBreaksField;
+        private CT_PageBreak rowBreaksField = null;
 
-        private CT_PageBreak colBreaksField;
+        private CT_PageBreak colBreaksField = null;
 
-        private CT_PageMargins pageMarginsField;
+        private CT_PageMargins pageMarginsField = null;
 
-        private CT_PrintOptions printOptionsField;
+        private CT_PrintOptions printOptionsField = null;
 
-        private CT_PageSetup pageSetupField;
+        private CT_PageSetup pageSetupField = null;
 
-        private CT_HeaderFooter headerFooterField;
+        private CT_HeaderFooter headerFooterField = null;
 
-        private CT_AutoFilter autoFilterField;
+        private CT_AutoFilter autoFilterField = null;
 
-        private CT_ExtensionList extLstField;
+        private CT_ExtensionList extLstField = null;
 
-        private string guidField;
+        // these are optional attributes except guid - TODO make them optional
+
+        private string guidField = string.Empty; // 1..1
 
         private uint scaleField;
 
@@ -5464,37 +5471,38 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         private string topLeftCellField;
 
-        public CT_CustomSheetView()
-        {
-            this.extLstField = new CT_ExtensionList();
-            this.autoFilterField = new CT_AutoFilter();
-            this.headerFooterField = new CT_HeaderFooter();
-            this.pageSetupField = new CT_PageSetup();
-            this.printOptionsField = new CT_PrintOptions();
-            this.pageMarginsField = new CT_PageMargins();
-            this.colBreaksField = new CT_PageBreak();
-            this.rowBreaksField = new CT_PageBreak();
-            this.selectionField = new CT_Selection();
-            this.paneField = new CT_Pane();
-            this.scaleField = ((uint)(100));
-            this.colorIdField = ((uint)(64));
-            this.showPageBreaksField = false;
-            this.showFormulasField = false;
-            this.showGridLinesField = true;
-            this.showRowColField = true;
-            this.outlineSymbolsField = true;
-            this.zeroValuesField = true;
-            this.fitToPageField = false;
-            this.printAreaField = false;
-            this.filterField = false;
-            this.showAutoFilterField = false;
-            this.hiddenRowsField = false;
-            this.hiddenColumnsField = false;
-            this.stateField = ST_SheetState.visible;
-            this.filterUniqueField = false;
-            this.viewField = ST_SheetViewType.normal;
-            this.showRulerField = true;
-        }
+        //public CT_CustomSheetView()
+        //{
+
+        //    this.extLstField = new CT_ExtensionList();
+        //    this.autoFilterField = new CT_AutoFilter();
+        //    this.headerFooterField = new CT_HeaderFooter();
+        //    this.pageSetupField = new CT_PageSetup();
+        //    this.printOptionsField = new CT_PrintOptions();
+        //    this.pageMarginsField = new CT_PageMargins();
+        //    this.colBreaksField = new CT_PageBreak();
+        //    this.rowBreaksField = new CT_PageBreak();
+        //    this.selectionField = new CT_Selection();
+        //    this.paneField = new CT_Pane();
+        //    this.scaleField = ((uint)(100));
+        //    this.colorIdField = ((uint)(64));
+        //    this.showPageBreaksField = false;
+        //    this.showFormulasField = false;
+        //    this.showGridLinesField = true;
+        //    this.showRowColField = true;
+        //    this.outlineSymbolsField = true;
+        //    this.zeroValuesField = true;
+        //    this.fitToPageField = false;
+        //    this.printAreaField = false;
+        //    this.filterField = false;
+        //    this.showAutoFilterField = false;
+        //    this.hiddenRowsField = false;
+        //    this.hiddenColumnsField = false;
+        //    this.stateField = ST_SheetState.visible;
+        //    this.filterUniqueField = false;
+        //    this.viewField = ST_SheetViewType.normal;
+        //    this.showRulerField = true;
+        //}
 
         public CT_Pane pane
         {
@@ -6483,7 +6491,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.copiesField = value;
             }
         }
-        [XmlAttribute]
+        // TODO is the following correct?
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/relationships")]
         public string id
         {
             get
@@ -6500,52 +6509,52 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     public enum ST_PageOrder
     {
 
-        /// <remarks/>
+    
         downThenOver,
 
-        /// <remarks/>
+    
         overThenDown,
     }
 
     public enum ST_Orientation
     {
 
-        /// <remarks/>
+    
         @default,
 
-        /// <remarks/>
+    
         portrait,
 
-        /// <remarks/>
+    
         landscape,
     }
 
     public enum ST_CellComments
     {
 
-        /// <remarks/>
+    
         none,
 
-        /// <remarks/>
+    
         asDisplayed,
 
-        /// <remarks/>
+    
         atEnd,
     }
 
     public enum ST_PrintError
     {
 
-        /// <remarks/>
+    
         displayed,
 
-        /// <remarks/>
+    
         blank,
 
-        /// <remarks/>
+    
         dash,
 
-        /// <remarks/>
+    
         NA,
     }
 
@@ -7406,22 +7415,22 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     public enum ST_CfvoType
     {
 
-        /// <remarks/>
+    
         num,
 
-        /// <remarks/>
+    
         percent,
 
-        /// <remarks/>
+    
         max,
 
-        /// <remarks/>
+    
         min,
 
-        /// <remarks/>
+    
         formula,
 
-        /// <remarks/>
+    
         percentile,
     }
 
@@ -7605,132 +7614,132 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     public enum ST_CfType
     {
 
-        /// <remarks/>
+    
         expression,
 
-        /// <remarks/>
+    
         cellIs,
 
-        /// <remarks/>
+    
         colorScale,
 
-        /// <remarks/>
+    
         dataBar,
 
-        /// <remarks/>
+    
         iconSet,
 
-        /// <remarks/>
+    
         top10,
 
-        /// <remarks/>
+    
         uniqueValues,
 
-        /// <remarks/>
+    
         duplicateValues,
 
-        /// <remarks/>
+    
         containsText,
 
-        /// <remarks/>
+    
         notContainsText,
 
-        /// <remarks/>
+    
         beginsWith,
 
-        /// <remarks/>
+    
         endsWith,
 
-        /// <remarks/>
+    
         containsBlanks,
 
-        /// <remarks/>
+    
         notContainsBlanks,
 
-        /// <remarks/>
+    
         containsErrors,
 
-        /// <remarks/>
+    
         notContainsErrors,
 
-        /// <remarks/>
+    
         timePeriod,
 
-        /// <remarks/>
+    
         aboveAverage,
     }
 
     public enum ST_ConditionalFormattingOperator
     {
 
-        /// <remarks/>
+    
         lessThan,
 
-        /// <remarks/>
+    
         lessThanOrEqual,
 
-        /// <remarks/>
+    
         equal,
 
-        /// <remarks/>
+    
         notEqual,
 
-        /// <remarks/>
+    
         greaterThanOrEqual,
 
-        /// <remarks/>
+    
         greaterThan,
 
-        /// <remarks/>
+    
         between,
 
-        /// <remarks/>
+    
         notBetween,
 
-        /// <remarks/>
+    
         containsText,
 
-        /// <remarks/>
+    
         notContains,
 
-        /// <remarks/>
+    
         beginsWith,
 
-        /// <remarks/>
+    
         endsWith,
     }
 
     public enum ST_TimePeriod
     {
 
-        /// <remarks/>
+    
         today,
 
-        /// <remarks/>
+    
         yesterday,
 
-        /// <remarks/>
+    
         tomorrow,
 
-        /// <remarks/>
+    
         last7Days,
 
-        /// <remarks/>
+    
         thisMonth,
 
-        /// <remarks/>
+    
         lastMonth,
 
-        /// <remarks/>
+    
         nextMonth,
 
-        /// <remarks/>
+    
         thisWeek,
 
-        /// <remarks/>
+    
         lastWeek,
 
-        /// <remarks/>
+    
         nextWeek,
     }
 
@@ -8130,106 +8139,106 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     public enum ST_DataValidationType
     {
 
-        /// <remarks/>
+    
         none,
 
-        /// <remarks/>
+    
         whole,
 
-        /// <remarks/>
+    
         @decimal,
 
-        /// <remarks/>
+    
         list,
 
-        /// <remarks/>
+    
         date,
 
-        /// <remarks/>
+    
         time,
 
-        /// <remarks/>
+    
         textLength,
 
-        /// <remarks/>
+    
         custom,
     }
 
     public enum ST_DataValidationErrorStyle
     {
 
-        /// <remarks/>
+    
         stop,
 
-        /// <remarks/>
+    
         warning,
 
-        /// <remarks/>
+    
         information,
     }
 
     public enum ST_DataValidationImeMode
     {
 
-        /// <remarks/>
+    
         noControl,
 
-        /// <remarks/>
+    
         off,
 
-        /// <remarks/>
+    
         on,
 
-        /// <remarks/>
+    
         disabled,
 
-        /// <remarks/>
+    
         hiragana,
 
-        /// <remarks/>
+    
         fullKatakana,
 
-        /// <remarks/>
+    
         halfKatakana,
 
-        /// <remarks/>
+    
         fullAlpha,
 
-        /// <remarks/>
+    
         halfAlpha,
 
-        /// <remarks/>
+    
         fullHangul,
 
-        /// <remarks/>
+    
         halfHangul,
     }
 
     public enum ST_DataValidationOperator
     {
 
-        /// <remarks/>
+    
         between,
 
-        /// <remarks/>
+    
         notBetween,
 
-        /// <remarks/>
+    
         equal,
 
-        /// <remarks/>
+    
         notEqual,
 
-        /// <remarks/>
+    
         lessThan,
 
-        /// <remarks/>
+    
         lessThanOrEqual,
 
-        /// <remarks/>
+    
         greaterThan,
 
-        /// <remarks/>
+    
         greaterThanOrEqual,
     }
 
@@ -8335,6 +8344,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
+        // TODO is the following correct?
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/relationships")]
         public string id
         {
             get
@@ -8835,6 +8846,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
+        // TODO is the following correct?
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/relationships")]
         public string id
         {
             get
@@ -8851,20 +8864,20 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     public enum ST_DvAspect
     {
 
-        /// <remarks/>
+    
         DVASPECT_CONTENT,
 
-        /// <remarks/>
+    
         DVASPECT_ICON,
     }
 
     public enum ST_OleUpdate
     {
 
-        /// <remarks/>
+    
         OLEUPDATE_ALWAYS,
 
-        /// <remarks/>
+    
         OLEUPDATE_ONCALL,
     }
 
@@ -8891,6 +8904,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
+        // TODO is the following correct?
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/relationships")]
         public string id
         {
             get
@@ -9097,28 +9112,28 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     public enum ST_WebSourceType
     {
 
-        /// <remarks/>
+    
         sheet,
 
-        /// <remarks/>
+    
         printArea,
 
-        /// <remarks/>
+    
         autoFilter,
 
-        /// <remarks/>
+    
         range,
 
-        /// <remarks/>
+    
         chart,
 
-        /// <remarks/>
+    
         pivotTable,
 
-        /// <remarks/>
+    
         query,
 
-        /// <remarks/>
+    
         label,
     }
 
@@ -9190,6 +9205,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         private string idField;
 
+        // TODO is the following correct?
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/relationships")]
         public string id
         {
             get
@@ -9940,6 +9957,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
+        // TODO is the following correct?
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/relationships")]
         public string id
         {
             get
@@ -9955,54 +9974,66 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
     [Serializable]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
+    public class CT_Drawing
+    {
+        private string idField = string.Empty;
+
+        [XmlAttribute(Form = XmlSchemaForm.Qualified, Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/relationships")]
+        public string id
+        {
+            get { return this.idField; }
+            set { this.idField = value; }
+        }
+    }
+
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
+    public class CT_LegacyDrawing
+    {
+        private string idField = string.Empty;
+
+        [XmlAttribute(Form = XmlSchemaForm.Qualified, Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/relationships")]
+        public string id
+        {
+            get { return this.idField; }
+            set { this.idField = value; }
+        }
+    }
+
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public class CT_Dialogsheet
     {
+        // all elements of this sequence are 0..1
 
-        private CT_SheetPr sheetPrField;
+        private CT_SheetPr sheetPrField = null;
 
-        private CT_SheetViews sheetViewsField;
+        private CT_SheetViews sheetViewsField = null;
 
-        private CT_SheetFormatPr sheetFormatPrField;
+        private CT_SheetFormatPr sheetFormatPrField = null;
 
-        private CT_SheetProtection sheetProtectionField;
+        private CT_SheetProtection sheetProtectionField = null;
 
-        private List<CT_CustomSheetView> customSheetViewsField;
+        private List<CT_CustomSheetView> customSheetViewsField = null;
 
-        private CT_PrintOptions printOptionsField;
+        private CT_PrintOptions printOptionsField = null;
 
-        private CT_PageMargins pageMarginsField;
+        private CT_PageMargins pageMarginsField = null;
 
-        private CT_PageSetup pageSetupField;
+        private CT_PageSetup pageSetupField = null;
 
-        private CT_HeaderFooter headerFooterField;
+        private CT_HeaderFooter headerFooterField = null;
 
-        private CT_Drawing drawingField;
+        private OpenXmlFormats.Spreadsheet.CT_Drawing drawingField = null; // there are 4 CT_Drawing!
 
-        private CT_LegacyDrawing legacyDrawingField;
+        private OpenXmlFormats.Spreadsheet.CT_LegacyDrawing legacyDrawingField = null;
 
-        private CT_LegacyDrawing legacyDrawingHFField;
+        private CT_LegacyDrawing legacyDrawingHFField = null;
 
-        private List<CT_OleObject> oleObjectsField;
+        private List<CT_OleObject> oleObjectsField = null;
 
-        private CT_ExtensionList extLstField;
+        private CT_ExtensionList extLstField = null;
 
-        public CT_Dialogsheet()
-        {
-            this.extLstField = new CT_ExtensionList();
-            this.oleObjectsField = new List<CT_OleObject>();
-            this.legacyDrawingHFField = new CT_LegacyDrawing();
-            this.legacyDrawingField = new CT_LegacyDrawing();
-            this.drawingField = new CT_Drawing();
-            this.headerFooterField = new CT_HeaderFooter();
-            this.pageSetupField = new CT_PageSetup();
-            this.pageMarginsField = new CT_PageMargins();
-            this.printOptionsField = new CT_PrintOptions();
-            this.customSheetViewsField = new List<CT_CustomSheetView>();
-            this.sheetProtectionField = new CT_SheetProtection();
-            this.sheetFormatPrField = new CT_SheetFormatPr();
-            this.sheetViewsField = new CT_SheetViews();
-            this.sheetPrField = new CT_SheetPr();
-        }
 
         public CT_SheetPr sheetPr
         {

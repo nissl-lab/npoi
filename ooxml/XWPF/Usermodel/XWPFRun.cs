@@ -25,6 +25,7 @@ namespace NPOI.XWPF.UserModel
     using NPOI.XWPF.Util;
     using NPOI.OpenXmlFormats.Dml;
     using System.Xml.Serialization;
+    using NPOI.OpenXmlFormats.Dml.Picture;
     /**
      * XWPFrun.object defines a region of text with a common Set of properties
      *
@@ -102,7 +103,7 @@ namespace NPOI.XWPF.UserModel
             pictures = new List<XWPFPicture>();
             foreach (object o in pictTextObjs)
             {
-                foreach (NPOI.OpenXmlFormats.Dml.CT_Picture pict in GetCTPictures(o))
+                foreach (var pict in GetCTPictures(o))
                 {
                     XWPFPicture picture = new XWPFPicture(pict, this);
                    pictures.Add(picture);
@@ -110,9 +111,9 @@ namespace NPOI.XWPF.UserModel
             }
         }
 
-        private List<NPOI.OpenXmlFormats.Dml.CT_Picture> GetCTPictures(object o)
+        private List<NPOI.OpenXmlFormats.Wordprocessing.CT_Picture> GetCTPictures(object o)
         {
-            List<NPOI.OpenXmlFormats.Dml.CT_Picture> pictures = new List<NPOI.OpenXmlFormats.Dml.CT_Picture>(); 
+            var pictures = new List<NPOI.OpenXmlFormats.Wordprocessing.CT_Picture>(); 
             //XmlObject[] picts = o.SelectPath("declare namespace pic='"+CT_Picture.type.Name.NamespaceURI+"' .//pic:pic");
             //XmlElement[] picts = o.Any;
             //foreach (XmlElement pict in picts)
@@ -703,7 +704,7 @@ namespace NPOI.XWPF.UserModel
                 // Grab the picture object
                 CT_GraphicalObject graphic = inline.graphic;
                 CT_GraphicalObjectData graphicData = graphic.graphicData;
-                NPOI.OpenXmlFormats.Dml.CT_Picture pic = GetCTPictures(graphicData)[(0)];
+                var pic = GetCTPictures(graphicData)[(0)];
 
                 // Set it up
                 CT_PictureNonVisual nvPicPr = pic.AddNewNvPicPr();

@@ -14,17 +14,16 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 ==================================================================== */
-using NPOI.SS.UserModel;
-using NPOI.OpenXmlFormats.Spreadsheet;
-using NPOI.XSSF.Model;
+
 using System;
-using NPOI.SS.Util;
+using NPOI.OpenXmlFormats.Spreadsheet;
 using NPOI.OpenXmlFormats.Vml;
-using NPOI.Util;
+using NPOI.SS.UserModel;
+using NPOI.SS.Util;
+using NPOI.XSSF.Model;
+
 namespace NPOI.XSSF.UserModel
 {
-
-
 
     public class XSSFComment : IComment
     {

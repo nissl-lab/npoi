@@ -83,7 +83,7 @@ namespace ooxml.Testcases
 
             using (StringWriter stream = new StringWriter())
             {
-                CommentsDocument_Accessor.serializer.Serialize(stream, comments);
+                CommentsDocument_Accessor.serializer.Serialize(stream, comments);//, CommentsDocument_Accessor.namespaces);
                 string expected = @"<?xml version=""1.0"" encoding=""utf-16""?>
 <comments xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"" xmlns=""http://schemas.openxmlformats.org/spreadsheetml/2006/main"">
   <authors>

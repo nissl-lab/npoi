@@ -862,22 +862,22 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     public enum ST_MdxKPIProperty
     {
 
-        /// <remarks/>
+    
         v,
 
-        /// <remarks/>
+    
         g,
 
-        /// <remarks/>
+    
         s,
 
-        /// <remarks/>
+    
         t,
 
-        /// <remarks/>
+    
         w,
 
-        /// <remarks/>
+    
         m,
     }
 
@@ -1028,25 +1028,25 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     public enum ST_MdxSetOrder
     {
 
-        /// <remarks/>
+    
         u,
 
-        /// <remarks/>
+    
         a,
 
-        /// <remarks/>
+    
         d,
 
-        /// <remarks/>
+    
         aa,
 
-        /// <remarks/>
+    
         ad,
 
-        /// <remarks/>
+    
         na,
 
-        /// <remarks/>
+    
         nd,
     }
 
@@ -1302,25 +1302,25 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     public enum ST_MdxFunctionType
     {
 
-        /// <remarks/>
+    
         m,
 
-        /// <remarks/>
+    
         v,
 
-        /// <remarks/>
+    
         s,
 
-        /// <remarks/>
+    
         c,
 
-        /// <remarks/>
+    
         r,
 
-        /// <remarks/>
+    
         p,
 
-        /// <remarks/>
+    
         k,
     }
 

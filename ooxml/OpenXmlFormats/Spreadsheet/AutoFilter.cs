@@ -284,22 +284,22 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     public enum ST_FilterOperator
     {
 
-        /// <remarks/>
+    
         equal,
 
-        /// <remarks/>
+    
         lessThan,
 
-        /// <remarks/>
+    
         lessThanOrEqual,
 
-        /// <remarks/>
+    
         notEqual,
 
-        /// <remarks/>
+    
         greaterThanOrEqual,
 
-        /// <remarks/>
+    
         greaterThan,
     }
 
@@ -382,109 +382,109 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     public enum ST_DynamicFilterType
     {
 
-        /// <remarks/>
+    
         @null,
 
-        /// <remarks/>
+    
         aboveAverage,
 
-        /// <remarks/>
+    
         belowAverage,
 
-        /// <remarks/>
+    
         tomorrow,
 
-        /// <remarks/>
+    
         today,
 
-        /// <remarks/>
+    
         yesterday,
 
-        /// <remarks/>
+    
         nextWeek,
 
-        /// <remarks/>
+    
         thisWeek,
 
-        /// <remarks/>
+    
         lastWeek,
 
-        /// <remarks/>
+    
         nextMonth,
 
-        /// <remarks/>
+    
         thisMonth,
 
-        /// <remarks/>
+    
         lastMonth,
 
-        /// <remarks/>
+    
         nextQuarter,
 
-        /// <remarks/>
+    
         thisQuarter,
 
-        /// <remarks/>
+    
         lastQuarter,
 
-        /// <remarks/>
+    
         nextYear,
 
-        /// <remarks/>
+    
         thisYear,
 
-        /// <remarks/>
+    
         lastYear,
 
-        /// <remarks/>
+    
         yearToDate,
 
-        /// <remarks/>
+    
         Q1,
 
-        /// <remarks/>
+    
         Q2,
 
-        /// <remarks/>
+    
         Q3,
 
-        /// <remarks/>
+    
         Q4,
 
-        /// <remarks/>
+    
         M1,
 
-        /// <remarks/>
+    
         M2,
 
-        /// <remarks/>
+    
         M3,
 
-        /// <remarks/>
+    
         M4,
 
-        /// <remarks/>
+    
         M5,
 
-        /// <remarks/>
+    
         M6,
 
-        /// <remarks/>
+    
         M7,
 
-        /// <remarks/>
+    
         M8,
 
-        /// <remarks/>
+    
         M9,
 
-        /// <remarks/>
+    
         M10,
 
-        /// <remarks/>
+    
         M11,
 
-        /// <remarks/>
+    
         M12,
     }
 
@@ -756,22 +756,22 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     public enum ST_DateTimeGrouping
     {
 
-        /// <remarks/>
+    
         year,
 
-        /// <remarks/>
+    
         month,
 
-        /// <remarks/>
+    
         day,
 
-        /// <remarks/>
+    
         hour,
 
-        /// <remarks/>
+    
         minute,
 
-        /// <remarks/>
+    
         second,
     }
     
@@ -825,71 +825,71 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     public enum ST_IconSetType
     {
 
-        /// <remarks/>
+    
         [XmlEnum("3Arrows")]
         Item3Arrows,
 
-        /// <remarks/>
+    
         [XmlEnum("3ArrowsGray")]
         Item3ArrowsGray,
 
-        /// <remarks/>
+    
         [XmlEnum("3Flags")]
         Item3Flags,
 
-        /// <remarks/>
+    
         [XmlEnum("3TrafficLights1")]
         Item3TrafficLights1,
 
-        /// <remarks/>
+    
         [XmlEnum("3TrafficLights2")]
         Item3TrafficLights2,
 
-        /// <remarks/>
+    
         [XmlEnum("3Signs")]
         Item3Signs,
 
-        /// <remarks/>
+    
         [XmlEnum("3Symbols")]
         Item3Symbols,
 
-        /// <remarks/>
+    
         [XmlEnum("3Symbols2")]
         Item3Symbols2,
 
-        /// <remarks/>
+    
         [XmlEnum("4Arrows")]
         Item4Arrows,
 
-        /// <remarks/>
+    
         [XmlEnum("4ArrowsGray")]
         Item4ArrowsGray,
 
-        /// <remarks/>
+    
         [XmlEnum("4RedToBlack")]
         Item4RedToBlack,
 
-        /// <remarks/>
+    
         [XmlEnum("4Rating")]
         Item4Rating,
 
-        /// <remarks/>
+    
         [XmlEnum("4TrafficLights")]
         Item4TrafficLights,
 
-        /// <remarks/>
+    
         [XmlEnum("5Arrows")]
         Item5Arrows,
 
-        /// <remarks/>
+    
         [XmlEnum("5ArrowsGray")]
         Item5ArrowsGray,
 
-        /// <remarks/>
+    
         [XmlEnum("5Rating")]
         Item5Rating,
 
-        /// <remarks/>
+    
         [XmlEnum("5Quarters")]
         Item5Quarters,
     }
@@ -1222,29 +1222,29 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     public enum ST_SortBy
     {
 
-        /// <remarks/>
+    
         value,
 
-        /// <remarks/>
+    
         cellColor,
 
-        /// <remarks/>
+    
         fontColor,
 
-        /// <remarks/>
+    
         icon,
     }
 
     public enum ST_SortMethod
     {
 
-        /// <remarks/>
+    
         stroke,
 
-        /// <remarks/>
+    
         pinYin,
 
-        /// <remarks/>
+    
         none,
     }
 }

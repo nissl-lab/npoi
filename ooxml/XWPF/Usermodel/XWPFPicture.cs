@@ -14,12 +14,13 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 ==================================================================== */
+
+using System;
+using NPOI.OpenXml4Net.OPC;
+using NPOI.OpenXmlFormats.Wordprocessing;
+
 namespace NPOI.XWPF.UserModel
 {
-    using System;
-    using NPOI.OpenXmlFormats.Dml;
-    using NPOI.OpenXml4Net.OPC;
-
 
     /**
      * @author Philipp Epp
@@ -27,7 +28,7 @@ namespace NPOI.XWPF.UserModel
     public class XWPFPicture
     {
 
-        private CT_Picture ctPic;
+        private NPOI.OpenXmlFormats.Wordprocessing.CT_Picture ctPic;
         private String description;
         private XWPFRun run;
 
@@ -35,7 +36,8 @@ namespace NPOI.XWPF.UserModel
         {
             this.run = Run;
             this.ctPic = ctPic;
-            description = ctPic.nvPicPr.cNvPr.descr;
+         // TODO perhaps the choosed CT_Picture is wrong - my best guess
+           //  description = ctPic.nvPicPr.cNvPr.descr;
         }
 
         /**
@@ -44,7 +46,7 @@ namespace NPOI.XWPF.UserModel
          */
         public void SetPictureReference(PackageRelationship rel)
         {
-            ctPic.blipFill.blip.embed = (rel.Id);
+// TODO            ctPic.blipFill.blip.embed = (rel.Id);
         }
 
         /**
@@ -63,7 +65,7 @@ namespace NPOI.XWPF.UserModel
          */
         public XWPFPictureData GetPictureData()
         {
-            String blipId = ctPic.blipFill.blip.embed;
+            String blipId = string.Empty;// TODO ctPic.blipFill.blip.embed;
             POIXMLDocumentPart part = run.GetParagraph().GetPart();
             if (part != null)
             {

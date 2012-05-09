@@ -5,7 +5,7 @@ using System.ComponentModel;
 namespace NPOI.OpenXmlFormats.Dml 
 {
     
-    /// <remarks/>
+
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
@@ -41,7 +41,7 @@ namespace NPOI.OpenXmlFormats.Dml
             this.endParaRPrField=new CT_TextCharacterProperties();
             return this.endParaRPrField;
         }
-        /// <remarks/>
+    
         public CT_TextParagraphProperties pPr {
             get {
                 return this.pPrField;
@@ -51,7 +51,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         [XmlElement("r")]
         public List<CT_RegularTextRun> r
         {
@@ -63,7 +63,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         [XmlElement("br")]
         public List<CT_TextLineBreak> br {
             get {
@@ -74,7 +74,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         [XmlElement("fld")]
         public List<CT_TextField> fld {
             get {
@@ -85,7 +85,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         public CT_TextCharacterProperties endParaRPr {
             get {
                 return this.endParaRPrField;
@@ -96,7 +96,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
@@ -181,7 +181,7 @@ namespace NPOI.OpenXmlFormats.Dml
         
         private bool hangingPunctFieldSpecified;
         
-        /// <remarks/>
+    
         public CT_TextSpacing lnSpc {
             get {
                 return this.lnSpcField;
@@ -191,7 +191,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         public CT_TextSpacing spcBef {
             get {
                 return this.spcBefField;
@@ -201,7 +201,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         public CT_TextSpacing spcAft {
             get {
                 return this.spcAftField;
@@ -211,7 +211,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         public CT_TextBulletColorFollowText buClrTx {
             get {
                 return this.buClrTxField;
@@ -221,7 +221,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         public CT_Color buClr {
             get {
                 return this.buClrField;
@@ -231,7 +231,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         public CT_TextBulletSizeFollowText buSzTx {
             get {
                 return this.buSzTxField;
@@ -241,7 +241,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         public CT_TextBulletSizePercent buSzPct {
             get {
                 return this.buSzPctField;
@@ -251,7 +251,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         public CT_TextBulletSizePoint buSzPts {
             get {
                 return this.buSzPtsField;
@@ -261,7 +261,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         public CT_TextBulletTypefaceFollowText buFontTx {
             get {
                 return this.buFontTxField;
@@ -271,7 +271,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         public CT_TextFont buFont {
             get {
                 return this.buFontField;
@@ -281,7 +281,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         public CT_TextNoBullet buNone {
             get {
                 return this.buNoneField;
@@ -291,7 +291,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         public CT_TextAutonumberBullet buAutoNum {
             get {
                 return this.buAutoNumField;
@@ -301,7 +301,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         public CT_TextCharBullet buChar {
             get {
                 return this.buCharField;
@@ -311,7 +311,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         public CT_TextBlipBullet buBlip {
             get {
                 return this.buBlipField;
@@ -321,7 +321,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         [XmlArrayItemAttribute("tab", IsNullable=false)]
         public CT_TextTabStop[] tabLst {
             get {
@@ -332,7 +332,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         public CT_TextCharacterProperties defRPr {
             get {
                 return this.defRPrField;
@@ -342,7 +342,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         public CT_OfficeArtExtensionList extLst {
             get {
                 return this.extLstField;
@@ -352,7 +352,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         [XmlAttribute]
         public int marL {
             get {
@@ -363,7 +363,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         [XmlIgnore]
         public bool marLSpecified {
             get {
@@ -374,7 +374,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         [XmlAttribute]
         public int marR {
             get {
@@ -385,7 +385,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         [XmlIgnore]
         public bool marRSpecified {
             get {
@@ -396,7 +396,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         [XmlAttribute]
         public int lvl {
             get {
@@ -407,7 +407,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         [XmlIgnore]
         public bool lvlSpecified {
             get {
@@ -418,7 +418,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         [XmlAttribute]
         public int indent {
             get {
@@ -429,7 +429,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         [XmlIgnore]
         public bool indentSpecified {
             get {
@@ -440,7 +440,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         [XmlAttribute]
         public ST_TextAlignType algn {
             get {
@@ -451,7 +451,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         [XmlIgnore]
         public bool algnSpecified {
             get {
@@ -462,7 +462,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         [XmlAttribute]
         public int defTabSz {
             get {
@@ -473,7 +473,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         [XmlIgnore]
         public bool defTabSzSpecified {
             get {
@@ -484,7 +484,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         [XmlAttribute]
         public bool rtl {
             get {
@@ -495,7 +495,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         [XmlIgnore]
         public bool rtlSpecified {
             get {
@@ -506,7 +506,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         [XmlAttribute]
         public bool eaLnBrk {
             get {
@@ -517,7 +517,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         [XmlIgnore]
         public bool eaLnBrkSpecified {
             get {
@@ -528,7 +528,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         [XmlAttribute]
         public ST_TextFontAlignType fontAlgn {
             get {
@@ -539,7 +539,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         [XmlIgnore]
         public bool fontAlgnSpecified {
             get {
@@ -550,7 +550,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         [XmlAttribute]
         public bool latinLnBrk {
             get {
@@ -561,7 +561,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         [XmlIgnore]
         public bool latinLnBrkSpecified {
             get {
@@ -572,7 +572,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         [XmlAttribute]
         public bool hangingPunct {
             get {
@@ -583,7 +583,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         [XmlIgnore]
         public bool hangingPunctSpecified {
             get {
@@ -595,7 +595,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
@@ -604,7 +604,7 @@ namespace NPOI.OpenXmlFormats.Dml
         
         private object itemField;
         
-        /// <remarks/>
+    
         [XmlElement("spcPct", typeof(CT_TextSpacingPercent))]
         [XmlElement("spcPts", typeof(CT_TextSpacingPoint))]
         public object Item {
@@ -617,7 +617,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
@@ -626,7 +626,7 @@ namespace NPOI.OpenXmlFormats.Dml
         
         private int valField;
         
-        /// <remarks/>
+    
         [XmlAttribute]
         public int val {
             get {
@@ -638,7 +638,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
@@ -651,7 +651,7 @@ namespace NPOI.OpenXmlFormats.Dml
             this.zField = ((long)(0));
         }
         
-        /// <remarks/>
+    
         [XmlAttribute]
         [DefaultValue(typeof(long), "0")]
         public long z {
@@ -665,7 +665,7 @@ namespace NPOI.OpenXmlFormats.Dml
     }
     
     
-    /// <remarks/>
+
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
@@ -682,7 +682,7 @@ namespace NPOI.OpenXmlFormats.Dml
         
         private string typeField;
         
-        /// <remarks/>
+    
         public CT_TextCharacterProperties rPr {
             get {
                 return this.rPrField;
@@ -692,7 +692,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         public CT_TextParagraphProperties pPr {
             get {
                 return this.pPrField;
@@ -702,7 +702,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         public string t {
             get {
                 return this.tField;
@@ -712,8 +712,9 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
-        [XmlAttributeAttribute(DataType="token")]
+    
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/relationships")]
+        //        [XmlAttributeAttribute(DataType="token")]
         public string id {
             get {
                 return this.idField;
@@ -723,7 +724,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         [XmlAttribute]
         public string type {
             get {
@@ -735,7 +736,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
@@ -856,7 +857,7 @@ namespace NPOI.OpenXmlFormats.Dml
         {
             throw new NotImplementedException();
         }
-        /// <remarks/>
+    
         public CT_LineProperties ln {
             get {
                 return this.lnField;
@@ -866,7 +867,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         public CT_NoFillProperties noFill {
             get {
                 return this.noFillField;
@@ -876,7 +877,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         public CT_SolidColorFillProperties solidFill {
             get {
                 return this.solidFillField;
@@ -886,7 +887,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         public CT_GradientFillProperties gradFill {
             get {
                 return this.gradFillField;
@@ -896,7 +897,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         public CT_BlipFillProperties blipFill {
             get {
                 return this.blipFillField;
@@ -906,7 +907,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         public CT_PatternFillProperties pattFill {
             get {
                 return this.pattFillField;
@@ -916,7 +917,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         public CT_GroupFillProperties grpFill {
             get {
                 return this.grpFillField;
@@ -926,7 +927,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         public CT_EffectList effectLst {
             get {
                 return this.effectLstField;
@@ -936,7 +937,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         public CT_EffectContainer effectDag {
             get {
                 return this.effectDagField;
@@ -946,7 +947,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         public CT_Color highlight {
             get {
                 return this.highlightField;
@@ -956,7 +957,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         public CT_TextUnderlineLineFollowText uLnTx {
             get {
                 return this.uLnTxField;
@@ -966,7 +967,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         public CT_LineProperties uLn {
             get {
                 return this.uLnField;
@@ -976,7 +977,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         public CT_TextUnderlineFillFollowText uFillTx {
             get {
                 return this.uFillTxField;
@@ -986,7 +987,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         public CT_TextUnderlineFillGroupWrapper uFill {
             get {
                 return this.uFillField;
@@ -996,7 +997,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         public CT_TextFont latin {
             get {
                 return this.latinField;
@@ -1006,7 +1007,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         public CT_TextFont ea {
             get {
                 return this.eaField;
@@ -1016,7 +1017,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         public CT_TextFont cs {
             get {
                 return this.csField;
@@ -1026,7 +1027,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         public CT_TextFont sym {
             get {
                 return this.symField;
@@ -1036,7 +1037,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         public CT_Hyperlink hlinkClick {
             get {
                 return this.hlinkClickField;
@@ -1046,7 +1047,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         public CT_Hyperlink hlinkMouseOver {
             get {
                 return this.hlinkMouseOverField;
@@ -1056,7 +1057,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         public CT_OfficeArtExtensionList extLst {
             get {
                 return this.extLstField;
@@ -1066,7 +1067,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         [XmlAttribute]
         public bool kumimoji {
             get {
@@ -1077,7 +1078,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         [XmlIgnore]
         public bool kumimojiSpecified {
             get {
@@ -1088,7 +1089,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         [XmlAttribute]
         public string lang {
             get {
@@ -1099,7 +1100,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         [XmlAttribute]
         public string altLang {
             get {
@@ -1110,7 +1111,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         [XmlAttribute]
         public int sz {
             get {
@@ -1121,7 +1122,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         [XmlIgnore]
         public bool szSpecified {
             get {
@@ -1132,7 +1133,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         [XmlAttribute]
         public bool b {
             get {
@@ -1143,7 +1144,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         [XmlIgnore]
         public bool bSpecified {
             get {
@@ -1154,7 +1155,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         [XmlAttribute]
         public bool i {
             get {
@@ -1165,7 +1166,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         [XmlIgnore]
         public bool iSpecified {
             get {
@@ -1176,7 +1177,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         [XmlAttribute]
         public ST_TextUnderlineType u {
             get {
@@ -1187,7 +1188,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         [XmlIgnore]
         public bool uSpecified {
             get {
@@ -1198,7 +1199,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         [XmlAttribute]
         public ST_TextStrikeType strike {
             get {
@@ -1209,7 +1210,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         [XmlIgnore]
         public bool strikeSpecified {
             get {
@@ -1220,7 +1221,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         [XmlAttribute]
         public int kern {
             get {
@@ -1231,7 +1232,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         [XmlIgnore]
         public bool kernSpecified {
             get {
@@ -1242,7 +1243,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         [XmlAttribute]
         public ST_TextCapsType cap {
             get {
@@ -1253,7 +1254,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         [XmlIgnore]
         public bool capSpecified {
             get {
@@ -1264,7 +1265,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         [XmlAttribute]
         public int spc {
             get {
@@ -1275,7 +1276,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         [XmlIgnore]
         public bool spcSpecified {
             get {
@@ -1286,7 +1287,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         [XmlAttribute]
         public bool normalizeH {
             get {
@@ -1297,7 +1298,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         [XmlIgnore]
         public bool normalizeHSpecified {
             get {
@@ -1308,7 +1309,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         [XmlAttribute]
         public int baseline {
             get {
@@ -1319,7 +1320,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         [XmlIgnore]
         public bool baselineSpecified {
             get {
@@ -1330,7 +1331,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         [XmlAttribute]
         public bool noProof {
             get {
@@ -1341,7 +1342,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         [XmlIgnore]
         public bool noProofSpecified {
             get {
@@ -1352,7 +1353,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         [XmlAttribute]
         [DefaultValue(true)]
         public bool dirty {
@@ -1364,7 +1365,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         [XmlAttribute]
         [DefaultValue(false)]
         public bool err {
@@ -1376,7 +1377,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         [XmlAttribute]
         [DefaultValue(true)]
         public bool smtClean {
@@ -1388,7 +1389,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         [XmlAttribute]
         [DefaultValue(typeof(uint), "0")]
         public uint smtId {
@@ -1400,7 +1401,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         [XmlAttribute]
         public string bmk {
             get {
@@ -1412,7 +1413,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
     }
     
-        /// <remarks/>
+    
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
@@ -1420,7 +1421,7 @@ namespace NPOI.OpenXmlFormats.Dml
     public partial class CT_TextUnderlineLineFollowText {
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
@@ -1428,7 +1429,7 @@ namespace NPOI.OpenXmlFormats.Dml
     public partial class CT_TextUnderlineFillFollowText {
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
@@ -1437,7 +1438,7 @@ namespace NPOI.OpenXmlFormats.Dml
         
         private object itemField;
         
-        /// <remarks/>
+    
         [XmlElement("blipFill", typeof(CT_BlipFillProperties))]
         [XmlElement("gradFill", typeof(CT_GradientFillProperties))]
         [XmlElement("grpFill", typeof(CT_GroupFillProperties))]
@@ -1454,97 +1455,97 @@ namespace NPOI.OpenXmlFormats.Dml
         }
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
     public enum ST_TextUnderlineType {
         
-        /// <remarks/>
+    
         none,
         
-        /// <remarks/>
+    
         words,
         
-        /// <remarks/>
+    
         sng,
         
-        /// <remarks/>
+    
         dbl,
         
-        /// <remarks/>
+    
         heavy,
         
-        /// <remarks/>
+    
         dotted,
         
-        /// <remarks/>
+    
         dottedHeavy,
         
-        /// <remarks/>
+    
         dash,
         
-        /// <remarks/>
+    
         dashHeavy,
         
-        /// <remarks/>
+    
         dashLong,
         
-        /// <remarks/>
+    
         dashLongHeavy,
         
-        /// <remarks/>
+    
         dotDash,
         
-        /// <remarks/>
+    
         dotDashHeavy,
         
-        /// <remarks/>
+    
         dotDotDash,
         
-        /// <remarks/>
+    
         dotDotDashHeavy,
         
-        /// <remarks/>
+    
         wavy,
         
-        /// <remarks/>
+    
         wavyHeavy,
         
-        /// <remarks/>
+    
         wavyDbl,
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
     public enum ST_TextStrikeType {
         
-        /// <remarks/>
+    
         noStrike,
         
-        /// <remarks/>
+    
         sngStrike,
         
-        /// <remarks/>
+    
         dblStrike,
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
     public enum ST_TextCapsType {
         
-        /// <remarks/>
+    
         none,
         
-        /// <remarks/>
+    
         small,
         
-        /// <remarks/>
+    
         all,
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
@@ -1553,7 +1554,7 @@ namespace NPOI.OpenXmlFormats.Dml
         
         private CT_TextCharacterProperties rPrField;
         
-        /// <remarks/>
+    
         public CT_TextCharacterProperties rPr {
             get {
                 return this.rPrField;
@@ -1564,7 +1565,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
@@ -1580,7 +1581,7 @@ namespace NPOI.OpenXmlFormats.Dml
             this.rPrField = new CT_TextCharacterProperties();
             return rPrField;
         }
-        /// <remarks/>
+    
         public CT_TextCharacterProperties rPr {
             get {
                 return this.rPrField;
@@ -1590,7 +1591,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         public string t {
             get {
                 return this.tField;
@@ -1601,7 +1602,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
@@ -1616,7 +1617,7 @@ namespace NPOI.OpenXmlFormats.Dml
         
         private bool algnFieldSpecified;
         
-        /// <remarks/>
+    
         [XmlAttribute]
         public int pos {
             get {
@@ -1627,7 +1628,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         [XmlIgnore]
         public bool posSpecified {
             get {
@@ -1638,7 +1639,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         [XmlAttribute]
         public ST_TextTabAlignType algn {
             get {
@@ -1649,7 +1650,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         [XmlIgnore]
         public bool algnSpecified {
             get {
@@ -1661,25 +1662,25 @@ namespace NPOI.OpenXmlFormats.Dml
         }
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
     public enum ST_TextTabAlignType {
         
-        /// <remarks/>
+    
         l,
         
-        /// <remarks/>
+    
         ctr,
         
-        /// <remarks/>
+    
         r,
         
-        /// <remarks/>
+    
         dec,
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
@@ -1688,7 +1689,7 @@ namespace NPOI.OpenXmlFormats.Dml
         
         private CT_Blip blipField;
         
-        /// <remarks/>
+    
         public CT_Blip blip {
             get {
                 return this.blipField;
@@ -1699,7 +1700,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
@@ -1708,7 +1709,7 @@ namespace NPOI.OpenXmlFormats.Dml
         
         private string charField;
         
-        /// <remarks/>
+    
         [XmlAttribute]
         public string @char {
             get {
@@ -1720,7 +1721,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
@@ -1735,7 +1736,7 @@ namespace NPOI.OpenXmlFormats.Dml
             this.startAtField = 1;
         }
         
-        /// <remarks/>
+    
         [XmlAttribute]
         public ST_TextAutonumberScheme type {
             get {
@@ -1746,7 +1747,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         [XmlAttribute]
         [DefaultValue(1)]
         public int startAt {
@@ -1759,136 +1760,136 @@ namespace NPOI.OpenXmlFormats.Dml
         }
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
     public enum ST_TextAutonumberScheme {
         
-        /// <remarks/>
+    
         alphaLcParenBoth,
         
-        /// <remarks/>
+    
         alphaUcParenBoth,
         
-        /// <remarks/>
+    
         alphaLcParenR,
         
-        /// <remarks/>
+    
         alphaUcParenR,
         
-        /// <remarks/>
+    
         alphaLcPeriod,
         
-        /// <remarks/>
+    
         alphaUcPeriod,
         
-        /// <remarks/>
+    
         arabicParenBoth,
         
-        /// <remarks/>
+    
         arabicParenR,
         
-        /// <remarks/>
+    
         arabicPeriod,
         
-        /// <remarks/>
+    
         arabicPlain,
         
-        /// <remarks/>
+    
         romanLcParenBoth,
         
-        /// <remarks/>
+    
         romanUcParenBoth,
         
-        /// <remarks/>
+    
         romanLcParenR,
         
-        /// <remarks/>
+    
         romanUcParenR,
         
-        /// <remarks/>
+    
         romanLcPeriod,
         
-        /// <remarks/>
+    
         romanUcPeriod,
         
-        /// <remarks/>
+    
         circleNumDbPlain,
         
-        /// <remarks/>
+    
         circleNumWdBlackPlain,
         
-        /// <remarks/>
+    
         circleNumWdWhitePlain,
         
-        /// <remarks/>
+    
         arabicDbPeriod,
         
-        /// <remarks/>
+    
         arabicDbPlain,
         
-        /// <remarks/>
+    
         ea1ChsPeriod,
         
-        /// <remarks/>
+    
         ea1ChsPlain,
         
-        /// <remarks/>
+    
         ea1ChtPeriod,
         
-        /// <remarks/>
+    
         ea1ChtPlain,
         
-        /// <remarks/>
+    
         ea1JpnChsDbPeriod,
         
-        /// <remarks/>
+    
         ea1JpnKorPlain,
         
-        /// <remarks/>
+    
         ea1JpnKorPeriod,
         
-        /// <remarks/>
+    
         arabic1Minus,
         
-        /// <remarks/>
+    
         arabic2Minus,
         
-        /// <remarks/>
+    
         hebrew2Minus,
         
-        /// <remarks/>
+    
         thaiAlphaPeriod,
         
-        /// <remarks/>
+    
         thaiAlphaParenR,
         
-        /// <remarks/>
+    
         thaiAlphaParenBoth,
         
-        /// <remarks/>
+    
         thaiNumPeriod,
         
-        /// <remarks/>
+    
         thaiNumParenR,
         
-        /// <remarks/>
+    
         thaiNumParenBoth,
         
-        /// <remarks/>
+    
         hindiAlphaPeriod,
         
-        /// <remarks/>
+    
         hindiNumPeriod,
         
-        /// <remarks/>
+    
         hindiNumParenR,
         
-        /// <remarks/>
+    
         hindiAlpha1Period,
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
@@ -1896,7 +1897,7 @@ namespace NPOI.OpenXmlFormats.Dml
     public partial class CT_TextNoBullet {
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
@@ -1904,7 +1905,7 @@ namespace NPOI.OpenXmlFormats.Dml
     public partial class CT_TextBulletTypefaceFollowText {
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
@@ -1915,7 +1916,7 @@ namespace NPOI.OpenXmlFormats.Dml
         
         private bool valFieldSpecified;
         
-        /// <remarks/>
+    
         [XmlAttribute]
         public int val {
             get {
@@ -1926,7 +1927,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         [XmlIgnore]
         public bool valSpecified {
             get {
@@ -1938,7 +1939,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
@@ -1949,7 +1950,7 @@ namespace NPOI.OpenXmlFormats.Dml
         
         private bool valFieldSpecified;
         
-        /// <remarks/>
+    
         [XmlAttribute]
         public int val {
             get {
@@ -1960,7 +1961,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         [XmlIgnore]
         public bool valSpecified {
             get {
@@ -1972,7 +1973,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
@@ -1980,7 +1981,7 @@ namespace NPOI.OpenXmlFormats.Dml
     public partial class CT_TextBulletSizeFollowText {
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
@@ -1988,7 +1989,7 @@ namespace NPOI.OpenXmlFormats.Dml
     public partial class CT_TextBulletColorFollowText {
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
@@ -1997,7 +1998,7 @@ namespace NPOI.OpenXmlFormats.Dml
         
         private int valField;
         
-        /// <remarks/>
+    
         [XmlAttribute]
         public int val {
             get {
@@ -2009,147 +2010,147 @@ namespace NPOI.OpenXmlFormats.Dml
         }
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
     public enum ST_TextAlignType {
         
-        /// <remarks/>
+    
         l,
         
-        /// <remarks/>
+    
         ctr,
         
-        /// <remarks/>
+    
         r,
         
-        /// <remarks/>
+    
         just,
         
-        /// <remarks/>
+    
         justLow,
         
-        /// <remarks/>
+    
         dist,
         
-        /// <remarks/>
+    
         thaiDist,
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
     public enum ST_TextFontAlignType {
         
-        /// <remarks/>
+    
         auto,
         
-        /// <remarks/>
+    
         t,
         
-        /// <remarks/>
+    
         ctr,
         
-        /// <remarks/>
+    
         @base,
         
-        /// <remarks/>
+    
         b,
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
     [XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=false)]
     public enum ST_TextAnchoringType {
         
-        /// <remarks/>
+    
         t,
         
-        /// <remarks/>
+    
         ctr,
         
-        /// <remarks/>
+    
         b,
         
-        /// <remarks/>
+    
         just,
         
-        /// <remarks/>
+    
         dist,
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
     [XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=false)]
     public enum ST_TextVertOverflowType {
         
-        /// <remarks/>
+    
         overflow,
         
-        /// <remarks/>
+    
         ellipsis,
         
-        /// <remarks/>
+    
         clip,
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
     [XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=false)]
     public enum ST_TextHorzOverflowType {
         
-        /// <remarks/>
+    
         overflow,
         
-        /// <remarks/>
+    
         clip,
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
     [XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=false)]
     public enum ST_TextVerticalType {
         
-        /// <remarks/>
+    
         horz,
         
-        /// <remarks/>
+    
         vert,
         
-        /// <remarks/>
+    
         vert270,
         
-        /// <remarks/>
+    
         wordArtVert,
         
-        /// <remarks/>
+    
         eaVert,
         
-        /// <remarks/>
+    
         mongolianVert,
         
-        /// <remarks/>
+    
         wordArtVertRtl,
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
     [XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=false)]
     public enum ST_TextWrappingType {
         
-        /// <remarks/>
+    
         none,
         
-        /// <remarks/>
+    
         square,
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
@@ -2179,7 +2180,7 @@ namespace NPOI.OpenXmlFormats.Dml
         
         private CT_OfficeArtExtensionList extLstField;
         
-        /// <remarks/>
+    
         public CT_TextParagraphProperties defPPr {
             get {
                 return this.defPPrField;
@@ -2189,7 +2190,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         public CT_TextParagraphProperties lvl1pPr {
             get {
                 return this.lvl1pPrField;
@@ -2199,7 +2200,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         public CT_TextParagraphProperties lvl2pPr {
             get {
                 return this.lvl2pPrField;
@@ -2209,7 +2210,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         public CT_TextParagraphProperties lvl3pPr {
             get {
                 return this.lvl3pPrField;
@@ -2219,7 +2220,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         public CT_TextParagraphProperties lvl4pPr {
             get {
                 return this.lvl4pPrField;
@@ -2229,7 +2230,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         public CT_TextParagraphProperties lvl5pPr {
             get {
                 return this.lvl5pPrField;
@@ -2239,7 +2240,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         public CT_TextParagraphProperties lvl6pPr {
             get {
                 return this.lvl6pPrField;
@@ -2249,7 +2250,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         public CT_TextParagraphProperties lvl7pPr {
             get {
                 return this.lvl7pPrField;
@@ -2259,7 +2260,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         public CT_TextParagraphProperties lvl8pPr {
             get {
                 return this.lvl8pPrField;
@@ -2269,7 +2270,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         public CT_TextParagraphProperties lvl9pPr {
             get {
                 return this.lvl9pPrField;
@@ -2279,7 +2280,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         public CT_OfficeArtExtensionList extLst {
             get {
                 return this.extLstField;
@@ -2290,7 +2291,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
@@ -2307,7 +2308,7 @@ namespace NPOI.OpenXmlFormats.Dml
             this.lnSpcReductionField = 0;
         }
         
-        /// <remarks/>
+    
         [XmlAttribute]
         [DefaultValue(100000)]
         public int fontScale {
@@ -2319,7 +2320,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         [XmlAttribute]
         [DefaultValue(0)]
         public int lnSpcReduction {
@@ -2332,7 +2333,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
@@ -2341,7 +2342,7 @@ namespace NPOI.OpenXmlFormats.Dml
     public partial class CT_TextShapeAutofit {
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
@@ -2350,7 +2351,7 @@ namespace NPOI.OpenXmlFormats.Dml
     public partial class CT_TextNoAutofit {
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
@@ -2452,7 +2453,7 @@ namespace NPOI.OpenXmlFormats.Dml
             this.uprightField = false;
         }
         
-        /// <remarks/>
+    
         public CT_PresetTextShape prstTxWarp {
             get {
                 return this.prstTxWarpField;
@@ -2462,7 +2463,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         public CT_TextNoAutofit noAutofit {
             get {
                 return this.noAutofitField;
@@ -2472,7 +2473,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         public CT_TextNormalAutofit normAutofit {
             get {
                 return this.normAutofitField;
@@ -2482,7 +2483,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         public CT_TextShapeAutofit spAutoFit {
             get {
                 return this.spAutoFitField;
@@ -2492,7 +2493,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         public CT_Scene3D scene3d {
             get {
                 return this.scene3dField;
@@ -2502,7 +2503,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         public CT_Shape3D sp3d {
             get {
                 return this.sp3dField;
@@ -2512,7 +2513,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         public CT_FlatText flatTx {
             get {
                 return this.flatTxField;
@@ -2522,7 +2523,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         public CT_OfficeArtExtensionList extLst {
             get {
                 return this.extLstField;
@@ -2532,7 +2533,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         [XmlAttribute]
         public int rot {
             get {
@@ -2543,7 +2544,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         [XmlIgnore]
         public bool rotSpecified {
             get {
@@ -2554,7 +2555,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         [XmlAttribute]
         public bool spcFirstLastPara {
             get {
@@ -2565,7 +2566,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         [XmlIgnore]
         public bool spcFirstLastParaSpecified {
             get {
@@ -2576,7 +2577,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         [XmlAttribute]
         public ST_TextVertOverflowType vertOverflow {
             get {
@@ -2587,7 +2588,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         [XmlIgnore]
         public bool vertOverflowSpecified {
             get {
@@ -2598,7 +2599,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         [XmlAttribute]
         public ST_TextHorzOverflowType horzOverflow {
             get {
@@ -2609,7 +2610,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         [XmlIgnore]
         public bool horzOverflowSpecified {
             get {
@@ -2620,7 +2621,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         [XmlAttribute]
         public ST_TextVerticalType vert {
             get {
@@ -2631,7 +2632,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         [XmlIgnore]
         public bool vertSpecified {
             get {
@@ -2642,7 +2643,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         [XmlAttribute]
         public ST_TextWrappingType wrap {
             get {
@@ -2653,7 +2654,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         [XmlIgnore]
         public bool wrapSpecified {
             get {
@@ -2664,7 +2665,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         [XmlAttribute]
         public int lIns {
             get {
@@ -2675,7 +2676,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         [XmlIgnore]
         public bool lInsSpecified {
             get {
@@ -2686,7 +2687,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         [XmlAttribute]
         public int tIns {
             get {
@@ -2697,7 +2698,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         [XmlIgnore]
         public bool tInsSpecified {
             get {
@@ -2708,7 +2709,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         [XmlAttribute]
         public int rIns {
             get {
@@ -2719,7 +2720,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         [XmlIgnore]
         public bool rInsSpecified {
             get {
@@ -2730,7 +2731,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         [XmlAttribute]
         public int bIns {
             get {
@@ -2741,7 +2742,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         [XmlIgnore]
         public bool bInsSpecified {
             get {
@@ -2752,7 +2753,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         [XmlAttribute]
         public int numCol {
             get {
@@ -2763,7 +2764,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         [XmlIgnore]
         public bool numColSpecified {
             get {
@@ -2774,7 +2775,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         [XmlAttribute]
         public int spcCol {
             get {
@@ -2785,7 +2786,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         [XmlIgnore]
         public bool spcColSpecified {
             get {
@@ -2796,7 +2797,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         [XmlAttribute]
         public bool rtlCol {
             get {
@@ -2807,7 +2808,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         [XmlIgnore]
         public bool rtlColSpecified {
             get {
@@ -2818,7 +2819,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         [XmlAttribute]
         public bool fromWordArt {
             get {
@@ -2829,7 +2830,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         [XmlIgnore]
         public bool fromWordArtSpecified {
             get {
@@ -2840,7 +2841,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         [XmlAttribute]
         public ST_TextAnchoringType anchor {
             get {
@@ -2851,7 +2852,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         [XmlIgnore]
         public bool anchorSpecified {
             get {
@@ -2862,7 +2863,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         [XmlAttribute]
         public bool anchorCtr {
             get {
@@ -2873,7 +2874,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         [XmlIgnore]
         public bool anchorCtrSpecified {
             get {
@@ -2884,7 +2885,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         [XmlAttribute]
         public bool forceAA {
             get {
@@ -2895,7 +2896,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         [XmlIgnore]
         public bool forceAASpecified {
             get {
@@ -2906,7 +2907,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         [XmlAttribute]
         [DefaultValue(false)]
         public bool upright {
@@ -2918,7 +2919,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         [XmlAttribute]
         public bool compatLnSpc {
             get {
@@ -2929,7 +2930,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         [XmlIgnore]
         public bool compatLnSpcSpecified {
             get {
@@ -2941,7 +2942,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
@@ -2978,7 +2979,7 @@ namespace NPOI.OpenXmlFormats.Dml
                 this.lstStyleField=new CT_TextListStyle();
             return this.lstStyleField;   
         }
-        /// <remarks/>
+    
         public CT_TextBodyProperties bodyPr {
             get {
                 return this.bodyPrField;
@@ -2988,7 +2989,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         public CT_TextListStyle lstStyle {
             get {
                 return this.lstStyleField;
@@ -2998,7 +2999,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
         
-        /// <remarks/>
+    
         [XmlElement("p")]
         public List<CT_TextParagraph> p {
             get {

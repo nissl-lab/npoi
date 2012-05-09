@@ -1,7 +1,7 @@
 namespace NPOI.OpenXmlFormats.Dml {
     
     
-    /// <remarks/>
+
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
@@ -13,7 +13,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         
         private string uriField;
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAnyElementAttribute()]
         public System.Xml.XmlElement[] Any {
             get {
@@ -24,7 +24,7 @@ namespace NPOI.OpenXmlFormats.Dml {
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttributeAttribute(DataType="token")]
         public string uri {
             get {
@@ -36,7 +36,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
@@ -46,7 +46,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         
         private CT_GraphicalObjectData graphicDataField;
         
-        /// <remarks/>
+    
         public CT_GraphicalObjectData graphicData {
             get {
                 return this.graphicDataField;

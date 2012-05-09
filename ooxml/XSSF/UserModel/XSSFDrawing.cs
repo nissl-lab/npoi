@@ -15,15 +15,14 @@
    limitations under the License.
 ==================================================================== */
 
-using System.Collections.Generic;
 using System;
-using NPOI.OpenXml4Net.OPC;
-using NPOI.OpenXmlFormats.Dml;
-using NPOI.XSSF.Model;
 using System.IO;
-using NPOI.OpenXmlFormats.Spreadsheet;
+using NPOI.OpenXml4Net.OPC;
+using NPOI.OpenXmlFormats.Dml.Spreadsheet; // http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing
 using NPOI.SS.UserModel;
-using NPOI.OpenXmlFormats;
+using NPOI.XSSF.Model;
+
+
 namespace NPOI.XSSF.UserModel
 {
 
@@ -34,15 +33,15 @@ namespace NPOI.XSSF.UserModel
      */
     public class XSSFDrawing : POIXMLDocumentPart, IDrawing
     {
+        public const String NAMESPACE_A = "http://schemas.openxmlformats.org/drawingml/2006/main";
+        public const String NAMESPACE_C = "http://schemas.openxmlformats.org/drawingml/2006/chart";
+
         /**
          * Root element of the SpreadsheetML Drawing part
          */
-        private CT_Drawing drawing;
+        private NPOI.OpenXmlFormats.Dml.Spreadsheet.CT_Drawing drawing;
        // private bool isNew = true; not used so far
         private long numOfGraphicFrames = 0L;
-
-        public const String NAMESPACE_A = "http://schemas.openxmlformats.org/drawingml/2006/main";
-        public const String NAMESPACE_C = "http://schemas.openxmlformats.org/drawingml/2006/chart";
 
         /**
          * Create a new SpreadsheetML Drawing
@@ -67,7 +66,7 @@ namespace NPOI.XSSF.UserModel
             : base(part, rel)
         {
 
-            drawing = CT_Drawing.Parse(part.GetInputStream());
+            drawing = NPOI.OpenXmlFormats.Dml.Spreadsheet.CT_Drawing.Parse(part.GetInputStream());
         }
 
         /**
@@ -75,7 +74,7 @@ namespace NPOI.XSSF.UserModel
          *
          * @return a new CT_Drawing bean
          */
-        private static CT_Drawing newDrawing()
+        private static NPOI.OpenXmlFormats.Dml.Spreadsheet.CT_Drawing newDrawing()
         {
             return new CT_Drawing();
         }
@@ -92,25 +91,25 @@ namespace NPOI.XSSF.UserModel
         }
 
 
-        protected override void Commit()  {
- 
-        /*
-            Saved Drawings must have the following namespaces Set:
-            <xdr:wsDr
-                xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main"
-                xmlns:xdr="http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing">
-        */
-        //if(isNew) xmlOptions.SetSaveSyntheticDocumentElement(new QName(CT_Drawing.type.GetName().GetNamespaceURI(), "wsDr", "xdr"));
-        Dictionary<String, String> map = new Dictionary<String, String>();
-        map[NAMESPACE_A]= "a";
-        map[ST_RelationshipId.NamespaceURI]= "r";
-        //xmlOptions.SetSaveSuggestedPrefixes(map);
+        protected override void Commit()
+        {
+            // /*
+            //    Saved Drawings must have the following namespaces Set:
+            //    <xdr:wsDr
+            //        xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main"
+            //        xmlns:xdr="http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing">
+            // */
+            ////if(isNew) xmlOptions.SetSaveSyntheticDocumentElement(new QName(CT_Drawing.type.GetName().GetNamespaceURI(), "wsDr", "xdr"));
+            //Dictionary<String, String> map = new Dictionary<String, String>();
+            //map[NAMESPACE_A]= "a";
+            //map[ST_RelationshipId.NamespaceURI]= "r";
+            //xmlOptions.SetSaveSuggestedPrefixes(map);
 
-        PackagePart part = GetPackagePart();
-        Stream out1 = part.GetOutputStream();
-        drawing.Save(out1);
-        out1.Close();
-    }
+            PackagePart part = GetPackagePart();
+            Stream out1 = part.GetOutputStream();
+            drawing.Save(out1);
+            out1.Close();
+        }
 
         public IClientAnchor CreateAnchor(int dx1, int dy1, int dx2, int dy2,
                 int col1, int row1, int col2, int row2)
@@ -153,7 +152,7 @@ namespace NPOI.XSSF.UserModel
 
             long shapeId = newShapeId();
             CT_TwoCellAnchor ctAnchor = CreateTwoCellAnchor(anchor);
-            CT_Picture ctShape = ctAnchor.AddNewPic();
+            NPOI.OpenXmlFormats.Dml.Spreadsheet.CT_Picture ctShape = ctAnchor.AddNewPic();
             ctShape.Set(XSSFPicture.Prototype());
 
             ctShape.nvPicPr.cNvPr.id = (uint)shapeId;
@@ -363,13 +362,13 @@ namespace NPOI.XSSF.UserModel
                     aditAs = ST_EditAs.oneCell;
                     break;
             }
-            ctAnchor.editAs = (aditAs);
+            ctAnchor.editAs = aditAs;
             return ctAnchor;
         }
 
         private long newShapeId()
         {
-            return drawing.sizeOfTwoCellAnchorArray() + 1;
+            return drawing.SizeOfTwoCellAnchorArray() + 1;
         }
 
         #region IDrawing Members

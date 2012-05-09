@@ -10,7 +10,6 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         public CommentsDocument()
         { 
-            
         }
         public CommentsDocument(CT_Comments comments)
         {
@@ -19,7 +18,6 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         public static CommentsDocument Parse(Stream stream)
         {
             CT_Comments obj = (CT_Comments)serializer.Deserialize(stream);
-
             return new CommentsDocument(obj);
         }
         public CT_Comments GetComments()

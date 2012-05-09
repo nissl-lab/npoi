@@ -1,10 +1,10 @@
 using System.Xml.Serialization;
 using System.Collections.Generic;
+using System.Xml.Schema;
+
 namespace NPOI.OpenXmlFormats.Vml
 {
     
-    
-    /// <remarks/>
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
@@ -12,7 +12,7 @@ namespace NPOI.OpenXmlFormats.Vml
     [XmlRoot(Namespace="urn:schemas-microsoft-com:vml", IsNullable=true)]
     public partial class CT_Shape {
         
-        private object[] itemsField;
+        private List<object> itemsField;
         
         private ItemsChoiceType1[] itemsElementNameField;
         
@@ -35,7 +35,7 @@ namespace NPOI.OpenXmlFormats.Vml
         private CT_TextPath textpathField;
 
         
-        /// <remarks/>
+        
         [XmlElement("ClientData", typeof(CT_ClientData), Namespace="urn:schemas-microsoft-com:office:excel")]
         [XmlElement("iscomment", typeof(CT_Empty), Namespace="urn:schemas-microsoft-com:office:powerpoint")]
         [XmlElement("textdata", typeof(CT_Rel), Namespace="urn:schemas-microsoft-com:office:powerpoint")]
@@ -45,7 +45,7 @@ namespace NPOI.OpenXmlFormats.Vml
         [XmlElement("borderright", typeof(CT_Border), Namespace="urn:schemas-microsoft-com:office:word")]
         [XmlElement("bordertop", typeof(CT_Border), Namespace="urn:schemas-microsoft-com:office:word")]
         [System.Xml.Serialization.XmlChoiceIdentifierAttribute("ItemsElementName")]
-        public object[] Items {
+        public List<object> Items {
             get {
                 return this.itemsField;
             }
@@ -53,7 +53,7 @@ namespace NPOI.OpenXmlFormats.Vml
                 this.itemsField = value;
             }
         }
-        /// <remarks/>
+        
         [XmlElement("ItemsElementName")]
         [System.Xml.Serialization.XmlIgnore]
         public ItemsChoiceType1[] ItemsElementName
@@ -135,7 +135,7 @@ namespace NPOI.OpenXmlFormats.Vml
             return clientDataField != null ? this.clientDataField[index] : null;
         }
         
-        /// <remarks/>
+        
         [XmlAttribute]
         public string type {
             get {
@@ -146,7 +146,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlAttribute]
         public string adj {
             get {
@@ -157,7 +157,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlElement]
         public CT_Path path {
             get {
@@ -168,7 +168,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlAttribute]
         public string equationxml {
             get {
@@ -192,78 +192,79 @@ namespace NPOI.OpenXmlFormats.Vml
         }
     }
     
-    /// <remarks/>
+    
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
-    [XmlType(Namespace="urn:schemas-microsoft-com:vml")]
-    [XmlRoot(Namespace="urn:schemas-microsoft-com:vml", IsNullable=true)]
-    public partial class CT_Formulas {
-        
-        private CT_F[] fField;
-        
-        /// <remarks/>
-        [XmlElement("f")]
-        public CT_F[] f {
-            get {
-                return this.fField;
-            }
-            set {
-                this.fField = value;
-            }
+    [XmlType(Namespace = "urn:schemas-microsoft-com:vml")]
+    public partial class CT_Formulas
+    {
+        private List<CT_F> fField = null; // 0..* 
+
+       
+        [XmlElement("f", Form = XmlSchemaForm.Qualified, Namespace = "urn:schemas-microsoft-com:vml")]
+        public List<CT_F> f
+        {
+            get { return this.fField; }
+            set { this.fField = value; }
+        }
+        [XmlIgnore]
+        public bool fSpecified
+        {
+            get { return (null != fField); }
         }
     }
-    
-    /// <remarks/>
+
+
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
-    [XmlType(Namespace="urn:schemas-microsoft-com:vml")]
-    [XmlRoot(Namespace="urn:schemas-microsoft-com:vml", IsNullable=true)]
-    public partial class CT_F {
-        
-        private string eqnField;
-        
-        /// <remarks/>
+    [XmlType(Namespace = "urn:schemas-microsoft-com:vml")]
+    public partial class CT_F
+    {
+        private string eqnField = null;
+
         [XmlAttribute]
-        public string eqn {
-            get {
-                return this.eqnField;
-            }
-            set {
-                this.eqnField = value;
-            }
+        public string eqn
+        {
+            get { return this.eqnField; }
+            set { this.eqnField = value; }
+        }
+        [XmlIgnore]
+        public bool eqnSpecified
+        {
+            get { return (null != eqnField); }
         }
     }
-    
-    /// <remarks/>
+
+
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
-    [XmlType(Namespace="urn:schemas-microsoft-com:vml")]
-    [XmlRoot(Namespace="urn:schemas-microsoft-com:vml", IsNullable=true)]
-    public partial class CT_Handles {
-        
-        private CT_H[] hField;
-        
-        /// <remarks/>
+    [XmlType(Namespace = "urn:schemas-microsoft-com:vml")]
+    public partial class CT_Handles
+    {
+
+        private List<CT_H> hField = null;
+
         [XmlElement("h")]
-        public CT_H[] h {
-            get {
-                return this.hField;
-            }
-            set {
-                this.hField = value;
-            }
+        public List<CT_H> h
+        {
+            get { return this.hField; }
+            set { this.hField = value; }
+        }
+        [XmlIgnore]
+        public bool hSpecified
+        {
+            get { return (null != hField); }
         }
     }
     
-    /// <remarks/>
+    
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace="urn:schemas-microsoft-com:vml")]
-    [XmlRoot(Namespace="urn:schemas-microsoft-com:vml", IsNullable=true)]
     public partial class CT_H {
         
         private string positionField;
@@ -278,7 +279,7 @@ namespace NPOI.OpenXmlFormats.Vml
         
         private ST_TrueFalse invyField;
         
-        private bool invyFieldSpecified;
+        private bool invyFieldSpecified; // TODO remove
         
         private ST_TrueFalseBlank switchField;
         
@@ -290,7 +291,7 @@ namespace NPOI.OpenXmlFormats.Vml
         
         private string radiusrangeField;
         
-        /// <remarks/>
+        
         [XmlAttribute]
         public string position {
             get {
@@ -301,7 +302,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlAttribute]
         public string polar {
             get {
@@ -312,7 +313,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlAttribute]
         public string map {
             get {
@@ -323,7 +324,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlAttribute]
         public ST_TrueFalse invx {
             get {
@@ -334,7 +335,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [System.Xml.Serialization.XmlIgnore]
         public bool invxSpecified {
             get {
@@ -345,7 +346,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlAttribute]
         public ST_TrueFalse invy {
             get {
@@ -356,7 +357,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [System.Xml.Serialization.XmlIgnore]
         public bool invySpecified {
             get {
@@ -367,7 +368,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlAttribute]
         public ST_TrueFalseBlank @switch {
             get {
@@ -378,7 +379,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [System.Xml.Serialization.XmlIgnore]
         public bool switchSpecified {
             get {
@@ -389,7 +390,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlAttribute]
         public string xrange {
             get {
@@ -400,7 +401,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlAttribute]
         public string yrange {
             get {
@@ -411,7 +412,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlAttribute]
         public string radiusrange {
             get {
@@ -423,7 +424,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
     }
     
-    /// <remarks/>
+    
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
@@ -469,9 +470,11 @@ namespace NPOI.OpenXmlFormats.Vml
         
         private string hrefField;
         
-        /// <remarks/>
-        [XmlAttribute]
-        public string id {
+        
+        // TODO is the following correct?
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/relationships")]
+        public string id
+        {
             get {
                 return this.idField;
             }
@@ -480,7 +483,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlAttribute]
         public string src {
             get {
@@ -491,7 +494,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlAttribute]
         public string cropleft {
             get {
@@ -502,7 +505,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlAttribute]
         public string croptop {
             get {
@@ -513,7 +516,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlAttribute]
         public string cropright {
             get {
@@ -524,7 +527,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlAttribute]
         public string cropbottom {
             get {
@@ -535,7 +538,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlAttribute]
         public string gain {
             get {
@@ -546,7 +549,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlAttribute]
         public string blacklevel {
             get {
@@ -557,7 +560,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlAttribute]
         public string gamma {
             get {
@@ -568,7 +571,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlAttribute]
         public ST_TrueFalse grayscale {
             get {
@@ -579,7 +582,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [System.Xml.Serialization.XmlIgnore]
         public bool grayscaleSpecified {
             get {
@@ -590,7 +593,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlAttribute]
         public ST_TrueFalse bilevel {
             get {
@@ -601,7 +604,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [System.Xml.Serialization.XmlIgnore]
         public bool bilevelSpecified {
             get {
@@ -612,7 +615,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlAttribute]
         public string chromakey {
             get {
@@ -623,7 +626,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlAttribute]
         public string embosscolor {
             get {
@@ -634,7 +637,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlAttribute]
         public string recolortarget {
             get {
@@ -645,7 +648,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlAttributeAttribute("id", Form=System.Xml.Schema.XmlSchemaForm.Qualified, Namespace="http://schemas.openxmlformats.org/officeDocument/2006/relationships")]
         public string id1 {
             get {
@@ -656,7 +659,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlAttributeAttribute(Form=System.Xml.Schema.XmlSchemaForm.Qualified, Namespace="http://schemas.openxmlformats.org/officeDocument/2006/relationships")]
         public string pict {
             get {
@@ -667,7 +670,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlAttributeAttribute(Form=System.Xml.Schema.XmlSchemaForm.Qualified, Namespace="http://schemas.openxmlformats.org/officeDocument/2006/relationships")]
         public string href {
             get {
@@ -679,7 +682,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
     }
     
-    /// <remarks/>
+    
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
@@ -723,9 +726,11 @@ namespace NPOI.OpenXmlFormats.Vml
         
         private bool insetpenokFieldSpecified;
         
-        /// <remarks/>
-        [XmlAttribute]
-        public string id {
+        
+        // TODO is the following correct?
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/relationships")]
+        public string id
+        {
             get {
                 return this.idField;
             }
@@ -734,7 +739,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlAttribute]
         public string v {
             get {
@@ -745,7 +750,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlAttribute]
         public string limo {
             get {
@@ -756,7 +761,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlAttribute]
         public string textboxrect {
             get {
@@ -767,7 +772,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlAttribute]
         public ST_TrueFalse fillok {
             get {
@@ -778,7 +783,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [System.Xml.Serialization.XmlIgnore]
         public bool fillokSpecified {
             get {
@@ -789,7 +794,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlAttribute]
         public ST_TrueFalse strokeok {
             get {
@@ -800,7 +805,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [System.Xml.Serialization.XmlIgnore]
         public bool strokeokSpecified {
             get {
@@ -811,7 +816,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlAttribute]
         public ST_TrueFalse shadowok {
             get {
@@ -822,7 +827,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [System.Xml.Serialization.XmlIgnore]
         public bool shadowokSpecified {
             get {
@@ -833,7 +838,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlAttribute]
         public ST_TrueFalse arrowok {
             get {
@@ -844,7 +849,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [System.Xml.Serialization.XmlIgnore]
         public bool arrowokSpecified {
             get {
@@ -855,7 +860,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlAttribute]
         public ST_TrueFalse gradientshapeok {
             get {
@@ -866,7 +871,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [System.Xml.Serialization.XmlIgnore]
         public bool gradientshapeokSpecified {
             get {
@@ -877,7 +882,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlAttribute]
         public ST_TrueFalse textpathok {
             get {
@@ -888,7 +893,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [System.Xml.Serialization.XmlIgnore]
         public bool textpathokSpecified {
             get {
@@ -899,7 +904,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlAttribute]
         public ST_TrueFalse insetpenok {
             get {
@@ -910,7 +915,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [System.Xml.Serialization.XmlIgnore]
         public bool insetpenokSpecified {
             get {
@@ -922,7 +927,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
     }
     
-    /// <remarks/>
+    
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
@@ -958,9 +963,11 @@ namespace NPOI.OpenXmlFormats.Vml
         
         private string matrixField;
         
-        /// <remarks/>
-        [XmlAttribute]
-        public string id {
+        
+        // TODO is the following correct?
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/relationships")]
+        public string id
+        {
             get {
                 return this.idField;
             }
@@ -969,7 +976,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlAttribute]
         public ST_TrueFalse on {
             get {
@@ -980,7 +987,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [System.Xml.Serialization.XmlIgnore]
         public bool onSpecified {
             get {
@@ -991,7 +998,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlAttribute]
         public ST_ShadowType type {
             get {
@@ -1002,7 +1009,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [System.Xml.Serialization.XmlIgnore]
         public bool typeSpecified {
             get {
@@ -1013,7 +1020,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlAttribute]
         public ST_TrueFalse obscured {
             get {
@@ -1024,7 +1031,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [System.Xml.Serialization.XmlIgnore]
         public bool obscuredSpecified {
             get {
@@ -1035,7 +1042,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlAttribute]
         public string color {
             get {
@@ -1046,7 +1053,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlAttribute]
         public string opacity {
             get {
@@ -1057,7 +1064,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlAttribute]
         public string offset {
             get {
@@ -1068,7 +1075,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlAttribute]
         public string color2 {
             get {
@@ -1079,7 +1086,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlAttribute]
         public string offset2 {
             get {
@@ -1090,7 +1097,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlAttribute]
         public string origin {
             get {
@@ -1101,7 +1108,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlAttribute]
         public string matrix {
             get {
@@ -1113,26 +1120,26 @@ namespace NPOI.OpenXmlFormats.Vml
         }
     }
     
-    /// <remarks/>
+    
     [System.Serializable]
     [XmlType(Namespace="urn:schemas-microsoft-com:vml")]
     [XmlRoot(Namespace="urn:schemas-microsoft-com:vml", IsNullable=false)]
     public enum ST_ShadowType {
         
-        /// <remarks/>
+        
         single,
         
-        /// <remarks/>
+        
         @double,
         
-        /// <remarks/>
+        
         emboss,
         
-        /// <remarks/>
+        
         perspective,
     }
     
-    /// <remarks/>
+    
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
@@ -1218,9 +1225,11 @@ namespace NPOI.OpenXmlFormats.Vml
         
         private bool insetpenFieldSpecified;
         
-        /// <remarks/>
-        [XmlAttribute]
-        public string id {
+        
+        // TODO is the following correct?
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/relationships")]
+        public string id
+        {
             get {
                 return this.idField;
             }
@@ -1229,7 +1238,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlAttribute]
         public ST_TrueFalse on {
             get {
@@ -1240,7 +1249,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [System.Xml.Serialization.XmlIgnore]
         public bool onSpecified {
             get {
@@ -1251,7 +1260,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlAttribute]
         public string weight {
             get {
@@ -1262,7 +1271,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlAttribute]
         public string color {
             get {
@@ -1273,7 +1282,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlAttribute]
         public string opacity {
             get {
@@ -1284,7 +1293,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlAttribute]
         public ST_StrokeLineStyle linestyle {
             get {
@@ -1295,7 +1304,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [System.Xml.Serialization.XmlIgnore]
         public bool linestyleSpecified {
             get {
@@ -1306,7 +1315,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlAttribute]
         public decimal miterlimit {
             get {
@@ -1317,7 +1326,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [System.Xml.Serialization.XmlIgnore]
         public bool miterlimitSpecified {
             get {
@@ -1328,7 +1337,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlAttribute]
         public ST_StrokeJoinStyle joinstyle {
             get {
@@ -1339,7 +1348,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [System.Xml.Serialization.XmlIgnore]
         public bool joinstyleSpecified {
             get {
@@ -1350,7 +1359,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlAttribute]
         public ST_StrokeEndCap endcap {
             get {
@@ -1361,7 +1370,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [System.Xml.Serialization.XmlIgnore]
         public bool endcapSpecified {
             get {
@@ -1372,7 +1381,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlAttribute]
         public string dashstyle {
             get {
@@ -1383,7 +1392,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlAttribute]
         public ST_FillType filltype {
             get {
@@ -1394,7 +1403,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [System.Xml.Serialization.XmlIgnore]
         public bool filltypeSpecified {
             get {
@@ -1405,7 +1414,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlAttribute]
         public string src {
             get {
@@ -1416,7 +1425,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlAttribute]
         public ST_ImageAspect imageaspect {
             get {
@@ -1427,7 +1436,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [System.Xml.Serialization.XmlIgnore]
         public bool imageaspectSpecified {
             get {
@@ -1438,7 +1447,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlAttribute]
         public string imagesize {
             get {
@@ -1449,7 +1458,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlAttribute]
         public ST_TrueFalse imagealignshape {
             get {
@@ -1460,7 +1469,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [System.Xml.Serialization.XmlIgnore]
         public bool imagealignshapeSpecified {
             get {
@@ -1471,7 +1480,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlAttribute]
         public string color2 {
             get {
@@ -1482,7 +1491,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlAttribute]
         public ST_StrokeArrowType startarrow {
             get {
@@ -1493,7 +1502,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [System.Xml.Serialization.XmlIgnore]
         public bool startarrowSpecified {
             get {
@@ -1504,7 +1513,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlAttribute]
         public ST_StrokeArrowWidth startarrowwidth {
             get {
@@ -1515,7 +1524,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [System.Xml.Serialization.XmlIgnore]
         public bool startarrowwidthSpecified {
             get {
@@ -1526,7 +1535,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlAttribute]
         public ST_StrokeArrowLength startarrowlength {
             get {
@@ -1537,7 +1546,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [System.Xml.Serialization.XmlIgnore]
         public bool startarrowlengthSpecified {
             get {
@@ -1548,7 +1557,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlAttribute]
         public ST_StrokeArrowType endarrow {
             get {
@@ -1559,7 +1568,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [System.Xml.Serialization.XmlIgnore]
         public bool endarrowSpecified {
             get {
@@ -1570,7 +1579,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlAttribute]
         public ST_StrokeArrowWidth endarrowwidth {
             get {
@@ -1581,7 +1590,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [System.Xml.Serialization.XmlIgnore]
         public bool endarrowwidthSpecified {
             get {
@@ -1592,7 +1601,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlAttribute]
         public ST_StrokeArrowLength endarrowlength {
             get {
@@ -1603,7 +1612,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [System.Xml.Serialization.XmlIgnore]
         public bool endarrowlengthSpecified {
             get {
@@ -1614,7 +1623,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlAttributeAttribute("id", Form=System.Xml.Schema.XmlSchemaForm.Qualified, Namespace="http://schemas.openxmlformats.org/officeDocument/2006/relationships")]
         public string id1 {
             get {
@@ -1625,7 +1634,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlAttribute]
         public ST_TrueFalse insetpen {
             get {
@@ -1636,7 +1645,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [System.Xml.Serialization.XmlIgnore]
         public bool insetpenSpecified {
             get {
@@ -1648,118 +1657,118 @@ namespace NPOI.OpenXmlFormats.Vml
         }
     }
     
-    /// <remarks/>
+    
     [System.Serializable]
     [XmlType(Namespace="urn:schemas-microsoft-com:vml")]
     [XmlRoot(Namespace="urn:schemas-microsoft-com:vml", IsNullable=false)]
     public enum ST_StrokeLineStyle {
         
-        /// <remarks/>
+        
         single,
         
-        /// <remarks/>
+        
         thinThin,
         
-        /// <remarks/>
+        
         thinThick,
         
-        /// <remarks/>
+        
         thickThin,
         
-        /// <remarks/>
+        
         thickBetweenThin,
     }
     
-    /// <remarks/>
+    
     [System.Serializable]
     [XmlType(Namespace="urn:schemas-microsoft-com:vml")]
     [XmlRoot(Namespace="urn:schemas-microsoft-com:vml", IsNullable=false)]
     public enum ST_StrokeJoinStyle {
         
-        /// <remarks/>
+        
         round,
         
-        /// <remarks/>
+        
         bevel,
         
-        /// <remarks/>
+        
         miter,
     }
     
-    /// <remarks/>
+    
     [System.Serializable]
     [XmlType(Namespace="urn:schemas-microsoft-com:vml")]
     [XmlRoot(Namespace="urn:schemas-microsoft-com:vml", IsNullable=false)]
     public enum ST_StrokeEndCap {
         
-        /// <remarks/>
+        
         flat,
         
-        /// <remarks/>
+        
         square,
         
-        /// <remarks/>
+        
         round,
     }
     
-    /// <remarks/>
+    
     [System.Serializable]
     [XmlType(Namespace="urn:schemas-microsoft-com:vml")]
     [XmlRoot(Namespace="urn:schemas-microsoft-com:vml", IsNullable=false)]
     public enum ST_StrokeArrowType {
         
-        /// <remarks/>
+        
         none,
         
-        /// <remarks/>
+        
         block,
         
-        /// <remarks/>
+        
         classic,
         
-        /// <remarks/>
+        
         oval,
         
-        /// <remarks/>
+        
         diamond,
         
-        /// <remarks/>
+        
         open,
     }
     
-    /// <remarks/>
+    
     [System.Serializable]
     [XmlType(Namespace="urn:schemas-microsoft-com:vml")]
     [XmlRoot(Namespace="urn:schemas-microsoft-com:vml", IsNullable=false)]
     public enum ST_StrokeArrowWidth {
         
-        /// <remarks/>
+        
         narrow,
         
-        /// <remarks/>
+        
         medium,
         
-        /// <remarks/>
+        
         wide,
     }
     
-    /// <remarks/>
+    
     [System.Serializable]
     [XmlType(Namespace="urn:schemas-microsoft-com:vml")]
     [XmlRoot(Namespace="urn:schemas-microsoft-com:vml", IsNullable=false)]
     public enum ST_StrokeArrowLength {
         
-        /// <remarks/>
+        
         @short,
         
-        /// <remarks/>
+        
         medium,
         
-        /// <remarks/>
+        
         @long,
     }
     
-    /// <remarks/>
+    
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
@@ -1775,7 +1784,7 @@ namespace NPOI.OpenXmlFormats.Vml
         
         private string insetField;
         
-        /// <remarks/>
+        
         [System.Xml.Serialization.XmlAnyElementAttribute()]
         public System.Xml.XmlElement Item {
             get {
@@ -1786,9 +1795,11 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
-        [XmlAttribute]
-        public string id {
+        
+        // TODO is the following correct?
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/relationships")]
+        public string id
+        {
             get {
                 return this.idField;
             }
@@ -1797,7 +1808,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlAttribute]
         public string style {
             get {
@@ -1808,7 +1819,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlAttribute]
         public string inset {
             get {
@@ -1820,7 +1831,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
     }
     
-    /// <remarks/>
+    
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
@@ -1854,9 +1865,11 @@ namespace NPOI.OpenXmlFormats.Vml
         
         private string stringField;
         
-        /// <remarks/>
-        [XmlAttribute]
-        public string id {
+        
+        // TODO is the following correct?
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/relationships")]
+        public string id
+        {
             get {
                 return this.idField;
             }
@@ -1865,7 +1878,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlAttribute]
         public string style {
             get {
@@ -1876,7 +1889,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlAttribute]
         public ST_TrueFalse on {
             get {
@@ -1887,7 +1900,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [System.Xml.Serialization.XmlIgnore]
         public bool onSpecified {
             get {
@@ -1898,7 +1911,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlAttribute]
         public ST_TrueFalse fitshape {
             get {
@@ -1909,7 +1922,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [System.Xml.Serialization.XmlIgnore]
         public bool fitshapeSpecified {
             get {
@@ -1920,7 +1933,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlAttribute]
         public ST_TrueFalse fitpath {
             get {
@@ -1931,7 +1944,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [System.Xml.Serialization.XmlIgnore]
         public bool fitpathSpecified {
             get {
@@ -1942,7 +1955,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlAttribute]
         public ST_TrueFalse trim {
             get {
@@ -1953,7 +1966,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [System.Xml.Serialization.XmlIgnore]
         public bool trimSpecified {
             get {
@@ -1964,7 +1977,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlAttribute]
         public ST_TrueFalse xscale {
             get {
@@ -1975,7 +1988,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [System.Xml.Serialization.XmlIgnore]
         public bool xscaleSpecified {
             get {
@@ -1986,7 +1999,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlAttribute]
         public string @string {
             get {
@@ -1998,76 +2011,76 @@ namespace NPOI.OpenXmlFormats.Vml
         }
     }
     
-    /// <remarks/>
+    
     [System.Serializable]
     [XmlType(Namespace="urn:schemas-microsoft-com:vml", IncludeInSchema=false)]
     public enum ItemsChoiceType1 {
         
-        /// <remarks/>
+        
         [XmlEnum("urn:schemas-microsoft-com:office:excel:ClientData")]
         ClientData,
         
-        /// <remarks/>
+        
         [XmlEnum("urn:schemas-microsoft-com:office:powerpoint:iscomment")]
         iscomment,
         
-        /// <remarks/>
+        
         [XmlEnum("urn:schemas-microsoft-com:office:powerpoint:textdata")]
         textdata,
         
-        /// <remarks/>
+        
         [XmlEnum("urn:schemas-microsoft-com:office:word:anchorlock")]
         anchorlock,
         
-        /// <remarks/>
+        
         [XmlEnum("urn:schemas-microsoft-com:office:word:borderbottom")]
         borderbottom,
         
-        /// <remarks/>
+        
         [XmlEnum("urn:schemas-microsoft-com:office:word:borderleft")]
         borderleft,
         
-        /// <remarks/>
+        
         [XmlEnum("urn:schemas-microsoft-com:office:word:borderright")]
         borderright,
         
-        /// <remarks/>
+        
         [XmlEnum("urn:schemas-microsoft-com:office:word:bordertop")]
         bordertop,
         
-        /// <remarks/>
+        
         [XmlEnum("urn:schemas-microsoft-com:office:word:wrap")]
         wrap,
         
-        /// <remarks/>
+        
         fill,
         
-        /// <remarks/>
+        
         formulas,
         
-        /// <remarks/>
+        
         handles,
         
-        /// <remarks/>
+        
         imagedata,
         
-        /// <remarks/>
+        
         path,
         
-        /// <remarks/>
+        
         shadow,
         
-        /// <remarks/>
+        
         stroke,
         
-        /// <remarks/>
+        
         textbox,
         
-        /// <remarks/>
+        
         textpath,
     }
     
-    /// <remarks/>
+    
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
@@ -2077,37 +2090,37 @@ namespace NPOI.OpenXmlFormats.Vml
         
         private List<CT_Path> pathField;
         
-        private CT_Formulas[] formulasField;
+        private List<CT_Formulas> formulasField;
         
-        private CT_Handles[] handlesField;
+        private List<CT_Handles> handlesField;
         
-        private CT_Fill[] fillField;
+        private List<CT_Fill> fillField;
         
         private List<CT_Stroke> strokeField;
         
-        private CT_Shadow[] shadowField;
+        private List<CT_Shadow> shadowField;
         
-        private CT_Textbox[] textboxField;
+        private List<CT_Textbox> textboxField;
         
-        private CT_TextPath[] textpathField;
+        private List<CT_TextPath> textpathField;
         
-        private CT_ImageData[] imagedataField;
+        private List<CT_ImageData> imagedataField;
         
-        private CT_Wrap[] wrapField;
+        private List<CT_Wrap> wrapField;
         
-        private CT_AnchorLock[] anchorlockField;
+        private List<CT_AnchorLock> anchorlockField;
         
-        private CT_Border[] bordertopField;
+        private List<CT_Border> bordertopField;
         
-        private CT_Border[] borderbottomField;
+        private List<CT_Border> borderbottomField;
         
-        private CT_Border[] borderleftField;
+        private List<CT_Border> borderleftField;
         
-        private CT_Border[] borderrightField;
+        private List<CT_Border> borderrightField;
         
-        private CT_ClientData[] clientDataField;
+        private List<CT_ClientData> clientDataField;
         
-        private CT_Rel[] textdataField;
+        private List<CT_Rel> textdataField;
         
         private string adjField;
         private string idField;
@@ -2116,7 +2129,8 @@ namespace NPOI.OpenXmlFormats.Vml
         
         private string path1Field;
 
-        [XmlAttribute]
+        // TODO is the following correct?
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/relationships")]
         public string id
         {
             get {
@@ -2128,7 +2142,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
 
-        /// <remarks/>
+        
         [XmlElement("path")]
         public List<CT_Path> path {
             get {
@@ -2139,9 +2153,9 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlElement("formulas")]
-        public CT_Formulas[] formulas {
+        public List<CT_Formulas> formulas {
             get {
                 return this.formulasField;
             }
@@ -2150,9 +2164,9 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlElement("handles")]
-        public CT_Handles[] handles {
+        public List<CT_Handles> handles {
             get {
                 return this.handlesField;
             }
@@ -2161,9 +2175,9 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlElement("fill")]
-        public CT_Fill[] fill {
+        public List<CT_Fill> fill {
             get {
                 return this.fillField;
             }
@@ -2172,7 +2186,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlElement("stroke")]
         public List<CT_Stroke> stroke {
             get {
@@ -2183,9 +2197,9 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlElement("shadow")]
-        public CT_Shadow[] shadow {
+        public List<CT_Shadow> shadow {
             get {
                 return this.shadowField;
             }
@@ -2194,9 +2208,9 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlElement("textbox")]
-        public CT_Textbox[] textbox {
+        public List<CT_Textbox> textbox {
             get {
                 return this.textboxField;
             }
@@ -2205,9 +2219,9 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlElement("textpath")]
-        public CT_TextPath[] textpath {
+        public List<CT_TextPath> textpath {
             get {
                 return this.textpathField;
             }
@@ -2216,9 +2230,9 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlElement("imagedata")]
-        public CT_ImageData[] imagedata {
+        public List<CT_ImageData> imagedata {
             get {
                 return this.imagedataField;
             }
@@ -2227,9 +2241,9 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlElement("wrap", Namespace="urn:schemas-microsoft-com:office:word")]
-        public CT_Wrap[] wrap {
+        public List<CT_Wrap> wrap {
             get {
                 return this.wrapField;
             }
@@ -2238,9 +2252,9 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlElement("anchorlock", Namespace="urn:schemas-microsoft-com:office:word")]
-        public CT_AnchorLock[] anchorlock {
+        public List<CT_AnchorLock> anchorlock {
             get {
                 return this.anchorlockField;
             }
@@ -2249,9 +2263,9 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlElement("bordertop", Namespace="urn:schemas-microsoft-com:office:word")]
-        public CT_Border[] bordertop {
+        public List<CT_Border> bordertop {
             get {
                 return this.bordertopField;
             }
@@ -2260,9 +2274,9 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlElement("borderbottom", Namespace="urn:schemas-microsoft-com:office:word")]
-        public CT_Border[] borderbottom {
+        public List<CT_Border> borderbottom {
             get {
                 return this.borderbottomField;
             }
@@ -2271,9 +2285,9 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlElement("borderleft", Namespace="urn:schemas-microsoft-com:office:word")]
-        public CT_Border[] borderleft {
+        public List<CT_Border> borderleft {
             get {
                 return this.borderleftField;
             }
@@ -2282,9 +2296,9 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlElement("borderright", Namespace="urn:schemas-microsoft-com:office:word")]
-        public CT_Border[] borderright {
+        public List<CT_Border> borderright {
             get {
                 return this.borderrightField;
             }
@@ -2293,9 +2307,9 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlElement("ClientData", Namespace="urn:schemas-microsoft-com:office:excel")]
-        public CT_ClientData[] ClientData {
+        public List<CT_ClientData> ClientData {
             get {
                 return this.clientDataField;
             }
@@ -2304,9 +2318,9 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlElement("textdata", Namespace="urn:schemas-microsoft-com:office:powerpoint")]
-        public CT_Rel[] textdata {
+        public List<CT_Rel> textdata {
             get {
                 return this.textdataField;
             }
@@ -2315,7 +2329,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlAttribute]
         public string adj {
             get {
@@ -2326,7 +2340,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlAttributeAttribute("path")]
         public string path1 {
             get {
@@ -2352,7 +2366,7 @@ namespace NPOI.OpenXmlFormats.Vml
 
     }
     
-    /// <remarks/>
+    
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
@@ -2360,7 +2374,7 @@ namespace NPOI.OpenXmlFormats.Vml
     [XmlRoot(Namespace="urn:schemas-microsoft-com:vml", IsNullable=true)]
     public partial class CT_Group {
         
-        private object[] itemsField;
+        private List<object> itemsField;
         
         private ItemsChoiceType6[] itemsElementNameField;
         
@@ -2374,7 +2388,7 @@ namespace NPOI.OpenXmlFormats.Vml
         
         private bool editasFieldSpecified;
         
-        /// <remarks/>
+        
         [XmlElement("ClientData", typeof(CT_ClientData), Namespace="urn:schemas-microsoft-com:office:excel")]
         [XmlElement("textdata", typeof(CT_Rel), Namespace="urn:schemas-microsoft-com:office:powerpoint")]
         [XmlElement("anchorlock", typeof(CT_AnchorLock), Namespace="urn:schemas-microsoft-com:office:word")]
@@ -2404,7 +2418,7 @@ namespace NPOI.OpenXmlFormats.Vml
         [XmlElement("textbox", typeof(CT_Textbox))]
         [XmlElement("textpath", typeof(CT_TextPath))]
         [System.Xml.Serialization.XmlChoiceIdentifierAttribute("ItemsElementName")]
-        public object[] Items {
+        public List<object> Items {
             get {
                 return this.itemsField;
             }
@@ -2413,7 +2427,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlElement("ItemsElementName")]
         [System.Xml.Serialization.XmlIgnore]
         public ItemsChoiceType6[] ItemsElementName {
@@ -2425,7 +2439,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlAttribute]
         public ST_TrueFalse filled {
             get {
@@ -2436,7 +2450,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [System.Xml.Serialization.XmlIgnore]
         public bool filledSpecified {
             get {
@@ -2447,7 +2461,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlAttribute]
         public string fillcolor {
             get {
@@ -2458,7 +2472,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlAttribute]
         public ST_EditAs editas {
             get {
@@ -2469,7 +2483,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [System.Xml.Serialization.XmlIgnore]
         public bool editasSpecified {
             get {
@@ -2486,7 +2500,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
     }
     
-    /// <remarks/>
+    
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
@@ -2494,39 +2508,39 @@ namespace NPOI.OpenXmlFormats.Vml
     [XmlRoot(Namespace="urn:schemas-microsoft-com:vml", IsNullable=true)]
     public partial class CT_Arc {
         
-        private CT_Path[] pathField;
+        private List<CT_Path> pathField;
         
-        private CT_Formulas[] formulasField;
+        private List<CT_Formulas> formulasField;
         
-        private CT_Handles[] handlesField;
+        private List<CT_Handles> handlesField;
         
-        private CT_Fill[] fillField;
+        private List<CT_Fill> fillField;
         
-        private CT_Stroke[] strokeField;
+        private List<CT_Stroke> strokeField;
         
-        private CT_Shadow[] shadowField;
+        private List<CT_Shadow> shadowField;
         
-        private CT_Textbox[] textboxField;
+        private List<CT_Textbox> textboxField;
         
-        private CT_TextPath[] textpathField;
+        private List<CT_TextPath> textpathField;
         
-        private CT_ImageData[] imagedataField;
+        private List<CT_ImageData> imagedataField;
         
-        private CT_Wrap[] wrapField;
+        private List<CT_Wrap> wrapField;
         
-        private CT_AnchorLock[] anchorlockField;
+        private List<CT_AnchorLock> anchorlockField;
         
-        private CT_Border[] bordertopField;
+        private List<CT_Border> bordertopField;
         
-        private CT_Border[] borderbottomField;
+        private List<CT_Border> borderbottomField;
         
-        private CT_Border[] borderleftField;
+        private List<CT_Border> borderleftField;
         
-        private CT_Border[] borderrightField;
+        private List<CT_Border> borderrightField;
         
-        private CT_ClientData[] clientDataField;
+        private List<CT_ClientData> clientDataField;
         
-        private CT_Rel[] textdataField;
+        private List<CT_Rel> textdataField;
         
         private decimal startAngleField;
         
@@ -2536,9 +2550,9 @@ namespace NPOI.OpenXmlFormats.Vml
         
         private bool endAngleFieldSpecified;
         
-        /// <remarks/>
+        
         [XmlElement("path")]
-        public CT_Path[] path {
+        public List<CT_Path> path {
             get {
                 return this.pathField;
             }
@@ -2547,9 +2561,9 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlElement("formulas")]
-        public CT_Formulas[] formulas {
+        public List<CT_Formulas> formulas {
             get {
                 return this.formulasField;
             }
@@ -2558,9 +2572,9 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlElement("handles")]
-        public CT_Handles[] handles {
+        public List<CT_Handles> handles {
             get {
                 return this.handlesField;
             }
@@ -2569,9 +2583,9 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlElement("fill")]
-        public CT_Fill[] fill {
+        public List<CT_Fill> fill {
             get {
                 return this.fillField;
             }
@@ -2580,9 +2594,9 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlElement("stroke")]
-        public CT_Stroke[] stroke {
+        public List<CT_Stroke> stroke {
             get {
                 return this.strokeField;
             }
@@ -2591,9 +2605,9 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlElement("shadow")]
-        public CT_Shadow[] shadow {
+        public List<CT_Shadow> shadow {
             get {
                 return this.shadowField;
             }
@@ -2602,9 +2616,9 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlElement("textbox")]
-        public CT_Textbox[] textbox {
+        public List<CT_Textbox> textbox {
             get {
                 return this.textboxField;
             }
@@ -2613,9 +2627,9 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlElement("textpath")]
-        public CT_TextPath[] textpath {
+        public List<CT_TextPath> textpath {
             get {
                 return this.textpathField;
             }
@@ -2624,9 +2638,9 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlElement("imagedata")]
-        public CT_ImageData[] imagedata {
+        public List<CT_ImageData> imagedata {
             get {
                 return this.imagedataField;
             }
@@ -2635,9 +2649,9 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlElement("wrap", Namespace="urn:schemas-microsoft-com:office:word")]
-        public CT_Wrap[] wrap {
+        public List<CT_Wrap> wrap {
             get {
                 return this.wrapField;
             }
@@ -2646,9 +2660,9 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlElement("anchorlock", Namespace="urn:schemas-microsoft-com:office:word")]
-        public CT_AnchorLock[] anchorlock {
+        public List<CT_AnchorLock> anchorlock {
             get {
                 return this.anchorlockField;
             }
@@ -2657,9 +2671,9 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlElement("bordertop", Namespace="urn:schemas-microsoft-com:office:word")]
-        public CT_Border[] bordertop {
+        public List<CT_Border> bordertop {
             get {
                 return this.bordertopField;
             }
@@ -2668,9 +2682,9 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlElement("borderbottom", Namespace="urn:schemas-microsoft-com:office:word")]
-        public CT_Border[] borderbottom {
+        public List<CT_Border> borderbottom {
             get {
                 return this.borderbottomField;
             }
@@ -2679,9 +2693,9 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlElement("borderleft", Namespace="urn:schemas-microsoft-com:office:word")]
-        public CT_Border[] borderleft {
+        public List<CT_Border> borderleft {
             get {
                 return this.borderleftField;
             }
@@ -2690,9 +2704,9 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlElement("borderright", Namespace="urn:schemas-microsoft-com:office:word")]
-        public CT_Border[] borderright {
+        public List<CT_Border> borderright {
             get {
                 return this.borderrightField;
             }
@@ -2701,9 +2715,9 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlElement("ClientData", Namespace="urn:schemas-microsoft-com:office:excel")]
-        public CT_ClientData[] ClientData {
+        public List<CT_ClientData> ClientData {
             get {
                 return this.clientDataField;
             }
@@ -2712,9 +2726,9 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlElement("textdata", Namespace="urn:schemas-microsoft-com:office:powerpoint")]
-        public CT_Rel[] textdata {
+        public List<CT_Rel> textdata {
             get {
                 return this.textdataField;
             }
@@ -2723,7 +2737,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlAttribute]
         public decimal startAngle {
             get {
@@ -2734,7 +2748,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [System.Xml.Serialization.XmlIgnore]
         public bool startAngleSpecified {
             get {
@@ -2745,7 +2759,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlAttribute]
         public decimal endAngle {
             get {
@@ -2756,7 +2770,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [System.Xml.Serialization.XmlIgnore]
         public bool endAngleSpecified {
             get {
@@ -2768,7 +2782,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
     }
     
-    /// <remarks/>
+    
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
@@ -2776,39 +2790,39 @@ namespace NPOI.OpenXmlFormats.Vml
     [XmlRoot(Namespace="urn:schemas-microsoft-com:vml", IsNullable=true)]
     public partial class CT_Curve {
         
-        private CT_Path[] pathField;
+        private List<CT_Path> pathField;
         
-        private CT_Formulas[] formulasField;
+        private List<CT_Formulas> formulasField;
         
-        private CT_Handles[] handlesField;
+        private List<CT_Handles> handlesField;
         
-        private CT_Fill[] fillField;
+        private List<CT_Fill> fillField;
         
-        private CT_Stroke[] strokeField;
+        private List<CT_Stroke> strokeField;
         
-        private CT_Shadow[] shadowField;
+        private List<CT_Shadow> shadowField;
         
-        private CT_Textbox[] textboxField;
+        private List<CT_Textbox> textboxField;
         
-        private CT_TextPath[] textpathField;
+        private List<CT_TextPath> textpathField;
         
-        private CT_ImageData[] imagedataField;
+        private List<CT_ImageData> imagedataField;
         
-        private CT_Wrap[] wrapField;
+        private List<CT_Wrap> wrapField;
         
-        private CT_AnchorLock[] anchorlockField;
+        private List<CT_AnchorLock> anchorlockField;
         
-        private CT_Border[] bordertopField;
+        private List<CT_Border> bordertopField;
         
-        private CT_Border[] borderbottomField;
+        private List<CT_Border> borderbottomField;
         
-        private CT_Border[] borderleftField;
+        private List<CT_Border> borderleftField;
         
-        private CT_Border[] borderrightField;
+        private List<CT_Border> borderrightField;
         
-        private CT_ClientData[] clientDataField;
+        private List<CT_ClientData> clientDataField;
         
-        private CT_Rel[] textdataField;
+        private List<CT_Rel> textdataField;
         
         private string fromField;
         
@@ -2818,9 +2832,9 @@ namespace NPOI.OpenXmlFormats.Vml
         
         private string toField;
         
-        /// <remarks/>
+        
         [XmlElement("path")]
-        public CT_Path[] path {
+        public List<CT_Path> path {
             get {
                 return this.pathField;
             }
@@ -2829,9 +2843,9 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlElement("formulas")]
-        public CT_Formulas[] formulas {
+        public List<CT_Formulas> formulas {
             get {
                 return this.formulasField;
             }
@@ -2840,9 +2854,9 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlElement("handles")]
-        public CT_Handles[] handles {
+        public List<CT_Handles> handles {
             get {
                 return this.handlesField;
             }
@@ -2851,9 +2865,9 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlElement("fill")]
-        public CT_Fill[] fill {
+        public List<CT_Fill> fill {
             get {
                 return this.fillField;
             }
@@ -2862,9 +2876,9 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlElement("stroke")]
-        public CT_Stroke[] stroke {
+        public List<CT_Stroke> stroke {
             get {
                 return this.strokeField;
             }
@@ -2873,9 +2887,9 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlElement("shadow")]
-        public CT_Shadow[] shadow {
+        public List<CT_Shadow> shadow {
             get {
                 return this.shadowField;
             }
@@ -2884,9 +2898,9 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlElement("textbox")]
-        public CT_Textbox[] textbox {
+        public List<CT_Textbox> textbox {
             get {
                 return this.textboxField;
             }
@@ -2895,9 +2909,9 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlElement("textpath")]
-        public CT_TextPath[] textpath {
+        public List<CT_TextPath> textpath {
             get {
                 return this.textpathField;
             }
@@ -2906,9 +2920,9 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlElement("imagedata")]
-        public CT_ImageData[] imagedata {
+        public List<CT_ImageData> imagedata {
             get {
                 return this.imagedataField;
             }
@@ -2917,9 +2931,9 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlElement("wrap", Namespace="urn:schemas-microsoft-com:office:word")]
-        public CT_Wrap[] wrap {
+        public List<CT_Wrap> wrap {
             get {
                 return this.wrapField;
             }
@@ -2928,9 +2942,9 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlElement("anchorlock", Namespace="urn:schemas-microsoft-com:office:word")]
-        public CT_AnchorLock[] anchorlock {
+        public List<CT_AnchorLock> anchorlock {
             get {
                 return this.anchorlockField;
             }
@@ -2939,9 +2953,9 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlElement("bordertop", Namespace="urn:schemas-microsoft-com:office:word")]
-        public CT_Border[] bordertop {
+        public List<CT_Border> bordertop {
             get {
                 return this.bordertopField;
             }
@@ -2950,9 +2964,9 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlElement("borderbottom", Namespace="urn:schemas-microsoft-com:office:word")]
-        public CT_Border[] borderbottom {
+        public List<CT_Border> borderbottom {
             get {
                 return this.borderbottomField;
             }
@@ -2961,9 +2975,9 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlElement("borderleft", Namespace="urn:schemas-microsoft-com:office:word")]
-        public CT_Border[] borderleft {
+        public List<CT_Border> borderleft {
             get {
                 return this.borderleftField;
             }
@@ -2972,9 +2986,9 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlElement("borderright", Namespace="urn:schemas-microsoft-com:office:word")]
-        public CT_Border[] borderright {
+        public List<CT_Border> borderright {
             get {
                 return this.borderrightField;
             }
@@ -2983,9 +2997,9 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlElement("ClientData", Namespace="urn:schemas-microsoft-com:office:excel")]
-        public CT_ClientData[] ClientData {
+        public List<CT_ClientData> ClientData {
             get {
                 return this.clientDataField;
             }
@@ -2994,9 +3008,9 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlElement("textdata", Namespace="urn:schemas-microsoft-com:office:powerpoint")]
-        public CT_Rel[] textdata {
+        public List<CT_Rel> textdata {
             get {
                 return this.textdataField;
             }
@@ -3005,7 +3019,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlAttribute]
         public string from {
             get {
@@ -3016,7 +3030,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlAttribute]
         public string control1 {
             get {
@@ -3027,7 +3041,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlAttribute]
         public string control2 {
             get {
@@ -3038,7 +3052,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlAttribute]
         public string to {
             get {
@@ -3050,7 +3064,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
     }
     
-    /// <remarks/>
+    
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
@@ -3058,39 +3072,39 @@ namespace NPOI.OpenXmlFormats.Vml
     [XmlRoot(Namespace="urn:schemas-microsoft-com:vml", IsNullable=true)]
     public partial class CT_Image {
         
-        private CT_Path[] pathField;
+        private List<CT_Path> pathField;
         
-        private CT_Formulas[] formulasField;
+        private List<CT_Formulas> formulasField;
         
-        private CT_Handles[] handlesField;
+        private List<CT_Handles> handlesField;
         
-        private CT_Fill[] fillField;
+        private List<CT_Fill> fillField;
         
-        private CT_Stroke[] strokeField;
+        private List<CT_Stroke> strokeField;
         
-        private CT_Shadow[] shadowField;
+        private List<CT_Shadow> shadowField;
         
-        private CT_Textbox[] textboxField;
+        private List<CT_Textbox> textboxField;
         
-        private CT_TextPath[] textpathField;
+        private List<CT_TextPath> textpathField;
         
-        private CT_ImageData[] imagedataField;
+        private List<CT_ImageData> imagedataField;
         
-        private CT_Wrap[] wrapField;
+        private List<CT_Wrap> wrapField;
         
-        private CT_AnchorLock[] anchorlockField;
+        private List<CT_AnchorLock> anchorlockField;
         
-        private CT_Border[] bordertopField;
+        private List<CT_Border> bordertopField;
         
-        private CT_Border[] borderbottomField;
+        private List<CT_Border> borderbottomField;
         
-        private CT_Border[] borderleftField;
+        private List<CT_Border> borderleftField;
         
-        private CT_Border[] borderrightField;
+        private List<CT_Border> borderrightField;
         
-        private CT_ClientData[] clientDataField;
+        private List<CT_ClientData> clientDataField;
         
-        private CT_Rel[] textdataField;
+        private List<CT_Rel> textdataField;
         
         private string srcField;
         
@@ -3116,9 +3130,9 @@ namespace NPOI.OpenXmlFormats.Vml
         
         private bool bilevelFieldSpecified;
         
-        /// <remarks/>
+        
         [XmlElement("path")]
-        public CT_Path[] path {
+        public List<CT_Path> path {
             get {
                 return this.pathField;
             }
@@ -3127,9 +3141,9 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlElement("formulas")]
-        public CT_Formulas[] formulas {
+        public List<CT_Formulas> formulas {
             get {
                 return this.formulasField;
             }
@@ -3138,9 +3152,9 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlElement("handles")]
-        public CT_Handles[] handles {
+        public List<CT_Handles> handles {
             get {
                 return this.handlesField;
             }
@@ -3149,9 +3163,9 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlElement("fill")]
-        public CT_Fill[] fill {
+        public List<CT_Fill> fill {
             get {
                 return this.fillField;
             }
@@ -3160,9 +3174,9 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlElement("stroke")]
-        public CT_Stroke[] stroke {
+        public List<CT_Stroke> stroke {
             get {
                 return this.strokeField;
             }
@@ -3171,9 +3185,9 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlElement("shadow")]
-        public CT_Shadow[] shadow {
+        public List<CT_Shadow> shadow {
             get {
                 return this.shadowField;
             }
@@ -3182,9 +3196,9 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlElement("textbox")]
-        public CT_Textbox[] textbox {
+        public List<CT_Textbox> textbox {
             get {
                 return this.textboxField;
             }
@@ -3193,9 +3207,9 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlElement("textpath")]
-        public CT_TextPath[] textpath {
+        public List<CT_TextPath> textpath {
             get {
                 return this.textpathField;
             }
@@ -3204,9 +3218,9 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlElement("imagedata")]
-        public CT_ImageData[] imagedata {
+        public List<CT_ImageData> imagedata {
             get {
                 return this.imagedataField;
             }
@@ -3215,9 +3229,9 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlElement("wrap", Namespace="urn:schemas-microsoft-com:office:word")]
-        public CT_Wrap[] wrap {
+        public List<CT_Wrap> wrap {
             get {
                 return this.wrapField;
             }
@@ -3226,9 +3240,9 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlElement("anchorlock", Namespace="urn:schemas-microsoft-com:office:word")]
-        public CT_AnchorLock[] anchorlock {
+        public List<CT_AnchorLock> anchorlock {
             get {
                 return this.anchorlockField;
             }
@@ -3237,9 +3251,9 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlElement("bordertop", Namespace="urn:schemas-microsoft-com:office:word")]
-        public CT_Border[] bordertop {
+        public List<CT_Border> bordertop {
             get {
                 return this.bordertopField;
             }
@@ -3248,9 +3262,9 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlElement("borderbottom", Namespace="urn:schemas-microsoft-com:office:word")]
-        public CT_Border[] borderbottom {
+        public List<CT_Border> borderbottom {
             get {
                 return this.borderbottomField;
             }
@@ -3259,9 +3273,9 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlElement("borderleft", Namespace="urn:schemas-microsoft-com:office:word")]
-        public CT_Border[] borderleft {
+        public List<CT_Border> borderleft {
             get {
                 return this.borderleftField;
             }
@@ -3270,9 +3284,9 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlElement("borderright", Namespace="urn:schemas-microsoft-com:office:word")]
-        public CT_Border[] borderright {
+        public List<CT_Border> borderright {
             get {
                 return this.borderrightField;
             }
@@ -3281,9 +3295,9 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlElement("ClientData", Namespace="urn:schemas-microsoft-com:office:excel")]
-        public CT_ClientData[] ClientData {
+        public List<CT_ClientData> ClientData {
             get {
                 return this.clientDataField;
             }
@@ -3292,9 +3306,9 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlElement("textdata", Namespace="urn:schemas-microsoft-com:office:powerpoint")]
-        public CT_Rel[] textdata {
+        public List<CT_Rel> textdata {
             get {
                 return this.textdataField;
             }
@@ -3303,7 +3317,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlAttribute]
         public string src {
             get {
@@ -3314,7 +3328,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlAttribute]
         public string cropleft {
             get {
@@ -3325,7 +3339,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlAttribute]
         public string croptop {
             get {
@@ -3336,7 +3350,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlAttribute]
         public string cropright {
             get {
@@ -3347,7 +3361,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlAttribute]
         public string cropbottom {
             get {
@@ -3358,7 +3372,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlAttribute]
         public string gain {
             get {
@@ -3369,7 +3383,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlAttribute]
         public string blacklevel {
             get {
@@ -3380,7 +3394,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlAttribute]
         public string gamma {
             get {
@@ -3391,7 +3405,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlAttribute]
         public ST_TrueFalse grayscale {
             get {
@@ -3402,7 +3416,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [System.Xml.Serialization.XmlIgnore]
         public bool grayscaleSpecified {
             get {
@@ -3413,7 +3427,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlAttribute]
         public ST_TrueFalse bilevel {
             get {
@@ -3424,7 +3438,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [System.Xml.Serialization.XmlIgnore]
         public bool bilevelSpecified {
             get {
@@ -3436,7 +3450,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
     }
     
-    /// <remarks/>
+    
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
@@ -3444,47 +3458,47 @@ namespace NPOI.OpenXmlFormats.Vml
     [XmlRoot(Namespace="urn:schemas-microsoft-com:vml", IsNullable=true)]
     public partial class CT_Line {
         
-        private CT_Path[] pathField;
+        private List<CT_Path> pathField;
         
-        private CT_Formulas[] formulasField;
+        private List<CT_Formulas> formulasField;
         
-        private CT_Handles[] handlesField;
+        private List<CT_Handles> handlesField;
         
-        private CT_Fill[] fillField;
+        private List<CT_Fill> fillField;
         
-        private CT_Stroke[] strokeField;
+        private List<CT_Stroke> strokeField;
         
-        private CT_Shadow[] shadowField;
+        private List<CT_Shadow> shadowField;
         
-        private CT_Textbox[] textboxField;
+        private List<CT_Textbox> textboxField;
         
-        private CT_TextPath[] textpathField;
+        private List<CT_TextPath> textpathField;
         
-        private CT_ImageData[] imagedataField;
+        private List<CT_ImageData> imagedataField;
         
-        private CT_Wrap[] wrapField;
+        private List<CT_Wrap> wrapField;
         
-        private CT_AnchorLock[] anchorlockField;
+        private List<CT_AnchorLock> anchorlockField;
         
-        private CT_Border[] bordertopField;
+        private List<CT_Border> bordertopField;
         
-        private CT_Border[] borderbottomField;
+        private List<CT_Border> borderbottomField;
         
-        private CT_Border[] borderleftField;
+        private List<CT_Border> borderleftField;
         
-        private CT_Border[] borderrightField;
+        private List<CT_Border> borderrightField;
         
-        private CT_ClientData[] clientDataField;
+        private List<CT_ClientData> clientDataField;
         
-        private CT_Rel[] textdataField;
+        private List<CT_Rel> textdataField;
         
         private string fromField;
         
         private string toField;
         
-        /// <remarks/>
+        
         [XmlElement("path")]
-        public CT_Path[] path {
+        public List<CT_Path> path {
             get {
                 return this.pathField;
             }
@@ -3493,9 +3507,9 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlElement("formulas")]
-        public CT_Formulas[] formulas {
+        public List<CT_Formulas> formulas {
             get {
                 return this.formulasField;
             }
@@ -3504,9 +3518,9 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlElement("handles")]
-        public CT_Handles[] handles {
+        public List<CT_Handles> handles {
             get {
                 return this.handlesField;
             }
@@ -3515,9 +3529,9 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlElement("fill")]
-        public CT_Fill[] fill {
+        public List<CT_Fill> fill {
             get {
                 return this.fillField;
             }
@@ -3526,9 +3540,9 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlElement("stroke")]
-        public CT_Stroke[] stroke {
+        public List<CT_Stroke> stroke {
             get {
                 return this.strokeField;
             }
@@ -3537,9 +3551,9 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlElement("shadow")]
-        public CT_Shadow[] shadow {
+        public List<CT_Shadow> shadow {
             get {
                 return this.shadowField;
             }
@@ -3548,9 +3562,9 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlElement("textbox")]
-        public CT_Textbox[] textbox {
+        public List<CT_Textbox> textbox {
             get {
                 return this.textboxField;
             }
@@ -3559,9 +3573,9 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlElement("textpath")]
-        public CT_TextPath[] textpath {
+        public List<CT_TextPath> textpath {
             get {
                 return this.textpathField;
             }
@@ -3570,9 +3584,9 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlElement("imagedata")]
-        public CT_ImageData[] imagedata {
+        public List<CT_ImageData> imagedata {
             get {
                 return this.imagedataField;
             }
@@ -3581,9 +3595,9 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlElement("wrap", Namespace="urn:schemas-microsoft-com:office:word")]
-        public CT_Wrap[] wrap {
+        public List<CT_Wrap> wrap {
             get {
                 return this.wrapField;
             }
@@ -3592,9 +3606,9 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlElement("anchorlock", Namespace="urn:schemas-microsoft-com:office:word")]
-        public CT_AnchorLock[] anchorlock {
+        public List<CT_AnchorLock> anchorlock {
             get {
                 return this.anchorlockField;
             }
@@ -3603,9 +3617,9 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlElement("bordertop", Namespace="urn:schemas-microsoft-com:office:word")]
-        public CT_Border[] bordertop {
+        public List<CT_Border> bordertop {
             get {
                 return this.bordertopField;
             }
@@ -3614,9 +3628,9 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlElement("borderbottom", Namespace="urn:schemas-microsoft-com:office:word")]
-        public CT_Border[] borderbottom {
+        public List<CT_Border> borderbottom {
             get {
                 return this.borderbottomField;
             }
@@ -3625,9 +3639,9 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlElement("borderleft", Namespace="urn:schemas-microsoft-com:office:word")]
-        public CT_Border[] borderleft {
+        public List<CT_Border> borderleft {
             get {
                 return this.borderleftField;
             }
@@ -3636,9 +3650,9 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlElement("borderright", Namespace="urn:schemas-microsoft-com:office:word")]
-        public CT_Border[] borderright {
+        public List<CT_Border> borderright {
             get {
                 return this.borderrightField;
             }
@@ -3647,9 +3661,9 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlElement("ClientData", Namespace="urn:schemas-microsoft-com:office:excel")]
-        public CT_ClientData[] ClientData {
+        public List<CT_ClientData> ClientData {
             get {
                 return this.clientDataField;
             }
@@ -3658,9 +3672,9 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlElement("textdata", Namespace="urn:schemas-microsoft-com:office:powerpoint")]
-        public CT_Rel[] textdata {
+        public List<CT_Rel> textdata {
             get {
                 return this.textdataField;
             }
@@ -3669,7 +3683,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlAttribute]
         public string from {
             get {
@@ -3680,7 +3694,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlAttribute]
         public string to {
             get {
@@ -3692,7 +3706,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
     }
     
-    /// <remarks/>
+    
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
@@ -3700,11 +3714,11 @@ namespace NPOI.OpenXmlFormats.Vml
     [XmlRoot(Namespace="urn:schemas-microsoft-com:vml", IsNullable=true)]
     public partial class CT_Oval {
         
-        private object[] itemsField;
+        private List<object> itemsField;
         
         private ItemsChoiceType2[] itemsElementNameField;
         
-        /// <remarks/>
+        
         [XmlElement("ClientData", typeof(CT_ClientData), Namespace="urn:schemas-microsoft-com:office:excel")]
         [XmlElement("textdata", typeof(CT_Rel), Namespace="urn:schemas-microsoft-com:office:powerpoint")]
         [XmlElement("anchorlock", typeof(CT_AnchorLock), Namespace="urn:schemas-microsoft-com:office:word")]
@@ -3723,7 +3737,7 @@ namespace NPOI.OpenXmlFormats.Vml
         [XmlElement("textbox", typeof(CT_Textbox))]
         [XmlElement("textpath", typeof(CT_TextPath))]
         [System.Xml.Serialization.XmlChoiceIdentifierAttribute("ItemsElementName")]
-        public object[] Items {
+        public List<object> Items {
             get {
                 return this.itemsField;
             }
@@ -3732,7 +3746,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlElement("ItemsElementName")]
         [System.Xml.Serialization.XmlIgnore]
         public ItemsChoiceType2[] ItemsElementName {
@@ -3745,72 +3759,72 @@ namespace NPOI.OpenXmlFormats.Vml
         }
     }
     
-    /// <remarks/>
+    
     [System.Serializable]
     [XmlType(Namespace="urn:schemas-microsoft-com:vml", IncludeInSchema=false)]
     public enum ItemsChoiceType2 {
         
-        /// <remarks/>
+        
         [XmlEnum("urn:schemas-microsoft-com:office:excel:ClientData")]
         ClientData,
         
-        /// <remarks/>
+        
         [XmlEnum("urn:schemas-microsoft-com:office:powerpoint:textdata")]
         textdata,
         
-        /// <remarks/>
+        
         [XmlEnum("urn:schemas-microsoft-com:office:word:anchorlock")]
         anchorlock,
         
-        /// <remarks/>
+        
         [XmlEnum("urn:schemas-microsoft-com:office:word:borderbottom")]
         borderbottom,
         
-        /// <remarks/>
+        
         [XmlEnum("urn:schemas-microsoft-com:office:word:borderleft")]
         borderleft,
         
-        /// <remarks/>
+        
         [XmlEnum("urn:schemas-microsoft-com:office:word:borderright")]
         borderright,
         
-        /// <remarks/>
+        
         [XmlEnum("urn:schemas-microsoft-com:office:word:bordertop")]
         bordertop,
         
-        /// <remarks/>
+        
         [XmlEnum("urn:schemas-microsoft-com:office:word:wrap")]
         wrap,
         
-        /// <remarks/>
+        
         fill,
         
-        /// <remarks/>
+        
         formulas,
         
-        /// <remarks/>
+        
         handles,
         
-        /// <remarks/>
+        
         imagedata,
         
-        /// <remarks/>
+        
         path,
         
-        /// <remarks/>
+        
         shadow,
         
-        /// <remarks/>
+        
         stroke,
         
-        /// <remarks/>
+        
         textbox,
         
-        /// <remarks/>
+        
         textpath,
     }
     
-    /// <remarks/>
+    
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
@@ -3818,13 +3832,13 @@ namespace NPOI.OpenXmlFormats.Vml
     [XmlRoot(Namespace="urn:schemas-microsoft-com:vml", IsNullable=true)]
     public partial class CT_PolyLine {
         
-        private object[] itemsField;
+        private List<object> itemsField;
         
         private ItemsChoiceType3[] itemsElementNameField;
         
         private string pointsField;
         
-        /// <remarks/>
+        
         [XmlElement("ClientData", typeof(CT_ClientData), Namespace="urn:schemas-microsoft-com:office:excel")]
         [XmlElement("textdata", typeof(CT_Rel), Namespace="urn:schemas-microsoft-com:office:powerpoint")]
         [XmlElement("anchorlock", typeof(CT_AnchorLock), Namespace="urn:schemas-microsoft-com:office:word")]
@@ -3843,7 +3857,7 @@ namespace NPOI.OpenXmlFormats.Vml
         [XmlElement("textbox", typeof(CT_Textbox))]
         [XmlElement("textpath", typeof(CT_TextPath))]
         [System.Xml.Serialization.XmlChoiceIdentifierAttribute("ItemsElementName")]
-        public object[] Items {
+        public List<object> Items {
             get {
                 return this.itemsField;
             }
@@ -3852,7 +3866,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlElement("ItemsElementName")]
         [System.Xml.Serialization.XmlIgnore]
         public ItemsChoiceType3[] ItemsElementName {
@@ -3864,7 +3878,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlAttribute]
         public string points {
             get {
@@ -3876,72 +3890,72 @@ namespace NPOI.OpenXmlFormats.Vml
         }
     }
     
-    /// <remarks/>
+    
     [System.Serializable]
     [XmlType(Namespace="urn:schemas-microsoft-com:vml", IncludeInSchema=false)]
     public enum ItemsChoiceType3 {
         
-        /// <remarks/>
+        
         [XmlEnum("urn:schemas-microsoft-com:office:excel:ClientData")]
         ClientData,
         
-        /// <remarks/>
+        
         [XmlEnum("urn:schemas-microsoft-com:office:powerpoint:textdata")]
         textdata,
         
-        /// <remarks/>
+        
         [XmlEnum("urn:schemas-microsoft-com:office:word:anchorlock")]
         anchorlock,
         
-        /// <remarks/>
+        
         [XmlEnum("urn:schemas-microsoft-com:office:word:borderbottom")]
         borderbottom,
         
-        /// <remarks/>
+        
         [XmlEnum("urn:schemas-microsoft-com:office:word:borderleft")]
         borderleft,
         
-        /// <remarks/>
+        
         [XmlEnum("urn:schemas-microsoft-com:office:word:borderright")]
         borderright,
         
-        /// <remarks/>
+        
         [XmlEnum("urn:schemas-microsoft-com:office:word:bordertop")]
         bordertop,
         
-        /// <remarks/>
+        
         [XmlEnum("urn:schemas-microsoft-com:office:word:wrap")]
         wrap,
         
-        /// <remarks/>
+        
         fill,
         
-        /// <remarks/>
+        
         formulas,
         
-        /// <remarks/>
+        
         handles,
         
-        /// <remarks/>
+        
         imagedata,
         
-        /// <remarks/>
+        
         path,
         
-        /// <remarks/>
+        
         shadow,
         
-        /// <remarks/>
+        
         stroke,
         
-        /// <remarks/>
+        
         textbox,
         
-        /// <remarks/>
+        
         textpath,
     }
     
-    /// <remarks/>
+    
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
@@ -3949,11 +3963,11 @@ namespace NPOI.OpenXmlFormats.Vml
     [XmlRoot(Namespace="urn:schemas-microsoft-com:vml", IsNullable=true)]
     public partial class CT_Rect {
         
-        private object[] itemsField;
+        private List<object> itemsField;
         
         private ItemsChoiceType4[] itemsElementNameField;
         
-        /// <remarks/>
+        
         [XmlElement("ClientData", typeof(CT_ClientData), Namespace="urn:schemas-microsoft-com:office:excel")]
         [XmlElement("textdata", typeof(CT_Rel), Namespace="urn:schemas-microsoft-com:office:powerpoint")]
         [XmlElement("anchorlock", typeof(CT_AnchorLock), Namespace="urn:schemas-microsoft-com:office:word")]
@@ -3972,7 +3986,7 @@ namespace NPOI.OpenXmlFormats.Vml
         [XmlElement("textbox", typeof(CT_Textbox))]
         [XmlElement("textpath", typeof(CT_TextPath))]
         [System.Xml.Serialization.XmlChoiceIdentifierAttribute("ItemsElementName")]
-        public object[] Items {
+        public List<object> Items {
             get {
                 return this.itemsField;
             }
@@ -3981,7 +3995,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlElement("ItemsElementName")]
         [System.Xml.Serialization.XmlIgnore]
         public ItemsChoiceType4[] ItemsElementName {
@@ -3994,72 +4008,72 @@ namespace NPOI.OpenXmlFormats.Vml
         }
     }
     
-    /// <remarks/>
+    
     [System.Serializable]
     [XmlType(Namespace="urn:schemas-microsoft-com:vml", IncludeInSchema=false)]
     public enum ItemsChoiceType4 {
         
-        /// <remarks/>
+        
         [XmlEnum("urn:schemas-microsoft-com:office:excel:ClientData")]
         ClientData,
         
-        /// <remarks/>
+        
         [XmlEnum("urn:schemas-microsoft-com:office:powerpoint:textdata")]
         textdata,
         
-        /// <remarks/>
+        
         [XmlEnum("urn:schemas-microsoft-com:office:word:anchorlock")]
         anchorlock,
         
-        /// <remarks/>
+        
         [XmlEnum("urn:schemas-microsoft-com:office:word:borderbottom")]
         borderbottom,
         
-        /// <remarks/>
+        
         [XmlEnum("urn:schemas-microsoft-com:office:word:borderleft")]
         borderleft,
         
-        /// <remarks/>
+        
         [XmlEnum("urn:schemas-microsoft-com:office:word:borderright")]
         borderright,
         
-        /// <remarks/>
+        
         [XmlEnum("urn:schemas-microsoft-com:office:word:bordertop")]
         bordertop,
         
-        /// <remarks/>
+        
         [XmlEnum("urn:schemas-microsoft-com:office:word:wrap")]
         wrap,
         
-        /// <remarks/>
+        
         fill,
         
-        /// <remarks/>
+        
         formulas,
         
-        /// <remarks/>
+        
         handles,
         
-        /// <remarks/>
+        
         imagedata,
         
-        /// <remarks/>
+        
         path,
         
-        /// <remarks/>
+        
         shadow,
         
-        /// <remarks/>
+        
         stroke,
         
-        /// <remarks/>
+        
         textbox,
         
-        /// <remarks/>
+        
         textpath,
     }
     
-    /// <remarks/>
+    
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
@@ -4067,13 +4081,13 @@ namespace NPOI.OpenXmlFormats.Vml
     [XmlRoot(Namespace="urn:schemas-microsoft-com:vml", IsNullable=true)]
     public partial class CT_RoundRect {
         
-        private object[] itemsField;
+        private List<object> itemsField;
         
         private ItemsChoiceType5[] itemsElementNameField;
         
         private string arcsizeField;
         
-        /// <remarks/>
+        
         [XmlElement("ClientData", typeof(CT_ClientData), Namespace="urn:schemas-microsoft-com:office:excel")]
         [XmlElement("textdata", typeof(CT_Rel), Namespace="urn:schemas-microsoft-com:office:powerpoint")]
         [XmlElement("anchorlock", typeof(CT_AnchorLock), Namespace="urn:schemas-microsoft-com:office:word")]
@@ -4092,7 +4106,7 @@ namespace NPOI.OpenXmlFormats.Vml
         [XmlElement("textbox", typeof(CT_Textbox))]
         [XmlElement("textpath", typeof(CT_TextPath))]
         [System.Xml.Serialization.XmlChoiceIdentifierAttribute("ItemsElementName")]
-        public object[] Items {
+        public List<object> Items {
             get {
                 return this.itemsField;
             }
@@ -4101,7 +4115,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlElement("ItemsElementName")]
         [System.Xml.Serialization.XmlIgnore]
         public ItemsChoiceType5[] ItemsElementName {
@@ -4113,7 +4127,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlAttribute]
         public string arcsize {
             get {
@@ -4125,198 +4139,198 @@ namespace NPOI.OpenXmlFormats.Vml
         }
     }
     
-    /// <remarks/>
+    
     [System.Serializable]
     [XmlType(Namespace="urn:schemas-microsoft-com:vml", IncludeInSchema=false)]
     public enum ItemsChoiceType5 {
         
-        /// <remarks/>
+        
         [XmlEnum("urn:schemas-microsoft-com:office:excel:ClientData")]
         ClientData,
         
-        /// <remarks/>
+        
         [XmlEnum("urn:schemas-microsoft-com:office:powerpoint:textdata")]
         textdata,
         
-        /// <remarks/>
+        
         [XmlEnum("urn:schemas-microsoft-com:office:word:anchorlock")]
         anchorlock,
         
-        /// <remarks/>
+        
         [XmlEnum("urn:schemas-microsoft-com:office:word:borderbottom")]
         borderbottom,
         
-        /// <remarks/>
+        
         [XmlEnum("urn:schemas-microsoft-com:office:word:borderleft")]
         borderleft,
         
-        /// <remarks/>
+        
         [XmlEnum("urn:schemas-microsoft-com:office:word:borderright")]
         borderright,
         
-        /// <remarks/>
+        
         [XmlEnum("urn:schemas-microsoft-com:office:word:bordertop")]
         bordertop,
         
-        /// <remarks/>
+        
         [XmlEnum("urn:schemas-microsoft-com:office:word:wrap")]
         wrap,
         
-        /// <remarks/>
+        
         fill,
         
-        /// <remarks/>
+        
         formulas,
         
-        /// <remarks/>
+        
         handles,
         
-        /// <remarks/>
+        
         imagedata,
         
-        /// <remarks/>
+        
         path,
         
-        /// <remarks/>
+        
         shadow,
         
-        /// <remarks/>
+        
         stroke,
         
-        /// <remarks/>
+        
         textbox,
         
-        /// <remarks/>
+        
         textpath,
     }
     
-    /// <remarks/>
+    
     [System.Serializable]
     [XmlType(Namespace="urn:schemas-microsoft-com:vml", IncludeInSchema=false)]
     public enum ItemsChoiceType6 {
         
-        /// <remarks/>
+        
         [XmlEnum("urn:schemas-microsoft-com:office:excel:ClientData")]
         ClientData,
         
-        /// <remarks/>
+        
         [XmlEnum("urn:schemas-microsoft-com:office:powerpoint:textdata")]
         textdata,
         
-        /// <remarks/>
+        
         [XmlEnum("urn:schemas-microsoft-com:office:word:anchorlock")]
         anchorlock,
         
-        /// <remarks/>
+        
         [XmlEnum("urn:schemas-microsoft-com:office:word:borderbottom")]
         borderbottom,
         
-        /// <remarks/>
+        
         [XmlEnum("urn:schemas-microsoft-com:office:word:borderleft")]
         borderleft,
         
-        /// <remarks/>
+        
         [XmlEnum("urn:schemas-microsoft-com:office:word:borderright")]
         borderright,
         
-        /// <remarks/>
+        
         [XmlEnum("urn:schemas-microsoft-com:office:word:bordertop")]
         bordertop,
         
-        /// <remarks/>
+        
         [XmlEnum("urn:schemas-microsoft-com:office:word:wrap")]
         wrap,
         
-        /// <remarks/>
+        
         arc,
         
-        /// <remarks/>
+        
         curve,
         
-        /// <remarks/>
+        
         fill,
         
-        /// <remarks/>
+        
         formulas,
         
-        /// <remarks/>
+        
         group,
         
-        /// <remarks/>
+        
         handles,
         
-        /// <remarks/>
+        
         image,
         
-        /// <remarks/>
+        
         imagedata,
         
-        /// <remarks/>
+        
         line,
         
-        /// <remarks/>
+        
         oval,
         
-        /// <remarks/>
+        
         path,
         
-        /// <remarks/>
+        
         polyline,
         
-        /// <remarks/>
+        
         rect,
         
-        /// <remarks/>
+        
         roundrect,
         
-        /// <remarks/>
+        
         shadow,
         
-        /// <remarks/>
+        
         shape,
         
-        /// <remarks/>
+        
         shapetype,
         
-        /// <remarks/>
+        
         stroke,
         
-        /// <remarks/>
+        
         textbox,
         
-        /// <remarks/>
+        
         textpath,
     }
     
-    /// <remarks/>
+    
     [System.Serializable]
     [XmlType(Namespace="urn:schemas-microsoft-com:vml")]
     [XmlRoot(Namespace="urn:schemas-microsoft-com:vml", IsNullable=false)]
     public enum ST_EditAs {
         
-        /// <remarks/>
+        
         canvas,
         
-        /// <remarks/>
+        
         orgchart,
         
-        /// <remarks/>
+        
         radial,
         
-        /// <remarks/>
+        
         cycle,
         
-        /// <remarks/>
+        
         stacked,
         
-        /// <remarks/>
+        
         venn,
         
-        /// <remarks/>
+        
         bullseye,
     }
     
-    /// <remarks/>
+    
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
@@ -4334,7 +4348,7 @@ namespace NPOI.OpenXmlFormats.Vml
         
         private string fillcolorField;
         
-        /// <remarks/>
+        
         public CT_Fill fill {
             get {
                 return this.fillField;
@@ -4344,9 +4358,11 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
-        [XmlAttribute]
-        public string id {
+        
+        // TODO is the following correct?
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/relationships")]
+        public string id
+        {
             get {
                 return this.idField;
             }
@@ -4355,7 +4371,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlAttribute]
         public ST_TrueFalse filled {
             get {
@@ -4366,7 +4382,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [System.Xml.Serialization.XmlIgnore]
         public bool filledSpecified {
             get {
@@ -4377,7 +4393,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+        
         [XmlAttribute]
         public string fillcolor {
             get {
@@ -4389,19 +4405,19 @@ namespace NPOI.OpenXmlFormats.Vml
         }
     }
     
-    /// <remarks/>
+    
     [System.Serializable]
     [XmlType(Namespace="urn:schemas-microsoft-com:vml")]
     [XmlRoot(Namespace="urn:schemas-microsoft-com:vml", IsNullable=false)]
     public enum ST_Ext {
         
-        /// <remarks/>
+        
         view,
         
-        /// <remarks/>
+        
         edit,
         
-        /// <remarks/>
+        
         backwardCompatible,
     }
 }

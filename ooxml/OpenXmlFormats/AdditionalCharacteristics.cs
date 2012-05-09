@@ -101,19 +101,19 @@ namespace NPOI.OpenXmlFormats
     public enum ST_Relation
     {
 
-        /// <remarks/>
+    
         ge,
 
-        /// <remarks/>
+    
         le,
 
-        /// <remarks/>
+    
         gt,
 
-        /// <remarks/>
+    
         lt,
 
-        /// <remarks/>
+    
         eq,
     }
 }

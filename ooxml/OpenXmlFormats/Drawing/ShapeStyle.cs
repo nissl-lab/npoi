@@ -1,7 +1,7 @@
 namespace NPOI.OpenXmlFormats.Dml {
     
     
-    /// <remarks/>
+
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
@@ -23,7 +23,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         
         private uint idxField;
         
-        /// <remarks/>
+    
         public CT_ScRgbColor scrgbClr {
             get {
                 return this.scrgbClrField;
@@ -33,7 +33,7 @@ namespace NPOI.OpenXmlFormats.Dml {
             }
         }
         
-        /// <remarks/>
+    
         public CT_SRgbColor srgbClr {
             get {
                 return this.srgbClrField;
@@ -43,7 +43,7 @@ namespace NPOI.OpenXmlFormats.Dml {
             }
         }
         
-        /// <remarks/>
+    
         public CT_HslColor hslClr {
             get {
                 return this.hslClrField;
@@ -53,7 +53,7 @@ namespace NPOI.OpenXmlFormats.Dml {
             }
         }
         
-        /// <remarks/>
+    
         public CT_SystemColor sysClr {
             get {
                 return this.sysClrField;
@@ -67,7 +67,7 @@ namespace NPOI.OpenXmlFormats.Dml {
             this.schemeClrField = new CT_SchemeColor();
             return this.schemeClrField;
         }
-        /// <remarks/>
+    
         public CT_SchemeColor schemeClr {
             get {
                 return this.schemeClrField;
@@ -77,7 +77,7 @@ namespace NPOI.OpenXmlFormats.Dml {
             }
         }
         
-        /// <remarks/>
+    
         public CT_PresetColor prstClr {
             get {
                 return this.prstClrField;
@@ -87,7 +87,7 @@ namespace NPOI.OpenXmlFormats.Dml {
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public uint idx {
             get {
@@ -101,7 +101,7 @@ namespace NPOI.OpenXmlFormats.Dml {
     
     
     
-    /// <remarks/>
+
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
@@ -123,7 +123,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         
         private ST_FontCollectionIndex idxField;
         
-        /// <remarks/>
+    
         public CT_ScRgbColor scrgbClr {
             get {
                 return this.scrgbClrField;
@@ -133,7 +133,7 @@ namespace NPOI.OpenXmlFormats.Dml {
             }
         }
         
-        /// <remarks/>
+    
         public CT_SRgbColor srgbClr {
             get {
                 return this.srgbClrField;
@@ -143,7 +143,7 @@ namespace NPOI.OpenXmlFormats.Dml {
             }
         }
         
-        /// <remarks/>
+    
         public CT_HslColor hslClr {
             get {
                 return this.hslClrField;
@@ -153,7 +153,7 @@ namespace NPOI.OpenXmlFormats.Dml {
             }
         }
         
-        /// <remarks/>
+    
         public CT_SystemColor sysClr {
             get {
                 return this.sysClrField;
@@ -167,7 +167,7 @@ namespace NPOI.OpenXmlFormats.Dml {
             this.schemeClrField=new CT_SchemeColor();
             return this.schemeClrField;
         }
-        /// <remarks/>
+    
         public CT_SchemeColor schemeClr {
             get {
                 return this.schemeClrField;
@@ -177,7 +177,7 @@ namespace NPOI.OpenXmlFormats.Dml {
             }
         }
         
-        /// <remarks/>
+    
         public CT_PresetColor prstClr {
             get {
                 return this.prstClrField;
@@ -187,7 +187,7 @@ namespace NPOI.OpenXmlFormats.Dml {
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public ST_FontCollectionIndex idx {
             get {
@@ -199,22 +199,22 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [System.Xml.Serialization.XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
     public enum ST_FontCollectionIndex {
         
-        /// <remarks/>
+    
         major,
         
-        /// <remarks/>
+    
         minor,
         
-        /// <remarks/>
+    
         none,
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
@@ -250,7 +250,7 @@ namespace NPOI.OpenXmlFormats.Dml {
             this.effectRefField = new CT_StyleMatrixReference();
             return this.effectRefField;
         }
-        /// <remarks/>
+    
         public CT_StyleMatrixReference lnRef {
             get {
                 return this.lnRefField;
@@ -260,7 +260,7 @@ namespace NPOI.OpenXmlFormats.Dml {
             }
         }
         
-        /// <remarks/>
+    
         public CT_StyleMatrixReference fillRef {
             get {
                 return this.fillRefField;
@@ -270,7 +270,7 @@ namespace NPOI.OpenXmlFormats.Dml {
             }
         }
         
-        /// <remarks/>
+    
         public CT_StyleMatrixReference effectRef {
             get {
                 return this.effectRefField;
@@ -280,7 +280,7 @@ namespace NPOI.OpenXmlFormats.Dml {
             }
         }
         
-        /// <remarks/>
+    
         public CT_FontReference fontRef {
             get {
                 return this.fontRefField;

@@ -32,6 +32,7 @@ using NPOI.OpenXmlFormats;
 using NPOI.OpenXmlFormats.Dml;
 using System.Collections;
 using NPOI.SS.Formula;
+
 namespace NPOI.XSSF.UserModel
 {
     /**
@@ -380,7 +381,7 @@ namespace NPOI.XSSF.UserModel
         public IDrawing CreateDrawingPatriarch()
         {
             XSSFDrawing drawing = null;
-            CT_Drawing ctDrawing = GetCTDrawing();
+            NPOI.OpenXmlFormats.Spreadsheet.CT_Drawing ctDrawing = GetCTDrawing();
             if (ctDrawing == null)
             {
                 //drawingNumber = #drawings.Count + 1
@@ -428,7 +429,7 @@ namespace NPOI.XSSF.UserModel
         internal XSSFVMLDrawing GetVMLDrawing(bool autoCreate)
         {
             XSSFVMLDrawing drawing = null;
-            CT_LegacyDrawing ctDrawing = GetCTLegacyDrawing();
+            NPOI.OpenXmlFormats.Spreadsheet.CT_LegacyDrawing ctDrawing = GetCTLegacyDrawing();
             if (ctDrawing == null)
             {
                 if (autoCreate)
@@ -469,11 +470,11 @@ namespace NPOI.XSSF.UserModel
             return drawing;
         }
 
-        protected virtual CT_Drawing GetCTDrawing()
+        protected virtual NPOI.OpenXmlFormats.Spreadsheet.CT_Drawing GetCTDrawing()
         {
             return worksheet.drawing;
         }
-        protected virtual CT_LegacyDrawing GetCTLegacyDrawing()
+        protected virtual NPOI.OpenXmlFormats.Spreadsheet.CT_LegacyDrawing GetCTLegacyDrawing()
         {
             return worksheet.legacyDrawing;
         }

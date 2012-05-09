@@ -15,15 +15,14 @@
    limitations under the License.
 ==================================================================== */
 
-using NPOI.SS.UserModel;
-using System.Collections.Generic;
-using NPOI.OpenXmlFormats.Spreadsheet;
-using NPOI.OpenXml4Net.OPC;
-using NPOI.XSSF.UserModel;
-using System.IO;
 using System;
-using NPOI.Util;
+using System.Collections.Generic;
+using System.IO;
 using System.Xml;
+using NPOI.OpenXml4Net.OPC;
+using NPOI.OpenXmlFormats.Spreadsheet;
+using NPOI.SS.UserModel;
+using NPOI.XSSF.UserModel;
 using NPOI.XSSF.UserModel.Extensions;
 
 namespace NPOI.XSSF.Model
@@ -430,27 +429,20 @@ namespace NPOI.XSSF.Model
             styleSheet.fonts = (ctFonts);
 
             // Fills
-            CT_Fills ctFills = new CT_Fills();
-            ctFills.count = (uint)fills.Count;
-            if (ctFills.count > 0)
-                ctFills.countSpecified = true;
-            CT_Fill[] ctf = new CT_Fill[fills.Count];
-            idx = 0;
+            var ctf = new List<CT_Fill>(fills.Count);
             foreach (XSSFCellFill f in fills)
-                ctf[idx++] = f.GetCTFill();
+                ctf.Add( f.GetCTFill());
+            CT_Fills ctFills = new CT_Fills();
             ctFills.SetFillArray(ctf);
-            styleSheet.fills = (ctFills);
+            styleSheet.fills = ctFills;
 
             // Borders
-            CT_Borders ctBorders = new CT_Borders();
-            ctBorders.count = (uint)borders.Count;
-            if (ctBorders.count > 0)
-                ctBorders.countSpecified = true;
-            CT_Border[] ctb = new CT_Border[borders.Count];
+            List<CT_Border> ctb = new List<CT_Border>(borders.Count);
             idx = 0;
-            foreach (XSSFCellBorder b in borders) ctb[idx++] = b.GetCTBorder();
+            foreach (XSSFCellBorder b in borders) ctb.Add(b.GetCTBorder());
+            CT_Borders ctBorders = new CT_Borders();
             ctBorders.SetBorderArray(ctb);
-            styleSheet.borders = (ctBorders);
+            styleSheet.borders = ctBorders;
 
             // Xfs
             if (xfs.Count > 0)

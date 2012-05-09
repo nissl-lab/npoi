@@ -15,19 +15,18 @@
    limitations under the License.
 ==================================================================== */
 
+using System;
+using System.Drawing;
+using System.IO;
+using NPOI.OpenXml4Net.OPC;
+using NPOI.OpenXmlFormats.Dml;
+using NPOI.OpenXmlFormats.Dml.Spreadsheet;
+using NPOI.OpenXmlFormats.Spreadsheet;
+using NPOI.SS.UserModel;
+using NPOI.Util;
+
 namespace NPOI.XSSF.UserModel
 {
-
-
-    using NPOI.SS.UserModel;
-    using NPOI.Util;
-    using NPOI.OpenXmlFormats.Dml;
-    using System.IO;
-    using NPOI.OpenXml4Net.OPC;
-    using System;
-    using NPOI.OpenXmlFormats.Spreadsheet;
-    using System.Drawing;
-
 
     /**
      * Represents a picture shape in a SpreadsheetML Drawing.

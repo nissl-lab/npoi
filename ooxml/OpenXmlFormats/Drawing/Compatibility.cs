@@ -1,7 +1,7 @@
 namespace NPOI.OpenXmlFormats.Dml {
     
     
-    /// <remarks/>
+
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
@@ -11,7 +11,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         
         private string spidField;
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttributeAttribute(DataType="token")]
         public string spid {
             get {

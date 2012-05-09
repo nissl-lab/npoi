@@ -4,7 +4,7 @@ namespace NPOI.OpenXmlFormats.Vml
 {
     
     
-    /// <remarks/>
+
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
@@ -56,7 +56,7 @@ namespace NPOI.OpenXmlFormats.Vml
         
         private bool allowincellFieldSpecified;
         
-        /// <remarks/>
+    
         [XmlElement(Namespace="urn:schemas-microsoft-com:vml")]
         public CT_Fill fill {
             get {
@@ -67,7 +67,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [XmlElement(Namespace="urn:schemas-microsoft-com:vml")]
         public CT_Stroke stroke {
             get {
@@ -78,7 +78,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [XmlElement(Namespace="urn:schemas-microsoft-com:vml")]
         public CT_Textbox textbox {
             get {
@@ -89,7 +89,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [XmlElement(Namespace="urn:schemas-microsoft-com:vml")]
         public CT_Shadow shadow {
             get {
@@ -100,7 +100,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         public CT_Skew skew {
             get {
                 return this.skewField;
@@ -110,7 +110,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         public CT_Extrusion extrusion {
             get {
                 return this.extrusionField;
@@ -120,7 +120,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         public CT_Callout callout {
             get {
                 return this.calloutField;
@@ -130,7 +130,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         public CT_Lock @lock {
             get {
                 return this.lockField;
@@ -140,7 +140,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         public CT_ColorMru colormru {
             get {
                 return this.colormruField;
@@ -150,7 +150,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         public CT_ColorMenu colormenu {
             get {
                 return this.colormenuField;
@@ -160,7 +160,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttributeAttribute(Form=System.Xml.Schema.XmlSchemaForm.Qualified, Namespace="urn:schemas-microsoft-com:vml")]
         public ST_Ext ext {
             get {
@@ -171,7 +171,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlIgnore]
         public bool extSpecified {
             get {
@@ -182,7 +182,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttributeAttribute(DataType="integer")]
         public string spidmax {
             get {
@@ -193,7 +193,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public string style {
             get {
@@ -204,7 +204,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttributeAttribute("fill")]
         public ST_TrueFalse1 fill1 {
             get {
@@ -215,7 +215,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlIgnore]
         public bool fill1Specified {
             get {
@@ -226,7 +226,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public string fillcolor {
             get {
@@ -237,7 +237,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttributeAttribute("stroke")]
         public ST_TrueFalse1 stroke1 {
             get {
@@ -248,7 +248,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlIgnore]
         public bool stroke1Specified {
             get {
@@ -259,7 +259,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public string strokecolor {
             get {
@@ -270,7 +270,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttributeAttribute(Form=System.Xml.Schema.XmlSchemaForm.Qualified)]
         public ST_TrueFalse1 allowincell {
             get {
@@ -281,7 +281,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlIgnore]
         public bool allowincellSpecified {
             get {
@@ -293,7 +293,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
@@ -358,9 +358,11 @@ namespace NPOI.OpenXmlFormats.Vml
         
         private string id1Field;
         
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttribute]
-        public string id {
+    
+        // TODO is the following correct?
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/relationships")]
+        public string id
+        {
             get {
                 return this.idField;
             }
@@ -369,7 +371,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public ST_FillType type {
             get {
@@ -380,7 +382,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlIgnore]
         public bool typeSpecified {
             get {
@@ -391,7 +393,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public ST_TrueFalse on {
             get {
@@ -402,7 +404,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlIgnore]
         public bool onSpecified {
             get {
@@ -413,7 +415,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public string color {
             get {
@@ -424,7 +426,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public string opacity {
             get {
@@ -435,7 +437,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public string color2 {
             get {
@@ -446,7 +448,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public string src {
             get {
@@ -457,7 +459,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public string size {
             get {
@@ -468,7 +470,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public string origin {
             get {
@@ -479,7 +481,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public string position {
             get {
@@ -490,7 +492,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public ST_ImageAspect aspect {
             get {
@@ -501,7 +503,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlIgnore]
         public bool aspectSpecified {
             get {
@@ -512,7 +514,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public string colors {
             get {
@@ -523,7 +525,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public decimal angle {
             get {
@@ -534,7 +536,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlIgnore]
         public bool angleSpecified {
             get {
@@ -545,7 +547,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public ST_TrueFalse alignshape {
             get {
@@ -556,7 +558,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlIgnore]
         public bool alignshapeSpecified {
             get {
@@ -567,7 +569,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public string focus {
             get {
@@ -578,7 +580,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public string focussize {
             get {
@@ -589,7 +591,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public string focusposition {
             get {
@@ -600,7 +602,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public ST_FillMethod method {
             get {
@@ -611,7 +613,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlIgnore]
         public bool methodSpecified {
             get {
@@ -622,7 +624,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public ST_TrueFalse recolor {
             get {
@@ -633,7 +635,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlIgnore]
         public bool recolorSpecified {
             get {
@@ -644,7 +646,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public ST_TrueFalse rotate {
             get {
@@ -655,7 +657,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlIgnore]
         public bool rotateSpecified {
             get {
@@ -666,7 +668,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttributeAttribute("id", Form=System.Xml.Schema.XmlSchemaForm.Qualified, Namespace="http://schemas.openxmlformats.org/officeDocument/2006/relationships")]
         public string id1 {
             get {
@@ -678,86 +680,86 @@ namespace NPOI.OpenXmlFormats.Vml
         }
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [XmlType(Namespace="urn:schemas-microsoft-com:vml")]
     public enum ST_FillType {
         
-        /// <remarks/>
+    
         solid,
         
-        /// <remarks/>
+    
         gradient,
         
-        /// <remarks/>
+    
         gradientRadial,
         
-        /// <remarks/>
+    
         tile,
         
-        /// <remarks/>
+    
         pattern,
         
-        /// <remarks/>
+    
         frame,
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [XmlType(Namespace="urn:schemas-microsoft-com:vml")]
     public enum ST_TrueFalse {
         
-        /// <remarks/>
+    
         t,
         
-        /// <remarks/>
+    
         f,
         
-        /// <remarks/>
+    
         @true,
         
-        /// <remarks/>
+    
         @false,
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [XmlType(Namespace="urn:schemas-microsoft-com:vml")]
     public enum ST_ImageAspect {
         
-        /// <remarks/>
+    
         ignore,
         
-        /// <remarks/>
+    
         atMost,
         
-        /// <remarks/>
+    
         atLeast,
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [XmlType(Namespace="urn:schemas-microsoft-com:vml")]
     public enum ST_FillMethod {
         
-        /// <remarks/>
+    
         none,
         
-        /// <remarks/>
+    
         linear,
         
-        /// <remarks/>
+    
         sigma,
         
-        /// <remarks/>
+    
         any,
         
-        /// <remarks/>
+    
         [XmlEnum("linear sigma")]
         linearsigma,
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
@@ -781,7 +783,7 @@ namespace NPOI.OpenXmlFormats.Vml
         
         private string matrixField;
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttributeAttribute(Form=System.Xml.Schema.XmlSchemaForm.Qualified, Namespace="urn:schemas-microsoft-com:vml")]
         public ST_Ext ext {
             get {
@@ -792,7 +794,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlIgnore]
         public bool extSpecified {
             get {
@@ -803,9 +805,11 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttribute]
-        public string id {
+    
+        // TODO is the following correct?
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/relationships")]
+        public string id
+        {
             get {
                 return this.idField;
             }
@@ -814,7 +818,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public ST_TrueFalse1 on {
             get {
@@ -825,7 +829,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlIgnore]
         public bool onSpecified {
             get {
@@ -836,7 +840,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public string offset {
             get {
@@ -847,7 +851,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public string origin {
             get {
@@ -858,7 +862,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public string matrix {
             get {
@@ -870,26 +874,26 @@ namespace NPOI.OpenXmlFormats.Vml
         }
     }
         
-    /// <remarks/>
+
     [System.Serializable]
     [XmlType(TypeName="ST_TrueFalse", Namespace="urn:schemas-microsoft-com:office:office")]
     [XmlRoot("ST_TrueFalse", Namespace="urn:schemas-microsoft-com:office:office", IsNullable=false)]
     public enum ST_TrueFalse1 {
         
-        /// <remarks/>
+    
         t,
         
-        /// <remarks/>
+    
         f,
         
-        /// <remarks/>
+    
         @true,
         
-        /// <remarks/>
+    
         @false,
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
@@ -993,7 +997,7 @@ namespace NPOI.OpenXmlFormats.Vml
             this.planeField = ST_ExtrusionPlane.XY;
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttributeAttribute(Form=System.Xml.Schema.XmlSchemaForm.Qualified, Namespace="urn:schemas-microsoft-com:vml")]
         public ST_Ext ext {
             get {
@@ -1004,7 +1008,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlIgnore]
         public bool extSpecified {
             get {
@@ -1015,7 +1019,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public ST_TrueFalse1 on {
             get {
@@ -1026,7 +1030,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlIgnore]
         public bool onSpecified {
             get {
@@ -1037,7 +1041,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         [DefaultValue(ST_ExtrusionType.parallel)]
         public ST_ExtrusionType type {
@@ -1049,7 +1053,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         [DefaultValue(ST_ExtrusionRender.solid)]
         public ST_ExtrusionRender render {
@@ -1061,7 +1065,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public string viewpointorigin {
             get {
@@ -1072,7 +1076,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public string viewpoint {
             get {
@@ -1083,7 +1087,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         [DefaultValue(ST_ExtrusionPlane.XY)]
         public ST_ExtrusionPlane plane {
@@ -1095,7 +1099,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public float skewangle {
             get {
@@ -1106,7 +1110,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlIgnore]
         public bool skewangleSpecified {
             get {
@@ -1117,7 +1121,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public string skewamt {
             get {
@@ -1128,7 +1132,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public string foredepth {
             get {
@@ -1139,7 +1143,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public string backdepth {
             get {
@@ -1150,7 +1154,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public string orientation {
             get {
@@ -1161,7 +1165,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public float orientationangle {
             get {
@@ -1172,7 +1176,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlIgnore]
         public bool orientationangleSpecified {
             get {
@@ -1183,7 +1187,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public ST_TrueFalse1 lockrotationcenter {
             get {
@@ -1194,7 +1198,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlIgnore]
         public bool lockrotationcenterSpecified {
             get {
@@ -1205,7 +1209,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public ST_TrueFalse1 autorotationcenter {
             get {
@@ -1216,7 +1220,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlIgnore]
         public bool autorotationcenterSpecified {
             get {
@@ -1227,7 +1231,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public string rotationcenter {
             get {
@@ -1238,7 +1242,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public string rotationangle {
             get {
@@ -1249,7 +1253,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public ST_ColorMode colormode {
             get {
@@ -1260,7 +1264,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlIgnore]
         public bool colormodeSpecified {
             get {
@@ -1271,7 +1275,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public string color {
             get {
@@ -1282,7 +1286,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public float shininess {
             get {
@@ -1293,7 +1297,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlIgnore]
         public bool shininessSpecified {
             get {
@@ -1304,7 +1308,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public string specularity {
             get {
@@ -1315,7 +1319,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public string diffusity {
             get {
@@ -1326,7 +1330,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public ST_TrueFalse1 metal {
             get {
@@ -1337,7 +1341,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlIgnore]
         public bool metalSpecified {
             get {
@@ -1348,7 +1352,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public string edge {
             get {
@@ -1359,7 +1363,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public string facet {
             get {
@@ -1370,7 +1374,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public ST_TrueFalse1 lightface {
             get {
@@ -1381,7 +1385,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlIgnore]
         public bool lightfaceSpecified {
             get {
@@ -1392,7 +1396,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public string brightness {
             get {
@@ -1403,7 +1407,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public string lightposition {
             get {
@@ -1414,7 +1418,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public string lightlevel {
             get {
@@ -1425,7 +1429,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public ST_TrueFalse1 lightharsh {
             get {
@@ -1436,7 +1440,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlIgnore]
         public bool lightharshSpecified {
             get {
@@ -1447,7 +1451,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public string lightposition2 {
             get {
@@ -1458,7 +1462,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public string lightlevel2 {
             get {
@@ -1469,7 +1473,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public ST_TrueFalse1 lightharsh2 {
             get {
@@ -1480,7 +1484,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlIgnore]
         public bool lightharsh2Specified {
             get {
@@ -1492,65 +1496,65 @@ namespace NPOI.OpenXmlFormats.Vml
         }
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [XmlType(Namespace="urn:schemas-microsoft-com:office:office")]
     [XmlRoot(Namespace="urn:schemas-microsoft-com:office:office", IsNullable=false)]
     public enum ST_ExtrusionType {
         
-        /// <remarks/>
+    
         perspective,
         
-        /// <remarks/>
+    
         parallel,
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [XmlType(Namespace="urn:schemas-microsoft-com:office:office")]
     [XmlRoot(Namespace="urn:schemas-microsoft-com:office:office", IsNullable=false)]
     public enum ST_ExtrusionRender {
         
-        /// <remarks/>
+    
         solid,
         
-        /// <remarks/>
+    
         wireFrame,
         
-        /// <remarks/>
+    
         boundingCube,
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [XmlType(Namespace="urn:schemas-microsoft-com:office:office")]
     [XmlRoot(Namespace="urn:schemas-microsoft-com:office:office", IsNullable=false)]
     public enum ST_ExtrusionPlane {
         
-        /// <remarks/>
+    
         XY,
         
-        /// <remarks/>
+    
         ZX,
         
-        /// <remarks/>
+    
         YZ,
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [XmlType(Namespace="urn:schemas-microsoft-com:office:office")]
     [XmlRoot(Namespace="urn:schemas-microsoft-com:office:office", IsNullable=false)]
     public enum ST_ColorMode {
         
-        /// <remarks/>
+    
         auto,
         
-        /// <remarks/>
+    
         custom,
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
@@ -1606,7 +1610,7 @@ namespace NPOI.OpenXmlFormats.Vml
             this.lengthspecifiedField = ST_TrueFalse1.f;
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttributeAttribute(Form=System.Xml.Schema.XmlSchemaForm.Qualified, Namespace="urn:schemas-microsoft-com:vml")]
         public ST_Ext ext {
             get {
@@ -1617,7 +1621,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlIgnore]
         public bool extSpecified {
             get {
@@ -1628,7 +1632,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public ST_TrueFalse1 on {
             get {
@@ -1639,7 +1643,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlIgnore]
         public bool onSpecified {
             get {
@@ -1650,7 +1654,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public string type {
             get {
@@ -1661,7 +1665,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public string gap {
             get {
@@ -1672,7 +1676,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public ST_Angle angle {
             get {
@@ -1683,7 +1687,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlIgnore]
         public bool angleSpecified {
             get {
@@ -1694,7 +1698,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public ST_TrueFalse1 dropauto {
             get {
@@ -1705,7 +1709,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlIgnore]
         public bool dropautoSpecified {
             get {
@@ -1716,7 +1720,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public string drop {
             get {
@@ -1727,7 +1731,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public string distance {
             get {
@@ -1738,7 +1742,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         [DefaultValue(ST_TrueFalse1.f)]
         public ST_TrueFalse1 lengthspecified {
@@ -1750,7 +1754,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public string length {
             get {
@@ -1761,7 +1765,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public ST_TrueFalse1 accentbar {
             get {
@@ -1772,7 +1776,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlIgnore]
         public bool accentbarSpecified {
             get {
@@ -1783,7 +1787,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public ST_TrueFalse1 textborder {
             get {
@@ -1794,7 +1798,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlIgnore]
         public bool textborderSpecified {
             get {
@@ -1805,7 +1809,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public ST_TrueFalse1 minusx {
             get {
@@ -1816,7 +1820,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlIgnore]
         public bool minusxSpecified {
             get {
@@ -1827,7 +1831,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public ST_TrueFalse1 minusy {
             get {
@@ -1838,7 +1842,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlIgnore]
         public bool minusySpecified {
             get {
@@ -1850,36 +1854,36 @@ namespace NPOI.OpenXmlFormats.Vml
         }
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [XmlType(Namespace="urn:schemas-microsoft-com:office:office")]
     [XmlRoot(Namespace="urn:schemas-microsoft-com:office:office", IsNullable=false)]
     public enum ST_Angle {
         
-        /// <remarks/>
+    
         any,
         
-        /// <remarks/>
+    
         [XmlEnum("30")]
         Item30,
         
-        /// <remarks/>
+    
         [XmlEnum("45")]
         Item45,
         
-        /// <remarks/>
+    
         [XmlEnum("60")]
         Item60,
         
-        /// <remarks/>
+    
         [XmlEnum("90")]
         Item90,
         
-        /// <remarks/>
+    
         auto,
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
@@ -1935,7 +1939,7 @@ namespace NPOI.OpenXmlFormats.Vml
         
         private bool shapetypeFieldSpecified;
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttributeAttribute(Form=System.Xml.Schema.XmlSchemaForm.Qualified, Namespace="urn:schemas-microsoft-com:vml")]
         public ST_Ext ext {
             get {
@@ -1946,7 +1950,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlIgnore]
         public bool extSpecified {
             get {
@@ -1957,7 +1961,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public ST_TrueFalse1 position {
             get {
@@ -1968,7 +1972,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlIgnore]
         public bool positionSpecified {
             get {
@@ -1979,7 +1983,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public ST_TrueFalse1 selection {
             get {
@@ -1990,7 +1994,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlIgnore]
         public bool selectionSpecified {
             get {
@@ -2001,7 +2005,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public ST_TrueFalse1 grouping {
             get {
@@ -2012,7 +2016,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlIgnore]
         public bool groupingSpecified {
             get {
@@ -2023,7 +2027,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public ST_TrueFalse1 ungrouping {
             get {
@@ -2034,7 +2038,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlIgnore]
         public bool ungroupingSpecified {
             get {
@@ -2045,7 +2049,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public ST_TrueFalse1 rotation {
             get {
@@ -2056,7 +2060,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlIgnore]
         public bool rotationSpecified {
             get {
@@ -2067,7 +2071,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public ST_TrueFalse1 cropping {
             get {
@@ -2078,7 +2082,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlIgnore]
         public bool croppingSpecified {
             get {
@@ -2089,7 +2093,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public ST_TrueFalse1 verticies {
             get {
@@ -2100,7 +2104,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlIgnore]
         public bool verticiesSpecified {
             get {
@@ -2111,7 +2115,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public ST_TrueFalse1 adjusthandles {
             get {
@@ -2122,7 +2126,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlIgnore]
         public bool adjusthandlesSpecified {
             get {
@@ -2133,7 +2137,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public ST_TrueFalse1 text {
             get {
@@ -2144,7 +2148,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlIgnore]
         public bool textSpecified {
             get {
@@ -2155,7 +2159,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public ST_TrueFalse1 aspectratio {
             get {
@@ -2166,7 +2170,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlIgnore]
         public bool aspectratioSpecified {
             get {
@@ -2177,7 +2181,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public ST_TrueFalse1 shapetype {
             get {
@@ -2188,7 +2192,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlIgnore]
         public bool shapetypeSpecified {
             get {
@@ -2200,7 +2204,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
@@ -2214,7 +2218,7 @@ namespace NPOI.OpenXmlFormats.Vml
         
         private string colorsField;
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttributeAttribute(Form=System.Xml.Schema.XmlSchemaForm.Qualified, Namespace="urn:schemas-microsoft-com:vml")]
         public ST_Ext ext {
             get {
@@ -2225,7 +2229,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlIgnore]
         public bool extSpecified {
             get {
@@ -2236,7 +2240,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public string colors {
             get {
@@ -2248,7 +2252,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
@@ -2268,7 +2272,7 @@ namespace NPOI.OpenXmlFormats.Vml
         
         private string extrusioncolorField;
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttributeAttribute(Form=System.Xml.Schema.XmlSchemaForm.Qualified, Namespace="urn:schemas-microsoft-com:vml")]
         public ST_Ext ext {
             get {
@@ -2279,7 +2283,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlIgnore]
         public bool extSpecified {
             get {
@@ -2290,7 +2294,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public string strokecolor {
             get {
@@ -2301,7 +2305,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public string fillcolor {
             get {
@@ -2312,7 +2316,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public string shadowcolor {
             get {
@@ -2323,7 +2327,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public string extrusioncolor {
             get {
@@ -2335,7 +2339,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
@@ -2349,7 +2353,7 @@ namespace NPOI.OpenXmlFormats.Vml
         
         private bool annotationFieldSpecified;
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttributeAttribute(DataType="base64Binary")]
         public byte[] i {
             get {
@@ -2360,7 +2364,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public ST_TrueFalse1 annotation {
             get {
@@ -2371,7 +2375,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlIgnore]
         public bool annotationSpecified {
             get {
@@ -2383,7 +2387,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
@@ -2427,7 +2431,7 @@ namespace NPOI.OpenXmlFormats.Vml
         
         private string sigprovurlField;
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttributeAttribute(Form=System.Xml.Schema.XmlSchemaForm.Qualified, Namespace="urn:schemas-microsoft-com:vml")]
         public ST_Ext ext {
             get {
@@ -2438,7 +2442,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlIgnore]
         public bool extSpecified {
             get {
@@ -2449,7 +2453,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public ST_TrueFalse1 issignatureline {
             get {
@@ -2460,7 +2464,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlIgnore]
         public bool issignaturelineSpecified {
             get {
@@ -2471,8 +2475,10 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute(DataType="token")]
+    
+        // TODO is the following correct?
+        //[XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/relationships")]
+        [System.Xml.Serialization.XmlAttributeAttribute(DataType = "token")]
         public string id {
             get {
                 return this.idField;
@@ -2482,7 +2488,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttributeAttribute(DataType="token")]
         public string provid {
             get {
@@ -2493,7 +2499,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public ST_TrueFalse1 signinginstructionsset {
             get {
@@ -2504,7 +2510,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlIgnore]
         public bool signinginstructionssetSpecified {
             get {
@@ -2515,7 +2521,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public ST_TrueFalse1 allowcomments {
             get {
@@ -2526,7 +2532,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlIgnore]
         public bool allowcommentsSpecified {
             get {
@@ -2537,7 +2543,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public ST_TrueFalse1 showsigndate {
             get {
@@ -2548,7 +2554,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlIgnore]
         public bool showsigndateSpecified {
             get {
@@ -2559,7 +2565,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttributeAttribute(Form=System.Xml.Schema.XmlSchemaForm.Qualified)]
         public string suggestedsigner {
             get {
@@ -2570,7 +2576,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttributeAttribute(Form=System.Xml.Schema.XmlSchemaForm.Qualified)]
         public string suggestedsigner2 {
             get {
@@ -2581,7 +2587,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttributeAttribute(Form=System.Xml.Schema.XmlSchemaForm.Qualified)]
         public string suggestedsigneremail {
             get {
@@ -2592,7 +2598,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public string signinginstructions {
             get {
@@ -2603,7 +2609,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public string addlxml {
             get {
@@ -2614,7 +2620,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public string sigprovurl {
             get {
@@ -2626,7 +2632,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
@@ -2650,7 +2656,7 @@ namespace NPOI.OpenXmlFormats.Vml
             return idmapField;
         }
 
-        /// <remarks/>
+    
         public CT_IdMap idmap {
             get {
                 return this.idmapField;
@@ -2660,7 +2666,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         public CT_RegroupTable regrouptable {
             get {
                 return this.regrouptableField;
@@ -2670,7 +2676,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         public CT_Rules rules {
             get {
                 return this.rulesField;
@@ -2680,7 +2686,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttributeAttribute(Form=System.Xml.Schema.XmlSchemaForm.Qualified, Namespace="urn:schemas-microsoft-com:vml")]
         public ST_Ext ext {
             get {
@@ -2691,7 +2697,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlIgnore]
         public bool extSpecified {
             get {
@@ -2703,7 +2709,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
@@ -2717,7 +2723,7 @@ namespace NPOI.OpenXmlFormats.Vml
         
         private string dataField;
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttributeAttribute(Form=System.Xml.Schema.XmlSchemaForm.Qualified, Namespace="urn:schemas-microsoft-com:vml")]
         public ST_Ext ext {
             get {
@@ -2728,7 +2734,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlIgnore]
         public bool extSpecified {
             get {
@@ -2739,7 +2745,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public string data {
             get {
@@ -2751,7 +2757,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
@@ -2765,7 +2771,7 @@ namespace NPOI.OpenXmlFormats.Vml
         
         private bool extFieldSpecified;
         
-        /// <remarks/>
+    
         [XmlElement("entry")]
         public CT_Entry[] entry {
             get {
@@ -2776,7 +2782,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttributeAttribute(Form=System.Xml.Schema.XmlSchemaForm.Qualified, Namespace="urn:schemas-microsoft-com:vml")]
         public ST_Ext ext {
             get {
@@ -2787,7 +2793,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlIgnore]
         public bool extSpecified {
             get {
@@ -2799,7 +2805,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
@@ -2815,7 +2821,7 @@ namespace NPOI.OpenXmlFormats.Vml
         
         private bool oldFieldSpecified;
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public int @new {
             get {
@@ -2826,7 +2832,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlIgnore]
         public bool newSpecified {
             get {
@@ -2837,7 +2843,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public int old {
             get {
@@ -2848,7 +2854,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlIgnore]
         public bool oldSpecified {
             get {
@@ -2860,7 +2866,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
@@ -2874,7 +2880,7 @@ namespace NPOI.OpenXmlFormats.Vml
         
         private bool extFieldSpecified;
         
-        /// <remarks/>
+    
         [XmlElement("r")]
         public CT_R[] r {
             get {
@@ -2885,7 +2891,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttributeAttribute(Form=System.Xml.Schema.XmlSchemaForm.Qualified, Namespace="urn:schemas-microsoft-com:vml")]
         public ST_Ext ext {
             get {
@@ -2896,7 +2902,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlIgnore]
         public bool extSpecified {
             get {
@@ -2908,7 +2914,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
@@ -2930,7 +2936,7 @@ namespace NPOI.OpenXmlFormats.Vml
         
         private string idrefField;
         
-        /// <remarks/>
+    
         [XmlElement("proxy")]
         public CT_Proxy[] proxy {
             get {
@@ -2941,9 +2947,11 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttribute]
-        public string id {
+    
+        // TODO is the following correct?
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/relationships")]
+        public string id
+        {
             get {
                 return this.idField;
             }
@@ -2952,7 +2960,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public ST_RType type {
             get {
@@ -2963,7 +2971,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlIgnore]
         public bool typeSpecified {
             get {
@@ -2974,7 +2982,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public ST_How how {
             get {
@@ -2985,7 +2993,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlIgnore]
         public bool howSpecified {
             get {
@@ -2996,7 +3004,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public string idref {
             get {
@@ -3008,7 +3016,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
@@ -3031,7 +3039,7 @@ namespace NPOI.OpenXmlFormats.Vml
             this.endField = ST_TrueFalseBlank.@false;
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         [DefaultValue(ST_TrueFalseBlank.@false)]
         public ST_TrueFalseBlank start {
@@ -3043,7 +3051,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         [DefaultValue(ST_TrueFalseBlank.@false)]
         public ST_TrueFalseBlank end {
@@ -3055,7 +3063,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public string idref {
             get {
@@ -3066,7 +3074,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public int connectloc {
             get {
@@ -3077,7 +3085,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlIgnore]
         public bool connectlocSpecified {
             get {
@@ -3089,51 +3097,51 @@ namespace NPOI.OpenXmlFormats.Vml
         }
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [XmlType(Namespace="urn:schemas-microsoft-com:office:office")]
     [XmlRoot(Namespace="urn:schemas-microsoft-com:office:office", IsNullable=false)]
     public enum ST_RType {
         
-        /// <remarks/>
+    
         arc,
         
-        /// <remarks/>
+    
         callout,
         
-        /// <remarks/>
+    
         connector,
         
-        /// <remarks/>
+    
         align,
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [XmlType(Namespace="urn:schemas-microsoft-com:office:office")]
     [XmlRoot(Namespace="urn:schemas-microsoft-com:office:office", IsNullable=false)]
     public enum ST_How {
         
-        /// <remarks/>
+    
         top,
         
-        /// <remarks/>
+    
         middle,
         
-        /// <remarks/>
+    
         bottom,
         
-        /// <remarks/>
+    
         left,
         
-        /// <remarks/>
+    
         center,
         
-        /// <remarks/>
+    
         right,
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
@@ -3171,7 +3179,7 @@ namespace NPOI.OpenXmlFormats.Vml
         
         private string dgmbasetextscaleField;
         
-        /// <remarks/>
+    
         public CT_RelationTable relationtable {
             get {
                 return this.relationtableField;
@@ -3181,7 +3189,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttributeAttribute(Form=System.Xml.Schema.XmlSchemaForm.Qualified, Namespace="urn:schemas-microsoft-com:vml")]
         public ST_Ext ext {
             get {
@@ -3192,7 +3200,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlIgnore]
         public bool extSpecified {
             get {
@@ -3203,7 +3211,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttributeAttribute(DataType="integer")]
         public string dgmstyle {
             get {
@@ -3214,7 +3222,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public ST_TrueFalse1 autoformat {
             get {
@@ -3225,7 +3233,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlIgnore]
         public bool autoformatSpecified {
             get {
@@ -3236,7 +3244,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public ST_TrueFalse1 reverse {
             get {
@@ -3247,7 +3255,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlIgnore]
         public bool reverseSpecified {
             get {
@@ -3258,7 +3266,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public ST_TrueFalse1 autolayout {
             get {
@@ -3269,7 +3277,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlIgnore]
         public bool autolayoutSpecified {
             get {
@@ -3280,7 +3288,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttributeAttribute(DataType="integer")]
         public string dgmscalex {
             get {
@@ -3291,7 +3299,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttributeAttribute(DataType="integer")]
         public string dgmscaley {
             get {
@@ -3302,7 +3310,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttributeAttribute(DataType="integer")]
         public string dgmfontsize {
             get {
@@ -3313,7 +3321,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public string constrainbounds {
             get {
@@ -3324,7 +3332,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttributeAttribute(DataType="integer")]
         public string dgmbasetextscale {
             get {
@@ -3336,7 +3344,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
@@ -3350,7 +3358,7 @@ namespace NPOI.OpenXmlFormats.Vml
         
         private bool extFieldSpecified;
         
-        /// <remarks/>
+    
         [XmlElement("rel")]
         public CT_Relation[] rel {
             get {
@@ -3361,7 +3369,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttributeAttribute(Form=System.Xml.Schema.XmlSchemaForm.Qualified, Namespace="urn:schemas-microsoft-com:vml")]
         public ST_Ext ext {
             get {
@@ -3372,7 +3380,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlIgnore]
         public bool extSpecified {
             get {
@@ -3384,7 +3392,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
@@ -3402,7 +3410,7 @@ namespace NPOI.OpenXmlFormats.Vml
         
         private string idcntrField;
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttributeAttribute(Form=System.Xml.Schema.XmlSchemaForm.Qualified, Namespace="urn:schemas-microsoft-com:vml")]
         public ST_Ext ext {
             get {
@@ -3413,7 +3421,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlIgnore]
         public bool extSpecified {
             get {
@@ -3424,7 +3432,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public string idsrc {
             get {
@@ -3435,7 +3443,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public string iddest {
             get {
@@ -3446,7 +3454,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public string idcntr {
             get {
@@ -3458,7 +3466,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
@@ -3496,7 +3504,7 @@ namespace NPOI.OpenXmlFormats.Vml
         
         private bool updateModeFieldSpecified;
         
-        /// <remarks/>
+    
         public ST_OLELinkType LinkType {
             get {
                 return this.linkTypeField;
@@ -3506,7 +3514,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlIgnore]
         public bool LinkTypeSpecified {
             get {
@@ -3517,7 +3525,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         public ST_TrueFalseBlank LockedField {
             get {
                 return this.lockedFieldField;
@@ -3527,7 +3535,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlIgnore]
         public bool LockedFieldSpecified {
             get {
@@ -3538,7 +3546,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         public string FieldCodes {
             get {
                 return this.fieldCodesField;
@@ -3548,7 +3556,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public ST_OLEType Type {
             get {
@@ -3559,7 +3567,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlIgnore]
         public bool TypeSpecified {
             get {
@@ -3570,7 +3578,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public string ProgID {
             get {
@@ -3581,7 +3589,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public string ShapeID {
             get {
@@ -3592,7 +3600,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public ST_OLEDrawAspect DrawAspect {
             get {
@@ -3603,7 +3611,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlIgnore]
         public bool DrawAspectSpecified {
             get {
@@ -3614,7 +3622,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public string ObjectID {
             get {
@@ -3625,7 +3633,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttributeAttribute(Form=System.Xml.Schema.XmlSchemaForm.Qualified, Namespace="http://schemas.openxmlformats.org/officeDocument/2006/relationships")]
         public string id {
             get {
@@ -3636,7 +3644,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public ST_OLEUpdateMode UpdateMode {
             get {
@@ -3647,7 +3655,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlIgnore]
         public bool UpdateModeSpecified {
             get {
@@ -3659,62 +3667,62 @@ namespace NPOI.OpenXmlFormats.Vml
         }
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [XmlType(Namespace="urn:schemas-microsoft-com:office:office")]
     [XmlRoot(Namespace="urn:schemas-microsoft-com:office:office", IsNullable=false)]
     public enum ST_OLELinkType {
         
-        /// <remarks/>
+    
         Picture,
         
-        /// <remarks/>
+    
         Bitmap,
         
-        /// <remarks/>
+    
         EnhancedMetaFile,
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [XmlType(Namespace="urn:schemas-microsoft-com:office:office")]
     [XmlRoot(Namespace="urn:schemas-microsoft-com:office:office", IsNullable=false)]
     public enum ST_OLEType {
         
-        /// <remarks/>
+    
         Embed,
         
-        /// <remarks/>
+    
         Link,
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [XmlType(Namespace="urn:schemas-microsoft-com:office:office")]
     [XmlRoot(Namespace="urn:schemas-microsoft-com:office:office", IsNullable=false)]
     public enum ST_OLEDrawAspect {
         
-        /// <remarks/>
+    
         Content,
         
-        /// <remarks/>
+    
         Icon,
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [XmlType(Namespace="urn:schemas-microsoft-com:office:office")]
     [XmlRoot(Namespace="urn:schemas-microsoft-com:office:office", IsNullable=false)]
     public enum ST_OLEUpdateMode {
         
-        /// <remarks/>
+    
         Always,
         
-        /// <remarks/>
+    
         OnCall,
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
@@ -3726,7 +3734,7 @@ namespace NPOI.OpenXmlFormats.Vml
         
         private bool extFieldSpecified;
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttributeAttribute(Form=System.Xml.Schema.XmlSchemaForm.Qualified, Namespace="urn:schemas-microsoft-com:vml")]
         public ST_Ext ext {
             get {
@@ -3737,7 +3745,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlIgnore]
         public bool extSpecified {
             get {
@@ -3749,7 +3757,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
@@ -3845,7 +3853,7 @@ namespace NPOI.OpenXmlFormats.Vml
         
         private bool forcedashFieldSpecified;
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttributeAttribute(Form=System.Xml.Schema.XmlSchemaForm.Qualified, Namespace="urn:schemas-microsoft-com:vml")]
         public ST_Ext ext {
             get {
@@ -3856,7 +3864,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlIgnore]
         public bool extSpecified {
             get {
@@ -3867,7 +3875,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public ST_TrueFalse1 on {
             get {
@@ -3878,7 +3886,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlIgnore]
         public bool onSpecified {
             get {
@@ -3889,7 +3897,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public string weight {
             get {
@@ -3900,7 +3908,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public string color {
             get {
@@ -3911,7 +3919,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public string color2 {
             get {
@@ -3922,7 +3930,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public string opacity {
             get {
@@ -3933,7 +3941,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public ST_StrokeLineStyle linestyle {
             get {
@@ -3944,7 +3952,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlIgnore]
         public bool linestyleSpecified {
             get {
@@ -3955,7 +3963,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public decimal miterlimit {
             get {
@@ -3966,7 +3974,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlIgnore]
         public bool miterlimitSpecified {
             get {
@@ -3977,7 +3985,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public ST_StrokeJoinStyle joinstyle {
             get {
@@ -3988,7 +3996,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlIgnore]
         public bool joinstyleSpecified {
             get {
@@ -3999,7 +4007,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public ST_StrokeEndCap endcap {
             get {
@@ -4010,7 +4018,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlIgnore]
         public bool endcapSpecified {
             get {
@@ -4021,7 +4029,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public string dashstyle {
             get {
@@ -4032,7 +4040,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public ST_TrueFalse1 insetpen {
             get {
@@ -4043,7 +4051,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlIgnore]
         public bool insetpenSpecified {
             get {
@@ -4054,7 +4062,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public ST_FillType filltype {
             get {
@@ -4065,7 +4073,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlIgnore]
         public bool filltypeSpecified {
             get {
@@ -4076,7 +4084,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public string src {
             get {
@@ -4087,7 +4095,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public ST_ImageAspect imageaspect {
             get {
@@ -4098,7 +4106,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlIgnore]
         public bool imageaspectSpecified {
             get {
@@ -4109,7 +4117,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public string imagesize {
             get {
@@ -4120,7 +4128,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public ST_TrueFalse1 imagealignshape {
             get {
@@ -4131,7 +4139,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlIgnore]
         public bool imagealignshapeSpecified {
             get {
@@ -4142,7 +4150,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public ST_StrokeArrowType startarrow {
             get {
@@ -4153,7 +4161,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlIgnore]
         public bool startarrowSpecified {
             get {
@@ -4164,7 +4172,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public ST_StrokeArrowWidth startarrowwidth {
             get {
@@ -4175,7 +4183,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlIgnore]
         public bool startarrowwidthSpecified {
             get {
@@ -4186,7 +4194,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public ST_StrokeArrowLength startarrowlength {
             get {
@@ -4197,7 +4205,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlIgnore]
         public bool startarrowlengthSpecified {
             get {
@@ -4208,7 +4216,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public ST_StrokeArrowType endarrow {
             get {
@@ -4219,7 +4227,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlIgnore]
         public bool endarrowSpecified {
             get {
@@ -4230,7 +4238,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public ST_StrokeArrowWidth endarrowwidth {
             get {
@@ -4241,7 +4249,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlIgnore]
         public bool endarrowwidthSpecified {
             get {
@@ -4252,7 +4260,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public ST_StrokeArrowLength endarrowlength {
             get {
@@ -4263,7 +4271,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlIgnore]
         public bool endarrowlengthSpecified {
             get {
@@ -4274,7 +4282,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttributeAttribute(Form=System.Xml.Schema.XmlSchemaForm.Qualified)]
         public string href {
             get {
@@ -4285,7 +4293,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttributeAttribute(Form=System.Xml.Schema.XmlSchemaForm.Qualified)]
         public string althref {
             get {
@@ -4296,7 +4304,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttributeAttribute(Form=System.Xml.Schema.XmlSchemaForm.Qualified)]
         public string title {
             get {
@@ -4307,7 +4315,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttributeAttribute(Form=System.Xml.Schema.XmlSchemaForm.Qualified)]
         public ST_TrueFalse1 forcedash {
             get {
@@ -4318,7 +4326,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlIgnore]
         public bool forcedashSpecified {
             get {
@@ -4330,7 +4338,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
@@ -4340,7 +4348,7 @@ namespace NPOI.OpenXmlFormats.Vml
         
         private string vField;
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttributeAttribute(Form=System.Xml.Schema.XmlSchemaForm.Qualified)]
         public string v {
             get {
@@ -4352,7 +4360,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
@@ -4368,7 +4376,7 @@ namespace NPOI.OpenXmlFormats.Vml
         
         private bool typeFieldSpecified;
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttributeAttribute(Form=System.Xml.Schema.XmlSchemaForm.Qualified, Namespace="urn:schemas-microsoft-com:vml")]
         public ST_Ext ext {
             get {
@@ -4379,7 +4387,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlIgnore]
         public bool extSpecified {
             get {
@@ -4390,7 +4398,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public ST_FillType1 type {
             get {
@@ -4401,7 +4409,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlIgnore]
         public bool typeSpecified {
             get {
@@ -4413,197 +4421,197 @@ namespace NPOI.OpenXmlFormats.Vml
         }
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [XmlType(TypeName="ST_FillType", Namespace="urn:schemas-microsoft-com:office:office")]
     [XmlRoot("ST_FillType", Namespace="urn:schemas-microsoft-com:office:office", IsNullable=false)]
     public enum ST_FillType1 {
         
-        /// <remarks/>
+    
         gradientCenter,
         
-        /// <remarks/>
+    
         solid,
         
-        /// <remarks/>
+    
         pattern,
         
-        /// <remarks/>
+    
         tile,
         
-        /// <remarks/>
+    
         frame,
         
-        /// <remarks/>
+    
         gradientUnscaled,
         
-        /// <remarks/>
+    
         gradientRadial,
         
-        /// <remarks/>
+    
         gradient,
         
-        /// <remarks/>
+    
         background,
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [XmlType(Namespace="urn:schemas-microsoft-com:office:office")]
     [XmlRoot(Namespace="urn:schemas-microsoft-com:office:office", IsNullable=false)]
     public enum ST_BWMode {
         
-        /// <remarks/>
+    
         color,
         
-        /// <remarks/>
+    
         auto,
         
-        /// <remarks/>
+    
         grayScale,
         
-        /// <remarks/>
+    
         lightGrayscale,
         
-        /// <remarks/>
+    
         inverseGray,
         
-        /// <remarks/>
+    
         grayOutline,
         
-        /// <remarks/>
+    
         highContrast,
         
-        /// <remarks/>
+    
         black,
         
-        /// <remarks/>
+    
         white,
         
-        /// <remarks/>
+    
         hide,
         
-        /// <remarks/>
+    
         undrawn,
         
-        /// <remarks/>
+    
         blackTextAndLines,
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [XmlType(Namespace="urn:schemas-microsoft-com:office:office")]
     [XmlRoot(Namespace="urn:schemas-microsoft-com:office:office", IsNullable=false)]
     public enum ST_ScreenSize {
         
-        /// <remarks/>
+    
         [XmlEnum("544,376")]
         Item544376,
         
-        /// <remarks/>
+    
         [XmlEnum("640,480")]
         Item640480,
         
-        /// <remarks/>
+    
         [XmlEnum("720,512")]
         Item720512,
         
-        /// <remarks/>
+    
         [XmlEnum("800,600")]
         Item800600,
         
-        /// <remarks/>
+    
         [XmlEnum("1024,768")]
         Item1024768,
         
-        /// <remarks/>
+    
         [XmlEnum("1152,862")]
         Item1152862,
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [XmlType(Namespace="urn:schemas-microsoft-com:office:office")]
     [XmlRoot(Namespace="urn:schemas-microsoft-com:office:office", IsNullable=false)]
     public enum ST_InsetMode {
         
-        /// <remarks/>
+    
         auto,
         
-        /// <remarks/>
+    
         custom,
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [XmlType(Namespace="urn:schemas-microsoft-com:office:office")]
     [XmlRoot(Namespace="urn:schemas-microsoft-com:office:office", IsNullable=false)]
     public enum ST_CalloutPlacement {
         
-        /// <remarks/>
+    
         top,
         
-        /// <remarks/>
+    
         center,
         
-        /// <remarks/>
+    
         bottom,
         
-        /// <remarks/>
+    
         user,
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [XmlType(Namespace="urn:schemas-microsoft-com:office:office")]
     [XmlRoot(Namespace="urn:schemas-microsoft-com:office:office", IsNullable=false)]
     public enum ST_ConnectorType {
         
-        /// <remarks/>
+    
         none,
         
-        /// <remarks/>
+    
         straight,
         
-        /// <remarks/>
+    
         elbow,
         
-        /// <remarks/>
+    
         curved,
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [XmlType(Namespace="urn:schemas-microsoft-com:office:office")]
     [XmlRoot(Namespace="urn:schemas-microsoft-com:office:office", IsNullable=false)]
     public enum ST_HrAlign {
         
-        /// <remarks/>
+    
         left,
         
-        /// <remarks/>
+    
         right,
         
-        /// <remarks/>
+    
         center,
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [XmlType(Namespace="urn:schemas-microsoft-com:office:office")]
     [XmlRoot(Namespace="urn:schemas-microsoft-com:office:office", IsNullable=false)]
     public enum ST_ConnectType {
         
-        /// <remarks/>
+    
         none,
         
-        /// <remarks/>
+    
         rect,
         
-        /// <remarks/>
+    
         segments,
         
-        /// <remarks/>
+    
         custom,
     }
 }

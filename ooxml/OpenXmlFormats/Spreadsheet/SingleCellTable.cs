@@ -1001,173 +1001,173 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     public enum ST_XmlDataType
     {
 
-        /// <remarks/>
+    
         @string,
 
-        /// <remarks/>
+    
         normalizedString,
 
-        /// <remarks/>
+    
         token,
 
-        /// <remarks/>
+    
         @byte,
 
-        /// <remarks/>
+    
         unsignedByte,
 
-        /// <remarks/>
+    
         base64Binary,
 
-        /// <remarks/>
+    
         hexBinary,
 
-        /// <remarks/>
+    
         integer,
 
-        /// <remarks/>
+    
         positiveInteger,
 
-        /// <remarks/>
+    
         negativeInteger,
 
-        /// <remarks/>
+    
         nonPositiveInteger,
 
-        /// <remarks/>
+    
         nonNegativeInteger,
 
-        /// <remarks/>
+    
         @int,
 
-        /// <remarks/>
+    
         unsignedInt,
 
-        /// <remarks/>
+    
         @long,
 
-        /// <remarks/>
+    
         unsignedLong,
 
-        /// <remarks/>
+    
         @short,
 
-        /// <remarks/>
+    
         unsignedShort,
 
-        /// <remarks/>
+    
         @decimal,
 
-        /// <remarks/>
+    
         @float,
 
-        /// <remarks/>
+    
         @double,
 
-        /// <remarks/>
+    
         boolean,
 
-        /// <remarks/>
+    
         time,
 
-        /// <remarks/>
+    
         dateTime,
 
-        /// <remarks/>
+    
         duration,
 
-        /// <remarks/>
+    
         date,
 
-        /// <remarks/>
+    
         gMonth,
 
-        /// <remarks/>
+    
         gYear,
 
-        /// <remarks/>
+    
         gYearMonth,
 
-        /// <remarks/>
+    
         gDay,
 
-        /// <remarks/>
+    
         gMonthDay,
 
-        /// <remarks/>
+    
         Name,
 
-        /// <remarks/>
+    
         QName,
 
-        /// <remarks/>
+    
         NCName,
 
-        /// <remarks/>
+    
         anyURI,
 
-        /// <remarks/>
+    
         language,
 
-        /// <remarks/>
+    
         ID,
 
-        /// <remarks/>
+    
         IDREF,
 
-        /// <remarks/>
+    
         IDREFS,
 
-        /// <remarks/>
+    
         ENTITY,
 
-        /// <remarks/>
+    
         ENTITIES,
 
-        /// <remarks/>
+    
         NOTATION,
 
-        /// <remarks/>
+    
         NMTOKEN,
 
-        /// <remarks/>
+    
         NMTOKENS,
 
-        /// <remarks/>
+    
         anyType,
     }
 
     public enum ST_TotalsRowFunction
     {
 
-        /// <remarks/>
+    
         none,
 
-        /// <remarks/>
+    
         sum,
 
-        /// <remarks/>
+    
         min,
 
-        /// <remarks/>
+    
         max,
 
-        /// <remarks/>
+    
         average,
 
-        /// <remarks/>
+    
         count,
 
-        /// <remarks/>
+    
         countNums,
 
-        /// <remarks/>
+    
         stdDev,
 
-        /// <remarks/>
+    
         var,
 
-        /// <remarks/>
+    
         custom,
     }
 
@@ -1308,13 +1308,13 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     public enum ST_TableType
     {
 
-        /// <remarks/>
+    
         worksheet,
 
-        /// <remarks/>
+    
         xml,
 
-        /// <remarks/>
+    
         queryTable,
     }
     [System.Serializable]

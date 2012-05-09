@@ -15,11 +15,12 @@
    limitations under the License.
 ==================================================================== */
 
+using NPOI.OpenXmlFormats.Dml;
+using NPOI.OpenXmlFormats.Dml.Spreadsheet;
+using NPOI.OpenXmlFormats.Spreadsheet;
+
 namespace NPOI.XSSF.UserModel
 {
-    using NPOI.OpenXmlFormats.Dml;
-    using NPOI.OpenXmlFormats.Spreadsheet;
-
     /**
      * Represents a shape with a predefined geometry in a SpreadsheetML Drawing.
      * Possible shape types are defined in {@link NPOI.ss.usermodel.ShapeTypes}

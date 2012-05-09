@@ -1,16 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Xml.Serialization;
 using System.IO;
+using System.Xml;
+using System.Xml.Schema;
+using System.Xml.Serialization;
+using System.Collections.Generic;
 
-namespace NPOI.OpenXmlFormats.Dml
+namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
 {
-
-    public interface EG_ObjectChoices
-    { 
-        
-    }
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing")]
     public class CT_ShapeNonVisual
     {
         private CT_NonVisualDrawingProps cNvPrField;
@@ -51,6 +49,9 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
     }
+
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing")]
     public class CT_GraphicalObjectFrameNonVisual
     {
 
@@ -79,6 +80,9 @@ namespace NPOI.OpenXmlFormats.Dml
             set { cNvGraphicFramePrField = value; }
         }
     }
+
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing")]
     public class CT_GraphicalObjectFrame
     {
         CT_GraphicalObjectFrameNonVisual nvGraphicFramePrField;
@@ -105,7 +109,7 @@ namespace NPOI.OpenXmlFormats.Dml
 
         public CT_GraphicalObjectFrameNonVisual AddNewNvGraphicFramePr()
         {
-            this.nvGraphicFramePr=new CT_GraphicalObjectFrameNonVisual();
+            this.nvGraphicFramePr = new CT_GraphicalObjectFrameNonVisual();
             return this.nvGraphicFramePr;
         }
 
@@ -131,14 +135,17 @@ namespace NPOI.OpenXmlFormats.Dml
             get { return fPublishedField; }
             set { fPublishedField = value; }
         }
-        
+
         public CT_GraphicalObject graphic
         {
             get { return graphicField; }
             set { graphicField = value; }
         }
     }
-    public class CT_Shape : EG_ObjectChoices
+
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing")]
+    public class CT_Shape // empty interface: EG_ObjectChoices
     {
         private CT_ShapeNonVisual nvSpPrField;
         private CT_ShapeProperties spPrField;
@@ -152,7 +159,7 @@ namespace NPOI.OpenXmlFormats.Dml
 
         public void Set(CT_Shape obj)
         {
-            
+
         }
 
         public CT_ShapeNonVisual AddNewNvSpPr()
@@ -249,6 +256,9 @@ namespace NPOI.OpenXmlFormats.Dml
             set { fPublishedField = value; }
         }
     }
+
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing")]
     public class CT_ConnectorNonVisual
     {
         private CT_NonVisualDrawingProps cNvPrField;
@@ -289,6 +299,9 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
     }
+
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing")]
     public class CT_GroupShape
     {
         CT_GroupShapeProperties grpSpPrField;
@@ -331,9 +344,12 @@ namespace NPOI.OpenXmlFormats.Dml
         {
             get { return grpSpPrField; }
             set { grpSpPrField = value; }
-        
+
         }
     }
+
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing")]
     public class CT_GroupShapeNonVisual
     {
         CT_NonVisualDrawingProps cNvPrField;
@@ -361,31 +377,42 @@ namespace NPOI.OpenXmlFormats.Dml
             set { cNvGrpSpPrField = value; }
         }
     }
+
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing")]
     public class CT_Marker
     {
         public int col
         {
-            get;set;
+            get;
+            set;
         }
         public long colOff
         {
-        get;set;
+            get;
+            set;
         }
         public int row
         {
-        get;set;
+            get;
+            set;
         }
         public long rowOff
         {
-        get;set;
+            get;
+            set;
         }
     }
     public enum ST_EditAs
     {
+        NONE,
         twoCell,
         oneCell,
         absolute
     }
+
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing")]
     public class CT_AnchorClientData
     {
         [XmlAttribute]
@@ -401,50 +428,104 @@ namespace NPOI.OpenXmlFormats.Dml
             set;
         }
     }
-    public interface EG_Anchor
-    { 
-    
-    }
+
+
+
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing")]
+    [XmlRoot("wsDr", Namespace = "http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing", IsNullable = true)]
     public class CT_Drawing
     {
+        internal static XmlSerializer serializer = new XmlSerializer(typeof(CT_Drawing));
+        //public const String NAMESPACE_A = "http://schemas.openxmlformats.org/drawingml/2006/main";
+        //public const String NAMESPACE_C = "http://schemas.openxmlformats.org/drawingml/2006/chart";
+        // 
+        //    Saved Drawings must have the following namespaces Set:
+        //    <xdr:wsDr
+        //        xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main"
+        //        xmlns:xdr="http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing">
+        //
+        ////if(isNew) xmlOptions.SetSaveSyntheticDocumentElement(new QName(CT_Drawing.type.GetName().GetNamespaceURI(), "wsDr", "xdr"));
+        //Dictionary<String, String> map = new Dictionary<String, String>();
+        //map[NAMESPACE_A]= "a";
+        //map[ST_RelationshipId.NamespaceURI]= "r";
+        ////xmlOptions.SetSaveSuggestedPrefixes(map);
+        internal static XmlSerializerNamespaces namespaces = new XmlSerializerNamespaces(new[] {
+            //new XmlQualifiedName("", "http://schemas.openxmlformats.org/spreadsheetml/2006/main"), 
+            new XmlQualifiedName("a", "http://schemas.openxmlformats.org/drawingml/2006/main"),
+            new XmlQualifiedName("r", "http://schemas.openxmlformats.org/officeDocument/2006/relationships"),
+            new XmlQualifiedName("xdr", "http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing")});
 
-        private string idField;
+        private List<CT_TwoCellAnchor> twoCellAnchors = new List<CT_TwoCellAnchor>();
+        //TODO     private List<CT_OneCellAnchor> oneCellAnchors = new List<CT_OneCellAnchor>();
+        //TODO     private List<CT_AbsoulteCellAnchor> absoluteCellAnchors = new List<CT_AbsoulteCellAnchor>();
 
         public CT_TwoCellAnchor AddNewTwoCellAnchor()
         {
-            throw new NotImplementedException();
+            var anchor = new CT_TwoCellAnchor();
+            twoCellAnchors.Add(anchor);
+            return anchor;
         }
-        public int sizeOfTwoCellAnchorArray()
+        public int SizeOfTwoCellAnchorArray()
         {
-            throw new NotImplementedException();
+            return twoCellAnchors.Count;
         }
         public static CT_Drawing Parse(Stream stream)
         {
-            throw new NotImplementedException();
+            CT_Drawing result = (CT_Drawing)serializer.Deserialize(stream);
+            return result;
         }
 
-        public string id
-        {
-            get
-            {
-                return this.idField;
-            }
-            set
-            {
-                this.idField = value;
-            }
-        }
         public void Save(Stream stream)
         {
-            throw new NotImplementedException();
+            serializer.Serialize(stream, this, namespaces);
+        }
+
+        [XmlElement("twoCellAnchor")]
+        public List<CT_TwoCellAnchor> TwoCellAnchors
+        {
+            get { return twoCellAnchors; }
+            set { twoCellAnchors = value; }
+        }
+        [XmlIgnore]
+        public bool TwoCellAnchorsSpecified
+        {
+            get { return (null != twoCellAnchors) && (0 < twoCellAnchors.Count); }
+        }
+
+        [XmlElement("oneCellAnchor")]
+        public List<CT_TwoCellAnchor> OneCellAnchors
+        {
+            get { return null; } // TODO oneCellAnchors; }
+            set { } // TODO oneCellAnchors = value; }
+        }
+        [XmlIgnore]
+        public bool OneCellAnchorsSpecified
+        {
+            get { return false; }//TODO (null != oneCellAnchors) && (0 < oneCellAnchors.Count); }
+        }
+
+        [XmlElement("absoluteAnchor")]
+        public List<CT_TwoCellAnchor> AbsoluteAnchors
+        {
+            get { return null; } // TODO absoluteAnchors; }
+            set { } // TODO absoluteAnchors = value; }
+        }
+        [XmlIgnore]
+        public bool AbsoluteAnchorsSpecified
+        {
+            get { return false; }//TODO (null != absoluteAnchors) && (0 < absoluteAnchors.Count); }
         }
     }
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing")]
     public class CT_LegacyDrawing
     {
 
         private string idField;
 
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/relationships")]
         public string id
         {
             get
@@ -458,15 +539,51 @@ namespace NPOI.OpenXmlFormats.Dml
         }
     }
 
-    public class CT_TwoCellAnchor : EG_Anchor
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing")]
+    public class CT_TwoCellAnchor // : EG_Anchor - was empty interface
     {
-        private CT_Marker fromField;
-        private CT_Marker toField;
-        private CT_AnchorClientData clientDataField;
+        private CT_Marker fromField = new CT_Marker(); // 1..1 element
+        private CT_Marker toField = new CT_Marker(); // 1..1 element
+        // 1..1 element choice - one of CT_Shape, CT_GroupShape, CT_GraphicalObjectFrame, CT_Connector or CT_Picture
+        private CT_Shape shapeField = null;
+        private CT_GroupShape groupShapeField = null;
+        private CT_GraphicalObjectFrame graphicalObjectField = null;
+        private CT_Connector connectorField = null;
+        private CT_Picture pictureField = null;
+
+        private CT_AnchorClientData clientDataField = new CT_AnchorClientData(); // 1..1 element
+
+        private ST_EditAs editAsField = ST_EditAs.NONE; // 0..1 attribute
+
+        public CT_Shape AddNewSp()
+        {
+            shapeField = new CT_Shape();
+            return shapeField;
+        }
+
+        public CT_GroupShape AddNewGrpSp()
+        {
+            groupShapeField = new CT_GroupShape();
+            return groupShapeField;
+        }
 
         public CT_GraphicalObjectFrame AddNewGraphicFrame()
         {
-            throw new NotImplementedException();
+            graphicalObjectField = new CT_GraphicalObjectFrame();
+            return graphicalObjectField;
+        }
+
+        public CT_Connector AddNewCxnSp()
+        {
+            connectorField = new CT_Connector();
+            return connectorField;
+        }
+
+        public CT_Picture AddNewPic()
+        {
+            pictureField = new CT_Picture();
+            return pictureField;
         }
 
         public CT_AnchorClientData AddNewClientData()
@@ -474,46 +591,111 @@ namespace NPOI.OpenXmlFormats.Dml
             this.clientDataField = new CT_AnchorClientData();
             return this.clientDataField;
         }
-        public CT_Picture AddNewPic()
+
+        [XmlAttribute("editAs")]
+        // (DataType="ST_EditAs")
+        public string editAsAttribute
         {
-            throw new NotImplementedException();
+            get { return editAsField.ToString(); }
+            set { editAsField = (ST_EditAs)Enum.Parse(typeof(ST_EditAs), value); }
         }
-        public CT_Shape AddNewSp()
+        // typesafe access to editAs attribute
+        public ST_EditAs editAs
         {
-            throw new NotImplementedException();
+            get { return editAsField; }
+            set { editAsField = value; }
         }
-        public CT_GroupShape AddNewGrpSp()
+        [XmlIgnore]
+        public bool editAsSpecified
         {
-            throw new NotImplementedException();
-        }
-        public CT_Connector AddNewCxnSp()
-        {
-            throw new NotImplementedException();
+            get { return ST_EditAs.NONE != editAsField; }
         }
 
+        [XmlElement]
         public CT_Marker from
         {
             get { return fromField; }
             set { fromField = value; }
         }
+
+        [XmlElement]
         public CT_Marker to
         {
             get { return toField; }
             set { toField = value; }
         }
-        public ST_EditAs editAs
+
+        #region Choice - one of CT_Shape, CT_GroupShape, CT_GraphicalObjectFrame, CT_Connector or CT_Picture
+
+        [XmlElement]
+        public CT_Shape shape
         {
-            get;
-            set;
+            get { return shapeField; }
+            set { shapeField = value; }
         }
+        public bool shapeSpecified
+        {
+            get { return null != shapeField; }
+        }
+
+        [XmlElement]
+        public CT_GroupShape groupShape
+        {
+            get { return groupShapeField; }
+            set { groupShapeField = value; }
+        }
+        public bool groupShapeSpecified
+        {
+            get { return null != groupShapeField; }
+        }
+
+        [XmlElement]
+        public CT_GraphicalObjectFrame graphicalObject
+        {
+            get { return graphicalObjectField; }
+            set { graphicalObjectField = value; }
+        }
+        public bool graphicalObjectSpecified
+        {
+            get { return null != graphicalObjectField; }
+        }
+
+        [XmlElement]
+        public CT_Connector connector
+        {
+            get { return connectorField; }
+            set { connectorField = value; }
+        }
+        public bool connectorSpecified
+        {
+            get { return null != connectorField; }
+        }
+
+        [XmlElement]
+        public CT_Picture picture
+        {
+            get { return pictureField; }
+            set { pictureField = value; }
+        }
+        public bool pictureSpecified
+        {
+            get { return null != pictureField; }
+        }
+
+        #endregion Choice - one of CT_Shape, CT_GroupShape, CT_GraphicalObjectFrame, CT_Connector or CT_Picture
+
+        [XmlElement]
         public CT_AnchorClientData clientData
         {
             get { return clientDataField; }
-            set { clientDataField = value; } 
+            set { clientDataField = value; }
         }
     }
-    public class CT_Connector : EG_ObjectChoices
-    { 
+
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing")]
+    public class CT_Connector // empty interface: EG_ObjectChoices
+    {
         string macroField;
         bool fPublishField;
         private CT_ShapeProperties spPrField;
@@ -540,7 +722,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         public CT_ShapeStyle AddNewStyle()
         {
-            this.styleField=new CT_ShapeStyle();
+            this.styleField = new CT_ShapeStyle();
             return this.styleField;
         }
         public CT_ShapeProperties spPr
@@ -554,49 +736,6 @@ namespace NPOI.OpenXmlFormats.Dml
                 this.spPrField = value;
             }
         }
-         public CT_ShapeStyle style
-         {
-             get
-             {
-                 return this.styleField;
-             }
-             set
-             {
-                 this.styleField = value;
-             }
-         }
-         [XmlAttribute]
-        public string macro
-        {
-            get{return this.macroField;}
-            set{this.macroField=value;}
-        }
-        [XmlAttribute]
-        public bool fPublished
-        {
-            get{return this.fPublishField;}
-            set{this.fPublishField = value;}
-        }
-    }
-    public partial class CT_Picture:EG_ObjectChoices
-    { 
-        private CT_ShapeStyle styleField;
-        private string macroField;
-        private bool fPublishedField;
-
-        [XmlAttribute]
-        public string macro
-        {
-            get { return macroField; }
-            set { macroField = value; }
-        }
-
-        [XmlAttribute]
-        public bool fPublished
-        {
-            get { return fPublishedField; }
-            set { fPublishedField = value; }
-        }
         public CT_ShapeStyle style
         {
             get
@@ -608,5 +747,149 @@ namespace NPOI.OpenXmlFormats.Dml
                 this.styleField = value;
             }
         }
+        [XmlAttribute]
+        public string macro
+        {
+            get { return this.macroField; }
+            set { this.macroField = value; }
+        }
+        [XmlAttribute]
+        public bool fPublished
+        {
+            get { return this.fPublishField; }
+            set { this.fPublishField = value; }
+        }
     }
+
+    
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing")]
+    public class CT_Picture // empty interface: EG_ObjectChoices
+    {
+        private CT_PictureNonVisual nvPicPrField = new CT_PictureNonVisual();        //  draw-ssdraw: 1..1 
+        private CT_BlipFillProperties blipFillField = new CT_BlipFillProperties();   //  draw-ssdraw: 1..1 
+        private CT_ShapeProperties spPrField = new CT_ShapeProperties();             //  draw-ssdraw: 1..1 
+        private CT_ShapeStyle styleField = null; // 0..1
+
+        private string macroField = null;
+        private bool? fPublishedField = null;
+
+        [XmlElement]
+        public CT_PictureNonVisual nvPicPr
+        {
+            get { return this.nvPicPrField; }
+            set { this.nvPicPrField = value; }
+        }
+
+        [XmlElement]
+        public CT_BlipFillProperties blipFill
+        {
+            get { return this.blipFillField; }
+            set { this.blipFillField = value; }
+        }
+
+        [XmlElement]
+        public CT_ShapeProperties spPr
+        {
+            get { return this.spPrField; }
+            set { this.spPrField = value; }
+        }
+
+        [XmlElement]
+        public CT_ShapeStyle style
+        {
+            get            {                return this.styleField;            }
+            set            {                this.styleField = value;            }
+        }
+        [XmlIgnore]
+        public bool styleSpecified
+        {
+            get { return (null != styleField); }
+        }
+
+        [XmlAttribute]
+        public string macro
+        {
+            get { return macroField; }
+            set { macroField = value; }
+        }
+        [XmlIgnore]
+        public bool macroSpecified
+        {
+            get { return (null != macroField); }
+        }
+
+        [XmlAttribute]
+        public bool fPublished
+        {
+            get { return null == fPublishedField ? false: (bool)fPublishedField; }
+            set { fPublishedField = value; }
+        }
+        [XmlIgnore]
+        public bool fPublishedSpecified
+        {
+            get { return (null != fPublishedField); }
+        }
+
+        public CT_PictureNonVisual AddNewNvPicPr()
+        {
+            nvPicPrField = new CT_PictureNonVisual();
+            return this.nvPicPrField;
+        }
+
+        public CT_BlipFillProperties AddNewBlipFill()
+        {
+            blipFillField = new CT_BlipFillProperties();
+            return this.blipFillField;
+        }
+
+        public CT_ShapeProperties AddNewSpPr()
+        {
+            spPrField = new CT_ShapeProperties();
+            return this.spPrField;
+        }
+
+        public void Set(CT_Picture pict)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    // see same class in different name space in Picture.cs
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing")]
+    public class CT_PictureNonVisual
+    {
+
+        private CT_NonVisualDrawingProps cNvPrField = new CT_NonVisualDrawingProps(); // 1..1
+        private CT_NonVisualPictureProperties cNvPicPrField = new CT_NonVisualPictureProperties(); // 1..1
+
+        public CT_NonVisualDrawingProps AddNewCNvPr()
+        {
+            this.cNvPrField = new CT_NonVisualDrawingProps();
+            return this.cNvPrField;
+        }
+        public CT_NonVisualPictureProperties AddNewCNvPicPr()
+        {
+            this.cNvPicPrField = new CT_NonVisualPictureProperties();
+            return this.cNvPicPrField;
+        }
+
+        [XmlElement]
+        public CT_NonVisualDrawingProps cNvPr
+        {
+            get { return this.cNvPrField; }
+            set { this.cNvPrField = value; }
+        }
+
+
+        [XmlElement]
+        public CT_NonVisualPictureProperties cNvPicPr
+        {
+            get { return this.cNvPicPrField; }
+            set { this.cNvPicPrField = value; }
+        }
+    }
+
+
 }

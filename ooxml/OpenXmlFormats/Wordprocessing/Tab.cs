@@ -5,8 +5,8 @@ using System.Text;
 namespace NPOI.OpenXmlFormats.Wordprocessing
 {
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
-    [System.Xml.Serialization.XmlRootAttribute(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
+    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
+    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
     public class CT_Tabs
     {
 
@@ -17,7 +17,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             this.tabField = new List<CT_TabStop>();
         }
 
-        [System.Xml.Serialization.XmlElementAttribute("tab", Order = 0)]
+        [System.Xml.Serialization.XmlElement("tab", Order = 0)]
         public List<CT_TabStop> tab
         {
             get
@@ -39,60 +39,60 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     }
 
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
+    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
     public enum ST_TabJc
     {
 
-        /// <remarks/>
+    
         clear,
 
-        /// <remarks/>
+    
         left,
 
-        /// <remarks/>
+    
         center,
 
-        /// <remarks/>
+    
         right,
 
-        /// <remarks/>
+    
         @decimal,
 
-        /// <remarks/>
+    
         bar,
 
-        /// <remarks/>
+    
         num,
     }
 
 
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
+    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
     public enum ST_TabTlc
     {
 
-        /// <remarks/>
+    
         none,
 
-        /// <remarks/>
+    
         dot,
 
-        /// <remarks/>
+    
         hyphen,
 
-        /// <remarks/>
+    
         underscore,
 
-        /// <remarks/>
+    
         heavy,
 
-        /// <remarks/>
+    
         middleDot,
     }
     [System.SerializableAttribute()]
 
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
-    [System.Xml.Serialization.XmlRootAttribute(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
+    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
+    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
     public class CT_TabStop
     {
 
@@ -159,8 +159,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
     [System.SerializableAttribute()]
 
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
-    [System.Xml.Serialization.XmlRootAttribute(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
+    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
+    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
     public class CT_PTab
     {
 
@@ -212,52 +212,52 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
 
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
+    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
     public enum ST_PTabAlignment
     {
 
-        /// <remarks/>
+    
         left,
 
-        /// <remarks/>
+    
         center,
 
-        /// <remarks/>
+    
         right,
     }
 
 
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
+    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
     public enum ST_PTabRelativeTo
     {
 
-        /// <remarks/>
+    
         margin,
 
-        /// <remarks/>
+    
         indent,
     }
 
 
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
+    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
     public enum ST_PTabLeader
     {
 
-        /// <remarks/>
+    
         none,
 
-        /// <remarks/>
+    
         dot,
 
-        /// <remarks/>
+    
         hyphen,
 
-        /// <remarks/>
+    
         underscore,
 
-        /// <remarks/>
+    
         middleDot,
     }
 

@@ -50,7 +50,7 @@ namespace NPOI.XSSF.Model
 
                     Assert.IsNotNull(ctMapInfo);
 
-                    Assert.AreEqual(1, ctMapInfo.Schema.Length);
+                    Assert.AreEqual(1, ctMapInfo.Schema.Count);
 
                     foreach (XSSFMap map in mapInfo.GetAllXSSFMaps())
                     {

@@ -18,121 +18,121 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     public enum ST_PivotAreaType
     {
 
-        /// <remarks/>
+    
         none,
 
-        /// <remarks/>
+    
         normal,
 
-        /// <remarks/>
+    
         data,
 
-        /// <remarks/>
+    
         all,
 
-        /// <remarks/>
+    
         origin,
 
-        /// <remarks/>
+    
         button,
 
-        /// <remarks/>
+    
         topRight,
     }
 
     public enum ST_Axis
     {
 
-        /// <remarks/>
+    
         axisRow,
 
-        /// <remarks/>
+    
         axisCol,
 
-        /// <remarks/>
+    
         axisPage,
 
-        /// <remarks/>
+    
         axisValues,
     }
 
     public enum ST_CalendarType
     {
 
-        /// <remarks/>
+    
         none,
 
-        /// <remarks/>
+    
         gregorian,
 
-        /// <remarks/>
+    
         gregorianUs,
 
-        /// <remarks/>
+    
         japan,
 
-        /// <remarks/>
+    
         taiwan,
 
-        /// <remarks/>
+    
         korea,
 
-        /// <remarks/>
+    
         hijri,
 
-        /// <remarks/>
+    
         thai,
 
-        /// <remarks/>
+    
         hebrew,
 
-        /// <remarks/>
+    
         gregorianMeFrench,
 
-        /// <remarks/>
+    
         gregorianArabic,
 
-        /// <remarks/>
+    
         gregorianXlitEnglish,
 
-        /// <remarks/>
+    
         gregorianXlitFrench,
     }
     
     public enum ST_DataConsolidateFunction
     {
 
-        /// <remarks/>
+    
         average,
 
-        /// <remarks/>
+    
         count,
 
-        /// <remarks/>
+    
         countNums,
 
-        /// <remarks/>
+    
         max,
 
-        /// <remarks/>
+    
         min,
 
-        /// <remarks/>
+    
         product,
 
-        /// <remarks/>
+    
         stdDev,
 
-        /// <remarks/>
+    
         stdDevp,
 
-        /// <remarks/>
+    
         sum,
 
-        /// <remarks/>
+    
         var,
 
-        /// <remarks/>
+    
         varp,
     }
         
@@ -465,6 +465,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
+        // TODO is the following correct?
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/relationships")]
         public string id
         {
             get
@@ -1504,10 +1506,10 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     public enum ST_RevisionAction
     {
 
-        /// <remarks/>
+    
         add,
 
-        /// <remarks/>
+    
         delete,
     }
 
@@ -2589,19 +2591,19 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     public enum ST_FormulaExpression
     {
 
-        /// <remarks/>
+    
         @ref,
 
-        /// <remarks/>
+    
         refError,
 
-        /// <remarks/>
+    
         area,
 
-        /// <remarks/>
+    
         areaError,
 
-        /// <remarks/>
+    
         computedArea,
     }
 
@@ -2797,16 +2799,16 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     public enum ST_rwColActionType
     {
 
-        /// <remarks/>
+    
         insertRow,
 
-        /// <remarks/>
+    
         deleteRow,
 
-        /// <remarks/>
+    
         insertCol,
 
-        /// <remarks/>
+    
         deleteCol,
     }
 

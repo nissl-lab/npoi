@@ -20,7 +20,6 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         ElementName = "comments")]
     public class CT_Comments
     {
-
         private CT_Authors authorsField = new CT_Authors(); // required field
 
         private CT_CommentList commentListField = new CT_CommentList(); // required field

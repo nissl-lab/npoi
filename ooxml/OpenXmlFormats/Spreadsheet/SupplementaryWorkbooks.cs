@@ -5,7 +5,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 {
     
     
-    /// <remarks/>
+
     [System.Serializable]
     [DebuggerStepThrough]
     [DesignerCategory("code")]
@@ -15,7 +15,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         
         private object itemField;
         
-        /// <remarks/>
+    
         [XmlElement("ddeLink", typeof(CT_DdeLink))]
         [XmlElement("extLst", typeof(CT_ExtensionList))]
         [XmlElement("externalBook", typeof(CT_ExternalBook))]
@@ -30,7 +30,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [DebuggerStepThrough]
     [DesignerCategory("code")]
@@ -44,7 +44,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         
         private string ddeTopicField;
         
-        /// <remarks/>
+    
         [XmlArrayItemAttribute("ddeItem", IsNullable=false)]
         public CT_DdeItem[] ddeItems {
             get {
@@ -55,7 +55,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
         
-        /// <remarks/>
+    
         [XmlAttribute]
         public string ddeService {
             get {
@@ -66,7 +66,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
         
-        /// <remarks/>
+    
         [XmlAttribute]
         public string ddeTopic {
             get {
@@ -78,7 +78,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [DebuggerStepThrough]
     [DesignerCategory("code")]
@@ -103,7 +103,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.preferPicField = false;
         }
         
-        /// <remarks/>
+    
         public CT_DdeValues values {
             get {
                 return this.valuesField;
@@ -113,7 +113,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
         
-        /// <remarks/>
+    
         [XmlAttribute]
         [DefaultValueAttribute("0")]
         public string name {
@@ -125,7 +125,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
         
-        /// <remarks/>
+    
         [XmlAttribute]
         [DefaultValueAttribute(false)]
         public bool ole {
@@ -137,7 +137,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
         
-        /// <remarks/>
+    
         [XmlAttribute]
         [DefaultValueAttribute(false)]
         public bool advise {
@@ -149,7 +149,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
         
-        /// <remarks/>
+    
         [XmlAttribute]
         [DefaultValueAttribute(false)]
         public bool preferPic {
@@ -162,7 +162,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [DebuggerStepThrough]
     [DesignerCategory("code")]
@@ -181,7 +181,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.colsField = ((uint)(1));
         }
         
-        /// <remarks/>
+    
         [XmlElement("value")]
         public CT_DdeValue[] value {
             get {
@@ -192,7 +192,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
         
-        /// <remarks/>
+    
         [XmlAttribute]
         [DefaultValueAttribute(typeof(uint), "1")]
         public uint rows {
@@ -204,7 +204,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
         
-        /// <remarks/>
+    
         [XmlAttribute]
         [DefaultValueAttribute(typeof(uint), "1")]
         public uint cols {
@@ -217,7 +217,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [DebuggerStepThrough]
     [DesignerCategory("code")]
@@ -233,7 +233,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.tField = ST_DdeValueType.n;
         }
         
-        /// <remarks/>
+    
         public string val {
             get {
                 return this.valField;
@@ -243,7 +243,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
         
-        /// <remarks/>
+    
         [XmlAttribute]
         [DefaultValueAttribute(ST_DdeValueType.n)]
         public ST_DdeValueType t {
@@ -256,30 +256,30 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [XmlType(Namespace="http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     [XmlRoot(Namespace="http://schemas.openxmlformats.org/spreadsheetml/2006/main", IsNullable=false)]
     public enum ST_DdeValueType {
         
-        /// <remarks/>
+    
         nil,
         
-        /// <remarks/>
+    
         b,
         
-        /// <remarks/>
+    
         n,
         
-        /// <remarks/>
+    
         e,
         
-        /// <remarks/>
+    
         str,
     }
     
 
-    /// <remarks/>
+
     [System.Serializable]
     [DebuggerStepThrough]
     [DesignerCategory("code")]
@@ -295,7 +295,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         
         private string idField;
         
-        /// <remarks/>
+    
         [XmlArrayItemAttribute("sheetName", IsNullable=false)]
         public CT_ExternalSheetName[] sheetNames {
             get {
@@ -306,7 +306,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
         
-        /// <remarks/>
+    
         [XmlArrayItemAttribute("definedName", IsNullable=false)]
         public CT_ExternalDefinedName[] definedNames {
             get {
@@ -317,7 +317,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
         
-        /// <remarks/>
+    
         [XmlArrayItemAttribute("sheetData", IsNullable=false)]
         public CT_ExternalSheetData[] sheetDataSet {
             get {
@@ -328,7 +328,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
         
-        /// <remarks/>
+    
         [XmlAttributeAttribute(Form=System.Xml.Schema.XmlSchemaForm.Qualified, Namespace="http://schemas.openxmlformats.org/officeDocument/2006/relationships")]
         public string id {
             get {
@@ -340,7 +340,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [DebuggerStepThrough]
     [DesignerCategory("code")]
@@ -350,7 +350,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         
         private string valField;
         
-        /// <remarks/>
+    
         [XmlAttribute]
         public string val {
             get {
@@ -362,7 +362,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [DebuggerStepThrough]
     [DesignerCategory("code")]
@@ -378,7 +378,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         
         private bool sheetIdFieldSpecified;
         
-        /// <remarks/>
+    
         [XmlAttribute]
         public string name {
             get {
@@ -389,7 +389,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
         
-        /// <remarks/>
+    
         [XmlAttribute]
         public string refersTo {
             get {
@@ -400,7 +400,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
         
-        /// <remarks/>
+    
         [XmlAttribute]
         public uint sheetId {
             get {
@@ -411,7 +411,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
         
-        /// <remarks/>
+    
         [XmlIgnore]
         public bool sheetIdSpecified {
             get {
@@ -423,7 +423,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [DebuggerStepThrough]
     [DesignerCategory("code")]
@@ -441,7 +441,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.refreshErrorField = false;
         }
         
-        /// <remarks/>
+    
         [XmlElement("row")]
         public CT_ExternalRow[] row {
             get {
@@ -452,7 +452,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
         
-        /// <remarks/>
+    
         [XmlAttribute]
         public uint sheetId {
             get {
@@ -463,7 +463,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
         
-        /// <remarks/>
+    
         [XmlAttribute]
         [DefaultValueAttribute(false)]
         public bool refreshError {
@@ -476,7 +476,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [DebuggerStepThrough]
     [DesignerCategory("code")]
@@ -488,7 +488,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         
         private uint rField;
         
-        /// <remarks/>
+    
         [XmlElement("cell")]
         public CT_ExternalCell[] cell {
             get {
@@ -499,7 +499,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
         
-        /// <remarks/>
+    
         [XmlAttribute]
         public uint r {
             get {
@@ -511,7 +511,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [DebuggerStepThrough]
     [DesignerCategory("code")]
@@ -532,7 +532,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.vmField = ((uint)(0));
         }
         
-        /// <remarks/>
+    
         public string v {
             get {
                 return this.vField;
@@ -542,7 +542,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
         
-        /// <remarks/>
+    
         [XmlAttribute]
         public string r {
             get {
@@ -553,7 +553,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
         
-        /// <remarks/>
+    
         [XmlAttribute]
         [DefaultValueAttribute(ST_CellType.n)]
         public ST_CellType t {
@@ -565,7 +565,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
         
-        /// <remarks/>
+    
         [XmlAttribute]
         [DefaultValueAttribute(typeof(uint), "0")]
         public uint vm {
@@ -579,7 +579,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     }
     
     
-    /// <remarks/>
+
     [System.Serializable]
     [DebuggerStepThrough]
     [DesignerCategory("code")]
@@ -593,7 +593,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         
         private string progIdField;
         
-        /// <remarks/>
+    
         [XmlArrayItemAttribute("oleItem", IsNullable=false)]
         public CT_OleItem[] oleItems {
             get {
@@ -604,7 +604,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
         
-        /// <remarks/>
+    
         [XmlAttributeAttribute(Form=System.Xml.Schema.XmlSchemaForm.Qualified, Namespace="http://schemas.openxmlformats.org/officeDocument/2006/relationships")]
         public string id {
             get {
@@ -615,7 +615,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
         
-        /// <remarks/>
+    
         [XmlAttribute]
         public string progId {
             get {
@@ -627,7 +627,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [DebuggerStepThrough]
     [DesignerCategory("code")]
@@ -649,7 +649,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.preferPicField = false;
         }
         
-        /// <remarks/>
+    
         [XmlAttribute]
         public string name {
             get {
@@ -660,7 +660,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
         
-        /// <remarks/>
+    
         [XmlAttribute]
         [DefaultValueAttribute(false)]
         public bool icon {
@@ -672,7 +672,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
         
-        /// <remarks/>
+    
         [XmlAttribute]
         [DefaultValueAttribute(false)]
         public bool advise {
@@ -684,7 +684,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
         
-        /// <remarks/>
+    
         [XmlAttribute]
         [DefaultValueAttribute(false)]
         public bool preferPic {
@@ -697,7 +697,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [DebuggerStepThrough]
     [DesignerCategory("code")]
@@ -707,7 +707,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         
         private CT_ExternalSheetName[] sheetNameField;
         
-        /// <remarks/>
+    
         [XmlElement("sheetName")]
         public CT_ExternalSheetName[] sheetName {
             get {
@@ -719,7 +719,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [DebuggerStepThrough]
     [DesignerCategory("code")]
@@ -729,7 +729,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         
         private CT_ExternalDefinedName[] definedNameField;
         
-        /// <remarks/>
+    
         [XmlElement("definedName")]
         public CT_ExternalDefinedName[] definedName {
             get {
@@ -741,7 +741,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [DebuggerStepThrough]
     [DesignerCategory("code")]
@@ -751,7 +751,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         
         private CT_ExternalSheetData[] sheetDataField;
         
-        /// <remarks/>
+    
         [XmlElement("sheetData")]
         public CT_ExternalSheetData[] sheetData {
             get {
@@ -763,7 +763,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [DebuggerStepThrough]
     [DesignerCategory("code")]
@@ -773,7 +773,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         
         private CT_DdeItem[] ddeItemField;
         
-        /// <remarks/>
+    
         [XmlElement("ddeItem")]
         public CT_DdeItem[] ddeItem {
             get {
@@ -785,7 +785,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [DebuggerStepThrough]
     [DesignerCategory("code")]
@@ -795,7 +795,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         
         private CT_OleItem[] oleItemField;
         
-        /// <remarks/>
+    
         [XmlElement("oleItem")]
         public CT_OleItem[] oleItem {
             get {

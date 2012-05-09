@@ -14,16 +14,16 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 ==================================================================== */
+
+using System;
+using System.IO;
+using NPOI.OpenXml4Net.Exceptions;
+using NPOI.OpenXml4Net.OPC;
+using NPOI.OpenXml4Net.OPC.Internal;
+using NPOI.OpenXmlFormats;
+
 namespace NPOI
 {
-    using System;
-    using System.IO;
-    using System.Collections.Generic;
-    using NPOI.OpenXml4Net.OPC;
-    using NPOI.OpenXml4Net.OPC.Internal;
-    using NPOI.OpenXml4Net.Exceptions;
-    using NPOI.OpenXmlFormats;
-
 
     /**
      * Wrapper around the two different kinds of OOXML properties
@@ -42,7 +42,8 @@ namespace NPOI
 
         private static ExtendedPropertiesDocument NEW_EXT_INSTANCE;
         private static CustomPropertiesDocument NEW_CUST_INSTANCE;
-        static POIXMLProperties(){
+        static POIXMLProperties()
+        {
             NEW_EXT_INSTANCE = new ExtendedPropertiesDocument();
             NEW_EXT_INSTANCE.AddNewProperties();
 
@@ -150,29 +151,22 @@ namespace NPOI
             }
             if (extPart != null)
             {
-                Dictionary<String, String> map = new Dictionary<String, String>();
-                map.Add("http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes", "vt");
-
                 Stream out1 = extPart.GetOutputStream();
-                ext.props.Save(out1,map);
+                ext.props.Save(out1);
                 out1.Close();
             }
             if (custPart != null)
             {
-                
-                Dictionary<String, String> map = new Dictionary<String, String>();
-                map.Add("http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes", "vt");
-
                 Stream out1 = custPart.GetOutputStream();
-                cust.props.Save(out1, map);
+                cust.props.Save(out1);
                 out1.Close();
             }
 
 
         }
         /**
-* The core document properties
-*/
+         * The core document properties
+         */
         public class CoreProperties
         {
             private PackagePropertiesPart part;
@@ -450,10 +444,5 @@ namespace NPOI
         }
 
     }
- 
+
 }
-
-
-
-
-

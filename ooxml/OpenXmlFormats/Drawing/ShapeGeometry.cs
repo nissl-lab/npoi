@@ -3,705 +3,705 @@ using System.ComponentModel;
 namespace NPOI.OpenXmlFormats.Dml {
     
     
-    /// <remarks/>
+
     [System.Serializable]
     [System.Xml.Serialization.XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
     [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=false)]
     public enum ST_ShapeType {
         
-        /// <remarks/>
+    
         line,
         
-        /// <remarks/>
+    
         lineInv,
         
-        /// <remarks/>
+    
         triangle,
         
-        /// <remarks/>
+    
         rtTriangle,
         
-        /// <remarks/>
+    
         rect,
         
-        /// <remarks/>
+    
         diamond,
         
-        /// <remarks/>
+    
         parallelogram,
         
-        /// <remarks/>
+    
         trapezoid,
         
-        /// <remarks/>
+    
         nonIsoscelesTrapezoid,
         
-        /// <remarks/>
+    
         pentagon,
         
-        /// <remarks/>
+    
         hexagon,
         
-        /// <remarks/>
+    
         heptagon,
         
-        /// <remarks/>
+    
         octagon,
         
-        /// <remarks/>
+    
         decagon,
         
-        /// <remarks/>
+    
         dodecagon,
         
-        /// <remarks/>
+    
         star4,
         
-        /// <remarks/>
+    
         star5,
         
-        /// <remarks/>
+    
         star6,
         
-        /// <remarks/>
+    
         star7,
         
-        /// <remarks/>
+    
         star8,
         
-        /// <remarks/>
+    
         star10,
         
-        /// <remarks/>
+    
         star12,
         
-        /// <remarks/>
+    
         star16,
         
-        /// <remarks/>
+    
         star24,
         
-        /// <remarks/>
+    
         star32,
         
-        /// <remarks/>
+    
         roundRect,
         
-        /// <remarks/>
+    
         round1Rect,
         
-        /// <remarks/>
+    
         round2SameRect,
         
-        /// <remarks/>
+    
         round2DiagRect,
         
-        /// <remarks/>
+    
         snipRoundRect,
         
-        /// <remarks/>
+    
         snip1Rect,
         
-        /// <remarks/>
+    
         snip2SameRect,
         
-        /// <remarks/>
+    
         snip2DiagRect,
         
-        /// <remarks/>
+    
         plaque,
         
-        /// <remarks/>
+    
         ellipse,
         
-        /// <remarks/>
+    
         teardrop,
         
-        /// <remarks/>
+    
         homePlate,
         
-        /// <remarks/>
+    
         chevron,
         
-        /// <remarks/>
+    
         pieWedge,
         
-        /// <remarks/>
+    
         pie,
         
-        /// <remarks/>
+    
         blockArc,
         
-        /// <remarks/>
+    
         donut,
         
-        /// <remarks/>
+    
         noSmoking,
         
-        /// <remarks/>
+    
         rightArrow,
         
-        /// <remarks/>
+    
         leftArrow,
         
-        /// <remarks/>
+    
         upArrow,
         
-        /// <remarks/>
+    
         downArrow,
         
-        /// <remarks/>
+    
         stripedRightArrow,
         
-        /// <remarks/>
+    
         notchedRightArrow,
         
-        /// <remarks/>
+    
         bentUpArrow,
         
-        /// <remarks/>
+    
         leftRightArrow,
         
-        /// <remarks/>
+    
         upDownArrow,
         
-        /// <remarks/>
+    
         leftUpArrow,
         
-        /// <remarks/>
+    
         leftRightUpArrow,
         
-        /// <remarks/>
+    
         quadArrow,
         
-        /// <remarks/>
+    
         leftArrowCallout,
         
-        /// <remarks/>
+    
         rightArrowCallout,
         
-        /// <remarks/>
+    
         upArrowCallout,
         
-        /// <remarks/>
+    
         downArrowCallout,
         
-        /// <remarks/>
+    
         leftRightArrowCallout,
         
-        /// <remarks/>
+    
         upDownArrowCallout,
         
-        /// <remarks/>
+    
         quadArrowCallout,
         
-        /// <remarks/>
+    
         bentArrow,
         
-        /// <remarks/>
+    
         uturnArrow,
         
-        /// <remarks/>
+    
         circularArrow,
         
-        /// <remarks/>
+    
         leftCircularArrow,
         
-        /// <remarks/>
+    
         leftRightCircularArrow,
         
-        /// <remarks/>
+    
         curvedRightArrow,
         
-        /// <remarks/>
+    
         curvedLeftArrow,
         
-        /// <remarks/>
+    
         curvedUpArrow,
         
-        /// <remarks/>
+    
         curvedDownArrow,
         
-        /// <remarks/>
+    
         swooshArrow,
         
-        /// <remarks/>
+    
         cube,
         
-        /// <remarks/>
+    
         can,
         
-        /// <remarks/>
+    
         lightningBolt,
         
-        /// <remarks/>
+    
         heart,
         
-        /// <remarks/>
+    
         sun,
         
-        /// <remarks/>
+    
         moon,
         
-        /// <remarks/>
+    
         smileyFace,
         
-        /// <remarks/>
+    
         irregularSeal1,
         
-        /// <remarks/>
+    
         irregularSeal2,
         
-        /// <remarks/>
+    
         foldedCorner,
         
-        /// <remarks/>
+    
         bevel,
         
-        /// <remarks/>
+    
         frame,
         
-        /// <remarks/>
+    
         halfFrame,
         
-        /// <remarks/>
+    
         corner,
         
-        /// <remarks/>
+    
         diagStripe,
         
-        /// <remarks/>
+    
         chord,
         
-        /// <remarks/>
+    
         arc,
         
-        /// <remarks/>
+    
         leftBracket,
         
-        /// <remarks/>
+    
         rightBracket,
         
-        /// <remarks/>
+    
         leftBrace,
         
-        /// <remarks/>
+    
         rightBrace,
         
-        /// <remarks/>
+    
         bracketPair,
         
-        /// <remarks/>
+    
         bracePair,
         
-        /// <remarks/>
+    
         straightConnector1,
         
-        /// <remarks/>
+    
         bentConnector2,
         
-        /// <remarks/>
+    
         bentConnector3,
         
-        /// <remarks/>
+    
         bentConnector4,
         
-        /// <remarks/>
+    
         bentConnector5,
         
-        /// <remarks/>
+    
         curvedConnector2,
         
-        /// <remarks/>
+    
         curvedConnector3,
         
-        /// <remarks/>
+    
         curvedConnector4,
         
-        /// <remarks/>
+    
         curvedConnector5,
         
-        /// <remarks/>
+    
         callout1,
         
-        /// <remarks/>
+    
         callout2,
         
-        /// <remarks/>
+    
         callout3,
         
-        /// <remarks/>
+    
         accentCallout1,
         
-        /// <remarks/>
+    
         accentCallout2,
         
-        /// <remarks/>
+    
         accentCallout3,
         
-        /// <remarks/>
+    
         borderCallout1,
         
-        /// <remarks/>
+    
         borderCallout2,
         
-        /// <remarks/>
+    
         borderCallout3,
         
-        /// <remarks/>
+    
         accentBorderCallout1,
         
-        /// <remarks/>
+    
         accentBorderCallout2,
         
-        /// <remarks/>
+    
         accentBorderCallout3,
         
-        /// <remarks/>
+    
         wedgeRectCallout,
         
-        /// <remarks/>
+    
         wedgeRoundRectCallout,
         
-        /// <remarks/>
+    
         wedgeEllipseCallout,
         
-        /// <remarks/>
+    
         cloudCallout,
         
-        /// <remarks/>
+    
         cloud,
         
-        /// <remarks/>
+    
         ribbon,
         
-        /// <remarks/>
+    
         ribbon2,
         
-        /// <remarks/>
+    
         ellipseRibbon,
         
-        /// <remarks/>
+    
         ellipseRibbon2,
         
-        /// <remarks/>
+    
         leftRightRibbon,
         
-        /// <remarks/>
+    
         verticalScroll,
         
-        /// <remarks/>
+    
         horizontalScroll,
         
-        /// <remarks/>
+    
         wave,
         
-        /// <remarks/>
+    
         doubleWave,
         
-        /// <remarks/>
+    
         plus,
         
-        /// <remarks/>
+    
         flowChartProcess,
         
-        /// <remarks/>
+    
         flowChartDecision,
         
-        /// <remarks/>
+    
         flowChartInputOutput,
         
-        /// <remarks/>
+    
         flowChartPredefinedProcess,
         
-        /// <remarks/>
+    
         flowChartInternalStorage,
         
-        /// <remarks/>
+    
         flowChartDocument,
         
-        /// <remarks/>
+    
         flowChartMultidocument,
         
-        /// <remarks/>
+    
         flowChartTerminator,
         
-        /// <remarks/>
+    
         flowChartPreparation,
         
-        /// <remarks/>
+    
         flowChartManualInput,
         
-        /// <remarks/>
+    
         flowChartManualOperation,
         
-        /// <remarks/>
+    
         flowChartConnector,
         
-        /// <remarks/>
+    
         flowChartPunchedCard,
         
-        /// <remarks/>
+    
         flowChartPunchedTape,
         
-        /// <remarks/>
+    
         flowChartSummingJunction,
         
-        /// <remarks/>
+    
         flowChartOr,
         
-        /// <remarks/>
+    
         flowChartCollate,
         
-        /// <remarks/>
+    
         flowChartSort,
         
-        /// <remarks/>
+    
         flowChartExtract,
         
-        /// <remarks/>
+    
         flowChartMerge,
         
-        /// <remarks/>
+    
         flowChartOfflineStorage,
         
-        /// <remarks/>
+    
         flowChartOnlineStorage,
         
-        /// <remarks/>
+    
         flowChartMagneticTape,
         
-        /// <remarks/>
+    
         flowChartMagneticDisk,
         
-        /// <remarks/>
+    
         flowChartMagneticDrum,
         
-        /// <remarks/>
+    
         flowChartDisplay,
         
-        /// <remarks/>
+    
         flowChartDelay,
         
-        /// <remarks/>
+    
         flowChartAlternateProcess,
         
-        /// <remarks/>
+    
         flowChartOffpageConnector,
         
-        /// <remarks/>
+    
         actionButtonBlank,
         
-        /// <remarks/>
+    
         actionButtonHome,
         
-        /// <remarks/>
+    
         actionButtonHelp,
         
-        /// <remarks/>
+    
         actionButtonInformation,
         
-        /// <remarks/>
+    
         actionButtonForwardNext,
         
-        /// <remarks/>
+    
         actionButtonBackPrevious,
         
-        /// <remarks/>
+    
         actionButtonEnd,
         
-        /// <remarks/>
+    
         actionButtonBeginning,
         
-        /// <remarks/>
+    
         actionButtonReturn,
         
-        /// <remarks/>
+    
         actionButtonDocument,
         
-        /// <remarks/>
+    
         actionButtonSound,
         
-        /// <remarks/>
+    
         actionButtonMovie,
         
-        /// <remarks/>
+    
         gear6,
         
-        /// <remarks/>
+    
         gear9,
         
-        /// <remarks/>
+    
         funnel,
         
-        /// <remarks/>
+    
         mathPlus,
         
-        /// <remarks/>
+    
         mathMinus,
         
-        /// <remarks/>
+    
         mathMultiply,
         
-        /// <remarks/>
+    
         mathDivide,
         
-        /// <remarks/>
+    
         mathEqual,
         
-        /// <remarks/>
+    
         mathNotEqual,
         
-        /// <remarks/>
+    
         cornerTabs,
         
-        /// <remarks/>
+    
         squareTabs,
         
-        /// <remarks/>
+    
         plaqueTabs,
         
-        /// <remarks/>
+    
         chartX,
         
-        /// <remarks/>
+    
         chartStar,
         
-        /// <remarks/>
+    
         chartPlus,
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [System.Xml.Serialization.XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
     [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=false)]
     public enum ST_TextShapeType {
         
-        /// <remarks/>
+    
         textNoShape,
         
-        /// <remarks/>
+    
         textPlain,
         
-        /// <remarks/>
+    
         textStop,
         
-        /// <remarks/>
+    
         textTriangle,
         
-        /// <remarks/>
+    
         textTriangleInverted,
         
-        /// <remarks/>
+    
         textChevron,
         
-        /// <remarks/>
+    
         textChevronInverted,
         
-        /// <remarks/>
+    
         textRingInside,
         
-        /// <remarks/>
+    
         textRingOutside,
         
-        /// <remarks/>
+    
         textArchUp,
         
-        /// <remarks/>
+    
         textArchDown,
         
-        /// <remarks/>
+    
         textCircle,
         
-        /// <remarks/>
+    
         textButton,
         
-        /// <remarks/>
+    
         textArchUpPour,
         
-        /// <remarks/>
+    
         textArchDownPour,
         
-        /// <remarks/>
+    
         textCirclePour,
         
-        /// <remarks/>
+    
         textButtonPour,
         
-        /// <remarks/>
+    
         textCurveUp,
         
-        /// <remarks/>
+    
         textCurveDown,
         
-        /// <remarks/>
+    
         textCanUp,
         
-        /// <remarks/>
+    
         textCanDown,
         
-        /// <remarks/>
+    
         textWave1,
         
-        /// <remarks/>
+    
         textWave2,
         
-        /// <remarks/>
+    
         textDoubleWave1,
         
-        /// <remarks/>
+    
         textWave4,
         
-        /// <remarks/>
+    
         textInflate,
         
-        /// <remarks/>
+    
         textDeflate,
         
-        /// <remarks/>
+    
         textInflateBottom,
         
-        /// <remarks/>
+    
         textDeflateBottom,
         
-        /// <remarks/>
+    
         textInflateTop,
         
-        /// <remarks/>
+    
         textDeflateTop,
         
-        /// <remarks/>
+    
         textDeflateInflate,
         
-        /// <remarks/>
+    
         textDeflateInflateDeflate,
         
-        /// <remarks/>
+    
         textFadeRight,
         
-        /// <remarks/>
+    
         textFadeLeft,
         
-        /// <remarks/>
+    
         textFadeUp,
         
-        /// <remarks/>
+    
         textFadeDown,
         
-        /// <remarks/>
+    
         textSlantUp,
         
-        /// <remarks/>
+    
         textSlantDown,
         
-        /// <remarks/>
+    
         textCascadeUp,
         
-        /// <remarks/>
+    
         textCascadeDown,
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
@@ -713,7 +713,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         
         private string fmlaField;
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttributeAttribute(DataType="token")]
         public string name {
             get {
@@ -724,7 +724,7 @@ namespace NPOI.OpenXmlFormats.Dml {
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public string fmla {
             get {
@@ -736,7 +736,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
@@ -746,7 +746,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         
         private CT_AdjPoint2D[] ptField;
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlElement("pt")]
         public CT_AdjPoint2D[] pt {
             get {
@@ -758,7 +758,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
@@ -770,7 +770,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         
         private string yField;
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public string x {
             get {
@@ -781,7 +781,7 @@ namespace NPOI.OpenXmlFormats.Dml {
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public string y {
             get {
@@ -793,7 +793,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
@@ -803,7 +803,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         
         private CT_AdjPoint2D[] ptField;
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlElement("pt")]
         public CT_AdjPoint2D[] pt {
             get {
@@ -815,7 +815,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
@@ -825,7 +825,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         
         private CT_GeomGuide[] gdField;
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlElement("gd")]
         public CT_GeomGuide[] gd {
             get {
@@ -837,7 +837,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
@@ -853,7 +853,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         
         private string bField;
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public string l {
             get {
@@ -864,7 +864,7 @@ namespace NPOI.OpenXmlFormats.Dml {
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public string t {
             get {
@@ -875,7 +875,7 @@ namespace NPOI.OpenXmlFormats.Dml {
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public string r {
             get {
@@ -886,7 +886,7 @@ namespace NPOI.OpenXmlFormats.Dml {
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public string b {
             get {
@@ -898,7 +898,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
@@ -920,7 +920,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         
         private string maxYField;
         
-        /// <remarks/>
+    
         public CT_AdjPoint2D pos {
             get {
                 return this.posField;
@@ -930,7 +930,7 @@ namespace NPOI.OpenXmlFormats.Dml {
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttributeAttribute(DataType="token")]
         public string gdRefX {
             get {
@@ -941,7 +941,7 @@ namespace NPOI.OpenXmlFormats.Dml {
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public string minX {
             get {
@@ -952,7 +952,7 @@ namespace NPOI.OpenXmlFormats.Dml {
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public string maxX {
             get {
@@ -963,7 +963,7 @@ namespace NPOI.OpenXmlFormats.Dml {
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttributeAttribute(DataType="token")]
         public string gdRefY {
             get {
@@ -974,7 +974,7 @@ namespace NPOI.OpenXmlFormats.Dml {
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public string minY {
             get {
@@ -985,7 +985,7 @@ namespace NPOI.OpenXmlFormats.Dml {
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public string maxY {
             get {
@@ -997,7 +997,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
@@ -1019,7 +1019,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         
         private string maxAngField;
         
-        /// <remarks/>
+    
         public CT_AdjPoint2D pos {
             get {
                 return this.posField;
@@ -1029,7 +1029,7 @@ namespace NPOI.OpenXmlFormats.Dml {
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttributeAttribute(DataType="token")]
         public string gdRefR {
             get {
@@ -1040,7 +1040,7 @@ namespace NPOI.OpenXmlFormats.Dml {
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public string minR {
             get {
@@ -1051,7 +1051,7 @@ namespace NPOI.OpenXmlFormats.Dml {
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public string maxR {
             get {
@@ -1062,7 +1062,7 @@ namespace NPOI.OpenXmlFormats.Dml {
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttributeAttribute(DataType="token")]
         public string gdRefAng {
             get {
@@ -1073,7 +1073,7 @@ namespace NPOI.OpenXmlFormats.Dml {
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public string minAng {
             get {
@@ -1084,7 +1084,7 @@ namespace NPOI.OpenXmlFormats.Dml {
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public string maxAng {
             get {
@@ -1096,7 +1096,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
@@ -1108,7 +1108,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         
         private string angField;
         
-        /// <remarks/>
+    
         public CT_AdjPoint2D pos {
             get {
                 return this.posField;
@@ -1118,7 +1118,7 @@ namespace NPOI.OpenXmlFormats.Dml {
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public string ang {
             get {
@@ -1130,7 +1130,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
@@ -1140,7 +1140,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         
         private object[] itemsField;
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlElement("ahPolar", typeof(CT_PolarAdjustHandle))]
         [System.Xml.Serialization.XmlElement("ahXY", typeof(CT_XYAdjustHandle))]
         public object[] Items {
@@ -1153,7 +1153,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
@@ -1163,7 +1163,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         
         private CT_ConnectionSite[] cxnField;
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlElement("cxn")]
         public CT_ConnectionSite[] cxn {
             get {
@@ -1175,7 +1175,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
@@ -1187,7 +1187,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         
         private uint idxField;
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public uint id {
             get {
@@ -1198,7 +1198,7 @@ namespace NPOI.OpenXmlFormats.Dml {
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public uint idx {
             get {
@@ -1210,7 +1210,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
@@ -1220,7 +1220,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         
         private CT_AdjPoint2D ptField;
         
-        /// <remarks/>
+    
         public CT_AdjPoint2D pt {
             get {
                 return this.ptField;
@@ -1231,7 +1231,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
@@ -1241,7 +1241,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         
         private CT_AdjPoint2D ptField;
         
-        /// <remarks/>
+    
         public CT_AdjPoint2D pt {
             get {
                 return this.ptField;
@@ -1252,7 +1252,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
@@ -1268,7 +1268,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         
         private string swAngField;
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public string wR {
             get {
@@ -1279,7 +1279,7 @@ namespace NPOI.OpenXmlFormats.Dml {
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public string hR {
             get {
@@ -1290,7 +1290,7 @@ namespace NPOI.OpenXmlFormats.Dml {
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public string stAng {
             get {
@@ -1301,7 +1301,7 @@ namespace NPOI.OpenXmlFormats.Dml {
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public string swAng {
             get {
@@ -1313,7 +1313,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
@@ -1322,32 +1322,32 @@ namespace NPOI.OpenXmlFormats.Dml {
     public partial class CT_Path2DClose {
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [System.Xml.Serialization.XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
     [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=false)]
     public enum ST_PathFillMode {
         
-        /// <remarks/>
+    
         none,
         
-        /// <remarks/>
+    
         norm,
         
-        /// <remarks/>
+    
         lighten,
         
-        /// <remarks/>
+    
         lightenLess,
         
-        /// <remarks/>
+    
         darken,
         
-        /// <remarks/>
+    
         darkenLess,
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
@@ -1377,7 +1377,7 @@ namespace NPOI.OpenXmlFormats.Dml {
             this.extrusionOkField = true;
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlElement("arcTo", typeof(CT_Path2DArcTo))]
         [System.Xml.Serialization.XmlElement("close", typeof(CT_Path2DClose))]
         [System.Xml.Serialization.XmlElement("cubicBezTo", typeof(CT_Path2DCubicBezierTo))]
@@ -1394,7 +1394,7 @@ namespace NPOI.OpenXmlFormats.Dml {
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlElement("ItemsElementName")]
         [System.Xml.Serialization.XmlIgnore]
         public ItemsChoiceType[] ItemsElementName {
@@ -1406,7 +1406,7 @@ namespace NPOI.OpenXmlFormats.Dml {
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         [DefaultValue(typeof(long), "0")]
         public long w {
@@ -1418,7 +1418,7 @@ namespace NPOI.OpenXmlFormats.Dml {
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         [DefaultValue(typeof(long), "0")]
         public long h {
@@ -1430,7 +1430,7 @@ namespace NPOI.OpenXmlFormats.Dml {
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         [DefaultValue(ST_PathFillMode.norm)]
         public ST_PathFillMode fill {
@@ -1442,7 +1442,7 @@ namespace NPOI.OpenXmlFormats.Dml {
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         [DefaultValue(true)]
         public bool stroke {
@@ -1454,7 +1454,7 @@ namespace NPOI.OpenXmlFormats.Dml {
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         [DefaultValue(true)]
         public bool extrusionOk {
@@ -1467,31 +1467,31 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [System.Xml.Serialization.XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IncludeInSchema=false)]
     public enum ItemsChoiceType {
         
-        /// <remarks/>
+    
         arcTo,
         
-        /// <remarks/>
+    
         close,
         
-        /// <remarks/>
+    
         cubicBezTo,
         
-        /// <remarks/>
+    
         lnTo,
         
-        /// <remarks/>
+    
         moveTo,
         
-        /// <remarks/>
+    
         quadBezTo,
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
@@ -1501,7 +1501,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         
         private CT_Path2D[] pathField;
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlElement("path")]
         public CT_Path2D[] path {
             get {
@@ -1513,7 +1513,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
@@ -1530,7 +1530,7 @@ namespace NPOI.OpenXmlFormats.Dml {
             this.avLstField = new List<CT_GeomGuide>();
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlArrayItemAttribute("gd", IsNullable=false)]
         public List<CT_GeomGuide> avLst {
             get {
@@ -1541,7 +1541,7 @@ namespace NPOI.OpenXmlFormats.Dml {
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public ST_ShapeType prst {
             get {
@@ -1553,7 +1553,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
@@ -1565,7 +1565,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         
         private ST_TextShapeType prstField;
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlArrayItemAttribute("gd", IsNullable=false)]
         public CT_GeomGuide[] avLst {
             get {
@@ -1576,7 +1576,7 @@ namespace NPOI.OpenXmlFormats.Dml {
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         public ST_TextShapeType prst {
             get {
@@ -1588,7 +1588,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
@@ -1608,7 +1608,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         
         private CT_Path2D[] pathLstField;
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlArrayItemAttribute("gd", IsNullable=false)]
         public CT_GeomGuide[] avLst {
             get {
@@ -1619,7 +1619,7 @@ namespace NPOI.OpenXmlFormats.Dml {
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlArrayItemAttribute("gd", IsNullable=false)]
         public CT_GeomGuide[] gdLst {
             get {
@@ -1630,7 +1630,7 @@ namespace NPOI.OpenXmlFormats.Dml {
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlArrayItemAttribute("ahPolar", typeof(CT_PolarAdjustHandle), IsNullable=false)]
         [System.Xml.Serialization.XmlArrayItemAttribute("ahXY", typeof(CT_XYAdjustHandle), IsNullable=false)]
         public object[] ahLst {
@@ -1642,7 +1642,7 @@ namespace NPOI.OpenXmlFormats.Dml {
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlArrayItemAttribute("cxn", IsNullable=false)]
         public CT_ConnectionSite[] cxnLst {
             get {
@@ -1653,7 +1653,7 @@ namespace NPOI.OpenXmlFormats.Dml {
             }
         }
         
-        /// <remarks/>
+    
         public CT_GeomRect rect {
             get {
                 return this.rectField;
@@ -1663,7 +1663,7 @@ namespace NPOI.OpenXmlFormats.Dml {
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlArrayItemAttribute("path", IsNullable=false)]
         public CT_Path2D[] pathLst {
             get {

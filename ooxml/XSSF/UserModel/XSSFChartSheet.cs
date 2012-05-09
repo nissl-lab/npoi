@@ -24,6 +24,7 @@ using NPOI.OpenXmlFormats;
 using NPOI.Util;
 using NPOI.OpenXml4Net.OPC;
 using NPOI.OpenXmlFormats.Dml;
+
 namespace NPOI.XSSF.UserModel
 {
 
@@ -74,13 +75,13 @@ namespace NPOI.XSSF.UserModel
         }
 
 
-        protected override CT_Drawing GetCTDrawing()
+        protected override NPOI.OpenXmlFormats.Spreadsheet.CT_Drawing GetCTDrawing()
         {
             return chartsheet.drawing;
         }
 
 
-        protected override CT_LegacyDrawing GetCTLegacyDrawing()
+        protected override NPOI.OpenXmlFormats.Spreadsheet.CT_LegacyDrawing GetCTLegacyDrawing()
         {
             return chartsheet.legacyDrawing;
         }

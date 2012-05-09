@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.IO;
 using System.Xml.Serialization;
-using System.IO;
 
 namespace NPOI.OpenXmlFormats.Spreadsheet
 {
     public class StyleSheetDocument
     {
         static XmlSerializer serializer = new XmlSerializer(typeof(CT_Stylesheet));
-        private CT_Stylesheet stylesheet;
+        private CT_Stylesheet stylesheet = null;
 
         public StyleSheetDocument()
         {
@@ -24,7 +21,6 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         public static StyleSheetDocument Parse(Stream stream)
         {
             CT_Stylesheet obj = (CT_Stylesheet)serializer.Deserialize(stream);
-
             return new StyleSheetDocument(obj);
         }
 

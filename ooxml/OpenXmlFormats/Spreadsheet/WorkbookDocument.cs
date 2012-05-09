@@ -14,12 +14,10 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         CT_Workbook workbook = null;
         public WorkbookDocument()
         {
-
         }
         public static WorkbookDocument Parse(Stream stream)
         {
             CT_Workbook obj = (CT_Workbook)serializer.Deserialize(stream);
-
             return new WorkbookDocument(obj);
         }
         public WorkbookDocument(CT_Workbook workbook)

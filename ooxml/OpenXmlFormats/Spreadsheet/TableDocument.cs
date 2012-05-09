@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.IO;
+﻿using System.IO;
 using System.Xml.Serialization;
 
 namespace NPOI.OpenXmlFormats.Spreadsheet
@@ -9,10 +6,11 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     public class TableDocument
     {
         static XmlSerializer serializer = new XmlSerializer(typeof(CT_Table));
+        CT_Table ctTable = null;
+
         public TableDocument()
         { 
         }
-        CT_Table ctTable;
         public TableDocument(CT_Table table)
         {
             this.ctTable = table;
@@ -21,7 +19,6 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         public static TableDocument Parse(Stream stream)
         {
             CT_Table obj = (CT_Table)serializer.Deserialize(stream);
-
             return new TableDocument(obj);
         }
 

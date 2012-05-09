@@ -502,7 +502,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     public class CT_CellStyleXfs
     {
 
-        private List<CT_Xf> xfField;
+        private List<CT_Xf> xfField = null;
 
         private uint countField;
 
@@ -563,12 +563,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public class CT_Borders
     {
-
         private List<CT_Border> borderField;
-
-        private uint countField;
-
-        private bool countFieldSpecified;
 
         public CT_Borders()
         {
@@ -592,35 +587,28 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.borderField = value;
             }
         }
-        public void SetBorderArray(CT_Border[] array)
+        public void SetBorderArray(List<CT_Border> array)
         {
-            borderField = new List<CT_Border>(array);
-            this.countField = (uint)borderField.Count;
+            borderField = array;
         }
         [XmlAttribute]
         public uint count
         {
-            get
-            {
-                return this.countField;
-            }
-            set
-            {
-                this.countField = value;
-            }
+            get { return (uint)this.borderField.Count; }
+            //set
+            //{
+            //    this.countField = value;
+            //}
         }
 
-        [System.Xml.Serialization.XmlIgnore]
+        [XmlIgnore]
         public bool countSpecified
         {
-            get
-            {
-                return this.countFieldSpecified;
-            }
-            set
-            {
-                this.countFieldSpecified = value;
-            }
+            get { return 0 < this.borderField.Count; }
+            //set
+            //{
+            //    this.countFieldSpecified = value;
+            //}
         }
     }
 
@@ -628,12 +616,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public class CT_Fills
     {
-
         private List<CT_Fill> fillField;
-
-        private uint countField;
-
-        private bool countFieldSpecified;
 
         public CT_Fills()
         {
@@ -651,34 +634,20 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.fillField = value;
             }
         }
-        public void SetFillArray(CT_Fill[] array)
+        public void SetFillArray(List<CT_Fill> array)
         {
-            fillField = new List<CT_Fill>(array);
+            fillField = array;
         }
         [XmlAttribute]
         public uint count
         {
-            get
-            {
-                return this.countField;
-            }
-            set
-            {
-                this.countField = value;
-            }
+            get { return(uint)this.fillField.Count; }
         }
 
-        [System.Xml.Serialization.XmlIgnore]
+        [XmlIgnore]
         public bool countSpecified
         {
-            get
-            {
-                return this.countFieldSpecified;
-            }
-            set
-            {
-                this.countFieldSpecified = value;
-            }
+            get { return 0 < this.fillField.Count; }
         }
     }
 
@@ -1210,10 +1179,10 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     public enum ST_GradientType
     {
 
-        /// <remarks/>
+    
         linear,
 
-        /// <remarks/>
+    
         path,
     }
 
@@ -1318,61 +1287,61 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     public enum ST_PatternType
     {
 
-        /// <remarks/>
+    
         none,
 
-        /// <remarks/>
+    
         solid,
 
-        /// <remarks/>
+    
         mediumGray,
 
-        /// <remarks/>
+    
         darkGray,
 
-        /// <remarks/>
+    
         lightGray,
 
-        /// <remarks/>
+    
         darkHorizontal,
 
-        /// <remarks/>
+    
         darkVertical,
 
-        /// <remarks/>
+    
         darkDown,
 
-        /// <remarks/>
+    
         darkUp,
 
-        /// <remarks/>
+    
         darkGrid,
 
-        /// <remarks/>
+    
         darkTrellis,
 
-        /// <remarks/>
+    
         lightHorizontal,
 
-        /// <remarks/>
+    
         lightVertical,
 
-        /// <remarks/>
+    
         lightDown,
 
-        /// <remarks/>
+    
         lightUp,
 
-        /// <remarks/>
+    
         lightGrid,
 
-        /// <remarks/>
+    
         lightTrellis,
 
-        /// <remarks/>
+    
         gray125,
 
-        /// <remarks/>
+    
         gray0625,
     }
     [Serializable]
@@ -1553,7 +1522,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     {
         private ST_FontScheme valField;
 
-        /// <remarks/>
+    
         [XmlAttribute]
         public ST_FontScheme val
         {
@@ -2128,13 +2097,13 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public enum ST_FontScheme
     {
-        /// <remarks/>
+    
         none = 1,
 
-        /// <remarks/>
+    
         major = 2,
 
-        /// <remarks/>
+    
         minor = 3,
     }
 
@@ -2175,20 +2144,20 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public enum ST_UnderlineValues
     {
-        /// <remarks/>
+    
         none,
 
-        /// <remarks/>
+    
         single,
 
-        /// <remarks/>
+    
         [XmlEnum("double")]
         @double,
 
-        /// <remarks/>
+    
         singleAccounting,
 
-        /// <remarks/>
+    
         doubleAccounting,
 
     }
@@ -2217,13 +2186,13 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public enum ST_VerticalAlignRun
     {
-        /// <remarks/>
+    
         baseline,
 
-        /// <remarks/>
+    
         superscript,
 
-        /// <remarks/>
+    
         subscript,
     }
 
@@ -2285,88 +2254,88 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     public enum ST_TableStyleType
     {
 
-        /// <remarks/>
+    
         wholeTable,
 
-        /// <remarks/>
+    
         headerRow,
 
-        /// <remarks/>
+    
         totalRow,
 
-        /// <remarks/>
+    
         firstColumn,
 
-        /// <remarks/>
+    
         lastColumn,
 
-        /// <remarks/>
+    
         firstRowStripe,
 
-        /// <remarks/>
+    
         secondRowStripe,
 
-        /// <remarks/>
+    
         firstColumnStripe,
 
-        /// <remarks/>
+    
         secondColumnStripe,
 
-        /// <remarks/>
+    
         firstHeaderCell,
 
-        /// <remarks/>
+    
         lastHeaderCell,
 
-        /// <remarks/>
+    
         firstTotalCell,
 
-        /// <remarks/>
+    
         lastTotalCell,
 
-        /// <remarks/>
+    
         firstSubtotalColumn,
 
-        /// <remarks/>
+    
         secondSubtotalColumn,
 
-        /// <remarks/>
+    
         thirdSubtotalColumn,
 
-        /// <remarks/>
+    
         firstSubtotalRow,
 
-        /// <remarks/>
+    
         secondSubtotalRow,
 
-        /// <remarks/>
+    
         thirdSubtotalRow,
 
-        /// <remarks/>
+    
         blankRow,
 
-        /// <remarks/>
+    
         firstColumnSubheading,
 
-        /// <remarks/>
+    
         secondColumnSubheading,
 
-        /// <remarks/>
+    
         thirdColumnSubheading,
 
-        /// <remarks/>
+    
         firstRowSubheading,
 
-        /// <remarks/>
+    
         secondRowSubheading,
 
-        /// <remarks/>
+    
         thirdRowSubheading,
 
-        /// <remarks/>
+    
         pageFieldLabels,
 
-        /// <remarks/>
+    
         pageFieldValues,
     }
 

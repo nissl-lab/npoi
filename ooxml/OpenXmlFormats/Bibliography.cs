@@ -174,166 +174,166 @@ namespace NPOI.OpenXmlFormats
             }
         }
     }
-    /// <remarks/>
+
     [System.Serializable]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/bibliography", IncludeInSchema = false)]
     public enum ItemsChoiceType1
     {
 
-        /// <remarks/>
+    
         AbbreviatedCaseNumber,
 
-        /// <remarks/>
+    
         AlbumTitle,
 
-        /// <remarks/>
+    
         Author,
 
-        /// <remarks/>
+    
         BookTitle,
 
-        /// <remarks/>
+    
         BroadcastTitle,
 
-        /// <remarks/>
+    
         Broadcaster,
 
-        /// <remarks/>
+    
         CaseNumber,
 
-        /// <remarks/>
+    
         ChapterNumber,
 
-        /// <remarks/>
+    
         City,
 
-        /// <remarks/>
+    
         Comments,
 
-        /// <remarks/>
+    
         ConferenceName,
 
-        /// <remarks/>
+    
         CountryRegion,
 
-        /// <remarks/>
+    
         Court,
 
-        /// <remarks/>
+    
         Day,
 
-        /// <remarks/>
+    
         DayAccessed,
 
-        /// <remarks/>
+    
         Department,
 
-        /// <remarks/>
+    
         Distributor,
 
-        /// <remarks/>
+    
         Edition,
 
-        /// <remarks/>
+    
         Guid,
 
-        /// <remarks/>
+    
         Institution,
 
-        /// <remarks/>
+    
         InternetSiteTitle,
 
-        /// <remarks/>
+    
         Issue,
 
-        /// <remarks/>
+    
         JournalName,
 
-        /// <remarks/>
+    
         LCID,
 
-        /// <remarks/>
+    
         Medium,
 
-        /// <remarks/>
+    
         Month,
 
-        /// <remarks/>
+    
         MonthAccessed,
 
-        /// <remarks/>
+    
         NumberVolumes,
 
-        /// <remarks/>
+    
         Pages,
 
-        /// <remarks/>
+    
         PatentNumber,
 
-        /// <remarks/>
+    
         PeriodicalTitle,
 
-        /// <remarks/>
+    
         ProductionCompany,
 
-        /// <remarks/>
+    
         PublicationTitle,
 
-        /// <remarks/>
+    
         Publisher,
 
-        /// <remarks/>
+    
         RecordingNumber,
 
-        /// <remarks/>
+    
         RefOrder,
 
-        /// <remarks/>
+    
         Reporter,
 
-        /// <remarks/>
+    
         ShortTitle,
 
-        /// <remarks/>
+    
         SourceType,
 
-        /// <remarks/>
+    
         StandardNumber,
 
-        /// <remarks/>
+    
         StateProvince,
 
-        /// <remarks/>
+    
         Station,
 
-        /// <remarks/>
+    
         Tag,
 
-        /// <remarks/>
+    
         Theater,
 
-        /// <remarks/>
+    
         ThesisType,
 
-        /// <remarks/>
+    
         Title,
 
-        /// <remarks/>
+    
         Type,
 
-        /// <remarks/>
+    
         URL,
 
-        /// <remarks/>
+    
         Version,
 
-        /// <remarks/>
+    
         Volume,
 
-        /// <remarks/>
+    
         Year,
 
-        /// <remarks/>
+    
         YearAccessed,
     }
 
@@ -540,55 +540,55 @@ namespace NPOI.OpenXmlFormats
     public enum ST_SourceType
     {
 
-        /// <remarks/>
+    
         ArticleInAPeriodical,
 
-        /// <remarks/>
+    
         Book,
 
-        /// <remarks/>
+    
         BookSection,
 
-        /// <remarks/>
+    
         JournalArticle,
 
-        /// <remarks/>
+    
         ConferenceProceedings,
 
-        /// <remarks/>
+    
         Report,
 
-        /// <remarks/>
+    
         SoundRecording,
 
-        /// <remarks/>
+    
         Performance,
 
-        /// <remarks/>
+    
         Art,
 
-        /// <remarks/>
+    
         DocumentFromInternetSite,
 
-        /// <remarks/>
+    
         InternetSite,
 
-        /// <remarks/>
+    
         Film,
 
-        /// <remarks/>
+    
         Interview,
 
-        /// <remarks/>
+    
         Patent,
 
-        /// <remarks/>
+    
         ElectronicSource,
 
-        /// <remarks/>
+    
         Case,
 
-        /// <remarks/>
+    
         Misc,
     }
 

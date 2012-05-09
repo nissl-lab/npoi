@@ -460,34 +460,34 @@ namespace NPOI.OpenXmlFormats.Dml
             this.itemsElementNameField = new List<ItemsChoiceType1>();
             this.itemsField = new List<object>();
         }
-        [System.Xml.Serialization.XmlElementAttribute("alpha", typeof(CT_PositiveFixedPercentage), Order = 0)]
-        [System.Xml.Serialization.XmlElementAttribute("alphaMod", typeof(CT_PositivePercentage), Order = 0)]
-        [System.Xml.Serialization.XmlElementAttribute("alphaOff", typeof(CT_FixedPercentage), Order = 0)]
-        [System.Xml.Serialization.XmlElementAttribute("blue", typeof(CT_Percentage), Order = 0)]
-        [System.Xml.Serialization.XmlElementAttribute("blueMod", typeof(CT_Percentage), Order = 0)]
-        [System.Xml.Serialization.XmlElementAttribute("blueOff", typeof(CT_Percentage), Order = 0)]
-        [System.Xml.Serialization.XmlElementAttribute("comp", typeof(CT_ComplementTransform), Order = 0)]
-        [System.Xml.Serialization.XmlElementAttribute("gamma", typeof(CT_GammaTransform), Order = 0)]
-        [System.Xml.Serialization.XmlElementAttribute("gray", typeof(CT_GrayscaleTransform), Order = 0)]
-        [System.Xml.Serialization.XmlElementAttribute("green", typeof(CT_Percentage), Order = 0)]
-        [System.Xml.Serialization.XmlElementAttribute("greenMod", typeof(CT_Percentage), Order = 0)]
-        [System.Xml.Serialization.XmlElementAttribute("greenOff", typeof(CT_Percentage), Order = 0)]
-        [System.Xml.Serialization.XmlElementAttribute("hue", typeof(CT_PositiveFixedAngle), Order = 0)]
-        [System.Xml.Serialization.XmlElementAttribute("hueMod", typeof(CT_PositivePercentage), Order = 0)]
-        [System.Xml.Serialization.XmlElementAttribute("hueOff", typeof(CT_Angle), Order = 0)]
-        [System.Xml.Serialization.XmlElementAttribute("inv", typeof(CT_InverseTransform), Order = 0)]
-        [System.Xml.Serialization.XmlElementAttribute("invGamma", typeof(CT_InverseGammaTransform), Order = 0)]
-        [System.Xml.Serialization.XmlElementAttribute("lum", typeof(CT_Percentage), Order = 0)]
-        [System.Xml.Serialization.XmlElementAttribute("lumMod", typeof(CT_Percentage), Order = 0)]
-        [System.Xml.Serialization.XmlElementAttribute("lumOff", typeof(CT_Percentage), Order = 0)]
-        [System.Xml.Serialization.XmlElementAttribute("red", typeof(CT_Percentage), Order = 0)]
-        [System.Xml.Serialization.XmlElementAttribute("redMod", typeof(CT_Percentage), Order = 0)]
-        [System.Xml.Serialization.XmlElementAttribute("redOff", typeof(CT_Percentage), Order = 0)]
-        [System.Xml.Serialization.XmlElementAttribute("sat", typeof(CT_Percentage), Order = 0)]
-        [System.Xml.Serialization.XmlElementAttribute("satMod", typeof(CT_Percentage), Order = 0)]
-        [System.Xml.Serialization.XmlElementAttribute("satOff", typeof(CT_Percentage), Order = 0)]
-        [System.Xml.Serialization.XmlElementAttribute("shade", typeof(CT_PositiveFixedPercentage), Order = 0)]
-        [System.Xml.Serialization.XmlElementAttribute("tint", typeof(CT_PositiveFixedPercentage), Order = 0)]
+        [System.Xml.Serialization.XmlElement("alpha", typeof(CT_PositiveFixedPercentage), Order = 0)]
+        [System.Xml.Serialization.XmlElement("alphaMod", typeof(CT_PositivePercentage), Order = 0)]
+        [System.Xml.Serialization.XmlElement("alphaOff", typeof(CT_FixedPercentage), Order = 0)]
+        [System.Xml.Serialization.XmlElement("blue", typeof(CT_Percentage), Order = 0)]
+        [System.Xml.Serialization.XmlElement("blueMod", typeof(CT_Percentage), Order = 0)]
+        [System.Xml.Serialization.XmlElement("blueOff", typeof(CT_Percentage), Order = 0)]
+        [System.Xml.Serialization.XmlElement("comp", typeof(CT_ComplementTransform), Order = 0)]
+        [System.Xml.Serialization.XmlElement("gamma", typeof(CT_GammaTransform), Order = 0)]
+        [System.Xml.Serialization.XmlElement("gray", typeof(CT_GrayscaleTransform), Order = 0)]
+        [System.Xml.Serialization.XmlElement("green", typeof(CT_Percentage), Order = 0)]
+        [System.Xml.Serialization.XmlElement("greenMod", typeof(CT_Percentage), Order = 0)]
+        [System.Xml.Serialization.XmlElement("greenOff", typeof(CT_Percentage), Order = 0)]
+        [System.Xml.Serialization.XmlElement("hue", typeof(CT_PositiveFixedAngle), Order = 0)]
+        [System.Xml.Serialization.XmlElement("hueMod", typeof(CT_PositivePercentage), Order = 0)]
+        [System.Xml.Serialization.XmlElement("hueOff", typeof(CT_Angle), Order = 0)]
+        [System.Xml.Serialization.XmlElement("inv", typeof(CT_InverseTransform), Order = 0)]
+        [System.Xml.Serialization.XmlElement("invGamma", typeof(CT_InverseGammaTransform), Order = 0)]
+        [System.Xml.Serialization.XmlElement("lum", typeof(CT_Percentage), Order = 0)]
+        [System.Xml.Serialization.XmlElement("lumMod", typeof(CT_Percentage), Order = 0)]
+        [System.Xml.Serialization.XmlElement("lumOff", typeof(CT_Percentage), Order = 0)]
+        [System.Xml.Serialization.XmlElement("red", typeof(CT_Percentage), Order = 0)]
+        [System.Xml.Serialization.XmlElement("redMod", typeof(CT_Percentage), Order = 0)]
+        [System.Xml.Serialization.XmlElement("redOff", typeof(CT_Percentage), Order = 0)]
+        [System.Xml.Serialization.XmlElement("sat", typeof(CT_Percentage), Order = 0)]
+        [System.Xml.Serialization.XmlElement("satMod", typeof(CT_Percentage), Order = 0)]
+        [System.Xml.Serialization.XmlElement("satOff", typeof(CT_Percentage), Order = 0)]
+        [System.Xml.Serialization.XmlElement("shade", typeof(CT_PositiveFixedPercentage), Order = 0)]
+        [System.Xml.Serialization.XmlElement("tint", typeof(CT_PositiveFixedPercentage), Order = 0)]
         [System.Xml.Serialization.XmlChoiceIdentifierAttribute("ItemsElementName")]
         public object[] Items
         {
@@ -503,7 +503,7 @@ namespace NPOI.OpenXmlFormats.Dml
                     this.itemsField = new List<object>(value);
             }
         }
-        [System.Xml.Serialization.XmlElementAttribute("ItemsElementName", Order = 1)]
+        [System.Xml.Serialization.XmlElement("ItemsElementName", Order = 1)]
         [System.Xml.Serialization.XmlIgnore]
         public ItemsChoiceType1[] ItemsElementName
         {
@@ -536,176 +536,176 @@ namespace NPOI.OpenXmlFormats.Dml
     public enum ItemsChoiceType1
     {
 
-        /// <remarks/>
+    
         alpha,
 
-        /// <remarks/>
+    
         alphaMod,
 
-        /// <remarks/>
+    
         alphaOff,
 
-        /// <remarks/>
+    
         blue,
 
-        /// <remarks/>
+    
         blueMod,
 
-        /// <remarks/>
+    
         blueOff,
 
-        /// <remarks/>
+    
         comp,
 
-        /// <remarks/>
+    
         gamma,
 
-        /// <remarks/>
+    
         gray,
 
-        /// <remarks/>
+    
         green,
 
-        /// <remarks/>
+    
         greenMod,
 
-        /// <remarks/>
+    
         greenOff,
 
-        /// <remarks/>
+    
         hue,
 
-        /// <remarks/>
+    
         hueMod,
 
-        /// <remarks/>
+    
         hueOff,
 
-        /// <remarks/>
+    
         inv,
 
-        /// <remarks/>
+    
         invGamma,
 
-        /// <remarks/>
+    
         lum,
 
-        /// <remarks/>
+    
         lumMod,
 
-        /// <remarks/>
+    
         lumOff,
 
-        /// <remarks/>
+    
         red,
 
-        /// <remarks/>
+    
         redMod,
 
-        /// <remarks/>
+    
         redOff,
 
-        /// <remarks/>
+    
         sat,
 
-        /// <remarks/>
+    
         satMod,
 
-        /// <remarks/>
+    
         satOff,
 
-        /// <remarks/>
+    
         shade,
 
-        /// <remarks/>
+    
         tint,
     }
 
     public enum ItemsChoiceType3
     {
 
-        /// <remarks/>
+    
         alpha,
 
-        /// <remarks/>
+    
         alphaMod,
 
-        /// <remarks/>
+    
         alphaOff,
 
-        /// <remarks/>
+    
         blue,
 
-        /// <remarks/>
+    
         blueMod,
 
-        /// <remarks/>
+    
         blueOff,
 
-        /// <remarks/>
+    
         comp,
 
-        /// <remarks/>
+    
         gamma,
 
-        /// <remarks/>
+    
         gray,
 
-        /// <remarks/>
+    
         green,
 
-        /// <remarks/>
+    
         greenMod,
 
-        /// <remarks/>
+    
         greenOff,
 
-        /// <remarks/>
+    
         hue,
 
-        /// <remarks/>
+    
         hueMod,
 
-        /// <remarks/>
+    
         hueOff,
 
-        /// <remarks/>
+    
         inv,
 
-        /// <remarks/>
+    
         invGamma,
 
-        /// <remarks/>
+    
         lum,
 
-        /// <remarks/>
+    
         lumMod,
 
-        /// <remarks/>
+    
         lumOff,
 
-        /// <remarks/>
+    
         red,
 
-        /// <remarks/>
+    
         redMod,
 
-        /// <remarks/>
+    
         redOff,
 
-        /// <remarks/>
+    
         sat,
 
-        /// <remarks/>
+    
         satMod,
 
-        /// <remarks/>
+    
         satOff,
 
-        /// <remarks/>
+    
         shade,
 
-        /// <remarks/>
+    
         tint,
     }
 
@@ -730,34 +730,34 @@ namespace NPOI.OpenXmlFormats.Dml
         {
             throw new NotImplementedException();
         }
-        [System.Xml.Serialization.XmlElementAttribute("alpha", typeof(CT_PositiveFixedPercentage), Order = 0)]
-        [System.Xml.Serialization.XmlElementAttribute("alphaMod", typeof(CT_PositivePercentage), Order = 0)]
-        [System.Xml.Serialization.XmlElementAttribute("alphaOff", typeof(CT_FixedPercentage), Order = 0)]
-        [System.Xml.Serialization.XmlElementAttribute("blue", typeof(CT_Percentage), Order = 0)]
-        [System.Xml.Serialization.XmlElementAttribute("blueMod", typeof(CT_Percentage), Order = 0)]
-        [System.Xml.Serialization.XmlElementAttribute("blueOff", typeof(CT_Percentage), Order = 0)]
-        [System.Xml.Serialization.XmlElementAttribute("comp", typeof(CT_ComplementTransform), Order = 0)]
-        [System.Xml.Serialization.XmlElementAttribute("gamma", typeof(CT_GammaTransform), Order = 0)]
-        [System.Xml.Serialization.XmlElementAttribute("gray", typeof(CT_GrayscaleTransform), Order = 0)]
-        [System.Xml.Serialization.XmlElementAttribute("green", typeof(CT_Percentage), Order = 0)]
-        [System.Xml.Serialization.XmlElementAttribute("greenMod", typeof(CT_Percentage), Order = 0)]
-        [System.Xml.Serialization.XmlElementAttribute("greenOff", typeof(CT_Percentage), Order = 0)]
-        [System.Xml.Serialization.XmlElementAttribute("hue", typeof(CT_PositiveFixedAngle), Order = 0)]
-        [System.Xml.Serialization.XmlElementAttribute("hueMod", typeof(CT_PositivePercentage), Order = 0)]
-        [System.Xml.Serialization.XmlElementAttribute("hueOff", typeof(CT_Angle), Order = 0)]
-        [System.Xml.Serialization.XmlElementAttribute("inv", typeof(CT_InverseTransform), Order = 0)]
-        [System.Xml.Serialization.XmlElementAttribute("invGamma", typeof(CT_InverseGammaTransform), Order = 0)]
-        [System.Xml.Serialization.XmlElementAttribute("lum", typeof(CT_Percentage), Order = 0)]
-        [System.Xml.Serialization.XmlElementAttribute("lumMod", typeof(CT_Percentage), Order = 0)]
-        [System.Xml.Serialization.XmlElementAttribute("lumOff", typeof(CT_Percentage), Order = 0)]
-        [System.Xml.Serialization.XmlElementAttribute("red", typeof(CT_Percentage), Order = 0)]
-        [System.Xml.Serialization.XmlElementAttribute("redMod", typeof(CT_Percentage), Order = 0)]
-        [System.Xml.Serialization.XmlElementAttribute("redOff", typeof(CT_Percentage), Order = 0)]
-        [System.Xml.Serialization.XmlElementAttribute("sat", typeof(CT_Percentage), Order = 0)]
-        [System.Xml.Serialization.XmlElementAttribute("satMod", typeof(CT_Percentage), Order = 0)]
-        [System.Xml.Serialization.XmlElementAttribute("satOff", typeof(CT_Percentage), Order = 0)]
-        [System.Xml.Serialization.XmlElementAttribute("shade", typeof(CT_PositiveFixedPercentage), Order = 0)]
-        [System.Xml.Serialization.XmlElementAttribute("tint", typeof(CT_PositiveFixedPercentage), Order = 0)]
+        [System.Xml.Serialization.XmlElement("alpha", typeof(CT_PositiveFixedPercentage), Order = 0)]
+        [System.Xml.Serialization.XmlElement("alphaMod", typeof(CT_PositivePercentage), Order = 0)]
+        [System.Xml.Serialization.XmlElement("alphaOff", typeof(CT_FixedPercentage), Order = 0)]
+        [System.Xml.Serialization.XmlElement("blue", typeof(CT_Percentage), Order = 0)]
+        [System.Xml.Serialization.XmlElement("blueMod", typeof(CT_Percentage), Order = 0)]
+        [System.Xml.Serialization.XmlElement("blueOff", typeof(CT_Percentage), Order = 0)]
+        [System.Xml.Serialization.XmlElement("comp", typeof(CT_ComplementTransform), Order = 0)]
+        [System.Xml.Serialization.XmlElement("gamma", typeof(CT_GammaTransform), Order = 0)]
+        [System.Xml.Serialization.XmlElement("gray", typeof(CT_GrayscaleTransform), Order = 0)]
+        [System.Xml.Serialization.XmlElement("green", typeof(CT_Percentage), Order = 0)]
+        [System.Xml.Serialization.XmlElement("greenMod", typeof(CT_Percentage), Order = 0)]
+        [System.Xml.Serialization.XmlElement("greenOff", typeof(CT_Percentage), Order = 0)]
+        [System.Xml.Serialization.XmlElement("hue", typeof(CT_PositiveFixedAngle), Order = 0)]
+        [System.Xml.Serialization.XmlElement("hueMod", typeof(CT_PositivePercentage), Order = 0)]
+        [System.Xml.Serialization.XmlElement("hueOff", typeof(CT_Angle), Order = 0)]
+        [System.Xml.Serialization.XmlElement("inv", typeof(CT_InverseTransform), Order = 0)]
+        [System.Xml.Serialization.XmlElement("invGamma", typeof(CT_InverseGammaTransform), Order = 0)]
+        [System.Xml.Serialization.XmlElement("lum", typeof(CT_Percentage), Order = 0)]
+        [System.Xml.Serialization.XmlElement("lumMod", typeof(CT_Percentage), Order = 0)]
+        [System.Xml.Serialization.XmlElement("lumOff", typeof(CT_Percentage), Order = 0)]
+        [System.Xml.Serialization.XmlElement("red", typeof(CT_Percentage), Order = 0)]
+        [System.Xml.Serialization.XmlElement("redMod", typeof(CT_Percentage), Order = 0)]
+        [System.Xml.Serialization.XmlElement("redOff", typeof(CT_Percentage), Order = 0)]
+        [System.Xml.Serialization.XmlElement("sat", typeof(CT_Percentage), Order = 0)]
+        [System.Xml.Serialization.XmlElement("satMod", typeof(CT_Percentage), Order = 0)]
+        [System.Xml.Serialization.XmlElement("satOff", typeof(CT_Percentage), Order = 0)]
+        [System.Xml.Serialization.XmlElement("shade", typeof(CT_PositiveFixedPercentage), Order = 0)]
+        [System.Xml.Serialization.XmlElement("tint", typeof(CT_PositiveFixedPercentage), Order = 0)]
         [System.Xml.Serialization.XmlChoiceIdentifierAttribute("ItemsElementName")]
         public object[] Items
         {
@@ -773,7 +773,7 @@ namespace NPOI.OpenXmlFormats.Dml
                     this.itemsField = new List<object>(value);
             }
         }
-        [System.Xml.Serialization.XmlElementAttribute("ItemsElementName", Order = 1)]
+        [System.Xml.Serialization.XmlElement("ItemsElementName", Order = 1)]
         [System.Xml.Serialization.XmlIgnore]
         public ItemsChoiceType4[] ItemsElementName
         {
@@ -806,143 +806,143 @@ namespace NPOI.OpenXmlFormats.Dml
     public enum ItemsChoiceType4
     {
 
-        /// <remarks/>
+    
         alpha,
 
-        /// <remarks/>
+    
         alphaMod,
 
-        /// <remarks/>
+    
         alphaOff,
 
-        /// <remarks/>
+    
         blue,
 
-        /// <remarks/>
+    
         blueMod,
 
-        /// <remarks/>
+    
         blueOff,
 
-        /// <remarks/>
+    
         comp,
 
-        /// <remarks/>
+    
         gamma,
 
-        /// <remarks/>
+    
         gray,
 
-        /// <remarks/>
+    
         green,
 
-        /// <remarks/>
+    
         greenMod,
 
-        /// <remarks/>
+    
         greenOff,
 
-        /// <remarks/>
+    
         hue,
 
-        /// <remarks/>
+    
         hueMod,
 
-        /// <remarks/>
+    
         hueOff,
 
-        /// <remarks/>
+    
         inv,
 
-        /// <remarks/>
+    
         invGamma,
 
-        /// <remarks/>
+    
         lum,
 
-        /// <remarks/>
+    
         lumMod,
 
-        /// <remarks/>
+    
         lumOff,
 
-        /// <remarks/>
+    
         red,
 
-        /// <remarks/>
+    
         redMod,
 
-        /// <remarks/>
+    
         redOff,
 
-        /// <remarks/>
+    
         sat,
 
-        /// <remarks/>
+    
         satMod,
 
-        /// <remarks/>
+    
         satOff,
 
-        /// <remarks/>
+    
         shade,
 
-        /// <remarks/>
+    
         tint,
     }
 
     public enum ST_SchemeColorVal
     {
 
-        /// <remarks/>
+    
         bg1,
 
-        /// <remarks/>
+    
         tx1,
 
-        /// <remarks/>
+    
         bg2,
 
-        /// <remarks/>
+    
         tx2,
 
-        /// <remarks/>
+    
         accent1,
 
-        /// <remarks/>
+    
         accent2,
 
-        /// <remarks/>
+    
         accent3,
 
-        /// <remarks/>
+    
         accent4,
 
-        /// <remarks/>
+    
         accent5,
 
-        /// <remarks/>
+    
         accent6,
 
-        /// <remarks/>
+    
         hlink,
 
-        /// <remarks/>
+    
         folHlink,
 
-        /// <remarks/>
+    
         phClr,
 
-        /// <remarks/>
+    
         dk1,
 
-        /// <remarks/>
+    
         lt1,
 
-        /// <remarks/>
+    
         dk2,
 
-        /// <remarks/>
+    
         lt2,
     }
 
@@ -950,424 +950,424 @@ namespace NPOI.OpenXmlFormats.Dml
     public enum ST_PresetColorVal
     {
 
-        /// <remarks/>
+    
         aliceBlue,
 
-        /// <remarks/>
+    
         antiqueWhite,
 
-        /// <remarks/>
+    
         aqua,
 
-        /// <remarks/>
+    
         aquamarine,
 
-        /// <remarks/>
+    
         azure,
 
-        /// <remarks/>
+    
         beige,
 
-        /// <remarks/>
+    
         bisque,
 
-        /// <remarks/>
+    
         black,
 
-        /// <remarks/>
+    
         blanchedAlmond,
 
-        /// <remarks/>
+    
         blue,
 
-        /// <remarks/>
+    
         blueViolet,
 
-        /// <remarks/>
+    
         brown,
 
-        /// <remarks/>
+    
         burlyWood,
 
-        /// <remarks/>
+    
         cadetBlue,
 
-        /// <remarks/>
+    
         chartreuse,
 
-        /// <remarks/>
+    
         chocolate,
 
-        /// <remarks/>
+    
         coral,
 
-        /// <remarks/>
+    
         cornflowerBlue,
 
-        /// <remarks/>
+    
         cornsilk,
 
-        /// <remarks/>
+    
         crimson,
 
-        /// <remarks/>
+    
         cyan,
 
-        /// <remarks/>
+    
         dkBlue,
 
-        /// <remarks/>
+    
         dkCyan,
 
-        /// <remarks/>
+    
         dkGoldenrod,
 
-        /// <remarks/>
+    
         dkGray,
 
-        /// <remarks/>
+    
         dkGreen,
 
-        /// <remarks/>
+    
         dkKhaki,
 
-        /// <remarks/>
+    
         dkMagenta,
 
-        /// <remarks/>
+    
         dkOliveGreen,
 
-        /// <remarks/>
+    
         dkOrange,
 
-        /// <remarks/>
+    
         dkOrchid,
 
-        /// <remarks/>
+    
         dkRed,
 
-        /// <remarks/>
+    
         dkSalmon,
 
-        /// <remarks/>
+    
         dkSeaGreen,
 
-        /// <remarks/>
+    
         dkSlateBlue,
 
-        /// <remarks/>
+    
         dkSlateGray,
 
-        /// <remarks/>
+    
         dkTurquoise,
 
-        /// <remarks/>
+    
         dkViolet,
 
-        /// <remarks/>
+    
         deepPink,
 
-        /// <remarks/>
+    
         deepSkyBlue,
 
-        /// <remarks/>
+    
         dimGray,
 
-        /// <remarks/>
+    
         dodgerBlue,
 
-        /// <remarks/>
+    
         firebrick,
 
-        /// <remarks/>
+    
         floralWhite,
 
-        /// <remarks/>
+    
         forestGreen,
 
-        /// <remarks/>
+    
         fuchsia,
 
-        /// <remarks/>
+    
         gainsboro,
 
-        /// <remarks/>
+    
         ghostWhite,
 
-        /// <remarks/>
+    
         gold,
 
-        /// <remarks/>
+    
         goldenrod,
 
-        /// <remarks/>
+    
         gray,
 
-        /// <remarks/>
+    
         green,
 
-        /// <remarks/>
+    
         greenYellow,
 
-        /// <remarks/>
+    
         honeydew,
 
-        /// <remarks/>
+    
         hotPink,
 
-        /// <remarks/>
+    
         indianRed,
 
-        /// <remarks/>
+    
         indigo,
 
-        /// <remarks/>
+    
         ivory,
 
-        /// <remarks/>
+    
         khaki,
 
-        /// <remarks/>
+    
         lavender,
 
-        /// <remarks/>
+    
         lavenderBlush,
 
-        /// <remarks/>
+    
         lawnGreen,
 
-        /// <remarks/>
+    
         lemonChiffon,
 
-        /// <remarks/>
+    
         ltBlue,
 
-        /// <remarks/>
+    
         ltCoral,
 
-        /// <remarks/>
+    
         ltCyan,
 
-        /// <remarks/>
+    
         ltGoldenrodYellow,
 
-        /// <remarks/>
+    
         ltGray,
 
-        /// <remarks/>
+    
         ltGreen,
 
-        /// <remarks/>
+    
         ltPink,
 
-        /// <remarks/>
+    
         ltSalmon,
 
-        /// <remarks/>
+    
         ltSeaGreen,
 
-        /// <remarks/>
+    
         ltSkyBlue,
 
-        /// <remarks/>
+    
         ltSlateGray,
 
-        /// <remarks/>
+    
         ltSteelBlue,
 
-        /// <remarks/>
+    
         ltYellow,
 
-        /// <remarks/>
+    
         lime,
 
-        /// <remarks/>
+    
         limeGreen,
 
-        /// <remarks/>
+    
         linen,
 
-        /// <remarks/>
+    
         magenta,
 
-        /// <remarks/>
+    
         maroon,
 
-        /// <remarks/>
+    
         medAquamarine,
 
-        /// <remarks/>
+    
         medBlue,
 
-        /// <remarks/>
+    
         medOrchid,
 
-        /// <remarks/>
+    
         medPurple,
 
-        /// <remarks/>
+    
         medSeaGreen,
 
-        /// <remarks/>
+    
         medSlateBlue,
 
-        /// <remarks/>
+    
         medSpringGreen,
 
-        /// <remarks/>
+    
         medTurquoise,
 
-        /// <remarks/>
+    
         medVioletRed,
 
-        /// <remarks/>
+    
         midnightBlue,
 
-        /// <remarks/>
+    
         mintCream,
 
-        /// <remarks/>
+    
         mistyRose,
 
-        /// <remarks/>
+    
         moccasin,
 
-        /// <remarks/>
+    
         navajoWhite,
 
-        /// <remarks/>
+    
         navy,
 
-        /// <remarks/>
+    
         oldLace,
 
-        /// <remarks/>
+    
         olive,
 
-        /// <remarks/>
+    
         oliveDrab,
 
-        /// <remarks/>
+    
         orange,
 
-        /// <remarks/>
+    
         orangeRed,
 
-        /// <remarks/>
+    
         orchid,
 
-        /// <remarks/>
+    
         paleGoldenrod,
 
-        /// <remarks/>
+    
         paleGreen,
 
-        /// <remarks/>
+    
         paleTurquoise,
 
-        /// <remarks/>
+    
         paleVioletRed,
 
-        /// <remarks/>
+    
         papayaWhip,
 
-        /// <remarks/>
+    
         peachPuff,
 
-        /// <remarks/>
+    
         peru,
 
-        /// <remarks/>
+    
         pink,
 
-        /// <remarks/>
+    
         plum,
 
-        /// <remarks/>
+    
         powderBlue,
 
-        /// <remarks/>
+    
         purple,
 
-        /// <remarks/>
+    
         red,
 
-        /// <remarks/>
+    
         rosyBrown,
 
-        /// <remarks/>
+    
         royalBlue,
 
-        /// <remarks/>
+    
         saddleBrown,
 
-        /// <remarks/>
+    
         salmon,
 
-        /// <remarks/>
+    
         sandyBrown,
 
-        /// <remarks/>
+    
         seaGreen,
 
-        /// <remarks/>
+    
         seaShell,
 
-        /// <remarks/>
+    
         sienna,
 
-        /// <remarks/>
+    
         silver,
 
-        /// <remarks/>
+    
         skyBlue,
 
-        /// <remarks/>
+    
         slateBlue,
 
-        /// <remarks/>
+    
         slateGray,
 
-        /// <remarks/>
+    
         snow,
 
-        /// <remarks/>
+    
         springGreen,
 
-        /// <remarks/>
+    
         steelBlue,
 
-        /// <remarks/>
+    
         tan,
 
-        /// <remarks/>
+    
         teal,
 
-        /// <remarks/>
+    
         thistle,
 
-        /// <remarks/>
+    
         tomato,
 
-        /// <remarks/>
+    
         turquoise,
 
-        /// <remarks/>
+    
         violet,
 
-        /// <remarks/>
+    
         wheat,
 
-        /// <remarks/>
+    
         white,
 
-        /// <remarks/>
+    
         whiteSmoke,
 
-        /// <remarks/>
+    
         yellow,
 
-        /// <remarks/>
+    
         yellowGreen,
     }
 
@@ -2135,6 +2135,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/relationships")]
         public string id
         {
             get
@@ -2241,37 +2242,37 @@ namespace NPOI.OpenXmlFormats.Dml
     public enum ST_BlackWhiteMode
     {
 
-        /// <remarks/>
+    
         clr,
 
-        /// <remarks/>
+    
         auto,
 
-        /// <remarks/>
+    
         gray,
 
-        /// <remarks/>
+    
         ltGray,
 
-        /// <remarks/>
+    
         invGray,
 
-        /// <remarks/>
+    
         grayWhite,
 
-        /// <remarks/>
+    
         blackGray,
 
-        /// <remarks/>
+    
         blackWhite,
 
-        /// <remarks/>
+    
         black,
 
-        /// <remarks/>
+    
         white,
 
-        /// <remarks/>
+    
         hidden,
     }
 }

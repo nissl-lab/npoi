@@ -343,8 +343,9 @@ namespace NPOI.XWPF.UserModel
             // Look in detail at one
             r = p.GetRuns()[4];
             XWPFPicture pict = r.GetEmbeddedPictures()[0];
-            NPOI.OpenXmlFormats.Dml.CT_Picture picture = pict.GetCTPicture();
-            Assert.AreEqual("rId8", picture.blipFill.blip.embed);
+            CT_Picture picture = pict.GetCTPicture();
+            Assert.Fail("picture.blipFill.blip.embed is missing from wordprocessing CT_Picture.");
+          //  Assert.AreEqual("rId8", picture.blipFill.blip.embed);
 
             // Ensure that the ooxml compiler Finds everything we need
             r.GetCTR().GetDrawingArray(0);

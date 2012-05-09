@@ -5,7 +5,7 @@ using System.Xml.Serialization;
 
 namespace NPOI.OpenXmlFormats.Vml
 {
-    /// <remarks/>
+
     [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
@@ -14,13 +14,13 @@ namespace NPOI.OpenXmlFormats.Vml
     public partial class CT_ClientData
     {
 
-        private object[] itemsField;
+        private List<object> itemsField;
 
         private ItemsChoiceType[] itemsElementNameField;
 
         private ST_ObjectType objectTypeField;
 
-        /// <remarks/>
+    
         [XmlElement("Accel", typeof(string), DataType = "integer")]
         [XmlElement("Accel2", typeof(string), DataType = "integer")]
         [XmlElement("Anchor", typeof(string))]
@@ -89,7 +89,7 @@ namespace NPOI.OpenXmlFormats.Vml
         [XmlElement("Visible", typeof(ST_TrueFalseBlank))]
         [XmlElement("WidthMin", typeof(string), DataType = "integer")]
         [System.Xml.Serialization.XmlChoiceIdentifierAttribute("ItemsElementName")]
-        public object[] Items
+        public List<object> Items
         {
             get
             {
@@ -101,7 +101,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
 
-        /// <remarks/>
+    
         [XmlElement("ItemsElementName")]
         [XmlIgnore]
         public ItemsChoiceType[] ItemsElementName
@@ -139,7 +139,7 @@ namespace NPOI.OpenXmlFormats.Vml
         {
             return this.rowField[index];
         }
-        /// <remarks/>
+    
         [XmlAttribute]
         public ST_ObjectType ObjectType
         {
@@ -154,323 +154,323 @@ namespace NPOI.OpenXmlFormats.Vml
         }
     }
 
-    /// <remarks/>
+
     [Serializable]
     [XmlType(Namespace = "urn:schemas-microsoft-com:office:excel")]
     [XmlRoot(Namespace = "urn:schemas-microsoft-com:office:excel", IsNullable = false)]
     public enum ST_TrueFalseBlank
     {
 
-        /// <remarks/>
+    
         @true,
 
-        /// <remarks/>
+    
         t,
 
-        /// <remarks/>
+    
         @false,
 
-        /// <remarks/>
+    
         f,
 
-        /// <remarks/>
+    
         [XmlEnum("")]
         Item,
     }
 
-    /// <remarks/>
+
     [Serializable]
     [XmlType(Namespace = "urn:schemas-microsoft-com:office:excel")]
     [XmlRoot(Namespace = "urn:schemas-microsoft-com:office:excel", IsNullable = false)]
     public enum ST_CF
     {
 
-        /// <remarks/>
+    
         PictOld,
 
-        /// <remarks/>
+    
         Pict,
 
-        /// <remarks/>
+    
         Bitmap,
 
-        /// <remarks/>
+    
         PictPrint,
 
-        /// <remarks/>
+    
         PictScreen,
     }
 
-    /// <remarks/>
+
     [Serializable]
     [XmlType(Namespace = "urn:schemas-microsoft-com:office:excel", IncludeInSchema = false)]
     public enum ItemsChoiceType
     {
 
-        /// <remarks/>
+    
         Accel,
 
-        /// <remarks/>
+    
         Accel2,
 
-        /// <remarks/>
+    
         Anchor,
 
-        /// <remarks/>
+    
         AutoFill,
 
-        /// <remarks/>
+    
         AutoLine,
 
-        /// <remarks/>
+    
         AutoPict,
 
-        /// <remarks/>
+    
         AutoScale,
 
-        /// <remarks/>
+    
         CF,
 
-        /// <remarks/>
+    
         Camera,
 
-        /// <remarks/>
+    
         Cancel,
 
-        /// <remarks/>
+    
         Checked,
 
-        /// <remarks/>
+    
         ColHidden,
 
-        /// <remarks/>
+    
         Colored,
 
-        /// <remarks/>
+    
         Column,
 
-        /// <remarks/>
+    
         DDE,
 
-        /// <remarks/>
+    
         Default,
 
-        /// <remarks/>
+    
         DefaultSize,
 
-        /// <remarks/>
+    
         Disabled,
 
-        /// <remarks/>
+    
         Dismiss,
 
-        /// <remarks/>
+    
         DropLines,
 
-        /// <remarks/>
+    
         DropStyle,
 
-        /// <remarks/>
+    
         Dx,
 
-        /// <remarks/>
+    
         FirstButton,
 
-        /// <remarks/>
+    
         FmlaGroup,
 
-        /// <remarks/>
+    
         FmlaLink,
 
-        /// <remarks/>
+    
         FmlaMacro,
 
-        /// <remarks/>
+    
         FmlaPict,
 
-        /// <remarks/>
+    
         FmlaRange,
 
-        /// <remarks/>
+    
         FmlaTxbx,
 
-        /// <remarks/>
+    
         Help,
 
-        /// <remarks/>
+    
         Horiz,
 
-        /// <remarks/>
+    
         Inc,
 
-        /// <remarks/>
+    
         JustLastX,
 
-        /// <remarks/>
+    
         LCT,
 
-        /// <remarks/>
+    
         ListItem,
 
-        /// <remarks/>
+    
         LockText,
 
-        /// <remarks/>
+    
         Locked,
 
-        /// <remarks/>
+    
         MapOCX,
 
-        /// <remarks/>
+    
         Max,
 
-        /// <remarks/>
+    
         Min,
 
-        /// <remarks/>
+    
         MoveWithCells,
 
-        /// <remarks/>
+    
         MultiLine,
 
-        /// <remarks/>
+    
         MultiSel,
 
-        /// <remarks/>
+    
         NoThreeD,
 
-        /// <remarks/>
+    
         NoThreeD2,
 
-        /// <remarks/>
+    
         Page,
 
-        /// <remarks/>
+    
         PrintObject,
 
-        /// <remarks/>
+    
         RecalcAlways,
 
-        /// <remarks/>
+    
         Row,
 
-        /// <remarks/>
+    
         RowHidden,
 
-        /// <remarks/>
+    
         ScriptExtended,
 
-        /// <remarks/>
+    
         ScriptLanguage,
 
-        /// <remarks/>
+    
         ScriptLocation,
 
-        /// <remarks/>
+    
         ScriptText,
 
-        /// <remarks/>
+    
         SecretEdit,
 
-        /// <remarks/>
+    
         Sel,
 
-        /// <remarks/>
+    
         SelType,
 
-        /// <remarks/>
+    
         SizeWithCells,
 
-        /// <remarks/>
+    
         TextHAlign,
 
-        /// <remarks/>
+    
         TextVAlign,
 
-        /// <remarks/>
+    
         UIObj,
 
-        /// <remarks/>
+    
         VScroll,
 
-        /// <remarks/>
+    
         VTEdit,
 
-        /// <remarks/>
+    
         Val,
 
-        /// <remarks/>
+    
         ValidIds,
 
-        /// <remarks/>
+    
         Visible,
 
-        /// <remarks/>
+    
         WidthMin,
     }
 
-    /// <remarks/>
+
     [Serializable]
     [XmlType(Namespace = "urn:schemas-microsoft-com:office:excel")]
     [XmlRoot(Namespace = "urn:schemas-microsoft-com:office:excel", IsNullable = false)]
     public enum ST_ObjectType
     {
 
-        /// <remarks/>
+    
         Button,
 
-        /// <remarks/>
+    
         Checkbox,
 
-        /// <remarks/>
+    
         Dialog,
 
-        /// <remarks/>
+    
         Drop,
 
-        /// <remarks/>
+    
         Edit,
 
-        /// <remarks/>
+    
         GBox,
 
-        /// <remarks/>
+    
         Label,
 
-        /// <remarks/>
+    
         LineA,
 
-        /// <remarks/>
+    
         List,
 
-        /// <remarks/>
+    
         Movie,
 
-        /// <remarks/>
+    
         Note,
 
-        /// <remarks/>
+    
         Pict,
 
-        /// <remarks/>
+    
         Radio,
 
-        /// <remarks/>
+    
         RectA,
 
-        /// <remarks/>
+    
         Scroll,
 
-        /// <remarks/>
+    
         Spin,
 
-        /// <remarks/>
+    
         Shape,
 
-        /// <remarks/>
+    
         Group,
 
-        /// <remarks/>
+    
         Rect,
     }
 }

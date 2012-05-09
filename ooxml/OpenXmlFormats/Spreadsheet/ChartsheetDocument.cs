@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.IO;
+﻿using System.IO;
 using System.Xml.Serialization;
 
 namespace NPOI.OpenXmlFormats.Spreadsheet
@@ -12,8 +9,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         CT_Chartsheet sheet = null;
 
         public ChartsheetDocument()
-        { 
-            
+        {
         }
         public ChartsheetDocument(CT_Chartsheet sheet)
         {
@@ -22,7 +18,6 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         public static ChartsheetDocument Parse(Stream stream)
         {
             CT_Chartsheet obj = (CT_Chartsheet)serializer.Deserialize(stream);
-
             return new ChartsheetDocument(obj);
         }
         public CT_Chartsheet GetChartsheet()

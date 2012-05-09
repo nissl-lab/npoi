@@ -10,7 +10,7 @@ namespace NPOI.OpenXmlFormats
     using System.Collections.Generic;
     using System.Xml.Schema;
 
-    /// <remarks/>
+
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]

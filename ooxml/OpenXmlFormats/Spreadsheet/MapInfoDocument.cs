@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.IO;
+﻿using System.IO;
 using System.Xml.Serialization;
 
 namespace NPOI.OpenXmlFormats.Spreadsheet
@@ -13,7 +10,6 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         public MapInfoDocument()
         { 
-            
         }
         public MapInfoDocument(CT_MapInfo map)
         {
@@ -22,7 +18,6 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         public static MapInfoDocument Parse(Stream stream)
         {
             CT_MapInfo obj = (CT_MapInfo)serializer.Deserialize(stream);
-
             return new MapInfoDocument(obj);
         }
         public CT_MapInfo GetMapInfo()

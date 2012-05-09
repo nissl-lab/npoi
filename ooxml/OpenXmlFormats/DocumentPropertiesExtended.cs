@@ -108,7 +108,7 @@ namespace NPOI.OpenXmlFormats
 
         private bool docSecurityFieldSpecified;
         [XmlElement]
-        /// <remarks/>
+    
         public string Template
         {
             get
@@ -121,7 +121,7 @@ namespace NPOI.OpenXmlFormats
             }
         }
         [XmlElement]
-        /// <remarks/>
+    
         public string Manager
         {
             get
@@ -134,7 +134,7 @@ namespace NPOI.OpenXmlFormats
             }
         }
         [XmlElement]
-        /// <remarks/>
+    
         public string Company
         {
             get
@@ -147,7 +147,7 @@ namespace NPOI.OpenXmlFormats
             }
         }
         [XmlElement]
-        /// <remarks/>
+    
         public int Pages
         {
             get
@@ -160,7 +160,7 @@ namespace NPOI.OpenXmlFormats
             }
         }
 
-        /// <remarks/>
+    
         [XmlIgnore]
         public bool PagesSpecified
         {
@@ -174,7 +174,7 @@ namespace NPOI.OpenXmlFormats
             }
         }
         [XmlElement]
-        /// <remarks/>
+    
         public int Words
         {
             get
@@ -187,7 +187,7 @@ namespace NPOI.OpenXmlFormats
             }
         }
 
-        /// <remarks/>
+    
         [XmlIgnore]
         public bool WordsSpecified
         {
@@ -201,7 +201,7 @@ namespace NPOI.OpenXmlFormats
             }
         }
         [XmlElement]
-        /// <remarks/>
+    
         public int Characters
         {
             get
@@ -214,7 +214,7 @@ namespace NPOI.OpenXmlFormats
             }
         }
 
-        /// <remarks/>
+    
         [XmlIgnore]
         public bool CharactersSpecified
         {
@@ -228,7 +228,7 @@ namespace NPOI.OpenXmlFormats
             }
         }
         [XmlElement]
-        /// <remarks/>
+    
         public string PresentationFormat
         {
             get
@@ -241,7 +241,7 @@ namespace NPOI.OpenXmlFormats
             }
         }
         [XmlElement]
-        /// <remarks/>
+    
         public int Lines
         {
             get
@@ -254,7 +254,7 @@ namespace NPOI.OpenXmlFormats
             }
         }
 
-        /// <remarks/>
+    
         [XmlIgnore]
         public bool LinesSpecified
         {
@@ -268,7 +268,7 @@ namespace NPOI.OpenXmlFormats
             }
         }
         [XmlElement]
-        /// <remarks/>
+    
         public int Paragraphs
         {
             get
@@ -281,7 +281,7 @@ namespace NPOI.OpenXmlFormats
             }
         }
 
-        /// <remarks/>
+    
         [XmlIgnore]
         public bool ParagraphsSpecified
         {
@@ -295,7 +295,7 @@ namespace NPOI.OpenXmlFormats
             }
         }
         [XmlElement]
-        /// <remarks/>
+    
         public int Slides
         {
             get
@@ -308,7 +308,7 @@ namespace NPOI.OpenXmlFormats
             }
         }
 
-        /// <remarks/>
+    
         [XmlIgnore]
         public bool SlidesSpecified
         {
@@ -322,7 +322,7 @@ namespace NPOI.OpenXmlFormats
             }
         }
         [XmlElement]
-        /// <remarks/>
+    
         public int Notes
         {
             get
@@ -335,7 +335,7 @@ namespace NPOI.OpenXmlFormats
             }
         }
 
-        /// <remarks/>
+    
         [XmlIgnore]
         public bool NotesSpecified
         {
@@ -349,7 +349,7 @@ namespace NPOI.OpenXmlFormats
             }
         }
         [XmlElement]
-        /// <remarks/>
+    
         public int TotalTime
         {
             get
@@ -362,7 +362,7 @@ namespace NPOI.OpenXmlFormats
             }
         }
 
-        /// <remarks/>
+    
         [XmlIgnore]
         public bool TotalTimeSpecified
         {
@@ -376,7 +376,7 @@ namespace NPOI.OpenXmlFormats
             }
         }
         [XmlElement]
-        /// <remarks/>
+    
         public int HiddenSlides
         {
             get
@@ -389,7 +389,7 @@ namespace NPOI.OpenXmlFormats
             }
         }
 
-        /// <remarks/>
+    
         [XmlIgnore]
         public bool HiddenSlidesSpecified
         {
@@ -403,7 +403,7 @@ namespace NPOI.OpenXmlFormats
             }
         }
         [XmlElement]
-        /// <remarks/>
+    
         public int MMClips
         {
             get
@@ -416,7 +416,7 @@ namespace NPOI.OpenXmlFormats
             }
         }
 
-        /// <remarks/>
+    
         [XmlIgnore]
         public bool MMClipsSpecified
         {
@@ -442,7 +442,7 @@ namespace NPOI.OpenXmlFormats
             }
         }
 
-        /// <remarks/>
+    
         [XmlIgnore]
         public bool ScaleCropSpecified
         {
@@ -482,7 +482,7 @@ namespace NPOI.OpenXmlFormats
             }
         }
         [XmlElement]
-        /// <remarks/>
+    
         public bool LinksUpToDate
         {
             get
@@ -495,7 +495,7 @@ namespace NPOI.OpenXmlFormats
             }
         }
 
-        /// <remarks/>
+    
         [XmlIgnore]
         public bool LinksUpToDateSpecified
         {
@@ -509,7 +509,7 @@ namespace NPOI.OpenXmlFormats
             }
         }
         [XmlElement]
-        /// <remarks/>
+    
         public int CharactersWithSpaces
         {
             get
@@ -522,7 +522,7 @@ namespace NPOI.OpenXmlFormats
             }
         }
 
-        /// <remarks/>
+    
         [XmlIgnore]
         public bool CharactersWithSpacesSpecified
         {
@@ -536,7 +536,7 @@ namespace NPOI.OpenXmlFormats
             }
         }
         [XmlElement]
-        /// <remarks/>
+    
         public bool SharedDoc
         {
             get
@@ -549,7 +549,7 @@ namespace NPOI.OpenXmlFormats
             }
         }
 
-        /// <remarks/>
+    
         [XmlIgnore]
         public bool SharedDocSpecified
         {
@@ -563,7 +563,7 @@ namespace NPOI.OpenXmlFormats
             }
         }
         [XmlElement]
-        /// <remarks/>
+    
         public string HyperlinkBase
         {
             get
@@ -576,7 +576,7 @@ namespace NPOI.OpenXmlFormats
             }
         }
 
-        /// <remarks/>
+    
         public CT_VectorVariant HLinks
         {
             get
@@ -589,7 +589,7 @@ namespace NPOI.OpenXmlFormats
             }
         }
         [XmlElement]
-        /// <remarks/>
+    
         public bool HyperlinksChanged
         {
             get
@@ -601,7 +601,7 @@ namespace NPOI.OpenXmlFormats
                 this.hyperlinksChangedField = value;
             }
         }
-        /// <remarks/>
+    
         [XmlIgnore]
         public bool HyperlinksChangedSpecified
         {
@@ -629,7 +629,7 @@ namespace NPOI.OpenXmlFormats
         }
 
         [XmlElement]
-        /// <remarks/>
+    
         public string Application
         {
             get
@@ -642,7 +642,7 @@ namespace NPOI.OpenXmlFormats
             }
         }
         [XmlElement]
-        /// <remarks/>
+    
         public string AppVersion
         {
             get
@@ -655,7 +655,7 @@ namespace NPOI.OpenXmlFormats
             }
         }
         [XmlElement]
-        /// <remarks/>
+    
         public int DocSecurity
         {
             get
@@ -668,7 +668,7 @@ namespace NPOI.OpenXmlFormats
             }
         }
 
-        /// <remarks/>
+    
         [XmlIgnore]
         public bool DocSecuritySpecified
         {

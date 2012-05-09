@@ -4,7 +4,7 @@ namespace NPOI.OpenXmlFormats.Vml
 {
     
     
-    /// <remarks/>
+
     [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
@@ -22,7 +22,7 @@ namespace NPOI.OpenXmlFormats.Vml
         
         private bool shadowFieldSpecified;
         
-        /// <remarks/>
+    
         [XmlAttribute]
         public ST_BorderType type {
             get {
@@ -33,7 +33,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [XmlIgnore]
         public bool typeSpecified {
             get {
@@ -44,7 +44,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [XmlAttribute(DataType="positiveInteger")]
         public string width {
             get {
@@ -55,7 +55,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [XmlAttribute]
         public ST_BorderShadow shadow {
             get {
@@ -66,7 +66,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [XmlIgnore]
         public bool shadowSpecified {
             get {
@@ -78,114 +78,114 @@ namespace NPOI.OpenXmlFormats.Vml
         }
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [XmlType(Namespace="urn:schemas-microsoft-com:office:word")]
     [XmlRoot(Namespace="urn:schemas-microsoft-com:office:word", IsNullable=false)]
     public enum ST_BorderType {
         
-        /// <remarks/>
+    
         none,
         
-        /// <remarks/>
+    
         single,
         
-        /// <remarks/>
+    
         thick,
         
-        /// <remarks/>
+    
         @double,
         
-        /// <remarks/>
+    
         hairline,
         
-        /// <remarks/>
+    
         dot,
         
-        /// <remarks/>
+    
         dash,
         
-        /// <remarks/>
+    
         dotDash,
         
-        /// <remarks/>
+    
         dashDotDot,
         
-        /// <remarks/>
+    
         triple,
         
-        /// <remarks/>
+    
         thinThickSmall,
         
-        /// <remarks/>
+    
         thickThinSmall,
         
-        /// <remarks/>
+    
         thickBetweenThinSmall,
         
-        /// <remarks/>
+    
         thinThick,
         
-        /// <remarks/>
+    
         thickThin,
         
-        /// <remarks/>
+    
         thickBetweenThin,
         
-        /// <remarks/>
+    
         thinThickLarge,
         
-        /// <remarks/>
+    
         thickThinLarge,
         
-        /// <remarks/>
+    
         thickBetweenThinLarge,
         
-        /// <remarks/>
+    
         wave,
         
-        /// <remarks/>
+    
         doubleWave,
         
-        /// <remarks/>
+    
         dashedSmall,
         
-        /// <remarks/>
+    
         dashDotStroked,
         
-        /// <remarks/>
+    
         threeDEmboss,
         
-        /// <remarks/>
+    
         threeDEngrave,
         
-        /// <remarks/>
+    
         HTMLOutset,
         
-        /// <remarks/>
+    
         HTMLInset,
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [XmlType(Namespace="urn:schemas-microsoft-com:office:word")]
     [XmlRoot(Namespace="urn:schemas-microsoft-com:office:word", IsNullable=false)]
     public enum ST_BorderShadow {
         
-        /// <remarks/>
+    
         t,
         
-        /// <remarks/>
+    
         @true,
         
-        /// <remarks/>
+    
         f,
         
-        /// <remarks/>
+    
         @false,
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
@@ -209,7 +209,7 @@ namespace NPOI.OpenXmlFormats.Vml
         
         private bool anchoryFieldSpecified;
         
-        /// <remarks/>
+    
         [XmlAttribute]
         public ST_WrapType type {
             get {
@@ -220,7 +220,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [XmlIgnore]
         public bool typeSpecified {
             get {
@@ -231,7 +231,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [XmlAttribute]
         public ST_WrapSide side {
             get {
@@ -242,7 +242,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [XmlIgnore]
         public bool sideSpecified {
             get {
@@ -253,7 +253,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [XmlAttribute]
         public ST_HorizontalAnchor anchorx {
             get {
@@ -264,7 +264,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [XmlIgnore]
         public bool anchorxSpecified {
             get {
@@ -275,7 +275,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [XmlAttribute]
         public ST_VerticalAnchor anchory {
             get {
@@ -286,7 +286,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        /// <remarks/>
+    
         [XmlIgnore]
         public bool anchorySpecified {
             get {
@@ -298,86 +298,86 @@ namespace NPOI.OpenXmlFormats.Vml
         }
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [XmlType(Namespace="urn:schemas-microsoft-com:office:word")]
     [XmlRoot(Namespace="urn:schemas-microsoft-com:office:word", IsNullable=false)]
     public enum ST_WrapType {
         
-        /// <remarks/>
+    
         topAndBottom,
         
-        /// <remarks/>
+    
         square,
         
-        /// <remarks/>
+    
         none,
         
-        /// <remarks/>
+    
         tight,
         
-        /// <remarks/>
+    
         through,
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [XmlType(Namespace="urn:schemas-microsoft-com:office:word")]
     [XmlRoot(Namespace="urn:schemas-microsoft-com:office:word", IsNullable=false)]
     public enum ST_WrapSide {
         
-        /// <remarks/>
+    
         both,
         
-        /// <remarks/>
+    
         left,
         
-        /// <remarks/>
+    
         right,
         
-        /// <remarks/>
+    
         largest,
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [XmlType(Namespace="urn:schemas-microsoft-com:office:word")]
     [XmlRoot(Namespace="urn:schemas-microsoft-com:office:word", IsNullable=false)]
     public enum ST_HorizontalAnchor {
         
-        /// <remarks/>
+    
         margin,
         
-        /// <remarks/>
+    
         page,
         
-        /// <remarks/>
+    
         text,
         
-        /// <remarks/>
+    
         @char,
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [XmlType(Namespace="urn:schemas-microsoft-com:office:word")]
     [XmlRoot(Namespace="urn:schemas-microsoft-com:office:word", IsNullable=false)]
     public enum ST_VerticalAnchor {
         
-        /// <remarks/>
+    
         margin,
         
-        /// <remarks/>
+    
         page,
         
-        /// <remarks/>
+    
         text,
         
-        /// <remarks/>
+    
         line,
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]

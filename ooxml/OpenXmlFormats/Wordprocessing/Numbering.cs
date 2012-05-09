@@ -7,8 +7,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 {
     [System.SerializableAttribute()]
 
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
-    [System.Xml.Serialization.XmlRootAttribute(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
+    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
+    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
     public class CT_Num
     {
 
@@ -24,7 +24,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             this.abstractNumIdField = new CT_DecimalNumber();
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Order = 0)]
+        [System.Xml.Serialization.XmlElement(Order = 0)]
         public CT_DecimalNumber abstractNumId
         {
             get
@@ -37,7 +37,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute("lvlOverride", Order = 1)]
+        [System.Xml.Serialization.XmlElement("lvlOverride", Order = 1)]
         public List<CT_NumLvl> lvlOverride
         {
             get
@@ -73,8 +73,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
     [System.SerializableAttribute()]
 
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
-    [System.Xml.Serialization.XmlRootAttribute(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
+    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
+    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
     public class CT_NumLvl
     {
 
@@ -90,7 +90,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             this.startOverrideField = new CT_DecimalNumber();
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Order = 0)]
+        [System.Xml.Serialization.XmlElement(Order = 0)]
         public CT_DecimalNumber startOverride
         {
             get
@@ -103,7 +103,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Order = 1)]
+        [System.Xml.Serialization.XmlElement(Order = 1)]
         public CT_Lvl lvl
         {
             get
@@ -133,8 +133,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
     [System.SerializableAttribute()]
 
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
-    [System.Xml.Serialization.XmlRootAttribute("numbering", Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = false)]
+    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
+    [System.Xml.Serialization.XmlRoot("numbering", Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = false)]
     public class CT_Numbering
     {
 
@@ -154,7 +154,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             this.numPicBulletField = new List<CT_NumPicBullet>();
         }
 
-        [System.Xml.Serialization.XmlElementAttribute("numPicBullet", Order = 0)]
+        [System.Xml.Serialization.XmlElement("numPicBullet", Order = 0)]
         public List<CT_NumPicBullet> numPicBullet
         {
             get
@@ -167,7 +167,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute("abstractNum", Order = 1)]
+        [System.Xml.Serialization.XmlElement("abstractNum", Order = 1)]
         public List<CT_AbstractNum> abstractNum
         {
             get
@@ -180,7 +180,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute("num", Order = 2)]
+        [System.Xml.Serialization.XmlElement("num", Order = 2)]
         public List<CT_Num> num
         {
             get
@@ -193,7 +193,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Order = 3)]
+        [System.Xml.Serialization.XmlElement(Order = 3)]
         public CT_DecimalNumber numIdMacAtCleanup
         {
             get
@@ -249,8 +249,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
     [System.SerializableAttribute()]
 
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
-    [System.Xml.Serialization.XmlRootAttribute(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
+    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
+    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
     public class CT_NumPicBullet
     {
 
@@ -263,7 +263,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             this.pictField = new CT_Picture();
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Order = 0)]
+        [System.Xml.Serialization.XmlElement(Order = 0)]
         public CT_Picture pict
         {
             get
@@ -293,8 +293,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
     [System.SerializableAttribute()]
 
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
-    [System.Xml.Serialization.XmlRootAttribute(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
+    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
+    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
     public class CT_NumFmt
     {
 
@@ -316,197 +316,197 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
 
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
+    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
     public enum ST_NumberFormat
     {
 
-        /// <remarks/>
+    
         [XmlEnum("decimal")]
         @decimal,
 
-        /// <remarks/>
+    
         upperRoman,
 
-        /// <remarks/>
+    
         lowerRoman,
 
-        /// <remarks/>
+    
         upperLetter,
 
-        /// <remarks/>
+    
         lowerLetter,
 
-        /// <remarks/>
+    
         ordinal,
 
-        /// <remarks/>
+    
         cardinalText,
 
-        /// <remarks/>
+    
         ordinalText,
 
-        /// <remarks/>
+    
         hex,
 
-        /// <remarks/>
+    
         chicago,
 
-        /// <remarks/>
+    
         ideographDigital,
 
-        /// <remarks/>
+    
         japaneseCounting,
 
-        /// <remarks/>
+    
         aiueo,
 
-        /// <remarks/>
+    
         iroha,
 
-        /// <remarks/>
+    
         decimalFullWidth,
 
-        /// <remarks/>
+    
         decimalHalfWidth,
 
-        /// <remarks/>
+    
         japaneseLegal,
 
-        /// <remarks/>
+    
         japaneseDigitalTenThousand,
 
-        /// <remarks/>
+    
         decimalEnclosedCircle,
 
-        /// <remarks/>
+    
         decimalFullWidth2,
 
-        /// <remarks/>
+    
         aiueoFullWidth,
 
-        /// <remarks/>
+    
         irohaFullWidth,
 
-        /// <remarks/>
+    
         decimalZero,
 
-        /// <remarks/>
+    
         bullet,
 
-        /// <remarks/>
+    
         ganada,
 
-        /// <remarks/>
+    
         chosung,
 
-        /// <remarks/>
+    
         decimalEnclosedFullstop,
 
-        /// <remarks/>
+    
         decimalEnclosedParen,
 
-        /// <remarks/>
+    
         decimalEnclosedCircleChinese,
 
-        /// <remarks/>
+    
         ideographEnclosedCircle,
 
-        /// <remarks/>
+    
         ideographTraditional,
 
-        /// <remarks/>
+    
         ideographZodiac,
 
-        /// <remarks/>
+    
         ideographZodiacTraditional,
 
-        /// <remarks/>
+    
         taiwaneseCounting,
 
-        /// <remarks/>
+    
         ideographLegalTraditional,
 
-        /// <remarks/>
+    
         taiwaneseCountingThousand,
 
-        /// <remarks/>
+    
         taiwaneseDigital,
 
-        /// <remarks/>
+    
         chineseCounting,
 
-        /// <remarks/>
+    
         chineseLegalSimplified,
 
-        /// <remarks/>
+    
         chineseCountingThousand,
 
-        /// <remarks/>
+    
         koreanDigital,
 
-        /// <remarks/>
+    
         koreanCounting,
 
-        /// <remarks/>
+    
         koreanLegal,
 
-        /// <remarks/>
+    
         koreanDigital2,
 
-        /// <remarks/>
+    
         vietnameseCounting,
 
-        /// <remarks/>
+    
         russianLower,
 
-        /// <remarks/>
+    
         russianUpper,
 
-        /// <remarks/>
+    
         none,
 
-        /// <remarks/>
+    
         numberInDash,
 
-        /// <remarks/>
+    
         hebrew1,
 
-        /// <remarks/>
+    
         hebrew2,
 
-        /// <remarks/>
+    
         arabicAlpha,
 
-        /// <remarks/>
+    
         arabicAbjad,
 
-        /// <remarks/>
+    
         hindiVowels,
 
-        /// <remarks/>
+    
         hindiConsonants,
 
-        /// <remarks/>
+    
         hindiNumbers,
 
-        /// <remarks/>
+    
         hindiCounting,
 
-        /// <remarks/>
+    
         thaiLetters,
 
-        /// <remarks/>
+    
         thaiNumbers,
 
-        /// <remarks/>
+    
         thaiCounting,
     }
 
 
     [System.SerializableAttribute()]
 
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
-    [System.Xml.Serialization.XmlRootAttribute(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
+    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
+    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
     public class CT_NumRestart
     {
 
@@ -528,23 +528,23 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
 
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
+    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
     public enum ST_RestartNumber
     {
 
-        /// <remarks/>
+    
         continuous,
 
-        /// <remarks/>
+    
         eachSect,
 
-        /// <remarks/>
+    
         eachPage,
     }
     [System.SerializableAttribute()]
 
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
-    [System.Xml.Serialization.XmlRootAttribute(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
+    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
+    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
     public class CT_NumPr
     {
 
@@ -564,7 +564,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             this.ilvlField = new CT_DecimalNumber();
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Order = 0)]
+        [System.Xml.Serialization.XmlElement(Order = 0)]
         public CT_DecimalNumber ilvl
         {
             get
@@ -577,7 +577,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Order = 1)]
+        [System.Xml.Serialization.XmlElement(Order = 1)]
         public CT_DecimalNumber numId
         {
             get
@@ -590,7 +590,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Order = 2)]
+        [System.Xml.Serialization.XmlElement(Order = 2)]
         public CT_TrackChangeNumbering numberingChange
         {
             get
@@ -603,7 +603,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Order = 3)]
+        [System.Xml.Serialization.XmlElement(Order = 3)]
         public CT_TrackChange ins
         {
             get
@@ -625,8 +625,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
     [System.SerializableAttribute()]
 
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
-    [System.Xml.Serialization.XmlRootAttribute(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
+    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
+    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
     public class CT_Sym
     {
 
@@ -663,8 +663,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
     [System.SerializableAttribute()]
 
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
-    [System.Xml.Serialization.XmlRootAttribute(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
+    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
+    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
     public class CT_AbstractNum
     {
 
@@ -695,7 +695,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             this.nsidField = new CT_LongHexNumber();
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Order = 0)]
+        [System.Xml.Serialization.XmlElement(Order = 0)]
         public CT_LongHexNumber nsid
         {
             get
@@ -708,7 +708,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Order = 1)]
+        [System.Xml.Serialization.XmlElement(Order = 1)]
         public CT_MultiLevelType multiLevelType
         {
             get
@@ -721,7 +721,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Order = 2)]
+        [System.Xml.Serialization.XmlElement(Order = 2)]
         public CT_LongHexNumber tmpl
         {
             get
@@ -734,7 +734,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Order = 3)]
+        [System.Xml.Serialization.XmlElement(Order = 3)]
         public CT_String name
         {
             get
@@ -747,7 +747,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Order = 4)]
+        [System.Xml.Serialization.XmlElement(Order = 4)]
         public CT_String styleLink
         {
             get
@@ -760,7 +760,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Order = 5)]
+        [System.Xml.Serialization.XmlElement(Order = 5)]
         public CT_String numStyleLink
         {
             get
@@ -773,7 +773,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute("lvl", Order = 6)]
+        [System.Xml.Serialization.XmlElement("lvl", Order = 6)]
         public List<CT_Lvl> lvl
         {
             get
@@ -834,8 +834,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
     [System.SerializableAttribute()]
 
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
-    [System.Xml.Serialization.XmlRootAttribute(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
+    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
+    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
     public class CT_MultiLevelType
     {
 
@@ -857,25 +857,25 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
 
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
+    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
     public enum ST_MultiLevelType
     {
 
-        /// <remarks/>
+    
         singleLevel,
 
-        /// <remarks/>
+    
         multilevel,
 
-        /// <remarks/>
+    
         hybridMultilevel,
     }
 
 
     [System.SerializableAttribute()]
 
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
-    [System.Xml.Serialization.XmlRootAttribute(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
+    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
+    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
     public class CT_Lvl
     {
 
@@ -927,7 +927,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             this.startField = new CT_DecimalNumber();
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Order = 0)]
+        [System.Xml.Serialization.XmlElement(Order = 0)]
         public CT_DecimalNumber start
         {
             get
@@ -940,7 +940,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Order = 1)]
+        [System.Xml.Serialization.XmlElement(Order = 1)]
         public CT_NumFmt numFmt
         {
             get
@@ -953,7 +953,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Order = 2)]
+        [System.Xml.Serialization.XmlElement(Order = 2)]
         public CT_DecimalNumber lvlRestart
         {
             get
@@ -966,7 +966,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Order = 3)]
+        [System.Xml.Serialization.XmlElement(Order = 3)]
         public CT_String pStyle
         {
             get
@@ -979,7 +979,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Order = 4)]
+        [System.Xml.Serialization.XmlElement(Order = 4)]
         public CT_OnOff isLgl
         {
             get
@@ -992,7 +992,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Order = 5)]
+        [System.Xml.Serialization.XmlElement(Order = 5)]
         public CT_LevelSuffix suff
         {
             get
@@ -1005,7 +1005,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Order = 6)]
+        [System.Xml.Serialization.XmlElement(Order = 6)]
         public CT_LevelText lvlText
         {
             get
@@ -1018,7 +1018,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Order = 7)]
+        [System.Xml.Serialization.XmlElement(Order = 7)]
         public CT_DecimalNumber lvlPicBulletId
         {
             get
@@ -1031,7 +1031,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Order = 8)]
+        [System.Xml.Serialization.XmlElement(Order = 8)]
         public CT_LvlLegacy legacy
         {
             get
@@ -1044,7 +1044,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Order = 9)]
+        [System.Xml.Serialization.XmlElement(Order = 9)]
         public CT_Jc lvlJc
         {
             get
@@ -1057,7 +1057,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Order = 10)]
+        [System.Xml.Serialization.XmlElement(Order = 10)]
         public CT_PPr pPr
         {
             get
@@ -1070,7 +1070,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Order = 11)]
+        [System.Xml.Serialization.XmlElement(Order = 11)]
         public CT_RPr rPr
         {
             get
@@ -1139,8 +1139,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
     [System.SerializableAttribute()]
 
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
-    [System.Xml.Serialization.XmlRootAttribute(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
+    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
+    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
     public class CT_LevelSuffix
     {
 
@@ -1162,25 +1162,25 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
 
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
+    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
     public enum ST_LevelSuffix
     {
 
-        /// <remarks/>
+    
         tab,
 
-        /// <remarks/>
+    
         space,
 
-        /// <remarks/>
+    
         nothing,
     }
 
 
     [System.SerializableAttribute()]
 
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
-    [System.Xml.Serialization.XmlRootAttribute(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
+    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
+    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
     public class CT_LevelText
     {
 
@@ -1233,8 +1233,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
     [System.SerializableAttribute()]
 
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
-    [System.Xml.Serialization.XmlRootAttribute(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
+    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
+    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
     public class CT_LvlLegacy
     {
 
@@ -1317,8 +1317,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
     [System.SerializableAttribute()]
 
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
-    [System.Xml.Serialization.XmlRootAttribute(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
+    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
+    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
     public class CT_LsdException
     {
 
@@ -1476,8 +1476,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
     [System.SerializableAttribute()]
 
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
-    [System.Xml.Serialization.XmlRootAttribute(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
+    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
+    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
     public class CT_TrackChangeNumbering : CT_TrackChange
     {
 

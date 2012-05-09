@@ -15,12 +15,13 @@
    limitations under the License.
 ==================================================================== */
 
+using System;
+using NPOI.OpenXml4Net.OPC;
+using NPOI.OpenXmlFormats.Dml;
+using NPOI.OpenXmlFormats.Dml.Spreadsheet;
+
 namespace NPOI.XSSF.UserModel
 {
-    using NPOI.OpenXmlFormats.Dml;
-    using NPOI.OpenXml4Net.OPC;
-    using System;
-
     /**
      * This object specifies a group shape that represents many shapes grouped together. This shape is to be treated
      * just as if it were a regular shape but instead of being described by a single geometry it is made up of all the

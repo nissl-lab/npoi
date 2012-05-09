@@ -71,6 +71,7 @@
   <ItemGroup>
     <Compile Include="OpenXmlFormats\Spreadsheet\CommentsDocumentTest.cs" />
     <Compile Include="OpenXmlFormats\Spreadsheet\CalcChainDocumentTest.cs" />
+    <Compile Include="OpenXmlFormats\Spreadsheet\DrawingDocumentTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>

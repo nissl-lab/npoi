@@ -17,9 +17,11 @@
  * ====================================================================
  */
 
-using NPOI.OpenXmlFormats.Dml;
 using System;
 using NPOI.OpenXmlFormats;
+using NPOI.OpenXmlFormats.Dml;
+using NPOI.OpenXmlFormats.Dml.Spreadsheet;
+
 namespace NPOI.XSSF.UserModel
 {
 

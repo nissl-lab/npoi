@@ -949,47 +949,47 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     public enum ST_TargetScreenSize
     {
 
-        /// <remarks/>
+    
         [XmlEnum("544x376")]
         Item544x376,
 
-        /// <remarks/>
+    
         [XmlEnum("640x480")]
         Item640x480,
 
-        /// <remarks/>
+    
         [XmlEnum("720x512")]
         Item720x512,
 
-        /// <remarks/>
+    
         [XmlEnum("800x600")]
         Item800x600,
 
-        /// <remarks/>
+    
         [XmlEnum("1024x768")]
         Item1024x768,
 
-        /// <remarks/>
+    
         [XmlEnum("1152x882")]
         Item1152x882,
 
-        /// <remarks/>
+    
         [XmlEnum("1152x900")]
         Item1152x900,
 
-        /// <remarks/>
+    
         [XmlEnum("1280x1024")]
         Item1280x1024,
 
-        /// <remarks/>
+    
         [XmlEnum("1600x1200")]
         Item1600x1200,
 
-        /// <remarks/>
+    
         [XmlEnum("1800x1440")]
         Item1800x1440,
 
-        /// <remarks/>
+    
         [XmlEnum("1920x1200")]
         Item1920x1200,
     }
@@ -1105,6 +1105,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
+        // TODO is the following correct?
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/relationships")]
         public string id
         {
             get
@@ -1533,26 +1535,26 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     public enum ST_Comments
     {
 
-        /// <remarks/>
+    
         commNone,
 
-        /// <remarks/>
+    
         commIndicator,
 
-        /// <remarks/>
+    
         commIndAndComment,
     }
 
     public enum ST_Objects
     {
 
-        /// <remarks/>
+    
         all,
 
-        /// <remarks/>
+    
         placeholders,
 
-        /// <remarks/>
+    
         none,
     }
 
@@ -1837,10 +1839,10 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     public enum ST_RefMode
     {
 
-        /// <remarks/>
+    
         A1,
 
-        /// <remarks/>
+    
         R1C1,
     }
 
@@ -2137,7 +2139,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         private string idField;
 
-        [XmlAttribute]
+        // TODO is the following correct?
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/relationships")]
         public string id
         {
             get
@@ -2462,13 +2465,13 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     public enum ST_Visibility
     {
 
-        /// <remarks/>
+    
         visible,
 
-        /// <remarks/>
+    
         hidden,
 
-        /// <remarks/>
+    
         veryHidden,
     }
 
@@ -2886,13 +2889,13 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     public enum ST_UpdateLinks
     {
 
-        /// <remarks/>
+    
         userSet,
 
-        /// <remarks/>
+    
         never,
 
-        /// <remarks/>
+    
         always,
     }
 
@@ -3152,6 +3155,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         private string idField;
 
+        // TODO is the following correct?
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/relationships")]
         public string id
         {
             get

@@ -7,11 +7,10 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     public class ThemeDocument
     {
         static XmlSerializer serializer = new XmlSerializer(typeof(CT_OfficeStyleSheet));
+        CT_OfficeStyleSheet stylesheet = null;
         public ThemeDocument()
-        { 
-        
+        {
         }
-        CT_OfficeStyleSheet stylesheet;
         public ThemeDocument(CT_OfficeStyleSheet stylesheet)
         {
             this.stylesheet = stylesheet;
@@ -20,7 +19,6 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         public static ThemeDocument Parse(Stream stream)
         {
             CT_OfficeStyleSheet obj = (CT_OfficeStyleSheet)serializer.Deserialize(stream);
-
             return new ThemeDocument(obj) ;
         }
         public CT_OfficeStyleSheet GetTheme()

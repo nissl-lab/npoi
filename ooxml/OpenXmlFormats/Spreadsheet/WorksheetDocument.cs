@@ -1,6 +1,6 @@
 ﻿using System.IO;
-using System.Xml.Serialization;
 using System.Xml;
+using System.Xml.Serialization;
 
 namespace NPOI.OpenXmlFormats.Spreadsheet
 {
@@ -14,7 +14,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         CT_Worksheet sheet = null;
 
         public WorksheetDocument()
-        {           
+        {
         }
         public WorksheetDocument(CT_Worksheet sheet)
         {

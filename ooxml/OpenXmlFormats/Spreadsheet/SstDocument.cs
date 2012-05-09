@@ -7,16 +7,15 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     {
         static XmlSerializer serializer = new XmlSerializer(typeof(CT_Sst));
 
-        public SstDocument()
-        { 
-        
-        }
         CT_Sst sst = null;
+
+        public SstDocument()
+        {         
+        }
         public SstDocument(CT_Sst sst)
         {
             this.sst = sst;
         }
-
 
         public void AddNewSst()
         {

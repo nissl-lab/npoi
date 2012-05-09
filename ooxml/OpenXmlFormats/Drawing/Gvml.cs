@@ -1,8 +1,9 @@
 using System.ComponentModel;
+using System.Xml.Serialization;
 namespace NPOI.OpenXmlFormats.Dml {
     
     
-    /// <remarks/>
+
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
@@ -13,7 +14,7 @@ namespace NPOI.OpenXmlFormats.Dml {
     
     
     
-    /// <remarks/>
+
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
@@ -46,7 +47,7 @@ namespace NPOI.OpenXmlFormats.Dml {
             this.noResizeField = false;
         }
         
-        /// <remarks/>
+    
         public CT_OfficeArtExtensionList extLst {
             get {
                 return this.extLstField;
@@ -56,7 +57,7 @@ namespace NPOI.OpenXmlFormats.Dml {
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         [DefaultValue(false)]
         public bool noGrp {
@@ -68,7 +69,7 @@ namespace NPOI.OpenXmlFormats.Dml {
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         [DefaultValue(false)]
         public bool noUngrp {
@@ -80,7 +81,7 @@ namespace NPOI.OpenXmlFormats.Dml {
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         [DefaultValue(false)]
         public bool noSelect {
@@ -92,7 +93,7 @@ namespace NPOI.OpenXmlFormats.Dml {
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         [DefaultValue(false)]
         public bool noRot {
@@ -104,7 +105,7 @@ namespace NPOI.OpenXmlFormats.Dml {
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         [DefaultValue(false)]
         public bool noChangeAspect {
@@ -116,7 +117,7 @@ namespace NPOI.OpenXmlFormats.Dml {
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         [DefaultValue(false)]
         public bool noMove {
@@ -128,7 +129,7 @@ namespace NPOI.OpenXmlFormats.Dml {
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         [DefaultValue(false)]
         public bool noResize {
@@ -141,7 +142,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
@@ -152,7 +153,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         
         private CT_OfficeArtExtensionList extLstField;
         
-        /// <remarks/>
+    
         public CT_GroupLocking grpSpLocks {
             get {
                 return this.grpSpLocksField;
@@ -162,7 +163,7 @@ namespace NPOI.OpenXmlFormats.Dml {
             }
         }
         
-        /// <remarks/>
+    
         public CT_OfficeArtExtensionList extLst {
             get {
                 return this.extLstField;
@@ -174,7 +175,7 @@ namespace NPOI.OpenXmlFormats.Dml {
     }
    
     
-    /// <remarks/>
+
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
@@ -204,7 +205,7 @@ namespace NPOI.OpenXmlFormats.Dml {
             this.noResizeField = false;
         }
         
-        /// <remarks/>
+    
         public CT_OfficeArtExtensionList extLst {
             get {
                 return this.extLstField;
@@ -214,7 +215,7 @@ namespace NPOI.OpenXmlFormats.Dml {
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         [DefaultValue(false)]
         public bool noGrp {
@@ -226,7 +227,7 @@ namespace NPOI.OpenXmlFormats.Dml {
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         [DefaultValue(false)]
         public bool noDrilldown {
@@ -238,7 +239,7 @@ namespace NPOI.OpenXmlFormats.Dml {
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         [DefaultValue(false)]
         public bool noSelect {
@@ -250,7 +251,7 @@ namespace NPOI.OpenXmlFormats.Dml {
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         [DefaultValue(false)]
         public bool noChangeAspect {
@@ -262,7 +263,7 @@ namespace NPOI.OpenXmlFormats.Dml {
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         [DefaultValue(false)]
         public bool noMove {
@@ -274,7 +275,7 @@ namespace NPOI.OpenXmlFormats.Dml {
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         [DefaultValue(false)]
         public bool noResize {
@@ -287,7 +288,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
@@ -298,7 +299,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         
         private CT_OfficeArtExtensionList extLstField;
         
-        /// <remarks/>
+    
         public CT_GraphicalObjectFrameLocking graphicFrameLocks {
             get {
                 return this.graphicFrameLocksField;
@@ -308,7 +309,7 @@ namespace NPOI.OpenXmlFormats.Dml {
             }
         }
         
-        /// <remarks/>
+    
         public CT_OfficeArtExtensionList extLst {
             get {
                 return this.extLstField;
@@ -318,7 +319,7 @@ namespace NPOI.OpenXmlFormats.Dml {
             }
         }
     }
-    /// <remarks/>
+
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
@@ -360,7 +361,7 @@ namespace NPOI.OpenXmlFormats.Dml {
             this.noChangeShapeTypeField = false;
         }
         
-        /// <remarks/>
+    
         public CT_OfficeArtExtensionList extLst {
             get {
                 return this.extLstField;
@@ -370,7 +371,7 @@ namespace NPOI.OpenXmlFormats.Dml {
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         [DefaultValue(false)]
         public bool noGrp {
@@ -382,7 +383,7 @@ namespace NPOI.OpenXmlFormats.Dml {
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         [DefaultValue(false)]
         public bool noSelect {
@@ -394,7 +395,7 @@ namespace NPOI.OpenXmlFormats.Dml {
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         [DefaultValue(false)]
         public bool noRot {
@@ -406,7 +407,7 @@ namespace NPOI.OpenXmlFormats.Dml {
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         [DefaultValue(false)]
         public bool noChangeAspect {
@@ -418,7 +419,7 @@ namespace NPOI.OpenXmlFormats.Dml {
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         [DefaultValue(false)]
         public bool noMove {
@@ -430,7 +431,7 @@ namespace NPOI.OpenXmlFormats.Dml {
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         [DefaultValue(false)]
         public bool noResize {
@@ -442,7 +443,7 @@ namespace NPOI.OpenXmlFormats.Dml {
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         [DefaultValue(false)]
         public bool noEditPoints {
@@ -454,7 +455,7 @@ namespace NPOI.OpenXmlFormats.Dml {
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         [DefaultValue(false)]
         public bool noAdjustHandles {
@@ -466,7 +467,7 @@ namespace NPOI.OpenXmlFormats.Dml {
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         [DefaultValue(false)]
         public bool noChangeArrowheads {
@@ -478,7 +479,7 @@ namespace NPOI.OpenXmlFormats.Dml {
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         [DefaultValue(false)]
         public bool noChangeShapeType {
@@ -491,7 +492,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
@@ -506,7 +507,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         
         private CT_OfficeArtExtensionList extLstField;
         
-        /// <remarks/>
+    
         public CT_ConnectorLocking cxnSpLocks {
             get {
                 return this.cxnSpLocksField;
@@ -516,7 +517,7 @@ namespace NPOI.OpenXmlFormats.Dml {
             }
         }
         
-        /// <remarks/>
+    
         public CT_Connection stCxn {
             get {
                 return this.stCxnField;
@@ -526,7 +527,7 @@ namespace NPOI.OpenXmlFormats.Dml {
             }
         }
         
-        /// <remarks/>
+    
         public CT_Connection endCxn {
             get {
                 return this.endCxnField;
@@ -536,7 +537,7 @@ namespace NPOI.OpenXmlFormats.Dml {
             }
         }
         
-        /// <remarks/>
+    
         public CT_OfficeArtExtensionList extLst {
             get {
                 return this.extLstField;
@@ -546,32 +547,32 @@ namespace NPOI.OpenXmlFormats.Dml {
             }
         }
     }
-    /// <remarks/>
+
     [System.Serializable]
     [System.Xml.Serialization.XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IncludeInSchema=false)]
     public enum ItemsChoiceType2 {
         
-        /// <remarks/>
+    
         arcTo,
         
-        /// <remarks/>
+    
         close,
         
-        /// <remarks/>
+    
         cubicBezTo,
         
-        /// <remarks/>
+    
         lnTo,
         
-        /// <remarks/>
+    
         moveTo,
         
-        /// <remarks/>
+    
         quadBezTo,
     }
     
     
-    /// <remarks/>
+
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
@@ -616,7 +617,7 @@ namespace NPOI.OpenXmlFormats.Dml {
             this.noTextEditField = false;
         }
         
-        /// <remarks/>
+    
         public CT_OfficeArtExtensionList extLst {
             get {
                 return this.extLstField;
@@ -626,7 +627,7 @@ namespace NPOI.OpenXmlFormats.Dml {
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         [DefaultValue(false)]
         public bool noGrp {
@@ -638,7 +639,7 @@ namespace NPOI.OpenXmlFormats.Dml {
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         [DefaultValue(false)]
         public bool noSelect {
@@ -650,7 +651,7 @@ namespace NPOI.OpenXmlFormats.Dml {
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         [DefaultValue(false)]
         public bool noRot {
@@ -662,7 +663,7 @@ namespace NPOI.OpenXmlFormats.Dml {
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         [DefaultValue(false)]
         public bool noChangeAspect {
@@ -674,7 +675,7 @@ namespace NPOI.OpenXmlFormats.Dml {
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         [DefaultValue(false)]
         public bool noMove {
@@ -686,7 +687,7 @@ namespace NPOI.OpenXmlFormats.Dml {
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         [DefaultValue(false)]
         public bool noResize {
@@ -698,7 +699,7 @@ namespace NPOI.OpenXmlFormats.Dml {
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         [DefaultValue(false)]
         public bool noEditPoints {
@@ -710,7 +711,7 @@ namespace NPOI.OpenXmlFormats.Dml {
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         [DefaultValue(false)]
         public bool noAdjustHandles {
@@ -722,7 +723,7 @@ namespace NPOI.OpenXmlFormats.Dml {
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         [DefaultValue(false)]
         public bool noChangeArrowheads {
@@ -734,7 +735,7 @@ namespace NPOI.OpenXmlFormats.Dml {
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         [DefaultValue(false)]
         public bool noChangeShapeType {
@@ -746,7 +747,7 @@ namespace NPOI.OpenXmlFormats.Dml {
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         [DefaultValue(false)]
         public bool noTextEdit {
@@ -759,7 +760,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
@@ -776,7 +777,7 @@ namespace NPOI.OpenXmlFormats.Dml {
             this.txBoxField = false;
         }
         
-        /// <remarks/>
+    
         public CT_ShapeLocking spLocks {
             get {
                 return this.spLocksField;
@@ -786,7 +787,7 @@ namespace NPOI.OpenXmlFormats.Dml {
             }
         }
         
-        /// <remarks/>
+    
         public CT_OfficeArtExtensionList extLst {
             get {
                 return this.extLstField;
@@ -796,7 +797,7 @@ namespace NPOI.OpenXmlFormats.Dml {
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlAttribute]
         [DefaultValue(false)]
         public bool txBox {
@@ -811,7 +812,7 @@ namespace NPOI.OpenXmlFormats.Dml {
     
       
     
-    /// <remarks/>
+
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
@@ -825,7 +826,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         
         private CT_OfficeArtExtensionList extLstField;
         
-        /// <remarks/>
+    
         public CT_TextBody txBody {
             get {
                 return this.txBodyField;
@@ -835,7 +836,7 @@ namespace NPOI.OpenXmlFormats.Dml {
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlElement("useSpRect", typeof(CT_GvmlUseShapeRectangle))]
         [System.Xml.Serialization.XmlElement("xfrm", typeof(CT_Transform2D))]
         public object Item {
@@ -847,7 +848,7 @@ namespace NPOI.OpenXmlFormats.Dml {
             }
         }
         
-        /// <remarks/>
+    
         public CT_OfficeArtExtensionList extLst {
             get {
                 return this.extLstField;
@@ -858,19 +859,18 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
-    [System.Xml.Serialization.XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
+    [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
     public partial class CT_GvmlShapeNonVisual {
         
         private CT_NonVisualDrawingProps cNvPrField;
         
         private CT_NonVisualDrawingShapeProps cNvSpPrField;
         
-        /// <remarks/>
+    
         public CT_NonVisualDrawingProps cNvPr {
             get {
                 return this.cNvPrField;
@@ -880,7 +880,7 @@ namespace NPOI.OpenXmlFormats.Dml {
             }
         }
         
-        /// <remarks/>
+    
         public CT_NonVisualDrawingShapeProps cNvSpPr {
             get {
                 return this.cNvSpPrField;
@@ -891,7 +891,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
@@ -909,7 +909,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         
         private CT_OfficeArtExtensionList extLstField;
         
-        /// <remarks/>
+    
         public CT_GvmlShapeNonVisual nvSpPr {
             get {
                 return this.nvSpPrField;
@@ -919,7 +919,7 @@ namespace NPOI.OpenXmlFormats.Dml {
             }
         }
         
-        /// <remarks/>
+    
         public CT_ShapeProperties spPr {
             get {
                 return this.spPrField;
@@ -929,7 +929,7 @@ namespace NPOI.OpenXmlFormats.Dml {
             }
         }
         
-        /// <remarks/>
+    
         public CT_GvmlTextShape txSp {
             get {
                 return this.txSpField;
@@ -939,7 +939,7 @@ namespace NPOI.OpenXmlFormats.Dml {
             }
         }
         
-        /// <remarks/>
+    
         public CT_ShapeStyle style {
             get {
                 return this.styleField;
@@ -949,7 +949,7 @@ namespace NPOI.OpenXmlFormats.Dml {
             }
         }
         
-        /// <remarks/>
+    
         public CT_OfficeArtExtensionList extLst {
             get {
                 return this.extLstField;
@@ -960,7 +960,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
@@ -972,7 +972,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         
         private CT_NonVisualConnectorProperties cNvCxnSpPrField;
         
-        /// <remarks/>
+    
         public CT_NonVisualDrawingProps cNvPr {
             get {
                 return this.cNvPrField;
@@ -982,7 +982,7 @@ namespace NPOI.OpenXmlFormats.Dml {
             }
         }
         
-        /// <remarks/>
+    
         public CT_NonVisualConnectorProperties cNvCxnSpPr {
             get {
                 return this.cNvCxnSpPrField;
@@ -993,7 +993,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
@@ -1009,7 +1009,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         
         private CT_OfficeArtExtensionList extLstField;
         
-        /// <remarks/>
+    
         public CT_GvmlConnectorNonVisual nvCxnSpPr {
             get {
                 return this.nvCxnSpPrField;
@@ -1019,7 +1019,7 @@ namespace NPOI.OpenXmlFormats.Dml {
             }
         }
         
-        /// <remarks/>
+    
         public CT_ShapeProperties spPr {
             get {
                 return this.spPrField;
@@ -1029,7 +1029,7 @@ namespace NPOI.OpenXmlFormats.Dml {
             }
         }
         
-        /// <remarks/>
+    
         public CT_ShapeStyle style {
             get {
                 return this.styleField;
@@ -1039,7 +1039,7 @@ namespace NPOI.OpenXmlFormats.Dml {
             }
         }
         
-        /// <remarks/>
+    
         public CT_OfficeArtExtensionList extLst {
             get {
                 return this.extLstField;
@@ -1050,19 +1050,18 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [System.Xml.Serialization.XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
-    [System.Xml.Serialization.XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_GvmlPictureNonVisual {
         
         private CT_NonVisualDrawingProps cNvPrField;
         
         private CT_NonVisualPictureProperties cNvPicPrField;
         
-        /// <remarks/>
+    
         public CT_NonVisualDrawingProps cNvPr {
             get {
                 return this.cNvPrField;
@@ -1072,7 +1071,7 @@ namespace NPOI.OpenXmlFormats.Dml {
             }
         }
         
-        /// <remarks/>
+    
         public CT_NonVisualPictureProperties cNvPicPr {
             get {
                 return this.cNvPicPrField;
@@ -1083,7 +1082,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
@@ -1101,7 +1100,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         
         private CT_OfficeArtExtensionList extLstField;
         
-        /// <remarks/>
+    
         public CT_GvmlPictureNonVisual nvPicPr {
             get {
                 return this.nvPicPrField;
@@ -1111,7 +1110,7 @@ namespace NPOI.OpenXmlFormats.Dml {
             }
         }
         
-        /// <remarks/>
+    
         public CT_BlipFillProperties blipFill {
             get {
                 return this.blipFillField;
@@ -1121,7 +1120,7 @@ namespace NPOI.OpenXmlFormats.Dml {
             }
         }
         
-        /// <remarks/>
+    
         public CT_ShapeProperties spPr {
             get {
                 return this.spPrField;
@@ -1131,7 +1130,7 @@ namespace NPOI.OpenXmlFormats.Dml {
             }
         }
         
-        /// <remarks/>
+    
         public CT_ShapeStyle style {
             get {
                 return this.styleField;
@@ -1141,7 +1140,7 @@ namespace NPOI.OpenXmlFormats.Dml {
             }
         }
         
-        /// <remarks/>
+    
         public CT_OfficeArtExtensionList extLst {
             get {
                 return this.extLstField;
@@ -1152,7 +1151,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
@@ -1164,7 +1163,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         
         private CT_NonVisualGraphicFrameProperties cNvGraphicFramePrField;
         
-        /// <remarks/>
+    
         public CT_NonVisualDrawingProps cNvPr {
             get {
                 return this.cNvPrField;
@@ -1174,7 +1173,7 @@ namespace NPOI.OpenXmlFormats.Dml {
             }
         }
         
-        /// <remarks/>
+    
         public CT_NonVisualGraphicFrameProperties cNvGraphicFramePr {
             get {
                 return this.cNvGraphicFramePrField;
@@ -1185,7 +1184,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
@@ -1201,7 +1200,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         
         private CT_OfficeArtExtensionList extLstField;
         
-        /// <remarks/>
+    
         public CT_GvmlGraphicFrameNonVisual nvGraphicFramePr {
             get {
                 return this.nvGraphicFramePrField;
@@ -1211,7 +1210,7 @@ namespace NPOI.OpenXmlFormats.Dml {
             }
         }
         
-        /// <remarks/>
+    
         public CT_GraphicalObject graphic {
             get {
                 return this.graphicField;
@@ -1221,7 +1220,7 @@ namespace NPOI.OpenXmlFormats.Dml {
             }
         }
         
-        /// <remarks/>
+    
         public CT_Transform2D xfrm {
             get {
                 return this.xfrmField;
@@ -1231,7 +1230,7 @@ namespace NPOI.OpenXmlFormats.Dml {
             }
         }
         
-        /// <remarks/>
+    
         public CT_OfficeArtExtensionList extLst {
             get {
                 return this.extLstField;
@@ -1242,7 +1241,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
@@ -1254,7 +1253,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         
         private CT_NonVisualGroupDrawingShapeProps cNvGrpSpPrField;
         
-        /// <remarks/>
+    
         public CT_NonVisualDrawingProps cNvPr {
             get {
                 return this.cNvPrField;
@@ -1264,7 +1263,7 @@ namespace NPOI.OpenXmlFormats.Dml {
             }
         }
         
-        /// <remarks/>
+    
         public CT_NonVisualGroupDrawingShapeProps cNvGrpSpPr {
             get {
                 return this.cNvGrpSpPrField;
@@ -1275,7 +1274,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
     }
     
-    /// <remarks/>
+
     [System.Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
@@ -1291,7 +1290,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         
         private CT_OfficeArtExtensionList extLstField;
         
-        /// <remarks/>
+    
         public CT_GvmlGroupShapeNonVisual nvGrpSpPr {
             get {
                 return this.nvGrpSpPrField;
@@ -1301,7 +1300,7 @@ namespace NPOI.OpenXmlFormats.Dml {
             }
         }
         
-        /// <remarks/>
+    
         public CT_GroupShapeProperties grpSpPr {
             get {
                 return this.grpSpPrField;
@@ -1311,7 +1310,7 @@ namespace NPOI.OpenXmlFormats.Dml {
             }
         }
         
-        /// <remarks/>
+    
         [System.Xml.Serialization.XmlElement("cxnSp", typeof(CT_GvmlConnector))]
         [System.Xml.Serialization.XmlElement("graphicFrame", typeof(CT_GvmlGraphicalObjectFrame))]
         [System.Xml.Serialization.XmlElement("grpSp", typeof(CT_GvmlGroupShape))]
@@ -1327,7 +1326,7 @@ namespace NPOI.OpenXmlFormats.Dml {
             }
         }
         
-        /// <remarks/>
+    
         public CT_OfficeArtExtensionList extLst {
             get {
                 return this.extLstField;

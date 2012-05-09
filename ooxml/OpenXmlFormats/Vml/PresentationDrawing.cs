@@ -1,8 +1,9 @@
 using System;
+using System.Xml.Serialization;
 namespace NPOI.OpenXmlFormats.Vml
 {
     
-    /// <remarks/>
+
     [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
@@ -11,7 +12,7 @@ namespace NPOI.OpenXmlFormats.Vml
     public partial class CT_Empty {
     }
     
-    /// <remarks/>
+
     [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
@@ -21,9 +22,11 @@ namespace NPOI.OpenXmlFormats.Vml
         
         private string idField;
         
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttribute]
-        public string id {
+    
+        // TODO is the following correct?
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/relationships")]
+        public string id
+        {
             get {
                 return this.idField;
             }

@@ -7,20 +7,20 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     #region Range Permission
 
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
+    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
     public enum ST_ProofErr
     {
 
-        /// <remarks/>
+    
         spellStart,
 
-        /// <remarks/>
+    
         spellEnd,
 
-        /// <remarks/>
+    
         gramStart,
 
-        /// <remarks/>
+    
         gramEnd,
     }
 
@@ -28,8 +28,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
     [System.SerializableAttribute()]
 
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
-    [System.Xml.Serialization.XmlRootAttribute(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
+    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
+    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
     public class CT_Perm
     {
 
@@ -39,6 +39,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         private bool displacedByCustomXmlFieldSpecified;
 
+        // TODO is the following correct/better with regard the namespace?
+        //[XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/relationships")]
         [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
         public string id
         {
@@ -82,8 +84,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
     [System.SerializableAttribute()]
 
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
-    [System.Xml.Serialization.XmlRootAttribute(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
+    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
+    [System.Xml.Serialization.XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
     public class CT_PermStart : CT_Perm
     {
 
@@ -165,29 +167,29 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
 
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
+    [System.Xml.Serialization.XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
     public enum ST_EdGrp
     {
 
-        /// <remarks/>
+    
         none,
 
-        /// <remarks/>
+    
         everyone,
 
-        /// <remarks/>
+    
         administrators,
 
-        /// <remarks/>
+    
         contributors,
 
-        /// <remarks/>
+    
         editors,
 
-        /// <remarks/>
+    
         owners,
 
-        /// <remarks/>
+    
         current,
     }
     #endregion

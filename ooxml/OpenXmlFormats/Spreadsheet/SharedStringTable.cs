@@ -397,47 +397,47 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     public enum ST_HorizontalAlignment
     {
 
-        /// <remarks/>
+    
         general,
 
-        /// <remarks/>
+    
         left,
 
-        /// <remarks/>
+    
         center,
 
-        /// <remarks/>
+    
         right,
 
-        /// <remarks/>
+    
         fill,
 
-        /// <remarks/>
+    
         justify,
 
-        /// <remarks/>
+    
         centerContinuous,
 
-        /// <remarks/>
+    
         distributed,
     }
 
     public enum ST_VerticalAlignment
     {
 
-        /// <remarks/>
+    
         top,
 
-        /// <remarks/>
+    
         center,
 
-        /// <remarks/>
+    
         bottom,
 
-        /// <remarks/>
+    
         justify,
 
-        /// <remarks/>
+    
         distributed,
     }
 
@@ -784,46 +784,46 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     public enum ST_BorderStyle
     {
 
-        /// <remarks/>
+    
         none,
 
-        /// <remarks/>
+    
         thin,
 
-        /// <remarks/>
+    
         medium,
 
-        /// <remarks/>
+    
         dashed,
 
-        /// <remarks/>
+    
         dotted,
 
-        /// <remarks/>
+    
         thick,
 
-        /// <remarks/>
+    
         @double,
 
-        /// <remarks/>
+    
         hair,
 
-        /// <remarks/>
+    
         mediumDashed,
 
-        /// <remarks/>
+    
         dashDot,
 
-        /// <remarks/>
+    
         mediumDashDot,
 
-        /// <remarks/>
+    
         dashDotDot,
 
-        /// <remarks/>
+    
         mediumDashDotDot,
 
-        /// <remarks/>
+    
         slantDashDot,
     }
 
@@ -2103,32 +2103,32 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     public enum ST_PhoneticType
     {
 
-        /// <remarks/>
+    
         halfwidthKatakana,
 
-        /// <remarks/>
+    
         fullwidthKatakana,
 
-        /// <remarks/>
+    
         Hiragana,
 
-        /// <remarks/>
+    
         noConversion,
     }
 
     public enum ST_PhoneticAlignment
     {
 
-        /// <remarks/>
+    
         noControl,
 
-        /// <remarks/>
+    
         left,
 
-        /// <remarks/>
+    
         center,
 
-        /// <remarks/>
+    
         distributed,
     }
 }
