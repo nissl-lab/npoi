@@ -5855,7 +5855,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             this.itemsField = new System.Xml.XmlElement[0];
         }
 
-        [System.Xml.Serialization.XmlAnyElementAttribute(Namespace = "urn:schemas-microsoft-com:office:office", Order = 0)]
+        [XmlAnyElement(Namespace = "urn:schemas-microsoft-com:office:office", Order = 0)]
         public System.Xml.XmlElement[] Items
         {
             get

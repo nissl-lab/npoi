@@ -154,13 +154,12 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
-
     public class CT_Extension
     {
 
         private System.Xml.XmlElement anyField;
 
-        private string uriField;
+        private string uriField = null;
 
         [XmlAnyElement(Order = 0)]
         public System.Xml.XmlElement Any
@@ -186,6 +185,12 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.uriField = value;
             }
         }
+        [XmlIgnore]
+        public bool uriSpecified
+        {
+            get { return (null != uriField); }
+        }
+
     }
 
     [Serializable]
@@ -194,7 +199,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public class CT_ExtensionList
     {
-        private List<CT_Extension> extField = new List<CT_Extension>();
+        private List<CT_Extension> extField = new List<CT_Extension>(); // 0..*
 
         public CT_ExtensionList Copy()
         {

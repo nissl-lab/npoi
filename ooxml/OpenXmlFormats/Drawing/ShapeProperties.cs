@@ -8,58 +8,57 @@ namespace NPOI.OpenXmlFormats.Dml
     public partial class CT_ShapeProperties
     {
 
-        private CT_Transform2D xfrmField;
+        private CT_Transform2D xfrmField = null;
 
-        private CT_CustomGeometry2D custGeomField;
+        private CT_CustomGeometry2D custGeomField = null;
 
-        private CT_PresetGeometry2D prstGeomField;
+        private CT_PresetGeometry2D prstGeomField = null;
 
-        private CT_NoFillProperties noFillField;
+        private CT_NoFillProperties noFillField = null;
 
-        private CT_SolidColorFillProperties solidFillField;
+        private CT_SolidColorFillProperties solidFillField = null;
 
-        private CT_GradientFillProperties gradFillField;
+        private CT_GradientFillProperties gradFillField = null;
 
-        private CT_BlipFillProperties blipFillField;
+        private CT_BlipFillProperties blipFillField = null;
 
-        private CT_PatternFillProperties pattFillField;
+        private CT_PatternFillProperties pattFillField = null;
 
-        private CT_GroupFillProperties grpFillField;
+        private CT_GroupFillProperties grpFillField = null;
 
-        private CT_LineProperties lnField;
+        private CT_LineProperties lnField = null;
 
-        private CT_EffectList effectLstField;
+        private CT_EffectList effectLstField = null;
 
-        private CT_EffectContainer effectDagField;
+        private CT_EffectContainer effectDagField = null;
 
-        private CT_Scene3D scene3dField;
+        private CT_Scene3D scene3dField = null;
 
-        private CT_Shape3D sp3dField;
+        private CT_Shape3D sp3dField = null;
 
-        private CT_OfficeArtExtensionList extLstField;
+        private CT_OfficeArtExtensionList extLstField = null;
 
-        private ST_BlackWhiteMode bwModeField;
+        private ST_BlackWhiteMode bwModeField = ST_BlackWhiteMode.NONE;
 
-        private bool bwModeFieldSpecified;
 
-        public CT_ShapeProperties()
-        {
-            this.extLstField = new CT_OfficeArtExtensionList();
-            this.sp3dField = new CT_Shape3D();
-            this.scene3dField = new CT_Scene3D();
-            this.effectDagField = new CT_EffectContainer();
-            this.effectLstField = new CT_EffectList();
-            //this.lnField = new CT_LineProperties();
-            this.grpFillField = new CT_GroupFillProperties();
-            this.pattFillField = new CT_PatternFillProperties();
-            this.blipFillField = new CT_BlipFillProperties();
-            this.gradFillField = new CT_GradientFillProperties();
-            
-            this.noFillField = new CT_NoFillProperties();
-            this.prstGeomField = new CT_PresetGeometry2D();
-            this.custGeomField = new CT_CustomGeometry2D();
-            //this.xfrmField = new CT_Transform2D();
-        }
+        //public CT_ShapeProperties()
+        //{
+        //    this.extLstField = new CT_OfficeArtExtensionList();
+        //    this.sp3dField = new CT_Shape3D();
+        //    this.scene3dField = new CT_Scene3D();
+        //    this.effectDagField = new CT_EffectContainer();
+        //    this.effectLstField = new CT_EffectList();
+        //    //this.lnField = new CT_LineProperties();
+        //    this.grpFillField = new CT_GroupFillProperties();
+        //    this.pattFillField = new CT_PatternFillProperties();
+        //    this.blipFillField = new CT_BlipFillProperties();
+        //    this.gradFillField = new CT_GradientFillProperties();
+
+        //    this.noFillField = new CT_NoFillProperties();
+        //    this.prstGeomField = new CT_PresetGeometry2D();
+        //    this.custGeomField = new CT_CustomGeometry2D();
+        //    //this.xfrmField = new CT_Transform2D();
+        //}
         public CT_PresetGeometry2D AddNewPrstGeom()
         {
             this.prstGeomField = new CT_PresetGeometry2D();
@@ -77,7 +76,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         public bool IsSetPattFill()
         {
-            return this.pattFillField!=null;
+            return this.pattFillField != null;
         }
         public bool IsSetSolidFill()
         {
@@ -101,6 +100,7 @@ namespace NPOI.OpenXmlFormats.Dml
             this.solidFill = null;
         }
 
+        [XmlElement]
         public CT_Transform2D xfrm
         {
             get
@@ -113,6 +113,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
+        [XmlElement]
         public CT_CustomGeometry2D custGeom
         {
             get
@@ -125,6 +126,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
+        [XmlElement]
         public CT_PresetGeometry2D prstGeom
         {
             get
@@ -137,6 +139,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
+        [XmlElement]
         public CT_NoFillProperties noFill
         {
             get
@@ -149,6 +152,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
+        [XmlElement]
         public CT_SolidColorFillProperties solidFill
         {
             get
@@ -161,6 +165,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
+        [XmlElement]
         public CT_GradientFillProperties gradFill
         {
             get
@@ -173,6 +178,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
+        [XmlElement]
         public CT_BlipFillProperties blipFill
         {
             get
@@ -185,6 +191,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
+        [XmlElement]
         public CT_PatternFillProperties pattFill
         {
             get
@@ -197,6 +204,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
+        [XmlElement]
         public CT_GroupFillProperties grpFill
         {
             get
@@ -209,6 +217,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
+        [XmlElement]
         public CT_LineProperties ln
         {
             get
@@ -221,6 +230,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
+        [XmlElement]
         public CT_EffectList effectLst
         {
             get
@@ -233,6 +243,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
+        [XmlElement]
         public CT_EffectContainer effectDag
         {
             get
@@ -245,6 +256,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
+        [XmlElement]
         public CT_Scene3D scene3d
         {
             get
@@ -257,6 +269,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
+        [XmlElement]
         public CT_Shape3D sp3d
         {
             get
@@ -269,6 +282,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
+        [XmlElement]
         public CT_OfficeArtExtensionList extLst
         {
             get
@@ -281,6 +295,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
+        [XmlAttribute]
         public ST_BlackWhiteMode bwMode
         {
             get
@@ -292,20 +307,13 @@ namespace NPOI.OpenXmlFormats.Dml
                 this.bwModeField = value;
             }
         }
-
         [XmlIgnore]
         public bool bwModeSpecified
         {
-            get
-            {
-                return this.bwModeFieldSpecified;
-            }
-            set
-            {
-                this.bwModeFieldSpecified = value;
-            }
+            get { return ST_BlackWhiteMode.NONE != this.bwModeField; }
         }
     }
+
     [Serializable]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     public partial class CT_GroupShapeProperties

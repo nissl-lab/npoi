@@ -14,18 +14,15 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 ==================================================================== */
+
+using System;
+using System.Globalization;
+using System.Text;
+using System.Text.RegularExpressions;
+using NPOI.SS.Util;
+
 namespace NPOI.SS.UserModel
 {
-    using System;
-    using NPOI.SS.Util;
-    using System.Text;
-    using System.Text.RegularExpressions;
-    using System.Globalization;
-
-
-
-
-
     /**
      * A wrapper around a {@link SimpleDateFormat} instance,
      * which handles a few Excel-style extensions that

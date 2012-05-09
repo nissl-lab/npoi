@@ -2,6 +2,7 @@ using System;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Xml.Serialization;
+using System.Collections.Generic;
 
 namespace NPOI.OpenXmlFormats.Spreadsheet
 {
@@ -38,15 +39,16 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     [XmlRoot(Namespace="http://schemas.openxmlformats.org/spreadsheetml/2006/main", IsNullable=true)]
     public partial class CT_DdeLink {
         
-        private CT_DdeItem[] ddeItemsField;
+        private List<CT_DdeItem> ddeItemsField = null; // 0..1
         
-        private string ddeServiceField;
+        private string ddeServiceField; // 1..1
         
-        private string ddeTopicField;
-        
-    
-        [XmlArrayItem("ddeItem", IsNullable=false)]
-        public CT_DdeItem[] ddeItems {
+        private string ddeTopicField; // 1..1
+
+
+        [XmlArray("ddeItems")]
+        [XmlArrayItem("ddeItem")]
+        public List<CT_DdeItem> ddeItems {
             get {
                 return this.ddeItemsField;
             }

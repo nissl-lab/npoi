@@ -18,7 +18,7 @@ namespace NPOI.OpenXmlFormats.Dml {
         private string uriField;
         
     
-        [System.Xml.Serialization.XmlAnyElementAttribute()]
+        [XmlAnyElement()]
         public System.Xml.XmlElement[] Any {
             get {
                 return this.anyField;

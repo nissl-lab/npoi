@@ -487,7 +487,7 @@ namespace NPOI.OpenXmlFormats {
         private string uriField;
         
     
-        [XmlAnyElementAttribute()]
+        [XmlAnyElement()]
         public System.Xml.XmlElement Any {
             get {
                 return this.anyField;

@@ -18,25 +18,17 @@ namespace NPOI.OpenXmlFormats.Dml
     public class CT_Blip
     {
 
-        private List<object> itemsField;
+        private List<object> itemsField = null;
 
-        private CT_OfficeArtExtensionList extLstField;
+        private CT_OfficeArtExtensionList extLstField = null;
 
-        private string embedField;
+        private string embedField = null;
 
-        private string linkField;
+        private string linkField = null;
 
-        private ST_BlipCompression cstateField;
+        private ST_BlipCompression cstateField = ST_BlipCompression.none;
 
-        public CT_Blip()
-        {
-            this.extLstField = new CT_OfficeArtExtensionList();
-            this.itemsField = new List<object>();
-            this.embedField = "";
-            this.linkField = "";
-            this.cstateField = ST_BlipCompression.none;
-        }
-
+        [XmlElement]
         public List<object> Items
         {
             get
@@ -49,6 +41,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
+        [XmlElement]
         public CT_OfficeArtExtensionList extLst
         {
             get
@@ -61,6 +54,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
+        [XmlAttribute]
         [DefaultValue("")]
         public string embed
         {
@@ -74,6 +68,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
+        [XmlAttribute]
         [DefaultValue("")]
         public string link
         {
@@ -87,6 +82,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
+        [XmlAttribute]
         [DefaultValue(ST_BlipCompression.none)]
         public ST_BlipCompression cstate
         {
@@ -104,127 +100,127 @@ namespace NPOI.OpenXmlFormats.Dml
     public enum ST_RectAlignment
     {
 
-    
+
         tl,
 
-    
+
         t,
 
-    
+
         tr,
 
-    
+
         l,
 
-    
+
         ctr,
 
-    
+
         r,
 
-    
+
         bl,
 
-    
+
         b,
 
-    
+
         br,
     }
 
     public enum ST_SystemColorVal
     {
 
-    
+
         scrollBar,
 
-    
+
         background,
 
-    
+
         activeCaption,
 
-    
+
         inactiveCaption,
 
-    
+
         menu,
 
-    
+
         window,
 
-    
+
         windowFrame,
 
-    
+
         menuText,
 
-    
+
         windowText,
 
-    
+
         captionText,
 
-    
+
         activeBorder,
 
-    
+
         inactiveBorder,
 
-    
+
         appWorkspace,
 
-    
+
         highlight,
 
-    
+
         highlightText,
 
-    
+
         btnFace,
 
-    
+
         btnShadow,
 
-    
+
         grayText,
 
-    
+
         btnText,
 
-    
+
         inactiveCaptionText,
 
-    
+
         btnHighlight,
 
-    
+
         [XmlEnum("3dDkShadow")]
         Item3dDkShadow,
 
-    
+
         [XmlEnum("3dLight")]
         Item3dLight,
 
-    
+
         infoText,
 
-    
+
         infoBk,
 
-    
+
         hotLight,
 
-    
+
         gradientActiveCaption,
 
-    
+
         gradientInactiveCaption,
 
-    
+
         menuHighlight,
 
-    
+
         menuBar,
     }
 
@@ -232,19 +228,19 @@ namespace NPOI.OpenXmlFormats.Dml
     public enum ST_BlipCompression
     {
 
-    
+
         email,
 
-    
+
         screen,
 
-    
+
         print,
 
-    
+
         hqprint,
 
-    
+
         none,
     }
 
@@ -1024,190 +1020,190 @@ namespace NPOI.OpenXmlFormats.Dml
     public enum ST_PresetCameraType
     {
 
-    
+
         legacyObliqueTopLeft,
 
-    
+
         legacyObliqueTop,
 
-    
+
         legacyObliqueTopRight,
 
-    
+
         legacyObliqueLeft,
 
-    
+
         legacyObliqueFront,
 
-    
+
         legacyObliqueRight,
 
-    
+
         legacyObliqueBottomLeft,
 
-    
+
         legacyObliqueBottom,
 
-    
+
         legacyObliqueBottomRight,
 
-    
+
         legacyPerspectiveTopLeft,
 
-    
+
         legacyPerspectiveTop,
 
-    
+
         legacyPerspectiveTopRight,
 
-    
+
         legacyPerspectiveLeft,
 
-    
+
         legacyPerspectiveFront,
 
-    
+
         legacyPerspectiveRight,
 
-    
+
         legacyPerspectiveBottomLeft,
 
-    
+
         legacyPerspectiveBottom,
 
-    
+
         legacyPerspectiveBottomRight,
 
-    
+
         orthographicFront,
 
-    
+
         isometricTopUp,
 
-    
+
         isometricTopDown,
 
-    
+
         isometricBottomUp,
 
-    
+
         isometricBottomDown,
 
-    
+
         isometricLeftUp,
 
-    
+
         isometricLeftDown,
 
-    
+
         isometricRightUp,
 
-    
+
         isometricRightDown,
 
-    
+
         isometricOffAxis1Left,
 
-    
+
         isometricOffAxis1Right,
 
-    
+
         isometricOffAxis1Top,
 
-    
+
         isometricOffAxis2Left,
 
-    
+
         isometricOffAxis2Right,
 
-    
+
         isometricOffAxis2Top,
 
-    
+
         isometricOffAxis3Left,
 
-    
+
         isometricOffAxis3Right,
 
-    
+
         isometricOffAxis3Bottom,
 
-    
+
         isometricOffAxis4Left,
 
-    
+
         isometricOffAxis4Right,
 
-    
+
         isometricOffAxis4Bottom,
 
-    
+
         obliqueTopLeft,
 
-    
+
         obliqueTop,
 
-    
+
         obliqueTopRight,
 
-    
+
         obliqueLeft,
 
-    
+
         obliqueRight,
 
-    
+
         obliqueBottomLeft,
 
-    
+
         obliqueBottom,
 
-    
+
         obliqueBottomRight,
 
-    
+
         perspectiveFront,
 
-    
+
         perspectiveLeft,
 
-    
+
         perspectiveRight,
 
-    
+
         perspectiveAbove,
 
-    
+
         perspectiveBelow,
 
-    
+
         perspectiveAboveLeftFacing,
 
-    
+
         perspectiveAboveRightFacing,
 
-    
+
         perspectiveContrastingLeftFacing,
 
-    
+
         perspectiveContrastingRightFacing,
 
-    
+
         perspectiveHeroicLeftFacing,
 
-    
+
         perspectiveHeroicRightFacing,
 
-    
+
         perspectiveHeroicExtremeLeftFacing,
 
-    
+
         perspectiveHeroicExtremeRightFacing,
 
-    
+
         perspectiveRelaxed,
 
-    
+
         perspectiveRelaxedModerately,
     }
 
@@ -1267,113 +1263,113 @@ namespace NPOI.OpenXmlFormats.Dml
     public enum ST_LightRigType
     {
 
-    
+
         legacyFlat1,
 
-    
+
         legacyFlat2,
 
-    
+
         legacyFlat3,
 
-    
+
         legacyFlat4,
 
-    
+
         legacyNormal1,
 
-    
+
         legacyNormal2,
 
-    
+
         legacyNormal3,
 
-    
+
         legacyNormal4,
 
-    
+
         legacyHarsh1,
 
-    
+
         legacyHarsh2,
 
-    
+
         legacyHarsh3,
 
-    
+
         legacyHarsh4,
 
-    
+
         threePt,
 
-    
+
         balanced,
 
-    
+
         soft,
 
-    
+
         harsh,
 
-    
+
         flood,
 
-    
+
         contrasting,
 
-    
+
         morning,
 
-    
+
         sunrise,
 
-    
+
         sunset,
 
-    
+
         chilly,
 
-    
+
         freezing,
 
-    
+
         flat,
 
-    
+
         twoPt,
 
-    
+
         glow,
 
-    
+
         brightRoom,
     }
 
     public enum ST_LightRigDirection
     {
 
-    
+
         tl,
 
-    
+
         t,
 
-    
+
         tr,
 
-    
+
         l,
 
-    
+
         r,
 
-    
+
         bl,
 
-    
+
         b,
 
-    
+
         br,
     }
 
@@ -1657,89 +1653,89 @@ namespace NPOI.OpenXmlFormats.Dml
     public enum ST_BevelPresetType
     {
 
-    
+
         relaxedInset,
 
-    
+
         circle,
 
-    
+
         slope,
 
-    
+
         cross,
 
-    
+
         angle,
 
-    
+
         softRound,
 
-    
+
         convex,
 
-    
+
         coolSlant,
 
-    
+
         divot,
 
-    
+
         riblet,
 
-    
+
         hardEdge,
 
-    
+
         artDeco,
     }
 
     public enum ST_PresetMaterialType
     {
 
-    
+
         legacyMatte,
 
-    
+
         legacyPlastic,
 
-    
+
         legacyMetal,
 
-    
+
         legacyWireframe,
 
-    
+
         matte,
 
-    
+
         plastic,
 
-    
+
         metal,
 
-    
+
         warmMatte,
 
-    
+
         translucentPowder,
 
-    
+
         powder,
 
-    
+
         dkEdge,
 
-    
+
         softEdge,
 
-    
+
         clear,
 
-    
+
         flat,
 
-    
+
         softmetal,
     }
 
@@ -1866,62 +1862,23 @@ namespace NPOI.OpenXmlFormats.Dml
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     public class CT_LineProperties
     {
+        private CT_NoFillProperties noFillField = null;
+        private CT_SolidColorFillProperties solidFillField = null;
+        private CT_GradientFillProperties gradFillField = null;
+        private CT_PatternFillProperties pattFillField = null;
+        private CT_PresetLineDashProperties prstDashField = null;
+        private List<CT_DashStop> custDashField = null;
+        private CT_LineJoinRound roundField = null;
+        private CT_LineJoinBevel bevelField = null;
+        private CT_LineJoinMiterProperties miterField = null;
+        private CT_LineEndProperties headEndField = null;
+        private CT_LineEndProperties tailEndField = null;
+        private CT_OfficeArtExtensionList extLstField = null;
 
-        private CT_NoFillProperties noFillField;
-
-        private CT_SolidColorFillProperties solidFillField;
-
-        private CT_GradientFillProperties gradFillField;
-
-        private CT_PatternFillProperties pattFillField;
-
-        private CT_PresetLineDashProperties prstDashField;
-
-        private List<CT_DashStop> custDashField;
-
-        private CT_LineJoinRound roundField;
-
-        private CT_LineJoinBevel bevelField;
-
-        private CT_LineJoinMiterProperties miterField;
-
-        private CT_LineEndProperties headEndField;
-
-        private CT_LineEndProperties tailEndField;
-
-        private CT_OfficeArtExtensionList extLstField;
-
-        private int wField;
-
-        private bool wFieldSpecified;
-
-        private ST_LineCap capField;
-
-        private bool capFieldSpecified;
-
-        private ST_CompoundLine cmpdField;
-
-        private bool cmpdFieldSpecified;
-
-        private ST_PenAlignment algnField;
-
-        private bool algnFieldSpecified;
-
-        public CT_LineProperties()
-        {
-            this.extLstField = new CT_OfficeArtExtensionList();
-            this.tailEndField = new CT_LineEndProperties();
-            this.headEndField = new CT_LineEndProperties();
-            this.miterField = new CT_LineJoinMiterProperties();
-            this.bevelField = new CT_LineJoinBevel();
-            this.roundField = new CT_LineJoinRound();
-            this.custDashField = new List<CT_DashStop>();
-            this.prstDashField = new CT_PresetLineDashProperties();
-            this.pattFillField = new CT_PatternFillProperties();
-            this.gradFillField = new CT_GradientFillProperties();
-            //this.solidFillField = new CT_SolidColorFillProperties();
-            this.noFillField = new CT_NoFillProperties();
-        }
+        private int? wField = null;
+        private ST_LineCap capField = ST_LineCap.NONE;
+        private ST_CompoundLine cmpdField = ST_CompoundLine.NONE;
+        private ST_PenAlignment algnField = ST_PenAlignment.NONE;
 
         public CT_SolidColorFillProperties AddNewSolidFill()
         {
@@ -2078,32 +2035,28 @@ namespace NPOI.OpenXmlFormats.Dml
                 this.extLstField = value;
             }
         }
-        [XmlAttribute()]
+        [XmlAttribute]
         public int w
         {
             get
             {
-                return this.wField;
+                return (int)this.wField;
             }
             set
             {
                 this.wField = value;
             }
         }
-
         [XmlIgnore]
         public bool wSpecified
         {
             get
             {
-                return this.wFieldSpecified;
-            }
-            set
-            {
-                this.wFieldSpecified = value;
+                return null != this.wField;
             }
         }
-        [XmlAttribute()]
+
+        [XmlAttribute]
         public ST_LineCap cap
         {
             get
@@ -2115,20 +2068,16 @@ namespace NPOI.OpenXmlFormats.Dml
                 this.capField = value;
             }
         }
-
         [XmlIgnore]
         public bool capSpecified
         {
             get
             {
-                return this.capFieldSpecified;
-            }
-            set
-            {
-                this.capFieldSpecified = value;
+                return ST_LineCap.NONE != capField;
             }
         }
-        [XmlAttribute()]
+
+        [XmlAttribute]
         public ST_CompoundLine cmpd
         {
             get
@@ -2140,20 +2089,16 @@ namespace NPOI.OpenXmlFormats.Dml
                 this.cmpdField = value;
             }
         }
-
         [XmlIgnore]
         public bool cmpdSpecified
         {
             get
             {
-                return this.cmpdFieldSpecified;
-            }
-            set
-            {
-                this.cmpdFieldSpecified = value;
+                return ST_CompoundLine.NONE != this.cmpdField;
             }
         }
-        [XmlAttribute()]
+
+        [XmlAttribute]
         public ST_PenAlignment algn
         {
             get
@@ -2165,17 +2110,12 @@ namespace NPOI.OpenXmlFormats.Dml
                 this.algnField = value;
             }
         }
-
         [XmlIgnore]
         public bool algnSpecified
         {
             get
             {
-                return this.algnFieldSpecified;
-            }
-            set
-            {
-                this.algnFieldSpecified = value;
+                return ST_PenAlignment.NONE != this.algnField;
             }
         }
     }
@@ -2218,37 +2158,37 @@ namespace NPOI.OpenXmlFormats.Dml
     public enum ST_PresetLineDashVal
     {
 
-    
+
         solid,
 
-    
+
         dot,
 
-    
+
         dash,
 
-    
+
         lgDash,
 
-    
+
         dashDot,
 
-    
+
         lgDashDot,
 
-    
+
         lgDashDotDot,
 
-    
+
         sysDash,
 
-    
+
         sysDot,
 
-    
+
         sysDashDot,
 
-    
+
         sysDashDotDot,
     }
 
@@ -2418,72 +2358,71 @@ namespace NPOI.OpenXmlFormats.Dml
     public enum ST_LineEndType
     {
 
-    
+
         none,
 
-    
+
         triangle,
 
-    
+
         stealth,
 
-    
+
         diamond,
 
-    
+
         oval,
 
-    
+
         arrow,
     }
 
     public enum ST_LineEndWidth
     {
 
-    
+
         sm,
 
-    
+
         med,
 
-    
+
         lg,
     }
 
     public enum ST_LineEndLength
     {
 
-    
+
         sm,
 
-    
+
         med,
 
-    
+
         lg,
     }
 
     public enum ST_LineCap
     {
+        NONE,
 
-    
         rnd,
 
-    
+
         sq,
 
-    
+
         flat,
     }
 
 
     public enum ST_PenAlignment
     {
-
-    
+        NONE,
         ctr,
 
-    
+
         @in,
     }
 
@@ -2787,7 +2726,7 @@ namespace NPOI.OpenXmlFormats.Dml
                     this.itemsElementNameField = new List<ItemsChoiceType1>(value);
             }
         }
-        [XmlAttribute()]
+        [XmlAttribute]
         public ST_PresetColorVal val
         {
             get
@@ -2815,20 +2754,19 @@ namespace NPOI.OpenXmlFormats.Dml
     }
     public enum ST_CompoundLine
     {
-
-    
+        NONE,
         sng,
 
-    
+
         dbl,
 
-    
+
         thickThin,
 
-    
+
         thinThick,
 
-    
+
         tri,
     }
 }

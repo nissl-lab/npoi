@@ -24,8 +24,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             this.itemsField = new System.Xml.XmlElement[0];
         }
 
-        [System.Xml.Serialization.XmlAnyElementAttribute(Namespace = "urn:schemas-microsoft-com:office:office", Order = 0)]
-        [System.Xml.Serialization.XmlAnyElementAttribute(Namespace = "urn:schemas-microsoft-com:vml", Order = 0)]
+        [XmlAnyElement(Namespace = "urn:schemas-microsoft-com:office:office", Order = 0)]
+        [XmlAnyElement(Namespace = "urn:schemas-microsoft-com:vml", Order = 0)]
         [XmlChoiceIdentifier("ItemsElementName")]
         public System.Xml.XmlElement[] Items
         {

@@ -4132,7 +4132,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.rField = value;
             }
         }
-        [XmlAttribute()]
+        [XmlAttribute]
         [DefaultValue(typeof(uint), "0")]
         public uint s
         {
@@ -4145,7 +4145,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.sField = value;
             }
         }
-        [XmlAttribute()]
+        [XmlAttribute]
         [DefaultValue(ST_CellType.n)]
         public ST_CellType t
         {

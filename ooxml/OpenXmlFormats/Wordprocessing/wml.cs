@@ -2239,7 +2239,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [XmlAttribute()]
+        [XmlAttribute]
         [System.ComponentModel.DefaultValueAttribute("")]
         public string invalidUrl
         {
@@ -2253,7 +2253,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [XmlAttribute()]
+        [XmlAttribute]
         [System.ComponentModel.DefaultValueAttribute("")]
         public string action
         {
@@ -2267,7 +2267,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [XmlAttribute()]
+        [XmlAttribute]
         [System.ComponentModel.DefaultValueAttribute("")]
         public string tgtFrame
         {
@@ -2281,7 +2281,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [XmlAttribute()]
+        [XmlAttribute]
         [System.ComponentModel.DefaultValueAttribute("")]
         public string tooltip
         {
@@ -2295,7 +2295,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [XmlAttribute()]
+        [XmlAttribute]
         [System.ComponentModel.DefaultValueAttribute(true)]
         public bool history
         {
@@ -2309,7 +2309,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [XmlAttribute()]
+        [XmlAttribute]
         [System.ComponentModel.DefaultValueAttribute(false)]
         public bool highlightClick
         {
@@ -2323,7 +2323,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [XmlAttribute()]
+        [XmlAttribute]
         [System.ComponentModel.DefaultValueAttribute(false)]
         public bool endSnd
         {

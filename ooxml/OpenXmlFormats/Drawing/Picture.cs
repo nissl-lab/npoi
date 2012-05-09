@@ -117,7 +117,7 @@ namespace NPOI.OpenXmlFormats.Dml
 
         private CT_OfficeArtExtensionList extLstField = null;
 
-        private bool preferRelativeResizeField;
+        private bool? preferRelativeResizeField = null;
 
         public CT_NonVisualPictureProperties()
         {
@@ -130,7 +130,7 @@ namespace NPOI.OpenXmlFormats.Dml
             return picLocksField;
         }
 
-
+        [XmlElement]
         public CT_PictureLocking picLocks
         {
             get
@@ -144,6 +144,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
 
 
+        [XmlElement]
         public CT_OfficeArtExtensionList extLst
         {
             get
@@ -163,13 +164,19 @@ namespace NPOI.OpenXmlFormats.Dml
         {
             get
             {
-                return this.preferRelativeResizeField;
+                return null == this.preferRelativeResizeField ? true : (bool)preferRelativeResizeField;
             }
             set
             {
                 this.preferRelativeResizeField = value;
             }
         }
+        [XmlIgnore]
+        public bool preferRelativeResizeSpecified
+        {
+            get { return (null != preferRelativeResizeField); }
+        }
+
     }
 
     [Serializable]
@@ -178,26 +185,19 @@ namespace NPOI.OpenXmlFormats.Dml
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     public class CT_NonVisualDrawingProps
     {
+        private CT_Hyperlink hlinkClickField = null;
 
-        private CT_Hyperlink hlinkClickField;
+        private CT_Hyperlink hlinkHoverField = null;
 
-        private CT_Hyperlink hlinkHoverField;
+        private CT_OfficeArtExtensionList extLstField = null;
 
-        private CT_OfficeArtExtensionList extLstField;
+        private uint idField; // 1..1
 
-        private uint idField;
+        private string nameField; // 1..1
 
-        private string nameField;
+        private string descrField = null;
 
-        private string descrField;
-
-        private bool hiddenField;
-
-        public CT_NonVisualDrawingProps()
-        {
-            this.descrField = "";
-            this.hiddenField = false;
-        }
+        private bool? hiddenField = null;
 
 
         [XmlElement(Order = 0)]
@@ -276,12 +276,17 @@ namespace NPOI.OpenXmlFormats.Dml
         {
             get
             {
-                return this.descrField;
+                return null == this.descrField ? "" : descrField;
             }
             set
             {
                 this.descrField = value;
             }
+        }
+        [XmlIgnore]
+        public bool descrSpecified
+        {
+            get { return (null != descrField); }
         }
 
 
@@ -291,12 +296,17 @@ namespace NPOI.OpenXmlFormats.Dml
         {
             get
             {
-                return this.hiddenField;
+                return null == this.hiddenField ? false : (bool)hiddenField;
             }
             set
             {
                 this.hiddenField = value;
             }
+        }
+        [XmlIgnore]
+        public bool hiddenSpecified
+        {
+            get { return (null != hiddenField); }
         }
     }
 

@@ -1786,7 +1786,7 @@ namespace NPOI.OpenXmlFormats.Vml
         private string insetField;
         
         
-        [System.Xml.Serialization.XmlAnyElementAttribute()]
+        [XmlAnyElement()]
         public System.Xml.XmlElement Item {
             get {
                 return this.itemField;

@@ -122,7 +122,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [XmlAttribute()]
+        [XmlAttribute]
         public uint distT
         {
             get
@@ -148,7 +148,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [XmlAttribute()]
+        [XmlAttribute]
         public uint distB
         {
             get
@@ -174,7 +174,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [XmlAttribute()]
+        [XmlAttribute]
         public uint distL
         {
             get
@@ -200,7 +200,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [XmlAttribute()]
+        [XmlAttribute]
         public uint distR
         {
             get
@@ -257,7 +257,7 @@ namespace NPOI.OpenXmlFormats.Dml
 
         private long bField;
 
-        [XmlAttribute()]
+        [XmlAttribute]
         public long l
         {
             get
@@ -270,7 +270,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [XmlAttribute()]
+        [XmlAttribute]
         public long t
         {
             get
@@ -283,7 +283,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [XmlAttribute()]
+        [XmlAttribute]
         public long r
         {
             get
@@ -296,7 +296,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [XmlAttribute()]
+        [XmlAttribute]
         public long b
         {
             get
@@ -502,7 +502,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [XmlAttribute()]
+        [XmlAttribute]
         public uint distT
         {
             get
@@ -528,7 +528,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [XmlAttribute()]
+        [XmlAttribute]
         public uint distB
         {
             get
@@ -554,7 +554,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [XmlAttribute()]
+        [XmlAttribute]
         public uint distL
         {
             get
@@ -580,7 +580,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [XmlAttribute()]
+        [XmlAttribute]
         public uint distR
         {
             get
@@ -632,7 +632,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [XmlAttribute()]
+        [XmlAttribute]
         public uint relativeHeight
         {
             get
@@ -645,7 +645,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [XmlAttribute()]
+        [XmlAttribute]
         public bool behindDoc
         {
             get
@@ -658,7 +658,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [XmlAttribute()]
+        [XmlAttribute]
         public bool locked
         {
             get
@@ -671,7 +671,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [XmlAttribute()]
+        [XmlAttribute]
         public bool layoutInCell
         {
             get
@@ -684,7 +684,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [XmlAttribute()]
+        [XmlAttribute]
         public bool hidden
         {
             get
@@ -710,7 +710,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [XmlAttribute()]
+        [XmlAttribute]
         public bool allowOverlap
         {
             get
@@ -750,7 +750,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [XmlAttribute()]
+        [XmlAttribute]
         public ST_RelFromH relativeFrom
         {
             get
@@ -843,7 +843,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [XmlAttribute()]
+        [XmlAttribute]
         public ST_RelFromV relativeFrom
         {
             get
@@ -968,7 +968,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [XmlAttribute()]
+        [XmlAttribute]
         public ST_WrapText wrapText
         {
             get
@@ -981,7 +981,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [XmlAttribute()]
+        [XmlAttribute]
         public uint distT
         {
             get
@@ -1007,7 +1007,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [XmlAttribute()]
+        [XmlAttribute]
         public uint distB
         {
             get
@@ -1033,7 +1033,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [XmlAttribute()]
+        [XmlAttribute]
         public uint distL
         {
             get
@@ -1059,7 +1059,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [XmlAttribute()]
+        [XmlAttribute]
         public uint distR
         {
             get
@@ -1146,7 +1146,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [XmlAttribute()]
+        [XmlAttribute]
         public ST_WrapText wrapText
         {
             get
@@ -1159,7 +1159,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [XmlAttribute()]
+        [XmlAttribute]
         public uint distL
         {
             get
@@ -1185,7 +1185,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [XmlAttribute()]
+        [XmlAttribute]
         public uint distR
         {
             get
@@ -1262,7 +1262,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [XmlAttribute()]
+        [XmlAttribute]
         public bool edited
         {
             get
@@ -1330,7 +1330,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [XmlAttribute()]
+        [XmlAttribute]
         public ST_WrapText wrapText
         {
             get
@@ -1343,7 +1343,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [XmlAttribute()]
+        [XmlAttribute]
         public uint distL
         {
             get
@@ -1369,7 +1369,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [XmlAttribute()]
+        [XmlAttribute]
         public uint distR
         {
             get
@@ -1435,7 +1435,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [XmlAttribute()]
+        [XmlAttribute]
         public uint distT
         {
             get
@@ -1461,7 +1461,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [XmlAttribute()]
+        [XmlAttribute]
         public uint distB
         {
             get

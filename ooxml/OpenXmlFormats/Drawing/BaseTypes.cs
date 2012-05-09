@@ -18,11 +18,11 @@ namespace NPOI.OpenXmlFormats.Dml
     public class CT_OfficeArtExtension
     {
 
-        private System.Xml.XmlElement anyField;
+        private System.Xml.XmlElement anyField; // 1..1
 
-        private string uriField;
+        private string uriField = null;
 
-        [System.Xml.Serialization.XmlAnyElementAttribute(Order = 0)]
+        [XmlAnyElement(Order = 0)]
         public System.Xml.XmlElement Any
         {
             get
@@ -46,6 +46,12 @@ namespace NPOI.OpenXmlFormats.Dml
                 this.uriField = value;
             }
         }
+        [XmlIgnore]
+        public bool uriSpecified
+        {
+            get { return (null != uriField); }
+        }
+
     }
 
     [Serializable]
@@ -538,176 +544,176 @@ namespace NPOI.OpenXmlFormats.Dml
     public enum ItemsChoiceType1
     {
 
-    
+
         alpha,
 
-    
+
         alphaMod,
 
-    
+
         alphaOff,
 
-    
+
         blue,
 
-    
+
         blueMod,
 
-    
+
         blueOff,
 
-    
+
         comp,
 
-    
+
         gamma,
 
-    
+
         gray,
 
-    
+
         green,
 
-    
+
         greenMod,
 
-    
+
         greenOff,
 
-    
+
         hue,
 
-    
+
         hueMod,
 
-    
+
         hueOff,
 
-    
+
         inv,
 
-    
+
         invGamma,
 
-    
+
         lum,
 
-    
+
         lumMod,
 
-    
+
         lumOff,
 
-    
+
         red,
 
-    
+
         redMod,
 
-    
+
         redOff,
 
-    
+
         sat,
 
-    
+
         satMod,
 
-    
+
         satOff,
 
-    
+
         shade,
 
-    
+
         tint,
     }
 
     public enum ItemsChoiceType3
     {
 
-    
+
         alpha,
 
-    
+
         alphaMod,
 
-    
+
         alphaOff,
 
-    
+
         blue,
 
-    
+
         blueMod,
 
-    
+
         blueOff,
 
-    
+
         comp,
 
-    
+
         gamma,
 
-    
+
         gray,
 
-    
+
         green,
 
-    
+
         greenMod,
 
-    
+
         greenOff,
 
-    
+
         hue,
 
-    
+
         hueMod,
 
-    
+
         hueOff,
 
-    
+
         inv,
 
-    
+
         invGamma,
 
-    
+
         lum,
 
-    
+
         lumMod,
 
-    
+
         lumOff,
 
-    
+
         red,
 
-    
+
         redMod,
 
-    
+
         redOff,
 
-    
+
         sat,
 
-    
+
         satMod,
 
-    
+
         satOff,
 
-    
+
         shade,
 
-    
+
         tint,
     }
 
@@ -791,7 +797,7 @@ namespace NPOI.OpenXmlFormats.Dml
                     this.itemsElementNameField = new List<ItemsChoiceType4>(value);
             }
         }
-        [XmlAttribute()]
+        [XmlAttribute]
         public ST_SchemeColorVal val
         {
             get
@@ -808,143 +814,143 @@ namespace NPOI.OpenXmlFormats.Dml
     public enum ItemsChoiceType4
     {
 
-    
+
         alpha,
 
-    
+
         alphaMod,
 
-    
+
         alphaOff,
 
-    
+
         blue,
 
-    
+
         blueMod,
 
-    
+
         blueOff,
 
-    
+
         comp,
 
-    
+
         gamma,
 
-    
+
         gray,
 
-    
+
         green,
 
-    
+
         greenMod,
 
-    
+
         greenOff,
 
-    
+
         hue,
 
-    
+
         hueMod,
 
-    
+
         hueOff,
 
-    
+
         inv,
 
-    
+
         invGamma,
 
-    
+
         lum,
 
-    
+
         lumMod,
 
-    
+
         lumOff,
 
-    
+
         red,
 
-    
+
         redMod,
 
-    
+
         redOff,
 
-    
+
         sat,
 
-    
+
         satMod,
 
-    
+
         satOff,
 
-    
+
         shade,
 
-    
+
         tint,
     }
 
     public enum ST_SchemeColorVal
     {
 
-    
+
         bg1,
 
-    
+
         tx1,
 
-    
+
         bg2,
 
-    
+
         tx2,
 
-    
+
         accent1,
 
-    
+
         accent2,
 
-    
+
         accent3,
 
-    
+
         accent4,
 
-    
+
         accent5,
 
-    
+
         accent6,
 
-    
+
         hlink,
 
-    
+
         folHlink,
 
-    
+
         phClr,
 
-    
+
         dk1,
 
-    
+
         lt1,
 
-    
+
         dk2,
 
-    
+
         lt2,
     }
 
@@ -952,424 +958,424 @@ namespace NPOI.OpenXmlFormats.Dml
     public enum ST_PresetColorVal
     {
 
-    
+
         aliceBlue,
 
-    
+
         antiqueWhite,
 
-    
+
         aqua,
 
-    
+
         aquamarine,
 
-    
+
         azure,
 
-    
+
         beige,
 
-    
+
         bisque,
 
-    
+
         black,
 
-    
+
         blanchedAlmond,
 
-    
+
         blue,
 
-    
+
         blueViolet,
 
-    
+
         brown,
 
-    
+
         burlyWood,
 
-    
+
         cadetBlue,
 
-    
+
         chartreuse,
 
-    
+
         chocolate,
 
-    
+
         coral,
 
-    
+
         cornflowerBlue,
 
-    
+
         cornsilk,
 
-    
+
         crimson,
 
-    
+
         cyan,
 
-    
+
         dkBlue,
 
-    
+
         dkCyan,
 
-    
+
         dkGoldenrod,
 
-    
+
         dkGray,
 
-    
+
         dkGreen,
 
-    
+
         dkKhaki,
 
-    
+
         dkMagenta,
 
-    
+
         dkOliveGreen,
 
-    
+
         dkOrange,
 
-    
+
         dkOrchid,
 
-    
+
         dkRed,
 
-    
+
         dkSalmon,
 
-    
+
         dkSeaGreen,
 
-    
+
         dkSlateBlue,
 
-    
+
         dkSlateGray,
 
-    
+
         dkTurquoise,
 
-    
+
         dkViolet,
 
-    
+
         deepPink,
 
-    
+
         deepSkyBlue,
 
-    
+
         dimGray,
 
-    
+
         dodgerBlue,
 
-    
+
         firebrick,
 
-    
+
         floralWhite,
 
-    
+
         forestGreen,
 
-    
+
         fuchsia,
 
-    
+
         gainsboro,
 
-    
+
         ghostWhite,
 
-    
+
         gold,
 
-    
+
         goldenrod,
 
-    
+
         gray,
 
-    
+
         green,
 
-    
+
         greenYellow,
 
-    
+
         honeydew,
 
-    
+
         hotPink,
 
-    
+
         indianRed,
 
-    
+
         indigo,
 
-    
+
         ivory,
 
-    
+
         khaki,
 
-    
+
         lavender,
 
-    
+
         lavenderBlush,
 
-    
+
         lawnGreen,
 
-    
+
         lemonChiffon,
 
-    
+
         ltBlue,
 
-    
+
         ltCoral,
 
-    
+
         ltCyan,
 
-    
+
         ltGoldenrodYellow,
 
-    
+
         ltGray,
 
-    
+
         ltGreen,
 
-    
+
         ltPink,
 
-    
+
         ltSalmon,
 
-    
+
         ltSeaGreen,
 
-    
+
         ltSkyBlue,
 
-    
+
         ltSlateGray,
 
-    
+
         ltSteelBlue,
 
-    
+
         ltYellow,
 
-    
+
         lime,
 
-    
+
         limeGreen,
 
-    
+
         linen,
 
-    
+
         magenta,
 
-    
+
         maroon,
 
-    
+
         medAquamarine,
 
-    
+
         medBlue,
 
-    
+
         medOrchid,
 
-    
+
         medPurple,
 
-    
+
         medSeaGreen,
 
-    
+
         medSlateBlue,
 
-    
+
         medSpringGreen,
 
-    
+
         medTurquoise,
 
-    
+
         medVioletRed,
 
-    
+
         midnightBlue,
 
-    
+
         mintCream,
 
-    
+
         mistyRose,
 
-    
+
         moccasin,
 
-    
+
         navajoWhite,
 
-    
+
         navy,
 
-    
+
         oldLace,
 
-    
+
         olive,
 
-    
+
         oliveDrab,
 
-    
+
         orange,
 
-    
+
         orangeRed,
 
-    
+
         orchid,
 
-    
+
         paleGoldenrod,
 
-    
+
         paleGreen,
 
-    
+
         paleTurquoise,
 
-    
+
         paleVioletRed,
 
-    
+
         papayaWhip,
 
-    
+
         peachPuff,
 
-    
+
         peru,
 
-    
+
         pink,
 
-    
+
         plum,
 
-    
+
         powderBlue,
 
-    
+
         purple,
 
-    
+
         red,
 
-    
+
         rosyBrown,
 
-    
+
         royalBlue,
 
-    
+
         saddleBrown,
 
-    
+
         salmon,
 
-    
+
         sandyBrown,
 
-    
+
         seaGreen,
 
-    
+
         seaShell,
 
-    
+
         sienna,
 
-    
+
         silver,
 
-    
+
         skyBlue,
 
-    
+
         slateBlue,
 
-    
+
         slateGray,
 
-    
+
         snow,
 
-    
+
         springGreen,
 
-    
+
         steelBlue,
 
-    
+
         tan,
 
-    
+
         teal,
 
-    
+
         thistle,
 
-    
+
         tomato,
 
-    
+
         turquoise,
 
-    
+
         violet,
 
-    
+
         wheat,
 
-    
+
         white,
 
-    
+
         whiteSmoke,
 
-    
+
         yellow,
 
-    
+
         yellowGreen,
     }
 
@@ -1378,13 +1384,14 @@ namespace NPOI.OpenXmlFormats.Dml
     public class CT_OfficeArtExtensionList
     {
 
-        private List<CT_OfficeArtExtension> extField;
+        private List<CT_OfficeArtExtension> extField = null; // 0..*
 
         public CT_OfficeArtExtensionList()
         {
             this.extField = new List<CT_OfficeArtExtension>();
         }
 
+        [XmlElement]
         public List<CT_OfficeArtExtension> ext
         {
             get
@@ -1443,24 +1450,15 @@ namespace NPOI.OpenXmlFormats.Dml
     public class CT_Transform2D
     {
 
-        private CT_Point2D offField;
+        private CT_Point2D offField = null;
 
-        private CT_PositiveSize2D extField;
+        private CT_PositiveSize2D extField = null;
 
-        private int rotField;
+        private int? rotField = null;
 
-        private bool flipHField;
+        private bool? flipHField = null;
 
-        private bool flipVField;
-
-        public CT_Transform2D()
-        {
-            //this.extField = new CT_PositiveSize2D();
-            //this.offField = new CT_Point2D();
-            this.rotField = 0;
-            this.flipHField = false;
-            this.flipVField = false;
-        }
+        private bool? flipVField = null;
 
         public CT_PositiveSize2D AddNewExt()
         {
@@ -1472,6 +1470,8 @@ namespace NPOI.OpenXmlFormats.Dml
             this.offField = new CT_Point2D();
             return this.offField;
         }
+
+        [XmlElement]
         public CT_Point2D off
         {
             get
@@ -1484,6 +1484,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
+        [XmlElement]
         public CT_PositiveSize2D ext
         {
             get
@@ -1496,43 +1497,61 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
+        [XmlAttribute]
         [DefaultValue(0)]
         public int rot
         {
             get
             {
-                return this.rotField;
+                return null == this.rotField ? 0 : (int)rotField;
             }
             set
             {
                 this.rotField = value;
             }
         }
+        [XmlIgnore]
+        public bool rotSpecified
+        {
+            get { return (null != rotField); }
+        }
 
+        [XmlAttribute]
         [DefaultValue(false)]
         public bool flipH
         {
             get
             {
-                return this.flipHField;
+                return null == this.flipHField ? false:(bool)flipHField;
             }
             set
             {
                 this.flipHField = value;
             }
         }
+        [XmlIgnore]
+        public bool flipHSpecified
+        {
+            get { return (null != flipHField); }
+        }
 
+        [XmlAttribute]
         [DefaultValue(false)]
         public bool flipV
         {
             get
             {
-                return this.flipVField;
+                return null == this.flipVField ? false:(bool)flipVField;
             }
             set
             {
                 this.flipVField = value;
             }
+        }
+        [XmlIgnore]
+        public bool flipVSpecified
+        {
+            get { return (null != flipVField); }
         }
     }
 
@@ -1824,73 +1843,58 @@ namespace NPOI.OpenXmlFormats.Dml
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     public class CT_RelativeRect
     {
+        private int? lField; // all attributes are percentage
+        private int? tField;
+        private int? rField;
+        private int? bField;
 
-        private int lField;
-
-        private int tField;
-
-        private int rField;
-
-        private int bField;
-
-        public CT_RelativeRect()
-        {
-            this.lField = 0;
-            this.tField = 0;
-            this.rField = 0;
-            this.bField = 0;
-        }
-
+        [XmlAttribute]
         [DefaultValue(0)]
         public int l
         {
-            get
-            {
-                return this.lField;
-            }
-            set
-            {
-                this.lField = value;
-            }
+            get { return (int)this.lField; }
+            set { this.lField = value; }
+        }
+        [XmlIgnore]
+        public bool lSpecified
+        {
+            get { return (null != lField); }
         }
 
         [DefaultValue(0)]
         public int t
         {
-            get
-            {
-                return this.tField;
-            }
-            set
-            {
-                this.tField = value;
-            }
+            get { return (int)this.tField; }
+            set { this.tField = value; }
+        }
+        [XmlIgnore]
+        public bool tSpecified
+        {
+            get { return (null != tField); }
         }
 
         [DefaultValue(0)]
         public int r
         {
-            get
-            {
-                return this.rField;
-            }
-            set
-            {
-                this.rField = value;
-            }
+            get { return (int)this.rField; }
+            set { this.rField = value; }
+        }
+        [XmlIgnore]
+        public bool rSpecified
+        {
+            get { return (null != rField); }
         }
 
         [DefaultValue(0)]
         public int b
         {
-            get
-            {
-                return this.bField;
-            }
-            set
-            {
-                this.bField = value;
-            }
+            get { return (int)this.bField; }
+            set { this.bField = value; }
+        }
+        [XmlIgnore]
+        public bool bSpecified
+        {
+            get { return (null != bField); }
         }
     }
 
@@ -2243,38 +2247,38 @@ namespace NPOI.OpenXmlFormats.Dml
     }
     public enum ST_BlackWhiteMode
     {
+        NONE,
 
-    
         clr,
 
-    
+
         auto,
 
-    
+
         gray,
 
-    
+
         ltGray,
 
-    
+
         invGray,
 
-    
+
         grayWhite,
 
-    
+
         blackGray,
 
-    
+
         blackWhite,
 
-    
+
         black,
 
-    
+
         white,
 
-    
+
         hidden,
     }
 }

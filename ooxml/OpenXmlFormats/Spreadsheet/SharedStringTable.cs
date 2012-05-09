@@ -395,47 +395,47 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     public enum ST_HorizontalAlignment
     {
 
-    
+
         general,
 
-    
+
         left,
 
-    
+
         center,
 
-    
+
         right,
 
-    
+
         fill,
 
-    
+
         justify,
 
-    
+
         centerContinuous,
 
-    
+
         distributed,
     }
 
     public enum ST_VerticalAlignment
     {
 
-    
+
         top,
 
-    
+
         center,
 
-    
+
         bottom,
 
-    
+
         justify,
 
-    
+
         distributed,
     }
 
@@ -564,7 +564,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             return this.bottomField;
         }
 
-        [XmlElement(Namespace="http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
+        [XmlElement(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
         public CT_BorderPr left
         {
             get
@@ -782,46 +782,46 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     public enum ST_BorderStyle
     {
 
-    
+
         none,
 
-    
+
         thin,
 
-    
+
         medium,
 
-    
+
         dashed,
 
-    
+
         dotted,
 
-    
+
         thick,
 
-    
+
         @double,
 
-    
+
         hair,
 
-    
+
         mediumDashed,
 
-    
+
         dashDot,
 
-    
+
         mediumDashDot,
 
-    
+
         dashDotDot,
 
-    
+
         mediumDashDotDot,
 
-    
+
         slantDashDot,
     }
 
@@ -830,13 +830,9 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     public class CT_CellProtection
     {
 
-        private bool? lockedField;
+        private bool? lockedField = null;
 
-        private bool lockedFieldSpecified;
-
-        private bool? hiddenField;
-
-        private bool hiddenFieldSpecified;
+        private bool? hiddenField = null;
 
         public bool IsSetHidden()
         {
@@ -847,32 +843,25 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             return this.lockedField != null;
         }
 
-
-        public bool? locked
+        [XmlAttribute]
+        public bool locked
         {
             get
             {
-                return this.lockedField;
+                return (bool)this.lockedField;
             }
             set
             {
                 this.lockedField = value;
             }
         }
-
         [XmlIgnore]
         public bool lockedSpecified
         {
-            get
-            {
-                return this.lockedFieldSpecified;
-            }
-            set
-            {
-                this.lockedFieldSpecified = value;
-            }
+            get { return null != this.lockedField; }
         }
 
+        [XmlAttribute]
         public bool hidden
         {
             get
@@ -884,18 +873,10 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.hiddenField = value;
             }
         }
-
         [XmlIgnore]
         public bool hiddenSpecified
         {
-            get
-            {
-                return this.hiddenFieldSpecified;
-            }
-            set
-            {
-                this.hiddenFieldSpecified = value;
-            }
+            get { return null != this.hiddenField; }
         }
     }
 
@@ -2101,32 +2082,32 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     public enum ST_PhoneticType
     {
 
-    
+
         halfwidthKatakana,
 
-    
+
         fullwidthKatakana,
 
-    
+
         Hiragana,
 
-    
+
         noConversion,
     }
 
     public enum ST_PhoneticAlignment
     {
 
-    
+
         noControl,
 
-    
+
         left,
 
-    
+
         center,
 
-    
+
         distributed,
     }
 }
