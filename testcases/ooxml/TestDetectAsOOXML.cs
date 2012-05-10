@@ -16,17 +16,14 @@
    limitations under the License.
 ==================================================================== */
 
+using System.IO;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NPOI.OpenXml4Net.OPC;
+using NPOI.Util;
+using TestCases.HSSF;
 
 namespace NPOI.OOXML
 {
-
-    using NPOI.OpenXml4Net.OPC;
-    using System.IO;
-    using NPOI.Util;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-    using NPOI;
-    using NPOI.HSSF;
-    using TestCases.HSSF;
 
     /**
      * Class to test that HXF correctly detects OOXML

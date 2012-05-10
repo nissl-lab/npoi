@@ -32,13 +32,15 @@
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>..\..\main\npoi.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <OutputPath>..\..\solution\Lib\Debug.net4\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;HIDE_UNREACHABLE_CODE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
@@ -47,8 +49,8 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
+    <OutputPath>..\..\solution\Lib\Release.net4\</OutputPath>
+    <DefineConstants>TRACE;HIDE_UNREACHABLE_CODE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
@@ -56,7 +58,7 @@
   <ItemGroup>
     <Reference Include="ICSharpCode.SharpZipLib, Version=0.86.0.518, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\solution\Lib\ICSharpCode.SharpZipLib.dll</HintPath>
+      <HintPath>..\..\solution\Lib\Release.net4\ICSharpCode.SharpZipLib.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
@@ -101,9 +103,7 @@
     <Compile Include="XSSF\UserModel\TestXSSFCellStyle.cs" />
     <Compile Include="XSSF\UserModel\TestXSSFComment.cs" />
     <Compile Include="XSSF\UserModel\TestXSSFDataFormat.cs" />
-    <Compile Include="XSSF\UserModel\TestXSSFFont.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="XSSF\UserModel\TestXSSFFont.cs" />
     <Compile Include="XSSF\UserModel\TestXSSFHeaderFooter.cs" />
     <Compile Include="XSSF\UserModel\TestXSSFHyperlink.cs" />
     <Compile Include="XSSF\UserModel\TestXSSFName.cs" />
@@ -118,9 +118,7 @@
     <Compile Include="XSSF\XSSFTestDataSamples.cs" />
     <Compile Include="XWPF\Model\TestXWPFDecorators.cs" />
     <Compile Include="XWPF\Model\TestXWPFHeaderFooterPolicy.cs" />
-    <Compile Include="XWPF\TestDocumentProtection.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="XWPF\TestDocumentProtection.cs" />
     <Compile Include="XWPF\TestPackageCorePropertiesGetKeywords.cs" />
     <Compile Include="XWPF\UserModel\TestXWPFDocument.cs" />
     <Compile Include="XWPF\UserModel\TestXWPFFootnotes.cs" />
@@ -137,7 +135,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\main\main vs10.csproj">
-      <Project>{4704E545-CEFF-46B6-ACEF-C8927830FA1C}</Project>
+      <Project>{10FA8538-157A-4380-A4F6-8E2C3EE92CAE}</Project>
       <Name>main vs10</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\ooxml\OOXML vs2010.csproj">
@@ -145,11 +143,11 @@
       <Name>OOXML vs2010</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\ooxml\openxml4Net\OpenXml4Net vs2010.csproj">
-      <Project>{D907A7AD-A67A-4492-A117-594D2168B7B8}</Project>
+      <Project>{C9F265B7-ECE3-4755-B0B1-79536575C2A9}</Project>
       <Name>OpenXml4Net vs2010</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\ooxml\OpenXmlFormats\OpenXmlFormats vs2010.csproj">
-      <Project>{29E4D389-8B1B-45D8-B197-06116395F5ED}</Project>
+      <Project>{A6874784-2875-4F40-9E8F-8385A640F5D6}</Project>
       <Name>OpenXmlFormats vs2010</Name>
     </ProjectReference>
     <ProjectReference Include="..\main\basetestlib vs10.csproj">
@@ -164,6 +162,11 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <Shadow Include="Test References\NPOI.OpenXmlFormats.accessor" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\main\npoi.snk">
+      <Link>npoi.snk</Link>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0">

@@ -5,13 +5,13 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("OpenXml4Net.NET")]
+[assembly: AssemblyTitle("NPOI OpenXml4Net")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("OpenXml4Net.NET")]
-[assembly: AssemblyCopyright("Copyright ©  2009")]
-[assembly: AssemblyTrademark("")]
+[assembly: AssemblyCompany("NPOI team, https://code.google.com/p/npoi/")]
+[assembly: AssemblyProduct("NPOI")]
+[assembly: AssemblyCopyright("Apache 2.0")]
+[assembly: AssemblyTrademark("NPOI")]
 [assembly: AssemblyCulture("")]
 
 // Setting ComVisible to false makes the types in this assembly not visible 
