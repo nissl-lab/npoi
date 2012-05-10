@@ -5,7 +5,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{4704E545-CEFF-46B6-ACEF-C8927830FA1C}</ProjectGuid>
+    <ProjectGuid>{10FA8538-157A-4380-A4F6-8E2C3EE92CAE}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>NPOI</RootNamespace>
@@ -40,26 +40,25 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\solution\Lib\.net4\</OutputPath>
+    <OutputPath>..\solution\Lib\Debug.net4\</OutputPath>
     <DefineConstants>DEBUG;TRACE;HIDE_UNREACHABLE_CODE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <CodeAnalysisRuleSet>BasicCorrectnessRules.ruleset</CodeAnalysisRuleSet>
     <RunCodeAnalysis>false</RunCodeAnalysis>
     <CodeAnalysisIgnoreGeneratedCode>false</CodeAnalysisIgnoreGeneratedCode>
-    <DocumentationFile>
-    </DocumentationFile>
+    <DocumentationFile>..\solution\Lib\Debug.net4\NPOI.XML</DocumentationFile>
     <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\solution\Lib\.net4\</OutputPath>
+    <OutputPath>..\solution\Lib\Release.net4\</OutputPath>
     <DefineConstants>TRACE;HIDE_UNREACHABLE_CODE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
-    <DocumentationFile>..\solution\Lib\.net4\NPOI.XML</DocumentationFile>
+    <CodeAnalysisRuleSet>BasicCorrectnessRules.ruleset</CodeAnalysisRuleSet>
+    <DocumentationFile>..\solution\Lib\Release.net4\NPOI.XML</DocumentationFile>
     <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <ItemGroup>
@@ -71,7 +70,7 @@
     <Reference Include="System.Configuration" />
     <Reference Include="Ionic.Zip, Version=1.9.1.5, Culture=neutral, PublicKeyToken=edbe51ad942a3f5c">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>Lib\Ionic.Zip.dll</HintPath>
+      <HintPath>..\solution\Lib\Release.net4\Ionic.Zip.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -83,12 +82,8 @@
     <Compile Include="HSSF\Model\Model.cs" />
     <Compile Include="HSSF\Record\Aggregates\ChartSubstreamRecordAggregate.cs" />
     <Compile Include="HSSF\Record\Aggregates\WorksheetProtectionBlock.cs" />
-    <Compile Include="HSSF\Record\AutoFilter\AutoFilterRecord.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="HSSF\Record\AutoFilter\FilterModeRecord.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="HSSF\Record\AutoFilter\AutoFilterRecord.cs" />
+    <Compile Include="HSSF\Record\AutoFilter\FilterModeRecord.cs" />
     <Compile Include="HSSF\Record\Common\FeatFormulaErr2.cs" />
     <Compile Include="HSSF\Record\Common\FeatProtection.cs" />
     <Compile Include="HSSF\Record\Common\FeatSmartTag.cs" />
@@ -299,15 +294,9 @@
     <Compile Include="HSSF\Record\Chart\ValueRangeRecord.cs" />
     <Compile Include="HSSF\Record\CodepageRecord.cs" />
     <Compile Include="HSSF\Record\ColumnInfoRecord.cs" />
-    <Compile Include="POIFS\EventFileSystem\POIFSWriterEvent.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="POIFS\EventFileSystem\POIFSWriterEventArgs.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="POIFS\EventFileSystem\POIFSWriterListener.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="POIFS\EventFileSystem\POIFSWriterEvent.cs" />
+    <Compile Include="POIFS\EventFileSystem\POIFSWriterEventArgs.cs" />
+    <Compile Include="POIFS\EventFileSystem\POIFSWriterListener.cs" />
     <Compile Include="POIFS\FileSystem\BlockStore.cs" />
     <Compile Include="POIFS\FileSystem\CloseIgnoringInputStream.cs" />
     <Compile Include="POIFS\FileSystem\DocumentInputStream.cs" />
@@ -318,9 +307,7 @@
     <Compile Include="POIFS\FileSystem\NPOIFSMiniStore.cs" />
     <Compile Include="POIFS\FileSystem\NPOIFSStream.cs" />
     <Compile Include="POIFS\FileSystem\ODocumentInputStream.cs" />
-    <Compile Include="POIFS\FileSystem\POIFSDocument.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="POIFS\FileSystem\POIFSDocument.cs" />
     <Compile Include="POIFS\NIO\ByteArrayBackedDataSource.cs" />
     <Compile Include="POIFS\NIO\FileBackedDataSource.cs" />
     <Compile Include="POIFS\NIO\DataSource.cs" />
@@ -328,13 +315,9 @@
     <Compile Include="POIFS\property\PropertyTableBase.cs" />
     <Compile Include="POIFS\Storage\HeaderBlock.cs" />
     <Compile Include="SS\Extractor\ExcelExtractor.cs" />
-    <Compile Include="SS\Format\CellDateFormatter.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="SS\Format\CellDateFormatter.cs" />
     <Compile Include="SS\Format\CellElapsedFormatter.cs" />
-    <Compile Include="SS\Format\CellFormat.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="SS\Format\CellFormat.cs" />
     <Compile Include="SS\Format\CellFormatCondition.cs" />
     <Compile Include="SS\Format\CellFormatPart.cs" />
     <Compile Include="SS\Format\CellFormatResult.cs" />
@@ -494,16 +477,10 @@
     <Compile Include="POIFS\Dev\POIFSViewEngine.cs" />
     <Compile Include="POIFS\Dev\POIFSViewer.cs" />
     <Compile Include="POIFS\EventFileSystem\POIFSReader.cs" />
-    <Compile Include="POIFS\EventFileSystem\POIFSReaderEvent.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="POIFS\EventFileSystem\POIFSReaderEvent.cs" />
     <Compile Include="POIFS\EventFileSystem\POIFSReaderEventArgs.cs" />
-    <Compile Include="POIFS\EventFileSystem\POIFSReaderListener.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="POIFS\EventFileSystem\POIFSReaderRegistry.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="POIFS\EventFileSystem\POIFSReaderListener.cs" />
+    <Compile Include="POIFS\EventFileSystem\POIFSReaderRegistry.cs" />
     <Compile Include="POIFS\FileSystem\BATManaged.cs" />
     <Compile Include="SS\Formula\Eval\Forked\ForkedEvaluationCell.cs" />
     <Compile Include="SS\Formula\Eval\Forked\ForkedEvaluationSheet.cs" />
@@ -951,9 +928,7 @@
     <Compile Include="SS\UserModel\DateUtil.cs" />
     <Compile Include="SS\UserModel\Drawing.cs" />
     <Compile Include="SS\UserModel\ErrorConstants.cs" />
-    <Compile Include="SS\UserModel\ExcelStyleDateFormatter.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="SS\UserModel\ExcelStyleDateFormatter.cs" />
     <Compile Include="SS\UserModel\FillPatternType.cs" />
     <Compile Include="SS\UserModel\Font.cs" />
     <Compile Include="SS\UserModel\FontCharset.cs" />
@@ -1003,9 +978,7 @@
     <Compile Include="SS\Util\Format.cs" />
     <Compile Include="SS\Util\IEEEDouble.cs" />
     <Compile Include="SS\Util\MutableFPNumber.cs" />
-    <Compile Include="SS\Util\NormalisedDecimal.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="SS\Util\NormalisedDecimal.cs" />
     <Compile Include="SS\Util\NumberComparer.cs" />
     <Compile Include="SS\Util\NumberToTextConverter.cs" />
     <Compile Include="SS\Util\PaneInformation.cs" />
@@ -1013,9 +986,7 @@
     <Compile Include="SS\Util\RegionUtil.cs" />
     <Compile Include="SS\Util\SheetBuilder.cs" />
     <Compile Include="SS\Util\SheetReferences.cs" />
-    <Compile Include="SS\Util\SheetUtil.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="SS\Util\SheetUtil.cs" />
     <Compile Include="SS\Util\SSCellRange.cs" />
     <Compile Include="SS\Util\WorkbookUtil.cs" />
     <Compile Include="Util\Arrays.cs" />

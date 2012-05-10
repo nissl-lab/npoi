@@ -5,12 +5,12 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{D907A7AD-A67A-4492-A117-594D2168B7B8}</ProjectGuid>
+    <ProjectGuid>{C9F265B7-ECE3-4755-B0B1-79536575C2A9}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>NPOI.OpenXml4Net</RootNamespace>
     <AssemblyName>NPOI.OpenXml4Net</AssemblyName>
-    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\..\main\npoi.snk</AssemblyOriginatorKeyFile>
@@ -33,37 +33,37 @@
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
+    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\solution\Lib\</OutputPath>
+    <OutputPath>..\..\solution\Lib\Debug.net4\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <CodeAnalysisRuleSet>BasicCorrectnessRules.ruleset</CodeAnalysisRuleSet>
     <CodeAnalysisIgnoreGeneratedCode>false</CodeAnalysisIgnoreGeneratedCode>
     <RunCodeAnalysis>false</RunCodeAnalysis>
+    <DocumentationFile>..\solution\Lib\Debug.net4\NPOI.OpenXml4Net.XML</DocumentationFile>
+    <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
+    <OutputPath>..\..\solution\Lib\Release.net4\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>BasicCorrectnessRules.ruleset</CodeAnalysisRuleSet>
+    <DocumentationFile>..\solution\Lib\Release.net4\NPOI.OpenXml4Net.XML</DocumentationFile>
+    <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="ICSharpCode.SharpZipLib, Version=0.86.0.518, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\solution\Lib\ICSharpCode.SharpZipLib.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="NPOI, Version=1.2.4.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\solution\Lib\NPOI.dll</HintPath>
+      <HintPath>..\..\solution\Lib\Release.net4\ICSharpCode.SharpZipLib.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -80,51 +80,23 @@
     <Compile Include="OPC\Configuration.cs" />
     <Compile Include="OPC\ContentTypes.cs" />
     <Compile Include="OPC\EncryptionOption.cs" />
-    <Compile Include="OPC\Internal\ContentType.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="OPC\Internal\ContentTypeManager.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="OPC\Internal\FileHelper.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="OPC\Internal\ContentType.cs" />
+    <Compile Include="OPC\Internal\ContentTypeManager.cs" />
+    <Compile Include="OPC\Internal\FileHelper.cs" />
     <Compile Include="OPC\Internal\Marshallers\DefaultMarshaller.cs" />
-    <Compile Include="OPC\Internal\Marshallers\PackagePropertiesMarshaller.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="OPC\Internal\Marshallers\ZipPackagePropertiesMarshaller.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="OPC\Internal\Marshallers\ZipPartMarshaller.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="OPC\Internal\Marshallers\PackagePropertiesMarshaller.cs" />
+    <Compile Include="OPC\Internal\Marshallers\ZipPackagePropertiesMarshaller.cs" />
+    <Compile Include="OPC\Internal\Marshallers\ZipPartMarshaller.cs" />
     <Compile Include="OPC\Internal\MemoryPackagePart.cs" />
     <Compile Include="OPC\Internal\MemoryPackagePartOutputStream.cs" />
-    <Compile Include="OPC\Internal\PackagePropertiesPart.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="OPC\Internal\PartMarshaller.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="OPC\Internal\PartUnmarshaller.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="OPC\Internal\Unmarshallers\PackagePropertiesUnmarshaller.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="OPC\Internal\Unmarshallers\UnmarshallContext.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="OPC\Internal\ZipContentTypeManager.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="OPC\Internal\ZipHelper.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="OPC\OPCPackage.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="OPC\Internal\PackagePropertiesPart.cs" />
+    <Compile Include="OPC\Internal\PartMarshaller.cs" />
+    <Compile Include="OPC\Internal\PartUnmarshaller.cs" />
+    <Compile Include="OPC\Internal\Unmarshallers\PackagePropertiesUnmarshaller.cs" />
+    <Compile Include="OPC\Internal\Unmarshallers\UnmarshallContext.cs" />
+    <Compile Include="OPC\Internal\ZipContentTypeManager.cs" />
+    <Compile Include="OPC\Internal\ZipHelper.cs" />
+    <Compile Include="OPC\OPCPackage.cs" />
     <Compile Include="OPC\PackageAccess.cs" />
     <Compile Include="OPC\PackageNamespaces.cs" />
     <Compile Include="OPC\PackagePart.cs" />
@@ -166,6 +138,12 @@
       <ProductName>Windows Installer 3.1</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\main\main vs10.csproj">
+      <Project>{10FA8538-157A-4380-A4F6-8E2C3EE92CAE}</Project>
+      <Name>main vs10</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -37,27 +37,31 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>..\solution\Lib\Debug.net4\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <CodeAnalysisRuleSet>BasicCorrectnessRules.ruleset</CodeAnalysisRuleSet>
     <CodeAnalysisIgnoreGeneratedCode>false</CodeAnalysisIgnoreGeneratedCode>
     <RunCodeAnalysis>false</RunCodeAnalysis>
+    <DocumentationFile>..\solution\Lib\Debug.net4\NPOI.OOXML.XML</DocumentationFile>
+    <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
+    <OutputPath>..\solution\Lib\Release.net4\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>BasicCorrectnessRules.ruleset</CodeAnalysisRuleSet>
+    <DocumentationFile>..\solution\Lib\Release.net4\NPOI.OOXML.XML</DocumentationFile>
+    <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="ICSharpCode.SharpZipLib, Version=0.86.0.518, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\solution\Lib\ICSharpCode.SharpZipLib.dll</HintPath>
+      <HintPath>..\solution\Lib\Release.net4\ICSharpCode.SharpZipLib.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -66,37 +70,27 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="POIXMLDocument.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="POIXMLDocument.cs" />
     <Compile Include="POIXMLDocumentPart.cs" />
     <Compile Include="POIXmlException.cs" />
     <Compile Include="POIXMLFactory.cs" />
-    <Compile Include="POIXMLProperties.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="POIXMLProperties.cs" />
     <Compile Include="POIXMLPropertiesTextExtractor.cs" />
     <Compile Include="POIXMLRelation.cs" />
-    <Compile Include="POIXMLTextExtractor.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="POIXMLTextExtractor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SS\UserModel\WorkbookFactory.cs" />
     <Compile Include="Util\IdentifierManager.cs" />
     <Compile Include="Util\PackageHelper.cs" />
     <Compile Include="Util\Units.cs" />
     <Compile Include="XSSF\Model\CalculationChain.cs" />
-    <Compile Include="XSSF\Model\CommentsTable.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="XSSF\Model\CommentsTable.cs" />
     <Compile Include="XSSF\Model\IndexedUDFFinder.cs" />
     <Compile Include="XSSF\Model\MapInfo.cs" />
     <Compile Include="XSSF\Model\SharedStringsTable.cs" />
     <Compile Include="XSSF\Model\SingleXmlCells.cs" />
     <Compile Include="XSSF\Model\StylesTable.cs" />
-    <Compile Include="XSSF\Model\ThemesTable.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="XSSF\Model\ThemesTable.cs" />
     <Compile Include="XSSF\UserModel\Extensions\XSSFCellAlignment.cs" />
     <Compile Include="XSSF\UserModel\Extensions\XSSFCellBorder.cs" />
     <Compile Include="XSSF\UserModel\Extensions\XSSFCellFill.cs" />
@@ -125,9 +119,7 @@
     <Compile Include="XSSF\UserModel\XSSFDataValidation.cs" />
     <Compile Include="XSSF\UserModel\XSSFDataValidationConstraint.cs" />
     <Compile Include="XSSF\UserModel\XSSFDataValidationHelper.cs" />
-    <Compile Include="XSSF\UserModel\XSSFDialogsheet.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="XSSF\UserModel\XSSFDialogsheet.cs" />
     <Compile Include="XSSF\UserModel\XSSFDrawing.cs" />
     <Compile Include="XSSF\UserModel\XSSFEvaluationCell.cs" />
     <Compile Include="XSSF\UserModel\XSSFEvaluationSheet.cs" />
@@ -158,15 +150,11 @@
     <Compile Include="XSSF\UserModel\XSSFSheet.cs" />
     <Compile Include="XSSF\UserModel\XSSFSheetConditionalFormatting.cs" />
     <Compile Include="XSSF\UserModel\XSSFSimpleShape.cs" />
-    <Compile Include="XSSF\UserModel\XSSFTable.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="XSSF\UserModel\XSSFTable.cs" />
     <Compile Include="XSSF\UserModel\XSSFTextBox.cs" />
     <Compile Include="XSSF\UserModel\XSSFVMLDrawing.cs" />
     <Compile Include="XSSF\UserModel\XSSFWorkbook.cs" />
-    <Compile Include="XSSF\Util\CTColComparator.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="XSSF\Util\CTColComparator.cs" />
     <Compile Include="XSSF\Util\EvilUnclosedBRFixingInputStream.cs" />
     <Compile Include="XSSF\Util\NumericRange.cs" />
     <Compile Include="XWPF\Model\XMLParagraph.cs" />
@@ -176,45 +164,21 @@
     <Compile Include="XWPF\Model\XWPFParagraphDecorator.cs" />
     <Compile Include="XWPF\Usermodel\BodyElementType.cs" />
     <Compile Include="XWPF\Usermodel\BodyType.cs" />
-    <Compile Include="XWPF\Usermodel\Borders.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="XWPF\Usermodel\BreakClear.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="XWPF\Usermodel\BreakType.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="XWPF\Usermodel\Document.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="XWPF\Usermodel\Borders.cs" />
+    <Compile Include="XWPF\Usermodel\BreakClear.cs" />
+    <Compile Include="XWPF\Usermodel\BreakType.cs" />
+    <Compile Include="XWPF\Usermodel\Document.cs" />
     <Compile Include="XWPF\Usermodel\IBody.cs" />
     <Compile Include="XWPF\Usermodel\IBodyElement.cs" />
-    <Compile Include="XWPF\Usermodel\LineSpacingRule.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="XWPF\Usermodel\ParagraphAlignment.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="XWPF\Usermodel\PositionInParagraph.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="XWPF\Usermodel\TextAlignment.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="XWPF\Usermodel\TextSegement.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="XWPF\Usermodel\LineSpacingRule.cs" />
+    <Compile Include="XWPF\Usermodel\ParagraphAlignment.cs" />
+    <Compile Include="XWPF\Usermodel\PositionInParagraph.cs" />
+    <Compile Include="XWPF\Usermodel\TextAlignment.cs" />
+    <Compile Include="XWPF\Usermodel\TextSegement.cs" />
     <Compile Include="XWPF\Usermodel\TOC.cs" />
-    <Compile Include="XWPF\Usermodel\UnderlinePatterns.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="XWPF\Usermodel\VerticalAlign.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="XWPF\Usermodel\XWPFAbstractNum.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="XWPF\Usermodel\UnderlinePatterns.cs" />
+    <Compile Include="XWPF\Usermodel\VerticalAlign.cs" />
+    <Compile Include="XWPF\Usermodel\XWPFAbstractNum.cs" />
     <Compile Include="XWPF\Usermodel\XWPFComment.cs" />
     <Compile Include="XWPF\Usermodel\XWPFDocument.cs" />
     <Compile Include="XWPF\Usermodel\XWPFFactory.cs" />
@@ -226,12 +190,8 @@
     <Compile Include="XWPF\Usermodel\XWPFHyperlink.cs" />
     <Compile Include="XWPF\Usermodel\XWPFHyperlinkRun.cs" />
     <Compile Include="XWPF\Usermodel\XWPFLatentStyles.cs" />
-    <Compile Include="XWPF\Usermodel\XWPFNum.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="XWPF\Usermodel\XWPFNumbering.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="XWPF\Usermodel\XWPFNum.cs" />
+    <Compile Include="XWPF\Usermodel\XWPFNumbering.cs" />
     <Compile Include="XWPF\Usermodel\XWPFParagraph.cs" />
     <Compile Include="XWPF\Usermodel\XWPFPicture.cs" />
     <Compile Include="XWPF\Usermodel\XWPFPictureData.cs" />
@@ -247,15 +207,15 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\main\main vs10.csproj">
-      <Project>{4704E545-CEFF-46B6-ACEF-C8927830FA1C}</Project>
+      <Project>{10FA8538-157A-4380-A4F6-8E2C3EE92CAE}</Project>
       <Name>main vs10</Name>
     </ProjectReference>
-    <ProjectReference Include="openxml4Net\OpenXml4Net.csproj">
-      <Project>{D907A7AD-A67A-4492-A117-594D2168B7B8}</Project>
+    <ProjectReference Include="openxml4Net\OpenXml4Net vs2010.csproj">
+      <Project>{C9F265B7-ECE3-4755-B0B1-79536575C2A9}</Project>
       <Name>OpenXml4Net</Name>
     </ProjectReference>
-    <ProjectReference Include="OpenXmlFormats\OpenXmlFormats.csproj">
-      <Project>{29E4D389-8B1B-45D8-B197-06116395F5ED}</Project>
+    <ProjectReference Include="OpenXmlFormats\OpenXmlFormats vs2010.csproj">
+      <Project>{A6874784-2875-4F40-9E8F-8385A640F5D6}</Project>
       <Name>OpenXmlFormats</Name>
     </ProjectReference>
   </ItemGroup>
