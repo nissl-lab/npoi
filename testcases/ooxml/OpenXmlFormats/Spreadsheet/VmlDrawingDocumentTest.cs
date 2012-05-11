@@ -60,26 +60,26 @@ namespace ooxml.Testcases
         #endregion
 
 
-        /// <summary>
-        ///A test for the Serialization of CT_Drawing.
-        ///</summary>
-        [TestMethod()]
-        public void SerializeVmlDrawingDocumentTest()
-        {
-            var drawing = new NPOI.OpenXmlFormats.Dml.Spreadsheet.CT_Drawing();
+//        /// <summary>
+//        ///A test for the Serialization of CT_Drawing.
+//        ///</summary>
+//        [TestMethod()]
+//        public void SerializeVmlDrawingDocumentTest()
+//        {
+//            var drawing = new NPOI.OpenXmlFormats.Dml.Spreadsheet.CT_Drawing();
             
-            using (StringWriter stream = new StringWriter())
-            {
-                NPOI.OpenXmlFormats.Dml.Spreadsheet.CT_Drawing_Accessor.serializer.Serialize(stream, drawing, NPOI.OpenXmlFormats.Dml.Spreadsheet.CT_Drawing_Accessor.namespaces);
-                string expected = @"<xml xmlns:v=""urn:schemas-microsoft-com:vml""
- xmlns:o=""urn:schemas-microsoft-com:office:office""
- xmlns:x=""urn:schemas-microsoft-com:office:excel"">
-<xdr:wsDr xmlns:r=""http://schemas.openxmlformats.org/officeDocument/2006/relationships"" xmlns:a=""http://schemas.openxmlformats.org/drawingml/2006/main"" xmlns:xdr=""http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing"" />";
+//            using (StringWriter stream = new StringWriter())
+//            {
+//                NPOI.OpenXmlFormats.Dml.Spreadsheet.CT_Drawing_Accessor.serializer.Serialize(stream, drawing, NPOI.OpenXmlFormats.Dml.Spreadsheet.CT_Drawing_Accessor.namespaces);
+//                string expected = @"<xml xmlns:v=""urn:schemas-microsoft-com:vml""
+// xmlns:o=""urn:schemas-microsoft-com:office:office""
+// xmlns:x=""urn:schemas-microsoft-com:office:excel"">
+//<xdr:wsDr xmlns:r=""http://schemas.openxmlformats.org/officeDocument/2006/relationships"" xmlns:a=""http://schemas.openxmlformats.org/drawingml/2006/main"" xmlns:xdr=""http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing"" />";
 
-//</xdr:wsDr>";
-                Assert.AreEqual(expected, stream.ToString());
-            }
-        }
+////</xdr:wsDr>";
+//                Assert.AreEqual(expected, stream.ToString());
+//            }
+//        }
 
         /// <summary>
         ///A test for Deserialize
@@ -198,22 +198,22 @@ namespace ooxml.Testcases
    <x:Visible/>
   </x:ClientData>
  </v:shape></xml>";
-            NPOI.OpenXmlFormats.Dml.Spreadsheet.CT_Drawing result;
+            //NPOI.OpenXmlFormats.Dml.Spreadsheet.CT_Drawing result;
+            ////{
+            ////    StringReader stream = new StringReader(input);
+            ////    result = (CT_Drawing)CommentsDocument_Accessor.serializer.Deserialize(stream); // instantiate source code to enable debugging the serialization code
+            ////}
             //{
-            //    StringReader stream = new StringReader(input);
-            //    result = (CT_Drawing)CommentsDocument_Accessor.serializer.Deserialize(stream); // instantiate source code to enable debugging the serialization code
+            //    using (StringReader stream = new StringReader(input))
+            //    {
+            //        result = (NPOI.OpenXmlFormats.Dml.Spreadsheet.CT_Drawing)NPOI.OpenXmlFormats.Dml.Spreadsheet.CT_Drawing_Accessor.serializer.Deserialize(stream);
+            //    }
             //}
-            {
-                using (StringReader stream = new StringReader(input))
-                {
-                    result = (NPOI.OpenXmlFormats.Dml.Spreadsheet.CT_Drawing)NPOI.OpenXmlFormats.Dml.Spreadsheet.CT_Drawing_Accessor.serializer.Deserialize(stream);
-                }
-            }
-            Assert.IsNotNull(result.TwoCellAnchors);
-            Assert.AreEqual(1, result.TwoCellAnchors.Count);
-            Assert.AreEqual(1, result.SizeOfTwoCellAnchorArray());
-            var anchor = result.TwoCellAnchors[0];
-            Assert.AreEqual(0, anchor.from.col);
+            //Assert.IsNotNull(result.TwoCellAnchors);
+            //Assert.AreEqual(1, result.TwoCellAnchors.Count);
+            //Assert.AreEqual(1, result.SizeOfTwoCellAnchorArray());
+            //var anchor = result.TwoCellAnchors[0];
+            //Assert.AreEqual(0, anchor.from.col);
         }
 
 
