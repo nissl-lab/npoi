@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Xml.Serialization;
 
-namespace NPOI.OpenXmlFormats.Vml
+namespace NPOI.OpenXmlFormats.Vml.Spreadsheet
 {
 
     [Serializable]
@@ -160,8 +160,7 @@ namespace NPOI.OpenXmlFormats.Vml
     [XmlRoot(Namespace = "urn:schemas-microsoft-com:office:excel", IsNullable = false)]
     public enum ST_TrueFalseBlank
     {
-
-    
+        NONE,    
         @true,
 
     

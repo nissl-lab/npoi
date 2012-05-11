@@ -25,6 +25,8 @@ using NPOI.OpenXmlFormats.Vml;
 using System.Xml.Serialization;
 using System.Xml;
 using System.Collections;
+using NPOI.OpenXmlFormats.Vml.Office;
+
 namespace NPOI.XSSF.UserModel
 {
 
@@ -95,7 +97,6 @@ namespace NPOI.XSSF.UserModel
         protected XSSFVMLDrawing(PackagePart part, PackageRelationship rel)
             : base(part, rel)
         {
-
             Read(GetPackagePart().GetInputStream());
         }
 
@@ -160,9 +161,11 @@ namespace NPOI.XSSF.UserModel
         protected override void Commit()
         {
             PackagePart part = GetPackagePart();
-            Stream out1 = part.GetOutputStream();
-            Write(out1);
-            out1.Close();
+            using (Stream out1 = part.GetOutputStream())
+            {
+                Write(out1);
+             //   out1.Close();
+            }
         }
 
         /**

@@ -2,6 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Xml.Schema;
 using System.Xml.Serialization;
+using NPOI.OpenXmlFormats.Vml.Wordprocessing;
+using NPOI.OpenXmlFormats.Vml.Office;
+using NPOI.OpenXmlFormats.Vml.Spreadsheet;
+using NPOI.OpenXmlFormats.Vml.Presentation;
 
 namespace NPOI.OpenXmlFormats.Vml
 {
@@ -472,8 +476,7 @@ namespace NPOI.OpenXmlFormats.Vml
         private string hrefField;
         
         
-        // TODO is the following correct?
-        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/relationships")]
+        [XmlAttribute]
         public string id
         {
             get {
@@ -650,7 +653,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         
-        [XmlAttribute("id", Form=System.Xml.Schema.XmlSchemaForm.Qualified, Namespace="http://schemas.openxmlformats.org/officeDocument/2006/relationships")]
+        [XmlAttribute("id")]//, Form=System.Xml.Schema.XmlSchemaForm.Qualified, Namespace="http://schemas.openxmlformats.org/officeDocument/2006/relationships")]
         public string id1 {
             get {
                 return this.id1Field;
@@ -661,7 +664,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         
-        [XmlAttribute(Form=System.Xml.Schema.XmlSchemaForm.Qualified, Namespace="http://schemas.openxmlformats.org/officeDocument/2006/relationships")]
+        [XmlAttribute]//(Form=System.Xml.Schema.XmlSchemaForm.Qualified, Namespace="http://schemas.openxmlformats.org/officeDocument/2006/relationships")]
         public string pict {
             get {
                 return this.pictField;
@@ -726,10 +729,9 @@ namespace NPOI.OpenXmlFormats.Vml
         private ST_TrueFalse insetpenokField;
         
         private bool insetpenokFieldSpecified;
-        
-        
-        // TODO is the following correct?
-        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/relationships")]
+
+
+        [XmlAttribute]
         public string id
         {
             get {
@@ -963,10 +965,9 @@ namespace NPOI.OpenXmlFormats.Vml
         private string originField;
         
         private string matrixField;
-        
-        
-        // TODO is the following correct?
-        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/relationships")]
+
+
+        [XmlAttribute]
         public string id
         {
             get {
@@ -1225,10 +1226,9 @@ namespace NPOI.OpenXmlFormats.Vml
         private ST_TrueFalse insetpenField;
         
         private bool insetpenFieldSpecified;
-        
-        
-        // TODO is the following correct?
-        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/relationships")]
+
+
+        [XmlAttribute]
         public string id
         {
             get {
@@ -1623,10 +1623,11 @@ namespace NPOI.OpenXmlFormats.Vml
                 this.endarrowlengthFieldSpecified = value;
             }
         }
-        
-        
-        [XmlAttribute("id", Form=System.Xml.Schema.XmlSchemaForm.Qualified, Namespace="http://schemas.openxmlformats.org/officeDocument/2006/relationships")]
-        public string id1 {
+
+
+        [XmlAttribute("id")]
+        public string id1
+        {
             get {
                 return this.id1Field;
             }
@@ -1795,10 +1796,9 @@ namespace NPOI.OpenXmlFormats.Vml
                 this.itemField = value;
             }
         }
-        
-        
-        // TODO is the following correct?
-        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/relationships")]
+
+
+        [XmlAttribute]
         public string id
         {
             get {
@@ -1865,10 +1865,9 @@ namespace NPOI.OpenXmlFormats.Vml
         private bool xscaleFieldSpecified;
         
         private string stringField;
-        
-        
-        // TODO is the following correct?
-        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/relationships")]
+
+
+        [XmlAttribute]
         public string id
         {
             get {
@@ -2130,8 +2129,7 @@ namespace NPOI.OpenXmlFormats.Vml
         
         private string path1Field;
 
-        // TODO is the following correct?
-        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/relationships")]
+        [XmlAttribute]
         public string id
         {
             get {
@@ -4358,10 +4356,9 @@ namespace NPOI.OpenXmlFormats.Vml
                 this.fillField = value;
             }
         }
-        
-        
-        // TODO is the following correct?
-        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/relationships")]
+
+
+        [XmlAttribute]
         public string id
         {
             get {
@@ -4410,15 +4407,11 @@ namespace NPOI.OpenXmlFormats.Vml
     [Serializable]
     [XmlType(Namespace="urn:schemas-microsoft-com:vml")]
     [XmlRoot(Namespace="urn:schemas-microsoft-com:vml", IsNullable=false)]
-    public enum ST_Ext {
-        
-        
+    public enum ST_Ext 
+    {       
+        NONE,
         view,
-        
-        
         edit,
-        
-        
         backwardCompatible,
     }
 }

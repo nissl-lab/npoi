@@ -717,7 +717,7 @@ public abstract class OPCPackage:RelationshipSource {
 			throw new InvalidOperationException(
 					"A part with the name '"
 							+ partName.Name
-							+ "' already exists : Packages shall not contain equivalent part names and package implementers shall neither Create nor recognize packages with equivalent part names. [M1.12]");
+							+ "' already exists : Packages shall not contain equivalent part names and package implementers shall neither create nor recognize packages with equivalent part names. [M1.12]");
 		}
 
 		/* Check OPC compliance */

@@ -1,7 +1,7 @@
 using System;
 using System.Xml.Serialization;
 
-namespace NPOI.OpenXmlFormats.Vml
+namespace NPOI.OpenXmlFormats.Vml.Wordprocessing
 {
     [Serializable]
     [System.Diagnostics.DebuggerStepThrough]

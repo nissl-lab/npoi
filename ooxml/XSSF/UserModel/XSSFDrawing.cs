@@ -39,7 +39,7 @@ namespace NPOI.XSSF.UserModel
         /**
          * Root element of the SpreadsheetML Drawing part
          */
-        private NPOI.OpenXmlFormats.Dml.Spreadsheet.CT_Drawing drawing;
+        private NPOI.OpenXmlFormats.Dml.Spreadsheet.CT_Drawing drawing = NewDrawing();
        // private bool isNew = true; not used so far
         private long numOfGraphicFrames = 0L;
 
@@ -51,7 +51,6 @@ namespace NPOI.XSSF.UserModel
         public XSSFDrawing()
             : base()
         {
-            drawing = newDrawing();
         }
 
         /**
@@ -65,7 +64,6 @@ namespace NPOI.XSSF.UserModel
         internal XSSFDrawing(PackagePart part, PackageRelationship rel)
             : base(part, rel)
         {
-
             drawing = NPOI.OpenXmlFormats.Dml.Spreadsheet.CT_Drawing.Parse(part.GetInputStream());
         }
 
@@ -74,7 +72,7 @@ namespace NPOI.XSSF.UserModel
          *
          * @return a new CT_Drawing bean
          */
-        private static NPOI.OpenXmlFormats.Dml.Spreadsheet.CT_Drawing newDrawing()
+        private static NPOI.OpenXmlFormats.Dml.Spreadsheet.CT_Drawing NewDrawing()
         {
             return new CT_Drawing();
         }
@@ -84,7 +82,6 @@ namespace NPOI.XSSF.UserModel
          *
          * @return the underlying CT_Drawing bean
          */
-
         public CT_Drawing GetCTDrawing()
         {
             return drawing;

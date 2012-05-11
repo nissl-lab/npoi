@@ -40,7 +40,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>..\solution\Lib\Debug.net4\</OutputPath>
-    <DefineConstants>DEBUG;TRACE;HIDE_UNREACHABLE_CODE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;HIDE_UNREACHABLE_CODE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <CodeAnalysisRuleSet>BasicCorrectnessRules.ruleset</CodeAnalysisRuleSet>

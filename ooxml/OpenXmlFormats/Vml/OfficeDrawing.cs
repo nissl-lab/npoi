@@ -1,8 +1,10 @@
 using System;
 using System.ComponentModel;
 using System.Xml.Serialization;
+using NPOI.OpenXmlFormats.Vml.Spreadsheet;
+using System.Collections.Generic;
 
-namespace NPOI.OpenXmlFormats.Vml
+namespace NPOI.OpenXmlFormats.Vml.Office
 {
     
     
@@ -34,9 +36,9 @@ namespace NPOI.OpenXmlFormats.Vml
         
         private CT_ColorMenu colormenuField;
         
-        private ST_Ext extField;
+        private ST_Ext extField = ST_Ext.NONE;
         
-        private bool extFieldSpecified;
+        
         
         private string spidmaxField;
         
@@ -161,29 +163,19 @@ namespace NPOI.OpenXmlFormats.Vml
                 this.colormenuField = value;
             }
         }
-        
-    
-        [XmlAttribute(Form=System.Xml.Schema.XmlSchemaForm.Qualified, Namespace="urn:schemas-microsoft-com:vml")]
-        public ST_Ext ext {
-            get {
-                return this.extField;
-            }
-            set {
-                this.extField = value;
-            }
+
+
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, Namespace = "urn:schemas-microsoft-com:vml")]
+        public ST_Ext ext
+        {
+            get { return this.extField; }
+            set { this.extField = value; }
         }
-        
-    
         [XmlIgnore]
-        public bool extSpecified {
-            get {
-                return this.extFieldSpecified;
-            }
-            set {
-                this.extFieldSpecified = value;
-            }
-        }
-        
+        public bool extSpecified
+        {
+            get { return ST_Ext.NONE != this.extField; }
+        }        
     
         [XmlAttribute(DataType="integer")]
         public string spidmax {
@@ -359,10 +351,9 @@ namespace NPOI.OpenXmlFormats.Vml
         private bool rotateFieldSpecified;
         
         private string id1Field;
-        
-    
-        // TODO is the following correct?
-        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/relationships")]
+
+
+        [XmlAttribute]
         public string id
         {
             get {
@@ -671,7 +662,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
     
-        [XmlAttribute("id", Form=System.Xml.Schema.XmlSchemaForm.Qualified, Namespace="http://schemas.openxmlformats.org/officeDocument/2006/relationships")]
+        [XmlAttribute("id")]
         public string id1 {
             get {
                 return this.id1Field;
@@ -769,9 +760,9 @@ namespace NPOI.OpenXmlFormats.Vml
     [XmlRoot(Namespace="urn:schemas-microsoft-com:office:office", IsNullable=true)]
     public partial class CT_Skew {
         
-        private ST_Ext extField;
+        private ST_Ext extField = ST_Ext.NONE;
         
-        private bool extFieldSpecified;
+        
         
         private string idField;
         
@@ -784,32 +775,21 @@ namespace NPOI.OpenXmlFormats.Vml
         private string originField;
         
         private string matrixField;
-        
-    
-        [XmlAttribute(Form=System.Xml.Schema.XmlSchemaForm.Qualified, Namespace="urn:schemas-microsoft-com:vml")]
-        public ST_Ext ext {
-            get {
-                return this.extField;
-            }
-            set {
-                this.extField = value;
-            }
+
+
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, Namespace = "urn:schemas-microsoft-com:vml")]
+        public ST_Ext ext
+        {
+            get { return this.extField; }
+            set { this.extField = value; }
         }
-        
-    
         [XmlIgnore]
-        public bool extSpecified {
-            get {
-                return this.extFieldSpecified;
-            }
-            set {
-                this.extFieldSpecified = value;
-            }
+        public bool extSpecified
+        {
+            get { return ST_Ext.NONE != this.extField; }
         }
-        
-    
-        // TODO is the following correct?
-        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/relationships")]
+
+        [XmlAttribute]
         public string id
         {
             get {
@@ -903,9 +883,9 @@ namespace NPOI.OpenXmlFormats.Vml
     [XmlRoot(Namespace="urn:schemas-microsoft-com:office:office", IsNullable=true)]
     public partial class CT_Extrusion {
         
-        private ST_Ext extField;
+        private ST_Ext extField = ST_Ext.NONE;
         
-        private bool extFieldSpecified;
+        
         
         private ST_TrueFalse1 onField;
         
@@ -998,29 +978,19 @@ namespace NPOI.OpenXmlFormats.Vml
             this.renderField = ST_ExtrusionRender.solid;
             this.planeField = ST_ExtrusionPlane.XY;
         }
-        
-    
-        [XmlAttribute(Form=System.Xml.Schema.XmlSchemaForm.Qualified, Namespace="urn:schemas-microsoft-com:vml")]
-        public ST_Ext ext {
-            get {
-                return this.extField;
-            }
-            set {
-                this.extField = value;
-            }
+
+
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, Namespace = "urn:schemas-microsoft-com:vml")]
+        public ST_Ext ext
+        {
+            get { return this.extField; }
+            set { this.extField = value; }
         }
-        
-    
         [XmlIgnore]
-        public bool extSpecified {
-            get {
-                return this.extFieldSpecified;
-            }
-            set {
-                this.extFieldSpecified = value;
-            }
-        }
-        
+        public bool extSpecified
+        {
+            get { return ST_Ext.NONE != this.extField; }
+        }        
     
         [XmlAttribute]
         public ST_TrueFalse1 on {
@@ -1564,9 +1534,9 @@ namespace NPOI.OpenXmlFormats.Vml
     [XmlRoot(Namespace="urn:schemas-microsoft-com:office:office", IsNullable=true)]
     public partial class CT_Callout {
         
-        private ST_Ext extField;
+        private ST_Ext extField = ST_Ext.NONE;
         
-        private bool extFieldSpecified;
+        
         
         private ST_TrueFalse1 onField;
         
@@ -1611,29 +1581,18 @@ namespace NPOI.OpenXmlFormats.Vml
         public CT_Callout() {
             this.lengthspecifiedField = ST_TrueFalse1.f;
         }
-        
-    
-        [XmlAttribute(Form=System.Xml.Schema.XmlSchemaForm.Qualified, Namespace="urn:schemas-microsoft-com:vml")]
-        public ST_Ext ext {
-            get {
-                return this.extField;
-            }
-            set {
-                this.extField = value;
-            }
+
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, Namespace = "urn:schemas-microsoft-com:vml")]
+        public ST_Ext ext
+        {
+            get { return this.extField; }
+            set { this.extField = value; }
         }
-        
-    
         [XmlIgnore]
-        public bool extSpecified {
-            get {
-                return this.extFieldSpecified;
-            }
-            set {
-                this.extFieldSpecified = value;
-            }
+        public bool extSpecified
+        {
+            get { return ST_Ext.NONE != this.extField; }
         }
-        
     
         [XmlAttribute]
         public ST_TrueFalse1 on {
@@ -1893,9 +1852,9 @@ namespace NPOI.OpenXmlFormats.Vml
     [XmlRoot(Namespace="urn:schemas-microsoft-com:office:office", IsNullable=true)]
     public partial class CT_Lock {
         
-        private ST_Ext extField;
+        private ST_Ext extField = ST_Ext.NONE;
         
-        private bool extFieldSpecified;
+        
         
         private ST_TrueFalse1 positionField;
         
@@ -1940,29 +1899,18 @@ namespace NPOI.OpenXmlFormats.Vml
         private ST_TrueFalse1 shapetypeField;
         
         private bool shapetypeFieldSpecified;
-        
-    
-        [XmlAttribute(Form=System.Xml.Schema.XmlSchemaForm.Qualified, Namespace="urn:schemas-microsoft-com:vml")]
-        public ST_Ext ext {
-            get {
-                return this.extField;
-            }
-            set {
-                this.extField = value;
-            }
+
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, Namespace = "urn:schemas-microsoft-com:vml")]
+        public ST_Ext ext
+        {
+            get { return this.extField; }
+            set { this.extField = value; }
         }
-        
-    
         [XmlIgnore]
-        public bool extSpecified {
-            get {
-                return this.extFieldSpecified;
-            }
-            set {
-                this.extFieldSpecified = value;
-            }
+        public bool extSpecified
+        {
+            get { return ST_Ext.NONE != this.extField; }
         }
-        
     
         [XmlAttribute]
         public ST_TrueFalse1 position {
@@ -2214,34 +2162,23 @@ namespace NPOI.OpenXmlFormats.Vml
     [XmlRoot(Namespace="urn:schemas-microsoft-com:office:office", IsNullable=true)]
     public partial class CT_ColorMru {
         
-        private ST_Ext extField;
+        private ST_Ext extField = ST_Ext.NONE;
         
-        private bool extFieldSpecified;
+        
         
         private string colorsField;
-        
-    
-        [XmlAttribute(Form=System.Xml.Schema.XmlSchemaForm.Qualified, Namespace="urn:schemas-microsoft-com:vml")]
-        public ST_Ext ext {
-            get {
-                return this.extField;
-            }
-            set {
-                this.extField = value;
-            }
+
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, Namespace = "urn:schemas-microsoft-com:vml")]
+        public ST_Ext ext
+        {
+            get { return this.extField; }
+            set { this.extField = value; }
         }
-        
-    
         [XmlIgnore]
-        public bool extSpecified {
-            get {
-                return this.extFieldSpecified;
-            }
-            set {
-                this.extFieldSpecified = value;
-            }
+        public bool extSpecified
+        {
+            get { return ST_Ext.NONE != this.extField; }
         }
-        
     
         [XmlAttribute]
         public string colors {
@@ -2262,9 +2199,9 @@ namespace NPOI.OpenXmlFormats.Vml
     [XmlRoot(Namespace="urn:schemas-microsoft-com:office:office", IsNullable=true)]
     public partial class CT_ColorMenu {
         
-        private ST_Ext extField;
+        private ST_Ext extField = ST_Ext.NONE;
         
-        private bool extFieldSpecified;
+        
         
         private string strokecolorField;
         
@@ -2273,29 +2210,18 @@ namespace NPOI.OpenXmlFormats.Vml
         private string shadowcolorField;
         
         private string extrusioncolorField;
-        
-    
-        [XmlAttribute(Form=System.Xml.Schema.XmlSchemaForm.Qualified, Namespace="urn:schemas-microsoft-com:vml")]
-        public ST_Ext ext {
-            get {
-                return this.extField;
-            }
-            set {
-                this.extField = value;
-            }
+
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, Namespace = "urn:schemas-microsoft-com:vml")]
+        public ST_Ext ext
+        {
+            get { return this.extField; }
+            set { this.extField = value; }
         }
-        
-    
         [XmlIgnore]
-        public bool extSpecified {
-            get {
-                return this.extFieldSpecified;
-            }
-            set {
-                this.extFieldSpecified = value;
-            }
+        public bool extSpecified
+        {
+            get { return ST_Ext.NONE != this.extField; }
         }
-        
     
         [XmlAttribute]
         public string strokecolor {
@@ -2397,9 +2323,9 @@ namespace NPOI.OpenXmlFormats.Vml
     [XmlRoot(Namespace="urn:schemas-microsoft-com:office:office", IsNullable=true)]
     public partial class CT_SignatureLine {
         
-        private ST_Ext extField;
+        private ST_Ext extField = ST_Ext.NONE;
         
-        private bool extFieldSpecified;
+        
         
         private ST_TrueFalse1 issignaturelineField;
         
@@ -2432,29 +2358,18 @@ namespace NPOI.OpenXmlFormats.Vml
         private string addlxmlField;
         
         private string sigprovurlField;
-        
-    
-        [XmlAttribute(Form=System.Xml.Schema.XmlSchemaForm.Qualified, Namespace="urn:schemas-microsoft-com:vml")]
-        public ST_Ext ext {
-            get {
-                return this.extField;
-            }
-            set {
-                this.extField = value;
-            }
+
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, Namespace = "urn:schemas-microsoft-com:vml")]
+        public ST_Ext ext
+        {
+            get { return this.extField; }
+            set { this.extField = value; }
         }
-        
-    
         [XmlIgnore]
-        public bool extSpecified {
-            get {
-                return this.extFieldSpecified;
-            }
-            set {
-                this.extFieldSpecified = value;
-            }
+        public bool extSpecified
+        {
+            get { return ST_Ext.NONE != this.extField; }
         }
-        
     
         [XmlAttribute]
         public ST_TrueFalse1 issignatureline {
@@ -2478,8 +2393,6 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
     
-        // TODO is the following correct?
-        //[XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/relationships")]
         [XmlAttribute(DataType = "token")]
         public string id {
             get {
@@ -2638,172 +2551,120 @@ namespace NPOI.OpenXmlFormats.Vml
     [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
-    [XmlType(Namespace="urn:schemas-microsoft-com:office:office")]
-    [XmlRoot(Namespace="urn:schemas-microsoft-com:office:office", IsNullable=true)]
-    public partial class CT_ShapeLayout {
+    [XmlType(Namespace = "urn:schemas-microsoft-com:office:office")]
+    [XmlRoot(Namespace = "urn:schemas-microsoft-com:office:office", IsNullable = true)]
+    public class CT_ShapeLayout
+    {
+        private CT_IdMap idmapField = null;
+        private CT_RegroupTable regrouptableField = null;
+        private CT_Rules rulesField = null;
+        private ST_Ext extField = ST_Ext.NONE;
         
-        private CT_IdMap idmapField;
-        
-        private CT_RegroupTable regrouptableField;
-        
-        private CT_Rules rulesField;
-        
-        private ST_Ext extField;
-        
-        private bool extFieldSpecified;
-
         public CT_IdMap AddNewIdmap()
         {
             idmapField = new CT_IdMap();
             return idmapField;
         }
 
-    
-        public CT_IdMap idmap {
-            get {
-                return this.idmapField;
-            }
-            set {
-                this.idmapField = value;
-            }
+        [XmlElement]
+        public CT_IdMap idmap
+        {
+            get { return this.idmapField; }
+            set { this.idmapField = value; }
         }
-        
-    
-        public CT_RegroupTable regrouptable {
-            get {
-                return this.regrouptableField;
-            }
-            set {
-                this.regrouptableField = value;
-            }
+
+        [XmlElement]
+        public CT_RegroupTable regrouptable
+        {
+            get { return this.regrouptableField; }
+            set { this.regrouptableField = value; }
         }
-        
-    
-        public CT_Rules rules {
-            get {
-                return this.rulesField;
-            }
-            set {
-                this.rulesField = value;
-            }
+
+        [XmlElement]
+        public CT_Rules rules
+        {
+            get { return this.rulesField; }
+            set { this.rulesField = value; }
         }
-        
-    
-        [XmlAttribute(Form=System.Xml.Schema.XmlSchemaForm.Qualified, Namespace="urn:schemas-microsoft-com:vml")]
-        public ST_Ext ext {
-            get {
-                return this.extField;
-            }
-            set {
-                this.extField = value;
-            }
+
+
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, Namespace = "urn:schemas-microsoft-com:vml")]
+        public ST_Ext ext
+        {
+            get { return this.extField; }
+            set { this.extField = value; }
         }
-        
-    
         [XmlIgnore]
-        public bool extSpecified {
-            get {
-                return this.extFieldSpecified;
-            }
-            set {
-                this.extFieldSpecified = value;
-            }
+        public bool extSpecified
+        {
+            get { return ST_Ext.NONE != this.extField; }
         }
     }
-    
+
 
     [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
-    [XmlType(Namespace="urn:schemas-microsoft-com:office:office")]
-    [XmlRoot(Namespace="urn:schemas-microsoft-com:office:office", IsNullable=true)]
-    public partial class CT_IdMap {
-        
-        private ST_Ext extField;
-        
-        private bool extFieldSpecified;
-        
-        private string dataField;
-        
-    
-        [XmlAttribute(Form=System.Xml.Schema.XmlSchemaForm.Qualified, Namespace="urn:schemas-microsoft-com:vml")]
-        public ST_Ext ext {
-            get {
-                return this.extField;
-            }
-            set {
-                this.extField = value;
-            }
+    [XmlType(Namespace = "urn:schemas-microsoft-com:office:office")]
+    [XmlRoot(Namespace = "urn:schemas-microsoft-com:office:office", IsNullable = true)]
+    public partial class CT_IdMap
+    {
+        private ST_Ext extField = ST_Ext.NONE;
+        private string dataField = null;
+
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, Namespace = "urn:schemas-microsoft-com:vml")]
+        public ST_Ext ext
+        {
+            get { return this.extField; }
+            set { this.extField = value; }
         }
-        
-    
         [XmlIgnore]
-        public bool extSpecified {
-            get {
-                return this.extFieldSpecified;
-            }
-            set {
-                this.extFieldSpecified = value;
-            }
+        public bool extSpecified
+        {
+            get { return ST_Ext.NONE != this.extField; }
         }
-        
-    
+
         [XmlAttribute]
-        public string data {
-            get {
-                return this.dataField;
-            }
-            set {
-                this.dataField = value;
-            }
+        public string data
+        {
+            get { return this.dataField; }
+            set { this.dataField = value; }
+        }
+        [XmlIgnore]
+        public bool dataSpecified
+        {
+            get { return null != this.dataField; }
         }
     }
-    
+
 
     [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
-    [XmlType(Namespace="urn:schemas-microsoft-com:office:office")]
-    [XmlRoot(Namespace="urn:schemas-microsoft-com:office:office", IsNullable=true)]
-    public partial class CT_RegroupTable {
-        
-        private CT_Entry[] entryField;
-        
-        private ST_Ext extField;
-        
-        private bool extFieldSpecified;
-        
-    
+    [XmlType(Namespace = "urn:schemas-microsoft-com:office:office")]
+    [XmlRoot(Namespace = "urn:schemas-microsoft-com:office:office", IsNullable = true)]
+    public partial class CT_RegroupTable
+    {
+        private List<CT_Entry> entryField = null; // 0..*
+        private ST_Ext extField = ST_Ext.NONE;
+
         [XmlElement("entry")]
-        public CT_Entry[] entry {
-            get {
-                return this.entryField;
-            }
-            set {
-                this.entryField = value;
-            }
+        public List<CT_Entry> entry
+        {
+            get { return this.entryField; }
+            set { this.entryField = value; }
         }
-        
-    
-        [XmlAttribute(Form=System.Xml.Schema.XmlSchemaForm.Qualified, Namespace="urn:schemas-microsoft-com:vml")]
-        public ST_Ext ext {
-            get {
-                return this.extField;
-            }
-            set {
-                this.extField = value;
-            }
+
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, Namespace = "urn:schemas-microsoft-com:vml")]
+        public ST_Ext ext
+        {
+            get { return this.extField; }
+            set { this.extField = value; }
         }
-        
-    
         [XmlIgnore]
-        public bool extSpecified {
-            get {
-                return this.extFieldSpecified;
-            }
-            set {
-                this.extFieldSpecified = value;
-            }
+        public bool extSpecified
+        {
+            get { return ST_Ext.NONE != this.extField; }
         }
     }
     
@@ -2811,335 +2672,229 @@ namespace NPOI.OpenXmlFormats.Vml
     [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
-    [XmlType(Namespace="urn:schemas-microsoft-com:office:office")]
-    [XmlRoot(Namespace="urn:schemas-microsoft-com:office:office", IsNullable=true)]
-    public partial class CT_Entry {
-        
-        private int newField;
-        
-        private bool newFieldSpecified;
-        
-        private int oldField;
-        
-        private bool oldFieldSpecified;
-        
-    
+    [XmlType(Namespace = "urn:schemas-microsoft-com:office:office")]
+    [XmlRoot(Namespace = "urn:schemas-microsoft-com:office:office", IsNullable = true)]
+    public partial class CT_Entry
+    {
+        private int? newField = null;
+        private int? oldField = null;
+
         [XmlAttribute]
-        public int @new {
-            get {
-                return this.newField;
-            }
-            set {
-                this.newField = value;
-            }
+        public int @new
+        {
+            get { return (int)this.newField; }
+            set { this.newField = value; }
         }
-        
-    
         [XmlIgnore]
-        public bool newSpecified {
-            get {
-                return this.newFieldSpecified;
-            }
-            set {
-                this.newFieldSpecified = value;
-            }
+        public bool newSpecified
+        {
+            get { return null != this.newField; }
         }
-        
-    
+
         [XmlAttribute]
-        public int old {
-            get {
-                return this.oldField;
-            }
-            set {
-                this.oldField = value;
-            }
+        public int old
+        {
+            get { return (int)this.oldField; }
+            set { this.oldField = value; }
         }
-        
-    
         [XmlIgnore]
-        public bool oldSpecified {
-            get {
-                return this.oldFieldSpecified;
-            }
-            set {
-                this.oldFieldSpecified = value;
-            }
+        public bool oldSpecified
+        {
+            get { return null != this.oldField; }
         }
     }
-    
+
 
     [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
-    [XmlType(Namespace="urn:schemas-microsoft-com:office:office")]
-    [XmlRoot(Namespace="urn:schemas-microsoft-com:office:office", IsNullable=true)]
-    public partial class CT_Rules {
-        
-        private CT_R[] rField;
-        
-        private ST_Ext extField;
-        
-        private bool extFieldSpecified;
-        
-    
+    [XmlType(Namespace = "urn:schemas-microsoft-com:office:office")]
+    [XmlRoot(Namespace = "urn:schemas-microsoft-com:office:office", IsNullable = true)]
+    public partial class CT_Rules
+    {
+        private List<CT_R> rField = null; // 0..*
+        private ST_Ext extField = ST_Ext.NONE;
+
+
         [XmlElement("r")]
-        public CT_R[] r {
-            get {
-                return this.rField;
-            }
-            set {
-                this.rField = value;
-            }
+        public List<CT_R> r
+        {
+            get { return this.rField; }
+            set { this.rField = value; }
         }
-        
-    
-        [XmlAttribute(Form=System.Xml.Schema.XmlSchemaForm.Qualified, Namespace="urn:schemas-microsoft-com:vml")]
-        public ST_Ext ext {
-            get {
-                return this.extField;
-            }
-            set {
-                this.extField = value;
-            }
+
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, Namespace = "urn:schemas-microsoft-com:vml")]
+        public ST_Ext ext
+        {
+            get { return this.extField; }
+            set { this.extField = value; }
         }
-        
-    
         [XmlIgnore]
-        public bool extSpecified {
-            get {
-                return this.extFieldSpecified;
-            }
-            set {
-                this.extFieldSpecified = value;
-            }
+        public bool extSpecified
+        {
+            get { return ST_Ext.NONE != this.extField; }
         }
     }
-    
+
 
     [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
-    [XmlType(Namespace="urn:schemas-microsoft-com:office:office")]
-    [XmlRoot(Namespace="urn:schemas-microsoft-com:office:office", IsNullable=true)]
-    public partial class CT_R {
-        
-        private CT_Proxy[] proxyField;
-        
-        private string idField;
-        
-        private ST_RType typeField;
-        
-        private bool typeFieldSpecified;
-        
-        private ST_How howField;
-        
-        private bool howFieldSpecified;
-        
-        private string idrefField;
-        
-    
+    [XmlType(Namespace = "urn:schemas-microsoft-com:office:office")]
+    [XmlRoot(Namespace = "urn:schemas-microsoft-com:office:office", IsNullable = true)]
+    public partial class CT_R
+    {
+
+        private List<CT_Proxy> proxyField = null; // 0..*       
+        private string idField = string.Empty; // 1..1
+        private ST_RType typeField = ST_RType.NONE; // others optional
+        private ST_How howField = ST_How.NONE;
+        private string idrefField = null;
+
         [XmlElement("proxy")]
-        public CT_Proxy[] proxy {
-            get {
-                return this.proxyField;
-            }
-            set {
-                this.proxyField = value;
-            }
+        public List<CT_Proxy> proxy
+        {
+            get { return this.proxyField; }
+            set { this.proxyField = value; }
         }
-        
-    
-        // TODO is the following correct?
-        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/relationships")]
+
+        [XmlAttribute]
         public string id
         {
-            get {
-                return this.idField;
-            }
-            set {
-                this.idField = value;
-            }
+            get { return this.idField; }
+            set { this.idField = value; }
         }
-        
-    
+
         [XmlAttribute]
-        public ST_RType type {
-            get {
-                return this.typeField;
-            }
-            set {
-                this.typeField = value;
-            }
+        public ST_RType type
+        {
+            get { return this.typeField; }
+            set { this.typeField = value; }
         }
-        
-    
         [XmlIgnore]
-        public bool typeSpecified {
-            get {
-                return this.typeFieldSpecified;
-            }
-            set {
-                this.typeFieldSpecified = value;
-            }
+        public bool typeSpecified
+        {
+            get { return ST_RType.NONE != this.typeField; }
         }
-        
-    
+
         [XmlAttribute]
-        public ST_How how {
-            get {
-                return this.howField;
-            }
-            set {
-                this.howField = value;
-            }
+        public ST_How how
+        {
+            get { return this.howField; }
+            set { this.howField = value; }
         }
-        
-    
         [XmlIgnore]
-        public bool howSpecified {
-            get {
-                return this.howFieldSpecified;
-            }
-            set {
-                this.howFieldSpecified = value;
-            }
+        public bool howSpecified
+        {
+            get { return ST_How.NONE != this.howField; }
         }
-        
-    
+
         [XmlAttribute]
-        public string idref {
-            get {
-                return this.idrefField;
-            }
-            set {
-                this.idrefField = value;
-            }
+        public string idref
+        {
+            get { return this.idrefField; }
+            set { this.idrefField = value; }
+        }
+        [XmlIgnore]
+        public bool idrefSpecified
+        {
+            get { return null != this.idrefField; }
         }
     }
-    
+
 
     [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
-    [XmlType(Namespace="urn:schemas-microsoft-com:office:office")]
-    [XmlRoot(Namespace="urn:schemas-microsoft-com:office:office", IsNullable=true)]
-    public partial class CT_Proxy {
-        
-        private ST_TrueFalseBlank startField;
-        
-        private ST_TrueFalseBlank endField;
-        
-        private string idrefField;
-        
-        private int connectlocField;
-        
-        private bool connectlocFieldSpecified;
-        
-        public CT_Proxy() {
-            this.startField = ST_TrueFalseBlank.@false;
-            this.endField = ST_TrueFalseBlank.@false;
-        }
-        
-    
+    [XmlType(Namespace = "urn:schemas-microsoft-com:office:office")]
+    [XmlRoot(Namespace = "urn:schemas-microsoft-com:office:office", IsNullable = true)]
+    public partial class CT_Proxy
+    {
+
+        private ST_TrueFalseBlank startField = ST_TrueFalseBlank.NONE;
+        private ST_TrueFalseBlank endField = ST_TrueFalseBlank.NONE;
+        private string idrefField = null;
+        private int? connectlocField;
+
         [XmlAttribute]
         [DefaultValue(ST_TrueFalseBlank.@false)]
-        public ST_TrueFalseBlank start {
-            get {
-                return this.startField;
-            }
-            set {
-                this.startField = value;
-            }
+        public ST_TrueFalseBlank start
+        {
+            get { return this.startField; }
+            set { this.startField = value; }
         }
-        
-    
-        [XmlAttribute]
-        [DefaultValue(ST_TrueFalseBlank.@false)]
-        public ST_TrueFalseBlank end {
-            get {
-                return this.endField;
-            }
-            set {
-                this.endField = value;
-            }
-        }
-        
-    
-        [XmlAttribute]
-        public string idref {
-            get {
-                return this.idrefField;
-            }
-            set {
-                this.idrefField = value;
-            }
-        }
-        
-    
-        [XmlAttribute]
-        public int connectloc {
-            get {
-                return this.connectlocField;
-            }
-            set {
-                this.connectlocField = value;
-            }
-        }
-        
-    
         [XmlIgnore]
-        public bool connectlocSpecified {
-            get {
-                return this.connectlocFieldSpecified;
-            }
-            set {
-                this.connectlocFieldSpecified = value;
+        public bool startSpecified
+        {
+            get { return (ST_TrueFalseBlank.NONE != startField); }
+        }
+
+        [XmlAttribute]
+        [DefaultValue(ST_TrueFalseBlank.@false)]
+        public ST_TrueFalseBlank end
+        {
+            get { return this.endField; }
+            set { this.endField = value; }
+        }
+        [XmlIgnore]
+        public bool endSpecified
+        {
+            get { return (ST_TrueFalseBlank.NONE != endField); }
+        }
+
+        [XmlAttribute]
+        public string idref
+        {
+            get { return this.idrefField; }
+            set { this.idrefField = value; }
+        }
+        [XmlIgnore]
+        public bool idrefSpecified
+        {
+            get { return (null != idrefField); }
+        }
+
+        [XmlAttribute]
+        public int connectloc
+        {
+            get { return (int)this.connectlocField; }
+            set { this.connectlocField = value; }
+        }
+        [XmlIgnore]
+        public bool connectlocSpecified
+        {
+            get
+            {
+                return null != this.connectlocField;
             }
         }
     }
-    
+
 
     [Serializable]
-    [XmlType(Namespace="urn:schemas-microsoft-com:office:office")]
-    [XmlRoot(Namespace="urn:schemas-microsoft-com:office:office", IsNullable=false)]
-    public enum ST_RType {
-        
-    
+    [XmlType(Namespace = "urn:schemas-microsoft-com:office:office")]
+    [XmlRoot(Namespace = "urn:schemas-microsoft-com:office:office", IsNullable = false)]
+    public enum ST_RType
+    {
+        NONE,
         arc,
-        
-    
         callout,
-        
-    
         connector,
-        
-    
         align,
     }
-    
+
 
     [Serializable]
-    [XmlType(Namespace="urn:schemas-microsoft-com:office:office")]
-    [XmlRoot(Namespace="urn:schemas-microsoft-com:office:office", IsNullable=false)]
-    public enum ST_How {
-        
-    
+    [XmlType(Namespace = "urn:schemas-microsoft-com:office:office")]
+    [XmlRoot(Namespace = "urn:schemas-microsoft-com:office:office", IsNullable = false)]
+    public enum ST_How
+    {
+        NONE,
         top,
-        
-    
         middle,
-        
-    
         bottom,
-        
-    
         left,
-        
-    
         center,
-        
-    
         right,
     }
     
@@ -3153,9 +2908,9 @@ namespace NPOI.OpenXmlFormats.Vml
         
         private CT_RelationTable relationtableField;
         
-        private ST_Ext extField;
+        private ST_Ext extField = ST_Ext.NONE;
         
-        private bool extFieldSpecified;
+        
         
         private string dgmstyleField;
         
@@ -3190,27 +2945,18 @@ namespace NPOI.OpenXmlFormats.Vml
                 this.relationtableField = value;
             }
         }
-        
-    
-        [XmlAttribute(Form=System.Xml.Schema.XmlSchemaForm.Qualified, Namespace="urn:schemas-microsoft-com:vml")]
-        public ST_Ext ext {
-            get {
-                return this.extField;
-            }
-            set {
-                this.extField = value;
-            }
+
+
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, Namespace = "urn:schemas-microsoft-com:vml")]
+        public ST_Ext ext
+        {
+            get { return this.extField; }
+            set { this.extField = value; }
         }
-        
-    
         [XmlIgnore]
-        public bool extSpecified {
-            get {
-                return this.extFieldSpecified;
-            }
-            set {
-                this.extFieldSpecified = value;
-            }
+        public bool extSpecified
+        {
+            get { return ST_Ext.NONE != this.extField; }
         }
         
     
@@ -3354,15 +3100,15 @@ namespace NPOI.OpenXmlFormats.Vml
     [XmlRoot(Namespace="urn:schemas-microsoft-com:office:office", IsNullable=true)]
     public partial class CT_RelationTable {
         
-        private CT_Relation[] relField;
+        private  List<CT_Relation> relField;
         
-        private ST_Ext extField;
+        private ST_Ext extField = ST_Ext.NONE;
         
-        private bool extFieldSpecified;
+        
         
     
         [XmlElement("rel")]
-        public CT_Relation[] rel {
+        public  List<CT_Relation> rel {
             get {
                 return this.relField;
             }
@@ -3370,27 +3116,18 @@ namespace NPOI.OpenXmlFormats.Vml
                 this.relField = value;
             }
         }
-        
-    
-        [XmlAttribute(Form=System.Xml.Schema.XmlSchemaForm.Qualified, Namespace="urn:schemas-microsoft-com:vml")]
-        public ST_Ext ext {
-            get {
-                return this.extField;
-            }
-            set {
-                this.extField = value;
-            }
+
+
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, Namespace = "urn:schemas-microsoft-com:vml")]
+        public ST_Ext ext
+        {
+            get { return this.extField; }
+            set { this.extField = value; }
         }
-        
-    
         [XmlIgnore]
-        public bool extSpecified {
-            get {
-                return this.extFieldSpecified;
-            }
-            set {
-                this.extFieldSpecified = value;
-            }
+        public bool extSpecified
+        {
+            get { return ST_Ext.NONE != this.extField; }
         }
     }
     
@@ -3402,38 +3139,28 @@ namespace NPOI.OpenXmlFormats.Vml
     [XmlRoot(Namespace="urn:schemas-microsoft-com:office:office", IsNullable=true)]
     public partial class CT_Relation {
         
-        private ST_Ext extField;
+        private ST_Ext extField = ST_Ext.NONE;
         
-        private bool extFieldSpecified;
+        
         
         private string idsrcField;
         
         private string iddestField;
         
         private string idcntrField;
-        
-    
-        [XmlAttribute(Form=System.Xml.Schema.XmlSchemaForm.Qualified, Namespace="urn:schemas-microsoft-com:vml")]
-        public ST_Ext ext {
-            get {
-                return this.extField;
-            }
-            set {
-                this.extField = value;
-            }
+
+
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, Namespace = "urn:schemas-microsoft-com:vml")]
+        public ST_Ext ext
+        {
+            get { return this.extField; }
+            set { this.extField = value; }
         }
-        
-    
         [XmlIgnore]
-        public bool extSpecified {
-            get {
-                return this.extFieldSpecified;
-            }
-            set {
-                this.extFieldSpecified = value;
-            }
-        }
-        
+        public bool extSpecified
+        {
+            get { return ST_Ext.NONE != this.extField; }
+        }       
     
         [XmlAttribute]
         public string idsrc {
@@ -3634,10 +3361,11 @@ namespace NPOI.OpenXmlFormats.Vml
                 this.objectIDField = value;
             }
         }
-        
-    
-        [XmlAttribute(Form=System.Xml.Schema.XmlSchemaForm.Qualified, Namespace="http://schemas.openxmlformats.org/officeDocument/2006/relationships")]
-        public string id {
+
+
+        [XmlAttribute]
+        public string id
+        {
             get {
                 return this.idField;
             }
@@ -3723,42 +3451,33 @@ namespace NPOI.OpenXmlFormats.Vml
     
         OnCall,
     }
-    
+
 
     [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
-    [XmlType(Namespace="urn:schemas-microsoft-com:office:office")]
-    [XmlRoot(Namespace="urn:schemas-microsoft-com:office:office", IsNullable=true)]
-    public partial class CT_Complex {
+    [XmlType(Namespace = "urn:schemas-microsoft-com:office:office")]
+    [XmlRoot(Namespace = "urn:schemas-microsoft-com:office:office", IsNullable = true)]
+    public partial class CT_Complex
+    {
+
+        private ST_Ext extField = ST_Ext.NONE;
+
         
-        private ST_Ext extField;
-        
-        private bool extFieldSpecified;
-        
-    
-        [XmlAttribute(Form=System.Xml.Schema.XmlSchemaForm.Qualified, Namespace="urn:schemas-microsoft-com:vml")]
-        public ST_Ext ext {
-            get {
-                return this.extField;
-            }
-            set {
-                this.extField = value;
-            }
+
+
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, Namespace = "urn:schemas-microsoft-com:vml")]
+        public ST_Ext ext
+        {
+            get { return this.extField; }
+            set { this.extField = value; }
         }
-        
-    
         [XmlIgnore]
-        public bool extSpecified {
-            get {
-                return this.extFieldSpecified;
-            }
-            set {
-                this.extFieldSpecified = value;
-            }
+        public bool extSpecified
+        {
+            get { return ST_Ext.NONE != this.extField; }
         }
-    }
-    
+    }    
 
     [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
@@ -3767,9 +3486,9 @@ namespace NPOI.OpenXmlFormats.Vml
     [XmlRoot(Namespace="urn:schemas-microsoft-com:office:office", IsNullable=true)]
     public partial class CT_StrokeChild {
         
-        private ST_Ext extField;
+        private ST_Ext extField = ST_Ext.NONE;
         
-        private bool extFieldSpecified;
+        
         
         private ST_TrueFalse1 onField;
         
@@ -3854,29 +3573,19 @@ namespace NPOI.OpenXmlFormats.Vml
         private ST_TrueFalse1 forcedashField;
         
         private bool forcedashFieldSpecified;
-        
-    
-        [XmlAttribute(Form=System.Xml.Schema.XmlSchemaForm.Qualified, Namespace="urn:schemas-microsoft-com:vml")]
-        public ST_Ext ext {
-            get {
-                return this.extField;
-            }
-            set {
-                this.extField = value;
-            }
+
+
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, Namespace = "urn:schemas-microsoft-com:vml")]
+        public ST_Ext ext
+        {
+            get { return this.extField; }
+            set { this.extField = value; }
         }
-        
-    
         [XmlIgnore]
-        public bool extSpecified {
-            get {
-                return this.extFieldSpecified;
-            }
-            set {
-                this.extFieldSpecified = value;
-            }
-        }
-        
+        public bool extSpecified
+        {
+            get { return ST_Ext.NONE != this.extField; }
+        }       
     
         [XmlAttribute]
         public ST_TrueFalse1 on {
@@ -4370,36 +4079,26 @@ namespace NPOI.OpenXmlFormats.Vml
     [XmlRoot("CT_Fill", Namespace="urn:schemas-microsoft-com:office:office", IsNullable=true)]
     public partial class CT_Fill1 {
         
-        private ST_Ext extField;
+        private ST_Ext extField = ST_Ext.NONE;
         
-        private bool extFieldSpecified;
+        
         
         private ST_FillType1 typeField;
         
         private bool typeFieldSpecified;
-        
-    
-        [XmlAttribute(Form=System.Xml.Schema.XmlSchemaForm.Qualified, Namespace="urn:schemas-microsoft-com:vml")]
-        public ST_Ext ext {
-            get {
-                return this.extField;
-            }
-            set {
-                this.extField = value;
-            }
+
+
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, Namespace = "urn:schemas-microsoft-com:vml")]
+        public ST_Ext ext
+        {
+            get { return this.extField; }
+            set { this.extField = value; }
         }
-        
-    
         [XmlIgnore]
-        public bool extSpecified {
-            get {
-                return this.extFieldSpecified;
-            }
-            set {
-                this.extFieldSpecified = value;
-            }
-        }
-        
+        public bool extSpecified
+        {
+            get { return ST_Ext.NONE != this.extField; }
+        }       
     
         [XmlAttribute]
         public ST_FillType1 type {

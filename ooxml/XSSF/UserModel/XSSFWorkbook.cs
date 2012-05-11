@@ -194,7 +194,7 @@ namespace NPOI.XSSF.UserModel
                         shIdMap.Add(p.GetPackageRelationship().Id,(XSSFSheet)p);
                     }
                 }
-                stylesSource.SetTheme(theme);
+                if (null != stylesSource) { stylesSource.SetTheme(theme); }
 
                 if (sharedStringSource == null)
                 {

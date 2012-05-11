@@ -14,19 +14,19 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 ==================================================================== */
+
+using System;
+using NPOI.OpenXmlFormats.Spreadsheet;
+using NPOI.SS;
+using NPOI.SS.Formula;
+using NPOI.SS.Formula.Functions;
+using NPOI.SS.Formula.PTG;
+using NPOI.SS.Formula.Udf;
+using NPOI.SS.UserModel;
+using NPOI.XSSF.Model;
+
 namespace NPOI.XSSF.UserModel
 {
-    using NPOI.XSSF.Model;
-    using NPOI.SS.Formula;
-    using System;
-    using NPOI.SS.Formula.Functions;
-    using NPOI.SS.Formula.PTG;
-    using NPOI.OpenXmlFormats.Spreadsheet;
-    using NPOI.SS;
-    using NPOI.SS.Formula.Udf;
-    using NPOI.SS.UserModel;
-
-
     /**
      * Internal POI use only
      *

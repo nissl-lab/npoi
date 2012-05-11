@@ -89,7 +89,7 @@ namespace NPOI.XSSF.UserModel
                 "application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml",
                 "http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles",
                 "/xl/styles.xml",
-                typeof(StylesTable)
+                 typeof(StylesTable)
         );
         public static XSSFRelation DRAWINGS = new XSSFRelation(
                 "application/vnd.openxmlformats-officedocument.Drawing+xml",
@@ -103,12 +103,12 @@ namespace NPOI.XSSF.UserModel
                 "/xl/drawings/vmlDrawing#.vml",
                 typeof(XSSFVMLDrawing)
         );
-        //public static XSSFRelation CHART = new XSSFRelation(
-        //      "application/vnd.openxmlformats-officedocument.Drawingml.chart+xml",
-        //      "http://schemas.openxmlformats.org/officeDocument/2006/relationships/chart",
-        //      "/xl/charts/chart#.xml",
-        //      typeof(XSSFChart)
-        //);
+        public static XSSFRelation CHART = new XSSFRelation(
+                "application/vnd.openxmlformats-officedocument.Drawingml.chart+xml",
+                "http://schemas.openxmlformats.org/officeDocument/2006/relationships/chart",
+                "/xl/charts/chart#.xml",
+                null //typeof(XSSFChart)
+        );
 
         public static XSSFRelation CUSTOM_XML_MAPPINGS = new XSSFRelation(
                 "application/xml",
@@ -121,7 +121,7 @@ namespace NPOI.XSSF.UserModel
                 "application/vnd.openxmlformats-officedocument.spreadsheetml.tableSingleCells+xml",
                 "http://schemas.openxmlformats.org/officeDocument/2006/relationships/tableSingleCells",
                 "/xl/tables/tableSingleCells#.xml",
-                typeof(SingleXmlCells)
+             null//    typeof(SingleXmlCells)
         );
 
         public static XSSFRelation TABLE = new XSSFRelation(
@@ -240,8 +240,6 @@ namespace NPOI.XSSF.UserModel
         private XSSFRelation(String type, String rel, String defaultName, Type cls) :
             base(type, rel, defaultName, cls)
         {
-
-
             if (cls != null && !_table.ContainsKey(rel)) 
                 _table.Add(rel, this);
         }
@@ -281,6 +279,32 @@ namespace NPOI.XSSF.UserModel
                 return _table[rel];
             else
                 return null;
+        }
+
+        /// <summary>
+        /// Removes the relation from the internal table.
+        /// Following readings of files will ignoring the removed relation.
+        /// </summary>
+        /// <param name="relation">Relation to remove</param>
+        public static void RemoveRelation(XSSFRelation relation)
+        {
+            if (_table.ContainsKey(relation._relation))
+            {
+                _table.Remove(relation._relation);
+            }
+        }
+
+        /// <summary>
+        /// Adds the relation to the internal table.
+        /// Following readings of files will process the given relation.
+        /// </summary>
+        /// <param name="relation">Relation to add</param>
+        internal static void AddRelation(XSSFRelation relation)
+        {
+            if ((null != relation._type) && !_table.ContainsKey(relation._relation))
+            {
+                _table.Add(relation._relation, relation);
+            }
         }
     }
 }

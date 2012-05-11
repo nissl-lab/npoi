@@ -41,11 +41,13 @@ namespace NPOI.XSSF.UserModel
         private WorkbookEvaluator _bookEvaluator;
         private XSSFWorkbook _book;
 
+        public XSSFFormulaEvaluator(IWorkbook workbook)
+            : this(workbook as XSSFWorkbook, null, null)
+        { }
         public XSSFFormulaEvaluator(XSSFWorkbook workbook)
             : this(workbook, null, null)
-        {
+        { }
 
-        }
         /**
          * @param stabilityClassifier used to optimise caching performance. Pass <code>null</code>
          * for the (conservative) assumption that any cell may have its defInition Changed After
