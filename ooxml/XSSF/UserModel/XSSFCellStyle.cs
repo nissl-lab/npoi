@@ -678,7 +678,7 @@ namespace NPOI.XSSF.UserModel
                 {
                     return true;
                 }
-                return (bool)_cellXf.protection.locked;
+                return _cellXf.protection.locked;
             }
             set 
             {
@@ -991,11 +991,14 @@ namespace NPOI.XSSF.UserModel
             {
                 long index = font.Index;
                 this._cellXf.fontId = (uint)index;
+                this._cellXf.fontIdSpecified = true;
                 this._cellXf.applyFont = (true);
+                this._cellXf.applyFontSpecified = true;
             }
             else
             {
                 this._cellXf.applyFont = (false);
+                this._cellXf.applyFontSpecified = false;
             }
         }
 

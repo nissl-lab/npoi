@@ -621,21 +621,21 @@ namespace NPOI.XSSF.UserModel
             XSSFCellStyle orig = (XSSFCellStyle)wb.CreateCellStyle();
             orig.Alignment = (HorizontalAlignment.RIGHT);
             orig.SetFont(fnt);
-            orig.DataFormat = ((short)18);
+            orig.DataFormat = (short)18;
 
-            Assert.IsTrue(HorizontalAlignment.RIGHT == orig.Alignment);
-            Assert.IsTrue(fnt == orig.GetFont());
-            Assert.IsTrue(18 == orig.DataFormat);
+            Assert.AreEqual(HorizontalAlignment.RIGHT,orig.Alignment);
+            Assert.AreEqual(fnt,orig.GetFont());
+            Assert.AreEqual(18,orig.DataFormat);
 
             XSSFCellStyle clone = (XSSFCellStyle)wb.CreateCellStyle();
-            Assert.IsFalse(HorizontalAlignment.RIGHT == clone.Alignment);
-            Assert.IsFalse(fnt ==clone.GetFont());
-            Assert.IsFalse(18 == clone.DataFormat);
+            Assert.AreNotEqual(HorizontalAlignment.RIGHT, clone.Alignment);
+            Assert.AreNotEqual(fnt,clone.GetFont());
+            Assert.AreNotEqual(18,clone.DataFormat);
 
             clone.CloneStyleFrom(orig);
-            Assert.IsTrue(HorizontalAlignment.RIGHT == clone.Alignment);
-            Assert.IsTrue(fnt == clone.GetFont());
-            Assert.IsTrue(18 == clone.DataFormat);
+            Assert.AreEqual(HorizontalAlignment.RIGHT, clone.Alignment);
+            Assert.AreEqual(fnt, clone.GetFont());
+            Assert.AreEqual(18, clone.DataFormat);
             Assert.AreEqual(2, wb.NumberOfFonts);
         }
         /**
