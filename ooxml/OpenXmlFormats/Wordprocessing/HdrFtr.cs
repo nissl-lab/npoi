@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Xml;
 using System.Xml.Serialization;
 using NPOI.OpenXmlFormats.Shared;
+using System.Xml.Schema;
 
 namespace NPOI.OpenXmlFormats.Wordprocessing
 {
@@ -615,8 +616,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-       // correct namespace, but no need for ns prefix: [XmlAttribute(Form = XmlSchemaForm.Qualified, DataType = "integer", Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
-        [XmlAttribute(DataType = "integer")]
+        [XmlAttribute(Form = XmlSchemaForm.Qualified, DataType = "integer", Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
         public string id
         {
             get
