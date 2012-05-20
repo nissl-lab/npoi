@@ -1930,7 +1930,7 @@ namespace NPOI.XSSF.UserModel
                 CT_Col nci = new CT_Col();
                 nci.min = (uint)targetColumnIx;
                 nci.max = (uint)targetColumnIx;
-                unSetCollapsed((bool)collapsed, nci);
+                UnsetCollapsed((bool)collapsed, nci);
                 this.columnHelper.AddCleanColIntoCols(cols, nci);
                 return;
             }
@@ -1954,7 +1954,7 @@ namespace NPOI.XSSF.UserModel
             if (ci.min == targetColumnIx && ci.max == targetColumnIx)
             {
                 // ColumnInfo ci for a single column, the target column
-                unSetCollapsed((bool)collapsed, ci);
+                UnsetCollapsed((bool)collapsed, ci);
                 return;
             }
 
@@ -1974,7 +1974,7 @@ namespace NPOI.XSSF.UserModel
                 }
                 CT_Col nci = columnHelper.CloneCol(cols, ci);
                 nci.min = (uint)(targetColumnIx);
-                unSetCollapsed((bool)collapsed, nci);
+                UnsetCollapsed((bool)collapsed, nci);
                 this.columnHelper.AddCleanColIntoCols(cols, nci);
 
             }
@@ -1990,7 +1990,7 @@ namespace NPOI.XSSF.UserModel
 
                 ciMid.min = (uint)(targetColumnIx);
                 ciMid.max = (uint)(targetColumnIx);
-                unSetCollapsed((bool)collapsed, ciMid);
+                UnsetCollapsed((bool)collapsed, ciMid);
                 this.columnHelper.AddCleanColIntoCols(cols, ciMid);
 
                 ciEnd.min = (uint)(targetColumnIx + 1);
@@ -1999,7 +1999,7 @@ namespace NPOI.XSSF.UserModel
             }
         }
 
-        private void unSetCollapsed(bool collapsed, CT_Col ci)
+        private void UnsetCollapsed(bool collapsed, CT_Col ci)
         {
             if (collapsed)
             {

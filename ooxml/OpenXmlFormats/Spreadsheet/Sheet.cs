@@ -3294,22 +3294,23 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         private uint maxField; // required
 
         private double widthField;  // optional, but width has no default value
+        private bool widthSpecifiedField;
 
-        private bool widthFieldSpecified;
+        private uint styleField;// optional, as are the following attributes
+        private bool styleSpecifiedField;
 
-        private uint? styleField = null;// optional, as are the following attributes
+        private bool hiddenField;
 
-        private bool? hiddenField = null;
+        private bool bestFitField;
 
-        private bool? bestFitField = null;
+        private bool customWidthField;
 
-        private bool? customWidthField = null;
+        private bool phoneticField;
 
-        private bool? phoneticField = null;
+        private byte outlineLevelField;
 
-        private byte? outlineLevelField = null;
-
-        private bool? collapsedField = null;
+        private bool collapsedField=true;
+        private bool collapsedSpecifiedField=false;
 
         [XmlAttribute]
         public uint min
@@ -3347,6 +3348,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             set
             {
                 this.widthField = value;
+                this.widthSpecified = true;
             }
         }
         [XmlIgnore]
@@ -3354,56 +3356,55 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             get
             {
-                return this.widthFieldSpecified;
+                return this.widthSpecifiedField;
             }
             set
             {
-                this.widthFieldSpecified = value;
+                this.widthSpecifiedField = value;
             }
         }
 
 
         public bool IsSetBestFit()
         {
-            return this.bestFitField!=null;
+            return this.bestFitField != false ;
         }
         public bool IsSetCustomWidth()
         {
-            return this.customWidthField!=null;
+            return this.customWidthField != false;
         }
         public bool IsSetHidden()
         {
-            return hiddenField != null;
+            return this.hiddenField!=false;
         }
-        public bool isSetStyle()
+        public bool IsSetStyle()
         {
-            return this.styleField!=null;
+            return this.styleSpecifiedField;
         }
         public bool IsSetWidth()
         {
-            return this.widthField!=0;
+            return this.widthSpecifiedField;
         }
         public bool IsSetCollapsed()
         {
-            return this.collapsedField != null;
+            return this.collapsedSpecifiedField;
         }
         public bool IsSetPhonetic()
         {
-            return this.phoneticField!=null;
+            return this.phoneticField!=false;
         }
         public bool IsSetOutlineLevel()
         {
-            return this.outlineLevelField!=null;
+            return this.outlineLevelField!=0;
         }
-
-
         public void UnsetHidden()
         {
-            this.hiddenField = null;
+            this.hiddenField = false;
         }
         public void UnsetCollapsed()
         {
-            this.collapsedField = null;
+            this.collapsedField = true;
+            this.collapsedSpecified = false;
         }
 
 
@@ -3414,7 +3415,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             get
             {
-                return (null == styleField) ? 0 : (uint)this.styleField;
+                return styleField;
             }
             set
             {
@@ -3424,8 +3425,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         [XmlIgnore]
         public bool styleSpecified
         {
-            get { return (null != styleField); }
-            set { CT_Row.SetSpecifiedWithDefaultValue(styleField, value); }
+            get { return this.styleSpecifiedField; }
+            set { this.styleSpecifiedField = value; }
         }
 
         [DefaultValue(false)]
@@ -3434,18 +3435,12 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             get
             {
-                return (null == hiddenField) ? false : (bool)this.hiddenField;
+                return hiddenField;
             }
             set
             {
                 this.hiddenField = value;
             }
-        }
-        [XmlIgnore]
-        public bool hiddenSpecified
-        {
-            get { return (null != hiddenField); }
-            set { CT_Row.SetSpecifiedWithDefaultFalse(hiddenField, value); }
         }
 
         [DefaultValue(false)]
@@ -3454,39 +3449,25 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             get
             {
-                return (null == bestFitField) ? false : (bool)this.bestFitField;
+                return bestFitField;
             }
             set
             {
                 this.bestFitField = value;
             }
         }
-        [XmlIgnore]
-        public bool bestFitSpecified
-        {
-            get { return (null != bestFitField); }
-            set { CT_Row.SetSpecifiedWithDefaultFalse(bestFitField, value); }
-        }
-
-
         [DefaultValue(false)]
         [XmlAttribute]
         public bool customWidth
         {
             get
             {
-                return (null == customWidthField) ? false : (bool)this.customWidthField;
+                return customWidthField;
             }
             set
             {
                 this.customWidthField = value;
             }
-        }
-        [XmlIgnore]
-        public bool customWidthSpecified
-        {
-            get { return (null != customWidthField); }
-            set { CT_Row.SetSpecifiedWithDefaultFalse(customWidthField, value); }
         }
 
         [DefaultValue(false)]
@@ -3495,18 +3476,12 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             get
             {
-                return (null == phoneticField) ? false : (bool)this.phoneticField;
+                return phoneticField;
             }
             set
             {
                 this.phoneticField = value;
             }
-        }
-        [XmlIgnore]
-        public bool phoneticSpecified
-        {
-            get { return (null != phoneticField); }
-            set { CT_Row.SetSpecifiedWithDefaultFalse(phoneticField, value); }
         }
 
 
@@ -3516,39 +3491,33 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             get
             {
-                return (null == outlineLevelField) ? (byte)0 : (byte)this.outlineLevelField;
+                return outlineLevelField;
             }
             set
             {
                 this.outlineLevelField = value;
             }
         }
-        [XmlIgnore]
-        public bool outlineLevelSpecified
-        {
-            get { return (null != outlineLevelField); }
-            set { CT_Row.SetSpecifiedWithDefaultValue(outlineLevelField, value); }
-        }
 
-
-        [DefaultValue(false)]
+        [DefaultValue(true)]
         [XmlAttribute]
         public bool collapsed
         {
             get
             {
-                return (null == collapsedField) ? false : (bool)this.collapsedField;
+                return collapsedField;
             }
             set
             {
                 this.collapsedField = value;
+                this.collapsedSpecifiedField = true;
             }
         }
         [XmlIgnore]
         public bool collapsedSpecified
         {
-            get { return (null != collapsedField); }
-            set { CT_Row.SetSpecifiedWithDefaultFalse(collapsedField, value); }
+            get { return this.collapsedSpecifiedField; }
+            set { this.collapsedSpecifiedField = value; }
         }
 
 

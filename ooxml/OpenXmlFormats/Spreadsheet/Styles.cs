@@ -37,21 +37,11 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         private bool applyAlignmentField = false;
         private bool applyProtectionField = false;
 
-        bool alignmentSpecifiedField = false;
-        bool protectionSpecifiedField = false;
         bool numFmtIdSpecifiedField = false;
         bool fontIdSpecifiedField = false;
         bool fillIdSpecifiedField = false;
         bool borderIdSpecifiedField = false;
         bool xfIdSpecifiedField = false;
-        bool quotePrefixSpecifiedField = false;
-        bool pivotButtonSpecifiedField = false;
-        bool applyNumberFormatSpecifiedField = false;
-        bool applyFontSpecifiedField = false;
-        bool applyFillSpecifiedField = false;
-        bool applyBorderSpecifiedField = false;
-        bool applyAlignmentSpecifiedField = false;
-        bool applyProtectionSpecifiedField = false;
 
         public CT_Xf Copy()
         {
@@ -157,7 +147,10 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         public uint numFmtId
         {
             get { return this.numFmtIdField; }
-            set { this.numFmtIdField = value; }
+            set { 
+                this.numFmtIdField = value;
+                this.numFmtIdSpecifiedField = true;
+            }
         }
 
         [XmlIgnore]
@@ -171,7 +164,10 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         public uint fontId
         {
             get { return this.fontIdField; }
-            set { this.fontIdField = value; }
+            set { 
+                this.fontIdField = value;
+                this.fontIdSpecifiedField = true;
+            }
         }
 
         [XmlIgnore]
@@ -185,7 +181,10 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         public uint fillId
         {
             get { return this.fillIdField; }
-            set { this.fillIdField = value; }
+            set { 
+                this.fillIdField = value;
+                this.fillIdSpecifiedField = true;
+            }
         }
 
         [XmlIgnore]
@@ -199,10 +198,11 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         public uint borderId
         {
             get { return this.borderIdField; }
-            set { this.borderIdField = value; }
+            set { 
+                this.borderIdField = value;
+                borderIdSpecifiedField = true;
+            }
         }
-
-        
         [XmlIgnore]
         public bool borderIdSpecified
         {
@@ -214,7 +214,10 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         public uint xfId
         {
             get { return this.xfIdField; }
-            set { this.xfIdField = value; }
+            set { 
+                this.xfIdField = value;
+                this.xfIdSpecifiedField = true;
+            }
         }
         [XmlIgnore]
         public bool xfIdSpecified
@@ -230,12 +233,6 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             get { return quotePrefixField; }
             set { this.quotePrefixField = value; }
         }
-        [XmlIgnore]
-        public bool quotePrefixSpecified
-        {
-            get { return quotePrefixSpecifiedField; }
-            set { quotePrefixSpecifiedField = value; }
-        }
 
         [XmlAttribute]
         [DefaultValue(false)]
@@ -245,14 +242,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             set { this.pivotButtonField = value; }
         }
 
-        [XmlIgnore]
-        public bool pivotButtonSpecified
-        {
-            get { return pivotButtonSpecifiedField; }
-            set { pivotButtonSpecifiedField = value; }
-        }
-
         [XmlAttribute]
+        [DefaultValue(false)]
         public bool applyNumberFormat
         {
             get { return this.applyNumberFormatField; }
@@ -262,78 +253,42 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        
-        
-        [XmlIgnore]
-        public bool applyNumberFormatSpecified
-        {
-            get { return applyNumberFormatSpecifiedField; }
-            set { applyNumberFormatSpecifiedField = value; }
-        }
-
         [XmlAttribute]
+        [DefaultValue(false)]
         public bool applyFont
         {
             get { return this.applyFontField; }
             set { this.applyFontField = value; }
         }
-        [XmlIgnore]
-        public bool applyFontSpecified
-        {
-            get { return applyFontSpecifiedField; }
-            set { applyFontSpecifiedField = value; }
-        }
 
         [XmlAttribute]
+        [DefaultValue(false)]
         public bool applyFill
         {
             get { return this.applyFillField; }
             set { this.applyFillField = value; }
         }
-        [XmlIgnore]
-        public bool applyFillSpecified
-        {
-            get { return applyFillSpecifiedField; }
-            set { applyFillSpecifiedField = value; }
-        }
-
         [XmlAttribute]
+        [DefaultValue(false)]
         public bool applyBorder
         {
             get { return this.applyBorderField; }
             set { this.applyBorderField = value; }
         }
-        [XmlIgnore]
-        public bool applyBorderSpecified
-        {
-            get { return applyBorderSpecifiedField; }
-            set { applyBorderSpecifiedField = value; }
-        }
         [XmlAttribute]
+        [DefaultValue(false)]
         public bool applyAlignment
         {
             get { return this.applyAlignmentField; }
             set { this.applyAlignmentField = value; }
         }
-        [XmlIgnore]
-        public bool applyAlignmentSpecified
-        {
-            get { return applyAlignmentSpecifiedField; }
-            set { applyAlignmentSpecifiedField = value; }
-
-        }
 
         [XmlAttribute]
+        [DefaultValue(false)]
         public bool applyProtection
         {
             get { return this.applyProtectionField; }
             set { this.applyProtectionField = value; }
-        }
-        [XmlIgnore]
-        public bool applyProtectionSpecified
-        {
-            get { return applyProtectionSpecifiedField; }
-            set { applyProtectionSpecifiedField = value; }
         }
     }
 

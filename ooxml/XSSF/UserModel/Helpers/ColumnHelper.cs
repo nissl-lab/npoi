@@ -248,15 +248,43 @@ namespace NPOI.XSSF.UserModel.Helpers
         public void SetColumnAttributes(CT_Col fromCol, CT_Col toCol)
         {
 
-            if (fromCol.IsSetBestFit()) toCol.bestFit = (fromCol.bestFit);
-            if (fromCol.IsSetCustomWidth()) toCol.customWidth = (fromCol.customWidth);
-            if (fromCol.IsSetHidden()) toCol.hidden=(fromCol.hidden);
-            if (fromCol.isSetStyle()) toCol.style=(fromCol.style);
-            if (fromCol.IsSetWidth()) toCol.width=(fromCol.width);
-            if (fromCol.IsSetCollapsed()) toCol.collapsed=(fromCol.collapsed);
-            if (fromCol.IsSetPhonetic()) toCol.phonetic=(fromCol.phonetic);
-            if (fromCol.IsSetOutlineLevel()) toCol.outlineLevel = (fromCol.outlineLevel);
-            toCol.collapsed = (fromCol.IsSetCollapsed());
+            if (fromCol.IsSetBestFit())
+            {
+                toCol.bestFit = (fromCol.bestFit);
+            }
+            if (fromCol.IsSetCustomWidth())
+            {
+                toCol.customWidth = (fromCol.customWidth);
+            }
+            if (fromCol.IsSetHidden()) 
+            {
+                toCol.hidden = (fromCol.hidden);
+            }
+            if (fromCol.IsSetStyle())
+            {
+                toCol.style = (fromCol.style);
+                toCol.styleSpecified = true;
+            }
+            if (fromCol.IsSetWidth())
+            {
+                toCol.width = (fromCol.width);
+            }
+            if (fromCol.IsSetCollapsed())
+            {
+                toCol.collapsed = (fromCol.collapsed);
+            }
+            if (fromCol.IsSetPhonetic())
+            {
+                toCol.phonetic = (fromCol.phonetic);
+            }
+            if (fromCol.IsSetOutlineLevel())
+            {
+                toCol.outlineLevel = (fromCol.outlineLevel);
+            }
+            if (fromCol.IsSetCollapsed())
+            {
+                toCol.collapsed = fromCol.collapsed;
+            }
         }
 
         public void SetColBestFit(long index, bool bestFit)
@@ -264,10 +292,10 @@ namespace NPOI.XSSF.UserModel.Helpers
             CT_Col col = GetOrCreateColumn1Based(index + 1, false);
             col.bestFit = (bestFit);
         }
-        public void SetCustomWidth(long index, bool bestFit)
+        public void SetCustomWidth(long index, bool width)
         {
             CT_Col col = GetOrCreateColumn1Based(index + 1, true);
-            col.customWidth = (bestFit);
+            col.customWidth = (width);
         }
 
         public void SetColWidth(long index, double width)
@@ -307,6 +335,7 @@ namespace NPOI.XSSF.UserModel.Helpers
         {
             CT_Col col = GetOrCreateColumn1Based(index + 1, true);
             col.style = (uint)styleId;
+            col.styleSpecified = true;
         }
 
         // Returns -1 if no column is found for the given index

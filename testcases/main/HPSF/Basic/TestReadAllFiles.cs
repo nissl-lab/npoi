@@ -71,6 +71,8 @@ namespace TestCases.HPSF.Basic
                     if (files[i].EndsWith("1"))
                         continue;
 
+                    Console.WriteLine("Reading file \"" + files[i] + "\"");
+
                     using (FileStream f = new FileStream(files[i], FileMode.Open, FileAccess.Read))
                     {
                         /* Read the POI filesystem's property Set streams: */

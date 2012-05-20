@@ -657,7 +657,7 @@ namespace TestCases.HPSF.Basic
                     || files[i].EndsWith("excel_with_embeded.xls"))
                     continue;
 
-                TestRecreate(_samples.GetFile(new FileInfo(files[i]).Name));
+                TestRecreate(new FileInfo(files[i]));
             }
         }
 
@@ -669,12 +669,12 @@ namespace TestCases.HPSF.Basic
          *
          * @param f the POI filesystem to check
          */
-        private void TestRecreate(FileStream f)
+        private void TestRecreate(FileInfo f)
         {
-            Console.WriteLine("Recreating file \"" + f + "\"");
-
+            Console.WriteLine("Recreating file \"" + f.Name + "\"");
+            
             /* Read the POI filesystem's property Set streams: */
-            POIFile[] psf1 = Util.ReadPropertySets(f);
+            POIFile[] psf1 = Util.ReadPropertySets(_samples.GetFile(f.Name));
 
             /* Create a new POI filesystem containing the origin file's
              * property Set streams: */

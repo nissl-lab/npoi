@@ -89,9 +89,9 @@ namespace TestCases.POIFS.NIO
         public void TestByteArray()
         {
             byte[] data = new byte[256];
-            for (byte i = 0; i < data.Length; i++)
+            for (int i = 0; i < data.Length; i++)
             {
-                data[i] = i;
+                data[i] = (byte)i;
             }
 
             ByteArrayBackedDataSource ds = new ByteArrayBackedDataSource(data);
