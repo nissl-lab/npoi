@@ -9,6 +9,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SetWidthAndHeightInXlsx", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ColorfulMatrix", "ColorfulMatrix\ColorfulMatrix.csproj", "{A3103D4C-7334-4B70-9524-E57105EB5E55}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FillBackgroundInXlsx", "FillBackgroundInXlsx\FillBackgroundInXlsx.csproj", "{B6485025-FA2D-4BFB-A98A-A7AE95582EE3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataFormatsInXlsx", "DataFormatsInXlsx\DataFormatsInXlsx.csproj", "{4FDDC7EA-AA4C-429B-A579-39C89B522ACF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
@@ -31,6 +35,14 @@ Global
 		{A3103D4C-7334-4B70-9524-E57105EB5E55}.Debug|x86.Build.0 = Debug|x86
 		{A3103D4C-7334-4B70-9524-E57105EB5E55}.Release|x86.ActiveCfg = Release|x86
 		{A3103D4C-7334-4B70-9524-E57105EB5E55}.Release|x86.Build.0 = Release|x86
+		{B6485025-FA2D-4BFB-A98A-A7AE95582EE3}.Debug|x86.ActiveCfg = Debug|x86
+		{B6485025-FA2D-4BFB-A98A-A7AE95582EE3}.Debug|x86.Build.0 = Debug|x86
+		{B6485025-FA2D-4BFB-A98A-A7AE95582EE3}.Release|x86.ActiveCfg = Release|x86
+		{B6485025-FA2D-4BFB-A98A-A7AE95582EE3}.Release|x86.Build.0 = Release|x86
+		{4FDDC7EA-AA4C-429B-A579-39C89B522ACF}.Debug|x86.ActiveCfg = Debug|x86
+		{4FDDC7EA-AA4C-429B-A579-39C89B522ACF}.Debug|x86.Build.0 = Debug|x86
+		{4FDDC7EA-AA4C-429B-A579-39C89B522ACF}.Release|x86.ActiveCfg = Release|x86
+		{4FDDC7EA-AA4C-429B-A579-39C89B522ACF}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
