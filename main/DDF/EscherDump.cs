@@ -26,7 +26,7 @@ namespace NPOI.DDF
 
 
     using NPOI.Util;
-    using Ionic.Zlib;
+    using ICSharpCode.SharpZipLib.Zip;
 
     /// <summary>
     /// Used to dump the contents of escher records to a PrintStream.
@@ -389,7 +389,7 @@ namespace NPOI.DDF
 
                     using (MemoryStream bin = new MemoryStream(buf))
                     {
-                        using (ZlibStream in2 = new ZlibStream(bin, CompressionMode.Decompress, false))
+                        using (ZipInputStream in2 = new ZipInputStream(bin))
                         {
                             int bytesToDump = -1;
                             HexDump.Dump(in2, 0, bytesToDump);

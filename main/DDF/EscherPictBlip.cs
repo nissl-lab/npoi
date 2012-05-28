@@ -22,7 +22,7 @@ namespace NPOI.DDF
     using System.Collections;
     using System.Drawing;
     using NPOI.Util;
-    using Ionic.Zlib;
+    using ICSharpCode.SharpZipLib.Zip;
 
     /// <summary>
     /// @author Daniel Noll
@@ -142,7 +142,7 @@ namespace NPOI.DDF
                 {
                     using (MemoryStream ms = new MemoryStream(data))
                     {
-                        using (ZlibStream in1 = new ZlibStream(ms, CompressionMode.Decompress))
+                        using (ZipInputStream in1 = new ZipInputStream(ms))
                         {
                             byte[] buf = new byte[4096];
                             int ReadBytes;

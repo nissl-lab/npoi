@@ -360,7 +360,6 @@ namespace NPOI.HSSF.UserModel
         /// Gets or sets the color to use for the left border
         /// </summary>
         /// <value>The index of the color definition</value>
-        /// @see org.apache.poi.hssf.usermodel.HSSFPalette#GetColor(short)
         public short LeftBorderColor
         {
             get { return format.LeftBorderPaletteIdx; }
@@ -372,7 +371,6 @@ namespace NPOI.HSSF.UserModel
         /// Gets or sets the color to use for the left border.
         /// </summary>
         /// <value>The index of the color definition</value>
-        /// @see org.apache.poi.hssf.usermodel.HSSFPalette#GetColor(short)
         public short RightBorderColor
         {
             get { return format.RightBorderPaletteIdx; }
@@ -384,7 +382,6 @@ namespace NPOI.HSSF.UserModel
         /// Gets or sets the color to use for the top border
         /// </summary>
         /// <value>The index of the color definition.</value>
-        /// @see org.apache.poi.hssf.usermodel.HSSFPalette#GetColor(short)
         public short TopBorderColor
         {
             get { return format.TopBorderPaletteIdx; }
@@ -396,11 +393,22 @@ namespace NPOI.HSSF.UserModel
         /// Gets or sets the color to use for the left border
         /// </summary>
         /// <value>The index of the color definition.</value>
-        /// @see org.apache.poi.hssf.usermodel.HSSFPalette#GetColor(short)
         public short BottomBorderColor
         {
             get { return format.BottomBorderPaletteIdx; }
             set { format.BottomBorderPaletteIdx = (value); }
+        }
+
+        public short DiagionalBorderColor
+        {
+            get { return format.AdtlFillPattern; }
+            set { format.AdtlFillPattern = value; }
+        }
+
+        public BorderStyle DiagionalBorder
+        {
+            get { return (BorderStyle)format.AdtlDiagLineStyle; }
+            set { format.AdtlDiagLineStyle=(short)value; }
         }
 
         /// <summary>

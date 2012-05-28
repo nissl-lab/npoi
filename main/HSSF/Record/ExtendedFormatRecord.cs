@@ -173,7 +173,7 @@ namespace NPOI.HSSF.Record
             BitFieldFactory.GetInstance(0x01e00000);
 
         // apparently bit 25 Is Unused
-        static private BitField _adtl_Fill_pattern =
+        static private BitField _adtl_fill_pattern =
             BitFieldFactory.GetInstance(unchecked((int)0xfc000000));
         private int field_8_adtl_palette_options;   // Additional to avoid 2
 
@@ -815,12 +815,12 @@ namespace NPOI.HSSF.Record
         /// </summary>
         public short AdtlFillPattern
         {
-            get{return (short)_adtl_Fill_pattern
+            get{return (short)_adtl_fill_pattern
                 .GetValue(field_8_adtl_palette_options);}
             set
             {
                 field_8_adtl_palette_options =
-                    _adtl_Fill_pattern.SetValue(field_8_adtl_palette_options, value);
+                    _adtl_fill_pattern.SetValue(field_8_adtl_palette_options, value);
             }
         }
 

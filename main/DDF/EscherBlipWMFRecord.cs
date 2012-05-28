@@ -25,7 +25,7 @@ namespace NPOI.DDF
     using NPOI.Util;
     using System.IO;
     using NPOI.HSSF.Record;
-    using Ionic.Zlib;
+    using ICSharpCode.SharpZipLib.Zip;
 
 
     /// <summary>
@@ -320,7 +320,7 @@ namespace NPOI.DDF
         {
             using (MemoryStream out1 = new MemoryStream())
             {
-                ZlibStream deflaterOutputStream = new ZlibStream(out1, CompressionMode.Compress);
+                ZipOutputStream deflaterOutputStream = new ZipOutputStream(out1);
                 try
                 {
                     //for (int i = 0; i < data.Length; i++)
@@ -356,7 +356,7 @@ namespace NPOI.DDF
             Array.Copy(data, pos + 50, compressedData, 0, Length);
             using (MemoryStream ms = new MemoryStream(compressedData))
             {
-                using (ZlibStream inflaterInputStream = new ZlibStream(ms, CompressionMode.Decompress))
+                using (ZipInputStream inflaterInputStream = new ZipInputStream(ms))
                 {
                     using (MemoryStream out1 = new MemoryStream())
                     {
