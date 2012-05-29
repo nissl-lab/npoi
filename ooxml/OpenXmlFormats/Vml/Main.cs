@@ -6,20 +6,20 @@ using NPOI.OpenXmlFormats.Vml.Wordprocessing;
 using NPOI.OpenXmlFormats.Vml.Office;
 using NPOI.OpenXmlFormats.Vml.Spreadsheet;
 using NPOI.OpenXmlFormats.Vml.Presentation;
+using System.IO;
+using System.Xml;
+using System.Text;
 
 namespace NPOI.OpenXmlFormats.Vml
 {
-    
+
     [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace="urn:schemas-microsoft-com:vml")]
-    [XmlRoot(Namespace="urn:schemas-microsoft-com:vml", IsNullable=true)]
+    [XmlRoot("shape",Namespace="urn:schemas-microsoft-com:vml", IsNullable=true)]
     public partial class CT_Shape {
         
-        private List<object> itemsField;
-        
-        private ItemsChoiceType1[] itemsElementNameField;
         
         private string typeField;
         
@@ -28,6 +28,46 @@ namespace NPOI.OpenXmlFormats.Vml
         private CT_Path pathField;
         
         private string equationxmlField;
+
+        private string idField;
+        private string fillcolorField;
+        private ST_InsetMode insetmodeField;
+
+
+        static XmlSerializer serializer = new XmlSerializer(typeof(CT_Shape), "urn:schemas-microsoft-com:vml");
+        public static CT_Shape Parse(string xmltext)
+        {
+            TextReader tr = new StringReader(xmltext);
+            CT_Shape obj = (CT_Shape)serializer.Deserialize(tr);
+            return obj;
+        }
+
+        [XmlAttribute]
+        public string id
+        {
+            get { return idField; }
+            set { idField = value; }
+        }
+
+        [XmlAttribute]
+        public string fillcolor
+        {
+            get { return fillcolorField; }
+            set { fillcolorField = value; }
+        }
+
+        [XmlAttribute(Namespace = "urn:schemas-microsoft-com:office:office")]
+        public ST_InsetMode insetmode
+        {
+            get { return insetmodeField; }
+            set { insetmodeField = value; }
+        }
+
+        public CT_Textbox AddNewTextbox()
+        {
+            textboxField = new CT_Textbox();
+            return this.textboxField;
+            }
 
         private CT_Wrap wrapField;
         private CT_Fill fillField;
@@ -38,39 +78,20 @@ namespace NPOI.OpenXmlFormats.Vml
         private CT_Shadow shadowField;
         private CT_Textbox textboxField;
         private CT_TextPath textpathField;
+        private CT_Empty iscommentField;
 
-        
-        
-        [XmlElement("ClientData", typeof(CT_ClientData), Namespace="urn:schemas-microsoft-com:office:excel")]
-        [XmlElement("iscomment", typeof(CT_Empty), Namespace="urn:schemas-microsoft-com:office:powerpoint")]
-        [XmlElement("textdata", typeof(CT_Rel), Namespace="urn:schemas-microsoft-com:office:powerpoint")]
-        [XmlElement("anchorlock", typeof(CT_AnchorLock), Namespace="urn:schemas-microsoft-com:office:word")]
-        [XmlElement("borderbottom", typeof(CT_Border), Namespace="urn:schemas-microsoft-com:office:word")]
-        [XmlElement("borderleft", typeof(CT_Border), Namespace="urn:schemas-microsoft-com:office:word")]
-        [XmlElement("borderright", typeof(CT_Border), Namespace="urn:schemas-microsoft-com:office:word")]
-        [XmlElement("bordertop", typeof(CT_Border), Namespace="urn:schemas-microsoft-com:office:word")]
-        [XmlChoiceIdentifier("ItemsElementName")]
-        public List<object> Items {
-            get {
-                return this.itemsField;
-            }
-            set {
-                this.itemsField = value;
-            }
-        }
-        
-        [XmlElement("ItemsElementName")]
-        [XmlIgnore]
-        public ItemsChoiceType1[] ItemsElementName
+        /*[XmlElement("textdata", typeof(CT_Rel), Namespace = "urn:schemas-microsoft-com:office:powerpoint")]
+        [XmlElement("anchorlock", typeof(CT_AnchorLock), Namespace = "urn:schemas-microsoft-com:office:word")]
+        [XmlElement("borderbottom", typeof(CT_Border), Namespace = "urn:schemas-microsoft-com:office:word")]
+        [XmlElement("borderleft", typeof(CT_Border), Namespace = "urn:schemas-microsoft-com:office:word")]
+        [XmlElement("borderright", typeof(CT_Border), Namespace = "urn:schemas-microsoft-com:office:word")]
+        [XmlElement("bordertop", typeof(CT_Border), Namespace = "urn:schemas-microsoft-com:office:word")]*/
+
+        [XmlElement(Namespace = "urn:schemas-microsoft-com:office:powerpoint")]
+        public CT_Empty iscomment
         {
-            get
-            {
-                return this.itemsElementNameField;
-            }
-            set
-            {
-                this.itemsElementNameField = value;
-            }
+            get { return this.iscommentField; }
+            set { this.iscommentField = value; }
         }
 
         [XmlElement(Namespace="urn:schemas-microsoft-com:office:word")]
@@ -78,6 +99,12 @@ namespace NPOI.OpenXmlFormats.Vml
         {
             get { return this.wrapField; }
             set { this.wrapField = value; }
+        }
+        [XmlElement]
+        public CT_Textbox textbox
+        {
+            get { return this.textboxField; }
+            set { this.textboxField = value; }
         }
         [XmlElement]
         public CT_Fill fill
@@ -126,10 +153,15 @@ namespace NPOI.OpenXmlFormats.Vml
             this.shadowField = new CT_Shadow();
             return this.shadowField;
         }
+        public CT_Path AddNewPath()
+        {
+            this.pathField = new CT_Path();
+            return this.pathField;       
+        }
         List<CT_ClientData> clientDataField = null;
 
-        [XmlElement]
-        public List<CT_ClientData> clientData
+        [XmlElement("ClientData",Namespace = "urn:schemas-microsoft-com:office:excel")]
+        public List<CT_ClientData> ClientData
         {
             get { return clientDataField; }
             set { clientDataField = value; }
@@ -138,6 +170,20 @@ namespace NPOI.OpenXmlFormats.Vml
         public CT_ClientData GetClientDataArray(int index)
         {
             return clientDataField != null ? this.clientDataField[index] : null;
+        }
+        public int sizeOfClientDataArray()
+        {
+            if (clientDataField == null)
+                return 0;
+            return clientDataField.Count;
+        }
+        public CT_ClientData AddNewClientData()
+        {
+            CT_ClientData cd=new CT_ClientData();
+            if (clientDataField == null)
+                this.clientDataField = new List<CT_ClientData>();
+            this.clientDataField.Add(cd);
+            return cd;
         }
         
         
@@ -193,6 +239,28 @@ namespace NPOI.OpenXmlFormats.Vml
             set 
             {
                 this.styleField = value;
+            }
+        }
+        internal static XmlSerializerNamespaces namespaces = new XmlSerializerNamespaces(new[] {
+            new XmlQualifiedName("o", "urn:schemas-microsoft-com:office:office"),
+            new XmlQualifiedName("x", "urn:schemas-microsoft-com:office:excel"),
+            new XmlQualifiedName("v", "urn:schemas-microsoft-com:vml")
+        });
+
+        public override string ToString()
+        {
+            using (StringWriter stringWriter = new StringWriter())
+            {
+                var settings = new XmlWriterSettings
+                {
+                    Encoding = Encoding.UTF8,
+                    OmitXmlDeclaration = true
+                };
+                using (var writer = XmlWriter.Create(stringWriter, settings))
+                {
+                    serializer.Serialize(writer, this, namespaces);
+                }
+                return stringWriter.ToString();
             }
         }
     }
@@ -653,17 +721,6 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         
-        [XmlAttribute("id")]//, Form=System.Xml.Schema.XmlSchemaForm.Qualified, Namespace="http://schemas.openxmlformats.org/officeDocument/2006/relationships")]
-        public string id1 {
-            get {
-                return this.id1Field;
-            }
-            set {
-                this.id1Field = value;
-            }
-        }
-        
-        
         [XmlAttribute]//(Form=System.Xml.Schema.XmlSchemaForm.Qualified, Namespace="http://schemas.openxmlformats.org/officeDocument/2006/relationships")]
         public string pict {
             get {
@@ -730,6 +787,8 @@ namespace NPOI.OpenXmlFormats.Vml
         
         private bool insetpenokFieldSpecified;
 
+        private ST_ConnectType connecttypeField;
+
 
         [XmlAttribute]
         public string id
@@ -741,7 +800,18 @@ namespace NPOI.OpenXmlFormats.Vml
                 this.idField = value;
             }
         }
-        
+        [XmlAttribute(Namespace = "urn:schemas-microsoft-com:office:office")]
+        public ST_ConnectType connecttype
+        {
+            get
+            {
+                return this.connecttypeField;
+            }
+            set
+            {
+                this.connecttypeField = value;
+            }
+        }
         
         [XmlAttribute]
         public string v {
@@ -1623,19 +1693,7 @@ namespace NPOI.OpenXmlFormats.Vml
                 this.endarrowlengthFieldSpecified = value;
             }
         }
-
-
-        [XmlAttribute("id")]
-        public string id1
-        {
-            get {
-                return this.id1Field;
-            }
-            set {
-                this.id1Field = value;
-            }
-        }
-        
+                
         
         [XmlAttribute]
         public ST_TrueFalse insetpen {
@@ -2085,10 +2143,10 @@ namespace NPOI.OpenXmlFormats.Vml
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace="urn:schemas-microsoft-com:vml")]
-    [XmlRoot(Namespace="urn:schemas-microsoft-com:vml", IsNullable=true)]
+    [XmlRoot("shapetype",Namespace="urn:schemas-microsoft-com:vml", IsNullable=true)]
     public partial class CT_Shapetype {
         
-        private List<CT_Path> pathField;
+        private CT_Path pathField;
         
         private List<CT_Formulas> formulasField;
         
@@ -2096,7 +2154,7 @@ namespace NPOI.OpenXmlFormats.Vml
         
         private List<CT_Fill> fillField;
         
-        private List<CT_Stroke> strokeField;
+        private CT_Stroke strokeField;
         
         private List<CT_Shadow> shadowField;
         
@@ -2125,8 +2183,43 @@ namespace NPOI.OpenXmlFormats.Vml
         private string adjField;
         private string idField;
         private string styleField;
+        private float sptField;
+        private string coordsizeField;
 
-        
+        static XmlSerializer serializer = new XmlSerializer(typeof(CT_Shapetype), "urn:schemas-microsoft-com:vml");
+
+        public static CT_Shapetype Parse(string xmltext)
+        {
+            TextReader tr = new StringReader(xmltext);
+            CT_Shapetype obj = (CT_Shapetype)serializer.Deserialize(tr);
+            return obj;
+        }
+
+        [XmlAttribute(Namespace = "urn:schemas-microsoft-com:office:office")]
+        public string coordsize
+        {
+            get
+            {
+                return this.coordsizeField;
+            }
+            set
+            {
+                this.coordsizeField = value;
+            }
+        }
+
+        [XmlAttribute(Namespace = "urn:schemas-microsoft-com:office:office")]
+        public float spt
+        {
+            get
+            {
+                return this.sptField;
+            }
+            set
+            {
+                this.sptField = value;
+            }
+        }
         private string path1Field;
 
         [XmlAttribute]
@@ -2140,14 +2233,14 @@ namespace NPOI.OpenXmlFormats.Vml
                 this.idField = value;
             }
         }
-
         
         [XmlElement("path")]
-        public List<CT_Path> path {
+        public CT_Path path {
             get {
                 return this.pathField;
             }
             set {
+
                 this.pathField = value;
             }
         }
@@ -2187,7 +2280,7 @@ namespace NPOI.OpenXmlFormats.Vml
         
         
         [XmlElement("stroke")]
-        public List<CT_Stroke> stroke {
+        public CT_Stroke stroke {
             get {
                 return this.strokeField;
             }
@@ -2197,136 +2290,136 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         
         
-        [XmlElement("shadow")]
-        public List<CT_Shadow> shadow {
-            get {
-                return this.shadowField;
-            }
-            set {
-                this.shadowField = value;
-            }
-        }
+        //[XmlElement("shadow")]
+        //public List<CT_Shadow> shadow {
+        //    get {
+        //        return this.shadowField;
+        //    }
+        //    set {
+        //        this.shadowField = value;
+        //    }
+        //}
         
         
-        [XmlElement("textbox")]
-        public List<CT_Textbox> textbox {
-            get {
-                return this.textboxField;
-            }
-            set {
-                this.textboxField = value;
-            }
-        }
+        //[XmlElement("textbox")]
+        //public List<CT_Textbox> textbox {
+        //    get {
+        //        return this.textboxField;
+        //    }
+        //    set {
+        //        this.textboxField = value;
+        //    }
+        //}
         
         
-        [XmlElement("textpath")]
-        public List<CT_TextPath> textpath {
-            get {
-                return this.textpathField;
-            }
-            set {
-                this.textpathField = value;
-            }
-        }
+        //[XmlElement("textpath")]
+        //public List<CT_TextPath> textpath {
+        //    get {
+        //        return this.textpathField;
+        //    }
+        //    set {
+        //        this.textpathField = value;
+        //    }
+        //}
         
         
-        [XmlElement("imagedata")]
-        public List<CT_ImageData> imagedata {
-            get {
-                return this.imagedataField;
-            }
-            set {
-                this.imagedataField = value;
-            }
-        }
+        //[XmlElement("imagedata")]
+        //public List<CT_ImageData> imagedata {
+        //    get {
+        //        return this.imagedataField;
+        //    }
+        //    set {
+        //        this.imagedataField = value;
+        //    }
+        //}
         
         
-        [XmlElement("wrap", Namespace="urn:schemas-microsoft-com:office:word")]
-        public List<CT_Wrap> wrap {
-            get {
-                return this.wrapField;
-            }
-            set {
-                this.wrapField = value;
-            }
-        }
+        //[XmlElement("wrap", Namespace="urn:schemas-microsoft-com:office:word")]
+        //public List<CT_Wrap> wrap {
+        //    get {
+        //        return this.wrapField;
+        //    }
+        //    set {
+        //        this.wrapField = value;
+        //    }
+        //}
         
         
-        [XmlElement("anchorlock", Namespace="urn:schemas-microsoft-com:office:word")]
-        public List<CT_AnchorLock> anchorlock {
-            get {
-                return this.anchorlockField;
-            }
-            set {
-                this.anchorlockField = value;
-            }
-        }
+        //[XmlElement("anchorlock", Namespace="urn:schemas-microsoft-com:office:word")]
+        //public List<CT_AnchorLock> anchorlock {
+        //    get {
+        //        return this.anchorlockField;
+        //    }
+        //    set {
+        //        this.anchorlockField = value;
+        //    }
+        //}
         
         
-        [XmlElement("bordertop", Namespace="urn:schemas-microsoft-com:office:word")]
-        public List<CT_Border> bordertop {
-            get {
-                return this.bordertopField;
-            }
-            set {
-                this.bordertopField = value;
-            }
-        }
+        //[XmlElement("bordertop", Namespace="urn:schemas-microsoft-com:office:word")]
+        //public List<CT_Border> bordertop {
+        //    get {
+        //        return this.bordertopField;
+        //    }
+        //    set {
+        //        this.bordertopField = value;
+        //    }
+        //}
         
         
-        [XmlElement("borderbottom", Namespace="urn:schemas-microsoft-com:office:word")]
-        public List<CT_Border> borderbottom {
-            get {
-                return this.borderbottomField;
-            }
-            set {
-                this.borderbottomField = value;
-            }
-        }
+        //[XmlElement("borderbottom", Namespace="urn:schemas-microsoft-com:office:word")]
+        //public List<CT_Border> borderbottom {
+        //    get {
+        //        return this.borderbottomField;
+        //    }
+        //    set {
+        //        this.borderbottomField = value;
+        //    }
+        //}
         
         
-        [XmlElement("borderleft", Namespace="urn:schemas-microsoft-com:office:word")]
-        public List<CT_Border> borderleft {
-            get {
-                return this.borderleftField;
-            }
-            set {
-                this.borderleftField = value;
-            }
-        }
+        //[XmlElement("borderleft", Namespace="urn:schemas-microsoft-com:office:word")]
+        //public List<CT_Border> borderleft {
+        //    get {
+        //        return this.borderleftField;
+        //    }
+        //    set {
+        //        this.borderleftField = value;
+        //    }
+        //}
         
         
-        [XmlElement("borderright", Namespace="urn:schemas-microsoft-com:office:word")]
-        public List<CT_Border> borderright {
-            get {
-                return this.borderrightField;
-            }
-            set {
-                this.borderrightField = value;
-            }
-        }
+        //[XmlElement("borderright", Namespace="urn:schemas-microsoft-com:office:word")]
+        //public List<CT_Border> borderright {
+        //    get {
+        //        return this.borderrightField;
+        //    }
+        //    set {
+        //        this.borderrightField = value;
+        //    }
+        //}
         
         
-        [XmlElement("ClientData", Namespace="urn:schemas-microsoft-com:office:excel")]
-        public List<CT_ClientData> ClientData {
-            get {
-                return this.clientDataField;
-            }
-            set {
-                this.clientDataField = value;
-            }
-        }
+        //[XmlElement("ClientData", Namespace="urn:schemas-microsoft-com:office:excel")]
+        //public List<CT_ClientData> ClientData {
+        //    get {
+        //        return this.clientDataField;
+        //    }
+        //    set {
+        //        this.clientDataField = value;
+        //    }
+        //}
         
         
-        [XmlElement("textdata", Namespace="urn:schemas-microsoft-com:office:powerpoint")]
-        public List<CT_Rel> textdata {
-            get {
-                return this.textdataField;
-            }
-            set {
-                this.textdataField = value;
-            }
-        }
+        //[XmlElement("textdata", Namespace="urn:schemas-microsoft-com:office:powerpoint")]
+        //public List<CT_Rel> textdata {
+        //    get {
+        //        return this.textdataField;
+        //    }
+        //    set {
+        //        this.textdataField = value;
+        //    }
+        //}
         
         
         [XmlAttribute]
@@ -2352,17 +2445,36 @@ namespace NPOI.OpenXmlFormats.Vml
 
         public CT_Stroke AddNewStroke()
         {
-            CT_Stroke stk = new CT_Stroke();
-            this.strokeField.Add(stk);
-            return stk;
+            this.strokeField = new CT_Stroke();
+            return strokeField;
         }
         public CT_Path AddNewPath()
         {
-            CT_Path p = new CT_Path();
-            this.pathField.Add(p);
-            return p;
+                this.pathField = new CT_Path();
+            return this.pathField;
         }
+        internal static XmlSerializerNamespaces namespaces = new XmlSerializerNamespaces(new[] {
+            new XmlQualifiedName("o", "urn:schemas-microsoft-com:office:office"),
+            new XmlQualifiedName("x", "urn:schemas-microsoft-com:office:excel"),
+            new XmlQualifiedName("v", "urn:schemas-microsoft-com:vml")
+        });
 
+        public override string ToString()
+        {
+            using (StringWriter stringWriter = new StringWriter())
+            {
+                var settings = new XmlWriterSettings
+                {
+                    Encoding = Encoding.UTF8,
+                    OmitXmlDeclaration = true
+                };
+                using (var writer = XmlWriter.Create(stringWriter, settings))
+                {
+                    serializer.Serialize(writer, this, namespaces);
+                }
+                return stringWriter.ToString();
+            }
+        }
     }
     
     
@@ -3967,44 +4079,44 @@ namespace NPOI.OpenXmlFormats.Vml
         private ItemsChoiceType4[] itemsElementNameField;
         
         
-        [XmlElement("ClientData", typeof(CT_ClientData), Namespace="urn:schemas-microsoft-com:office:excel")]
-        [XmlElement("textdata", typeof(CT_Rel), Namespace="urn:schemas-microsoft-com:office:powerpoint")]
-        [XmlElement("anchorlock", typeof(CT_AnchorLock), Namespace="urn:schemas-microsoft-com:office:word")]
-        [XmlElement("borderbottom", typeof(CT_Border), Namespace="urn:schemas-microsoft-com:office:word")]
-        [XmlElement("borderleft", typeof(CT_Border), Namespace="urn:schemas-microsoft-com:office:word")]
-        [XmlElement("borderright", typeof(CT_Border), Namespace="urn:schemas-microsoft-com:office:word")]
-        [XmlElement("bordertop", typeof(CT_Border), Namespace="urn:schemas-microsoft-com:office:word")]
-        [XmlElement("wrap", typeof(CT_Wrap), Namespace="urn:schemas-microsoft-com:office:word")]
-        [XmlElement("fill", typeof(CT_Fill))]
-        [XmlElement("formulas", typeof(CT_Formulas))]
-        [XmlElement("handles", typeof(CT_Handles))]
-        [XmlElement("imagedata", typeof(CT_ImageData))]
-        [XmlElement("path", typeof(CT_Path))]
-        [XmlElement("shadow", typeof(CT_Shadow))]
-        [XmlElement("stroke", typeof(CT_Stroke))]
-        [XmlElement("textbox", typeof(CT_Textbox))]
-        [XmlElement("textpath", typeof(CT_TextPath))]
-        [XmlChoiceIdentifier("ItemsElementName")]
-        public List<object> Items {
-            get {
-                return this.itemsField;
-            }
-            set {
-                this.itemsField = value;
-            }
-        }
+        //[XmlElement("ClientData", typeof(CT_ClientData), Namespace="urn:schemas-microsoft-com:office:excel")]
+        //[XmlElement("textdata", typeof(CT_Rel), Namespace="urn:schemas-microsoft-com:office:powerpoint")]
+        //[XmlElement("anchorlock", typeof(CT_AnchorLock), Namespace="urn:schemas-microsoft-com:office:word")]
+        //[XmlElement("borderbottom", typeof(CT_Border), Namespace="urn:schemas-microsoft-com:office:word")]
+        //[XmlElement("borderleft", typeof(CT_Border), Namespace="urn:schemas-microsoft-com:office:word")]
+        //[XmlElement("borderright", typeof(CT_Border), Namespace="urn:schemas-microsoft-com:office:word")]
+        //[XmlElement("bordertop", typeof(CT_Border), Namespace="urn:schemas-microsoft-com:office:word")]
+        //[XmlElement("wrap", typeof(CT_Wrap), Namespace="urn:schemas-microsoft-com:office:word")]
+        //[XmlElement("fill", typeof(CT_Fill))]
+        //[XmlElement("formulas", typeof(CT_Formulas))]
+        //[XmlElement("handles", typeof(CT_Handles))]
+        //[XmlElement("imagedata", typeof(CT_ImageData))]
+        //[XmlElement("path", typeof(CT_Path))]
+        //[XmlElement("shadow", typeof(CT_Shadow))]
+        //[XmlElement("stroke", typeof(CT_Stroke))]
+        //[XmlElement("textbox", typeof(CT_Textbox))]
+        //[XmlElement("textpath", typeof(CT_TextPath))]
+        //[XmlChoiceIdentifier("ItemsElementName")]
+        //public List<object> Items {
+        //    get {
+        //        return this.itemsField;
+        //    }
+        //    set {
+        //        this.itemsField = value;
+        //    }
+        //}
         
         
-        [XmlElement("ItemsElementName")]
-        [XmlIgnore]
-        public ItemsChoiceType4[] ItemsElementName {
-            get {
-                return this.itemsElementNameField;
-            }
-            set {
-                this.itemsElementNameField = value;
-            }
-        }
+        //[XmlElement("ItemsElementName")]
+        //[XmlIgnore]
+        //public ItemsChoiceType4[] ItemsElementName {
+        //    get {
+        //        return this.itemsElementNameField;
+        //    }
+        //    set {
+        //        this.itemsElementNameField = value;
+        //    }
+        //}
     }
     
     
@@ -4087,44 +4199,44 @@ namespace NPOI.OpenXmlFormats.Vml
         private string arcsizeField;
         
         
-        [XmlElement("ClientData", typeof(CT_ClientData), Namespace="urn:schemas-microsoft-com:office:excel")]
-        [XmlElement("textdata", typeof(CT_Rel), Namespace="urn:schemas-microsoft-com:office:powerpoint")]
-        [XmlElement("anchorlock", typeof(CT_AnchorLock), Namespace="urn:schemas-microsoft-com:office:word")]
-        [XmlElement("borderbottom", typeof(CT_Border), Namespace="urn:schemas-microsoft-com:office:word")]
-        [XmlElement("borderleft", typeof(CT_Border), Namespace="urn:schemas-microsoft-com:office:word")]
-        [XmlElement("borderright", typeof(CT_Border), Namespace="urn:schemas-microsoft-com:office:word")]
-        [XmlElement("bordertop", typeof(CT_Border), Namespace="urn:schemas-microsoft-com:office:word")]
-        [XmlElement("wrap", typeof(CT_Wrap), Namespace="urn:schemas-microsoft-com:office:word")]
-        [XmlElement("fill", typeof(CT_Fill))]
-        [XmlElement("formulas", typeof(CT_Formulas))]
-        [XmlElement("handles", typeof(CT_Handles))]
-        [XmlElement("imagedata", typeof(CT_ImageData))]
-        [XmlElement("path", typeof(CT_Path))]
-        [XmlElement("shadow", typeof(CT_Shadow))]
-        [XmlElement("stroke", typeof(CT_Stroke))]
-        [XmlElement("textbox", typeof(CT_Textbox))]
-        [XmlElement("textpath", typeof(CT_TextPath))]
-        [XmlChoiceIdentifier("ItemsElementName")]
-        public List<object> Items {
-            get {
-                return this.itemsField;
-            }
-            set {
-                this.itemsField = value;
-            }
-        }
+        //[XmlElement("ClientData", typeof(CT_ClientData), Namespace="urn:schemas-microsoft-com:office:excel")]
+        //[XmlElement("textdata", typeof(CT_Rel), Namespace="urn:schemas-microsoft-com:office:powerpoint")]
+        //[XmlElement("anchorlock", typeof(CT_AnchorLock), Namespace="urn:schemas-microsoft-com:office:word")]
+        //[XmlElement("borderbottom", typeof(CT_Border), Namespace="urn:schemas-microsoft-com:office:word")]
+        //[XmlElement("borderleft", typeof(CT_Border), Namespace="urn:schemas-microsoft-com:office:word")]
+        //[XmlElement("borderright", typeof(CT_Border), Namespace="urn:schemas-microsoft-com:office:word")]
+        //[XmlElement("bordertop", typeof(CT_Border), Namespace="urn:schemas-microsoft-com:office:word")]
+        //[XmlElement("wrap", typeof(CT_Wrap), Namespace="urn:schemas-microsoft-com:office:word")]
+        //[XmlElement("fill", typeof(CT_Fill))]
+        //[XmlElement("formulas", typeof(CT_Formulas))]
+        //[XmlElement("handles", typeof(CT_Handles))]
+        //[XmlElement("imagedata", typeof(CT_ImageData))]
+        //[XmlElement("path", typeof(CT_Path))]
+        //[XmlElement("shadow", typeof(CT_Shadow))]
+        //[XmlElement("stroke", typeof(CT_Stroke))]
+        //[XmlElement("textbox", typeof(CT_Textbox))]
+        //[XmlElement("textpath", typeof(CT_TextPath))]
+        //[XmlChoiceIdentifier("ItemsElementName")]
+        //public List<object> Items {
+        //    get {
+        //        return this.itemsField;
+        //    }
+        //    set {
+        //        this.itemsField = value;
+        //    }
+        //}
         
         
-        [XmlElement("ItemsElementName")]
-        [XmlIgnore]
-        public ItemsChoiceType5[] ItemsElementName {
-            get {
-                return this.itemsElementNameField;
-            }
-            set {
-                this.itemsElementNameField = value;
-            }
-        }
+        //[XmlElement("ItemsElementName")]
+        //[XmlIgnore]
+        //public ItemsChoiceType5[] ItemsElementName {
+        //    get {
+        //        return this.itemsElementNameField;
+        //    }
+        //    set {
+        //        this.itemsElementNameField = value;
+        //    }
+        //}
         
         
         [XmlAttribute]

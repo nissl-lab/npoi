@@ -72,6 +72,18 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     public enum ST_OnOff
     {
         /// <summary>
+        /// False
+        /// </summary>
+        [XmlEnum("0")]
+        Value0 = 0,
+
+        /// <summary>
+        /// True
+        /// </summary>
+        [XmlEnum("1")]
+        Value1 = 1,
+
+        /// <summary>
         /// True
         /// </summary>
         [XmlEnum("true")]
@@ -92,18 +104,6 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         /// False
         /// </summary>
         off,
-
-        /// <summary>
-        /// False
-        /// </summary>
-        [XmlEnum("0")]
-        Value0=0,
-
-        /// <summary>
-        /// True
-        /// </summary>
-        [XmlEnum("1")]
-        Value1=1,
     }
     /// <summary>
     /// Long Hexadecimal Number

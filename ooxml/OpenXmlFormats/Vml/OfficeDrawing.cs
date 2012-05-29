@@ -3,6 +3,9 @@ using System.ComponentModel;
 using System.Xml.Serialization;
 using NPOI.OpenXmlFormats.Vml.Spreadsheet;
 using System.Collections.Generic;
+using System.Xml;
+using System.IO;
+using System.Text;
 
 namespace NPOI.OpenXmlFormats.Vml.Office
 {
@@ -660,17 +663,6 @@ namespace NPOI.OpenXmlFormats.Vml.Office
                 this.rotateFieldSpecified = value;
             }
         }
-        
-    
-        [XmlAttribute("id")]
-        public string id1 {
-            get {
-                return this.id1Field;
-            }
-            set {
-                this.id1Field = value;
-            }
-        }
     }
     
 
@@ -861,17 +853,9 @@ namespace NPOI.OpenXmlFormats.Vml.Office
     [XmlType(TypeName="ST_TrueFalse", Namespace="urn:schemas-microsoft-com:office:office")]
     [XmlRoot("ST_TrueFalse", Namespace="urn:schemas-microsoft-com:office:office", IsNullable=false)]
     public enum ST_TrueFalse1 {
-        
-    
         t,
-        
-    
         f,
-        
-    
         @true,
-        
-    
         @false,
     }
     
@@ -2552,14 +2536,22 @@ namespace NPOI.OpenXmlFormats.Vml.Office
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace = "urn:schemas-microsoft-com:office:office")]
-    [XmlRoot(Namespace = "urn:schemas-microsoft-com:office:office", IsNullable = true)]
+    [XmlRoot("shapelayout",Namespace = "urn:schemas-microsoft-com:office:office", IsNullable = true)]
     public class CT_ShapeLayout
     {
         private CT_IdMap idmapField = null;
         private CT_RegroupTable regrouptableField = null;
         private CT_Rules rulesField = null;
         private ST_Ext extField = ST_Ext.NONE;
-        
+
+        static XmlSerializer serializer = new XmlSerializer(typeof(CT_ShapeLayout), "urn:schemas-microsoft-com:office:office");
+        public static CT_ShapeLayout Parse(string xmltext)
+        {
+            TextReader tr = new StringReader(xmltext);
+            CT_ShapeLayout obj = (CT_ShapeLayout)serializer.Deserialize(tr);
+            return obj;
+        }
+
         public CT_IdMap AddNewIdmap()
         {
             idmapField = new CT_IdMap();
@@ -2598,6 +2590,28 @@ namespace NPOI.OpenXmlFormats.Vml.Office
         public bool extSpecified
         {
             get { return ST_Ext.NONE != this.extField; }
+        }
+        internal static XmlSerializerNamespaces namespaces = new XmlSerializerNamespaces(new[] {
+            new XmlQualifiedName("o", "urn:schemas-microsoft-com:office:office"),
+            new XmlQualifiedName("x", "urn:schemas-microsoft-com:office:excel"),
+            new XmlQualifiedName("v", "urn:schemas-microsoft-com:vml")
+        });
+
+        public override string ToString()
+        {
+            using (StringWriter stringWriter = new StringWriter())
+            {
+                var settings = new XmlWriterSettings
+                {
+                    Encoding = Encoding.UTF8,
+                    OmitXmlDeclaration = true
+                };
+                using (var writer = XmlWriter.Create(stringWriter, settings))
+                {
+                    serializer.Serialize(writer, this, namespaces);
+                }
+                return stringWriter.ToString();
+            }
         }
     }
 
@@ -4235,11 +4249,7 @@ namespace NPOI.OpenXmlFormats.Vml.Office
     [XmlType(Namespace="urn:schemas-microsoft-com:office:office")]
     [XmlRoot(Namespace="urn:schemas-microsoft-com:office:office", IsNullable=false)]
     public enum ST_InsetMode {
-        
-    
         auto,
-        
-    
         custom,
     }
     
