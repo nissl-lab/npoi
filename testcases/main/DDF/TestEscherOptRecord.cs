@@ -76,7 +76,7 @@ namespace TestCases.DDF
             Assert.AreEqual(unchecked((short)0xF00B), r.RecordId);
             Assert.AreEqual(3, r.EscherProperties.Count);
             EscherBoolProperty prop1 = new EscherBoolProperty(EscherProperties.TEXT__SIZE_TEXT_TO_FIT_SHAPE, 524296);
-            EscherRGBProperty prop2 = new EscherRGBProperty(EscherProperties.Fill__FillCOLOR, 0x08000009);
+            EscherRGBProperty prop2 = new EscherRGBProperty(EscherProperties.FILL__FILLCOLOR, 0x08000009);
             EscherRGBProperty prop3 = new EscherRGBProperty(EscherProperties.LINESTYLE__COLOR, 0x08000040);
             Assert.AreEqual(prop1, r.GetEscherProperty(0));
             Assert.AreEqual(prop2, r.GetEscherProperty(1));
@@ -122,7 +122,7 @@ namespace TestCases.DDF
             r.Options=(short)0x0033;
             r.RecordId=unchecked((short)0xF00B);
             EscherBoolProperty prop1 = new EscherBoolProperty(EscherProperties.TEXT__SIZE_TEXT_TO_FIT_SHAPE, 1);
-            EscherRGBProperty prop2 = new EscherRGBProperty(EscherProperties.Fill__FillCOLOR, 0x08000009);
+            EscherRGBProperty prop2 = new EscherRGBProperty(EscherProperties.FILL__FILLCOLOR, 0x08000009);
             EscherRGBProperty prop3 = new EscherRGBProperty(EscherProperties.LINESTYLE__COLOR, 0x08000040);
             r.AddEscherProperty(prop1);
             r.AddEscherProperty(prop2);
@@ -324,7 +324,7 @@ namespace TestCases.DDF
         public void TestEmptyArrayProperty()
         {
             EscherOptRecord r = new EscherOptRecord();
-            EscherArrayProperty p = new EscherArrayProperty(unchecked((short)(EscherProperties.Fill__SHADECOLORS + 0x8000)), new byte[0]);
+            EscherArrayProperty p = new EscherArrayProperty(unchecked((short)(EscherProperties.FILL__SHADECOLORS + 0x8000)), new byte[0]);
             Assert.AreEqual(0, p.NumberOfElementsInArray);
             r.AddEscherProperty(p);
 
