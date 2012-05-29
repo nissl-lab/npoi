@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FillBackgroundInXlsx", "Fil
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataFormatsInXlsx", "DataFormatsInXlsx\DataFormatsInXlsx.csproj", "{4FDDC7EA-AA4C-429B-A579-39C89B522ACF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CreateHeaderFooterInXlsx", "CreateHeaderFooterInXlsx\CreateHeaderFooterInXlsx.csproj", "{0E707837-B595-4F19-B3DB-69959A3DC10F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
@@ -43,6 +45,10 @@ Global
 		{4FDDC7EA-AA4C-429B-A579-39C89B522ACF}.Debug|x86.Build.0 = Debug|x86
 		{4FDDC7EA-AA4C-429B-A579-39C89B522ACF}.Release|x86.ActiveCfg = Release|x86
 		{4FDDC7EA-AA4C-429B-A579-39C89B522ACF}.Release|x86.Build.0 = Release|x86
+		{0E707837-B595-4F19-B3DB-69959A3DC10F}.Debug|x86.ActiveCfg = Debug|x86
+		{0E707837-B595-4F19-B3DB-69959A3DC10F}.Debug|x86.Build.0 = Debug|x86
+		{0E707837-B595-4F19-B3DB-69959A3DC10F}.Release|x86.ActiveCfg = Release|x86
+		{0E707837-B595-4F19-B3DB-69959A3DC10F}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
