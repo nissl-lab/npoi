@@ -26,7 +26,8 @@ namespace NPOI.DDF
 
 
     using NPOI.Util;
-    using ICSharpCode.SharpZipLib.Zip;
+    using ICSharpCode.SharpZipLib.Zip.Compression;
+    using ICSharpCode.SharpZipLib.Zip.Compression.Streams;
 
     /// <summary>
     /// Used to dump the contents of escher records to a PrintStream.
@@ -389,10 +390,11 @@ namespace NPOI.DDF
 
                     using (MemoryStream bin = new MemoryStream(buf))
                     {
-                        using (ZipInputStream in2 = new ZipInputStream(bin))
+                        Inflater inflater = new Inflater(false);
+                        using (InflaterInputStream zIn = new InflaterInputStream(bin, inflater))
                         {
                             int bytesToDump = -1;
-                            HexDump.Dump(in2, 0, bytesToDump);
+                            HexDump.Dump(zIn, 0, bytesToDump);
 
                             recordBytesRemaining -= nDumpSize;
                             remainingBytes -= nDumpSize;

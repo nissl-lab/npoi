@@ -25,7 +25,8 @@ namespace NPOI.DDF
     using NPOI.Util;
     using System.IO;
     using NPOI.HSSF.Record;
-    using ICSharpCode.SharpZipLib.Zip;
+    using ICSharpCode.SharpZipLib.Zip.Compression;
+    using ICSharpCode.SharpZipLib.Zip.Compression.Streams;
 
 
     /// <summary>
@@ -320,7 +321,8 @@ namespace NPOI.DDF
         {
             using (MemoryStream out1 = new MemoryStream())
             {
-                ZipOutputStream deflaterOutputStream = new ZipOutputStream(out1);
+                Deflater deflater = new Deflater(0, false);
+                DeflaterOutputStream deflaterOutputStream = new DeflaterOutputStream(out1,deflater);
                 try
                 {
                     //for (int i = 0; i < data.Length; i++)
@@ -356,14 +358,16 @@ namespace NPOI.DDF
             Array.Copy(data, pos + 50, compressedData, 0, Length);
             using (MemoryStream ms = new MemoryStream(compressedData))
             {
-                using (ZipInputStream inflaterInputStream = new ZipInputStream(ms))
+                Inflater inflater = new Inflater(false);
+
+                using (InflaterInputStream zIn = new InflaterInputStream(ms, inflater))
                 {
                     using (MemoryStream out1 = new MemoryStream())
                     {
                         int c;
                         try
                         {
-                            while ((c = inflaterInputStream.ReadByte()) != -1)
+                            while ((c = zIn.ReadByte()) != -1)
                                 out1.WriteByte((byte)c);
                             return out1.ToArray();
                         }

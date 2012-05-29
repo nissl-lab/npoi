@@ -22,7 +22,8 @@ namespace NPOI.DDF
     using System.Collections;
     using System.Drawing;
     using NPOI.Util;
-    using ICSharpCode.SharpZipLib.Zip;
+    using ICSharpCode.SharpZipLib.Zip.Compression.Streams;
+    using ICSharpCode.SharpZipLib.Zip.Compression;
 
     /// <summary>
     /// @author Daniel Noll
@@ -172,11 +173,11 @@ namespace NPOI.DDF
             {
                 using (MemoryStream out1 = new MemoryStream())
                 {
-                    
-                    ZipInputStream zIn = null;
+                    InflaterInputStream zIn = null;
                     try
                     {
-                        zIn = new ZipInputStream(in1);
+                        Inflater inflater = new Inflater(false);
+                        zIn = new InflaterInputStream(in1, inflater);
 
                         byte[] buf = new byte[4096];
                         int ReadBytes;
