@@ -411,6 +411,12 @@ namespace NPOI.HSSF.UserModel
             set { format.AdtlDiagLineStyle=(short)value; }
         }
 
+        public short DiagionalFillPattern
+        {
+            get { return (short)format.AdtlFillPattern; }
+            set { format.AdtlFillPattern = value; }
+        }
+
         /// <summary>
         /// Gets or sets whether the cell is shrink-to-fit
         /// </summary>
