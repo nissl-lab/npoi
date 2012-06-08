@@ -62,6 +62,11 @@ namespace SetBorderStyleInXls
             style.RightBorderColor= HSSFColor.BLUE.index;
             style.BorderTop = BorderStyle.MEDIUM_DASHED;
             style.TopBorderColor= HSSFColor.ORANGE.index;
+
+            style.BorderDiagonal = BorderDiagonal.FORWARD;
+            style.BorderDiagonalColor = HSSFColor.GOLD.index;
+            style.BorderDiagonalLineStyle = BorderStyle.MEDIUM;
+
             cell.CellStyle= style;
 
             WriteToFile();

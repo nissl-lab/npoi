@@ -77,9 +77,7 @@
     <Compile Include="DDF\AbstractEscherOptRecord.cs" />
     <Compile Include="DDF\EscherTertiaryOptRecord.cs" />
     <Compile Include="GlobalSuppressions.cs" />
-    <Compile Include="HSSF\EventModel\ModelFactoryListener.cs" />
     <Compile Include="HSSF\EventUserModel\DummyRecord\DummyRecordBase.cs" />
-    <Compile Include="HSSF\Model\Model.cs" />
     <Compile Include="HSSF\Record\Aggregates\ChartSubstreamRecordAggregate.cs" />
     <Compile Include="HSSF\Record\Aggregates\WorksheetProtectionBlock.cs" />
     <Compile Include="HSSF\Record\AutoFilter\AutoFilterRecord.cs" />
@@ -488,6 +486,7 @@
     <Compile Include="SS\Formula\Eval\Forked\ForkedEvaluationWorkbook.cs" />
     <Compile Include="SS\Formula\Eval\Forked\ForkedEvaluator.cs" />
     <Compile Include="SS\Formula\SharedFormula.cs" />
+    <Compile Include="SS\UserModel\BorderDiagonal.cs" />
     <Compile Include="Util\BlockingInputStream.cs" />
     <Compile Include="Util\ByteArrayInputStream.cs" />
     <Compile Include="Util\ByteBuffer.cs" />

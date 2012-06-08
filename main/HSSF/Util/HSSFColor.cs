@@ -35,7 +35,7 @@ namespace NPOI.HSSF.Util
      * @author  Andrew C. Oliver (acoliver at apache dot org)
      * @author  Brian Sanders (bsanders at risklabs dot com) - full default color palette
      */
-    public class HSSFColor
+    public class HSSFColor : NPOI.SS.UserModel.IColor
     {
         private static Hashtable indexHash; 
         public static short COLOR_NORMAL = 0x7fff;

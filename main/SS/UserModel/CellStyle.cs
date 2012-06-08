@@ -274,5 +274,40 @@ namespace NPOI.SS.UserModel
 
 
         IFont GetFont(IWorkbook parentWorkbook);
+
+        /// <summary>
+        /// Gets or sets the color to use for the diagional border
+        /// </summary>
+        /// <value>The index of the color definition.</value>
+        short BorderDiagonalColor { get; set; }
+
+        /// <summary>
+        /// Gets or sets the line type  to use for the diagional border
+        /// </summary>
+        /// <value>The line type.</value>
+        BorderStyle BorderDiagonalLineStyle { get; set; }
+
+        /// <summary>
+        /// Gets or sets the type of diagional border
+        /// </summary>.
+        /// <value>The border diagional type.</value>
+        BorderDiagonal BorderDiagonal { get; set; }
+
+        /**
+         * Gets the color object representing the current
+         *  background fill, resolving indexes using
+         *  the supplied workbook.
+         * This will work for both indexed and rgb
+         *  defined colors. 
+         */
+        IColor FillBackgroundColorColor { get; }
+        /**
+         * Gets the color object representing the current
+         *  foreground fill, resolving indexes using
+         *  the supplied workbook.
+         * This will work for both indexed and rgb
+         *  defined colors. 
+         */
+        IColor FillForegroundColorColor { get; }
     }
 }

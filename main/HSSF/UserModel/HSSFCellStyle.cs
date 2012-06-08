@@ -399,22 +399,34 @@ namespace NPOI.HSSF.UserModel
             set { format.BottomBorderPaletteIdx = (value); }
         }
 
-        public short DiagionalBorderColor
+        /// <summary>
+        /// Gets or sets the color to use for the diagional border
+        /// </summary>
+        /// <value>The index of the color definition.</value>
+        public short BorderDiagonalColor
         {
-            get { return format.AdtlFillPattern; }
-            set { format.AdtlFillPattern = value; }
+            get { return format.AdtlDiagBorderPaletteIdx; }
+            set { format.AdtlDiagBorderPaletteIdx = value; }
         }
 
-        public BorderStyle DiagionalBorder
+        /// <summary>
+        /// Gets or sets the line type  to use for the diagional border
+        /// </summary>
+        /// <value>The line type.</value>
+        public BorderStyle BorderDiagonalLineStyle
         {
             get { return (BorderStyle)format.AdtlDiagLineStyle; }
             set { format.AdtlDiagLineStyle=(short)value; }
         }
 
-        public short DiagionalFillPattern
+        /// <summary>
+        /// Gets or sets the type of diagional border
+        /// </summary>.
+        /// <value>The border diagional type.</value>
+        public BorderDiagonal BorderDiagonal
         {
-            get { return (short)format.AdtlFillPattern; }
-            set { format.AdtlFillPattern = value; }
+            get { return (BorderDiagonal)format.Diagonal; }
+            set { format.Diagonal = (short)value; }
         }
 
         /// <summary>
@@ -567,7 +579,14 @@ namespace NPOI.HSSF.UserModel
                 CheckDefaultBackgroundFills();
             }
         }
-
+        public IColor FillBackgroundColorColor
+        {
+            get
+            {
+                HSSFPalette pallette = new HSSFPalette(workbook.CustomPalette);
+                return pallette.GetColor(FillBackgroundColor);
+            }
+        }
         /// <summary>
         /// Gets or sets the foreground Fill color
         /// </summary>
@@ -580,6 +599,14 @@ namespace NPOI.HSSF.UserModel
             {
                 format.FillForeground = value;
                 CheckDefaultBackgroundFills();
+            }
+        }
+        public IColor FillForegroundColorColor
+        {
+            get
+            {
+                HSSFPalette pallette = new HSSFPalette(workbook.CustomPalette);
+                return pallette.GetColor(FillForegroundColor);
             }
         }
         /**

@@ -33,10 +33,14 @@
     <OutputPath>..\solution\Lib\</OutputPath>
     <DefineConstants>TRACE;HIDE_UNREACHABLE_CODE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
-	<DocumentationFile>..\solution\Lib\NPOI.XML</DocumentationFile>
+    <DocumentationFile>..\solution\Lib\NPOI.XML</DocumentationFile>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ICSharpCode.SharpZipLib, Version=0.86.0.518, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Lib\ICSharpCode.SharpZipLib.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -289,6 +293,8 @@
     <Compile Include="POIFS\FileSystem\NPOIFSStream.cs" />
     <Compile Include="POIFS\FileSystem\ODocumentInputStream.cs" />
     <Compile Include="POIFS\NIO\ByteArrayBackedDataSource.cs" />
+    <Compile Include="SS\Formula\Atp\EDate.cs" />
+    <Compile Include="SS\UserModel\BorderDiagonal.cs" />
     <Compile Include="Util\ByteArrayInputStream.cs" />
     <Compile Include="Util\ByteBuffer.cs" />
     <Compile Include="POIFS\NIO\FileBackedDataSource.cs" />
@@ -1041,7 +1047,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="HSSF\Dev\" />
-    <Folder Include="SS\Format\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

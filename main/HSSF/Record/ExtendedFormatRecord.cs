@@ -167,7 +167,8 @@ namespace NPOI.HSSF.Record
             BitFieldFactory.GetInstance(0x0000007F);
         static private BitField _bottom_border_palette_idx =
             BitFieldFactory.GetInstance(0x00003F80);
-        static private BitField _adtl_diag =
+        //is this used for diagional border color?
+        static private BitField _adtl_diag_border_palette_idx =
             BitFieldFactory.GetInstance(0x001fc000);
         static private BitField _adtl_diag_line_style =
             BitFieldFactory.GetInstance(0x01e00000);
@@ -728,19 +729,6 @@ namespace NPOI.HSSF.Record
 
 
         /// <summary>
-        /// Not sure what this Is for (maybe Fill lines?) 1 = down, 2 = up, 3 = both, 0 for none..
-        /// </summary>
-        public short Diag
-        {
-            get{return _diag.GetShortValue(field_7_palette_options);}
-            set
-            {
-                field_7_palette_options = _diag.SetShortValue(field_7_palette_options,
-                    value);
-            }
-        }
-
-        /// <summary>
         /// Get the Additional palette options bitmask (see individual bit Getter methods
         /// that reference this method)
         /// </summary>
@@ -784,13 +772,13 @@ namespace NPOI.HSSF.Record
         /// <summary>
         /// Get for diagonal borders
         /// </summary>
-        public short AdtlDiag
+        public short AdtlDiagBorderPaletteIdx
         {
-            get{return (short)_adtl_diag.GetValue(field_8_adtl_palette_options);}
+            get{return (short)_adtl_diag_border_palette_idx.GetValue(field_8_adtl_palette_options);}
             set
             {
                 field_8_adtl_palette_options =
-                    _adtl_diag.SetValue(field_8_adtl_palette_options, value);
+                    _adtl_diag_border_palette_idx.SetValue(field_8_adtl_palette_options, value);
             }
         }
 
@@ -809,7 +797,18 @@ namespace NPOI.HSSF.Record
                                  value);
             }
         }
-
+        /// <summary>
+        /// Not sure what this Is for (maybe Fill lines?) 1 = down, 2 = up, 3 = both, 0 for none..
+        /// </summary>
+        public short Diagonal
+        {
+            get { return _diag.GetShortValue(field_7_palette_options); }
+            set
+            {
+                field_7_palette_options = _diag.SetShortValue(field_7_palette_options,
+                    value);
+            }
+        }
         /// <summary>
         /// Get the Additional Fill pattern
         /// </summary>
@@ -942,7 +941,7 @@ namespace NPOI.HSSF.Record
                 .Append(StringUtil.ToHexString(RightBorderPaletteIdx))
                 .Append("\n");
             buffer.Append("          .diag      = ")
-                .Append(StringUtil.ToHexString(Diag)).Append("\n");
+                .Append(StringUtil.ToHexString(Diagonal)).Append("\n");
             buffer.Append("    .paleteoptn2     = ")
                 .Append(StringUtil.ToHexString(AdtlPaletteOptions))
                 .Append("\n");
@@ -953,7 +952,7 @@ namespace NPOI.HSSF.Record
                 .Append(StringUtil.ToHexString(BottomBorderPaletteIdx))
                 .Append("\n");
             buffer.Append("          .adtldiag  = ")
-                .Append(StringUtil.ToHexString(AdtlDiag)).Append("\n");
+                .Append(StringUtil.ToHexString(AdtlDiagBorderPaletteIdx)).Append("\n");
             buffer.Append("          .diaglnstyl= ")
                 .Append(StringUtil.ToHexString(AdtlDiagLineStyle)).Append("\n");
             buffer.Append("          .Fillpattrn= ")
