@@ -68,6 +68,14 @@ namespace SetBorderStyleInXls
             style.BorderDiagonalLineStyle = BorderStyle.MEDIUM;
 
             cell.CellStyle= style;
+            // Create a cell and put a value in it.
+            ICell cell2 = row.CreateCell(2);
+            cell2.SetCellValue(5);
+            ICellStyle style2 = hssfworkbook.CreateCellStyle();
+            style2.BorderDiagonal = BorderDiagonal.BACKWARD;
+            style2.BorderDiagonalColor = HSSFColor.RED.index;
+            style2.BorderDiagonalLineStyle = BorderStyle.MEDIUM;
+            cell2.CellStyle = style2;
 
             WriteToFile();
         }
