@@ -28,7 +28,7 @@ namespace NPOI.XSSF.UserModel.Extensions
  */
     public enum BorderSide
     {
-        TOP, RIGHT, BOTTOM, LEFT
+        TOP, RIGHT, BOTTOM, LEFT, DIAGONAL
     }
 
     /**
@@ -182,6 +182,10 @@ namespace NPOI.XSSF.UserModel.Extensions
                 case BorderSide.LEFT:
                     borderPr = border.left;
                     if (ensure && borderPr == null) borderPr = border.AddNewLeft();
+                    break;
+                case BorderSide.DIAGONAL:
+                    borderPr = border.diagonal;
+                    if (ensure && borderPr == null) borderPr = border.AddNewDiagonal();
                     break;
                 default:
                     throw new ArgumentException("No suitable side specified for the border");

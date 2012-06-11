@@ -388,7 +388,7 @@ namespace NPOI.XSSF.UserModel
          * @return the underlying XML bean
          */
 
-        public CT_Color GetCTColor()
+        internal CT_Color GetCTColor()
         {
             return ctColor;
         }

@@ -563,7 +563,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.horizontalField = value;
             }
         }
-
+        [XmlAttribute]
         public bool diagonalUp
         {
             get
@@ -588,7 +588,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.diagonalUpFieldSpecified = value;
             }
         }
-
+        [XmlAttribute]
         public bool diagonalDown
         {
             get

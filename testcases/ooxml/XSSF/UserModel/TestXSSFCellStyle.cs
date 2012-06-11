@@ -393,7 +393,7 @@ namespace NPOI.XSSF.UserModel
        public void TestGetSetFillBackgroundColor()
        {
             Assert.AreEqual(IndexedColors.AUTOMATIC.Index, cellStyle.FillBackgroundColor);
-            Assert.IsNull(cellStyle.FillBackgroundXSSFColor);
+            Assert.IsNull(cellStyle.FillBackgroundColorColor);
 
             XSSFColor clr;
 
@@ -402,7 +402,7 @@ namespace NPOI.XSSF.UserModel
             //setting indexed color
             cellStyle.FillBackgroundColor = (IndexedColors.RED.Index);
             Assert.AreEqual(IndexedColors.RED.Index, cellStyle.FillBackgroundColor);
-            clr = cellStyle.FillBackgroundXSSFColor;
+            clr = (XSSFColor)cellStyle.FillBackgroundColorColor;
             Assert.IsTrue(clr.GetCTColor().IsSetIndexed());
             Assert.AreEqual(IndexedColors.RED.Index, clr.GetIndexed());
             //a new fill was Added to the styles table
@@ -419,15 +419,15 @@ namespace NPOI.XSSF.UserModel
             num = stylesTable.GetFills().Count;
             clr = new XSSFColor(Color.Cyan);
             cellStyle.SetFillBackgroundColor(clr); // TODO this testcase assumes that cellStyle creates a new CT_Fill, but the implementation changes the existing style. - do not know whats right 8-(
-            Assert.AreEqual(clr.GetCTColor().ToString(), cellStyle.FillBackgroundXSSFColor.GetCTColor().ToString());
-            byte[] rgb = cellStyle.FillBackgroundXSSFColor.GetRgb();
+            Assert.AreEqual(clr.GetCTColor().ToString(), ((XSSFColor)cellStyle.FillBackgroundColorColor).GetCTColor().ToString());
+            byte[] rgb = ((XSSFColor)cellStyle.FillBackgroundColorColor).GetRgb();
             Assert.AreEqual(Color.Cyan.ToArgb(), Color.FromArgb(rgb[0] & 0xFF, rgb[1] & 0xFF, rgb[2] & 0xFF).ToArgb());
             //another border was Added to the styles table
             Assert.AreEqual(num + 1, stylesTable.GetFills().Count);
 
             //passing null unsets the color
             cellStyle.SetFillBackgroundColor(null);
-            Assert.IsNull(cellStyle.FillBackgroundXSSFColor);
+            Assert.IsNull(cellStyle.FillBackgroundColorColor);
             Assert.AreEqual(IndexedColors.AUTOMATIC.Index, cellStyle.FillBackgroundColor);
         }
        [TestMethod]
@@ -438,7 +438,7 @@ namespace NPOI.XSSF.UserModel
 
             XSSFCellStyle style1 = (XSSFCellStyle)wb1.CreateCellStyle();
             Assert.AreEqual(IndexedColors.AUTOMATIC.Index, style1.FillBackgroundColor);
-            Assert.IsNull(style1.FillBackgroundXSSFColor);
+            Assert.IsNull(style1.FillBackgroundColorColor);
 
             //compatibility with HSSF
             HSSFWorkbook wb2 = new HSSFWorkbook();
@@ -469,7 +469,7 @@ namespace NPOI.XSSF.UserModel
 
             XSSFCellStyle defaultStyle = (XSSFCellStyle)wb.GetCellStyleAt((short)0);
             Assert.AreEqual(IndexedColors.AUTOMATIC.Index, defaultStyle.FillForegroundColor);
-            Assert.AreEqual(null, defaultStyle.FillForegroundXSSFColor);
+            Assert.AreEqual(null, defaultStyle.FillForegroundColorColor);
             Assert.AreEqual(FillPatternType.NO_FILL, defaultStyle.FillPattern);
 
             XSSFCellStyle customStyle = (XSSFCellStyle)wb.CreateCellStyle();

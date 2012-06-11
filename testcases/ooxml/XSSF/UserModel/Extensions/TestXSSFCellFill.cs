@@ -69,7 +69,7 @@ namespace NPOI.XSSF.UserModel.Extensions
             XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("styles.xlsx");
             XSSFCell cellWithThemeColor = (XSSFCell)wb.GetSheetAt(0).GetRow(10).GetCell(0);
             //color RGB will be extracted from theme
-            XSSFColor foregroundColor = ((XSSFCellStyle)cellWithThemeColor.CellStyle).FillForegroundXSSFColor;
+            XSSFColor foregroundColor = (XSSFColor)((XSSFCellStyle)cellWithThemeColor.CellStyle).FillForegroundColorColor;
             byte[] rgb = foregroundColor.GetRgb();
             byte[] rgbWithTint = foregroundColor.GetRgbWithTint();
             Assert.AreEqual(rgb[0], -18);
