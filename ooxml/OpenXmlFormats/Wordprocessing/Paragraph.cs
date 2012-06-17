@@ -475,9 +475,9 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         public CT_PPr()
         {
-            this.pPrChangeField = new CT_PPrChange();
-            this.sectPrField = new CT_SectPr();
-            this.rPrField = new CT_ParaRPr();
+            //this.pPrChangeField = new CT_PPrChange();
+            //this.sectPrField = new CT_SectPr();
+            //this.rPrField = new CT_ParaRPr();
         }
 
         [XmlElement(Order = 0)]
@@ -1318,26 +1318,45 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         public CT_SectPr()
         {
-            this.sectPrChangeField = new CT_SectPrChange();
-            this.printerSettingsField = new CT_Rel();
+            //this.sectPrChangeField = new CT_SectPrChange();
+            //this.printerSettingsField = new CT_Rel();
             this.docGridField = new CT_DocGrid();
-            this.rtlGutterField = new CT_OnOff();
-            this.bidiField = new CT_OnOff();
-            this.textDirectionField = new CT_TextDirection();
-            this.titlePgField = new CT_OnOff();
-            this.noEndnoteField = new CT_OnOff();
-            this.vAlignField = new CT_VerticalJc();
-            this.formProtField = new CT_OnOff();
+            this.docGrid.type = ST_DocGrid.lines;
+            this.docGrid.typeSpecified = true;
+            this.docGrid.linePitch = "312";
+            
+            //this.rtlGutterField = new CT_OnOff();
+            //this.bidiField = new CT_OnOff();
+            //this.textDirectionField = new CT_TextDirection();
+            //this.titlePgField = new CT_OnOff();
+            //this.noEndnoteField = new CT_OnOff();
+            //this.vAlignField = new CT_VerticalJc();
+            //this.formProtField = new CT_OnOff();
             this.colsField = new CT_Columns();
-            this.pgNumTypeField = new CT_PageNumber();
-            this.lnNumTypeField = new CT_LineNumber();
-            this.pgBordersField = new CT_PageBorders();
-            this.paperSrcField = new CT_PaperSource();
+            this.cols.space = 425;
+            this.cols.spaceSpecified = true;
+            //this.pgNumTypeField = new CT_PageNumber();
+            //this.lnNumTypeField = new CT_LineNumber();
+            //this.pgBordersField = new CT_PageBorders();
+            //this.paperSrcField = new CT_PaperSource();
             this.pgMarField = new CT_PageMar();
+            this.pgMar.top = "1440";
+            this.pgMar.right = 1800;
+            this.pgMar.bottom = "1440";
+            this.pgMar.left = 1800;
+            this.pgMar.header = 851;
+            this.pgMar.footer = 992;
+            this.pgMar.gutter = 0;
+
             this.pgSzField = new CT_PageSz();
-            this.typeField = new CT_SectType();
-            this.endnotePrField = new CT_EdnProps();
-            this.footnotePrField = new CT_FtnProps();
+            this.pgSz.w = 11906;
+            this.pgSz.wSpecified = true;
+            this.pgSz.h = 16838;
+            this.pgSz.hSpecified = true;
+
+            //this.typeField = new CT_SectType();
+            //this.endnotePrField = new CT_EdnProps();
+            //this.footnotePrField = new CT_FtnProps();
             this.itemsElementNameField = new List<ItemsChoiceHdrFtrRefType>();
             this.itemsField = new List<CT_HdrFtrRef>();
         }
@@ -3580,39 +3599,39 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         public CT_PPrBase()
         {
-            this.cnfStyleField = new CT_Cnf();
-            this.divIdField = new CT_DecimalNumber();
-            this.outlineLvlField = new CT_DecimalNumber();
-            this.textboxTightWrapField = new CT_TextboxTightWrap();
-            this.textAlignmentField = new CT_TextAlignment();
-            this.textDirectionField = new CT_TextDirection();
-            this.jcField = new CT_Jc();
-            this.suppressOverlapField = new CT_OnOff();
-            this.mirrorIndentsField = new CT_OnOff();
-            this.contextualSpacingField = new CT_OnOff();
-            this.indField = new CT_Ind();
-            this.spacingField = new CT_Spacing();
-            this.snapToGridField = new CT_OnOff();
-            this.adjustRightIndField = new CT_OnOff();
-            this.bidiField = new CT_OnOff();
-            this.autoSpaceDNField = new CT_OnOff();
-            this.autoSpaceDEField = new CT_OnOff();
-            this.topLinePunctField = new CT_OnOff();
-            this.overflowPunctField = new CT_OnOff();
-            this.wordWrapField = new CT_OnOff();
-            this.kinsokuField = new CT_OnOff();
-            this.suppressAutoHyphensField = new CT_OnOff();
-            this.tabsField = new List<CT_TabStop>();
-            this.shdField = new CT_Shd();
-            this.pBdrField = new CT_PBdr();
-            this.suppressLineNumbersField = new CT_OnOff();
-            this.numPrField = new CT_NumPr();
-            this.widowControlField = new CT_OnOff();
-            this.framePrField = new CT_FramePr();
-            this.pageBreakBeforeField = new CT_OnOff();
-            this.keepLinesField = new CT_OnOff();
-            this.keepNextField = new CT_OnOff();
-            this.pStyleField = new CT_String();
+            //this.cnfStyleField = new CT_Cnf();
+            //this.divIdField = new CT_DecimalNumber();
+            //this.outlineLvlField = new CT_DecimalNumber();
+            //this.textboxTightWrapField = new CT_TextboxTightWrap();
+            //this.textAlignmentField = new CT_TextAlignment();
+            //this.textDirectionField = new CT_TextDirection();
+            //this.jcField = new CT_Jc();
+            //this.suppressOverlapField = new CT_OnOff();
+            //this.mirrorIndentsField = new CT_OnOff();
+            //this.contextualSpacingField = new CT_OnOff();
+            //this.indField = new CT_Ind();
+            //this.spacingField = new CT_Spacing();
+            //this.snapToGridField = new CT_OnOff();
+            //this.adjustRightIndField = new CT_OnOff();
+            //this.bidiField = new CT_OnOff();
+            //this.autoSpaceDNField = new CT_OnOff();
+            //this.autoSpaceDEField = new CT_OnOff();
+            //this.topLinePunctField = new CT_OnOff();
+            //this.overflowPunctField = new CT_OnOff();
+            //this.wordWrapField = new CT_OnOff();
+            //this.kinsokuField = new CT_OnOff();
+            //this.suppressAutoHyphensField = new CT_OnOff();
+            //this.tabsField = new List<CT_TabStop>();
+            //this.shdField = new CT_Shd();
+            //this.pBdrField = new CT_PBdr();
+            //this.suppressLineNumbersField = new CT_OnOff();
+            //this.numPrField = new CT_NumPr();
+            //this.widowControlField = new CT_OnOff();
+            //this.framePrField = new CT_FramePr();
+            //this.pageBreakBeforeField = new CT_OnOff();
+            //this.keepLinesField = new CT_OnOff();
+            //this.keepNextField = new CT_OnOff();
+            //this.pStyleField = new CT_String();
         }
 
         [XmlElement(Order = 0)]

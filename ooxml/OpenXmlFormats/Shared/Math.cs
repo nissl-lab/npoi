@@ -68,6 +68,17 @@ namespace NPOI.OpenXmlFormats.Shared
             this.brkBinSubField = new CT_BreakBinSub();
             this.brkBinField = new CT_BreakBin();
             this.mathFontField = new CT_String();
+            this.mathFont.val = "Cambria Math";
+            this.brkBin.val = ST_BreakBin.before;
+            this.brkBinSub.val = ST_BreakBinSub.Item;
+            this.smallFrac.val = ST_OnOff.off;
+            this.lMargin.val = 0;
+            this.rMargin.val = 0;
+            this.defJc.val = ST_Jc.centerGroup;
+            this.itemField = new CT_TwipsMeasure();
+            (this.Item as CT_TwipsMeasure).val = 1440;
+            this.intLim.val = ST_LimLoc.subSup;
+            this.naryLim.val = ST_LimLoc.undOvr;
         }
 
         [XmlElement(Order = 0)]
@@ -550,9 +561,10 @@ namespace NPOI.OpenXmlFormats.Shared
         {
             get
             {
-                return this.valFieldSpecified;
+                return this.valField != ST_BreakBin.NONE;
+                //return this.valFieldSpecified;
             }
-            set
+            private set
             {
                 this.valFieldSpecified = value;
             }
@@ -565,7 +577,7 @@ namespace NPOI.OpenXmlFormats.Shared
     public enum ST_BreakBin
     {
 
-    
+        NONE,
         before,
 
     

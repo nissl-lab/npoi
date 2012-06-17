@@ -17,7 +17,7 @@
 
 using System;
 using NPOI.OpenXml4Net.OPC;
-using NPOI.OpenXmlFormats.Wordprocessing;
+using NPOI.OpenXmlFormats.Dml.Picture;
 
 namespace NPOI.XWPF.UserModel
 {
@@ -28,7 +28,7 @@ namespace NPOI.XWPF.UserModel
     public class XWPFPicture
     {
 
-        private NPOI.OpenXmlFormats.Wordprocessing.CT_Picture ctPic;
+        private CT_Picture ctPic;
         private String description;
         private XWPFRun run;
 

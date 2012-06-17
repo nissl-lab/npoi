@@ -111,9 +111,9 @@ namespace NPOI.XWPF.UserModel
             }
         }
 
-        private List<NPOI.OpenXmlFormats.Wordprocessing.CT_Picture> GetCTPictures(object o)
+        private List<NPOI.OpenXmlFormats.Dml.Picture.CT_Picture> GetCTPictures(object o)
         {
-            var pictures = new List<NPOI.OpenXmlFormats.Wordprocessing.CT_Picture>(); 
+            var pictures = new List<NPOI.OpenXmlFormats.Dml.Picture.CT_Picture>(); 
             //XmlObject[] picts = o.SelectPath("declare namespace pic='"+CT_Picture.type.Name.NamespaceURI+"' .//pic:pic");
             //XmlElement[] picts = o.Any;
             //foreach (XmlElement pict in picts)
@@ -138,18 +138,19 @@ namespace NPOI.XWPF.UserModel
                 {
                     if (obj is CT_Inline)
                     {
-                        //CT_Inline inline = obj as CT_Inline;
-                        //XmlSerializer xmlse = new XmlSerializer(typeof(NPOI.OpenXmlFormats.Dml.CT_Picture));
-                        //using (MemoryStream ms = new MemoryStream())
-                        //{
-                        //    using (StreamWriter sw = new StreamWriter(ms))
-                        //    {
-                        //        sw.Write(inline.graphic.graphicData.Any[0].OuterXml);
-                        //        ms.Position = 0;
-                        //        NPOI.OpenXmlFormats.Dml.CT_Picture pict = xmlse.Deserialize(ms) as NPOI.OpenXmlFormats.Dml.CT_Picture;
+                        CT_Inline inline = obj as CT_Inline;
+                        XmlSerializer xmlse = new XmlSerializer(typeof(NPOI.OpenXmlFormats.Dml.Picture.CT_Picture));
+                        using (MemoryStream ms = new MemoryStream())
+                        {
+                            using (StreamWriter sw = new StreamWriter(ms))
+                            {
+                                sw.Write(inline.graphic.graphicData.Any[0].OuterXml);
+                                ms.Position = 0;
+                                
+                                //NPOI.OpenXmlFormats.Dml.Picture.CT_Picture pict = xmlse.Deserialize(ms) as NPOI.OpenXmlFormats.Dml.Picture.CT_Picture;
                         //        pictures.Add(pict);
-                        //    }
-                        //}
+                            }
+                        }
                     }
                 }
             }

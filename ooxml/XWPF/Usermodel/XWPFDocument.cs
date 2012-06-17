@@ -243,7 +243,6 @@ namespace NPOI.XWPF.UserModel
                 pkg.CreatePart(corePartName, XWPFRelation.DOCUMENT.ContentType);
 
                 pkg.GetPackageProperties().SetCreatorProperty(DOCUMENT_CREATOR);
-
                 return pkg;
              }
              catch (Exception e)
@@ -259,9 +258,11 @@ namespace NPOI.XWPF.UserModel
         internal override void OnDocumentCreate()
         {
             ctDocument = new CT_Document();
-            //ctDocument.AddNewBody();
+            ctDocument.AddNewBody();
+            
 
             Settings = (XWPFSettings) CreateRelationship(XWPFRelation.SETTINGS,XWPFFactory.GetInstance());
+            styles = (XWPFStyles)CreateRelationship(XWPFRelation.STYLES, XWPFFactory.GetInstance());
 
             POIXMLProperties.ExtendedProperties expProps = GetProperties().GetExtendedProperties();
             expProps.GetUnderlyingProperties().Application = (DOCUMENT_CREATOR);

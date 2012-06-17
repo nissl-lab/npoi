@@ -45,7 +45,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         public CT_DocumentBase()
         {
-            this.backgroundField = new CT_Background();
+            //this.backgroundField = new CT_Background();
         }
 
         [XmlElement(Order = 0)]
@@ -88,6 +88,11 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             {
                 this.bodyField = value;
             }
+        }
+
+        public void AddNewBody()
+        {
+            this.bodyField = new CT_Body();
         }
     }
 
@@ -161,10 +166,10 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         public CT_P AddNewP()
         {
             CT_P p = new CT_P();
-            lock(this)
+            lock (this)
             {
-            this.itemsField.Add(p);
-            this.itemsElementNameField.Add(DocumentBodyItemChoiceType.p);
+                this.itemsField.Add(p);
+                this.itemsElementNameField.Add(DocumentBodyItemChoiceType.p);
             }
             return p;
         }
