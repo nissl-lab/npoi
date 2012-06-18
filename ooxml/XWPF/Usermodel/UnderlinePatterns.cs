@@ -34,109 +34,109 @@ namespace NPOI.XWPF.UserModel
          * Specifies an underline consisting of a single line beneath all characters
          * in this Run.
          */
-        SINGLE = (1),
+        Single = (1),
 
         /**
          * Specifies an underline consisting of a single line beneath all non-space
          * characters in the Run. There shall be no underline beneath any space
          * character (breaking or non-breaking).
          */
-        WORDS = (2),
+        Words = (2),
 
         /**
          * Specifies an underline consisting of two lines beneath all characters in
          * this run
          */
-        DOUBLE = (3),
+        Double = (3),
 
         /**
          * Specifies an underline consisting of a single thick line beneath all
          * characters in this Run.
          */
-        THICK = (4),
+        Thick = (4),
 
         /**
          * Specifies an underline consisting of a series of dot characters beneath
          * all characters in this Run.
          */
-        DOTTED = (5),
+        Dotted = (5),
 
         /**
          * Specifies an underline consisting of a series of thick dot characters
          * beneath all characters in this Run.
          */
-        DOTTED_HEAVY = (6),
+        DottedHeavy = (6),
 
         /**
          * Specifies an underline consisting of a dashed line beneath all characters
          * in this Run.
          */
-        DASH = (7),
+        Dash = (7),
 
         /**
          * Specifies an underline consisting of a series of thick dashes beneath all
          * characters in this Run.
          */
-        DASHED_HEAVY = (8),
+        DashedHeavy = (8),
 
         /**
          * Specifies an underline consisting of long dashed characters beneath all
          * characters in this Run.
          */
-        DASH_LONG = (9),
+        DashLong = (9),
 
         /**
          * Specifies an underline consisting of thick long dashed characters beneath
          * all characters in this Run.
          */
-        DASH_LONG_HEAVY = (10),
+        DashLongHeavy = (10),
 
         /**
          * Specifies an underline consisting of a series of dash, dot characters
          * beneath all characters in this Run.
          */
-        DOT_DASH = (11),
+        DotDash = (11),
 
         /**
          * Specifies an underline consisting of a series of thick dash, dot
          * characters beneath all characters in this Run.
          */
-        DASH_DOT_HEAVY = (12),
+        DashDotHeavy = (12),
 
         /**
          * Specifies an underline consisting of a series of dash, dot, dot
          * characters beneath all characters in this Run.
          */
-        DOT_DOT_DASH = (13),
+        DotDotDash = (13),
 
         /**
          * Specifies an underline consisting of a series of thick dash, dot, dot
          * characters beneath all characters in this Run.
          */
-        DASH_DOT_DOT_HEAVY = (14),
+        DashDotDotHeavy = (14),
 
         /**
          * Specifies an underline consisting of a single wavy line beneath all
          * characters in this Run.
          */
-        WAVE = (15),
+        Wave = (15),
 
         /**
          * Specifies an underline consisting of a single thick wavy line beneath all
          * characters in this Run.
          */
-        WAVY_HEAVY = (16),
+        WavyHeavy = (16),
 
         /**
          * Specifies an underline consisting of a pair of wavy lines beneath all
          * characters in this Run.
          */
-        WAVY_DOUBLE = (17),
+        WavyDouble = (17),
 
         /**
          * Specifies no underline beneath this Run.
          */
-        NONE = (18)
+        None = (18)
 
         //private int value;
 

@@ -350,7 +350,7 @@ namespace NPOI.XWPF.UserModel
         public UnderlinePatterns GetUnderline()
         {
             CT_RPr pr = run.rPr;
-            return (pr != null && pr.IsSetU()) ? EnumConverter.ValueOf<UnderlinePatterns, ST_Underline>(pr.u.val) : UnderlinePatterns.NONE;
+            return (pr != null && pr.IsSetU()) ? EnumConverter.ValueOf<UnderlinePatterns, ST_Underline>(pr.u.val) : UnderlinePatterns.None;
         }
 
         /**

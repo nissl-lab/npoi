@@ -564,7 +564,7 @@ namespace NPOI.OpenXmlFormats.Shared
                 return this.valField != ST_BreakBin.NONE;
                 //return this.valFieldSpecified;
             }
-            private set
+            set
             {
                 this.valFieldSpecified = value;
             }

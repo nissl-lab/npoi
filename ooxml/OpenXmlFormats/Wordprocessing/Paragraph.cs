@@ -526,9 +526,11 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             return this.rPrField;
         }
 
-        public void AddNewNumPr()
+        public CT_NumPr AddNewNumPr()
         {
-            throw new NotImplementedException();
+            if (this.numPr == null)
+                this.numPr = new CT_NumPr();
+            return this.numPr;
         }
     }
 
@@ -3105,7 +3107,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         public bool IsSetPosition()
         {
-            return !string.IsNullOrEmpty(this.positionField.val);
+            return this.positionField!=null && !string.IsNullOrEmpty(this.positionField.val);
         }
 
         public CT_SignedHpsMeasure AddNewPosition()
@@ -3117,16 +3119,12 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         public bool IsSetB()
         {
-            //return this.b.valSpecified;
-            return this.bField != null && (this.bField.val == ST_OnOff.on ||
-                this.bField.val == ST_OnOff.True || this.bField.val == ST_OnOff.Value1);
+            return this.bField != null;
         }
 
         public bool IsSetI()
         {
-            return this.iField != null && (this.iField.val == ST_OnOff.on ||
-                this.iField.val == ST_OnOff.True || this.iField.val == ST_OnOff.Value1);
-            //return this.i.valSpecified;
+            return this.iField != null;
         }
 
         public CT_OnOff AddNewI()
@@ -3138,7 +3136,6 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         public void AddNewNoProof()
         {
-            //throw new NotImplementedException();
             if (this.noProofField == null)
                 this.noProofField = new CT_OnOff();
         }
@@ -3157,8 +3154,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         public bool IsSetStrike()
         {
-            return this.strike != null && (this.strikeField.val == ST_OnOff.on || 
-                this.strikeField.val == ST_OnOff.True || this.strikeField.val == ST_OnOff.Value1);
+            return this.strike != null;
         }
 
         public CT_OnOff AddNewStrike()
@@ -4065,6 +4061,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         }
         public bool IsSetTextAlignment()
         {
+            if (this.textAlignmentField == null)
+                return false;
             return this.textAlignmentField != null;
         }
 
@@ -4077,6 +4075,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         public bool IsSetPStyle()
         {
+            if (this.pStyleField == null)
+                return false;
             return !string.IsNullOrEmpty(this.pStyleField.val);
         }
 
@@ -4116,6 +4116,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         public bool IsSetPageBreakBefore()
         {
+            if (pageBreakBeforeField == null)
+                return false;
             return this.pageBreakBeforeField.val == ST_OnOff.on || this.pageBreakBeforeField.val == ST_OnOff.True ||
                 this.pageBreakBeforeField.val == ST_OnOff.Value1;
         }
@@ -4136,6 +4138,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         public bool IsSetWordWrap()
         {
+            if (wordWrapField == null)
+                return false;
             return this.wordWrapField.val == ST_OnOff.Value1 || this.wordWrapField.val == ST_OnOff.True ||
                 this.wordWrapField.val == ST_OnOff.on;
         }
@@ -4303,6 +4307,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             set
             {
                 this.typeField = value;
+                this.typeFieldSpecified = true;
             }
         }
 
@@ -4329,6 +4334,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             set
             {
                 this.clearField = value;
+                this.clearFieldSpecified = true;
             }
         }
 

@@ -34,7 +34,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             //this.rPrField = new CT_RPr();
         }
 
-        [XmlElement(Order = 0)]
+        [XmlElement(Order = 0, IsNullable = true)]
         public CT_RPr rPr
         {
             get
