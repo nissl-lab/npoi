@@ -29,7 +29,7 @@ namespace SimpleDocument
             r1.SetText("The quick brown fox");
             r1.SetBold(true);
             r1.SetFontFamily("Courier");
-            r1.SetUnderline(UnderlinePatterns.DOTDOTDASH);
+            r1.SetUnderline(UnderlinePatterns.DotDotDash);
             r1.SetTextPosition(100);
 
             XWPFParagraph p2 = doc.CreateParagraph();
