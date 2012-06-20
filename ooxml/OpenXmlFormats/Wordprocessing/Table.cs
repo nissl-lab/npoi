@@ -30,8 +30,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         {
             this.items1ElementNameField = new List<Items1ChoiceType>();
             this.items1Field = new List<object>();
-            this.tblGridField = new CT_TblGrid();
-            this.tblPrField = new CT_TblPr();
+            //this.tblGridField = new CT_TblGrid();
+            //this.tblPrField = new CT_TblPr();
             this.itemsElementNameField = new List<ItemsChoiceType30>();
             this.itemsField = new List<object>();
         }
@@ -557,9 +557,9 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         private string wField;
 
-        private ST_TblWidth typeField;
+        private ST_TblWidth typeField = ST_TblWidth.auto;
 
-        private bool typeFieldSpecified;
+        private bool typeFieldSpecified = true;
 
         [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, DataType = "integer")]
         public string w
@@ -690,21 +690,21 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         public CT_TblPrBase()
         {
-            this.tblLookField = new CT_ShortHexNumber();
-            this.tblCellMarField = new CT_TblCellMar();
-            this.tblLayoutField = new CT_TblLayoutType();
-            this.shdField = new CT_Shd();
-            this.tblBordersField = new CT_TblBorders();
-            this.tblIndField = new CT_TblWidth();
-            this.tblCellSpacingField = new CT_TblWidth();
-            this.jcField = new CT_Jc();
-            this.tblWField = new CT_TblWidth();
-            this.tblStyleColBandSizeField = new CT_DecimalNumber();
-            this.tblStyleRowBandSizeField = new CT_DecimalNumber();
-            this.bidiVisualField = new CT_OnOff();
-            this.tblOverlapField = new CT_TblOverlap();
-            this.tblpPrField = new CT_TblPPr();
-            this.tblStyleField = new CT_String();
+            //this.tblLookField = new CT_ShortHexNumber();
+            //this.tblCellMarField = new CT_TblCellMar();
+            //this.tblLayoutField = new CT_TblLayoutType();
+            //this.shdField = new CT_Shd();
+            //this.tblBordersField = new CT_TblBorders();
+            //this.tblIndField = new CT_TblWidth();
+            //this.tblCellSpacingField = new CT_TblWidth();
+            //this.jcField = new CT_Jc();
+            //this.tblWField = new CT_TblWidth();
+            //this.tblStyleColBandSizeField = new CT_DecimalNumber();
+            //this.tblStyleRowBandSizeField = new CT_DecimalNumber();
+            //this.bidiVisualField = new CT_OnOff();
+            //this.tblOverlapField = new CT_TblOverlap();
+            //this.tblpPrField = new CT_TblPPr();
+            //this.tblStyleField = new CT_String();
         }
 
         [XmlElement(Order = 0)]
@@ -904,7 +904,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         public bool IsSetTblW()
         {
-            return !string.IsNullOrEmpty(this.tblWField.w);
+            return this.tblW != null;
         }
 
         public CT_TblWidth AddNewTblW()
@@ -1821,7 +1821,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         public CT_TblPr()
         {
-            this.tblPrChangeField = new CT_TblPrChange();
+            //this.tblPrChangeField = new CT_TblPrChange();
         }
 
         [XmlElement(Order = 0)]
@@ -2069,7 +2069,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         {
             this.itemsElementNameField = new List<ItemsChoiceTableCellType>();
             this.itemsField = new List<object>();
-            this.tcPrField = new CT_TcPr();
+            //this.tcPrField = new CT_TcPr();
         }
 
         [XmlElement(Order = 0)]
@@ -2147,6 +2147,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                     this.itemsElementNameField = new List<ItemsChoiceTableCellType>(value);
             }
         }
+        #region Generic methods for object operation
         private List<T> GetObjectList<T>(ItemsChoiceTableCellType type) where T : class
         {
             lock (this)
@@ -2173,33 +2174,75 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 return size;
             }
         }
-        private T GetObjectArray<T>(int p, ItemsChoiceTableCellType type) where T: class
+        private T GetObjectArray<T>(int p, ItemsChoiceTableCellType type) where T : class
         {
             lock (this)
             {
-                int pos = 0;
-                for (int i = 0; i < itemsElementNameField.Count; i++)
-                {
-                    if (itemsElementNameField[i] == type)
-                    {
-                        if (pos == p)
-                            return itemsField[i] as T;
-                        else
-                            pos++;
-                    }
-                }
-                return null;
+                int pos = GetObjectIndex(type, p);
+                if (pos < 0 || pos >= this.itemsField.Count)
+                    return null;
+                return itemsField[pos] as T;
             }
         }
-        public CT_P AddNewP()
+        private int GetObjectIndex(ItemsChoiceTableCellType type, int p)
         {
-            CT_P p = new CT_P();
+            int index = -1;
+            int pos = 0;
+            for (int i = 0; i < itemsElementNameField.Count; i++)
+            {
+                if (itemsElementNameField[i] == type)
+                {
+                    if (pos == p)
+                    {
+                        index = i;
+                        break;
+                    }
+                    else
+                        pos++;
+                }
+            }
+            return index;
+        }
+        private void RemoveObject(ItemsChoiceTableCellType type, int p)
+        {
             lock (this)
             {
-                this.itemsElementNameField.Add(ItemsChoiceTableCellType.p);
-                this.itemsField.Add(p);
+                int pos = GetObjectIndex(type, p);
+                if (pos < 0 || pos >= this.itemsField.Count)
+                    return;
+                itemsElementNameField.RemoveAt(pos);
+                itemsField.RemoveAt(pos);
             }
-            return p;
+        }
+        private void SetObject<T>(ItemsChoiceTableCellType type, int p, T obj) where T : class
+        {
+            lock (this)
+            {
+                int pos = GetObjectIndex(type, p);
+                if (pos < 0 || pos >= this.itemsField.Count)
+                    return;
+                if (this.itemsField[pos] is T)
+                    this.itemsField[pos] = obj;
+                else
+                    throw new Exception(string.Format(@"object types are difference, itemsField[{0}] is {1}, and parameter obj is {2}",
+                        pos, this.itemsField[pos].GetType().Name, typeof(T).Name));
+            }
+        }
+
+        private T AddNewObject<T>(ItemsChoiceTableCellType type) where T : class, new()
+        {
+            T t = new T();
+            lock (this)
+            {
+                this.itemsElementNameField.Add(type);
+                this.itemsField.Add(t);
+            }
+            return t;
+        }
+        #endregion
+        public CT_P AddNewP()
+        {
+            return AddNewObject<CT_P>(ItemsChoiceTableCellType.p);
         }
 
         public IList<CT_P> GetPList()
@@ -2214,12 +2257,12 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         public void SetPArray(int p, CT_P cT_P)
         {
-            throw new NotImplementedException();
+            SetObject<CT_P>(ItemsChoiceTableCellType.p, p, cT_P);
         }
 
         public void RemoveP(int pos)
         {
-            throw new NotImplementedException();
+            RemoveObject(ItemsChoiceTableCellType.p, pos);
         }
 
         public CT_P GetPArray(int p)
@@ -3161,8 +3204,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         {
             this.itemsElementNameField = new List<ItemsChoiceTableRowType>();
             this.itemsField = new List<object>();
-            this.trPrField = new CT_TrPr();
-            this.tblPrExField = new CT_TblPrEx();
+            //this.trPrField = new CT_TrPr();
+            //this.tblPrExField = new CT_TblPrEx();
         }
 
         [XmlElement(Order = 0)]

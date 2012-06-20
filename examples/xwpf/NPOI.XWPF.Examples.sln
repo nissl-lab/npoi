@@ -5,6 +5,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CreateEmptyDocument", "Crea
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleDocument", "SimpleDocument\SimpleDocument.csproj", "{642109E6-8B42-4A26-BD9F-A1638BCE7457}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleTable", "SimpleTable\SimpleTable.csproj", "{794E4979-C67C-4565-8207-2BA313F89EBD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
@@ -19,6 +21,10 @@ Global
 		{642109E6-8B42-4A26-BD9F-A1638BCE7457}.Debug|x86.Build.0 = Debug|x86
 		{642109E6-8B42-4A26-BD9F-A1638BCE7457}.Release|x86.ActiveCfg = Release|x86
 		{642109E6-8B42-4A26-BD9F-A1638BCE7457}.Release|x86.Build.0 = Release|x86
+		{794E4979-C67C-4565-8207-2BA313F89EBD}.Debug|x86.ActiveCfg = Debug|x86
+		{794E4979-C67C-4565-8207-2BA313F89EBD}.Debug|x86.Build.0 = Debug|x86
+		{794E4979-C67C-4565-8207-2BA313F89EBD}.Release|x86.ActiveCfg = Release|x86
+		{794E4979-C67C-4565-8207-2BA313F89EBD}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
