@@ -10,6 +10,7 @@ using ICSharpCode.SharpZipLib.Zip;
 using System.IO;
 using ICSharpCode.TextEditor.Document;
 using System.Xml;
+using ICSharpCode.TextEditor;
 
 namespace DocPartViewer
 {
@@ -18,13 +19,22 @@ namespace DocPartViewer
         public MainForm()
         {
             InitializeComponent();
-            txtEditor.Document.HighlightingStrategy = HighlightingStrategyFactory.CreateHighlightingStrategy("XML");
-            txtEditor.Encoding = System.Text.Encoding.Default;
+            txtEditor1.Document.HighlightingStrategy = HighlightingStrategyFactory.CreateHighlightingStrategy("XML");
+            txtEditor1.Encoding = System.Text.Encoding.Default;
+            txtEditor2.Document.HighlightingStrategy = HighlightingStrategyFactory.CreateHighlightingStrategy("XML");
+            txtEditor2.Encoding = System.Text.Encoding.Default;
+            treeDocPart1.Tag = txtEditor1;
+            treeDocPart2.Tag = txtEditor2;
         }
         
         List<ZipEntryData> roots = new List<ZipEntryData>();
         Dictionary<string, ZipEntryData> dicDatas = new Dictionary<string, ZipEntryData>();
         private void menuOpenFile_Click(object sender, EventArgs e)
+        {
+            ShowDocPartTree(treeDocPart1);
+        }
+
+        private void ShowDocPartTree(TreeView tv)
         {
             string fileDir = string.Empty;
             if (openFileDialog.ShowDialog() == DialogResult.OK)
@@ -108,11 +118,11 @@ namespace DocPartViewer
                 }
                 catch (Exception)
                 {
-                }  
+                }
             }
-            treeDocPart.Nodes.Clear();
-            BuildDocPartTree(roots, treeDocPart.Nodes);
-            treeDocPart.ExpandAll();
+            tv.Nodes.Clear();
+            BuildDocPartTree(roots, tv.Nodes);
+            tv.ExpandAll();
         }
 
         private void BuildDocPartTree(List<ZipEntryData> nodes, TreeNodeCollection treeNodes)
@@ -195,6 +205,7 @@ namespace DocPartViewer
                 ZipEntryData data = (ZipEntryData)e.Node.Tag;
                 if (data.Type == ZipEntryType.File)
                 {
+                    TextEditorControl editor = e.Node.TreeView.Tag as TextEditorControl;
                     UTF8Encoding utf8 = new UTF8Encoding(false);
                     byte[] test = Encoding.UTF8.GetBytes(data.Content);
                     string xml;
@@ -215,12 +226,17 @@ namespace DocPartViewer
                             xmlWriter.Close();
                         }
                         string result = Encoding.UTF8.GetString(ms.ToArray());
-                        txtEditor.Text = result;
-                        txtEditor.Refresh();
+                        editor.Text = result;
+                        editor.Refresh();
                     }
                     
                 }
             }
+        }
+
+        private void menuOpenAnother_Click(object sender, EventArgs e)
+        {
+            ShowDocPartTree(treeDocPart2);
         }
     }
 }

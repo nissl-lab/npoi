@@ -39,16 +39,29 @@
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.treeDocPart = new System.Windows.Forms.TreeView();
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
-            this.txtEditor = new ICSharpCode.TextEditor.TextEditorControl();
+            this.splitEditor = new System.Windows.Forms.SplitContainer();
+            this.txtEditor1 = new ICSharpCode.TextEditor.TextEditorControl();
+            this.splitTree = new System.Windows.Forms.SplitContainer();
+            this.treeDocPart1 = new System.Windows.Forms.TreeView();
+            this.treeDocPart2 = new System.Windows.Forms.TreeView();
+            this.txtEditor2 = new ICSharpCode.TextEditor.TextEditorControl();
+            this.menuOpenAnother = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitEditor)).BeginInit();
+            this.splitEditor.Panel1.SuspendLayout();
+            this.splitEditor.Panel2.SuspendLayout();
+            this.splitEditor.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitTree)).BeginInit();
+            this.splitTree.Panel1.SuspendLayout();
+            this.splitTree.Panel2.SuspendLayout();
+            this.splitTree.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -65,6 +78,7 @@
             // 
             this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.menuOpenFile,
+            this.menuOpenAnother,
             this.toolStripSeparator1,
             this.menuExit});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
@@ -74,19 +88,21 @@
             // menuOpenFile
             // 
             this.menuOpenFile.Name = "menuOpenFile";
-            this.menuOpenFile.Size = new System.Drawing.Size(108, 22);
+            this.menuOpenFile.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
+            this.menuOpenFile.Size = new System.Drawing.Size(201, 22);
             this.menuOpenFile.Text = "&Open";
             this.menuOpenFile.Click += new System.EventHandler(this.menuOpenFile_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(105, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(198, 6);
             // 
             // menuExit
             // 
             this.menuExit.Name = "menuExit";
-            this.menuExit.Size = new System.Drawing.Size(108, 22);
+            this.menuExit.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.F4)));
+            this.menuExit.Size = new System.Drawing.Size(201, 22);
             this.menuExit.Text = "&Exit";
             // 
             // statusStrip1
@@ -124,23 +140,14 @@
             // 
             // splitContainer1.Panel1
             // 
-            this.splitContainer1.Panel1.Controls.Add(this.treeDocPart);
+            this.splitContainer1.Panel1.Controls.Add(this.splitTree);
             // 
             // splitContainer1.Panel2
             // 
-            this.splitContainer1.Panel2.Controls.Add(this.txtEditor);
+            this.splitContainer1.Panel2.Controls.Add(this.splitEditor);
             this.splitContainer1.Size = new System.Drawing.Size(773, 378);
             this.splitContainer1.SplitterDistance = 257;
             this.splitContainer1.TabIndex = 3;
-            // 
-            // treeDocPart
-            // 
-            this.treeDocPart.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.treeDocPart.Location = new System.Drawing.Point(0, 0);
-            this.treeDocPart.Name = "treeDocPart";
-            this.treeDocPart.Size = new System.Drawing.Size(257, 378);
-            this.treeDocPart.TabIndex = 0;
-            this.treeDocPart.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeDocPart_AfterSelect);
             // 
             // imageList1
             // 
@@ -153,15 +160,87 @@
             this.openFileDialog.FileName = "openFileDialog1";
             this.openFileDialog.Filter = "Word|*.docx";
             // 
-            // txtEditor
+            // splitEditor
             // 
-            this.txtEditor.AutoScroll = true;
-            this.txtEditor.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtEditor.IsReadOnly = false;
-            this.txtEditor.Location = new System.Drawing.Point(0, 0);
-            this.txtEditor.Name = "txtEditor";
-            this.txtEditor.Size = new System.Drawing.Size(512, 378);
-            this.txtEditor.TabIndex = 0;
+            this.splitEditor.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitEditor.Location = new System.Drawing.Point(0, 0);
+            this.splitEditor.Name = "splitEditor";
+            this.splitEditor.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            // 
+            // splitEditor.Panel1
+            // 
+            this.splitEditor.Panel1.Controls.Add(this.txtEditor1);
+            // 
+            // splitEditor.Panel2
+            // 
+            this.splitEditor.Panel2.Controls.Add(this.txtEditor2);
+            this.splitEditor.Size = new System.Drawing.Size(512, 378);
+            this.splitEditor.SplitterDistance = 189;
+            this.splitEditor.TabIndex = 1;
+            // 
+            // txtEditor1
+            // 
+            this.txtEditor1.AutoScroll = true;
+            this.txtEditor1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtEditor1.IsReadOnly = false;
+            this.txtEditor1.Location = new System.Drawing.Point(0, 0);
+            this.txtEditor1.Name = "txtEditor1";
+            this.txtEditor1.Size = new System.Drawing.Size(512, 189);
+            this.txtEditor1.TabIndex = 1;
+            // 
+            // splitTree
+            // 
+            this.splitTree.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitTree.Location = new System.Drawing.Point(0, 0);
+            this.splitTree.Name = "splitTree";
+            this.splitTree.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            // 
+            // splitTree.Panel1
+            // 
+            this.splitTree.Panel1.Controls.Add(this.treeDocPart1);
+            // 
+            // splitTree.Panel2
+            // 
+            this.splitTree.Panel2.Controls.Add(this.treeDocPart2);
+            this.splitTree.Size = new System.Drawing.Size(257, 378);
+            this.splitTree.SplitterDistance = 189;
+            this.splitTree.TabIndex = 1;
+            // 
+            // treeDocPart1
+            // 
+            this.treeDocPart1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.treeDocPart1.Location = new System.Drawing.Point(0, 0);
+            this.treeDocPart1.Name = "treeDocPart1";
+            this.treeDocPart1.Size = new System.Drawing.Size(257, 189);
+            this.treeDocPart1.TabIndex = 1;
+            this.treeDocPart1.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeDocPart_AfterSelect);
+            // 
+            // treeDocPart2
+            // 
+            this.treeDocPart2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.treeDocPart2.Location = new System.Drawing.Point(0, 0);
+            this.treeDocPart2.Name = "treeDocPart2";
+            this.treeDocPart2.Size = new System.Drawing.Size(257, 185);
+            this.treeDocPart2.TabIndex = 0;
+            this.treeDocPart2.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeDocPart_AfterSelect);
+            // 
+            // txtEditor2
+            // 
+            this.txtEditor2.AutoScroll = true;
+            this.txtEditor2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtEditor2.IsReadOnly = false;
+            this.txtEditor2.Location = new System.Drawing.Point(0, 0);
+            this.txtEditor2.Name = "txtEditor2";
+            this.txtEditor2.Size = new System.Drawing.Size(512, 185);
+            this.txtEditor2.TabIndex = 2;
+            // 
+            // menuOpenAnother
+            // 
+            this.menuOpenAnother.Name = "menuOpenAnother";
+            this.menuOpenAnother.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.L)));
+            this.menuOpenAnother.Size = new System.Drawing.Size(201, 22);
+            this.menuOpenAnother.Text = "Open Another";
+            this.menuOpenAnother.Click += new System.EventHandler(this.menuOpenAnother_Click);
             // 
             // MainForm
             // 
@@ -175,6 +254,7 @@
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "MainForm";
             this.Text = "DocPartViewer";
+            this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.toolStrip1.ResumeLayout(false);
@@ -183,6 +263,14 @@
             this.splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
+            this.splitEditor.Panel1.ResumeLayout(false);
+            this.splitEditor.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitEditor)).EndInit();
+            this.splitEditor.ResumeLayout(false);
+            this.splitTree.Panel1.ResumeLayout(false);
+            this.splitTree.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitTree)).EndInit();
+            this.splitTree.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -198,11 +286,16 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem menuExit;
         private System.Windows.Forms.SplitContainer splitContainer1;
-        private System.Windows.Forms.TreeView treeDocPart;
         private System.Windows.Forms.ToolStripButton toolStripButton1;
         private System.Windows.Forms.ImageList imageList1;
         private System.Windows.Forms.OpenFileDialog openFileDialog;
-        private ICSharpCode.TextEditor.TextEditorControl txtEditor;
+        private System.Windows.Forms.SplitContainer splitEditor;
+        private ICSharpCode.TextEditor.TextEditorControl txtEditor1;
+        private System.Windows.Forms.SplitContainer splitTree;
+        private System.Windows.Forms.TreeView treeDocPart1;
+        private System.Windows.Forms.TreeView treeDocPart2;
+        private ICSharpCode.TextEditor.TextEditorControl txtEditor2;
+        private System.Windows.Forms.ToolStripMenuItem menuOpenAnother;
 
     }
 }
