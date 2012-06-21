@@ -15,6 +15,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataFormatsInXlsx", "DataFo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CreateHeaderFooterInXlsx", "CreateHeaderFooterInXlsx\CreateHeaderFooterInXlsx.csproj", "{0E707837-B595-4F19-B3DB-69959A3DC10F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SplitAndFreezePanesInXlsx", "SplitAndFreezePanesInXlsx\SplitAndFreezePanesInXlsx.csproj", "{7A0D486D-9BB8-49BE-9DE7-28027B1C5ADA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HideColumnAndRowInXlsx", "HideColumnAndRowInXlsx\HideColumnAndRowInXlsx.csproj", "{A99CBC67-2CD6-40BC-8316-E270404385B2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
@@ -49,6 +53,14 @@ Global
 		{0E707837-B595-4F19-B3DB-69959A3DC10F}.Debug|x86.Build.0 = Debug|x86
 		{0E707837-B595-4F19-B3DB-69959A3DC10F}.Release|x86.ActiveCfg = Release|x86
 		{0E707837-B595-4F19-B3DB-69959A3DC10F}.Release|x86.Build.0 = Release|x86
+		{7A0D486D-9BB8-49BE-9DE7-28027B1C5ADA}.Debug|x86.ActiveCfg = Debug|x86
+		{7A0D486D-9BB8-49BE-9DE7-28027B1C5ADA}.Debug|x86.Build.0 = Debug|x86
+		{7A0D486D-9BB8-49BE-9DE7-28027B1C5ADA}.Release|x86.ActiveCfg = Release|x86
+		{7A0D486D-9BB8-49BE-9DE7-28027B1C5ADA}.Release|x86.Build.0 = Release|x86
+		{A99CBC67-2CD6-40BC-8316-E270404385B2}.Debug|x86.ActiveCfg = Debug|x86
+		{A99CBC67-2CD6-40BC-8316-E270404385B2}.Debug|x86.Build.0 = Debug|x86
+		{A99CBC67-2CD6-40BC-8316-E270404385B2}.Release|x86.ActiveCfg = Release|x86
+		{A99CBC67-2CD6-40BC-8316-E270404385B2}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
