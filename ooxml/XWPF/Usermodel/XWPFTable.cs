@@ -65,9 +65,11 @@ namespace NPOI.XWPF.UserModel
 
             foreach (CT_Row row in table.GetTrList()) {
                 StringBuilder rowText = new StringBuilder();
+                row.Table = table;
                 XWPFTableRow tabRow = new XWPFTableRow(row, this);
                 tableRows.Add(tabRow);
                 foreach (CT_Tc cell in row.GetTcList()) {
+                    cell.TableRow = row;
                     foreach (CT_P ctp in cell.GetPList()) {
                         XWPFParagraph p = new XWPFParagraph(ctp, part);
                         if (rowText.Length > 0) {

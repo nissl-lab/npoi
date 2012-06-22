@@ -235,7 +235,7 @@ namespace NPOI.XWPF.UserModel
          * SetNumID of Paragraph
          * @param numPos
          */
-        public void SetNumID(string numPos)
+        public void SetNumID(string numId)
         {
             if (paragraph.pPr == null)
                 paragraph.AddNewPPr();
@@ -245,9 +245,31 @@ namespace NPOI.XWPF.UserModel
             {
                 paragraph.pPr.numPr.AddNewNumId();
             }
-            paragraph.pPr.numPr.numId.val = (numPos);
+            paragraph.pPr.numPr.ilvl.val = "0";
+            string abstractNumId = this.GetDocument().GetNumbering().GetNum(numId).GetCTNum().abstractNumId.val;
+            this.GetDocument().GetNumbering().GetAbstractNum(abstractNumId).SetLevelTentative(0, false);
+            paragraph.pPr.numPr.numId.val = (numId);
         }
-
+        /// <summary>
+        /// Set NumID and level of Paragraph
+        /// </summary>
+        /// <param name="numId"></param>
+        /// <param name="ilvl"></param>
+        public void SetNumID(string numId, string ilvl)
+        {
+            if (paragraph.pPr == null)
+                paragraph.AddNewPPr();
+            if (paragraph.pPr.numPr == null)
+                paragraph.pPr.AddNewNumPr();
+            if (paragraph.pPr.numPr.numId == null)
+            {
+                paragraph.pPr.numPr.AddNewNumId();
+            }
+            paragraph.pPr.numPr.ilvl.val = ilvl;
+            string abstractNumId = this.GetDocument().GetNumbering().GetNum(numId).GetCTNum().abstractNumId.val;
+            this.GetDocument().GetNumbering().GetAbstractNum(abstractNumId).SetLevelTentative(int.Parse(ilvl), false);
+            paragraph.pPr.numPr.numId.val = (numId);
+        }
         /**
          * Returns the text of the paragraph, but not of any objects in the
          * paragraph

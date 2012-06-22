@@ -2147,6 +2147,23 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                     this.itemsElementNameField = new List<ItemsChoiceTableCellType>(value);
             }
         }
+        [XmlIgnore]
+        public CT_Tbl Table
+        {
+            get
+            {
+                if (_tableRow == null)
+                    return null;
+                return _tableRow.Table; 
+            }
+        }
+        private CT_Row _tableRow;
+        [XmlIgnore]
+        public CT_Row TableRow
+        {
+            get { return _tableRow; }
+            set { _tableRow = value; }
+        }
         #region Generic methods for object operation
         private List<T> GetObjectList<T>(ItemsChoiceTableCellType type) where T : class
         {
@@ -3346,6 +3363,13 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 this.rsidTrField = value;
             }
         }
+        private CT_Tbl _table;
+        [XmlIgnore]
+        public CT_Tbl Table
+        {
+            get { return _table; }
+            set { _table = value; }
+        }
 
         public IList<CT_Tc> GetTcList()
         {
@@ -3354,6 +3378,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         public bool IsSetTrPr()
         {
+            if (this.trPrField == null)
+                return false;
             return this.trPrField.Items.Length > 0;
         }
 

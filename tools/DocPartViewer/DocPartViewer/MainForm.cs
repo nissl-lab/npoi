@@ -119,10 +119,11 @@ namespace DocPartViewer
                 catch (Exception)
                 {
                 }
+                tv.Nodes.Clear();
+                BuildDocPartTree(roots, tv.Nodes);
+                tv.ExpandAll();
             }
-            tv.Nodes.Clear();
-            BuildDocPartTree(roots, tv.Nodes);
-            tv.ExpandAll();
+            
         }
 
         private void BuildDocPartTree(List<ZipEntryData> nodes, TreeNodeCollection treeNodes)

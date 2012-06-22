@@ -2307,6 +2307,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             set
             {
                 this.hangingField = value;
+                this.hangingFieldSpecified = true;
             }
         }
 

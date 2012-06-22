@@ -1473,12 +1473,25 @@ namespace NPOI.XWPF.UserModel
             }
             return tableRow.GetTableCell(cell);
              */
-            throw new NotImplementedException();
+            if (cell == null|| cell.Table == null)
+                return null;
+            XWPFTable table = GetTable(cell.Table);
+            if (table == null)
+            {
+                return null;
+            }
+            XWPFTableRow tableRow = table.GetRow(cell.TableRow);
+            if (tableRow == null)
+            {
+                return null;
+            }
+            return tableRow.GetTableCell(cell);
         }
 
         public XWPFDocument GetXWPFDocument()
         {
             return this;
         }
+
     } // end class
 }

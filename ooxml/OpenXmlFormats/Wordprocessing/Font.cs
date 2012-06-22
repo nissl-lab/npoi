@@ -470,6 +470,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             set
             {
                 this.hintField = value;
+                this.hintFieldSpecified = true;
             }
         }
 

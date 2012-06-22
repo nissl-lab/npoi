@@ -260,7 +260,21 @@ namespace NPOI.XWPF.UserModel
             abstractNums.Add(abstractNum);
             return abstractNum.GetAbstractNum().abstractNumId;
         }
-
+        /// <summary>
+        /// Add a new AbstractNum
+        /// </summary>
+        /// <returns></returns>
+        /// @author antony liu
+        public string AddAbstractNum()
+        {
+            CT_AbstractNum ctAbstractNum = ctNumbering.AddNewAbstractNum();
+            XWPFAbstractNum abstractNum = new XWPFAbstractNum(ctAbstractNum, this);
+            abstractNum.AbstractNumId = abstractNums.Count.ToString();
+            abstractNum.MultiLevelType = MultiLevelType.HybridMultilevel;
+            abstractNum.InitLvl();
+            abstractNums.Add(abstractNum);
+            return abstractNum.GetAbstractNum().abstractNumId;
+        }
         /**
          * remove an existing abstractNum 
          * @param abstractNumID

@@ -33,35 +33,35 @@
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuOpenFile = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuOpenAnother = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.menuExit = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.imageList1 = new System.Windows.Forms.ImageList(this.components);
-            this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
-            this.splitEditor = new System.Windows.Forms.SplitContainer();
-            this.txtEditor1 = new ICSharpCode.TextEditor.TextEditorControl();
             this.splitTree = new System.Windows.Forms.SplitContainer();
             this.treeDocPart1 = new System.Windows.Forms.TreeView();
             this.treeDocPart2 = new System.Windows.Forms.TreeView();
+            this.splitEditor = new System.Windows.Forms.SplitContainer();
+            this.txtEditor1 = new ICSharpCode.TextEditor.TextEditorControl();
             this.txtEditor2 = new ICSharpCode.TextEditor.TextEditorControl();
-            this.menuOpenAnother = new System.Windows.Forms.ToolStripMenuItem();
+            this.imageList1 = new System.Windows.Forms.ImageList(this.components);
+            this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.menuStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.splitEditor)).BeginInit();
-            this.splitEditor.Panel1.SuspendLayout();
-            this.splitEditor.Panel2.SuspendLayout();
-            this.splitEditor.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitTree)).BeginInit();
             this.splitTree.Panel1.SuspendLayout();
             this.splitTree.Panel2.SuspendLayout();
             this.splitTree.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitEditor)).BeginInit();
+            this.splitEditor.Panel1.SuspendLayout();
+            this.splitEditor.Panel2.SuspendLayout();
+            this.splitEditor.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -92,6 +92,14 @@
             this.menuOpenFile.Size = new System.Drawing.Size(201, 22);
             this.menuOpenFile.Text = "&Open";
             this.menuOpenFile.Click += new System.EventHandler(this.menuOpenFile_Click);
+            // 
+            // menuOpenAnother
+            // 
+            this.menuOpenAnother.Name = "menuOpenAnother";
+            this.menuOpenAnother.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.L)));
+            this.menuOpenAnother.Size = new System.Drawing.Size(201, 22);
+            this.menuOpenAnother.Text = "Open Another";
+            this.menuOpenAnother.Click += new System.EventHandler(this.menuOpenAnother_Click);
             // 
             // toolStripSeparator1
             // 
@@ -149,45 +157,6 @@
             this.splitContainer1.SplitterDistance = 257;
             this.splitContainer1.TabIndex = 3;
             // 
-            // imageList1
-            // 
-            this.imageList1.ColorDepth = System.Windows.Forms.ColorDepth.Depth8Bit;
-            this.imageList1.ImageSize = new System.Drawing.Size(16, 16);
-            this.imageList1.TransparentColor = System.Drawing.Color.Transparent;
-            // 
-            // openFileDialog
-            // 
-            this.openFileDialog.FileName = "openFileDialog1";
-            this.openFileDialog.Filter = "Word|*.docx";
-            // 
-            // splitEditor
-            // 
-            this.splitEditor.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitEditor.Location = new System.Drawing.Point(0, 0);
-            this.splitEditor.Name = "splitEditor";
-            this.splitEditor.Orientation = System.Windows.Forms.Orientation.Horizontal;
-            // 
-            // splitEditor.Panel1
-            // 
-            this.splitEditor.Panel1.Controls.Add(this.txtEditor1);
-            // 
-            // splitEditor.Panel2
-            // 
-            this.splitEditor.Panel2.Controls.Add(this.txtEditor2);
-            this.splitEditor.Size = new System.Drawing.Size(512, 378);
-            this.splitEditor.SplitterDistance = 189;
-            this.splitEditor.TabIndex = 1;
-            // 
-            // txtEditor1
-            // 
-            this.txtEditor1.AutoScroll = true;
-            this.txtEditor1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtEditor1.IsReadOnly = false;
-            this.txtEditor1.Location = new System.Drawing.Point(0, 0);
-            this.txtEditor1.Name = "txtEditor1";
-            this.txtEditor1.Size = new System.Drawing.Size(512, 189);
-            this.txtEditor1.TabIndex = 1;
-            // 
             // splitTree
             // 
             this.splitTree.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -224,6 +193,34 @@
             this.treeDocPart2.TabIndex = 0;
             this.treeDocPart2.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeDocPart_AfterSelect);
             // 
+            // splitEditor
+            // 
+            this.splitEditor.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitEditor.Location = new System.Drawing.Point(0, 0);
+            this.splitEditor.Name = "splitEditor";
+            this.splitEditor.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            // 
+            // splitEditor.Panel1
+            // 
+            this.splitEditor.Panel1.Controls.Add(this.txtEditor1);
+            // 
+            // splitEditor.Panel2
+            // 
+            this.splitEditor.Panel2.Controls.Add(this.txtEditor2);
+            this.splitEditor.Size = new System.Drawing.Size(512, 378);
+            this.splitEditor.SplitterDistance = 189;
+            this.splitEditor.TabIndex = 1;
+            // 
+            // txtEditor1
+            // 
+            this.txtEditor1.AutoScroll = true;
+            this.txtEditor1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtEditor1.IsReadOnly = false;
+            this.txtEditor1.Location = new System.Drawing.Point(0, 0);
+            this.txtEditor1.Name = "txtEditor1";
+            this.txtEditor1.Size = new System.Drawing.Size(512, 189);
+            this.txtEditor1.TabIndex = 1;
+            // 
             // txtEditor2
             // 
             this.txtEditor2.AutoScroll = true;
@@ -234,13 +231,15 @@
             this.txtEditor2.Size = new System.Drawing.Size(512, 185);
             this.txtEditor2.TabIndex = 2;
             // 
-            // menuOpenAnother
+            // imageList1
             // 
-            this.menuOpenAnother.Name = "menuOpenAnother";
-            this.menuOpenAnother.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.L)));
-            this.menuOpenAnother.Size = new System.Drawing.Size(201, 22);
-            this.menuOpenAnother.Text = "Open Another";
-            this.menuOpenAnother.Click += new System.EventHandler(this.menuOpenAnother_Click);
+            this.imageList1.ColorDepth = System.Windows.Forms.ColorDepth.Depth8Bit;
+            this.imageList1.ImageSize = new System.Drawing.Size(16, 16);
+            this.imageList1.TransparentColor = System.Drawing.Color.Transparent;
+            // 
+            // openFileDialog
+            // 
+            this.openFileDialog.Filter = "Word|*.docx";
             // 
             // MainForm
             // 
@@ -263,14 +262,14 @@
             this.splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
-            this.splitEditor.Panel1.ResumeLayout(false);
-            this.splitEditor.Panel2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.splitEditor)).EndInit();
-            this.splitEditor.ResumeLayout(false);
             this.splitTree.Panel1.ResumeLayout(false);
             this.splitTree.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitTree)).EndInit();
             this.splitTree.ResumeLayout(false);
+            this.splitEditor.Panel1.ResumeLayout(false);
+            this.splitEditor.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitEditor)).EndInit();
+            this.splitEditor.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 

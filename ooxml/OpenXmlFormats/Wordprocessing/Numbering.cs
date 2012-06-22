@@ -19,7 +19,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         public CT_Num()
         {
-            this.lvlOverrideField = new List<CT_NumLvl>();
+            //this.lvlOverrideField = new List<CT_NumLvl>();
             this.abstractNumIdField = new CT_DecimalNumber();
         }
 
@@ -62,10 +62,11 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        public void AddNewAbstractNumId()
+        public CT_DecimalNumber AddNewAbstractNumId()
         {
             if (this.abstractNumIdField == null)
                 abstractNumIdField = new CT_DecimalNumber();
+            return abstractNumIdField;
         }
     }
 
@@ -147,10 +148,10 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         public CT_Numbering()
         {
-            this.numIdMacAtCleanupField = new CT_DecimalNumber();
+            //this.numIdMacAtCleanupField = new CT_DecimalNumber();
             this.numField = new List<CT_Num>();
             this.abstractNumField = new List<CT_AbstractNum>();
-            this.numPicBulletField = new List<CT_NumPicBullet>();
+            //this.numPicBulletField = new List<CT_NumPicBullet>();
         }
 
         [XmlElement("numPicBullet", Order = 0)]
@@ -224,6 +225,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         public void SetNumArray(int pos, CT_Num cT_Num)
         {
+            if (pos < 0 || pos >= numField.Count)
+                numField.Add(cT_Num);
             numField[pos] = cT_Num;
         }
 
@@ -236,6 +239,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         public void SetAbstractNumArray(int pos, CT_AbstractNum cT_AbstractNum)
         {
+            if (pos < 0 || pos >= abstractNumField.Count)
+                abstractNumField.Add(cT_AbstractNum);
             abstractNumField[pos] = cT_AbstractNum;
         }
 
@@ -557,8 +562,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         public CT_NumPr()
         {
-            this.insField = new CT_TrackChange();
-            this.numberingChangeField = new CT_TrackChangeNumbering();
+            //this.insField = new CT_TrackChange();
+            //this.numberingChangeField = new CT_TrackChangeNumbering();
             this.numIdField = new CT_DecimalNumber();
             this.ilvlField = new CT_DecimalNumber();
         }
@@ -686,12 +691,14 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         public CT_AbstractNum()
         {
             this.lvlField = new List<CT_Lvl>();
-            this.numStyleLinkField = new CT_String();
-            this.styleLinkField = new CT_String();
-            this.nameField = new CT_String();
-            this.tmplField = new CT_LongHexNumber();
+            //this.numStyleLinkField = new CT_String();
+            //this.styleLinkField = new CT_String();
+            //this.nameField = new CT_String();
+            //this.tmplField = new CT_LongHexNumber();
             this.multiLevelTypeField = new CT_MultiLevelType();
             this.nsidField = new CT_LongHexNumber();
+            this.nsidField.val = new byte[4];
+            Array.Copy(BitConverter.GetBytes(DateTime.Now.Ticks), 4, this.nsidField.val, 0, 4);
         }
 
         [XmlElement(Order = 0)]
@@ -773,15 +780,18 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         }
 
         [XmlElement("lvl", Order = 6)]
-        public List<CT_Lvl> lvl
+        public CT_Lvl[] lvl
         {
             get
             {
-                return this.lvlField;
+                return this.lvlField.ToArray();
             }
             set
             {
-                this.lvlField = value;
+                if (value == null || value.Length == 0)
+                    this.lvlField = new List<CT_Lvl>();
+                else
+                    this.lvlField = new List<CT_Lvl>(value);
             }
         }
 
@@ -915,13 +925,13 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             this.rPrField = new CT_RPr();
             this.pPrField = new CT_PPr();
             this.lvlJcField = new CT_Jc();
-            this.legacyField = new CT_LvlLegacy();
-            this.lvlPicBulletIdField = new CT_DecimalNumber();
+            //this.legacyField = new CT_LvlLegacy();
+            //this.lvlPicBulletIdField = new CT_DecimalNumber();
             this.lvlTextField = new CT_LevelText();
-            this.suffField = new CT_LevelSuffix();
-            this.isLglField = new CT_OnOff();
-            this.pStyleField = new CT_String();
-            this.lvlRestartField = new CT_DecimalNumber();
+            //this.suffField = new CT_LevelSuffix();
+            //this.isLglField = new CT_OnOff();
+            //this.pStyleField = new CT_String();
+            //this.lvlRestartField = new CT_DecimalNumber();
             this.numFmtField = new CT_NumFmt();
             this.startField = new CT_DecimalNumber();
         }
@@ -1118,6 +1128,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             set
             {
                 this.tentativeField = value;
+                this.tentativeFieldSpecified = true;
             }
         }
 
