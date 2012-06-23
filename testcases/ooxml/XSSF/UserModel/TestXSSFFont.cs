@@ -189,11 +189,11 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual(FontUnderline.SINGLE.ByteValue, xssfFont.Underline);
 
             xssfFont.SetUnderline(FontUnderline.DOUBLE);
-            Assert.AreEqual(ctFont.u.Count, 1);
+            Assert.AreEqual(1,ctFont.u.Count);
             Assert.AreEqual(ST_UnderlineValues.@double, ctFont.GetUArray(0).val);
 
             xssfFont.SetUnderline(FontUnderline.DOUBLE_ACCOUNTING);
-            Assert.AreEqual(ctFont.u.Count, 1);
+            Assert.AreEqual(1,ctFont.u.Count);
             Assert.AreEqual(ST_UnderlineValues.doubleAccounting, ctFont.GetUArray(0).val);
         }
         [TestMethod]

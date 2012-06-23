@@ -107,9 +107,9 @@ namespace NPOI.XWPF.UserModel
             rpr.AddNewU().val = (ST_Underline.dash);
 
             XWPFRun run = new XWPFRun(ctRun, p);
-            Assert.AreEqual(UnderlinePatterns.DASH, run.GetUnderline());
+            Assert.AreEqual(UnderlinePatterns.Dash, run.GetUnderline());
 
-            run.SetUnderline(UnderlinePatterns.NONE);
+            run.SetUnderline(UnderlinePatterns.None);
             Assert.AreEqual(ST_Underline.none, rpr.u.val);
         }
 

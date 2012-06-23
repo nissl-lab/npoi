@@ -385,14 +385,14 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         public CT_Border()
         {
-            this.horizontalField = new CT_BorderPr();
-            this.verticalField = new CT_BorderPr();
+            //this.horizontalField = new CT_BorderPr();
+            //this.verticalField = new CT_BorderPr();
             //this.diagonalField = new CT_BorderPr();
             //this.bottomField = new CT_BorderPr();
             //this.topField = new CT_BorderPr();
             //this.rightField = new CT_BorderPr();
             //this.leftField = new CT_BorderPr();
-            this.outlineField = true;
+            //this.outlineField = true;
         }
         public CT_Border Copy()
         {
@@ -408,7 +408,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
         public CT_BorderPr AddNewDiagonal()
         {
-            this.diagonalField = new CT_BorderPr();
+            if(this.diagonalField==null)
+                this.diagonalField = new CT_BorderPr();
             return this.diagonalField;
         }
         public bool IsSetDiagonal()
@@ -460,22 +461,26 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
         public CT_BorderPr AddNewTop()
         {
-            this.topField = new CT_BorderPr();
+            if (this.topField == null)
+                this.topField = new CT_BorderPr();
             return this.topField;
         }
         public CT_BorderPr AddNewRight()
         {
-            this.rightField = new CT_BorderPr();
+            if (this.rightField == null)
+                this.rightField = new CT_BorderPr();
             return this.rightField;
         }
         public CT_BorderPr AddNewLeft()
         {
-            this.leftField = new CT_BorderPr();
+            if (this.leftField == null)
+                this.leftField = new CT_BorderPr();
             return this.leftField;
         }
         public CT_BorderPr AddNewBottom()
         {
-            this.bottomField = new CT_BorderPr();
+            if (this.bottomField == null)
+                this.bottomField = new CT_BorderPr();
             return this.bottomField;
         }
 
@@ -613,8 +618,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.diagonalDownFieldSpecified = value;
             }
         }
-
-        [DefaultValue(true)]
+        [XmlAttribute]
+        [DefaultValue(false)]
         public bool outline
         {
             get
@@ -718,6 +723,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     public class CT_Borders
     {
         private List<CT_Border> borderField;
+        private uint countField = 0;
+        private bool countFieldSpecified = false;
 
         public CT_Borders()
         {
@@ -748,21 +755,27 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         [XmlAttribute]
         public uint count
         {
-            get { return (uint)this.borderField.Count; }
-            //set
-            //{
-            //    this.countField = value;
-            //}
+            get
+            {
+                return this.countField;
+            }
+            set
+            {
+                this.countField = value;
+            }
         }
 
         [XmlIgnore]
         public bool countSpecified
         {
-            get { return 0 < this.borderField.Count; }
-            //set
-            //{
-            //    this.countFieldSpecified = value;
-            //}
+            get
+            {
+                return this.countFieldSpecified;
+            }
+            set
+            {
+                this.countFieldSpecified = value;
+            }
         }
     }
 
@@ -771,6 +784,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     public class CT_Fills
     {
         private List<CT_Fill> fillField;
+        private uint countField = 0;
+        private bool countFieldSpecified = false;
 
         public CT_Fills()
         {
@@ -795,13 +810,27 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         [XmlAttribute]
         public uint count
         {
-            get { return(uint)this.fillField.Count; }
+            get
+            {
+                return this.countField;
+            }
+            set
+            {
+                this.countField = value;
+            }
         }
 
         [XmlIgnore]
         public bool countSpecified
         {
-            get { return 0 < this.fillField.Count; }
+            get
+            {
+                return this.countFieldSpecified;
+            }
+            set
+            {
+                this.countFieldSpecified = value;
+            }
         }
     }
 
@@ -2134,9 +2163,10 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
         public void SetUArray(int index,CT_UnderlineProperty value)
         {
-            if (uField == null)
-                uField = new List<CT_UnderlineProperty>();
-            this.uField.Insert(index, value);
+            if (uField[index] != null)
+                this.uField[index] = value;
+            else
+                this.uField.Insert(index, value);
         }
         public void SetUArray(CT_UnderlineProperty[] array)
         {

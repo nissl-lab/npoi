@@ -435,14 +435,21 @@ namespace NPOI.XSSF.Model
                 ctf.Add( f.GetCTFill());
             CT_Fills ctFills = new CT_Fills();
             ctFills.SetFillArray(ctf);
+            ctFills.count = (uint)fills.Count;
+            if (ctFills.count > 0)
+                ctFills.countSpecified = true;
             styleSheet.fills = ctFills;
 
             // Borders
             List<CT_Border> ctb = new List<CT_Border>(borders.Count);
             idx = 0;
-            foreach (XSSFCellBorder b in borders) ctb.Add(b.GetCTBorder());
+            foreach (XSSFCellBorder b in borders) 
+                ctb.Add(b.GetCTBorder());
             CT_Borders ctBorders = new CT_Borders();
             ctBorders.SetBorderArray(ctb);
+            ctBorders.count = (uint)ctb.Count;
+            if (ctBorders.count > 0)
+                ctBorders.countSpecified = true;
             styleSheet.borders = ctBorders;
 
             // Xfs
@@ -526,10 +533,10 @@ namespace NPOI.XSSF.Model
         private static CT_Border CreateDefaultBorder()
         {
             CT_Border ctBorder = new CT_Border();
-            ctBorder.AddNewBottom();
-            ctBorder.AddNewTop();
             ctBorder.AddNewLeft();
             ctBorder.AddNewRight();
+            ctBorder.AddNewTop();
+            ctBorder.AddNewBottom();
             ctBorder.AddNewDiagonal();
             return ctBorder;
         }

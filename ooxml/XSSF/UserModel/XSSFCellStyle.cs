@@ -970,19 +970,24 @@ namespace NPOI.XSSF.UserModel
          */
         private CT_Border GetCTBorder()
         {
-            CT_Border ct;
+            CT_Border ctBorder;
             if (_cellXf.applyBorder)
             {
                 int idx = (int)_cellXf.borderId;
                 XSSFCellBorder cf = _stylesSource.GetBorderAt(idx);
 
-                ct = (CT_Border)cf.GetCTBorder().Copy();
+                ctBorder = (CT_Border)cf.GetCTBorder();
             }
             else
             {
-                ct = new CT_Border();
+                ctBorder = new CT_Border();
+                ctBorder.AddNewLeft();
+                ctBorder.AddNewRight();
+                ctBorder.AddNewTop();
+                ctBorder.AddNewBottom();
+                ctBorder.AddNewDiagonal();
             }
-            return ct;
+            return ctBorder;
         }
 
 
@@ -1299,8 +1304,10 @@ namespace NPOI.XSSF.UserModel
                     return BorderDiagonal.BOTH;
                 else if (ct.diagonalDown == true)
                     return BorderDiagonal.FORWARD;
-                else
+                else if (ct.diagonalUp == true)
                     return BorderDiagonal.BACKWARD;
+                else
+                    return BorderDiagonal.NONE;
             }
             set
             {
@@ -1328,6 +1335,7 @@ namespace NPOI.XSSF.UserModel
                 }
                 else
                 {
+                    ct.unsetDiagonal();
                     ct.diagonalDown = false;
                     ct.diagonalDownSpecified = false;
                     ct.diagonalUp = false;

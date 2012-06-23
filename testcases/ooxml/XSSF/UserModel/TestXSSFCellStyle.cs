@@ -22,6 +22,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NPOI.SS.UserModel;
 using NPOI.HSSF.UserModel;
 using System.Drawing;
+using NPOI.HSSF.Util;
 namespace NPOI.XSSF.UserModel
 {
 
@@ -115,6 +116,64 @@ namespace NPOI.XSSF.UserModel
             ctBorder = stylesTable.GetBorderAt(borderId).GetCTBorder();
             Assert.IsFalse(ctBorder.IsSetBottom());
         }
+       [TestMethod]
+       public void TestSetServeralBordersOnSameCell()
+       {
+           Assert.AreEqual(BorderStyle.NONE, cellStyle.BorderRight);
+           Assert.AreEqual(BorderStyle.NONE, cellStyle.BorderLeft);
+           Assert.AreEqual(BorderStyle.NONE, cellStyle.BorderTop);
+           Assert.AreEqual(BorderStyle.NONE, cellStyle.BorderBottom);
+           Assert.AreEqual(2, stylesTable.GetBorders().Count);
+
+           cellStyle.BorderBottom = BorderStyle.THIN;
+           cellStyle.BottomBorderColor = HSSFColor.BLACK.index;
+           cellStyle.BorderLeft = BorderStyle.DASH_DOT_DOT;
+           cellStyle.LeftBorderColor = HSSFColor.GREEN.index;
+           cellStyle.BorderRight = BorderStyle.HAIR;
+           cellStyle.RightBorderColor = HSSFColor.BLUE.index;
+           cellStyle.BorderTop = BorderStyle.MEDIUM_DASHED;
+           cellStyle.TopBorderColor = HSSFColor.ORANGE.index;
+           //only one border style should be generated
+           Assert.AreEqual(3, stylesTable.GetBorders().Count);
+           
+       }
+       [TestMethod]
+       public void TestGetSetBorderDiagonal()
+       {
+           Assert.AreEqual(BorderDiagonal.NONE, cellStyle.BorderDiagonal);
+
+           int num = stylesTable.GetBorders().Count;
+           cellStyle.BorderDiagonalLineStyle = BorderStyle.MEDIUM;
+           cellStyle.BorderDiagonalColor = HSSFColor.RED.index;
+           cellStyle.BorderDiagonal = BorderDiagonal.BACKWARD;
+
+           Assert.AreEqual(BorderStyle.MEDIUM, cellStyle.BorderDiagonalLineStyle);
+           //a new border has been added
+           Assert.AreEqual(num + 1, stylesTable.GetBorders().Count);
+           //id of the created border
+           uint borderId = cellStyle.GetCoreXf().borderId;
+           Assert.IsTrue(borderId > 0);
+
+           CT_Border ctBorder = stylesTable.GetBorderAt((int)borderId).GetCTBorder();
+           Assert.AreEqual(ST_BorderStyle.medium, ctBorder.diagonal.style);
+
+           num = stylesTable.GetBorders().Count;
+           //setting the same border multiple times should not change borderId
+           for (int i = 0; i < 3; i++)
+           {
+               cellStyle.BorderDiagonal = BorderDiagonal.BACKWARD;
+               Assert.AreEqual(BorderDiagonal.BACKWARD, cellStyle.BorderDiagonal);
+           }
+           Assert.AreEqual(borderId, cellStyle.GetCoreXf().borderId);
+           Assert.AreEqual(num, stylesTable.GetBorders().Count);
+           Assert.AreSame(ctBorder, stylesTable.GetBorderAt((int)borderId).GetCTBorder());
+
+           cellStyle.BorderDiagonal = (BorderDiagonal.NONE);
+           Assert.AreEqual(num, stylesTable.GetBorders().Count);
+           borderId = cellStyle.GetCoreXf().borderId;
+           ctBorder = stylesTable.GetBorderAt((int)borderId).GetCTBorder();
+           Assert.IsFalse(ctBorder.IsSetDiagonal());
+       }
        [TestMethod]
         public void TestGetSetBorderRight()
         {
