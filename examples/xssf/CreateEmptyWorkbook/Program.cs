@@ -16,7 +16,7 @@ namespace NPOI.Examples.XSSF.CreateEmptyWorkbook
             workbook.CreateSheet("Sheet A2");
             workbook.CreateSheet("Sheet A3");
 
-            FileStream sw = File.OpenWrite("test.xlsx");
+            FileStream sw = File.Create("test.xlsx");
             workbook.Write(sw);
             sw.Close();
         }

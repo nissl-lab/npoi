@@ -66,7 +66,7 @@ namespace NPOI.Examples.XSSF.DataFormatsInXlsx
             ICell cell10 = sheet.CreateRow(9).CreateCell(0);
             SetValueAndFormat(workbook, cell10, DateTime.Now, format.GetFormat("[$-409]h:mm:ss AM/PM;@"));
 
-            FileStream sw = File.OpenWrite("test.xlsx");
+            FileStream sw = File.Create("test.xlsx");
             workbook.Write(sw);
             sw.Close();
         }

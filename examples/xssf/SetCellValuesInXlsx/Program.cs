@@ -23,7 +23,7 @@ namespace NPOI.Examples.XSSF.SetCellValuesInXlsx
                     row.CreateCell(j).SetCellValue(x++);
                 }
             }
-            FileStream sw = File.OpenWrite("test.xlsx");
+            FileStream sw = File.Create("test.xlsx");
             workbook.Write(sw);
             sw.Close();
         }

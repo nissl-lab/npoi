@@ -19,6 +19,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SplitAndFreezePanesInXlsx",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HideColumnAndRowInXlsx", "HideColumnAndRowInXlsx\HideColumnAndRowInXlsx.csproj", "{A99CBC67-2CD6-40BC-8316-E270404385B2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BorderStylesInXlsx", "BorderStylesInXlsx\BorderStylesInXlsx.csproj", "{7FEF327E-BD06-4A68-9B7C-60A3FD38152F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
@@ -61,6 +63,10 @@ Global
 		{A99CBC67-2CD6-40BC-8316-E270404385B2}.Debug|x86.Build.0 = Debug|x86
 		{A99CBC67-2CD6-40BC-8316-E270404385B2}.Release|x86.ActiveCfg = Release|x86
 		{A99CBC67-2CD6-40BC-8316-E270404385B2}.Release|x86.Build.0 = Release|x86
+		{7FEF327E-BD06-4A68-9B7C-60A3FD38152F}.Debug|x86.ActiveCfg = Debug|x86
+		{7FEF327E-BD06-4A68-9B7C-60A3FD38152F}.Debug|x86.Build.0 = Debug|x86
+		{7FEF327E-BD06-4A68-9B7C-60A3FD38152F}.Release|x86.ActiveCfg = Release|x86
+		{7FEF327E-BD06-4A68-9B7C-60A3FD38152F}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

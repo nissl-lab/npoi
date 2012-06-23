@@ -24,7 +24,7 @@ namespace NPOI.Examples.XSSF.HideColumnAndRowInXlsx
 
             //hide column C
             s.SetColumnHidden(2, true);
-            FileStream sw = File.OpenWrite("test.xlsx");
+            FileStream sw = File.Create("test.xlsx");
             workbook.Write(sw);
             sw.Close();
         }

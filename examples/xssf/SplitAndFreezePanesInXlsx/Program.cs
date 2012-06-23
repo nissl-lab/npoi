@@ -27,7 +27,7 @@ namespace NPOI.Examples.XSSF.SplitAndFreezePanesInXlsx
             sheet4.CreateSplitPane(2000, 2000, 0, 0, PanePosition.LOWER_LEFT);
 
 
-            FileStream sw = File.OpenWrite("test.xlsx");
+            FileStream sw = File.Create("test.xlsx");
             workbook.Write(sw);
             sw.Close();
         }

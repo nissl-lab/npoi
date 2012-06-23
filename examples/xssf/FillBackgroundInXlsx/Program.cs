@@ -136,7 +136,7 @@ namespace NPOI.Examples.XSSF.FillBackgroundInXlsx
             style17.FillBackgroundColor = NPOI.HSSF.Util.HSSFColor.YELLOW.index;
             sheet1.CreateRow(16).CreateCell(0).CellStyle = style17;
 
-            FileStream sw = File.OpenWrite("test.xlsx");
+            FileStream sw = File.Create("test.xlsx");
             workbook.Write(sw);
             sw.Close();
         }

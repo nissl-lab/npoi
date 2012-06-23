@@ -23,7 +23,7 @@ namespace CreateHeaderFooterInXlsx
             //set footer text
             s1.Footer.Left = "Copyright NPOI Team";
             s1.Footer.Right = "created by Tony Qu（瞿杰）";
-            FileStream sw = File.OpenWrite("test.xlsx");
+            FileStream sw = File.Create("test.xlsx");
             workbook.Write(sw);
             sw.Close();
         }

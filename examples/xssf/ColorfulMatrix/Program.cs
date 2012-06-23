@@ -40,7 +40,7 @@ namespace ColorfulMatrix
                     x++;
                 }
             }
-            FileStream sw = File.OpenWrite("test.xlsx");
+            FileStream sw = File.Create("test.xlsx");
             workbook.Write(sw);
             sw.Close();
         }
