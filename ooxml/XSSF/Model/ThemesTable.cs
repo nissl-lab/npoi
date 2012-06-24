@@ -51,7 +51,8 @@ namespace NPOI.XSSF.Model
             CT_ColorScheme colorScheme = theme.GetTheme().themeElements.clrScheme;
             NPOI.OpenXmlFormats.Dml.CT_Color ctColor = null;
             throw new NotImplementedException();
-            //int cnt = 0;
+            int cnt = 0;
+            
             //TODO:: iterate ctcolors in colorschema
             //foreach (XmlElement obj in colorScheme.SelectPath("./*"))
             //{

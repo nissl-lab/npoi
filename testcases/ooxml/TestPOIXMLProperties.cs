@@ -23,6 +23,8 @@ namespace NPOI
     using NPOI.XSSF.UserModel;
     using NPOI.OpenXmlFormats;
     using NPOI.XSSF;
+    using NPOI.XWPF.UserModel;
+    using NPOI.XWPF;
 
     /**
      * Test Setting extended and custom OOXML properties
@@ -33,12 +35,13 @@ namespace NPOI
         private POIXMLProperties _props;
         private NPOI.POIXMLProperties.CoreProperties _coreProperties;
 
+        [TestInitialize]
         public void SetUp()
         {
-            //XWPFDocument sampleDoc = XWPFTestDataSamples.OpenSampleDocument("documentProperties.docx");
-            //_props = sampleDoc.GetProperties();
-            //_coreProperties = _props.GetCoreProperties();
-            //AssertNotNull(_props);
+            XWPFDocument sampleDoc = XWPFTestDataSamples.OpenSampleDocument("documentProperties.docx");
+            _props = sampleDoc.GetProperties();
+            _coreProperties = _props.GetCoreProperties();
+            Assert.IsNotNull(_props);
         }
         [TestMethod]
         public void TestWorkbookExtendedProperties()
@@ -158,21 +161,21 @@ namespace NPOI
             Assert.AreEqual("Hello World", title);
         }
 
-        //public void TestTransitiveSetters()
-        //{
-        //    XWPFDocument doc = new XWPFDocument();
-        //    NPOI.POIXMLProperties.CoreProperties cp = doc.GetProperties().GetCoreProperties();
+        public void TestTransitiveSetters()
+        {
+            XWPFDocument doc = new XWPFDocument();
+            NPOI.POIXMLProperties.CoreProperties cp = doc.GetProperties().GetCoreProperties();
 
-        //    DateTime dateCreated = new GregorianCalendar(2010, 6, 15, 10, 0, 0).GetTime();
-        //    cp.SetCreated(new Nullable<Date>(dateCreated));
-        //    Assert.AreEqual(dateCreated.ToString(), cp.GetCreated().ToString());
+            DateTime dateCreated = new DateTime(2010, 6, 15, 10, 0, 0);
+            cp.SetCreated(new DateTime(2010, 6, 15, 10, 0, 0));
+            Assert.AreEqual(dateCreated.ToString(), cp.GetCreated().ToString());
 
-        //    doc = XWPFTestDataSamples.WriteOutAndReadBack(doc);
-        //    cp = doc.GetProperties().GetCoreProperties();
-        //    DateTime dt3 = cp.GetCreated();
-        //    Assert.AreEqual(dateCreated.ToString(), dt3.ToString());
+            doc = XWPFTestDataSamples.WriteOutAndReadBack(doc);
+            cp = doc.GetProperties().GetCoreProperties();
+            DateTime? dt3 = cp.GetCreated();
+            Assert.AreEqual(dateCreated.ToString(), dt3.ToString());
 
-        //}
+        }
         [Ignore]
         public void TestGetSetRevision()
         {

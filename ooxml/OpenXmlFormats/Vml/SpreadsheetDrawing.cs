@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Xml.Serialization;
+using System.ComponentModel;
 
 namespace NPOI.OpenXmlFormats.Vml.Spreadsheet
 {
@@ -13,10 +14,14 @@ namespace NPOI.OpenXmlFormats.Vml.Spreadsheet
     [XmlRoot(Namespace = "urn:schemas-microsoft-com:office:excel", IsNullable = true)]
     public partial class CT_ClientData
     {
+        public CT_ClientData()
+        {
+            this.rowField = new List<int>();
+            this.columnField = new List<int>();
+        }
+        //private List<object> itemsField;
 
-        private List<object> itemsField;
-
-        private ItemsChoiceType[] itemsElementNameField;
+        //private ItemsChoiceType[] itemsElementNameField;
 
         private ST_ObjectType objectTypeField;
 
@@ -101,22 +106,102 @@ namespace NPOI.OpenXmlFormats.Vml.Spreadsheet
         //    }
         //}
 
-    
-        //[XmlElement("ItemsElementName")]
-        //[XmlIgnore]
-        //public ItemsChoiceType[] ItemsElementName
-        //{
-        //    get
-        //    {
-        //        return this.itemsElementNameField;
-        //    }
-        //    set
-        //    {
-        //        this.itemsElementNameField = value;
-        //    }
-        //}
+
+        public void AddNewRow(int rowNum)
+        {
+            if (rowField != null)
+            {
+                rowField.Add(rowNum);
+            }
+        }
+        public void AddNewColumn(int columnNum)
+        {
+            if (columnField != null)
+            {
+                columnField.Add(columnNum);
+            }        
+        }
+
+        public void AddNewMoveWithCells()
+        {
+            this.moveWithCellsFieldSpecified = true;
+        }
+        public void AddNewSizeWithCells()
+        {
+            this.sizeWithCellsFieldSpecified = true;
+        }
+        private string authorField;
+        [XmlElement(ElementName = "Author")]
+        public string author
+        {
+            get { return this.authorField; }
+            set { this.authorField = value; }
+        }
+
+        public void AddNewAnchor(string name)
+        {
+            this.authorField = name;
+        }
+
+        public void AddNewAutoFill(ST_TrueFalseBlank value)
+        {
+            this.autoFillField = value;
+            this.autoFillFieldSpecified = true;
+        }
+
+        ST_TrueFalseBlank autoFillField = ST_TrueFalseBlank.NONE;
+        bool autoFillFieldSpecified = false;
+
+        [XmlElement(ElementName = "AutoFill")]
+        [DefaultValue(ST_TrueFalseBlank.NONE)]
+        public ST_TrueFalseBlank autoFill
+        {
+            get { return this.autoFillField; }
+            set { this.autoFillField = value; }
+        }
+        [XmlIgnore]
+        public bool autoFillSpecified
+        {
+            get { return this.autoFillFieldSpecified; }
+            set { this.autoFillFieldSpecified = value; }
+        }
+
+        ST_TrueFalseBlank moveWithCellsField= ST_TrueFalseBlank.NONE;
+        bool moveWithCellsFieldSpecified = false;
+
+        [XmlElement(ElementName="MoveWithCells")]
+        [DefaultValue(ST_TrueFalseBlank.NONE)]
+        public ST_TrueFalseBlank moveWithCells
+        {
+            get { return this.moveWithCellsField; }
+            set { this.moveWithCellsField = value; }
+        }
+        [XmlIgnore]
+        public bool moveWithCellsSpecified
+        {
+            get { return this.moveWithCellsFieldSpecified; }
+            set { this.moveWithCellsFieldSpecified = value; }
+        }
+        ST_TrueFalseBlank sizeWithCellsField = ST_TrueFalseBlank.NONE;
+        bool sizeWithCellsFieldSpecified = false;
+
+        [XmlElement(ElementName = "SizeWithCells")]
+        [DefaultValue(ST_TrueFalseBlank.NONE)]
+        public ST_TrueFalseBlank sizeWithCells
+        {
+            get { return this.sizeWithCellsField; }
+            set { this.sizeWithCellsField = value; }
+        }
+        [XmlIgnore]
+        public bool sizeWithCellsSpecified
+        {
+            get { return this.sizeWithCellsFieldSpecified; }
+            set { this.sizeWithCellsFieldSpecified = value; }
+        }
+        
+
         private List<int> columnField;
-        [XmlElement]
+        [XmlElement(ElementName = "Column")]
         public List<int> column
         {
             get { return this.columnField; }
@@ -126,9 +211,23 @@ namespace NPOI.OpenXmlFormats.Vml.Spreadsheet
         {
             return this.columnField[index];
         }
+        public void SetColumnArray(int index, int value)
+        {
+            if (this.columnField != null)
+            {
+                this.columnField.Insert(index, value);
+            }                
+        }
+        public void SetRowArray(int index, int value)
+        {
+            if (this.rowField != null)
+            {
+                this.rowField.Insert(index, value);
+            }
+        }
         private List<int> rowField;
 
-        [XmlElement]
+        [XmlElement(ElementName="Row")]
         public List<int> row
         {
             get { return this.rowField; }
@@ -160,21 +259,22 @@ namespace NPOI.OpenXmlFormats.Vml.Spreadsheet
     [XmlRoot(Namespace = "urn:schemas-microsoft-com:office:excel", IsNullable = false)]
     public enum ST_TrueFalseBlank
     {
-        NONE,    
+        NONE,
+        [XmlEnum("True")]
         @true,
 
     
         t,
 
-    
+        [XmlEnum("False")]
         @false,
 
     
         f,
 
     
-        [XmlEnum("")]
-        Item,
+        //[XmlEnum("")]
+        //Item,
     }
 
 

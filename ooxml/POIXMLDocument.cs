@@ -33,7 +33,7 @@ namespace NPOI
         public static String OLE_OBJECT_REL_TYPE = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/oleObject";
 
         // Embedded OPC documents relation name
-        public static String PACK_OBJECT_REL_TYPE = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/namespace";
+        public static String PACK_OBJECT_REL_TYPE = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/package";
 
         /** The OPC Package */
         private OPCPackage pkg;

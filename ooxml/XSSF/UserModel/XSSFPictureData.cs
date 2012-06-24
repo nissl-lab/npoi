@@ -51,7 +51,7 @@ namespace NPOI.XSSF.UserModel
          *
          * @see NPOI.xssf.usermodel.XSSFWorkbook#AddPicture(byte[], int)
          */
-        protected XSSFPictureData()
+        public XSSFPictureData()
             : base()
         {
 
@@ -64,7 +64,7 @@ namespace NPOI.XSSF.UserModel
          * @param rel  the namespace relationship holding this Drawing,
          * the relationship type must be http://schemas.Openxmlformats.org/officeDocument/2006/relationships/image
          */
-        public XSSFPictureData(PackagePart part, PackageRelationship rel)
+        internal XSSFPictureData(PackagePart part, PackageRelationship rel)
             : base(part, rel)
         {
 

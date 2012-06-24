@@ -67,7 +67,7 @@ namespace ooxml.Testcases
 //        public void SerializeVmlDrawingDocumentTest()
 //        {
 //            var drawing = new NPOI.OpenXmlFormats.Dml.Spreadsheet.CT_Drawing();
-            
+
 //            using (StringWriter stream = new StringWriter())
 //            {
 //                NPOI.OpenXmlFormats.Dml.Spreadsheet.CT_Drawing_Accessor.serializer.Serialize(stream, drawing, NPOI.OpenXmlFormats.Dml.Spreadsheet.CT_Drawing_Accessor.namespaces);
@@ -76,7 +76,7 @@ namespace ooxml.Testcases
 // xmlns:x=""urn:schemas-microsoft-com:office:excel"">
 //<xdr:wsDr xmlns:r=""http://schemas.openxmlformats.org/officeDocument/2006/relationships"" xmlns:a=""http://schemas.openxmlformats.org/drawingml/2006/main"" xmlns:xdr=""http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing"" />";
 
-////</xdr:wsDr>";
+//                //</xdr:wsDr>";
 //                Assert.AreEqual(expected, stream.ToString());
 //            }
 //        }

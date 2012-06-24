@@ -82,17 +82,17 @@ namespace NPOI.XSSF.UserModel
                 _comment.@ref = (ref1.FormatAsString());
                 _comments.ReferenceUpdated(oldRef, _comment);
 
-                //if (_vmlShape != null)
-                //{
-                //    _vmlShape.GetClientDataArray(0).SetColumnArray(
-                //          new BigInteger[] { new BigInteger(value) }
-                //    );
+                if (_vmlShape != null)
+                {
+                    _vmlShape.GetClientDataArray(0).SetColumnArray(
+                          0,value
+                    );
 
-                //    // There is a very odd xmlbeans bug when changing the column
-                //    //  arrays which can lead to corrupt pointer
-                //    // This call seems to fix them again... See bug #50795
-                //    _vmlShape.GetClientDataList().ToString();
-                //}
+                    // There is a very odd xmlbeans bug when changing the column
+                    //  arrays which can lead to corrupt pointer
+                    // This call seems to fix them again... See bug #50795
+                    //_vmlShape.ClientData.ToString();
+                }
             }
         }
 
@@ -114,9 +114,9 @@ namespace NPOI.XSSF.UserModel
                 _comment.@ref = (newRef);
                 _comments.ReferenceUpdated(oldRef, _comment);
 
-                //if (_vmlShape != null) 
-                //    _vmlShape.GetClientDataArray(0)
-                //        .SetRowArray(0, new BigInteger(value));
+                if (_vmlShape != null) 
+                    _vmlShape.GetClientDataArray(0)
+                        .SetRowArray(0,value);
             }
         }
 

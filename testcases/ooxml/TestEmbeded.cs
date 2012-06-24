@@ -20,52 +20,57 @@
 namespace NPOI
 {
 
-    using NPOI.UTIL.IOUtils;
-    using NPOI.XSLF.XSLFSlideShow;
-    using NPOI.XSSF.Usermodel.XSSFWorkbook;
-    using NPOI.XWPF.usermodel.XWPFDocument;
+    using TestCases;
+    using NPOI.XSSF.UserModel;
+    using NPOI.XWPF.UserModel;
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NPOI.OpenXml4Net.OPC;
+    using NPOI.Util;
 
     /**
      * Class to Test that we handle embeded bits in
      *  OOXML files properly
      */
+    [TestClass]
     public class TestEmbeded
     {
+        [TestMethod]
         public void TestExcel()
         {
             POIXMLDocument doc = new XSSFWorkbook(
                     POIDataSamples.GetSpreadSheetInstance().OpenResourceAsStream("ExcelWithAttachments.xlsm")
             );
-            test(doc, 4);
+            Test(doc, 4);
         }
-
+        [TestMethod]
         public void TestWord()
         {
             POIXMLDocument doc = new XWPFDocument(
                     POIDataSamples.GetDocumentInstance().OpenResourceAsStream("WordWithAttachments.docx")
             );
-            test(doc, 5);
+            Test(doc, 5);
         }
-
+        /*
+        [TestMethod]
         public void TestPowerPoint()
         {
             POIXMLDocument doc = new XSLFSlideShow(OPCPackage.Open(
                     POIDataSamples.GetSlideShowInstance().OpenResourceAsStream("PPTWithAttachments.pptm"))
             );
-            test(doc, 4);
-        }
+            Test(doc, 4);
+        }*/
 
         private void Test(POIXMLDocument doc, int expectedCount)
         {
-            assertNotNull(doc.GetAllEmbedds());
+            Assert.IsNotNull(doc.GetAllEmbedds());
             Assert.AreEqual(expectedCount, doc.GetAllEmbedds().Count);
 
             for (int i = 0; i < doc.GetAllEmbedds().Count; i++)
             {
-                PackagePart pp = doc.GetAllEmbedds().Get(i);
-                assertNotNull(pp);
+                PackagePart pp = doc.GetAllEmbedds()[i];
+                Assert.IsNotNull(pp);
 
-                byte[] b = IOUtils.ToArray(pp.GetStream());
+                byte[] b = IOUtils.ToByteArray(pp.GetStream(System.IO.FileMode.Open));
                 Assert.IsTrue(b.Length > 0);
             }
         }

@@ -84,7 +84,9 @@
     <Compile Include="SS\Format\TestCellFormatPart.cs" />
     <Compile Include="SS\TestWorkbookFactory.cs" />
     <Compile Include="TestDetectAsOOXML.cs" />
+    <Compile Include="TestEmbeded.cs" />
     <Compile Include="TestPOIXMLDocument.cs" />
+    <Compile Include="TestPOIXMLProperties.cs" />
     <Compile Include="Util\TestIdentifierManager.cs" />
     <Compile Include="OpenXmlFormats\Spreadsheet\WorksheetDocumentTest.cs" />
     <Compile Include="OpenXmlFormats\Spreadsheet\WorkbookDocumentTest.cs" />

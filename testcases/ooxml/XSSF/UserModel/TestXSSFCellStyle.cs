@@ -470,7 +470,7 @@ namespace NPOI.XSSF.UserModel
             //id of the Created border
             int FillId = (int)cellStyle.GetCoreXf().fillId;
             Assert.IsTrue(FillId > 0);
-            //check Changes in the underlying xml bean
+            //check changes in the underlying xml bean
             CT_Fill ctFill = stylesTable.GetFillAt(FillId).GetCTFill();
             Assert.AreEqual((uint)IndexedColors.RED.Index, ctFill.GetPatternFill().bgColor.indexed);
 
@@ -481,8 +481,8 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual(clr.GetCTColor().ToString(), ((XSSFColor)cellStyle.FillBackgroundColorColor).GetCTColor().ToString());
             byte[] rgb = ((XSSFColor)cellStyle.FillBackgroundColorColor).GetRgb();
             Assert.AreEqual(Color.Cyan.ToArgb(), Color.FromArgb(rgb[0] & 0xFF, rgb[1] & 0xFF, rgb[2] & 0xFF).ToArgb());
-            //another border was Added to the styles table
-            Assert.AreEqual(num + 1, stylesTable.GetFills().Count);
+            //another border was added to the styles table
+            Assert.AreEqual(num, stylesTable.GetFills().Count);
 
             //passing null unsets the color
             cellStyle.SetFillBackgroundColor(null);

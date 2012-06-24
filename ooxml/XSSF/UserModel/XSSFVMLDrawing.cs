@@ -221,12 +221,12 @@ namespace NPOI.XSSF.UserModel
             shape.AddNewTextbox().style = ("mso-direction-alt:auto");
             CT_ClientData cldata = shape.AddNewClientData();
             cldata.ObjectType=ST_ObjectType.Note;
-            //cldata.AddNewMoveWithCells();
-            //cldata.AddNewSizeWithCells();
-            //cldata.AddNewAnchor().SetStringValue("1, 15, 0, 2, 3, 15, 3, 16");
-            //cldata.AddNewAutoFill().SetStringValue("False");
-            //cldata.AddNewRow().SetBigintValue(new Bigint("0"));
-            //cldata.AddNewColumn().SetBigintValue(new Bigint("0"));
+            cldata.AddNewMoveWithCells();
+            cldata.AddNewSizeWithCells();
+            cldata.AddNewAnchor("1, 15, 0, 2, 3, 15, 3, 16");
+            cldata.AddNewAutoFill(ST_TrueFalseBlank.@false);
+            cldata.AddNewRow(0);
+            cldata.AddNewColumn(0);
             _items.Add(shape);
 
             return shape;
