@@ -437,8 +437,8 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
     public class CT_Drawing
     {
         internal static XmlSerializer serializer = new XmlSerializer(typeof(CT_Drawing));
-        //public const String NAMESPACE_A = "http://schemas.openxmlformats.org/drawingml/2006/main";
-        //public const String NAMESPACE_C = "http://schemas.openxmlformats.org/drawingml/2006/chart";
+        public const String NAMESPACE_A = "http://schemas.openxmlformats.org/drawingml/2006/main";
+        public const String NAMESPACE_C = "http://schemas.openxmlformats.org/drawingml/2006/chart";
         // 
         //    Saved Drawings must have the following namespaces Set:
         //    <xdr:wsDr
@@ -457,8 +457,8 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
             new XmlQualifiedName("xdr", "http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing")});
 
         private List<CT_TwoCellAnchor> twoCellAnchors = new List<CT_TwoCellAnchor>();
-        //TODO     private List<CT_OneCellAnchor> oneCellAnchors = new List<CT_OneCellAnchor>();
-        //TODO     private List<CT_AbsoulteCellAnchor> absoluteCellAnchors = new List<CT_AbsoulteCellAnchor>();
+        //private List<CT_OneCellAnchor> oneCellAnchors = new List<CT_OneCellAnchor>();
+        //private List<CT_AbsoulteCellAnchor> absoluteCellAnchors = new List<CT_AbsoulteCellAnchor>();
 
         public CT_TwoCellAnchor AddNewTwoCellAnchor()
         {
@@ -487,35 +487,20 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
             get { return twoCellAnchors; }
             set { twoCellAnchors = value; }
         }
-        [XmlIgnore]
-        public bool TwoCellAnchorsSpecified
-        {
-            get { return (null != twoCellAnchors) && (0 < twoCellAnchors.Count); }
-        }
 
-        [XmlElement("oneCellAnchor")]
-        public List<CT_TwoCellAnchor> OneCellAnchors
-        {
-            get { return null; } // TODO oneCellAnchors; }
-            set { } // TODO oneCellAnchors = value; }
-        }
-        [XmlIgnore]
-        public bool OneCellAnchorsSpecified
-        {
-            get { return false; }//TODO (null != oneCellAnchors) && (0 < oneCellAnchors.Count); }
-        }
+        //[XmlElement("oneCellAnchor")]
+        //public List<CT_TwoCellAnchor> OneCellAnchors
+        //{
+        //    get { return oneCellAnchors; }
+        //    set { oneCellAnchors = value; }
+        //}
 
-        [XmlElement("absoluteAnchor")]
-        public List<CT_TwoCellAnchor> AbsoluteAnchors
-        {
-            get { return null; } // TODO absoluteAnchors; }
-            set { } // TODO absoluteAnchors = value; }
-        }
-        [XmlIgnore]
-        public bool AbsoluteAnchorsSpecified
-        {
-            get { return false; }//TODO (null != absoluteAnchors) && (0 < absoluteAnchors.Count); }
-        }
+        //[XmlElement("absoluteAnchor")]
+        //public List<CT_TwoCellAnchor> AbsoluteAnchors
+        //{
+        //    get { return absoluteAnchors; }
+        //    set { absoluteAnchors = value; }
+        //}
     }
 
     [Serializable]

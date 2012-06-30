@@ -287,7 +287,7 @@ namespace NPOI.XSSF.UserModel
                 String position =
                         ca.Col1 + ", 0, " + ca.Row1 + ", 0, " +
                         ca.Col2 + ", 0, " + ca.Row2 + ", 0";
-                //vmlShape.GetClientDataArray(0).SetAnchorArray(0, position);
+                vmlShape.GetClientDataArray(0).SetAnchorArray(0, position);
             }
             XSSFComment shape = new XSSFComment(comments, comments.CreateComment(), vmlShape);
             shape.Column = (ca.Col1);

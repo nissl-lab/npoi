@@ -131,7 +131,10 @@ namespace NPOI.XSSF.UserModel
                 if (_vmlShape != null)
                 {
                     String style = _vmlShape.style;
-                    visible = style != null && style.IndexOf("visibility:visible") != -1;
+                    if (style != null)
+                        visible = style.IndexOf("visibility:visible") != -1;
+                    else
+                        visible = _vmlShape.GetClientDataArray(0).visibleSpecified;
                 }
                 return visible;
             }
@@ -141,12 +144,20 @@ namespace NPOI.XSSF.UserModel
                 {
                     String style;
                     if (value)
+                    {
                         style = "position:absolute;visibility:visible";
+                        _vmlShape.GetClientDataArray(0).visible = OpenXmlFormats.Vml.Spreadsheet.ST_TrueFalseBlank.@true;
+                        _vmlShape.GetClientDataArray(0).visibleSpecified = true;
+                    }
                     else
+                    {
                         style = "position:absolute;visibility:hidden";
+                        _vmlShape.GetClientDataArray(0).visible = OpenXmlFormats.Vml.Spreadsheet.ST_TrueFalseBlank.@false;
+                        _vmlShape.GetClientDataArray(0).visibleSpecified = false;
+
+                    }
                     _vmlShape.style = (style);
                 }   
-                throw new NotImplementedException();
             }
         }
 

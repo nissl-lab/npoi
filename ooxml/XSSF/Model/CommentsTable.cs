@@ -40,7 +40,7 @@ namespace NPOI.XSSF.Model
 
             comments = new CT_Comments();
             comments.AddNewCommentList();
-            comments.AddNewAuthors().AddAuthor("");
+            //comments.AddNewAuthors().AddAuthor("");
         }
 
         internal CommentsTable(PackagePart part, PackageRelationship rel)

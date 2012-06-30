@@ -130,17 +130,17 @@ namespace NPOI.OpenXmlFormats.Vml.Spreadsheet
         {
             this.sizeWithCellsFieldSpecified = true;
         }
-        private string authorField;
-        [XmlElement(ElementName = "Author")]
-        public string author
+        private string anchorField;
+        [XmlElement(ElementName = "Anchor")]
+        public string anchor
         {
-            get { return this.authorField; }
-            set { this.authorField = value; }
+            get { return this.anchorField; }
+            set { this.anchorField = value; }
         }
 
         public void AddNewAnchor(string name)
         {
-            this.authorField = name;
+            this.anchorField = name;
         }
 
         public void AddNewAutoFill(ST_TrueFalseBlank value)
@@ -164,6 +164,23 @@ namespace NPOI.OpenXmlFormats.Vml.Spreadsheet
         {
             get { return this.autoFillFieldSpecified; }
             set { this.autoFillFieldSpecified = value; }
+        }
+
+        ST_TrueFalseBlank visibleField = ST_TrueFalseBlank.NONE;
+        bool visibleFieldSpecified = false;
+
+        [XmlElement(ElementName = "Visible")]
+        [DefaultValue(ST_TrueFalseBlank.NONE)]
+        public ST_TrueFalseBlank visible
+        {
+            get { return this.visibleField; }
+            set { this.visibleField = value; }
+        }
+        [XmlIgnore]
+        public bool visibleSpecified
+        {
+            get { return this.visibleFieldSpecified; }
+            set { this.visibleFieldSpecified = value; }
         }
 
         ST_TrueFalseBlank moveWithCellsField= ST_TrueFalseBlank.NONE;
@@ -213,17 +230,15 @@ namespace NPOI.OpenXmlFormats.Vml.Spreadsheet
         }
         public void SetColumnArray(int index, int value)
         {
-            if (this.columnField != null)
-            {
-                this.columnField.Insert(index, value);
-            }                
+            this.columnField[index]= value;
         }
         public void SetRowArray(int index, int value)
         {
-            if (this.rowField != null)
-            {
-                this.rowField.Insert(index, value);
-            }
+            this.rowField[index] = value;
+        }
+        public void SetAnchorArray(int index, string value)
+        {
+            AddNewAnchor(value);
         }
         private List<int> rowField;
 

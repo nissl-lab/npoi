@@ -155,15 +155,16 @@ namespace NPOI.XSSF.UserModel
                 object xc = _items[i];
                 if (xc is XmlNode)
                 {
-                    xw.WriteRaw(((XmlNode)xc).OuterXml);
+                    xw.WriteRaw(((XmlNode)xc).OuterXml.Replace(" xmlns:v=\"urn:schemas-microsoft-com:vml\"", "").Replace(" xmlns:x=\"urn:schemas-microsoft-com:office:excel\"", "").Replace(" xmlns:o=\"urn:schemas-microsoft-com:office:office\"", ""));
                 }
                 else
                 {
-                    xw.WriteRaw(xc.ToString());
+                    xw.WriteRaw(xc.ToString().Replace(" xmlns:v=\"urn:schemas-microsoft-com:vml\"", "").Replace(" xmlns:x=\"urn:schemas-microsoft-com:office:excel\"", "").Replace(" xmlns:o=\"urn:schemas-microsoft-com:office:office\"", ""));
                 }
             }
 
             xw.WriteEndElement();
+            xw.Flush();
             //rootObject.save(out1);
         }
 
@@ -171,11 +172,9 @@ namespace NPOI.XSSF.UserModel
         protected override void Commit()
         {
             PackagePart part = GetPackagePart();
-            using (Stream out1 = part.GetOutputStream())
-            {
-                Write(out1);
-             //   out1.Close();
-            }
+            Stream out1 = part.GetOutputStream();
+            Write(out1);
+            out1.Close();
         }
 
         /**
