@@ -21,6 +21,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HideColumnAndRowInXlsx", "H
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BorderStylesInXlsx", "BorderStylesInXlsx\BorderStylesInXlsx.csproj", "{7FEF327E-BD06-4A68-9B7C-60A3FD38152F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CreateCommentInXlsx", "CreateCommentInXlsx\CreateCommentInXlsx.csproj", "{AC14631B-A377-4BFE-86DA-FF70EC3B278A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
@@ -67,6 +69,10 @@ Global
 		{7FEF327E-BD06-4A68-9B7C-60A3FD38152F}.Debug|x86.Build.0 = Debug|x86
 		{7FEF327E-BD06-4A68-9B7C-60A3FD38152F}.Release|x86.ActiveCfg = Release|x86
 		{7FEF327E-BD06-4A68-9B7C-60A3FD38152F}.Release|x86.Build.0 = Release|x86
+		{AC14631B-A377-4BFE-86DA-FF70EC3B278A}.Debug|x86.ActiveCfg = Debug|x86
+		{AC14631B-A377-4BFE-86DA-FF70EC3B278A}.Debug|x86.Build.0 = Debug|x86
+		{AC14631B-A377-4BFE-86DA-FF70EC3B278A}.Release|x86.ActiveCfg = Release|x86
+		{AC14631B-A377-4BFE-86DA-FF70EC3B278A}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
