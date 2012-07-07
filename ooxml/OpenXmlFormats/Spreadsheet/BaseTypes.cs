@@ -208,8 +208,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             return obj;
         }
 
-        [XmlArray(Order = 0)]
-        [XmlArrayItem("ext", IsNullable = true)]
+        //[XmlArray(Order = 0)]
+        [XmlElement]
         public List<CT_Extension> ext
         {
             get

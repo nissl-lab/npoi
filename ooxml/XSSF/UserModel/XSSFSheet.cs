@@ -1260,7 +1260,7 @@ namespace NPOI.XSSF.UserModel
             if (password != null)
             {
                 CT_SheetProtection sheetProtection = worksheet.AddNewSheetProtection();
-                sheetProtection.password = StringToExcelPassword(password).ToBytes();
+                sheetProtection.password = StringToExcelPassword(password);
                 sheetProtection.sheet = (true);
                 sheetProtection.scenarios = (true);
                 sheetProtection.objects = (true);
@@ -1278,11 +1278,12 @@ namespace NPOI.XSSF.UserModel
          * @param password the password string you wish convert to an {@link STUnsignedshortHex}
          * @return {@link STUnsignedshortHex} that Contains Excel hashed password in Hex format
          */
-        private ST_UnsignedshortHex StringToExcelPassword(String password)
+        private string StringToExcelPassword(String password)
         {
-            ST_UnsignedshortHex hexPassword = new ST_UnsignedshortHex();
-            hexPassword.StringValue = HexDump.ShortToHex(PasswordRecord.HashPassword(password)).ToString().Substring(2);
-            return hexPassword;
+            //ST_UnsignedshortHex hexPassword = new ST_UnsignedshortHex();
+            return PasswordRecord.HashPassword(password).ToString("x");
+            
+            //return hexPassword;
         }
 
         /**

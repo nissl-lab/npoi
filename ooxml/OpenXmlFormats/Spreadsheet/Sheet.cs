@@ -574,7 +574,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        //[XmlElement("dimension", Order = 1)]
+        [XmlElement]
         public CT_SheetDimension dimension
         {
             get
@@ -586,7 +586,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.dimensionField = value;
             }
         }
-
+        [XmlElement]
         public CT_SheetViews sheetViews
         {
             get
@@ -598,7 +598,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.sheetViewsField = value;
             }
         }
-
+        [XmlElement]
         public CT_SheetFormatPr sheetFormatPr
         {
             get
@@ -638,7 +638,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.sheetDataField = value;
             }
         }
-
+        [XmlElement]
         public CT_SheetCalcPr sheetCalcPr
         {
             get
@@ -650,7 +650,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.sheetCalcPrField = value;
             }
         }
-
+        [XmlElement]
         public CT_SheetProtection sheetProtection
         {
             get
@@ -4485,13 +4485,13 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     public class CT_SheetProtection
     {
 
-        private byte[] passwordField;
+        private string passwordField;
 
-        private bool? sheetField;
+        private bool sheetField;
 
-        private bool? objectsField;
+        private bool objectsField;
 
-        private bool? scenariosField;
+        private bool scenariosField;
 
         private bool formatCellsField;
 
@@ -4539,20 +4539,21 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.selectUnlockedCellsField = false;
         }
 
-        public bool IsSetSheet()
-        {
-            return this.sheetField != null;
-        }
+        //public bool IsSetSheet()
+        //{
+        //    return this.sheetField != null;
+        //}
 
-        public bool IsSetObjects()
-        {
-            return this.objectsField != null;
-        }
-        public bool IsSetScenarios()
-        {
-            return this.scenariosField != null;
-        }
-        public byte[] password
+        //public bool IsSetObjects()
+        //{
+        //    return this.objectsField != null;
+        //}
+        //public bool IsSetScenarios()
+        //{
+        //    return this.scenariosField != null;
+        //}
+        [XmlAttribute]
+        public string password
         {
             get
             {
@@ -4563,9 +4564,9 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.passwordField = value;
             }
         }
-
+        [XmlAttribute]
         [DefaultValue(false)]
-        public bool? sheet
+        public bool sheet
         {
             get
             {
@@ -4576,9 +4577,9 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.sheetField = value;
             }
         }
-
+        [XmlAttribute]
         [DefaultValue(false)]
-        public bool? objects
+        public bool objects
         {
             get
             {
@@ -4589,9 +4590,9 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.objectsField = value;
             }
         }
-
+        [XmlAttribute]
         [DefaultValue(false)]
-        public bool? scenarios
+        public bool scenarios
         {
             get
             {
@@ -4602,7 +4603,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.scenariosField = value;
             }
         }
-
+        [XmlAttribute]
         [DefaultValue(true)]
         public bool formatCells
         {
@@ -4615,7 +4616,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.formatCellsField = value;
             }
         }
-
+        [XmlAttribute]
         [DefaultValue(true)]
         public bool formatColumns
         {
@@ -4628,7 +4629,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.formatColumnsField = value;
             }
         }
-
+        [XmlAttribute]
         [DefaultValue(true)]
         public bool formatRows
         {
@@ -4641,7 +4642,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.formatRowsField = value;
             }
         }
-
+        [XmlAttribute]
         [DefaultValue(true)]
         public bool insertColumns
         {
@@ -4654,7 +4655,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.insertColumnsField = value;
             }
         }
-
+        [XmlAttribute]
         [DefaultValue(true)]
         public bool insertRows
         {
@@ -4667,7 +4668,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.insertRowsField = value;
             }
         }
-
+        [XmlAttribute]
         [DefaultValue(true)]
         public bool insertHyperlinks
         {
@@ -4680,7 +4681,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.insertHyperlinksField = value;
             }
         }
-
+        [XmlAttribute]
         [DefaultValue(true)]
         public bool deleteColumns
         {
@@ -4693,7 +4694,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.deleteColumnsField = value;
             }
         }
-
+        [XmlAttribute]
         [DefaultValue(true)]
         public bool deleteRows
         {
@@ -4706,7 +4707,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.deleteRowsField = value;
             }
         }
-
+        [XmlAttribute]
         [DefaultValue(false)]
         public bool selectLockedCells
         {
@@ -4719,7 +4720,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.selectLockedCellsField = value;
             }
         }
-
+        [XmlAttribute]
         [DefaultValue(true)]
         public bool sort
         {
@@ -4732,7 +4733,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.sortField = value;
             }
         }
-
+        [XmlAttribute]
         [DefaultValue(true)]
         public bool autoFilter
         {
@@ -4745,7 +4746,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.autoFilterField = value;
             }
         }
-
+        [XmlAttribute]
         [DefaultValue(true)]
         public bool pivotTables
         {
@@ -4758,7 +4759,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.pivotTablesField = value;
             }
         }
-
+        [XmlAttribute]
         [DefaultValue(false)]
         public bool selectUnlockedCells
         {
