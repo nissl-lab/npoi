@@ -465,7 +465,17 @@ namespace NPOI.OpenXmlFormats.Shared
     [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
     public enum ST_OnOff
     {
+        /// <summary>
+        /// False
+        /// </summary>
+        [XmlEnum("0")]
+        Value0 = 0,
 
+        /// <summary>
+        /// True
+        /// </summary>
+        [XmlEnum("1")]
+        Value1 = 1,
     
         on,
 

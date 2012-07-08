@@ -23,6 +23,7 @@ namespace NPOI.XWPF.UserModel
     using NPOI.XWPF;
     using System.Collections.Generic;
     using NPOI.OpenXmlFormats.Wordprocessing;
+    using NPOI.XWPF.Util;
 
     /**
      * Tests for XWPF Paragraphs
@@ -87,7 +88,7 @@ namespace NPOI.XWPF.UserModel
             XWPFDocument doc = new XWPFDocument();
             XWPFParagraph p = doc.CreateParagraph();
 
-            Assert.AreEqual((int)ST_Border.none, (int)p.GetBorderTop());
+            Assert.AreEqual(ST_Border.none, EnumConverter.ValueOf<ST_Border, Borders>(p.GetBorderTop()));
 
             CT_P ctp = p.GetCTP();
             CT_PPr ppr = ctp.pPr == null ? ctp.AddNewPPr() : ctp.pPr;
@@ -100,7 +101,7 @@ namespace NPOI.XWPF.UserModel
 
             Assert.AreEqual(Borders.DOUBLE, p.GetBorderTop());
             p.SetBorderTop (Borders.SINGLE);
-            Assert.AreEqual((int)ST_Border.single, (int)borderTop.val);
+            Assert.AreEqual(ST_Border.single, borderTop.val);
         }
 
         [Test]
@@ -344,6 +345,7 @@ namespace NPOI.XWPF.UserModel
             r = p.GetRuns()[4];
             XWPFPicture pict = r.GetEmbeddedPictures()[0];
             //CT_Picture picture = pict.GetCTPicture();
+            NPOI.OpenXmlFormats.Dml.Picture.CT_Picture picture = pict.GetCTPicture();
             Assert.Fail("picture.blipFill.blip.embed is missing from wordprocessing CT_Picture.");
           //  Assert.AreEqual("rId8", picture.blipFill.blip.embed);
 

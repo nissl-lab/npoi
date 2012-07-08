@@ -246,8 +246,8 @@ namespace NPOI.XWPF.UserModel
                 paragraph.pPr.numPr.AddNewNumId();
             }
             paragraph.pPr.numPr.ilvl.val = "0";
-            string abstractNumId = this.GetDocument().GetNumbering().GetNum(numId).GetCTNum().abstractNumId.val;
-            this.GetDocument().GetNumbering().GetAbstractNum(abstractNumId).SetLevelTentative(0, false);
+            //string abstractNumId = this.GetDocument().GetNumbering().GetNum(numId).GetCTNum().abstractNumId.val;
+            //this.GetDocument().GetNumbering().GetAbstractNum(abstractNumId).SetLevelTentative(0, false);
             paragraph.pPr.numPr.numId.val = (numId);
         }
         /// <summary>
@@ -266,8 +266,8 @@ namespace NPOI.XWPF.UserModel
                 paragraph.pPr.numPr.AddNewNumId();
             }
             paragraph.pPr.numPr.ilvl.val = ilvl;
-            string abstractNumId = this.GetDocument().GetNumbering().GetNum(numId).GetCTNum().abstractNumId.val;
-            this.GetDocument().GetNumbering().GetAbstractNum(abstractNumId).SetLevelTentative(int.Parse(ilvl), false);
+            //string abstractNumId = this.GetDocument().GetNumbering().GetNum(numId).GetCTNum().abstractNumId.val;
+            //this.GetDocument().GetNumbering().GetAbstractNum(abstractNumId).SetLevelTentative(int.Parse(ilvl), false);
             paragraph.pPr.numPr.numId.val = (numId);
         }
         /**

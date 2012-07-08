@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Xml.Serialization;
-using NPOI.OpenXmlFormats.Shared;
+//using NPOI.OpenXmlFormats.Shared;
 
 namespace NPOI.OpenXmlFormats.Wordprocessing
 {
@@ -179,7 +179,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         private CT_DocRsids rsidsField;
 
-        private CT_MathPr mathPrField;
+        private NPOI.OpenXmlFormats.Shared.CT_MathPr mathPrField;
 
         private CT_OnOff uiCompat97To2003Field;
 
@@ -245,7 +245,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             this.themeFontLang.eastAsia = "zh-CN";
             //this.attachedSchemaField = new List<CT_String>();
             //this.uiCompat97To2003Field = new CT_OnOff();
-            this.mathPrField = new CT_MathPr();
+            this.mathPrField = new NPOI.OpenXmlFormats.Shared.CT_MathPr();
             this.rsidsField = new CT_DocRsids();
             //this.docVarsField = new List<CT_DocVar>();
             this.compatField = new CT_Compat();
@@ -1418,7 +1418,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         }
 
         [XmlElement(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", Order = 83)]
-        public CT_MathPr mathPr
+        public NPOI.OpenXmlFormats.Shared.CT_MathPr mathPr
         {
             get
             {
@@ -1625,6 +1625,16 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             {
                 this.listSeparatorField = value;
             }
+        }
+
+        public bool IsSetZoom()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void AddNewZoom()
+        {
+            throw new NotImplementedException();
         }
     }
 

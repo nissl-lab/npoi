@@ -89,9 +89,9 @@ using System.Xml.Serialization;
             //{
             //    ctSettings.AddNewZoom();
             //}
-            //CTZoom zoom = ctSettings.Zoom;
+            CT_Zoom zoom = ctSettings.zoom;
             //zoom.Percent = (BigInt32.ValueOf(zoomPercent));
-            ctSettings.zoom.percent = zoomPercent.ToString();
+            zoom.percent = zoomPercent.ToString();
         }
 
         /**
@@ -111,9 +111,10 @@ using System.Xml.Serialization;
         public bool IsEnforcedWith(ST_DocProtect editValue) {
             CT_DocProtect ctDocProtect = ctSettings.documentProtection;
 
-        //    if (ctDocProtect == null) {
-        //        return false;
-        //    }
+            if (ctDocProtect == null)
+            {
+                return false;
+            }
 
             return ctDocProtect.enforcement.Equals(ST_OnOff.Value1) && ctDocProtect.edit.Equals(editValue);
         }

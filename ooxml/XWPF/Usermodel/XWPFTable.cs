@@ -267,7 +267,7 @@ namespace NPOI.XWPF.UserModel
          * @param pos
          * @return  the inserted row
          */
-        public XWPFTableRow insertNewTableRow(int pos)
+        public XWPFTableRow InsertNewTableRow(int pos)
         {
             if(pos >= 0 && pos <= tableRows.Count){
                 CT_Row row = ctTbl.InsertNewTr(pos);
