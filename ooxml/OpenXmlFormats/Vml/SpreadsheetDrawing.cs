@@ -199,6 +199,14 @@ namespace NPOI.OpenXmlFormats.Vml.Spreadsheet
             get { return this.moveWithCellsFieldSpecified; }
             set { this.moveWithCellsFieldSpecified = value; }
         }
+        public int SizeOfMoveWithCellsArray()
+        {
+            return moveWithCellsSpecified?1:0;
+        }
+        public int SizeOfSizeWithCellsArray()
+        {
+            return sizeWithCellsFieldSpecified?1:0;
+        }
         ST_TrueFalseBlank sizeWithCellsField = ST_TrueFalseBlank.NONE;
         bool sizeWithCellsFieldSpecified = false;
 

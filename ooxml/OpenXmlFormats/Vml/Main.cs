@@ -166,7 +166,6 @@ namespace NPOI.OpenXmlFormats.Vml
             get { return clientDataField; }
             set { clientDataField = value; }
         }
-
         public CT_ClientData GetClientDataArray(int index)
         {
             return clientDataField != null ? this.clientDataField[index] : null;
@@ -2434,7 +2433,7 @@ namespace NPOI.OpenXmlFormats.Vml
         
         
         [XmlAttribute("path")]
-        public string path1 {
+        public string path2 {
             get {
                 return this.path1Field;
             }

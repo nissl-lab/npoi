@@ -4235,6 +4235,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             obj.valueField = this.valueField;
             return obj;
         }
+        [XmlAttribute]
         [DefaultValue(ST_CellFormulaType.normal)]
         public ST_CellFormulaType t
         {
@@ -4247,7 +4248,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.tField = value;
             }
         }
-
+        [XmlAttribute]
         [DefaultValue(false)]
         public bool aca
         {
@@ -4260,7 +4261,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.acaField = value;
             }
         }
-
+        [XmlAttribute]
         public string @ref
         {
             get
@@ -4272,7 +4273,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.refField = value;
             }
         }
-
+        [XmlAttribute]
         [DefaultValue(false)]
         public bool dt2D
         {
@@ -4285,7 +4286,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.dt2DField = value;
             }
         }
-
+        [XmlAttribute]
         [DefaultValue(false)]
         public bool dtr
         {
@@ -4298,7 +4299,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.dtrField = value;
             }
         }
-
+        [XmlAttribute]
         [DefaultValue(false)]
         public bool del1
         {
@@ -4311,7 +4312,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.del1Field = value;
             }
         }
-
+        [XmlAttribute]
         [DefaultValue(false)]
         public bool del2
         {
@@ -4324,7 +4325,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.del2Field = value;
             }
         }
-
+        [XmlAttribute]
         public string r1
         {
             get
@@ -4336,7 +4337,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.r1Field = value;
             }
         }
-
+        [XmlAttribute]
         public string r2
         {
             get
@@ -4361,7 +4362,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.caField = value;
             }
         }
-
+        [XmlAttribute]
         public uint si
         {
             get
@@ -4386,7 +4387,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.siFieldSpecified = value;
             }
         }
-
+        [XmlAttribute]
         [DefaultValue(false)]
         public bool bx
         {
@@ -4400,7 +4401,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [XmlTextAttribute()]
+        [XmlText]
         public string Value
         {
             get
@@ -6476,40 +6477,40 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
     }
 
-    public enum ST_PageOrder
+    public enum ST_PageOrder:int
     {
 
     
-        downThenOver,
+        downThenOver=1,
 
     
-        overThenDown,
+        overThenDown=2,
     }
 
-    public enum ST_Orientation
+    public enum ST_Orientation:int
     {
 
     
-        @default,
+        @default=1,
 
     
-        portrait,
+        portrait=2,
 
     
-        landscape,
+        landscape=3,
     }
 
-    public enum ST_CellComments
+    public enum ST_CellComments:int
     {
 
     
-        none,
+        none=1,
 
     
-        asDisplayed,
+        asDisplayed=2,
 
     
-        atEnd,
+        atEnd=3,
     }
 
     public enum ST_PrintError

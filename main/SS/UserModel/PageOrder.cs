@@ -28,15 +28,21 @@ namespace NPOI.SS.UserModel
         /**
          * Order pages vertically first, then move horizontally.
          */
-        public static PageOrder DOWN_THEN_OVER = new PageOrder(1);
+        public static PageOrder DOWN_THEN_OVER;
         /**
          * Order pages horizontally first, then move vertically
          */
-        public static PageOrder OVER_THEN_DOWN = new PageOrder(2);
+        public static PageOrder OVER_THEN_DOWN;
 
 
         private int order;
 
+        static PageOrder()
+        { 
+            _table = new PageOrder[3];
+            DOWN_THEN_OVER = new PageOrder(1);
+            OVER_THEN_DOWN = new PageOrder(2);
+        }
 
         private PageOrder(int order)
         {
@@ -52,7 +58,7 @@ namespace NPOI.SS.UserModel
             }
         }
 
-        private static PageOrder[] _table = new PageOrder[3];
+        private static PageOrder[] _table;
 
         public static PageOrder ValueOf(int value)
         {

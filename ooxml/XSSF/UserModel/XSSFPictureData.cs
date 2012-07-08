@@ -21,6 +21,7 @@ using NPOI.OpenXml4Net.OPC;
 using NPOI.Util;
 using System.IO;
 using System;
+using System.Collections.Generic;
 namespace NPOI.XSSF.UserModel
 {
 
@@ -34,16 +35,16 @@ namespace NPOI.XSSF.UserModel
         /**
          * Relationships for each known picture type
          */
-        internal static POIXMLRelation[] RELATIONS;
+        internal static Dictionary<PictureType, POIXMLRelation> RELATIONS;
         static XSSFPictureData()
         {
-            RELATIONS = new POIXMLRelation[8];
-            RELATIONS[(int)PictureType.EMF] = XSSFRelation.IMAGE_EMF;
-            RELATIONS[(int)PictureType.WMF] = XSSFRelation.IMAGE_WMF;
-            RELATIONS[(int)PictureType.PICT] = XSSFRelation.IMAGE_PICT;
-            RELATIONS[(int)PictureType.JPEG] = XSSFRelation.IMAGE_JPEG;
-            RELATIONS[(int)PictureType.PNG] = XSSFRelation.IMAGE_PNG;
-            RELATIONS[(int)PictureType.DIB] = XSSFRelation.IMAGE_DIB;
+            RELATIONS = new Dictionary<PictureType,POIXMLRelation>(8);
+            RELATIONS[PictureType.EMF] = XSSFRelation.IMAGE_EMF;
+            RELATIONS[PictureType.WMF] = XSSFRelation.IMAGE_WMF;
+            RELATIONS[PictureType.PICT] = XSSFRelation.IMAGE_PICT;
+            RELATIONS[PictureType.JPEG] = XSSFRelation.IMAGE_JPEG;
+            RELATIONS[PictureType.PNG] = XSSFRelation.IMAGE_PNG;
+            RELATIONS[PictureType.DIB] = XSSFRelation.IMAGE_DIB;
         }
 
         /**
@@ -95,13 +96,11 @@ namespace NPOI.XSSF.UserModel
         public int GetPictureType()
         {
             String contentType = GetPackagePart().ContentType;
-            for (int i = 0; i < RELATIONS.Length; i++)
+            foreach (PictureType relation in RELATIONS.Keys)
             {
-                if (RELATIONS[i] == null) continue;
-
-                if (RELATIONS[i].ContentType.Equals(contentType))
+                if ( RELATIONS[relation].ContentType.Equals(contentType))
                 {
-                    return i;
+                    return (int)relation;
                 }
             }
             return 0;

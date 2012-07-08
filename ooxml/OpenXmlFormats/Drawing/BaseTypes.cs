@@ -60,7 +60,7 @@ namespace NPOI.OpenXmlFormats.Dml
     {
 
         private int valField;
-
+        [XmlAttribute]
         public int val
         {
             get
@@ -80,7 +80,7 @@ namespace NPOI.OpenXmlFormats.Dml
     {
 
         private int valField;
-
+        [XmlAttribute]
         public int val
         {
             get
@@ -100,7 +100,7 @@ namespace NPOI.OpenXmlFormats.Dml
     {
 
         private int valField;
-
+        [XmlAttribute]
         public int val
         {
             get
@@ -120,7 +120,7 @@ namespace NPOI.OpenXmlFormats.Dml
     {
 
         private int valField;
-
+        [XmlAttribute]
         public int val
         {
             get
@@ -140,7 +140,7 @@ namespace NPOI.OpenXmlFormats.Dml
     {
 
         private int valField;
-
+        [XmlAttribute]
         public int val
         {
             get
@@ -160,7 +160,7 @@ namespace NPOI.OpenXmlFormats.Dml
     {
 
         private int valField;
-
+        [XmlAttribute]
         public int val
         {
             get
@@ -182,7 +182,7 @@ namespace NPOI.OpenXmlFormats.Dml
         private long nField;
 
         private long dField;
-
+        [XmlAttribute]
         public long n
         {
             get
@@ -194,7 +194,7 @@ namespace NPOI.OpenXmlFormats.Dml
                 this.nField = value;
             }
         }
-
+        [XmlAttribute]
         public long d
         {
             get
@@ -216,7 +216,7 @@ namespace NPOI.OpenXmlFormats.Dml
         private long xField;
 
         private long yField;
-
+        [XmlAttribute]
         public long x
         {
             get
@@ -228,7 +228,7 @@ namespace NPOI.OpenXmlFormats.Dml
                 this.xField = value;
             }
         }
-
+        [XmlAttribute]
         public long y
         {
             get
@@ -251,6 +251,7 @@ namespace NPOI.OpenXmlFormats.Dml
 
         private long cyField;
 
+        [XmlAttribute]
         public long cx
         {
             get
@@ -262,7 +263,7 @@ namespace NPOI.OpenXmlFormats.Dml
                 this.cxField = value;
             }
         }
-
+        [XmlAttribute]
         public long cy
         {
             get
@@ -414,7 +415,7 @@ namespace NPOI.OpenXmlFormats.Dml
                 this.itemsElementNameField = new List<ScRgbColorType>(value);
             }
         }
-
+        [XmlAttribute]
         public int r
         {
             get
@@ -426,7 +427,7 @@ namespace NPOI.OpenXmlFormats.Dml
                 this.rField = value;
             }
         }
-
+        [XmlAttribute]
         public int g
         {
             get
@@ -438,7 +439,7 @@ namespace NPOI.OpenXmlFormats.Dml
                 this.gField = value;
             }
         }
-
+        [XmlAttribute]
         public int b
         {
             get
@@ -2281,4 +2282,6 @@ namespace NPOI.OpenXmlFormats.Dml
 
         hidden,
     }
+
+    
 }

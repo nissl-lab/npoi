@@ -29,16 +29,24 @@ namespace NPOI.SS.UserModel
         /**
          * Do not print cell comments.
          */
-        public static PrintCellComments NONE = new PrintCellComments(1);
+        public static PrintCellComments NONE;
         /**
          * Print cell comments as displayed.
          */
-        public static PrintCellComments AS_DISPLAYED = new PrintCellComments(2);
+        public static PrintCellComments AS_DISPLAYED;
         /**
          * Print cell comments at end of document.
          */
-        public static PrintCellComments AT_END = new PrintCellComments(3);
+        public static PrintCellComments AT_END;
 
+
+        static PrintCellComments()
+        { 
+            _table= new PrintCellComments[4];
+            NONE = new PrintCellComments(1);
+            AS_DISPLAYED = new PrintCellComments(2);
+            AT_END = new PrintCellComments(3);
+        }
 
         private int comments;
 
@@ -56,7 +64,7 @@ namespace NPOI.SS.UserModel
             }
         }
 
-        private static PrintCellComments[] _table = new PrintCellComments[4];
+        private static PrintCellComments[] _table;
 
         public static PrintCellComments ValueOf(int value)
         {

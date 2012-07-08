@@ -324,20 +324,7 @@ namespace NPOI.XSSF.UserModel
          */
         public int AddPicture(byte[] pictureData, int format)
         {
-            int imageNumber = GetAllPictures().Count + 1;
-            XSSFPictureData img = (XSSFPictureData)CreateRelationship(XSSFPictureData.RELATIONS[format], XSSFFactory.GetInstance(), imageNumber, true);
-            try
-            {
-                Stream out1 = img.GetPackagePart().GetOutputStream();
-                out1.Write(pictureData,0,pictureData.Length);
-                out1.Close();
-            }
-            catch (IOException e)
-            {
-                throw new POIXMLException(e);
-            }
-            pictures.Add(img);
-            return imageNumber - 1;
+            return this.AddPicture(pictureData, (PictureType)format);
         }
 
         /**
@@ -355,12 +342,12 @@ namespace NPOI.XSSF.UserModel
          * @see Workbook#PICTURE_TYPE_DIB
          * @see #getAllPictures()
          */
-        public int AddPicture(Stream is1, int format)
+        public int AddPicture(Stream picStream, int format)
         {
             int imageNumber = GetAllPictures().Count + 1;
-            XSSFPictureData img = (XSSFPictureData)CreateRelationship(XSSFPictureData.RELATIONS[format], XSSFFactory.GetInstance(), imageNumber, true);
+            XSSFPictureData img = (XSSFPictureData)CreateRelationship(XSSFPictureData.RELATIONS[(PictureType)format], XSSFFactory.GetInstance(), imageNumber, true);
             Stream out1 = img.GetPackagePart().GetOutputStream();
-            IOUtils.Copy(is1, out1);
+            IOUtils.Copy(picStream, out1);
             out1.Close();
             pictures.Add(img);
             return imageNumber - 1;
@@ -1491,7 +1478,6 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
-
                 throw new NotImplementedException();
             }
             set 
@@ -1571,7 +1557,7 @@ namespace NPOI.XSSF.UserModel
             ValidateSheetIndex(sheetIx);
             WorkbookUtil.ValidateSheetState(state);
             CT_Sheet ctSheet = sheets[sheetIx].sheet;
-            ctSheet.state = (ST_SheetState)(state + 1);
+            ctSheet.state = (ST_SheetState)state;
         }
 
         /// <summary>
@@ -1818,7 +1804,21 @@ namespace NPOI.XSSF.UserModel
 
         public int AddPicture(byte[] pictureData, PictureType format)
         {
-            throw new NotImplementedException();
+            int imageNumber = GetAllPictures().Count + 1;
+            XSSFPictureData img = (XSSFPictureData)CreateRelationship(XSSFPictureData.RELATIONS[format], XSSFFactory.GetInstance(), imageNumber, true);
+            try
+            {
+                Stream out1 = img.GetPackagePart().GetOutputStream();
+                out1.Write(pictureData, 0, pictureData.Length);
+                out1.Close();
+            }
+            catch (IOException e)
+            {
+                throw new POIXMLException(e);
+            }
+            pictures.Add(img);
+            return imageNumber - 1;
+
         }
 
 

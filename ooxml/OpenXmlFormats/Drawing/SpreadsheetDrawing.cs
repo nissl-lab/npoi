@@ -457,7 +457,7 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
             new XmlQualifiedName("xdr", "http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing")});
 
         private List<CT_TwoCellAnchor> twoCellAnchors = new List<CT_TwoCellAnchor>();
-        //private List<CT_OneCellAnchor> oneCellAnchors = new List<CT_OneCellAnchor>();
+        private List<CT_OneCellAnchor> oneCellAnchors = new List<CT_OneCellAnchor>();
         //private List<CT_AbsoulteCellAnchor> absoluteCellAnchors = new List<CT_AbsoulteCellAnchor>();
 
         public CT_TwoCellAnchor AddNewTwoCellAnchor()
@@ -488,12 +488,12 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
             set { twoCellAnchors = value; }
         }
 
-        //[XmlElement("oneCellAnchor")]
-        //public List<CT_TwoCellAnchor> OneCellAnchors
-        //{
-        //    get { return oneCellAnchors; }
-        //    set { oneCellAnchors = value; }
-        //}
+        [XmlElement("oneCellAnchor")]
+        public List<CT_OneCellAnchor> OneCellAnchors
+        {
+            get { return oneCellAnchors; }
+            set { oneCellAnchors = value; }
+        }
 
         //[XmlElement("absoluteAnchor")]
         //public List<CT_TwoCellAnchor> AbsoluteAnchors
@@ -521,6 +521,37 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
             {
                 this.idField = value;
             }
+        }
+    }
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing")]
+    public class CT_OneCellAnchor
+    {
+        private CT_Marker fromField = new CT_Marker();
+        private CT_PositiveSize2D extField; //= new CT_PositiveSize2D();
+        private CT_AnchorClientData clientDataField = new CT_AnchorClientData(); // 1..1 element
+        [XmlElement]
+        public CT_Marker from
+        {
+            get { return fromField; }
+            set { fromField = value; }
+        }
+
+        [XmlElement]
+        public CT_PositiveSize2D ext
+        {
+            get { return this.extField; }
+            set { this.extField = value; }
+        }
+        public CT_AnchorClientData AddNewClientData()
+        {
+            this.clientDataField = new CT_AnchorClientData();
+            return this.clientDataField;
+        }
+        [XmlElement]
+        public CT_AnchorClientData clientData
+        {
+            get { return clientDataField; }
+            set { clientDataField = value; }
         }
     }
 
@@ -577,23 +608,27 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
             return this.clientDataField;
         }
 
-        [XmlAttribute("editAs")]
-        // (DataType="ST_EditAs")
-        public string editAsAttribute
-        {
-            get { return editAsField.ToString(); }
-            set { editAsField = (ST_EditAs)Enum.Parse(typeof(ST_EditAs), value); }
-        }
+        //[XmlAttribute("editAs")]
+        //// (DataType="ST_EditAs")
+        //public string editAsAttribute
+        //{
+        //    get { return editAsField.ToString(); }
+        //    set { editAsField = (ST_EditAs)Enum.Parse(typeof(ST_EditAs), value); }
+        //}
         // typesafe access to editAs attribute
+
+        [XmlAttribute]
         public ST_EditAs editAs
         {
             get { return editAsField; }
             set { editAsField = value; }
         }
+        bool editAsSpecifiedField = false;
         [XmlIgnore]
         public bool editAsSpecified
         {
-            get { return ST_EditAs.NONE != editAsField; }
+            get { return editAsSpecifiedField; }
+            set { editAsSpecifiedField = value; }
         }
 
         [XmlElement]
@@ -618,9 +653,12 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
             get { return shapeField; }
             set { shapeField = value; }
         }
+        bool shapeSpecifiedField = false;
+        [XmlIgnore]
         public bool shapeSpecified
         {
-            get { return null != shapeField; }
+            get { return shapeSpecifiedField; }
+            set { shapeSpecifiedField = value; }
         }
 
         [XmlElement]
@@ -629,9 +667,12 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
             get { return groupShapeField; }
             set { groupShapeField = value; }
         }
+        bool groupShapeSpecifiedField = false;
+        [XmlIgnore]
         public bool groupShapeSpecified
         {
-            get { return null != groupShapeField; }
+            get { return groupShapeSpecifiedField; }
+            set { groupShapeSpecifiedField = value; }
         }
 
         [XmlElement]
@@ -640,9 +681,12 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
             get { return graphicalObjectField; }
             set { graphicalObjectField = value; }
         }
+        bool graphicalObjectSpecifiedField = false;
+        [XmlIgnore]
         public bool graphicalObjectSpecified
         {
-            get { return null != graphicalObjectField; }
+            get { return graphicalObjectSpecifiedField; }
+            set { graphicalObjectSpecifiedField = value; }
         }
 
         [XmlElement]
@@ -651,9 +695,12 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
             get { return connectorField; }
             set { connectorField = value; }
         }
+        bool connectorSpecifiedField = false;
+        [XmlIgnore]
         public bool connectorSpecified
         {
-            get { return null != connectorField; }
+            get { return connectorSpecifiedField; }
+            set { connectorSpecifiedField = value; }
         }
 
         [XmlElement]
@@ -662,9 +709,12 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
             get { return pictureField; }
             set { pictureField = value; }
         }
+        bool pictureSpecifiedField = false;
+        [XmlIgnore]
         public bool pictureSpecified
         {
-            get { return null != pictureField; }
+            get { return pictureSpecifiedField; }
+            set { pictureSpecifiedField = value; }
         }
 
         #endregion Choice - one of CT_Shape, CT_GroupShape, CT_GraphicalObjectFrame, CT_Connector or CT_Picture
@@ -757,7 +807,7 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
         private CT_ShapeStyle styleField = null; // 0..1
 
         private string macroField = null;
-        private bool? fPublishedField = null;
+        private bool fPublishedField = false;
 
         [XmlElement]
         public CT_PictureNonVisual nvPicPr
@@ -783,37 +833,47 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
         [XmlElement]
         public CT_ShapeStyle style
         {
-            get            {                return this.styleField;            }
-            set            {                this.styleField = value;            }
+            get {
+                return this.styleField;
+            }
+            set {
+                this.styleField = value;
+            }
         }
+        private bool styleSpecifiedField = false;
         [XmlIgnore]
         public bool styleSpecified
         {
-            get { return (null != styleField); }
+            get { return styleSpecifiedField; }
+            set { styleSpecifiedField = value; }
         }
-
+        
         [XmlAttribute]
         public string macro
         {
             get { return macroField; }
             set { macroField = value; }
         }
+        private bool macroSpecifiedField = false;
         [XmlIgnore]
         public bool macroSpecified
         {
-            get { return (null != macroField); }
+            get { return macroSpecifiedField; }
+            set { macroSpecifiedField = value; }
         }
 
         [XmlAttribute]
         public bool fPublished
         {
-            get { return null == fPublishedField ? false: (bool)fPublishedField; }
+            get { return fPublishedField; }
             set { fPublishedField = value; }
         }
+        private bool fPublishedSpecifiedField = false;
         [XmlIgnore]
         public bool fPublishedSpecified
         {
-            get { return (null != fPublishedField); }
+            get { return fPublishedSpecifiedField; }
+            set { fPublishedSpecifiedField = value; }
         }
 
         public CT_PictureNonVisual AddNewNvPicPr()
@@ -836,7 +896,17 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
 
         public void Set(CT_Picture pict)
         {
-            throw new NotImplementedException();
+            this.nvPicPr = pict.nvPicPr;
+            this.spPr = pict.spPr;
+            this.macro = pict.macro;
+            this.macroSpecified = this.macroSpecified;
+            this.style = pict.style;
+            this.styleSpecified = pict.styleSpecified;
+            this.fPublished = pict.fPublished;
+            this.fPublishedSpecified = pict.fPublishedSpecified;
+            this.blipFill = pict.blipFill;
+            
+
         }
     }
 

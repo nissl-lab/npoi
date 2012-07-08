@@ -134,7 +134,12 @@ namespace NPOI.XSSF.UserModel
                     if (style != null)
                         visible = style.IndexOf("visibility:visible") != -1;
                     else
-                        visible = _vmlShape.GetClientDataArray(0).visibleSpecified;
+                    {
+                        if (_vmlShape.GetClientDataArray(0) == null)
+                            return false;
+                        else
+                            visible = _vmlShape.GetClientDataArray(0).visibleSpecified;
+                    }
                 }
                 return visible;
             }

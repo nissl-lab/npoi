@@ -33,8 +33,6 @@ namespace NPOI.SS.Formula.PTG
     [Serializable]
     public abstract class RefPtgBase : OperandPtg
     {
-        private static int MAX_ROW_NUMBER = 65536;
-
         /** The row index - zero based Unsigned 16 bit value */
         private int field_1_row;
         /** Field 2
@@ -109,10 +107,6 @@ namespace NPOI.SS.Formula.PTG
             get { return field_1_row; }
             set
             {
-                if (value < 0 || value >= MAX_ROW_NUMBER)
-                {
-                    throw new ArgumentException("The row number, when specified as an integer, must be between 0 and " + MAX_ROW_NUMBER);
-                }
                 field_1_row = value;
             }
         }

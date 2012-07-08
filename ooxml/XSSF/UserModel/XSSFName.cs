@@ -153,7 +153,7 @@ namespace NPOI.XSSF.UserModel
                         if (value.Equals(nm.NameName, StringComparison.InvariantCultureIgnoreCase) 
                             && sheetIndex == nm.SheetIndex)
                         {
-                            String msg = "The " + (sheetIndex == -1 ? "workbook" : "sheet") + " already Contains this name: " + value;
+                            String msg = "The " + (sheetIndex == -1 ? "workbook" : "sheet") + " already contains this name: " + value;
                             throw new ArgumentException(msg);
                         }
                     }

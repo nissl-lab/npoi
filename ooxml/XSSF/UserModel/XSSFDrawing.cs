@@ -360,6 +360,7 @@ namespace NPOI.XSSF.UserModel
                     break;
             }
             ctAnchor.editAs = aditAs;
+            ctAnchor.editAsSpecified = true;
             return ctAnchor;
         }
 

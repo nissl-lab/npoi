@@ -107,8 +107,7 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
-                return (pageSetup.pageOrder == null) ? null :
-                    PageOrder.ValueOf((int)pageSetup.pageOrder);
+                return PageOrder.ValueOf((int)pageSetup.pageOrder);
             }
             set 
             {

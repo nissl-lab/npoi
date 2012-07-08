@@ -98,7 +98,7 @@ namespace NPOI.XSSF.UserModel
         }
 
 
-        protected void Read(Stream is1)
+        internal void Read(Stream is1)
         {
             XmlDocument doc = new XmlDocument();
              doc.Load(
@@ -122,12 +122,20 @@ namespace NPOI.XSSF.UserModel
                 else if (nd.LocalName == QNAME_SHAPE_TYPE.Name)
                 {
                     CT_Shapetype st = CT_Shapetype.Parse(xmltext);
+                    _shapeTypeId = st.id;
                     _items.Add(st);
                 }
                 else if (nd.LocalName == QNAME_SHAPE.Name)
                 {
-                    CT_Shape s = CT_Shape.Parse(xmltext);
-                    _items.Add(s);
+                    CT_Shape shape = CT_Shape.Parse(xmltext);
+                    String id = shape.id;
+                    if (id != null)
+                    {
+                        MatchCollection m = ptrn_shapeId.Matches(id);
+                        if (m.Count>0) 
+                            _shapeId = Math.Max(_shapeId, int.Parse(m[0].Groups[1].Value));
+                    }
+                    _items.Add(shape);
                 }
                 else
                 {
@@ -137,12 +145,12 @@ namespace NPOI.XSSF.UserModel
             }
         }
 
-        protected ArrayList GetItems()
+        internal ArrayList GetItems()
         {
             return _items;
         }
 
-        protected void Write(Stream out1)
+        internal void Write(Stream out1)
         {
             XmlWriter xw = XmlWriter.Create(out1);
             xw.WriteStartElement("xml");
@@ -194,7 +202,7 @@ namespace NPOI.XSSF.UserModel
             shapetype.id= _shapeTypeId;
             shapetype.coordsize="21600,21600";
             shapetype.spt=202;
-            shapetype.path1 = ("m,l,21600r21600,l21600,xe");
+            shapetype.path2 = ("m,l,21600r21600,l21600,xe");
             shapetype.AddNewStroke().joinstyle = (ST_StrokeJoinStyle.miter);
             CT_Path path = shapetype.AddNewPath();
             path.gradientshapeok = ST_TrueFalse.t;
