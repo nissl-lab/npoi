@@ -19,7 +19,7 @@ namespace TestCases.SS.Formula.Functions
 {
     using System;
     using NPOI.SS.Formula.Eval;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.SS.Formula.Functions;
 
     /**
@@ -29,7 +29,7 @@ namespace TestCases.SS.Formula.Functions
      * @author Brendan Nolan
      *
      */
-    [TestClass]
+    [TestFixture]
     public class TestLeftRight
     {
 
@@ -48,7 +48,7 @@ namespace TestCases.SS.Formula.Functions
             ValueEval[] args = new ValueEval[] { text, operand };
             return TextFunction.RIGHT.Evaluate(args, -1, (short)-1);
         }
-        [TestMethod]
+        [Test]
         public void TestLeftRight_bug49841()
         {
 
@@ -63,7 +63,7 @@ namespace TestCases.SS.Formula.Functions
             }
 
         }
-        [TestMethod]
+        [Test]
         public void TestLeftRightNegativeOperand()
         {
 

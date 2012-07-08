@@ -15,7 +15,7 @@
    limitations under the License.
    ==================================================================== */
 using NPOI.SS.Util;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using System;
 using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
@@ -26,7 +26,7 @@ namespace TestCases.SS.Util
      * Tests SheetBuilder.
      * @see org.apache.poi.ss.util.SheetBuilder
      */
-    [TestClass]
+    [TestFixture]
     public class TestSheetBuilder
     {
 
@@ -35,7 +35,7 @@ namespace TestCases.SS.Util
 	new object[]{DateTime.Now,  null,     null},
 	new object[]{     "one", "two", "=A1+B2"}
     };
-        [TestMethod]
+        [Test]
         public void TestNotCreateEmptyCells()
         {
             IWorkbook wb = new HSSFWorkbook();
@@ -62,7 +62,7 @@ namespace TestCases.SS.Util
             Assert.AreEqual(CellType.FORMULA, thirdRow.GetCell(2).CellType);
             Assert.AreEqual("A1+B2", thirdRow.GetCell(2).CellFormula);
         }
-        [TestMethod]
+        [Test]
         public void TestEmptyCells()
         {
             NPOI.SS.UserModel.IWorkbook wb = new HSSFWorkbook();

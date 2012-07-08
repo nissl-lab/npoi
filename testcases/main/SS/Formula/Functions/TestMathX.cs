@@ -22,7 +22,7 @@ namespace TestCases.SS.Formula.Functions
 {
 
     using System;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.SS.Formula.Functions;
 
 
@@ -30,10 +30,10 @@ namespace TestCases.SS.Formula.Functions
      * @author Amol S. Deshmukh &lt; amolweb at ya hoo dot com &gt;
      *  
      */
-    [TestClass]
+    [TestFixture]
     public class TestMathX : AbstractNumericTestCase
     {
-        [TestMethod]
+        [Test]
         public void TestAcosh()
         {
             double d = 0;
@@ -57,7 +57,7 @@ namespace TestCases.SS.Formula.Functions
             AssertEqual("Acosh 200000 ",12.89921983d, d);
 
         }
-        [TestMethod]
+        [Test]
         public void TestAsinh()
         {
             double d = 0;
@@ -84,7 +84,7 @@ namespace TestCases.SS.Formula.Functions
             AssertEqual("asinh -200000 ",-12.899223853137, d);
 
         }
-        [TestMethod]
+        [Test]
         public void TestAtanh()
         {
             double d = 0;
@@ -116,7 +116,7 @@ namespace TestCases.SS.Formula.Functions
             AssertEqual("atanh -0.1 ", -0.100335348, d);
 
         }
-        [TestMethod]
+        [Test]
         public void TestCosh()
         {
             double d = 0;
@@ -148,7 +148,7 @@ namespace TestCases.SS.Formula.Functions
             AssertEqual("cosh -0.1 ", 1.005004168, d);
 
         }
-        [TestMethod]
+        [Test]
         public void TestTanh()
         {
             double d = 0;
@@ -180,7 +180,7 @@ namespace TestCases.SS.Formula.Functions
             AssertEqual("tanh -0.1 ", -0.099667995, d);
 
         }
-        [TestMethod]
+        [Test]
         public void TestMax()
         {
             double[] d = new double[100];
@@ -215,7 +215,7 @@ namespace TestCases.SS.Formula.Functions
             AssertEqual("Max ", -1.1, m);
 
         }
-        [TestMethod]
+        [Test]
         public void TestMin()
         {
             double[] d = new double[100];
@@ -259,7 +259,7 @@ namespace TestCases.SS.Formula.Functions
             m = MathX.min(d);
             AssertEqual("Min ", -20.1, m);
         }
-        [TestMethod]
+        [Test]
         public void TestProduct()
         {
             double[] d = new double[100];
@@ -303,7 +303,7 @@ namespace TestCases.SS.Formula.Functions
             m = MathX.min(d);
             AssertEqual("Min ", -20.1, m);
         }
-        [TestMethod]
+        [Test]
         public void TestMod()
         {
 
@@ -321,7 +321,7 @@ namespace TestCases.SS.Formula.Functions
             // Bugzilla 50033
             Assert.AreEqual(1.0, MathX.mod(13, 12));
         }
-        [TestMethod]
+        [Test]
         public void TestNChooseK()
         {
             int n = 100;
@@ -370,7 +370,7 @@ namespace TestCases.SS.Formula.Functions
             AssertEqual("NChooseK ", 1716, d);
 
         }
-        [TestMethod]
+        [Test]
         public void TestSign()
         {
             short minus = -1;
@@ -423,7 +423,7 @@ namespace TestCases.SS.Formula.Functions
             AssertEqual("Sign ", plus, MathX.sign(d));
 
         }
-        [TestMethod]
+        [Test]
         public void TestSinh()
         {
             double d = 0;
@@ -455,7 +455,7 @@ namespace TestCases.SS.Formula.Functions
             AssertEqual("sinh -0.1 ", -0.10016675, d);
 
         }
-        [TestMethod]
+        [Test]
         public void TestSum()
         {
             double[] d = new double[100];
@@ -489,7 +489,7 @@ namespace TestCases.SS.Formula.Functions
             AssertEqual("Sum ", -212d, s);
 
         }
-        [TestMethod]
+        [Test]
         public void TestSumsq()
         {
             double[] d = new double[100];
@@ -522,7 +522,7 @@ namespace TestCases.SS.Formula.Functions
             s = MathX.sumsq(d);
             AssertEqual("Sumsq ", 2912.2, s);
         }
-        [TestMethod]
+        [Test]
         public void TestFactorial()
         {
             int n = 0;
@@ -552,7 +552,7 @@ namespace TestCases.SS.Formula.Functions
             s = MathX.factorial(n);
             AssertEqual("Factorial ", Double.PositiveInfinity, s);
         }
-        [TestMethod]
+        [Test]
         public void TestSumx2my2()
         {
             double[] xarr = null;
@@ -578,7 +578,7 @@ namespace TestCases.SS.Formula.Functions
             yarr = new double[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
             ConfirmSumx2my2(xarr, yarr, 0);
         }
-        [TestMethod]
+        [Test]
         public void TestSumx2py2()
         {
             double[] xarr = null;
@@ -604,7 +604,7 @@ namespace TestCases.SS.Formula.Functions
             yarr = new double[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
             ConfirmSumx2py2(xarr, yarr, 770);
         }
-        [TestMethod]
+        [Test]
         public void TestSumxmy2()
         {
             double[] xarr = null;
@@ -654,7 +654,7 @@ namespace TestCases.SS.Formula.Functions
             }
             Assert.AreEqual(expectedResult, result, 0.0);
         }
-        [TestMethod]
+        [Test]
         public void TestRound()
         {
             double d = 0;
@@ -705,7 +705,7 @@ namespace TestCases.SS.Formula.Functions
             d = 2162.615d; p = 2;
             AssertEqual("round ", 2162.62d, MathX.round(d, p));
         }
-        [TestMethod]
+        [Test]
         public void TestRoundDown()
         {
             double d = 0;
@@ -753,7 +753,7 @@ namespace TestCases.SS.Formula.Functions
             d = 150.0; p = -2;
             AssertEqual("roundDown ", 100, MathX.roundDown(d, p));
         }
-        [TestMethod]
+        [Test]
         public void TestRoundUp()
         {
             double d = 0;
@@ -801,7 +801,7 @@ namespace TestCases.SS.Formula.Functions
             d = 150.0; p = -2;
             AssertEqual("roundUp ", 200, MathX.roundUp(d, p));
         }
-        [TestMethod]
+        [Test]
         public void TestCeiling()
         {
             double d = 0;
@@ -855,7 +855,7 @@ namespace TestCases.SS.Formula.Functions
             d = 2d / 3; s = 3.33;
             AssertEqual("ceiling ", 3.33, MathX.ceiling(d, s));
         }
-        [TestMethod]
+        [Test]
         public void TestFloor()
         {
             double d = 0;

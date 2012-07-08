@@ -19,7 +19,7 @@ namespace TestCases.HSSF.Record.Crypto
 {
     using System;
     using System.Text;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.Util;
     using TestCases.Exceptions;
     using NPOI.HSSF.Record.Crypto;
@@ -28,10 +28,10 @@ namespace TestCases.HSSF.Record.Crypto
      *
      * @author Josh Micich
      */
-    [TestClass]
+    [TestFixture]
     public class TestRC4
     {
-        [TestMethod]
+        [Test]
         public void TestSimple()
         {
             ConfirmRC4("Key", "Plaintext", "BBF316E8D940AF0AD3");

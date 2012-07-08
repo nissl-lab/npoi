@@ -19,7 +19,7 @@ namespace TestCases.HSSF.Record.Pivot
 {
     using System;
 
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
 
     using NPOI.HSSF.Record;
     using NPOI.Util;
@@ -31,11 +31,11 @@ namespace TestCases.HSSF.Record.Pivot
      * 
      * @author Josh Micich
      */
-    [TestClass]
+    [TestFixture]
     public class TestViewFieldsRecord
     {
 
-        [TestMethod]
+        [Test]
         public void TestUnicodeFlag_bug46693()
         {
             byte[] data = HexRead.ReadFromString("01 00 01 00 01 00 04 00 05 00 00 6D 61 72 63 6F");
@@ -43,13 +43,13 @@ namespace TestCases.HSSF.Record.Pivot
             ViewFieldsRecord rec = new ViewFieldsRecord(in1);
             if (in1.Remaining == 1)
             {
-                throw new AssertFailedException("Identified bug 46693b");
+                throw new AssertionException("Identified bug 46693b");
             }
             Assert.AreEqual(0, in1.Remaining);
             Assert.AreEqual(4 + data.Length, rec.RecordSize);
         }
 
-        [TestMethod]
+        [Test]
         public void TestSerialize()
         {
             // This hex data was produced by changing the 'Custom Name' property, 

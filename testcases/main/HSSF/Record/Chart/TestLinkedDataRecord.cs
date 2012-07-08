@@ -25,7 +25,7 @@ namespace TestCases.HSSF.Record.Chart
     using NPOI.HSSF.Record;
     using NPOI.SS.Formula;
     using NPOI.HSSF.Record.Chart;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.SS.Formula.PTG;
 
     /**
@@ -35,7 +35,7 @@ namespace TestCases.HSSF.Record.Chart
      *
      * @author Glen Stampoultzis (glens at apache.org)
      */
-    [TestClass]
+    [TestFixture]
     public class TestLinkedDataRecord
     {
 
@@ -166,7 +166,7 @@ namespace TestCases.HSSF.Record.Chart
         {
 
         }
-        [TestMethod]
+        [Test]
         public void TestLoad()
         {
 
@@ -185,7 +185,7 @@ namespace TestCases.HSSF.Record.Chart
             Assert.AreEqual(data.Length + 4, record.RecordSize);
 
         }
-        [TestMethod]
+        [Test]
         public void TestStore()
         {
             LinkedDataRecord record = new LinkedDataRecord();

@@ -20,7 +20,7 @@ namespace TestCases.SS.Formula.Functions
 
     using NPOI.SS.Formula.Eval;
     using NPOI.SS.Formula.Functions;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using System;
 
     /**
@@ -28,10 +28,10 @@ namespace TestCases.SS.Formula.Functions
      *
      * @author Josh Micich
      */
-    [TestClass]
+    [TestFixture]
     public class TestRowCol
     {
-        [TestMethod]
+        [Test]
         public void TestCol()
         {
             Function target = new Column();
@@ -46,7 +46,7 @@ namespace TestCases.SS.Formula.Functions
                 Assert.AreEqual(5, actual, 0D);
             }
         }
-        [TestMethod]
+        [Test]
         public void TestRow()
         {
             //throw new NotImplementedException();
@@ -62,7 +62,7 @@ namespace TestCases.SS.Formula.Functions
                 Assert.AreEqual(2, actual, 0D);
             }
         }
-        [TestMethod]
+        [Test]
         public void TestColumns()
         {
 
@@ -75,7 +75,7 @@ namespace TestCases.SS.Formula.Functions
             double actual = NumericFunctionInvoker.Invoke(new Columns(), args);
             Assert.AreEqual(1, actual, 0D);
         }
-        [TestMethod]
+        [Test]
         public void TestRows()
         {
 

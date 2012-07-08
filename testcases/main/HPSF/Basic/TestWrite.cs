@@ -22,7 +22,7 @@ namespace TestCases.HPSF.Basic
     using System.IO;
     using System.Text;
     using System.Collections;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.HPSF;
     using NPOI.Util;
     using NPOI.POIFS.FileSystem;
@@ -38,7 +38,7 @@ namespace TestCases.HPSF.Basic
      * @since 2003-02-07
      * @version $Id: TestWrite.java 489730 2006-12-22 19:18:16Z bayard $
      */
-    [TestClass]
+    [TestFixture]
     public class TestWrite
     {
         //static string dataDir = @"..\..\..\TestCases\HPSF\data\";
@@ -92,7 +92,7 @@ namespace TestCases.HPSF.Basic
 
 
 
-        [TestInitialize]
+        [SetUp]
         public void SetUp()
         {
             VariantSupport.IsLogUnsupportedTypes = (false);
@@ -106,7 +106,7 @@ namespace TestCases.HPSF.Basic
          * 
          * @exception IOException if an I/O exception occurs
          */
-        [TestMethod]
+        [Test]
         public void TestNoFormatID()
         {
             using (FileStream file = _samples.GetFile(POI_FS))
@@ -156,7 +156,7 @@ namespace TestCases.HPSF.Basic
          * @exception UnsupportedVariantTypeException if HPSF does not yet support
          * a variant type to be written
          */
-        [TestMethod]
+        [Test]
         public void TestWriteEmptyPropertySet()
         {
 
@@ -212,7 +212,7 @@ namespace TestCases.HPSF.Basic
          * @exception UnsupportedVariantTypeException if HPSF does not yet support
          * a variant type to be written
          */
-        [TestMethod]
+        [Test]
         public void TestWriteSimplePropertySet()
         {
             String AUTHOR = "Rainer Klute";
@@ -279,7 +279,7 @@ namespace TestCases.HPSF.Basic
          * @exception WritingNotSupportedException if HPSF does not yet support
          * a variant type to be written
          */
-        [TestMethod]
+        [Test]
         public void TestWriteTwoSections()
         {
             String STREAM_NAME = "PropertySetStream";
@@ -366,7 +366,7 @@ namespace TestCases.HPSF.Basic
          * Writes and Reads back various variant types and checks whether the
          * stuff that has been Read back Equals the stuff that was written.
          */
-        [TestMethod]
+        [Test]
         public void TestVariantTypes()
         {
             int codepage = CODEPAGE_DEFAULT;
@@ -444,7 +444,7 @@ namespace TestCases.HPSF.Basic
          * checks whether the stuff that has been Read back Equals the stuff that
          * was written.
          */
-        [TestMethod]
+        [Test]
         public void TestCodepages()
         {
             //Exception thr = null;
@@ -517,7 +517,7 @@ namespace TestCases.HPSF.Basic
          * Tests whether writing 8-bit characters to a Unicode property
          * succeeds.
          */
-        [TestMethod]
+        [Test]
         public void TestUnicodeWrite8Bit()
         {
             String TITLE = "This is a sample title";
@@ -645,7 +645,7 @@ namespace TestCases.HPSF.Basic
          *
          * </ul>
          */
-        [TestMethod]
+        [Test]
         public void TestRecreate()
         {
             string[] files = _samples.GetFiles();
@@ -679,7 +679,7 @@ namespace TestCases.HPSF.Basic
             /* Create a new POI filesystem containing the origin file's
              * property Set streams: */
             FileInfo fi = new FileInfo(f.Name);
-            FileStream copy = File.Create(testContextInstance.TestDir +"\\"+ fi.Name);
+            FileStream copy = File.Create("\\"+ fi.Name);
             //copy.deleteOnExit();
             FileStream out1 = copy;
             POIFSFileSystem poiFs = new POIFSFileSystem();
@@ -723,10 +723,10 @@ namespace TestCases.HPSF.Basic
         /**
          * Tests writing and Reading back a proper dictionary.
          */
-        [TestMethod]
+        [Test]
         public void TestDictionary()
         {
-            FileStream copy = File.Create(testContextInstance.TestDir + @"\Test-HPSF.ole2");
+            FileStream copy = File.Create( @"\Test-HPSF.ole2");
             //copy.deleteOnExit();
 
             /* Write: */
@@ -763,7 +763,7 @@ namespace TestCases.HPSF.Basic
 
             out1.Close();
             copy.Close();
-            File.Delete(testContextInstance.TestDir + @"\Test-HPSF.ole2");
+            File.Delete( @"\Test-HPSF.ole2");
 
         }
 
@@ -773,12 +773,12 @@ namespace TestCases.HPSF.Basic
          * Tests writing and Reading back a proper dictionary with an invalid
          * codepage. (HPSF Writes Unicode dictionaries only.)
          */
-        [TestMethod]
+        [Test]
         public void TestDictionaryWithInvalidCodepage()
         {
             try
             {
-                FileStream copy = File.Create(testContextInstance.TestDir + @"\Test-HPSF.ole2");
+                FileStream copy = File.Create( @"\Test-HPSF.ole2");
                 //copy.deleteOnExit();
 
                 /* Write: */

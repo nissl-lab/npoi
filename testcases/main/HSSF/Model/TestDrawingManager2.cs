@@ -19,14 +19,14 @@ namespace TestCases.HSSF.Model
     using System;
     using NPOI.DDF;
     using NPOI.HSSF.Model;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
 
-    [TestClass]
+    [TestFixture]
     public class TestDrawingManager2
     {
         private DrawingManager2 drawingManager2;
         private EscherDggRecord dgg;
-        [TestInitialize]
+        [SetUp]
         public void SetUp()
         {
 
@@ -34,7 +34,7 @@ namespace TestCases.HSSF.Model
             dgg.FileIdClusters = (new EscherDggRecord.FileIdCluster[0]);
             drawingManager2 = new DrawingManager2(dgg);
         }
-        [TestMethod]
+        [Test]
         public void TestCreateDgRecord()
         {
             EscherDgRecord dgRecord1 = drawingManager2.CreateDgRecord();
@@ -50,7 +50,7 @@ namespace TestCases.HSSF.Model
             Assert.AreEqual(3, dgg.NumIdClusters);
             Assert.AreEqual(0, dgg.NumShapesSaved);
         }
-        [TestMethod]
+        [Test]
         public void TestAllocateShapeId()
         {
             EscherDgRecord dgRecord1 = drawingManager2.CreateDgRecord();

@@ -19,7 +19,7 @@ namespace TestCases.SS.Formula.Eval
 {
 
     using System;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.HSSF.UserModel;
     using NPOI.SS.UserModel;
 
@@ -28,10 +28,10 @@ namespace TestCases.SS.Formula.Eval
      *
      * @author Josh Micich
      */
-    [TestClass]
+    [TestFixture]
     public class TestMissingArgEval
     {
-        [TestMethod]
+        [Test]
         public void TestEvaluateMissingArgs()
         {
             HSSFWorkbook wb = new HSSFWorkbook();
@@ -49,7 +49,7 @@ namespace TestCases.SS.Formula.Eval
             catch (Exception e)
             {
                 Console.Error.WriteLine(e.Message);
-                throw new AssertFailedException("Missing args Evaluation not implemented (bug 43354");
+                throw new AssertionException("Missing args Evaluation not implemented (bug 43354");
             }
             // MissingArg -> BlankEval -> zero (as formula result)
             Assert.AreEqual(0.0, cv.NumberValue, 0.0);
@@ -59,7 +59,7 @@ namespace TestCases.SS.Formula.Eval
             fe.ClearAllCachedResultValues();
             Assert.AreEqual("abc", fe.Evaluate(cell).StringValue);
         }
-        [TestMethod]
+        [Test]
         public void TestCountFuncs()
         {
             HSSFWorkbook wb = new HSSFWorkbook();

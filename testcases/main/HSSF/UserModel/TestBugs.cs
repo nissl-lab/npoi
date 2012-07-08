@@ -21,7 +21,7 @@ namespace TestCases.HSSF.UserModel
     using System.IO;
     using System.Text;
     using System.Collections;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
 
     using TestCases.HSSF;
 
@@ -45,13 +45,13 @@ using NPOI.POIFS.FileSystem;
      * @author Avik Sengupta
      * @author Yegor Kozlov
      */
-    [TestClass]
+    [TestFixture]
     public class TestBugs
     {
         /// <summary>
         ///  Some of the tests are depending on the american culture.
         /// </summary>
-        [TestInitialize()]
+        [SetUp]
         public void InitializeCultere()
         {
             System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
@@ -90,7 +90,7 @@ using NPOI.POIFS.FileSystem;
 
         /** Test reading AND writing a complicated workbook
          *Test Opening resulting sheet in excel*/
-        [TestMethod]
+        [Test]
         public void Test15228()
         {
             HSSFWorkbook wb = OpenSample("15228.xls");
@@ -100,7 +100,7 @@ using NPOI.POIFS.FileSystem;
             c.SetCellValue(10);
             WriteTestOutputFileForViewing(wb, "Test15228");
         }
-        [TestMethod]
+        [Test]
         public void Test13796()
         {
             HSSFWorkbook wb = OpenSample("13796.xls");
@@ -112,7 +112,7 @@ using NPOI.POIFS.FileSystem;
         }
         /**Test writing a hyperlink
          * Open resulting sheet in Excel and Check that A1 contains a hyperlink*/
-        [TestMethod]
+        [Test]
         [Ignore]//not found in poi
         public void Test23094()
         {
@@ -127,7 +127,7 @@ using NPOI.POIFS.FileSystem;
         /** Test hyperlinks
          * Open resulting file in excel, and Check that there is a link to Google
          */
-        [TestMethod]
+        [Test]
         public void Test15353()
         {
             HSSFWorkbook wb = new HSSFWorkbook();
@@ -142,13 +142,13 @@ using NPOI.POIFS.FileSystem;
 
         /** Test reading of a formula with a name and a cell ref in one
          **/
-        [TestMethod]
+        [Test]
         public void Test14460()
         {
             HSSFWorkbook wb = OpenSample("14460.xls");
             wb.GetSheetAt(0);
         }
-        [TestMethod]
+        [Test]
         public void Test14330()
         {
             HSSFWorkbook wb = OpenSample("14330-1.xls");
@@ -165,7 +165,7 @@ using NPOI.POIFS.FileSystem;
 
         /** Test rewriting a file with large number of unique strings
          *Open resulting file in Excel to Check results!*/
-        [TestMethod]
+        [Test]
         public void Test15375()
         {
             HSSFWorkbook wb = OpenSample("15375.xls");
@@ -193,7 +193,7 @@ using NPOI.POIFS.FileSystem;
 
         /** Test writing a file with large number of unique strings
          *Open resulting file in Excel to Check results!*/
-        [TestMethod]
+        [Test]
         public void Test15375_2()
         {
             HSSFWorkbook wb = new HSSFWorkbook();
@@ -222,7 +222,7 @@ using NPOI.POIFS.FileSystem;
         }
         /** another Test for the number of unique strings issue
          *Test Opening the resulting file in Excel*/
-        [TestMethod]
+        [Test]
         [Ignore] //this test was not found in poi 3.8beta4
         public void Test22568()
         {
@@ -261,7 +261,7 @@ using NPOI.POIFS.FileSystem;
         }
 
         /**Double byte strings*/
-        [TestMethod]
+        [Test]
         public void Test15556()
         {
 
@@ -271,26 +271,26 @@ using NPOI.POIFS.FileSystem;
             Assert.IsNotNull(row, "Read row fine!");
         }
         /**Double byte strings */
-        [TestMethod]
+        [Test]
         public void Test22742()
         {
             OpenSample("22742.xls");
         }
         /**Double byte strings */
-        [TestMethod]
+        [Test]
         public void Test12561_1()
         {
             OpenSample("12561-1.xls");
         }
         /** Double byte strings */
-        [TestMethod]
+        [Test]
         public void Test12561_2()
         {
             OpenSample("12561-2.xls");
         }
         /** Double byte strings
          File supplied by jubeson*/
-        [TestMethod]
+        [Test]
         public void Test12843_1()
         {
             OpenSample("12843-1.xls");
@@ -298,27 +298,27 @@ using NPOI.POIFS.FileSystem;
 
         /** Double byte strings
          File supplied by Paul Chung*/
-        [TestMethod]
+        [Test]
         public void Test12843_2()
         {
             OpenSample("12843-2.xls");
         }
 
         /** Reference to Name*/
-        [TestMethod]
+        [Test]
         public void Test13224()
         {
             OpenSample("13224.xls");
         }
 
         /** Illegal argument exception - cannot store duplicate value in Map*/
-        [TestMethod]
+        [Test]
         public void Test19599()
         {
             OpenSample("19599-1.xls");
             OpenSample("19599-2.xls");
         }
-        [TestMethod]
+        [Test]
         public void Test24215()
         {
             HSSFWorkbook wb = OpenSample("24215.xls");
@@ -340,7 +340,7 @@ using NPOI.POIFS.FileSystem;
                 }
             }
         }
-        [TestMethod]
+        [Test]
         [Ignore] ///not found in poi 3.8beat4
         public void Test18800()
         {
@@ -360,7 +360,7 @@ using NPOI.POIFS.FileSystem;
         /**
          * Merged regions were being Removed from the parent in cloned sheets
          */
-        [TestMethod]
+        [Test]
         [Ignore] //this test was not found in poi 3.8beta4
         public void Test22720()
         {
@@ -396,7 +396,7 @@ using NPOI.POIFS.FileSystem;
          * bug and Testcase submitted by Sompop Kumnoonsate
          * The file contains THAI unicode characters.
          */
-        [TestMethod]
+        [Test]
         public void TestUnicodeStringFormulaRead()
         {
 
@@ -472,20 +472,20 @@ using NPOI.POIFS.FileSystem;
         }
 
         /** Error in Opening wb*/
-        [TestMethod]
+        [Test]
         public void Test32822()
         {
             OpenSample("32822.xls");
         }
         /**Assert.Fail to read wb with chart */
-        [TestMethod]
+        [Test]
         public void Test15573()
         {
             OpenSample("15573.xls");
         }
 
         /**names and macros */
-        [TestMethod]
+        [Test]
         public void Test27852()
         {
             HSSFWorkbook wb = OpenSample("27852.xls");
@@ -501,7 +501,7 @@ using NPOI.POIFS.FileSystem;
                 //name.Reference;
             }
         }
-        [TestMethod]
+        [Test]
         [Ignore]// not found in poi
         public void Test28031()
         {
@@ -518,12 +518,12 @@ using NPOI.POIFS.FileSystem;
             Assert.AreEqual(formulaText, cell.CellFormula);
             WriteTestOutputFileForViewing(wb, "output28031.xls");
         }
-        [TestMethod]
+        [Test]
         public void Test33082()
         {
             OpenSample("33082.xls");
         }
-        [TestMethod]
+        [Test]
         public void Test34775()
         {
             try
@@ -532,12 +532,12 @@ using NPOI.POIFS.FileSystem;
             }
             catch (NullReferenceException)
             {
-                throw new AssertFailedException("identified bug 34775");
+                throw new AssertionException("identified bug 34775");
             }
         }
 
         /** Error when reading then writing ArrayValues in NameRecord's*/
-        [TestMethod]
+        [Test]
         public void Test37630()
         {
             HSSFWorkbook wb = OpenSample("37630.xls");
@@ -547,7 +547,7 @@ using NPOI.POIFS.FileSystem;
         /**
          * Bug 25183: org.apache.poi.hssf.usermodel.Sheet.SetPropertiesFromSheet
          */
-        [TestMethod]
+        [Test]
         public void Test25183()
         {
             HSSFWorkbook wb = OpenSample("25183.xls");
@@ -557,7 +557,7 @@ using NPOI.POIFS.FileSystem;
         /**
          * Bug 26100: 128-character message in IF statement cell causes HSSFWorkbook Open Assert.Failure
          */
-        [TestMethod]
+        [Test]
         public void Test26100()
         {
             HSSFWorkbook wb = OpenSample("26100.xls");
@@ -567,7 +567,7 @@ using NPOI.POIFS.FileSystem;
         /**
          * Bug 27933: Unable to use a template (xls) file containing a wmf graphic
          */
-        [TestMethod]
+        [Test]
         public void Test27933()
         {
             HSSFWorkbook wb = OpenSample("27933.xls");
@@ -577,7 +577,7 @@ using NPOI.POIFS.FileSystem;
         /**
          * Bug 29206:      NPE on Sheet.GetRow for blank rows
          */
-        [TestMethod]
+        [Test]
         public void Test29206()
         {
             //the first Check with blank workbook
@@ -609,7 +609,7 @@ using NPOI.POIFS.FileSystem;
         /**
          * Bug 29675: POI 2.5 corrupts output when starting workbook has a graphic
          */
-        [TestMethod]
+        [Test]
         public void Test29675()
         {
             HSSFWorkbook wb = OpenSample("29675.xls");
@@ -619,7 +619,7 @@ using NPOI.POIFS.FileSystem;
         /**
          * Bug 29942: Importing Excel files that have been Created by Open Office on Linux
          */
-        [TestMethod]
+        [Test]
         public void Test29942()
         {
             HSSFWorkbook wb = OpenSample("29942.xls");
@@ -645,7 +645,7 @@ using NPOI.POIFS.FileSystem;
          * Bug 29982: Unable to read spreadsheet when dropdown list cell is selected -
          *  Unable to construct record instance
          */
-        [TestMethod]
+        [Test]
         public void Test29982()
         {
             HSSFWorkbook wb = OpenSample("29982.xls");
@@ -655,7 +655,7 @@ using NPOI.POIFS.FileSystem;
         /**
          * Bug 30540: Sheet.SetRowBreak throws NullPointerException
          */
-        [TestMethod]
+        [Test]
         public void Test30540()
         {
             HSSFWorkbook wb = OpenSample("30540.xls");
@@ -668,7 +668,7 @@ using NPOI.POIFS.FileSystem;
         /**
          * Bug 31749: {Need help urgently}[This is critical] workbook.Write() corrupts the file......?
          */
-        [TestMethod]
+        [Test]
         public void Test31749()
         {
             HSSFWorkbook wb = OpenSample("31749.xls");
@@ -688,7 +688,7 @@ using NPOI.POIFS.FileSystem;
          * Bug 35564: Cell.java: NullPtrExc in isGridsPrinted() and getProtect()
          *  when HSSFWorkbook is Created from file
          */
-        [TestMethod]
+        [Test]
         public void Test35564()
         {
             HSSFWorkbook wb = OpenSample("35564.xls");
@@ -703,7 +703,7 @@ using NPOI.POIFS.FileSystem;
         /**
          * Bug 35565: Cell.java: NullPtrExc in getColumnBreaks() when HSSFWorkbook is Created from file
          */
-        [TestMethod]
+        [Test]
         public void Test35565()
         {
             HSSFWorkbook wb = OpenSample("35565.xls");
@@ -716,7 +716,7 @@ using NPOI.POIFS.FileSystem;
         /**
          * Bug 37376: Cannot Open the saved Excel file if Checkbox controls exceed certain limit
          */
-        [TestMethod]
+        [Test]
         public void Test37376()
         {
             HSSFWorkbook wb = OpenSample("37376.xls");
@@ -726,7 +726,7 @@ using NPOI.POIFS.FileSystem;
         /**
          * Bug 40285:      CellIterator Skips First Column
          */
-        [TestMethod]
+        [Test]
         public void Test40285()
         {
             HSSFWorkbook wb = OpenSample("40285.xls");
@@ -750,7 +750,7 @@ using NPOI.POIFS.FileSystem;
          * Bug 40296:      Cell.SetCellFormula throws
          *   ClassCastException if cell is Created using Row.CreateCell(short column, int type)
          */
-        [TestMethod]
+        [Test]
         public void Test40296()
         {
             HSSFWorkbook wb = new HSSFWorkbook();
@@ -779,7 +779,7 @@ using NPOI.POIFS.FileSystem;
          * 3. Try Adding a row break (via sheet.SetRowBreak()) to the sheet mentioned in step #1
          * 4. Get a NullPointerException
          */
-        [TestMethod]
+        [Test]
         public void Test38266()
         {
             String[] files = { "Simple.xls", "SimpleMultiCell.xls", "duprich1.xls" };
@@ -798,7 +798,7 @@ using NPOI.POIFS.FileSystem;
                 }
             }
         }
-        [TestMethod]
+        [Test]
         public void Test40738()
         {
             HSSFWorkbook wb = OpenSample("SimpleWithAutofilter.xls");
@@ -808,7 +808,7 @@ using NPOI.POIFS.FileSystem;
         /**
          * Bug 44200: Sheet not cloneable when Note Added to excel cell
          */
-        [TestMethod]
+        [Test]
         public void Test44200()
         {
             HSSFWorkbook wb = OpenSample("44200.xls");
@@ -820,7 +820,7 @@ using NPOI.POIFS.FileSystem;
         /**
          * Bug 44201: Sheet not cloneable when validation Added to excel cell
          */
-        [TestMethod]
+        [Test]
         public void Test44201()
         {
             HSSFWorkbook wb = OpenSample("44201.xls");
@@ -830,7 +830,7 @@ using NPOI.POIFS.FileSystem;
         /**
          * Bug 37684  : Unhandled Continue Record Error
          */
-        [TestMethod]
+        [Test]
         public void Test37684()
         {
             HSSFWorkbook wb = OpenSample("37684-1.xls");
@@ -844,7 +844,7 @@ using NPOI.POIFS.FileSystem;
         /**
          * Bug 41139: Constructing HSSFWorkbook is Assert.Failed,threw threw ArrayIndexOutOfBoundsException for creating UnknownRecord
          */
-        [TestMethod]
+        [Test]
         public void Test41139()
         {
             HSSFWorkbook wb = OpenSample("41139.xls");
@@ -855,7 +855,7 @@ using NPOI.POIFS.FileSystem;
          * Bug 41546: Constructing HSSFWorkbook is Assert.Failed,
          *  Unknown Ptg in Formula: 0x1a (26)
          */
-        [TestMethod]
+        [Test]
         public void Test41546()
         {
             HSSFWorkbook wb = OpenSample("41546.xls");
@@ -868,7 +868,7 @@ using NPOI.POIFS.FileSystem;
          * Bug 42564: Some files from Access were giving a RecordFormatException
          *  when reading the BOFRecord
          */
-        [TestMethod]
+        [Test]
         public void Test42564()
         {
             HSSFWorkbook wb = OpenSample("ex42564-21435.xls");
@@ -880,7 +880,7 @@ using NPOI.POIFS.FileSystem;
          *  with the NameRecord, once you get past the BOFRecord
          *  issue.
          */
-        [TestMethod]
+        [Test]
         public void Test42564Alt()
         {
             HSSFWorkbook wb = OpenSample("ex42564-21503.xls");
@@ -891,7 +891,7 @@ using NPOI.POIFS.FileSystem;
          * Bug 42618: RecordFormatException reading a file containing
          *     =CHOOSE(2,A2,A3,A4)
          */
-        [TestMethod]
+        [Test]
         public void Test42618()
         {
             HSSFWorkbook wb = OpenSample("SimpleWithChoose.xls");
@@ -918,7 +918,7 @@ using NPOI.POIFS.FileSystem;
                 if (e.Message.StartsWith("Too few arguments")
                         && e.Message.IndexOf("ConcatPtg") > 0)
                 {
-                    throw new AssertFailedException("identified bug 44306");
+                    throw new AssertionException("identified bug 44306");
                 }
             }
         }
@@ -926,7 +926,7 @@ using NPOI.POIFS.FileSystem;
         /**
          * Something up with the FileSharingRecord
          */
-        [TestMethod]
+        [Test]
         public void Test43251()
         {
 
@@ -939,7 +939,7 @@ using NPOI.POIFS.FileSystem;
             }
             catch (ArgumentException)
             {
-                throw new AssertFailedException("identified bug 43251");
+                throw new AssertionException("identified bug 43251");
             }
 
             Assert.AreEqual(1, wb.NumberOfSheets);
@@ -949,7 +949,7 @@ using NPOI.POIFS.FileSystem;
          * Crystal reports generates files with short
          *  StyleRecords, which is against the spec
          */
-        [TestMethod]
+        [Test]
         public void Test44471()
         {
 
@@ -962,7 +962,7 @@ using NPOI.POIFS.FileSystem;
             }
             catch (IndexOutOfRangeException)
             {
-                throw new AssertFailedException("Identified bug 44471");
+                throw new AssertionException("Identified bug 44471");
             }
 
             Assert.AreEqual(1, wb.NumberOfSheets);
@@ -972,7 +972,7 @@ using NPOI.POIFS.FileSystem;
          * Files with "read only recommended" were giving
          *  grief on the FileSharingRecord
          */
-        [TestMethod]
+        [Test]
         public void Test44536()
         {
 
@@ -993,7 +993,7 @@ using NPOI.POIFS.FileSystem;
          * Some files were having problems with the DVRecord,
          *  probably due to dropdowns
          */
-        [TestMethod]
+        [Test]
         public void Test44593()
         {
 
@@ -1008,7 +1008,7 @@ using NPOI.POIFS.FileSystem;
             }
             catch (ArgumentException)
             {
-                throw new AssertFailedException("Identified bug 44593");
+                throw new AssertionException("Identified bug 44593");
             }
 
             Assert.AreEqual(2, wb.NumberOfSheets);
@@ -1018,7 +1018,7 @@ using NPOI.POIFS.FileSystem;
          * Used to give problems due to trying to read a zero
          *  Length string, but that's now properly handled
          */
-        [TestMethod]
+        [Test]
         public void Test44643()
         {
 
@@ -1030,7 +1030,7 @@ using NPOI.POIFS.FileSystem;
             }
             catch (ArgumentException)
             {
-                throw new AssertFailedException("identified bug 44643");
+                throw new AssertionException("identified bug 44643");
             }
 
             Assert.AreEqual(1, wb.NumberOfSheets);
@@ -1040,7 +1040,7 @@ using NPOI.POIFS.FileSystem;
          * User reported the wrong number of rows from the
          *  iterator, but we can't replicate that
          */
-        [TestMethod]
+        [Test]
         public void Test44693()
         {
 
@@ -1066,7 +1066,7 @@ using NPOI.POIFS.FileSystem;
         /**
          * Bug 28774: Excel will crash when Opening xls-files with images.
          */
-        [TestMethod]
+        [Test]
         public void Test28774()
         {
             HSSFWorkbook wb = OpenSample("28774.xls");
@@ -1079,7 +1079,7 @@ using NPOI.POIFS.FileSystem;
          * Had a problem apparently, not sure what as it
          *  works just fine...
          */
-        [TestMethod]
+        [Test]
         public void Test44891()
         {
             HSSFWorkbook wb = OpenSample("44891.xls");
@@ -1093,7 +1093,7 @@ using NPOI.POIFS.FileSystem;
          *
          * Works fine with poi-3.1-beta1.
          */
-        [TestMethod]
+        [Test]
         public void Test44235()
         {
             HSSFWorkbook wb = OpenSample("44235.xls");
@@ -1103,7 +1103,7 @@ using NPOI.POIFS.FileSystem;
         }
 
 
-        [TestMethod]
+        [Test]
         public void Test36947()
         {
             HSSFWorkbook wb = OpenSample("36947.xls");
@@ -1112,7 +1112,7 @@ using NPOI.POIFS.FileSystem;
             Assert.IsTrue(true, "no errors writing sample xls");
         }
 
-        [TestMethod]
+        [Test]
         public void Test39634()
         {
             HSSFWorkbook wb = OpenSample("39634.xls");
@@ -1126,7 +1126,7 @@ using NPOI.POIFS.FileSystem;
          *  HSSFObjectData
          * @
          */
-        [TestMethod]
+        [Test]
         public void Test44840()
         {
             HSSFWorkbook wb = OpenSample("WithCheckBoxes.xls");
@@ -1169,7 +1169,7 @@ using NPOI.POIFS.FileSystem;
          *  breaking the build in named ranges
          *  used for printing stuff.
          */
-        [TestMethod]
+        [Test]
         public void Test30978()
         {
             HSSFWorkbook wb = OpenSample("30978-alt.xls");
@@ -1230,7 +1230,7 @@ using NPOI.POIFS.FileSystem;
         /**
          * Test that fonts get added properly
          */
-        [TestMethod]
+        [Test]
         public void Test45338()
         {
             HSSFWorkbook wb = new HSSFWorkbook();
@@ -1317,7 +1317,7 @@ using NPOI.POIFS.FileSystem;
          * From the mailing list - ensure we can handle a formula
          *  containing a zip code, eg ="70164"
          */
-        [TestMethod]
+        [Test]
         public void TestZipCodeFormulas()
         {
             HSSFWorkbook wb = new HSSFWorkbook();
@@ -1348,7 +1348,7 @@ using NPOI.POIFS.FileSystem;
             try
             {
                 double a = c3.NumericCellValue;
-                throw new AssertFailedException("exception should have been thrown");
+                throw new AssertionException("exception should have been thrown");
             }
             catch (InvalidOperationException e)
             {
@@ -1436,7 +1436,7 @@ using NPOI.POIFS.FileSystem;
          * For now, blows up with an exception from ExtPtg
          *  Expected ExpPtg to be converted from Shared to Non-Shared...
          */
-        [TestMethod]
+        [Test]
         [Ignore]//this test is disabled in poi.
         public void DISABLED_Test43623()
         {
@@ -1470,7 +1470,7 @@ using NPOI.POIFS.FileSystem;
          * People are all getting confused about the last
          *  row and cell number
          */
-        [TestMethod]
+        [Test]
         public void Test30635()
         {
             HSSFWorkbook wb = new HSSFWorkbook();
@@ -1520,7 +1520,7 @@ using NPOI.POIFS.FileSystem;
         /**
          * Data Tables - ptg 0x2
          */
-        [TestMethod]
+        [Test]
         public void Test44958()
         {
             HSSFWorkbook wb = OpenSample("44958.xls");
@@ -1553,7 +1553,7 @@ using NPOI.POIFS.FileSystem;
         /**
          * 45322: Sheet.autoSizeColumn Assert.Fails when style.GetDataFormat() returns -1
          */
-        [TestMethod]
+        [Test]
         public void Test45322()
         {
             HSSFWorkbook wb = OpenSample("44958.xls");
@@ -1565,7 +1565,7 @@ using NPOI.POIFS.FileSystem;
          * We used to Add too many UncalcRecords to sheets
          *  with diagrams on. Don't any more
          */
-        [TestMethod]
+        [Test]
         public void Test45414()
         {
             HSSFWorkbook wb = OpenSample("WithThreeCharts.xls");
@@ -1586,7 +1586,7 @@ using NPOI.POIFS.FileSystem;
         /**
          * Very hidden sheets not displaying as such
          */
-        [TestMethod]
+        [Test]
         public void Test45761()
         {
             HSSFWorkbook wb = OpenSample("45761.xls");
@@ -1615,7 +1615,7 @@ using NPOI.POIFS.FileSystem;
         ///**
         // * header / footer text too long
         // */
-        //[TestMethod]
+        //[Test]
         //public void Test45777()
         //{
         //    HSSFWorkbook wb = new HSSFWorkbook();
@@ -1686,7 +1686,7 @@ using NPOI.POIFS.FileSystem;
         /**
          * Charts with long titles
          */
-        [TestMethod]
+        [Test]
         public void Test45784()
         {
             // This used to break
@@ -1697,7 +1697,7 @@ using NPOI.POIFS.FileSystem;
         /**
           * Cell background colours
           */
-        [TestMethod]
+        [Test]
         public void Test45492()
         {
             HSSFWorkbook wb = OpenSample("45492.xls");
@@ -1734,7 +1734,7 @@ using NPOI.POIFS.FileSystem;
         /**
  * ContinueRecord after EOF
  */
-        [TestMethod]
+        [Test]
         public void Test46137()
         {
             // This used to break
@@ -1749,7 +1749,7 @@ using NPOI.POIFS.FileSystem;
          * Also ensure that print setup refs are
          *  by reference not value 
          */
-        [TestMethod]
+        [Test]
         public void Test46664()
         {
             HSSFWorkbook wb = new HSSFWorkbook();
@@ -1807,7 +1807,7 @@ using NPOI.POIFS.FileSystem;
          * Odd POIFS blocks issue:
          * block[ 44 ] already removed from org.apache.poi.poifs.storage.BlockListImpl.remove
          */
-        [TestMethod]
+        [Test]
         public void Test45290()
         {
             HSSFWorkbook wb = OpenSample("45290.xls");
@@ -1817,7 +1817,7 @@ using NPOI.POIFS.FileSystem;
  * In POI-2.5 user reported exception when parsing a name with a custom VBA function:
  *  =MY_VBA_FUNCTION("lskdjflsk")
  */
-        [TestMethod]
+        [Test]
         public void Test30070()
         {
             HSSFWorkbook wb = OpenSample("30070.xls"); //contains custom VBA function 'Commission'
@@ -1851,7 +1851,7 @@ using NPOI.POIFS.FileSystem;
  * Sheet1!$A$3
  *
  */
-        [TestMethod]
+        [Test]
         public void Test27364()
         {
             HSSFWorkbook wb = OpenSample("27364.xls");
@@ -1866,7 +1866,7 @@ using NPOI.POIFS.FileSystem;
          * Similar to bug#27364:
          * HSSFCell.GetCellFormula() fails with references to external workbooks
          */
-        [TestMethod]
+        [Test]
         public void Test31661()
         {
             HSSFWorkbook wb = OpenSample("31661.xls");
@@ -1878,7 +1878,7 @@ using NPOI.POIFS.FileSystem;
         /**
          * Incorrect handling of non-ISO 8859-1 characters in Windows ANSII Code Page 1252
          */
-        [TestMethod]
+        [Test]
         public void Test27394()
         {
             HSSFWorkbook wb = OpenSample("27394.xls");
@@ -1893,7 +1893,7 @@ using NPOI.POIFS.FileSystem;
         /**
          * Multiple calls of HSSFWorkbook.Write result in corrupted xls
          */
-        [TestMethod]
+        [Test]
         public void Test32191()
         {
             HSSFWorkbook wb = OpenSample("27394.xls");
@@ -1921,7 +1921,7 @@ using NPOI.POIFS.FileSystem;
          * java.io.IOException: block[ 0 ] already removed
          * (is an excel 95 file though)
          */
-        [TestMethod]
+        [Test]
         public void Test46904()
         {
             try
@@ -1941,7 +1941,7 @@ using NPOI.POIFS.FileSystem;
          * java.lang.NegativeArraySizeException reading long
          *  non-unicode data for a name record
          */
-        [TestMethod]
+        [Test]
         public void Test47034()
         {
             HSSFWorkbook wb = OpenSample("47034.xls");
@@ -1953,7 +1953,7 @@ using NPOI.POIFS.FileSystem;
          * HSSFRichTextString.Length returns negative for really long strings.
          * The Test file was created in OpenOffice 3.0 as Excel does not allow cell text longer than 32,767 characters
          */
-        [TestMethod]
+        [Test]
         public void Test46368()
         {
             HSSFWorkbook wb = OpenSample("46368.xls");
@@ -1968,7 +1968,7 @@ using NPOI.POIFS.FileSystem;
         /**
          * Short records on certain sheets with charts in them
          */
-        [TestMethod]
+        [Test]
         public void Test48180()
         {
             HSSFWorkbook wb = OpenSample("48180.xls");
@@ -1984,7 +1984,7 @@ using NPOI.POIFS.FileSystem;
         /**
          * POI 3.5 beta 7 can not read excel file contain list box (Form Control)  
          */
-        [TestMethod]
+        [Test]
         public void Test47701()
         {
             OpenSample("47701.xls");
@@ -2019,7 +2019,7 @@ using NPOI.POIFS.FileSystem;
         /// <summary>
         /// http://npoi.codeplex.com/WorkItem/View.aspx?WorkItemId=5010
         /// </summary>
-        [TestMethod]
+        [Test]
         public void TestNPOIBug5010()
         {
             try
@@ -2030,14 +2030,14 @@ using NPOI.POIFS.FileSystem;
             {
                 if (e.Message.Contains("Unable to construct record instance"))
                 {
-                    throw new AssertFailedException("identified NPOI bug 5010");
+                    throw new AssertionException("identified NPOI bug 5010");
                 }
             }
         }
         /// <summary>
         /// http://npoi.codeplex.com/WorkItem/View.aspx?WorkItemId=5139
         /// </summary>
-        [TestMethod]
+        [Test]
         public void TestNPOIBug5139()
         {
             try
@@ -2048,14 +2048,14 @@ using NPOI.POIFS.FileSystem;
             {
                 if (e.Message.StartsWith("Initialisation of record 0x862"))
                 {
-                    throw new AssertFailedException("identified NPOI bug 5139");
+                    throw new AssertionException("identified NPOI bug 5139");
                 }
             }
         }
         /**
  * Vertically aligned text
  */
-        [TestMethod]
+        [Test]
         public void Test49524()
         {
             HSSFWorkbook wb = OpenSample("49524.xls");
@@ -2155,7 +2155,7 @@ using NPOI.POIFS.FileSystem;
         /**
          * Regression with the PageSettingsBlock
          */
-        [TestMethod]
+        [Test]
         public void Test49931()
         {
             HSSFWorkbook wb = OpenSample("49931.xls");
@@ -2167,7 +2167,7 @@ using NPOI.POIFS.FileSystem;
         /**
          * Missing left/right/centre options on a footer
          */
-        [TestMethod]
+        [Test]
         public void Test48325()
         {
             HSSFWorkbook wb = OpenSample("48325.xls");
@@ -2186,13 +2186,13 @@ using NPOI.POIFS.FileSystem;
         /**
          * IllegalStateException received when creating Data validation in sheet with macro
          */
-        [TestMethod]
+        [Test]
         public void Test50020()
         {
             HSSFWorkbook wb = OpenSample("50020.xls");
             WriteOutAndReadBack(wb);
         }
-        [TestMethod]
+        [Test]
         public void TestAutoSize_bug50681()
         {
             IWorkbook wb = new HSSFWorkbook();
@@ -2217,7 +2217,7 @@ using NPOI.POIFS.FileSystem;
  * Mixture of Ascii and Unicode strings in a 
  *  NameComment record
  */
-        [TestMethod]
+        [Test]
         public void Test51143()
         {
             HSSFWorkbook wb = OpenSample("51143.xls");
@@ -2231,7 +2231,7 @@ using NPOI.POIFS.FileSystem;
      * record was 256 bytes.  This assumption appears to be wrong.  Since the fix for bug 47244,
      * POI now supports header / footer text lengths beyond 256 bytes.
      */
-        [TestMethod]
+        [Test]
         public void Test45777()
         {
             HSSFWorkbook wb = new HSSFWorkbook();
@@ -2265,7 +2265,7 @@ using NPOI.POIFS.FileSystem;
             }
             catch (ArgumentException)
             {
-                throw new AssertFailedException("Identified bug 47244b - header can be more than 256 bytes");
+                throw new AssertionException("Identified bug 47244b - header can be more than 256 bytes");
             }
 
             try
@@ -2274,7 +2274,7 @@ using NPOI.POIFS.FileSystem;
             }
             catch (ArgumentException)
             {
-                throw new AssertFailedException("Identified bug 47244b - header can be more than 256 bytes");
+                throw new AssertionException("Identified bug 47244b - header can be more than 256 bytes");
             }
 
             // Now try on footers
@@ -2292,7 +2292,7 @@ using NPOI.POIFS.FileSystem;
             }
             catch (ArgumentException)
             {
-                throw new AssertFailedException("Identified bug 47244b - footer can be more than 256 bytes");
+                throw new AssertionException("Identified bug 47244b - footer can be more than 256 bytes");
             }
 
             try
@@ -2301,14 +2301,14 @@ using NPOI.POIFS.FileSystem;
             }
             catch (ArgumentException)
             {
-                throw new AssertFailedException("Identified bug 47244b - footer can be more than 256 bytes");
+                throw new AssertionException("Identified bug 47244b - footer can be more than 256 bytes");
             }
         }
         /**
      * Problems with formula references to 
      *  sheets via URLs
      */
-        [TestMethod]
+        [Test]
         public void Test45970()
         {
             HSSFWorkbook wb = OpenSample("FormulaRefs.xls");
@@ -2391,7 +2391,7 @@ using NPOI.POIFS.FileSystem;
             }
 #endif
         }
-        [TestMethod]
+        [Test]
         public void Test47251()
         {
             OpenSample("47251.xls");
@@ -2399,7 +2399,7 @@ using NPOI.POIFS.FileSystem;
         /**
      * Round trip a file with an unusual UnicodeString/ExtRst record parts
      */
-        [TestMethod]
+        [Test]
         public void Test47847()
         {
             HSSFWorkbook wb = OpenSample("47847.xls");
@@ -2432,12 +2432,12 @@ using NPOI.POIFS.FileSystem;
             Assert.AreEqual("RT", withoutExt.String);
             Assert.IsTrue((withoutExt.OptionFlags & 0x0004) == 0x0000);
         }
-        [TestMethod]
+        [Test]
         public void Test48026()
         {
             OpenSample("48026.xls");
         }
-        [TestMethod]
+        [Test]
         public void Test48968()
         {
             HSSFWorkbook wb = OpenSample("48968.xls");
@@ -2489,7 +2489,7 @@ using NPOI.POIFS.FileSystem;
         * Problem with cloning a sheet with a chart
         *  contained in it.
         */
-        [TestMethod]
+        [Test]
         public void Test49096()
         {
             HSSFWorkbook wb = OpenSample("49096.xls");
@@ -2503,7 +2503,7 @@ using NPOI.POIFS.FileSystem;
             Assert.AreEqual(2, wb.NumberOfSheets);
         }
         
-        [TestMethod]
+        [Test]
         public void Test49219()
         {
             HSSFWorkbook wb = OpenSample("49219.xls");
@@ -2513,7 +2513,7 @@ using NPOI.POIFS.FileSystem;
         /**
          * Setting the user style name on custom styles
          */
-        [TestMethod]
+        [Test]
         public void Test49689()
         {
             HSSFWorkbook wb = new HSSFWorkbook();
@@ -2545,7 +2545,7 @@ using NPOI.POIFS.FileSystem;
             Assert.AreEqual("Testing 2", ((HSSFCellStyle)wb.GetCellStyleAt((short)22)).UserStyleName);
             Assert.AreEqual("Testing 3", ((HSSFCellStyle)wb.GetCellStyleAt((short)23)).UserStyleName);
         }
-        [TestMethod]
+        [Test]
         public void Test49751()
         {
             HSSFWorkbook wb = OpenSample("49751.xls");
@@ -2576,7 +2576,7 @@ using NPOI.POIFS.FileSystem;
         /**
         * Last row number when shifting rows
         */
-        [TestMethod]
+        [Test]
         public void Test50416LastRowNumber()
         {
             // Create the workbook with 1 sheet which contains 3 rows
@@ -2628,7 +2628,7 @@ using NPOI.POIFS.FileSystem;
             Assert.AreEqual("Cell A,1", sheet.GetRow(1).GetCell(0).StringCellValue);
             Assert.AreEqual("Cell A,3", sheet.GetRow(2).GetCell(0).StringCellValue);
         }
-        [TestMethod]
+        [Test]
         public void Test50426()
         {
             HSSFWorkbook wb = OpenSample("50426.xls");
@@ -2638,7 +2638,7 @@ using NPOI.POIFS.FileSystem;
          * If you send a file between Excel and OpenOffice enough, something
          *  will turn the "General" format into "GENERAL"
          */
-        [TestMethod]
+        [Test]
         public void Test50756()
         {
             HSSFWorkbook wb = OpenSample("50756.xls");
@@ -2681,7 +2681,7 @@ using NPOI.POIFS.FileSystem;
          * TODO Identify the cause and add extra asserts for
          *  the bit excel cares about
          */
-        [TestMethod]
+        [Test]
         public void Test50833()
         {
             HSSFWorkbook wb = OpenSample("50833.xls");
@@ -2714,7 +2714,7 @@ using NPOI.POIFS.FileSystem;
          * The spec says that ChartEndObjectRecord has 6 reserved
          *  bytes on the end, but we sometimes find files without... 
          */
-        [TestMethod]
+        [Test]
         public void Test50939()
         {
             HSSFWorkbook wb = OpenSample("50939.xls");
@@ -2723,7 +2723,7 @@ using NPOI.POIFS.FileSystem;
         /**
          * HLookup and VLookup with optional arguments 
          */
-        [TestMethod]
+        [Test]
         public void Test51024()
         {
             HSSFWorkbook wb = new HSSFWorkbook();
@@ -2762,7 +2762,7 @@ using NPOI.POIFS.FileSystem;
          * File with exactly 256 data blocks (+header block)
          *  shouldn't break on POIFS loading 
          */
-        [TestMethod]
+        [Test]
         public void Test51461()
         {
             byte[] data = HSSFITestDataProvider.Instance.GetTestDataFileContent("51461.xls");
@@ -2778,7 +2778,7 @@ using NPOI.POIFS.FileSystem;
         /**
         * Large row numbers and NPOIFS vs POIFS
         */
-        [TestMethod]
+        [Test]
         public void Test51535()
         {
             byte[] data = HSSFITestDataProvider.Instance.GetTestDataFileContent("51535.xls");

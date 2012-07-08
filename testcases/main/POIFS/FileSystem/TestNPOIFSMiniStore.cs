@@ -19,7 +19,7 @@ using System;
 using System.IO;
 using System.Collections;
 
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 using NPOI.POIFS.Common;
 using TestCases;
@@ -33,7 +33,7 @@ namespace TestCases.POIFS.FileSystem
     /// <summary>
     /// Summary description for TestNPOIFSMiniStore
     /// </summary>
-    [TestClass]
+    [TestFixture]
     public class TestNPOIFSMiniStore
     {
         private static POIDataSamples _inst = POIDataSamples.GetPOIFSInstance();
@@ -45,7 +45,7 @@ namespace TestCases.POIFS.FileSystem
             //
         }
 
-        [TestMethod]
+        [Test]
         public void TestNextBlock()
         {
             // It's the same on 512 byte and 4096 byte block files!
@@ -127,7 +127,7 @@ namespace TestCases.POIFS.FileSystem
         }
 
 
-        [TestMethod]
+        [Test]
         public void TestGetBlock()
         {
             // It's the same on 512 byte and 4096 byte block files!
@@ -193,7 +193,7 @@ namespace TestCases.POIFS.FileSystem
             }
         }
 
-        [TestMethod]
+        [Test]
         public void TestGetFreeBlockWithSpare()
         {
             NPOIFSFileSystem fs = new NPOIFSFileSystem(_inst.GetFile("BlockSize512.zvi"));
@@ -220,7 +220,7 @@ namespace TestCases.POIFS.FileSystem
             Assert.AreEqual(182, ministore.GetFreeBlock());
         }
 
-        [TestMethod]
+        [Test]
         public void TestGetFreeBlockWithNonSpare()
         {
             NPOIFSFileSystem fs = new NPOIFSFileSystem(_inst.OpenResourceAsStream("BlockSize512.zvi"));
@@ -264,7 +264,7 @@ namespace TestCases.POIFS.FileSystem
             Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, ministore.GetNextBlock(257)); // 3rd SBAT
         }
 
-        [TestMethod]
+        [Test]
         public void TestCreateBlockIfNeeded()
         {
             NPOIFSFileSystem fs = new NPOIFSFileSystem(_inst.OpenResourceAsStream("BlockSize512.zvi"));

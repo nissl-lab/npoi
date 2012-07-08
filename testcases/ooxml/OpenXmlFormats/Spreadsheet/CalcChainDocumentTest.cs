@@ -1,5 +1,5 @@
 ﻿using System.IO;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using NPOI.OpenXmlFormats.Spreadsheet;
 
 namespace ooxml.Testcases
@@ -7,7 +7,7 @@ namespace ooxml.Testcases
     /// <summary>
     ///This is a test class for serialization and deserialization of the CT_CalcChain and CT_CalcCell.
     ///</summary>
-    [TestClass()]
+    [TestFixture]
     public class CalcChainDocumentTest
     {
         private TestContext testContextInstance;
@@ -62,7 +62,7 @@ namespace ooxml.Testcases
         /// <summary>
         ///A test for the Serialization of CT_CalcChain.
         ///</summary>
-        [TestMethod()]
+        [Test]
         public void SerializeCalcChainDocumentTest()
         {
             var calcChain = new CT_CalcChain();
@@ -100,7 +100,7 @@ namespace ooxml.Testcases
         /// <summary>
         ///A test for Deserialize
         ///</summary>
-        [TestMethod()]
+        [Test]
         public void DeserializeCalcChainDocumentTest()
         {
             // The following input is the excerpt of the Excel file (49966.xlsx).

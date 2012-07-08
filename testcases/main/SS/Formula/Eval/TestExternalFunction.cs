@@ -19,7 +19,7 @@ namespace TestCases.SS.Formula.Eval
 {
 
     using System;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.HSSF.UserModel;
     using NPOI.SS.Formula;
     using NPOI.SS.Formula.Eval;
@@ -32,7 +32,7 @@ namespace TestCases.SS.Formula.Eval
      * @author Josh Micich
      * @author Petr Udalau - registering UDFs in workbook and using ToolPacks.
      */
-    [TestClass]
+    [TestFixture]
     public class TestExternalFunction
     {
 
@@ -76,7 +76,7 @@ namespace TestCases.SS.Formula.Eval
          * Checks that an external function can Get invoked from the formula
          * Evaluator.
          */
-        [TestMethod]
+        [Test]
         public void TestInvoke()
         {
             HSSFWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("testNames.xls");

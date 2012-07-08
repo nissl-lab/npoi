@@ -26,11 +26,11 @@ namespace TestCases.HSSF.Extractor
     using TestCases.HSSF;
 
 
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
 using NPOI.HSSF.Record.Crypto;
 
 
-    [TestClass]
+    [TestFixture]
     public class TestExcelExtractor
     {
 
@@ -49,7 +49,7 @@ using NPOI.HSSF.Record.Crypto;
             }
         }
 
-        [TestMethod]
+        [Test]
         public void TestSimple()
         {
 
@@ -61,7 +61,7 @@ using NPOI.HSSF.Record.Crypto;
             extractor.IncludeSheetNames=false;
             Assert.AreEqual("replaceMe\n", extractor.Text);
         }
-        [TestMethod]
+        [Test]
         public void TestNumericFormula()
         {
 
@@ -92,7 +92,7 @@ using NPOI.HSSF.Record.Crypto;
                     extractor.Text
             );
         }
-        [TestMethod]
+        [Test]
         public void TestwithContinueRecords()
         {
 
@@ -105,7 +105,7 @@ using NPOI.HSSF.Record.Crypto;
             //   failed by now
             Assert.IsTrue(extractor.Text.Length > 40960);
         }
-        [TestMethod]
+        [Test]
         public void TestStringConcat()
         {
 
@@ -119,7 +119,7 @@ using NPOI.HSSF.Record.Crypto;
 
             Assert.AreEqual("Sheet1\nreplaceme\nreplaceme\nCONCATENATE(A1,A2)\nSheet2\nSheet3\n", extractor.Text);
         }
-        [TestMethod]
+        [Test]
         public void TestStringFormula()
         {
 
@@ -134,7 +134,7 @@ using NPOI.HSSF.Record.Crypto;
             Assert.AreEqual("Sheet1\nUPPER(\"xyz\")\nSheet2\nSheet3\n", extractor.Text);
         }
 
-        [TestMethod]
+        [Test]
         public void TestEventExtractor()
         {
             EventBasedExcelExtractor extractor;
@@ -177,7 +177,7 @@ using NPOI.HSSF.Record.Crypto;
                     text
             );
         }
-        [TestMethod]
+        [Test]
         public void TestWithComments()
         {
             ExcelExtractor extractor = CreateExtractor("SimpleWithComments.xls");
@@ -200,7 +200,7 @@ using NPOI.HSSF.Record.Crypto;
                     extractor.Text
             );
         }
-        [TestMethod]
+        [Test]
         public void TestWithBlank()
         {
             ExcelExtractor extractor = CreateExtractor("MissingBits.xls");
@@ -222,7 +222,7 @@ using NPOI.HSSF.Record.Crypto;
                 "11\t\t\t23\n"
             ));
         }
-        [TestMethod]
+        [Test]
         public void TestFormatting()
         {
             ExcelExtractor extractor = CreateExtractor("Formatting.xls");
@@ -273,7 +273,7 @@ using NPOI.HSSF.Record.Crypto;
         /**
          * Embded in a non-excel file
          */
-        [TestMethod]
+        [Test]
         public void TestWithEmbeded()
         {
             POIFSFileSystem fs = new POIFSFileSystem(
@@ -302,7 +302,7 @@ using NPOI.HSSF.Record.Crypto;
         /**
          * Excel embeded in excel
          */
-        [TestMethod]
+        [Test]
         public void TestWithEmbededInOwn()
         {
             POIFSFileSystem fs = new POIFSFileSystem(
@@ -336,7 +336,7 @@ using NPOI.HSSF.Record.Crypto;
         /**
          * Test that we get text from headers and footers
          */
-        [TestMethod]
+        [Test]
         public void Test45538()
         {
             String[] files = {
@@ -351,7 +351,7 @@ using NPOI.HSSF.Record.Crypto;
                 Assert.IsTrue(text.IndexOf("test phrase") >= 0, "Unable to find expected word in text\n" + text);
             }
         }
-        [TestMethod]
+        [Test]
         public void TestPassword()
         {
             Biff8EncryptionKey.CurrentUserPassword = ("password");

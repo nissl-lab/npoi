@@ -24,10 +24,10 @@ namespace TestCases.DDF
     using System.Collections.Generic;
     using System.IO;
 
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.DDF;
     using NPOI.Util;
-    [TestClass]
+    [TestFixture]
     public class TestEscherBlipWMFRecord
     {
         private String dataStr;
@@ -41,7 +41,7 @@ namespace TestCases.DDF
                             "0B 00 00 00 05 00 00 00 08 07 01 02";
             data = HexRead.ReadFromString(dataStr);
         }
-        [TestMethod]
+        [Test]
         public void TestSerialize()
         {
             EscherBlipWMFRecord r = new EscherBlipWMFRecord();
@@ -83,7 +83,7 @@ namespace TestCases.DDF
             Assert.AreEqual(60, r.RecordSize);
 
         }
-        [TestMethod]
+        [Test]
         public void TestFillFields()
         {
             EscherBlipWMFRecord r = new EscherBlipWMFRecord();
@@ -104,7 +104,7 @@ namespace TestCases.DDF
             Assert.AreEqual((short)5420, r.Options);
             Assert.AreEqual("[01, 02, ]", HexDump.ToHex(r.Data));
         }
-        [TestMethod]
+        [Test]
         public void TestToString()
         {
             EscherBlipWMFRecord r = new EscherBlipWMFRecord();

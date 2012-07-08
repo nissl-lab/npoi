@@ -15,14 +15,14 @@
    limitations under the License.
 ==================================================================== */
 
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 namespace NPOI.XSSF.Util
 {
 
-    [TestClass]
+    [TestFixture]
     public class TestNumericRanges
     {
-        [TestMethod]
+        [Test]
         public void TestGetOverlappingType()
         {
             long[] r1 = { 3, 8 };
@@ -37,7 +37,7 @@ namespace NPOI.XSSF.Util
             Assert.AreEqual(NumericRanges.OVERLAPS_1_WRAPS, NumericRanges.GetOverlappingType(r1, r5));
             Assert.AreEqual(NumericRanges.NO_OVERLAPS, NumericRanges.GetOverlappingType(r1, r6));
         }
-        [TestMethod]
+        [Test]
         public void TestGetOverlappingRange()
         {
             long[] r1 = { 3, 8 };

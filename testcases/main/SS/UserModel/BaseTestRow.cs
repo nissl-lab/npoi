@@ -21,7 +21,7 @@ namespace TestCases.SS.UserModel
 
 
 
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
 
     using NPOI.SS;
     using System.Collections;
@@ -32,7 +32,7 @@ namespace TestCases.SS.UserModel
      * A base class for Testing implementations of
      * {@link NPOI.SS.UserModel.Row}
      */
-    [TestClass]
+    [TestFixture]
     public class BaseTestRow
     {
 
@@ -44,7 +44,7 @@ namespace TestCases.SS.UserModel
         {
             _testDataProvider = TestDataProvider;
         }
-        [TestMethod]
+        [Test]
         public void TestLastAndFirstColumns()
         {
             IWorkbook workbook = _testDataProvider.CreateWorkbook();
@@ -74,7 +74,7 @@ namespace TestCases.SS.UserModel
          * Make sure that there is no cross-talk between rows especially with GetFirstCellNum and GetLastCellNum
          * This Test was Added in response to bug report 44987.
          */
-        [TestMethod]
+        [Test]
         public void TestBoundsInMultipleRows()
         {
             IWorkbook workbook = _testDataProvider.CreateWorkbook();
@@ -99,7 +99,7 @@ namespace TestCases.SS.UserModel
 
             Assert.AreEqual(31, rowB.LastCellNum);
         }
-        [TestMethod]
+        [Test]
         public void TestRemoveCell()
         {
             IWorkbook workbook = _testDataProvider.CreateWorkbook();
@@ -216,7 +216,7 @@ namespace TestCases.SS.UserModel
          * Prior to patch 43901, POI was producing files with the wrong last-column
          * number on the row
          */
-        [TestMethod]
+        [Test]
         public void TestLastCellNumIsCorrectAfterAddCell_bug43901()
         {
             IWorkbook workbook = _testDataProvider.CreateWorkbook();
@@ -241,7 +241,7 @@ namespace TestCases.SS.UserModel
         /**
          * Tests for the missing/blank cell policy stuff
          */
-        [TestMethod]
+        [Test]
         public void TestGetCellPolicy()
         {
             IWorkbook workbook = _testDataProvider.CreateWorkbook();
@@ -311,7 +311,7 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual(null, row.GetCell(4));
             Assert.AreEqual(CellType.NUMERIC, row.GetCell(5).CellType);
         }
-        [TestMethod]
+        [Test]
         public void TestRowHeight()
         {
             IWorkbook workbook = _testDataProvider.CreateWorkbook();
@@ -365,7 +365,7 @@ namespace TestCases.SS.UserModel
         /**
          * Test Adding cells to a row in various places and see if we can find them again.
          */
-        [TestMethod]
+        [Test]
         public void TestCellIterator()
         {
             IWorkbook wb = _testDataProvider.CreateWorkbook();
@@ -422,7 +422,7 @@ namespace TestCases.SS.UserModel
             Assert.IsTrue(cell2 == it.Current);
             Assert.AreEqual(CellType.STRING, cell5.CellType);
         }
-        [TestMethod]
+        [Test]
         public void TestRowStyle()
         {
             IWorkbook workbook = _testDataProvider.CreateWorkbook();

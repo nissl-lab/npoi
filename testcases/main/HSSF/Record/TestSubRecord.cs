@@ -19,7 +19,7 @@
 namespace TestCases.HSSF.Record
 {
     using System;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
 
     using NPOI.Util;
     using TestCases.HSSF.Record;
@@ -31,7 +31,7 @@ namespace TestCases.HSSF.Record
      *
      * @author Michael Zalewski (zalewski@optonline.net)
      */
-    [TestClass]
+    [TestFixture]
     public class TestSubRecord
     {
         /*
@@ -73,7 +73,7 @@ namespace TestCases.HSSF.Record
          * At the time of fixing (Oct-2008 svn r707447) {@link RecordInputStream} allowed  buffer 
          * read overRuns, so the bug was mostly silent.
          */
-        [TestMethod]
+        [Test]
         public void TestReadAll_bug45778()
         {
             RecordInputStream in1 = TestcaseRecordInputStream.Create(dataAutoFilter);
@@ -81,12 +81,12 @@ namespace TestCases.HSSF.Record
             byte[] data2 = or.Serialize();
             if (data2.Length == 8228)
             {
-                throw new AssertFailedException("Identified bug 45778");
+                throw new AssertionException("Identified bug 45778");
             }
             Assert.AreEqual(74, data2.Length);
             Assert.IsTrue(Arrays.Equals(dataAutoFilter, data2));
         }
-        [TestMethod]
+        [Test]
         public void TestReadManualComboWithFormula()
         {
             byte[] data = HexRead.ReadFromString(""
@@ -105,14 +105,14 @@ namespace TestCases.HSSF.Record
             byte[] data2 = or.Serialize();
             if (data2.Length == 8228)
             {
-                throw new AssertFailedException("Identified bug 45778");
+                throw new AssertionException("Identified bug 45778");
             }
             Assert.AreEqual(data.Length, data2.Length, "Encoded length");
             for (int i = 0; i < data.Length; i++)
             {
                 if (data[i] != data2[i])
                 {
-                    throw new AssertFailedException("Encoded data differs at index " + i);
+                    throw new AssertionException("Encoded data differs at index " + i);
                 }
             }
             Assert.IsTrue(Arrays.Equals(data, data2));
@@ -131,7 +131,7 @@ namespace TestCases.HSSF.Record
          * Excel Reads files with this excessive pAdding OK.  It also tRuncates the over-sized
          * ObjRecord back to the proper size.  POI should do the same.
          */
-        [TestMethod]
+        [Test]
         public void TestWayTooMuchPAdding_bug46545()
         {
             byte[] data = HexRead.ReadFromString(""
@@ -163,7 +163,7 @@ namespace TestCases.HSSF.Record
             {
                 if (e.Message.StartsWith("Leftover 8154 bytes in subrecord data"))
                 {
-                    throw new AssertFailedException("Identified bug 46545");
+                    throw new AssertionException("Identified bug 46545");
                 }
                 throw e;
             }

@@ -22,13 +22,13 @@ namespace TestCases.HSSF.Util
 
     using System;
     using NPOI.HSSF.Util;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
 
     /**
      * Tests the Range Address Utility Functionality
      * @author Danny Mui (danny at muibros.com)
      */
-    [TestClass]
+    [TestFixture]
     public class TestRangeAddress
     {
         public TestRangeAddress()
@@ -36,7 +36,7 @@ namespace TestCases.HSSF.Util
 
         }
 
-        [TestMethod]
+        [Test]
         public void TestReferenceParse()
         {
             String reference = "Sheet2!$A$1:$C$3";

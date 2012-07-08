@@ -19,7 +19,7 @@ namespace TestCases.SS.UserModel
 {
     using System;
 
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.SS;
     using NPOI.SS.Util;
     using NPOI.SS.UserModel;
@@ -34,7 +34,7 @@ namespace TestCases.SS.UserModel
      *
      * @author Yegor Kozlov
      */
-    [TestClass]
+    [TestFixture]
     public class BaseTestSheetAutosizeColumn
     {
 
@@ -67,7 +67,7 @@ namespace TestCases.SS.UserModel
             }
         }
     }
-        [TestMethod]
+        [Test]
         public void TestNumericCells()
         {
             System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.GetCultureInfo("en-US");
@@ -109,7 +109,7 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual(sheet.GetColumnWidth(2), sheet.GetColumnWidth(3)); // columns 1, 2 and 3 should have the same width
             Assert.AreEqual(sheet.GetColumnWidth(4), sheet.GetColumnWidth(5)); // 10.0000 and '10.0000'
         }
-        [TestMethod]
+        [Test]
         public void TestBooleanCells()
         {
             IWorkbook workbook = _testDataProvider.CreateWorkbook();
@@ -137,7 +137,7 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual(sheet.GetColumnWidth(1), sheet.GetColumnWidth(2));  // columns 1, 2 and 3 should have the same width
             Assert.AreEqual(sheet.GetColumnWidth(2), sheet.GetColumnWidth(3));  // columns 1, 2 and 3 should have the same width
         }
-        [TestMethod]
+        [Test]
         public void TestDateCells()
         {
             IWorkbook workbook = _testDataProvider.CreateWorkbook();
@@ -203,7 +203,7 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual(sheet.GetColumnWidth(6), sheet.GetColumnWidth(5)); // date formatted as 'mmm/dd/yyyy'
             Assert.AreEqual(sheet.GetColumnWidth(4), sheet.GetColumnWidth(7)); // date formula formatted as 'mmm'
         }
-        [TestMethod]
+        [Test]
         public void TestStringCells()
         {
             IWorkbook workbook = _testDataProvider.CreateWorkbook();
@@ -234,7 +234,7 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual(sheet.GetColumnWidth(4), sheet.GetColumnWidth(3));
             Assert.IsTrue(sheet.GetColumnWidth(5) > sheet.GetColumnWidth(4)); //larger font results in a wider column width
         }
-        [TestMethod]
+        [Test]
         public void TestRotatedText()
         {
             IWorkbook workbook = _testDataProvider.CreateWorkbook();
@@ -258,7 +258,7 @@ namespace TestCases.SS.UserModel
 
             Assert.IsTrue(w0 * 5 < w1); // rotated text occupies at least five times less horizontal space than normal text
         }
-        [TestMethod]
+        [Test]
         public void TestMergedCells()
         {
             IWorkbook workbook = _testDataProvider.CreateWorkbook();
@@ -284,7 +284,7 @@ namespace TestCases.SS.UserModel
          * Auto-Sizing a column needs to work when we have rows
          *  passed the 32767 boundary. See bug #48079
          */
-        [TestMethod]
+        [Test]
         public void TestLargeRowNumbers()
         {
             IWorkbook workbook = _testDataProvider.CreateWorkbook();

@@ -19,13 +19,13 @@ namespace TestCases.SS.Format
     using System;
 
     using NPOI.SS.Format;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using System.Windows.Forms;
 
-    [TestClass]
+    [TestFixture]
     public class TestCellFormat
     {
-        [TestMethod]
+        [Test]
         public void TestSome()
         {
             Label l = new Label();

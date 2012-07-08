@@ -20,14 +20,14 @@ namespace TestCases.SS.Formula.Functions
 
     using NPOI.SS.Formula.Eval;
     using NPOI.SS.Formula.Functions;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using System;
     /**
      * Tests for Excel functions SUMX2MY2(), SUMX2PY2(), SUMXMY2()
      *
      * @author Josh Micich
      */
-    [TestClass]
+    [TestFixture]
     public class TestXYNumericFunction
     {
         private static Function SUM_SQUARES = new Sumx2py2();
@@ -59,7 +59,7 @@ namespace TestCases.SS.Formula.Functions
             ConfirmError(DIFF_SQUARES, xArray, yArray, expectedError);
             ConfirmError(SUM_SQUARES_OF_DIFFS, xArray, yArray, expectedError);
         }
-        [TestMethod]
+        [Test]
         public void TestBasic()
         {
             ValueEval[] xValues = {
@@ -84,7 +84,7 @@ namespace TestCases.SS.Formula.Functions
         /**
          * number of items in array is not limited to 30
          */
-        [TestMethod]
+        [Test]
         public void TestLargeArrays()
         {
             ValueEval[] xValues = CreateMockNumberArray(100, 3);
@@ -111,7 +111,7 @@ namespace TestCases.SS.Formula.Functions
             String refStr = "A1:A" + values.Length;
             return EvalFactory.CreateAreaEval(refStr, values);
         }
-        [TestMethod]
+        [Test]
         public void TestErrors()
         {
             ValueEval[] xValues = {

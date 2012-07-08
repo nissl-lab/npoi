@@ -16,7 +16,7 @@
 ==================================================================== */
 
 using NPOI.XSSF.UserModel;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using NPOI.XSSF.UserModel.Helpers;
 using NPOI.OpenXmlFormats.Spreadsheet;
 using NPOI.SS.UserModel;
@@ -30,7 +30,7 @@ using NPOI.HSSF.Record;
 using TestCases.SS.UserModel;
 namespace NPOI.XSSF.UserModel
 {
-    [TestClass]
+    [TestFixture]
     public class TestXSSFSheet : BaseTestSheet
     {
 
@@ -46,12 +46,12 @@ namespace NPOI.XSSF.UserModel
         {
             //super.testDefaultColumnStyle();
         }
-        [TestMethod]
+        [Test]
         public void TestTestGetSetMargin()
         {
             BaseTestGetSetMargin(new double[] { 0.7, 0.7, 0.75, 0.75, 0.3, 0.3 });
         }
-        [TestMethod]
+        [Test]
         public void TestExistingHeaderFooter()
         {
             XSSFWorkbook workbook = XSSFTestDataSamples.OpenSampleWorkbook("45540_classic_Header.xlsx");
@@ -108,7 +108,7 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual("", ftr.Center);
             Assert.AreEqual("", ftr.Right);
         }
-        [TestMethod]
+        [Test]
         public void TestGetAllHeadersFooters()
         {
             XSSFWorkbook workbook = new XSSFWorkbook();
@@ -148,7 +148,7 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual("odd footer left", sheet.Footer.Left);
             Assert.AreEqual("odd header center", sheet.Header.Center);
         }
-        [TestMethod]
+        [Test]
         public void TestAutoSizeColumn()
         {
             XSSFWorkbook workbook = new XSSFWorkbook();
@@ -165,7 +165,7 @@ namespace NPOI.XSSF.UserModel
         /**
          * XSSFSheet autoSizeColumn() on empty RichTextString fails
          */
-        [TestMethod]
+        [Test]
         public void Test48325()
         {
             XSSFWorkbook wb = new XSSFWorkbook();
@@ -182,7 +182,7 @@ namespace NPOI.XSSF.UserModel
 
             sheet.AutoSizeColumn(0);
         }
-        [TestMethod]
+        [Test]
         public void TestGetCellComment()
         {
             XSSFWorkbook workbook = new XSSFWorkbook();
@@ -196,7 +196,7 @@ namespace NPOI.XSSF.UserModel
             Assert.IsNotNull(sheet.GetCellComment(9, 2));
             Assert.AreEqual("test C10 author", sheet.GetCellComment(9, 2).Author);
         }
-        [TestMethod]
+        [Test]
         public void TestSetCellComment()
         {
             XSSFWorkbook workbook = new XSSFWorkbook();
@@ -214,7 +214,7 @@ namespace NPOI.XSSF.UserModel
             comment.Author = ("test A1 author");
             Assert.AreEqual("test A1 author", comments.GetAuthor((int)ctComments.commentList.GetCommentArray(0).authorId));
         }
-        [TestMethod]
+        [Test]
         public void TestGetActiveCell()
         {
             XSSFWorkbook workbook = new XSSFWorkbook();
@@ -224,7 +224,7 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual("R5", sheet.GetActiveCell());
 
         }
-        [TestMethod]
+        [Test]
         public void TestCreateFreezePane_XSSF()
         {
             XSSFWorkbook workbook = new XSSFWorkbook();
@@ -242,7 +242,7 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual(8.0, ctWorksheet.sheetViews.GetSheetViewArray(0).pane.ySplit);
             Assert.AreEqual(ST_Pane.bottomRight, ctWorksheet.sheetViews.GetSheetViewArray(0).pane.activePane);
         }
-        [TestMethod]
+        [Test]
         public void TestNewMergedRegionAt()
         {
             XSSFWorkbook workbook = new XSSFWorkbook();
@@ -252,7 +252,7 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual("B2:D4", sheet.GetMergedRegion(0).FormatAsString());
             Assert.AreEqual(1, sheet.NumMergedRegions);
         }
-        [TestMethod]
+        [Test]
         public void TestRemoveMergedRegion_lowlevel()
         {
             XSSFWorkbook workbook = new XSSFWorkbook();
@@ -275,7 +275,7 @@ namespace NPOI.XSSF.UserModel
             Assert.IsNull(sheet.GetCTWorksheet().mergeCells, " CTMergeCells should be deleted After removing the last merged " +
                     "region on the sheet.");
         }
-        [TestMethod]
+        [Test]
         public void TestSetDefaultColumnStyle()
         {
             XSSFWorkbook workbook = new XSSFWorkbook();
@@ -301,7 +301,7 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual(1u, ctWorksheet.GetColsArray(0).GetColArray(0).style);
         }
 
-        [TestMethod]
+        [Test]
         public void TestGroupUngroupColumn()
         {
             XSSFWorkbook workbook = new XSSFWorkbook();
@@ -345,7 +345,7 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual(2, sheet.GetCTWorksheet().sheetFormatPr.outlineLevelCol);
         }
 
-        [TestMethod]
+        [Test]
         public void TestGroupUngroupRow()
         {
             XSSFWorkbook workbook = new XSSFWorkbook();
@@ -380,7 +380,7 @@ namespace NPOI.XSSF.UserModel
 
             Assert.AreEqual(1, sheet.GetCTWorksheet().sheetFormatPr.outlineLevelRow);
         }
-        [TestMethod]
+        [Test]
         public void TestSetZoom()
         {
             XSSFWorkbook workBook = new XSSFWorkbook();
@@ -410,7 +410,7 @@ namespace NPOI.XSSF.UserModel
          *  be doing... Someone who understands the goals a little
          *  better should really review this!
          */
-        [TestMethod]
+        [Test]
         public void TestSetColumnGroupCollapsed()
         {
             IWorkbook wb = new XSSFWorkbook();
@@ -642,7 +642,7 @@ namespace NPOI.XSSF.UserModel
          *  be doing... Someone who understands the goals a little
          *  better should really review this!
          */
-        [TestMethod]
+        [Test]
         public void TestSetRowGroupCollapsed()
         {
             IWorkbook wb = new XSSFWorkbook();
@@ -720,7 +720,7 @@ namespace NPOI.XSSF.UserModel
         /**
          * Get / Set column width and check the actual values of the underlying XML beans
          */
-        [TestMethod]
+        [Test]
         public void TestColumnWidth_lowlevel()
         {
             XSSFWorkbook workbook = new XSSFWorkbook();
@@ -769,7 +769,7 @@ namespace NPOI.XSSF.UserModel
         /**
          * Setting width of a column included in a column span
          */
-        [TestMethod]
+        [Test]
         public void Test47862()
         {
             XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("47862.xlsx");
@@ -831,7 +831,7 @@ namespace NPOI.XSSF.UserModel
         /**
          * Hiding a column included in a column span
          */
-        [TestMethod]
+        [Test]
         public void Test47804()
         {
             XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("47804.xlsx");
@@ -899,7 +899,7 @@ namespace NPOI.XSSF.UserModel
             Assert.IsFalse(sheet.IsColumnHidden(4));
             Assert.IsFalse(sheet.IsColumnHidden(5));
         }
-        [TestMethod]
+        [Test]
         public void TestCommentsTable()
         {
             XSSFWorkbook workbook = new XSSFWorkbook();
@@ -940,7 +940,7 @@ namespace NPOI.XSSF.UserModel
          * Rows and cells can be Created in random order,
          * but CTRows are kept in ascending order
          */
-        [TestMethod]
+        [Test]
         public new void TestCreateRow()
         {
             XSSFWorkbook workbook = new XSSFWorkbook();
@@ -1018,7 +1018,7 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual(3u, xrow[2].r);
 
         }
-        [TestMethod]
+        [Test]
         public void TestSetAutoFilter()
         {
             XSSFWorkbook wb = new XSSFWorkbook();
@@ -1036,7 +1036,7 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual("_xlnm._FilterDatabase", nm.GetCTName().name);
             Assert.AreEqual("'new sheet'!$A$1:$D$100", nm.GetCTName().Value);
         }
-        //[TestMethod]
+        //[Test]
         //public void TestProtectSheet_lowlevel()
         //{
 
@@ -1058,7 +1058,7 @@ namespace NPOI.XSSF.UserModel
         //    Assert.IsNull(sheet.GetCTWorksheet().sheetProtection, "protectSheet(null) should unset CTSheetProtection");
         //}
 
-        [TestMethod]
+        [Test]
         public void Test49966()
         {
             XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("49966.xlsx");
@@ -1080,7 +1080,7 @@ namespace NPOI.XSSF.UserModel
         /**
          * See bug #50829
          */
-        [TestMethod]
+        [Test]
         public void TestTables()
         {
             XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("WithTable.xlsx");

@@ -20,7 +20,7 @@ namespace TestCases.HSSF.UserModel
     using System;
     using System.Collections;
     using NPOI.HSSF.UserModel;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.SS.UserModel;
 
     /**
@@ -28,14 +28,14 @@ namespace TestCases.HSSF.UserModel
      *  http://poi.apache.org/hssf/eval.html
      * all actually works as we'd expect them to
      */
-    [TestClass]
+    [TestFixture]
     public class TestFormulaEvaluatorDocs
     {
 
         /**
          * http://poi.apache.org/hssf/eval.html#EvaluateAll
          */
-        [TestMethod]
+        [Test]
         public void TestEvaluateAll()
         {
             HSSFWorkbook wb = new HSSFWorkbook();

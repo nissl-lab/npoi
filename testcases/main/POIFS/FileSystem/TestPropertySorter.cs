@@ -32,7 +32,7 @@ namespace TestCases.POIFS.FileSystem
     using System.Collections;
     using System.IO;
 
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
 
     using NPOI.POIFS.FileSystem;
     using NPOI.Util;
@@ -49,7 +49,7 @@ namespace TestCases.POIFS.FileSystem
      *
      * @author Yegor Kozlov
      */
-    [TestClass]
+    [TestFixture]
     public class TestPropertySorter
     {
         private static IComparer OldCaseSensitivePropertyComparator = new PropertyComparer();
@@ -76,7 +76,7 @@ namespace TestCases.POIFS.FileSystem
         /**
          * Test sorting of properties in <c>DirectoryProperty</c>
          */
-        [TestMethod]
+        [Test]
         public void TestSortProperties()
         {
             POIFSFileSystem fs = OpenSampleFS();
@@ -94,7 +94,7 @@ namespace TestCases.POIFS.FileSystem
                 }
                 Assert.Fail("expected old case-sensitive property comparator to return properties in wrong order");
             }
-            catch (AssertFailedException e)
+            catch (AssertionException e)
             {
                 // expected during successful Test
                 Assert.IsNotNull(e.Message);
@@ -111,7 +111,7 @@ namespace TestCases.POIFS.FileSystem
         /**
          * Serialize file system and Verify that the order of properties is the same as in the original file.
          */
-        [TestMethod]
+        [Test]
         public void TestSerialization()
         {
             POIFSFileSystem fs = OpenSampleFS();

@@ -18,13 +18,13 @@ namespace TestCases.SS.Formula.Functions
 {
 
     using System;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.HSSF.UserModel;
     using NPOI.SS.UserModel;
-    [TestClass]
+    [TestFixture]
     public class TestAddress
     {
-        [TestMethod]
+        [Test]
         public void TestAddress1()
         {
             HSSFWorkbook wb = new HSSFWorkbook();

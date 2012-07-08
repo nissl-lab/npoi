@@ -18,7 +18,7 @@
  * Created on May 23, 2005
  *
  */
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using TestCases.SS.Formula.Functions;
 using NPOI.SS.Formula.Functions;
 namespace TestCases.SS.Formula.Functions
@@ -29,10 +29,10 @@ namespace TestCases.SS.Formula.Functions
      * @author Amol S. Deshmukh &lt; amolweb at ya hoo dot com &gt;
      *
      */
-    [TestClass]
+    [TestFixture]
     public class TestFinanceLib : AbstractNumericTestCase
     {
-        [TestMethod]
+        [Test]
         public void TestFv()
         {
             double f, r, y, p, x;
@@ -76,7 +76,7 @@ namespace TestCases.SS.Formula.Functions
             Assert.AreEqual(x, f, 0.01, "fv ");
 
         }
-        [TestMethod]
+        [Test]
         public void TestNpv()
         {
             double r, npv, x;
@@ -102,7 +102,7 @@ namespace TestCases.SS.Formula.Functions
             x = 11342283.4233124;
             Assert.AreEqual(x, npv, 0.0000001, "npv ");
         }
-        [TestMethod]
+        [Test]
         public void TestPmt()
         {
             double f, r, y, p, x;
@@ -136,7 +136,7 @@ namespace TestCases.SS.Formula.Functions
             x = 120;
             Assert.AreEqual(x, y, "pmt ");
         }
-        [TestMethod]
+        [Test]
         public void TestPv()
         {
             double f, r, y, p, x;
@@ -180,7 +180,7 @@ namespace TestCases.SS.Formula.Functions
             Assert.AreEqual(x, p, "pv ");
 
         }
-        [TestMethod]
+        [Test]
         public void TestNper()
         {
             double f, r, y, p, x, n;

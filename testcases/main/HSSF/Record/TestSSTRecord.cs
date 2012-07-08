@@ -20,7 +20,7 @@ namespace TestCases.HSSF.Record
     using System;
     using System.Collections;
     using System.IO;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.HSSF.UserModel;
     using NPOI.SS.UserModel;
     using NPOI.Util;
@@ -32,7 +32,7 @@ namespace TestCases.HSSF.Record
      * @author Marc Johnson (mjohnson at apache dot org)
      * @author Glen Stampoultzis (glens at apache.org)
      */
-    [TestClass]
+    [TestFixture]
     public class TestSSTRecord
     {
 
@@ -88,7 +88,7 @@ namespace TestCases.HSSF.Record
         /**
          * SST is often split over several {@link ContinueRecord}s
          */
-        [TestMethod]
+        [Test]
         public void TestContinuedRecord()
         {
             byte[] origData;
@@ -123,7 +123,7 @@ namespace TestCases.HSSF.Record
             SSTRecord rec2 = CreateSSTFromRawData(ser_output);
             if (!areSameSSTs(record, rec2))
             {
-                throw new AssertFailedException("large SST re-Serialized incorrectly");
+                throw new AssertionException("large SST re-Serialized incorrectly");
             }
 #if !HIDE_UNREACHABLE_CODE
             if (false)
@@ -171,7 +171,7 @@ namespace TestCases.HSSF.Record
          *
          * @exception IOException
          */
-        [TestMethod]
+        [Test]
         public void TestHugeStrings()
         {
             SSTRecord record = new SSTRecord();
@@ -255,7 +255,7 @@ namespace TestCases.HSSF.Record
         /**
          * Test SSTRecord boundary conditions
          */
-        [TestMethod]
+        [Test]
         public void TestSSTRecordBug()
         {
             // create an SSTRecord and write a certain pattern of strings
@@ -292,7 +292,7 @@ namespace TestCases.HSSF.Record
         /**
          * Test simple AddString
          */
-        [TestMethod]
+        [Test]
         public void TestSimpleAddString()
         {
             SSTRecord record = new SSTRecord();
@@ -340,7 +340,7 @@ namespace TestCases.HSSF.Record
         /**
          * Test simple constructor
          */
-        [TestMethod]
+        [Test]
         public void TestSimpleConstructor()
         {
             SSTRecord record = new SSTRecord();
@@ -366,7 +366,7 @@ namespace TestCases.HSSF.Record
         /**
          * Tests that workbooks with rich text that duplicates a non rich text cell can be read and written.
          */
-        [TestMethod]
+        [Test]
         public void TestReadWriteDuplicatedRichText1()
         {
             IWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("duprich1.xls");
@@ -1495,7 +1495,7 @@ namespace TestCases.HSSF.Record
             }
         }
 
-        [TestMethod]
+        [Test]
         public void Test50779_1()
         {
             byte[] bytes = HexRead.ReadFromString(data_50779_1);
@@ -1514,7 +1514,7 @@ namespace TestCases.HSSF.Record
 
             AssertAreEqual(src, dst);
         }
-        [TestMethod]
+        [Test]
         public void Test50779_2()
         {
             byte[] bytes = HexRead.ReadFromString(data_50779_2);

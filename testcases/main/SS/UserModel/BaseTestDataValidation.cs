@@ -19,7 +19,7 @@ namespace TestCases.SS.UserModel
 {
     using System;
 
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
 
     using NPOI.SS;
     using NPOI.SS.Util;
@@ -32,7 +32,7 @@ namespace TestCases.SS.UserModel
      *
      * @author Dragos Buleandra ( dragos.buleandra@trade2b.ro )
      */
-    [TestClass]
+    [TestFixture]
     public class BaseTestDataValidation
     {
         private ITestDataProvider _testDataProvider;
@@ -507,7 +507,7 @@ namespace TestCases.SS.UserModel
             va.AddValidation(OperatorType.GREATER_OR_EQUAL, "4", null, ERRORSTYLE.STOP, "Greater than or equal to 4", "Error box type = STOP", true, false, true);
             va.AddValidation(OperatorType.LESS_OR_EQUAL, "4", null, ERRORSTYLE.STOP, "Less than or equal to 4", "-", false, true, false);
         }
-        [TestMethod]
+        [Test]
         public void TestDataValidation()
         {
             Log("\nTest no. 2 - Test Excel's Data validation mechanism");

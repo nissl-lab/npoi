@@ -15,7 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ==================================================================== */
 using NPOI.SS.Util;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using TestCases.HSSF.Record;
 using NPOI.Util;
 using System.IO;
@@ -27,7 +27,7 @@ namespace TestCases.SS.Util
     //import org.apache.poi.ss.util.CellRangeAddress;
     //import org.apache.poi.util.LittleEndianOutputStream;
 
-    [TestClass]
+    [TestFixture]
     public class TestCellRangeAddress
     {
         byte[] data = new byte[] {
@@ -36,7 +36,7 @@ namespace TestCases.SS.Util
      (byte)0x00,(byte)0x00, 
      (byte)0x03,(byte)0x00, 
  };
-        [TestMethod]
+        [Test]
         public void TestLoad()
         {
             CellRangeAddress cref = new CellRangeAddress(
@@ -49,7 +49,7 @@ namespace TestCases.SS.Util
 
             Assert.AreEqual(8, CellRangeAddress.ENCODED_SIZE);
         }
-        [TestMethod]
+        [Test]
         public void TestStore()
         {
             CellRangeAddress cref = new CellRangeAddress(0, 0, 0, 0);

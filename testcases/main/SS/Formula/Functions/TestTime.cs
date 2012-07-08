@@ -16,7 +16,7 @@
 ==================================================================== */
 
 using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
 namespace TestCases.SS.Formula.Functions
@@ -28,7 +28,7 @@ namespace TestCases.SS.Formula.Functions
      *
      * @author @author Steven Butler (sebutler @ gmail dot com)
      */
-    [TestClass]
+    [TestFixture]
     public class TestTime
     {
 
@@ -40,7 +40,7 @@ namespace TestCases.SS.Formula.Functions
         private HSSFWorkbook wb;
         private DataFormatter form;
         private ICellStyle style;
-        [TestInitialize]
+        [SetUp]
         public void SetUp()
         {
             wb = new HSSFWorkbook();
@@ -54,13 +54,13 @@ namespace TestCases.SS.Formula.Functions
 
             Evaluator = new HSSFFormulaEvaluator(wb);
         }
-        [TestMethod]
+        [Test]
         public void TestSomeArgumentsMissing()
         {
             Confirm("00:00:00", "TIME(, 0, 0)");
             Confirm("12:00:00", "TIME(12, , )");
         }
-        [TestMethod]
+        [Test]
         public void TestValid()
         {
             Confirm("00:00:01", 0, 0, 1);

@@ -17,7 +17,7 @@
 
 namespace TestCases.HSSF.UserModel
 {
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
 
     using TestCases.HSSF;
     using TestCases.SS.UserModel;
@@ -29,7 +29,7 @@ namespace TestCases.HSSF.UserModel
      * @author Glen Stampoultzis (glens at apache.org)
      * @author Andrew C. Oliver (acoliver apache org)
      */
-    [TestClass]
+    [TestFixture]
     public class TestHSSFSheetShiftRows : BaseTestSheetShiftRows
     {
         public TestHSSFSheetShiftRows()

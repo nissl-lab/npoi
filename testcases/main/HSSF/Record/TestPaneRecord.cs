@@ -23,7 +23,7 @@ namespace TestCases.HSSF.Record
     using System;
     using NPOI.HSSF.Record;
 
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
 
     /**
      * Tests the serialization and deserialization of the PaneRecord
@@ -32,7 +32,7 @@ namespace TestCases.HSSF.Record
      *
      * @author Glen Stampoultzis (glens at apache.org)
      */
-    [TestClass]
+    [TestFixture]
     public class TestPaneRecord
     {
         byte[] data = new byte[] {
@@ -47,7 +47,7 @@ namespace TestCases.HSSF.Record
         {
 
         }
-        [TestMethod]
+        [Test]
         public void TestLoad()
         {
             PaneRecord record = new PaneRecord(TestcaseRecordInputStream.Create((short)0x41, data));
@@ -61,7 +61,7 @@ namespace TestCases.HSSF.Record
 
             Assert.AreEqual(14, record.RecordSize);
         }
-        [TestMethod]
+        [Test]
         public void TestStore()
         {
             PaneRecord record = new PaneRecord();

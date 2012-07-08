@@ -19,7 +19,7 @@ namespace TestCases.SS.Formula.Functions
 {
 
     using NPOI.SS.Formula.Eval;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.SS.Formula.Functions;
 
     /**
@@ -27,7 +27,7 @@ namespace TestCases.SS.Formula.Functions
      *
      * @author Josh Micich
      */
-    [TestClass]
+    [TestFixture]
     public class TestSumproduct
     {
 
@@ -45,7 +45,7 @@ namespace TestCases.SS.Formula.Functions
             NumericValueEval nve = (NumericValueEval)actualEval;
             Assert.AreEqual(expected, nve.NumberValue, 0);
         }
-        [TestMethod]
+        [Test]
         public void TestScalarSimple()
         {
 
@@ -57,7 +57,7 @@ namespace TestCases.SS.Formula.Functions
             ValueEval result = invokeSumproduct(args);
             ConfirmDouble(6D, result);
         }
-        [TestMethod]
+        [Test]
         public void TestAreaSimple()
         {
             ValueEval[] aValues = {
@@ -81,7 +81,7 @@ namespace TestCases.SS.Formula.Functions
         /**
          * For scalar products, the terms may be 1x1 area refs
          */
-        [TestMethod]
+        [Test]
         public void TestOneByOneArea()
         {
 
@@ -94,7 +94,7 @@ namespace TestCases.SS.Formula.Functions
             ValueEval result = invokeSumproduct(args);
             ConfirmDouble(14D, result);
         }
-        [TestMethod]
+        [Test]
         public void TestMismatchAreaDimensions()
         {
 
@@ -108,7 +108,7 @@ namespace TestCases.SS.Formula.Functions
             args = new ValueEval[] { aeA, new NumberEval(5), };
             Assert.AreEqual(ErrorEval.VALUE_INVALID, invokeSumproduct(args));
         }
-        [TestMethod]
+        [Test]
         public void TestAreaWithErrorCell()
         {
             ValueEval[] aValues = {

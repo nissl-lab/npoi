@@ -22,25 +22,25 @@ namespace TestCases.Util
     using NPOI.Util;
 
 
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     /**
      * Class to test {@link LittleEndianInputStream} and {@link LittleEndianOutputStream}
      *
      * @author Josh Micich
      */
-    [TestClass]
+    [TestFixture]
     public class TestLittleEndianStreams
     {
         /// <summary>
         ///  Some of the tests are depending on the american culture.
         /// </summary>
-        [TestInitialize()]
+        [SetUp]
         public void InitializeCultere()
         {
             System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
         }
 
-        [TestMethod]
+        [Test]
         public void TestRead()
         {
             MemoryStream baos = new MemoryStream();
@@ -69,7 +69,7 @@ namespace TestCases.Util
          * had an error which resulted in the data being read and written back to the source byte
          * array.
          */
-        [TestMethod]
+        [Test]
         public void TestReadFully()
         {
             byte[] srcBuf = HexRead.ReadFromString("99 88 77 66 55 44 33");
@@ -83,7 +83,7 @@ namespace TestCases.Util
 
             if (actBuf[0] == 0x00 && srcBuf[0] == 0x77 && srcBuf[3] == 0x44)
             {
-                throw new AssertFailedException("Identified bug in ReadFully() - source buffer was modified");
+                throw new AssertionException("Identified bug in ReadFully() - source buffer was modified");
             }
 
             byte[] expBuf = HexRead.ReadFromString("77 66 55 44");

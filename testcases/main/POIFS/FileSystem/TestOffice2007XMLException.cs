@@ -32,7 +32,7 @@ namespace TestCases.POIFS.FileSystem
     using System.IO;
     using TestCases.HSSF;
     using NPOI.POIFS.FileSystem;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
 
 
     /**
@@ -40,7 +40,7 @@ namespace TestCases.POIFS.FileSystem
      *
      * @author Marc Johnson
      */
-    [TestClass]
+    [TestFixture]
     public class TestOffice2007XMLException
     {
 
@@ -48,7 +48,7 @@ namespace TestCases.POIFS.FileSystem
         {
             return HSSFTestDataSamples.OpenSampleFileStream(sampleFileName);
         }
-        [TestMethod]
+        [Test]
         public void TestXMLException()
         {
             Stream in1 = OpenSampleStream("sample.xlsx");
@@ -65,7 +65,7 @@ namespace TestCases.POIFS.FileSystem
                 Assert.IsTrue(e.Message.IndexOf("You are calling the part of POI that deals with OLE2 Office Documents") > -1);
             }
         }
-        [TestMethod]
+        [Test]
         public void TestDetectAsPOIFS()
         {
 

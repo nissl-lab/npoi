@@ -23,7 +23,7 @@ namespace TestCases.HSSF.Record
 
     using System;
     using NPOI.HSSF.Record;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
 
     /**
      * Tests the serialization and deserialization of the EndSubRecord
@@ -32,19 +32,19 @@ namespace TestCases.HSSF.Record
      *
      * @author Glen Stampoultzis (glens at apache.org)
      */
-    [TestClass]
+    [TestFixture]
     public class TestEndSubRecord
     {
         byte[] data = new byte[]{};
 
-        [TestMethod]
+        [Test]
         public void TestLoad()
         {
             EndSubRecord record = new EndSubRecord(TestcaseRecordInputStream.Create((short)0x00,  data),data.Length);
 
             Assert.AreEqual(0, record.DataSize);
         }
-        [TestMethod]
+        [Test]
         public void TestStore()
         {
             EndSubRecord record = new EndSubRecord();

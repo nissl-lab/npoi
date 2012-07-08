@@ -18,7 +18,7 @@
 namespace TestCases.HSSF.Model
 {
     using System;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.HSSF.UserModel;
     using NPOI.SS.Formula.PTG;
     using NPOI.HSSF.Model;
@@ -28,7 +28,7 @@ namespace TestCases.HSSF.Model
      * 
      * @author Josh Micich
      */
-    [TestClass]
+    [TestFixture]
     public class TestOperandClassTransformer
     {
 
@@ -39,7 +39,7 @@ namespace TestCases.HSSF.Model
             return result;
         }
 
-        [TestMethod]
+        [Test]
         public void TestMdeterm()
         {
             String formula = "MDETERM(ABS(A1))";
@@ -59,7 +59,7 @@ namespace TestCases.HSSF.Model
          * 
          * This test has been Added but disabled in order to document this issue.
          */
-        [TestMethod]
+        [Test]
         [Ignore]//this test is disabled in poi.
         public void DISABLED_TestIndexPi1()
         {
@@ -74,14 +74,14 @@ namespace TestCases.HSSF.Model
          * Even though count expects args of type R, because A1 is a direct operand of a
          * value operator it must Get type V
          */
-        [TestMethod]
+        [Test]
         public void TestDirectOperandOfValueOperator()
         {
             String formula = "COUNT(A1*1)";
             Ptg[] ptgs = ParseFormula(formula);
             if (ptgs[0].PtgClass == Ptg.CLASS_REF)
             {
-                throw new AssertFailedException("Identified bug 45348");
+                throw new AssertionException("Identified bug 45348");
             }
 
             ConfirmTokenClass(ptgs, 0, Ptg.CLASS_VALUE);
@@ -91,7 +91,7 @@ namespace TestCases.HSSF.Model
         /**
          * A cell ref passed to a function expecting type V should be Converted to type V
          */
-        [TestMethod]
+        [Test]
         public void TestRtoV()
         {
 
@@ -100,7 +100,7 @@ namespace TestCases.HSSF.Model
             ConfirmTokenClass(ptgs, 0, Ptg.CLASS_VALUE);
         }
 
-        [TestMethod]
+        [Test]
         public void TestComplexIRR_bug45041()
         {
             String formula = "(1+IRR(SUMIF(A:A,ROW(INDIRECT(MIN(A:A)&\":\"&MAX(A:A))),B:B),0))^365-1";
@@ -113,7 +113,7 @@ namespace TestCases.HSSF.Model
 
             if (rowFunc.PtgClass == Ptg.CLASS_VALUE || sumifFunc.PtgClass == Ptg.CLASS_VALUE)
             {
-                throw new AssertFailedException("Identified bug 45041");
+                throw new AssertionException("Identified bug 45041");
             }
             ConfirmTokenClass(ptgs, 1, Ptg.CLASS_REF);
             ConfirmTokenClass(ptgs, 2, Ptg.CLASS_REF);
@@ -139,11 +139,11 @@ namespace TestCases.HSSF.Model
             Ptg ptg = ptgs[i];
             if (ptg.IsBaseToken)
             {
-                throw new AssertFailedException("ptg[" + i + "] is a base token");
+                throw new AssertionException("ptg[" + i + "] is a base token");
             }
             if (operandClass != ptg.PtgClass)
             {
-                throw new AssertFailedException("Wrong operand class for ptg ("
+                throw new AssertionException("Wrong operand class for ptg ("
                         + ptg.ToString() + "). Expected " + GetOperandClassName(operandClass)
                         + " but got " + GetOperandClassName(ptg.PtgClass));
             }

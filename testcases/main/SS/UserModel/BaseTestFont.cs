@@ -15,7 +15,7 @@
    limitations under the License.
 ==================================================================== */
 
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using NPOI.SS.UserModel;
 using System;
 using NPOI.HSSF.Record.CF;
@@ -25,7 +25,7 @@ namespace TestCases.SS.UserModel
     /**
      * @author Yegor Kozlov
      */
-    [TestClass]
+    [TestFixture]
     public class BaseTestFont
     {
         protected ITestDataProvider _testDataProvider;
@@ -59,7 +59,7 @@ namespace TestCases.SS.UserModel
             fontFind = workbook.FindFont((short)FontBoldWeight.BOLD, defaultColor, (short)(15 * 20), defaultName, false, false, FontFormatting.SS_NONE, (byte)FontUnderlineType.DOUBLE);
             Assert.IsNotNull(fontFind);
         }
-        [TestMethod]
+        [Test]
         public void TestNumberOfFonts()
         {
             IWorkbook wb = _testDataProvider.CreateWorkbook();
@@ -90,7 +90,7 @@ namespace TestCases.SS.UserModel
          * Tests that we can define fonts to a new
          *  file, save, load, and still see them
          */
-        [TestMethod]
+        [Test]
         public void TestCreateSave()
         {
             IWorkbook wb = _testDataProvider.CreateWorkbook();
@@ -150,7 +150,7 @@ namespace TestCases.SS.UserModel
          *
          * @see NPOI.HSSF.usermodel.TestBugs#test45338()
          */
-        [TestMethod]
+        [Test]
         public void Test45338()
         {
             IWorkbook wb = _testDataProvider.CreateWorkbook();

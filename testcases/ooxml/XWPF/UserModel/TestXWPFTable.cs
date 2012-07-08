@@ -17,7 +17,7 @@
 namespace NPOI.XWPF.UserModel
 {
     using System;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
 
     using NPOI.XWPF;
     using NPOI.OpenXmlFormats.Wordprocessing;
@@ -27,7 +27,7 @@ namespace NPOI.XWPF.UserModel
     /**
      * Tests for XWPF Run
      */
-    [TestClass]
+    [TestFixture]
     public class TestXWPFTable
     {
 
@@ -41,7 +41,7 @@ namespace NPOI.XWPF.UserModel
            */
         }
 
-        [TestMethod]
+        [Test]
         public void TestConstructor()
         {
             XWPFDocument doc = new XWPFDocument();
@@ -61,7 +61,7 @@ namespace NPOI.XWPF.UserModel
         }
 
 
-        [TestMethod]
+        [Test]
         public void TestGetText()
         {
             XWPFDocument doc = new XWPFDocument();
@@ -78,7 +78,7 @@ namespace NPOI.XWPF.UserModel
         }
 
 
-        [TestMethod]
+        [Test]
         public void TestCreateRow()
         {
             XWPFDocument doc = new XWPFDocument();
@@ -110,7 +110,7 @@ namespace NPOI.XWPF.UserModel
             Assert.AreEqual(1, xtab.GetCTTbl().GetTrArray(0).SizeOfTcArray());
         }
 
-        [TestMethod]
+        [Test]
         public void TestSetWidth()
         {
             XWPFDocument doc = new XWPFDocument();
@@ -125,7 +125,7 @@ namespace NPOI.XWPF.UserModel
             xtab.SetWidth(100);
             Assert.AreEqual(100, int.Parse(table.tblPr.tblW.w));
         }
-        [TestMethod]
+        [Test]
         public void TestSetHeight()
         {
             XWPFDocument doc = new XWPFDocument();
@@ -138,7 +138,7 @@ namespace NPOI.XWPF.UserModel
             Assert.AreEqual(20, row.GetHeight());
         }
 
-        [TestMethod]
+        [Test]
         public void TestCreateTable()
         {
             // open an empty document

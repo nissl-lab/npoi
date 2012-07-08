@@ -18,7 +18,7 @@
 namespace TestCases.SS.Formula.Eval
 {
     using System;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.SS.Formula.Eval;
     using NPOI.SS.Formula.Functions;
     using NPOI.Util;
@@ -38,14 +38,14 @@ namespace TestCases.SS.Formula.Eval
      * </ol>
      * @author Josh Micich
      */
-    [TestClass]
+    [TestFixture]
     public class TestMinusZeroResult
     {
         private static double MINUS_ZERO = -0.0;
 
         // convenient access to namepace
         //no use private static EvalInstances EI = null;
-        [TestMethod]
+        [Test]
         public void TestSimpleOperators()
         {
 
@@ -68,7 +68,7 @@ namespace TestCases.SS.Formula.Eval
          * These results are hard to see in Excel (since -0.0 is usually Converted to +0.0 before it
          * Gets to the comparison operator)
          */
-        [TestMethod]
+        [Test]
         [Ignore] //no representation for -0.0 in c#, this test always failed.
         public void TestComparisonOperators()
         {
@@ -80,7 +80,7 @@ namespace TestCases.SS.Formula.Eval
             //CheckEval(false, EvalInstances.GreaterThan, 0.0, MINUS_ZERO);
             //CheckEval(false, EvalInstances.LessThan, MINUS_ZERO, 0.0);
         }
-        [TestMethod]
+        [Test]
         public void TestTextRendering()
         {
             ConfirmTextRendering("-0", MINUS_ZERO);
@@ -124,7 +124,7 @@ namespace TestCases.SS.Formula.Eval
         /**
          * Not really a POI Test - just Shows similar behaviour of '-0.0' in Java.
          */
-        [TestMethod]
+        [Test]
         public void TestJava()
         {
 

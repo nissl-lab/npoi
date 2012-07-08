@@ -18,7 +18,7 @@
 namespace TestCases.SS.Formula.Eval.Forked
 {
     using System;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.HSSF.UserModel;
     using NPOI.SS.Formula;
     using NPOI.SS.Formula.Eval;
@@ -29,7 +29,7 @@ namespace TestCases.SS.Formula.Eval.Forked
     /**
      * @author Josh Micich
      */
-    [TestClass]
+    [TestFixture]
     public class TestForkedEvaluator
     {
         /**
@@ -62,7 +62,7 @@ namespace TestCases.SS.Formula.Eval.Forked
         /**
          * Shows a basic use-case for {@link ForkedEvaluator}
          */
-        [TestMethod]
+        [Test]
         public void TestBasic()
         {
             HSSFWorkbook wb = CreateWorkbook();
@@ -97,7 +97,7 @@ namespace TestCases.SS.Formula.Eval.Forked
          * was considered less desirable because so far, the underlying 'master' workbook is strictly
          * <i>read-only</i> with respect to the ForkedEvaluator.
          */
-        [TestMethod]
+        [Test]
         public void TestMissingInputCell()
         {
             HSSFWorkbook wb = CreateWorkbook();
@@ -108,14 +108,14 @@ namespace TestCases.SS.Formula.Eval.Forked
             try
             {
                 fe.UpdateCell("Inputs", 1, 0, new NumberEval(4.0));
-                throw new AssertFailedException(
+                throw new AssertionException(
                         "Expected exception to be thrown due to missing input cell");
             }
             catch (NullReferenceException e)
             {
                 if (e.TargetSite.Equals("IdentityKey"))
                 {
-                    throw new AssertFailedException("Identified bug with update of missing input cell");
+                    throw new AssertionException("Identified bug with update of missing input cell");
                 }
                 throw e;
             }

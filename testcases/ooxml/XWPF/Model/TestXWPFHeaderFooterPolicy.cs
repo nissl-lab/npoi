@@ -21,7 +21,7 @@ namespace NPOI.XWPF.Model
 
 
 
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
 
     using NPOI.XWPF;
     using NPOI.XWPF.UserModel;
@@ -29,7 +29,7 @@ namespace NPOI.XWPF.Model
     /**
      * Tests for XWPF Header Footer Stuff
      */
-    [TestClass]
+    [TestFixture]
     public class TestXWPFHeaderFooterPolicy
     {
         private XWPFDocument noHeader;
@@ -38,7 +38,7 @@ namespace NPOI.XWPF.Model
         private XWPFDocument footer;
         private XWPFDocument oddEven;
         private XWPFDocument diffFirst;
-        [TestInitialize]
+        [SetUp]
         public void SetUp()
         {
 
@@ -50,7 +50,7 @@ namespace NPOI.XWPF.Model
             diffFirst = XWPFTestDataSamples.OpenSampleDocument("DiffFirstPageHeadFoot.docx");
         }
 
-        [TestMethod]
+        [Test]
         public void TestPolicy()
         {
             XWPFHeaderFooterPolicy policy;
@@ -133,7 +133,7 @@ namespace NPOI.XWPF.Model
             Assert.AreEqual(policy.GetDefaultFooter(), policy.GetFooter(3));
         }
 
-        [TestMethod]
+        [Test]
         public void TestContents()
         {
             XWPFHeaderFooterPolicy policy;

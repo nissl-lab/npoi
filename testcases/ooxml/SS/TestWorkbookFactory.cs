@@ -18,7 +18,7 @@
 namespace NPOI.SS
 {
     using System;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.HSSF.UserModel;
     using NPOI.OpenXml4Net.OPC;
     using NPOI.POIFS.FileSystem;
@@ -26,13 +26,13 @@ namespace NPOI.SS
     using NPOI.XSSF.UserModel;
     using TestCases.HSSF;
 
-    [TestClass]
+    [TestFixture]
     public class TestWorkbookFactory
     {
         private String xls;
         private String xlsx;
         private String txt;
-        [TestInitialize]
+        [SetUp]
         public void SetUp()
         {
             xls = "SampleSS.xls";
@@ -40,7 +40,7 @@ namespace NPOI.SS
             txt = "SampleSS.txt";
         }
 
-        [TestMethod]
+        [Test]
         public void TestCreateNative()
         {
             IWorkbook wb;
@@ -66,7 +66,7 @@ namespace NPOI.SS
          *  Checking the mime magic at the start of the
          *  InputStream, then creating what's required.
          */
-        [TestMethod]
+        [Test]
         public void TestCreateGeneric()
         {
             IWorkbook wb;

@@ -23,13 +23,13 @@ namespace TestCases.DDF
     using System.Text;
     using System.IO;
 
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.DDF;
     using NPOI.Util;
-    [TestClass]
+    [TestFixture]
     public class TestEscherClientAnchorRecord
     {
-        [TestMethod]
+        [Test]
         public void TestSerialize()
         {
             EscherClientAnchorRecord r = CreateRecord();
@@ -45,7 +45,7 @@ namespace TestCases.DDF
                     "42, 00, " +
                     "FF, DD, ]", HexDump.ToHex(data));
         }
-        [TestMethod]
+        [Test]
         public void TestFillFields()
         {
             String hexData = "01 00 " +
@@ -73,7 +73,7 @@ namespace TestCases.DDF
             Assert.AreEqual((byte)0xFF, r.RemainingData[0]);
             Assert.AreEqual((byte)0xDD, r.RemainingData[1]);
         }
-        [TestMethod]
+        [Test]
         public void TestToString()
         {
             String nl = Environment.NewLine;

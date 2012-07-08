@@ -18,7 +18,7 @@
 namespace TestCases.HSSF.Record.CF
 {
     using System;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.HSSF.Record.CF;
     using NPOI.HSSF.Util;
     using NPOI.SS.Util;
@@ -26,7 +26,7 @@ namespace TestCases.HSSF.Record.CF
     /**
      * Tests CellRange operations.
      */
-    [TestClass]
+    [TestFixture]
     public class TestCellRange
     {
 	    private static CellRangeAddress biggest     = CreateCR( 0, -1, 0,-1);
@@ -67,7 +67,7 @@ namespace TestCases.HSSF.Record.CF
 				    lastCol == -1 ? 0x00FF : lastCol);
 	    }
 
-        [TestMethod]
+        [Test]
 	    public void TestContainsMethod()
 	    {
 		    CellRangeAddress[] ranges = sampleRanges;
@@ -76,7 +76,7 @@ namespace TestCases.HSSF.Record.CF
 			    for(int j = 0; j != ranges.Length; j++)
 			    {
 				    bool expectedResult = containsExpectedResults[i,j];
-                    Assert.AreEqual<bool>(expectedResult, CellRangeUtil.Contains(ranges[i], ranges[j]), "("+i+","+j+"): ");
+                    Assert.AreEqual(expectedResult, CellRangeUtil.Contains(ranges[i], ranges[j]), "("+i+","+j+"): ");
 			    }
 		    }
 	    }
@@ -93,7 +93,7 @@ namespace TestCases.HSSF.Record.CF
 	    private static CellRangeAddress box4     = CreateCR( 2, 3, 2,3);
 	    private static CellRangeAddress box5     = CreateCR( 1, 3, 1,3);
 
-        [TestMethod]
+        [Test]
 	    public void TestHasSharedBorderMethod()
 	    {
 		    Assert.IsFalse(CellRangeUtil.HasExactSharedBorder(col1, col1));
@@ -137,31 +137,31 @@ namespace TestCases.HSSF.Record.CF
 		    Assert.IsFalse(CellRangeUtil.HasExactSharedBorder(box4, box4));
 	    }
 
-        [TestMethod]
+        [Test]
 	    public void TestIntersectMethod()
 	    {
-		    Assert.AreEqual<int>(CellRangeUtil.OVERLAP, CellRangeUtil.Intersect(box0, box5));
-		    Assert.AreEqual<int>(CellRangeUtil.OVERLAP, CellRangeUtil.Intersect(box5, box0));
-		    Assert.AreEqual<int>(CellRangeUtil.NO_INTERSECTION, CellRangeUtil.Intersect(box1, box4));
-		    Assert.AreEqual<int>(CellRangeUtil.NO_INTERSECTION, CellRangeUtil.Intersect(box4, box1));
-		    Assert.AreEqual<int>(CellRangeUtil.NO_INTERSECTION, CellRangeUtil.Intersect(box2, box3));
-		    Assert.AreEqual<int>(CellRangeUtil.NO_INTERSECTION, CellRangeUtil.Intersect(box3, box2));
-		    Assert.AreEqual<int>(CellRangeUtil.INSIDE, CellRangeUtil.Intersect(box0, box1));
-		    Assert.AreEqual<int>(CellRangeUtil.INSIDE, CellRangeUtil.Intersect(box0, box0));
-		    Assert.AreEqual<int>(CellRangeUtil.ENCLOSES, CellRangeUtil.Intersect(box1, box0));
-		    Assert.AreEqual<int>(CellRangeUtil.INSIDE, CellRangeUtil.Intersect(tenthColumn, oneCell));
-		    Assert.AreEqual<int>(CellRangeUtil.ENCLOSES, CellRangeUtil.Intersect(oneCell, tenthColumn));
-		    Assert.AreEqual<int>(CellRangeUtil.OVERLAP, CellRangeUtil.Intersect(tenthColumn, tenthRow));
-		    Assert.AreEqual<int>(CellRangeUtil.OVERLAP, CellRangeUtil.Intersect(tenthRow, tenthColumn));
-		    Assert.AreEqual<int>(CellRangeUtil.INSIDE, CellRangeUtil.Intersect(tenthColumn, tenthColumn));
-		    Assert.AreEqual<int>(CellRangeUtil.INSIDE, CellRangeUtil.Intersect(tenthRow, tenthRow));
+		    Assert.AreEqual(CellRangeUtil.OVERLAP, CellRangeUtil.Intersect(box0, box5));
+		    Assert.AreEqual(CellRangeUtil.OVERLAP, CellRangeUtil.Intersect(box5, box0));
+		    Assert.AreEqual(CellRangeUtil.NO_INTERSECTION, CellRangeUtil.Intersect(box1, box4));
+		    Assert.AreEqual(CellRangeUtil.NO_INTERSECTION, CellRangeUtil.Intersect(box4, box1));
+		    Assert.AreEqual(CellRangeUtil.NO_INTERSECTION, CellRangeUtil.Intersect(box2, box3));
+		    Assert.AreEqual(CellRangeUtil.NO_INTERSECTION, CellRangeUtil.Intersect(box3, box2));
+		    Assert.AreEqual(CellRangeUtil.INSIDE, CellRangeUtil.Intersect(box0, box1));
+		    Assert.AreEqual(CellRangeUtil.INSIDE, CellRangeUtil.Intersect(box0, box0));
+		    Assert.AreEqual(CellRangeUtil.ENCLOSES, CellRangeUtil.Intersect(box1, box0));
+		    Assert.AreEqual(CellRangeUtil.INSIDE, CellRangeUtil.Intersect(tenthColumn, oneCell));
+		    Assert.AreEqual(CellRangeUtil.ENCLOSES, CellRangeUtil.Intersect(oneCell, tenthColumn));
+		    Assert.AreEqual(CellRangeUtil.OVERLAP, CellRangeUtil.Intersect(tenthColumn, tenthRow));
+		    Assert.AreEqual(CellRangeUtil.OVERLAP, CellRangeUtil.Intersect(tenthRow, tenthColumn));
+		    Assert.AreEqual(CellRangeUtil.INSIDE, CellRangeUtil.Intersect(tenthColumn, tenthColumn));
+		    Assert.AreEqual(CellRangeUtil.INSIDE, CellRangeUtil.Intersect(tenthRow, tenthRow));
 	    }
     	
 	    /**
 	     * Cell ranges like the following are valid
 	     * =$C:$IV,$B$1:$B$8,$B$10:$B$65536,$A:$A
 	     */
-        [TestMethod]
+        [Test]
 	    public void TestCreate() {
 		    CellRangeAddress cr;
     		
@@ -173,7 +173,7 @@ namespace TestCases.HSSF.Record.CF
 			    cr = CreateCR(9, -1, 1, 1); // $B$65536
 		    } catch (ArgumentException e) {
 			    if(e.Message.StartsWith("invalid cell range")) {
-				    throw new AssertFailedException("Identified bug 44739");
+				    throw new AssertionException("Identified bug 44739");
 			    }
 			    throw e;
 		    }
@@ -181,11 +181,11 @@ namespace TestCases.HSSF.Record.CF
 	    }
 
 	    private static void ConfirmRange(CellRangeAddress cr, bool isFullRow, bool isFullColumn) {
-		    Assert.AreEqual<bool>(isFullRow, cr.IsFullRowRange, "isFullRowRange");
-		    Assert.AreEqual<bool>(isFullColumn, cr.IsFullColumnRange, "isFullColumnRange");
+		    Assert.AreEqual(isFullRow, cr.IsFullRowRange, "isFullRowRange");
+		    Assert.AreEqual(isFullColumn, cr.IsFullColumnRange, "isFullColumnRange");
 	    }
 
-        [TestMethod]
+        [Test]
         public void TestNumberOfCells()
         {
             Assert.AreEqual(1, oneCell.NumberOfCells);
@@ -193,7 +193,7 @@ namespace TestCases.HSSF.Record.CF
             Assert.AreEqual(121, box10to20c.NumberOfCells);
         }
 
-        [TestMethod]
+        [Test]
         public void TestMergeCellRanges()
         {
             CellRangeAddress cr1 = CellRangeAddress.ValueOf("A1:B1");
@@ -203,7 +203,7 @@ namespace TestCases.HSSF.Record.CF
             Assert.AreEqual("A1:B2", cr3[0].FormatAsString());
         }
 
-        [TestMethod]
+        [Test]
         public void TestValueOf()
         {
             CellRangeAddress cr1 = CellRangeAddress.ValueOf("A1:B1");

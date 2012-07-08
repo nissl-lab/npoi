@@ -29,7 +29,7 @@ namespace TestCases.HSSF.UserModel
     using NPOI.HSSF.Record.Aggregates;
     using TestCases.HSSF;
 
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.SS.UserModel;
     using NPOI.SS.Util;
     /**
@@ -39,7 +39,7 @@ namespace TestCases.HSSF.UserModel
      * @author Greg Merrill
      * @author Siggi Cherem
      */
-    [TestClass]
+    [TestFixture]
     public class TestWorkbook
     {
         private static String LAST_NAME_KEY = "lastName";
@@ -69,7 +69,7 @@ namespace TestCases.HSSF.UserModel
          *             NPOI.SS.UserModel.Sheet last row or first row is incorrect.             <P>
          *
          */
-        [TestMethod]
+        [Test]
         public void TestWriteSheetSimple()  {
         string            filepath = TempFile.GetTempFilePath("TestWriteSheetSimple",
                                                     ".xls");
@@ -108,7 +108,7 @@ namespace TestCases.HSSF.UserModel
          *             NPOI.SS.UserModel.Sheet last row or first row is incorrect.             <P>
          *
          */
-        [TestMethod]
+        [Test]
         public void TestWriteModifySheetSimple()
         {
             string filepath = TempFile.GetTempFilePath("TestWriteSheetSimple",
@@ -159,7 +159,7 @@ namespace TestCases.HSSF.UserModel
          *             in the sheet in their known positions.<P>
          *
          */
-        [TestMethod]
+        [Test]
         public void TestReadSimple()
         {
             HSSFWorkbook workbook = OpenSample("Simple.xls");
@@ -177,7 +177,7 @@ namespace TestCases.HSSF.UserModel
          *             in the sheet in their known positions.<P>
          *
          */
-        [TestMethod]
+        [Test]
         public void TestReadSimpleWithDataFormat()
         {
             HSSFWorkbook workbook = OpenSample("SimpleWithDataFormat.xls");
@@ -198,7 +198,7 @@ namespace TestCases.HSSF.UserModel
              *             in the sheet in their known positions.<P>
              *
              */
-        [TestMethod]
+        [Test]
         public void TestWriteDataFormat()
         {
             string filepath = TempFile.GetTempFilePath("TestWriteSheetSimple", ".xls");
@@ -246,7 +246,7 @@ namespace TestCases.HSSF.UserModel
          *             in the sheet in their known positions.<P>
          *
          */
-        [TestMethod]
+        [Test]
         public void TestReadEmployeeSimple()
         {
             HSSFWorkbook workbook = OpenSample("Employee.xls");
@@ -270,7 +270,7 @@ namespace TestCases.HSSF.UserModel
          *             is incorrect or has not been replaced. <P>
          *
          */
-        [TestMethod]
+        [Test]
         public void TestModifySimple()
         {
             HSSFWorkbook workbook = OpenSample("Simple.xls");
@@ -298,7 +298,7 @@ namespace TestCases.HSSF.UserModel
          *             or is incorrect. <P>
          *
          */
-        [TestMethod]
+        [Test]
         public void TestModifySimpleWithSkip()
         {
             HSSFWorkbook workbook = OpenSample("SimpleWithSkip.xls");
@@ -335,7 +335,7 @@ namespace TestCases.HSSF.UserModel
          *             is incorrect or has not been replaced. <P>
          *
          */
-        [TestMethod]
+        [Test]
         public void TestModifySimpleWithStyling()
         {
             HSSFWorkbook workbook = OpenSample("SimpleWithStyling.xls");
@@ -372,7 +372,7 @@ namespace TestCases.HSSF.UserModel
          *             is incorrect or has not been replaced. <P>
          *
          */
-        [TestMethod]
+        [Test]
         public void TestModifyEmployee()
         {
             HSSFWorkbook workbook = OpenSample("Employee.xls");
@@ -401,7 +401,7 @@ namespace TestCases.HSSF.UserModel
          * FAILURE:    HSSF does not read a sheet or excepts.  HSSF incorrectly indentifies the cell<P>
          *
          */
-        [TestMethod]
+        [Test]
         public void TestReadSheetWithRK()
         {
             HSSFWorkbook h = OpenSample("rk.xls");
@@ -422,7 +422,7 @@ namespace TestCases.HSSF.UserModel
          *             NPOI.SS.UserModel.Sheet last row or first row is incorrect.             <P>
          *
          */
-        [TestMethod]
+        [Test]
         public void TestWriteModifySheetMerged()
         {
             HSSFWorkbook wb = new HSSFWorkbook();
@@ -466,7 +466,7 @@ namespace TestCases.HSSF.UserModel
         /**
          * Test the backup field gets set as expected.
          */
-        [TestMethod]
+        [Test]
         public void TestBackupRecord()
         {
             HSSFWorkbook wb = new HSSFWorkbook();
@@ -505,7 +505,7 @@ namespace TestCases.HSSF.UserModel
          *
          * We need to make sure only one LabelSSTRecord is produced.
          */
-        [TestMethod]
+        [Test]
         public void TestRepeatingBug()
         {
             HSSFWorkbook workbook = new HSSFWorkbook();
@@ -521,7 +521,7 @@ namespace TestCases.HSSF.UserModel
             Assert.AreEqual(1, rc.GetCount());
         }
 
-        [TestMethod]
+        [Test]
         public void TestManyRows()
         {
             HSSFWorkbook workbook = new HSSFWorkbook();
@@ -551,7 +551,7 @@ namespace TestCases.HSSF.UserModel
         /**
          * Generate a file to visually/programmatically verify repeating rows and cols made it
          */
-        [TestMethod]
+        [Test]
         public void TestRepeatingColsRows()
         {
             HSSFWorkbook workbook = new HSSFWorkbook();
@@ -574,7 +574,7 @@ namespace TestCases.HSSF.UserModel
             Assert.IsTrue(File.Exists(filepath), "file exists");
         }
 
-        [TestMethod]
+        [Test]
         public void TestNPOIBug6341()
         {
             {

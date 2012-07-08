@@ -16,7 +16,7 @@
 ==================================================================== */
 
 using NPOI.SS.Util;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using TestCases.HSSF.Record;
 
 using System.IO;
@@ -28,10 +28,10 @@ namespace TestCases.SS.Util
     /**
      * Tests that the common CellReference works as we need it to
      */
-    [TestClass]
+    [TestFixture]
     public class TestCellReference
     {
-        [TestMethod]
+        [Test]
         public void TestGetCellRefParts()
         {
             CellReference cellReference;
@@ -99,7 +99,7 @@ namespace TestCases.SS.Util
             Assert.AreEqual("10065", parts[1]);
             Assert.AreEqual("AABC", parts[2]);
         }
-        [TestMethod]
+        [Test]
         public void TestGetColNumFromRef()
         {
             String cellRef = "A1";
@@ -143,7 +143,7 @@ namespace TestCases.SS.Util
             cellReference = new CellReference(cellRef);
             Assert.AreEqual(54, cellReference.Col);
         }
-        [TestMethod]
+        [Test]
         public void TestGetRowNumFromRef()
         {
             String cellRef = "A1";
@@ -158,7 +158,7 @@ namespace TestCases.SS.Util
             cellReference = new CellReference(cellRef);
             Assert.AreEqual(120, cellReference.Row);
         }
-        [TestMethod]
+        [Test]
         public void TestConvertNumToColString()
         {
             short col = 702;
@@ -177,7 +177,7 @@ namespace TestCases.SS.Util
             String collRef4 = new CellReference(0, col4).FormatAsString();
             Assert.AreEqual("CBA1", collRef4);
         }
-        [TestMethod]
+        [Test]
         public void TestBadRowNumber()
         {
             SpreadsheetVersion v97 = SpreadsheetVersion.EXCEL97;
@@ -195,13 +195,13 @@ namespace TestCases.SS.Util
 
             if (CellReference.CellReferenceIsWithinRange("B", "0", v97))
             {
-                throw new AssertFailedException ("Identified bug 47312a");
+                throw new AssertionException ("Identified bug 47312a");
             }
 
             ConfirmCrInRange(false, "A", "0", v97);
             ConfirmCrInRange(false, "A", "0", v2007);
         }
-        [TestMethod]
+        [Test]
         public void TestInvalidReference()
         {
             try
@@ -233,7 +233,7 @@ namespace TestCases.SS.Util
             {
                 return;
             }
-            throw new AssertFailedException("expected (c='" + colStr + "', r='" + rowStr + "' to be "
+            throw new AssertionException("expected (c='" + colStr + "', r='" + rowStr + "' to be "
                     + (expResult ? "within" : "out of") + " bounds for version " + sv.ToString());
         }
     }

@@ -20,64 +20,64 @@ namespace TestCases.HSSF.Util
     using System;
 
 
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
 
     using NPOI.SS.Util;
     using NPOI.SS;
 
 
-    [TestClass]
+    [TestFixture]
     public class TestCellReference
     {
-        [TestMethod]
+        [Test]
         public void TestAbsRef1()
         {
             CellReference cf = new CellReference("$B$5");
             ConfirmCell(cf, null, 4, 1, true, true, "$B$5");
         }
-        [TestMethod]
+        [Test]
         public void TestAbsRef2()
         {
             CellReference cf = new CellReference(4, 1, true, true);
             ConfirmCell(cf, null, 4, 1, true, true, "$B$5");
         }
-        [TestMethod]
+        [Test]
         public void TestAbsRef3()
         {
             CellReference cf = new CellReference("B$5");
             ConfirmCell(cf, null, 4, 1, true, false, "B$5");
         }
-        [TestMethod]
+        [Test]
         public void TestAbsRef4()
         {
             CellReference cf = new CellReference(4, 1, true, false);
             ConfirmCell(cf, null, 4, 1, true, false, "B$5");
         }
-        [TestMethod]
+        [Test]
         public void TestAbsRef5()
         {
             CellReference cf = new CellReference("$B5");
             ConfirmCell(cf, null, 4, 1, false, true, "$B5");
         }
-        [TestMethod]
+        [Test]
         public void TestAbsRef6()
         {
             CellReference cf = new CellReference(4, 1, false, true);
             ConfirmCell(cf, null, 4, 1, false, true, "$B5");
         }
-        [TestMethod]
+        [Test]
         public void TestAbsRef7()
         {
             CellReference cf = new CellReference("B5");
             ConfirmCell(cf, null, 4, 1, false, false, "B5");
         }
-        [TestMethod]
+        [Test]
         public void TestAbsRef8()
         {
             CellReference cf = new CellReference(4, 1, false, false);
             ConfirmCell(cf, null, 4, 1, false, false, "B5");
         }
-        [TestMethod]
+        [Test]
         public void TestSpecialSheetNames()
         {
             CellReference cf;
@@ -103,7 +103,7 @@ namespace TestCases.HSSF.Util
             Assert.AreEqual(expIsColAbs, cf.IsColAbsolute, "isColAbsolute is wrong");
             Assert.AreEqual(expText, cf.FormatAsString(), "text is wrong");
         }
-        [TestMethod]
+        [Test]
         public void TestClassifyCellReference()
         {
             ConfirmNameType("a1", NameType.CELL);
@@ -118,7 +118,7 @@ namespace TestCases.HSSF.Util
             ConfirmNameType("A.1", NameType.NAMED_RANGE);
             ConfirmNameType("A1.", NameType.NAMED_RANGE);
         }
-        [TestMethod]
+        [Test]
         public void TestClassificationOfRowReferences()
         {
             ConfirmNameType("10", NameType.ROW);

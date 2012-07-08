@@ -16,16 +16,16 @@
 ==================================================================== */
 
 using NPOI.XSSF.UserModel;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using NPOI.SS.UserModel;
 using NPOI.OpenXmlFormats.Spreadsheet;
 namespace NPOI.XSSF.Model
 {
 
-    [TestClass]
+    [TestFixture]
     public class TestCalculationChain
     {
-        [TestMethod]
+        [Test]
         public void Test46535()
         {
             XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("46535.xlsx");

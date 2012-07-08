@@ -23,7 +23,7 @@ namespace TestCases.HSSF.Record.Chart
 
     using System;
     using NPOI.HSSF.Record;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
 
     /**
      * Tests the serialization and deserialization of the TickRecord
@@ -33,7 +33,7 @@ namespace TestCases.HSSF.Record.Chart
 
      * @author Andrew C. Oliver(acoliver at apache.org)
      */
-    [TestClass]
+    [TestFixture]
     public class TestTickRecord
     {
         byte[] data = new byte[] {
@@ -50,7 +50,7 @@ namespace TestCases.HSSF.Record.Chart
         {
 
         }
-        [TestMethod]
+        [Test]
         public void TestLoad()
         {
             TickRecord record = new TickRecord(TestcaseRecordInputStream.Create(0x101e, data));
@@ -72,7 +72,7 @@ namespace TestCases.HSSF.Record.Chart
 
             Assert.AreEqual(34, record.RecordSize);
         }
-        [TestMethod]
+        [Test]
         public void TestStore()
         {
             TickRecord record = new TickRecord();

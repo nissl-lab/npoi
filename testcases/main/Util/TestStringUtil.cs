@@ -22,7 +22,7 @@ namespace TestCases.Util
     using System.Text;
 
     using NPOI.Util;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     /**
      * Unit Test for StringUtil
      *
@@ -30,7 +30,7 @@ namespace TestCases.Util
      * @author  Glen Stampoultzis (glens at apache.org)
      * @author  Sergei Kozello (sergeikozello at mail.ru)
      */
-    [TestClass]
+    [TestFixture]
     public class TestStringUtil
     {
         /**
@@ -46,7 +46,7 @@ namespace TestCases.Util
         /**
          * Test simple form of getFromUnicode
          */
-        [TestMethod]
+        [Test]
         public void TestSimpleGetFromUnicode()
         {
             byte[] Test_data = new byte[32];
@@ -65,7 +65,7 @@ namespace TestCases.Util
         /**
          * Test simple form of getFromUnicode with symbols with code below and more 127
          */
-        [TestMethod]
+        [Test]
         public void TestGetFromUnicodeSymbolsWithCodesMoreThan127()
         {
             byte[] Test_data = new byte[]{0x04, 0x22,
@@ -86,7 +86,7 @@ namespace TestCases.Util
         /**
          * Test getFromUnicodeHigh for symbols with code below and more 127
          */
-        [TestMethod]
+        [Test]
         public void TestGetFromUnicodeHighSymbolsWithCodesMoreThan127()
         {
             byte[] Test_data = new byte[]{0x22, 0x04,
@@ -108,7 +108,7 @@ namespace TestCases.Util
         /**
          * Test more complex form of getFromUnicode
          */
-        [TestMethod]
+        [Test]
         public void TestComplexGetFromUnicode()
         {
             byte[] Test_data = new byte[32];
@@ -166,7 +166,7 @@ namespace TestCases.Util
         /**
          * Test PutCompressedUnicode
          */
-        [TestMethod]
+        [Test]
         public void TestPutCompressedUnicode()
         {
             byte[] outPut = new byte[100];
@@ -206,7 +206,7 @@ namespace TestCases.Util
         /**
          * Test PutUncompressedUnicode
          */
-        [TestMethod]
+        [Test]
         public void TestPutUncompressedUnicode()
         {
             byte[] outPut = new byte[100];

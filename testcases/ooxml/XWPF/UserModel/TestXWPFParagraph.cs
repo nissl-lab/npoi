@@ -18,7 +18,7 @@
 namespace NPOI.XWPF.UserModel
 {
     using System;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
 
     using NPOI.XWPF;
     using System.Collections.Generic;
@@ -27,7 +27,7 @@ namespace NPOI.XWPF.UserModel
     /**
      * Tests for XWPF Paragraphs
      */
-    [TestClass]
+    [TestFixture]
     public class TestXWPFParagraph
     {
 
@@ -35,7 +35,7 @@ namespace NPOI.XWPF.UserModel
          * Check that we Get the right paragraph from the header
          * @throws IOException 
          */
-        [TestMethod]
+        [Test]
         public void TestHeaderParagraph()
         {
             XWPFDocument xml = XWPFTestDataSamples.OpenSampleDocument("ThreeColHead.docx");
@@ -55,7 +55,7 @@ namespace NPOI.XWPF.UserModel
          * Check that we Get the right paragraphs from the document
          * @throws IOException 
          */
-        [TestMethod]
+        [Test]
         public void TestDocumentParagraph()
         {
             XWPFDocument xml = XWPFTestDataSamples.OpenSampleDocument("ThreeColHead.docx");
@@ -80,7 +80,7 @@ namespace NPOI.XWPF.UserModel
             Assert.AreEqual("More on page one", ps[4].GetText());
         }
 
-        [TestMethod]
+        [Test]
         public void TestSetGetBorderTop()
         {
             //new clean instance of paragraph
@@ -103,7 +103,7 @@ namespace NPOI.XWPF.UserModel
             Assert.AreEqual((int)ST_Border.single, (int)borderTop.val);
         }
 
-        [TestMethod]
+        [Test]
         public void TestSetGetAlignment()
         {
             //new clean instance of paragraph
@@ -124,7 +124,7 @@ namespace NPOI.XWPF.UserModel
         }
 
 
-        [TestMethod]
+        [Test]
         public void TestSetGetSpacing()
         {
             XWPFDocument doc = new XWPFDocument();
@@ -143,7 +143,7 @@ namespace NPOI.XWPF.UserModel
             Assert.AreEqual(100, (int)spacing.after);
         }
 
-        [TestMethod]
+        [Test]
         public void TestSetGetSpacingLineRule()
         {
             XWPFDocument doc = new XWPFDocument();
@@ -162,7 +162,7 @@ namespace NPOI.XWPF.UserModel
             Assert.AreEqual(100, (int)spacing.after);
         }
 
-        [TestMethod]
+        [Test]
         public void TestSetGetIndentation()
         {
             XWPFDocument doc = new XWPFDocument();
@@ -183,7 +183,7 @@ namespace NPOI.XWPF.UserModel
             Assert.AreEqual(100, int.Parse(ind.left));
         }
 
-        [TestMethod]
+        [Test]
         public void TestSetGetVerticalAlignment()
         {
             //new clean instance of paragraph
@@ -201,7 +201,7 @@ namespace NPOI.XWPF.UserModel
             Assert.AreEqual(ST_TextAlignment.bottom, ppr.textAlignment.val);
         }
 
-        [TestMethod]
+        [Test]
         public void TestSetGetWordWrap()
         {
             XWPFDocument doc = new XWPFDocument();
@@ -219,7 +219,7 @@ namespace NPOI.XWPF.UserModel
         }
 
 
-        [TestMethod]
+        [Test]
         public void TestSetGetPageBreak()
         {
             XWPFDocument doc = new XWPFDocument();
@@ -236,7 +236,7 @@ namespace NPOI.XWPF.UserModel
             Assert.AreEqual(ST_OnOff.True, ppr.pageBreakBefore.val);
         }
 
-        [TestMethod]
+        [Test]
         public void TestBookmarks()
         {
             XWPFDocument doc = XWPFTestDataSamples.OpenSampleDocument("bookmarks.docx");
@@ -252,7 +252,7 @@ namespace NPOI.XWPF.UserModel
             }
         }
 
-        [TestMethod]
+        [Test]
         public void TestGetSetNumID()
         {
             XWPFDocument doc = new XWPFDocument();
@@ -262,7 +262,7 @@ namespace NPOI.XWPF.UserModel
             Assert.AreEqual("10", p.GetNumID());
         }
 
-        [TestMethod]
+        [Test]
         public void TestAddingRuns()
         {
             XWPFDocument doc = XWPFTestDataSamples.OpenSampleDocument("sample.docx");
@@ -280,7 +280,7 @@ namespace NPOI.XWPF.UserModel
             Assert.AreEqual(3, p.GetRuns().IndexOf(r));
         }
 
-        [TestMethod]
+        [Test]
         public void TestPictures()
         {
             XWPFDocument doc = XWPFTestDataSamples.OpenSampleDocument("VariousPictures.docx");
@@ -343,7 +343,7 @@ namespace NPOI.XWPF.UserModel
             // Look in detail at one
             r = p.GetRuns()[4];
             XWPFPicture pict = r.GetEmbeddedPictures()[0];
-            CT_Picture picture = pict.GetCTPicture();
+            //CT_Picture picture = pict.GetCTPicture();
             Assert.Fail("picture.blipFill.blip.embed is missing from wordprocessing CT_Picture.");
           //  Assert.AreEqual("rId8", picture.blipFill.blip.embed);
 

@@ -23,21 +23,21 @@ namespace TestCases.HSSF.Util
     using System.Collections;
     using NPOI.HSSF.Util;
 
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     /**
      * @author Nick Burch
      */
-    [TestClass]
+    [TestFixture]
     public class TestHSSFColor
     {
-        [TestMethod]
+        [Test]
         public void TestBasics()
         {
             Assert.IsNotNull(typeof(HSSFColor.YELLOW));
             Assert.IsTrue(HSSFColor.YELLOW.index > 0);
             Assert.IsTrue(HSSFColor.YELLOW.index2 > 0);
         }
-        [TestMethod]
+        [Test]
         public void TestContents()
         {
             Assert.AreEqual(3, HSSFColor.YELLOW.triplet.Length);
@@ -47,7 +47,7 @@ namespace TestCases.HSSF.Util
 
             Assert.AreEqual("FFFF:FFFF:0", HSSFColor.YELLOW.hexString);
         }
-        [TestMethod]
+        [Test]
         public void TestTrippletHash()
         {
             Hashtable tripplets = HSSFColor.GetTripletHash();

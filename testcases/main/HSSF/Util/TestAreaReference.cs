@@ -25,7 +25,7 @@ namespace TestCases.HSSF.Util
     using NPOI.HSSF.Record;
     using NPOI.HSSF.UserModel;
 
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
 
     using TestCases.HSSF;
     using NPOI.SS.UserModel;
@@ -33,11 +33,11 @@ namespace TestCases.HSSF.Util
     using NPOI.HSSF.Model;
     using NPOI.SS.Formula.PTG;
 
-    [TestClass]
+    [TestFixture]
     public class TestAreaReference
     {
 
-        [TestMethod]
+        [Test]
         public void TestAreaRef1()
         {
             AreaReference ar = new AreaReference("$A$1:$B$2");
@@ -80,7 +80,7 @@ namespace TestCases.HSSF.Util
          * References failed when sheet names were being used
          * Reported by Arne.Clauss@gedas.de
          */
-        [TestMethod]
+        [Test]
         public void TestReferenceWithSheet()
         {
             AreaReference ar;
@@ -105,7 +105,7 @@ namespace TestCases.HSSF.Util
             TestCellReference.ConfirmCell(allCells[1], "Tabelle1", 5, 1, true, true, "Tabelle1!$B$6");
             TestCellReference.ConfirmCell(allCells[2], "Tabelle1", 6, 1, true, true, "Tabelle1!$B$7");
         }
-        [TestMethod]
+        [Test]
         public void TestContiguousReferences()
         {
             String refSimple = "$C$10:$C$10";
@@ -185,7 +185,7 @@ namespace TestCases.HSSF.Util
             Assert.AreEqual("Tabelle1", refs[1].FirstCell.SheetName);
             Assert.AreEqual("Tabelle1", refs[1].LastCell.SheetName);
         }
-        [TestMethod]
+        [Test]
         public void TestDiscontinousReference()
         {
             Stream is1 = HSSFTestDataSamples.OpenSampleFileStream("44167.xls");
@@ -250,7 +250,7 @@ namespace TestCases.HSSF.Util
             ICell c = r.GetCell((int)cref.Col);
             Assert.IsNotNull(c);
         }
-        [TestMethod]
+        [Test]
         public void TestSpecialSheetNames()
         {
             AreaReference ar;
@@ -273,7 +273,7 @@ namespace TestCases.HSSF.Util
             Assert.AreEqual(sheetName, cells[0].SheetName);
             Assert.AreEqual(expectedFullText, ar.FormatAsString());
         }
-        [TestMethod]
+        [Test]
         public void TestWholeColumnRefs()
         {
             ConfirmWholeColumnRef("A:A", 0, 0, false, false);

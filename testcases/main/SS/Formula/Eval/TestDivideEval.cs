@@ -18,7 +18,7 @@
 namespace TestCases.SS.Formula.Eval
 {
 
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.SS.Formula.Eval;
     using TestCases.SS.Formula.Functions;
 
@@ -27,7 +27,7 @@ namespace TestCases.SS.Formula.Eval
      *
      * @author Josh Micich
      */
-    [TestClass]
+    [TestFixture]
     public class TestDivideEval
     {
 
@@ -41,7 +41,7 @@ namespace TestCases.SS.Formula.Eval
 
             Assert.AreEqual(expectedResult, result, 0);
         }
-        [TestMethod]
+        [Test]
         public void TestBasic()
         {
             System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US"); 
@@ -52,14 +52,14 @@ namespace TestCases.SS.Formula.Eval
             Confirm(new StringEval("0.2"), new NumberEval(0.05), 4.0);
             Confirm(BoolEval.TRUE, new StringEval("-0.2"), -5.0);
         }
-        [TestMethod]
+        [Test]
         public void Test1x1Area()
         {
             AreaEval ae0 = EvalFactory.CreateAreaEval("B2:B2", new ValueEval[] { new NumberEval(50), });
             AreaEval ae1 = EvalFactory.CreateAreaEval("C2:C2", new ValueEval[] { new NumberEval(10), });
             Confirm(ae0, ae1, 5);
         }
-        [TestMethod]
+        [Test]
         public void TestDivZero()
         {
             ValueEval[] args = {

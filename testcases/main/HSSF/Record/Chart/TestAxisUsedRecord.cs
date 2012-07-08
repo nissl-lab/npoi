@@ -23,7 +23,7 @@ namespace TestCases.HSSF.Record.Chart
     using System;
     using NPOI.HSSF.Record;
     using NPOI.HSSF.Record.Chart;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
 
     /**
      * Tests the serialization and deserialization of the AxisUsedRecord
@@ -33,7 +33,7 @@ namespace TestCases.HSSF.Record.Chart
 
      * @author Glen Stampoultzis (glens at apache.org)
      */
-    [TestClass]
+    [TestFixture]
     public class TestAxisUsedRecord
     {
         byte[] data = new byte[] {
@@ -44,14 +44,14 @@ namespace TestCases.HSSF.Record.Chart
         {
 
         }
-        [TestMethod]
+        [Test]
         public void TestLoad()
         {
             AxisUsedRecord record = new AxisUsedRecord(TestcaseRecordInputStream.Create((short)0x1046, data));
             Assert.AreEqual(1, record.NumAxis);
             Assert.AreEqual(6, record.RecordSize);
         }
-        [TestMethod]
+        [Test]
         public void TestStore()
         {
             AxisUsedRecord record = new AxisUsedRecord();

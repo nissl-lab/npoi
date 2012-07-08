@@ -22,14 +22,14 @@ namespace TestCases.HSSF.UserModel
     using NPOI.HSSF.UserModel;
     using NPOI.POIFS.FileSystem;
     using TestCases.HSSF;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
 
     /**
      * Tests for how HSSFWorkbook behaves with XLS files
      *  with a WORKBOOK directory entry (instead of the more
      *  usual, Workbook)
      */
-    [TestClass]
+    [TestFixture]
     public class TestUppercaseWorkbook
     {
 
@@ -38,7 +38,7 @@ namespace TestCases.HSSF.UserModel
         /**
          * Test that we can Open a file with WORKBOOK
          */
-        [TestMethod]
+        [Test]
         public void TestOpen()
         {
             Stream is1 = HSSFTestDataSamples.OpenSampleFileStream(xlsA);
@@ -69,7 +69,7 @@ namespace TestCases.HSSF.UserModel
         /**
          * Test that when we Write out, we go back to the correct case
          */
-        [TestMethod]
+        [Test]
         public void TestWrite()
         {
             Stream is1 = HSSFTestDataSamples.OpenSampleFileStream(xlsA);

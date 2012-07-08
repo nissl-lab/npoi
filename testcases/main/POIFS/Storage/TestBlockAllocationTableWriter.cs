@@ -30,7 +30,7 @@ using System.Text;
 using System.Collections.Generic;
 using System.IO;
 
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 using NPOI.POIFS.Storage;
 using NPOI.Util;
@@ -44,7 +44,7 @@ namespace TestCases.POIFS.Storage
      *
      * @author Marc Johnson
      */
-    [TestClass]
+    [TestFixture]
     public class TestBlockAllocationTableWriter
     {
 
@@ -61,7 +61,7 @@ namespace TestCases.POIFS.Storage
         /**
          * Test the AllocateSpace method.
          */
-        [TestMethod]
+        [Test]
         public void TestAllocateSpace()
         {
             BlockAllocationTableWriter table = new BlockAllocationTableWriter(POIFSConstants.SMALLER_BIG_BLOCK_SIZE_DETAILS);
@@ -82,7 +82,7 @@ namespace TestCases.POIFS.Storage
          *
          * @exception IOException
          */
-        [TestMethod]
+        [Test]
         public void TestCreateBlocks()
         {
             BlockAllocationTableWriter table = new BlockAllocationTableWriter(POIFSConstants.SMALLER_BIG_BLOCK_SIZE_DETAILS);
@@ -132,7 +132,7 @@ namespace TestCases.POIFS.Storage
          *
          * @exception IOException
          */
-        [TestMethod]
+        [Test]
         public void TestProduct()
         {
             BlockAllocationTableWriter table = new BlockAllocationTableWriter(POIFSConstants.SMALLER_BIG_BLOCK_SIZE_DETAILS);

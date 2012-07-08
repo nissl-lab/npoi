@@ -16,7 +16,7 @@
 ==================================================================== */
 using NPOI.XSSF.UserModel;
 using NPOI.OpenXmlFormats.Spreadsheet;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using System.Xml;
 namespace NPOI.XSSF.Model
 {
@@ -24,11 +24,11 @@ namespace NPOI.XSSF.Model
     /**
      * @author Roberto Manicardi
      */
-    [TestClass]
+    [TestFixture]
     public class TestMapInfo
     {
 
-        [TestMethod]
+        [Test]
         public void TestMapInfoExists()
         {
 

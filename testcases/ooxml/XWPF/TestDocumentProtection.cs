@@ -17,15 +17,15 @@
 namespace NPOI.XWPF
 {
     using System.IO;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.Util;
     using NPOI.XWPF.UserModel;
 
-    [TestClass]
+    [TestFixture]
     public class TestDocumentProtection
     {
 
-        [TestMethod]
+        [Test]
         public void TestShouldReadEnforcementProperties()
         {
 
@@ -67,7 +67,7 @@ namespace NPOI.XWPF
 
         }
 
-        [TestMethod]
+        [Test]
         public void TestShouldEnforceForReadOnly()
         {
             //		XWPFDocument document = CreateDocumentFromSampleFile("test-data/document/documentProtection_no_protection.docx");
@@ -79,7 +79,7 @@ namespace NPOI.XWPF
             Assert.IsTrue(document.IsEnforcedReadonlyProtection());
         }
 
-        [TestMethod]
+        [Test]
         public void TestShouldEnforceForFillingForms()
         {
             XWPFDocument document = XWPFTestDataSamples.OpenSampleDocument("documentProtection_no_protection.docx");
@@ -90,7 +90,7 @@ namespace NPOI.XWPF
             Assert.IsTrue(document.IsEnforcedFillingFormsProtection());
         }
 
-        [TestMethod]
+        [Test]
         public void TestShouldEnforceForComments()
         {
             XWPFDocument document = XWPFTestDataSamples.OpenSampleDocument("documentProtection_no_protection.docx");
@@ -101,7 +101,7 @@ namespace NPOI.XWPF
             Assert.IsTrue(document.IsEnforcedCommentsProtection());
         }
 
-        [TestMethod]
+        [Test]
         public void TestShouldEnforceForTrackedChanges()
         {
             XWPFDocument document = XWPFTestDataSamples.OpenSampleDocument("documentProtection_no_protection.docx");
@@ -112,7 +112,7 @@ namespace NPOI.XWPF
             Assert.IsTrue(document.IsEnforcedTrackedChangesProtection());
         }
 
-        [TestMethod]
+        [Test]
         public void TestShouldUnsetEnforcement()
         {
             XWPFDocument document = XWPFTestDataSamples.OpenSampleDocument("documentProtection_readonly_no_password.docx");
@@ -123,7 +123,7 @@ namespace NPOI.XWPF
             Assert.IsFalse(document.IsEnforcedReadonlyProtection());
         }
 
-        [TestMethod]
+        [Test]
         public void TestIntegration()
         {
             XWPFDocument doc = new XWPFDocument();

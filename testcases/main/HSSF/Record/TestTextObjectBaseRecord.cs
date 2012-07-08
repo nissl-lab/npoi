@@ -23,7 +23,7 @@ namespace TestCases.HSSF.Record
 
     using System;
     using NPOI.HSSF.Record;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.HSSF.UserModel;
     using NPOI.Util;
 
@@ -35,7 +35,7 @@ namespace TestCases.HSSF.Record
 
      * @author Glen Stampoultzis (glens at apache.org)
      */
-    [TestClass]
+    [TestFixture]
     public class TestTextObjectBaseRecord
     {
 	    /** data for one TXO rec and two continue recs */
@@ -58,7 +58,7 @@ namespace TestCases.HSSF.Record
             "02 00 00 00 00 00 00 00 "
         );
 
-        [TestMethod]
+        [Test]
         public void TestLoad()
         {
             TextObjectRecord record = new TextObjectRecord(TestcaseRecordInputStream.Create(data));
@@ -71,7 +71,7 @@ namespace TestCases.HSSF.Record
             Assert.AreEqual(49, record.RecordSize);
         }
 
-        [TestMethod]
+        [Test]
         public void TestStore()
         {
             TextObjectRecord record = new TextObjectRecord();

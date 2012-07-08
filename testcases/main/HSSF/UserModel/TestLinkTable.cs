@@ -2,7 +2,7 @@ namespace TestCases.HSSF.UserModel
 {
     using System;
     using NPOI.HSSF.UserModel;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
 
     using TestCases.HSSF;
     /**
@@ -10,7 +10,7 @@ namespace TestCases.HSSF.UserModel
      *
      * @author Josh Micich
      */
-    [TestClass]
+    [TestFixture]
     public class TestLinkTable
     {
 
@@ -21,7 +21,7 @@ namespace TestCases.HSSF.UserModel
          *
          * It's not Clear what exact steps need to be taken in Excel to Create such a workbook
          */
-        [TestMethod]
+        [Test]
         public void TestLinkTableWithoutExternalBookRecord_bug45046()
         {
             HSSFWorkbook wb;
@@ -34,7 +34,7 @@ namespace TestCases.HSSF.UserModel
             {
                 if ("DEFINEDNAME is part of LinkTable".Equals(e.Message))
                 {
-                    throw new AssertFailedException("Identified bug 45046 b");
+                    throw new AssertionException("Identified bug 45046 b");
                 }
                 throw e;
             }
@@ -45,13 +45,13 @@ namespace TestCases.HSSF.UserModel
             if ("ipcSummenproduktIntern($P5,N$6,$A$9,N$5)".Equals(formula))
             {
                 // The reported symptom of this bugzilla is an earlier bug (already fixed)
-                throw new AssertFailedException("Identified bug 41726");
+                throw new AssertionException("Identified bug 41726");
                 // This is observable in version 3.0
             }
 
             Assert.AreEqual("ipcSummenproduktIntern($C5,N$2,$A$9,N$1)", formula);
         }
-        [TestMethod]
+        [Test]
         public void TestMultipleExternSheetRecords_bug45698()
         {
             HSSFWorkbook wb;
@@ -64,14 +64,14 @@ namespace TestCases.HSSF.UserModel
             {
                 if ("Extern sheet is part of LinkTable".Equals(e.Message))
                 {
-                    throw new AssertFailedException("Identified bug 45698");
+                    throw new AssertionException("Identified bug 45698");
                 }
                 throw e;
             }
             // some other sanity Checks
             Assert.AreEqual(7, wb.NumberOfSheets);
         }
-        [TestMethod]
+        [Test]
         public void TestExtraSheetRefs_bug45978()
         {
             HSSFWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("ex45978-extraLinkTableSheets.xls");
@@ -111,7 +111,7 @@ namespace TestCases.HSSF.UserModel
             {
                 if (e.Message.Equals("Index: 2, Size: 2"))
                 {
-                    throw new AssertFailedException("Identified bug 45798");
+                    throw new AssertionException("Identified bug 45798");
                 }
                 throw e;
             }

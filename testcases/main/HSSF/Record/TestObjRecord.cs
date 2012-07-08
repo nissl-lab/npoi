@@ -19,7 +19,7 @@ namespace TestCases.HSSF.Record
 {
     using System;
     using System.Collections;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.HSSF.Record;
     using NPOI.Util;
 
@@ -29,7 +29,7 @@ namespace TestCases.HSSF.Record
      *
      * @author Yegor Kozlov
      */
-    [TestClass]
+    [TestFixture]
     public class TestObjRecord
     {
         /**
@@ -51,7 +51,7 @@ namespace TestCases.HSSF.Record
         private static byte[] recdataNeedingPadding = {
     	    21, 0, 18, 0, 0, 0, 1, 0, 17, 96, 0, 0, 0, 0, 56, 111, unchecked((byte)-52), 3, 0, 0, 0, 0, 6, 0, 2, 0, 0, 0, 0, 0, 0, 0
         };
-        [TestMethod]
+        [Test]
         public void TestLoad()
         {
             ObjRecord record = new ObjRecord(TestcaseRecordInputStream.Create(ObjRecord.sid, recdata));
@@ -64,7 +64,7 @@ namespace TestCases.HSSF.Record
             Assert.IsTrue(subrecords[1] is EndSubRecord);
 
         }
-        [TestMethod]
+        [Test]
         public void TestStore()
         {
             ObjRecord record = new ObjRecord(TestcaseRecordInputStream.Create(ObjRecord.sid, recdata));
@@ -75,7 +75,7 @@ namespace TestCases.HSSF.Record
             System.Array.Copy(recordBytes, 4, subData, 0, subData.Length);
             Assert.IsTrue(NPOI.Util.Arrays.Equals(recdata, subData));
         }
-        [TestMethod]
+        [Test]
         public void TestConstruct()
         {
             ObjRecord record = new ObjRecord();
@@ -102,14 +102,14 @@ namespace TestCases.HSSF.Record
             Assert.IsTrue(subrecords[0] is CommonObjectDataSubRecord);
             Assert.IsTrue(subrecords[1] is EndSubRecord);
         }
-        [TestMethod]
+        [Test]
         public void TestReadWriteWithPadding_bug45133()
         {
             ObjRecord record = new ObjRecord(TestcaseRecordInputStream.Create(ObjRecord.sid, recdataNeedingPadding));
 
             if (record.RecordSize == 34)
             {
-                throw new AssertFailedException("Identified bug 45133");
+                throw new AssertionException("Identified bug 45133");
             }
 
             Assert.AreEqual(36, record.RecordSize);
@@ -124,7 +124,7 @@ namespace TestCases.HSSF.Record
  * Check that ObjRecord tolerates and preserves padding to a 4-byte boundary
  * (normally padding is to a 2-byte boundary).
  */
-        [TestMethod]
+        [Test]
         public void Test4BytePadding()
         {
             // actual data from file saved by Excel 2007

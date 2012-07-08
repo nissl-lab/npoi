@@ -16,7 +16,7 @@
 ==================================================================== */
 
 using TestCases.SS.UserModel;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using NPOI.SS.UserModel;
 namespace NPOI.XSSF.UserModel
 {
@@ -24,7 +24,7 @@ namespace NPOI.XSSF.UserModel
     /**
      * @author Yegor Kozlov
      */
-    [TestClass]
+    [TestFixture]
     public class TestXSSFName : BaseTestNamedRange
     {
 
@@ -35,7 +35,7 @@ namespace NPOI.XSSF.UserModel
         }
 
         //TODO combine TestRepeatingRowsAndColums() for HSSF and XSSF
-        [TestMethod]
+        [Test]
         public void TestRepeatingRowsAndColums()
         {
             // First Test that Setting RR&C for same sheet more than once only Creates a

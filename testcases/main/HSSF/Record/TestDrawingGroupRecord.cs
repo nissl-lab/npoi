@@ -19,17 +19,17 @@ namespace TestCases.HSSF.Record
 {
     using System;
     using NPOI.HSSF.Record;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.DDF;
     using NPOI.Util;
 
-    [TestClass]
+    [TestFixture]
     public class TestDrawingGroupRecord
     {
         static int MAX_RECORD_SIZE = 8228;
         private static int MAX_DATA_SIZE = MAX_RECORD_SIZE - 4;
 
-        [TestMethod]
+        [Test]
         public void TestRecordSize()
         {
             DrawingGroupRecord r = new DrawingGroupRecord();
@@ -66,7 +66,7 @@ namespace TestCases.HSSF.Record
             r.RawData = (new byte[MAX_DATA_SIZE * 2 + 1]);
             Assert.AreEqual(MAX_RECORD_SIZE * 2 + 5, r.RecordSize);
         }
-        [TestMethod]
+        [Test]
         public void TestSerialize()
         {
             // Check under max record size
@@ -125,7 +125,7 @@ namespace TestCases.HSSF.Record
             System.Array.Copy(data, fromInclusive, result, 0, length);
             return result;
         }
-        [TestMethod]
+        [Test]
         public void TestGrossSizeFromDataSize()
         {
             for (int i = 0; i < MAX_RECORD_SIZE * 4; i += 11)

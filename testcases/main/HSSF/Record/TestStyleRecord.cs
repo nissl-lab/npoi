@@ -18,17 +18,17 @@
 namespace TestCases.HSSF.Record
 {
     using System;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.HSSF.Record;
     using NPOI.Util;
 
     /**
      * Tests for {@link StyleRecord}
      */
-    [TestClass]
+    [TestFixture]
     public class TestStyleRecord
     {
-        [TestMethod]
+        [Test]
         public void TestUnicodeReadName()
         {
             byte[] data = HexRead.ReadFromString(
@@ -45,7 +45,7 @@ namespace TestCases.HSSF.Record
             {
                 if (e.Message.Equals("Incorrect number of bytes written - expected 27 but got 18"))
                 {
-                    throw new AssertFailedException("Identified bug 46385");
+                    throw new AssertionException("Identified bug 46385");
                 }
                 throw e;
             }

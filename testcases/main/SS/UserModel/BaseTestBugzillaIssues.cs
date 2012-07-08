@@ -19,7 +19,7 @@ namespace TestCases.SS.UserModel
 {
     using System;
 
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
 
     using NPOI.HSSF.Util;
     using NPOI.SS;
@@ -32,7 +32,7 @@ namespace TestCases.SS.UserModel
      *
      * @author Yegor Kozlov
      */
-    [TestClass]
+    [TestFixture]
     public class BaseTestBugzillaIssues
     {
 
@@ -52,7 +52,7 @@ namespace TestCases.SS.UserModel
          *
          * Also Tests bug 15353 (problems with hyperlinks to Google)
          */
-        [TestMethod]
+        [Test]
         public void Test23094()
         {
             IWorkbook wb = _testDataProvider.CreateWorkbook();
@@ -118,7 +118,7 @@ namespace TestCases.SS.UserModel
         /**
          * Merged regions were being Removed from the parent in Cloned sheets
          */
-        [TestMethod]
+        [Test]
         public void Test22720()
         {
             IWorkbook workBook = _testDataProvider.CreateWorkbook();
@@ -148,7 +148,7 @@ namespace TestCases.SS.UserModel
             //make sure we dont exception
 
         }
-        [TestMethod]
+        [Test]
         public void Test28031()
         {
             IWorkbook wb = _testDataProvider.CreateWorkbook();
@@ -172,7 +172,7 @@ namespace TestCases.SS.UserModel
          * that Contains macros and this formula:
          * {=SUM(IF(FREQUENCY(IF(LEN(V4:V220)>0,MATCH(V4:V220,V4:V220,0),""),IF(LEN(V4:V220)>0,MATCH(V4:V220,V4:V220,0),""))>0,1))}
          */
-        [TestMethod]
+        [Test]
         public void Test21334()
         {
             IWorkbook wb = _testDataProvider.CreateWorkbook();
@@ -188,7 +188,7 @@ namespace TestCases.SS.UserModel
 
         /** another Test for the number of unique strings issue
          *test opening the resulting file in Excel*/
-        [TestMethod]
+        [Test]
         public void Test22568()
         {
             int r = 2000; int c = 3;
@@ -245,7 +245,7 @@ namespace TestCases.SS.UserModel
         /**
          * Bug 42448: Can't parse SUMPRODUCT(A!C7:A!C67, B8:B68) / B69
          */
-        [TestMethod]
+        [Test]
         public void Test42448()
         {
             IWorkbook wb = _testDataProvider.CreateWorkbook();
@@ -253,7 +253,7 @@ namespace TestCases.SS.UserModel
             cell.CellFormula = (/*setter*/"SUMPRODUCT(A!C7:A!C67, B8:B68) / B69");
             Assert.IsTrue(true, "no errors parsing formula");
         }
-        [TestMethod]
+        [Test]
         public void Test18800()
         {
             IWorkbook book = _testDataProvider.CreateWorkbook();
@@ -285,7 +285,7 @@ namespace TestCases.SS.UserModel
                 }
             }
         }
-        [TestMethod]
+        [Test]
         public void TestBug43093()
         {
             IWorkbook xlw = _testDataProvider.CreateWorkbook();
@@ -305,7 +305,7 @@ namespace TestCases.SS.UserModel
 
             Assert.AreEqual(d, (311 + 312 + 321 + 322), 0.0000001);
         }
-        [TestMethod]
+        [Test]
         public void TestMaxFunctionArguments_bug46729()
         {
             String[] func = { "COUNT", "AVERAGE", "MAX", "MIN", "OR", "SUBTOTAL", "SKEW" };
@@ -350,7 +350,7 @@ namespace TestCases.SS.UserModel
             fmla.Append(")");
             return fmla.ToString();
         }
-        [TestMethod]
+        [Test]
         public void TestAutoSize_bug506819()
         {
             IWorkbook wb = _testDataProvider.CreateWorkbook();
@@ -375,7 +375,7 @@ namespace TestCases.SS.UserModel
         /**
          * CreateFreezePane column/row order check
          */
-        [TestMethod]
+        [Test]
         public void Test49381()
         {
             IWorkbook wb = _testDataProvider.CreateWorkbook();

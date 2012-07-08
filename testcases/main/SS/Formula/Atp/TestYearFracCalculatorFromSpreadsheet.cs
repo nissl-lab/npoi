@@ -20,7 +20,7 @@ namespace TestCases.SS.Formula.Atp
     using System;
     using System.Collections;
     using System.IO;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.HSSF.UserModel;
     using NPOI.SS.Formula.Atp;
     using NPOI.SS.Formula.Eval;
@@ -33,7 +33,7 @@ namespace TestCases.SS.Formula.Atp
      * 
      * @author Josh Micich
      */
-    [TestClass]
+    [TestFixture]
     public class TestYearFracCalculatorFromSpreadsheet
     {
 
@@ -46,7 +46,7 @@ namespace TestCases.SS.Formula.Atp
             public static int YEARFRAC_FORMULA_COLUMN = 11; // "L"
             public static int EXPECTED_RESULT_COLUMN = 13; // "N"
         }
-        [TestMethod]
+        [Test]
         public void TestAll()
         {
 
@@ -76,7 +76,7 @@ namespace TestCases.SS.Formula.Atp
                     nUnexpectedErrors++;
                     printshortStackTrace(System.Console.Error, e);
                 }
-                catch (AssertFailedException e)
+                catch (AssertionException e)
                 {
                     nFailures++;
                     printshortStackTrace(System.Console.Error, e);
@@ -86,7 +86,7 @@ namespace TestCases.SS.Formula.Atp
             {
                 String msg = nFailures + " failures(s) and " + nUnexpectedErrors
                     + " unexpected errors(s) occurred. See stderr for details";
-                throw new AssertFailedException(msg);
+                throw new AssertionException(msg);
             }
             if (nSuccess < 1)
             {

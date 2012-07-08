@@ -29,17 +29,17 @@ namespace TestCases.HSSF.EventUserModel
     using NPOI.POIFS.FileSystem;
     using NPOI.SS.Formula;
 
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.SS.Formula.PTG;
 
 
-    [TestClass]
+    [TestFixture]
     public class TestEventWorkbookBuilder
     {
         private MockHSSFListener mockListen;
         private EventWorkbookBuilder.SheetRecordCollectingListener listener;
 
-        [TestInitialize]
+        [SetUp]
         public void SetUp()
         {
             HSSFRequest req = new HSSFRequest();
@@ -59,20 +59,20 @@ namespace TestCases.HSSF.EventUserModel
                 throw;
             }
         }
-        [TestMethod]
+        [Test]
         public void TestBasics()
         {
             Assert.IsNotNull(listener.GetSSTRecord());
             Assert.IsNotNull(listener.GetBoundSheetRecords());
             Assert.IsNotNull(listener.GetExternSheetRecords());
         }
-        [TestMethod]
+        [Test]
         public void TestGetStubWorkbooks()
         {
             Assert.IsNotNull(listener.GetStubWorkbook());
             Assert.IsNotNull(listener.GetStubHSSFWorkbook());
         }
-        [TestMethod]
+        [Test]
         public void TestContents()
         {
             Assert.AreEqual(2, listener.GetSSTRecord().NumStrings);
@@ -86,7 +86,7 @@ namespace TestCases.HSSF.EventUserModel
             Assert.AreEqual("Sheet1", ref1.FindSheetNameFromExternSheet(1));
             Assert.AreEqual("S2", ref1.FindSheetNameFromExternSheet(2));
         }
-        [TestMethod]
+        [Test]
         public void TestFormulas()
         {
 

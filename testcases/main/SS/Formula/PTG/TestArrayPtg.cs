@@ -18,7 +18,7 @@
 namespace TestCases.SS.Formula.PTG
 {
     using System;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.HSSF.UserModel;
     using NPOI.SS.Formula.PTG;
     using NPOI.Util;
@@ -30,7 +30,7 @@ namespace TestCases.SS.Formula.PTG
      *
      * @author Josh Micich
      */
-    [TestClass]
+    [TestFixture]
     public class TestArrayPtg
     {
 
@@ -58,7 +58,7 @@ namespace TestCases.SS.Formula.PTG
         /**
          * Lots of problems with ArrayPtg's decoding and encoding of the element value data
          */
-        [TestMethod]
+        [Test]
         public void TestReadWriteTokenValueBytes()
         {
             ArrayPtg ptg = Create(ENCODED_PTG_DATA, ENCODED_CONSTANT_DATA);
@@ -79,7 +79,7 @@ namespace TestCases.SS.Formula.PTG
 
             if (outBuf[0] == 4)
             {
-                throw new AssertFailedException("Identified bug 42564b");
+                throw new AssertionException("Identified bug 42564b");
             }
             Assert.IsTrue(Arrays.Equals(ENCODED_CONSTANT_DATA, outBuf));
         }
@@ -88,7 +88,7 @@ namespace TestCases.SS.Formula.PTG
         /**
          * Excel stores array elements column by column.  This Test Makes sure POI does the same.
          */
-        [TestMethod]
+        [Test]
         public void TestElementOrdering()
         {
             ArrayPtg ptg = Create(ENCODED_PTG_DATA, ENCODED_CONSTANT_DATA);
@@ -107,7 +107,7 @@ namespace TestCases.SS.Formula.PTG
          * Test for a bug which was temporarily introduced by the fix for bug 42564.
          * A spreadsheet was Added to make the ordering Clearer.
          */
-        [TestMethod]
+        [Test]
         public void TestElementOrderingInSpreadsheet()
         {
             HSSFWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("ex42564-elementOrder.xls");
@@ -117,11 +117,11 @@ namespace TestCases.SS.Formula.PTG
 
             if (formula.Equals("SUM({1,6,11;2,7,12;3,8,13;4,9,14;5,10,15})"))
             {
-                throw new AssertFailedException("Identified bug 42564 b");
+                throw new AssertionException("Identified bug 42564 b");
             }
             Assert.AreEqual("SUM({1,2,3,4,5;6,7,8,9,10;11,12,13,14,15})", formula);
         }
-        [TestMethod]
+        [Test]
         public void TestToFormulaString()
         {
             ArrayPtg ptg = Create(ENCODED_PTG_DATA, ENCODED_CONSTANT_DATA);
@@ -134,7 +134,7 @@ namespace TestCases.SS.Formula.PTG
             {
                 if (e.Message.Equals("Unexpected constant class (java.lang.Boolean)"))
                 {
-                    throw new AssertFailedException("Identified bug 45380");
+                    throw new AssertionException("Identified bug 45380");
                 }
                 throw e;
             }
@@ -144,7 +144,7 @@ namespace TestCases.SS.Formula.PTG
         /**
          * worth Checking since AttrPtg.sid=0x20 and Ptg.CLASS_* = (0x00, 0x20, and 0x40)
          */
-        [TestMethod]
+        [Test]
         public void TestOperandClassDecoding()
         {
             ConfirmOperandClassDecoding(Ptg.CLASS_REF);

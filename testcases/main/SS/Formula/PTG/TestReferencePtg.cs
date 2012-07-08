@@ -18,7 +18,7 @@
 namespace TestCases.SS.Formula.PTG
 {
     using System;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.HSSF.UserModel;
     using NPOI.SS.Formula.PTG;
     using NPOI.SS.UserModel;
@@ -30,13 +30,13 @@ namespace TestCases.SS.Formula.PTG
     /**
      * Tests for {@link RefPtg}.
      */
-    [TestClass]
+    [TestFixture]
     public class TestReferencePtg
     {
         /**
          * Tests Reading a file Containing this ptg.
          */
-        [TestMethod]
+        [Test]
         public void TestReading()
         {
             HSSFWorkbook workbook = HSSFTestDataSamples.OpenSampleWorkbook("ReferencePtg.xls");
@@ -65,7 +65,7 @@ namespace TestCases.SS.Formula.PTG
             Assert.AreEqual(32770.0, sheet.GetRow(32769).GetCell(1).NumericCellValue, 0.0, "Wrong numeric value for referemce");
             Assert.AreEqual("A32770", sheet.GetRow(32769).GetCell(1).CellFormula, "Wrong formula string for reference");
         }
-        [TestMethod]
+        [Test]
         public void TestBug44921()
         {
             HSSFWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("ex44921-21902.xls");
@@ -78,7 +78,7 @@ namespace TestCases.SS.Formula.PTG
             {
                 if (e.Message.Equals("Coding Error: This method should never be called. This ptg should be Converted"))
                 {
-                    throw new AssertFailedException("Identified bug 44921");
+                    throw new AssertionException("Identified bug 44921");
                 }
                 throw e;
             }
@@ -86,7 +86,7 @@ namespace TestCases.SS.Formula.PTG
         private static byte[] tRefN_data = {
     	0x2C, 33, 44, 55, 66,
     };
-        [TestMethod]
+        [Test]
         public void TestReadWrite_tRefN_bug45091()
         {
             ILittleEndianInput in1 = TestcaseRecordInputStream.CreateLittleEndian(tRefN_data);
@@ -95,7 +95,7 @@ namespace TestCases.SS.Formula.PTG
             Ptg.SerializePtgs(ptgs, outData, 0);
             if (outData[0] == 0x24)
             {
-                throw new AssertFailedException("Identified bug 45091");
+                throw new AssertionException("Identified bug 45091");
             }
             Assert.IsTrue(Arrays.Equals(tRefN_data, outData));
         }
@@ -104,7 +104,7 @@ namespace TestCases.SS.Formula.PTG
          * Test that RefPtgBase can handle references with column index greater than 255,
          * see Bugzilla 50096
          */
-        [TestMethod]
+        [Test]
         public void TestColumnGreater255()
         {
             RefPtgBase ptg;

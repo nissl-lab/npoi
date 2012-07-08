@@ -16,7 +16,7 @@
 ==================================================================== */
 
 using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using NPOI.SS.Formula.Function;
 namespace TestCases.SS.Formula.Function
 {
@@ -24,10 +24,10 @@ namespace TestCases.SS.Formula.Function
      * 
      * @author Josh Micich
      */
-    [TestClass]
+    [TestFixture]
     public class TestFunctionMetadataRegistry
     {
-        [TestMethod]
+        [Test]
         public void TestWellKnownFunctions()
         {
             ConfirmFunction(0, "COUNT");

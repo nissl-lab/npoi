@@ -30,7 +30,7 @@ using System;
 using System.IO;
 using System.Collections;
 
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using NPOI.POIFS.Storage;
 using NPOI.Util;
 using NPOI.POIFS.FileSystem;
@@ -43,7 +43,7 @@ namespace TestCases.POIFS.Storage
      *
      * @author Marc Johnson
      */
-    [TestClass]
+    [TestFixture]
     public class TestSmallDocumentBlockList
     {
         /**
@@ -51,7 +51,7 @@ namespace TestCases.POIFS.Storage
          *
          * @exception IOException
          */
-        [TestMethod]
+        [Test]
         public void TestConstructor()
         {
             byte[] data = new byte[2560];

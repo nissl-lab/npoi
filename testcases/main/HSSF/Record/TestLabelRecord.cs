@@ -22,16 +22,16 @@ namespace TestCases.HSSF.Record
     using TestCases.HSSF;
     using NPOI.HSSF.UserModel;
     using NPOI.HSSF.Record;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     /**
      * Tests for <c>LabelRecord</c>
      * 
      * @author Josh Micich
      */
-    [TestClass]
+    [TestFixture]
     public class TestLabelRecord
     {
-        [TestMethod]
+        [Test]
         public void TestEmptyString()
         {
             HSSFWorkbook wb;
@@ -41,7 +41,7 @@ namespace TestCases.HSSF.Record
             }
             catch (NullReferenceException)
             {
-                throw new AssertFailedException("Identified bug 42570");
+                throw new AssertionException("Identified bug 42570");
             }
             HSSFTestDataSamples.WriteOutAndReadBack(wb);
         }

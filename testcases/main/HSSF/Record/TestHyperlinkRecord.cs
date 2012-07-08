@@ -25,7 +25,7 @@ namespace TestCases.HSSF.Record
 
 
 
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
 
     /**
      * Test HyperlinkRecord
@@ -33,13 +33,13 @@ namespace TestCases.HSSF.Record
      * @author Nick Burch
      * @author Yegor Kozlov
      */
-    [TestClass]
+    [TestFixture]
     public class TestHyperlinkRecord
     {
         /// <summary>
         ///  Some of the tests are depending on the american culture.
         /// </summary>
-        [TestInitialize()]
+        [SetUp]
         public void InitializeCultere()
         {
             System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
@@ -276,7 +276,7 @@ namespace TestCases.HSSF.Record
             Assert.AreEqual(expectedGuid, actualGuid);
         }
 
-        [TestMethod]
+        [Test]
         public void TestReadURLLink()
         {
             RecordInputStream is1 = TestcaseRecordInputStream.Create(HyperlinkRecord.sid, data1);
@@ -296,7 +296,7 @@ namespace TestCases.HSSF.Record
             Assert.AreEqual("My Link", link.Label);
             Assert.AreEqual("http://www.lakings.com/", link.Address);
         }
-        [TestMethod]
+        [Test]
         public void TestReadFileLink()
         {
             RecordInputStream is1 = TestcaseRecordInputStream.Create((short)HyperlinkRecord.sid, data2);
@@ -315,7 +315,7 @@ namespace TestCases.HSSF.Record
             Assert.AreEqual("file", link.Label);
             Assert.AreEqual("link1.xls", link.ShortFilename);
         }
-        [TestMethod]
+        [Test]
         public void TestReadEmailLink()
         {
             RecordInputStream is1 = TestcaseRecordInputStream.Create((short)HyperlinkRecord.sid, data3);
@@ -334,7 +334,7 @@ namespace TestCases.HSSF.Record
             Assert.AreEqual("email", link.Label);
             Assert.AreEqual("mailto:ebgans@mail.ru?subject=Hello,%20Ebgans!", link.Address);
         }
-        [TestMethod]
+        [Test]
         public void TestReadDocumentLink()
         {
             RecordInputStream is1 = TestcaseRecordInputStream.Create(HyperlinkRecord.sid, data4);
@@ -364,7 +364,7 @@ namespace TestCases.HSSF.Record
             Assert.AreEqual(bytes1.Length, bytes2.Length);
             Assert.IsTrue(Arrays.Equals(bytes1, bytes2));
         }
-        [TestMethod]
+        [Test]
         public void TestSerialize()
         {
             Serialize(data1);
@@ -372,7 +372,7 @@ namespace TestCases.HSSF.Record
             Serialize(data3);
             Serialize(data4);
         }
-        [TestMethod]
+        [Test]
         public void TestCreateURLRecord()
         {
             HyperlinkRecord link = new HyperlinkRecord();
@@ -388,7 +388,7 @@ namespace TestCases.HSSF.Record
             Assert.AreEqual(data1.Length, ser.Length);
             Assert.IsTrue(Arrays.Equals(data1, ser));
         }
-        [TestMethod]
+        [Test]
         public void TestCreateFileRecord()
         {
             HyperlinkRecord link = new HyperlinkRecord();
@@ -404,7 +404,7 @@ namespace TestCases.HSSF.Record
             Assert.AreEqual(data2.Length, ser.Length);
             Assert.IsTrue(Arrays.Equals(data2, ser));
         }
-        [TestMethod]
+        [Test]
         public void TestCreateDocumentRecord()
         {
             HyperlinkRecord link = new HyperlinkRecord();
@@ -420,7 +420,7 @@ namespace TestCases.HSSF.Record
             //Assert.AreEqual(data4.Length, ser.Length);
             Assert.IsTrue(Arrays.Equals(data4, ser));
         }
-        [TestMethod]
+        [Test]
         public void TestCreateEmailtRecord()
         {
             HyperlinkRecord link = new HyperlinkRecord();
@@ -436,7 +436,7 @@ namespace TestCases.HSSF.Record
             Assert.AreEqual(data3.Length, ser.Length);
             Assert.IsTrue(Arrays.Equals(data3, ser));
         }
-        [TestMethod]
+        [Test]
         public void TestClone()
         {
             byte[][] data = { data1, data2, data3, data4 };
@@ -450,7 +450,7 @@ namespace TestCases.HSSF.Record
 
         }
 
-        [TestMethod]
+        [Test]
         public void TestReserializeTargetFrame()
         {
             RecordInputStream in1 = TestcaseRecordInputStream.Create(HyperlinkRecord.sid, dataTargetFrame);
@@ -459,7 +459,7 @@ namespace TestCases.HSSF.Record
             TestcaseRecordInputStream.ConfirmRecordEncoding(HyperlinkRecord.sid, dataTargetFrame, ser);
         }
 
-        [TestMethod]
+        [Test]
         public void TestReserializeLinkToWorkbook()
         {
 
@@ -469,11 +469,11 @@ namespace TestCases.HSSF.Record
             TestcaseRecordInputStream.ConfirmRecordEncoding(HyperlinkRecord.sid, dataLinkToWorkbook, ser);
             if ("YEARFR~1.XLS".Equals(hr.Address))
             {
-                throw new AssertFailedException("Identified bug in reading workbook link");
+                throw new AssertionException("Identified bug in reading workbook link");
             }
             Assert.AreEqual("yearfracExamples.xls", hr.Address);
         }
-        [TestMethod]
+        [Test]
         public void TestReserializeUNC()
         {
 
@@ -487,10 +487,10 @@ namespace TestCases.HSSF.Record
             }
             catch (NullReferenceException)
             {
-                throw new AssertFailedException("Identified bug with option URL and UNC set at same time");
+                throw new AssertionException("Identified bug with option URL and UNC set at same time");
             }
         }
-        [TestMethod]
+        [Test]
         public void TestGUID()
         {
             GUID g;
@@ -530,7 +530,7 @@ namespace TestCases.HSSF.Record
             Assert.AreEqual(new String(HexDump.ShortToHex(d3)), new String(HexDump.ShortToHex(g.D3)));
             Assert.AreEqual(new String(HexDump.LongToHex(d4)), new String(HexDump.LongToHex(g.D4)));
         }
-        [TestMethod]
+        [Test]
         public void Test47498()
         {
             RecordInputStream is1 = TestcaseRecordInputStream.Create(HyperlinkRecord.sid, data_47498);

@@ -24,13 +24,13 @@ namespace TestCases.DDF
     using System.Collections.Generic;
     using System.IO;
 
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.DDF;
     using NPOI.Util;
 
 using System.Configuration;
 
-    [TestClass]
+    [TestFixture]
     public class TestEscherContainerRecord
     {
         private String ESCHER_DATA_PATH;
@@ -39,7 +39,7 @@ using System.Configuration;
         {
             ESCHER_DATA_PATH = ConfigurationManager.AppSettings["escher.data.path"];
         }
-        [TestMethod]
+        [Test]
         public void TestFillFields()
         {
             EscherRecordFactory f = new DefaultEscherRecordFactory();
@@ -59,7 +59,7 @@ using System.Configuration;
             Assert.AreEqual(unchecked((short)0x0002), c.Options);
             Assert.AreEqual(unchecked((short)0xF222), c.RecordId);
         }
-        [TestMethod]
+        [Test]
         public void TestSerialize()
         {
             UnknownEscherRecord r = new UnknownEscherRecord();
@@ -80,7 +80,7 @@ using System.Configuration;
             Assert.AreEqual("[3F, 12, 12, F1, 08, 00, 00, 00, 99, 99, 01, FF, 00, 00, 00, 00, ]", HexDump.ToHex(data));
 
         }
-        [TestMethod]
+        [Test]
         public void TestToString()
         {
             EscherContainerRecord r = new EscherContainerRecord();
@@ -149,7 +149,7 @@ using System.Configuration;
             public override int RecordSize { get { return 10; } }
             public override String RecordName { get { return ""; } }
         }
-        [TestMethod]
+        [Test]
         public void TestRecordSize()
         {
             EscherContainerRecord r = new EscherContainerRecord();
@@ -163,7 +163,7 @@ using System.Configuration;
          * We were having problems with Reading too much data on an UnknownEscherRecord,
          *  but hopefully we now Read the correct size.
          */
-        [TestMethod]
+        [Test]
         public void TestBug44857()
         {
             //File f = new File(ESCHER_DATA_PATH, "Container.dat");
@@ -182,7 +182,7 @@ using System.Configuration;
         /**
 	 * Ensure {@link EscherContainerRecord} doesn't spill its guts everywhere
 	 */
-        [TestMethod]
+        [Test]
         public void TestChildren()
         {
             EscherContainerRecord ecr = new EscherContainerRecord();

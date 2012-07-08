@@ -18,7 +18,7 @@
 namespace TestCases.SS.Formula.PTG
 {
     using System;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.SS.Formula.PTG;
     using NPOI.Util;
 
@@ -29,14 +29,14 @@ namespace TestCases.SS.Formula.PTG
      * 
      * @author Josh Micich
      */
-    [TestClass]
+    [TestFixture]
     public class TestAttrPtg : AbstractPtgTestCase
     {
 
         /**
          * Fix for bug visible around svn r706772.
          */
-        [TestMethod]
+        [Test]
         public void TestReSerializeAttrChoose()
         {
             byte[] data = HexRead.ReadFromString("19, 04, 03, 00, 08, 00, 11, 00, 1A, 00, 23, 00");
@@ -49,7 +49,7 @@ namespace TestCases.SS.Formula.PTG
             }
             catch (IndexOutOfRangeException)
             {
-                throw new AssertFailedException("incorrect re-serialization of tAttrChoose");
+                throw new AssertionException("incorrect re-serialization of tAttrChoose");
             }
             Assert.IsTrue(Arrays.Equals(data, data2));
         }

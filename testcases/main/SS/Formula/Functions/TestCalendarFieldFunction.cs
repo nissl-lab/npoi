@@ -20,19 +20,19 @@ namespace TestCases.SS.Formula.Functions
 
     using NPOI.HSSF.UserModel;
     using NPOI.SS.UserModel;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using System;
 
     /**
      * Test for YEAR / MONTH / DAY / HOUR / MINUTE / SECOND
      */
-    [TestClass]
+    [TestFixture]
     public class TestCalendarFieldFunction
     {
 
         private ICell cell11;
         private HSSFFormulaEvaluator Evaluator;
-        [TestInitialize]
+        [SetUp]
         public void SetUp()
         {
             System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
@@ -42,7 +42,7 @@ namespace TestCases.SS.Formula.Functions
             cell11.SetCellType(CellType.FORMULA);
             Evaluator = new HSSFFormulaEvaluator(wb);
         }
-        [TestMethod]
+        [Test]
         public void TestValid()
         {
             Confirm("YEAR(2.26)", 1900);
@@ -59,7 +59,7 @@ namespace TestCases.SS.Formula.Functions
             Confirm("MINUTE(40627.4860417)", 39);
             Confirm("SECOND(40627.4860417)", 54);
         }
-        [TestMethod]
+        [Test]
         public void TestBugDate()
         {
             Confirm("YEAR(0.0)", 1900);
@@ -81,7 +81,7 @@ namespace TestCases.SS.Formula.Functions
             CellValue cv = Evaluator.Evaluate(cell11);
             if (cv.CellType != CellType.NUMERIC)
             {
-                throw new AssertFailedException("Wrong result type: " + cv.FormatAsString());
+                throw new AssertionException("Wrong result type: " + cv.FormatAsString());
             }
             double actualValue = cv.NumberValue;
             Assert.AreEqual(expectedResult, actualValue, 0);

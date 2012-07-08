@@ -15,7 +15,7 @@
    limitations under the License.
 ==================================================================== */
 
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using NPOI.OpenXmlFormats.Spreadsheet;
 using System.Collections.Generic;
 using System;
@@ -27,11 +27,11 @@ namespace NPOI.XSSF.UserModel
      *
      * @author Yegor Kozlov
      */
-    [TestClass]
+    [TestFixture]
     public class TestXSSFRichTextString
     {
 
-        [TestMethod]
+        [Test]
         public void TestCreate()
         {
 
@@ -49,7 +49,7 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual("Apache POI is cool stuff", rt.String);
         }
 
-        [TestMethod]
+        [Test]
         public void TestApplyFont()
         {
 
@@ -80,7 +80,7 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual(2, rt.GetLengthOfFormattingRun(3));
             Assert.AreEqual("89", rt.GetCTRst().GetRArray(3).t);
         }
-        [TestMethod]
+        [Test]
         public void TestClearFormatting()
         {
 
@@ -103,7 +103,7 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual("Apache POI", rt.String);
             Assert.AreEqual(0, rt.NumFormattingRuns);
         }
-        [TestMethod]
+        [Test]
         public void TestGetFonts()
         {
 
@@ -132,7 +132,7 @@ namespace NPOI.XSSF.UserModel
          * make sure we insert xml:space="preserve" attribute
          * if a string has leading or trailing white spaces
          */
-        //   [TestMethod]
+        //   [Test]
         //public void TestPreserveSpaces()
         //{
         //    XSSFRichTextString rt = new XSSFRichTextString("Apache");
@@ -147,7 +147,7 @@ namespace NPOI.XSSF.UserModel
         /**
          * Test that unicode representation_ xHHHH_ is properly Processed
          */
-           [TestMethod]
+           [Test]
         public void TestUtfDecode()
         {
             CT_Rst st = new CT_Rst();
@@ -157,7 +157,7 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual("abc\r2ef\r", rt.String);
 
         }
-        //[TestMethod]
+        //[Test]
         //public void TestApplyFont_lowlevel()
         //{
         //    CT_Rst st = new CT_Rst();
@@ -272,7 +272,7 @@ namespace NPOI.XSSF.UserModel
         //    Assert.AreSame(fmt4, Runs12[3]);
         //    Assert.AreSame(fmt5, Runs12[4]);
         //}
-        [TestMethod]
+        [Test]
         public void TestApplyFont_usermodel()
         {
             String text = "Apache Software Foundation";
@@ -300,7 +300,7 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual("Apache", str.GetCTRst().GetRArray(0).t);
             Assert.AreEqual(" Software Foundation", str.GetCTRst().GetRArray(1).t);
         }
-        //[TestMethod]
+        //[Test]
         //public void TestLineBreaks_bug48877()
         //{
 

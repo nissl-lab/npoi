@@ -18,7 +18,7 @@
 namespace TestCases.HSSF.Record.Pivot
 {
 
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.HSSF.Record;
     using NPOI.HSSF.Record.PivotTable;
     using NPOI.Util;
@@ -29,11 +29,11 @@ namespace TestCases.HSSF.Record.Pivot
      * 
      * @author Josh Micich
      */
-    [TestClass]
+    [TestFixture]
     public class TestExtendedPivotTableViewFieldsRecord
     {
 
-        [TestMethod]
+        [Test]
         public void TestSubNameNotPresent_bug46693()
         {
             // This data came from attachment 23347 of bug 46693 at offset 0xAA43
@@ -50,7 +50,7 @@ namespace TestCases.HSSF.Record.Pivot
             {
                 if (e.Message.Equals("Expected to find a ContinueRecord in order to read remaining 65535 of 65535 chars"))
                 {
-                    throw new AssertFailedException("Identified bug 46693a");
+                    throw new AssertionException("Identified bug 46693a");
                 }
                 throw e;
             }
@@ -58,7 +58,7 @@ namespace TestCases.HSSF.Record.Pivot
             Assert.AreEqual(data.Length, rec.RecordSize);
         }
 
-        [TestMethod]
+        [Test]
         public void TestOlderFormat_bug46918()
         {
             // There are 10 SXVDEX records in the file (not uploaded) that originated bugzilla 46918
@@ -75,7 +75,7 @@ namespace TestCases.HSSF.Record.Pivot
             {
                 if (e.Message.Equals("Not enough data (0) to read requested (2) bytes"))
                 {
-                    throw new AssertFailedException("Identified bug 46918");
+                    throw new AssertionException("Identified bug 46918");
                 }
                 throw e;
             }

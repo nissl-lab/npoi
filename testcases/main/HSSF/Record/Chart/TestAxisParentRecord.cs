@@ -22,7 +22,7 @@ namespace TestCases.HSSF.Record.Chart
 {
     using System;
     using NPOI.HSSF.Record;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.HSSF.Record.Chart;
     /**
      * Tests the serialization and deserialization of the AxisParentRecord
@@ -31,7 +31,7 @@ namespace TestCases.HSSF.Record.Chart
      *
      * @author Glen Stampoultzis (glens at apache.org)
      */
-    [TestClass]
+    [TestFixture]
     public class TestAxisParentRecord
     {
         byte[] data = new byte[] {
@@ -46,7 +46,7 @@ namespace TestCases.HSSF.Record.Chart
         {
 
         }
-        [TestMethod]
+        [Test]
         public void TestLoad()
         {
             AxisParentRecord record = new AxisParentRecord(TestcaseRecordInputStream.Create((short)0x1041, data));
@@ -59,7 +59,7 @@ namespace TestCases.HSSF.Record.Chart
 
             Assert.AreEqual(22, record.RecordSize);
         }
-        [TestMethod]
+        [Test]
         public void TestStore()
         {
             AxisParentRecord record = new AxisParentRecord();

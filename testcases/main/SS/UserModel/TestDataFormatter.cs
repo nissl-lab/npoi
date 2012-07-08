@@ -18,7 +18,7 @@
 namespace TestCases.SS.UserModel
 {
     using System;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
 
     using NPOI.HSSF.UserModel;
     using NPOI.SS.UserModel;
@@ -29,14 +29,14 @@ namespace TestCases.SS.UserModel
      * See {@link TestHSSFDataFormatter} too for
      *  more Tests.
      */
-    [TestClass]
+    [TestFixture]
     public class TestDataFormatter
     {
         /**
          * Test that we use the specified locale when deciding
          *   how to format normal numbers
          */
-        [TestMethod]
+        [Test]
         public void TestLocale()
         {
             DataFormatter dfUS = new DataFormatter(System.Globalization.CultureInfo.GetCultureInfo("en-US"));
@@ -54,7 +54,7 @@ namespace TestCases.SS.UserModel
          * Ensure that colours Get correctly
          *  zapped from within the format strings
          */
-        [TestMethod]
+        [Test]
         public void TestColours()
         {
             //DataFormatter dfUS = new DataFormatter(Locale.US);
@@ -85,7 +85,7 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual("12.34[a]", dfUS.FormatRawCellContents(12.343, -1, "##.##[a]"));
             Assert.AreEqual("[ab]12.34[x]", dfUS.FormatRawCellContents(12.343, -1, "[ab]##.##[x]"));
         }
-        [TestMethod]
+        [Test]
         public void TestColoursAndBrackets()
         {
             //DataFormatter dfUS = new DataFormatter(Locale.US);
@@ -136,7 +136,7 @@ namespace TestCases.SS.UserModel
          *  and Excel differ, and workarounds are not
          *  yet in place for all of these
          */
-        [TestMethod]
+        [Test]
         public void TestNegativeZero()
         {
             //DataFormatter dfUS = new DataFormatter(Locale.US);
@@ -184,7 +184,7 @@ namespace TestCases.SS.UserModel
          *  and *x (fill to the column width with "x"s) are
          *  correctly ignored by us.
          */
-        [TestMethod]
+        [Test]
         public void TestPAddingSpaces()
         {
             //DataFormatter dfUS = new DataFormatter(Locale.US);
@@ -203,7 +203,7 @@ namespace TestCases.SS.UserModel
         /**
          * DataFormatter is the CSV mode preserves spaces
          */
-        [TestMethod]
+        [Test]
         public void TestPAddingSpacesCSV()
         {
             //DataFormatter dfUS = new DataFormatter(Locale.US);
@@ -239,7 +239,7 @@ namespace TestCases.SS.UserModel
          * Test that the special Excel month format MMMMM
          *  Gets turned into the first letter of the month
          */
-        [TestMethod]
+        [Test]
         public void TestMMMMM()
         {
             //DataFormatter dfUS = new DataFormatter(Locale.US);
@@ -256,7 +256,7 @@ namespace TestCases.SS.UserModel
          * Test that we can handle elapsed time,
          *  eg formatting 1 day 4 hours as 28 hours
          */
-        [TestMethod]
+        [Test]
         public void TestElapsedTime()
         {
             //DataFormatter dfUS = new DataFormatter(Locale.US);
@@ -354,7 +354,7 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual("57:41.760", dfUS.FormatRawCellContents(.1234, -1, "mm:ss.000;@"));
             Assert.AreEqual("24:00.0", dfUS.FormatRawCellContents(123456.6, -1, "mm:ss.0"));
         }
-        [TestMethod]
+        [Test]
         public void TestDateWindowing()
         {
             //DataFormatter dfUS = new DataFormatter(Locale.US);
@@ -363,7 +363,7 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual("1899-12-31 00:00:00", dfUS.FormatRawCellContents(0.0, -1, "yyyy-mm-dd hh:mm:ss", false));
             Assert.AreEqual("1904-01-01 00:00:00", dfUS.FormatRawCellContents(0.0, -1, "yyyy-mm-dd hh:mm:ss", true));
         }
-        [TestMethod]
+        [Test]
         public void TestScientificNotation()
         {
             //DataFormatter dfUS = new DataFormatter(Locale.US);
@@ -373,7 +373,7 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual("-1.23E+01", dfUS.FormatRawCellContents(-12.343, -1, "0.00E+00"));
             Assert.AreEqual("0.00E+00", dfUS.FormatRawCellContents(0.0, -1, "0.00E+00"));
         }
-        [TestMethod]
+        [Test]
         public void TestInvalidDate()
         {
             //DataFormatter df1 = new DataFormatter(Locale.US);
@@ -386,7 +386,7 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual("###############################################################################################################################################################################################################################################################",
                     df2.FormatRawCellContents(-1, -1, "mm/dd/yyyy"));
         }
-        [TestMethod]
+        [Test]
         public void TestEscapes()
         {
             DataFormatter dfUS = new DataFormatter(System.Globalization.CultureInfo.GetCultureInfo("en-US"));
@@ -399,7 +399,7 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual("1901/01/01", dfUS.FormatRawCellContents(367.0, -1, "yyyy/mm/dd"));
             Assert.AreEqual("1901/01/01", dfUS.FormatRawCellContents(367.0, -1, "yyyy\\/mm\\/dd"));
         }
-        [TestMethod]
+        [Test]
         public void TestOther()
         {
             //DataFormatter dfUS = new DataFormatter(Locale.US, true);

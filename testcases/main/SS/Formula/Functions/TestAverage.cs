@@ -16,7 +16,7 @@
 ==================================================================== */
 
 using NPOI.SS.Formula.Eval;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using NPOI.SS.Formula.Functions;
 namespace TestCases.SS.Formula.Functions
 {
@@ -26,7 +26,7 @@ namespace TestCases.SS.Formula.Functions
      *
      * @author Josh Micich
      */
-    [TestClass]
+    [TestFixture]
     public class TestAverage
     {
 
@@ -48,7 +48,7 @@ namespace TestCases.SS.Formula.Functions
             Assert.AreEqual(typeof(ErrorEval), result.GetType());
             Assert.AreEqual(expectedError.ErrorCode, ((ErrorEval)result).ErrorCode);
         }
-        [TestMethod]
+        [Test]
         public void TestBasic()
         {
 
@@ -77,7 +77,7 @@ namespace TestCases.SS.Formula.Functions
         /**
          * Valid cases where values are not pure numbers
          */
-        [TestMethod]
+        [Test]
         public void TestUnusualArgs()
         {
             ValueEval[] values = {
@@ -90,7 +90,7 @@ namespace TestCases.SS.Formula.Functions
             ConfirmAverage(values, 1.0);
 
         }
-        [TestMethod]
+        [Test]
         public void TestErrors()
         {
             ValueEval[] values = {

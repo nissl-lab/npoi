@@ -24,14 +24,14 @@ namespace TestCases.HSSF.Record
     using NPOI.Util;
     using NPOI.HSSF.Model;
     using NPOI.HSSF.Record;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
 
     /**
      * Tests the EscherAggregate class.
      *
      * @author Glen Stampoultzis (glens at apache.org)
      */
-    [TestClass]
+    [TestFixture]
     public class TestEscherAggregate
     {
         /**
@@ -39,7 +39,7 @@ namespace TestCases.HSSF.Record
          *
          * @
          */
-        [TestMethod]
+        [Test]
         public void TestCreateAggregate()
         {
             String msoDrawingRecord1 =
@@ -90,7 +90,7 @@ namespace TestCases.HSSF.Record
 
             //        System.out.println( "aggregate = " + aggregate );
         }
-        [TestMethod]
+        [Test]
         public void TestSerialize()
         {
 

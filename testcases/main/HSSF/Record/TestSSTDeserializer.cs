@@ -19,7 +19,7 @@ namespace TestCases.HSSF.Record
 {
     using System;
     using System.IO;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.HSSF.Record;
     using TestCases.HSSF;
     using NPOI.Util;
@@ -30,7 +30,7 @@ namespace TestCases.HSSF.Record
      *
      * @author Glen Stampoultzis (glens at apache.org)
      */
-    [TestClass]
+    [TestFixture]
     public class TestSSTDeserializer
     {
         private static int FAKE_SID = -5555;
@@ -56,7 +56,7 @@ namespace TestCases.HSSF.Record
             }
             return TestcaseRecordInputStream.MergeDataAndSid(recSid, data.Length, data);
         }
-        [TestMethod]
+        [Test]
         public void TestSpanRichTextToPlainText()
         {
             byte[] header = ReadSampleHexData("richtextdata.txt", "header", FAKE_SID);
@@ -70,7 +70,7 @@ namespace TestCases.HSSF.Record
 
             Assert.AreEqual("At a dinner party orAt At At ", strings[0] + "");
         }
-        [TestMethod]
+        [Test]
         public void TestContinuationWithNoOverlap()
         {
             byte[] header = ReadSampleHexData("evencontinuation.txt", "header", FAKE_SID);
@@ -88,7 +88,7 @@ namespace TestCases.HSSF.Record
         /**
          * Strings can actually span across more than one continuation.
          */
-        [TestMethod]
+        [Test]
         public void TestStringAcross2Continuations()
         {
             byte[] header = ReadSampleHexData("stringacross2continuations.txt", "header", FAKE_SID);
@@ -106,7 +106,7 @@ namespace TestCases.HSSF.Record
             Assert.AreEqual("At a dinner party or", strings[0] + "");
             Assert.AreEqual("At a dinner partyAt a dinner party", strings[1] + "");
         }
-        [TestMethod]
+        [Test]
         public void TestExtendedStrings()
         {
             byte[] header = ReadSampleHexData("extendedtextstrings.txt", "rich-header", FAKE_SID);

@@ -16,15 +16,15 @@
 ==================================================================== */
 
 using System.IO;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using System.Text;
 using NPOI.Util;
 namespace NPOI.XSSF.Util
 {
-    [TestClass]
+    [TestFixture]
     public class TestEvilUnclosedBRFixingInputStream
     {
-        [TestMethod]
+        [Test]
         public void TestOK()
         {
             byte[] ok = Encoding.UTF8.GetBytes("<p><div>Hello There!</div> <div>Tags!</div></p>");
@@ -52,7 +52,7 @@ namespace NPOI.XSSF.Util
             byte[] result = bout.ToArray();
             Assert.IsTrue(Arrays.Equals(ok, result));
         }
-        [TestMethod]
+        [Test]
         public void TestProblem()
         {
             byte[] orig = Encoding.UTF8.GetBytes("<p><div>Hello<br>There!</div> <div>Tags!</div></p>");
@@ -85,7 +85,7 @@ namespace NPOI.XSSF.Util
         /**
          * Checks that we can copy with br tags around the buffer boundaries
          */
-        [TestMethod]
+        [Test]
         public void TestBufferSize()
         {
             byte[] orig = Encoding.UTF8.GetBytes("<p><div>Hello<br> <br>There!</div> <div>Tags!<br><br></div></p>");

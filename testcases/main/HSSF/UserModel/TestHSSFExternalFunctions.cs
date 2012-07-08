@@ -23,13 +23,13 @@ namespace TestCases.HSSF.UserModel
     using NPOI.SS.Formula;
     using TestCases.SS.Formula;
     using TestCases.HSSF;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.SS.UserModel;
 
     /**
      * Tests Setting and Evaluating user-defined functions in HSSF
      */
-    [TestClass]
+    [TestFixture]
     public class TestHSSFExternalFunctions
     {
         /* This test is a copy of BaseTestExternalFunctions.BaseTestInvokeATP(String testFile)
@@ -38,7 +38,7 @@ namespace TestCases.HSSF.UserModel
          * the fist passed and the second failed.
          * 
          */
-        [TestMethod]
+        [Test]
         public void TestATP()
         {
             //baseTestInvokeATP("atp.xls");

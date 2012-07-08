@@ -24,7 +24,7 @@ namespace TestCases.HSSF.Record.Chart
     using System;
     using NPOI.HSSF.Record;
     using NPOI.HSSF.Record.Chart;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
 
     /**
      * Tests the serialization and deserialization of the SeriesLabelsRecord
@@ -34,7 +34,7 @@ namespace TestCases.HSSF.Record.Chart
 
      * @author Glen Stampoultzis (glens at apache.org)
      */
-    [TestClass]
+    [TestFixture]
     public class TestSeriesLabelsRecord
     {
         byte[] data = new byte[] {
@@ -45,7 +45,7 @@ namespace TestCases.HSSF.Record.Chart
         {
 
         }
-        [TestMethod]
+        [Test]
         public void TestLoad()
         {
             SeriesLabelsRecord record = new SeriesLabelsRecord(TestcaseRecordInputStream.Create(0x100c, data));
@@ -61,7 +61,7 @@ namespace TestCases.HSSF.Record.Chart
             Assert.AreEqual(2 + 4, record.RecordSize);
 
         }
-        [TestMethod]
+        [Test]
         public void TestStore()
         {
             SeriesLabelsRecord record = new SeriesLabelsRecord();

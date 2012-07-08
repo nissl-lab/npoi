@@ -30,7 +30,7 @@ using System;
 using System.Collections;
 using System.IO;
 
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 using NPOI.POIFS.FileSystem;
 using NPOI.Util;
@@ -45,7 +45,7 @@ namespace TestCases.POIFS.FileSystem
      *
      * @author Marc Johnson
      */
-    [TestClass]
+    [TestFixture]
     public class TestPOIFSDocumentPath
     {
 
@@ -63,7 +63,7 @@ namespace TestCases.POIFS.FileSystem
         /**
          * Test default constructor
          */
-        [TestMethod]
+        [Test]
         public void TestDefaultConstructor()
         {
             POIFSDocumentPath path = new POIFSDocumentPath();
@@ -74,7 +74,7 @@ namespace TestCases.POIFS.FileSystem
         /**
          * Test full path constructor
          */
-        [TestMethod]
+        [Test]
         public void TestFullPathConstructor()
         {
             string[] components = { "foo", "bar", "foobar", "fubar" };
@@ -131,7 +131,7 @@ namespace TestCases.POIFS.FileSystem
         /**
          * Test relative path constructor
          */
-        [TestMethod]
+        [Test]
         public void TestRelativePathConstructor()
         {
             string[] initialComponents = { "a", "b", "c" };
@@ -213,7 +213,7 @@ namespace TestCases.POIFS.FileSystem
         /**
          * Test equality
          */
-        [TestMethod]
+        [Test]
         public void TestEquality()
         {
             POIFSDocumentPath a1 = new POIFSDocumentPath();

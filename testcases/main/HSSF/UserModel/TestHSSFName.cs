@@ -19,7 +19,7 @@ namespace TestCases.HSSF.UserModel
 {
     using System;
     using System.Reflection;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.HSSF.Model;
     using NPOI.HSSF.Record;
     using NPOI.HSSF.UserModel;
@@ -37,7 +37,7 @@ namespace TestCases.HSSF.UserModel
      * @author Danny Mui (danny at muibros.com)
      * @author Amol S. Deshmukh &lt; amol at ap ache dot org &gt;
      */
-    [TestClass]
+    [TestFixture]
     public class TestHSSFName : BaseTestNamedRange
     {
         public TestHSSFName()
@@ -61,7 +61,7 @@ namespace TestCases.HSSF.UserModel
             return (NameRecord)f.GetValue(definedName);
         }
 
-        [TestMethod]
+        [Test]
         public void TestRepeatingRowsAndColumsNames()
         {
             // First Test that Setting RR&C for same sheet more than once only Creates a
@@ -121,7 +121,7 @@ namespace TestCases.HSSF.UserModel
             //        Console.WriteLine("check out " + tempFile.GetAbsolutePath());
             //}
         }
-        [TestMethod]
+        [Test]
         public void TestNamedRange()
         {
             HSSFWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("Simple.xls");
@@ -157,7 +157,7 @@ namespace TestCases.HSSF.UserModel
          * <p>
          * Addresses Bug <a href="http://issues.apache.org/bugzilla/Show_bug.cgi?id=9632" tarGet="_bug">#9632</a>
          */
-        [TestMethod]
+        [Test]
         public void TestNamedRead()
         {
             HSSFWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("namedinput.xls");
@@ -185,7 +185,7 @@ namespace TestCases.HSSF.UserModel
          * <p>
          * Addresses Bug <a href="http://issues.apache.org/bugzilla/Show_bug.cgi?id=16411" tarGet="_bug">#16411</a>
          */
-        [TestMethod]
+        [Test]
         public void TestNamedReadModify()
         {
             HSSFWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("namedinput.xls");
@@ -205,7 +205,7 @@ namespace TestCases.HSSF.UserModel
         /**
          * Test to see if the print area can be retrieved from an excel Created file
          */
-        [TestMethod]
+        [Test]
         public void TestPrintAreaFileRead()
         {
             HSSFWorkbook workbook = HSSFTestDataSamples.OpenSampleWorkbook("SimpleWithPrintArea.xls");
@@ -216,7 +216,7 @@ namespace TestCases.HSSF.UserModel
             Assert.AreEqual(reference, workbook.GetPrintArea(0));
         }
 
-        [TestMethod]
+        [Test]
         public void TestDeletedReference()
         {
             HSSFWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("24207.xls");
@@ -248,7 +248,7 @@ namespace TestCases.HSSF.UserModel
          * must set the type of operands to Ptg.CLASS_REF,
          * otherwise Created named don't appear in the drop-down to the left of formula bar in Excel
          */
-        [TestMethod]
+        [Test]
         public void TestTypeOfRootPtg()
         {
             HSSFWorkbook wb = new HSSFWorkbook();

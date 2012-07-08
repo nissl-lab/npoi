@@ -24,13 +24,13 @@ namespace TestCases.DDF
     using System.Collections.Generic;
     using System.IO;
 
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.DDF;
     using NPOI.Util;
-    [TestClass]
+    [TestFixture]
     public class TestEscherDggRecord
     {
-        [TestMethod]
+        [Test]
         public void TestSerialize()
         {
             EscherDggRecord r = CreateRecord();
@@ -48,7 +48,7 @@ namespace TestCases.DDF
                     "01, 00, 00, 00, 02, 00, 00, 00, ]",
                     HexDump.ToHex(data));
         }
-        [TestMethod]
+        [Test]
         public void TestFillFields()
         {
             String hexData = "00 00 " +
@@ -72,7 +72,7 @@ namespace TestCases.DDF
             Assert.AreEqual(0x01, r.FileIdClusters[0].DrawingGroupId);
             Assert.AreEqual(0x02, r.FileIdClusters[0].NumShapeIdsUsed);
         }
-        [TestMethod]
+        [Test]
         public void TestToString()
         {
             String nl = Environment.NewLine;
@@ -102,7 +102,7 @@ namespace TestCases.DDF
         };
             return r;
         }
-        [TestMethod]
+        [Test]
         public void TestRecordSize()
         {
             EscherDggRecord r = new EscherDggRecord();

@@ -20,7 +20,7 @@ using System;
 using System.Text;
 using System.Collections;
 using NPOI.POIFS.FileSystem;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using NPOI.POIFS.EventFileSystem;
 namespace TestCases.POIFS.EventFileSystem
 {
@@ -29,7 +29,7 @@ namespace TestCases.POIFS.EventFileSystem
      *
      * @author Marc Johnson
      */
-    [TestClass]
+    [TestFixture]
     public class TestPOIFSReaderRegistry
     {
         private POIFSReaderListener[] listeners =
@@ -51,7 +51,7 @@ namespace TestCases.POIFS.EventFileSystem
         /**
          * Test empty registry
          */
-        [TestMethod]
+        [Test]
         public void TestEmptyRegistry()
         {
             POIFSReaderRegistry registry = new POIFSReaderRegistry();
@@ -68,7 +68,7 @@ namespace TestCases.POIFS.EventFileSystem
         /**
          * Test mixed registration operations
          */
-        [TestMethod]
+        [Test]
         public void TestMixedRegistrationOperations()
         {
             POIFSReaderRegistry registry = new POIFSReaderRegistry();

@@ -18,7 +18,7 @@
 namespace TestCases.HSSF.Model
 {
     using System;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.HSSF.Model;
     using NPOI.HSSF.Record;
     using NPOI.HSSF.UserModel;
@@ -35,14 +35,14 @@ namespace TestCases.HSSF.Model
      * Test the low level formula Parser functionality. High level Tests are to
      * be done via usermodel/Cell.SetFormulaValue().
      */
-    [TestClass]
+    [TestFixture]
     public class TestFormulaParser
     {
         /// <summary>
         ///  Some of the tests are depending on the american culture.
         /// </summary>
-        [ClassInitialize()]
-        public static void PrepareCultere(TestContext testContext)
+        [SetUp]
+        public void PrepareCulture()
         {
             System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
         }
@@ -58,13 +58,13 @@ namespace TestCases.HSSF.Model
             Assert.IsNotNull(result, "Ptg array should not be null");
             return result;
         }
-        [TestMethod]
+        [Test]
         public void TestSimpleFormula()
         {
             Ptg[] ptgs = ParseFormula("2+2");
             Assert.AreEqual(3, ptgs.Length);
         }
-        [TestMethod]
+        [Test]
         public void TestFormulaWithSpace1()
         {
             Ptg[] ptgs = ParseFormula(" 2 + 2 ");
@@ -73,25 +73,25 @@ namespace TestCases.HSSF.Model
             Assert.IsTrue((ptgs[1] is IntPtg));
             Assert.IsTrue((ptgs[2] is AddPtg));
         }
-        [TestMethod]
+        [Test]
         public void TestFormulaWithSpace2()
         {
             Ptg[] ptgs = ParseFormula("2+ sum( 3 , 4) ");
             Assert.AreEqual(5, ptgs.Length);
         }
-        [TestMethod]
+        [Test]
         public void TestFormulaWithSpaceNRef()
         {
             Ptg[] ptgs = ParseFormula("sum( A2:A3 )");
             Assert.AreEqual(2, ptgs.Length);
         }
-        [TestMethod]
+        [Test]
         public void TestFormulaWithString()
         {
             Ptg[] ptgs = ParseFormula("\"hello\" & \"world\" ");
             Assert.AreEqual(3, ptgs.Length);
         }
-        [TestMethod]
+        [Test]
         public void TestTRUE()
         {
             Ptg[] ptgs = ParseFormula("TRUE");
@@ -99,7 +99,7 @@ namespace TestCases.HSSF.Model
             BoolPtg flag = (BoolPtg)ptgs[0];
             Assert.AreEqual(true, flag.Value);
         }
-        [TestMethod]
+        [Test]
         public void TestSumIf()
         {
             Ptg[] ptgs = ParseFormula("SUMIF(A1:A5,\">4000\",B1:B5)");
@@ -111,7 +111,7 @@ namespace TestCases.HSSF.Model
          * Refers to Bug <a href="http://issues.apache.org/bugzilla/show_bug.cgi?id=17582">#17582</a>
          *
          */
-        [TestMethod]
+        [Test]
         public void TestNonAlphaFormula()
         {
             String currencyCell = "F3";
@@ -123,7 +123,7 @@ namespace TestCases.HSSF.Model
             Assert.AreEqual("TOTAL[", firstString.Value);
             //the PTG order isn't 100% correct but it still works - dmui
         }
-        [TestMethod]
+        [Test]
         public void TestMacroFunction()
         {
             // TestNames.xls contains a VB function called 'myFunc'
@@ -139,21 +139,21 @@ namespace TestCases.HSSF.Model
             AbstractFunctionPtg tfunc = (AbstractFunctionPtg)ptg[1];
             Assert.IsTrue(tfunc.IsExternalFunction);
         }
-        [TestMethod]
+        [Test]
         public void TestEmbeddedSlash()
         {
             Ptg[] ptgs = ParseFormula("HYPERLINK(\"http://www.jakarta.org\",\"Jakarta\")");
             Assert.IsTrue(ptgs[0] is StringPtg, "first ptg is1 string");
             Assert.IsTrue(ptgs[1] is StringPtg, "second ptg is1 string");
         }
-        [TestMethod]
+        [Test]
         public void TestConcatenate()
         {
             Ptg[] ptgs = ParseFormula("CONCATENATE(\"first\",\"second\")");
             Assert.IsTrue(ptgs[0] is StringPtg, "first ptg is1 string");
             Assert.IsTrue(ptgs[1] is StringPtg, "second ptg is1 string");
         }
-        [TestMethod]
+        [Test]
         public void TestWorksheetReferences()
         {
             HSSFWorkbook wb = new HSSFWorkbook();
@@ -171,7 +171,7 @@ namespace TestCases.HSSF.Model
             cell = row.CreateCell((short)1);
             cell.CellFormula = ("'Quotes Needed Here &#$@'!A1");
         }
-        [TestMethod]
+        [Test]
         public void TestUnaryMinus()
         {
             Ptg[] ptgs = ParseFormula("-A1");
@@ -179,7 +179,7 @@ namespace TestCases.HSSF.Model
             Assert.IsTrue(ptgs[0] is RefPtg, "first ptg is1 reference");
             Assert.IsTrue(ptgs[1] is UnaryMinusPtg, "second ptg is1 Minus");
         }
-        [TestMethod]
+        [Test]
         public void TestUnaryPlus()
         {
             Ptg[] ptgs = ParseFormula("+A1");
@@ -187,7 +187,7 @@ namespace TestCases.HSSF.Model
             Assert.IsTrue(ptgs[0] is RefPtg, "first ptg is1 reference");
             Assert.IsTrue(ptgs[1] is UnaryPlusPtg, "second ptg is1 Plus");
         }
-        [TestMethod]
+        [Test]
         public void TestLeadingSpaceInString()
         {
             String value = "  hi  ";
@@ -197,7 +197,7 @@ namespace TestCases.HSSF.Model
             Assert.IsTrue(ptgs[0] is StringPtg, "ptg0 is1 a StringPtg");
             Assert.IsTrue(((StringPtg)ptgs[0]).Value.Equals(value), "ptg0 contains exact value");
         }
-        [TestMethod]
+        [Test]
         public void TestLookupAndMatchFunctionArgs()
         {
             Ptg[] ptgs = ParseFormula("lookup(A1, A3:A52, B3:B52)");
@@ -212,7 +212,7 @@ namespace TestCases.HSSF.Model
         }
 
         /** bug 33160*/
-        [TestMethod]
+        [Test]
         public void TestLargeInt()
         {
             Ptg[] ptgs = ParseFormula("40");
@@ -223,7 +223,7 @@ namespace TestCases.HSSF.Model
         }
 
         /** bug 33160, Testcase by Amol Deshmukh*/
-        [TestMethod]
+        [Test]
         public void TestSimpleLongFormula()
         {
             Ptg[] ptgs = ParseFormula("40000/2");
@@ -234,7 +234,7 @@ namespace TestCases.HSSF.Model
         }
 
         /** bug 35027, underscore in sheet name */
-        [TestMethod]
+        [Test]
         public void TestUnderscore()
         {
             HSSFWorkbook wb = new HSSFWorkbook();
@@ -249,7 +249,7 @@ namespace TestCases.HSSF.Model
             cell.CellFormula = ("Cash_Flow!A1");
         }
         /** bug 49725, defined names with underscore */
-        [TestMethod]
+        [Test]
         public void TestNamesWithUnderscore()
         {
             HSSFWorkbook wb = new HSSFWorkbook(); //or new XSSFWorkbook();
@@ -294,7 +294,7 @@ namespace TestCases.HSSF.Model
             Assert.AreEqual("INDEX(DA6_LEO_WBS_Name,MATCH($A3,DA6_LEO_WBS_Number,0))", cell.CellFormula);
         }
         // bug 38396 : Formula with exponential numbers not Parsed correctly.
-        [TestMethod]
+        [Test]
         public void TestExponentialParsing()
         {
             Ptg[] ptgs;
@@ -319,7 +319,7 @@ namespace TestCases.HSSF.Model
         /// <summary>
         /// Tests the exponential in sheet.
         /// </summary>
-        [TestMethod]
+        [Test]
         public void TestExponentialInSheet()
         {
             // This Test depends on the american culture.
@@ -394,7 +394,7 @@ namespace TestCases.HSSF.Model
             formula = cell.CellFormula;
             Assert.AreEqual("-1/310*4000/30000", formula, "Exponential formula string");
         }
-        [TestMethod]
+        [Test]
         public void TestNumbers()
         {
             System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
@@ -436,7 +436,7 @@ namespace TestCases.HSSF.Model
             formula = cell.CellFormula;
             Assert.AreEqual("1", formula);
         }
-        [TestMethod]
+        [Test]
         public void TestRanges()
         {
             HSSFWorkbook wb = new HSSFWorkbook();
@@ -465,7 +465,7 @@ namespace TestCases.HSSF.Model
          * Test for bug observable at svn revision 618865 (5-Feb-2008)<br/>
          * a formula consisting of a single no-arg function got rendered without the function braces
          */
-        [TestMethod]
+        [Test]
         public void TestToFormulaStringZeroArgFunction()
         {
             HSSFWorkbook book = new HSSFWorkbook();
@@ -475,7 +475,7 @@ namespace TestCases.HSSF.Model
 		};
             Assert.AreEqual("NA()", HSSFFormulaParser.ToFormulaString(book, ptgs));
         }
-        [TestMethod]
+        [Test]
         public void TestPercent()
         {
             Ptg[] ptgs;
@@ -535,7 +535,7 @@ namespace TestCases.HSSF.Model
         /**
          * Tests combinations of various operators in the absence of brackets
          */
-        [TestMethod]
+        [Test]
         public void TestPrecedenceAndAssociativity()
         {
 
@@ -598,7 +598,7 @@ namespace TestCases.HSSF.Model
          * POI encodes formulas may cause unnecessary confusion.  These non-critical tests
          * check that POI follows the same encoding rules as Excel.
          */
-        [TestMethod]
+        [Test]
         public void TestExactEncodingOfUnaryPlusAndMinus()
         {
             // as tested in Excel:
@@ -633,7 +633,7 @@ namespace TestCases.HSSF.Model
                 Assert.Fail("bad ptg0 " + ptg0);
             }
         }
-        [TestMethod]
+        [Test]
         public void TestPower()
         {
             ConfirmTokenClasses("2^5", new Type[] { typeof(IntPtg), typeof(IntPtg), typeof(PowerPtg), });
@@ -647,7 +647,7 @@ namespace TestCases.HSSF.Model
             Assert.AreEqual(ptgClass, result.GetType());
             return result;
         }
-        [TestMethod]
+        [Test]
         public void TestParseNumber()
         {
             // This Test depends on the american culture.
@@ -670,7 +670,7 @@ namespace TestCases.HSSF.Model
             np = (NumberPtg)ParseSingleToken("65534.6", typeof(NumberPtg));
             Assert.AreEqual(65534.6, np.Value, 0);
         }
-        [TestMethod]
+        [Test]
         public void TestMissingArgs()
         {
 
@@ -692,7 +692,7 @@ namespace TestCases.HSSF.Model
 				typeof(FuncVarPtg), };
             ConfirmTokenClasses("counta( , A1:B2, )", expClss);
         }
-        [TestMethod]
+        [Test]
         public void TestParseErrorLiterals()
         {
 
@@ -724,7 +724,7 @@ namespace TestCases.HSSF.Model
             StringPtg sp = (StringPtg)ParseSingleToken(formula, typeof(StringPtg));
             Assert.AreEqual(expectedValue, sp.Value);
         }
-        [TestMethod]
+        [Test]
         public void TestParseStringLiterals_bug28754()
         {
 
@@ -737,7 +737,7 @@ namespace TestCases.HSSF.Model
             {
                 if (e.Message.StartsWith("Cannot Parse"))
                 {
-                    throw new AssertFailedException("Identified bug 28754a");
+                    throw new AssertionException("Identified bug 28754a");
                 }
                 throw e;
             }
@@ -753,11 +753,11 @@ namespace TestCases.HSSF.Model
             String actualCellFormula = cell.CellFormula;
             if ("RIGHT(\"test\"ing\",3)".Equals(actualCellFormula))
             {
-                throw new AssertFailedException("Identified bug 28754b");
+                throw new AssertionException("Identified bug 28754b");
             }
             Assert.AreEqual("RIGHT(\"test\"\"ing\",3)", actualCellFormula);
         }
-        [TestMethod]
+        [Test]
         public void TestParseStringLiterals()
         {
             ConfirmStringParse("goto considered harmful");
@@ -770,7 +770,7 @@ namespace TestCases.HSSF.Model
             ConfirmStringParse("' '");
             ConfirmStringParse(" ' ");
         }
-        [TestMethod]
+        [Test]
         public void TestParseSumIfSum()
         {
             String formulaString;
@@ -783,7 +783,7 @@ namespace TestCases.HSSF.Model
             formulaString = HSSFFormulaParser.ToFormulaString(null, ptgs);
             Assert.AreEqual("IF(1<2,SUM(5,2,IF(3>2,SUM(A1:A2),6)),4)", formulaString);
         }
-        [TestMethod]
+        [Test]
         public void TestParserErrors()
         {
             ParseExpectedException("1 2");
@@ -805,7 +805,7 @@ namespace TestCases.HSSF.Model
             try
             {
                 ParseFormula(formula);
-                throw new AssertFailedException("expected Parse exception");
+                throw new AssertionException("expected Parse exception");
             }
             catch (Exception e)
             {
@@ -813,11 +813,11 @@ namespace TestCases.HSSF.Model
                 {
                     String failMsg = "Expected FormulaParseException, but got (" + e.GetType().Name + "):";
                     Console.WriteLine(failMsg);
-                    throw new AssertFailedException(failMsg);
+                    throw new AssertionException(failMsg);
                 }
             }
         }
-        [TestMethod]
+        [Test]
         public void TestSetFormulaWithRowBeyond32768_Bug44539()
         {
 
@@ -834,7 +834,7 @@ namespace TestCases.HSSF.Model
             }
             Assert.AreEqual("SUM(A32769:A32770)", cell.CellFormula);
         }
-        [TestMethod]
+        [Test]
         public void TestSpaceAtStartOfFormula()
         {
             // Simulating cell formula of "= 4" (note space)
@@ -851,7 +851,7 @@ namespace TestCases.HSSF.Model
             {
                 if (e.Message.Equals("too much stuff left on the stack", StringComparison.OrdinalIgnoreCase))
                 {
-                    throw new AssertFailedException("Identified bug 44609");
+                    throw new AssertionException("Identified bug 44609");
                 }
                 // else some unexpected error
                 throw e;
@@ -867,7 +867,7 @@ namespace TestCases.HSSF.Model
         /**
          * Checks some internal error detecting logic ('stack underflow error' in toFormulaString)
          */
-        [TestMethod]
+        [Test]
         public void TestTooFewOperandArgs()
         {
             // Simulating badly encoded cell formula of "=/1"
@@ -896,7 +896,7 @@ namespace TestCases.HSSF.Model
          * Excel tolerates the wrong Ptg and evaluates the formula OK (e.g. SIN), but in some cases 
          * (e.g. COUNTIF) Excel Assert.Fails to evaluate the formula, giving '#VALUE!' instead. 
          */
-        [TestMethod]
+        [Test]
         public void TestFuncPtgSelection()
         {
 
@@ -905,14 +905,14 @@ namespace TestCases.HSSF.Model
             Assert.AreEqual(3, ptgs.Length);
             if (typeof(FuncVarPtg) == ptgs[2].GetType())
             {
-                throw new AssertFailedException("Identified bug 44675");
+                throw new AssertionException("Identified bug 44675");
             }
             Assert.AreEqual(typeof(FuncPtg), ptgs[2].GetType());
             ptgs = ParseFormula("sin(1)");
             Assert.AreEqual(2, ptgs.Length);
             Assert.AreEqual(typeof(FuncPtg), ptgs[1].GetType());
         }
-        [TestMethod]
+        [Test]
         public void TestWrongNumberOfFunctionArgs()
         {
             ConfirmArgCountMsg("sin()", "Too few arguments to function 'SIN'. Expected 1 but got 0.");
@@ -927,7 +927,7 @@ namespace TestCases.HSSF.Model
             try
             {
                 HSSFFormulaParser.Parse(formula, book);
-                throw new AssertFailedException("Didn't Get Parse exception as expected");
+                throw new AssertionException("Didn't Get Parse exception as expected");
             }
             catch (Exception e)
             {
@@ -935,7 +935,7 @@ namespace TestCases.HSSF.Model
             }
         }
 
-        [TestMethod]
+        [Test]
         public void TestRange_bug46643()
         {
             String formula = "Sheet1!A1:Sheet1!B3";
@@ -946,7 +946,7 @@ namespace TestCases.HSSF.Model
             if (ptgs.Length == 3)
             {
                 ConfirmTokenClasses(ptgs, typeof(Ref3DPtg), typeof(Ref3DPtg), typeof(RangePtg));
-                throw new AssertFailedException("Identified bug 46643");
+                throw new AssertionException("Identified bug 46643");
             }
 
             ConfirmTokenClasses(ptgs,
@@ -972,14 +972,14 @@ namespace TestCases.HSSF.Model
                 }
             }
         }
-        [TestMethod]
+        [Test]
         public void TestParseErrorExpectedMsg()
         {
 
             try
             {
                 ParseFormula("round(3.14;2)");
-                throw new AssertFailedException("Didn't get parse exception as expected");
+                throw new AssertionException("Didn't get parse exception as expected");
             }
             catch (FormulaParseException e)
             {
@@ -990,7 +990,7 @@ namespace TestCases.HSSF.Model
             try
             {
                 ParseFormula(" =2+2");
-                throw new AssertFailedException("Didn't get parse exception as expected");
+                throw new AssertionException("Didn't get parse exception as expected");
             }
             catch (FormulaParseException e)
             {
@@ -1002,7 +1002,7 @@ namespace TestCases.HSSF.Model
         /**
          * this function name has a dot in it.
          */
-        [TestMethod]
+        [Test]
         public void TestParseErrorTypeFunction()
         {
 
@@ -1015,14 +1015,14 @@ namespace TestCases.HSSF.Model
             {
                 if (e.Message.Equals("Invalid Formula cell reference: 'error'"))
                 {
-                    throw new AssertFailedException("Identified bug 45334");
+                    throw new AssertionException("Identified bug 45334");
                 }
                 throw e;
             }
             ConfirmTokenClasses(ptgs, typeof(RefPtg), typeof(FuncPtg));
             Assert.AreEqual("ERROR.TYPE", ((FuncPtg)ptgs[1]).Name);
         }
-        [TestMethod]
+        [Test]
         public void TestNamedRangeThatLooksLikeCell()
         {
             HSSFWorkbook wb = new HSSFWorkbook();
@@ -1040,7 +1040,7 @@ namespace TestCases.HSSF.Model
             {
                 if (e.Message.Equals("Specified colIx (1012) is out of range"))
                 {
-                    throw new AssertFailedException("Identified bug 45354");
+                    throw new AssertionException("Identified bug 45354");
                 }
                 throw e;
             }
@@ -1052,7 +1052,7 @@ namespace TestCases.HSSF.Model
             try
             {
                 cell.CellFormula = ("count(pf1)");
-                throw new AssertFailedException("Expected formula parse execption");
+                throw new AssertionException("Expected formula parse execption");
             }
             catch (FormulaParseException e)
             {
@@ -1061,7 +1061,7 @@ namespace TestCases.HSSF.Model
             }
             cell.CellFormula = ("count(fp1)"); // plain cell ref, col is in range
         }
-        [TestMethod]
+        [Test]
         public void TestParseAreaRefHighRow_bug45358()
         {
             Ptg[] ptgs;
@@ -1074,7 +1074,7 @@ namespace TestCases.HSSF.Model
             aptg = (AreaI)ptgs[0];
             if (aptg.LastRow == -25537)
             {
-                throw new AssertFailedException("Identified bug 45358");
+                throw new AssertionException("Identified bug 45358");
             }
             Assert.AreEqual(39999, aptg.LastRow);
 
@@ -1088,7 +1088,7 @@ namespace TestCases.HSSF.Model
             Assert.AreEqual(65535, aptg.LastRow);
 
         }
-        [TestMethod]
+        [Test]
         public void TestParseArray()
         {
             Ptg[] ptgs;
@@ -1101,7 +1101,7 @@ namespace TestCases.HSSF.Model
             Assert.AreEqual(ErrorConstant.ValueOf(HSSFErrorConstants.ERROR_REF), values[0][3]);
             Assert.AreEqual(false, values[1][0]);
         }
-        [TestMethod]
+        [Test]
         public void TestParseStringElementInArray()
         {
             Ptg[] ptgs;
@@ -1111,7 +1111,7 @@ namespace TestCases.HSSF.Model
             if (element is UnicodeString)
             {
                 // this would cause ClassCastException below
-                throw new AssertFailedException("Wrong encoding of array element value");
+                throw new AssertionException("Wrong encoding of array element value");
             }
             Assert.AreEqual(typeof(String), element.GetType());
 
@@ -1131,7 +1131,7 @@ namespace TestCases.HSSF.Model
             Ptg[] ptgs2 = Ptg.ReadTokens(initSize, new LittleEndianByteArrayInputStream(data));
             ConfirmTokenClasses(ptgs2, typeof(ArrayPtg), typeof(IntPtg), typeof(FuncVarPtg));
         }
-        [TestMethod]
+        [Test]
         public void TestParseArrayNegativeElement()
         {
             Ptg[] ptgs;
@@ -1143,7 +1143,7 @@ namespace TestCases.HSSF.Model
             {
                 if (e.Message.StartsWith("Parse error near char 1 '-' in specified formula '{-42}'. Expected ")) // "Integer" in Java or "int" in C#
                 {
-                    throw new AssertFailedException("Identified bug - failed to parse negative array element.");
+                    throw new AssertionException("Identified bug - failed to parse negative array element.");
                 }
                 throw e;
             }
@@ -1158,7 +1158,7 @@ namespace TestCases.HSSF.Model
             element = ((ArrayPtg)ptgs[0]).GetTokenArrayValues()[0][0];
             Assert.AreEqual(-5.0, (Double)element, 0.0);
         }
-        [TestMethod]
+        [Test]
         public void TestRangeOperator()
         {
             HSSFWorkbook wb = new HSSFWorkbook();
@@ -1180,7 +1180,7 @@ namespace TestCases.HSSF.Model
             cell.CellFormula = ("A1...A2!B1");
             Assert.AreEqual("A1...A2!B1", cell.CellFormula);
         }
-        [TestMethod]
+        [Test]
         public void TestBooleanNamedSheet()
         {
 
@@ -1191,7 +1191,7 @@ namespace TestCases.HSSF.Model
 
             Assert.AreEqual("'true'!B2", cell.CellFormula);
         }
-        [TestMethod]
+        [Test]
         public void TestParseExternalWorkbookReference()
         {
             HSSFWorkbook wbA = HSSFTestDataSamples.OpenSampleWorkbook("multibookFormulaA.xls");
@@ -1221,7 +1221,7 @@ namespace TestCases.HSSF.Model
             Assert.IsTrue(ptg0 is Ref3DPtg);
             Assert.AreEqual(expectedExternSheetIndex, ((Ref3DPtg)ptg0).ExternSheetIndex);
         }
-        [TestMethod]
+        [Test]
         public void TestUnion()
         {
             String formula = "Sheet1!$B$2:$C$3,OFFSET(Sheet1!$E$2:$E$4,1,Sheet1!$A$1),Sheet1!$D$6";
@@ -1245,7 +1245,7 @@ namespace TestCases.HSSF.Model
             Assert.AreEqual(45, mf.LenRefSubexpression);
         }
         /** Named ranges with backslashes, e.g. 'POI\\2009' */
-        [TestMethod]
+        [Test]
         public void TestBackSlashInNames()
         {
             HSSFWorkbook wb = new HSSFWorkbook();
@@ -1270,7 +1270,7 @@ namespace TestCases.HSSF.Model
          * TODO - delete equiv Test:
          * {@link BaseTestBugzillaIssues#test42448()}
          */
-        [TestMethod]
+        [Test]
         public void TestParseAbnormalSheetNamesAndRanges_bug42448()
         {
             HSSFWorkbook wb = new HSSFWorkbook();
@@ -1281,12 +1281,12 @@ namespace TestCases.HSSF.Model
             }
             catch (IndexOutOfRangeException)
             {
-                throw new AssertFailedException("Identified bug 42448");
+                throw new AssertionException("Identified bug 42448");
             }
             // the exact example from the bugzilla description:
             HSSFFormulaParser.Parse("SUMPRODUCT(A!C7:A!C67, B8:B68) / B69", wb);
         }
-        [TestMethod]
+        [Test]
         public void TestRangeFuncOperand_bug46951()
         {
             HSSFWorkbook wb = new HSSFWorkbook();
@@ -1299,7 +1299,7 @@ namespace TestCases.HSSF.Model
             {
                 if (e.Message.Equals("Specified named range 'OFFSET' does not exist in the current workbook."))
                 {
-                    throw new AssertFailedException("Identified bug 46951");
+                    throw new AssertionException("Identified bug 46951");
                 }
                 throw e;
             }
@@ -1315,7 +1315,7 @@ namespace TestCases.HSSF.Model
             );
 
         }
-        [TestMethod]
+        [Test]
         public void TestUnionOfFullCollFullRowRef()
         {
             Ptg[] ptgs;
@@ -1352,7 +1352,7 @@ namespace TestCases.HSSF.Model
             );
         }
 
-        [TestMethod]
+        [Test]
         public void TestExplicitRangeWithTwoSheetNames()
         {
             HSSFWorkbook wb = new HSSFWorkbook();
@@ -1373,7 +1373,7 @@ namespace TestCases.HSSF.Model
          * Checks that the area-ref and explicit range operators get the right associativity
          * and that the {@link MemFuncPtg} / {@link MemAreaPtg} is added correctly
          */
-        [TestMethod]
+        [Test]
         public void TestComplexExplicitRangeEncodings()
         {
             Ptg[] ptgs;
@@ -1422,7 +1422,7 @@ namespace TestCases.HSSF.Model
          * Mostly Confirming that erroneous conditions are detected.  Actual error message wording is not critical.
          *
          */
-        [TestMethod]
+        [Test]
         public void TestEdgeCaseParserErrors()
         {
             HSSFWorkbook wb = new HSSFWorkbook();
@@ -1446,7 +1446,7 @@ namespace TestCases.HSSF.Model
             try
             {
                 HSSFFormulaParser.Parse(formula, wb);
-                throw new AssertFailedException("Expected formula parse execption");
+                throw new AssertionException("Expected formula parse execption");
             }
             catch (FormulaParseException e)
             {
@@ -1458,7 +1458,7 @@ namespace TestCases.HSSF.Model
          * In bug 47078, POI had trouble evaluating a defined name flagged as 'complex'.
          * POI should also be able to parse such defined names.
          */
-        [TestMethod]
+        [Test]
         public void TestParseComplexName()
         {
 
@@ -1482,7 +1482,7 @@ namespace TestCases.HSSF.Model
             {
                 if (e.Message.Equals("Specified name 'foo' is not a range as expected."))
                 {
-                    throw new AssertFailedException("Identified bug 47078c");
+                    throw new AssertionException("Identified bug 47078c");
                 }
                 throw e;
             }
@@ -1496,7 +1496,7 @@ namespace TestCases.HSSF.Model
          * In addition, leading zeros (on the row component) should be removed from cell
          * references during parsing.
          */
-        [TestMethod]
+        [Test]
         public void TestZeroRowRefs()
         {
             String badCellRef = "B0"; // bad because zero is not a valid row number
@@ -1506,7 +1506,7 @@ namespace TestCases.HSSF.Model
             try
             {
                 HSSFFormulaParser.Parse(badCellRef, wb);
-                throw new AssertFailedException("Identified bug 47312b - Shouldn't be able to parse cell ref '"
+                throw new AssertionException("Identified bug 47312b - Shouldn't be able to parse cell ref '"
                         + badCellRef + "'.");
             }
             catch (FormulaParseException e)
@@ -1527,7 +1527,7 @@ namespace TestCases.HSSF.Model
                 ConfirmParseException(e, "Specified named range '"
                         + leadingZeroCellRef + "' does not exist in the current workbook.");
                 // close but no cigar
-                throw new AssertFailedException("Identified bug 47312c - '"
+                throw new AssertionException("Identified bug 47312c - '"
                         + leadingZeroCellRef + "' should parse as 'B1'.");
             }
 

@@ -18,7 +18,7 @@
 namespace TestCases.SS.UserModel
 {
     using System;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.SS.Util;
     using TestCases.SS;
     using NPOI.SS.UserModel;
@@ -26,7 +26,7 @@ namespace TestCases.SS.UserModel
     /**
      * @author Yegor Kozlov
      */
-    [TestClass]
+    [TestFixture]
     public abstract class BaseTestWorkbook
     {
 
@@ -40,7 +40,7 @@ namespace TestCases.SS.UserModel
             _testDataProvider = TestDataProvider;
         }
 
-        [TestMethod]
+        [Test]
         public void TestCreateSheet()
         {
             IWorkbook wb = _testDataProvider.CreateWorkbook();
@@ -69,7 +69,7 @@ namespace TestCases.SS.UserModel
             ISheet fetchedSheet = wb.GetSheet("sheet3");
             if (fetchedSheet == null)
             {
-                throw new AssertFailedException("Identified bug 44892");
+                throw new AssertionException("Identified bug 44892");
             }
             Assert.AreEqual("Sheet3", fetchedSheet.SheetName);
             Assert.AreEqual(3, wb.NumberOfSheets);
@@ -166,7 +166,7 @@ namespace TestCases.SS.UserModel
          * avoid funny duplicate sheet name errors, POI enforces uniqueness on only the first 31 chars.
          * but for the purpose of uniqueness long sheet names are silently tRuncated to 31 chars.
          */
-        [TestMethod]
+        [Test]
         public void TestCreateSheetWithLongNames()
         {
             IWorkbook wb = _testDataProvider.CreateWorkbook();
@@ -207,7 +207,7 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual(1, wb.GetSheetIndex(tRuncatedSheetName3));
         }
 
-        [TestMethod]
+        [Test]
         public void TestRemoveSheetAt()
         {
             IWorkbook workbook = _testDataProvider.CreateWorkbook();
@@ -231,7 +231,7 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual(3, workbook.NumberOfSheets);
         }
 
-        [TestMethod]
+        [Test]
         public void TestDefaultValues()
         {
             IWorkbook b = _testDataProvider.CreateWorkbook();
@@ -241,7 +241,7 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual(0, b.NumberOfSheets);
         }
 
-        [TestMethod]
+        [Test]
         public void TestSheetSelection()
         {
             IWorkbook b = _testDataProvider.CreateWorkbook();
@@ -254,7 +254,7 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual(1, b.FirstVisibleTab);
         }
 
-        [TestMethod]
+        [Test]
         public void TestPrintArea()
         {
             IWorkbook workbook = _testDataProvider.CreateWorkbook();
@@ -275,7 +275,7 @@ namespace TestCases.SS.UserModel
             Assert.IsNull(workbook.GetPrintArea(0));
         }
 
-        [TestMethod]
+        [Test]
         public void TestGetSetActiveSheet()
         {
             IWorkbook workbook = _testDataProvider.CreateWorkbook();
@@ -294,7 +294,7 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual(0, workbook.ActiveSheetIndex);
         }
 
-        [TestMethod]
+        [Test]
         public void TestSetSheetOrder()
         {
             IWorkbook wb = _testDataProvider.CreateWorkbook();
@@ -354,7 +354,7 @@ namespace TestCases.SS.UserModel
             }
         }
 
-        [TestMethod]
+        [Test]
         public void TestCloneSheet()
         {
             IWorkbook book = _testDataProvider.CreateWorkbook();
@@ -384,7 +384,7 @@ namespace TestCases.SS.UserModel
 
         }
 
-        [TestMethod]
+        [Test]
         public void TestParentReferences()
         {
             IWorkbook workbook = _testDataProvider.CreateWorkbook();
@@ -410,7 +410,7 @@ namespace TestCases.SS.UserModel
             Assert.AreSame(row, cell.Row);
         }
 
-        [TestMethod]
+        [Test]
         public void TestSetRepeatingRowsAnsColumns()
         {
             IWorkbook wb = _testDataProvider.CreateWorkbook();
@@ -425,7 +425,7 @@ namespace TestCases.SS.UserModel
         /**
          * Tests that all of the unicode capable string fields can be Set, written and then read back
          */
-        [TestMethod]
+        [Test]
         public void TestUnicodeInAll()
         {
             System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
@@ -543,7 +543,7 @@ namespace TestCases.SS.UserModel
          *
          * @see <a href="https://issues.apache.org/bugzilla/Show_bug.cgi?id=47100">Bugzilla 47100</a>
          */
-        [TestMethod]
+        [Test]
         public void TestSetSheetName()
         {
 

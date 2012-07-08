@@ -20,7 +20,7 @@ namespace TestCases.SS.Formula.Eval
 
     using System;
     using System.IO;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.HSSF.UserModel;
     using NPOI.SS.UserModel;
     using TestCases.HSSF;
@@ -32,7 +32,7 @@ namespace TestCases.SS.Formula.Eval
      * 
      * @author Josh Micich
      */
-    [TestClass]
+    [TestFixture]
     public class TestFormulaBugs
     {
 
@@ -40,7 +40,7 @@ namespace TestCases.SS.Formula.Eval
          * Bug 27349 - VLOOKUP with reference to another sheet.<p/> This Test was
          * Added <em>long</em> After the relevant functionality was fixed.
          */
-        [TestMethod]
+        [Test]
         public void Test27349()
         {
             // 27349-vLookupAcrossSheets.xls is bugzilla/attachment.cgi?id=10622
@@ -78,7 +78,7 @@ namespace TestCases.SS.Formula.Eval
          * 
          * seems to be a duplicate of 24925
          */
-        [TestMethod]
+        [Test]
         public void Test27405()
         {
 
@@ -131,7 +131,7 @@ namespace TestCases.SS.Formula.Eval
         /**
          * Bug 42448 - Can't parse SUMPRODUCT(A!C7:A!C67, B8:B68) / B69 <p/>
          */
-        [TestMethod]
+        [Test]
         public void Test42448()
         {
             HSSFWorkbook wb = new HSSFWorkbook();
@@ -154,7 +154,7 @@ namespace TestCases.SS.Formula.Eval
             }
             catch (IndexOutOfRangeException)
             {
-                throw new AssertFailedException("Identified bug 42448");
+                throw new AssertionException("Identified bug 42448");
             }
 
             Assert.AreEqual("SUMPRODUCT(A!C7:A!C67,B8:B68)/B69", cell.CellFormula);

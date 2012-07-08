@@ -20,7 +20,7 @@ namespace TestCases.HPSF.Basic
 {
     using System;
     using System.IO;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.HPSF;
     using NPOI.Util;
 
@@ -34,7 +34,7 @@ namespace TestCases.HPSF.Basic
      * @since 2002-12-09
      * @version $Id: TestUnicode.java 489730 2006-12-22 19:18:16Z bayard $
      */
-    [TestClass]
+    [TestFixture]
     public class TestUnicode
     {
         //static string dataDir = @"..\..\..\TestCases\HPSF\data\";
@@ -47,7 +47,7 @@ namespace TestCases.HPSF.Basic
         //POIFile[] poiFiles;
 
 
-        //[TestInitialize]
+        //[SetUp]
         //public void Setup()
         //{
         //    POIDataSamples samples = POIDataSamples.GetHPSFInstance();
@@ -64,7 +64,7 @@ namespace TestCases.HPSF.Basic
          * @exception IOException if an I/O exception occurs
          * @exception HPSFException if an HPSF exception occurs
          */
-        [TestMethod]
+        [Test]
         public void TestPropertySetMethods()
         {
             POIDataSamples samples = POIDataSamples.GetHPSFInstance();

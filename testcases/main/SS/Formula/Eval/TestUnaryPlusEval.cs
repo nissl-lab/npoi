@@ -18,7 +18,7 @@
 namespace TestCases.SS.Formula.Eval
 {
 
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.SS.Formula.Eval;
     using NPOI.SS.Formula.PTG;
     using TestCases.SS.Formula.Functions;
@@ -28,7 +28,7 @@ namespace TestCases.SS.Formula.Eval
      *
      * @author Josh Micich
      */
-    [TestClass]
+    [TestFixture]
     public class TestUnaryPlusEval
     {
 
@@ -36,7 +36,7 @@ namespace TestCases.SS.Formula.Eval
          * Test for bug observable at svn revision 618865 (5-Feb-2008)<br/>
          * The code for handling column operands had been copy-pasted from the row handling code.
          */
-        [TestMethod]
+        [Test]
         public void TestColumnOperand()
         {
 

@@ -18,7 +18,7 @@
 namespace TestCases.SS.Formula.PTG
 {
 
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.HSSF.UserModel;
     using NPOI.SS.UserModel;
 
@@ -27,13 +27,13 @@ namespace TestCases.SS.Formula.PTG
      *
      * @author Daniel Noll (daniel at nuix dot com dot au)
      */
-    [TestClass]
+    [TestFixture]
     public class TestPercentPtg : AbstractPtgTestCase
     {
         /**
          * Tests Reading a file Containing this ptg.
          */
-        [TestMethod]
+        [Test]
         public void TestReading()
         {
             HSSFWorkbook workbook = LoadWorkbook("PercentPtg.xls");

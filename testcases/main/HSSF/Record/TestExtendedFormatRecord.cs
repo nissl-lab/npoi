@@ -19,12 +19,12 @@ namespace TestCases.HSSF.Record
 {
     using System;
 
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using TestCases.HSSF.Record;
     using NPOI.HSSF.Record;
     /**
      */
-    [TestClass]
+    [TestFixture]
     public class TestExtendedFormatRecord
     {
 
@@ -44,7 +44,7 @@ namespace TestCases.HSSF.Record
         {
             return new ExtendedFormatRecord(TestcaseRecordInputStream.Create(0x00E0, data));
         }
-        [TestMethod]
+        [Test]
         public void TestLoad()
         {
             ExtendedFormatRecord record = CreateEFR();
@@ -61,7 +61,7 @@ namespace TestCases.HSSF.Record
             Assert.AreEqual(20 + 4, record.RecordSize);
         }
 
-        [TestMethod]
+        [Test]
         public void TestStore()
         {
             //    .fontindex       = 0
@@ -126,7 +126,7 @@ namespace TestCases.HSSF.Record
             for (int i = 0; i < data.Length; i++)
                 Assert.AreEqual(data[i], recordBytes[i + 4], "At offset " + i);
         }
-        [TestMethod]
+        [Test]
         public void TestCloneOnto()
         {
             ExtendedFormatRecord base1 = CreateEFR();

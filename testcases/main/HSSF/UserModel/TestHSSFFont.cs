@@ -17,7 +17,7 @@
 namespace TestCases.HSSF.UserModel
 {
     using NPOI.HSSF.UserModel;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
 
     using NPOI.SS.UserModel;
     using TestCases.SS.UserModel;
@@ -27,7 +27,7 @@ namespace TestCases.HSSF.UserModel
      *
      * @author Yegor Kozlov (yegor at apache.org)
      */
-    [TestClass]
+    [TestFixture]
     public class TestHSSFFont:BaseTestFont
     {
         public TestHSSFFont()
@@ -36,7 +36,7 @@ namespace TestCases.HSSF.UserModel
             
         }
 
-        [TestMethod]
+        [Test]
         public void TestDefaultFont()
         {
             BaseTestDefaultFont(HSSFFont.FONT_ARIAL, (short)200, (short)FontColor.NORMAL);

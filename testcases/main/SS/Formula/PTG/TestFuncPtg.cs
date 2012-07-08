@@ -18,7 +18,7 @@
 namespace TestCases.SS.Formula.PTG
 {
 
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.SS.Formula.PTG;
     using TestCases.HSSF.Record;
 
@@ -27,10 +27,10 @@ namespace TestCases.SS.Formula.PTG
      *
      * @author Danny Mui (dmui at apache dot org)
      */
-    [TestClass]
+    [TestFixture]
     public class TestFuncPtg
     {
-        [TestMethod]
+        [Test]
         public void TestRead()
         {
             // This function index represents the LEN() function
@@ -42,7 +42,7 @@ namespace TestCases.SS.Formula.PTG
             Assert.AreEqual("LEN", ptg.Name, "Function Name");
             Assert.AreEqual(3, ptg.Size, "Ptg Size");
         }
-        [TestMethod]
+        [Test]
         public void TestNumberOfOperands()
         {
             FuncPtg funcPtg = FuncPtg.Create(27); // ROUND() - takes 2 args

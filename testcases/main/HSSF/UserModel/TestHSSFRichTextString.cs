@@ -21,14 +21,14 @@ namespace TestCases.HSSF.UserModel
     using NPOI.HSSF.UserModel;
     using System.IO;
     using TestCases.HSSF;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
 
     using NPOI.SS.UserModel;
 
-    [TestClass]
+    [TestFixture]
     public class TestHSSFRichTextString
     {
-        [TestMethod]
+        [Test]
         public void TestApplyFont()
         {
 
@@ -71,7 +71,7 @@ namespace TestCases.HSSF.UserModel
             Assert.AreEqual(1, r.GetFontAtIndex(6));
 
         }
-        [TestMethod]
+        [Test]
         public void TestClearFormatting()
         {
 
@@ -85,7 +85,7 @@ namespace TestCases.HSSF.UserModel
         /**
   * Test case proposed in Bug 40520:  formated twice => will format whole String
   */
-        [TestMethod]
+        [Test]
         public void Test40520_1()
         {
 
@@ -104,7 +104,7 @@ namespace TestCases.HSSF.UserModel
         /**
          * Test case proposed in Bug 40520:  overlapped range => will format whole String
          */
-        [TestMethod]
+        [Test]
         public void Test40520_2()
         {
 
@@ -123,7 +123,7 @@ namespace TestCases.HSSF.UserModel
         /**
          * Test case proposed in Bug 40520:  formated twice => will format whole String
          */
-        [TestMethod]
+        [Test]
         public void Test40520_3()
         {
 

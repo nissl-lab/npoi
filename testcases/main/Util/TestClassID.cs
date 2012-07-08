@@ -31,7 +31,7 @@ namespace TestCases.Util
 
     using System;
 
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using System.IO;
     using NPOI.Util;
 
@@ -40,7 +40,7 @@ namespace TestCases.Util
      *
      * @author Michael Zalewski (zalewski@optonline.net)
      */
-    [TestClass]
+    [TestFixture]
     public class TestClassID
     {
         /**
@@ -56,7 +56,7 @@ namespace TestCases.Util
         /**
          * Various Tests of overridden .Equals()
          */
-        [TestMethod]
+        [Test]
         public void TestEquals()
         {
             ClassID clsidTest1 = new ClassID(
@@ -83,7 +83,7 @@ namespace TestCases.Util
          * Try to Write to a buffer that is too small. This should
          *   throw an Exception
          */
-        [TestMethod]
+        [Test]
         public void TestWriteArrayStoreException()
         {
             ClassID clsidTest = new ClassID(
@@ -131,7 +131,7 @@ namespace TestCases.Util
          * property Set: the first one is a {@link SummaryInformation},
          * the second one is a {@link DocumentSummaryInformation}.
          */
-        [TestMethod]
+        [Test]
         public void TestClassID1()
         {
             ClassID clsidTest = new ClassID(

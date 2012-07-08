@@ -19,7 +19,7 @@ namespace TestCases.HSSF.Record
 {
     using System;
     using System.IO;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
 
     using TestCases.HSSF;
     using NPOI.HSSF.Record;
@@ -27,10 +27,10 @@ namespace TestCases.HSSF.Record
     /**
      * 
      */
-    [TestClass]
+    [TestFixture]
     public class TestBOFRecord
     {
-        [TestMethod]
+        [Test]
         public void TestBOFRecord1()
         {
             Stream is1 = HSSFTestDataSamples.OpenSampleFileStream("bug_42794.xls");
@@ -42,7 +42,7 @@ namespace TestCases.HSSF.Record
             }
             catch (IndexOutOfRangeException)
             {
-                throw new AssertFailedException("Identified bug 42794");
+                throw new AssertionException("Identified bug 42794");
             }
         }
     }

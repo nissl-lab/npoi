@@ -19,7 +19,7 @@ namespace TestCases.SS.Formula.Eval
 {
 
     using System;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.SS.Formula.Eval;
     using NPOI.SS.Formula.Functions;
     using TestCases.SS.Formula.Functions;
@@ -29,7 +29,7 @@ namespace TestCases.SS.Formula.Eval
      *
      * @author Josh Micich
      */
-    [TestClass]
+    [TestFixture]
     public class TestEqualEval
     {
         // convenient access to namepace
@@ -39,7 +39,7 @@ namespace TestCases.SS.Formula.Eval
          * Test for bug observable at svn revision 692218 (Sep 2008)<br/>
          * The value from a 1x1 area should be taken immediately, regardless of srcRow and srcCol
          */
-        [TestMethod]
+        [Test]
         public void Test1x1AreaOperand()
         {
 
@@ -53,7 +53,7 @@ namespace TestCases.SS.Formula.Eval
             {
                 if (result == ErrorEval.VALUE_INVALID)
                 {
-                    throw new AssertFailedException("Identified bug in Evaluation of 1x1 area");
+                    throw new AssertionException("Identified bug in Evaluation of 1x1 area");
                 }
             }
             Assert.AreEqual(typeof(BoolEval), result.GetType());
@@ -62,7 +62,7 @@ namespace TestCases.SS.Formula.Eval
         /**
          * Empty string is equal to blank
          */
-        [TestMethod]
+        [Test]
         public void TestBlankEqualToEmptyString()
         {
 
@@ -75,7 +75,7 @@ namespace TestCases.SS.Formula.Eval
             BoolEval be = (BoolEval)result;
             if (!be.BooleanValue)
             {
-                throw new AssertFailedException("Identified bug blank/empty string Equality");
+                throw new AssertionException("Identified bug blank/empty string Equality");
             }
             Assert.IsTrue(be.BooleanValue);
         }
@@ -83,12 +83,12 @@ namespace TestCases.SS.Formula.Eval
         /**
          * Test for bug 46613 (observable at svn r737248)
          */
-        [TestMethod]
+        [Test]
         public void TestStringInsensitive_bug46613()
         {
             if (!EvalStringCmp("abc", "aBc", EvalInstances.Equal))
             {
-                throw new AssertFailedException("Identified bug 46613");
+                throw new AssertionException("Identified bug 46613");
             }
             Assert.IsTrue(EvalStringCmp("abc", "aBc", EvalInstances.Equal));
             Assert.IsTrue(EvalStringCmp("ABC", "azz", EvalInstances.LessThan));
@@ -109,7 +109,7 @@ namespace TestCases.SS.Formula.Eval
             BoolEval be = (BoolEval)result;
             return be.BooleanValue;
         }
-        [TestMethod]
+        [Test]
         public void TestBooleanCompares()
         {
             ConfirmCompares(BoolEval.TRUE, new StringEval("TRUE"), +1);
@@ -153,23 +153,23 @@ namespace TestCases.SS.Formula.Eval
          * "Excel considers -0.0 to be equal to 0.0" which is NQR
          * See {@link TestMinusZeroResult} for more specific Tests regarding -0.0.
          */
-        [TestMethod]
+        [Test]
         public void TestZeroEquality_bug47198()
         {
             NumberEval zero = new NumberEval(0.0);
             NumberEval mZero = (NumberEval)Evaluate(UnaryMinusEval.instance, new ValueEval[] { zero, }, 0, 0);
             if ((ulong)BitConverter.DoubleToInt64Bits(mZero.NumberValue) == 0x8000000000000000L)
             {
-                throw new AssertFailedException("Identified bug 47198: unary minus should convert -0.0 to 0.0");
+                throw new AssertionException("Identified bug 47198: unary minus should convert -0.0 to 0.0");
             }
             ValueEval[] args = { zero, mZero, };
             BoolEval result = (BoolEval)Evaluate(EvalInstances.Equal, args, 0, 0);
             if (!result.BooleanValue)
             {
-                throw new AssertFailedException("Identified bug 47198: -0.0 != 0.0");
+                throw new AssertionException("Identified bug 47198: -0.0 != 0.0");
             }
         }
-        [TestMethod]
+        [Test]
         public void TestRounding_bug47598()
         {
             double x = 1 + 1.0028 - 0.9973; // should be 1.0055, but has IEEE rounding
@@ -183,7 +183,7 @@ namespace TestCases.SS.Formula.Eval
             BoolEval result = (BoolEval)Evaluate(EvalInstances.Equal, args, 0, 0);
             if (!result.BooleanValue)
             {
-                throw new AssertFailedException("Identified bug 47598: 1+1.0028-0.9973 != 1.0055");
+                throw new AssertionException("Identified bug 47598: 1+1.0028-0.9973 != 1.0055");
             }
         }
 

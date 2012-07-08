@@ -29,7 +29,7 @@ using System;
 using System.IO;
 using System.Collections;
 
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using NPOI.POIFS.Storage;
 using NPOI.POIFS.Common;
 using NPOI.Util;
@@ -43,7 +43,7 @@ namespace TestCases.POIFS.Storage
      *
      * @author Marc Johnson
      */
-    [TestClass]
+    [TestFixture]
     public class TestRawDataBlockList
     {
 
@@ -62,7 +62,7 @@ namespace TestCases.POIFS.Storage
          *
          * @exception IOException
          */
-        [TestMethod]
+        [Test]
         public void TestNormalConstructor()
         {
             byte[] data = new byte[2560];
@@ -79,7 +79,7 @@ namespace TestCases.POIFS.Storage
          *
          * @exception IOException
          */
-        [TestMethod]
+        [Test]
         public void TestEmptyConstructor()
         {
             new RawDataBlockList(new MemoryStream(new byte[0]), POIFSConstants.SMALLER_BIG_BLOCK_SIZE_DETAILS);
@@ -88,7 +88,7 @@ namespace TestCases.POIFS.Storage
         /**
          * Test creating a short RawDataBlockList
          */
-        [TestMethod]
+        [Test]
         public void TestShortConstructor()
         {
             // Get the logger to be used

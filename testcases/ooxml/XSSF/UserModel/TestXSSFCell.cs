@@ -15,7 +15,7 @@
    limitations under the License.
 ==================================================================== */
 
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using TestCases.SS.UserModel;
 using NPOI.SS.UserModel;
 using NPOI.OpenXmlFormats.Spreadsheet;
@@ -27,7 +27,7 @@ namespace NPOI.XSSF.UserModel
     /**
      * @author Yegor Kozlov
      */
-    [TestClass]
+    [TestFixture]
     public class TestXSSFCell : BaseTestCell
     {
 
@@ -41,7 +41,7 @@ namespace NPOI.XSSF.UserModel
          * Bug 47026: trouble changing cell type when workbook doesn't contain
          * Shared String Table
          */
-        [TestMethod]
+        [Test]
         public void Test47026_1()
         {
             IWorkbook source = _testDataProvider.OpenSampleWorkbook("47026.xlsm");
@@ -51,7 +51,7 @@ namespace NPOI.XSSF.UserModel
             cell.SetCellType(CellType.STRING);
             cell.SetCellValue("456");
         }
-        [TestMethod]
+        [Test]
         public void Test47026_2()
         {
             IWorkbook source = _testDataProvider.OpenSampleWorkbook("47026.xlsm");
@@ -69,7 +69,7 @@ namespace NPOI.XSSF.UserModel
          * Some programs, for example, Microsoft Excel Driver for .xlsx insert inline string
          * instead of using the shared string table. See bug 47206
          */
-        [TestMethod]
+        [Test]
         public void TestInlineString()
         {
             XSSFWorkbook wb = (XSSFWorkbook)_testDataProvider.OpenSampleWorkbook("xlsx-jdbc.xlsx");
@@ -95,7 +95,7 @@ namespace NPOI.XSSF.UserModel
         /**
          *  Bug 47278 -  xsi:nil attribute for <t> tag caused Excel 2007 to fail to open workbook
          */
-        [TestMethod]
+        [Test]
         public void Test47278()
         {
             XSSFWorkbook wb = (XSSFWorkbook)_testDataProvider.CreateWorkbook();
@@ -118,7 +118,7 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual(0, sst.GetCount());
             Assert.AreEqual(CellType.BLANK, cell_1.CellType);
         }
-        [TestMethod]
+        [Test]
         public void TestFormulaString()
         {
             XSSFWorkbook wb = new XSSFWorkbook();
@@ -157,7 +157,7 @@ namespace NPOI.XSSF.UserModel
         /**
          * Bug 47889: problems when calling XSSFCell.StringCellValue on a workbook Created in Gnumeric
          */
-        [TestMethod]
+        [Test]
         public void Test47889()
         {
             XSSFWorkbook wb = (XSSFWorkbook)_testDataProvider.OpenSampleWorkbook("47889.xlsx");
@@ -188,7 +188,7 @@ namespace NPOI.XSSF.UserModel
          * Cell with the formula that returns error must return error code(There was
          * an problem that cell could not return error value form formula cell).
          */
-        [TestMethod]
+        [Test]
         public void TestGetErrorCellValueFromFormulaCell()
         {
             XSSFWorkbook wb = new XSSFWorkbook();

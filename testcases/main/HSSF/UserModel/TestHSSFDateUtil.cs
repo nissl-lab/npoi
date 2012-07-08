@@ -22,7 +22,7 @@ namespace TestCases.HSSF.UserModel
 
     using TestCases.HSSF;
     using NPOI.HSSF.Model;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.HSSF.UserModel;
     using NPOI.SS.UserModel;
 
@@ -36,7 +36,7 @@ namespace TestCases.HSSF.UserModel
      * @author Alex Jacoby (ajacoby at gmail.com)
      * @version %I%, %G%
      */
-    [TestClass]
+    [TestFixture]
     public class TestHSSFDateUtil
     {
 
@@ -50,7 +50,7 @@ namespace TestCases.HSSF.UserModel
         /**
          * Checks the date conversion functions in the DateUtil class.
          */
-        [TestMethod]
+        [Test]
         public void TestDateConversion()
         {
 
@@ -177,7 +177,7 @@ namespace TestCases.HSSF.UserModel
          * Checks the conversion of an Excel date to java.util.Date on a day when
          * Daylight Saving Time ends.
          */
-        [TestMethod]
+        [Test]
         public void TestJavaConversionOnDSTEnd()
         {
             //TODO:: change time zone
@@ -198,7 +198,7 @@ namespace TestCases.HSSF.UserModel
         /**
          * Tests that we deal with time-zones properly
          */
-        [TestMethod]
+        [Test]
         public void TestCalendarConversion()
         {
             DateTime date = new DateTime(2002, 1, 1, 12, 1, 1);
@@ -224,7 +224,7 @@ namespace TestCases.HSSF.UserModel
         /**
          * Tests that we correctly detect date formats as such
          */
-        [TestMethod]
+        [Test]
         public void TestIdentifyDateFormats()
         {
             // First up, try with a few built in date formats
@@ -332,7 +332,7 @@ namespace TestCases.HSSF.UserModel
          * Test that against a real, Test file, we still do everything
          *  correctly
          */
-        [TestMethod]
+        [Test]
         public void TestOnARealFile()
         {
 
@@ -390,7 +390,7 @@ namespace TestCases.HSSF.UserModel
             Assert.IsTrue(DateUtil.IsADateFormat(style.DataFormat, style.GetDataFormatString()));
             Assert.IsTrue(DateUtil.IsCellDateFormatted(cell));
         }
-        [TestMethod]
+        [Test]
         public void TestDateBug_2Excel()
         {
             Assert.AreEqual(59.0, DateUtil.GetExcelDate(new DateTime(1900, CALENDAR_FEBRUARY, 28), false), 1);
@@ -401,7 +401,7 @@ namespace TestCases.HSSF.UserModel
             Assert.AreEqual(37257.00, DateUtil.GetExcelDate(new DateTime(2002, CALENDAR_JANUARY, 1), false), 1);
             Assert.AreEqual(38074.00, DateUtil.GetExcelDate(new DateTime(2004, CALENDAR_MARCH, 28), false), 1);
         }
-        [TestMethod]
+        [Test]
         public void TestDateBug_2Java()
         {
             Assert.AreEqual(new DateTime(1900, CALENDAR_FEBRUARY, 28), DateUtil.GetJavaDate(59.0, false));
@@ -412,7 +412,7 @@ namespace TestCases.HSSF.UserModel
             Assert.AreEqual(new DateTime(2002, CALENDAR_JANUARY, 1), DateUtil.GetJavaDate(37257.00, false));
             Assert.AreEqual(new DateTime(2004, CALENDAR_MARCH, 28), DateUtil.GetJavaDate(38074.00, false));
         }
-        [TestMethod]
+        [Test]
         public void TestDate1904()
         {
             Assert.AreEqual(new DateTime(1904, CALENDAR_JANUARY, 2), DateUtil.GetJavaDate(1.0, true));
@@ -430,7 +430,7 @@ namespace TestCases.HSSF.UserModel
         /**
          * Check if DateUtil.GetAbsoluteDay works as advertised.
          */
-        [TestMethod]
+        [Test]
         public void TestAbsoluteDay()
         {
             // 1 Jan 1900 is 1 day after 31 Dec 1899
@@ -440,7 +440,7 @@ namespace TestCases.HSSF.UserModel
             calendar = new DateTime(1901, 1, 1);
             Assert.AreEqual(366, DateUtil.AbsoluteDay(calendar, false), "Checking absolute day (1 Jan 1901)");
         }
-        [TestMethod]
+        [Test]
         public void TestConvertTime()
         {
 
@@ -450,7 +450,7 @@ namespace TestCases.HSSF.UserModel
             Assert.AreEqual(0.0000116, DateUtil.ConvertTime("0:00:01"), delta);
             Assert.AreEqual(0.7330440, DateUtil.ConvertTime("17:35:35"), delta);
         }
-        [TestMethod]
+        [Test]
         public void TestParseDate()
         {
             Assert.AreEqual(new DateTime(2008, 8, 3), DateUtil.ParseYYYYMMDDDate("2008/08/03"));
@@ -460,7 +460,7 @@ namespace TestCases.HSSF.UserModel
         /**
          * Ensure that date values *with* a fractional portion get the right time of day
          */
-        [TestMethod]
+        [Test]
         public void TestConvertDateTime()
         {
             // Excel day 30000 is date 18-Feb-1982 
@@ -473,7 +473,7 @@ namespace TestCases.HSSF.UserModel
          * User reported a datetime issue in POI-2.5:
          *  Setting Cell's value to Jan 1, 1900 without a time doesn't return the same value Set to
          */
-        [TestMethod]
+        [Test]
         public void TestBug19172()
         {
             IWorkbook workbook = new HSSFWorkbook();

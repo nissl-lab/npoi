@@ -21,9 +21,9 @@ namespace TestCases.SS.Util.CellWalk
     using NPOI.HSSF.UserModel;
     using NPOI.SS.Util;
     using System;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.SS.Util.CellWalk;
-    [TestClass]
+    [TestFixture]
     public class TestCellWalk
     {
 
@@ -34,7 +34,7 @@ namespace TestCases.SS.Util.CellWalk
     };
 
         private CountCellHandler countCellHandler = new CountCellHandler();
-        [TestMethod]
+        [Test]
         public void TestNotTraverseEmptyCells()
         {
             IWorkbook wb = new HSSFWorkbook();

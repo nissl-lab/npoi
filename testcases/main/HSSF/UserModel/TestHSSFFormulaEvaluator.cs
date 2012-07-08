@@ -21,7 +21,7 @@ namespace TestCases.HSSF.UserModel
     using NPOI.HSSF.UserModel;
     using NPOI.SS.UserModel;
 
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using TestCases.HSSF;
     using NPOI.SS.Formula;
     using TestCases.SS.Formula;
@@ -32,13 +32,13 @@ namespace TestCases.HSSF.UserModel
      * 
      * @author Josh Micich
      */
-    [TestClass]
+    [TestFixture]
     public class TestHSSFFormulaEvaluator : BaseTestFormulaEvaluator
     {
         /// <summary>
         ///  Some of the tests are depending on the american culture.
         /// </summary>
-        [TestInitialize()]
+        [SetUp]
         public void InitializeCultere()
         {
             System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
@@ -51,7 +51,7 @@ namespace TestCases.HSSF.UserModel
          * Test that the HSSFFormulaEvaluator can Evaluate simple named ranges
          *  (single cells and rectangular areas)
          */
-        [TestMethod]
+        [Test]
         public void TestEvaluateSimple()
         {
             HSSFWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("TestNames.xls");
@@ -83,7 +83,7 @@ namespace TestCases.HSSF.UserModel
          * which contained a simple area ref.  It is not clear what the 'complex' flag is used
          * for but POI should look elsewhere to decide whether it can evaluate the name.
          */
-        [TestMethod]
+        [Test]
         public void TestDefinedNameWithComplexFlag_bug47048()
         {
             // Mock up a spreadsheet to match the critical details of the sample
@@ -117,7 +117,7 @@ namespace TestCases.HSSF.UserModel
             {
                 if (e.Message.Equals("Don't now how to evalate name 'Is_Multicar_Vehicle'"))
                 {
-                    throw new AssertFailedException("Identified bug 47048a");
+                    throw new AssertionException("Identified bug 47048a");
                 }
                 throw e;
             }
@@ -148,7 +148,7 @@ namespace TestCases.HSSF.UserModel
         /**
          * The HSSFFormula evaluator performance benefits greatly from caching of intermediate cell values
          */
-        [TestMethod]
+        [Test]
         public void TestShortCircuitIfEvaluation()
         {
 
@@ -173,7 +173,7 @@ namespace TestCases.HSSF.UserModel
             if (evalCount == 6)
             {
                 // Without short-circuit-if evaluation, evaluating cell 'A1' takes 3 extra evaluations (for D1,E1,F1)
-                throw new AssertFailedException("Identifed bug 48195 - Formula evaluator should short-circuit IF() calculations.");
+                throw new AssertionException("Identifed bug 48195 - Formula evaluator should short-circuit IF() calculations.");
             }
             Assert.AreEqual(3, evalCount);
             Assert.AreEqual(2.0, ((NumberEval)ve).NumberValue, 0D);
@@ -182,7 +182,7 @@ namespace TestCases.HSSF.UserModel
 	 * Ensures that we can handle NameXPtgs in the formulas
 	 *  we Parse.
 	 */
-        [TestMethod]
+        [Test]
         public void TestXRefs()
         {
             IWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("XRefCalc.xls");
@@ -240,7 +240,7 @@ namespace TestCases.HSSF.UserModel
             Assert.AreEqual(CellType.NUMERIC, cell.CachedFormulaResultType);
             Assert.AreEqual(36.90, cell.NumericCellValue, 0.0001);
         }
-        [TestMethod]
+        [Test]
         public void TestSharedFormulas()
         {
             BaseTestSharedFormulas("shared_formulas.xls");

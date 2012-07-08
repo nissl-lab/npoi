@@ -24,7 +24,7 @@ namespace TestCases.HSSF.Record.Chart
     using System;
     using NPOI.HSSF.Record;
     using NPOI.HSSF.Record.Chart;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
 
     /**
      * Tests the serialization and deserialization of the BarRecord
@@ -34,7 +34,7 @@ namespace TestCases.HSSF.Record.Chart
 
      * @author Glen Stampoultzis (glens at apache.org)
      */
-    [TestClass]
+    [TestFixture]
     public class TestBarRecord
     {
         byte[] data = new byte[] {
@@ -47,7 +47,7 @@ namespace TestCases.HSSF.Record.Chart
         {
 
         }
-        [TestMethod]
+        [Test]
         public void TestLoad()
         {
 
@@ -63,7 +63,7 @@ namespace TestCases.HSSF.Record.Chart
 
             Assert.AreEqual(10, record.RecordSize);
         }
-        [TestMethod]
+        [Test]
         public void TestStore()
         {
             BarRecord record = new BarRecord();

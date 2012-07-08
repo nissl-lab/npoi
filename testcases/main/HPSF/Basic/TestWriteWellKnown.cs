@@ -21,7 +21,7 @@ namespace TestCases.HPSF.Basic
     using System.IO;
     using System.Text;
     using System.Collections;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.HPSF;
     using NPOI.POIFS.FileSystem;
     using NPOI.HPSF.Wellknown;
@@ -41,7 +41,7 @@ namespace TestCases.HPSF.Basic
      * @since 2006-02-01
      * @version $Id: TestWriteWellKnown.java 489730 2006-12-22 19:18:16Z bayard $
      */
-    [TestClass]
+    [TestFixture]
     public class TestWriteWellKnown
     {
         //static string dataDir = @"..\..\..\TestCases\HPSF\data\";
@@ -69,7 +69,7 @@ namespace TestCases.HPSF.Basic
          * @throws NoPropertySetStreamException 
          * @throws UnexpectedPropertySetTypeException 
          */
-        [TestMethod]
+        [Test]
         public void TestReadDocumentSummaryInformation()
         {
             POIDataSamples _samples = POIDataSamples.GetHPSFInstance();
@@ -201,7 +201,7 @@ namespace TestCases.HPSF.Basic
                 testContextInstance = value;
             }
         }
-        [TestMethod]
+        [Test]
         public void TestWriteWellKnown1()
         {
         POIDataSamples _samples = POIDataSamples.GetHPSFInstance();
@@ -358,7 +358,7 @@ namespace TestCases.HPSF.Basic
 
             /* Write the POI filesystem to a (temporary) file <em>doc2</em>
              * and Close the latter. */
-            using (FileStream doc2 = File.Create(testContextInstance.TestDir + @"\POI_HPSF_Test2.tmp"))
+            using (FileStream doc2 = File.Create( @"\POI_HPSF_Test2.tmp"))
             {
 
                 poifs.WriteFileSystem(doc2);
@@ -489,7 +489,7 @@ namespace TestCases.HPSF.Basic
                 /* 
                  * <li>Write the POI filesystem to a (temporary) file <em>doc3</em>
                  * and Close the latter. */
-                using (FileStream doc3 = File.Create(testContextInstance.TestDir + @"\POI_HPSF_Test3.tmp"))
+                using (FileStream doc3 = File.Create( @"\POI_HPSF_Test3.tmp"))
                 {
 
                     poifs2.WriteFileSystem(doc3);
@@ -565,8 +565,8 @@ namespace TestCases.HPSF.Basic
                 }
             }
         }
-            File.Delete(testContextInstance.TestDir + @"\POI_HPSF_Test3.tmp");
-            File.Delete(testContextInstance.TestDir + @"\POI_HPSF_Test2.tmp");
+            File.Delete( @"\POI_HPSF_Test3.tmp");
+            File.Delete( @"\POI_HPSF_Test2.tmp");
         }
 
         private void RunTest(FileStream file)
@@ -621,7 +621,7 @@ namespace TestCases.HPSF.Basic
          *
          * @throws Exception if anything goes wrong.
          */
-        [TestMethod]
+        [Test]
         public void TestReadCustomPropertiesFromFiles()
         {
               POIDataSamples _samples = POIDataSamples.GetHPSFInstance();
@@ -641,7 +641,7 @@ namespace TestCases.HPSF.Basic
         /**
          * Tests basic custom property features.
          */
-        [TestMethod]
+        [Test]
         public void TestCustomerProperties()
         {
             String KEY = "Schlüssel ";
@@ -680,7 +680,7 @@ namespace TestCases.HPSF.Basic
          * Tests Reading custom properties from a section including Reading
          * custom properties which are not pure.
          */
-        [TestMethod]
+        [Test]
         public void TestGetCustomerProperties()
         {
             long ID_1 = 2;

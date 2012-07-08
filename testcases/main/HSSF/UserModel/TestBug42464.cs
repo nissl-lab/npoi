@@ -25,7 +25,7 @@ namespace TestCases.HSSF.UserModel
     using NPOI.SS.Formula;
     using NPOI.HSSF.UserModel;
     
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
 
     using TestCases.HSSF;
     using NPOI.SS.UserModel;
@@ -35,16 +35,16 @@ namespace TestCases.HSSF.UserModel
     /**
      * 
      */
-    [TestClass]
+    [TestFixture]
     public class TestBug42464
     {
-        [TestMethod]
+        [Test]
         public void TestOKFile()
         {
             HSSFWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("42464-ExpPtg-ok.xls");
             Process(wb);
         }
-        [TestMethod]
+        [Test]
         public void TestExpSharedBadFile()
         {
             HSSFWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("42464-ExpPtg-bad.xls");

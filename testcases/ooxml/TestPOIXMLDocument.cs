@@ -20,7 +20,7 @@ namespace NPOI.OOXML
     using System;
     using NPOI.Util;
     using System.Collections.Generic;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using System.IO;
     using NPOI.OpenXml4Net.OPC;
     using NPOI;
@@ -29,7 +29,7 @@ namespace NPOI.OOXML
     /**
      * Test recursive read and write of OPC namespaces
      */
-    [TestClass]
+    [TestFixture]
     public class TestPOIXMLDocument 
     {
 
@@ -137,28 +137,28 @@ namespace NPOI.OOXML
             }
         }
 
-        [TestMethod]
+        [Test]
         public void TestPPTX()
         {
             AssertReadWrite(
                     PackageHelper.Open(POIDataSamples.GetSlideShowInstance().OpenResourceAsStream("PPTWithAttachments.pptm"))
             );
         }
-        [TestMethod]
+        [Test]
         public void TestXLSX()
         {
             AssertReadWrite(
                     PackageHelper.Open(POIDataSamples.GetSpreadSheetInstance().OpenResourceAsStream("ExcelWithAttachments.xlsm"))
                     );
         }
-        [TestMethod]
+        [Test]
         public void TestDOCX()
         {
             AssertReadWrite(
                     PackageHelper.Open(POIDataSamples.GetDocumentInstance().OpenResourceAsStream("WordWithAttachments.docx"))
                     );
         }
-        [TestMethod]
+        [Test]
         public void TestRelationOrder()
         {
             OPCPackage pkg = PackageHelper.Open(POIDataSamples.GetDocumentInstance().OpenResourceAsStream("WordWithAttachments.docx"));

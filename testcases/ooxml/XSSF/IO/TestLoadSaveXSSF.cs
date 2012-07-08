@@ -17,19 +17,19 @@
 
 using TestCases;
 using NPOI.XSSF.UserModel;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using NPOI.SS.UserModel;
 using System.Collections.Generic;
 using System.Collections;
 namespace NPOI.XSSF.IO
 {
 
-    [TestClass]
+    [TestFixture]
     public class TestLoadSaveXSSF
     {
         private static POIDataSamples _ssSampels = POIDataSamples.GetSpreadSheetInstance();
 
-        [TestMethod]
+        [Test]
         public void TestLoadSample()
         {
             XSSFWorkbook workbook = new XSSFWorkbook(_ssSampels.OpenResourceAsStream("sample.xlsx"));
@@ -45,7 +45,7 @@ namespace NPOI.XSSF.IO
         }
 
         // TODO filename string hard coded in XSSFWorkbook constructor in order to make ant Test-ooxml target be successful.
-        [TestMethod]
+        [Test]
         public void TestLoadStyles()
         {
             XSSFWorkbook workbook = new XSSFWorkbook(_ssSampels.OpenResourceAsStream("styles.xlsx"));
@@ -57,7 +57,7 @@ namespace NPOI.XSSF.IO
         }
 
         // TODO filename string hard coded in XSSFWorkbook constructor in order to make ant Test-ooxml target be successful.
-        [TestMethod]
+        [Test]
         public void TestLoadPictures()
         {
             XSSFWorkbook workbook = new XSSFWorkbook(_ssSampels.OpenResourceAsStream("picture.xlsx"));

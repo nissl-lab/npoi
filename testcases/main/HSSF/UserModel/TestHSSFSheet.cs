@@ -25,7 +25,6 @@ namespace TestCases.HSSF.UserModel
     using NPOI.HSSF.Record;
     using NPOI.SS.Util;
     using NPOI.DDF;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     using TestCases.HSSF;
     using NPOI.HSSF.Record.Aggregates;
@@ -38,6 +37,7 @@ namespace TestCases.HSSF.UserModel
     using System.Collections;
     using NPOI.SS.Formula;
     using NPOI.SS.Formula.PTG;
+    using NUnit.Framework;
 
     /**
      * Tests NPOI.SS.UserModel.Sheet.  This Test case is very incomplete at the moment.
@@ -46,7 +46,7 @@ namespace TestCases.HSSF.UserModel
      * @author Glen Stampoultzis (glens at apache.org)
      * @author Andrew C. Oliver (acoliver apache org)
      */
-    [TestClass]
+    [TestFixture]
     public class TestHSSFSheet : BaseTestSheet
     {
         public TestHSSFSheet()
@@ -58,12 +58,12 @@ namespace TestCases.HSSF.UserModel
         /// <summary>
         ///  Some of the tests are depending on the american culture.
         /// </summary>
-        [TestInitialize()]
+        [SetUp]
         public void InitializeCultere()
         {
             System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
         }
-        [TestMethod]
+        [Test]
         public void TestTestGetSetMargin()
         {
             BaseTestGetSetMargin(new double[] { 0.75, 0.75, 1.0, 1.0, 0.3, 0.3 });
@@ -72,7 +72,7 @@ namespace TestCases.HSSF.UserModel
         /**
          * Test the gridset field gets set as expected.
          */
-        [TestMethod]
+        [Test]
         public void TestBackupRecord()
         {
             HSSFWorkbook wb = new HSSFWorkbook();
@@ -89,7 +89,7 @@ namespace TestCases.HSSF.UserModel
         /**
          * Test vertically centered output.
          */
-        [TestMethod]
+        [Test]
         public void TestVerticallyCenter()
         {
             HSSFWorkbook wb = new HSSFWorkbook();
@@ -107,7 +107,7 @@ namespace TestCases.HSSF.UserModel
         /**
          * Test horizontally centered output.
          */
-        [TestMethod]
+        [Test]
         public void TestHorizontallyCenter()
         {
             HSSFWorkbook wb = new HSSFWorkbook();
@@ -124,7 +124,7 @@ namespace TestCases.HSSF.UserModel
         /**
          * Test WSBboolRecord fields get set in the user model.
          */
-        [TestMethod]
+        [Test]
         public void TestWSBool()
         {
             HSSFWorkbook wb = new HSSFWorkbook();
@@ -171,7 +171,7 @@ namespace TestCases.HSSF.UserModel
             Assert.AreEqual(true, s.RowSumsBelow);
             Assert.AreEqual(true, s.RowSumsRight);
         }
-        [TestMethod]
+        [Test]
         public void TestReadBooleans()
         {
             HSSFWorkbook workbook = new HSSFWorkbook();
@@ -189,7 +189,7 @@ namespace TestCases.HSSF.UserModel
             Assert.IsNotNull(row);
             Assert.AreEqual(2, row.PhysicalNumberOfCells);
         }
-        [TestMethod]
+        [Test]
         public void TestRemoveZeroRow()
         {
             HSSFWorkbook workbook = new HSSFWorkbook();
@@ -203,7 +203,7 @@ namespace TestCases.HSSF.UserModel
             {
                 if (e.Message.Equals("Invalid row number (-1) outside allowable range (0..65535)"))
                 {
-                    throw new AssertFailedException("Identified bug 45367");
+                    throw new AssertionException("Identified bug 45367");
                 }
                 throw e;
             }
@@ -213,7 +213,7 @@ namespace TestCases.HSSF.UserModel
         /**
          * Setting landscape and portrait stuff on existing sheets
          */
-        [TestMethod]
+        [Test]
         public void TestPrintSetupLandscapeExisting()
         {
             HSSFWorkbook workbook = HSSFTestDataSamples.OpenSampleWorkbook("SimpleWithPageBreaks.xls");
@@ -255,7 +255,7 @@ namespace TestCases.HSSF.UserModel
             Assert.AreEqual(3, sheetPM.PrintSetup.Copies);
             Assert.AreEqual(1, sheetLS.PrintSetup.Copies);
         }
-        [TestMethod]
+        [Test]
         public void TestGroupRows()
         {
             HSSFWorkbook workbook = new HSSFWorkbook();
@@ -296,7 +296,7 @@ namespace TestCases.HSSF.UserModel
             Assert.AreEqual(1, r4.OutlineLevel);
             Assert.AreEqual(0, r5.OutlineLevel);
         }
-        [TestMethod]
+        [Test]
         public void TestGroupRowsExisting()
         {
             HSSFWorkbook workbook = HSSFTestDataSamples.OpenSampleWorkbook("NoGutsRecords.xls");
@@ -333,7 +333,7 @@ namespace TestCases.HSSF.UserModel
             }
             catch (OutOfMemoryException)
             {
-                throw new AssertFailedException("Identified bug 39903");
+                throw new AssertionException("Identified bug 39903");
             }
 
             s = workbook.GetSheetAt(0);
@@ -351,7 +351,7 @@ namespace TestCases.HSSF.UserModel
             Assert.AreEqual(1, r5.OutlineLevel);
             Assert.AreEqual(0, r6.OutlineLevel);
         }
-        [TestMethod]
+        [Test]
         public void TestCreateDrawings()
         {
             IWorkbook workbook = new HSSFWorkbook();
@@ -360,7 +360,7 @@ namespace TestCases.HSSF.UserModel
             HSSFPatriarch p2 = (HSSFPatriarch)sheet.CreateDrawingPatriarch();
             Assert.AreSame(p1, p2);
         }
-        [TestMethod]
+        [Test]
         public void TestGetDrawings()
         {
             HSSFWorkbook wb1c = HSSFTestDataSamples.OpenSampleWorkbook("WithChart.xls");
@@ -384,7 +384,7 @@ namespace TestCases.HSSF.UserModel
         /**
  * Test that the ProtectRecord is included when creating or cloning a sheet
  */
-        [TestMethod]
+        [Test]
         public void TestCloneWithProtect()
         {
             String passwordA = "secrect";
@@ -407,7 +407,7 @@ namespace TestCases.HSSF.UserModel
             // but the cloned sheet's password should remain unchanged
             Assert.AreEqual(expectedHashA, sheet2.Password);
         }
-        [TestMethod]
+        [Test]
         public new void TestProtectSheet()
         {
             short expected = unchecked((short)0xfef1);
@@ -425,7 +425,7 @@ namespace TestCases.HSSF.UserModel
             Assert.AreEqual(expected, s.Password, "well known value for top secret hash should be " + StringUtil.ToHexString(expected).Substring(4));
 
         }
-        [TestMethod]
+        [Test]
         public void TestProtectSheetRecordOrder_bug47363a()
         {
             HSSFWorkbook wb = new HSSFWorkbook();
@@ -437,7 +437,7 @@ namespace TestCases.HSSF.UserModel
             int nRecs = recs.Length;
             if (recs[nRecs - 2] is PasswordRecord && recs[nRecs - 5] is DimensionsRecord)
             {
-                throw new AssertFailedException("Identified bug 47363a - PASSWORD after DIMENSION");
+                throw new AssertionException("Identified bug 47363a - PASSWORD after DIMENSION");
             }
             // Check that protection block is together, and before DIMENSION
             //ConfirmRecordClass(recs, nRecs - 4, typeof(DimensionsRecord));
@@ -456,7 +456,7 @@ namespace TestCases.HSSF.UserModel
         {
             if (recs.Length <= index)
             {
-                throw new AssertFailedException("Expected (" + cls.Name + ") at index "
+                throw new AssertionException("Expected (" + cls.Name + ") at index "
                         + index + " but array length is " + recs.Length + ".");
             }
             Assert.AreEqual(cls, recs[index].GetType());
@@ -465,7 +465,7 @@ namespace TestCases.HSSF.UserModel
         /**
     * There should be no problem with Adding data validations After sheet protection
     */
-        [TestMethod]
+        [Test]
         public void TestDvProtectionOrder_bug47363b()
         {
             IWorkbook workbook = new HSSFWorkbook();
@@ -485,7 +485,7 @@ namespace TestCases.HSSF.UserModel
                 String expMsg = "Unexpected (NPOI.HSSF.Record.PasswordRecord) while looking for DV Table insert pos";
                 if (expMsg.Equals(e.Message))
                 {
-                    throw new AssertFailedException("Identified bug 47363b");
+                    throw new AssertionException("Identified bug 47363b");
                 }
                 throw e;
             }
@@ -501,7 +501,7 @@ namespace TestCases.HSSF.UserModel
 
             Assert.AreEqual(4, nRecsWithProtection - nRecsWithoutProtection);
         }
-        [TestMethod]
+        [Test]
         public void TestZoom()
         {
             HSSFWorkbook wb = new HSSFWorkbook();
@@ -524,7 +524,7 @@ namespace TestCases.HSSF.UserModel
          * Make sure the excel file loads work
          *
          */
-        [TestMethod]
+        [Test]
         public void TestPageBreakFiles()
         {
             HSSFWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("SimpleWithPageBreaks.xls");
@@ -553,7 +553,7 @@ namespace TestCases.HSSF.UserModel
             Assert.AreEqual(2, sheet.RowBreaks.Length, "row breaks number");
             Assert.AreEqual(2, sheet.ColumnBreaks.Length, "column breaks number");
         }
-        [TestMethod]
+        [Test]
         public void TestDBCSName()
         {
             HSSFWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("DBCSSheetName.xls");
@@ -567,7 +567,7 @@ namespace TestCases.HSSF.UserModel
          * parameter to allow setting the toprow in the visible view
          * of the sheet when it is first Opened.
          */
-        [TestMethod]
+        [Test]
         public void TestTopRow()
         {
             HSSFWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("SimpleWithPageBreaks.xls");
@@ -583,7 +583,7 @@ namespace TestCases.HSSF.UserModel
         }
 
         /** cell with formula becomes null on cloning a sheet*/
-        [TestMethod]
+        [Test]
         public new void Test35084()
         {
 
@@ -600,7 +600,7 @@ namespace TestCases.HSSF.UserModel
         }
 
         /** Test that new default column styles get applied */
-        [TestMethod]
+        [Test]
         public new void TestDefaultColumnStyle()
         {
             HSSFWorkbook wb = new HSSFWorkbook();
@@ -616,7 +616,7 @@ namespace TestCases.HSSF.UserModel
         /**
          *
          */
-        [TestMethod]
+        [Test]
         public void TestAddEmptyRow()
         {
             //try to Add 5 empty rows to a new sheet
@@ -637,7 +637,7 @@ namespace TestCases.HSSF.UserModel
 
             workbook = HSSFTestDataSamples.WriteOutAndReadBack(workbook);
         }
-        [TestMethod]
+        [Test]
         public void TestAutoSizeColumn()
         {
             HSSFWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("43902.xls");
@@ -679,7 +679,7 @@ namespace TestCases.HSSF.UserModel
             Assert.IsTrue(sheet3.GetColumnWidth(0) >= minWithRow1And2);
             Assert.IsTrue(sheet3.GetColumnWidth(0) <= maxWithRow1And2);
         }
-        [TestMethod]
+        [Test]
         public void TestAutoSizeDate()
         {
             IWorkbook wb = new HSSFWorkbook();
@@ -722,7 +722,7 @@ namespace TestCases.HSSF.UserModel
         ///**
         // * Setting ForceFormulaRecalculation on sheets
         // */
-        [TestMethod]
+        [Test]
         public void TestForceRecalculation()
         {
             IWorkbook workbook = HSSFTestDataSamples.OpenSampleWorkbook("UncalcedRecord.xls");
@@ -791,7 +791,7 @@ namespace TestCases.HSSF.UserModel
             Assert.IsTrue(wb3.GetSheetAt(3).ForceFormulaRecalculation);
         }
 
-        [TestMethod]
+        [Test]
         public new void TestColumnWidth()
         {
             //check we can correctly read column widths from a reference workbook
@@ -855,7 +855,7 @@ namespace TestCases.HSSF.UserModel
             sh.SetColumnWidth(0, 40000);
             Assert.AreEqual(40000, sh.GetColumnWidth(0));
         }
-        [TestMethod]
+        [Test]
         public void TestDefaultColumnWidth()
         {
             IWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("12843-1.xls");
@@ -883,7 +883,7 @@ namespace TestCases.HSSF.UserModel
          * Excel, ooo, and google docs are OK with this.
          * Now POI is too.
          */
-        [TestMethod]
+        [Test]
         public void TestMissingRowRecords_bug41187()
         {
             HSSFWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("ex41187-19267.xls");
@@ -892,11 +892,11 @@ namespace TestCases.HSSF.UserModel
             IRow row = sheet.GetRow(0);
             if (row == null)
             {
-                throw new AssertFailedException("Identified bug 41187 a");
+                throw new AssertionException("Identified bug 41187 a");
             }
             if (row.Height == 0)
             {
-                throw new AssertFailedException("Identified bug 41187 b");
+                throw new AssertionException("Identified bug 41187 b");
             }
             Assert.AreEqual("Hi Excel!", row.GetCell(0).RichStringCellValue.String);
             // Check row height for 'default' flag
@@ -911,7 +911,7 @@ namespace TestCases.HSSF.UserModel
          *
          * See bug #45720.
          */
-        [TestMethod]
+        [Test]
         public void TestCloneSheetWithDrawings()
         {
             HSSFWorkbook wb1 = HSSFTestDataSamples.OpenSampleWorkbook("45720.xls");
@@ -947,7 +947,7 @@ namespace TestCases.HSSF.UserModel
          * Since Excel silently truncates to 31, make sure that POI enforces uniqueness on the first
          * 31 chars. 
          */
-        [TestMethod]
+        [Test]
         public void TestLongSheetNames()
         {
             HSSFWorkbook wb = new HSSFWorkbook();
@@ -957,7 +957,7 @@ namespace TestCases.HSSF.UserModel
             try
             {
                 wb.CreateSheet(SAME_PREFIX + "Dyyyy"); // identical up to the 32nd char
-                throw new AssertFailedException("Expected exception not thrown");
+                throw new AssertionException("Expected exception not thrown");
             }
             catch (ArgumentException e)
             {
@@ -968,7 +968,7 @@ namespace TestCases.HSSF.UserModel
         /**
      * Tests that we can read existing column styles
      */
-        [TestMethod]
+        [Test]
         public void TestReadColumnStyles()
         {
             IWorkbook wbNone = HSSFTestDataSamples.OpenSampleWorkbook("ColumnStyleNone.xls");
@@ -1005,7 +1005,7 @@ namespace TestCases.HSSF.UserModel
             Assert.IsFalse(cs.GetFont(wbComplex).IsItalic);
             Assert.AreEqual((int)FontBoldWeight.BOLD, cs.GetFont(wbComplex).Boldweight);
         }
-        [TestMethod]
+        [Test]
         public void TestArabic()
         {
             HSSFWorkbook wb = new HSSFWorkbook();
@@ -1015,7 +1015,7 @@ namespace TestCases.HSSF.UserModel
             s.IsArabic = true;
             Assert.AreEqual(true, s.IsArabic);
         }
-        [TestMethod]
+        [Test]
         public void TestAutoFilter()
         {
             HSSFWorkbook wb = new HSSFWorkbook();

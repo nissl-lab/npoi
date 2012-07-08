@@ -20,17 +20,17 @@ namespace TestCases.HSSF.Record.Aggregates
     using System;
     using System.Collections;
     using NPOI.HSSF.Record;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.HSSF.Record.Aggregates;
 
     /**
      * @author Glen Stampoultzis
      */
-    [TestClass]
+    [TestFixture]
     public class TestColumnInfoRecordsAggregate
     {
         //ColumnInfoRecordsAggregate columnInfoRecordsAggregate;
-        [TestMethod]
+        [Test]
         public void TestRecordSize()
         {
             ColumnInfoRecordsAggregate agg = new ColumnInfoRecordsAggregate();
@@ -85,7 +85,7 @@ namespace TestCases.HSSF.Record.Aggregates
                 return result;
             }
         }
-        [TestMethod]
+        [Test]
         public void TestGroupColumns_bug45639()
         {
             ColumnInfoRecordsAggregate agg = new ColumnInfoRecordsAggregate();
@@ -97,7 +97,7 @@ namespace TestCases.HSSF.Record.Aggregates
             }
             catch (IndexOutOfRangeException)
             {
-                throw new AssertFailedException("Identified bug 45639");
+                throw new AssertionException("Identified bug 45639");
             }
             ColumnInfoRecord[] cirs = CIRCollector.GetRecords(agg);
             Assert.AreEqual(5, cirs.Length);
@@ -111,7 +111,7 @@ namespace TestCases.HSSF.Record.Aggregates
         /**
          * Check that an inner Group remains hidden
          */
-        [TestMethod]
+        [Test]
         public void TestHiddenAfterExpanding()
         {
             ColumnInfoRecordsAggregate agg = new ColumnInfoRecordsAggregate();
@@ -139,7 +139,7 @@ namespace TestCases.HSSF.Record.Aggregates
             Assert.AreEqual(4, cirs.Length);
             if (!cirs[1].IsHidden)
             {
-                throw new AssertFailedException("Inner Group should still be hidden");
+                throw new AssertionException("Inner Group should still be hidden");
             }
             ConfirmCIR(cirs, 0, 1, 3, 1, true, false);
             ConfirmCIR(cirs, 1, 4, 12, 2, true, false);

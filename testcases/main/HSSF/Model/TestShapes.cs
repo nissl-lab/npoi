@@ -20,7 +20,7 @@
 namespace TestCases.HSSF.Model
 {
 
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.HSSF.Record;
     using NPOI.HSSF.UserModel;
     using NPOI.HSSF.Model;
@@ -29,7 +29,7 @@ namespace TestCases.HSSF.Model
      *
      * @author Yegor Kozlov
      */
-    [TestClass]
+    [TestFixture]
     public class TestShapes
     {
 
@@ -38,7 +38,7 @@ namespace TestCases.HSSF.Model
          *
          * See Bug 51332
          */
-        [TestMethod]
+        [Test]
         public void TestShapeId()
         {
 

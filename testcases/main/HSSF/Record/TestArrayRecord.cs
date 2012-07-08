@@ -18,7 +18,7 @@
 namespace TestCases.HSSF.Record
 {
     using System;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.SS.Formula;
     using NPOI.SS.Formula.PTG;
     using NPOI.SS.Util;
@@ -26,10 +26,10 @@ namespace TestCases.HSSF.Record
     using TestCases.HSSF.Record;
     using NPOI.HSSF.Record;
 
-    [TestClass]
+    [TestFixture]
     public class TestArrayRecord
     {
-        [TestMethod]
+        [Test]
         public void TestRead()
         {
             String hex =

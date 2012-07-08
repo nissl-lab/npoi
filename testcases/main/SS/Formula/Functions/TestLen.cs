@@ -19,7 +19,7 @@ namespace TestCases.SS.Formula.Functions
 {
 
     using NPOI.SS.Formula.Eval;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.SS.Formula.Functions;
 
     /**
@@ -27,7 +27,7 @@ namespace TestCases.SS.Formula.Functions
      *
      * @author Josh Micich
      */
-    [TestClass]
+    [TestFixture]
     public class TestLen
     {
 
@@ -50,7 +50,7 @@ namespace TestCases.SS.Formula.Functions
             Assert.AreEqual(typeof(ErrorEval), result.GetType());
             Assert.AreEqual(expectedError.ErrorCode, ((ErrorEval)result).ErrorCode);
         }
-        [TestMethod]
+        [Test]
         public void TestBasic()
         {
 
@@ -60,7 +60,7 @@ namespace TestCases.SS.Formula.Functions
         /**
          * Valid cases where text arg is not exactly a string
          */
-        [TestMethod]
+        [Test]
         public void TestUnusualArgs()
         {
 

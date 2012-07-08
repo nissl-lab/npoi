@@ -24,7 +24,7 @@ namespace TestCases.HSSF.UserModel
     using NPOI.SS.Util;
     using NPOI.Util;
     using NPOI.HSSF.UserModel;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.SS.UserModel;
     using NPOI.SS.Formula.PTG;
     using NPOI.HSSF.Model;
@@ -33,7 +33,7 @@ namespace TestCases.HSSF.UserModel
      * @author Andrew C. Oliver (acoliver at apache dot org)
      * @author Avik Sengupta
      */
-    [TestClass]
+    [TestFixture]
     public class TestFormulas
     {
         public TestFormulas()
@@ -48,7 +48,7 @@ namespace TestCases.HSSF.UserModel
         /**
          * Add 1+1 -- WHoohoo!
          */
-        [TestMethod]
+        [Test]
         public void TestBasicAddIntegers()
         {
 
@@ -73,7 +73,7 @@ namespace TestCases.HSSF.UserModel
         /**
          * Add various integers
          */
-        [TestMethod]
+        [Test]
         public void TestAddIntegers()
         {
             BinomialOperator("+");
@@ -82,7 +82,7 @@ namespace TestCases.HSSF.UserModel
         /**
          * Multiply various integers
          */
-        [TestMethod]
+        [Test]
         public void TestMultplyIntegers()
         {
             BinomialOperator("*");
@@ -91,7 +91,7 @@ namespace TestCases.HSSF.UserModel
         /**
          * Subtract various integers
          */
-        [TestMethod]
+        [Test]
         public void TestSubtractIntegers()
         {
             BinomialOperator("-");
@@ -100,7 +100,7 @@ namespace TestCases.HSSF.UserModel
         /**
          * Subtract various integers
          */
-        [TestMethod]
+        [Test]
         public void TestDivideIntegers()
         {
             BinomialOperator("/");
@@ -109,7 +109,7 @@ namespace TestCases.HSSF.UserModel
         /**
          * Exponentialize various integers;
          */
-        [TestMethod]
+        [Test]
         public void TestPowerIntegers()
         {
             BinomialOperator("^");
@@ -118,7 +118,7 @@ namespace TestCases.HSSF.UserModel
         /**
          * Concatenate two numbers 1&2 = 12
          */
-        [TestMethod]
+        [Test]
         public void TestConcatIntegers()
         {
             BinomialOperator("&");
@@ -127,7 +127,7 @@ namespace TestCases.HSSF.UserModel
         /**
          * Tests 1*2+3*4
          */
-        [TestMethod]
+        [Test]
         public void TestOrderOfOperationsMultiply()
         {
             OrderTest("1*2+3*4");
@@ -136,7 +136,7 @@ namespace TestCases.HSSF.UserModel
         /**
          * Tests 1*2+3^4
          */
-        [TestMethod]
+        [Test]
         public void TestOrderOfOperationsPower()
         {
             OrderTest("1*2+3^4");
@@ -145,12 +145,12 @@ namespace TestCases.HSSF.UserModel
         /**
          * Tests that parenthesis are obeyed
          */
-        [TestMethod]
+        [Test]
         public void TestParenthesis()
         {
             OrderTest("(1*3)+2+(1+2)*(3^4)^5");
         }
-        [TestMethod]
+        [Test]
         public void TestReferencesOpr()
         {
             String[] operation = new String[] {
@@ -166,7 +166,7 @@ namespace TestCases.HSSF.UserModel
          * Tests creating a file with floating point in a formula.
          *
          */
-        [TestMethod]
+        [Test]
         public void TestFloat()
         {
             // This Test depends on the american culture.
@@ -235,22 +235,22 @@ namespace TestCases.HSSF.UserModel
                 }
             }
         }
-        [TestMethod]
+        [Test]
         public void TestAreaSum()
         {
             AreaFunctionTest("SUM");
         }
-        [TestMethod]
+        [Test]
         public void TestAreaAverage()
         {
             AreaFunctionTest("AVERAGE");
         }
-        [TestMethod]
+        [Test]
         public void TestRefArraySum()
         {
             RefArrayFunctionTest("SUM");
         }
-        [TestMethod]
+        [Test]
         public void TestAreaArraySum()
         {
             RefAreaArrayFunctionTest("SUM");
@@ -601,7 +601,7 @@ namespace TestCases.HSSF.UserModel
         }
 
 
-        [TestMethod]
+        [Test]
         public void TestAbsRefs()
         {
             HSSFWorkbook wb = new HSSFWorkbook();
@@ -635,7 +635,7 @@ namespace TestCases.HSSF.UserModel
             c = r.GetCell(4);
             Assert.IsTrue(("SUM($A$3,$A$2)").Equals(c.CellFormula), "SUM($A$3,$A$2)");
         }
-        [TestMethod]
+        [Test]
         public void TestSheetFunctions()
         {
             HSSFWorkbook wb = new HSSFWorkbook();
@@ -661,7 +661,7 @@ namespace TestCases.HSSF.UserModel
             c = r.GetCell(1);
             Assert.IsTrue(("A!A1+A!B1").Equals(c.CellFormula), "expected: A!A1+A!B1 got: " + c.CellFormula);
         }
-        [TestMethod]
+        [Test]
         public void TestRVAoperands()
         {
             string tmpfile = TempFile.GetTempFilePath("TestFormulaRVA", ".xls");
@@ -701,7 +701,7 @@ namespace TestCases.HSSF.UserModel
             out1.Close();
             Assert.IsTrue(File.Exists(tmpfile), "file exists");
         }
-        [TestMethod]
+        [Test]
         public void TestStringFormulas()
         {
             HSSFWorkbook wb = new HSSFWorkbook();
@@ -721,7 +721,7 @@ namespace TestCases.HSSF.UserModel
             c = r.GetCell(0);
             Assert.AreEqual("UPPER(\"xyz\")", c.CellFormula);
         }
-        [TestMethod]
+        [Test]
         public void TestLogicalFormulas()
         {
 
@@ -738,7 +738,7 @@ namespace TestCases.HSSF.UserModel
             c = r.GetCell(1);
             Assert.AreEqual("IF(A1<A2,B1,B2)", c.CellFormula, "Formula in cell 1 ");
         }
-        [TestMethod]
+        [Test]
         public void TestDateFormulas()
         {
             HSSFWorkbook wb = new HSSFWorkbook();
@@ -768,7 +768,7 @@ namespace TestCases.HSSF.UserModel
             HSSFTestDataSamples.WriteOutAndReadBack(wb);
         }
 
-        [TestMethod]
+        [Test]
         public void TestIfFormulas()
         {
             HSSFWorkbook wb = new HSSFWorkbook();
@@ -831,7 +831,7 @@ namespace TestCases.HSSF.UserModel
 
             HSSFTestDataSamples.WriteOutAndReadBack(wb);
         }
-        [TestMethod]
+        [Test]
         public void TestSumIf()
         {
             String function = "SUMIF(A1:A5,\">4000\",B1:B5)";
@@ -873,7 +873,7 @@ namespace TestCases.HSSF.UserModel
 
             HSSFTestDataSamples.WriteOutAndReadBack(wb);
         }
-        [TestMethod]
+        [Test]
         public void TestSquareMacro()
         {
             HSSFWorkbook w = OpenSample("SquareMacro.xls");
@@ -913,7 +913,7 @@ namespace TestCases.HSSF.UserModel
             Assert.AreEqual("square(two())", d2.CellFormula);
             Assert.AreEqual(4d, d2.NumericCellValue, 1e-9);
         }
-        [TestMethod]
+        [Test]
         public void TestStringFormulaRead()
         {
             HSSFWorkbook w = OpenSample("StringFormulas.xls");
@@ -922,7 +922,7 @@ namespace TestCases.HSSF.UserModel
         }
 
         /** Test for bug 34021*/
-        [TestMethod]
+        [Test]
         public void TestComplexSheetRefs()
         {
             HSSFWorkbook sb = new HSSFWorkbook();
@@ -937,7 +937,7 @@ namespace TestCases.HSSF.UserModel
         }
 
         /** Unknown Ptg 3C*/
-        [TestMethod]
+        [Test]
         public void Test27272_1()
         {
             HSSFWorkbook wb = OpenSample("27272_1.xls");
@@ -951,7 +951,7 @@ namespace TestCases.HSSF.UserModel
 
         }
         /** Unknown Ptg 3D*/
-        [TestMethod]
+        [Test]
         public void Test27272_2()
         {
             HSSFWorkbook wb = OpenSample("27272_2.xls");
@@ -963,14 +963,14 @@ namespace TestCases.HSSF.UserModel
         }
 
         /** MissingArgPtg */
-        [TestMethod]
+        [Test]
         public void TestMissingArgPtg()
         {
             HSSFWorkbook wb = new HSSFWorkbook();
             ICell cell = wb.CreateSheet("Sheet1").CreateRow(4).CreateCell(0);
             cell.CellFormula = ("IF(A1=\"A\",1,)");
         }
-        [TestMethod]
+        [Test]
         public void TestSharedFormula()
         {
             HSSFWorkbook wb = OpenSample("SharedFormulaTest.xls");
@@ -983,7 +983,7 @@ namespace TestCases.HSSF.UserModel
         /**
          * Test creation / evaluation of formulas with sheet-level names
          */
-        [TestMethod]
+        [Test]
         public void TestSheetLevelFormulas()
         {
             HSSFWorkbook wb = new HSSFWorkbook();
@@ -1033,7 +1033,7 @@ namespace TestCases.HSSF.UserModel
          * Verify that FormulaParser handles defined names beginning with underscores,
          * see Bug #49640
          */
-        [TestMethod]
+        [Test]
         public void TestFormulasWithUnderscore()
         {
             HSSFWorkbook wb = new HSSFWorkbook();

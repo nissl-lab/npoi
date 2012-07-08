@@ -17,11 +17,11 @@
 
 using TestCases.SS.UserModel;
 using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using NPOI.SS.UserModel;
 namespace NPOI.XSSF.UserModel
 {
-    [TestClass]
+    [TestFixture]
     public class TestXSSFHyperlink : BaseTestHyperlink
     {
         public TestXSSFHyperlink()
@@ -30,7 +30,7 @@ namespace NPOI.XSSF.UserModel
 
         }
 
-        [TestInitialize]
+        [SetUp]
         public void SetUp()
         {
             // Use system out logger
@@ -39,7 +39,7 @@ namespace NPOI.XSSF.UserModel
                     "NPOI.util.SystemOutLogger"
             );
         }
-        [TestMethod]
+        [Test]
         public void TestLoadExisting()
         {
             XSSFWorkbook workbook = XSSFTestDataSamples.OpenSampleWorkbook("WithMoreVariousData.xlsx");
@@ -51,7 +51,7 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual(4, sheet.NumHyperlinks);
             doTestHyperlinkContents(sheet);
         }
-        [TestMethod]
+        [Test]
         public void TestLoadSave()
         {
             XSSFWorkbook workbook = XSSFTestDataSamples.OpenSampleWorkbook("WithMoreVariousData.xlsx");

@@ -20,7 +20,7 @@ namespace TestCases.HSSF.UserModel
     using System;
     using System.IO;
     using NPOI.HSSF.UserModel;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
 
     using TestCases.HSSF;
     using NPOI.HPSF;
@@ -31,7 +31,7 @@ namespace TestCases.HSSF.UserModel
      *
      * @author Yegor Kozlov
      */
-    [TestClass]
+    [TestFixture]
     public class TestPOIFSProperties
     {
 
@@ -64,7 +64,7 @@ namespace TestCases.HSSF.UserModel
             Assert.AreEqual(title, summary2.Title);
         }
 
-        [TestMethod]
+        [Test]
         public void TestOK()
         {
             Stream is1 = HSSFTestDataSamples.OpenSampleFileStream("Simple.xls");

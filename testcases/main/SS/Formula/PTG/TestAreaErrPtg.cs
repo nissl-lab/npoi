@@ -18,20 +18,20 @@
 namespace TestCases.SS.Formula.PTG
 {
 
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.HSSF.UserModel;
     /**
      * Tests for {@link AreaErrPtg}.
      *
      * @author Daniel Noll (daniel at nuix dot com dot au)
      */
-    [TestClass]
+    [TestFixture]
     public class TestAreaErrPtg : AbstractPtgTestCase
     {
         /**
          * Tests Reading a file Containing this ptg.
          */
-        [TestMethod]
+        [Test]
         public void TestReading()
         {
             HSSFWorkbook workbook = LoadWorkbook("AreaErrPtg.xls");

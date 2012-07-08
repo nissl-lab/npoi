@@ -22,15 +22,15 @@ namespace TestCases.HSSF.Record
     using TestCases.HSSF.Record;
     using NPOI.Util;
     using NPOI.HSSF.Record;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
 
     /**
      * Tests for {@link BoolErrRecord}
      */
-    [TestClass]
+    [TestFixture]
     public class TestBoolErrRecord
     {
-        [TestMethod]
+        [Test]
         public void TestError()
         {
             byte[] data = HexRead.ReadFromString(
@@ -54,7 +54,7 @@ namespace TestCases.HSSF.Record
          * no problem.  OOO does not have the same bug for error values (which wouldn't
          * work by the same coincidence). 
          */
-        [TestMethod]
+        [Test]
         public void TestOooBadFormat_bug47479()
         {
             byte[] data = HexRead.ReadFromString(
@@ -74,7 +74,7 @@ namespace TestCases.HSSF.Record
             {
                 if ("Initialisation of record 0x205 left 1 bytes remaining still to be Read.".Equals(e.Message))
                 {
-                    throw new AssertFailedException("Identified bug 47479");
+                    throw new AssertionException("Identified bug 47479");
                 }
                 throw e;
             }

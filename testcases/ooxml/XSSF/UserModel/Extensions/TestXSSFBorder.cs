@@ -17,15 +17,15 @@
 
 using NPOI.SS.UserModel;
 using NPOI.OpenXmlFormats.Spreadsheet;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 namespace NPOI.XSSF.UserModel.Extensions
 {
 
-    [TestClass]
+    [TestFixture]
     public class TestXSSFBorder
     {
 
-        [TestMethod]
+        [Test]
         public void TestGetBorderStyle()
         {
             CT_Stylesheet stylesheet = new CT_Stylesheet();

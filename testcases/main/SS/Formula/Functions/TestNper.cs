@@ -20,7 +20,7 @@ namespace TestCases.SS.Formula.Functions
 {
     using NPOI.SS.Formula.Eval;
     using NPOI.SS.Formula.Functions;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.HSSF.UserModel;
     using NPOI.SS.UserModel;
 
@@ -29,10 +29,10 @@ namespace TestCases.SS.Formula.Functions
      *
      * @author Josh Micich
      */
-    [TestClass]
+    [TestFixture]
     public class TestNper
     {
-        [TestMethod]
+        [Test]
         public void TestSimpleEvaluate()
         {
 
@@ -46,7 +46,7 @@ namespace TestCases.SS.Formula.Functions
             Assert.AreEqual(typeof(NumberEval), result.GetType());
             Assert.AreEqual(4.57353557, ((NumberEval)result).NumberValue, 0.00000001);
         }
-        [TestMethod]
+        [Test]
         public void TestEvaluate_bug_45732()
         {
             HSSFWorkbook wb = new HSSFWorkbook();

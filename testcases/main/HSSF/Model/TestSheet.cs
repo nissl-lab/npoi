@@ -20,7 +20,7 @@ namespace TestCases.HSSF.Model
     using System;
     using System.Collections;
     using System.IO;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.HSSF.Record.Aggregates;
     using NPOI.HSSF.Record;
     using NPOI.HSSF.EventModel;
@@ -38,7 +38,7 @@ namespace TestCases.HSSF.Model
      *
      * @author Glen Stampoultzis (glens at apache.org)
      */
-    [TestClass]
+    [TestFixture]
     public class TestSheet
     {
 
@@ -53,7 +53,7 @@ namespace TestCases.HSSF.Model
             return InternalSheet.CreateSheet(new RecordStream(inRecs, 0));
         }
 
-        [TestMethod]
+        [Test]
         public void TestCreateSheet()
         {
             // Check we're Adding row and cell aggregates
@@ -94,7 +94,7 @@ namespace TestCases.HSSF.Model
             }
         }
 
-        [TestMethod]
+        [Test]
         public void TestAddMergedRegion()
         {
             InternalSheet sheet = InternalSheet.CreateSheet();
@@ -141,7 +141,7 @@ namespace TestCases.HSSF.Model
                 Assert.AreEqual("The 'to' col (9) must not be less than the 'from' col (10)", e.Message);
             }
         }
-        [TestMethod]
+        [Test]
         public void TestRemoveMergedRegion()
         {
             InternalSheet sheet = InternalSheet.CreateSheet();
@@ -172,7 +172,7 @@ namespace TestCases.HSSF.Model
          * fills up the records.
          *
          */
-        [TestMethod]
+        [Test]
         public void TestMovingMergedRegion()
         {
             ArrayList records = new ArrayList();
@@ -223,7 +223,7 @@ namespace TestCases.HSSF.Model
          * Makes sure all rows registered for this sheet are aggregated, they were being skipped
          *
          */
-        [TestMethod]
+        [Test]
         public void TestRowAggregation()
         {
             ArrayList records = new ArrayList();
@@ -248,7 +248,7 @@ namespace TestCases.HSSF.Model
          * Make sure page break functionality works (in memory)
          *
          */
-        [TestMethod]
+        [Test]
         public void TestRowPageBreaks()
         {
             short colFrom = 0;
@@ -307,7 +307,7 @@ namespace TestCases.HSSF.Model
          * Make sure column pag breaks works properly (in-memory)
          *
          */
-        [TestMethod]
+        [Test]
         public void TestColPageBreaks()
         {
             int rowFrom = 0;
@@ -371,7 +371,7 @@ namespace TestCases.HSSF.Model
          * Test newly Added method Sheet.GetXFIndexForColAt(..)
          * works as designed.
          */
-        [TestMethod]
+        [Test]
         public void TestXFIndexForColumn()
         {
             short TEST_IDX = 10;
@@ -454,7 +454,7 @@ namespace TestCases.HSSF.Model
                 int serializedSize = r.Serialize(0, buf);
                 if (estimatedSize != serializedSize)
                 {
-                    throw new AssertFailedException("serialized size mismatch for record ("
+                    throw new AssertionException("serialized size mismatch for record ("
                             + r.GetType().Name + ")");
                 }
                 _totalSize += estimatedSize;
@@ -471,7 +471,7 @@ namespace TestCases.HSSF.Model
          * Prior to bug 45066, POI would Get the estimated sheet size wrong
          * when an <c>UncalcedRecord</c> was present.<p/>
          */
-        [TestMethod]
+        [Test]
         public void TestUncalcSize_bug45066()
         {
 
@@ -498,7 +498,7 @@ namespace TestCases.HSSF.Model
          *
          * The code here represents a normal POI use case where a spReadsheet is1 Created from scratch.
          */
-        [TestMethod]
+        [Test]
         public void TestRowValueAggregatesOrder_bug45145()
         {
 
@@ -518,7 +518,7 @@ namespace TestCases.HSSF.Model
             {
                 // The overt symptom of the bug
                 // DBCELL record pos is1 calculated wrong if VRA comes before RRA
-                throw new AssertFailedException("Identified  bug 45145");
+                throw new AssertionException("Identified  bug 45145");
             }
 
             Assert.AreEqual(242, dbCellRecordPos);
@@ -582,7 +582,7 @@ namespace TestCases.HSSF.Model
 			}
 		}
 		if (count == 2) {
-			throw new AssertFailedException("Identified bug 45640");
+			throw new AssertionException("Identified bug 45640");
 		}
 		Assert.AreEqual(1, count);
 	}
@@ -596,14 +596,14 @@ namespace TestCases.HSSF.Model
             HSSFCell cell = (HSSFCell)row.GetCell(4);
             if (cell == null)
             {
-                throw new AssertFailedException("Identified bug 45699");
+                throw new AssertionException("Identified bug 45699");
             }
             Assert.AreEqual("Informations", cell.RichStringCellValue.String);
         }
         /**
          * In 3.1, setting margins between creating first row and first cell caused an exception.
          */
-        [TestMethod]
+        [Test]
         public void TestSetMargins_bug45717()
         {
             HSSFWorkbook workbook = new HSSFWorkbook();
@@ -619,7 +619,7 @@ namespace TestCases.HSSF.Model
             {
                 if (e.Message.Equals("Cannot Create value records before row records exist"))
                 {
-                    throw new AssertFailedException("Identified bug 45717");
+                    throw new AssertionException("Identified bug 45717");
                 }
                 throw e;
             }
@@ -629,7 +629,7 @@ namespace TestCases.HSSF.Model
          * Some apps seem to write files with missing DIMENSION records.
          * Excel(2007) tolerates this, so POI should too.
          */
-        [TestMethod]
+        [Test]
         public void TestMissingDims()
         {
 
@@ -655,7 +655,7 @@ namespace TestCases.HSSF.Model
             {
                 if ("DimensionsRecord was not found".Equals(e.Message))
                 {
-                    throw new AssertFailedException("Identified bug 46206");
+                    throw new AssertionException("Identified bug 46206");
                 }
                 throw e;
             }
@@ -678,7 +678,7 @@ namespace TestCases.HSSF.Model
          * aggregates. However, since this unnecessary creation helped expose bug 46547b,
          * and since there is a slight performance hit the fix was made to avoid it.
          */
-        [TestMethod]
+        [Test]
         public void TestShiftFormulasAddCondFormat_bug46547()
         {
             // Create a sheet with data validity (similar to bugzilla attachment id=23131).
@@ -692,7 +692,7 @@ namespace TestCases.HSSF.Model
             sheet.UpdateFormulasAfterCellShift(shifter, 0);
             if (sheetRecs.Count == 25 && sheetRecs[22] is ConditionalFormattingTable)
             {
-                throw new AssertFailedException("Identified bug 46547a");
+                throw new AssertionException("Identified bug 46547a");
             }
             //Assert.AreEqual(23, sheetRecs.Count);
             Assert.AreEqual(24, sheetRecs.Count); //for SheetExtRecord
@@ -701,7 +701,7 @@ namespace TestCases.HSSF.Model
          * Bug 46547 happened when attempting to Add conditional formatting to a sheet
          * which already had data validity constraints.
          */
-        [TestMethod]
+        [Test]
         public void TestAddCondFormatAfterDataValidation_bug46547()
         {
             // Create a sheet with data validity (similar to bugzilla attachment id=23131).
@@ -717,11 +717,11 @@ namespace TestCases.HSSF.Model
             }
             catch (InvalidCastException)
             {
-                throw new AssertFailedException("Identified bug 46547b");
+                throw new AssertionException("Identified bug 46547b");
             }
             Assert.IsNotNull(cft);
         }
-        [TestMethod]
+        [Test]
         public void TestCloneMulBlank_bug46776()
         {
             Record[] recs = {
@@ -745,7 +745,7 @@ namespace TestCases.HSSF.Model
             {
                 if (e.Message.Equals("The class org.apache.poi.hssf.record.MulBlankRecord needs to define a clone method"))
                 {
-                    throw new AssertFailedException("Identified bug 46776");
+                    throw new AssertionException("Identified bug 46776");
                 }
                 throw e;
             }
@@ -755,7 +755,7 @@ namespace TestCases.HSSF.Model
             Record[] clonedRecs = rc.Records;
             Assert.AreEqual(recs.Length + 2, clonedRecs.Length); // +2 for INDEX and DBCELL
         }
-        [TestMethod]
+        [Test]
         public void TestCreateAggregate()
         {
             String msoDrawingRecord1 =

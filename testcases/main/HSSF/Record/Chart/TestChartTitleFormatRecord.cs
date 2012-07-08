@@ -20,7 +20,7 @@ namespace TestCases.HSSF.Record.Chart
     using System;
     using System.Collections;
     using System.IO;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
 
     using TestCases.HSSF;
     using NPOI.HSSF.Record;
@@ -31,10 +31,10 @@ namespace TestCases.HSSF.Record.Chart
     /**
      * 
      */
-    [TestClass]
+    [TestFixture]
     public class TestChartTitleFormatRecord
     {
-        [TestMethod]
+        [Test]
         public void TestRecord()
         {
             POIFSFileSystem fs = new POIFSFileSystem(

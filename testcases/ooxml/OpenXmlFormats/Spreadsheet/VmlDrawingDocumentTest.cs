@@ -1,5 +1,5 @@
 ﻿using System.IO;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using NPOI.OpenXmlFormats.Dml;
 
 namespace ooxml.Testcases
@@ -8,7 +8,7 @@ namespace ooxml.Testcases
     ///This is a test class for VmlDrawingDocumentTest and is intended
     ///to contain all VmlDrawingDocumentTest Unit Tests
     ///</summary>
-    [TestClass()]
+    [TestFixture]
     public class VmlDrawingDocumentTest
     {
         private TestContext testContextInstance;
@@ -63,7 +63,7 @@ namespace ooxml.Testcases
 //        /// <summary>
 //        ///A test for the Serialization of CT_Drawing.
 //        ///</summary>
-//        [TestMethod()]
+//        [Test]
 //        public void SerializeVmlDrawingDocumentTest()
 //        {
 //            var drawing = new NPOI.OpenXmlFormats.Dml.Spreadsheet.CT_Drawing();
@@ -84,7 +84,7 @@ namespace ooxml.Testcases
         /// <summary>
         ///A test for Deserialize
         ///</summary>
-        [TestMethod()]
+        [Test]
         public void DeserializeVmlDrawingDocumentTest()
         {
             // The following is the excerpt of an Excel file.
@@ -221,7 +221,7 @@ namespace ooxml.Testcases
         /// <summary>
         ///A test for Deserialize
         ///</summary>
-        [TestMethod()]
+        [Test]
         public void DeserializeVmlDrawingDocumentWithPicturesTest()
         {
             // The following is the excerpt of an Excel file.

@@ -24,13 +24,13 @@ namespace TestCases.DDF
     using System.Collections.Generic;
     using System.IO;
 
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.DDF;
     using NPOI.Util;
-    [TestClass]
+    [TestFixture]
     public class TestUnknownEscherRecord
     {
-        [TestMethod]
+        [Test]
         public void TestFillFields()
         {
             String TestData =
@@ -88,7 +88,7 @@ namespace TestCases.DDF
             Assert.AreEqual(unchecked((short)0xFFFF), r.GetChild(0).RecordId);
 
         }
-        [TestMethod]
+        [Test]
         public void TestSerialize()
         {
             UnknownEscherRecord r = new UnknownEscherRecord();
@@ -109,7 +109,7 @@ namespace TestCases.DDF
 
             Assert.AreEqual("[3F, 12, 12, F1, 08, 00, 00, 00, 99, 99, 01, FF, 00, 00, 00, 00, ]", HexDump.ToHex(data));
         }
-        [TestMethod]
+        [Test]
         public void TestToString()
         {
             UnknownEscherRecord r = new UnknownEscherRecord();

@@ -23,21 +23,21 @@ namespace TestCases.DDF
     using System.Collections;
     using System.IO;
 
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.DDF;
     using NPOI.Util;
 
     /**
      * @author Yegor Kozlov
      */
-    [TestClass]
+    [TestFixture]
     public class TestEscherProperty
     {
         /**
          * assure that EscherProperty.getName() returns correct name for complex properties
          * See Bugzilla 50401 
          */
-        [TestMethod]
+        [Test]
         public void TestPropertyNames()
         {
             EscherProperty p1 = new EscherSimpleProperty(EscherProperties.GROUPSHAPE__SHAPENAME, 0);

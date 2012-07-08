@@ -21,7 +21,7 @@ namespace TestCases.HSSF.Record
 {
     using System;
     using NPOI.HSSF.Record;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using System.Collections.Generic;
     using NPOI.Util;
 
@@ -32,17 +32,17 @@ namespace TestCases.HSSF.Record
      *
      * @author Glen Stampoultzis (glens at apache.org)
      */
-    [TestClass]
+    [TestFixture]
     public class TestBoundSheetRecord
     {
 
-        [TestMethod]
+        [Test]
         public void TestRecordLength()
         {
             BoundSheetRecord record = new BoundSheetRecord("Sheet1");
             Assert.AreEqual(18, record.RecordSize, " 2  +  2  +  4  +   2   +    1     +    1    + len(str)");
         }
-        [TestMethod]
+        [Test]
         public void TestWideRecordLength()
         {
             BoundSheetRecord record = new BoundSheetRecord("Sheet\u20ac");
@@ -50,7 +50,7 @@ namespace TestCases.HSSF.Record
 
             Assert.AreEqual(24, record.RecordSize, " 2  +  2  +  4  +   2   +    1     +    1    + len(str) * 2");
         }
-        [TestMethod]
+        [Test]
         public void TestName()
         {
             BoundSheetRecord record = new BoundSheetRecord("1234567890223456789032345678904");
@@ -66,7 +66,7 @@ namespace TestCases.HSSF.Record
             }
 
         }
-        [TestMethod]
+        [Test]
         public void TestDeSerializeUnicode() {
 
 		byte[] data = HexRead.ReadFromString(""
@@ -88,7 +88,7 @@ namespace TestCases.HSSF.Record
 		byte[] data2 = bsr.Serialize();
 		Assert.IsTrue(Arrays.Equals(data, data2));
 	}
-        [TestMethod]
+        [Test]
         public void TestOrdering()
         {
             BoundSheetRecord bs1 = new BoundSheetRecord("SheetB");
@@ -109,7 +109,7 @@ namespace TestCases.HSSF.Record
             Assert.AreEqual(bs3, r[1]);
             Assert.AreEqual(bs2, r[2]);
         }
-        [TestMethod]
+        [Test]
         public void TestValidNames()
         {
             ConfirmValid("Sheet1", true);
@@ -134,14 +134,14 @@ namespace TestCases.HSSF.Record
                 new BoundSheetRecord(sheetName);
                 if (!expectedResult)
                 {
-                    throw new AssertFailedException("Expected sheet name '" + sheetName + "' to be invalid");
+                    throw new AssertionException("Expected sheet name '" + sheetName + "' to be invalid");
                 }
             }
             catch (ArgumentException)
             {
                 if (expectedResult)
                 {
-                    throw new AssertFailedException("Expected sheet name '" + sheetName + "' to be valid");
+                    throw new AssertionException("Expected sheet name '" + sheetName + "' to be valid");
                 }
             }
         }

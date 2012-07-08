@@ -14,14 +14,14 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 ==================================================================== */
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using System;
 namespace NPOI.Util
 {
-    [TestClass]
+    [TestFixture]
     public class TestIdentifierManager
     {
-        [TestMethod]
+        [Test]
         public void TestBasic()
         {
             IdentifierManager manager = new IdentifierManager(0L, 100L);
@@ -31,7 +31,7 @@ namespace NPOI.Util
             Assert.AreEqual(1L, manager.Reserve(0L));
             Assert.AreEqual(99L, manager.GetRemainingIdentifiers());
         }
-        [TestMethod]
+        [Test]
         public void TestLongLimits()
         {
             long min = IdentifierManager.MIN_ID;
@@ -45,7 +45,7 @@ namespace NPOI.Util
             manager.Release(max);
             manager.Release(min);
         }
-        [TestMethod]
+        [Test]
         public void TestReserve()
         {
             IdentifierManager manager = new IdentifierManager(10L, 30L);
@@ -89,7 +89,7 @@ namespace NPOI.Util
                 // expected
             }
         }
-        [TestMethod]
+        [Test]
         public void TestReserveNew()
         {
             IdentifierManager manager = new IdentifierManager(10L, 12L);
@@ -106,7 +106,7 @@ namespace NPOI.Util
                 // expected
             }
         }
-        [TestMethod]
+        [Test]
         public void TestRelease()
         {
             IdentifierManager manager = new IdentifierManager(10L, 20L);

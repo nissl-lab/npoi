@@ -19,7 +19,7 @@ namespace TestCases.HSSF.Record
 {
     using System;
     using System.IO;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.HSSF.Record;
     using NPOI.Util;
     using System.Text;
@@ -96,7 +96,7 @@ namespace TestCases.HSSF.Record
                     sb.Append("At offset ").Append(i);
                     sb.Append(": expected ").Append(HexDump.ByteToHex(expectedData[i]));
                     sb.Append(" but found ").Append(HexDump.ByteToHex(actualRecordBytes[i + 4]));
-                    throw new AssertFailedException(sb.ToString());
+                    throw new AssertionException(sb.ToString());
                 }
         }
         /// <summary>

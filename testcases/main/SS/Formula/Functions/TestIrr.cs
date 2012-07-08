@@ -19,7 +19,7 @@ namespace TestCases.SS.Formula.Functions
 {
     using System;
     using System.Text;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.HSSF.UserModel;
     using NPOI.SS.UserModel;
     using TestCases.HSSF;
@@ -30,10 +30,10 @@ namespace TestCases.SS.Formula.Functions
      *
      * @author Marcel May
      */
-    [TestClass]
+    [TestFixture]
     public class TestIrr
     {
-        [TestMethod]
+        [Test]
         public void TestIrr1()
         {
             // http://en.wikipedia.org/wiki/Internal_rate_of_return#Example
@@ -63,7 +63,7 @@ namespace TestCases.SS.Formula.Functions
             irrRounded = Math.Round(irr * 100d) / 100d;
             Assert.AreEqual(-0.44, irrRounded, "irr");
         }
-        [TestMethod]
+        [Test]
         public void TestEvaluateInSheet()
         {
             HSSFWorkbook wb = new HSSFWorkbook();
@@ -85,7 +85,7 @@ namespace TestCases.SS.Formula.Functions
             double res = cell.NumericCellValue;
             Assert.AreEqual(0.143d, Math.Round(res * 1000d) / 1000d);
         }
-        [TestMethod]
+        [Test]
         public void TestIrrFromSpreadsheet()
         {
             HSSFWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("IrrNpvTestCaseData.xls");
@@ -129,7 +129,7 @@ namespace TestCases.SS.Formula.Functions
 
             if (failures.Length > 0)
             {
-                throw new AssertFailedException(failureCount + " IRR assertions failed:\n" + failures.ToString());
+                throw new AssertionException(failureCount + " IRR assertions failed:\n" + failures.ToString());
             }
 
         }

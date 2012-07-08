@@ -18,7 +18,7 @@
 namespace TestCases.HSSF.EventModel
 {
     using System.IO;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.HSSF.EventUserModel;
     using NPOI.HSSF.Record;
     using NPOI.POIFS.FileSystem;
@@ -28,7 +28,7 @@ namespace TestCases.HSSF.EventModel
     /**
      * Tests for {@link AbortableHSSFListener}
      */
-    [TestClass]
+    [TestFixture]
     public class TestAbortableListener
     {
 
@@ -46,7 +46,7 @@ namespace TestCases.HSSF.EventModel
             }
         }
 
-        [TestMethod]
+        [Test]
         public void TestAbortingBasics()
         {
             AbortableCountingListener l = new AbortableCountingListener(1000);
@@ -69,7 +69,7 @@ namespace TestCases.HSSF.EventModel
         }
 
 
-        [TestMethod]
+        [Test]
         public void TestAbortStops()
         {
             AbortableCountingListener l = new AbortableCountingListener(1);

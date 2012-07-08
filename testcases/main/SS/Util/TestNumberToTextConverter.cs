@@ -22,20 +22,20 @@ namespace TestCases.SS.Util
     using System.Text;
     using System.Collections.Generic;
 
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.SS.Util;
     /**
  * Tests for {@link NumberToTextConverter}
  * 
  * @author Josh Micich
  */
-    [TestClass]
+    [TestFixture]
     public class TestNumberToTextConverter
     {
         /// <summary>
         ///  Some of the tests are depending on the american culture.
         /// </summary>
-        [TestInitialize()]
+        [SetUp]
         public void InitializeCultere()
         {
             System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
@@ -46,7 +46,7 @@ namespace TestCases.SS.Util
          * As part of preparing this test class, the <c>ExampleConversion</c> instances should be set
          * up to contain the rendering as produced by Excel.
          */
-        [TestMethod]
+        [Test]
         public void TestAllNumberToText()
         {
             int failureCount = 0;
@@ -134,7 +134,7 @@ namespace TestCases.SS.Util
 
             Assert.AreEqual(excelRep, strExcel);
         }
-        [TestMethod]
+        [Test]
         public void TestSimpleRendering_bug56156()
         {
             double dResult = 0.05 + 0.01; // values chosen to produce rounding anomaly

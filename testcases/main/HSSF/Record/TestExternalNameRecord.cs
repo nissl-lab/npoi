@@ -19,13 +19,13 @@ namespace TestCases.HSSF.Record
 {
     using System;
     using NPOI.HSSF.Record;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.Util;
     /**
      * 
      * @author Josh Micich
      */
-    [TestClass]
+    [TestFixture]
     public class TestExternalNameRecord
     {
 
@@ -50,7 +50,7 @@ namespace TestCases.HSSF.Record
         {
             return new ExternalNameRecord(TestcaseRecordInputStream.Create(0x0023, data));
         }
-        [TestMethod]
+        [Test]
         public void TestBasicDeserializeReserialize()
         {
 
@@ -65,21 +65,21 @@ namespace TestCases.HSSF.Record
             {
                 if (e.Message.Equals("15"))
                 {
-                    throw new AssertFailedException("Identified bug 44695");
+                    throw new AssertionException("Identified bug 44695");
                 }
             }
         }
-        [TestMethod]
+        [Test]
         public void TestBasicSize()
         {
             ExternalNameRecord enr = CreateSimpleENR(dataFDS);
             if (enr.RecordSize == 13)
             {
-                throw new AssertFailedException("Identified bug 44695");
+                throw new AssertionException("Identified bug 44695");
             }
             Assert.AreEqual(17, enr.RecordSize);
         }
-        [TestMethod]
+        [Test]
         public void TestAutoStdDocName()
         {
 
@@ -92,7 +92,7 @@ namespace TestCases.HSSF.Record
             {
                 if (e.Message == null)
                 {
-                    throw new AssertFailedException("Identified bug XXXX");
+                    throw new AssertionException("Identified bug XXXX");
                 }
                 throw e;
             }
@@ -108,7 +108,7 @@ namespace TestCases.HSSF.Record
 
             TestcaseRecordInputStream.ConfirmRecordEncoding(0x0023, dataAutoDocName, enr.Serialize());
         }
-        [TestMethod]
+        [Test]
         public void TestPlainName()
         {
 
@@ -123,7 +123,7 @@ namespace TestCases.HSSF.Record
 
             TestcaseRecordInputStream.ConfirmRecordEncoding(0x0023, dataPlainName, enr.Serialize());
         }
-        [TestMethod]
+        [Test]
         public void TestDDELink_bug47229()
         {
             /**
@@ -151,7 +151,7 @@ namespace TestCases.HSSF.Record
                 // because that seems to be using a version from before svn r646666
                 if (e.Message.StartsWith("Some unread data (is formula present?)"))
                 {
-                    throw new AssertFailedException("Identified bug 47229 - failed to read ENR with OLE/DDE result data");
+                    throw new AssertionException("Identified bug 47229 - failed to read ENR with OLE/DDE result data");
                 }
                 throw e;
             }
@@ -159,7 +159,7 @@ namespace TestCases.HSSF.Record
 
             TestcaseRecordInputStream.ConfirmRecordEncoding(0x0023, dataDDE, enr.Serialize());
         }
-        [TestMethod]
+        [Test]
         public void TestUnicodeName_bug47384()
         {
             // data taken from bugzilla 47384 att 23830 at offset 0x13A0
@@ -180,7 +180,7 @@ namespace TestCases.HSSF.Record
             {
                 if (e.Message.StartsWith("Expected to find a ContinueRecord in order to read remaining 242 of 268 chars"))
                 {
-                    throw new AssertFailedException("Identified bug 47384 - failed to read ENR with unicode name");
+                    throw new AssertionException("Identified bug 47384 - failed to read ENR with unicode name");
                 }
                 throw e;
             }

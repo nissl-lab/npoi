@@ -23,7 +23,7 @@ namespace TestCases.HSSF.Record.Chart
     using System;
     using NPOI.HSSF.Record;
     using NPOI.HSSF.Record.Chart;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.Util;
 
     /**
@@ -34,7 +34,7 @@ namespace TestCases.HSSF.Record.Chart
 
      * @author Andrew C. Oliver (acoliver at apache.org)
      */
-    [TestClass]
+    [TestFixture]
     public class TestSeriesTextRecord
     {
 
@@ -44,7 +44,7 @@ namespace TestCases.HSSF.Record.Chart
         {
 
         }
-        [TestMethod]
+        [Test]
         public void TestLoad()
         {
             SeriesTextRecord record = new SeriesTextRecord(TestcaseRecordInputStream.Create(0x100d, SIMPLE_DATA));
@@ -57,7 +57,7 @@ namespace TestCases.HSSF.Record.Chart
 
             Assert.AreEqual(SIMPLE_DATA.Length+4, record.RecordSize);
         }
-        [TestMethod]
+        [Test]
         public void TestStore()
         {
             SeriesTextRecord record = new SeriesTextRecord();

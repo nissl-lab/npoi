@@ -22,7 +22,7 @@ namespace TestCases.HSSF.UserModel
     using NPOI.HSSF.UserModel;
     using NPOI.HSSF.Util;
     using NPOI.HSSF.Record;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.SS.Util;
     using NPOI.SS.UserModel;
     using NPOI.HSSF.Record.CF;
@@ -30,10 +30,10 @@ namespace TestCases.HSSF.UserModel
      * 
      * @author Dmitriy Kumshayev
      */
-    [TestClass]
+    [TestFixture]
     public class TestHSSFConditionalFormatting
     {
-        [TestMethod]
+        [Test]
         public void TestCreateCF()
         {
             HSSFWorkbook workbook = new HSSFWorkbook();
@@ -113,7 +113,7 @@ namespace TestCases.HSSF.UserModel
             Assert.AreEqual("2", rule2.Formula2);
             Assert.AreEqual("1", rule2.Formula1);
         }
-        [TestMethod]
+        [Test]
         public void TestClone()
         {
 
@@ -152,13 +152,13 @@ namespace TestCases.HSSF.UserModel
             {
                 if (e.Message.IndexOf("needs to define a clone method") > 0)
                 {
-                    throw new AssertFailedException("Indentified bug 45682");
+                    throw new AssertionException("Indentified bug 45682");
                 }
                 throw e;
             }
             Assert.AreEqual(2, wb.NumberOfSheets);
         }
-        [TestMethod]
+        [Test]
         public void TestShiftRows()
         {
 

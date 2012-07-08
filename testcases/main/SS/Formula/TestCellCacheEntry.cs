@@ -19,7 +19,7 @@ namespace TestCases.SS.Formula
 {
 
     using NPOI.SS.Formula.Eval;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.SS.Formula;
 
     /**
@@ -27,10 +27,10 @@ namespace TestCases.SS.Formula
      *
      * @author Josh Micich
      */
-    [TestClass]
+    [TestFixture]
     public class TestCellCacheEntry
     {
-        [TestMethod]
+        [Test]
         public void TestBasicCellCacheEntry()
         {
             CellCacheEntry pcce = new PlainValueCellCacheEntry(new NumberEval(42.0));

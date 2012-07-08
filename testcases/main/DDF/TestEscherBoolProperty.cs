@@ -21,13 +21,13 @@ namespace TestCases.DDF
 
     using System;
 
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.DDF;
     using NPOI.Util;
-    [TestClass]
+    [TestFixture]
     public class TestEscherBoolProperty
     {
-        [TestMethod]
+        [Test]
         public void TestToString()
         {
             EscherBoolProperty p = new EscherBoolProperty((short)1, 1);

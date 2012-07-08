@@ -30,7 +30,7 @@ using System;
 using System.Collections;
 using System.IO;
 
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 using NPOI.POIFS.FileSystem;
 using NPOI.Util;
@@ -46,7 +46,7 @@ namespace TestCases.POIFS.FileSystem
      *
      * @author Marc Johnson
      */
-    [TestClass]
+    [TestFixture]
     public class TestDocument
     {
 
@@ -66,7 +66,7 @@ namespace TestCases.POIFS.FileSystem
          *
          * @exception IOException
          */
-        [TestMethod]
+        [Test]
         public void TestPOIFSDocument()
         {
 

@@ -21,7 +21,7 @@ namespace TestCases.HSSF.UserModel
     using System.Collections;
     using System.Configuration;
     using System.IO;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.HSSF.Record.Aggregates;
     using NPOI.HSSF.UserModel;
     using NPOI.SS.Formula;
@@ -33,13 +33,13 @@ namespace TestCases.HSSF.UserModel
     /**
      * 
      */
-    [TestClass]
+    [TestFixture]
     public class TestFormulaEvaluatorBugs
     {
         private static bool OUTPUT_TEST_FILES = false;
         private String tmpDirName;
 
-        [TestInitialize]
+        [SetUp]
         public void SetUp()
         {
             System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
@@ -56,7 +56,7 @@ namespace TestCases.HSSF.UserModel
          * WARNING - tedious bug where you actually have to
          *  Open up excel
          */
-        [TestMethod]
+        [Test]
         public void Test44636()
         {
             // Open the existing file, tweak one value and
@@ -114,7 +114,7 @@ namespace TestCases.HSSF.UserModel
          *
          * @author Yegor Kozlov
          */
-        [TestMethod]
+        [Test]
         public void Test44297()
         {
 
@@ -179,7 +179,7 @@ namespace TestCases.HSSF.UserModel
          *
          * @author Nick Burch
          */
-        [TestMethod]
+        [Test]
         public void Test44410()
         {
 
@@ -239,7 +239,7 @@ namespace TestCases.HSSF.UserModel
         /**
          * Tests that we can Evaluate boolean cells properly
          */
-        [TestMethod]
+        [Test]
         public void TestEvaluateBooleanInCell_bug44508()
         {
             HSSFWorkbook wb = new HSSFWorkbook();
@@ -261,7 +261,7 @@ namespace TestCases.HSSF.UserModel
             }
             Assert.AreEqual(true, cell.BooleanCellValue);
         }
-        [TestMethod]
+        [Test]
         public void TestClassCast_bug44861()
         {
             HSSFWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("44861.xls");
@@ -288,7 +288,7 @@ namespace TestCases.HSSF.UserModel
                 }
             }
         }
-        [TestMethod]
+        [Test]
         public void TestEvaluateInCellWithErrorCode_bug44950()
         {
             HSSFWorkbook wb = new HSSFWorkbook();
@@ -305,7 +305,7 @@ namespace TestCases.HSSF.UserModel
             {
                 if (e.Message.StartsWith("Cannot get a error value from"))
                 {
-                    throw new AssertFailedException("Identified bug 44950 b");
+                    throw new AssertionException("Identified bug 44950 b");
                 }
                 throw;
             }
@@ -343,7 +343,7 @@ namespace TestCases.HSSF.UserModel
         /**
          * The HSSFFormula evaluator performance benefits greatly from caching of intermediate cell values
          */
-        [TestMethod]
+        [Test]
         public void TestSlowEvaluate45376()
         {
             /*
@@ -380,7 +380,7 @@ namespace TestCases.HSSF.UserModel
                 // Without caching, evaluating cell 'A9' takes 21845 evaluations which consumes
                 // much time (~3 sec on Core 2 Duo 2.2GHz)
                 Console.Error.WriteLine("Cell A9 took " + evalCount + " intermediate evaluations");
-                throw new AssertFailedException("Identifed bug 45376 - Formula evaluator should cache values");
+                throw new AssertionException("Identifed bug 45376 - Formula evaluator should cache values");
             }
             // With caching, the evaluationCount is 8 which is a big improvement
             // Note - these expected values may change if the WorkbookEvaluator is 

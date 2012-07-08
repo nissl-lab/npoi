@@ -19,7 +19,7 @@ namespace TestCases.HSSF.UserModel
 {
     using System;
     using System.IO;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using TestCases.HSSF;
     using NPOI.HSSF.UserModel;
     using NPOI.SS.UserModel;
@@ -29,7 +29,7 @@ namespace TestCases.HSSF.UserModel
      *
      * @author  Yegor Kozlov
      */
-    [TestClass]
+    [TestFixture]
     public class TestHSSFHyperlink : BaseTestHyperlink
     {
         public TestHSSFHyperlink()
@@ -40,7 +40,7 @@ namespace TestCases.HSSF.UserModel
         /**
          * Test that we can read hyperlinks.
          */
-        [TestMethod]
+        [Test]
         public void TestRead()
         {
 
@@ -82,7 +82,7 @@ namespace TestCases.HSSF.UserModel
             Assert.AreEqual("WebLinks!A1", link.TextMark);
             Assert.AreEqual("WebLinks!A1", link.Address);
         }
-        [TestMethod]
+        [Test]
         public void TestModify()
         {
             HSSFWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("HyperlinksOnManySheets.xls");
@@ -116,7 +116,7 @@ namespace TestCases.HSSF.UserModel
          *  or
          *  link.SetAddress("'Target Sheet-1'!A1"); //common between XSSF and HSSF
          */
-        [TestMethod]
+        [Test]
         public void TestCreateDocumentLink()
         {
             HSSFWorkbook wb = new HSSFWorkbook();
@@ -163,7 +163,7 @@ namespace TestCases.HSSF.UserModel
          * Test that NPOI.SS.UserModel.Sheet#shiftRows moves hyperlinks,
          * see bugs #46445 and #29957
          */
-        [TestMethod]
+        [Test]
         public void TestShiftRows()
         {
             HSSFWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("46445.xls");
@@ -205,7 +205,7 @@ namespace TestCases.HSSF.UserModel
             Assert.AreEqual(5, link2_shifted.FirstRow);
             Assert.AreEqual(5, link2_shifted.LastRow);
         }
-        [TestMethod]
+        [Test]
         public void TestCreate()
         {
             HSSFWorkbook wb = new HSSFWorkbook();
@@ -273,7 +273,7 @@ namespace TestCases.HSSF.UserModel
             Assert.IsNotNull(link);
             Assert.AreEqual("'Target Sheet'!A1", link.TextMark);
         }
-        [TestMethod]
+        [Test]
         public void TestCloneSheet()
         {
             HSSFWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("HyperlinksOnManySheets.xls");

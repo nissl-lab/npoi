@@ -16,14 +16,14 @@
 ==================================================================== */
 
 using TestCases.SS.UserModel;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 namespace NPOI.XSSF.UserModel
 {
 
     /**
      * @author Yegor Kozlov
      */
-    [TestClass]
+    [TestFixture]
     public class TestSheetHiding : BaseTestSheetHiding
     {
         public TestSheetHiding():base(XSSFITestDataProvider.instance,

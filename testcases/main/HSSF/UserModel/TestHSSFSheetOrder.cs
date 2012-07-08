@@ -23,14 +23,14 @@ namespace TestCases.HSSF.UserModel
     using System.IO;
     using NPOI.HSSF.Model;
     using NPOI.HSSF.UserModel;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     /**
      * Tests HSSFWorkbook method setSheetOrder()
      *
      *
      * @author Ruel Loehr (loehr1 at us.ibm.com)
      */
-    [TestClass]
+    [TestFixture]
     public class TestHSSFSheetOrder
     {
         public TestHSSFSheetOrder()
@@ -41,7 +41,7 @@ namespace TestCases.HSSF.UserModel
         /**
          * Test the sheet set order method
          */
-        [TestMethod]
+        [Test]
         public void TestBackupRecord()
         {
             HSSFWorkbook wb = new HSSFWorkbook();

@@ -18,7 +18,7 @@ namespace NPOI.XWPF.UserModel
 {
     using System.Collections.Generic;
     using System.IO;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.OpenXmlFormats.Wordprocessing;
     using NPOI.XWPF;
     using NPOI.XWPF.Model;
@@ -26,13 +26,13 @@ namespace NPOI.XWPF.UserModel
     /**
      * Tests for XWPF Run
      */
-    [TestClass]
+    [TestFixture]
     public class TestXWPFRun
     {
 
         public CT_R ctRun;
         public XWPFParagraph p;
-        [TestInitialize]
+        [SetUp]
         public void SetUp()
         {
             XWPFDocument doc = new XWPFDocument();
@@ -42,7 +42,7 @@ namespace NPOI.XWPF.UserModel
 
         }
 
-        [TestMethod]
+        [Test]
         public void TestSetGetText()
         {
             ctRun.AddNewT().Value = ("TEST STRING");
@@ -61,7 +61,7 @@ namespace NPOI.XWPF.UserModel
             //Assert.Fail("Position wrong");
         }
 
-        [TestMethod]
+        [Test]
         public void TestSetGetBold()
         {
             CT_RPr rpr = ctRun.AddNewRPr();
@@ -74,7 +74,7 @@ namespace NPOI.XWPF.UserModel
             Assert.AreEqual(ST_OnOff.False, rpr.b.val);
         }
 
-        [TestMethod]
+        [Test]
         public void TestSetGetItalic()
         {
             CT_RPr rpr = ctRun.AddNewRPr();
@@ -87,7 +87,7 @@ namespace NPOI.XWPF.UserModel
             Assert.AreEqual(ST_OnOff.False, rpr.i.val);
         }
 
-        [TestMethod]
+        [Test]
         public void TestSetGetStrike()
         {
             CT_RPr rpr = ctRun.AddNewRPr();
@@ -100,7 +100,7 @@ namespace NPOI.XWPF.UserModel
             Assert.AreEqual(ST_OnOff.False, rpr.strike.val);
         }
 
-        [TestMethod]
+        [Test]
         public void TestSetGetUnderline()
         {
             CT_RPr rpr = ctRun.AddNewRPr();
@@ -114,7 +114,7 @@ namespace NPOI.XWPF.UserModel
         }
 
 
-        [TestMethod]
+        [Test]
         public void TestSetGetVAlign()
         {
             CT_RPr rpr = ctRun.AddNewRPr();
@@ -128,7 +128,7 @@ namespace NPOI.XWPF.UserModel
         }
 
 
-        [TestMethod]
+        [Test]
         public void TestSetGetFontFamily()
         {
             CT_RPr rpr = ctRun.AddNewRPr();
@@ -142,7 +142,7 @@ namespace NPOI.XWPF.UserModel
         }
 
 
-        [TestMethod]
+        [Test]
         public void TestSetGetFontSize()
         {
             CT_RPr rpr = ctRun.AddNewRPr();
@@ -156,7 +156,7 @@ namespace NPOI.XWPF.UserModel
         }
 
 
-        [TestMethod]
+        [Test]
         public void TestSetGetTextForegroundBackground()
         {
             CT_RPr rpr = ctRun.AddNewRPr();
@@ -169,7 +169,7 @@ namespace NPOI.XWPF.UserModel
             Assert.AreEqual(2400, int.Parse(rpr.position.val));
         }
 
-        [TestMethod]
+        [Test]
         public void TestAddCarriageReturn()
         {
 
@@ -190,7 +190,7 @@ namespace NPOI.XWPF.UserModel
 
         }
 
-        [TestMethod]
+        [Test]
         public void TestAddPageBreak()
         {
             ctRun.AddNewT().Value = ("TEST STRING");
@@ -214,7 +214,7 @@ namespace NPOI.XWPF.UserModel
          *  right thing with it
          * @throws IOException 
          */
-        [TestMethod]
+        [Test]
         public void TestExisting()
         {
             XWPFDocument doc = XWPFTestDataSamples.OpenSampleDocument("TestDocument.docx");
@@ -347,7 +347,7 @@ namespace NPOI.XWPF.UserModel
             Assert.AreEqual(null, run.GetCTR().rPr);
         }
 
-        [TestMethod]
+        [Test]
         public void TestPictureInHeader()
         {
             XWPFDocument sampleDoc = XWPFTestDataSamples.OpenSampleDocument("headerPic.docx");
@@ -376,7 +376,7 @@ namespace NPOI.XWPF.UserModel
             Assert.AreEqual(1, count);
         }
 
-        [TestMethod]
+        [Test]
         public void TestAddPicture()
         {
             XWPFDocument doc = XWPFTestDataSamples.OpenSampleDocument("TestDocument.docx");

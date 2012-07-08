@@ -20,16 +20,16 @@ namespace TestCases.HSSF.UserModel
     using System;
     using NPOI.HSSF.UserModel;
     using TestCases.HSSF;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.SS.UserModel;
 
     /**
      * @author Josh Micich
      */
-    [TestClass]
+    [TestFixture]
     public class TestHSSFPatriarch
     {
-        [TestMethod]
+        [Test]
         public void TestBasic()
         {
 
@@ -44,7 +44,7 @@ namespace TestCases.HSSF.UserModel
         }
 
         // TODO - fix bug 44916 (1-May-2008)
-        [TestMethod]
+        [Test]
         public void Test44916()
         {
 
@@ -62,7 +62,7 @@ namespace TestCases.HSSF.UserModel
             }
             catch (NullReferenceException)
             {
-                throw new AssertFailedException("Identified bug 44916");
+                throw new AssertionException("Identified bug 44916");
             }
 
             // 3. Use patriarch

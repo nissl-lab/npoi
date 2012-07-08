@@ -20,7 +20,7 @@ namespace TestCases.SS.Formula.Eval
     using NPOI.SS.Formula.PTG;
     using NPOI.SS.Formula.Functions;
     using TestCases.SS.Formula.Functions;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.SS.Formula.Eval;
 
     /**
@@ -28,10 +28,10 @@ namespace TestCases.SS.Formula.Eval
      *
      * @author Josh Micich
      */
-    [TestClass]
+    [TestFixture]
     public class TestAreaEval
     {
-        [TestMethod]
+        [Test]
         public void TestGetValue_bug44950()
         {
             // TODO - this Test probably isn't Testing much anymore
@@ -48,7 +48,7 @@ namespace TestCases.SS.Formula.Eval
             AreaEval ae = EvalFactory.CreateAreaEval(ptg, values);
             if (one == ae.GetAbsoluteValue(1, 2))
             {
-                throw new AssertFailedException("Identified bug 44950 a");
+                throw new AssertionException("Identified bug 44950 a");
             }
             Confirm(1, ae, 1, 1);
             Confirm(2, ae, 1, 2);

@@ -19,10 +19,10 @@ namespace NPOI.XWPF.UserModel
 {
     using System;
 
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.OpenXmlFormats.Wordprocessing;
 
-    [TestClass]
+    [TestFixture]
     public class TestXWPFTableRow
     {
 
@@ -35,7 +35,7 @@ namespace NPOI.XWPF.UserModel
             //super.Up=();
         }
 
-        [TestMethod]
+        [Test]
         public void TestSomething()
         {
 

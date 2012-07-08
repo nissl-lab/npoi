@@ -2,7 +2,7 @@
 using System.Text;
 using System.Collections.Generic;
 
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using NPOI.Util;
 using NPOI.HSSF.Record;
 
@@ -11,7 +11,7 @@ namespace TestCases.HSSF.Record
     /// <summary>
     /// Summary description for TestNameCommentRecord
     /// </summary>
-    [TestClass]
+    [TestFixture]
     public class TestNameCommentRecord
     {
         public TestNameCommentRecord()
@@ -22,7 +22,7 @@ namespace TestCases.HSSF.Record
         }
 
 
-        [TestMethod]
+        [Test]
         public void TestReserialize()
         {
             byte[] data = HexRead

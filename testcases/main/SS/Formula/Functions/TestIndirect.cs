@@ -22,14 +22,14 @@ namespace TestCases.SS.Formula.Functions
     using NPOI.HSSF.UserModel;
     using NPOI.SS.UserModel;
     using System;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
 
     /**
      * Tests for the INDIRECT() function.</p>
      *
      * @author Josh Micich
      */
-    [TestClass]
+    [TestFixture]
     public class TestIndirect
     {
         // convenient access to namespace
@@ -94,7 +94,7 @@ namespace TestCases.SS.Formula.Functions
 
             return wb;
         }
-        [TestMethod]
+        [Test]
         public void TestBasic()
         {
 
@@ -152,7 +152,7 @@ namespace TestCases.SS.Formula.Functions
 #endif
             Confirm(feA, c, "INDIRECT(\"Sheet1!A 1\")", ErrorEval.REF_INVALID); // space in cell ref
         }
-        [TestMethod]
+        [Test]
         public void TestMultipleWorkbooks()
         {
             HSSFWorkbook wbA = CreateWBA();
@@ -183,7 +183,7 @@ namespace TestCases.SS.Formula.Functions
             CellValue cv = fe.Evaluate(cell);
             if (cv.CellType != CellType.NUMERIC)
             {
-                throw new AssertFailedException("expected numeric cell type but got " + cv.FormatAsString());
+                throw new AssertionException("expected numeric cell type but got " + cv.FormatAsString());
             }
             Assert.AreEqual(expectedResult, cv.NumberValue, 0.0);
         }
@@ -195,12 +195,12 @@ namespace TestCases.SS.Formula.Functions
             CellValue cv = fe.Evaluate(cell);
             if (cv.CellType != CellType.ERROR)
             {
-                throw new AssertFailedException("expected error cell type but got " + cv.FormatAsString());
+                throw new AssertionException("expected error cell type but got " + cv.FormatAsString());
             }
             int expCode = expectedResult.ErrorCode;
             if (cv.ErrorValue != expCode)
             {
-                throw new AssertFailedException("Expected error '" + ErrorEval.GetText(expCode)
+                throw new AssertionException("Expected error '" + ErrorEval.GetText(expCode)
                         + "' but got '" + cv.FormatAsString() + "'.");
             }
         }

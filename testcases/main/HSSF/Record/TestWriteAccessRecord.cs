@@ -20,7 +20,7 @@ namespace TestCases.HSSF.Record
     using System;
     using NPOI.Util;
     using TestCases.HSSF.Record;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.HSSF.Record;
 
 
@@ -29,7 +29,7 @@ namespace TestCases.HSSF.Record
      *
      * @author Josh Micich
      */
-    [TestClass]
+    [TestFixture]
     public class TestWriteAccessRecord
     {
 
@@ -39,7 +39,7 @@ namespace TestCases.HSSF.Record
             + "20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 "
             + "20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20";
 
-        [TestMethod]
+        [Test]
         public void TestMissingStringHeader_bug47001a()
         {
             /*
@@ -65,7 +65,7 @@ namespace TestCases.HSSF.Record
             {
                 if (e.Message.Equals("Not enough data (0) to read requested (1) bytes"))
                 {
-                    throw new AssertFailedException("Identified bug 47001a");
+                    throw new AssertionException("Identified bug 47001a");
                 }
                 throw e;
             }
@@ -81,7 +81,7 @@ namespace TestCases.HSSF.Record
 
             TestcaseRecordInputStream.ConfirmRecordEncoding(WriteAccessRecord.sid, expectedEncoding, rec.Serialize());
         }
-        [TestMethod]
+        [Test]
         public void TestshortRecordWrittenByMSAccess()
         {
             /*

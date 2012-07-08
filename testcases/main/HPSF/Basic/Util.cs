@@ -22,7 +22,7 @@ namespace TestCases.HPSF.Basic
     using System;
     using System.IO;
     using System.Collections;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.HPSF;
     using NPOI.POIFS.EventFileSystem;
     using NPOI.Util;

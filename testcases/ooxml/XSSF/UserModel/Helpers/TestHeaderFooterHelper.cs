@@ -16,7 +16,7 @@
 ==================================================================== */
 
 using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 namespace NPOI.XSSF.UserModel.Helpers
 {
 
@@ -25,10 +25,10 @@ namespace NPOI.XSSF.UserModel.Helpers
      * As we go through XmlBeans, should always use &,
      *  and not &amp;
      */
-    [TestClass]
+    [TestFixture]
     public class TestHeaderFooterHelper
     {
-        [TestMethod]
+        [Test]
         public void TestGetCenterLeftRightSection()
         {
             HeaderFooterHelper helper = new HeaderFooterHelper();
@@ -41,7 +41,7 @@ namespace NPOI.XSSF.UserModel.Helpers
             Assert.AreEqual("The left one", helper.GetLeftSection(headerFooter));
             Assert.AreEqual("And the right one", helper.GetRightSection(headerFooter));
         }
-        [TestMethod]
+        [Test]
         public void TestSetCenterLeftRightSection()
         {
             HeaderFooterHelper helper = new HeaderFooterHelper();

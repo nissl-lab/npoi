@@ -19,14 +19,14 @@ namespace TestCases.SS.Formula.Functions
 {
 
     using NPOI.SS.Formula.Eval;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.SS.Formula.Functions;
 
     /**
      * Tests for Excel function POISSON(x,mean,cumulative)
      * @author Kalpesh Parmar
      */
-    [TestClass]
+    [TestFixture]
     public class TestPoisson
     {
 
@@ -42,7 +42,7 @@ namespace TestCases.SS.Formula.Functions
 
             return NumericFunction.POISSON.Evaluate(valueEvals, -1, -1);
         }
-        [TestMethod]
+        [Test]
         public void TestCumulativeProbability()
         {
             double x = 1;
@@ -53,7 +53,7 @@ namespace TestCases.SS.Formula.Functions
 
             Assert.AreEqual(myResult.NumberValue, result, DELTA);
         }
-        [TestMethod]
+        [Test]
         public void TestNonCumulativeProbability()
         {
             double x = 0;
@@ -64,7 +64,7 @@ namespace TestCases.SS.Formula.Functions
 
             Assert.AreEqual(myResult.NumberValue, result, DELTA);
         }
-        [TestMethod]
+        [Test]
         public void TestNegativeMean()
         {
             double x = 0;
@@ -74,7 +74,7 @@ namespace TestCases.SS.Formula.Functions
 
             Assert.AreEqual(ErrorEval.NUM_ERROR.ErrorCode, myResult.ErrorCode);
         }
-        [TestMethod]
+        [Test]
         public void TestNegativeX()
         {
             double x = -1;
@@ -86,7 +86,7 @@ namespace TestCases.SS.Formula.Functions
         }
 
 
-        [TestMethod]
+        [Test]
         public void TestXAsDecimalNumber()
         {
             double x = 1.1;
@@ -97,7 +97,7 @@ namespace TestCases.SS.Formula.Functions
 
             Assert.AreEqual(myResult.NumberValue, result, DELTA);
         }
-        [TestMethod]
+        [Test]
         public void TestXZeroMeanZero()
         {
             double x = 0;

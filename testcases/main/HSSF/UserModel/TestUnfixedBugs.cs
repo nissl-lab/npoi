@@ -22,7 +22,7 @@ namespace TestCases.HSSF.UserModel
     using NPOI.HSSF.UserModel;
 
     using TestCases.HSSF;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.HSSF.Record;
     using NPOI.Util;
     using NPOI.SS.UserModel;
@@ -36,11 +36,11 @@ namespace TestCases.HSSF.UserModel
      * Bugzilla id's PLEASE MOVE Tests from this class to TestBugs once the bugs are
      * fixed, so that they are then run automatically.
      */
-    [TestClass]
+    [TestFixture]
     public class TestUnfixedBugs
     {
         //In POI bugzilla, this bug is taged as "RESOLVED WON'T FIX"
-        [TestMethod]
+        [Test]
         [Ignore] // because of WON'T FIX
         public void Test43493()
         {
@@ -54,13 +54,13 @@ namespace TestCases.HSSF.UserModel
             {
                 if (e.InnerException.InnerException is IndexOutOfRangeException)
                 {
-                    throw new AssertFailedException("Identified bug 43493");
+                    throw new AssertionException("Identified bug 43493");
                 }
                 throw e;
             }
         }
 
-        [TestMethod]
+        [Test]
         [Ignore] //TestUnfixedBugs
         public void Test49612()
         {

@@ -17,14 +17,14 @@
 
 using TestCases.SS.UserModel;
 using NPOI.SS;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 namespace NPOI.XSSF.UserModel
 {
 
     /**
      * Tests for XSSFRow
      */
-    [TestClass]
+    [TestFixture]
     public class TestXSSFRow : BaseTestRow
     {
 
@@ -32,12 +32,12 @@ namespace NPOI.XSSF.UserModel
         {
             
         }
-        [TestMethod]
+        [Test]
         public void TestRowBounds()
         {
             BaseTestRowBounds(SpreadsheetVersion.EXCEL2007.LastRowIndex);
         }
-        [TestMethod]
+        [Test]
         public void TestCellBounds()
         {
             BaseTestCellBounds(SpreadsheetVersion.EXCEL2007.LastColumnIndex);

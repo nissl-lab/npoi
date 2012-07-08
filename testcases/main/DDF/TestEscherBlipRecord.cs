@@ -26,7 +26,7 @@ namespace TestCases.DDF
     using System.Collections.Generic;
     using System.IO;
 
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.DDF;
     using NPOI.Util;
 
@@ -35,14 +35,14 @@ namespace TestCases.DDF
      *
      * @author Yegor Kozlov
      */
-    [TestClass]
+    [TestFixture]
     public class TestEscherBlipRecord
     {
         static POIDataSamples _samples = POIDataSamples.GetDDFInstance();
 
 
         //Test Reading/serializing of a PNG blip
-        [TestMethod]
+        [Test]
         public void TestReadPNG()
         {
             //provided in bug-44886
@@ -89,7 +89,7 @@ namespace TestCases.DDF
         }
 
         //Test Reading/serializing of a PICT metafile
-        [TestMethod]
+        [Test]
         public void TestReadPICT()
         {
             //provided in bug-44886
@@ -143,7 +143,7 @@ namespace TestCases.DDF
         }
 
         //integral Test: check that the Read-Write-Read round trip is consistent
-        [TestMethod]
+        [Test]
         public void TestContainer()
         {
             byte[] data = _samples.ReadFile("Container.dat");
@@ -158,7 +158,7 @@ namespace TestCases.DDF
         /**
      * The test data was created from pl031405.xls attached to Bugzilla #47143
      */
-        [TestMethod]
+        [Test]
         public void Test47143()
         {
             byte[] data = _samples.ReadFile("47143.dat");

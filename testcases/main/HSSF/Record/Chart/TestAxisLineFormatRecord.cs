@@ -23,7 +23,7 @@ namespace TestCases.HSSF.Record.Chart
     using System;
     using NPOI.HSSF.Record;
     using NPOI.HSSF.Record.Chart;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
 
     /**
      * Tests the serialization and deserialization of the AxisLineFormatRecord
@@ -33,7 +33,7 @@ namespace TestCases.HSSF.Record.Chart
 
      * @author Glen Stampoultzis (glens at apache.org)
      */
-    [TestClass]
+    [TestFixture]
     public class TestAxisLineFormatRecord
     {
         byte[] data = new byte[] {
@@ -44,7 +44,7 @@ namespace TestCases.HSSF.Record.Chart
         {
 
         }
-        [TestMethod]
+        [Test]
         public void TestLoad()
         {
             AxisLineFormatRecord record = new AxisLineFormatRecord(TestcaseRecordInputStream.Create((short)0x1021, data));
@@ -53,7 +53,7 @@ namespace TestCases.HSSF.Record.Chart
 
             Assert.AreEqual(6, record.RecordSize);
         }
-        [TestMethod]
+        [Test]
         public void TestStore()
         {
             AxisLineFormatRecord record = new AxisLineFormatRecord();

@@ -18,7 +18,7 @@ namespace TestCases.HSSF.UserModel
 {
     using System;
     using System.IO;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.HSSF.UserModel;
     using TestCases.HSSF;
     using NPOI.SS.UserModel;
@@ -28,7 +28,7 @@ namespace TestCases.HSSF.UserModel
      *
      * @author  Yegor Kozlov
      */
-    [TestClass]
+    [TestFixture]
     public class TestHSSFComment:BaseTestCellComment
     {
         public TestHSSFComment(): base(HSSFITestDataProvider.Instance)
@@ -36,7 +36,7 @@ namespace TestCases.HSSF.UserModel
 
         }
 
-        [TestMethod]
+        [Test]
         public void TestDefaultShapeType()
         {
             HSSFComment comment = new HSSFComment((HSSFShape)null, (HSSFAnchor)null);
@@ -46,7 +46,7 @@ namespace TestCases.HSSF.UserModel
  *  HSSFCell#findCellComment should NOT rely on the order of records
  * when matching cells and their cell comments. The correct algorithm is to map
  */
-        [TestMethod]
+        [Test]
         public void Test47924()
         {
             HSSFWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("47924.xls");

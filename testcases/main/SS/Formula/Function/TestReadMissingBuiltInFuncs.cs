@@ -22,7 +22,7 @@ namespace TestCases.SS.Formula.Function
     using System;
     using TestCases.HSSF;
     using NPOI.SS.UserModel;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.Util;
 
     /**
@@ -31,7 +31,7 @@ namespace TestCases.SS.Formula.Function
      * 
      * @author Josh Micich
      */
-    [TestClass]
+    [TestFixture]
     public class TestReadMissingBuiltInFuncs
     {
 
@@ -50,7 +50,7 @@ namespace TestCases.SS.Formula.Function
             }
             return _sheet;
         }
-        [TestMethod]
+        [Test]
         public void TestDatedif()
         {
 
@@ -78,7 +78,7 @@ namespace TestCases.SS.Formula.Function
             }
             Assert.AreEqual("DATEDIF(NOW(),NOW(),\"d\")", formula);
         }
-        [TestMethod]
+        [Test]
         public void TestDdb()
         {
 
@@ -89,7 +89,7 @@ namespace TestCases.SS.Formula.Function
             }
             Assert.AreEqual("DDB(1,1,1,1,1)", formula);
         }
-        [TestMethod]
+        [Test]
         public void TestAtan()
         {
 
@@ -100,7 +100,7 @@ namespace TestCases.SS.Formula.Function
             }
             Assert.AreEqual("ATAN(1)", formula);
         }
-        [TestMethod]
+        [Test]
         public void TestUsdollar()
         {
 
@@ -111,7 +111,7 @@ namespace TestCases.SS.Formula.Function
             }
             Assert.AreEqual("USDOLLAR(1)", formula);
         }
-        [TestMethod]
+        [Test]
         public void TestDBCS()
         {
 
@@ -131,7 +131,7 @@ namespace TestCases.SS.Formula.Function
             }
             catch (Exception)
             {
-                throw new AssertFailedException("found err- DBCS() registered with -1 args");
+                throw new AssertionException("found err- DBCS() registered with -1 args");
             }
             if (formula.Equals("JIS(\"abc\")"))
             {
@@ -139,7 +139,7 @@ namespace TestCases.SS.Formula.Function
             }
             Assert.AreEqual("DBCS(\"abc\")", formula);
         }
-        [TestMethod]
+        [Test]
         public void TestIsnontext()
         {
             String formula;
@@ -158,7 +158,7 @@ namespace TestCases.SS.Formula.Function
             }
             Assert.AreEqual("ISNONTEXT(\"abc\")", formula);
         }
-        [TestMethod]
+        [Test]
         public void TestDproduct()
         {
 
@@ -191,9 +191,9 @@ namespace TestCases.SS.Formula.Function
 #endif
             return result;
         }
-        private static AssertFailedException afe(String msg)
+        private static AssertionException afe(String msg)
         {
-            return new AssertFailedException(msg);
+            return new AssertionException(msg);
         }
     }
 

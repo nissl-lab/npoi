@@ -16,7 +16,7 @@
 ==================================================================== */
 
 using NPOI.OpenXmlFormats.Spreadsheet;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using NPOI.XSSF.Model;
 namespace NPOI.XSSF.UserModel.Helpers
 {
@@ -24,10 +24,10 @@ namespace NPOI.XSSF.UserModel.Helpers
      * Tests for {@link ColumnHelper}
      *
      */
-    [TestClass]
+    [TestFixture]
     public class TestColumnHelper
     {
-        [TestMethod]
+        [Test]
         public void TestCleanColumns()
         {
             CT_Worksheet worksheet = new CT_Worksheet();
@@ -61,7 +61,7 @@ namespace NPOI.XSSF.UserModel.Helpers
             Assert.AreEqual(0.0, helper.GetColumn(1, false).width, 0.0);
             Assert.IsFalse(helper.GetColumn(1, false).hidden);
         }
-        [TestMethod]
+        [Test]
         public void TestSortColumns()
         {
             //CT_Worksheet worksheet = new CT_Worksheet();
@@ -110,7 +110,7 @@ namespace NPOI.XSSF.UserModel.Helpers
             Assert.AreEqual(25u, cols1.GetColArray(8).min);
             Assert.AreEqual(27u, cols1.GetColArray(8).max);
         }
-        [TestMethod]
+        [Test]
         public void TestCloneCol()
         {
             CT_Worksheet worksheet = new CT_Worksheet();
@@ -128,7 +128,7 @@ namespace NPOI.XSSF.UserModel.Helpers
             Assert.IsTrue(newCol.hidden);
             Assert.AreEqual(13.4, newCol.width, 0.0);
         }
-        [TestMethod]
+        [Test]
         public void TestAddCleanColIntoCols()
         {
             CT_Worksheet worksheet = new CT_Worksheet();
@@ -188,7 +188,7 @@ namespace NPOI.XSSF.UserModel.Helpers
             Assert.AreEqual(1u, cols1.GetColArray(0).min);
             Assert.AreEqual(16750u, cols1.GetColArray(11).max);
         }
-        [TestMethod]
+        [Test]
         public void TestColumn()
         {
             CT_Worksheet worksheet = new CT_Worksheet();
@@ -218,7 +218,7 @@ namespace NPOI.XSSF.UserModel.Helpers
             Assert.IsNull(helper.GetColumn(99, false));
             Assert.IsNotNull(helper.GetColumn(5, false));
         }
-        [TestMethod]
+        [Test]
         public void TestSetColumnAttributes()
         {
             CT_Col col = new CT_Col();
@@ -232,7 +232,7 @@ namespace NPOI.XSSF.UserModel.Helpers
             Assert.AreEqual(12.0, newCol.width, 0.0);
             Assert.IsTrue(newCol.hidden);
         }
-        [TestMethod]
+        [Test]
         public void TestGetOrCreateColumn()
         {
             XSSFWorkbook workbook = new XSSFWorkbook();
@@ -254,7 +254,7 @@ namespace NPOI.XSSF.UserModel.Helpers
             Assert.IsNotNull(columnHelper.GetColumn1Based(30, false));
             Assert.IsNull(columnHelper.GetColumn(30, false));
         }
-        [TestMethod]
+        [Test]
         public void TestGetSetColDefaultStyle()
         {
             XSSFWorkbook workbook = new XSSFWorkbook();

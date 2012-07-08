@@ -19,7 +19,7 @@ namespace TestCases.SS.Formula
 {
 
     using System;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.HSSF.UserModel;
     using NPOI.SS.Formula;
     using NPOI.SS.Formula.Eval;
@@ -32,7 +32,7 @@ namespace TestCases.SS.Formula
      *
      * @author Josh Micich
      */
-    [TestClass]
+    [TestFixture]
     public class TestWorkbookEvaluator
     {
 
@@ -46,7 +46,7 @@ namespace TestCases.SS.Formula
          * Make sure that the Evaluator can directly handle tAttrSum (instead of relying on re-parsing
          * the whole formula which Converts tAttrSum to tFuncVar("SUM") )
          */
-        [TestMethod]
+        [Test]
         public void TestAttrSum()
         {
 
@@ -64,7 +64,7 @@ namespace TestCases.SS.Formula
          * (instead of relying on re-parsing the whole formula which Converts these
          * to the error constant #REF! )
          */
-        [TestMethod]
+        [Test]
         public void TestRefErr()
         {
 
@@ -87,7 +87,7 @@ namespace TestCases.SS.Formula
          * Make sure that the Evaluator can directly handle tAttrSum (instead of relying on re-parsing
          * the whole formula which Converts tAttrSum to tFuncVar("SUM") )
          */
-        [TestMethod]
+        [Test]
         public void TestMemFunc()
         {
 
@@ -100,7 +100,7 @@ namespace TestCases.SS.Formula
             Assert.AreEqual(42, ((NumberEval)result).NumberValue, 0.0);
         }
 
-        [TestMethod]
+        [Test]
         public void TestEvaluateMultipleWorkbooks()
         {
             HSSFWorkbook wbA = HSSFTestDataSamples.OpenSampleWorkbook("multibookFormulaA.xls");
@@ -169,7 +169,7 @@ namespace TestCases.SS.Formula
          * This Test Makes sure that any {@link MissingArgEval} that propagates to
          * the result of a function Gets translated to {@link BlankEval}.
          */
-        [TestMethod]
+        [Test]
         public void TestMissingArg()
         {
             HSSFWorkbook wb = new HSSFWorkbook();
@@ -185,7 +185,7 @@ namespace TestCases.SS.Formula
             }
             catch (Exception)
             {
-                throw new AssertFailedException("Missing arg result not being handled correctly.");
+                throw new AssertionException("Missing arg result not being handled correctly.");
             }
             Assert.AreEqual(CellType.NUMERIC, cv.CellType);
             // Adding blank to 1.0 gives 1.0
@@ -212,7 +212,7 @@ namespace TestCases.SS.Formula
          * Functions like IF, INDIRECT, INDEX, OFFSET etc can return AreaEvals which
          * should be dereferenced by the Evaluator
          */
-        [TestMethod]
+        [Test]
         public void TestResultOutsideRange()
         {
             System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
@@ -230,7 +230,7 @@ namespace TestCases.SS.Formula
             {
                 if ("Specified row index (0) is outside the allowed range (1..4)".Equals(e.Message))
                 {
-                    throw new AssertFailedException("Identified bug in result dereferencing");
+                    throw new AssertionException("Identified bug in result dereferencing");
                 }
                 throw;
             }

@@ -18,7 +18,7 @@ namespace NPOI.XWPF
 {
     using System;
     using NPOI.XWPF.UserModel;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using System.IO;
     using TestCases;
     using NPOI.Util;

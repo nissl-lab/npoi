@@ -22,7 +22,7 @@ namespace TestCases.HSSF.UserModel
     using System;
     using NPOI.HSSF.UserModel;
     using NPOI.SS.Util;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.SS.UserModel;
     /**
      * Test the ability to clone a sheet. 
@@ -30,10 +30,10 @@ namespace TestCases.HSSF.UserModel
      *  Add that record to the sheet in the TestCloneSheetBasic method. 
      * @author  avik
      */
-    [TestClass]
+    [TestFixture]
     public class TestCloneSheet
     {
-        [TestMethod]
+        [Test]
         public void TestCloneSheetBasic()
         {
             HSSFWorkbook b = new HSSFWorkbook();
@@ -47,7 +47,7 @@ namespace TestCases.HSSF.UserModel
          * Ensures that pagebreak cloning works properly
          *
          */
-        [TestMethod]
+        [Test]
         public void TestPageBreakClones()
         {
             HSSFWorkbook b = new HSSFWorkbook();

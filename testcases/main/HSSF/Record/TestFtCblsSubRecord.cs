@@ -20,7 +20,7 @@ namespace TestCases.HSSF.Record
     using System;
 
 
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using TestCases.HSSF.Record;
     using NPOI.Util;
     using NPOI.HSSF.Record;
@@ -33,14 +33,14 @@ namespace TestCases.HSSF.Record
      *
      * @author Yegor Kozlov
      */
-    [TestClass]
+    [TestFixture]
     public class TestFtCblsSubRecord
     {
         private byte[] data = new byte[] {
         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x64, 0x00,
         0x01, 0x00, 0x0A, 0x00, 0x00, 0x00, 0x10, 0x00, 0x01, 0x00
     };
-        [TestMethod]
+        [Test]
         public void TestRead()
         {
 
@@ -49,7 +49,7 @@ namespace TestCases.HSSF.Record
             Assert.AreEqual(FtCblsSubRecord.sid, record.Sid);
             Assert.AreEqual(data.Length, record.DataSize);
         }
-        [TestMethod]
+        [Test]
         public void TestWrite()
         {
             FtCblsSubRecord record = new FtCblsSubRecord();
@@ -60,7 +60,7 @@ namespace TestCases.HSSF.Record
             Assert.AreEqual(ser.Length - 4, data.Length);
 
         }
-        [TestMethod]
+        [Test]
         public void TestClone()
         {
             FtCblsSubRecord record = new FtCblsSubRecord();

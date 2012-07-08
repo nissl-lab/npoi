@@ -23,7 +23,7 @@ namespace TestCases.HSSF.Record
     using System.IO;
     using System.Collections;
 
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.SS.Formula.PTG;
     using NPOI.HSSF.UserModel;
 
@@ -33,10 +33,10 @@ namespace TestCases.HSSF.Record
      *
      * @author Andrew C. Oliver 
      */
-    [TestClass]
+    [TestFixture]
     public class TestFormulaRecord
     {
-        [TestMethod]
+        [Test]
         public void TestCreateFormulaRecord()
         {
             FormulaRecord record = new FormulaRecord();
@@ -55,7 +55,7 @@ namespace TestCases.HSSF.Record
          * Make sure a NAN value is1 preserved
          * This formula record is1 a representation of =1/0 at row 0, column 0 
          */
-        [TestMethod]
+        [Test]
         public void TestCheckNanPreserve()
         {
             byte[] formulaByte = new byte[29];
@@ -91,7 +91,7 @@ namespace TestCases.HSSF.Record
          * Tests to see if the shared formula cells properly reSerialize the expPtg
          *
          */
-        [TestMethod]
+        [Test]
         public void TestExpFormula()
         {
             byte[] formulaByte = new byte[27];
@@ -109,7 +109,7 @@ namespace TestCases.HSSF.Record
             Assert.AreEqual(31, output.Length, "Output size"); //includes sid+recordlength
             Assert.AreEqual(1, output[26], "OffSet 22");
         }
-        [TestMethod]
+        [Test]
         public void TestWithConcat()
         {
             // =CHOOSE(2,A2,A3,A4)
@@ -149,7 +149,7 @@ namespace TestCases.HSSF.Record
             FuncVarPtg choose = (FuncVarPtg)ptgs[8];
             Assert.AreEqual("CHOOSE", choose.Name);
         }
-        [TestMethod]
+        [Test]
         public void TestReSerialize()
         {
             FormulaRecord formulaRecord = new FormulaRecord();
@@ -173,7 +173,7 @@ namespace TestCases.HSSF.Record
          * Bug noticed while fixing 46479.  Operands of conditional operator ( ? : ) were swapped
          * inside {@link FormulaRecord}
          */
-        [TestMethod]
+        [Test]
         public void TestCachedValue_bug46479()
         {
             FormulaRecord fr0 = new FormulaRecord();
@@ -188,7 +188,7 @@ namespace TestCases.HSSF.Record
             fr1.SetCachedResultBoolean(true);
             if (fr0.CachedBooleanValue == true && fr1.CachedBooleanValue == false)
             {
-                throw new AssertFailedException("Identified bug 46479c");
+                throw new AssertionException("Identified bug 46479c");
             }
             Assert.AreEqual(false, fr0.CachedBooleanValue);
             Assert.AreEqual(true, fr1.CachedBooleanValue);

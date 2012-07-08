@@ -16,7 +16,7 @@
 ==================================================================== */
 
 using NPOI.SS.UserModel;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 namespace TestCases.SS.UserModel
 {
 

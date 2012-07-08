@@ -26,9 +26,9 @@ namespace TestCases.HSSF.EventUserModel
     using NPOI.HSSF.Record;
     using NPOI.POIFS.FileSystem;
 
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
 
-    [TestClass]
+    [TestFixture]
     public class TestHSSFEventFactory
     {
 
@@ -36,7 +36,7 @@ namespace TestCases.HSSF.EventUserModel
         {
             return HSSFTestDataSamples.OpenSampleFileStream(sampleFileName);
         }
-        [TestMethod]
+        [Test]
         public void TestWithMissingRecords()
         {
 
@@ -96,7 +96,7 @@ namespace TestCases.HSSF.EventUserModel
          * Check that HSSFEventFactory doesn't break on them.
          * (the Test file was provided in a reopen of bug #42844)
          */
-        [TestMethod]
+        [Test]
         public void TestUnknownContinueRecords()
         {
 

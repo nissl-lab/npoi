@@ -29,7 +29,7 @@ using System;
 using System.IO;
 using System.Collections.Generic;
 
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using NPOI.Util;
 
 namespace TestCases.Util
@@ -37,7 +37,7 @@ namespace TestCases.Util
     /// <summary>
     /// Summary description for TestShortField
     /// </summary>
-    [TestClass]
+    [TestFixture]
     public class TestShortField
     {
         static private short[] _test_array =
@@ -49,7 +49,7 @@ namespace TestCases.Util
         /**
          * Test constructors.
          */
-        [TestMethod]
+        [Test]
         public void TestConstructors()
         {
             try
@@ -115,7 +115,7 @@ namespace TestCases.Util
         /**
          * Test set() methods
          */
-        [TestMethod]
+        [Test]
         public void TestSet()
         {
             ShortField field = new ShortField(0);
@@ -139,7 +139,7 @@ namespace TestCases.Util
         /**
          * Test readFromBytes
          */
-        [TestMethod]
+        [Test]
         public void TestReadFromBytes()
         {
             ShortField field = new ShortField(1);
@@ -170,7 +170,7 @@ namespace TestCases.Util
          *
          * @exception IOException
          */
-        [TestMethod]
+        [Test]
         public void TestReadFromStream()
             
         {
@@ -194,7 +194,7 @@ namespace TestCases.Util
         /**
          * Test writeToBytes
          */
-        [TestMethod]
+        [Test]
         public void TestWriteToBytes()
         {
             ShortField field = new ShortField(0);

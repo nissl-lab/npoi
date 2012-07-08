@@ -22,7 +22,7 @@ namespace TestCases.HSSF.UserModel
     using NPOI.HSSF;
     using NPOI.SS.UserModel;
 
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using System.Collections;
     using TestCases.HSSF;
     using NPOI.SS.Util;
@@ -34,7 +34,7 @@ namespace TestCases.HSSF.UserModel
      * @author James May (james dot may at fmr dot com)
      *
      */
-    [TestClass]
+    [TestFixture]
     public class TestHSSFDataFormatter
     {
 
@@ -204,7 +204,7 @@ namespace TestCases.HSSF.UserModel
         /**
          * Test Getting formatted values from numeric and date cells.
          */
-        [TestMethod]
+        [Test]
         public void TestGetFormattedCellValueHSSFCell()
         {
             // Valid date formats -- cell values should be date formatted & not "555.555"
@@ -308,7 +308,7 @@ namespace TestCases.HSSF.UserModel
             // null Test-- null cell should result in empty String
             Assert.AreEqual(formatter.FormatCellValue(null), "");
         }
-        [TestMethod]
+        [Test]
         public void TestGetFormattedCellValueHSSFCellHSSFFormulaEvaluator()
         {
             // Test formula format
@@ -332,7 +332,7 @@ namespace TestCases.HSSF.UserModel
          * Test using a default number format. The format should be used when a
          * format pattern cannot be Parsed by DecimalFormat.
          */
-        [TestMethod]
+        [Test]
         public void TestSetDefaultNumberFormat()
         {
             IRow row = wb.GetSheetAt(0).GetRow(3);
@@ -354,7 +354,7 @@ namespace TestCases.HSSF.UserModel
         /**
          * A format of "@" means use the general format
          */
-        [TestMethod]
+        [Test]
         public void TestGeneralAtFormat()
         {
             IWorkbook workbook = HSSFTestDataSamples.OpenSampleWorkbook("47154.xls");
@@ -374,7 +374,7 @@ namespace TestCases.HSSF.UserModel
         /**
          * Tests various formattings of dates and numbers
          */
-        [TestMethod]
+        [Test]
         public void TestFromFile()
         {
             IWorkbook workbook = HSSFTestDataSamples.OpenSampleWorkbook("Formatting.xls");

@@ -17,7 +17,7 @@
 namespace TestCases.HSSF.UserModel
 {
     using NPOI.HSSF.UserModel;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
 
     using NPOI.SS.UserModel;
     using TestCases.SS.UserModel;
@@ -30,7 +30,7 @@ namespace TestCases.HSSF.UserModel
      *
      * @author Yegor Kozlov (yegor at apache.org)
      */
-    [TestClass]
+    [TestFixture]
     public class TestHSSFPicture : BaseTestPicture
     {
         public TestHSSFPicture()
@@ -39,7 +39,7 @@ namespace TestCases.HSSF.UserModel
 
         }
 
-        [TestMethod]
+        [Test]
         public void TestResize()
         {
             BaseTestResize(new HSSFClientAnchor(0, 0, 848, 240, (short)0, 0, (short)1, 9));
@@ -48,7 +48,7 @@ namespace TestCases.HSSF.UserModel
         /**
          * Bug # 45829 reported ArithmeticException (/ by zero) when resizing png with zero DPI.
          */
-        [TestMethod]
+        [Test]
         public void Test45829()
         {
             HSSFWorkbook wb = new HSSFWorkbook();
@@ -60,7 +60,7 @@ namespace TestCases.HSSF.UserModel
             IPicture pic = p1.CreatePicture(new HSSFClientAnchor(), idx1);
             pic.Resize();
         }
-        [TestMethod]
+        [Test]
         public void TestAddPictures()
         {
             IWorkbook wb = new HSSFWorkbook();

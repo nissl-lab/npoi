@@ -3,14 +3,14 @@ using System.Text;
 
 using NPOI.Util;
 
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace TestCases.Util
 {
     /// <summary>
     /// This class is used to test NPOI.Util.Arrays class
     /// </summary>
-    [TestClass]
+    [TestFixture]
     public class TestArrayUtil
     {
         public TestArrayUtil()
@@ -38,7 +38,7 @@ namespace TestCases.Util
             }
         }
 
-        [TestMethod]
+        [Test]
         public void TestCharFill()
         {
             char[] a=new char[100];
@@ -52,7 +52,7 @@ namespace TestCases.Util
             }
         }
 
-        [TestMethod]
+        [Test]
         public void TestByteFill()
         {
             byte[] a = new byte[100];
@@ -66,7 +66,7 @@ namespace TestCases.Util
             }
         }
 
-        [TestMethod]
+        [Test]
         public void TestIntFill()
         {
             int[] a = new int[100];
@@ -79,7 +79,7 @@ namespace TestCases.Util
                 }
             }
         }
-        [TestMethod]
+        [Test]
         public void TestEquals()
         {
             byte[] a = { 1, 2, 3, 4, 0x56, 0x2A,0xff };

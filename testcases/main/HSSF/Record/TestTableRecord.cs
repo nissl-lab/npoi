@@ -21,7 +21,7 @@ namespace TestCases.HSSF.Record
 
     using NPOI.HSSF.Util;
 
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.SS.Util;
     using TestCases.HSSF.Record;
     using NPOI.HSSF.Record;
@@ -31,7 +31,7 @@ namespace TestCases.HSSF.Record
      * class works correctly.  Test data taken directly from a real
      * Excel file.
      */
-    [TestClass]
+    [TestFixture]
     public class TestTableRecord
     {
         byte[] header = new byte[] {
@@ -48,7 +48,7 @@ namespace TestCases.HSSF.Record
 			0x76, 0x40, // row inp col 0x4076 (!)
 			00, 00   // col inp col 0
 	};
-        [TestMethod]
+        [Test]
         public void TestLoad()
         {
 
@@ -67,7 +67,7 @@ namespace TestCases.HSSF.Record
 
             Assert.AreEqual(16 + 4, record.RecordSize);
         }
-        [TestMethod]
+        [Test]
         public void TestStore()
         {
             //    	Offset 0x3bd9 (15321)

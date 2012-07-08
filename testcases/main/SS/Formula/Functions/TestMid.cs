@@ -19,7 +19,7 @@ namespace TestCases.SS.Formula.Functions
 {
     using NPOI.SS.Formula.Eval;
     using NPOI.SS.Formula.Functions;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using System;
 
     /**
@@ -27,7 +27,7 @@ namespace TestCases.SS.Formula.Functions
      *
      * @author Josh Micich
      */
-    [TestClass]
+    [TestFixture]
     public class TestMid
     {
 
@@ -51,7 +51,7 @@ namespace TestCases.SS.Formula.Functions
             Assert.AreEqual(typeof(ErrorEval), result.GetType());
             Assert.AreEqual(expectedError.ErrorCode, ((ErrorEval)result).ErrorCode);
         }
-        [TestMethod]
+        [Test]
         public void TestBasic()
         {
 
@@ -61,7 +61,7 @@ namespace TestCases.SS.Formula.Functions
         /**
          * Valid cases where args are not precisely (string, int, int) but can be Resolved OK.
          */
-        [TestMethod]
+        [Test]
         public void TestUnusualArgs()
         {
             System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.GetCultureInfo("en-US");
@@ -91,7 +91,7 @@ namespace TestCases.SS.Formula.Functions
         /**
          * Extreme values for startPos and numChars
          */
-        [TestMethod]
+        [Test]
         public void TestExtremes()
         {
             ConfirmMid(new StringEval("galactic"), new NumberEval(4), new NumberEval(400), "actic");
@@ -103,7 +103,7 @@ namespace TestCases.SS.Formula.Functions
         /**
          * All sorts of ways to make MID return defined errors.
          */
-        [TestMethod]
+        [Test]
         public void TestErrors()
         {
             ConfirmMid(ErrorEval.NAME_INVALID, new NumberEval(3), new NumberEval(4), ErrorEval.NAME_INVALID);

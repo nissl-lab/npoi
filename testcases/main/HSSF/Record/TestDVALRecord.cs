@@ -20,16 +20,16 @@ namespace TestCases.HSSF.Record
     using System.IO;
     using NPOI.Util;
     using NPOI.HSSF.Record;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
 
     /**
      * 
      * @author Josh Micich
      */
-    [TestClass]
+    [TestFixture]
     public class TestDVALRecord
     {
-        [TestMethod]
+        [Test]
         public void TestRead()
         {
 

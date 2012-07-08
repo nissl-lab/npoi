@@ -18,7 +18,7 @@ namespace TestCases.HSSF.Record
 {
     using System;
     using NPOI.HSSF.Record;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.Util;
     using System.IO;
 
@@ -30,12 +30,12 @@ namespace TestCases.HSSF.Record
      *
      * @author Yegor Kozlov
      */
-    [TestClass]
+    [TestFixture]
     public class TestEmbeddedObjectRefSubRecord
     {
 
         String data1 = "20, 00, 05, 00, FC, 10, 76, 01, 02, 24, 14, DF, 00, 03, 10, 00, 00, 46, 6F, 72, 6D, 73, 2E, 43, 68, 65, 63, 6B, 42, 6F, 78, 2E, 31, 00, 00, 00, 00, 00, 70, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00";
-        [TestMethod]
+        [Test]
         public void TestStore()
         {
 
@@ -69,11 +69,11 @@ namespace TestCases.HSSF.Record
             {
                 if (expectedData[i] != actualFullRecordData[i + 4])
                 {
-                    throw new AssertFailedException("Difference at offset (" + i + ")");
+                    throw new AssertionException("Difference at offset (" + i + ")");
                 }
             }
         }
-        [TestMethod]
+        [Test]
         public void TestCreate()
         {
             EmbeddedObjectRefSubRecord record1 = new EmbeddedObjectRefSubRecord();
@@ -95,7 +95,7 @@ namespace TestCases.HSSF.Record
         {
             return HexRead.ReadFromString(str);
         }
-        [TestMethod]
+        [Test]
         public void TestCameraTool_bug45912()
         {
             /**
@@ -115,7 +115,7 @@ namespace TestCases.HSSF.Record
         /**
  * tests various examples of OLE controls
  */
-        [TestMethod]
+        [Test]
         public void TestVarious()
         {
             String[] rawData = {
@@ -150,7 +150,7 @@ namespace TestCases.HSSF.Record
             byte[] ser2 = rec.Serialize();
             TestcaseRecordInputStream.ConfirmRecordEncoding("Test record " + i, EORSR_SID, data, ser2);
         }
-        [TestMethod]
+        [Test]
         public void TestVisioDrawing_bug46199()
         {
             /**
@@ -175,7 +175,7 @@ namespace TestCases.HSSF.Record
             {
                 if (e.Message.Equals("Not enough data (3) to read requested (4) bytes"))
                 {
-                    throw new AssertFailedException("Identified bug 22860");
+                    throw new AssertionException("Identified bug 22860");
                 }
                 throw e;
             }

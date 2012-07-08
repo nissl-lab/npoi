@@ -22,7 +22,7 @@ namespace TestCases.SS.Format
     using System.Drawing;
     using System.Text.RegularExpressions;
     using System.Windows.Forms;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.HSSF.UserModel;
     using NPOI.SS.Format;
     using NPOI.SS.UserModel;
@@ -40,7 +40,7 @@ namespace TestCases.SS.Format
      * flag "Categories" is not empty, only tests that have at least one category
      * listed in "Categories" are Run.
      */
-    [TestClass]
+    [TestFixture]
     public class CellFormatTestBase
     {
         private static POILogger logger = POILogFactory.GetLogger(typeof(CellFormatTestBase));

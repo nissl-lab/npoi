@@ -20,7 +20,7 @@ namespace TestCases.HSSF.Record
     using System;
     using System.Collections.Generic;
     using System.IO;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.Util;
     using NPOI.HSSF.Record;
 
@@ -33,10 +33,10 @@ namespace TestCases.HSSF.Record
      *
      * @author Yegor Kozlov
      */
-    [TestClass]
+    [TestFixture]
     public class TestInterfaceEndRecord
     {
-        [TestMethod]
+        [Test]
         public void TestCreate()
         {
             InterfaceEndRecord record = InterfaceEndRecord.Instance;
@@ -48,7 +48,7 @@ namespace TestCases.HSSF.Record
          * Although it violates the spec, Excel silently Converts this
          * data to an {@link InterfaceHdrRecord}.
          */
-        [TestMethod]
+        [Test]
         public void TestUnexpectedBytes_bug47251()
         {
             String hex = "" +

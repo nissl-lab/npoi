@@ -20,7 +20,7 @@ namespace TestCases.HSSF.Record
     using System;
     using System.IO;
     using System.Text;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.HSSF.UserModel;
     using NPOI.SS.Formula.PTG;
     using NPOI.SS.UserModel;
@@ -34,7 +34,7 @@ namespace TestCases.HSSF.Record
      *
      * @author Yegor Kozlov
      */
-    [TestClass]
+    [TestFixture]
     public class TestTextObjectRecord
     {
 
@@ -49,7 +49,7 @@ namespace TestCases.HSSF.Record
             "00 0D 00 00 00 00 00 00 00"
         );
 
-        [TestMethod]
+        [Test]
         public void TestRead()
         {
 
@@ -62,7 +62,7 @@ namespace TestCases.HSSF.Record
             Assert.AreEqual(TextObjectRecord.TEXT_ORIENTATION_NONE, record.TextOrientation);
             Assert.AreEqual("Hello, World!", record.Str.String);
         }
-        [TestMethod]
+        [Test]
         public void TestWrite()
         {
             HSSFRichTextString str = new HSSFRichTextString("Hello, World!");
@@ -87,7 +87,7 @@ namespace TestCases.HSSF.Record
         /**
          * Zero {@link ContinueRecord}s follow a {@link TextObjectRecord} if the text is empty
          */
-        [TestMethod]
+        [Test]
         public void TestWriteEmpty()
         {
             HSSFRichTextString str = new HSSFRichTextString("");
@@ -111,7 +111,7 @@ namespace TestCases.HSSF.Record
         /**
          * Test that TextObjectRecord Serializes logs records properly.
          */
-        [TestMethod]
+        [Test]
         public void TestLongRecords()
         {
             int[] length = { 1024, 2048, 4096, 8192, 16384 }; //test against strings of different length
@@ -141,7 +141,7 @@ namespace TestCases.HSSF.Record
         /**
          * Test cloning
          */
-        [TestMethod]
+        [Test]
         public void TestClone()
         {
             String text = "Hello, World";
@@ -187,7 +187,7 @@ namespace TestCases.HSSF.Record
                 "02 00 00 00 00 00 00 00 "
             );
 
-        [TestMethod]
+        [Test]
         public void TestLinkFormula()
         {
             RecordInputStream is1 = new RecordInputStream(new MemoryStream(linkData));

@@ -18,7 +18,7 @@
 namespace TestCases.SS.Formula.PTG
 {
     using System;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.HSSF.UserModel;
     using NPOI.SS.UserModel;
     using NPOI.SS.Util;
@@ -29,7 +29,7 @@ namespace TestCases.SS.Formula.PTG
      * 
      * @author Stephen Wolke (smwolke at geistig.com)
      */
-    [TestClass]
+    [TestFixture]
     public class TestExternalNameReference
     {
         // not used: double MARKUP_COST = 1.9d;
@@ -42,7 +42,7 @@ namespace TestCases.SS.Formula.PTG
         /// <summary>
         ///  Some of the tests are depending on the american culture.
         /// </summary>
-        [TestInitialize()]
+        [SetUp]
         public void InitializeCultere()
         {
             System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
@@ -51,7 +51,7 @@ namespace TestCases.SS.Formula.PTG
         /**
          * Tests <c>NameXPtg for external cell reference by name</c> and logic in Workbook below that   
          */
-        [TestMethod]
+        [Test]
         public void TestReadCalcSheet()
         {
             try
@@ -78,7 +78,7 @@ namespace TestCases.SS.Formula.PTG
                 Assert.Fail(e.Message);
             }
         }
-        [TestMethod]
+        [Test]
         public void TestReadReferencedSheet()
         {
             try
@@ -95,7 +95,7 @@ namespace TestCases.SS.Formula.PTG
                 Assert.Fail(e.Message);
             }
         }
-        [TestMethod]
+        [Test]
         public void TestEvaluate()
         {
             HSSFWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("XRefCalc.xls");

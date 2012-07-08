@@ -15,10 +15,10 @@
    limitations under the License.
 ==================================================================== */
 
-namespace TestCases.HPSF.basic
+namespace TestCases.HPSF.Basic
 {
     using System.IO;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.HSSF.UserModel;
     using System;
     using NPOI.SS.UserModel;
@@ -26,7 +26,7 @@ namespace TestCases.HPSF.basic
     /**
      * Tests various bugs have been fixed
      */
-    [TestClass]
+    [TestFixture]
     public class TestHPSFBugs
     {
         /**
@@ -34,7 +34,7 @@ namespace TestCases.HPSF.basic
          *  then add some properties to it, save +
          *  reload, and still access & change them.
          */
-        [TestMethod]
+        [Test]
         public void Test48832()
         {
             HSSFWorkbook wb = new HSSFWorkbook();

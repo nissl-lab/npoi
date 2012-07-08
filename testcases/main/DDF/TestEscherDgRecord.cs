@@ -24,14 +24,14 @@ namespace TestCases.DDF
     using System.Collections.Generic;
     using System.IO;
 
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.DDF;
     using NPOI.Util;
 
-    [TestClass]
+    [TestFixture]
     public class TestEscherDgRecord
     {
-        [TestMethod]
+        [Test]
         public void TestSerialize()
         {
             EscherDgRecord r = CreateRecord();
@@ -46,7 +46,7 @@ namespace TestCases.DDF
                     "01, 04, 00, 00, ]",     // The last MSOSPID given to an SP in this DG
                     HexDump.ToHex(data));
         }
-        [TestMethod]
+        [Test]
         public void TestFillFields()
         {
             String hexData = "10 00 " +
@@ -62,7 +62,7 @@ namespace TestCases.DDF
             Assert.AreEqual(2, r.NumShapes);
             Assert.AreEqual(1025, r.LastMSOSPID);
         }
-        [TestMethod]
+        [Test]
         public void TestToString()
         {
             String nl = Environment.NewLine;

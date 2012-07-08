@@ -18,7 +18,7 @@
 namespace TestCases.HSSF.UserModel
 {
     using System;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.HSSF.Record;
     using NPOI.HSSF.Record.Aggregates;
     using NPOI.HSSF.UserModel;
@@ -32,14 +32,14 @@ namespace TestCases.HSSF.UserModel
      * @author Yegor Kozlov
      * @author Josh Micich
      */
-    [TestClass]
+    [TestFixture]
     public class TestHSSFSheetUpdateArrayFormulas
     {
 
         // Test methods common with XSSF are in superclass
         // Local methods here test HSSF-specific details of updating array formulas
 
-        [TestMethod]
+        [Test]
         public void TestHSSFSetArrayFormula_SingleCell()
         {
             IWorkbook workbook = new HSSFWorkbook();
@@ -66,7 +66,7 @@ namespace TestCases.HSSF.UserModel
         /**
          * Makes sure the internal state of HSSFSheet is consistent After removing array formulas
          */
-        [TestMethod]
+        [Test]
         public void TestAddRemoveArrayFormulas_recordUpdates()
         {
             IWorkbook wb = new HSSFWorkbook();
@@ -95,7 +95,7 @@ namespace TestCases.HSSF.UserModel
             SharedValueManager svm = TestSharedValueManager.ExtractFromRRA(rra);
             if (svm.GetArrayRecord(4, 1) != null)
             {
-                throw new AssertFailedException("Array record was not cleaned up properly.");
+                throw new AssertionException("Array record was not cleaned up properly.");
             }
         }
 
@@ -103,7 +103,7 @@ namespace TestCases.HSSF.UserModel
         {
             if (recs.Length <= index)
             {
-                throw new AssertFailedException("Expected (" + cls.Name + ") at index "
+                throw new AssertionException("Expected (" + cls.Name + ") at index "
                         + index + " but array length is " + recs.Length + ".");
             }
             Assert.AreEqual(cls, recs[index].GetType());

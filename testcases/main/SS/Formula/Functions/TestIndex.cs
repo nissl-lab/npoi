@@ -19,7 +19,7 @@ namespace TestCases.SS.Formula.Functions
 {
 
     using System;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.SS.Formula;
     using NPOI.SS.Formula.Eval;
     using NPOI.SS.Util;
@@ -37,7 +37,7 @@ namespace TestCases.SS.Formula.Functions
      *
      * @author Josh Micich
      */
-    [TestClass]
+    [TestFixture]
     public class TestIndex
     {
 
@@ -54,7 +54,7 @@ namespace TestCases.SS.Formula.Functions
         /**
          * For the case when the first argument to INDEX() is an area reference
          */
-        [TestMethod]
+        [Test]
         public void TestEvaluateAreaReference()
         {
 
@@ -110,7 +110,7 @@ namespace TestCases.SS.Formula.Functions
          * Tests expressions like "INDEX(A1:C1,,2)".<br/>
          * This problem was found while fixing bug 47048 and is observable up to svn r773441.
          */
-        [TestMethod]
+        [Test]
         public void TestMissingArg()
         {
             ValueEval[] values = {
@@ -129,7 +129,7 @@ namespace TestCases.SS.Formula.Functions
             {
                 if (e.Message.Equals("Unexpected arg eval type (NPOI.hssf.Record.Formula.Eval.MissingArgEval"))
                 {
-                    throw new AssertFailedException("Identified bug 47048b - INDEX() should support missing-arg");
+                    throw new AssertionException("Identified bug 47048b - INDEX() should support missing-arg");
                 }
                 throw e;
             }
@@ -145,7 +145,7 @@ namespace TestCases.SS.Formula.Functions
          * A formula like "OFFSET(INDEX(A1:B2,2,1),1,1,1,1)" should return the value of cell B3.
          * This works because the INDEX() function returns a reference to A2 (not the value of A2)
          */
-        [TestMethod]
+        [Test]
         public void TestReferenceResult()
         {
             ValueEval[] values = new ValueEval[4];

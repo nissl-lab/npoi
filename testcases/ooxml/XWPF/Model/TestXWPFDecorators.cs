@@ -21,7 +21,7 @@ namespace NPOI.XWPF.Model
 
 
 
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
 
     using NPOI.XWPF;
     using NPOI.XWPF.UserModel;
@@ -29,13 +29,13 @@ namespace NPOI.XWPF.Model
     /**
      * Tests for the various XWPF decorators
      */
-    [TestClass]
+    [TestFixture]
     public class TestXWPFDecorators
     {
         private XWPFDocument simple;
         private XWPFDocument hyperlink;
         private XWPFDocument comments;
-        [TestInitialize]
+        [SetUp]
         public void SetUp()
         {
             simple = XWPFTestDataSamples.OpenSampleDocument("SampleDoc.docx");
@@ -43,7 +43,7 @@ namespace NPOI.XWPF.Model
             comments = XWPFTestDataSamples.OpenSampleDocument("WordWithAttachments.docx");
         }
 
-        [TestMethod]
+        [Test]
         public void TestHyperlink()
         {
             XWPFParagraph ps;
@@ -92,7 +92,7 @@ namespace NPOI.XWPF.Model
             );
         }
 
-        [TestMethod]
+        [Test]
         public void TestComments()
         {
             int numComments = 0;

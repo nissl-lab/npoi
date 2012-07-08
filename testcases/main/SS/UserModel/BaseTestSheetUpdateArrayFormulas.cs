@@ -18,7 +18,7 @@
 namespace TestCases.SS.UserModel
 {
     using System;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.SS.Formula;
     using NPOI.SS.UserModel;
     using NPOI.SS.Util;
@@ -32,7 +32,7 @@ namespace TestCases.SS.UserModel
      * @author Yegor Kozlov
      * @author Josh Micich
      */
-    [TestClass]
+    [TestFixture]
     public class BaseTestSheetUpdateArrayFormulas
     {
         protected ITestDataProvider _testDataProvider;
@@ -44,7 +44,7 @@ namespace TestCases.SS.UserModel
         {
             _testDataProvider = TestDataProvider;
         }
-        [TestMethod]
+        [Test]
         public void TestAutoCreateOtherCells()
         {
             IWorkbook workbook = _testDataProvider.CreateWorkbook();
@@ -66,7 +66,7 @@ namespace TestCases.SS.UserModel
         /**
          *  Set Single-cell array formula
          */
-        [TestMethod]
+        [Test]
         public void TestSetArrayFormula_SingleCell()
         {
             ICell[] cells;
@@ -105,7 +105,7 @@ namespace TestCases.SS.UserModel
         /**
          * Set multi-cell array formula
          */
-        [TestMethod]
+        [Test]
         public void TestSetArrayFormula_multiCell()
         {
             IWorkbook workbook = _testDataProvider.CreateWorkbook();
@@ -140,7 +140,7 @@ namespace TestCases.SS.UserModel
          * Passing an incorrect formula to sheet.SetArrayFormula
          *  should throw FormulaParseException
          */
-        [TestMethod]
+        [Test]
         public void TestSetArrayFormula_incorrectFormula()
         {
             IWorkbook workbook = _testDataProvider.CreateWorkbook();
@@ -162,7 +162,7 @@ namespace TestCases.SS.UserModel
          * Calls of cell.GetArrayFormulaRange and sheet.RemoveArrayFormula
          * on a not-array-formula cell throw InvalidOperationException
          */
-        [TestMethod]
+        [Test]
         public void TestArrayFormulas_illegalCalls()
         {
             IWorkbook workbook = _testDataProvider.CreateWorkbook();
@@ -194,7 +194,7 @@ namespace TestCases.SS.UserModel
         /**
          * create and remove array formulas
          */
-        [TestMethod]
+        [Test]
         public void TestRemoveArrayFormula()
         {
             IWorkbook workbook = _testDataProvider.CreateWorkbook();
@@ -236,7 +236,7 @@ namespace TestCases.SS.UserModel
         /**
          * Test that when Reading a workbook from input stream, array formulas are recognized
          */
-        [TestMethod]
+        [Test]
         public void TestReadArrayFormula()
         {
             ICell[] cells;
@@ -275,7 +275,7 @@ namespace TestCases.SS.UserModel
         /**
          * Test that we can Set pre-calculated formula result for array formulas
          */
-        [TestMethod]
+        [Test]
         public void TestModifyArrayCells_setFormulaResult()
         {
             IWorkbook workbook = _testDataProvider.CreateWorkbook();
@@ -302,7 +302,7 @@ namespace TestCases.SS.UserModel
                 Assert.AreEqual(fmlaResult, mcell.NumericCellValue);
             }
         }
-        [TestMethod]
+        [Test]
         public void TestModifyArrayCells_setCellType()
         {
             IWorkbook workbook = _testDataProvider.CreateWorkbook();
@@ -343,7 +343,7 @@ namespace TestCases.SS.UserModel
                 Assert.IsTrue(mcell.IsPartOfArrayFormulaGroup);
             }
         }
-        [TestMethod]
+        [Test]
         public void TestModifyArrayCells_setCellFormula()
         {
             IWorkbook workbook = _testDataProvider.CreateWorkbook();
@@ -389,7 +389,7 @@ namespace TestCases.SS.UserModel
                 Assert.IsTrue(mcell.IsPartOfArrayFormulaGroup);
             }
         }
-        [TestMethod]
+        [Test]
         public void TestModifyArrayCells_RemoveCell()
         {
             IWorkbook workbook = _testDataProvider.CreateWorkbook();
@@ -436,7 +436,7 @@ namespace TestCases.SS.UserModel
                 Assert.AreEqual(CellType.FORMULA, mcell.CellType);
             }
         }
-        [TestMethod]
+        [Test]
         public void TestModifyArrayCells_RemoveRow()
         {
             IWorkbook workbook = _testDataProvider.CreateWorkbook();
@@ -484,7 +484,7 @@ namespace TestCases.SS.UserModel
                 Assert.AreEqual(CellType.FORMULA, mcell.CellType);
             }
         }
-        [TestMethod]
+        [Test]
         public void TestModifyArrayCells_mergeCells()
         {
             IWorkbook workbook = _testDataProvider.CreateWorkbook();
@@ -518,7 +518,7 @@ namespace TestCases.SS.UserModel
             //the number of merged regions remains the same
             Assert.AreEqual(1, sheet.NumMergedRegions);
         }
-        [TestMethod]
+        [Test]
         public void TestModifyArrayCells_ShiftRows()
         {
             IWorkbook workbook = _testDataProvider.CreateWorkbook();

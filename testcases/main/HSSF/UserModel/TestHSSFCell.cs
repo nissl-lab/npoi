@@ -22,7 +22,7 @@ namespace TestCases.HSSF.UserModel
     using NPOI.HSSF.Util;
     using NPOI.HSSF.UserModel;
 
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using TestCases.HSSF;
     using NPOI.SS.UserModel;
     using NPOI.HSSF.Record;
@@ -36,7 +36,7 @@ namespace TestCases.HSSF.UserModel
      * @author  Dan Sherman (dsherman at isisph.com)
      * @author Alex Jacoby (ajacoby at gmail.com)
      */
-    [TestClass]
+    [TestFixture]
     public class TestHSSFCell : BaseTestCell
     {
         public TestHSSFCell()
@@ -58,7 +58,7 @@ namespace TestCases.HSSF.UserModel
         /**
          * Test that Boolean and Error types (BoolErrRecord) are supported properly.
          */
-        //[TestMethod]
+        //[Test]
         //public void TestBoolErr()
         //{
 
@@ -103,7 +103,7 @@ namespace TestCases.HSSF.UserModel
          *  is working properly. Conversion of the date is also an issue,
          *  but there's a separate unit Test for that.
          */
-        [TestMethod]
+        [Test]
         public void TestDateWindowingRead()
         {
             DateTime date = new DateTime(2000, 1, 1);
@@ -129,7 +129,7 @@ namespace TestCases.HSSF.UserModel
          * previous Test ({@link #TestDateWindowingRead}) Assert.Fails, the
          * results of this Test are meaningless.
          */
-        [TestMethod]
+        [Test]
         public void TestDateWindowingWrite()
         {
             DateTime date = new DateTime(2000, 1, 1);
@@ -158,7 +158,7 @@ namespace TestCases.HSSF.UserModel
  * changed to number/boolean/error.  Excel silently ignores the extra record, but some POI
  * versions (prior to bug 46213 / r717883) crash instead.
  */
-        [TestMethod]
+        [Test]
         public void TestCachedTypeChange()
         {
             HSSFSheet sheet = (HSSFSheet)new HSSFWorkbook().CreateSheet("Sheet1");
@@ -170,7 +170,7 @@ namespace TestCases.HSSF.UserModel
             NPOI.HSSF.Record.Record[] recs = RecordInspector.GetRecords(sheet, 0);
             if (recs.Length == 28 && recs[23] is StringRecord)
             {
-                throw new AssertFailedException("Identified bug - leftover StringRecord");
+                throw new AssertionException("Identified bug - leftover StringRecord");
             }
             ConfirmStringRecord(sheet, false);
 
@@ -210,7 +210,7 @@ namespace TestCases.HSSF.UserModel
         /**
          *  The maximum length of cell contents (text) is 32,767 characters.
          */
-        [TestMethod]
+        [Test]
         public void TestMaxTextLength()
         {
             HSSFSheet sheet = (HSSFSheet)new HSSFWorkbook().CreateSheet();
@@ -265,7 +265,7 @@ namespace TestCases.HSSF.UserModel
         /**
          * Tests that the active cell can be correctly read and set
          */
-        [TestMethod]
+        [Test]
         public void TestActiveCell()
         {
             //read in sample
@@ -297,7 +297,7 @@ namespace TestCases.HSSF.UserModel
         /**
          * Test reading hyperlinks
          */
-        [TestMethod]
+        [Test]
         public void TestWithHyperlink()
         {
 
@@ -317,7 +317,7 @@ namespace TestCases.HSSF.UserModel
         /**
          * Test reading hyperlinks
          */
-        [TestMethod]
+        [Test]
         public void TestWithTwoHyperlinks()
         {
 
@@ -343,7 +343,7 @@ namespace TestCases.HSSF.UserModel
         }
 
 
-        [TestMethod]
+        [Test]
         public void TestHSSFCellToStringWithDataFormat()
         {
             HSSFWorkbook wb = new HSSFWorkbook();
@@ -360,7 +360,7 @@ namespace TestCases.HSSF.UserModel
             cell.CellStyle = cellStyle2;
             Assert.AreEqual("2009-08/20", cell.ToString());
         }
-        [TestMethod]
+        [Test]
         public void TestGetDataFormatUniqueIndex()
         {
             HSSFWorkbook wb = new HSSFWorkbook();
@@ -376,7 +376,7 @@ namespace TestCases.HSSF.UserModel
          * Test to ensure we can only assign cell styles that belong
          *  to our workbook, and not those from other workbooks.
          */
-        [TestMethod]
+        [Test]
         public void TestCellStyleWorkbookMatch()
         {
             HSSFWorkbook wbA = new HSSFWorkbook();
@@ -421,7 +421,7 @@ namespace TestCases.HSSF.UserModel
         /**
   * HSSF prior to version 3.7 had a bug: it could write a NaN but could not read such a file back.
   */
-        [TestMethod]
+        [Test]
         public void TestReadNaN()
         {
             HSSFWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("49761.xls");

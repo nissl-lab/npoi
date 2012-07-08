@@ -26,7 +26,7 @@ namespace TestCases.HSSF.UserModel
     using NPOI.SS.UserModel;
 
 
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
 
     /**
      * Tests the capabilities of the EscherGraphics class.
@@ -37,7 +37,7 @@ namespace TestCases.HSSF.UserModel
      *
      * @author Glen Stampoultzis (glens at apache.org)
      */
-    [TestClass]
+    [TestFixture]
     public class TestEscherGraphics
     {
         private HSSFWorkbook workbook;
@@ -46,7 +46,7 @@ namespace TestCases.HSSF.UserModel
         private HSSFShapeGroup escherGroupB;
         private EscherGraphics graphics;
 
-        [TestInitialize]
+        [SetUp]
         public void SetUp()
         {
             System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
@@ -61,7 +61,7 @@ namespace TestCases.HSSF.UserModel
 
         }
 
-        [TestMethod]
+        [Test]
         public void TestGetFont()
         {
             System.Drawing.Font f = graphics.Font;
@@ -81,7 +81,7 @@ namespace TestCases.HSSF.UserModel
         //    Assert.AreEqual(7, fontMetrics.charWidth('X'));
         //    Assert.AreEqual("java.awt.Font[family=Arial,name=Arial,style=plain,size=10]", fontMetrics.GetFont().ToString());
         //}
-        [TestMethod]
+        [Test]
         public void TestSetFont()
         {
             System.Drawing.Font f = new System.Drawing.Font("Helvetica", 12,FontStyle.Regular);
@@ -89,14 +89,14 @@ namespace TestCases.HSSF.UserModel
             Assert.AreEqual(f, graphics.Font);
         }
 
-        [TestMethod]
+        [Test]
         public void TestSetColor()
         {
             graphics.SetColor(System.Drawing.Color.Red);
             Assert.AreEqual(System.Drawing.Color.Red, graphics.Color);
         }
 
-        [TestMethod]
+        [Test]
         public void TestFillRect()
         {
             graphics.FillRect(10, 10, 20, 20);
@@ -108,7 +108,7 @@ namespace TestCases.HSSF.UserModel
             Assert.AreEqual(30, s.Anchor.Dx2);
         }
 
-        [TestMethod]
+        [Test]
         public void TestDrawString()
         {
             graphics.DrawString("This is a Test", 10, 10);
@@ -116,7 +116,7 @@ namespace TestCases.HSSF.UserModel
             Assert.AreEqual("This is a Test", t.String.String.ToString());
         }
 
-        [TestMethod]
+        [Test]
         public void TestGetDataBackAgain()
         {
             HSSFSheet s;

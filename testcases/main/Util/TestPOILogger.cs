@@ -29,7 +29,7 @@ using System;
 using System.Text;
 using System.Collections.Generic;
 
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 using NPOI.Util;
 
@@ -38,7 +38,7 @@ namespace TestCases.Util
     /// <summary>
     /// Summary description for TestPOILogger
     /// </summary>
-    [TestClass]
+    [TestFixture]
     public class TestPOILogger
     {
         public TestPOILogger()
@@ -48,7 +48,7 @@ namespace TestCases.Util
             //
         }
 
-        [TestMethod]
+        [Test]
         public void TestVariousLogTypes()
         {
             //NKB Testing only that logging classes use gives no exception

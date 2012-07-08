@@ -29,7 +29,7 @@ using System.Text;
 using System.Collections.Generic;
 using System.IO;
 
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 using NPOI.POIFS.Storage;
 using NPOI.POIFS.Common;
@@ -40,10 +40,10 @@ namespace TestCases.POIFS.Storage
     /// <summary>
     /// Summary description for TestBATBlock
     /// </summary>
-    [TestClass]
+    [TestFixture]
     public class TestBATBlock
     {
-        [TestMethod]
+        [Test]
         public void TestCreateBATBlocks()
         {
 
@@ -121,7 +121,7 @@ namespace TestCases.POIFS.Storage
          *
          * @exception IOException
          */
-        [TestMethod]
+        [Test]
         public void TestCreateXBATBlocks()
         {
 
@@ -212,7 +212,7 @@ namespace TestCases.POIFS.Storage
         /**
          * Test calculateXBATStorageRequirements
          */
-        [TestMethod]
+        [Test]
         public void TestCalculateXBATStorageRequirements()
         {
             int[] blockCounts =
@@ -236,7 +236,7 @@ namespace TestCases.POIFS.Storage
         /**
          * Test entriesPerBlock
          */
-        [TestMethod]
+        [Test]
         public void TestEntriesPerBlock()
         {
             Assert.AreEqual(128, BATBlock.EntriesPerBlock);
@@ -245,7 +245,7 @@ namespace TestCases.POIFS.Storage
         /**
          * Test entriesPerXBATBlock
          */
-        [TestMethod]
+        [Test]
         public void TestEntriesPerXBATBlock()
         {
             Assert.AreEqual(127, BATBlock.EntriesPerXBATBlock);
@@ -254,12 +254,12 @@ namespace TestCases.POIFS.Storage
         /**
          * Test getXBATChainOffset
          */
-        [TestMethod]
+        [Test]
         public void TestGetXBATChainOffset()
         {
             Assert.AreEqual(508, BATBlock.XBATChainOffset);
         }
-        [TestMethod]
+        [Test]
         public void TestCalculateMaximumSize()
         {
             // Zero fat blocks isn't technically valid, but it'd be header only
@@ -321,7 +321,7 @@ namespace TestCases.POIFS.Storage
                   BATBlock.CalculateMaximumSize(POIFSConstants.LARGER_BIG_BLOCK_SIZE_DETAILS, 112)
             );
         }
-        [TestMethod]
+        [Test]
         public void TestGetBATBlockAndIndex()
         {
             HeaderBlock header = new HeaderBlock(POIFSConstants.SMALLER_BIG_BLOCK_SIZE_DETAILS);

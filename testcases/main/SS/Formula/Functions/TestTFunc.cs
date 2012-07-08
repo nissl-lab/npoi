@@ -19,7 +19,7 @@ namespace TestCases.SS.Formula.Functions
 {
 
     using NPOI.SS.Formula.Eval;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using System;
     using NPOI.SS.Formula.Functions;
 
@@ -29,7 +29,7 @@ namespace TestCases.SS.Formula.Functions
      *
      * @author Josh Micich
      */
-    [TestClass]
+    [TestFixture]
     public class TestTFunc
     {
 
@@ -61,7 +61,7 @@ namespace TestCases.SS.Formula.Functions
             StringEval se = (StringEval)eval;
             Assert.AreEqual(text, se.StringValue);
         }
-        [TestMethod]
+        [Test]
         public void TestTextValues()
         {
 
@@ -78,7 +78,7 @@ namespace TestCases.SS.Formula.Functions
             ValueEval eval = invokeT(arg);
             Assert.IsTrue(arg == eval);
         }
-        [TestMethod]
+        [Test]
         public void TestErrorValues()
         {
 
@@ -98,14 +98,14 @@ namespace TestCases.SS.Formula.Functions
             ValueEval eval = invokeT(arg);
             ConfirmString(eval, "");
         }
-        [TestMethod]
+        [Test]
         public void TestOtherValues()
         {
             ConfirmOther(new NumberEval(2));
             ConfirmOther(BoolEval.FALSE);
             ConfirmOther(BlankEval.instance);  // can this particular case be verified?
         }
-        [TestMethod]
+        [Test]
         public void TestRefValues()
         {
             ValueEval eval;
@@ -123,7 +123,7 @@ namespace TestCases.SS.Formula.Functions
             eval = invokeTWithReference(ErrorEval.NAME_INVALID);
             Assert.IsTrue(eval == ErrorEval.NAME_INVALID);
         }
-        [TestMethod]
+        [Test]
         public void TestAreaArg()
         {
             ValueEval[] areaValues = new ValueEval[] {

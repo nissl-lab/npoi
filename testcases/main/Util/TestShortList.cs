@@ -19,7 +19,7 @@ namespace TestCases.Util
 {
     using System;
 
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.Util;
 
     /**
@@ -27,10 +27,10 @@ namespace TestCases.Util
      *
      * @author Marc Johnson
      */
-    [TestClass]
+    [TestFixture]
     public class TestShortList
     {
-        [TestMethod]
+        [Test]
         public void TestConstructors()
         {
             ShortList list = new ShortList();
@@ -45,7 +45,7 @@ namespace TestCases.Util
 
             Assert.IsTrue(list3.IsEmpty());
         }
-        [TestMethod]
+        [Test]
         public void TestAdd()
         {
             ShortList list = new ShortList();
@@ -124,7 +124,7 @@ namespace TestCases.Util
                 Assert.AreEqual(j, list.Get(999 - j));
             }
         }
-        [TestMethod]
+        [Test]
         public void TestAddAll()
         {
             ShortList list = new ShortList();
@@ -199,7 +199,7 @@ namespace TestCases.Util
             Assert.AreEqual(list.Get(4), empty.Get(9));
             Assert.AreEqual(list.Get(4), empty.Get(14));
         }
-        [TestMethod]
+        [Test]
         public void TestClear()
         {
             ShortList list = new ShortList();
@@ -221,7 +221,7 @@ namespace TestCases.Util
                 Assert.AreEqual(j + 1, list.Get(j));
             }
         }
-        [TestMethod]
+        [Test]
         public void TestContains()
         {
             ShortList list = new ShortList();
@@ -242,7 +242,7 @@ namespace TestCases.Util
                 }
             }
         }
-        [TestMethod]
+        [Test]
         public void TestContainsAll()
         {
             ShortList list = new ShortList();
@@ -263,7 +263,7 @@ namespace TestCases.Util
             Assert.IsTrue(!list2.ContainsAll(list));
             Assert.IsTrue(!list.ContainsAll(list2));
         }
-        [TestMethod]
+        [Test]
         public void TestEquals()
         {
             ShortList list = new ShortList();
@@ -293,7 +293,7 @@ namespace TestCases.Util
             Assert.IsTrue(!list.Equals(list2));
             Assert.IsTrue(!list2.Equals(list));
         }
-        [TestMethod]
+        [Test]
         public void TestGet()
         {
             ShortList list = new ShortList();
@@ -321,7 +321,7 @@ namespace TestCases.Util
                 }
             }
         }
-        [TestMethod]
+        [Test]
         public void TestIndexOf()
         {
             ShortList list = new ShortList();
@@ -342,7 +342,7 @@ namespace TestCases.Util
                 }
             }
         }
-        [TestMethod]
+        [Test]
         public void TestIsEmpty()
         {
             ShortList list1 = new ShortList();
@@ -365,7 +365,7 @@ namespace TestCases.Util
             Assert.IsTrue(list2.IsEmpty());
             Assert.IsTrue(list3.IsEmpty());
         }
-        [TestMethod]
+        [Test]
         public void TestLastIndexOf()
         {
             ShortList list = new ShortList();
@@ -386,7 +386,7 @@ namespace TestCases.Util
                 }
             }
         }
-        [TestMethod]
+        [Test]
         public void TestRemove()
         {
             ShortList list = new ShortList();
@@ -421,7 +421,7 @@ namespace TestCases.Util
                 // as expected
             }
         }
-        [TestMethod]
+        [Test]
         public void TestRemoveValue()
         {
             ShortList list = new ShortList();
@@ -440,7 +440,7 @@ namespace TestCases.Util
                 Assert.IsTrue(!list.RemoveValue(j));
             }
         }
-        [TestMethod]
+        [Test]
         public void TestRemoveAll()
         {
             ShortList list = new ShortList();
@@ -474,7 +474,7 @@ namespace TestCases.Util
             listCopy.RemoveAll(listEven);
             Assert.IsTrue(listCopy.IsEmpty());
         }
-        [TestMethod]
+        [Test]
         public void TestRetainAll()
         {
             ShortList list = new ShortList();
@@ -508,7 +508,7 @@ namespace TestCases.Util
             listCopy.RetainAll(listOdd);
             Assert.IsTrue(listCopy.IsEmpty());
         }
-        [TestMethod]
+        [Test]
         public void TestSet()
         {
             ShortList list = new ShortList();
@@ -537,7 +537,7 @@ namespace TestCases.Util
                 }
             }
         }
-        [TestMethod]
+        [Test]
         public void TestSize()
         {
             ShortList list = new ShortList();
@@ -555,7 +555,7 @@ namespace TestCases.Util
                 Assert.AreEqual(999 - j, list.Count);
             }
         }
-        [TestMethod]
+        [Test]
         public void TestToArray()
         {
             ShortList list = new ShortList();

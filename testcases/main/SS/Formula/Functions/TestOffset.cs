@@ -20,14 +20,14 @@ namespace TestCases.SS.Formula.Functions
 
     using NPOI.SS.Formula.Eval;
     using NPOI.SS.Formula.Functions;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
 
     /**
      * Tests for OFFSET function implementation
      *
      * @author Josh Micich
      */
-    [TestClass]
+    [TestFixture]
     public class TestOffset
     {
 
@@ -39,7 +39,7 @@ namespace TestCases.SS.Formula.Functions
             }
             catch (EvaluationException e)
             {
-                throw new AssertFailedException("Unexpected error '" + e.GetErrorEval().ToString() + "'.");
+                throw new AssertionException("Unexpected error '" + e.GetErrorEval().ToString() + "'.");
             }
         }
         /**
@@ -48,7 +48,7 @@ namespace TestCases.SS.Formula.Functions
          * Fractional values are silently tRuncated.
          * TRuncation is toward negative infInity.
          */
-        [TestMethod]
+        [Test]
         public void TestDoubleConversion()
         {
 
@@ -73,7 +73,7 @@ namespace TestCases.SS.Formula.Functions
             ConfirmDoubleConvert(-2.00, -2);
             ConfirmDoubleConvert(-2.01, -3);
         }
-        [TestMethod]
+        [Test]
         public void TestLinearOffsetRange()
         {
             Offset.LinearOffsetRange lor;

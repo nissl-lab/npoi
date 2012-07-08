@@ -19,16 +19,16 @@ namespace TestCases.SS.Formula.Functions
 {
     using NPOI.HSSF.UserModel;
     using NPOI.SS.UserModel;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     /**
      * Tests for Excel function ISBLANK()
      * 
      * @author Josh Micich
      */
-    [TestClass]
+    [TestFixture]
     public class TestIsBlank
     {
-        [TestMethod]
+        [Test]
         public void Test3DArea()
         {
             HSSFWorkbook wb = new HSSFWorkbook();

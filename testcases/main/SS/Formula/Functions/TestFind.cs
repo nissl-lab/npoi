@@ -19,7 +19,7 @@ namespace TestCases.SS.Formula.Functions
 {
 
     using System;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.HSSF.UserModel;
     using NPOI.SS.UserModel;
 
@@ -28,10 +28,10 @@ namespace TestCases.SS.Formula.Functions
      * 
      * @author Torstein Svendsen (torstei@officenet.no)
      */
-    [TestClass]
+    [TestFixture]
     public class TestFind
     {
-        [TestMethod]
+        [Test]
         public void TestFind1()
         {
             HSSFWorkbook wb = new HSSFWorkbook();

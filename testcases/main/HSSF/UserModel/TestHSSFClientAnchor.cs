@@ -21,17 +21,17 @@ namespace TestCases.HSSF.UserModel
     using NPOI.DDF;
     using NPOI.HSSF.Model;
     using NPOI.HSSF.UserModel;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     /**
      * Various Tests for HSSFClientAnchor.
      *
      * @author Glen Stampoultzis (glens at apache.org)
      * @author Yegor Kozlov (yegor at apache.org)
      */
-    [TestClass]
+    [TestFixture]
     public class TestHSSFClientAnchor
     {
-        [TestMethod]
+        [Test]
         public void TestGetAnchorHeightInPoints()
         {
             HSSFWorkbook wb = new HSSFWorkbook();
@@ -69,7 +69,7 @@ namespace TestCases.HSSF.UserModel
          * Check that dx1, dx2, dy1 and dy2 are writtem "as is".
          * (Bug 42999 reported that dx1 ans dx2 are swapped if dx1>dx2. It doesn't make sense for client anchors.)
          */
-        [TestMethod]
+        [Test]
         public void TestConvertAnchor()
         {
             HSSFClientAnchor[] anchor = {
@@ -90,7 +90,7 @@ namespace TestCases.HSSF.UserModel
                 Assert.AreEqual(anchor[i].Row2, record.Row2);
             }
         }
-        [TestMethod]
+        [Test]
         public void TestAnchorHeightInPoints()
         {
             HSSFWorkbook wb = new HSSFWorkbook();

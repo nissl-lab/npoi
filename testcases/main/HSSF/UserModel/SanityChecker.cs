@@ -26,7 +26,7 @@ namespace TestCases.HSSF.UserModel
     using NPOI.HSSF.Record.Aggregates;
     using NPOI.HSSF.UserModel;
 
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
 
     /**
      * Designed to Check wither the records written actually make sense.

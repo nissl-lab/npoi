@@ -18,7 +18,7 @@
 namespace TestCases.HSSF.Record
 {
     using System;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.HSSF.Record;
     using NPOI.Util;
 
@@ -27,7 +27,7 @@ namespace TestCases.HSSF.Record
      *
      * @author Josh Micich
      */
-    [TestClass]
+    [TestFixture]
     public class TestRecordInputStream
     {
 
@@ -53,7 +53,7 @@ namespace TestCases.HSSF.Record
                 + "01"	// this bit uncompressed
                 + "1A 59 00 8A 9E 8A " // 3 uncompressed unicode chars
         ;
-        [TestMethod]
+        [Test]
         public void TestChangeOfCompressionFlag_bug25866()
         {
             byte[] changingFlagSimpleData = HexRead.ReadFromString(""
@@ -71,14 +71,14 @@ namespace TestCases.HSSF.Record
             {
                 if ("compressByte in continue records must be 1 while Reading unicode LE string".Equals(e.Message))
                 {
-                    throw new AssertFailedException("Identified bug 45866");
+                    throw new AssertionException("Identified bug 45866");
                 }
 
                 throw e;
             }
             Assert.AreEqual("\u591A\u8A00\u8A9E - Multilingual", actual);
         }
-        [TestMethod]
+        [Test]
         public void TestChangeFromUnCompressedToCompressed()
         {
             byte[] changingFlagSimpleData = HexRead.ReadFromString(""
@@ -90,7 +90,7 @@ namespace TestCases.HSSF.Record
             String actual = in1.ReadCompressedUnicode(18);
             Assert.AreEqual("Multilingual - \u591A\u8A00\u8A9E", actual);
         }
-        [TestMethod]
+        [Test]
         public void TestReadString()
         {
             byte[] changingFlagFullData = HexRead.ReadFromString(""

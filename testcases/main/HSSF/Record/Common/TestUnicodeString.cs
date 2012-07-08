@@ -20,7 +20,7 @@ namespace TestCases.HSSF.Record.Common
     using System;
     using System.IO;
     using System.Text;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.HSSF.Record;
     using NPOI.HSSF.Record.Cont;
     using NPOI.Util;
@@ -31,7 +31,7 @@ namespace TestCases.HSSF.Record.Common
      *
      * @author Jason Height (jheight at apache.org)
      */
-    [TestClass]
+    [TestFixture]
     public class TestUnicodeString
     {
         private static int MAX_DATA_SIZE = RecordInputStream.MAX_RECORD_DATA_SIZE;
@@ -61,7 +61,7 @@ namespace TestCases.HSSF.Record.Common
         int actualSize = size1-size0;
         Assert.AreEqual(expectedSize, actualSize);
     }
-        [TestMethod]
+        [Test]
         public void TestSmallStringSize()
         {
             //Test a basic string
@@ -108,7 +108,7 @@ namespace TestCases.HSSF.Record.Common
             s.ExtendedRst = (/*setter*/null);
             ConfirmSize(21, s);
         }
-        [TestMethod]
+        [Test]
         public void TestPerfectStringSize()
         {
             //Test a basic string
@@ -122,7 +122,7 @@ namespace TestCases.HSSF.Record.Common
             s.OptionFlags = (/*setter*/(byte)0x1);
             ConfirmSize(MAX_DATA_SIZE - 1, s);
         }
-        [TestMethod]
+        [Test]
         public void TestPerfectRichStringSize()
         {
             //Test a rich text string
@@ -141,7 +141,7 @@ namespace TestCases.HSSF.Record.Common
             s.OptionFlags = (/*setter*/(byte)0x9);
             ConfirmSize(MAX_DATA_SIZE - 1, s);
         }
-        [TestMethod]
+        [Test]
         public void TestContinuedStringSize()
         {
             //Test a basic string
@@ -150,7 +150,7 @@ namespace TestCases.HSSF.Record.Common
         }
 
         /** Tests that a string size calculation that fits neatly in two records, the second being a continue*/
-        [TestMethod]
+        [Test]
         public void TestPerfectContinuedStringSize()
         {
             //Test a basic string
@@ -164,7 +164,7 @@ namespace TestCases.HSSF.Record.Common
             UnicodeString s = MakeUnicodeString(strSize);
             ConfirmSize(MAX_DATA_SIZE * 2, s);
         }
-        [TestMethod]
+        [Test]
         public void TestFormatRun()
         {
             UnicodeString.FormatRun fr = new UnicodeString.FormatRun((short)4, (short)0x15c);
@@ -190,7 +190,7 @@ namespace TestCases.HSSF.Record.Common
             Assert.AreEqual(4, fr.CharacterPos);
             Assert.AreEqual(0x15c, fr.FontIndex);
         }
-        [TestMethod]
+        [Test]
         public void TestExtRstFromEmpty()
         {
             UnicodeString.ExtRst ext = new UnicodeString.ExtRst();
@@ -257,7 +257,7 @@ namespace TestCases.HSSF.Record.Common
             Assert.AreEqual("", ext.PhoneticText);
             Assert.AreEqual(0, ext.PhRuns.Length);
         }
-        [TestMethod]
+        [Test]
         public void TestExtRstFromData()
         {
             byte[] data = new byte[] {
@@ -281,7 +281,7 @@ namespace TestCases.HSSF.Record.Common
             Assert.AreEqual("", ext.PhoneticText);
             Assert.AreEqual(0, ext.PhRuns.Length);
         }
-        [TestMethod]
+        [Test]
         public void TestCorruptExtRstDetection()
         {
             byte[] data = new byte[] {

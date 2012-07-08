@@ -30,7 +30,7 @@ using System.Text;
 using System.Collections;
 using System.IO;
 
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 using NPOI.POIFS.Common;
 using NPOI.POIFS.Storage;
@@ -44,7 +44,7 @@ namespace TestCases.POIFS.Properties
      *
      * @author Marc Johnson
      */
-    [TestClass]
+    [TestFixture]
     public class TestDirectoryProperty
     {
         private DirectoryProperty _property;
@@ -66,7 +66,7 @@ namespace TestCases.POIFS.Properties
          *
          * @exception IOException
          */
-        [TestMethod]
+        [Test]
         public void TestConstructor()
         {
             CreateBasicDirectoryProperty();
@@ -78,7 +78,7 @@ namespace TestCases.POIFS.Properties
          *
          * @exception IOException
          */
-        [TestMethod]
+        [Test]
         public void TestPreWrite()
         {
             CreateBasicDirectoryProperty();
@@ -237,7 +237,7 @@ namespace TestCases.POIFS.Properties
          *
          * @exception IOException
          */
-        [TestMethod]
+        [Test]
         public void TestAddChild()
         {
             CreateBasicDirectoryProperty();
@@ -271,7 +271,7 @@ namespace TestCases.POIFS.Properties
          *
          * @exception IOException
          */
-        [TestMethod]
+        [Test]
         public void TestDeleteChild()
         {
             CreateBasicDirectoryProperty();
@@ -298,7 +298,7 @@ namespace TestCases.POIFS.Properties
          *
          * @exception IOException
          */
-        [TestMethod]
+        [Test]
         public void TestChangeName()
         {
             CreateBasicDirectoryProperty();
@@ -323,7 +323,7 @@ namespace TestCases.POIFS.Properties
          *
          * @exception IOException
          */
-        [TestMethod]
+        [Test]
         public void TestReadingConstructor()
         {
             byte[] input =

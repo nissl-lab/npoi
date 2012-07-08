@@ -18,7 +18,7 @@ namespace TestCases.SS.Formula.Atp
 {
     using NPOI.HSSF.UserModel;
     using NPOI.SS.UserModel;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.HSSF.Model;
     using System;
     using TestCases.HSSF;
@@ -30,7 +30,7 @@ namespace TestCases.SS.Formula.Atp
      * 
      * @author Brendan Nolan
      */
-    [TestClass]
+    [TestFixture]
     public class TestRandBetween
     {
 
@@ -40,7 +40,7 @@ namespace TestCases.SS.Formula.Atp
         private ICell topValueCell;
         private ICell formulaCell;
 
-        [TestInitialize]
+        [SetUp]
         public void SetUp()
         {
             wb = HSSFTestDataSamples.OpenSampleWorkbook("TestRandBetween.xls");
@@ -62,7 +62,7 @@ namespace TestCases.SS.Formula.Atp
         /**
          * Check where values are the same
          */
-        [TestMethod]
+        [Test]
         public void TestRandBetweenSameValues()
         {
 
@@ -81,7 +81,7 @@ namespace TestCases.SS.Formula.Atp
          * Check special case where rounded up bottom value is greater than 
          * top value.
          */
-        [TestMethod]
+        [Test]
         public void TestRandBetweenSpecialCase()
         {
 
@@ -115,7 +115,7 @@ namespace TestCases.SS.Formula.Atp
         /**
          * Check top value of BLANK which Excel will Evaluate as 0
          */
-        [TestMethod]
+        [Test]
         public void TestRandBetweenTopBlank()
         {
 
@@ -130,7 +130,7 @@ namespace TestCases.SS.Formula.Atp
         /**
          * Check where input values are of wrong type
          */
-        [TestMethod]
+        [Test]
         public void TestRandBetweenWrongInputTypes()
         {
             // Check case where bottom input is of the wrong type
@@ -166,7 +166,7 @@ namespace TestCases.SS.Formula.Atp
         /**
          * Check case where bottom is greater than top
          */
-        [TestMethod]
+        [Test]
         public void TestRandBetweenBottomGreaterThanTop()
         {
 
@@ -190,7 +190,7 @@ namespace TestCases.SS.Formula.Atp
         /**
          * Boundary check of Double MIN and MAX values
          */
-        [TestMethod]
+        [Test]
         public void TestRandBetweenBoundaryCheck()
         {
 

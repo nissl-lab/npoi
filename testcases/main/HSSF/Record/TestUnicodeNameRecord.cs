@@ -19,17 +19,17 @@ namespace TestCases.HSSF.Record
 {
 
 
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
 
     using TestCases.HSSF;
     using NPOI.HSSF.UserModel;
     /**
      * 
      */
-    [TestClass]
+    [TestFixture]
     public class TestUnicodeNameRecord
     {
-        [TestMethod]
+        [Test]
         public void TestReadBook()
         {
 

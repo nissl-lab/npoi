@@ -24,13 +24,13 @@ namespace TestCases.DDF
     using System.Collections.Generic;
     using System.IO;
 
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.DDF;
     using NPOI.Util;
-    [TestClass]
+    [TestFixture]
     public class TestEscherOptRecord
     {
-        [TestMethod]
+        [Test]
         public void TestFillFields()
         {
             CheckFillFieldsSimple();
@@ -82,7 +82,7 @@ namespace TestCases.DDF
             Assert.AreEqual(prop2, r.GetEscherProperty(1));
             Assert.AreEqual(prop3, r.GetEscherProperty(2));
         }
-        [TestMethod]
+        [Test]
         public void TestSerialize()
         {
             CheckSerializeSimple();
@@ -139,7 +139,7 @@ namespace TestCases.DDF
             Assert.AreEqual(dataStr, HexDump.ToHex(data));
             Assert.AreEqual(26, bytesWritten);
         }
-        [TestMethod]
+        [Test]
         public void TestToString()
         {
             String nl = Environment.NewLine;
@@ -162,7 +162,7 @@ namespace TestCases.DDF
          * Test serialisation of a particually complex example 
          * This Test is currently broken!
          */
-        [TestMethod]
+        [Test]
         public void TestComplexSerialise()
         {
             byte[] data = new byte[] {
@@ -266,7 +266,7 @@ namespace TestCases.DDF
          *
          * See Bug 41946 for details.
          */
-        [TestMethod]
+        [Test]
         public void Test41946()
         {
             String dataStr1 =
@@ -320,7 +320,7 @@ namespace TestCases.DDF
          * Test that EscherOptRecord can properly Read/Write array properties
          * with empty complex part.
          */
-        [TestMethod]
+        [Test]
         public void TestEmptyArrayProperty()
         {
             EscherOptRecord r = new EscherOptRecord();

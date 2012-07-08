@@ -19,15 +19,15 @@ namespace NPOI.XWPF.UserModel
 {
     using System;
 
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
 
     using NPOI.XWPF;
 
-    [TestClass]
+    [TestFixture]
     public class TestXWPFNumbering
     {
 
-        [TestMethod]
+        [Test]
         public void TestCompareAbstractNum()
         {
             XWPFDocument doc = XWPFTestDataSamples.OpenSampleDocument("Numbering.docx");
@@ -41,7 +41,7 @@ namespace NPOI.XWPF.UserModel
             Assert.AreEqual(abstrNumId, CompareAbstractNum);
         }
 
-        [TestMethod]
+        [Test]
         public void TestAddNumberingToDoc()
         {
             string abstractNumId = "1";

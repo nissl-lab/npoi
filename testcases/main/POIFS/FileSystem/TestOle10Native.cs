@@ -20,7 +20,7 @@ using System;
 using System.IO;
 using System.Collections.Generic;
 
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 using TestCases;
 using NPOI.POIFS.FileSystem;
@@ -30,7 +30,7 @@ namespace TestCases.POIFS.FileSystem
     /// <summary>
     /// Summary description for TestOle10Native
     /// </summary>
-    [TestClass]
+    [TestFixture]
     public class TestOle10Native
     {
         private static POIDataSamples dataSamples = POIDataSamples.GetPOIFSInstance();
@@ -41,7 +41,7 @@ namespace TestCases.POIFS.FileSystem
             //
         }
 
-        [TestMethod]
+        [Test]
         public void TestOleNative()
         {
             POIFSFileSystem fs = new POIFSFileSystem(dataSamples.OpenResourceAsStream("oleObject1.bin"));

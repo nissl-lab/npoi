@@ -26,7 +26,7 @@ namespace TestCases.HSSF.Record.Aggregates
     using System;
     using NPOI.HSSF.Record;
     using NPOI.HSSF.Record.Aggregates;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.Util;
     using NPOI.SS.Formula.PTG;
     using NPOI.HSSF.Model;
@@ -37,10 +37,10 @@ namespace TestCases.HSSF.Record.Aggregates
      *
      * @author  avik
      */
-    [TestClass]
+    [TestFixture]
     public class TestFormulaRecordAggregate
     {
-        [TestMethod]
+        [Test]
         public void TestBasic()
         {
             FormulaRecord f = new FormulaRecord();
@@ -58,7 +58,7 @@ namespace TestCases.HSSF.Record.Aggregates
  * This file seems to open in Excel (2007) with no trouble.  When it is re-saved, Excel omits
  * the extra record.  POI should do the same.
  */
-        [TestMethod]
+        [Test]
         public void TestExtraStringRecord_bug46213()
         {
             FormulaRecord fr = new FormulaRecord();
@@ -76,7 +76,7 @@ namespace TestCases.HSSF.Record.Aggregates
             {
                 if ("String record was  supplied but formula record flag is not  set".Equals(e.Message))
                 {
-                    throw new AssertFailedException("Identified bug 46213");
+                    throw new AssertionException("Identified bug 46213");
                 }
                 throw e;
             }
@@ -86,7 +86,7 @@ namespace TestCases.HSSF.Record.Aggregates
             Assert.AreEqual(1, vraRecs.Length);
             Assert.AreEqual(fr, vraRecs[0]);
         }
-        [TestMethod]
+        [Test]
         public void TestArrayFormulas()
         {
             int rownum = 4;

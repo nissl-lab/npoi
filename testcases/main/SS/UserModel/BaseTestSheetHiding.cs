@@ -19,7 +19,7 @@ namespace TestCases.SS.UserModel
 {
     using System;
 
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
 
     using NPOI.SS;
     using TestCases.SS;
@@ -27,7 +27,7 @@ namespace TestCases.SS.UserModel
 
     /**
      */
-    [TestClass]
+    [TestFixture]
     public class BaseTestSheetHiding
     {
 
@@ -50,14 +50,14 @@ namespace TestCases.SS.UserModel
             _file1 = file1;
             _file2 = file2;
         }
-        [TestInitialize]
+        [SetUp]
         public void SetUp()
         {
             wbH = _testDataProvider.OpenSampleWorkbook(_file1);
             wbU = _testDataProvider.OpenSampleWorkbook(_file2);
         }
 
-        [TestMethod]
+        [Test]
         public void TestSheetHidden()
         {
             IWorkbook wb = _testDataProvider.CreateWorkbook();
@@ -103,7 +103,7 @@ namespace TestCases.SS.UserModel
          *  with the right text on them, no matter what
          *  the hidden flags are
          */
-        [TestMethod]
+        [Test]
         public void TestTextSheets()
         {
             // Both should have two sheets
@@ -133,7 +133,7 @@ namespace TestCases.SS.UserModel
          * Check that we can Get and Set the hidden flags
          *  as expected
          */
-        [TestMethod]
+        [Test]
         public void TestHideUnHideFlags()
         {
             Assert.IsTrue(wbH.IsSheetHidden(0));
@@ -146,7 +146,7 @@ namespace TestCases.SS.UserModel
          * Turn the sheet with none hidden into the one with
          *  one hidden
          */
-        [TestMethod]
+        [Test]
         public void TestHide()
         {
             wbU.SetSheetHidden(0,SheetState.HIDDEN);
@@ -161,7 +161,7 @@ namespace TestCases.SS.UserModel
          * Turn the sheet with one hidden into the one with
          *  none hidden
          */
-        [TestMethod]
+        [Test]
         public void TestUnHide()
         {
             wbH.SetSheetHidden(0,SheetState.VISIBLE);

@@ -21,7 +21,7 @@ namespace TestCases.HSSF.Record
 {
     using System;
     using NPOI.HSSF.Record;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.HSSF.Record.Cont;
     using System.Text;
 
@@ -30,7 +30,7 @@ namespace TestCases.HSSF.Record
      *
      * @author Jason Height (jheight at apache.org)
      */
-    [TestClass]
+    [TestFixture]
     public class TestUnicodeString
     {
         private static int MAX_DATA_SIZE = RecordInputStream.MAX_RECORD_DATA_SIZE;
@@ -42,7 +42,7 @@ namespace TestCases.HSSF.Record
 
         }
 
-        [TestMethod]
+        [Test]
         public void TestSmallStringSize()
         {
             //Test a basic string
@@ -85,7 +85,7 @@ namespace TestCases.HSSF.Record
             s.OptionFlags = ((byte)0xD);
             ConfirmSize(39, s);
         }
-        [TestMethod]
+        [Test]
         public void TestPerfectStringSize()
         {
             //Test a basic string
@@ -99,7 +99,7 @@ namespace TestCases.HSSF.Record
             s.OptionFlags = (byte)0x1;
             ConfirmSize(MAX_DATA_SIZE - 1, s);
         }
-        [TestMethod]
+        [Test]
         public void TestPerfectRichStringSize()
         {
             //Test a rich text string
@@ -118,7 +118,7 @@ namespace TestCases.HSSF.Record
             s.OptionFlags = ((byte)0x9);
             ConfirmSize(MAX_DATA_SIZE - 1, s);
         }
-        [TestMethod]
+        [Test]
         public void TestContinuedStringSize()
         {
             UnicodeString s = MakeUnicodeString(MAX_DATA_SIZE - 2 - 1 + 20);
@@ -126,7 +126,7 @@ namespace TestCases.HSSF.Record
         }
 
         /** Tests that a string size calculation that fits neatly in two records, the second being a continue*/
-        [TestMethod]
+        [Test]
         public void TestPerfectContinuedStringSize()
         {
             //Test a basic string

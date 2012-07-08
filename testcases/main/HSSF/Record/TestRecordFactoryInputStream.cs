@@ -19,7 +19,7 @@ namespace TestCases.HSSF.Record
 {
     using System;
     using System.IO;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI;
     using NPOI.HSSF.Record;
     using NPOI.HSSF.Record.Crypto;
@@ -30,7 +30,7 @@ namespace TestCases.HSSF.Record
      *
      * @author Josh Micich
      */
-    [TestClass]
+    [TestFixture]
     public class TestRecordFactoryInputStream
     {
 
@@ -58,7 +58,7 @@ namespace TestCases.HSSF.Record
         /**
          * Makes sure that a default password mismatch condition is represented with {@link EncryptedDocumentException}
          */
-        [TestMethod]
+        [Test]
         public void TestDefaultPassword()
         {
             // This encodng depends on docId, password and stream position
@@ -75,7 +75,7 @@ namespace TestCases.HSSF.Record
             try
             {
                 rfis = CreateRFIS(dataWrongDefault);
-                throw new AssertFailedException("Expected password mismatch error");
+                throw new AssertionException("Expected password mismatch error");
             }
             catch (EncryptedDocumentException e)
             {
@@ -100,7 +100,7 @@ namespace TestCases.HSSF.Record
         /**
          * Makes sure that an incorrect user supplied password condition is represented with {@link EncryptedDocumentException}
          */
-        [TestMethod]
+        [Test]
         public void TestSuppliedPassword()
         {
             // This encodng depends on docId, password and stream position
@@ -120,7 +120,7 @@ namespace TestCases.HSSF.Record
             try
             {
                 rfis = CreateRFIS(dataWrongDefault);
-                throw new AssertFailedException("Expected password mismatch error");
+                throw new AssertionException("Expected password mismatch error");
             }
             catch (EncryptedDocumentException e)
             {

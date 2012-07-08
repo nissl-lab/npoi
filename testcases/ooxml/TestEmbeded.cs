@@ -23,7 +23,7 @@ namespace NPOI
     using TestCases;
     using NPOI.XSSF.UserModel;
     using NPOI.XWPF.UserModel;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.OpenXml4Net.OPC;
     using NPOI.Util;
 
@@ -31,10 +31,10 @@ namespace NPOI
      * Class to Test that we handle embeded bits in
      *  OOXML files properly
      */
-    [TestClass]
+    [TestFixture]
     public class TestEmbeded
     {
-        [TestMethod]
+        [Test]
         public void TestExcel()
         {
             POIXMLDocument doc = new XSSFWorkbook(
@@ -42,7 +42,7 @@ namespace NPOI
             );
             Test(doc, 4);
         }
-        [TestMethod]
+        [Test]
         public void TestWord()
         {
             POIXMLDocument doc = new XWPFDocument(
@@ -51,7 +51,7 @@ namespace NPOI
             Test(doc, 5);
         }
         /*
-        [TestMethod]
+        [Test]
         public void TestPowerPoint()
         {
             POIXMLDocument doc = new XSLFSlideShow(OPCPackage.Open(

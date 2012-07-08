@@ -16,7 +16,7 @@
 ==================================================================== */
 
 using TestCases.SS.Util;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using System;
 using NPOI.SS.Util;
 using System.Text;
@@ -28,11 +28,11 @@ namespace TestCases.SS.Util
      *
      * @author Josh Micich
      */
-    [TestClass]
+    [TestFixture]
     public class TestNumberComparer
     {
 
-        [TestMethod]
+        [Test]
         public void TestAllComparisonExamples()
         {
             ComparisonExample[] examples = NumberComparisonExamples.GetComparisonExamples();
@@ -48,10 +48,10 @@ namespace TestCases.SS.Util
             }
             if (!success)
             {
-                throw new AssertFailedException("One or more cases failed.  See stderr");
+                throw new AssertionException("One or more cases failed.  See stderr");
             }
         }
-        [TestMethod]
+        [Test]
         public void TestRoundTripOnComparisonExamples()
         {
             ComparisonExample[] examples = NumberComparisonExamples.GetComparisonExamples();
@@ -66,7 +66,7 @@ namespace TestCases.SS.Util
             }
             if (!success)
             {
-                throw new AssertFailedException("One or more cases failed.  See stderr");
+                throw new AssertionException("One or more cases failed.  See stderr");
             }
 
         }
@@ -79,7 +79,7 @@ namespace TestCases.SS.Util
         /**
          * The actual example from bug 47598
          */
-        [TestMethod]
+        [Test]
         public void TestSpecificExampleA()
         {
             double a = 0.06 - 0.01;
@@ -91,7 +91,7 @@ namespace TestCases.SS.Util
         /**
          * The example from the nabble posting
          */
-        [TestMethod]
+        [Test]
         public void TestSpecificExampleB()
         {
             double a = 1 + 1.0028 - 0.9973;

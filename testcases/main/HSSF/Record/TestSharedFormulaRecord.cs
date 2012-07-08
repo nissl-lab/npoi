@@ -18,7 +18,7 @@
 namespace TestCases.HSSF.Record
 {
     using System;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.HSSF.Record;
     using NPOI.HSSF.UserModel;
     using NPOI.SS;
@@ -33,7 +33,7 @@ namespace TestCases.HSSF.Record
     /**
      * @author Josh Micich
      */
-    [TestClass]
+    [TestFixture]
     public class TestSharedFormulaRecord
     {
 
@@ -69,7 +69,7 @@ namespace TestCases.HSSF.Record
          * classes are preserved during this transformation, because Excel may not tolerate the
          * incorrect encoding.  The formula here is one such example (Excel displays #VALUE!).
          */
-        [TestMethod]
+        [Test]
         public void TestConvertSharedFormulasOperandClasses_bug45123()
         {
 
@@ -84,7 +84,7 @@ namespace TestCases.HSSF.Record
             Assert.AreEqual("$C101", refPtg.ToFormulaString());
             if (refPtg.PtgClass == Ptg.CLASS_REF)
             {
-                throw new AssertFailedException("Identified bug 45123");
+                throw new AssertionException("Identified bug 45123");
             }
 
             ConfirmOperandClasses(sharedFormula, ConvertedFormula);
@@ -104,7 +104,7 @@ namespace TestCases.HSSF.Record
                 }
             }
         }
-        [TestMethod]
+        [Test]
         public void TestConvertSharedFormulas()
         {
             IWorkbook wb = new HSSFWorkbook();
@@ -146,7 +146,7 @@ namespace TestCases.HSSF.Record
         /**
          * Make sure that POI preserves {@link SharedFormulaRecord}s
          */
-        [TestMethod]
+        [Test]
         public void TestPreserveOnReSerialize()
         {
             HSSFWorkbook wb;
@@ -178,7 +178,7 @@ namespace TestCases.HSSF.Record
             ConfirmCellEvaluation(wb, cellB32769, 4);
             Assert.AreEqual(4, countSharedFormulas(sheet));
         }
-        [TestMethod]
+        [Test]
         public void TestUnshareFormulaDueToChangeFormula()
         {
             HSSFWorkbook wb;
@@ -200,7 +200,7 @@ namespace TestCases.HSSF.Record
             Assert.AreEqual("C32770*2", cellC32769.CellFormula);
             ConfirmCellEvaluation(wb, cellC32769, 6);
         }
-        [TestMethod]
+        [Test]
         public void TestUnshareFormulaDueToDelete()
         {
             HSSFWorkbook wb;

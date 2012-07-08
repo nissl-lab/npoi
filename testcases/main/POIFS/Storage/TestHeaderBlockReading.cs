@@ -32,7 +32,7 @@ namespace TestCases.POIFS.Storage
     using System.IO;
     using System.Collections;
 
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.POIFS.Storage;
     using NPOI.Util;
     using NPOI.POIFS.FileSystem;
@@ -41,7 +41,7 @@ namespace TestCases.POIFS.Storage
      *
      * @author Marc Johnson
      */
-    [TestClass]
+    [TestFixture]
     public class TestHeaderBlockReading
     {
 
@@ -60,7 +60,7 @@ namespace TestCases.POIFS.Storage
          *
          * @exception IOException
          */
-        [TestMethod]
+        [Test]
         public void TestConstructors()
         {
             string[] hexData = 

@@ -28,7 +28,7 @@ using System;
 using System.IO;
 using System.Collections;
 
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using NPOI.POIFS.Storage;
 using NPOI.Util;
 using NPOI.POIFS.FileSystem;
@@ -41,7 +41,7 @@ namespace TestCases.POIFS.Storage
      *
      * @author Marc Johnson
      */
-    [TestClass]
+    [TestFixture]
     public class TestBlockListImpl
     {
 
@@ -50,7 +50,7 @@ namespace TestCases.POIFS.Storage
          *
          * @exception IOException
          */
-        [TestMethod]
+        [Test]
         public void TestZap()
         {
             BlockListImpl list = new BlockListImpl();
@@ -94,7 +94,7 @@ namespace TestCases.POIFS.Storage
          *
          * @exception IOException
          */
-        [TestMethod]
+        [Test]
         public void TestRemove()
         {
             BlockListImpl list = new BlockListImpl();
@@ -163,7 +163,7 @@ namespace TestCases.POIFS.Storage
          *
          * @exception IOException
          */
-        [TestMethod]
+        [Test]
         public void TestSetBAT()
         {
             BlockListImpl list = new BlockListImpl();
@@ -185,7 +185,7 @@ namespace TestCases.POIFS.Storage
          *
          * @exception IOException
          */
-        [TestMethod]
+        [Test]
         public void TestFetchBlocks()
         {
 

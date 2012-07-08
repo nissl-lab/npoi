@@ -19,7 +19,7 @@ namespace TestCases.SS.UserModel
 {
     using System;
 
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
 
     using NPOI.SS;
     using NPOI.SS.UserModel;
@@ -29,7 +29,7 @@ namespace TestCases.SS.UserModel
      *
      * @author Yegor Kozlov
      */
-    [TestClass]
+    [TestFixture]
     public class BaseTestFormulaEvaluator
     {
 
@@ -44,7 +44,7 @@ namespace TestCases.SS.UserModel
         {
             _testDataProvider = TestDataProvider;
         }
-        [TestMethod]
+        [Test]
         public void TestSimpleArithmetic()
         {
             IWorkbook wb = _testDataProvider.CreateWorkbook();
@@ -67,7 +67,7 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual(6.0, c1.NumericCellValue, 0.0001);
             Assert.AreEqual(5.0, c2.NumericCellValue, 0.0001);
         }
-        [TestMethod]
+        [Test]
         public void TestSumCount()
         {
             IWorkbook wb = _testDataProvider.CreateWorkbook();
@@ -140,7 +140,7 @@ namespace TestCases.SS.UserModel
         /**
          * Test creation / Evaluation of formulas with sheet-level names
          */
-        [TestMethod]
+        [Test]
         public void TestSheetLevelFormulas()
         {
             IWorkbook wb = _testDataProvider.CreateWorkbook();
@@ -174,7 +174,7 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual(5.0, Evaluator.Evaluate(sh2.GetRow(0).GetCell(1)).NumberValue, 0.0);
             Assert.AreEqual(15.0, Evaluator.Evaluate(sh2.GetRow(0).GetCell(2)).NumberValue, 0.0);
         }
-        [TestMethod]
+        [Test]
         public void TestFullColumnRefs()
         {
             IWorkbook wb = _testDataProvider.CreateWorkbook();
@@ -206,7 +206,7 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual(26.0, fe.Evaluate(cell0).NumberValue, 0.0);
             Assert.AreEqual(56.0, fe.Evaluate(cell1).NumberValue, 0.0);
         }
-        [TestMethod]
+        [Test]
         public void TestRepeatedEvaluation()
         {
             IWorkbook wb = _testDataProvider.CreateWorkbook();
@@ -260,7 +260,7 @@ namespace TestCases.SS.UserModel
          * {@link FormulaEvaluator#Evaluate(NPOI.SS.UserModel.Cell)} should behave the same whether the cell
          * is <code>null</code> or blank.
          */
-        [TestMethod]
+        [Test]
         public void TestEvaluateBlank()
         {
             IWorkbook wb = _testDataProvider.CreateWorkbook();
@@ -274,7 +274,7 @@ namespace TestCases.SS.UserModel
         /**
          * Test for bug due to attempt to convert a cached formula error result to a bool
          */
-        [TestMethod]
+        [Test]
         public void TestUpdateCachedFormulaResultFromErrorToNumber_bug46479()
         {
 
@@ -299,13 +299,13 @@ namespace TestCases.SS.UserModel
             {
                 if (e.Message.Equals("Cannot get a numeric value from a error formula cell"))
                 {
-                    throw new AssertFailedException("Identified bug 46479a");
+                    throw new AssertionException("Identified bug 46479a");
                 }
             }
             Assert.AreEqual(3.5, cellB1.NumericCellValue, 0.0);
         }
 
-        [TestMethod]
+        [Test]
         public void TestRounding_bug51339()
         {
             IWorkbook wb = _testDataProvider.CreateWorkbook();

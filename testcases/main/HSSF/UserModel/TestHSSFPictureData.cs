@@ -21,7 +21,7 @@ namespace TestCases.HSSF.UserModel
     using System;
     using System.Collections;
     using NPOI.HSSF.UserModel;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using System.IO;
     using TestCases.HSSF;
     using System.Drawing;
@@ -37,11 +37,11 @@ namespace TestCases.HSSF.UserModel
      * @author Yegor Kozlov (yegor at apache dot org)
      * @author Trejkaz (trejkaz at trypticon dot org)
      */
-    [TestClass]
+    [TestFixture]
     public class TestHSSFPictureData
     {
 
-        [TestMethod]
+        [Test]
         public void TestPictures()
         {
             HSSFWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("SimpleWithImages.xls");
@@ -76,7 +76,7 @@ namespace TestCases.HSSF.UserModel
                 }
             }
         }
-        [TestMethod]
+        [Test]
         public void TestNotNullPictures()
         {
 

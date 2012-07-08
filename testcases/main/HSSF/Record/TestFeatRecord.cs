@@ -18,7 +18,7 @@
 namespace TestCases.HSSF.Record
 {
 
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.HSSF.Model;
     using NPOI.HSSF.Record.Common;
     using NPOI.HSSF.UserModel;
@@ -31,7 +31,7 @@ namespace TestCases.HSSF.Record
      * 
      * @author Josh Micich
      */
-    [TestClass]
+    [TestFixture]
     public class TestFeatRecord
     {
         public void TestWithoutFeatRecord()

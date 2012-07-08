@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using NPOI.HSSF.Record;
 using NPOI.Util;
 
 namespace TestCases.HSSF.Record
 {
-    [TestClass]
+    [TestFixture]
     public class TestFontRecord
     {
         private const int SID = 0x31;
@@ -23,7 +23,7 @@ namespace TestCases.HSSF.Record
                     0x41, 0x72, 0x69, 0x61, 0x6C, // Arial, as unicode
 
             };
-        [TestMethod]
+        [Test]
         public void TestLoad()
         {
 
@@ -44,7 +44,7 @@ namespace TestCases.HSSF.Record
 
             Assert.AreEqual(21 + 4, record.RecordSize);
         }
-        [TestMethod]
+        [Test]
         public void TestStore()
         {
             //      .fontheight      = c8
@@ -76,7 +76,7 @@ namespace TestCases.HSSF.Record
             byte[] recordBytes = record.Serialize();
             TestcaseRecordInputStream.ConfirmRecordEncoding(0x31, data, recordBytes);
         }
-        [TestMethod]
+        [Test]
         public void TestCloneOnto()
         {
             FontRecord base1 = new FontRecord(TestcaseRecordInputStream.Create(0x31, data));
@@ -89,7 +89,7 @@ namespace TestCases.HSSF.Record
             for (int i = 0; i < data.Length; i++)
                 Assert.AreEqual(data[i], recordBytes[i + 4], "At offset " + i);
         }
-        [TestMethod]
+        [Test]
         public void TestSameProperties()
         {
             FontRecord f1 = new FontRecord(TestcaseRecordInputStream.Create(0x31, data));
@@ -113,7 +113,7 @@ namespace TestCases.HSSF.Record
          * length is zero.  The OOO documentation seems to agree with this and POI had no test data
          * samples to say otherwise.
          */
-        [TestMethod]
+        [Test]
         public void TestEmptyName_bug47250()
         {
             byte[] emptyNameData = HexRead.ReadFromString(
@@ -126,7 +126,7 @@ namespace TestCases.HSSF.Record
             FontRecord fr = new FontRecord(in1);
             if (in1.Available() == 1)
             {
-                throw new AssertFailedException("Identified bug 47250");
+                throw new AssertionException("Identified bug 47250");
             }
             Assert.AreEqual(0, in1.Available());
 

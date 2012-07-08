@@ -20,7 +20,7 @@ namespace TestCases.HSSF.UserModel
     using System;
     using System.Collections;
     using NPOI.HSSF.UserModel;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
 
     using TestCases.HSSF;
     using System.Collections.Generic;
@@ -28,10 +28,10 @@ namespace TestCases.HSSF.UserModel
     /**
      * 
      */
-    [TestClass]
+    [TestFixture]
     public class TestOLE2Embeding
     {
-        [TestMethod]
+        [Test]
         public void TestEmbeding()
         {
             // This used to break, until bug #43116 was fixed
@@ -40,7 +40,7 @@ namespace TestCases.HSSF.UserModel
             // Check we can get at the Escher layer still
             workbook.GetAllPictures();
         }
-        [TestMethod]
+        [Test]
         public void TestEmbeddedObjects()
         {
             HSSFWorkbook workbook = HSSFTestDataSamples.OpenSampleWorkbook("ole2-embedding.xls");

@@ -20,7 +20,7 @@ namespace TestCases.SS.Formula.PTG
 {
 
     using System;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.HSSF.Model;
     using NPOI.HSSF.UserModel;
     using NPOI.SS.Formula.PTG;
@@ -30,13 +30,13 @@ namespace TestCases.SS.Formula.PTG
      *
      * @author Dmitriy Kumshayev
      */
-    [TestClass]
+    [TestFixture]
     public class TestAreaPtg
     {
 
         AreaPtg relative;
         AreaPtg absolute;
-        [TestInitialize]
+        [SetUp]
         public void SetUp()
         {
             short firstRow = 5;
@@ -46,13 +46,13 @@ namespace TestCases.SS.Formula.PTG
             relative = new AreaPtg(firstRow, lastRow, firstCol, lastCol, true, true, true, true);
             absolute = new AreaPtg(firstRow, lastRow, firstCol, lastCol, false, false, false, false);
         }
-        [TestMethod]
+        [Test]
         public void TestSetColumnsAbsolute()
         {
             resetColumns(absolute);
             validateReference(true, absolute);
         }
-        [TestMethod]
+        [Test]
         public void TestSetColumnsRelative()
         {
             resetColumns(relative);
@@ -77,7 +77,7 @@ namespace TestCases.SS.Formula.PTG
             Assert.AreEqual(fc, aptg.FirstColumn);
             Assert.AreEqual(lc, aptg.LastColumn);
         }
-        [TestMethod]
+        [Test]
         public void TestFormulaParser()
         {
             String formula1 = "SUM($E$5:$E$6)";

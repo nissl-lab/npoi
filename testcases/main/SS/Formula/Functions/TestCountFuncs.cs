@@ -23,7 +23,7 @@ namespace TestCases.SS.Formula.Functions
     using NPOI.SS.Formula.Functions;
     using NPOI.HSSF.UserModel;
     using NPOI.SS.UserModel;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using System;
     using TestCases.HSSF;
 
@@ -32,7 +32,7 @@ namespace TestCases.SS.Formula.Functions
      *
      * @author Josh Micich
      */
-    [TestClass]
+    [TestFixture]
     public class TestCountFuncs
     {
 
@@ -41,13 +41,13 @@ namespace TestCases.SS.Formula.Functions
         /// <summary>
         ///  Some of the tests are depending on the american culture.
         /// </summary>
-        [TestInitialize()]
+        [SetUp]
         public void InitializeCultere()
         {
             System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
         }
 
-        [TestMethod]
+        [Test]
         public void TestCountBlank()
         {
 
@@ -76,7 +76,7 @@ namespace TestCases.SS.Formula.Functions
             range = EvalFactory.CreateAreaEval("A1:B3", values);
             ConfirmCountBlank(2, range);
         }
-        [TestMethod]
+        [Test]
         public void TestCountA()
         {
 
@@ -107,7 +107,7 @@ namespace TestCases.SS.Formula.Functions
 		};
             ConfirmCountA(59, args);
         }
-        [TestMethod]
+        [Test]
         public void TestCountIf()
         {
 
@@ -145,7 +145,7 @@ namespace TestCases.SS.Formula.Functions
             // when criteria is an expression (starting with a comparison operator)
             ConfirmCountIf(2, range, new StringEval(">0.5"));
         }
-        [TestMethod]
+        [Test]
         public void TestCriteriaPredicateNe_Bug46647()
         {
             I_MatchPredicate mp = Countif.CreateCriteriaPredicate(new StringEval("<>aa"), 0, 0);
@@ -153,7 +153,7 @@ namespace TestCases.SS.Formula.Functions
             StringEval seB = new StringEval("bb"); // this should match
             if (mp.Matches(seA) && !mp.Matches(seB))
             {
-                throw new AssertFailedException("Identified bug 46647");
+                throw new AssertionException("Identified bug 46647");
             }
             Assert.IsFalse(mp.Matches(seA));
             Assert.IsTrue(mp.Matches(seB));
@@ -202,7 +202,7 @@ namespace TestCases.SS.Formula.Functions
         /**
          * special case where the criteria argument is a cell reference
          */
-        [TestMethod]
+        [Test]
         public void TestCountIfWithCriteriaReference()
         {
 
@@ -251,7 +251,7 @@ namespace TestCases.SS.Formula.Functions
         /**
          * the criteria arg is mostly handled by {@link OperandResolver#getSingleValue(NPOI.SS.Formula.Eval.ValueEval, int, int)}}
          */
-        [TestMethod]
+        [Test]
         public void TestCountifAreaCriteria()
         {
             int srcColIx = 2; // anything but column A
@@ -287,7 +287,7 @@ namespace TestCases.SS.Formula.Functions
             ConfirmPredicate(false, mp, ErrorEval.DIV_ZERO);
             ConfirmPredicate(true, mp, ErrorEval.VALUE_INVALID);
         }
-        [TestMethod]
+        [Test]
         public void TestCountifEmptyStringCriteria()
         {
             I_MatchPredicate mp;
@@ -307,7 +307,7 @@ namespace TestCases.SS.Formula.Functions
             ConfirmPredicate(false, mp, NULL);
             ConfirmPredicate(true, mp, "");
         }
-        [TestMethod]
+        [Test]
         public void TestCountifComparisons()
         {
             I_MatchPredicate mp;
@@ -350,7 +350,7 @@ namespace TestCases.SS.Formula.Functions
          * the criteria arg value can be an error code (the error does not
          * propagate to the COUNTIF result).
          */
-        [TestMethod]
+        [Test]
         public void TestCountifErrorCriteria()
         {
             I_MatchPredicate mp;
@@ -375,7 +375,7 @@ namespace TestCases.SS.Formula.Functions
             ConfirmPredicate(false, mp, ErrorEval.DIV_ZERO);
             ConfirmPredicate(false, mp, ErrorEval.REF_INVALID);
         }
-        [TestMethod]
+        [Test]
         public void TestWildCards()
         {
             I_MatchPredicate mp;
@@ -408,7 +408,7 @@ namespace TestCases.SS.Formula.Functions
             ConfirmPredicate(true, mp, "12812");
             ConfirmPredicate(false, mp, "128812");
         }
-        [TestMethod]
+        [Test]
         public void TestNotQuiteWildCards()
         {
             I_MatchPredicate mp;
@@ -445,12 +445,12 @@ namespace TestCases.SS.Formula.Functions
         {
             Assert.AreEqual(expectedResult, matchPredicate.Matches(value));
         }
-        [TestMethod]
+        [Test]
         public void TestCountifFromSpreadsheet()
         {
             TestCountFunctionFromSpreadsheet("countifExamples.xls", 1, 2, 3, "countif");
         }
-        [TestMethod]
+        [Test]
         public void TestCountBlankFromSpreadsheet()
         {
             TestCountFunctionFromSpreadsheet("countblankExamples.xls", 1, 3, 4, "countblank");
@@ -485,7 +485,7 @@ namespace TestCases.SS.Formula.Functions
 
             if (failureCount > 0)
             {
-                throw new AssertFailedException(failureCount + " " + functionName
+                throw new AssertionException(failureCount + " " + functionName
                         + " Evaluations failed. See stderr for more details");
             }
         }

@@ -19,7 +19,7 @@ namespace TestCases.SS.Formula.Eval
 {
 
     using System;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.HSSF.UserModel;
     using NPOI.SS.Formula.Eval;
     using NPOI.SS.UserModel;
@@ -30,7 +30,7 @@ namespace TestCases.SS.Formula.Eval
      *
      * @author Josh Micich
      */
-    [TestClass]
+    [TestFixture]
     public class TestPercentEval
     {
 
@@ -44,7 +44,7 @@ namespace TestCases.SS.Formula.Eval
 
             Assert.AreEqual(expectedResult, result, 0);
         }
-        [TestMethod]
+        [Test]
         public void TestBasic()
         {
             System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
@@ -55,13 +55,13 @@ namespace TestCases.SS.Formula.Eval
             Confirm(new StringEval("0.2"), 0.002);
             Confirm(BoolEval.TRUE, 0.01);
         }
-        [TestMethod]
+        [Test]
         public void Test1x1Area()
         {
             AreaEval ae = EvalFactory.CreateAreaEval("B2:B2", new ValueEval[] { new NumberEval(50), });
             Confirm(ae, 0.5);
         }
-        [TestMethod]
+        [Test]
         public void TestInSpreadSheet()
         {
             HSSFWorkbook wb = new HSSFWorkbook();
@@ -81,7 +81,7 @@ namespace TestCases.SS.Formula.Eval
             {
                 if (e.InnerException is NullReferenceException)
                 {
-                    throw new AssertFailedException("Identified bug 44608");
+                    throw new AssertionException("Identified bug 44608");
                 }
                 // else some other unexpected error
                 throw e;

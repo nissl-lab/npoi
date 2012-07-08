@@ -21,7 +21,7 @@ namespace TestCases.HSSF.Record
     using System.IO;
     using System.Collections;
     using NPOI.HSSF.Record;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.Util;
     using NPOI.POIFS.FileSystem;
     using System.Collections.Generic;
@@ -32,13 +32,13 @@ namespace TestCases.HSSF.Record
      * @author Andrew C. Oliver (acoliver at apache dot org)
      * @author Csaba Nagy (ncsaba at yahoo dot com)
      */
-    [TestClass]
+    [TestFixture]
     public class TestRecordFactory
     {
         /// <summary>
         ///  Some of the tests are depending on the american culture.
         /// </summary>
-        [TestInitialize()]
+        [SetUp]
         public void InitializeCultere()
         {
             System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
@@ -52,7 +52,7 @@ namespace TestCases.HSSF.Record
          * FAILURE:    The wrong records are creates or contain the wrong values <P>
          *
          */
-        [TestMethod]
+        [Test]
         public void TestBasicRecordConstruction()
         {
             short recType = BOFRecord.sid;
@@ -98,7 +98,7 @@ namespace TestCases.HSSF.Record
          * FAILURE:    The wrong records are created or contain the wrong values <P>
          *
          */
-        [TestMethod]
+        [Test]
         public void TestSpecial()
         {
             short recType = RKRecord.sid;
@@ -127,7 +127,7 @@ namespace TestCases.HSSF.Record
          * FAILURE:    The wrong records are created or contain the wrong values <P>
          *
          */
-        [TestMethod]
+        [Test]
         public void TestContinuedUnknownRecord()
         {
             byte[] data = {
@@ -164,7 +164,7 @@ namespace TestCases.HSSF.Record
          * There can actually be OBJ records mixed between the continues.
          * Record factory must preserve this structure when Reading records.
          */
-        [TestMethod]
+        [Test]
         public void TestMixedContinue()
         {
             /**
@@ -222,7 +222,7 @@ namespace TestCases.HSSF.Record
             Assert.AreEqual(data.Length, ser.Length);
             Assert.IsTrue(Arrays.Equals(data, ser));
         }
-        [TestMethod]
+        [Test]
         public void TestNonZeroPadding_bug46987()
         {
             Record[] recs = {
@@ -264,13 +264,13 @@ namespace TestCases.HSSF.Record
             {
                 if (e.Message.Equals("Buffer underrun - requested 512 bytes but 192 was available"))
                 {
-                    throw new AssertFailedException("Identified bug 46987");
+                    throw new AssertionException("Identified bug 46987");
                 }
                 throw e;
             }
             Assert.AreEqual(5, outRecs.Count);
         }
-        [TestMethod]
+        [Test]
         //public void TestNonZeroPadding_bug46987()
         public void TestNPOIBug6177()
         {
@@ -310,7 +310,7 @@ namespace TestCases.HSSF.Record
             //{
             //    if (e.Message.Equals("Buffer underrun - requested 512 bytes but 192 was available"))
             //    {
-            //        throw new AssertFailedException("Identified bug 46987");
+            //        throw new AssertionException("Identified bug 46987");
             //    }
             //    throw e;
             //}

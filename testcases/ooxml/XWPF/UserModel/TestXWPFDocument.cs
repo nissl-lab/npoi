@@ -18,7 +18,7 @@
 namespace NPOI.XWPF.UserModel
 {
     using System;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.OpenXml4Net.OPC;
     using System.IO;
     using System.Collections.Generic;
@@ -27,11 +27,11 @@ namespace NPOI.XWPF.UserModel
     using NPOI.OpenXmlFormats.Wordprocessing;
     using NPOI.XWPF.Util;
 
-    [TestClass]
+    [TestFixture]
     public class TestXWPFDocument
     {
 
-        [TestMethod]
+        [Test]
         public void TestContainsMainContentType()
         {
             XWPFDocument doc = XWPFTestDataSamples.OpenSampleDocument("sample.docx");
@@ -53,7 +53,7 @@ namespace NPOI.XWPF.UserModel
             Assert.IsTrue(found);
         }
 
-        [TestMethod]
+        [Test]
         public void TestOpen()
         {
             XWPFDocument xml;
@@ -72,7 +72,7 @@ namespace NPOI.XWPF.UserModel
             Assert.IsNotNull(xml.GetStyle());
         }
 
-        [TestMethod]
+        [Test]
         public void TestMetadataBasics()
         {
             XWPFDocument xml = XWPFTestDataSamples.OpenSampleDocument("sample.docx");
@@ -87,7 +87,7 @@ namespace NPOI.XWPF.UserModel
             Assert.AreEqual(null, xml.GetProperties().GetCoreProperties().GetUnderlyingProperties().GetSubjectProperty());
         }
 
-        [TestMethod]
+        [Test]
         public void TestMetadataComplex()
         {
             XWPFDocument xml = XWPFTestDataSamples.OpenSampleDocument("IllustrativeCases.docx");
@@ -102,7 +102,7 @@ namespace NPOI.XWPF.UserModel
             Assert.AreEqual(" ", xml.GetProperties().GetCoreProperties().GetUnderlyingProperties().GetSubjectProperty());
         }
 
-        [TestMethod]
+        [Test]
         public void TestWorkbookProperties()
         {
             XWPFDocument doc = new XWPFDocument();
@@ -111,7 +111,7 @@ namespace NPOI.XWPF.UserModel
             Assert.AreEqual("Apache POI", props.GetExtendedProperties().GetUnderlyingProperties().Application);
         }
 
-        [TestMethod]
+        [Test]
         public void TestAddParagraph()
         {
             XWPFDocument doc = XWPFTestDataSamples.OpenSampleDocument("sample.docx");
@@ -132,7 +132,7 @@ namespace NPOI.XWPF.UserModel
             //Assert.AreSame(cP, doc.Paragraphs[(0)]);
             //Assert.AreEqual(5, doc.Paragraphs.Count);
         }
-        [TestMethod]
+        [Test]
         public void TestAddPicture()
         {
             XWPFDocument doc = XWPFTestDataSamples.OpenSampleDocument("sample.docx");
@@ -147,7 +147,7 @@ namespace NPOI.XWPF.UserModel
             }
         }
 
-        [TestMethod]
+        [Test]
         public void TestRemoveBodyElement()
         {
             XWPFDocument doc = XWPFTestDataSamples.OpenSampleDocument("sample.docx");
@@ -210,7 +210,7 @@ namespace NPOI.XWPF.UserModel
             Assert.AreEqual(p3, doc.Paragraphs[(0)]);
         }
 
-        [TestMethod]
+        [Test]
         public void TestRegisterPackagePictureData()
         {
             XWPFDocument doc = XWPFTestDataSamples.OpenSampleDocument("issue_51265_1.docx");
@@ -242,7 +242,7 @@ namespace NPOI.XWPF.UserModel
             doc.Package.Revert();
         }
 
-        [TestMethod]
+        [Test]
         public void TestFindPackagePictureData()
         {
             XWPFDocument doc = XWPFTestDataSamples.OpenSampleDocument("issue_51265_1.docx");
@@ -254,7 +254,7 @@ namespace NPOI.XWPF.UserModel
             doc.Package.Revert();
         }
 
-        [TestMethod]
+        [Test]
         public void TestGetAllPictures()
         {
             XWPFDocument doc = XWPFTestDataSamples.OpenSampleDocument("issue_51265_3.docx");
@@ -281,7 +281,7 @@ namespace NPOI.XWPF.UserModel
             doc.Package.Revert();
         }
 
-        [TestMethod]
+        [Test]
         public void TestGetAllPackagePictures()
         {
             XWPFDocument doc = XWPFTestDataSamples.OpenSampleDocument("issue_51265_3.docx");
@@ -303,7 +303,7 @@ namespace NPOI.XWPF.UserModel
             doc.Package.Revert();
         }
 
-        [TestMethod]
+        [Test]
         public void TestPictureHandlingSimpleFile()
         {
             XWPFDocument doc = XWPFTestDataSamples.OpenSampleDocument("issue_51265_1.docx");
@@ -318,7 +318,7 @@ namespace NPOI.XWPF.UserModel
             doc.Package.Revert();
         }
 
-        [TestMethod]
+        [Test]
         public void TestPictureHandlingHeaderDocumentImages()
         {
             XWPFDocument doc = XWPFTestDataSamples.OpenSampleDocument("issue_51265_2.docx");
@@ -328,7 +328,7 @@ namespace NPOI.XWPF.UserModel
             doc.Package.Revert();
         }
 
-        [TestMethod]
+        [Test]
         public void TestPictureHandlingComplex()
         {
             XWPFDocument doc = XWPFTestDataSamples.OpenSampleDocument("issue_51265_3.docx");

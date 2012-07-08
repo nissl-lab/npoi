@@ -29,7 +29,7 @@ using System;
 using System.Collections;
 using System.IO;
 
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 using NPOI.POIFS.FileSystem;
 using NPOI.Util;
@@ -41,7 +41,7 @@ using NPOI.POIFS.EventFileSystem;
 
 namespace TestCases.POIFS.FileSystem
 {
-    [TestClass]
+    [TestFixture]
     public class TestEmptyDocument
     {
         private static POILogger _logger = POILogFactory.GetLogger(typeof(TestEmptyDocument));
@@ -87,7 +87,7 @@ namespace TestCases.POIFS.FileSystem
         }
        
 
-        [TestMethod]
+        [Test]
         public void TestSingleEmptyDocument()
         {
             POIFSFileSystem fs = new POIFSFileSystem();
@@ -100,7 +100,7 @@ namespace TestCases.POIFS.FileSystem
             Assert.IsNotNull(new POIFSFileSystem(new MemoryStream(temp)));
         }
 
-        [TestMethod]
+        [Test]
         public void TestSingleEmptyDocumentEvent()
         {
             POIFSFileSystem fs = new POIFSFileSystem();
@@ -111,7 +111,7 @@ namespace TestCases.POIFS.FileSystem
             fs.WriteFileSystem(output);
             Assert.IsNotNull(new POIFSFileSystem(new MemoryStream(output.ToArray())));
         }
-        [TestMethod]
+        [Test]
         public void TestEmptyDocumentWithFriend()
         {
             POIFSFileSystem fs = new POIFSFileSystem();
@@ -124,7 +124,7 @@ namespace TestCases.POIFS.FileSystem
             Assert.IsNotNull(new POIFSFileSystem(new MemoryStream(output.ToArray())));
         }
 
-        [TestMethod]
+        [Test]
         public void TestEmptyDocumentEventWithFriend()
         {
             POIFSFileSystem fs = new POIFSFileSystem();
@@ -137,7 +137,7 @@ namespace TestCases.POIFS.FileSystem
             Assert.IsNotNull(new POIFSFileSystem(new MemoryStream(output.ToArray())));
 
         }
-        [TestMethod]
+        [Test]
         public void TestEmptyDocumentBug11744()
         {
             byte[] TestData = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };

@@ -19,7 +19,7 @@ namespace TestCases.SS.Formula.Functions
 {
     using System;
     using System.Text;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.HSSF.UserModel;
     using NPOI.SS.UserModel;
     using TestCases.HSSF;
@@ -30,10 +30,10 @@ namespace TestCases.SS.Formula.Functions
      * @author Marcel May
      * @see <a href="http://office.microsoft.com/en-us/excel-help/npv-HP005209199.aspx">Excel Help</a>
      */
-    [TestClass]
+    [TestFixture]
     public class TestNpv
     {
-        [TestMethod]
+        [Test]
         public void TestEvaluateInSheetExample2()
         {
             HSSFWorkbook wb = new HSSFWorkbook();
@@ -71,7 +71,7 @@ namespace TestCases.SS.Formula.Functions
          * Evaluate formulas with NPV and compare the result with
          * the cached formula result pre-calculated by Excel
          */
-        [TestMethod]
+        [Test]
         public void TestNpvFromSpreadsheet()
         {
             HSSFWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("IrrNpvTestCaseData.xls");
@@ -101,7 +101,7 @@ namespace TestCases.SS.Formula.Functions
 
             if (failures.Length > 0)
             {
-                throw new AssertFailedException(failureCount + " IRR Evaluations failed:\n" + failures.ToString());
+                throw new AssertionException(failureCount + " IRR Evaluations failed:\n" + failures.ToString());
             }
         }
 

@@ -20,7 +20,7 @@ namespace TestCases.SS.Formula.Eval
 
     using System;
     using System.IO;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.HSSF.UserModel;
     using NPOI.SS.Formula.Eval;
     using NPOI.SS.UserModel;
@@ -89,7 +89,7 @@ namespace TestCases.SS.Formula.Eval
         private HSSFWorkbook workbook;
         private ISheet sheet;
         // Note - multiple failures are aggregated before ending.
-        // If one or more functions fail, a single AssertFailedException is thrown at the end
+        // If one or more functions fail, a single AssertionException is thrown at the end
         private int _functionFailureCount;
         private int _functionSuccessCount;
         private int _EvaluationFailureCount;
@@ -109,11 +109,11 @@ namespace TestCases.SS.Formula.Eval
         {
             if (expected == null)
             {
-                throw new AssertFailedException(msg + " - Bad Setup data expected value is null");
+                throw new AssertionException(msg + " - Bad Setup data expected value is null");
             }
             if (actual == null)
             {
-                throw new AssertFailedException(msg + " - actual value was null");
+                throw new AssertionException(msg + " - actual value was null");
             }
 
             switch (expected.CellType)
@@ -130,7 +130,7 @@ namespace TestCases.SS.Formula.Eval
                     Assert.AreEqual(msg, ErrorEval.GetText(expected.ErrorCellValue), ErrorEval.GetText(actual.ErrorValue));
                     break;
                 case CellType.FORMULA: // will never be used, since we will call method After formula Evaluation
-                    throw new AssertFailedException("Cannot expect formula as result of formula Evaluation: " + msg);
+                    throw new AssertionException("Cannot expect formula as result of formula Evaluation: " + msg);
                 case CellType.NUMERIC:
                     Assert.AreEqual(CellType.NUMERIC, actual.CellType, msg);
                     AbstractNumericTestCase.AssertEqual(msg, expected.NumericCellValue, actual.NumberValue, AbstractNumericTestCase.POS_ZERO, AbstractNumericTestCase.DIFF_TOLERANCE_FACTOR);
@@ -173,7 +173,7 @@ namespace TestCases.SS.Formula.Eval
             {
                 String msg = _functionFailureCount + " function(s) failed in "
                 + _EvaluationFailureCount + " Evaluation(s).  " + successMsg;
-                throw new AssertFailedException(msg);
+                throw new AssertionException(msg);
             }
 #if !HIDE_UNREACHABLE_CODE
 		if(false) { // normally no output for successful Tests
@@ -198,7 +198,7 @@ namespace TestCases.SS.Formula.Eval
                 String targetFunctionName = GetTargetFunctionName(r);
                 if (targetFunctionName == null)
                 {
-                    throw new AssertFailedException("Test spreadsheet cell empty on row ("
+                    throw new AssertionException("Test spreadsheet cell empty on row ("
                             + (rowIndex + 1) + "). Expected function name or '"
                             + SS.FUNCTION_NAMES_END_SENTINEL + "'");
                 }
@@ -215,7 +215,7 @@ namespace TestCases.SS.Formula.Eval
                     if (expectedValuesRow == null)
                     {
                         int missingRowNum = rowIndex + 2; //+1 for 1-based, +1 for next row
-                        throw new AssertFailedException("Missing expected values row for function '"
+                        throw new AssertionException("Missing expected values row for function '"
                                 + targetFunctionName + " (row " + missingRowNum + ")");
                     }
                     switch (ProcessFunctionRow(evaluator, targetFunctionName, r, expectedValuesRow))
@@ -266,7 +266,7 @@ namespace TestCases.SS.Formula.Eval
                         result = Result.ALL_EVALUATIONS_SUCCEEDED;
                     }
                 }
-                catch (AssertFailedException e)
+                catch (AssertionException e)
                 {
                     _EvaluationFailureCount++;
                     printshortStackTrace(System.Console.Error, e);
@@ -279,7 +279,7 @@ namespace TestCases.SS.Formula.Eval
         /**
          * Useful to keep output concise when expecting many failures to be reported by this Test case
          */
-        private static void printshortStackTrace(TextWriter ps, AssertFailedException e)
+        private static void printshortStackTrace(TextWriter ps, AssertionException e)
         {
             ps.WriteLine(e.Message);
             ps.WriteLine(e.StackTrace);
@@ -338,7 +338,7 @@ namespace TestCases.SS.Formula.Eval
                 return cell.RichStringCellValue.String;
             }
 
-            throw new AssertFailedException("Bad cell type for 'function name' column: ("
+            throw new AssertionException("Bad cell type for 'function name' column: ("
                     + cell.CellType + ") row (" + (r.RowNum + 1) + ")");
         }
     }

@@ -19,7 +19,7 @@ namespace NPOI
 {
 
     using System;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.XSSF.UserModel;
     using NPOI.OpenXmlFormats;
     using NPOI.XSSF;
@@ -29,13 +29,13 @@ namespace NPOI
     /**
      * Test Setting extended and custom OOXML properties
      */
-    [TestClass]
+    [TestFixture]
     public class TestPOIXMLProperties
     {
         private POIXMLProperties _props;
         private NPOI.POIXMLProperties.CoreProperties _coreProperties;
 
-        [TestInitialize]
+        [SetUp]
         public void SetUp()
         {
             XWPFDocument sampleDoc = XWPFTestDataSamples.OpenSampleDocument("documentProperties.docx");
@@ -43,7 +43,7 @@ namespace NPOI
             _coreProperties = _props.GetCoreProperties();
             Assert.IsNotNull(_props);
         }
-        [TestMethod]
+        [Test]
         public void TestWorkbookExtendedProperties()
         {
             XSSFWorkbook workbook = new XSSFWorkbook();
@@ -91,7 +91,7 @@ namespace NPOI
         /**
          * Test usermodel API for Setting custom properties
          */
-        [TestMethod]
+        [Test]
         public void TestCustomProperties()
         {
             POIXMLDocument wb = new XSSFWorkbook();

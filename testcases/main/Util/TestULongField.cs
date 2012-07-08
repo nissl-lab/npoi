@@ -32,7 +32,7 @@ using System.Collections.Generic;
 using System.IO;
 
 
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using NPOI.Util;
 
 namespace TestCases.Util
@@ -42,7 +42,7 @@ namespace TestCases.Util
     /// </summary>
 #if !HIDE_UNREACHABLE_CODE
     // ULongField is declared obsolete so ommit this test class.
-    [TestClass]
+    [TestFixture]
     public class TestULongField
     {
         public TestULongField()
@@ -58,7 +58,7 @@ namespace TestCases.Util
         /**
          * Test constructors.
          */
-        [TestMethod]
+        [Test]
         public void TestConstructors()
         {
             try
@@ -130,7 +130,7 @@ namespace TestCases.Util
         /**
          * Test set() methods
          */
-        [TestMethod]
+        [Test]
         public void TestSet()
         {
             ULongField field = new ULongField(0);
@@ -163,7 +163,7 @@ namespace TestCases.Util
         /**
          * Test readFromBytes
          */
-        [TestMethod]
+        [Test]
         public void TestReadFromBytes()
         {
             ULongField field = new ULongField(1);
@@ -200,7 +200,7 @@ namespace TestCases.Util
          *
          * @exception IOException
          */
-        [TestMethod]
+        [Test]
         public void TestReadFromStream()
         {
             ULongField field  = new ULongField(0);
@@ -229,7 +229,7 @@ namespace TestCases.Util
         /**
          * Test writeToBytes
          */
-        [TestMethod]
+        [Test]
         public void TestWriteToBytes()
         {
             ULongField field = new ULongField(0);

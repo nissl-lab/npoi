@@ -19,7 +19,7 @@ using TestCases.HSSF;
 using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
 using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using NPOI.Util;
 using NPOI.HSSF.Model;
 using TestCases.HSSF.UserModel;
@@ -33,10 +33,10 @@ namespace TestCases.HSSF.Record.Aggregates
      *
      * @author Dmitriy Kumshayev
      */
-    [TestClass]
+    [TestFixture]
     public class TestPageSettingsBlock
     {
-        [TestMethod]
+        [Test]
         public void TestPrintSetup_bug46548()
         {
 
@@ -60,7 +60,7 @@ namespace TestCases.HSSF.Record.Aggregates
          * Bug 46840 occurred because POI failed to recognise HEADERFOOTER as part of the
          * {@link PageSettingsBlock}.
          */
-        [TestMethod]
+        [Test]
         public void TestHeaderFooter_bug46840()
         {
 
@@ -96,7 +96,7 @@ namespace TestCases.HSSF.Record.Aggregates
             {
                 if (e.Message.Equals("two Page Settings Blocks found in the same sheet"))
                 {
-                    throw new AssertFailedException("Identified bug 46480");
+                    throw new AssertionException("Identified bug 46480");
                 }
                 throw e;
             }
@@ -110,7 +110,7 @@ namespace TestCases.HSSF.Record.Aggregates
         /**
          * Bug 46953 occurred because POI didn't handle late PSB records properly.
          */
-        [TestMethod]
+        [Test]
         public void TestLateHeaderFooter_bug46953()
         {
 
@@ -138,7 +138,7 @@ namespace TestCases.HSSF.Record.Aggregates
             NPOI.HSSF.Record.Record[] outRecs = rv.Records;
             if (outRecs[4] == EOFRecord.instance)
             {
-                throw new AssertFailedException("Identified bug 46953 - EOF incorrectly Appended to PSB");
+                throw new AssertionException("Identified bug 46953 - EOF incorrectly Appended to PSB");
             }
             Assert.AreEqual(recs.Length + 1, outRecs.Length); // +1 for index record
 
@@ -163,7 +163,7 @@ namespace TestCases.HSSF.Record.Aggregates
          * <li>BottomMargin(0x0029)</li>
          * </ul>
          */
-        [TestMethod]
+        [Test]
         public void TestLateMargins_bug47199()
         {
 
@@ -187,7 +187,7 @@ namespace TestCases.HSSF.Record.Aggregates
             {
                 if (e.Message.Equals("two Page Settings Blocks found in the same sheet"))
                 {
-                    throw new AssertFailedException("Identified bug 47199a - failed to process late margings records");
+                    throw new AssertionException("Identified bug 47199a - failed to process late margings records");
                 }
                 throw e;
             }
@@ -217,7 +217,7 @@ namespace TestCases.HSSF.Record.Aggregates
          * The PageSettingsBlock should not allow multiple copies of the same record.  This extra assertion
          * was Added while fixing bug 47199.  All existing POI Test samples comply with this requirement.
          */
-        [TestMethod]
+        [Test]
         public void TestDuplicatePSBRecord_bug47199()
         {
 
@@ -231,7 +231,7 @@ namespace TestCases.HSSF.Record.Aggregates
             try
             {
                 new PageSettingsBlock(rs);
-                throw new AssertFailedException("Identified bug 47199b - duplicate PSB records should not be allowed");
+                throw new AssertionException("Identified bug 47199b - duplicate PSB records should not be allowed");
             }
             catch (RecordFormatException e)
             {
@@ -241,7 +241,7 @@ namespace TestCases.HSSF.Record.Aggregates
                 }
                 else
                 {
-                    throw new AssertFailedException("Expected RecordFormatException due to duplicate PSB record");
+                    throw new AssertionException("Expected RecordFormatException due to duplicate PSB record");
                 }
             }
         }
@@ -256,7 +256,7 @@ namespace TestCases.HSSF.Record.Aggregates
          * This is not critical functionality but it has been decided to keep POI consistent with
          * Excel in this regard.
          */
-        [TestMethod]
+        [Test]
         public void TestMissingHeaderFooter()
         {
             // Initialise PSB with some records, but not the header / footer
@@ -274,7 +274,7 @@ namespace TestCases.HSSF.Record.Aggregates
 
             if (outRecs.Length == 2)
             {
-                throw new AssertFailedException("PageSettingsBlock didn't add missing header/footer records");
+                throw new AssertionException("PageSettingsBlock didn't add missing header/footer records");
             }
             Assert.AreEqual(4, outRecs.Length);
             Assert.AreEqual(typeof(HeaderRecord), outRecs[0].GetType());
@@ -298,7 +298,7 @@ namespace TestCases.HSSF.Record.Aggregates
          *
          * As of June 2009, PLS is still uninterpreted by POI
          */
-        [TestMethod]
+        [Test]
         public void TestDuplicatePLS_bug47415()
         {
             NPOI.HSSF.Record.Record plsA = ur(UnknownRecord.PLS_004D, "BA AD F0 0D");
@@ -323,7 +323,7 @@ namespace TestCases.HSSF.Record.Aggregates
             {
                 if ("Duplicate PageSettingsBlock record (sid=0x4d)".Equals(e.Message))
                 {
-                    throw new AssertFailedException("Identified bug 47415");
+                    throw new AssertionException("Identified bug 47415");
                 }
                 throw e;
             }
@@ -336,7 +336,7 @@ namespace TestCases.HSSF.Record.Aggregates
             // records were assembled in standard order, so this simple check is OK
             Assert.IsTrue(Arrays.Equals(recs, outRecs));
         }
-        [TestMethod]
+        [Test]
         public void TestDuplicateHeaderFooter_bug48026()
         {
 
@@ -373,7 +373,7 @@ namespace TestCases.HSSF.Record.Aggregates
             {
                 if (e.Message.Equals("Duplicate PageSettingsBlock record (sid=0x89c)"))
                 {
-                    throw new AssertFailedException("Identified bug 48026");
+                    throw new AssertionException("Identified bug 48026");
                 }
                 throw e;
             }

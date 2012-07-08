@@ -18,7 +18,7 @@
 namespace TestCases.HSSF.Record
 {
     using System;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.HSSF.UserModel;
     using NPOI.SS.Formula.PTG;
     using NPOI.SS.UserModel;
@@ -31,14 +31,14 @@ namespace TestCases.HSSF.Record
      * 
      * @author Danny Mui (dmui at apache dot org)
      */
-    [TestClass]
+    [TestFixture]
     public class TestNameRecord
     {
 
         /**
          * Makes sure that Additional name information is Parsed properly such as menu/description
          */
-        [TestMethod]
+        [Test]
         public void TestFillExtras()
         {
 
@@ -53,7 +53,7 @@ namespace TestCases.HSSF.Record
             Assert.IsNotNull(description);
             Assert.IsTrue(description.EndsWith("Macro recorded 27-Sep-93 by ALLWOR"));
         }
-        [TestMethod]
+        [Test]
         public void TestReSerialize()
         {
             byte[] data = HexRead
@@ -65,7 +65,7 @@ namespace TestCases.HSSF.Record
             byte[] data2 = nr.Serialize();
             TestcaseRecordInputStream.ConfirmRecordEncoding(NameRecord.sid, data, data2);
         }
-        [TestMethod]
+        [Test]
         public void TestFormulaRelAbs_bug46174()
         {
             // perhaps this Testcase belongs on TestHSSFName
@@ -76,11 +76,11 @@ namespace TestCases.HSSF.Record
             name.RefersToFormula = (/*setter*/"Sheet1!$B$3");
             if (name.RefersToFormula.Equals("Sheet1!B3"))
             {
-                throw new AssertFailedException("Identified bug 46174");
+                throw new AssertionException("Identified bug 46174");
             }
             Assert.AreEqual("Sheet1!$B$3", name.RefersToFormula);
         }
-        [TestMethod]
+        [Test]
         public void TestFormulaGeneral()
         {
             // perhaps this Testcase belongs on TestHSSFName
@@ -97,7 +97,7 @@ namespace TestCases.HSSF.Record
         /**
          *  A NameRecord followed by a ContinueRecord. See Bugzilla 50244
          */
-        [TestMethod]
+        [Test]
         public void Test50244()
         {
             String record_0x0018 =

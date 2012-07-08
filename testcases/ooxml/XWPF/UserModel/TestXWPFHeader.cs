@@ -21,17 +21,17 @@ namespace NPOI.XWPF.UserModel
 
 
 
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
 
     using NPOI.XWPF;
     using NPOI.XWPF.Model;
     using NPOI.OpenXmlFormats.Wordprocessing;
 
-    [TestClass]
+    [TestFixture]
     public class TestXWPFHeader
     {
 
-        [TestMethod]
+        [Test]
         public void TestSimpleHeader()
         {
             XWPFDocument sampleDoc = XWPFTestDataSamples.OpenSampleDocument("headerFooter.docx");
@@ -44,7 +44,7 @@ namespace NPOI.XWPF.UserModel
             Assert.IsNotNull(footer);
         }
 
-        [TestMethod]
+        [Test]
         public void TestImageInHeader()
         {
             XWPFDocument sampleDoc = XWPFTestDataSamples.OpenSampleDocument("headerPic.docx");
@@ -57,7 +57,7 @@ namespace NPOI.XWPF.UserModel
             Assert.AreEqual(1, header.GetRelations().Count);
         }
 
-        [TestMethod]
+        [Test]
         public void TestSetHeader()
         {
             XWPFDocument sampleDoc = XWPFTestDataSamples.OpenSampleDocument("SampleDoc.docx");
@@ -131,7 +131,7 @@ namespace NPOI.XWPF.UserModel
             Assert.AreEqual("Second paragraph for the footer", paras[1].GetText());
         }
 
-        [TestMethod]
+        [Test]
         public void TestSetWatermark()
         {
             XWPFDocument sampleDoc = XWPFTestDataSamples.OpenSampleDocument("SampleDoc.docx");
@@ -148,25 +148,25 @@ namespace NPOI.XWPF.UserModel
             Assert.IsNotNull(policy.GetEvenPageHeader());
         }
 
-        [TestMethod]
+        [Test]
         public void TestAddPictureData()
         {
 
         }
 
-        [TestMethod]
+        [Test]
         public void TestGetAllPictures()
         {
 
         }
 
-        [TestMethod]
+        [Test]
         public void TestGetAllPackagePictures()
         {
 
         }
 
-        [TestMethod]
+        [Test]
         public void TestGetPictureDataById()
         {
 

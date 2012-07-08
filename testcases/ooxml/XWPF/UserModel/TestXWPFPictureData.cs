@@ -19,17 +19,17 @@ namespace NPOI.XWPF.UserModel
 {
     using System;
     using System.Collections.Generic;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.OpenXml4Net.OPC;
     using NPOI.Util;
     using NPOI.XSSF.UserModel;
     using NPOI.XWPF;
     using NPOI.XWPF.Model;
 
-    [TestClass]
+    [TestFixture]
     public class TestXWPFPictureData
     {
-        [TestMethod]
+        [Test]
         public void TestRead()
         {
             XWPFDocument sampleDoc = XWPFTestDataSamples.OpenSampleDocument("VariousPictures.docx");
@@ -53,7 +53,7 @@ namespace NPOI.XWPF.UserModel
             Assert.AreEqual("jpeg", pict.suggestFileExtension());
             Assert.IsTrue(Arrays.Equals(pictureData, pict.GetData()));
         }
-        [TestMethod]
+        [Test]
         public void TestPictureInHeader()
         {
             XWPFDocument sampleDoc = XWPFTestDataSamples.OpenSampleDocument("headerPic.docx");
@@ -64,7 +64,7 @@ namespace NPOI.XWPF.UserModel
             IList<XWPFPictureData> pictures = header.AllPictures;
             Assert.AreEqual(1, pictures.Count);
         }
-        [TestMethod]
+        [Test]
         public void TestNew()
         {
             XWPFDocument doc = XWPFTestDataSamples.OpenSampleDocument("EmptyDocumentWithHeaderFooter.docx");
@@ -125,7 +125,7 @@ namespace NPOI.XWPF.UserModel
             Assert.AreEqual(1, doc.AllPackagePictures.Count);
         }
 
-        [TestMethod]
+        [Test]
         public void TestGetChecksum()
         {
 

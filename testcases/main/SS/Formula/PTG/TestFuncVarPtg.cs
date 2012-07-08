@@ -18,7 +18,7 @@
 namespace TestCases.SS.Formula.PTG
 {
     using System;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.HSSF.Model;
     using NPOI.HSSF.UserModel;
     using NPOI.SS.Formula.PTG;
@@ -26,7 +26,7 @@ namespace TestCases.SS.Formula.PTG
     /**
      * @author Josh Micich
      */
-    [TestClass]
+    [TestFixture]
     public class TestFuncVarPtg
     {
 
@@ -37,7 +37,7 @@ namespace TestCases.SS.Formula.PTG
          * wrong.  In other cases Excel seems to tolerate bad operand classes.</p>
          * This functionality is related to the SetParameterRVA() methods of <c>FormulaParser</c>
          */
-        [TestMethod]
+        [Test]
         public void TestOperandClass()
         {
             HSSFWorkbook book = new HSSFWorkbook();
@@ -51,7 +51,7 @@ namespace TestCases.SS.Formula.PTG
                     // correct behaviour
                     break;
                 case Ptg.CLASS_VALUE:
-                    throw new AssertFailedException("Identified bug 44675b");
+                    throw new AssertionException("Identified bug 44675b");
                 default:
                     throw new Exception("Unexpected operand class");
             }

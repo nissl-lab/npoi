@@ -20,7 +20,7 @@ namespace TestCases.SS.Formula.Atp
 
 
     using System;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.SS.Formula.Atp;
     using NPOI.SS.Formula.Eval;
     using NPOI.SS.UserModel;
@@ -28,10 +28,10 @@ namespace TestCases.SS.Formula.Atp
     /**
      * Specific Test cases for YearFracCalculator
      */
-    [TestClass]
+    [TestFixture]
     public class TestYearFracCalculator
     {
-        [TestMethod]
+        [Test]
         public void TestBasis1()
         {
             Confirm(md(1999, 1, 1), md(1999, 4, 5), 1, 0.257534247);

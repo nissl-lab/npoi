@@ -19,7 +19,7 @@ namespace TestCases.SS.UserModel
 {
     using System;
 
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using TestCases.SS;
     using NPOI.SS.UserModel;
     using NPOI.SS.Util;
@@ -28,7 +28,7 @@ namespace TestCases.SS.UserModel
      * Common superclass for testing implementatiosn of
      *  {@link NPOI.SS.usermodel.Cell}
      */
-    [TestClass]
+    [TestFixture]
     public class BaseTestCell
     {
 
@@ -47,7 +47,7 @@ namespace TestCases.SS.UserModel
             System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
             _testDataProvider = testDataProvider;
         }
-        [TestMethod]
+        [Test]
         public void TestSetValues()
         {
             IWorkbook book = _testDataProvider.CreateWorkbook();
@@ -143,7 +143,7 @@ namespace TestCases.SS.UserModel
         /**
          * test that Boolean and Error types (BoolErrRecord) are supported properly.
          */
-        [TestMethod]
+        [Test]
         public void TestBoolErr()
         {
 
@@ -186,7 +186,7 @@ namespace TestCases.SS.UserModel
         /**
          * test that Cell Styles being applied to formulas remain intact
          */
-        [TestMethod]
+        [Test]
         public void TestFormulaStyle()
         {
 
@@ -229,7 +229,7 @@ namespace TestCases.SS.UserModel
         }
 
         /**tests the ToString() method of HSSFCell*/
-        [TestMethod]
+        [Test]
         public void TestToString()
         {
             IWorkbook wb = _testDataProvider.CreateWorkbook();
@@ -262,7 +262,7 @@ namespace TestCases.SS.UserModel
         /**
          *  Test that Setting cached formula result keeps the cell type
          */
-        [TestMethod]
+        [Test]
         public void TestSetFormulaValue()
         {
             IWorkbook wb = _testDataProvider.CreateWorkbook();
@@ -298,7 +298,7 @@ namespace TestCases.SS.UserModel
             return _testDataProvider.CreateWorkbook().CreateSheet("Sheet1").CreateRow(0).CreateCell(0);
         }
 
-        [TestMethod]
+        [Test]
         public void TestChangeTypeStringToBool()
         {
             ICell cell = CreateACell();
@@ -311,7 +311,7 @@ namespace TestCases.SS.UserModel
             }
             catch (InvalidCastException)
             {
-                throw new AssertFailedException(
+                throw new AssertionException(
                         "Identified bug in conversion of cell from text to bool");
             }
 
@@ -328,7 +328,7 @@ namespace TestCases.SS.UserModel
             cell.SetCellType(CellType.STRING);
             Assert.AreEqual("FALSE", cell.RichStringCellValue.String);
         }
-        [TestMethod]
+        [Test]
         public void TestChangeTypeBoolToString()
         {
             ICell cell = CreateACell();
@@ -342,14 +342,14 @@ namespace TestCases.SS.UserModel
             {
                 if (e.Message.Equals("Cannot get a text value from a bool cell"))
                 {
-                    throw new AssertFailedException(
+                    throw new AssertionException(
                             "Identified bug in conversion of cell from bool to text");
                 }
                 throw e;
             }
             Assert.AreEqual("TRUE", cell.RichStringCellValue.String);
         }
-        [TestMethod]
+        [Test]
         public void TestChangeTypeErrorToNumber()
         {
             ICell cell = CreateACell();
@@ -360,11 +360,11 @@ namespace TestCases.SS.UserModel
             }
             catch (InvalidCastException)
             {
-                throw new AssertFailedException("Identified bug 46479b");
+                throw new AssertionException("Identified bug 46479b");
             }
             Assert.AreEqual(2.5, cell.NumericCellValue, 0.0);
         }
-        [TestMethod]
+        [Test]
         public void TestChangeTypeErrorToBoolean()
         {
             ICell cell = CreateACell();
@@ -379,7 +379,7 @@ namespace TestCases.SS.UserModel
                 if (e.Message.Equals("Cannot get a bool value from a error cell"))
                 {
 
-                    throw new AssertFailedException("Identified bug 46479c");
+                    throw new AssertionException("Identified bug 46479c");
                 }
                 throw e;
             }
@@ -391,7 +391,7 @@ namespace TestCases.SS.UserModel
          * {@link FormulaEvaluator#EvaluateInCell(Cell)} with a
          * string result type.
          */
-        [TestMethod]
+        [Test]
         public void TestConvertStringFormulaCell()
         {
             ICell cellA1 = CreateACell();
@@ -408,7 +408,7 @@ namespace TestCases.SS.UserModel
             fe.EvaluateInCell(cellA1);
             if (cellA1.StringCellValue.Equals(""))
             {
-                throw new AssertFailedException("Identified bug with writing back formula result of type string");
+                throw new AssertionException("Identified bug with writing back formula result of type string");
             }
             Assert.AreEqual("abc", cellA1.StringCellValue);
         }
@@ -416,7 +416,7 @@ namespace TestCases.SS.UserModel
          * similar to {@link #testConvertStringFormulaCell()} but  Checks at a
          * lower level that {#link {@link Cell#SetCellType(int)} works properly
          */
-        [TestMethod]
+        [Test]
         public void TestSetTypeStringOnFormulaCell()
         {
             ICell cellA1 = CreateACell();
@@ -462,7 +462,7 @@ namespace TestCases.SS.UserModel
         /**
          * Test for bug in ConvertCellValueToBoolean to make sure that formula results get Converted
          */
-        [TestMethod]
+        [Test]
         public void TestChangeTypeFormulaToBoolean()
         {
             ICell cell = CreateACell();
@@ -471,7 +471,7 @@ namespace TestCases.SS.UserModel
             cell.SetCellType(CellType.BOOLEAN);
             if (cell.BooleanCellValue == false)
             {
-                throw new AssertFailedException("Identified bug 46479d");
+                throw new AssertionException("Identified bug 46479d");
             }
             Assert.AreEqual(true, cell.BooleanCellValue);
         }
@@ -480,7 +480,7 @@ namespace TestCases.SS.UserModel
          * Bug 40296:	  HSSFCell.CellFormula =  throws
          *   InvalidCastException if cell is Created using HSSFRow.CreateCell(short column, int type)
          */
-        [TestMethod]
+        [Test]
         public void Test40296()
         {
             IWorkbook wb = _testDataProvider.CreateWorkbook();
@@ -518,7 +518,7 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual(CellType.FORMULA, cell.CellType);
             Assert.AreEqual("SUM(A1:B1)", cell.CellFormula);
         }
-        [TestMethod]
+        [Test]
         public void TestSetStringInFormulaCell_bug44606()
         {
             IWorkbook wb = _testDataProvider.CreateWorkbook();
@@ -530,14 +530,14 @@ namespace TestCases.SS.UserModel
             }
             catch (InvalidCastException)
             {
-                throw new AssertFailedException("Identified bug 44606");
+                throw new AssertionException("Identified bug 44606");
             }
         }
 
         /**
          *  Make sure that cell.SetCellType(Cell.CELL_TYPE_BLANK) preserves the cell style
          */
-        [TestMethod]
+        [Test]
         public void TestSetBlank_bug47028()
         {
             IWorkbook wb = _testDataProvider.CreateWorkbook();
@@ -569,7 +569,7 @@ namespace TestCases.SS.UserModel
          * </li>
          * </ul>
          */
-        [TestMethod]
+        [Test]
         public void TestNanAndInfInity()
         {
             IWorkbook wb = _testDataProvider.CreateWorkbook();
@@ -606,7 +606,7 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual(CellType.ERROR, cell2.CellType);
             Assert.AreEqual(ErrorConstants.ERROR_DIV_0, cell2.ErrorCellValue);
         }
-        [TestMethod]
+        [Test]
         public void TestDefaultStyleProperties()
         {
             IWorkbook wb = _testDataProvider.CreateWorkbook();

@@ -18,7 +18,7 @@
 namespace TestCases.HSSF.Model
 {
     using System;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.HSSF.Model;
     using NPOI.HSSF.UserModel;
     using NPOI.SS.Formula.PTG;
@@ -29,10 +29,10 @@ namespace TestCases.HSSF.Model
      *  but using parts which need to use 
      *  HSSFFormulaEvaluator.
      */
-    [TestClass]
+    [TestFixture]
     public class TestFormulaParserEval
     {
-        [TestMethod]
+        [Test]
         public void TestWithNamedRange()
         {
             HSSFWorkbook workbook = new HSSFWorkbook();
@@ -67,7 +67,7 @@ namespace TestCases.HSSF.Model
             Assert.AreEqual(typeof(AttrPtg), ptgs[1].GetType());
         }
 
-        [TestMethod]
+        [Test]
         public void TestEvaluateFormulaWithRowBeyond32768_Bug44539()
         {
 

@@ -31,7 +31,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 using NPOI.POIFS.Storage;
 using NPOI.Util;

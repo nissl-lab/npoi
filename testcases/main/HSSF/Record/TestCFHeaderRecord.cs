@@ -20,7 +20,7 @@ namespace TestCases.HSSF.Record
     using System;
     using NPOI.HSSF.Record;
 
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.HSSF.Record.CF;
     using NPOI.HSSF.Util;
     using NPOI.SS.Util;
@@ -31,10 +31,10 @@ namespace TestCases.HSSF.Record
      *
      * @author Dmitriy Kumshayev 
      */
-    [TestClass]
+    [TestFixture]
     public class TestCFHeaderRecord
     {
-        [TestMethod]
+        [Test]
         public void TestCreateCFHeaderRecord()
         {
             CFHeaderRecord record = new CFHeaderRecord();
@@ -59,7 +59,7 @@ namespace TestCases.HSSF.Record
             record.NeedRecalculation = (false);
             Assert.IsFalse(record.NeedRecalculation);
         }
-        [TestMethod]
+        [Test]
         public void TestSerialization()
         {
             byte[] recordData = 
@@ -117,7 +117,7 @@ namespace TestCases.HSSF.Record
                 Assert.AreEqual(recordData[i], output[i + 4], "CFHeaderRecord doesn't match");
             }
         }
-        [TestMethod]
+        [Test]
         public void TestExtremeRows()
         {
             byte[] recordData = {
@@ -156,7 +156,7 @@ namespace TestCases.HSSF.Record
             {
                 if (e.Message.Equals("invalid cell range (-25536, 2, -15536, 2)"))
                 {
-                    throw new AssertFailedException("Identified bug 44739b");
+                    throw new AssertionException("Identified bug 44739b");
                 }
                 throw e;
             }

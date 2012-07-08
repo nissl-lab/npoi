@@ -21,7 +21,7 @@ namespace TestCases.HSSF.Model
     using NPOI.HSSF.Record;
     using NPOI.HSSF.Record.PivotTable;
     using NPOI.Util;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.HSSF.Model;
 
     /**
@@ -29,10 +29,10 @@ namespace TestCases.HSSF.Model
      *
      * @author Josh Micich
      */
-    [TestClass]
+    [TestFixture]
     public class TestRowBlocksReader
     {
-        [TestMethod]
+        [Test]
         public void TestAbnormalPivotTableRecords_bug46280()
         {
             int SXVIEW_SID = ViewDefinitionRecord.sid;
@@ -48,7 +48,7 @@ namespace TestCases.HSSF.Model
             if (rs.PeekNextClass() == typeof(WindowTwoRecord))
             {
                 // Should have stopped at the SXVIEW record
-                throw new AssertFailedException("Identified bug 46280b");
+                throw new AssertionException("Identified bug 46280b");
             }
             RecordStream rbStream = rbr.PlainRecordStream;
             Assert.AreEqual(inRecs[0], rbStream.GetNext());

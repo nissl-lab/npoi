@@ -18,7 +18,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using NPOI.POIFS.Common;
 using NPOI.POIFS.FileSystem;
 using NPOI.POIFS.NIO;
@@ -32,7 +32,7 @@ namespace TestCases.POIFS.FileSystem
     /// <summary>
     /// Summary description for TestNPOIFSStream
     /// </summary>
-    [TestClass]
+    [TestFixture]
     public class TestNPOIFSStream
     {
         private static POIDataSamples _inst = POIDataSamples.GetPOIFSInstance();
@@ -43,7 +43,7 @@ namespace TestCases.POIFS.FileSystem
             //
         }
 
-        [TestMethod]
+        [Test]
         public void TestReadTinyStream()
         {
             NPOIFSFileSystem fs = new NPOIFSFileSystem(_inst.GetFile("BlockSize512.zvi"));
@@ -66,7 +66,7 @@ namespace TestCases.POIFS.FileSystem
             Assert.AreEqual((byte)0x00, b[7]);
         }
 
-        [TestMethod]
+        [Test]
         public void TestReadShortStream()
         {
             NPOIFSFileSystem fs = new NPOIFSFileSystem(_inst.GetFile("BlockSize512.zvi"));
@@ -106,7 +106,7 @@ namespace TestCases.POIFS.FileSystem
             Assert.AreEqual((byte)0x00, b98[7]);
         }
 
-        [TestMethod]
+        [Test]
         public void TestReadLongerStream()
         {
             NPOIFSFileSystem fs = new NPOIFSFileSystem(_inst.GetFile("BlockSize512.zvi"));
@@ -164,7 +164,7 @@ namespace TestCases.POIFS.FileSystem
             Assert.AreEqual((byte)0x00, b22[7]);
         }
 
-        [TestMethod]
+        [Test]
         public void TestReadStream4096()
         {
             NPOIFSFileSystem fs = new NPOIFSFileSystem(_inst.GetFile("BlockSize4096.zvi"));
@@ -218,7 +218,7 @@ namespace TestCases.POIFS.FileSystem
             Assert.AreEqual((byte)0x00, b2[7]);
         }
 
-        [TestMethod]
+        [Test]
         public void TestReadFailsOnLoop()
         {
             NPOIFSFileSystem fs = new NPOIFSFileSystem(_inst.GetFile("BlockSize512.zvi"));
@@ -261,7 +261,7 @@ namespace TestCases.POIFS.FileSystem
             // Assert.AreEqual(true, i.MoveNext());
         }
 
-        [TestMethod]
+        [Test]
         public void TestReadMiniStreams()
         {
             NPOIFSFileSystem fs = new NPOIFSFileSystem(_inst.OpenResourceAsStream("BlockSize512.zvi"));
@@ -320,7 +320,7 @@ namespace TestCases.POIFS.FileSystem
             Assert.AreEqual((byte)0x80, b180[7]);
         }
 
-        [TestMethod]
+        [Test]
         public void TestReplaceStream()
         {
             NPOIFSFileSystem fs = new NPOIFSFileSystem(_inst.OpenResourceAsStream("BlockSize512.zvi"));
@@ -354,7 +354,7 @@ namespace TestCases.POIFS.FileSystem
             }
         }
 
-        [TestMethod]
+        [Test]
         public void TestReplaceStreamWithLess()
         {
             NPOIFSFileSystem fs = new NPOIFSFileSystem(_inst.OpenResourceAsStream("BlockSize512.zvi"));
@@ -399,7 +399,7 @@ namespace TestCases.POIFS.FileSystem
             }
         }
 
-        [TestMethod]
+        [Test]
         public void TestReplaceStreamWithMore()
         {
             NPOIFSFileSystem fs = new NPOIFSFileSystem(_inst.OpenResourceAsStream("BlockSize512.zvi"));
@@ -448,7 +448,7 @@ namespace TestCases.POIFS.FileSystem
             Assert.AreEqual(3, count);
         }
 
-        [TestMethod]
+        [Test]
         public void TestWriteNewStream()
         {
             NPOIFSFileSystem fs = new NPOIFSFileSystem(_inst.OpenResourceAsStream("BlockSize512.zvi"));
@@ -548,7 +548,7 @@ namespace TestCases.POIFS.FileSystem
             Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(104));
         }
 
-        [TestMethod]
+        [Test]
         public void TestWriteNewStreamExtraFATs()
         {
             NPOIFSFileSystem fs = new NPOIFSFileSystem(_inst.OpenResourceAsStream("BlockSize512.zvi"));
@@ -587,7 +587,7 @@ namespace TestCases.POIFS.FileSystem
             Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(131));
         }
 
-        [TestMethod]
+        [Test]
         public void TestWriteStream4096()
         {
             NPOIFSFileSystem fs = new NPOIFSFileSystem(_inst.OpenResourceAsStream("BlockSize4096.zvi"));
@@ -643,7 +643,7 @@ namespace TestCases.POIFS.FileSystem
             Assert.AreEqual(5, count);
         }
 
-        [TestMethod]
+        [Test]
         public void TestWriteMiniStreams()
         {
             NPOIFSFileSystem fs = new NPOIFSFileSystem(_inst.OpenResourceAsStream("BlockSize512.zvi"));
@@ -861,7 +861,7 @@ namespace TestCases.POIFS.FileSystem
             Assert.AreEqual((byte)0x82, b184[1]);
         }
 
-        [TestMethod]
+        [Test]
         public void TestWriteFailsOnLoop()
         {
             NPOIFSFileSystem fs = new NPOIFSFileSystem(_inst.GetFile("BlockSize512.zvi"));
@@ -897,7 +897,7 @@ namespace TestCases.POIFS.FileSystem
             catch (Exception) { }
         }
 
-        [TestMethod]
+        [Test]
         public void TestReadWriteNewStream()
         {
             NPOIFSFileSystem fs = new NPOIFSFileSystem();

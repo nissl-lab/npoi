@@ -18,13 +18,13 @@ namespace TestCases.SS.format
 {
     using System;
 
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.SS.Format;
 
-    [TestClass]
+    [TestFixture]
     public class TestCellFormatCondition
     {
-        [TestMethod]
+        [Test]
         public void TestSVConditions()
         {
             System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");

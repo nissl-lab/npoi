@@ -31,7 +31,7 @@ namespace TestCases.POIFS.FileSystem
     using System.Collections;
     using System.IO;
 
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
 
     using NPOI.POIFS.FileSystem;
     using NPOI.Util;
@@ -46,7 +46,7 @@ namespace TestCases.POIFS.FileSystem
      * 
      * @author Josh Micich
      */
-    [TestClass]
+    [TestFixture]
     public class TestPOIFSFileSystem
     {
         private POIDataSamples _samples = POIDataSamples.GetPOIFSInstance();
@@ -180,7 +180,7 @@ namespace TestCases.POIFS.FileSystem
          * Test for undesired behaviour observable as of svn revision 618865 (5-Feb-2008).
          * POIFSFileSystem was not closing the input stream.
          */
-        [TestMethod]
+        [Test]
         public void TestAlwaysClose()
         {
 
@@ -228,7 +228,7 @@ namespace TestCases.POIFS.FileSystem
          * The other is to fix the handling of the last block in
          *  POIFS, since it seems to be slight wrong
          */
-        [TestMethod]
+        [Test]
         public void TestShortLastBlock()
         {
             String[] files = new String[] {"ShortLastBlock.qwp", "ShortLastBlock.wps"};
@@ -248,7 +248,7 @@ namespace TestCases.POIFS.FileSystem
             }
         }
 
-        [TestMethod]
+        [Test]
         public void TestFATandDIFATsectors()
         {
             // Open the file up
@@ -265,7 +265,7 @@ namespace TestCases.POIFS.FileSystem
             }
         }
 
-        [TestMethod]
+        [Test]
         public void TestBATandXBAT()
         {
             byte[] hugeStream = new byte[8 * 1024 * 1024];
@@ -321,7 +321,7 @@ namespace TestCases.POIFS.FileSystem
 
         }
 
-        [TestMethod]
+        [Test]
         public void Test4KBlocks()
         {
             
@@ -385,7 +385,7 @@ namespace TestCases.POIFS.FileSystem
 	 * Test that we can open files that come via Lotus notes.
 	 * These have a top level directory without a name....
 	 */
-        [TestMethod]
+        [Test]
         public void TestNotesOLE2Files()
         {
             POIDataSamples _samples = POIDataSamples.GetPOIFSInstance();

@@ -17,7 +17,7 @@
 
 namespace TestCases.HSSF.Record
 {
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
 
     using NPOI.Util;
     using TestCases.HSSF.Record;
@@ -28,10 +28,10 @@ namespace TestCases.HSSF.Record
      *
      * @author Josh Micich
      */
-    [TestClass]
+    [TestFixture]
     public class TestColumnInfoRecord
     {
-        [TestMethod]
+        [Test]
         public void TestBasic() {
 		byte[] data = HexRead.ReadFromString("7D 00 0C 00 14 00 9B 00 C7 19 0F 00 01 13 00 00");
 
@@ -54,7 +54,7 @@ namespace TestCases.HSSF.Record
          * The attached file was apparently Created by "SoftArtisans OfficeWriter for Excel".
          * Excel Reads that file OK and assumes zero for the value of the reserved field.
          */
-        [TestMethod]
+        [Test]
         public void TestZeroResevedBytes_bug48332()
         {
             // Taken from bugzilla attachment 24661 (offset 0x1E73)
@@ -71,7 +71,7 @@ namespace TestCases.HSSF.Record
             {
                 if (e.Message.Equals("Unusual record size remaining=(0)"))
                 {
-                    throw new AssertFailedException("Identified bug 48332");
+                    throw new AssertionException("Identified bug 48332");
                 }
                 throw e;
             }
@@ -84,7 +84,7 @@ namespace TestCases.HSSF.Record
          * OddStyleRecord.xls, NoGutsRecords.xls, WORKBOOK_in_capitals.xls
          * but this seems to cause no problem to Excel
          */
-        [TestMethod]
+        [Test]
         public void TestOneReservedByte()
         {
             byte[] inpData = HexRead.ReadFromString("7D 00 0B 00 00 00 00 00 24 02 0F 00 00 00 01");

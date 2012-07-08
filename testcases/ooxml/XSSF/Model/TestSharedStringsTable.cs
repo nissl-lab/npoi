@@ -15,7 +15,7 @@
    limitations under the License.
 ==================================================================== */
 
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using NPOI.OpenXmlFormats.Spreadsheet;
 using NPOI.XSSF.UserModel;
 using System.Collections.Generic;
@@ -31,10 +31,10 @@ namespace NPOI.XSSF.Model
      *
      * @author Yegor Kozlov
      */
-    [TestClass]
+    [TestFixture]
     public class TestSharedStringsTable
     {
-        [TestMethod]
+        [Test]
         public void TestCreateNew()
         {
             SharedStringsTable sst = new SharedStringsTable();
@@ -106,7 +106,7 @@ namespace NPOI.XSSF.Model
             Assert.AreEqual("Second string", new XSSFRichTextString(sst.GetEntryAt(1)).ToString());
             Assert.AreEqual("Second string", new XSSFRichTextString(sst.GetEntryAt(2)).ToString());
         }
-        [TestMethod]
+        [Test]
         public void TestReadWrite()
         {
             XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("sample.xlsx");
@@ -136,7 +136,7 @@ namespace NPOI.XSSF.Model
          *
          * @author Philippe Laflamme
          */
-        [TestMethod]
+        [Test]
         public void TestBug48936()
         {
             IWorkbook w = new XSSFWorkbook();

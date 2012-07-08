@@ -23,13 +23,13 @@ namespace TestCases.DDF
     using System.Text;
     using System.IO;
 
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.DDF;
     using NPOI.Util;
-    [TestClass]
+    [TestFixture]
     public class TestEscherSplitMenuColorsRecord
     {
-        [TestMethod]
+        [Test]
         public void TestSerialize()
         {
             EscherSplitMenuColorsRecord r = CreateRecord();
@@ -46,7 +46,7 @@ namespace TestCases.DDF
                     "01, 00, 00, 00, ]",
                     HexDump.ToHex(data));
         }
-        [TestMethod]
+        [Test]
         public void TestFillFields()
         {
             String hexData = "40 00 " +
@@ -66,7 +66,7 @@ namespace TestCases.DDF
             Assert.AreEqual(0x02, r.Color3);
             Assert.AreEqual(0x01, r.Color4);
         }
-        [TestMethod]
+        [Test]
         public void TestToString()
         {
             String nl = Environment.NewLine;

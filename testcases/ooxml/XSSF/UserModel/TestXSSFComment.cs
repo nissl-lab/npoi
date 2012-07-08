@@ -16,7 +16,7 @@
 ==================================================================== */
 
 using NPOI.SS.Util;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using NPOI.XSSF.Model;
 using System;
 using TestCases.SS.UserModel;
@@ -29,7 +29,7 @@ namespace NPOI.XSSF.UserModel
     /**
      * @author Yegor Kozlov
      */
-    [TestClass]
+    [TestFixture]
     public class TestXSSFComment : BaseTestCellComment
     {
 
@@ -44,14 +44,14 @@ namespace NPOI.XSSF.UserModel
         /**
          * Test properties of a newly constructed comment
          */
-        [TestMethod]
+        [Test]
         public void TestConstructor()
         {
             CommentsTable sheetComments = new CommentsTable();
             Assert.IsNotNull(sheetComments.GetCTComments().commentList);
             Assert.IsNotNull(sheetComments.GetCTComments().authors);
-            Assert.AreEqual(1, sheetComments.GetCTComments().authors.SizeOfAuthorArray());
-            Assert.AreEqual(1, sheetComments.GetNumberOfAuthors());
+            Assert.AreEqual(0, sheetComments.GetCTComments().authors.SizeOfAuthorArray());
+            Assert.AreEqual(0, sheetComments.GetNumberOfAuthors());
 
             CT_Comment ctComment = sheetComments.CreateComment();
             CT_Shape vmlShape = new CT_Shape();
@@ -60,10 +60,10 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual(null, comment.String.String);
             Assert.AreEqual(0, comment.Row);
             Assert.AreEqual(0, comment.Column);
-            Assert.AreEqual("", comment.Author);
+            Assert.AreEqual(null, comment.Author);
             Assert.AreEqual(false, comment.Visible);
         }
-        [TestMethod]
+        [Test]
         public void TestGetSetCol()
         {
             CommentsTable sheetComments = new CommentsTable();
@@ -82,7 +82,7 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual(5, new CellReference(ctComment.@ref).Col);
             Assert.AreEqual(5, vmlShape.GetClientDataArray(0).GetColumnArray(0));
         }
-        [TestMethod]
+        [Test]
         public void TestGetSetRow()
         {
             CommentsTable sheetComments = new CommentsTable();
@@ -101,7 +101,7 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual(5, new CellReference(ctComment.@ref).Row);
             Assert.AreEqual(5, vmlShape.GetClientDataArray(0).GetRowArray(0));
         }
-        [TestMethod]
+        [Test]
         public void TestSetString()
         {
             XSSFWorkbook wb = new XSSFWorkbook();
@@ -158,20 +158,20 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual(IndexedColors.BLUE_GREY.Index, (short)rPr.GetColorArray(0).indexed);
             Assert.AreEqual("Tahoma", rPr.GetRFontArray(0).val);
         }
-        [TestMethod]
+        [Test]
         public void TestAuthor()
         {
             CommentsTable sheetComments = new CommentsTable();
             CT_Comment ctComment = sheetComments.CreateComment();
 
-            Assert.AreEqual(1, sheetComments.GetNumberOfAuthors());
+            Assert.AreEqual(0, sheetComments.GetNumberOfAuthors());
             XSSFComment comment = new XSSFComment(sheetComments, ctComment, null);
-            Assert.AreEqual("", comment.Author);
+            Assert.AreEqual(null, comment.Author);
             comment.Author = ("Apache POI");
             Assert.AreEqual("Apache POI", comment.Author);
-            Assert.AreEqual(2, sheetComments.GetNumberOfAuthors());
+            Assert.AreEqual(1, sheetComments.GetNumberOfAuthors());
             comment.Author = ("Apache POI");
-            Assert.AreEqual(2, sheetComments.GetNumberOfAuthors());
+            Assert.AreEqual(1, sheetComments.GetNumberOfAuthors());
             comment.Author = ("");
             Assert.AreEqual("", comment.Author);
             Assert.AreEqual(2, sheetComments.GetNumberOfAuthors());

@@ -30,7 +30,7 @@ using System.Text;
 using System.Collections.Generic;
 using System.IO;
 
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using NPOI.Util;
 
 namespace TestCases.Util
@@ -38,7 +38,7 @@ namespace TestCases.Util
     /// <summary>
     /// Summary description for TestHexRead
     /// </summary>
-    [TestClass]
+    [TestFixture]
     public class TestIntegerField
     {
         private int[] _test_array;
@@ -52,7 +52,7 @@ namespace TestCases.Util
             };
         }
 
-        [TestMethod]
+        [Test]
         public void TestConstructors()
         {
             try
@@ -128,7 +128,7 @@ namespace TestCases.Util
         /**
          * Test set() methods
          */
-        [TestMethod]
+        [Test]
         public void TestSet()
         {
             IntegerField field = new IntegerField(0);
@@ -154,7 +154,7 @@ namespace TestCases.Util
         /**
          * Test readFromBytes
          */
-        [TestMethod]
+        [Test]
         public void TestReadFromBytes()
         {
             IntegerField field = new IntegerField(1);
@@ -187,7 +187,7 @@ namespace TestCases.Util
          *
          * @exception IOException
          */
-        [TestMethod]
+        [Test]
         public void TestReadFromStream()
         {
             IntegerField field  = new IntegerField(0);
@@ -212,7 +212,7 @@ namespace TestCases.Util
         /**
          * Test writeToBytes
          */
-        [TestMethod]
+        [Test]
         public void TestWriteToBytes()
         {
             IntegerField field = new IntegerField(0);

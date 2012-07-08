@@ -16,7 +16,7 @@
 */
 namespace TestCases.HSSF.UserModel
 {
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
 
     using TestCases.HSSF;
     using TestCases.SS.UserModel;
@@ -29,7 +29,7 @@ namespace TestCases.HSSF.UserModel
      *
      * @author Yegor Kozlov (yegor at apache.org)
      */
-    [TestClass]
+    [TestFixture]
     public class TestHSSFDataFormat : BaseTestDataFormat
     {
         public TestHSSFDataFormat()
@@ -40,7 +40,7 @@ namespace TestCases.HSSF.UserModel
         /**
 * [Bug 49928] formatCellValue returns incorrect value for \u00a3 formatted cells
 */
-        [TestMethod]
+        [Test]
         public new void Test49928()
         {
             HSSFWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("49928.xls");
@@ -67,7 +67,7 @@ namespace TestCases.HSSF.UserModel
         /**
      * Bug 51378: GetDataFormatString method call crashes when Reading the test file
      */
-        [TestMethod]
+        [Test]
         public void Test51378()
         {
             IWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("12561-1.xls");

@@ -23,20 +23,20 @@ namespace TestCases.HSSF.UserModel
     using NPOI.HSSF.Record;
     using TestCases.HSSF;
     using NPOI.SS.UserModel;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.HSSF.Model;
 
     /**
      * @author Glen Stampoultzis (glens at apache.org)
      */
-    [TestClass]
+    [TestFixture]
     public class TestReadWriteChart
     {
 
         /**
          * In the presence of a chart we need to make sure BOF/EOF records still exist.
          */
-        [TestMethod]
+        [Test]
         public void TestBOFandEOFRecords()
         {
             HSSFWorkbook workbook = HSSFTestDataSamples.OpenSampleWorkbook("SimpleChart.xls");

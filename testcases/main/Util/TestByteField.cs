@@ -28,7 +28,7 @@
 using System;
 using System.Collections.Generic;
 
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using System.IO;
 using NPOI.Util;
 
@@ -37,7 +37,7 @@ namespace TestCases.Util
     /// <summary>
     /// Summary description for TestByteField
     /// </summary>
-    [TestClass]
+    [TestFixture]
     public class TestByteField
     {
         public TestByteField()
@@ -53,7 +53,7 @@ namespace TestCases.Util
         /**
          * Test constructors.
          */
-        [TestMethod]
+        [Test]
         public void TestConstructors()
         {
             try
@@ -118,7 +118,7 @@ namespace TestCases.Util
         /**
          * Test set() methods
          */
-        [TestMethod]
+        [Test]
         public void TestSet()
         {
             ByteField field = new ByteField(0);
@@ -138,7 +138,7 @@ namespace TestCases.Util
         /**
          * Test readFromBytes
          */
-        [TestMethod]
+        [Test]
         public void TestReadFromBytes()
         {
             ByteField field = new ByteField(1);
@@ -168,7 +168,7 @@ namespace TestCases.Util
          *
          * @exception IOException
          */
-        [TestMethod]
+        [Test]
         public void TestReadFromStream()
         {
             ByteField field  = new ByteField(0);
@@ -187,7 +187,7 @@ namespace TestCases.Util
         /**
          * Test writeToBytes
          */
-        [TestMethod]
+        [Test]
         public void TestWriteToBytes()
         {
             ByteField field = new ByteField(0);

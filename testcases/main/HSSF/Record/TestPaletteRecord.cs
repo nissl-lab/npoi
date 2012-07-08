@@ -20,7 +20,7 @@ namespace TestCases.HSSF.Record
 {
     using System;
     using System.Collections;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.HSSF.Util;
     using NPOI.HSSF.Record;
 
@@ -30,13 +30,13 @@ namespace TestCases.HSSF.Record
      *
      * @author Brian Sanders (bsanders at risklabs dot com)
      */
-    [TestClass]
+    [TestFixture]
     public class TestPaletteRecord
     {
         /**
          * Tests that the default palette matches the constants of HSSFColor
          */
-        [TestMethod]
+        [Test]
         public void TestDefaultPalette()
         {
             PaletteRecord palette = new PaletteRecord();

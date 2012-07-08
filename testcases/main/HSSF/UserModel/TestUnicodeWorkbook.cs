@@ -21,9 +21,9 @@ namespace TestCases.HSSF.UserModel
     using NPOI.HSSF.UserModel;
     using NPOI.Util;
     using NPOI.SS.UserModel;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
 
-    [TestClass]
+    [TestFixture]
     public class TestUnicodeWorkbook
     {
 
@@ -36,7 +36,7 @@ namespace TestCases.HSSF.UserModel
          * 
          *
          */
-        //[TestMethod]
+        //[Test]
         //public void TestUnicodeInAll()
         //{
         //    HSSFWorkbook wb = new HSSFWorkbook();
@@ -119,7 +119,7 @@ namespace TestCases.HSSF.UserModel
          * 
          *
          */
-        [TestMethod]
+        [Test]
         public void TestUmlatReadWrite()
         {
             HSSFWorkbook wb = new HSSFWorkbook();

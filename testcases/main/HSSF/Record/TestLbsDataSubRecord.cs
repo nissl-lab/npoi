@@ -18,7 +18,7 @@
 namespace TestCases.HSSF.Record
 {
     using System.IO;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.SS.Formula.PTG;
     using NPOI.SS.Util;
     using NPOI.Util;
@@ -30,7 +30,7 @@ namespace TestCases.HSSF.Record
      *
      * @author Yegor Kozlov
      */
-    [TestClass]
+    [TestFixture]
     public class TestLbsDataSubRecord
     {
 
@@ -38,7 +38,7 @@ namespace TestCases.HSSF.Record
          * Test Read-write round trip
          * Test data was taken from 47701.xls
          */
-        [TestMethod]
+        [Test]
         public void Test_47701()
         {
             byte[] data = HexRead.ReadFromString(
@@ -73,7 +73,7 @@ namespace TestCases.HSSF.Record
         /**
          * Test data was taken from the file attached to Bugzilla 45778
          */
-        [TestMethod]
+        [Test]
         public void Test_45778()
         {
             byte[] data = HexRead.ReadFromString(
@@ -114,7 +114,7 @@ namespace TestCases.HSSF.Record
          * Test data produced by OpenOffice 3.1 by opening  and saving 47701.xls
          * There are 5 pAdding bytes that are Removed by POI
          */
-        [TestMethod]
+        [Test]
         public void Test_Remove_padding()
         {
             byte[] data = HexRead.ReadFromString(
@@ -148,7 +148,7 @@ namespace TestCases.HSSF.Record
             byte[] ser2 = record2.Serialize();
             Assert.IsTrue(Arrays.Equals(ser, ser2));
         }
-        [TestMethod]
+        [Test]
         public void Test_LbsDropData()
         {
             byte[] data = HexRead.ReadFromString(

@@ -18,7 +18,7 @@
 namespace TestCases.HSSF.Model
 {
     using System;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.HSSF.Record;
     using NPOI.HSSF.UserModel;
     using NPOI.SS.Formula;
@@ -33,10 +33,10 @@ namespace TestCases.HSSF.Model
      *
      * @author Glen Stampoultzis (glens at apache.org)
      */
-    [TestClass]
+    [TestFixture]
     public class TestWorkbook
     {
-        [TestMethod]
+        [Test]
         public void TestFontStuff()
         {
             InternalWorkbook wb = TestHSSFWorkbook.GetInternalWorkbook(new HSSFWorkbook());
@@ -103,7 +103,7 @@ namespace TestCases.HSSF.Model
 
             #endregion
         }
-        [TestMethod]
+        [Test]
         public void TestAddNameX()
         {
             InternalWorkbook wb = TestHSSFWorkbook.GetInternalWorkbook(new HSSFWorkbook());
@@ -124,7 +124,7 @@ namespace TestCases.HSSF.Model
 
             Assert.IsNull(wb.GetNameXPtg("myFunc3", udff));  // myFunc3 is unknown
         }
-        [TestMethod]
+        [Test]
         public void TestRecalcId()
         {
             HSSFWorkbook wb = new HSSFWorkbook();

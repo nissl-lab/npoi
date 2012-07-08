@@ -16,16 +16,16 @@
 ==================================================================== */
 
 using NPOI.OpenXmlFormats.Spreadsheet;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using NPOI.Util;
 using System;
 namespace NPOI.XSSF.Util
 {
 
-    [TestClass]
+    [TestFixture]
     public class TestCTColComparator
     {
-        [TestMethod]
+        [Test]
         public void TestCompare()
         {
             CTColComparator comparator = new CTColComparator();
@@ -44,7 +44,7 @@ namespace NPOI.XSSF.Util
             o4.max = 80;
             Assert.AreEqual(-1, comparator.Compare(o3, o4));
         }
-        [TestMethod]
+        [Test]
         public void TestArraysSort()
         {
             CTColComparator comparator = new CTColComparator();

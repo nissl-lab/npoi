@@ -24,17 +24,17 @@ namespace TestCases.DDF
     using System.Collections;
     using System.IO;
 
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.DDF;
     using NPOI.Util;
 
     /**
      * @author Glen Stampoultzis  (glens @ superlinksoftware.com)
      */
-    [TestClass]
+    [TestFixture]
     public class TestEscherPropertyFactory
     {
-        [TestMethod]
+        [Test]
         public void TestCreateProperties()
         {
             String dataStr = "41 C1 " +     // propid, complex ind

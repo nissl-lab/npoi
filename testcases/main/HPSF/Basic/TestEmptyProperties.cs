@@ -19,7 +19,7 @@ namespace TestCases.HPSF.Basic
 {
     using System;
     using System.IO;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.HPSF;
     using NPOI.Util;
 
@@ -32,7 +32,7 @@ namespace TestCases.HPSF.Basic
      * @since 2003-07-25
      * @version $Id: TestEmptyProperties.java 489730 2006-12-22 19:18:16Z bayard $
      */
-    [TestClass]
+    [TestFixture]
     public class TestEmptyProperties
     {
        // static string dataDir = @"..\..\..\TestCases\HPSF\data\";
@@ -68,7 +68,7 @@ namespace TestCases.HPSF.Basic
          * Checks the names of the files in the POI filesystem. They
          * are expected to be in a certain order.
          */
-        [TestMethod]
+        [Test]
         public void TestReadFiles()
         {
             String[] expected = POI_FILES;
@@ -92,7 +92,7 @@ namespace TestCases.HPSF.Basic
          * @exception UnsupportedEncodingException if a character encoding is not
          * supported.
          */
-        [TestMethod]
+        [Test]
         public void TestCreatePropertySets()
         {
             Type[] expected = new Type[]
@@ -132,7 +132,7 @@ namespace TestCases.HPSF.Basic
          * @exception IOException if an I/O exception occurs
          * @exception HPSFException if an HPSF operation fails
          */
-        [TestMethod]
+        [Test]
         public void TestPropertySetMethods()
         {
             byte[] b = poiFiles[1].GetBytes();

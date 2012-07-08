@@ -17,7 +17,7 @@
 
 using System;
 using System.Reflection;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using NPOI.HSSF.Record;
 using NPOI.HSSF.Record.Aggregates;
 using NPOI.HSSF.UserModel;
@@ -31,7 +31,7 @@ namespace TestCases.HSSF.Record.Aggregates
      *
      * @author Josh Micich
      */
-    [TestClass]
+    [TestFixture]
     public class TestSharedValueManager
     {
 
@@ -62,7 +62,7 @@ namespace TestCases.HSSF.Record.Aggregates
          * This bug happened when there were two or more shared formula ranges that overlapped.  POI
          * would sometimes associate formulas in the overlapping region with the wrong shared formula
          */
-        [TestMethod]
+        [Test]
         public void TestPartiallyOverlappingRanges()
         {
             NPOI.HSSF.Record.Record[] records;
@@ -77,7 +77,7 @@ namespace TestCases.HSSF.Record.Aggregates
                 Assert.AreEqual("1+1", sheet.GetRow(2).GetCell(0).CellFormula);
                 if ("1+1".Equals(sheet.GetRow(3).GetCell(0).CellFormula))
                 {
-                    throw new AssertFailedException("Identified bug - wrong shared formula record chosen"
+                    throw new AssertionException("Identified bug - wrong shared formula record chosen"
                             + " (attempt " + attempt + ")");
                 }
                 Assert.AreEqual("2+2", sheet.GetRow(3).GetCell(0).CellFormula);
@@ -99,7 +99,7 @@ namespace TestCases.HSSF.Record.Aggregates
          * This bug occurs for similar reasons to the bug in {@link #testPartiallyOverlappingRanges()}
          * but the symptoms are much uglier - serialization fails with {@link NullPointerException}.<br/>
          */
-        [TestMethod]
+        [Test]
         public void TestCompletelyOverlappedRanges()
         {
             NPOI.HSSF.Record.Record[] records;
@@ -116,7 +116,7 @@ namespace TestCases.HSSF.Record.Aggregates
                 }
                 catch (NullReferenceException)
                 {
-                    throw new AssertFailedException("Identified bug " +
+                    throw new AssertionException("Identified bug " +
                             "- cannot reserialize completely overlapped shared formula"
                             + " (attempt " + attempt + ")");
                 }
@@ -143,7 +143,7 @@ namespace TestCases.HSSF.Record.Aggregates
          * Two existing sample files (15228.xls and ex45046-21984.xls) had similar issues.
          * These were not explored fully, but seem to be fixed now.
          */
-        [TestMethod]
+        [Test]
         public void TestRecalculateFormulas47747()
         {
 
@@ -180,7 +180,7 @@ namespace TestCases.HSSF.Record.Aggregates
                 // with the first shared formula group
                 if ("Shared Formula Conversion: Coding Error".Equals(e.Message))
                 {
-                    throw new AssertFailedException("Identified bug 47747");
+                    throw new AssertionException("Identified bug 47747");
                 }
                 throw e;
             }

@@ -15,15 +15,15 @@
    limitations under the License.
 ==================================================================== */
 
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using NPOI.OpenXmlFormats.Spreadsheet;
 namespace NPOI.XSSF.UserModel.Extensions
 {
 
-    [TestClass]
+    [TestFixture]
     public class TestXSSFCellFill
     {
-        [TestMethod]
+        [Test]
         public void TestGetFillBackgroundColor()
         {
             CT_Fill ctFill = new CT_Fill();
@@ -34,7 +34,7 @@ namespace NPOI.XSSF.UserModel.Extensions
             bgColor.indexed = 2;
             Assert.AreEqual(2, cellFill.GetFillBackgroundColor().GetIndexed());
         }
-        [TestMethod]
+        [Test]
         public void TestGetFillForegroundColor()
         {
             CT_Fill ctFill = new CT_Fill();
@@ -45,7 +45,7 @@ namespace NPOI.XSSF.UserModel.Extensions
             fgColor.indexed = 8;
             Assert.AreEqual(8, cellFill.GetFillForegroundColor().GetIndexed());
         }
-        [TestMethod]
+        [Test]
         public void TestGetSetPatternType()
         {
             CT_Fill ctFill = new CT_Fill();
@@ -54,7 +54,7 @@ namespace NPOI.XSSF.UserModel.Extensions
             ctPatternFill.patternType = (ST_PatternType.solid);
             //Assert.AreEqual(FillPatternType.SOLID_FOREGROUND.ordinal(), cellFill.GetPatternType().ordinal());
         }
-        [TestMethod]
+        [Test]
         public void TestGetNotModifies()
         {
             CT_Fill ctFill = new CT_Fill();
@@ -63,7 +63,7 @@ namespace NPOI.XSSF.UserModel.Extensions
             ctPatternFill.patternType = (ST_PatternType.darkDown);
             Assert.AreEqual(ST_PatternType.darkDown, cellFill.GetPatternType());
         }
-        [TestMethod]
+        [Test]
         public void TestColorFromTheme()
         {
             XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("styles.xlsx");

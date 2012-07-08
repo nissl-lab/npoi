@@ -19,7 +19,7 @@ namespace TestCases.HSSF.Record
     using System;
     using NPOI.HSSF.Record;
 
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
 
     /**
      * Tests the serialization and deserialization of the NoteRecord
@@ -28,7 +28,7 @@ namespace TestCases.HSSF.Record
      *
      * @author Yegor Kozlov
      */
-    [TestClass]
+    [TestFixture]
     public class TestNoteStructureSubRecord
     {
         private byte[] data = new byte[] {
@@ -41,7 +41,7 @@ namespace TestCases.HSSF.Record
         {
 
         }
-        [TestMethod]
+        [Test]
         public void TestRead()
         {
 
@@ -51,7 +51,7 @@ namespace TestCases.HSSF.Record
             Assert.AreEqual(data.Length , record.DataSize);
 
         }
-        [TestMethod]
+        [Test]
         public void TestWrite()
         {
             NoteStructureSubRecord record = new NoteStructureSubRecord();
@@ -62,7 +62,7 @@ namespace TestCases.HSSF.Record
             Assert.AreEqual(ser.Length - 4, data.Length);
 
         }
-        [TestMethod]
+        [Test]
         public void TestClone()
         {
             NoteStructureSubRecord record = new NoteStructureSubRecord();

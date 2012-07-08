@@ -19,7 +19,7 @@ namespace TestCases.SS.Formula.Functions
 {
 
     using NPOI.SS.Formula.Eval;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using System;
     using NPOI.SS.Util;
     using NPOI.SS.Formula.Functions;
@@ -29,11 +29,11 @@ namespace TestCases.SS.Formula.Functions
      *
      * @author Stephen Wolke (smwolke at geistig.com)
      */
-    [TestClass]
+    [TestFixture]
     public class TestText
     {
         //private static TextFunction T = null;
-        [TestMethod]
+        [Test]
         public void TestTextWithStringFirstArg()
         {
 
@@ -43,7 +43,7 @@ namespace TestCases.SS.Formula.Functions
             ValueEval result = TextFunction.TEXT.Evaluate(args, -1, (short)-1);
             Assert.AreEqual(ErrorEval.VALUE_INVALID, result);
         }
-        [TestMethod]
+        [Test]
         public void TestTextWithDeciamlFormatSecondArg()
         {
             ValueEval numArg = new NumberEval(321321.321);
@@ -73,7 +73,7 @@ namespace TestCases.SS.Formula.Functions
             testResult = new StringEval("$321" + decimalSeparator + "3");
             Assert.AreEqual(testResult.ToString(), result.ToString());
         }
-        [TestMethod]
+        [Test]
         public void TestTextWithFractionFormatSecondArg()
         {
 
@@ -96,7 +96,7 @@ namespace TestCases.SS.Formula.Functions
             testResult = new StringEval("26027/81");
             Assert.AreEqual(testResult.ToString(), result.ToString());
         }
-        [TestMethod]
+        [Test]
         public void TestTextWithDateFormatSecondArg()
         {
             System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.GetCultureInfo("en-US");

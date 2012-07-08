@@ -23,7 +23,7 @@ namespace TestCases.HPSF.Basic
     using System.IO;
     using System.Text;
     using System.Collections;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.HPSF;
     using NPOI.Util;
 
@@ -37,7 +37,7 @@ namespace TestCases.HPSF.Basic
      * @since 2008-02-08
      * @version $Id: TestBasic.java 489730 2006-12-22 19:18:16Z bayard $
      */
-    [TestClass]
+    [TestFixture]
     public class TestReadAllFiles
     {
 
@@ -57,7 +57,7 @@ namespace TestCases.HPSF.Basic
          * This Test methods Reads all property Set streams from all POI
          * filesystems in the "data" directory.
          */
-        [TestMethod]
+        [Test]
         public void TestReadAllFiles1()
         {
             //string dataDir = @"..\..\..\TestCases\HPSF\data\";

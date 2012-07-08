@@ -22,7 +22,7 @@ namespace TestCases.HSSF.Record
     using System;
     using NPOI.HSSF.Record;
     using NPOI.SS.Util;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.HSSF.Record.Aggregates;
     using System.Collections;
     using NPOI.HSSF.Model;
@@ -32,7 +32,7 @@ namespace TestCases.HSSF.Record
      * @author Danny Mui (dmui at apache dot org)
      *
      */
-    [TestClass]
+    [TestFixture]
     public class TestMergeCellsRecord
     {
 
@@ -40,7 +40,7 @@ namespace TestCases.HSSF.Record
          * Make sure when a clone is1 called, we actually clone it.
          * @
          */
-        [TestMethod]
+        [Test]
         public void TestCloneReferences()
         {
             CellRangeAddress[] cras = { new CellRangeAddress(0, 1, 0, 2), };
@@ -64,7 +64,7 @@ namespace TestCases.HSSF.Record
 
             Assert.IsFalse(merge.GetAreaAt(0) == clone.GetAreaAt(0));
         }
-        [TestMethod]
+        [Test]
         public void testMCTable_bug46009()
         {
             MergedCellsTable mct = new MergedCellsTable();
@@ -81,7 +81,7 @@ namespace TestCases.HSSF.Record
             }
             catch (Exception)
             {
-                throw new AssertFailedException("Identified bug 46009");
+                throw new AssertionException("Identified bug 46009");
             }
         }
         DummyRecordVisitor dummyRecordVisitor = new DummyRecordVisitor();

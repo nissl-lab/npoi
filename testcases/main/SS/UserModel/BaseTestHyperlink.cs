@@ -16,7 +16,7 @@
 ==================================================================== */
 
 using TestCases.SS;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using NPOI.SS.UserModel;
 namespace TestCases.SS.UserModel
 {
@@ -26,7 +26,7 @@ namespace TestCases.SS.UserModel
      *
      * @author Yegor Kozlov
      */
-    [TestClass]
+    [TestFixture]
     public class BaseTestHyperlink
     {
 
@@ -42,7 +42,7 @@ namespace TestCases.SS.UserModel
         {
             _testDataProvider = testDataProvider;
         }
-        [TestMethod]
+        [Test]
         public void TestBasicTypes()
         {
             IWorkbook wb = _testDataProvider.CreateWorkbook();

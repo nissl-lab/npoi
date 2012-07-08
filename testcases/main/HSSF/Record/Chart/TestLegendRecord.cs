@@ -24,7 +24,7 @@ namespace TestCases.HSSF.Record.Chart
     using NPOI.HSSF.Record;
     using NPOI.HSSF.Record.Chart;
 
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
 
     /**
      * Tests the serialization and deserialization of the LegendRecord
@@ -34,7 +34,7 @@ namespace TestCases.HSSF.Record.Chart
 
      * @author Andrew C. Oliver (acoliver at apache.org)
      */
-    [TestClass]
+    [TestFixture]
     public class TestLegendRecord
     {
         byte[] data = new byte[] {
@@ -45,7 +45,7 @@ namespace TestCases.HSSF.Record.Chart
         {
 
         }
-        [TestMethod]
+        [Test]
         public void TestLoad()
         {
             LegendRecord record = new LegendRecord(TestcaseRecordInputStream.Create((short)0x1015, data));
@@ -74,7 +74,7 @@ namespace TestCases.HSSF.Record.Chart
 
             Assert.AreEqual(24, record.RecordSize);
         }
-        [TestMethod]
+        [Test]
         public void TestStore()
         {
             LegendRecord record = new LegendRecord();

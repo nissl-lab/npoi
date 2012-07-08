@@ -19,7 +19,7 @@ namespace TestCases.SS.Formula.Eval
 {
 
     using System;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.HSSF.UserModel;
     using NPOI.SS.Formula;
     using NPOI.SS.Formula.Eval;
@@ -32,10 +32,10 @@ namespace TestCases.SS.Formula.Eval
      *
      * @author Josh Micich
      */
-    [TestClass]
+    [TestFixture]
     public class TestRangeEval
     {
-        [TestMethod]
+        [Test]
         public void TestPermutations()
         {
 
@@ -139,7 +139,7 @@ namespace TestCases.SS.Formula.Eval
                 return new MockAreaEval(FirstRow, columnIndex, LastRow, columnIndex);
             }
         }
-        [TestMethod]
+        [Test]
         public void TestRangeUsingOffsetFunc_bug46948()
         {
             HSSFWorkbook wb = new HSSFWorkbook();
@@ -165,7 +165,7 @@ namespace TestCases.SS.Formula.Eval
             {
                 if (e.Message.Equals("Unexpected ref arg class (NPOI.SS.Formula.LazyAreaEval)"))
                 {
-                    throw new AssertFailedException("Identified bug 46948");
+                    throw new AssertionException("Identified bug 46948");
                 }
                 throw e;
             }

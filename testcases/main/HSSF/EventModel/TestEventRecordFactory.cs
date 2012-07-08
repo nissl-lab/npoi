@@ -27,7 +27,7 @@ namespace TestCases.HSSF.EventModel
     using NPOI.HSSF.Record;
     using NPOI.POIFS.FileSystem;
 
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
 
 
     /**
@@ -36,7 +36,7 @@ namespace TestCases.HSSF.EventModel
      * @author Andrew C. Oliver acoliver@apache.org
      * @author Csaba Nagy (ncsaba at yahoo dot com)
      */
-    [TestClass]
+    [TestFixture]
     public class TestEventRecordFactory
     {
 
@@ -63,7 +63,7 @@ namespace TestCases.HSSF.EventModel
          * Tests that the records can be Processed and properly return 
          * values.
          */
-        [TestMethod]
+        [Test]
         public void TestProcessRecords()
         {
             bool[] wascalled = { false, }; // hack to pass boolean by ref into inner class
@@ -95,7 +95,7 @@ namespace TestCases.HSSF.EventModel
          * Tests that the create record function returns a properly 
          * constructed record in the simple case.
          */
-        [TestMethod]
+        [Test]
         public void TestCreateRecord()
         {
             BOFRecord bof = new BOFRecord();
@@ -198,7 +198,7 @@ namespace TestCases.HSSF.EventModel
          * FAILURE:    The wrong records are created or contain the wrong values <P>
          *
          */
-        [TestMethod]
+        [Test]
         public void TestContinuedUnknownRecord()
         {
             byte[] data = {

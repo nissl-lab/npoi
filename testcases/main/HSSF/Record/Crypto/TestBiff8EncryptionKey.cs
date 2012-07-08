@@ -18,7 +18,7 @@
 namespace TestCases.HSSF.Record.Crypto
 {
     using System;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.Util;
     using TestCases.Exceptions;
     using NPOI.HSSF.Record.Crypto;
@@ -28,7 +28,7 @@ namespace TestCases.HSSF.Record.Crypto
      *
      * @author Josh Micich
      */
-    [TestClass]
+    [TestFixture]
     public class TestBiff8EncryptionKey
     {
 
@@ -36,7 +36,7 @@ namespace TestCases.HSSF.Record.Crypto
         {
             return HexRead.ReadFromString(hexString);
         }
-        [TestMethod]
+        [Test]
         public void TestCreateKeyDigest()
         {
             byte[] docIdData = fromHex("17 F6 D1 6B 09 B1 5F 7B 4C 9D 03 B4 81 B5 B4 4A");
@@ -49,7 +49,7 @@ namespace TestCases.HSSF.Record.Crypto
         }
 
 
-        [TestMethod]
+        [Test]
         public void TestValidateWithDefaultPassword()
         {
 
@@ -67,7 +67,7 @@ namespace TestCases.HSSF.Record.Crypto
             ConfirmValid(false, docIdB, "B" + saltDataSuffixB, saltHashB);
         }
 
-        [TestMethod]
+        [Test]
         public void TestValidateWithSuppliedPassword()
         {
 

@@ -30,7 +30,7 @@ using System;
 using System.IO;
 using System.Collections;
 
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using NPOI.POIFS.Storage;
 using NPOI.Util;
 using NPOI.POIFS.FileSystem;
@@ -43,7 +43,7 @@ namespace TestCases.POIFS.Storage
      *
      * @author Marc Johnson
      */
-    [TestClass]
+    [TestFixture]
     public class TestSmallDocumentBlock
     {
         private static byte[] testData;
@@ -64,7 +64,7 @@ namespace TestCases.POIFS.Storage
          *
          * @exception IOException
          */
-        [TestMethod]
+        [Test]
         public void TestConvert1()
         {
             MemoryStream stream = new MemoryStream(testData);
@@ -115,7 +115,7 @@ namespace TestCases.POIFS.Storage
          *
          * @exception IOException
          */
-        [TestMethod]
+        [Test]
         public void TestConvert2()
         {
             for (int j = 0; j < 320; j++)
@@ -154,7 +154,7 @@ namespace TestCases.POIFS.Storage
          *
          * @exception IOException
          */
-        [TestMethod]
+        [Test]
         public void TestRead()
         {
             MemoryStream stream = new MemoryStream(testData);
@@ -196,7 +196,7 @@ namespace TestCases.POIFS.Storage
          *
          * @exception IOException
          */
-        [TestMethod]
+        [Test]
         public void TestFill()
         {
             for (int j = 0; j <= 8; j++)
@@ -233,7 +233,7 @@ namespace TestCases.POIFS.Storage
         /**
          * Test calcSize
          */
-        [TestMethod]
+        [Test]
         public void TestCalcSize()
         {
             for (int j = 0; j < 10; j++)
@@ -248,7 +248,7 @@ namespace TestCases.POIFS.Storage
          *
          * @exception IOException
          */
-        [TestMethod]
+        [Test]
         public void TestExtract()
         {
             byte[] data = new byte[512];

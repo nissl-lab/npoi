@@ -20,9 +20,9 @@ namespace TestCases.HSSF.UserModel
 {
     using System;
     using TestCases.SS.UserModel;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
 
-    [TestClass]
+    [TestFixture]
     public class TestSheetHiding:BaseTestSheetHiding
     {
         public TestSheetHiding():base(HSSFITestDataProvider.Instance,

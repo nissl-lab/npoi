@@ -31,7 +31,7 @@ namespace TestCases.POIFS.Storage
     using System.IO;
     using System.Collections;
 
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.POIFS.Storage;
     using NPOI.Util;
     using NPOI.POIFS.FileSystem;
@@ -41,7 +41,7 @@ namespace TestCases.POIFS.Storage
      *
      * @author Marc Johnson
      */
-    [TestClass]
+    [TestFixture]
     public class TestHeaderBlockWriting
     {
 
@@ -59,7 +59,7 @@ namespace TestCases.POIFS.Storage
          *
          * @exception IOException
          */
-        [TestMethod]
+        [Test]
         public void TestConstructors()
         {
             //
@@ -102,7 +102,7 @@ namespace TestCases.POIFS.Storage
          *
          * @exception IOException
          */
-        [TestMethod]
+        [Test]
         public void TestSetBATStart()
         {
             HeaderBlockWriter block = new HeaderBlockWriter(POIFSConstants.SMALLER_BIG_BLOCK_SIZE_DETAILS);
@@ -139,7 +139,7 @@ namespace TestCases.POIFS.Storage
          *
          * @exception IOException
          */
-        [TestMethod]
+        [Test]
         public void TestSetPropertyStart()
         {
             HeaderBlockWriter block = new HeaderBlockWriter(POIFSConstants.SMALLER_BIG_BLOCK_SIZE_DETAILS);
@@ -179,7 +179,7 @@ namespace TestCases.POIFS.Storage
          *
          * @exception IOException
          */
-        [TestMethod]
+        [Test]
         public void TestSetBATBlocks()
         {
             HeaderBlockWriter block = new HeaderBlockWriter(POIFSConstants.SMALLER_BIG_BLOCK_SIZE_DETAILS);

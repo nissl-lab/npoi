@@ -20,7 +20,7 @@ namespace TestCases.HSSF.UserModel
     using System;
     using System.Collections;
     using NPOI.HSSF.UserModel;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using System.Threading;
     using NPOI.HSSF.Record;
 
@@ -30,7 +30,7 @@ namespace TestCases.HSSF.UserModel
      *
      * @author Glen Stampoultzis (glens at apache.org)
      */
-    [TestClass]
+    [TestFixture]
     public class TestSanityChecker
     {
         private static Record INTERFACEHDR = new InterfaceHdrRecord(InterfaceHdrRecord.CODEPAGE);
@@ -38,7 +38,7 @@ namespace TestCases.HSSF.UserModel
         {
             return new BoundSheetRecord("Sheet1");
         }
-        [TestMethod]
+        [Test]
         public void TestCheckRecordOrder()
         {
             SanityChecker c = new SanityChecker();
@@ -125,12 +125,12 @@ namespace TestCases.HSSF.UserModel
                 IList recs1 = NPOI.Util.Arrays.AsList(recs);
                 c.CheckRecordOrder(recs1, check);
             }
-            catch (AssertFailedException)
+            catch (AssertionException)
             {
                 // expected during normal Test
                 return;
             }
-            throw new AssertFailedException("Did not get Assert.Failure exception as expected");
+            throw new AssertionException("Did not get Assert.Failure exception as expected");
         }
 
         private static void ConfirmBadRecordOrder(SanityChecker.CheckRecord[] Check, Record[] recs)

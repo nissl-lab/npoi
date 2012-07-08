@@ -27,9 +27,9 @@ namespace TestCases.HSSF.EventUserModel
     using NPOI.POIFS.FileSystem;
     using NPOI.HSSF.EventUserModel.DummyRecord;
 
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
 
-    [TestClass]
+    [TestFixture]
     public class TestMissingRecordAwareHSSFListener
     {
 
@@ -61,7 +61,7 @@ namespace TestCases.HSSF.EventUserModel
         {
             ReadRecords("MissingBits.xls");
         }
-        [TestMethod]
+        [Test]
         public void TestMissingRowRecords()
         {
             OpenNormal();
@@ -114,7 +114,7 @@ namespace TestCases.HSSF.EventUserModel
             mr = (MissingRowDummyRecord)r[row0 + 19];
             Assert.AreEqual(19, mr.RowNumber);
         }
-        [TestMethod]
+        [Test]
         public void TestEndOfRowRecords()
         {
             OpenNormal();
@@ -242,7 +242,7 @@ namespace TestCases.HSSF.EventUserModel
             Assert.AreEqual(22, lrs[22].Row);
         }
 
-        [TestMethod]
+        [Test]
         public void TestMissingCellRecords()
         {
             OpenNormal();
@@ -348,7 +348,7 @@ namespace TestCases.HSSF.EventUserModel
 
         // Make sure we don't put in any extra new lines
         //  that aren't alReady there
-        [TestMethod]
+        [Test]
         public void TestNoExtraNewLines()
         {
             // Load a different file
@@ -427,7 +427,7 @@ namespace TestCases.HSSF.EventUserModel
          * Make sure that the presence of shared formulas does not cause extra 
          * end-of-row records.
          */
-        [TestMethod]
+        [Test]
         public void TestEndOfRow_bug45672()
         {
             ReadRecords("ex45672.xls");
@@ -448,7 +448,7 @@ namespace TestCases.HSSF.EventUserModel
             }
             if (eorCount == 2)
             {
-                throw new AssertFailedException("Identified bug 45672");
+                throw new AssertionException("Identified bug 45672");
             }
             Assert.AreEqual(1, eorCount);
             Assert.AreEqual(1, sfrCount);
@@ -458,7 +458,7 @@ namespace TestCases.HSSF.EventUserModel
 	     * MulBlank records hold multiple blank cells. Check we
 	     *  can handle them correctly.
 	     */
-        [TestMethod]
+        [Test]
         public void TestMulBlankHandling()
         {
             ReadRecords("45672.xls");
@@ -487,15 +487,15 @@ namespace TestCases.HSSF.EventUserModel
             }
             if (mbrCount > 0)
             {
-                throw new AssertFailedException("Identified bug 45672");
+                throw new AssertionException("Identified bug 45672");
             }
             if (brCount < 20)
             {
-                throw new AssertFailedException("Identified bug 45672");
+                throw new AssertionException("Identified bug 45672");
             }
             if (eorCount != 2)
             {
-                throw new AssertFailedException("Identified bug 45672");
+                throw new AssertionException("Identified bug 45672");
             }
             Assert.AreEqual(2, eorCount);
         }

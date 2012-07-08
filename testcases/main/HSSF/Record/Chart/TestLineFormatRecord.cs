@@ -23,7 +23,7 @@ namespace TestCases.HSSF.Record.Chart
     using System;
     using NPOI.HSSF.Record;
     using NPOI.HSSF.Record.Chart;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
 
     /**
      * Tests the serialization and deserialization of the LineFormatRecord
@@ -33,7 +33,7 @@ namespace TestCases.HSSF.Record.Chart
 
      * @author Glen Stampoultzis (glens at apache.org)
      */
-    [TestClass]
+    [TestFixture]
     public class TestLineFormatRecord
     {
         byte[] data = new byte[] {
@@ -48,7 +48,7 @@ namespace TestCases.HSSF.Record.Chart
         {
 
         }
-        [TestMethod]
+        [Test]
         public void TestLoad()
         {
             LineFormatRecord record = new LineFormatRecord(TestcaseRecordInputStream.Create((short)0x1007, data));
@@ -63,7 +63,7 @@ namespace TestCases.HSSF.Record.Chart
 
             Assert.AreEqual(16, record.RecordSize);
         }
-        [TestMethod]
+        [Test]
         public void TestStore()
         {
             LineFormatRecord record = new LineFormatRecord();

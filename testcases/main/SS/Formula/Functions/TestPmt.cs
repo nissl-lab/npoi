@@ -20,13 +20,13 @@ namespace TestCases.SS.Formula.Functions
 
     using NPOI.SS.Formula.Eval;
     using NPOI.HSSF.UserModel;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.SS.Formula.Functions;
 
     /**
      * @author Josh Micich
      */
-    [TestClass]
+    [TestFixture]
     public class TestPmt
     {
 
@@ -47,7 +47,7 @@ namespace TestCases.SS.Formula.Functions
             ValueEval ev = invoke(args);
             if (ev is ErrorEval)
             {
-                throw new AssertFailedException("Normal Evaluation failed with error code: "
+                throw new AssertionException("Normal Evaluation failed with error code: "
                         + ev.ToString());
             }
             return (NumberEval)ev;
@@ -65,13 +65,13 @@ namespace TestCases.SS.Formula.Functions
             Confirm(expected, invokeNormal(args));
         }
 
-        [TestMethod]
+        [Test]
         public void TestBasic()
         {
             Confirm(-1037.0321, (0.08 / 12), 10, 10000, 0, false);
             Confirm(-1030.1643, (0.08 / 12), 10, 10000, 0, true);
         }
-        [TestMethod]
+        [Test]
         public void Test3args()
         {
 
@@ -86,7 +86,7 @@ namespace TestCases.SS.Formula.Functions
                 ErrorEval err = (ErrorEval)ev;
                 if (err.ErrorCode == HSSFErrorConstants.ERROR_VALUE)
                 {
-                    throw new AssertFailedException("Identified bug 44691");
+                    throw new AssertionException("Identified bug 44691");
                 }
             }
 

@@ -20,14 +20,14 @@ namespace TestCases.SS.Formula.Atp
     using NPOI.HSSF.UserModel;
     using NPOI.SS.Formula.Eval;
     using NPOI.SS.UserModel;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
 
     /**
      * Testcase for 'Analysis Toolpak' function MROUND()
      * 
      * @author Yegor Kozlov
      */
-    [TestClass]
+    [TestFixture]
     public class TestMRound
     {
 
@@ -37,7 +37,7 @@ namespace TestCases.SS.Formula.Atp
     =MROUND(1.3, 0.2) 	Rounds 1.3 to a nearest multiple of 0.2 (1.4)
     =MROUND(5, -2) 	Returns an error, because -2 and 5 have different signs (#NUM!)     *
          */
-        [TestMethod]
+        [Test]
         public void TestEvaluate()
         {
             System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US"); 

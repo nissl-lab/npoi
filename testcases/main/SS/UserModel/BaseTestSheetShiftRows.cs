@@ -19,7 +19,7 @@ namespace TestCases.SS.UserModel
 {
     using System;
 
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
 
     using NPOI.SS;
     using NPOI.SS.Util;
@@ -32,7 +32,7 @@ namespace TestCases.SS.UserModel
      * @author Shawn Laubach (slaubach at apache dot com)
      * @author Toshiaki Kamoshida (kamoshida.Toshiaki at future dot co dot jp)
      */
-    [TestClass]
+    [TestFixture]
     public class BaseTestSheetShiftRows
     {
 
@@ -54,7 +54,7 @@ namespace TestCases.SS.UserModel
          *
          * @param sampleName the sample file to Test against
          */
-        [TestMethod]
+        [Test]
         public void TestShiftRows()
         {
             // Read Initial file in
@@ -152,7 +152,7 @@ namespace TestCases.SS.UserModel
         /**
          * Tests when rows are null.
          */
-        [TestMethod]
+        [Test]
         public void TestShiftRow()
         {
             IWorkbook b = _testDataProvider.CreateWorkbook();
@@ -165,7 +165,7 @@ namespace TestCases.SS.UserModel
         /**
          * Tests when Shifting the first row.
          */
-        [TestMethod]
+        [Test]
         public void TestActiveCell()
         {
             IWorkbook b = _testDataProvider.CreateWorkbook();
@@ -179,7 +179,7 @@ namespace TestCases.SS.UserModel
         /**
          * When Shifting rows, the page breaks should go with it
          */
-        [TestMethod]
+        [Test]
         public void TestShiftRowBreaks()
         { // TODO - enable XSSF Test
             IWorkbook b = _testDataProvider.CreateWorkbook();
@@ -191,7 +191,7 @@ namespace TestCases.SS.UserModel
             s.ShiftRows(4, 4, 2);
             Assert.IsTrue(s.IsRowBroken(6), "Row number 6 should have a pagebreak");
         }
-        [TestMethod]
+        [Test]
         public void TestShiftWithComments()
         { // TODO - enable XSSF Test
 
@@ -251,7 +251,7 @@ namespace TestCases.SS.UserModel
             comment4_Shifted = sheet.GetCellComment(4, 0).String.String;
             Assert.AreEqual(comment4, comment4_Shifted);
         }
-        [TestMethod]
+        [Test]
         public void TestShiftWithNames()
         {
             IWorkbook wb = _testDataProvider.CreateWorkbook();
@@ -294,7 +294,7 @@ namespace TestCases.SS.UserModel
             name4 = wb.GetNameAt(3);
             Assert.AreEqual("A1", name4.RefersToFormula);
         }
-        [TestMethod]
+        [Test]
         public void TestShiftWithMergedRegions()
         {
             IWorkbook wb = _testDataProvider.CreateWorkbook();
@@ -315,7 +315,7 @@ namespace TestCases.SS.UserModel
         /**
          * See bug #34023
          */
-        [TestMethod]
+        [Test]
         public void TestShiftWithFormulas()
         {
             IWorkbook wb = _testDataProvider.OpenSampleWorkbook("ForShifting." + _testDataProvider.StandardFileNameExtension);

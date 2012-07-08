@@ -18,7 +18,7 @@
 namespace TestCases.SS.Formula.Functions
 {
     using System;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.SS.Formula.Eval;
     using NPOI.SS.Formula.Functions;
 
@@ -71,7 +71,7 @@ namespace TestCases.SS.Formula.Functions
             }
             catch (NumericEvalEx e)
             {
-                throw new AssertFailedException("Evaluation of function (" + f.GetType().Name
+                throw new AssertionException("Evaluation of function (" + f.GetType().Name
                         + ") failed: " + e.Message);
             }
         }

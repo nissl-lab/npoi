@@ -22,7 +22,7 @@ namespace TestCases.HPSF.Basic
     using System.IO;
     using System.Text;
     using System.Collections;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.HPSF;
     using NPOI.HPSF.Wellknown;
     using NPOI.Util;
@@ -35,7 +35,7 @@ namespace TestCases.HPSF.Basic
      * @since 2002-07-20
      * @version $Id: TestBasic.java 619848 2008-02-08 11:55:43Z klute $
      */
-    [TestClass]
+    [TestFixture]
     public class TestBasic
     {
         //static string dataDir = @"..\..\..\TestCases\HPSF\data\";
@@ -86,7 +86,7 @@ namespace TestCases.HPSF.Basic
          * Checks the names of the files in the POI filesystem. They
          * are expected to be in a certain order.
          */
-        [TestMethod]
+        [Test]
         public void TestReadFiles()
         {
             String[] expected = POI_FILES;
@@ -110,7 +110,7 @@ namespace TestCases.HPSF.Basic
          * @exception UnsupportedEncodingException if a character encoding is not
          * supported.
          */
-        [TestMethod]
+        [Test]
         public void TestCreatePropertySets()
         {
             Type[] expected = new Type[]
@@ -152,7 +152,7 @@ namespace TestCases.HPSF.Basic
          * @exception IOException if an I/O exception occurs
          * @exception HPSFException if any HPSF exception occurs
          */
-        [TestMethod]
+        [Test]
         public void TestPropertySetMethods()
         {
             /* Loop over the two property Sets. */
@@ -185,7 +185,7 @@ namespace TestCases.HPSF.Basic
          * @exception IOException if an I/O exception occurs
          * @exception HPSFException if any HPSF exception occurs
          */
-        [TestMethod]
+        [Test]
         public void TestSectionMethods()
         {
             SummaryInformation si = (SummaryInformation)

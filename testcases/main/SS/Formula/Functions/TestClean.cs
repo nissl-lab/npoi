@@ -19,11 +19,11 @@ namespace TestCases.SS.Formula.Functions
     using NPOI.HSSF.UserModel;
     using NPOI.SS.UserModel;
     using System;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-    [TestClass]
+    using NUnit.Framework;
+    [TestFixture]
     public class TestClean
     {
-        [TestMethod]
+        [Test]
         public void TestClean1()
         {
             HSSFWorkbook wb = new HSSFWorkbook();

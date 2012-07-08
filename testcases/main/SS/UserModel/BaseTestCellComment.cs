@@ -20,13 +20,13 @@ namespace TestCases.SS.UserModel
     using System;
     using NPOI.SS;
     using NPOI.SS.UserModel;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
 
     /**
      * Common superclass for testing implementatiosn of
      * {@link Comment}
      */
-    [TestClass]
+    [TestFixture]
     public class BaseTestCellComment
     {
 
@@ -38,7 +38,7 @@ namespace TestCases.SS.UserModel
         protected BaseTestCellComment(ITestDataProvider testDataProvider) {
             _testDataProvider = testDataProvider;
         }
-        [TestMethod]
+        [Test]
         public void TestFind()
         {
             IWorkbook book = _testDataProvider.CreateWorkbook();
@@ -50,7 +50,7 @@ namespace TestCases.SS.UserModel
             Assert.IsNull(sheet.GetCellComment(0, 0));
             Assert.IsNull(cell.CellComment);
         }
-        [TestMethod]
+        [Test]
         public void TestCreate()
         {
             String cellText = "Hello, World";
@@ -126,7 +126,7 @@ namespace TestCases.SS.UserModel
         /**
          * test that we can read cell comments from an existing workbook.
          */
-        [TestMethod]
+        [Test]
         public void TestReadComments()
         {
             IWorkbook wb = _testDataProvider.OpenSampleWorkbook("SimpleWithComments." + _testDataProvider.StandardFileNameExtension);
@@ -164,7 +164,7 @@ namespace TestCases.SS.UserModel
         /**
          * test that we can modify existing cell comments
          */
-        [TestMethod]
+        [Test]
         public void TestModifyComments()
         {
 
@@ -200,7 +200,7 @@ namespace TestCases.SS.UserModel
             }
 
         }
-        [TestMethod]
+        [Test]
         public void TestDeleteComments()
         {
             IWorkbook wb = _testDataProvider.OpenSampleWorkbook("SimpleWithComments." + _testDataProvider.StandardFileNameExtension);
@@ -232,7 +232,7 @@ namespace TestCases.SS.UserModel
         /**
          * code from the quick guide
          */
-        [TestMethod]
+        [Test]
         public void TestQuickGuide()
         {
             IWorkbook wb = _testDataProvider.CreateWorkbook();

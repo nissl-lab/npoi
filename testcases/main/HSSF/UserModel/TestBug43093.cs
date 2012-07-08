@@ -19,12 +19,12 @@ namespace TestCases.HSSF.UserModel
 {
     using System;
     using NPOI.HSSF.UserModel;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.SS.UserModel;
     /**
      * 
      */
-    [TestClass]
+    [TestFixture]
     public class TestBug43093Class
     {
 
@@ -44,7 +44,7 @@ namespace TestCases.HSSF.UserModel
                 }
             }
         }
-        [TestMethod]
+        [Test]
         public void TestBug43093()
         {
             HSSFWorkbook xlw = new HSSFWorkbook();

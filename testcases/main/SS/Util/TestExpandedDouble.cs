@@ -16,7 +16,7 @@
 ==================================================================== */
 
 using NPOI.SS.Util;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using System;
 using System.Text;
 using NPOI.Util;
@@ -27,33 +27,33 @@ namespace TestCases.SS.Util
      *
      * @author Josh Micich
      */
-    [TestClass]
+    [TestFixture]
     public class TestExpandedDouble
     {
         private static BigInteger BIG_POW_10 = new BigInteger(1000000000);
 
-        [TestMethod]
+        [Test]
         public void TestNegative()
         {
             ExpandedDouble hd = new ExpandedDouble(unchecked((long)0xC010000000000000L));
 
             if (hd.GetBinaryExponent() == -2046)
             {
-                throw new AssertFailedException("identified bug - sign bit not masked out of exponent");
+                throw new AssertionException("identified bug - sign bit not masked out of exponent");
             }
             Assert.AreEqual(2, hd.GetBinaryExponent());
             BigInteger frac = hd.GetSignificand();
             Assert.AreEqual(64, frac.BitLength());
             Assert.AreEqual(1, frac.BitCount());
         }
-        [TestMethod]
+        [Test]
         public void TestSubnormal()
         {
             ExpandedDouble hd = new ExpandedDouble(0x0000000000000001L);
 
             if (hd.GetBinaryExponent() == -1023)
             {
-                throw new AssertFailedException("identified bug - subnormal numbers not decoded properly");
+                throw new AssertionException("identified bug - subnormal numbers not decoded properly");
             }
             Assert.AreEqual(-1086, hd.GetBinaryExponent());
             BigInteger frac = hd.GetSignificand();
@@ -64,7 +64,7 @@ namespace TestCases.SS.Util
         /**
          * Tests specific values for conversion from {@link ExpandedDouble} to {@link NormalisedDecimal} and back
          */
-        [TestMethod]
+        [Test]
         public void TestRoundTripShifting()
         {
             long[] rawValues = {
@@ -93,7 +93,7 @@ namespace TestCases.SS.Util
             }
             if (!success)
             {
-                throw new AssertFailedException("One or more Test examples failed.  See stderr.");
+                throw new AssertionException("One or more Test examples failed.  See stderr.");
             }
         }
         public static bool ConfirmRoundTrip(int i, long rawBitsA)
@@ -231,7 +231,7 @@ namespace TestCases.SS.Util
 
             if (!origDigs.StartsWith(sigDigs))
             {
-                throw new AssertFailedException("Expected '" + origDigs + "' but got '" + sigDigs + "'.");
+                throw new AssertionException("Expected '" + origDigs + "' but got '" + sigDigs + "'.");
             }
 
             double dO = Double.Parse("0." + origDigs.Substring(sigDigs.Length));
@@ -247,7 +247,7 @@ namespace TestCases.SS.Util
             if (diff.IntValue() > 100)
             {
                 // 100/32768 ~= 0.003
-                throw new AssertFailedException("minor mistake");
+                throw new AssertionException("minor mistake");
             }
         }
 

@@ -18,7 +18,7 @@
 namespace TestCases.SS.Formula.PTG
 {
     using System;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.HSSF.UserModel;
     using NPOI.SS.Formula.PTG;
 
@@ -27,14 +27,14 @@ namespace TestCases.SS.Formula.PTG
      * 
      * @author Josh Micich
      */
-    [TestClass]
+    [TestFixture]
     public class TestArea3DPtg : AbstractPtgTestCase
     {
 
         /**
          * Confirms that sheet names Get properly escaped
          */
-        [TestMethod]
+        [Test]
         public void TestToFormulaString()
         {
 

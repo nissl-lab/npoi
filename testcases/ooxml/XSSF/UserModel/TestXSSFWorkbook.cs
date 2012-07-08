@@ -17,7 +17,7 @@
 
 using NPOI.XSSF;
 using NPOI.OpenXmlFormats.Spreadsheet;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using NPOI.SS.UserModel;
 using System.IO;
 using NPOI.Util;
@@ -32,7 +32,7 @@ using TestCases.SS.UserModel;
 namespace NPOI.XSSF.UserModel
 {
 
-    [TestClass]
+    [TestFixture]
     public class TestXSSFWorkbook : BaseTestWorkbook
     {
 
@@ -45,7 +45,7 @@ namespace NPOI.XSSF.UserModel
         /**
          * Tests that we can save, and then re-load a new document
          */
-        [TestMethod]
+        [Test]
         public void TestSaveLoadNew()
         {
             XSSFWorkbook workbook = new XSSFWorkbook();
@@ -113,7 +113,7 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual(1.2, sheet1.GetRow(0).GetCell(0).NumericCellValue, 0.0001);
             Assert.AreEqual("hello world", sheet1.GetRow(1).GetCell(0).RichStringCellValue.String);
         }
-        [TestMethod]
+        [Test]
         public void TestExisting()
         {
 
@@ -131,7 +131,7 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual(6, wbPart.Relationships.Size);
 
         }
-        [TestMethod]
+        [Test]
         public void TestGetCellStyleAt()
         {
             XSSFWorkbook workbook = new XSSFWorkbook();
@@ -150,7 +150,7 @@ namespace NPOI.XSSF.UserModel
             cellStyleAt = workbook.GetCellStyleAt((short)x);
             Assert.IsNotNull(cellStyleAt);
         }
-        [TestMethod]
+        [Test]
         public void TestGetFontAt()
         {
             XSSFWorkbook workbook = new XSSFWorkbook();
@@ -167,7 +167,7 @@ namespace NPOI.XSSF.UserModel
             fontAt = workbook.GetFontAt((short)x);
             Assert.IsNotNull(fontAt);
         }
-        [TestMethod]
+        [Test]
         public void TestNumCellStyles()
         {
             XSSFWorkbook workbook = new XSSFWorkbook();
@@ -175,7 +175,7 @@ namespace NPOI.XSSF.UserModel
             //get default cellStyles
             Assert.AreEqual(1, i);
         }
-        [TestMethod]
+        [Test]
         public void TestLoadSave()
         {
             XSSFWorkbook workbook = XSSFTestDataSamples.OpenSampleWorkbook("Formatting.xlsx");
@@ -199,7 +199,7 @@ namespace NPOI.XSSF.UserModel
             Assert.IsNotNull(wb2.GetSharedStringSource());
             Assert.IsNotNull(wb2.GetStylesSource());
         }
-        [TestMethod]
+        [Test]
         public void TestStyles()
         {
             XSSFWorkbook workbook = XSSFTestDataSamples.OpenSampleWorkbook("Formatting.xlsx");
@@ -238,7 +238,7 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual(2, st.GetFills().Count);
             Assert.AreEqual(1, st.GetBorders().Count);
         }
-        [TestMethod]
+        [Test]
         public void TestIncrementSheetId()
         {
             XSSFWorkbook wb = new XSSFWorkbook();
@@ -257,7 +257,7 @@ namespace NPOI.XSSF.UserModel
         /**
          *  Test Setting of core properties such as Title and Author
          */
-        [TestMethod]
+        [Test]
         public void TestWorkbookProperties()
         {
             XSSFWorkbook workbook = new XSSFWorkbook();
@@ -321,7 +321,7 @@ namespace NPOI.XSSF.UserModel
         /**
          * When deleting a sheet make sure that we adjust sheet indices of named ranges
          */
-        [TestMethod]
+        [Test]
         public void TestBug47737()
         {
             XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("47737.xlsx");
@@ -349,7 +349,7 @@ namespace NPOI.XSSF.UserModel
         /**
          * Problems with XSSFWorkbook.RemoveSheetAt when workbook Contains chart
          */
-        [TestMethod]
+        [Test]
         public void TestBug47813()
         {
             XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("47813.xlsx");
@@ -378,7 +378,7 @@ namespace NPOI.XSSF.UserModel
          * Problems with the count of the number of styles
          *  coming out wrong
          */
-        [TestMethod]
+        [Test]
         public void TestBug49702()
         {
             // First try with a new file
@@ -434,7 +434,7 @@ namespace NPOI.XSSF.UserModel
             }
             catch (ArgumentOutOfRangeException) { }
         }
-        [TestMethod]
+        [Test]
         public void TestRecalcId()
         {
             XSSFWorkbook wb = new XSSFWorkbook();
@@ -455,7 +455,7 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual(0, (int)calcPr.calcId);
             Assert.IsFalse(wb.GetForceFormulaRecalculation());
         }
-        [TestMethod]
+        [Test]
         public void TestChangeSheetNameWithSharedFormulas()
         {
             ChangeSheetNameWithSharedFormulas("shared_formulas.xlsx");

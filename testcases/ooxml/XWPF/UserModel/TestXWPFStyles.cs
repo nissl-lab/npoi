@@ -24,13 +24,13 @@ namespace NPOI.XWPF.UserModel
 
 
 
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
 
     using NPOI.XWPF;
     using System.Collections.Generic;
     using NPOI.OpenXmlFormats.Wordprocessing;
 
-    [TestClass]
+    [TestFixture]
     public class TestXWPFStyles
     {
 
@@ -38,7 +38,7 @@ namespace NPOI.XWPF.UserModel
         //		super.Up=();
         //	}
 
-        [TestMethod]
+        [Test]
         public void TestGetUsedStyles()
         {
             XWPFDocument sampleDoc = XWPFTestDataSamples.OpenSampleDocument("Styles.docx");
@@ -61,7 +61,7 @@ namespace NPOI.XWPF.UserModel
             }
         }
 
-        [TestMethod]
+        [Test]
         public void TestAddStylesToDocument()
         {
             XWPFDocument docOut = new XWPFDocument();

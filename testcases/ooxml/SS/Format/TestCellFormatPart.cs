@@ -19,7 +19,7 @@ namespace NPOI.SS.Format
     using System;
     using System.Text;
     using System.Text.RegularExpressions;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.SS.UserModel;
     using NPOI.XSSF;
     using TestCases.SS.Format;
@@ -28,7 +28,7 @@ namespace NPOI.SS.Format
 
 
     /** Test the individual CellFormatPart types. */
-    [TestClass]
+    [TestFixture]
     public class TestCellFormatPart : CellFormatTestBase
     {
         private static Regex NUMBER_EXTRACT_FMT = new Regex(
@@ -52,7 +52,7 @@ namespace NPOI.SS.Format
                     return cell.StringCellValue;
             }
         }
-        [TestMethod]
+        [Test]
         public void TestGeneralFormat()
         {
             RunFormatTests("GeneralFormatTests.xlsx", new CellValue1());
@@ -64,7 +64,7 @@ namespace NPOI.SS.Format
                 return cell.NumericCellValue;
             }
         }
-        [TestMethod]
+        [Test]
         public void TestNumberFormat()
         {
             RunFormatTests("NumberFormatTests.xlsx", new CellValue2());
@@ -86,7 +86,7 @@ namespace NPOI.SS.Format
                         actual);
             }
         }
-        [TestMethod]
+        [Test]
         public void TestNumberApproxFormat()
         {
             RunFormatTests("NumberFormatApproxTests.xlsx", new CellValue3());
@@ -99,13 +99,13 @@ namespace NPOI.SS.Format
                 return cell.DateCellValue;
             }
         }
-        [TestMethod]
+        [Test]
         public void TestDateFormat()
         {
             RunFormatTests("DateFormatTests.xlsx", new CellValue4());
         }
 
-        [TestMethod]
+        [Test]
         public void TestElapsedFormat()
         {
             RunFormatTests("ElapsedFormatTests.xlsx", new CellValue2());
@@ -120,13 +120,13 @@ namespace NPOI.SS.Format
                     return cell.StringCellValue;
             }
         }
-        [TestMethod]
+        [Test]
         public void TestTextFormat()
         {
             RunFormatTests("TextFormatTests.xlsx", new CellValue6());
         }
 
-        [TestMethod]
+        [Test]
         public void TestConditions()
         {
             RunFormatTests("FormatConditionTests.xlsx", new CellValue2());

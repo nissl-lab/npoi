@@ -17,7 +17,7 @@
 
 namespace TestCases.HSSF.Record
 {
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
 
     using NPOI.Util;
     using TestCases.HSSF.Record;
@@ -26,10 +26,10 @@ namespace TestCases.HSSF.Record
      *
      * @author Josh Micich
      */
-    [TestClass]
+    [TestFixture]
     public class TestRecalcIdRecord
     {
-        [TestMethod]
+        [Test]
         public void TestBasicDeSerializeReserialize()
         {
 
@@ -41,7 +41,7 @@ namespace TestCases.HSSF.Record
             RecalcIdRecord r = Create(data);
             TestcaseRecordInputStream.ConfirmRecordEncoding(RecalcIdRecord.sid, data, r.Serialize());
         }
-        [TestMethod]
+        [Test]
         public void TestBadFirstField_bug48096()
         {
             /**
@@ -63,7 +63,7 @@ namespace TestCases.HSSF.Record
             {
                 if (e.Message.Equals("expected 449 but got 49409"))
                 {
-                    throw new AssertFailedException("Identified bug 48096");
+                    throw new AssertionException("Identified bug 48096");
                 }
                 throw e;
             }

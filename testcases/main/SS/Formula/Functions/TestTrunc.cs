@@ -17,7 +17,7 @@
 
 namespace TestCases.SS.Formula.Functions
 {
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.SS.Formula.Eval;
     using NPOI.SS.Formula.Functions;
 
@@ -26,11 +26,11 @@ namespace TestCases.SS.Formula.Functions
      *
      * @author Stephen Wolke (smwolke at geistig.com)
      */
-    [TestClass]
+    [TestFixture]
     public class TestTrunc : AbstractNumericTestCase
     {
         //private static NumericFunction F = null;
-        [TestMethod]
+        [Test]
         public void TestTRuncWithStringArg()
         {
 
@@ -39,21 +39,21 @@ namespace TestCases.SS.Formula.Functions
             ValueEval result = NumericFunction.TRUNC.Evaluate(args, -1, (short)-1);
             Assert.AreEqual(ErrorEval.VALUE_INVALID, result);
         }
-        [TestMethod]
+        [Test]
         public void TestTRuncWithWholeNumber()
         {
             ValueEval[] args = { new NumberEval(200), new NumberEval(2) };
             ValueEval result = NumericFunction.TRUNC.Evaluate(args, -1, (short)-1);
             Assert.AreEqual((new NumberEval(200d)).NumberValue, ((NumberEval)result).NumberValue, "TRUNC");
         }
-        [TestMethod]
+        [Test]
         public void TestTRuncWithDecimalNumber()
         {
             ValueEval[] args = { new NumberEval(2.612777), new NumberEval(3) };
             ValueEval result = NumericFunction.TRUNC.Evaluate(args, -1, (short)-1);
             Assert.AreEqual((new NumberEval(2.612d)).NumberValue, ((NumberEval)result).NumberValue, "TRUNC");
         }
-        [TestMethod]
+        [Test]
         public void TestTRuncWithDecimalNumberOneArg()
         {
             ValueEval[] args = { new NumberEval(2.612777) };

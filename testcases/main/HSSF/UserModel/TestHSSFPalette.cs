@@ -25,13 +25,13 @@ namespace TestCases.HSSF.UserModel
     using NPOI.Util;
     using NPOI.HSSF.Util;
     using TestCases.HSSF;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.SS.UserModel;
 
     /**
      * @author Brian Sanders (bsanders at risklabs dot com)
      */
-    [TestClass]
+    [TestFixture]
     public class TestHSSFPalette
     {
         private PaletteRecord palette;
@@ -39,7 +39,7 @@ namespace TestCases.HSSF.UserModel
 
 
 
-        [TestInitialize]
+        [SetUp]
         public void SetUp()
         {
             palette = new PaletteRecord();
@@ -49,7 +49,7 @@ namespace TestCases.HSSF.UserModel
         /**
          * Verifies that a custom palette can be Created, saved, and reloaded
          */
-        [TestMethod]
+        [Test]
         public void TestCustomPalette()
         {
             //reading sample xls
@@ -92,7 +92,7 @@ namespace TestCases.HSSF.UserModel
         /**
          * Uses the palette from cell stylings
          */
-        [TestMethod]
+        [Test]
         public void TestPaletteFromCellColours()
         {
             HSSFWorkbook book = HSSFTestDataSamples.OpenSampleWorkbook("SimpleWithColours.xls");
@@ -150,7 +150,7 @@ namespace TestCases.HSSF.UserModel
             Assert.AreEqual("FFFF:FFFF:0", p.GetColor((short)13).GetHexString());
             Assert.AreEqual("FFFF:0:FFFF", p.GetColor((short)14).GetHexString());
         }
-        [TestMethod]
+        [Test]
         public void TestFindSimilar()
         {
             HSSFWorkbook book = new HSSFWorkbook();
@@ -207,7 +207,7 @@ namespace TestCases.HSSF.UserModel
             }
         }
 
-        [TestMethod]
+        [Test]
         public void TestGnumericStrings()
         {
             CompareToDefaults(new ColorComparator1());
@@ -227,7 +227,7 @@ namespace TestCases.HSSF.UserModel
                 Assert.AreEqual(s1[2], s2[2]);
             }
         }
-        [TestMethod]
+        [Test]
         public void TestBadIndexes()
         {
             //too small
@@ -251,7 +251,7 @@ namespace TestCases.HSSF.UserModel
                 c.Compare(expectedColor, paletteColor);
             }
         }
-        [TestMethod]
+        [Test]
         public void TestAddColor()
         {
             try

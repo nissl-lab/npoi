@@ -22,14 +22,14 @@ namespace TestCases.SS.Formula.Function
     using NPOI.SS.Formula.PTG;
     using NPOI.HSSF.UserModel;
     using System;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     /**
      * Tests parsing of some built-in functions that were not properly
      * registered in POI as of bug #44675, #44733 (March/April 2008).
      * 
      * @author Josh Micich
      */
-    [TestClass]
+    [TestFixture]
     public class TestParseMissingBuiltInFuncs
     {
 
@@ -51,7 +51,7 @@ namespace TestCases.SS.Formula.Function
             AbstractFunctionPtg func = (AbstractFunctionPtg)ptgF;
             if (func.GetFunctionIndex() == 255)
             {
-                throw new AssertFailedException("Failed to recognise built-in function in formula '"
+                throw new AssertionException("Failed to recognise built-in function in formula '"
                         + formula + "'");
             }
             Assert.AreEqual(expPtgArraySize, ptgs.Length);
@@ -64,38 +64,38 @@ namespace TestCases.SS.Formula.Function
             String reRenderedFormula = HSSFFormulaParser.ToFormulaString(book, ptgs);
             Assert.AreEqual(formula, reRenderedFormula);
         }
-        [TestMethod]
+        [Test]
         public void TestDatedif()
         {
             int expSize = 4;   // NB would be 5 if POI Added tAttrVolatile properly
             ConfirmFunc("DATEDIF(NOW(),NOW(),\"d\")", expSize, false, 351);
         }
-        [TestMethod]
+        [Test]
         public void TestDdb()
         {
             ConfirmFunc("DDB(1,1,1,1,1)", 6, true, 144);
         }
-        [TestMethod]
+        [Test]
         public void TestAtan()
         {
             ConfirmFunc("ATAN(1)", 2, false, 18);
         }
-        [TestMethod]
+        [Test]
         public void TestUsdollar()
         {
             ConfirmFunc("USDOLLAR(1)", 2, true, 204);
         }
-        [TestMethod]
+        [Test]
         public void TestDBCS()
         {
             ConfirmFunc("DBCS(\"abc\")", 2, false, 215);
         }
-        [TestMethod]
+        [Test]
         public void TestIsnontext()
         {
             ConfirmFunc("ISNONTEXT(\"abc\")", 2, false, 190);
         }
-        [TestMethod]
+        [Test]
         public void TestDproduct()
         {
             ConfirmFunc("DPRODUCT(C1:E5,\"HarvestYield\",G1:H2)", 4, false, 189);

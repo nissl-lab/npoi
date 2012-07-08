@@ -23,13 +23,13 @@ namespace TestCases.DDF
     using System.Text;
     using System.IO;
 
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.DDF;
     using NPOI.Util;
-    [TestClass]
+    [TestFixture]
     public class TestEscherSpgrRecord
     {
-        [TestMethod]
+        [Test]
         public void TestSerialize()
         {
             EscherSpgrRecord r = CreateRecord();
@@ -46,7 +46,7 @@ namespace TestCases.DDF
                     "04, 00, 00, 00, ]",     // height
                     HexDump.ToHex(data));
         }
-        [TestMethod]
+        [Test]
         public void TestFillFields()
         {
             String hexData = "10 00 " +
@@ -66,7 +66,7 @@ namespace TestCases.DDF
             Assert.AreEqual(3, r.RectX2);
             Assert.AreEqual(4, r.RectY2);
         }
-        [TestMethod]
+        [Test]
         public void TestToString()
         {
             String nl = Environment.NewLine;

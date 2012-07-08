@@ -22,7 +22,7 @@ namespace TestCases.SS.Formula
     using System.Collections.Generic;
     using System.IO;
     using System.Text;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.HSSF.Model;
     using NPOI.HSSF.UserModel;
     using NPOI.SS.Formula;
@@ -39,7 +39,7 @@ namespace TestCases.SS.Formula
      *
      * @author Josh Micich
      */
-    [TestClass]
+    [TestFixture]
     public class TestEvaluationCache
     {
 
@@ -342,7 +342,7 @@ namespace TestCases.SS.Formula
             ms.ClearAllCachedResultValues();
             return ms;
         }
-        [TestMethod]
+        [Test]
         public void TestMediumComplex()
         {
 
@@ -421,7 +421,7 @@ namespace TestCases.SS.Formula
 			"end A1 100",
 		});
         }
-        [TestMethod]
+        [Test]
         public void TestMediumComplexWithDependencyChange()
         {
 
@@ -482,7 +482,7 @@ namespace TestCases.SS.Formula
          * verifies that when updating a plain cell, depending (formula) cell cached values are cleared
          * only when the plain cell's value actually changes
          */
-        [TestMethod]
+        [Test]
         public void TestRedundantUpdate()
         {
             MySheet ms = new MySheet();
@@ -527,7 +527,7 @@ namespace TestCases.SS.Formula
          * and VLOOKUP the effect can be subtle.  The presence of error values can also produce this
          * effect in almost every function and operator.
          */
-        [TestMethod]
+        [Test]
         public void TestSimpleWithDependencyChange()
         {
 
@@ -578,7 +578,7 @@ namespace TestCases.SS.Formula
 			"end A1 25",
 		});
         }
-        [TestMethod]
+        [Test]
         public void TestBlankCells()
         {
 
@@ -631,7 +631,7 @@ namespace TestCases.SS.Formula
          * Make sure that when blank cells are Changed to value/formula cells, any dependent formulas
          * have their cached results Cleared.
          */
-        [TestMethod]
+        [Test]
         public void TestBlankCellChangedToValueCell_bug46053()
         {
             System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
@@ -664,7 +664,7 @@ namespace TestCases.SS.Formula
             if (cv.NumberValue == 2.2)
             {
                 // looks like left-over cached result from before change to B1
-                throw new AssertFailedException("Identified bug 46053");
+                throw new AssertionException("Identified bug 46053");
             }
             Assert.AreEqual(2.6, cv.NumberValue, 0.0);
         }
@@ -672,7 +672,7 @@ namespace TestCases.SS.Formula
         /**
          * same use-case as the Test for bug 46053, but Checking trace values too
          */
-        [TestMethod]
+        [Test]
         public void TestBlankCellChangedToValueCell()
         {
             System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US"); 
@@ -719,7 +719,7 @@ namespace TestCases.SS.Formula
             {
                 System.Console.Error.WriteLine("Log lengths mismatch");
                 dumpCompare(System.Console.Error, expectedLog, actualLog);
-                throw new AssertFailedException("Log lengths mismatch");
+                throw new AssertionException("Log lengths mismatch");
             }
             for (int i = 0; i < endIx; i++)
             {
@@ -728,7 +728,7 @@ namespace TestCases.SS.Formula
                     String msg = "Log entry mismatch at index " + i;
                     System.Console.Error.WriteLine(msg);
                     dumpCompare(System.Console.Error, expectedLog, actualLog);
-                    throw new AssertFailedException(msg);
+                    throw new AssertionException(msg);
                 }
             }
 
@@ -804,7 +804,7 @@ namespace TestCases.SS.Formula
             Evaluator.EvaluateFormulaCell(summaryCell);
         }
 
-        [TestMethod]
+        [Test]
         public void TestPlainValueCache()
         {
 

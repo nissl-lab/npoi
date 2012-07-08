@@ -19,7 +19,7 @@ namespace TestCases.HSSF.UserModel
 {
     using System;
     using System.IO;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.HSSF.EventModel;
     using NPOI.HSSF.Record;
     using NPOI.POIFS.FileSystem;
@@ -37,7 +37,7 @@ namespace TestCases.HSSF.UserModel
      *
      * @author Dragos Buleandra ( dragos.buleandra@trade2b.ro )
      */
-    [TestClass]
+    [TestFixture]
     public class TestDataValidation : BaseTestDataValidation
     {
 
@@ -142,7 +142,7 @@ namespace TestCases.HSSF.UserModel
             cell.SetCellValue(new HSSFRichTextString(text));
 
         }
-        [TestMethod]
+        [Test]
         public void TestAddToExistingSheet()
         {
 
@@ -214,7 +214,7 @@ namespace TestCases.HSSF.UserModel
 
             if (nextSid == 0x0867)
             {
-                throw new AssertFailedException("Identified bug 45519");
+                throw new AssertionException("Identified bug 45519");
             }
             Assert.AreEqual(DVRecord.sid, nextSid);
         }

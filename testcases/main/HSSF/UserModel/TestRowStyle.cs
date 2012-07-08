@@ -25,7 +25,7 @@ namespace TestCases.HSSF.UserModel
     using System.IO;
     using System;
 
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
 
     using TestCases.HSSF;
     using NPOI.Util;
@@ -38,7 +38,7 @@ namespace TestCases.HSSF.UserModel
      * @author Amol S. Deshmukh &lt; amolweb at ya hoo dot com &gt;
      */
 
-    [TestClass]
+    [TestFixture]
     public class TestRowStyle
     {
 
@@ -58,7 +58,7 @@ namespace TestCases.HSSF.UserModel
          *             NPOI.SS.UserModel.Sheet last row or first row is incorrect.             <P>
          *
          */
-        [TestMethod]
+        [Test]
         public void TestWriteSheetFont()
         {
             HSSFWorkbook wb = new HSSFWorkbook();
@@ -88,7 +88,7 @@ namespace TestCases.HSSF.UserModel
         /**
          * Tests that is creating a file with a date or an calendar works correctly.
          */
-        [TestMethod]
+        [Test]
         public void TestDataStyle()
         {
             HSSFWorkbook wb = new HSSFWorkbook();
@@ -128,7 +128,7 @@ namespace TestCases.HSSF.UserModel
          *             NPOI.SS.UserModel.Sheet last row or first row is incorrect.             <P>
          *
          */
-        [TestMethod]
+        [Test]
         public void TestWriteSheetStyle()
         {
             HSSFWorkbook wb = new HSSFWorkbook();

@@ -18,7 +18,7 @@
 namespace TestCases.HSSF.Record
 {
     using System;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
 
     using NPOI.HSSF.Record;
     using NPOI.HSSF.Record.CF;
@@ -36,10 +36,10 @@ namespace TestCases.HSSF.Record
      *
      * @author Dmitriy Kumshayev 
      */
-    [TestClass]
+    [TestFixture]
     public class TestCFRuleRecord
     {
-        [TestMethod]
+        [Test]
         public void TestConstructors()
         {
             IWorkbook workbook = new HSSFWorkbook();
@@ -63,7 +63,7 @@ namespace TestCases.HSSF.Record
             Assert.AreSame(Ptg.EMPTY_PTG_ARRAY, rule3.ParsedExpression2);
             Assert.AreSame(Ptg.EMPTY_PTG_ARRAY, rule3.ParsedExpression2);
         }
-        [TestMethod]
+        [Test]
         public void TestCreateCFRuleRecord()
         {
             HSSFWorkbook workbook = new HSSFWorkbook();
@@ -305,7 +305,7 @@ namespace TestCases.HSSF.Record
             fontFormatting.IsUnderlineTypeModified = (true);
             Assert.IsTrue(fontFormatting.IsUnderlineTypeModified);
         }
-        [TestMethod]
+        [Test]
         public void TestWrite() {
 		    HSSFWorkbook workbook = new HSSFWorkbook();
             HSSFSheet sheet = (HSSFSheet)workbook.CreateSheet();
@@ -341,7 +341,7 @@ namespace TestCases.HSSF.Record
         /**
          * tRefN and tAreaN tokens must be preserved when re-serializing conditional format formulas
          */
-        [TestMethod]
+        [Test]
         public void TestReserializeRefNTokens() 
         {
     		
@@ -350,7 +350,7 @@ namespace TestCases.HSSF.Record
 		    Ptg[] ptgs = rr.ParsedExpression1;
 		    Assert.AreEqual(3, ptgs.Length);
 		    if (ptgs[0] is RefPtg) {
-			    throw new AssertFailedException("Identified bug 45234");
+			    throw new AssertionException("Identified bug 45234");
 		    }
 		    Assert.AreEqual(typeof(RefNPtg), ptgs[0].GetType());
 		    RefNPtg refNPtg = (RefNPtg) ptgs[0];

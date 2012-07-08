@@ -19,7 +19,7 @@ namespace TestCases.HSSF.Model
 {
     using System;
     using System.Text;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
 
     using TestCases.HSSF;
     using NPOI.SS.Formula;
@@ -36,19 +36,19 @@ namespace TestCases.HSSF.Model
      * 
      * @author Josh Micich
      */
-    [TestClass]
+    [TestFixture]
     public class TestRVA
     {
         /// <summary>
         ///  Some of the tests are depending on the american culture.
         /// </summary>
-        [TestInitialize()]
+        [SetUp]
         public void InitializeCultere()
         {
             System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
         }
 
-        [TestMethod]
+        [Test]
         public void TestFormulasRVA()
         {
             HSSFWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("testRVA.xls");
@@ -75,7 +75,7 @@ namespace TestCases.HSSF.Model
                 {
                     ConfirmCell(cell, formula, wb);
                 }
-                catch (AssertFailedException e)
+                catch (AssertionException e)
                 {
                     Console.Error.WriteLine("Problem with row[" + rowIx + "] formula '" + formula + "'");
                     Console.Error.WriteLine(e.Message);
@@ -92,7 +92,7 @@ namespace TestCases.HSSF.Model
             {
                 String msg = "One or more RVA tests failed: countFailures=" + countFailures
                         + " countFailures=" + countErrors + ". See stderr for details.";
-                throw new AssertFailedException(msg);
+                throw new AssertionException(msg);
             }
         }
 
@@ -155,7 +155,7 @@ namespace TestCases.HSSF.Model
             //}
             if (hasMismatch)
             {
-                throw new AssertFailedException(sb.ToString());
+                throw new AssertionException(sb.ToString());
             }
         }
 

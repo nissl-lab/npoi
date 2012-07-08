@@ -20,12 +20,12 @@ namespace TestCases.HSSF.Model
     using NPOI.DDF;
     using NPOI.HSSF.Model;
 
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
 
-    [TestClass]
+    [TestFixture]
     public class TestDrawingManager
     {
-        [TestMethod]
+        [Test]
         public void TestFindFreeSPIDBlock()
         {
             EscherDggRecord dgg = new EscherDggRecord();
@@ -38,7 +38,7 @@ namespace TestCases.HSSF.Model
             Assert.AreEqual(2048, dm.FindFreeSPIDBlock());
         }
 
-        [TestMethod]
+        [Test]
         public void TestFindNewDrawingGroupId()
         {
             EscherDggRecord dgg = new EscherDggRecord();
@@ -52,7 +52,7 @@ namespace TestCases.HSSF.Model
             new EscherDggRecord.FileIdCluster( 2, 10 )});
             Assert.AreEqual(3, dm.FindNewDrawingGroupId());
         }
-        [TestMethod]
+        [Test]
         public void TestDrawingGroupExists()
         {
             EscherDggRecord dgg = new EscherDggRecord();
@@ -64,7 +64,7 @@ namespace TestCases.HSSF.Model
             Assert.IsTrue(dm.DrawingGroupExists((short)2));
             Assert.IsFalse(dm.DrawingGroupExists((short)3));
         }
-        [TestMethod]
+        [Test]
         public void TestCreateDgRecord()
         {
             EscherDggRecord dgg = new EscherDggRecord();
@@ -80,7 +80,7 @@ namespace TestCases.HSSF.Model
             Assert.AreEqual(1, dm.Dgg.FileIdClusters[0].DrawingGroupId);
             Assert.AreEqual(0, dm.Dgg.FileIdClusters[0].NumShapeIdsUsed);
         }
-        [TestMethod]
+        [Test]
         public void TestAllocateShapeId()
         {
             EscherDggRecord dgg = new EscherDggRecord();

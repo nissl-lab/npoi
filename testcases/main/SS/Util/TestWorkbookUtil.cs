@@ -19,7 +19,7 @@ namespace TestCases.SS.Util
 {
 
     using NPOI.SS.Util;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using System;
     using System.Text;
     using NPOI.Util;
@@ -29,14 +29,14 @@ namespace TestCases.SS.Util
      *
      * @see org.apache.poi.ss.util.WorkbookUtil
      */
-    [TestClass]
+    [TestFixture]
     public class TestWorkbookUtil
     {
         /**
          * borrowed test cases from 
          * {@link org.apache.poi.hssf.record.TestBoundSheetRecord#testValidNames()}
          */
-        [TestMethod]
+        [Test]
         public void TestCreateSafeNames()
         {
 

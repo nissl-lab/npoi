@@ -20,19 +20,19 @@ namespace TestCases.HSSF.UserModel
     using System;
     using NPOI.Util.Collections;
     using NPOI.HSSF.UserModel;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     /**
      * Tests the implementation of the FontDetails class.
      *
      * @author Glen Stampoultzis (glens at apache.org)
      */
-    [TestClass]
+    [TestFixture]
     public class TestFontDetails
     {
         private Properties properties;
         private FontDetails fontDetails;
 
-        [TestInitialize]
+        [SetUp]
         public void SetUp()
         {
             properties = new Properties();
@@ -42,19 +42,19 @@ namespace TestCases.HSSF.UserModel
             fontDetails = FontDetails.Create("Arial", properties);
 
         }
-        [TestMethod]
+        [Test]
         public void TestCreate()
         {
             Assert.AreEqual(13, fontDetails.GetHeight());
             Assert.AreEqual(6, fontDetails.GetCharWidth('a'));
             Assert.AreEqual(3, fontDetails.GetCharWidth('f'));
         }
-        [TestMethod]
+        [Test]
         public void TestGetStringWidth()
         {
             Assert.AreEqual(9, fontDetails.GetStringWidth("af"));
         }
-        [TestMethod]
+        [Test]
         public void TestGetCharWidth()
         {
             Assert.AreEqual(6, fontDetails.GetCharWidth('a'));

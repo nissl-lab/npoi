@@ -30,7 +30,7 @@ using System;
 using System.Collections;
 using System.IO;
 
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 using NPOI.POIFS.FileSystem;
 using NPOI.Util;
@@ -44,7 +44,7 @@ namespace TestCases.POIFS.FileSystem
      *
      * @author Marc Johnson
      */
-    [TestClass]
+    [TestFixture]
     public class TestDocumentDescriptor
     {
 
@@ -62,7 +62,7 @@ namespace TestCases.POIFS.FileSystem
         /**
          * Test equality
          */
-        [TestMethod]
+        [Test]
         public void TestEquality()
         {
             String[] names =

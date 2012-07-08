@@ -17,7 +17,7 @@
 
 namespace TestCases.HSSF.Record.Chart
 {
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.HSSF.Record;
     using NPOI.Util;
     using TestCases.HSSF.Record;
@@ -28,7 +28,7 @@ namespace TestCases.HSSF.Record.Chart
      *
      * @author Josh Micich
      */
-    [TestClass]
+    [TestFixture]
     public class TestChartFormatRecord
     {
         /**
@@ -44,14 +44,14 @@ namespace TestCases.HSSF.Record.Chart
         /**
          * The correct size of a {@link ChartFormatRecord} is 20 bytes (not including header).
          */
-        [TestMethod]
+        [Test]
         public void TestLoad()
         {
             RecordInputStream in1 = TestcaseRecordInputStream.Create(data);
             ChartFormatRecord record = new ChartFormatRecord(in1);
             if (in1.Remaining == 2)
             {
-                throw new AssertFailedException("Identified bug 44693d");
+                throw new AssertionException("Identified bug 44693d");
             }
             Assert.AreEqual(0, in1.Remaining);
             Assert.AreEqual(24, record.RecordSize);

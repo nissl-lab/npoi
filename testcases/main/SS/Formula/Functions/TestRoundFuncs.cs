@@ -19,7 +19,7 @@ namespace TestCases.SS.Formula.Functions
 {
 
     using NPOI.SS.Formula.Eval;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.SS.Formula.Functions;
 
     /**
@@ -27,11 +27,11 @@ namespace TestCases.SS.Formula.Functions
      *
      * @author Josh Micich
      */
-    [TestClass]
+    [TestFixture]
     public class TestRoundFuncs
     {
         //private static NumericFunction F = null;
-        [TestMethod]
+        [Test]
         public void TestRounddownWithStringArg()
         {
 
@@ -40,7 +40,7 @@ namespace TestCases.SS.Formula.Functions
             ValueEval result = NumericFunction.ROUNDDOWN.Evaluate(args, -1, (short)-1);
             Assert.AreEqual(ErrorEval.VALUE_INVALID, result);
         }
-        [TestMethod]
+        [Test]
         public void TestRoundupWithStringArg()
         {
 

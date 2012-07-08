@@ -22,7 +22,7 @@ namespace TestCases.SS.Formula.Functions
 {
 
     using NPOI.SS.Formula.Eval;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.SS.Formula.Functions;
     using System;
 
@@ -31,10 +31,10 @@ namespace TestCases.SS.Formula.Functions
      * @author Amol S. Deshmukh &lt; amolweb at ya hoo dot com &gt;
      *
      */
-    [TestClass]
+    [TestFixture]
     public class TestStatsLib : AbstractNumericTestCase
     {
-        [TestMethod]
+        [Test]
         public void TestDevsq()
         {
             double[] v = null;
@@ -70,7 +70,7 @@ namespace TestCases.SS.Formula.Functions
             x = 82.5;
             Assert.AreEqual( x, d,"devsq ");
         }
-        [TestMethod]
+        [Test]
         public void TestKthLargest()
         {
             double[] v = null;
@@ -106,11 +106,11 @@ namespace TestCases.SS.Formula.Functions
             x = -3;
             Assert.AreEqual( x, d,"kthLargest ");
         }
-        [TestMethod]
+        [Test]
         public void TestKthSmallest()
         {
         }
-        [TestMethod]
+        [Test]
         public void TestAvedev()
         {
             double[] v = null;
@@ -146,7 +146,7 @@ namespace TestCases.SS.Formula.Functions
             x = 2.5;
             Assert.AreEqual( x, d,"avedev ");
         }
-        [TestMethod]
+        [Test]
         public void TestMedian()
         {
             double[] v = null;
@@ -192,7 +192,7 @@ namespace TestCases.SS.Formula.Functions
             x = 5;
             Assert.AreEqual( x, d,"median ");
         }
-        [TestMethod]
+        [Test]
         public void TestMode()
         {
             double[] v;
@@ -233,7 +233,7 @@ namespace TestCases.SS.Formula.Functions
                 actual = Mode.Evaluate(v);
                 if (expectedResult == null)
                 {
-                    throw new AssertFailedException("Expected N/A exception was not thrown");
+                    throw new AssertionException("Expected N/A exception was not thrown");
                 }
             }
             catch (EvaluationException e)
@@ -248,7 +248,7 @@ namespace TestCases.SS.Formula.Functions
             Assert.AreEqual( expectedResult.Value, actual,"mode");
         }
 
-        [TestMethod]
+        [Test]
         public void TestStddev()
         {
             double[] v = null;
@@ -284,7 +284,7 @@ namespace TestCases.SS.Formula.Functions
             x = 3.02765035410;
             Assert.AreEqual( x, d,0.0000000001,"stdev ");
         }
-        [TestMethod]
+        [Test]
         
         public void TestVar()
         {
@@ -312,7 +312,7 @@ namespace TestCases.SS.Formula.Functions
             x = 754.2666667;
             Assert.AreEqual( x, d, 0.0000001,"var ");
         }
-        [TestMethod]
+        [Test]
         public void TestVarp()
         {
             double[] v = null;

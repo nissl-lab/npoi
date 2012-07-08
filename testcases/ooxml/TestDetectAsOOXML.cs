@@ -17,7 +17,7 @@
 ==================================================================== */
 
 using System.IO;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using NPOI.OpenXml4Net.OPC;
 using NPOI.Util;
 using TestCases.HSSF;
@@ -29,15 +29,15 @@ namespace NPOI.OOXML
      * Class to test that HXF correctly detects OOXML
      *  documents
      */
-    [TestClass]
+    [TestFixture]
     public class TestDetectAsOOXML
     {
-        [TestMethod]
+        [Test]
         public void TestOpensProperly()
         {
             OPCPackage.Open(HSSFTestDataSamples.OpenSampleFileStream("sample.xlsx"));
         }
-        [TestMethod]
+        [Test]
         public void TestDetectAsPOIFS()
         {
             Stream in1;

@@ -16,7 +16,7 @@
 ==================================================================== */
 
 using TestCases.SS.UserModel;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using NPOI.SS.UserModel;
 namespace NPOI.XSSF.UserModel
 {
@@ -24,7 +24,7 @@ namespace NPOI.XSSF.UserModel
     /**
      * Tests for {@link XSSFDataFormat}
      */
-    [TestClass]
+    [TestFixture]
     public class TestXSSFDataFormat : BaseTestDataFormat
     {
 
@@ -37,7 +37,7 @@ namespace NPOI.XSSF.UserModel
         /**
          * [Bug 49928] formatCellValue returns incorrect value for \u00a3 formatted cells
          */
-        [TestMethod]
+        [Test]
         public override void Test49928()
         {
             XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("49928.xlsx");

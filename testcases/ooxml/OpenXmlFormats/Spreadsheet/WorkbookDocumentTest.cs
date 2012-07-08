@@ -1,5 +1,5 @@
 ﻿using NPOI.OpenXmlFormats.Spreadsheet;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using System;
 using System.IO;
 
@@ -11,7 +11,7 @@ namespace ooxml.Testcases
     ///This is a test class for WorkbookDocumentTest and is intended
     ///to contain all WorkbookDocumentTest Unit Tests
     ///</summary>
-    [TestClass()]
+    [TestFixture]
     public class WorkbookDocumentTest
     {
 
@@ -68,7 +68,7 @@ namespace ooxml.Testcases
         /// <summary>
         ///A test for the Serialization of CT_Worksheet.
         ///</summary>
-        [TestMethod()]
+        [Test]
         public void SerializeEmptyWorksheetDocumentTest()
         {
             CT_Workbook worksheet = new CT_Workbook();
@@ -86,7 +86,7 @@ namespace ooxml.Testcases
         /// <summary>
         ///A test for the Serialization of CT_Worksheet.
         ///</summary>
-        [TestMethod()]
+        [Test]
         public void SerializeWorksheetDocumentTest()
         {
             CT_Workbook worksheet = new CT_Workbook();
@@ -127,7 +127,7 @@ namespace ooxml.Testcases
         /// <summary>
         ///A test for Deserialization of CT_Worksheet.
         ///</summary>
-        [TestMethod()]
+        [Test]
         public void DeserializeWorksheetDocumentTest()
         {
             // The following is the excerpt of an Excel file.

@@ -21,7 +21,7 @@ namespace TestCases.HSSF.UserModel
     using System.IO;
     using NPOI.HSSF.UserModel;
 
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using TestCases.HSSF;
     using NPOI.SS.UserModel;
 
@@ -32,7 +32,7 @@ namespace TestCases.HSSF.UserModel
      * @author Shawn Laubach (slaubach at apache dot com)
      * @author Toshiaki Kamoshida (kamoshida.toshiaki at future dot co dot jp)
      */
-    [TestClass]
+    [TestFixture]
     public class TestSheetShiftRows
     {
 
@@ -44,7 +44,7 @@ namespace TestCases.HSSF.UserModel
          *
          * @author Shawn Laubach (slaubach at apache dot org)
          */
-        [TestMethod]
+        [Test]
         public void TestShiftRows()
         {
             // Read initial file in
@@ -104,7 +104,7 @@ namespace TestCases.HSSF.UserModel
          *
          * @author Toshiaki Kamoshida (kamoshida.toshiaki at future dot co dot jp)
          */
-        [TestMethod]
+        [Test]
         public void TestShiftRow()
         {
             HSSFWorkbook b = new HSSFWorkbook();
@@ -119,7 +119,7 @@ namespace TestCases.HSSF.UserModel
          *
          * @author Toshiaki Kamoshida (kamoshida.toshiaki at future dot co dot jp)
          */
-        [TestMethod]
+        [Test]
         public void TestShiftRow0()
         {
             HSSFWorkbook b = new HSSFWorkbook();
@@ -133,7 +133,7 @@ namespace TestCases.HSSF.UserModel
          * When shifting rows, the page breaks should go with it
          *
          */
-        [TestMethod]
+        [Test]
         public void TestShiftRowBreaks()
         {
             HSSFWorkbook b = new HSSFWorkbook();
@@ -147,7 +147,7 @@ namespace TestCases.HSSF.UserModel
 
         }
 
-        [TestMethod]
+        [Test]
         public void TestShiftWithComments()
         {
             HSSFWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("comments.xls");
@@ -212,7 +212,7 @@ namespace TestCases.HSSF.UserModel
         /**
          * See bug #34023
          */
-        [TestMethod]
+        [Test]
         public void TestShiftWithFormulas()
         {
             HSSFWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("ForShifting.xls");

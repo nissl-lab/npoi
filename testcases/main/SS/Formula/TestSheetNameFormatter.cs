@@ -19,7 +19,7 @@ namespace TestCases.SS.Formula
 {
 
     using NPOI.SS.Formula;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using System;
 
     /**
@@ -27,7 +27,7 @@ namespace TestCases.SS.Formula
      * 
      * @author Josh Micich
      */
-    [TestClass]
+    [TestFixture]
     public class TestSheetNameFormatter
     {
 
@@ -39,7 +39,7 @@ namespace TestCases.SS.Formula
         /**
          * Tests main public method 'format' 
          */
-        [TestMethod]
+        [Test]
         public void TestFormat()
         {
 
@@ -58,7 +58,7 @@ namespace TestCases.SS.Formula
             ConfirmFormat("A12220", "'A12220'");
             ConfirmFormat("TAXRETURN19980415", "TAXRETURN19980415");
         }
-        [TestMethod]
+        [Test]
         public void TestBooleanLiterals()
         {
             ConfirmFormat("TRUE", "'TRUE'");
@@ -79,7 +79,7 @@ namespace TestCases.SS.Formula
          * Tests functionality to determine whether a sheet name Containing only letters and digits
          * would look (to Excel) like a cell name.
          */
-        [TestMethod]
+        [Test]
         public void TestLooksLikePlainCellReference()
         {
 
@@ -104,7 +104,7 @@ namespace TestCases.SS.Formula
          * Tests exact boundaries for names that look very close to cell names (i.e. contain 1 or more
          * letters followed by one or more digits).
          */
-        [TestMethod]
+        [Test]
         public void TestCellRange()
         {
             ConfirmCellRange("A1", 1, true);

@@ -19,7 +19,7 @@ namespace TestCases.SS.Formula.Functions
 {
 
     using NPOI.SS.Formula.Eval;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.SS.Formula.Functions;
 
     /**
@@ -27,7 +27,7 @@ namespace TestCases.SS.Formula.Functions
      *
      * @author Josh Micich
      */
-    [TestClass]
+    [TestFixture]
     public class TestSumif
     {
         private static NumberEval _30 = new NumberEval(30);
@@ -43,12 +43,12 @@ namespace TestCases.SS.Formula.Functions
         {
             if (!(actualEval is NumericValueEval))
             {
-                throw new AssertFailedException("Expected numeric result");
+                throw new AssertionException("Expected numeric result");
             }
             NumericValueEval nve = (NumericValueEval)actualEval;
             Assert.AreEqual(expected, nve.NumberValue, 0);
         }
-        [TestMethod]
+        [Test]
         public void TestBasic()
         {
             ValueEval[] arg0values = new ValueEval[] { _30, _30, _40, _40, _50, _50 };
@@ -74,7 +74,7 @@ namespace TestCases.SS.Formula.Functions
         /**
          * Test for bug observed near svn r882931
          */
-        [TestMethod]
+        [Test]
         public void TestCriteriaArgRange()
         {
             ValueEval[] arg0values = new ValueEval[] { _50, _60, _50, _50, _50, _30, };
@@ -93,7 +93,7 @@ namespace TestCases.SS.Formula.Functions
                 NumberEval ne = (NumberEval)ve;
                 if (ne.NumberValue == 30.0)
                 {
-                    throw new AssertFailedException("identified error in SUMIF - criteria arg not Evaluated properly");
+                    throw new AssertionException("identified error in SUMIF - criteria arg not Evaluated properly");
                 }
             }
 

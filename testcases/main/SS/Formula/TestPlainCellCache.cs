@@ -20,7 +20,7 @@
 namespace TestCases.SS.Formula
 {
 
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.SS.Formula;
     using NPOI.SS.Formula.Eval;
 
@@ -30,14 +30,14 @@ namespace TestCases.SS.Formula
     /**
      * @author Yegor Kozlov
      */
-    [TestClass]
+    [TestFixture]
     public class TestPlainCellCache
     {
 
         /**
          *
          */
-        [TestMethod]
+        [Test]
         public void TestLoc()
         {
             PlainCellCache cache = new PlainCellCache();

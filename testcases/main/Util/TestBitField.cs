@@ -29,7 +29,7 @@ using System;
 using System.Text;
 using System.Collections.Generic;
 
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using NPOI.Util;
 
 namespace TestCases.Util
@@ -37,7 +37,7 @@ namespace TestCases.Util
     /// <summary>
     /// Summary description for TestBitField
     /// </summary>
-    [TestClass]
+    [TestFixture]
     public class TestBitField
     {
         private static BitField bf_multi = BitFieldFactory.GetInstance(0x3F80);
@@ -51,7 +51,7 @@ namespace TestCases.Util
         /// <summary>
         /// Tests the get value.
         /// </summary>
-        [TestMethod]
+        [Test]
         public void TestGetValue()
         {
             Assert.AreEqual(bf_multi.GetValue(-1), 127);
@@ -62,7 +62,7 @@ namespace TestCases.Util
         /// <summary>
         /// Tests the get short value.
         /// </summary>
-        [TestMethod]
+        [Test]
         public void TestGetShortValue()
         {
             Assert.AreEqual(bf_multi.GetShortValue((short)-1), (short)127);
@@ -73,7 +73,7 @@ namespace TestCases.Util
         /// <summary>
         /// Tests the get raw value.
         /// </summary>
-        [TestMethod]
+        [Test]
         public void TestGetRawValue()
         {
             Assert.AreEqual(bf_multi.GetRawValue(-1), 0x3F80);
@@ -84,7 +84,7 @@ namespace TestCases.Util
         /// <summary>
         /// Tests the get short raw value.
         /// </summary>
-        [TestMethod]
+        [Test]
         public void TestGetShortRawValue()
         {
             Assert.AreEqual(bf_multi.GetShortRawValue((short)-1),
@@ -97,7 +97,7 @@ namespace TestCases.Util
         /// <summary>
         /// Tests the is set.
         /// </summary>
-        [TestMethod]
+        [Test]
         public void TestIsSet()
         {
             Assert.IsTrue(!bf_multi.IsSet(0));
@@ -111,7 +111,7 @@ namespace TestCases.Util
         /// <summary>
         /// Tests the is all set.
         /// </summary>
-        [TestMethod]
+        [Test]
         public void TestIsAllSet()
         {
             for (int j = 0; j < 0x3F80; j += 0x80)
@@ -125,7 +125,7 @@ namespace TestCases.Util
         /// <summary>
         /// Tests the set value.
         /// </summary>
-        [TestMethod]
+        [Test]
         public void TestSetValue()
         {
             for (int j = 0; j < 128; j++)
@@ -148,7 +148,7 @@ namespace TestCases.Util
         /// <summary>
         /// Tests the set short value.
         /// </summary>
-        [TestMethod]
+        [Test]
         public void TestSetShortValue()
         {
             for (int j = 0; j < 128; j++)
@@ -179,7 +179,7 @@ namespace TestCases.Util
         /// <summary>
         /// Tests the byte.
         /// </summary>
-        [TestMethod]
+        [Test]
         public void TestByte()
         {
             Assert.AreEqual(1, BitFieldFactory.GetInstance(1).SetByteBoolean((byte)0, true));
@@ -206,7 +206,7 @@ namespace TestCases.Util
         /// <summary>
         /// Tests the clear.
         /// </summary>
-        [TestMethod]
+        [Test]
         public void TestClear()
         {
             Assert.AreEqual(bf_multi.Clear(-1), unchecked((Int32)0xFFFFC07F));
@@ -216,7 +216,7 @@ namespace TestCases.Util
         /// <summary>
         /// Tests the clear short.
         /// </summary>
-        [TestMethod]
+        [Test]
         public void TestClearShort()
         {
             Assert.AreEqual(bf_multi.ClearShort((short)-1), unchecked((short)0xC07F));
@@ -225,7 +225,7 @@ namespace TestCases.Util
         /// <summary>
         /// Tests the set.
         /// </summary>
-        [TestMethod]
+        [Test]
         public void TestSet()
         {
             Assert.AreEqual(bf_multi.Set(0), 0x3F80);
@@ -234,7 +234,7 @@ namespace TestCases.Util
         /// <summary>
         /// Tests the set short.
         /// </summary>
-        [TestMethod]
+        [Test]
         public void TestSetShort()
         {
             Assert.AreEqual(bf_multi.SetShort((short)0), (short)0x3F80);
@@ -243,7 +243,7 @@ namespace TestCases.Util
         /// <summary>
         /// Tests the set boolean.
         /// </summary>
-        [TestMethod]
+        [Test]
         public void TestSetBoolean()
         {
             Assert.AreEqual(bf_multi.Set(0), bf_multi.SetBoolean(0, true));
@@ -254,7 +254,7 @@ namespace TestCases.Util
         /// <summary>
         /// Tests the set short boolean.
         /// </summary>
-        [TestMethod]
+        [Test]
         public void TestSetShortBoolean()
         {
             Assert.AreEqual(bf_multi.SetShort((short)0),
@@ -266,7 +266,7 @@ namespace TestCases.Util
             Assert.AreEqual(bf_single.ClearShort((short)-1),
                          bf_single.SetShortBoolean((short)-1, false));
         }
-        [TestMethod]
+        [Test]
         public void TestSetLargeValues()
         {
             BitField bf1 = new BitField(0xF), bf2 = new BitField(0xF0000000);

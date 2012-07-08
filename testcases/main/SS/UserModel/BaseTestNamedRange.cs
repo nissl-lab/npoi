@@ -20,7 +20,7 @@ namespace TestCases.SS.UserModel
 
 
     using System;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.SS.UserModel;
     using NPOI.SS.Util;
 
@@ -29,7 +29,7 @@ namespace TestCases.SS.UserModel
      *
      * @author Yegor Kozlov
      */
-    [TestClass]
+    [TestFixture]
     public class BaseTestNamedRange
     {
 
@@ -41,7 +41,7 @@ namespace TestCases.SS.UserModel
         {
             _testDataProvider = TestDataProvider;
         }
-        [TestMethod]
+        [Test]
         public void TestCreate()
         {
             // Create a new workbook
@@ -121,7 +121,7 @@ namespace TestCases.SS.UserModel
                 }
             }
         }
-        [TestMethod]
+        [Test]
         public void TestUnicodeNamedRange()
         {
             IWorkbook workBook = _testDataProvider.CreateWorkbook();
@@ -137,7 +137,7 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual("\u03B1", name2.NameName);
             Assert.AreEqual("Test!$D$3:$E$8", name2.RefersToFormula);
         }
-        [TestMethod]
+        [Test]
         public void TestAddRemove()
         {
             IWorkbook wb = _testDataProvider.CreateWorkbook();
@@ -160,7 +160,7 @@ namespace TestCases.SS.UserModel
             wb.RemoveName(0);
             Assert.AreEqual(1, wb.NumberOfNames);
         }
-        [TestMethod]
+        [Test]
         public void TestScope()
         {
             IWorkbook wb = _testDataProvider.CreateWorkbook();
@@ -225,7 +225,7 @@ namespace TestCases.SS.UserModel
          * <p>
          * Addresses Bug <a href="http://issues.apache.org/bugzilla/Show_bug.cgi?id=13775" target="_bug">#13775</a>
          */
-        [TestMethod]
+        [Test]
         public void TestMultiNamedRange()
         {
 
@@ -273,7 +273,7 @@ namespace TestCases.SS.UserModel
         /**
          * Test to see if the print areas can be retrieved/Created in memory
          */
-        [TestMethod]
+        [Test]
         public void TestSinglePrintArea()
         {
             IWorkbook workbook = _testDataProvider.CreateWorkbook();
@@ -292,7 +292,7 @@ namespace TestCases.SS.UserModel
         /**
          * For Convenience, don't force sheet names to be used
          */
-        [TestMethod]
+        [Test]
         public void TestSinglePrintAreaWOSheet()
         {
             IWorkbook workbook = _testDataProvider.CreateWorkbook();
@@ -311,7 +311,7 @@ namespace TestCases.SS.UserModel
         /**
          * Test to see if the print area made it to the file
          */
-        [TestMethod]
+        [Test]
         public void TestPrintAreaFile()
         {
             IWorkbook workbook = _testDataProvider.CreateWorkbook();
@@ -332,7 +332,7 @@ namespace TestCases.SS.UserModel
         /**
          * Test to see if multiple print areas made it to the file
          */
-        [TestMethod]
+        [Test]
         public void TestMultiplePrintAreaFile()
         {
             IWorkbook workbook = _testDataProvider.CreateWorkbook();
@@ -383,7 +383,7 @@ namespace TestCases.SS.UserModel
          * Tests the Setting of print areas with coordinates (Row/Column designations)
          *
          */
-        [TestMethod]
+        [Test]
         public void TestPrintAreaCoords()
         {
             IWorkbook workbook = _testDataProvider.CreateWorkbook();
@@ -403,7 +403,7 @@ namespace TestCases.SS.UserModel
          * Tests the parsing of union area expressions, and re-display in the presence of sheet names
          * with special characters.
          */
-        [TestMethod]
+        [Test]
         public void TestPrintAreaUnion()
         {
             IWorkbook workbook = _testDataProvider.CreateWorkbook();
@@ -420,7 +420,7 @@ namespace TestCases.SS.UserModel
          * Verifies an existing print area is deleted
          *
          */
-        [TestMethod]
+        [Test]
         public void TestPrintAreaRemove()
         {
             IWorkbook workbook = _testDataProvider.CreateWorkbook();
@@ -440,7 +440,7 @@ namespace TestCases.SS.UserModel
         /**
          * Test that multiple named ranges can be Added written and read
          */
-        [TestMethod]
+        [Test]
         public void TestMultipleNamedWrite()
         {
             IWorkbook wb = _testDataProvider.CreateWorkbook();
@@ -477,7 +477,7 @@ namespace TestCases.SS.UserModel
         /**
          * Verifies correct functioning for "single cell named range" (aka "named cell")
          */
-        [TestMethod]
+        [Test]
         public void TestNamedCell_1()
         {
 
@@ -518,7 +518,7 @@ namespace TestCases.SS.UserModel
         /**
          * Verifies correct functioning for "single cell named range" (aka "named cell")
          */
-        [TestMethod]
+        [Test]
         public void TestNamedCell_2()
         {
 
@@ -567,7 +567,7 @@ namespace TestCases.SS.UserModel
          * For the moment, POI has been made to behave more sensibly with unInitialised name
          * records.
          */
-        [TestMethod]
+        [Test]
         public void TestUnInitialisedNameGetRefersToFormula_bug46973()
         {
             IWorkbook wb = _testDataProvider.CreateWorkbook();
@@ -582,14 +582,14 @@ namespace TestCases.SS.UserModel
             {
                 if (e.Message.Equals("ptgs must not be null"))
                 {
-                    throw new AssertFailedException("Identified bug 46973");
+                    throw new AssertionException("Identified bug 46973");
                 }
                 throw e;
             }
             Assert.IsNull(formula);
             Assert.IsFalse(n.IsDeleted); // according to exact defInition of isDeleted()
         }
-        [TestMethod]
+        [Test]
         public void TestDeletedCell()
         {
             IWorkbook wb = _testDataProvider.CreateWorkbook();
@@ -600,11 +600,11 @@ namespace TestCases.SS.UserModel
 
             if (n.IsDeleted)
             {
-                throw new AssertFailedException("Identified bug in recoginising formulas referring to deleted cells");
+                throw new AssertionException("Identified bug in recoginising formulas referring to deleted cells");
             }
 
         }
-        [TestMethod]
+        [Test]
         public void TestFunctionNames()
         {
             IWorkbook wb = _testDataProvider.CreateWorkbook();
@@ -620,7 +620,7 @@ namespace TestCases.SS.UserModel
             n.SetFunction(false);
             Assert.IsFalse(n.IsFunctionName);
         }
-        [TestMethod]
+        [Test]
         public void TestDefferedSetting()
         {
             IWorkbook wb = _testDataProvider.CreateWorkbook();

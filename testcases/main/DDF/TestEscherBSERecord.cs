@@ -24,13 +24,13 @@ namespace TestCases.DDF
     using System.Collections.Generic;
     using System.IO;
 
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.DDF;
     using NPOI.Util;
-    [TestClass]
+    [TestFixture]
     public class TestEscherBSERecord
     {
-        [TestMethod]
+        [Test]
         public void TestFillFields()
         {
             String data = "01 00 00 00 24 00 00 00 05 05 01 02 03 04 " +
@@ -52,7 +52,7 @@ namespace TestCases.DDF
             Assert.AreEqual((byte)7, r.Unused3);
             Assert.AreEqual(0, r.RemainingData.Length);
         }
-        [TestMethod]
+        [Test]
         public void TestSerialize()
         {
             EscherBSERecord r = CreateRecord();
@@ -85,7 +85,7 @@ namespace TestCases.DDF
             return r;
 
         }
-        [TestMethod]
+        [Test]
         public void TestToString()
         {
             EscherBSERecord record = CreateRecord();

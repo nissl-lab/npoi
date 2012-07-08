@@ -18,7 +18,7 @@
 using NPOI.SS.UserModel;
 using NPOI.HSSF.UserModel;
 using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 namespace TestCases.SS.Formula.Functions
 {
 
@@ -26,13 +26,13 @@ namespace TestCases.SS.Formula.Functions
     /**
      * @author Pavel Krupets (pkrupets at palmtreebusiness dot com)
      */
-    [TestClass]
+    [TestFixture]
     public class TestDate
     {
 
         private ICell cell11;
         private HSSFFormulaEvaluator Evaluator;
-        [TestInitialize]
+        [SetUp]
         public void SetUp()
         {
             HSSFWorkbook wb = new HSSFWorkbook();
@@ -46,14 +46,14 @@ namespace TestCases.SS.Formula.Functions
          * Test disabled pending a fix in the formula Evaluator
          * TODO - create MissingArgEval and modify the formula Evaluator to handle this
          */
-        [TestMethod]
+        [Test]
         [Ignore]//this test is disabled in poi.
         public void DISABLEDtestSomeArgumentsMissing()
         {
             Confirm("DATE(, 1, 0)", 0.0);
             Confirm("DATE(, 1, 1)", 1.0);
         }
-        [TestMethod]
+        [Test]
         public void TestValid()
         {
 
@@ -64,7 +64,7 @@ namespace TestCases.SS.Formula.Functions
             Confirm("DATE(2000, 1, 222)", 36747.00);
             Confirm("DATE(2007, 1, 1)", 39083);
         }
-        [TestMethod]
+        [Test]
         public void TestBugDate()
         {
             Confirm("DATE(1900, 2, 29)", 60);
@@ -73,7 +73,7 @@ namespace TestCases.SS.Formula.Functions
             Confirm("DATE(1900, 1, 2222)", 2222);
             Confirm("DATE(1900, 1, 22222)", 22222);
         }
-        [TestMethod]
+        [Test]
         public void TestPartYears()
         {
             Confirm("DATE(4, 1, 1)", 1462.00);
@@ -89,7 +89,7 @@ namespace TestCases.SS.Formula.Functions
             CellValue cv = Evaluator.Evaluate(cell11);
             if (cv.CellType != CellType.NUMERIC)
             {
-                throw new AssertFailedException("Wrong result type: " + cv.FormatAsString());
+                throw new AssertionException("Wrong result type: " + cv.FormatAsString());
             }
             double actualValue = cv.NumberValue;
             Assert.AreEqual(expectedResult, actualValue, 0);

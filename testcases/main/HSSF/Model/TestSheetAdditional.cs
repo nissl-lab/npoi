@@ -20,7 +20,7 @@ namespace TestCases.HSSF.Model
     using System;
     using System.Collections;
 
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
 
     using NPOI.HSSF.Record;
     using NPOI.HSSF.Model;
@@ -29,10 +29,10 @@ namespace TestCases.HSSF.Model
     /**
      * @author Tony Poppleton
      */
-    [TestClass]
+    [TestFixture]
     public class TestSheetAdditional
     {
-        [TestMethod]
+        [Test]
         public void TestGetCellWidth()
         {
             InternalSheet sheet = InternalSheet.CreateSheet();
@@ -62,7 +62,7 @@ namespace TestCases.HSSF.Model
             Assert.AreEqual(100, sheet.GetColumnWidth(9));
             Assert.AreEqual(100, sheet.GetColumnWidth(10));
         }
-        [TestMethod]
+        [Test]
         public void TestMaxColumnWidth()
         {
             InternalSheet sheet = InternalSheet.CreateSheet();

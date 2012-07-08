@@ -19,7 +19,7 @@ using System;
 using System.IO;
 using System.Collections.Generic;
 
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using NPOI.POIFS.Storage;
 using NPOI.POIFS.Properties;
 using NPOI.POIFS.FileSystem;
@@ -33,7 +33,7 @@ namespace TestCases.POIFS.FileSystem
     /// <summary>
     /// Summary description for TestNPOIFSFileSystem
     /// </summary>
-    [TestClass]
+    [TestFixture]
     public class TestNPOIFSFileSystem
     {
         private static POIDataSamples _inst = POIDataSamples.GetPOIFSInstance();
@@ -44,7 +44,7 @@ namespace TestCases.POIFS.FileSystem
             //
         }
 
-        [TestMethod]
+        [Test]
         public void TestBasicOpen()
         {
             NPOIFSFileSystem fsA, fsB;
@@ -65,7 +65,7 @@ namespace TestCases.POIFS.FileSystem
             }
         }
 
-        [TestMethod]
+        [Test]
         public void TestPropertiesAndFatOnRead()
         {
             NPOIFSFileSystem fsA, fsB;
@@ -221,7 +221,7 @@ namespace TestCases.POIFS.FileSystem
 
         }
 
-        [TestMethod]
+        [Test]
         public void TestNextBlock()
         {
             NPOIFSFileSystem fsA = new NPOIFSFileSystem(_inst.GetFile("BlockSize512.zvi"));
@@ -273,7 +273,7 @@ namespace TestCases.POIFS.FileSystem
 
         }
 
-        [TestMethod]
+        [Test]
         public void TestGetBlock()
         {
             NPOIFSFileSystem fsA = new NPOIFSFileSystem(_inst.GetFile("BlockSize512.zvi"));
@@ -338,7 +338,7 @@ namespace TestCases.POIFS.FileSystem
             }
         }
 
-        [TestMethod]
+        [Test]
         public void TestGetFreeBlockWithSpare()
         {
             NPOIFSFileSystem fs = new NPOIFSFileSystem(_inst.GetFile("BlockSize512.zvi"));
@@ -359,7 +359,7 @@ namespace TestCases.POIFS.FileSystem
 
         }
 
-        [TestMethod]
+        [Test]
         public void TestGetFreeBlockWithNoneSpare()
         {
             NPOIFSFileSystem fs = new NPOIFSFileSystem(_inst.OpenResourceAsStream("BlockSize512.zvi"));
@@ -510,7 +510,7 @@ namespace TestCases.POIFS.FileSystem
         * Test that we can correctly get the list of directory
         *  entries, and the details on the files in them
         */
-        [TestMethod]
+        [Test]
         public void TestListEntries() 
         {
 
@@ -555,7 +555,7 @@ namespace TestCases.POIFS.FileSystem
               }
          }
 
-        [TestMethod]
+        [Test]
         public void TestGetDocumentEntry()
         {
 
@@ -596,7 +596,7 @@ namespace TestCases.POIFS.FileSystem
             * Read a file, write it and read it again.
             * Then, alter+add some streams, write and read
         */
-        [TestMethod]
+        [Test]
         public void TestReadWriteRead()
         {
         }
@@ -605,7 +605,7 @@ namespace TestCases.POIFS.FileSystem
              * Create a new file, write it and read it again
              * Then, add some streams, write and read
         */
-        [TestMethod]
+        [Test]
         public void TestCreateWriteRead()
         {
             NPOIFSFileSystem fs = new NPOIFSFileSystem();

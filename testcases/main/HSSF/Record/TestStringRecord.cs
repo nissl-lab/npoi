@@ -19,7 +19,7 @@ namespace TestCases.HSSF.Record
 {
     using System;
     using System.Text;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.HSSF.Record;
     using NPOI.Util;
 
@@ -30,7 +30,7 @@ namespace TestCases.HSSF.Record
      *
      * @author Glen Stampoultzis (glens at apache.org)
      */
-    [TestClass]
+    [TestFixture]
     public class TestStringRecord
     {
         private static byte[] data = HexRead.ReadFromString(
@@ -39,7 +39,7 @@ namespace TestCases.HSSF.Record
             // string
                 "46 61 68 72 7A 65 75 67 74 79 70"
         );
-        [TestMethod]
+        [Test]
         public void TestLoad()
         {
 
@@ -48,7 +48,7 @@ namespace TestCases.HSSF.Record
 
             Assert.AreEqual(18, record.RecordSize);
         }
-        [TestMethod]
+        [Test]
         public void TestStore()
         {
             StringRecord record = new StringRecord();
@@ -59,7 +59,7 @@ namespace TestCases.HSSF.Record
             for (int i = 0; i < data.Length; i++)
                 Assert.AreEqual(data[i], recordBytes[i + 4], "At offset " + i);
         }
-        [TestMethod]
+        [Test]
         public void TestContinue()
         {
             int MAX_BIFF_DATA = RecordInputStream.MAX_RECORD_DATA_SIZE;
@@ -78,7 +78,7 @@ namespace TestCases.HSSF.Record
             Assert.AreEqual(StringRecord.sid, LittleEndian.GetUShort(ser, 0));
             if (LittleEndian.GetUShort(ser, 2) > MAX_BIFF_DATA)
             {
-                throw new AssertFailedException(
+                throw new AssertionException(
                         "StringRecord should have been split with a continue record");
             }
             // Confirm expected size of first record, and ushort strLen.

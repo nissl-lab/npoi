@@ -28,9 +28,9 @@ namespace TestCases.HSSF.EventUserModel
     using NPOI.HSSF.Record;
     using NPOI.POIFS.FileSystem;
 
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
 
-    [TestClass]
+    [TestFixture]
     public class TestFormatTrackingHSSFListener
     {
         private FormatTrackingHSSFListener listener;
@@ -55,7 +55,7 @@ namespace TestCases.HSSF.EventUserModel
                 throw;
             }
         }
-        [TestMethod]
+        [Test]
         public void TestFormats()
         {
             ProcessFile("MissingBits.xls");
@@ -72,7 +72,7 @@ namespace TestCases.HSSF.EventUserModel
          *  exceptions thrown, but in future we might also
          *  want to check the exact strings!
          */
-        [TestMethod]
+        [Test]
         public void TestTurnToString()
         {
             String[] files = new String[] { 

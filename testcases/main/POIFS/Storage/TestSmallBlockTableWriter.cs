@@ -32,7 +32,7 @@ namespace TestCases.POIFS.Storage
     using System.IO;
     using System.Collections;
 
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.POIFS.Storage;
     using NPOI.POIFS.Common;
     using NPOI.Util;
@@ -43,7 +43,7 @@ namespace TestCases.POIFS.Storage
      *
      * @author Marc Johnson
      */
-    [TestClass]
+    [TestFixture]
     public class TestSmallBlockTableWriter
     {
 
@@ -62,7 +62,7 @@ namespace TestCases.POIFS.Storage
          *
          * @exception IOException
          */
-        [TestMethod]
+        [Test]
         public void TestWritingConstructor()
         {
             ArrayList documents = new ArrayList();

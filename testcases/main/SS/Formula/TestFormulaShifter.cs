@@ -19,7 +19,7 @@ namespace TestCases.SS.Formula
 {
 
     using NPOI.SS.Formula.PTG;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.SS.Formula;
 
 
@@ -28,7 +28,7 @@ namespace TestCases.SS.Formula
      *
      * @author Josh Micich
      */
-    [TestClass]
+    [TestFixture]
     public class TestFormulaShifter
     {
         // Note - the expected result row coordinates here were determined/verified
@@ -38,7 +38,7 @@ namespace TestCases.SS.Formula
          * Tests what happens to area refs when a range of rows from inside, or overlapping are
          * Moved
          */
-        [TestMethod]
+        [Test]
         public void TestShiftAreasSourceRows()
         {
 
@@ -82,7 +82,7 @@ namespace TestCases.SS.Formula
          * Tests what happens to an area ref when some outside rows are Moved to overlap
          * that area ref
          */
-        [TestMethod]
+        [Test]
         public void TestShiftAreasDestRows()
         {
             // all these operations are on an area ref spanning rows 20 to 25

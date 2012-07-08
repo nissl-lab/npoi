@@ -20,7 +20,7 @@ namespace TestCases.HSSF.Record
 
     using System;
     using NPOI.HSSF.Record;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.Util;
 
     /**
@@ -30,7 +30,7 @@ namespace TestCases.HSSF.Record
      *
      * @author Yegor Kozlov
      */
-    [TestClass]
+    [TestFixture]
     public class TestNoteRecord
     {
         private byte[] testData = HexRead.ReadFromString(
@@ -40,7 +40,7 @@ namespace TestCases.HSSF.Record
             "00" // padding byte
             );
 
-        [TestMethod]
+        [Test]
         public void TestRead()
         {
 
@@ -55,7 +55,7 @@ namespace TestCases.HSSF.Record
             Assert.AreEqual("Apache Software Foundation", record.Author);
 
         }
-        [TestMethod]
+        [Test]
         public void TestWrite()
         {
             NoteRecord record = new NoteRecord();
@@ -70,7 +70,7 @@ namespace TestCases.HSSF.Record
             byte[] ser = record.Serialize();
             TestcaseRecordInputStream.ConfirmRecordEncoding(NoteRecord.sid, testData, ser);
         }
-        [TestMethod]
+        [Test]
         public void TestClone()
         {
             NoteRecord record = new NoteRecord();
@@ -93,7 +93,7 @@ namespace TestCases.HSSF.Record
             byte[] cln = cloned.Serialize();
             Assert.IsTrue(NPOI.Util.Arrays.Equals(src, cln));
         }
-        [TestMethod]
+        [Test]
         public void TestUnicodeAuthor()
         {
             // This sample data was created by setting the 'user name' field in the 'Personalize' 
@@ -108,7 +108,7 @@ namespace TestCases.HSSF.Record
             NoteRecord nr = new NoteRecord(in1);
             if ("\u00A2\u0030\u00D1\u0030\u00C3".Equals(nr.Author))
             {
-                throw new AssertFailedException("Identified bug in reading note with unicode author");
+                throw new AssertionException("Identified bug in reading note with unicode author");
             }
             Assert.AreEqual("\u30A2\u30D1\u30C3\u30C1\u65CF", nr.Author);
             Assert.IsTrue(nr.AuthorIsMultibyte);

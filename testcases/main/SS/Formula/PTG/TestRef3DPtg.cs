@@ -17,7 +17,7 @@
 
 namespace TestCases.SS.Formula.PTG
 {
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.HSSF.UserModel;
     using NPOI.SS.Formula.PTG;
     /**
@@ -25,10 +25,10 @@ namespace TestCases.SS.Formula.PTG
      * 
      * @author Josh Micich
      */
-    [TestClass]
+    [TestFixture]
     public class TestRef3DPtg : AbstractPtgTestCase
     {
-        [TestMethod]
+        [Test]
         public void TestToFormulaString()
         {
 

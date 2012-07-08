@@ -30,7 +30,7 @@ using System.Text;
 using System.Collections;
 using System.IO;
 
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 using NPOI.POIFS.Common;
 using NPOI.POIFS.Storage;
@@ -45,7 +45,7 @@ namespace TestCases.POIFS.Properties
      *
      * @author Marc Johnson
      */
-    [TestClass]
+    [TestFixture]
     public class TestPropertyTable
     {
 
@@ -70,7 +70,7 @@ namespace TestCases.POIFS.Properties
                 Assert.AreEqual(expectedData[i], output[i], "content check #1: mismatch at offset " + i);
         }
 
-        [TestMethod]
+        [Test]
         public void TestWriterPropertyTable()
         {
             HeaderBlock headerBlock = new HeaderBlock(POIFSConstants.SMALLER_BIG_BLOCK_SIZE_DETAILS);
@@ -174,7 +174,7 @@ namespace TestCases.POIFS.Properties
          *
          * @exception IOException
          */
-        [TestMethod]
+        [Test]
         public void TestReadingConstructor()
         {
             string[] raw_data_array = {

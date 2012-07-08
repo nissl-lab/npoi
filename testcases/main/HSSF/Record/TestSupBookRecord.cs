@@ -23,7 +23,7 @@ namespace TestCases.HSSF.Record
 
     using System;
     using NPOI.HSSF.Record;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
 
     /**
      * Tests the serialization and deserialization of the SupBook record
@@ -31,7 +31,7 @@ namespace TestCases.HSSF.Record
      *
      * @author Andrew C. Oliver (acoliver at apache dot org)
      */
-    [TestClass]
+    [TestFixture]
     public class TestSupBookRecord
     {
         /**
@@ -61,7 +61,7 @@ namespace TestCases.HSSF.Record
         /**
          * tests that we can load the record
          */
-        [TestMethod]
+        [Test]
         public void TestLoadIR()
         {
 
@@ -74,7 +74,7 @@ namespace TestCases.HSSF.Record
         /**
          * tests that we can load the record
          */
-        [TestMethod]
+        [Test]
         public void TestLoadER()
         {
 
@@ -94,7 +94,7 @@ namespace TestCases.HSSF.Record
         /**
          * tests that we can load the record
          */
-        [TestMethod]
+        [Test]
         public void TestLoadAIF()
         {
 
@@ -108,14 +108,14 @@ namespace TestCases.HSSF.Record
          * Tests that we can store the record
          *
          */
-        [TestMethod]
+        [Test]
         public void TestStoreIR()
         {
             SupBookRecord record = SupBookRecord.CreateInternalReferences((short)4);
 
             TestcaseRecordInputStream.ConfirmRecordEncoding(0x01AE, dataIR, record.Serialize());
         }
-        [TestMethod]
+        [Test]
         public void TestStoreER()
         {
             String url = "testURL";

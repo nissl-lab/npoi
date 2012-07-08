@@ -18,7 +18,7 @@
 namespace TestCases.SS.Formula.Eval
 {
     using System;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.HSSF.UserModel;
     using NPOI.SS.Formula.Eval;
     using NPOI.SS.UserModel;
@@ -27,7 +27,7 @@ namespace TestCases.SS.Formula.Eval
      *
      * @author Josh Micich
      */
-    [TestClass]
+    [TestFixture]
     public class TestCircularReferences
     {
         /**
@@ -42,7 +42,7 @@ namespace TestCases.SS.Formula.Eval
             }
             catch (StackOverflowException)
             {
-                throw new AssertFailedException("circular reference caused stack overflow error");
+                throw new AssertionException("circular reference caused stack overflow error");
             }
         }
         /**
@@ -59,7 +59,7 @@ namespace TestCases.SS.Formula.Eval
          * ASF Bugzilla Bug 44413
          * "INDEX() formula cannot contain its own location in the data array range"
          */
-        [TestMethod]
+        [Test]
         public void TestIndexFormula()
         {
 
@@ -89,7 +89,7 @@ namespace TestCases.SS.Formula.Eval
         /**
          * Cell A1 has formula "=A1"
          */
-        [TestMethod]
+        [Test]
         public void TestSimpleCircularReference()
         {
 
@@ -108,7 +108,7 @@ namespace TestCases.SS.Formula.Eval
         /**
          * A1=B1, B1=C1, C1=D1, D1=A1
          */
-        [TestMethod]
+        [Test]
         public void TestMultiLevelCircularReference()
         {
 
@@ -126,7 +126,7 @@ namespace TestCases.SS.Formula.Eval
 
             ConfirmCycleErrorCode(cellValue);
         }
-        [TestMethod]
+        [Test]
         public void TestIntermediateCircularReferenceResults_bug46898()
         {
             HSSFWorkbook wb = new HSSFWorkbook();
@@ -162,7 +162,7 @@ namespace TestCases.SS.Formula.Eval
             cv = fe.Evaluate(cellB1);
             if ((int)cv.CellType == ErrorEval.CIRCULAR_REF_ERROR.ErrorCode)
             {
-                throw new AssertFailedException("Identified bug 46898");
+                throw new AssertionException("Identified bug 46898");
             }
             Assert.AreEqual(CellType.NUMERIC, cv.CellType);
             Assert.AreEqual(46.0, cv.NumberValue, 0.0);

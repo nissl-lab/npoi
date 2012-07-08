@@ -29,7 +29,7 @@ using System;
 using System.IO;
 using System.Collections;
 
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using NPOI.POIFS.Storage;
 using NPOI.Util;
 using NPOI.POIFS.FileSystem;
@@ -43,7 +43,7 @@ namespace TestCases.POIFS.Storage
      *
      * @author Marc Johnson
      */
-    [TestClass]
+    [TestFixture]
     public class TestRawDataBlock
     {
         public TestRawDataBlock()
@@ -56,7 +56,7 @@ namespace TestCases.POIFS.Storage
          *
          * @exception IOException
          */
-        [TestMethod]
+        [Test]
         public void TestNormalConstructor()
         {
             byte[] data = new byte[512];
@@ -83,7 +83,7 @@ namespace TestCases.POIFS.Storage
          *
          * @exception IOException
          */
-        [TestMethod]
+        [Test]
         public void TestEmptyConstructor()
         {
             byte[] data = new byte[0];
@@ -106,7 +106,7 @@ namespace TestCases.POIFS.Storage
          * Will trigger a warning, but no longer an IOException,
          *  as people seem to have "valid" truncated files
          */
-        [TestMethod]
+        [Test]
         public void TestShortConstructor()
         {
             //// Get the logger to be used
@@ -163,7 +163,7 @@ namespace TestCases.POIFS.Storage
          *  won't return a full block at a time, we don't
          *  incorrectly think that there's not enough data
          */
-        [TestMethod]
+        [Test]
         public void TestSlowInputStream()
         {
             // Get the logger to be used

@@ -61,7 +61,10 @@
       <HintPath>..\..\solution\Lib\Release.net4\ICSharpCode.SharpZipLib.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="NPOI.TestCases">
+      <HintPath>..\..\solution\Lib\.net4\NPOI.TestCases.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.framework, Version=2.6.0.12051, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -71,10 +74,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="OpenXmlFormats\Spreadsheet\CommentsDocumentTest.cs" />
-    <Compile Include="OpenXmlFormats\Spreadsheet\CalcChainDocumentTest.cs" />
-    <Compile Include="OpenXmlFormats\Spreadsheet\VmlDrawingDocumentTest.cs" />
-    <Compile Include="OpenXmlFormats\Spreadsheet\DrawingDocumentTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -88,8 +87,6 @@
     <Compile Include="TestPOIXMLDocument.cs" />
     <Compile Include="TestPOIXMLProperties.cs" />
     <Compile Include="Util\TestIdentifierManager.cs" />
-    <Compile Include="OpenXmlFormats\Spreadsheet\WorksheetDocumentTest.cs" />
-    <Compile Include="OpenXmlFormats\Spreadsheet\WorkbookDocumentTest.cs" />
     <Compile Include="XSSF\IO\TestLoadSaveXSSF.cs" />
     <Compile Include="XSSF\Model\TestCalculationChain.cs" />
     <Compile Include="XSSF\Model\TestCommentsTable.cs" />
@@ -106,13 +103,20 @@
     <Compile Include="XSSF\UserModel\TestXSSFCellStyle.cs" />
     <Compile Include="XSSF\UserModel\TestXSSFComment.cs" />
     <Compile Include="XSSF\UserModel\TestXSSFDataFormat.cs" />
+    <Compile Include="XSSF\UserModel\TestXSSFDrawing.cs" />
     <Compile Include="XSSF\UserModel\TestXSSFFont.cs" />
+    <Compile Include="XSSF\UserModel\TestXSSFFormulaEvaluation.cs" />
+    <Compile Include="XSSF\UserModel\TestXSSFFormulaParser.cs" />
     <Compile Include="XSSF\UserModel\TestXSSFHeaderFooter.cs" />
     <Compile Include="XSSF\UserModel\TestXSSFHyperlink.cs" />
     <Compile Include="XSSF\UserModel\TestXSSFName.cs" />
+    <Compile Include="XSSF\UserModel\TestXSSFPicture.cs" />
+    <Compile Include="XSSF\UserModel\TestXSSFPictureData.cs" />
+    <Compile Include="XSSF\UserModel\TestXSSFPrintSetup.cs" />
     <Compile Include="XSSF\UserModel\TestXSSFRichTextString.cs" />
     <Compile Include="XSSF\UserModel\TestXSSFRow.cs" />
     <Compile Include="XSSF\UserModel\TestXSSFSheet.cs" />
+    <Compile Include="XSSF\UserModel\TestXSSFVMLDrawing.cs" />
     <Compile Include="XSSF\UserModel\TestXSSFWorkbook.cs" />
     <Compile Include="XSSF\Util\TestCTColComparator.cs" />
     <Compile Include="XSSF\Util\TestEvilUnclosedBRFixingInputStream.cs" />
@@ -152,10 +156,6 @@
     <ProjectReference Include="..\..\ooxml\OpenXmlFormats\OpenXmlFormats vs2010.csproj">
       <Project>{A6874784-2875-4F40-9E8F-8385A640F5D6}</Project>
       <Name>OpenXmlFormats vs2010</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\main\basetestlib vs10.csproj">
-      <Project>{7927D62A-E403-4209-B2A6-8BED1FBDBE5A}</Project>
-      <Name>basetestlib vs10</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

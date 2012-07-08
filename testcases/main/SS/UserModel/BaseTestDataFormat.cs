@@ -18,7 +18,7 @@
 using NPOI.SS.UserModel;
 using System.Collections.Generic;
 using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using NPOI.HSSF.UserModel;
 namespace TestCases.SS.UserModel
 {
@@ -27,7 +27,7 @@ namespace TestCases.SS.UserModel
      * Tests of implementation of {@link DataFormat}
      *
      */
-    [TestClass]
+    [TestFixture]
     public class BaseTestDataFormat
     {
 
@@ -42,7 +42,7 @@ namespace TestCases.SS.UserModel
         {
             _testDataProvider = testDataProvider;
         }
-        [TestMethod]
+        [Test]
         public void TestBuiltinFormats()
         {
             IWorkbook wb = _testDataProvider.CreateWorkbook();

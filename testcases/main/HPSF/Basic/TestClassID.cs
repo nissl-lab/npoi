@@ -15,11 +15,11 @@
    limitations under the License.
 ==================================================================== */
 
-namespace TestCases.HPSF.basic
+namespace TestCases.HPSF.Basic
 {
     using System;
 
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
 
     using NPOI.Util;
 
@@ -28,14 +28,14 @@ namespace TestCases.HPSF.basic
      *
      * @author Michael Zalewski (zalewski@optonline.net)
      */
-    [TestClass]
+    [TestFixture]
     public class TestClassID
     {
 
         /**
          * Various tests of overridden .Equals()
          */
-        [TestMethod]
+        [Test]
         public void TestEquals()
         {
             ClassID clsidTest1 = new ClassID(
@@ -62,7 +62,7 @@ namespace TestCases.HPSF.basic
          * Try to write to a buffer that is too small. This should
          *   throw an Exception
          */
-        [TestMethod]
+        [Test]
         public void TestWriteArrayStoreException()
         {
             ClassID clsidTest = new ClassID(
@@ -110,7 +110,7 @@ namespace TestCases.HPSF.basic
          * property Set: the first one is a {@link SummaryInformation},
          * the second one is a {@link DocumentSummaryInformation}.</p>
          */
-        [TestMethod]
+        [Test]
         public void TestClassID1()
         {
             ClassID clsidTest = new ClassID(

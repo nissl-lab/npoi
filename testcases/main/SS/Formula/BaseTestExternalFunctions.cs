@@ -18,7 +18,7 @@ namespace TestCases.SS.Formula
 {
 
     using System;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.SS.Formula;
     using NPOI.SS.Formula.Eval;
     using NPOI.SS.Formula.Functions;
@@ -31,7 +31,7 @@ namespace TestCases.SS.Formula
      *
      * @author Yegor Kozlov
      */
-    [TestClass]
+    [TestFixture]
     public class BaseTestExternalFunctions
     {
         protected ITestDataProvider _testDataProvider;
@@ -47,7 +47,7 @@ namespace TestCases.SS.Formula
         {
             _testDataProvider = TestDataProvider;
         }
-        [TestMethod]
+        [Test]
         public void TestExternalFunctions()
         {
             IWorkbook wb = _testDataProvider.CreateWorkbook();

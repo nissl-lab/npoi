@@ -20,7 +20,7 @@ namespace NPOI.XWPF.UserModel
 
 
 
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
 
     using NPOI.XWPF;
     using NPOI.OpenXmlFormats.Wordprocessing;
@@ -29,12 +29,12 @@ namespace NPOI.XWPF.UserModel
     /**
      * @author Paolo Mottadelli
      */
-    [TestClass]
+    [TestFixture]
     public class TestXWPFHeadings
     {
         private static String HEADING1 = "Heading1";
 
-        [TestMethod]
+        [Test]
         public void TestSetParagraphStyle()
         {
             //new clean instance of paragraph

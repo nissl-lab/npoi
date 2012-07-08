@@ -20,14 +20,14 @@ namespace TestCases.HSSF.Model
     using System;
     using NPOI.HSSF.Model;
     using NPOI.SS.Formula;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.HSSF.UserModel;
     using NPOI.SS.Formula.PTG;
 
     /**
      * Tests <c>FormulaParser</c> specifically with respect to IF() functions
      */
-    [TestClass]
+    [TestFixture]
     public class TestFormulaParserIf
     {
         private static Ptg[] ParseFormula(String formula)
@@ -45,12 +45,12 @@ namespace TestCases.HSSF.Model
             Ptg ptg = ptgs[i];
             if (!(ptg is AttrPtg))
             {
-                throw new AssertFailedException("Token[" + i + "] was not AttrPtg as expected");
+                throw new AssertionException("Token[" + i + "] was not AttrPtg as expected");
             }
             AttrPtg attrPtg = (AttrPtg)ptg;
             Assert.AreEqual(expectedData, attrPtg.Data);
         }
-        [TestMethod]
+        [Test]
         public void TestSimpleIf()
         {
 
@@ -72,7 +72,7 @@ namespace TestCases.HSSF.Model
             ConfirmAttrData(ptgs, 3, 10);
             ConfirmAttrData(ptgs, 5, 3);
         }
-        [TestMethod]
+        [Test]
         public void TestSimpleIfNoFalseParam()
         {
 
@@ -91,7 +91,7 @@ namespace TestCases.HSSF.Model
             ConfirmAttrData(ptgs, 1, 9);
             ConfirmAttrData(ptgs, 3, 3);
         }
-        [TestMethod]
+        [Test]
         public void TestIfWithLargeParams()
         {
 
@@ -124,7 +124,7 @@ namespace TestCases.HSSF.Model
             ConfirmAttrData(ptgs, 9, 20);
             ConfirmAttrData(ptgs, 13, 3);
         }
-        [TestMethod]
+        [Test]
         public void TestNestedIf()
         {
 
@@ -164,7 +164,7 @@ namespace TestCases.HSSF.Model
             ConfirmAttrData(ptgs, 15, 3);
             ConfirmAttrData(ptgs, 17, 3);
         }
-        [TestMethod]
+        [Test]
         public void TestEmbeddedIf()
         {
             Ptg[] ptgs = ParseFormula("IF(3>=1,\"*\",IF(4<>1,\"first\",\"second\"))");
@@ -175,14 +175,14 @@ namespace TestCases.HSSF.Model
             Assert.AreEqual(typeof(FuncVarPtg), ptgs[14].GetType(), "15th Ptg is1 not the inner IF variable function ptg");
         }
 
-        [TestMethod]
+        [Test]
         public void TestSimpleLogical()
         {
             Ptg[] ptgs = ParseFormula("IF(A1<A2,B1,B2)");
             Assert.AreEqual(9, ptgs.Length);
             Assert.AreEqual(typeof(LessThanPtg), ptgs[2].GetType(), "3rd Ptg is1 less than");
         }
-        [TestMethod]
+        [Test]
         public void TestParenIf()
         {
             Ptg[] ptgs = ParseFormula("IF((A1+A2)<=3,\"yes\",\"no\")");
@@ -190,7 +190,7 @@ namespace TestCases.HSSF.Model
             Assert.AreEqual(typeof(LessEqualPtg), ptgs[5].GetType(), "6th Ptg is1 less than equal");
             Assert.AreEqual(typeof(AttrPtg), ptgs[10].GetType(), "11th Ptg is1 not a goto (Attr) ptg");
         }
-        [TestMethod]
+        [Test]
         public void TestYN()
         {
             Ptg[] ptgs = ParseFormula("IF(TRUE,\"Y\",\"N\")");
@@ -213,7 +213,7 @@ namespace TestCases.HSSF.Model
          * Make sure the ptgs are generated properly with two functions embedded
          *
          */
-        [TestMethod]
+        [Test]
         public void TestNestedFunctionIf()
         {
             Ptg[] ptgs = ParseFormula("IF(A1=B1,AVERAGE(A1:B1),AVERAGE(A2:B2))");
@@ -225,7 +225,7 @@ namespace TestCases.HSSF.Model
 
             Assert.IsTrue((ptgs[5] is FuncVarPtg), "Average Function Set correctly");
         }
-        [TestMethod]
+        [Test]
         public void TestIfSingleCondition()
         {
             Ptg[] ptgs = ParseFormula("IF(1=1,10)");

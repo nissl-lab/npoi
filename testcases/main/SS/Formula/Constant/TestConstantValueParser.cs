@@ -17,7 +17,7 @@
 
 namespace TestCases.SS.Formula.Constant
 {
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.HSSF.UserModel;
     using NPOI.Util;
 
@@ -27,7 +27,7 @@ namespace TestCases.SS.Formula.Constant
      * 
      * @author Josh Micich
      */
-    [TestClass]
+    [TestFixture]
     public class TestConstantValueParser
     {
         private static object[] SAMPLE_VALUES = {
@@ -43,13 +43,13 @@ namespace TestCases.SS.Formula.Constant
             "01 9A 99 99 99 99 99 F1 3F " +
             "02 0B 00 00 53 61 6D 70 6C 65 20 74 65 78 74 " +
             "10 07 00 00 00 00 00 00 00");
-        [TestMethod]
+        [Test]
         public void TestGetEncodedSize()
         {
             int actual = ConstantValueParser.GetEncodedSize(SAMPLE_VALUES);
             Assert.AreEqual(51, actual);
         }
-        [TestMethod]
+        [Test]
         public void TestEncode()
         {
             int size = ConstantValueParser.GetEncodedSize(SAMPLE_VALUES);
@@ -62,7 +62,7 @@ namespace TestCases.SS.Formula.Constant
                 Assert.Fail("Encoding differs");
             }
         }
-        [TestMethod]
+        [Test]
         public void TestDecode()
         {
             ILittleEndianInput in1 = TestcaseRecordInputStream.CreateLittleEndian(SAMPLE_ENCODING);

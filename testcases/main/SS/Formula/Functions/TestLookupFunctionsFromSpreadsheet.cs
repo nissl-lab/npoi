@@ -24,7 +24,7 @@ namespace TestCases.SS.Formula.Functions
     using NPOI.HSSF.Util;
     using NPOI.SS.UserModel;
     using System;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using System.Text;
     using NPOI.SS.Util;
     using TestCases.Exceptions;
@@ -43,7 +43,7 @@ namespace TestCases.SS.Formula.Functions
      *
      * @author Josh Micich
      */
-    [TestClass]
+    [TestFixture]
     public class TestLookupFunctionsFromSpreadsheet
     {
 
@@ -95,11 +95,11 @@ namespace TestCases.SS.Formula.Functions
         {
             if (expected == null)
             {
-                throw new AssertFailedException(msg + " - Bad Setup data expected value is null");
+                throw new AssertionException(msg + " - Bad Setup data expected value is null");
             }
             if (actual == null)
             {
-                throw new AssertFailedException(msg + " - actual value was null");
+                throw new AssertionException(msg + " - actual value was null");
             }
             if (expected.CellType == CellType.ERROR)
             {
@@ -133,17 +133,17 @@ namespace TestCases.SS.Formula.Functions
         }
 
 
-        private static AssertFailedException wrongTypeError(String msgPrefix, ICell expectedCell, CellValue actualValue)
+        private static AssertionException wrongTypeError(String msgPrefix, ICell expectedCell, CellValue actualValue)
         {
-            return new AssertFailedException(msgPrefix + " Result type mismatch. Evaluated result was "
+            return new AssertionException(msgPrefix + " Result type mismatch. Evaluated result was "
                     + actualValue.FormatAsString()
                     + " but the expected result was "
                     + formatValue(expectedCell)
                     );
         }
-        private static AssertFailedException unexpectedError(String msgPrefix, ICell expected, int actualErrorCode)
+        private static AssertionException unexpectedError(String msgPrefix, ICell expected, int actualErrorCode)
         {
-            return new AssertFailedException(msgPrefix + " Error code ("
+            return new AssertionException(msgPrefix + " Error code ("
                     + ErrorEval.GetText(actualErrorCode)
                     + ") was Evaluated, but the expected result was "
                     + formatValue(expected)
@@ -155,13 +155,13 @@ namespace TestCases.SS.Formula.Functions
         {
             if (actual.CellType != CellType.ERROR)
             {
-                throw new AssertFailedException(msgPrefix + " Expected cell error ("
+                throw new AssertionException(msgPrefix + " Expected cell error ("
                         + ErrorEval.GetText(expectedErrorCode) + ") but actual value was "
                         + actual.FormatAsString());
             }
             if (expectedErrorCode != actual.ErrorValue)
             {
-                throw new AssertFailedException(msgPrefix + " Expected cell error code ("
+                throw new AssertionException(msgPrefix + " Expected cell error code ("
                         + ErrorEval.GetText(expectedErrorCode)
                         + ") but actual error code was ("
                         + ErrorEval.GetText(actual.ErrorValue)
@@ -182,7 +182,7 @@ namespace TestCases.SS.Formula.Functions
             throw new RuntimeException("Unexpected cell type of expected value (" + expecedCell.CellType + ")");
         }
 
-        [TestInitialize]
+        [SetUp]
         public void SetUp()
         {
             _sheetFailureCount = 0;
@@ -190,7 +190,7 @@ namespace TestCases.SS.Formula.Functions
             _EvaluationFailureCount = 0;
             _EvaluationSuccessCount = 0;
         }
-        [TestMethod]
+        [Test]
         public void TestFunctionsFromTestSpreadsheet()
         {
             HSSFWorkbook workbook = HSSFTestDataSamples.OpenSampleWorkbook(SS.FILENAME);
@@ -215,7 +215,7 @@ namespace TestCases.SS.Formula.Functions
             {
                 String msg = _sheetFailureCount + " sheets(s) failed with "
                 + _EvaluationFailureCount + " Evaluation(s).  " + successMsg;
-                throw new AssertFailedException(msg);
+                throw new AssertionException(msg);
             }
             //if (false)
             //{ // normally no output for successful Tests
@@ -278,7 +278,7 @@ namespace TestCases.SS.Formula.Functions
                     printshortStackTrace(System.Console.Error, e);
                     result = Result.SOME_EVALUATIONS_FAILED;
                 }
-                catch (AssertFailedException e)
+                catch (AssertionException e)
                 {
                     _EvaluationFailureCount++;
                     printshortStackTrace(System.Console.Error, e);

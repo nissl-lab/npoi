@@ -23,7 +23,7 @@ namespace TestCases.HSSF.Record
     using System;
     using NPOI.HSSF.Record;
 
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
 
     /**
      * Tests the serialization and deserialization of the SCLRecord
@@ -33,14 +33,14 @@ namespace TestCases.HSSF.Record
 
      * @author Andrew C. Oliver (acoliver at apache.org)
      */
-    [TestClass]
+    [TestFixture]
     public class TestSCLRecord
     {
         byte[] data = new byte[] {
       (byte)0x3,(byte)0x0,(byte)0x4,(byte)0x0
     };
 
-        [TestMethod]
+        [Test]
         public void TestLoad()
         {
             SCLRecord record = new SCLRecord(TestcaseRecordInputStream.Create((short)0xa0, data));
@@ -50,7 +50,7 @@ namespace TestCases.HSSF.Record
 
             Assert.AreEqual(8, record.RecordSize);
         }
-        [TestMethod]
+        [Test]
         public void TestStore()
         {
             SCLRecord record = new SCLRecord();

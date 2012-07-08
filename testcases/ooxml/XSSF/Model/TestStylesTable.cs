@@ -16,15 +16,15 @@
 ==================================================================== */
 
 using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using NPOI.XSSF.UserModel;
 namespace NPOI.XSSF.Model
 {
-    [TestClass]
+    [TestFixture]
     public class TestStylesTable
     {
         private String testFile = "Formatting.xlsx";
-        [TestMethod]
+        [Test]
         public void TestCreateNew()
         {
             StylesTable st = new StylesTable();
@@ -35,7 +35,7 @@ namespace NPOI.XSSF.Model
             Assert.AreEqual(1, st._GetStyleXfsSize());
             Assert.AreEqual(0, st._GetNumberFormatSize());
         }
-        [TestMethod]
+        [Test]
         public void TestCreateSaveLoad()
         {
             XSSFWorkbook wb = new XSSFWorkbook();
@@ -53,7 +53,7 @@ namespace NPOI.XSSF.Model
             Assert.AreEqual(1, st._GetStyleXfsSize());
             Assert.AreEqual(0, st._GetNumberFormatSize());
         }
-        [TestMethod]
+        [Test]
         public void TestLoadExisting()
         {
             XSSFWorkbook workbook = XSSFTestDataSamples.OpenSampleWorkbook(testFile);
@@ -63,7 +63,7 @@ namespace NPOI.XSSF.Model
 
             doTestExisting(st);
         }
-        [TestMethod]
+        [Test]
         public void TestLoadSaveLoad()
         {
             XSSFWorkbook workbook = XSSFTestDataSamples.OpenSampleWorkbook(testFile);
@@ -101,7 +101,7 @@ namespace NPOI.XSSF.Model
 
             Assert.AreEqual("yyyy/mm/dd", st.GetStyleAt(3).GetDataFormatString());
         }
-        [TestMethod]
+        [Test]
         public void TestPopulateNew()
         {
             XSSFWorkbook wb = new XSSFWorkbook();
@@ -130,7 +130,7 @@ namespace NPOI.XSSF.Model
             Assert.AreEqual(nf1, st.PutNumberFormat("yyyy-mm-dd"));
             Assert.AreEqual(nf2, st.PutNumberFormat("yyyy-mm-DD"));
         }
-        [TestMethod]
+        [Test]
         public void TestPopulateExisting()
         {
             XSSFWorkbook workbook = XSSFTestDataSamples.OpenSampleWorkbook(testFile);

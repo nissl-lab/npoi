@@ -20,11 +20,11 @@ namespace TestCases.HSSF.Record
     using System;
     using System.Collections.Generic;
     using System.IO;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.HSSF.Record;
     using NPOI.Util;
 
-    [TestClass]
+    [TestFixture]
     public class TestDrawingRecord
     {
 
@@ -32,7 +32,7 @@ namespace TestCases.HSSF.Record
          * Check that RecordFactoryInputStream properly handles continued DrawingRecords
          * See Bugzilla #47548
          */
-        [TestMethod]
+        [Test]
         public void TestReadContinued()
         {
 

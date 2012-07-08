@@ -23,7 +23,7 @@ namespace TestCases.HSSF.Record
     using System;
     using NPOI.HSSF.Record;
 
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
 
     /**
      * Tests the serialization and deserialization of the CommonObjectDataSubRecord
@@ -33,7 +33,7 @@ namespace TestCases.HSSF.Record
 
      * @author Glen Stampoultzis (glens at apache.org)
      */
-    [TestClass]
+    [TestFixture]
     public class TestCommonObjectDataSubRecord
     {
         byte[] data = new byte[] {
@@ -44,7 +44,7 @@ namespace TestCases.HSSF.Record
         (byte)0x00,(byte)0x00,
     };
 
-        [TestMethod]
+        [Test]
         public void TestLoad()
         {
             CommonObjectDataSubRecord record = new CommonObjectDataSubRecord(TestcaseRecordInputStream.Create((short)0x15, data),data.Length);
@@ -62,7 +62,7 @@ namespace TestCases.HSSF.Record
             Assert.AreEqual((int)294, record.Reserved3);
             Assert.AreEqual(18, record.DataSize);
         }
-        [TestMethod]
+        [Test]
         public void TestStore()
         {
             CommonObjectDataSubRecord record = new CommonObjectDataSubRecord();

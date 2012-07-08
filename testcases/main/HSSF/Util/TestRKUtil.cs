@@ -19,21 +19,21 @@ namespace TestCases.HSSF.Util
 {
     using System;
 
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.Util;
     using NPOI.HSSF.Util;
 
     /**
      * Tests the {@link RKUtil} class.
      */
-    [TestClass]
+    [TestFixture]
     public class TestRKUtil
     {
 
         /**
          * Check we can decode correctly.
          */
-        [TestMethod]
+        [Test]
         public void TestDecode()
         {
 
@@ -52,7 +52,7 @@ namespace TestCases.HSSF.Util
                 double actualValue = RKUtil.DecodeNumber(intBits);
                 if (expectedValue != actualValue)
                 {
-                    throw new AssertFailedException("0x" + StringUtil.ToHexString(intBits)
+                    throw new AssertionException("0x" + StringUtil.ToHexString(intBits)
                             + " should decode to " + expectedValue + " but got " + actualValue);
                 }
             }

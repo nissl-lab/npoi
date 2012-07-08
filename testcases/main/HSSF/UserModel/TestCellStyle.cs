@@ -30,7 +30,7 @@ namespace TestCases.HSSF.UserModel
     using NPOI.HSSF.UserModel;
 
 
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using TestCases.HSSF;
     using NPOI.SS.UserModel;
 
@@ -39,7 +39,7 @@ namespace TestCases.HSSF.UserModel
      *
      * @author Andrew C. Oliver
      */
-    [TestClass]
+    [TestFixture]
     public class TestCellStyle
     {
 
@@ -64,7 +64,7 @@ namespace TestCases.HSSF.UserModel
          *             NPOI.SS.UserModel.Sheet last row or first row is incorrect.             <P>
          *
          */
-        [TestMethod]
+        [Test]
         public void TestWriteSheetFont()
     {
         string             filepath = TempFile.GetTempFilePath("TestWriteSheetFont",
@@ -109,7 +109,7 @@ namespace TestCases.HSSF.UserModel
         /**
          * Tests that is creating a file with a date or an calendar works correctly.
          */
-        [TestMethod]
+        [Test]
         public void TestDataStyle()
             
     {
@@ -142,7 +142,7 @@ namespace TestCases.HSSF.UserModel
         Assert.AreEqual(0, s.FirstRowNum,"FIRST ROW ");
 
     }
-        [TestMethod]
+        [Test]
         public void TestHashEquals()
         {
             HSSFWorkbook wb = new HSSFWorkbook();
@@ -183,7 +183,7 @@ namespace TestCases.HSSF.UserModel
          *             NPOI.SS.UserModel.Sheet last row or first row is incorrect.             <P>
          *
          */
-        [TestMethod]
+        [Test]
         public void TestWriteSheetStyle()
     {
         string             filepath = TempFile.GetTempFilePath("TestWriteSheetStyle",
@@ -239,7 +239,7 @@ namespace TestCases.HSSF.UserModel
          * Cloning one NPOI.SS.UserModel.CellType onto Another, same
          *  HSSFWorkbook
          */
-        [TestMethod]
+        [Test]
         public void TestCloneStyleSameWB()
         {
             HSSFWorkbook wb = new HSSFWorkbook();
@@ -272,7 +272,7 @@ namespace TestCases.HSSF.UserModel
          * Cloning one NPOI.SS.UserModel.CellType onto Another, across
          *  two different HSSFWorkbooks
          */
-        [TestMethod]
+        [Test]
         public void TestCloneStyleDiffWB()
         {
             HSSFWorkbook wbOrig = new HSSFWorkbook();
@@ -312,7 +312,7 @@ namespace TestCases.HSSF.UserModel
             Assert.AreNotEqual(fmtClone.GetFormat("Test##") , fmt.GetFormat("Test##"));
             Assert.AreEqual(5, wbClone.NumberOfFonts);
         }
-        [TestMethod]
+        [Test]
         public void TestStyleNames()
         {
             HSSFWorkbook wb = OpenSample("WithExtendedStyles.xls");

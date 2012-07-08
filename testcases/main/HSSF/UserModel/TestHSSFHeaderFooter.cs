@@ -19,7 +19,7 @@ namespace TestCases.HSSF.UserModel
 {
     using System;
 
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.HSSF.UserModel;
     using TestCases.HSSF;
     using NPOI.SS.UserModel;
@@ -31,7 +31,7 @@ namespace TestCases.HSSF.UserModel
      *
      * @author Shawn Laubach (slaubach at apache dot com)
      */
-    [TestClass]
+    [TestFixture]
     public class TestHSSFHeaderFooter
     {
 
@@ -40,7 +40,7 @@ namespace TestCases.HSSF.UserModel
          *
          * @author Shawn Laubach (slaubach at apache dot org)
          */
-        [TestMethod]
+        [Test]
         public void TestRetrieveCorrectHeader()
         {
             // Read initial file in
@@ -52,7 +52,7 @@ namespace TestCases.HSSF.UserModel
             Assert.AreEqual("Top Center", head.Center);
             Assert.AreEqual("Top Right", head.Right);
         }
-        [TestMethod]
+        [Test]
         public void TestSpecialChars()
         {
             Assert.AreEqual("&U", HSSFHeader.StartUnderline);
@@ -62,7 +62,7 @@ namespace TestCases.HSSF.UserModel
             Assert.AreEqual("&22", HSSFFooter.FontSize((short)22));
             Assert.AreEqual("&\"Arial,bold\"", HSSFFooter.Font("Arial", "bold"));
         }
-        [TestMethod]
+        [Test]
         public void TestStripFields()
         {
             String simple = "I am a Test header";
@@ -107,7 +107,7 @@ namespace TestCases.HSSF.UserModel
          *
          * @author Shawn Laubach (slaubach at apache dot org)
          */
-        [TestMethod]
+        [Test]
         public void TestRetrieveCorrectFooter()
         {
             // Read initial file in
@@ -123,7 +123,7 @@ namespace TestCases.HSSF.UserModel
         /**
          * Testcase for Bug 17039 HSSFHeader  doesnot support DBCS 
          */
-        [TestMethod]
+        [Test]
         public void TestHeaderHas16bitCharacter()
         {
             HSSFWorkbook b = new HSSFWorkbook();
@@ -144,7 +144,7 @@ namespace TestCases.HSSF.UserModel
         /**
          * Testcase for Bug 17039 HSSFFooter doesnot support DBCS 
          */
-        [TestMethod]
+        [Test]
         public void TestFooterHas16bitCharacter()
         {
             HSSFWorkbook b = new HSSFWorkbook();
@@ -161,7 +161,7 @@ namespace TestCases.HSSF.UserModel
             Assert.AreEqual(f2.Center, "\u0392");
             Assert.AreEqual(f2.Right, "\u0393");
         }
-        [TestMethod]
+        [Test]
         public void TestReadDBCSHeaderFooter()
         {
             HSSFWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("DBCSHeader.xls");
@@ -179,7 +179,7 @@ namespace TestCases.HSSF.UserModel
         /**
 	 * Excel tolerates files with missing HEADER/FOOTER records.  POI should do the same.
 	 */
-        [TestMethod]
+        [Test]
         public void TestMissingHeaderFooterRecord_bug47244()
         {
             // noHeaderFooter47244.xls was Created by a slightly modified POI
@@ -194,7 +194,7 @@ namespace TestCases.HSSF.UserModel
             }
             catch (NullReferenceException)
             {
-                throw new AssertFailedException("Identified bug 47244a");
+                throw new AssertionException("Identified bug 47244a");
             }
             Assert.AreEqual("", footer.RawText);
             HSSFHeader header = (HSSFHeader)sheet.Header;

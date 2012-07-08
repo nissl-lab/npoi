@@ -16,7 +16,7 @@
 ==================================================================== */
 
 using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using NPOI.OpenXmlFormats.Spreadsheet;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
@@ -24,14 +24,14 @@ namespace NPOI.XSSF.Model
 {
 
 
-    [TestClass]
+    [TestFixture]
     public class TestCommentsTable
     {
 
         private static String TEST_A2_TEXT = "test A2 text";
         private static String TEST_A1_TEXT = "test A1 text";
         private static String TEST_AUTHOR = "test author";
-        [TestMethod]
+        [Test]
         public void TestFindAuthor()
         {
             CommentsTable sheetComments = new CommentsTable();
@@ -45,7 +45,7 @@ namespace NPOI.XSSF.Model
             Assert.AreEqual(3, sheetComments.FindAuthor("YAA"));
             Assert.AreEqual(2, sheetComments.FindAuthor("another author"));
         }
-        [TestMethod]
+        [Test]
         public void TestGetCellComment()
         {
             CommentsTable sheetComments = new CommentsTable();
@@ -71,7 +71,7 @@ namespace NPOI.XSSF.Model
             Assert.IsNull(sheetComments.GetCTComment("A3"));
         }
 
-        [TestMethod]
+        [Test]
         public void TestExisting()
         {
             IWorkbook workbook = XSSFTestDataSamples.OpenSampleWorkbook("WithVariousData.xlsx");
@@ -102,7 +102,7 @@ namespace NPOI.XSSF.Model
             Assert.AreEqual(6, cc7.Row);
             Assert.AreEqual(2, cc7.Column);
         }
-        [TestMethod]
+        [Test]
         public void TestWriteRead()
         {
             XSSFWorkbook workbook = XSSFTestDataSamples.OpenSampleWorkbook("WithVariousData.xlsx");
@@ -149,9 +149,9 @@ namespace NPOI.XSSF.Model
                     sheet2.GetRow(2).GetCell(1).CellComment.Author);
 
             Assert.AreEqual("Hello!",
-                    sheet1.GetRow(4).GetCell(2).CellComment.String);
+                    sheet1.GetRow(4).GetCell(2).CellComment.String.String);
         }
-        [TestMethod]
+        [Test]
         public void TestReadWriteMultipleAuthors()
         {
             XSSFWorkbook workbook = XSSFTestDataSamples.OpenSampleWorkbook("WithMoreVariousData.xlsx");
@@ -187,7 +187,7 @@ namespace NPOI.XSSF.Model
 
             // Todo - check text too, once bug fixed
         }
-        [TestMethod]
+        [Test]
         public void TestRemoveComment()
         {
             CommentsTable sheetComments = new CommentsTable();

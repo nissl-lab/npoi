@@ -19,7 +19,7 @@ using System;
 using System.Text;
 using System.Collections.Generic;
 
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using NPOI.POIFS.NIO;
 using System.IO;
 using NPOI.Util;
@@ -29,7 +29,7 @@ namespace TestCases.POIFS.NIO
     /// <summary>
     /// Summary description for TestDataSource
     /// </summary>
-    [TestClass]
+    [TestFixture]
     public class TestDataSource
     {
         private static POIDataSamples data = POIDataSamples.GetPOIFSInstance();
@@ -40,7 +40,7 @@ namespace TestCases.POIFS.NIO
             //
         }
 
-        [TestMethod]
+        [Test]
         public void TestFile()
         {
             FileStream f =  data.GetFile("Notes.ole2");
@@ -85,7 +85,7 @@ namespace TestCases.POIFS.NIO
         }
 
 
-        [TestMethod]
+        [Test]
         public void TestByteArray()
         {
             byte[] data = new byte[256];

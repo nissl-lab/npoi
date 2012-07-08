@@ -20,7 +20,7 @@
 namespace TestCases.HSSF.Record
 {
     using System;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.Util.Collections;
     using NPOI.HSSF.Record;
     using NPOI.HSSF.Record.Cont;
@@ -32,7 +32,7 @@ namespace TestCases.HSSF.Record
      *
      * @author Glen Stampoultzis (glens at apache.org)
      */
-    [TestClass]
+    [TestFixture]
     public class TestSSTRecordSizeCalculator
     {
         private static String SMALL_STRING = "Small string";
@@ -41,7 +41,7 @@ namespace TestCases.HSSF.Record
         private IntMapper<UnicodeString> strings = new IntMapper<UnicodeString>();
         private static int OPTION_FIELD_SIZE = 1;
 
-        [TestMethod]
+        [Test]
         public void TestBasic()
         {
             strings.Add(MakeUnicodeString(SMALL_STRING));
@@ -49,7 +49,7 @@ namespace TestCases.HSSF.Record
                     + COMPRESSED_PLAIN_STRING_OVERHEAD
                     + SMALL_STRING.Length);
         }
-        [TestMethod]
+        [Test]
         public void TestBigStringAcrossUnicode()
         {
             String bigString = new String(new char[SSTRecord.MAX_DATA_SPACE + 100]);
@@ -61,7 +61,7 @@ namespace TestCases.HSSF.Record
                     + OPTION_FIELD_SIZE
                     + 100);
         }
-        [TestMethod]
+        [Test]
         public void TestPerfectFit()
         {
             int perfectFit = SSTRecord.MAX_DATA_SPACE - COMPRESSED_PLAIN_STRING_OVERHEAD;
@@ -70,7 +70,7 @@ namespace TestCases.HSSF.Record
                     + COMPRESSED_PLAIN_STRING_OVERHEAD
                     + perfectFit);
         }
-        [TestMethod]
+        [Test]
         public void TestJustOversized()
         {
             int tooBig = SSTRecord.MAX_DATA_SPACE - COMPRESSED_PLAIN_STRING_OVERHEAD + 1;
@@ -82,7 +82,7 @@ namespace TestCases.HSSF.Record
                     + SSTRecord.STD_RECORD_OVERHEAD
                     + OPTION_FIELD_SIZE + 1);
         }
-        [TestMethod]
+        [Test]
         public void TestSecondStringStartsOnNewContinuation()
         {
             int perfectFit = SSTRecord.MAX_DATA_SPACE - COMPRESSED_PLAIN_STRING_OVERHEAD;
@@ -95,7 +95,7 @@ namespace TestCases.HSSF.Record
                     + COMPRESSED_PLAIN_STRING_OVERHEAD
                     + SMALL_STRING.Length);
         }
-        [TestMethod]
+        [Test]
         public void TestHeaderCrossesNormalContinuePoint()
         {
             int almostPerfectFit = SSTRecord.MAX_DATA_SPACE - COMPRESSED_PLAIN_STRING_OVERHEAD - 2;

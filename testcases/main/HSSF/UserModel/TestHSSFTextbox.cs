@@ -18,7 +18,7 @@ namespace TestCases.HSSF.UserModel
 {
     using System;
     using NPOI.HSSF.UserModel;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using System.IO;
     using TestCases.HSSF;
     using NPOI.SS.UserModel;
@@ -28,14 +28,14 @@ namespace TestCases.HSSF.UserModel
      *
      * @author Yegor Kozlov (yegor at apache.org)
      */
-    [TestClass]
+    [TestFixture]
     public class TestHSSFTextbox
     {
 
         /**
          * Test that accessors to horizontal and vertical alignment work properly
          */
-        [TestMethod]
+        [Test]
         public void TestAlignment()
         {
             HSSFWorkbook wb = new HSSFWorkbook();
@@ -56,7 +56,7 @@ namespace TestCases.HSSF.UserModel
          * Excel requires at least one format run in HSSFTextbox.
          * When inserting text make sure that if font is not set we must set the default one.
          */
-        [TestMethod]
+        [Test]
         public void TestSetDeafultTextFormat()
         {
             HSSFWorkbook wb = new HSSFWorkbook();

@@ -30,7 +30,7 @@ using System.Text;
 using System.Collections;
 using System.IO;
 
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 using NPOI.POIFS.Common;
 using NPOI.POIFS.Storage;
@@ -44,7 +44,7 @@ namespace TestCases.POIFS.Properties
      *
      * @author Marc Johnson
      */
-    [TestClass]
+    [TestFixture]
     public class TestRootProperty
     {
         private RootProperty _property;
@@ -66,7 +66,7 @@ namespace TestCases.POIFS.Properties
          *
          * @exception IOException
          */
-        [TestMethod]
+        [Test]
         public void TestConstructor()
         {
             CreateBasicRootProperty();
@@ -133,7 +133,7 @@ namespace TestCases.POIFS.Properties
         /**
          * Test SetSize
          */
-        [TestMethod]
+        [Test]
         public void TestSetSize()
         {
             for (int j = 0; j < 10; j++)
@@ -150,7 +150,7 @@ namespace TestCases.POIFS.Properties
          *
          * @exception IOException
          */
-        [TestMethod]
+        [Test]
         public void TestReadingConstructor()
         {
             string[] input = {

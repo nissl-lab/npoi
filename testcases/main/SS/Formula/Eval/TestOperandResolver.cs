@@ -16,7 +16,7 @@
 ==================================================================== */
 
 using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using NPOI.SS.Formula.Eval;
 namespace TestCases.SS.Formula.Eval
 {
@@ -26,10 +26,10 @@ namespace TestCases.SS.Formula.Eval
      *
      * @author Brendan Nolan
      */
-    [TestClass]
+    [TestFixture]
     public class TestOperandResolver
     {
-        [TestMethod]
+        [Test]
         public void TestParseDouble_bug48472()
         {
 
@@ -43,13 +43,13 @@ namespace TestCases.SS.Formula.Eval
             }
             catch (Exception)
             {
-                throw new AssertFailedException("Identified bug 48472");
+                throw new AssertionException("Identified bug 48472");
             }
 
             Assert.AreEqual(double.NaN, ResolvedValue);
 
         }
-        [TestMethod]
+        [Test]
         public void TestParseDouble_bug49723()
         {
             System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
@@ -69,7 +69,7 @@ namespace TestCases.SS.Formula.Eval
          * Tests that a list of valid strings all return a non null value from {@link OperandResolver#ParseDouble(String)}
          * 
          */
-        [TestMethod]
+        [Test]
         public void TestParseDoubleValidStrings()
         {
             System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
@@ -89,7 +89,7 @@ namespace TestCases.SS.Formula.Eval
          * Tests that a list of invalid strings all return null from {@link OperandResolver#ParseDouble(String)}
          * 
          */
-        [TestMethod]
+        [Test]
         public void TestParseDoubleInvalidStrings()
         {
             System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");

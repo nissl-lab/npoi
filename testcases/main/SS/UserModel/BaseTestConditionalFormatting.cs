@@ -21,7 +21,7 @@ namespace TestCases.SS.UserModel
 {
     using System;
 
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.SS;
     using NPOI.SS.UserModel;
     using NPOI.SS.Util;
@@ -32,7 +32,7 @@ namespace TestCases.SS.UserModel
      * @author Dmitriy Kumshayev
      * @author Yegor Kozlov
      */
-    [TestClass]
+    [TestFixture]
     public class BaseTestConditionalFormatting
     {
         private ITestDataProvider _testDataProvider;
@@ -44,7 +44,7 @@ namespace TestCases.SS.UserModel
         {
             _testDataProvider = TestDataProvider;
         }
-        [TestMethod]
+        [Test]
         public void TestBasic()
         {
             IWorkbook wb = _testDataProvider.CreateWorkbook();
@@ -125,7 +125,7 @@ namespace TestCases.SS.UserModel
         /**
          * Test format conditions based on a bool formula
          */
-        [TestMethod]
+        [Test]
         public void TestBooleanFormulaConditions()
         {
             IWorkbook wb = _testDataProvider.CreateWorkbook();
@@ -160,7 +160,7 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual(1, ranges2.Length);
             Assert.AreEqual("B1:B3", ranges2[0].FormatAsString());
         }
-        [TestMethod]
+        [Test]
         public void TestSingleFormulaConditions()
         {
             IWorkbook wb = _testDataProvider.CreateWorkbook();
@@ -223,7 +223,7 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual("5", rule9.Formula2);
             Assert.AreEqual(ComparisonOperator.NOT_BETWEEN, rule9.ComparisonOperation);
         }
-        [TestMethod]
+        [Test]
         public void TestCopy()
         {
             IWorkbook wb = _testDataProvider.CreateWorkbook();
@@ -262,7 +262,7 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual(ComparisonOperator.NOT_EQUAL, sheet2cf.GetRule(1).ComparisonOperation);
             Assert.AreEqual(ConditionType.CELL_VALUE_IS, sheet2cf.GetRule(1).ConditionType);
         }
-        [TestMethod]
+        [Test]
         public void TestRemove()
         {
             IWorkbook wb = _testDataProvider.CreateWorkbook();
@@ -310,7 +310,7 @@ namespace TestCases.SS.UserModel
                 Assert.IsTrue(e.Message.StartsWith("Specified CF index 0 is outside the allowable range"));
             }
         }
-        [TestMethod]
+        [Test]
         public void TestCreateCF()
         {
             IWorkbook workbook = _testDataProvider.CreateWorkbook();
@@ -390,7 +390,7 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual("2", rule2.Formula2);
             Assert.AreEqual("1", rule2.Formula1);
         }
-        [TestMethod]
+        [Test]
         public void TestClone()
         {
 
@@ -435,7 +435,7 @@ namespace TestCases.SS.UserModel
             }
             Assert.AreEqual(2, wb.NumberOfSheets);
         }
-        [TestMethod]
+        [Test]
         public void TestShiftRows()
         {
 
@@ -477,7 +477,7 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual("1+SUM(#REF!)", cf.GetRule(0).Formula2);
         }
         //
-        [TestMethod]
+        [Test]
         public void TestRead()
         {
 
@@ -565,7 +565,7 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual("\"AAA\"", rule5.Formula2);
         }
 
-        [TestMethod]
+        [Test]
         public void TestCreateFontFormatting()
         {
             IWorkbook workbook = _testDataProvider.CreateWorkbook();
@@ -633,7 +633,7 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual(IndexedColors.BLUE.Index, r1fp.FontColorIndex);
 
         }
-        [TestMethod]
+        [Test]
         public void TestCreatePatternFormatting()
         {
             IWorkbook workbook = _testDataProvider.CreateWorkbook();
@@ -679,7 +679,7 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual(IndexedColors.BLUE.Index, r1fp.FillForegroundColor);
             Assert.AreEqual(PatternFormatting.BRICKS, r1fp.FillPattern);
         }
-        [TestMethod]
+        [Test]
         public void TestCreateBorderFormatting()
         {
             IWorkbook workbook = _testDataProvider.CreateWorkbook();

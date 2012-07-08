@@ -18,14 +18,14 @@ namespace TestCases.HSSF.UserModel
     using System;
     using NPOI.HSSF.UserModel;
     using NPOI.HSSF.Model;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
 
     using NPOI.SS.UserModel;
 
-    [TestClass]
+    [TestFixture]
     public class TestHSSFOptimiser
     {
-        [TestMethod]
+        [Test]
         public void TestDoesNoHarmIfNothingToDo()
         {
             HSSFWorkbook wb = new HSSFWorkbook();
@@ -54,7 +54,7 @@ namespace TestCases.HSSF.UserModel
 
             Assert.AreEqual(f, s.GetFont(wb));
         }
-        [TestMethod]
+        [Test]
         public void TestOptimiseFonts()
         {
             HSSFWorkbook wb = new HSSFWorkbook();
@@ -158,7 +158,7 @@ namespace TestCases.HSSF.UserModel
             Assert.AreEqual(8, r.GetCell(1).RichStringCellValue.GetFontAtIndex(6));
             Assert.AreEqual(8, r.GetCell(1).RichStringCellValue.GetFontAtIndex(7));
         }
-        [TestMethod]
+        [Test]
         public void TestOptimiseStyles()
         {
             HSSFWorkbook wb = new HSSFWorkbook();

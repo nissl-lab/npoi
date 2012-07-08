@@ -18,17 +18,17 @@
 namespace NPOI.XWPF.UserModel
 {
 
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
 
     using NPOI.XWPF;
     using NPOI.OpenXmlFormats.Wordprocessing;
 
 
-    [TestClass]
+    [TestFixture]
     public class TestXWPFFootnotes
     {
 
-        [TestMethod]
+        [Test]
         public void TestAddFootnotesToDocument()
         {
             XWPFDocument docOut = new XWPFDocument();

@@ -30,7 +30,7 @@ using System.Text;
 using System.Collections.Generic;
 using System.IO;
 
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 using NPOI.POIFS.Storage;
 using NPOI.Util;
@@ -43,7 +43,7 @@ namespace TestCases.POIFS.Storage
      *
      * @author Marc Johnson
      */
-    [TestClass]
+    [TestFixture]
     public class TestBlockAllocationTableReader
     {
 
@@ -63,7 +63,7 @@ namespace TestCases.POIFS.Storage
          *
          * @exception IOException
          */
-        [TestMethod]
+        [Test]
         public void TestSmallBATConstructor()
         {
 
@@ -1172,7 +1172,7 @@ namespace TestCases.POIFS.Storage
          *
          * @exception IOException
          */
-        [TestMethod]
+        [Test]
         public void TestReadingConstructor()
         {
 
@@ -1236,7 +1236,7 @@ namespace TestCases.POIFS.Storage
          *
          * @exception IOException
          */
-        [TestMethod]
+        [Test]
         public void TestFetchBlocks()
         {
 
@@ -1348,7 +1348,7 @@ namespace TestCases.POIFS.Storage
 	 * Bugzilla 48085 describes an error where a corrupted Excel file causes POI to throw an
 	 * {@link OutOfMemoryError}.
 	 */
-        [TestMethod]
+        [Test]
         public void TestBadSectorAllocationTableSize_bug48085()
         {
             int BLOCK_SIZE = 512;
@@ -1395,7 +1395,7 @@ namespace TestCases.POIFS.Storage
             {
                 if (e.StackTrace.Contains("testBadSectorAllocationTableSize"))
                 {
-                    throw new AssertFailedException("Identified bug 48085");
+                    throw new AssertionException("Identified bug 48085");
                 }
             }
         }

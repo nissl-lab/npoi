@@ -20,7 +20,7 @@ namespace TestCases.SS.Formula.PTG
 
     using System;
     using System.IO;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.HSSF.Model;
     using NPOI.HSSF.UserModel;
     using NPOI.SS.Formula.PTG;
@@ -32,14 +32,14 @@ namespace TestCases.SS.Formula.PTG
      * 
      * @author Josh Micich
      */
-    [TestClass]
+    [TestFixture]
     public class TestExternalFunctionFormulas
     {
 
         /**
          * Tests <c>NameXPtg.ToFormulaString(Workbook)</c> and logic in Workbook below that   
          */
-        [TestMethod]
+        [Test]
         public void TestReadFormulaContainingExternalFunction()
         {
             HSSFWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("externalFunctionExample.xls");
@@ -49,7 +49,7 @@ namespace TestCases.SS.Formula.PTG
             String cellFormula = sht.GetRow(0).GetCell(0).CellFormula;
             Assert.AreEqual(expectedFormula, cellFormula);
         }
-        [TestMethod]
+        [Test]
         public void TestParse()
         {
             System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
@@ -79,7 +79,7 @@ namespace TestCases.SS.Formula.PTG
             }
 #endif
         }
-        [TestMethod]
+        [Test]
         public void TestEvaluate()
         {
             System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US"); 

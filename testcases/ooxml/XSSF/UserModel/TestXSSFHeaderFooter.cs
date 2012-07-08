@@ -16,17 +16,17 @@
 ==================================================================== */
 
 using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using NPOI.OpenXmlFormats.Spreadsheet;
 namespace NPOI.XSSF.UserModel
 {
     /**
      * Tests for {@link XSSFHeaderFooter}
      */
-    [TestClass]
+    [TestFixture]
     public class TestXSSFHeaderFooter
     {
-        [TestMethod]
+        [Test]
         public void TestStripFields()
         {
             String simple = "I am a Test header";
@@ -64,7 +64,7 @@ namespace NPOI.XSSF.UserModel
             head.Center = ("HEADER TEXT &P&N&D&T&Z&F&F&A&V");
             Assert.AreEqual("HEADER TEXT &V", head.Center);
         }
-        [TestMethod]
+        [Test]
         public void TestGetSetCenterLeftRight()
         {
 

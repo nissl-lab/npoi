@@ -2,7 +2,7 @@
 using System.Text;
 using System.Collections.Generic;
 
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using NPOI.SS;
 
 namespace TestCases.SS
@@ -10,7 +10,7 @@ namespace TestCases.SS
     /// <summary>
     /// Summary description for TestSpreadsheetVersion
     /// </summary>
-    [TestClass]
+    [TestFixture]
     public class TestSpreadsheetVersion
     {
         public TestSpreadsheetVersion()
@@ -51,7 +51,7 @@ namespace TestCases.SS
         // public static void MyClassCleanup() { }
         //
         // Use TestInitialize to run code before running each test 
-        // [TestInitialize()]
+        // [SetUp]
         // public void MyTestInitialize() { }
         //
         // Use TestCleanup to run code after each test has run
@@ -60,7 +60,7 @@ namespace TestCases.SS
         //
         #endregion
 
-        [TestMethod]
+        [Test]
         public void TestExcel97()
         {
             SpreadsheetVersion v = SpreadsheetVersion.EXCEL97;
@@ -72,7 +72,7 @@ namespace TestCases.SS
             Assert.AreEqual(3, v.MaxConditionalFormats);
             Assert.AreEqual("IV", v.LastColumnName);
         }
-        [TestMethod]
+        [Test]
         public void TestExcel2007()
         {
             SpreadsheetVersion v = SpreadsheetVersion.EXCEL2007;

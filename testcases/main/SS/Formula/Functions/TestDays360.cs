@@ -18,7 +18,7 @@
 namespace TestCases.SS.Formula.Functions
 {
     using System;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.SS.Formula.Eval;
     using NPOI.SS.UserModel;
     using NPOI.SS.Formula.Functions;
@@ -26,7 +26,7 @@ namespace TestCases.SS.Formula.Functions
     /**
      * @author Josh Micich
      */
-    [TestClass]
+    [TestFixture]
     public class TestDays360
     {
 
@@ -63,7 +63,7 @@ namespace TestCases.SS.Formula.Functions
             return d.ToString("yyyy/mm/dd");
         }
 
-        [TestMethod]
+        [Test]
         public void TestBasic()
         {
             Confirm(120, 2009, 1, 15, 2009, 5, 15);
@@ -149,14 +149,14 @@ namespace TestCases.SS.Formula.Functions
                 NumberEval numberEval = (NumberEval)ve;
                 if (numberEval.NumberValue != expResult)
                 {
-                    throw new AssertFailedException(fmt(firstArg) + " " + fmt(secondArg) + " " + method +
+                    throw new AssertionException(fmt(firstArg) + " " + fmt(secondArg) + " " + method +
                             " wrong result got (" + numberEval.NumberValue
                             + ") but expected (" + expResult + ")");
                 }
                 //	System.err.println(fmt(firstArg) + " " + fmt(secondArg) + " " + method + " success got (" + expResult + ")");
                 return;
             }
-            throw new AssertFailedException("wrong return type (" + ve.GetType().Name + ")");
+            throw new AssertionException("wrong return type (" + ve.GetType().Name + ")");
         }
         private static ValueEval invokeDays360(params ValueEval[] args)
         {

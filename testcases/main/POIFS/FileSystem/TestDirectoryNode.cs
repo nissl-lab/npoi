@@ -31,7 +31,7 @@ using System;
 using System.Collections;
 using System.IO;
 
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 using NPOI.POIFS.FileSystem;
 using NPOI.POIFS.Properties;
@@ -47,7 +47,7 @@ namespace TestCases.POIFS.FileSystem
     /// <summary>
     /// Summary description for TestDirectoryNode
     /// </summary>
-    [TestClass]
+    [TestFixture]
     public class TestDirectoryNode
     {
 
@@ -67,7 +67,7 @@ namespace TestCases.POIFS.FileSystem
          *
          * @exception IOException
          */
-        [TestMethod]
+        [Test]
         public void TestEmptyConstructor()
         {
             POIFSFileSystem fs = new POIFSFileSystem();
@@ -126,7 +126,7 @@ namespace TestCases.POIFS.FileSystem
          *
          * @exception IOException
          */
-        [TestMethod]
+        [Test]
         public void TestNonEmptyConstructor()
         {
             DirectoryProperty property1 = new DirectoryProperty("parent");
@@ -188,7 +188,7 @@ namespace TestCases.POIFS.FileSystem
          *
          * @exception IOException
          */
-        [TestMethod]
+        [Test]
         public void TestDeletion()
         {
             POIFSFileSystem fs = new POIFSFileSystem();
@@ -227,7 +227,7 @@ namespace TestCases.POIFS.FileSystem
          *
          * @exception IOException
          */
-        [TestMethod]
+        [Test]
         public void TestRename()
         {
             POIFSFileSystem fs = new POIFSFileSystem();

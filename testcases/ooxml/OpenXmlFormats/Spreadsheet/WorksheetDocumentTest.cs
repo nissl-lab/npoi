@@ -1,5 +1,5 @@
 ﻿using System.IO;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using NPOI.OpenXmlFormats.Spreadsheet;
 using NPOI.XSSF.UserModel;
 using NPOI.SS.UserModel;
@@ -10,7 +10,7 @@ namespace ooxml.Testcases
     ///This is a test class for WorksheetDocumentTest and is intended
     ///to contain all WorksheetDocumentTest Unit Tests
     ///</summary>
-    [TestClass()]
+    [TestFixture]
     public class WorksheetDocumentTest
     {
         private TestContext testContextInstance;
@@ -64,7 +64,7 @@ namespace ooxml.Testcases
         /// <summary>
         ///A test for the Serialization of CT_Worksheet.
         ///</summary>
-        [TestMethod()]
+        [Test]
         public void SerializeEmptyWorksheetDocumentTest()
         {
             CT_Worksheet worksheet = new CT_Worksheet();
@@ -82,7 +82,7 @@ namespace ooxml.Testcases
         /// <summary>
         ///A test for the Serialization of CT_Worksheet.
         ///</summary>
-        [TestMethod()]
+        [Test]
         public void SerializeWorksheetDocumentTest()
         {
             CT_Worksheet worksheet = new CT_Worksheet();
@@ -145,7 +145,7 @@ namespace ooxml.Testcases
         /// <summary>
         ///A test for Deserialization of CT_Worksheet.
         ///</summary>
-        [TestMethod()]
+        [Test]
         public void DeserializeWorksheetDocumentTest()
         {
             // The following is the excerpt of an Excel file.
@@ -311,7 +311,7 @@ namespace ooxml.Testcases
         /// <summary>
         ///A test for Deserialization of CT_Worksheet.
         ///</summary>
-        [TestMethod()]
+        [Test]
         public void DeserializeWorksheetDocumentWithPageMarginsTest()
         {
             // The following is the excerpt of an Excel file.

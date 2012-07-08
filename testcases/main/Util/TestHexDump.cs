@@ -31,7 +31,7 @@ using System.Text;
 using System.Collections.Generic;
 using System.IO;
 
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using NPOI.Util;
 
 namespace TestCases.Util
@@ -39,7 +39,7 @@ namespace TestCases.Util
     /// <summary>
     /// Summary description for UnitTest1
     /// </summary>
-    [TestClass]
+    [TestFixture]
     public class TestHexDump
     {
         public TestHexDump()
@@ -88,7 +88,7 @@ namespace TestCases.Util
             return rval;
         }
 
-        [TestMethod]
+        [Test]
         public void TestDump()
         {
             byte[] testArray = new byte[256];
@@ -302,7 +302,7 @@ namespace TestCases.Util
 
         }
 
-        [TestMethod]
+        [Test]
         public void TestToHex()
         {
             Assert.AreEqual("000A", HexDump.ToHex((short)0xA));

@@ -21,7 +21,7 @@ namespace NPOI.XWPF
 
 
 
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.XWPF.UserModel;
 
     /**
@@ -37,10 +37,10 @@ namespace NPOI.XWPF
      * @author Antoni Mylka
      * 
      */
-    [TestClass]
+    [TestFixture]
     public class TestPackageCorePropertiesGetKeywords
     {
-        [TestMethod]
+        [Test]
         public void TestGetSetKeywords()
         {
             XWPFDocument doc = XWPFTestDataSamples.OpenSampleDocument("TestPoiXMLDocumentCorePropertiesGetKeywords.docx");

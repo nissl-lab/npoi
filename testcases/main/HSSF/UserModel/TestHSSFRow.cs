@@ -19,7 +19,7 @@ namespace TestCases.HSSF.UserModel
 {
     using System;
     using NPOI.HSSF.UserModel;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
 
     using TestCases.HSSF;
     using NPOI.SS.UserModel;
@@ -32,7 +32,7 @@ namespace TestCases.HSSF.UserModel
      *
      * @author Glen Stampoultzis (glens at apache.org)
      */
-    [TestClass]
+    [TestFixture]
     public class TestHSSFRow : BaseTestRow
     {
         public TestHSSFRow(): base(HSSFITestDataProvider.Instance)
@@ -40,7 +40,7 @@ namespace TestCases.HSSF.UserModel
           
         }
 
-        [TestMethod]
+        [Test]
         public void TestMoveCell()
         {
             HSSFWorkbook workbook = new HSSFWorkbook();
@@ -93,12 +93,12 @@ namespace TestCases.HSSF.UserModel
             Assert.AreEqual(2, row.FirstCellNum);
             Assert.AreEqual(6, row.LastCellNum);
         }
-        [TestMethod]
+        [Test]
         public void TestRowBounds()
         {
             BaseTestRowBounds(SpreadsheetVersion.EXCEL97.LastRowIndex);
         }
-        [TestMethod]
+        [Test]
         public void TestCellBounds()
         {
             BaseTestCellBounds(SpreadsheetVersion.EXCEL97.LastColumnIndex);
@@ -107,7 +107,7 @@ namespace TestCases.HSSF.UserModel
          * Prior to patch 43901, POI was producing files with the wrong last-column
          * number on the row
          */
-        [TestMethod]
+        [Test]
         public new void TestLastCellNumIsCorrectAfterAddCell_bug43901()
         {
             HSSFWorkbook book = new HSSFWorkbook();
@@ -128,7 +128,7 @@ namespace TestCases.HSSF.UserModel
             row.CreateCell(255);
             Assert.AreEqual(256, row.LastCellNum);
         }
-        [TestMethod]
+        [Test]
         public void TestLastAndFirstColumns_bug46654()
         {
             int ROW_IX = 10;
@@ -149,7 +149,7 @@ namespace TestCases.HSSF.UserModel
 
             if (row.FirstCellNum == 2 && row.LastCellNum == 5)
             {
-                throw new AssertFailedException("Identified bug 46654a");
+                throw new AssertionException("Identified bug 46654a");
             }
             Assert.AreEqual(COL_IX, row.FirstCellNum);
             Assert.AreEqual(COL_IX + 1, row.LastCellNum);

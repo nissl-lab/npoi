@@ -18,7 +18,7 @@
 namespace TestCases.HSSF.Record.Aggregates
 {
     using System;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.HSSF.Record;
     using NPOI.HSSF.Record.Aggregates;
     using NPOI.HSSF.UserModel;
@@ -32,10 +32,10 @@ namespace TestCases.HSSF.Record.Aggregates
     /**
      * 
      */
-    [TestClass]
+    [TestFixture]
     public class TestRowRecordsAggregate
     {
-        [TestMethod]
+        [Test]
         public void TestRowGet()
         {
             RowRecordsAggregate rra = new RowRecordsAggregate();
@@ -55,7 +55,7 @@ namespace TestCases.HSSF.Record.Aggregates
 	 * {@link SharedFormulaRecord}s, these records should appear immediately after the first
 	 * {@link FormulaRecord}s that they apply to (and only once).<br/>
 	 */
-        [TestMethod]
+        [Test]
         public void TestArraysAndTables()
         {
             HSSFWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("testArraysAndTables.xls");
@@ -98,7 +98,7 @@ namespace TestCases.HSSF.Record.Aggregates
                     Record prevRec = recs[i - 1];
                     if (!(prevRec is FormulaRecord))
                     {
-                        throw new AssertFailedException("Bad record order at index "
+                        throw new AssertionException("Bad record order at index "
                                 + i + ": Formula record expected but got ("
                                 + prevRec.GetType().Name + ")");
                     }
@@ -125,7 +125,7 @@ namespace TestCases.HSSF.Record.Aggregates
          * This fix in {@link RowRecordsAggregate} was implemented anyway since any {@link
          * UnknownRecord} has the potential of being 'continued'.
          */
-        [TestMethod]
+        [Test]
         public void TestUnknownContinue_bug46280()
         {
             byte[] dummtydata = Encoding.Unicode.GetBytes("dummydata");
@@ -148,7 +148,7 @@ namespace TestCases.HSSF.Record.Aggregates
             {
                 if (e.Message.StartsWith("Unexpected record type"))
                 {
-                    throw new AssertFailedException("Identified bug 46280a");
+                    throw new AssertionException("Identified bug 46280a");
                 }
                 throw e;
             }

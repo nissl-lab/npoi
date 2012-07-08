@@ -20,14 +20,14 @@ namespace TestCases.SS.Formula.Functions
     using NPOI.SS.Formula.Eval;
     using System;
     using NPOI.SS.Formula.Functions;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
 
     /**
      * Tests for {@link Value}
      *
      * @author Josh Micich
      */
-    [TestClass]
+    [TestFixture]
     public class TestValue
     {
 
@@ -50,7 +50,7 @@ namespace TestCases.SS.Formula.Functions
             Assert.AreEqual(typeof(ErrorEval), result.GetType());
             Assert.AreEqual(ErrorEval.VALUE_INVALID, result);
         }
-        [TestMethod]
+        [Test]
         public void TestBasic()
         {
             System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
@@ -77,7 +77,7 @@ namespace TestCases.SS.Formula.Functions
             ConfirmValue("$10e2", 1000);
             ConfirmValue("$1,000e2", 100000);
         }
-        [TestMethod]
+        [Test]
         public void TestErrors()
         {
             ConfirmValueError("1+1");

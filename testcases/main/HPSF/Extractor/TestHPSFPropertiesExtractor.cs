@@ -21,7 +21,7 @@ namespace TestCases.HPSF.Extractor
 
 
 
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
 
     using NPOI.HSSF;
     using NPOI.HSSF.UserModel;
@@ -31,12 +31,12 @@ namespace TestCases.HPSF.Extractor
     using NPOI.HPSF.Extractor;
     using TestCases.HSSF;
 
-    [TestClass]
+    [TestFixture]
     public class TestHPSFPropertiesExtractor
     {
         private static POIDataSamples _samples = POIDataSamples.GetHPSFInstance();
 
-        [TestMethod]
+        [Test]
         public void TestNormalProperties()
         {
             POIFSFileSystem fs = new POIFSFileSystem(_samples.OpenResourceAsStream("TestMickey.doc"));
@@ -60,7 +60,7 @@ namespace TestCases.HPSF.Extractor
             Assert.IsTrue(text.IndexOf("COMPANY = sample company") > -1);
         }
 
-        [TestMethod]
+        [Test]
         public void TestNormalUnicodeProperties()
         {
             POIFSFileSystem fs = new POIFSFileSystem(_samples.OpenResourceAsStream("TestUnicode.xls"));
@@ -84,7 +84,7 @@ namespace TestCases.HPSF.Extractor
             Assert.IsTrue(text.IndexOf("SCALE = False") > -1);
         }
 
-        [TestMethod]
+        [Test]
         public void TestCustomProperties()
         {
             POIFSFileSystem fs = new POIFSFileSystem(
@@ -102,7 +102,7 @@ namespace TestCases.HPSF.Extractor
             Assert.IsTrue(text.IndexOf("Division = sample division") > -1);
         }
 
-        [TestMethod]
+        [Test]
         public void TestConstructors()
         {
             POIFSFileSystem fs;
@@ -129,7 +129,7 @@ namespace TestCases.HPSF.Extractor
             Assert.IsTrue(fsText.IndexOf("TITLE = Titel: \u00c4h") > -1);
         }
 
-        [TestMethod]
+        [Test]
         public void Test42726()
         {
             HPSFPropertiesExtractor ex = new HPSFPropertiesExtractor(HSSFTestDataSamples.OpenSampleWorkbook("42726.xls"));

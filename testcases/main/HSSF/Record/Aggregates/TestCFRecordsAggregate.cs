@@ -21,7 +21,7 @@ namespace TestCases.HSSF.Record.Aggregates
     using System.IO;
     using System.Collections;
 
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
 
     using NPOI.HSSF.Record;
     using NPOI.HSSF.Record.Aggregates;
@@ -36,11 +36,11 @@ namespace TestCases.HSSF.Record.Aggregates
      *
      * @author Dmitriy Kumshayev 
      */
-    [TestClass]
+    [TestFixture]
     public class TestCFRecordsAggregate
     {
 
-        [TestMethod]
+        [Test]
         public void TestCFRecordsAggregate1()
         {
             HSSFWorkbook workbook = new HSSFWorkbook();
@@ -103,7 +103,7 @@ namespace TestCases.HSSF.Record.Aggregates
         /**
          * Make sure that the CF Header record is properly updated with the number of rules
          */
-        [TestMethod]
+        [Test]
         public void TestNRules()
         {
             HSSFWorkbook workbook = new HSSFWorkbook();
@@ -123,7 +123,7 @@ namespace TestCases.HSSF.Record.Aggregates
             int nRules = NPOI.Util.LittleEndian.GetUShort(serializedRecord, 4);
             if (nRules == 0)
             {
-                throw new AssertFailedException("Identified bug 45682 b");
+                throw new AssertionException("Identified bug 45682 b");
             }
             Assert.AreEqual(rules.Length, nRules);
         }

@@ -19,7 +19,7 @@ namespace TestCases.SS.Formula.Functions
 {
 
     using System;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.SS.Formula.Eval;
     using TestCases.SS.Formula.Functions;
     using NPOI.SS.Formula.Functions;
@@ -29,7 +29,7 @@ namespace TestCases.SS.Formula.Functions
      *
      * @author Josh Micich
      */
-    [TestClass]
+    [TestFixture]
     public class TestMatch
     {
         /** less than or equal to */
@@ -53,7 +53,7 @@ namespace TestCases.SS.Formula.Functions
             NumericValueEval nve = (NumericValueEval)actualEval;
             Assert.AreEqual(expected, nve.NumberValue, 0);
         }
-        [TestMethod]
+        [Test]
         public void TestSimpleNumber()
         {
 
@@ -74,7 +74,7 @@ namespace TestCases.SS.Formula.Functions
             ConfirmInt(4, invokeMatch(new NumberEval(20), ae, MATCH_LARGEST_LTE));
             Assert.AreEqual(ErrorEval.NA, invokeMatch(new NumberEval(20), ae, MATCH_EXACT));
         }
-        [TestMethod]
+        [Test]
         public void TestReversedNumber()
         {
 
@@ -95,7 +95,7 @@ namespace TestCases.SS.Formula.Functions
             Assert.AreEqual(ErrorEval.NA, invokeMatch(new NumberEval(20), ae, MATCH_EXACT));
             Assert.AreEqual(ErrorEval.NA, invokeMatch(new NumberEval(26), ae, MATCH_SMALLEST_GTE));
         }
-        [TestMethod]
+        [Test]
         public void TestSimpleString()
         {
 
@@ -117,7 +117,7 @@ namespace TestCases.SS.Formula.Functions
             ConfirmInt(4, invokeMatch(new StringEval("Hugh"), ae, MATCH_LARGEST_LTE));
             Assert.AreEqual(ErrorEval.NA, invokeMatch(new StringEval("Hugh"), ae, MATCH_EXACT));
         }
-        [TestMethod]
+        [Test]
         public void TestSimpleBoolean()
         {
 
@@ -136,7 +136,7 @@ namespace TestCases.SS.Formula.Functions
             ConfirmInt(4, invokeMatch(BoolEval.TRUE, ae, MATCH_LARGEST_LTE));
             ConfirmInt(3, invokeMatch(BoolEval.TRUE, ae, MATCH_EXACT));
         }
-        [TestMethod]
+        [Test]
         public void TestHeterogeneous()
         {
 
@@ -184,7 +184,7 @@ namespace TestCases.SS.Formula.Functions
          * Ensures that the match_type argument can be an <c>AreaEval</c>.<br/>
          * Bugzilla 44421
          */
-        [TestMethod]
+        [Test]
         public void TestMatchArgTypeArea()
         {
 

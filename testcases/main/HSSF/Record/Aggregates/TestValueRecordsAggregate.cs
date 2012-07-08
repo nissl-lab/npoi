@@ -21,7 +21,7 @@ namespace TestCases.HSSF.Record.Aggregates
     using System.IO;
     using System.Collections;
 
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
 
     using NPOI.HSSF.Record;
     using NPOI.HSSF.Record.Aggregates;
@@ -29,17 +29,21 @@ namespace TestCases.HSSF.Record.Aggregates
     using NPOI.HSSF.Model;
     using NPOI.Util;
 
-    [TestClass]
+    [TestFixture]
     public class TestValueRecordsAggregate
     {
         private static String ABNORMAL_SHARED_FORMULA_FLAG_TEST_FILE = "AbnormalSharedFormulaFlag.xls";
         ValueRecordsAggregate valueRecord = new ValueRecordsAggregate();
-
+        [TearDown]
+        public void TearDown()
+        {
+            valueRecord = new ValueRecordsAggregate();
+        }
         /**
          * Make sure the shared formula DOESNT makes it to the FormulaRecordAggregate when being parsed
          * as part of the value records
          */
-        [TestMethod]
+        [Test]
         public void TestSharedFormula()
         {
             IList records = new ArrayList();
@@ -74,7 +78,7 @@ namespace TestCases.HSSF.Record.Aggregates
             records.Add(windowOneRecord);
             return records;
         }
-        [TestMethod]
+        [Test]
         public void TestInsertCell()
         {
             IEnumerator iterator = valueRecord.GetEnumerator();
@@ -85,7 +89,7 @@ namespace TestCases.HSSF.Record.Aggregates
             iterator = valueRecord.GetEnumerator();
             Assert.IsTrue(iterator.MoveNext());
         }
-        [TestMethod]
+        [Test]
         public void TestRemoveCell()
         {
             BlankRecord blankRecord1 = NewBlankRecord();
@@ -99,7 +103,7 @@ namespace TestCases.HSSF.Record.Aggregates
             valueRecord.RemoveCell(blankRecord2);
 
         }
-        [TestMethod]
+        [Test]
         public void TestPhysicalNumberOfCells()
         {
             Assert.AreEqual(0, valueRecord.PhysicalNumberOfCells);
@@ -109,7 +113,7 @@ namespace TestCases.HSSF.Record.Aggregates
             valueRecord.RemoveCell(blankRecord1);
             Assert.AreEqual(0, valueRecord.PhysicalNumberOfCells);
         }
-        [TestMethod]
+        [Test]
         public void TestFirstCellNum()
         {
             Assert.AreEqual(-1, valueRecord.FirstCellNum);
@@ -122,7 +126,7 @@ namespace TestCases.HSSF.Record.Aggregates
             valueRecord.RemoveCell(NewBlankRecord(2, 2));
             Assert.AreEqual(2, valueRecord.FirstCellNum);
         }
-        [TestMethod]
+        [Test]
         public void TestLastCellNum()
         {
             Assert.AreEqual(-1, valueRecord.LastCellNum);
@@ -136,7 +140,7 @@ namespace TestCases.HSSF.Record.Aggregates
             Assert.AreEqual(3, valueRecord.LastCellNum);
 
         }
-        [TestMethod]
+        [Test]
         public void TestSerialize()
         {
             byte[] actualArray = new byte[36];
@@ -205,7 +209,7 @@ namespace TestCases.HSSF.Record.Aggregates
          * There are other variations on this theme to create the same effect.  
          * 
          */
-        [TestMethod]
+        [Test]
         public void TestSpuriousSharedFormulaFlag()
         {
 
@@ -232,7 +236,7 @@ namespace TestCases.HSSF.Record.Aggregates
             cellFormula = GetFormulaFromFirstCell(s, 1); // row "2"
             if (cellFormula.Equals("\"second formula\""))
             {
-                throw new AssertFailedException("found bug 44449 (Wrong SharedFormulaRecord was used).");
+                throw new AssertionException("found bug 44449 (Wrong SharedFormulaRecord was used).");
             }
             if (!cellFormula.Equals("\"first formula\""))
             {
@@ -282,7 +286,7 @@ namespace TestCases.HSSF.Record.Aggregates
             CRC32 crc = new CRC32();
             return crc.StreamCRC(is1);
         }
-        [TestMethod]
+        [Test]
         public void TestRemoveNewRow_bug46312()
         {
             // To make bug occur, rowIndex needs to be >= ValueRecordsAggregate.records.length
@@ -297,7 +301,7 @@ namespace TestCases.HSSF.Record.Aggregates
             {
                 if (e.Message.Equals("Specified rowIndex 30 is outside the allowable range (0..30)"))
                 {
-                    throw new AssertFailedException("Identified bug 46312");
+                    throw new AssertionException("Identified bug 46312");
                 }
                 throw e;
             }
@@ -313,7 +317,7 @@ namespace TestCases.HSSF.Record.Aggregates
             //    try {
             //        sheet.CreateRow(rowIndex);
             //    } catch (ArgumentException e) {
-            //        throw new AssertFailedException("Identified bug 46312");
+            //        throw new AssertionException("Identified bug 46312");
             //    }
             //}
         }
@@ -322,7 +326,7 @@ namespace TestCases.HSSF.Record.Aggregates
          * Tests various manipulations of blank cells, to make sure that {@link MulBlankRecord}s
          * are use appropriately
          */
-        [TestMethod]
+        [Test]
         public void TestMultipleBlanks()
         {
             BlankRecord brA2 = NewBlankRecord(0, 1);

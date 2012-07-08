@@ -21,7 +21,7 @@ namespace TestCases.HSSF.Record
 {
     using System;
 
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.Util;
     using TestCases.HSSF.Record;
     using NPOI.HSSF.Record;
@@ -29,7 +29,7 @@ namespace TestCases.HSSF.Record
     /**
      * @author Yegor Kozlov
      */
-    [TestClass]
+    [TestFixture]
     public class TestExtSSTRecord
     {
 
@@ -840,7 +840,7 @@ namespace TestCases.HSSF.Record
         /**
          *  ExtSSTRecord can be continued. Ensure we properly read the continue remainder.
          */
-        [TestMethod]
+        [Test]
         public void Test50967()
         {
             byte[] bytes = HexRead.ReadFromString(data_50967);

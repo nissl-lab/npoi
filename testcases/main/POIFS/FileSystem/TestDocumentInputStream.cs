@@ -30,7 +30,7 @@ using System;
 using System.Collections;
 using System.IO;
 
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 using NPOI.POIFS.FileSystem;
 using NPOI.Util;
@@ -45,7 +45,7 @@ namespace TestCases.POIFS.FileSystem
      *
      * @author Marc Johnson
      */
-    [TestClass]
+    [TestFixture]
     public class TestDocumentInputStream
     {
         //private DocumentNode _workbook;
@@ -108,7 +108,7 @@ namespace TestCases.POIFS.FileSystem
          *
          * @exception IOException
          */
-        [TestMethod]
+        [Test]
         public void TestConstructor()
         {
             DocumentInputStream ostream = new DocumentInputStream(_workbook_o);
@@ -125,7 +125,7 @@ namespace TestCases.POIFS.FileSystem
          *
          * @exception IOException
          */
-        [TestMethod]
+        [Test]
         public void TestAvailable()
         {
             DocumentInputStream ostream = new DocumentInputStream(_workbook_o);
@@ -161,7 +161,7 @@ namespace TestCases.POIFS.FileSystem
          *
          * @exception IOException
          */
-        [TestMethod]
+        [Test]
         public void TestMarkFunctions()
         {
             byte[] buffer = new byte[_workbook_size / 5];
@@ -302,7 +302,7 @@ namespace TestCases.POIFS.FileSystem
          *
          * @exception IOException
          */
-        [TestMethod]
+        [Test]
         public void TestReadSingleByte()
         {
             DocumentInputStream[] streams = new DocumentInputStream[] {
@@ -347,7 +347,7 @@ namespace TestCases.POIFS.FileSystem
          *
          * @exception IOException
          */
-        [TestMethod]
+        [Test]
         public void TestBufferRead()
         {
             DocumentInputStream[] streams = new DocumentInputStream[] {
@@ -420,7 +420,7 @@ namespace TestCases.POIFS.FileSystem
          *
          * @exception IOException
          */
-        [TestMethod]
+        [Test]
         public void TestComplexBufferRead()
         {
             DocumentInputStream[] streams = new DocumentInputStream[] {
@@ -536,7 +536,7 @@ namespace TestCases.POIFS.FileSystem
          *
          * @exception IOException
          */
-        [TestMethod]
+        [Test]
         public void TestSkip()
         {
             DocumentInputStream[] streams = new DocumentInputStream[] {
@@ -571,7 +571,7 @@ namespace TestCases.POIFS.FileSystem
         /**
      * Test that we can read files at multiple levels down the tree
      */
-        [TestMethod]
+        [Test]
         public void TestReadMultipleTreeLevels()
         {
             POIDataSamples _samples = POIDataSamples.GetPublisherInstance();

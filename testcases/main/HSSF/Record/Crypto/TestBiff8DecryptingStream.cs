@@ -19,7 +19,7 @@ namespace TestCases.HSSF.Record.Crypto
 {
     using System;
     using System.IO;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.Util;
     using TestCases.Exceptions;
     using NPOI.HSSF.Record.Crypto;
@@ -29,7 +29,7 @@ namespace TestCases.HSSF.Record.Crypto
      *
      * @author Josh Micich
      */
-    [TestClass]
+    [TestFixture]
     public class TestBiff8DecryptingStream
     {
 
@@ -168,7 +168,7 @@ namespace TestCases.HSSF.Record.Crypto
         /**
          * Tests Reading of 64,32,16 and 8 bit integers aligned with key changing boundaries
          */
-        [TestMethod]
+        [Test]
         public void TestReadsAlignedWithBoundary()
         {
             StreamTester st = CreateStreamTester(0x50, "BA AD F0 0D 00",  unchecked((int)0x96C66829));
@@ -191,7 +191,7 @@ namespace TestCases.HSSF.Record.Crypto
         /**
          * Tests Reading of 64,32 and 16 bit integers <i>across</i> key changing boundaries
          */
-        [TestMethod]
+        [Test]
         public void TestReadsSpanningBoundary()
         {
             StreamTester st = CreateStreamTester(0x50, "BA AD F0 0D 00",  unchecked((int)0x96C66829));
@@ -209,7 +209,7 @@ namespace TestCases.HSSF.Record.Crypto
          * Checks that the BIFF header fields (sid, size) Get read without Applying decryption,
          * and that the RC4 stream stays aligned during these calls
          */
-        [TestMethod]
+        [Test]
         public void TestReadHeaderUshort()
         {
             StreamTester st = CreateStreamTester(0x50, "BA AD F0 0D 00",  unchecked((int)0x96C66829));
@@ -221,13 +221,13 @@ namespace TestCases.HSSF.Record.Crypto
             int nextInt = bds.ReadInt();
             if (nextInt == unchecked((int)0x8F534029))
             {
-                throw new AssertFailedException(
+                throw new AssertionException(
                         "Indentified bug in key alignment After call to ReadHeaderUshort()");
             }
             Assert.AreEqual(0x16885243, nextInt);
             if (hval == 0x283E)
             {
-                throw new AssertFailedException("readHeaderUshort() incorrectly decrypted result");
+                throw new AssertionException("readHeaderUshort() incorrectly decrypted result");
             }
             Assert.AreEqual(0x504F, hval);
 
@@ -241,7 +241,7 @@ namespace TestCases.HSSF.Record.Crypto
         /**
          * Tests Reading of byte sequences <i>across</i> and <i>aligned with</i> key changing boundaries
          */
-        [TestMethod]
+        [Test]
         public void TestReadByteArrays()
         {
             StreamTester st = CreateStreamTester(0x50, "BA AD F0 0D 00", unchecked((int)0x96C66829));

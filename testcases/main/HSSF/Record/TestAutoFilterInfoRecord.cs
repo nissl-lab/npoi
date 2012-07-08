@@ -18,7 +18,7 @@
 namespace TestCases.HSSF.Record
 {
 
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.HSSF.Record.AutoFilter;
     using NPOI.Util;
 
@@ -27,13 +27,13 @@ namespace TestCases.HSSF.Record
      *
      * @author Yegor Kozlov
      */
-    [TestClass]
+    [TestFixture]
     public class TestAutoFilterInfoRecord
     {
         private byte[] data = new byte[] {
         0x05, 0x00
     };
-        [TestMethod]
+        [Test]
         public void TestRead()
         {
 
@@ -45,7 +45,7 @@ namespace TestCases.HSSF.Record
             record.NumEntries = (/*setter*/(short)3);
             Assert.AreEqual(3, record.NumEntries);
         }
-        [TestMethod]
+        [Test]
         public void TestWrite()
         {
             AutoFilterInfoRecord record = new AutoFilterInfoRecord();
@@ -56,7 +56,7 @@ namespace TestCases.HSSF.Record
             record = new AutoFilterInfoRecord(TestcaseRecordInputStream.Create(ser));
             Assert.AreEqual(3, record.NumEntries);
         }
-        [TestMethod]
+        [Test]
         public void TestClone()
         {
             AutoFilterInfoRecord record = new AutoFilterInfoRecord();

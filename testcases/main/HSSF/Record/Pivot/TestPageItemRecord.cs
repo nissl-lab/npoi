@@ -18,7 +18,7 @@
 namespace TestCases.HSSF.Record.Pivot
 {
     using System;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.HSSF.Record;
     using NPOI.HSSF.Record.PivotTable;
     using NPOI.Util;
@@ -29,11 +29,11 @@ namespace TestCases.HSSF.Record.Pivot
      * 
      * @author Josh Micich
      */
-    [TestClass]
+    [TestFixture]
     public class TestPageItemRecord
     {
 
-        [TestMethod]
+        [Test]
         public void TestMoreThanOneInfoItem_bug46917()
         {
             byte[] data = HexRead.ReadFromString("01 02 03 04 05 06 07 08 09 0A 0B 0C");
@@ -41,14 +41,14 @@ namespace TestCases.HSSF.Record.Pivot
             PageItemRecord rec = new PageItemRecord(in1);
             if (in1.Remaining == 6)
             {
-                throw new AssertFailedException("Identified bug 46917");
+                throw new AssertionException("Identified bug 46917");
             }
             Assert.AreEqual(0, in1.Remaining);
 
             Assert.AreEqual(4 + data.Length, rec.RecordSize);
         }
 
-        [TestMethod]
+        [Test]
         public void TestSerialize()
         {
             ConfirmSerialize("01 02 03 04 05 06");
