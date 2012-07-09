@@ -317,7 +317,7 @@ namespace NPOI.HPSF
                             (int)Math.Min(buffer.Length, dis.Available()));
             bool isPropertySetStream =
                 IsPropertySetStream(buffer, 0, bytes);
-            stream.Seek(0, SeekOrigin.Begin);
+            //stream.Seek(0, SeekOrigin.Begin);
             dis.Reset();
             return isPropertySetStream;
         }

@@ -109,7 +109,8 @@ namespace TestCases.HPSF.Basic
         [Test]
         public void TestNoFormatID()
         {
-            using (FileStream file = _samples.GetFile(POI_FS))
+            FileInfo fi = TempFile.CreateTempFile(POI_FS, ".doc");
+            using (FileStream file = new FileStream(fi.FullName, FileMode.Open, FileAccess.ReadWrite))
             {
                 //FileStream filename = File.OpenRead(dataDir + POI_FS);
                 //filename.deleteOnExit();
@@ -144,6 +145,13 @@ namespace TestCases.HPSF.Basic
                     out1.Close();
                 }
             }
+            try
+            {
+                File.Delete(fi.FullName);
+            }
+            catch
+            {
+            }
         }
 
 
@@ -159,8 +167,8 @@ namespace TestCases.HPSF.Basic
         [Test]
         public void TestWriteEmptyPropertySet()
         {
-
-            using (FileStream file = _samples.GetFile(POI_FS))
+            FileInfo fi = TempFile.CreateTempFile(POI_FS, ".doc");
+            using (FileStream file = new FileStream(fi.FullName, FileMode.Open, FileAccess.ReadWrite))
             {
                 //filename.deleteOnExit();
 
@@ -186,6 +194,13 @@ namespace TestCases.HPSF.Basic
                 reader3.Read(file);
                 file.Close();
                 //File.Delete(dataDir + POI_FS);
+            }
+            try
+            {
+                File.Delete(fi.FullName);
+            }
+            catch
+            {
             }
         }
 
@@ -218,7 +233,8 @@ namespace TestCases.HPSF.Basic
             String AUTHOR = "Rainer Klute";
             String TITLE = "Test Document";
 
-            FileStream file = _samples.GetFile(POI_FS);
+            FileInfo fi = TempFile.CreateTempFile(POI_FS, ".doc");
+            FileStream file = new FileStream(fi.FullName, FileMode.Open, FileAccess.ReadWrite);
 
             FileStream out1 = file;
             POIFSFileSystem poiFs = new POIFSFileSystem();
@@ -255,6 +271,13 @@ namespace TestCases.HPSF.Basic
             Assert.AreEqual(AUTHOR, p1);
             Assert.AreEqual(TITLE, p2);
             file.Close();
+            try
+            {
+                File.Delete(fi.FullName);
+            }
+            catch
+            {
+            }
         }
         private class POIFSReaderListener1 : POIFSReaderListener
         {
@@ -286,7 +309,8 @@ namespace TestCases.HPSF.Basic
             String SECTION1 = "Section 1";
             String SECTION2 = "Section 2";
 
-            FileStream file = _samples.GetFile(POI_FS);
+            FileInfo fi = TempFile.CreateTempFile(POI_FS, ".doc");
+            FileStream file = new FileStream(fi.FullName, FileMode.Open, FileAccess.ReadWrite);
             //filename.deleteOnExit();
             FileStream out1 = file;
 
@@ -329,6 +353,13 @@ namespace TestCases.HPSF.Basic
 
             file.Close();
             //File.Delete(dataDir + POI_FS);
+            try
+            {
+                File.Delete(fi.FullName);
+            }
+            catch
+            {
+            }
         }
         private class POIFSReaderListener2 : POIFSReaderListener
         {
@@ -649,15 +680,18 @@ namespace TestCases.HPSF.Basic
         public void TestRecreate()
         {
             string[] files = _samples.GetFiles();
-
             for (int i = 0; i < files.Length; i++)
             {
-                if (files[i].EndsWith("1")
-                    || files[i].EndsWith("TestHPSFWritingFunctionality.doc")
-                    || files[i].EndsWith("excel_with_embeded.xls"))
-                    continue;
+                string filename = Path.GetFileName(files[i]);
+                if (filename.StartsWith("Test"))
+                {
+                    //if (files[i].EndsWith("1")
+                    //    || files[i].EndsWith("TestHPSFWritingFunctionality.doc")
+                    //    || files[i].EndsWith("excel_with_embeded.xls"))
+                    //    continue;
 
-                TestRecreate(new FileInfo(files[i]));
+                    TestRecreate(new FileInfo(files[i]));
+                }
             }
         }
 
@@ -713,7 +747,8 @@ namespace TestCases.HPSF.Basic
 
                 /* Compare the property Set stream with the corresponding one
                  * from the origin file and check whether they are equal. */
-                Assert.IsTrue(ps1.Equals(ps2));
+                
+                Assert.AreEqual(ps1, ps2, "Equality for file " + f.Name);
             }
             out1.Close();
         }

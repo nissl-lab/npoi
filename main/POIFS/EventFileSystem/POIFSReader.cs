@@ -217,6 +217,7 @@ namespace NPOI.POIFS.EventFileSystem
                     POIFSDocument document = null;
                     if (listeners.MoveNext())
                     {
+                        listeners.Reset();
                         int size = property.Size;
                         
 
@@ -232,15 +233,15 @@ namespace NPOI.POIFS.EventFileSystem
                                 new POIFSDocument(name, big_blocks
                                     .FetchBlocks(startBlock, -1), size);
                         }
-                        POIFSReaderListener listener =
-                                (POIFSReaderListener)listeners.Current;
-                        listener.ProcessPOIFSReaderEvent(
-                                new POIFSReaderEvent(
-                                    new DocumentInputStream(document), path,
-                                    name));
+                        //POIFSReaderListener listener =
+                        //        (POIFSReaderListener)listeners.Current;
+                        //listener.ProcessPOIFSReaderEvent(
+                        //        new POIFSReaderEvent(
+                        //            new DocumentInputStream(document), path,
+                        //            name));
                         while (listeners.MoveNext())
                         {
-                            listener =
+                            POIFSReaderListener listener =
                                 (POIFSReaderListener)listeners.Current;
                             listener.ProcessPOIFSReaderEvent(
                                 new POIFSReaderEvent(
@@ -259,8 +260,8 @@ namespace NPOI.POIFS.EventFileSystem
                         {
                             big_blocks.FetchBlocks(startBlock, -1);
                         }
-                        documents.Add(
-                                new DocumentDescriptor(path, name));
+                        //documents.Add(
+                        //        new DocumentDescriptor(path, name));
                         //fire event
                         //OnStreamReaded(new POIFSReaderEventArgs(name, path, document));
                     }

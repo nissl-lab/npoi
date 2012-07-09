@@ -44,6 +44,7 @@ namespace TestCases.HSSF.Record
         [Test]
         public void TestBasic()
         {
+            strings.Clear();
             strings.Add(MakeUnicodeString(SMALL_STRING));
             ConfirmSize(SSTRecord.SST_RECORD_OVERHEAD
                     + COMPRESSED_PLAIN_STRING_OVERHEAD
@@ -52,6 +53,7 @@ namespace TestCases.HSSF.Record
         [Test]
         public void TestBigStringAcrossUnicode()
         {
+            strings.Clear();
             String bigString = new String(new char[SSTRecord.MAX_DATA_SPACE + 100]);
             strings.Add(MakeUnicodeString(bigString));
             ConfirmSize(SSTRecord.SST_RECORD_OVERHEAD
@@ -64,6 +66,7 @@ namespace TestCases.HSSF.Record
         [Test]
         public void TestPerfectFit()
         {
+            strings.Clear();
             int perfectFit = SSTRecord.MAX_DATA_SPACE - COMPRESSED_PLAIN_STRING_OVERHEAD;
             strings.Add(MakeUnicodeString(perfectFit));
             ConfirmSize(SSTRecord.SST_RECORD_OVERHEAD
@@ -73,6 +76,7 @@ namespace TestCases.HSSF.Record
         [Test]
         public void TestJustOversized()
         {
+            strings.Clear();
             int tooBig = SSTRecord.MAX_DATA_SPACE - COMPRESSED_PLAIN_STRING_OVERHEAD + 1;
             strings.Add(MakeUnicodeString(tooBig));
             ConfirmSize(SSTRecord.SST_RECORD_OVERHEAD
@@ -85,6 +89,7 @@ namespace TestCases.HSSF.Record
         [Test]
         public void TestSecondStringStartsOnNewContinuation()
         {
+            strings.Clear();
             int perfectFit = SSTRecord.MAX_DATA_SPACE - COMPRESSED_PLAIN_STRING_OVERHEAD;
             strings.Add(MakeUnicodeString(perfectFit));
             strings.Add(MakeUnicodeString(SMALL_STRING));
@@ -98,6 +103,7 @@ namespace TestCases.HSSF.Record
         [Test]
         public void TestHeaderCrossesNormalContinuePoint()
         {
+            strings.Clear();
             int almostPerfectFit = SSTRecord.MAX_DATA_SPACE - COMPRESSED_PLAIN_STRING_OVERHEAD - 2;
             strings.Add(MakeUnicodeString(almostPerfectFit));
             String oneCharString = new String(new char[1]);

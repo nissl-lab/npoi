@@ -116,6 +116,12 @@ namespace NPOI.Util
         {
             return elements.GetEnumerator();
         }
+
+        public void Clear()
+        {
+            elements.Clear();
+            valueKeyMap.Clear();
+        }
     }   // end public class IntMapper
 
 
