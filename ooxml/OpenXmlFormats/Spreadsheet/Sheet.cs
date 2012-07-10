@@ -740,7 +740,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.customSheetViewsField = value;
             }
         }
-
+        [XmlElement]
         public CT_MergeCells mergeCells
         {
             get
@@ -752,7 +752,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.mergeCellsField = value;
             }
         }
-
+        [XmlElement]
         public CT_PhoneticPr phoneticPr
         {
             get
@@ -764,7 +764,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.phoneticPrField = value;
             }
         }
-
+        [XmlElement]
         public List<CT_ConditionalFormatting> conditionalFormatting
         {
             get
@@ -776,7 +776,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.conditionalFormattingField = value;
             }
         }
-
+        [XmlElement]
         public CT_DataValidations dataValidations
         {
             get
@@ -802,7 +802,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.hyperlinksField = value;
             }
         }
-
+        [XmlElement]
         public CT_PrintOptions printOptions
         {
             get
@@ -827,7 +827,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.pageMarginsField = value;
             }
         }
-
+        [XmlElement]
         public CT_PageSetup pageSetup
         {
             get
@@ -839,7 +839,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.pageSetupField = value;
             }
         }
-
+        [XmlElement]
         public CT_HeaderFooter headerFooter
         {
             get
@@ -851,7 +851,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.headerFooterField = value;
             }
         }
-
+        [XmlElement]
         public CT_PageBreak rowBreaks
         {
             get
@@ -863,7 +863,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.rowBreaksField = value;
             }
         }
-
+        [XmlElement]
         public CT_PageBreak colBreaks
         {
             get
@@ -905,7 +905,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.cellWatchesField = value;
             }
         }
-
+        [XmlElement]
         public CT_IgnoredErrors ignoredErrors
         {
             get
@@ -932,7 +932,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.smartTagsField = value;
             }
         }
-
+        [XmlElement]
         public CT_Drawing drawing
         {
             get
@@ -944,7 +944,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.drawingField = value;
             }
         }
-
+        [XmlElement]
         public CT_LegacyDrawing legacyDrawing
         {
             get
@@ -956,7 +956,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.legacyDrawingField = value;
             }
         }
-
+        [XmlElement]
         public CT_LegacyDrawing legacyDrawingHF
         {
             get
@@ -968,7 +968,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.legacyDrawingHFField = value;
             }
         }
-
+        [XmlElement]
         public CT_SheetBackgroundPicture picture
         {
             get
@@ -983,7 +983,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         //[XmlArray(Order = 33)]
         //[XmlArrayItem("oleObject", IsNullable = false)]
-        [XmlElement("oleObject")]
+        [XmlElement("oleObjects")]
         public List<CT_OleObject> oleObjects
         {
             get
@@ -1010,7 +1010,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.controlsField = value;
             }
         }
-
+        [XmlElement]
         public CT_WebPublishItems webPublishItems
         {
             get
@@ -1022,7 +1022,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.webPublishItemsField = value;
             }
         }
-
+        [XmlElement]
         public CT_TableParts tableParts
         {
             get
@@ -1034,7 +1034,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.tablePartsField = value;
             }
         }
-
+        [XmlElement]
         public CT_ExtensionList extLst
         {
             get
@@ -6129,7 +6129,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.gridLinesField = false;
             this.gridLinesSetField = true;
         }
-
+        [XmlAttribute]
         [DefaultValue(false)]
         public bool horizontalCentered
         {
@@ -6142,7 +6142,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.horizontalCenteredField = value;
             }
         }
-
+        [XmlAttribute]
         [DefaultValue(false)]
         public bool verticalCentered
         {
@@ -6155,7 +6155,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.verticalCenteredField = value;
             }
         }
-
+        [XmlAttribute]
         [DefaultValue(false)]
         public bool headings
         {
@@ -6168,7 +6168,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.headingsField = value;
             }
         }
-
+        [XmlAttribute]
         [DefaultValue(false)]
         public bool gridLines
         {
@@ -6181,7 +6181,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.gridLinesField = value;
             }
         }
-
+        [XmlAttribute]
         [DefaultValue(true)]
         public bool gridLinesSet
         {
@@ -6722,7 +6722,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             mergeCell.Add(mergecell);
             return mergecell;
         }
-
+        [XmlElement]
         public List<CT_MergeCell> mergeCell
         {
             get
@@ -6734,7 +6734,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.mergeCellField = value;
             }
         }
-
+        [XmlAttribute]
         public uint count
         {
             get
@@ -6767,7 +6767,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     {
 
         private string refField;
-
+        [XmlAttribute]
         public string @ref
         {
             get
@@ -9130,7 +9130,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.tablePart.Add(tp);
             return tp;
         }
-
+        [XmlElement]
         public List<CT_TablePart> tablePart
         {
             get
@@ -9142,7 +9142,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.tablePartField = value;
             }
         }
-
+        [XmlAttribute]
         public uint count
         {
             get

@@ -27,6 +27,8 @@ using System.Xml;
 using System.Collections;
 using NPOI.OpenXmlFormats.Vml.Office;
 using NPOI.OpenXmlFormats.Vml.Spreadsheet;
+using System.Text;
+using ICSharpCode.SharpZipLib.Zip.Compression.Streams;
 
 namespace NPOI.XSSF.UserModel
 {
@@ -101,8 +103,15 @@ namespace NPOI.XSSF.UserModel
         internal void Read(Stream is1)
         {
             XmlDocument doc = new XmlDocument();
-             doc.Load(
-                  new EvilUnclosedBRFixingInputStream(is1)
+
+            InflaterInputStream iis = (InflaterInputStream)is1;
+            StreamReader sr=new StreamReader(iis);
+            string data = sr.ReadToEnd();
+            
+            //Stream vmlsm = new EvilUnclosedBRFixingInputStream(is1); --TODO:: add later
+            
+             doc.LoadXml(
+                  data
             );
 
              XmlNamespaceManager nsmgr = new XmlNamespaceManager(doc.NameTable);
