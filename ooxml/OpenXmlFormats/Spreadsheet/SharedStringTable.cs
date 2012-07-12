@@ -176,7 +176,6 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.horizontalField = value;
             }
         }
-
         [XmlIgnore]
         public bool horizontalSpecified
         {
@@ -803,7 +802,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         public CT_Sst()
         {
-            this.extLstField = new CT_ExtensionList();
+            //this.extLstField = new CT_ExtensionList();
             this.siField = new List<CT_Rst>();
         }
 

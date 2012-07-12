@@ -89,15 +89,15 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         private string rField = ""; // [1..1] the cell reference, type: ST_CellRef
 
-        private int? iField = null; // [0..1], Sheet Id, default 0
+        private int iField = 0; // [0..1], Sheet Id, default 0
 
-        private bool? sField = null; // [0..1], child chain, default false
+        private bool sField = false; // [0..1], child chain, default false
 
-        private bool? lField = null; // [0..1], new dependency level, default false
+        private bool lField = false; // [0..1], new dependency level, default false
 
-        private bool? tField = null; // [0..1], new thread, default false
+        private bool tField = false; // [0..1], new thread, default false
 
-        private bool? aField = null; // [0..1], array, default false
+        private bool aField = false; // [0..1], array, default false
 
         [XmlAttribute]
         public string r
@@ -118,17 +118,25 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             get
             {
-                return null == this.iField ? 0 : (int)this.iField;
+                return this.iField;
             }
             set
             {
                 this.iField = value;
             }
         }
+        bool iSpecifiedField = false;
         [XmlIgnore]
         public bool iSpecified
         {
-            get { return null != this.iField; }
+            get 
+            {
+                return iSpecifiedField;
+            }
+            set 
+            {
+                iSpecifiedField = value;
+            }
         }
 
         [XmlAttribute]
@@ -137,17 +145,12 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             get
             {
-                return null == this.sField ? false : (bool)this.sField;
+                return this.sField;
             }
             set
             {
                 this.sField = value;
             }
-        }
-        [XmlIgnore]
-        public bool sSpecified
-        {
-            get { return null != this.sField; }
         }
 
         [XmlAttribute]
@@ -156,17 +159,12 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             get
             {
-                return null == this.lField ? false : (bool)this.lField;
+                return this.lField;
             }
             set
             {
                 this.lField = value;
             }
-        }
-        [XmlIgnore]
-        public bool lSpecified
-        {
-            get { return null != this.lField; }
         }
 
         [XmlAttribute]
@@ -175,17 +173,12 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             get
             {
-                return null == this.tField ? false : (bool)this.tField;
+                return this.tField;
             }
             set
             {
                 this.tField = value;
             }
-        }
-        [XmlIgnore]
-        public bool tSpecified
-        {
-            get { return null != this.tField; }
         }
 
         [XmlAttribute]
@@ -194,17 +187,12 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             get
             {
-                return null == this.aField ? false : (bool)this.aField;
+                return this.aField;
             }
             set
             {
                 this.aField = value;
             }
-        }
-        [XmlIgnore]
-        public bool aSpecified
-        {
-            get { return null != this.aField; }
         }
     }
 

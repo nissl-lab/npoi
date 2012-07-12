@@ -37,7 +37,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         private CT_FunctionGroups functionGroupsField;
 
-        private List<CT_ExternalReference> externalReferencesField;
+        private CT_ExternalReferences externalReferencesField;
 
         private CT_DefinedNames definedNamesField = null;
 
@@ -45,13 +45,13 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         private CT_OleSize oleSizeField;
 
-        private List<CT_CustomWorkbookView> customWorkbookViewsField;
+        private CT_CustomWorkbookViews customWorkbookViewsField;
 
-        private List<CT_PivotCache> pivotCachesField;
+        private CT_PivotCaches pivotCachesField;
 
         private CT_SmartTagPr smartTagPrField;
 
-        private List<CT_SmartTagType> smartTagTypesField;
+        private CT_SmartTagTypes smartTagTypesField;
 
         private CT_WebPublishing webPublishingField;
 
@@ -63,25 +63,25 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         public CT_Workbook()
         {
-            this.extLstField = new CT_ExtensionList();
-            this.webPublishObjectsField = new CT_WebPublishObjects();
-            this.fileRecoveryPrField = new List<CT_FileRecoveryPr>();
-            this.webPublishingField = new CT_WebPublishing();
-            this.smartTagTypesField = new List<CT_SmartTagType>();
-            this.smartTagPrField = new CT_SmartTagPr();
-            this.pivotCachesField = new List<CT_PivotCache>();
-            this.customWorkbookViewsField = new List<CT_CustomWorkbookView>();
-            this.oleSizeField = new CT_OleSize();
+            //this.extLstField = new CT_ExtensionList();
+            //this.webPublishObjectsField = new CT_WebPublishObjects();
+            //this.fileRecoveryPrField = new List<CT_FileRecoveryPr>();
+            //this.webPublishingField = new CT_WebPublishing();
+            //this.smartTagTypesField = new List<CT_SmartTagType>();
+            //this.smartTagPrField = new CT_SmartTagPr();
+            //this.pivotCachesField = new List<CT_PivotCache>();
+            //this.customWorkbookViewsField = new List<CT_CustomWorkbookView>();
+            //this.oleSizeField = new CT_OleSize();
             //this.calcPrField = new CT_CalcPr();
             //this.definedNamesField = new List<CT_DefinedName>();
-            this.externalReferencesField = new List<CT_ExternalReference>();
-            this.functionGroupsField = new CT_FunctionGroups();
+            //this.externalReferencesField = new List<CT_ExternalReference>();
+            //this.functionGroupsField = new CT_FunctionGroups();
             //this.sheetsField = new List<CT_Sheet>();
             //this.bookViewsField = new List<CT_BookView>();
-            this.workbookProtectionField = new CT_WorkbookProtection();
+            //this.workbookProtectionField = new CT_WorkbookProtection();
             //this.workbookPrField = new CT_WorkbookPr();
-            this.fileSharingField = new CT_FileSharing();
-            this.fileVersionField = new CT_FileVersion();
+            //this.fileSharingField = new CT_FileSharing();
+            //this.fileVersionField = new CT_FileVersion();
         }
         public void Save(Stream stream)
         {
@@ -155,12 +155,6 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.fileVersionField = value;
             }
         }
-        [XmlIgnore]
-        public bool fileVersionSpecified
-        {
-            get { return false; } // TODO
-        }
-
         [XmlElement]
         public CT_FileSharing fileSharing
         {
@@ -172,11 +166,6 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             {
                 this.fileSharingField = value;
             }
-        }
-        [XmlIgnore]
-        public bool fileSharingSpecified
-        {
-            get { return false; } // TODO
         }
 
         [XmlElement]
@@ -191,11 +180,6 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.workbookPrField = value;
             }
         }
-        [XmlIgnore]
-        public bool workbookPrSpecified
-        {
-            get { return false; } // TODO
-        }
 
         [XmlElement]
         public CT_WorkbookProtection workbookProtection
@@ -209,11 +193,6 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.workbookProtectionField = value;
             }
         }
-        [XmlIgnore]
-        public bool workbookProtectionSpecified
-        {
-            get { return false; } // TODO
-        }
 
         [XmlElement("bookViews", IsNullable = false)]
         public CT_BookViews bookViews
@@ -226,11 +205,6 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             {
                 this.bookViewsField = value;
             }
-        }
-        [XmlIgnore]
-        public bool bookViewsSpecified
-        {
-            get { return null != this.bookViewsField; }
         }
 
 
@@ -259,16 +233,11 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.functionGroupsField = value;
             }
         }
-        [XmlIgnore]
-        public bool functionGroupsSpecified
-        {
-            get { return false; } // TODO
-        }
 
         //[XmlArray(Order = 7)]
         //[XmlArrayItem("externalReference", IsNullable = false)]
-        [XmlElement("externalReference")]
-        public List<CT_ExternalReference> externalReferences
+        [XmlElement]
+        public CT_ExternalReferences externalReferences
         {
             get
             {
@@ -278,11 +247,6 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             {
                 this.externalReferencesField = value;
             }
-        }
-        [XmlIgnore]
-        public bool externalReferencesSpecified
-        {
-            get { return false; } // TODO
         }
 
         //[XmlArray(Order = 8)]
@@ -299,11 +263,6 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.definedNamesField = value;
             }
         }
-        [XmlIgnore]
-        public bool definedNamesSpecified
-        {
-            get { return false; } // TODO
-        }
 
         [XmlElement]
         public CT_CalcPr calcPr
@@ -316,11 +275,6 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             {
                 this.calcPrField = value;
             }
-        }
-        [XmlIgnore]
-        public bool calcPrSpecified
-        {
-            get { return false; } // TODO
         }
 
         [XmlElement]
@@ -335,16 +289,11 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.oleSizeField = value;
             }
         }
-        [XmlIgnore]
-        public bool oleSizeSpecified
-        {
-            get { return false; } // TODO
-        }
 
         //[XmlArray(Order = 11)]
         //[XmlArrayItem("customWorkbookView", IsNullable = false)]
         [XmlElement]
-        public List<CT_CustomWorkbookView> customWorkbookViews
+        public CT_CustomWorkbookViews customWorkbookViews
         {
             get
             {
@@ -355,16 +304,11 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.customWorkbookViewsField = value;
             }
         }
-        [XmlIgnore]
-        public bool customWorkbookViewsSpecified
-        {
-            get { return false; } // TODO
-        }
 
         //[XmlArray(Order = 12)]
         //[XmlArrayItem("pivotCache", IsNullable = false)]
         [XmlElement]
-        public List<CT_PivotCache> pivotCaches
+        public CT_PivotCaches pivotCaches
         {
             get
             {
@@ -374,11 +318,6 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             {
                 this.pivotCachesField = value;
             }
-        }
-        [XmlIgnore]
-        public bool pivotCachesSpecified
-        {
-            get { return false; } // TODO
         }
 
         [XmlElement]
@@ -393,16 +332,11 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.smartTagPrField = value;
             }
         }
-        [XmlIgnore]
-        public bool smartTagPrSpecified
-        {
-            get { return false; } // TODO
-        }
 
         //[XmlArray(Order = 14)]
         //[XmlArrayItem("smartTagType", IsNullable = false)]
         [XmlElement]
-        public List<CT_SmartTagType> smartTagTypes
+        public CT_SmartTagTypes smartTagTypes
         {
             get
             {
@@ -412,11 +346,6 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             {
                 this.smartTagTypesField = value;
             }
-        }
-        [XmlIgnore]
-        public bool smartTagTypesSpecified
-        {
-            get { return false; } // TODO
         }
 
         [XmlElement]
@@ -431,11 +360,6 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.webPublishingField = value;
             }
         }
-        [XmlIgnore]
-        public bool webPublishingSpecified
-        {
-            get { return false; } // TODO
-        }
 
         [XmlElement]
         public List<CT_FileRecoveryPr> fileRecoveryPr
@@ -448,11 +372,6 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             {
                 this.fileRecoveryPrField = value;
             }
-        }
-        [XmlIgnore]
-        public bool fileRecoveryPrSpecified
-        {
-            get { return false; } // TODO
         }
 
         [XmlElement]
@@ -467,11 +386,6 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.webPublishObjectsField = value;
             }
         }
-        [XmlIgnore]
-        public bool webPublishObjectsSpecified
-        {
-            get { return false; } // TODO
-        }
 
         [XmlElement]
         public CT_ExtensionList extLst
@@ -485,12 +399,6 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.extLstField = value;
             }
         }
-        [XmlIgnore]
-        public bool extLstSpecified
-        {
-            get { return false; } // TODO
-        }
-
     }
 
     [Serializable]
@@ -508,6 +416,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         private string codeNameField;
 
+        [XmlAttribute]
         public string appName
         {
             get
@@ -519,7 +428,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.appNameField = value;
             }
         }
-
+        [XmlAttribute]
         public string lastEdited
         {
             get
@@ -531,7 +440,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.lastEditedField = value;
             }
         }
-
+        [XmlAttribute]
         public string lowestEdited
         {
             get
@@ -543,7 +452,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.lowestEditedField = value;
             }
         }
-
+        [XmlAttribute]
         public string rupBuild
         {
             get
@@ -555,7 +464,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.rupBuildField = value;
             }
         }
-
+        [XmlAttribute]
         public string codeName
         {
             get
@@ -2518,7 +2427,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.revisionsPasswordField = value;
             }
         }
-
+        [XmlAttribute]
         [DefaultValue(false)]
         public bool lockStructure
         {
@@ -2531,7 +2440,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.lockStructureField = value;
             }
         }
-
+        [XmlAttribute]
         [DefaultValue(false)]
         public bool lockWindows
         {
@@ -2544,7 +2453,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.lockWindowsField = value;
             }
         }
-
+        [XmlAttribute]
         [DefaultValue(false)]
         public bool lockRevision
         {
@@ -2626,7 +2535,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.autoCompressPicturesField = true;
             this.refreshAllConnectionsField = false;
         }
-
+        [XmlAttribute]
         [DefaultValue(false)]
         public bool date1904
         {
@@ -2639,6 +2548,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.date1904Field = value;
             }
         }
+        [XmlIgnore]
         public bool date1904Specified
         {
             get
@@ -2650,7 +2560,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 date1904FieldSpecifiedField = value;
             }
         }
-
+        [XmlAttribute]
         [DefaultValue(ST_Objects.all)]
         public ST_Objects showObjects
         {
@@ -2663,7 +2573,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.showObjectsField = value;
             }
         }
-
+        [XmlAttribute]
         [DefaultValue(true)]
         public bool showBorderUnselectedTables
         {
@@ -2676,7 +2586,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.showBorderUnselectedTablesField = value;
             }
         }
-
+        [XmlAttribute]
         [DefaultValue(false)]
         public bool filterPrivacy
         {
@@ -2689,7 +2599,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.filterPrivacyField = value;
             }
         }
-
+        [XmlAttribute]
         [DefaultValue(false)]
         public bool promptedSolutions
         {
@@ -2702,7 +2612,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.promptedSolutionsField = value;
             }
         }
-
+        [XmlAttribute]
         [DefaultValue(true)]
         public bool showInkAnnotation
         {
@@ -2715,7 +2625,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.showInkAnnotationField = value;
             }
         }
-
+        [XmlAttribute]
         [DefaultValue(false)]
         public bool backupFile
         {
@@ -2728,7 +2638,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.backupFileField = value;
             }
         }
-
+        [XmlAttribute]
         [DefaultValue(true)]
         public bool saveExternalLinkValues
         {
@@ -2741,7 +2651,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.saveExternalLinkValuesField = value;
             }
         }
-
+        [XmlAttribute]
         [DefaultValue(ST_UpdateLinks.userSet)]
         public ST_UpdateLinks updateLinks
         {
@@ -2754,7 +2664,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.updateLinksField = value;
             }
         }
-
+        [XmlAttribute]
         public string codeName
         {
             get
@@ -2766,7 +2676,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.codeNameField = value;
             }
         }
-
+        [XmlAttribute]
         [DefaultValue(false)]
         public bool hidePivotFieldList
         {
@@ -2779,7 +2689,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.hidePivotFieldListField = value;
             }
         }
-
+        [XmlAttribute]
         [DefaultValue(false)]
         public bool showPivotChartFilter
         {
@@ -2792,7 +2702,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.showPivotChartFilterField = value;
             }
         }
-
+        [XmlAttribute]
         [DefaultValue(false)]
         public bool allowRefreshQuery
         {
@@ -2805,7 +2715,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.allowRefreshQueryField = value;
             }
         }
-
+        [XmlAttribute]
         [DefaultValue(false)]
         public bool publishItems
         {
@@ -2818,7 +2728,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.publishItemsField = value;
             }
         }
-
+        [XmlAttribute]
         [DefaultValue(false)]
         public bool checkCompatibility
         {
@@ -2831,7 +2741,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.checkCompatibilityField = value;
             }
         }
-
+        [XmlAttribute]
         [DefaultValue(true)]
         public bool autoCompressPictures
         {
@@ -2844,7 +2754,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.autoCompressPicturesField = value;
             }
         }
-
+        [XmlAttribute]
         [DefaultValue(false)]
         public bool refreshAllConnections
         {
@@ -2857,7 +2767,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.refreshAllConnectionsField = value;
             }
         }
-
+        [XmlAttribute]
         public uint defaultThemeVersion
         {
             get
@@ -3130,9 +3040,9 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         public CT_ExternalReferences()
         {
-            this.externalReferenceField = new List<CT_ExternalReference>();
+            //this.externalReferenceField = new List<CT_ExternalReference>();
         }
-
+        [XmlElement]
         public List<CT_ExternalReference> externalReference
         {
             get

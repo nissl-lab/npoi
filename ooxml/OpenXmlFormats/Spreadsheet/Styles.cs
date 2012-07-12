@@ -1113,12 +1113,12 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         public CT_Dxf()
         {
-            this.extLstField = new CT_ExtensionList();
-            this.protectionField = new CT_CellProtection();
+            //this.extLstField = new CT_ExtensionList();
+            //this.protectionField = new CT_CellProtection();
             //this.borderField = new CT_Border();
-            this.alignmentField = new CT_CellAlignment();
+            //this.alignmentField = new CT_CellAlignment();
             //this.fillField = new CT_Fill();
-            this.numFmtField = new CT_NumFmt();
+            //this.numFmtField = new CT_NumFmt();
             //this.fontField = new CT_Font();
         }
 
@@ -1154,7 +1154,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             return fillField != null;
         }
-
+        [XmlElement]
         public CT_Font font
         {
             get
@@ -1166,7 +1166,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.fontField = value;
             }
         }
-
+        [XmlElement]
         public CT_NumFmt numFmt
         {
             get
@@ -1178,7 +1178,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.numFmtField = value;
             }
         }
-
+        [XmlElement]
         public CT_Fill fill
         {
             get
@@ -1190,7 +1190,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.fillField = value;
             }
         }
-
+        [XmlElement]
         public CT_CellAlignment alignment
         {
             get
@@ -1202,7 +1202,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.alignmentField = value;
             }
         }
-
+        [XmlElement]
         public CT_Border border
         {
             get
@@ -1214,7 +1214,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.borderField = value;
             }
         }
-
+        [XmlElement]
         public CT_CellProtection protection
         {
             get
@@ -1226,7 +1226,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.protectionField = value;
             }
         }
-
+        [XmlElement]
         public CT_ExtensionList extLst
         {
             get
@@ -2552,7 +2552,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.pivotField = true;
             this.tableField = true;
         }
-
+        [XmlElement]
         public List<CT_TableStyleElement> tableStyleElement
         {
             get
@@ -2564,7 +2564,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.tableStyleElementField = value;
             }
         }
-
+        [XmlAttribute]
         public string name
         {
             get
@@ -2576,7 +2576,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.nameField = value;
             }
         }
-
+        [XmlAttribute]
         [DefaultValue(true)]
         public bool pivot
         {
@@ -2589,7 +2589,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.pivotField = value;
             }
         }
-
+        [XmlAttribute]
         [DefaultValue(true)]
         public bool table
         {
@@ -2602,7 +2602,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.tableField = value;
             }
         }
-
+        [XmlAttribute]
         public uint count
         {
             get
@@ -2723,7 +2723,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             this.sizeField = ((uint)(1));
         }
-
+        [XmlAttribute]
         public ST_TableStyleType type
         {
             get
@@ -2748,7 +2748,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.sizeField = value;
             }
         }
-
+        [XmlAttribute]
         public uint dxfId
         {
             get

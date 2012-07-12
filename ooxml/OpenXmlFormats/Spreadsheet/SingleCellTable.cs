@@ -90,11 +90,11 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         public CT_Table()
         {
-            this.extLstField = new CT_ExtensionList();
-            this.tableStyleInfoField = new CT_TableStyleInfo();
-            this.tableColumnsField = new CT_TableColumns();
-            this.sortStateField = new CT_SortState();
-            this.autoFilterField = new CT_AutoFilter();
+            //this.extLstField = new CT_ExtensionList();
+            //this.tableStyleInfoField = new CT_TableStyleInfo();
+            //this.tableColumnsField = new CT_TableColumns();
+            //this.sortStateField = new CT_SortState();
+            //this.autoFilterField = new CT_AutoFilter();
             this.tableTypeField = ST_TableType.worksheet;
             this.headerRowCountField = ((uint)(1));
             this.insertRowField = false;
@@ -103,7 +103,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.totalsRowShownField = true;
             this.publishedField = false;
         }
-
+        [XmlElement]
         public CT_AutoFilter autoFilter
         {
             get
@@ -115,7 +115,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.autoFilterField = value;
             }
         }
-
+        [XmlElement]
         public CT_SortState sortState
         {
             get
@@ -127,7 +127,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.sortStateField = value;
             }
         }
-
+        [XmlElement]
         public CT_TableColumns tableColumns
         {
             get
@@ -139,7 +139,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.tableColumnsField = value;
             }
         }
-
+        [XmlElement]
         public CT_TableStyleInfo tableStyleInfo
         {
             get
@@ -151,7 +151,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.tableStyleInfoField = value;
             }
         }
-
+        [XmlElement]
         public CT_ExtensionList extLst
         {
             get
@@ -539,7 +539,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             this.tableColumnField = new List<CT_TableColumn>();
         }
-
+        [XmlElement]
         public List<CT_TableColumn> tableColumn
         {
             get
@@ -551,7 +551,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.tableColumnField = value;
             }
         }
-
+        [XmlAttribute]
         public uint count
         {
             get
@@ -623,13 +623,13 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         public CT_TableColumn()
         {
-            this.extLstField = new CT_ExtensionList();
-            this.xmlColumnPrField = new CT_XmlColumnPr();
-            this.totalsRowFormulaField = new CT_TableFormula();
-            this.calculatedColumnFormulaField = new CT_TableFormula();
+            //this.extLstField = new CT_ExtensionList();
+            //this.xmlColumnPrField = new CT_XmlColumnPr();
+            //this.totalsRowFormulaField = new CT_TableFormula();
+            //this.calculatedColumnFormulaField = new CT_TableFormula();
             this.totalsRowFunctionField = ST_TotalsRowFunction.none;
         }
-
+        [XmlElement]
         public CT_TableFormula calculatedColumnFormula
         {
             get
@@ -641,7 +641,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.calculatedColumnFormulaField = value;
             }
         }
-
+        [XmlElement]
         public CT_TableFormula totalsRowFormula
         {
             get
@@ -653,7 +653,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.totalsRowFormulaField = value;
             }
         }
-
+        [XmlElement]
         public CT_XmlColumnPr xmlColumnPr
         {
             get
@@ -665,7 +665,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.xmlColumnPrField = value;
             }
         }
-
+        [XmlElement]
         public CT_ExtensionList extLst
         {
             get
@@ -677,7 +677,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.extLstField = value;
             }
         }
-
+        [XmlAttribute]
         public uint id
         {
             get
@@ -689,7 +689,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.idField = value;
             }
         }
-
+        [XmlAttribute]
         public string uniqueName
         {
             get
@@ -701,7 +701,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.uniqueNameField = value;
             }
         }
-
+        [XmlAttribute]
         public string name
         {
             get
@@ -713,7 +713,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.nameField = value;
             }
         }
-
+        [XmlAttribute]
         [DefaultValue(ST_TotalsRowFunction.none)]
         public ST_TotalsRowFunction totalsRowFunction
         {
@@ -726,7 +726,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.totalsRowFunctionField = value;
             }
         }
-
+        [XmlAttribute]
         public string totalsRowLabel
         {
             get
@@ -738,7 +738,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.totalsRowLabelField = value;
             }
         }
-
+        [XmlAttribute]
         public uint queryTableFieldId
         {
             get
@@ -763,7 +763,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.queryTableFieldIdFieldSpecified = value;
             }
         }
-
+        [XmlAttribute]
         public uint headerRowDxfId
         {
             get
@@ -788,7 +788,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.headerRowDxfIdFieldSpecified = value;
             }
         }
-
+        [XmlAttribute]
         public uint dataDxfId
         {
             get
@@ -813,7 +813,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.dataDxfIdFieldSpecified = value;
             }
         }
-
+        [XmlAttribute]
         public uint totalsRowDxfId
         {
             get
@@ -838,7 +838,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.totalsRowDxfIdFieldSpecified = value;
             }
         }
-
+        [XmlAttribute]
         public string headerRowCellStyle
         {
             get
@@ -850,7 +850,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.headerRowCellStyleField = value;
             }
         }
-
+        [XmlAttribute]
         public string dataCellStyle
         {
             get
@@ -862,7 +862,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.dataCellStyleField = value;
             }
         }
-
+        [XmlAttribute]
         public string totalsRowCellStyle
         {
             get
@@ -887,7 +887,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             this.arrayField = false;
         }
-
+        [XmlAttribute]
         [DefaultValue(false)]
         public bool array
         {
@@ -901,7 +901,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlTextAttribute()]
+        [XmlText]
         public string Value
         {
             get
@@ -933,7 +933,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.extLstField = new CT_ExtensionList();
             this.denormalizedField = false;
         }
-
+        [XmlElement]
         public CT_ExtensionList extLst
         {
             get
@@ -945,7 +945,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.extLstField = value;
             }
         }
-
+        [XmlAttribute]
         public uint mapId
         {
             get
@@ -957,7 +957,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.mapIdField = value;
             }
         }
-
+        [XmlAttribute]
         public string xpath
         {
             get
@@ -969,7 +969,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.xpathField = value;
             }
         }
-
+        [XmlAttribute]
         [DefaultValue(false)]
         public bool denormalized
         {
@@ -982,7 +982,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.denormalizedField = value;
             }
         }
-
+        [XmlAttribute]
         public ST_XmlDataType xmlDataType
         {
             get
@@ -1189,7 +1189,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         private bool showColumnStripesField;
 
         private bool showColumnStripesFieldSpecified;
-
+        [XmlAttribute]
         public string name
         {
             get
@@ -1201,7 +1201,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.nameField = value;
             }
         }
-
+        [XmlAttribute]
         public bool showFirstColumn
         {
             get
@@ -1226,7 +1226,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.showFirstColumnFieldSpecified = value;
             }
         }
-
+        [XmlAttribute]
         public bool showLastColumn
         {
             get
@@ -1251,7 +1251,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.showLastColumnFieldSpecified = value;
             }
         }
-
+        [XmlAttribute]
         public bool showRowStripes
         {
             get
@@ -1276,7 +1276,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.showRowStripesFieldSpecified = value;
             }
         }
-
+        [XmlAttribute]
         public bool showColumnStripes
         {
             get
@@ -1329,7 +1329,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             this.singleXmlCellField = new List<CT_SingleXmlCell>();
         }
-
+        [XmlElement]
         public List<CT_SingleXmlCell> singleXmlCell
         {
             get
@@ -1361,7 +1361,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.extLstField = new CT_ExtensionList();
             this.xmlCellPrField = new CT_XmlCellPr();
         }
-
+        [XmlElement]
         public CT_XmlCellPr xmlCellPr
         {
             get
@@ -1373,7 +1373,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.xmlCellPrField = value;
             }
         }
-
+        [XmlElement]
         public CT_ExtensionList extLst
         {
             get
@@ -1385,7 +1385,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.extLstField = value;
             }
         }
-
+        [XmlAttribute]
         public uint id
         {
             get
@@ -1397,7 +1397,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.idField = value;
             }
         }
-
+        [XmlAttribute]
         public string r
         {
             get
@@ -1409,7 +1409,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.rField = value;
             }
         }
-
+        [XmlAttribute]
         public uint connectionId
         {
             get
@@ -1439,7 +1439,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.extLstField = new CT_ExtensionList();
             this.xmlPrField = new CT_XmlPr();
         }
-
+        [XmlElement]
         public CT_XmlPr xmlPr
         {
             get
@@ -1451,7 +1451,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.xmlPrField = value;
             }
         }
-
+        [XmlElement]
         public CT_ExtensionList extLst
         {
             get
@@ -1463,7 +1463,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.extLstField = value;
             }
         }
-
+        [XmlAttribute]
         public uint id
         {
             get
@@ -1475,7 +1475,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.idField = value;
             }
         }
-
+        [XmlAttribute]
         public string uniqueName
         {
             get
@@ -1504,7 +1504,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             this.extLstField = new CT_ExtensionList();
         }
-
+        [XmlElement]
         public CT_ExtensionList extLst
         {
             get
@@ -1516,7 +1516,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.extLstField = value;
             }
         }
-
+        [XmlAttribute]
         public uint mapId
         {
             get
@@ -1528,7 +1528,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.mapIdField = value;
             }
         }
-
+        [XmlAttribute]
         public string xpath
         {
             get
@@ -1540,7 +1540,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.xpathField = value;
             }
         }
-
+        [XmlAttribute]
         public ST_XmlDataType xmlDataType
         {
             get

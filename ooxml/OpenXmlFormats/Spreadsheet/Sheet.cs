@@ -1511,7 +1511,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         public CT_SheetView()
         {
-            this.extLstField = new CT_ExtensionList();
+            //this.extLstField = new CT_ExtensionList();
             this.pivotSelectionField = new List<CT_PivotSelection>();
             this.selectionField = new List<CT_Selection>();
             this.paneField = new CT_Pane();
@@ -2022,20 +2022,18 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         private uint activeCellIdField;
 
-        private List<string> sqrefField;
+        private string sqrefField;
 
         public CT_Selection()
         {
-            this.sqrefField = new List<string>();
             this.paneField = ST_Pane.topLeft;
             this.activeCellIdField = ((uint)(0));
-            this.sqrefField = new List<string>();
-            sqrefField.Add("A1");
         }
 
         public void SetSqref(string[] array)
         {
-            sqrefField = new List<string>(array);
+            if(array.Length>0)
+                sqrefField = array[0];
         }
         [XmlAttribute]
         [DefaultValue(ST_Pane.topLeft)]
@@ -2075,8 +2073,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.activeCellIdField = value;
             }
         }
-
-        public List<string> sqref
+        [XmlAttribute]
+        public string sqref
         {
             get
             {
@@ -6561,7 +6559,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.scaleWithDocField = true;
             this.alignWithMarginsField = true;
         }
-
+        [XmlElement]
         public string oddHeader
         {
             get
@@ -6573,7 +6571,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.oddHeaderField = value;
             }
         }
-
+        [XmlElement]
         public string oddFooter
         {
             get
@@ -6585,7 +6583,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.oddFooterField = value;
             }
         }
-
+        [XmlElement]
         public string evenHeader
         {
             get
@@ -6597,7 +6595,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.evenHeaderField = value;
             }
         }
-
+        [XmlElement]
         public string evenFooter
         {
             get
@@ -6609,7 +6607,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.evenFooterField = value;
             }
         }
-
+        [XmlElement]
         public string firstHeader
         {
             get
@@ -6621,7 +6619,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.firstHeaderField = value;
             }
         }
-
+        [XmlElement]
         public string firstFooter
         {
             get
@@ -6633,7 +6631,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.firstFooterField = value;
             }
         }
-
+        [XmlAttribute]
         [DefaultValue(false)]
         public bool differentOddEven
         {
@@ -6646,7 +6644,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.differentOddEvenField = value;
             }
         }
-
+        [XmlAttribute]
         [DefaultValue(false)]
         public bool differentFirst
         {
@@ -6659,7 +6657,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.differentFirstField = value;
             }
         }
-
+        [XmlAttribute]
         [DefaultValue(true)]
         public bool scaleWithDoc
         {
@@ -6672,7 +6670,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.scaleWithDocField = value;
             }
         }
-
+        [XmlAttribute]
         [DefaultValue(true)]
         public bool alignWithMargins
         {
@@ -6796,10 +6794,10 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         public CT_ConditionalFormatting()
         {
-            this.cfRuleField = new List<CT_CfRule>();
-            this.extLstField = new CT_ExtensionList();
+            //this.cfRuleField = new List<CT_CfRule>();
+            //this.extLstField = new CT_ExtensionList();
             this.pivotField = false;
-            this.sqrefField = new List<string>();
+            //this.sqrefField = new List<string>();
         }
         public int sizeOfCfRuleArray()
         {
@@ -6826,6 +6824,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.cfRule.Add(rule);
             return rule;
         }
+        [XmlElement]
         public List<CT_CfRule> cfRule
         {
             get
@@ -6837,7 +6836,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.cfRuleField = value;
             }
         }
-
+        [XmlElement]
         public CT_ExtensionList extLst
         {
             get
@@ -6849,7 +6848,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.extLstField = value;
             }
         }
-
+        [XmlAttribute]
         [DefaultValue(false)]
         public bool pivot
         {
@@ -6862,7 +6861,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.pivotField = value;
             }
         }
-
+        [XmlElement]
         public List<string> sqref
         {
             get
@@ -7889,7 +7888,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         public CT_DataValidation()
         {
-            this.sqrefField = new List<string>();
+            //this.sqrefField = new List<string>();
             this.typeField = ST_DataValidationType.none;
             this.errorStyleField = ST_DataValidationErrorStyle.stop;
             this.imeModeField = ST_DataValidationImeMode.noControl;
@@ -7917,7 +7916,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             promptField = obj.promptField;
             sqrefField = obj.sqrefField;
         }
-
+        [XmlAttribute]
         public string formula1
         {
             get
@@ -7929,7 +7928,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.formula1Field = value;
             }
         }
-
+        [XmlAttribute]
         public string formula2
         {
             get
@@ -7941,7 +7940,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.formula2Field = value;
             }
         }
-
+        [XmlAttribute]
         [DefaultValue(ST_DataValidationType.none)]
         public ST_DataValidationType type
         {
@@ -7954,7 +7953,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.typeField = value;
             }
         }
-
+        [XmlAttribute]
         [DefaultValue(ST_DataValidationErrorStyle.stop)]
         public ST_DataValidationErrorStyle errorStyle
         {
@@ -7967,7 +7966,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.errorStyleField = value;
             }
         }
-
+        [XmlAttribute]
         [DefaultValue(ST_DataValidationImeMode.noControl)]
         public ST_DataValidationImeMode imeMode
         {
@@ -7980,7 +7979,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.imeModeField = value;
             }
         }
-
+        [XmlAttribute]
         [DefaultValue(ST_DataValidationOperator.between)]
         public ST_DataValidationOperator @operator
         {
@@ -7993,7 +7992,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.operatorField = value;
             }
         }
-
+        [XmlAttribute]
         [DefaultValue(false)]
         public bool allowBlank
         {
@@ -8006,7 +8005,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.allowBlankField = value;
             }
         }
-
+        [XmlAttribute]
         [DefaultValue(false)]
         public bool showDropDown
         {
@@ -8019,7 +8018,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.showDropDownField = value;
             }
         }
-
+        [XmlAttribute]
         [DefaultValue(false)]
         public bool showInputMessage
         {
@@ -8032,7 +8031,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.showInputMessageField = value;
             }
         }
-
+        [XmlAttribute]
         [DefaultValue(false)]
         public bool showErrorMessage
         {
@@ -8045,7 +8044,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.showErrorMessageField = value;
             }
         }
-
+        [XmlAttribute]
         public string errorTitle
         {
             get
@@ -8057,7 +8056,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.errorTitleField = value;
             }
         }
-
+        [XmlAttribute]
         public string error
         {
             get
@@ -8069,7 +8068,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.errorField = value;
             }
         }
-
+        [XmlAttribute]
         public string promptTitle
         {
             get
@@ -8081,7 +8080,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.promptTitleField = value;
             }
         }
-
+        [XmlAttribute]
         public string prompt
         {
             get
@@ -9224,25 +9223,25 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         public CT_Chartsheet()
         {
-            this.extLstField = new CT_ExtensionList();
-            this.webPublishItemsField = new CT_WebPublishItems();
-            this.pictureField = new CT_SheetBackgroundPicture();
-            this.legacyDrawingHFField = new CT_LegacyDrawing();
-            this.legacyDrawingField = new CT_LegacyDrawing();
-            this.drawingField = new CT_Drawing();
-            this.headerFooterField = new CT_HeaderFooter();
-            this.pageSetupField = new CT_CsPageSetup();
-            this.pageMarginsField = new CT_PageMargins();
-            this.customSheetViewsField = new List<CT_CustomChartsheetView>();
-            this.sheetProtectionField = new CT_ChartsheetProtection();
-            this.sheetViewsField = new CT_ChartsheetViews();
-            this.sheetPrField = new CT_ChartsheetPr();
+            //this.extLstField = new CT_ExtensionList();
+            //this.webPublishItemsField = new CT_WebPublishItems();
+            //this.pictureField = new CT_SheetBackgroundPicture();
+            //this.legacyDrawingHFField = new CT_LegacyDrawing();
+            //this.legacyDrawingField = new CT_LegacyDrawing();
+            //this.drawingField = new CT_Drawing();
+            //this.headerFooterField = new CT_HeaderFooter();
+            //this.pageSetupField = new CT_CsPageSetup();
+            //this.pageMarginsField = new CT_PageMargins();
+            //this.customSheetViewsField = new List<CT_CustomChartsheetView>();
+            //this.sheetProtectionField = new CT_ChartsheetProtection();
+            //this.sheetViewsField = new CT_ChartsheetViews();
+            //this.sheetPrField = new CT_ChartsheetPr();
         }
         public void Save(Stream stream)
         {
             throw new NotImplementedException();
         }
-
+        [XmlElement]
         public CT_ChartsheetPr sheetPr
         {
             get
@@ -9254,7 +9253,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.sheetPrField = value;
             }
         }
-
+        [XmlElement]
         public CT_ChartsheetViews sheetViews
         {
             get
@@ -9266,7 +9265,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.sheetViewsField = value;
             }
         }
-
+        [XmlElement]
         public CT_ChartsheetProtection sheetProtection
         {
             get
@@ -9278,9 +9277,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.sheetProtectionField = value;
             }
         }
-
-        [XmlArray]
-        [XmlArrayItem("customSheetView", IsNullable = false)]
+        [XmlElement]
         public List<CT_CustomChartsheetView> customSheetViews
         {
             get
@@ -9292,7 +9289,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.customSheetViewsField = value;
             }
         }
-
+        [XmlElement]
         public CT_PageMargins pageMargins
         {
             get
@@ -9304,7 +9301,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.pageMarginsField = value;
             }
         }
-
+        [XmlElement]
         public CT_CsPageSetup pageSetup
         {
             get
@@ -9316,7 +9313,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.pageSetupField = value;
             }
         }
-
+        [XmlElement]
         public CT_HeaderFooter headerFooter
         {
             get
@@ -9328,7 +9325,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.headerFooterField = value;
             }
         }
-
+        [XmlElement]
         public CT_Drawing drawing
         {
             get
@@ -9340,7 +9337,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.drawingField = value;
             }
         }
-
+        [XmlElement]
         public CT_LegacyDrawing legacyDrawing
         {
             get
@@ -9352,7 +9349,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.legacyDrawingField = value;
             }
         }
-
+        [XmlElement]
         public CT_LegacyDrawing legacyDrawingHF
         {
             get
@@ -9364,7 +9361,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.legacyDrawingHFField = value;
             }
         }
-
+        [XmlElement]
         public CT_SheetBackgroundPicture picture
         {
             get
@@ -9376,7 +9373,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.pictureField = value;
             }
         }
-
+        [XmlElement]
         public CT_WebPublishItems webPublishItems
         {
             get
@@ -9388,7 +9385,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.webPublishItemsField = value;
             }
         }
-
+        [XmlElement]
         public CT_ExtensionList extLst
         {
             get

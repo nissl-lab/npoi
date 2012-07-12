@@ -30,11 +30,11 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         public CT_AutoFilter()
         {
-            this.extLstField = new CT_ExtensionList();
-            this.sortStateField = new CT_SortState();
-            this.filterColumnField = new List<CT_FilterColumn>();
+            //this.extLstField = new CT_ExtensionList();
+            //this.sortStateField = new CT_SortState();
+            //this.filterColumnField = new List<CT_FilterColumn>();
         }
-
+        [XmlElement]
         public List<CT_FilterColumn> filterColumn
         {
             get
@@ -46,7 +46,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.filterColumnField = value;
             }
         }
-
+        [XmlElement]
         public CT_SortState sortState
         {
             get
@@ -58,7 +58,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.sortStateField = value;
             }
         }
-
+        [XmlElement]
         public CT_ExtensionList extLst
         {
             get
@@ -70,7 +70,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.extLstField = value;
             }
         }
-
+        [XmlAttribute]
         public string @ref
         {
             get
@@ -995,13 +995,13 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         public CT_SortState()
         {
-            this.extLstField = new CT_ExtensionList();
-            this.sortConditionField = new List<CT_SortCondition>();
+            //this.extLstField = new CT_ExtensionList();
+            //this.sortConditionField = new List<CT_SortCondition>();
             this.columnSortField = false;
             this.caseSensitiveField = false;
             this.sortMethodField = ST_SortMethod.none;
         }
-
+        [XmlElement]
         public List<CT_SortCondition> sortCondition
         {
             get
@@ -1013,7 +1013,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.sortConditionField = value;
             }
         }
-
+        [XmlElement]
         public CT_ExtensionList extLst
         {
             get
@@ -1025,7 +1025,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.extLstField = value;
             }
         }
-
+        [XmlAttribute]
         [DefaultValue(false)]
         public bool columnSort
         {
@@ -1038,7 +1038,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.columnSortField = value;
             }
         }
-
+        [XmlAttribute]
         [DefaultValue(false)]
         public bool caseSensitive
         {
@@ -1051,7 +1051,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.caseSensitiveField = value;
             }
         }
-
+        [XmlAttribute]
         [DefaultValue(ST_SortMethod.none)]
         public ST_SortMethod sortMethod
         {
@@ -1064,7 +1064,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.sortMethodField = value;
             }
         }
-
+        [XmlAttribute]
         public string @ref
         {
             get
