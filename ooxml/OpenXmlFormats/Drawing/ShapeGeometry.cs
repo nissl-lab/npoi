@@ -10,7 +10,6 @@ namespace NPOI.OpenXmlFormats.Dml
 
     [Serializable]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
-    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = false)]
     public enum ST_ShapeType
     {
 
@@ -579,7 +578,6 @@ namespace NPOI.OpenXmlFormats.Dml
 
     [Serializable]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
-    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = false)]
     public enum ST_TextShapeType
     {
 
@@ -712,7 +710,8 @@ namespace NPOI.OpenXmlFormats.Dml
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
-    public partial class CT_GeomGuide
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
+    public class CT_GeomGuide
     {
 
         private string nameField;
@@ -754,13 +753,13 @@ namespace NPOI.OpenXmlFormats.Dml
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
-    public partial class CT_Path2DCubicBezierTo
+    public class CT_Path2DCubicBezierTo
     {
 
         private CT_AdjPoint2D[] ptField;
 
 
-        [XmlElement("pt")]
+        [XmlElement("pt", Order=0)]
         public CT_AdjPoint2D[] pt
         {
             get
@@ -780,7 +779,7 @@ namespace NPOI.OpenXmlFormats.Dml
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
-    public partial class CT_AdjPoint2D
+    public class CT_AdjPoint2D
     {
 
         private string xField;
@@ -822,13 +821,13 @@ namespace NPOI.OpenXmlFormats.Dml
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
-    public partial class CT_Path2DQuadBezierTo
+    public class CT_Path2DQuadBezierTo
     {
 
         private CT_AdjPoint2D[] ptField;
 
 
-        [XmlElement("pt")]
+        [XmlElement("pt", Order = 0)]
         public CT_AdjPoint2D[] pt
         {
             get
@@ -848,13 +847,13 @@ namespace NPOI.OpenXmlFormats.Dml
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
-    public partial class CT_GeomGuideList
+    public class CT_GeomGuideList
     {
 
         private CT_GeomGuide[] gdField;
 
 
-        [XmlElement("gd")]
+        [XmlElement("gd", Order = 0)]
         public CT_GeomGuide[] gd
         {
             get
@@ -874,7 +873,7 @@ namespace NPOI.OpenXmlFormats.Dml
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
-    public partial class CT_GeomRect
+    public class CT_GeomRect
     {
 
         private string lField;
@@ -948,7 +947,7 @@ namespace NPOI.OpenXmlFormats.Dml
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
-    public partial class CT_XYAdjustHandle
+    public class CT_XYAdjustHandle
     {
 
         private CT_AdjPoint2D posField;
@@ -965,7 +964,7 @@ namespace NPOI.OpenXmlFormats.Dml
 
         private string maxYField;
 
-
+        [XmlElement(Order = 0)]
         public CT_AdjPoint2D pos
         {
             get
@@ -1069,7 +1068,7 @@ namespace NPOI.OpenXmlFormats.Dml
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
-    public partial class CT_PolarAdjustHandle
+    public class CT_PolarAdjustHandle
     {
 
         private CT_AdjPoint2D posField;
@@ -1086,7 +1085,7 @@ namespace NPOI.OpenXmlFormats.Dml
 
         private string maxAngField;
 
-
+        [XmlElement(Order = 0)]
         public CT_AdjPoint2D pos
         {
             get
@@ -1190,14 +1189,14 @@ namespace NPOI.OpenXmlFormats.Dml
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
-    public partial class CT_ConnectionSite
+    public class CT_ConnectionSite
     {
 
         private CT_AdjPoint2D posField;
 
         private string angField;
 
-
+        [XmlElement(Order = 0)]
         public CT_AdjPoint2D pos
         {
             get
@@ -1231,14 +1230,14 @@ namespace NPOI.OpenXmlFormats.Dml
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
-    public partial class CT_AdjustHandleList
+    public class CT_AdjustHandleList
     {
 
         private object[] itemsField;
 
 
-        [XmlElement("ahPolar", typeof(CT_PolarAdjustHandle))]
-        [XmlElement("ahXY", typeof(CT_XYAdjustHandle))]
+        [XmlElement("ahPolar", typeof(CT_PolarAdjustHandle), Order = 0)]
+        [XmlElement("ahXY", typeof(CT_XYAdjustHandle), Order = 0)]
         public object[] Items
         {
             get
@@ -1258,13 +1257,13 @@ namespace NPOI.OpenXmlFormats.Dml
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
-    public partial class CT_ConnectionSiteList
+    public class CT_ConnectionSiteList
     {
 
         private CT_ConnectionSite[] cxnField;
 
 
-        [XmlElement("cxn")]
+        [XmlElement("cxn", Order = 0)]
         public CT_ConnectionSite[] cxn
         {
             get
@@ -1284,7 +1283,7 @@ namespace NPOI.OpenXmlFormats.Dml
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
-    public partial class CT_Connection
+    public class CT_Connection
     {
 
         private uint idField;
@@ -1326,12 +1325,15 @@ namespace NPOI.OpenXmlFormats.Dml
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
-    public partial class CT_Path2DMoveTo
+    public class CT_Path2DMoveTo
     {
 
         private CT_AdjPoint2D ptField;
-
-
+        public CT_Path2DMoveTo()
+        {
+            this.ptField = new CT_AdjPoint2D();
+        }
+        [XmlElement(Order = 0)]
         public CT_AdjPoint2D pt
         {
             get
@@ -1351,12 +1353,17 @@ namespace NPOI.OpenXmlFormats.Dml
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
-    public partial class CT_Path2DLineTo
+    public class CT_Path2DLineTo
     {
 
         private CT_AdjPoint2D ptField;
 
+        public CT_Path2DLineTo()
+        {
+            this.ptField = new CT_AdjPoint2D();
+        }
 
+        [XmlElement(Order = 0)]
         public CT_AdjPoint2D pt
         {
             get
@@ -1376,7 +1383,7 @@ namespace NPOI.OpenXmlFormats.Dml
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
-    public partial class CT_Path2DArcTo
+    public class CT_Path2DArcTo
     {
 
         private string wrField;
@@ -1450,14 +1457,13 @@ namespace NPOI.OpenXmlFormats.Dml
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
-    public partial class CT_Path2DClose
+    public class CT_Path2DClose
     {
     }
 
 
     [Serializable]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
-    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = false)]
     public enum ST_PathFillMode
     {
 
@@ -1486,7 +1492,7 @@ namespace NPOI.OpenXmlFormats.Dml
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
-    public partial class CT_Path2D
+    public class CT_Path2D
     {
 
         private object[] itemsField;
@@ -1654,13 +1660,13 @@ namespace NPOI.OpenXmlFormats.Dml
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
-    public partial class CT_Path2DList
+    public class CT_Path2DList
     {
 
         private CT_Path2D[] pathField;
 
 
-        [XmlElement("path")]
+        [XmlElement("path", Order = 0)]
         public CT_Path2D[] path
         {
             get
@@ -1679,7 +1685,8 @@ namespace NPOI.OpenXmlFormats.Dml
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
-    public partial class CT_PresetGeometry2D
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
+    public class CT_PresetGeometry2D
     {
 
         private List<CT_GeomGuide> avLstField = null;
@@ -1692,7 +1699,9 @@ namespace NPOI.OpenXmlFormats.Dml
         }
 
 
-        [XmlElement("avLst")]
+        //[XmlElement("avLst")]
+        [XmlArray(Order = 0)]
+        [XmlArrayItem("gd", IsNullable = false)]
         public List<CT_GeomGuide> avLst
         {
             get
@@ -1726,14 +1735,14 @@ namespace NPOI.OpenXmlFormats.Dml
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
-    public partial class CT_PresetTextShape
+    public class CT_PresetTextShape
     {
 
         private CT_GeomGuide[] avLstField;
 
         private ST_TextShapeType prstField;
 
-
+        [XmlArray(Order = 0)]
         [XmlArrayItem("gd", IsNullable = false)]
         public CT_GeomGuide[] avLst
         {
@@ -1768,7 +1777,7 @@ namespace NPOI.OpenXmlFormats.Dml
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
-    public partial class CT_CustomGeometry2D
+    public class CT_CustomGeometry2D
     {
 
         private CT_GeomGuide[] avLstField;
@@ -1783,7 +1792,7 @@ namespace NPOI.OpenXmlFormats.Dml
 
         private CT_Path2D[] pathLstField;
 
-
+        [XmlArray(Order = 0)]
         [XmlArrayItem("gd", IsNullable = false)]
         public CT_GeomGuide[] avLst
         {
@@ -1797,7 +1806,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-
+        [XmlArray(Order = 1)]
         [XmlArrayItem("gd", IsNullable = false)]
         public CT_GeomGuide[] gdLst
         {
@@ -1811,7 +1820,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-
+        [XmlArray(Order = 2)]
         [XmlArrayItem("ahPolar", typeof(CT_PolarAdjustHandle), IsNullable = false)]
         [XmlArrayItem("ahXY", typeof(CT_XYAdjustHandle), IsNullable = false)]
         public object[] ahLst
@@ -1826,7 +1835,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-
+        [XmlArray(Order = 3)]
         [XmlArrayItem("cxn", IsNullable = false)]
         public CT_ConnectionSite[] cxnLst
         {
@@ -1840,7 +1849,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-
+        [XmlElement(Order = 4)]
         public CT_GeomRect rect
         {
             get
@@ -1853,7 +1862,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-
+        [XmlArray(Order = 5)]
         [XmlArrayItem("path", IsNullable = false)]
         public CT_Path2D[] pathLst
         {

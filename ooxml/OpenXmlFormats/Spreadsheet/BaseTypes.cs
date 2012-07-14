@@ -64,7 +64,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         [XmlIgnore]
         public bool typeSpecified
         {
-            get { return (null != typeField); }
+            get { return (ST_GradientType.NONE != typeField); }
         }
 
         [XmlAttribute]

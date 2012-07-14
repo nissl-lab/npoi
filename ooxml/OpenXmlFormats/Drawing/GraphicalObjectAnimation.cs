@@ -8,7 +8,6 @@ namespace NPOI.OpenXmlFormats.Dml
 
     [Serializable]
     [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
-    [XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=false)]
     public enum ST_ChartBuildStep {
         
     
@@ -33,7 +32,6 @@ namespace NPOI.OpenXmlFormats.Dml
 
     [Serializable]
     [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
-    [XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=false)]
     public enum ST_DgmBuildStep {
         
     
@@ -149,10 +147,10 @@ namespace NPOI.OpenXmlFormats.Dml
     public partial class CT_AnimationElementChoice {
         
         private object itemField;
-        
-    
-        [XmlElement("chart", typeof(CT_AnimationChartElement))]
-        [XmlElement("dgm", typeof(CT_AnimationDgmElement))]
+
+
+        [XmlElement("chart", typeof(CT_AnimationChartElement), Order = 0)]
+        [XmlElement("dgm", typeof(CT_AnimationDgmElement), Order = 0)]
         public object Item {
             get {
                 return this.itemField;
@@ -166,7 +164,6 @@ namespace NPOI.OpenXmlFormats.Dml
 
     [Serializable]
     [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
-    [XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=false)]
     public enum ST_AnimationBuildType {
         
     
@@ -176,7 +173,6 @@ namespace NPOI.OpenXmlFormats.Dml
 
     [Serializable]
     [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
-    [XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=false)]
     public enum ST_AnimationDgmOnlyBuildType {
         
     
@@ -234,7 +230,6 @@ namespace NPOI.OpenXmlFormats.Dml
 
     [Serializable]
     [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
-    [XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=false)]
     public enum ST_AnimationChartOnlyBuildType {
         
     

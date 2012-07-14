@@ -5,6 +5,7 @@ namespace NPOI.OpenXmlFormats.Dml
 {
     [Serializable]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
     public partial class CT_ShapeProperties
     {
 
@@ -100,7 +101,7 @@ namespace NPOI.OpenXmlFormats.Dml
             this.solidFill = null;
         }
 
-        [XmlElement]
+        [XmlElement(Order = 0)]
         public CT_Transform2D xfrm
         {
             get
@@ -113,7 +114,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [XmlElement]
+        [XmlElement(Order = 1)]
         public CT_CustomGeometry2D custGeom
         {
             get
@@ -126,7 +127,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [XmlElement]
+        [XmlElement(Order = 2)]
         public CT_PresetGeometry2D prstGeom
         {
             get
@@ -139,7 +140,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [XmlElement]
+        [XmlElement(Order = 3)]
         public CT_NoFillProperties noFill
         {
             get
@@ -152,7 +153,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [XmlElement]
+        [XmlElement(Order = 4)]
         public CT_SolidColorFillProperties solidFill
         {
             get
@@ -165,7 +166,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [XmlElement]
+        [XmlElement(Order = 5)]
         public CT_GradientFillProperties gradFill
         {
             get
@@ -178,7 +179,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [XmlElement]
+        [XmlElement(Order = 6)]
         public CT_BlipFillProperties blipFill
         {
             get
@@ -191,7 +192,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [XmlElement]
+        [XmlElement(Order = 7)]
         public CT_PatternFillProperties pattFill
         {
             get
@@ -204,7 +205,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [XmlElement]
+        [XmlElement(Order = 8)]
         public CT_GroupFillProperties grpFill
         {
             get
@@ -217,7 +218,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [XmlElement]
+        [XmlElement(Order = 9)]
         public CT_LineProperties ln
         {
             get
@@ -230,7 +231,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [XmlElement]
+        [XmlElement(Order = 10)]
         public CT_EffectList effectLst
         {
             get
@@ -243,7 +244,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [XmlElement]
+        [XmlElement(Order = 11)]
         public CT_EffectContainer effectDag
         {
             get
@@ -256,7 +257,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [XmlElement]
+        [XmlElement(Order = 12)]
         public CT_Scene3D scene3d
         {
             get
@@ -269,7 +270,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [XmlElement]
+        [XmlElement(Order = 13)]
         public CT_Shape3D sp3d
         {
             get
@@ -282,7 +283,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [XmlElement]
+        [XmlElement(Order = 14)]
         public CT_OfficeArtExtensionList extLst
         {
             get
@@ -365,6 +366,7 @@ namespace NPOI.OpenXmlFormats.Dml
             this.xfrmField = new CT_GroupTransform2D();
             return this.xfrmField;
         }
+        [XmlElement(Order = 0)]
         public CT_GroupTransform2D xfrm
         {
             get
@@ -377,6 +379,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
+        [XmlElement(Order = 1)]
         public CT_NoFillProperties noFill
         {
             get
@@ -389,6 +392,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
+        [XmlElement(Order = 2)]
         public CT_SolidColorFillProperties solidFill
         {
             get
@@ -401,6 +405,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
+        [XmlElement(Order = 3)]
         public CT_GradientFillProperties gradFill
         {
             get
@@ -413,6 +418,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
+        [XmlElement(Order = 4)]
         public CT_BlipFillProperties blipFill
         {
             get
@@ -425,6 +431,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
+        [XmlElement(Order = 5)]
         public CT_PatternFillProperties pattFill
         {
             get
@@ -437,6 +444,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
+        [XmlElement(Order = 6)]
         public CT_GroupFillProperties grpFill
         {
             get
@@ -449,6 +457,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
+        [XmlElement(Order = 7)]
         public CT_EffectList effectLst
         {
             get
@@ -461,6 +470,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
+        [XmlElement(Order = 8)]
         public CT_EffectContainer effectDag
         {
             get
@@ -473,6 +483,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
+        [XmlElement(Order = 9)]
         public CT_Scene3D scene3d
         {
             get
@@ -485,6 +496,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
+        [XmlElement(Order = 10)]
         public CT_OfficeArtExtensionList extLst
         {
             get
@@ -497,6 +509,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
+        [XmlAttribute]
         public ST_BlackWhiteMode bwMode
         {
             get

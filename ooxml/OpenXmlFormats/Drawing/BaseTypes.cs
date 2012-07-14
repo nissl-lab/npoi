@@ -15,13 +15,14 @@ namespace NPOI.OpenXmlFormats.Dml
 
     [Serializable]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlRootAttribute(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
     public class CT_OfficeArtExtension
     {
 
         private System.Xml.XmlElement anyField; // 1..1
 
         private string uriField = null;
-
+        private bool uriSpecifiedField;
         [XmlAnyElement(Order = 0)]
         public System.Xml.XmlElement Any
         {
@@ -50,12 +51,14 @@ namespace NPOI.OpenXmlFormats.Dml
         public bool uriSpecified
         {
             get { return (null != uriField); }
+            set { uriSpecifiedField = value; }
         }
 
     }
 
     [Serializable]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
     public class CT_Angle
     {
 
@@ -76,6 +79,7 @@ namespace NPOI.OpenXmlFormats.Dml
 
     [Serializable]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
     public class CT_PositiveFixedAngle
     {
 
@@ -96,6 +100,7 @@ namespace NPOI.OpenXmlFormats.Dml
 
     [Serializable]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
     public class CT_Percentage
     {
 
@@ -116,6 +121,7 @@ namespace NPOI.OpenXmlFormats.Dml
 
     [Serializable]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
     public class CT_PositivePercentage
     {
 
@@ -136,6 +142,7 @@ namespace NPOI.OpenXmlFormats.Dml
 
     [Serializable]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
     public class CT_FixedPercentage
     {
 
@@ -156,6 +163,7 @@ namespace NPOI.OpenXmlFormats.Dml
 
     [Serializable]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
     public class CT_PositiveFixedPercentage
     {
 
@@ -176,6 +184,7 @@ namespace NPOI.OpenXmlFormats.Dml
 
     [Serializable]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
     public class CT_Ratio
     {
 
@@ -210,6 +219,7 @@ namespace NPOI.OpenXmlFormats.Dml
 
     [Serializable]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
     public class CT_Point2D
     {
 
@@ -244,6 +254,7 @@ namespace NPOI.OpenXmlFormats.Dml
 
     [Serializable]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
     public class CT_PositiveSize2D
     {
 
@@ -279,76 +290,49 @@ namespace NPOI.OpenXmlFormats.Dml
 
     [Serializable]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
     public class CT_ComplementTransform
     {
     }
 
     [Serializable]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
     public class CT_InverseTransform
     {
     }
 
     [Serializable]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
     public class CT_GrayscaleTransform
     {
     }
 
     [Serializable]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
     public class CT_GammaTransform
     {
     }
 
     [Serializable]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
     public class CT_InverseGammaTransform
     {
     }
+    
     [Serializable]
+
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
-    public enum ScRgbColorType
-    {
-        tint,
-        shade,
-        comp,
-        inv,
-        gray,
-        alpha,
-        alphaOff,
-        alphaMod,
-        hue,
-        hueOff,
-        hueMod,
-        sat,
-        satOff,
-        satMod,
-        lum,
-        lumOff,
-        lumMod,
-        red,
-        redOff,
-        redMod,
-        green,
-        greenOff,
-        greenMod,
-        blue,
-        blueOff,
-        blueMod,
-        gamma,
-        invGamma
-    }
-    [Serializable]
-    [System.Diagnostics.DebuggerStepThrough]
-    [System.ComponentModel.DesignerCategory("code")]
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
     public class CT_ScRgbColor
     {
 
         private List<object> itemsField;
 
-        private List<ScRgbColorType> itemsElementNameField;
+        private List<EG_ColorTransform> itemsElementNameField;
 
         private int rField;
 
@@ -358,117 +342,10 @@ namespace NPOI.OpenXmlFormats.Dml
 
         public CT_ScRgbColor()
         {
-            this.itemsElementNameField = new List<ScRgbColorType>();
+            this.itemsElementNameField = new List<EG_ColorTransform>();
             this.itemsField = new List<object>();
         }
-        [XmlElement("tint", typeof(CT_PositiveFixedPercentage))]
-        [XmlElement("shade", typeof(CT_PositiveFixedPercentage))]
-        [XmlElement("comp", typeof(CT_ComplementTransform))]
-        [XmlElement("inv", typeof(CT_InverseTransform))]
-        [XmlElement("gray", typeof(CT_GrayscaleTransform))]
-        [XmlElement("alpha", typeof(CT_PositiveFixedPercentage))]
-        [XmlElement("alphaOff", typeof(CT_FixedPercentage))]
-        [XmlElement("alphaMod", typeof(CT_PositivePercentage))]
-        [XmlElement("hue", typeof(CT_PositiveFixedAngle))]
-        [XmlElement("hueOff", typeof(CT_Angle))]
-        [XmlElement("hueMod", typeof(CT_PositivePercentage))]
-        [XmlElement("sat", typeof(CT_Percentage))]
-        [XmlElement("satOff", typeof(CT_Percentage))]
-        [XmlElement("satMod", typeof(CT_Percentage))]
-        [XmlElement("lum", typeof(CT_Percentage))]
-        [XmlElement("lumOff", typeof(CT_Percentage))]
-        [XmlElement("lumMod", typeof(CT_Percentage))]
-        [XmlElement("red", typeof(CT_Percentage))]
-        [XmlElement("redOff", typeof(CT_Percentage))]
-        [XmlElement("redMod", typeof(CT_Percentage))]
-        [XmlElement("green", typeof(CT_Percentage))]
-        [XmlElement("greenOff", typeof(CT_Percentage))]
-        [XmlElement("greenMod", typeof(CT_Percentage))]
-        [XmlElement("blue", typeof(CT_Percentage))]
-        [XmlElement("blueOff", typeof(CT_Percentage))]
-        [XmlElement("blueMod", typeof(CT_Percentage))]
-        [XmlElement("gamma", typeof(CT_GammaTransform))]
-        [XmlElement("invGamma", typeof(CT_InverseGammaTransform))]
-        [XmlChoiceIdentifier("ItemsElementName")]
-        public object[] Items
-        {
-            get
-            {
-                return this.itemsField.ToArray();
-            }
-            set
-            {
-                this.itemsField = new List<object>(value);
-            }
-        }
 
-        [XmlElement("ItemsElementName")]
-        //[XmlIgnore()]
-        public ScRgbColorType[] ItemsElementName
-        {
-            get
-            {
-                return this.itemsElementNameField.ToArray();
-            }
-            set
-            {
-                this.itemsElementNameField = new List<ScRgbColorType>(value);
-            }
-        }
-        [XmlAttribute]
-        public int r
-        {
-            get
-            {
-                return this.rField;
-            }
-            set
-            {
-                this.rField = value;
-            }
-        }
-        [XmlAttribute]
-        public int g
-        {
-            get
-            {
-                return this.gField;
-            }
-            set
-            {
-                this.gField = value;
-            }
-        }
-        [XmlAttribute]
-        public int b
-        {
-            get
-            {
-                return this.bField;
-            }
-            set
-            {
-                this.bField = value;
-            }
-        }
-    }
-
-    [Serializable]
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
-    public class CT_SRgbColor
-    {
-
-        private List<object> itemsField;
-
-        private List<ItemsChoiceType1> itemsElementNameField;
-
-        private byte[] valField;
-
-        public CT_SRgbColor()
-        {
-            this.itemsElementNameField = new List<ItemsChoiceType1>();
-            this.itemsField = new List<object>();
-        }
         [XmlElement("alpha", typeof(CT_PositiveFixedPercentage), Order = 0)]
         [XmlElement("alphaMod", typeof(CT_PositivePercentage), Order = 0)]
         [XmlElement("alphaOff", typeof(CT_FixedPercentage), Order = 0)]
@@ -514,7 +391,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         [XmlElement("ItemsElementName", Order = 1)]
         [XmlIgnore]
-        public ItemsChoiceType1[] ItemsElementName
+        public EG_ColorTransform[] ItemsElementName
         {
             get
             {
@@ -523,11 +400,223 @@ namespace NPOI.OpenXmlFormats.Dml
             set
             {
                 if (value == null || value.Length == 0)
-                    this.itemsElementNameField = new List<ItemsChoiceType1>();
+                    this.itemsElementNameField = new List<EG_ColorTransform>();
                 else
-                    this.itemsElementNameField = new List<ItemsChoiceType1>(value);
+                    this.itemsElementNameField = new List<EG_ColorTransform>(value);
             }
         }
+
+        [XmlAttribute]
+        public int r
+        {
+            get
+            {
+                return this.rField;
+            }
+            set
+            {
+                this.rField = value;
+            }
+        }
+
+        [XmlAttribute]
+        public int g
+        {
+            get
+            {
+                return this.gField;
+            }
+            set
+            {
+                this.gField = value;
+            }
+        }
+
+        [XmlAttribute]
+        public int b
+        {
+            get
+            {
+                return this.bField;
+            }
+            set
+            {
+                this.bField = value;
+            }
+        }
+    }
+
+
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IncludeInSchema = false)]
+    public enum EG_ColorTransform
+    {
+
+        /// <remarks/>
+        alpha,
+
+        /// <remarks/>
+        alphaMod,
+
+        /// <remarks/>
+        alphaOff,
+
+        /// <remarks/>
+        blue,
+
+        /// <remarks/>
+        blueMod,
+
+        /// <remarks/>
+        blueOff,
+
+        /// <remarks/>
+        comp,
+
+        /// <remarks/>
+        gamma,
+
+        /// <remarks/>
+        gray,
+
+        /// <remarks/>
+        green,
+
+        /// <remarks/>
+        greenMod,
+
+        /// <remarks/>
+        greenOff,
+
+        /// <remarks/>
+        hue,
+
+        /// <remarks/>
+        hueMod,
+
+        /// <remarks/>
+        hueOff,
+
+        /// <remarks/>
+        inv,
+
+        /// <remarks/>
+        invGamma,
+
+        /// <remarks/>
+        lum,
+
+        /// <remarks/>
+        lumMod,
+
+        /// <remarks/>
+        lumOff,
+
+        /// <remarks/>
+        red,
+
+        /// <remarks/>
+        redMod,
+
+        /// <remarks/>
+        redOff,
+
+        /// <remarks/>
+        sat,
+
+        /// <remarks/>
+        satMod,
+
+        /// <remarks/>
+        satOff,
+
+        /// <remarks/>
+        shade,
+
+        /// <remarks/>
+        tint,
+    }
+
+
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
+    public class CT_SRgbColor
+    {
+
+        private List<object> itemsField;
+
+        private List<EG_ColorTransform> itemsElementNameField;
+
+        private byte[] valField;
+
+        public CT_SRgbColor()
+        {
+            this.itemsElementNameField = new List<EG_ColorTransform>();
+            this.itemsField = new List<object>();
+        }
+
+        [XmlElement("alpha", typeof(CT_PositiveFixedPercentage), Order = 0)]
+        [XmlElement("alphaMod", typeof(CT_PositivePercentage), Order = 0)]
+        [XmlElement("alphaOff", typeof(CT_FixedPercentage), Order = 0)]
+        [XmlElement("blue", typeof(CT_Percentage), Order = 0)]
+        [XmlElement("blueMod", typeof(CT_Percentage), Order = 0)]
+        [XmlElement("blueOff", typeof(CT_Percentage), Order = 0)]
+        [XmlElement("comp", typeof(CT_ComplementTransform), Order = 0)]
+        [XmlElement("gamma", typeof(CT_GammaTransform), Order = 0)]
+        [XmlElement("gray", typeof(CT_GrayscaleTransform), Order = 0)]
+        [XmlElement("green", typeof(CT_Percentage), Order = 0)]
+        [XmlElement("greenMod", typeof(CT_Percentage), Order = 0)]
+        [XmlElement("greenOff", typeof(CT_Percentage), Order = 0)]
+        [XmlElement("hue", typeof(CT_PositiveFixedAngle), Order = 0)]
+        [XmlElement("hueMod", typeof(CT_PositivePercentage), Order = 0)]
+        [XmlElement("hueOff", typeof(CT_Angle), Order = 0)]
+        [XmlElement("inv", typeof(CT_InverseTransform), Order = 0)]
+        [XmlElement("invGamma", typeof(CT_InverseGammaTransform), Order = 0)]
+        [XmlElement("lum", typeof(CT_Percentage), Order = 0)]
+        [XmlElement("lumMod", typeof(CT_Percentage), Order = 0)]
+        [XmlElement("lumOff", typeof(CT_Percentage), Order = 0)]
+        [XmlElement("red", typeof(CT_Percentage), Order = 0)]
+        [XmlElement("redMod", typeof(CT_Percentage), Order = 0)]
+        [XmlElement("redOff", typeof(CT_Percentage), Order = 0)]
+        [XmlElement("sat", typeof(CT_Percentage), Order = 0)]
+        [XmlElement("satMod", typeof(CT_Percentage), Order = 0)]
+        [XmlElement("satOff", typeof(CT_Percentage), Order = 0)]
+        [XmlElement("shade", typeof(CT_PositiveFixedPercentage), Order = 0)]
+        [XmlElement("tint", typeof(CT_PositiveFixedPercentage), Order = 0)]
+        [XmlChoiceIdentifier("ItemsElementName")]
+        public object[] Items
+        {
+            get
+            {
+                return this.itemsField.ToArray();
+            }
+            set
+            {
+                if (value == null || value.Length == 0)
+                    this.itemsField = new List<object>();
+                else
+                    this.itemsField = new List<object>(value);
+            }
+        }
+
+        [XmlElement("ItemsElementName", Order = 1)]
+        [XmlIgnore]
+        public EG_ColorTransform[] ItemsElementName
+        {
+            get
+            {
+                return this.itemsElementNameField.ToArray();
+            }
+            set
+            {
+                if (value == null || value.Length == 0)
+                    this.itemsElementNameField = new List<EG_ColorTransform>();
+                else
+                    this.itemsElementNameField = new List<EG_ColorTransform>(value);
+            }
+        }
+
         [XmlAttribute(DataType = "hexBinary")]
         public byte[] val
         {
@@ -542,196 +631,350 @@ namespace NPOI.OpenXmlFormats.Dml
         }
     }
 
-    public enum ItemsChoiceType1
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
+    public class CT_HslColor
     {
 
-
-        alpha,
-
-
-        alphaMod,
-
-
-        alphaOff,
-
-
-        blue,
-
-
-        blueMod,
-
-
-        blueOff,
-
-
-        comp,
-
-
-        gamma,
-
-
-        gray,
-
-
-        green,
-
-
-        greenMod,
-
-
-        greenOff,
-
-
-        hue,
-
-
-        hueMod,
-
-
-        hueOff,
-
-
-        inv,
-
-
-        invGamma,
-
-
-        lum,
-
-
-        lumMod,
-
-
-        lumOff,
-
-
-        red,
-
-
-        redMod,
-
-
-        redOff,
-
-
-        sat,
-
-
-        satMod,
-
-
-        satOff,
-
-
-        shade,
-
-
-        tint,
-    }
-
-    public enum ItemsChoiceType3
-    {
-
-
-        alpha,
-
-
-        alphaMod,
-
-
-        alphaOff,
-
-
-        blue,
-
-
-        blueMod,
-
-
-        blueOff,
-
-
-        comp,
-
-
-        gamma,
-
-
-        gray,
-
-
-        green,
-
-
-        greenMod,
-
-
-        greenOff,
-
-
-        hue,
-
-
-        hueMod,
-
-
-        hueOff,
-
-
-        inv,
-
-
-        invGamma,
-
-
-        lum,
-
-
-        lumMod,
-
-
-        lumOff,
-
-
-        red,
-
-
-        redMod,
-
-
-        redOff,
-
-
-        sat,
-
-
-        satMod,
-
-
-        satOff,
-
-
-        shade,
-
-
-        tint,
+        private List<object> itemsField;
+
+        private List<EG_ColorTransform> itemsElementNameField;
+
+        private int hueField;
+
+        private int satField;
+
+        private int lumField;
+
+        public CT_HslColor()
+        {
+            this.itemsElementNameField = new List<EG_ColorTransform>();
+            this.itemsField = new List<object>();
+        }
+
+        [XmlElement("alpha", typeof(CT_PositiveFixedPercentage), Order = 0)]
+        [XmlElement("alphaMod", typeof(CT_PositivePercentage), Order = 0)]
+        [XmlElement("alphaOff", typeof(CT_FixedPercentage), Order = 0)]
+        [XmlElement("blue", typeof(CT_Percentage), Order = 0)]
+        [XmlElement("blueMod", typeof(CT_Percentage), Order = 0)]
+        [XmlElement("blueOff", typeof(CT_Percentage), Order = 0)]
+        [XmlElement("comp", typeof(CT_ComplementTransform), Order = 0)]
+        [XmlElement("gamma", typeof(CT_GammaTransform), Order = 0)]
+        [XmlElement("gray", typeof(CT_GrayscaleTransform), Order = 0)]
+        [XmlElement("green", typeof(CT_Percentage), Order = 0)]
+        [XmlElement("greenMod", typeof(CT_Percentage), Order = 0)]
+        [XmlElement("greenOff", typeof(CT_Percentage), Order = 0)]
+        [XmlElement("hue", typeof(CT_PositiveFixedAngle), Order = 0)]
+        [XmlElement("hueMod", typeof(CT_PositivePercentage), Order = 0)]
+        [XmlElement("hueOff", typeof(CT_Angle), Order = 0)]
+        [XmlElement("inv", typeof(CT_InverseTransform), Order = 0)]
+        [XmlElement("invGamma", typeof(CT_InverseGammaTransform), Order = 0)]
+        [XmlElement("lum", typeof(CT_Percentage), Order = 0)]
+        [XmlElement("lumMod", typeof(CT_Percentage), Order = 0)]
+        [XmlElement("lumOff", typeof(CT_Percentage), Order = 0)]
+        [XmlElement("red", typeof(CT_Percentage), Order = 0)]
+        [XmlElement("redMod", typeof(CT_Percentage), Order = 0)]
+        [XmlElement("redOff", typeof(CT_Percentage), Order = 0)]
+        [XmlElement("sat", typeof(CT_Percentage), Order = 0)]
+        [XmlElement("satMod", typeof(CT_Percentage), Order = 0)]
+        [XmlElement("satOff", typeof(CT_Percentage), Order = 0)]
+        [XmlElement("shade", typeof(CT_PositiveFixedPercentage), Order = 0)]
+        [XmlElement("tint", typeof(CT_PositiveFixedPercentage), Order = 0)]
+        [XmlChoiceIdentifier("ItemsElementName")]
+        public object[] Items
+        {
+            get
+            {
+                return this.itemsField.ToArray();
+            }
+            set
+            {
+                if (value == null || value.Length == 0)
+                    this.itemsField = new List<object>();
+                else
+                    this.itemsField = new List<object>(value);
+            }
+        }
+
+        [XmlElement("ItemsElementName", Order = 1)]
+        [XmlIgnore]
+        public EG_ColorTransform[] ItemsElementName
+        {
+            get
+            {
+                return this.itemsElementNameField.ToArray();
+            }
+            set
+            {
+                if (value == null || value.Length == 0)
+                    this.itemsElementNameField = new List<EG_ColorTransform>();
+                else
+                    this.itemsElementNameField = new List<EG_ColorTransform>(value);
+            }
+        }
+
+        [XmlAttribute]
+        public int hue
+        {
+            get
+            {
+                return this.hueField;
+            }
+            set
+            {
+                this.hueField = value;
+            }
+        }
+
+        [XmlAttribute]
+        public int sat
+        {
+            get
+            {
+                return this.satField;
+            }
+            set
+            {
+                this.satField = value;
+            }
+        }
+
+        [XmlAttribute]
+        public int lum
+        {
+            get
+            {
+                return this.lumField;
+            }
+            set
+            {
+                this.lumField = value;
+            }
+        }
     }
 
     [Serializable]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
+    public class CT_SystemColor
+    {
+
+        private List<object> itemsField;
+
+        private List<EG_ColorTransform> itemsElementNameField;
+
+        private ST_SystemColorVal valField;
+
+        private byte[] lastClrField;
+
+        public CT_SystemColor()
+        {
+            this.itemsElementNameField = new List<EG_ColorTransform>();
+            this.itemsField = new List<object>();
+        }
+
+        [XmlElement("alpha", typeof(CT_PositiveFixedPercentage), Order = 0)]
+        [XmlElement("alphaMod", typeof(CT_PositivePercentage), Order = 0)]
+        [XmlElement("alphaOff", typeof(CT_FixedPercentage), Order = 0)]
+        [XmlElement("blue", typeof(CT_Percentage), Order = 0)]
+        [XmlElement("blueMod", typeof(CT_Percentage), Order = 0)]
+        [XmlElement("blueOff", typeof(CT_Percentage), Order = 0)]
+        [XmlElement("comp", typeof(CT_ComplementTransform), Order = 0)]
+        [XmlElement("gamma", typeof(CT_GammaTransform), Order = 0)]
+        [XmlElement("gray", typeof(CT_GrayscaleTransform), Order = 0)]
+        [XmlElement("green", typeof(CT_Percentage), Order = 0)]
+        [XmlElement("greenMod", typeof(CT_Percentage), Order = 0)]
+        [XmlElement("greenOff", typeof(CT_Percentage), Order = 0)]
+        [XmlElement("hue", typeof(CT_PositiveFixedAngle), Order = 0)]
+        [XmlElement("hueMod", typeof(CT_PositivePercentage), Order = 0)]
+        [XmlElement("hueOff", typeof(CT_Angle), Order = 0)]
+        [XmlElement("inv", typeof(CT_InverseTransform), Order = 0)]
+        [XmlElement("invGamma", typeof(CT_InverseGammaTransform), Order = 0)]
+        [XmlElement("lum", typeof(CT_Percentage), Order = 0)]
+        [XmlElement("lumMod", typeof(CT_Percentage), Order = 0)]
+        [XmlElement("lumOff", typeof(CT_Percentage), Order = 0)]
+        [XmlElement("red", typeof(CT_Percentage), Order = 0)]
+        [XmlElement("redMod", typeof(CT_Percentage), Order = 0)]
+        [XmlElement("redOff", typeof(CT_Percentage), Order = 0)]
+        [XmlElement("sat", typeof(CT_Percentage), Order = 0)]
+        [XmlElement("satMod", typeof(CT_Percentage), Order = 0)]
+        [XmlElement("satOff", typeof(CT_Percentage), Order = 0)]
+        [XmlElement("shade", typeof(CT_PositiveFixedPercentage), Order = 0)]
+        [XmlElement("tint", typeof(CT_PositiveFixedPercentage), Order = 0)]
+        [XmlChoiceIdentifier("ItemsElementName")]
+        public object[] Items
+        {
+            get
+            {
+                return this.itemsField.ToArray();
+            }
+            set
+            {
+                if (value == null || value.Length == 0)
+                    this.itemsField = new List<object>();
+                else
+                    this.itemsField = new List<object>(value);
+            }
+        }
+
+        [XmlElement("ItemsElementName", Order = 1)]
+        [XmlIgnore]
+        public EG_ColorTransform[] ItemsElementName
+        {
+            get
+            {
+                return this.itemsElementNameField.ToArray();
+            }
+            set
+            {
+                if (value == null || value.Length == 0)
+                    this.itemsElementNameField = new List<EG_ColorTransform>();
+                else
+                    this.itemsElementNameField = new List<EG_ColorTransform>(value);
+            }
+        }
+
+        [XmlAttribute]
+        public ST_SystemColorVal val
+        {
+            get
+            {
+                return this.valField;
+            }
+            set
+            {
+                this.valField = value;
+            }
+        }
+
+        [XmlAttribute(DataType = "hexBinary")]
+        public byte[] lastClr
+        {
+            get
+            {
+                return this.lastClrField;
+            }
+            set
+            {
+                this.lastClrField = value;
+            }
+        }
+    }
+
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
+    public enum ST_SystemColorVal
+    {
+
+        /// <remarks/>
+        scrollBar,
+
+        /// <remarks/>
+        background,
+
+        /// <remarks/>
+        activeCaption,
+
+        /// <remarks/>
+        inactiveCaption,
+
+        /// <remarks/>
+        menu,
+
+        /// <remarks/>
+        window,
+
+        /// <remarks/>
+        windowFrame,
+
+        /// <remarks/>
+        menuText,
+
+        /// <remarks/>
+        windowText,
+
+        /// <remarks/>
+        captionText,
+
+        /// <remarks/>
+        activeBorder,
+
+        /// <remarks/>
+        inactiveBorder,
+
+        /// <remarks/>
+        appWorkspace,
+
+        /// <remarks/>
+        highlight,
+
+        /// <remarks/>
+        highlightText,
+
+        /// <remarks/>
+        btnFace,
+
+        /// <remarks/>
+        btnShadow,
+
+        /// <remarks/>
+        grayText,
+
+        /// <remarks/>
+        btnText,
+
+        /// <remarks/>
+        inactiveCaptionText,
+
+        /// <remarks/>
+        btnHighlight,
+
+        /// <remarks/>
+        [XmlEnum("3dDkShadow")]
+        Item3dDkShadow,
+
+        /// <remarks/>
+        [XmlEnum("3dLight")]
+        Item3dLight,
+
+        /// <remarks/>
+        infoText,
+
+        /// <remarks/>
+        infoBk,
+
+        /// <remarks/>
+        hotLight,
+
+        /// <remarks/>
+        gradientActiveCaption,
+
+        /// <remarks/>
+        gradientInactiveCaption,
+
+        /// <remarks/>
+        menuHighlight,
+
+        /// <remarks/>
+        menuBar,
+    }
+
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
     public class CT_SchemeColor
     {
 
         private List<object> itemsField;
 
-        private List<ItemsChoiceType4> itemsElementNameField;
+        private List<EG_ColorTransform> itemsElementNameField;
 
         private ST_SchemeColorVal valField;
 
         public CT_SchemeColor()
         {
-            this.itemsElementNameField = new List<ItemsChoiceType4>();
+            this.itemsElementNameField = new List<EG_ColorTransform>();
             this.itemsField = new List<object>();
         }
 
@@ -784,7 +1027,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         [XmlElement("ItemsElementName", Order = 1)]
         [XmlIgnore]
-        public ItemsChoiceType4[] ItemsElementName
+        public EG_ColorTransform[] ItemsElementName
         {
             get
             {
@@ -793,9 +1036,9 @@ namespace NPOI.OpenXmlFormats.Dml
             set
             {
                 if (value == null || value.Length == 0)
-                    this.itemsElementNameField = new List<ItemsChoiceType4>();
+                    this.itemsElementNameField = new List<EG_ColorTransform>();
                 else
-                    this.itemsElementNameField = new List<ItemsChoiceType4>(value);
+                    this.itemsElementNameField = new List<EG_ColorTransform>(value);
             }
         }
         [XmlAttribute]
@@ -812,587 +1055,612 @@ namespace NPOI.OpenXmlFormats.Dml
         }
     }
 
-    public enum ItemsChoiceType4
-    {
 
-
-        alpha,
-
-
-        alphaMod,
-
-
-        alphaOff,
-
-
-        blue,
-
-
-        blueMod,
-
-
-        blueOff,
-
-
-        comp,
-
-
-        gamma,
-
-
-        gray,
-
-
-        green,
-
-
-        greenMod,
-
-
-        greenOff,
-
-
-        hue,
-
-
-        hueMod,
-
-
-        hueOff,
-
-
-        inv,
-
-
-        invGamma,
-
-
-        lum,
-
-
-        lumMod,
-
-
-        lumOff,
-
-
-        red,
-
-
-        redMod,
-
-
-        redOff,
-
-
-        sat,
-
-
-        satMod,
-
-
-        satOff,
-
-
-        shade,
-
-
-        tint,
-    }
-
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     public enum ST_SchemeColorVal
     {
 
-
+        /// <remarks/>
         bg1,
 
-
+        /// <remarks/>
         tx1,
 
-
+        /// <remarks/>
         bg2,
 
-
+        /// <remarks/>
         tx2,
 
-
+        /// <remarks/>
         accent1,
 
-
+        /// <remarks/>
         accent2,
 
-
+        /// <remarks/>
         accent3,
 
-
+        /// <remarks/>
         accent4,
 
-
+        /// <remarks/>
         accent5,
 
-
+        /// <remarks/>
         accent6,
 
-
+        /// <remarks/>
         hlink,
 
-
+        /// <remarks/>
         folHlink,
 
-
+        /// <remarks/>
         phClr,
 
-
+        /// <remarks/>
         dk1,
 
-
+        /// <remarks/>
         lt1,
 
-
+        /// <remarks/>
         dk2,
 
-
+        /// <remarks/>
         lt2,
     }
 
 
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
+    public class CT_PresetColor
+    {
+
+        private List<object> itemsField;
+
+        private List<EG_ColorTransform> itemsElementNameField;
+
+        private ST_PresetColorVal valField;
+
+        private bool valFieldSpecified;
+
+        public CT_PresetColor()
+        {
+            this.itemsElementNameField = new List<EG_ColorTransform>();
+            this.itemsField = new List<object>();
+        }
+
+        [XmlElement("alpha", typeof(CT_PositiveFixedPercentage), Order = 0)]
+        [XmlElement("alphaMod", typeof(CT_PositivePercentage), Order = 0)]
+        [XmlElement("alphaOff", typeof(CT_FixedPercentage), Order = 0)]
+        [XmlElement("blue", typeof(CT_Percentage), Order = 0)]
+        [XmlElement("blueMod", typeof(CT_Percentage), Order = 0)]
+        [XmlElement("blueOff", typeof(CT_Percentage), Order = 0)]
+        [XmlElement("comp", typeof(CT_ComplementTransform), Order = 0)]
+        [XmlElement("gamma", typeof(CT_GammaTransform), Order = 0)]
+        [XmlElement("gray", typeof(CT_GrayscaleTransform), Order = 0)]
+        [XmlElement("green", typeof(CT_Percentage), Order = 0)]
+        [XmlElement("greenMod", typeof(CT_Percentage), Order = 0)]
+        [XmlElement("greenOff", typeof(CT_Percentage), Order = 0)]
+        [XmlElement("hue", typeof(CT_PositiveFixedAngle), Order = 0)]
+        [XmlElement("hueMod", typeof(CT_PositivePercentage), Order = 0)]
+        [XmlElement("hueOff", typeof(CT_Angle), Order = 0)]
+        [XmlElement("inv", typeof(CT_InverseTransform), Order = 0)]
+        [XmlElement("invGamma", typeof(CT_InverseGammaTransform), Order = 0)]
+        [XmlElement("lum", typeof(CT_Percentage), Order = 0)]
+        [XmlElement("lumMod", typeof(CT_Percentage), Order = 0)]
+        [XmlElement("lumOff", typeof(CT_Percentage), Order = 0)]
+        [XmlElement("red", typeof(CT_Percentage), Order = 0)]
+        [XmlElement("redMod", typeof(CT_Percentage), Order = 0)]
+        [XmlElement("redOff", typeof(CT_Percentage), Order = 0)]
+        [XmlElement("sat", typeof(CT_Percentage), Order = 0)]
+        [XmlElement("satMod", typeof(CT_Percentage), Order = 0)]
+        [XmlElement("satOff", typeof(CT_Percentage), Order = 0)]
+        [XmlElement("shade", typeof(CT_PositiveFixedPercentage), Order = 0)]
+        [XmlElement("tint", typeof(CT_PositiveFixedPercentage), Order = 0)]
+        [XmlChoiceIdentifier("ItemsElementName")]
+        public object[] Items
+        {
+            get
+            {
+                return this.itemsField.ToArray();
+            }
+            set
+            {
+                if (value == null || value.Length == 0)
+                    this.itemsField = new List<object>();
+                else
+                    this.itemsField = new List<object>(value);
+            }
+        }
+        [XmlElement("ItemsElementName", Order = 1)]
+        [XmlIgnore]
+        public EG_ColorTransform[] ItemsElementName
+        {
+            get
+            {
+                return this.itemsElementNameField.ToArray();
+            }
+            set
+            {
+                if (value == null || value.Length == 0)
+                    this.itemsElementNameField = new List<EG_ColorTransform>();
+                else
+                    this.itemsElementNameField = new List<EG_ColorTransform>(value);
+            }
+        }
+
+        [XmlAttribute]
+        public ST_PresetColorVal val
+        {
+            get
+            {
+                return this.valField;
+            }
+            set
+            {
+                this.valField = value;
+            }
+        }
+
+        [XmlIgnore]
+        public bool valSpecified
+        {
+            get
+            {
+                return this.valFieldSpecified;
+            }
+            set
+            {
+                this.valFieldSpecified = value;
+            }
+        }
+    }
+
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     public enum ST_PresetColorVal
     {
 
-
+        /// <remarks/>
         aliceBlue,
 
-
+        /// <remarks/>
         antiqueWhite,
 
-
+        /// <remarks/>
         aqua,
 
-
+        /// <remarks/>
         aquamarine,
 
-
+        /// <remarks/>
         azure,
 
-
+        /// <remarks/>
         beige,
 
-
+        /// <remarks/>
         bisque,
 
-
+        /// <remarks/>
         black,
 
-
+        /// <remarks/>
         blanchedAlmond,
 
-
+        /// <remarks/>
         blue,
 
-
+        /// <remarks/>
         blueViolet,
 
-
+        /// <remarks/>
         brown,
 
-
+        /// <remarks/>
         burlyWood,
 
-
+        /// <remarks/>
         cadetBlue,
 
-
+        /// <remarks/>
         chartreuse,
 
-
+        /// <remarks/>
         chocolate,
 
-
+        /// <remarks/>
         coral,
 
-
+        /// <remarks/>
         cornflowerBlue,
 
-
+        /// <remarks/>
         cornsilk,
 
-
+        /// <remarks/>
         crimson,
 
-
+        /// <remarks/>
         cyan,
 
-
+        /// <remarks/>
         dkBlue,
 
-
+        /// <remarks/>
         dkCyan,
 
-
+        /// <remarks/>
         dkGoldenrod,
 
-
+        /// <remarks/>
         dkGray,
 
-
+        /// <remarks/>
         dkGreen,
 
-
+        /// <remarks/>
         dkKhaki,
 
-
+        /// <remarks/>
         dkMagenta,
 
-
+        /// <remarks/>
         dkOliveGreen,
 
-
+        /// <remarks/>
         dkOrange,
 
-
+        /// <remarks/>
         dkOrchid,
 
-
+        /// <remarks/>
         dkRed,
 
-
+        /// <remarks/>
         dkSalmon,
 
-
+        /// <remarks/>
         dkSeaGreen,
 
-
+        /// <remarks/>
         dkSlateBlue,
 
-
+        /// <remarks/>
         dkSlateGray,
 
-
+        /// <remarks/>
         dkTurquoise,
 
-
+        /// <remarks/>
         dkViolet,
 
-
+        /// <remarks/>
         deepPink,
 
-
+        /// <remarks/>
         deepSkyBlue,
 
-
+        /// <remarks/>
         dimGray,
 
-
+        /// <remarks/>
         dodgerBlue,
 
-
+        /// <remarks/>
         firebrick,
 
-
+        /// <remarks/>
         floralWhite,
 
-
+        /// <remarks/>
         forestGreen,
 
-
+        /// <remarks/>
         fuchsia,
 
-
+        /// <remarks/>
         gainsboro,
 
-
+        /// <remarks/>
         ghostWhite,
 
-
+        /// <remarks/>
         gold,
 
-
+        /// <remarks/>
         goldenrod,
 
-
+        /// <remarks/>
         gray,
 
-
+        /// <remarks/>
         green,
 
-
+        /// <remarks/>
         greenYellow,
 
-
+        /// <remarks/>
         honeydew,
 
-
+        /// <remarks/>
         hotPink,
 
-
+        /// <remarks/>
         indianRed,
 
-
+        /// <remarks/>
         indigo,
 
-
+        /// <remarks/>
         ivory,
 
-
+        /// <remarks/>
         khaki,
 
-
+        /// <remarks/>
         lavender,
 
-
+        /// <remarks/>
         lavenderBlush,
 
-
+        /// <remarks/>
         lawnGreen,
 
-
+        /// <remarks/>
         lemonChiffon,
 
-
+        /// <remarks/>
         ltBlue,
 
-
+        /// <remarks/>
         ltCoral,
 
-
+        /// <remarks/>
         ltCyan,
 
-
+        /// <remarks/>
         ltGoldenrodYellow,
 
-
+        /// <remarks/>
         ltGray,
 
-
+        /// <remarks/>
         ltGreen,
 
-
+        /// <remarks/>
         ltPink,
 
-
+        /// <remarks/>
         ltSalmon,
 
-
+        /// <remarks/>
         ltSeaGreen,
 
-
+        /// <remarks/>
         ltSkyBlue,
 
-
+        /// <remarks/>
         ltSlateGray,
 
-
+        /// <remarks/>
         ltSteelBlue,
 
-
+        /// <remarks/>
         ltYellow,
 
-
+        /// <remarks/>
         lime,
 
-
+        /// <remarks/>
         limeGreen,
 
-
+        /// <remarks/>
         linen,
 
-
+        /// <remarks/>
         magenta,
 
-
+        /// <remarks/>
         maroon,
 
-
+        /// <remarks/>
         medAquamarine,
 
-
+        /// <remarks/>
         medBlue,
 
-
+        /// <remarks/>
         medOrchid,
 
-
+        /// <remarks/>
         medPurple,
 
-
+        /// <remarks/>
         medSeaGreen,
 
-
+        /// <remarks/>
         medSlateBlue,
 
-
+        /// <remarks/>
         medSpringGreen,
 
-
+        /// <remarks/>
         medTurquoise,
 
-
+        /// <remarks/>
         medVioletRed,
 
-
+        /// <remarks/>
         midnightBlue,
 
-
+        /// <remarks/>
         mintCream,
 
-
+        /// <remarks/>
         mistyRose,
 
-
+        /// <remarks/>
         moccasin,
 
-
+        /// <remarks/>
         navajoWhite,
 
-
+        /// <remarks/>
         navy,
 
-
+        /// <remarks/>
         oldLace,
 
-
+        /// <remarks/>
         olive,
 
-
+        /// <remarks/>
         oliveDrab,
 
-
+        /// <remarks/>
         orange,
 
-
+        /// <remarks/>
         orangeRed,
 
-
+        /// <remarks/>
         orchid,
 
-
+        /// <remarks/>
         paleGoldenrod,
 
-
+        /// <remarks/>
         paleGreen,
 
-
+        /// <remarks/>
         paleTurquoise,
 
-
+        /// <remarks/>
         paleVioletRed,
 
-
+        /// <remarks/>
         papayaWhip,
 
-
+        /// <remarks/>
         peachPuff,
 
-
+        /// <remarks/>
         peru,
 
-
+        /// <remarks/>
         pink,
 
-
+        /// <remarks/>
         plum,
 
-
+        /// <remarks/>
         powderBlue,
 
-
+        /// <remarks/>
         purple,
 
-
+        /// <remarks/>
         red,
 
-
+        /// <remarks/>
         rosyBrown,
 
-
+        /// <remarks/>
         royalBlue,
 
-
+        /// <remarks/>
         saddleBrown,
 
-
+        /// <remarks/>
         salmon,
 
-
+        /// <remarks/>
         sandyBrown,
 
-
+        /// <remarks/>
         seaGreen,
 
-
+        /// <remarks/>
         seaShell,
 
-
+        /// <remarks/>
         sienna,
 
-
+        /// <remarks/>
         silver,
 
-
+        /// <remarks/>
         skyBlue,
 
-
+        /// <remarks/>
         slateBlue,
 
-
+        /// <remarks/>
         slateGray,
 
-
+        /// <remarks/>
         snow,
 
-
+        /// <remarks/>
         springGreen,
 
-
+        /// <remarks/>
         steelBlue,
 
-
+        /// <remarks/>
         tan,
 
-
+        /// <remarks/>
         teal,
 
-
+        /// <remarks/>
         thistle,
 
-
+        /// <remarks/>
         tomato,
 
-
+        /// <remarks/>
         turquoise,
 
-
+        /// <remarks/>
         violet,
 
-
+        /// <remarks/>
         wheat,
 
-
+        /// <remarks/>
         white,
 
-
+        /// <remarks/>
         whiteSmoke,
 
-
+        /// <remarks/>
         yellow,
 
-
+        /// <remarks/>
         yellowGreen,
     }
 
     [Serializable]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
     public class CT_OfficeArtExtensionList
     {
 
-        private List<CT_OfficeArtExtension> extField = null; // 0..*
+        private List<CT_OfficeArtExtension> extField;
 
         public CT_OfficeArtExtensionList()
         {
             this.extField = new List<CT_OfficeArtExtension>();
         }
 
-        [XmlElement]
+        [XmlElement("ext", Order = 0)]
         public List<CT_OfficeArtExtension> ext
         {
             get
@@ -1408,6 +1676,7 @@ namespace NPOI.OpenXmlFormats.Dml
 
     [Serializable]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
     public class CT_Scale2D
     {
 
@@ -1421,6 +1690,7 @@ namespace NPOI.OpenXmlFormats.Dml
             this.sxField = new CT_Ratio();
         }
 
+        [XmlElement(Order = 0)]
         public CT_Ratio sx
         {
             get
@@ -1433,6 +1703,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
+        [XmlElement(Order = 1)]
         public CT_Ratio sy
         {
             get
@@ -1448,6 +1719,7 @@ namespace NPOI.OpenXmlFormats.Dml
 
     [Serializable]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
     public class CT_Transform2D
     {
 
@@ -1472,7 +1744,7 @@ namespace NPOI.OpenXmlFormats.Dml
             return this.offField;
         }
 
-        [XmlElement]
+        [XmlElement(Order = 0)]
         public CT_Point2D off
         {
             get
@@ -1485,7 +1757,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [XmlElement]
+        [XmlElement(Order = 1)]
         public CT_PositiveSize2D ext
         {
             get
@@ -1523,7 +1795,7 @@ namespace NPOI.OpenXmlFormats.Dml
         {
             get
             {
-                return null == this.flipHField ? false:(bool)flipHField;
+                return null == this.flipHField ? false : (bool)flipHField;
             }
             set
             {
@@ -1542,7 +1814,7 @@ namespace NPOI.OpenXmlFormats.Dml
         {
             get
             {
-                return null == this.flipVField ? false:(bool)flipVField;
+                return null == this.flipVField ? false : (bool)flipVField;
             }
             set
             {
@@ -1558,6 +1830,7 @@ namespace NPOI.OpenXmlFormats.Dml
 
     [Serializable]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
     public class CT_GroupTransform2D
     {
 
@@ -1607,7 +1880,7 @@ namespace NPOI.OpenXmlFormats.Dml
             return this.chOffField;
         }
 
-
+        [XmlElement(Order = 0)]
         public CT_Point2D off
         {
             get
@@ -1620,6 +1893,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
+        [XmlElement(Order = 1)]
         public CT_PositiveSize2D ext
         {
             get
@@ -1632,6 +1906,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
+        [XmlElement(Order = 2)]
         public CT_Point2D chOff
         {
             get
@@ -1644,6 +1919,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
+        [XmlElement(Order = 3)]
         public CT_PositiveSize2D chExt
         {
             get
@@ -1656,6 +1932,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
+        [XmlAttribute]
         [DefaultValue(0)]
         public int rot
         {
@@ -1669,6 +1946,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
+        [XmlAttribute]
         [DefaultValue(false)]
         public bool flipH
         {
@@ -1682,6 +1960,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
+        [XmlAttribute]
         [DefaultValue(false)]
         public bool flipV
         {
@@ -1698,6 +1977,7 @@ namespace NPOI.OpenXmlFormats.Dml
 
     [Serializable]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
     public class CT_Point3D
     {
 
@@ -1707,6 +1987,7 @@ namespace NPOI.OpenXmlFormats.Dml
 
         private long zField;
 
+        [XmlAttribute]
         public long x
         {
             get
@@ -1719,6 +2000,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
+        [XmlAttribute]
         public long y
         {
             get
@@ -1731,6 +2013,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
+        [XmlAttribute]
         public long z
         {
             get
@@ -1746,6 +2029,7 @@ namespace NPOI.OpenXmlFormats.Dml
 
     [Serializable]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
     public class CT_Vector3D
     {
 
@@ -1755,6 +2039,7 @@ namespace NPOI.OpenXmlFormats.Dml
 
         private long dzField;
 
+        [XmlAttribute]
         public long dx
         {
             get
@@ -1767,6 +2052,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
+        [XmlAttribute]
         public long dy
         {
             get
@@ -1779,6 +2065,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
+        [XmlAttribute]
         public long dz
         {
             get
@@ -1794,6 +2081,7 @@ namespace NPOI.OpenXmlFormats.Dml
 
     [Serializable]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
     public class CT_SphereCoords
     {
 
@@ -1803,6 +2091,7 @@ namespace NPOI.OpenXmlFormats.Dml
 
         private int revField;
 
+        [XmlAttribute]
         public int lat
         {
             get
@@ -1815,6 +2104,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
+        [XmlAttribute]
         public int lon
         {
             get
@@ -1827,6 +2117,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
+        [XmlAttribute]
         public int rev
         {
             get
@@ -1842,6 +2133,7 @@ namespace NPOI.OpenXmlFormats.Dml
 
     [Serializable]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
     public class CT_RelativeRect
     {
         private int? lField; // all attributes are percentage
@@ -1861,7 +2153,7 @@ namespace NPOI.OpenXmlFormats.Dml
         {
             get { return (null != lField); }
         }
-
+        [XmlAttribute]
         [DefaultValue(0)]
         public int t
         {
@@ -1873,7 +2165,7 @@ namespace NPOI.OpenXmlFormats.Dml
         {
             get { return (null != tField); }
         }
-
+        [XmlAttribute]
         [DefaultValue(0)]
         public int r
         {
@@ -1885,7 +2177,7 @@ namespace NPOI.OpenXmlFormats.Dml
         {
             get { return (null != rField); }
         }
-
+        [XmlAttribute]
         [DefaultValue(0)]
         public int b
         {
@@ -1901,6 +2193,7 @@ namespace NPOI.OpenXmlFormats.Dml
 
     [Serializable]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
     public class CT_Color
     {
 
@@ -1926,6 +2219,7 @@ namespace NPOI.OpenXmlFormats.Dml
             this.scrgbClrField = new CT_ScRgbColor();
         }
 
+        [XmlElement(Order = 0)]
         public CT_ScRgbColor scrgbClr
         {
             get
@@ -1938,6 +2232,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
+        [XmlElement(Order = 1)]
         public CT_SRgbColor srgbClr
         {
             get
@@ -1950,6 +2245,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
+        [XmlElement(Order = 2)]
         public CT_HslColor hslClr
         {
             get
@@ -1962,6 +2258,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
+        [XmlElement(Order = 3)]
         public CT_SystemColor sysClr
         {
             get
@@ -1974,6 +2271,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
+        [XmlElement(Order = 4)]
         public CT_SchemeColor schemeClr
         {
             get
@@ -1986,6 +2284,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
+        [XmlElement(Order = 5)]
         public CT_PresetColor prstClr
         {
             get
@@ -2001,6 +2300,7 @@ namespace NPOI.OpenXmlFormats.Dml
 
     [Serializable]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
     public class CT_ColorMRU
     {
 
@@ -2011,6 +2311,12 @@ namespace NPOI.OpenXmlFormats.Dml
             this.itemsField = new List<object>();
         }
 
+        [XmlElement("hslClr", typeof(CT_HslColor), Order = 0)]
+        [XmlElement("prstClr", typeof(CT_PresetColor), Order = 0)]
+        [XmlElement("schemeClr", typeof(CT_SchemeColor), Order = 0)]
+        [XmlElement("scrgbClr", typeof(CT_ScRgbColor), Order = 0)]
+        [XmlElement("srgbClr", typeof(CT_SRgbColor), Order = 0)]
+        [XmlElement("sysClr", typeof(CT_SystemColor), Order = 0)]
         public List<object> Items
         {
             get
@@ -2026,6 +2332,7 @@ namespace NPOI.OpenXmlFormats.Dml
 
     [Serializable]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
     public class CT_EmbeddedWAVAudioFile
     {
 
@@ -2041,6 +2348,7 @@ namespace NPOI.OpenXmlFormats.Dml
             this.builtInField = false;
         }
 
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/relationships")]
         public string embed
         {
             get
@@ -2053,6 +2361,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
+        [XmlAttribute]
         [DefaultValue("")]
         public string name
         {
@@ -2066,6 +2375,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
+        [XmlAttribute]
         [DefaultValue(false)]
         public bool builtIn
         {
@@ -2082,6 +2392,7 @@ namespace NPOI.OpenXmlFormats.Dml
 
     [Serializable]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
     public class CT_Hyperlink
     {
 
@@ -2118,6 +2429,7 @@ namespace NPOI.OpenXmlFormats.Dml
             this.endSndField = false;
         }
 
+        [XmlElement(Order = 0)]
         public CT_EmbeddedWAVAudioFile snd
         {
             get
@@ -2130,6 +2442,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
+        [XmlElement(Order = 1)]
         public CT_OfficeArtExtensionList extLst
         {
             get
@@ -2155,6 +2468,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
+        [XmlAttribute]
         [DefaultValue("")]
         public string invalidUrl
         {
@@ -2168,6 +2482,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
+        [XmlAttribute]
         [DefaultValue("")]
         public string action
         {
@@ -2181,6 +2496,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
+        [XmlAttribute]
         [DefaultValue("")]
         public string tgtFrame
         {
@@ -2194,6 +2510,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
+        [XmlAttribute]
         [DefaultValue("")]
         public string tooltip
         {
@@ -2207,6 +2524,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
+        [XmlAttribute]
         [DefaultValue(true)]
         public bool history
         {
@@ -2220,6 +2538,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
+        [XmlAttribute]
         [DefaultValue(false)]
         public bool highlightClick
         {
@@ -2233,6 +2552,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
+        [XmlAttribute]
         [DefaultValue(false)]
         public bool endSnd
         {
@@ -2283,5 +2603,37 @@ namespace NPOI.OpenXmlFormats.Dml
         hidden,
     }
 
-    
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
+    public enum ST_RectAlignment
+    {
+
+        /// <remarks/>
+        tl,
+
+        /// <remarks/>
+        t,
+
+        /// <remarks/>
+        tr,
+
+        /// <remarks/>
+        l,
+
+        /// <remarks/>
+        ctr,
+
+        /// <remarks/>
+        r,
+
+        /// <remarks/>
+        bl,
+
+        /// <remarks/>
+        b,
+
+        /// <remarks/>
+        br,
+    }
+        
 }

@@ -2,60 +2,69 @@
 using System;
 using System.Xml.Serialization;
 
-namespace NPOI.OpenXmlFormats.Dml {
-    
-    
-
+namespace NPOI.OpenXmlFormats.Dml
+{
     [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
-    [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
-    [XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
-    public partial class CT_GraphicalObjectData {
-        
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
+    public partial class CT_GraphicalObjectData
+    {
+
         private System.Xml.XmlElement[] anyField;
-        
+
         private string uriField;
-        
-    
+
+
         [XmlAnyElement()]
-        public System.Xml.XmlElement[] Any {
-            get {
+        public System.Xml.XmlElement[] Any
+        {
+            get
+            {
                 return this.anyField;
             }
-            set {
+            set
+            {
                 this.anyField = value;
             }
         }
-        
-    
-        [XmlAttribute(DataType="token")]
-        public string uri {
-            get {
+
+
+        [XmlAttribute(DataType = "token")]
+        public string uri
+        {
+            get
+            {
                 return this.uriField;
             }
-            set {
+            set
+            {
                 this.uriField = value;
             }
         }
     }
-    
+
 
     [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
-    [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
-    [XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
-    public partial class CT_GraphicalObject {
-        
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
+    public partial class CT_GraphicalObject
+    {
+
         private CT_GraphicalObjectData graphicDataField;
-        
-    
-        public CT_GraphicalObjectData graphicData {
-            get {
+
+        [XmlElement(Order = 0)]
+        public CT_GraphicalObjectData graphicData
+        {
+            get
+            {
                 return this.graphicDataField;
             }
-            set {
+            set
+            {
                 this.graphicDataField = value;
             }
         }
