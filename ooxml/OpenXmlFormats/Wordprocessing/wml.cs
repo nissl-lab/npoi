@@ -2028,11 +2028,11 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
     
         [XmlEnum("urn:schemas-microsoft-com:office:office:")]
-        Item,
+        office,
 
     
         [XmlEnum("urn:schemas-microsoft-com:vml:")]
-        Item1,
+        vml,
     }
 
 
@@ -2653,7 +2653,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [System.Xml.Serialization.XmlTextAttribute()]
+        [XmlText]
         public string Value
         {
             get

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Xml.Serialization;
+using System.Diagnostics;
 
 namespace NPOI.OpenXmlFormats.Dml
 {
@@ -707,7 +708,7 @@ namespace NPOI.OpenXmlFormats.Dml
 
 
     [Serializable]
-    [System.Diagnostics.DebuggerStepThrough]
+    [DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
@@ -775,7 +776,7 @@ namespace NPOI.OpenXmlFormats.Dml
 
 
     [Serializable]
-    [System.Diagnostics.DebuggerStepThrough]
+    [DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
@@ -1185,7 +1186,7 @@ namespace NPOI.OpenXmlFormats.Dml
 
 
     [Serializable]
-    [System.Diagnostics.DebuggerStepThrough]
+    [DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
@@ -1689,7 +1690,7 @@ namespace NPOI.OpenXmlFormats.Dml
     public class CT_PresetGeometry2D
     {
 
-        private List<CT_GeomGuide> avLstField = null;
+        private List<CT_GeomGuide> avLstField = new List<CT_GeomGuide>();
 
         private ST_ShapeType prstField;
 
@@ -1699,18 +1700,21 @@ namespace NPOI.OpenXmlFormats.Dml
         }
 
 
-        //[XmlElement("avLst")]
         [XmlArray(Order = 0)]
+        //[XmlArrayItem("avLst", IsNullable = false)]
         [XmlArrayItem("gd", IsNullable = false)]
-        public List<CT_GeomGuide> avLst
+        public CT_GeomGuide[] avLst
         {
             get
             {
-                return this.avLstField;
+                return this.avLstField.ToArray();
             }
             set
             {
-                this.avLstField = value;
+                if (value == null)
+                    this.avLstField = new List<CT_GeomGuide>();
+                else
+                    this.avLstField = new List<CT_GeomGuide>(value);
             }
         }
 

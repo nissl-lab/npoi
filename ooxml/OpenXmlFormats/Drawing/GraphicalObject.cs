@@ -1,6 +1,7 @@
 
 using System;
 using System.Xml.Serialization;
+using System.Collections.Generic;
 
 namespace NPOI.OpenXmlFormats.Dml
 {
@@ -12,21 +13,27 @@ namespace NPOI.OpenXmlFormats.Dml
     public partial class CT_GraphicalObjectData
     {
 
-        private System.Xml.XmlElement[] anyField;
+        private List<System.Xml.XmlElement> anyField = new List<System.Xml.XmlElement>();
 
         private string uriField;
-
-
+        
+        public void AddPicElement(System.Xml.XmlElement el)
+        {
+            anyField.Add(el);
+        }
         [XmlAnyElement()]
         public System.Xml.XmlElement[] Any
         {
             get
             {
-                return this.anyField;
+                return this.anyField.ToArray();
             }
             set
             {
-                this.anyField = value;
+                if (value == null)
+                    this.anyField = new List<System.Xml.XmlElement>();
+                else
+                    this.anyField = new List<System.Xml.XmlElement>(value);
             }
         }
 

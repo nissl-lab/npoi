@@ -36,8 +36,7 @@ namespace NPOI.XWPF.UserModel
         {
             this.run = Run;
             this.ctPic = ctPic;
-         // TODO perhaps the choosed CT_Picture is wrong - my best guess
-           //  description = ctPic.nvPicPr.cNvPr.descr;
+            description = ctPic.nvPicPr.cNvPr.descr;
         }
 
         /**
@@ -46,7 +45,7 @@ namespace NPOI.XWPF.UserModel
          */
         public void SetPictureReference(PackageRelationship rel)
         {
-// TODO            ctPic.blipFill.blip.embed = (rel.Id);
+            ctPic.blipFill.blip.embed = (rel.Id);
         }
 
         /**
@@ -65,7 +64,7 @@ namespace NPOI.XWPF.UserModel
          */
         public XWPFPictureData GetPictureData()
         {
-            String blipId = string.Empty;// TODO ctPic.blipFill.blip.embed;
+            String blipId = ctPic.blipFill.blip.embed;
             POIXMLDocumentPart part = run.GetParagraph().GetPart();
             if (part != null)
             {

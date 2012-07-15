@@ -25,7 +25,6 @@ namespace NPOI.XWPF.UserModel
     using NPOI.XWPF.Util;
     using NPOI.OpenXmlFormats.Dml;
     using System.Xml.Serialization;
-    using NPOI.OpenXmlFormats.Dml.Picture;
     /**
      * XWPFrun.object defines a region of text with a common Set of properties
      *
@@ -113,7 +112,7 @@ namespace NPOI.XWPF.UserModel
 
         private List<NPOI.OpenXmlFormats.Dml.Picture.CT_Picture> GetCTPictures(object o)
         {
-            var pictures = new List<NPOI.OpenXmlFormats.Dml.Picture.CT_Picture>(); 
+            List<NPOI.OpenXmlFormats.Dml.Picture.CT_Picture> pictures = new List<NPOI.OpenXmlFormats.Dml.Picture.CT_Picture>(); 
             //XmlObject[] picts = o.SelectPath("declare namespace pic='"+CT_Picture.type.Name.NamespaceURI+"' .//pic:pic");
             //XmlElement[] picts = o.Any;
             //foreach (XmlElement pict in picts)
@@ -139,22 +138,28 @@ namespace NPOI.XWPF.UserModel
                     if (obj is CT_Inline)
                     {
                         CT_Inline inline = obj as CT_Inline;
-                        XmlSerializer xmlse = new XmlSerializer(typeof(NPOI.OpenXmlFormats.Dml.Picture.CT_Picture));
-                        using (MemoryStream ms = new MemoryStream())
-                        {
-                            using (StreamWriter sw = new StreamWriter(ms))
-                            {
-                                sw.Write(inline.graphic.graphicData.Any[0].OuterXml);
-                                ms.Position = 0;
-                                
-                                //NPOI.OpenXmlFormats.Dml.Picture.CT_Picture pict = xmlse.Deserialize(ms) as NPOI.OpenXmlFormats.Dml.Picture.CT_Picture;
-                        //        pictures.Add(pict);
-                            }
-                        }
+                        GetPictures(inline.graphic.graphicData, pictures);
                     }
                 }
             }
+            else if (o is CT_GraphicalObjectData)
+            {
+                GetPictures(o as CT_GraphicalObjectData, pictures);
+            }
             return pictures;
+        }
+        
+        private void GetPictures(CT_GraphicalObjectData god, List<NPOI.OpenXmlFormats.Dml.Picture.CT_Picture> pictures)
+        {
+            XmlSerializer xmlse = new XmlSerializer(typeof(NPOI.OpenXmlFormats.Dml.Picture.CT_Picture));
+            foreach (XmlElement el in god.Any)
+            {
+                System.IO.StringReader stringReader = new System.IO.StringReader(el.OuterXml);
+
+                NPOI.OpenXmlFormats.Dml.Picture.CT_Picture pict =
+                    xmlse.Deserialize(System.Xml.XmlReader.Create(stringReader)) as NPOI.OpenXmlFormats.Dml.Picture.CT_Picture;
+                pictures.Add(pict);
+            }
         }
 
         /**
@@ -685,6 +690,13 @@ namespace NPOI.XWPF.UserModel
                 //    "</a:graphic>";
                 //inline.Set((xml));
 
+                XmlDocument xmlDoc = new XmlDocument();
+                XmlElement el = xmlDoc.CreateElement("pic", "pic", "http://schemas.openxmlformats.org/drawingml/2006/picture");
+
+                inline.graphic = new CT_GraphicalObject();
+                inline.graphic.graphicData = new CT_GraphicalObjectData();
+                inline.graphic.graphicData.AddPicElement((XmlElement)el.Clone());
+
                 // Setup the inline
                 inline.distT = (0);
                 inline.distR = (0);
@@ -705,10 +717,10 @@ namespace NPOI.XWPF.UserModel
                 // Grab the picture object
                 CT_GraphicalObject graphic = inline.graphic;
                 CT_GraphicalObjectData graphicData = graphic.graphicData;
-                var pic = GetCTPictures(graphicData)[(0)];
+                NPOI.OpenXmlFormats.Dml.Picture.CT_Picture pic = GetCTPictures(graphicData)[(0)];
 
                 // Set it up
-                CT_PictureNonVisual nvPicPr = pic.AddNewNvPicPr();
+                NPOI.OpenXmlFormats.Dml.Picture.CT_PictureNonVisual nvPicPr = pic.AddNewNvPicPr();
 
                 CT_NonVisualDrawingProps cNvPr = nvPicPr.AddNewCNvPr();
                 /* use "0" for the id. See ECM-576, 20.2.2.3 */

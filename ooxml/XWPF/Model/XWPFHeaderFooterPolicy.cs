@@ -24,6 +24,7 @@ namespace NPOI.XWPF.Model
     using System.Xml.Serialization;
     using System.Xml;
     using NPOI.OpenXmlFormats.Vml;
+    using NPOI.OpenXmlFormats.Vml.Office;
 
     /**
      * A .docx file can have no headers/footers, the same header/footer
@@ -435,55 +436,54 @@ namespace NPOI.XWPF.Model
 
             CT_Group group = new CT_Group();
             CT_Shapetype shapetype = group.AddNewShapetype();
-            //shapetype.Id = ("_x0000_t136");
-            //shapetype.Coordsize = ("1600,21600");
-            //shapetype.Spt = (136);
-            //shapetype.Adj = ("10800");
-            //shapetype.Path2 = ("m@7,0l@8,0m@5,21600l@6,21600e");
-            //CTFormulas formulas = shapetype.AddNewFormulas();
-            //formulas.AddNewF().Eqn=("sum #0 0 10800");
-            //formulas.AddNewF().Eqn=("prod #0 2 1");
-            //formulas.AddNewF().Eqn=("sum 21600 0 @1");
-            //formulas.AddNewF().Eqn=("sum 0 0 @2");
-            //formulas.AddNewF().Eqn=("sum 21600 0 @3");
-            //formulas.AddNewF().Eqn=("if @0 @3 0");
-            //formulas.AddNewF().Eqn=("if @0 21600 @1");
-            //formulas.AddNewF().Eqn=("if @0 0 @2");
-            //formulas.AddNewF().Eqn=("if @0 @4 21600");
-            //formulas.AddNewF().Eqn=("mid @5 @6");
-            //formulas.AddNewF().Eqn=("mid @8 @5");
-            //formulas.AddNewF().Eqn=("mid @7 @8");
-            //formulas.AddNewF().Eqn=("mid @6 @7");
-            //formulas.AddNewF().Eqn=("sum @6 0 @5");
-            //CTPath path = shapetype.AddNewPath();
-            //path.Textpathok=(STTrueFalse.T);
-            //path.Connecttype=(STConnectType.CUSTOM);
-            //path.Connectlocs=("@9,0;@10,10800;@11,21600;@12,10800");
-            //path.Connectangles=("270,180,90,0");
-            //CTTextPath shapeTypeTextPath = shapetype.AddNewTextpath();
-            //shapeTypeTextPath.On=(STTrueFalse.T);
-            //shapeTypeTextPath.Fitshape=(STTrueFalse.T);
-            //CTHandles handles = shapetype.AddNewHandles();
-            //CTH h = handles.AddNewH();
-            //h.Position=("#0,bottomRight");
-            //h.Xrange=("6629,14971");
-            //CTLock lock = shapetype.AddNewLock();
-            //lock.Ext=(STExt.EDIT);
-            //CTShape shape = group.AddNewShape();
-            //shape.Id=("PowerPlusWaterMarkObject" + idx);
-            //shape.Spid=("_x0000_s102" + (4+idx));
-            //shape.Type=("#_x0000_t136");
-            //shape.Style=("position:absolute;margin-left:0;margin-top:0;width:415pt;height:207.5pt;z-index:-251654144;mso-wrap-edited:f;mso-position-horizontal:center;mso-position-horizontal-relative:margin;mso-position-vertical:center;mso-position-vertical-relative:margin");
-            //shape.Wrapcoords=("616 5068 390 16297 39 16921 -39 17155 7265 17545 7186 17467 -39 17467 18904 17467 10507 17467 8710 17545 18904 17077 18787 16843 18358 16297 18279 12554 19178 12476 20701 11774 20779 11228 21131 10059 21248 8811 21248 7563 20975 6316 20935 5380 19490 5146 14022 5068 2616 5068");
-            //shape.Fillcolor=("black");
-            //shape.Stroked=(STTrueFalse.FALSE);
-            //CTTextPath shapeTextPath = shape.AddNewTextpath();
-            //shapeTextPath.Style=("font-family:&quot;Cambria&quot;;font-size:1pt");
-            //shapeTextPath.String=(text);
-            //pict.Set(group);
-            //// end watermark paragraph
-            //return new XWPFParagraph(p, doc);
-            throw new NotImplementedException();
+            shapetype.id = ("_x0000_t136");
+            shapetype.coordsize = ("1600,21600");
+            shapetype.spt = (136);
+            shapetype.adj = ("10800");
+            shapetype.path2 = ("m@7,0l@8,0m@5,21600l@6,21600e");
+            CT_Formulas formulas = shapetype.AddNewFormulas();
+            formulas.AddNewF().eqn=("sum #0 0 10800");
+            formulas.AddNewF().eqn = ("prod #0 2 1");
+            formulas.AddNewF().eqn = ("sum 21600 0 @1");
+            formulas.AddNewF().eqn = ("sum 0 0 @2");
+            formulas.AddNewF().eqn = ("sum 21600 0 @3");
+            formulas.AddNewF().eqn = ("if @0 @3 0");
+            formulas.AddNewF().eqn = ("if @0 21600 @1");
+            formulas.AddNewF().eqn = ("if @0 0 @2");
+            formulas.AddNewF().eqn = ("if @0 @4 21600");
+            formulas.AddNewF().eqn = ("mid @5 @6");
+            formulas.AddNewF().eqn = ("mid @8 @5");
+            formulas.AddNewF().eqn = ("mid @7 @8");
+            formulas.AddNewF().eqn = ("mid @6 @7");
+            formulas.AddNewF().eqn = ("sum @6 0 @5");
+            CT_Path path = shapetype.AddNewPath();
+            path.textpathok=(ST_TrueFalse.t);
+            path.connecttype=(ST_ConnectType.custom);
+            path.connectlocs=("@9,0;@10,10800;@11,21600;@12,10800");
+            path.connectangles=("270,180,90,0");
+            CT_TextPath shapeTypeTextPath = shapetype.AddNewTextpath();
+            shapeTypeTextPath.on=(ST_TrueFalse.t);
+            shapeTypeTextPath.fitshape=(ST_TrueFalse.t);
+            CT_Handles handles = shapetype.AddNewHandles();
+            CT_H h = handles.AddNewH();
+            h.position=("#0,bottomRight");
+            h.xrange=("6629,14971");
+            NPOI.OpenXmlFormats.Vml.Office.CT_Lock lock1 = shapetype.AddNewLock();
+            lock1.ext=(ST_Ext.edit);
+            CT_Shape shape = group.AddNewShape();
+            shape.id = ("PowerPlusWaterMarkObject" + idx);
+            shape.spid = ("_x0000_s102" + (4 + idx));
+            shape.type = ("#_x0000_t136");
+            shape.style = ("position:absolute;margin-left:0;margin-top:0;width:415pt;height:207.5pt;z-index:-251654144;mso-wrap-edited:f;mso-position-horizontal:center;mso-position-horizontal-relative:margin;mso-position-vertical:center;mso-position-vertical-relative:margin");
+            shape.wrapcoords = ("616 5068 390 16297 39 16921 -39 17155 7265 17545 7186 17467 -39 17467 18904 17467 10507 17467 8710 17545 18904 17077 18787 16843 18358 16297 18279 12554 19178 12476 20701 11774 20779 11228 21131 10059 21248 8811 21248 7563 20975 6316 20935 5380 19490 5146 14022 5068 2616 5068");
+            shape.fillcolor = ("black");
+            shape.stroked = (ST_TrueFalse.@false);
+            CT_TextPath shapeTextPath = shape.AddNewTextpath();
+            shapeTextPath.style=("font-family:&quot;Cambria&quot;;font-size:1pt");
+            shapeTextPath.@string=(text);
+            pict.Set(group);
+            // end watermark paragraph
+            return new XWPFParagraph(p, doc);
         }
     }
 

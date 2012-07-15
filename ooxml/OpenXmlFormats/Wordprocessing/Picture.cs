@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Xml;
 using System.Xml.Serialization;
+using System.Text;
+using System.Collections.Generic;
 
 namespace NPOI.OpenXmlFormats.Wordprocessing
 {
@@ -14,14 +16,14 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     public class CT_PictureBase
     {
 
-        private System.Xml.XmlElement[] itemsField;
+        private List<System.Xml.XmlElement> itemsField;
 
-        private ItemsChoiceType9[] itemsElementNameField;
+        private List<ItemsChoiceType9> itemsElementNameField;
 
         public CT_PictureBase()
         {
-            this.itemsElementNameField = new ItemsChoiceType9[0];
-            this.itemsField = new System.Xml.XmlElement[0];
+            this.itemsElementNameField = new List<ItemsChoiceType9>();
+            this.itemsField = new List<System.Xml.XmlElement>();
         }
 
         [XmlAnyElement(Namespace = "urn:schemas-microsoft-com:office:office", Order = 0)]
@@ -31,11 +33,14 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         {
             get
             {
-                return this.itemsField;
+                return this.itemsField.ToArray();
             }
             set
             {
-                this.itemsField = value;
+                if (value == null)
+                    this.itemsField = new List<XmlElement>();
+                else
+                    this.itemsField = new List<XmlElement>(value);
             }
         }
 
@@ -45,11 +50,35 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         {
             get
             {
-                return this.itemsElementNameField;
+                return this.itemsElementNameField.ToArray();
             }
             set
             {
-                this.itemsElementNameField = value;
+                if (value == null)
+                    this.itemsElementNameField = new List<ItemsChoiceType9>();
+                else
+                    this.itemsElementNameField = new List<ItemsChoiceType9>(value);
+            }
+        }
+
+        public void Set(object obj)
+        {
+            XmlSerializer xmlse = new XmlSerializer(obj.GetType());
+            StringBuilder output = new StringBuilder();
+            XmlWriterSettings settings = new XmlWriterSettings
+            {
+                Encoding = Encoding.UTF8,
+                OmitXmlDeclaration = true
+            };
+            XmlWriter writer = XmlWriter.Create(output, settings);
+            xmlse.Serialize(writer, obj);
+            
+            XmlDocument xmlDoc = new XmlDocument();
+            xmlDoc.LoadXml(output.ToString());
+            lock(this)
+            {
+                this.itemsField.Add((XmlElement)xmlDoc.DocumentElement.CloneNode(true));
+                this.itemsElementNameField.Add(ItemsChoiceType9.vml);
             }
         }
     }
@@ -111,6 +140,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         {
             throw new NotImplementedException();
         }
+
+        
     }
 
     [Serializable]

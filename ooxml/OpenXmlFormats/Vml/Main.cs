@@ -18,7 +18,7 @@ namespace NPOI.OpenXmlFormats.Vml
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace="urn:schemas-microsoft-com:vml")]
     [XmlRoot("shape",Namespace="urn:schemas-microsoft-com:vml", IsNullable=true)]
-    public partial class CT_Shape {
+    public partial class  CT_Shape {
         
         
         private string typeField;
@@ -33,6 +33,21 @@ namespace NPOI.OpenXmlFormats.Vml
         private string fillcolorField;
         private ST_InsetMode insetmodeField;
 
+        private ST_TrueFalse strokedField;
+        private string wrapcoordsField;
+        [XmlAttribute]
+        public string wrapcoords
+        {
+            get { return wrapcoordsField; }
+            set { wrapcoordsField = value; }
+        }
+        [XmlAttribute]
+        public ST_TrueFalse stroked
+        {
+            get { return strokedField; }
+            set { strokedField = value; }
+        }
+
 
         static XmlSerializer serializer = new XmlSerializer(typeof(CT_Shape), "urn:schemas-microsoft-com:vml");
         public static CT_Shape Parse(string xmltext)
@@ -41,7 +56,14 @@ namespace NPOI.OpenXmlFormats.Vml
             CT_Shape obj = (CT_Shape)serializer.Deserialize(tr);
             return obj;
         }
+        private string spidField;
 
+        [XmlAttribute(Namespace = "urn:schemas-microsoft-com:office:office")]
+        public string spid
+        {
+            get { return this.spidField; }
+            set { this.spidField = value; }
+        }
         [XmlAttribute]
         public string id
         {
@@ -161,10 +183,21 @@ namespace NPOI.OpenXmlFormats.Vml
         List<CT_ClientData> clientDataField = null;
 
         [XmlElement("ClientData",Namespace = "urn:schemas-microsoft-com:office:excel")]
-        public List<CT_ClientData> ClientData
+        public CT_ClientData[] ClientData
         {
-            get { return clientDataField; }
-            set { clientDataField = value; }
+            get
+            {
+                if (clientDataField == null)
+                    return null;
+                return clientDataField.ToArray();
+            }
+            set
+            {
+                if (value == null)
+                    this.clientDataField = new List<CT_ClientData>();
+                else
+                    this.clientDataField = new List<CT_ClientData>(value);
+            }
         }
         public CT_ClientData GetClientDataArray(int index)
         {
@@ -262,6 +295,24 @@ namespace NPOI.OpenXmlFormats.Vml
                 return stringWriter.ToString();
             }
         }
+        [XmlElement]
+        public CT_TextPath textpath
+        {
+            get
+            {
+                return this.textpathField;
+            }
+            set
+            {
+                this.textpathField = value;
+            }
+        }
+
+        public CT_TextPath AddNewTextpath()
+        {
+            this.textpathField = new CT_TextPath();
+            return this.textpathField;
+        }
     }
     
     
@@ -284,6 +335,14 @@ namespace NPOI.OpenXmlFormats.Vml
         public bool fSpecified
         {
             get { return (null != fField); }
+        }
+
+        public CT_F AddNewF()
+        {
+            if (this.fField == null)
+                this.fField = new List<CT_F>();
+            this.fField.Add(new CT_F());
+            return this.fField[this.fField.Count - 1];
         }
     }
 
@@ -329,6 +388,15 @@ namespace NPOI.OpenXmlFormats.Vml
         public bool hSpecified
         {
             get { return (null != hField); }
+        }
+
+        public CT_H AddNewH()
+        {
+            if (hField == null)
+                hField = new List<CT_H>();
+            CT_H h = new CT_H();
+            hField.Add(h);
+            return h;
         }
     }
     
@@ -788,6 +856,17 @@ namespace NPOI.OpenXmlFormats.Vml
 
         private ST_ConnectType connecttypeField;
 
+        private string connectlocsField;
+
+        private bool connectlocsFieldSpecified;
+
+        private string connectanglesField;
+
+        private bool connectanglesFieldSpecified;
+
+        private ST_TrueFalse extrusionokField;
+
+        private bool extrusionokFieldSpecified;
 
         [XmlAttribute]
         public string id
@@ -995,6 +1074,78 @@ namespace NPOI.OpenXmlFormats.Vml
             }
             set {
                 this.insetpenokFieldSpecified = value;
+            }
+        }
+        [XmlAttribute]
+        public string connectlocs
+        {
+            get
+            {
+                return this.connectlocsField;
+            }
+            set
+            {
+                this.connectlocsField = value;
+            }
+        }
+        [XmlIgnore]
+        public bool connectlocsSpecified
+        {
+            get
+            {
+                return this.connectlocsFieldSpecified;
+            }
+            set
+            {
+                this.connectlocsFieldSpecified = value;
+            }
+        }
+        [XmlAttribute]
+        public string connectangles
+        {
+            get
+            {
+                return this.connectanglesField;
+            }
+            set
+            {
+                this.connectanglesField = value;
+            }
+        }
+        [XmlIgnore]
+        public bool connectanglesSpecified
+        {
+            get
+            {
+                return this.connectanglesFieldSpecified;
+            }
+            set
+            {
+                this.connectanglesFieldSpecified = value;
+            }
+        }
+        [XmlAttribute]
+        public ST_TrueFalse extrusionok
+        {
+            get
+            {
+                return this.extrusionokField;
+            }
+            set
+            {
+                this.extrusionokField = value;
+            }
+        }
+        [XmlIgnore]
+        public bool extrusionokSpecified
+        {
+            get
+            {
+                return this.extrusionokFieldSpecified;
+            }
+            set
+            {
+                this.extrusionokFieldSpecified = value;
             }
         }
     }
@@ -2147,11 +2298,11 @@ namespace NPOI.OpenXmlFormats.Vml
         
         private CT_Path pathField;
         
-        private List<CT_Formulas> formulasField;
+        private List<CT_Formulas> formulasField = new List<CT_Formulas>();
         
-        private List<CT_Handles> handlesField;
+        private List<CT_Handles> handlesField = new List<CT_Handles>();
         
-        private List<CT_Fill> fillField;
+        private List<CT_Fill> fillField = new List<CT_Fill>();
         
         private CT_Stroke strokeField;
         
@@ -2159,13 +2310,15 @@ namespace NPOI.OpenXmlFormats.Vml
         
         private List<CT_Textbox> textboxField;
         
-        private List<CT_TextPath> textpathField;
+        private List<CT_TextPath> textpathField = new List<CT_TextPath>();
         
         private List<CT_ImageData> imagedataField;
         
         private List<CT_Wrap> wrapField;
         
         private List<CT_AnchorLock> anchorlockField;
+
+        private List<CT_Lock> lockField = new List<CT_Lock>();
         
         private List<CT_Border> bordertopField;
         
@@ -2243,37 +2396,55 @@ namespace NPOI.OpenXmlFormats.Vml
                 this.pathField = value;
             }
         }
-        
-        
+
+
         [XmlElement("formulas")]
-        public List<CT_Formulas> formulas {
-            get {
-                return this.formulasField;
+        public CT_Formulas[] formulas
+        {
+            get
+            {
+                return this.formulasField.ToArray();
             }
-            set {
-                this.formulasField = value;
+            set
+            {
+                if (value == null)
+                    this.formulasField = new List<CT_Formulas>();
+                else
+                    this.formulasField = new List<CT_Formulas>(value);
             }
         }
-        
-        
+
+
         [XmlElement("handles")]
-        public List<CT_Handles> handles {
-            get {
-                return this.handlesField;
+        public CT_Handles[] handles
+        {
+            get
+            {
+                return this.handlesField.ToArray();
             }
-            set {
-                this.handlesField = value;
+            set
+            {
+                if (value == null)
+                    this.handlesField = new List<CT_Handles>();
+                else
+                    this.handlesField = new List<CT_Handles>(value);
             }
         }
-        
-        
+
+
         [XmlElement("fill")]
-        public List<CT_Fill> fill {
-            get {
-                return this.fillField;
+        public CT_Fill[] fill
+        {
+            get
+            {
+                return this.fillField.ToArray();
             }
-            set {
-                this.fillField = value;
+            set
+            {
+                if (value == null)
+                    this.fillField = new List<CT_Fill>();
+                else
+                    this.fillField = new List<CT_Fill>(value);
             }
         }
         
@@ -2309,17 +2480,23 @@ namespace NPOI.OpenXmlFormats.Vml
         //        this.textboxField = value;
         //    }
         //}
-        
-        
-        //[XmlElement("textpath")]
-        //public List<CT_TextPath> textpath {
-        //    get {
-        //        return this.textpathField;
-        //    }
-        //    set {
-        //        this.textpathField = value;
-        //    }
-        //}
+
+
+        [XmlElement("textpath")]
+        public CT_TextPath[] textpath
+        {
+            get
+            {
+                return this.textpathField.ToArray();
+            }
+            set
+            {
+                if (value == null)
+                    this.textpathField = new List<CT_TextPath>();
+                else
+                    this.textpathField = new List<CT_TextPath>(value);
+            }
+        }
         
         
         //[XmlElement("imagedata")]
@@ -2353,7 +2530,22 @@ namespace NPOI.OpenXmlFormats.Vml
         //        this.anchorlockField = value;
         //    }
         //}
-        
+
+        [XmlElement("lock", Namespace = "urn:schemas-microsoft-com:office:word")]
+        public CT_Lock[] @lock
+        {
+            get
+            {
+                return this.lockField.ToArray();
+            }
+            set
+            {
+                if (value == null)
+                    this.lockField = new List<CT_Lock>();
+                else
+                    this.lockField = new List<CT_Lock>(value);
+            }
+        }
         
         //[XmlElement("bordertop", Namespace="urn:schemas-microsoft-com:office:word")]
         //public List<CT_Border> bordertop {
@@ -2474,6 +2666,38 @@ namespace NPOI.OpenXmlFormats.Vml
                 return stringWriter.ToString();
             }
         }
+
+        public CT_Formulas AddNewFormulas()
+        {
+            if (this.formulasField == null)
+                this.formulasField = new List<CT_Formulas>();
+            this.formulasField.Add(new CT_Formulas());
+            return this.formulasField[this.formulasField.Count - 1];
+        }
+
+        public CT_TextPath AddNewTextpath()
+        {
+            if (this.textpathField == null)
+                this.textpathField = new List<CT_TextPath>();
+            this.textpathField.Add(new CT_TextPath());
+            return this.textpathField[this.textpathField.Count - 1];
+        }
+
+        public CT_Handles AddNewHandles()
+        {
+            if (this.handlesField == null)
+                this.handlesField = new List<CT_Handles>();
+            this.handlesField.Add(new CT_Handles());
+            return this.handlesField[this.handlesField.Count - 1];
+        }
+
+        public CT_Lock AddNewLock()
+        {
+            if (this.lockField == null)
+                this.lockField = new List<CT_Lock>();
+            this.lockField.Add(new CT_Lock());
+            return this.lockField[this.lockField.Count - 1];
+        }
     }
     
     
@@ -2484,9 +2708,9 @@ namespace NPOI.OpenXmlFormats.Vml
     [XmlRoot(Namespace="urn:schemas-microsoft-com:vml", IsNullable=true)]
     public partial class CT_Group {
         
-        private List<object> itemsField;
+        private List<object> itemsField = new List<object>();
         
-        private ItemsChoiceType6[] itemsElementNameField;
+        private List<ItemsChoiceType6> itemsElementNameField = new List<ItemsChoiceType6>();
         
         private ST_TrueFalse filledField;
         
@@ -2528,12 +2752,17 @@ namespace NPOI.OpenXmlFormats.Vml
         [XmlElement("textbox", typeof(CT_Textbox))]
         [XmlElement("textpath", typeof(CT_TextPath))]
         [XmlChoiceIdentifier("ItemsElementName")]
-        public List<object> Items {
+        public object[] Items {
             get {
-                return this.itemsField;
+                if (this.itemsField == null)
+                    return null;
+                return this.itemsField.ToArray();
             }
             set {
-                this.itemsField = value;
+                if (value == null)
+                    this.itemsField = new List<object>();
+                else
+                    this.itemsField = new List<object>(value);
             }
         }
         
@@ -2542,10 +2771,13 @@ namespace NPOI.OpenXmlFormats.Vml
         [XmlIgnore]
         public ItemsChoiceType6[] ItemsElementName {
             get {
-                return this.itemsElementNameField;
+                return this.itemsElementNameField.ToArray();
             }
             set {
-                this.itemsElementNameField = value;
+                if (value == null)
+                    this.itemsElementNameField = new List<ItemsChoiceType6>();
+                else
+                    this.itemsElementNameField = new List<ItemsChoiceType6>(value);
             }
         }
         
@@ -2606,7 +2838,117 @@ namespace NPOI.OpenXmlFormats.Vml
 
         public CT_Shapetype AddNewShapetype()
         {
-            throw new System.NotImplementedException();
+            return AddNewObject<CT_Shapetype>(ItemsChoiceType6.shapetype);
+        }
+        #region Generic methods for object operation
+
+        private List<T> GetObjectList<T>(ItemsChoiceType6 type) where T : class
+        {
+            lock (this)
+            {
+                List<T> list = new List<T>();
+                for (int i = 0; i < itemsElementNameField.Count; i++)
+                {
+                    if (itemsElementNameField[i] == type)
+                        list.Add(itemsField[i] as T);
+                }
+                return list;
+            }
+        }
+        private int SizeOfObjectArray(ItemsChoiceType6 type)
+        {
+            lock (this)
+            {
+                int size = 0;
+                for (int i = 0; i < itemsElementNameField.Count; i++)
+                {
+                    if (itemsElementNameField[i] == type)
+                        size++;
+                }
+                return size;
+            }
+        }
+        private T GetObjectArray<T>(int p, ItemsChoiceType6 type) where T : class
+        {
+            lock (this)
+            {
+                int pos = GetObjectIndex(type, p);
+                if (pos < 0 || pos >= this.itemsField.Count)
+                    return null;
+                return itemsField[pos] as T;
+            }
+        }
+        private T InsertNewObject<T>(ItemsChoiceType6 type, int p) where T : class, new()
+        {
+            T t = new T();
+            lock (this)
+            {
+                int pos = GetObjectIndex(type, p);
+                this.itemsElementNameField.Insert(pos, type);
+                this.itemsField.Insert(pos, t);
+            }
+            return t;
+        }
+        private T AddNewObject<T>(ItemsChoiceType6 type) where T : class, new()
+        {
+            T t = new T();
+            lock (this)
+            {
+                this.itemsElementNameField.Add(type);
+                this.itemsField.Add(t);
+            }
+            return t;
+        }
+        private void SetObjectArray<T>(ItemsChoiceType6 type, int p, T obj) where T : class
+        {
+            lock (this)
+            {
+                int pos = GetObjectIndex(type, p);
+                if (pos < 0 || pos >= this.itemsField.Count)
+                    return;
+                if (this.itemsField[pos] is T)
+                    this.itemsField[pos] = obj;
+                else
+                    throw new Exception(string.Format(@"object types are difference, itemsField[{0}] is {1}, and parameter obj is {2}",
+                        pos, this.itemsField[pos].GetType().Name, typeof(T).Name));
+            }
+        }
+        private int GetObjectIndex(ItemsChoiceType6 type, int p)
+        {
+            int index = -1;
+            int pos = 0;
+            for (int i = 0; i < itemsElementNameField.Count; i++)
+            {
+                if (itemsElementNameField[i] == type)
+                {
+                    if (pos == p)
+                    {
+                        //return itemsField[p] as T;
+                        index = i;
+                        break;
+                    }
+                    else
+                        pos++;
+                }
+            }
+            return index;
+        }
+        private void RemoveObject(ItemsChoiceType6 type, int p)
+        {
+            lock (this)
+            {
+                int pos = GetObjectIndex(type, p);
+                if (pos < 0 || pos >= this.itemsField.Count)
+                    return;
+                itemsElementNameField.RemoveAt(pos);
+                itemsField.RemoveAt(pos);
+            }
+        }
+        #endregion
+
+        public CT_Shape AddNewShape()
+        {
+            return AddNewObject<CT_Shape>(ItemsChoiceType6.shape);
         }
     }
     
@@ -3824,19 +4166,19 @@ namespace NPOI.OpenXmlFormats.Vml
     [XmlRoot(Namespace="urn:schemas-microsoft-com:vml", IsNullable=true)]
     public partial class CT_Oval {
         
-        private List<object> itemsField;
+        private List<object> itemsField = new List<object>();
         
-        private ItemsChoiceType2[] itemsElementNameField;
-        
-        
-        [XmlElement("ClientData", typeof(CT_ClientData), Namespace="urn:schemas-microsoft-com:office:excel")]
-        [XmlElement("textdata", typeof(CT_Rel), Namespace="urn:schemas-microsoft-com:office:powerpoint")]
-        [XmlElement("anchorlock", typeof(CT_AnchorLock), Namespace="urn:schemas-microsoft-com:office:word")]
-        [XmlElement("borderbottom", typeof(CT_Border), Namespace="urn:schemas-microsoft-com:office:word")]
-        [XmlElement("borderleft", typeof(CT_Border), Namespace="urn:schemas-microsoft-com:office:word")]
-        [XmlElement("borderright", typeof(CT_Border), Namespace="urn:schemas-microsoft-com:office:word")]
-        [XmlElement("bordertop", typeof(CT_Border), Namespace="urn:schemas-microsoft-com:office:word")]
-        [XmlElement("wrap", typeof(CT_Wrap), Namespace="urn:schemas-microsoft-com:office:word")]
+        private List<ItemsChoiceType2> itemsElementNameField = new List<ItemsChoiceType2>();
+
+
+        [XmlElement("ClientData", typeof(CT_ClientData), Namespace = "urn:schemas-microsoft-com:office:excel")]
+        [XmlElement("textdata", typeof(CT_Rel), Namespace = "urn:schemas-microsoft-com:office:powerpoint")]
+        [XmlElement("anchorlock", typeof(CT_AnchorLock), Namespace = "urn:schemas-microsoft-com:office:word")]
+        [XmlElement("borderbottom", typeof(CT_Border), Namespace = "urn:schemas-microsoft-com:office:word")]
+        [XmlElement("borderleft", typeof(CT_Border), Namespace = "urn:schemas-microsoft-com:office:word")]
+        [XmlElement("borderright", typeof(CT_Border), Namespace = "urn:schemas-microsoft-com:office:word")]
+        [XmlElement("bordertop", typeof(CT_Border), Namespace = "urn:schemas-microsoft-com:office:word")]
+        [XmlElement("wrap", typeof(CT_Wrap), Namespace = "urn:schemas-microsoft-com:office:word")]
         [XmlElement("fill", typeof(CT_Fill))]
         [XmlElement("formulas", typeof(CT_Formulas))]
         [XmlElement("handles", typeof(CT_Handles))]
@@ -3847,12 +4189,18 @@ namespace NPOI.OpenXmlFormats.Vml
         [XmlElement("textbox", typeof(CT_Textbox))]
         [XmlElement("textpath", typeof(CT_TextPath))]
         [XmlChoiceIdentifier("ItemsElementName")]
-        public List<object> Items {
-            get {
-                return this.itemsField;
+        public object[] Items
+        {
+            get
+            {
+                return this.itemsField.ToArray();
             }
-            set {
-                this.itemsField = value;
+            set
+            {
+                if (value == null)
+                    this.itemsField = new List<object>();
+                else
+                    this.itemsField = new List<object>(value);
             }
         }
         
@@ -3861,10 +4209,13 @@ namespace NPOI.OpenXmlFormats.Vml
         [XmlIgnore]
         public ItemsChoiceType2[] ItemsElementName {
             get {
-                return this.itemsElementNameField;
+                return this.itemsElementNameField.ToArray();
             }
             set {
-                this.itemsElementNameField = value;
+                if (value == null)
+                    this.itemsElementNameField = new List<ItemsChoiceType2>();
+                else
+                    this.itemsElementNameField = new List<ItemsChoiceType2>(value);
             }
         }
     }
@@ -3942,9 +4293,9 @@ namespace NPOI.OpenXmlFormats.Vml
     [XmlRoot(Namespace="urn:schemas-microsoft-com:vml", IsNullable=true)]
     public partial class CT_PolyLine {
         
-        private List<object> itemsField;
-        
-        private ItemsChoiceType3[] itemsElementNameField;
+        private List<object> itemsField = new List<object>();
+
+        private List<ItemsChoiceType3> itemsElementNameField = new List<ItemsChoiceType3>();
         
         private string pointsField;
         
@@ -3967,12 +4318,15 @@ namespace NPOI.OpenXmlFormats.Vml
         [XmlElement("textbox", typeof(CT_Textbox))]
         [XmlElement("textpath", typeof(CT_TextPath))]
         [XmlChoiceIdentifier("ItemsElementName")]
-        public List<object> Items {
+        public object[] Items {
             get {
-                return this.itemsField;
+                return this.itemsField.ToArray();
             }
             set {
-                this.itemsField = value;
+                if (value == null)
+                    this.itemsField = new List<object>();
+                else
+                    this.itemsField = new List<object>(value);
             }
         }
         
@@ -3981,10 +4335,13 @@ namespace NPOI.OpenXmlFormats.Vml
         [XmlIgnore]
         public ItemsChoiceType3[] ItemsElementName {
             get {
-                return this.itemsElementNameField;
+                return this.itemsElementNameField.ToArray();
             }
             set {
-                this.itemsElementNameField = value;
+                if (value == null)
+                    this.itemsElementNameField = new List<ItemsChoiceType3>();
+                else
+                    this.itemsElementNameField = new List<ItemsChoiceType3>(value);
             }
         }
         

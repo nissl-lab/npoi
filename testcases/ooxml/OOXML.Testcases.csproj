@@ -45,6 +45,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\solution\Lib\NPOI.TestCases.dll</HintPath>
     </Reference>
+    <Reference Include="nunit.framework, Version=2.6.0.12051, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -62,21 +63,6 @@
     <Compile Include="XSSF\IO\TestLoadSaveXSSF.cs" />
     <Compile Include="XSSF\Model\TestCalculationChain.cs" />
     <Compile Include="XSSF\UserModel\TestSheetHiding.cs" />
-    <Compile Include="XSSF\UserModel\TestXSSFCell.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="XSSF\UserModel\TestXSSFName.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="XSSF\UserModel\TestXSSFRow.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="XSSF\UserModel\TestXSSFSheet.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="XSSF\UserModel\TestXSSFWorkbook.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="XSSF\Util\TestCTColComparator.cs" />
     <Compile Include="XSSF\Util\TestEvilUnclosedBRFixingInputStream.cs" />
     <Compile Include="XSSF\Util\TestNumericRanges.cs" />
@@ -103,7 +89,6 @@
     <ProjectReference Include="..\..\ooxml\OOXML.csproj">
       <Project>{6BEED965-B9A0-4FFA-B96D-0F380A97331A}</Project>
       <Name>OOXML</Name>
-      <Private>True</Private>
     </ProjectReference>
     <ProjectReference Include="..\..\ooxml\openxml4Net\OpenXml4Net.csproj">
       <Project>{D907A7AD-A67A-4492-A117-594D2168B7B8}</Project>

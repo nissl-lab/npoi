@@ -24,7 +24,9 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         }
         public static DocumentDocument Parse(Stream stream)
         {
-            CT_Document obj = (CT_Document)serializer.Deserialize(stream);
+            XmlTextReader xmlReader = new XmlTextReader(stream);
+            xmlReader.WhitespaceHandling = WhitespaceHandling.All;
+            CT_Document obj = (CT_Document)serializer.Deserialize(xmlReader);
 
             return new DocumentDocument(obj);
         }
