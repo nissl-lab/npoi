@@ -420,7 +420,7 @@ namespace NPOI.XSSF.UserModel
             int bracketPos = srcName.LastIndexOf('(');
             if (bracketPos > 0 && srcName.EndsWith(")"))
             {
-                String suffix = srcName.Substring(bracketPos + 1, srcName.Length - ")".Length);
+                String suffix = srcName.Substring(bracketPos + 1, srcName.Length - bracketPos - 2);
                 try
                 {
                     uniqueIndex = Int32.Parse(suffix.Trim());

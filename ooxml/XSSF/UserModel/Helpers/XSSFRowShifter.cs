@@ -210,7 +210,7 @@ namespace NPOI.XSSF.UserModel.Helpers
 
         XSSFEvaluationWorkbook fpb = XSSFEvaluationWorkbook.Create(wb);
         List<CT_ConditionalFormatting> cfList = sheet.GetCTWorksheet().conditionalFormatting;
-        for(int j = 0; j< cfList.Count; j++){
+        for(int j = 0; cfList!=null&&j< cfList.Count; j++){
             CT_ConditionalFormatting cf = cfList[j];
 
             List<CellRangeAddress> cellRanges = new List<CellRangeAddress>();

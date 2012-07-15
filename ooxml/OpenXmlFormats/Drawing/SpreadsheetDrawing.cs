@@ -608,15 +608,6 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
             return this.clientDataField;
         }
 
-        //[XmlAttribute("editAs")]
-        //// (DataType="ST_EditAs")
-        //public string editAsAttribute
-        //{
-        //    get { return editAsField.ToString(); }
-        //    set { editAsField = (ST_EditAs)Enum.Parse(typeof(ST_EditAs), value); }
-        //}
-        // typesafe access to editAs attribute
-
         [XmlAttribute]
         public ST_EditAs editAs
         {
@@ -648,18 +639,18 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
         #region Choice - one of CT_Shape, CT_GroupShape, CT_GraphicalObjectFrame, CT_Connector or CT_Picture
 
         [XmlElement]
-        public CT_Shape shape
+        public CT_Shape sp
         {
             get { return shapeField; }
             set { shapeField = value; }
         }
-        bool shapeSpecifiedField = false;
-        [XmlIgnore]
-        public bool shapeSpecified
-        {
-            get { return shapeSpecifiedField; }
-            set { shapeSpecifiedField = value; }
-        }
+        //bool shapeSpecifiedField = false;
+        //[XmlIgnore]
+        //public bool spSpecified
+        //{
+        //    get { return shapeSpecifiedField; }
+        //    set { shapeSpecifiedField = value; }
+        //}
 
         [XmlElement]
         public CT_GroupShape groupShape
@@ -667,13 +658,13 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
             get { return groupShapeField; }
             set { groupShapeField = value; }
         }
-        bool groupShapeSpecifiedField = false;
-        [XmlIgnore]
-        public bool groupShapeSpecified
-        {
-            get { return groupShapeSpecifiedField; }
-            set { groupShapeSpecifiedField = value; }
-        }
+        //bool groupShapeSpecifiedField = false;
+        //[XmlIgnore]
+        //public bool groupShapeSpecified
+        //{
+        //    get { return groupShapeSpecifiedField; }
+        //    set { groupShapeSpecifiedField = value; }
+        //}
 
         [XmlElement]
         public CT_GraphicalObjectFrame graphicalObject
@@ -681,13 +672,13 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
             get { return graphicalObjectField; }
             set { graphicalObjectField = value; }
         }
-        bool graphicalObjectSpecifiedField = false;
-        [XmlIgnore]
-        public bool graphicalObjectSpecified
-        {
-            get { return graphicalObjectSpecifiedField; }
-            set { graphicalObjectSpecifiedField = value; }
-        }
+        //bool graphicalObjectSpecifiedField = false;
+        //[XmlIgnore]
+        //public bool graphicalObjectSpecified
+        //{
+        //    get { return graphicalObjectSpecifiedField; }
+        //    set { graphicalObjectSpecifiedField = value; }
+        //}
 
         [XmlElement]
         public CT_Connector connector
@@ -695,13 +686,13 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
             get { return connectorField; }
             set { connectorField = value; }
         }
-        bool connectorSpecifiedField = false;
-        [XmlIgnore]
-        public bool connectorSpecified
-        {
-            get { return connectorSpecifiedField; }
-            set { connectorSpecifiedField = value; }
-        }
+        //bool connectorSpecifiedField = false;
+        //[XmlIgnore]
+        //public bool connectorSpecified
+        //{
+        //    get { return connectorSpecifiedField; }
+        //    set { connectorSpecifiedField = value; }
+        //}
 
         [XmlElement]
         public CT_Picture picture
@@ -709,13 +700,13 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
             get { return pictureField; }
             set { pictureField = value; }
         }
-        bool pictureSpecifiedField = false;
-        [XmlIgnore]
-        public bool pictureSpecified
-        {
-            get { return pictureSpecifiedField; }
-            set { pictureSpecifiedField = value; }
-        }
+        //bool pictureSpecifiedField = false;
+        //[XmlIgnore]
+        //public bool pictureSpecified
+        //{
+        //    get { return pictureSpecifiedField; }
+        //    set { pictureSpecifiedField = value; }
+        //}
 
         #endregion Choice - one of CT_Shape, CT_GroupShape, CT_GraphicalObjectFrame, CT_Connector or CT_Picture
 

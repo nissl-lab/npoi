@@ -1594,7 +1594,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         private uint sbField;
 
         private uint ebField;
-
+        [XmlAttribute]
         public string t
         {
             get
@@ -1606,7 +1606,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.tField = value;
             }
         }
-
+        [XmlAttribute]
         public uint sb
         {
             get
@@ -1618,7 +1618,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.sbField = value;
             }
         }
-
+        [XmlAttribute]
         public uint eb
         {
             get
@@ -1653,7 +1653,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.typeField = ST_PhoneticType.fullwidthKatakana;
             this.alignmentField = ST_PhoneticAlignment.left;
         }
-
+        [XmlAttribute]
         public uint fontId
         {
             get
@@ -1665,7 +1665,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.fontIdField = value;
             }
         }
-
+        [XmlAttribute]
         [DefaultValue(ST_PhoneticType.fullwidthKatakana)]
         public ST_PhoneticType type
         {
@@ -1678,7 +1678,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.typeField = value;
             }
         }
-
+        [XmlAttribute]
         [DefaultValue(ST_PhoneticAlignment.left)]
         public ST_PhoneticAlignment alignment
         {

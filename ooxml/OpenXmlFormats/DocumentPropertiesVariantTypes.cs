@@ -19,68 +19,159 @@ namespace NPOI.OpenXmlFormats
     public class CT_Variant
     {
 
-        private object itemField;
+        //private object itemField;
 
-        private ItemChoiceType itemElementNameField;
-        [XmlElement("array", typeof(CT_Array))]
-        [XmlElement("blob", typeof(byte[]), DataType = "base64Binary")]
-        [XmlElement("bool", typeof(bool))]
-        [XmlElement("bstr", typeof(string))]
-        [XmlElement("cf", typeof(CT_Cf))]
-        [XmlElement("clsid", typeof(string))]
-        [XmlElement("cy", typeof(string))]
-        [XmlElement("date", typeof(System.DateTime))]
-        [XmlElement("decimal", typeof(decimal))]
-        [XmlElement("empty", typeof(CT_Empty))]
-        [XmlElement("error", typeof(string))]
-        [XmlElement("filetime", typeof(System.DateTime))]
-        [XmlElement("i1", typeof(sbyte))]
-        [XmlElement("i2", typeof(short))]
-        [XmlElement("i4", typeof(int))]
-        [XmlElement("i8", typeof(long))]
-        [XmlElement("int", typeof(int))]
-        [XmlElement("lpstr", typeof(string))]
-        [XmlElement("lpwstr", typeof(string))]
-        [XmlElement("null", typeof(CT_Null))]
-        [XmlElement("oblob", typeof(byte[]), DataType = "base64Binary")]
-        [XmlElement("ostorage", typeof(byte[]), DataType = "base64Binary")]
-        [XmlElement("ostream", typeof(byte[]), DataType = "base64Binary")]
-        [XmlElement("r4", typeof(float))]
-        [XmlElement("r8", typeof(double))]
-        [XmlElement("storage", typeof(byte[]), DataType = "base64Binary")]
-        [XmlElement("stream", typeof(byte[]), DataType = "base64Binary")]
-        [XmlElement("ui1", typeof(byte))]
-        [XmlElement("ui2", typeof(ushort))]
-        [XmlElement("ui4", typeof(uint))]
-        [XmlElement("ui8", typeof(ulong))]
-        [XmlElement("uint", typeof(uint))]
-        //[XmlElement("variant", typeof(CT_Variant))]
-        [XmlElement("vector", typeof(CT_Vector))]
-        [XmlElement("vstream", typeof(CT_Vstream))]
-        [XmlChoiceIdentifier("ItemElementName")]
-        public object Item
+        //private ItemChoiceType itemElementNameField;
+        //[XmlElement("array", typeof(CT_Array))]
+        //[XmlElement("blob", typeof(byte[]), DataType = "base64Binary")]
+        //[XmlElement("bool", typeof(bool))]
+        //[XmlElement("bstr", typeof(string))]
+        //[XmlElement("cf", typeof(CT_Cf))]
+        //[XmlElement("clsid", typeof(string))]
+        //[XmlElement("cy", typeof(string))]
+        //[XmlElement("date", typeof(System.DateTime))]
+        //[XmlElement("decimal", typeof(decimal))]
+        //[XmlElement("empty", typeof(CT_Empty))]
+        //[XmlElement("error", typeof(string))]
+        //[XmlElement("filetime", typeof(System.DateTime))]
+        //[XmlElement("int", typeof(int))]
+        //[XmlElement("null", typeof(CT_Null))]
+        //[XmlElement("oblob", typeof(byte[]), DataType = "base64Binary")]
+        //[XmlElement("ostorage", typeof(byte[]), DataType = "base64Binary")]
+        //[XmlElement("ostream", typeof(byte[]), DataType = "base64Binary")]
+        //[XmlElement("storage", typeof(byte[]), DataType = "base64Binary")]
+        //[XmlElement("stream", typeof(byte[]), DataType = "base64Binary")]
+        //[XmlElement("ui1", typeof(byte))]
+        //[XmlElement("ui2", typeof(ushort))]
+        //[XmlElement("ui4", typeof(uint))]
+        //[XmlElement("ui8", typeof(ulong))]
+        //[XmlElement("uint", typeof(uint))]
+        ////[XmlElement("variant", typeof(CT_Variant))]
+        //[XmlElement("vector", typeof(CT_Vector))]
+        //[XmlElement("vstream", typeof(CT_Vstream))]
+        //[XmlChoiceIdentifier("ItemElementName")]
+        //public object Item
+        //{
+        //    get
+        //    {
+        //        return this.itemField;
+        //    }
+        //    set
+        //    {
+        //        this.itemField = value;
+        //    }
+        //}
+
+        //[XmlIgnore]
+        //public ItemChoiceType ItemElementName
+        //{
+        //    get
+        //    {
+        //        return this.itemElementNameField;
+        //    }
+        //    set
+        //    {
+        //        this.itemElementNameField = value;
+        //    }
+        //}
+        private sbyte i1Field = 0;
+        private bool i1SpecifiedField = false;
+        private short i2Field = 0;
+        private bool i2SpecifiedField = false;
+        private int i4Field = 0;
+        private bool i4SpecifiedField = false;
+        private long i8Field = 0;
+        private bool i8SpecifiedField = false;
+        //[XmlElement]
+        //public sbyte i1
+        //{
+        //    get { return i1Field; }
+        //    set { i1Field = value; }
+        //}
+        //[XmlIgnore]
+        //public bool i1Specified
+        //{
+        //    get { return i1SpecifiedField; }
+        //    set { i1SpecifiedField = value; }
+        //}
+        [XmlElement]
+        public short i2
         {
-            get
-            {
-                return this.itemField;
-            }
-            set
-            {
-                this.itemField = value;
-            }
+            get { return i2Field; }
+            set { i2Field = value; }
         }
-
         [XmlIgnore]
-        public ItemChoiceType ItemElementName
+        public bool i2Specified
         {
-            get
-            {
-                return this.itemElementNameField;
-            }
-            set
-            {
-                this.itemElementNameField = value;
-            }
+            get { return i2SpecifiedField; }
+            set { i2SpecifiedField = value; }
+        }
+        [XmlElement]
+        public int i4
+        {
+            get { return i4Field; }
+            set { i4Field = value; }
+        }
+        [XmlIgnore]
+        public bool i4Specified
+        {
+            get { return i4SpecifiedField; }
+            set { i4SpecifiedField = value; }
+        }
+        [XmlElement]
+        public long i8
+        {
+            get { return i8Field; }
+            set { i8Field = value; }
+        }
+        [XmlIgnore]
+        public bool i8Specified
+        {
+            get { return i8SpecifiedField; }
+            set { i8SpecifiedField = value; }
+        }
+        private string lpstrField = null;
+        private string lpwstrField = null;
+        private float r4Field = 0;
+        private bool r4SpecifiedField = false;
+        private double r8Field = 0;
+        private bool r8SpecifiedField = false;
+
+        [XmlElement]
+        public string lpstr
+        {
+            get { return lpstrField; }
+            set { lpstrField = value; }
+        }
+        [XmlElement]
+        public string lpwstr
+        {
+            get { return lpwstrField; }
+            set { lpwstrField = value; }
+        }
+        [XmlElement]
+        public float r4
+        {
+            get { return r4Field; }
+            set { r4Field = value; }
+        }
+        [XmlIgnore]
+        public bool r4Specified
+        {
+            get { return r4SpecifiedField; }
+            set { r4SpecifiedField = value; }
+        }
+        [XmlElement]
+        public double r8
+        {
+            get { return r8Field; }
+            set { r8Field = value; }
+        }
+        [XmlIgnore]
+        public bool r8Specified
+        {
+            get { return r8SpecifiedField; }
+            set { r8SpecifiedField = value; }
         }
     }
 
@@ -338,69 +429,257 @@ namespace NPOI.OpenXmlFormats
     public class CT_Vector
     {
 
-        private List<object> itemsField;
-
-        private List<ST_VectorBaseType> itemsElementNameField;
-
         private ST_VectorBaseType baseTypeField;
 
         private uint sizeField;
 
         public CT_Vector()
         {
-            this.itemsElementNameField = new List<ST_VectorBaseType>();
-            this.itemsField = new List<object>();
         }
-        [XmlElement("bool", typeof(bool))]
-        [XmlElement("bstr", typeof(string))]
-        [XmlElement("cf", typeof(CT_Cf))]
-        [XmlElement("clsid", typeof(string))]
-        [XmlElement("cy", typeof(string))]
-        [XmlElement("date", typeof(System.DateTime))]
-        [XmlElement("error", typeof(string))]
-        [XmlElement("filetime", typeof(System.DateTime))]
-        [XmlElement("i1", typeof(sbyte))]
-        [XmlElement("i2", typeof(short))]
-        [XmlElement("i4", typeof(int))]
-        [XmlElement("i8", typeof(long))]
-        [XmlElement("lpstr", typeof(string))]
-        [XmlElement("lpwstr", typeof(string))]
-        [XmlElement("r4", typeof(float))]
-        [XmlElement("r8", typeof(double))]
-        [XmlElement("ui1", typeof(byte))]
-        [XmlElement("ui2", typeof(ushort))]
-        [XmlElement("ui4", typeof(uint))]
-        [XmlElement("ui8", typeof(ulong))]
-        [XmlElement("variant", typeof(CT_Variant))]
-        [XmlChoiceIdentifier("ItemsElementName")]
-        public object[] Items
+
+        private bool @boolField=false;
+        private bool @boolSpecifiedField = false;
+        [XmlElement("bool")]
+        public bool @bool
         {
-            get
-            {
-                return this.itemsField.ToArray();
-            }
-            set
-            {
-                if (value != null && value.Length > 0)
-                    this.itemsField = new List<object>(value);
-                else
-                    this.itemsField = new List<object>();
-            }
+            get { return @boolField; }
+            set { @boolField = value; }
         }
         [XmlIgnore]
-        public ST_VectorBaseType[] ItemsElementName
+        public bool @boolSpecified
         {
-            get
-            {
-                return this.itemsElementNameField.ToArray();
-            }
-            set
-            {
-                if (value != null && value.Length > 0)
-                    this.itemsElementNameField = new List<ST_VectorBaseType>(value);
-                else
-                    this.itemsElementNameField = new List<ST_VectorBaseType>();
-            }
+            get { return @boolSpecifiedField; }
+            set { @boolSpecifiedField = value; }
+        }
+
+        private string bstrField = null;
+        [XmlElement]
+        public string bstr
+        {
+            get { return bstrField; }
+            set { bstrField = value; }
+        }
+
+        private CT_Cf cfField = null;
+        private string clsidField = null;
+        private string cyField = null;
+        [XmlElement]
+        public CT_Cf cf
+        {
+            get { return cfField; }
+            set { cfField = value; }
+        }
+        [XmlElement]
+        public string clsid
+        {
+            get { return clsidField; }
+            set { clsidField = value; }
+        }
+        [XmlElement]
+        public string cy
+        {
+            get { return cyField; }
+            set { cyField = value; }
+        }
+        private DateTime dateField;
+        private bool dateSpecifiedField = false;
+        [XmlElement]
+        public DateTime date
+        {
+            get { return dateField; }
+            set { dateField = value; }
+        }
+        [XmlIgnore]
+        public bool dateSpecified
+        {
+            get { return dateSpecifiedField; }
+            set { dateSpecifiedField = value; }
+        }
+        private string errorField = null;
+        [XmlElement]
+        public string error
+        {
+            get { return errorField; }
+            set { errorField = value; }
+        }
+
+        private DateTime filetimeField;
+        private bool filetimeSpecifiedField = false;
+        [XmlElement]
+        public DateTime filetime
+        {
+            get { return filetimeField; }
+            set { filetimeField = value; }
+        }
+        [XmlIgnore]
+        public bool filetimeSpecified
+        {
+            get { return filetimeSpecifiedField; }
+            set { filetimeSpecifiedField = value; }
+        }
+        private sbyte i1Field = 0;
+        private bool i1SpecifiedField = false;
+        private short i2Field = 0;
+        private bool i2SpecifiedField = false;
+        private int i4Field = 0;
+        private bool i4SpecifiedField = false;
+        private long i8Field = 0;
+        private bool i8SpecifiedField = false;
+        [XmlElement]
+        public sbyte i1
+        {
+            get { return i1Field; }
+            set { i1Field = value; }
+        }
+        [XmlIgnore]
+        public bool i1Specified
+        {
+            get { return i1SpecifiedField; }
+            set { i1SpecifiedField = value; }
+        }
+        [XmlElement]
+        public short i2
+        {
+            get { return i2Field; }
+            set { i2Field = value; }
+        }
+        [XmlIgnore]
+        public bool i2Specified
+        {
+            get { return i2SpecifiedField; }
+            set { i2SpecifiedField = value; }
+        }
+        [XmlElement]
+        public int i4
+        {
+            get { return i4Field; }
+            set { i4Field = value; }
+        }
+        [XmlIgnore]
+        public bool i4Specified
+        {
+            get { return i4SpecifiedField; }
+            set { i4SpecifiedField = value; }
+        }
+        [XmlElement]
+        public long i8
+        {
+            get { return i8Field; }
+            set { i8Field = value; }
+        }
+        [XmlIgnore]
+        public bool i8Specified
+        {
+            get { return i8SpecifiedField; }
+            set { i8SpecifiedField = value; }
+        }
+        private string lpstrField = null;
+        private string lpwstrField = null;
+        private float r4Field = 0;
+        private bool r4SpecifiedField = false;
+        private double r8Field = 0;
+        private bool r8SpecifiedField = false;
+
+        [XmlElement]
+        public string lpstr
+        {
+            get { return lpstrField; }
+            set { lpstrField = value; }
+        }
+        [XmlElement]
+        public string lpwstr
+        {
+            get { return lpwstrField; }
+            set { lpwstrField = value; }
+        }
+        [XmlElement]
+        public float r4
+        {
+            get { return r4Field; }
+            set { r4Field = value; }
+        }
+        [XmlIgnore]
+        public bool r4Specified
+        {
+            get { return r4SpecifiedField; }
+            set { r4SpecifiedField = value; }
+        }
+        [XmlElement]
+        public double r8
+        {
+            get { return r8Field; }
+            set { r8Field = value; }
+        }
+        [XmlIgnore]
+        public bool r8Specified
+        {
+            get { return r8SpecifiedField; }
+            set { r8SpecifiedField = value; }
+        }
+        private byte ui1Field = 0;
+        private bool ui1SpecifiedField = false;
+        private ushort ui2Field = 0;
+        private bool ui2SpecifiedField = false;
+        private uint ui4Field = 0;
+        private bool ui4SpecifiedField = false;
+        private ulong ui8Field = 0;
+        private bool ui8SpecifiedField = false;
+
+        [XmlElement]
+        public byte ui1
+        {
+            get { return ui1Field; }
+            set { ui1Field = value; }
+        }
+        [XmlIgnore]
+        public bool ui1Specified
+        {
+            get { return ui1SpecifiedField; }
+            set { ui1SpecifiedField=value; }
+        }
+        [XmlElement]
+        public ushort ui2
+        {
+            get { return ui2Field; }
+            set { ui2Field = value; }
+        }
+        [XmlIgnore]
+        public bool ui2Specified
+        {
+            get { return ui2SpecifiedField; }
+            set { ui2SpecifiedField = value; }
+        }
+        [XmlElement]
+        public uint ui4
+        {
+            get { return ui4Field; }
+            set { ui4Field = value; }
+        }
+        [XmlIgnore]
+        public bool ui4Specified
+        {
+            get { return ui4SpecifiedField; }
+            set { ui4SpecifiedField = value; }
+        }
+        [XmlElement]
+        public ulong ui8
+        {
+            get { return ui8Field; }
+            set { ui8Field = value; }
+        }
+        [XmlIgnore]
+        public bool ui8Specified
+        {
+            get { return ui8SpecifiedField; }
+            set { ui8SpecifiedField = value; }
+        }
+
+        private List<CT_Variant> variantsField;
+        [XmlElement("variant")]
+        public List<CT_Variant> variants
+        {
+            get { return variantsField; }
+            set { variantsField = value; }
         }
         [XmlAttribute]
         public ST_VectorBaseType baseType

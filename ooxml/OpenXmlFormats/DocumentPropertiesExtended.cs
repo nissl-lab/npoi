@@ -9,6 +9,7 @@ using System;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Xml.Serialization;
+using System.Collections.Generic;
 
 namespace NPOI.OpenXmlFormats
 {
@@ -734,9 +735,9 @@ namespace NPOI.OpenXmlFormats
 
         public CT_VectorVariant()
         {
-            this.vectorField = new CT_Vector();
+            //this.vectorField = new CT_Vector();
         }
-
+        [XmlElement]
         public CT_Vector vector
         {
             get
