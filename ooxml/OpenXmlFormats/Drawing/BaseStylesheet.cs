@@ -857,8 +857,8 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 1)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("ln", IsNullable = false)]
+        [XmlArray(Order = 1)]
+        [XmlArrayItem("ln", IsNullable = false)]
         public List<CT_LineProperties> lnStyleLst
         {
             get
@@ -871,8 +871,8 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 2)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("effectStyle", IsNullable = false)]
+        [XmlArray(Order = 2)]
+        [XmlArrayItem("effectStyle", IsNullable = false)]
         public List<CT_EffectStyleItem> effectStyleLst
         {
             get

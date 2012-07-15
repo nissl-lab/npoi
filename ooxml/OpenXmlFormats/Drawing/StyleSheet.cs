@@ -394,8 +394,8 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        //[System.Xml.Serialization.XmlArrayAttribute(Order = 2)]
-        //[System.Xml.Serialization.XmlArrayItemAttribute("extraClrScheme", IsNullable = false)]
+        //[XmlArray(Order = 2)]
+        //[XmlArrayItem("extraClrScheme", IsNullable = false)]
         [XmlIgnore] // TODO
         public List<CT_ColorSchemeAndMapping> extraClrSchemeLst
         {
@@ -409,8 +409,8 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        //[System.Xml.Serialization.XmlArrayAttribute(Order = 3)]
-        //[System.Xml.Serialization.XmlArrayItemAttribute("custClr", IsNullable = false)]
+        //[XmlArray(Order = 3)]
+        //[XmlArrayItem("custClr", IsNullable = false)]
         [XmlIgnore] // TODO
         public List<CT_CustomColor> custClrLst
         {

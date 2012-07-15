@@ -239,8 +239,8 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             }
         }
 
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 13)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("ext", IsNullable = false)]
+        [XmlArray(Order = 13)]
+        [XmlArrayItem("ext", IsNullable = false)]
         public List<CT_Extension> extLst
         {
             get
@@ -966,8 +966,8 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             }
         }
 
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 2)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("ext", IsNullable = false)]
+        [XmlArray(Order = 2)]
+        [XmlArrayItem("ext", IsNullable = false)]
         public List<CT_Extension> extLst
         {
             get
@@ -1210,8 +1210,8 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             }
         }
 
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 6)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("ext", IsNullable = false)]
+        [XmlArray(Order = 6)]
+        [XmlArrayItem("ext", IsNullable = false)]
         public List<CT_Extension> extLst
         {
             get
@@ -1257,8 +1257,8 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             }
         }
 
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 1)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("ext", IsNullable = false)]
+        [XmlArray(Order = 1)]
+        [XmlArrayItem("ext", IsNullable = false)]
         public List<CT_Extension> extLst
         {
             get
@@ -1432,8 +1432,8 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             }
         }
 
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 9)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("ext", IsNullable = false)]
+        [XmlArray(Order = 9)]
+        [XmlArrayItem("ext", IsNullable = false)]
         public List<CT_Extension> extLst
         {
             get
@@ -1670,8 +1670,8 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             }
         }
 
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 6)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("ext", IsNullable = false)]
+        [XmlArray(Order = 6)]
+        [XmlArrayItem("ext", IsNullable = false)]
         public List<CT_Extension> extLst
         {
             get
@@ -1971,8 +1971,8 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             }
         }
 
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 17)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("ext", IsNullable = false)]
+        [XmlArray(Order = 17)]
+        [XmlArrayItem("ext", IsNullable = false)]
         public List<CT_Extension> extLst
         {
             get
@@ -2066,8 +2066,8 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             }
         }
 
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 4)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("ext", IsNullable = false)]
+        [XmlArray(Order = 4)]
+        [XmlArrayItem("ext", IsNullable = false)]
         public List<CT_Extension> extLst
         {
             get
@@ -2313,8 +2313,8 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             }
         }
 
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 5)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("ext", IsNullable = false)]
+        [XmlArray(Order = 5)]
+        [XmlArrayItem("ext", IsNullable = false)]
         public List<CT_Extension> extLst
         {
             get
@@ -2401,8 +2401,8 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             }
         }
 
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 2)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("ext", IsNullable = false)]
+        [XmlArray(Order = 2)]
+        [XmlArrayItem("ext", IsNullable = false)]
         public List<CT_Extension> extLst
         {
             get
@@ -2464,8 +2464,8 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             }
         }
 
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 2)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("ext", IsNullable = false)]
+        [XmlArray(Order = 2)]
+        [XmlArrayItem("ext", IsNullable = false)]
         public List<CT_Extension> extLst
         {
             get
@@ -3153,8 +3153,8 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             }
         }
 
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 22)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("ext", IsNullable = false)]
+        [XmlArray(Order = 22)]
+        [XmlArrayItem("ext", IsNullable = false)]
         public List<CT_Extension> extLst
         {
             get
@@ -3615,8 +3615,8 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             }
         }
 
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 21)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("ext", IsNullable = false)]
+        [XmlArray(Order = 21)]
+        [XmlArrayItem("ext", IsNullable = false)]
         public List<CT_Extension> extLst
         {
             get
@@ -3819,8 +3819,8 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             }
         }
 
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 2)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("ext", IsNullable = false)]
+        [XmlArray(Order = 2)]
+        [XmlArrayItem("ext", IsNullable = false)]
         public List<CT_Extension> extLst
         {
             get
@@ -4190,8 +4190,8 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             }
         }
 
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 19)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("ext", IsNullable = false)]
+        [XmlArray(Order = 19)]
+        [XmlArrayItem("ext", IsNullable = false)]
         public List<CT_Extension> extLst
         {
             get
@@ -4503,8 +4503,8 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             }
         }
 
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 13)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("ext", IsNullable = false)]
+        [XmlArray(Order = 13)]
+        [XmlArrayItem("ext", IsNullable = false)]
         public List<CT_Extension> extLst
         {
             get
@@ -4671,8 +4671,8 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             }
         }
 
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 7)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("ext", IsNullable = false)]
+        [XmlArray(Order = 7)]
+        [XmlArrayItem("ext", IsNullable = false)]
         public List<CT_Extension> extLst
         {
             get
@@ -4749,8 +4749,8 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             }
         }
 
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 3)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("ext", IsNullable = false)]
+        [XmlArray(Order = 3)]
+        [XmlArrayItem("ext", IsNullable = false)]
         public List<CT_Extension> extLst
         {
             get
@@ -5099,8 +5099,8 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             }
         }
 
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 3)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("ext", IsNullable = false)]
+        [XmlArray(Order = 3)]
+        [XmlArrayItem("ext", IsNullable = false)]
         public List<CT_Extension> extLst
         {
             get
@@ -5193,8 +5193,8 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             }
         }
 
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 3)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("ext", IsNullable = false)]
+        [XmlArray(Order = 3)]
+        [XmlArrayItem("ext", IsNullable = false)]
         public List<CT_Extension> extLst
         {
             get
@@ -5555,8 +5555,8 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             }
         }
 
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 11)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("ext", IsNullable = false)]
+        [XmlArray(Order = 11)]
+        [XmlArrayItem("ext", IsNullable = false)]
         public List<CT_Extension> extLst
         {
             get
@@ -5782,8 +5782,8 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             }
         }
 
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 5)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("ext", IsNullable = false)]
+        [XmlArray(Order = 5)]
+        [XmlArrayItem("ext", IsNullable = false)]
         public List<CT_Extension> extLst
         {
             get
@@ -5940,8 +5940,8 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             }
         }
 
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 8)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("ext", IsNullable = false)]
+        [XmlArray(Order = 8)]
+        [XmlArrayItem("ext", IsNullable = false)]
         public List<CT_Extension> extLst
         {
             get
@@ -6182,8 +6182,8 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             }
         }
 
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 3)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("ext", IsNullable = false)]
+        [XmlArray(Order = 3)]
+        [XmlArrayItem("ext", IsNullable = false)]
         public List<CT_Extension> extLst
         {
             get
@@ -6299,8 +6299,8 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             }
         }
 
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 2)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("ext", IsNullable = false)]
+        [XmlArray(Order = 2)]
+        [XmlArrayItem("ext", IsNullable = false)]
         public List<CT_Extension> extLst
         {
             get
@@ -6390,8 +6390,8 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             }
         }
 
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 2)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("ext", IsNullable = false)]
+        [XmlArray(Order = 2)]
+        [XmlArrayItem("ext", IsNullable = false)]
         public List<CT_Extension> extLst
         {
             get
@@ -6440,8 +6440,8 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             }
         }
 
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 1)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("pt", typeof(CT_StrVal), IsNullable = false)]
+        [XmlArray(Order = 1)]
+        [XmlArrayItem("pt", typeof(CT_StrVal), IsNullable = false)]
         public List<CT_StrVal> lvl
         {
             get
@@ -6454,8 +6454,8 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             }
         }
 
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 2)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("ext", IsNullable = false)]
+        [XmlArray(Order = 2)]
+        [XmlArrayItem("ext", IsNullable = false)]
         public List<CT_Extension> extLst
         {
             get
@@ -6613,8 +6613,8 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             }
         }
 
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 8)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("ext", IsNullable = false)]
+        [XmlArray(Order = 8)]
+        [XmlArrayItem("ext", IsNullable = false)]
         public List<CT_Extension> extLst
         {
             get
@@ -6682,8 +6682,8 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             }
         }
 
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 2)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("bandFmt", IsNullable = false)]
+        [XmlArray(Order = 2)]
+        [XmlArrayItem("bandFmt", IsNullable = false)]
         public List<CT_BandFmt> bandFmts
         {
             get
@@ -6709,8 +6709,8 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             }
         }
 
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 4)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("ext", IsNullable = false)]
+        [XmlArray(Order = 4)]
+        [XmlArrayItem("ext", IsNullable = false)]
         public List<CT_Extension> extLst
         {
             get
@@ -6835,8 +6835,8 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             }
         }
 
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 6)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("ext", IsNullable = false)]
+        [XmlArray(Order = 6)]
+        [XmlArrayItem("ext", IsNullable = false)]
         public List<CT_Extension> extLst
         {
             get
@@ -6949,8 +6949,8 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             }
         }
 
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 2)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("bandFmt", IsNullable = false)]
+        [XmlArray(Order = 2)]
+        [XmlArrayItem("bandFmt", IsNullable = false)]
         public List<CT_BandFmt> bandFmts
         {
             get
@@ -6976,8 +6976,8 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             }
         }
 
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 4)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("ext", IsNullable = false)]
+        [XmlArray(Order = 4)]
+        [XmlArrayItem("ext", IsNullable = false)]
         public List<CT_Extension> extLst
         {
             get
@@ -7256,8 +7256,8 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             }
         }
 
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 7)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("secondPiePt", IsNullable = false)]
+        [XmlArray(Order = 7)]
+        [XmlArrayItem("secondPiePt", IsNullable = false)]
         public List<CT_UnsignedInt> custSplit
         {
             get
@@ -7296,8 +7296,8 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             }
         }
 
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 10)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("ext", IsNullable = false)]
+        [XmlArray(Order = 10)]
+        [XmlArrayItem("ext", IsNullable = false)]
         public List<CT_Extension> extLst
         {
             get
@@ -7470,8 +7470,8 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             }
         }
 
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 9)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("ext", IsNullable = false)]
+        [XmlArray(Order = 9)]
+        [XmlArrayItem("ext", IsNullable = false)]
         public List<CT_Extension> extLst
         {
             get
@@ -7676,8 +7676,8 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             }
         }
 
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 9)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("ext", IsNullable = false)]
+        [XmlArray(Order = 9)]
+        [XmlArrayItem("ext", IsNullable = false)]
         public List<CT_Extension> extLst
         {
             get
@@ -8008,8 +8008,8 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             }
         }
 
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 13)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("ext", IsNullable = false)]
+        [XmlArray(Order = 13)]
+        [XmlArrayItem("ext", IsNullable = false)]
         public List<CT_Extension> extLst
         {
             get
@@ -8270,8 +8270,8 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             }
         }
 
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 9)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("ext", IsNullable = false)]
+        [XmlArray(Order = 9)]
+        [XmlArrayItem("ext", IsNullable = false)]
         public List<CT_Extension> extLst
         {
             get
@@ -8412,8 +8412,8 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             }
         }
 
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 5)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("ext", IsNullable = false)]
+        [XmlArray(Order = 5)]
+        [XmlArrayItem("ext", IsNullable = false)]
         public List<CT_Extension> extLst
         {
             get
@@ -8522,8 +8522,8 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             }
         }
 
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 3)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("ext", IsNullable = false)]
+        [XmlArray(Order = 3)]
+        [XmlArrayItem("ext", IsNullable = false)]
         public List<CT_Extension> extLst
         {
             get
@@ -8617,8 +8617,8 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             }
         }
 
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 4)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("ext", IsNullable = false)]
+        [XmlArray(Order = 4)]
+        [XmlArrayItem("ext", IsNullable = false)]
         public List<CT_Extension> extLst
         {
             get
@@ -8839,8 +8839,8 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             }
         }
 
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 12)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("ext", IsNullable = false)]
+        [XmlArray(Order = 12)]
+        [XmlArrayItem("ext", IsNullable = false)]
         public List<CT_Extension> extLst
         {
             get
@@ -9006,8 +9006,8 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             }
         }
 
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 5)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("ext", IsNullable = false)]
+        [XmlArray(Order = 5)]
+        [XmlArrayItem("ext", IsNullable = false)]
         public List<CT_Extension> extLst
         {
             get
@@ -9180,8 +9180,8 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             }
         }
 
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 9)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("ext", IsNullable = false)]
+        [XmlArray(Order = 9)]
+        [XmlArrayItem("ext", IsNullable = false)]
         public List<CT_Extension> extLst
         {
             get
@@ -9338,8 +9338,8 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             }
         }
 
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 5)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("ext", IsNullable = false)]
+        [XmlArray(Order = 5)]
+        [XmlArrayItem("ext", IsNullable = false)]
         public List<CT_Extension> extLst
         {
             get
@@ -9465,8 +9465,8 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             }
         }
 
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 6)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("ext", IsNullable = false)]
+        [XmlArray(Order = 6)]
+        [XmlArrayItem("ext", IsNullable = false)]
         public List<CT_Extension> extLst
         {
             get
@@ -9687,8 +9687,8 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             }
         }
 
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 12)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("ext", IsNullable = false)]
+        [XmlArray(Order = 12)]
+        [XmlArrayItem("ext", IsNullable = false)]
         public List<CT_Extension> extLst
         {
             get
@@ -9766,8 +9766,8 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             }
         }
 
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 3)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("ext", IsNullable = false)]
+        [XmlArray(Order = 3)]
+        [XmlArrayItem("ext", IsNullable = false)]
         public List<CT_Extension> extLst
         {
             get
@@ -9934,8 +9934,8 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             }
         }
 
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 7)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("ext", IsNullable = false)]
+        [XmlArray(Order = 7)]
+        [XmlArrayItem("ext", IsNullable = false)]
         public List<CT_Extension> extLst
         {
             get
@@ -10172,8 +10172,8 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             }
         }
 
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 10)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("ext", IsNullable = false)]
+        [XmlArray(Order = 10)]
+        [XmlArrayItem("ext", IsNullable = false)]
         public List<CT_Extension> extLst
         {
             get
@@ -10315,8 +10315,8 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             }
         }
 
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 7)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("ext", IsNullable = false)]
+        [XmlArray(Order = 7)]
+        [XmlArrayItem("ext", IsNullable = false)]
         public List<CT_Extension> extLst
         {
             get
@@ -10521,8 +10521,8 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             }
         }
 
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 11)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("ext", IsNullable = false)]
+        [XmlArray(Order = 11)]
+        [XmlArrayItem("ext", IsNullable = false)]
         public List<CT_Extension> extLst
         {
             get
@@ -10648,8 +10648,8 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             }
         }
 
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 6)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("ext", IsNullable = false)]
+        [XmlArray(Order = 6)]
+        [XmlArrayItem("ext", IsNullable = false)]
         public List<CT_Extension> extLst
         {
             get
@@ -10776,8 +10776,8 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             }
         }
 
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 5)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("ext", IsNullable = false)]
+        [XmlArray(Order = 5)]
+        [XmlArrayItem("ext", IsNullable = false)]
         public List<CT_Extension> extLst
         {
             get
@@ -10854,8 +10854,8 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             }
         }
 
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 3)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("ext", IsNullable = false)]
+        [XmlArray(Order = 3)]
+        [XmlArrayItem("ext", IsNullable = false)]
         public List<CT_Extension> extLst
         {
             get
@@ -11136,8 +11136,8 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             }
         }
 
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 6)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("ext", IsNullable = false)]
+        [XmlArray(Order = 6)]
+        [XmlArrayItem("ext", IsNullable = false)]
         public List<CT_Extension> extLst
         {
             get
@@ -11245,8 +11245,8 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             }
         }
 
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 5)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("ext", IsNullable = false)]
+        [XmlArray(Order = 5)]
+        [XmlArrayItem("ext", IsNullable = false)]
         public List<CT_Extension> extLst
         {
             get
@@ -11338,8 +11338,8 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             }
         }
 
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 2)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("pivotFmt", IsNullable = false)]
+        [XmlArray(Order = 2)]
+        [XmlArrayItem("pivotFmt", IsNullable = false)]
         public List<CT_PivotFmt> pivotFmts
         {
             get
@@ -11469,8 +11469,8 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             }
         }
 
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 12)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("ext", IsNullable = false)]
+        [XmlArray(Order = 12)]
+        [XmlArrayItem("ext", IsNullable = false)]
         public List<CT_Extension> extLst
         {
             get
@@ -11625,8 +11625,8 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             }
         }
 
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 2)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("ext", typeof(CT_Extension), IsNullable = false)]
+        [XmlArray(Order = 2)]
+        [XmlArrayItem("ext", typeof(CT_Extension), IsNullable = false)]
         public List<CT_Extension> extLst
         {
             get

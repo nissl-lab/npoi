@@ -568,7 +568,7 @@ namespace NPOI.XSSF.UserModel
             }
 
             if (ContainsSheet(sheetname, sheets.Count))
-                throw new ArgumentException("The workbook already Contains a sheet of this name");
+                throw new ArgumentException("The workbook already contains a sheet of this name");
 
             // YK: Mimic Excel and silently tRuncate sheet names longer than 31 characters
             if (sheetname.Length > 31) sheetname = sheetname.Substring(0, 31);
@@ -1278,7 +1278,7 @@ namespace NPOI.XSSF.UserModel
             WorkbookUtil.ValidateSheetName(sheetname);
 
             if (ContainsSheet(sheetname, sheetIndex))
-                throw new ArgumentException("The workbook already Contains a sheet of this name");
+                throw new ArgumentException("The workbook already contains a sheet of this name");
 
             XSSFFormulaUtils utils = new XSSFFormulaUtils(this);
             utils.UpdateSheetName(sheetIndex, sheetname);

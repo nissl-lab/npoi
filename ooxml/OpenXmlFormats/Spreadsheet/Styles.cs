@@ -853,7 +853,10 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         public void SetFontArray(CT_Font[] array)
         {
-            fontField = new List<CT_Font>(array);
+            if (array != null)
+                fontField = new List<CT_Font>(array);
+            else
+                fontField.Clear();
         }
         [XmlElement]
         public List<CT_Font> font
@@ -1927,7 +1930,10 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
         public void SetIArray(CT_BooleanProperty[] array)
         {
-            this.iField = new List<CT_BooleanProperty>(array);
+            if (array == null)
+                this.iField = new List<CT_BooleanProperty>();
+            else
+                this.iField = new List<CT_BooleanProperty>(array);
         }
         public CT_BooleanProperty GetIArray(int index)
         {

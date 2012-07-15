@@ -43,8 +43,8 @@ namespace NPOI.OpenXmlFormats.Dml.Diagram
             this.ptLstField = new List<CT_Pt>();
         }
 
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 0)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("pt", IsNullable = false)]
+        [XmlArray(Order = 0)]
+        [XmlArrayItem("pt", IsNullable = false)]
         public List<CT_Pt> ptLst
         {
             get
@@ -57,8 +57,8 @@ namespace NPOI.OpenXmlFormats.Dml.Diagram
             }
         }
 
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 1)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("cxn", IsNullable = false)]
+        [XmlArray(Order = 1)]
+        [XmlArrayItem("cxn", IsNullable = false)]
         public List<CT_Cxn> cxnLst
         {
             get

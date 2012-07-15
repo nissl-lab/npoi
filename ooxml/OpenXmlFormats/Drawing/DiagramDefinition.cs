@@ -2086,8 +2086,8 @@ namespace NPOI.OpenXmlFormats.Dml.Diagram
             this.blipPhldrField = false;
         }
 
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 0)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("adj", IsNullable = false)]
+        [XmlArray(Order = 0)]
+        [XmlArrayItem("adj", IsNullable = false)]
         public List<CT_Adj> adjLst
         {
             get
@@ -2441,8 +2441,8 @@ namespace NPOI.OpenXmlFormats.Dml.Diagram
             }
         }
 
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 2)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("cat", IsNullable = false)]
+        [XmlArray(Order = 2)]
+        [XmlArrayItem("cat", IsNullable = false)]
         public List<CT_Category> catLst
         {
             get
@@ -2624,8 +2624,8 @@ namespace NPOI.OpenXmlFormats.Dml.Diagram
             }
         }
 
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 2)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("cat", IsNullable = false)]
+        [XmlArray(Order = 2)]
+        [XmlArrayItem("cat", IsNullable = false)]
         public List<CT_Category> catLst
         {
             get

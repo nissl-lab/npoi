@@ -104,8 +104,8 @@ namespace NPOI.XSSF.UserModel
         {
             XmlDocument doc = new XmlDocument();
 
-            InflaterInputStream iis = (InflaterInputStream)is1;
-            StreamReader sr=new StreamReader(iis);
+            //InflaterInputStream iis = (InflaterInputStream)is1;
+            StreamReader sr = new StreamReader(is1);
             string data = sr.ReadToEnd();
             
             //Stream vmlsm = new EvilUnclosedBRFixingInputStream(is1); --TODO:: add later

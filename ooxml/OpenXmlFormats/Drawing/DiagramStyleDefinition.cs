@@ -78,8 +78,8 @@ namespace NPOI.OpenXmlFormats.Dml.Diagram
             }
         }
 
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 2)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("cat", IsNullable = false)]
+        [XmlArray(Order = 2)]
+        [XmlArrayItem("cat", IsNullable = false)]
         public List<CT_SDCategory> catLst
         {
             get
@@ -501,8 +501,8 @@ namespace NPOI.OpenXmlFormats.Dml.Diagram
             }
         }
 
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 2)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("cat", IsNullable = false)]
+        [XmlArray(Order = 2)]
+        [XmlArrayItem("cat", IsNullable = false)]
         public List<CT_SDCategory> catLst
         {
             get

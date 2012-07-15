@@ -1763,8 +1763,8 @@ namespace NPOI.OpenXmlFormats.Dml
             this.gsLstField = new List<CT_GradientStop>();
         }
 
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 0)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("gs", IsNullable = false)]
+        [XmlArray(Order = 0)]
+        [XmlArrayItem("gs", IsNullable = false)]
         public List<CT_GradientStop> gsLst
         {
             get

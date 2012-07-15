@@ -49,8 +49,8 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 1)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("gridCol", IsNullable = false)]
+        [XmlArray(Order = 1)]
+        [XmlArrayItem("gridCol", IsNullable = false)]
         public List<CT_TableCol> tblGrid
         {
             get

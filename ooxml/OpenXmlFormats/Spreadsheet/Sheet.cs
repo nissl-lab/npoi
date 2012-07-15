@@ -13,6 +13,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     using NPOI.OpenXmlFormats.Dml;
     using System.ComponentModel;
     using System.Xml.Schema;
+    using System.Diagnostics;
 
     public enum ST_SmartTagShow
     {
@@ -9191,7 +9192,9 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     }
 
     [Serializable]
+    [DebuggerStepThroughAttribute]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
+    [XmlRoot("chartsheet", Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main", IsNullable = false)]
     public class CT_Chartsheet
     {
 

@@ -2474,7 +2474,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     {
 
         private bool date1904Field;
-        private bool date1904FieldSpecifiedField;
+        private bool date1904FieldSpecifiedField = true;
 
         private ST_Objects showObjectsField;
 

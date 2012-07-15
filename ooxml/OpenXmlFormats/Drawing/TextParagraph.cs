@@ -534,8 +534,8 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 14)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("tab", IsNullable = false)]
+        [XmlArray(Order = 14)]
+        [XmlArrayItem("tab", IsNullable = false)]
         public List<CT_TextTabStop> tabLst
         {
             get
