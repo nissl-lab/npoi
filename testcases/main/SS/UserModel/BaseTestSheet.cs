@@ -474,7 +474,7 @@ namespace TestCases.SS.UserModel
 
         /** Test that new default column styles Get applied */
         [Test]
-        public void TestDefaultColumnStyle()
+        public virtual void TestDefaultColumnStyle()
         {
             IWorkbook wb = _testDataProvider.CreateWorkbook();
             ICellStyle style = wb.CreateCellStyle();

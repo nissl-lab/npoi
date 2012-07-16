@@ -175,7 +175,10 @@ namespace NPOI.XSSF.Model
 
         public String GetNumberFormatAt(int idx)
         {
-            return numberFormats[idx];
+            if (numberFormats.ContainsKey(idx))
+                return numberFormats[idx];
+            else
+                return null;
         }
 
         public int PutNumberFormat(String fmt)

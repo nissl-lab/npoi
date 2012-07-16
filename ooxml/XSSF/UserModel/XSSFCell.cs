@@ -927,7 +927,7 @@ namespace NPOI.XSSF.UserModel
          */
         private static Exception TypeMismatch(CellType expectedTypeCode, CellType actualTypeCode, bool IsFormulaCell)
         {
-            String msg = "Cannot Get a "
+            String msg = "Cannot get a "
                 + GetCellTypeName(expectedTypeCode) + " value from a "
                 + GetCellTypeName(actualTypeCode) + " " + (IsFormulaCell ? "formula " : "") + "cell";
             return new InvalidOperationException(msg);

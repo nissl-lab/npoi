@@ -1515,7 +1515,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             //this.extLstField = new CT_ExtensionList();
             this.pivotSelectionField = new List<CT_PivotSelection>();
             this.selectionField = new List<CT_Selection>();
-            this.paneField = new CT_Pane();
+            //this.paneField = new CT_Pane();
             this.windowProtectionField = false;
             this.showFormulasField = false;
             this.showGridLinesField = true;
@@ -3309,7 +3309,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         private byte outlineLevelField;
 
         private bool collapsedField=true;
-        private bool collapsedSpecifiedField=false;
+        private bool collapsedSpecifiedField=true;
 
         [XmlAttribute]
         public uint min

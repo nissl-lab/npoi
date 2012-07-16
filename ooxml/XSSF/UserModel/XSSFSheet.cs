@@ -761,7 +761,7 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
-                return (int)DefaultRowHeightInPoints * 20;
+                return (int)((decimal)DefaultRowHeightInPoints * 20);
             }
             set
             {
@@ -1204,7 +1204,8 @@ namespace NPOI.XSSF.UserModel
                     new CellReference(pane.topLeftCell) : null;
                 return new PaneInformation((short)pane.xSplit, (short)pane.ySplit,
                         (short)(cellRef == null ? 0 : cellRef.Row), (short)(cellRef == null ? 0 : cellRef.Col),
-                        (byte)(pane.activePane - 1), pane.state == ST_PaneState.frozen);
+                        //in java the frist enum value is 1,but 0 in c#
+                        (byte)(pane.activePane /*- 1*/), pane.state == ST_PaneState.frozen);
             }
         }
 
