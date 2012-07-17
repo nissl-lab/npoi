@@ -21,6 +21,7 @@ using NPOI.OpenXmlFormats.Spreadsheet;
 using NUnit.Framework;
 using System;
 using NPOI.Util;
+using System.Text;
 namespace NPOI.XSSF.UserModel
 {
     [TestFixture]
@@ -216,7 +217,8 @@ namespace NPOI.XSSF.UserModel
             CT_Font ctFont = new CT_Font();
             CT_Color color = ctFont.AddNewColor();
 
-            color.SetRgb(255, 255, 255);
+            //color.SetRgb(255, 255, 255);
+            color.SetRgb(Encoding.ASCII.GetBytes("ffffff"));
             ctFont.SetColorArray(0, color);
 
             XSSFFont xssfFont = new XSSFFont(ctFont);

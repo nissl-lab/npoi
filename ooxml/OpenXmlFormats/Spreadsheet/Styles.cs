@@ -1637,7 +1637,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         public void SetRgb(byte[] rgb)
         {
             rgbField = new byte[rgb.Length];
-            Array.Copy(rgbField, this.rgb, rgb.Length);
+            Array.Copy(rgb, this.rgbField, rgb.Length);
         }
         public byte[] GetRgb()
         {
