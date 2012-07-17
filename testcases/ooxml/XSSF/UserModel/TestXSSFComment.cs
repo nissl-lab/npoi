@@ -50,8 +50,8 @@ namespace NPOI.XSSF.UserModel
             CommentsTable sheetComments = new CommentsTable();
             Assert.IsNotNull(sheetComments.GetCTComments().commentList);
             Assert.IsNotNull(sheetComments.GetCTComments().authors);
-            Assert.AreEqual(0, sheetComments.GetCTComments().authors.SizeOfAuthorArray());
-            Assert.AreEqual(0, sheetComments.GetNumberOfAuthors());
+            Assert.AreEqual(1, sheetComments.GetCTComments().authors.SizeOfAuthorArray());
+            Assert.AreEqual(1, sheetComments.GetNumberOfAuthors());
 
             CT_Comment ctComment = sheetComments.CreateComment();
             CT_Shape vmlShape = new CT_Shape();
@@ -60,7 +60,7 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual(null, comment.String.String);
             Assert.AreEqual(0, comment.Row);
             Assert.AreEqual(0, comment.Column);
-            Assert.AreEqual(null, comment.Author);
+            Assert.AreEqual("", comment.Author);
             Assert.AreEqual(false, comment.Visible);
         }
         [Test]
@@ -164,14 +164,14 @@ namespace NPOI.XSSF.UserModel
             CommentsTable sheetComments = new CommentsTable();
             CT_Comment ctComment = sheetComments.CreateComment();
 
-            Assert.AreEqual(0, sheetComments.GetNumberOfAuthors());
+            Assert.AreEqual(1, sheetComments.GetNumberOfAuthors());
             XSSFComment comment = new XSSFComment(sheetComments, ctComment, null);
-            Assert.AreEqual(null, comment.Author);
+            Assert.AreEqual("", comment.Author);
             comment.Author = ("Apache POI");
             Assert.AreEqual("Apache POI", comment.Author);
-            Assert.AreEqual(1, sheetComments.GetNumberOfAuthors());
+            Assert.AreEqual(2, sheetComments.GetNumberOfAuthors());
             comment.Author = ("Apache POI");
-            Assert.AreEqual(1, sheetComments.GetNumberOfAuthors());
+            Assert.AreEqual(2, sheetComments.GetNumberOfAuthors());
             comment.Author = ("");
             Assert.AreEqual("", comment.Author);
             Assert.AreEqual(2, sheetComments.GetNumberOfAuthors());
