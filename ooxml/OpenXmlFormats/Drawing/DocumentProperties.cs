@@ -251,7 +251,7 @@ namespace NPOI.OpenXmlFormats.Dml
 
         public CT_ShapeLocking()
         {
-            this.extLstField = new CT_OfficeArtExtensionList();
+            //this.extLstField = new CT_OfficeArtExtensionList();
             this.noGrpField = false;
             this.noSelectField = false;
             this.noRotField = false;

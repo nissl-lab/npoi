@@ -27,7 +27,7 @@ namespace NPOI
 
     public abstract class POIXMLDocument : POIXMLDocumentPart
     {
-        public static String DOCUMENT_CREATOR = "Apache POI";
+        public static String DOCUMENT_CREATOR = "NPOI";
 
         // OLE embeddings relation name
         public static String OLE_OBJECT_REL_TYPE = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/oleObject";

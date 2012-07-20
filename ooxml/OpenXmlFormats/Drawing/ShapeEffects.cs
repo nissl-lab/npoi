@@ -1646,12 +1646,12 @@ namespace NPOI.OpenXmlFormats.Dml
 
         public CT_SolidColorFillProperties()
         {
-            this.prstClrField = new CT_PresetColor();
-            this.schemeClrField = new CT_SchemeColor();
-            this.sysClrField = new CT_SystemColor();
-            this.hslClrField = new CT_HslColor();
-            this.srgbClrField = new CT_SRgbColor();
-            this.scrgbClrField = new CT_ScRgbColor();
+            //this.prstClrField = new CT_PresetColor();
+            //this.schemeClrField = new CT_SchemeColor();
+            //this.sysClrField = new CT_SystemColor();
+            //this.hslClrField = new CT_HslColor();
+            //this.srgbClrField = new CT_SRgbColor();
+            //this.scrgbClrField = new CT_ScRgbColor();
         }
 
         [XmlElement(Order = 0)]

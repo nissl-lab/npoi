@@ -92,7 +92,7 @@ namespace NPOI.XSSF.UserModel
                  typeof(StylesTable)
         );
         public static XSSFRelation DRAWINGS = new XSSFRelation(
-                "application/vnd.openxmlformats-officedocument.Drawing+xml",
+                "application/vnd.openxmlformats-officedocument.drawing+xml",
                 "http://schemas.openxmlformats.org/officeDocument/2006/relationships/drawing",
                 "/xl/drawings/drawing#.xml",
                 typeof(XSSFDrawing)
@@ -104,7 +104,7 @@ namespace NPOI.XSSF.UserModel
                 typeof(XSSFVMLDrawing)
         );
         public static XSSFRelation CHART = new XSSFRelation(
-                "application/vnd.openxmlformats-officedocument.Drawingml.chart+xml",
+                "application/vnd.openxmlformats-officedocument.drawingml.chart+xml",
                 "http://schemas.openxmlformats.org/officeDocument/2006/relationships/chart",
                 "/xl/charts/chart#.xml",
                 null //typeof(XSSFChart)

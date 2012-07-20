@@ -455,18 +455,18 @@ namespace NPOI.OpenXmlFormats
             }
         }
 
-        [XmlElement]
-        public CT_VectorVariant HeadingPairs
-        {
-            get
-            {
-                return this.headingPairsField;
-            }
-            set
-            {
-                this.headingPairsField = value;
-            }
-        }
+        //[XmlElement]
+        //public CT_VectorVariant HeadingPairs
+        //{
+        //    get
+        //    {
+        //        return this.headingPairsField;
+        //    }
+        //    set
+        //    {
+        //        this.headingPairsField = value;
+        //    }
+        //}
 
         [XmlElement]
         public CT_VectorLpstr TitlesOfParts
