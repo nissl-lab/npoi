@@ -108,7 +108,7 @@ namespace NPOI.SS.Format
                         mStart = -1;
                         int sLen = part.Length;
                         _formatter.sFmt = "%0" + (sLen + 2) + "." + sLen + "f";
-                        return part.Replace('0', 'S');
+                        return part.Replace('0', 'f');
 
                     case 'a':
                     case 'A':
@@ -122,8 +122,11 @@ namespace NPOI.SS.Format
                             _formatter.ShowM = char.ToLower(part[1]) == 'm';
                             // For some reason "am/pm" becomes AM or PM, but "a/p" becomes a or p
                             _formatter.amPmUpper = _formatter.ShowM || char.IsUpper(part[0]);
-
-                            return "a";
+                            if (_formatter.ShowM)
+                                return "tt";
+                            else
+                                return "t";
+                            //return "a";
                         }
                     //noinspection fallthrough
                         return null;
@@ -173,8 +176,9 @@ namespace NPOI.SS.Format
                 else
                     value = new DateTime((long)(EXCEL_EPOCH_TIME.Ticks + v));
             }
-            
-            throw new NotImplementedException();
+            dateFmt.Format(value, toAppendTo);
+
+            //throw new NotImplementedException();
             //AttributedCharacterIterator it = dateFmt.FormatToCharacterIterator(
             //        value);
             //bool doneAm = false;
