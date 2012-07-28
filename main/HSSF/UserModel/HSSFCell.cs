@@ -965,7 +965,7 @@ namespace NPOI.HSSF.UserModel
                 }
 
                 // Change our cell record to use this style
-                record.XFIndex = value.Index;
+                record.XFIndex = styleIndex;
             }
         }
         /**

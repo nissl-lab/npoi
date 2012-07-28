@@ -44,7 +44,6 @@ namespace NPOI.HSSF.Record.Chart
             grbitFrt = in1.ReadShort();
             iObjectKind = in1.ReadShort();
 
-            reserved = new byte[6];
             // The spec says that there should be 6 bytes at the
             //  end, which must be there and must be zero
             // However, sometimes Excel forgets them...

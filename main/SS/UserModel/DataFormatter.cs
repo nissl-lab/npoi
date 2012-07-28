@@ -207,7 +207,7 @@ using System.Globalization;
             {
                 return format;
             }
-            if (formatStr.Equals("General"))
+            if (formatStr.Equals("General", StringComparison.CurrentCultureIgnoreCase) || "@".Equals(formatStr))
             {
                 if (DataFormatter.IsWholeNumber(cellValue))
                 {
