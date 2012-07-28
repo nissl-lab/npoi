@@ -955,7 +955,7 @@ namespace NPOI.HSSF.UserModel
         /// </summary>
         /// <value>true for right to left, false otherwise</value>
         /// <remarks>poi bug 47970</remarks>
-        public bool IsArabic
+        public bool IsRightToLeft
         {
             get
             {
@@ -1474,15 +1474,10 @@ namespace NPOI.HSSF.UserModel
         /// Inserts the chart records.
         /// </summary>
         /// <param name="records">The records.</param>
-        public void InsertChartRecords(IList records)
+        public void InsertChartRecords(List<RecordBase> records)
         {
             int window2Loc = _sheet.FindFirstRecordLocBySid(WindowTwoRecord.sid);
-            int i = 0;
-            foreach (Record rec in records)
-            {
-                _sheet.Records.Insert(window2Loc + i, records);
-                i++;
-            }
+            _sheet.Records.InsertRange(window2Loc, records);
         }
         private void NotifyRowShifting(HSSFRow row)
         {

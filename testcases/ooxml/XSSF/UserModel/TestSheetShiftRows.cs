@@ -37,46 +37,5 @@ namespace NPOI.XSSF.UserModel
         public TestSheetShiftRows()
             : base(XSSFITestDataProvider.instance)
         {  }
-        [Test]
-        public void TestActiveCell()
-        {
-            base.TestActiveCell();
-        }
-
-        [Test]
-        public void TestShiftRow()
-        {
-            base.TestShiftRow();
-        }
-        [Test]
-        public void TestShiftRows()
-        {
-            base.TestShiftRows();
-        }
-        [Test]
-        public void TestShiftRowBreaks()
-        {
-            base.TestShiftRowBreaks();
-        }
-        [Test]
-        public void TestShiftWithComments()
-        {
-            base.TestShiftWithComments();
-        }
-        [Test]
-        public void TestShiftWithFormulas()
-        {
-            base.TestShiftWithFormulas();
-        }
-        [Test]
-        public void TestShiftWithMergedRegions()
-        {
-            base.TestShiftWithMergedRegions();
-        }
-        [Test]
-        public void TestShiftWithNames()
-        {
-            base.TestShiftWithNames();
-        }
     }
 }

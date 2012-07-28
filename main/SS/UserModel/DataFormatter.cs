@@ -292,7 +292,9 @@ using System.Globalization;
             String formatStr = pformatStr;
             formatStr = formatStr.Replace("\\-", "-");
             formatStr = formatStr.Replace("\\,", ",");
+            formatStr = formatStr.Replace("\\.", ".");
             formatStr = formatStr.Replace("\\ ", " ");
+            formatStr = formatStr.Replace("\\/", "/");
             formatStr = formatStr.Replace(";@", "");
             bool hasAmPm = Regex.IsMatch(formatStr, amPmPattern);
             if (hasAmPm)

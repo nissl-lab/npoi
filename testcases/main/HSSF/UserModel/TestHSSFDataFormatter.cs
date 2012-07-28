@@ -27,6 +27,7 @@ namespace TestCases.HSSF.UserModel
     using TestCases.HSSF;
     using NPOI.SS.Util;
     using NPOI.HSSF.UserModel;
+    using System.Collections.Generic;
 
     /**
      * Unit Tests for HSSFDataFormatter.java
@@ -42,6 +43,12 @@ namespace TestCases.HSSF.UserModel
         private HSSFWorkbook wb;
 
         public TestHSSFDataFormatter()
+        {
+
+        }
+
+        [SetUp]
+        public void SetUp()
         {
             // One or more test methods depends on the american culture.
             System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
@@ -336,14 +343,13 @@ namespace TestCases.HSSF.UserModel
         public void TestSetDefaultNumberFormat()
         {
             IRow row = wb.GetSheetAt(0).GetRow(3);
-            IEnumerator it = row.GetEnumerator();
+            List<ICell> cells = row.Cells;
             FormatBase defaultFormat = new DecimalFormat("Balance $#,#00.00 USD;Balance -$#,#00.00 USD");
             formatter.SetDefaultNumberFormat(defaultFormat);
             Random rand = new Random((int)DateTime.Now.ToFileTime());
             log("\n==== DEFAULT NUMBER FORMAT ====");
-            while (it.MoveNext())
+            foreach(ICell cell in cells)
             {
-                ICell cell = (ICell)it.Current;
                 cell.SetCellValue(cell.NumericCellValue * rand.Next() / 1000000 - 1000);
                 log(formatter.FormatCellValue(cell));
                 Assert.IsTrue(formatter.FormatCellValue(cell).StartsWith("Balance "));

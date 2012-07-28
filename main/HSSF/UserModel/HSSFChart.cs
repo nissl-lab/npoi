@@ -77,7 +77,7 @@ namespace NPOI.HSSF.UserModel
         public void CreateBarChart(HSSFWorkbook workbook, HSSFSheet sheet)
         {
 
-            List<Record> records = new List<Record>();
+            List<RecordBase> records = new List<RecordBase>();
             records.Add(CreateMSDrawingObjectRecord());
             records.Add(CreateOBJRecord());
             records.Add(CreateBOFRecord());

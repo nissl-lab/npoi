@@ -713,7 +713,7 @@ namespace TestCases.HPSF.Basic
             /* Create a new POI filesystem containing the origin file's
              * property Set streams: */
             FileInfo fi = new FileInfo(f.Name);
-            FileStream copy = File.Create("\\"+ fi.Name);
+            FileStream copy = File.Create(fi.Name);
             //copy.deleteOnExit();
             FileStream out1 = copy;
             POIFSFileSystem poiFs = new POIFSFileSystem();

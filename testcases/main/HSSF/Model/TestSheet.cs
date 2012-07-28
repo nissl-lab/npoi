@@ -191,7 +191,7 @@ namespace TestCases.HSSF.Model
             records.Add(merged);
 
             InternalSheet sheet = CreateSheet(records);
-            sheet.Records.Remove(0);
+            sheet.Records.RemoveAt(0);
 
             //stub object to throw off list INDEX operations
             sheet.RemoveMergedRegion(0);

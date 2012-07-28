@@ -1011,9 +1011,9 @@ namespace TestCases.HSSF.UserModel
             HSSFWorkbook wb = new HSSFWorkbook();
             HSSFSheet s = (HSSFSheet)wb.CreateSheet();
 
-            Assert.AreEqual(false, s.IsArabic);
-            s.IsArabic = true;
-            Assert.AreEqual(true, s.IsArabic);
+            Assert.AreEqual(false, s.IsRightToLeft);
+            s.IsRightToLeft = true;
+            Assert.AreEqual(true, s.IsRightToLeft);
         }
         [Test]
         public void TestAutoFilter()

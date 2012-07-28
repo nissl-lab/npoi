@@ -1493,7 +1493,7 @@ namespace NPOI.HSSF.Model
             return new EOFRecord();
         }
 
-        public IList Records
+        public List<RecordBase> Records
         {
             get { return records; }
         }

@@ -658,7 +658,6 @@ namespace NPOI.SS.UserModel
         /// </summary>
         IDrawing CreateDrawingPatriarch();
 
-
         /// <summary>
         /// Gets the parent workbook.
         /// </summary>
@@ -725,6 +724,11 @@ namespace NPOI.SS.UserModel
         /// </summary>
         /// <returns>conditional formatting rule for this sheet</returns>
         ISheetConditionalFormatting SheetConditionalFormatting { get; }
+
+        /// <summary>
+        /// Whether the text is displayed in right-to-left mode in the window
+        /// </summary>
+        bool IsRightToLeft { get; set; }
     }
 
 }

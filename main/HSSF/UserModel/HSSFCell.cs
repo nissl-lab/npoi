@@ -136,9 +136,9 @@ namespace NPOI.HSSF.UserModel
                     stringValue = new HSSFRichTextString(((FormulaRecordAggregate)cval).StringValue);
                     break;
             }
-            ExtendedFormatRecord xf = book.Workbook.GetExFormatAt(cval.XFIndex);
+            //ExtendedFormatRecord xf = book.Workbook.GetExFormatAt(cval.XFIndex);
 
-            CellStyle = new HSSFCellStyle((short)cval.XFIndex, xf, book);
+            //CellStyle = new HSSFCellStyle((short)cval.XFIndex, xf, book);
         }
 
         /**
